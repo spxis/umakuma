@@ -66,6 +66,7 @@ type LeaderboardStats = {
     burned: { radical: number; kanji: number; vocabulary: number; total: number };
     totals: { radical: number; kanji: number; vocabulary: number; total: number };
   };
+  jlptCounts: { n1: number; n2: number; n3: number; n4: number; n5: number };
   score: number;
 };
 
@@ -456,6 +457,7 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
   let guruCount = 0;
   let masterCount = 0;
   let enlightenedCount = 0;
+  const jlptCounts = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
   const itemSpread = {
     apprentice: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
     guru: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
@@ -494,6 +496,53 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
     }
   }
 
+  const learnedKanjiSubjectIds = Array.from(
+    new Set(
+      allAssignmentData
+        .filter(
+          (assignment) =>
+            assignment.subject_type === "kanji" && assignment.unlocked_at && assignment.srs_stage > 0,
+        )
+        .map((assignment) => assignment.subject_id),
+    ),
+  );
+
+  if (learnedKanjiSubjectIds.length > 0) {
+    const chunkSize = 200;
+    const learnedKanjiChars = new Set<string>();
+
+    for (let i = 0; i < learnedKanjiSubjectIds.length; i += chunkSize) {
+      const chunk = learnedKanjiSubjectIds.slice(i, i + chunkSize).join(",");
+      const subjectChunk = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token);
+
+      for (const row of subjectChunk.data) {
+        if ((row.object ?? "") !== "kanji") {
+          continue;
+        }
+
+        const data = row.data as { characters?: string | null };
+        if (data.characters) {
+          learnedKanjiChars.add(data.characters);
+        }
+      }
+    }
+
+    if (learnedKanjiChars.size > 0) {
+      const jlptRows = await prisma.jlptKanji.findMany({
+        where: { kanji: { in: Array.from(learnedKanjiChars) } },
+        select: { nLevel: true },
+      });
+
+      for (const row of jlptRows) {
+        if (row.nLevel === 1) jlptCounts.n1 += 1;
+        if (row.nLevel === 2) jlptCounts.n2 += 1;
+        if (row.nLevel === 3) jlptCounts.n3 += 1;
+        if (row.nLevel === 4) jlptCounts.n4 += 1;
+        if (row.nLevel === 5) jlptCounts.n5 += 1;
+      }
+    }
+  }
+
   const levelKanjiTotal = levelSnapshot.kanjiTotal;
   const levelKanjiLearned = levelSnapshot.kanjiLearned;
   const levelKanjiGuruPlus = levelSnapshot.kanjiGuruPlus;
@@ -525,6 +574,7 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
     lastActivityAt,
     levelKanjiItems,
     itemSpread,
+    jlptCounts,
     score,
   };
 }

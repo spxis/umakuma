@@ -24,6 +24,7 @@ type LeaderboardRow = {
   levelKanjiGuruPlus: number;
   levelKanjiLocked: number;
   itemSpread: unknown;
+  jlptCounts: unknown;
   lastActivityAt: string | null;
   score: number;
   lastSyncedAt: string;
@@ -132,6 +133,21 @@ function kanjiCountFromRow(row: LeaderboardRow): number {
   }
 
   return 0;
+}
+
+function jlptCountsFromRow(row: LeaderboardRow): { n1: number; n2: number; n3: number; n4: number; n5: number } {
+  if (!row.jlptCounts || typeof row.jlptCounts !== "object") {
+    return { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
+  }
+
+  const values = row.jlptCounts as Record<string, unknown>;
+  return {
+    n1: typeof values.n1 === "number" ? values.n1 : 0,
+    n2: typeof values.n2 === "number" ? values.n2 : 0,
+    n3: typeof values.n3 === "number" ? values.n3 : 0,
+    n4: typeof values.n4 === "number" ? values.n4 : 0,
+    n5: typeof values.n5 === "number" ? values.n5 : 0,
+  };
 }
 
 export default function LeaderboardTable({ rows }: Props) {
@@ -269,12 +285,13 @@ export default function LeaderboardTable({ rows }: Props) {
                     <td colSpan={10} className="px-4 py-4">
                       {(() => {
                         const spread = isItemSpread(row.itemSpread) ? row.itemSpread : EMPTY_ITEM_SPREAD;
+                        const jlpt = jlptCountsFromRow(row);
                         const kanjiGoal = Math.ceil(row.levelKanjiTotal * 0.9);
                         const remainingToLevelUp = Math.max(0, kanjiGoal - row.levelKanjiGuruPlus);
 
                         return (
                       <div className="space-y-3">
-                      <div className="grid gap-3 lg:grid-cols-[1.1fr_2fr_1.5fr]">
+                      <div className="grid gap-3 lg:grid-cols-4">
                         <div className="rounded-2xl border border-accent/25 bg-white p-4">
                           <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-600">
                             Due Now
@@ -309,6 +326,26 @@ export default function LeaderboardTable({ rows }: Props) {
                               <p className="text-[10px] font-bold uppercase text-slate-600">Burned</p>
                               <p className="text-2xl font-black text-slate-900">{formatNumber(row.burnedCount)}</p>
                             </div>
+                          </div>
+                        </div>
+
+                        <div className="rounded-2xl border border-line bg-white p-4">
+                          <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-600">
+                            JLPT Levels
+                          </p>
+                          <div className="mt-3 grid grid-cols-5 gap-2">
+                            {([
+                              ["N1", jlpt.n1],
+                              ["N2", jlpt.n2],
+                              ["N3", jlpt.n3],
+                              ["N4", jlpt.n4],
+                              ["N5", jlpt.n5],
+                            ] as const).map(([label, count]) => (
+                              <div key={label} className="rounded-xl border border-line bg-surface-muted p-2 text-center">
+                                <p className="text-[10px] font-bold uppercase text-slate-600">{label}</p>
+                                <p className="text-2xl font-black text-slate-900">{formatNumber(count)}</p>
+                              </div>
+                            ))}
                           </div>
                         </div>
 
