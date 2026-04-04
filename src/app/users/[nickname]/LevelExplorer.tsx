@@ -129,6 +129,7 @@ export default function LevelExplorer({
   initialSrsFilter = "all",
 }: Props) {
   const typeVisibilityStorageKey = `wr:explorer:${accountId}:type-visibility`;
+  const selectedSubjectStorageKey = `wr:explorer:${accountId}:selected-subject`;
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(new Set([initialSnapshot.level]));
   const [snapshotsByLevel, setSnapshotsByLevel] = useState<Map<number, Snapshot>>(
     new Map([[initialSnapshot.level, normalizeSnapshot(initialSnapshot)]]),
@@ -163,6 +164,34 @@ export default function LevelExplorer({
       // Ignore storage errors in restricted browsing modes.
     }
   }, [typeVisibilityStorageKey]);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(selectedSubjectStorageKey);
+      if (!raw) {
+        return;
+      }
+
+      const parsed = Number(raw);
+      if (Number.isInteger(parsed) && parsed > 0) {
+        setSelectedSubjectId(parsed);
+      }
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [selectedSubjectStorageKey]);
+
+  useEffect(() => {
+    try {
+      if (selectedSubjectId === null) {
+        window.localStorage.removeItem(selectedSubjectStorageKey);
+      } else {
+        window.localStorage.setItem(selectedSubjectStorageKey, String(selectedSubjectId));
+      }
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [selectedSubjectId, selectedSubjectStorageKey]);
 
   function setVisibleTypesAndPersist(next: typeof visibleTypes) {
     setVisibleTypes(next);
