@@ -117,7 +117,12 @@ function formatDate(input: string | null | undefined): string {
   }).format(parsed);
 }
 
-function formatNextReviewBadge(input: string | null | undefined): string | null {
+type NextReviewBadge = {
+  label: string;
+  className: string;
+};
+
+function formatNextReviewBadge(input: string | null | undefined): NextReviewBadge | null {
   if (!input) {
     return null;
   }
@@ -127,32 +132,60 @@ function formatNextReviewBadge(input: string | null | undefined): string | null 
     return null;
   }
 
-  const absolute = new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-  }).format(parsed);
-
   const deltaMs = parsed.getTime() - Date.now();
   const absMs = Math.abs(deltaMs);
 
-  let relative = "soon";
+  if (deltaMs <= 0) {
+    if (absMs < 15 * 60 * 1000) {
+      return {
+        label: "Due now",
+        className: "border-orange-300 bg-orange-50 text-orange-700",
+      };
+    }
+
+    if (absMs < 24 * 60 * 60 * 1000) {
+      const hours = Math.max(1, Math.round(absMs / (60 * 60 * 1000)));
+      return {
+        label: `Overdue ${hours}h`,
+        className: "border-orange-300 bg-orange-50 text-orange-700",
+      };
+    }
+
+    const days = Math.max(1, Math.round(absMs / (24 * 60 * 60 * 1000)));
+    return {
+      label: `Overdue ${days}d`,
+      className: "border-red-300 bg-red-50 text-red-700",
+    };
+  }
+
+  if (absMs < 15 * 60 * 1000) {
+    return {
+      label: "Due soon",
+      className: "border-emerald-300 bg-emerald-50 text-emerald-700",
+    };
+  }
+
   if (absMs < 60 * 60 * 1000) {
     const minutes = Math.max(1, Math.round(absMs / (60 * 1000)));
-    relative = `${deltaMs >= 0 ? "in" : ""} ${minutes} minute${minutes === 1 ? "" : "s"}`.trim();
-  } else if (absMs < 24 * 60 * 60 * 1000) {
+    return {
+      label: `In ${minutes}m`,
+      className: "border-emerald-300 bg-emerald-50 text-emerald-700",
+    };
+  }
+
+  if (absMs < 24 * 60 * 60 * 1000) {
     const hours = Math.max(1, Math.round(absMs / (60 * 60 * 1000)));
-    relative = `${deltaMs >= 0 ? "in" : ""} ${hours} hour${hours === 1 ? "" : "s"}`.trim();
-  } else {
-    const days = Math.max(1, Math.round(absMs / (24 * 60 * 60 * 1000)));
-    relative = `${deltaMs >= 0 ? "in" : ""} ${days} day${days === 1 ? "" : "s"}`.trim();
+    return {
+      label: `In ${hours}h`,
+      className: "border-emerald-300 bg-emerald-50 text-emerald-700",
+    };
   }
 
-  if (deltaMs < 0) {
-    relative = `${relative} ago`;
-  }
-
-  return `Next review ${absolute} (${relative})`;
+  const days = Math.max(1, Math.round(absMs / (24 * 60 * 60 * 1000)));
+  return {
+    label: `In ${days}d`,
+    className: "border-emerald-300 bg-emerald-50 text-emerald-700",
+  };
 }
 
 function stripHtml(input: string | undefined): string {
@@ -1078,8 +1111,10 @@ export default function LevelExplorer({
 
                       return (
                         <div className="mt-2 flex justify-center">
-                          <span className="rounded-full border border-line bg-white px-3 py-1 text-xs font-semibold text-slate-700">
-                            {nextReviewBadge}
+                          <span
+                            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.03em] ${nextReviewBadge.className}`}
+                          >
+                            {nextReviewBadge.label}
                           </span>
                         </div>
                       );
