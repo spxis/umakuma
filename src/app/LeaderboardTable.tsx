@@ -135,18 +135,56 @@ function kanjiCountFromRow(row: LeaderboardRow): number {
   return 0;
 }
 
-function jlptCountsFromRow(row: LeaderboardRow): { n1: number; n2: number; n3: number; n4: number; n5: number } {
+function jlptCountsFromRow(row: LeaderboardRow): {
+  n1: { learned: number; total: number; percent: number };
+  n2: { learned: number; total: number; percent: number };
+  n3: { learned: number; total: number; percent: number };
+  n4: { learned: number; total: number; percent: number };
+  n5: { learned: number; total: number; percent: number };
+} {
+  const empty = {
+    n1: { learned: 0, total: 0, percent: 0 },
+    n2: { learned: 0, total: 0, percent: 0 },
+    n3: { learned: 0, total: 0, percent: 0 },
+    n4: { learned: 0, total: 0, percent: 0 },
+    n5: { learned: 0, total: 0, percent: 0 },
+  };
+
   if (!row.jlptCounts || typeof row.jlptCounts !== "object") {
-    return { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
+    return empty;
   }
 
   const values = row.jlptCounts as Record<string, unknown>;
+
+  function readLevel(levelKey: "n1" | "n2" | "n3" | "n4" | "n5") {
+    const value = values[levelKey];
+    if (typeof value === "number") {
+      return { learned: value, total: 0, percent: 0 };
+    }
+
+    if (!value || typeof value !== "object") {
+      return empty[levelKey];
+    }
+
+    const rec = value as Record<string, unknown>;
+    const learned = typeof rec.learned === "number" ? rec.learned : 0;
+    const total = typeof rec.total === "number" ? rec.total : 0;
+    const percent =
+      typeof rec.percent === "number"
+        ? rec.percent
+        : total > 0
+          ? Math.round((learned / total) * 100)
+          : 0;
+
+    return { learned, total, percent };
+  }
+
   return {
-    n1: typeof values.n1 === "number" ? values.n1 : 0,
-    n2: typeof values.n2 === "number" ? values.n2 : 0,
-    n3: typeof values.n3 === "number" ? values.n3 : 0,
-    n4: typeof values.n4 === "number" ? values.n4 : 0,
-    n5: typeof values.n5 === "number" ? values.n5 : 0,
+    n1: readLevel("n1"),
+    n2: readLevel("n2"),
+    n3: readLevel("n3"),
+    n4: readLevel("n4"),
+    n5: readLevel("n5"),
   };
 }
 
@@ -343,7 +381,10 @@ export default function LeaderboardTable({ rows }: Props) {
                             ] as const).map(([label, count]) => (
                               <div key={label} className="min-w-[64px] flex-1 rounded-xl border border-line bg-surface-muted p-2 text-center">
                                 <p className="text-[10px] font-bold uppercase text-slate-600">{label}</p>
-                                <p className="text-xl font-black leading-none text-slate-900">{formatNumber(count)}</p>
+                                <p className="text-lg font-black leading-none text-slate-900">
+                                  {formatNumber(count.learned)}/{formatNumber(count.total)}
+                                </p>
+                                <p className="mt-1 text-[10px] font-semibold text-slate-500">{count.percent}%</p>
                               </div>
                             ))}
                           </div>

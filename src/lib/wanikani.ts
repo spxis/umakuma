@@ -66,7 +66,13 @@ type LeaderboardStats = {
     burned: { radical: number; kanji: number; vocabulary: number; total: number };
     totals: { radical: number; kanji: number; vocabulary: number; total: number };
   };
-  jlptCounts: { n1: number; n2: number; n3: number; n4: number; n5: number };
+  jlptCounts: {
+    n1: { learned: number; total: number; percent: number };
+    n2: { learned: number; total: number; percent: number };
+    n3: { learned: number; total: number; percent: number };
+    n4: { learned: number; total: number; percent: number };
+    n5: { learned: number; total: number; percent: number };
+  };
   score: number;
 };
 
@@ -457,7 +463,7 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
   let guruCount = 0;
   let masterCount = 0;
   let enlightenedCount = 0;
-  const jlptCounts = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
+  const jlptLearnedCounts = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
   const itemSpread = {
     apprentice: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
     guru: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
@@ -534,14 +540,56 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
       });
 
       for (const row of jlptRows) {
-        if (row.nLevel === 1) jlptCounts.n1 += 1;
-        if (row.nLevel === 2) jlptCounts.n2 += 1;
-        if (row.nLevel === 3) jlptCounts.n3 += 1;
-        if (row.nLevel === 4) jlptCounts.n4 += 1;
-        if (row.nLevel === 5) jlptCounts.n5 += 1;
+        if (row.nLevel === 1) jlptLearnedCounts.n1 += 1;
+        if (row.nLevel === 2) jlptLearnedCounts.n2 += 1;
+        if (row.nLevel === 3) jlptLearnedCounts.n3 += 1;
+        if (row.nLevel === 4) jlptLearnedCounts.n4 += 1;
+        if (row.nLevel === 5) jlptLearnedCounts.n5 += 1;
       }
     }
   }
+
+  const jlptTotalsRows = await prisma.jlptKanji.groupBy({
+    by: ["nLevel"],
+    _count: { _all: true },
+  });
+
+  const jlptTotals = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
+  for (const row of jlptTotalsRows) {
+    if (row.nLevel === 1) jlptTotals.n1 = row._count._all;
+    if (row.nLevel === 2) jlptTotals.n2 = row._count._all;
+    if (row.nLevel === 3) jlptTotals.n3 = row._count._all;
+    if (row.nLevel === 4) jlptTotals.n4 = row._count._all;
+    if (row.nLevel === 5) jlptTotals.n5 = row._count._all;
+  }
+
+  const jlptCounts = {
+    n1: {
+      learned: jlptLearnedCounts.n1,
+      total: jlptTotals.n1,
+      percent: jlptTotals.n1 > 0 ? Math.round((jlptLearnedCounts.n1 / jlptTotals.n1) * 100) : 0,
+    },
+    n2: {
+      learned: jlptLearnedCounts.n2,
+      total: jlptTotals.n2,
+      percent: jlptTotals.n2 > 0 ? Math.round((jlptLearnedCounts.n2 / jlptTotals.n2) * 100) : 0,
+    },
+    n3: {
+      learned: jlptLearnedCounts.n3,
+      total: jlptTotals.n3,
+      percent: jlptTotals.n3 > 0 ? Math.round((jlptLearnedCounts.n3 / jlptTotals.n3) * 100) : 0,
+    },
+    n4: {
+      learned: jlptLearnedCounts.n4,
+      total: jlptTotals.n4,
+      percent: jlptTotals.n4 > 0 ? Math.round((jlptLearnedCounts.n4 / jlptTotals.n4) * 100) : 0,
+    },
+    n5: {
+      learned: jlptLearnedCounts.n5,
+      total: jlptTotals.n5,
+      percent: jlptTotals.n5 > 0 ? Math.round((jlptLearnedCounts.n5 / jlptTotals.n5) * 100) : 0,
+    },
+  };
 
   const levelKanjiTotal = levelSnapshot.kanjiTotal;
   const levelKanjiLearned = levelSnapshot.kanjiLearned;
