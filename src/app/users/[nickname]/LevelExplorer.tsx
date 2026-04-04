@@ -946,28 +946,35 @@ export default function LevelExplorer({
                 </button>
 
                 {selectedItem?.subjectId === item.subjectId ? (
-                  <section className="col-span-1 rounded-2xl border border-line bg-white/80 p-5 sm:col-span-2 lg:col-span-3">
-                    <div
-                      className={`inline-flex rounded-2xl border ${
-                        glyphHasReading(selectedItem)
-                          ? "min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center px-4 py-3"
-                          : "min-h-[5.75rem] min-w-[5.75rem] items-center justify-center px-4 py-3"
-                      } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
-                    >
-                      <div>
-                        <h3 className="text-4xl font-black leading-none text-current">{selectedItem.characters}</h3>
-                        {primaryReadingForDisplay(selectedItem) ? (
-                          <p className="mt-1 text-center text-sm font-semibold text-slate-700">
-                            {primaryReadingForDisplay(selectedItem)}
-                          </p>
-                        ) : null}
+                  <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-white p-5 sm:col-span-2 lg:col-span-3">
+                    <div className="flex flex-wrap items-end gap-3">
+                      <div
+                        className={`inline-flex rounded-2xl border ${
+                          glyphHasReading(selectedItem)
+                            ? "min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center px-4 py-3"
+                            : "min-h-[5.75rem] min-w-[5.75rem] items-center justify-center px-4 py-3"
+                        } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
+                      >
+                        <div>
+                          <h3 className="text-4xl font-black leading-none text-current">{selectedItem.characters}</h3>
+                          {primaryReadingForDisplay(selectedItem) ? (
+                            <p className="mt-1 text-center text-sm font-semibold text-slate-700">
+                              {primaryReadingForDisplay(selectedItem)}
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-2xl font-black leading-tight text-foreground">
+                          {selectedItem.meanings.join(", ") || "-"}
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-slate-600">
+                          WaniKani Level {selectedItem.wkLevel} · {selectedItem.subjectType}
+                        </p>
                       </div>
                     </div>
-                    <p className="text-sm font-semibold text-slate-600">
-                      WaniKani Level {selectedItem.wkLevel} · {selectedItem.subjectType}
-                    </p>
                     {selectedItem.subjectType === "kanji" && selectedItem.jlptLevel ? (
-                      <p className="mt-1 inline-flex rounded-full border border-line bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-slate-700">
+                      <p className="mt-2 inline-flex rounded-full border border-line bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-slate-700">
                         JLPT N{selectedItem.jlptLevel}
                       </p>
                     ) : null}
