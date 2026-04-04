@@ -291,7 +291,7 @@ export default function LeaderboardTable({ rows }: Props) {
 
                         return (
                       <div className="space-y-3">
-                      <div className="grid gap-3 lg:grid-cols-4">
+                      <div className="grid gap-3 lg:grid-cols-[0.7fr_1.5fr_1.5fr_1fr]">
                         <div className="rounded-2xl border border-accent/25 bg-white p-4">
                           <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-600">
                             Due Now
@@ -305,26 +305,26 @@ export default function LeaderboardTable({ rows }: Props) {
                           <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-600">
                             SRS Stages
                           </p>
-                          <div className="mt-3 grid grid-cols-5 gap-2">
-                            <div className="rounded-xl border border-line bg-surface-muted p-2 text-center">
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <div className="min-w-[84px] flex-1 rounded-xl border border-line bg-surface-muted p-2 text-center">
                               <p className="text-[10px] font-bold uppercase text-slate-600">Apprentice</p>
-                              <p className="text-2xl font-black text-slate-900">{formatNumber(row.apprenticeCount)}</p>
+                              <p className="text-xl font-black leading-none text-slate-900">{formatNumber(row.apprenticeCount)}</p>
                             </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-2 text-center">
+                            <div className="min-w-[84px] flex-1 rounded-xl border border-line bg-surface-muted p-2 text-center">
                               <p className="text-[10px] font-bold uppercase text-slate-600">Guru</p>
-                              <p className="text-2xl font-black text-slate-900">{formatNumber(row.guruCount)}</p>
+                              <p className="text-xl font-black leading-none text-slate-900">{formatNumber(row.guruCount)}</p>
                             </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-2 text-center">
+                            <div className="min-w-[84px] flex-1 rounded-xl border border-line bg-surface-muted p-2 text-center">
                               <p className="text-[10px] font-bold uppercase text-slate-600">Master</p>
-                              <p className="text-2xl font-black text-slate-900">{formatNumber(row.masterCount)}</p>
+                              <p className="text-xl font-black leading-none text-slate-900">{formatNumber(row.masterCount)}</p>
                             </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-2 text-center">
+                            <div className="min-w-[84px] flex-1 rounded-xl border border-line bg-surface-muted p-2 text-center">
                               <p className="text-[10px] font-bold uppercase text-slate-600">Enlightened</p>
-                              <p className="text-2xl font-black text-slate-900">{formatNumber(row.enlightenedCount)}</p>
+                              <p className="text-xl font-black leading-none text-slate-900">{formatNumber(row.enlightenedCount)}</p>
                             </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-2 text-center">
+                            <div className="min-w-[84px] flex-1 rounded-xl border border-line bg-surface-muted p-2 text-center">
                               <p className="text-[10px] font-bold uppercase text-slate-600">Burned</p>
-                              <p className="text-2xl font-black text-slate-900">{formatNumber(row.burnedCount)}</p>
+                              <p className="text-xl font-black leading-none text-slate-900">{formatNumber(row.burnedCount)}</p>
                             </div>
                           </div>
                         </div>
@@ -333,7 +333,7 @@ export default function LeaderboardTable({ rows }: Props) {
                           <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-600">
                             JLPT Levels
                           </p>
-                          <div className="mt-3 grid grid-cols-5 gap-2">
+                          <div className="mt-3 flex flex-wrap gap-2">
                             {([
                               ["N1", jlpt.n1],
                               ["N2", jlpt.n2],
@@ -341,9 +341,9 @@ export default function LeaderboardTable({ rows }: Props) {
                               ["N4", jlpt.n4],
                               ["N5", jlpt.n5],
                             ] as const).map(([label, count]) => (
-                              <div key={label} className="rounded-xl border border-line bg-surface-muted p-2 text-center">
+                              <div key={label} className="min-w-[64px] flex-1 rounded-xl border border-line bg-surface-muted p-2 text-center">
                                 <p className="text-[10px] font-bold uppercase text-slate-600">{label}</p>
-                                <p className="text-2xl font-black text-slate-900">{formatNumber(count)}</p>
+                                <p className="text-xl font-black leading-none text-slate-900">{formatNumber(count)}</p>
                               </div>
                             ))}
                           </div>
