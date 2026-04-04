@@ -208,7 +208,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
             </article>
           </div>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-7">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-8">
             <Link href={`?srs=apprentice#explorer`} className="rounded-xl border border-line bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-surface-muted">
               Apprentice: {formatNumber(account.apprenticeCount)}
             </Link>
@@ -226,6 +226,9 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
             </Link>
             <div className="rounded-xl border border-radical/40 bg-radical/10 px-3 py-2 text-sm font-semibold text-radical">
               Radicals: {formatNumber(account.radicalCount)}
+            </div>
+            <div className="rounded-xl border border-kanji/40 bg-kanji/10 px-3 py-2 text-sm font-semibold text-kanji">
+              Kanji: {formatNumber(itemSpread.totals.kanji)}
             </div>
             <div className="rounded-xl border border-vocabulary/40 bg-vocabulary/10 px-3 py-2 text-sm font-semibold text-vocabulary">
               Vocabulary: {formatNumber(account.vocabularyCount)}

@@ -313,20 +313,41 @@ export default function LevelExplorer({
   }
 
   const filteredItems = useMemo(() => {
-    return combinedSnapshot.items.filter((item) => {
-      const srsPass = srsFilter === "all" ? true : item.status === srsFilter;
-      const typePass = typeFilter === "all" ? true : item.subjectType === typeFilter;
-      const visibilityPass =
-        item.subjectType === "radical"
-          ? visibleTypes.radical
-          : item.subjectType === "kanji"
-            ? visibleTypes.kanji
-            : item.subjectType === "vocabulary"
-              ? visibleTypes.vocabulary
-              : true;
+    const typeOrder: Record<NonNullable<LevelItem["subjectType"]>, number> = {
+      radical: 0,
+      kanji: 1,
+      vocabulary: 2,
+    };
 
-      return srsPass && typePass && visibilityPass;
-    });
+    return combinedSnapshot.items
+      .filter((item) => {
+        const srsPass = srsFilter === "all" ? true : item.status === srsFilter;
+        const typePass = typeFilter === "all" ? true : item.subjectType === typeFilter;
+        const visibilityPass =
+          item.subjectType === "radical"
+            ? visibleTypes.radical
+            : item.subjectType === "kanji"
+              ? visibleTypes.kanji
+              : item.subjectType === "vocabulary"
+                ? visibleTypes.vocabulary
+                : true;
+
+        return srsPass && typePass && visibilityPass;
+      })
+      .sort((a, b) => {
+        const aOrder = a.subjectType ? typeOrder[a.subjectType] : 99;
+        const bOrder = b.subjectType ? typeOrder[b.subjectType] : 99;
+
+        if (aOrder !== bOrder) {
+          return aOrder - bOrder;
+        }
+
+        if ((a.wkLevel ?? 0) !== (b.wkLevel ?? 0)) {
+          return (a.wkLevel ?? 0) - (b.wkLevel ?? 0);
+        }
+
+        return a.subjectId - b.subjectId;
+      });
   }, [combinedSnapshot.items, srsFilter, typeFilter, visibleTypes]);
 
   const selectedItem =
