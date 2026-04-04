@@ -138,6 +138,10 @@ function primaryReadingForDisplay(item: LevelItem): string | null {
   return "-";
 }
 
+function glyphHasReading(item: LevelItem): boolean {
+  return Boolean(primaryReadingForDisplay(item));
+}
+
 export default function LevelExplorer({
   accountId,
   maxLevel,
@@ -897,7 +901,11 @@ export default function LevelExplorer({
               >
                 <div className="flex items-start justify-between gap-2">
                   <div
-                    className={`rounded-xl border px-4 py-2 ${typeGlyphBoxClass(item.subjectType)} ${
+                    className={`rounded-xl border ${
+                      glyphHasReading(item)
+                        ? "px-4 py-2"
+                        : "flex h-28 w-28 items-center justify-center p-2"
+                    } ${typeGlyphBoxClass(item.subjectType)} ${
                       item.status === "locked" || item.srsStage <= 0 ? "opacity-60" : ""
                     }`}
                   >
@@ -947,7 +955,13 @@ export default function LevelExplorer({
 
       {selectedItem ? (
         <section className="border-t border-line bg-white/80 p-5">
-          <div className={`inline-flex rounded-2xl border px-4 py-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
+          <div
+            className={`inline-flex rounded-2xl border ${
+              glyphHasReading(selectedItem)
+                ? "px-4 py-3"
+                : "h-36 w-36 items-center justify-center p-3"
+            } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
+          >
             <div>
               <h3 className="text-4xl font-black leading-none text-current">{selectedItem.characters}</h3>
               {primaryReadingForDisplay(selectedItem) ? (
