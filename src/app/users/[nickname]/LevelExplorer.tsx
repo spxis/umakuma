@@ -141,7 +141,7 @@ export default function LevelExplorer({
   const [error, setError] = useState<string>("");
 
   const levelOptions = useMemo(() => {
-    return Array.from({ length: maxLevel }, (_, index) => index + 1).reverse();
+    return Array.from({ length: maxLevel }, (_, index) => index + 1);
   }, [maxLevel]);
 
   const combinedSnapshot = useMemo(() => {
