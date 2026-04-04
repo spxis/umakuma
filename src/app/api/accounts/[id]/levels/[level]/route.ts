@@ -10,6 +10,20 @@ type RouteContext = {
 
 const LEVEL_CACHE_MS = 24 * 60 * 60 * 1000;
 
+function snapshotHasDrilldownFields(items: unknown): boolean {
+  if (!Array.isArray(items) || items.length === 0) {
+    return true;
+  }
+
+  const first = items[0] as Record<string, unknown>;
+  return (
+    Array.isArray(first.readings) &&
+    Array.isArray(first.radicals) &&
+    typeof first.meaningExplanation === "string" &&
+    typeof first.readingExplanation === "string"
+  );
+}
+
 export async function GET(_: Request, context: RouteContext) {
   try {
     const { id, level: rawLevel } = await context.params;
@@ -39,7 +53,11 @@ export async function GET(_: Request, context: RouteContext) {
     });
 
     const now = Date.now();
-    if (cached && now - cached.syncedAt.getTime() < LEVEL_CACHE_MS) {
+    if (
+      cached &&
+      now - cached.syncedAt.getTime() < LEVEL_CACHE_MS &&
+      snapshotHasDrilldownFields(cached.items)
+    ) {
       return NextResponse.json({
         snapshot: {
           level: cached.level,
