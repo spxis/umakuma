@@ -743,6 +743,17 @@ export default function LevelExplorer({
     return "border-line bg-white text-slate-700";
   }
 
+  function glyphTextSizeClass(characters: string): string {
+    const length = Array.from(characters).length;
+    if (length >= 5) {
+      return "text-4xl";
+    }
+    if (length >= 3) {
+      return "text-5xl";
+    }
+    return "text-6xl";
+  }
+
   const kanjiByCharacter = useMemo(() => {
     return new Map(
       combinedSnapshot.items
@@ -1015,32 +1026,7 @@ export default function LevelExplorer({
                     selectedItem?.subjectId === item.subjectId,
                   )} ${lockedCardStateClass(item)}`}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex min-w-0 flex-1 items-center gap-3">
-                      <div
-                        className={`rounded-xl border ${
-                          glyphHasReading(item)
-                            ? "inline-flex min-h-[5.25rem] min-w-[5.25rem] flex-col items-center justify-center px-3 py-2"
-                            : "inline-flex min-h-[5.25rem] min-w-[5.25rem] items-center justify-center px-3 py-3"
-                        } ${typeGlyphBoxClass(item.subjectType)} ${
-                          item.status === "locked" || item.srsStage <= 0 ? "opacity-60" : ""
-                        }`}
-                      >
-                        <p className="text-4xl font-black leading-none">{item.characters}</p>
-                        {primaryReadingForDisplay(item) ? (
-                          <p className="mt-1 text-center text-sm font-semibold text-slate-600">
-                            {primaryReadingForDisplay(item)}
-                          </p>
-                        ) : null}
-                      </div>
-                      <p
-                        className={`line-clamp-2 text-xl font-black leading-tight ${
-                          item.status === "locked" || item.srsStage <= 0 ? "text-slate-500" : "text-slate-700"
-                        }`}
-                      >
-                        {item.meanings.join(", ") || "-"}
-                      </p>
-                    </div>
+                  <div className="flex items-start justify-end gap-1">
                     <div className="flex flex-col items-end gap-1">
                       <span className={subjectTypePillClass(item.subjectType)}>{item.subjectType}</span>
                       {item.subjectType === "kanji" && item.jlptLevel ? (
@@ -1050,6 +1036,31 @@ export default function LevelExplorer({
                       ) : null}
                     </div>
                   </div>
+                  <div
+                    className={`mt-2 rounded-xl border ${
+                      glyphHasReading(item)
+                        ? "flex min-h-[6rem] w-full flex-col items-center justify-center px-3 py-2"
+                        : "flex min-h-[6rem] w-full items-center justify-center px-3 py-3"
+                    } ${typeGlyphBoxClass(item.subjectType)} ${
+                      item.status === "locked" || item.srsStage <= 0 ? "opacity-60" : ""
+                    }`}
+                  >
+                    <p className={`${glyphTextSizeClass(item.characters)} font-black leading-none whitespace-nowrap`}>
+                      {item.characters}
+                    </p>
+                    {primaryReadingForDisplay(item) ? (
+                      <p className="mt-1 text-center text-sm font-semibold text-slate-600 whitespace-nowrap">
+                        {primaryReadingForDisplay(item)}
+                      </p>
+                    ) : null}
+                  </div>
+                  <p
+                    className={`mt-3 text-xl font-black leading-tight ${
+                      item.status === "locked" || item.srsStage <= 0 ? "text-slate-500" : "text-slate-700"
+                    }`}
+                  >
+                    {item.meanings.join(", ") || "-"}
+                  </p>
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(item.status)}`}>
                       {item.status}
