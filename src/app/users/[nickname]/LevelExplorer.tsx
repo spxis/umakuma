@@ -257,6 +257,41 @@ export default function LevelExplorer({
       : "border-line bg-white text-slate-700 hover:bg-surface-muted";
   }
 
+  function disabledBadgeClass(): string {
+    return "cursor-not-allowed border-line bg-slate-100 text-slate-400";
+  }
+
+  const kanjiByCharacter = useMemo(() => {
+    return new Map(
+      combinedSnapshot.items
+        .filter((item) => item.subjectType === "kanji")
+        .map((item) => [item.characters, item]),
+    );
+  }, [combinedSnapshot.items]);
+
+  const vocabularyKanjiLinks = useMemo(() => {
+    if (!selectedItem || selectedItem.subjectType !== "vocabulary") {
+      return [] as Array<{ char: string; subjectId: number }>;
+    }
+
+    return Array.from(selectedItem.characters)
+      .map((char) => {
+        const found = kanjiByCharacter.get(char);
+        if (!found) {
+          return null;
+        }
+
+        return { char, subjectId: found.subjectId };
+      })
+      .filter((value): value is { char: string; subjectId: number } => value !== null);
+  }, [selectedItem, kanjiByCharacter]);
+
+  function jumpToKanji(subjectId: number) {
+    setTypeFilter("kanji");
+    setSrsFilter("all");
+    setSelectedSubjectId(subjectId);
+  }
+
   return (
     <section id="explorer" className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="flex flex-col gap-3 border-b border-line bg-surface-muted px-5 py-4">
@@ -305,32 +340,46 @@ export default function LevelExplorer({
         <div className="flex flex-wrap gap-2">
           {(["all", "apprentice", "guru", "master", "enlightened", "burned", "locked"] as const).map(
             (status) => (
-              <button
-                key={status}
-                type="button"
-                onClick={() => setSrsFilter(status)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
-                  srsFilter === status,
-                )}`}
-              >
-                {status} ({formatNumber(counts[status])})
-              </button>
+              (() => {
+                const count = counts[status];
+                const disabled = status !== "all" && count === 0;
+
+                return (
+                  <button
+                    key={status}
+                    type="button"
+                    onClick={() => setSrsFilter(status)}
+                    disabled={disabled}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
+                      disabled ? disabledBadgeClass() : badgeClass(srsFilter === status)
+                    }`}
+                  >
+                    {status} ({formatNumber(count)})
+                  </button>
+                );
+              })()
             ),
           )}
         </div>
         <div className="flex flex-wrap gap-2">
-          {(["all", "kanji", "radical", "vocabulary"] as const).map((type) => (
-            <button
-              key={type}
-              type="button"
-              onClick={() => setTypeFilter(type)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
-                typeFilter === type,
-              )}`}
-            >
-              {type} ({formatNumber(counts[type])})
-            </button>
-          ))}
+          {(["all", "kanji", "radical", "vocabulary"] as const).map((type) => {
+            const count = counts[type];
+            const disabled = type !== "all" && count === 0;
+
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => setTypeFilter(type)}
+                disabled={disabled}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
+                  disabled ? disabledBadgeClass() : badgeClass(typeFilter === type)
+                }`}
+              >
+                {type} ({formatNumber(count)})
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -380,6 +429,32 @@ export default function LevelExplorer({
           <p className="text-sm font-semibold text-slate-600">
             WaniKani Level {selectedItem.wkLevel} · {selectedItem.subjectType}
           </p>
+
+          {selectedItem.subjectType === "vocabulary" ? (
+            <div className="mt-3">
+              <p className="text-xs font-bold uppercase tracking-[0.1em] text-slate-600">
+                Kanji used in this vocabulary
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {vocabularyKanjiLinks.length === 0 ? (
+                  <span className="rounded-full border border-line bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
+                    No linked kanji in selected levels
+                  </span>
+                ) : (
+                  vocabularyKanjiLinks.map((item) => (
+                    <button
+                      key={`${selectedItem.subjectId}-${item.subjectId}`}
+                      type="button"
+                      onClick={() => jumpToKanji(item.subjectId)}
+                      className="rounded-full border border-accent/50 bg-white px-3 py-1 text-sm font-black text-accent hover:bg-surface-muted"
+                    >
+                      {item.char}
+                    </button>
+                  ))
+                )}
+              </div>
+            </div>
+          ) : null}
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
