@@ -193,6 +193,7 @@ export default function LevelExplorer({
   const typeFilterStorageKey = `wr:explorer:${accountId}:type-filter`;
   const jlptFilterStorageKey = `wr:explorer:${accountId}:jlpt-filter`;
   const showLockedStorageKey = `wr:explorer:${accountId}:show-locked`;
+  const showBurnedStorageKey = `wr:explorer:${accountId}:show-burned`;
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(new Set([initialSnapshot.level]));
   const [snapshotsByLevel, setSnapshotsByLevel] = useState<Map<number, Snapshot>>(
     new Map([[initialSnapshot.level, normalizeSnapshot(initialSnapshot)]]),
@@ -209,6 +210,7 @@ export default function LevelExplorer({
     vocabulary: true,
   });
   const [showLockedItems, setShowLockedItems] = useState(false);
+  const [showBurnedItems, setShowBurnedItems] = useState(true);
   const [stickyMerge, setStickyMerge] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
@@ -328,6 +330,17 @@ export default function LevelExplorer({
   }, [showLockedStorageKey]);
 
   useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(showBurnedStorageKey);
+      if (raw === "0") {
+        setShowBurnedItems(false);
+      }
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [showBurnedStorageKey]);
+
+  useEffect(() => {
     const computeColumns = () => {
       if (window.matchMedia("(min-width: 1024px)").matches) {
         setGridColumns(3);
@@ -386,6 +399,14 @@ export default function LevelExplorer({
       // Ignore storage errors in restricted browsing modes.
     }
   }, [showLockedItems, showLockedStorageKey]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(showBurnedStorageKey, showBurnedItems ? "1" : "0");
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [showBurnedItems, showBurnedStorageKey]);
 
   useEffect(() => {
     try {
@@ -553,6 +574,7 @@ export default function LevelExplorer({
             ? true
             : item.subjectType === "kanji" && item.jlptLevel === Number(jlptFilter.slice(1));
         const lockedPass = showLockedItems ? true : item.status !== "locked";
+        const burnedPass = showBurnedItems ? true : item.status !== "burned";
         const visibilityPass =
           item.subjectType === "radical"
             ? visibleTypes.radical
@@ -562,7 +584,7 @@ export default function LevelExplorer({
                 ? visibleTypes.vocabulary
                 : true;
 
-        return srsPass && typePass && jlptPass && lockedPass && visibilityPass;
+        return srsPass && typePass && jlptPass && lockedPass && burnedPass && visibilityPass;
       })
       .sort((a, b) => {
         const aOrder = a.subjectType ? typeOrder[a.subjectType] : 99;
@@ -578,7 +600,7 @@ export default function LevelExplorer({
 
         return a.subjectId - b.subjectId;
       });
-  }, [combinedSnapshot.items, srsFilter, typeFilter, jlptFilter, showLockedItems, visibleTypes]);
+  }, [combinedSnapshot.items, srsFilter, typeFilter, jlptFilter, showLockedItems, showBurnedItems, visibleTypes]);
 
   const selectedItem = filteredItems.find((item) => item.subjectId === selectedSubjectId) ?? null;
   const selectedItemIndex = selectedItem
@@ -951,6 +973,22 @@ export default function LevelExplorer({
           </button>
           <p className="text-xs font-semibold text-slate-500">
             Locked items are hidden by default.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowBurnedItems((prev) => !prev)}
+            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${
+              showBurnedItems
+                ? "border-emerald-500 bg-emerald-600 text-white"
+                : "border-line bg-white text-slate-700"
+            }`}
+          >
+            {showBurnedItems ? "Hide Burned" : "Show Burned"}
+          </button>
+          <p className="text-xs font-semibold text-slate-500">
+            Burned items are visible by default.
           </p>
         </div>
       </div>
