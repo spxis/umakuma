@@ -903,7 +903,7 @@ export default function LevelExplorer({
                   <div
                     className={`rounded-xl border ${
                       glyphHasReading(item)
-                        ? "px-4 py-2"
+                        ? "inline-flex min-h-[5.25rem] min-w-[5.25rem] flex-col items-center justify-center px-3 py-2"
                         : "inline-flex min-h-[5.25rem] min-w-[5.25rem] items-center justify-center px-3 py-3"
                     } ${typeGlyphBoxClass(item.subjectType)} ${
                       item.status === "locked" || item.srsStage <= 0 ? "opacity-60" : ""
@@ -958,8 +958,8 @@ export default function LevelExplorer({
           <div
             className={`inline-flex rounded-2xl border ${
               glyphHasReading(selectedItem)
-                ? "px-4 py-3"
-                : "min-h-[6.75rem] min-w-[6.75rem] items-center justify-center p-3"
+                ? "min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center px-4 py-3"
+                : "min-h-[5.75rem] min-w-[5.75rem] items-center justify-center px-4 py-3"
             } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
           >
             <div>
