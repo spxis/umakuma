@@ -396,6 +396,19 @@ export default function LevelExplorer({
     return `border-line bg-white text-slate-700 ${selectedRing}`;
   }
 
+  function typeGlyphBoxClass(type: LevelItem["subjectType"]): string {
+    if (type === "radical") {
+      return "border-radical/50 bg-radical/15 text-radical";
+    }
+    if (type === "kanji") {
+      return "border-kanji/50 bg-kanji/15 text-kanji";
+    }
+    if (type === "vocabulary") {
+      return "border-vocabulary/50 bg-vocabulary/15 text-vocabulary";
+    }
+    return "border-line bg-white text-slate-700";
+  }
+
   const kanjiByCharacter = useMemo(() => {
     return new Map(
       combinedSnapshot.items
@@ -406,7 +419,7 @@ export default function LevelExplorer({
 
   const vocabularyKanjiLinks = useMemo(() => {
     if (!selectedItem || selectedItem.subjectType !== "vocabulary") {
-      return [] as Array<{ char: string; subjectId: number }>;
+      return [] as Array<{ char: string; subjectId: number; reading: string }>;
     }
 
     return Array.from(selectedItem.characters)
@@ -416,9 +429,13 @@ export default function LevelExplorer({
           return null;
         }
 
-        return { char, subjectId: found.subjectId };
+        return {
+          char,
+          subjectId: found.subjectId,
+          reading: (found.primaryReadings ?? [])[0] ?? "-",
+        };
       })
-      .filter((value): value is { char: string; subjectId: number } => value !== null);
+      .filter((value): value is { char: string; subjectId: number; reading: string } => value !== null);
   }, [selectedItem, kanjiByCharacter]);
 
   function jumpToKanji(subjectId: number) {
@@ -574,7 +591,12 @@ export default function LevelExplorer({
                 )}`}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-4xl font-black leading-none">{item.characters}</p>
+                  <div className={`rounded-xl border px-4 py-2 ${typeGlyphBoxClass(item.subjectType)}`}>
+                    <p className="text-4xl font-black leading-none">{item.characters}</p>
+                    <p className="mt-1 text-xs font-semibold text-slate-600">
+                      {(item.primaryReadings ?? [])[0] ?? "-"}
+                    </p>
+                  </div>
                   <span className={subjectTypePillClass(item.subjectType)}>{item.subjectType}</span>
                 </div>
                 <p className="mt-2 text-sm font-semibold text-slate-700">{item.meanings.join(", ") || "-"}</p>
@@ -595,7 +617,14 @@ export default function LevelExplorer({
 
       {selectedItem ? (
         <section className="border-t border-line bg-white/80 p-5">
-          <h3 className="text-2xl font-black text-foreground">{selectedItem.characters}</h3>
+          <div className={`inline-flex rounded-2xl border px-4 py-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
+            <div>
+              <h3 className="text-4xl font-black leading-none text-current">{selectedItem.characters}</h3>
+              <p className="mt-1 text-sm font-semibold text-slate-700">
+                {(selectedItem.primaryReadings ?? [])[0] ?? "-"}
+              </p>
+            </div>
+          </div>
           <p className="text-sm font-semibold text-slate-600">
             WaniKani Level {selectedItem.wkLevel} · {selectedItem.subjectType}
           </p>
@@ -616,9 +645,10 @@ export default function LevelExplorer({
                       key={`${selectedItem.subjectId}-${item.subjectId}`}
                       type="button"
                       onClick={() => jumpToKanji(item.subjectId)}
-                      className="subject-pill subject-pill--kanji px-3 py-1 text-sm font-black"
+                      className="rounded-xl border border-kanji/50 bg-kanji/15 px-4 py-2 text-kanji"
                     >
-                      {item.char}
+                      <p className="text-3xl font-black leading-none">{item.char}</p>
+                      <p className="mt-1 text-xs font-semibold text-slate-600">{item.reading}</p>
                     </button>
                   ))
                 )}
