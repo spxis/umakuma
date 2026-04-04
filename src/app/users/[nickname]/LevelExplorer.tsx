@@ -24,6 +24,7 @@ type LevelItem = {
   }>;
   meaningExplanation?: string;
   readingExplanation?: string;
+  jlptLevel?: number | null;
   srsStage: number;
   status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
   startedAt?: string | null;
@@ -68,6 +69,7 @@ function normalizeSnapshot(raw: Snapshot): Snapshot {
       usedInVocabulary: item.usedInVocabulary ?? [],
       meaningExplanation: item.meaningExplanation ?? "",
       readingExplanation: item.readingExplanation ?? "",
+      jlptLevel: item.jlptLevel ?? null,
       startedAt: item.startedAt ?? null,
       passedAt: item.passedAt ?? null,
       availableAt: item.availableAt ?? null,
@@ -712,7 +714,14 @@ export default function LevelExplorer({
                       </p>
                     ) : null}
                   </div>
-                  <span className={subjectTypePillClass(item.subjectType)}>{item.subjectType}</span>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className={subjectTypePillClass(item.subjectType)}>{item.subjectType}</span>
+                    {item.subjectType === "kanji" && item.jlptLevel ? (
+                      <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-bold uppercase text-slate-600">
+                        JLPT N{item.jlptLevel}
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
                 <p
                   className={`mt-2 text-sm font-semibold ${
@@ -757,6 +766,11 @@ export default function LevelExplorer({
           <p className="text-sm font-semibold text-slate-600">
             WaniKani Level {selectedItem.wkLevel} · {selectedItem.subjectType}
           </p>
+          {selectedItem.subjectType === "kanji" && selectedItem.jlptLevel ? (
+            <p className="mt-1 inline-flex rounded-full border border-line bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-slate-700">
+              JLPT N{selectedItem.jlptLevel}
+            </p>
+          ) : null}
 
           {selectedItem.subjectType === "vocabulary" ? (
             <div className="mt-3">

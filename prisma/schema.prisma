@@ -87,3 +87,13 @@ model DailyAccountSnapshot {
   @@unique([accountId, snapshotDatePst])
   @@index([accountId])
 }
+
+model JlptKanji {
+  id        String   @id @default(cuid())
+  kanji     String   @unique
+  nLevel    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([nLevel])
+}

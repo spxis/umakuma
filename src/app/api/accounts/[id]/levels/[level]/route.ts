@@ -21,7 +21,8 @@ function snapshotHasDrilldownFields(items: unknown): boolean {
     Array.isArray(first.readings) &&
     Array.isArray(first.radicals) &&
     typeof first.meaningExplanation === "string" &&
-    typeof first.readingExplanation === "string"
+    typeof first.readingExplanation === "string" &&
+    Object.hasOwn(first, "jlptLevel")
   );
 }
 

@@ -6,6 +6,8 @@ type WaniKaniUserResponse = {
   };
 };
 
+import { prisma } from "@/lib/prisma";
+
 type WaniKaniCollectionResponse = {
   object: "collection";
   pages: {
@@ -96,6 +98,7 @@ export type LevelKanjiSnapshot = {
     }>;
     meaningExplanation: string;
     readingExplanation: string;
+    jlptLevel: number | null;
     srsStage: number;
     status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
     startedAt: string | null;
@@ -247,6 +250,23 @@ export async function getLevelKanjiSnapshot(
     ]),
   );
 
+  const kanjiCharsForLevel = levelSubjects.data
+    .filter((row) => (row.object ?? "") === "kanji")
+    .map((row) => {
+      const subject = subjectById.get(row.id);
+      return subject?.characters ?? null;
+    })
+    .filter((value): value is string => Boolean(value));
+
+  const jlptRows =
+    kanjiCharsForLevel.length > 0
+      ? await prisma.jlptKanji.findMany({
+          where: { kanji: { in: kanjiCharsForLevel } },
+          select: { kanji: true, nLevel: true },
+        })
+      : [];
+  const jlptByKanji = new Map(jlptRows.map((row) => [row.kanji, row.nLevel]));
+
   const relatedSubjectIds = new Set<number>();
   for (const subject of subjectById.values()) {
     for (const id of subject.component_subject_ids ?? []) {
@@ -338,6 +358,8 @@ export async function getLevelKanjiSnapshot(
         })),
         meaningExplanation: subject?.meaning_mnemonic ?? "",
         readingExplanation: subject?.reading_mnemonic ?? "",
+        jlptLevel:
+          object === "kanji" ? jlptByKanji.get(subject?.characters ?? "") ?? null : null,
         srsStage,
         status: srsLabel(srsStage, locked),
         startedAt: assignment?.started_at ?? null,
