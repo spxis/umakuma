@@ -14,6 +14,7 @@ type WaniKaniCollectionResponse = {
   total_count: number;
   data: Array<{
     id: number;
+    object?: string;
     data: Record<string, unknown>;
   }>;
 };
@@ -63,10 +64,29 @@ export type LevelKanjiSnapshot = {
   estimatedHoursRemaining: number | null;
   items: Array<{
     subjectId: number;
+    wkLevel: number;
     characters: string;
     meanings: string[];
+    readings: string[];
+    primaryReadings: string[];
+    radicals: Array<{
+      subjectId: number;
+      label: string;
+    }>;
+    visuallySimilar: Array<{
+      subjectId: number;
+      label: string;
+    }>;
+    usedInVocabulary: Array<{
+      subjectId: number;
+      label: string;
+    }>;
+    meaningExplanation: string;
+    readingExplanation: string;
     srsStage: number;
     status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+    startedAt: string | null;
+    passedAt: string | null;
     availableAt: string | null;
   }>;
 };
@@ -171,8 +191,15 @@ export async function getLevelKanjiSnapshot(
     levelSubjects.data.map((row) => [
       row.id,
       row.data as {
+        level: number;
         characters: string | null;
         meanings: Array<{ meaning: string; primary: boolean }>;
+        readings: Array<{ reading: string; primary: boolean; accepted_answer: boolean }>;
+        component_subject_ids: number[];
+        amalgamation_subject_ids: number[];
+        visually_similar_subject_ids: number[];
+        meaning_mnemonic: string;
+        reading_mnemonic: string;
       },
     ]),
   );
@@ -184,10 +211,66 @@ export async function getLevelKanjiSnapshot(
         subject_id: number;
         srs_stage: number;
         unlocked_at: string | null;
+        started_at: string | null;
+        passed_at: string | null;
         available_at: string | null;
       },
     ]),
   );
+
+  const relatedSubjectIds = new Set<number>();
+  for (const subject of subjectById.values()) {
+    for (const id of subject.component_subject_ids ?? []) {
+      relatedSubjectIds.add(id);
+    }
+
+    for (const id of subject.amalgamation_subject_ids ?? []) {
+      relatedSubjectIds.add(id);
+    }
+
+    for (const id of subject.visually_similar_subject_ids ?? []) {
+      relatedSubjectIds.add(id);
+    }
+  }
+
+  let relatedSubjects = new Map<
+    number,
+    {
+      subjectId: number;
+      object: string;
+      characters: string | null;
+      slug: string | null;
+    }
+  >();
+
+  if (relatedSubjectIds.size > 0) {
+    const ids = Array.from(relatedSubjectIds.values());
+    const chunkSize = 200;
+
+    for (let i = 0; i < ids.length; i += chunkSize) {
+      const chunk = ids.slice(i, i + chunkSize).join(",");
+      const relatedCollection = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token);
+
+      for (const row of relatedCollection.data) {
+        const data = row.data as { characters?: string | null; slug?: string | null };
+        relatedSubjects.set(row.id, {
+          subjectId: row.id,
+          object: row.object ?? "subject",
+          characters: data.characters ?? null,
+          slug: data.slug ?? null,
+        });
+      }
+    }
+  }
+
+  function subjectLabel(subjectId: number): string {
+    const item = relatedSubjects.get(subjectId);
+    if (!item) {
+      return String(subjectId);
+    }
+
+    return item.characters || item.slug || String(subjectId);
+  }
 
   const items = levelSubjects.data
     .map((subjectRow) => {
@@ -199,10 +282,35 @@ export async function getLevelKanjiSnapshot(
 
       return {
         subjectId: subjectRow.id,
+        wkLevel: subject?.level ?? level,
         characters: subject?.characters ?? "?",
         meanings: (subject?.meanings ?? []).slice(0, 3).map((item) => item.meaning),
+        readings: (subject?.readings ?? [])
+          .filter((item) => item.accepted_answer)
+          .map((item) => item.reading),
+        primaryReadings: (subject?.readings ?? [])
+          .filter((item) => item.primary)
+          .map((item) => item.reading),
+        radicals: (subject?.component_subject_ids ?? [])
+          .filter((id) => {
+            const related = relatedSubjects.get(id);
+            return related?.object === "radical";
+          })
+          .map((id) => ({ subjectId: id, label: subjectLabel(id) })),
+        visuallySimilar: (subject?.visually_similar_subject_ids ?? []).map((id) => ({
+          subjectId: id,
+          label: subjectLabel(id),
+        })),
+        usedInVocabulary: (subject?.amalgamation_subject_ids ?? []).map((id) => ({
+          subjectId: id,
+          label: subjectLabel(id),
+        })),
+        meaningExplanation: subject?.meaning_mnemonic ?? "",
+        readingExplanation: subject?.reading_mnemonic ?? "",
         srsStage,
         status: srsLabel(srsStage, locked),
+        startedAt: assignment?.started_at ?? null,
+        passedAt: assignment?.passed_at ?? null,
         availableAt: assignment?.available_at ?? null,
       };
     })

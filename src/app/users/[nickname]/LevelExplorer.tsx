@@ -4,10 +4,29 @@ import { useMemo, useState } from "react";
 
 type LevelItem = {
   subjectId: number;
+  wkLevel?: number;
   characters: string;
   meanings: string[];
+  readings?: string[];
+  primaryReadings?: string[];
+  radicals?: Array<{
+    subjectId: number;
+    label: string;
+  }>;
+  visuallySimilar?: Array<{
+    subjectId: number;
+    label: string;
+  }>;
+  usedInVocabulary?: Array<{
+    subjectId: number;
+    label: string;
+  }>;
+  meaningExplanation?: string;
+  readingExplanation?: string;
   srsStage: number;
   status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+  startedAt?: string | null;
+  passedAt?: string | null;
   availableAt: string | null;
 };
 
@@ -27,6 +46,28 @@ type Props = {
   maxLevel: number;
   initialSnapshot: Snapshot;
 };
+
+function normalizeSnapshot(raw: Snapshot): Snapshot {
+  return {
+    ...raw,
+    items: raw.items.map((item) => ({
+      ...item,
+      wkLevel: item.wkLevel ?? raw.level,
+      characters: item.characters ?? "?",
+      meanings: item.meanings ?? [],
+      readings: item.readings ?? [],
+      primaryReadings: item.primaryReadings ?? [],
+      radicals: item.radicals ?? [],
+      visuallySimilar: item.visuallySimilar ?? [],
+      usedInVocabulary: item.usedInVocabulary ?? [],
+      meaningExplanation: item.meaningExplanation ?? "",
+      readingExplanation: item.readingExplanation ?? "",
+      startedAt: item.startedAt ?? null,
+      passedAt: item.passedAt ?? null,
+      availableAt: item.availableAt ?? null,
+    })),
+  };
+}
 
 function statusClass(status: LevelItem["status"]): string {
   switch (status) {
@@ -49,9 +90,38 @@ function formatNumber(input: number): string {
   return new Intl.NumberFormat("en-US").format(input);
 }
 
+function formatDate(input: string | null | undefined): string {
+  if (!input) {
+    return "-";
+  }
+
+  const parsed = new Date(input);
+  if (Number.isNaN(parsed.getTime())) {
+    return "-";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(parsed);
+}
+
+function stripHtml(input: string | undefined): string {
+  if (!input) {
+    return "";
+  }
+
+  return input.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
 export default function LevelExplorer({ accountId, maxLevel, initialSnapshot }: Props) {
   const [selectedLevel, setSelectedLevel] = useState(initialSnapshot.level);
-  const [snapshot, setSnapshot] = useState<Snapshot>(initialSnapshot);
+  const [snapshot, setSnapshot] = useState<Snapshot>(normalizeSnapshot(initialSnapshot));
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
+    initialSnapshot.items[0]?.subjectId ?? null,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
 
@@ -76,13 +146,18 @@ export default function LevelExplorer({ accountId, maxLevel, initialSnapshot }: 
         throw new Error(data.error ?? "Could not load level details.");
       }
 
-      setSnapshot(data.snapshot);
+      const normalized = normalizeSnapshot(data.snapshot);
+      setSnapshot(normalized);
+      setSelectedSubjectId(normalized.items[0]?.subjectId ?? null);
     } catch (fetchError) {
       setError(fetchError instanceof Error ? fetchError.message : "Could not load level details.");
     } finally {
       setLoading(false);
     }
   }
+
+  const selectedItem =
+    snapshot.items.find((item) => item.subjectId === selectedSubjectId) ?? snapshot.items[0] ?? null;
 
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
@@ -137,15 +212,23 @@ export default function LevelExplorer({ accountId, maxLevel, initialSnapshot }: 
             <tr>
               <th className="px-5 py-3">Kanji</th>
               <th className="px-5 py-3">Meanings</th>
+              <th className="px-5 py-3">Readings</th>
               <th className="px-5 py-3">Status</th>
               <th className="px-5 py-3">SRS</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-line text-sm">
             {snapshot.items.map((item) => (
-              <tr key={item.subjectId}>
+              <tr
+                key={item.subjectId}
+                className={`cursor-pointer transition hover:bg-surface-muted ${
+                  selectedItem?.subjectId === item.subjectId ? "bg-surface-muted" : ""
+                }`}
+                onClick={() => setSelectedSubjectId(item.subjectId)}
+              >
                 <td className="px-5 py-3 text-2xl font-black text-foreground">{item.characters}</td>
                 <td className="px-5 py-3 text-slate-700">{item.meanings.join(", ")}</td>
+                <td className="px-5 py-3 text-slate-700">{(item.readings ?? []).join(", ") || "-"}</td>
                 <td className="px-5 py-3">
                   <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(item.status)}`}>
                     {item.status}
@@ -157,6 +240,70 @@ export default function LevelExplorer({ accountId, maxLevel, initialSnapshot }: 
           </tbody>
         </table>
       </div>
+
+      {selectedItem ? (
+        <section className="border-t border-line bg-white/80 p-5">
+          <h3 className="text-2xl font-black text-foreground">{selectedItem.characters}</h3>
+          <p className="text-sm font-semibold text-slate-600">WaniKani Level {selectedItem.wkLevel}</p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">SRS state</p>
+              <p className="mt-1 font-semibold text-slate-800">{selectedItem.status}</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">Started</p>
+              <p className="mt-1 font-semibold text-slate-800">{formatDate(selectedItem.startedAt)}</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">Next review</p>
+              <p className="mt-1 font-semibold text-slate-800">{formatDate(selectedItem.availableAt)}</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">Passed</p>
+              <p className="mt-1 font-semibold text-slate-800">{formatDate(selectedItem.passedAt)}</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm sm:col-span-2">
+              <p className="text-xs font-bold uppercase text-slate-600">Primary reading</p>
+              <p className="mt-1 font-semibold text-slate-800">
+                {(selectedItem.primaryReadings ?? []).join(", ") || "-"}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-3 lg:grid-cols-2">
+            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">Meaning explanation</p>
+              <p className="mt-2 text-slate-800">{stripHtml(selectedItem.meaningExplanation) || "-"}</p>
+            </article>
+            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">Reading explanation</p>
+              <p className="mt-2 text-slate-800">{stripHtml(selectedItem.readingExplanation) || "-"}</p>
+            </article>
+          </div>
+
+          <div className="mt-4 grid gap-3 lg:grid-cols-3">
+            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">Radicals</p>
+              <p className="mt-2 text-slate-800">
+                {(selectedItem.radicals ?? []).map((item) => item.label).join(", ") || "-"}
+              </p>
+            </article>
+            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">Visually similar</p>
+              <p className="mt-2 text-slate-800">
+                {(selectedItem.visuallySimilar ?? []).map((item) => item.label).join(", ") || "-"}
+              </p>
+            </article>
+            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-slate-600">Used in vocabulary</p>
+              <p className="mt-2 text-slate-800">
+                {(selectedItem.usedInVocabulary ?? []).map((item) => item.label).join(", ") || "-"}
+              </p>
+            </article>
+          </div>
+        </section>
+      ) : null}
     </section>
   );
 }
