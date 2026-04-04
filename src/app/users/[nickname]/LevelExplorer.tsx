@@ -655,7 +655,7 @@ export default function LevelExplorer({
                   >
                     <p className="text-4xl font-black leading-none">{item.characters}</p>
                     {primaryReadingForDisplay(item) ? (
-                      <p className="mt-1 text-center text-xs font-semibold text-slate-600">
+                      <p className="mt-1 text-center text-sm font-semibold text-slate-600">
                         {primaryReadingForDisplay(item)}
                       </p>
                     ) : null}
@@ -725,7 +725,7 @@ export default function LevelExplorer({
                       className="rounded-xl border border-kanji/50 bg-kanji/15 px-4 py-2 text-kanji"
                     >
                       <p className="text-3xl font-black leading-none">{item.char}</p>
-                      <p className="mt-1 text-center text-xs font-semibold text-slate-600">{item.reading}</p>
+                      <p className="mt-1 text-center text-sm font-semibold text-slate-600">{item.reading}</p>
                     </button>
                   ))
                 )}
