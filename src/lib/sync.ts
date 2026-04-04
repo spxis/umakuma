@@ -108,6 +108,7 @@ export async function refreshAccountById(accountId: string, force: boolean): Pro
         levelKanjiGuruPlus: stats.levelKanjiGuruPlus,
         levelKanjiLocked: stats.levelKanjiLocked,
         estimatedHoursRemaining: stats.estimatedHoursRemaining,
+        lastActivityAt: stats.lastActivityAt,
         levelKanjiItems: stats.levelKanjiItems,
         score: stats.score,
         lastSyncedAt: new Date(),

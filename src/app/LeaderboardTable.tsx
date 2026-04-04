@@ -21,6 +21,7 @@ type LeaderboardRow = {
   levelKanjiTotal: number;
   levelKanjiLearned: number;
   levelKanjiLocked: number;
+  lastActivityAt: string | null;
   score: number;
   lastSyncedAt: string;
 };
@@ -40,6 +41,30 @@ function formatDate(input: string): string {
     hour: "numeric",
     minute: "2-digit",
   }).format(new Date(input));
+}
+
+function formatSince(input: string | null): string {
+  if (!input) {
+    return "No activity yet";
+  }
+
+  const deltaMs = Date.now() - new Date(input).getTime();
+  if (!Number.isFinite(deltaMs) || deltaMs < 0) {
+    return "Just now";
+  }
+
+  const minutes = Math.floor(deltaMs / (1000 * 60));
+  if (minutes < 60) {
+    return `${minutes} min ago`;
+  }
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) {
+    return `${hours} hr ago`;
+  }
+
+  const days = Math.floor(hours / 24);
+  return `${days} day${days === 1 ? "" : "s"} ago`;
 }
 
 export default function LeaderboardTable({ rows }: Props) {
@@ -70,7 +95,7 @@ export default function LeaderboardTable({ rows }: Props) {
               <th className="px-4 py-3">Radicals</th>
               <th className="px-4 py-3">Vocab</th>
               <th className="px-4 py-3">Score</th>
-              <th className="px-4 py-3">Synced</th>
+              <th className="px-4 py-3">Last Activity</th>
               <th className="px-4 py-3">More</th>
             </tr>
           </thead>
@@ -91,7 +116,10 @@ export default function LeaderboardTable({ rows }: Props) {
                   <td className="px-4 py-3 font-semibold">{formatNumber(row.vocabularyCount)}</td>
                   <td className="px-4 py-3 text-lg font-black text-hot">{formatNumber(row.score)}</td>
                   <td className="px-4 py-3 text-xs uppercase tracking-[0.08em] text-slate-500">
-                    {formatDate(row.lastSyncedAt)}
+                    <p>{row.lastActivityAt ? formatDate(row.lastActivityAt) : "-"}</p>
+                    <p className="mt-1 text-[10px] font-semibold normal-case tracking-normal text-slate-400">
+                      {formatSince(row.lastActivityAt)}
+                    </p>
                   </td>
                   <td className="px-4 py-3">
                     <button
@@ -148,12 +176,16 @@ export default function LeaderboardTable({ rows }: Props) {
               <div className="rounded-lg bg-surface-muted p-2">R {formatNumber(row.reviewCount)}</div>
               <div className="rounded-lg bg-surface-muted p-2">S {formatNumber(row.score)}</div>
             </div>
+            <p className="mt-2 text-[11px] font-semibold text-slate-500">
+              Activity: {row.lastActivityAt ? formatDate(row.lastActivityAt) : "-"} · {formatSince(row.lastActivityAt)}
+            </p>
             {expanded.has(row.id) ? (
               <div className="mt-3 grid grid-cols-2 gap-2 text-xs font-semibold text-slate-700">
                 <div className="rounded-lg bg-surface-muted p-2">Radicals {formatNumber(row.radicalCount)}</div>
                 <div className="rounded-lg bg-surface-muted p-2">Vocab {formatNumber(row.vocabularyCount)}</div>
                 <div className="rounded-lg bg-surface-muted p-2">Due {formatNumber(row.pendingReviews)}</div>
                 <div className="rounded-lg bg-surface-muted p-2">Burned {formatNumber(row.burnedCount)}</div>
+                <div className="col-span-2 rounded-lg bg-surface-muted p-2">Last sync {formatDate(row.lastSyncedAt)}</div>
               </div>
             ) : null}
           </article>

@@ -28,6 +28,7 @@ export async function GET() {
         levelKanjiGuruPlus: true,
         levelKanjiLocked: true,
         estimatedHoursRemaining: true,
+        lastActivityAt: true,
         score: true,
         lastSyncedAt: true,
       },

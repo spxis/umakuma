@@ -22,6 +22,7 @@ type LeaderboardRow = {
   levelKanjiTotal: number;
   levelKanjiLearned: number;
   levelKanjiLocked: number;
+  lastActivityAt: Date | null;
   score: number;
   lastSyncedAt: Date;
 };
@@ -56,6 +57,7 @@ export default async function Home() {
         levelKanjiTotal: true,
         levelKanjiLearned: true,
         levelKanjiLocked: true,
+        lastActivityAt: true,
         score: true,
         lastSyncedAt: true,
       },
@@ -140,6 +142,7 @@ export default async function Home() {
             <LeaderboardTable
               rows={leaderboard.map((row) => ({
                 ...row,
+                lastActivityAt: row.lastActivityAt ? row.lastActivityAt.toISOString() : null,
                 lastSyncedAt: row.lastSyncedAt.toISOString(),
               }))}
             />

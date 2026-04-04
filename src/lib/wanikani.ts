@@ -15,6 +15,7 @@ type WaniKaniCollectionResponse = {
   data: Array<{
     id: number;
     object?: string;
+    data_updated_at?: string;
     data: Record<string, unknown>;
   }>;
 };
@@ -46,6 +47,7 @@ type LeaderboardStats = {
   levelKanjiGuruPlus: number;
   levelKanjiLocked: number;
   estimatedHoursRemaining: number | null;
+  lastActivityAt: Date | null;
   levelKanjiItems: Array<{
     subjectId: number;
     characters: string;
@@ -387,6 +389,11 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
     },
   );
 
+  const lastActivityAt = allAssignments.data
+    .map((row) => toDate(row.data_updated_at))
+    .filter((value): value is Date => value !== null)
+    .sort((a, b) => b.getTime() - a.getTime())[0] ?? null;
+
   const radicalCount = allAssignmentData.filter(
     (assignment) => assignment.subject_type === "radical" && assignment.srs_stage > 0,
   ).length;
@@ -443,6 +450,7 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
     levelKanjiGuruPlus,
     levelKanjiLocked,
     estimatedHoursRemaining,
+    lastActivityAt,
     levelKanjiItems,
     score,
   };
