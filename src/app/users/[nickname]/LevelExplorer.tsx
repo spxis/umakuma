@@ -52,6 +52,7 @@ type Props = {
 
 type SrsFilter = "all" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | "locked";
 type TypeFilter = "all" | "kanji" | "radical" | "vocabulary";
+type JlptFilter = "all" | "n1" | "n2" | "n3" | "n4" | "n5";
 
 function normalizeSnapshot(raw: Snapshot): Snapshot {
   return {
@@ -148,6 +149,7 @@ export default function LevelExplorer({
   const stickyMergeStorageKey = `wr:explorer:${accountId}:sticky-merge`;
   const srsFilterStorageKey = `wr:explorer:${accountId}:srs-filter`;
   const typeFilterStorageKey = `wr:explorer:${accountId}:type-filter`;
+  const jlptFilterStorageKey = `wr:explorer:${accountId}:jlpt-filter`;
   const showLockedStorageKey = `wr:explorer:${accountId}:show-locked`;
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(new Set([initialSnapshot.level]));
   const [snapshotsByLevel, setSnapshotsByLevel] = useState<Map<number, Snapshot>>(
@@ -155,6 +157,7 @@ export default function LevelExplorer({
   );
   const [srsFilter, setSrsFilter] = useState<SrsFilter>(initialSrsFilter);
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
+  const [jlptFilter, setJlptFilter] = useState<JlptFilter>("all");
   const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
     initialSnapshot.items[0]?.subjectId ?? null,
   );
@@ -256,6 +259,22 @@ export default function LevelExplorer({
 
   useEffect(() => {
     try {
+      const raw = window.localStorage.getItem(jlptFilterStorageKey);
+      if (!raw) {
+        return;
+      }
+
+      const allowed: JlptFilter[] = ["all", "n1", "n2", "n3", "n4", "n5"];
+      if (allowed.includes(raw as JlptFilter)) {
+        setJlptFilter(raw as JlptFilter);
+      }
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [jlptFilterStorageKey]);
+
+  useEffect(() => {
+    try {
       const raw = window.localStorage.getItem(showLockedStorageKey);
       if (raw === "1") {
         setShowLockedItems(true);
@@ -280,6 +299,14 @@ export default function LevelExplorer({
       // Ignore storage errors in restricted browsing modes.
     }
   }, [typeFilter, typeFilterStorageKey]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(jlptFilterStorageKey, jlptFilter);
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [jlptFilter, jlptFilterStorageKey]);
 
   useEffect(() => {
     try {
@@ -450,6 +477,10 @@ export default function LevelExplorer({
       .filter((item) => {
         const srsPass = srsFilter === "all" ? true : item.status === srsFilter;
         const typePass = typeFilter === "all" ? true : item.subjectType === typeFilter;
+        const jlptPass =
+          jlptFilter === "all"
+            ? true
+            : item.subjectType === "kanji" && item.jlptLevel === Number(jlptFilter.slice(1));
         const lockedPass = showLockedItems ? true : item.status !== "locked";
         const visibilityPass =
           item.subjectType === "radical"
@@ -460,7 +491,7 @@ export default function LevelExplorer({
                 ? visibleTypes.vocabulary
                 : true;
 
-        return srsPass && typePass && lockedPass && visibilityPass;
+        return srsPass && typePass && jlptPass && lockedPass && visibilityPass;
       })
       .sort((a, b) => {
         const aOrder = a.subjectType ? typeOrder[a.subjectType] : 99;
@@ -476,7 +507,7 @@ export default function LevelExplorer({
 
         return a.subjectId - b.subjectId;
       });
-  }, [combinedSnapshot.items, srsFilter, typeFilter, showLockedItems, visibleTypes]);
+  }, [combinedSnapshot.items, srsFilter, typeFilter, jlptFilter, showLockedItems, visibleTypes]);
 
   const selectedItem =
     filteredItems.find((item) => item.subjectId === selectedSubjectId) ?? filteredItems[0] ?? null;
@@ -499,6 +530,22 @@ export default function LevelExplorer({
       base[item.status] += 1;
       if (item.subjectType) {
         base[item.subjectType] += 1;
+      }
+    }
+
+    return base;
+  }, [combinedSnapshot.items]);
+
+  const jlptCounts = useMemo(() => {
+    const base = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
+    for (const item of combinedSnapshot.items) {
+      if (item.subjectType !== "kanji" || !item.jlptLevel) {
+        continue;
+      }
+
+      const key = `n${item.jlptLevel}` as keyof typeof base;
+      if (key in base) {
+        base[key] += 1;
       }
     }
 
@@ -687,6 +734,24 @@ export default function LevelExplorer({
         </div>
       </div>
 
+      <div className="border-b border-line px-5 py-4">
+        <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-600">JLPT mix (kanji in selected levels)</p>
+        <div className="mt-2 grid grid-cols-5 gap-2">
+          {([
+            ["N5", jlptCounts.n5],
+            ["N4", jlptCounts.n4],
+            ["N3", jlptCounts.n3],
+            ["N2", jlptCounts.n2],
+            ["N1", jlptCounts.n1],
+          ] as const).map(([label, count]) => (
+            <div key={label} className="rounded-xl border border-line bg-surface-muted p-2 text-center">
+              <p className="text-[10px] font-bold uppercase text-slate-600">{label}</p>
+              <p className="text-2xl font-black text-foreground">{formatNumber(count)}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div className="space-y-3 border-b border-line px-5 py-4">
         <div className="flex flex-wrap gap-2">
           {(["all", "apprentice", "guru", "master", "enlightened", "burned", "locked"] as const).map(
@@ -730,6 +795,31 @@ export default function LevelExplorer({
                 )}`}
               >
                 {type} ({formatNumber(count)})
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {(["all", "n5", "n4", "n3", "n2", "n1"] as const).map((level) => {
+            const count = level === "all" ? counts.kanji : jlptCounts[level];
+            const disabled = level !== "all" && count === 0;
+
+            return (
+              <button
+                key={level}
+                type="button"
+                onClick={() => {
+                  setJlptFilter(level);
+                  if (level !== "all") {
+                    setTypeFilterAndEnsureVisible("kanji");
+                  }
+                }}
+                disabled={disabled}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
+                  disabled ? disabledBadgeClass() : badgeClass(jlptFilter === level)
+                }`}
+              >
+                {level === "all" ? "JLPT All" : level.toUpperCase()} ({formatNumber(count)})
               </button>
             );
           })}
