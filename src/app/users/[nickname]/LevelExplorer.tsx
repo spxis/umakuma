@@ -212,6 +212,7 @@ export default function LevelExplorer({
   const [stickyMerge, setStickyMerge] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const [gridColumns, setGridColumns] = useState(1);
 
   useEffect(() => {
     try {
@@ -325,6 +326,34 @@ export default function LevelExplorer({
       // Ignore storage errors in restricted browsing modes.
     }
   }, [showLockedStorageKey]);
+
+  useEffect(() => {
+    const computeColumns = () => {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        setGridColumns(3);
+        return;
+      }
+
+      if (window.matchMedia("(min-width: 640px)").matches) {
+        setGridColumns(2);
+        return;
+      }
+
+      setGridColumns(1);
+    };
+
+    computeColumns();
+
+    const sm = window.matchMedia("(min-width: 640px)");
+    const lg = window.matchMedia("(min-width: 1024px)");
+    sm.addEventListener("change", computeColumns);
+    lg.addEventListener("change", computeColumns);
+
+    return () => {
+      sm.removeEventListener("change", computeColumns);
+      lg.removeEventListener("change", computeColumns);
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -552,6 +581,16 @@ export default function LevelExplorer({
   }, [combinedSnapshot.items, srsFilter, typeFilter, jlptFilter, showLockedItems, visibleTypes]);
 
   const selectedItem = filteredItems.find((item) => item.subjectId === selectedSubjectId) ?? null;
+  const selectedItemIndex = selectedItem
+    ? filteredItems.findIndex((item) => item.subjectId === selectedItem.subjectId)
+    : -1;
+  const detailInsertIndex =
+    selectedItemIndex >= 0
+      ? Math.min(
+          filteredItems.length - 1,
+          Math.floor(selectedItemIndex / gridColumns) * gridColumns + (gridColumns - 1),
+        )
+      : -1;
 
   const counts = useMemo(() => {
     const base = {
@@ -926,7 +965,7 @@ export default function LevelExplorer({
           </div>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredItems.map((item) => (
+            {filteredItems.map((item, index) => (
               <Fragment key={`${item.subjectType}-${item.subjectId}`}>
                 <button
                   type="button"
@@ -999,7 +1038,7 @@ export default function LevelExplorer({
                   ) : null}
                 </button>
 
-                {selectedItem?.subjectId === item.subjectId ? (
+                {selectedItem && index === detailInsertIndex ? (
                   <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-white p-5 sm:col-span-2 lg:col-span-3">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="flex min-w-0 flex-1 items-end gap-3">
