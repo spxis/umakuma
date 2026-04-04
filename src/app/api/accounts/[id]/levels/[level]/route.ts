@@ -17,6 +17,7 @@ function snapshotHasDrilldownFields(items: unknown): boolean {
 
   const first = items[0] as Record<string, unknown>;
   return (
+    typeof first.subjectType === "string" &&
     Array.isArray(first.readings) &&
     Array.isArray(first.radicals) &&
     typeof first.meaningExplanation === "string" &&
