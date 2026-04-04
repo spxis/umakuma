@@ -127,14 +127,24 @@ function formatSince(input: string | null): string {
 }
 
 export default function LeaderboardTable({ rows }: Props) {
+  const expandedStorageKey = "wr:leaderboard:expanded-rows";
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [showItemSpreadPanel, setShowItemSpreadPanel] = useState(true);
   const [showLevelProgressPanel, setShowLevelProgressPanel] = useState(true);
 
   useEffect(() => {
     try {
+      const expandedStored = window.localStorage.getItem(expandedStorageKey);
       const spread = window.localStorage.getItem("wr:leaderboard:item-spread-open");
       const progress = window.localStorage.getItem("wr:leaderboard:level-progress-open");
+
+      if (expandedStored) {
+        const parsed = JSON.parse(expandedStored) as string[];
+        if (Array.isArray(parsed)) {
+          setExpanded(new Set(parsed));
+        }
+      }
+
       if (spread === "0") {
         setShowItemSpreadPanel(false);
       }
@@ -144,7 +154,22 @@ export default function LeaderboardTable({ rows }: Props) {
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
-  }, []);
+  }, [expandedStorageKey]);
+
+  useEffect(() => {
+    const validRowIds = new Set(rows.map((row) => row.id));
+    setExpanded((prev) => {
+      const filtered = new Set(Array.from(prev).filter((id) => validRowIds.has(id)));
+
+      try {
+        window.localStorage.setItem(expandedStorageKey, JSON.stringify(Array.from(filtered)));
+      } catch {
+        // Ignore storage errors in restricted browsing modes.
+      }
+
+      return filtered;
+    });
+  }, [rows, expandedStorageKey]);
 
   function persistPanelState(key: string, value: boolean, setter: (next: boolean) => void) {
     setter(value);
@@ -163,6 +188,13 @@ export default function LeaderboardTable({ rows }: Props) {
       } else {
         next.add(id);
       }
+
+      try {
+        window.localStorage.setItem(expandedStorageKey, JSON.stringify(Array.from(next)));
+      } catch {
+        // Ignore storage errors in restricted browsing modes.
+      }
+
       return next;
     });
   }
