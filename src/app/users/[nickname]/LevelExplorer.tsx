@@ -775,9 +775,9 @@ export default function LevelExplorer({
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <span className={subjectTypePillClass(item.subjectType)}>{item.subjectType}</span>
-                    {item.subjectType === "kanji" ? (
+                    {item.subjectType === "kanji" && item.jlptLevel ? (
                       <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-bold uppercase text-slate-600">
-                        {item.jlptLevel ? `JLPT N${item.jlptLevel}` : "JLPT -"}
+                        JLPT N{item.jlptLevel}
                       </span>
                     ) : null}
                   </div>
@@ -825,9 +825,9 @@ export default function LevelExplorer({
           <p className="text-sm font-semibold text-slate-600">
             WaniKani Level {selectedItem.wkLevel} · {selectedItem.subjectType}
           </p>
-          {selectedItem.subjectType === "kanji" ? (
+          {selectedItem.subjectType === "kanji" && selectedItem.jlptLevel ? (
             <p className="mt-1 inline-flex rounded-full border border-line bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-slate-700">
-              {selectedItem.jlptLevel ? `JLPT N${selectedItem.jlptLevel}` : "JLPT -"}
+              JLPT N{selectedItem.jlptLevel}
             </p>
           ) : null}
 
