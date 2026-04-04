@@ -445,6 +445,14 @@ export default function LevelExplorer({
     return `border-line bg-white text-slate-700 ${selectedRing}`;
   }
 
+  function lockedCardStateClass(item: LevelItem): string {
+    if (item.status !== "locked" && item.srsStage > 0) {
+      return "";
+    }
+
+    return "bg-slate-50/80 text-slate-500";
+  }
+
   function typeGlyphBoxClass(type: LevelItem["subjectType"]): string {
     if (type === "radical") {
       return "border-radical/50 bg-radical/15 text-radical";
@@ -637,10 +645,14 @@ export default function LevelExplorer({
                 className={`rounded-2xl border p-3 text-left transition hover:brightness-95 ${typeCardClass(
                   item.subjectType,
                   selectedItem?.subjectId === item.subjectId,
-                )}`}
+                )} ${lockedCardStateClass(item)}`}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <div className={`rounded-xl border px-4 py-2 ${typeGlyphBoxClass(item.subjectType)}`}>
+                  <div
+                    className={`rounded-xl border px-4 py-2 ${typeGlyphBoxClass(item.subjectType)} ${
+                      item.status === "locked" || item.srsStage <= 0 ? "opacity-60" : ""
+                    }`}
+                  >
                     <p className="text-4xl font-black leading-none">{item.characters}</p>
                     {primaryReadingForDisplay(item) ? (
                       <p className="mt-1 text-center text-xs font-semibold text-slate-600">
@@ -650,8 +662,20 @@ export default function LevelExplorer({
                   </div>
                   <span className={subjectTypePillClass(item.subjectType)}>{item.subjectType}</span>
                 </div>
-                <p className="mt-2 text-sm font-semibold text-slate-700">{item.meanings.join(", ") || "-"}</p>
-                <p className="mt-1 text-xs text-slate-600">{(item.readings ?? []).join(", ") || "-"}</p>
+                <p
+                  className={`mt-2 text-sm font-semibold ${
+                    item.status === "locked" || item.srsStage <= 0 ? "text-slate-500" : "text-slate-700"
+                  }`}
+                >
+                  {item.meanings.join(", ") || "-"}
+                </p>
+                <p
+                  className={`mt-1 text-xs ${
+                    item.status === "locked" || item.srsStage <= 0 ? "text-slate-400" : "text-slate-600"
+                  }`}
+                >
+                  {(item.readings ?? []).join(", ") || "-"}
+                </p>
                 <div className="mt-3 flex items-center justify-between gap-2">
                   <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(item.status)}`}>
                     {item.status}
