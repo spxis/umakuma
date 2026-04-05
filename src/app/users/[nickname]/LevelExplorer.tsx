@@ -968,14 +968,26 @@ export default function LevelExplorer({
     }
   }
 
-  function toggleVisibleType(type: "radical" | "kanji" | "vocabulary") {
+  function toggleTypeVisibility(type: "radical" | "kanji" | "vocabulary") {
     markHistoryPush();
 
-    const next = {
+    const visibleCount =
+      Number(visibleTypes.radical) + Number(visibleTypes.kanji) + Number(visibleTypes.vocabulary);
+    if (visibleTypes[type] && visibleCount === 1) {
+      return;
+    }
+
+    setVisibleTypesAndPersist({
       ...visibleTypes,
       [type]: !visibleTypes[type],
-    };
-    setVisibleTypesAndPersist(next);
+    });
+    setTypeFilter("all");
+  }
+
+  function enableAllTypes() {
+    markHistoryPush();
+    setVisibleTypesAndPersist({ radical: true, kanji: true, vocabulary: true });
+    setTypeFilter("all");
   }
 
   function setStickyMergeAndPersist(next: boolean) {
@@ -1969,26 +1981,33 @@ export default function LevelExplorer({
           )}
         </div>
         <div className="flex flex-wrap gap-2">
-          {(["all", "radical", "kanji", "vocabulary"] as const).map((type) => {
-            const count = counts[type];
-            const disabled = type !== "all" && count === 0;
-
-            return (
-              <button
-                key={type}
-                type="button"
-                onClick={() => setTypeFilterAndEnsureVisible(type)}
-                disabled={disabled}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${typeBadgeClass(
-                  type,
-                  typeFilter === type,
-                  disabled,
-                )}`}
-              >
-                {type} ({formatNumber(count)})
-              </button>
-            );
-          })}
+          <button
+            type="button"
+            onClick={enableAllTypes}
+            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+              visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary,
+            )}`}
+          >
+            All ({formatNumber(counts.all)})
+          </button>
+          {([
+            ["radical", counts.radical],
+            ["kanji", counts.kanji],
+            ["vocabulary", counts.vocabulary],
+          ] as const).map(([type, count]) => (
+            <button
+              key={type}
+              type="button"
+              onClick={() => toggleTypeVisibility(type)}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${typeBadgeClass(
+                type,
+                visibleTypes[type],
+                false,
+              )}`}
+            >
+              {type} ({formatNumber(count)})
+            </button>
+          ))}
         </div>
         <div className="flex flex-wrap gap-2">
           {(["all", "n5", "n4", "n3", "n2", "n1"] as const).map((level) => {
@@ -2045,45 +2064,6 @@ export default function LevelExplorer({
               </button>
             );
           })}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <p className="text-xs font-bold uppercase tracking-[0.1em] text-slate-600">Collapse item types</p>
-          {([
-            ["radical", visibleTypes.radical],
-            ["kanji", visibleTypes.kanji],
-            ["vocabulary", visibleTypes.vocabulary],
-          ] as const).map(([type, isVisible]) => (
-            <button
-              key={type}
-              type="button"
-              onClick={() => toggleVisibleType(type)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${
-                isVisible ? typeBadgeClass(type, true, false) : "border-line bg-slate-100 text-slate-500"
-              }`}
-            >
-              {isVisible ? `Hide ${type}` : `Show ${type}`}
-            </button>
-          ))}
-          <button
-            type="button"
-            onClick={() => {
-              markHistoryPush();
-              setVisibleTypesAndPersist({ radical: false, kanji: false, vocabulary: false });
-            }}
-            className="rounded-full border border-line bg-slate-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-slate-600"
-          >
-            Collapse all
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              markHistoryPush();
-              setVisibleTypesAndPersist({ radical: true, kanji: true, vocabulary: true });
-            }}
-            className="rounded-full border border-line bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-slate-700"
-          >
-            Expand all
-          </button>
         </div>
         <div className="flex items-center gap-2">
           <button
