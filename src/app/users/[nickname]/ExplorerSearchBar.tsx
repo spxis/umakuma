@@ -74,8 +74,8 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
     setSrStatus("Searching...");
 
     const params = new URLSearchParams(window.location.search);
-    const key = scope === "jlpt" ? "findJlpt" : "findLevel";
-    params.set(key, trimmed);
+    params.set("findLevel", trimmed);
+    params.set("findJlpt", trimmed);
 
     const next = `${window.location.pathname}?${params.toString()}#explorer`;
     window.history.pushState(null, "", next);

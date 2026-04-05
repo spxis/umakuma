@@ -155,11 +155,15 @@ export default function JlptExplorer({
       const readings = preload?.readings ?? [];
       const meanings = preload?.meanings ?? [];
       const romaji = normalizeSearch(toRomaji(item.kanji, { upcaseKatakana: false }));
+      const readingRomajiMatch = readings.some((reading) =>
+        normalizeSearch(toRomaji(reading, { upcaseKatakana: false })).includes(normalizedQuery),
+      );
       return (
         item.kanji.includes(query.trim()) ||
         normalizeSearch(item.kanji).includes(normalizedQuery) ||
         romaji.includes(normalizedQuery) ||
         readings.some((reading) => normalizeSearch(reading).includes(normalizedQuery)) ||
+        readingRomajiMatch ||
         meanings.some((meaning) => normalizeSearch(meaning).includes(normalizedQuery))
       );
     });
@@ -315,10 +319,19 @@ export default function JlptExplorer({
         }
 
         const romaji = normalizeSearch(toRomaji(item.kanji, { upcaseKatakana: false }));
+        const preload = (jlptReadings as JlptReadingsRecord)[item.kanji];
+        const readings = preload?.readings ?? [];
+        const meanings = preload?.meanings ?? [];
+        const readingRomajiMatch = readings.some((reading) =>
+          normalizeSearch(toRomaji(reading, { upcaseKatakana: false })).includes(normalizedQuery),
+        );
         return (
           item.kanji.includes(nextQuery) ||
           normalizeSearch(item.kanji).includes(normalizedQuery) ||
-          romaji.includes(normalizedQuery)
+          romaji.includes(normalizedQuery) ||
+          readings.some((reading) => normalizeSearch(reading).includes(normalizedQuery)) ||
+          readingRomajiMatch ||
+          meanings.some((meaning) => normalizeSearch(meaning).includes(normalizedQuery))
         );
       }).length;
 
@@ -497,7 +510,7 @@ export default function JlptExplorer({
                   </div>
                 </button>
 
-                {selectedItem && index === detailInsertIndex && selectedItem.kanji === item.kanji ? (
+                {selectedItem && index === detailInsertIndex ? (
                   <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-white p-5 sm:col-span-2 lg:col-span-4">
                     {(() => {
                       const selectedUserMatch = userKanjiByChar.get(selectedItem.kanji);

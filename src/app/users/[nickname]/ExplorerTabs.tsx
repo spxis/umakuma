@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import ExplorerSearchBar from "./ExplorerSearchBar";
 import JlptExplorer from "./JlptExplorer";
@@ -99,6 +99,24 @@ export default function ExplorerTabs({
 }: Props) {
   const [activeTab, setActiveTab] = useState<"level" | "jlpt">("level");
   const [showEnglish, setShowEnglish] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const query = (params.get("findLevel") ?? params.get("findJlpt") ?? "").trim();
+    if (!query) {
+      return;
+    }
+
+    window.dispatchEvent(
+      new CustomEvent("wr:explorer-search", {
+        detail: { query, scope: activeTab },
+      }),
+    );
+  }, [activeTab]);
 
   function tabClass(tab: "level" | "jlpt"): string {
     const active = activeTab === tab;
