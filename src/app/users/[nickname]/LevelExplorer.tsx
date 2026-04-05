@@ -1844,16 +1844,19 @@ export default function LevelExplorer({
                           <p className="text-2xl font-black leading-tight text-foreground">
                             {selectedItem.meanings.join(", ") || "-"}
                           </p>
-                          <p className="mt-1 text-sm font-semibold text-slate-600">
-                            WaniKani Level {selectedItem.wkLevel} · {selectedItem.subjectType}
-                          </p>
+                        </div>
                       </div>
-                    </div>
-                      {selectedItem.subjectType === "kanji" && selectedItem.jlptLevel ? (
-                        <p className="inline-flex self-start rounded-full border border-line bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-slate-700">
-                        JLPT N{selectedItem.jlptLevel}
-                      </p>
-                    ) : null}
+                      <div className="flex flex-col items-end gap-1">
+                        <span className={subjectTypePillClass(selectedItem.subjectType)}>{selectedItem.subjectType}</span>
+                        <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-bold uppercase text-slate-600">
+                          WK {selectedItem.wkLevel}
+                        </span>
+                        {selectedItem.subjectType === "kanji" && selectedItem.jlptLevel ? (
+                          <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-bold uppercase text-slate-600">
+                            JLPT N{selectedItem.jlptLevel}
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
 
                     <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
