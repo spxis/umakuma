@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { toRomaji } from "wanakana";
 
 type LevelItem = {
   subjectId: number;
@@ -232,6 +233,65 @@ function primaryReadingForDisplay(item: LevelItem): string | null {
 
 function glyphHasReading(item: LevelItem): boolean {
   return Boolean(primaryReadingForDisplay(item));
+}
+
+function pronunciationForReading(reading: string | null | undefined): string | null {
+  if (!reading) {
+    return null;
+  }
+
+  const trimmed = reading.trim();
+  if (!trimmed || trimmed === "-") {
+    return null;
+  }
+
+  const romaji = toRomaji(trimmed, { upcaseKatakana: false }).trim();
+  if (!romaji || romaji === trimmed) {
+    return null;
+  }
+
+  return romaji;
+}
+
+function ReadingWithPronunciation({
+  reading,
+  className,
+}: {
+  reading: string;
+  className?: string;
+}) {
+  const pronunciation = pronunciationForReading(reading);
+
+  if (!pronunciation) {
+    return <span className={className}>{reading}</span>;
+  }
+
+  return (
+    <span
+      className={`${className ?? ""} cursor-help decoration-dotted underline-offset-2`}
+      title={`Pronunciation: ${pronunciation}`}
+      aria-label={`${reading} pronunciation ${pronunciation}`}
+    >
+      {reading}
+    </span>
+  );
+}
+
+function ReadingListWithPronunciation({ readings }: { readings: string[] }) {
+  if (readings.length === 0) {
+    return <span>-</span>;
+  }
+
+  return (
+    <>
+      {readings.map((reading, index) => (
+        <Fragment key={`${reading}-${index}`}>
+          {index > 0 ? ", " : null}
+          <ReadingWithPronunciation reading={reading} />
+        </Fragment>
+      ))}
+    </>
+  );
 }
 
 export default function LevelExplorer({
@@ -1455,11 +1515,18 @@ export default function LevelExplorer({
                     <p className={`${glyphTextSizeClass(item.characters)} font-black leading-none whitespace-nowrap`}>
                       {item.characters}
                     </p>
-                    {primaryReadingForDisplay(item) ? (
-                      <p className="mt-1 text-center text-sm font-semibold text-slate-600 whitespace-nowrap">
-                        {primaryReadingForDisplay(item)}
-                      </p>
-                    ) : null}
+                    {(() => {
+                      const reading = primaryReadingForDisplay(item);
+                      if (!reading) {
+                        return null;
+                      }
+
+                      return (
+                        <p className="mt-1 text-center text-sm font-semibold text-slate-600 whitespace-nowrap">
+                          <ReadingWithPronunciation reading={reading} />
+                        </p>
+                      );
+                    })()}
                   </div>
                   <div className="mt-3 flex items-center justify-between gap-2">
                     <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(item.status)}`}>
@@ -1502,11 +1569,18 @@ export default function LevelExplorer({
                         >
                           <div>
                             <h3 className="text-4xl font-black leading-none text-current">{selectedItem.characters}</h3>
-                            {primaryReadingForDisplay(selectedItem) ? (
-                              <p className="mt-1 text-center text-sm font-semibold text-slate-700">
-                                {primaryReadingForDisplay(selectedItem)}
-                              </p>
-                            ) : null}
+                            {(() => {
+                              const reading = primaryReadingForDisplay(selectedItem);
+                              if (!reading) {
+                                return null;
+                              }
+
+                              return (
+                                <p className="mt-1 text-center text-sm font-semibold text-slate-700">
+                                  <ReadingWithPronunciation reading={reading} />
+                                </p>
+                              );
+                            })()}
                           </div>
                         </div>
                         <div className="min-w-0 flex-1">
@@ -1547,7 +1621,7 @@ export default function LevelExplorer({
                         <p className="mt-1 font-semibold text-slate-800">
                           {selectedItem.subjectType === "radical"
                             ? "Not applicable"
-                            : (selectedItem.primaryReadings ?? []).join(", ") || "-"}
+                            : <ReadingListWithPronunciation readings={selectedItem.primaryReadings ?? []} />}
                         </p>
                       </div>
                     </div>
