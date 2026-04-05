@@ -993,16 +993,41 @@ export default function LevelExplorer({
       return <p className="mt-2 text-slate-500">-</p>;
     }
 
+    const expandedItems = items.flatMap((item) => {
+      const segments = item.label
+        .split(",")
+        .map((segment) => segment.trim())
+        .filter((segment) => Boolean(segment));
+
+      if (segments.length <= 1) {
+        return [item];
+      }
+
+      return segments.map((segment, index) => ({
+        subjectId: item.subjectId,
+        label: segment,
+        fallbackKey: `${item.subjectId}-${segment}-${index}`,
+      }));
+    });
+
     return (
       <div className="mt-2 flex flex-wrap gap-2">
-        {items.map((item) => {
+        {expandedItems.map((entry, index) => {
+          const item = {
+            subjectId: entry.subjectId,
+            label: entry.label,
+          };
           const linked = subjectById.get(item.subjectId) ?? null;
           const isClickable = linked !== null;
           const relationType = linked?.subjectType;
+          const key =
+            "fallbackKey" in entry && typeof entry.fallbackKey === "string"
+              ? entry.fallbackKey
+              : `${item.subjectId}-${item.label}-${index}`;
 
           if (!isClickable) {
             return (
-              <span key={item.subjectId} className={relatedReferenceCardClass(relationType, false)}>
+              <span key={key} className={relatedReferenceCardClass(relationType, false)}>
                 <span className="text-xl font-black leading-none">{item.label}</span>
               </span>
             );
@@ -1010,7 +1035,7 @@ export default function LevelExplorer({
 
           return (
             <button
-              key={item.subjectId}
+              key={key}
               type="button"
               onClick={() => jumpToRelatedSubject(item.subjectId)}
               className={relatedReferenceCardClass(relationType, true)}

@@ -10,6 +10,20 @@ type RouteContext = {
 
 const LEVEL_CACHE_MS = 24 * 60 * 60 * 1000;
 
+function hasObjectRelationRows(value: unknown): boolean {
+  if (!Array.isArray(value) || value.length === 0) {
+    return true;
+  }
+
+  const first = value[0];
+  if (!first || typeof first !== "object") {
+    return false;
+  }
+
+  const row = first as Record<string, unknown>;
+  return typeof row.subjectId === "number" && typeof row.label === "string";
+}
+
 function snapshotHasDrilldownFields(items: unknown): boolean {
   if (!Array.isArray(items) || items.length === 0) {
     return true;
@@ -19,7 +33,9 @@ function snapshotHasDrilldownFields(items: unknown): boolean {
   return (
     typeof first.subjectType === "string" &&
     Array.isArray(first.readings) &&
-    Array.isArray(first.radicals) &&
+    hasObjectRelationRows(first.radicals) &&
+    hasObjectRelationRows(first.visuallySimilar) &&
+    hasObjectRelationRows(first.usedInVocabulary) &&
     typeof first.meaningExplanation === "string" &&
     typeof first.readingExplanation === "string" &&
     Object.hasOwn(first, "jlptLevel")
