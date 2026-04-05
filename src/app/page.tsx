@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { refreshDueAccounts } from "@/lib/sync";
-import Link from "next/link";
+import LeaderboardAdminActions from "./LeaderboardAdminActions";
 import LeaderboardTable from "./LeaderboardTable";
 
 export const dynamic = "force-dynamic";
@@ -179,12 +179,7 @@ export default async function Home() {
                 and flex daily review grind.
               </p>
             </div>
-            <Link
-              href="/admin"
-              className="inline-flex h-11 items-center justify-center rounded-full border border-accent/50 bg-accent px-6 text-sm font-bold uppercase tracking-[0.14em] text-white transition hover:bg-accent-2"
-            >
-              Open Admin
-            </Link>
+            <LeaderboardAdminActions />
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3 sm:gap-4">
