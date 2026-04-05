@@ -2,8 +2,7 @@ import { notFound } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 import { refreshDueAccounts } from "@/lib/sync";
-import JlptExplorer from "./JlptExplorer";
-import LevelExplorer from "./LevelExplorer";
+import ExplorerTabs from "./ExplorerTabs";
 import UserDashboardTabs from "./UserDashboardTabs";
 
 type PageProps = {
@@ -210,7 +209,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
           passedLevelUpGate={passedLevelUpGate}
         />
 
-        <LevelExplorer
+        <ExplorerTabs
           accountId={account.id}
           maxLevel={account.wkLevel}
           initialSnapshot={{
@@ -224,10 +223,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
             syncedAt: account.lastSyncedAt.toISOString(),
           }}
           initialSrsFilter={initialSrsFilter}
-        />
-
-        <JlptExplorer
-          items={jlptKanjiRows.map((row) => ({
+          jlptItems={jlptKanjiRows.map((row) => ({
             kanji: row.kanji,
             nLevel: row.nLevel,
           }))}

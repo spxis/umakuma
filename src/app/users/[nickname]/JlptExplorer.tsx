@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toRomaji } from "wanakana";
 
 type JlptItem = {
@@ -25,6 +25,7 @@ function normalizeSearch(input: string): string {
 export default function JlptExplorer({ items }: Props) {
   const [levelFilter, setLevelFilter] = useState<JlptFilter>("all");
   const [query, setQuery] = useState("");
+  const lastHandledFindQueryRef = useRef<string>("");
 
   const counts = useMemo(() => {
     return {
@@ -67,26 +68,95 @@ export default function JlptExplorer({ items }: Props) {
       : "border-line bg-white text-slate-700 hover:bg-surface-muted";
   }
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const runFromUrl = () => {
+      const fromUrl = new URLSearchParams(window.location.search).get("findJlpt");
+      const trimmed = fromUrl?.trim() ?? "";
+
+      if (!trimmed) {
+        setQuery("");
+        return;
+      }
+
+      if (lastHandledFindQueryRef.current === trimmed) {
+        return;
+      }
+
+      lastHandledFindQueryRef.current = trimmed;
+      setQuery(trimmed);
+    };
+
+    runFromUrl();
+
+    const onSearch = (event: Event) => {
+      const custom = event as CustomEvent<{ query?: string; requestId?: string; scope?: "level" | "jlpt" }>;
+      if (custom.detail?.scope !== "jlpt") {
+        return;
+      }
+
+      const nextQuery = custom.detail?.query?.trim() ?? "";
+      const requestId = custom.detail?.requestId;
+      lastHandledFindQueryRef.current = nextQuery;
+      setQuery(nextQuery);
+
+      const normalizedQuery = normalizeSearch(nextQuery);
+      const matchedCount = items.filter((item) => {
+        const levelPass =
+          levelFilter === "all" ? true : item.nLevel === Number(levelFilter.slice(1));
+
+        if (!levelPass) {
+          return false;
+        }
+
+        if (!normalizedQuery) {
+          return true;
+        }
+
+        const romaji = normalizeSearch(toRomaji(item.kanji, { upcaseKatakana: false }));
+        return (
+          item.kanji.includes(nextQuery) ||
+          normalizeSearch(item.kanji).includes(normalizedQuery) ||
+          romaji.includes(normalizedQuery)
+        );
+      }).length;
+
+      if (requestId) {
+        window.dispatchEvent(
+          new CustomEvent("wr:explorer-search-complete", {
+            detail: {
+              requestId,
+              ok: true,
+              message: `Found ${matchedCount} JLPT result${matchedCount === 1 ? "" : "s"}.`,
+            },
+          }),
+        );
+      }
+    };
+
+    const onPopState = () => {
+      runFromUrl();
+    };
+
+    window.addEventListener("wr:explorer-search", onSearch as EventListener);
+    window.addEventListener("popstate", onPopState);
+    return () => {
+      window.removeEventListener("wr:explorer-search", onSearch as EventListener);
+      window.removeEventListener("popstate", onPopState);
+    };
+  }, [items, levelFilter]);
+
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface-muted px-5 py-4">
-        <div className="grid gap-3 md:grid-cols-2 md:items-start">
-          <div>
-            <h2 className="text-xl font-black text-foreground">JLPT Explorer</h2>
-            <p className="text-xs uppercase tracking-[0.08em] text-slate-600">
-              Browse all N1-N5 kanji ({formatNumber(items.length)} total)
-            </p>
-          </div>
-          <div className="rounded-full border border-line bg-white px-2 py-1">
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search JLPT kanji"
-              className="h-9 w-full rounded-full bg-transparent px-3 text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-500"
-              aria-label="Search JLPT explorer"
-            />
-          </div>
+        <div>
+          <h2 className="text-xl font-black text-foreground">JLPT Explorer</h2>
+          <p className="text-xs uppercase tracking-[0.08em] text-slate-600">
+            Browse all N1-N5 kanji ({formatNumber(items.length)} total)
+          </p>
         </div>
       </header>
 

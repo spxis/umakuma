@@ -2,7 +2,11 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-export default function ExplorerSearchBar() {
+type Props = {
+  scope?: "level" | "jlpt";
+};
+
+export default function ExplorerSearchBar({ scope = "level" }: Props) {
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchState, setSearchState] = useState<"idle" | "searching" | "done" | "error">("idle");
@@ -70,14 +74,15 @@ export default function ExplorerSearchBar() {
     setSrStatus("Searching...");
 
     const params = new URLSearchParams(window.location.search);
-    params.set("find", trimmed);
+    const key = scope === "jlpt" ? "findJlpt" : "findLevel";
+    params.set(key, trimmed);
 
     const next = `${window.location.pathname}?${params.toString()}#explorer`;
     window.history.pushState(null, "", next);
 
     window.dispatchEvent(
       new CustomEvent("wr:explorer-search", {
-        detail: { query: trimmed, requestId },
+        detail: { query: trimmed, requestId, scope },
       }),
     );
   }
@@ -89,7 +94,7 @@ export default function ExplorerSearchBar() {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search kanji, hiragana, or romaji"
+          placeholder={scope === "jlpt" ? "Search JLPT kanji" : "Search kanji, hiragana, or romaji"}
           className="h-9 min-w-0 flex-1 rounded-full bg-transparent px-3 text-sm font-semibold text-slate-800 outline-none placeholder:text-slate-500"
           aria-label="Search level explorer"
           disabled={isSearching}

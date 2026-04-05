@@ -3,8 +3,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { toRomaji } from "wanakana";
 
-import ExplorerSearchBar from "./ExplorerSearchBar";
-
 type LevelItem = {
   subjectId: number;
   subjectType?: "kanji" | "radical" | "vocabulary";
@@ -1667,7 +1665,7 @@ export default function LevelExplorer({
     }
 
     const runFromUrl = () => {
-      const fromUrl = new URLSearchParams(window.location.search).get("find");
+      const fromUrl = new URLSearchParams(window.location.search).get("findLevel");
       const trimmed = fromUrl?.trim() ?? "";
       if (!trimmed) {
         setSearchMatchedSubjectIds(null);
@@ -1685,7 +1683,11 @@ export default function LevelExplorer({
     runFromUrl();
 
     const onSearch = (event: Event) => {
-      const custom = event as CustomEvent<{ query?: string; requestId?: string }>;
+      const custom = event as CustomEvent<{ query?: string; requestId?: string; scope?: "level" | "jlpt" }>;
+      if (custom.detail?.scope === "jlpt") {
+        return;
+      }
+
       const query = custom.detail?.query ?? "";
       const requestId = custom.detail?.requestId;
       const trimmed = query.trim();
@@ -1884,16 +1886,11 @@ export default function LevelExplorer({
   return (
     <section id="explorer" className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="flex flex-col gap-3 border-b border-line bg-surface-muted px-5 py-4">
-        <div className="grid gap-3 md:grid-cols-2 md:items-start">
-          <div>
-            <h2 className="text-xl font-black text-foreground">Level Explorer</h2>
-            <p className="text-xs uppercase tracking-[0.08em] text-slate-600">
-              Click one or more level badges to combine data
-            </p>
-          </div>
-          <div className="md:pl-2">
-            <ExplorerSearchBar />
-          </div>
+        <div>
+          <h2 className="text-xl font-black text-foreground">Level Explorer</h2>
+          <p className="text-xs uppercase tracking-[0.08em] text-slate-600">
+            Click one or more level badges to combine data
+          </p>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">
