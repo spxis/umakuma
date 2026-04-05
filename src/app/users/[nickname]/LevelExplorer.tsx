@@ -995,7 +995,7 @@ export default function LevelExplorer({
 
     const expandedItems = items.flatMap((item) => {
       const segments = item.label
-        .split(",")
+        .split(/[、,]/)
         .map((segment) => segment.trim())
         .filter((segment) => Boolean(segment));
 
@@ -1027,7 +1027,7 @@ export default function LevelExplorer({
 
           if (!isClickable) {
             return (
-              <span key={key} className={relatedReferenceCardClass(relationType, false)}>
+              <span key={key} className={`${relatedReferenceCardClass(relationType, false)} inline-flex`}>
                 <span className="text-xl font-black leading-none">{item.label}</span>
               </span>
             );
@@ -1038,7 +1038,7 @@ export default function LevelExplorer({
               key={key}
               type="button"
               onClick={() => jumpToRelatedSubject(item.subjectId)}
-              className={relatedReferenceCardClass(relationType, true)}
+              className={`${relatedReferenceCardClass(relationType, true)} inline-flex`}
             >
               <span className="text-xl font-black leading-none">{item.label}</span>
             </button>
