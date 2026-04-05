@@ -19,11 +19,24 @@ type JlptItem = {
   kanji: string;
   nLevel: number;
   strokeCount: number | null;
+  frequencyRank: number | null;
+  schoolGrade: number | null;
+  heisigKeyword: string | null;
+  unicodeHex: string | null;
+  sourceJlpt: number | null;
   primaryMeaning: string | null;
   meanings: string[];
   onReadings: string[];
   kunReadings: string[];
   nanoriReadings: string[];
+  notes: string[];
+  wordExamples: unknown;
+};
+
+type JlptWordExample = {
+  written: string;
+  pronounced: string;
+  gloss: string;
 };
 
 type Props = {
@@ -49,6 +62,32 @@ type Props = {
 type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;
 
 type JlptFilter = "all" | "kanji" | "none";
+
+function parseWordExamples(input: unknown): JlptWordExample[] {
+  if (!Array.isArray(input)) {
+    return [];
+  }
+
+  const rows: JlptWordExample[] = [];
+  for (const value of input) {
+    if (!value || typeof value !== "object") {
+      continue;
+    }
+
+    const record = value as Record<string, unknown>;
+    const written = typeof record.written === "string" ? record.written.trim() : "";
+    const pronounced = typeof record.pronounced === "string" ? record.pronounced.trim() : "";
+    const gloss = typeof record.gloss === "string" ? record.gloss.trim() : "";
+
+    if (!written && !pronounced) {
+      continue;
+    }
+
+    rows.push({ written, pronounced, gloss });
+  }
+
+  return rows;
+}
 
 export default function JlptExplorer({
   items,
@@ -338,6 +377,48 @@ export default function JlptExplorer({
     };
   }, [items, selectedLevels]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const applyFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = params.get("jlptKanji")?.trim() ?? "";
+      setSelectedKanji(fromUrl || null);
+    };
+
+    applyFromUrl();
+
+    const onPopState = () => {
+      applyFromUrl();
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (selectedKanji) {
+      params.set("jlptKanji", selectedKanji);
+    } else {
+      params.delete("jlptKanji");
+    }
+
+    const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (next !== current) {
+      window.history.replaceState(null, "", next);
+    }
+  }, [selectedKanji]);
+
   const selectedItem = selectedKanji
     ? filteredItems.find((item) => item.kanji === selectedKanji) ?? null
     : null;
@@ -518,6 +599,7 @@ export default function JlptExplorer({
                           ? selectedItem.meanings
                           : selectedPreload?.meanings ?? [];
                       const jsonMeanings = (selectedPreload?.meanings ?? []).filter((meaning) => meaning.trim().length > 0);
+                      const wordExamples = parseWordExamples(selectedItem.wordExamples);
 
                       return (
                         <>
@@ -542,7 +624,7 @@ export default function JlptExplorer({
                             </div>
                           </div>
 
-                          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
+                          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-8">
                             <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                               <p className="text-xs font-bold uppercase text-foreground/70">Primary reading</p>
                               <p className="mt-1 font-semibold text-foreground/90">{readingLabel(primary, showEnglish)}</p>
@@ -572,6 +654,28 @@ export default function JlptExplorer({
                             <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                               <p className="text-xs font-bold uppercase text-foreground/70">Main meaning</p>
                               <p className="mt-1 font-semibold text-foreground/90">{selectedItem.primaryMeaning ?? "-"}</p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-foreground/70">Frequency rank</p>
+                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.frequencyRank ?? "-"}</p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-foreground/70">School grade</p>
+                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.schoolGrade ?? "-"}</p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-foreground/70">Heisig keyword</p>
+                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.heisigKeyword ?? "-"}</p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-foreground/70">Unicode</p>
+                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.unicodeHex ?? "-"}</p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-foreground/70">Source JLPT</p>
+                              <p className="mt-1 font-semibold text-foreground/90">
+                                {selectedItem.sourceJlpt ? `N${selectedItem.sourceJlpt}` : "-"}
+                              </p>
                             </div>
                           </div>
 
@@ -606,6 +710,43 @@ export default function JlptExplorer({
                               )}
                             </article>
                           </div>
+
+                          {selectedItem.notes.length > 0 ? (
+                            <div className="mt-4">
+                              <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                                <p className="text-xs font-bold uppercase text-foreground/70">Dictionary notes</p>
+                                <ul className="mt-2 space-y-1 text-foreground/90">
+                                  {selectedItem.notes.map((note) => (
+                                    <li key={note}>- {note}</li>
+                                  ))}
+                                </ul>
+                              </article>
+                            </div>
+                          ) : null}
+
+                          {wordExamples.length > 0 ? (
+                            <div className="mt-4">
+                              <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                                <p className="text-xs font-bold uppercase text-foreground/70">Used in words</p>
+                                <ul className="mt-2 space-y-2 text-foreground/90">
+                                  {wordExamples.map((example, index) => (
+                                    <li
+                                      key={`${selectedItem.kanji}-${example.written}-${example.pronounced}-${index}`}
+                                      className="rounded-lg border border-line bg-surface px-3 py-2"
+                                    >
+                                      <p className="text-base font-bold text-foreground">
+                                        {example.written || "-"}
+                                      </p>
+                                      <p className="text-xs font-semibold text-foreground/70">
+                                        {example.pronounced || "-"}
+                                      </p>
+                                      <p className="mt-1 text-sm text-foreground/85">{example.gloss || "-"}</p>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </article>
+                            </div>
+                          ) : null}
                         </>
                       );
                     })()}

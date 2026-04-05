@@ -68,6 +68,29 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const readQueryFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const next = (scope === "jlpt" ? params.get("findJlpt") : params.get("findLevel"))?.trim() ?? "";
+      setQuery(next);
+    };
+
+    readQueryFromUrl();
+
+    const onPopState = () => {
+      readQueryFromUrl();
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+    };
+  }, [scope]);
+
   function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 

@@ -63,11 +63,18 @@ type JlptItem = {
   kanji: string;
   nLevel: number;
   strokeCount: number | null;
+  frequencyRank: number | null;
+  schoolGrade: number | null;
+  heisigKeyword: string | null;
+  unicodeHex: string | null;
+  sourceJlpt: number | null;
   primaryMeaning: string | null;
   meanings: string[];
   onReadings: string[];
   kunReadings: string[];
   nanoriReadings: string[];
+  notes: string[];
+  wordExamples: unknown;
 };
 
 type SrsFilter = "all" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | "locked";
@@ -103,8 +110,45 @@ export default function ExplorerTabs({
   jlptItems,
   userKanjiItems,
 }: Props) {
-  const [activeTab, setActiveTab] = useState<"level" | "jlpt">("level");
+  const [activeTab, setActiveTab] = useState<"level" | "jlpt">(() => {
+    if (typeof window === "undefined") {
+      return "level";
+    }
+
+    const raw = new URLSearchParams(window.location.search).get("tab");
+    return raw === "jlpt" ? "jlpt" : "level";
+  });
   const [showEnglish, setShowEnglish] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const tabInUrl = params.get("tab") === "jlpt" ? "jlpt" : "level";
+    if (tabInUrl !== activeTab) {
+      params.set("tab", activeTab);
+      const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+      window.history.replaceState(null, "", next);
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const onPopState = () => {
+      const raw = new URLSearchParams(window.location.search).get("tab");
+      setActiveTab(raw === "jlpt" ? "jlpt" : "level");
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") {

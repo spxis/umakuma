@@ -26,11 +26,18 @@ type JlptKanjiRow = {
   kanji: string;
   nLevel: number;
   strokeCount: number | null;
+  frequencyRank: number | null;
+  schoolGrade: number | null;
+  heisigKeyword: string | null;
+  unicodeHex: string | null;
+  sourceJlpt: number | null;
   primaryMeaning: string | null;
   meanings: string[];
   onReadings: string[];
   kunReadings: string[];
   nanoriReadings: string[];
+  notes: string[];
+  wordExamples: unknown;
 };
 
 type ItemSpreadRow = {
@@ -166,11 +173,18 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
       kanji: true,
       nLevel: true,
       strokeCount: true,
+      frequencyRank: true,
+      schoolGrade: true,
+      heisigKeyword: true,
+      unicodeHex: true,
+      sourceJlpt: true,
       primaryMeaning: true,
       meanings: true,
       onReadings: true,
       kunReadings: true,
       nanoriReadings: true,
+      notes: true,
+      wordExamples: true,
     },
   }) as JlptKanjiRow[];
 
@@ -258,11 +272,18 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
             kanji: row.kanji,
             nLevel: row.nLevel,
             strokeCount: row.strokeCount,
+            frequencyRank: row.frequencyRank,
+            schoolGrade: row.schoolGrade,
+            heisigKeyword: row.heisigKeyword,
+            unicodeHex: row.unicodeHex,
+            sourceJlpt: row.sourceJlpt,
             primaryMeaning: row.primaryMeaning,
             meanings: row.meanings,
             onReadings: row.onReadings,
             kunReadings: row.kunReadings,
             nanoriReadings: row.nanoriReadings,
+            notes: row.notes,
+            wordExamples: row.wordExamples,
           }))}
           userKanjiItems={userKanjiIndex}
         />

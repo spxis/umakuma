@@ -1,14 +1,41 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 
 type KanjiApiPayload = {
+  freq_mainichi_shinbun?: unknown;
+  grade?: unknown;
+  heisig_en?: unknown;
+  jlpt?: unknown;
+  unicode?: unknown;
   meanings?: unknown;
   on_readings?: unknown;
   kun_readings?: unknown;
   name_readings?: unknown;
+  notes?: unknown;
   stroke_count?: unknown;
+};
+
+type WordsApiVariant = {
+  written?: unknown;
+  pronounced?: unknown;
+};
+
+type WordsApiMeaning = {
+  glosses?: unknown;
+};
+
+type WordsApiEntry = {
+  variants?: unknown;
+  meanings?: unknown;
+};
+
+type JlptWordExample = {
+  written: string;
+  pronounced: string;
+  gloss: string;
 };
 
 function uniqueStrings(values: unknown): string[] {
@@ -47,18 +74,60 @@ async function fetchKanjiDetails(kanji: string) {
 
   const payload = (await response.json()) as KanjiApiPayload;
 
+  const wordsResponse = await fetch(`https://kanjiapi.dev/v1/words/${encodeURIComponent(kanji)}`, {
+    cache: "no-store",
+  });
+  const wordsPayload = wordsResponse.ok ? ((await wordsResponse.json()) as unknown) : [];
+
   const meanings = uniqueStrings(payload.meanings);
   const onReadings = uniqueStrings(payload.on_readings);
   const kunReadings = uniqueStrings(payload.kun_readings);
   const nanoriReadings = uniqueStrings(payload.name_readings);
+  const notes = uniqueStrings(payload.notes);
+
+  const wordExamples: JlptWordExample[] = Array.isArray(wordsPayload)
+    ? (wordsPayload as WordsApiEntry[])
+        .map((entry) => {
+          const variants = Array.isArray(entry.variants) ? (entry.variants as WordsApiVariant[]) : [];
+          const firstVariant = variants[0];
+
+          const meaningsList = Array.isArray(entry.meanings) ? (entry.meanings as WordsApiMeaning[]) : [];
+          const firstMeaning = meaningsList[0];
+          const glosses = Array.isArray(firstMeaning?.glosses) ? firstMeaning.glosses : [];
+
+          const written = typeof firstVariant?.written === "string" ? firstVariant.written.trim() : "";
+          const pronounced =
+            typeof firstVariant?.pronounced === "string" ? firstVariant.pronounced.trim() : "";
+          const gloss = typeof glosses[0] === "string" ? glosses[0].trim() : "";
+
+          if (!written && !pronounced) {
+            return null;
+          }
+
+          return {
+            written,
+            pronounced,
+            gloss,
+          };
+        })
+        .filter((entry): entry is JlptWordExample => entry !== null)
+        .slice(0, 12)
+    : [];
 
   return {
     strokeCount: typeof payload.stroke_count === "number" ? payload.stroke_count : null,
+    frequencyRank: typeof payload.freq_mainichi_shinbun === "number" ? payload.freq_mainichi_shinbun : null,
+    schoolGrade: typeof payload.grade === "number" ? payload.grade : null,
+    heisigKeyword: typeof payload.heisig_en === "string" ? payload.heisig_en.trim() || null : null,
+    unicodeHex: typeof payload.unicode === "string" ? payload.unicode.trim() || null : null,
+    sourceJlpt: typeof payload.jlpt === "number" ? payload.jlpt : null,
     primaryMeaning: meanings[0] ?? null,
     meanings,
     onReadings,
     kunReadings,
     nanoriReadings,
+    notes,
+    wordExamples,
     enrichedAt: new Date(),
   };
 }
@@ -84,6 +153,8 @@ export async function POST(request: Request) {
         enrichedAt?: { equals: null };
         meanings?: { isEmpty: true };
         strokeCount?: { equals: null };
+        heisigKeyword?: { equals: null };
+        wordExamples?: { equals: Prisma.NullTypes.DbNull | Prisma.NullTypes.JsonNull };
       }>;
     } | undefined = onlyMissing
       ? {
@@ -91,6 +162,9 @@ export async function POST(request: Request) {
             { enrichedAt: { equals: null } },
             { meanings: { isEmpty: true } },
             { strokeCount: { equals: null } },
+            { heisigKeyword: { equals: null } },
+            { wordExamples: { equals: Prisma.DbNull } },
+            { wordExamples: { equals: Prisma.JsonNull } },
           ],
         }
       : undefined;

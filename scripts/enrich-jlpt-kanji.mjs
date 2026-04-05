@@ -34,20 +34,73 @@ async function fetchKanjiDetails(kanji) {
 
   const payload = await response.json();
 
+  const wordsResponse = await fetch(`https://kanjiapi.dev/v1/words/${encodeURIComponent(kanji)}`, {
+    cache: "no-store",
+  });
+  const wordsPayload = wordsResponse.ok ? await wordsResponse.json() : [];
+
   const meanings = uniqueStrings(Array.isArray(payload?.meanings) ? payload.meanings : []);
   const onReadings = uniqueStrings(Array.isArray(payload?.on_readings) ? payload.on_readings : []);
   const kunReadings = uniqueStrings(Array.isArray(payload?.kun_readings) ? payload.kun_readings : []);
   const nanoriReadings = uniqueStrings(Array.isArray(payload?.name_readings) ? payload.name_readings : []);
+  const notes = uniqueStrings(Array.isArray(payload?.notes) ? payload.notes : []);
+
+  const wordExamples = Array.isArray(wordsPayload)
+    ? wordsPayload
+        .map((entry) => {
+          const variants = Array.isArray(entry?.variants) ? entry.variants : [];
+          const firstVariant = variants[0] ?? null;
+          if (!firstVariant || typeof firstVariant !== "object") {
+            return null;
+          }
+
+          const meanings = Array.isArray(entry?.meanings) ? entry.meanings : [];
+          const firstMeaning = meanings[0] ?? null;
+          const glosses = Array.isArray(firstMeaning?.glosses) ? firstMeaning.glosses : [];
+          const gloss = typeof glosses[0] === "string" ? glosses[0].trim() : "";
+
+          const written = typeof firstVariant.written === "string" ? firstVariant.written.trim() : "";
+          const pronounced =
+            typeof firstVariant.pronounced === "string" ? firstVariant.pronounced.trim() : "";
+
+          if (!written && !pronounced) {
+            return null;
+          }
+
+          return {
+            written,
+            pronounced,
+            gloss,
+          };
+        })
+        .filter((entry) => entry !== null)
+        .slice(0, 12)
+    : [];
+
   const primaryMeaning = meanings[0] ?? null;
   const strokeCount = Number.isInteger(payload?.stroke_count) ? payload.stroke_count : null;
+  const frequencyRank = Number.isInteger(payload?.freq_mainichi_shinbun)
+    ? payload.freq_mainichi_shinbun
+    : null;
+  const schoolGrade = Number.isInteger(payload?.grade) ? payload.grade : null;
+  const heisigKeyword = typeof payload?.heisig_en === "string" ? payload.heisig_en.trim() || null : null;
+  const unicodeHex = typeof payload?.unicode === "string" ? payload.unicode.trim() || null : null;
+  const sourceJlpt = Number.isInteger(payload?.jlpt) ? payload.jlpt : null;
 
   return {
     strokeCount,
+    frequencyRank,
+    schoolGrade,
+    heisigKeyword,
+    unicodeHex,
+    sourceJlpt,
     primaryMeaning,
     meanings,
     onReadings,
     kunReadings,
     nanoriReadings,
+    notes,
+    wordExamples,
     enrichedAt: new Date(),
   };
 }

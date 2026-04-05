@@ -94,11 +94,18 @@ model JlptKanji {
   kanji     String   @unique
   nLevel    Int
   strokeCount Int?
+  frequencyRank Int?
+  schoolGrade Int?
+  heisigKeyword String?
+  unicodeHex String?
+  sourceJlpt Int?
   primaryMeaning String?
   meanings   String[] @default([])
   onReadings String[] @default([])
   kunReadings String[] @default([])
   nanoriReadings String[] @default([])
+  notes String[] @default([])
+  wordExamples Json?
   enrichedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
