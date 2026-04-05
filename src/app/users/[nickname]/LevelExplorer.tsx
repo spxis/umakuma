@@ -1902,7 +1902,7 @@ export default function LevelExplorer({
                     <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-x-3">
                       <div className="row-span-2 inline-flex">
                         <div
-                          className={`${
+                          className={`inline-flex rounded-2xl border ${
                             glyphHasReading(selectedItem)
                               ? "min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center px-4 py-3"
                               : "min-h-[5.75rem] min-w-[5.75rem] items-center justify-center px-4 py-3"
