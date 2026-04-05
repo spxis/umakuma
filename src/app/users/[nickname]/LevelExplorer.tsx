@@ -53,6 +53,12 @@ type Props = {
 type SrsFilter = "all" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | "locked";
 type TypeFilter = "all" | "kanji" | "radical" | "vocabulary";
 type JlptFilter = "all" | "n1" | "n2" | "n3" | "n4" | "n5";
+type ReviewTimingFilter = "all" | "overdue" | "next1h" | "next8h" | "next24h" | "next72h";
+
+type RelatedReference = {
+  subjectId: number;
+  label: string;
+};
 
 function normalizeSnapshot(raw: Snapshot): Snapshot {
   return {
@@ -225,6 +231,7 @@ export default function LevelExplorer({
   const srsFilterStorageKey = `wr:explorer:${accountId}:srs-filter`;
   const typeFilterStorageKey = `wr:explorer:${accountId}:type-filter`;
   const jlptFilterStorageKey = `wr:explorer:${accountId}:jlpt-filter`;
+  const reviewTimingFilterStorageKey = `wr:explorer:${accountId}:review-timing-filter`;
   const showLockedStorageKey = `wr:explorer:${accountId}:show-locked`;
   const showBurnedStorageKey = `wr:explorer:${accountId}:show-burned`;
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(new Set([initialSnapshot.level]));
@@ -234,6 +241,7 @@ export default function LevelExplorer({
   const [srsFilter, setSrsFilter] = useState<SrsFilter>(initialSrsFilter);
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
   const [jlptFilter, setJlptFilter] = useState<JlptFilter>("all");
+  const [reviewTimingFilter, setReviewTimingFilter] = useState<ReviewTimingFilter>("all");
   const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
     initialSnapshot.items[0]?.subjectId ?? null,
   );
@@ -353,6 +361,22 @@ export default function LevelExplorer({
 
   useEffect(() => {
     try {
+      const raw = window.localStorage.getItem(reviewTimingFilterStorageKey);
+      if (!raw) {
+        return;
+      }
+
+      const allowed: ReviewTimingFilter[] = ["all", "overdue", "next1h", "next8h", "next24h", "next72h"];
+      if (allowed.includes(raw as ReviewTimingFilter)) {
+        setReviewTimingFilter(raw as ReviewTimingFilter);
+      }
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [reviewTimingFilterStorageKey]);
+
+  useEffect(() => {
+    try {
       const raw = window.localStorage.getItem(showLockedStorageKey);
       if (raw === "1") {
         setShowLockedItems(true);
@@ -424,6 +448,14 @@ export default function LevelExplorer({
       // Ignore storage errors in restricted browsing modes.
     }
   }, [jlptFilter, jlptFilterStorageKey]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(reviewTimingFilterStorageKey, reviewTimingFilter);
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [reviewTimingFilter, reviewTimingFilterStorageKey]);
 
   useEffect(() => {
     try {
@@ -608,6 +640,40 @@ export default function LevelExplorer({
             : item.subjectType === "kanji" && item.jlptLevel === Number(jlptFilter.slice(1));
         const lockedPass = showLockedItems ? true : item.status !== "locked";
         const burnedPass = showBurnedItems ? true : item.status !== "burned";
+        const reviewTimingPass = (() => {
+          if (reviewTimingFilter === "all") {
+            return true;
+          }
+
+          if (!item.availableAt || item.status === "burned") {
+            return false;
+          }
+
+          const availableTime = new Date(item.availableAt).getTime();
+          if (Number.isNaN(availableTime)) {
+            return false;
+          }
+
+          const deltaMs = availableTime - Date.now();
+          if (reviewTimingFilter === "overdue") {
+            return deltaMs <= 0;
+          }
+
+          if (deltaMs < 0) {
+            return false;
+          }
+
+          const windowMs =
+            reviewTimingFilter === "next1h"
+              ? 60 * 60 * 1000
+              : reviewTimingFilter === "next8h"
+                ? 8 * 60 * 60 * 1000
+                : reviewTimingFilter === "next24h"
+                  ? 24 * 60 * 60 * 1000
+                  : 72 * 60 * 60 * 1000;
+
+          return deltaMs <= windowMs;
+        })();
         const visibilityPass =
           item.subjectType === "radical"
             ? visibleTypes.radical
@@ -617,7 +683,7 @@ export default function LevelExplorer({
                 ? visibleTypes.vocabulary
                 : true;
 
-        return srsPass && typePass && jlptPass && lockedPass && burnedPass && visibilityPass;
+        return srsPass && typePass && jlptPass && lockedPass && burnedPass && reviewTimingPass && visibilityPass;
       })
       .sort((a, b) => {
         const aOrder = a.subjectType ? typeOrder[a.subjectType] : 99;
@@ -633,7 +699,16 @@ export default function LevelExplorer({
 
         return a.subjectId - b.subjectId;
       });
-  }, [combinedSnapshot.items, srsFilter, typeFilter, jlptFilter, showLockedItems, showBurnedItems, visibleTypes]);
+  }, [
+    combinedSnapshot.items,
+    srsFilter,
+    typeFilter,
+    jlptFilter,
+    reviewTimingFilter,
+    showLockedItems,
+    showBurnedItems,
+    visibleTypes,
+  ]);
 
   const selectedItem = filteredItems.find((item) => item.subjectId === selectedSubjectId) ?? null;
   const selectedItemIndex = selectedItem
@@ -681,6 +756,50 @@ export default function LevelExplorer({
       const key = `n${item.jlptLevel}` as keyof typeof base;
       if (key in base) {
         base[key] += 1;
+      }
+    }
+
+    return base;
+  }, [combinedSnapshot.items]);
+
+  const reviewTimingCounts = useMemo(() => {
+    const base = {
+      overdue: 0,
+      next1h: 0,
+      next8h: 0,
+      next24h: 0,
+      next72h: 0,
+    };
+
+    for (const item of combinedSnapshot.items) {
+      if (!item.availableAt || item.status === "burned") {
+        continue;
+      }
+
+      const availableTime = new Date(item.availableAt).getTime();
+      if (Number.isNaN(availableTime)) {
+        continue;
+      }
+
+      const deltaMs = availableTime - Date.now();
+      if (deltaMs <= 0) {
+        base.overdue += 1;
+      }
+
+      if (deltaMs >= 0 && deltaMs <= 60 * 60 * 1000) {
+        base.next1h += 1;
+      }
+
+      if (deltaMs >= 0 && deltaMs <= 8 * 60 * 60 * 1000) {
+        base.next8h += 1;
+      }
+
+      if (deltaMs >= 0 && deltaMs <= 24 * 60 * 60 * 1000) {
+        base.next24h += 1;
+      }
+
+      if (deltaMs >= 0 && deltaMs <= 72 * 60 * 60 * 1000) {
+        base.next72h += 1;
       }
     }
 
@@ -795,6 +914,10 @@ export default function LevelExplorer({
     );
   }, [combinedSnapshot.items]);
 
+  const subjectById = useMemo(() => {
+    return new Map(combinedSnapshot.items.map((item) => [item.subjectId, item]));
+  }, [combinedSnapshot.items]);
+
   const vocabularyKanjiLinks = useMemo(() => {
     if (!selectedItem || selectedItem.subjectType !== "vocabulary") {
       return [] as Array<{ char: string; subjectId: number; reading: string }>;
@@ -820,6 +943,84 @@ export default function LevelExplorer({
     setTypeFilter("kanji");
     setSrsFilter("all");
     setSelectedSubjectId(subjectId);
+  }
+
+  function jumpToRelatedSubject(subjectId: number) {
+    const found = subjectById.get(subjectId);
+    if (!found) {
+      return;
+    }
+
+    if (found.subjectType) {
+      setTypeFilterAndEnsureVisible(found.subjectType);
+    }
+
+    setSrsFilter("all");
+    setJlptFilter("all");
+
+    if (found.status === "locked") {
+      setShowLockedItems(true);
+    }
+
+    if (found.status === "burned") {
+      setShowBurnedItems(true);
+    }
+
+    setSelectedSubjectId(found.subjectId);
+  }
+
+  function relatedReferenceCardClass(type: LevelItem["subjectType"], isClickable: boolean): string {
+    const base =
+      "rounded-xl border px-3 py-2 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
+
+    if (type === "radical") {
+      return `${base} ${isClickable ? "border-radical/50 bg-radical/10 text-radical hover:bg-radical/20" : "border-radical/30 bg-radical/5 text-radical/80"}`;
+    }
+
+    if (type === "kanji") {
+      return `${base} ${isClickable ? "border-kanji/50 bg-kanji/10 text-kanji hover:bg-kanji/20" : "border-kanji/30 bg-kanji/5 text-kanji/80"}`;
+    }
+
+    if (type === "vocabulary") {
+      return `${base} ${isClickable ? "border-vocabulary/50 bg-vocabulary/10 text-vocabulary hover:bg-vocabulary/20" : "border-vocabulary/30 bg-vocabulary/5 text-vocabulary/80"}`;
+    }
+
+    return `${base} ${isClickable ? "border-line bg-white text-slate-700 hover:bg-slate-100" : "border-line bg-slate-50 text-slate-500"}`;
+  }
+
+  function renderRelatedReferenceCards(items: RelatedReference[]) {
+    if (items.length === 0) {
+      return <p className="mt-2 text-slate-500">-</p>;
+    }
+
+    return (
+      <div className="mt-2 flex flex-wrap gap-2">
+        {items.map((item) => {
+          const linked = subjectById.get(item.subjectId) ?? null;
+          const isClickable = linked !== null;
+          const relationType = linked?.subjectType;
+
+          if (!isClickable) {
+            return (
+              <span key={item.subjectId} className={relatedReferenceCardClass(relationType, false)}>
+                <span className="text-xl font-black leading-none">{item.label}</span>
+              </span>
+            );
+          }
+
+          return (
+            <button
+              key={item.subjectId}
+              type="button"
+              onClick={() => jumpToRelatedSubject(item.subjectId)}
+              className={relatedReferenceCardClass(relationType, true)}
+            >
+              <span className="text-xl font-black leading-none">{item.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
   }
 
   return (
@@ -966,6 +1167,32 @@ export default function LevelExplorer({
                 }`}
               >
                 {level === "all" ? "JLPT All" : level.toUpperCase()} ({formatNumber(count)})
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {([
+            ["all", "Review All", combinedSnapshot.items.length],
+            ["overdue", "Overdue", reviewTimingCounts.overdue],
+            ["next1h", "Starts <= 1h", reviewTimingCounts.next1h],
+            ["next8h", "Starts <= 8h", reviewTimingCounts.next8h],
+            ["next24h", "Starts <= 24h", reviewTimingCounts.next24h],
+            ["next72h", "Starts <= 72h", reviewTimingCounts.next72h],
+          ] as const).map(([timing, label, count]) => {
+            const disabled = timing !== "all" && count === 0;
+
+            return (
+              <button
+                key={timing}
+                type="button"
+                onClick={() => setReviewTimingFilter(timing)}
+                disabled={disabled}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
+                  disabled ? disabledBadgeClass() : badgeClass(reviewTimingFilter === timing)
+                }`}
+              >
+                {label} ({formatNumber(count)})
               </button>
             );
           })}
@@ -1226,21 +1453,15 @@ export default function LevelExplorer({
                     <div className="mt-4 grid gap-3 lg:grid-cols-3">
                       <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                         <p className="text-xs font-bold uppercase text-slate-600">Radicals</p>
-                        <p className="mt-2 text-slate-800">
-                          {(selectedItem.radicals ?? []).map((item) => item.label).join(", ") || "-"}
-                        </p>
+                        {renderRelatedReferenceCards(selectedItem.radicals ?? [])}
                       </article>
                       <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                         <p className="text-xs font-bold uppercase text-slate-600">Visually similar</p>
-                        <p className="mt-2 text-slate-800">
-                          {(selectedItem.visuallySimilar ?? []).map((item) => item.label).join(", ") || "-"}
-                        </p>
+                        {renderRelatedReferenceCards(selectedItem.visuallySimilar ?? [])}
                       </article>
                       <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                         <p className="text-xs font-bold uppercase text-slate-600">Used in vocabulary</p>
-                        <p className="mt-2 text-slate-800">
-                          {(selectedItem.usedInVocabulary ?? []).map((item) => item.label).join(", ") || "-"}
-                        </p>
+                        {renderRelatedReferenceCards(selectedItem.usedInVocabulary ?? [])}
                       </article>
                     </div>
                   </section>
