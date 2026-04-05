@@ -73,9 +73,16 @@ type Props = {
   initialSrsFilter: SrsFilter;
   jlptItems: JlptItem[];
   userKanjiItems: Array<{
+    subjectId?: number;
     characters: string;
+    meanings?: string[];
     primaryReadings?: string[];
     readings?: string[];
+    meaningExplanation?: string;
+    readingExplanation?: string;
+    startedAt?: string | null;
+    passedAt?: string | null;
+    availableAt?: string | null;
     status?: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
     srsStage?: number;
     wkLevel?: number | null;
@@ -111,7 +118,7 @@ export default function ExplorerTabs({
             className={tabClass("level")}
             onClick={() => setActiveTab("level")}
           >
-            Level Explorer
+            WaniKani Explorer
           </button>
           <button
             type="button"

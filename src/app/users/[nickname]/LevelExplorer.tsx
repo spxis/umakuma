@@ -1880,7 +1880,7 @@ export default function LevelExplorer({
     <section id="explorer" className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="flex flex-col gap-3 border-b border-line bg-surface-muted px-5 py-4">
         <div>
-          <h2 className="text-xl font-black text-foreground">Level Explorer</h2>
+          <h2 className="text-xl font-black text-foreground">WaniKani Explorer</h2>
           <p className="text-xs uppercase tracking-[0.08em] text-slate-600">
             Click one or more level badges to combine data
           </p>
@@ -1957,30 +1957,6 @@ export default function LevelExplorer({
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-600">Filters</p>
           <div className="mt-3 space-y-3">
         <div className="flex flex-wrap gap-2">
-          {(["all", "apprentice", "guru", "master", "enlightened", "burned", "locked"] as const).map(
-            (status) => (
-              (() => {
-                const count = counts[status];
-                const disabled = status !== "all" && count === 0;
-
-                return (
-                  <button
-                    key={status}
-                    type="button"
-                    onClick={() => setSrsFilterAndSyncLocked(status)}
-                    disabled={disabled}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                      disabled ? disabledBadgeClass() : badgeClass(srsFilter === status)
-                    }`}
-                  >
-                    {status} ({formatNumber(count)})
-                  </button>
-                );
-              })()
-            ),
-          )}
-        </div>
-        <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={enableAllTypes}
@@ -2008,6 +1984,30 @@ export default function LevelExplorer({
               {type} ({formatNumber(count)})
             </button>
           ))}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {(["all", "apprentice", "guru", "master", "enlightened", "burned", "locked"] as const).map(
+            (status) => (
+              (() => {
+                const count = counts[status];
+                const disabled = status !== "all" && count === 0;
+
+                return (
+                  <button
+                    key={status}
+                    type="button"
+                    onClick={() => setSrsFilterAndSyncLocked(status)}
+                    disabled={disabled}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
+                      disabled ? disabledBadgeClass() : badgeClass(srsFilter === status)
+                    }`}
+                  >
+                    {status} ({formatNumber(count)})
+                  </button>
+                );
+              })()
+            ),
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           {(["all", "n5", "n4", "n3", "n2", "n1"] as const).map((level) => {

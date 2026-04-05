@@ -70,7 +70,14 @@ async function fetchKanjiDetail(kanji) {
   const onyomi = on.map((reading) => toHiragana(String(reading).trim())).filter(Boolean);
 
   const allReadings = Array.from(new Set([...kunyomi, ...onyomi]));
-  return allReadings;
+  const meanings = Array.isArray(detail.meanings)
+    ? detail.meanings.map((value) => String(value).trim()).filter(Boolean).slice(0, 3)
+    : [];
+
+  return {
+    readings: allReadings,
+    meanings,
+  };
 }
 
 async function runPool(items, worker, concurrency) {
@@ -106,7 +113,8 @@ async function main() {
   for (const entry of jlptEntries) {
     output[entry.kanji] = {
       nLevel: entry.nLevel,
-      readings: readingMap.get(entry.kanji) ?? [],
+      readings: readingMap.get(entry.kanji)?.readings ?? [],
+      meanings: readingMap.get(entry.kanji)?.meanings ?? [],
     };
   }
 

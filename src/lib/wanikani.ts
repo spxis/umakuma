@@ -79,8 +79,14 @@ type LeaderboardStats = {
 export type UserKanjiIndexItem = {
   subjectId: number;
   characters: string;
+  meanings: string[];
   readings: string[];
   primaryReadings: string[];
+  meaningExplanation: string;
+  readingExplanation: string;
+  startedAt: string | null;
+  passedAt: string | null;
+  availableAt: string | null;
   srsStage: number;
   status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
   wkLevel: number | null;
@@ -242,6 +248,9 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
         subject_type: string;
         srs_stage: number;
         unlocked_at: string | null;
+        started_at: string | null;
+        passed_at: string | null;
+        available_at: string | null;
       },
     )
     .filter((assignment) => assignment.subject_type === "kanji");
@@ -251,8 +260,11 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
     number,
     {
       characters: string;
+      meanings: string[];
       readings: string[];
       primaryReadings: string[];
+      meaningExplanation: string;
+      readingExplanation: string;
       wkLevel: number | null;
     }
   >();
@@ -273,7 +285,10 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
       const data = row.data as {
         characters?: string | null;
         level?: number | null;
+        meanings?: Array<{ meaning?: string; primary?: boolean }>;
         readings?: Array<{ reading?: string; primary?: boolean; accepted_answer?: boolean }>;
+        meaning_mnemonic?: string;
+        reading_mnemonic?: string;
       };
 
       const characters = data.characters ?? "";
@@ -291,10 +306,18 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
         .map((reading) => reading.reading)
         .filter((reading): reading is string => typeof reading === "string" && reading.length > 0);
 
+      const meanings = (data.meanings ?? [])
+        .map((entry) => entry.meaning)
+        .filter((entry): entry is string => typeof entry === "string" && entry.length > 0)
+        .slice(0, 3);
+
       subjectById.set(row.id, {
         characters,
+        meanings,
         readings,
         primaryReadings,
+        meaningExplanation: data.meaning_mnemonic ?? "",
+        readingExplanation: data.reading_mnemonic ?? "",
         wkLevel: typeof data.level === "number" ? data.level : null,
       });
     }
@@ -311,8 +334,14 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
     const item: UserKanjiIndexItem = {
       subjectId: assignment.subject_id,
       characters: subject.characters,
+      meanings: subject.meanings,
       readings: subject.readings,
       primaryReadings: subject.primaryReadings,
+      meaningExplanation: subject.meaningExplanation,
+      readingExplanation: subject.readingExplanation,
+      startedAt: assignment.started_at ?? null,
+      passedAt: assignment.passed_at ?? null,
+      availableAt: assignment.available_at ?? null,
       srsStage: assignment.srs_stage,
       status: srsLabel(assignment.srs_stage, locked),
       wkLevel: subject.wkLevel,

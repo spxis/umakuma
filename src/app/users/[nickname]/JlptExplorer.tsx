@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { toRomaji } from "wanakana";
 
 import jlptReadings from "@/data/jlptReadings.json";
@@ -14,9 +14,16 @@ type Props = {
   items: JlptItem[];
   showEnglish?: boolean;
   userKanjiItems?: Array<{
+    subjectId?: number;
     characters: string;
+    meanings?: string[];
     primaryReadings?: string[];
     readings?: string[];
+    meaningExplanation?: string;
+    readingExplanation?: string;
+    startedAt?: string | null;
+    passedAt?: string | null;
+    availableAt?: string | null;
     status?: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
     srsStage?: number;
     wkLevel?: number | null;
@@ -33,6 +40,36 @@ function normalizeSearch(input: string): string {
 
 type JlptReadingsMap = Record<string, { nLevel: number; readings: string[] }>;
 
+type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;
+
+type JlptFilter = "all" | "kanji" | "none";
+
+function formatDate(input: string | null | undefined): string {
+  if (!input) {
+    return "-";
+  }
+
+  const parsed = new Date(input);
+  if (Number.isNaN(parsed.getTime())) {
+    return "-";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(parsed);
+}
+
+function stripHtml(input: string | undefined): string {
+  if (!input) {
+    return "";
+  }
+
+  return input.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
 export default function JlptExplorer({
   items,
   showEnglish = false,
@@ -40,14 +77,24 @@ export default function JlptExplorer({
 }: Props) {
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(new Set([1, 2, 3, 4, 5]));
   const [stickyLevels, setStickyLevels] = useState(false);
+  const [wkFilter, setWkFilter] = useState<JlptFilter>("all");
   const [query, setQuery] = useState("");
+  const [selectedKanji, setSelectedKanji] = useState<string | null>(null);
+  const [gridColumns, setGridColumns] = useState(1);
   const lastHandledFindQueryRef = useRef<string>("");
 
   const userKanjiByChar = useMemo(() => {
     const map = new Map<string, {
+      subjectId?: number;
       characters: string;
+      meanings?: string[];
       primaryReadings?: string[];
       readings?: string[];
+      meaningExplanation?: string;
+      readingExplanation?: string;
+      startedAt?: string | null;
+      passedAt?: string | null;
+      availableAt?: string | null;
       status?: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
       srsStage?: number;
       wkLevel?: number | null;
@@ -64,18 +111,22 @@ export default function JlptExplorer({
   }, [userKanjiItems]);
 
   const counts = useMemo(() => {
+    const noneCount = items.filter((item) => !userKanjiByChar.has(item.kanji)).length;
     return {
       all: items.length,
+      kanji: items.length - noneCount,
+      none: noneCount,
       n5: items.filter((item) => item.nLevel === 5).length,
       n4: items.filter((item) => item.nLevel === 4).length,
       n3: items.filter((item) => item.nLevel === 3).length,
       n2: items.filter((item) => item.nLevel === 2).length,
       n1: items.filter((item) => item.nLevel === 1).length,
     };
-  }, [items]);
+  }, [items, userKanjiByChar]);
 
   const filteredItems = useMemo(() => {
     const normalizedQuery = normalizeSearch(query);
+    const records = jlptReadings as JlptReadingsRecord;
 
     return items.filter((item) => {
       const levelPass = selectedLevels.has(item.nLevel);
@@ -84,18 +135,63 @@ export default function JlptExplorer({
         return false;
       }
 
+      const userMatch = userKanjiByChar.get(item.kanji);
+      const wkPass =
+        wkFilter === "all"
+          ? true
+          : wkFilter === "kanji"
+            ? Boolean(userMatch)
+            : !userMatch;
+
+      if (!wkPass) {
+        return false;
+      }
+
       if (!normalizedQuery) {
         return true;
       }
 
+      const preload = records[item.kanji];
+      const readings = preload?.readings ?? [];
+      const meanings = preload?.meanings ?? [];
       const romaji = normalizeSearch(toRomaji(item.kanji, { upcaseKatakana: false }));
       return (
         item.kanji.includes(query.trim()) ||
         normalizeSearch(item.kanji).includes(normalizedQuery) ||
-        romaji.includes(normalizedQuery)
+        romaji.includes(normalizedQuery) ||
+        readings.some((reading) => normalizeSearch(reading).includes(normalizedQuery)) ||
+        meanings.some((meaning) => normalizeSearch(meaning).includes(normalizedQuery))
       );
     });
-  }, [items, query, selectedLevels]);
+  }, [items, query, selectedLevels, userKanjiByChar, wkFilter]);
+
+  useEffect(() => {
+    const computeColumns = () => {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        setGridColumns(4);
+        return;
+      }
+
+      if (window.matchMedia("(min-width: 640px)").matches) {
+        setGridColumns(2);
+        return;
+      }
+
+      setGridColumns(1);
+    };
+
+    computeColumns();
+
+    const sm = window.matchMedia("(min-width: 640px)");
+    const lg = window.matchMedia("(min-width: 1024px)");
+    sm.addEventListener("change", computeColumns);
+    lg.addEventListener("change", computeColumns);
+
+    return () => {
+      sm.removeEventListener("change", computeColumns);
+      lg.removeEventListener("change", computeColumns);
+    };
+  }, []);
 
   function badgeClass(active: boolean): string {
     return active
@@ -135,6 +231,18 @@ export default function JlptExplorer({
 
     const primary = readings[0] ?? null;
     return readingLabel(primary);
+  }
+
+  function meaningLabelFromList(meanings: string[]): string {
+    if (meanings.length === 0) {
+      return "-";
+    }
+
+    if (!showEnglish) {
+      return "-";
+    }
+
+    return meanings.slice(0, 2).join(", ");
   }
 
   function toggleNLevel(level: number) {
@@ -239,6 +347,20 @@ export default function JlptExplorer({
     };
   }, [items, selectedLevels]);
 
+  const selectedItem = selectedKanji
+    ? filteredItems.find((item) => item.kanji === selectedKanji) ?? null
+    : null;
+  const selectedItemIndex = selectedItem
+    ? filteredItems.findIndex((item) => item.kanji === selectedItem.kanji)
+    : -1;
+  const detailInsertIndex =
+    selectedItemIndex >= 0
+      ? Math.min(
+          filteredItems.length - 1,
+          Math.floor(selectedItemIndex / gridColumns) * gridColumns + (gridColumns - 1),
+        )
+      : -1;
+
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -278,6 +400,34 @@ export default function JlptExplorer({
                 N{level} ({formatNumber(count)})
               </button>
             ))}
+
+            <button
+              type="button"
+              onClick={() => setWkFilter("all")}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+                wkFilter === "all",
+              )}`}
+            >
+              All ({formatNumber(counts.all)})
+            </button>
+            <button
+              type="button"
+              onClick={() => setWkFilter("kanji")}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+                wkFilter === "kanji",
+              )}`}
+            >
+              Kanji ({formatNumber(counts.kanji)})
+            </button>
+            <button
+              type="button"
+              onClick={() => setWkFilter("none")}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+                wkFilter === "none",
+              )}`}
+            >
+              None ({formatNumber(counts.none)})
+            </button>
           </div>
           <button
             type="button"
@@ -301,38 +451,126 @@ export default function JlptExplorer({
           WaniKani-specific SRS stats are shown only where subject mappings exist.
         </p>
 
-        <div className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {filteredItems.map((item) => {
+        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {filteredItems.map((item, index) => {
             const userMatch = userKanjiByChar.get(item.kanji);
-            const preload = (jlptReadings as JlptReadingsMap)[item.kanji];
+            const preload = (jlptReadings as JlptReadingsRecord)[item.kanji];
             const primaryReading = userMatch
               ? (userMatch.primaryReadings ?? [])[0] ?? (userMatch.readings ?? [])[0] ?? null
               : null;
             const fallbackReadings = preload?.readings ?? [];
+            const fallbackMeanings = preload?.meanings ?? [];
+            const heading = userMatch?.meanings?.[0] ?? meaningLabelFromList(fallbackMeanings);
 
             return (
-              <article
-                key={`${item.nLevel}-${item.kanji}`}
-                className={`rounded-2xl border p-3 text-center ${
-                  userMatch
-                    ? "border-kanji/50 bg-kanji/10"
-                    : "border-line bg-white"
-                }`}
-              >
-                <div className="flex items-center justify-between gap-1">
-                  <p className="subject-pill border-line bg-white text-slate-700">N{item.nLevel}</p>
-                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${statusClass(userMatch?.status)}`}>
-                    {userMatch?.status ?? "untracked"}
-                  </span>
-                </div>
-                <p className={`mt-2 text-5xl font-black ${userMatch ? "text-kanji" : "text-foreground"}`}>{item.kanji}</p>
-                <p className="mt-1 text-sm font-semibold text-slate-600">
-                  {primaryReading ? readingLabel(primaryReading) : readingLabelFromList(fallbackReadings)}
-                </p>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-                  {userMatch ? `WK L${userMatch.wkLevel ?? "?"} / SRS ${userMatch.srsStage ?? 0}` : "No WK match"}
-                </p>
-              </article>
+              <Fragment key={`${item.nLevel}-${item.kanji}`}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedKanji((prev) => (prev === item.kanji ? null : item.kanji))}
+                  className={`rounded-2xl border p-3 text-left transition hover:brightness-95 ${
+                    userMatch
+                      ? "border-kanji/50 bg-white text-slate-800"
+                      : "border-line bg-white text-slate-700"
+                  } ${selectedKanji === item.kanji ? "ring-2 ring-accent" : ""}`}
+                >
+                  <div className="flex items-start justify-end gap-1">
+                    <div className="flex flex-wrap items-center justify-end gap-1">
+                      <span className="subject-pill subject-pill--kanji">kanji</span>
+                      <span className="subject-pill border-line bg-white text-slate-700">N{item.nLevel}</span>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-xl font-black leading-tight text-slate-700">{heading}</p>
+                  <div className={`mt-3 rounded-xl border border-kanji/50 bg-kanji/10 px-3 py-2 ${userMatch ? "text-kanji" : "text-foreground"}`}>
+                    <p className="text-center text-6xl font-black leading-none">{item.kanji}</p>
+                    <p className="mt-1 text-center text-sm font-semibold text-slate-600">
+                      {primaryReading ? readingLabel(primaryReading) : readingLabelFromList(fallbackReadings)}
+                    </p>
+                  </div>
+                  <div className="mt-3 grid grid-cols-3 items-center gap-2">
+                    <span className={`justify-self-start rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(userMatch?.status)}`}>
+                      {userMatch?.status ?? "untracked"}
+                    </span>
+                    <span />
+                    <span className="justify-self-end rounded-full border border-line bg-white px-2 py-1 text-xs font-bold text-slate-700">
+                      {userMatch ? `SRS ${userMatch.srsStage ?? 0}` : "-"}
+                    </span>
+                  </div>
+                </button>
+
+                {selectedItem && index === detailInsertIndex && selectedItem.kanji === item.kanji ? (
+                  <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-white p-5 sm:col-span-2 lg:col-span-4">
+                    {(() => {
+                      const selectedUserMatch = userKanjiByChar.get(selectedItem.kanji);
+                      const selectedPreload = (jlptReadings as JlptReadingsRecord)[selectedItem.kanji];
+                      const primary = selectedUserMatch
+                        ? (selectedUserMatch.primaryReadings ?? [])[0] ?? (selectedUserMatch.readings ?? [])[0] ?? null
+                        : selectedPreload?.readings?.[0] ?? null;
+                      const secondary = selectedUserMatch
+                        ? (selectedUserMatch.readings ?? []).filter((reading) => reading !== primary)
+                        : (selectedPreload?.readings ?? []).filter((reading) => reading !== primary);
+                      const meanings = selectedUserMatch?.meanings?.length
+                        ? selectedUserMatch.meanings
+                        : selectedPreload?.meanings ?? [];
+
+                      return (
+                        <>
+                          <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-x-3">
+                            <div className="inline-flex rounded-2xl border border-kanji/50 bg-kanji/10 px-4 py-3 text-kanji">
+                              <h3 className="text-4xl font-black leading-none">{selectedItem.kanji}</h3>
+                            </div>
+                            <div className="flex flex-wrap justify-start gap-1 sm:justify-end">
+                              <span className="subject-pill subject-pill--kanji">kanji</span>
+                              <span className="subject-pill border-line bg-white text-slate-700">N{selectedItem.nLevel}</span>
+                              <span className={`subject-pill ${statusClass(selectedUserMatch?.status)}`}>{selectedUserMatch?.status ?? "untracked"}</span>
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-3xl font-black leading-tight text-foreground">
+                                {meanings.length > 0 ? meanings.join(", ") : "-"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-slate-600">Primary reading</p>
+                              <p className="mt-1 font-semibold text-slate-800">{readingLabel(primary)}</p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-slate-600">Secondary readings</p>
+                              <p className="mt-1 font-semibold text-slate-800">
+                                {secondary.length > 0 ? secondary.map((reading) => readingLabel(reading)).join(", ") : "-"}
+                              </p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-slate-600">Started</p>
+                              <p className="mt-1 font-semibold text-slate-800">{formatDate(selectedUserMatch?.startedAt)}</p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-slate-600">Next review</p>
+                              <p className="mt-1 font-semibold text-slate-800">{formatDate(selectedUserMatch?.availableAt)}</p>
+                            </div>
+                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-slate-600">Passed</p>
+                              <p className="mt-1 font-semibold text-slate-800">{formatDate(selectedUserMatch?.passedAt)}</p>
+                            </div>
+                          </div>
+
+                          <div className="mt-4 grid gap-3 lg:grid-cols-2">
+                            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-slate-600">Meaning explanation</p>
+                              <p className="mt-2 text-slate-800">{stripHtml(selectedUserMatch?.meaningExplanation) || "-"}</p>
+                            </article>
+                            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+                              <p className="text-xs font-bold uppercase text-slate-600">Reading explanation</p>
+                              <p className="mt-2 text-slate-800">{stripHtml(selectedUserMatch?.readingExplanation) || "-"}</p>
+                            </article>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </section>
+                ) : null}
+              </Fragment>
             );
           })}
         </div>
