@@ -567,11 +567,16 @@ export default function LeaderboardTable({ rows }: Props) {
         </table>
       </div>
 
-      <div className="space-y-3 md:hidden">
+      <div className="space-y-4 md:hidden">
         {rows.map((row, index) => (
-          <article key={row.id} className="rounded-2xl border border-line bg-white/90 p-4">
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-black text-foreground">#{index + 1} {row.nickname}</p>
+          <article key={row.id} className="rounded-2xl border border-line bg-white/90 p-4 shadow-[0_10px_24px_rgba(8,16,36,0.06)]">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <Link href={`/users/${encodeURIComponent(row.nickname)}`} className="text-3xl font-black text-foreground hover:text-accent">
+                  #{index + 1} {row.nickname}
+                </Link>
+                <p className="mt-0.5 text-sm text-slate-500">@{row.wkUsername}</p>
+              </div>
               <button
                 type="button"
                 onClick={() => toggle(row.id)}
@@ -580,24 +585,68 @@ export default function LeaderboardTable({ rows }: Props) {
                 {expanded.has(row.id) ? "Hide" : "More"}
               </button>
             </div>
-            <p className="text-xs text-slate-500">@{row.wkUsername}</p>
-            <div className="mt-3 grid grid-cols-3 gap-2 text-sm font-semibold text-slate-700">
-              <div className="rounded-lg bg-surface-muted p-2">Lv {row.wkLevel}</div>
-              <div className="rounded-lg bg-surface-muted p-2">R {formatNumber(row.reviewCount)}</div>
-              <div className="rounded-lg bg-surface-muted p-2">S {formatNumber(row.score)}</div>
+
+            <div className="mt-3 grid grid-cols-2 gap-2 text-sm font-semibold text-slate-700">
+              <div className="rounded-xl bg-surface-muted px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500">Level</p>
+                <p className="mt-1 text-xl font-black text-accent">Lv {row.wkLevel}</p>
+              </div>
+              <div className="rounded-xl bg-surface-muted px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500">Reviewed</p>
+                <p className="mt-1 text-xl font-black text-foreground">{formatNumber(row.reviewCount)}</p>
+              </div>
+              <div className="rounded-xl bg-surface-muted px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500">Score</p>
+                <p className="mt-1 text-xl font-black text-hot">{formatNumber(row.score)}</p>
+              </div>
+              <div className="rounded-xl bg-surface-muted px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500">Pending</p>
+                <p className="mt-1 text-xl font-black text-accent">{formatNumber(row.pendingReviews)}</p>
+              </div>
             </div>
+
+            <div className="mt-3 flex flex-wrap gap-1 text-[10px]">
+              <span className="subject-pill subject-pill--radical">R {formatNumber(row.radicalCount)}</span>
+              <span className="subject-pill subject-pill--kanji">K {formatNumber(kanjiCountFromRow(row))}</span>
+              <span className="subject-pill subject-pill--vocabulary">V {formatNumber(row.vocabularyCount)}</span>
+              <span className="rounded-full border border-line bg-surface px-2 py-0.5 font-bold uppercase tracking-[0.08em] text-slate-600">
+                Learned {formatNumber(learnedKanjiFromRow(row))}
+              </span>
+            </div>
+
             <p className="mt-2 text-[11px] font-semibold text-slate-500">
               Activity: {row.lastActivityAt ? formatDate(row.lastActivityAt) : "-"} · {formatSince(row.lastActivityAt)}
             </p>
             {expanded.has(row.id) ? (
-              <div className="mt-3 grid grid-cols-2 gap-2 text-xs font-semibold text-slate-700">
-                <div className="rounded-lg bg-surface-muted p-2">Radicals {formatNumber(row.radicalCount)}</div>
-                <div className="rounded-lg bg-surface-muted p-2">Kanji {formatNumber(kanjiCountFromRow(row))}</div>
-                <div className="rounded-lg bg-surface-muted p-2">Vocab {formatNumber(row.vocabularyCount)}</div>
-                <div className="rounded-lg bg-surface-muted p-2">Learned {formatNumber(learnedKanjiFromRow(row))}</div>
-                <div className="rounded-lg bg-surface-muted p-2">Due {formatNumber(row.pendingReviews)}</div>
-                <div className="rounded-lg bg-surface-muted p-2">Burned {formatNumber(row.burnedCount)}</div>
-                <div className="col-span-2 rounded-lg bg-surface-muted p-2">Last sync {formatDate(row.lastSyncedAt)}</div>
+              <div className="mt-3 space-y-2 text-xs font-semibold text-slate-700">
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="rounded-lg bg-surface-muted p-2">Apprentice {formatNumber(row.apprenticeCount)}</div>
+                  <div className="rounded-lg bg-surface-muted p-2">Guru {formatNumber(row.guruCount)}</div>
+                  <div className="rounded-lg bg-surface-muted p-2">Master {formatNumber(row.masterCount)}</div>
+                  <div className="rounded-lg bg-surface-muted p-2">Enlightened {formatNumber(row.enlightenedCount)}</div>
+                  <div className="rounded-lg bg-surface-muted p-2">Burned {formatNumber(row.burnedCount)}</div>
+                  <div className="rounded-lg bg-surface-muted p-2">Level Kanji {formatNumber(row.levelKanjiLearned)}/{formatNumber(row.levelKanjiTotal)}</div>
+                </div>
+                <div className="rounded-lg bg-surface-muted p-2">
+                  Last sync {formatDate(row.lastSyncedAt)}
+                </div>
+                <div className="grid grid-cols-5 gap-1">
+                  {(() => {
+                    const jlpt = jlptCountsFromRow(row);
+                    return ([
+                      ["N5", jlpt.n5],
+                      ["N4", jlpt.n4],
+                      ["N3", jlpt.n3],
+                      ["N2", jlpt.n2],
+                      ["N1", jlpt.n1],
+                    ] as const).map(([label, count]) => (
+                      <div key={label} className={`rounded-lg border p-1 text-center ${jlptCompletionClass(count.percent)}`}>
+                        <p className="text-[9px] font-bold uppercase">{label}</p>
+                        <p className="text-[11px] font-black leading-none">{count.percent}%</p>
+                      </div>
+                    ));
+                  })()}
+                </div>
               </div>
             ) : null}
           </article>
