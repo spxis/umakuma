@@ -82,6 +82,7 @@ export default function ExplorerTabs({
   jlptItems,
 }: Props) {
   const [activeTab, setActiveTab] = useState<"level" | "jlpt">("level");
+  const [showEnglish, setShowEnglish] = useState(false);
 
   function tabClass(tab: "level" | "jlpt"): string {
     const active = activeTab === tab;
@@ -92,7 +93,7 @@ export default function ExplorerTabs({
 
   return (
     <section className="space-y-3">
-      <div className="grid gap-3 md:grid-cols-2 md:items-center">
+      <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="Explorer tabs">
           <button
             type="button"
@@ -113,7 +114,16 @@ export default function ExplorerTabs({
             JLPT Explorer
           </button>
         </div>
-        <ExplorerSearchBar scope={activeTab} />
+        <div className="flex items-center gap-2">
+          <ExplorerSearchBar scope={activeTab} />
+          <button
+            type="button"
+            onClick={() => setShowEnglish((prev) => !prev)}
+            className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-bold uppercase tracking-[0.1em] text-slate-700 transition hover:bg-surface-muted"
+          >
+            {showEnglish ? "Hide English" : "Show English"}
+          </button>
+        </div>
       </div>
 
       <div className={activeTab === "level" ? "block" : "hidden"}>
@@ -122,11 +132,16 @@ export default function ExplorerTabs({
           maxLevel={maxLevel}
           initialSnapshot={initialSnapshot}
           initialSrsFilter={initialSrsFilter}
+          showEnglish={showEnglish}
         />
       </div>
 
       <div className={activeTab === "jlpt" ? "block" : "hidden"}>
-        <JlptExplorer items={jlptItems} />
+        <JlptExplorer
+          items={jlptItems}
+          showEnglish={showEnglish}
+          userKanjiItems={initialSnapshot.items.filter((item) => item.subjectType === "kanji")}
+        />
       </div>
     </section>
   );

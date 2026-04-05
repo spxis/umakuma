@@ -10,9 +10,16 @@ type JlptItem = {
 
 type Props = {
   items: JlptItem[];
+  showEnglish?: boolean;
+  userKanjiItems?: Array<{
+    characters: string;
+    primaryReadings?: string[];
+    readings?: string[];
+    status?: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+    srsStage?: number;
+    wkLevel?: number;
+  }>;
 };
-
-type JlptFilter = "all" | "n5" | "n4" | "n3" | "n2" | "n1";
 
 function formatNumber(input: number): string {
   return new Intl.NumberFormat("en-US").format(input);
@@ -22,10 +29,35 @@ function normalizeSearch(input: string): string {
   return input.trim().toLowerCase();
 }
 
-export default function JlptExplorer({ items }: Props) {
-  const [levelFilter, setLevelFilter] = useState<JlptFilter>("all");
+export default function JlptExplorer({
+  items,
+  showEnglish = false,
+  userKanjiItems = [],
+}: Props) {
+  const [selectedLevels, setSelectedLevels] = useState<Set<number>>(new Set([1, 2, 3, 4, 5]));
+  const [stickyLevels, setStickyLevels] = useState(false);
   const [query, setQuery] = useState("");
   const lastHandledFindQueryRef = useRef<string>("");
+
+  const userKanjiByChar = useMemo(() => {
+    const map = new Map<string, {
+      characters: string;
+      primaryReadings?: string[];
+      readings?: string[];
+      status?: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+      srsStage?: number;
+      wkLevel?: number;
+    }>();
+
+    for (const item of userKanjiItems) {
+      const current = map.get(item.characters);
+      if (!current || (item.srsStage ?? 0) >= (current.srsStage ?? 0)) {
+        map.set(item.characters, item);
+      }
+    }
+
+    return map;
+  }, [userKanjiItems]);
 
   const counts = useMemo(() => {
     return {
@@ -42,8 +74,7 @@ export default function JlptExplorer({ items }: Props) {
     const normalizedQuery = normalizeSearch(query);
 
     return items.filter((item) => {
-      const levelPass =
-        levelFilter === "all" ? true : item.nLevel === Number(levelFilter.slice(1));
+      const levelPass = selectedLevels.has(item.nLevel);
 
       if (!levelPass) {
         return false;
@@ -60,12 +91,58 @@ export default function JlptExplorer({ items }: Props) {
         romaji.includes(normalizedQuery)
       );
     });
-  }, [items, levelFilter, query]);
+  }, [items, query, selectedLevels]);
 
   function badgeClass(active: boolean): string {
     return active
       ? "border-accent bg-accent text-white"
       : "border-line bg-white text-slate-700 hover:bg-surface-muted";
+  }
+
+  function statusClass(
+    status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | undefined,
+  ): string {
+    if (status === "locked") return "bg-slate-100 text-slate-600";
+    if (status === "apprentice") return "bg-pink-100 text-pink-700";
+    if (status === "guru") return "bg-violet-100 text-violet-700";
+    if (status === "master") return "bg-sky-100 text-sky-700";
+    if (status === "enlightened") return "bg-amber-100 text-amber-700";
+    if (status === "burned") return "bg-slate-200 text-slate-700";
+    return "bg-slate-100 text-slate-500";
+  }
+
+  function readingLabel(reading: string | null): string {
+    if (!reading) {
+      return "-";
+    }
+
+    if (!showEnglish) {
+      return reading;
+    }
+
+    const romaji = toRomaji(reading, { upcaseKatakana: false }).trim();
+    return romaji && romaji !== reading ? `${reading} / ${romaji}` : reading;
+  }
+
+  function toggleNLevel(level: number) {
+    if (!stickyLevels) {
+      setSelectedLevels(new Set([level]));
+      return;
+    }
+
+    setSelectedLevels((prev) => {
+      const next = new Set(prev);
+      if (next.has(level)) {
+        if (next.size === 1) {
+          return next;
+        }
+        next.delete(level);
+        return next;
+      }
+
+      next.add(level);
+      return next;
+    });
   }
 
   useEffect(() => {
@@ -106,7 +183,7 @@ export default function JlptExplorer({ items }: Props) {
       const normalizedQuery = normalizeSearch(nextQuery);
       const matchedCount = items.filter((item) => {
         const levelPass =
-          levelFilter === "all" ? true : item.nLevel === Number(levelFilter.slice(1));
+          selectedLevels.has(item.nLevel);
 
         if (!levelPass) {
           return false;
@@ -147,7 +224,7 @@ export default function JlptExplorer({ items }: Props) {
       window.removeEventListener("wr:explorer-search", onSearch as EventListener);
       window.removeEventListener("popstate", onPopState);
     };
-  }, [items, levelFilter]);
+  }, [items, selectedLevels]);
 
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
@@ -158,34 +235,50 @@ export default function JlptExplorer({ items }: Props) {
             Browse all N1-N5 kanji ({formatNumber(items.length)} total)
           </p>
         </div>
-      </header>
 
-      <div className="border-b border-line px-5 py-4">
-        <section className="rounded-2xl border border-line bg-surface-muted/60 p-3 sm:p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-600">Filters</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setSelectedLevels(new Set([1, 2, 3, 4, 5]))}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+                selectedLevels.size === 5,
+              )}`}
+            >
+              JLPT All ({formatNumber(counts.all)})
+            </button>
             {([
-              ["all", "JLPT All", counts.all],
-              ["n5", "N5", counts.n5],
-              ["n4", "N4", counts.n4],
-              ["n3", "N3", counts.n3],
-              ["n2", "N2", counts.n2],
-              ["n1", "N1", counts.n1],
-            ] as const).map(([value, label, count]) => (
+              [5, counts.n5],
+              [4, counts.n4],
+              [3, counts.n3],
+              [2, counts.n2],
+              [1, counts.n1],
+            ] as const).map(([level, count]) => (
               <button
-                key={value}
+                key={level}
                 type="button"
-                onClick={() => setLevelFilter(value)}
+                onClick={() => toggleNLevel(level)}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
-                  levelFilter === value,
+                  selectedLevels.has(level),
                 )}`}
               >
-                {label} ({formatNumber(count)})
+                N{level} ({formatNumber(count)})
               </button>
             ))}
           </div>
-        </section>
-      </div>
+          <button
+            type="button"
+            onClick={() => setStickyLevels((prev) => !prev)}
+            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${
+              stickyLevels
+                ? "border-accent bg-accent text-white"
+                : "border-line bg-white text-slate-700"
+            }`}
+          >
+            Sticky {stickyLevels ? "On" : "Off"}
+          </button>
+        </div>
+      </header>
 
       <div className="p-5">
         <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-600">
@@ -195,19 +288,32 @@ export default function JlptExplorer({ items }: Props) {
           WaniKani-specific SRS stats are shown only where subject mappings exist.
         </p>
 
-        <div className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {filteredItems.map((item) => (
-            <article
-              key={`${item.nLevel}-${item.kanji}`}
-              className="rounded-2xl border border-line bg-white p-3 text-center"
-            >
-              <p className="subject-pill border-line bg-white text-slate-700">N{item.nLevel}</p>
-              <p className="mt-2 text-5xl font-black text-foreground">{item.kanji}</p>
-              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-                WK stats pending
-              </p>
-            </article>
-          ))}
+        <div className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {filteredItems.map((item) => {
+            const userMatch = userKanjiByChar.get(item.kanji);
+            const primaryReading = userMatch
+              ? (userMatch.primaryReadings ?? [])[0] ?? (userMatch.readings ?? [])[0] ?? null
+              : null;
+
+            return (
+              <article
+                key={`${item.nLevel}-${item.kanji}`}
+                className="rounded-2xl border border-line bg-white p-3 text-center"
+              >
+                <div className="flex items-center justify-between gap-1">
+                  <p className="subject-pill border-line bg-white text-slate-700">N{item.nLevel}</p>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${statusClass(userMatch?.status)}`}>
+                    {userMatch?.status ?? "untracked"}
+                  </span>
+                </div>
+                <p className="mt-2 text-5xl font-black text-foreground">{item.kanji}</p>
+                <p className="mt-1 text-sm font-semibold text-slate-600">{readingLabel(primaryReading)}</p>
+                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+                  {userMatch ? `WK L${userMatch.wkLevel ?? "?"} / SRS ${userMatch.srsStage ?? 0}` : "No WK match in loaded data"}
+                </p>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

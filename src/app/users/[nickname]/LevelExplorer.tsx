@@ -61,6 +61,7 @@ type Props = {
   maxLevel: number;
   initialSnapshot: Snapshot;
   initialSrsFilter?: SrsFilter;
+  showEnglish?: boolean;
 };
 
 type SrsFilter = "all" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | "locked";
@@ -492,6 +493,7 @@ export default function LevelExplorer({
   maxLevel,
   initialSnapshot,
   initialSrsFilter = "all",
+  showEnglish = false,
 }: Props) {
   const typeVisibilityStorageKey = `wr:explorer:${accountId}:type-visibility`;
   const selectedSubjectStorageKey = `wr:explorer:${accountId}:selected-subject`;
@@ -502,7 +504,6 @@ export default function LevelExplorer({
   const reviewTimingFilterStorageKey = `wr:explorer:${accountId}:review-timing-filter`;
   const showLockedStorageKey = `wr:explorer:${accountId}:show-locked`;
   const showBurnedStorageKey = `wr:explorer:${accountId}:show-burned`;
-  const showPrimaryReadingEnglishStorageKey = `wr:explorer:${accountId}:show-primary-reading-english`;
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(new Set([initialSnapshot.level]));
   const [snapshotsByLevel, setSnapshotsByLevel] = useState<Map<number, Snapshot>>(
     new Map([[initialSnapshot.level, normalizeSnapshot(initialSnapshot)]]),
@@ -526,7 +527,6 @@ export default function LevelExplorer({
   const [error, setError] = useState<string>("");
   const [searchMatchedSubjectIds, setSearchMatchedSubjectIds] = useState<Set<number> | null>(null);
   const [gridColumns, setGridColumns] = useState(1);
-  const [showPrimaryReadingEnglish, setShowPrimaryReadingEnglish] = useState(true);
   const applyingUrlStateRef = useRef(false);
   const hasHydratedUrlStateRef = useRef(false);
   const pendingHistoryModeRef = useRef<"replace" | "push">("replace");
@@ -863,20 +863,9 @@ export default function LevelExplorer({
   }, [showBurnedStorageKey]);
 
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(showPrimaryReadingEnglishStorageKey);
-      if (raw === "0") {
-        setShowPrimaryReadingEnglish(false);
-      }
-    } catch {
-      // Ignore storage errors in restricted browsing modes.
-    }
-  }, [showPrimaryReadingEnglishStorageKey]);
-
-  useEffect(() => {
     const computeColumns = () => {
       if (window.matchMedia("(min-width: 1024px)").matches) {
-        setGridColumns(3);
+        setGridColumns(4);
         return;
       }
 
@@ -948,14 +937,6 @@ export default function LevelExplorer({
       // Ignore storage errors in restricted browsing modes.
     }
   }, [showBurnedItems, showBurnedStorageKey]);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(showPrimaryReadingEnglishStorageKey, showPrimaryReadingEnglish ? "1" : "0");
-    } catch {
-      // Ignore storage errors in restricted browsing modes.
-    }
-  }, [showPrimaryReadingEnglish, showPrimaryReadingEnglishStorageKey]);
 
   useEffect(() => {
     try {
@@ -1794,7 +1775,7 @@ export default function LevelExplorer({
               return null;
             }
 
-            if (!showPrimaryReadingEnglish) {
+            if (!showEnglish) {
               return reading;
             }
 
@@ -1854,7 +1835,7 @@ export default function LevelExplorer({
         {vocabularyKanjiLinks.map((item) => (
           (() => {
             const subtitle = (() => {
-              if (!showPrimaryReadingEnglish) {
+              if (!showEnglish) {
                 return item.reading;
               }
 
@@ -2160,7 +2141,7 @@ export default function LevelExplorer({
             No items visible. Expand one or more types above.
           </div>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {filteredItems.map((item, index) => (
               <Fragment key={`${item.subjectType}-${item.subjectId}`}>
                 <button
@@ -2247,7 +2228,7 @@ export default function LevelExplorer({
                 </button>
 
                 {selectedItem && index === detailInsertIndex ? (
-                  <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-white p-5 sm:col-span-2 lg:col-span-3">
+                  <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-white p-5 sm:col-span-2 lg:col-span-4">
                     <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-x-3">
                       <div className="row-span-2 inline-flex">
                         <div
@@ -2260,7 +2241,7 @@ export default function LevelExplorer({
                           <div>
                             <h3 className="text-center text-4xl font-black leading-none text-current">{selectedItem.characters}</h3>
                             {(() => {
-                              const subtitle = showPrimaryReadingEnglish
+                              const subtitle = showEnglish
                                 ? englishSubtitleForDisplay(selectedItem)
                                 : glyphSubtitleForDisplay(selectedItem);
                               if (!subtitle) {
@@ -2293,16 +2274,6 @@ export default function LevelExplorer({
                       </div>
                     </div>
 
-                    <div className="mt-2 flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => setShowPrimaryReadingEnglish((prev) => !prev)}
-                        className="rounded-full border border-line bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-700"
-                      >
-                        {showPrimaryReadingEnglish ? "Hide English" : "Show English"}
-                      </button>
-                    </div>
-
                     <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                       <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                         <p className="text-xs font-bold uppercase text-slate-600">Primary reading</p>
@@ -2312,7 +2283,7 @@ export default function LevelExplorer({
                             : (
                                 <ReadingListWithPronunciation
                                   readings={selectedItem.primaryReadings ?? []}
-                                  mode={showPrimaryReadingEnglish ? "inline" : "plain"}
+                                  mode={showEnglish ? "inline" : "plain"}
                                 />
                               )}
                         </p>
@@ -2325,7 +2296,7 @@ export default function LevelExplorer({
                             : (
                                 <ReadingListWithPronunciation
                                   readings={secondaryReadingsForDisplay(selectedItem)}
-                                  mode={showPrimaryReadingEnglish ? "inline" : "plain"}
+                                  mode={showEnglish ? "inline" : "plain"}
                                 />
                               )}
                         </p>
