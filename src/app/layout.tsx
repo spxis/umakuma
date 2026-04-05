@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Archivo_Black, Space_Grotesk } from "next/font/google";
+import { Archivo_Black, Noto_Sans_JP, Noto_Serif_JP, Space_Grotesk } from "next/font/google";
+import AppFooter from "./AppFooter";
 import "./globals.css";
 
 const bodySans = Space_Grotesk({
@@ -10,6 +11,18 @@ const bodySans = Space_Grotesk({
 const displaySans = Archivo_Black({
   variable: "--font-display-sans",
   weight: "400",
+  subsets: ["latin"],
+});
+
+const jpSans = Noto_Sans_JP({
+  variable: "--font-jp-sans",
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+});
+
+const jpSerif = Noto_Serif_JP({
+  variable: "--font-jp-serif",
+  weight: ["400", "500", "700"],
   subsets: ["latin"],
 });
 
@@ -26,9 +39,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bodySans.variable} ${displaySans.variable} h-full antialiased`}
+      className={`${bodySans.variable} ${displaySans.variable} ${jpSans.variable} ${jpSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <main className="flex-1">{children}</main>
+        <AppFooter />
+      </body>
     </html>
   );
 }

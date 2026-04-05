@@ -15,19 +15,16 @@ type LevelItem = {
     subjectId: number;
     label: string;
     reading?: string | null;
-    meaning?: string | null;
   }>;
   visuallySimilar?: Array<{
     subjectId: number;
     label: string;
     reading?: string | null;
-    meaning?: string | null;
   }>;
   usedInVocabulary?: Array<{
     subjectId: number;
     label: string;
     reading?: string | null;
-    meaning?: string | null;
   }>;
   componentKanji?: Array<{
     subjectId: number;
@@ -72,7 +69,6 @@ type RelatedReference = {
   subjectId: number;
   label: string;
   reading?: string | null;
-  meaning?: string | null;
 };
 
 type ExplorerUrlState = {
@@ -103,21 +99,17 @@ function snapshotHasComponentKanjiData(snapshot: Snapshot): boolean {
   const vocabularyItems = snapshot.items.filter((item) => item.subjectType === "vocabulary");
   const kanjiItems = snapshot.items.filter((item) => item.subjectType === "kanji");
 
-  const vocabularyReady =
-    vocabularyItems.length === 0
-      ? true
-      : vocabularyItems.every((item) =>
-          Array.isArray(item.componentKanji) &&
-          (item.componentKanji ?? []).every((entry) => Object.hasOwn(entry as object, "reading")),
-        );
-
-  const kanjiReady = kanjiItems.every(
-    (item) =>
-      (item.usedInVocabulary ?? []).every((entry) => Object.hasOwn(entry as object, "reading")) &&
-      (item.radicals ?? []).every((entry) => Object.hasOwn(entry as object, "meaning")),
+  return (
+    vocabularyItems.every((item) =>
+      Array.isArray(item.componentKanji) &&
+      (item.componentKanji ?? []).every((related) => Object.hasOwn(related as object, "reading")),
+    ) &&
+    kanjiItems.every((item) =>
+      (item.usedInVocabulary ?? []).every((related) => Object.hasOwn(related as object, "reading")) &&
+      (item.radicals ?? []).every((related) => Object.hasOwn(related as object, "reading")) &&
+      (item.visuallySimilar ?? []).every((related) => Object.hasOwn(related as object, "reading")),
+    )
   );
-
-  return vocabularyReady && kanjiReady;
 }
 
 function normalizeSnapshot(raw: Snapshot): Snapshot {
@@ -158,7 +150,7 @@ function statusClass(status: LevelItem["status"]): string {
     case "enlightened":
       return "bg-amber-100 text-amber-700";
     case "burned":
-      return "bg-emerald-100 text-emerald-700";
+      return "bg-slate-200 text-slate-700";
   }
 }
 
@@ -270,15 +262,22 @@ function primaryReadingForDisplay(item: LevelItem): string | null {
   }
 
   if (item.subjectType === "radical") {
-    const meaning = (item.meanings ?? [])[0] ?? null;
-    return meaning ?? null;
+    return null;
   }
 
   return "-";
 }
 
+function glyphSubtitleForDisplay(item: LevelItem): string | null {
+  if (item.subjectType === "radical") {
+    return item.meanings[0] ?? null;
+  }
+
+  return primaryReadingForDisplay(item);
+}
+
 function glyphHasReading(item: LevelItem): boolean {
-  return Boolean(primaryReadingForDisplay(item));
+  return Boolean(glyphSubtitleForDisplay(item));
 }
 
 function pronunciationForReading(reading: string | null | undefined): string | null {
@@ -1465,7 +1464,6 @@ export default function LevelExplorer({
         subjectId: item.subjectId,
         label: segment,
         reading: null,
-        meaning: null,
         fallbackKey: `${item.subjectId}-${segment}-${index}`,
       }));
     });
@@ -1477,14 +1475,11 @@ export default function LevelExplorer({
             subjectId: entry.subjectId,
             label: entry.label,
             reading: "reading" in entry ? entry.reading : null,
-            meaning: "meaning" in entry ? entry.meaning : null,
           };
           const linked = subjectById.get(item.subjectId) ?? null;
           const isClickable = linked !== null;
           const relationType = linked?.subjectType;
           const reading = typeof item.reading === "string" && item.reading.trim() ? item.reading : null;
-          const meaning = typeof item.meaning === "string" && item.meaning.trim() ? item.meaning : null;
-          const subtitle = reading ?? meaning;
           const key =
             "fallbackKey" in entry && typeof entry.fallbackKey === "string"
               ? entry.fallbackKey
@@ -1497,9 +1492,9 @@ export default function LevelExplorer({
                 className={`${relatedReferenceCardClass(relationType, false, size)} inline-flex flex-col items-center`}
               >
                 <span className={`${labelClass(item.label)} font-black leading-none`}>{item.label}</span>
-                {subtitle ? (
+                {reading ? (
                   <span className="mt-1 text-center text-sm font-semibold leading-none text-slate-600">
-                    <ReadingWithPronunciation reading={subtitle} />
+                    <ReadingWithPronunciation reading={reading} />
                   </span>
                 ) : null}
               </span>
@@ -1514,9 +1509,9 @@ export default function LevelExplorer({
               className={`${relatedReferenceCardClass(relationType, true, size)} inline-flex flex-col items-center`}
             >
               <span className={`${labelClass(item.label)} font-black leading-none`}>{item.label}</span>
-              {subtitle ? (
+              {reading ? (
                 <span className="mt-1 text-center text-sm font-semibold leading-none text-slate-600">
-                  <ReadingWithPronunciation reading={subtitle} />
+                  <ReadingWithPronunciation reading={reading} />
                 </span>
               ) : null}
             </button>
@@ -1834,7 +1829,7 @@ export default function LevelExplorer({
                     <div className="flex flex-wrap items-center justify-end gap-1">
                       <span className={subjectTypePillClass(item.subjectType)}>{item.subjectType}</span>
                       {item.subjectType === "kanji" && item.jlptLevel ? (
-                        <span className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-bold uppercase text-slate-600">
+                        <span className="subject-pill border-line bg-white text-slate-700">
                           JLPT N{item.jlptLevel}
                         </span>
                       ) : null}
@@ -1860,14 +1855,14 @@ export default function LevelExplorer({
                       {item.characters}
                     </p>
                     {(() => {
-                      const reading = primaryReadingForDisplay(item);
-                      if (!reading) {
+                      const subtitle = glyphSubtitleForDisplay(item);
+                      if (!subtitle) {
                         return null;
                       }
 
                       return (
-                        <p className="mt-1 text-center text-sm font-semibold text-slate-600 whitespace-nowrap">
-                          <ReadingWithPronunciation reading={reading} />
+                        <p className="mt-1 w-full text-center text-sm font-semibold text-slate-600 whitespace-nowrap">
+                          <ReadingWithPronunciation reading={subtitle} />
                         </p>
                       );
                     })()}
@@ -1916,14 +1911,14 @@ export default function LevelExplorer({
                           <div>
                             <h3 className="text-4xl font-black leading-none text-current">{selectedItem.characters}</h3>
                             {(() => {
-                              const reading = primaryReadingForDisplay(selectedItem);
-                              if (!reading) {
+                              const subtitle = glyphSubtitleForDisplay(selectedItem);
+                              if (!subtitle) {
                                 return null;
                               }
 
                               return (
-                                <p className="mt-1 text-center text-sm font-semibold text-slate-700">
-                                  <ReadingWithPronunciation reading={reading} />
+                                <p className="mt-1 w-full text-center text-sm font-semibold text-slate-700">
+                                  <ReadingWithPronunciation reading={subtitle} />
                                 </p>
                               );
                             })()}

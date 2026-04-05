@@ -13,6 +13,15 @@
   --radical: #2f80ed;
   --kanji: #ff3b82;
   --vocabulary: #8b5cf6;
+  --font-jp-current: var(--font-jp-sans);
+}
+
+:root[data-jp-font="serif"] {
+  --font-jp-current: var(--font-jp-serif);
+}
+
+:root[data-jp-font="sans"] {
+  --font-jp-current: var(--font-jp-sans);
 }
 
 @theme inline {
@@ -35,7 +44,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body-sans), sans-serif;
+  font-family: var(--font-body-sans), var(--font-jp-current), sans-serif;
   background-image:
     radial-gradient(circle at 12% 8%, rgba(15, 111, 255, 0.17) 0%, transparent 38%),
     radial-gradient(circle at 90% 18%, rgba(0, 164, 255, 0.14) 0%, transparent 35%),

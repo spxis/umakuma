@@ -42,24 +42,6 @@ function hasReadingMetadataRows(value: unknown): boolean {
   return true;
 }
 
-function hasMeaningMetadataRows(value: unknown): boolean {
-  if (!Array.isArray(value) || value.length === 0) {
-    return true;
-  }
-
-  for (const row of value) {
-    if (!row || typeof row !== "object") {
-      return false;
-    }
-
-    if (!Object.hasOwn(row, "meaning")) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 function snapshotHasDrilldownFields(items: unknown): boolean {
   if (!Array.isArray(items) || items.length === 0) {
     return true;
@@ -86,11 +68,15 @@ function snapshotHasDrilldownFields(items: unknown): boolean {
       return false;
     }
 
-    if (row.subjectType === "kanji" && !hasReadingMetadataRows(row.usedInVocabulary)) {
+    if (!hasReadingMetadataRows(row.radicals)) {
       return false;
     }
 
-    if (row.subjectType === "kanji" && !hasMeaningMetadataRows(row.radicals)) {
+    if (!hasReadingMetadataRows(row.visuallySimilar)) {
+      return false;
+    }
+
+    if (row.subjectType === "kanji" && !hasReadingMetadataRows(row.usedInVocabulary)) {
       return false;
     }
 

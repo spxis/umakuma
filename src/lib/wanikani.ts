@@ -95,19 +95,16 @@ export type LevelKanjiSnapshot = {
       subjectId: number;
       label: string;
       reading: string | null;
-      meaning: string | null;
     }>;
     visuallySimilar: Array<{
       subjectId: number;
       label: string;
       reading: string | null;
-      meaning: string | null;
     }>;
     usedInVocabulary: Array<{
       subjectId: number;
       label: string;
       reading: string | null;
-      meaning: string | null;
     }>;
     componentKanji: Array<{
       subjectId: number;
@@ -337,13 +334,9 @@ export async function getLevelKanjiSnapshot(
             .find((reading): reading is string => typeof reading === "string" && reading.length > 0) ?? null;
         const primaryMeaning =
           data.meanings
-            ?.filter((meaning) => meaning.primary)
+            ?.filter((meaning) => meaning.primary ?? true)
             .map((meaning) => meaning.meaning)
-            .find((meaning): meaning is string => typeof meaning === "string" && meaning.length > 0) ??
-          data.meanings
-            ?.map((meaning) => meaning.meaning)
-            .find((meaning): meaning is string => typeof meaning === "string" && meaning.length > 0) ??
-          null;
+            .find((meaning): meaning is string => typeof meaning === "string" && meaning.length > 0) ?? null;
 
         relatedSubjects.set(row.id, {
           subjectId: row.id,
@@ -396,20 +389,20 @@ export async function getLevelKanjiSnapshot(
           .map((id) => ({
             subjectId: id,
             label: subjectLabel(id),
-            reading: null,
-            meaning: relatedSubjects.get(id)?.primaryMeaning ?? null,
+            reading: relatedSubjects.get(id)?.primaryMeaning ?? null,
           })),
         visuallySimilar: (subject?.visually_similar_subject_ids ?? []).map((id) => ({
           subjectId: id,
           label: subjectLabel(id),
-          reading: relatedSubjects.get(id)?.primaryReading ?? null,
-          meaning: relatedSubjects.get(id)?.primaryMeaning ?? null,
+          reading:
+            relatedSubjects.get(id)?.object === "radical"
+              ? relatedSubjects.get(id)?.primaryMeaning ?? null
+              : relatedSubjects.get(id)?.primaryReading ?? null,
         })),
         usedInVocabulary: (subject?.amalgamation_subject_ids ?? []).map((id) => ({
           subjectId: id,
           label: subjectLabel(id),
           reading: relatedSubjects.get(id)?.primaryReading ?? null,
-          meaning: relatedSubjects.get(id)?.primaryMeaning ?? null,
         })),
         componentKanji: (subject?.component_subject_ids ?? [])
           .filter((id) => {
