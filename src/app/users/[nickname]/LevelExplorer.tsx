@@ -290,6 +290,52 @@ function stripHtml(input: string | undefined): string {
   return input.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
+function normalizeSearchTerm(input: string): string {
+  return input.trim().toLowerCase();
+}
+
+function compactSearchTerm(input: string): string {
+  return normalizeSearchTerm(input).replace(/[\s_-]+/g, "");
+}
+
+function itemMatchesSearch(item: LevelItem, rawQuery: string): boolean {
+  const query = normalizeSearchTerm(rawQuery);
+  if (!query) {
+    return false;
+  }
+
+  const queryCompact = compactSearchTerm(rawQuery);
+  const readingCandidates = [
+    ...(item.primaryReadings ?? []),
+    ...(item.readings ?? []),
+  ].filter((reading): reading is string => Boolean(reading && reading.trim()));
+
+  const meaningMatch = item.meanings.some((meaning) => normalizeSearchTerm(meaning).includes(query));
+  if (meaningMatch) {
+    return true;
+  }
+
+  if (item.characters && item.characters.includes(rawQuery.trim())) {
+    return true;
+  }
+
+  const readingMatch = readingCandidates.some((reading) => {
+    const normalizedReading = normalizeSearchTerm(reading);
+    const compactReading = compactSearchTerm(reading);
+    const romajiReading = normalizeSearchTerm(toRomaji(reading, { upcaseKatakana: false }));
+    const compactRomaji = compactSearchTerm(romajiReading);
+
+    return (
+      normalizedReading.includes(query) ||
+      compactReading.includes(queryCompact) ||
+      romajiReading.includes(query) ||
+      compactRomaji.includes(queryCompact)
+    );
+  });
+
+  return readingMatch;
+}
+
 function primaryReadingForDisplay(item: LevelItem): string | null {
   const reading = (item.primaryReadings ?? [])[0] ?? null;
   if (reading) {
@@ -458,6 +504,7 @@ export default function LevelExplorer({
   const applyingUrlStateRef = useRef(false);
   const hasHydratedUrlStateRef = useRef(false);
   const pendingHistoryModeRef = useRef<"replace" | "push">("replace");
+  const lastHandledFindQueryRef = useRef<string>("");
 
   function markHistoryPush() {
     pendingHistoryModeRef.current = "push";
@@ -1000,9 +1047,9 @@ export default function LevelExplorer({
     };
   }, [initialSnapshot, selectedLevels, snapshotsByLevel]);
 
-  async function ensureLevelLoaded(level: number, forceReload = false) {
+  async function ensureLevelLoaded(level: number, forceReload = false): Promise<Snapshot | undefined> {
     if (!forceReload && snapshotsByLevel.has(level)) {
-      return;
+      return snapshotsByLevel.get(level);
     }
 
     setLoading(true);
@@ -1020,8 +1067,10 @@ export default function LevelExplorer({
         map.set(level, normalized);
         return map;
       });
+      return normalized;
     } catch (fetchError) {
       setError(fetchError instanceof Error ? fetchError.message : "Could not load level details.");
+      return undefined;
     } finally {
       setLoading(false);
     }
@@ -1466,6 +1515,51 @@ export default function LevelExplorer({
     setSelectedSubjectId(subjectId);
   }
 
+  async function searchAndReveal(rawQuery: string) {
+    const trimmed = rawQuery.trim();
+    if (!trimmed) {
+      return;
+    }
+
+    setError("");
+
+    let found = combinedSnapshot.items.find((item) => itemMatchesSearch(item, trimmed)) ?? null;
+
+    if (!found) {
+      for (let level = 1; level <= maxLevel; level += 1) {
+        const snapshot = await ensureLevelLoaded(level);
+        const candidates = snapshot?.items ?? [];
+        const match = candidates.find((item) => itemMatchesSearch(item, trimmed));
+        if (match) {
+          found = match;
+          break;
+        }
+      }
+    }
+
+    if (!found) {
+      setError(`No item matched "${trimmed}".`);
+      return;
+    }
+
+    markHistoryPush();
+
+    const targetLevel = typeof found.wkLevel === "number" ? found.wkLevel : initialSnapshot.level;
+    await ensureLevelLoaded(targetLevel);
+
+    setSelectedLevels((prev) => {
+      if (stickyMerge) {
+        const next = new Set(prev);
+        next.add(targetLevel);
+        return next;
+      }
+
+      return new Set([targetLevel]);
+    });
+
+    setSelectedSubjectId(found.subjectId);
+  }
+
   function jumpToRelatedSubject(subjectId: number) {
     markHistoryPush();
 
@@ -1492,6 +1586,48 @@ export default function LevelExplorer({
 
     setSelectedSubjectId(found.subjectId);
   }
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const runFromUrl = () => {
+      const fromUrl = new URLSearchParams(window.location.search).get("find");
+      const trimmed = fromUrl?.trim() ?? "";
+      if (!trimmed || lastHandledFindQueryRef.current === trimmed) {
+        return;
+      }
+
+      lastHandledFindQueryRef.current = trimmed;
+      void searchAndReveal(trimmed);
+    };
+
+    runFromUrl();
+
+    const onSearch = (event: Event) => {
+      const custom = event as CustomEvent<{ query?: string }>;
+      const query = custom.detail?.query ?? "";
+      const trimmed = query.trim();
+      if (!trimmed) {
+        return;
+      }
+
+      lastHandledFindQueryRef.current = trimmed;
+      void searchAndReveal(trimmed);
+    };
+
+    const onPopState = () => {
+      runFromUrl();
+    };
+
+    window.addEventListener("wr:explorer-search", onSearch as EventListener);
+    window.addEventListener("popstate", onPopState);
+    return () => {
+      window.removeEventListener("wr:explorer-search", onSearch as EventListener);
+      window.removeEventListener("popstate", onPopState);
+    };
+  }, [combinedSnapshot.items, maxLevel, stickyMerge]);
 
   function relatedReferenceCardClass(
     type: LevelItem["subjectType"],

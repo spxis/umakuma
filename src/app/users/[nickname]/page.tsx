@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
 import { refreshDueAccounts } from "@/lib/sync";
+import ExplorerSearchBar from "./ExplorerSearchBar";
 import LevelExplorer from "./LevelExplorer";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import UserProgressPanels from "./UserProgressPanels";
@@ -179,12 +180,16 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   return (
     <div className="relative min-h-screen overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
       <main className="relative mx-auto w-full max-w-6xl space-y-6">
-        <Link
-          href="/"
-          className="inline-flex items-center rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
-        >
-          Back to leaderboard
-        </Link>
+        <div className="grid grid-cols-1 items-center gap-3 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
+          <Link
+            href="/"
+            className="inline-flex items-center rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
+          >
+            Back to leaderboard
+          </Link>
+          <ExplorerSearchBar />
+          <div className="hidden sm:block" aria-hidden="true" />
+        </div>
 
         <section className="rounded-[2rem] border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-3">
