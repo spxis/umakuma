@@ -176,6 +176,41 @@ function formatDate(input: string | null | undefined): string {
   }).format(parsed);
 }
 
+function passesReviewTimingFilter(item: LevelItem, reviewTimingFilter: ReviewTimingFilter): boolean {
+  if (reviewTimingFilter === "all") {
+    return true;
+  }
+
+  if (!item.availableAt || item.status === "burned") {
+    return false;
+  }
+
+  const availableTime = new Date(item.availableAt).getTime();
+  if (Number.isNaN(availableTime)) {
+    return false;
+  }
+
+  const deltaMs = availableTime - Date.now();
+  if (reviewTimingFilter === "overdue") {
+    return deltaMs <= 0;
+  }
+
+  if (deltaMs < 0) {
+    return false;
+  }
+
+  const windowMs =
+    reviewTimingFilter === "next1h"
+      ? 60 * 60 * 1000
+      : reviewTimingFilter === "next8h"
+        ? 8 * 60 * 60 * 1000
+        : reviewTimingFilter === "next24h"
+          ? 24 * 60 * 60 * 1000
+          : 72 * 60 * 60 * 1000;
+
+  return deltaMs <= windowMs;
+}
+
 type NextReviewBadge = {
   label: string;
   className: string;
@@ -862,9 +897,18 @@ export default function LevelExplorer({
   }, [selectedSubjectId, selectedSubjectStorageKey]);
 
   function setVisibleTypesAndPersist(next: typeof visibleTypes) {
-    setVisibleTypes(next);
+    const hasAtLeastOneVisible = next.radical || next.kanji || next.vocabulary;
+    const normalized = hasAtLeastOneVisible
+      ? next
+      : {
+          radical: true,
+          kanji: true,
+          vocabulary: true,
+        };
+
+    setVisibleTypes(normalized);
     try {
-      window.localStorage.setItem(typeVisibilityStorageKey, JSON.stringify(next));
+      window.localStorage.setItem(typeVisibilityStorageKey, JSON.stringify(normalized));
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
@@ -1037,40 +1081,7 @@ export default function LevelExplorer({
             : item.subjectType === "kanji" && item.jlptLevel === Number(jlptFilter.slice(1));
         const lockedPass = showLockedItems ? true : item.status !== "locked";
         const burnedPass = showBurnedItems ? true : item.status !== "burned";
-        const reviewTimingPass = (() => {
-          if (reviewTimingFilter === "all") {
-            return true;
-          }
-
-          if (!item.availableAt || item.status === "burned") {
-            return false;
-          }
-
-          const availableTime = new Date(item.availableAt).getTime();
-          if (Number.isNaN(availableTime)) {
-            return false;
-          }
-
-          const deltaMs = availableTime - Date.now();
-          if (reviewTimingFilter === "overdue") {
-            return deltaMs <= 0;
-          }
-
-          if (deltaMs < 0) {
-            return false;
-          }
-
-          const windowMs =
-            reviewTimingFilter === "next1h"
-              ? 60 * 60 * 1000
-              : reviewTimingFilter === "next8h"
-                ? 8 * 60 * 60 * 1000
-                : reviewTimingFilter === "next24h"
-                  ? 24 * 60 * 60 * 1000
-                  : 72 * 60 * 60 * 1000;
-
-          return deltaMs <= windowMs;
-        })();
+        const reviewTimingPass = passesReviewTimingFilter(item, reviewTimingFilter);
         const visibilityPass =
           item.subjectType === "radical"
             ? visibleTypes.radical
@@ -1108,6 +1119,10 @@ export default function LevelExplorer({
   ]);
 
   const selectedItem = filteredItems.find((item) => item.subjectId === selectedSubjectId) ?? null;
+  const selectedItemFromAll =
+    selectedSubjectId === null
+      ? null
+      : combinedSnapshot.items.find((item) => item.subjectId === selectedSubjectId) ?? null;
   const selectedItemIndex = selectedItem
     ? filteredItems.findIndex((item) => item.subjectId === selectedItem.subjectId)
     : -1;
@@ -1204,6 +1219,65 @@ export default function LevelExplorer({
   }, [combinedSnapshot.items]);
 
   const selectedLevelList = Array.from(selectedLevels.values()).sort((a, b) => a - b);
+
+  useEffect(() => {
+    if (!selectedItemFromAll) {
+      return;
+    }
+
+    if (selectedItem) {
+      return;
+    }
+
+    if (selectedItemFromAll.subjectType && typeFilter !== selectedItemFromAll.subjectType) {
+      setTypeFilter(selectedItemFromAll.subjectType);
+    }
+
+    if (
+      selectedItemFromAll.subjectType &&
+      !visibleTypes[selectedItemFromAll.subjectType]
+    ) {
+      setVisibleTypesAndPersist({
+        ...visibleTypes,
+        [selectedItemFromAll.subjectType]: true,
+      });
+    }
+
+    if (srsFilter !== "all" && selectedItemFromAll.status !== srsFilter) {
+      setSrsFilter("all");
+    }
+
+    if (jlptFilter !== "all") {
+      const expectedJlpt = Number(jlptFilter.slice(1));
+      const matchesJlpt = selectedItemFromAll.subjectType === "kanji" && selectedItemFromAll.jlptLevel === expectedJlpt;
+
+      if (!matchesJlpt) {
+        setJlptFilter("all");
+      }
+    }
+
+    if (!passesReviewTimingFilter(selectedItemFromAll, reviewTimingFilter)) {
+      setReviewTimingFilter("all");
+    }
+
+    if (selectedItemFromAll.status === "locked" && !showLockedItems) {
+      setShowLockedItems(true);
+    }
+
+    if (selectedItemFromAll.status === "burned" && !showBurnedItems) {
+      setShowBurnedItems(true);
+    }
+  }, [
+    selectedItem,
+    selectedItemFromAll,
+    typeFilter,
+    visibleTypes,
+    srsFilter,
+    jlptFilter,
+    reviewTimingFilter,
+    showLockedItems,
+    showBurnedItems,
+  ]);
 
   function badgeClass(active: boolean): string {
     return active
@@ -1406,6 +1480,7 @@ export default function LevelExplorer({
 
     setSrsFilter("all");
     setJlptFilter("all");
+    setReviewTimingFilter("all");
 
     if (found.status === "locked") {
       setShowLockedItems(true);
