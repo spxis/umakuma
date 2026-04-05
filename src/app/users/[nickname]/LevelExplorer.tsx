@@ -1038,28 +1038,50 @@ export default function LevelExplorer({
     setSelectedSubjectId(found.subjectId);
   }
 
-  function relatedReferenceCardClass(type: LevelItem["subjectType"], isClickable: boolean): string {
+  function relatedReferenceCardClass(
+    type: LevelItem["subjectType"],
+    isClickable: boolean,
+    size: "normal" | "large",
+  ): string {
     const base =
-      "rounded-xl border px-3 py-2 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
+      "rounded-xl border text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
+    const sizeClass = size === "large" ? "px-4 py-3" : "px-3 py-2";
 
     if (type === "radical") {
-      return `${base} ${isClickable ? "border-radical/50 bg-radical/10 text-radical hover:bg-radical/20" : "border-radical/30 bg-radical/5 text-radical/80"}`;
+      return `${base} ${sizeClass} ${isClickable ? "border-radical/50 bg-radical/10 text-radical hover:bg-radical/20" : "border-radical/30 bg-radical/5 text-radical/80"}`;
     }
 
     if (type === "kanji") {
-      return `${base} ${isClickable ? "border-kanji/50 bg-kanji/10 text-kanji hover:bg-kanji/20" : "border-kanji/30 bg-kanji/5 text-kanji/80"}`;
+      return `${base} ${sizeClass} ${isClickable ? "border-kanji/50 bg-kanji/10 text-kanji hover:bg-kanji/20" : "border-kanji/30 bg-kanji/5 text-kanji/80"}`;
     }
 
     if (type === "vocabulary") {
-      return `${base} ${isClickable ? "border-vocabulary/50 bg-vocabulary/10 text-vocabulary hover:bg-vocabulary/20" : "border-vocabulary/30 bg-vocabulary/5 text-vocabulary/80"}`;
+      return `${base} ${sizeClass} ${isClickable ? "border-vocabulary/50 bg-vocabulary/10 text-vocabulary hover:bg-vocabulary/20" : "border-vocabulary/30 bg-vocabulary/5 text-vocabulary/80"}`;
     }
 
-    return `${base} ${isClickable ? "border-line bg-white text-slate-700 hover:bg-slate-100" : "border-line bg-slate-50 text-slate-500"}`;
+    return `${base} ${sizeClass} ${isClickable ? "border-line bg-white text-slate-700 hover:bg-slate-100" : "border-line bg-slate-50 text-slate-500"}`;
   }
 
-  function renderRelatedReferenceCards(items: RelatedReference[]) {
+  function renderRelatedReferenceCards(items: RelatedReference[], options?: { large?: boolean }) {
     if (items.length === 0) {
       return <p className="mt-2 text-slate-500">-</p>;
+    }
+
+    const size = options?.large ? "large" : "normal";
+
+    function labelClass(label: string): string {
+      if (size === "normal") {
+        return "text-xl";
+      }
+
+      const length = Array.from(label).length;
+      if (length <= 2) {
+        return "text-4xl";
+      }
+      if (length <= 4) {
+        return "text-3xl";
+      }
+      return "text-2xl";
     }
 
     const expandedItems = items.flatMap((item) => {
@@ -1096,8 +1118,11 @@ export default function LevelExplorer({
 
           if (!isClickable) {
             return (
-              <span key={key} className={`${relatedReferenceCardClass(relationType, false)} inline-flex`}>
-                <span className="text-xl font-black leading-none">{item.label}</span>
+              <span
+                key={key}
+                className={`${relatedReferenceCardClass(relationType, false, size)} inline-flex`}
+              >
+                <span className={`${labelClass(item.label)} font-black leading-none`}>{item.label}</span>
               </span>
             );
           }
@@ -1107,12 +1132,33 @@ export default function LevelExplorer({
               key={key}
               type="button"
               onClick={() => jumpToRelatedSubject(item.subjectId)}
-              className={`${relatedReferenceCardClass(relationType, true)} inline-flex`}
+              className={`${relatedReferenceCardClass(relationType, true, size)} inline-flex`}
             >
-              <span className="text-xl font-black leading-none">{item.label}</span>
+              <span className={`${labelClass(item.label)} font-black leading-none`}>{item.label}</span>
             </button>
           );
         })}
+      </div>
+    );
+  }
+
+  function renderVocabularyKanjiCards() {
+    if (vocabularyKanjiLinks.length === 0) {
+      return <p className="mt-2 text-slate-500">-</p>;
+    }
+
+    return (
+      <div className="mt-2 flex flex-wrap gap-2">
+        {vocabularyKanjiLinks.map((item) => (
+          <button
+            key={`${selectedItem?.subjectId ?? "vocab"}-${item.subjectId}`}
+            type="button"
+            onClick={() => jumpToKanji(item.subjectId, item.wkLevel)}
+            className="inline-flex rounded-xl border border-kanji/50 bg-kanji/10 px-4 py-3 text-left text-kanji transition hover:bg-kanji/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+          >
+            <span className="text-4xl font-black leading-none">{item.char}</span>
+          </button>
+        ))}
       </div>
     );
   }
@@ -1479,33 +1525,6 @@ export default function LevelExplorer({
                     ) : null}
                     </div>
 
-                    {selectedItem.subjectType === "vocabulary" ? (
-                      <div className="mt-3">
-                        <p className="text-xs font-bold uppercase tracking-[0.1em] text-slate-600">
-                          Kanji used in this vocabulary
-                        </p>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {vocabularyKanjiLinks.length === 0 ? (
-                            <span className="rounded-full border border-line bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500">
-                              No linked kanji in selected levels
-                            </span>
-                          ) : (
-                            vocabularyKanjiLinks.map((item) => (
-                              <button
-                                key={`${selectedItem.subjectId}-${item.subjectId}`}
-                                type="button"
-                                onClick={() => jumpToKanji(item.subjectId, item.wkLevel)}
-                                className="rounded-xl border border-kanji/50 bg-kanji/15 px-4 py-2 text-kanji"
-                              >
-                                <p className="text-3xl font-black leading-none">{item.char}</p>
-                                <p className="mt-1 text-center text-sm font-semibold text-slate-600">{item.reading}</p>
-                              </button>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    ) : null}
-
                     <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                       <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                         <p className="text-xs font-bold uppercase text-slate-600">SRS state</p>
@@ -1546,16 +1565,26 @@ export default function LevelExplorer({
 
                     <div className="mt-4 grid gap-3 lg:grid-cols-3">
                       <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                        <p className="text-xs font-bold uppercase text-slate-600">Radicals</p>
-                        {renderRelatedReferenceCards(selectedItem.radicals ?? [])}
+                        <p className="text-xs font-bold uppercase text-slate-600">
+                          {selectedItem.subjectType === "vocabulary" ? "Kanji" : "Radicals"}
+                        </p>
+                        {selectedItem.subjectType === "vocabulary"
+                          ? renderVocabularyKanjiCards()
+                          : renderRelatedReferenceCards(selectedItem.radicals ?? [], {
+                              large: selectedItem.subjectType === "kanji",
+                            })}
                       </article>
                       <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                         <p className="text-xs font-bold uppercase text-slate-600">Visually similar</p>
-                        {renderRelatedReferenceCards(selectedItem.visuallySimilar ?? [])}
+                        {renderRelatedReferenceCards(selectedItem.visuallySimilar ?? [], {
+                          large: selectedItem.subjectType === "kanji",
+                        })}
                       </article>
                       <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
                         <p className="text-xs font-bold uppercase text-slate-600">Used in vocabulary</p>
-                        {renderRelatedReferenceCards(selectedItem.usedInVocabulary ?? [])}
+                        {renderRelatedReferenceCards(selectedItem.usedInVocabulary ?? [], {
+                          large: selectedItem.subjectType === "kanji",
+                        })}
                       </article>
                     </div>
                   </section>
