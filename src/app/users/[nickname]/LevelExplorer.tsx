@@ -1553,7 +1553,7 @@ export default function LevelExplorer({
     }
 
     return (
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div className="mt-2 flex flex-wrap justify-center gap-2">
         {vocabularyKanjiLinks.map((item) => (
           (() => {
             const subtitle = (() => {
@@ -1570,7 +1570,7 @@ export default function LevelExplorer({
             key={`${selectedItem?.subjectId ?? "vocab"}-${item.subjectId}`}
             type="button"
             onClick={() => jumpToKanji(item.subjectId, item.wkLevel)}
-            className="inline-flex cursor-pointer flex-col rounded-xl border border-kanji/50 bg-kanji/10 px-4 py-3 text-left text-kanji transition hover:bg-kanji/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+            className="inline-flex cursor-pointer flex-col items-center rounded-xl border border-kanji/50 bg-kanji/10 px-4 py-3 text-center text-kanji transition hover:bg-kanji/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
           >
             <span className="text-4xl font-black leading-none">{item.char}</span>
             {subtitle ? (
