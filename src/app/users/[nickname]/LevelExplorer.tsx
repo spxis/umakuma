@@ -143,7 +143,7 @@ function normalizeSnapshot(raw: Snapshot): Snapshot {
 function statusClass(status: LevelItem["status"]): string {
   switch (status) {
     case "locked":
-      return "bg-slate-100 text-slate-600";
+      return "bg-surface-muted text-foreground/70";
     case "apprentice":
       return "bg-pink-100 text-pink-700";
     case "guru":
@@ -153,7 +153,7 @@ function statusClass(status: LevelItem["status"]): string {
     case "enlightened":
       return "bg-amber-100 text-amber-700";
     case "burned":
-      return "bg-slate-200 text-slate-700";
+      return "bg-surface-muted text-foreground/80";
   }
 }
 
@@ -372,6 +372,19 @@ function englishSubtitleForDisplay(item: LevelItem): string | null {
 
   const pronunciation = pronunciationForReading(reading);
   return pronunciation ? `${reading} / ${pronunciation}` : reading;
+}
+
+function titleForDisplay(item: LevelItem, showEnglish: boolean): string {
+  if (showEnglish) {
+    return item.meanings.join(", ") || "-";
+  }
+
+  const subtitle = glyphSubtitleForDisplay(item);
+  if (subtitle && subtitle !== "-") {
+    return subtitle;
+  }
+
+  return item.characters || "-";
 }
 
 function glyphHasReading(item: LevelItem): boolean {
@@ -2118,7 +2131,7 @@ export default function LevelExplorer({
                       item.status === "locked" || item.srsStage <= 0 ? "text-foreground/60" : "text-foreground"
                     }`}
                   >
-                    {item.meanings.join(", ") || "-"}
+                    {titleForDisplay(item, showEnglish)}
                   </p>
                   <div
                     className={`mt-3 rounded-xl border ${
@@ -2217,7 +2230,7 @@ export default function LevelExplorer({
                       </div>
                       <div className="min-w-0">
                         <p className="text-3xl font-black leading-tight text-foreground">
-                          {selectedItem.meanings.join(", ") || "-"}
+                          {titleForDisplay(selectedItem, showEnglish)}
                         </p>
                       </div>
                     </div>

@@ -206,13 +206,13 @@ export default function JlptExplorer({
   function statusClass(
     status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | undefined,
   ): string {
-    if (status === "locked") return "bg-slate-100 text-slate-600";
+    if (status === "locked") return "bg-surface-muted text-foreground/70";
     if (status === "apprentice") return "bg-pink-100 text-pink-700";
     if (status === "guru") return "bg-violet-100 text-violet-700";
     if (status === "master") return "bg-sky-100 text-sky-700";
     if (status === "enlightened") return "bg-amber-100 text-amber-700";
-    if (status === "burned") return "bg-slate-200 text-slate-700";
-    return "bg-slate-100 text-slate-500";
+    if (status === "burned") return "bg-surface-muted text-foreground/80";
+    return "bg-surface-muted text-foreground/65";
   }
 
   function readingLabel(reading: string | null): string {
@@ -247,6 +247,41 @@ export default function JlptExplorer({
     }
 
     return meanings.slice(0, 2).join(", ");
+  }
+
+  function jlptTitleForDisplay({
+    userMeanings,
+    fallbackMeanings,
+    primaryReading,
+    fallbackReadings,
+    kanji,
+  }: {
+    userMeanings?: string[];
+    fallbackMeanings?: string[];
+    primaryReading: string | null;
+    fallbackReadings: string[];
+    kanji: string;
+  }): string {
+    if (showEnglish) {
+      const fromUser = userMeanings?.[0];
+      if (fromUser) {
+        return fromUser;
+      }
+
+      const fromFallback = meaningLabelFromList(fallbackMeanings ?? []);
+      return fromFallback || "-";
+    }
+
+    if (primaryReading) {
+      return primaryReading;
+    }
+
+    const fallbackReading = fallbackReadings[0] ?? null;
+    if (fallbackReading) {
+      return fallbackReading;
+    }
+
+    return kanji;
   }
 
   function toggleNLevel(level: number) {
@@ -473,7 +508,13 @@ export default function JlptExplorer({
               : null;
             const fallbackReadings = preload?.readings ?? [];
             const fallbackMeanings = preload?.meanings ?? [];
-            const heading = userMatch?.meanings?.[0] ?? meaningLabelFromList(fallbackMeanings);
+            const heading = jlptTitleForDisplay({
+              userMeanings: userMatch?.meanings,
+              fallbackMeanings,
+              primaryReading,
+              fallbackReadings,
+              kanji: item.kanji,
+            });
 
             return (
               <Fragment key={`${item.nLevel}-${item.kanji}`}>
@@ -538,7 +579,13 @@ export default function JlptExplorer({
                             </div>
                             <div className="min-w-0">
                               <p className="text-3xl font-black leading-tight text-foreground">
-                                {meanings.length > 0 ? meanings.join(", ") : "-"}
+                                {jlptTitleForDisplay({
+                                  userMeanings: selectedUserMatch?.meanings,
+                                  fallbackMeanings: selectedPreload?.meanings ?? [],
+                                  primaryReading: primary,
+                                  fallbackReadings: selectedPreload?.readings ?? [],
+                                  kanji: selectedItem.kanji,
+                                })}
                               </p>
                             </div>
                           </div>

@@ -122,7 +122,7 @@ export default function ExplorerTabs({
     const active = activeTab === tab;
     return active
       ? "rounded-full border border-accent bg-accent px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white"
-      : "rounded-full border border-line bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-slate-700 hover:bg-surface-muted";
+      : "rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted";
   }
 
   return (
@@ -153,7 +153,7 @@ export default function ExplorerTabs({
           <button
             type="button"
             onClick={() => setShowEnglish((prev) => !prev)}
-            className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-bold uppercase tracking-[0.1em] text-slate-700 transition hover:bg-surface-muted"
+            className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted"
           >
             {showEnglish ? "Hide English" : "Show English"}
           </button>
