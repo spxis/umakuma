@@ -1,10 +1,23 @@
-# Large File Refactor Plan
+# Large File Refactor Plan (Revised)
 
-## Goals
+## Objectives
 
-- Reduce file size and cognitive load in explorer components.
-- Keep behavior and URL/state persistence stable during extraction.
-- Ship incrementally with production-safe checkpoints.
+- Reduce component size and cognitive load while preserving all current behavior.
+- Stabilize explorer and leaderboard contracts before UI extraction.
+- Ship in small, reversible PR slices with explicit verification gates.
+
+## Scope
+
+In scope:
+- Level explorer refactor.
+- JLPT explorer refactor.
+- Leaderboard table refactor.
+- Shared type/helper extraction needed to support those refactors.
+
+Out of scope:
+- Visual redesign.
+- API schema changes.
+- New product behavior.
 
 ## Current Hotspots
 
@@ -14,122 +27,188 @@
 
 ## Extraction Strategy
 
-Work in thin vertical slices: extract one UI section at a time with typed props and no behavior changes in the same commit.
+Work in thin vertical slices with stable contracts: extract shared types/utilities first, then state/data logic, then presentational components. Avoid behavior changes in refactor PRs.
 
-## Phase 1: Level Explorer Core Split
+## Phase 0: Baseline and Behavioral Contract Lock
 
-### 1. Extract URL/filter state
+- Capture a behavior matrix for current UX:
+	- URL param sync and browser back/forward behavior.
+	- localStorage hydration and persistence behavior.
+	- Cross-tab search event flow and completion events.
+	- Detail panel placement rules in responsive grids.
+- Add a temporary refactor checklist to PR template text (or this plan) and use it on each slice.
 
-Create `src/app/users/[nickname]/levelExplorerState.ts`:
-- URL parse/write helpers
-- filter types/constants
-- localStorage key helpers
+Acceptance criteria:
+- Written behavior matrix exists and is reviewed.
+- Manual baseline scenarios are documented and reproducible.
 
-Acceptance:
-- Reload preserves filter/selection/search behavior exactly.
+Verification:
+- `pnpm lint`
+- `pnpm build`
+- Manual baseline run on desktop and mobile widths.
 
-### 2. Extract filtering/search engine
+### Phase 0 Baseline Behavior Matrix (PR1)
 
-Create `src/app/users/[nickname]/levelExplorerSearch.ts`:
-- `itemMatchesSearch`
-- filtered-item selectors
-- search result sorting and level set derivation
+Use this checklist before and after each PR slice.
 
-Acceptance:
-- Search results count and selected level behavior unchanged.
+| Area | Scenario | Expected Result | Status |
+| --- | --- | --- | --- |
+| Level Explorer URL | Open deep link with `tab=level`, `levels`, `subject`, `srs`, `type`, `jlpt`, `review`, `sticky` | UI state matches URL on first render | [ ] |
+| Level Explorer History | Change multiple filters, then browser Back/Forward | State restores correctly in sequence | [ ] |
+| Level Explorer Persistence | Set SRS/JLPT/review filters, reload page | Persisted filters rehydrate unless URL overrides | [ ] |
+| Level Explorer Search | Trigger search from shared bar, clear query | Results, selection, and badges update consistently | [ ] |
+| Level Detail Placement | Select cards across different grid columns (desktop/mobile) | Detail panel inserts at correct row boundary | [ ] |
+| Related Navigation | Open related item jump (radicals, visually similar, vocab) | Target level/item selected and visible | [ ] |
+| JLPT URL | Open deep link with `tab=jlpt`, `findJlpt`, `jlptKanji` | Query and selected detail are restored | [ ] |
+| JLPT Search Events | Switch tabs with active query | Correct scope receives search event | [ ] |
+| Leaderboard Expansion | Expand/collapse rows, refresh page | Expanded row state persists for valid rows | [ ] |
+| Leaderboard Panels | Toggle item spread/level progress panels | Panel open/closed state persists after reload | [ ] |
+| Leaderboard Mobile/Desktop | Validate same account on desktop and mobile widths | Data parity across both layouts | [ ] |
 
-### 3. Extract filter header UI
+Notes:
+- Record any mismatches as follow-up bugfix PRs, not in refactor PRs.
+- Keep this matrix updated as behavior contracts are clarified.
 
-Create `src/app/users/[nickname]/LevelExplorerFilters.tsx`:
-- level chips
-- SRS/type/JLPT/review timing controls
-- collapsed/expanded section
+## Phase 1: Shared Domain Types and Pure Utilities First
 
-Acceptance:
-- Button layout and counts unchanged.
-- Clicking any control still clears drilldown where intended.
+- Extract duplicate types and pure helpers used by multiple files before UI splits.
+- Consolidate repeated model guards/formatters only when behavior is identical.
+- Keep exports stable and migrate call sites incrementally.
 
-### 4. Extract grid card UI
+Acceptance criteria:
+- No runtime behavior changes.
+- All affected call sites compile against shared types/utilities.
+- Diff is mostly moves and import rewiring.
 
-Create `src/app/users/[nickname]/LevelSubjectCard.tsx`:
-- single card rendering
-- status badges
-- selected-state indicator
+Verification:
+- `pnpm lint`
+- `pnpm build`
+- Smoke test leaderboard page and user explorer page.
 
-Acceptance:
-- Card visuals identical on light/dark theme.
+## Phase 2: Level Explorer State and Data Engine Split
 
-### 5. Extract detail panel UI
+- Extract state and persistence engine from `LevelExplorer.tsx`:
+	- URL parse/write.
+	- localStorage read/write keys and hydration.
+	- Selection/filter transitions.
+- Extract data/filter/search engine:
+	- Search matching.
+	- Filter pipelines and counts.
+	- Level loading orchestration wrappers.
+- Keep current UI markup in place during this phase.
 
-Create `src/app/users/[nickname]/LevelSubjectDetail.tsx`:
-- metadata section
-- meaning/reading explanation boxes
-- relation panel composition via existing `LevelRelatedPanels`
+Acceptance criteria:
+- URL and localStorage behavior is unchanged.
+- Search results/counts and level-loading behavior are unchanged.
+- Browser back/forward restores equivalent state.
 
-Acceptance:
-- Drilldown parity with current implementation.
+Verification:
+- `pnpm lint`
+- `pnpm build`
+- Manual scenarios:
+	- Deep link with levels/subject/srs/type/jlpt/review/sticky.
+	- Search + clear + back navigation.
+	- Sticky merge on/off transitions.
+	- Related-item jump across levels.
 
-Target outcome:
-- `LevelExplorer.tsx` reduced to orchestration container, <900 LOC.
+## Phase 3: Level Explorer Presentational Split
 
-## Phase 2: JLPT Explorer Split
+- Extract pure presentational components after state engine is stable:
+	- Filter header.
+	- Grid card.
+	- Detail panel.
+	- Related reference card renderers.
+- Keep container responsible for orchestration only.
 
-### 1. Extract detail panels
+Acceptance criteria:
+- Visual parity for cards/detail/filter sections.
+- Selection and detail insertion behavior remains unchanged.
+- Container owns orchestration, children are mostly props-in/render-out.
 
-Create `src/app/users/[nickname]/JlptDetailPanels.tsx`:
-- readings/metadata cards
-- dictionary notes
-- used-in-words list
+Verification:
+- `pnpm lint`
+- `pnpm build`
+- Manual comparison of representative levels and subject types.
 
-### 2. Extract card grid item
+## Phase 4: JLPT Explorer Split
 
-Create `src/app/users/[nickname]/JlptKanjiCard.tsx`:
-- heading + badge + status + reading summary
+- Extract JLPT filter/search state helpers and pure selectors.
+- Extract JLPT card and detail panel components.
+- Preserve URL coupling behavior and custom-event search contract.
 
-### 3. Extract JLPT filter/search header
+Acceptance criteria:
+- `findJlpt` and `jlptKanji` URL behavior unchanged.
+- JLPT search and matching semantics unchanged.
+- Card/detail behavior and insertion point parity maintained.
 
-Create `src/app/users/[nickname]/JlptExplorerFilters.tsx`:
-- N-level toggles
-- WK membership filters
-- sticky mode
+Verification:
+- `pnpm lint`
+- `pnpm build`
+- Manual scenarios:
+	- Query via shared search bar.
+	- Toggle sticky levels and N-level filters.
+	- Select/deselect detail and browser back/forward.
 
-Target outcome:
-- `JlptExplorer.tsx` <350 LOC.
+## Phase 5: Leaderboard Split
 
-## Phase 3: Leaderboard Table Split
+- Extract row view-model helpers from table component.
+- Split desktop row, mobile card, and expanded details panel.
+- Keep sorting/display semantics unchanged.
 
-### 1. Extract row view models
+Acceptance criteria:
+- Desktop and mobile layouts render equivalent data.
+- Expanded state persistence behavior unchanged.
+- Delta and JLPT completion displays remain consistent.
 
-Create `src/app/leaderboardViewModel.ts`:
-- score/status formatting
-- rank helpers
+Verification:
+- `pnpm lint`
+- `pnpm build`
+- Manual desktop/mobile checks with expand/collapse persistence.
 
-### 2. Extract row components
+## Phase 6: Hardening and Cleanup
 
-Create:
-- `src/app/LeaderboardRowDesktop.tsx`
-- `src/app/LeaderboardRowMobile.tsx`
+- Remove dead code and temporary compatibility wrappers.
+- Normalize naming and module boundaries.
+- Update architecture/refactor docs with final module map.
 
-### 3. Extract expandable details
+Acceptance criteria:
+- No TODO placeholders remain in refactor paths.
+- All checks pass and manual scenario checklist passes.
+- Final file-size and responsibility targets are met.
 
-Create `src/app/LeaderboardRowDetails.tsx`.
+Verification:
+- `pnpm lint`
+- `pnpm build`
+- Full manual sanity pass on home, user explorer, and API-powered level loading.
 
-Target outcome:
-- `LeaderboardTable.tsx` <350 LOC.
+## Rollback Strategy
 
-## Guardrails
+- Use one feature area per PR slice and avoid mixed concerns.
+- If regression appears:
+	- Revert the latest PR slice only.
+	- Keep prior extracted pure modules if they are behavior-neutral and verified.
+	- Re-run baseline behavior matrix before resuming.
+- No data migrations or API contract changes during this refactor, so rollback remains code-only.
 
-- Preserve public prop contracts unless extraction requires new types.
-- No visual redesign while splitting; only structure changes.
-- Keep each extraction commit build-green.
-- Add tiny snapshot checks where practical for pure format helpers.
+## Definition of Done
 
-## Suggested Commit Sequence
+- All phases complete with acceptance criteria satisfied.
+- `pnpm lint` and `pnpm build` pass on each merged slice.
+- Manual behavior matrix passes for:
+	- Explorer URL/state persistence.
+	- Shared search event flow.
+	- Level/JLPT detail insertion behavior.
+	- Leaderboard desktop/mobile/expanded states.
+- `LevelExplorer.tsx`, `JlptExplorer.tsx`, and `LeaderboardTable.tsx` are orchestration-first containers with extracted pure modules/components.
+- Refactor documentation is updated with final file map and ownership boundaries.
 
-1. state helpers + wire in LevelExplorer
-2. search helpers + wire in LevelExplorer
-3. filter header component
-4. card component
-5. detail component
-6. JLPT split (filters/cards/detail)
-7. leaderboard split
+## Suggested PR Slicing Strategy
+
+1. PR1: Baseline matrix + no-op guard rails + initial shared type module introduction.
+2. PR2: Level explorer URL/localStorage state extraction only.
+3. PR3: Level explorer search/filter/selectors extraction only.
+4. PR4: Level explorer UI split (filters + card + detail) with no logic changes.
+5. PR5: JLPT selectors/state extraction.
+6. PR6: JLPT UI split (filters + card + detail).
+7. PR7: Leaderboard view-model extraction and desktop/mobile/details split.
+8. PR8: Cleanup, dead-code removal, and doc finalization.

@@ -14,24 +14,7 @@ import {
   readingLabelFromList,
   stripReadingSeparators,
 } from "./jlptDisplay";
-
-type JlptItem = {
-  kanji: string;
-  nLevel: number;
-  strokeCount: number | null;
-  frequencyRank: number | null;
-  schoolGrade: number | null;
-  heisigKeyword: string | null;
-  unicodeHex: string | null;
-  sourceJlpt: number | null;
-  primaryMeaning: string | null;
-  meanings: string[];
-  onReadings: string[];
-  kunReadings: string[];
-  nanoriReadings: string[];
-  notes: string[];
-  wordExamples: unknown;
-};
+import type { JlptItem, UserKanjiItem } from "./explorerTypes";
 
 type JlptWordExample = {
   written: string;
@@ -42,21 +25,7 @@ type JlptWordExample = {
 type Props = {
   items: JlptItem[];
   showEnglish?: boolean;
-  userKanjiItems?: Array<{
-    subjectId?: number;
-    characters: string;
-    meanings?: string[];
-    primaryReadings?: string[];
-    readings?: string[];
-    meaningExplanation?: string;
-    readingExplanation?: string;
-    startedAt?: string | null;
-    passedAt?: string | null;
-    availableAt?: string | null;
-    status?: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
-    srsStage?: number;
-    wkLevel?: number | null;
-  }>;
+  userKanjiItems?: UserKanjiItem[];
 };
 
 type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;

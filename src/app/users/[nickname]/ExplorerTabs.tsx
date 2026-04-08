@@ -5,79 +5,7 @@ import { useEffect, useState } from "react";
 import ExplorerSearchBar from "./ExplorerSearchBar";
 import JlptExplorer from "./JlptExplorer";
 import LevelExplorer from "./LevelExplorer";
-
-type LevelItem = {
-  subjectId: number;
-  subjectType?: "kanji" | "radical" | "vocabulary";
-  wkLevel?: number;
-  characters: string;
-  meanings: string[];
-  readings?: string[];
-  primaryReadings?: string[];
-  radicals?: Array<{
-    subjectId: number;
-    label: string;
-    wkLevel?: number | null;
-    reading?: string | null;
-  }>;
-  visuallySimilar?: Array<{
-    subjectId: number;
-    label: string;
-    wkLevel?: number | null;
-    reading?: string | null;
-  }>;
-  usedInVocabulary?: Array<{
-    subjectId: number;
-    label: string;
-    wkLevel?: number | null;
-    reading?: string | null;
-  }>;
-  componentKanji?: Array<{
-    subjectId: number;
-    label: string;
-    wkLevel?: number | null;
-    reading?: string | null;
-  }>;
-  meaningExplanation?: string;
-  readingExplanation?: string;
-  jlptLevel?: number | null;
-  srsStage: number;
-  status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
-  startedAt?: string | null;
-  passedAt?: string | null;
-  availableAt: string | null;
-};
-
-type Snapshot = {
-  level: number;
-  kanjiTotal: number;
-  kanjiLearned: number;
-  kanjiGuruPlus: number;
-  kanjiLocked: number;
-  estimatedHoursRemaining: number | null;
-  items: LevelItem[];
-  syncedAt?: string;
-};
-
-type JlptItem = {
-  kanji: string;
-  nLevel: number;
-  strokeCount: number | null;
-  frequencyRank: number | null;
-  schoolGrade: number | null;
-  heisigKeyword: string | null;
-  unicodeHex: string | null;
-  sourceJlpt: number | null;
-  primaryMeaning: string | null;
-  meanings: string[];
-  onReadings: string[];
-  kunReadings: string[];
-  nanoriReadings: string[];
-  notes: string[];
-  wordExamples: unknown;
-};
-
-type SrsFilter = "all" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | "locked";
+import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
 
 type Props = {
   accountId: string;
@@ -85,21 +13,7 @@ type Props = {
   initialSnapshot: Snapshot;
   initialSrsFilter: SrsFilter;
   jlptItems: JlptItem[];
-  userKanjiItems: Array<{
-    subjectId?: number;
-    characters: string;
-    meanings?: string[];
-    primaryReadings?: string[];
-    readings?: string[];
-    meaningExplanation?: string;
-    readingExplanation?: string;
-    startedAt?: string | null;
-    passedAt?: string | null;
-    availableAt?: string | null;
-    status?: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
-    srsStage?: number;
-    wkLevel?: number | null;
-  }>;
+  userKanjiItems: UserKanjiItem[];
 };
 
 export default function ExplorerTabs({
