@@ -991,7 +991,9 @@ export async function getLeaderboardStats(
     ),
   );
   const fallbackTypeBySubjectId =
-    missingSubjectIds.length > 0 ? await loadSubjectTypes(token, missingSubjectIds) : new Map();
+    missingSubjectIds.length > 0
+      ? await loadSubjectTypes(token, missingSubjectIds)
+      : new Map<number, "radical" | "kanji" | "vocabulary">();
 
   const lastGuruedAt = {
     radical: existing.lastRadicalGuruedAt,
