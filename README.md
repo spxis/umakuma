@@ -48,6 +48,8 @@ Required Vercel environment variables:
 - `DIRECT_URL`
 - `TOKEN_ENCRYPTION_KEY`
 - `ADMIN_API_KEY`
+- `LEADERBOARD_REFRESH_INTERVAL_MS` (optional, default `300000`)
+- `LEADERBOARD_REQUEST_GAP_MS` (optional, default `5000`)
 
 Generate encryption key with:
 

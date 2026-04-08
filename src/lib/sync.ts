@@ -1,12 +1,11 @@
 import { decryptToken } from "@/lib/crypto";
 import { upsertDailySnapshot } from "@/lib/dailySnapshot";
 import { prisma } from "@/lib/prisma";
+import { LEADERBOARD_REFRESH_INTERVAL_MS, LEADERBOARD_REQUEST_GAP_MS } from "@/lib/refreshPolicy";
 import { getLeaderboardStats } from "@/lib/wanikani";
 
-const DAILY_REFRESH_MS = 24 * 60 * 60 * 1000;
 const SYNC_LOCK_MS = 5 * 60 * 1000;
 const FAILURE_COOLDOWN_MS = 30 * 60 * 1000;
-const SUCCESS_COOLDOWN_MS = 60 * 60 * 1000;
 const MANUAL_REFRESH_COOLDOWN_MS = 60 * 1000;
 
 type SyncResult = {
@@ -14,13 +13,24 @@ type SyncResult = {
   reason?: string;
 };
 
+type RefreshBatchResult = {
+  refreshed: number;
+  skipped: number;
+};
+
 function nowPlus(ms: number): Date {
   return new Date(Date.now() + ms);
 }
 
-export async function refreshDueAccounts(maxAccounts = 2): Promise<void> {
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+export async function refreshDueAccounts(maxAccounts = 2): Promise<RefreshBatchResult> {
   const now = new Date();
-  const staleBefore = new Date(Date.now() - DAILY_REFRESH_MS);
+  const staleBefore = new Date(Date.now() - LEADERBOARD_REFRESH_INTERVAL_MS);
 
   const due = await prisma.account.findMany({
     where: {
@@ -37,13 +47,29 @@ export async function refreshDueAccounts(maxAccounts = 2): Promise<void> {
     take: maxAccounts,
   });
 
-  for (const account of due) {
-    await refreshAccountById(account.id, false);
+  let refreshed = 0;
+
+  for (let index = 0; index < due.length; index += 1) {
+    const account = due[index];
+    const result = await refreshAccountById(account.id, false);
+    if (result.refreshed) {
+      refreshed += 1;
+    }
+
+    if (index < due.length - 1) {
+      await sleep(LEADERBOARD_REQUEST_GAP_MS);
+    }
   }
+
+  return {
+    refreshed,
+    skipped: due.length - refreshed,
+  };
 }
 
 export async function refreshAccountById(accountId: string, force: boolean): Promise<SyncResult> {
   const now = new Date();
+  const staleBefore = new Date(Date.now() - LEADERBOARD_REFRESH_INTERVAL_MS);
   const manualThreshold = new Date(Date.now() - MANUAL_REFRESH_COOLDOWN_MS);
 
   const claim = await prisma.account.updateMany({
@@ -51,7 +77,9 @@ export async function refreshAccountById(accountId: string, force: boolean): Pro
       id: accountId,
       ...(force
         ? { lastSyncedAt: { lt: manualThreshold } }
-        : { nextSyncAllowedAt: { lte: now } }),
+        : {
+            AND: [{ nextSyncAllowedAt: { lte: now } }, { lastSyncedAt: { lt: staleBefore } }],
+          }),
       OR: [{ isSyncing: false }, { syncLockUntil: { lt: now } }, { syncLockUntil: null }],
     },
     data: {
@@ -63,7 +91,10 @@ export async function refreshAccountById(accountId: string, force: boolean): Pro
   });
 
   if (claim.count === 0) {
-    return { refreshed: false, reason: force ? "manual-cooldown-1m" : "busy-or-rate-limited" };
+    return {
+      refreshed: false,
+      reason: force ? "manual-cooldown-1m" : "not-due-or-busy",
+    };
   }
 
   const account = await prisma.account.findUnique({
@@ -117,7 +148,7 @@ export async function refreshAccountById(accountId: string, force: boolean): Pro
         jlptCounts: stats.jlptCounts,
         score: stats.score,
         lastSyncedAt: syncedAt,
-        nextSyncAllowedAt: nowPlus(SUCCESS_COOLDOWN_MS),
+        nextSyncAllowedAt: nowPlus(LEADERBOARD_REFRESH_INTERVAL_MS),
         lastSyncStatus: "ok",
         lastSyncError: null,
         isSyncing: false,
