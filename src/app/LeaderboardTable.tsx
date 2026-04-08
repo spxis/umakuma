@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Fragment } from "react";
+import { useMemo } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -218,51 +219,61 @@ function jlptCompletionClass(percent: number): string {
 
 export default function LeaderboardTable({ rows }: Props) {
   const expandedStorageKey = "wr:leaderboard:expanded-rows";
-  const [expanded, setExpanded] = useState<Set<string>>(new Set());
-  const [showItemSpreadPanel, setShowItemSpreadPanel] = useState(true);
-  const [showLevelProgressPanel, setShowLevelProgressPanel] = useState(true);
+  const [expanded, setExpanded] = useState<Set<string>>(() => {
+    if (typeof window === "undefined") {
+      return new Set();
+    }
+
+    try {
+      const stored = window.localStorage.getItem(expandedStorageKey);
+      if (!stored) {
+        return new Set();
+      }
+
+      const parsed = JSON.parse(stored) as string[];
+      return Array.isArray(parsed) ? new Set(parsed) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+  const [showItemSpreadPanel, setShowItemSpreadPanel] = useState(() => {
+    if (typeof window === "undefined") {
+      return true;
+    }
+
+    try {
+      return window.localStorage.getItem("wr:leaderboard:item-spread-open") !== "0";
+    } catch {
+      return true;
+    }
+  });
+  const [showLevelProgressPanel, setShowLevelProgressPanel] = useState(() => {
+    if (typeof window === "undefined") {
+      return true;
+    }
+
+    try {
+      return window.localStorage.getItem("wr:leaderboard:level-progress-open") !== "0";
+    } catch {
+      return true;
+    }
+  });
+  const validRowIds = useMemo(() => new Set(rows.map((row) => row.id)), [rows]);
+  const filteredExpanded = useMemo(
+    () => new Set(Array.from(expanded).filter((id) => validRowIds.has(id))),
+    [expanded, validRowIds],
+  );
   const allRowIds = rows.map((row) => row.id);
-  const allExpanded = rows.length > 0 && expanded.size === rows.length;
-  const anyExpanded = expanded.size > 0;
+  const allExpanded = rows.length > 0 && filteredExpanded.size === rows.length;
+  const anyExpanded = filteredExpanded.size > 0;
 
   useEffect(() => {
     try {
-      const expandedStored = window.localStorage.getItem(expandedStorageKey);
-      const spread = window.localStorage.getItem("wr:leaderboard:item-spread-open");
-      const progress = window.localStorage.getItem("wr:leaderboard:level-progress-open");
-
-      if (expandedStored) {
-        const parsed = JSON.parse(expandedStored) as string[];
-        if (Array.isArray(parsed)) {
-          setExpanded(new Set(parsed));
-        }
-      }
-
-      if (spread === "0") {
-        setShowItemSpreadPanel(false);
-      }
-      if (progress === "0") {
-        setShowLevelProgressPanel(false);
-      }
+      window.localStorage.setItem(expandedStorageKey, JSON.stringify(Array.from(filteredExpanded)));
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
-  }, [expandedStorageKey]);
-
-  useEffect(() => {
-    const validRowIds = new Set(rows.map((row) => row.id));
-    setExpanded((prev) => {
-      const filtered = new Set(Array.from(prev).filter((id) => validRowIds.has(id)));
-
-      try {
-        window.localStorage.setItem(expandedStorageKey, JSON.stringify(Array.from(filtered)));
-      } catch {
-        // Ignore storage errors in restricted browsing modes.
-      }
-
-      return filtered;
-    });
-  }, [rows, expandedStorageKey]);
+  }, [expandedStorageKey, filteredExpanded]);
 
   function persistPanelState(key: string, value: boolean, setter: (next: boolean) => void) {
     setter(value);
@@ -275,7 +286,7 @@ export default function LeaderboardTable({ rows }: Props) {
 
   function toggle(id: string) {
     setExpanded((prev) => {
-      const next = new Set(prev);
+      const next = new Set(Array.from(prev).filter((rowId) => validRowIds.has(rowId)));
       if (next.has(id)) {
         next.delete(id);
       } else {
@@ -404,11 +415,11 @@ export default function LeaderboardTable({ rows }: Props) {
                       onClick={() => toggle(row.id)}
                       className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground"
                     >
-                      {expanded.has(row.id) ? "Hide" : "Expand"}
+                      {filteredExpanded.has(row.id) ? "Hide" : "Expand"}
                     </button>
                   </td>
                 </tr>
-                {expanded.has(row.id) ? (
+                {filteredExpanded.has(row.id) ? (
                   <tr className="bg-surface-muted/40">
                     <td colSpan={11} className="px-4 py-4">
                       {(() => {
@@ -653,7 +664,7 @@ export default function LeaderboardTable({ rows }: Props) {
                 onClick={() => toggle(row.id)}
                 className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground"
               >
-                {expanded.has(row.id) ? "Hide" : "More"}
+                {filteredExpanded.has(row.id) ? "Hide" : "More"}
               </button>
             </div>
 
@@ -697,7 +708,7 @@ export default function LeaderboardTable({ rows }: Props) {
             <p className="mt-2 text-[11px] font-semibold text-foreground/60">
               Activity: {row.lastActivityAt ? formatDate(row.lastActivityAt) : "-"} · {formatSince(row.lastActivityAt)}
             </p>
-            {expanded.has(row.id) ? (
+            {filteredExpanded.has(row.id) ? (
               <div className="mt-3 space-y-2 text-xs font-semibold text-foreground/80">
                 <div className="grid grid-cols-2 gap-2">
                   <div className="rounded-lg bg-surface-muted p-2">Apprentice {formatNumber(row.apprenticeCount)}</div>

@@ -547,7 +547,7 @@ export async function getLevelKanjiSnapshot(
     }
   }
 
-  let relatedSubjects = new Map<
+  const relatedSubjects = new Map<
     number,
     {
       subjectId: number;

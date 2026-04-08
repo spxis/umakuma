@@ -562,11 +562,6 @@ export default function JlptExplorer({
                         ? (selectedUserMatch.readings ?? []).filter((reading) => reading !== primary)
                         : (selectedDbReadings.length > 0 ? selectedDbReadings : (selectedPreload?.readings ?? []))
                             .filter((reading) => reading !== primary);
-                      const meanings = selectedUserMatch?.meanings?.length
-                        ? selectedUserMatch.meanings
-                        : selectedItem.meanings.length > 0
-                          ? selectedItem.meanings
-                          : selectedPreload?.meanings ?? [];
                       const jsonMeanings = (selectedPreload?.meanings ?? []).filter((meaning) => meaning.trim().length > 0);
                       const wordExamples = parseWordExamples(selectedItem.wordExamples);
 

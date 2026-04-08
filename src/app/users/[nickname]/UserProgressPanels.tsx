@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type ItemSpreadRow = {
   radical: number;
@@ -49,25 +49,28 @@ export default function UserProgressPanels({
   passedLevelUpGate,
 }: Props) {
   const storagePrefix = `wr:user:${accountId}`;
-  const [showItemSpread, setShowItemSpread] = useState(true);
-  const [showLevelProgress, setShowLevelProgress] = useState(true);
-
-  useEffect(() => {
-    try {
-      const itemSpreadStored = window.localStorage.getItem(`${storagePrefix}:item-spread-open`);
-      const levelProgressStored = window.localStorage.getItem(`${storagePrefix}:level-progress-open`);
-
-      if (itemSpreadStored === "0") {
-        setShowItemSpread(false);
-      }
-
-      if (levelProgressStored === "0") {
-        setShowLevelProgress(false);
-      }
-    } catch {
-      // Ignore storage errors in restricted browsing modes.
+  const [showItemSpread, setShowItemSpread] = useState(() => {
+    if (typeof window === "undefined") {
+      return true;
     }
-  }, [storagePrefix]);
+
+    try {
+      return window.localStorage.getItem(`${storagePrefix}:item-spread-open`) !== "0";
+    } catch {
+      return true;
+    }
+  });
+  const [showLevelProgress, setShowLevelProgress] = useState(() => {
+    if (typeof window === "undefined") {
+      return true;
+    }
+
+    try {
+      return window.localStorage.getItem(`${storagePrefix}:level-progress-open`) !== "0";
+    } catch {
+      return true;
+    }
+  });
 
   function setPersistedState(key: string, value: boolean, setter: (next: boolean) => void) {
     setter(value);

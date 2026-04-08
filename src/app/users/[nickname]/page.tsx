@@ -41,10 +41,6 @@ type JlptKanjiRow = {
   wordExamples: unknown;
 };
 
-function formatNumber(input: number): string {
-  return new Intl.NumberFormat("en-US").format(input);
-}
-
 export default async function UserDetailPage({ params, searchParams }: PageProps) {
   const { nickname } = await params;
   const query = await searchParams;

@@ -9,6 +9,7 @@ type Props = {
 export default function ExplorerSearchBar({ scope = "level" }: Props) {
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [isSubmitLocked, setIsSubmitLocked] = useState(false);
   const [searchState, setSearchState] = useState<"idle" | "searching" | "done" | "error">("idle");
   const [srStatus, setSrStatus] = useState("");
   const activeRequestIdRef = useRef<string | null>(null);
@@ -30,6 +31,7 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
 
       activeRequestIdRef.current = null;
       submitLockedRef.current = false;
+      setIsSubmitLocked(false);
       setIsSearching(false);
       setSearchState(custom.detail?.ok ? "done" : "error");
       setSrStatus(custom.detail?.ok ? "Search complete." : custom.detail?.message ?? "No matches found.");
@@ -51,6 +53,7 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
 
       activeRequestIdRef.current = null;
       submitLockedRef.current = false;
+      setIsSubmitLocked(false);
       setIsSearching(false);
       setSearchState("idle");
       setSrStatus("Search cleared.");
@@ -66,7 +69,7 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
         window.clearTimeout(clearIndicatorTimeoutRef.current);
       }
     };
-  }, []);
+  }, [scope]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -105,6 +108,7 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
     }
 
     submitLockedRef.current = true;
+    setIsSubmitLocked(true);
     throttleUntilRef.current = now + 800;
 
     const requestId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -165,7 +169,7 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
         />
         <button
           type="submit"
-          disabled={isSearching || submitLockedRef.current || !query.trim()}
+          disabled={isSearching || isSubmitLocked || !query.trim()}
           className="inline-flex h-9 items-center rounded-full border border-accent bg-accent px-4 text-xs font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isSearching ? (

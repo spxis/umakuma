@@ -9,30 +9,36 @@ type JpFontMode = "sans" | "serif";
 type ThemeMode = "light" | "dark";
 
 export default function AppFooter() {
-  const [jpFontMode, setJpFontMode] = useState<JpFontMode>("sans");
-  const [themeMode, setThemeMode] = useState<ThemeMode>("light");
+  const [jpFontMode, setJpFontMode] = useState<JpFontMode>(() => {
+    if (typeof window === "undefined") {
+      return "sans";
+    }
+
+    try {
+      return window.localStorage.getItem(JP_FONT_STORAGE_KEY) === "serif" ? "serif" : "sans";
+    } catch {
+      return "sans";
+    }
+  });
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+    if (typeof window === "undefined") {
+      return "light";
+    }
+
+    try {
+      return window.localStorage.getItem(THEME_STORAGE_KEY) === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
+    }
+  });
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(JP_FONT_STORAGE_KEY);
-      const mode: JpFontMode = stored === "serif" ? "serif" : "sans";
-      setJpFontMode(mode);
-      document.documentElement.setAttribute("data-jp-font", mode);
-    } catch {
-      document.documentElement.setAttribute("data-jp-font", "sans");
-    }
-  }, []);
+    document.documentElement.setAttribute("data-jp-font", jpFontMode);
+  }, [jpFontMode]);
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
-      const mode: ThemeMode = stored === "dark" ? "dark" : "light";
-      setThemeMode(mode);
-      document.documentElement.setAttribute("data-theme", mode);
-    } catch {
-      document.documentElement.setAttribute("data-theme", "light");
-    }
-  }, []);
+    document.documentElement.setAttribute("data-theme", themeMode);
+  }, [themeMode]);
 
   function toggleJapaneseFont() {
     const next: JpFontMode = jpFontMode === "sans" ? "serif" : "sans";

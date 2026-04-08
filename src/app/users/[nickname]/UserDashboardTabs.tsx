@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 
@@ -89,20 +89,22 @@ export default function UserDashboardTabs({
   passedLevelUpGate,
 }: Props) {
   const tabStorageKey = `wr:user:${accountId}:dashboard-tab`;
-  const [activeTab, setActiveTab] = useState<TabId>("main");
-  const actionButtonBaseClass =
-    "inline-flex h-10 min-w-[9.5rem] items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.1em] transition disabled:cursor-not-allowed disabled:opacity-60";
+  const [activeTab, setActiveTab] = useState<TabId>(() => {
+    if (typeof window === "undefined") {
+      return "main";
+    }
 
-  useEffect(() => {
     try {
       const stored = window.localStorage.getItem(tabStorageKey);
-      if (stored === "main" || stored === "item-spread" || stored === "level-progress") {
-        setActiveTab(stored);
-      }
+      return stored === "main" || stored === "item-spread" || stored === "level-progress"
+        ? stored
+        : "main";
     } catch {
-      // Ignore storage errors in restricted browsing modes.
+      return "main";
     }
-  }, [tabStorageKey]);
+  });
+  const actionButtonBaseClass =
+    "inline-flex h-10 min-w-[9.5rem] items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.1em] transition disabled:cursor-not-allowed disabled:opacity-60";
 
   function switchTab(next: TabId) {
     setActiveTab(next);
