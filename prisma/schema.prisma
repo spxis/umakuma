@@ -40,6 +40,9 @@ model Account {
   lastRadicalGuruedAt DateTime?
   lastKanjiGuruedAt DateTime?
   lastVocabularyGuruedAt DateTime?
+  lastRadicalGuruedItem Json?
+  lastKanjiGuruedItem Json?
+  lastVocabularyGuruedItem Json?
   wkHttpCache     Json?
   lastActivityAt  DateTime?
   isSyncing       Boolean  @default(false)

@@ -56,6 +56,13 @@ type AssignmentCacheRow = {
   data: Record<string, unknown>;
 };
 
+type GuruedItemSummary = {
+  subjectId: number;
+  label: string;
+  reading: string | null;
+  passedAt: string;
+};
+
 export type ExistingLeaderboardState = {
   wkUserId: string;
   wkUsername: string;
@@ -66,6 +73,9 @@ export type ExistingLeaderboardState = {
   lastRadicalGuruedAt: Date | null;
   lastKanjiGuruedAt: Date | null;
   lastVocabularyGuruedAt: Date | null;
+  lastRadicalGuruedItem: unknown;
+  lastKanjiGuruedItem: unknown;
+  lastVocabularyGuruedItem: unknown;
   assignmentCache: unknown;
   assignmentCacheUpdatedAt: Date | null;
   wkHttpCache: unknown;
@@ -123,6 +133,9 @@ type LeaderboardStats = {
   lastRadicalGuruedAt: Date | null;
   lastKanjiGuruedAt: Date | null;
   lastVocabularyGuruedAt: Date | null;
+  lastRadicalGuruedItem: GuruedItemSummary | null;
+  lastKanjiGuruedItem: GuruedItemSummary | null;
+  lastVocabularyGuruedItem: GuruedItemSummary | null;
   score: number;
   cache: LeaderboardSyncCache;
 };
@@ -351,6 +364,24 @@ function normalizeAssignmentType(input: string): "radical" | "kanji" | "vocabula
   }
 
   return null;
+}
+
+function parseGuruedItemSummary(input: unknown): GuruedItemSummary | null {
+  if (!input || typeof input !== "object") {
+    return null;
+  }
+
+  const row = input as Record<string, unknown>;
+  const subjectId = typeof row.subjectId === "number" ? row.subjectId : null;
+  const label = typeof row.label === "string" ? row.label : null;
+  const reading = typeof row.reading === "string" ? row.reading : null;
+  const passedAt = typeof row.passedAt === "string" ? row.passedAt : null;
+
+  if (!subjectId || !label || !passedAt) {
+    return null;
+  }
+
+  return { subjectId, label, reading, passedAt };
 }
 
 export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexItem[]> {
@@ -808,6 +839,54 @@ async function loadSubjectTypes(
   return output;
 }
 
+async function loadSubjectSummaries(
+  token: string,
+  subjectIds: number[],
+): Promise<Map<number, { label: string; reading: string | null }>> {
+  const output = new Map<number, { label: string; reading: string | null }>();
+  const chunkSize = 200;
+
+  for (let i = 0; i < subjectIds.length; i += chunkSize) {
+    const chunk = subjectIds.slice(i, i + chunkSize).join(",");
+    if (!chunk) {
+      continue;
+    }
+
+    const subjectChunk = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token);
+    for (const row of subjectChunk.data) {
+      const data = row.data as {
+        characters?: string | null;
+        slug?: string | null;
+        meanings?: Array<{ meaning?: string; primary?: boolean }>;
+        readings?: Array<{ reading?: string; primary?: boolean; accepted_answer?: boolean }>;
+      };
+      const normalizedType = normalizeAssignmentType(row.object ?? "");
+      if (!normalizedType) {
+        continue;
+      }
+
+      const label = data.characters ?? data.slug ?? `#${row.id}`;
+      const primaryMeaning =
+        (data.meanings ?? [])
+          .filter((meaning) => meaning.primary ?? true)
+          .map((meaning) => meaning.meaning)
+          .find((meaning): meaning is string => typeof meaning === "string" && meaning.length > 0) ?? null;
+      const primaryReading =
+        (data.readings ?? [])
+          .filter((reading) => reading.primary && (reading.accepted_answer ?? true))
+          .map((reading) => reading.reading)
+          .find((reading): reading is string => typeof reading === "string" && reading.length > 0) ?? null;
+
+      output.set(row.id, {
+        label,
+        reading: normalizedType === "radical" ? primaryMeaning : primaryReading,
+      });
+    }
+  }
+
+  return output;
+}
+
 function mergeHttpCacheEntry(
   previous: HttpCacheEntry | undefined,
   headers: WaniKaniResponseHeaders,
@@ -1000,6 +1079,20 @@ export async function getLeaderboardStats(
     kanji: existing.lastKanjiGuruedAt,
     vocabulary: existing.lastVocabularyGuruedAt,
   };
+  const lastGuruedItem = {
+    radical: parseGuruedItemSummary(existing.lastRadicalGuruedItem),
+    kanji: parseGuruedItemSummary(existing.lastKanjiGuruedItem),
+    vocabulary: parseGuruedItemSummary(existing.lastVocabularyGuruedItem),
+  };
+  const latestSubjectIdByType: {
+    radical: number | null;
+    kanji: number | null;
+    vocabulary: number | null;
+  } = {
+    radical: null,
+    kanji: null,
+    vocabulary: null,
+  };
 
   for (const review of reviews) {
     if (!(review.starting_srs_stage < 5 && review.ending_srs_stage >= 5)) {
@@ -1019,7 +1112,40 @@ export async function getLeaderboardStats(
     const current = lastGuruedAt[type];
     if (!current || createdAt.getTime() > current.getTime()) {
       lastGuruedAt[type] = createdAt;
+      latestSubjectIdByType[type] = review.subject_id;
     }
+  }
+
+  const latestSubjectIds = Array.from(
+    new Set(
+      [
+        latestSubjectIdByType.radical,
+        latestSubjectIdByType.kanji,
+        latestSubjectIdByType.vocabulary,
+      ].filter((value): value is number => value !== null),
+    ),
+  );
+  const latestSubjectSummaryById =
+    latestSubjectIds.length > 0 ? await loadSubjectSummaries(token, latestSubjectIds) : new Map();
+
+  for (const type of ["radical", "kanji", "vocabulary"] as const) {
+    const subjectId = latestSubjectIdByType[type];
+    if (!subjectId) {
+      continue;
+    }
+
+    const passedAt = lastGuruedAt[type]?.toISOString();
+    if (!passedAt) {
+      continue;
+    }
+
+    const summary = latestSubjectSummaryById.get(subjectId);
+    lastGuruedItem[type] = {
+      subjectId,
+      label: summary?.label ?? `#${subjectId}`,
+      reading: summary?.reading ?? null,
+      passedAt,
+    };
   }
 
   const reviewsUpdatedAt =
@@ -1212,6 +1338,9 @@ export async function getLeaderboardStats(
     lastRadicalGuruedAt: lastGuruedAt.radical,
     lastKanjiGuruedAt: lastGuruedAt.kanji,
     lastVocabularyGuruedAt: lastGuruedAt.vocabulary,
+    lastRadicalGuruedItem: lastGuruedItem.radical,
+    lastKanjiGuruedItem: lastGuruedItem.kanji,
+    lastVocabularyGuruedItem: lastGuruedItem.vocabulary,
     score,
     cache: {
       assignmentCache: assignmentRows,

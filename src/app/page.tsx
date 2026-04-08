@@ -29,6 +29,9 @@ type LeaderboardRow = {
   lastRadicalGuruedAt: Date | null;
   lastKanjiGuruedAt: Date | null;
   lastVocabularyGuruedAt: Date | null;
+  lastRadicalGuruedItem: unknown;
+  lastKanjiGuruedItem: unknown;
+  lastVocabularyGuruedItem: unknown;
   score: number;
   lastSyncedAt: Date;
   dailyDelta?: {
@@ -79,6 +82,9 @@ export default async function Home() {
         lastRadicalGuruedAt: true,
         lastKanjiGuruedAt: true,
         lastVocabularyGuruedAt: true,
+        lastRadicalGuruedItem: true,
+        lastKanjiGuruedItem: true,
+        lastVocabularyGuruedItem: true,
         score: true,
         lastSyncedAt: true,
       },
@@ -239,6 +245,9 @@ export default async function Home() {
                 lastVocabularyGuruedAt: row.lastVocabularyGuruedAt
                   ? row.lastVocabularyGuruedAt.toISOString()
                   : null,
+                lastRadicalGuruedItem: row.lastRadicalGuruedItem,
+                lastKanjiGuruedItem: row.lastKanjiGuruedItem,
+                lastVocabularyGuruedItem: row.lastVocabularyGuruedItem,
                 lastSyncedAt: row.lastSyncedAt.toISOString(),
               }))}
             />
