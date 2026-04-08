@@ -1,5 +1,6 @@
 import { decryptToken } from "@/lib/crypto";
 import { upsertDailySnapshot } from "@/lib/dailySnapshot";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { LEADERBOARD_REFRESH_INTERVAL_MS, LEADERBOARD_REQUEST_GAP_MS } from "@/lib/refreshPolicy";
 import { getLeaderboardStats } from "@/lib/wanikani";
@@ -104,6 +105,14 @@ export async function refreshAccountById(accountId: string, force: boolean): Pro
       tokenEncrypted: true,
       tokenIv: true,
       tokenTag: true,
+      wkUserId: true,
+      wkUsername: true,
+      wkLevel: true,
+      reviewCount: true,
+      burnedCount: true,
+      assignmentCache: true,
+      assignmentCacheUpdatedAt: true,
+      wkHttpCache: true,
     },
   });
 
@@ -118,7 +127,16 @@ export async function refreshAccountById(accountId: string, force: boolean): Pro
       tag: account.tokenTag,
     });
 
-    const stats = await getLeaderboardStats(token);
+    const stats = await getLeaderboardStats(token, {
+      wkUserId: account.wkUserId,
+      wkUsername: account.wkUsername,
+      wkLevel: account.wkLevel,
+      reviewCount: account.reviewCount,
+      burnedCount: account.burnedCount,
+      assignmentCache: account.assignmentCache,
+      assignmentCacheUpdatedAt: account.assignmentCacheUpdatedAt,
+      wkHttpCache: account.wkHttpCache,
+    });
 
     const syncedAt = new Date();
 
@@ -146,6 +164,9 @@ export async function refreshAccountById(accountId: string, force: boolean): Pro
         levelKanjiItems: stats.levelKanjiItems,
         itemSpread: stats.itemSpread,
         jlptCounts: stats.jlptCounts,
+        assignmentCache: stats.cache.assignmentCache as Prisma.InputJsonValue,
+        assignmentCacheUpdatedAt: stats.cache.assignmentCacheUpdatedAt,
+        wkHttpCache: stats.cache.wkHttpCache as Prisma.InputJsonValue,
         score: stats.score,
         lastSyncedAt: syncedAt,
         nextSyncAllowedAt: nowPlus(LEADERBOARD_REFRESH_INTERVAL_MS),

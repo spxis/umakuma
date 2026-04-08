@@ -34,6 +34,9 @@ model Account {
   levelKanjiItems Json?
   itemSpread      Json?
   jlptCounts      Json?
+  assignmentCache Json?
+  assignmentCacheUpdatedAt DateTime?
+  wkHttpCache     Json?
   lastActivityAt  DateTime?
   isSyncing       Boolean  @default(false)
   syncLockUntil   DateTime?

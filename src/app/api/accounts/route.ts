@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { isAuthorizedAdmin } from "@/lib/admin";
@@ -26,7 +27,30 @@ export async function POST(request: Request) {
     }
 
     const { nickname, token } = parsed.data;
-    const stats = await getLeaderboardStats(token);
+    const existingAccount = await prisma.account.findUnique({
+      where: { nickname },
+      select: {
+        wkUserId: true,
+        wkUsername: true,
+        wkLevel: true,
+        reviewCount: true,
+        burnedCount: true,
+        assignmentCache: true,
+        assignmentCacheUpdatedAt: true,
+        wkHttpCache: true,
+      },
+    });
+
+    const stats = await getLeaderboardStats(token, {
+      wkUserId: existingAccount?.wkUserId ?? "",
+      wkUsername: existingAccount?.wkUsername ?? "",
+      wkLevel: existingAccount?.wkLevel ?? 1,
+      reviewCount: existingAccount?.reviewCount ?? 0,
+      burnedCount: existingAccount?.burnedCount ?? 0,
+      assignmentCache: existingAccount?.assignmentCache ?? null,
+      assignmentCacheUpdatedAt: existingAccount?.assignmentCacheUpdatedAt ?? null,
+      wkHttpCache: existingAccount?.wkHttpCache ?? null,
+    });
     const encrypted = encryptToken(token);
 
     const syncedAt = new Date();
@@ -58,6 +82,9 @@ export async function POST(request: Request) {
         levelKanjiItems: stats.levelKanjiItems,
         itemSpread: stats.itemSpread,
         jlptCounts: stats.jlptCounts,
+        assignmentCache: stats.cache.assignmentCache as Prisma.InputJsonValue,
+        assignmentCacheUpdatedAt: stats.cache.assignmentCacheUpdatedAt,
+        wkHttpCache: stats.cache.wkHttpCache as Prisma.InputJsonValue,
         lastSyncStatus: "ok",
         lastSyncError: null,
         isSyncing: false,
@@ -91,6 +118,9 @@ export async function POST(request: Request) {
         levelKanjiItems: stats.levelKanjiItems,
         itemSpread: stats.itemSpread,
         jlptCounts: stats.jlptCounts,
+        assignmentCache: stats.cache.assignmentCache as Prisma.InputJsonValue,
+        assignmentCacheUpdatedAt: stats.cache.assignmentCacheUpdatedAt,
+        wkHttpCache: stats.cache.wkHttpCache as Prisma.InputJsonValue,
         lastSyncStatus: "ok",
         lastSyncError: null,
         isSyncing: false,

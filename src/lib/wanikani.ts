@@ -7,9 +7,11 @@ type WaniKaniUserResponse = {
 };
 
 import { prisma } from "@/lib/prisma";
+import { LEADERBOARD_REQUEST_GAP_MS } from "@/lib/refreshPolicy";
 
 type WaniKaniCollectionResponse = {
   object: "collection";
+  data_updated_at?: string | null;
   pages: {
     next_url: string | null;
   };
@@ -29,6 +31,46 @@ type WaniKaniSummaryResponse = {
       subject_ids: number[];
     }>;
   };
+};
+
+type WaniKaniResponseHeaders = {
+  etag: string | null;
+  lastModified: string | null;
+};
+
+type HttpCacheEntry = {
+  etag: string | null;
+  lastModified: string | null;
+};
+
+type HttpCacheState = {
+  user?: HttpCacheEntry;
+  reviewStats?: HttpCacheEntry;
+  burnedAssignments?: HttpCacheEntry;
+};
+
+type AssignmentCacheRow = {
+  id: number;
+  object?: string;
+  data_updated_at?: string;
+  data: Record<string, unknown>;
+};
+
+export type ExistingLeaderboardState = {
+  wkUserId: string;
+  wkUsername: string;
+  wkLevel: number;
+  reviewCount: number;
+  burnedCount: number;
+  assignmentCache: unknown;
+  assignmentCacheUpdatedAt: Date | null;
+  wkHttpCache: unknown;
+};
+
+type LeaderboardSyncCache = {
+  assignmentCache: AssignmentCacheRow[];
+  assignmentCacheUpdatedAt: Date;
+  wkHttpCache: HttpCacheState;
 };
 
 type LeaderboardStats = {
@@ -74,6 +116,7 @@ type LeaderboardStats = {
     n5: { learned: number; total: number; percent: number };
   };
   score: number;
+  cache: LeaderboardSyncCache;
 };
 
 export type UserKanjiIndexItem = {
@@ -143,33 +186,96 @@ export type LevelKanjiSnapshot = {
 };
 
 const BASE_URL = "https://api.wanikani.com/v2";
+let requestChain: Promise<void> = Promise.resolve();
+let lastRequestStartedAt = 0;
 
-async function fetchWaniKani<T>(path: string, token: string): Promise<T> {
-  const response = await fetch(`${BASE_URL}${path}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Wanikani-Revision": "20170710",
-    },
-    cache: "no-store",
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
   });
+}
+
+async function runThrottledRequest<T>(work: () => Promise<T>): Promise<T> {
+  const run = requestChain.then(async () => {
+    const now = Date.now();
+    const waitMs = Math.max(0, lastRequestStartedAt + LEADERBOARD_REQUEST_GAP_MS - now);
+    if (waitMs > 0) {
+      await sleep(waitMs);
+    }
+
+    lastRequestStartedAt = Date.now();
+    return work();
+  });
+
+  requestChain = run.then(
+    () => undefined,
+    () => undefined,
+  );
+
+  return run;
+}
+
+async function fetchWaniKani<T>(
+  path: string,
+  token: string,
+  conditionalHeaders?: { ifNoneMatch?: string | null; ifModifiedSince?: string | null },
+): Promise<{ status: number; data: T | null; headers: WaniKaniResponseHeaders }> {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    "Wanikani-Revision": "20170710",
+  };
+
+  if (conditionalHeaders?.ifNoneMatch) {
+    headers["If-None-Match"] = conditionalHeaders.ifNoneMatch;
+  }
+
+  if (conditionalHeaders?.ifModifiedSince) {
+    headers["If-Modified-Since"] = conditionalHeaders.ifModifiedSince;
+  }
+
+  const response = await runThrottledRequest(() =>
+    fetch(`${BASE_URL}${path}`, {
+      headers,
+      cache: "no-store",
+    }),
+  );
+
+  const responseHeaders: WaniKaniResponseHeaders = {
+    etag: response.headers.get("etag"),
+    lastModified: response.headers.get("last-modified"),
+  };
+
+  if (response.status === 304) {
+    return { status: 304, data: null, headers: responseHeaders };
+  }
 
   if (!response.ok) {
     throw new Error(`WaniKani API error: ${response.status}`);
   }
 
-  return (await response.json()) as T;
+  return {
+    status: response.status,
+    data: (await response.json()) as T,
+    headers: responseHeaders,
+  };
 }
 
 async function fetchAllCollectionPages(path: string, token: string): Promise<WaniKaniCollectionResponse> {
   let nextPath = path;
   let totalCount = 0;
   const allData: WaniKaniCollectionResponse["data"] = [];
+  let latestDataUpdatedAt: string | null = null;
 
   while (nextPath) {
-    const page = await fetchWaniKani<WaniKaniCollectionResponse>(nextPath, token);
+    const pageResponse = await fetchWaniKani<WaniKaniCollectionResponse>(nextPath, token);
+    const page = pageResponse.data;
+    if (!page) {
+      break;
+    }
 
     totalCount = page.total_count;
     allData.push(...page.data);
+    latestDataUpdatedAt = page.data_updated_at ?? latestDataUpdatedAt;
 
     if (!page.pages.next_url) {
       break;
@@ -181,6 +287,7 @@ async function fetchAllCollectionPages(path: string, token: string): Promise<Wan
 
   return {
     object: "collection",
+    data_updated_at: latestDataUpdatedAt,
     total_count: totalCount,
     pages: { next_url: null },
     data: allData,
@@ -360,16 +467,21 @@ export async function getLevelKanjiSnapshot(
   token: string,
   level: number,
 ): Promise<LevelKanjiSnapshot> {
-  const [levelSubjects, levelAssignments] = await Promise.all([
-    fetchWaniKani<WaniKaniCollectionResponse>(
-      `/subjects?types=kanji,radical,vocabulary&levels=${level}`,
-      token,
-    ),
-    fetchWaniKani<WaniKaniCollectionResponse>(
-      `/assignments?subject_types=kanji,radical,vocabulary&levels=${level}`,
-      token,
-    ),
-  ]);
+  const levelSubjectsResponse = await fetchWaniKani<WaniKaniCollectionResponse>(
+    `/subjects?types=kanji,radical,vocabulary&levels=${level}`,
+    token,
+  );
+  const levelAssignmentsResponse = await fetchWaniKani<WaniKaniCollectionResponse>(
+    `/assignments?subject_types=kanji,radical,vocabulary&levels=${level}`,
+    token,
+  );
+
+  const levelSubjects = levelSubjectsResponse.data;
+  const levelAssignments = levelAssignmentsResponse.data;
+
+  if (!levelSubjects || !levelAssignments) {
+    throw new Error("WaniKani API returned an unexpected empty payload.");
+  }
 
   const subjectById = new Map(
     levelSubjects.data.map((row) => [
@@ -600,37 +712,199 @@ export async function getLevelKanjiSnapshot(
   };
 }
 
-export async function getLeaderboardStats(token: string): Promise<LeaderboardStats> {
-  const userRes = await fetchWaniKani<WaniKaniUserResponse>("/user", token);
+type WaniKaniAssignmentData = {
+  subject_id: number;
+  subject_type: string;
+  srs_stage: number;
+  unlocked_at: string | null;
+  started_at: string | null;
+  passed_at: string | null;
+  burned_at: string | null;
+  resurrected_at: string | null;
+  available_at: string | null;
+};
 
-  const [reviewStatsRes, burnedRes, summaryRes, allAssignments, levelSnapshot] = await Promise.all([
-    fetchWaniKani<WaniKaniCollectionResponse>("/review_statistics", token),
-    fetchWaniKani<WaniKaniCollectionResponse>("/assignments?srs_stages=9", token),
-    fetchWaniKani<WaniKaniSummaryResponse>("/summary", token),
-    fetchAllCollectionPages("/assignments", token),
-    getLevelKanjiSnapshot(token, userRes.data.level),
-  ]);
+function parseHttpCacheState(input: unknown): HttpCacheState {
+  if (!input || typeof input !== "object") {
+    return {};
+  }
 
-  const wkLevel = userRes.data.level;
-  const reviewCount = reviewStatsRes.total_count;
-  const burnedCount = burnedRes.total_count;
+  const record = input as Record<string, unknown>;
+  const keys: Array<keyof HttpCacheState> = ["user", "reviewStats", "burnedAssignments"];
+  const output: HttpCacheState = {};
+
+  for (const key of keys) {
+    const entry = record[key];
+    if (!entry || typeof entry !== "object") {
+      continue;
+    }
+
+    const row = entry as Record<string, unknown>;
+    const etag = typeof row.etag === "string" ? row.etag : null;
+    const lastModified = typeof row.lastModified === "string" ? row.lastModified : null;
+    output[key] = { etag, lastModified };
+  }
+
+  return output;
+}
+
+function mergeHttpCacheEntry(
+  previous: HttpCacheEntry | undefined,
+  headers: WaniKaniResponseHeaders,
+): HttpCacheEntry {
+  return {
+    etag: headers.etag ?? previous?.etag ?? null,
+    lastModified: headers.lastModified ?? previous?.lastModified ?? null,
+  };
+}
+
+function parseAssignmentCacheRows(input: unknown): AssignmentCacheRow[] {
+  if (!Array.isArray(input)) {
+    return [];
+  }
+
+  return input
+    .filter((row) => row && typeof row === "object")
+    .map((row) => {
+      const item = row as Record<string, unknown>;
+      return {
+        id: typeof item.id === "number" ? item.id : -1,
+        object: typeof item.object === "string" ? item.object : undefined,
+        data_updated_at:
+          typeof item.data_updated_at === "string" ? item.data_updated_at : undefined,
+        data:
+          item.data && typeof item.data === "object"
+            ? (item.data as Record<string, unknown>)
+            : {},
+      };
+    })
+    .filter((row) => row.id >= 0);
+}
+
+function maxAssignmentUpdatedAt(rows: AssignmentCacheRow[]): Date | null {
+  const timestamps = rows
+    .map((row) => toDate(row.data_updated_at))
+    .filter((value): value is Date => value !== null)
+    .map((value) => value.getTime());
+
+  if (timestamps.length === 0) {
+    return null;
+  }
+
+  return new Date(Math.max(...timestamps));
+}
+
+function mergeAssignmentRows(
+  existingRows: AssignmentCacheRow[],
+  updates: AssignmentCacheRow[],
+): AssignmentCacheRow[] {
+  const byId = new Map<number, AssignmentCacheRow>();
+
+  for (const row of existingRows) {
+    byId.set(row.id, row);
+  }
+
+  for (const row of updates) {
+    byId.set(row.id, row);
+  }
+
+  return Array.from(byId.values());
+}
+
+export async function getLeaderboardStats(
+  token: string,
+  existing: ExistingLeaderboardState,
+): Promise<LeaderboardStats> {
+  const httpCache = parseHttpCacheState(existing.wkHttpCache);
+
+  const userResponse = await fetchWaniKani<WaniKaniUserResponse>("/user", token, {
+    ifNoneMatch: httpCache.user?.etag,
+    ifModifiedSince: httpCache.user?.lastModified,
+  });
+
+  const wkUserId = userResponse.status === 304 ? existing.wkUserId : userResponse.data?.data.id;
+  const wkUsername =
+    userResponse.status === 304 ? existing.wkUsername : userResponse.data?.data.username;
+  const wkLevel = userResponse.status === 304 ? existing.wkLevel : userResponse.data?.data.level;
+
+  if (!wkUserId || !wkUsername || typeof wkLevel !== "number") {
+    throw new Error("Unable to determine WaniKani user profile.");
+  }
+
+  const reviewStatsResponse = await fetchWaniKani<WaniKaniCollectionResponse>(
+    "/review_statistics",
+    token,
+    {
+      ifNoneMatch: httpCache.reviewStats?.etag,
+      ifModifiedSince: httpCache.reviewStats?.lastModified,
+    },
+  );
+
+  const burnedResponse = await fetchWaniKani<WaniKaniCollectionResponse>(
+    "/assignments?srs_stages=9",
+    token,
+    {
+      ifNoneMatch: httpCache.burnedAssignments?.etag,
+      ifModifiedSince: httpCache.burnedAssignments?.lastModified,
+    },
+  );
+
+  const summaryResponse = await fetchWaniKani<WaniKaniSummaryResponse>("/summary", token);
+  const summary = summaryResponse.data;
+
+  if (!summary) {
+    throw new Error("Unable to fetch WaniKani summary data.");
+  }
+
+  const reviewCount =
+    reviewStatsResponse.status === 304
+      ? existing.reviewCount
+      : (reviewStatsResponse.data?.total_count ?? existing.reviewCount);
+  const burnedCount =
+    burnedResponse.status === 304
+      ? existing.burnedCount
+      : (burnedResponse.data?.total_count ?? existing.burnedCount);
+
   const now = Date.now();
-  const pendingReviews = summaryRes.data.reviews
+  const pendingReviews = summary.data.reviews
     .filter((group) => new Date(group.available_at).getTime() <= now)
     .reduce((sum, group) => sum + group.subject_ids.length, 0);
 
-  const allAssignmentData = allAssignments.data.map((row) =>
-    row.data as {
-      subject_id: number;
-      subject_type: string;
-      srs_stage: number;
-      unlocked_at: string | null;
-      started_at: string | null;
-      passed_at: string | null;
-      burned_at: string | null;
-      resurrected_at: string | null;
-      available_at: string | null;
-    },
+  const existingAssignmentCache = parseAssignmentCacheRows(existing.assignmentCache);
+  const existingAssignmentUpdatedAt =
+    existing.assignmentCacheUpdatedAt ?? maxAssignmentUpdatedAt(existingAssignmentCache);
+
+  let assignmentRows = existingAssignmentCache;
+  let assignmentCacheUpdatedAt = existingAssignmentUpdatedAt;
+
+  if (!assignmentCacheUpdatedAt || existingAssignmentCache.length === 0) {
+    const allAssignments = await fetchAllCollectionPages("/assignments", token);
+    assignmentRows = allAssignments.data;
+    assignmentCacheUpdatedAt =
+      toDate(allAssignments.data_updated_at) ??
+      maxAssignmentUpdatedAt(assignmentRows) ??
+      new Date();
+  } else {
+    const updatedAfter = encodeURIComponent(assignmentCacheUpdatedAt.toISOString());
+    const assignmentUpdates = await fetchAllCollectionPages(
+      `/assignments?updated_after=${updatedAfter}`,
+      token,
+    );
+
+    if (assignmentUpdates.data.length > 0) {
+      assignmentRows = mergeAssignmentRows(existingAssignmentCache, assignmentUpdates.data);
+    }
+
+    assignmentCacheUpdatedAt =
+      toDate(assignmentUpdates.data_updated_at) ??
+      maxAssignmentUpdatedAt(assignmentRows) ??
+      assignmentCacheUpdatedAt;
+  }
+
+  const levelSnapshot = await getLevelKanjiSnapshot(token, wkLevel);
+
+  const allAssignmentData = assignmentRows.map(
+    (row) => row.data as WaniKaniAssignmentData,
   );
 
   const lastActivityAt = allAssignmentData
@@ -796,8 +1070,8 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
   const score = wkLevel * 1000 + reviewCount * 2 + burnedCount * 4 + learnedKanjiCount * 3;
 
   return {
-    wkUserId: userRes.data.id,
-    wkUsername: userRes.data.username,
+    wkUserId,
+    wkUsername,
     wkLevel,
     reviewCount,
     burnedCount,
@@ -818,5 +1092,17 @@ export async function getLeaderboardStats(token: string): Promise<LeaderboardSta
     itemSpread,
     jlptCounts,
     score,
+    cache: {
+      assignmentCache: assignmentRows,
+      assignmentCacheUpdatedAt: assignmentCacheUpdatedAt ?? new Date(),
+      wkHttpCache: {
+        user: mergeHttpCacheEntry(httpCache.user, userResponse.headers),
+        reviewStats: mergeHttpCacheEntry(httpCache.reviewStats, reviewStatsResponse.headers),
+        burnedAssignments: mergeHttpCacheEntry(
+          httpCache.burnedAssignments,
+          burnedResponse.headers,
+        ),
+      },
+    },
   };
 }

@@ -38,6 +38,15 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Use [http://localhost:3000/admin](http://localhost:3000/admin) to add family accounts with your admin key.
 
+## WaniKani Sync Best Practices (Implemented)
+
+- Respect rate limits by serializing API requests with a minimum gap (`LEADERBOARD_REQUEST_GAP_MS`, default 5000).
+- Avoid unnecessary full re-fetches by using incremental assignment sync via `updated_after`.
+- Use conditional requests (`If-None-Match` / `If-Modified-Since`) for stable endpoints and reuse stored counts when unchanged.
+- Persist assignment cache and request metadata in `Account` JSON columns.
+
+After pulling schema changes, run `pnpm db:push` so the new `Account` cache fields exist.
+
 ## Deployment (Free)
 
 Deploy on Vercel Hobby and use Neon Postgres Free.
