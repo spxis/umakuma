@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { toRomaji } from "wanakana";
 
-import type { LevelItem } from "./explorerTypes";
+import type { LevelItem } from "../../explorerTypes";
 import type { TypeFilter } from "./levelExplorerState";
 
 export function statusClass(status: LevelItem["status"]): string {

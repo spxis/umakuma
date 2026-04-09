@@ -1,6 +1,6 @@
 "use client";
 
-import type { Snapshot, SrsFilter } from "./explorerTypes";
+import type { Snapshot, SrsFilter } from "../../explorerTypes";
 import LevelExplorerScreen from "./LevelExplorerScreen";
 
 type Props = {

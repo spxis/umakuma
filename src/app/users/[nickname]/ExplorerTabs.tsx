@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 import ExplorerSearchBar from "./ExplorerSearchBar";
-import JlptExplorer from "./JlptExplorer";
-import LevelExplorer from "./LevelExplorer";
+import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
+import LevelExplorer from "./level-explorer/components/LevelExplorer";
 import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
 
 type Props = {

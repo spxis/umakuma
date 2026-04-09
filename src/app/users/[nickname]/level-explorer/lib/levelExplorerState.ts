@@ -1,4 +1,4 @@
-import type { SrsFilter } from "./explorerTypes";
+import type { SrsFilter } from "../../explorerTypes";
 
 export type TypeFilter = "all" | "kanji" | "radical" | "vocabulary";
 export type JlptFilter = "all" | "n1" | "n2" | "n3" | "n4" | "n5";

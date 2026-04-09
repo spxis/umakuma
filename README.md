@@ -70,6 +70,7 @@ openssl rand -base64 32
 
 - `pnpm dev`: start app locally
 - `pnpm lint`: run ESLint
+- `pnpm loc:check`: enforce 500-line max for code files in `src/`
 - `pnpm db:push`: sync Prisma schema to the DB
 - `pnpm db:studio`: open Prisma Studio
 - `pnpm db:seed:jlpt`: refresh JLPT N-level membership list

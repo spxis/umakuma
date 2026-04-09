@@ -1,6 +1,6 @@
 import { toRomaji } from "wanakana";
 
-import type { LevelItem, Snapshot, SrsFilter } from "./explorerTypes";
+import type { LevelItem, Snapshot, SrsFilter } from "../../explorerTypes";
 import type { JlptFilter, ReviewTimingFilter, TypeFilter, TypeVisibility } from "./levelExplorerState";
 
 export type LevelItemCounts = {

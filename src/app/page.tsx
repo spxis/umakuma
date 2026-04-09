@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { refreshDueAccounts } from "@/lib/sync";
 import LeaderboardAdminActions from "./LeaderboardAdminActions";
-import LeaderboardTable from "./LeaderboardTable";
+import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
 
 export const dynamic = "force-dynamic";
 

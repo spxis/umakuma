@@ -1,0 +1,29 @@
+name: LOC Gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  loc-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run LOC gate
+        run: pnpm loc:check
