@@ -11,6 +11,13 @@ See `docs/ARCHITECTURE.md` for system design, data flow, security, and deploymen
 
 ## Getting Started
 
+0. Use Node.js 24 LTS (matches Vercel).
+
+```bash
+nvm install 24
+nvm use 24
+```
+
 1. Create env vars and fill in your Neon connection strings.
 
 ```bash
