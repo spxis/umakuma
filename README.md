@@ -57,8 +57,24 @@ Required Vercel environment variables:
 - `DIRECT_URL`
 - `TOKEN_ENCRYPTION_KEY`
 - `ADMIN_API_KEY`
+- `AUTH_SECRET` (required for Google OAuth sessions)
+- `AUTH_GOOGLE_ID` (Google OAuth client ID)
+- `AUTH_GOOGLE_SECRET` (Google OAuth client secret)
+- `ADMIN_GOOGLE_ALLOWED_EMAILS` (comma-separated admin emails, e.g. `you@gmail.com,partner@gmail.com`)
 - `LEADERBOARD_REFRESH_INTERVAL_MS` (optional, default `300000`)
 - `LEADERBOARD_REQUEST_GAP_MS` (optional, default `5000`)
+
+## Admin Auth (Recommended)
+
+Admin now supports Google OAuth allowlist (industry standard) with API key fallback.
+
+1. Create OAuth Client credentials in Google Cloud Console.
+2. Add authorized redirect URI:
+	- `https://waniranks.vercel.app/api/auth/callback/google`
+3. Set `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `AUTH_SECRET`, and `ADMIN_GOOGLE_ALLOWED_EMAILS` in Vercel.
+4. Open `/admin` and click `Sign in with Google`.
+
+If Google OAuth is not configured yet, existing `ADMIN_API_KEY` flow still works.
 
 Generate encryption key with:
 

@@ -32,7 +32,7 @@ async function fetchJlptList(nLevel: number): Promise<string[]> {
 
 export async function POST(request: Request) {
   try {
-    if (!isAuthorizedCron(request) && !isAuthorizedAdmin(request)) {
+    if (!isAuthorizedCron(request) && !(await isAuthorizedAdmin(request))) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
     }
 

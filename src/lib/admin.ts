@@ -1,4 +1,7 @@
+import { getServerSession } from "next-auth";
+
 import { ADMIN_SESSION_COOKIE_NAME, verifyAdminSessionToken } from "@/lib/adminSession";
+import { authOptions, isAdminEmail } from "@/lib/auth";
 
 function getCookieValue(cookieHeader: string, cookieName: string): string | null {
   const cookies = cookieHeader.split(";");
@@ -11,10 +14,15 @@ function getCookieValue(cookieHeader: string, cookieName: string): string | null
   return null;
 }
 
-export function isAuthorizedAdmin(request: Request): boolean {
+export async function isAuthorizedAdmin(request: Request): Promise<boolean> {
+  const session = await getServerSession(authOptions);
+  if (isAdminEmail(session?.user?.email)) {
+    return true;
+  }
+
   const expected = process.env.ADMIN_API_KEY;
   if (!expected) {
-    throw new Error("ADMIN_API_KEY is not set.");
+    return false;
   }
 
   const received = request.headers.get("x-admin-key");

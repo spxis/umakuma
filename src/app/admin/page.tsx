@@ -30,6 +30,7 @@ export default function AdminPage() {
   const [rememberDevice, setRememberDevice] = useState(true);
   const [sessionAuthorized, setSessionAuthorized] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
+  const [googleConfigured, setGoogleConfigured] = useState(false);
   const [status, setStatus] = useState<Status>({ type: "idle", message: "" });
   const [loading, setLoading] = useState(false);
   const [jlptRefreshing, setJlptRefreshing] = useState(false);
@@ -39,8 +40,9 @@ export default function AdminPage() {
   async function getAdminSessionStatus() {
     try {
       const response = await fetch("/api/admin/session", { cache: "no-store" });
-      const data = (await response.json()) as { authorized?: boolean };
+      const data = (await response.json()) as { authorized?: boolean; googleConfigured?: boolean };
       setSessionAuthorized(Boolean(data.authorized));
+      setGoogleConfigured(Boolean(data.googleConfigured));
     } finally {
       setCheckingSession(false);
     }
@@ -295,6 +297,23 @@ export default function AdminPage() {
             Manage family accounts, rotate tokens, and push fresh stats to the leaderboard.
           </p>
 
+          {googleConfigured ? (
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Link
+                href="/api/auth/signin/google?callbackUrl=/admin"
+                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
+              >
+                Sign in with Google
+              </Link>
+              <Link
+                href="/api/auth/signout?callbackUrl=/admin"
+                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
+              >
+                Sign out Google
+              </Link>
+            </div>
+          ) : null}
+
           <form onSubmit={addAccount} className="mt-7 space-y-4">
             <label className="block">
               <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
@@ -311,8 +330,8 @@ export default function AdminPage() {
                 {checkingSession
                   ? "Checking admin session..."
                   : sessionAuthorized
-                    ? "This device is remembered. You only need the key again if you forget this device."
-                    : "Needed once to unlock admin actions on this browser/device."}
+                    ? "Admin unlocked by Google sign-in or remembered device cookie."
+                    : "Use Google sign-in (recommended) or API key once to unlock this browser/device."}
               </p>
             </label>
 

@@ -9,7 +9,7 @@ type RouteContext = {
 
 export async function POST(request: Request, context: RouteContext) {
   try {
-    if (!isAuthorizedAdmin(request)) {
+    if (!(await isAuthorizedAdmin(request))) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
     }
 

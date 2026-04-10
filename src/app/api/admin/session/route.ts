@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { isAuthorizedAdmin } from "@/lib/admin";
+import { isGoogleAuthConfigured } from "@/lib/auth";
 import {
   ADMIN_SESSION_COOKIE_NAME,
   ADMIN_SESSION_MAX_AGE_SECONDS,
@@ -10,16 +11,19 @@ import {
 
 export async function GET(request: Request) {
   try {
-    return NextResponse.json({ authorized: isAuthorizedAdmin(request) });
+    return NextResponse.json({
+      authorized: await isAuthorizedAdmin(request),
+      googleConfigured: isGoogleAuthConfigured(),
+    });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ authorized: false }, { status: 500 });
+    return NextResponse.json({ authorized: false, googleConfigured: false }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
   try {
-    if (!isAuthorizedAdmin(request)) {
+    if (!(await isAuthorizedAdmin(request))) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
     }
 

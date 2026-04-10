@@ -15,7 +15,7 @@ const createAccountSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    if (!isAuthorizedAdmin(request)) {
+    if (!(await isAuthorizedAdmin(request))) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
     }
 

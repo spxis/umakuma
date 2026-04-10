@@ -52,6 +52,7 @@ function formatNumber(input: number): string {
 export default async function Home() {
   let leaderboard: LeaderboardRow[] = [];
   let setupMessage = "";
+  let runtimeError = "";
 
   try {
     const refreshPromise = refreshDueAccounts(1).catch((error) => {
@@ -165,7 +166,8 @@ export default async function Home() {
     }
 
     void refreshPromise;
-  } catch {
+  } catch (error) {
+    runtimeError = error instanceof Error ? error.message : "Unknown server error";
     setupMessage = "Leaderboard will appear after DATABASE_URL is configured and synced.";
   }
 
@@ -229,6 +231,12 @@ export default async function Home() {
         </section>
 
         <section className="animate-enter animate-enter-delay-2 mt-6 overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+          {runtimeError ? (
+            <div className="border-b border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-900">
+              <p className="font-bold uppercase tracking-[0.08em]">Runtime error detected</p>
+              <p className="mt-1 break-words font-medium">{runtimeError}</p>
+            </div>
+          ) : null}
           {leaderboard.length === 0 ? (
             <div className="p-10 text-center">
               <p className="text-xl font-black text-foreground">No players yet</p>
