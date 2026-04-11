@@ -149,6 +149,7 @@ export default function StudyExplorer({
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
   const [revealedAssignmentIds, setRevealedAssignmentIds] = useState<Set<number>>(new Set());
+  const [showLocked, setShowLocked] = useState(true);
 
   const counts = data?.counts ?? persistedCounts;
 
@@ -223,9 +224,13 @@ export default function StudyExplorer({
         return false;
       }
 
+      if (!showLocked && item.status === "locked") {
+        return false;
+      }
+
       return true;
     });
-  }, [data?.items, queueMode, srsFilter, typeFilter, viewedLevel]);
+  }, [data?.items, queueMode, showLocked, srsFilter, typeFilter, viewedLevel]);
 
   useEffect(() => {
     setSelectedId(null);
@@ -503,9 +508,18 @@ export default function StudyExplorer({
 
         {filteredItems.length > 0 ? (
           <>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-            Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} items
-          </p>
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
+              Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} items
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowLocked((prev) => !prev)}
+              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+            >
+              {showLocked ? "Hide Locked" : "Show Locked"}
+            </button>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {visibleItems.map((item, index) => (
               <button
@@ -524,7 +538,6 @@ export default function StudyExplorer({
                     {typeof item.wkLevel === "number" ? (
                       <span className="subject-pill border-line bg-surface text-foreground">WK{item.wkLevel}</span>
                     ) : null}
-                    <span className={`subject-pill border ${queueBadgeClass(item.queueType)}`}>{item.queueType}</span>
                   </div>
                 </div>
                 <div className="mt-2 min-h-[2rem]">
