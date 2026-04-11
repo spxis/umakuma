@@ -146,6 +146,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
+  const [revealedAssignmentIds, setRevealedAssignmentIds] = useState<Set<number>>(new Set());
 
   const counts = data?.counts ?? persistedCounts;
 
@@ -242,6 +243,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   const selectedReadingExplanationRaw = selectedItem?.readingExplanation ?? "";
   const showReadingExplanation = selectedReadingExplanationRaw.trim().length > 0;
   const visibleItems = filteredItems.slice(0, visibleCount);
+  const isAnswerRevealed = selectedItem ? revealedAssignmentIds.has(selectedItem.assignmentId) : false;
 
   useEffect(() => {
     if (selectedId === null) {
@@ -308,7 +310,16 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
         next.delete(assignmentId);
         return next;
       });
+      setRevealedAssignmentIds((prev) => {
+        const next = new Set(prev);
+        next.delete(assignmentId);
+        return next;
+      });
     }
+  }
+
+  function revealAnswer(assignmentId: number) {
+    setRevealedAssignmentIds((prev) => new Set(prev).add(assignmentId));
   }
 
   function toggleLevel(level: number) {
@@ -412,6 +423,14 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
         return;
       }
 
+      if (studyMode && selectedItem.queueType === "review" && !isAnswerRevealed) {
+        if (event.key === "Enter" || key === "r") {
+          event.preventDefault();
+          revealAnswer(selectedItem.assignmentId);
+        }
+        return;
+      }
+
       if (selectedItem.queueType === "review" && !submittingByAssignmentId.has(selectedItem.assignmentId)) {
         if (event.key === "1") {
           event.preventDefault();
@@ -431,7 +450,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [filteredItems, selectedItem, selectedIndex, submittingByAssignmentId]);
+  }, [filteredItems, isAnswerRevealed, selectedItem, selectedIndex, studyMode, submittingByAssignmentId]);
 
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
@@ -604,13 +623,18 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
             <div className="overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
                 Shortcuts: Left/Right/Up/Down or W/A/S/D (prev/next), Home/End (first/last), Esc (back)
-                {selectedItem.queueType === "review" ? ", 1=wrong, 2=correct" : ""}
+                {studyMode && selectedItem.queueType === "review" && !isAnswerRevealed
+                  ? ", Enter/R=show answer"
+                  : selectedItem.queueType === "review"
+                    ? ", 1=wrong, 2=correct"
+                    : ""}
               </p>
 
               <LevelExplorerDetailSection
                 selectedItem={selectedItem}
                 showEnglish={showEnglish}
                 studyMode={studyMode}
+                revealStudyReading={!(studyMode && selectedItem.queueType === "review" && !isAnswerRevealed)}
                 selectedMeaningExplanation={selectedMeaningExplanation}
                 selectedReadingExplanationRaw={selectedReadingExplanationRaw}
                 showReadingExplanation={showReadingExplanation}
@@ -625,22 +649,34 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
 
               {selectedItem.queueType === "review" ? (
                 <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => submitReview(selectedItem.assignmentId, "correct")}
-                    disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
-                    className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    Correct
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => submitReview(selectedItem.assignmentId, "wrong")}
-                    disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
-                    className="rounded-full border border-red-300 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-red-800 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    Wrong
-                  </button>
+                  {studyMode && !isAnswerRevealed ? (
+                    <button
+                      type="button"
+                      onClick={() => revealAnswer(selectedItem.assignmentId)}
+                      className="rounded-full border border-line bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+                    >
+                      Show Answer
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => submitReview(selectedItem.assignmentId, "correct")}
+                        disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
+                        className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        Correct
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => submitReview(selectedItem.assignmentId, "wrong")}
+                        disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
+                        className="rounded-full border border-red-300 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-red-800 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        Wrong
+                      </button>
+                    </>
+                  )}
                 </div>
               ) : null}
             </div>

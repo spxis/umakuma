@@ -35,6 +35,7 @@ type Props = {
   selectedItem: LevelItem;
   showEnglish: boolean;
   studyMode: boolean;
+  revealStudyReading?: boolean;
   selectedMeaningExplanation: string;
   selectedReadingExplanationRaw: string;
   showReadingExplanation: boolean;
@@ -222,6 +223,7 @@ export default function LevelExplorerDetailSection({
   selectedItem,
   showEnglish,
   studyMode,
+  revealStudyReading = false,
   selectedMeaningExplanation,
   selectedReadingExplanationRaw,
   showReadingExplanation,
@@ -233,6 +235,8 @@ export default function LevelExplorerDetailSection({
   onJumpToRelatedSubject,
   onJumpToKanji,
 }: Props) {
+  const canShowReadings = !studyMode || revealStudyReading;
+
   return (
     <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
       <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-x-3">
@@ -247,7 +251,7 @@ export default function LevelExplorerDetailSection({
             <div>
               <h3 className="text-center text-4xl font-black leading-none text-current">{selectedItem.characters}</h3>
               {(() => {
-                if (studyMode) {
+                if (studyMode && !canShowReadings) {
                   return null;
                 }
 
@@ -291,7 +295,7 @@ export default function LevelExplorerDetailSection({
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {!studyMode ? (
+        {canShowReadings ? (
           <>
         <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
           <p className="text-xs font-bold uppercase text-foreground/70">Primary reading</p>
