@@ -54,6 +54,23 @@ function badgeClass(active: boolean): string {
     : "border-line bg-surface text-foreground hover:bg-surface-muted";
 }
 
+function queueBadgeClass(queueType: "review" | "lesson"): string {
+  return queueType === "review"
+    ? "border-amber-300 bg-amber-50 text-amber-800"
+    : "border-sky-300 bg-sky-50 text-sky-800";
+}
+
+function queueModeButtonClass(mode: "review" | "lesson", activeMode: "review" | "lesson"): string {
+  const active = mode === activeMode;
+  if (!active) {
+    return "border-line bg-surface text-foreground hover:bg-surface-muted";
+  }
+
+  return mode === "review"
+    ? "border-amber-500 bg-amber-500 text-white"
+    : "border-sky-500 bg-sky-500 text-white";
+}
+
 export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyMode }: Props) {
   const PAGE_SIZE = 40;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -67,7 +84,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
     [maxLevel],
   );
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(() => new Set(levelOptions));
-  const [queueFilter, setQueueFilter] = useState<"all" | "review" | "lesson">("all");
+  const [queueMode, setQueueMode] = useState<"review" | "lesson">("review");
   const [typeFilter, setTypeFilter] = useState<"all" | "radical" | "kanji" | "vocabulary">("all");
   const [srsFilter, setSrsFilter] = useState<SrsFilter>("all");
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -88,7 +105,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
         }
       }
 
-      if (queueFilter !== "all" && item.queueType !== queueFilter) {
+      if (item.queueType !== queueMode) {
         return false;
       }
 
@@ -102,7 +119,11 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
 
       return true;
     });
-  }, [allLevelsSelected, data?.items, queueFilter, selectedLevels, srsFilter, typeFilter]);
+  }, [allLevelsSelected, data?.items, queueMode, selectedLevels, srsFilter, typeFilter]);
+
+  useEffect(() => {
+    setSelectedId(null);
+  }, [queueMode]);
 
   const selectedItem = filteredItems.find((item) => item.subjectId === selectedId) ?? null;
   const selectedIndex = selectedItem
@@ -308,14 +329,12 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
           ))}
         </div>
 
-        <div className="mt-2 flex flex-wrap gap-2">
-          <button type="button" onClick={() => setQueueFilter("all")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(queueFilter === "all")}`}>
-            All ({formatNumber(counts.all)})
-          </button>
-          <button type="button" onClick={() => setQueueFilter("review")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(queueFilter === "review")}`}>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/70">Mode</p>
+          <button type="button" onClick={() => setQueueMode("review")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${queueModeButtonClass("review", queueMode)}`}>
             Reviews ({formatNumber(counts.reviews)})
           </button>
-          <button type="button" onClick={() => setQueueFilter("lesson")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(queueFilter === "lesson")}`}>
+          <button type="button" onClick={() => setQueueMode("lesson")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${queueModeButtonClass("lesson", queueMode)}`}>
             Lessons ({formatNumber(counts.lessons)})
           </button>
         </div>
@@ -367,7 +386,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
                     {typeof item.wkLevel === "number" ? (
                       <span className="subject-pill border-line bg-surface text-foreground">WK{item.wkLevel}</span>
                     ) : null}
-                    <span className="subject-pill border-line bg-surface text-foreground">{item.queueType}</span>
+                    <span className={`subject-pill border ${queueBadgeClass(item.queueType)}`}>{item.queueType}</span>
                   </div>
                 </div>
                 <p className="mt-2 text-xl font-black leading-tight text-foreground">
