@@ -92,6 +92,10 @@ function badgeClass(active: boolean): string {
     : "border-line bg-surface text-foreground hover:bg-surface-muted";
 }
 
+function disabledBadgeClass(): string {
+  return "cursor-not-allowed border-line bg-surface-muted text-foreground/45";
+}
+
 function queueBadgeClass(queueType: "review" | "lesson"): string {
   return queueType === "review"
     ? "border-amber-300 bg-amber-50 text-amber-800"
@@ -152,6 +156,20 @@ export default function StudyExplorer({
   const [showLocked, setShowLocked] = useState(true);
 
   const counts = data?.counts ?? persistedCounts;
+  const availableLevels = useMemo(() => {
+    const levels = new Set<number>();
+    for (const item of data?.items ?? []) {
+      if (item.queueType !== queueMode) {
+        continue;
+      }
+
+      if (typeof item.wkLevel === "number") {
+        levels.add(item.wkLevel);
+      }
+    }
+
+    return levels;
+  }, [data?.items, queueMode]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(countsStorageKey);
@@ -180,7 +198,16 @@ export default function StudyExplorer({
 
     setPersistedCounts(data.counts);
     window.localStorage.setItem(countsStorageKey, JSON.stringify(data.counts));
-  }, [countsStorageKey, data?.counts]);
+    window.dispatchEvent(
+      new CustomEvent("wr:study-counts-updated", {
+        detail: {
+          accountId,
+          reviews: data.counts.reviews,
+          lessons: data.counts.lessons,
+        },
+      }),
+    );
+  }, [accountId, countsStorageKey, data?.counts]);
 
   useEffect(() => {
     setCachedQueueData(readStoredQueue(accountId, queueMode));
@@ -235,6 +262,16 @@ export default function StudyExplorer({
   useEffect(() => {
     setSelectedId(null);
   }, [queueMode]);
+
+  useEffect(() => {
+    if (viewedLevel === null) {
+      return;
+    }
+
+    if (!availableLevels.has(viewedLevel)) {
+      setViewedLevel(null);
+    }
+  }, [availableLevels, viewedLevel]);
 
   const selectedItem = filteredItems.find((item) => item.subjectId === selectedId) ?? null;
   const selectedIndex = selectedItem
@@ -346,6 +383,10 @@ export default function StudyExplorer({
   }
 
   function toggleLevel(level: number) {
+    if (!availableLevels.has(level)) {
+      return;
+    }
+
     setViewedLevel(level);
   }
 
@@ -475,7 +516,12 @@ export default function StudyExplorer({
               key={level}
               type="button"
               onClick={() => toggleLevel(level)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === level)}`}
+              disabled={!availableLevels.has(level)}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${
+                !availableLevels.has(level)
+                  ? disabledBadgeClass()
+                  : badgeClass(viewedLevel === level)
+              }`}
             >
               L{level}
             </button>

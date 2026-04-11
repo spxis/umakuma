@@ -27,6 +27,7 @@ export default function ExplorerTabs({
   jlptItems,
   userKanjiItems,
 }: Props) {
+  const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const [studyMode, setStudyMode] = useState(() => {
     if (typeof window === "undefined") {
       return false;
@@ -45,6 +46,7 @@ export default function ExplorerTabs({
     return "study";
   });
   const [showEnglish, setShowEnglish] = useState(false);
+  const [studyCounts, setStudyCounts] = useState<{ reviews: number; lessons: number } | null>(null);
   const [queueMode, setQueueMode] = useState<"review" | "lesson">(() => {
     if (typeof window === "undefined") {
       return "review";
@@ -54,6 +56,51 @@ export default function ExplorerTabs({
       ? "lesson"
       : "review";
   });
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const readCounts = () => {
+      const raw = window.localStorage.getItem(countsStorageKey);
+      if (!raw) {
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(raw) as { reviews?: number; lessons?: number };
+        if (typeof parsed.reviews === "number" && typeof parsed.lessons === "number") {
+          setStudyCounts({ reviews: parsed.reviews, lessons: parsed.lessons });
+        }
+      } catch {
+        // Ignore malformed cache values.
+      }
+    };
+
+    const onStudyCountsUpdated = (event: Event) => {
+      const custom = event as CustomEvent<{ accountId?: string; reviews?: number; lessons?: number }>;
+      if (custom.detail?.accountId !== accountId) {
+        return;
+      }
+
+      if (typeof custom.detail?.reviews === "number" && typeof custom.detail?.lessons === "number") {
+        setStudyCounts({ reviews: custom.detail.reviews, lessons: custom.detail.lessons });
+        return;
+      }
+
+      readCounts();
+    };
+
+    readCounts();
+    window.addEventListener("wr:study-counts-updated", onStudyCountsUpdated as EventListener);
+    window.addEventListener("focus", readCounts);
+
+    return () => {
+      window.removeEventListener("wr:study-counts-updated", onStudyCountsUpdated as EventListener);
+      window.removeEventListener("focus", readCounts);
+    };
+  }, [accountId, countsStorageKey]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -187,14 +234,14 @@ export default function ExplorerTabs({
                 onClick={() => setQueueMode("review")}
                 className={queueModeButtonClass("review", queueMode)}
               >
-                Reviews
+                Reviews ({typeof studyCounts?.reviews === "number" ? studyCounts.reviews : "..."})
               </button>
               <button
                 type="button"
                 onClick={() => setQueueMode("lesson")}
                 className={queueModeButtonClass("lesson", queueMode)}
               >
-                Lessons
+                Lessons ({typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."})
               </button>
             </>
           ) : null}
