@@ -241,6 +241,9 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
       return;
     }
 
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const onKeyDown = (event: KeyboardEvent) => {
       const active = document.activeElement as HTMLElement | null;
       if (active) {
@@ -301,6 +304,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
 
     window.addEventListener("keydown", onKeyDown);
     return () => {
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [filteredItems, selectedItem, selectedIndex, submittingByAssignmentId]);
@@ -363,7 +367,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
           </div>
         ) : null}
 
-        {filteredItems.length > 0 && !selectedItem ? (
+        {filteredItems.length > 0 ? (
           <>
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
             Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} items
@@ -431,10 +435,12 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
           ) : null}
           </>
         ) : null}
+      </div>
 
-        {selectedItem ? (
-          <div className="mt-4 space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
+      {selectedItem ? (
+        <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-3 backdrop-blur-[2px] sm:p-6">
+          <div className="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)]">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line bg-surface-muted px-4 py-3 sm:px-6">
               <button
                 type="button"
                 onClick={() => setSelectedId(null)}
@@ -464,49 +470,53 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
                 </button>
               </div>
             </div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
-              Shortcuts: Left/Right (prev/next), Home/End (first/last), Esc (back)
-              {selectedItem.queueType === "review" ? ", 1=wrong, 2=correct" : ""}
-            </p>
 
-            <LevelExplorerDetailSection
-              selectedItem={selectedItem}
-              showEnglish={showEnglish}
-              studyMode={studyMode}
-              selectedMeaningExplanation={selectedMeaningExplanation}
-              selectedReadingExplanationRaw={selectedReadingExplanationRaw}
-              showReadingExplanation={showReadingExplanation}
-              hasPrimaryRelatedPanel={false}
-              hasVisuallySimilarPanel={false}
-              hasUsedInVocabularyPanel={false}
-              vocabularyKanjiLinks={[]}
-              subjectById={new Map()}
-              onJumpToRelatedSubject={async () => {}}
-              onJumpToKanji={async () => {}}
-            />
-            {selectedItem.queueType === "review" ? (
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => submitReview(selectedItem.assignmentId, "correct")}
-                  disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
-                  className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  Correct
-                </button>
-                <button
-                  type="button"
-                  onClick={() => submitReview(selectedItem.assignmentId, "wrong")}
-                  disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
-                  className="rounded-full border border-red-300 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-red-800 disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  Wrong
-                </button>
-              </div>
-            ) : null}
+            <div className="overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
+                Shortcuts: Left/Right (prev/next), Home/End (first/last), Esc (back)
+                {selectedItem.queueType === "review" ? ", 1=wrong, 2=correct" : ""}
+              </p>
+
+              <LevelExplorerDetailSection
+                selectedItem={selectedItem}
+                showEnglish={showEnglish}
+                studyMode={studyMode}
+                selectedMeaningExplanation={selectedMeaningExplanation}
+                selectedReadingExplanationRaw={selectedReadingExplanationRaw}
+                showReadingExplanation={showReadingExplanation}
+                hasPrimaryRelatedPanel={false}
+                hasVisuallySimilarPanel={false}
+                hasUsedInVocabularyPanel={false}
+                vocabularyKanjiLinks={[]}
+                subjectById={new Map()}
+                onJumpToRelatedSubject={async () => {}}
+                onJumpToKanji={async () => {}}
+              />
+
+              {selectedItem.queueType === "review" ? (
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => submitReview(selectedItem.assignmentId, "correct")}
+                    disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
+                    className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Correct
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => submitReview(selectedItem.assignmentId, "wrong")}
+                    disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
+                    className="rounded-full border border-red-300 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-red-800 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    Wrong
+                  </button>
+                </div>
+              ) : null}
+            </div>
           </div>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </section>
   );
 }
