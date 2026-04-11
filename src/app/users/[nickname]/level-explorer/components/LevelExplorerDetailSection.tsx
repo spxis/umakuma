@@ -278,39 +278,37 @@ export default function LevelExplorerDetailSection({
             </div>
           </div>
         </div>
-        {isStudyHidden ? (
-          <div className="min-w-0">
-            <p className="text-base font-black uppercase tracking-[0.08em] text-foreground/80">Blind Review</p>
-            <p className="mt-1 text-sm font-semibold text-foreground/65">Recall meaning and reading, then reveal answer.</p>
+        <>
+          <div className="flex flex-wrap justify-start gap-1 sm:justify-end">
+            <span className={`subject-pill ${statusClass(selectedItem.status)}`}>{selectedItem.status}</span>
+            <span className={subjectTypePillClass(selectedItem.subjectType)}>{selectedItem.subjectType}</span>
+            {typeof selectedItem.wkLevel === "number" ? (
+              <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span>
+            ) : null}
+            {selectedItem.subjectType === "kanji" && selectedItem.jlptLevel ? (
+              <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.jlptLevel}</span>
+            ) : null}
+            <span className="subject-pill border-line bg-surface text-foreground">SRS {selectedItem.srsStage}</span>
           </div>
-        ) : (
-          <>
-            <div className="flex flex-wrap justify-start gap-1 sm:justify-end">
-              <span className={`subject-pill ${statusClass(selectedItem.status)}`}>{selectedItem.status}</span>
-              <span className={subjectTypePillClass(selectedItem.subjectType)}>{selectedItem.subjectType}</span>
-              {typeof selectedItem.wkLevel === "number" ? (
-                <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span>
-              ) : null}
-              {selectedItem.subjectType === "kanji" && selectedItem.jlptLevel ? (
-                <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.jlptLevel}</span>
-              ) : null}
-            </div>
-            <div className="min-w-0">
-              <p className="text-3xl font-black leading-tight text-foreground">
-                {studyMode
-                  ? selectedItem.subjectType === "kanji"
-                    ? "Kanji"
-                    : selectedItem.subjectType === "radical"
-                      ? "Radical"
-                      : "Vocabulary"
-                  : titleForDisplay(selectedItem, showEnglish)}
-              </p>
-            </div>
-          </>
-        )}
+          <div className="min-w-0">
+            {isStudyHidden ? (
+              <>
+                <p className="text-base font-black uppercase tracking-[0.08em] text-foreground/80">Blind Review</p>
+                <p className="mt-1 text-sm font-semibold text-foreground/65">Recall meaning and reading, then reveal answer.</p>
+              </>
+            ) : studyMode ? (
+              <>
+                <p className="text-3xl font-black leading-tight text-foreground">{titleForDisplay(selectedItem, true)}</p>
+                <p className="mt-1 text-base font-semibold text-foreground/75">{titleForDisplay(selectedItem, false)}</p>
+              </>
+            ) : (
+              <p className="text-3xl font-black leading-tight text-foreground">{titleForDisplay(selectedItem, showEnglish)}</p>
+            )}
+          </div>
+        </>
       </div>
 
-      <div className={`mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 ${isStudyHidden ? "hidden" : ""}`}>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {canShowReadings ? (
           <>
         <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
