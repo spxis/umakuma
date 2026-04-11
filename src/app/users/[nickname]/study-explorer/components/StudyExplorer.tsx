@@ -174,6 +174,8 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   const selectedIndex = selectedItem
     ? filteredItems.findIndex((item) => item.subjectId === selectedItem.subjectId)
     : -1;
+  const prevItem = selectedIndex > 0 ? filteredItems[selectedIndex - 1] : null;
+  const nextItem = selectedIndex >= 0 && selectedIndex < filteredItems.length - 1 ? filteredItems[selectedIndex + 1] : null;
   const selectedMeaningExplanation = selectedItem?.meaningExplanation ?? "-";
   const selectedReadingExplanationRaw = selectedItem?.readingExplanation ?? "";
   const showReadingExplanation = selectedReadingExplanationRaw.trim().length > 0;
@@ -271,6 +273,15 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
     return typeof value === "number" ? formatNumber(value) : "...";
   }
 
+  function navPreviewLabel(item: StudyQueueItem | null): string {
+    if (!item) {
+      return "-";
+    }
+
+    const typeLabel = (item.subjectType ?? "item").toUpperCase();
+    return `${item.characters} · ${typeLabel}`;
+  }
+
   function moveSelection(delta: -1 | 1) {
     if (filteredItems.length === 0) {
       return;
@@ -309,25 +320,25 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
 
       const key = event.key.toLowerCase();
 
-      if (event.key === "ArrowLeft" || key === "a") {
+      if (event.key === "ArrowLeft" || event.key === "ArrowUp" || key === "a" || key === "w") {
         event.preventDefault();
         moveSelection(-1);
         return;
       }
 
-      if (event.key === "ArrowRight" || event.key === " " || key === "d") {
+      if (event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === " " || key === "d" || key === "s") {
         event.preventDefault();
         moveSelection(1);
         return;
       }
 
-      if (event.key === "Home" || key === "w") {
+      if (event.key === "Home") {
         event.preventDefault();
         setSelectedId(filteredItems[0]?.subjectId ?? null);
         return;
       }
 
-      if (event.key === "End" || key === "s") {
+      if (event.key === "End") {
         event.preventDefault();
         setSelectedId(filteredItems[filteredItems.length - 1]?.subjectId ?? null);
         return;
@@ -504,9 +515,12 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
                   type="button"
                   onClick={() => moveSelection(-1)}
                   disabled={selectedIndex <= 0}
-                  className="rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-full border border-line bg-surface px-4 py-2 text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Prev
+                  <span className="block text-xs font-bold uppercase tracking-[0.1em]">Prev</span>
+                  <span className="block max-w-[11rem] truncate text-[10px] font-semibold uppercase tracking-[0.06em] text-foreground/60">
+                    {navPreviewLabel(prevItem)}
+                  </span>
                 </button>
                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">
                   #{selectedIndex + 1} of {filteredItems.length}
@@ -515,16 +529,19 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
                   type="button"
                   onClick={() => moveSelection(1)}
                   disabled={selectedIndex >= filteredItems.length - 1}
-                  className="rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-full border border-line bg-surface px-4 py-2 text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Next
+                  <span className="block text-xs font-bold uppercase tracking-[0.1em]">Next</span>
+                  <span className="block max-w-[11rem] truncate text-[10px] font-semibold uppercase tracking-[0.06em] text-foreground/60">
+                    {navPreviewLabel(nextItem)}
+                  </span>
                 </button>
               </div>
             </div>
 
             <div className="overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
-                Shortcuts: Left/Right or A/D (prev/next), Home/End or W/S (first/last), Esc (back)
+                Shortcuts: Left/Right/Up/Down or W/A/S/D (prev/next), Home/End (first/last), Esc (back)
                 {selectedItem.queueType === "review" ? ", 1=wrong, 2=correct" : ""}
               </p>
 
