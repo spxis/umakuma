@@ -243,7 +243,6 @@ export default function ExplorerTabs({
               </button>
             </>
           ) : null}
-            const query = (params.get("findLevel") ?? params.get("findJlpt") ?? params.get("findStudy") ?? "").trim();
           <button
             type="button"
             onClick={() => setStudyMode((prev) => !prev)}
