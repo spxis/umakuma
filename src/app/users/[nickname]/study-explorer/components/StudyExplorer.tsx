@@ -300,7 +300,27 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
         throw new Error(payload.error ?? "Could not submit review.");
       }
 
-      await mutate();
+      await mutate(
+        (current) => {
+          if (!current) {
+            return current;
+          }
+
+          const nextItems = current.items.filter((item) => item.assignmentId !== assignmentId);
+          return {
+            ...current,
+            items: nextItems,
+            counts: {
+              ...current.counts,
+              reviews: Math.max(0, current.counts.reviews - 1),
+              all: Math.max(0, current.counts.all - 1),
+            },
+          };
+        },
+        { revalidate: false },
+      );
+
+      void mutate();
       window.dispatchEvent(new CustomEvent("wr:user-refreshed", { detail: { accountId } }));
     } catch (submitError) {
       console.error(submitError);
