@@ -45,6 +45,15 @@ export default function ExplorerTabs({
     return "study";
   });
   const [showEnglish, setShowEnglish] = useState(false);
+  const [queueMode, setQueueMode] = useState<"review" | "lesson">(() => {
+    if (typeof window === "undefined") {
+      return "review";
+    }
+
+    return window.localStorage.getItem(`wr:study-queue-mode:${accountId}`) === "lesson"
+      ? "lesson"
+      : "review";
+  });
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -57,6 +66,18 @@ export default function ExplorerTabs({
       // Ignore storage errors in restricted browsing modes.
     }
   }, [studyMode]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(`wr:study-queue-mode:${accountId}`, queueMode);
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [accountId, queueMode]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -114,6 +135,17 @@ export default function ExplorerTabs({
       : "rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted";
   }
 
+  function queueModeButtonClass(mode: "review" | "lesson", activeMode: "review" | "lesson"): string {
+    const active = mode === activeMode;
+    if (!active) {
+      return "inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted";
+    }
+
+    return mode === "review"
+      ? "inline-flex h-10 items-center justify-center rounded-full border border-amber-500 bg-amber-500 px-4 text-xs font-bold uppercase tracking-[0.1em] text-white"
+      : "inline-flex h-10 items-center justify-center rounded-full border border-sky-500 bg-sky-500 px-4 text-xs font-bold uppercase tracking-[0.1em] text-white";
+  }
+
   return (
     <section className="space-y-3">
       <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
@@ -146,8 +178,26 @@ export default function ExplorerTabs({
             JLPT Explorer
           </button>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-start gap-2 md:justify-end">
           {activeTab !== "study" ? <ExplorerSearchBar scope={activeTab} /> : null}
+          {activeTab === "study" ? (
+            <>
+              <button
+                type="button"
+                onClick={() => setQueueMode("review")}
+                className={queueModeButtonClass("review", queueMode)}
+              >
+                Reviews
+              </button>
+              <button
+                type="button"
+                onClick={() => setQueueMode("lesson")}
+                className={queueModeButtonClass("lesson", queueMode)}
+              >
+                Lessons
+              </button>
+            </>
+          ) : null}
           <button
             type="button"
             onClick={() => setStudyMode((prev) => !prev)}
@@ -171,7 +221,13 @@ export default function ExplorerTabs({
       </div>
 
       <div className={activeTab === "study" ? "block" : "hidden"}>
-        <StudyExplorer accountId={accountId} maxLevel={maxLevel} showEnglish={showEnglish} studyMode={studyMode} />
+        <StudyExplorer
+          accountId={accountId}
+          maxLevel={maxLevel}
+          showEnglish={showEnglish}
+          studyMode={studyMode}
+          queueMode={queueMode}
+        />
       </div>
 
       <div className={activeTab === "level" ? "block" : "hidden"}>

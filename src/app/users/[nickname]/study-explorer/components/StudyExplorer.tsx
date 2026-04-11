@@ -44,6 +44,7 @@ type Props = {
   maxLevel: number;
   showEnglish: boolean;
   studyMode: boolean;
+  queueMode: "review" | "lesson";
 };
 
 const fetcher = async (url: string): Promise<QueueResponse> => {
@@ -97,17 +98,6 @@ function queueBadgeClass(queueType: "review" | "lesson"): string {
     : "border-sky-300 bg-sky-50 text-sky-800";
 }
 
-function queueModeButtonClass(mode: "review" | "lesson", activeMode: "review" | "lesson"): string {
-  const active = mode === activeMode;
-  if (!active) {
-    return "border-line bg-surface text-foreground hover:bg-surface-muted";
-  }
-
-  return mode === "review"
-    ? "border-amber-500 bg-amber-500 text-white"
-    : "border-sky-500 bg-sky-500 text-white";
-}
-
 function shortSubjectTypeLabel(type: StudyQueueItem["subjectType"]): string {
   if (type === "vocabulary") {
     return "VOCAB";
@@ -124,25 +114,20 @@ function shortSubjectTypeLabel(type: StudyQueueItem["subjectType"]): string {
   return "ITEM";
 }
 
-export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyMode }: Props) {
+export default function StudyExplorer({
+  accountId,
+  maxLevel,
+  showEnglish,
+  studyMode,
+  queueMode,
+}: Props) {
   const PAGE_SIZE = 40;
-  const modeStorageKey = `wr:study-queue-mode:${accountId}`;
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const [queueMode, setQueueMode] = useState<"review" | "lesson">(() => {
-    if (typeof window === "undefined") {
-      return "review";
-    }
-
-    const stored = window.localStorage.getItem(`wr:study-queue-mode:${accountId}`);
-    return stored === "lesson" ? "lesson" : "review";
-  });
   const [cachedQueueData, setCachedQueueData] = useState<QueueResponse | undefined>(() =>
     readStoredQueue(
       accountId,
-      typeof window !== "undefined" && window.localStorage.getItem(`wr:study-queue-mode:${accountId}`) === "lesson"
-        ? "lesson"
-        : "review",
+      queueMode,
     ),
   );
   const [persistedCounts, setPersistedCounts] = useState<StudyCounts | null>(null);
@@ -157,7 +142,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
     () => Array.from({ length: Math.max(1, maxLevel) }, (_, index) => index + 1),
     [maxLevel],
   );
-  const [selectedLevels, setSelectedLevels] = useState<Set<number>>(() => new Set(levelOptions));
+  const [viewedLevel, setViewedLevel] = useState<number | null>(null);
   const [typeFilter, setTypeFilter] = useState<"all" | "radical" | "kanji" | "vocabulary">("all");
   const [srsFilter, setSrsFilter] = useState<SrsFilter>("all");
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -197,10 +182,6 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   }, [countsStorageKey, data?.counts]);
 
   useEffect(() => {
-    window.localStorage.setItem(modeStorageKey, queueMode);
-  }, [modeStorageKey, queueMode]);
-
-  useEffect(() => {
     setCachedQueueData(readStoredQueue(accountId, queueMode));
   }, [accountId, queueMode]);
 
@@ -218,14 +199,14 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
     window.localStorage.setItem(key, JSON.stringify(payload));
   }, [accountId, data, queueMode]);
 
-  const allLevelsSelected = selectedLevels.size === levelOptions.length;
+  const allLevelsSelected = viewedLevel === null;
 
   const filteredItems = useMemo(() => {
     const items = data?.items ?? [];
     return items.filter((item) => {
-      if (!allLevelsSelected) {
+      if (viewedLevel !== null) {
         const itemLevel = item.wkLevel;
-        if (typeof itemLevel !== "number" || !selectedLevels.has(itemLevel)) {
+        if (typeof itemLevel !== "number" || itemLevel !== viewedLevel) {
           return false;
         }
       }
@@ -244,7 +225,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
 
       return true;
     });
-  }, [allLevelsSelected, data?.items, queueMode, selectedLevels, srsFilter, typeFilter]);
+  }, [data?.items, queueMode, srsFilter, typeFilter, viewedLevel]);
 
   useEffect(() => {
     setSelectedId(null);
@@ -360,23 +341,11 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   }
 
   function toggleLevel(level: number) {
-    setSelectedLevels((prev) => {
-      const next = new Set(prev);
-      if (next.has(level)) {
-        if (next.size === 1) {
-          return next;
-        }
-        next.delete(level);
-        return next;
-      }
-
-      next.add(level);
-      return next;
-    });
+    setViewedLevel(level);
   }
 
   function selectAllLevels() {
-    setSelectedLevels(new Set(levelOptions));
+    setViewedLevel(null);
   }
 
   function countLabel(value: number | undefined): string {
@@ -501,21 +470,11 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
               key={level}
               type="button"
               onClick={() => toggleLevel(level)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.has(level))}`}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === level)}`}
             >
               L{level}
             </button>
           ))}
-        </div>
-
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/70">Mode</p>
-          <button type="button" onClick={() => setQueueMode("review")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${queueModeButtonClass("review", queueMode)}`}>
-            Reviews ({countLabel(counts?.reviews)})
-          </button>
-          <button type="button" onClick={() => setQueueMode("lesson")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${queueModeButtonClass("lesson", queueMode)}`}>
-            Lessons ({countLabel(counts?.lessons)})
-          </button>
         </div>
 
         <div className="mt-2 flex flex-wrap gap-2">
