@@ -4,6 +4,8 @@ import {
   ReadingWithPronunciation,
   englishSubtitleForDisplay,
   formatDate,
+  formatNextReviewBadge,
+  formatRelativeFromNow,
   glyphHasReading,
   glyphSubtitleForDisplay,
   pronunciationForReading,
@@ -238,6 +240,7 @@ export default function LevelExplorerDetailSection({
   const isStudyHidden = studyMode && !revealStudyReading;
   const canShowReadings = !isStudyHidden;
   const primaryMeaning = selectedItem.meanings.find((entry) => entry.trim().length > 0) ?? "";
+  const nextReviewBadge = formatNextReviewBadge(selectedItem.availableAt);
   const revealedStudyTitle =
     primaryMeaning ||
     titleForDisplay(selectedItem, true) ||
@@ -298,6 +301,9 @@ export default function LevelExplorerDetailSection({
               <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.jlptLevel}</span>
             ) : null}
             <span className="subject-pill border-line bg-surface text-foreground">SRS {selectedItem.srsStage}</span>
+            {nextReviewBadge ? (
+              <span className={`subject-pill ${nextReviewBadge.className}`}>{nextReviewBadge.label}</span>
+            ) : null}
           </div>
           <div className="min-w-0">
             {isStudyHidden ? (
@@ -350,7 +356,10 @@ export default function LevelExplorerDetailSection({
         ) : null}
         <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
           <p className="text-xs font-bold uppercase text-foreground/70">Started</p>
-          <p className="mt-1 font-semibold text-foreground/90">{formatDate(selectedItem.startedAt)}</p>
+          <p className="mt-1 font-semibold text-foreground/90">
+            {formatDate(selectedItem.startedAt)}
+            {formatRelativeFromNow(selectedItem.startedAt) ? ` (${formatRelativeFromNow(selectedItem.startedAt)})` : ""}
+          </p>
         </div>
         <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
           <p className="text-xs font-bold uppercase text-foreground/70">Next review</p>
@@ -358,7 +367,10 @@ export default function LevelExplorerDetailSection({
         </div>
         <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
           <p className="text-xs font-bold uppercase text-foreground/70">Passed</p>
-          <p className="mt-1 font-semibold text-foreground/90">{formatDate(selectedItem.passedAt)}</p>
+          <p className="mt-1 font-semibold text-foreground/90">
+            {formatDate(selectedItem.passedAt)}
+            {formatRelativeFromNow(selectedItem.passedAt) ? ` (${formatRelativeFromNow(selectedItem.passedAt)})` : ""}
+          </p>
         </div>
       </div>
 

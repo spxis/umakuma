@@ -75,7 +75,15 @@ export function formatNextReviewBadge(input: string | null | undefined): NextRev
   if (deltaMs <= 0) {
     if (absMs < 15 * 60 * 1000) {
       return {
-        label: "Late now",
+        label: "Overdue now",
+        className: "border-orange-300 bg-orange-50 text-orange-700",
+      };
+    }
+
+    if (absMs < 60 * 60 * 1000) {
+      const minutes = Math.max(1, Math.round(absMs / (60 * 1000)));
+      return {
+        label: `Overdue ${minutes}m`,
         className: "border-orange-300 bg-orange-50 text-orange-700",
       };
     }
@@ -83,14 +91,14 @@ export function formatNextReviewBadge(input: string | null | undefined): NextRev
     if (absMs < 24 * 60 * 60 * 1000) {
       const hours = Math.max(1, Math.round(absMs / (60 * 60 * 1000)));
       return {
-        label: `Late ${hours}h`,
+        label: `Overdue ${hours}h`,
         className: "border-orange-300 bg-orange-50 text-orange-700",
       };
     }
 
     const days = Math.max(1, Math.round(absMs / (24 * 60 * 60 * 1000)));
     return {
-      label: `Late ${days}d`,
+      label: `Overdue ${days}d`,
       className: "border-red-300 bg-red-50 text-red-700",
     };
   }
@@ -123,6 +131,57 @@ export function formatNextReviewBadge(input: string | null | undefined): NextRev
     label: `In ${days}d`,
     className: "border-emerald-300 bg-emerald-50 text-emerald-700",
   };
+}
+
+export function formatRelativeFromNow(input: string | null | undefined): string | null {
+  if (!input) {
+    return null;
+  }
+
+  const parsed = new Date(input);
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  const deltaMs = parsed.getTime() - Date.now();
+  const absMs = Math.abs(deltaMs);
+
+  const minuteMs = 60 * 1000;
+  const hourMs = 60 * minuteMs;
+  const dayMs = 24 * hourMs;
+  const weekMs = 7 * dayMs;
+  const monthMs = 30 * dayMs;
+  const yearMs = 365 * dayMs;
+
+  let value = 0;
+  let unit = "minute";
+
+  if (absMs >= yearMs) {
+    value = Math.max(1, Math.round(absMs / yearMs));
+    unit = "year";
+  } else if (absMs >= monthMs) {
+    value = Math.max(1, Math.round(absMs / monthMs));
+    unit = "month";
+  } else if (absMs >= weekMs) {
+    value = Math.max(1, Math.round(absMs / weekMs));
+    unit = "week";
+  } else if (absMs >= dayMs) {
+    value = Math.max(1, Math.round(absMs / dayMs));
+    unit = "day";
+  } else if (absMs >= hourMs) {
+    value = Math.max(1, Math.round(absMs / hourMs));
+    unit = "hour";
+  } else {
+    value = Math.max(1, Math.round(absMs / minuteMs));
+    unit = "minute";
+  }
+
+  const plural = value === 1 ? unit : `${unit}s`;
+  if (deltaMs < 0) {
+    return `${value} ${plural} ago`;
+  }
+
+  return `in ${value} ${plural}`;
 }
 
 export function stripHtml(input: string | undefined): string {
