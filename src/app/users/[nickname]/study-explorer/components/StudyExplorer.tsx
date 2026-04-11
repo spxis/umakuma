@@ -55,16 +55,14 @@ type SubmitInFlight = {
   itemLabel: string;
 };
 
-type ReviewTally = {
-  correct: number;
-  skipped: number;
-  wrong: number;
-};
+type ReviewOutcome = "correct" | "wrong" | "skipped";
 
 type Props = {
   accountId: string;
   maxLevel: number;
   showEnglish: boolean;
+  onToggleShowEnglish: () => void;
+  canToggleEnglish: boolean;
   studyMode: boolean;
   queueMode: "review" | "lesson";
 };
@@ -193,6 +191,8 @@ export default function StudyExplorer({
   accountId,
   maxLevel,
   showEnglish,
+  onToggleShowEnglish,
+  canToggleEnglish,
   studyMode,
   queueMode,
 }: Props) {
@@ -267,7 +267,7 @@ export default function StudyExplorer({
   const [revealedAssignmentIds, setRevealedAssignmentIds] = useState<Set<number>>(new Set());
   const [submitFeedback, setSubmitFeedback] = useState<SubmitFeedback | null>(null);
   const [submitInFlight, setSubmitInFlight] = useState<SubmitInFlight | null>(null);
-  const [reviewTally, setReviewTally] = useState<ReviewTally>({ correct: 0, skipped: 0, wrong: 0 });
+  const [reviewOutcomeByAssignmentId, setReviewOutcomeByAssignmentId] = useState<Record<number, ReviewOutcome>>({});
   const [showLocked, setShowLocked] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -580,7 +580,7 @@ export default function StudyExplorer({
     if (selectedId === null) {
       setSubmitFeedback(null);
       setSubmitInFlight(null);
-      setReviewTally({ correct: 0, skipped: 0, wrong: 0 });
+      setReviewOutcomeByAssignmentId({});
     }
   }, [selectedId]);
 
@@ -609,6 +609,23 @@ export default function StudyExplorer({
   const isReviewAwaitingGrade = Boolean(
     selectedItem && selectedItem.queueType === "review" && isAnswerRevealed,
   );
+  const reviewTally = useMemo(() => {
+    let correct = 0;
+    let skipped = 0;
+    let wrong = 0;
+
+    for (const outcome of Object.values(reviewOutcomeByAssignmentId)) {
+      if (outcome === "correct") {
+        correct += 1;
+      } else if (outcome === "wrong") {
+        wrong += 1;
+      } else if (outcome === "skipped") {
+        skipped += 1;
+      }
+    }
+
+    return { correct, skipped, wrong };
+  }, [reviewOutcomeByAssignmentId]);
 
   useEffect(() => {
     if (selectedId === null) {
@@ -712,10 +729,9 @@ export default function StudyExplorer({
           itemForSubmit ? `${itemForSubmit.characters} (${studyItemEnglishTitle(itemForSubmit)})` : "item"
         }.`,
       });
-      setReviewTally((prev) => ({
-        correct: prev.correct + (result === "correct" ? 1 : 0),
-        skipped: prev.skipped,
-        wrong: prev.wrong + (result === "wrong" ? 1 : 0),
+      setReviewOutcomeByAssignmentId((prev) => ({
+        ...prev,
+        [assignmentId]: result,
       }));
 
       // Avoid immediate revalidation churn on every answer; periodic/background refresh remains.
@@ -775,11 +791,17 @@ export default function StudyExplorer({
     }
 
     if (selectedItem && selectedItem.queueType === "review" && !isAnswerRevealed) {
-      setReviewTally((prev) => ({
-        correct: prev.correct,
-        skipped: prev.skipped + 1,
-        wrong: prev.wrong,
-      }));
+      setReviewOutcomeByAssignmentId((prev) => {
+        const current = prev[selectedItem.assignmentId];
+        if (current === "correct" || current === "wrong" || current === "skipped") {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          [selectedItem.assignmentId]: "skipped",
+        };
+      });
     }
 
     if (selectedIndex < 0) {
@@ -997,13 +1019,23 @@ export default function StudyExplorer({
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
               Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} items
             </p>
-            <button
-              type="button"
-              onClick={() => setShowLocked((prev) => !prev)}
-              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
-            >
-              {showLocked ? "Hide Locked" : "Show Locked"}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onToggleShowEnglish}
+                disabled={!canToggleEnglish}
+                className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowLocked((prev) => !prev)}
+                className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+              >
+                {showLocked ? "Hide Locked" : "Show Locked"}
+              </button>
+            </div>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {visibleItems.map((item, index) => {
@@ -1035,11 +1067,18 @@ export default function StudyExplorer({
                           : "Vocabulary"
                       : titleForDisplay(item, showEnglish)
                   }
+                  hideTitle={item.subjectType === "kanji"}
                   titleTooltip={titleForDisplay(item, showEnglish)}
                   glyphClassName={typeGlyphBoxClass(item.subjectType)}
                   glyphText={item.characters}
                   glyphTextClassName={glyphTextSizeClass(item.characters)}
-                  glyphSubtitle={studyMode ? <span className="text-foreground/45">...</span> : (glyphSubtitleForDisplay(item) ?? "")}
+                  glyphSubtitle={
+                    studyMode
+                      ? <span className="text-foreground/45">...</span>
+                      : item.subjectType === "kanji"
+                        ? (showEnglish ? titleForDisplay(item, true) : (glyphSubtitleForDisplay(item) ?? ""))
+                        : (glyphSubtitleForDisplay(item) ?? "")
+                  }
                   statusChip={
                     <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>
                       {statusShortLabel(item.status)}

@@ -254,14 +254,6 @@ export default function ExplorerTabs({
           >
             Study Mode {studyMode ? "On" : "Off"}
           </button>
-          <button
-            type="button"
-            onClick={() => setShowEnglish((prev) => !prev)}
-            disabled={studyMode}
-            className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {studyMode ? "Hints Hidden" : showEnglish ? "Hide English" : "Show English"}
-          </button>
         </div>
       </div>
 
@@ -270,6 +262,8 @@ export default function ExplorerTabs({
           accountId={accountId}
           maxLevel={maxLevel}
           showEnglish={showEnglish}
+          onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
+          canToggleEnglish={!studyMode}
           studyMode={studyMode}
           queueMode={queueMode}
         />

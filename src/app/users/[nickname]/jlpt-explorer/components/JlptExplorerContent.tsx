@@ -280,15 +280,18 @@ export default function JlptExplorerContent({
                     </>
                   }
                   title={studyMode ? "Kanji" : heading}
+                  hideTitle
                   glyphClassName={`border-kanji/50 bg-kanji/10 ${userMatch ? "text-kanji" : "text-foreground"}`}
                   glyphText={item.kanji}
                   glyphTextClassName="text-6xl"
                   glyphSubtitle={
-                    !studyMode
-                      ? primaryReading
-                        ? readingLabel(primaryReading, showEnglish)
-                        : readingLabelFromList(fallbackReadings, showEnglish)
-                      : undefined
+                    studyMode
+                      ? <span className="text-foreground/45">...</span>
+                      : showEnglish
+                        ? heading
+                        : primaryReading
+                          ? readingLabel(primaryReading, showEnglish)
+                          : readingLabelFromList(fallbackReadings, showEnglish)
                   }
                   statusChip={
                     <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(userMatch?.status)}`}>

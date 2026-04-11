@@ -438,21 +438,24 @@ export default function LevelExplorerContent({
                           : "Vocabulary"
                       : titleForDisplay(item, showEnglish)
                   }
+                    hideTitle={item.subjectType === "kanji"}
                   titleTooltip={titleForDisplay(item, showEnglish)}
                   titleClassName={item.status === "locked" || item.srsStage <= 0 ? "text-foreground/60" : ""}
                   glyphClassName={`${typeGlyphBoxClass(item.subjectType)} ${item.status === "locked" || item.srsStage <= 0 ? "opacity-60" : ""}`}
                   glyphText={item.characters}
                   glyphTextClassName={`${glyphTextSizeClass(item.characters)} whitespace-nowrap`}
                   glyphSubtitle={
-                    !studyMode
-                      ? (() => {
-                          const subtitle = glyphSubtitleForDisplay(item);
-                          if (!subtitle) {
-                            return null;
-                          }
-                          return <ReadingWithPronunciation reading={subtitle} />;
-                        })()
-                      : undefined
+                      studyMode
+                        ? <span className="text-foreground/45">...</span>
+                        : item.subjectType === "kanji"
+                          ? (showEnglish ? titleForDisplay(item, true) : (glyphSubtitleForDisplay(item) ?? ""))
+                          : (() => {
+                              const subtitle = glyphSubtitleForDisplay(item);
+                              if (!subtitle) {
+                                return null;
+                              }
+                              return <ReadingWithPronunciation reading={subtitle} />;
+                            })()
                   }
                   statusChip={
                     <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(item.status)}`}>
