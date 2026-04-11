@@ -118,6 +118,28 @@ function shortSubjectTypeLabel(type: StudyQueueItem["subjectType"]): string {
   return "ITEM";
 }
 
+function StudySkeletonCards() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-hidden="true">
+      {Array.from({ length: 4 }, (_, index) => (
+        <div key={`study-skeleton-${index}`} className="rounded-2xl border border-line bg-surface p-3 animate-pulse">
+          <div className="flex items-center justify-between">
+            <div className="h-4 w-8 rounded bg-surface-muted" />
+            <div className="h-6 w-24 rounded-full bg-surface-muted" />
+          </div>
+          <div className="mt-3 h-8 w-40 rounded bg-surface-muted" />
+          <div className="mt-3 h-[9.75rem] rounded-xl border border-line/50 bg-surface-muted" />
+          <div className="mt-3 flex items-center justify-between">
+            <div className="h-8 w-20 rounded-full bg-surface-muted" />
+            <div className="h-8 w-20 rounded-full bg-surface-muted" />
+            <div className="h-8 w-20 rounded-full bg-surface-muted" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function StudyExplorer({
   accountId,
   maxLevel,
@@ -643,13 +665,24 @@ export default function StudyExplorer({
         </div>
       </header>
 
-      {isLoading && !data ? <p className="px-5 py-4 text-sm text-foreground/70">Loading study queue...</p> : null}
       {error ? <p className="px-5 py-4 text-sm text-red-700">{error.message}</p> : null}
 
       <div className="p-5">
+        {isLoading && !data ? (
+          <>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Loading study queue...</p>
+            <StudySkeletonCards />
+          </>
+        ) : null}
+
         {filteredItems.length === 0 && !isLoading ? (
           <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
-            No study items match the current filters.
+            <p>No study items match the current filters.</p>
+            <div className="mt-2 inline-flex items-center gap-1 text-foreground/50" aria-hidden="true">
+              <span className="h-1.5 w-1.5 rounded-full bg-foreground/30 animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-foreground/30 animate-pulse [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-foreground/30 animate-pulse [animation-delay:300ms]" />
+            </div>
           </div>
         ) : null}
 
@@ -683,7 +716,7 @@ export default function StudyExplorer({
                   <div className="flex min-h-[2.2rem] flex-wrap content-start items-start justify-end gap-1">
                     <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
                     {typeof item.wkLevel === "number" ? (
-                      <span className="subject-pill border-line bg-surface text-foreground">WK{item.wkLevel}</span>
+                      <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span>
                     ) : null}
                   </div>
                 </div>
