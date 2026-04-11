@@ -568,15 +568,17 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
                     <span className={`subject-pill border ${queueBadgeClass(item.queueType)}`}>{item.queueType}</span>
                   </div>
                 </div>
-                <p className="mt-2 truncate whitespace-nowrap text-xl font-black leading-tight text-foreground" title={titleForDisplay(item, showEnglish)}>
-                  {studyMode
-                    ? item.subjectType === "kanji"
-                      ? "Kanji"
-                      : item.subjectType === "radical"
-                        ? "Radical"
-                        : "Vocabulary"
-                    : titleForDisplay(item, showEnglish)}
-                </p>
+                <div className="mt-2 min-h-[2rem]">
+                  <p className="truncate whitespace-nowrap text-xl font-black leading-none text-foreground" title={titleForDisplay(item, showEnglish)}>
+                    {studyMode
+                      ? item.subjectType === "kanji"
+                        ? "Kanji"
+                        : item.subjectType === "radical"
+                          ? "Radical"
+                          : "Vocabulary"
+                      : titleForDisplay(item, showEnglish)}
+                  </p>
+                </div>
                 <div className={`mt-3 rounded-xl border ${typeGlyphBoxClass(item.subjectType)} px-3 py-2`}>
                   <p className={`${glyphTextSizeClass(item.characters)} text-center font-black leading-none`}>{item.characters}</p>
                   {!studyMode && glyphSubtitleForDisplay(item) ? (
