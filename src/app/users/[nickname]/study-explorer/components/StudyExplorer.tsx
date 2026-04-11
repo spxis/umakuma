@@ -807,6 +807,7 @@ export default function StudyExplorer({
           {(["all", "radical", "kanji", "vocabulary"] as const).map((type) => {
             const count = typeCounts[type];
             const isDisabled = type !== "all" && count <= 0;
+            const isTypeActive = typeFilter === type || (type !== "all" && typeFilter === "all");
             const label =
               type === "vocabulary"
                 ? `vocab (${formatNumber(count)})`
@@ -826,8 +827,8 @@ export default function StudyExplorer({
                   isDisabled
                     ? disabledBadgeClass()
                     : type === "all"
-                      ? badgeClass(typeFilter === type)
-                      : typeBadgeClass(type, typeFilter === type, false)
+                      ? badgeClass(isTypeActive)
+                      : typeBadgeClass(type, isTypeActive, false)
                 }`}
               >
                 {label}
