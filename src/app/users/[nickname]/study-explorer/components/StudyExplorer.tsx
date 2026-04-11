@@ -43,6 +43,11 @@ type StoredQueuePayload = {
   data: QueueResponse;
 };
 
+type SubmitFeedback = {
+  kind: "success" | "error";
+  message: string;
+};
+
 type Props = {
   accountId: string;
   maxLevel: number;
@@ -227,6 +232,7 @@ export default function StudyExplorer({
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
   const [revealedAssignmentIds, setRevealedAssignmentIds] = useState<Set<number>>(new Set());
+  const [submitFeedback, setSubmitFeedback] = useState<SubmitFeedback | null>(null);
   const [showLocked, setShowLocked] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -532,6 +538,12 @@ export default function StudyExplorer({
   }, [queueMode]);
 
   useEffect(() => {
+    if (selectedId === null) {
+      setSubmitFeedback(null);
+    }
+  }, [selectedId]);
+
+  useEffect(() => {
     if (viewedLevel === null) {
       return;
     }
@@ -552,6 +564,10 @@ export default function StudyExplorer({
   const showReadingExplanation = selectedReadingExplanationRaw.trim().length > 0;
   const visibleItems = filteredItems.slice(0, visibleCount);
   const isAnswerRevealed = selectedItem ? revealedAssignmentIds.has(selectedItem.assignmentId) : false;
+  const isSubmittingSelected = selectedItem ? submittingByAssignmentId.has(selectedItem.assignmentId) : false;
+  const isReviewAwaitingGrade = Boolean(
+    selectedItem && selectedItem.queueType === "review" && isAnswerRevealed,
+  );
 
   useEffect(() => {
     if (selectedId === null) {
@@ -594,6 +610,15 @@ export default function StudyExplorer({
   }, [filteredItems.length, selectedItem, visibleCount]);
 
   async function submitReview(assignmentId: number, result: "correct" | "wrong") {
+    const isSubmittingSelectedItem = selectedItem?.assignmentId === assignmentId;
+    const currentSelectedIndex = isSubmittingSelectedItem ? selectedIndex : -1;
+    const nextCandidate =
+      currentSelectedIndex >= 0 && currentSelectedIndex < filteredItems.length - 1
+        ? filteredItems[currentSelectedIndex + 1]
+        : null;
+    const previousCandidate = currentSelectedIndex > 0 ? filteredItems[currentSelectedIndex - 1] : null;
+    const nextSelectedSubjectId = nextCandidate?.subjectId ?? previousCandidate?.subjectId ?? null;
+
     setSubmittingByAssignmentId((prev) => new Set(prev).add(assignmentId));
 
     try {
@@ -628,10 +653,21 @@ export default function StudyExplorer({
         { revalidate: false },
       );
 
+      if (isSubmittingSelectedItem && nextSelectedSubjectId !== null) {
+        setSelectedId(nextSelectedSubjectId);
+      }
+
+      setSubmitFeedback({
+        kind: "success",
+        message: `Submitted ${result === "correct" ? "Correct" : "Wrong"}.`,
+      });
+
       void mutate();
       window.dispatchEvent(new CustomEvent("wr:user-refreshed", { detail: { accountId } }));
     } catch (submitError) {
       console.error(submitError);
+      const message = submitError instanceof Error ? submitError.message : "Could not submit review.";
+      setSubmitFeedback({ kind: "error", message });
     } finally {
       setSubmittingByAssignmentId((prev) => {
         const next = new Set(prev);
@@ -707,26 +743,33 @@ export default function StudyExplorer({
       }
 
       const key = event.key.toLowerCase();
+      const navigationLocked = selectedItem.queueType === "review" && isAnswerRevealed;
 
-      if (event.key === "ArrowLeft" || event.key === "ArrowUp" || key === "a" || key === "w") {
+      if (!isAnswerRevealed && (event.key === "Enter" || key === "r" || event.code === "Space")) {
+        event.preventDefault();
+        revealAnswer(selectedItem.assignmentId);
+        return;
+      }
+
+      if (!navigationLocked && (event.key === "ArrowLeft" || event.key === "ArrowUp" || key === "a" || key === "w")) {
         event.preventDefault();
         moveSelection(-1);
         return;
       }
 
-      if (event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === " " || key === "d" || key === "s") {
+      if (!navigationLocked && (event.key === "ArrowRight" || event.key === "ArrowDown" || key === "d" || key === "s")) {
         event.preventDefault();
         moveSelection(1);
         return;
       }
 
-      if (event.key === "Home") {
+      if (!navigationLocked && event.key === "Home") {
         event.preventDefault();
         setSelectedId(filteredItems[0]?.subjectId ?? null);
         return;
       }
 
-      if (event.key === "End") {
+      if (!navigationLocked && event.key === "End") {
         event.preventDefault();
         setSelectedId(filteredItems[filteredItems.length - 1]?.subjectId ?? null);
         return;
@@ -739,10 +782,6 @@ export default function StudyExplorer({
       }
 
       if (!isAnswerRevealed) {
-        if (event.key === "Enter" || key === "r") {
-          event.preventDefault();
-          revealAnswer(selectedItem.assignmentId);
-        }
         return;
       }
 
@@ -976,15 +1015,15 @@ export default function StudyExplorer({
                   <button
                     type="button"
                     onClick={() => moveSelection(-1)}
-                    disabled={selectedIndex <= 0}
-                    className="rounded-full border border-line bg-surface px-3 py-2 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:text-xs"
+                    disabled={selectedIndex <= 0 || isReviewAwaitingGrade}
+                    className="h-10 min-w-[6.75rem] rounded-full border border-line bg-surface px-3 py-2 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:text-xs"
                   >
                     Prev
                   </button>
                   {prevItem ? (
                     <>
-                      <span className="subject-pill border-line bg-surface text-foreground">{prevItem.characters}</span>
-                      <span className={subjectTypePillClass(prevItem.subjectType)}>{shortSubjectTypeLabel(prevItem.subjectType)}</span>
+                      <span className="subject-pill inline-flex h-10 items-center border-line bg-surface px-3 text-foreground">{prevItem.characters}</span>
+                      <span className={`${subjectTypePillClass(prevItem.subjectType)} inline-flex h-10 items-center px-3`}>{shortSubjectTypeLabel(prevItem.subjectType)}</span>
                     </>
                   ) : null}
                 </div>
@@ -995,30 +1034,30 @@ export default function StudyExplorer({
                   <button
                     type="button"
                     onClick={() => moveSelection(1)}
-                    disabled={selectedIndex >= filteredItems.length - 1}
-                    className="rounded-full border border-line bg-surface px-3 py-2 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:text-xs"
+                    disabled={selectedIndex >= filteredItems.length - 1 || isReviewAwaitingGrade}
+                    className="h-10 min-w-[6.75rem] rounded-full border border-line bg-surface px-3 py-2 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:text-xs"
                   >
                     Next
                   </button>
                   {nextItem ? (
                     <>
-                      <span className="subject-pill border-line bg-surface text-foreground">{nextItem.characters}</span>
-                      <span className={subjectTypePillClass(nextItem.subjectType)}>{shortSubjectTypeLabel(nextItem.subjectType)}</span>
+                      <span className="subject-pill inline-flex h-10 items-center border-line bg-surface px-3 text-foreground">{nextItem.characters}</span>
+                      <span className={`${subjectTypePillClass(nextItem.subjectType)} inline-flex h-10 items-center px-3`}>{shortSubjectTypeLabel(nextItem.subjectType)}</span>
                     </>
                   ) : null}
                 </div>
               </div>
             </div>
 
-            <div className="overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
-                Shortcuts: Left/Right/Up/Down or W/A/S/D (prev/next), Home/End (first/last), Esc (back)
-                {!isAnswerRevealed
-                  ? ", Enter/R=show answer"
-                  : selectedItem.queueType === "review"
-                    ? ", 1=wrong, 2=correct"
-                    : ""}
-              </p>
+            <div className="relative overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
+              {isSubmittingSelected ? (
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-surface/80 backdrop-blur-[1px]">
+                  <div className="inline-flex items-center gap-3 rounded-full border border-line bg-surface px-4 py-2 text-sm font-bold uppercase tracking-[0.08em] text-foreground">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
+                    Submitting...
+                  </div>
+                </div>
+              ) : null}
 
               <LevelExplorerDetailSection
                 selectedItem={selectedItem}
@@ -1043,29 +1082,29 @@ export default function StudyExplorer({
                     <button
                       type="button"
                       onClick={() => revealAnswer(selectedItem.assignmentId)}
-                      className="rounded-full border border-line bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+                      className="w-full rounded-full border border-line bg-surface px-4 py-3 text-sm font-black uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
                     >
                       Show Answer
                     </button>
                   ) : (
-                    <>
+                    <div className="grid w-full grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => submitReview(selectedItem.assignmentId, "correct")}
                         disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
-                        className="rounded-full border border-emerald-300 bg-emerald-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        Correct
+                        Correct (2)
                       </button>
                       <button
                         type="button"
                         onClick={() => submitReview(selectedItem.assignmentId, "wrong")}
                         disabled={submittingByAssignmentId.has(selectedItem.assignmentId)}
-                        className="rounded-full border border-red-300 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-red-800 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-xl border border-red-300 bg-red-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-red-800 disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        Wrong
+                        Wrong (1)
                       </button>
-                    </>
+                    </div>
                   )}
                 </div>
               ) : null}
@@ -1076,13 +1115,36 @@ export default function StudyExplorer({
                     <button
                       type="button"
                       onClick={() => revealAnswer(selectedItem.assignmentId)}
-                      className="rounded-full border border-line bg-surface px-4 py-2 text-xs font-black uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+                      className="w-full rounded-full border border-line bg-surface px-4 py-3 text-sm font-black uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
                     >
                       Show Answer
                     </button>
                   ) : null}
                 </div>
               ) : null}
+
+              <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
+                Shortcuts: Left/Right/Up/Down or W/A/S/D (prev/next), Home/End (first/last), Esc (back)
+                {!isAnswerRevealed
+                  ? ", Enter/R/Space=show answer"
+                  : selectedItem.queueType === "review"
+                    ? ", 1=wrong, 2=correct"
+                    : ""}
+              </p>
+
+              <div className="mt-2 min-h-[2.25rem]">
+                {submitFeedback ? (
+                  <p
+                    className={`rounded-xl border px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] ${
+                      submitFeedback.kind === "success"
+                        ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                        : "border-red-300 bg-red-50 text-red-800"
+                    }`}
+                  >
+                    {submitFeedback.message}
+                  </p>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
