@@ -181,6 +181,75 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
     setSelectedId(filteredItems[nextIndex]?.subjectId ?? null);
   }
 
+  useEffect(() => {
+    if (!selectedItem) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      const active = document.activeElement as HTMLElement | null;
+      if (active) {
+        const tag = active.tagName;
+        const isTypingContext =
+          tag === "INPUT" ||
+          tag === "TEXTAREA" ||
+          tag === "SELECT" ||
+          active.isContentEditable;
+        if (isTypingContext) {
+          return;
+        }
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        moveSelection(-1);
+        return;
+      }
+
+      if (event.key === "ArrowRight" || event.key === " ") {
+        event.preventDefault();
+        moveSelection(1);
+        return;
+      }
+
+      if (event.key === "Home") {
+        event.preventDefault();
+        setSelectedId(filteredItems[0]?.subjectId ?? null);
+        return;
+      }
+
+      if (event.key === "End") {
+        event.preventDefault();
+        setSelectedId(filteredItems[filteredItems.length - 1]?.subjectId ?? null);
+        return;
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setSelectedId(null);
+        return;
+      }
+
+      if (selectedItem.queueType === "review" && !submittingByAssignmentId.has(selectedItem.assignmentId)) {
+        if (event.key === "1") {
+          event.preventDefault();
+          void submitReview(selectedItem.assignmentId, "wrong");
+          return;
+        }
+
+        if (event.key === "2") {
+          event.preventDefault();
+          void submitReview(selectedItem.assignmentId, "correct");
+        }
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [filteredItems, selectedItem, selectedIndex, submittingByAssignmentId]);
+
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -332,6 +401,10 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
                 </button>
               </div>
             </div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
+              Shortcuts: Left/Right (prev/next), Home/End (first/last), Esc (back)
+              {selectedItem.queueType === "review" ? ", 1=wrong, 2=correct" : ""}
+            </p>
 
             <LevelExplorerDetailSection
               selectedItem={selectedItem}
