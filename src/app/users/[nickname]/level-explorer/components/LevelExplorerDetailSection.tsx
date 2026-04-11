@@ -254,9 +254,9 @@ export default function LevelExplorerDetailSection({
             } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
           >
             <div>
-              <h3 className={`text-center font-black leading-none text-current ${isStudyHidden ? "text-6xl sm:text-7xl" : "text-4xl"}`}>
+              <p className={`text-center font-black leading-none text-current ${isStudyHidden ? "text-6xl sm:text-7xl" : "text-4xl"}`}>
                 {selectedItem.characters}
-              </h3>
+              </p>
               {(() => {
                 if (isStudyHidden) {
                   return null;
