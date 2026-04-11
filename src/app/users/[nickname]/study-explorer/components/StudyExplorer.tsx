@@ -360,9 +360,9 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
                   false,
                 )}`}
               >
-                <div className="flex items-start justify-between gap-2">
+                <div className="flex min-h-[2.35rem] items-start justify-between gap-2">
                   <span className="text-[10px] font-semibold text-foreground/45">#{index + 1}</span>
-                  <div className="flex flex-wrap items-center justify-end gap-1">
+                  <div className="flex min-h-[2.2rem] flex-wrap content-start items-start justify-end gap-1">
                     <span className={subjectTypePillClass(item.subjectType)}>{item.subjectType}</span>
                     {typeof item.wkLevel === "number" ? (
                       <span className="subject-pill border-line bg-surface text-foreground">WK{item.wkLevel}</span>
