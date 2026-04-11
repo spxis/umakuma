@@ -186,6 +186,7 @@ export default function StudyExplorer({
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const levelStorageKey = `wr:study-level:${accountId}`;
   const typeStorageKey = `wr:study-type:${accountId}`;
+  const srsStorageKey = `wr:study-srs:${accountId}`;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const lastHandledStudyQueryRef = useRef("");
   const [cachedQueueData, setCachedQueueData] = useState<QueueResponse | undefined>(() =>
@@ -227,7 +228,25 @@ export default function StudyExplorer({
     const raw = window.localStorage.getItem(`wr:study-type:${accountId}`);
     return raw === "radical" || raw === "kanji" || raw === "vocabulary" ? raw : "all";
   });
-  const [srsFilter, setSrsFilter] = useState<SrsFilter>("all");
+  const [srsFilter, setSrsFilter] = useState<SrsFilter>(() => {
+    if (typeof window === "undefined") {
+      return "all";
+    }
+
+    const raw = window.localStorage.getItem(`wr:study-srs:${accountId}`);
+    if (
+      raw === "apprentice" ||
+      raw === "guru" ||
+      raw === "master" ||
+      raw === "enlightened" ||
+      raw === "burned" ||
+      raw === "locked"
+    ) {
+      return raw;
+    }
+
+    return "all";
+  });
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
@@ -532,6 +551,10 @@ export default function StudyExplorer({
   useEffect(() => {
     window.localStorage.setItem(typeStorageKey, typeFilter);
   }, [typeFilter, typeStorageKey]);
+
+  useEffect(() => {
+    window.localStorage.setItem(srsStorageKey, srsFilter);
+  }, [srsFilter, srsStorageKey]);
 
   useEffect(() => {
     setSelectedId(null);
