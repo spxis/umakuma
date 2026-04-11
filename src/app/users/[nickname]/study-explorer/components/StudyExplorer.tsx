@@ -270,25 +270,27 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
         }
       }
 
-      if (event.key === "ArrowLeft") {
+      const key = event.key.toLowerCase();
+
+      if (event.key === "ArrowLeft" || key === "a") {
         event.preventDefault();
         moveSelection(-1);
         return;
       }
 
-      if (event.key === "ArrowRight" || event.key === " ") {
+      if (event.key === "ArrowRight" || event.key === " " || key === "d") {
         event.preventDefault();
         moveSelection(1);
         return;
       }
 
-      if (event.key === "Home") {
+      if (event.key === "Home" || key === "w") {
         event.preventDefault();
         setSelectedId(filteredItems[0]?.subjectId ?? null);
         return;
       }
 
-      if (event.key === "End") {
+      if (event.key === "End" || key === "s") {
         event.preventDefault();
         setSelectedId(filteredItems[filteredItems.length - 1]?.subjectId ?? null);
         return;
@@ -485,7 +487,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
 
             <div className="overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
-                Shortcuts: Left/Right (prev/next), Home/End (first/last), Esc (back)
+                Shortcuts: Left/Right or A/D (prev/next), Home/End or W/S (first/last), Esc (back)
                 {selectedItem.queueType === "review" ? ", 1=wrong, 2=correct" : ""}
               </p>
 
