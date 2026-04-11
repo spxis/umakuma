@@ -33,6 +33,10 @@ type QueueResponse = {
 };
 
 type StudyCounts = QueueResponse["counts"];
+type StoredQueuePayload = {
+  cachedAtMs: number;
+  data: QueueResponse;
+};
 
 type Props = {
   accountId: string;
@@ -42,13 +46,43 @@ type Props = {
 };
 
 const fetcher = async (url: string): Promise<QueueResponse> => {
-  const response = await fetch(url, { cache: "no-store" });
+  const response = await fetch(url);
   const data = (await response.json()) as QueueResponse & { error?: string };
   if (!response.ok) {
     throw new Error(data.error ?? "Could not fetch study queue.");
   }
   return data;
 };
+
+const STUDY_QUEUE_STORAGE_TTL_MS = 90_000;
+
+function readStoredQueue(accountId: string, mode: "review" | "lesson"): QueueResponse | undefined {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
+  const raw = window.localStorage.getItem(`wr:study-queue:${accountId}:${mode}`);
+  if (!raw) {
+    return undefined;
+  }
+
+  try {
+    const payload = JSON.parse(raw) as StoredQueuePayload;
+    if (!payload || typeof payload.cachedAtMs !== "number" || !payload.data) {
+      return undefined;
+    }
+
+    if (Date.now() - payload.cachedAtMs > STUDY_QUEUE_STORAGE_TTL_MS) {
+      window.localStorage.removeItem(`wr:study-queue:${accountId}:${mode}`);
+      return undefined;
+    }
+
+    return payload.data;
+  } catch {
+    window.localStorage.removeItem(`wr:study-queue:${accountId}:${mode}`);
+    return undefined;
+  }
+}
 
 function badgeClass(active: boolean): string {
   return active
@@ -78,9 +112,26 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   const modeStorageKey = `wr:study-queue-mode:${accountId}`;
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const [queueMode, setQueueMode] = useState<"review" | "lesson">("review");
+  const [queueMode, setQueueMode] = useState<"review" | "lesson">(() => {
+    if (typeof window === "undefined") {
+      return "review";
+    }
+
+    const stored = window.localStorage.getItem(`wr:study-queue-mode:${accountId}`);
+    return stored === "lesson" ? "lesson" : "review";
+  });
+  const [cachedQueueData, setCachedQueueData] = useState<QueueResponse | undefined>(() =>
+    readStoredQueue(
+      accountId,
+      typeof window !== "undefined" && window.localStorage.getItem(`wr:study-queue-mode:${accountId}`) === "lesson"
+        ? "lesson"
+        : "review",
+    ),
+  );
   const [persistedCounts, setPersistedCounts] = useState<StudyCounts | null>(null);
   const { data, error, mutate, isLoading } = useSWR(`/api/study/${accountId}/queue?mode=${queueMode}`, fetcher, {
+    fallbackData: cachedQueueData,
+    keepPreviousData: true,
     refreshInterval: 30_000,
     revalidateOnFocus: true,
   });
@@ -97,13 +148,6 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
 
   const counts = data?.counts ?? persistedCounts;
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem(modeStorageKey);
-    if (stored === "review" || stored === "lesson") {
-      setQueueMode(stored);
-    }
-  }, [modeStorageKey]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(countsStorageKey);
@@ -137,6 +181,24 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   useEffect(() => {
     window.localStorage.setItem(modeStorageKey, queueMode);
   }, [modeStorageKey, queueMode]);
+
+  useEffect(() => {
+    setCachedQueueData(readStoredQueue(accountId, queueMode));
+  }, [accountId, queueMode]);
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    const key = `wr:study-queue:${accountId}:${queueMode}`;
+    const payload: StoredQueuePayload = {
+      cachedAtMs: Date.now(),
+      data,
+    };
+    setCachedQueueData(data);
+    window.localStorage.setItem(key, JSON.stringify(payload));
+  }, [accountId, data, queueMode]);
 
   const allLevelsSelected = selectedLevels.size === levelOptions.length;
 
@@ -419,11 +481,11 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
         </div>
       </header>
 
-      {isLoading ? <p className="px-5 py-4 text-sm text-foreground/70">Loading study queue...</p> : null}
+      {isLoading && !data ? <p className="px-5 py-4 text-sm text-foreground/70">Loading study queue...</p> : null}
       {error ? <p className="px-5 py-4 text-sm text-red-700">{error.message}</p> : null}
 
       <div className="p-5">
-        {filteredItems.length === 0 ? (
+        {filteredItems.length === 0 && !isLoading ? (
           <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
             No study items match the current filters.
           </div>
