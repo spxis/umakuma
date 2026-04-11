@@ -846,7 +846,11 @@ export default function StudyExplorer({
           })}
           {(["all", "apprentice", "guru", "master", "enlightened"] as const).map((status) => (
             <button key={status} type="button" onClick={() => setSrsFilter(status)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(srsFilter === status)}`}>
-              {status === "apprentice"
+              {status === "all"
+                ? viewedLevel !== null
+                  ? `all L${viewedLevel} (${formatNumber(srsCounts.all)})`
+                  : `all (${formatNumber(srsCounts.all)})`
+                : status === "apprentice"
                 ? `appr (${formatNumber(srsCounts.apprentice)})`
                 : status === "enlightened"
                   ? `enlight (${formatNumber(srsCounts.enlightened)})`
