@@ -58,6 +58,51 @@ After pulling schema changes, run `pnpm db:push` so the new `Account` cache fiel
 
 Deploy on Vercel Hobby and use Neon Postgres Free.
 
+### Current Deployment Workflow (April 2026)
+
+Use this flow for production deploys right now:
+
+1. Commit and push app changes to `main`.
+
+```bash
+git push origin main
+```
+
+2. Confirm deployment started/completed in Vercel CLI.
+
+```bash
+vercel list waniranks
+vercel inspect <latest-deployment-url>
+```
+
+3. Production is live when status is `Ready`.
+
+Primary alias:
+
+- `https://waniranks.vercel.app`
+
+### Important GitHub Scope Note
+
+If a push includes files in `.github/workflows/*`, GitHub may reject the push when the current OAuth token does not include `workflow` scope.
+
+Error looks like:
+
+- `refusing to allow an OAuth App to create or update workflow ... without workflow scope`
+
+If this happens, use one of these options:
+
+- Push non-workflow app changes first (recommended for fast ship).
+- Re-auth with workflow scope (`gh auth refresh -h github.com -s workflow`).
+- Use SSH transport/key for git pushes.
+
+### Manual Fallback Deploy
+
+If GitHub-triggered deploys are delayed, deploy directly from local:
+
+```bash
+vercel --prod
+```
+
 Required Vercel environment variables:
 
 - `DATABASE_URL`
