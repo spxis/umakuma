@@ -32,6 +32,8 @@ type QueueResponse = {
   };
 };
 
+type StudyCounts = QueueResponse["counts"];
+
 type Props = {
   accountId: string;
   maxLevel: number;
@@ -74,8 +76,10 @@ function queueModeButtonClass(mode: "review" | "lesson", activeMode: "review" | 
 export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyMode }: Props) {
   const PAGE_SIZE = 40;
   const modeStorageKey = `wr:study-queue-mode:${accountId}`;
+  const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const [queueMode, setQueueMode] = useState<"review" | "lesson">("review");
+  const [persistedCounts, setPersistedCounts] = useState<StudyCounts | null>(null);
   const { data, error, mutate, isLoading } = useSWR(`/api/study/${accountId}/queue?mode=${queueMode}`, fetcher, {
     refreshInterval: 30_000,
     revalidateOnFocus: true,
@@ -92,7 +96,7 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
 
-  const counts = data?.counts ?? { all: 0, reviews: 0, lessons: 0 };
+  const counts = data?.counts ?? persistedCounts;
 
   useEffect(() => {
     const stored = window.localStorage.getItem(modeStorageKey);
@@ -100,6 +104,35 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
       setQueueMode(stored);
     }
   }, [modeStorageKey]);
+
+  useEffect(() => {
+    const raw = window.localStorage.getItem(countsStorageKey);
+    if (!raw) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as Partial<StudyCounts>;
+      if (
+        typeof parsed.all === "number" &&
+        typeof parsed.reviews === "number" &&
+        typeof parsed.lessons === "number"
+      ) {
+        setPersistedCounts({ all: parsed.all, reviews: parsed.reviews, lessons: parsed.lessons });
+      }
+    } catch {
+      window.localStorage.removeItem(countsStorageKey);
+    }
+  }, [countsStorageKey]);
+
+  useEffect(() => {
+    if (!data?.counts) {
+      return;
+    }
+
+    setPersistedCounts(data.counts);
+    window.localStorage.setItem(countsStorageKey, JSON.stringify(data.counts));
+  }, [countsStorageKey, data?.counts]);
 
   useEffect(() => {
     window.localStorage.setItem(modeStorageKey, queueMode);
@@ -234,6 +267,10 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
     setSelectedLevels(new Set(levelOptions));
   }
 
+  function countLabel(value: number | undefined): string {
+    return typeof value === "number" ? formatNumber(value) : "...";
+  }
+
   function moveSelection(delta: -1 | 1) {
     if (filteredItems.length === 0) {
       return;
@@ -350,10 +387,10 @@ export default function StudyExplorer({ accountId, maxLevel, showEnglish, studyM
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/70">Mode</p>
           <button type="button" onClick={() => setQueueMode("review")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${queueModeButtonClass("review", queueMode)}`}>
-            Reviews ({formatNumber(counts.reviews)})
+            Reviews ({countLabel(counts?.reviews)})
           </button>
           <button type="button" onClick={() => setQueueMode("lesson")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${queueModeButtonClass("lesson", queueMode)}`}>
-            Lessons ({formatNumber(counts.lessons)})
+            Lessons ({countLabel(counts?.lessons)})
           </button>
         </div>
 
