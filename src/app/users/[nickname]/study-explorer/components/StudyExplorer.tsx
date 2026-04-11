@@ -1206,7 +1206,7 @@ export default function StudyExplorer({
                 </div>
 
                 <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
-                  Shortcuts: Left/Right/Up/Down or W/A/S/D (prev/next), Home/End (first/last), Esc (back)
+                  Shortcuts: Left/Right/Up/Down or W/A/S/D (prev/next), Home/End (first/last), Esc (close/go back)
                   {!isAnswerRevealed
                     ? ", Enter/R/Space=show answer"
                     : selectedItem.queueType === "review"
