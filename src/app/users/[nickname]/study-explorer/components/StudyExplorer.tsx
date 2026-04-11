@@ -57,6 +57,7 @@ type SubmitInFlight = {
 
 type ReviewTally = {
   correct: number;
+  skipped: number;
   wrong: number;
 };
 
@@ -266,7 +267,7 @@ export default function StudyExplorer({
   const [revealedAssignmentIds, setRevealedAssignmentIds] = useState<Set<number>>(new Set());
   const [submitFeedback, setSubmitFeedback] = useState<SubmitFeedback | null>(null);
   const [submitInFlight, setSubmitInFlight] = useState<SubmitInFlight | null>(null);
-  const [reviewTally, setReviewTally] = useState<ReviewTally>({ correct: 0, wrong: 0 });
+  const [reviewTally, setReviewTally] = useState<ReviewTally>({ correct: 0, skipped: 0, wrong: 0 });
   const [showLocked, setShowLocked] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -579,7 +580,7 @@ export default function StudyExplorer({
     if (selectedId === null) {
       setSubmitFeedback(null);
       setSubmitInFlight(null);
-      setReviewTally({ correct: 0, wrong: 0 });
+      setReviewTally({ correct: 0, skipped: 0, wrong: 0 });
     }
   }, [selectedId]);
 
@@ -668,6 +669,11 @@ export default function StudyExplorer({
     });
     setSubmittingByAssignmentId((prev) => new Set(prev).add(assignmentId));
 
+    if (isSubmittingSelectedItem && nextSelectedSubjectId !== null) {
+      // Advance immediately so grading feels instant; queue/cache update follows.
+      setSelectedId(nextSelectedSubjectId);
+    }
+
     try {
       const response = await fetch(`/api/study/${accountId}/review`, {
         method: "POST",
@@ -700,10 +706,6 @@ export default function StudyExplorer({
         { revalidate: false },
       );
 
-      if (isSubmittingSelectedItem && nextSelectedSubjectId !== null) {
-        setSelectedId(nextSelectedSubjectId);
-      }
-
       setSubmitFeedback({
         kind: "success",
         message: `${result === "correct" ? "Correct" : "Wrong"} submitted for ${
@@ -712,15 +714,22 @@ export default function StudyExplorer({
       });
       setReviewTally((prev) => ({
         correct: prev.correct + (result === "correct" ? 1 : 0),
+        skipped: prev.skipped,
         wrong: prev.wrong + (result === "wrong" ? 1 : 0),
       }));
 
-      void mutate();
-      window.dispatchEvent(new CustomEvent("wr:user-refreshed", { detail: { accountId } }));
+      // Avoid immediate revalidation churn on every answer; periodic/background refresh remains.
     } catch (submitError) {
       console.error(submitError);
       const message = submitError instanceof Error ? submitError.message : "Could not submit review.";
       setSubmitFeedback({ kind: "error", message });
+
+      if (isSubmittingSelectedItem) {
+        const failedItem = filteredItems.find((item) => item.assignmentId === assignmentId);
+        if (failedItem) {
+          setSelectedId(failedItem.subjectId);
+        }
+      }
     } finally {
       setSubmittingByAssignmentId((prev) => {
         const next = new Set(prev);
@@ -763,6 +772,14 @@ export default function StudyExplorer({
   function moveSelection(delta: -1 | 1) {
     if (filteredItems.length === 0) {
       return;
+    }
+
+    if (selectedItem && selectedItem.queueType === "review" && !isAnswerRevealed) {
+      setReviewTally((prev) => ({
+        correct: prev.correct,
+        skipped: prev.skipped + 1,
+        wrong: prev.wrong,
+      }));
     }
 
     if (selectedIndex < 0) {
@@ -1179,10 +1196,14 @@ export default function StudyExplorer({
                 </div>
               ) : null}
 
-              <div className="mt-3 grid w-full grid-cols-2 gap-3">
+              <div className="mt-3 grid w-full grid-cols-3 gap-3">
                 <div className="rounded-2xl border border-red-300 bg-red-50 p-4 text-center">
                   <p className="text-xs font-bold uppercase tracking-[0.12em] text-red-700/80">Wrong</p>
                   <p className="mt-1 text-3xl font-black leading-none text-red-800">{reviewTally.wrong}</p>
+                </div>
+                <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-center">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-amber-700/80">Skipped</p>
+                  <p className="mt-1 text-3xl font-black leading-none text-amber-800">{reviewTally.skipped}</p>
                 </div>
                 <div className="rounded-2xl border border-emerald-300 bg-emerald-50 p-4 text-center">
                   <p className="text-xs font-bold uppercase tracking-[0.12em] text-emerald-700/80">Correct</p>
