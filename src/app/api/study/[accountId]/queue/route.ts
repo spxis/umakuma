@@ -31,6 +31,9 @@ type SubjectData = {
   level?: number;
   characters?: string | null;
   slug?: string | null;
+  component_subject_ids?: number[];
+  amalgamation_subject_ids?: number[];
+  visually_similar_subject_ids?: number[];
   meanings?: Array<{ meaning: string; primary?: boolean }>;
   readings?: Array<{ reading: string; primary?: boolean; accepted_answer?: boolean }>;
   meaning_mnemonic?: string;
@@ -356,9 +359,51 @@ export async function GET(request: Request, context: RouteContext) {
 
     const jlptRows =
       kanjiChars.length > 0
-        ? await prisma.jlptKanji.findMany({ where: { kanji: { in: kanjiChars } }, select: { kanji: true, nLevel: true } })
+        ? await prisma.jlptKanji.findMany({
+            where: { kanji: { in: kanjiChars } },
+            select: {
+              kanji: true,
+              nLevel: true,
+              primaryMeaning: true,
+              meanings: true,
+              onReadings: true,
+              kunReadings: true,
+              nanoriReadings: true,
+              wordExamples: true,
+              strokeCount: true,
+              frequencyRank: true,
+              schoolGrade: true,
+              heisigKeyword: true,
+            },
+          })
         : [];
-    const jlptByKanji = new Map(jlptRows.map((row) => [row.kanji, row.nLevel]));
+    const jlptByKanji = new Map(jlptRows.map((row) => [row.kanji, row]));
+
+    const relatedReferenceFromId = (subjectId: number) => {
+      const related = subjectById.get(subjectId);
+      const meaning =
+        (related?.data.meanings ?? [])
+          .find((item) => (item.primary ?? true) && typeof item.meaning === "string" && item.meaning.length > 0)
+          ?.meaning ??
+        (related?.data.meanings ?? [])
+          .find((item) => typeof item.meaning === "string" && item.meaning.length > 0)
+          ?.meaning ??
+        null;
+
+      const reading =
+        (related?.data.readings ?? [])
+          .find((item) => item.primary && (item.accepted_answer ?? true))
+          ?.reading ??
+        null;
+
+      return {
+        subjectId,
+        label: related?.data.characters ?? related?.data.slug ?? String(subjectId),
+        wkLevel: typeof related?.data.level === "number" ? related.data.level : null,
+        reading,
+        meaning,
+      };
+    };
 
     const items = queued
       .map((row) => {
@@ -366,13 +411,59 @@ export async function GET(request: Request, context: RouteContext) {
         const subjectData = subject?.data;
         const subjectType = normalizeSubjectType(row.data.subject_type);
         const label = subjectData?.characters ?? subjectData?.slug ?? `#${row.data.subject_id}`;
-        const meanings = (subjectData?.meanings ?? []).map((item) => item.meaning).slice(0, 3);
+        const meanings = (subjectData?.meanings ?? []).map((item) => item.meaning);
         const readings = (subjectData?.readings ?? [])
           .filter((item) => item.accepted_answer ?? true)
           .map((item) => item.reading);
         const primaryReadings = (subjectData?.readings ?? [])
           .filter((item) => item.primary)
           .map((item) => item.reading);
+
+        const componentSubjectIds = subjectData?.component_subject_ids ?? [];
+        const amalgamationSubjectIds = subjectData?.amalgamation_subject_ids ?? [];
+        const visuallySimilarSubjectIds = subjectData?.visually_similar_subject_ids ?? [];
+
+        const radicals =
+          subjectType === "kanji"
+            ? componentSubjectIds
+                .filter((subjectId) => subjectById.get(subjectId)?.object === "radical")
+                .map(relatedReferenceFromId)
+            : [];
+
+        const usedInVocabulary =
+          subjectType === "kanji"
+            ? amalgamationSubjectIds
+                .filter((subjectId) => subjectById.get(subjectId)?.object === "vocabulary")
+                .map(relatedReferenceFromId)
+            : [];
+
+        const visuallySimilar =
+          subjectType === "kanji"
+            ? visuallySimilarSubjectIds.map(relatedReferenceFromId)
+            : [];
+
+        const componentKanji =
+          subjectType === "vocabulary"
+            ? componentSubjectIds
+                .filter((subjectId) => subjectById.get(subjectId)?.object === "kanji")
+                .map(relatedReferenceFromId)
+            : [];
+
+        const jlpt = subjectType === "kanji" ? jlptByKanji.get(subjectData?.characters ?? "") : null;
+        const jlptMeta = jlpt
+          ? {
+              primaryMeaning: jlpt.primaryMeaning,
+              meanings: jlpt.meanings,
+              onReadings: jlpt.onReadings,
+              kunReadings: jlpt.kunReadings,
+              nanoriReadings: jlpt.nanoriReadings,
+              wordExamples: jlpt.wordExamples,
+              strokeCount: jlpt.strokeCount,
+              frequencyRank: jlpt.frequencyRank,
+              schoolGrade: jlpt.schoolGrade,
+              heisigKeyword: jlpt.heisigKeyword,
+            }
+          : null;
 
         return {
           subjectId: row.data.subject_id,
@@ -384,13 +475,14 @@ export async function GET(request: Request, context: RouteContext) {
           meanings,
           readings,
           primaryReadings,
-          radicals: [],
-          visuallySimilar: [],
-          usedInVocabulary: [],
-          componentKanji: [],
+          radicals,
+          visuallySimilar,
+          usedInVocabulary,
+          componentKanji,
           meaningExplanation: subjectData?.meaning_mnemonic ?? "",
           readingExplanation: subjectData?.reading_mnemonic ?? "",
-          jlptLevel: subjectType === "kanji" ? jlptByKanji.get(subjectData?.characters ?? "") ?? null : null,
+          jlptLevel: jlpt?.nLevel ?? null,
+          jlptMeta,
           srsStage: row.data.srs_stage,
           status: srsLabel(row.data.srs_stage, row.data.srs_stage <= 0 || !row.data.unlocked_at),
           startedAt: row.data.started_at,

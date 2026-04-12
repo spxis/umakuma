@@ -523,6 +523,7 @@ export default function StudyReviewModal({
   const secondaryReadings = (selectedItem.readings ?? []).filter((reading) => !primaryReadings.includes(reading));
   const requiresReveal = studyMode && selectedItem.queueType === "review";
   const detailsRevealed = !requiresReveal || isAnswerRevealed;
+  const useStudyFlashLayout = studyMode && selectedItem.queueType === "review";
   const hasRadicals = hasRenderableRelatedItems(selectedItem.radicals as RelatedReference[] | undefined);
   const hasVisuallySimilar = hasRenderableRelatedItems(
     selectedItem.visuallySimilar as RelatedReference[] | undefined,
@@ -743,6 +744,124 @@ export default function StudyReviewModal({
                   </button>
                 </div>
               )
+            ) : useStudyFlashLayout ? (
+              <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
+                <div className="flex min-h-[20rem] flex-col rounded-2xl border border-line bg-surface p-4 lg:h-full lg:min-h-0">
+                  {!isAnswerRevealed ? (
+                    <div
+                      className={`flex min-h-[20rem] flex-1 select-none items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
+                        selectedItem.subjectType,
+                      )}`}
+                    >
+                      <p className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">
+                        {selectedItem.characters}
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        className={`flex min-h-[14rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
+                          selectedItem.subjectType,
+                        )}`}
+                      >
+                        <p className="text-center text-[clamp(4rem,12vw,8rem)] font-black leading-none text-current">
+                          {selectedItem.characters}
+                        </p>
+                      </div>
+
+                      <div className="mt-3 grid flex-1 gap-3 lg:grid-rows-2">
+                      <div className="rounded-xl border border-line bg-surface-muted px-4 py-4">
+                        <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">Reading</p>
+                        <p className="mt-2 text-5xl font-black leading-tight text-foreground">
+                          {primaryReadingHiragana === "-" && secondaryReadingValue !== "-"
+                            ? secondaryReadingValue
+                            : primaryReadingHiragana}
+                        </p>
+                        {primaryReadingKatakana !== "-" ? (
+                          <p className="mt-2 text-4xl font-black leading-tight text-foreground/75">
+                            {primaryReadingKatakana}
+                          </p>
+                        ) : null}
+                      </div>
+                      <div className="rounded-xl border border-line bg-surface-muted px-4 py-4">
+                        <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">Meaning</p>
+                        <p className="mt-2 text-4xl font-black leading-tight text-foreground">
+                          {allMeanings[0] ?? selectedItem.characters}
+                        </p>
+                        {allMeanings.length > 1 ? (
+                          <p className="mt-2 text-sm font-semibold uppercase tracking-[0.08em] text-foreground/70">
+                            {allMeanings.slice(1).join(" • ")}
+                          </p>
+                        ) : null}
+                      </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className="grid min-h-[20rem] grid-rows-2 gap-3 lg:h-full lg:min-h-0">
+                  {!isAnswerRevealed ? (
+                    <button
+                      type="button"
+                      onClick={() => onReveal(selectedItem.assignmentId)}
+                      className="row-span-2 h-full w-full rounded-2xl border border-line bg-surface-muted px-6 py-6 text-center hover:bg-surface"
+                    >
+                      <div>
+                        <p className="text-base font-black uppercase tracking-[0.12em] text-foreground/70">Show Answer</p>
+                        <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">Space To Reveal</p>
+                      </div>
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => onSubmit(selectedItem.assignmentId, "wrong")}
+                        aria-keyshortcuts="1"
+                        title="Wrong (Key: 1)"
+                        className="h-full w-full rounded-2xl border-2 border-red-300 bg-red-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-red-800"
+                      >
+                        Wrong
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onSubmit(selectedItem.assignmentId, "correct")}
+                        aria-keyshortcuts="2"
+                        title="Correct (Key: 2)"
+                        className="h-full w-full rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-emerald-800"
+                      >
+                        Correct
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ) : requiresReveal && !isAnswerRevealed ? (
+              <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
+                <div
+                  className={`flex min-h-[20rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
+                    selectedItem.subjectType,
+                  )}`}
+                >
+                  <p className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">
+                    {selectedItem.characters}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => onReveal(selectedItem.assignmentId)}
+                  className="flex min-h-[20rem] w-full flex-col justify-center rounded-2xl border border-line bg-surface px-6 py-6 text-left hover:bg-surface-muted lg:h-full lg:min-h-0"
+                >
+                  <div className="mx-auto text-center">
+                    <p className="text-base font-black uppercase tracking-[0.12em] text-foreground/70">
+                      Show Answer
+                    </p>
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">
+                      Space To Reveal
+                    </p>
+                  </div>
+                </button>
+              </div>
             ) : (
             <div className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-start">
               <div
@@ -792,7 +911,7 @@ export default function StudyReviewModal({
             </div>
             )}
 
-            {(!studyMode && viewerMode === "flash") ? null : detailsRevealed ? (
+            {(!studyMode && viewerMode === "flash") || useStudyFlashLayout ? null : detailsRevealed ? (
               <>
                 <div className="mt-3 grid gap-2 lg:grid-cols-2">
                   {readingDualScriptCard("Primary readings", primaryReadingHiragana, primaryReadingKatakana)}
@@ -948,19 +1067,7 @@ export default function StudyReviewModal({
             ) : null}
           </section>
 
-          {requiresReveal && !isAnswerRevealed ? (
-            <div className="flex flex-1 items-center justify-center py-6">
-              <button
-                type="button"
-                onClick={() => onReveal(selectedItem.assignmentId)}
-                className="min-h-[4rem] w-full max-w-xl rounded-2xl border border-line bg-surface px-4 py-3 text-sm font-black uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
-              >
-                Show Answer
-              </button>
-            </div>
-          ) : null}
-
-          {selectedItem.queueType === "review" && studyMode && (!requiresReveal || isAnswerRevealed) ? (
+          {selectedItem.queueType === "review" && studyMode && (!requiresReveal || isAnswerRevealed) && !useStudyFlashLayout ? (
             <div className="mt-auto grid w-full grid-cols-2 gap-2 pt-3">
               <button
                 type="button"
