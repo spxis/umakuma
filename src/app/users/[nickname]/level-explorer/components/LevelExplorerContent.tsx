@@ -7,7 +7,6 @@ import {
   disabledBadgeClass,
   formatNextReviewBadge,
   formatNumber,
-  glyphHasReading,
   glyphSubtitleForDisplay,
   glyphTextSizeClass,
   statusClass,
@@ -21,71 +20,8 @@ import {
 import SubjectTypeFilterButton from "../../shared/SubjectTypeFilterButton";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
-import type { JlptFilter, ReviewTimingFilter, TypeFilter, TypeVisibility } from "../lib/levelExplorerState";
-import type { SrsFilter } from "../../explorerTypes";
-import type {
-  LevelItemCounts,
-  LevelJlptCounts,
-  ReviewTimingCounts,
-} from "../lib/levelExplorerSelectors";
 import LevelExplorerDetailSection from "./LevelExplorerDetailSection";
-
-type VocabularyKanjiLink = {
-  char: string;
-  subjectId: number;
-  reading: string;
-  wkLevel: number | null;
-};
-
-type Props = {
-  levelOptions: number[];
-  selectedLevels: Set<number>;
-  searchAvailableLevels: Set<number> | null;
-  stickyMerge: boolean;
-  visibleTypes: TypeVisibility;
-  counts: LevelItemCounts;
-  jlptCounts: LevelJlptCounts;
-  reviewTimingCounts: ReviewTimingCounts;
-  accountPendingReviews: number;
-  overdueOutsideSelectedLevels: number;
-  combinedItemLength: number;
-  combinedKanjiLearned: number;
-  combinedKanjiLocked: number;
-  selectedLevelList: number[];
-  filtersCollapsed: boolean;
-  srsFilter: SrsFilter;
-  jlptFilter: JlptFilter;
-  reviewTimingFilter: ReviewTimingFilter;
-  showEnglish: boolean;
-  studyMode: boolean;
-  loading: boolean;
-  gridColumns: number;
-  searchMatchedSubjectIds: Set<number> | null;
-  error: string;
-  filteredItems: LevelItem[];
-  selectedItem: LevelItem | null;
-  selectedMeaningExplanation: string;
-  selectedReadingExplanationRaw: string;
-  showReadingExplanation: boolean;
-  hasPrimaryRelatedPanel: boolean;
-  hasVisuallySimilarPanel: boolean;
-  hasUsedInVocabularyPanel: boolean;
-  vocabularyKanjiLinks: VocabularyKanjiLink[];
-  subjectById: Map<number, LevelItem>;
-  onSelectAllLevelsAndClearSearch: () => Promise<void>;
-  onToggleLevel: (level: number) => Promise<void>;
-  onSetStickyMerge: (next: boolean) => void;
-  onEnableAllTypes: () => void;
-  onToggleTypeVisibility: (type: "radical" | "kanji" | "vocabulary") => void;
-  onSetFiltersCollapsed: (next: boolean) => void;
-  onSetSrsFilter: (next: SrsFilter) => void;
-  onSetJlptFilter: (next: JlptFilter) => void;
-  onSetReviewTimingFilter: (next: ReviewTimingFilter) => void;
-  onSetSelectedSubjectId: (next: number | null | ((prev: number | null) => number | null)) => void;
-  onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
-  onJumpToKanji: (subjectId: number, wkLevel: number | null) => Promise<void>;
-  onMarkHistoryPush: () => void;
-};
+import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
 
 function lockedCardStateClass(item: LevelItem): string {
   if (item.status !== "locked" && item.srsStage > 0) {
@@ -99,7 +35,6 @@ export default function LevelExplorerContent({
   levelOptions,
   selectedLevels,
   searchAvailableLevels,
-  stickyMerge,
   visibleTypes,
   counts,
   jlptCounts,
@@ -130,9 +65,7 @@ export default function LevelExplorerContent({
   hasUsedInVocabularyPanel,
   vocabularyKanjiLinks,
   subjectById,
-  onSelectAllLevelsAndClearSearch,
   onToggleLevel,
-  onSetStickyMerge,
   onEnableAllTypes,
   onToggleTypeVisibility,
   onSetFiltersCollapsed,
@@ -429,18 +362,6 @@ export default function LevelExplorerContent({
                       ) : null}
                     </>
                   }
-                  title={
-                    studyMode
-                      ? item.subjectType === "kanji"
-                        ? "Kanji"
-                        : item.subjectType === "radical"
-                          ? "Radical"
-                          : "Vocabulary"
-                      : titleForDisplay(item, showEnglish)
-                  }
-                    hideTitle={item.subjectType === "kanji"}
-                  titleTooltip={titleForDisplay(item, showEnglish)}
-                  titleClassName={item.status === "locked" || item.srsStage <= 0 ? "text-foreground/60" : ""}
                   glyphClassName={`${typeGlyphBoxClass(item.subjectType)} ${item.status === "locked" || item.srsStage <= 0 ? "opacity-60" : ""}`}
                   glyphText={item.characters}
                   glyphTextClassName={`${glyphTextSizeClass(item.characters)} whitespace-nowrap`}

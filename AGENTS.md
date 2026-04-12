@@ -18,3 +18,9 @@ This file is the single source of truth for agent behavior in this repo.
 ### Refactor Rule
 
 - If a file approaches the limit, split by feature responsibility (`components/`, `lib/`, domain modules) rather than adding flags or deeply nested conditionals.
+
+### Types And Props Pattern
+
+- Keep component-local logic in component files, but move exported/shared `type` and `Props` declarations into adjacent helper files (for example `*.types.ts` or `lib/*Types.ts`).
+- Prefer importing types from those helper files instead of defining large type blocks inline in UI components.
+- When refactoring for LOC compliance, extract types/props first, then extract pure helpers/selectors, then split JSX sections into focused subcomponents.

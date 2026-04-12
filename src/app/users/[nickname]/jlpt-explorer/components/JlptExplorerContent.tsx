@@ -12,14 +12,12 @@ import {
   readingLabelFromList,
   stripReadingSeparators,
 } from "../lib/jlptDisplay";
+import {
+  jlptStatusClass,
+  parseWordExamples,
+} from "../lib/jlptExplorerContentHelpers";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
-
-type JlptWordExample = {
-  written: string;
-  pronounced: string;
-  gloss: string;
-};
 
 type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;
 
@@ -54,43 +52,6 @@ type Props = {
   onSetSelectedKanji: (next: string | null | ((prev: string | null) => string | null)) => void;
 };
 
-function parseWordExamples(input: unknown): JlptWordExample[] {
-  if (!Array.isArray(input)) {
-    return [];
-  }
-
-  const rows: JlptWordExample[] = [];
-  for (const value of input) {
-    if (!value || typeof value !== "object") {
-      continue;
-    }
-
-    const record = value as Record<string, unknown>;
-    const written = typeof record.written === "string" ? record.written.trim() : "";
-    const pronounced = typeof record.pronounced === "string" ? record.pronounced.trim() : "";
-    const gloss = typeof record.gloss === "string" ? record.gloss.trim() : "";
-
-    if (!written && !pronounced) {
-      continue;
-    }
-
-    rows.push({ written, pronounced, gloss });
-  }
-
-  return rows;
-}
-
-function statusClass(
-  status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | undefined,
-): string {
-  if (status === "locked") return "bg-surface-muted text-foreground/70";
-  if (status === "apprentice") return "bg-pink-100 text-pink-700";
-  if (status === "guru") return "bg-violet-100 text-violet-700";
-  if (status === "master") return "bg-sky-100 text-sky-700";
-  if (status === "enlightened") return "bg-amber-100 text-amber-700";
-  if (status === "burned") return "bg-surface-muted text-foreground/80";
-  return "bg-surface-muted text-foreground/65";
-}
 
 export default function JlptExplorerContent({
   items,
@@ -279,8 +240,6 @@ export default function JlptExplorerContent({
                       <span className="subject-pill border-line bg-surface text-foreground">N{item.nLevel}</span>
                     </>
                   }
-                  title={studyMode ? "Kanji" : heading}
-                  hideTitle
                   glyphClassName={`border-kanji/50 bg-kanji/10 ${userMatch ? "text-kanji" : "text-foreground"}`}
                   glyphText={item.kanji}
                   glyphTextClassName="text-6xl"
@@ -294,7 +253,7 @@ export default function JlptExplorerContent({
                           : readingLabelFromList(fallbackReadings, showEnglish)
                   }
                   statusChip={
-                    <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(userMatch?.status)}`}>
+                    <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${jlptStatusClass(userMatch?.status)}`}>
                       {userMatch?.status ?? "untracked"}
                     </span>
                   }
@@ -338,7 +297,7 @@ export default function JlptExplorerContent({
                                 <span className="subject-pill border-line bg-surface text-foreground">L{selectedUserMatch.wkLevel}</span>
                               ) : null}
                               <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.nLevel}</span>
-                              <span className={`subject-pill ${statusClass(selectedUserMatch?.status)}`}>
+                              <span className={`subject-pill ${jlptStatusClass(selectedUserMatch?.status)}`}>
                                 {selectedUserMatch?.status ?? "untracked"}
                               </span>
                             </div>

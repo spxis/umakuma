@@ -3,7 +3,12 @@ import { NextResponse } from "next/server";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
-import { getCachedStudyQueue, setCachedStudyQueue } from "@/lib/studyQueueCache";
+import {
+  getCachedStudyQueue,
+  getCachedStudyQueueSyncState,
+  setCachedStudyQueue,
+  setCachedStudyQueueSyncState,
+} from "@/lib/studyQueueCache";
 import { srsLabel } from "@/lib/wanikani/helpers";
 import { fetchAllCollectionPages, fetchWaniKani } from "@/lib/wanikani/http";
 import type { WaniKaniCollectionResponse } from "@/lib/wanikani/types";
@@ -32,11 +37,219 @@ type SubjectData = {
   reading_mnemonic?: string;
 };
 
+type QueueMode = "review" | "lesson";
+
+type AssignmentRow = {
+  id: number;
+  data: AssignmentData;
+};
+
+type CachedSubjectRow = {
+  object: string;
+  data: SubjectData;
+  fetchedAtMs: number;
+};
+
+type QueueSyncState = {
+  assignmentById: Map<number, AssignmentRow>;
+  subjectById: Map<number, CachedSubjectRow>;
+};
+
+const ASSIGNMENT_FULL_RESYNC_MS = 10 * 60_000;
+const SUBJECT_CACHE_TTL_MS = 24 * 60 * 60_000;
+const ASSIGNMENT_CHUNK_SIZE = 200;
+const SUBJECT_CACHE_MAX_ENTRIES = 2_500;
+
 function normalizeSubjectType(input: string): "radical" | "kanji" | "vocabulary" {
   if (input === "radical" || input === "kanji") {
     return input;
   }
   return "vocabulary";
+}
+
+function modePathParam(mode: QueueMode): string {
+  return mode === "review"
+    ? "immediately_available_for_review=true"
+    : "immediately_available_for_lessons=true";
+}
+
+function buildImmediateAssignmentsPath(mode: QueueMode): string {
+  return `/assignments?${modePathParam(mode)}`;
+}
+
+function toAssignmentRows(collection: WaniKaniCollectionResponse): AssignmentRow[] {
+  return collection.data.map((row) => ({
+    id: row.id,
+    data: row.data as AssignmentData,
+  }));
+}
+
+function trimSubjectCache(input: Map<number, CachedSubjectRow>, activeSubjectIds: Set<number>): void {
+  for (const subjectId of input.keys()) {
+    if (!activeSubjectIds.has(subjectId)) {
+      input.delete(subjectId);
+    }
+  }
+
+  if (input.size <= SUBJECT_CACHE_MAX_ENTRIES) {
+    return;
+  }
+
+  const sorted = Array.from(input.entries()).sort((a, b) => a[1].fetchedAtMs - b[1].fetchedAtMs);
+  const toRemove = sorted.slice(0, Math.max(0, sorted.length - SUBJECT_CACHE_MAX_ENTRIES));
+  for (const [subjectId] of toRemove) {
+    input.delete(subjectId);
+  }
+}
+
+async function fetchEligibleAssignmentIds(
+  token: string,
+  mode: QueueMode,
+  assignmentIds: number[],
+): Promise<Set<number>> {
+  const output = new Set<number>();
+
+  for (let i = 0; i < assignmentIds.length; i += ASSIGNMENT_CHUNK_SIZE) {
+    const chunk = assignmentIds.slice(i, i + ASSIGNMENT_CHUNK_SIZE).join(",");
+    if (!chunk) {
+      continue;
+    }
+
+    const collection = await fetchAllCollectionPages(
+      `/assignments?ids=${chunk}&${modePathParam(mode)}`,
+      token,
+    );
+
+    for (const row of collection.data) {
+      output.add(row.id);
+    }
+  }
+
+  return output;
+}
+
+async function hydrateQueueSyncState(
+  accountId: string,
+  mode: QueueMode,
+  token: string,
+): Promise<QueueSyncState> {
+  const nowMs = Date.now();
+  const cachedState = getCachedStudyQueueSyncState(accountId, mode);
+  const assignmentById = new Map<number, AssignmentRow>();
+  const subjectById = new Map<number, CachedSubjectRow>();
+
+  if (cachedState) {
+    for (const [id, row] of cachedState.assignmentById.entries()) {
+      assignmentById.set(id, row as AssignmentRow);
+    }
+
+    for (const [id, row] of cachedState.subjectById.entries()) {
+      subjectById.set(id, row as CachedSubjectRow);
+    }
+  }
+
+  let assignmentCheckpoint = cachedState?.assignmentCheckpoint ?? null;
+  const shouldFullResync =
+    !cachedState ||
+    !assignmentCheckpoint ||
+    nowMs - cachedState.lastFullSyncAtMs > ASSIGNMENT_FULL_RESYNC_MS;
+  let lastFullSyncAtMs = cachedState?.lastFullSyncAtMs ?? 0;
+
+  if (shouldFullResync) {
+    assignmentById.clear();
+    const fullCollection = await fetchAllCollectionPages(buildImmediateAssignmentsPath(mode), token);
+    for (const row of toAssignmentRows(fullCollection)) {
+      assignmentById.set(row.id, row);
+    }
+
+    assignmentCheckpoint = fullCollection.data_updated_at ?? assignmentCheckpoint;
+    lastFullSyncAtMs = nowMs;
+  } else if (assignmentCheckpoint) {
+    const updates = await fetchAllCollectionPages(
+      `/assignments?updated_after=${encodeURIComponent(assignmentCheckpoint)}`,
+      token,
+    );
+    const updatedRows = toAssignmentRows(updates);
+
+    if (updatedRows.length > 0) {
+      const eligibleUpdatedIds = await fetchEligibleAssignmentIds(
+        token,
+        mode,
+        updatedRows.map((row) => row.id),
+      );
+
+      for (const row of updatedRows) {
+        if (eligibleUpdatedIds.has(row.id)) {
+          assignmentById.set(row.id, row);
+        } else {
+          assignmentById.delete(row.id);
+        }
+      }
+    }
+
+    assignmentCheckpoint = updates.data_updated_at ?? assignmentCheckpoint;
+  }
+
+  const queueSubjectIds = new Set<number>();
+  for (const row of assignmentById.values()) {
+    queueSubjectIds.add(row.data.subject_id);
+  }
+
+  const staleOrMissingSubjectIds = Array.from(queueSubjectIds).filter((subjectId) => {
+    const existing = subjectById.get(subjectId);
+    if (!existing) {
+      return true;
+    }
+
+    return nowMs - existing.fetchedAtMs > SUBJECT_CACHE_TTL_MS;
+  });
+
+  for (let i = 0; i < staleOrMissingSubjectIds.length; i += ASSIGNMENT_CHUNK_SIZE) {
+    const chunk = staleOrMissingSubjectIds.slice(i, i + ASSIGNMENT_CHUNK_SIZE).join(",");
+    if (!chunk) {
+      continue;
+    }
+
+    const subjectCollection = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token);
+    for (const row of subjectCollection.data) {
+      subjectById.set(row.id, {
+        object: row.object ?? "subject",
+        data: row.data as SubjectData,
+        fetchedAtMs: nowMs,
+      });
+    }
+  }
+
+  trimSubjectCache(subjectById, queueSubjectIds);
+
+  setCachedStudyQueueSyncState(accountId, mode, {
+    assignmentById: assignmentById as Map<number, unknown>,
+    subjectById: subjectById as Map<number, unknown>,
+    assignmentCheckpoint,
+    lastFullSyncAtMs,
+  });
+
+  return {
+    assignmentById,
+    subjectById,
+  };
+}
+
+function queueRowsFromState(
+  state: QueueSyncState,
+  queueType: "review" | "lesson",
+): Array<{ assignmentId: number; data: AssignmentData; queueType: "review" | "lesson" }> {
+  const rows: Array<{ assignmentId: number; data: AssignmentData; queueType: "review" | "lesson" }> = [];
+
+  for (const assignment of state.assignmentById.values()) {
+    rows.push({
+      assignmentId: assignment.id,
+      data: assignment.data,
+      queueType,
+    });
+  }
+
+  return rows;
 }
 
 async function fetchAssignmentCount(path: string, token: string): Promise<number> {
@@ -105,36 +318,30 @@ export async function GET(request: Request, context: RouteContext) {
       );
     }
 
-    const [reviewAssignmentsResponse, lessonAssignmentsResponse] =
+    const reviewState =
+      mode === "lesson" ? null : await hydrateQueueSyncState(accountId, "review", token);
+    const lessonState =
+      mode === "review" ? null : await hydrateQueueSyncState(accountId, "lesson", token);
+
+    const reviewAssignments = reviewState ? queueRowsFromState(reviewState, "review") : [];
+    const lessonAssignments = lessonState ? queueRowsFromState(lessonState, "lesson") : [];
+    const queued =
       mode === "all"
-        ? await Promise.all([
-            fetchAllCollectionPages("/assignments?immediately_available_for_review=true", token),
-            fetchAllCollectionPages("/assignments?immediately_available_for_lessons=true", token),
-          ])
+        ? [...reviewAssignments, ...lessonAssignments]
         : mode === "lesson"
-          ? [null, await fetchAllCollectionPages("/assignments?immediately_available_for_lessons=true", token)]
-          : [await fetchAllCollectionPages("/assignments?immediately_available_for_review=true", token), null];
+          ? lessonAssignments
+          : reviewAssignments;
 
-    const reviewAssignments = (reviewAssignmentsResponse?.data ?? []).map((row) => ({
-      assignmentId: row.id,
-      data: row.data as AssignmentData,
-      queueType: "review" as const,
-    }));
-    const lessonAssignments = (lessonAssignmentsResponse?.data ?? []).map((row) => ({
-      assignmentId: row.id,
-      data: row.data as AssignmentData,
-      queueType: "lesson" as const,
-    }));
-    const queued = [...reviewAssignments, ...lessonAssignments];
-
-    const subjectIds = Array.from(new Set(queued.map((row) => row.data.subject_id)));
     const subjectById = new Map<number, { object: string; data: SubjectData }>();
+    if (reviewState) {
+      for (const [subjectId, row] of reviewState.subjectById.entries()) {
+        subjectById.set(subjectId, { object: row.object, data: row.data });
+      }
+    }
 
-    for (let i = 0; i < subjectIds.length; i += 200) {
-      const chunk = subjectIds.slice(i, i + 200).join(",");
-      const subjectCollection = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token);
-      for (const row of subjectCollection.data) {
-        subjectById.set(row.id, { object: row.object ?? "subject", data: row.data as SubjectData });
+    if (lessonState) {
+      for (const [subjectId, row] of lessonState.subjectById.entries()) {
+        subjectById.set(subjectId, { object: row.object, data: row.data });
       }
     }
 
@@ -211,8 +418,8 @@ export async function GET(request: Request, context: RouteContext) {
       mode === "all"
         ? {
             all: items.length,
-            reviews: reviewAssignments.length,
-            lessons: lessonAssignments.length,
+          reviews: reviewAssignments.length,
+          lessons: lessonAssignments.length,
           }
         : mode === "lesson"
           ? {

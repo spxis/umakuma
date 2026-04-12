@@ -1,0 +1,54 @@
+import type { LevelItem, SrsFilter } from "../../explorerTypes";
+
+export type StudyQueueItem = LevelItem & {
+  assignmentId: number;
+  queueType: "review" | "lesson";
+};
+
+export type QueueResponse = {
+  items: StudyQueueItem[];
+  counts: {
+    all: number;
+    reviews: number;
+    lessons: number;
+  };
+  pagination?: {
+    offset: number;
+    limit: number;
+    total: number;
+    hasMore: boolean;
+  };
+};
+
+export type StudyCounts = QueueResponse["counts"];
+
+export type StoredQueuePayload = {
+  cachedAtMs: number;
+  data: QueueResponse;
+};
+
+export type SubmitFeedback = {
+  kind: "success" | "error";
+  message: string;
+};
+
+export type SubmitInFlight = {
+  assignmentId: number;
+  result: "correct" | "wrong";
+  itemLabel: string;
+};
+
+export type ReviewOutcome = "correct" | "wrong" | "skipped";
+
+export type StudyExplorerProps = {
+  accountId: string;
+  maxLevel: number;
+  showEnglish: boolean;
+  onToggleShowEnglish: () => void;
+  canToggleEnglish: boolean;
+  studyMode: boolean;
+  queueMode: "review" | "lesson";
+};
+
+export type StudyTypeFilter = "all" | "radical" | "kanji" | "vocabulary";
+export type StudySrsFilter = Extract<SrsFilter, "all" | "apprentice" | "guru" | "master" | "enlightened">;
