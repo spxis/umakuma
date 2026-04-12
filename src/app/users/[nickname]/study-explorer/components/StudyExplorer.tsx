@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 
-import SubjectTypeFilterButton from "../../shared/SubjectTypeFilterButton";
+import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import StudyReviewModal from "./StudyReviewModal";
 import {
@@ -12,6 +12,7 @@ import {
   glyphSubtitleForDisplay,
   glyphTextSizeClass,
   shortSubjectTypeLabel,
+  srsFilterButtonLabel,
   statusClass,
   statusShortLabel,
   subjectTypePillClass,
@@ -106,6 +107,7 @@ export default function StudyExplorer({
       revalidateOnFocus: true,
     },
   );
+  const isUnauthorized = Boolean(error && /unauthorized/i.test(error.message));
 
   const counts = data?.counts ?? persistedCounts;
   const hasMorePages = loadedItems.length < totalItems;
@@ -319,6 +321,14 @@ export default function StudyExplorer({
     }
   }, [accountId, filteredItems, selectedItem]);
 
+  const closeReviewSession = useCallback(() => {
+    setSelectedId(null);
+    setReviewOutcomeByAssignmentId({});
+    setSubmitFeedback(null);
+    setSubmitInFlight(null);
+    setRevealedAssignmentIds(new Set());
+  }, []);
+
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -347,37 +357,32 @@ export default function StudyExplorer({
           ))}
         </div>
 
-        <div className="mt-2 flex flex-wrap gap-2">
-          {( ["all", "radical", "kanji", "vocabulary"] as const).map((type) => (
-            type === "all" ? (
+        <div className="mt-2 flex flex-wrap items-start justify-between gap-2">
+          <SubjectTypeFilterGroup
+            counts={typeCounts}
+            allLabel={viewedLevel === null ? "All Levels" : `All L${viewedLevel}`}
+            allActive={typeFilter === "all"}
+            activeTypes={{
+              radical: typeFilter === "all" || typeFilter === "radical",
+              kanji: typeFilter === "all" || typeFilter === "kanji",
+              vocabulary: typeFilter === "all" || typeFilter === "vocabulary",
+            }}
+            onClickAll={() => setTypeFilter("all")}
+            onClickType={(type) => setTypeFilter(type)}
+          />
+
+          <div className="ml-auto flex flex-wrap justify-end gap-2">
+            {(["all", "apprentice", "guru", "master", "enlightened"] as const).map((status) => (
               <button
-                key={type}
+                key={status}
                 type="button"
-                onClick={() => setTypeFilter(type)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(typeFilter === type)}`}
+                onClick={() => setSrsFilter(status)}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(srsFilter === status)}`}
               >
-                {type} ({formatNumber(typeCounts[type])})
+                {srsFilterButtonLabel(status)} ({formatNumber(srsCounts[status])})
               </button>
-            ) : (
-              <SubjectTypeFilterButton
-                key={type}
-                type={type}
-                count={typeCounts[type]}
-                active={typeFilter === type || typeFilter === "all"}
-                onClick={() => setTypeFilter(type)}
-              />
-            )
-          ))}
-          {( ["all", "apprentice", "guru", "master", "enlightened"] as const).map((status) => (
-            <button
-              key={status}
-              type="button"
-              onClick={() => setSrsFilter(status)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(srsFilter === status)}`}
-            >
-              {status} ({formatNumber(srsCounts[status])})
-            </button>
-          ))}
+            ))}
+          </div>
         </div>
       </header>
 
@@ -418,8 +423,14 @@ export default function StudyExplorer({
                 return (
                   <UnifiedExplorerCard
                     key={`${item.queueType}-${item.subjectId}`}
-                    onClick={() => setSelectedId(item.subjectId)}
-                    className={`rounded-2xl border p-3 text-left transition hover:brightness-95 ${typeCardClass(item.subjectType, false)}`}
+                    onClick={() => {
+                      if (!isUnauthorized) {
+                        setSelectedId(item.subjectId);
+                      }
+                    }}
+                    className={`rounded-2xl border p-3 text-left transition ${
+                      isUnauthorized ? "cursor-not-allowed opacity-65" : "hover:brightness-95"
+                    } ${typeCardClass(item.subjectType, false)}`}
                     indexLabel={`#${index + 1}`}
                     topRight={
                       <>
@@ -460,24 +471,47 @@ export default function StudyExplorer({
         )}
       </div>
 
-      <StudyReviewModal
-        selectedItem={selectedItem}
-        selectedIndex={selectedIndex}
-        filteredTotal={filteredItems.length}
-        prevLabel={prevItem?.characters ?? null}
-        nextLabel={nextItem?.characters ?? null}
-        showEnglish={showEnglish}
-        isAnswerRevealed={isAnswerRevealed}
-        isSubmittingSelected={isSubmittingSelected}
-        submitInFlight={submitInFlight}
-        submitFeedback={submitFeedback}
-        reviewOutcomeByAssignmentId={reviewOutcomeByAssignmentId}
-        onClose={() => setSelectedId(null)}
-        onReveal={(assignmentId) => {
-          setRevealedAssignmentIds((prev) => new Set(prev).add(assignmentId));
-        }}
-        onSubmit={submitReview}
-      />
+      {!isUnauthorized ? (
+        <StudyReviewModal
+          studyMode={studyMode}
+          selectedItem={selectedItem}
+          selectedIndex={selectedIndex}
+          filteredTotal={filteredItems.length}
+          prevLabel={prevItem?.characters ?? null}
+          nextLabel={nextItem?.characters ?? null}
+          isAnswerRevealed={isAnswerRevealed}
+          isSubmittingSelected={isSubmittingSelected}
+          submitInFlight={submitInFlight}
+          submitFeedback={submitFeedback}
+          reviewOutcomeByAssignmentId={reviewOutcomeByAssignmentId}
+          onClose={closeReviewSession}
+          onPrev={
+            prevItem
+              ? () => {
+                  setSelectedId(prevItem.subjectId);
+                }
+              : null
+          }
+          onNext={
+            nextItem
+              ? () => {
+                  setSelectedId(nextItem.subjectId);
+                }
+              : null
+          }
+          onRestartFromBeginning={
+            filteredItems.length > 0
+              ? () => {
+                  setSelectedId(filteredItems[0]?.subjectId ?? null);
+                }
+              : null
+          }
+          onReveal={(assignmentId) => {
+            setRevealedAssignmentIds((prev) => new Set(prev).add(assignmentId));
+          }}
+          onSubmit={submitReview}
+        />
+      ) : null}
     </section>
   );
 }
