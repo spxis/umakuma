@@ -432,7 +432,6 @@ export default function StudyExplorer({
                       isUnauthorized ? "cursor-not-allowed opacity-65" : "hover:brightness-95"
                     } ${typeCardClass(item.subjectType, false)}`}
                     indexLabel={`#${index + 1}`}
-                    title={titleForDisplay(item, showEnglish)}
                     topRight={
                       <>
                         <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>

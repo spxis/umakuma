@@ -186,7 +186,6 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
           nickname={account.nickname}
           wkUsername={account.wkUsername}
           linkedEmail={account.joinedByEmail}
-          viewerSignedIn={Boolean(viewerEmail)}
           viewerMatchesAccount={viewerMatchesAccount}
           lastSyncedAt={account.lastSyncedAt.toISOString()}
           lastActivityAt={account.lastActivityAt ? account.lastActivityAt.toISOString() : null}

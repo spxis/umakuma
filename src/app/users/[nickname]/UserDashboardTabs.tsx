@@ -35,7 +35,6 @@ type Props = {
   nickname: string;
   wkUsername: string;
   linkedEmail: string | null;
-  viewerSignedIn: boolean;
   viewerMatchesAccount: boolean;
   lastSyncedAt: string;
   lastActivityAt: string | null;
@@ -77,7 +76,6 @@ export default function UserDashboardTabs({
   nickname,
   wkUsername,
   linkedEmail,
-  viewerSignedIn,
   viewerMatchesAccount,
   lastSyncedAt,
   lastActivityAt,
@@ -121,7 +119,7 @@ export default function UserDashboardTabs({
   });
 
   const actionButtonBaseClass =
-    "inline-flex h-10 min-w-[9.5rem] items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.1em] transition disabled:cursor-not-allowed disabled:opacity-60";
+    "inline-flex h-10 shrink-0 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.1em] transition disabled:cursor-not-allowed disabled:opacity-60";
   const [nowMs, setNowMs] = useState(() => Date.now());
 
   const { data: liveData, mutate } = useSWR<LiveData>(
@@ -225,8 +223,8 @@ export default function UserDashboardTabs({
 
   return (
     <section className="rounded-[2rem] border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] sm:p-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-        <div className="min-w-0">
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">User detail</p>
             <Link
@@ -236,78 +234,133 @@ export default function UserDashboardTabs({
               Leaderboard
             </Link>
           </div>
-          <h1 className="mt-2 text-4xl leading-[0.95] text-foreground sm:text-5xl">{nickname}</h1>
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-foreground/70">
-            <p>@{wkUsername}</p>
-            {linkedEmail ? <p className="text-foreground/55">· {linkedEmail}</p> : null}
-          </div>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            {viewerMatchesAccount ? (
-              <span className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-emerald-800">
-                You
-              </span>
-            ) : null}
-            {viewerMatchesAccount ? (
-              <span className="inline-flex items-center rounded-full border border-blue-300 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-blue-800">
-                Google Linked · Reviews Enabled
-              </span>
-            ) : viewerSignedIn ? (
-              <span className="inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-amber-800">
-                Signed In · Not Linked To This User
-              </span>
-            ) : null}
-          </div>
-          <p className="mt-1 inline-flex rounded-full border border-line bg-surface-muted px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/80">
-            Global Rank #{globalRank} of {formatNumber(totalPlayers)}
-          </p>
-        </div>
 
-        <div className="flex flex-wrap items-center justify-start gap-2 lg:justify-end">
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label="User dashboard tabs">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "main"}
-              className={tabClass("main")}
-              onClick={() => switchTab("main")}
-            >
-              Main Data
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "item-spread"}
-              className={tabClass("item-spread")}
-              onClick={() => switchTab("item-spread")}
-            >
-              Item Spread
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === "level-progress"}
-              className={tabClass("level-progress")}
-              onClick={() => switchTab("level-progress")}
-            >
-              Level Progress
-            </button>
+          <div className="ml-auto hidden items-center justify-end gap-2 sm:flex">
+            <div className="flex flex-wrap gap-2" role="tablist" aria-label="User dashboard tabs">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeTab === "main"}
+                className={tabClass("main")}
+                onClick={() => switchTab("main")}
+              >
+                Main Data
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeTab === "item-spread"}
+                className={tabClass("item-spread")}
+                onClick={() => switchTab("item-spread")}
+              >
+                Item Spread
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeTab === "level-progress"}
+                className={tabClass("level-progress")}
+                onClick={() => switchTab("level-progress")}
+              >
+                Level Progress
+              </button>
+            </div>
+
+            <UserAdminRefreshButton
+              accountId={accountId}
+              label={"\u21BB"}
+              ariaLabel="Refresh"
+              iconOnly
+              showMessage={false}
+              buttonClassName="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-lg font-bold text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+            />
           </div>
-          <span className="hidden h-8 w-px bg-line lg:inline-block" aria-hidden="true" />
+
           <UserAdminRefreshButton
             accountId={accountId}
-            label="Refresh"
+            label={"\u21BB"}
+            ariaLabel="Refresh"
+            iconOnly
             showMessage={false}
-            buttonClassName={`${actionButtonBaseClass} border-line bg-surface text-foreground hover:bg-surface-muted`}
+            buttonClassName="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-lg font-bold text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60 sm:hidden"
           />
         </div>
-      </div>
 
-      <p className="mt-3 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
-        Last refresh {formatAbsoluteTime(liveLastSyncedMs)} ({formatRelativeTime(liveLastSyncedMs)})
-      </p>
-      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
-        Last activity {lastActivityAt || liveData?.lastActivityAt ? `${formatAbsoluteTime(liveLastActivityMs)} (${formatRelativeTime(liveLastActivityMs)})` : "Unknown"}
-      </p>
+        <div
+          className="flex w-full items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:hidden"
+          role="tablist"
+          aria-label="User dashboard tabs"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "main"}
+            className={tabClass("main")}
+            onClick={() => switchTab("main")}
+          >
+            <span className="sm:hidden">Main</span>
+            <span className="hidden sm:inline">Main Data</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "item-spread"}
+            className={tabClass("item-spread")}
+            onClick={() => switchTab("item-spread")}
+          >
+            <span className="sm:hidden">Items</span>
+            <span className="hidden sm:inline">Item Spread</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "level-progress"}
+            className={tabClass("level-progress")}
+            onClick={() => switchTab("level-progress")}
+          >
+            <span className="sm:hidden">Level</span>
+            <span className="hidden sm:inline">Level Progress</span>
+          </button>
+        </div>
+
+        <div className="flex w-full items-start gap-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <h1 className="truncate text-4xl leading-[0.95] text-foreground sm:text-5xl">{nickname}</h1>
+            {viewerMatchesAccount ? (
+              <span className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-800">
+                Me
+              </span>
+            ) : null}
+          </div>
+          <div className="ml-auto shrink-0 text-right">
+            <p className="text-2xl font-black uppercase tracking-[0.06em] text-foreground sm:text-4xl">
+              <span>Rank #{globalRank}</span>
+              <span className="ml-2 text-base font-bold text-foreground/65 sm:text-xl">
+                of {formatNumber(totalPlayers)}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <p className="min-w-0 truncate text-sm text-foreground/70">
+            @{wkUsername}
+            {linkedEmail ? <span className="text-foreground/55"> · {linkedEmail}</span> : null}
+          </p>
+          <p className="shrink-0 text-right text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60 sm:text-xs">
+            <span className="sm:hidden">
+              Upd {formatRelativeTime(liveLastSyncedMs)}
+              <span className="mx-1 text-foreground/40">|</span>
+              Act {lastActivityAt || liveData?.lastActivityAt ? formatRelativeTime(liveLastActivityMs) : "Unknown"}
+            </span>
+            <span className="hidden sm:inline">
+              Updated {formatAbsoluteTime(liveLastSyncedMs)} ({formatRelativeTime(liveLastSyncedMs)})
+              <span className="mx-2 text-foreground/40">|</span>
+              Active {lastActivityAt || liveData?.lastActivityAt ? `${formatAbsoluteTime(liveLastActivityMs)} (${formatRelativeTime(liveLastActivityMs)})` : "Unknown"}
+            </span>
+          </p>
+        </div>
+      </div>
 
       {activeTab === "main" ? (
         <div className="mt-4" role="tabpanel">

@@ -12,12 +12,13 @@ import {
   statusClass,
   statusShortLabel,
   shortSubjectTypeLabel,
+  srsFilterButtonLabel,
   subjectTypePillClass,
   titleForDisplay,
   typeCardClass,
   typeGlyphBoxClass,
 } from "../lib/levelExplorerDisplay";
-import SubjectTypeFilterButton from "../../shared/SubjectTypeFilterButton";
+import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import LevelExplorerDetailSection from "./LevelExplorerDetailSection";
@@ -160,32 +161,35 @@ export default function LevelExplorerContent({
             ))}
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={onEnableAllTypes}
-            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
-              visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary,
-            )}`}
-          >
-            {selectedLevelList.length === 1
-              ? `All L${selectedLevelList[0]} (${formatNumber(counts.all)})`
-              : `All (${formatNumber(counts.all)})`}
-          </button>
-          {([
-            ["radical", counts.radical],
-            ["kanji", counts.kanji],
-            ["vocabulary", counts.vocabulary],
-          ] as const).map(([type, count]) => (
-            <SubjectTypeFilterButton
-              key={type}
-              type={type}
-              count={count}
-              active={visibleTypes[type]}
-              disabled={false}
-              onClick={() => onToggleTypeVisibility(type)}
-            />
-          ))}
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <SubjectTypeFilterGroup
+            counts={counts}
+            allLabel={selectedLevelList.length === 1 ? `All L${selectedLevelList[0]}` : "All"}
+            allActive={visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary}
+            activeTypes={visibleTypes}
+            onClickAll={onEnableAllTypes}
+            onClickType={onToggleTypeVisibility}
+          />
+          <div className="ml-auto flex flex-wrap justify-end gap-2">
+            {(["all", "apprentice", "guru", "master", "enlightened", "burned", "locked"] as const).map((status) => {
+              const count = counts[status];
+              const disabled = status !== "all" && count === 0;
+
+              return (
+                <button
+                  key={status}
+                  type="button"
+                  onClick={() => onSetSrsFilter(status)}
+                  disabled={disabled}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
+                    disabled ? disabledBadgeClass() : badgeClass(srsFilter === status)
+                  }`}
+                >
+                  {srsFilterButtonLabel(status)} ({formatNumber(count)})
+                </button>
+              );
+            })}
+          </div>
         </div>
       </header>
 
@@ -241,26 +245,6 @@ export default function LevelExplorerContent({
           </div>
           {!filtersCollapsed ? (
             <div className="mt-3 space-y-3">
-              <div className="flex flex-wrap gap-2">
-                {(["all", "apprentice", "guru", "master", "enlightened", "burned", "locked"] as const).map((status) => {
-                  const count = counts[status];
-                  const disabled = status !== "all" && count === 0;
-
-                  return (
-                    <button
-                      key={status}
-                      type="button"
-                      onClick={() => onSetSrsFilter(status)}
-                      disabled={disabled}
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                        disabled ? disabledBadgeClass() : badgeClass(srsFilter === status)
-                      }`}
-                    >
-                      {status} ({formatNumber(count)})
-                    </button>
-                  );
-                })}
-              </div>
               <div className="flex flex-wrap gap-2">
                 {(["all", "n5", "n4", "n3", "n2", "n1"] as const).map((level) => {
                   const count = level === "all" ? counts.kanji : jlptCounts[level];
@@ -349,7 +333,6 @@ export default function LevelExplorerContent({
                     selectedItem?.subjectId === item.subjectId,
                   )} ${lockedCardStateClass(item)}`}
                   indexLabel={`#${formatNumber(index + 1)}`}
-                  title={titleForDisplay(item, showEnglish)}
                   topRight={
                     <>
                       <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>

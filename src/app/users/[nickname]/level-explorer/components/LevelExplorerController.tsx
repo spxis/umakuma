@@ -200,12 +200,11 @@ export default function LevelExplorerController({
 
   const toggleTypeVisibility = (type: "radical" | "kanji" | "vocabulary") => {
     markHistoryPush();
-    const visibleCount = Number(visibleTypes.radical) + Number(visibleTypes.kanji) + Number(visibleTypes.vocabulary);
-    if (visibleTypes[type] && visibleCount === 1) {
-      return;
-    }
-
-    setVisibleTypesAndPersist({ ...visibleTypes, [type]: !visibleTypes[type] });
+    setVisibleTypesAndPersist({
+      radical: type === "radical",
+      kanji: type === "kanji",
+      vocabulary: type === "vocabulary",
+    });
     setSelectedSubjectId(null);
     setTypeFilter("all");
   };

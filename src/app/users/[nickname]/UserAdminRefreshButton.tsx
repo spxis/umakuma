@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 type Props = {
   accountId: string;
   label?: string;
+  ariaLabel?: string;
+  iconOnly?: boolean;
   buttonClassName?: string;
   showMessage?: boolean;
 };
@@ -13,6 +15,8 @@ type Props = {
 export default function UserAdminRefreshButton({
   accountId,
   label = "Refresh user",
+  ariaLabel,
+  iconOnly = false,
   buttonClassName,
   showMessage = true,
 }: Props) {
@@ -84,12 +88,16 @@ export default function UserAdminRefreshButton({
           });
         }}
         disabled={refreshing}
+        aria-label={ariaLabel ?? label}
+        title={ariaLabel ?? label}
         className={
           buttonClassName ??
           "inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
         }
       >
-        {refreshing ? "Refreshing..." : label}
+        <span className={refreshing && iconOnly ? "inline-block animate-spin" : ""}>
+          {iconOnly ? label : refreshing ? "Refreshing..." : label}
+        </span>
       </button>
       {showMessage && message ? <p className="text-xs font-semibold text-slate-600">{message}</p> : null}
     </div>

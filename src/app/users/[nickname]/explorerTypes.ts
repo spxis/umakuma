@@ -14,18 +14,6 @@ export type RelatedReference = {
   meaning?: string | null;
 };
 
-export type JlptMeta = {
-  primaryMeaning?: string | null;
-  meanings: string[];
-  onReadings: string[];
-  kunReadings: string[];
-  strokeCount?: number | null;
-  frequencyRank?: number | null;
-  schoolGrade?: number | null;
-  heisigKeyword?: string | null;
-  wordExamples?: unknown;
-};
-
 export type LevelItem = {
   subjectId: number;
   subjectType?: "kanji" | "radical" | "vocabulary";
@@ -41,7 +29,18 @@ export type LevelItem = {
   meaningExplanation?: string;
   readingExplanation?: string;
   jlptLevel?: number | null;
-  jlptMeta?: JlptMeta | null;
+  jlptMeta?: {
+    primaryMeaning: string | null;
+    meanings: string[];
+    onReadings: string[];
+    kunReadings: string[];
+    nanoriReadings: string[];
+    wordExamples: unknown;
+    strokeCount: number | null;
+    frequencyRank: number | null;
+    schoolGrade: number | null;
+    heisigKeyword: string | null;
+  };
   srsStage: number;
   status: SubjectStatus;
   startedAt?: string | null;

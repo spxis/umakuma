@@ -5,10 +5,6 @@ type Props = {
   className: string;
   indexLabel: string;
   topRight: ReactNode;
-  title: string;
-  hideTitle?: boolean;
-  titleClassName?: string;
-  titleTooltip?: string;
   glyphClassName: string;
   glyphText: string;
   glyphTextClassName: string;
@@ -23,10 +19,6 @@ export default function UnifiedExplorerCard({
   className,
   indexLabel,
   topRight,
-  title,
-  hideTitle = false,
-  titleClassName,
-  titleTooltip,
   glyphClassName,
   glyphText,
   glyphTextClassName,
@@ -42,18 +34,7 @@ export default function UnifiedExplorerCard({
         <div className="flex min-h-[2.2rem] flex-wrap content-start items-start justify-end gap-1">{topRight}</div>
       </div>
 
-      {!hideTitle ? (
-        <div className="mt-2 min-h-[2rem]">
-          <p
-            className={`truncate whitespace-nowrap text-xl font-black leading-none text-foreground ${titleClassName ?? ""}`.trim()}
-            title={titleTooltip}
-          >
-            {title}
-          </p>
-        </div>
-      ) : null}
-
-      <div className={`flex ${hideTitle ? "mt-2 h-[8rem]" : "mt-3 h-[8.5rem]"} flex-col justify-center rounded-xl border px-3 py-2 ${glyphClassName}`}>
+      <div className={`mt-2 flex h-[8rem] flex-col justify-center rounded-xl border px-3 py-2 ${glyphClassName}`}>
         <p className={`${glyphTextClassName} text-center font-black leading-none`}>{glyphText}</p>
         <p className="mt-1 min-h-[1.35rem] truncate whitespace-nowrap text-center text-base font-semibold text-foreground/70">{glyphSubtitle ?? ""}</p>
       </div>
