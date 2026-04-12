@@ -71,6 +71,7 @@ export default function StudyExplorer({
   queueMode,
 }: StudyExplorerProps) {
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
+  const typeFilterStorageKey = `wr:study-type-filter:${accountId}:${queueMode}`;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const lastHandledStudyQueryRef = useRef("");
 
@@ -94,6 +95,7 @@ export default function StudyExplorer({
   const [submitFeedback, setSubmitFeedback] = useState<SubmitFeedback | null>(null);
   const [submitInFlight, setSubmitInFlight] = useState<SubmitInFlight | null>(null);
   const [reviewOutcomeByAssignmentId, setReviewOutcomeByAssignmentId] = useState<Record<number, ReviewOutcome>>({});
+  const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
   const [showLocked, setShowLocked] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -190,6 +192,22 @@ export default function StudyExplorer({
   }, [countsStorageKey]);
 
   useEffect(() => {
+    const raw = window.localStorage.getItem(typeFilterStorageKey);
+    if (!raw) return;
+
+    if (raw === "all" || raw === "radical" || raw === "kanji" || raw === "vocabulary") {
+      setTypeFilter(raw);
+      return;
+    }
+
+    window.localStorage.removeItem(typeFilterStorageKey);
+  }, [typeFilterStorageKey]);
+
+  useEffect(() => {
+    window.localStorage.setItem(typeFilterStorageKey, typeFilter);
+  }, [typeFilterStorageKey, typeFilter]);
+
+  useEffect(() => {
     if (!data?.counts) return;
     setPersistedCounts(data.counts);
     window.localStorage.setItem(countsStorageKey, JSON.stringify(data.counts));
@@ -274,6 +292,12 @@ export default function StudyExplorer({
 
   const submitReview = useCallback(async (assignmentId: number, result: "correct" | "wrong") => {
     const itemForSubmit = filteredItems.find((item) => item.assignmentId === assignmentId) ?? selectedItem ?? null;
+    const submittedIndex = filteredItems.findIndex((item) => item.assignmentId === assignmentId);
+    const remainingAfterSubmit = filteredItems.filter((item) => item.assignmentId !== assignmentId);
+    const nextFocusedItem =
+      remainingAfterSubmit[submittedIndex] ??
+      remainingAfterSubmit[Math.max(0, submittedIndex - 1)] ??
+      null;
 
     setSubmitInFlight({
       assignmentId,
@@ -301,6 +325,8 @@ export default function StudyExplorer({
         message: `${result === "correct" ? "Correct" : "Wrong"} submitted for ${itemForSubmit ? `${itemForSubmit.characters} (${studyItemEnglishTitle(itemForSubmit)})` : "item"}.`,
       });
       setReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: result }));
+      setHasPendingStudySubmissions(true);
+      setSelectedId(nextFocusedItem?.subjectId ?? null);
     } catch (submitError) {
       setSubmitFeedback({
         kind: "error",
@@ -322,12 +348,19 @@ export default function StudyExplorer({
   }, [accountId, filteredItems, selectedItem]);
 
   const closeReviewSession = useCallback(() => {
+    if (hasPendingStudySubmissions) {
+      void fetch(`/api/accounts/${accountId}/refresh`, { method: "POST" }).catch(() => {
+        // Non-blocking best-effort refresh after review session closes.
+      });
+      setHasPendingStudySubmissions(false);
+    }
+
     setSelectedId(null);
     setReviewOutcomeByAssignmentId({});
     setSubmitFeedback(null);
     setSubmitInFlight(null);
     setRevealedAssignmentIds(new Set());
-  }, []);
+  }, [accountId, hasPendingStudySubmissions]);
 
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">

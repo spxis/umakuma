@@ -746,24 +746,44 @@ export default function StudyReviewModal({
               )
             ) : useStudyFlashLayout ? (
               <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
-                <div className="flex min-h-[20rem] flex-col rounded-2xl border border-line bg-surface p-4 lg:h-full lg:min-h-0">
+                <div className="flex min-h-[20rem] flex-col lg:h-full lg:min-h-0">
                   {!isAnswerRevealed ? (
+                    <>
                     <div
-                      className={`flex min-h-[20rem] flex-1 select-none items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
+                      className={`relative flex min-h-[20rem] flex-1 select-none items-center justify-center rounded-2xl border p-6 lg:h-full ${typeGlyphBoxClass(
                         selectedItem.subjectType,
                       )}`}
                     >
+                      <div className="absolute left-1/2 top-4 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-1">
+                        <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
+                        {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
+                        {selectedItem.jlptLevel ? <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.jlptLevel}</span> : null}
+                        <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(selectedItem.status)}`}>
+                          {statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}
+                        </span>
+                      </div>
+
                       <p className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">
                         {selectedItem.characters}
                       </p>
                     </div>
+                    </>
                   ) : (
                     <>
                       <div
-                        className={`flex min-h-[14rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
+                        className={`relative flex min-h-[14rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
                           selectedItem.subjectType,
                         )}`}
                       >
+                        <div className="absolute left-1/2 top-4 z-10 flex -translate-x-1/2 flex-wrap items-center justify-center gap-1">
+                          <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
+                          {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
+                          {selectedItem.jlptLevel ? <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.jlptLevel}</span> : null}
+                          <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(selectedItem.status)}`}>
+                            {statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}
+                          </span>
+                        </div>
+
                         <p className="text-center text-[clamp(4rem,12vw,8rem)] font-black leading-none text-current">
                           {selectedItem.characters}
                         </p>
