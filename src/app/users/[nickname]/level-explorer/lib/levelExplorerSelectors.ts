@@ -172,6 +172,7 @@ export function filterAndSortLevelItems(
   items: LevelItem[],
   options: {
     recentOnly: boolean;
+    showLocked: boolean;
     srsFilter: SrsFilter;
     typeFilter: TypeFilter;
     jlptFilter: JlptFilter;
@@ -197,13 +198,13 @@ export function filterAndSortLevelItems(
       const searchPass = options.searchMatchedSubjectIds
         ? options.searchMatchedSubjectIds.has(item.subjectId)
         : true;
+      const lockedVisibilityPass = options.showLocked || item.status !== "locked";
       const srsPass = options.srsFilter === "all" ? true : item.status === options.srsFilter;
       const typePass = options.typeFilter === "all" ? true : item.subjectType === options.typeFilter;
       const jlptPass =
         options.jlptFilter === "all"
           ? true
           : item.subjectType === "kanji" && item.jlptLevel === Number(options.jlptFilter.slice(1));
-      const lockedPass = item.status !== "locked";
       const burnedPass = true;
       const reviewTimingPass = passesReviewTimingFilter(item, options.reviewTimingFilter, nowMs);
       const visibilityPass =
@@ -217,10 +218,10 @@ export function filterAndSortLevelItems(
 
       return (
         searchPass &&
+        lockedVisibilityPass &&
         srsPass &&
         typePass &&
         jlptPass &&
-        lockedPass &&
         burnedPass &&
         reviewTimingPass &&
         visibilityPass

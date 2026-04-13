@@ -69,6 +69,7 @@ export default function LevelExplorerController({
   const [jlptFilter, setJlptFilter] = useState<JlptFilter>("all");
   const [reviewTimingFilter, setReviewTimingFilter] = useState<ReviewTimingFilter>("all");
   const [recentOnly, setRecentOnly] = useState(false);
+  const [showLocked, setShowLocked] = useState(true);
   const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
     initialSnapshot.items[0]?.subjectId ?? null,
   );
@@ -232,6 +233,7 @@ export default function LevelExplorerController({
     () =>
       filterAndSortLevelItems(combinedSnapshot.items, {
         recentOnly,
+        showLocked,
         srsFilter,
         typeFilter,
         jlptFilter,
@@ -242,6 +244,7 @@ export default function LevelExplorerController({
     [
       combinedSnapshot.items,
       recentOnly,
+      showLocked,
       srsFilter,
       typeFilter,
       jlptFilter,
@@ -399,15 +402,13 @@ export default function LevelExplorerController({
       reviewTimingCounts={reviewTimingCounts}
       accountPendingReviews={accountPendingReviews}
       overdueOutsideSelectedLevels={overdueOutsideSelectedLevels}
-      combinedItemLength={combinedSnapshot.items.length}
-      combinedKanjiLearned={combinedSnapshot.kanjiLearned}
-      combinedKanjiLocked={combinedSnapshot.kanjiLocked}
       selectedLevelList={selectedLevelList}
       filtersCollapsed={filtersCollapsed}
       srsFilter={srsFilter}
       jlptFilter={jlptFilter}
       reviewTimingFilter={reviewTimingFilter}
       recentOnly={recentOnly}
+      showLocked={showLocked}
       showEnglish={showEnglish}
       studyMode={studyMode}
       loading={loading}
@@ -448,6 +449,11 @@ export default function LevelExplorerController({
         markHistoryPush();
         setSelectedSubjectId(null);
         setRecentOnly(next);
+      }}
+      onSetShowLocked={(next) => {
+        markHistoryPush();
+        setSelectedSubjectId(null);
+        setShowLocked(next);
       }}
       onSetSelectedSubjectId={setSelectedSubjectId}
       onJumpToRelatedSubject={actions.jumpToRelatedSubject}

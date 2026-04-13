@@ -19,15 +19,13 @@ export type LevelExplorerContentProps = {
   reviewTimingCounts: ReviewTimingCounts;
   accountPendingReviews: number;
   overdueOutsideSelectedLevels: number;
-  combinedItemLength: number;
-  combinedKanjiLearned: number;
-  combinedKanjiLocked: number;
   selectedLevelList: number[];
   filtersCollapsed: boolean;
   srsFilter: SrsFilter;
   jlptFilter: JlptFilter;
   reviewTimingFilter: ReviewTimingFilter;
   recentOnly: boolean;
+  showLocked: boolean;
   showEnglish: boolean;
   studyMode: boolean;
   loading: boolean;
@@ -54,6 +52,7 @@ export type LevelExplorerContentProps = {
   onSetJlptFilter: (next: JlptFilter) => void;
   onSetReviewTimingFilter: (next: ReviewTimingFilter) => void;
   onSetRecentOnly: (next: boolean) => void;
+  onSetShowLocked: (next: boolean) => void;
   onSetSelectedSubjectId: (next: number | null | ((prev: number | null) => number | null)) => void;
   onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
   onJumpToKanji: (subjectId: number, wkLevel: number | null) => Promise<void>;

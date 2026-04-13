@@ -43,15 +43,13 @@ export default function LevelExplorerContent({
   reviewTimingCounts,
   accountPendingReviews,
   overdueOutsideSelectedLevels,
-  combinedItemLength,
-  combinedKanjiLearned,
-  combinedKanjiLocked,
   selectedLevelList,
   filtersCollapsed,
   srsFilter,
   jlptFilter,
   reviewTimingFilter,
   recentOnly,
+  showLocked,
   showEnglish,
   studyMode,
   loading,
@@ -77,6 +75,7 @@ export default function LevelExplorerContent({
   onSetJlptFilter,
   onSetReviewTimingFilter,
   onSetRecentOnly,
+  onSetShowLocked,
   onSetSelectedSubjectId,
   onJumpToRelatedSubject,
   onJumpToKanji,
@@ -151,6 +150,7 @@ export default function LevelExplorerContent({
     onSetJlptFilter("all");
     onSetReviewTimingFilter("all");
     onSetRecentOnly(false);
+    onSetShowLocked(true);
     onSetSelectedSubjectId(null);
   }, [
     onEnableAllTypes,
@@ -158,6 +158,7 @@ export default function LevelExplorerContent({
     onSetJlptFilter,
     onSetRecentOnly,
     onSetReviewTimingFilter,
+    onSetShowLocked,
     onSetSelectedSubjectId,
     onSetSrsFilter,
   ]);
@@ -228,25 +229,6 @@ export default function LevelExplorerContent({
         </div>
       </header>
 
-      <div className="grid gap-3 border-b border-line p-5 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">Selected levels</p>
-          <p className="mt-1 text-2xl font-black text-foreground">{selectedLevelList.join(", ")}</p>
-        </div>
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">Total Items</p>
-          <p className="mt-1 text-2xl font-black text-foreground">{formatNumber(combinedItemLength)}</p>
-        </div>
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">Kanji Learned</p>
-          <p className="mt-1 text-2xl font-black text-accent">{formatNumber(combinedKanjiLearned)}</p>
-        </div>
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">Kanji Locked</p>
-          <p className="mt-1 text-2xl font-black text-hot">{formatNumber(combinedKanjiLocked)}</p>
-        </div>
-      </div>
-
       <div className="border-b border-line px-5 py-4">
         <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">JLPT mix (kanji in selected levels)</p>
         <div className="mt-2 grid grid-cols-5 gap-2">
@@ -302,7 +284,7 @@ export default function LevelExplorerContent({
               </div>
               <div className="flex flex-wrap gap-2">
                 {([
-                  ["all", "Review All", combinedItemLength],
+                  ["all", "Review All", counts.all],
                   ["overdue", "Overdue", reviewTimingCounts.overdue],
                   ["next1h", "Starts <= 1h", reviewTimingCounts.next1h],
                   ["next8h", "Starts <= 8h", reviewTimingCounts.next8h],
@@ -331,6 +313,13 @@ export default function LevelExplorerContent({
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(recentOnly)}`}
                 >
                   Recent Only
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSetShowLocked(!showLocked)}
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted"
+                >
+                  {showLocked ? "Hide Locked" : "Show Locked"}
                 </button>
               </div>
               {reviewTimingFilter === "overdue" && overdueOutsideSelectedLevels > 0 ? (
