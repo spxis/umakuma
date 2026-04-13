@@ -44,6 +44,20 @@ import {
 
 const API_PAGE_SIZE = 120;
 
+function sameAssignmentList(a: StudyQueueItem[], b: StudyQueueItem[]): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  for (let index = 0; index < a.length; index += 1) {
+    if (a[index]?.assignmentId !== b[index]?.assignmentId) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function StudySkeletonCards() {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-hidden="true">
@@ -229,8 +243,10 @@ export default function StudyExplorer({
     const freshIds = new Set(fresh.map((item) => item.assignmentId));
     setLoadedItems((prev) => {
       const visiblePrev = prev.filter((item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId));
-      if (visiblePrev.length === 0) return fresh;
-      return [...fresh, ...visiblePrev.filter((item) => !freshIds.has(item.assignmentId))];
+      const merged =
+        visiblePrev.length === 0 ? fresh : [...fresh, ...visiblePrev.filter((item) => !freshIds.has(item.assignmentId))];
+
+      return sameAssignmentList(prev, merged) ? prev : merged;
     });
     const nextTotalRaw = data.pagination?.total ?? fresh.length;
     setTotalItems(Math.max(0, nextTotalRaw - hiddenSubmittedAssignmentIds.size));
@@ -298,7 +314,8 @@ export default function StudyExplorer({
 
       setLoadedItems((prev) => {
         const existing = new Set(prev.map((item) => item.assignmentId));
-        return [...prev, ...payloadVisibleItems.filter((item) => !existing.has(item.assignmentId))];
+        const merged = [...prev, ...payloadVisibleItems.filter((item) => !existing.has(item.assignmentId))];
+        return sameAssignmentList(prev, merged) ? prev : merged;
       });
       const nextTotalRaw = payload.pagination?.total ?? totalItems;
       setTotalItems(Math.max(0, nextTotalRaw - hiddenSubmittedAssignmentIds.size));
