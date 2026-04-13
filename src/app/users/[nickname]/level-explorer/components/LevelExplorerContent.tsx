@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 
 import type { LevelItem } from "../../explorerTypes";
 import {
@@ -68,6 +68,7 @@ export default function LevelExplorerContent({
   hasUsedInVocabularyPanel,
   vocabularyKanjiLinks,
   subjectById,
+  onSelectAllLevelsAndClearSearch,
   onToggleLevel,
   onEnableAllTypes,
   onToggleTypeVisibility,
@@ -142,6 +143,24 @@ export default function LevelExplorerContent({
           Math.floor(selectedVisibleIndex / gridColumns) * gridColumns + (gridColumns - 1),
         )
       : -1;
+
+  const clearAllFilters = useCallback(() => {
+    void onSelectAllLevelsAndClearSearch();
+    onEnableAllTypes();
+    onSetSrsFilter("all");
+    onSetJlptFilter("all");
+    onSetReviewTimingFilter("all");
+    onSetRecentOnly(false);
+    onSetSelectedSubjectId(null);
+  }, [
+    onEnableAllTypes,
+    onSelectAllLevelsAndClearSearch,
+    onSetJlptFilter,
+    onSetRecentOnly,
+    onSetReviewTimingFilter,
+    onSetSelectedSubjectId,
+    onSetSrsFilter,
+  ]);
 
   return (
     <section
@@ -336,7 +355,14 @@ export default function LevelExplorerContent({
       <div className="p-5">
         {filteredItems.length === 0 ? (
           <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
-            No items visible. Expand one or more types above.
+            No items match the current filters. {" "}
+            <button
+              type="button"
+              onClick={clearAllFilters}
+              className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
+            >
+              Clear filters
+            </button>
           </div>
         ) : (
           <>

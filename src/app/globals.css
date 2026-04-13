@@ -140,6 +140,8 @@ input[type="reset"] {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .subject-pill--radical {

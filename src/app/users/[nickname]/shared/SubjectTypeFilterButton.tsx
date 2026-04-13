@@ -1,4 +1,5 @@
 import { disabledBadgeClass, formatNumber, typeBadgeClass } from "../level-explorer/lib/levelExplorerDisplay";
+import { subjectTypeFilterLabel } from "./subjectTypeLabels";
 
 type SubjectType = "radical" | "kanji" | "vocabulary";
 
@@ -9,14 +10,6 @@ type Props = {
   disabled?: boolean;
   onClick: () => void;
 };
-
-function buttonLabel(type: SubjectType): string {
-  if (type === "vocabulary") {
-    return "vocab";
-  }
-
-  return type;
-}
 
 export default function SubjectTypeFilterButton({
   type,
@@ -34,7 +27,7 @@ export default function SubjectTypeFilterButton({
         disabled ? disabledBadgeClass() : typeBadgeClass(type, active, false)
       }`}
     >
-      {buttonLabel(type)} ({formatNumber(count)})
+      {subjectTypeFilterLabel(type)} ({formatNumber(count)})
     </button>
   );
 }

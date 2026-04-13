@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
+import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
 import type { LiveData, TabId, UserDashboardTabsProps as Props } from "./UserDashboardTabs.types";
 function formatNumber(input: number): string {
   return new Intl.NumberFormat("en-US").format(input);
@@ -240,7 +241,7 @@ export default function UserDashboardTabs({
           <div className="flex min-w-0 items-center gap-2">
             <h1 className="truncate text-4xl leading-[0.95] text-foreground sm:text-5xl">{nickname}</h1>
             {viewerMatchesAccount ? (
-              <span className="inline-flex items-center rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-800">
+              <span className="inline-flex select-none items-center rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-800">
                 Me
               </span>
             ) : null}
@@ -343,15 +344,15 @@ export default function UserDashboardTabs({
               <span className="mt-0.5 block text-3xl leading-none sm:text-4xl">{formatNumber(burnedCount)}</span>
             </Link>
             <div className="rounded-xl border border-radical/40 bg-radical/10 px-3 py-2 text-center text-sm font-semibold text-radical">
-              <span className="block">Radicals:</span>
+              <span className="block">{subjectTypePluralLabel("radical")}:</span>
               <span className="mt-0.5 block text-4xl leading-none">{formatNumber(radicalCount)}</span>
             </div>
             <div className="rounded-xl border border-kanji/40 bg-kanji/10 px-3 py-2 text-center text-sm font-semibold text-kanji">
-              <span className="block">Kanji:</span>
+              <span className="block">{subjectTypePluralLabel("kanji")}:</span>
               <span className="mt-0.5 block text-4xl leading-none">{formatNumber(totalKanjiCount)}</span>
             </div>
             <div className="rounded-xl border border-vocabulary/40 bg-vocabulary/10 px-3 py-2 text-center text-sm font-semibold text-vocabulary">
-              <span className="block">Vocabulary:</span>
+              <span className="block">{subjectTypePluralLabel("vocabulary")}:</span>
               <span className="mt-0.5 block text-4xl leading-none">{formatNumber(vocabularyCount)}</span>
             </div>
           </div>
@@ -362,9 +363,9 @@ export default function UserDashboardTabs({
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-3xl font-black text-foreground">Item Spread</h2>
             <div className="hidden flex-wrap items-center gap-2 text-sm font-semibold text-foreground/80 sm:flex">
-              <span className="subject-pill subject-pill--radical">Radicals</span>
-              <span className="subject-pill subject-pill--kanji">Kanji</span>
-              <span className="subject-pill subject-pill--vocabulary">Vocabulary</span>
+              <span className="subject-pill subject-pill--radical">{subjectTypePluralLabel("radical")}</span>
+              <span className="subject-pill subject-pill--kanji">{subjectTypePluralLabel("kanji")}</span>
+              <span className="subject-pill subject-pill--vocabulary">{subjectTypePluralLabel("vocabulary")}</span>
             </div>
           </div>
           <div className="mt-4 space-y-2">
@@ -400,9 +401,9 @@ export default function UserDashboardTabs({
           <p className="mt-3 text-lg text-foreground/75">Number of items Guru&apos;d in this level.</p>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {([
-              ["Radicals", "radical", levelRadicalProgress],
-              ["Kanji", "kanji", levelKanjiProgress],
-              ["Vocabulary", "vocabulary", levelVocabularyProgress],
+              [subjectTypePluralLabel("radical"), "radical", levelRadicalProgress],
+              [subjectTypePluralLabel("kanji"), "kanji", levelKanjiProgress],
+              [subjectTypePluralLabel("vocabulary"), "vocabulary", levelVocabularyProgress],
             ] as const).map(([label, type, progress]) => (
               <article key={label} className="overflow-hidden rounded-2xl border border-line bg-surface">
                 <div className="flex items-center gap-2 px-4 py-3">

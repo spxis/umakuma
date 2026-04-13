@@ -371,6 +371,29 @@ export default function StudyExplorer({
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
+  const clearAllFilters = useCallback(() => {
+    setViewedLevel(null);
+    setTypeFilter("all");
+    setSrsFilter("all");
+    setShowLocked(true);
+    setRecentOnly(false);
+    setSelectedId(null);
+    setSearchQuery("");
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    params.delete("findStudy");
+    params.delete("findLevel");
+    params.delete("findJlpt");
+    const query = params.toString();
+    const next = `${window.location.pathname}${query ? `?${query}` : ""}#explorer`;
+    window.history.pushState(null, "", next);
+    window.dispatchEvent(new CustomEvent("wr:explorer-search-clear", { detail: { scope: "all" } }));
+  }, []);
+
   const loadMorePage = useCallback(async () => {
     if (isLoadingMore || !hasMorePages) return;
 
@@ -650,7 +673,14 @@ export default function StudyExplorer({
           </>
         ) : (
           <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
-            No study items match the current filters.
+            No study items match the current filters. {" "}
+            <button
+              type="button"
+              onClick={clearAllFilters}
+              className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
+            >
+              Clear filters
+            </button>
           </div>
         )}
       </div>
