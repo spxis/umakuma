@@ -12,121 +12,29 @@ import {
 import { srsLabel } from "@/lib/wanikani/helpers";
 import { fetchAllCollectionPages, fetchWaniKani } from "@/lib/wanikani/http";
 import type { WaniKaniCollectionResponse } from "@/lib/wanikani/types";
+import {
+  ASSIGNMENT_CHUNK_SIZE,
+  ASSIGNMENT_FULL_RESYNC_MS,
+  SUBJECT_CACHE_TTL_MS,
+  buildImmediateAssignmentsPath,
+  fetchAssignmentCount,
+  hydrateMissingSubjects,
+  modePathParam,
+  normalizeSubjectType,
+  queueRowsFromState,
+  toAssignmentRows,
+  trimSubjectCache,
+  type AssignmentData,
+  type AssignmentRow,
+  type CachedSubjectRow,
+  type QueueMode,
+  type QueueSyncState,
+  type SubjectData,
+} from "./queueRouteUtils";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
 };
-
-type AssignmentData = {
-  subject_id: number;
-  subject_type: string;
-  srs_stage: number;
-  unlocked_at: string | null;
-  started_at: string | null;
-  passed_at: string | null;
-  available_at: string | null;
-};
-
-type SubjectData = {
-  level?: number;
-  characters?: string | null;
-  slug?: string | null;
-  component_subject_ids?: number[];
-  amalgamation_subject_ids?: number[];
-  visually_similar_subject_ids?: number[];
-  meanings?: Array<{ meaning: string; primary?: boolean }>;
-  readings?: Array<{ reading: string; primary?: boolean; accepted_answer?: boolean }>;
-  meaning_mnemonic?: string;
-  reading_mnemonic?: string;
-};
-
-type QueueMode = "review" | "lesson";
-
-type AssignmentRow = {
-  id: number;
-  data: AssignmentData;
-};
-
-type CachedSubjectRow = {
-  object: string;
-  data: SubjectData;
-  fetchedAtMs: number;
-};
-
-type QueueSyncState = {
-  assignmentById: Map<number, AssignmentRow>;
-  subjectById: Map<number, CachedSubjectRow>;
-};
-
-const ASSIGNMENT_FULL_RESYNC_MS = 10 * 60_000;
-const SUBJECT_CACHE_TTL_MS = 24 * 60 * 60_000;
-const ASSIGNMENT_CHUNK_SIZE = 200;
-const SUBJECT_CACHE_MAX_ENTRIES = 2_500;
-
-function normalizeSubjectType(input: string): "radical" | "kanji" | "vocabulary" {
-  if (input === "radical" || input === "kanji") {
-    return input;
-  }
-  return "vocabulary";
-}
-
-function modePathParam(mode: QueueMode): string {
-  return mode === "review"
-    ? "immediately_available_for_review=true"
-    : "immediately_available_for_lessons=true";
-}
-
-async function hydrateMissingSubjects(
-  token: string,
-  subjectById: Map<number, { object: string; data: SubjectData }>,
-  subjectIds: number[],
-): Promise<void> {
-  const missingIds = subjectIds.filter((subjectId) => !subjectById.has(subjectId));
-
-  for (let i = 0; i < missingIds.length; i += ASSIGNMENT_CHUNK_SIZE) {
-    const chunkIds = missingIds.slice(i, i + ASSIGNMENT_CHUNK_SIZE);
-    if (chunkIds.length === 0) {
-      continue;
-    }
-
-    const collection = await fetchAllCollectionPages(`/subjects?ids=${chunkIds.join(",")}`, token);
-    for (const row of collection.data) {
-      subjectById.set(row.id, {
-        object: row.object ?? "subject",
-        data: row.data as SubjectData,
-      });
-    }
-  }
-}
-
-function buildImmediateAssignmentsPath(mode: QueueMode): string {
-  return `/assignments?${modePathParam(mode)}`;
-}
-
-function toAssignmentRows(collection: WaniKaniCollectionResponse): AssignmentRow[] {
-  return collection.data.map((row) => ({
-    id: row.id,
-    data: row.data as AssignmentData,
-  }));
-}
-
-function trimSubjectCache(input: Map<number, CachedSubjectRow>, activeSubjectIds: Set<number>): void {
-  for (const subjectId of input.keys()) {
-    if (!activeSubjectIds.has(subjectId)) {
-      input.delete(subjectId);
-    }
-  }
-
-  if (input.size <= SUBJECT_CACHE_MAX_ENTRIES) {
-    return;
-  }
-
-  const sorted = Array.from(input.entries()).sort((a, b) => a[1].fetchedAtMs - b[1].fetchedAtMs);
-  const toRemove = sorted.slice(0, Math.max(0, sorted.length - SUBJECT_CACHE_MAX_ENTRIES));
-  for (const [subjectId] of toRemove) {
-    input.delete(subjectId);
-  }
-}
 
 async function fetchEligibleAssignmentIds(
   token: string,
@@ -259,28 +167,6 @@ async function hydrateQueueSyncState(
     assignmentById,
     subjectById,
   };
-}
-
-function queueRowsFromState(
-  state: QueueSyncState,
-  queueType: "review" | "lesson",
-): Array<{ assignmentId: number; data: AssignmentData; queueType: "review" | "lesson" }> {
-  const rows: Array<{ assignmentId: number; data: AssignmentData; queueType: "review" | "lesson" }> = [];
-
-  for (const assignment of state.assignmentById.values()) {
-    rows.push({
-      assignmentId: assignment.id,
-      data: assignment.data,
-      queueType,
-    });
-  }
-
-  return rows;
-}
-
-async function fetchAssignmentCount(path: string, token: string): Promise<number> {
-  const response = await fetchWaniKani<WaniKaniCollectionResponse>(path, token);
-  return response.data?.total_count ?? 0;
 }
 
 export async function GET(request: Request, context: RouteContext) {

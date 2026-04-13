@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
-
 import jlptReadings from "@/data/jlptReadings.json";
 import SubjectTypeFilterButton from "../../shared/SubjectTypeFilterButton";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
@@ -18,12 +17,10 @@ import {
   parseWordExamples,
 } from "../lib/jlptExplorerContentHelpers";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
+import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
-
 type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;
-
 type JlptFilter = "all" | "kanji" | "none";
-
 type Props = {
   items: JlptItem[];
   showEnglish: boolean;
@@ -52,25 +49,6 @@ type Props = {
   onSetStickyLevels: (next: boolean) => void;
   onSetSelectedKanji: (next: string | null | ((prev: string | null) => string | null)) => void;
 };
-
-
-// Helper for collapsible
-function Collapsible({ open, onToggle, label, children }: { open: boolean; onToggle: () => void; label: string; children: React.ReactNode }) {
-  return (
-    <div className="mt-4">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="mb-2 rounded border border-line bg-surface-muted px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground/80 hover:bg-surface"
-        aria-expanded={open}
-      >
-        {open ? "Hide" : "Show"} {label}
-      </button>
-      {open ? <div className="rounded border border-line bg-surface-muted p-3">{children}</div> : null}
-    </div>
-  );
-}
-
 export default function JlptExplorerContent({
   items,
   showEnglish,
@@ -93,24 +71,20 @@ export default function JlptExplorerContent({
   const PAGE_SIZE = 40;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-
   const selectedIndex = selectedItem
     ? filteredItems.findIndex((item) => item.kanji === selectedItem.kanji)
     : -1;
-
   // --- Kanji stats/history state ---
   const [statsOpen, setStatsOpen] = useState(false);
   const [kanjiStats, setKanjiStats] = useState<any | null>(null);
   const [kanjiStatsLoading, setKanjiStatsLoading] = useState(false);
   const [kanjiStatsError, setKanjiStatsError] = useState<string | null>(null);
-
   // Account ID is not in props, so try to extract from location (fragile fallback)
   function getAccountIdFromUrl() {
     if (typeof window === "undefined") return null;
     const m = window.location.pathname.match(/\/users\/([^/]+)/);
     return m ? m[1] : null;
   }
-
   useEffect(() => {
     setKanjiStats(null);
     setKanjiStatsError(null);
@@ -139,32 +113,26 @@ export default function JlptExplorerContent({
     filteredItems.length,
     Math.max(PAGE_SIZE, visibleCount, selectedIndex + 1),
   );
-
   useEffect(() => {
     if (!sentinelRef.current) {
       return;
     }
-
     if (effectiveVisibleCount >= filteredItems.length) {
       return;
     }
-
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
         if (!entry?.isIntersecting) {
           return;
         }
-
         setVisibleCount((prev) => Math.min(filteredItems.length, prev + PAGE_SIZE));
       },
       { rootMargin: "600px 0px" },
     );
-
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
   }, [effectiveVisibleCount, filteredItems.length]);
-
   const visibleItems = filteredItems.slice(0, effectiveVisibleCount);
   const selectedVisibleIndex = selectedItem
     ? visibleItems.findIndex((item) => item.kanji === selectedItem.kanji)
@@ -176,7 +144,6 @@ export default function JlptExplorerContent({
           Math.floor(selectedVisibleIndex / gridColumns) * gridColumns + (gridColumns - 1),
         )
       : -1;
-
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -191,7 +158,6 @@ export default function JlptExplorerContent({
             <ExplorerSearchBar scope="jlpt" />
           </div>
         </div>
-
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap gap-2">
             <button
@@ -221,7 +187,6 @@ export default function JlptExplorerContent({
                 N{level} ({formatNumber(count)})
               </button>
             ))}
-
             <button
               type="button"
               onClick={() => onSetWkFilter("all")}
@@ -258,7 +223,6 @@ export default function JlptExplorerContent({
           </button>
         </div>
       </header>
-
       <div className="p-5">
         <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
           Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} results
@@ -266,7 +230,6 @@ export default function JlptExplorerContent({
         <p className="mt-1 text-xs text-foreground/60">
           WaniKani-specific SRS stats are shown only where subject mappings exist.
         </p>
-
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {visibleItems.map((item, index) => {
             const userMatch = userKanjiByChar.get(item.kanji);
@@ -278,7 +241,6 @@ export default function JlptExplorerContent({
             const fallbackReadings = dbReadings.length > 0 ? dbReadings : (preload?.readings ?? []);
             const fallbackMeanings = item.meanings.length > 0 ? item.meanings : (preload?.meanings ?? []);
             const heading = jlptHeading(item.primaryMeaning, userMatch?.meanings, fallbackMeanings, item.kanji);
-
             return (
               <Fragment key={`${item.nLevel}-${item.kanji}`}>
                 <UnifiedExplorerCard
@@ -319,7 +281,6 @@ export default function JlptExplorerContent({
                     </span>
                   }
                 />
-
                 {selectedItem && index === visibleDetailInsertIndex ? (
                   <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
                     {(() => {
@@ -340,7 +301,6 @@ export default function JlptExplorerContent({
                           );
                       const jsonMeanings = (selectedPreload?.meanings ?? []).filter((meaning) => meaning.trim().length > 0);
                       const wordExamples = parseWordExamples(selectedItem.wordExamples);
-
                       return (
                         <>
                           <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-x-3">
@@ -372,77 +332,16 @@ export default function JlptExplorerContent({
                               </p>
                             </div>
                           </div>
-
                           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-8">
-                                                      {/* Collapsible Kanji Stats Panel */}
-                                                      {selectedItem && (
-                                                        <Collapsible
+                                                      {selectedItem ? (
+                                                        <JlptExplorerStatsPanel
                                                           open={statsOpen}
-                                                          onToggle={() => setStatsOpen((v) => !v)}
-                                                          label="Review Stats"
-                                                        >
-                                                          {kanjiStatsLoading ? (
-                                                            <div className="text-xs text-foreground/60">Loading stats...</div>
-                                                          ) : kanjiStatsError ? (
-                                                            <div className="text-xs text-red-600">{kanjiStatsError}</div>
-                                                          ) : kanjiStats ? (
-                                                            <div>
-                                                              {kanjiStats.latest ? (
-                                                                <div className="mb-2">
-                                                                  <div className="font-bold text-sm mb-1">Latest Snapshot</div>
-                                                                  <div className="grid grid-cols-2 gap-2 text-xs">
-                                                                    <div>Correct %:</div>
-                                                                    <div>{kanjiStats.latest.percentageCorrect ?? "-"}</div>
-                                                                    <div>Meaning Correct:</div>
-                                                                    <div>{kanjiStats.latest.meaningCorrect ?? "-"}</div>
-                                                                    <div>Meaning Incorrect:</div>
-                                                                    <div>{kanjiStats.latest.meaningIncorrect ?? "-"}</div>
-                                                                    <div>Reading Correct:</div>
-                                                                    <div>{kanjiStats.latest.readingCorrect ?? "-"}</div>
-                                                                    <div>Reading Incorrect:</div>
-                                                                    <div>{kanjiStats.latest.readingIncorrect ?? "-"}</div>
-                                                                    <div>Captured At:</div>
-                                                                    <div>{kanjiStats.latest.capturedAt ? formatDate(kanjiStats.latest.capturedAt) : "-"}</div>
-                                                                    <div>Source:</div>
-                                                                    <div>{kanjiStats.latest.source}</div>
-                                                                  </div>
-                                                                </div>
-                                                              ) : <div className="text-xs text-foreground/60">No stats yet.</div>}
-                                                              {kanjiStats.trend && kanjiStats.trend.length > 1 && (
-                                                                <div>
-                                                                  <div className="font-bold text-sm mb-1 mt-2">History Trend</div>
-                                                                  <div className="overflow-x-auto">
-                                                                    <table className="min-w-[320px] text-xs border border-line">
-                                                                      <thead>
-                                                                        <tr className="bg-surface-muted">
-                                                                          <th className="px-2 py-1 border-b border-line">Date</th>
-                                                                          <th className="px-2 py-1 border-b border-line">% Correct</th>
-                                                                          <th className="px-2 py-1 border-b border-line">Total</th>
-                                                                          <th className="px-2 py-1 border-b border-line">Correct</th>
-                                                                          <th className="px-2 py-1 border-b border-line">Wrong</th>
-                                                                          <th className="px-2 py-1 border-b border-line">Source</th>
-                                                                        </tr>
-                                                                      </thead>
-                                                                      <tbody>
-                                                                        {kanjiStats.trend.map((row: any, i: number) => (
-                                                                          <tr key={i}>
-                                                                            <td className="px-2 py-1 border-b border-line">{formatDate(row.capturedAt)}</td>
-                                                                            <td className="px-2 py-1 border-b border-line">{row.percentageCorrect}</td>
-                                                                            <td className="px-2 py-1 border-b border-line">{row.totalAnswers}</td>
-                                                                            <td className="px-2 py-1 border-b border-line">{row.correctAnswers}</td>
-                                                                            <td className="px-2 py-1 border-b border-line">{row.wrongAnswers}</td>
-                                                                            <td className="px-2 py-1 border-b border-line">{row.source}</td>
-                                                                          </tr>
-                                                                        ))}
-                                                                      </tbody>
-                                                                    </table>
-                                                                  </div>
-                                                                </div>
-                                                              )}
-                                                            </div>
-                                                          ) : null}
-                                                        </Collapsible>
-                                                      )}
+                                                          onToggle={() => setStatsOpen((value) => !value)}
+                                                          loading={kanjiStatsLoading}
+                                                          error={kanjiStatsError}
+                                                          kanjiStats={kanjiStats}
+                                                        />
+                                                      ) : null}
                             {!studyMode ? (
                               <>
                             <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
@@ -506,7 +405,6 @@ export default function JlptExplorerContent({
                               </p>
                             </div>
                           </div>
-
                           {selectedUserMatch ? (
                             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                               <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
@@ -523,7 +421,6 @@ export default function JlptExplorerContent({
                               </div>
                             </div>
                           ) : null}
-
                           {!studyMode ? (
                             <div className="mt-4">
                               <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
@@ -540,7 +437,6 @@ export default function JlptExplorerContent({
                               </article>
                             </div>
                           ) : null}
-
                           {!studyMode && selectedItem.notes.length > 0 ? (
                             <div className="mt-4">
                               <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
@@ -553,7 +449,6 @@ export default function JlptExplorerContent({
                               </article>
                             </div>
                           ) : null}
-
                           {!studyMode && wordExamples.length > 0 ? (
                             <div className="mt-4">
                               <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
