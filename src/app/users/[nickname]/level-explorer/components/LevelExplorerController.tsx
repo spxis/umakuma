@@ -31,6 +31,11 @@ import {
   filterAndSortLevelItems,
 } from "../lib/levelExplorerSelectors";
 import {
+  buildKanjiByCharacter,
+  buildSubjectById,
+  buildVocabularyKanjiLinks,
+} from "../lib/levelExplorerItemDetails";
+import {
   normalizeSnapshot,
   snapshotHasComponentKanjiData,
 } from "../lib/levelExplorerSnapshotUtils";
@@ -63,6 +68,7 @@ export default function LevelExplorerController({
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
   const [jlptFilter, setJlptFilter] = useState<JlptFilter>("all");
   const [reviewTimingFilter, setReviewTimingFilter] = useState<ReviewTimingFilter>("all");
+  const [recentOnly, setRecentOnly] = useState(false);
   const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
     initialSnapshot.items[0]?.subjectId ?? null,
   );
@@ -98,6 +104,7 @@ export default function LevelExplorerController({
       type: typeFilter,
       jlpt: jlptFilter,
       review: reviewTimingFilter,
+      recentOnly,
       stickyMerge,
     });
     const next = `${window.location.pathname}?${nextSearch}${window.location.hash}`;
@@ -224,6 +231,7 @@ export default function LevelExplorerController({
   const filteredItems = useMemo(
     () =>
       filterAndSortLevelItems(combinedSnapshot.items, {
+        recentOnly,
         srsFilter,
         typeFilter,
         jlptFilter,
@@ -233,6 +241,7 @@ export default function LevelExplorerController({
       }),
     [
       combinedSnapshot.items,
+      recentOnly,
       srsFilter,
       typeFilter,
       jlptFilter,
@@ -254,60 +263,13 @@ export default function LevelExplorerController({
   );
   const overdueOutsideSelectedLevels = Math.max(0, accountPendingReviews - reviewTimingCounts.overdue);
   const selectedLevelList = Array.from(selectedLevels.values()).sort((a, b) => a - b);
+  const subjectById = useMemo(() => buildSubjectById(combinedSnapshot.items), [combinedSnapshot.items]);
+  const kanjiByCharacter = useMemo(() => buildKanjiByCharacter(combinedSnapshot.items), [combinedSnapshot.items]);
 
-  const kanjiByCharacter = useMemo(
-    () => new Map(combinedSnapshot.items.filter((item) => item.subjectType === "kanji").map((item) => [item.characters, item])),
-    [combinedSnapshot.items],
+  const vocabularyKanjiLinks = useMemo(
+    () => buildVocabularyKanjiLinks(selectedItem, subjectById, kanjiByCharacter),
+    [selectedItem, subjectById, kanjiByCharacter],
   );
-  const subjectById = useMemo(() => new Map(combinedSnapshot.items.map((item) => [item.subjectId, item])), [combinedSnapshot.items]);
-
-  const vocabularyKanjiLinks = useMemo(() => {
-    if (!selectedItem || selectedItem.subjectType !== "vocabulary") {
-      return [] as Array<{ char: string; subjectId: number; reading: string; wkLevel: number | null }>;
-    }
-
-    const componentLinks = (selectedItem.componentKanji ?? [])
-      .map((component) => {
-        const found = subjectById.get(component.subjectId);
-        return {
-          char: component.label,
-          subjectId: component.subjectId,
-          reading:
-            typeof component.reading === "string" && component.reading.length > 0
-              ? component.reading
-              : found
-                ? (found.primaryReadings ?? [])[0] ?? "-"
-                : "-",
-          wkLevel:
-            typeof component.wkLevel === "number"
-              ? component.wkLevel
-              : typeof found?.wkLevel === "number"
-                ? found.wkLevel
-                : null,
-        };
-      })
-      .filter((item) => Boolean(item.char));
-
-    if (componentLinks.length > 0) {
-      return componentLinks;
-    }
-
-    return Array.from(selectedItem.characters)
-      .map((char) => {
-        const found = kanjiByCharacter.get(char);
-        if (!found) {
-          return null;
-        }
-
-        return {
-          char,
-          subjectId: found.subjectId,
-          reading: (found.primaryReadings ?? [])[0] ?? "-",
-          wkLevel: typeof found.wkLevel === "number" ? found.wkLevel : null,
-        };
-      })
-      .filter((value): value is { char: string; subjectId: number; reading: string; wkLevel: number | null } => value !== null);
-  }, [selectedItem, kanjiByCharacter, subjectById]);
 
   const hasPrimaryRelatedPanel = selectedItem
     ? selectedItem.subjectType === "vocabulary"
@@ -339,6 +301,7 @@ export default function LevelExplorerController({
     setSearchAvailableLevels,
     setVisibleTypesAndPersist,
     setTypeFilterAndEnsureVisible,
+    setRecentOnly,
     setTypeFilter,
     setSrsFilter,
     setJlptFilter,
@@ -357,6 +320,7 @@ export default function LevelExplorerController({
     setTypeFilter,
     setJlptFilter,
     setReviewTimingFilter,
+    setRecentOnly,
     setStickyMerge,
   });
 
@@ -378,6 +342,7 @@ export default function LevelExplorerController({
     setTypeFilter,
     setJlptFilter,
     setReviewTimingFilter,
+    setRecentOnly,
   });
 
   useLevelExplorerGridColumns(setGridColumns);
@@ -388,6 +353,7 @@ export default function LevelExplorerController({
     typeFilter,
     jlptFilter,
     reviewTimingFilter,
+    recentOnly,
     selectedSubjectId,
   });
 
@@ -441,6 +407,7 @@ export default function LevelExplorerController({
       srsFilter={srsFilter}
       jlptFilter={jlptFilter}
       reviewTimingFilter={reviewTimingFilter}
+      recentOnly={recentOnly}
       showEnglish={showEnglish}
       studyMode={studyMode}
       loading={loading}
@@ -476,6 +443,11 @@ export default function LevelExplorerController({
         markHistoryPush();
         setSelectedSubjectId(null);
         setReviewTimingFilter(timing);
+      }}
+      onSetRecentOnly={(next) => {
+        markHistoryPush();
+        setSelectedSubjectId(null);
+        setRecentOnly(next);
       }}
       onSetSelectedSubjectId={setSelectedSubjectId}
       onJumpToRelatedSubject={actions.jumpToRelatedSubject}

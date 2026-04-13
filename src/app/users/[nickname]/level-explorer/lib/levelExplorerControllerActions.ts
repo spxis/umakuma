@@ -23,6 +23,7 @@ type BuildActionsArgs = {
   setSearchAvailableLevels: Dispatch<SetStateAction<Set<number> | null>>;
   setVisibleTypesAndPersist: (next: { radical: boolean; kanji: boolean; vocabulary: boolean }) => void;
   setTypeFilterAndEnsureVisible: (next: TypeFilter) => void;
+  setRecentOnly: Dispatch<SetStateAction<boolean>>;
   setTypeFilter: Dispatch<SetStateAction<TypeFilter>>;
   setSrsFilter: (next: "all" | "apprentice" | "guru" | "master" | "enlightened" | "burned" | "locked") => void;
   setJlptFilter: Dispatch<SetStateAction<JlptFilter>>;
@@ -48,6 +49,7 @@ export function buildLevelExplorerActions({
   setSearchAvailableLevels,
   setVisibleTypesAndPersist,
   setTypeFilterAndEnsureVisible,
+  setRecentOnly,
   setTypeFilter,
   setSrsFilter,
   setJlptFilter,
@@ -73,6 +75,7 @@ export function buildLevelExplorerActions({
     setSelectedLevels(new Set([initialLevel]));
     setSearchMatchedSubjectIds(null);
     setSearchAvailableLevels(null);
+    setRecentOnly(false);
 
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);

@@ -568,38 +568,38 @@ export default function StudyExplorer({
       <div className="p-5">
         {isLoading && !data ? <StudySkeletonCards /> : null}
 
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
+            Showing {formatNumber(filteredItems.length)} loaded items · {formatNumber(totalItems)} total in queue
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onToggleShowEnglish}
+              disabled={!canToggleEnglish}
+              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowLocked((prev) => !prev)}
+              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+            >
+              {showLocked ? "Hide Locked" : "Show Locked"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setRecentOnly((prev) => !prev)}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(recentOnly)}`}
+            >
+              Recent Only
+            </button>
+          </div>
+        </div>
+
         {filteredItems.length > 0 ? (
           <>
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-                Showing {formatNumber(filteredItems.length)} loaded items · {formatNumber(totalItems)} total in queue
-              </p>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={onToggleShowEnglish}
-                  disabled={!canToggleEnglish}
-                  className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowLocked((prev) => !prev)}
-                  className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
-                >
-                  {showLocked ? "Hide Locked" : "Show Locked"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRecentOnly((prev) => !prev)}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(recentOnly)}`}
-                >
-                  Recent Only
-                </button>
-              </div>
-            </div>
-
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {filteredItems.map((item, index) => {
                 const reviewBadge = item.queueType === "review" ? formatNextReviewBadge(item.availableAt) : null;

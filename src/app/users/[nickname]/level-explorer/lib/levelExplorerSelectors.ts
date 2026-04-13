@@ -32,6 +32,26 @@ export type ReviewTimingCounts = {
   next72h: number;
 };
 
+const LEVEL_RECENT_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+function parseTimestampMs(value: string | null | undefined): number | null {
+  if (!value) {
+    return null;
+  }
+
+  const timestampMs = Date.parse(value);
+  return Number.isNaN(timestampMs) ? null : timestampMs;
+}
+
+export function isRecentLevelItem(item: LevelItem, nowMs: number = Date.now()): boolean {
+  const anchorMs = parseTimestampMs(item.startedAt) ?? parseTimestampMs(item.availableAt);
+  if (anchorMs === null) {
+    return false;
+  }
+
+  return anchorMs >= nowMs - LEVEL_RECENT_WINDOW_MS && anchorMs <= nowMs;
+}
+
 function normalizeSearchTerm(input: string): string {
   return input.trim().toLowerCase();
 }
@@ -151,6 +171,7 @@ export function buildCombinedSnapshot(
 export function filterAndSortLevelItems(
   items: LevelItem[],
   options: {
+    recentOnly: boolean;
     srsFilter: SrsFilter;
     typeFilter: TypeFilter;
     jlptFilter: JlptFilter;
@@ -169,6 +190,10 @@ export function filterAndSortLevelItems(
 
   return items
     .filter((item) => {
+      if (options.recentOnly && !isRecentLevelItem(item, nowMs)) {
+        return false;
+      }
+
       const searchPass = options.searchMatchedSubjectIds
         ? options.searchMatchedSubjectIds.has(item.subjectId)
         : true;

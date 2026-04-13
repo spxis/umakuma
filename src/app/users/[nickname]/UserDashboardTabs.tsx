@@ -3,63 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
-type ItemSpreadRow = {
-  radical: number;
-  kanji: number;
-  vocabulary: number;
-  total: number;
-};
-type ItemSpread = {
-  apprentice: ItemSpreadRow;
-  guru: ItemSpreadRow;
-  master: ItemSpreadRow;
-  enlightened: ItemSpreadRow;
-  burned: ItemSpreadRow;
-  totals: ItemSpreadRow;
-};
-type TypeProgress = {
-  guruOrHigher: number;
-  total: number;
-  percent: number;
-};
-type TabId = "main" | "item-spread" | "level-progress";
-type Props = {
-  accountId: string;
-  nickname: string;
-  wkUsername: string;
-  previousUser: { nickname: string; wkUsername: string } | null;
-  nextUser: { nickname: string; wkUsername: string } | null;
-  linkedEmail: string | null;
-  viewerMatchesAccount: boolean;
-  lastSyncedAt: string;
-  lastActivityAt: string | null;
-  globalRank: number;
-  totalPlayers: number;
-  wkLevel: number;
-  levelKanjiLearned: number;
-  levelKanjiTotal: number;
-  levelKanjiLocked: number;
-  totalLearnedKanji: number;
-  estimatedHoursRemaining: number | null;
-  apprenticeCount: number;
-  guruCount: number;
-  masterCount: number;
-  enlightenedCount: number;
-  burnedCount: number;
-  radicalCount: number;
-  totalKanjiCount: number;
-  vocabularyCount: number;
-  itemSpread: ItemSpread;
-  levelRadicalProgress: TypeProgress;
-  levelKanjiProgress: TypeProgress;
-  levelVocabularyProgress: TypeProgress;
-  remainingToLevelUp: number;
-  passedLevelUpGate: boolean;
-};
-type LiveData = {
-  lastSyncedAt: string;
-  lastActivityAt: string | null;
-};
+import type { LiveData, TabId, UserDashboardTabsProps as Props } from "./UserDashboardTabs.types";
 function formatNumber(input: number): string {
   return new Intl.NumberFormat("en-US").format(input);
 }

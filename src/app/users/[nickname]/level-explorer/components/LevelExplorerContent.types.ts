@@ -5,13 +5,7 @@ import type {
   LevelJlptCounts,
   ReviewTimingCounts,
 } from "../lib/levelExplorerSelectors";
-
-export type VocabularyKanjiLink = {
-  char: string;
-  subjectId: number;
-  reading: string;
-  wkLevel: number | null;
-};
+import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
 
 export type LevelExplorerContentProps = {
   accountId: string;
@@ -33,6 +27,7 @@ export type LevelExplorerContentProps = {
   srsFilter: SrsFilter;
   jlptFilter: JlptFilter;
   reviewTimingFilter: ReviewTimingFilter;
+  recentOnly: boolean;
   showEnglish: boolean;
   studyMode: boolean;
   loading: boolean;
@@ -58,6 +53,7 @@ export type LevelExplorerContentProps = {
   onSetSrsFilter: (next: SrsFilter) => void;
   onSetJlptFilter: (next: JlptFilter) => void;
   onSetReviewTimingFilter: (next: ReviewTimingFilter) => void;
+  onSetRecentOnly: (next: boolean) => void;
   onSetSelectedSubjectId: (next: number | null | ((prev: number | null) => number | null)) => void;
   onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
   onJumpToKanji: (subjectId: number, wkLevel: number | null) => Promise<void>;

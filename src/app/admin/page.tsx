@@ -4,21 +4,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import AdminAccountsSection, { type AdminAccount } from "./AdminAccountsSection";
 import AdminStatusBadge from "./AdminStatusBadge";
-
-type Status = {
-  type: "idle" | "ok" | "error";
-  message: string;
-};
-type AdminSessionStatus = {
-  authorized?: boolean;
-  googleConfigured?: boolean;
-  signedIn?: boolean;
-  emailAllowed?: boolean;
-  user?: {
-    name?: string | null;
-    email?: string | null;
-  } | null;
-};
+import type { AdminSessionStatus, Status } from "./AdminPage.types";
 
 export default function AdminPage() {
   const [nickname, setNickname] = useState("");

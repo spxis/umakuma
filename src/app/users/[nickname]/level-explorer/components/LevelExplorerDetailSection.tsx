@@ -42,6 +42,7 @@ type Props = {
   showEnglish: boolean;
   studyMode: boolean;
   revealStudyReading?: boolean;
+  onTogglePeek?: (() => void) | null;
   selectedMeaningExplanation: string;
   selectedReadingExplanationRaw: string;
   showReadingExplanation: boolean;
@@ -217,6 +218,7 @@ export default function LevelExplorerDetailSection({
   showEnglish,
   studyMode,
   revealStudyReading = false,
+  onTogglePeek = null,
   selectedMeaningExplanation,
   selectedReadingExplanationRaw,
   showReadingExplanation,
@@ -290,13 +292,35 @@ export default function LevelExplorerDetailSection({
           <div className="min-w-0">
             {isStudyHidden ? (
               <>
-                <p className="text-base font-black uppercase tracking-[0.08em] text-foreground/80">Blind Review</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-base font-black uppercase tracking-[0.08em] text-foreground/80">Blind Review</p>
+                  {onTogglePeek ? (
+                    <button
+                      type="button"
+                      onClick={onTogglePeek}
+                      className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground"
+                    >
+                      Peek
+                    </button>
+                  ) : null}
+                </div>
                 <p className="mt-1 text-sm font-semibold text-foreground/65">Recall meaning and reading, then reveal answer.</p>
               </>
             ) : studyMode ? (
               <>
                 <p className="text-3xl font-black leading-tight text-foreground">{revealedStudyTitle}</p>
                 <p className="mt-1 text-base font-semibold text-foreground/75">{titleForDisplay(selectedItem, false)}</p>
+                {onTogglePeek ? (
+                  <div className="mt-2">
+                    <button
+                      type="button"
+                      onClick={onTogglePeek}
+                      className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground"
+                    >
+                      Hide Peek
+                    </button>
+                  </div>
+                ) : null}
               </>
             ) : (
               <p className="text-3xl font-black leading-tight text-foreground">{titleForDisplay(selectedItem, showEnglish)}</p>
@@ -351,7 +375,7 @@ export default function LevelExplorerDetailSection({
         </div>
       </div>
 
-      {!studyMode ? (
+      {!studyMode || revealStudyReading ? (
         <div className={`mt-4 grid gap-3 ${showReadingExplanation ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
           <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
             <p className="text-xs font-bold uppercase text-foreground/70">Meaning explanation</p>
@@ -366,7 +390,7 @@ export default function LevelExplorerDetailSection({
         </div>
       ) : null}
 
-      {!studyMode ? (
+      {!studyMode || revealStudyReading ? (
         <LevelRelatedPanels
           hasPrimary={hasPrimaryRelatedPanel}
           hasVisuallySimilar={hasVisuallySimilarPanel}
@@ -411,7 +435,7 @@ export default function LevelExplorerDetailSection({
         />
       ) : null}
 
-      {!studyMode || isStudyHidden ? (
+      {!studyMode || isStudyHidden || revealStudyReading ? (
         <LevelExplorerReviewStatsCard
           accountId={accountId}
           subjectId={selectedItem.subjectId}

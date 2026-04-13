@@ -51,6 +51,7 @@ export default function LevelExplorerContent({
   srsFilter,
   jlptFilter,
   reviewTimingFilter,
+  recentOnly,
   showEnglish,
   studyMode,
   loading,
@@ -74,6 +75,7 @@ export default function LevelExplorerContent({
   onSetSrsFilter,
   onSetJlptFilter,
   onSetReviewTimingFilter,
+  onSetRecentOnly,
   onSetSelectedSubjectId,
   onJumpToRelatedSubject,
   onJumpToKanji,
@@ -82,6 +84,7 @@ export default function LevelExplorerContent({
   const PAGE_SIZE = 40;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [peekSubjectId, setPeekSubjectId] = useState<number | null>(null);
 
   const selectedItemIndex = selectedItem
     ? filteredItems.findIndex((item) => item.subjectId === selectedItem.subjectId)
@@ -120,6 +123,18 @@ export default function LevelExplorerContent({
   const selectedVisibleIndex = selectedItem
     ? visibleItems.findIndex((item) => item.subjectId === selectedItem.subjectId)
     : -1;
+  const isPeekRevealed = studyMode && selectedItem !== null && peekSubjectId === selectedItem.subjectId;
+
+  useEffect(() => {
+    if (!studyMode || !selectedItem) {
+      setPeekSubjectId(null);
+      return;
+    }
+
+    if (peekSubjectId !== selectedItem.subjectId) {
+      setPeekSubjectId(null);
+    }
+  }, [peekSubjectId, selectedItem, studyMode]);
   const visibleDetailInsertIndex =
     selectedVisibleIndex >= 0
       ? Math.min(
@@ -291,6 +306,13 @@ export default function LevelExplorerContent({
                     </button>
                   );
                 })}
+                <button
+                  type="button"
+                  onClick={() => onSetRecentOnly(!recentOnly)}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(recentOnly)}`}
+                >
+                  Recent Only
+                </button>
               </div>
               {reviewTimingFilter === "overdue" && overdueOutsideSelectedLevels > 0 ? (
                 <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/55">
@@ -328,6 +350,7 @@ export default function LevelExplorerContent({
                   onClick={() => {
                     onMarkHistoryPush();
                     onSetSelectedSubjectId((prev) => (prev === item.subjectId ? null : item.subjectId));
+                    setPeekSubjectId(null);
                   }}
                   className={`rounded-2xl border p-3 text-left transition hover:brightness-95 ${typeCardClass(
                     item.subjectType,
@@ -398,6 +421,14 @@ export default function LevelExplorerContent({
                     selectedItem={selectedItem}
                     showEnglish={showEnglish}
                     studyMode={studyMode}
+                    revealStudyReading={isPeekRevealed}
+                    onTogglePeek={
+                      studyMode
+                        ? () => {
+                            setPeekSubjectId((prev) => (prev === selectedItem.subjectId ? null : selectedItem.subjectId));
+                          }
+                        : null
+                    }
                     selectedMeaningExplanation={selectedMeaningExplanation}
                     selectedReadingExplanationRaw={selectedReadingExplanationRaw}
                     showReadingExplanation={showReadingExplanation}

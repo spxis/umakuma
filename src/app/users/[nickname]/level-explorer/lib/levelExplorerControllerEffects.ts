@@ -8,6 +8,7 @@ import {
   TYPE_FILTER_ALLOWED,
   parseLevelExplorerUrlState,
   persistEnum,
+  persistFlag,
   persistOptionalPositiveInteger,
   readStoredEnum,
   readStoredFlag,
@@ -26,6 +27,7 @@ type BaseSetters = {
   setTypeFilter: Dispatch<SetStateAction<TypeFilter>>;
   setJlptFilter: Dispatch<SetStateAction<JlptFilter>>;
   setReviewTimingFilter: Dispatch<SetStateAction<ReviewTimingFilter>>;
+  setRecentOnly: Dispatch<SetStateAction<boolean>>;
   setStickyMerge: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -62,6 +64,7 @@ export function useLevelExplorerUrlHydration({
       setters.setTypeFilter(parsed.type);
       setters.setJlptFilter(parsed.jlpt);
       setters.setReviewTimingFilter(parsed.review);
+      setters.setRecentOnly(parsed.recentOnly);
       setters.setStickyMerge(parsed.stickyMerge);
 
       for (const level of normalizedLevels.values()) {
@@ -92,12 +95,14 @@ export function useLevelExplorerStorageHydration({
   setTypeFilter,
   setJlptFilter,
   setReviewTimingFilter,
+  setRecentOnly,
 }: {
   storageKeys: {
     typeVisibility: string;
     selectedSubject: string;
     stickyMerge: string;
     filtersCollapsed: string;
+    recentOnly: string;
     srsFilter: string;
     typeFilter: string;
     jlptFilter: string;
@@ -111,6 +116,7 @@ export function useLevelExplorerStorageHydration({
   setTypeFilter: Dispatch<SetStateAction<TypeFilter>>;
   setJlptFilter: Dispatch<SetStateAction<JlptFilter>>;
   setReviewTimingFilter: Dispatch<SetStateAction<ReviewTimingFilter>>;
+  setRecentOnly: Dispatch<SetStateAction<boolean>>;
 }) {
   useEffect(() => {
     try {
@@ -129,6 +135,10 @@ export function useLevelExplorerStorageHydration({
 
       if (readStoredFlag(window.localStorage, storageKeys.filtersCollapsed)) {
         setFiltersCollapsed(true);
+      }
+
+      if (!new URLSearchParams(window.location.search).has("recent") && readStoredFlag(window.localStorage, storageKeys.recentOnly)) {
+        setRecentOnly(true);
       }
 
       if (!new URLSearchParams(window.location.search).has("srs")) {
@@ -199,10 +209,12 @@ export function useLevelExplorerStoragePersistence({
   typeFilter,
   jlptFilter,
   reviewTimingFilter,
+  recentOnly,
   selectedSubjectId,
 }: {
   storageKeys: {
     selectedSubject: string;
+    recentOnly: string;
     srsFilter: string;
     typeFilter: string;
     jlptFilter: string;
@@ -212,6 +224,7 @@ export function useLevelExplorerStoragePersistence({
   typeFilter: TypeFilter;
   jlptFilter: JlptFilter;
   reviewTimingFilter: ReviewTimingFilter;
+  recentOnly: boolean;
   selectedSubjectId: number | null;
 }) {
   useEffect(() => {
@@ -220,11 +233,12 @@ export function useLevelExplorerStoragePersistence({
       persistEnum(window.localStorage, storageKeys.typeFilter, typeFilter);
       persistEnum(window.localStorage, storageKeys.jlptFilter, jlptFilter);
       persistEnum(window.localStorage, storageKeys.reviewTimingFilter, reviewTimingFilter);
+      persistFlag(window.localStorage, storageKeys.recentOnly, recentOnly);
       persistOptionalPositiveInteger(window.localStorage, storageKeys.selectedSubject, selectedSubjectId);
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
-  }, [srsFilter, typeFilter, jlptFilter, reviewTimingFilter, selectedSubjectId, storageKeys]);
+  }, [srsFilter, typeFilter, jlptFilter, reviewTimingFilter, recentOnly, selectedSubjectId, storageKeys]);
 }
 
 export function useLevelExplorerSelectionReconcile({

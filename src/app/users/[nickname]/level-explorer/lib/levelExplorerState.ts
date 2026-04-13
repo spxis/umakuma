@@ -11,6 +11,7 @@ export type ExplorerUrlState = {
   type: TypeFilter;
   jlpt: JlptFilter;
   review: ReviewTimingFilter;
+  recentOnly: boolean;
   stickyMerge: boolean;
 };
 
@@ -46,6 +47,7 @@ export type LevelExplorerStorageKeys = {
   selectedSubject: string;
   stickyMerge: string;
   filtersCollapsed: string;
+  recentOnly: string;
   srsFilter: string;
   typeFilter: string;
   jlptFilter: string;
@@ -58,6 +60,7 @@ export function buildLevelExplorerStorageKeys(accountId: string): LevelExplorerS
     selectedSubject: `wr:explorer:${accountId}:selected-subject`,
     stickyMerge: `wr:explorer:${accountId}:sticky-merge`,
     filtersCollapsed: `wr:explorer:${accountId}:filters-collapsed`,
+    recentOnly: `wr:explorer:${accountId}:recent-only`,
     srsFilter: `wr:explorer:${accountId}:srs-filter`,
     typeFilter: `wr:explorer:${accountId}:type-filter`,
     jlptFilter: `wr:explorer:${accountId}:jlpt-filter`,
@@ -115,6 +118,7 @@ export function parseLevelExplorerUrlState(
     type,
     jlpt,
     review,
+    recentOnly: parseBooleanParam(params.get("recent"), false),
     stickyMerge: parseBooleanParam(params.get("sticky"), false),
   };
 }
@@ -138,6 +142,7 @@ export function buildLevelExplorerUrl(
   params.set("type", state.type);
   params.set("jlpt", state.jlpt);
   params.set("review", state.review);
+  params.set("recent", state.recentOnly ? "1" : "0");
   params.delete("locked");
   params.delete("burned");
   params.set("sticky", state.stickyMerge ? "1" : "0");
