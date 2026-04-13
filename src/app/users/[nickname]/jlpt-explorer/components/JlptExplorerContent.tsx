@@ -116,10 +116,12 @@ export default function JlptExplorerContent({
     setKanjiStatsError(null);
     setStatsOpen(false);
     if (!selectedItem) return;
+    const selectedSubjectId = userKanjiByChar.get(selectedItem.kanji)?.subjectId;
+    if (!selectedSubjectId) return;
     const accountId = getAccountIdFromUrl();
     if (!accountId) return;
     setKanjiStatsLoading(true);
-    fetch(`/api/study/${accountId}/subjects/${selectedItem.subjectId}/history?refresh=1`)
+    fetch(`/api/study/${accountId}/subjects/${selectedSubjectId}/history?refresh=1`)
       .then(async (res) => {
         if (!res.ok) throw new Error("Failed to load stats");
         return res.json();
@@ -132,7 +134,7 @@ export default function JlptExplorerContent({
         setKanjiStatsError("Could not load kanji stats");
         setKanjiStatsLoading(false);
       });
-  }, [selectedItem]);
+  }, [selectedItem, userKanjiByChar]);
   const effectiveVisibleCount = Math.min(
     filteredItems.length,
     Math.max(PAGE_SIZE, visibleCount, selectedIndex + 1),
