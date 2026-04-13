@@ -113,16 +113,7 @@ export default function AdminPage() {
   async function completeGoogleSignOut() {
     setLoading(true);
     setStatus({ type: "idle", message: "" });
-
-    try {
-      await fetch("/api/admin/session", {
-        method: "DELETE",
-      });
-    } catch {
-      // Ignore cookie clear errors and continue with NextAuth sign out.
-    } finally {
-      window.location.href = "/api/auth/signout?callbackUrl=/admin";
-    }
+    window.location.href = "/signout?callbackUrl=/admin&clearAdmin=1";
   }
 
   function adminAuthHeaders(extraHeaders: Record<string, string> = {}): Record<string, string> {

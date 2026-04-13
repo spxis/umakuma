@@ -108,7 +108,7 @@ export default function JoinPage() {
               Sign in with Google
             </button>
             <Link
-              href="/api/auth/signout?callbackUrl=/join"
+              href="/signout?callbackUrl=/join"
               className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
             >
               Sign out
