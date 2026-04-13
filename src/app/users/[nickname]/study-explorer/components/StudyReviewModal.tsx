@@ -376,6 +376,8 @@ export default function StudyReviewModal({
       }
 
       const requiresReveal = studyMode && selectedItem.queueType === "review";
+      const selectedOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
+      const isOutcomeFinal = selectedOutcome === "correct" || selectedOutcome === "wrong";
       const key = event.key;
       const lowerKey = key.toLowerCase();
 
@@ -487,6 +489,10 @@ export default function StudyReviewModal({
           return;
         }
 
+        if (isOutcomeFinal) {
+          return;
+        }
+
         const canSubmit = !requiresReveal || isAnswerRevealed;
         if (!canSubmit) {
           return;
@@ -521,6 +527,7 @@ export default function StudyReviewModal({
     selectedIndex,
     studyMode,
     filteredTotal,
+    reviewOutcomeByAssignmentId,
   ]);
 
   if (!selectedItem) {
@@ -547,7 +554,9 @@ export default function StudyReviewModal({
   const primaryReadings = selectedItem.primaryReadings ?? [];
   const secondaryReadings = (selectedItem.readings ?? []).filter((reading) => !primaryReadings.includes(reading));
   const requiresReveal = studyMode && selectedItem.queueType === "review";
-  const detailsRevealed = !requiresReveal || isAnswerRevealed;
+  const selectedOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
+  const isOutcomeFinal = selectedOutcome === "correct" || selectedOutcome === "wrong";
+  const detailsRevealed = isOutcomeFinal || !requiresReveal || isAnswerRevealed;
   const useStudyFlashLayout = studyMode && selectedItem.queueType === "review";
   const hasRadicals = hasRenderableRelatedItems(selectedItem.radicals as RelatedReference[] | undefined);
   const hasVisuallySimilar = hasRenderableRelatedItems(
@@ -771,7 +780,7 @@ export default function StudyReviewModal({
             ) : useStudyFlashLayout ? (
               <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
                 <div className="flex min-h-[20rem] flex-col lg:h-full lg:min-h-0">
-                  {!isAnswerRevealed ? (
+                  {!detailsRevealed ? (
                     <>
                     <div
                       className={`relative flex min-h-[20rem] flex-1 select-none items-center justify-center rounded-2xl border p-6 lg:h-full ${typeGlyphBoxClass(
@@ -844,7 +853,7 @@ export default function StudyReviewModal({
                 </div>
 
                 <div className="grid min-h-[20rem] grid-rows-2 gap-3 lg:h-full lg:min-h-0">
-                  {!isAnswerRevealed ? (
+                  {!detailsRevealed ? (
                     <button
                       type="button"
                       onClick={() => onReveal(selectedItem.assignmentId)}
@@ -855,6 +864,18 @@ export default function StudyReviewModal({
                         <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">Space To Reveal</p>
                       </div>
                     </button>
+                  ) : isOutcomeFinal ? (
+                    <div className="row-span-2 flex h-full w-full items-center justify-center rounded-2xl border-2 border-line bg-surface px-4 py-4 text-center">
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">Answer locked</p>
+                        <p className={`mt-2 text-2xl font-black uppercase ${selectedOutcome === "correct" ? "text-emerald-700" : "text-red-700"}`}>
+                          {selectedOutcome}
+                        </p>
+                        <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
+                          Review submitted. This item is now read-only.
+                        </p>
+                      </div>
+                    </div>
                   ) : (
                     <>
                       <button
@@ -1121,7 +1142,7 @@ export default function StudyReviewModal({
             ) : null}
           </section>
 
-          {selectedItem.queueType === "review" && studyMode && (!requiresReveal || isAnswerRevealed) && !useStudyFlashLayout ? (
+          {selectedItem.queueType === "review" && studyMode && (!requiresReveal || isAnswerRevealed) && !useStudyFlashLayout && !isOutcomeFinal ? (
             <div className="mt-auto grid w-full grid-cols-2 gap-2 pt-3">
               <button
                 type="button"

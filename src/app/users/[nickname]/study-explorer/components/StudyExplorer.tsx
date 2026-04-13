@@ -110,6 +110,8 @@ export default function StudyExplorer({
   const [submitFeedback, setSubmitFeedback] = useState<SubmitFeedback | null>(null);
   const [submitInFlight, setSubmitInFlight] = useState<SubmitInFlight | null>(null);
   const [reviewOutcomeByAssignmentId, setReviewOutcomeByAssignmentId] = useState<Record<number, ReviewOutcome>>({});
+  const [modalSessionOrderByAssignmentId, setModalSessionOrderByAssignmentId] = useState<number[] | null>(null);
+  const [modalSessionItemByAssignmentId, setModalSessionItemByAssignmentId] = useState<Record<number, StudyQueueItem>>({});
   const [hiddenSubmittedAssignmentIds, setHiddenSubmittedAssignmentIds] = useState<Set<number>>(new Set());
   const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
   const [showLocked, setShowLocked] = useState(true);
@@ -152,6 +154,14 @@ export default function StudyExplorer({
     [loadedItems, queueMode, viewedLevel, typeFilter, srsFilter, showLocked, searchQuery],
   );
 
+  const filteredItemByAssignmentId = useMemo(() => {
+    const map = new Map<number, StudyQueueItem>();
+    for (const item of filteredItems) {
+      map.set(item.assignmentId, item);
+    }
+    return map;
+  }, [filteredItems]);
+
   const typeCounts = useMemo(() => {
     const out = { all: 0, radical: 0, kanji: 0, vocabulary: 0 };
     for (const item of loadedItems) {
@@ -185,14 +195,54 @@ export default function StudyExplorer({
     return out;
   }, [loadedItems, queueMode, viewedLevel, typeFilter, showLocked]);
 
-  const selectedItem = filteredItems.find((item) => item.subjectId === selectedId) ?? null;
+  const modalItems = useMemo(() => {
+    if (!modalSessionOrderByAssignmentId || selectedId === null) {
+      return filteredItems;
+    }
+
+    return modalSessionOrderByAssignmentId
+      .map((assignmentId) => filteredItemByAssignmentId.get(assignmentId) ?? modalSessionItemByAssignmentId[assignmentId] ?? null)
+      .filter((item): item is StudyQueueItem => item !== null);
+  }, [filteredItems, filteredItemByAssignmentId, modalSessionItemByAssignmentId, modalSessionOrderByAssignmentId, selectedId]);
+
+  const selectedItem = modalItems.find((item) => item.subjectId === selectedId) ?? null;
   const selectedIndex = selectedItem
-    ? filteredItems.findIndex((item) => item.subjectId === selectedItem.subjectId)
+    ? modalItems.findIndex((item) => item.assignmentId === selectedItem.assignmentId)
     : -1;
-  const prevItem = selectedIndex > 0 ? filteredItems[selectedIndex - 1] : null;
-  const nextItem = selectedIndex >= 0 && selectedIndex < filteredItems.length - 1 ? filteredItems[selectedIndex + 1] : null;
+  const prevItem = selectedIndex > 0 ? modalItems[selectedIndex - 1] : null;
+  const nextItem = selectedIndex >= 0 && selectedIndex < modalItems.length - 1 ? modalItems[selectedIndex + 1] : null;
   const isAnswerRevealed = selectedItem ? revealedAssignmentIds.has(selectedItem.assignmentId) : false;
   const isSubmittingSelected = selectedItem ? submittingByAssignmentId.has(selectedItem.assignmentId) : false;
+
+  useEffect(() => {
+    if (selectedId === null) {
+      setModalSessionOrderByAssignmentId(null);
+      setModalSessionItemByAssignmentId({});
+      return;
+    }
+
+    setModalSessionOrderByAssignmentId((prev) => {
+      if (prev && prev.length > 0) {
+        return prev;
+      }
+      if (filteredItems.length === 0) {
+        return prev;
+      }
+      return filteredItems.map((item) => item.assignmentId);
+    });
+
+    setModalSessionItemByAssignmentId((prev) => {
+      if (filteredItems.length === 0) {
+        return prev;
+      }
+
+      const next = { ...prev };
+      for (const item of filteredItems) {
+        next[item.assignmentId] = item;
+      }
+      return next;
+    });
+  }, [filteredItems, selectedId]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(countsStorageKey);
@@ -341,9 +391,9 @@ export default function StudyExplorer({
   }, [selectedItem, hasMorePages, loadMorePage]);
 
   const submitReview = useCallback(async (assignmentId: number, result: "correct" | "wrong") => {
-    const itemForSubmit = filteredItems.find((item) => item.assignmentId === assignmentId) ?? selectedItem ?? null;
-    const submittedIndex = filteredItems.findIndex((item) => item.assignmentId === assignmentId);
-    const remainingAfterSubmit = filteredItems.filter((item) => item.assignmentId !== assignmentId);
+    const itemForSubmit = modalItems.find((item) => item.assignmentId === assignmentId) ?? selectedItem ?? null;
+    const submittedIndex = modalItems.findIndex((item) => item.assignmentId === assignmentId);
+    const remainingAfterSubmit = modalItems.filter((item) => item.assignmentId !== assignmentId);
     const nextFocusedItem =
       remainingAfterSubmit[submittedIndex] ??
       remainingAfterSubmit[Math.max(0, submittedIndex - 1)] ??
@@ -364,6 +414,10 @@ export default function StudyExplorer({
       });
       const payload = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(payload.error ?? "Could not submit review.");
+
+      if (itemForSubmit) {
+        setModalSessionItemByAssignmentId((prev) => ({ ...prev, [assignmentId]: itemForSubmit }));
+      }
 
       setLoadedItems((prev) => prev.filter((item) => item.assignmentId !== assignmentId));
       setTotalItems((prev) => Math.max(0, prev - 1));
@@ -410,7 +464,7 @@ export default function StudyExplorer({
       });
       setSubmitInFlight(null);
     }
-  }, [accountId, filteredItems, selectedItem]);
+  }, [accountId, modalItems, selectedItem]);
 
   const closeReviewSession = useCallback(() => {
     if (hasPendingStudySubmissions) {
@@ -423,6 +477,8 @@ export default function StudyExplorer({
 
     setSelectedId(null);
     setReviewOutcomeByAssignmentId({});
+    setModalSessionOrderByAssignmentId(null);
+    setModalSessionItemByAssignmentId({});
     setSubmitFeedback(null);
     setSubmitInFlight(null);
     setRevealedAssignmentIds(new Set());
@@ -576,7 +632,7 @@ export default function StudyExplorer({
           studyMode={studyMode}
           selectedItem={selectedItem}
           selectedIndex={selectedIndex}
-          filteredTotal={filteredItems.length}
+          filteredTotal={modalItems.length}
           prevLabel={prevItem?.characters ?? null}
           nextLabel={nextItem?.characters ?? null}
           isAnswerRevealed={isAnswerRevealed}
