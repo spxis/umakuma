@@ -10,6 +10,25 @@ import type {
 } from "./studyExplorerTypes";
 
 export const STUDY_QUEUE_STORAGE_TTL_MS = 90_000;
+export const STUDY_RECENT_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+function parseTimestampMs(value: string | null | undefined): number | null {
+  if (!value) {
+    return null;
+  }
+
+  const timestampMs = Date.parse(value);
+  return Number.isNaN(timestampMs) ? null : timestampMs;
+}
+
+export function isRecentStudyItem(item: StudyQueueItem, nowMs: number = Date.now()): boolean {
+  const anchorMs = parseTimestampMs(item.startedAt) ?? parseTimestampMs(item.availableAt);
+  if (anchorMs === null) {
+    return false;
+  }
+
+  return anchorMs >= nowMs - STUDY_RECENT_WINDOW_MS && anchorMs <= nowMs;
+}
 
 export async function fetchStudyQueue(url: string): Promise<QueueResponse> {
   const response = await fetch(url);
@@ -142,11 +161,17 @@ export function filterStudyItems(
   typeFilter: StudyTypeFilter,
   srsFilter: StudySrsFilter,
   showLocked: boolean,
+  recentOnly: boolean,
   searchQuery: string,
 ): StudyQueueItem[] {
   const normalizedQuery = normalizeStudySearch(searchQuery);
+  const nowMs = Date.now();
 
   return items.filter((item) => {
+    if (recentOnly && !isRecentStudyItem(item, nowMs)) {
+      return false;
+    }
+
     if (viewedLevel !== null) {
       if (typeof item.wkLevel !== "number" || item.wkLevel !== viewedLevel) {
         return false;

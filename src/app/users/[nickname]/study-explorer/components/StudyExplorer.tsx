@@ -37,6 +37,7 @@ import {
   disabledBadgeClass,
   fetchStudyQueue,
   filterStudyItems,
+  isRecentStudyItem,
   persistQueue,
   readStoredQueue,
   studyItemEnglishTitle,
@@ -87,6 +88,7 @@ export default function StudyExplorer({
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const selectedSubjectStorageKey = `wr:study-selected-subject:${accountId}:${queueMode}`;
   const typeFilterStorageKey = `wr:study-type-filter:${accountId}:${queueMode}`;
+  const recentOnlyStorageKey = `wr:study-recent-only:${accountId}:${queueMode}`;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const lastHandledStudyQueryRef = useRef("");
 
@@ -115,6 +117,7 @@ export default function StudyExplorer({
   const [hiddenSubmittedAssignmentIds, setHiddenSubmittedAssignmentIds] = useState<Set<number>>(new Set());
   const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
   const [showLocked, setShowLocked] = useState(true);
+  const [recentOnly, setRecentOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
 
@@ -141,17 +144,20 @@ export default function StudyExplorer({
   const availableLevels = useMemo(() => {
     const output = new Set<number>();
     for (const item of loadedItems) {
+      if (recentOnly && !isRecentStudyItem(item)) {
+        continue;
+      }
       if (item.queueType === queueMode && typeof item.wkLevel === "number") {
         output.add(item.wkLevel);
       }
     }
     return output;
-  }, [loadedItems, queueMode]);
+  }, [loadedItems, queueMode, recentOnly]);
 
   const filteredItems = useMemo(
     () =>
-      filterStudyItems(loadedItems, queueMode, viewedLevel, typeFilter, srsFilter, showLocked, searchQuery),
-    [loadedItems, queueMode, viewedLevel, typeFilter, srsFilter, showLocked, searchQuery],
+      filterStudyItems(loadedItems, queueMode, viewedLevel, typeFilter, srsFilter, showLocked, recentOnly, searchQuery),
+    [loadedItems, queueMode, viewedLevel, typeFilter, srsFilter, showLocked, recentOnly, searchQuery],
   );
 
   const filteredItemByAssignmentId = useMemo(() => {
@@ -165,6 +171,7 @@ export default function StudyExplorer({
   const typeCounts = useMemo(() => {
     const out = { all: 0, radical: 0, kanji: 0, vocabulary: 0 };
     for (const item of loadedItems) {
+      if (recentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
       if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
       if (srsFilter !== "all" && item.status !== srsFilter) continue;
@@ -176,11 +183,12 @@ export default function StudyExplorer({
       else out.vocabulary += 1;
     }
     return out;
-  }, [loadedItems, queueMode, viewedLevel, srsFilter, showLocked]);
+  }, [loadedItems, queueMode, recentOnly, viewedLevel, srsFilter, showLocked]);
 
   const srsCounts = useMemo(() => {
     const out = { all: 0, apprentice: 0, guru: 0, master: 0, enlightened: 0 };
     for (const item of loadedItems) {
+      if (recentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
       if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
       if (typeFilter !== "all" && item.subjectType !== typeFilter) continue;
@@ -193,7 +201,7 @@ export default function StudyExplorer({
       if (item.status === "enlightened") out.enlightened += 1;
     }
     return out;
-  }, [loadedItems, queueMode, viewedLevel, typeFilter, showLocked]);
+  }, [loadedItems, queueMode, recentOnly, viewedLevel, typeFilter, showLocked]);
 
   const modalItems = useMemo(() => {
     if (!modalSessionOrderByAssignmentId || selectedId === null) {
@@ -276,9 +284,23 @@ export default function StudyExplorer({
   }, [typeFilterStorageKey]);
 
   useEffect(() => {
+    const raw = window.localStorage.getItem(recentOnlyStorageKey);
+    if (!raw) {
+      setRecentOnly(false);
+      return;
+    }
+
+    setRecentOnly(raw === "1");
+  }, [recentOnlyStorageKey]);
+
+  useEffect(() => {
     if (!hasHydratedTypeFilter) return;
     window.localStorage.setItem(typeFilterStorageKey, typeFilter);
   }, [hasHydratedTypeFilter, typeFilterStorageKey, typeFilter]);
+
+  useEffect(() => {
+    window.localStorage.setItem(recentOnlyStorageKey, recentOnly ? "1" : "0");
+  }, [recentOnly, recentOnlyStorageKey]);
 
   useEffect(() => {
     if (!data?.counts) return;
@@ -567,6 +589,13 @@ export default function StudyExplorer({
                   className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
                 >
                   {showLocked ? "Hide Locked" : "Show Locked"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRecentOnly((prev) => !prev)}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(recentOnly)}`}
+                >
+                  Recent Only
                 </button>
               </div>
             </div>
