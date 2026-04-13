@@ -584,6 +584,16 @@ export default function StudyExplorer({
           submitInFlight={submitInFlight}
           submitFeedback={submitFeedback}
           reviewOutcomeByAssignmentId={reviewOutcomeByAssignmentId}
+          onMarkSkipped={(assignmentId) => {
+            setReviewOutcomeByAssignmentId((prev) => {
+              const current = prev[assignmentId];
+              if (current === "correct" || current === "wrong" || current === "skipped") {
+                return prev;
+              }
+
+              return { ...prev, [assignmentId]: "skipped" };
+            });
+          }}
           onClose={closeReviewSession}
           onPrev={
             prevItem

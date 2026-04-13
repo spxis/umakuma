@@ -41,6 +41,7 @@ type Props = {
   submitInFlight: SubmitInFlight | null;
   submitFeedback: SubmitFeedback | null;
   reviewOutcomeByAssignmentId: Record<number, ReviewOutcome>;
+  onMarkSkipped: (assignmentId: number) => void;
   onClose: () => void;
   onPrev: (() => void) | null;
   onNext: (() => void) | null;
@@ -185,6 +186,7 @@ export default function StudyReviewModal({
   submitInFlight,
   submitFeedback,
   reviewOutcomeByAssignmentId,
+  onMarkSkipped,
   onClose,
   onPrev,
   onNext,
@@ -240,23 +242,43 @@ export default function StudyReviewModal({
   const displayIndex = filteredTotal > 0 ? Math.min(selectedIndex + 1, filteredTotal) : 0;
   const displayTotal = filteredTotal;
 
+  const markCurrentAsSkippedIfUnresolved = useCallback(() => {
+    if (!studyMode || !selectedItem || selectedItem.queueType !== "review") {
+      return;
+    }
+
+    const currentOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
+    if (currentOutcome === "correct" || currentOutcome === "wrong" || currentOutcome === "skipped") {
+      return;
+    }
+
+    onMarkSkipped(selectedItem.assignmentId);
+  }, [onMarkSkipped, reviewOutcomeByAssignmentId, selectedItem, studyMode]);
+
+  const closeModal = useCallback(() => {
+    markCurrentAsSkippedIfUnresolved();
+    onClose();
+  }, [markCurrentAsSkippedIfUnresolved, onClose]);
+
   const goPrev = useCallback(() => {
     if (!onPrev) {
       return;
     }
 
+    markCurrentAsSkippedIfUnresolved();
     setFlashCycleDoneKey(null);
     onPrev();
-  }, [onPrev]);
+  }, [markCurrentAsSkippedIfUnresolved, onPrev]);
 
   const goNextItem = useCallback(() => {
     if (!onNext) {
       return;
     }
 
+    markCurrentAsSkippedIfUnresolved();
     setFlashCycleDoneKey(null);
     onNext();
-  }, [onNext]);
+  }, [markCurrentAsSkippedIfUnresolved, onNext]);
 
   const advanceFlashOrNext = useCallback(() => {
     if (onNext) {
@@ -384,7 +406,7 @@ export default function StudyReviewModal({
       }
 
       if (event.key === "Escape") {
-        onClose();
+        closeModal();
         return;
       }
 
@@ -482,7 +504,7 @@ export default function StudyReviewModal({
     isAnswerRevealed,
     goNextItem,
     goPrev,
-    onClose,
+    closeModal,
     onNext,
     onRestartFromBeginning,
     onPrev,
@@ -574,7 +596,7 @@ export default function StudyReviewModal({
     <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-3 backdrop-blur-[2px] sm:p-6">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)]">
         <div className="flex flex-col gap-2 border-b border-line bg-surface-muted px-4 py-3 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:px-6">
-          <button type="button" onClick={onClose} className="self-start rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted sm:justify-self-start">Back To List</button>
+          <button type="button" onClick={closeModal} className="self-start rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted sm:justify-self-start">Back To List</button>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-self-center">
             <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-foreground/70 sm:text-xs">#{displayIndex} of {displayTotal}</p>
             {!studyMode ? (
@@ -1141,7 +1163,7 @@ export default function StudyReviewModal({
         <div className="border-t border-line/70 bg-surface px-4 py-3 sm:px-6">
           <p className="rounded-xl border border-line/70 bg-surface-muted px-4 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:text-[11px]">
             {studyMode
-              ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev • Space reveal (study) • 1/J wrong • 2/K correct"
+              ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev • Space reveal (study) • 1/J wrong • 2/K correct • Skip counts once per item on leave"
               : viewerMode === "flash"
                 ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter/Space reveal • Enter next (revealed) • Shift+Enter prev • Shift+Space prev • Swipe ←/→ nav • Swipe ↑ reveal"
                 : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev"}
