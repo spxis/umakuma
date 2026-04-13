@@ -308,14 +308,26 @@ export default function UserDashboardTabs({
                 of {formatNumber(totalPlayers)}
               </span>
             </p>
-            {previousUser && nextUser ? (
+            {totalPlayers > 1 ? (
               <div className="mt-1 flex items-center justify-end gap-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">
-                <Link href={`/users/${encodeURIComponent(previousUser.wkUsername)}`} className="rounded-full border border-line bg-surface px-2 py-0.5 hover:bg-surface-muted" aria-label={`Previous user ${previousUser.nickname}`}>
-                  {"< "}{previousUser.nickname}
-                </Link>
-                <Link href={`/users/${encodeURIComponent(nextUser.wkUsername)}`} className="rounded-full border border-line bg-surface px-2 py-0.5 hover:bg-surface-muted" aria-label={`Next user ${nextUser.nickname}`}>
-                  {nextUser.nickname}{" >"}
-                </Link>
+                {previousUser ? (
+                  <Link href={`/users/${encodeURIComponent(previousUser.wkUsername)}`} className="rounded-full border border-line bg-surface px-2 py-0.5 hover:bg-surface-muted" aria-label={`Previous user ${previousUser.nickname}`}>
+                    {"< "}{previousUser.nickname || "Prev"}
+                  </Link>
+                ) : (
+                  <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-foreground/50">
+                    {"< Prev"}
+                  </span>
+                )}
+                {nextUser ? (
+                  <Link href={`/users/${encodeURIComponent(nextUser.wkUsername)}`} className="rounded-full border border-line bg-surface px-2 py-0.5 hover:bg-surface-muted" aria-label={`Next user ${nextUser.nickname}`}>
+                    {nextUser.nickname || "Next"}{" >"}
+                  </Link>
+                ) : (
+                  <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-foreground/50">
+                    {"Next >"}
+                  </span>
+                )}
               </div>
             ) : null}
           </div>
