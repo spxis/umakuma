@@ -17,6 +17,7 @@ import {
   subjectTypePillClass,
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
+import LevelExplorerReviewStatsCard from "../../level-explorer/components/LevelExplorerReviewStatsCard";
 import { parseWordExamples } from "../../jlpt-explorer/lib/jlptExplorerContentHelpers";
 
 type RelatedReference = {
@@ -28,6 +29,7 @@ type RelatedReference = {
 };
 
 type Props = {
+  accountId: string;
   studyMode: boolean;
   selectedItem: StudyQueueItem | null;
   selectedIndex: number;
@@ -171,6 +173,7 @@ function formatTimestampWithRelative(value: string | null | undefined): string {
 }
 
 export default function StudyReviewModal({
+  accountId,
   studyMode,
   selectedItem,
   selectedIndex,
@@ -1083,6 +1086,15 @@ export default function StudyReviewModal({
                     ) : null}
                   </div>
                 ) : null}
+
+                <div className="mt-2">
+                  <LevelExplorerReviewStatsCard
+                    accountId={accountId}
+                    subjectId={selectedItem.subjectId}
+                    currentSrsStage={selectedItem.srsStage}
+                    startedAt={selectedItem.startedAt}
+                  />
+                </div>
               </>
             ) : null}
           </section>

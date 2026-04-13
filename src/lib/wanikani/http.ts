@@ -1,4 +1,4 @@
-import { LEADERBOARD_REQUEST_GAP_MS } from "@/lib/refreshPolicy";
+import { EFFECTIVE_WANIKANI_REQUEST_GAP_MS } from "@/lib/refreshPolicy";
 
 import type {
   WaniKaniCollectionResponse,
@@ -38,7 +38,7 @@ async function runThrottledRequest<T>(token: string, work: () => Promise<T>): Pr
 
   const run = state.requestChain.then(async () => {
     const now = Date.now();
-    const waitMs = Math.max(0, state.lastRequestStartedAt + LEADERBOARD_REQUEST_GAP_MS - now);
+    const waitMs = Math.max(0, state.lastRequestStartedAt + EFFECTIVE_WANIKANI_REQUEST_GAP_MS - now);
     if (waitMs > 0) {
       await sleep(waitMs);
     }

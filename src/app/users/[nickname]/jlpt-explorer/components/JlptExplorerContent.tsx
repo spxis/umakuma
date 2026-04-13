@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
+import useSWR from "swr";
 
 import jlptReadings from "@/data/jlptReadings.json";
 import SubjectTypeFilterButton from "../../shared/SubjectTypeFilterButton";
@@ -53,6 +54,23 @@ type Props = {
 };
 
 
+// Helper for collapsible
+function Collapsible({ open, onToggle, label, children }: { open: boolean; onToggle: () => void; label: string; children: React.ReactNode }) {
+  return (
+    <div className="mt-4">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="mb-2 rounded border border-line bg-surface-muted px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground/80 hover:bg-surface"
+        aria-expanded={open}
+      >
+        {open ? "Hide" : "Show"} {label}
+      </button>
+      {open ? <div className="rounded border border-line bg-surface-muted p-3">{children}</div> : null}
+    </div>
+  );
+}
+
 export default function JlptExplorerContent({
   items,
   showEnglish,
@@ -79,6 +97,42 @@ export default function JlptExplorerContent({
   const selectedIndex = selectedItem
     ? filteredItems.findIndex((item) => item.kanji === selectedItem.kanji)
     : -1;
+
+  // --- Kanji stats/history state ---
+  const [statsOpen, setStatsOpen] = useState(false);
+  const [kanjiStats, setKanjiStats] = useState<any | null>(null);
+  const [kanjiStatsLoading, setKanjiStatsLoading] = useState(false);
+  const [kanjiStatsError, setKanjiStatsError] = useState<string | null>(null);
+
+  // Account ID is not in props, so try to extract from location (fragile fallback)
+  function getAccountIdFromUrl() {
+    if (typeof window === "undefined") return null;
+    const m = window.location.pathname.match(/\/users\/([^/]+)/);
+    return m ? m[1] : null;
+  }
+
+  useEffect(() => {
+    setKanjiStats(null);
+    setKanjiStatsError(null);
+    setStatsOpen(false);
+    if (!selectedItem) return;
+    const accountId = getAccountIdFromUrl();
+    if (!accountId) return;
+    setKanjiStatsLoading(true);
+    fetch(`/api/study/${accountId}/subjects/${selectedItem.subjectId}/history?refresh=1`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Failed to load stats");
+        return res.json();
+      })
+      .then((data) => {
+        setKanjiStats(data.history || null);
+        setKanjiStatsLoading(false);
+      })
+      .catch((err) => {
+        setKanjiStatsError("Could not load kanji stats");
+        setKanjiStatsLoading(false);
+      });
+  }, [selectedItem]);
   const effectiveVisibleCount = Math.min(
     filteredItems.length,
     Math.max(PAGE_SIZE, visibleCount, selectedIndex + 1),
@@ -318,6 +372,75 @@ export default function JlptExplorerContent({
                           </div>
 
                           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-8">
+                                                      {/* Collapsible Kanji Stats Panel */}
+                                                      {selectedItem && (
+                                                        <Collapsible
+                                                          open={statsOpen}
+                                                          onToggle={() => setStatsOpen((v) => !v)}
+                                                          label="Review Stats"
+                                                        >
+                                                          {kanjiStatsLoading ? (
+                                                            <div className="text-xs text-foreground/60">Loading stats...</div>
+                                                          ) : kanjiStatsError ? (
+                                                            <div className="text-xs text-red-600">{kanjiStatsError}</div>
+                                                          ) : kanjiStats ? (
+                                                            <div>
+                                                              {kanjiStats.latest ? (
+                                                                <div className="mb-2">
+                                                                  <div className="font-bold text-sm mb-1">Latest Snapshot</div>
+                                                                  <div className="grid grid-cols-2 gap-2 text-xs">
+                                                                    <div>Correct %:</div>
+                                                                    <div>{kanjiStats.latest.percentageCorrect ?? "-"}</div>
+                                                                    <div>Meaning Correct:</div>
+                                                                    <div>{kanjiStats.latest.meaningCorrect ?? "-"}</div>
+                                                                    <div>Meaning Incorrect:</div>
+                                                                    <div>{kanjiStats.latest.meaningIncorrect ?? "-"}</div>
+                                                                    <div>Reading Correct:</div>
+                                                                    <div>{kanjiStats.latest.readingCorrect ?? "-"}</div>
+                                                                    <div>Reading Incorrect:</div>
+                                                                    <div>{kanjiStats.latest.readingIncorrect ?? "-"}</div>
+                                                                    <div>Captured At:</div>
+                                                                    <div>{kanjiStats.latest.capturedAt ? formatDate(kanjiStats.latest.capturedAt) : "-"}</div>
+                                                                    <div>Source:</div>
+                                                                    <div>{kanjiStats.latest.source}</div>
+                                                                  </div>
+                                                                </div>
+                                                              ) : <div className="text-xs text-foreground/60">No stats yet.</div>}
+                                                              {kanjiStats.trend && kanjiStats.trend.length > 1 && (
+                                                                <div>
+                                                                  <div className="font-bold text-sm mb-1 mt-2">History Trend</div>
+                                                                  <div className="overflow-x-auto">
+                                                                    <table className="min-w-[320px] text-xs border border-line">
+                                                                      <thead>
+                                                                        <tr className="bg-surface-muted">
+                                                                          <th className="px-2 py-1 border-b border-line">Date</th>
+                                                                          <th className="px-2 py-1 border-b border-line">% Correct</th>
+                                                                          <th className="px-2 py-1 border-b border-line">Total</th>
+                                                                          <th className="px-2 py-1 border-b border-line">Correct</th>
+                                                                          <th className="px-2 py-1 border-b border-line">Wrong</th>
+                                                                          <th className="px-2 py-1 border-b border-line">Source</th>
+                                                                        </tr>
+                                                                      </thead>
+                                                                      <tbody>
+                                                                        {kanjiStats.trend.map((row: any, i: number) => (
+                                                                          <tr key={i}>
+                                                                            <td className="px-2 py-1 border-b border-line">{formatDate(row.capturedAt)}</td>
+                                                                            <td className="px-2 py-1 border-b border-line">{row.percentageCorrect}</td>
+                                                                            <td className="px-2 py-1 border-b border-line">{row.totalAnswers}</td>
+                                                                            <td className="px-2 py-1 border-b border-line">{row.correctAnswers}</td>
+                                                                            <td className="px-2 py-1 border-b border-line">{row.wrongAnswers}</td>
+                                                                            <td className="px-2 py-1 border-b border-line">{row.source}</td>
+                                                                          </tr>
+                                                                        ))}
+                                                                      </tbody>
+                                                                    </table>
+                                                                  </div>
+                                                                </div>
+                                                              )}
+                                                            </div>
+                                                          ) : null}
+                                                        </Collapsible>
+                                                      )}
                             {!studyMode ? (
                               <>
                             <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">

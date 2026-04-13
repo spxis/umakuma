@@ -106,7 +106,7 @@ export function formatNextReviewBadge(input: string | null | undefined): NextRev
   if (deltaMs <= 0) {
     if (absMs < 15 * 60 * 1000) {
       return {
-        label: "Overdue now",
+        label: "LATE now",
         className: "border-orange-300 bg-orange-50 text-orange-700",
       };
     }
@@ -114,7 +114,7 @@ export function formatNextReviewBadge(input: string | null | undefined): NextRev
     if (absMs < 60 * 60 * 1000) {
       const minutes = Math.max(1, Math.round(absMs / (60 * 1000)));
       return {
-        label: `Overdue ${minutes}m`,
+        label: `LATE ${minutes}M`,
         className: "border-orange-300 bg-orange-50 text-orange-700",
       };
     }
@@ -122,14 +122,14 @@ export function formatNextReviewBadge(input: string | null | undefined): NextRev
     if (absMs < 24 * 60 * 60 * 1000) {
       const hours = Math.max(1, Math.round(absMs / (60 * 60 * 1000)));
       return {
-        label: `Overdue ${hours}h`,
+        label: `LATE ${hours}H`,
         className: "border-orange-300 bg-orange-50 text-orange-700",
       };
     }
 
     const days = Math.max(1, Math.round(absMs / (24 * 60 * 60 * 1000)));
     return {
-      label: `Overdue ${days}d`,
+      label: `LATE ${days}D`,
       className: "border-red-300 bg-red-50 text-red-700",
     };
   }
@@ -144,7 +144,7 @@ export function formatNextReviewBadge(input: string | null | undefined): NextRev
   if (absMs < 60 * 60 * 1000) {
     const minutes = Math.max(1, Math.round(absMs / (60 * 1000)));
     return {
-      label: `In ${minutes}m`,
+      label: `In ${minutes}M`,
       className: "border-emerald-300 bg-emerald-50 text-emerald-700",
     };
   }
@@ -152,14 +152,14 @@ export function formatNextReviewBadge(input: string | null | undefined): NextRev
   if (absMs < 24 * 60 * 60 * 1000) {
     const hours = Math.max(1, Math.round(absMs / (60 * 60 * 1000)));
     return {
-      label: `In ${hours}h`,
+      label: `In ${hours}H`,
       className: "border-emerald-300 bg-emerald-50 text-emerald-700",
     };
   }
 
   const days = Math.max(1, Math.round(absMs / (24 * 60 * 60 * 1000)));
   return {
-    label: `In ${days}d`,
+    label: `In ${days}D`,
     className: "border-emerald-300 bg-emerald-50 text-emerald-700",
   };
 }

@@ -33,6 +33,7 @@ function lockedCardStateClass(item: LevelItem): string {
 }
 
 export default function LevelExplorerContent({
+  accountId,
   levelOptions,
   selectedLevels,
   searchAvailableLevels,
@@ -376,7 +377,7 @@ export default function LevelExplorerContent({
                           }
                           return (
                             <span
-                              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.03em] ${nextReviewBadge.className}`}
+                              className={`rounded-full border px-2 py-1 text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap ${nextReviewBadge.className}`}
                             >
                               {nextReviewBadge.label}
                             </span>
@@ -393,6 +394,7 @@ export default function LevelExplorerContent({
 
                 {selectedItem && index === visibleDetailInsertIndex ? (
                   <LevelExplorerDetailSection
+                    accountId={accountId}
                     selectedItem={selectedItem}
                     showEnglish={showEnglish}
                     studyMode={studyMode}

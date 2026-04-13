@@ -71,6 +71,7 @@ export default function StudyExplorer({
   queueMode,
 }: StudyExplorerProps) {
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
+  const selectedSubjectStorageKey = `wr:study-selected-subject:${accountId}:${queueMode}`;
   const typeFilterStorageKey = `wr:study-type-filter:${accountId}:${queueMode}`;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const lastHandledStudyQueryRef = useRef("");
@@ -244,8 +245,26 @@ export default function StudyExplorer({
   useEffect(() => {
     setCachedQueueData(readStoredQueue(accountId, queueMode));
     setLoadMoreError(null);
-    setSelectedId(null);
-  }, [accountId, queueMode]);
+    try {
+      const raw = window.localStorage.getItem(selectedSubjectStorageKey);
+      const parsed = Number(raw);
+      setSelectedId(Number.isInteger(parsed) && parsed > 0 ? parsed : null);
+    } catch {
+      setSelectedId(null);
+    }
+  }, [accountId, queueMode, selectedSubjectStorageKey]);
+
+  useEffect(() => {
+    try {
+      if (selectedId === null) {
+        window.localStorage.removeItem(selectedSubjectStorageKey);
+      } else {
+        window.localStorage.setItem(selectedSubjectStorageKey, String(selectedId));
+      }
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [selectedId, selectedSubjectStorageKey]);
 
   useEffect(() => {
     const runFromUrl = () => {
@@ -331,6 +350,16 @@ export default function StudyExplorer({
         kind: "success",
         message: `${result === "correct" ? "Correct" : "Wrong"} submitted for ${itemForSubmit ? `${itemForSubmit.characters} (${studyItemEnglishTitle(itemForSubmit)})` : "item"}.`,
       });
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("wr:study-review-submitted", {
+            detail: {
+              accountId,
+              subjectId: itemForSubmit?.subjectId,
+            },
+          }),
+        );
+      }
       setReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: result }));
       setHasPendingStudySubmissions(true);
       setSelectedId(nextFocusedItem?.subjectId ?? null);
@@ -513,6 +542,7 @@ export default function StudyExplorer({
 
       {!isUnauthorized ? (
         <StudyReviewModal
+          accountId={accountId}
           studyMode={studyMode}
           selectedItem={selectedItem}
           selectedIndex={selectedIndex}

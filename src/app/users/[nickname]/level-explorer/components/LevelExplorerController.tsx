@@ -422,6 +422,7 @@ export default function LevelExplorerController({
 
   return (
     <LevelExplorerContent
+      accountId={accountId}
       levelOptions={levelOptions}
       selectedLevels={selectedLevels}
       searchAvailableLevels={searchAvailableLevels}

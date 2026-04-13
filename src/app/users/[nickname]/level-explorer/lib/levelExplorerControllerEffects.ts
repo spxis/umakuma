@@ -69,10 +69,10 @@ export function useLevelExplorerUrlHydration({
       }
 
       applyingUrlStateRef.current = false;
+      hasHydratedUrlStateRef.current = true;
     };
 
     void applyFromUrl();
-    hasHydratedUrlStateRef.current = true;
 
     const onPopState = () => {
       void applyFromUrl();

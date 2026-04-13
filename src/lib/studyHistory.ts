@@ -33,6 +33,12 @@ type SubmissionReviewStatisticData = {
   percentage_correct?: unknown;
 };
 
+type ReviewTransition = {
+  createdAt: string;
+  startingSrsStage: number;
+  endingSrsStage: number;
+};
+
 function toInt(value: unknown, fallback = 0): number {
   const num = typeof value === "number" ? value : Number(value);
   if (!Number.isFinite(num)) {
@@ -111,6 +117,61 @@ export async function captureSubjectReviewStatsFromApi(params: {
 
   await insertSnapshot(params.accountId, params.source, parsed);
   return true;
+}
+
+export async function fetchSubjectReviewTransitionsFromApi(params: {
+  token: string;
+  subjectId: number;
+  limit?: number;
+}): Promise<ReviewTransition[]> {
+  const collection = await fetchAllCollectionPages(
+    `/reviews?subject_ids=${params.subjectId}`,
+    params.token,
+  );
+
+  const transitions = collection.data
+    .map((row) => {
+      const data = row.data as Record<string, unknown>;
+      const createdAt = typeof data.created_at === "string" ? data.created_at : null;
+      const startingSrsStage = toInt(data.starting_srs_stage, -1);
+      const endingSrsStage = toInt(data.ending_srs_stage, -1);
+
+      if (!createdAt || startingSrsStage <= 0 || endingSrsStage <= 0) {
+        return null;
+      }
+
+      const createdAtMs = new Date(createdAt).getTime();
+      if (!Number.isFinite(createdAtMs)) {
+        return null;
+      }
+
+      return {
+        createdAt,
+        createdAtMs,
+        startingSrsStage,
+        endingSrsStage,
+      };
+    })
+    .filter(
+      (
+        item,
+      ): item is {
+        createdAt: string;
+        createdAtMs: number;
+        startingSrsStage: number;
+        endingSrsStage: number;
+      } => item !== null,
+    )
+    .sort((a, b) => a.createdAtMs - b.createdAtMs);
+
+  const limit = Math.max(1, params.limit ?? 300);
+  const trimmed = transitions.slice(-limit);
+
+  return trimmed.map((item) => ({
+    createdAt: item.createdAt,
+    startingSrsStage: item.startingSrsStage,
+    endingSrsStage: item.endingSrsStage,
+  }));
 }
 
 export async function recordStudyReviewAttempt(params: {

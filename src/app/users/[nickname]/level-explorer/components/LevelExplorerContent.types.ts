@@ -14,6 +14,7 @@ export type VocabularyKanjiLink = {
 };
 
 export type LevelExplorerContentProps = {
+  accountId: string;
   levelOptions: number[];
   selectedLevels: Set<number>;
   searchAvailableLevels: Set<number> | null;

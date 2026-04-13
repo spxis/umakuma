@@ -60,6 +60,35 @@ function hasWkLevelMetadataRows(value: unknown): boolean {
   return true;
 }
 
+function hasResolvedRelationLabels(value: unknown): boolean {
+  if (!Array.isArray(value) || value.length === 0) {
+    return true;
+  }
+
+  for (const row of value) {
+    if (!row || typeof row !== "object") {
+      return false;
+    }
+
+    const relation = row as Record<string, unknown>;
+    if (typeof relation.label !== "string") {
+      return false;
+    }
+
+    const label = relation.label.trim();
+    if (!label) {
+      return false;
+    }
+
+    // Numeric-only labels are fallback placeholders (subjectId), not real glyph/slug labels.
+    if (/^#?\d+$/.test(label)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function snapshotHasDrilldownFields(items: unknown): boolean {
   if (!Array.isArray(items) || items.length === 0) {
     return true;
@@ -94,11 +123,19 @@ function snapshotHasDrilldownFields(items: unknown): boolean {
       return false;
     }
 
+    if (!hasResolvedRelationLabels(row.radicals)) {
+      return false;
+    }
+
     if (!hasReadingMetadataRows(row.visuallySimilar)) {
       return false;
     }
 
     if (!hasWkLevelMetadataRows(row.visuallySimilar)) {
+      return false;
+    }
+
+    if (!hasResolvedRelationLabels(row.visuallySimilar)) {
       return false;
     }
 
@@ -110,7 +147,15 @@ function snapshotHasDrilldownFields(items: unknown): boolean {
       return false;
     }
 
+    if (row.subjectType === "kanji" && !hasResolvedRelationLabels(row.usedInVocabulary)) {
+      return false;
+    }
+
     if (row.subjectType === "vocabulary" && !hasReadingMetadataRows(row.componentKanji)) {
+      return false;
+    }
+
+    if (row.subjectType === "vocabulary" && !hasResolvedRelationLabels(row.componentKanji)) {
       return false;
     }
   }

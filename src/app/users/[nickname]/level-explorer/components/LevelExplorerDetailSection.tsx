@@ -11,14 +11,15 @@ import {
   pronunciationForReading,
   relatedReferenceCardClass,
   secondaryReadingsForDisplay,
+  shortSubjectTypeLabel,
   statusClass,
   statusShortLabel,
-  shortSubjectTypeLabel,
   subjectTypePillClass,
   titleForDisplay,
   typeGlyphBoxClass,
 } from "../lib/levelExplorerDisplay";
 import LevelRelatedPanels from "./LevelRelatedPanels";
+import LevelExplorerReviewStatsCard from "./LevelExplorerReviewStatsCard";
 
 type RelatedEntry = {
   subjectId: number;
@@ -36,6 +37,7 @@ type VocabularyKanjiLink = {
 };
 
 type Props = {
+  accountId: string;
   selectedItem: LevelItem;
   showEnglish: boolean;
   studyMode: boolean;
@@ -51,21 +53,6 @@ type Props = {
   onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
   onJumpToKanji: (subjectId: number, wkLevel: number | null) => Promise<void>;
 };
-
-function labelClass(label: string, size: "normal" | "large"): string {
-  if (size === "normal") {
-    return "text-xl";
-  }
-
-  const length = Array.from(label).length;
-  if (length <= 2) {
-    return "text-4xl";
-  }
-  if (length <= 4) {
-    return "text-3xl";
-  }
-  return "text-2xl";
-}
 
 function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
   return items.flatMap((item) => {
@@ -93,6 +80,15 @@ function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
       fallbackKey: `${item.subjectId}-${segment}-${index}`,
     }));
   });
+}
+
+function labelClass(label: string, size: "normal" | "large"): string {
+  if (size === "normal") return "text-xl";
+
+  const length = Array.from(label).length;
+  if (length <= 2) return "text-4xl";
+  if (length <= 4) return "text-3xl";
+  return "text-2xl";
 }
 
 function RelatedReferenceCards({
@@ -123,13 +119,8 @@ function RelatedReferenceCards({
         const relationType = linked?.subjectType;
         const reading = typeof entry.reading === "string" && entry.reading.trim() ? entry.reading : null;
         const subtitle = (() => {
-          if (!reading) {
-            return null;
-          }
-
-          if (!showEnglish) {
-            return reading;
-          }
+          if (!reading) return null;
+          if (!showEnglish) return reading;
 
           const pronunciation = pronunciationForReading(reading);
           return pronunciation ? `${reading} / ${pronunciation}` : reading;
@@ -193,10 +184,7 @@ function VocabularyKanjiCards({
     <div className="mt-2 flex flex-wrap justify-center gap-2">
       {links.map((item) => {
         const subtitle = (() => {
-          if (!showEnglish) {
-            return item.reading;
-          }
-
+          if (!showEnglish) return item.reading;
           const pronunciation = pronunciationForReading(item.reading);
           return pronunciation ? `${item.reading} / ${pronunciation}` : item.reading;
         })();
@@ -224,6 +212,7 @@ function VocabularyKanjiCards({
 }
 
 export default function LevelExplorerDetailSection({
+  accountId,
   selectedItem,
   showEnglish,
   studyMode,
@@ -246,11 +235,7 @@ export default function LevelExplorerDetailSection({
   const revealedStudyTitle =
     primaryMeaning ||
     titleForDisplay(selectedItem, true) ||
-    (selectedItem.subjectType === "kanji"
-      ? "Kanji"
-      : selectedItem.subjectType === "radical"
-        ? "Radical"
-        : "Vocabulary");
+    (selectedItem.subjectType === "kanji" ? "Kanji" : selectedItem.subjectType === "radical" ? "Radical" : "Vocabulary");
 
   return (
     <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
@@ -271,27 +256,24 @@ export default function LevelExplorerDetailSection({
               <p className={`text-center font-black leading-none text-current ${isStudyHidden ? "text-6xl sm:text-7xl" : "text-4xl"}`}>
                 {selectedItem.characters}
               </p>
-              {(() => {
-                if (isStudyHidden) {
-                  return null;
-                }
+              {!isStudyHidden ? (
+                (() => {
+                  const subtitle = showEnglish
+                    ? englishSubtitleForDisplay(selectedItem)
+                    : glyphSubtitleForDisplay(selectedItem);
+                  if (!subtitle) return null;
 
-                const subtitle = showEnglish
-                  ? englishSubtitleForDisplay(selectedItem)
-                  : glyphSubtitleForDisplay(selectedItem);
-                if (!subtitle) {
-                  return null;
-                }
-
-                return (
-                  <p className="mt-1 w-full text-center text-sm font-semibold text-foreground/85">
-                    <ReadingWithPronunciation reading={subtitle} />
-                  </p>
-                );
-              })()}
+                  return (
+                    <p className="mt-1 w-full text-center text-sm font-semibold text-foreground/85">
+                      <ReadingWithPronunciation reading={subtitle} />
+                    </p>
+                  );
+                })()
+              ) : null}
             </div>
           </div>
         </div>
+
         <>
           <div className="flex flex-wrap justify-start gap-1 sm:justify-end">
             <span className={`subject-pill ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)}</span>
@@ -303,9 +285,7 @@ export default function LevelExplorerDetailSection({
               <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.jlptLevel}</span>
             ) : null}
             <span className="subject-pill border-line bg-surface text-foreground">SRS {selectedItem.srsStage}</span>
-            {nextReviewBadge ? (
-              <span className={`subject-pill ${nextReviewBadge.className}`}>{nextReviewBadge.label}</span>
-            ) : null}
+            {nextReviewBadge ? <span className={`subject-pill ${nextReviewBadge.className}`}>{nextReviewBadge.label}</span> : null}
           </div>
           <div className="min-w-0">
             {isStudyHidden ? (
@@ -328,34 +308,29 @@ export default function LevelExplorerDetailSection({
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {canShowReadings ? (
           <>
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-          <p className="text-xs font-bold uppercase text-foreground/70">Primary reading</p>
-          <p className="mt-1 font-semibold text-foreground/90">
-            {selectedItem.subjectType === "radical" ? (
-              "Not applicable"
-            ) : (
-              <ReadingListWithPronunciation
-                readings={selectedItem.primaryReadings ?? []}
-                mode={showEnglish ? "inline" : "plain"}
-              />
-            )}
-          </p>
-        </div>
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-          <p className="text-xs font-bold uppercase text-foreground/70">Secondary readings</p>
-          <p className="mt-1 font-semibold text-foreground/90">
-            {selectedItem.subjectType === "radical" ? (
-              "Not applicable"
-            ) : (
-              <ReadingListWithPronunciation
-                readings={secondaryReadingsForDisplay(selectedItem)}
-                mode={showEnglish ? "inline" : "plain"}
-              />
-            )}
-          </p>
-        </div>
+            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-foreground/70">Primary reading</p>
+              <p className="mt-1 font-semibold text-foreground/90">
+                {selectedItem.subjectType === "radical" ? (
+                  "Not applicable"
+                ) : (
+                  <ReadingListWithPronunciation readings={selectedItem.primaryReadings ?? []} mode={showEnglish ? "inline" : "plain"} />
+                )}
+              </p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-foreground/70">Secondary readings</p>
+              <p className="mt-1 font-semibold text-foreground/90">
+                {selectedItem.subjectType === "radical" ? (
+                  "Not applicable"
+                ) : (
+                  <ReadingListWithPronunciation readings={secondaryReadingsForDisplay(selectedItem)} mode={showEnglish ? "inline" : "plain"} />
+                )}
+              </p>
+            </div>
           </>
         ) : null}
+
         <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
           <p className="text-xs font-bold uppercase text-foreground/70">Started</p>
           <p className="mt-1 font-semibold text-foreground/90">
@@ -377,63 +352,72 @@ export default function LevelExplorerDetailSection({
       </div>
 
       {!studyMode ? (
-      <div className={`mt-4 grid gap-3 ${showReadingExplanation ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
-        <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-          <p className="text-xs font-bold uppercase text-foreground/70">Meaning explanation</p>
-          <p className="mt-2 text-foreground/90">{selectedMeaningExplanation}</p>
-        </article>
-        {showReadingExplanation ? (
+        <div className={`mt-4 grid gap-3 ${showReadingExplanation ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
           <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Reading explanation</p>
-            <p className="mt-2 text-foreground/90">{selectedReadingExplanationRaw}</p>
+            <p className="text-xs font-bold uppercase text-foreground/70">Meaning explanation</p>
+            <p className="mt-2 text-foreground/90">{selectedMeaningExplanation}</p>
           </article>
-        ) : null}
-      </div>
+          {showReadingExplanation ? (
+            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+              <p className="text-xs font-bold uppercase text-foreground/70">Reading explanation</p>
+              <p className="mt-2 text-foreground/90">{selectedReadingExplanationRaw}</p>
+            </article>
+          ) : null}
+        </div>
       ) : null}
 
       {!studyMode ? (
-      <LevelRelatedPanels
-        hasPrimary={hasPrimaryRelatedPanel}
-        hasVisuallySimilar={hasVisuallySimilarPanel}
-        hasUsedInVocabulary={hasUsedInVocabularyPanel}
-        primaryTitle={selectedItem.subjectType === "vocabulary" ? "Kanji" : "Radicals"}
-        primaryContent={
-          selectedItem.subjectType === "vocabulary" ? (
-            <VocabularyKanjiCards
-              links={vocabularyKanjiLinks}
-              showEnglish={showEnglish}
-              selectedSubjectId={selectedItem.subjectId}
-              onJumpToKanji={onJumpToKanji}
-            />
-          ) : (
+        <LevelRelatedPanels
+          hasPrimary={hasPrimaryRelatedPanel}
+          hasVisuallySimilar={hasVisuallySimilarPanel}
+          hasUsedInVocabulary={hasUsedInVocabularyPanel}
+          primaryTitle={selectedItem.subjectType === "vocabulary" ? "Kanji" : "Radicals"}
+          primaryContent={
+            selectedItem.subjectType === "vocabulary" ? (
+              <VocabularyKanjiCards
+                links={vocabularyKanjiLinks}
+                showEnglish={showEnglish}
+                selectedSubjectId={selectedItem.subjectId}
+                onJumpToKanji={onJumpToKanji}
+              />
+            ) : (
+              <RelatedReferenceCards
+                items={selectedItem.radicals ?? []}
+                large={selectedItem.subjectType === "kanji"}
+                showEnglish={showEnglish}
+                subjectById={subjectById}
+                onJumpToRelatedSubject={onJumpToRelatedSubject}
+              />
+            )
+          }
+          visuallySimilarContent={
             <RelatedReferenceCards
-              items={selectedItem.radicals ?? []}
+              items={selectedItem.visuallySimilar ?? []}
               large={selectedItem.subjectType === "kanji"}
               showEnglish={showEnglish}
               subjectById={subjectById}
               onJumpToRelatedSubject={onJumpToRelatedSubject}
             />
-          )
-        }
-        visuallySimilarContent={
-          <RelatedReferenceCards
-            items={selectedItem.visuallySimilar ?? []}
-            large={selectedItem.subjectType === "kanji"}
-            showEnglish={showEnglish}
-            subjectById={subjectById}
-            onJumpToRelatedSubject={onJumpToRelatedSubject}
-          />
-        }
-        usedInVocabularyContent={
-          <RelatedReferenceCards
-            items={selectedItem.usedInVocabulary ?? []}
-            large
-            showEnglish={showEnglish}
-            subjectById={subjectById}
-            onJumpToRelatedSubject={onJumpToRelatedSubject}
-          />
-        }
-      />
+          }
+          usedInVocabularyContent={
+            <RelatedReferenceCards
+              items={selectedItem.usedInVocabulary ?? []}
+              large
+              showEnglish={showEnglish}
+              subjectById={subjectById}
+              onJumpToRelatedSubject={onJumpToRelatedSubject}
+            />
+          }
+        />
+      ) : null}
+
+      {!studyMode ? (
+        <LevelExplorerReviewStatsCard
+          accountId={accountId}
+          subjectId={selectedItem.subjectId}
+          currentSrsStage={selectedItem.srsStage}
+          startedAt={selectedItem.startedAt}
+        />
       ) : null}
     </section>
   );

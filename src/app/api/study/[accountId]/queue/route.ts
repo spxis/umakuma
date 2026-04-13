@@ -76,6 +76,29 @@ function modePathParam(mode: QueueMode): string {
     : "immediately_available_for_lessons=true";
 }
 
+async function hydrateMissingSubjects(
+  token: string,
+  subjectById: Map<number, { object: string; data: SubjectData }>,
+  subjectIds: number[],
+): Promise<void> {
+  const missingIds = subjectIds.filter((subjectId) => !subjectById.has(subjectId));
+
+  for (let i = 0; i < missingIds.length; i += ASSIGNMENT_CHUNK_SIZE) {
+    const chunkIds = missingIds.slice(i, i + ASSIGNMENT_CHUNK_SIZE);
+    if (chunkIds.length === 0) {
+      continue;
+    }
+
+    const collection = await fetchAllCollectionPages(`/subjects?ids=${chunkIds.join(",")}`, token);
+    for (const row of collection.data) {
+      subjectById.set(row.id, {
+        object: row.object ?? "subject",
+        data: row.data as SubjectData,
+      });
+    }
+  }
+}
+
 function buildImmediateAssignmentsPath(mode: QueueMode): string {
   return `/assignments?${modePathParam(mode)}`;
 }
@@ -346,6 +369,30 @@ export async function GET(request: Request, context: RouteContext) {
       for (const [subjectId, row] of lessonState.subjectById.entries()) {
         subjectById.set(subjectId, { object: row.object, data: row.data });
       }
+    }
+
+    const relatedSubjectIds = new Set<number>();
+    for (const row of queued) {
+      const subject = subjectById.get(row.data.subject_id)?.data;
+      if (!subject) {
+        continue;
+      }
+
+      for (const subjectId of subject.component_subject_ids ?? []) {
+        relatedSubjectIds.add(subjectId);
+      }
+
+      for (const subjectId of subject.amalgamation_subject_ids ?? []) {
+        relatedSubjectIds.add(subjectId);
+      }
+
+      for (const subjectId of subject.visually_similar_subject_ids ?? []) {
+        relatedSubjectIds.add(subjectId);
+      }
+    }
+
+    if (relatedSubjectIds.size > 0) {
+      await hydrateMissingSubjects(token, subjectById, Array.from(relatedSubjectIds));
     }
 
     const kanjiChars = Array.from(
