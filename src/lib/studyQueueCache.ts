@@ -13,6 +13,7 @@ type CachedStudyQueueSyncState = {
   assignmentById: Map<number, unknown>;
   subjectById: Map<number, unknown>;
   assignmentCheckpoint: string | null;
+  modeSignature?: string;
   cachedAtMs: number;
   lastFullSyncAtMs: number;
 };
@@ -101,6 +102,7 @@ export function setCachedStudyQueueSyncState(
     assignmentById: Map<number, unknown>;
     subjectById: Map<number, unknown>;
     assignmentCheckpoint: string | null;
+    modeSignature?: string;
     lastFullSyncAtMs: number;
   },
 ): void {
@@ -108,6 +110,7 @@ export function setCachedStudyQueueSyncState(
     assignmentById: state.assignmentById,
     subjectById: state.subjectById,
     assignmentCheckpoint: state.assignmentCheckpoint,
+    modeSignature: state.modeSignature,
     lastFullSyncAtMs: state.lastFullSyncAtMs,
     cachedAtMs: Date.now(),
   });

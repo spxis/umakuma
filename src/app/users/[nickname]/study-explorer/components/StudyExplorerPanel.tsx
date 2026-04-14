@@ -119,6 +119,8 @@ export default function StudyExplorerPanel({
   onClearAllFilters,
 }: Props) {
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
+  const showFilterPagingState =
+    queueMode === "lesson" && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
   const srsStatuses =
     queueMode === "lesson"
       ? ([] as const)
@@ -252,11 +254,11 @@ export default function StudyExplorerPanel({
           </div>
         </div>
 
-        {showLoadingIndicator ? (
+        {showLoadingIndicator || showFilterPagingState ? (
           <div className="mb-3 rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/75">
             <div className="flex items-center gap-2">
               <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
-              <span>Loading study queue...</span>
+              <span>{showFilterPagingState ? "Loading selected level..." : "Loading study queue..."}</span>
             </div>
           </div>
         ) : null}
@@ -314,7 +316,7 @@ export default function StudyExplorerPanel({
               </div>
             ) : null}
           </>
-        ) : showLoadingIndicator ? null : (
+        ) : showLoadingIndicator || showFilterPagingState ? null : (
           <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
             No study items match the current filters.{" "}
             <button

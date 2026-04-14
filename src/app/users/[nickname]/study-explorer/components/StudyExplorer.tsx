@@ -397,6 +397,37 @@ export default function StudyExplorer({
     return () => observer.disconnect();
   }, [selectedItem, hasMorePages, loadMorePage]);
 
+  useEffect(() => {
+    if (queueMode !== "lesson") {
+      return;
+    }
+    if (selectedItem || isLoadingMore || !hasMorePages) {
+      return;
+    }
+    if (viewedLevel === null || typeFilter !== "all") {
+      return;
+    }
+
+    const expectedForLevel = lessonLevelCounts[viewedLevel] ?? 0;
+    if (expectedForLevel <= 0) {
+      return;
+    }
+
+    if (filteredItems.length < expectedForLevel) {
+      void loadMorePage();
+    }
+  }, [
+    filteredItems.length,
+    hasMorePages,
+    isLoadingMore,
+    lessonLevelCounts,
+    loadMorePage,
+    queueMode,
+    selectedItem,
+    typeFilter,
+    viewedLevel,
+  ]);
+
   const { submitReview, submitLessonStart, closeReviewSession } = useStudyReviewSubmission({
     accountId,
     modalItems,

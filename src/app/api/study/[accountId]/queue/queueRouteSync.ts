@@ -19,6 +19,10 @@ import {
   type SubjectData,
 } from "./queueRouteUtils";
 
+function queueModeSignature(mode: QueueMode): string {
+  return mode === "lesson" ? "lesson-srs0-v2" : "review-immediate-v1";
+}
+
 async function fetchEligibleAssignmentIds(
   token: string,
   mode: QueueMode,
@@ -51,6 +55,7 @@ export async function hydrateQueueSyncState(
   token: string,
 ): Promise<QueueSyncState> {
   const nowMs = Date.now();
+  const signature = queueModeSignature(mode);
   const cachedState = getCachedStudyQueueSyncState(accountId, mode);
   const assignmentById = new Map<number, AssignmentRow>();
   const subjectById = new Map<number, CachedSubjectRow>();
@@ -68,6 +73,7 @@ export async function hydrateQueueSyncState(
   let assignmentCheckpoint = cachedState?.assignmentCheckpoint ?? null;
   const shouldFullResync =
     !cachedState ||
+    cachedState.modeSignature !== signature ||
     !assignmentCheckpoint ||
     nowMs - cachedState.lastFullSyncAtMs > ASSIGNMENT_FULL_RESYNC_MS;
   let lastFullSyncAtMs = cachedState?.lastFullSyncAtMs ?? 0;
@@ -143,6 +149,7 @@ export async function hydrateQueueSyncState(
     assignmentById: assignmentById as Map<number, unknown>,
     subjectById: subjectById as Map<number, unknown>,
     assignmentCheckpoint,
+    modeSignature: signature,
     lastFullSyncAtMs,
   });
 
