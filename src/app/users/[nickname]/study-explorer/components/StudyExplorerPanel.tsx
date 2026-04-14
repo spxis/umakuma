@@ -48,8 +48,16 @@ type Props = {
   viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
   srsFilter: StudySrsFilter;
+  queueMode: "review" | "lesson";
   typeCounts: { all: number; radical: number; kanji: number; vocabulary: number };
-  srsCounts: { all: number; apprentice: number; guru: number; master: number; enlightened: number };
+  srsCounts: {
+    all: number;
+    locked: number;
+    apprentice: number;
+    guru: number;
+    master: number;
+    enlightened: number;
+  };
   filteredItems: StudyQueueItem[];
   totalItems: number;
   hasMorePages: boolean;
@@ -82,6 +90,7 @@ export default function StudyExplorerPanel({
   viewedLevel,
   typeFilter,
   srsFilter,
+  queueMode,
   typeCounts,
   srsCounts,
   filteredItems,
@@ -107,6 +116,10 @@ export default function StudyExplorerPanel({
   onClearAllFilters,
 }: Props) {
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
+  const srsStatuses =
+    queueMode === "lesson"
+      ? (["locked"] as const)
+      : (["all", "apprentice", "guru", "master", "enlightened"] as const);
 
   return (
     <>
@@ -151,7 +164,7 @@ export default function StudyExplorerPanel({
           />
 
           <div className="ml-auto flex flex-wrap justify-end gap-2">
-            {(["all", "apprentice", "guru", "master", "enlightened"] as const).map((status) => (
+            {srsStatuses.map((status) => (
               <button
                 key={status}
                 type="button"

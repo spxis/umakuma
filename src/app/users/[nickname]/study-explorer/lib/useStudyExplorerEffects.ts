@@ -33,7 +33,9 @@ type Args = {
   setLoadMoreError: React.Dispatch<React.SetStateAction<string | null>>;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   setViewedLevel: React.Dispatch<React.SetStateAction<number | null>>;
-  setSrsFilter: React.Dispatch<React.SetStateAction<"all" | "apprentice" | "guru" | "master" | "enlightened">>;
+  setSrsFilter: React.Dispatch<
+    React.SetStateAction<"all" | "locked" | "apprentice" | "guru" | "master" | "enlightened">
+  >;
   setShowLocked: React.Dispatch<React.SetStateAction<boolean>>;
   lastHandledStudyQueryRef: React.MutableRefObject<string>;
 };

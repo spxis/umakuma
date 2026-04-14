@@ -153,7 +153,7 @@ export default function StudyExplorer({
   }, [loadedItems, queueMode, recentOnly, viewedLevel, srsFilter, showLocked]);
 
   const srsCounts = useMemo(() => {
-    const out = { all: 0, apprentice: 0, guru: 0, master: 0, enlightened: 0 };
+    const out = { all: 0, locked: 0, apprentice: 0, guru: 0, master: 0, enlightened: 0 };
     for (const item of loadedItems) {
       if (recentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
@@ -162,6 +162,7 @@ export default function StudyExplorer({
       if (!showLocked && item.status === "locked") continue;
 
       out.all += 1;
+      if (item.status === "locked") out.locked += 1;
       if (item.status === "apprentice") out.apprentice += 1;
       if (item.status === "guru") out.guru += 1;
       if (item.status === "master") out.master += 1;
@@ -341,6 +342,7 @@ export default function StudyExplorer({
         viewedLevel={viewedLevel}
         typeFilter={typeFilter}
         srsFilter={srsFilter}
+        queueMode={queueMode}
         typeCounts={typeCounts}
         srsCounts={srsCounts}
         filteredItems={filteredItems}

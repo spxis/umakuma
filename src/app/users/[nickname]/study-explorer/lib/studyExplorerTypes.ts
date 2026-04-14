@@ -51,4 +51,7 @@ export type StudyExplorerProps = {
 };
 
 export type StudyTypeFilter = "all" | "radical" | "kanji" | "vocabulary";
-export type StudySrsFilter = Extract<SrsFilter, "all" | "apprentice" | "guru" | "master" | "enlightened">;
+export type StudySrsFilter = Extract<
+  SrsFilter,
+  "all" | "locked" | "apprentice" | "guru" | "master" | "enlightened"
+>;
