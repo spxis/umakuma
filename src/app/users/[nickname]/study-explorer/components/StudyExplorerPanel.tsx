@@ -312,7 +312,13 @@ export default function StudyExplorerPanel({
 
             {hasMorePages ? (
               <div ref={sentinelRef} className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
-                {isLoadingMore ? "Loading more..." : loadMoreError ? `Load error: ${loadMoreError}` : "Scroll to load more..."}
+                {isLoadingMore
+                  ? "Loading more..."
+                  : loadMoreError
+                    ? `Load error: ${loadMoreError}`
+                    : queueMode === "lesson"
+                      ? "Loading remaining lessons..."
+                      : "Scroll to load more..."}
               </div>
             ) : null}
           </>

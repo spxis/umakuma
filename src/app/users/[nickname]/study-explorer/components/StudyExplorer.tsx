@@ -424,6 +424,17 @@ export default function StudyExplorer({
     if (selectedItem || isLoadingMore || !hasMorePages) {
       return;
     }
+
+    void loadMorePage();
+  }, [hasMorePages, isLoadingMore, loadMorePage, queueMode, selectedItem]);
+
+  useEffect(() => {
+    if (queueMode !== "lesson") {
+      return;
+    }
+    if (selectedItem || isLoadingMore || !hasMorePages) {
+      return;
+    }
     if (viewedLevel === null || typeFilter !== "all") {
       return;
     }
