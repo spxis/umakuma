@@ -9,8 +9,10 @@ type Args = {
   countsStorageKey: string;
   selectedSubjectStorageKey: string;
   typeFilterStorageKey: string;
+  viewedLevelStorageKey: string;
   recentOnlyStorageKey: string;
   showLockedStorageKey: string;
+  viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
   recentOnly: boolean;
   showLocked: boolean;
@@ -66,8 +68,10 @@ export function useStudyExplorerEffects({
   countsStorageKey,
   selectedSubjectStorageKey,
   typeFilterStorageKey,
+  viewedLevelStorageKey,
   recentOnlyStorageKey,
   showLockedStorageKey,
+  viewedLevel,
   typeFilter,
   recentOnly,
   showLocked,
@@ -129,6 +133,23 @@ export function useStudyExplorerEffects({
   }, [setHasHydratedTypeFilter, setTypeFilter, typeFilterStorageKey]);
 
   useEffect(() => {
+    const raw = window.localStorage.getItem(viewedLevelStorageKey);
+    if (!raw) {
+      setViewedLevel(null);
+      return;
+    }
+
+    const parsed = Number(raw);
+    if (Number.isInteger(parsed) && parsed > 0) {
+      setViewedLevel(parsed);
+      return;
+    }
+
+    window.localStorage.removeItem(viewedLevelStorageKey);
+    setViewedLevel(null);
+  }, [setViewedLevel, viewedLevelStorageKey]);
+
+  useEffect(() => {
     const raw = window.localStorage.getItem(recentOnlyStorageKey);
     if (!raw) {
       setRecentOnly(false);
@@ -151,6 +172,15 @@ export function useStudyExplorerEffects({
     if (!hasHydratedTypeFilter) return;
     window.localStorage.setItem(typeFilterStorageKey, typeFilter);
   }, [hasHydratedTypeFilter, typeFilter, typeFilterStorageKey]);
+
+  useEffect(() => {
+    if (viewedLevel === null) {
+      window.localStorage.removeItem(viewedLevelStorageKey);
+      return;
+    }
+
+    window.localStorage.setItem(viewedLevelStorageKey, String(viewedLevel));
+  }, [viewedLevel, viewedLevelStorageKey]);
 
   useEffect(() => {
     window.localStorage.setItem(recentOnlyStorageKey, recentOnly ? "1" : "0");

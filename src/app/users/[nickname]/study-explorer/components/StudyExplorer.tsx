@@ -25,7 +25,8 @@ import {
 import { useStudyReviewSubmission } from "../lib/useStudyReviewSubmission";
 import { useStudyExplorerEffects } from "../lib/useStudyExplorerEffects";
 
-const API_PAGE_SIZE = 120;
+const REVIEW_API_PAGE_SIZE = 120;
+const LESSON_API_PAGE_SIZE = 200;
 
 function sameAssignmentList(a: StudyQueueItem[], b: StudyQueueItem[]): boolean {
   if (a.length !== b.length) {
@@ -53,6 +54,7 @@ export default function StudyExplorer({
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const selectedSubjectStorageKey = `wr:study-selected-subject:${accountId}:${queueMode}`;
   const typeFilterStorageKey = `wr:study-type-filter:${accountId}:${queueMode}`;
+  const viewedLevelStorageKey = `wr:study-viewed-level:${accountId}:${queueMode}`;
   const recentOnlyStorageKey = `wr:study-recent-only:${accountId}:${queueMode}`;
   const showLockedStorageKey = `wr:study-show-locked:${accountId}:${queueMode}`;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -90,9 +92,10 @@ export default function StudyExplorer({
   const effectiveSrsFilter: StudySrsFilter = queueMode === "lesson" ? "all" : srsFilter;
   const effectiveRecentOnly = queueMode === "lesson" ? false : recentOnly;
   const effectiveShowLocked = queueMode === "lesson" ? true : showLocked;
+  const initialPageSize = queueMode === "lesson" ? LESSON_API_PAGE_SIZE : REVIEW_API_PAGE_SIZE;
 
   const { data, error, isLoading, isValidating, mutate: mutateQueue } = useSWR(
-    `/api/study/${accountId}/queue?mode=${queueMode}&limit=${API_PAGE_SIZE}&offset=0`,
+    `/api/study/${accountId}/queue?mode=${queueMode}&limit=${initialPageSize}&offset=0`,
     fetchStudyQueue,
     {
       fallbackData: cachedQueueData,
@@ -342,8 +345,10 @@ export default function StudyExplorer({
     countsStorageKey,
     selectedSubjectStorageKey,
     typeFilterStorageKey,
+    viewedLevelStorageKey,
     recentOnlyStorageKey,
     showLockedStorageKey,
+    viewedLevel,
     typeFilter,
     recentOnly,
     showLocked,
@@ -394,7 +399,7 @@ export default function StudyExplorer({
     setLoadMoreError(null);
     try {
       const payload = await fetchStudyQueue(
-        `/api/study/${accountId}/queue?mode=${queueMode}&limit=${API_PAGE_SIZE}&offset=${loadedItems.length}`,
+        `/api/study/${accountId}/queue?mode=${queueMode}&limit=${initialPageSize}&offset=${loadedItems.length}`,
       );
       const payloadVisibleItems = payload.items.filter(
         (item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId),
@@ -413,7 +418,16 @@ export default function StudyExplorer({
     } finally {
       setIsLoadingMore(false);
     }
-  }, [accountId, queueMode, loadedItems.length, hasMorePages, hiddenSubmittedAssignmentIds, isLoadingMore, totalItems]);
+  }, [
+    accountId,
+    queueMode,
+    loadedItems.length,
+    hasMorePages,
+    hiddenSubmittedAssignmentIds,
+    initialPageSize,
+    isLoadingMore,
+    totalItems,
+  ]);
 
   useEffect(() => {
     if (!sentinelRef.current || selectedItem || !hasMorePages) return;
