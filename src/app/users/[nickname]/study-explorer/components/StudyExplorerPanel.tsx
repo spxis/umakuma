@@ -135,7 +135,7 @@ export default function StudyExplorerPanel({
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h2 className="text-xl font-black text-foreground">Study</h2>
-            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Reviews due now and available lessons across all levels</p>
+            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Reviews due now and pending lessons across all levels</p>
           </div>
           <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope="study" /></div>
         </div>

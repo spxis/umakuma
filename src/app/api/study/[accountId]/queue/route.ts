@@ -305,7 +305,7 @@ export async function GET(request: Request, context: RouteContext) {
             }
           : {
               reviews: items.length,
-              lessons: await fetchAssignmentCount("/assignments?immediately_available_for_lessons=true", token),
+              lessons: await fetchAssignmentCount("/assignments?srs_stages=0", token),
               all: 0,
             };
 

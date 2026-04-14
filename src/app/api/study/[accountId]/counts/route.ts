@@ -37,7 +37,7 @@ export async function GET(request: Request, context: RouteContext) {
 
     const [reviews, lessons] = await Promise.all([
       fetchAssignmentCount("/assignments?immediately_available_for_review=true", token),
-      fetchAssignmentCount("/assignments?immediately_available_for_lessons=true", token),
+      fetchAssignmentCount("/assignments?srs_stages=0", token),
     ]);
 
     return NextResponse.json(

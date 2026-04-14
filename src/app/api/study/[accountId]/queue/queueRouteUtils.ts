@@ -58,7 +58,7 @@ export function normalizeSubjectType(input: string): "radical" | "kanji" | "voca
 export function modePathParam(mode: QueueMode): string {
   return mode === "review"
     ? "immediately_available_for_review=true"
-    : "immediately_available_for_lessons=true";
+    : "srs_stages=0";
 }
 
 export async function hydrateMissingSubjects(
