@@ -28,6 +28,7 @@ export default function StudyReviewModal({
   onRestartFromBeginning,
   onReveal,
   onSubmit,
+  onStartLesson,
 }: Props) {
   const usedInWordsStorageKey = "wr:study-modal:used-in-words-collapsed";
   const usedKanjiStorageKey = "wr:study-modal:used-kanji-collapsed";
@@ -192,6 +193,7 @@ export default function StudyReviewModal({
   const primaryReadings = selectedItem.primaryReadings ?? [];
   const secondaryReadings = (selectedItem.readings ?? []).filter((reading) => !primaryReadings.includes(reading));
   const requiresReveal = studyMode && selectedItem.queueType === "review";
+  const isLessonItem = selectedItem.queueType === "lesson";
   const selectedOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
   const isOutcomeFinal = selectedOutcome === "correct" || selectedOutcome === "wrong";
   const detailsRevealed = isOutcomeFinal || !requiresReveal || isAnswerRevealed;
@@ -306,6 +308,7 @@ export default function StudyReviewModal({
             correct={correct}
             onReveal={onReveal}
             onSubmit={onSubmit}
+            onStartLesson={onStartLesson}
             onAdvanceFlashOrNext={advanceFlashOrNext}
             onFlashTouchStart={handleFlashTouchStart}
             onFlashTouchEnd={handleFlashTouchEnd}
@@ -322,7 +325,9 @@ export default function StudyReviewModal({
         <div className="border-t border-line/70 bg-surface px-4 py-3 sm:px-6">
           <p className="rounded-xl border border-line/70 bg-surface-muted px-4 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:text-[11px]">
             {studyMode
-              ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev • Space reveal (study) • 1/J wrong • 2/K correct • Skip counts once per item on leave"
+              ? isLessonItem
+                ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev"
+                : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev • Space reveal (study) • 1/J wrong • 2/K correct • Skip counts once per item on leave"
               : viewerMode === "flash"
                 ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter/Space reveal • Enter next (revealed) • Shift+Enter prev • Shift+Space prev • Swipe ←/→ nav • Swipe ↑ reveal"
                 : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev"}

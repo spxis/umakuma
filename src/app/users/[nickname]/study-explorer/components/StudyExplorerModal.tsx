@@ -26,6 +26,7 @@ type Props = {
   onSetRevealedAssignmentIds: React.Dispatch<React.SetStateAction<Set<number>>>;
   onClose: () => void;
   onSubmit: (assignmentId: number, result: "correct" | "wrong") => Promise<void>;
+  onStartLesson: (assignmentId: number) => Promise<void>;
 };
 
 export default function StudyExplorerModal({
@@ -48,6 +49,7 @@ export default function StudyExplorerModal({
   onSetRevealedAssignmentIds,
   onClose,
   onSubmit,
+  onStartLesson,
 }: Props) {
   if (isUnauthorized) {
     return null;
@@ -103,6 +105,7 @@ export default function StudyExplorerModal({
         onSetRevealedAssignmentIds((prev) => new Set(prev).add(assignmentId));
       }}
       onSubmit={onSubmit}
+      onStartLesson={onStartLesson}
     />
   );
 }

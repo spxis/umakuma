@@ -304,7 +304,7 @@ export default function StudyExplorer({
     return () => observer.disconnect();
   }, [selectedItem, hasMorePages, loadMorePage]);
 
-  const { submitReview, closeReviewSession } = useStudyReviewSubmission({
+  const { submitReview, submitLessonStart, closeReviewSession } = useStudyReviewSubmission({
     accountId,
     modalItems,
     selectedItem,
@@ -381,6 +381,7 @@ export default function StudyExplorer({
         onSetRevealedAssignmentIds={setRevealedAssignmentIds}
         onClose={closeReviewSession}
         onSubmit={submitReview}
+        onStartLesson={submitLessonStart}
       />
     </section>
   );

@@ -1,4 +1,4 @@
-import type { StudyQueueItem } from "../lib/studyExplorerTypes";
+import type { StudyQueueItem, SubmitInFlight } from "../lib/studyExplorerTypes";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
 import LevelExplorerReviewStatsCard from "../../level-explorer/components/LevelExplorerReviewStatsCard";
@@ -19,7 +19,7 @@ type Props = {
   selectedItem: StudyQueueItem;
   selectedOutcome: "correct" | "wrong" | "skipped" | undefined;
   isSubmittingSelected: boolean;
-  submitInFlight: { itemLabel: string; result: "correct" | "wrong" } | null;
+  submitInFlight: SubmitInFlight | null;
   submitFeedback: { kind: "success" | "error"; message: string } | null;
   requiresReveal: boolean;
   isAnswerRevealed: boolean;
@@ -46,6 +46,7 @@ type Props = {
   correct: number;
   onReveal: (assignmentId: number) => void;
   onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
+  onStartLesson: (assignmentId: number) => void;
   onAdvanceFlashOrNext: () => void;
   onFlashTouchStart: (event: React.TouchEvent) => void;
   onFlashTouchEnd: (event: React.TouchEvent) => void;
@@ -88,6 +89,7 @@ export default function StudyReviewModalSection({
   correct,
   onReveal,
   onSubmit,
+  onStartLesson,
   onAdvanceFlashOrNext,
   onFlashTouchStart,
   onFlashTouchEnd,
@@ -339,6 +341,7 @@ export default function StudyReviewModalSection({
         skipped={skipped}
         correct={correct}
         onSubmit={onSubmit}
+        onStartLesson={onStartLesson}
         onToggleUsedKanjiCollapsed={onToggleUsedKanjiCollapsed}
         onToggleUsedInWordsCollapsed={onToggleUsedInWordsCollapsed}
       />

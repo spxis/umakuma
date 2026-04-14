@@ -1,4 +1,4 @@
-import type { StudyQueueItem } from "../lib/studyExplorerTypes";
+import type { StudyQueueItem, SubmitInFlight } from "../lib/studyExplorerTypes";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
 import LevelExplorerReviewStatsCard from "../../level-explorer/components/LevelExplorerReviewStatsCard";
@@ -18,7 +18,7 @@ type Props = {
   viewerMode: "detail" | "flash";
   selectedItem: StudyQueueItem;
   submitFeedback: { kind: "success" | "error"; message: string } | null;
-  submitInFlight: { itemLabel: string; result: "correct" | "wrong" } | null;
+  submitInFlight: SubmitInFlight | null;
   isSubmittingSelected: boolean;
   detailsRevealed: boolean;
   useStudyFlashLayout: boolean;
@@ -41,6 +41,7 @@ type Props = {
   skipped: number;
   correct: number;
   onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
+  onStartLesson: (assignmentId: number) => void;
   onToggleUsedKanjiCollapsed: () => void;
   onToggleUsedInWordsCollapsed: () => void;
 };
@@ -74,10 +75,17 @@ export default function StudyReviewModalMetaPanels({
   skipped,
   correct,
   onSubmit,
+  onStartLesson,
   onToggleUsedKanjiCollapsed,
   onToggleUsedInWordsCollapsed,
 }: Props) {
   const wordExamples = parseWordExamples(selectedItem.jlptMeta?.wordExamples);
+  const submitActionLabel =
+    submitInFlight?.result === "correct"
+      ? "CORRECT"
+      : submitInFlight?.result === "wrong"
+        ? "WRONG"
+        : "LESSON";
 
   return (
     <>
@@ -241,7 +249,19 @@ export default function StudyReviewModalMetaPanels({
         </div>
       ) : null}
 
-      {studyMode ? (
+      {selectedItem.queueType === "lesson" && studyMode ? (
+        <div className="mt-auto w-full pt-3">
+          <button
+            type="button"
+            onClick={() => onStartLesson(selectedItem.assignmentId)}
+            className="min-h-[4.25rem] w-full rounded-2xl border-2 border-accent/50 bg-accent/10 px-4 py-4 text-base font-black uppercase tracking-[0.1em] text-accent"
+          >
+            Add To Lessons
+          </button>
+        </div>
+      ) : null}
+
+      {studyMode && selectedItem.queueType === "review" ? (
         <div className="mt-2 grid w-full grid-cols-3 gap-2">
           <div className="rounded-xl border border-red-200 bg-red-50/60 p-2 text-center"><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-red-700/80">Wrong</p><p className="mt-1 text-2xl font-black leading-none text-red-800">{wrong}</p></div>
           <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-2 text-center"><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-700/80">Skipped</p><p className="mt-1 text-2xl font-black leading-none text-amber-800">{skipped}</p></div>
@@ -259,7 +279,7 @@ export default function StudyReviewModalMetaPanels({
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-surface/80 backdrop-blur-[1px]">
           <div className="inline-flex items-center gap-3 rounded-full border border-line bg-surface px-4 py-2 text-sm font-bold uppercase tracking-[0.08em] text-foreground">
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
-            {submitInFlight ? `Submitting ${submitInFlight.result.toUpperCase()} for ${submitInFlight.itemLabel}...` : "Submitting..."}
+            {submitInFlight ? `Submitting ${submitActionLabel} for ${submitInFlight.itemLabel}...` : "Submitting..."}
           </div>
         </div>
       ) : null}

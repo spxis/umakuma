@@ -34,7 +34,7 @@ export type SubmitFeedback = {
 
 export type SubmitInFlight = {
   assignmentId: number;
-  result: "correct" | "wrong";
+  result: "correct" | "wrong" | "start-lesson";
   itemLabel: string;
 };
 
