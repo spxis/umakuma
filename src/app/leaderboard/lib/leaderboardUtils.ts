@@ -1,4 +1,5 @@
 import { isItemSpread } from "@/lib/itemSpread";
+import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
 
 import type {
   ALL_SORT_KEYS,
@@ -50,36 +51,17 @@ export function formatNumber(input: number): string {
 }
 
 export function formatDate(input: string): string {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(input));
+  return formatDateTimeShort(input, "-");
 }
 
 export function formatSince(input: string | null): string {
-  if (!input) {
-    return "No activity yet";
-  }
-
-  const deltaMs = Date.now() - new Date(input).getTime();
-  if (!Number.isFinite(deltaMs) || deltaMs < 0) {
-    return "Just now";
-  }
-
-  const minutes = Math.floor(deltaMs / (1000 * 60));
-  if (minutes < 60) {
-    return `${minutes} min ago`;
-  }
-
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) {
-    return `${hours} hr ago`;
-  }
-
-  const days = Math.floor(hours / 24);
-  return `${days} day${days === 1 ? "" : "s"} ago`;
+  return formatRelativeFromNow(input, {
+    style: "short",
+    allowFuture: false,
+    noValueLabel: "No activity yet",
+    invalidLabel: "Just now",
+    justNowLabel: "Just now",
+  });
 }
 
 export function formatDelta(value: number | null | undefined): string {

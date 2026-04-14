@@ -1,23 +1,15 @@
 import type { LevelItem } from "../../explorerTypes";
+import {
+  formatDateTimeShort,
+  formatRelativeFromNow as formatRelativeFromNowShared,
+} from "@/lib/timeFormat";
 
 export function formatNumber(input: number): string {
   return new Intl.NumberFormat("en-US").format(input);
 }
 
 export function formatDate(input: string | null | undefined): string {
-  if (!input) {
-    return "-";
-  }
-  const parsed = new Date(input);
-  if (Number.isNaN(parsed.getTime())) {
-    return "-";
-  }
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(parsed);
+  return formatDateTimeShort(input, "-");
 }
 
 type NextReviewBadge = {
@@ -69,41 +61,11 @@ export function formatRelativeFromNow(input: string | null | undefined): string 
   if (!input) {
     return null;
   }
-  const parsed = new Date(input);
-  if (Number.isNaN(parsed.getTime())) {
-    return null;
-  }
-  const deltaMs = parsed.getTime() - Date.now();
-  const absMs = Math.abs(deltaMs);
-  const minuteMs = 60 * 1000;
-  const hourMs = 60 * minuteMs;
-  const dayMs = 24 * hourMs;
-  const weekMs = 7 * dayMs;
-  const monthMs = 30 * dayMs;
-  const yearMs = 365 * dayMs;
-  let value = 0;
-  let unit = "minute";
-  if (absMs >= yearMs) {
-    value = Math.max(1, Math.round(absMs / yearMs));
-    unit = "year";
-  } else if (absMs >= monthMs) {
-    value = Math.max(1, Math.round(absMs / monthMs));
-    unit = "month";
-  } else if (absMs >= weekMs) {
-    value = Math.max(1, Math.round(absMs / weekMs));
-    unit = "week";
-  } else if (absMs >= dayMs) {
-    value = Math.max(1, Math.round(absMs / dayMs));
-    unit = "day";
-  } else if (absMs >= hourMs) {
-    value = Math.max(1, Math.round(absMs / hourMs));
-    unit = "hour";
-  } else {
-    value = Math.max(1, Math.round(absMs / minuteMs));
-    unit = "minute";
-  }
-  const plural = value === 1 ? unit : `${unit}s`;
-  return deltaMs < 0 ? `${value} ${plural} ago` : `in ${value} ${plural}`;
+  return formatRelativeFromNowShared(input, {
+    style: "long",
+    allowFuture: true,
+    invalidLabel: "-",
+  });
 }
 
 export function isNewGlyphWithinHours(

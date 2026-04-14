@@ -1,3 +1,5 @@
+import { formatDateShort, formatDateTimeShort } from "@/lib/timeFormat";
+
 export type AdminAccount = {
   id: string;
   nickname: string;
@@ -75,13 +77,13 @@ export default function AdminAccountsSection({
                     @{account.wkUsername} · Lv {account.wkLevel} · Due {account.pendingReviews}
                   </p>
                   <p className="text-xs uppercase tracking-[0.08em] text-slate-500">
-                    Last sync {new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(account.lastSyncedAt))} · {account.lastSyncStatus}
+                    Last sync {formatDateTimeShort(account.lastSyncedAt)} · {account.lastSyncStatus}
                   </p>
                   {syncLockLabel ? (
                     <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-400">{syncLockLabel}</p>
                   ) : null}
                   <p className="text-xs text-slate-500">
-                    Joined {new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(account.createdAt))}
+                    Joined {formatDateShort(account.createdAt)}
                     {account.joinedByName ? ` by ${account.joinedByName}` : ""}
                     {account.joinedByEmail ? ` (${account.joinedByEmail})` : ""}
                   </p>

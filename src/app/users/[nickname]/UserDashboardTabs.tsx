@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import {
   ItemSpreadTabPanel,
@@ -98,37 +99,17 @@ export default function UserDashboardTabs({
   const liveLastSyncedMs = new Date(liveData?.lastSyncedAt ?? lastSyncedAt).getTime();
   const liveLastActivityMs = new Date(liveData?.lastActivityAt ?? lastActivityAt ?? "").getTime();
   function formatRelativeTime(timestampMs: number): string {
-    if (Number.isNaN(timestampMs)) {
-      return "unknown";
-    }
-    const deltaMs = nowMs - timestampMs;
-    if (deltaMs < 30_000) {
-      return "just now";
-    }
-    const minuteMs = 60_000;
-    const hourMs = 60 * minuteMs;
-    const dayMs = 24 * hourMs;
-    if (deltaMs < hourMs) {
-      const minutes = Math.max(1, Math.round(deltaMs / minuteMs));
-      return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
-    }
-    if (deltaMs < dayMs) {
-      const hours = Math.max(1, Math.round(deltaMs / hourMs));
-      return `${hours} hour${hours === 1 ? "" : "s"} ago`;
-    }
-    const days = Math.max(1, Math.round(deltaMs / dayMs));
-    return `${days} day${days === 1 ? "" : "s"} ago`;
+    return formatRelativeFromNow(timestampMs, {
+      nowMs,
+      style: "long",
+      allowFuture: false,
+      noValueLabel: "unknown",
+      invalidLabel: "unknown",
+      justNowLabel: "just now",
+    });
   }
   function formatAbsoluteTime(timestampMs: number): string {
-    if (Number.isNaN(timestampMs)) {
-      return "Unknown";
-    }
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    }).format(new Date(timestampMs));
+    return formatDateTimeShort(timestampMs, "Unknown");
   }
   function switchTab(next: TabId) {
     setActiveTab(next);

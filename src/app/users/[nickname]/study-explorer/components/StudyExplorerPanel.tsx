@@ -56,6 +56,7 @@ type Props = {
   isLoadingMore: boolean;
   loadMoreError: string | null;
   isLoading: boolean;
+  isValidating: boolean;
   hasData: boolean;
   isUnauthorized: boolean;
   errorMessage: string | null;
@@ -89,6 +90,7 @@ export default function StudyExplorerPanel({
   isLoadingMore,
   loadMoreError,
   isLoading,
+  isValidating,
   hasData,
   isUnauthorized,
   errorMessage,
@@ -104,6 +106,8 @@ export default function StudyExplorerPanel({
   onSelectSubject,
   onClearAllFilters,
 }: Props) {
+  const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
+
   return (
     <>
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -164,6 +168,15 @@ export default function StudyExplorerPanel({
       {errorMessage ? <p className="px-5 py-4 text-sm text-red-700">{errorMessage}</p> : null}
 
       <div className="p-5">
+        {showLoadingIndicator ? (
+          <div className="mb-3 rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/75">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
+              <span>Loading study queue...</span>
+            </div>
+          </div>
+        ) : null}
+
         {isLoading && !hasData ? <StudySkeletonCards /> : null}
 
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -242,7 +255,7 @@ export default function StudyExplorerPanel({
               </div>
             ) : null}
           </>
-        ) : (
+        ) : showLoadingIndicator ? null : (
           <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
             No study items match the current filters.{" "}
             <button

@@ -86,7 +86,7 @@ export default function StudyExplorer({
   const [searchQuery, setSearchQuery] = useState("");
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
 
-  const { data, error, isLoading, mutate: mutateQueue } = useSWR(
+  const { data, error, isLoading, isValidating, mutate: mutateQueue } = useSWR(
     `/api/study/${accountId}/queue?mode=${queueMode}&limit=${API_PAGE_SIZE}&offset=0`,
     fetchStudyQueue,
     {
@@ -344,6 +344,7 @@ export default function StudyExplorer({
         isLoadingMore={isLoadingMore}
         loadMoreError={loadMoreError}
         isLoading={isLoading}
+        isValidating={isValidating}
         hasData={Boolean(data)}
         isUnauthorized={isUnauthorized}
         errorMessage={error?.message ?? null}
