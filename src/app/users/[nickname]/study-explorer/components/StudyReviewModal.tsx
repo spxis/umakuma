@@ -195,7 +195,10 @@ export default function StudyReviewModal({
   const requiresReveal = studyMode && selectedItem.queueType === "review";
   const isLessonItem = selectedItem.queueType === "lesson";
   const selectedOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
-  const isOutcomeFinal = selectedOutcome === "correct" || selectedOutcome === "wrong";
+  const isOutcomeFinal =
+    selectedOutcome === "correct" ||
+    selectedOutcome === "wrong" ||
+    (isLessonItem && selectedOutcome === "lesson-started");
   const detailsRevealed = isOutcomeFinal || !requiresReveal || isAnswerRevealed;
   const useStudyFlashLayout = studyMode && selectedItem.queueType === "review";
 

@@ -237,8 +237,8 @@ export default function StudyExplorerPanel({
                     glyphSubtitle={
                       studyMode
                         ? <span className="text-foreground/45">...</span>
-                        : item.subjectType === "kanji"
-                          ? (showEnglish ? titleForDisplay(item, true) : (glyphSubtitleForDisplay(item) ?? ""))
+                        : showEnglish
+                          ? titleForDisplay(item, true)
                           : (glyphSubtitleForDisplay(item) ?? "")
                     }
                     statusChip={<span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)}</span>}

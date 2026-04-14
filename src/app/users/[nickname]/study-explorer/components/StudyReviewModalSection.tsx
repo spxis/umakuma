@@ -17,7 +17,7 @@ type Props = {
   studyMode: boolean;
   viewerMode: "detail" | "flash";
   selectedItem: StudyQueueItem;
-  selectedOutcome: "correct" | "wrong" | "skipped" | undefined;
+  selectedOutcome: "correct" | "wrong" | "skipped" | "lesson-started" | undefined;
   isSubmittingSelected: boolean;
   submitInFlight: SubmitInFlight | null;
   submitFeedback: { kind: "success" | "error"; message: string } | null;

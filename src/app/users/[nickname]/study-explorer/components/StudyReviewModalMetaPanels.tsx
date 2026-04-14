@@ -249,7 +249,7 @@ export default function StudyReviewModalMetaPanels({
         </div>
       ) : null}
 
-      {selectedItem.queueType === "lesson" && studyMode ? (
+      {selectedItem.queueType === "lesson" && studyMode && !isOutcomeFinal ? (
         <div className="mt-auto w-full pt-3">
           <button
             type="button"
@@ -258,6 +258,17 @@ export default function StudyReviewModalMetaPanels({
           >
             Add To Lessons
           </button>
+        </div>
+      ) : null}
+
+      {selectedItem.queueType === "lesson" && studyMode && isOutcomeFinal ? (
+        <div className="mt-auto w-full pt-3">
+          <div className="flex min-h-[4.25rem] w-full items-center justify-center rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-4 py-4 text-center">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.1em] text-emerald-800">Added To Lessons</p>
+              <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-emerald-700/80">Already submitted in this session</p>
+            </div>
+          </div>
         </div>
       ) : null}
 

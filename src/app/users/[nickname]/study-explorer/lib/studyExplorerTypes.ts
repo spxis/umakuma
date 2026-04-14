@@ -38,7 +38,7 @@ export type SubmitInFlight = {
   itemLabel: string;
 };
 
-export type ReviewOutcome = "correct" | "wrong" | "skipped";
+export type ReviewOutcome = "correct" | "wrong" | "skipped" | "lesson-started";
 
 export type StudyExplorerProps = {
   accountId: string;

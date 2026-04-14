@@ -104,6 +104,7 @@ export function useStudyReviewSubmission({
         next.add(assignmentId);
         return next;
       });
+      onSetReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: "lesson-started" }));
       onSetHasPendingStudySubmissions(true);
       onSetSelectedId(nextFocusedItem?.subjectId ?? null);
     } catch (submitError) {
