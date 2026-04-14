@@ -20,10 +20,10 @@ import {
   fetchStudyQueue,
   filterStudyItems,
   isRecentStudyItem,
-  persistQueue,
   readStoredQueue,
 } from "../lib/studyExplorerUtils";
 import { useStudyReviewSubmission } from "../lib/useStudyReviewSubmission";
+import { useStudyExplorerEffects } from "../lib/useStudyExplorerEffects";
 
 const API_PAGE_SIZE = 120;
 
@@ -217,98 +217,38 @@ export default function StudyExplorer({
     });
   }, [filteredItems, selectedId]);
 
-  useEffect(() => {
-    const raw = window.localStorage.getItem(countsStorageKey);
-    if (!raw) return;
-
-    try {
-      const parsed = JSON.parse(raw) as Partial<StudyCounts>;
-      if (typeof parsed.all === "number" && typeof parsed.reviews === "number" && typeof parsed.lessons === "number") {
-        setPersistedCounts({ all: parsed.all, reviews: parsed.reviews, lessons: parsed.lessons });
-      }
-    } catch {
-      window.localStorage.removeItem(countsStorageKey);
-    }
-  }, [countsStorageKey]);
-
-  useEffect(() => {
-    const raw = window.localStorage.getItem(typeFilterStorageKey);
-    if (!raw) {
-      setHasHydratedTypeFilter(true);
-      return;
-    }
-
-    if (raw === "all" || raw === "radical" || raw === "kanji" || raw === "vocabulary") {
-      setTypeFilter(raw);
-      setHasHydratedTypeFilter(true);
-      return;
-    }
-
-    window.localStorage.removeItem(typeFilterStorageKey);
-    setHasHydratedTypeFilter(true);
-  }, [typeFilterStorageKey]);
-
-  useEffect(() => {
-    const raw = window.localStorage.getItem(recentOnlyStorageKey);
-    if (!raw) {
-      setRecentOnly(false);
-      return;
-    }
-
-    setRecentOnly(raw === "1");
-  }, [recentOnlyStorageKey]);
-
-  useEffect(() => {
-    if (!hasHydratedTypeFilter) return;
-    window.localStorage.setItem(typeFilterStorageKey, typeFilter);
-  }, [hasHydratedTypeFilter, typeFilterStorageKey, typeFilter]);
-
-  useEffect(() => {
-    window.localStorage.setItem(recentOnlyStorageKey, recentOnly ? "1" : "0");
-  }, [recentOnly, recentOnlyStorageKey]);
-
-  useEffect(() => {
-    if (!data?.counts) return;
-    setPersistedCounts(data.counts);
-    window.localStorage.setItem(countsStorageKey, JSON.stringify(data.counts));
-  }, [countsStorageKey, data?.counts]);
-
-  useEffect(() => {
-    if (!data?.items) return;
-
-    const fresh = data.items.filter((item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId));
-    const freshIds = new Set(fresh.map((item) => item.assignmentId));
-    setLoadedItems((prev) => {
-      const visiblePrev = prev.filter((item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId));
-      const merged =
-        visiblePrev.length === 0 ? fresh : [...fresh, ...visiblePrev.filter((item) => !freshIds.has(item.assignmentId))];
-
-      return sameAssignmentList(prev, merged) ? prev : merged;
-    });
-    const nextTotalRaw = data.pagination?.total ?? fresh.length;
-    setTotalItems(Math.max(0, nextTotalRaw - hiddenSubmittedAssignmentIds.size));
-  }, [data?.items, data?.pagination?.total, hiddenSubmittedAssignmentIds]);
-
-  useEffect(() => {
-    persistQueue(accountId, queueMode, loadedItems, totalItems, counts ?? null);
-    setCachedQueueData({
-      items: loadedItems,
-      counts: counts ?? { all: loadedItems.length, reviews: 0, lessons: 0 },
-      pagination: { offset: 0, limit: loadedItems.length, total: totalItems, hasMore: loadedItems.length < totalItems },
-    });
-  }, [accountId, queueMode, loadedItems, totalItems, counts]);
-
-  useEffect(() => {
-    setCachedQueueData(readStoredQueue(accountId, queueMode));
-    setLoadMoreError(null);
-    try {
-      const raw = window.localStorage.getItem(selectedSubjectStorageKey);
-      const parsed = Number(raw);
-      setSelectedId(Number.isInteger(parsed) && parsed > 0 ? parsed : null);
-    } catch {
-      setSelectedId(null);
-    }
-  }, [accountId, queueMode, selectedSubjectStorageKey]);
+  const { clearAllFilters } = useStudyExplorerEffects({
+    accountId,
+    queueMode,
+    countsStorageKey,
+    selectedSubjectStorageKey,
+    typeFilterStorageKey,
+    recentOnlyStorageKey,
+    typeFilter,
+    recentOnly,
+    hasHydratedTypeFilter,
+    setHasHydratedTypeFilter,
+    hiddenSubmittedAssignmentIds,
+    loadedItems,
+    totalItems,
+    counts,
+    dataItems: data?.items,
+    dataPaginationTotal: data?.pagination?.total,
+    dataCounts: data?.counts,
+    setCachedQueueData,
+    setPersistedCounts,
+    setLoadedItems,
+    setTotalItems,
+    setSelectedId,
+    setTypeFilter,
+    setRecentOnly,
+    setLoadMoreError,
+    setSearchQuery,
+    setViewedLevel,
+    setSrsFilter,
+    setShowLocked,
+    lastHandledStudyQueryRef,
+  });
 
   useEffect(() => {
     try {
@@ -322,42 +262,6 @@ export default function StudyExplorer({
     }
   }, [selectedId, selectedSubjectStorageKey]);
 
-  useEffect(() => {
-    const runFromUrl = () => {
-      const fromUrl = new URLSearchParams(window.location.search).get("findStudy")?.trim() ?? "";
-      if (fromUrl === lastHandledStudyQueryRef.current) return;
-      lastHandledStudyQueryRef.current = fromUrl;
-      setSearchQuery(fromUrl);
-    };
-
-    runFromUrl();
-    const onPopState = () => runFromUrl();
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
-  }, []);
-
-  const clearAllFilters = useCallback(() => {
-    setViewedLevel(null);
-    setTypeFilter("all");
-    setSrsFilter("all");
-    setShowLocked(true);
-    setRecentOnly(false);
-    setSelectedId(null);
-    setSearchQuery("");
-
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    params.delete("findStudy");
-    params.delete("findLevel");
-    params.delete("findJlpt");
-    const query = params.toString();
-    const next = `${window.location.pathname}${query ? `?${query}` : ""}#explorer`;
-    window.history.pushState(null, "", next);
-    window.dispatchEvent(new CustomEvent("wr:explorer-search-clear", { detail: { scope: "all" } }));
-  }, []);
 
   const loadMorePage = useCallback(async () => {
     if (isLoadingMore || !hasMorePages) return;

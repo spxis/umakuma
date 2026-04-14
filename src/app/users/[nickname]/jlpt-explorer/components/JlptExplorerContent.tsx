@@ -1,54 +1,23 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import useSWR from "swr";
 import jlptReadings from "@/data/jlptReadings.json";
 import SubjectTypeFilterButton from "../../shared/SubjectTypeFilterButton";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import { badgeClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import {
-  formatDate,
   formatNumber,
   jlptHeading,
   readingLabel,
   readingLabelFromList,
-  stripReadingSeparators,
 } from "../lib/jlptDisplay";
-import {
-  jlptStatusClass,
-  parseWordExamples,
-} from "../lib/jlptExplorerContentHelpers";
+import { jlptStatusClass } from "../lib/jlptExplorerContentHelpers";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
-import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
+import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
-type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;
-type JlptFilter = "all" | "kanji" | "none";
-type Props = {
-  items: JlptItem[];
-  showEnglish: boolean;
-  studyMode: boolean;
-  counts: {
-    all: number;
-    kanji: number;
-    none: number;
-    n1: number;
-    n2: number;
-    n3: number;
-    n4: number;
-    n5: number;
-  };
-  selectedLevels: Set<number>;
-  stickyLevels: boolean;
-  wkFilter: JlptFilter;
-  filteredItems: JlptItem[];
-  selectedKanji: string | null;
-  selectedItem: JlptItem | null;
-  gridColumns: number;
-  userKanjiByChar: Map<string, UserKanjiItem>;
-  onSetSelectedLevels: (next: Set<number>) => void;
-  onToggleNLevel: (level: number) => void;
-  onSetWkFilter: (next: JlptFilter) => void;
-  onSetStickyLevels: (next: boolean) => void;
-  onSetSelectedKanji: (next: string | null | ((prev: string | null) => string | null)) => void;
-};
+import type {
+  KanjiStats,
+  JlptExplorerContentProps as Props,
+  JlptReadingsRecord,
+} from "./JlptExplorerContent.types";
 export default function JlptExplorerContent({
   items,
   showEnglish,
@@ -76,7 +45,7 @@ export default function JlptExplorerContent({
     : -1;
   // --- Kanji stats/history state ---
   const [statsOpen, setStatsOpen] = useState(false);
-  const [kanjiStats, setKanjiStats] = useState<any | null>(null);
+  const [kanjiStats, setKanjiStats] = useState<KanjiStats | null>(null);
   const [kanjiStatsLoading, setKanjiStatsLoading] = useState(false);
   const [kanjiStatsError, setKanjiStatsError] = useState<string | null>(null);
   // Account ID is not in props, so try to extract from location (fragile fallback)
@@ -101,7 +70,8 @@ export default function JlptExplorerContent({
         return res.json();
       })
       .then((data) => {
-        setKanjiStats(data.history || null);
+        const payload = data as { history?: KanjiStats };
+        setKanjiStats(payload.history || null);
         setKanjiStatsLoading(false);
       })
       .catch((err) => {
@@ -282,196 +252,17 @@ export default function JlptExplorerContent({
                   }
                 />
                 {selectedItem && index === visibleDetailInsertIndex ? (
-                  <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
-                    {(() => {
-                      const selectedUserMatch = userKanjiByChar.get(selectedItem.kanji);
-                      const selectedPreload = (jlptReadings as JlptReadingsRecord)[selectedItem.kanji];
-                      const selectedDbReadings = [
-                        ...selectedItem.kunReadings,
-                        ...selectedItem.onReadings,
-                        ...selectedItem.nanoriReadings,
-                      ];
-                      const primary = selectedUserMatch
-                        ? (selectedUserMatch.primaryReadings ?? [])[0] ?? (selectedUserMatch.readings ?? [])[0] ?? null
-                        : selectedDbReadings[0] ?? selectedPreload?.readings?.[0] ?? null;
-                      const secondary = selectedUserMatch
-                        ? (selectedUserMatch.readings ?? []).filter((reading) => reading !== primary)
-                        : (selectedDbReadings.length > 0 ? selectedDbReadings : (selectedPreload?.readings ?? [])).filter(
-                            (reading) => reading !== primary,
-                          );
-                      const jsonMeanings = (selectedPreload?.meanings ?? []).filter((meaning) => meaning.trim().length > 0);
-                      const wordExamples = parseWordExamples(selectedItem.wordExamples);
-                      return (
-                        <>
-                          <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-x-3">
-                            <div className="inline-flex rounded-2xl border border-kanji/50 bg-kanji/10 px-4 py-3 text-kanji">
-                              <h3 className="text-4xl font-black leading-none">{selectedItem.kanji}</h3>
-                            </div>
-                            <div className="flex flex-wrap justify-start gap-1 sm:justify-end">
-                              <span className="subject-pill subject-pill--kanji">kanji</span>
-                              {typeof selectedUserMatch?.wkLevel === "number" ? (
-                                <span className="subject-pill border-line bg-surface text-foreground">L{selectedUserMatch.wkLevel}</span>
-                              ) : null}
-                              <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.nLevel}</span>
-                              <span className={`subject-pill ${jlptStatusClass(selectedUserMatch?.status)}`}>
-                                {selectedUserMatch?.status ?? "untracked"}
-                              </span>
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-3xl font-black leading-tight text-foreground">
-                                {studyMode
-                                  ? "Kanji"
-                                  : jlptHeading(
-                                      selectedItem.primaryMeaning,
-                                      selectedUserMatch?.meanings,
-                                      selectedItem.meanings.length > 0
-                                        ? selectedItem.meanings
-                                        : (selectedPreload?.meanings ?? []),
-                                      selectedItem.kanji,
-                                    )}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-8">
-                                                      {selectedItem ? (
-                                                        <JlptExplorerStatsPanel
-                                                          open={statsOpen}
-                                                          onToggle={() => setStatsOpen((value) => !value)}
-                                                          loading={kanjiStatsLoading}
-                                                          error={kanjiStatsError}
-                                                          kanjiStats={kanjiStats}
-                                                        />
-                                                      ) : null}
-                            {!studyMode ? (
-                              <>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Primary reading</p>
-                              <p className="mt-1 font-semibold text-foreground/90">{readingLabel(primary, showEnglish)}</p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Secondary readings</p>
-                              <p className="mt-1 font-semibold text-foreground/90">
-                                {secondary.length > 0
-                                  ? secondary.map((reading) => readingLabel(reading, showEnglish)).join(", ")
-                                  : "-"}
-                              </p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Kunyomi</p>
-                              <p className="mt-1 font-semibold text-foreground/90">
-                                {selectedItem.kunReadings.length > 0
-                                  ? selectedItem.kunReadings.map((reading) => stripReadingSeparators(reading)).join(", ")
-                                  : "-"}
-                              </p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Onyomi</p>
-                              <p className="mt-1 font-semibold text-foreground/90">
-                                {selectedItem.onReadings.length > 0
-                                  ? selectedItem.onReadings.map((reading) => stripReadingSeparators(reading)).join(", ")
-                                  : "-"}
-                              </p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Stroke count</p>
-                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.strokeCount ?? "-"}</p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Main meaning</p>
-                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.primaryMeaning ?? "-"}</p>
-                            </div>
-                              </>
-                            ) : null}
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Frequency rank</p>
-                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.frequencyRank ?? "-"}</p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">School grade</p>
-                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.schoolGrade ?? "-"}</p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Heisig keyword</p>
-                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.heisigKeyword ?? "-"}</p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Unicode</p>
-                              <p className="mt-1 font-semibold text-foreground/90">{selectedItem.unicodeHex ?? "-"}</p>
-                            </div>
-                            <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                              <p className="text-xs font-bold uppercase text-foreground/70">Source JLPT</p>
-                              <p className="mt-1 font-semibold text-foreground/90">
-                                {selectedItem.sourceJlpt ? `N${selectedItem.sourceJlpt}` : "-"}
-                              </p>
-                            </div>
-                          </div>
-                          {selectedUserMatch ? (
-                            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                              <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                                <p className="text-xs font-bold uppercase text-foreground/70">Started</p>
-                                <p className="mt-1 font-semibold text-foreground/90">{formatDate(selectedUserMatch.startedAt)}</p>
-                              </div>
-                              <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                                <p className="text-xs font-bold uppercase text-foreground/70">Next review</p>
-                                <p className="mt-1 font-semibold text-foreground/90">{formatDate(selectedUserMatch.availableAt)}</p>
-                              </div>
-                              <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                                <p className="text-xs font-bold uppercase text-foreground/70">Passed</p>
-                                <p className="mt-1 font-semibold text-foreground/90">{formatDate(selectedUserMatch.passedAt)}</p>
-                              </div>
-                            </div>
-                          ) : null}
-                          {!studyMode ? (
-                            <div className="mt-4">
-                              <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                                <p className="text-xs font-bold uppercase text-foreground/70">Meaning explanation</p>
-                                {jsonMeanings.length > 0 ? (
-                                  <ul className="mt-2 space-y-1 text-foreground/90">
-                                    {jsonMeanings.map((meaning) => (
-                                      <li key={meaning}>- {meaning}</li>
-                                    ))}
-                                  </ul>
-                                ) : (
-                                  <p className="mt-2 text-foreground/90">-</p>
-                                )}
-                              </article>
-                            </div>
-                          ) : null}
-                          {!studyMode && selectedItem.notes.length > 0 ? (
-                            <div className="mt-4">
-                              <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                                <p className="text-xs font-bold uppercase text-foreground/70">Dictionary notes</p>
-                                <ul className="mt-2 space-y-1 text-foreground/90">
-                                  {selectedItem.notes.map((note) => (
-                                    <li key={note}>- {note}</li>
-                                  ))}
-                                </ul>
-                              </article>
-                            </div>
-                          ) : null}
-                          {!studyMode && wordExamples.length > 0 ? (
-                            <div className="mt-4">
-                              <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-                                <p className="text-xs font-bold uppercase text-foreground/70">Used in words</p>
-                                <ul className="mt-2 space-y-2 text-foreground/90">
-                                  {wordExamples.map((example, index) => (
-                                    <li
-                                      key={`${selectedItem.kanji}-${example.written}-${example.pronounced}-${index}`}
-                                      className="rounded-lg border border-line bg-surface px-3 py-2"
-                                    >
-                                      <p className="text-base font-bold text-foreground">{example.written || "-"}</p>
-                                      <p className="text-xs font-semibold text-foreground/70">{example.pronounced || "-"}</p>
-                                      <p className="mt-1 text-sm text-foreground/85">{example.gloss || "-"}</p>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </article>
-                            </div>
-                          ) : null}
-                        </>
-                      );
-                    })()}
-                  </section>
+                  <JlptExplorerDetailSection
+                    selectedItem={selectedItem}
+                    showEnglish={showEnglish}
+                    studyMode={studyMode}
+                    userKanjiByChar={userKanjiByChar}
+                    statsOpen={statsOpen}
+                    kanjiStats={kanjiStats}
+                    kanjiStatsLoading={kanjiStatsLoading}
+                    kanjiStatsError={kanjiStatsError}
+                    onToggleStatsOpen={() => setStatsOpen((value) => !value)}
+                  />
                 ) : null}
               </Fragment>
             );
