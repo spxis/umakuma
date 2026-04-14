@@ -1,0 +1,260 @@
+import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
+import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
+import ExplorerSearchBar from "../../ExplorerSearchBar";
+import {
+  formatNextReviewBadge,
+  formatNumber,
+  glyphSubtitleForDisplay,
+  glyphTextSizeClass,
+  shortSubjectTypeLabel,
+  srsFilterButtonLabel,
+  statusClass,
+  statusShortLabel,
+  subjectTypePillClass,
+  titleForDisplay,
+  typeCardClass,
+  typeGlyphBoxClass,
+} from "../../level-explorer/lib/levelExplorerDisplay";
+import type {
+  StudyQueueItem,
+  StudySrsFilter,
+  StudyTypeFilter,
+} from "../lib/studyExplorerTypes";
+import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
+
+function StudySkeletonCards() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-hidden="true">
+      {Array.from({ length: 4 }, (_, index) => (
+        <div key={`study-skeleton-${index}`} className="rounded-2xl border border-line bg-surface p-3 animate-pulse">
+          <div className="flex items-center justify-between">
+            <div className="h-4 w-8 rounded bg-surface-muted" />
+            <div className="h-6 w-24 rounded-full bg-surface-muted" />
+          </div>
+          <div className="mt-3 h-8 w-40 rounded bg-surface-muted" />
+          <div className="mt-3 h-[9.75rem] rounded-xl border border-line/50 bg-surface-muted" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+type Props = {
+  canToggleEnglish: boolean;
+  showEnglish: boolean;
+  studyMode: boolean;
+  levelOptions: number[];
+  availableLevels: Set<number>;
+  viewedLevel: number | null;
+  typeFilter: StudyTypeFilter;
+  srsFilter: StudySrsFilter;
+  typeCounts: { all: number; radical: number; kanji: number; vocabulary: number };
+  srsCounts: { all: number; apprentice: number; guru: number; master: number; enlightened: number };
+  filteredItems: StudyQueueItem[];
+  totalItems: number;
+  hasMorePages: boolean;
+  isLoadingMore: boolean;
+  loadMoreError: string | null;
+  isLoading: boolean;
+  hasData: boolean;
+  isUnauthorized: boolean;
+  errorMessage: string | null;
+  recentOnly: boolean;
+  showLocked: boolean;
+  sentinelRef: React.RefObject<HTMLDivElement | null>;
+  onSetViewedLevel: (level: number | null) => void;
+  onSetTypeFilter: (filter: StudyTypeFilter) => void;
+  onSetSrsFilter: (filter: StudySrsFilter) => void;
+  onToggleShowEnglish: () => void;
+  onToggleShowLocked: () => void;
+  onToggleRecentOnly: () => void;
+  onSelectSubject: (subjectId: number) => void;
+  onClearAllFilters: () => void;
+};
+
+export default function StudyExplorerPanel({
+  canToggleEnglish,
+  showEnglish,
+  studyMode,
+  levelOptions,
+  availableLevels,
+  viewedLevel,
+  typeFilter,
+  srsFilter,
+  typeCounts,
+  srsCounts,
+  filteredItems,
+  totalItems,
+  hasMorePages,
+  isLoadingMore,
+  loadMoreError,
+  isLoading,
+  hasData,
+  isUnauthorized,
+  errorMessage,
+  recentOnly,
+  showLocked,
+  sentinelRef,
+  onSetViewedLevel,
+  onSetTypeFilter,
+  onSetSrsFilter,
+  onToggleShowEnglish,
+  onToggleShowLocked,
+  onToggleRecentOnly,
+  onSelectSubject,
+  onClearAllFilters,
+}: Props) {
+  return (
+    <>
+      <header className="border-b border-line bg-surface-muted px-5 py-4">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2 className="text-xl font-black text-foreground">Study</h2>
+            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Reviews due now and available lessons across all levels</p>
+          </div>
+          <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope="study" /></div>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button type="button" onClick={() => onSetViewedLevel(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === null)}`}>
+            All Levels
+          </button>
+          {levelOptions.map((level) => (
+            <button
+              key={level}
+              type="button"
+              onClick={() => onSetViewedLevel(level)}
+              disabled={!availableLevels.has(level)}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${!availableLevels.has(level) ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
+            >
+              L{level}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-start justify-between gap-2">
+          <SubjectTypeFilterGroup
+            counts={typeCounts}
+            allLabel={viewedLevel === null ? "All Levels" : `All L${viewedLevel}`}
+            allActive={typeFilter === "all"}
+            activeTypes={{
+              radical: typeFilter === "all" || typeFilter === "radical",
+              kanji: typeFilter === "all" || typeFilter === "kanji",
+              vocabulary: typeFilter === "all" || typeFilter === "vocabulary",
+            }}
+            onClickAll={() => onSetTypeFilter("all")}
+            onClickType={(type) => onSetTypeFilter(type)}
+          />
+
+          <div className="ml-auto flex flex-wrap justify-end gap-2">
+            {(["all", "apprentice", "guru", "master", "enlightened"] as const).map((status) => (
+              <button
+                key={status}
+                type="button"
+                onClick={() => onSetSrsFilter(status)}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(srsFilter === status)}`}
+              >
+                {srsFilterButtonLabel(status)} ({formatNumber(srsCounts[status])})
+              </button>
+            ))}
+          </div>
+        </div>
+      </header>
+
+      {errorMessage ? <p className="px-5 py-4 text-sm text-red-700">{errorMessage}</p> : null}
+
+      <div className="p-5">
+        {isLoading && !hasData ? <StudySkeletonCards /> : null}
+
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
+            Showing {formatNumber(filteredItems.length)} loaded items · {formatNumber(totalItems)} total in queue
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onToggleShowEnglish}
+              disabled={!canToggleEnglish}
+              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
+            </button>
+            <button
+              type="button"
+              onClick={onToggleShowLocked}
+              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+            >
+              {showLocked ? "Hide Locked" : "Show Locked"}
+            </button>
+            <button
+              type="button"
+              onClick={onToggleRecentOnly}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(recentOnly)}`}
+            >
+              Recent Only
+            </button>
+          </div>
+        </div>
+
+        {filteredItems.length > 0 ? (
+          <>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {filteredItems.map((item, index) => {
+                const reviewBadge = item.queueType === "review" ? formatNextReviewBadge(item.availableAt) : null;
+
+                return (
+                  <UnifiedExplorerCard
+                    key={`${item.queueType}-${item.subjectId}`}
+                    onClick={() => {
+                      if (!isUnauthorized) {
+                        onSelectSubject(item.subjectId);
+                      }
+                    }}
+                    className={`rounded-2xl border p-3 text-left transition ${isUnauthorized ? "cursor-not-allowed opacity-65" : "hover:brightness-95"} ${typeCardClass(item.subjectType, false)}`}
+                    indexLabel={`#${index + 1}`}
+                    topRight={
+                      <>
+                        <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
+                        {typeof item.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span> : null}
+                      </>
+                    }
+                    glyphClassName={typeGlyphBoxClass(item.subjectType)}
+                    glyphText={item.characters}
+                    glyphTextClassName={glyphTextSizeClass(item.characters)}
+                    glyphSubtitle={
+                      studyMode
+                        ? <span className="text-foreground/45">...</span>
+                        : item.subjectType === "kanji"
+                          ? (showEnglish ? titleForDisplay(item, true) : (glyphSubtitleForDisplay(item) ?? ""))
+                          : (glyphSubtitleForDisplay(item) ?? "")
+                    }
+                    statusChip={<span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)}</span>}
+                    middleChip={reviewBadge ? <span className={`rounded-full border px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${reviewBadge.className}`}>{reviewBadge.label}</span> : undefined}
+                    rightChip={<span className="rounded-full border border-line bg-surface px-2 py-1 text-xs font-bold text-foreground">SRS {item.srsStage}</span>}
+                  />
+                );
+              })}
+            </div>
+
+            {hasMorePages ? (
+              <div ref={sentinelRef} className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
+                {isLoadingMore ? "Loading more..." : loadMoreError ? `Load error: ${loadMoreError}` : "Scroll to load more..."}
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
+            No study items match the current filters.{" "}
+            <button
+              type="button"
+              onClick={onClearAllFilters}
+              className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}

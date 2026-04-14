@@ -1,0 +1,36 @@
+import type {
+  ReviewOutcome,
+  StudyQueueItem,
+  SubmitFeedback,
+  SubmitInFlight,
+} from "../lib/studyExplorerTypes";
+
+export type RelatedReference = {
+  subjectId: number;
+  label: string;
+  wkLevel?: number | null;
+  reading?: string | null;
+  meaning?: string | null;
+};
+
+export type StudyReviewModalProps = {
+  accountId: string;
+  studyMode: boolean;
+  selectedItem: StudyQueueItem | null;
+  selectedIndex: number;
+  filteredTotal: number;
+  prevLabel: string | null;
+  nextLabel: string | null;
+  isAnswerRevealed: boolean;
+  isSubmittingSelected: boolean;
+  submitInFlight: SubmitInFlight | null;
+  submitFeedback: SubmitFeedback | null;
+  reviewOutcomeByAssignmentId: Record<number, ReviewOutcome>;
+  onMarkSkipped: (assignmentId: number) => void;
+  onClose: () => void;
+  onPrev: (() => void) | null;
+  onNext: (() => void) | null;
+  onRestartFromBeginning: (() => void) | null;
+  onReveal: (assignmentId: number) => void;
+  onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
+};

@@ -1,0 +1,268 @@
+import type { StudyQueueItem } from "../lib/studyExplorerTypes";
+
+import type { RelatedReference } from "./StudyReviewModal.types";
+import LevelExplorerReviewStatsCard from "../../level-explorer/components/LevelExplorerReviewStatsCard";
+import { parseWordExamples } from "../../jlpt-explorer/lib/jlptExplorerContentHelpers";
+import {
+  formatTimestampWithRelative,
+  metricCard,
+  readingCard,
+  readingDualScriptCard,
+  relatedTileLabelClass,
+  relatedTiles,
+} from "./StudyReviewModalHelpers";
+
+type Props = {
+  accountId: string;
+  studyMode: boolean;
+  viewerMode: "detail" | "flash";
+  selectedItem: StudyQueueItem;
+  submitFeedback: { kind: "success" | "error"; message: string } | null;
+  submitInFlight: { itemLabel: string; result: "correct" | "wrong" } | null;
+  isSubmittingSelected: boolean;
+  detailsRevealed: boolean;
+  useStudyFlashLayout: boolean;
+  requiresReveal: boolean;
+  isAnswerRevealed: boolean;
+  isOutcomeFinal: boolean;
+  allMeanings: string[];
+  primaryReadingHiragana: string;
+  primaryReadingKatakana: string;
+  secondaryReadingValue: string;
+  hasRadicals: boolean;
+  hasVisuallySimilar: boolean;
+  hasUsedInVocabulary: boolean;
+  hasComponentKanji: boolean;
+  usedKanjiItems: RelatedReference[];
+  usedKanjiCollapsed: boolean;
+  usedInWordsCollapsed: boolean;
+  jlptGradeLabel: string;
+  wrong: number;
+  skipped: number;
+  correct: number;
+  onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
+  onToggleUsedKanjiCollapsed: () => void;
+  onToggleUsedInWordsCollapsed: () => void;
+};
+
+export default function StudyReviewModalMetaPanels({
+  accountId,
+  studyMode,
+  viewerMode,
+  selectedItem,
+  submitFeedback,
+  submitInFlight,
+  isSubmittingSelected,
+  detailsRevealed,
+  useStudyFlashLayout,
+  requiresReveal,
+  isAnswerRevealed,
+  isOutcomeFinal,
+  allMeanings,
+  primaryReadingHiragana,
+  primaryReadingKatakana,
+  secondaryReadingValue,
+  hasRadicals,
+  hasVisuallySimilar,
+  hasUsedInVocabulary,
+  hasComponentKanji,
+  usedKanjiItems,
+  usedKanjiCollapsed,
+  usedInWordsCollapsed,
+  jlptGradeLabel,
+  wrong,
+  skipped,
+  correct,
+  onSubmit,
+  onToggleUsedKanjiCollapsed,
+  onToggleUsedInWordsCollapsed,
+}: Props) {
+  const wordExamples = parseWordExamples(selectedItem.jlptMeta?.wordExamples);
+
+  return (
+    <>
+      {(!studyMode && viewerMode === "flash") || useStudyFlashLayout ? null : detailsRevealed ? (
+        <>
+          <div className="mt-3 grid gap-2 lg:grid-cols-2">
+            {readingDualScriptCard("Primary readings", primaryReadingHiragana, primaryReadingKatakana)}
+            {readingCard("Secondary readings", secondaryReadingValue)}
+          </div>
+
+          <div className="mt-2 grid gap-2 lg:grid-cols-3">
+            {metricCard("Started", formatTimestampWithRelative(selectedItem.startedAt))}
+            {metricCard("Next review", formatTimestampWithRelative(selectedItem.availableAt))}
+            {metricCard("Passed", formatTimestampWithRelative(selectedItem.passedAt))}
+          </div>
+
+          {hasRadicals || hasVisuallySimilar || hasUsedInVocabulary ? (
+            <div className="mt-2 space-y-2">
+              {hasRadicals || hasVisuallySimilar ? (
+                <div className={`grid gap-2 ${hasRadicals && hasVisuallySimilar ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
+                  {hasRadicals ? (
+                    <div className="rounded-xl border border-line bg-surface px-3 py-2">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Radicals</p>
+                      {relatedTiles(selectedItem.radicals as RelatedReference[] | undefined)}
+                    </div>
+                  ) : null}
+                  {hasVisuallySimilar ? (
+                    <div className="rounded-xl border border-line bg-surface px-3 py-2">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Visually similar</p>
+                      {relatedTiles(selectedItem.visuallySimilar as RelatedReference[] | undefined)}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {hasUsedInVocabulary ? (
+                <div className="rounded-xl border border-line bg-surface px-3 py-2">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Used in vocabulary</p>
+                  {relatedTiles(selectedItem.usedInVocabulary as RelatedReference[] | undefined)}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
+          {hasComponentKanji ? (
+            <div className="mt-2">
+              <div className="rounded-xl border border-line bg-surface px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Component kanji</p>
+                {relatedTiles(selectedItem.componentKanji as RelatedReference[] | undefined)}
+              </div>
+            </div>
+          ) : null}
+
+          {selectedItem.subjectType === "vocabulary" && usedKanjiItems.length > 0 ? (
+            <div className="mt-2">
+              <div className="rounded-xl border border-line bg-surface px-3 py-2">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Used kanji</p>
+                  <button
+                    type="button"
+                    onClick={onToggleUsedKanjiCollapsed}
+                    className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
+                  >
+                    {usedKanjiCollapsed ? "Expand" : "Collapse"}
+                  </button>
+                </div>
+                {!usedKanjiCollapsed ? (
+                  <ul className="mt-2 space-y-2 text-foreground/90">
+                    {usedKanjiItems.map((item, index) => (
+                      <li
+                        key={`${selectedItem.subjectId}-${item.subjectId}-${item.label}-${index}`}
+                        className="rounded-lg border border-line bg-surface-muted px-3 py-2"
+                      >
+                        <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+                          <p className={`font-black leading-none text-foreground ${relatedTileLabelClass(item.label)}`}>
+                            {item.label}
+                          </p>
+                          <p className="text-2xl font-bold leading-none text-foreground/80">{item.reading || "-"}</p>
+                        </div>
+                        <p className="mt-1 text-sm text-foreground/85">{item.meaning || "-"}</p>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+
+          {selectedItem.jlptMeta ? (
+            <div className="mt-2 grid gap-2 lg:grid-cols-3">
+              {metricCard("JLPT meanings", selectedItem.jlptMeta.meanings.slice(0, 6).join(" • ") || "-")}
+              {metricCard("Stroke/Freq", `${selectedItem.jlptMeta.strokeCount ?? "-"} / ${selectedItem.jlptMeta.frequencyRank ?? "-"}`)}
+              {metricCard("Grade/Heisig", `${jlptGradeLabel} / ${selectedItem.jlptMeta.heisigKeyword ?? "-"}`)}
+            </div>
+          ) : null}
+
+          {wordExamples.length > 0 ? (
+            <div className="mt-2 rounded-xl border border-line bg-surface px-3 py-2">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Used in words</p>
+                <button
+                  type="button"
+                  onClick={onToggleUsedInWordsCollapsed}
+                  className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
+                >
+                  {usedInWordsCollapsed ? "Expand" : "Collapse"}
+                </button>
+              </div>
+              {!usedInWordsCollapsed ? (
+                <ul className="mt-2 space-y-2 text-foreground/90">
+                  {wordExamples.map((example, index) => (
+                    <li
+                      key={`${selectedItem.subjectId}-${example.written}-${example.pronounced}-${index}`}
+                      className="rounded-lg border border-line bg-surface-muted px-3 py-2"
+                    >
+                      <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+                        <p className={`font-black leading-none text-foreground ${relatedTileLabelClass(example.written || "-")}`}>
+                          {example.written || "-"}
+                        </p>
+                        <p className="text-2xl font-bold leading-none text-foreground/80">{example.pronounced || "-"}</p>
+                      </div>
+                      <p className="mt-1 text-sm text-foreground/85">{example.gloss || "-"}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
+
+          <div className="mt-2">
+            <LevelExplorerReviewStatsCard
+              accountId={accountId}
+              subjectId={selectedItem.subjectId}
+              currentSrsStage={selectedItem.srsStage}
+              startedAt={selectedItem.startedAt}
+            />
+          </div>
+        </>
+      ) : null}
+
+      {selectedItem.queueType === "review" && studyMode && (!requiresReveal || isAnswerRevealed) && !useStudyFlashLayout && !isOutcomeFinal ? (
+        <div className="mt-auto grid w-full grid-cols-2 gap-2 pt-3">
+          <button
+            type="button"
+            onClick={() => onSubmit(selectedItem.assignmentId, "wrong")}
+            aria-keyshortcuts="1"
+            title="Wrong (Key: 1)"
+            className="min-h-[4.25rem] w-full rounded-2xl border-2 border-red-300 bg-red-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-red-800"
+          >
+            Wrong
+          </button>
+          <button
+            type="button"
+            onClick={() => onSubmit(selectedItem.assignmentId, "correct")}
+            aria-keyshortcuts="2"
+            title="Correct (Key: 2)"
+            className="min-h-[4.25rem] w-full rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-emerald-800"
+          >
+            Correct
+          </button>
+        </div>
+      ) : null}
+
+      {studyMode ? (
+        <div className="mt-2 grid w-full grid-cols-3 gap-2">
+          <div className="rounded-xl border border-red-200 bg-red-50/60 p-2 text-center"><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-red-700/80">Wrong</p><p className="mt-1 text-2xl font-black leading-none text-red-800">{wrong}</p></div>
+          <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-2 text-center"><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-700/80">Skipped</p><p className="mt-1 text-2xl font-black leading-none text-amber-800">{skipped}</p></div>
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-2 text-center"><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-700/80">Correct</p><p className="mt-1 text-2xl font-black leading-none text-emerald-800">{correct}</p></div>
+        </div>
+      ) : null}
+
+      {submitFeedback ? (
+        <p className={`mt-3 rounded-xl border px-4 py-3 text-sm font-black uppercase tracking-[0.08em] ${submitFeedback.kind === "success" ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-red-300 bg-red-50 text-red-800"}`}>
+          {submitFeedback.message}
+        </p>
+      ) : null}
+
+      {isSubmittingSelected ? (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-surface/80 backdrop-blur-[1px]">
+          <div className="inline-flex items-center gap-3 rounded-full border border-line bg-surface px-4 py-2 text-sm font-bold uppercase tracking-[0.08em] text-foreground">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
+            {submitInFlight ? `Submitting ${submitInFlight.result.toUpperCase()} for ${submitInFlight.itemLabel}...` : "Submitting..."}
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
+}

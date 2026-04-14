@@ -3,24 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 
-import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
-import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
-import StudyReviewModal from "./StudyReviewModal";
-import {
-  formatNextReviewBadge,
-  formatNumber,
-  glyphSubtitleForDisplay,
-  glyphTextSizeClass,
-  shortSubjectTypeLabel,
-  srsFilterButtonLabel,
-  statusClass,
-  statusShortLabel,
-  subjectTypePillClass,
-  titleForDisplay,
-  typeCardClass,
-  typeGlyphBoxClass,
-} from "../../level-explorer/lib/levelExplorerDisplay";
-import ExplorerSearchBar from "../../ExplorerSearchBar";
+import StudyExplorerModal from "./StudyExplorerModal";
+import StudyExplorerPanel from "./StudyExplorerPanel";
 import type {
   QueueResponse,
   ReviewOutcome,
@@ -33,15 +17,13 @@ import type {
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
 import {
-  badgeClass,
-  disabledBadgeClass,
   fetchStudyQueue,
   filterStudyItems,
   isRecentStudyItem,
   persistQueue,
   readStoredQueue,
-  studyItemEnglishTitle,
 } from "../lib/studyExplorerUtils";
+import { useStudyReviewSubmission } from "../lib/useStudyReviewSubmission";
 
 const API_PAGE_SIZE = 120;
 
@@ -57,23 +39,6 @@ function sameAssignmentList(a: StudyQueueItem[], b: StudyQueueItem[]): boolean {
   }
 
   return true;
-}
-
-function StudySkeletonCards() {
-  return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-hidden="true">
-      {Array.from({ length: 4 }, (_, index) => (
-        <div key={`study-skeleton-${index}`} className="rounded-2xl border border-line bg-surface p-3 animate-pulse">
-          <div className="flex items-center justify-between">
-            <div className="h-4 w-8 rounded bg-surface-muted" />
-            <div className="h-6 w-24 rounded-full bg-surface-muted" />
-          </div>
-          <div className="mt-3 h-8 w-40 rounded bg-surface-muted" />
-          <div className="mt-3 h-[9.75rem] rounded-xl border border-line/50 bg-surface-muted" />
-        </div>
-      ))}
-    </div>
-  );
 }
 
 export default function StudyExplorer({
@@ -435,308 +400,83 @@ export default function StudyExplorer({
     return () => observer.disconnect();
   }, [selectedItem, hasMorePages, loadMorePage]);
 
-  const submitReview = useCallback(async (assignmentId: number, result: "correct" | "wrong") => {
-    const itemForSubmit = modalItems.find((item) => item.assignmentId === assignmentId) ?? selectedItem ?? null;
-    const submittedIndex = modalItems.findIndex((item) => item.assignmentId === assignmentId);
-    const remainingAfterSubmit = modalItems.filter((item) => item.assignmentId !== assignmentId);
-    const nextFocusedItem =
-      remainingAfterSubmit[submittedIndex] ??
-      remainingAfterSubmit[Math.max(0, submittedIndex - 1)] ??
-      null;
-
-    setSubmitInFlight({
-      assignmentId,
-      result,
-      itemLabel: itemForSubmit ? `${itemForSubmit.characters} (${studyItemEnglishTitle(itemForSubmit)})` : "item",
-    });
-    setSubmittingByAssignmentId((prev) => new Set(prev).add(assignmentId));
-
-    try {
-      const response = await fetch(`/api/study/${accountId}/review`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ assignmentId, result }),
-      });
-      const payload = (await response.json()) as { error?: string };
-      if (!response.ok) throw new Error(payload.error ?? "Could not submit review.");
-
-      if (itemForSubmit) {
-        setModalSessionItemByAssignmentId((prev) => ({ ...prev, [assignmentId]: itemForSubmit }));
-      }
-
-      setLoadedItems((prev) => prev.filter((item) => item.assignmentId !== assignmentId));
-      setTotalItems((prev) => Math.max(0, prev - 1));
-      setPersistedCounts((prev) => (prev
-        ? { ...prev, reviews: Math.max(0, prev.reviews - 1), all: Math.max(0, prev.all - 1) }
-        : prev));
-      setSubmitFeedback({
-        kind: "success",
-        message: `${result === "correct" ? "Correct" : "Wrong"} submitted for ${itemForSubmit ? `${itemForSubmit.characters} (${studyItemEnglishTitle(itemForSubmit)})` : "item"}.`,
-      });
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(
-          new CustomEvent("wr:study-review-submitted", {
-            detail: {
-              accountId,
-              subjectId: itemForSubmit?.subjectId,
-            },
-          }),
-        );
-      }
-      setReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: result }));
-      setHiddenSubmittedAssignmentIds((prev) => {
-        const next = new Set(prev);
-        next.add(assignmentId);
-        return next;
-      });
-      setHasPendingStudySubmissions(true);
-      setSelectedId(nextFocusedItem?.subjectId ?? null);
-    } catch (submitError) {
-      setSubmitFeedback({
-        kind: "error",
-        message: submitError instanceof Error ? submitError.message : "Could not submit review.",
-      });
-    } finally {
-      setSubmittingByAssignmentId((prev) => {
-        const next = new Set(prev);
-        next.delete(assignmentId);
-        return next;
-      });
-      setRevealedAssignmentIds((prev) => {
-        const next = new Set(prev);
-        next.delete(assignmentId);
-        return next;
-      });
-      setSubmitInFlight(null);
-    }
-  }, [accountId, modalItems, selectedItem]);
-
-  const closeReviewSession = useCallback(() => {
-    if (hasPendingStudySubmissions) {
-      void fetch(`/api/accounts/${accountId}/refresh`, { method: "POST" }).catch(() => {
-        // Non-blocking best-effort refresh after review session closes.
-      });
-      void mutateQueue();
-      setHasPendingStudySubmissions(false);
-    }
-
-    setSelectedId(null);
-    setReviewOutcomeByAssignmentId({});
-    setModalSessionOrderByAssignmentId(null);
-    setModalSessionItemByAssignmentId({});
-    setSubmitFeedback(null);
-    setSubmitInFlight(null);
-    setRevealedAssignmentIds(new Set());
-  }, [accountId, hasPendingStudySubmissions, mutateQueue]);
+  const { submitReview, closeReviewSession } = useStudyReviewSubmission({
+    accountId,
+    modalItems,
+    selectedItem,
+    hasPendingStudySubmissions,
+    mutateQueue,
+    onSetLoadedItems: setLoadedItems,
+    onSetTotalItems: setTotalItems,
+    onSetPersistedCounts: setPersistedCounts,
+    onSetSubmitFeedback: setSubmitFeedback,
+    onSetSubmitInFlight: setSubmitInFlight,
+    onSetSubmittingByAssignmentId: setSubmittingByAssignmentId,
+    onSetRevealedAssignmentIds: setRevealedAssignmentIds,
+    onSetReviewOutcomeByAssignmentId: setReviewOutcomeByAssignmentId,
+    onSetHiddenSubmittedAssignmentIds: setHiddenSubmittedAssignmentIds,
+    onSetHasPendingStudySubmissions: setHasPendingStudySubmissions,
+    onSetSelectedId: setSelectedId,
+    onSetModalSessionOrderByAssignmentId: setModalSessionOrderByAssignmentId,
+    onSetModalSessionItemByAssignmentId: setModalSessionItemByAssignmentId,
+  });
 
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
-      <header className="border-b border-line bg-surface-muted px-5 py-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <h2 className="text-xl font-black text-foreground">Study</h2>
-            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Reviews due now and available lessons across all levels</p>
-          </div>
-          <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope="study" /></div>
-        </div>
+      <StudyExplorerPanel
+        canToggleEnglish={canToggleEnglish}
+        showEnglish={showEnglish}
+        studyMode={studyMode}
+        levelOptions={levelOptions}
+        availableLevels={availableLevels}
+        viewedLevel={viewedLevel}
+        typeFilter={typeFilter}
+        srsFilter={srsFilter}
+        typeCounts={typeCounts}
+        srsCounts={srsCounts}
+        filteredItems={filteredItems}
+        totalItems={totalItems}
+        hasMorePages={hasMorePages}
+        isLoadingMore={isLoadingMore}
+        loadMoreError={loadMoreError}
+        isLoading={isLoading}
+        hasData={Boolean(data)}
+        isUnauthorized={isUnauthorized}
+        errorMessage={error?.message ?? null}
+        recentOnly={recentOnly}
+        showLocked={showLocked}
+        sentinelRef={sentinelRef}
+        onSetViewedLevel={setViewedLevel}
+        onSetTypeFilter={setTypeFilter}
+        onSetSrsFilter={setSrsFilter}
+        onToggleShowEnglish={onToggleShowEnglish}
+        onToggleShowLocked={() => setShowLocked((prev) => !prev)}
+        onToggleRecentOnly={() => setRecentOnly((prev) => !prev)}
+        onSelectSubject={setSelectedId}
+        onClearAllFilters={clearAllFilters}
+      />
 
-        <div className="mt-3 flex flex-wrap gap-2">
-          <button type="button" onClick={() => setViewedLevel(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === null)}`}>
-            All Levels
-          </button>
-          {levelOptions.map((level) => (
-            <button
-              key={level}
-              type="button"
-              onClick={() => setViewedLevel(level)}
-              disabled={!availableLevels.has(level)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${!availableLevels.has(level) ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
-            >
-              L{level}
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-2 flex flex-wrap items-start justify-between gap-2">
-          <SubjectTypeFilterGroup
-            counts={typeCounts}
-            allLabel={viewedLevel === null ? "All Levels" : `All L${viewedLevel}`}
-            allActive={typeFilter === "all"}
-            activeTypes={{
-              radical: typeFilter === "all" || typeFilter === "radical",
-              kanji: typeFilter === "all" || typeFilter === "kanji",
-              vocabulary: typeFilter === "all" || typeFilter === "vocabulary",
-            }}
-            onClickAll={() => setTypeFilter("all")}
-            onClickType={(type) => setTypeFilter(type)}
-          />
-
-          <div className="ml-auto flex flex-wrap justify-end gap-2">
-            {(["all", "apprentice", "guru", "master", "enlightened"] as const).map((status) => (
-              <button
-                key={status}
-                type="button"
-                onClick={() => setSrsFilter(status)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(srsFilter === status)}`}
-              >
-                {srsFilterButtonLabel(status)} ({formatNumber(srsCounts[status])})
-              </button>
-            ))}
-          </div>
-        </div>
-      </header>
-
-      {error ? <p className="px-5 py-4 text-sm text-red-700">{error.message}</p> : null}
-
-      <div className="p-5">
-        {isLoading && !data ? <StudySkeletonCards /> : null}
-
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-            Showing {formatNumber(filteredItems.length)} loaded items · {formatNumber(totalItems)} total in queue
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={onToggleShowEnglish}
-              disabled={!canToggleEnglish}
-              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowLocked((prev) => !prev)}
-              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
-            >
-              {showLocked ? "Hide Locked" : "Show Locked"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setRecentOnly((prev) => !prev)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(recentOnly)}`}
-            >
-              Recent Only
-            </button>
-          </div>
-        </div>
-
-        {filteredItems.length > 0 ? (
-          <>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {filteredItems.map((item, index) => {
-                const reviewBadge = item.queueType === "review" ? formatNextReviewBadge(item.availableAt) : null;
-
-                return (
-                  <UnifiedExplorerCard
-                    key={`${item.queueType}-${item.subjectId}`}
-                    onClick={() => {
-                      if (!isUnauthorized) {
-                        setSelectedId(item.subjectId);
-                      }
-                    }}
-                    className={`rounded-2xl border p-3 text-left transition ${
-                      isUnauthorized ? "cursor-not-allowed opacity-65" : "hover:brightness-95"
-                    } ${typeCardClass(item.subjectType, false)}`}
-                    indexLabel={`#${index + 1}`}
-                    topRight={
-                      <>
-                        <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
-                        {typeof item.wkLevel === "number" ? (
-                          <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span>
-                        ) : null}
-                      </>
-                    }
-                    glyphClassName={typeGlyphBoxClass(item.subjectType)}
-                    glyphText={item.characters}
-                    glyphTextClassName={glyphTextSizeClass(item.characters)}
-                    glyphSubtitle={
-                      studyMode
-                        ? <span className="text-foreground/45">...</span>
-                        : item.subjectType === "kanji"
-                          ? (showEnglish ? titleForDisplay(item, true) : (glyphSubtitleForDisplay(item) ?? ""))
-                          : (glyphSubtitleForDisplay(item) ?? "")
-                    }
-                    statusChip={<span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)}</span>}
-                    middleChip={reviewBadge ? <span className={`rounded-full border px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${reviewBadge.className}`}>{reviewBadge.label}</span> : undefined}
-                    rightChip={<span className="rounded-full border border-line bg-surface px-2 py-1 text-xs font-bold text-foreground">SRS {item.srsStage}</span>}
-                  />
-                );
-              })}
-            </div>
-
-            {hasMorePages ? (
-              <div ref={sentinelRef} className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
-                {isLoadingMore ? "Loading more..." : loadMoreError ? `Load error: ${loadMoreError}` : "Scroll to load more..."}
-              </div>
-            ) : null}
-          </>
-        ) : (
-          <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
-            No study items match the current filters. {" "}
-            <button
-              type="button"
-              onClick={clearAllFilters}
-              className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
-            >
-              Clear filters
-            </button>
-          </div>
-        )}
-      </div>
-
-      {!isUnauthorized ? (
-        <StudyReviewModal
-          accountId={accountId}
-          studyMode={studyMode}
-          selectedItem={selectedItem}
-          selectedIndex={selectedIndex}
-          filteredTotal={modalItems.length}
-          prevLabel={prevItem?.characters ?? null}
-          nextLabel={nextItem?.characters ?? null}
-          isAnswerRevealed={isAnswerRevealed}
-          isSubmittingSelected={isSubmittingSelected}
-          submitInFlight={submitInFlight}
-          submitFeedback={submitFeedback}
-          reviewOutcomeByAssignmentId={reviewOutcomeByAssignmentId}
-          onMarkSkipped={(assignmentId) => {
-            setReviewOutcomeByAssignmentId((prev) => {
-              const current = prev[assignmentId];
-              if (current === "correct" || current === "wrong" || current === "skipped") {
-                return prev;
-              }
-
-              return { ...prev, [assignmentId]: "skipped" };
-            });
-          }}
-          onClose={closeReviewSession}
-          onPrev={
-            prevItem
-              ? () => {
-                  setSelectedId(prevItem.subjectId);
-                }
-              : null
-          }
-          onNext={
-            nextItem
-              ? () => {
-                  setSelectedId(nextItem.subjectId);
-                }
-              : null
-          }
-          onRestartFromBeginning={
-            filteredItems.length > 0
-              ? () => {
-                  setSelectedId(filteredItems[0]?.subjectId ?? null);
-                }
-              : null
-          }
-          onReveal={(assignmentId) => {
-            setRevealedAssignmentIds((prev) => new Set(prev).add(assignmentId));
-          }}
-          onSubmit={submitReview}
-        />
-      ) : null}
+      <StudyExplorerModal
+        accountId={accountId}
+        isUnauthorized={isUnauthorized}
+        studyMode={studyMode}
+        selectedItem={selectedItem}
+        selectedIndex={selectedIndex}
+        modalItems={modalItems}
+        prevItem={prevItem}
+        nextItem={nextItem}
+        filteredItems={filteredItems}
+        isAnswerRevealed={isAnswerRevealed}
+        isSubmittingSelected={isSubmittingSelected}
+        submitInFlight={submitInFlight}
+        submitFeedback={submitFeedback}
+        reviewOutcomeByAssignmentId={reviewOutcomeByAssignmentId}
+        onSetReviewOutcomeByAssignmentId={setReviewOutcomeByAssignmentId}
+        onSetSelectedId={setSelectedId}
+        onSetRevealedAssignmentIds={setRevealedAssignmentIds}
+        onClose={closeReviewSession}
+        onSubmit={submitReview}
+      />
     </section>
   );
 }
