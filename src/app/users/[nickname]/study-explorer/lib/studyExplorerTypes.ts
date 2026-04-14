@@ -12,6 +12,7 @@ export type QueueResponse = {
     reviews: number;
     lessons: number;
   };
+  levelCounts?: Record<number, number>;
   pagination?: {
     offset: number;
     limit: number;

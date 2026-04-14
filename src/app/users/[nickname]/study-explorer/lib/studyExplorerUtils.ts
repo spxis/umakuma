@@ -101,6 +101,7 @@ export function persistQueue(
   items: StudyQueueItem[],
   totalItems: number,
   counts: StudyCounts | null,
+  levelCounts?: Record<number, number>,
 ): void {
   if (typeof window === "undefined") {
     return;
@@ -115,6 +116,7 @@ export function persistQueue(
         reviews: items.filter((item) => item.queueType === "review").length,
         lessons: items.filter((item) => item.queueType === "lesson").length,
       },
+      levelCounts,
       pagination: {
         offset: 0,
         limit: items.length,

@@ -5,6 +5,7 @@ type CachedStudyQueue = {
     reviews: number;
     lessons: number;
   };
+  levelCounts?: Record<number, number>;
   cachedAtMs: number;
 };
 
@@ -64,10 +65,12 @@ export function setCachedStudyQueue(
   mode: string,
   items: unknown[],
   counts: { all: number; reviews: number; lessons: number },
+  levelCounts?: Record<number, number>,
 ): void {
   cache.set(cacheKey(accountId, mode), {
     items,
     counts,
+    levelCounts,
     cachedAtMs: Date.now(),
   });
   trimOldestEntries(cache, MAX_QUEUE_CACHE_KEYS);

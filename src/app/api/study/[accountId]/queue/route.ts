@@ -64,6 +64,7 @@ export async function GET(request: Request, context: RouteContext) {
         {
           items: pagedItems,
           counts: cached.counts,
+          levelCounts: cached.levelCounts ?? {},
           pagination: {
             offset,
             limit: limit ?? cachedItems.length,
@@ -310,7 +311,16 @@ export async function GET(request: Request, context: RouteContext) {
 
     counts.all = counts.reviews + counts.lessons;
 
-    setCachedStudyQueue(accountId, mode, items, counts);
+    const levelCounts = items.reduce<Record<number, number>>((acc, item) => {
+      if (typeof item.wkLevel !== "number") {
+        return acc;
+      }
+
+      acc[item.wkLevel] = (acc[item.wkLevel] ?? 0) + 1;
+      return acc;
+    }, {});
+
+    setCachedStudyQueue(accountId, mode, items, counts, levelCounts);
 
     const pagedItems = limit === null ? items : items.slice(offset, offset + limit);
 
@@ -318,6 +328,7 @@ export async function GET(request: Request, context: RouteContext) {
       {
         items: pagedItems,
         counts,
+        levelCounts,
         pagination: {
           offset,
           limit: limit ?? items.length,

@@ -223,20 +223,24 @@ export default function StudyExplorerPanel({
             >
               {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
             </button>
-            <button
-              type="button"
-              onClick={onToggleShowLocked}
-              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
-            >
-              {showLocked ? "Hide Locked" : "Show Locked"}
-            </button>
-            <button
-              type="button"
-              onClick={onToggleRecentOnly}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(recentOnly)}`}
-            >
-              Recent Only
-            </button>
+            {queueMode !== "lesson" ? (
+              <>
+                <button
+                  type="button"
+                  onClick={onToggleShowLocked}
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+                >
+                  {showLocked ? "Hide Locked" : "Show Locked"}
+                </button>
+                <button
+                  type="button"
+                  onClick={onToggleRecentOnly}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(recentOnly)}`}
+                >
+                  Recent Only
+                </button>
+              </>
+            ) : null}
           </div>
         </div>
 

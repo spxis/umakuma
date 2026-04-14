@@ -137,7 +137,7 @@ export default function StudyExplorer({
     [loadedItems, queueMode, viewedLevel, typeFilter, effectiveSrsFilter, showLocked, recentOnly, searchQuery],
   );
 
-  const lessonLevelCounts = useMemo(() => {
+  const lessonLevelCountsFromLoaded = useMemo(() => {
     const countsByLevel: Record<number, number> = {};
 
     for (const item of loadedItems) {
@@ -162,6 +162,34 @@ export default function StudyExplorer({
 
     return countsByLevel;
   }, [loadedItems, recentOnly, showLocked, typeFilter]);
+
+  const lessonLevelCountsFromServer = useMemo(() => {
+    const raw = data?.levelCounts ?? cachedQueueData?.levelCounts;
+    if (!raw) {
+      return {} as Record<number, number>;
+    }
+
+    const normalized: Record<number, number> = {};
+    for (const [levelRaw, count] of Object.entries(raw)) {
+      const level = Number(levelRaw);
+      if (!Number.isInteger(level) || level <= 0 || typeof count !== "number" || count <= 0) {
+        continue;
+      }
+      normalized[level] = count;
+    }
+
+    return normalized;
+  }, [cachedQueueData?.levelCounts, data?.levelCounts]);
+
+  const lessonLevelCounts = useMemo(() => {
+    if (queueMode !== "lesson") {
+      return lessonLevelCountsFromLoaded;
+    }
+
+    return Object.keys(lessonLevelCountsFromServer).length > 0
+      ? lessonLevelCountsFromServer
+      : lessonLevelCountsFromLoaded;
+  }, [lessonLevelCountsFromLoaded, lessonLevelCountsFromServer, queueMode]);
 
   const filteredItemByAssignmentId = useMemo(() => {
     const map = new Map<number, StudyQueueItem>();
@@ -274,6 +302,7 @@ export default function StudyExplorer({
     loadedItems,
     totalItems,
     counts,
+    levelCounts: lessonLevelCountsFromServer,
     dataItems: data?.items,
     dataPaginationTotal: data?.pagination?.total,
     dataCounts: data?.counts,

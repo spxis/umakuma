@@ -20,6 +20,7 @@ type Args = {
   loadedItems: StudyQueueItem[];
   totalItems: number;
   counts: StudyCounts | null;
+  levelCounts: Record<number, number>;
   dataItems: StudyQueueItem[] | undefined;
   dataPaginationTotal: number | undefined;
   dataCounts: StudyCounts | undefined;
@@ -71,6 +72,7 @@ export function useStudyExplorerEffects({
   loadedItems,
   totalItems,
   counts,
+  levelCounts,
   dataItems,
   dataPaginationTotal,
   dataCounts,
@@ -175,13 +177,14 @@ export function useStudyExplorerEffects({
   }, [dataItems, dataPaginationTotal, hiddenSubmittedAssignmentIds, setLoadedItems, setTotalItems]);
 
   useEffect(() => {
-    persistQueue(accountId, queueMode, loadedItems, totalItems, counts ?? null);
+    persistQueue(accountId, queueMode, loadedItems, totalItems, counts ?? null, levelCounts);
     setCachedQueueData({
       items: loadedItems,
       counts: counts ?? { all: loadedItems.length, reviews: 0, lessons: 0 },
+      levelCounts,
       pagination: { offset: 0, limit: loadedItems.length, total: totalItems, hasMore: loadedItems.length < totalItems },
     });
-  }, [accountId, counts, loadedItems, queueMode, setCachedQueueData, totalItems]);
+  }, [accountId, counts, levelCounts, loadedItems, queueMode, setCachedQueueData, totalItems]);
 
   useEffect(() => {
     setCachedQueueData(readStoredQueue(accountId, queueMode));
