@@ -17,6 +17,7 @@ export type LevelItemCounts = {
 };
 
 export type LevelJlptCounts = {
+  none: number;
   n1: number;
   n2: number;
   n3: number;
@@ -204,7 +205,9 @@ export function filterAndSortLevelItems(
       const jlptPass =
         options.jlptFilter === "all"
           ? true
-          : item.subjectType === "kanji" && item.jlptLevel === Number(options.jlptFilter.slice(1));
+          : options.jlptFilter === "none"
+            ? !item.jlptLevel
+            : item.subjectType === "kanji" && item.jlptLevel === Number(options.jlptFilter.slice(1));
       const burnedPass = true;
       const reviewTimingPass = passesReviewTimingFilter(item, options.reviewTimingFilter, nowMs);
       const visibilityPass =
@@ -268,10 +271,11 @@ export function computeLevelItemCounts(items: LevelItem[]): LevelItemCounts {
 }
 
 export function computeJlptCounts(items: LevelItem[]): LevelJlptCounts {
-  const base: LevelJlptCounts = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
+  const base: LevelJlptCounts = { none: 0, n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
 
   for (const item of items) {
-    if (item.subjectType !== "kanji" || !item.jlptLevel) {
+    if (!item.jlptLevel) {
+      base.none += 1;
       continue;
     }
 

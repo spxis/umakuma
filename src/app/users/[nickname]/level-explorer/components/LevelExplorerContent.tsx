@@ -244,8 +244,8 @@ export default function LevelExplorerContent({
           {!filtersCollapsed ? (
             <div className="mt-3 space-y-3">
               <div className="flex flex-wrap gap-2">
-                {(["all", "n5", "n4", "n3", "n2", "n1"] as const).map((level) => {
-                  const count = level === "all" ? counts.kanji : jlptCounts[level];
+                {(["all", "none", "n5", "n4", "n3", "n2", "n1"] as const).map((level) => {
+                  const count = level === "all" ? counts.all : jlptCounts[level];
                   const disabled = level !== "all" && count === 0;
 
                   return (
@@ -258,7 +258,7 @@ export default function LevelExplorerContent({
                         disabled ? disabledBadgeClass() : badgeClass(jlptFilter === level)
                       }`}
                     >
-                      {level === "all" ? "JLPT All" : level.toUpperCase()} ({formatNumber(count)})
+                      {level === "all" ? "JLPT All" : level === "none" ? "No JLPT" : level.toUpperCase()} ({formatNumber(count)})
                     </button>
                   );
                 })}

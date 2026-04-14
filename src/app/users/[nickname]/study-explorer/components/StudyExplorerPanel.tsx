@@ -49,6 +49,7 @@ type Props = {
   typeFilter: StudyTypeFilter;
   srsFilter: StudySrsFilter;
   queueMode: "review" | "lesson";
+  lessonLevelCounts: Record<number, number>;
   typeCounts: { all: number; radical: number; kanji: number; vocabulary: number };
   srsCounts: {
     all: number;
@@ -91,6 +92,7 @@ export default function StudyExplorerPanel({
   typeFilter,
   srsFilter,
   queueMode,
+  lessonLevelCounts,
   typeCounts,
   srsCounts,
   filteredItems,
@@ -118,8 +120,13 @@ export default function StudyExplorerPanel({
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
   const srsStatuses =
     queueMode === "lesson"
-      ? (["locked"] as const)
+      ? ([] as const)
       : (["all", "apprentice", "guru", "master", "enlightened"] as const);
+  const lessonLevelOptions = Object.entries(lessonLevelCounts)
+    .map(([level, count]) => [Number(level), count] as const)
+    .filter(([, count]) => count > 0)
+    .sort((a, b) => a[0] - b[0]);
+  const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
 
   return (
     <>
@@ -133,20 +140,40 @@ export default function StudyExplorerPanel({
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2">
-          <button type="button" onClick={() => onSetViewedLevel(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === null)}`}>
-            All Levels
-          </button>
-          {levelOptions.map((level) => (
-            <button
-              key={level}
-              type="button"
-              onClick={() => onSetViewedLevel(level)}
-              disabled={!availableLevels.has(level)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${!availableLevels.has(level) ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
-            >
-              L{level}
-            </button>
-          ))}
+          {queueMode === "lesson" ? (
+            <>
+              <button type="button" onClick={() => onSetViewedLevel(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === null)}`}>
+                All Levels ({formatNumber(totalLessonsInVisibleLevels)})
+              </button>
+              {lessonLevelOptions.map(([level, count]) => (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => onSetViewedLevel(level)}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === level)}`}
+                >
+                  L{level} ({formatNumber(count)})
+                </button>
+              ))}
+            </>
+          ) : (
+            <>
+              <button type="button" onClick={() => onSetViewedLevel(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === null)}`}>
+                All Levels
+              </button>
+              {levelOptions.map((level) => (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => onSetViewedLevel(level)}
+                  disabled={!availableLevels.has(level)}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${!availableLevels.has(level) ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
+                >
+                  L{level}
+                </button>
+              ))}
+            </>
+          )}
         </div>
 
         <div className="mt-2 flex flex-wrap items-start justify-between gap-2">
@@ -163,18 +190,20 @@ export default function StudyExplorerPanel({
             onClickType={(type) => onSetTypeFilter(type)}
           />
 
-          <div className="ml-auto flex flex-wrap justify-end gap-2">
-            {srsStatuses.map((status) => (
-              <button
-                key={status}
-                type="button"
-                onClick={() => onSetSrsFilter(status)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(srsFilter === status)}`}
-              >
-                {srsFilterButtonLabel(status)} ({formatNumber(srsCounts[status])})
-              </button>
-            ))}
-          </div>
+          {srsStatuses.length > 0 ? (
+            <div className="ml-auto flex flex-wrap justify-end gap-2">
+              {srsStatuses.map((status) => (
+                <button
+                  key={status}
+                  type="button"
+                  onClick={() => onSetSrsFilter(status)}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(srsFilter === status)}`}
+                >
+                  {srsFilterButtonLabel(status)} ({formatNumber(srsCounts[status])})
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
       </header>
 
@@ -242,6 +271,7 @@ export default function StudyExplorerPanel({
                       <>
                         <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
                         {typeof item.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span> : null}
+                        {item.jlptLevel ? <span className="subject-pill border-line bg-surface text-foreground">N{item.jlptLevel}</span> : null}
                       </>
                     }
                     glyphClassName={typeGlyphBoxClass(item.subjectType)}
@@ -254,7 +284,11 @@ export default function StudyExplorerPanel({
                           ? titleForDisplay(item, true)
                           : (glyphSubtitleForDisplay(item) ?? "")
                     }
-                    statusChip={<span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)}</span>}
+                    statusChip={
+                      item.queueType === "lesson" && item.status === "locked"
+                        ? undefined
+                        : <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)}</span>
+                    }
                     middleChip={reviewBadge ? <span className={`rounded-full border px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${reviewBadge.className}`}>{reviewBadge.label}</span> : undefined}
                     rightChip={<span className="rounded-full border border-line bg-surface px-2 py-1 text-xs font-bold text-foreground">SRS {item.srsStage}</span>}
                   />

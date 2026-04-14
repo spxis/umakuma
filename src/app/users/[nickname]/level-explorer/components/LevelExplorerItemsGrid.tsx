@@ -157,7 +157,7 @@ export default function LevelExplorerItemsGrid({
                       L{selectedLevelList[selectedLevelList.length - 1]}
                     </span>
                   ) : null}
-                  {item.subjectType === "kanji" && item.jlptLevel ? (
+                  {item.jlptLevel ? (
                     <span className="subject-pill border-line bg-surface text-foreground">N{item.jlptLevel}</span>
                   ) : null}
                   {isNewGlyphWithinHours(item) ? (

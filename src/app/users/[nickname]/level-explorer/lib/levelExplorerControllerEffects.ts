@@ -297,8 +297,11 @@ export function useLevelExplorerSelectionReconcile({
     }
 
     if (jlptFilter !== "all") {
-      const expectedJlpt = Number(jlptFilter.slice(1));
-      const matchesJlpt = selectedItemFromAll.subjectType === "kanji" && selectedItemFromAll.jlptLevel === expectedJlpt;
+      const matchesJlpt =
+        jlptFilter === "none"
+          ? !selectedItemFromAll.jlptLevel
+          : selectedItemFromAll.subjectType === "kanji" &&
+            selectedItemFromAll.jlptLevel === Number(jlptFilter.slice(1));
       if (!matchesJlpt) {
         setJlptFilter("all");
       }

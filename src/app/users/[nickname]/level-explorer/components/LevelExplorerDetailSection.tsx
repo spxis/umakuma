@@ -128,7 +128,7 @@ export default function LevelExplorerDetailSection({
             {typeof selectedItem.wkLevel === "number" ? (
               <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span>
             ) : null}
-            {selectedItem.subjectType === "kanji" && selectedItem.jlptLevel ? (
+            {selectedItem.jlptLevel ? (
               <span className="subject-pill border-line bg-surface text-foreground">N{selectedItem.jlptLevel}</span>
             ) : null}
             <span className="subject-pill border-line bg-surface text-foreground">SRS {selectedItem.srsStage}</span>

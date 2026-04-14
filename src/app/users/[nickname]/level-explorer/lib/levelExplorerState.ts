@@ -1,7 +1,7 @@
 import type { SrsFilter } from "../../explorerTypes";
 
 export type TypeFilter = "all" | "kanji" | "radical" | "vocabulary";
-export type JlptFilter = "all" | "n1" | "n2" | "n3" | "n4" | "n5";
+export type JlptFilter = "all" | "none" | "n1" | "n2" | "n3" | "n4" | "n5";
 export type ReviewTimingFilter = "all" | "overdue" | "next1h" | "next8h" | "next24h" | "next72h";
 
 export type ExplorerUrlState = {
@@ -32,7 +32,7 @@ export const SRS_FILTER_ALLOWED: SrsFilter[] = [
 ];
 
 export const TYPE_FILTER_ALLOWED: TypeFilter[] = ["all", "radical", "kanji", "vocabulary"];
-export const JLPT_FILTER_ALLOWED: JlptFilter[] = ["all", "n5", "n4", "n3", "n2", "n1"];
+export const JLPT_FILTER_ALLOWED: JlptFilter[] = ["all", "none", "n5", "n4", "n3", "n2", "n1"];
 export const REVIEW_TIMING_ALLOWED: ReviewTimingFilter[] = [
   "all",
   "overdue",

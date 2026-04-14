@@ -87,6 +87,7 @@ export default function StudyExplorer({
   const [searchQuery, setSearchQuery] = useState("");
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
   const isModalOpen = selectedId !== null;
+  const effectiveSrsFilter: StudySrsFilter = queueMode === "lesson" ? "all" : srsFilter;
 
   const { data, error, isLoading, isValidating, mutate: mutateQueue } = useSWR(
     `/api/study/${accountId}/queue?mode=${queueMode}&limit=${API_PAGE_SIZE}&offset=0`,
@@ -123,9 +124,44 @@ export default function StudyExplorer({
 
   const filteredItems = useMemo(
     () =>
-      filterStudyItems(loadedItems, queueMode, viewedLevel, typeFilter, srsFilter, showLocked, recentOnly, searchQuery),
-    [loadedItems, queueMode, viewedLevel, typeFilter, srsFilter, showLocked, recentOnly, searchQuery],
+      filterStudyItems(
+        loadedItems,
+        queueMode,
+        viewedLevel,
+        typeFilter,
+        effectiveSrsFilter,
+        showLocked,
+        recentOnly,
+        searchQuery,
+      ),
+    [loadedItems, queueMode, viewedLevel, typeFilter, effectiveSrsFilter, showLocked, recentOnly, searchQuery],
   );
+
+  const lessonLevelCounts = useMemo(() => {
+    const countsByLevel: Record<number, number> = {};
+
+    for (const item of loadedItems) {
+      if (item.queueType !== "lesson") {
+        continue;
+      }
+      if (recentOnly && !isRecentStudyItem(item)) {
+        continue;
+      }
+      if (typeFilter !== "all" && item.subjectType !== typeFilter) {
+        continue;
+      }
+      if (!showLocked && item.status === "locked") {
+        continue;
+      }
+      if (typeof item.wkLevel !== "number") {
+        continue;
+      }
+
+      countsByLevel[item.wkLevel] = (countsByLevel[item.wkLevel] ?? 0) + 1;
+    }
+
+    return countsByLevel;
+  }, [loadedItems, recentOnly, showLocked, typeFilter]);
 
   const filteredItemByAssignmentId = useMemo(() => {
     const map = new Map<number, StudyQueueItem>();
@@ -141,7 +177,7 @@ export default function StudyExplorer({
       if (recentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
       if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
-      if (srsFilter !== "all" && item.status !== srsFilter) continue;
+      if (effectiveSrsFilter !== "all" && item.status !== effectiveSrsFilter) continue;
       if (!showLocked && item.status === "locked") continue;
 
       out.all += 1;
@@ -150,7 +186,7 @@ export default function StudyExplorer({
       else out.vocabulary += 1;
     }
     return out;
-  }, [loadedItems, queueMode, recentOnly, viewedLevel, srsFilter, showLocked]);
+  }, [loadedItems, queueMode, recentOnly, viewedLevel, effectiveSrsFilter, showLocked]);
 
   const srsCounts = useMemo(() => {
     const out = { all: 0, locked: 0, apprentice: 0, guru: 0, master: 0, enlightened: 0 };
@@ -341,8 +377,9 @@ export default function StudyExplorer({
         availableLevels={availableLevels}
         viewedLevel={viewedLevel}
         typeFilter={typeFilter}
-        srsFilter={srsFilter}
+        srsFilter={effectiveSrsFilter}
         queueMode={queueMode}
+        lessonLevelCounts={lessonLevelCounts}
         typeCounts={typeCounts}
         srsCounts={srsCounts}
         filteredItems={filteredItems}
