@@ -204,15 +204,15 @@ export default function ExplorerTabs({
       : "rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted";
   }
 
-  function queueModeButtonClass(mode: "review" | "lesson", activeMode: "review" | "lesson"): string {
+  function queueModeSegmentClass(mode: "review" | "lesson", activeMode: "review" | "lesson"): string {
     const active = mode === activeMode;
     if (!active) {
-      return "inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted";
+      return "inline-flex h-8 items-center justify-center rounded-full px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted";
     }
 
     return mode === "review"
-      ? "inline-flex h-10 items-center justify-center rounded-full border border-amber-500 bg-amber-500 px-4 text-xs font-bold uppercase tracking-[0.1em] text-white"
-      : "inline-flex h-10 items-center justify-center rounded-full border border-sky-500 bg-sky-500 px-4 text-xs font-bold uppercase tracking-[0.1em] text-white";
+      ? "inline-flex h-8 items-center justify-center rounded-full border border-amber-500 bg-amber-500 px-4 text-xs font-bold uppercase tracking-[0.1em] text-white"
+      : "inline-flex h-8 items-center justify-center rounded-full border border-sky-500 bg-sky-500 px-4 text-xs font-bold uppercase tracking-[0.1em] text-white";
   }
 
   return (
@@ -249,22 +249,30 @@ export default function ExplorerTabs({
         </div>
           <div className="flex flex-wrap items-center justify-start gap-2 md:justify-end">
           {activeTab === "study" ? (
-            <>
+            <div
+              className="inline-flex items-center rounded-full border border-line bg-surface p-1"
+              role="tablist"
+              aria-label="Study queue mode"
+            >
               <button
                 type="button"
+                role="tab"
+                aria-selected={queueMode === "review"}
                 onClick={() => setQueueMode("review")}
-                className={queueModeButtonClass("review", queueMode)}
+                className={queueModeSegmentClass("review", queueMode)}
               >
                 Reviews ({typeof studyCounts?.reviews === "number" ? studyCounts.reviews : "..."})
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={queueMode === "lesson"}
                 onClick={() => setQueueMode("lesson")}
-                className={queueModeButtonClass("lesson", queueMode)}
+                className={queueModeSegmentClass("lesson", queueMode)}
               >
                 Lessons ({typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."})
               </button>
-            </>
+            </div>
           ) : null}
           <button
             type="button"
