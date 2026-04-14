@@ -168,17 +168,6 @@ export default function StudyExplorerPanel({
       {errorMessage ? <p className="px-5 py-4 text-sm text-red-700">{errorMessage}</p> : null}
 
       <div className="p-5">
-        {showLoadingIndicator ? (
-          <div className="mb-3 rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/75">
-            <div className="flex items-center gap-2">
-              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
-              <span>Loading study queue...</span>
-            </div>
-          </div>
-        ) : null}
-
-        {isLoading && !hasData ? <StudySkeletonCards /> : null}
-
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
             Showing {formatNumber(filteredItems.length)} loaded items · {formatNumber(totalItems)} total in queue
@@ -208,6 +197,17 @@ export default function StudyExplorerPanel({
             </button>
           </div>
         </div>
+
+        {showLoadingIndicator ? (
+          <div className="mb-3 rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/75">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
+              <span>Loading study queue...</span>
+            </div>
+          </div>
+        ) : null}
+
+        {isLoading && !hasData ? <StudySkeletonCards /> : null}
 
         {filteredItems.length > 0 ? (
           <>
