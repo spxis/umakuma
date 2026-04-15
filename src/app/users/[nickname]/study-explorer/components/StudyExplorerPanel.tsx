@@ -21,6 +21,13 @@ import type {
   StudySrsFilter,
   StudyTypeFilter,
 } from "../lib/studyExplorerTypes";
+import {
+  STUDY_QUEUE_MODE_LESSON,
+  STUDY_QUEUE_MODE_REVIEW,
+  STUDY_REVIEW_SRS_FILTERS,
+  STUDY_STATUS_LOCKED,
+} from "../lib/studyExplorerConstants";
+import type { StudyQueueMode } from "../lib/studyExplorerConstants";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 
 function StudySkeletonCards() {
@@ -49,7 +56,7 @@ type Props = {
   viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
   srsFilter: StudySrsFilter;
-  queueMode: "review" | "lesson";
+  queueMode: StudyQueueMode;
   lessonLevelCounts: Record<number, number>;
   typeCounts: { all: number; radical: number; kanji: number; vocabulary: number };
   srsCounts: {
@@ -120,18 +127,18 @@ export default function StudyExplorerPanel({
 }: Props) {
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
   const showFilterPagingState =
-    queueMode === "lesson" && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
+    queueMode === STUDY_QUEUE_MODE_LESSON && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
   const srsStatuses =
-    queueMode === "lesson"
+    queueMode === STUDY_QUEUE_MODE_LESSON
       ? ([] as const)
-      : (["all", "apprentice", "guru", "master", "enlightened"] as const);
+      : STUDY_REVIEW_SRS_FILTERS;
   const lessonLevelOptions = Object.entries(lessonLevelCounts)
     .map(([level, count]) => [Number(level), count] as const)
     .filter(([, count]) => count > 0)
     .sort((a, b) => a[0] - b[0]);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount =
-    queueMode === "lesson"
+    queueMode === STUDY_QUEUE_MODE_LESSON
       ? viewedLevel === null
         ? totalItems
         : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)
@@ -149,7 +156,7 @@ export default function StudyExplorerPanel({
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2">
-          {queueMode === "lesson" ? (
+          {queueMode === STUDY_QUEUE_MODE_LESSON ? (
             <>
               <button type="button" onClick={() => onSetViewedLevel(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(viewedLevel === null)}`}>
                 All Levels ({formatNumber(totalLessonsInVisibleLevels)})
@@ -233,7 +240,7 @@ export default function StudyExplorerPanel({
             >
               {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
             </button>
-            {queueMode !== "lesson" ? (
+            {queueMode !== STUDY_QUEUE_MODE_LESSON ? (
               <>
                 <button
                   type="button"
@@ -269,7 +276,7 @@ export default function StudyExplorerPanel({
           <>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {filteredItems.map((item, index) => {
-                const reviewBadge = item.queueType === "review" ? formatNextReviewBadge(item.availableAt) : null;
+                const reviewBadge = item.queueType === STUDY_QUEUE_MODE_REVIEW ? formatNextReviewBadge(item.availableAt) : null;
 
                 return (
                   <UnifiedExplorerCard
@@ -299,7 +306,7 @@ export default function StudyExplorerPanel({
                           : (glyphSubtitleForDisplay(item) ?? "")
                     }
                     statusChip={
-                      item.queueType === "lesson" && item.status === "locked"
+                      item.queueType === STUDY_QUEUE_MODE_LESSON && item.status === STUDY_STATUS_LOCKED
                         ? undefined
                         : <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)}</span>
                     }
@@ -316,7 +323,7 @@ export default function StudyExplorerPanel({
                   ? "Loading more..."
                   : loadMoreError
                     ? `Load error: ${loadMoreError}`
-                    : queueMode === "lesson"
+                    : queueMode === STUDY_QUEUE_MODE_LESSON
                       ? "Loading remaining lessons..."
                       : "Scroll to load more..."}
               </div>

@@ -1,8 +1,10 @@
-import type { LevelItem, SrsFilter } from "../../explorerTypes";
+import type { LevelItem } from "../../explorerTypes";
+import { STUDY_SRS_FILTERS } from "./studyExplorerConstants";
+import type { StudyQueueMode } from "./studyExplorerConstants";
 
 export type StudyQueueItem = LevelItem & {
   assignmentId: number;
-  queueType: "review" | "lesson";
+  queueType: StudyQueueMode;
 };
 
 export type QueueResponse = {
@@ -63,11 +65,8 @@ export type StudyExplorerProps = {
   onToggleShowEnglish: () => void;
   canToggleEnglish: boolean;
   studyMode: boolean;
-  queueMode: "review" | "lesson";
+  queueMode: StudyQueueMode;
 };
 
 export type StudyTypeFilter = "all" | "radical" | "kanji" | "vocabulary";
-export type StudySrsFilter = Extract<
-  SrsFilter,
-  "all" | "locked" | "apprentice" | "guru" | "master" | "enlightened"
->;
+export type StudySrsFilter = (typeof STUDY_SRS_FILTERS)[number];

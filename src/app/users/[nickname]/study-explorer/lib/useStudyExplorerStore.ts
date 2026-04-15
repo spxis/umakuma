@@ -2,6 +2,7 @@ import { create } from "zustand";
 import type { SetStateAction } from "react";
 
 import type { StudySrsFilter, StudyTypeFilter } from "./studyExplorerTypes";
+import { STUDY_SRS_FILTER_ALL } from "./studyExplorerConstants";
 
 type StudyUiState = {
   viewedLevel: number | null;
@@ -30,8 +31,8 @@ type StudyExplorerStoreState = {
 function defaultUiState(): StudyUiState {
   return {
     viewedLevel: null,
-    typeFilter: "all",
-    srsFilter: "all",
+    typeFilter: STUDY_SRS_FILTER_ALL,
+    srsFilter: STUDY_SRS_FILTER_ALL,
     selectedId: null,
     showLocked: true,
     recentOnly: false,
