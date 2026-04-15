@@ -8,6 +8,7 @@ import type {
 
 type Props = {
   accountId: string;
+  showEnglish: boolean;
   isUnauthorized: boolean;
   studyMode: boolean;
   selectedItem: StudyQueueItem | null;
@@ -32,6 +33,7 @@ type Props = {
 
 export default function StudyExplorerModal({
   accountId,
+  showEnglish,
   isUnauthorized,
   studyMode,
   selectedItem,
@@ -60,6 +62,7 @@ export default function StudyExplorerModal({
   return (
     <StudyReviewModal
       accountId={accountId}
+      showEnglish={showEnglish}
       studyMode={studyMode}
       selectedItem={selectedItem}
       selectedIndex={selectedIndex}

@@ -16,6 +16,7 @@ import StudyReviewModalMetaPanels from "./StudyReviewModalMetaPanels";
 type Props = {
   accountId: string;
   studyMode: boolean;
+  showEnglish: boolean;
   viewerMode: "detail" | "flash";
   selectedItem: StudyQueueItem;
   selectedOutcome: "correct" | "wrong" | "skipped" | "lesson-started" | undefined;
@@ -59,6 +60,7 @@ type Props = {
 export default function StudyReviewModalSection({
   accountId,
   studyMode,
+  showEnglish,
   viewerMode,
   selectedItem,
   selectedOutcome,
@@ -343,6 +345,7 @@ export default function StudyReviewModalSection({
         isAnswerRevealed={isAnswerRevealed}
         isOutcomeFinal={isOutcomeFinal}
         allMeanings={allMeanings}
+        showEnglish={showEnglish}
         primaryReadingHiragana={primaryReadingHiragana}
         primaryReadingKatakana={primaryReadingKatakana}
         secondaryReadingValue={secondaryReadingValue}

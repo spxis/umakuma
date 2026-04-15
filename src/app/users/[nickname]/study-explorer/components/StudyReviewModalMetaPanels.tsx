@@ -8,6 +8,8 @@ import {
   metricCard,
   readingCard,
   readingDualScriptCard,
+  readingWithPronunciation,
+  readingsWithPronunciationList,
   relatedTileLabelClass,
   relatedTiles,
 } from "./StudyReviewModalHelpers";
@@ -26,6 +28,7 @@ type Props = {
   isAnswerRevealed: boolean;
   isOutcomeFinal: boolean;
   allMeanings: string[];
+  showEnglish: boolean;
   primaryReadingHiragana: string;
   primaryReadingKatakana: string;
   secondaryReadingValue: string;
@@ -60,6 +63,7 @@ export default function StudyReviewModalMetaPanels({
   isAnswerRevealed,
   isOutcomeFinal,
   allMeanings,
+  showEnglish,
   primaryReadingHiragana,
   primaryReadingKatakana,
   secondaryReadingValue,
@@ -92,8 +96,12 @@ export default function StudyReviewModalMetaPanels({
       {(!studyMode && viewerMode === "flash") || useStudyFlashLayout ? null : detailsRevealed ? (
         <>
           <div className="mt-3 grid gap-2 lg:grid-cols-2">
-            {readingDualScriptCard("Primary readings", primaryReadingHiragana, primaryReadingKatakana)}
-            {readingCard("Secondary readings", secondaryReadingValue)}
+            {readingDualScriptCard(
+              "Primary readings",
+              readingWithPronunciation(primaryReadingHiragana, showEnglish),
+              readingWithPronunciation(primaryReadingKatakana, showEnglish),
+            )}
+            {readingCard("Secondary readings", readingsWithPronunciationList(secondaryReadingValue, showEnglish))}
           </div>
 
           <div className="mt-2 grid gap-2 lg:grid-cols-3">

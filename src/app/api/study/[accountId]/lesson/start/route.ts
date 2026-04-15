@@ -5,7 +5,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { clearStudyQueueCache } from "@/lib/studyQueueCache";
-import { postWaniKani } from "@/lib/wanikani/http";
+import { putWaniKani } from "@/lib/wanikani/http";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -48,12 +48,12 @@ export async function POST(request: Request, context: RouteContext) {
     });
 
     try {
-      await postWaniKani(`/assignments/${parsed.data.assignmentId}/start`, token, {});
+      await putWaniKani(`/assignments/${parsed.data.assignmentId}/start`, token, {});
     } catch (error) {
       const message = error instanceof Error ? error.message : "WaniKani API error";
 
-      // Treat stale/unavailable starts as already handled so study flow can continue.
-      if (message.includes("422") || message.includes("409") || message.includes("404")) {
+      // Treat already-started conflicts as handled so study flow can continue.
+      if (message.includes("422") || message.includes("409")) {
         clearStudyQueueCache(accountId);
         return NextResponse.json({ ok: true, skipped: true, reason: "already-started-or-unavailable" });
       }

@@ -10,6 +10,7 @@ import { useStudyReviewModalKeyboard } from "../lib/useStudyReviewModalKeyboard"
 
 export default function StudyReviewModal({
   accountId,
+  showEnglish,
   studyMode,
   selectedItem,
   selectedIndex,
@@ -282,6 +283,7 @@ export default function StudyReviewModal({
           <StudyReviewModalSection
             accountId={accountId}
             studyMode={studyMode}
+            showEnglish={showEnglish}
             viewerMode={viewerMode}
             selectedItem={selectedItem}
             selectedOutcome={selectedOutcome}

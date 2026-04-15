@@ -177,6 +177,16 @@ export default function LevelExplorerContent({
               </button>
             ))}
           </div>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onToggleShowEnglish}
+              disabled={!canToggleEnglish}
+              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
+            </button>
+          </div>
         </div>
         <div className="flex flex-wrap items-start justify-between gap-2">
           <SubjectTypeFilterGroup

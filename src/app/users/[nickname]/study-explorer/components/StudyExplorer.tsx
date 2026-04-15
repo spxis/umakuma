@@ -417,6 +417,7 @@ export default function StudyExplorer({
 
       <StudyExplorerModal
         accountId={accountId}
+        showEnglish={showEnglish}
         isUnauthorized={isUnauthorized}
         studyMode={studyMode}
         selectedItem={selectedItem}

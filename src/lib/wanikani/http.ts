@@ -163,3 +163,30 @@ export async function postWaniKani<TResponse>(
 
   return (await response.json()) as TResponse;
 }
+
+export async function putWaniKani<TResponse>(
+  path: string,
+  token: string,
+  body?: unknown,
+): Promise<TResponse> {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    "Wanikani-Revision": "20170710",
+    "Content-Type": "application/json",
+  };
+
+  const response = await runThrottledRequest(token, () =>
+    fetch(`${BASE_URL}${path}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(body ?? {}),
+      cache: "no-store",
+    }),
+  );
+
+  if (!response.ok) {
+    throw new Error(`WaniKani API error: ${response.status}`);
+  }
+
+  return (await response.json()) as TResponse;
+}

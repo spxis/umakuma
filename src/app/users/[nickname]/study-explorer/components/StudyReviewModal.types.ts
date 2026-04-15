@@ -15,6 +15,7 @@ export type RelatedReference = {
 
 export type StudyReviewModalProps = {
   accountId: string;
+  showEnglish: boolean;
   studyMode: boolean;
   selectedItem: StudyQueueItem | null;
   selectedIndex: number;

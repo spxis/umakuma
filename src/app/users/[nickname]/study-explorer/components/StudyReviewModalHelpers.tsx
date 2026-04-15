@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import { toRomaji } from "wanakana";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
 
@@ -90,6 +91,42 @@ export function readingCard(label: string, value: string): JSX.Element {
       <p className="mt-1 text-2xl font-black leading-tight text-foreground/95">{value}</p>
     </div>
   );
+}
+
+function pronunciationForReading(reading: string): string | null {
+  const trimmed = reading.trim();
+  if (!trimmed || trimmed === "-") {
+    return null;
+  }
+
+  const romaji = toRomaji(trimmed, { upcaseKatakana: false }).trim();
+  if (!romaji || romaji === trimmed) {
+    return null;
+  }
+
+  return romaji;
+}
+
+export function readingWithPronunciation(reading: string, showPronunciation: boolean): string {
+  if (!showPronunciation) {
+    return reading;
+  }
+
+  const pronunciation = pronunciationForReading(reading);
+  return pronunciation ? `${reading} / ${pronunciation}` : reading;
+}
+
+export function readingsWithPronunciationList(value: string, showPronunciation: boolean): string {
+  if (!showPronunciation || !value || value === "-") {
+    return value;
+  }
+
+  return value
+    .split(",")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0)
+    .map((part) => readingWithPronunciation(part, true))
+    .join(", ");
 }
 
 export function readingDualScriptCard(label: string, hiraganaValue: string, katakanaValue: string): JSX.Element {
