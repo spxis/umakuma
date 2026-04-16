@@ -131,7 +131,9 @@ export default function StudyReviewModalMetaPanels({
 
               {hasUsedInVocabulary ? (
                 <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Used in vocabulary</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
+                    {selectedItem.subjectType === "radical" ? "Used in kanji" : "Used in vocabulary"}
+                  </p>
                   {relatedTiles(selectedItem.usedInVocabulary as RelatedReference[] | undefined)}
                 </div>
               ) : null}

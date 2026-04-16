@@ -197,7 +197,9 @@ export async function GET(request: Request, context: RouteContext) {
         const subjectData = subject?.data;
         const subjectType = normalizeSubjectType(row.data.subject_type);
         const label = subjectData?.characters ?? subjectData?.slug ?? `#${row.data.subject_id}`;
-        const meanings = (subjectData?.meanings ?? []).map((item) => item.meaning);
+        const primaryMeanings = (subjectData?.meanings ?? []).map((item) => item.meaning);
+        const auxiliaryMeanings = (subjectData?.auxiliary_meanings ?? []).map((item) => item.meaning);
+        const meanings = Array.from(new Set([...primaryMeanings, ...auxiliaryMeanings]));
         const readings = (subjectData?.readings ?? [])
           .filter((item) => item.accepted_answer ?? true)
           .map((item) => item.reading);
@@ -221,7 +223,11 @@ export async function GET(request: Request, context: RouteContext) {
             ? amalgamationSubjectIds
                 .filter((subjectId) => subjectById.get(subjectId)?.object === "vocabulary")
                 .map(relatedReferenceFromId)
-            : [];
+            : subjectType === "radical"
+              ? amalgamationSubjectIds
+                  .filter((subjectId) => subjectById.get(subjectId)?.object === "kanji")
+                  .map(relatedReferenceFromId)
+              : [];
 
         const visuallySimilar =
           subjectType === "kanji"

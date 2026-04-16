@@ -19,6 +19,7 @@ export type SubjectData = {
   amalgamation_subject_ids?: number[];
   visually_similar_subject_ids?: number[];
   meanings?: Array<{ meaning: string; primary?: boolean }>;
+  auxiliary_meanings?: Array<{ meaning: string; type?: string }>;
   readings?: Array<{ reading: string; primary?: boolean; accepted_answer?: boolean }>;
   meaning_mnemonic?: string;
   reading_mnemonic?: string;
