@@ -18,11 +18,46 @@ export function pronunciationForReading(reading: string | null | undefined): str
   if (!trimmed || trimmed === "-") {
     return null;
   }
-  const romaji = toRomaji(trimmed, { upcaseKatakana: false }).trim();
-  if (!romaji || romaji === trimmed) {
+  const normalized = trimmed.replace(/[.・]/g, "");
+  const romaji = toRomaji(normalized, { upcaseKatakana: false }).trim();
+  if (!romaji || romaji === normalized) {
     return null;
   }
   return romaji;
+}
+
+function splitReadingSegments(reading: string): string[] {
+  const segments = reading
+    .split(/[.・]/)
+    .map((segment) => segment.trim())
+    .filter((segment) => segment.length > 0);
+
+  if (segments.length > 0) {
+    return segments;
+  }
+
+  const trimmed = reading.trim();
+  return trimmed ? [trimmed] : [reading];
+}
+
+function SegmentedReading({ reading }: { reading: string }) {
+  const segments = splitReadingSegments(reading);
+  if (segments.length <= 1) {
+    return <>{segments[0] ?? reading}</>;
+  }
+
+  return (
+    <span className="inline-flex flex-wrap items-center gap-1 align-middle">
+      {segments.map((segment, index) => (
+        <span
+          key={`${segment}-${index}`}
+          className="inline-flex items-center rounded-[0.35rem] border border-line/50 px-1.5 py-0.5 leading-none"
+        >
+          {segment}
+        </span>
+      ))}
+    </span>
+  );
 }
 
 export function primaryReadingForDisplay(item: LevelItem): string | null {
@@ -79,7 +114,11 @@ export function ReadingWithPronunciation({
 }) {
   const pronunciation = pronunciationForReading(reading);
   if (!pronunciation) {
-    return <span className={className}>{reading}</span>;
+    return (
+      <span className={className}>
+        <SegmentedReading reading={reading} />
+      </span>
+    );
   }
   return (
     <span
@@ -87,7 +126,7 @@ export function ReadingWithPronunciation({
       title={`Pronunciation: ${pronunciation}`}
       aria-label={`${reading} pronunciation ${pronunciation}`}
     >
-      {reading}
+      <SegmentedReading reading={reading} />
     </span>
   );
 }
@@ -103,18 +142,29 @@ export function ReadingListWithPronunciation({
     return <span>-</span>;
   }
   if (mode === "plain") {
-    return <>{readings.join(", ")}</>;
+    return (
+      <>
+        {readings.map((reading, index) => (
+          <Fragment key={`${reading}-${index}`}>
+            {index > 0 ? ", " : null}
+            <SegmentedReading reading={reading} />
+          </Fragment>
+        ))}
+      </>
+    );
   }
   if (mode === "inline") {
     return (
       <>
         {readings.map((reading, index) => {
           const pronunciation = pronunciationForReading(reading);
-          const label = pronunciation ? `${reading} / ${pronunciation}` : reading;
           return (
             <Fragment key={`${reading}-${index}`}>
               {index > 0 ? ", " : null}
-              <span>{label}</span>
+              <span className="inline-flex items-center gap-1 align-middle">
+                <SegmentedReading reading={reading} />
+                {pronunciation ? <span className="text-foreground/70">/ {pronunciation}</span> : null}
+              </span>
             </Fragment>
           );
         })}

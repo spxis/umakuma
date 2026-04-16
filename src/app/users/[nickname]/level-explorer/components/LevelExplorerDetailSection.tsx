@@ -155,7 +155,7 @@ export default function LevelExplorerDetailSection({
               </button>
             </div>
           ) : null}
-          {!studyMode && onToggleShowEnglish ? (
+          {onToggleShowEnglish ? (
             <div className="mt-2 flex justify-end">
               <button
                 type="button"

@@ -216,6 +216,8 @@ export default function LevelExplorerItemsGrid({
                 accountId={accountId}
                 selectedItem={selectedItem}
                 showEnglish={showEnglish}
+                canToggleEnglish={canToggleEnglish}
+                onToggleShowEnglish={onToggleShowEnglish}
                 studyMode={studyMode}
                 revealStudyReading={isPeekRevealed}
                 onTogglePeek={
