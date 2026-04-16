@@ -28,7 +28,11 @@ export default function UnifiedExplorerCard({
   rightChip,
 }: Props) {
   return (
-    <button type="button" onClick={onClick} className={className}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`${className} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70`}
+    >
       <div className="flex min-h-[2.35rem] items-start justify-between gap-2">
         <span className="text-[10px] font-semibold text-foreground/45">{indexLabel}</span>
         <div className="flex min-h-[2.2rem] flex-wrap content-start items-start justify-end gap-1">{topRight}</div>

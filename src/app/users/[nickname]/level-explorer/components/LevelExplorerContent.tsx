@@ -152,6 +152,9 @@ export default function LevelExplorerContent({
       }
 
       event.preventDefault();
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
       onMarkHistoryPush();
       onSetSelectedSubjectId(nextItem.subjectId);
       setPeekSubjectId(null);
