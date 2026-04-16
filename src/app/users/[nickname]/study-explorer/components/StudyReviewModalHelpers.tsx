@@ -119,7 +119,7 @@ function renderSegmentedReading(reading: string): JSX.Element {
       {segments.map((segment, index) => (
         <span
           key={`${segment}-${index}`}
-          className="inline-flex items-center rounded-[0.35rem] border border-line/50 px-1.5 py-0.5 text-[0.72em] leading-none"
+          className="inline-flex items-center rounded-[0.35rem] border border-line/50 px-1.5 py-0.5 leading-none"
         >
           {segment}
         </span>
