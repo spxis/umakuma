@@ -115,11 +115,11 @@ function renderSegmentedReading(reading: string): JSX.Element {
   }
 
   return (
-    <span className="inline-flex flex-wrap items-center gap-1 align-middle">
+      <span className="inline-flex flex-wrap items-baseline gap-1 align-baseline">
       {segments.map((segment, index) => (
         <span
           key={`${segment}-${index}`}
-          className="inline-flex items-center rounded-[0.35rem] border border-line/50 px-1.5 py-0.5 leading-none"
+            className="inline-flex items-center rounded-[0.35rem] border border-line/50 px-1.5 leading-[1.05] align-baseline"
         >
           {segment}
         </span>
@@ -173,7 +173,7 @@ export function readingWithPronunciation(reading: string, showPronunciation: boo
 
   const pronunciation = pronunciationForReading(reading);
   return (
-    <span className="inline-flex items-center gap-1 align-middle">
+      <span className="inline-flex items-baseline gap-1 align-baseline">
       {renderSegmentedReading(reading)}
       {pronunciation ? <span className="text-base font-semibold text-foreground/70">/ {pronunciation}</span> : null}
     </span>
