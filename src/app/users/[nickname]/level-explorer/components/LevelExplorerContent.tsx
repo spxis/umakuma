@@ -128,6 +128,17 @@ export default function LevelExplorerContent({
       }
 
       const key = event.key.toLowerCase();
+      if (key === "escape") {
+        event.preventDefault();
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+        onMarkHistoryPush();
+        onSetSelectedSubjectId(null);
+        setPeekSubjectId(null);
+        return;
+      }
+
       const columns = Math.max(1, gridColumns);
       const delta =
         key === "l" || key === "a" || event.key === "ArrowLeft"
