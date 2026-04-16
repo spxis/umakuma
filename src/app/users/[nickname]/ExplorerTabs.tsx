@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 
 import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
@@ -27,6 +27,7 @@ export default function ExplorerTabs({
   jlptItems,
   userKanjiItems,
 }: Props) {
+  const previousPageKeyRef = useRef<string | null>(null);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
   const [studyMode, setStudyMode] = useState(() => {
@@ -188,6 +189,27 @@ export default function ExplorerTabs({
       window.history.replaceState(null, "", next);
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const pageKey = activeTab === "study" ? `${activeTab}:${queueMode}` : activeTab;
+    if (previousPageKeyRef.current === null) {
+      previousPageKeyRef.current = pageKey;
+      return;
+    }
+
+    if (previousPageKeyRef.current !== pageKey) {
+      window.dispatchEvent(
+        new CustomEvent("wr:explorer-page-change", {
+          detail: { activeTab, queueMode },
+        }),
+      );
+      previousPageKeyRef.current = pageKey;
+    }
+  }, [activeTab, queueMode]);
 
   useEffect(() => {
     if (typeof window === "undefined") {

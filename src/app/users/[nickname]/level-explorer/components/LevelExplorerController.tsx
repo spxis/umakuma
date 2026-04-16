@@ -89,6 +89,21 @@ export default function LevelExplorerController({
   const pendingHistoryModeRef = useRef<"replace" | "push">("replace");
   const lastHandledFindQueryRef = useRef("");
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const onExplorerPageChange = () => {
+      setSelectedSubjectId(null);
+    };
+
+    window.addEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
+    return () => {
+      window.removeEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
+    };
+  }, []);
+
   const levelOptions = useMemo(() => Array.from({ length: maxLevel }, (_, index) => index + 1), [maxLevel]);
 
   const {

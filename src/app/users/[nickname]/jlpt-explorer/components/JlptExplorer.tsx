@@ -127,6 +127,21 @@ export default function JlptExplorer({
   const [query, setQuery] = useState("");
   const [selectedKanji, setSelectedKanji] = useState<string | null>(null);
   const [gridColumns, setGridColumns] = useState(1);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const onExplorerPageChange = () => {
+      setSelectedKanji(null);
+    };
+
+    window.addEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
+    return () => {
+      window.removeEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
+    };
+  }, []);
   const lastHandledFindQueryRef = useRef<string>("");
 
   const userKanjiByChar = useMemo(() => {

@@ -176,6 +176,21 @@ export default function StudyExplorer({
     };
   }, [canToggleEnglish, onToggleShowEnglish]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const onExplorerPageChange = () => {
+      setSelectedId(null);
+    };
+
+    window.addEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
+    return () => {
+      window.removeEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
+    };
+  }, []);
+
   const {
     levelOptions,
     availableLevels,
