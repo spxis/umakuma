@@ -110,7 +110,7 @@ function snapshotHasDrilldownFields(items: unknown): boolean {
       typeof row.meaningExplanation === "string" &&
       typeof row.readingExplanation === "string" &&
       Object.hasOwn(row, "jlptLevel") &&
-      (row.subjectType !== "kanji" || Object.hasOwn(row, "jlptMeta"));
+      Object.hasOwn(row, "jlptMeta");
 
     if (!baseValid) {
       return false;

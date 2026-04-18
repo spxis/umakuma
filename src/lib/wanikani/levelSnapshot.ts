@@ -68,7 +68,20 @@ export async function getLevelKanjiSnapshot(
     kanjiCharsForLevel.length > 0
       ? await prisma.jlptKanji.findMany({
           where: { kanji: { in: kanjiCharsForLevel } },
-          select: { kanji: true, nLevel: true, schoolGrade: true },
+          select: {
+            kanji: true,
+            nLevel: true,
+            schoolGrade: true,
+            primaryMeaning: true,
+            meanings: true,
+            onReadings: true,
+            kunReadings: true,
+            nanoriReadings: true,
+            wordExamples: true,
+            strokeCount: true,
+            frequencyRank: true,
+            heisigKeyword: true,
+          },
         })
       : [];
   const jlptByKanji = new Map(jlptRows.map((row) => [row.kanji, row]));
@@ -214,8 +227,19 @@ export async function getLevelKanjiSnapshot(
           object === "kanji" ? jlptByKanji.get(subject?.characters ?? "")?.nLevel ?? null : null,
         jlptMeta:
           object === "kanji" && jlptByKanji.has(subject?.characters ?? "")
-            ? { schoolGrade: jlptByKanji.get(subject?.characters ?? "")?.schoolGrade ?? null }
-            : undefined,
+            ? {
+                primaryMeaning: jlptByKanji.get(subject?.characters ?? "")?.primaryMeaning ?? null,
+                meanings: jlptByKanji.get(subject?.characters ?? "")?.meanings ?? [],
+                onReadings: jlptByKanji.get(subject?.characters ?? "")?.onReadings ?? [],
+                kunReadings: jlptByKanji.get(subject?.characters ?? "")?.kunReadings ?? [],
+                nanoriReadings: jlptByKanji.get(subject?.characters ?? "")?.nanoriReadings ?? [],
+                wordExamples: jlptByKanji.get(subject?.characters ?? "")?.wordExamples ?? null,
+                strokeCount: jlptByKanji.get(subject?.characters ?? "")?.strokeCount ?? null,
+                frequencyRank: jlptByKanji.get(subject?.characters ?? "")?.frequencyRank ?? null,
+                schoolGrade: jlptByKanji.get(subject?.characters ?? "")?.schoolGrade ?? null,
+                heisigKeyword: jlptByKanji.get(subject?.characters ?? "")?.heisigKeyword ?? null,
+              }
+            : null,
         srsStage,
         status: srsLabel(srsStage, locked),
         startedAt: assignment?.started_at ?? null,

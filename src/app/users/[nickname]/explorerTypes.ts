@@ -40,7 +40,7 @@ export type LevelItem = {
     frequencyRank: number | null;
     schoolGrade: number | null;
     heisigKeyword: string | null;
-  };
+  } | null;
   srsStage: number;
   status: SubjectStatus;
   startedAt?: string | null;

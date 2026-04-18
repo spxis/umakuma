@@ -35,6 +35,7 @@ import {
 } from "../lib/levelExplorerItemDetails";
 import {
   snapshotHasComponentKanjiData,
+  snapshotHasJlptMetaData,
   normalizeSnapshot,
 } from "../lib/levelExplorerSnapshotUtils";
 
@@ -284,7 +285,7 @@ export default function LevelExplorerController({
 
   useEffect(() => {
     const current = snapshotsByLevel.get(initialSnapshot.level);
-    if (current && !snapshotHasComponentKanjiData(current)) {
+    if (current && (!snapshotHasComponentKanjiData(current) || !snapshotHasJlptMetaData(current))) {
       void ensureLevelLoaded(initialSnapshot.level, true);
     }
   }, [initialSnapshot.level, snapshotsByLevel]);

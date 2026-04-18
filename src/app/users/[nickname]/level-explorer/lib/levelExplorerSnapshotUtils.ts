@@ -17,6 +17,12 @@ export function snapshotHasComponentKanjiData(snapshot: Snapshot): boolean {
   );
 }
 
+export function snapshotHasJlptMetaData(snapshot: Snapshot): boolean {
+  const kanjiItems = snapshot.items.filter((item) => item.subjectType === "kanji");
+  if (kanjiItems.length === 0) return true;
+  return kanjiItems.every((item) => Object.hasOwn(item, "jlptMeta"));
+}
+
 export function normalizeSnapshot(raw: Snapshot): Snapshot {
   return {
     ...raw,
