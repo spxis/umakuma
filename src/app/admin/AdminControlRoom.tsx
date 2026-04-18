@@ -6,8 +6,6 @@ import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 export default function AdminControlRoom({
   nickname,
   token,
-  adminKey,
-  rememberDevice,
   sessionAuthorized,
   checkingSession,
   googleConfigured,
@@ -21,14 +19,11 @@ export default function AdminControlRoom({
   jlptEnriching,
   onSetNickname,
   onSetToken,
-  onSetAdminKey,
-  onSetRememberDevice,
   onAddAccount,
   onCompleteGoogleSignOut,
   onRefreshAll,
   onRefreshJlptList,
   onEnrichJlptKanji,
-  onClearAdminSession,
 }: AdminControlRoomProps) {
   return (
     <section className="animate-enter rounded-[2rem] border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
@@ -44,6 +39,7 @@ export default function AdminControlRoom({
       </div>
       <p className="mt-3 text-sm text-slate-700 sm:text-base">
         Manage family accounts, rotate tokens, and push fresh stats to the leaderboard.
+        Admin access requires Google OAuth and allowlisted emails.
       </p>
 
       {googleConfigured ? (
@@ -76,25 +72,11 @@ export default function AdminControlRoom({
 
       {sessionAuthorized ? (
         <form onSubmit={onAddAccount} className="mt-7 space-y-4">
-          <label className="block">
-            <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
-              Admin API key
-            </span>
-            <input
-              type="password"
-              value={adminKey}
-              onChange={(event) => onSetAdminKey(event.target.value)}
-              className="w-full rounded-2xl border border-line bg-surface-muted px-4 py-3 text-base text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
-              placeholder={sessionAuthorized ? "Already remembered on this device" : "Paste admin key"}
-            />
-            <p className="mt-1.5 text-xs font-semibold text-slate-500">
-              {checkingSession
-                ? "Checking admin session..."
-                : sessionAuthorized
-                  ? "Admin unlocked by Google sign-in or remembered device cookie."
-                  : "Use Google sign-in (recommended) or API key once to unlock this browser/device."}
-            </p>
-          </label>
+          <p className="rounded-2xl border border-line bg-surface-muted px-4 py-3 text-xs font-semibold text-slate-600">
+            {checkingSession
+              ? "Checking admin session..."
+              : "Admin unlocked by allowlisted Google account."}
+          </p>
 
           <label className="block">
             <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
@@ -124,16 +106,6 @@ export default function AdminControlRoom({
               className="w-full rounded-2xl border border-line bg-surface-muted px-4 py-3 text-base text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
               placeholder="Paste personal token"
             />
-          </label>
-
-          <label className="inline-flex items-center gap-2 px-1 text-sm font-semibold text-slate-700">
-            <input
-              type="checkbox"
-              checked={rememberDevice}
-              onChange={(event) => onSetRememberDevice(event.target.checked)}
-              className="h-4 w-4 rounded border-line text-accent focus:ring-accent"
-            />
-            Remember admin access on this device for 30 days (stored as HttpOnly cookie)
           </label>
 
           <div className="grid gap-3 pt-1 sm:grid-cols-2">
@@ -173,18 +145,10 @@ export default function AdminControlRoom({
             </button>
           </div>
 
-          <button
-            type="button"
-            disabled={loading || !sessionAuthorized}
-            onClick={onClearAdminSession}
-            className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-5 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            Forget this device
-          </button>
         </form>
       ) : (
         <div className="mt-7 rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-slate-700">
-          Admin tools hidden. Sign in with allowlisted Google account, or use admin API key.
+          Admin tools hidden. Sign in with an allowlisted Google account.
         </div>
       )}
 

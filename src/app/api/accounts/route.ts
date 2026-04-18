@@ -77,6 +77,7 @@ export async function GET(request: Request) {
         syncLockUntil: true,
         joinedByName: true,
         joinedByEmail: true,
+        inviteCodeUpdatedAt: true,
         createdAt: true,
       },
     });

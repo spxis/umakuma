@@ -10,8 +10,6 @@ import type { AdminSessionStatus, Status } from "./AdminPage.types";
 export default function AdminPage() {
   const [nickname, setNickname] = useState("");
   const [token, setToken] = useState("");
-  const [adminKey, setAdminKey] = useState("");
-  const [rememberDevice, setRememberDevice] = useState(true);
   const [sessionAuthorized, setSessionAuthorized] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
   const [googleConfigured, setGoogleConfigured] = useState(false);
@@ -46,57 +44,6 @@ export default function AdminPage() {
     }
   }
 
-  async function persistAdminSession() {
-    if (!rememberDevice || !adminKey.trim() || sessionAuthorized) {
-      return;
-    }
-
-    const response = await fetch("/api/admin/session", {
-      method: "POST",
-      headers: {
-        "x-admin-key": adminKey,
-      },
-    });
-
-    if (!response.ok) {
-      const data = (await response.json()) as { error?: string };
-      throw new Error(data.error ?? "Could not remember this device.");
-    }
-
-    setSessionAuthorized(true);
-  }
-
-  async function clearAdminSession() {
-    setLoading(true);
-    setStatus({ type: "idle", message: "" });
-
-    try {
-      const response = await fetch("/api/admin/session", {
-        method: "DELETE",
-      });
-
-      const data = (await response.json()) as { error?: string };
-      if (!response.ok) {
-        throw new Error(data.error ?? "Could not forget this device.");
-      }
-
-      setSessionAuthorized(false);
-      setSignedIn(false);
-      setEmailAllowed(false);
-      setUserName(null);
-      setUserEmail(null);
-      setAccounts([]);
-      setStatus({ type: "ok", message: "This device is no longer remembered." });
-    } catch (error) {
-      setStatus({
-        type: "error",
-        message: error instanceof Error ? error.message : "Request failed.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
-
   async function completeGoogleSignOut() {
     setLoading(true);
     setStatus({ type: "idle", message: "" });
@@ -104,7 +51,7 @@ export default function AdminPage() {
   }
 
   function adminAuthHeaders(extraHeaders: Record<string, string> = {}): Record<string, string> {
-    return adminKey.trim() ? { ...extraHeaders, "x-admin-key": adminKey } : extraHeaders;
+    return extraHeaders;
   }
 
   async function loadAccounts() {
@@ -146,7 +93,6 @@ export default function AdminPage() {
 
       setNickname("");
       setToken("");
-      await persistAdminSession();
       setStatus({ type: "ok", message: "Account saved." });
       await loadAccounts();
     } catch (error) {
@@ -174,7 +120,6 @@ export default function AdminPage() {
         throw new Error(data.error ?? "Refresh failed.");
       }
 
-      await persistAdminSession();
       setStatus({ type: "ok", message: "Leaderboard refreshed." });
       await loadAccounts();
     } catch (error) {
@@ -205,7 +150,6 @@ export default function AdminPage() {
       if (!data.refreshed && data.reason) {
         setStatus({ type: "error", message: `Skipped: ${data.reason}` });
       } else {
-        await persistAdminSession();
         setStatus({ type: "ok", message: "User refreshed." });
       }
 
@@ -235,7 +179,6 @@ export default function AdminPage() {
         throw new Error(data.error ?? "JLPT list refresh failed.");
       }
 
-      await persistAdminSession();
       setStatus({
         type: "ok",
         message: `JLPT list refreshed (${data.count ?? 0} records).`,
@@ -275,7 +218,6 @@ export default function AdminPage() {
         throw new Error(data.error ?? "JLPT enrichment failed.");
       }
 
-      await persistAdminSession();
       setStatus({
         type: "ok",
         message: `JLPT enriched chunk processed=${data.processed ?? 0}, updated=${data.updated ?? 0}, failed=${data.failed ?? 0}, remaining=${data.remaining ?? 0}.`,
@@ -290,10 +232,75 @@ export default function AdminPage() {
     }
   }
 
+  async function assignInviteCode(accountId: string): Promise<string | null> {
+    setLoading(true);
+    setStatus({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch(`/api/accounts/${accountId}/invite-code`, {
+        method: "POST",
+        headers: adminAuthHeaders({
+          "Content-Type": "application/json",
+        }),
+        body: JSON.stringify({}),
+      });
+
+      const data = (await response.json()) as { error?: string; inviteCode?: string };
+      if (!response.ok) {
+        throw new Error(data.error ?? "Could not assign invite code.");
+      }
+
+      await loadAccounts();
+      setStatus({
+        type: "ok",
+        message: data.inviteCode
+          ? `Invite code generated: ${data.inviteCode} (copied if permitted).`
+          : "Invite code generated.",
+      });
+
+      return data.inviteCode ?? null;
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error instanceof Error ? error.message : "Could not assign invite code.",
+      });
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function resetInviteCode(accountId: string) {
+    setLoading(true);
+    setStatus({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch(`/api/accounts/${accountId}/invite-code`, {
+        method: "DELETE",
+        headers: adminAuthHeaders(),
+      });
+
+      const data = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(data.error ?? "Could not reset invite code.");
+      }
+
+      await loadAccounts();
+      setStatus({ type: "ok", message: "Invite code reset." });
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error instanceof Error ? error.message : "Could not reset invite code.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="relative min-h-screen overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
-      <main className="relative mx-auto w-full max-w-3xl space-y-5">
+      <main className="relative mx-auto w-full max-w-6xl space-y-5">
         <Link
           href="/"
           className="inline-flex items-center rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
@@ -304,8 +311,6 @@ export default function AdminPage() {
         <AdminControlRoom
           nickname={nickname}
           token={token}
-          adminKey={adminKey}
-          rememberDevice={rememberDevice}
           sessionAuthorized={sessionAuthorized}
           checkingSession={checkingSession}
           googleConfigured={googleConfigured}
@@ -319,8 +324,6 @@ export default function AdminPage() {
           jlptEnriching={jlptEnriching}
           onSetNickname={setNickname}
           onSetToken={setToken}
-          onSetAdminKey={setAdminKey}
-          onSetRememberDevice={setRememberDevice}
           onAddAccount={addAccount}
           onCompleteGoogleSignOut={() => {
             void completeGoogleSignOut();
@@ -334,9 +337,6 @@ export default function AdminPage() {
           onEnrichJlptKanji={() => {
             void enrichJlptKanji();
           }}
-          onClearAdminSession={() => {
-            void clearAdminSession();
-          }}
         />
 
         <AdminAccountsSection
@@ -344,6 +344,8 @@ export default function AdminPage() {
           accounts={accounts}
           loading={loading}
           onRefreshOne={refreshOne}
+          onAssignInviteCode={assignInviteCode}
+          onResetInviteCode={resetInviteCode}
         />
 
         <AdminStudyHistory sessionAuthorized={sessionAuthorized} />

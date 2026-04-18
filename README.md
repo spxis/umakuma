@@ -27,7 +27,7 @@ cp .env.example .env
 - `DATABASE_URL`: Neon pooled connection string (host usually includes `-pooler`)
 - `DIRECT_URL`: Neon direct connection string (non-pooler host)
 - `TOKEN_ENCRYPTION_KEY`: generate with `openssl rand -base64 32`
-- `ADMIN_API_KEY`: your private admin key for `/admin`
+- `ADMIN_GOOGLE_ALLOWED_EMAILS`: comma-separated Google OAuth emails allowed to access `/admin`
 
 2. Push the Prisma schema.
 
@@ -43,7 +43,7 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Use [http://localhost:3000/admin](http://localhost:3000/admin) to add family accounts with your admin key.
+Use [http://localhost:3000/admin](http://localhost:3000/admin) to add family accounts with an allowlisted Google OAuth account.
 
 ## WaniKani Sync Best Practices (Implemented)
 
@@ -108,7 +108,6 @@ Required Vercel environment variables:
 - `DATABASE_URL`
 - `DIRECT_URL`
 - `TOKEN_ENCRYPTION_KEY`
-- `ADMIN_API_KEY`
 - `AUTH_SECRET` (required for Google OAuth sessions)
 - `AUTH_GOOGLE_ID` (Google OAuth client ID)
 - `AUTH_GOOGLE_SECRET` (Google OAuth client secret)
@@ -116,17 +115,15 @@ Required Vercel environment variables:
 - `LEADERBOARD_REFRESH_INTERVAL_MS` (optional, default `300000`)
 - `LEADERBOARD_REQUEST_GAP_MS` (optional, default `1000`)
 
-## Admin Auth (Recommended)
+## Admin Auth
 
-Admin now supports Google OAuth allowlist (industry standard) with API key fallback.
+Admin access is Google OAuth allowlist only.
 
 1. Create OAuth Client credentials in Google Cloud Console.
 2. Add authorized redirect URI:
 	- `https://waniranks.vercel.app/api/auth/callback/google`
 3. Set `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `AUTH_SECRET`, and `ADMIN_GOOGLE_ALLOWED_EMAILS` in Vercel.
 4. Open `/admin` and click `Sign in with Google`.
-
-If Google OAuth is not configured yet, existing `ADMIN_API_KEY` flow still works.
 
 Generate encryption key with:
 
@@ -165,4 +162,4 @@ pnpm db:enrich:jlpt
 - `POST /api/jlpt/refresh` (refresh JLPT N-level list)
 - `POST /api/jlpt/enrich` with JSON body like `{ "limit": 250, "onlyMissing": true }`
 
-Both endpoints require admin authorization (`x-admin-key` or admin session cookie).
+Both endpoints require admin authorization (allowlisted Google OAuth session).
