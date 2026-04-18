@@ -55,6 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${bodySans.variable} ${displaySans.variable} ${jpSans.variable} ${jpSerif.variable} h-full antialiased`}
     >
       <head>
