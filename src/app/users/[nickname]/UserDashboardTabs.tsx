@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
@@ -50,30 +50,19 @@ export default function UserDashboardTabs({
   levelProgressByLevel = {},
 }: Props) {
   const tabStorageKey = `wr:user:${accountId}:dashboard-tab`;
-  const baseProgressLevels = Array.from({ length: Math.max(1, wkLevel) }, (_, index) => index + 1);
-  const safeProgressLevels = Array.from(
-    new Set([
-      ...baseProgressLevels,
-      ...(Array.isArray(availableProgressLevels) ? availableProgressLevels : []),
-    ]),
-  ).sort((a, b) => a - b);
-  const [activeTab, setActiveTab] = useState<TabId>(() => {
-    return getStoredEnum(tabStorageKey, ["main", "item-spread", "level-progress"] as const, "main");
-  });
+  const safeProgressLevels = useMemo(
+    () =>
+      Array.from(
+        new Set([
+          ...Array.from({ length: Math.max(1, wkLevel) }, (_, index) => index + 1),
+          ...(Array.isArray(availableProgressLevels) ? availableProgressLevels : []),
+        ]),
+      ).sort((a, b) => a - b),
+    [availableProgressLevels, wkLevel],
+  );
+  const [activeTab, setActiveTab] = useState<TabId>("main");
   const levelProgressStorageKey = `wr:user:${accountId}:level-progress-level`;
-  const [selectedProgressLevel, setSelectedProgressLevel] = useState<number>(() => {
-    const fallback = wkLevel;
-    if (typeof window === "undefined") {
-      return fallback;
-    }
-
-    const raw = window.localStorage.getItem(levelProgressStorageKey);
-    const parsed = Number(raw);
-    if (Number.isInteger(parsed) && safeProgressLevels.includes(parsed)) {
-      return parsed;
-    }
-    return fallback;
-  });
+  const [selectedProgressLevel, setSelectedProgressLevel] = useState<number>(wkLevel);
   const actionButtonBaseClass =
     "inline-flex h-10 shrink-0 select-none items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.1em] transition disabled:cursor-not-allowed disabled:opacity-60";
   const [nowMs, setNowMs] = useState(() => Date.now());
@@ -89,6 +78,27 @@ export default function UserDashboardTabs({
     },
     { refreshInterval: 15_000, revalidateOnFocus: true },
   );
+  useEffect(() => {
+    const storedTab = getStoredEnum(
+      tabStorageKey,
+      ["main", "item-spread", "level-progress"] as const,
+      "main",
+    );
+    setActiveTab(storedTab);
+
+  }, [tabStorageKey]);
+
+  useEffect(() => {
+    const raw = window.localStorage.getItem(levelProgressStorageKey);
+    const parsed = Number(raw);
+    if (Number.isInteger(parsed) && safeProgressLevels.includes(parsed)) {
+      setSelectedProgressLevel(parsed);
+      return;
+    }
+
+    setSelectedProgressLevel(wkLevel);
+  }, [levelProgressStorageKey, safeProgressLevels, wkLevel]);
+
   useEffect(() => {
     const timer = window.setInterval(() => {
       setNowMs(Date.now());
