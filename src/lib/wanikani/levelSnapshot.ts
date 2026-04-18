@@ -68,10 +68,10 @@ export async function getLevelKanjiSnapshot(
     kanjiCharsForLevel.length > 0
       ? await prisma.jlptKanji.findMany({
           where: { kanji: { in: kanjiCharsForLevel } },
-          select: { kanji: true, nLevel: true },
+          select: { kanji: true, nLevel: true, schoolGrade: true },
         })
       : [];
-  const jlptByKanji = new Map(jlptRows.map((row) => [row.kanji, row.nLevel]));
+  const jlptByKanji = new Map(jlptRows.map((row) => [row.kanji, row]));
 
   const relatedSubjectIds = new Set<number>();
   for (const subject of subjectById.values()) {
@@ -211,7 +211,11 @@ export async function getLevelKanjiSnapshot(
         meaningExplanation: subject?.meaning_mnemonic ?? "",
         readingExplanation: subject?.reading_mnemonic ?? "",
         jlptLevel:
-          object === "kanji" ? jlptByKanji.get(subject?.characters ?? "") ?? null : null,
+          object === "kanji" ? jlptByKanji.get(subject?.characters ?? "")?.nLevel ?? null : null,
+        jlptMeta:
+          object === "kanji" && jlptByKanji.has(subject?.characters ?? "")
+            ? { schoolGrade: jlptByKanji.get(subject?.characters ?? "")?.schoolGrade ?? null }
+            : undefined,
         srsStage,
         status: srsLabel(srsStage, locked),
         startedAt: assignment?.started_at ?? null,
