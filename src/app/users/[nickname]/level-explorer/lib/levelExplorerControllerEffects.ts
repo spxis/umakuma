@@ -1,4 +1,4 @@
-import { useEffect, type Dispatch, type MutableRefObject, type SetStateAction } from "react";
+import { useEffect, useRef, type Dispatch, type MutableRefObject, type SetStateAction } from "react";
 
 import type { LevelItem, Snapshot, SrsFilter } from "../../explorerTypes";
 import {
@@ -58,14 +58,15 @@ export function useLevelExplorerUrlHydration({
         ? new Set(levelsArray)
         : new Set([levelsArray[levelsArray.length - 1] ?? initialLevel]);
 
+      const params = new URLSearchParams(window.location.search);
       setters.setSelectedLevels(normalizedLevels);
-      setters.setSelectedSubjectId(parsed.subjectId);
-      setters.setSrsFilter(parsed.srs);
-      setters.setTypeFilter(parsed.type);
-      setters.setJlptFilter(parsed.jlpt);
-      setters.setReviewTimingFilter(parsed.review);
-      setters.setRecentOnly(parsed.recentOnly);
-      setters.setStickyMerge(parsed.stickyMerge);
+      if (params.has("subject")) setters.setSelectedSubjectId(parsed.subjectId);
+      if (params.has("srs")) setters.setSrsFilter(parsed.srs);
+      if (params.has("type")) setters.setTypeFilter(parsed.type);
+      if (params.has("jlpt")) setters.setJlptFilter(parsed.jlpt);
+      if (params.has("review")) setters.setReviewTimingFilter(parsed.review);
+      if (params.has("recent")) setters.setRecentOnly(parsed.recentOnly);
+      if (params.has("sticky")) setters.setStickyMerge(parsed.stickyMerge);
 
       for (const level of normalizedLevels.values()) {
         await ensureLevelLoaded(level);
@@ -237,7 +238,12 @@ export function useLevelExplorerStoragePersistence({
   showLocked: boolean;
   selectedSubjectId: number | null;
 }) {
+  const hasMountedRef = useRef(false);
   useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
     try {
       persistEnum(window.localStorage, storageKeys.srsFilter, srsFilter);
       persistEnum(window.localStorage, storageKeys.typeFilter, typeFilter);
