@@ -144,21 +144,6 @@ export default function LevelExplorerItemsGrid({
     return true;
   };
 
-  if (filteredItems.length === 0) {
-    return (
-      <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
-        No items match the current filters.{" "}
-        <button
-          type="button"
-          onClick={onClearFilters}
-          className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
-        >
-          Clear filters
-        </button>
-      </div>
-    );
-  }
-
   return (
     <>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -281,9 +266,22 @@ export default function LevelExplorerItemsGrid({
           {resetFeedback.message}
         </p>
       ) : null}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {visibleItems.map((item, index) => (
-          <Fragment key={`${item.subjectType}-${item.subjectId}`}>
+      {filteredItems.length === 0 ? (
+        <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
+          No items match the current filters.{" "}
+          <button
+            type="button"
+            onClick={onClearFilters}
+            className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
+          >
+            Clear filters
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {visibleItems.map((item, index) => (
+              <Fragment key={`${item.subjectType}-${item.subjectId}`}>
             <UnifiedExplorerCard
               onClick={(meta) => {
                 if (
@@ -436,17 +434,19 @@ export default function LevelExplorerItemsGrid({
                 resetBusy={isResetting}
               />
             ) : null}
-          </Fragment>
-        ))}
-      </div>
-      {visibleItems.length < filteredItems.length ? (
-        <div
-          ref={sentinelRef}
-          className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60"
-        >
-          Loading more...
-        </div>
-      ) : null}
+              </Fragment>
+            ))}
+          </div>
+          {visibleItems.length < filteredItems.length ? (
+            <div
+              ref={sentinelRef}
+              className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60"
+            >
+              Loading more...
+            </div>
+          ) : null}
+        </>
+      )}
 
       <ExplorerConfirmDialog
         open={pendingResetKind === "bulk"}
