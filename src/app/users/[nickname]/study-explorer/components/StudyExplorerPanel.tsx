@@ -156,6 +156,18 @@ export default function StudyExplorerPanel({
         : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)
       : typeCounts.all;
 
+  const toggleBulkSelection = (subjectId: number) => {
+    setSelectedSubjectIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(subjectId)) {
+        next.delete(subjectId);
+      } else {
+        next.add(subjectId);
+      }
+      return next;
+    });
+  };
+
   return (
     <>
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -366,15 +378,7 @@ export default function StudyExplorerPanel({
                     onClick={() => {
                       if (!isUnauthorized) {
                         if (bulkModeEnabled) {
-                          setSelectedSubjectIds((prev) => {
-                            const next = new Set(prev);
-                            if (next.has(item.subjectId)) {
-                              next.delete(item.subjectId);
-                            } else {
-                              next.add(item.subjectId);
-                            }
-                            return next;
-                          });
+                          toggleBulkSelection(item.subjectId);
                           return;
                         }
 
@@ -386,9 +390,21 @@ export default function StudyExplorerPanel({
                     topRight={
                       <>
                         {bulkModeEnabled ? (
-                          <span className={`subject-pill ${selectedSubjectIds.has(item.subjectId) ? "border-amber-400 bg-amber-100 text-amber-900" : "border-line bg-surface text-foreground"}`}>
-                            {selectedSubjectIds.has(item.subjectId) ? "Selected" : "Select"}
-                          </span>
+                          <label className="inline-flex items-center gap-1 rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground">
+                            <input
+                              type="checkbox"
+                              checked={selectedSubjectIds.has(item.subjectId)}
+                              onChange={() => {
+                                toggleBulkSelection(item.subjectId);
+                              }}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                              }}
+                              className="h-3.5 w-3.5 rounded border-line text-amber-600 accent-amber-600"
+                              aria-label={`Select ${item.characters}`}
+                            />
+                            Pick
+                          </label>
                         ) : null}
                         <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
                         {typeof item.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span> : null}
