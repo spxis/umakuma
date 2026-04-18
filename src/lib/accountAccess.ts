@@ -18,7 +18,14 @@ export async function canAccessAccount(request: Request, accountId: string): Pro
   if (inviteToken) {
     const payload = verifyInviteSessionToken(inviteToken);
     if (payload?.accountId === accountId) {
-      return true;
+      const inviteAccount = await prisma.account.findUnique({
+        where: { id: accountId },
+        select: { inviteCodeHash: true },
+      });
+
+      if (inviteAccount?.inviteCodeHash) {
+        return true;
+      }
     }
   }
 

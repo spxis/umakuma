@@ -36,10 +36,11 @@ export async function GET(request: Request) {
         id: true,
         nickname: true,
         wkUsername: true,
+        inviteCodeHash: true,
       },
     });
 
-    if (!account) {
+    if (!account || !account.inviteCodeHash) {
       cookieStore.delete(INVITE_SESSION_COOKIE_NAME);
       return NextResponse.json({ signedIn: false });
     }
