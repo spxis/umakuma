@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { useMemo, useState } from "react";
 
 import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
-import type { ItemSpread, TypeProgress } from "./UserDashboardTabs.types";
+import type {
+  ItemSpread,
+  ItemSpreadGroupDetails,
+  LevelProgressSnapshot,
+  SrsGroupKey,
+  TypeProgress,
+} from "./UserDashboardTabs.types";
 
 type MainTabPanelProps = {
   wkLevel: number;
@@ -93,48 +102,131 @@ export function MainTabPanel({
 
 type ItemSpreadTabPanelProps = {
   itemSpread: ItemSpread;
+  itemSpreadDetails: ItemSpreadGroupDetails;
 };
 
-export function ItemSpreadTabPanel({ itemSpread }: ItemSpreadTabPanelProps) {
+export function ItemSpreadTabPanel({ itemSpread, itemSpreadDetails }: ItemSpreadTabPanelProps) {
+  const [detailedView, setDetailedView] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<Record<SrsGroupKey, boolean>>({
+    apprentice: false,
+    guru: false,
+    master: false,
+    enlightened: false,
+    burned: false,
+  });
+
+  const groupedRows = [
+    ["apprentice", "Apprentice", itemSpread.apprentice],
+    ["guru", "Guru", itemSpread.guru],
+    ["master", "Master", itemSpread.master],
+    ["enlightened", "Enlightened", itemSpread.enlightened],
+    ["burned", "Burned", itemSpread.burned],
+  ] as const;
+
+  const toggleExpanded = (group: SrsGroupKey) => {
+    setExpandedGroups((prev) => ({ ...prev, [group]: !prev[group] }));
+  };
   return (
     <div className="mt-4" role="tabpanel">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-3xl font-black text-foreground">Item Spread</h2>
-        <div className="hidden flex-wrap items-center gap-2 text-sm font-semibold text-foreground/80 sm:flex">
-          <span className="subject-pill subject-pill--radical">{subjectTypePluralLabel("radical")}</span>
-          <span className="subject-pill subject-pill--kanji">{subjectTypePluralLabel("kanji")}</span>
-          <span className="subject-pill subject-pill--vocabulary">{subjectTypePluralLabel("vocabulary")}</span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setDetailedView((prev) => !prev)}
+            className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+          >
+            {detailedView ? "Regular View" : "Detailed View"}
+          </button>
+          <div className="hidden flex-wrap items-center gap-2 text-sm font-semibold text-foreground/80 sm:flex">
+            <span className="subject-pill subject-pill--radical">{subjectTypePluralLabel("radical")}</span>
+            <span className="subject-pill subject-pill--kanji">{subjectTypePluralLabel("kanji")}</span>
+            <span className="subject-pill subject-pill--vocabulary">{subjectTypePluralLabel("vocabulary")}</span>
+          </div>
         </div>
       </div>
       <div className="mt-4 space-y-2">
-        {([
-          ["Apprentice", itemSpread.apprentice],
-          ["Guru", itemSpread.guru],
-          ["Master", itemSpread.master],
-          ["Enlightened", itemSpread.enlightened],
-          ["Burned", itemSpread.burned],
-        ] as const).map(([label, row]) => (
-          <div
-            key={label}
-            className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.9fr_0.9fr] items-center gap-2 rounded-xl border border-line bg-surface-muted px-3 py-2"
-          >
-            <p className="text-xl font-semibold text-foreground">{label}</p>
-            <span className="subject-pill subject-pill--radical justify-center">{formatNumber(row.radical)}</span>
-            <span className="subject-pill subject-pill--kanji justify-center">{formatNumber(row.kanji)}</span>
-            <span className="subject-pill subject-pill--vocabulary justify-center">{formatNumber(row.vocabulary)}</span>
-            <span className="rounded-full border border-line bg-surface px-3 py-1 text-center text-2xl font-black text-foreground">
-              {formatNumber(row.total)}
-            </span>
-          </div>
-        ))}
+        {groupedRows.map(([groupKey, label, row]) => {
+          const details = itemSpreadDetails[groupKey];
+          const isExpanded = expandedGroups[groupKey];
+          const hasDetails = details.levels.length > 0;
+
+          return (
+            <div key={groupKey} className="overflow-hidden rounded-xl border border-line bg-surface-muted">
+              <div className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.9fr_0.9fr_auto] items-center gap-2 px-3 py-2">
+                <p className="text-xl font-semibold text-foreground">{label}</p>
+                <span className="subject-pill subject-pill--radical justify-center">{formatNumber(row.radical)}</span>
+                <span className="subject-pill subject-pill--kanji justify-center">{formatNumber(row.kanji)}</span>
+                <span className="subject-pill subject-pill--vocabulary justify-center">{formatNumber(row.vocabulary)}</span>
+                <span className="rounded-full border border-line bg-surface px-3 py-1 text-center text-2xl font-black text-foreground">
+                  {formatNumber(row.total)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => toggleExpanded(groupKey)}
+                  disabled={!hasDetails}
+                  className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isExpanded ? "Hide" : "Expand"}
+                </button>
+              </div>
+              {isExpanded ? (
+                <div className="border-t border-line/70 bg-surface px-3 py-3">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-foreground/70">Kanji Levels In {label}</p>
+                  <div className="mt-2 space-y-1.5">
+                    {details.levels.map((levelRow) => (
+                      <div
+                        key={`${groupKey}-level-${levelRow.level}`}
+                        className="grid grid-cols-[auto_1fr_1fr_1fr_auto] items-center gap-2 rounded-lg border border-line bg-surface-muted px-2 py-1.5"
+                      >
+                        <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">L{levelRow.level}</span>
+                        <span className="subject-pill subject-pill--radical justify-center">{formatNumber(levelRow.radical)}</span>
+                        <span className="subject-pill subject-pill--kanji justify-center">{formatNumber(levelRow.kanji)}</span>
+                        <span className="subject-pill subject-pill--vocabulary justify-center">{formatNumber(levelRow.vocabulary)}</span>
+                        <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-xs font-black text-foreground">
+                          {formatNumber(levelRow.total)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  {detailedView ? (
+                    <div className="mt-3">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-foreground/70">SRS Stage Breakdown</p>
+                      <div className="mt-2 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
+                        {details.stages.map((stageRow) => (
+                          <div
+                            key={`${groupKey}-stage-${stageRow.label}`}
+                            className="rounded-lg border border-line bg-surface-muted px-2 py-1.5"
+                          >
+                            <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70">{stageRow.label}</p>
+                            <div className="mt-1 flex flex-wrap items-center gap-1">
+                              <span className="subject-pill subject-pill--radical">R {formatNumber(stageRow.radical)}</span>
+                              <span className="subject-pill subject-pill--kanji">K {formatNumber(stageRow.kanji)}</span>
+                              <span className="subject-pill subject-pill--vocabulary">V {formatNumber(stageRow.vocabulary)}</span>
+                              <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-black text-foreground">
+                                T {formatNumber(stageRow.total)}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
 type LevelProgressTabPanelProps = {
+  currentWkLevel: number;
   wkLevel: number;
   levelOptions: number[];
+  levelProgressByLevel: Record<number, LevelProgressSnapshot>;
   onSelectLevel: (level: number) => void;
   levelRadicalProgress: TypeProgress;
   levelKanjiProgress: TypeProgress;
@@ -144,8 +236,10 @@ type LevelProgressTabPanelProps = {
 };
 
 export function LevelProgressTabPanel({
+  currentWkLevel,
   wkLevel,
   levelOptions,
+  levelProgressByLevel,
   onSelectLevel,
   levelRadicalProgress,
   levelKanjiProgress,
@@ -153,106 +247,184 @@ export function LevelProgressTabPanel({
   remainingToLevelUp,
   passedLevelUpGate,
 }: LevelProgressTabPanelProps) {
+  const [viewMode, setViewMode] = useState<"browser" | "last3">("browser");
+  const lastThreeLevels = useMemo(() => {
+    const uptoCurrent = levelOptions.filter((level) => level <= currentWkLevel);
+    return uptoCurrent.slice(-3).reverse();
+  }, [currentWkLevel, levelOptions]);
+
   return (
     <div className="mt-4" role="tabpanel">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-3xl font-black text-foreground">Level Progress</h2>
-        <label className="flex items-center gap-2 text-foreground/80">
-          <span className="text-sm font-bold uppercase tracking-[0.08em]">Level</span>
-          <select
-            value={wkLevel}
-            onChange={(event) => onSelectLevel(Number(event.target.value))}
-            className="h-10 rounded-full border border-line bg-surface px-4 text-lg font-semibold text-foreground"
-          >
-            {levelOptions.map((level) => (
-              <option key={level} value={level}>
-                {level}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center rounded-full border border-line bg-surface p-1">
+            <button
+              type="button"
+              onClick={() => setViewMode("last3")}
+              className={`inline-flex h-8 items-center justify-center rounded-full px-3 text-[11px] font-bold uppercase tracking-[0.1em] ${
+                viewMode === "last3" ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"
+              }`}
+            >
+              Last 3
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("browser")}
+              className={`inline-flex h-8 items-center justify-center rounded-full px-3 text-[11px] font-bold uppercase tracking-[0.1em] ${
+                viewMode === "browser" ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"
+              }`}
+            >
+              Level Browser
+            </button>
+          </div>
+          {viewMode === "browser" ? (
+            <label className="flex items-center gap-2 text-foreground/80">
+              <span className="text-sm font-bold uppercase tracking-[0.08em]">Level</span>
+              <select
+                value={wkLevel}
+                onChange={(event) => onSelectLevel(Number(event.target.value))}
+                className="h-10 rounded-full border border-line bg-surface px-4 text-lg font-semibold text-foreground"
+              >
+                {levelOptions.map((level) => (
+                  <option key={level} value={level}>
+                    {level}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+        </div>
       </div>
-      <p className="mt-3 text-lg text-foreground/75">Number of items Guru&apos;d in this level.</p>
-      <div className="mt-4 grid gap-3 md:grid-cols-3">
-        {([
-          [subjectTypePluralLabel("radical"), "radical", levelRadicalProgress],
-          [subjectTypePluralLabel("kanji"), "kanji", levelKanjiProgress],
-          [subjectTypePluralLabel("vocabulary"), "vocabulary", levelVocabularyProgress],
-        ] as const).map(([label, type, progress]) => {
-          const stageCounts = [
-            ["apprentice", progress.apprentice],
-            ["guru", progress.guru],
-            ["master", progress.master],
-            ["enlightened", progress.enlightened],
-            ["burned", progress.burned],
-            ["locked", progress.locked],
-          ] as const;
-          const visibleStages = stageCounts.filter(([, count]) => count > 0);
-          const remainingToGuru = Math.max(0, progress.total - progress.guruOrHigher);
+      {viewMode === "browser" ? (
+        <>
+          <p className="mt-3 text-lg text-foreground/75">Number of items Guru&apos;d in this level.</p>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {([
+              [subjectTypePluralLabel("radical"), "radical", levelRadicalProgress],
+              [subjectTypePluralLabel("kanji"), "kanji", levelKanjiProgress],
+              [subjectTypePluralLabel("vocabulary"), "vocabulary", levelVocabularyProgress],
+            ] as const).map(([label, type, progress]) => {
+              const stageCounts = [
+                ["apprentice", progress.apprentice],
+                ["guru", progress.guru],
+                ["master", progress.master],
+                ["enlightened", progress.enlightened],
+                ["burned", progress.burned],
+                ["locked", progress.locked],
+              ] as const;
+              const visibleStages = stageCounts.filter(([, count]) => count > 0);
+              const remainingToGuru = Math.max(0, progress.total - progress.guruOrHigher);
 
-          return (
-            <article key={label} className="overflow-hidden rounded-2xl border border-line bg-surface">
-              <div className="flex items-center gap-2 px-4 py-3">
-                <span className={`subject-pill subject-pill--${type}`}>{label}</span>
-              </div>
-              <div className="px-4">
-                <div className="flex h-6 w-full overflow-hidden rounded-full border border-line/60 bg-surface-muted">
-                  {progress.total > 0
-                    ? visibleStages.map(([stage, count]) => {
-                        const widthPercent = (count / progress.total) * 100;
+              return (
+                <article key={label} className="overflow-hidden rounded-2xl border border-line bg-surface">
+                  <div className="flex items-center gap-2 px-4 py-3">
+                    <span className={`subject-pill subject-pill--${type}`}>{label}</span>
+                  </div>
+                  <div className="px-4">
+                    <div className="flex h-6 w-full overflow-hidden rounded-full border border-line/60 bg-surface-muted">
+                      {progress.total > 0
+                        ? visibleStages.map(([stage, count]) => {
+                            const widthPercent = (count / progress.total) * 100;
 
-                        return (
-                          <div
-                            key={stage}
-                            className={`relative flex h-full shrink-0 items-center justify-center ${srsSegmentClass(stage)}`}
-                            style={{ width: `${widthPercent}%` }}
-                            title={`${stageLabel(stage)}: ${formatNumber(count)}`}
-                          >
-                            {widthPercent >= 16 ? (
-                              <span
-                                className={`px-1 text-[10px] font-black leading-none ${srsSegmentTextClass(stage)}`}
+                            return (
+                              <div
+                                key={stage}
+                                className={`relative flex h-full shrink-0 items-center justify-center ${srsSegmentClass(stage)}`}
+                                style={{ width: `${widthPercent}%` }}
+                                title={`${stageLabel(stage)}: ${formatNumber(count)}`}
                               >
-                                {formatNumber(count)}
-                              </span>
-                            ) : null}
-                          </div>
-                        );
-                      })
-                    : null}
+                                {widthPercent >= 16 ? (
+                                  <span
+                                    className={`px-1 text-[10px] font-black leading-none ${srsSegmentTextClass(stage)}`}
+                                  >
+                                    {formatNumber(count)}
+                                  </span>
+                                ) : null}
+                              </div>
+                            );
+                          })
+                        : null}
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1.5 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/75">
+                      {visibleStages.map(([stage, count]) => (
+                        <span
+                          key={`${stage}-count`}
+                          className={`inline-flex items-center rounded-full border px-2 py-0.5 ${srsBadgeClass(stage)}`}
+                        >
+                          {stageLabel(stage)} {formatNumber(count)}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-foreground/80">
+                    <div>
+                      <p className="text-4xl font-black text-foreground" title={`${progress.percent}% Guru+`}>
+                        {formatNumber(progress.guruOrHigher)}/{formatNumber(progress.total)}
+                      </p>
+                      <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">
+                        Remaining to Guru+: {formatNumber(remainingToGuru)}
+                      </p>
+                    </div>
+                    <a href="#explorer" className="text-lg font-bold text-foreground/80 hover:text-accent">
+                      See all
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          <div className="mt-5 rounded-2xl border border-line bg-surface-muted px-4 py-4 text-lg text-foreground/85">
+            {passedLevelUpGate
+              ? "You have passed this level gate, but there are still items you have not Guru'd yet."
+              : `Guru ${formatNumber(remainingToLevelUp)} more kanji to level up.`}
+          </div>
+        </>
+      ) : (
+        <div className="mt-4 space-y-3">
+          {lastThreeLevels.map((level) => {
+            const snapshot = levelProgressByLevel[level];
+            if (!snapshot) {
+              return null;
+            }
+
+            return (
+              <article key={`last3-${level}`} className="rounded-2xl border border-line bg-surface p-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-lg font-black uppercase tracking-[0.08em] text-foreground">Level {level}</p>
+                  <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">
+                    Kanji Guru+: {formatNumber(snapshot.kanji.guruOrHigher)}/{formatNumber(snapshot.kanji.total)}
+                  </span>
                 </div>
-                <div className="mt-2 flex flex-wrap gap-1.5 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/75">
-                  {visibleStages.map(([stage, count]) => (
-                    <span
-                      key={`${stage}-count`}
-                      className={`inline-flex items-center rounded-full border px-2 py-0.5 ${srsBadgeClass(stage)}`}
-                    >
-                      {stageLabel(stage)} {formatNumber(count)}
-                    </span>
+                <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                  {([
+                    [subjectTypePluralLabel("radical"), "radical", snapshot.radical],
+                    [subjectTypePluralLabel("kanji"), "kanji", snapshot.kanji],
+                    [subjectTypePluralLabel("vocabulary"), "vocabulary", snapshot.vocabulary],
+                  ] as const).map(([label, type, progress]) => (
+                    <div key={`${level}-${label}`} className="rounded-xl border border-line bg-surface-muted px-3 py-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`subject-pill subject-pill--${type}`}>{label}</span>
+                        <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">
+                          {formatNumber(progress.percent)}%
+                        </span>
+                      </div>
+                      <p className="mt-1 text-2xl font-black text-foreground">
+                        {formatNumber(progress.guruOrHigher)}/{formatNumber(progress.total)}
+                      </p>
+                    </div>
                   ))}
                 </div>
-              </div>
-              <div className="flex items-center justify-between px-4 py-3 text-sm font-semibold text-foreground/80">
-                <div>
-                  <p className="text-4xl font-black text-foreground" title={`${progress.percent}% Guru+`}>
-                    {formatNumber(progress.guruOrHigher)}/{formatNumber(progress.total)}
-                  </p>
-                  <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">
-                    Remaining to Guru+: {formatNumber(remainingToGuru)}
-                  </p>
-                </div>
-                <a href="#explorer" className="text-lg font-bold text-foreground/80 hover:text-accent">
-                  See all
-                </a>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-      <div className="mt-5 rounded-2xl border border-line bg-surface-muted px-4 py-4 text-lg text-foreground/85">
-        {passedLevelUpGate
-          ? "You have passed this level gate, but there are still items you have not Guru'd yet."
-          : `Guru ${formatNumber(remainingToLevelUp)} more kanji to level up.`}
-      </div>
+                <p className="mt-2 text-sm font-semibold text-foreground/75">
+                  {snapshot.passedLevelUpGate
+                    ? "Level gate passed; remaining items are below Guru+."
+                    : `Guru ${formatNumber(snapshot.remainingToLevelUp)} more kanji to level up.`}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

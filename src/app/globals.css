@@ -140,6 +140,18 @@ input[type="reset"] {
   animation: score-flash 350ms ease-out;
 }
 
+button,
+[role="button"],
+.subject-pill,
+.badge,
+.chip,
+[class*="badge"],
+[class*="chip"] {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .animate-enter-delay-1 {
   animation-delay: 90ms;
 }

@@ -8,7 +8,12 @@ import { prisma } from "@/lib/prisma";
 import { getUserKanjiIndex } from "@/lib/wanikani";
 import ExplorerTabs from "./ExplorerTabs";
 import UserDashboardTabs from "./UserDashboardTabs";
-import type { LevelProgressSnapshot, TypeProgress } from "./UserDashboardTabs.types";
+import type {
+  ItemSpreadGroupDetails,
+  LevelProgressSnapshot,
+  SrsGroupKey,
+  TypeProgress,
+} from "./UserDashboardTabs.types";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;
@@ -254,6 +259,110 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     availableProgressLevels.map((level) => [level, computeLevelSnapshot(level)]),
   ) as Record<number, LevelProgressSnapshot>;
 
+  const itemSpreadDetails: ItemSpreadGroupDetails = {
+    apprentice: { levels: [], stages: [] },
+    guru: { levels: [], stages: [] },
+    master: { levels: [], stages: [] },
+    enlightened: { levels: [], stages: [] },
+    burned: { levels: [], stages: [] },
+  };
+
+  const groupByStage = (srsStage: number): { group: SrsGroupKey; label: string } | null => {
+    if (srsStage >= 1 && srsStage <= 4) return { group: "apprentice", label: `SRS ${srsStage}` };
+    if (srsStage === 5) return { group: "guru", label: "SRS 5" };
+    if (srsStage === 6) return { group: "guru", label: "SRS 6" };
+    if (srsStage === 7) return { group: "master", label: "SRS 7" };
+    if (srsStage === 8) return { group: "enlightened", label: "SRS 8" };
+    if (srsStage >= 9) return { group: "burned", label: "SRS 9+" };
+    return null;
+  };
+
+  for (const [level, items] of Array.from(progressItemsByLevel.entries()).sort((a, b) => b[0] - a[0])) {
+    const stageTotalsByGroup: Record<
+      SrsGroupKey,
+      Map<string, { radical: number; kanji: number; vocabulary: number; total: number }>
+    > = {
+      apprentice: new Map<string, { radical: number; kanji: number; vocabulary: number; total: number }>(),
+      guru: new Map<string, { radical: number; kanji: number; vocabulary: number; total: number }>(),
+      master: new Map<string, { radical: number; kanji: number; vocabulary: number; total: number }>(),
+      enlightened: new Map<string, { radical: number; kanji: number; vocabulary: number; total: number }>(),
+      burned: new Map<string, { radical: number; kanji: number; vocabulary: number; total: number }>(),
+    };
+    const levelTotalsByGroup: Record<
+      SrsGroupKey,
+      { radical: number; kanji: number; vocabulary: number; total: number }
+    > = {
+      apprentice: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
+      guru: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
+      master: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
+      enlightened: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
+      burned: { radical: 0, kanji: 0, vocabulary: 0, total: 0 },
+    };
+
+    for (const item of items) {
+      const bucket = groupByStage(item.srsStage);
+      if (!bucket) {
+        continue;
+      }
+
+      const subjectType = item.subjectType;
+      if (subjectType !== "radical" && subjectType !== "kanji" && subjectType !== "vocabulary") {
+        continue;
+      }
+
+      const groupTotals = levelTotalsByGroup[bucket.group];
+      groupTotals[subjectType] += 1;
+      groupTotals.total += 1;
+
+      const stageMap = stageTotalsByGroup[bucket.group];
+      const stageTotals = stageMap.get(bucket.label) ?? { radical: 0, kanji: 0, vocabulary: 0, total: 0 };
+      stageTotals[subjectType] += 1;
+      stageTotals.total += 1;
+      stageMap.set(bucket.label, stageTotals);
+    }
+
+    (Object.keys(levelTotalsByGroup) as SrsGroupKey[]).forEach((groupKey) => {
+      const totals = levelTotalsByGroup[groupKey];
+      if (totals.total <= 0) {
+        return;
+      }
+
+      itemSpreadDetails[groupKey].levels.push({
+        level,
+        radical: totals.radical,
+        kanji: totals.kanji,
+        vocabulary: totals.vocabulary,
+        total: totals.total,
+      });
+
+      const stageRows = Array.from(stageTotalsByGroup[groupKey].entries())
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([label, counts]) => ({
+          label,
+          radical: counts.radical,
+          kanji: counts.kanji,
+          vocabulary: counts.vocabulary,
+          total: counts.total,
+        }));
+
+      for (const row of stageRows) {
+        const existing = itemSpreadDetails[groupKey].stages.find((stage) => stage.label === row.label);
+        if (existing) {
+          existing.radical += row.radical;
+          existing.kanji += row.kanji;
+          existing.vocabulary += row.vocabulary;
+          existing.total += row.total;
+        } else {
+          itemSpreadDetails[groupKey].stages.push(row);
+        }
+      }
+    });
+  }
+
+  (Object.keys(itemSpreadDetails) as SrsGroupKey[]).forEach((groupKey) => {
+    itemSpreadDetails[groupKey].stages.sort((a, b) => a.label.localeCompare(b.label));
+  });
+
   const currentLevelProgress = levelProgressByLevel[account.wkLevel] ?? computeLevelSnapshot(account.wkLevel);
   const levelRadicalProgress = currentLevelProgress.radical;
   const levelKanjiProgress = currentLevelProgress.kanji;
@@ -313,6 +422,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
           totalKanjiCount={itemSpread.totals.kanji}
           vocabularyCount={account.vocabularyCount}
           itemSpread={itemSpread}
+          itemSpreadDetails={itemSpreadDetails}
           levelRadicalProgress={levelRadicalProgress}
           levelKanjiProgress={levelKanjiProgress}
           levelVocabularyProgress={levelVocabularyProgress}

@@ -41,6 +41,7 @@ export default function UserDashboardTabs({
   totalKanjiCount,
   vocabularyCount,
   itemSpread,
+  itemSpreadDetails,
   levelRadicalProgress,
   levelKanjiProgress,
   levelVocabularyProgress,
@@ -363,11 +364,15 @@ export default function UserDashboardTabs({
           vocabularyCount={vocabularyCount}
         />
       ) : null}
-      {activeTab === "item-spread" ? <ItemSpreadTabPanel itemSpread={itemSpread} /> : null}
+      {activeTab === "item-spread" ? (
+        <ItemSpreadTabPanel itemSpread={itemSpread} itemSpreadDetails={itemSpreadDetails} />
+      ) : null}
       {activeTab === "level-progress" ? (
         <LevelProgressTabPanel
+          currentWkLevel={wkLevel}
           wkLevel={selectedProgressLevel}
           levelOptions={safeProgressLevels}
+          levelProgressByLevel={levelProgressByLevel}
           onSelectLevel={setSelectedProgressLevel}
           levelRadicalProgress={selectedLevelProgress.radical}
           levelKanjiProgress={selectedLevelProgress.kanji}

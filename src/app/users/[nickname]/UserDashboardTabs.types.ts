@@ -34,6 +34,32 @@ export type LevelProgressSnapshot = {
   passedLevelUpGate: boolean;
 };
 
+export type SrsGroupKey = "apprentice" | "guru" | "master" | "enlightened" | "burned";
+
+export type ItemSpreadLevelBreakdown = {
+  level: number;
+  radical: number;
+  kanji: number;
+  vocabulary: number;
+  total: number;
+};
+
+export type ItemSpreadStageBreakdown = {
+  label: string;
+  radical: number;
+  kanji: number;
+  vocabulary: number;
+  total: number;
+};
+
+export type ItemSpreadGroupDetails = Record<
+  SrsGroupKey,
+  {
+    levels: ItemSpreadLevelBreakdown[];
+    stages: ItemSpreadStageBreakdown[];
+  }
+>;
+
 export type TabId = "main" | "item-spread" | "level-progress";
 
 export type UserDashboardTabsProps = {
@@ -63,6 +89,7 @@ export type UserDashboardTabsProps = {
   totalKanjiCount: number;
   vocabularyCount: number;
   itemSpread: ItemSpread;
+  itemSpreadDetails: ItemSpreadGroupDetails;
   levelRadicalProgress: TypeProgress;
   levelKanjiProgress: TypeProgress;
   levelVocabularyProgress: TypeProgress;
