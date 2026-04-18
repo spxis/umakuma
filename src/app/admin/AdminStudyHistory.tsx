@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
 
 type Attempt = {
   id: string;
@@ -112,8 +113,16 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
                   <tbody className="divide-y divide-line/50">
                     {data.attempts.map((a) => (
                       <tr key={a.id} className="hover:bg-surface-muted/40">
-                        <td className="whitespace-nowrap px-2 py-1 font-mono text-muted">
-                          {formatTime(a.submittedAt)}
+                        <td className="whitespace-nowrap px-2 py-1 text-muted">
+                          <p className="font-semibold text-foreground/85">{formatDateTimeShort(a.submittedAt)}</p>
+                          <p className="text-[10px] uppercase tracking-[0.08em] text-foreground/55">
+                            {formatRelativeFromNow(a.submittedAt, {
+                              style: "short",
+                              allowFuture: false,
+                              noValueLabel: "-",
+                              invalidLabel: "-",
+                            })}
+                          </p>
                         </td>
                         <td className="px-2 py-1">{a.nickname}</td>
                         <td className={`px-2 py-1 font-bold ${resultColor[a.result] ?? ""}`}>
@@ -139,14 +148,4 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
       )}
     </section>
   );
-}
-
-function formatTime(iso: string): string {
-  const d = new Date(iso);
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  const hours = String(d.getHours()).padStart(2, "0");
-  const minutes = String(d.getMinutes()).padStart(2, "0");
-  const seconds = String(d.getSeconds()).padStart(2, "0");
-  return `${month}/${day} ${hours}:${minutes}:${seconds}`;
 }
