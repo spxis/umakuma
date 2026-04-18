@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
 import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
@@ -42,6 +42,8 @@ type Props = {
   endpoint: string;
   showUserColumn?: boolean;
   heading?: string;
+  collapsible?: boolean;
+  persistenceKey?: string;
 };
 
 function sortIcon(activeSortBy: SortBy, sortBy: SortBy, sortDir: SortDir): string {
@@ -56,7 +58,21 @@ export default function StudyHistoryTable({
   endpoint,
   showUserColumn = false,
   heading = "Study Submission History",
+  collapsible = true,
+  persistenceKey,
 }: Props) {
+  const storageKey = persistenceKey ?? `wr:study-history:open:${endpoint}`;
+  const [expanded, setExpanded] = useState(() => {
+    if (!collapsible || typeof window === "undefined") {
+      return true;
+    }
+
+    try {
+      return window.localStorage.getItem(storageKey) !== "0";
+    } catch {
+      return true;
+    }
+  });
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(25);
   const [sortBy, setSortBy] = useState<SortBy>("submittedAt");
@@ -75,7 +91,7 @@ export default function StudyHistoryTable({
   }, [endpoint, page, pageSize, sortBy, sortDir]);
 
   const { data, error, isLoading } = useSWR<HistoryPayload>(
-    query,
+    expanded ? query : null,
     async (url: string) => {
       const response = await fetch(url, { cache: "no-store" });
       const payload = (await response.json()) as HistoryPayload;
@@ -89,6 +105,18 @@ export default function StudyHistoryTable({
 
   const totals = data?.totals ?? {};
   const totalAttempts = Object.values(totals).reduce((sum, value) => sum + value, 0);
+
+  useEffect(() => {
+    if (!collapsible || typeof window === "undefined") {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(storageKey, expanded ? "1" : "0");
+    } catch {
+      // Ignore persistence failures.
+    }
+  }, [collapsible, expanded, storageKey]);
 
   function toggleSort(nextSortBy: SortBy) {
     setPage(1);
@@ -115,7 +143,20 @@ export default function StudyHistoryTable({
 
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
-      <h2 className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">{heading}</h2>
+      {collapsible ? (
+        <button
+          type="button"
+          onClick={() => setExpanded((value) => !value)}
+          className="text-sm font-bold uppercase tracking-[0.1em] text-foreground"
+        >
+          {heading} {expanded ? "▲" : "▼"}
+        </button>
+      ) : (
+        <h2 className="text-sm font-bold uppercase tracking-[0.1em] text-foreground">{heading}</h2>
+      )}
+
+      {!expanded ? null : (
+        <>
 
       <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
         <span>Total: <strong>{totalAttempts}</strong></span>
@@ -226,6 +267,8 @@ export default function StudyHistoryTable({
           </div>
         </div>
       ) : null}
+        </>
+      )}
     </section>
   );
 }

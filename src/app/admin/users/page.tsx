@@ -1,0 +1,184 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import AdminAccountsSection, { type AdminAccount } from "../AdminAccountsSection";
+import type { AdminSessionStatus, Status } from "../AdminPage.types";
+
+export default function AdminUsersPage() {
+  const [sessionAuthorized, setSessionAuthorized] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
+  const [accounts, setAccounts] = useState<AdminAccount[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<Status>({ type: "idle", message: "" });
+
+  async function loadAccounts() {
+    const response = await fetch("/api/accounts", {
+      cache: "no-store",
+    });
+    const data = (await response.json()) as { accounts?: AdminAccount[]; error?: string };
+    if (!response.ok) {
+      throw new Error(data.error ?? "Could not load account list.");
+    }
+    setAccounts(data.accounts ?? []);
+  }
+
+  useEffect(() => {
+    async function loadSession() {
+      try {
+        const response = await fetch("/api/admin/session", { cache: "no-store" });
+        const data = (await response.json()) as AdminSessionStatus;
+        const authorized = Boolean(data.authorized);
+        setSessionAuthorized(authorized);
+
+        if (authorized) {
+          await loadAccounts();
+        } else {
+          setAccounts([]);
+        }
+      } finally {
+        setCheckingSession(false);
+      }
+    }
+
+    void loadSession().catch(() => {
+      setCheckingSession(false);
+    });
+  }, []);
+
+  async function refreshOne(accountId: string) {
+    setLoading(true);
+    setStatus({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch(`/api/accounts/${accountId}/refresh`, {
+        method: "POST",
+      });
+
+      const data = (await response.json()) as { error?: string; refreshed?: boolean; reason?: string };
+      if (!response.ok) {
+        throw new Error(data.error ?? "Refresh failed.");
+      }
+
+      if (!data.refreshed && data.reason) {
+        setStatus({ type: "error", message: `Skipped: ${data.reason}` });
+      } else {
+        setStatus({ type: "ok", message: "User refreshed." });
+      }
+
+      await loadAccounts();
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error instanceof Error ? error.message : "Refresh failed.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function assignInviteCode(accountId: string): Promise<string | null> {
+    setLoading(true);
+    setStatus({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch(`/api/accounts/${accountId}/invite-code`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
+
+      const data = (await response.json()) as { error?: string; inviteCode?: string };
+      if (!response.ok) {
+        throw new Error(data.error ?? "Could not assign invite code.");
+      }
+
+      await loadAccounts();
+      setStatus({
+        type: "ok",
+        message: data.inviteCode
+          ? `Invite code generated: ${data.inviteCode} (copied if permitted).`
+          : "Invite code generated.",
+      });
+
+      return data.inviteCode ?? null;
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error instanceof Error ? error.message : "Could not assign invite code.",
+      });
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function resetInviteCode(accountId: string) {
+    setLoading(true);
+    setStatus({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch(`/api/accounts/${accountId}/invite-code`, {
+        method: "DELETE",
+      });
+
+      const data = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(data.error ?? "Could not reset invite code.");
+      }
+
+      await loadAccounts();
+      setStatus({ type: "ok", message: "Invite code reset." });
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error instanceof Error ? error.message : "Could not reset invite code.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="relative min-h-screen overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
+      <main className="relative mx-auto w-full max-w-6xl space-y-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href="/admin"
+            className="inline-flex items-center rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
+          >
+            Back to admin
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex items-center rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
+          >
+            Leaderboard
+          </Link>
+        </div>
+
+        {checkingSession ? (
+          <p className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-slate-700">Checking admin session...</p>
+        ) : null}
+
+        {status.message ? (
+          <p className={`rounded-2xl px-4 py-3 text-sm font-semibold ${status.type === "error" ? "border border-red-200 bg-red-50 text-red-800" : "border border-emerald-200 bg-emerald-50 text-emerald-800"}`}>
+            {status.message}
+          </p>
+        ) : null}
+
+        <AdminAccountsSection
+          sessionAuthorized={sessionAuthorized}
+          accounts={accounts}
+          loading={loading}
+          onRefreshOne={refreshOne}
+          onAssignInviteCode={assignInviteCode}
+          onResetInviteCode={resetInviteCode}
+        />
+      </main>
+    </div>
+  );
+}
