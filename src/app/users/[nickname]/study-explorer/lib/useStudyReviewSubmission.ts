@@ -136,10 +136,21 @@ export function useStudyReviewSubmission({
           }
         })
         .catch((submitError: unknown) => {
+          // Rollback optimistic removal so the item reappears
+          onSetHiddenSubmittedAssignmentIds((prev) => {
+            const next = new Set(prev);
+            next.delete(assignmentId);
+            return next;
+          });
+          onSetReviewOutcomeByAssignmentId((prev) => {
+            const { [assignmentId]: _, ...rest } = prev;
+            return rest;
+          });
           onSetSubmitFeedback({
             kind: "error",
             message: submitError instanceof Error ? submitError.message : "Could not submit review.",
           });
+          console.error("[WaniRanks] Review submission failed for assignment", assignmentId, submitError);
         });
     },
     [

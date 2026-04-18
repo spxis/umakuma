@@ -94,6 +94,7 @@ export async function POST(request: Request, context: RouteContext) {
 
       // Treat stale/unavailable submissions as already handled so study flow can continue.
       if (message.includes("422") || message.includes("409") || message.includes("404")) {
+        console.warn(`[review] Assignment ${parsed.data.assignmentId} skipped (${message.slice(0, 80)})`);
         clearStudyQueueCache(accountId);
         return NextResponse.json({ ok: true, skipped: true, reason: "already-reviewed-or-unavailable" });
       }
