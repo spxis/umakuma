@@ -243,11 +243,11 @@ export default function StudyReviewModalSection({
           )
         ) : useStudyFlashLayout ? (
           <>
-            <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
-              <div className="flex min-h-[20rem] flex-col lg:h-full lg:min-h-0">
+            <div className="grid min-h-[56vh] gap-3 lg:min-h-[68vh] lg:grid-cols-2 lg:items-stretch">
+              <div className="flex min-h-[14rem] flex-col lg:h-full lg:min-h-0">
                 {!detailsRevealed ? (
                   <div
-                    className={`relative flex min-h-[20rem] flex-1 select-none items-center justify-center rounded-2xl border p-6 lg:h-full ${typeGlyphBoxClass(
+                    className={`relative flex min-h-[14rem] flex-1 select-none items-center justify-center rounded-2xl border p-4 sm:p-6 lg:h-full ${typeGlyphBoxClass(
                       selectedItem.subjectType,
                     )}`}
                   >
@@ -299,9 +299,9 @@ export default function StudyReviewModalSection({
                 )}
               </div>
 
-              <div className="grid min-h-[20rem] grid-rows-2 gap-3 lg:h-full lg:min-h-0">
+              <div className="grid min-h-[12rem] grid-rows-2 gap-3 lg:h-full lg:min-h-0">
                 {!detailsRevealed ? (
-                  <button type="button" onClick={() => onReveal(selectedItem.assignmentId)} className="row-span-2 h-full w-full rounded-2xl border border-line bg-surface-muted px-6 py-6 text-center hover:bg-surface">
+                  <button type="button" onClick={() => onReveal(selectedItem.assignmentId)} className="row-span-2 h-full w-full rounded-2xl border border-line bg-surface-muted px-4 py-4 text-center hover:bg-surface sm:px-6 sm:py-6">
                     <div>
                       <p className="text-base font-black uppercase tracking-[0.12em] text-foreground/70">Show Answer</p>
                       <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">Space To Reveal</p>
@@ -317,13 +317,13 @@ export default function StudyReviewModalSection({
                   </div>
                 ) : (
                   <>
-                    <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "wrong")} aria-keyshortcuts="1" title="Wrong (Key: 1)" className="h-full w-full rounded-2xl border-2 border-red-300 bg-red-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-red-800">Wrong</button>
-                    <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "correct")} aria-keyshortcuts="2" title="Correct (Key: 2)" className="h-full w-full rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-emerald-800">Correct</button>
+                    <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "wrong")} aria-keyshortcuts="1" title="Wrong (Key: 1)" className="h-full w-full rounded-2xl border-2 border-red-300 bg-red-50 px-3 py-3 text-sm font-black uppercase tracking-[0.1em] text-red-800 sm:px-4 sm:py-4">Wrong</button>
+                    <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "correct")} aria-keyshortcuts="2" title="Correct (Key: 2)" className="h-full w-full rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-3 py-3 text-sm font-black uppercase tracking-[0.1em] text-emerald-800 sm:px-4 sm:py-4">Correct</button>
                   </>
                 )}
               </div>
             </div>
-            <div className="mt-3">
+            <div className="mt-3 hidden sm:block">
               <LevelExplorerReviewStatsCard accountId={accountId} subjectId={selectedItem.subjectId} currentSrsStage={selectedItem.srsStage} startedAt={selectedItem.startedAt} />
             </div>
           </>
