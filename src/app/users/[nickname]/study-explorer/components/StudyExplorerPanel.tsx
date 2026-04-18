@@ -1,4 +1,5 @@
 import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
+import ExplorerConfirmDialog from "../../shared/ExplorerConfirmDialog";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import {
@@ -21,6 +22,7 @@ import type {
   StudySrsFilter,
   StudyTypeFilter,
 } from "../lib/studyExplorerTypes";
+import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 
 function StudySkeletonCards() {
@@ -41,6 +43,7 @@ function StudySkeletonCards() {
 }
 
 type Props = {
+  accountId: string;
   canToggleEnglish: boolean;
   showEnglish: boolean;
   studyMode: boolean;
@@ -84,6 +87,7 @@ type Props = {
 };
 
 export default function StudyExplorerPanel({
+  accountId,
   canToggleEnglish,
   showEnglish,
   studyMode,
@@ -118,6 +122,21 @@ export default function StudyExplorerPanel({
   onSelectSubject,
   onClearAllFilters,
 }: Props) {
+  const {
+    bulkModeEnabled,
+    selectedSubjectIds,
+    pendingBulkReset,
+    isResetting,
+    resetFeedback,
+    selectedItems,
+    selectedDetails,
+    selectedPreview,
+    setBulkModeEnabled,
+    setSelectedSubjectIds,
+    setPendingBulkReset,
+    resetSelectedItems,
+  } = useStudyBulkReset({ accountId, filteredItems });
+
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
   const showFilterPagingState =
     queueMode === "lesson" && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
@@ -251,8 +270,78 @@ export default function StudyExplorerPanel({
                 </button>
               </>
             ) : null}
+            <button
+              type="button"
+              onClick={() => {
+                setBulkModeEnabled((prev) => {
+                  const next = !prev;
+                  if (!next) {
+                    setSelectedSubjectIds(new Set());
+                    setPendingBulkReset(false);
+                  }
+                  return next;
+                });
+              }}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(bulkModeEnabled)}`}
+            >
+              {bulkModeEnabled ? "Done Bulk Ops" : "Bulk Reset"}
+            </button>
           </div>
         </div>
+
+        {bulkModeEnabled ? (
+          <div className="mb-3 rounded-xl border border-line bg-surface-muted px-3 py-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">Bulk Reset Active</p>
+                <p className="text-xs text-foreground/70">
+                  Selected {formatNumber(selectedSubjectIds.size)} item{selectedSubjectIds.size === 1 ? "" : "s"}
+                </p>
+                {selectedPreview.length > 0 ? (
+                  <p className="mt-1 text-xs text-foreground/70">{selectedPreview.join("  •  ")}</p>
+                ) : null}
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedSubjectIds(new Set(filteredItems.map((item) => item.subjectId)))}
+                  disabled={filteredItems.length === 0 || isResetting}
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Select Visible
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedSubjectIds(new Set())}
+                  disabled={selectedSubjectIds.size === 0 || isResetting}
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPendingBulkReset(true)}
+                  disabled={selectedSubjectIds.size === 0 || isResetting}
+                  className="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-amber-900 hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isResetting ? "Resetting..." : "Reset Selected"}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {resetFeedback ? (
+          <p
+            className={`mb-3 rounded-xl border px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] ${
+              resetFeedback.kind === "success"
+                ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                : "border-red-300 bg-red-50 text-red-800"
+            }`}
+          >
+            {resetFeedback.message}
+          </p>
+        ) : null}
 
         {showLoadingIndicator || showFilterPagingState ? (
           <div className="mb-3 rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/75">
@@ -276,13 +365,31 @@ export default function StudyExplorerPanel({
                     key={`${item.queueType}-${item.subjectId}`}
                     onClick={() => {
                       if (!isUnauthorized) {
+                        if (bulkModeEnabled) {
+                          setSelectedSubjectIds((prev) => {
+                            const next = new Set(prev);
+                            if (next.has(item.subjectId)) {
+                              next.delete(item.subjectId);
+                            } else {
+                              next.add(item.subjectId);
+                            }
+                            return next;
+                          });
+                          return;
+                        }
+
                         onSelectSubject(item.subjectId);
                       }
                     }}
-                    className={`rounded-2xl border p-3 text-left transition ${isUnauthorized ? "cursor-not-allowed opacity-65" : "hover:brightness-95"} ${typeCardClass(item.subjectType, false)}`}
+                    className={`rounded-2xl border p-3 text-left transition ${isUnauthorized ? "cursor-not-allowed opacity-65" : "hover:brightness-95"} ${typeCardClass(item.subjectType, false)} ${selectedSubjectIds.has(item.subjectId) ? "ring-2 ring-amber-400" : ""}`}
                     indexLabel={`#${index + 1}`}
                     topRight={
                       <>
+                        {bulkModeEnabled ? (
+                          <span className={`subject-pill ${selectedSubjectIds.has(item.subjectId) ? "border-amber-400 bg-amber-100 text-amber-900" : "border-line bg-surface text-foreground"}`}>
+                            {selectedSubjectIds.has(item.subjectId) ? "Selected" : "Select"}
+                          </span>
+                        ) : null}
                         <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
                         {typeof item.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span> : null}
                         {item.jlptLevel ? <span className={jlptLevelPillClass()}>N{item.jlptLevel}</span> : null}
@@ -334,6 +441,24 @@ export default function StudyExplorerPanel({
             </button>
           </div>
         )}
+
+        <ExplorerConfirmDialog
+          open={pendingBulkReset}
+          title={`Reset ${formatNumber(selectedItems.length)} selected item${selectedItems.length === 1 ? "" : "s"} to lessons?`}
+          description="This will move selected assignments back to lessons. This action cannot be undone."
+          confirmLabel="Reset Selected"
+          details={selectedDetails}
+          requirePhrase="RESET"
+          busy={isResetting}
+          onCancel={() => {
+            if (!isResetting) {
+              setPendingBulkReset(false);
+            }
+          }}
+          onConfirm={() => {
+            void resetSelectedItems();
+          }}
+        />
       </div>
     </>
   );
