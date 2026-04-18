@@ -88,77 +88,59 @@ export function useStudyReviewSubmission({
     async (assignmentId: number, result: "correct" | "wrong") => {
       const { itemForSubmit, nextFocusedItem } = getSubmissionContext(assignmentId);
 
-      onSetSubmitInFlight({
-        assignmentId,
-        result,
-        itemLabel: itemForSubmit
-          ? `${itemForSubmit.characters} (${studyItemEnglishTitle(itemForSubmit)})`
-          : "item",
-      });
-      onSetSubmittingByAssignmentId((prev) => new Set(prev).add(assignmentId));
-
-      try {
-        const response = await fetch(`/api/study/${accountId}/review`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ assignmentId, result }),
-        });
-        const payload = (await response.json()) as { error?: string };
-        if (!response.ok) throw new Error(payload.error ?? "Could not submit review.");
-
-        if (itemForSubmit) {
-          onSetModalSessionItemByAssignmentId((prev) => ({ ...prev, [assignmentId]: itemForSubmit }));
-        }
-
-        onSetLoadedItems((prev) => prev.filter((item) => item.assignmentId !== assignmentId));
-        onSetTotalItems((prev) => Math.max(0, prev - 1));
-        onSetPersistedCounts((prev) =>
-          prev
-            ? { ...prev, reviews: Math.max(0, prev.reviews - 1), all: Math.max(0, prev.all - 1) }
-            : prev,
-        );
-        onSetSubmitFeedback({
-          kind: "success",
-          message: `${result === "correct" ? "Correct" : "Wrong"} submitted for ${
-            itemForSubmit ? `${itemForSubmit.characters} (${studyItemEnglishTitle(itemForSubmit)})` : "item"
-          }.`,
-        });
-
-        if (typeof window !== "undefined") {
-          window.dispatchEvent(
-            new CustomEvent("wr:study-review-submitted", {
-              detail: { accountId, subjectId: itemForSubmit?.subjectId },
-            }),
-          );
-        }
-
-        onSetReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: result }));
-        onSetHiddenSubmittedAssignmentIds((prev) => {
-          const next = new Set(prev);
-          next.add(assignmentId);
-          return next;
-        });
-        onSetHasPendingStudySubmissions(true);
-        onSetSelectedId(nextFocusedItem?.subjectId ?? null);
-        removeFromModalSession(assignmentId);
-      } catch (submitError) {
-        onSetSubmitFeedback({
-          kind: "error",
-          message: submitError instanceof Error ? submitError.message : "Could not submit review.",
-        });
-      } finally {
-        onSetSubmittingByAssignmentId((prev) => {
-          const next = new Set(prev);
-          next.delete(assignmentId);
-          return next;
-        });
-        onSetRevealedAssignmentIds((prev) => {
-          const next = new Set(prev);
-          next.delete(assignmentId);
-          return next;
-        });
-        onSetSubmitInFlight(null);
+      // Optimistic: update UI immediately before the network call
+      if (itemForSubmit) {
+        onSetModalSessionItemByAssignmentId((prev) => ({ ...prev, [assignmentId]: itemForSubmit }));
       }
+
+      onSetReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: result }));
+      onSetHiddenSubmittedAssignmentIds((prev) => {
+        const next = new Set(prev);
+        next.add(assignmentId);
+        return next;
+      });
+      onSetLoadedItems((prev) => prev.filter((item) => item.assignmentId !== assignmentId));
+      onSetTotalItems((prev) => Math.max(0, prev - 1));
+      onSetPersistedCounts((prev) =>
+        prev
+          ? { ...prev, reviews: Math.max(0, prev.reviews - 1), all: Math.max(0, prev.all - 1) }
+          : prev,
+      );
+      onSetHasPendingStudySubmissions(true);
+      onSetSelectedId(nextFocusedItem?.subjectId ?? null);
+      onSetRevealedAssignmentIds((prev) => {
+        const next = new Set(prev);
+        next.delete(assignmentId);
+        return next;
+      });
+      removeFromModalSession(assignmentId);
+
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("wr:study-review-submitted", {
+            detail: { accountId, subjectId: itemForSubmit?.subjectId },
+          }),
+        );
+      }
+
+      // Fire network call in background — don't block UI
+      fetch(`/api/study/${accountId}/review`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assignmentId, result }),
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            const payload = (await response.json()) as { error?: string };
+            throw new Error(payload.error ?? "Could not submit review.");
+          }
+        })
+        .catch((submitError: unknown) => {
+          onSetSubmitFeedback({
+            kind: "error",
+            message: submitError instanceof Error ? submitError.message : "Could not submit review.",
+          });
+        });
     },
     [
       accountId,

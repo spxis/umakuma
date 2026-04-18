@@ -105,33 +105,34 @@ export async function POST(request: Request, context: RouteContext) {
       return NextResponse.json({ error: message }, { status: 502 });
     }
 
-    try {
-      const subjectId =
-        submissionResponse?.resources_updated?.review_statistic?.data?.subject_id ??
-        submissionResponse?.data?.subject_id;
+    // Fire-and-forget: persist history without blocking the response
+    const subjectId =
+      submissionResponse?.resources_updated?.review_statistic?.data?.subject_id ??
+      submissionResponse?.data?.subject_id;
 
-      const subjectType =
-        submissionResponse?.resources_updated?.review_statistic?.data?.subject_type ??
-        submissionResponse?.resources_updated?.assignment?.data?.subject_type ??
-        "unknown";
+    const subjectType =
+      submissionResponse?.resources_updated?.review_statistic?.data?.subject_type ??
+      submissionResponse?.resources_updated?.assignment?.data?.subject_type ??
+      "unknown";
 
-      if (typeof subjectId === "number" && Number.isInteger(subjectId) && subjectId > 0) {
-        await recordStudyReviewAttempt({
-          accountId,
-          assignmentId: parsed.data.assignmentId,
-          subjectId,
-          subjectType,
-          result: parsed.data.result,
-        });
-      }
-
-      await recordSubmissionSnapshot({
+    const historyWork = Promise.allSettled([
+      typeof subjectId === "number" && Number.isInteger(subjectId) && subjectId > 0
+        ? recordStudyReviewAttempt({
+            accountId,
+            assignmentId: parsed.data.assignmentId,
+            subjectId,
+            subjectType,
+            result: parsed.data.result,
+          })
+        : Promise.resolve(),
+      recordSubmissionSnapshot({
         accountId,
         data: submissionResponse?.resources_updated?.review_statistic?.data,
-      });
-    } catch (historyError) {
+      }),
+    ]);
+    historyWork.catch((historyError) => {
       console.error("Failed to persist local study history", historyError);
-    }
+    });
 
     clearStudyQueueCache(accountId);
 
