@@ -22,6 +22,8 @@ type AdminAccountsSectionProps = {
   sessionAuthorized: boolean;
   accounts: AdminAccount[];
   loading: boolean;
+  viewerEmail?: string | null;
+  generatedInviteCodesByAccountId?: Record<string, string>;
   onRefreshOne: (accountId: string) => void;
   onAssignInviteCode: (accountId: string) => Promise<string | null>;
   onResetInviteCode: (accountId: string) => Promise<void>;
@@ -55,6 +57,8 @@ export default function AdminAccountsSection({
   sessionAuthorized,
   accounts,
   loading,
+  viewerEmail = null,
+  generatedInviteCodesByAccountId = {},
   onRefreshOne,
   onAssignInviteCode,
   onResetInviteCode,
@@ -86,11 +90,21 @@ export default function AdminAccountsSection({
             <tbody>
               {accounts.map((account) => {
                 const syncLockLabel = lockLabel(account);
+                const linkedEmail = account.joinedByEmail?.trim().toLowerCase() ?? null;
+                const isMe = Boolean(viewerEmail && linkedEmail && linkedEmail === viewerEmail.trim().toLowerCase());
+                const generatedInviteCode = generatedInviteCodesByAccountId[account.id] ?? null;
 
                 return (
                   <tr key={account.id} className="border-b border-line/70 align-top last:border-b-0">
                     <td className="px-3 py-3">
-                      <p className="font-black text-foreground">{account.nickname}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-black text-foreground">{account.nickname}</p>
+                        {isMe ? (
+                          <span className="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.1em] text-accent">
+                            Me
+                          </span>
+                        ) : null}
+                      </div>
                       <p className="text-xs text-slate-600">
                         @{account.wkUsername} · Lv {account.wkLevel} · Due {account.pendingReviews}
                       </p>
@@ -106,9 +120,29 @@ export default function AdminAccountsSection({
                       {syncLockLabel ? <p>{syncLockLabel}</p> : null}
                     </td>
                     <td className="px-3 py-3 text-xs text-slate-700">
-                      {account.inviteCodeUpdatedAt
-                        ? `Set ${formatDateTimeShort(account.inviteCodeUpdatedAt)}`
-                        : "Not set"}
+                      <p>
+                        {account.inviteCodeUpdatedAt
+                          ? `Set ${formatDateTimeShort(account.inviteCodeUpdatedAt)}`
+                          : "Not set"}
+                      </p>
+                      {generatedInviteCode ? (
+                        <div className="mt-1 flex items-center gap-2">
+                          <code className="rounded border border-line bg-white px-2 py-0.5 text-[11px] font-black tracking-[0.12em] text-slate-800">
+                            {generatedInviteCode}
+                          </code>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              void navigator.clipboard.writeText(generatedInviteCode).catch(() => {
+                                // Ignore clipboard failures.
+                              });
+                            }}
+                            className="rounded-full border border-line bg-white px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-slate-700 hover:bg-surface"
+                          >
+                            Copy
+                          </button>
+                        </div>
+                      ) : null}
                     </td>
                     <td className="px-3 py-3">
                       <div className="flex flex-wrap gap-2">

@@ -9,7 +9,9 @@ import type { AdminSessionStatus, Status } from "../AdminPage.types";
 export default function AdminUsersPage() {
   const [sessionAuthorized, setSessionAuthorized] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
+  const [viewerEmail, setViewerEmail] = useState<string | null>(null);
   const [accounts, setAccounts] = useState<AdminAccount[]>([]);
+  const [generatedInviteCodesByAccountId, setGeneratedInviteCodesByAccountId] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<Status>({ type: "idle", message: "" });
 
@@ -31,6 +33,7 @@ export default function AdminUsersPage() {
         const data = (await response.json()) as AdminSessionStatus;
         const authorized = Boolean(data.authorized);
         setSessionAuthorized(authorized);
+        setViewerEmail(data.user?.email?.trim().toLowerCase() ?? null);
 
         if (authorized) {
           await loadAccounts();
@@ -97,6 +100,9 @@ export default function AdminUsersPage() {
       }
 
       await loadAccounts();
+      if (data.inviteCode) {
+        setGeneratedInviteCodesByAccountId((prev) => ({ ...prev, [accountId]: data.inviteCode! }));
+      }
       setStatus({
         type: "ok",
         message: data.inviteCode
@@ -131,6 +137,15 @@ export default function AdminUsersPage() {
       }
 
       await loadAccounts();
+      setGeneratedInviteCodesByAccountId((prev) => {
+        if (!(accountId in prev)) {
+          return prev;
+        }
+
+        const next = { ...prev };
+        delete next[accountId];
+        return next;
+      });
       setStatus({ type: "ok", message: "Invite code reset." });
     } catch (error) {
       setStatus({
@@ -174,6 +189,8 @@ export default function AdminUsersPage() {
           sessionAuthorized={sessionAuthorized}
           accounts={accounts}
           loading={loading}
+          viewerEmail={viewerEmail}
+          generatedInviteCodesByAccountId={generatedInviteCodesByAccountId}
           onRefreshOne={refreshOne}
           onAssignInviteCode={assignInviteCode}
           onResetInviteCode={resetInviteCode}
