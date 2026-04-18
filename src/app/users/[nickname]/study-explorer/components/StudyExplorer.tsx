@@ -269,6 +269,7 @@ export default function StudyExplorer({
     showLockedStorageKey,
     viewedLevel,
     typeFilter,
+    srsFilter,
     recentOnly,
     showLocked,
     hasHydratedTypeFilter,

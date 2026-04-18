@@ -64,6 +64,8 @@ export default function ExplorerTabs({
       return "review";
     }
 
+    const urlMode = new URLSearchParams(window.location.search).get("mode");
+    if (urlMode === "review" || urlMode === "lesson") return urlMode;
     return window.localStorage.getItem(`wr:study-queue-mode:${accountId}`) === "lesson"
       ? "lesson"
       : "review";
@@ -183,12 +185,21 @@ export default function ExplorerTabs({
     const params = new URLSearchParams(window.location.search);
     const raw = params.get("tab");
     const tabInUrl = raw === "jlpt" ? "jlpt" : raw === "level" ? "level" : "study";
+    let changed = false;
     if (tabInUrl !== activeTab) {
       params.set("tab", activeTab);
+      changed = true;
+    }
+    const modeInUrl = params.get("mode");
+    if (modeInUrl !== queueMode) {
+      params.set("mode", queueMode);
+      changed = true;
+    }
+    if (changed) {
       const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
       window.history.replaceState(null, "", next);
     }
-  }, [activeTab]);
+  }, [activeTab, queueMode]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -229,8 +240,10 @@ export default function ExplorerTabs({
     }
 
     const onPopState = () => {
-      const raw = new URLSearchParams(window.location.search).get("tab");
-      setActiveTab(raw === "jlpt" ? "jlpt" : raw === "level" ? "level" : "study");
+      const params = new URLSearchParams(window.location.search);
+      setActiveTab(params.get("tab") === "jlpt" ? "jlpt" : params.get("tab") === "level" ? "level" : "study");
+      const urlMode = params.get("mode");
+      if (urlMode === "review" || urlMode === "lesson") setQueueMode(urlMode);
     };
 
     window.addEventListener("popstate", onPopState);

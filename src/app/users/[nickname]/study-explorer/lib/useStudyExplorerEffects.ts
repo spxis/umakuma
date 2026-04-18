@@ -14,6 +14,7 @@ type Args = {
   showLockedStorageKey: string;
   viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
+  srsFilter: "all" | "locked" | "apprentice" | "guru" | "master" | "enlightened";
   recentOnly: boolean;
   showLocked: boolean;
   hasHydratedTypeFilter: boolean;
@@ -73,6 +74,7 @@ export function useStudyExplorerEffects({
   showLockedStorageKey,
   viewedLevel,
   typeFilter,
+  srsFilter,
   recentOnly,
   showLocked,
   hasHydratedTypeFilter,
@@ -116,6 +118,13 @@ export function useStudyExplorerEffects({
   }, [countsStorageKey, setPersistedCounts]);
 
   useEffect(() => {
+    const urlType = new URLSearchParams(window.location.search).get("type");
+    if (urlType === "radical" || urlType === "kanji" || urlType === "vocabulary") {
+      setTypeFilter(urlType);
+      setHasHydratedTypeFilter(true);
+      return;
+    }
+
     const raw = window.localStorage.getItem(typeFilterStorageKey);
     if (!raw) {
       setHasHydratedTypeFilter(true);
@@ -133,6 +142,15 @@ export function useStudyExplorerEffects({
   }, [setHasHydratedTypeFilter, setTypeFilter, typeFilterStorageKey]);
 
   useEffect(() => {
+    const urlLevel = new URLSearchParams(window.location.search).get("level");
+    if (urlLevel !== null) {
+      const parsed = Number(urlLevel);
+      if (Number.isInteger(parsed) && parsed > 0) {
+        setViewedLevel(parsed);
+        return;
+      }
+    }
+
     const raw = window.localStorage.getItem(viewedLevelStorageKey);
     if (!raw) {
       setViewedLevel(null);
@@ -150,6 +168,12 @@ export function useStudyExplorerEffects({
   }, [setViewedLevel, viewedLevelStorageKey]);
 
   useEffect(() => {
+    const urlRecent = new URLSearchParams(window.location.search).get("recent");
+    if (urlRecent !== null) {
+      setRecentOnly(urlRecent === "1");
+      return;
+    }
+
     const raw = window.localStorage.getItem(recentOnlyStorageKey);
     if (!raw) {
       setRecentOnly(false);
@@ -160,6 +184,12 @@ export function useStudyExplorerEffects({
   }, [recentOnlyStorageKey, setRecentOnly]);
 
   useEffect(() => {
+    const urlHideLocked = new URLSearchParams(window.location.search).get("hideLocked");
+    if (urlHideLocked !== null) {
+      setShowLocked(urlHideLocked !== "1");
+      return;
+    }
+
     const raw = window.localStorage.getItem(showLockedStorageKey);
     if (!raw) {
       return;
@@ -167,6 +197,14 @@ export function useStudyExplorerEffects({
 
     setShowLocked(raw === "1");
   }, [setShowLocked, showLockedStorageKey]);
+
+  useEffect(() => {
+    const urlSrs = new URLSearchParams(window.location.search).get("srs");
+    const validSrs = ["apprentice", "guru", "master", "enlightened", "locked"];
+    if (urlSrs && validSrs.includes(urlSrs)) {
+      setSrsFilter(urlSrs as "apprentice" | "guru" | "master" | "enlightened" | "locked");
+    }
+  }, [setSrsFilter]);
 
   useEffect(() => {
     if (!hasHydratedTypeFilter) return;
@@ -189,6 +227,22 @@ export function useStudyExplorerEffects({
   useEffect(() => {
     window.localStorage.setItem(showLockedStorageKey, showLocked ? "1" : "0");
   }, [showLocked, showLockedStorageKey]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (viewedLevel !== null) params.set("level", String(viewedLevel));
+    else params.delete("level");
+    if (typeFilter !== "all") params.set("type", typeFilter);
+    else params.delete("type");
+    if (srsFilter !== "all") params.set("srs", srsFilter);
+    else params.delete("srs");
+    if (recentOnly) params.set("recent", "1");
+    else params.delete("recent");
+    if (!showLocked) params.set("hideLocked", "1");
+    else params.delete("hideLocked");
+    const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+    window.history.replaceState(null, "", next);
+  }, [viewedLevel, typeFilter, srsFilter, recentOnly, showLocked]);
 
   useEffect(() => {
     if (!dataCounts) return;
@@ -301,6 +355,11 @@ export function useStudyExplorerEffects({
     params.delete("findStudy");
     params.delete("findLevel");
     params.delete("findJlpt");
+    params.delete("level");
+    params.delete("type");
+    params.delete("srs");
+    params.delete("recent");
+    params.delete("hideLocked");
     const query = params.toString();
     const next = `${window.location.pathname}${query ? `?${query}` : ""}#explorer`;
     window.history.pushState(null, "", next);
