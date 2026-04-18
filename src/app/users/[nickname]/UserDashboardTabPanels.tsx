@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
 import type {
@@ -223,6 +223,7 @@ export function ItemSpreadTabPanel({ itemSpread, itemSpreadDetails }: ItemSpread
 }
 
 type LevelProgressTabPanelProps = {
+  accountId: string;
   currentWkLevel: number;
   wkLevel: number;
   levelOptions: number[];
@@ -236,6 +237,7 @@ type LevelProgressTabPanelProps = {
 };
 
 export function LevelProgressTabPanel({
+  accountId,
   currentWkLevel,
   wkLevel,
   levelOptions,
@@ -247,10 +249,26 @@ export function LevelProgressTabPanel({
   remainingToLevelUp,
   passedLevelUpGate,
 }: LevelProgressTabPanelProps) {
-  const [viewMode, setViewMode] = useState<"browser" | "last3">("browser");
-  const lastThreeLevels = useMemo(() => {
+  const [viewMode, setViewMode] = useState<"browser" | "last5">("browser");
+  const storageKey = `wr:user:${accountId}:level-progress-view`;
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const stored = window.localStorage.getItem(storageKey);
+    if (stored === "browser" || stored === "last5") {
+      setViewMode(stored);
+    }
+  }, [storageKey]);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    window.localStorage.setItem(storageKey, viewMode);
+  }, [storageKey, viewMode]);
+  const lastFiveLevels = useMemo(() => {
     const uptoCurrent = levelOptions.filter((level) => level <= currentWkLevel);
-    return uptoCurrent.slice(-3).reverse();
+    return uptoCurrent.slice(-5).reverse();
   }, [currentWkLevel, levelOptions]);
 
   return (
@@ -261,12 +279,12 @@ export function LevelProgressTabPanel({
           <div className="inline-flex items-center rounded-full border border-line bg-surface p-1">
             <button
               type="button"
-              onClick={() => setViewMode("last3")}
+              onClick={() => setViewMode("last5")}
               className={`inline-flex h-8 items-center justify-center rounded-full px-3 text-[11px] font-bold uppercase tracking-[0.1em] ${
-                viewMode === "last3" ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"
+                viewMode === "last5" ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"
               }`}
             >
-              Last 3
+              Last 5
             </button>
             <button
               type="button"
@@ -382,14 +400,14 @@ export function LevelProgressTabPanel({
         </>
       ) : (
         <div className="mt-4 space-y-3">
-          {lastThreeLevels.map((level) => {
+          {lastFiveLevels.map((level) => {
             const snapshot = levelProgressByLevel[level];
             if (!snapshot) {
               return null;
             }
 
             return (
-              <article key={`last3-${level}`} className="rounded-2xl border border-line bg-surface p-3">
+              <article key={`last5-${level}`} className="rounded-2xl border border-line bg-surface p-3">
                 <div className="flex items-center justify-between">
                   <p className="text-lg font-black uppercase tracking-[0.08em] text-foreground">Level {level}</p>
                   <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">

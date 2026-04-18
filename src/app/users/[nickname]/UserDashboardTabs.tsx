@@ -369,6 +369,7 @@ export default function UserDashboardTabs({
       ) : null}
       {activeTab === "level-progress" ? (
         <LevelProgressTabPanel
+          accountId={accountId}
           currentWkLevel={wkLevel}
           wkLevel={selectedProgressLevel}
           levelOptions={safeProgressLevels}
