@@ -10,6 +10,7 @@ type Props = {
   accountId: string;
   showEnglish: boolean;
   canToggleEnglish: boolean;
+  forcedViewerMode: "detail" | "flash" | null;
   isUnauthorized: boolean;
   studyMode: boolean;
   selectedItem: StudyQueueItem | null;
@@ -38,6 +39,7 @@ export default function StudyExplorerModal({
   accountId,
   showEnglish,
   canToggleEnglish,
+  forcedViewerMode,
   isUnauthorized,
   studyMode,
   selectedItem,
@@ -70,6 +72,7 @@ export default function StudyExplorerModal({
       accountId={accountId}
       showEnglish={showEnglish}
       canToggleEnglish={canToggleEnglish}
+      forcedViewerMode={forcedViewerMode}
       studyMode={studyMode}
       selectedItem={selectedItem}
       selectedIndex={selectedIndex}

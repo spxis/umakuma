@@ -12,6 +12,7 @@ export default function StudyReviewModal({
   accountId,
   showEnglish,
   canToggleEnglish,
+  forcedViewerMode,
   studyMode,
   selectedItem,
   selectedIndex,
@@ -52,6 +53,15 @@ export default function StudyReviewModal({
   const [viewerMode, setViewerMode] = useState<"detail" | "flash">(() => {
     return getStoredEnum(viewerModeStorageKey, ["detail", "flash"] as const, "detail");
   });
+
+  useEffect(() => {
+    if (!forcedViewerMode) {
+      return;
+    }
+
+    setViewerMode(forcedViewerMode);
+    setStoredEnum(viewerModeStorageKey, forcedViewerMode);
+  }, [forcedViewerMode]);
 
   const [flashRevealKey, setFlashRevealKey] = useState<string | null>(null);
   const [flashCycleDoneKey, setFlashCycleDoneKey] = useState<string | null>(null);

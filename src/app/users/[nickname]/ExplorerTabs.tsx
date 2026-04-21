@@ -71,6 +71,14 @@ export default function ExplorerTabs({
       ? "lesson"
       : "review";
   });
+  const initialViewerMode = (() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const viewer = new URLSearchParams(window.location.search).get("viewer");
+    return viewer === "detail" || viewer === "flash" ? viewer : null;
+  })();
 
   const { data: fetchedStudyCounts } = useSWR<{ reviews: number; lessons: number }>(
     `/api/study/${accountId}/counts`,
@@ -380,6 +388,7 @@ export default function ExplorerTabs({
         <StudyExplorer
           accountId={accountId}
           maxLevel={maxLevel}
+          initialViewerMode={initialViewerMode}
           showEnglish={showEnglish}
           onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
           canToggleEnglish={!studyMode}

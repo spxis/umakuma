@@ -17,6 +17,7 @@ export type StudyReviewModalProps = {
   accountId: string;
   showEnglish: boolean;
   canToggleEnglish: boolean;
+  forcedViewerMode: "detail" | "flash" | null;
   studyMode: boolean;
   selectedItem: StudyQueueItem | null;
   selectedIndex: number;

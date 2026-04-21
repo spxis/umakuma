@@ -64,6 +64,7 @@ export type StudyExplorerProps = {
   canToggleEnglish: boolean;
   studyMode: boolean;
   queueMode: "review" | "lesson";
+  initialViewerMode?: "detail" | "flash" | null;
 };
 
 export type StudyTypeFilter = "all" | "radical" | "kanji" | "vocabulary";

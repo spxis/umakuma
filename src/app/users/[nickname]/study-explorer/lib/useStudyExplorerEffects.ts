@@ -427,6 +427,12 @@ export function useStudyExplorerEffects({
     setLoadMoreError(null);
 
     try {
+      const fromUrl = Number(new URLSearchParams(window.location.search).get("subject"));
+      if (Number.isInteger(fromUrl) && fromUrl > 0) {
+        setSelectedId(fromUrl);
+        return;
+      }
+
       const raw = window.localStorage.getItem(selectedSubjectStorageKey);
       const parsed = Number(raw);
       setSelectedId(Number.isInteger(parsed) && parsed > 0 ? parsed : null);

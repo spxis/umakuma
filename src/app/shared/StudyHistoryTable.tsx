@@ -207,43 +207,52 @@ export default function StudyHistoryTable({
 
       {data ? (
         <div className="mt-3 space-y-3">
-          <div className="space-y-2 sm:hidden">
-            {data.attempts.map((row) => (
-              <article key={`mobile-${row.id}`} className="rounded-lg border border-line bg-surface-muted/40 px-3 py-2.5">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/70">{formatHistoryDateCompact(row.submittedAt)}</p>
-                    <p className="text-[10px] uppercase tracking-[0.08em] text-foreground/50">
-                      {formatRelativeFromNow(row.submittedAt, { style: "short", allowFuture: false, noValueLabel: "-", invalidLabel: "-" })}
-                    </p>
-                  </div>
-                  {showUserColumn ? <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">{row.nickname}</p> : null}
-                </div>
-                <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                  <span className={`text-xs font-black uppercase ${resultColor[row.result] ?? ""}`}>{row.result}</span>
-                  <span className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
-                    {row.subjectType}
-                  </span>
-                </div>
-                <div className="mt-2">
-                  <p className="text-xl font-black leading-tight text-foreground">{row.subjectLabel}</p>
-                  <p className="mt-0.5 text-sm font-semibold text-foreground/80">{row.subjectReading ? row.subjectReading : "-"}</p>
-                  <p className="mt-0.5 text-[11px] text-foreground/65">
-                    {row.subjectMeaning ? row.subjectMeaning : "-"} · #{row.subjectId}
-                  </p>
-                  {row.subjectType === "kanji" ? (
-                    <p className="mt-1">
-                      <Link
-                        href={`/users/${encodeURIComponent(row.wkUsername)}?tab=study&subject=${row.subjectId}`}
-                        className="text-[11px] font-bold uppercase tracking-[0.08em] text-accent hover:underline"
-                      >
-                        View details
-                      </Link>
-                    </p>
-                  ) : null}
-                </div>
-              </article>
-            ))}
+          <div className="sm:hidden overflow-hidden rounded-lg border border-line">
+            <table className="w-full table-fixed text-left text-xs">
+              <thead className="bg-surface-muted text-[10px] uppercase tracking-[0.08em] text-foreground/65">
+                <tr>
+                  <th className="w-[34%] px-2 py-1.5 font-bold">Time</th>
+                  <th className="w-[18%] px-2 py-1.5 font-bold">Result</th>
+                  <th className="w-[48%] px-2 py-1.5 font-bold">Subject</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line/50">
+                {data.attempts.map((row) => (
+                  <tr key={`mobile-${row.id}`} className="bg-surface hover:bg-surface-muted/40 align-top">
+                    <td className="px-2 py-1.5">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-foreground/75 leading-tight">{formatHistoryDateCompact(row.submittedAt)}</p>
+                      <p className="text-[10px] uppercase tracking-[0.06em] text-foreground/50 leading-tight">
+                        {formatRelativeFromNow(row.submittedAt, { style: "short", allowFuture: false, noValueLabel: "-", invalidLabel: "-" })}
+                      </p>
+                      {showUserColumn ? (
+                        <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/60 leading-tight">{row.nickname}</p>
+                      ) : null}
+                    </td>
+                    <td className="px-2 py-1.5">
+                      <p className={`text-[11px] font-black uppercase leading-tight ${resultColor[row.result] ?? ""}`}>{row.result}</p>
+                      <span className={`mt-0.5 inline-block rounded px-1 py-0.5 text-[10px] font-bold uppercase ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
+                        {row.subjectType}
+                      </span>
+                    </td>
+                    <td className="px-2 py-1.5">
+                      <p className="text-lg font-black leading-tight text-foreground">{row.subjectLabel}</p>
+                      <p className="text-[13px] font-semibold leading-tight text-foreground/80">{row.subjectReading ? row.subjectReading : "-"}</p>
+                      <p className="text-[10px] leading-tight text-foreground/60">#{row.subjectId}{row.subjectMeaning ? ` · ${row.subjectMeaning}` : ""}</p>
+                      {row.subjectType === "kanji" ? (
+                        <p className="mt-0.5">
+                          <Link
+                            href={`/users/${encodeURIComponent(row.wkUsername)}?tab=study&subject=${row.subjectId}&viewer=detail`}
+                            className="text-[10px] font-bold uppercase tracking-[0.06em] text-accent hover:underline"
+                          >
+                            View details
+                          </Link>
+                        </p>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
           <div className="hidden max-h-[42rem] overflow-auto rounded-lg border border-line sm:block">
@@ -305,7 +314,7 @@ export default function StudyHistoryTable({
                     {row.subjectType === "kanji" ? (
                       <p className="mt-1">
                         <Link
-                          href={`/users/${encodeURIComponent(row.wkUsername)}?tab=study&subject=${row.subjectId}`}
+                          href={`/users/${encodeURIComponent(row.wkUsername)}?tab=study&subject=${row.subjectId}&viewer=detail`}
                           className="text-xs font-bold uppercase tracking-[0.08em] text-accent hover:underline"
                         >
                           View details

@@ -46,6 +46,7 @@ function sameAssignmentList(a: StudyQueueItem[], b: StudyQueueItem[]): boolean {
 export default function StudyExplorer({
   accountId,
   maxLevel,
+  initialViewerMode = null,
   showEnglish,
   onToggleShowEnglish,
   canToggleEnglish,
@@ -89,6 +90,9 @@ export default function StudyExplorer({
   const [showLocked, setShowLocked] = useState(true);
   const [recentOnly, setRecentOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [forcedViewerMode, setForcedViewerMode] = useState<"detail" | "flash" | null>(
+    initialViewerMode,
+  );
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
   const isModalOpen = selectedId !== null;
   const effectiveSrsFilter: StudySrsFilter = queueMode === "lesson" ? "all" : srsFilter;
@@ -190,6 +194,24 @@ export default function StudyExplorer({
     window.addEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
     return () => {
       window.removeEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const syncFromUrl = () => {
+      const viewer = new URLSearchParams(window.location.search).get("viewer");
+      setForcedViewerMode(viewer === "detail" || viewer === "flash" ? viewer : null);
+    };
+
+    syncFromUrl();
+    const onPopState = () => syncFromUrl();
+    window.addEventListener("popstate", onPopState);
+    return () => {
+      window.removeEventListener("popstate", onPopState);
     };
   }, []);
 
@@ -432,6 +454,7 @@ export default function StudyExplorer({
         accountId={accountId}
         showEnglish={showEnglish}
         canToggleEnglish={canToggleEnglish}
+        forcedViewerMode={forcedViewerMode}
         isUnauthorized={isUnauthorized}
         studyMode={studyMode}
         selectedItem={selectedItem}
