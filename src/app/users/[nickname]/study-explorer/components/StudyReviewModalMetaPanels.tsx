@@ -251,7 +251,8 @@ export default function StudyReviewModalMetaPanels({
             title="Wrong (Key: 1)"
             className="min-h-[4.25rem] w-full rounded-2xl border-2 border-red-300 bg-red-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-red-800"
           >
-            Wrong
+            <span className="block">Wrong</span>
+            <span className="mt-1 block text-xl leading-none">{wrong}</span>
           </button>
           <button
             type="button"
@@ -260,7 +261,8 @@ export default function StudyReviewModalMetaPanels({
             title="Correct (Key: 2)"
             className="min-h-[4.25rem] w-full rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-emerald-800"
           >
-            Correct
+            <span className="block">Correct</span>
+            <span className="mt-1 block text-xl leading-none">{correct}</span>
           </button>
         </div>
       ) : null}
@@ -289,10 +291,21 @@ export default function StudyReviewModalMetaPanels({
       ) : null}
 
       {studyMode && selectedItem.queueType === "review" ? (
-        <div className="mt-2 grid w-full grid-cols-3 gap-2">
-          <div key={`w${wrong}`} className={`rounded-xl border border-red-200 bg-red-50/60 p-2 text-center${wrong > 0 ? " animate-score-flash" : ""}`}><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-red-700/80">Wrong</p><p className="mt-1 text-2xl font-black leading-none text-red-800">{wrong}</p></div>
-          <div key={`s${skipped}`} className={`rounded-xl border border-amber-200 bg-amber-50/60 p-2 text-center${skipped > 0 ? " animate-score-flash" : ""}`}><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-700/80">Skipped</p><p className="mt-1 text-2xl font-black leading-none text-amber-800">{skipped}</p></div>
-          <div key={`c${correct}`} className={`rounded-xl border border-emerald-200 bg-emerald-50/60 p-2 text-center${correct > 0 ? " animate-score-flash" : ""}`}><p className="text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-700/80">Correct</p><p className="mt-1 text-2xl font-black leading-none text-emerald-800">{correct}</p></div>
+        <div className="mt-2 grid w-full gap-2">
+          <div className="grid grid-cols-2 gap-2">
+            <div key={`w${wrong}`} className={`rounded-xl border border-red-200 bg-red-50/60 p-2 text-center${wrong > 0 ? " animate-score-flash" : ""}`}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-red-700/80">Wrong</p>
+              <p className="mt-1 text-2xl font-black leading-none text-red-800">{wrong}</p>
+            </div>
+            <div key={`c${correct}`} className={`rounded-xl border border-emerald-200 bg-emerald-50/60 p-2 text-center${correct > 0 ? " animate-score-flash" : ""}`}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-700/80">Correct</p>
+              <p className="mt-1 text-2xl font-black leading-none text-emerald-800">{correct}</p>
+            </div>
+          </div>
+          <div key={`s${skipped}`} className={`rounded-xl border border-amber-200 bg-amber-50/60 p-2 text-center${skipped > 0 ? " animate-score-flash" : ""}`}>
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-700/80">Skipped</p>
+            <p className="mt-1 text-2xl font-black leading-none text-amber-800">{skipped}</p>
+          </div>
         </div>
       ) : null}
 

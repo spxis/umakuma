@@ -244,11 +244,11 @@ export default function StudyReviewModalSection({
           )
         ) : useStudyFlashLayout ? (
           <>
-            <div className="grid min-h-[48vh] gap-2 lg:min-h-[68vh] lg:grid-cols-2 lg:items-stretch">
-              <div className="flex min-h-[12rem] flex-col max-[380px]:min-h-[10.5rem] lg:h-full lg:min-h-0">
+            <div className="grid min-h-[calc(100dvh-20rem)] gap-2 lg:min-h-[68vh] lg:grid-cols-2 lg:items-stretch">
+              <div className="flex min-h-[10rem] flex-col max-[380px]:min-h-[9rem] lg:h-full lg:min-h-0">
                 {!detailsRevealed ? (
                   <div
-                    className={`relative flex min-h-[12rem] flex-1 select-none items-center justify-center rounded-2xl border p-3 max-[380px]:min-h-[10.5rem] max-[380px]:p-2 sm:p-6 lg:h-full ${typeGlyphBoxClass(
+                    className={`relative flex min-h-[10rem] flex-1 select-none items-center justify-center rounded-2xl border p-3 max-[380px]:min-h-[9rem] max-[380px]:p-2 sm:p-6 lg:h-full ${typeGlyphBoxClass(
                       selectedItem.subjectType,
                     )}`}
                   >
@@ -263,13 +263,13 @@ export default function StudyReviewModalSection({
                         </span>
                       ) : null}
                     </div>
-                    <p className="text-center text-[clamp(3.1rem,10vw,6.5rem)] font-black leading-none text-current sm:text-[clamp(3.8rem,12vw,10rem)] lg:text-[clamp(3.8rem,6vw,7rem)] max-[380px]:text-[clamp(2.8rem,10.5vw,6rem)]">
+                    <p className="text-center text-[clamp(2.8rem,9.4vw,6rem)] font-black leading-none text-current sm:text-[clamp(3.8rem,12vw,10rem)] lg:text-[clamp(3.8rem,6vw,7rem)] max-[380px]:text-[clamp(2.5rem,9.8vw,5.6rem)]">
                       {selectedItem.characters}
                     </p>
                   </div>
                 ) : (
                   <>
-                    <div className={`relative flex min-h-[12rem] items-center justify-center rounded-2xl border p-4 max-[380px]:min-h-[10.5rem] max-[380px]:p-2 sm:p-6 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
+                    <div className={`relative flex min-h-[10rem] items-center justify-center rounded-2xl border p-4 max-[380px]:min-h-[9rem] max-[380px]:p-2 sm:p-6 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
                       <div className="absolute left-1/2 top-3 z-10 flex max-w-[calc(100%-1.5rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-hidden px-1 max-[380px]:top-2 sm:top-4">
                         <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
                         {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
@@ -285,17 +285,17 @@ export default function StudyReviewModalSection({
                     </div>
 
                     <div className="mt-2 grid flex-1 gap-2 lg:mt-3 lg:gap-3 lg:grid-rows-2">
-                      <div className="rounded-xl border border-line bg-surface-muted px-3 py-3 max-[380px]:px-2.5 max-[380px]:py-2.5 sm:px-4 sm:py-4">
+                      <div className="max-h-[8.7rem] overflow-hidden rounded-xl border border-line bg-surface-muted px-3 py-3 max-[380px]:max-h-[7.8rem] max-[380px]:px-2.5 max-[380px]:py-2.5 sm:max-h-none sm:px-4 sm:py-4">
                         <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">Reading</p>
-                        <p className="mt-1 text-3xl font-black leading-tight text-foreground max-[380px]:text-[2.25rem] sm:mt-2 sm:text-5xl">
+                        <p className="mt-1 line-clamp-2 text-3xl font-black leading-tight text-foreground max-[380px]:text-[2.25rem] sm:mt-2 sm:text-5xl">
                           {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
                         </p>
-                        {primaryReadingKatakana !== "-" ? <p className="mt-1 text-sm font-semibold leading-tight text-foreground/70">{primaryReadingKatakana}</p> : null}
+                        {primaryReadingKatakana !== "-" ? <p className="mt-1 line-clamp-1 text-sm font-semibold leading-tight text-foreground/70">{primaryReadingKatakana}</p> : null}
                       </div>
-                      <div className="rounded-xl border border-line bg-surface-muted px-3 py-3 max-[380px]:px-2.5 max-[380px]:py-2.5 sm:px-4 sm:py-4">
+                      <div className="max-h-[8.7rem] overflow-hidden rounded-xl border border-line bg-surface-muted px-3 py-3 max-[380px]:max-h-[7.8rem] max-[380px]:px-2.5 max-[380px]:py-2.5 sm:max-h-none sm:px-4 sm:py-4">
                         <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">Meaning</p>
-                        <p className="mt-1 text-[2rem] font-black leading-tight text-foreground max-[380px]:text-[1.65rem] sm:mt-2 sm:text-4xl">{allMeanings[0] ?? selectedItem.characters}</p>
-                        {allMeanings.length > 1 ? <p className="mt-1.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground/70">{allMeanings.slice(1).join(" • ")}</p> : null}
+                        <p className="mt-1 line-clamp-2 text-[2rem] font-black leading-tight text-foreground max-[380px]:text-[1.65rem] sm:mt-2 sm:text-4xl">{allMeanings[0] ?? selectedItem.characters}</p>
+                        {allMeanings.length > 1 ? <p className="mt-1.5 line-clamp-2 text-sm font-semibold uppercase tracking-[0.08em] text-foreground/70">{allMeanings.slice(1).join(" • ")}</p> : null}
                       </div>
                     </div>
                   </>
@@ -320,8 +320,14 @@ export default function StudyReviewModalSection({
                   </div>
                 ) : (
                   <div className="grid h-full grid-cols-2 gap-2 lg:row-span-2 lg:grid-cols-1 lg:grid-rows-2 lg:gap-3">
-                    <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "wrong")} aria-keyshortcuts="1" title="Wrong (Key: 1)" className="h-full w-full rounded-2xl border-2 border-red-300 bg-red-50 px-3 py-2.5 text-sm font-black uppercase tracking-[0.1em] text-red-800 sm:px-4 sm:py-4">Wrong</button>
-                    <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "correct")} aria-keyshortcuts="2" title="Correct (Key: 2)" className="h-full w-full rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-3 py-2.5 text-sm font-black uppercase tracking-[0.1em] text-emerald-800 sm:px-4 sm:py-4">Correct</button>
+                    <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "wrong")} aria-keyshortcuts="1" title="Wrong (Key: 1)" className="h-full w-full rounded-2xl border-2 border-red-300 bg-red-50 px-3 py-2.5 text-sm font-black uppercase tracking-[0.1em] text-red-800 sm:px-4 sm:py-4">
+                      <span className="block">Wrong</span>
+                      <span className="mt-1 block text-xl leading-none">{wrong}</span>
+                    </button>
+                    <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "correct")} aria-keyshortcuts="2" title="Correct (Key: 2)" className="h-full w-full rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-3 py-2.5 text-sm font-black uppercase tracking-[0.1em] text-emerald-800 sm:px-4 sm:py-4">
+                      <span className="block">Correct</span>
+                      <span className="mt-1 block text-xl leading-none">{correct}</span>
+                    </button>
                   </div>
                 )}
               </div>
