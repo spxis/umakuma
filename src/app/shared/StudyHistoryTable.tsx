@@ -227,26 +227,27 @@ export default function StudyHistoryTable({
               </thead>
               <tbody className="divide-y divide-line/50">
                 {data.attempts.map((row) => (
-                  <tr key={`mobile-${row.id}`} className="bg-surface hover:bg-surface-muted/40 align-top">
+                  <tr key={`mobile-${row.id}`} className="relative bg-surface hover:bg-surface-muted/40 align-top">
                     <td className="px-2 py-1.5">
-                      <div className="flex items-start justify-between gap-1">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-foreground/75 leading-tight">{formatHistoryDateCompact(row.submittedAt)}</p>
-                        {(() => {
-                          const meta = resultIcon(row.result);
-                          return (
-                            <>
-                              <span className={`text-base font-black leading-none ${meta.className}`} title={meta.label} aria-hidden>
-                                {meta.icon}
-                              </span>
-                              <span className="sr-only">{meta.label}</span>
-                            </>
-                          );
-                        })()}
-                      </div>
-                      <p className="text-[10px] uppercase tracking-[0.06em] text-foreground/50 leading-tight">
-                        {formatRelativeFromNow(row.submittedAt, { style: "short", allowFuture: false, noValueLabel: "-", invalidLabel: "-" })}
+                      {(() => {
+                        const meta = resultIcon(row.result);
+                        return (
+                          <>
+                            <span
+                              className={`absolute right-2 top-1/2 -translate-y-1/2 text-lg font-black leading-none ${meta.className}`}
+                              title={meta.label}
+                              aria-hidden
+                            >
+                              {meta.icon}
+                            </span>
+                            <span className="sr-only">{meta.label}</span>
+                          </>
+                        );
+                      })()}
+                      <p className="truncate pr-5 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/70 leading-tight">
+                        {formatHistoryDateCompact(row.submittedAt)} · {formatRelativeFromNow(row.submittedAt, { style: "short", allowFuture: false, noValueLabel: "-", invalidLabel: "-" })}
                       </p>
-                      <div className="mt-0.5 flex flex-wrap items-center gap-1">
+                      <div className="mt-0.5 flex flex-nowrap items-center gap-1 overflow-hidden whitespace-nowrap pr-5">
                         <span className={`inline-block rounded px-1 py-0.5 text-[10px] font-bold uppercase ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
                           {row.subjectType}
                         </span>
@@ -265,23 +266,23 @@ export default function StudyHistoryTable({
                         </span>
                       </div>
                       {showUserColumn ? (
-                        <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/60 leading-tight">{row.nickname}</p>
+                        <p className="mt-0.5 truncate pr-5 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/60 leading-tight">{row.nickname}</p>
                       ) : null}
                     </td>
-                    <td className="px-2 py-1.5">
-                      <div className="flex items-baseline gap-1.5 leading-tight">
+                    <td className="px-2 py-1.5 pr-6">
+                      <div className="flex items-baseline gap-1 leading-tight">
                         <button
                           type="button"
                           onClick={() => {
                             setSelectedAttemptId(row.id);
                           }}
-                          className="text-2xl font-black text-accent hover:underline"
+                          className="text-xl font-black text-accent hover:underline"
                         >
                           {row.subjectLabel}
                         </button>
-                        <p className="min-w-0 truncate text-base font-semibold text-foreground/90">{row.subjectReading ? row.subjectReading : "-"}</p>
+                        <p className="min-w-0 truncate text-[13px] font-semibold text-foreground/90">{row.subjectReading ? row.subjectReading : "-"}</p>
                       </div>
-                      <p className="mt-0.5 line-clamp-2 text-[14px] leading-tight text-foreground/75">
+                      <p className="mt-0.5 line-clamp-2 text-[13px] leading-tight text-foreground/75">
                         {row.subjectMeaning ? row.subjectMeaning : "-"}
                       </p>
                     </td>
