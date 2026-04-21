@@ -1,5 +1,6 @@
 import type { ReviewOutcome, StudyQueueItem, SubmitInFlight } from "../lib/studyExplorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
+import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
 import type { LevelItem } from "../../explorerTypes";
@@ -50,6 +51,8 @@ type Props = {
   wrong: number;
   skipped: number;
   correct: number;
+  glyphViewerItems?: StudyQueueItem[];
+  glyphViewerIndex?: number;
   onReveal: (assignmentId: number) => void;
   onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
   onSkipCurrent: () => void;
@@ -98,6 +101,8 @@ export default function StudyReviewModalSection({
   wrong,
   skipped,
   correct,
+  glyphViewerItems,
+  glyphViewerIndex,
   onReveal,
   onSubmit,
   onSkipCurrent,
@@ -112,6 +117,8 @@ export default function StudyReviewModalSection({
   onToggleShowEnglish,
 }: Props) {
   const showStatusChip = !(selectedItem.queueType === "lesson" && selectedItem.status === "locked");
+  const resolvedViewerItems = glyphViewerItems && glyphViewerItems.length > 0 ? glyphViewerItems : [selectedItem];
+  const resolvedViewerIndex = typeof glyphViewerIndex === "number" ? glyphViewerIndex : 0;
   const shouldUseUnifiedLessonDetail =
     selectedItem.queueType === "lesson" &&
     viewerMode === "detail" &&
@@ -252,16 +259,22 @@ export default function StudyReviewModalSection({
                 role="button"
                 tabIndex={0}
                 onClick={() => {
-                  toggleGlyphFont();
+                  openViewGlyphViewer({
+                    items: resolvedViewerItems,
+                    startIndex: Math.max(0, Math.min(resolvedViewerIndex, resolvedViewerItems.length - 1)),
+                  });
                 }}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    toggleGlyphFont();
+                    openViewGlyphViewer({
+                      items: resolvedViewerItems,
+                      startIndex: Math.max(0, Math.min(resolvedViewerIndex, resolvedViewerItems.length - 1)),
+                    });
                   }
                 }}
                 className={`relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-3 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-5 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
-                title={`Toggle Japanese font (${glyphFontMode === "jpSans" ? "Sans" : "Serif"})`}
+                title="View Glyph"
               >
                 <div className="absolute left-1/2 top-3 z-10 flex max-w-[calc(100%-1.25rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-hidden px-1 sm:top-4">
                   <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
@@ -273,6 +286,17 @@ export default function StudyReviewModalSection({
                       {statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}
                     </span>
                   ) : null}
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      toggleGlyphFont();
+                    }}
+                    className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/75 hover:bg-surface-muted"
+                  >
+                    Font
+                  </button>
                 </div>
 
                 <p style={{ fontFamily: glyphFontFamily }} className="px-2 text-center text-[clamp(2.8rem,10.4vw,5.4rem)] font-black leading-none text-current sm:text-[clamp(3.6rem,8vw,7rem)]">

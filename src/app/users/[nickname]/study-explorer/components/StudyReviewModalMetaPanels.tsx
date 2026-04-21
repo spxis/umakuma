@@ -3,6 +3,7 @@ import type { StudyQueueItem, SubmitInFlight } from "../lib/studyExplorerTypes";
 import type { RelatedReference } from "./StudyReviewModal.types";
 import LevelExplorerReviewStatsCard from "../../level-explorer/components/LevelExplorerReviewStatsCard";
 import { parseWordExamples } from "../../jlpt-explorer/lib/jlptExplorerContentHelpers";
+import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 import {
   formatTimestampWithRelative,
   metricCard,
@@ -12,6 +13,7 @@ import {
   readingsWithPronunciationList,
   relatedTileLabelClass,
   relatedTiles,
+  relatedTilesClickable,
 } from "./StudyReviewModalHelpers";
 
 type Props = {
@@ -89,6 +91,44 @@ export default function StudyReviewModalMetaPanels({
   onToggleUsedKanjiCollapsed,
   onToggleUsedInWordsCollapsed,
 }: Props) {
+  function openSingleGlyph(params: {
+    subjectId: number;
+    label: string;
+    reading?: string | null;
+    meaning?: string | null;
+    subjectType?: "kanji" | "radical" | "vocabulary";
+  }) {
+    openViewGlyphViewer({
+      items: [
+        {
+          assignmentId: -1,
+          queueType: "review",
+          subjectId: params.subjectId,
+          subjectType: params.subjectType ?? "kanji",
+          wkLevel: selectedItem.wkLevel,
+          characters: params.label,
+          meanings: [params.meaning ?? "-"],
+          readings: params.reading ? [params.reading] : [],
+          primaryReadings: params.reading ? [params.reading] : [],
+          radicals: [],
+          visuallySimilar: [],
+          usedInVocabulary: [],
+          componentKanji: [],
+          meaningExplanation: undefined,
+          readingExplanation: undefined,
+          jlptLevel: selectedItem.jlptLevel ?? null,
+          jlptMeta: null,
+          srsStage: selectedItem.srsStage,
+          status: selectedItem.status,
+          startedAt: selectedItem.startedAt ?? null,
+          passedAt: selectedItem.passedAt ?? null,
+          availableAt: selectedItem.availableAt ?? null,
+        },
+      ],
+      startIndex: 0,
+    });
+  }
+
   const wordExamples = parseWordExamples(selectedItem.jlptMeta?.wordExamples);
   const submitActionLabel =
     submitInFlight?.result === "correct"
@@ -125,13 +165,17 @@ export default function StudyReviewModalMetaPanels({
                   {hasRadicals ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
                       <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Radicals</p>
-                      {relatedTiles(selectedItem.radicals as RelatedReference[] | undefined)}
+                      {relatedTilesClickable(selectedItem.radicals as RelatedReference[] | undefined, (entry) => {
+                        openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: "radical" });
+                      })}
                     </div>
                   ) : null}
                   {hasVisuallySimilar ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
                       <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Visually similar</p>
-                      {relatedTiles(selectedItem.visuallySimilar as RelatedReference[] | undefined)}
+                      {relatedTilesClickable(selectedItem.visuallySimilar as RelatedReference[] | undefined, (entry) => {
+                        openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: "kanji" });
+                      })}
                     </div>
                   ) : null}
                 </div>
@@ -142,7 +186,14 @@ export default function StudyReviewModalMetaPanels({
                   <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
                     {selectedItem.subjectType === "radical" ? "Used in kanji" : "Used in vocabulary"}
                   </p>
-                  {relatedTiles(selectedItem.usedInVocabulary as RelatedReference[] | undefined)}
+                  {relatedTilesClickable(selectedItem.usedInVocabulary as RelatedReference[] | undefined, (entry) => {
+                    openSingleGlyph({
+                      subjectId: entry.subjectId,
+                      label: entry.label,
+                      reading: entry.reading,
+                      subjectType: selectedItem.subjectType === "radical" ? "kanji" : "vocabulary",
+                    });
+                  })}
                 </div>
               ) : null}
             </div>
@@ -152,7 +203,9 @@ export default function StudyReviewModalMetaPanels({
             <div className="mt-2">
               <div className="rounded-xl border border-line bg-surface px-3 py-2">
                 <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Component kanji</p>
-                {relatedTiles(selectedItem.componentKanji as RelatedReference[] | undefined)}
+                {relatedTilesClickable(selectedItem.componentKanji as RelatedReference[] | undefined, (entry) => {
+                  openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: "kanji" });
+                })}
               </div>
             </div>
           ) : null}
@@ -178,9 +231,21 @@ export default function StudyReviewModalMetaPanels({
                         className="rounded-lg border border-line bg-surface-muted px-3 py-2"
                       >
                         <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
-                          <p className={`font-black leading-none text-foreground ${relatedTileLabelClass(item.label)}`}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              openSingleGlyph({
+                                subjectId: item.subjectId,
+                                label: item.label,
+                                reading: item.reading ?? null,
+                                meaning: item.meaning ?? null,
+                                subjectType: "kanji",
+                              });
+                            }}
+                            className={`cursor-pointer text-left font-black leading-none text-foreground hover:opacity-85 ${relatedTileLabelClass(item.label)}`}
+                          >
                             {item.label}
-                          </p>
+                          </button>
                           <p className="text-2xl font-bold leading-none text-foreground/80">{item.reading || "-"}</p>
                         </div>
                         <p className="mt-1 text-sm text-foreground/85">{item.meaning || "-"}</p>
@@ -220,9 +285,21 @@ export default function StudyReviewModalMetaPanels({
                       className="rounded-lg border border-line bg-surface-muted px-3 py-2"
                     >
                       <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
-                        <p className={`font-black leading-none text-foreground ${relatedTileLabelClass(example.written || "-")}`}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            openSingleGlyph({
+                              subjectId: -(index + 1),
+                              label: example.written || "-",
+                              reading: example.pronounced || null,
+                              meaning: example.gloss || null,
+                              subjectType: "vocabulary",
+                            });
+                          }}
+                          className={`cursor-pointer text-left font-black leading-none text-foreground hover:opacity-85 ${relatedTileLabelClass(example.written || "-")}`}
+                        >
                           {example.written || "-"}
-                        </p>
+                        </button>
                         <p className="text-2xl font-bold leading-none text-foreground/80">{example.pronounced || "-"}</p>
                       </div>
                       <p className="mt-1 text-sm text-foreground/85">{example.gloss || "-"}</p>

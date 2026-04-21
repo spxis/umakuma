@@ -137,6 +137,7 @@ export default function HistoryItemDetailModal({
       onSubmit={() => {}}
       onStartLesson={() => {}}
       onResetToLessons={() => {}}
+      glyphViewerItems={queueItems}
     />
   );
 }

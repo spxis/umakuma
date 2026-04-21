@@ -1,3 +1,5 @@
+"use client";
+
 import type { LevelItem } from "../../explorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import {

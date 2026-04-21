@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Noto_Sans_JP, Noto_Serif_JP, Space_Grotesk } from "next/font/google";
 import AppFooter from "./AppFooter";
+import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
 
 const bodySans = Space_Grotesk({
@@ -64,6 +65,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <main className="flex-1">{children}</main>
         <AppFooter />
+        <ViewGlyphModalHost />
       </body>
     </html>
   );

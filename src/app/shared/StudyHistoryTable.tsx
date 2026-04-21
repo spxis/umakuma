@@ -276,28 +276,28 @@ export default function StudyHistoryTable({
                   </div>
 
                   <div className="min-w-0 pr-5">
-                    <div className="flex items-center gap-1.5 leading-tight">
+                    <div className="flex items-center gap-2 leading-tight">
                       <button
                         type="button"
                         onClick={() => {
                           setSelectedAttemptId(row.id);
                         }}
-                        className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${
+                        className={`inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border px-2 ${
                           typeGlyphBoxColor[row.subjectType] ?? "border-gray-300 bg-gray-100 text-gray-600"
                         }`}
                       >
                         <span
                           style={{ fontFamily }}
-                          className={`max-w-full truncate px-1 text-center font-black leading-none ${row.subjectLabel.length > 2 ? "text-lg" : "text-2xl"}`}
+                          className={`text-center font-black leading-none ${row.subjectLabel.length > 2 ? "text-lg" : "text-2xl"}`}
                         >
                           {row.subjectLabel}
                         </span>
                       </button>
-                      <p className="min-w-0 truncate text-[13px] font-semibold text-foreground/90">{row.subjectReading ? row.subjectReading : "-"}</p>
+                      <div className="flex min-w-0 flex-col justify-center leading-tight">
+                        <p className="truncate text-[13px] font-semibold text-foreground/90">{row.subjectReading ? row.subjectReading : "-"}</p>
+                        <p className="truncate text-[12px] text-foreground/75">{row.subjectMeaning ? row.subjectMeaning : "-"}</p>
+                      </div>
                     </div>
-                    <p className="mt-0.5 line-clamp-2 text-[13px] leading-tight text-foreground/75">
-                      {row.subjectMeaning ? row.subjectMeaning : "-"}
-                    </p>
                   </div>
                 </div>
               ))}
@@ -354,30 +354,28 @@ export default function StudyHistoryTable({
                   {showUserColumn ? <td className="px-3 py-2 align-top">{row.nickname}</td> : null}
                   <td className="px-3 py-2 align-top">
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2 leading-tight">
+                      <div className="flex items-center gap-3 leading-tight">
                         <button
                           type="button"
                           onClick={() => {
                             setSelectedAttemptId(row.id);
                           }}
-                          className={`inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border ${
+                          className={`inline-flex min-h-14 min-w-14 shrink-0 items-center justify-center rounded-xl border px-3 ${
                             typeGlyphBoxColor[row.subjectType] ?? "border-gray-300 bg-gray-100 text-gray-600"
                           }`}
                         >
                           <span
                             style={{ fontFamily }}
-                            className={`max-w-full truncate px-1 text-center font-black leading-none ${row.subjectLabel.length > 2 ? "text-2xl" : "text-4xl"}`}
+                            className={`text-center font-black leading-none ${row.subjectLabel.length > 2 ? "text-2xl" : "text-4xl"}`}
                           >
                             {row.subjectLabel}
                           </span>
                         </button>
-                        <p className="min-w-0 truncate text-lg font-semibold text-foreground/90 sm:text-xl">
-                          {row.subjectReading ? row.subjectReading : "-"}
-                        </p>
+                        <div className="flex min-w-0 flex-col justify-center">
+                          <p className="truncate text-lg font-semibold text-foreground/90 sm:text-xl">{row.subjectReading ? row.subjectReading : "-"}</p>
+                          <p className="truncate text-base text-foreground/75 sm:text-lg">{row.subjectMeaning ? row.subjectMeaning : "-"}</p>
+                        </div>
                       </div>
-                      <p className="mt-0.5 text-base leading-tight text-foreground/75 sm:text-lg">
-                        {row.subjectMeaning ? row.subjectMeaning : "-"}
-                      </p>
                     </div>
                   </td>
                   <td className="px-3 py-2 align-middle text-center">

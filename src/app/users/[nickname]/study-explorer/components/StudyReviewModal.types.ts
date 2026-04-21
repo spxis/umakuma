@@ -40,4 +40,5 @@ export type StudyReviewModalProps = {
   onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
   onStartLesson: (assignmentId: number) => void;
   onResetToLessons: (assignmentId: number) => void;
+  glyphViewerItems?: StudyQueueItem[];
 };

@@ -35,6 +35,7 @@ export default function StudyReviewModal({
   onSubmit,
   onStartLesson,
   onResetToLessons,
+  glyphViewerItems,
 }: Props) {
   const usedInWordsStorageKey = "wr:study-modal:used-in-words-collapsed";
   const usedKanjiStorageKey = "wr:study-modal:used-kanji-collapsed";
@@ -372,6 +373,8 @@ export default function StudyReviewModal({
             wrong={wrong}
             skipped={skipped}
             correct={correct}
+            glyphViewerItems={glyphViewerItems}
+            glyphViewerIndex={selectedIndex}
             onReveal={onReveal}
             onSubmit={onSubmit}
             onSkipCurrent={skipCurrentAndAdvance}

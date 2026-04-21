@@ -75,6 +75,62 @@ export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element
   );
 }
 
+export function relatedTilesClickable(
+  items: RelatedReference[] | undefined,
+  onSelect: (item: { subjectId: number; label: string; reading?: string | null }) => void,
+): JSX.Element {
+  if (!items || items.length === 0) {
+    return <p className="mt-1 text-sm font-semibold text-foreground/70">-</p>;
+  }
+
+  const expanded = items.flatMap((item) => {
+    const parts = item.label
+      .split(/[、,]/)
+      .map((part) => part.trim())
+      .filter((part) => Boolean(part) && part !== "-");
+
+    if (parts.length <= 1) {
+      const normalizedLabel = item.label.trim();
+      if (!normalizedLabel || normalizedLabel === "-") {
+        return [];
+      }
+
+      return [{ subjectId: item.subjectId, label: normalizedLabel, reading: item.reading?.trim() || null, key: `${item.subjectId}-${normalizedLabel}` }];
+    }
+
+    return parts.map((part, index) => ({
+      subjectId: item.subjectId,
+      label: part,
+      reading: null,
+      key: `${item.subjectId}-${part}-${index}`,
+    }));
+  });
+
+  if (expanded.length === 0) {
+    return <p className="mt-1 text-sm font-semibold text-foreground/70">-</p>;
+  }
+
+  return (
+    <div className="mt-2 flex flex-wrap gap-2">
+      {expanded.map((entry) => (
+        <button
+          type="button"
+          key={entry.key}
+          onClick={() => onSelect(entry)}
+          className="inline-flex min-w-[4.5rem] cursor-pointer flex-col items-center rounded-xl border border-line bg-surface px-3 py-2 text-center transition-colors hover:bg-surface-muted"
+        >
+          <span className={`font-black leading-none text-foreground ${relatedTileLabelClass(entry.label)}`}>
+            {entry.label}
+          </span>
+          {entry.reading ? (
+            <span className="mt-1 text-xs font-semibold leading-none text-foreground/70">{entry.reading}</span>
+          ) : null}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function metricCard(label: string, value: string): JSX.Element {
   return (
     <div className="rounded-xl border border-line bg-surface px-3 py-2">
