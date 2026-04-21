@@ -22,12 +22,16 @@ type Attempt = {
   subjectLabel: string;
   subjectReading: string | null;
   subjectMeaning: string | null;
+  wkLevel: number | null;
+  srsStage: number | null;
 };
 
 type HistoryPayload = {
   attempts: Attempt[];
   totals: Record<string, number>;
   accountCount: number;
+  availableLevels: number[];
+  availableSrs: number[];
   pagination: {
     page: number;
     pageSize: number;
@@ -74,6 +78,18 @@ function formatHistoryDateCompact(value: string): string {
   return `${monthDay.toUpperCase()} (${time})`;
 }
 
+function resultIcon(result: string): { icon: string; className: string; label: string } {
+  if (result === "correct") {
+    return { icon: "✓", className: "text-emerald-600", label: "Correct" };
+  }
+
+  if (result === "wrong") {
+    return { icon: "✕", className: "text-red-600", label: "Wrong" };
+  }
+
+  return { icon: "•", className: "text-amber-600", label: "Skipped" };
+}
+
 export default function StudyHistoryTable({
   endpoint,
   showUserColumn = false,
@@ -97,6 +113,9 @@ export default function StudyHistoryTable({
   const [pageSize, setPageSize] = useState(25);
   const [sortBy, setSortBy] = useState<SortBy>("submittedAt");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [resultFilter, setResultFilter] = useState<"all" | "correct" | "wrong" | "skipped">("all");
+  const [levelFilter, setLevelFilter] = useState<number | "all">("all");
+  const [srsFilter, setSrsFilter] = useState<number | "all">("all");
 
   const query = useMemo(() => {
     const params = new URLSearchParams({
@@ -106,9 +125,19 @@ export default function StudyHistoryTable({
       sortDir,
     });
 
+    if (resultFilter !== "all") {
+      params.set("result", resultFilter);
+    }
+    if (levelFilter !== "all") {
+      params.set("level", String(levelFilter));
+    }
+    if (srsFilter !== "all") {
+      params.set("srs", String(srsFilter));
+    }
+
     const glue = endpoint.includes("?") ? "&" : "?";
     return `${endpoint}${glue}${params.toString()}`;
-  }, [endpoint, page, pageSize, sortBy, sortDir]);
+  }, [endpoint, levelFilter, page, pageSize, resultFilter, sortBy, sortDir, srsFilter]);
 
   const { data, error, isLoading } = useSWR<HistoryPayload>(
     expanded ? query : null,
@@ -125,6 +154,10 @@ export default function StudyHistoryTable({
 
   const totals = data?.totals ?? {};
   const totalAttempts = Object.values(totals).reduce((sum, value) => sum + value, 0);
+
+  useEffect(() => {
+    setPage(1);
+  }, [resultFilter, levelFilter, srsFilter]);
 
   useEffect(() => {
     if (!collapsible || typeof window === "undefined") {
@@ -148,12 +181,6 @@ export default function StudyHistoryTable({
 
     setSortDir((prev) => (prev === "desc" ? "asc" : "desc"));
   }
-
-  const resultColor: Record<string, string> = {
-    correct: "text-emerald-600",
-    wrong: "text-red-500",
-    skipped: "text-amber-500",
-  };
 
   const typeColor: Record<string, string> = {
     radical: "bg-sky-100 text-sky-700",
@@ -200,6 +227,53 @@ export default function StudyHistoryTable({
             <option key={size} value={size}>{size}</option>
           ))}
         </select>
+
+        <label className="ml-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:text-sm">Result</label>
+        <select
+          value={resultFilter}
+          onChange={(event) => {
+            const next = event.target.value;
+            setResultFilter(
+              next === "correct" || next === "wrong" || next === "skipped" ? next : "all",
+            );
+          }}
+          className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold"
+        >
+          <option value="all">All</option>
+          <option value="correct">Correct</option>
+          <option value="wrong">Wrong</option>
+          <option value="skipped">Skipped</option>
+        </select>
+
+        <label className="ml-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:text-sm">Level</label>
+        <select
+          value={String(levelFilter)}
+          onChange={(event) => {
+            const next = Number(event.target.value);
+            setLevelFilter(Number.isInteger(next) && next > 0 ? next : "all");
+          }}
+          className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold"
+        >
+          <option value="all">All</option>
+          {(data?.availableLevels ?? []).map((level) => (
+            <option key={`lvl-${level}`} value={level}>L{level}</option>
+          ))}
+        </select>
+
+        <label className="ml-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:text-sm">SRS</label>
+        <select
+          value={String(srsFilter)}
+          onChange={(event) => {
+            const next = Number(event.target.value);
+            setSrsFilter(Number.isInteger(next) && next > 0 ? next : "all");
+          }}
+          className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold"
+        >
+          <option value="all">All</option>
+          {(data?.availableSrs ?? []).map((srs) => (
+            <option key={`srs-${srs}`} value={srs}>SRS {srs}</option>
+          ))}
+        </select>
       </div>
 
       {isLoading ? <p className="mt-4 text-base text-foreground/70">Loading...</p> : null}
@@ -229,25 +303,44 @@ export default function StudyHistoryTable({
                       ) : null}
                     </td>
                     <td className="px-2 py-1.5">
-                      <p className={`text-[11px] font-black uppercase leading-tight ${resultColor[row.result] ?? ""}`}>{row.result}</p>
+                      {(() => {
+                        const meta = resultIcon(row.result);
+                        return (
+                          <div className="flex items-start gap-1.5">
+                            <span className={`text-base font-black leading-none ${meta.className}`} title={meta.label} aria-hidden>
+                              {meta.icon}
+                            </span>
+                            <span className="sr-only">{meta.label}</span>
+                          </div>
+                        );
+                      })()}
                       <span className={`mt-0.5 inline-block rounded px-1 py-0.5 text-[10px] font-bold uppercase ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
                         {row.subjectType}
                       </span>
+                      {typeof row.wkLevel === "number" ? (
+                        <span className="mt-0.5 inline-block rounded border border-line px-1 py-0.5 text-[10px] font-bold uppercase text-foreground/80">
+                          L{row.wkLevel}
+                        </span>
+                      ) : null}
+                      {typeof row.srsStage === "number" ? (
+                        <span className="mt-0.5 inline-block rounded border border-line px-1 py-0.5 text-[10px] font-bold uppercase text-foreground/80">
+                          SRS {row.srsStage}
+                        </span>
+                      ) : null}
                     </td>
                     <td className="px-2 py-1.5">
-                      <p className="text-lg font-black leading-tight text-foreground">{row.subjectLabel}</p>
-                      <p className="text-[13px] font-semibold leading-tight text-foreground/80">{row.subjectReading ? row.subjectReading : "-"}</p>
-                      <p className="text-[10px] leading-tight text-foreground/60">#{row.subjectId}{row.subjectMeaning ? ` · ${row.subjectMeaning}` : ""}</p>
                       {row.subjectType === "kanji" ? (
-                        <p className="mt-0.5">
-                          <Link
-                            href={`/users/${encodeURIComponent(row.wkUsername)}?tab=study&subject=${row.subjectId}&viewer=detail`}
-                            className="text-[10px] font-bold uppercase tracking-[0.06em] text-accent hover:underline"
-                          >
-                            View details
-                          </Link>
-                        </p>
-                      ) : null}
+                        <Link
+                          href={`/users/${encodeURIComponent(row.wkUsername)}?tab=study&subject=${row.subjectId}&viewer=detail`}
+                          className="text-lg font-black leading-tight text-accent hover:underline"
+                        >
+                          {row.subjectLabel}
+                        </Link>
+                      ) : (
+                        <p className="text-lg font-black leading-tight text-foreground">{row.subjectLabel}</p>
+                      )}
+                      <p className="text-sm font-semibold leading-tight text-foreground/85">{row.subjectReading ? row.subjectReading : "-"}</p>
+                      <p className="text-xs leading-tight text-foreground/70">{row.subjectMeaning ? row.subjectMeaning : "-"}</p>
                     </td>
                   </tr>
                 ))}
@@ -290,37 +383,68 @@ export default function StudyHistoryTable({
                   </td>
                   {showUserColumn ? <td className="px-3 py-2 align-top">{row.nickname}</td> : null}
                   <td className="px-3 py-2 align-top">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <span className={`font-bold uppercase ${resultColor[row.result] ?? ""}`}>{row.result}</span>
+                    <div className="flex flex-wrap items-start gap-1.5">
+                      {(() => {
+                        const meta = resultIcon(row.result);
+                        return (
+                          <>
+                            <span className={`text-base font-black leading-none ${meta.className}`} title={meta.label} aria-hidden>
+                              {meta.icon}
+                            </span>
+                            <span className="sr-only">{meta.label}</span>
+                          </>
+                        );
+                      })()}
                       <span className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase sm:hidden ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
                         {row.subjectType}
                       </span>
+                      {typeof row.wkLevel === "number" ? (
+                        <span className="inline-block rounded border border-line px-1.5 py-0.5 text-[10px] font-bold uppercase text-foreground/80">
+                          L{row.wkLevel}
+                        </span>
+                      ) : null}
+                      {typeof row.srsStage === "number" ? (
+                        <span className="inline-block rounded border border-line px-1.5 py-0.5 text-[10px] font-bold uppercase text-foreground/80">
+                          SRS {row.srsStage}
+                        </span>
+                      ) : null}
                     </div>
                   </td>
                   <td className="hidden px-3 py-2 align-top sm:table-cell">
-                    <span className={`inline-block rounded px-2 py-0.5 text-xs font-bold uppercase ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
-                      {row.subjectType}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className={`inline-block rounded px-2 py-0.5 text-xs font-bold uppercase ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
+                        {row.subjectType}
+                      </span>
+                      {typeof row.wkLevel === "number" ? (
+                        <span className="inline-block rounded border border-line px-2 py-0.5 text-[10px] font-bold uppercase text-foreground/80">
+                          L{row.wkLevel}
+                        </span>
+                      ) : null}
+                      {typeof row.srsStage === "number" ? (
+                        <span className="inline-block rounded border border-line px-2 py-0.5 text-[10px] font-bold uppercase text-foreground/80">
+                          SRS {row.srsStage}
+                        </span>
+                      ) : null}
+                    </div>
                   </td>
                   <td className="px-3 py-2 align-top">
-                    <p className="text-xl font-black leading-tight text-foreground sm:text-2xl">{row.subjectLabel}</p>
-                    <p className="text-sm font-semibold text-foreground/80 sm:text-base">
+                    {row.subjectType === "kanji" ? (
+                      <Link
+                        href={`/users/${encodeURIComponent(row.wkUsername)}?tab=study&subject=${row.subjectId}&viewer=detail`}
+                        className="text-xl font-black leading-tight text-accent hover:underline sm:text-2xl"
+                      >
+                        {row.subjectLabel}
+                      </Link>
+                    ) : (
+                      <p className="text-xl font-black leading-tight text-foreground sm:text-2xl">{row.subjectLabel}</p>
+                    )}
+                    <p className="text-base font-semibold text-foreground/85 sm:text-lg">
                       {row.subjectReading ? row.subjectReading : "-"}
                     </p>
-                    <p className="text-xs text-foreground/65 sm:text-sm">
-                      {row.subjectMeaning ? ` · ${row.subjectMeaning}` : ""}
+                    <p className="text-sm text-foreground/70 sm:text-base">
+                      {row.subjectMeaning ? row.subjectMeaning : "-"}
                       {` · #${row.subjectId}`}
                     </p>
-                    {row.subjectType === "kanji" ? (
-                      <p className="mt-1">
-                        <Link
-                          href={`/users/${encodeURIComponent(row.wkUsername)}?tab=study&subject=${row.subjectId}&viewer=detail`}
-                          className="text-xs font-bold uppercase tracking-[0.08em] text-accent hover:underline"
-                        >
-                          View details
-                        </Link>
-                      </p>
-                    ) : null}
                   </td>
                   <td className="hidden px-3 py-2 align-top font-mono text-foreground/70 sm:table-cell">{row.assignmentId}</td>
                 </tr>

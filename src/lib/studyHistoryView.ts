@@ -16,12 +16,16 @@ export type StudyHistoryRow = {
   subjectLabel: string;
   subjectReading: string | null;
   subjectMeaning: string | null;
+  wkLevel: number | null;
+  srsStage: number | null;
 };
 
 export type StudyHistoryPage = {
   attempts: StudyHistoryRow[];
   totals: Record<string, number>;
   accountCount: number;
+  availableLevels: number[];
+  availableSrs: number[];
   pagination: {
     page: number;
     pageSize: number;
@@ -34,6 +38,9 @@ export type StudyHistoryPage = {
 
 type QueryArgs = {
   accountId?: string;
+  result?: "correct" | "wrong" | "skipped";
+  level?: number;
+  srs?: number;
   page: number;
   pageSize: number;
   sortBy: StudyHistorySortBy;
@@ -46,6 +53,8 @@ type SnapshotItem = {
   meanings?: string[];
   primaryReadings?: string[];
   readings?: string[];
+  wkLevel?: number;
+  srsStage?: number;
 };
 
 function parseSnapshotItems(raw: unknown): SnapshotItem[] {
@@ -90,9 +99,33 @@ function normalizePageSize(raw: string | null): number {
   return Math.min(100, Math.trunc(parsed));
 }
 
+function normalizeResult(raw: string | null): QueryArgs["result"] {
+  if (raw === "correct" || raw === "wrong" || raw === "skipped") {
+    return raw;
+  }
+
+  return undefined;
+}
+
+function normalizeOptionalPositiveInt(raw: string | null): number | undefined {
+  if (!raw) {
+    return undefined;
+  }
+
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || !Number.isInteger(parsed) || parsed <= 0) {
+    return undefined;
+  }
+
+  return parsed;
+}
+
 export function parseStudyHistoryQuery(url: URL): QueryArgs {
   return {
     accountId: url.searchParams.get("accountId") ?? undefined,
+    result: normalizeResult(url.searchParams.get("result")),
+    level: normalizeOptionalPositiveInt(url.searchParams.get("level")),
+    srs: normalizeOptionalPositiveInt(url.searchParams.get("srs")),
     page: normalizePage(url.searchParams.get("page")),
     pageSize: normalizePageSize(url.searchParams.get("pageSize")),
     sortBy: normalizeSort(url.searchParams.get("sortBy")),
@@ -101,35 +134,21 @@ export function parseStudyHistoryQuery(url: URL): QueryArgs {
 }
 
 export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistoryPage> {
-  const where = args.accountId ? { accountId: args.accountId } : {};
-  const skip = (args.page - 1) * args.pageSize;
+  const where = {
+    ...(args.accountId ? { accountId: args.accountId } : {}),
+    ...(args.result ? { result: args.result } : {}),
+  };
 
-  const baseOrderBy =
-    args.sortBy === "result"
-      ? [{ result: args.sortDir }, { submittedAt: "desc" as const }]
-      : args.sortBy === "subjectType"
-        ? [{ subjectType: args.sortDir }, { submittedAt: "desc" as const }]
-        : [{ submittedAt: args.sortDir }];
+  const attempts = await prisma.studyReviewAttempt.findMany({
+    where,
+    orderBy: { submittedAt: "desc" },
+  });
 
-  const [attempts, totalCount, totals, accountStats, accountRows] = await Promise.all([
-    prisma.studyReviewAttempt.findMany({
-      where,
-      orderBy: baseOrderBy,
-      skip,
-      take: args.pageSize,
-    }),
-    prisma.studyReviewAttempt.count({ where }),
-    prisma.studyReviewAttempt.groupBy({
-      by: ["result"],
-      where,
-      _count: true,
-    }),
-    prisma.studyReviewAttempt.groupBy({
-      by: ["accountId"],
-      where,
-      _count: true,
-    }),
+  const accountIds = Array.from(new Set(attempts.map((row) => row.accountId)));
+
+  const [accountRows, subjectSnapshotRows] = await Promise.all([
     prisma.account.findMany({
+      where: { id: { in: accountIds } },
       select: {
         id: true,
         nickname: true,
@@ -137,26 +156,29 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
         levelKanjiItems: true,
       },
     }),
+    prisma.levelSnapshot.findMany({
+      where: { accountId: { in: accountIds } },
+      orderBy: { syncedAt: "desc" },
+      select: { accountId: true, items: true },
+    }),
   ]);
 
   const accountMap = new Map(
     accountRows.map((row) => [row.id, { nickname: row.nickname, wkUsername: row.wkUsername }]),
   );
 
-  const accountIds = Array.from(new Set(attempts.map((row) => row.accountId)));
-
-  const snapshotRows = await prisma.levelSnapshot.findMany({
-    where: { accountId: { in: accountIds } },
-    orderBy: { syncedAt: "desc" },
-    select: { accountId: true, items: true },
-  });
-
   const subjectMeta = new Map<
     string,
-    { label: string; reading: string | null; meaning: string | null }
+    {
+      label: string;
+      reading: string | null;
+      meaning: string | null;
+      wkLevel: number | null;
+      srsStage: number | null;
+    }
   >();
 
-  for (const row of snapshotRows) {
+  for (const row of subjectSnapshotRows) {
     for (const item of parseSnapshotItems(row.items)) {
       const key = `${row.accountId}:${item.subjectId}`;
       if (subjectMeta.has(key)) {
@@ -174,6 +196,8 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
         label: item.characters ?? `#${item.subjectId}`,
         reading,
         meaning,
+        wkLevel: typeof item.wkLevel === "number" ? item.wkLevel : null,
+        srsStage: typeof item.srsStage === "number" ? item.srsStage : null,
       });
     }
   }
@@ -195,13 +219,10 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
         label: item.characters ?? `#${item.subjectId}`,
         reading,
         meaning,
+        wkLevel: typeof item.wkLevel === "number" ? item.wkLevel : null,
+        srsStage: typeof item.srsStage === "number" ? item.srsStage : null,
       });
     }
-  }
-
-  const totalsByResult: Record<string, number> = {};
-  for (const row of totals) {
-    totalsByResult[row.result] = row._count;
   }
 
   let rows: StudyHistoryRow[] = attempts.map((row) => {
@@ -223,36 +244,79 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
       subjectLabel: subject?.label ?? `#${row.subjectId}`,
       subjectReading: subject?.reading ?? null,
       subjectMeaning: subject?.meaning ?? null,
+      wkLevel: subject?.wkLevel ?? null,
+      srsStage: subject?.srsStage ?? null,
     };
   });
 
-  if (args.sortBy === "subject") {
-    rows = rows.sort((a, b) => {
+  if (typeof args.level === "number") {
+    rows = rows.filter((row) => row.wkLevel === args.level);
+  }
+
+  if (typeof args.srs === "number") {
+    rows = rows.filter((row) => row.srsStage === args.srs);
+  }
+
+  const compareSign = args.sortDir === "asc" ? 1 : -1;
+  rows = rows.sort((a, b) => {
+    if (args.sortBy === "submittedAt") {
+      return compareSign * (new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime());
+    }
+
+    if (args.sortBy === "result") {
+      const compare = a.result.localeCompare(b.result, undefined, { sensitivity: "base" });
+      return compare === 0
+        ? new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+        : compare * compareSign;
+    }
+
+    if (args.sortBy === "subjectType") {
+      const compare = a.subjectType.localeCompare(b.subjectType, undefined, { sensitivity: "base" });
+      return compare === 0
+        ? new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+        : compare * compareSign;
+    }
+
+    if (args.sortBy === "subject") {
       const compare = a.subjectLabel.localeCompare(b.subjectLabel, undefined, { sensitivity: "base" });
-      return args.sortDir === "asc" ? compare : -compare;
-    });
+      return compare * compareSign;
+    }
+
+    const compare = a.nickname.localeCompare(b.nickname, undefined, { sensitivity: "base" });
+    return compare * compareSign;
+  });
+
+  const totalsByResult: Record<string, number> = {};
+  for (const row of rows) {
+    totalsByResult[row.result] = (totalsByResult[row.result] ?? 0) + 1;
   }
 
-  if (args.sortBy === "user") {
-    rows = rows.sort((a, b) => {
-      const compare = a.nickname.localeCompare(b.nickname, undefined, { sensitivity: "base" });
-      return args.sortDir === "asc" ? compare : -compare;
-    });
-  }
-
-  const totalPages = Math.max(1, Math.ceil(totalCount / args.pageSize));
+  const filteredTotal = rows.length;
+  const totalPages = Math.max(1, Math.ceil(filteredTotal / args.pageSize));
+  const page = Math.min(args.page, totalPages);
+  const pageStart = (page - 1) * args.pageSize;
+  const pagedRows = rows.slice(pageStart, pageStart + args.pageSize);
+  const availableLevels = Array.from(
+    new Set(rows.map((row) => row.wkLevel).filter((level): level is number => typeof level === "number")),
+  ).sort((a, b) => a - b);
+  const availableSrs = Array.from(
+    new Set(rows.map((row) => row.srsStage).filter((srs): srs is number => typeof srs === "number")),
+  ).sort((a, b) => a - b);
+  const accountCount = new Set(rows.map((row) => row.accountId)).size;
 
   return {
-    attempts: rows,
+    attempts: pagedRows,
     totals: totalsByResult,
-    accountCount: accountStats.length,
+    accountCount,
+    availableLevels,
+    availableSrs,
     pagination: {
-      page: args.page,
+      page,
       pageSize: args.pageSize,
-      total: totalCount,
+      total: filteredTotal,
       totalPages,
-      hasNext: args.page < totalPages,
-      hasPrevious: args.page > 1,
+      hasNext: page < totalPages,
+      hasPrevious: page > 1,
     },
   };
 }
