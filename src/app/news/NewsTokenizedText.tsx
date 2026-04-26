@@ -19,6 +19,7 @@ export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
   const [dynamicAvailability, setDynamicAvailability] = useState<
     Record<string, "unknown" | "known" | "missing">
   >({});
+  const [loadingRun, setLoadingRun] = useState<string | null>(null);
 
   const availabilityByRun = useMemo<Record<string, "unknown" | "known" | "missing">>(() => {
     const map = new Map<string, "unknown" | "known" | "missing">();
@@ -44,6 +45,7 @@ export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
           return <span key={index}>{segment.text}</span>;
         }
         const availability = dynamicAvailability[segment.text] ?? availabilityByRun[segment.text] ?? "unknown";
+        const isLoading = loadingRun === segment.text;
         const sizeClass = emphasizeKanji ? "text-[1.2em] leading-none" : "";
         const missingClass =
           availability === "missing"
@@ -53,9 +55,18 @@ export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
           <button
             key={index}
             type="button"
-            onClick={() => void openNewsGlyphRun(segment.text)}
+            disabled={isLoading}
+            onClick={() => {
+              if (isLoading) {
+                return;
+              }
+              setLoadingRun(segment.text);
+              void openNewsGlyphRun(segment.text).finally(() => {
+                setLoadingRun((prev) => (prev === segment.text ? null : prev));
+              });
+            }}
             onMouseEnter={() => {
-              if (availability !== "unknown") {
+              if (availability !== "unknown" || isLoading) {
                 return;
               }
               void prefetchNewsGlyphRun(segment.text).then((next) => {
@@ -63,16 +74,18 @@ export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
               });
             }}
             onFocus={() => {
-              if (availability !== "unknown") {
+              if (availability !== "unknown" || isLoading) {
                 return;
               }
               void prefetchNewsGlyphRun(segment.text).then((next) => {
                 setDynamicAvailability((prev) => ({ ...prev, [segment.text]: next }));
               });
             }}
-            className={`group relative inline cursor-pointer select-none align-baseline border-0 bg-transparent p-0 text-foreground outline-none transition hover:text-accent focus:outline-none focus-visible:outline-none ${sizeClass} ${missingClass}`.trim()}
+            className={`group relative inline select-none align-baseline border-0 bg-transparent p-0 text-foreground outline-none transition hover:text-accent focus:outline-none focus-visible:outline-none disabled:cursor-wait disabled:opacity-80 ${sizeClass} ${missingClass}`.trim()}
             title={
-              availability === "missing"
+              isLoading
+                ? `Looking up ${segment.text}...`
+                : availability === "missing"
                 ? `${segment.text} is not in your WaniKani data`
                 : `Look up ${segment.text}`
             }
@@ -80,6 +93,12 @@ export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
             <span className="rounded-sm group-hover:bg-accent/10 group-focus-visible:bg-accent/10">
               {segment.text}
             </span>
+            {isLoading ? (
+              <span
+                aria-hidden="true"
+                className="ml-1 inline-block h-3 w-3 animate-spin rounded-full border-2 border-accent/35 border-t-accent"
+              />
+            ) : null}
           </button>
         );
       })}

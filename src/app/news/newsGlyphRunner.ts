@@ -26,6 +26,11 @@ type ResolvedLookup = {
 };
 
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
+const OPEN_COOLDOWN_MS = 1000;
+
+const inFlightLookupByRun = new Map<string, Promise<ResolvedLookup | null>>();
+const inFlightOpenByRun = new Map<string, Promise<boolean>>();
+const recentOpenAtByRun = new Map<string, number>();
 
 export function availabilityForRun(run: string): "unknown" | "known" | "missing" {
   return runAvailabilityFromCache(run);
@@ -59,42 +64,69 @@ export async function openNewsGlyphRun(run: string): Promise<boolean> {
     return false;
   }
 
-  const resolved = await resolveLookup(value);
-  if (!resolved) {
-    return false;
+  const existingOpen = inFlightOpenByRun.get(value);
+  if (existingOpen) {
+    return existingOpen;
   }
 
-  const { accountId, result } = resolved;
+  const openTask = (async () => {
+    const lastOpenAt = recentOpenAtByRun.get(value) ?? 0;
+    if (Date.now() - lastOpenAt < OPEN_COOLDOWN_MS) {
+      return false;
+    }
 
-  const { items, selector } = buildViewerState(value, result);
+    const resolved = await resolveLookup(value);
+    if (!resolved) {
+      return false;
+    }
 
-  recordNewsKanjiClick({
-    run: value,
-    hasVocabulary: Boolean(result.vocabulary?.subjectId),
-    knownCount: selector.filter((entry) => entry.exists).length,
-    totalCount: selector.length,
+    const { accountId, result } = resolved;
+
+    const { items, selector } = buildViewerState(value, result);
+
+    recordNewsKanjiClick({
+      run: value,
+      hasVocabulary: Boolean(result.vocabulary?.subjectId),
+      knownCount: selector.filter((entry) => entry.exists).length,
+      totalCount: selector.length,
+    });
+
+    recordNewsGlyphViews({
+      run: value,
+      glyphs: selector
+        .filter((entry) => entry.exists)
+        .map((entry) => ({ label: entry.label, type: entry.kind })),
+    });
+
+    if (items.length === 0) {
+      return false;
+    }
+
+    openViewGlyphViewer({
+      accountId,
+      items,
+      selector,
+      startIndex: 0,
+      title: `Compound · ${value}`,
+    });
+
+    recentOpenAtByRun.set(value, Date.now());
+    if (recentOpenAtByRun.size > 300) {
+      const cutoff = Date.now() - 60_000;
+      for (const [key, openedAt] of recentOpenAtByRun) {
+        if (openedAt < cutoff) {
+          recentOpenAtByRun.delete(key);
+        }
+      }
+    }
+
+    return true;
+  })().finally(() => {
+    inFlightOpenByRun.delete(value);
   });
 
-  recordNewsGlyphViews({
-    run: value,
-    glyphs: selector
-      .filter((entry) => entry.exists)
-      .map((entry) => ({ label: entry.label, type: entry.kind })),
-  });
-
-  if (items.length === 0) {
-    return false;
-  }
-
-  openViewGlyphViewer({
-    accountId,
-    items,
-    selector,
-    startIndex: 0,
-    title: `Compound · ${value}`,
-  });
-
-  return true;
+  inFlightOpenByRun.set(value, openTask);
+  return openTask;
 }
 
 async function resolveLookup(run: string): Promise<ResolvedLookup | null> {
@@ -106,27 +138,39 @@ async function resolveLookup(run: string): Promise<ResolvedLookup | null> {
     };
   }
 
-  const response = await fetch("/api/news/lookup-kanji", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ run }),
-  });
-
-  const payload = (await response.json().catch(() => null)) as
-    | (LookupResponse & { error?: string })
-    | { error?: string }
-    | null;
-
-  if (!response.ok || !payload || !("result" in payload) || !payload.result) {
-    return null;
+  const existing = inFlightLookupByRun.get(run);
+  if (existing) {
+    return existing;
   }
 
-  const resolved = {
-    accountId: payload.accountId,
-    result: payload.result,
-  };
-  writeRunLookupCache(run, resolved.accountId, resolved.result);
-  return resolved;
+  const lookupTask = (async () => {
+    const response = await fetch("/api/news/lookup-kanji", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ run }),
+    });
+
+    const payload = (await response.json().catch(() => null)) as
+      | (LookupResponse & { error?: string })
+      | { error?: string }
+      | null;
+
+    if (!response.ok || !payload || !("result" in payload) || !payload.result) {
+      return null;
+    }
+
+    const resolved = {
+      accountId: payload.accountId,
+      result: payload.result,
+    };
+    writeRunLookupCache(run, resolved.accountId, resolved.result);
+    return resolved;
+  })().finally(() => {
+    inFlightLookupByRun.delete(run);
+  });
+
+  inFlightLookupByRun.set(run, lookupTask);
+  return lookupTask;
 }
 
 function buildViewerState(
