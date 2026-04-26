@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { authOptions } from "@/lib/auth";
 
@@ -56,7 +57,9 @@ export default async function NewsPage() {
 
         <section className="animate-enter animate-enter-delay-2 mt-6 rounded-[2rem] border border-line bg-surface/90 p-5 shadow-[0_20px_55px_rgba(8,16,36,0.12)] sm:p-8">
           {session?.user?.email ? (
-            <NewsReader devSampleUrls={getDevSampleUrls()} />
+            <Suspense fallback={<NewsReaderFallback />}>
+              <NewsReader devSampleUrls={getDevSampleUrls()} />
+            </Suspense>
           ) : (
             <div className="rounded-2xl border border-line bg-surface-muted p-6 text-sm text-foreground/80">
               Please{" "}
@@ -68,6 +71,14 @@ export default async function NewsPage() {
           )}
         </section>
       </main>
+    </div>
+  );
+}
+
+function NewsReaderFallback() {
+  return (
+    <div className="rounded-2xl border border-dashed border-line bg-surface-muted p-6 text-center text-sm font-semibold uppercase tracking-[0.14em] text-foreground/60">
+      Loading…
     </div>
   );
 }

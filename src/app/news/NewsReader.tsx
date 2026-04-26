@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { NewsArticle } from "@/lib/news/newsTypes";
 
@@ -11,43 +12,70 @@ type Props = {
 };
 
 export default function NewsReader({ devSampleUrls = [] }: Props) {
-  const [url, setUrl] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialUrlParam = searchParams.get("url") ?? "";
+
+  const [url, setUrl] = useState(initialUrlParam);
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const lastFetchedUrl = useRef<string | null>(null);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!url.trim()) {
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setArticle(null);
-
-    try {
-      const response = await fetch("/api/news/extract", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: url.trim() }),
-      });
-
-      const payload = (await response.json().catch(() => null)) as
-        | { article?: NewsArticle; error?: string }
-        | null;
-
-      if (!response.ok || !payload?.article) {
-        setError(payload?.error ?? "Couldn't read that article.");
+  const fetchArticle = useCallback(
+    async (target: string) => {
+      const trimmed = target.trim();
+      if (!trimmed) {
         return;
       }
 
-      setArticle(payload.article);
-    } catch {
-      setError("Network problem — try again.");
-    } finally {
-      setLoading(false);
+      lastFetchedUrl.current = trimmed;
+      setLoading(true);
+      setError(null);
+      setArticle(null);
+
+      try {
+        const response = await fetch("/api/news/extract", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: trimmed }),
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | { article?: NewsArticle; error?: string }
+          | null;
+
+        if (!response.ok || !payload?.article) {
+          setError(payload?.error ?? "Couldn't read that article.");
+          return;
+        }
+
+        setArticle(payload.article);
+        const next = `/news?url=${encodeURIComponent(trimmed)}`;
+        if (`${window.location.pathname}${window.location.search}` !== next) {
+          router.replace(next, { scroll: false });
+        }
+      } catch {
+        setError("Network problem — try again.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [router],
+  );
+
+  useEffect(() => {
+    const param = searchParams.get("url") ?? "";
+    if (!param || param === lastFetchedUrl.current) {
+      return;
     }
+    setUrl(param);
+    void fetchArticle(param);
+  }, [searchParams, fetchArticle]);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await fetchArticle(url);
   }
 
   return (
