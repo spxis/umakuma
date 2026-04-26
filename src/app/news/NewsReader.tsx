@@ -6,6 +6,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { NewsArticle } from "@/lib/news/newsTypes";
 
 import NewsArticleView from "./NewsArticleView";
+import NewsHistoryPanel from "./NewsHistoryPanel";
+import {
+  clearNewsHistory,
+  readNewsHistory,
+  recordNewsView,
+  removeNewsView,
+  type NewsHistoryEntry,
+} from "./newsHistory";
 
 type Props = {
   devSampleUrls?: string[];
@@ -20,7 +28,12 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [history, setHistory] = useState<NewsHistoryEntry[]>([]);
   const lastFetchedUrl = useRef<string | null>(null);
+
+  useEffect(() => {
+    setHistory(readNewsHistory());
+  }, []);
 
   const fetchArticle = useCallback(
     async (target: string) => {
@@ -51,6 +64,13 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
         }
 
         setArticle(payload.article);
+        setHistory(
+          recordNewsView({
+            url: trimmed,
+            title: payload.article.title,
+            siteName: payload.article.siteName,
+          }),
+        );
         const next = `/news?url=${encodeURIComponent(trimmed)}`;
         if (`${window.location.pathname}${window.location.search}` !== next) {
           router.replace(next, { scroll: false });
@@ -76,6 +96,20 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     await fetchArticle(url);
+  }
+
+  function handleSelectHistory(target: string) {
+    setUrl(target);
+    void fetchArticle(target);
+  }
+
+  function handleRemoveHistory(target: string) {
+    setHistory(removeNewsView(target));
+  }
+
+  function handleClearHistory() {
+    clearNewsHistory();
+    setHistory([]);
   }
 
   return (
@@ -131,6 +165,14 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
       {loading ? <LoadingState /> : null}
       {error ? <ErrorState message={error} /> : null}
       {article && !loading ? <NewsArticleView article={article} /> : null}
+
+      <NewsHistoryPanel
+        entries={history}
+        activeUrl={article ? lastFetchedUrl.current : null}
+        onSelect={handleSelectHistory}
+        onRemove={handleRemoveHistory}
+        onClear={handleClearHistory}
+      />
     </div>
   );
 }
