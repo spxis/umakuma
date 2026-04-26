@@ -106,7 +106,7 @@ test("home page loads", async ({ browser, baseURL }) => {
 test("news reader page loads", async ({ browser, baseURL }) => {
   const url = `${baseURL}/news`;
   await assertPageLoads(browser, url, async (page) => {
-    await expect(page.getByRole("heading", { name: "News Reader" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Read News" })).toBeVisible();
   });
 });
 
