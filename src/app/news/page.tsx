@@ -18,7 +18,7 @@ function getDevSampleUrls(): string[] {
 }
 
 export const metadata: Metadata = {
-  title: "News Reader · UmaKuma",
+  title: "Read · UmaKuma",
   description: "Read Japanese news articles you choose, with kanji insight.",
 };
 
@@ -26,25 +26,48 @@ export default async function NewsPage() {
   const session = await getServerSession(authOptions);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8">
-      <header className="mb-6 space-y-1">
-        <h1 className="text-3xl font-semibold text-[#16223A]">News Reader</h1>
-        <p className="text-sm text-slate-600">
-          Paste a news article URL. Uma and Kuma will fetch it for you.
-        </p>
-      </header>
+    <div className="relative min-h-screen overflow-hidden pb-12">
+      <div className="noise-overlay pointer-events-none absolute inset-0" />
+      <main className="relative mx-auto w-full max-w-4xl px-4 pt-8 sm:px-6 lg:px-8">
+        <section className="animate-enter rounded-[2rem] border border-line/80 bg-surface/85 p-5 shadow-[0_24px_80px_rgba(15,111,255,0.17)] backdrop-blur sm:p-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-accent">
+                Reader
+              </p>
+              <h1 className="mt-2 text-4xl leading-[0.9] text-foreground sm:text-6xl lg:text-7xl">
+                Read News
+              </h1>
+              <p className="mt-4 max-w-2xl text-base text-foreground/75 sm:text-lg">
+                Paste a Japanese news article. Uma and Kuma fetch it for you, then surface
+                the kanji you&rsquo;re ready for.
+              </p>
+            </div>
+            <div className="flex w-full flex-wrap items-center justify-end gap-2 md:w-auto">
+              <Link
+                href="/"
+                className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-surface px-6 text-sm font-bold uppercase tracking-[0.14em] text-foreground transition hover:bg-surface-muted"
+              >
+                Learn
+              </Link>
+            </div>
+          </div>
+        </section>
 
-      {session?.user?.email ? (
-        <NewsReader devSampleUrls={getDevSampleUrls()} />
-      ) : (
-        <div className="rounded-md border border-slate-200 bg-slate-50 p-6 text-sm text-slate-700">
-          Please{" "}
-          <Link href="/login" className="font-semibold text-[#2D7CFF] underline">
-            sign in
-          </Link>{" "}
-          to use the News Reader.
-        </div>
-      )}
-    </main>
+        <section className="animate-enter animate-enter-delay-2 mt-6 rounded-[2rem] border border-line bg-surface/90 p-5 shadow-[0_20px_55px_rgba(8,16,36,0.12)] sm:p-8">
+          {session?.user?.email ? (
+            <NewsReader devSampleUrls={getDevSampleUrls()} />
+          ) : (
+            <div className="rounded-2xl border border-line bg-surface-muted p-6 text-sm text-foreground/80">
+              Please{" "}
+              <Link href="/login" className="font-bold uppercase tracking-[0.12em] text-accent underline">
+                sign in
+              </Link>{" "}
+              to use the News Reader.
+            </div>
+          )}
+        </section>
+      </main>
+    </div>
   );
 }

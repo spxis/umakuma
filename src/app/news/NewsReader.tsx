@@ -52,11 +52,14 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
 
   return (
     <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-2">
-        <label htmlFor="news-url" className="block text-sm font-medium">
-          Paste a news article URL
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <label
+          htmlFor="news-url"
+          className="block text-xs font-bold uppercase tracking-[0.14em] text-foreground/70"
+        >
+          Article URL
         </label>
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <input
             id="news-url"
             type="url"
@@ -64,29 +67,31 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
             placeholder="https://..."
             value={url}
             onChange={(event) => setUrl(event.target.value)}
-            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-[#2D7CFF] focus:outline-none"
+            className="h-11 flex-1 rounded-full border border-line bg-surface px-5 text-sm text-foreground placeholder:text-foreground/40 focus:border-accent focus:outline-none"
             required
           />
           <button
             type="submit"
             disabled={loading || !url.trim()}
-            className="rounded-md bg-[#2D7CFF] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+            className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-accent px-6 text-sm font-bold uppercase tracking-[0.14em] text-surface transition hover:bg-accent-2 disabled:opacity-50"
           >
             {loading ? "Reading…" : "Read"}
           </button>
         </div>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-foreground/60">
           You provide the link, so you take responsibility for the source. Articles are cached briefly and not stored.
         </p>
         {devSampleUrls.length > 0 ? (
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-            <span className="text-slate-500">Dev samples:</span>
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <span className="text-xs font-bold uppercase tracking-[0.14em] text-foreground/55">
+              Dev samples
+            </span>
             {devSampleUrls.map((sample) => (
               <button
                 key={sample}
                 type="button"
                 onClick={() => setUrl(sample)}
-                className="rounded border border-slate-300 bg-white px-2 py-0.5 font-mono text-[11px] text-slate-700 hover:border-[#2D7CFF] hover:text-[#2D7CFF]"
+                className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[11px] font-semibold text-foreground/80 transition hover:border-accent hover:text-accent"
               >
                 {hostnameOf(sample)}
               </button>
@@ -104,7 +109,7 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
 
 function LoadingState() {
   return (
-    <div className="rounded-md border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500">
+    <div className="rounded-2xl border border-dashed border-line bg-surface-muted p-6 text-center text-sm font-semibold uppercase tracking-[0.14em] text-foreground/60">
       Fetching the article…
     </div>
   );
@@ -112,7 +117,7 @@ function LoadingState() {
 
 function ErrorState({ message }: { message: string }) {
   return (
-    <div className="rounded-md border border-[#FF5D73] bg-[#FFF1F4] p-4 text-sm text-[#16223A]">
+    <div className="rounded-2xl border border-hot/60 bg-hot/10 p-4 text-sm text-foreground">
       {message}
     </div>
   );
