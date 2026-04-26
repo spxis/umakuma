@@ -8,6 +8,7 @@ import HistoryItemDetailModal from "@/app/shared/HistoryItemDetailModal";
 import StudyHistoryFilters from "@/app/shared/StudyHistoryFilters";
 import type { HistorySrsBucket, StudyHistoryPayload } from "@/app/shared/studyHistoryTypes";
 import { srsBucketBadgeClass, srsBucketLabel } from "@/app/shared/studyHistoryUi";
+import { typeGlyphBoxClass } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
@@ -174,12 +175,6 @@ export default function StudyHistoryTable({
     kanji: "bg-pink-100 text-pink-700",
     vocabulary: "bg-violet-100 text-violet-700",
   };
-  const typeGlyphBoxColor: Record<string, string> = {
-    radical: "border-sky-300 bg-sky-100/70 text-sky-700",
-    kanji: "border-pink-300 bg-pink-100/70 text-pink-700",
-    vocabulary: "border-violet-300 bg-violet-100/70 text-violet-700",
-  };
-
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-4 shadow-sm sm:p-5">
       {collapsible ? (
@@ -282,9 +277,7 @@ export default function StudyHistoryTable({
                         onClick={() => {
                           setSelectedAttemptId(row.id);
                         }}
-                        className={`inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border px-2 ${
-                          typeGlyphBoxColor[row.subjectType] ?? "border-gray-300 bg-gray-100 text-gray-600"
-                        }`}
+                        className={historyGlyphButtonClass(row.subjectType, "compact")}
                       >
                         <span
                           style={{ fontFamily }}
@@ -360,9 +353,7 @@ export default function StudyHistoryTable({
                           onClick={() => {
                             setSelectedAttemptId(row.id);
                           }}
-                          className={`inline-flex min-h-14 min-w-14 shrink-0 items-center justify-center rounded-xl border px-3 ${
-                            typeGlyphBoxColor[row.subjectType] ?? "border-gray-300 bg-gray-100 text-gray-600"
-                          }`}
+                          className={historyGlyphButtonClass(row.subjectType, "large")}
                         >
                           <span
                             style={{ fontFamily }}
@@ -439,4 +430,25 @@ export default function StudyHistoryTable({
       )}
     </section>
   );
+}
+
+function historyGlyphBoxClass(type: string): string {
+  if (type === "radical" || type === "kanji" || type === "vocabulary") {
+    return typeGlyphBoxClass(type);
+  }
+  return "border-line bg-surface text-foreground";
+}
+
+function historyGlyphButtonClass(type: string, size: "compact" | "large"): string {
+  const sizeClass =
+    size === "compact"
+      ? "min-h-11 min-w-11 px-2 text-2xl"
+      : "min-h-14 min-w-14 px-3 text-4xl";
+
+  return [
+    "inline-flex shrink-0 items-center justify-center rounded-xl border font-black leading-none",
+    "cursor-pointer transition hover:brightness-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70",
+    sizeClass,
+    historyGlyphBoxClass(type),
+  ].join(" ");
 }
