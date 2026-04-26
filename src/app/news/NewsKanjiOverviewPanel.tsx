@@ -33,6 +33,10 @@ export function countUniqueArticleKanji(blocks: NewsArticleBlock[]): number {
 
 export default function NewsKanjiOverviewPanel({ blocks }: Props) {
   const [refreshKey, setRefreshKey] = useState(0);
+  const [resolvedWkLevels, setResolvedWkLevels] = useState<Record<string, number | null>>({});
+
+  const orderedChars = useMemo(() => extractArticleKanji(blocks), [blocks]);
+  const charsKey = useMemo(() => orderedChars.join(""), [orderedChars]);
 
   useEffect(() => {
     const onRefresh = () => {
@@ -44,8 +48,45 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (orderedChars.length === 0) {
+      return;
+    }
+
+    const cached = buildWkLevelByChar();
+    const unresolved = orderedChars.filter(
+      (char) => !cached.has(char) && !(char in resolvedWkLevels),
+    );
+    if (unresolved.length === 0) {
+      return;
+    }
+
+    let cancelled = false;
+    void fetch("/api/news/kanji-levels", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chars: unresolved }),
+    })
+      .then(async (response) => {
+        const payload = (await response.json().catch(() => null)) as
+          | { levels?: Record<string, number | null> }
+          | null;
+        if (!response.ok || !payload?.levels || cancelled) {
+          return;
+        }
+
+        setResolvedWkLevels((prev) => ({ ...prev, ...payload.levels }));
+      })
+      .catch(() => {
+        // Keep panel functional even if this enrichment request fails.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [charsKey, orderedChars, refreshKey, resolvedWkLevels]);
+
   const entries = useMemo(() => {
-    const orderedChars = extractArticleKanji(blocks);
     const wkByChar = buildWkLevelByChar();
     const jlptByChar = jlptReadings as JlptRecord;
     const gradeByChar = kanjiLevels as GradeRecord;
@@ -56,13 +97,13 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
         typeof jlptByChar[char]?.nLevel === "number"
           ? (jlptByChar[char]?.nLevel as number)
           : null,
-      wkLevel: wkByChar.get(char) ?? null,
+      wkLevel: wkByChar.get(char) ?? resolvedWkLevels[char] ?? null,
       schoolGrade:
         typeof gradeByChar[char]?.schoolGrade === "number"
           ? (gradeByChar[char]?.schoolGrade as number)
           : null,
     }));
-  }, [blocks, refreshKey]);
+  }, [orderedChars, refreshKey, resolvedWkLevels]);
 
   if (entries.length === 0) {
     return null;
@@ -119,7 +160,7 @@ function GroupColumn({
               {group.label} ({group.chars.length})
             </p>
             <div className="mt-1 flex flex-wrap gap-1.5">
-              {group.chars.slice(0, 14).map((char) => (
+              {group.chars.map((char) => (
                 <button
                   key={`${group.label}-${char}`}
                   type="button"

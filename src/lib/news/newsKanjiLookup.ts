@@ -33,6 +33,18 @@ export async function lookupRunInWaniKani(run: string, token: string): Promise<L
   };
 }
 
+export async function lookupKanjiLevelsByChars(
+  chars: string[],
+  token: string,
+): Promise<Record<string, number | null>> {
+  const items = await lookupKanjiByChars(chars, token);
+  const out: Record<string, number | null> = {};
+  for (const item of items) {
+    out[item.text] = typeof item.wkLevel === "number" ? item.wkLevel : null;
+  }
+  return out;
+}
+
 async function lookupVocabulary(run: string, token: string): Promise<LookupGlyphItem | null> {
   const value = run.trim();
   if (!value) {
