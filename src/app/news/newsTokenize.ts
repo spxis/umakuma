@@ -9,6 +9,7 @@ const PARTICLE_BOUNDARY_LATER = new Set(["を", "が", "に", "で", "と", "へ
 const INDEFINITE_PRONOUN_BASE = new Set(["誰", "何"]);
 const COUNTER_AFTER_DIGIT = new Set(["歳", "才", "人", "円", "年", "月", "日", "時", "分", "秒", "代", "位", "名"]);
 const MAX_PURE_KANJI_CLICKABLE_RUN = 6;
+const MAX_KANA_SUFFIX = 3;
 
 export type NewsTextSegment = {
   kind: "kanji" | "other";
@@ -57,6 +58,7 @@ export function tokenizeJapanese(text: string): NewsTextSegment[] {
 
     while (suffixEnd < chars.length && KANA_REGEX.test(chars[suffixEnd] ?? "")) {
       const nextChar = chars[suffixEnd] ?? "";
+      const followingChar = chars[suffixEnd + 1] ?? "";
       // If kana starts with a likely particle, keep it outside the clickable token.
       if (suffixCount === 0 && !shouldAttachFirstKana(chars.slice(start, kanjiEnd).join(""), nextChar)) {
         break;
@@ -68,12 +70,19 @@ export function tokenizeJapanese(text: string): NewsTextSegment[] {
       if (suffixCount > 0 && PARTICLE_BOUNDARY_LATER.has(nextChar)) {
         break;
       }
+      // Avoid swallowing nominalizer boundary in patterns like 応募すること.
+      if (suffixCount > 0 && nextChar === "こ" && followingChar === "と") {
+        break;
+      }
       // For pronoun compounds (誰か, 何か, 誰も, 何も), keep only the one-kana suffix.
       if (
         suffixCount > 0 &&
         (firstAttachedKana === "か" || firstAttachedKana === "も") &&
         INDEFINITE_PRONOUN_BASE.has(chars.slice(start, kanjiEnd).join(""))
       ) {
+        break;
+      }
+      if (suffixCount >= MAX_KANA_SUFFIX) {
         break;
       }
       suffixEnd += 1;

@@ -209,7 +209,39 @@ function buildLookupCandidates(segments: Array<{ kind: "kanji" | "other"; text: 
   out.push(run);
 
   const normalized = Array.from(new Set(out.map((value) => value.trim()).filter((value) => value.length > 0)));
-  return expandDictionaryCandidates(normalized);
+  return expandDictionaryCandidates(expandBySuffixShortening(normalized));
+}
+
+function expandBySuffixShortening(base: string[]): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+
+  for (const value of base) {
+    if (!seen.has(value)) {
+      seen.add(value);
+      out.push(value);
+    }
+
+    const chars = Array.from(value);
+    let tail = 0;
+    for (let i = chars.length - 1; i >= 0; i -= 1) {
+      if (!KANA_REGEX.test(chars[i] ?? "")) {
+        break;
+      }
+      tail += 1;
+    }
+
+    for (let drop = 1; drop <= tail; drop += 1) {
+      const candidate = chars.slice(0, chars.length - drop).join("");
+      if (!candidate || seen.has(candidate) || !KANJI_REGEX.test(candidate)) {
+        continue;
+      }
+      seen.add(candidate);
+      out.push(candidate);
+    }
+  }
+
+  return out;
 }
 
 function kanaPrefixVariants(nextKana: string): string[] {

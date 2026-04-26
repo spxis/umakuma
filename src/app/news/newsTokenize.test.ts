@@ -83,6 +83,22 @@ describe("tokenizeJapanese", () => {
     expect(kanjiRuns).toContain("歳");
   });
 
+  it("does not swallow nominalizer in 〜すること pattern", () => {
+    const segments = tokenizeJapanese("応募すること");
+    const kanjiRuns = segments.filter((segment) => segment.kind === "kanji").map((segment) => segment.text);
+
+    expect(kanjiRuns).toContain("応募する");
+    expect(kanjiRuns).not.toContain("応募するこ");
+  });
+
+  it("caps overlong polite suffix attachment", () => {
+    const segments = tokenizeJapanese("紹介させていただきます");
+    const kanjiRuns = segments.filter((segment) => segment.kind === "kanji").map((segment) => segment.text);
+
+    expect(kanjiRuns[0]?.startsWith("紹介")).toBe(true);
+    expect(kanjiRuns).not.toContain("紹介させていただきます");
+  });
+
   it("maintains core segmentation invariants across mixed corpus", () => {
     const corpus = [
       "高い山に登った。",
