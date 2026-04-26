@@ -4,8 +4,6 @@ import { fetchNewsHtml, type NewsHttpError } from "./newsHttp";
 
 const MAX_RESULTS = 30;
 const MIN_TITLE_LENGTH = 6;
-const DISCOVERY_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
-const DISCOVERY_MAX_ENTRIES = 100;
 
 const EXCLUDE_PATH_SEGMENTS = new Set([
   "tag",
@@ -65,22 +63,12 @@ export type DiscoverError =
 export type DiscoverPayload = {
   baseUrl: string;
   links: DiscoveredLink[];
-  cached: boolean;
-  cachedAgeMs?: number;
   fetchedAt: string;
 };
 
 export type DiscoverResult =
   | { ok: true; payload: DiscoverPayload }
   | { ok: false; error: DiscoverError };
-
-type DiscoveryCacheEntry = {
-  payload: DiscoverPayload;
-  fetchedAtMs: number;
-  expiresAt: number;
-};
-
-const discoveryCache = new Map<string, DiscoveryCacheEntry>();
 
 export async function discoverArticleLinks(rawUrl: string): Promise<DiscoverResult> {
   const parsed = parseAllowedUrl(rawUrl);
@@ -89,12 +77,6 @@ export async function discoverArticleLinks(rawUrl: string): Promise<DiscoverResu
   }
   if (isBlockedHost(parsed.hostname)) {
     return { ok: false, error: { kind: "blocked_host" } };
-  }
-
-  const key = parsed.toString().toLowerCase();
-  const cached = readDiscoveryCache(key);
-  if (cached) {
-    return { ok: true, payload: cached };
   }
 
   const fetched = await fetchNewsHtml(parsed.toString());
@@ -148,46 +130,10 @@ export async function discoverArticleLinks(rawUrl: string): Promise<DiscoverResu
   const payload: DiscoverPayload = {
     baseUrl: fetched.finalUrl,
     links: Array.from(seen.values()).slice(0, MAX_RESULTS),
-    cached: false,
     fetchedAt: new Date().toISOString(),
   };
 
-  writeDiscoveryCache(key, payload);
   return { ok: true, payload };
-}
-
-function readDiscoveryCache(key: string): DiscoverPayload | null {
-  const entry = discoveryCache.get(key);
-  if (!entry) {
-    return null;
-  }
-  if (entry.expiresAt < Date.now()) {
-    discoveryCache.delete(key);
-    return null;
-  }
-  return {
-    ...entry.payload,
-    cached: true,
-    cachedAgeMs: Date.now() - entry.fetchedAtMs,
-  };
-}
-
-function writeDiscoveryCache(key: string, payload: DiscoverPayload): void {
-  const fetchedAtMs = Date.parse(payload.fetchedAt) || Date.now();
-  discoveryCache.set(key, {
-    payload: { ...payload, cached: false, cachedAgeMs: undefined },
-    fetchedAtMs,
-    expiresAt: fetchedAtMs + DISCOVERY_TTL_MS,
-  });
-
-  if (discoveryCache.size > DISCOVERY_MAX_ENTRIES) {
-    const now = Date.now();
-    for (const [k, e] of discoveryCache) {
-      if (e.expiresAt < now) {
-        discoveryCache.delete(k);
-      }
-    }
-  }
 }
 
 function parseAllowedUrl(input: string): URL | null {

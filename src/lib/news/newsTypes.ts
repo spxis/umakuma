@@ -15,6 +15,6 @@ export type NewsArticle = {
   blocks: NewsArticleBlock[];
   textLength: number;
   fetchedAt: string;
-  cached: boolean;
+  cached?: boolean;
   cachedAgeMs?: number;
 };

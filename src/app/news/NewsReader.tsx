@@ -16,6 +16,12 @@ import {
   removeNewsView,
   type NewsHistoryEntry,
 } from "./newsHistory";
+import {
+  readArticleCache,
+  readDiscoverCache,
+  writeArticleCache,
+  writeDiscoverCache,
+} from "./newsClientCache";
 
 type Mode = "article" | "site";
 
@@ -71,6 +77,24 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
       setDiscover(EMPTY_DISCOVER);
       setDiscoverError(null);
 
+      const cached = readArticleCache(trimmed);
+      if (cached) {
+        setArticle(cached);
+        setHistory(
+          recordNewsView({
+            url: trimmed,
+            title: cached.title,
+            siteName: cached.siteName,
+          }),
+        );
+        const nextUrl = `/news?url=${encodeURIComponent(trimmed)}`;
+        if (`${window.location.pathname}${window.location.search}` !== nextUrl) {
+          router.replace(nextUrl, { scroll: false });
+        }
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch("/api/news/extract", {
           method: "POST",
@@ -88,6 +112,7 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
         }
 
         setArticle(payload.article);
+        writeArticleCache(trimmed, payload.article);
         setHistory(
           recordNewsView({
             url: trimmed,
@@ -120,6 +145,19 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
     setArticle(null);
     setError(null);
 
+    const cached = readDiscoverCache(trimmed);
+    if (cached) {
+      setDiscover({
+        baseUrl: cached.baseUrl,
+        links: cached.links,
+        cached: true,
+        cachedAgeMs: cached.cachedAgeMs,
+        fetchedAt: cached.fetchedAt,
+      });
+      setDiscoverLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch("/api/news/discover", {
         method: "POST",
@@ -138,11 +176,11 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
       }
 
       const data = payload as DiscoverPayload;
+      writeDiscoverCache(trimmed, data.baseUrl, data.links);
       setDiscover({
         baseUrl: data.baseUrl,
         links: data.links,
-        cached: data.cached,
-        cachedAgeMs: data.cachedAgeMs,
+        cached: false,
         fetchedAt: data.fetchedAt,
       });
     } catch {
@@ -230,7 +268,7 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
           </button>
         </div>
         <p className="text-xs text-foreground/60">
-          You provide the link, so you take responsibility for the source. Pages are cached locally and on the server to avoid repeat fetches.
+          You provide the link, so you take responsibility for the source. Articles you read are cached locally in your browser to avoid re-fetching the same page.
         </p>
         {devSampleUrls.length > 0 ? (
           <div className="flex flex-wrap items-center gap-2 pt-1">

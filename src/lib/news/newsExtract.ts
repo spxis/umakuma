@@ -2,7 +2,6 @@ import { Readability } from "@mozilla/readability";
 import { JSDOM } from "jsdom";
 
 import type { NewsArticle, NewsArticleBlock } from "./newsTypes";
-import { getCachedArticle, newsCacheKey, setCachedArticle } from "./newsCache";
 import { fetchNewsHtml, type NewsHttpError } from "./newsHttp";
 
 const MIN_TEXT_LENGTH = 400;
@@ -24,12 +23,6 @@ export async function extractArticle(rawUrl: string): Promise<NewsExtractResult>
   }
   if (isBlockedHost(parsed.hostname)) {
     return { ok: false, error: { kind: "blocked_host" } };
-  }
-
-  const cacheKey = newsCacheKey(parsed.toString());
-  const cached = getCachedArticle(cacheKey);
-  if (cached) {
-    return { ok: true, article: cached };
   }
 
   const fetched = await fetchNewsHtml(parsed.toString());
@@ -66,7 +59,6 @@ export async function extractArticle(rawUrl: string): Promise<NewsExtractResult>
     cached: false,
   };
 
-  setCachedArticle(cacheKey, article);
   return { ok: true, article };
 }
 

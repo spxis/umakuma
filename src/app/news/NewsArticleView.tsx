@@ -46,7 +46,7 @@ export default function NewsArticleView({ article }: Props) {
             Article
           </p>
           <NewsCacheBadge
-            cached={article.cached}
+            cached={Boolean(article.cached)}
             cachedAgeMs={article.cachedAgeMs}
             fetchedAt={article.fetchedAt}
           />

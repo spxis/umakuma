@@ -2,7 +2,7 @@ import { getStoredJson, setStoredJson } from "@/lib/clientStorage";
 
 export const NEWS_READING_PREFS_KEY = "uk:news-reading-prefs";
 
-export type NewsTextSize = "sm" | "md" | "lg" | "xl";
+export type NewsTextSize = "sm" | "md" | "lg" | "xl" | "2xl";
 
 export type NewsReadingPrefs = {
   textSize: NewsTextSize;
@@ -10,11 +10,11 @@ export type NewsReadingPrefs = {
 };
 
 export const DEFAULT_NEWS_READING_PREFS: NewsReadingPrefs = {
-  textSize: "md",
+  textSize: "lg",
   emphasizeKanji: false,
 };
 
-const TEXT_SIZE_ORDER: NewsTextSize[] = ["sm", "md", "lg", "xl"];
+const TEXT_SIZE_ORDER: NewsTextSize[] = ["sm", "md", "lg", "xl", "2xl"];
 
 export function readReadingPrefs(): NewsReadingPrefs {
   const stored = getStoredJson<Partial<NewsReadingPrefs> | null>(
@@ -48,14 +48,16 @@ export function bumpTextSize(current: NewsTextSize, delta: 1 | -1): NewsTextSize
 export function textSizeClass(size: NewsTextSize): string {
   switch (size) {
     case "sm":
-      return "text-[0.95rem] leading-[1.85]";
+      return "text-base leading-[1.9]";
     case "lg":
-      return "text-lg leading-[2]";
-    case "xl":
       return "text-xl leading-[2.05]";
+    case "xl":
+      return "text-2xl leading-[2.1]";
+    case "2xl":
+      return "text-3xl leading-[2.15]";
     case "md":
     default:
-      return "text-base leading-[1.95]";
+      return "text-lg leading-[2]";
   }
 }
 
@@ -67,6 +69,8 @@ export function textSizeLabel(size: NewsTextSize): string {
       return "Large";
     case "xl":
       return "X-Large";
+    case "2xl":
+      return "XX-Large";
     case "md":
     default:
       return "Medium";
