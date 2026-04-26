@@ -23,10 +23,12 @@ type KanjiEntry = {
 };
 
 type GroupMode = "jlpt" | "wk" | "grade";
+type EntrySortMode = "article" | "count" | "jp";
 
 type JlptRecord = Record<string, { nLevel?: number }>;
 
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
+const japaneseCollator = new Intl.Collator("ja");
 
 export function countUniqueArticleKanji(blocks: NewsArticleBlock[]): number {
   return extractArticleKanjiData(blocks).orderedChars.length;
@@ -37,6 +39,7 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
   const [resolvedWkLevels, setResolvedWkLevels] = useState<Record<string, number | null>>({});
   const [resolvedGrades, setResolvedGrades] = useState<Record<string, number | null>>({});
   const [groupMode, setGroupMode] = useState<GroupMode>("jlpt");
+  const [entrySortMode, setEntrySortMode] = useState<EntrySortMode>("article");
 
   const { orderedChars, countsByChar } = useMemo(() => extractArticleKanjiData(blocks), [blocks]);
   const charsKey = useMemo(() => orderedChars.join(""), [orderedChars]);
@@ -134,6 +137,8 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
         ? { title: "By WaniKani", groups: wkGroups }
         : { title: "By School Grade", groups: gradeGroups };
 
+  const visibleGroups = sortGroupsForDisplay(activeGroup.groups, entrySortMode);
+
   return (
     <section className="rounded-2xl border border-line bg-surface-muted/70 p-3 sm:p-4">
       <header className="mb-3 rounded-xl border border-line bg-surface px-3 py-2">
@@ -144,37 +149,63 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
           {entries.length} unique kanji • JLPT {knownJlpt} • WK {knownWk} • Grade {knownGrade}
         </p>
 
-        <div className="mt-2 inline-flex rounded-lg border border-line bg-surface-muted p-1">
-          <GroupModeButton
-            label="JLPT"
-            selected={groupMode === "jlpt"}
-            onClick={() => {
-              setGroupMode("jlpt");
-            }}
-          />
-          <GroupModeButton
-            label="WK"
-            selected={groupMode === "wk"}
-            onClick={() => {
-              setGroupMode("wk");
-            }}
-          />
-          <GroupModeButton
-            label="Grade"
-            selected={groupMode === "grade"}
-            onClick={() => {
-              setGroupMode("grade");
-            }}
-          />
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <div className="inline-flex rounded-lg border border-line bg-surface-muted p-1">
+            <SegmentButton
+              label="JLPT"
+              selected={groupMode === "jlpt"}
+              onClick={() => {
+                setGroupMode("jlpt");
+              }}
+            />
+            <SegmentButton
+              label="WK"
+              selected={groupMode === "wk"}
+              onClick={() => {
+                setGroupMode("wk");
+              }}
+            />
+            <SegmentButton
+              label="Grade"
+              selected={groupMode === "grade"}
+              onClick={() => {
+                setGroupMode("grade");
+              }}
+            />
+          </div>
+
+          <div className="inline-flex rounded-lg border border-line bg-surface-muted p-1">
+            <SegmentButton
+              label="Article"
+              selected={entrySortMode === "article"}
+              onClick={() => {
+                setEntrySortMode("article");
+              }}
+            />
+            <SegmentButton
+              label="Count"
+              selected={entrySortMode === "count"}
+              onClick={() => {
+                setEntrySortMode("count");
+              }}
+            />
+            <SegmentButton
+              label="Japanese"
+              selected={entrySortMode === "jp"}
+              onClick={() => {
+                setEntrySortMode("jp");
+              }}
+            />
+          </div>
         </div>
       </header>
 
-      <GroupColumn title={activeGroup.title} groups={activeGroup.groups} />
+      <GroupColumn title={activeGroup.title} groups={visibleGroups} />
     </section>
   );
 }
 
-function GroupModeButton({
+function SegmentButton({
   label,
   selected,
   onClick,
@@ -198,6 +229,35 @@ function GroupModeButton({
       {label}
     </button>
   );
+}
+
+function sortGroupsForDisplay(
+  groups: Array<{ label: string; entries: KanjiEntry[] }>,
+  mode: EntrySortMode,
+): Array<{ label: string; entries: KanjiEntry[] }> {
+  if (mode === "article") {
+    return groups;
+  }
+
+  return groups.map((group) => ({
+    ...group,
+    entries: sortEntries(group.entries, mode),
+  }));
+}
+
+function sortEntries(entries: KanjiEntry[], mode: EntrySortMode): KanjiEntry[] {
+  const sorted = [...entries];
+
+  if (mode === "count") {
+    return sorted.sort((a, b) => {
+      if (a.occurrenceCount !== b.occurrenceCount) {
+        return b.occurrenceCount - a.occurrenceCount;
+      }
+      return japaneseCollator.compare(a.char, b.char);
+    });
+  }
+
+  return sorted.sort((a, b) => japaneseCollator.compare(a.char, b.char));
 }
 
 function GroupColumn({
