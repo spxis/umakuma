@@ -85,6 +85,14 @@ describe("tokenizeJapanese", () => {
     expect(kanjiRuns).not.toContain("深掘りコン");
   });
 
+  it("keeps full katakana suffix when run starts with katakana tail", () => {
+    const segments = tokenizeJapanese("福祉サービス事業所が閉鎖");
+    const kanjiRuns = segments.filter((segment) => segment.kind === "kanji").map((segment) => segment.text);
+
+    expect(kanjiRuns).toContain("福祉サービス");
+    expect(kanjiRuns).not.toContain("福祉サービ");
+  });
+
   it("splits 4-kanji pure compounds into smaller runs", () => {
     const segments = tokenizeJapanese("日本時間の26日夜");
     const kanjiRuns = segments.filter((segment) => segment.kind === "kanji").map((segment) => segment.text);

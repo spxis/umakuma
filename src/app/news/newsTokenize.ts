@@ -10,6 +10,7 @@ const PARTICLE_BOUNDARY_LATER = new Set(["を", "が", "に", "で", "と", "へ
 const INDEFINITE_PRONOUN_BASE = new Set(["誰", "何"]);
 const COUNTER_AFTER_DIGIT = new Set(["歳", "才", "人", "円", "年", "月", "日", "時", "分", "秒", "代", "位", "名"]);
 const MAX_KANA_SUFFIX = 3;
+const MAX_KATAKANA_SUFFIX = 10;
 
 export type NewsTextSegment = {
   kind: "kanji" | "other";
@@ -87,7 +88,10 @@ export function tokenizeJapanese(text: string): NewsTextSegment[] {
       ) {
         break;
       }
-      if (suffixCount >= MAX_KANA_SUFFIX) {
+      const suffixLimit = KATAKANA_REGEX.test(firstAttachedKana)
+        ? MAX_KATAKANA_SUFFIX
+        : MAX_KANA_SUFFIX;
+      if (suffixCount >= suffixLimit) {
         break;
       }
       suffixEnd += 1;
