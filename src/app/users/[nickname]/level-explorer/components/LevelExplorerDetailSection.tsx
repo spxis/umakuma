@@ -210,7 +210,7 @@ export default function LevelExplorerDetailSection({
           </div>
           <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
             <p className="text-xs font-bold uppercase text-foreground/70">Secondary readings</p>
-            <p className="mt-1 font-semibold text-foreground/90">
+            <p className="mt-1 text-lg font-semibold text-foreground/90 sm:text-xl">
               {selectedItem.subjectType === "radical" ? (
                 "Not applicable"
               ) : (
