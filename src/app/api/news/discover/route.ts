@@ -42,6 +42,12 @@ function mapErrorToResponse(error: DiscoverError): { status: number; message: st
     case "blocked_host":
       return { status: 400, message: "That host isn't allowed." };
     case "fetch_failed":
+      if (error.status === 403) {
+        return { status: 403, message: "That site blocked server access (403)." };
+      }
+      if (error.status === 429) {
+        return { status: 429, message: "That site is rate limiting requests right now." };
+      }
       return {
         status: 502,
         message: error.status === 408 ? "The site took too long to respond." : "Couldn't reach that page.",
