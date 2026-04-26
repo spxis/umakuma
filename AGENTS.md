@@ -92,3 +92,8 @@ Run `pnpm lint` and `pnpm loc:check` after non-trivial `src/` edits.
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
 - Do not create markdown docs to describe changes unless asked.
 - Prefer editing existing files over creating new ones.
+
+## Communication
+
+- Default language for all user-facing responses is English.
+- Only switch to another language when the user explicitly requests it.
