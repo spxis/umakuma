@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import {
   availabilityForRun,
-  openNewsGlyphCandidates,
+  openNewsGlyphCandidatesWithOptions,
   prefetchNewsGlyphCandidates,
 } from "./newsGlyphRunner";
 import {
@@ -102,7 +102,9 @@ export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
           const lookupPrimary = lookupCandidates[0] ?? primaryRun;
 
           setLoadingRun(segment.text);
-          void openNewsGlyphCandidates(lookupCandidates)
+          void openNewsGlyphCandidatesWithOptions(lookupCandidates, {
+            displayRun: segment.text,
+          })
             .then((opened) => {
               if (!opened) {
                 void prefetchNewsGlyphCandidates(lookupCandidates).then((next) => {

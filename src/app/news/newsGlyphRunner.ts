@@ -83,10 +83,19 @@ export async function prefetchNewsGlyphRun(run: string): Promise<"unknown" | "kn
 }
 
 export async function openNewsGlyphCandidates(candidates: string[]): Promise<boolean> {
+  return openNewsGlyphCandidatesWithOptions(candidates, {});
+}
+
+export async function openNewsGlyphCandidatesWithOptions(
+  candidates: string[],
+  options: { displayRun?: string },
+): Promise<boolean> {
   const normalized = normalizeCandidateRuns(candidates);
   if (normalized.length === 0) {
     return false;
   }
+
+  const displayRun = options.displayRun?.trim() || normalized[0] || "";
 
   const dedupeKey = normalized[0];
   if (activeOpenRequest?.run === dedupeKey) {
@@ -125,7 +134,7 @@ export async function openNewsGlyphCandidates(candidates: string[]): Promise<boo
     }
 
     const value = selected.run;
-    const lastOpenAt = recentOpenAtByRun.get(value) ?? 0;
+    const lastOpenAt = recentOpenAtByRun.get(displayRun) ?? 0;
     if (Date.now() - lastOpenAt < OPEN_COOLDOWN_MS) {
       return false;
     }
@@ -136,18 +145,18 @@ export async function openNewsGlyphCandidates(candidates: string[]): Promise<boo
 
     const { accountId, result } = selected.resolved;
 
-    const { items, selector } = buildViewerState(value, result);
+    const { items, selector } = buildViewerState(displayRun, result);
     const currentSelector = selector.filter((entry) => entry.origin !== "session");
 
     recordNewsKanjiClick({
-      run: value,
+      run: displayRun,
       hasVocabulary: Boolean(result.vocabulary?.subjectId),
       knownCount: currentSelector.filter((entry) => entry.exists).length,
       totalCount: currentSelector.length,
     });
 
     recordNewsGlyphViews({
-      run: value,
+      run: displayRun,
       glyphs: currentSelector
         .filter((entry) => entry.exists)
         .map((entry) => ({ label: entry.label, type: entry.kind })),
@@ -162,10 +171,10 @@ export async function openNewsGlyphCandidates(candidates: string[]): Promise<boo
       items,
       selector,
       startIndex: 0,
-      title: `Compound · ${value}`,
+      title: `Compound · ${displayRun}`,
     });
 
-    recentOpenAtByRun.set(value, Date.now());
+    recentOpenAtByRun.set(displayRun, Date.now());
     if (recentOpenAtByRun.size > 300) {
       const cutoff = Date.now() - 60_000;
       for (const [key, openedAt] of recentOpenAtByRun) {
@@ -187,7 +196,7 @@ export async function openNewsGlyphCandidates(candidates: string[]): Promise<boo
 }
 
 export async function openNewsGlyphRun(run: string): Promise<boolean> {
-  return openNewsGlyphCandidates([run]);
+  return openNewsGlyphCandidatesWithOptions([run], { displayRun: run });
 }
 
 async function selectBestCandidate(

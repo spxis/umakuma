@@ -47,4 +47,12 @@ describe("news lookup candidate priority", () => {
     expect(candidates[0]).toBe("配信");
     expect(candidates).not.toContain("配信・");
   });
+
+  it("keeps clicked inflected token as first candidate", () => {
+    const segments = [{ kind: "kanji" as const, text: "確認してく" }];
+    const candidates = buildLookupCandidates(segments, 0);
+
+    expect(candidates[0]).toBe("確認してく");
+    expect(candidates).toContain("確認");
+  });
 });
