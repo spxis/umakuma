@@ -44,7 +44,11 @@ export async function fetchNewsHtml(url: string): Promise<NewsHttpResult> {
     if (attempt.ok) {
       return attempt;
     }
-    lastFailure = attempt.error;
+    // Keep the most informative failure instead of letting a later low-signal
+    // transport error hide a prior concrete status like 403 or 429.
+    if (shouldPreferFailure(attempt.error, lastFailure)) {
+      lastFailure = attempt.error;
+    }
     if (attempt.error.kind === "too_large") {
       return attempt;
     }
@@ -111,13 +115,6 @@ function buildHeaders(url: string, profile: HeaderProfile, includeReferer: boole
   };
 
   if (profile === "browser-like") {
-    headers["Sec-Ch-Ua"] = '"Not A(Brand";v="99", "Google Chrome";v="132", "Chromium";v="132"';
-    headers["Sec-Ch-Ua-Mobile"] = "?0";
-    headers["Sec-Ch-Ua-Platform"] = '"macOS"';
-    headers["Sec-Fetch-Dest"] = "document";
-    headers["Sec-Fetch-Mode"] = "navigate";
-    headers["Sec-Fetch-Site"] = "none";
-    headers["Sec-Fetch-User"] = "?1";
     headers["Upgrade-Insecure-Requests"] = "1";
   }
 
@@ -126,4 +123,27 @@ function buildHeaders(url: string, profile: HeaderProfile, includeReferer: boole
   }
 
   return headers;
+}
+
+function shouldPreferFailure(next: NewsHttpError, current: NewsHttpError): boolean {
+  const nextScore = failureScore(next);
+  const currentScore = failureScore(current);
+  return nextScore >= currentScore;
+}
+
+function failureScore(error: NewsHttpError): number {
+  if (error.kind === "too_large") {
+    return 100;
+  }
+  if (error.kind === "not_html") {
+    return 90;
+  }
+  if (error.kind === "fetch_failed") {
+    if (typeof error.status === "number") {
+      // Preserve explicit status responses over opaque network exceptions.
+      return 50;
+    }
+    return 10;
+  }
+  return 0;
 }
