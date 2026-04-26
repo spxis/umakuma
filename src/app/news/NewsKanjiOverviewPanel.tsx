@@ -221,7 +221,7 @@ function SegmentButton({
       className={[
         "rounded-md px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.1em] transition",
         selected
-          ? "bg-accent text-accent-foreground shadow-sm"
+          ? "bg-accent text-white shadow-sm"
           : "text-foreground/70 hover:bg-surface hover:text-foreground",
       ].join(" ")}
       aria-pressed={selected}
