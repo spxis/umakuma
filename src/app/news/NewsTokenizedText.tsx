@@ -165,12 +165,45 @@ export default function NewsTokenizedText({
     };
   }, [articleCharsKey, articleKanjiChars, resolvedGrades, resolvedWkLevels]);
 
+  const downgradedRunSet = useMemo(() => {
+    if (!capEnabled) {
+      return new Set<string>();
+    }
+
+    const out = new Set<string>();
+    for (const run of articleKanjiRuns) {
+      if (
+        shouldDeemphasizeSegment(run, {
+          basis: kanjiCapBasis,
+          jlptCap: kanjiCapJlpt,
+          wkCap: kanjiCapWk,
+          gradeCap: kanjiCapGrade,
+          wkByChar: resolvedWkLevels,
+          gradeByChar: resolvedGrades,
+        })
+      ) {
+        out.add(run);
+      }
+    }
+    return out;
+  }, [
+    articleKanjiRuns,
+    capEnabled,
+    kanjiCapBasis,
+    kanjiCapGrade,
+    kanjiCapJlpt,
+    kanjiCapWk,
+    resolvedGrades,
+    resolvedWkLevels,
+  ]);
+
   useEffect(() => {
-    if (!capEnabled || articleKanjiRuns.length === 0) {
+    if (downgradedRunSet.size === 0) {
       return;
     }
 
-    const unresolved = articleKanjiRuns.filter((run) => !(run in readingsByRun));
+    const runs = Array.from(downgradedRunSet);
+    const unresolved = runs.filter((run) => !(run in readingsByRun));
     if (unresolved.length === 0) {
       return;
     }
@@ -186,7 +219,7 @@ export default function NewsTokenizedText({
     return () => {
       cancelled = true;
     };
-  }, [articleKanjiRuns, capEnabled, readingsByRun]);
+  }, [downgradedRunSet, readingsByRun]);
 
   if (segments.length === 0) {
     return <>{text}</>;
@@ -202,14 +235,7 @@ export default function NewsTokenizedText({
         const primaryRun = candidates[0] ?? segment.text;
         const availability = dynamicAvailability[segment.text] ?? availabilityByRun[segment.text] ?? "unknown";
         const isLoading = loadingRun === segment.text;
-        const isDowngraded = shouldDeemphasizeSegment(segment.text, {
-          basis: kanjiCapBasis,
-          jlptCap: kanjiCapJlpt,
-          wkCap: kanjiCapWk,
-          gradeCap: kanjiCapGrade,
-          wkByChar: resolvedWkLevels,
-          gradeByChar: resolvedGrades,
-        });
+        const isDowngraded = downgradedRunSet.has(segment.text);
         const resolvedReading = readingsByRun[segment.text];
         const readingPending =
           isDowngraded && (!(segment.text in readingsByRun) || loadingReadingRuns.has(segment.text));
@@ -225,7 +251,10 @@ export default function NewsTokenizedText({
         const sizeClass = emphasizeKanji ? "text-[1.2em] leading-none" : "";
         const seenClass = seenRuns.has(segment.text) ? "text-accent/80" : "";
         const downgradedClass = isDowngraded && displayText === segment.text ? "opacity-65" : "";
-        const capPendingClass = isDowngraded && (readingPending || levelPending) ? "animate-pulse" : "";
+        const capPendingClass =
+          isDowngraded && (readingPending || levelPending)
+            ? "decoration-accent/60 decoration-dotted underline"
+            : "";
         const missingClass =
           availability === "missing"
             ? "text-hot/80 decoration-hot/70 decoration-wavy underline"
@@ -324,12 +353,7 @@ export default function NewsTokenizedText({
                 className="pointer-events-none absolute -right-2 -top-1 h-3 w-3 animate-spin rounded-full border-2 border-accent/35 border-t-accent"
               />
             ) : null}
-            {!isLoading && isDowngraded && (readingPending || levelPending) ? (
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute -right-2 -top-1 h-3 w-3 animate-spin rounded-full border-2 border-accent/25 border-t-accent"
-              />
-            ) : null}
+            {/* Keep pending state lightweight to avoid UI jank on long articles. */}
           </span>
         );
       })}
