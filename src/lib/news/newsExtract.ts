@@ -1,6 +1,3 @@
-import { Readability } from "@mozilla/readability";
-import { JSDOM } from "jsdom";
-
 import type { NewsArticle, NewsArticleBlock } from "./newsTypes";
 import { fetchNewsHtml, type NewsHttpError } from "./newsHttp";
 
@@ -30,6 +27,11 @@ export async function extractArticle(rawUrl: string): Promise<NewsExtractResult>
     return { ok: false, error: fetched.error };
   }
 
+  const [{ Readability }, { JSDOM }] = await Promise.all([
+    import("@mozilla/readability"),
+    import("jsdom"),
+  ]);
+
   const dom = new JSDOM(fetched.html, { url: fetched.finalUrl });
   const reader = new Readability(dom.window.document);
   const parsedArticle = reader.parse();
@@ -38,7 +40,7 @@ export async function extractArticle(rawUrl: string): Promise<NewsExtractResult>
     return { ok: false, error: { kind: "not_article" } };
   }
 
-  const blocks = htmlToBlocks(parsedArticle.content, fetched.finalUrl);
+  const blocks = htmlToBlocks(parsedArticle.content, fetched.finalUrl, JSDOM);
   const textLength = blocks.reduce((sum, block) => sum + block.text.length, 0);
 
   if (textLength < MIN_TEXT_LENGTH || blocks.length === 0) {
@@ -85,7 +87,11 @@ function isBlockedHost(hostname: string): boolean {
   return false;
 }
 
-function htmlToBlocks(html: string, baseUrl: string): NewsArticleBlock[] {
+function htmlToBlocks(
+  html: string,
+  baseUrl: string,
+  JSDOM: typeof import("jsdom").JSDOM,
+): NewsArticleBlock[] {
   const dom = new JSDOM(`<!doctype html><html><body>${html}</body></html>`, { url: baseUrl });
   const body = dom.window.document.body;
   const out: NewsArticleBlock[] = [];

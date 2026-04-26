@@ -1,5 +1,3 @@
-import { JSDOM } from "jsdom";
-
 import { fetchNewsHtml, type NewsHttpError } from "./newsHttp";
 
 const MAX_RESULTS = 30;
@@ -85,6 +83,7 @@ export async function discoverArticleLinks(rawUrl: string): Promise<DiscoverResu
   }
 
   try {
+    const { JSDOM } = await import("jsdom");
     const dom = new JSDOM(fetched.html, { url: fetched.finalUrl });
     const baseHost = new URL(fetched.finalUrl).hostname.toLowerCase();
     const seen = new Map<string, DiscoveredLink>();
