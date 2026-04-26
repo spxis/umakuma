@@ -21,6 +21,8 @@ type KanjiEntry = {
   schoolGrade: number | null;
 };
 
+type GroupMode = "jlpt" | "wk" | "grade";
+
 type JlptRecord = Record<string, { nLevel?: number }>;
 
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
@@ -33,6 +35,7 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [resolvedWkLevels, setResolvedWkLevels] = useState<Record<string, number | null>>({});
   const [resolvedGrades, setResolvedGrades] = useState<Record<string, number | null>>({});
+  const [groupMode, setGroupMode] = useState<GroupMode>("jlpt");
 
   const orderedChars = useMemo(() => extractArticleKanji(blocks), [blocks]);
   const charsKey = useMemo(() => orderedChars.join(""), [orderedChars]);
@@ -122,6 +125,13 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
     entry.schoolGrade === null ? "Unknown" : `Grade ${entry.schoolGrade}`,
   );
 
+  const activeGroup =
+    groupMode === "jlpt"
+      ? { title: "By JLPT", groups: jlptGroups }
+      : groupMode === "wk"
+        ? { title: "By WaniKani", groups: wkGroups }
+        : { title: "By School Grade", groups: gradeGroups };
+
   return (
     <section className="rounded-2xl border border-line bg-surface-muted/70 p-3 sm:p-4">
       <header className="mb-3 rounded-xl border border-line bg-surface px-3 py-2">
@@ -131,14 +141,60 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
         <p className="mt-1 text-xs text-foreground/65">
           {entries.length} unique kanji • JLPT {knownJlpt} • WK {knownWk} • Grade {knownGrade}
         </p>
+
+        <div className="mt-2 inline-flex rounded-lg border border-line bg-surface-muted p-1">
+          <GroupModeButton
+            label="JLPT"
+            selected={groupMode === "jlpt"}
+            onClick={() => {
+              setGroupMode("jlpt");
+            }}
+          />
+          <GroupModeButton
+            label="WK"
+            selected={groupMode === "wk"}
+            onClick={() => {
+              setGroupMode("wk");
+            }}
+          />
+          <GroupModeButton
+            label="Grade"
+            selected={groupMode === "grade"}
+            onClick={() => {
+              setGroupMode("grade");
+            }}
+          />
+        </div>
       </header>
 
-      <div className="grid gap-3 lg:grid-cols-3">
-        <GroupColumn title="By JLPT" groups={jlptGroups} />
-        <GroupColumn title="By WaniKani" groups={wkGroups} />
-        <GroupColumn title="By School Grade" groups={gradeGroups} />
-      </div>
+      <GroupColumn title={activeGroup.title} groups={activeGroup.groups} />
     </section>
+  );
+}
+
+function GroupModeButton({
+  label,
+  selected,
+  onClick,
+}: {
+  label: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={[
+        "rounded-md px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.1em] transition",
+        selected
+          ? "bg-accent text-accent-foreground shadow-sm"
+          : "text-foreground/70 hover:bg-surface hover:text-foreground",
+      ].join(" ")}
+      aria-pressed={selected}
+    >
+      {label}
+    </button>
   );
 }
 
