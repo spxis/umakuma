@@ -269,7 +269,7 @@ export default function ViewGlyphModalHost() {
                   disabled={entry.itemIndex === null}
                   className={
                     unavailable
-                      ? `inline-flex min-h-10 items-center gap-1 rounded-xl border border-hot/45 bg-hot/10 px-3 text-2xl font-black leading-none text-hot/75 ${entry.itemIndex === null ? "cursor-not-allowed opacity-80" : "cursor-pointer"}`
+                      ? `inline-flex min-h-10 items-center rounded-xl border border-line/70 bg-surface-muted px-3 text-2xl font-black leading-none text-foreground/70 ${entry.itemIndex === null ? "cursor-not-allowed opacity-80" : "cursor-pointer"}`
                       : `${newsGlyphButtonClass({
                           type: glyphType,
                           size: "normal",
@@ -284,7 +284,6 @@ export default function ViewGlyphModalHost() {
                   }
                 >
                   <span>{entry.label}</span>
-                  {unavailable ? <span className="text-sm font-semibold">missing</span> : null}
                 </button>
               );
             })}
