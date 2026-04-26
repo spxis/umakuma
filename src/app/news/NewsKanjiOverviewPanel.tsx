@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import jlptReadings from "@/data/jlptReadings.json";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import type { NewsArticleBlock } from "@/lib/news/newsTypes";
 
 import { openNewsGlyphRun } from "./newsGlyphRunner";
@@ -29,6 +30,10 @@ type JlptRecord = Record<string, { nLevel?: number }>;
 
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
 const japaneseCollator = new Intl.Collator("ja");
+const GROUP_MODE_STORAGE_KEY = "news:kanji-group-mode";
+const ENTRY_SORT_STORAGE_KEY = "news:kanji-sort-mode";
+const GROUP_MODE_OPTIONS = ["jlpt", "wk", "grade"] as const;
+const ENTRY_SORT_OPTIONS = ["article", "count", "jp"] as const;
 
 export function countUniqueArticleKanji(blocks: NewsArticleBlock[]): number {
   return extractArticleKanjiData(blocks).orderedChars.length;
@@ -38,8 +43,12 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [resolvedWkLevels, setResolvedWkLevels] = useState<Record<string, number | null>>({});
   const [resolvedGrades, setResolvedGrades] = useState<Record<string, number | null>>({});
-  const [groupMode, setGroupMode] = useState<GroupMode>("jlpt");
-  const [entrySortMode, setEntrySortMode] = useState<EntrySortMode>("article");
+  const [groupMode, setGroupMode] = useState<GroupMode>(() =>
+    getStoredEnum<GroupMode>(GROUP_MODE_STORAGE_KEY, GROUP_MODE_OPTIONS, "jlpt"),
+  );
+  const [entrySortMode, setEntrySortMode] = useState<EntrySortMode>(() =>
+    getStoredEnum<EntrySortMode>(ENTRY_SORT_STORAGE_KEY, ENTRY_SORT_OPTIONS, "article"),
+  );
 
   const { orderedChars, countsByChar } = useMemo(() => extractArticleKanjiData(blocks), [blocks]);
   const charsKey = useMemo(() => orderedChars.join(""), [orderedChars]);
@@ -139,6 +148,16 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
 
   const visibleGroups = sortGroupsForDisplay(activeGroup.groups, entrySortMode);
 
+  const updateGroupMode = (nextMode: GroupMode) => {
+    setGroupMode(nextMode);
+    setStoredEnum(GROUP_MODE_STORAGE_KEY, nextMode);
+  };
+
+  const updateEntrySortMode = (nextMode: EntrySortMode) => {
+    setEntrySortMode(nextMode);
+    setStoredEnum(ENTRY_SORT_STORAGE_KEY, nextMode);
+  };
+
   return (
     <section className="rounded-2xl border border-line bg-surface-muted/70 p-3 sm:p-4">
       <header className="mb-3 rounded-xl border border-line bg-surface px-3 py-2">
@@ -155,21 +174,21 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
               label="JLPT"
               selected={groupMode === "jlpt"}
               onClick={() => {
-                setGroupMode("jlpt");
+                updateGroupMode("jlpt");
               }}
             />
             <SegmentButton
               label="WK"
               selected={groupMode === "wk"}
               onClick={() => {
-                setGroupMode("wk");
+                updateGroupMode("wk");
               }}
             />
             <SegmentButton
               label="Grade"
               selected={groupMode === "grade"}
               onClick={() => {
-                setGroupMode("grade");
+                updateGroupMode("grade");
               }}
             />
           </div>
@@ -179,21 +198,21 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
               label="Article"
               selected={entrySortMode === "article"}
               onClick={() => {
-                setEntrySortMode("article");
+                updateEntrySortMode("article");
               }}
             />
             <SegmentButton
               label="Count"
               selected={entrySortMode === "count"}
               onClick={() => {
-                setEntrySortMode("count");
+                updateEntrySortMode("count");
               }}
             />
             <SegmentButton
               label="Japanese"
               selected={entrySortMode === "jp"}
               onClick={() => {
-                setEntrySortMode("jp");
+                updateEntrySortMode("jp");
               }}
             />
           </div>
