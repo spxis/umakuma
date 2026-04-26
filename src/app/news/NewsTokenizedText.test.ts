@@ -23,4 +23,13 @@ describe("news lookup candidate priority", () => {
     const candidates = buildCandidatesFromSelectedText(" 記者会 ");
     expect(candidates[0]).toBe("記者会");
   });
+
+  it("adds pure-kanji subruns for long compounds", () => {
+    const segments = [{ kind: "kanji" as const, text: "日本時間" }];
+    const candidates = buildLookupCandidates(segments, 0);
+
+    expect(candidates[0]).toBe("日本時間");
+    expect(candidates).toContain("日本");
+    expect(candidates).toContain("時間");
+  });
 });

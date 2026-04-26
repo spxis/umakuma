@@ -14,6 +14,9 @@ export function buildLookupCandidates(segments: Segment[], index: number): strin
   const suffixVariants = kanaPrefixVariants(nextKana);
 
   const out: string[] = [run];
+  for (const subrun of pureKanjiSubruns(run)) {
+    out.push(subrun);
+  }
   for (const suffix of suffixVariants) {
     if (!suffix) {
       continue;
@@ -28,6 +31,22 @@ export function buildLookupCandidates(segments: Segment[], index: number): strin
 
   const normalized = Array.from(new Set(out.map((value) => value.trim()).filter((value) => value.length > 0)));
   return expandDictionaryCandidates(expandBySuffixShortening(normalized));
+}
+
+function pureKanjiSubruns(run: string): string[] {
+  const chars = Array.from(run);
+  if (chars.length < 3 || chars.some((char) => !KANJI_REGEX.test(char))) {
+    return [];
+  }
+
+  const out: string[] = [];
+  const maxLength = Math.min(chars.length - 1, 4);
+  for (let length = maxLength; length >= 2; length -= 1) {
+    for (let start = 0; start + length <= chars.length; start += 1) {
+      out.push(chars.slice(start, start + length).join(""));
+    }
+  }
+  return out;
 }
 
 export function buildCandidatesFromSelectedText(raw: string): string[] {

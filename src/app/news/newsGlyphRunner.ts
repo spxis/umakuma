@@ -194,7 +194,7 @@ async function selectBestCandidate(
 ): Promise<{ run: string; resolved: ResolvedLookup } | null> {
   let best: { run: string; resolved: ResolvedLookup; score: number } | null = null;
 
-  for (const candidate of candidates) {
+  for (const [index, candidate] of candidates.entries()) {
     if (options.requestId !== null && activeOpenRequest?.requestId !== options.requestId) {
       return null;
     }
@@ -211,12 +211,8 @@ async function selectBestCandidate(
       continue;
     }
 
-    // For explicit click/open, preserve user intent: first openable candidate wins.
-    if (options.requireKnown && openable) {
-      return { run: candidate, resolved };
-    }
-
-    const score = candidateScore(candidate, resolved.result);
+    // Earlier candidates represent stronger user intent; vocab matches still dominate.
+    const score = candidateScore(candidate, resolved.result) - index * 10;
     if (!best || score > best.score) {
       best = { run: candidate, resolved, score };
     }
