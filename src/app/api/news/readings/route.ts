@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
+import { logNewsApiPerf } from "@/lib/news/newsApiPerf";
 import { readingKanaForRun } from "@/lib/news/newsReadingKana";
 
 const requestSchema = z.object({
@@ -10,16 +11,22 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const startedAtMs = Date.now();
+  const respond = (body: unknown, status: number, meta?: Record<string, number | string | boolean | null>) => {
+    logNewsApiPerf("/api/news/readings", startedAtMs, status, meta);
+    return NextResponse.json(body, { status });
+  };
+
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+      return respond({ error: "Unauthorized." }, 401);
     }
 
     const json = await request.json().catch(() => null);
     const parsed = requestSchema.safeParse(json);
     if (!parsed.success) {
-      return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+      return respond({ error: "Invalid request payload." }, 400);
     }
 
     const uniqueRuns = Array.from(new Set(parsed.data.runs.map((run) => run.trim()).filter(Boolean)));
@@ -31,9 +38,13 @@ export async function POST(request: Request) {
       }),
     );
 
-    return NextResponse.json({ readings: Object.fromEntries(entries) }, { status: 200 });
+    return respond(
+      { readings: Object.fromEntries(entries) },
+      200,
+      { runs: uniqueRuns.length },
+    );
   } catch (error) {
     console.error("[news/readings] failed", error);
-    return NextResponse.json({ error: "Couldn't build readings." }, { status: 500 });
+    return respond({ error: "Couldn't build readings." }, 500);
   }
 }

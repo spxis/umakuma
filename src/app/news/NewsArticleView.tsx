@@ -22,11 +22,13 @@ import {
 } from "./newsReadingPrefs";
 
 const AD_INTERVAL = 4;
+const LARGE_ARTICLE_TEXT_LENGTH = 7000;
 
 export type ArticlePanelTab = "article" | "kanji" | "history" | "stats";
 
 type Props = {
   article: NewsArticle;
+  userWkLevel: number | null;
   activeTab: ArticlePanelTab;
   onTabChangeAction: (next: ArticlePanelTab) => void;
   historyCount: number;
@@ -37,6 +39,7 @@ type Props = {
 
 export default function NewsArticleView({
   article,
+  userWkLevel,
   activeTab,
   onTabChangeAction,
   historyCount,
@@ -46,6 +49,7 @@ export default function NewsArticleView({
 }: Props) {
   const items = interleaveAdSlots(article.blocks);
   const kanjiCount = countUniqueArticleKanji(article.blocks);
+  const largeArticleMode = article.textLength >= LARGE_ARTICLE_TEXT_LENGTH;
   const [prefs, setPrefs] = useState<NewsReadingPrefs>(() => readReadingPrefs());
 
   function updatePrefs(next: NewsReadingPrefs) {
@@ -77,7 +81,7 @@ export default function NewsArticleView({
         ) : null}
       </header>
 
-      <NewsReadingControls prefs={prefs} onChange={updatePrefs} />
+      <NewsReadingControls prefs={prefs} onChange={updatePrefs} userWkLevel={userWkLevel} />
 
       <ArticleTabs
         activeTab={activeTab}
@@ -119,6 +123,7 @@ export default function NewsArticleView({
                     kanjiCapJlpt={prefs.kanjiCapJlpt}
                     kanjiCapWk={prefs.kanjiCapWk}
                     kanjiCapGrade={prefs.kanjiCapGrade}
+                    largeArticleMode={largeArticleMode}
                   />
                 );
               })}
@@ -214,6 +219,7 @@ function BlockView({
   kanjiCapJlpt,
   kanjiCapWk,
   kanjiCapGrade,
+  largeArticleMode,
 }: {
   block: NewsArticleBlock;
   emphasizeKanji: boolean;
@@ -221,6 +227,7 @@ function BlockView({
   kanjiCapJlpt: NewsKanjiCapJlpt;
   kanjiCapWk: NewsKanjiCapWk;
   kanjiCapGrade: NewsKanjiCapGrade;
+  largeArticleMode: boolean;
 }) {
   const content = (
     <NewsTokenizedText
@@ -230,6 +237,7 @@ function BlockView({
       kanjiCapJlpt={kanjiCapJlpt}
       kanjiCapWk={kanjiCapWk}
       kanjiCapGrade={kanjiCapGrade}
+      largeArticleMode={largeArticleMode}
     />
   );
 

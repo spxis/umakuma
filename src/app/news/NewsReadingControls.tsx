@@ -1,14 +1,16 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
 import {
   articleFontLabel,
+  buildWkCapOptions,
   bumpTextSize,
   kanjiCapBasisLabel,
   kanjiCapLabel,
   NEWS_KANJI_CAP_BASIS_OPTIONS,
   NEWS_KANJI_CAP_GRADE_OPTIONS,
   NEWS_KANJI_CAP_JLPT_OPTIONS,
-  NEWS_KANJI_CAP_WK_OPTIONS,
   textSizeLabel,
   type NewsArticleFont,
   type NewsKanjiCapBasis,
@@ -22,9 +24,40 @@ import {
 type Props = {
   prefs: NewsReadingPrefs;
   onChange: (next: NewsReadingPrefs) => void;
+  userWkLevel?: number | null;
 };
 
-export default function NewsReadingControls({ prefs, onChange }: Props) {
+export default function NewsReadingControls({ prefs, onChange, userWkLevel = null }: Props) {
+  const hasKnownWkLevel = typeof userWkLevel === "number" && Number.isFinite(userWkLevel);
+  const normalizedWkLevel = hasKnownWkLevel
+    ? Math.max(1, Math.min(60, Math.floor(userWkLevel)))
+    : null;
+
+  const allWkOptions = useMemo(() => buildWkCapOptions(normalizedWkLevel), [normalizedWkLevel]);
+  const wkBaseOptions = useMemo(() => {
+    if (normalizedWkLevel === null) {
+      return allWkOptions;
+    }
+
+    return allWkOptions.filter((value) => value === "all" || Number(value) <= normalizedWkLevel);
+  }, [allWkOptions, normalizedWkLevel]);
+  const hasWkOverrideOptions = useMemo(() => {
+    if (normalizedWkLevel === null) {
+      return false;
+    }
+
+    return allWkOptions.some((value) => value !== "all" && Number(value) > normalizedWkLevel);
+  }, [allWkOptions, normalizedWkLevel]);
+
+  const selectedWkBeyondLevel =
+    normalizedWkLevel !== null &&
+    prefs.kanjiCapBasis === "wk" &&
+    prefs.kanjiCapWk !== "all" &&
+    Number(prefs.kanjiCapWk) > normalizedWkLevel;
+
+  const [showWkOverrides, setShowWkOverrides] = useState(selectedWkBeyondLevel);
+  const effectiveShowWkOverrides = showWkOverrides || selectedWkBeyondLevel;
+
   function setSize(size: NewsTextSize) {
     onChange({ ...prefs, textSize: size });
   }
@@ -57,7 +90,9 @@ export default function NewsReadingControls({ prefs, onChange }: Props) {
     prefs.kanjiCapBasis === "jlpt"
       ? NEWS_KANJI_CAP_JLPT_OPTIONS
       : prefs.kanjiCapBasis === "wk"
-        ? NEWS_KANJI_CAP_WK_OPTIONS
+        ? effectiveShowWkOverrides
+          ? allWkOptions
+          : wkBaseOptions
         : NEWS_KANJI_CAP_GRADE_OPTIONS;
 
   const activeCapValue =
@@ -128,7 +163,7 @@ export default function NewsReadingControls({ prefs, onChange }: Props) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-start gap-2">
           <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/60">
             Kanji cap
           </span>
@@ -145,18 +180,61 @@ export default function NewsReadingControls({ prefs, onChange }: Props) {
               </button>
             ))}
           </div>
-          <div className="inline-flex items-center overflow-hidden rounded-full border border-line bg-surface">
-            {capOptions.map((value) => (
+          <div className="flex min-w-0 flex-1 flex-wrap items-start gap-2">
+            <div className="flex min-w-0 flex-wrap items-center gap-1 rounded-2xl border border-line bg-surface p-1">
+              {capOptions.map((value) => {
+                const wkOverride =
+                  prefs.kanjiCapBasis === "wk" &&
+                  value !== "all" &&
+                  normalizedWkLevel !== null &&
+                  Number(value) > normalizedWkLevel;
+                const isUserCurrentWkLevel =
+                  prefs.kanjiCapBasis === "wk" &&
+                  value !== "all" &&
+                  normalizedWkLevel !== null &&
+                  Number(value) === normalizedWkLevel;
+
+                const buttonClass =
+                  activeCapValue === value
+                    ? "bg-accent text-surface"
+                    : isUserCurrentWkLevel
+                      ? "bg-accent/12 text-accent ring-1 ring-inset ring-accent/45"
+                      : "text-foreground/75 hover:bg-surface-muted";
+
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setCapValue(value)}
+                    className={`rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] ${buttonClass}`}
+                    aria-label={`Use ${kanjiCapLabel(prefs.kanjiCapBasis, value)} kanji cap`}
+                    title={
+                      wkOverride
+                        ? `${kanjiCapLabel(prefs.kanjiCapBasis, value)} (override past your current WK level)`
+                        : isUserCurrentWkLevel
+                          ? `${kanjiCapLabel(prefs.kanjiCapBasis, value)} (your current WK level)`
+                          : undefined
+                    }
+                  >
+                    {kanjiCapLabel(prefs.kanjiCapBasis, value)}
+                  </button>
+                );
+              })}
+            </div>
+
+            {prefs.kanjiCapBasis === "wk" && normalizedWkLevel !== null && hasWkOverrideOptions ? (
               <button
-                key={value}
                 type="button"
-                onClick={() => setCapValue(value)}
-                className={`px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] ${activeCapValue === value ? "bg-accent text-surface" : "text-foreground/75 hover:bg-surface-muted"}`}
-                aria-label={`Use ${kanjiCapLabel(prefs.kanjiCapBasis, value)} kanji cap`}
+                onClick={() => {
+                  setShowWkOverrides((prev) => !prev);
+                }}
+                className={`rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] ${effectiveShowWkOverrides ? "border-accent bg-accent text-surface" : "border-line bg-surface text-foreground/70 hover:border-accent hover:text-accent"}`}
+                aria-label={effectiveShowWkOverrides ? "Hide WK override levels" : `Show WK override levels above ${normalizedWkLevel}`}
+                title={effectiveShowWkOverrides ? "Hide levels above your current WK level" : `Show levels above your current WK level (${normalizedWkLevel})`}
               >
-                {kanjiCapLabel(prefs.kanjiCapBasis, value)}
+                {effectiveShowWkOverrides ? "Hide Extra" : `Past ${normalizedWkLevel}`}
               </button>
-            ))}
+            ) : null}
           </div>
         </div>
       </div>

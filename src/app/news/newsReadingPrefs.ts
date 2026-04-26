@@ -6,7 +6,7 @@ export type NewsTextSize = "sm" | "md" | "lg" | "xl" | "2xl";
 export type NewsArticleFont = "body" | "jp-sans" | "jp-serif";
 export type NewsKanjiCapBasis = "jlpt" | "wk" | "grade";
 export type NewsKanjiCapJlpt = "all" | "n5" | "n4" | "n3" | "n2" | "n1";
-export type NewsKanjiCapWk = "all" | "10" | "20" | "30" | "40" | "50" | "60";
+export type NewsKanjiCapWk = "all" | `${number}`;
 export type NewsKanjiCapGrade = "all" | "1" | "2" | "3" | "4" | "5" | "6" | "8";
 
 export const NEWS_KANJI_CAP_BASIS_OPTIONS: readonly NewsKanjiCapBasis[] = [
@@ -22,15 +22,7 @@ export const NEWS_KANJI_CAP_JLPT_OPTIONS: readonly NewsKanjiCapJlpt[] = [
   "n2",
   "n1",
 ];
-export const NEWS_KANJI_CAP_WK_OPTIONS: readonly NewsKanjiCapWk[] = [
-  "all",
-  "10",
-  "20",
-  "30",
-  "40",
-  "50",
-  "60",
-];
+const MAX_WK_LEVEL = 60;
 export const NEWS_KANJI_CAP_GRADE_OPTIONS: readonly NewsKanjiCapGrade[] = [
   "all",
   "1",
@@ -93,7 +85,7 @@ export function readReadingPrefs(): NewsReadingPrefs {
   )
     ? (stored.kanjiCapJlpt as NewsKanjiCapJlpt)
     : DEFAULT_NEWS_READING_PREFS.kanjiCapJlpt;
-  const kanjiCapWk = NEWS_KANJI_CAP_WK_OPTIONS.includes(stored.kanjiCapWk as NewsKanjiCapWk)
+  const kanjiCapWk = isValidWkCap(stored.kanjiCapWk)
     ? (stored.kanjiCapWk as NewsKanjiCapWk)
     : DEFAULT_NEWS_READING_PREFS.kanjiCapWk;
   const kanjiCapGrade = NEWS_KANJI_CAP_GRADE_OPTIONS.includes(
@@ -192,4 +184,40 @@ export function kanjiCapLabel(
   }
 
   return `${value}+`;
+}
+
+export function buildWkCapOptions(userWkLevel?: number | null): NewsKanjiCapWk[] {
+  const normalizedUserLevel =
+    typeof userWkLevel === "number"
+      ? Math.max(1, Math.min(MAX_WK_LEVEL, Math.floor(userWkLevel)))
+      : null;
+
+  const levels: NewsKanjiCapWk[] = ["all"];
+
+  if (normalizedUserLevel !== null) {
+    for (let level = 1; level <= normalizedUserLevel; level += 1) {
+      levels.push(String(level) as NewsKanjiCapWk);
+    }
+    for (let level = normalizedUserLevel + 1; level <= MAX_WK_LEVEL; level += 1) {
+      levels.push(String(level) as NewsKanjiCapWk);
+    }
+    return levels;
+  }
+
+  for (let level = 1; level <= MAX_WK_LEVEL; level += 1) {
+    levels.push(String(level) as NewsKanjiCapWk);
+  }
+  return levels;
+}
+
+function isValidWkCap(value: unknown): value is NewsKanjiCapWk {
+  if (value === "all") {
+    return true;
+  }
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= MAX_WK_LEVEL;
 }

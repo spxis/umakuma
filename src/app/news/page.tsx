@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 import NewsReader from "./NewsReader";
 
@@ -25,6 +26,14 @@ export const metadata: Metadata = {
 
 export default async function NewsPage() {
   const session = await getServerSession(authOptions);
+  const email = session?.user?.email?.trim().toLowerCase() ?? null;
+  const linkedAccount = email
+    ? await prisma.account.findFirst({
+        where: { joinedByEmail: email },
+        select: { wkLevel: true },
+      })
+    : null;
+  const userWkLevel = typeof linkedAccount?.wkLevel === "number" ? linkedAccount.wkLevel : null;
 
   return (
     <div className="relative min-h-screen overflow-hidden pb-12">
@@ -70,7 +79,7 @@ export default async function NewsPage() {
         <section className="animate-enter animate-enter-delay-2 mt-6 rounded-[2rem] border border-line bg-surface/90 p-5 shadow-[0_20px_55px_rgba(8,16,36,0.12)] sm:p-8">
           {session?.user?.email ? (
             <Suspense fallback={<NewsReaderFallback />}>
-              <NewsReader devSampleUrls={getDevSampleUrls()} />
+              <NewsReader devSampleUrls={getDevSampleUrls()} userWkLevel={userWkLevel} />
             </Suspense>
           ) : (
             <div className="rounded-2xl border border-line bg-surface-muted p-6 text-sm text-foreground/80">

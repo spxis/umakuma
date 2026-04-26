@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
+import { logNewsApiPerf } from "@/lib/news/newsApiPerf";
 import { extractArticle, type NewsExtractError } from "@/lib/news/newsExtract";
 
 const requestSchema = z.object({
@@ -10,28 +11,43 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const startedAtMs = Date.now();
+  const respond = (body: unknown, status: number, meta?: Record<string, number | string | boolean | null>) => {
+    logNewsApiPerf("/api/news/extract", startedAtMs, status, meta);
+    return NextResponse.json(body, { status });
+  };
+
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+      return respond({ error: "Unauthorized." }, 401);
     }
 
     const json = await request.json().catch(() => null);
     const parsed = requestSchema.safeParse(json);
     if (!parsed.success) {
-      return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+      return respond({ error: "Invalid request payload." }, 400);
     }
 
     const result = await extractArticle(parsed.data.url);
     if (!result.ok) {
       const { status, message } = mapErrorToResponse(result.error);
-      return NextResponse.json({ error: message }, { status });
+      return respond({ error: message }, status, {
+        errorKind: result.error.kind,
+      });
     }
 
-    return NextResponse.json({ article: result.article }, { status: 200 });
+    return respond(
+      { article: result.article },
+      200,
+      {
+        blocks: result.article.blocks.length,
+        textLength: result.article.textLength,
+      },
+    );
   } catch (error) {
     console.error("[news/extract] failed", error);
-    return NextResponse.json({ error: "Couldn't read that article." }, { status: 500 });
+    return respond({ error: "Couldn't read that article." }, 500);
   }
 }
 

@@ -55,9 +55,10 @@ const EMPTY_DISCOVER: DiscoverState = {
 
 type Props = {
   devSampleUrls?: string[];
+  userWkLevel?: number | null;
 };
 
-export default function NewsReader({ devSampleUrls = [] }: Props) {
+export default function NewsReader({ devSampleUrls = [], userWkLevel = null }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialUrlParam = searchParams.get("url") ?? "";
@@ -337,6 +338,7 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
       {article && !loading ? (
         <NewsArticleView
           article={article}
+          userWkLevel={userWkLevel}
           activeTab={activeTab}
           onTabChangeAction={setActiveTab}
           historyCount={kanjiHistory.length}

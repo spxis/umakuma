@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
 import { decryptToken } from "@/lib/crypto";
+import { logNewsApiPerf } from "@/lib/news/newsApiPerf";
 import { lookupKanjiLevelsByChars } from "@/lib/news/newsKanjiLookup";
 import { prisma } from "@/lib/prisma";
 
@@ -14,17 +15,23 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const startedAtMs = Date.now();
+  const respond = (body: unknown, status: number, meta?: Record<string, number | string | boolean | null>) => {
+    logNewsApiPerf("/api/news/kanji-levels", startedAtMs, status, meta);
+    return NextResponse.json(body, { status });
+  };
+
   try {
     const session = await getServerSession(authOptions);
     const email = session?.user?.email?.trim().toLowerCase() ?? null;
     if (!email) {
-      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+      return respond({ error: "Unauthorized." }, 401);
     }
 
     const json = await request.json().catch(() => null);
     const parsed = requestSchema.safeParse(json);
     if (!parsed.success) {
-      return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+      return respond({ error: "Invalid request payload." }, 400);
     }
 
     const chars = Array.from(new Set(parsed.data.chars.map((char) => char.trim()))).filter((char) =>
@@ -32,7 +39,7 @@ export async function POST(request: Request) {
     );
 
     if (chars.length === 0) {
-      return NextResponse.json({ error: "No kanji to look up." }, { status: 400 });
+      return respond({ error: "No kanji to look up." }, 400);
     }
 
     const account = await prisma.account.findFirst({
@@ -46,7 +53,7 @@ export async function POST(request: Request) {
     });
 
     if (!account) {
-      return NextResponse.json({ error: "No linked WaniKani account." }, { status: 404 });
+      return respond({ error: "No linked WaniKani account." }, 404);
     }
 
     const token = decryptToken({
@@ -70,9 +77,9 @@ export async function POST(request: Request) {
       grades[row.kanji] = typeof row.schoolGrade === "number" ? row.schoolGrade : null;
     }
 
-    return NextResponse.json({ levels, grades }, { status: 200 });
+    return respond({ levels, grades }, 200, { chars: chars.length });
   } catch (error) {
     console.error("[news/kanji-levels] failed", error);
-    return NextResponse.json({ error: "Lookup failed." }, { status: 500 });
+    return respond({ error: "Lookup failed." }, 500);
   }
 }

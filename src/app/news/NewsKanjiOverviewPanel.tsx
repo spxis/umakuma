@@ -8,6 +8,11 @@ import type { NewsArticleBlock } from "@/lib/news/newsTypes";
 
 import { openNewsGlyphRun } from "./newsGlyphRunner";
 import { newsGlyphButtonClass } from "./newsGlyphBoxStyle";
+import {
+  ensureKanjiLevels,
+  getCachedKanjiLevels,
+  hasFreshKanjiLevel,
+} from "./newsEnrichmentCache";
 import { NEWS_KANJI_HISTORY_EVENT } from "./newsKanjiHistory";
 import { readAllRunLookupCache } from "./newsKanjiCache";
 
@@ -42,8 +47,7 @@ export function countUniqueArticleKanji(blocks: NewsArticleBlock[]): number {
 
 export default function NewsKanjiOverviewPanel({ blocks }: Props) {
   const [refreshKey, setRefreshKey] = useState(0);
-  const [resolvedWkLevels, setResolvedWkLevels] = useState<Record<string, number | null>>({});
-  const [resolvedGrades, setResolvedGrades] = useState<Record<string, number | null>>({});
+  const [levelVersion, setLevelVersion] = useState(0);
   const [groupMode, setGroupMode] = useState<GroupMode>(() =>
     getStoredEnum<GroupMode>(GROUP_MODE_STORAGE_KEY, GROUP_MODE_OPTIONS, "jlpt"),
   );
@@ -69,44 +73,35 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
       return;
     }
 
-    const unresolved = orderedChars.filter(
-      (char) => !(char in resolvedWkLevels) || !(char in resolvedGrades),
-    );
+    const unresolved = orderedChars.filter((char) => !hasFreshKanjiLevel(char));
     if (unresolved.length === 0) {
       return;
     }
 
     let cancelled = false;
-    void fetch("/api/news/kanji-levels", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chars: unresolved }),
-    })
-      .then(async (response) => {
-        const payload = (await response.json().catch(() => null)) as
-          | { levels?: Record<string, number | null>; grades?: Record<string, number | null> }
-          | null;
-        if (!response.ok || cancelled) {
-          return;
-        }
+    void ensureKanjiLevels(unresolved).then(() => {
+      if (cancelled) {
+        return;
+      }
 
-        if (payload?.levels) {
-          setResolvedWkLevels((prev) => ({ ...prev, ...payload.levels }));
-        }
-        if (payload?.grades) {
-          setResolvedGrades((prev) => ({ ...prev, ...payload.grades }));
-        }
-      })
-      .catch(() => {
-        // Keep panel functional even if this enrichment request fails.
-      });
+      setLevelVersion((prev) => prev + 1);
+    });
 
     return () => {
       cancelled = true;
     };
-  }, [charsKey, orderedChars, refreshKey, resolvedGrades, resolvedWkLevels]);
+  }, [charsKey, orderedChars, refreshKey]);
+
+  const cachedLevels = useMemo(
+    () => {
+      void levelVersion;
+      return getCachedKanjiLevels(orderedChars);
+    },
+    [levelVersion, orderedChars],
+  );
 
   const entries = useMemo(() => {
+    void refreshKey;
     const wkByChar = buildWkLevelByChar();
     const jlptByChar = jlptReadings as JlptRecord;
 
@@ -116,12 +111,12 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
         typeof jlptByChar[char]?.nLevel === "number"
           ? (jlptByChar[char]?.nLevel as number)
           : null,
-      wkLevel: wkByChar.get(char) ?? resolvedWkLevels[char] ?? null,
-      schoolGrade: resolvedGrades[char] ?? null,
-      schoolGradePending: !(char in resolvedGrades),
+      wkLevel: wkByChar.get(char) ?? cachedLevels.levels[char] ?? null,
+      schoolGrade: cachedLevels.grades[char] ?? null,
+      schoolGradePending: !hasFreshKanjiLevel(char),
       occurrenceCount: countsByChar.get(char) ?? 1,
     }));
-  }, [countsByChar, orderedChars, refreshKey, resolvedGrades, resolvedWkLevels]);
+  }, [cachedLevels.grades, cachedLevels.levels, countsByChar, orderedChars, refreshKey]);
 
   if (entries.length === 0) {
     return null;

@@ -1,16 +1,22 @@
 "use client";
-
 import { useEffect, useMemo, useState } from "react";
-
 import jlptReadings from "@/data/jlptReadings.json";
-
 import type {
   NewsKanjiCapBasis,
   NewsKanjiCapGrade,
   NewsKanjiCapJlpt,
   NewsKanjiCapWk,
 } from "./newsReadingPrefs";
-
+import {
+  ensureKanjiLevels,
+  ensureRunReadings,
+  getCachedKanjiLevels,
+  getCachedRunReadings,
+  hasFreshKanjiLevel,
+  hasFreshRunReading,
+  isKanjiLevelPending,
+  isRunReadingPending,
+} from "./newsEnrichmentCache";
 import {
   availabilityForRun,
   openNewsGlyphCandidatesWithOptions,
@@ -33,24 +39,13 @@ type Props = {
   kanjiCapJlpt: NewsKanjiCapJlpt;
   kanjiCapWk: NewsKanjiCapWk;
   kanjiCapGrade: NewsKanjiCapGrade;
+  largeArticleMode: boolean;
 };
 
-const pageSessionSeenGlyphs = new Set<string>();
 type JlptRecord = Record<string, { nLevel?: number }>;
-
-const sharedWkLevelsByChar: Record<string, number | null> = {};
-const sharedGradesByChar: Record<string, number | null> = {};
-const sharedReadingsByRun: Record<string, string | null> = {};
-const loadingLevelChars = new Set<string>();
-const loadingReadingRuns = new Set<string>();
-const queuedLevelChars = new Set<string>();
-const queuedReadingRuns = new Set<string>();
-let levelBatchTimer: ReturnType<typeof setTimeout> | null = null;
-let readingBatchTimer: ReturnType<typeof setTimeout> | null = null;
-let levelBatchPromise: Promise<void> | null = null;
-let readingBatchPromise: Promise<void> | null = null;
-let resolveLevelBatchPromise: (() => void) | null = null;
-let resolveReadingBatchPromise: (() => void) | null = null;
+const pageSessionSeenGlyphs = new Set<string>();
+const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
+const jlptByChar = jlptReadings as JlptRecord;
 
 export default function NewsTokenizedText({
   text,
@@ -59,20 +54,21 @@ export default function NewsTokenizedText({
   kanjiCapJlpt,
   kanjiCapWk,
   kanjiCapGrade,
+  largeArticleMode,
 }: Props) {
-  const segments = tokenizeJapanese(text);
+  const segments = useMemo(() => tokenizeJapanese(text), [text]);
+  const candidatesByIndex = useMemo(
+    () =>
+      segments.map((segment, index) =>
+        segment.kind === "kanji" ? buildLookupCandidates(segments, index) : [],
+      ),
+    [segments],
+  );
+
   const [dynamicAvailability, setDynamicAvailability] = useState<
     Record<string, "unknown" | "known" | "missing">
   >({});
-  const [resolvedWkLevels, setResolvedWkLevels] = useState<Record<string, number | null>>(
-    () => ({ ...sharedWkLevelsByChar }),
-  );
-  const [resolvedGrades, setResolvedGrades] = useState<Record<string, number | null>>(
-    () => ({ ...sharedGradesByChar }),
-  );
-  const [readingsByRun, setReadingsByRun] = useState<Record<string, string | null>>(
-    () => ({ ...sharedReadingsByRun }),
-  );
+  const [, setEnrichmentVersion] = useState(0);
   const [loadingRun, setLoadingRun] = useState<string | null>(null);
   const [seenRuns, setSeenRuns] = useState<Set<string>>(() => {
     const next = collectSeenGlyphs();
@@ -123,29 +119,25 @@ export default function NewsTokenizedText({
 
   const articleKanjiChars = useMemo(() => {
     const unique = new Set<string>();
-    for (const segment of segments) {
-      if (segment.kind !== "kanji") {
-        continue;
-      }
-      for (const char of Array.from(segment.text)) {
+    for (const run of articleKanjiRuns) {
+      for (const char of Array.from(run)) {
         if (KANJI_REGEX.test(char)) {
           unique.add(char);
         }
       }
     }
     return Array.from(unique);
-  }, [segments]);
+  }, [articleKanjiRuns]);
 
   const articleCharsKey = useMemo(() => articleKanjiChars.join(""), [articleKanjiChars]);
+  const cachedLevels = getCachedKanjiLevels(articleKanjiChars);
 
   useEffect(() => {
     if (articleKanjiChars.length === 0) {
       return;
     }
 
-    const unresolved = articleKanjiChars.filter(
-      (char) => !(char in resolvedWkLevels) || !(char in resolvedGrades),
-    );
+    const unresolved = articleKanjiChars.filter((char) => !hasFreshKanjiLevel(char));
     if (unresolved.length === 0) {
       return;
     }
@@ -155,37 +147,29 @@ export default function NewsTokenizedText({
       if (cancelled) {
         return;
       }
-
-      setResolvedWkLevels((prev) => ({ ...prev, ...pickCharValues(unresolved, sharedWkLevelsByChar) }));
-      setResolvedGrades((prev) => ({ ...prev, ...pickCharValues(unresolved, sharedGradesByChar) }));
+      setEnrichmentVersion((prev) => prev + 1);
     });
 
     return () => {
       cancelled = true;
     };
-  }, [articleCharsKey, articleKanjiChars, resolvedGrades, resolvedWkLevels]);
+  }, [articleCharsKey, articleKanjiChars]);
 
-  const downgradedRunSet = useMemo(() => {
+  const downgradedRuns = useMemo(() => {
     if (!capEnabled) {
-      return new Set<string>();
+      return [] as string[];
     }
 
-    const out = new Set<string>();
-    for (const run of articleKanjiRuns) {
-      if (
-        shouldDeemphasizeSegment(run, {
-          basis: kanjiCapBasis,
-          jlptCap: kanjiCapJlpt,
-          wkCap: kanjiCapWk,
-          gradeCap: kanjiCapGrade,
-          wkByChar: resolvedWkLevels,
-          gradeByChar: resolvedGrades,
-        })
-      ) {
-        out.add(run);
-      }
-    }
-    return out;
+    return articleKanjiRuns.filter((run) =>
+      shouldDeemphasizeSegment(run, {
+        basis: kanjiCapBasis,
+        jlptCap: kanjiCapJlpt,
+        wkCap: kanjiCapWk,
+        gradeCap: kanjiCapGrade,
+        wkByChar: cachedLevels.levels,
+        gradeByChar: cachedLevels.grades,
+      }),
+    );
   }, [
     articleKanjiRuns,
     capEnabled,
@@ -193,17 +177,19 @@ export default function NewsTokenizedText({
     kanjiCapGrade,
     kanjiCapJlpt,
     kanjiCapWk,
-    resolvedGrades,
-    resolvedWkLevels,
+    cachedLevels.grades,
+    cachedLevels.levels,
   ]);
 
+  const downgradedRunsKey = useMemo(() => downgradedRuns.join("\u0000"), [downgradedRuns]);
+  const cachedReadings = getCachedRunReadings(downgradedRuns);
+
   useEffect(() => {
-    if (downgradedRunSet.size === 0) {
+    if (downgradedRuns.length === 0) {
       return;
     }
 
-    const runs = Array.from(downgradedRunSet);
-    const unresolved = runs.filter((run) => !(run in readingsByRun));
+    const unresolved = downgradedRuns.filter((run) => !hasFreshRunReading(run));
     if (unresolved.length === 0) {
       return;
     }
@@ -213,17 +199,19 @@ export default function NewsTokenizedText({
       if (cancelled) {
         return;
       }
-      setReadingsByRun((prev) => ({ ...prev, ...pickRunValues(unresolved, sharedReadingsByRun) }));
+      setEnrichmentVersion((prev) => prev + 1);
     });
 
     return () => {
       cancelled = true;
     };
-  }, [downgradedRunSet, readingsByRun]);
+  }, [downgradedRuns, downgradedRunsKey]);
 
   if (segments.length === 0) {
     return <>{text}</>;
   }
+
+  const downgradedRunSet = new Set(downgradedRuns);
 
   return (
     <>
@@ -231,23 +219,26 @@ export default function NewsTokenizedText({
         if (segment.kind !== "kanji") {
           return <span key={index}>{segment.text}</span>;
         }
-        const candidates = buildLookupCandidates(segments, index);
+
+        const candidates = candidatesByIndex[index] ?? [];
         const primaryRun = candidates[0] ?? segment.text;
-        const availability = dynamicAvailability[segment.text] ?? availabilityByRun[segment.text] ?? "unknown";
+        const availability =
+          dynamicAvailability[segment.text] ?? availabilityByRun[segment.text] ?? "unknown";
         const isLoading = loadingRun === segment.text;
         const isDowngraded = downgradedRunSet.has(segment.text);
-        const resolvedReading = readingsByRun[segment.text];
+        const resolvedReading = cachedReadings[segment.text];
         const readingPending =
-          isDowngraded && (!(segment.text in readingsByRun) || loadingReadingRuns.has(segment.text));
+          isDowngraded && (isRunReadingPending(segment.text) || !hasFreshRunReading(segment.text));
         const levelPending = isSegmentLevelPending(segment.text, {
           basis: kanjiCapBasis,
-          wkByChar: resolvedWkLevels,
-          gradeByChar: resolvedGrades,
+          wkByChar: cachedLevels.levels,
+          gradeByChar: cachedLevels.grades,
         });
         const displayText =
           isDowngraded && typeof resolvedReading === "string" && resolvedReading.length > 0
             ? resolvedReading
             : segment.text;
+
         const sizeClass = emphasizeKanji ? "text-[1.2em] leading-none" : "";
         const seenClass = seenRuns.has(segment.text) ? "text-accent/80" : "";
         const downgradedClass = isDowngraded && displayText === segment.text ? "opacity-65" : "";
@@ -259,11 +250,14 @@ export default function NewsTokenizedText({
           availability === "missing"
             ? "text-hot/80 decoration-hot/70 decoration-wavy underline"
             : "";
+
         const tryOpen = () => {
-          const selectionText = typeof window !== "undefined" ? window.getSelection()?.toString().trim() ?? "" : "";
+          const selectionText =
+            typeof window !== "undefined" ? window.getSelection()?.toString().trim() ?? "" : "";
           if (isLoading) {
             return;
           }
+
           const selectionCandidates = selectionText
             ? buildCandidatesFromSelectedText(selectionText)
             : [];
@@ -318,6 +312,9 @@ export default function NewsTokenizedText({
               }
             }}
             onMouseEnter={() => {
+              if (largeArticleMode) {
+                return;
+              }
               if (availability !== "unknown" || isLoading) {
                 return;
               }
@@ -326,6 +323,9 @@ export default function NewsTokenizedText({
               });
             }}
             onFocus={() => {
+              if (largeArticleMode) {
+                return;
+              }
               if (availability !== "unknown" || isLoading) {
                 return;
               }
@@ -338,10 +338,10 @@ export default function NewsTokenizedText({
               isLoading
                 ? `Looking up ${segment.text}...`
                 : isDowngraded && (readingPending || levelPending)
-                ? `Applying cap to ${segment.text}...`
-                : availability === "missing"
-                ? `${segment.text} is not in your WaniKani data`
-                : `Look up ${segment.text}`
+                  ? `Applying cap to ${segment.text}...`
+                  : availability === "missing"
+                    ? `${segment.text} is not in your WaniKani data`
+                    : `Look up ${segment.text}`
             }
           >
             <span className="rounded-sm group-hover:bg-accent/10 group-focus-visible:bg-accent/10">
@@ -353,244 +353,11 @@ export default function NewsTokenizedText({
                 className="pointer-events-none absolute -right-2 -top-1 h-3 w-3 animate-spin rounded-full border-2 border-accent/35 border-t-accent"
               />
             ) : null}
-            {/* Keep pending state lightweight to avoid UI jank on long articles. */}
           </span>
         );
       })}
     </>
   );
-}
-
-const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
-const jlptByChar = jlptReadings as JlptRecord;
-
-async function ensureKanjiLevels(chars: string[]): Promise<void> {
-  let added = false;
-  for (const char of chars) {
-    if (isCharLevelResolved(char) || loadingLevelChars.has(char)) {
-      continue;
-    }
-    queuedLevelChars.add(char);
-    added = true;
-  }
-
-  if (added) {
-    scheduleLevelBatch();
-  }
-
-  if (levelBatchPromise) {
-    await levelBatchPromise;
-  }
-}
-
-async function ensureRunReadings(runs: string[]): Promise<void> {
-  let added = false;
-  for (const run of runs) {
-    if (run in sharedReadingsByRun || loadingReadingRuns.has(run)) {
-      continue;
-    }
-    queuedReadingRuns.add(run);
-    added = true;
-  }
-
-  if (added) {
-    scheduleReadingBatch();
-  }
-
-  if (readingBatchPromise) {
-    await readingBatchPromise;
-  }
-}
-
-function scheduleLevelBatch(): void {
-  if (!levelBatchPromise) {
-    levelBatchPromise = new Promise<void>((resolve) => {
-      resolveLevelBatchPromise = resolve;
-    });
-  }
-  if (levelBatchTimer !== null) {
-    return;
-  }
-
-  levelBatchTimer = setTimeout(() => {
-    void flushLevelBatch();
-  }, 20);
-}
-
-async function flushLevelBatch(): Promise<void> {
-  const batch = Array.from(queuedLevelChars);
-  queuedLevelChars.clear();
-
-  if (batch.length > 0) {
-    for (const char of batch) {
-      loadingLevelChars.add(char);
-    }
-
-    let success = false;
-    try {
-      const response = await fetch("/api/news/kanji-levels", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chars: batch }),
-      });
-
-      const payload = (await response.json().catch(() => null)) as
-        | { levels?: Record<string, number | null>; grades?: Record<string, number | null> }
-        | null;
-      if (response.ok) {
-        success = true;
-        for (const char of batch) {
-          sharedWkLevelsByChar[char] = payload?.levels?.[char] ?? null;
-          sharedGradesByChar[char] = payload?.grades?.[char] ?? null;
-        }
-      }
-    } catch {
-      // Keep rendering functional if enrichment fails.
-    } finally {
-      if (!success) {
-        // Mark as resolved-missing to avoid hot retry loops that can freeze UI.
-        for (const char of batch) {
-          if (!(char in sharedWkLevelsByChar)) {
-            sharedWkLevelsByChar[char] = null;
-          }
-          if (!(char in sharedGradesByChar)) {
-            sharedGradesByChar[char] = null;
-          }
-        }
-      }
-      for (const char of batch) {
-        loadingLevelChars.delete(char);
-      }
-    }
-  }
-
-  levelBatchTimer = null;
-  const resolve = resolveLevelBatchPromise;
-  levelBatchPromise = null;
-  resolveLevelBatchPromise = null;
-  resolve?.();
-
-  if (queuedLevelChars.size > 0) {
-    scheduleLevelBatch();
-  }
-}
-
-function scheduleReadingBatch(): void {
-  if (!readingBatchPromise) {
-    readingBatchPromise = new Promise<void>((resolve) => {
-      resolveReadingBatchPromise = resolve;
-    });
-  }
-  if (readingBatchTimer !== null) {
-    return;
-  }
-
-  readingBatchTimer = setTimeout(() => {
-    void flushReadingBatch();
-  }, 20);
-}
-
-async function flushReadingBatch(): Promise<void> {
-  const batch = Array.from(queuedReadingRuns);
-  queuedReadingRuns.clear();
-
-  if (batch.length > 0) {
-    for (const run of batch) {
-      loadingReadingRuns.add(run);
-    }
-
-    let success = false;
-    try {
-      const response = await fetch("/api/news/readings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ runs: batch }),
-      });
-
-      const payload = (await response.json().catch(() => null)) as
-        | { readings?: Record<string, string | null> }
-        | null;
-      if (response.ok) {
-        success = true;
-        for (const run of batch) {
-          sharedReadingsByRun[run] = payload?.readings?.[run] ?? null;
-        }
-      }
-    } catch {
-      // Keep original text if reading lookup fails.
-    } finally {
-      if (!success) {
-        // Mark as resolved-missing to avoid repeated retries under failures.
-        for (const run of batch) {
-          if (!(run in sharedReadingsByRun)) {
-            sharedReadingsByRun[run] = null;
-          }
-        }
-      }
-      for (const run of batch) {
-        loadingReadingRuns.delete(run);
-      }
-    }
-  }
-
-  readingBatchTimer = null;
-  const resolve = resolveReadingBatchPromise;
-  readingBatchPromise = null;
-  resolveReadingBatchPromise = null;
-  resolve?.();
-
-  if (queuedReadingRuns.size > 0) {
-    scheduleReadingBatch();
-  }
-}
-
-function isCharLevelResolved(char: string): boolean {
-  return char in sharedWkLevelsByChar && char in sharedGradesByChar;
-}
-
-function pickCharValues(
-  chars: string[],
-  source: Record<string, number | null>,
-): Record<string, number | null> {
-  const out: Record<string, number | null> = {};
-  for (const char of chars) {
-    if (char in source) {
-      out[char] = source[char] ?? null;
-    }
-  }
-  return out;
-}
-
-function pickRunValues(
-  runs: string[],
-  source: Record<string, string | null>,
-): Record<string, string | null> {
-  const out: Record<string, string | null> = {};
-  for (const run of runs) {
-    if (run in source) {
-      out[run] = source[run] ?? null;
-    }
-  }
-  return out;
-}
-
-function isSegmentLevelPending(
-  value: string,
-  settings: {
-    basis: NewsKanjiCapBasis;
-    wkByChar: Record<string, number | null>;
-    gradeByChar: Record<string, number | null>;
-  },
-): boolean {
-  if (settings.basis === "jlpt") {
-    return false;
-  }
-
-  const chars = Array.from(value).filter((char) => KANJI_REGEX.test(char));
-  if (settings.basis === "wk") {
-    return chars.some((char) => !(char in settings.wkByChar));
-  }
-  return chars.some((char) => !(char in settings.gradeByChar));
 }
 
 function collectSeenGlyphs(): Set<string> {
@@ -672,6 +439,25 @@ function shouldDeemphasizeSegment(
   });
 }
 
+function isSegmentLevelPending(
+  value: string,
+  settings: {
+    basis: NewsKanjiCapBasis;
+    wkByChar: Record<string, number | null>;
+    gradeByChar: Record<string, number | null>;
+  },
+): boolean {
+  if (settings.basis === "jlpt") {
+    return false;
+  }
+
+  const chars = Array.from(value).filter((char) => KANJI_REGEX.test(char));
+  if (settings.basis === "wk") {
+    return chars.some((char) => isKanjiLevelPending(char) || !(char in settings.wkByChar));
+  }
+  return chars.some((char) => isKanjiLevelPending(char) || !(char in settings.gradeByChar));
+}
+
 function jlptThresholdFromMode(mode: NewsKanjiCapJlpt): number | null {
   if (mode === "all") {
     return null;
@@ -711,4 +497,3 @@ function isJlptHarderThanThreshold(char: string, threshold: number): boolean {
 
   return nLevel < threshold;
 }
-
