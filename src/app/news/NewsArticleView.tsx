@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 import type { NewsArticle, NewsArticleBlock } from "@/lib/news/newsTypes";
 
@@ -17,11 +18,27 @@ import {
 
 const AD_INTERVAL = 4;
 
+export type ArticlePanelTab = "article" | "history" | "stats";
+
 type Props = {
   article: NewsArticle;
+  activeTab: ArticlePanelTab;
+  onTabChangeAction: (next: ArticlePanelTab) => void;
+  historyCount: number;
+  statsCount: number;
+  historyPanel: ReactNode;
+  statsPanel: ReactNode;
 };
 
-export default function NewsArticleView({ article }: Props) {
+export default function NewsArticleView({
+  article,
+  activeTab,
+  onTabChangeAction,
+  historyCount,
+  statsCount,
+  historyPanel,
+  statsPanel,
+}: Props) {
   const items = interleaveAdSlots(article.blocks);
   const [prefs, setPrefs] = useState<NewsReadingPrefs>(DEFAULT_NEWS_READING_PREFS);
   const [hydrated, setHydrated] = useState(false);
@@ -65,20 +82,35 @@ export default function NewsArticleView({ article }: Props) {
 
       <NewsReadingControls prefs={prefs} onChange={updatePrefs} />
 
-      <div className={`space-y-4 text-foreground ${textSizeClass(prefs.textSize)}`.trim()}>
-        {items.map((item, index) => {
-          if (item.kind === "ad") {
-            return <AdPlaceholder key={`ad-${index}`} />;
-          }
-          return (
-            <BlockView
-              key={`block-${index}`}
-              block={item.block}
-              emphasizeKanji={prefs.emphasizeKanji}
-            />
-          );
-        })}
-      </div>
+      <ArticleTabs
+        activeTab={activeTab}
+        onChange={onTabChangeAction}
+        historyCount={historyCount}
+        statsCount={statsCount}
+      />
+
+      {activeTab === "article" ? (
+        <div
+          className={`space-y-4 text-foreground ${textSizeClass(prefs.textSize)}`.trim()}
+          style={articleTextStyle(prefs.articleFont)}
+        >
+          {items.map((item, index) => {
+            if (item.kind === "ad") {
+              return <AdPlaceholder key={`ad-${index}`} />;
+            }
+            return (
+              <BlockView
+                key={`block-${index}`}
+                block={item.block}
+                emphasizeKanji={prefs.emphasizeKanji}
+              />
+            );
+          })}
+        </div>
+      ) : null}
+
+      {activeTab === "history" ? historyPanel : null}
+      {activeTab === "stats" ? statsPanel : null}
 
       <footer className="border-t border-line pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/55">
         Source:{" "}
@@ -93,6 +125,56 @@ export default function NewsArticleView({ article }: Props) {
       </footer>
     </article>
   );
+}
+
+function ArticleTabs({
+  activeTab,
+  onChange,
+  historyCount,
+  statsCount,
+}: {
+  activeTab: ArticlePanelTab;
+  onChange: (next: ArticlePanelTab) => void;
+  historyCount: number;
+  statsCount: number;
+}) {
+  return (
+    <div className="inline-flex flex-wrap overflow-hidden rounded-full border border-line bg-surface-muted text-[11px] font-bold uppercase tracking-[0.12em]">
+      <button
+        type="button"
+        onClick={() => onChange("article")}
+        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === "article" ? "bg-accent text-surface" : "text-foreground/70"}`}
+      >
+        <span>Article</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("history")}
+        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === "history" ? "bg-accent text-surface" : "text-foreground/70"}`}
+      >
+        <span>History</span>
+        <span className="text-[10px] opacity-85">{historyCount}</span>
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("stats")}
+        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === "stats" ? "bg-accent text-surface" : "text-foreground/70"}`}
+      >
+        <span>Stats</span>
+        <span className="text-[10px] opacity-85">{statsCount}</span>
+      </button>
+    </div>
+  );
+}
+
+function articleTextStyle(font: "body" | "jp-sans" | "jp-serif"): { fontFamily: string } {
+  if (font === "jp-sans") {
+    return { fontFamily: "var(--font-jp-sans), var(--font-body-sans), sans-serif" };
+  }
+  if (font === "jp-serif") {
+    return { fontFamily: "var(--font-jp-serif), serif" };
+  }
+  return { fontFamily: "var(--font-body-sans), var(--font-jp-current), sans-serif" };
 }
 
 function BlockView({

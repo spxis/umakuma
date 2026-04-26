@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  articleFontLabel,
   bumpTextSize,
   textSizeLabel,
+  type NewsArticleFont,
   type NewsReadingPrefs,
   type NewsTextSize,
 } from "./newsReadingPrefs";
@@ -21,32 +23,57 @@ export default function NewsReadingControls({ prefs, onChange }: Props) {
     onChange({ ...prefs, emphasizeKanji: !prefs.emphasizeKanji });
   }
 
+  function setFont(font: NewsArticleFont) {
+    onChange({ ...prefs, articleFont: font });
+  }
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line/80 bg-surface-muted px-4 py-3">
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/60">
-          Text size
-        </span>
-        <div className="inline-flex items-center overflow-hidden rounded-full border border-line bg-surface">
-          <button
-            type="button"
-            onClick={() => setSize(bumpTextSize(prefs.textSize, -1))}
-            className="px-3 py-1 text-sm font-bold text-foreground/80 hover:bg-surface-muted"
-            aria-label="Decrease text size"
-          >
-            A−
-          </button>
-          <span className="border-x border-line px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/70">
-            {textSizeLabel(prefs.textSize)}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/60">
+            Text size
           </span>
-          <button
-            type="button"
-            onClick={() => setSize(bumpTextSize(prefs.textSize, 1))}
-            className="px-3 py-1 text-sm font-bold text-foreground/80 hover:bg-surface-muted"
-            aria-label="Increase text size"
-          >
-            A+
-          </button>
+          <div className="inline-flex items-center overflow-hidden rounded-full border border-line bg-surface">
+            <button
+              type="button"
+              onClick={() => setSize(bumpTextSize(prefs.textSize, -1))}
+              className="px-3 py-1 text-sm font-bold text-foreground/80 hover:bg-surface-muted"
+              aria-label="Decrease text size"
+            >
+              A−
+            </button>
+            <span className="border-x border-line px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/70">
+              {textSizeLabel(prefs.textSize)}
+            </span>
+            <button
+              type="button"
+              onClick={() => setSize(bumpTextSize(prefs.textSize, 1))}
+              className="px-3 py-1 text-sm font-bold text-foreground/80 hover:bg-surface-muted"
+              aria-label="Increase text size"
+            >
+              A+
+            </button>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/60">
+            Font
+          </span>
+          <div className="inline-flex items-center overflow-hidden rounded-full border border-line bg-surface">
+            {(["body", "jp-sans", "jp-serif"] as const).map((font) => (
+              <button
+                key={font}
+                type="button"
+                onClick={() => setFont(font)}
+                className={`px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] ${prefs.articleFont === font ? "bg-accent text-surface" : "text-foreground/75 hover:bg-surface-muted"}`}
+                aria-label={`Use ${articleFontLabel(font)} font`}
+              >
+                {articleFontLabel(font)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

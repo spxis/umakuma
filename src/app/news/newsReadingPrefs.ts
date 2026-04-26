@@ -3,18 +3,22 @@ import { getStoredJson, setStoredJson } from "@/lib/clientStorage";
 export const NEWS_READING_PREFS_KEY = "uk:news-reading-prefs";
 
 export type NewsTextSize = "sm" | "md" | "lg" | "xl" | "2xl";
+export type NewsArticleFont = "body" | "jp-sans" | "jp-serif";
 
 export type NewsReadingPrefs = {
   textSize: NewsTextSize;
   emphasizeKanji: boolean;
+  articleFont: NewsArticleFont;
 };
 
 export const DEFAULT_NEWS_READING_PREFS: NewsReadingPrefs = {
   textSize: "lg",
   emphasizeKanji: false,
+  articleFont: "body",
 };
 
 const TEXT_SIZE_ORDER: NewsTextSize[] = ["sm", "md", "lg", "xl", "2xl"];
+const ARTICLE_FONTS: NewsArticleFont[] = ["body", "jp-sans", "jp-serif"];
 
 export function readReadingPrefs(): NewsReadingPrefs {
   const stored = getStoredJson<Partial<NewsReadingPrefs> | null>(
@@ -31,7 +35,10 @@ export function readReadingPrefs(): NewsReadingPrefs {
     typeof stored.emphasizeKanji === "boolean"
       ? stored.emphasizeKanji
       : DEFAULT_NEWS_READING_PREFS.emphasizeKanji;
-  return { textSize, emphasizeKanji };
+  const articleFont = ARTICLE_FONTS.includes(stored.articleFont as NewsArticleFont)
+    ? (stored.articleFont as NewsArticleFont)
+    : DEFAULT_NEWS_READING_PREFS.articleFont;
+  return { textSize, emphasizeKanji, articleFont };
 }
 
 export function writeReadingPrefs(prefs: NewsReadingPrefs): void {
@@ -74,5 +81,17 @@ export function textSizeLabel(size: NewsTextSize): string {
     case "md":
     default:
       return "Medium";
+  }
+}
+
+export function articleFontLabel(font: NewsArticleFont): string {
+  switch (font) {
+    case "jp-sans":
+      return "JP Sans";
+    case "jp-serif":
+      return "JP Serif";
+    case "body":
+    default:
+      return "Body";
   }
 }
