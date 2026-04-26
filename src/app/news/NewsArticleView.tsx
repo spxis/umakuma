@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import type { NewsArticle, NewsArticleBlock } from "@/lib/news/newsTypes";
 
 import NewsCacheBadge from "./NewsCacheBadge";
+import NewsKanjiOverviewPanel from "./NewsKanjiOverviewPanel";
 import NewsReadingControls from "./NewsReadingControls";
 import NewsTokenizedText from "./NewsTokenizedText";
 import {
@@ -75,6 +76,8 @@ export default function NewsArticleView({
       </header>
 
       <NewsReadingControls prefs={prefs} onChange={updatePrefs} />
+
+      <NewsKanjiOverviewPanel blocks={article.blocks} />
 
       <ArticleTabs
         activeTab={activeTab}

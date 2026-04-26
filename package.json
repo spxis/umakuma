@@ -22,6 +22,7 @@
     "db:studio": "prisma studio",
     "db:seed:jlpt": "node scripts/seed-jlpt.mjs",
     "db:seed:jlpt:readings": "node scripts/build-jlpt-readings.mjs",
+    "db:seed:kanji-levels": "node scripts/build-kanji-levels.mjs",
     "db:enrich:jlpt": "node scripts/enrich-jlpt-kanji.mjs",
     "test:news:candidates": "node scripts/news-candidate-analysis.mjs"
   },

@@ -86,6 +86,36 @@ export function runAvailabilityFromCache(run: string): "unknown" | "known" | "mi
   return "missing";
 }
 
+export function readAllRunLookupCache(): RunLookupCacheHit[] {
+  const store = getStoredJson<CacheStore>(CACHE_KEY, {});
+  const now = Date.now();
+  const out: RunLookupCacheHit[] = [];
+  let mutated = false;
+
+  for (const [key, entry] of Object.entries(store)) {
+    if (!key) {
+      continue;
+    }
+    if (now - entry.fetchedAtMs > TTL_MS) {
+      delete store[key];
+      mutated = true;
+      continue;
+    }
+
+    out.push({
+      accountId: entry.accountId,
+      result: entry.result,
+      cachedAgeMs: now - entry.fetchedAtMs,
+    });
+  }
+
+  if (mutated) {
+    setStoredJson(CACHE_KEY, store);
+  }
+
+  return out;
+}
+
 function prune(store: CacheStore): void {
   const now = Date.now();
   for (const key of Object.keys(store)) {
