@@ -67,8 +67,7 @@ export default function NewsArticleView({
           {article.title}
         </h2>
         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-foreground/60">
-          {article.siteName ?? hostnameOf(article.finalUrl)}
-          {article.byline ? ` · ${article.byline}` : ""}
+          {articleMetaLine(article)}
         </p>
         {article.excerpt ? (
           <p className="text-sm text-foreground/75">{article.excerpt}</p>
@@ -231,4 +230,33 @@ function hostnameOf(url: string): string {
   } catch {
     return url;
   }
+}
+
+function articleMetaLine(article: NewsArticle): string {
+  const values = [article.siteName ?? hostnameOf(article.finalUrl), article.byline ?? ""]
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0);
+
+  const unique: string[] = [];
+  const seen = new Set<string>();
+  for (const value of values) {
+    const key = normalizeMetaValue(value);
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    unique.push(value);
+  }
+
+  return unique.join(" · ");
+}
+
+function normalizeMetaValue(value: string): string {
+  return value
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[\s\u00A0]+/g, " ")
+    .replace(/[\[\]（）()]/g, "")
+    .replace(/[・･·]/g, "")
+    .trim();
 }
