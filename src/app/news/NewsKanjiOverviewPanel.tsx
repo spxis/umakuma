@@ -32,6 +32,8 @@ type KanjiEntry = {
 
 type GroupMode = "all" | "jlpt" | "wk" | "grade";
 type EntrySortMode = "article" | "count" | "jp";
+type AllCountFilter = "all" | "2+" | "3+" | "5+";
+type AllCoverageFilter = "all" | "wk-known" | "wk-unknown" | "no-level-data";
 
 type JlptRecord = Record<string, { nLevel?: number }>;
 
@@ -39,8 +41,12 @@ const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
 const japaneseCollator = new Intl.Collator("ja");
 const GROUP_MODE_STORAGE_KEY = "news:kanji-group-mode";
 const ENTRY_SORT_STORAGE_KEY = "news:kanji-sort-mode";
+const ALL_COUNT_FILTER_STORAGE_KEY = "news:kanji-all-count-filter";
+const ALL_COVERAGE_FILTER_STORAGE_KEY = "news:kanji-all-coverage-filter";
 const GROUP_MODE_OPTIONS = ["all", "jlpt", "wk", "grade"] as const;
 const ENTRY_SORT_OPTIONS = ["article", "count", "jp"] as const;
+const ALL_COUNT_FILTER_OPTIONS = ["all", "2+", "3+", "5+"] as const;
+const ALL_COVERAGE_FILTER_OPTIONS = ["all", "wk-known", "wk-unknown", "no-level-data"] as const;
 
 export function countUniqueArticleKanji(blocks: NewsArticleBlock[]): number {
   return extractArticleKanjiData(blocks).orderedChars.length;
@@ -54,6 +60,12 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
   );
   const [entrySortMode, setEntrySortMode] = useState<EntrySortMode>(() =>
     getStoredEnum<EntrySortMode>(ENTRY_SORT_STORAGE_KEY, ENTRY_SORT_OPTIONS, "article"),
+  );
+  const [allCountFilter, setAllCountFilter] = useState<AllCountFilter>(() =>
+    getStoredEnum<AllCountFilter>(ALL_COUNT_FILTER_STORAGE_KEY, ALL_COUNT_FILTER_OPTIONS, "all"),
+  );
+  const [allCoverageFilter, setAllCoverageFilter] = useState<AllCoverageFilter>(() =>
+    getStoredEnum<AllCoverageFilter>(ALL_COVERAGE_FILTER_STORAGE_KEY, ALL_COVERAGE_FILTER_OPTIONS, "all"),
   );
 
   const { orderedChars, countsByChar } = useMemo(() => extractArticleKanjiData(blocks), [blocks]);
@@ -142,7 +154,10 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
         ? "Unknown"
         : `Grade ${entry.schoolGrade}`,
   );
-  const allGroups = buildGroups(entries, () => "All");
+  const filteredAllEntries = entries.filter((entry) =>
+    matchesAllFilters(entry, allCountFilter, allCoverageFilter),
+  );
+  const allGroups = buildGroups(filteredAllEntries, () => "All");
 
   const activeGroup =
     groupMode === "all"
@@ -163,6 +178,16 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
   const updateEntrySortMode = (nextMode: EntrySortMode) => {
     setEntrySortMode(nextMode);
     setStoredEnum(ENTRY_SORT_STORAGE_KEY, nextMode);
+  };
+
+  const updateAllCountFilter = (nextFilter: AllCountFilter) => {
+    setAllCountFilter(nextFilter);
+    setStoredEnum(ALL_COUNT_FILTER_STORAGE_KEY, nextFilter);
+  };
+
+  const updateAllCoverageFilter = (nextFilter: AllCoverageFilter) => {
+    setAllCoverageFilter(nextFilter);
+    setStoredEnum(ALL_COVERAGE_FILTER_STORAGE_KEY, nextFilter);
   };
 
   return (
@@ -230,6 +255,72 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
               }}
             />
           </div>
+
+          {groupMode === "all" ? (
+            <>
+              <div className="inline-flex rounded-lg border border-line bg-surface-muted p-1">
+                <SegmentButton
+                  label="Count All"
+                  selected={allCountFilter === "all"}
+                  onClick={() => {
+                    updateAllCountFilter("all");
+                  }}
+                />
+                <SegmentButton
+                  label="2+"
+                  selected={allCountFilter === "2+"}
+                  onClick={() => {
+                    updateAllCountFilter("2+");
+                  }}
+                />
+                <SegmentButton
+                  label="3+"
+                  selected={allCountFilter === "3+"}
+                  onClick={() => {
+                    updateAllCountFilter("3+");
+                  }}
+                />
+                <SegmentButton
+                  label="5+"
+                  selected={allCountFilter === "5+"}
+                  onClick={() => {
+                    updateAllCountFilter("5+");
+                  }}
+                />
+              </div>
+
+              <div className="inline-flex rounded-lg border border-line bg-surface-muted p-1">
+                <SegmentButton
+                  label="Focus All"
+                  selected={allCoverageFilter === "all"}
+                  onClick={() => {
+                    updateAllCoverageFilter("all");
+                  }}
+                />
+                <SegmentButton
+                  label="WK Known"
+                  selected={allCoverageFilter === "wk-known"}
+                  onClick={() => {
+                    updateAllCoverageFilter("wk-known");
+                  }}
+                />
+                <SegmentButton
+                  label="WK Unknown"
+                  selected={allCoverageFilter === "wk-unknown"}
+                  onClick={() => {
+                    updateAllCoverageFilter("wk-unknown");
+                  }}
+                />
+                <SegmentButton
+                  label="No Level"
+                  selected={allCoverageFilter === "no-level-data"}
+                  onClick={() => {
+                    updateAllCoverageFilter("no-level-data");
+                  }}
+                />
+              </div>
+            </>
+          ) : null}
         </div>
       </header>
 
@@ -423,4 +514,49 @@ function compareLabels(a: string, b: string): number {
   };
 
   return rank(a) - rank(b);
+}
+
+function matchesAllFilters(
+  entry: KanjiEntry,
+  countFilter: AllCountFilter,
+  coverageFilter: AllCoverageFilter,
+): boolean {
+  if (!matchesCountFilter(entry.occurrenceCount, countFilter)) {
+    return false;
+  }
+
+  if (!matchesCoverageFilter(entry, coverageFilter)) {
+    return false;
+  }
+
+  return true;
+}
+
+function matchesCountFilter(count: number, filter: AllCountFilter): boolean {
+  if (filter === "2+") {
+    return count >= 2;
+  }
+  if (filter === "3+") {
+    return count >= 3;
+  }
+  if (filter === "5+") {
+    return count >= 5;
+  }
+  return true;
+}
+
+function matchesCoverageFilter(entry: KanjiEntry, filter: AllCoverageFilter): boolean {
+  if (filter === "wk-known") {
+    return entry.wkLevel !== null;
+  }
+
+  if (filter === "wk-unknown") {
+    return entry.wkLevel === null;
+  }
+
+  if (filter === "no-level-data") {
+    return entry.wkLevel === null && entry.jlptLevel === null && entry.schoolGrade === null;
+  }
+
+  return true;
 }
