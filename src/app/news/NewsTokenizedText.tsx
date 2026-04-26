@@ -35,16 +35,15 @@ export default function NewsTokenizedText({ text, emphasizeKanji, kanjiDowngrade
   const [dynamicAvailability, setDynamicAvailability] = useState<
     Record<string, "unknown" | "known" | "missing">
   >({});
+  const [readingsByRun, setReadingsByRun] = useState<Record<string, string | null>>({});
   const [loadingRun, setLoadingRun] = useState<string | null>(null);
-  const [seenRuns, setSeenRuns] = useState<Set<string>>(() => new Set());
-
-  useEffect(() => {
+  const [seenRuns, setSeenRuns] = useState<Set<string>>(() => {
     const next = collectSeenGlyphs();
     for (const token of pageSessionSeenGlyphs) {
       next.add(token);
     }
-    setSeenRuns(next);
-  }, []);
+    return next;
+  });
 
   useEffect(() => {
     const refresh = () => {
@@ -73,6 +72,60 @@ export default function NewsTokenizedText({ text, emphasizeKanji, kanjiDowngrade
     return Object.fromEntries(map.entries());
   }, [segments]);
 
+  const downgradedRuns = useMemo(() => {
+    if (kanjiDowngrade === "off") {
+      return [] as string[];
+    }
+
+    const unique = new Set<string>();
+    for (const segment of segments) {
+      if (segment.kind !== "kanji") {
+        continue;
+      }
+      if (!shouldDeemphasizeSegment(segment.text, kanjiDowngrade)) {
+        continue;
+      }
+      unique.add(segment.text);
+    }
+
+    return Array.from(unique);
+  }, [kanjiDowngrade, segments]);
+
+  useEffect(() => {
+    if (kanjiDowngrade === "off" || downgradedRuns.length === 0) {
+      return;
+    }
+
+    const unresolved = downgradedRuns.filter((run) => !(run in readingsByRun));
+    if (unresolved.length === 0) {
+      return;
+    }
+
+    let cancelled = false;
+    void fetch("/api/news/readings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ runs: unresolved }),
+    })
+      .then(async (response) => {
+        const payload = (await response.json().catch(() => null)) as
+          | { readings?: Record<string, string | null> }
+          | null;
+        if (!response.ok || cancelled || !payload?.readings) {
+          return;
+        }
+
+        setReadingsByRun((prev) => ({ ...prev, ...payload.readings }));
+      })
+      .catch(() => {
+        // Keep original rendering if readings cannot be resolved.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [downgradedRuns, kanjiDowngrade, readingsByRun]);
+
   if (segments.length === 0) {
     return <>{text}</>;
   }
@@ -88,9 +141,15 @@ export default function NewsTokenizedText({ text, emphasizeKanji, kanjiDowngrade
         const availability = dynamicAvailability[segment.text] ?? availabilityByRun[segment.text] ?? "unknown";
         const isLoading = loadingRun === segment.text;
         const isDowngraded = shouldDeemphasizeSegment(segment.text, kanjiDowngrade);
+        const resolvedReading = readingsByRun[segment.text];
+        const displayText =
+          isDowngraded && typeof resolvedReading === "string" && resolvedReading.length > 0
+            ? resolvedReading
+            : segment.text;
         const sizeClass = emphasizeKanji ? "text-[1.2em] leading-none" : "";
         const seenClass = seenRuns.has(segment.text) ? "text-accent/80" : "";
-        const downgradedClass = isDowngraded ? "opacity-65" : "";
+        const downgradedClass =
+          isDowngraded && displayText === segment.text ? "opacity-65" : "";
         const missingClass =
           availability === "missing"
             ? "text-hot/80 decoration-hot/70 decoration-wavy underline"
@@ -179,7 +238,7 @@ export default function NewsTokenizedText({ text, emphasizeKanji, kanjiDowngrade
             }
           >
             <span className="rounded-sm group-hover:bg-accent/10 group-focus-visible:bg-accent/10">
-              {segment.text}
+              {displayText}
             </span>
             {isLoading ? (
               <span
