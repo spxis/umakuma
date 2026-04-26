@@ -94,6 +94,24 @@ describe("tokenizeJapanese", () => {
     expect(kanjiRuns).toContain("悪化");
   });
 
+  it("splits honorific 氏 from following compound", () => {
+    const segments = tokenizeJapanese("トランプ氏出席の会合");
+    const kanjiRuns = segments.filter((segment) => segment.kind === "kanji").map((segment) => segment.text);
+
+    expect(kanjiRuns).toContain("氏");
+    expect(kanjiRuns).toContain("出席");
+    expect(kanjiRuns).not.toContain("氏出席");
+  });
+
+  it("keeps suffix with post-氏 compound while splitting 氏", () => {
+    const segments = tokenizeJapanese("トランプ氏出席した会合");
+    const kanjiRuns = segments.filter((segment) => segment.kind === "kanji").map((segment) => segment.text);
+
+    expect(kanjiRuns).toContain("氏");
+    expect(kanjiRuns).toContain("出席した");
+    expect(kanjiRuns).not.toContain("氏出席した");
+  });
+
   it("does not create giant merged clickable runs after numeric counters", () => {
     const segments = tokenizeJapanese("さん55歳地方公務員愛知県在住");
     const kanjiRuns = segments.filter((segment) => segment.kind === "kanji").map((segment) => segment.text);

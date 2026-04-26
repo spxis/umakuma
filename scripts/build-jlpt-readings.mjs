@@ -55,7 +55,9 @@ async function fetchJlptLists() {
 }
 
 function toHiragana(reading) {
-  return reading.replace(/[ァ-ヶ]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0x60));
+  return reading.replace(/[\u30A1-\u30FA\u30FD-\u30FF]/g, (char) =>
+    String.fromCharCode(char.charCodeAt(0) - 0x60),
+  );
 }
 
 async function fetchKanjiDetail(kanji) {

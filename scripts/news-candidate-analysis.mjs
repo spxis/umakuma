@@ -3,7 +3,7 @@ import { Readability } from "@mozilla/readability";
 import { JSDOM } from "jsdom";
 
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
-const KANA_REGEX = /[\u3040-\u309F\u30A0-\u30FFー]/;
+const KANA_REGEX = /[\u3040-\u309F\u30A0-\u30FA\u30FC-\u30FF]/;
 
 const urls = process.argv.slice(2).filter(Boolean);
 if (urls.length === 0) {
@@ -140,7 +140,7 @@ function expandedTokens(text) {
   return {
     tokenCount: unique.length,
     avgLen: avg(unique.map((token) => Array.from(token).length)),
-    withKanaSuffix: unique.filter((token) => /[\u3040-\u309F\u30A0-\u30FFー]/.test(token)).length,
+    withKanaSuffix: unique.filter((token) => /[\u3040-\u309F\u30A0-\u30FA\u30FC-\u30FF]/.test(token)).length,
     avgCandidates: avg(candidatesPerRun),
     samples: unique.slice(0, 10),
   };

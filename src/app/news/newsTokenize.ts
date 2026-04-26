@@ -89,6 +89,17 @@ export function tokenizeJapanese(text: string): NewsTextSegment[] {
     }
 
     index = suffixEnd;
+    if ((chars[start] ?? "") === "氏" && kanjiEnd - start >= 2) {
+      const suffix = suffixCount > 0 ? chars.slice(kanjiEnd, suffixEnd).join("") : "";
+      const rest = `${chars.slice(start + 1, kanjiEnd).join("")}${suffix}`;
+
+      segments.push({ kind: "kanji", text: "氏" });
+      if (rest) {
+        segments.push({ kind: "kanji", text: rest });
+      }
+      continue;
+    }
+
     if (kanjiEnd - start >= 4) {
       const chunks = splitPureKanjiRun(chars, start, kanjiEnd);
       const suffix = suffixCount > 0 ? chars.slice(kanjiEnd, suffixEnd).join("") : "";
