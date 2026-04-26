@@ -31,6 +31,21 @@ type ViewerRow = {
   lastClickedAt: string;
 };
 
+const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
+
+function uniqueKanji(run: string): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const char of Array.from(run)) {
+    if (!KANJI_REGEX.test(char) || seen.has(char)) {
+      continue;
+    }
+    seen.add(char);
+    out.push(char);
+  }
+  return out;
+}
+
 export default function NewsHistoryViewerClient() {
   const [entries, setEntries] = useState<NewsKanjiHistoryEntry[]>([]);
   const [events, setEvents] = useState<NewsGlyphViewEvent[]>([]);
@@ -125,12 +140,34 @@ export default function NewsHistoryViewerClient() {
         <ul className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-surface">
           {filtered.map((entry) => (
             <li key={entry.key} className="flex items-center gap-3 px-4 py-3 hover:bg-surface-muted">
-              <button type="button" onClick={() => void openNewsGlyphRun(entry.run)} className="min-w-0 flex-1 text-left">
-                <p className="line-clamp-1 text-xl font-bold text-foreground">{entry.run}</p>
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  {entry.hasVocabulary ? (
+                    <button
+                      type="button"
+                      onClick={() => void openNewsGlyphRun(entry.run)}
+                      className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-xl border border-vocabulary/55 bg-vocabulary/10 px-3 text-2xl font-black leading-none text-vocabulary transition hover:bg-vocabulary/20"
+                      title={`Open vocabulary ${entry.run}`}
+                    >
+                      {entry.run}
+                    </button>
+                  ) : null}
+                  {uniqueKanji(entry.run).map((char) => (
+                    <button
+                      key={`${entry.key}-${char}`}
+                      type="button"
+                      onClick={() => void openNewsGlyphRun(char)}
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-kanji/55 bg-kanji/10 text-2xl font-black leading-none text-kanji transition hover:bg-kanji/20"
+                      title={`Open kanji ${char}`}
+                    >
+                      {char}
+                    </button>
+                  ))}
+                </div>
                 <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground/55">
                   {entry.hasVocabulary ? "vocab" : "kanji only"} · {entry.knownCount}/{entry.totalCount} known · {formatRelativeFromNow(entry.lastClickedAt)}
                 </p>
-              </button>
+              </div>
               <div className="min-w-[5.5rem] rounded-xl border border-line bg-surface-muted px-2 py-1 text-center">
                 <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-foreground/60">Opens</p>
                 <p className="text-2xl font-black leading-none text-foreground">{entry.opens}</p>
