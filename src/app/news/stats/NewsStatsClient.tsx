@@ -95,10 +95,7 @@ export default function NewsStatsClient() {
                   <button
                     type="button"
                     onClick={() => void openNewsGlyphRun(entry.label)}
-                    className={newsGlyphButtonClass({
-                      type: entry.type,
-                      size: "normal",
-                    })}
+                    className={newsGlyphButtonClass({ type: entry.type })}
                     title={`Open ${entry.type} ${entry.label}`}
                   >
                     {entry.label}

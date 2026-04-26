@@ -8,15 +8,11 @@ export function newsGlyphBoxClass(type: NewsGlyphBoxType): string {
 
 export function newsGlyphButtonClass(options: {
   type: NewsGlyphBoxType;
-  size?: "compact" | "normal";
   selected?: boolean;
   clickable?: boolean;
 }): string {
-  const { type, size = "normal", selected = false, clickable = true } = options;
-  const sizeClass =
-    size === "compact"
-      ? "h-10 min-w-10 px-2 text-2xl"
-      : "min-h-10 min-w-10 px-3 text-2xl";
+  const { type, selected = false, clickable = true } = options;
+  const sizeClass = "min-h-14 min-w-14 px-3 text-4xl";
   const interactive = clickable
     ? "cursor-pointer transition hover:brightness-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
     : "cursor-default";

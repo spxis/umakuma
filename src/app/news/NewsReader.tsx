@@ -12,6 +12,7 @@ import type { ArticlePanelTab } from "./NewsArticleView";
 import NewsHistoryPanel from "./NewsHistoryPanel";
 import NewsKanjiHistoryPanel from "./NewsKanjiHistoryPanel";
 import NewsSiteLinks from "./NewsSiteLinks";
+import SegmentedControl from "../shared/SegmentedControl";
 import NewsStatsClient from "./stats/NewsStatsClient";
 import {
   clearNewsHistory,
@@ -285,7 +286,16 @@ export default function NewsReader({ devSampleUrls = [], userWkLevel = null }: P
           >
             {mode === "site" ? "Section / homepage URL" : "Article URL"}
           </label>
-          <ModeToggle mode={mode} onChange={setMode} />
+          <SegmentedControl
+            ariaLabel="News mode"
+            value={mode}
+            onChange={setMode}
+            size="sm"
+            options={[
+              { value: "article", label: "Article", activeClassName: "bg-accent text-surface", inactiveClassName: "text-foreground/70 hover:text-accent" },
+              { value: "site", label: "Site", activeClassName: "bg-accent text-surface", inactiveClassName: "text-foreground/70 hover:text-accent" },
+            ]}
+          />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <input
@@ -389,27 +399,6 @@ export default function NewsReader({ devSampleUrls = [], userWkLevel = null }: P
         onRemove={handleRemoveHistory}
         onClear={handleClearHistory}
       />
-    </div>
-  );
-}
-
-function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (next: Mode) => void }) {
-  return (
-    <div className="inline-flex overflow-hidden rounded-full border border-line bg-surface text-[11px] font-bold uppercase tracking-[0.14em]">
-      <button
-        type="button"
-        onClick={() => onChange("article")}
-        className={`px-3 py-1 transition ${mode === "article" ? "bg-accent text-surface" : "text-foreground/70 hover:text-accent"}`}
-      >
-        Article
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange("site")}
-        className={`px-3 py-1 transition ${mode === "site" ? "bg-accent text-surface" : "text-foreground/70 hover:text-accent"}`}
-      >
-        Site
-      </button>
     </div>
   );
 }

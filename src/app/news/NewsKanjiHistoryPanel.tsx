@@ -65,7 +65,7 @@ export default function NewsKanjiHistoryPanel({
                   <button
                     type="button"
                     onClick={() => onSelect(entry.run)}
-                    className={newsGlyphButtonClass({ type: "vocabulary", size: "normal" })}
+                    className={newsGlyphButtonClass({ type: "vocabulary" })}
                     title={`Open vocabulary ${entry.run}`}
                   >
                     {entry.run}
@@ -77,7 +77,7 @@ export default function NewsKanjiHistoryPanel({
                     key={`${entry.run}-${char}`}
                     type="button"
                     onClick={() => onSelect(char)}
-                    className={newsGlyphButtonClass({ type: "kanji", size: "compact" })}
+                    className={newsGlyphButtonClass({ type: "kanji" })}
                     title={`Open kanji ${char}`}
                   >
                     {char}

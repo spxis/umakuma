@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
+import SegmentedControl from "@/app/shared/SegmentedControl";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import {
   ItemSpreadTabPanel,
@@ -149,14 +150,6 @@ export default function UserDashboardTabs({
     window.dispatchEvent(new CustomEvent("wr:dashboard-tab-change", { detail: { tab: activeTab } }));
   }, [activeTab]);
 
-  const segmentBtnBase = "inline-flex h-8 shrink-0 select-none items-center justify-center rounded-full px-3 text-[11px] font-bold uppercase tracking-[0.1em] transition sm:px-4 sm:text-xs";
-  function tabClass(tab: TabId): string {
-    const active = activeTab === tab;
-    return active
-      ? `${segmentBtnBase} border border-accent bg-accent text-white`
-      : `${segmentBtnBase} text-foreground hover:bg-surface-muted`;
-  }
-
   useEffect(() => {
     if (safeProgressLevels.length === 0) {
       return;
@@ -211,35 +204,18 @@ export default function UserDashboardTabs({
             </Link>
           </div>
           <div className="ml-auto hidden items-center justify-end gap-2 sm:flex">
-            <div className="inline-flex items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="User dashboard tabs">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeTab === "main"}
-                className={tabClass("main")}
-                onClick={() => switchTab("main")}
-              >
-                Main Data
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeTab === "item-spread"}
-                className={tabClass("item-spread")}
-                onClick={() => switchTab("item-spread")}
-              >
-                Item Spread
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={activeTab === "level-progress"}
-                className={tabClass("level-progress")}
-                onClick={() => switchTab("level-progress")}
-              >
-                Level Progress
-              </button>
-            </div>
+            <SegmentedControl
+              ariaLabel="User dashboard tabs"
+              value={activeTab}
+              onChange={switchTab}
+              size="md"
+              asTabs
+              options={[
+                { value: "main", label: "Main Data" },
+                { value: "item-spread", label: "Item Spread" },
+                { value: "level-progress", label: "Level Progress" },
+              ]}
+            />
             <UserAdminRefreshButton
               accountId={accountId}
               label={"\u21BB"}
@@ -258,38 +234,19 @@ export default function UserDashboardTabs({
             buttonClassName="inline-flex h-9 w-9 shrink-0 select-none items-center justify-center rounded-full border border-line bg-surface text-lg font-bold text-foreground transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60 sm:hidden"
           />
         </div>
-        <div
-          className="inline-flex items-center rounded-full border border-line bg-surface p-1 sm:hidden"
-          role="tablist"
-          aria-label="User dashboard tabs"
-        >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "main"}
-            className={tabClass("main")}
-            onClick={() => switchTab("main")}
-          >
-            Main
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "item-spread"}
-            className={tabClass("item-spread")}
-            onClick={() => switchTab("item-spread")}
-          >
-            Items
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "level-progress"}
-            className={tabClass("level-progress")}
-            onClick={() => switchTab("level-progress")}
-          >
-            Level
-          </button>
+        <div className="sm:hidden">
+          <SegmentedControl
+            ariaLabel="User dashboard tabs"
+            value={activeTab}
+            onChange={switchTab}
+            size="md"
+            asTabs
+            options={[
+              { value: "main", label: "Main" },
+              { value: "item-spread", label: "Items" },
+              { value: "level-progress", label: "Level" },
+            ]}
+          />
         </div>
         <div className="flex w-full items-start gap-2">
           <div className="flex min-w-0 items-center gap-2">

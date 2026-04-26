@@ -1,6 +1,7 @@
 "use client";
 
 import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
+import SegmentedControl from "@/app/shared/SegmentedControl";
 
 import { srsBucketBadgeClass, srsBucketLabel, titleCaseSrsBucket } from "./studyHistoryUi";
 
@@ -47,28 +48,19 @@ export default function StudyHistoryFilters({
         ))}
       </select>
 
-      <div className="ml-2 inline-flex items-center gap-1 rounded-full border border-line bg-surface p-1">
-        {(["all", "correct", "wrong", "skipped"] as const).map((value) => (
-          <button
-            key={`result-${value}`}
-            type="button"
-            onClick={() => {
-              setResultFilter(value);
-            }}
-            className={`rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.08em] ${
-              resultFilter === value
-                ? value === "wrong"
-                  ? "bg-red-600 text-white"
-                  : value === "correct"
-                    ? "bg-emerald-600 text-white"
-                    : "bg-accent text-white"
-                : "text-foreground/80 hover:bg-surface-muted"
-            }`}
-          >
-            {value === "all" ? "All" : value}
-          </button>
-        ))}
-      </div>
+      <SegmentedControl
+        ariaLabel="Result filter"
+        className="ml-2 inline-flex items-center rounded-full border border-line bg-surface p-1"
+        value={resultFilter}
+        onChange={setResultFilter}
+        size="sm"
+        options={[
+          { value: "all", label: "All", activeClassName: "bg-accent text-white", inactiveClassName: "text-foreground/80 hover:bg-surface-muted" },
+          { value: "correct", label: "correct", activeClassName: "bg-emerald-600 text-white", inactiveClassName: "text-foreground/80 hover:bg-surface-muted" },
+          { value: "wrong", label: "wrong", activeClassName: "bg-red-600 text-white", inactiveClassName: "text-foreground/80 hover:bg-surface-muted" },
+          { value: "skipped", label: "skipped", activeClassName: "bg-accent text-white", inactiveClassName: "text-foreground/80 hover:bg-surface-muted" },
+        ]}
+      />
 
       <label className="ml-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:text-sm">Level</label>
       <select
@@ -85,36 +77,30 @@ export default function StudyHistoryFilters({
         ))}
       </select>
 
-      <div className="ml-2 inline-flex flex-wrap items-center gap-1 rounded-full border border-line bg-surface p-1">
-        <button
-          type="button"
-          onClick={() => {
-            setSrsBucketFilter("all");
-          }}
-          className={`rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.08em] ${
-            srsBucketFilter === "all" ? "bg-accent text-white" : "text-foreground/80 hover:bg-surface-muted"
-          }`}
-        >
-          SRS All
-        </button>
-        {availableSrsBuckets.filter((bucket) => bucket !== "unknown").map((bucket) => (
-          <button
-            key={`bucket-${bucket}`}
-            type="button"
-            onClick={() => {
-              setSrsBucketFilter(bucket);
-            }}
-            className={`rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.08em] ${
-              srsBucketFilter === bucket
-                ? `${srsBucketBadgeClass(bucket)} ring-1 ring-offset-0`
-                : "border-line text-foreground/75 hover:bg-surface-muted"
-            }`}
-            title={titleCaseSrsBucket(bucket)}
-          >
-            {srsBucketLabel(bucket)}
-          </button>
-        ))}
-      </div>
+      <SegmentedControl
+        ariaLabel="SRS filter"
+        className="ml-2 inline-flex flex-wrap items-center rounded-full border border-line bg-surface p-1"
+        value={srsBucketFilter}
+        onChange={setSrsBucketFilter}
+        size="sm"
+        options={[
+          {
+            value: "all",
+            label: "SRS All",
+            activeClassName: "bg-accent text-white",
+            inactiveClassName: "text-foreground/80 hover:bg-surface-muted",
+          },
+          ...availableSrsBuckets
+            .filter((bucket) => bucket !== "unknown")
+            .map((bucket) => ({
+              value: bucket,
+              label: srsBucketLabel(bucket),
+              title: titleCaseSrsBucket(bucket),
+              activeClassName: `${srsBucketBadgeClass(bucket)} ring-1 ring-offset-0`,
+              inactiveClassName: "border border-line text-foreground/75 hover:bg-surface-muted",
+            })),
+        ]}
+      />
     </div>
   );
 }

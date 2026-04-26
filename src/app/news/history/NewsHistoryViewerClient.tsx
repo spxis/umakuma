@@ -147,7 +147,7 @@ export default function NewsHistoryViewerClient() {
                     <button
                       type="button"
                       onClick={() => void openNewsGlyphRun(entry.run)}
-                      className={newsGlyphButtonClass({ type: "vocabulary", size: "normal" })}
+                      className={newsGlyphButtonClass({ type: "vocabulary" })}
                       title={`Open vocabulary ${entry.run}`}
                     >
                       {entry.run}
@@ -158,7 +158,7 @@ export default function NewsHistoryViewerClient() {
                       key={`${entry.key}-${char}`}
                       type="button"
                       onClick={() => void openNewsGlyphRun(char)}
-                      className={newsGlyphButtonClass({ type: "kanji", size: "compact" })}
+                      className={newsGlyphButtonClass({ type: "kanji" })}
                       title={`Open kanji ${char}`}
                     >
                       {char}
