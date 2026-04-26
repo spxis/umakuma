@@ -2,11 +2,19 @@
 
 import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
 
+export type ViewGlyphSelectorEntry = {
+  label: string;
+  itemIndex: number | null;
+  kind: "vocabulary" | "kanji";
+  exists: boolean;
+};
+
 export type ViewGlyphViewerPayload = {
   items: StudyQueueItem[];
   startIndex?: number;
   title?: string;
   accountId?: string;
+  selector?: ViewGlyphSelectorEntry[];
 };
 
 export const VIEW_GLYPH_EVENT = "wr:view-glyph-open";

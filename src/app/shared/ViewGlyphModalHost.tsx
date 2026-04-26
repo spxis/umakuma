@@ -8,7 +8,11 @@ import type { VocabularyKanjiLink } from "@/app/users/[nickname]/level-explorer/
 import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { hasRenderableRelatedItems } from "@/app/users/[nickname]/study-explorer/components/StudyReviewModalHelpers";
 import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
-import { VIEW_GLYPH_EVENT, type ViewGlyphViewerPayload } from "@/lib/viewGlyphViewer";
+import {
+  VIEW_GLYPH_EVENT,
+  type ViewGlyphSelectorEntry,
+  type ViewGlyphViewerPayload,
+} from "@/lib/viewGlyphViewer";
 
 function viewerTitle(item: StudyQueueItem): string {
   if (item.subjectType === "kanji") return "View Kanji";
@@ -32,6 +36,7 @@ export default function ViewGlyphModalHost() {
   const [accountId, setAccountId] = useState("");
   const [showEnglish, setShowEnglish] = useState(true);
   const [customTitle, setCustomTitle] = useState<string | undefined>(undefined);
+  const [selector, setSelector] = useState<ViewGlyphSelectorEntry[]>([]);
 
   useEffect(() => {
     const onOpen = (event: Event) => {
@@ -44,6 +49,7 @@ export default function ViewGlyphModalHost() {
       setIndex(Math.max(0, Math.min(detail.startIndex ?? 0, detail.items.length - 1)));
       setAccountId(detail.accountId ?? "");
       setCustomTitle(detail.title);
+      setSelector(Array.isArray(detail.selector) ? detail.selector : []);
     };
 
     window.addEventListener(VIEW_GLYPH_EVENT, onOpen);
@@ -59,6 +65,7 @@ export default function ViewGlyphModalHost() {
     setIndex(0);
     setAccountId("");
     setCustomTitle(undefined);
+    setSelector([]);
   }, []);
 
   const subjectById = useMemo(() => {
@@ -250,6 +257,43 @@ export default function ViewGlyphModalHost() {
             </button>
           </div>
         </div>
+
+        {selector.length > 0 ? (
+          <div className="flex flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
+            {selector.map((entry, entryIndex) => {
+              const selected = entry.itemIndex === index;
+              const unavailable = !entry.exists || entry.itemIndex === null;
+              return (
+                <button
+                  key={`${entry.label}-${entry.kind}-${entryIndex}`}
+                  type="button"
+                  onClick={() => {
+                    if (entry.itemIndex === null) {
+                      return;
+                    }
+                    setIndex(entry.itemIndex);
+                  }}
+                  disabled={entry.itemIndex === null}
+                  className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+                    unavailable
+                      ? "border-hot/40 bg-hot/10 text-hot/70"
+                      : selected
+                        ? "border-accent bg-accent/10 text-accent"
+                        : "border-line bg-surface-muted text-foreground/80 hover:border-accent hover:text-accent"
+                  } ${entry.itemIndex === null ? "cursor-not-allowed opacity-80" : "cursor-pointer"}`}
+                  title={
+                    unavailable
+                      ? `${entry.label} not found in WaniKani`
+                      : `${entry.kind === "vocabulary" ? "Vocabulary" : "Kanji"}: ${entry.label}`
+                  }
+                >
+                  <span>{entry.label}</span>
+                  {unavailable ? <span className="text-[10px]">missing</span> : null}
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
 
         <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
           <LevelExplorerDetailSection

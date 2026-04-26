@@ -4,13 +4,13 @@ import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
 import { decryptToken } from "@/lib/crypto";
-import { lookupKanjiByChars } from "@/lib/news/newsKanjiLookup";
+import { lookupRunInWaniKani } from "@/lib/news/newsKanjiLookup";
 import { prisma } from "@/lib/prisma";
 
-const KANJI_REGEX = /^[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]$/;
+const KANJI_RUN_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
 
 const requestSchema = z.object({
-  chars: z.array(z.string().min(1).max(2)).min(1).max(20),
+  run: z.string().trim().min(1).max(40),
 });
 
 export async function POST(request: Request) {
@@ -27,11 +27,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
     }
 
-    const chars = Array.from(
-      new Set(parsed.data.chars.filter((char) => KANJI_REGEX.test(char))),
-    );
-
-    if (chars.length === 0) {
+    const run = parsed.data.run;
+    if (!KANJI_RUN_REGEX.test(run)) {
       return NextResponse.json({ error: "No kanji to look up." }, { status: 400 });
     }
 
@@ -58,9 +55,9 @@ export async function POST(request: Request) {
       tag: account.tokenTag,
     });
 
-    const items = await lookupKanjiByChars(chars, token);
+    const result = await lookupRunInWaniKani(run, token);
 
-    return NextResponse.json({ accountId: account.id, items }, { status: 200 });
+    return NextResponse.json({ accountId: account.id, result }, { status: 200 });
   } catch (error) {
     console.error("[news/lookup-kanji] failed", error);
     return NextResponse.json({ error: "Lookup failed." }, { status: 500 });

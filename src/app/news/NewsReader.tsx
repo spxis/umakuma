@@ -8,6 +8,7 @@ import type { NewsArticle } from "@/lib/news/newsTypes";
 
 import NewsArticleView from "./NewsArticleView";
 import NewsHistoryPanel from "./NewsHistoryPanel";
+import NewsKanjiHistoryPanel from "./NewsKanjiHistoryPanel";
 import NewsSiteLinks from "./NewsSiteLinks";
 import {
   clearNewsHistory,
@@ -16,6 +17,14 @@ import {
   removeNewsView,
   type NewsHistoryEntry,
 } from "./newsHistory";
+import { openNewsGlyphRun } from "./newsGlyphRunner";
+import {
+  NEWS_KANJI_HISTORY_EVENT,
+  clearNewsKanjiHistory,
+  readNewsKanjiHistory,
+  removeNewsKanjiHistory,
+  type NewsKanjiHistoryEntry,
+} from "./newsKanjiHistory";
 import {
   readArticleCache,
   readDiscoverCache,
@@ -54,6 +63,7 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<NewsHistoryEntry[]>([]);
+  const [kanjiHistory, setKanjiHistory] = useState<NewsKanjiHistoryEntry[]>([]);
   const [discover, setDiscover] = useState<DiscoverState>(EMPTY_DISCOVER);
   const [discoverLoading, setDiscoverLoading] = useState(false);
   const [discoverError, setDiscoverError] = useState<string | null>(null);
@@ -61,6 +71,17 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
 
   useEffect(() => {
     setHistory(readNewsHistory());
+  }, []);
+
+  useEffect(() => {
+    const refresh = () => {
+      setKanjiHistory(readNewsKanjiHistory());
+    };
+    refresh();
+    window.addEventListener(NEWS_KANJI_HISTORY_EVENT, refresh);
+    return () => {
+      window.removeEventListener(NEWS_KANJI_HISTORY_EVENT, refresh);
+    };
   }, []);
 
   const fetchArticle = useCallback(
@@ -316,6 +337,20 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
         onSelect={handleSelectHistory}
         onRemove={handleRemoveHistory}
         onClear={handleClearHistory}
+      />
+
+      <NewsKanjiHistoryPanel
+        entries={kanjiHistory}
+        onSelect={(run) => {
+          void openNewsGlyphRun(run);
+        }}
+        onRemove={(run) => {
+          setKanjiHistory(removeNewsKanjiHistory(run));
+        }}
+        onClear={() => {
+          clearNewsKanjiHistory();
+          setKanjiHistory([]);
+        }}
       />
     </div>
   );

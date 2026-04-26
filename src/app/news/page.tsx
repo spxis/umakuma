@@ -51,6 +51,18 @@ export default async function NewsPage() {
               >
                 Learn
               </Link>
+              <Link
+                href="/news/history"
+                className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-surface px-6 text-sm font-bold uppercase tracking-[0.14em] text-foreground transition hover:bg-surface-muted"
+              >
+                History
+              </Link>
+              <Link
+                href="/news/stats"
+                className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-surface px-6 text-sm font-bold uppercase tracking-[0.14em] text-foreground transition hover:bg-surface-muted"
+              >
+                Stats
+              </Link>
             </div>
           </div>
         </section>
