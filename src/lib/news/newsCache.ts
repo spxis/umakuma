@@ -1,9 +1,11 @@
 import type { NewsArticle } from "./newsTypes";
 
 const TTL_MS = 7 * 24 * 60 * 60 * 1000; // 1 week
+const MAX_ENTRIES = 200;
 
 type CacheEntry = {
   article: NewsArticle;
+  fetchedAtMs: number;
   expiresAt: number;
 };
 
@@ -18,16 +20,22 @@ export function getCachedArticle(key: string): NewsArticle | null {
     store.delete(key);
     return null;
   }
-  return { ...entry.article, cached: true };
+  return {
+    ...entry.article,
+    cached: true,
+    cachedAgeMs: Date.now() - entry.fetchedAtMs,
+  };
 }
 
 export function setCachedArticle(key: string, article: NewsArticle): void {
+  const fetchedAtMs = Date.parse(article.fetchedAt) || Date.now();
   store.set(key, {
-    article: { ...article, cached: false },
-    expiresAt: Date.now() + TTL_MS,
+    article: { ...article, cached: false, cachedAgeMs: undefined },
+    fetchedAtMs,
+    expiresAt: fetchedAtMs + TTL_MS,
   });
 
-  if (store.size > 200) {
+  if (store.size > MAX_ENTRIES) {
     pruneExpired();
   }
 }

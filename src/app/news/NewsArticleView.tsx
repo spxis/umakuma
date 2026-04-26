@@ -1,4 +1,19 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 import type { NewsArticle, NewsArticleBlock } from "@/lib/news/newsTypes";
+
+import NewsCacheBadge from "./NewsCacheBadge";
+import NewsReadingControls from "./NewsReadingControls";
+import NewsTokenizedText from "./NewsTokenizedText";
+import {
+  DEFAULT_NEWS_READING_PREFS,
+  readReadingPrefs,
+  textSizeClass,
+  writeReadingPrefs,
+  type NewsReadingPrefs,
+} from "./newsReadingPrefs";
 
 const AD_INTERVAL = 4;
 
@@ -8,32 +23,60 @@ type Props = {
 
 export default function NewsArticleView({ article }: Props) {
   const items = interleaveAdSlots(article.blocks);
+  const [prefs, setPrefs] = useState<NewsReadingPrefs>(DEFAULT_NEWS_READING_PREFS);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setPrefs(readReadingPrefs());
+    setHydrated(true);
+  }, []);
+
+  function updatePrefs(next: NewsReadingPrefs) {
+    setPrefs(next);
+    if (hydrated) {
+      writeReadingPrefs(next);
+    }
+  }
 
   return (
     <article className="space-y-6">
       <header className="space-y-2 border-b border-line pb-4">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">
-          Article
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">
+            Article
+          </p>
+          <NewsCacheBadge
+            cached={article.cached}
+            cachedAgeMs={article.cachedAgeMs}
+            fetchedAt={article.fetchedAt}
+          />
+        </div>
         <h2 className="text-3xl leading-tight text-foreground sm:text-4xl">
           {article.title}
         </h2>
         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-foreground/60">
           {article.siteName ?? hostnameOf(article.finalUrl)}
           {article.byline ? ` · ${article.byline}` : ""}
-          {article.cached ? " · cached" : ""}
         </p>
         {article.excerpt ? (
           <p className="text-sm text-foreground/75">{article.excerpt}</p>
         ) : null}
       </header>
 
-      <div className="space-y-4 text-[15px] leading-relaxed text-foreground">
+      <NewsReadingControls prefs={prefs} onChange={updatePrefs} />
+
+      <div className={`space-y-4 text-foreground ${textSizeClass(prefs.textSize)}`.trim()}>
         {items.map((item, index) => {
           if (item.kind === "ad") {
             return <AdPlaceholder key={`ad-${index}`} />;
           }
-          return <BlockView key={`block-${index}`} block={item.block} />;
+          return (
+            <BlockView
+              key={`block-${index}`}
+              block={item.block}
+              emphasizeKanji={prefs.emphasizeKanji}
+            />
+          );
         })}
       </div>
 
@@ -52,18 +95,28 @@ export default function NewsArticleView({ article }: Props) {
   );
 }
 
-function BlockView({ block }: { block: NewsArticleBlock }) {
+function BlockView({
+  block,
+  emphasizeKanji,
+}: {
+  block: NewsArticleBlock;
+  emphasizeKanji: boolean;
+}) {
+  const content = (
+    <NewsTokenizedText text={block.text} emphasizeKanji={emphasizeKanji} />
+  );
+
   if (block.kind === "heading") {
     const level = Math.min(Math.max(block.level ?? 2, 2), 4);
     if (level === 2) {
-      return <h3 className="pt-2 text-2xl text-foreground">{block.text}</h3>;
+      return <h3 className="pt-2 text-2xl text-foreground">{content}</h3>;
     }
     if (level === 3) {
-      return <h4 className="pt-2 text-xl text-foreground">{block.text}</h4>;
+      return <h4 className="pt-2 text-xl text-foreground">{content}</h4>;
     }
-    return <h5 className="pt-2 text-lg text-foreground">{block.text}</h5>;
+    return <h5 className="pt-2 text-lg text-foreground">{content}</h5>;
   }
-  return <p>{block.text}</p>;
+  return <p>{content}</p>;
 }
 
 function AdPlaceholder() {

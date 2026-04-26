@@ -16,4 +16,5 @@ export type NewsArticle = {
   textLength: number;
   fetchedAt: string;
   cached: boolean;
+  cachedAgeMs?: number;
 };

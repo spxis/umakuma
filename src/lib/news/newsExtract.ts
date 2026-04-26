@@ -3,20 +3,15 @@ import { JSDOM } from "jsdom";
 
 import type { NewsArticle, NewsArticleBlock } from "./newsTypes";
 import { getCachedArticle, newsCacheKey, setCachedArticle } from "./newsCache";
+import { fetchNewsHtml, type NewsHttpError } from "./newsHttp";
 
-const FETCH_TIMEOUT_MS = 15_000;
-const MAX_BYTES = 4 * 1024 * 1024;
 const MIN_TEXT_LENGTH = 400;
-const USER_AGENT =
-  "Mozilla/5.0 (compatible; UmaKumaNewsReader/1.0; +https://umakuma.com/news)";
 
 export type NewsExtractError =
   | { kind: "invalid_url" }
   | { kind: "blocked_host" }
-  | { kind: "fetch_failed"; status?: number }
-  | { kind: "too_large" }
-  | { kind: "not_html" }
-  | { kind: "not_article" };
+  | { kind: "not_article" }
+  | NewsHttpError;
 
 export type NewsExtractResult =
   | { ok: true; article: NewsArticle }
@@ -37,7 +32,7 @@ export async function extractArticle(rawUrl: string): Promise<NewsExtractResult>
     return { ok: true, article: cached };
   }
 
-  const fetched = await fetchHtml(parsed.toString());
+  const fetched = await fetchNewsHtml(parsed.toString());
   if (!fetched.ok) {
     return { ok: false, error: fetched.error };
   }
@@ -96,47 +91,6 @@ function isBlockedHost(hostname: string): boolean {
     return true;
   }
   return false;
-}
-
-type FetchHtmlOk = { ok: true; html: string; finalUrl: string };
-type FetchHtmlErr = { ok: false; error: NewsExtractError };
-
-async function fetchHtml(url: string): Promise<FetchHtmlOk | FetchHtmlErr> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-  try {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": USER_AGENT,
-        Accept: "text/html,application/xhtml+xml",
-        "Accept-Language": "ja,en;q=0.8",
-      },
-      redirect: "follow",
-      signal: controller.signal,
-    });
-
-    if (!response.ok) {
-      return { ok: false, error: { kind: "fetch_failed", status: response.status } };
-    }
-
-    const contentType = response.headers.get("content-type") ?? "";
-    if (!/text\/html|application\/xhtml/i.test(contentType)) {
-      return { ok: false, error: { kind: "not_html" } };
-    }
-
-    const buffer = await response.arrayBuffer();
-    if (buffer.byteLength > MAX_BYTES) {
-      return { ok: false, error: { kind: "too_large" } };
-    }
-
-    const html = new TextDecoder("utf-8", { fatal: false }).decode(buffer);
-    return { ok: true, html, finalUrl: response.url || url };
-  } catch (error) {
-    const isAbort = error instanceof Error && error.name === "AbortError";
-    return { ok: false, error: { kind: "fetch_failed", status: isAbort ? 408 : undefined } };
-  } finally {
-    clearTimeout(timer);
-  }
 }
 
 function htmlToBlocks(html: string, baseUrl: string): NewsArticleBlock[] {

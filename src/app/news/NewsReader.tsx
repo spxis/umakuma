@@ -3,10 +3,12 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import type { DiscoveredLink, DiscoverPayload } from "@/lib/news/newsDiscover";
 import type { NewsArticle } from "@/lib/news/newsTypes";
 
 import NewsArticleView from "./NewsArticleView";
 import NewsHistoryPanel from "./NewsHistoryPanel";
+import NewsSiteLinks from "./NewsSiteLinks";
 import {
   clearNewsHistory,
   readNewsHistory,
@@ -14,6 +16,22 @@ import {
   removeNewsView,
   type NewsHistoryEntry,
 } from "./newsHistory";
+
+type Mode = "article" | "site";
+
+type DiscoverState = {
+  baseUrl: string | null;
+  links: DiscoveredLink[];
+  cached: boolean;
+  cachedAgeMs?: number;
+  fetchedAt?: string;
+};
+
+const EMPTY_DISCOVER: DiscoverState = {
+  baseUrl: null,
+  links: [],
+  cached: false,
+};
 
 type Props = {
   devSampleUrls?: string[];
@@ -24,11 +42,15 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
   const searchParams = useSearchParams();
   const initialUrlParam = searchParams.get("url") ?? "";
 
+  const [mode, setMode] = useState<Mode>("article");
   const [url, setUrl] = useState(initialUrlParam);
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<NewsHistoryEntry[]>([]);
+  const [discover, setDiscover] = useState<DiscoverState>(EMPTY_DISCOVER);
+  const [discoverLoading, setDiscoverLoading] = useState(false);
+  const [discoverError, setDiscoverError] = useState<string | null>(null);
   const lastFetchedUrl = useRef<string | null>(null);
 
   useEffect(() => {
@@ -46,6 +68,8 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
       setLoading(true);
       setError(null);
       setArticle(null);
+      setDiscover(EMPTY_DISCOVER);
+      setDiscoverError(null);
 
       try {
         const response = await fetch("/api/news/extract", {
@@ -84,22 +108,72 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
     [router],
   );
 
+  const fetchDiscover = useCallback(async (target: string) => {
+    const trimmed = target.trim();
+    if (!trimmed) {
+      return;
+    }
+
+    setDiscoverLoading(true);
+    setDiscoverError(null);
+    setDiscover(EMPTY_DISCOVER);
+    setArticle(null);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/news/discover", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: trimmed }),
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | (DiscoverPayload & { error?: string })
+        | { error?: string }
+        | null;
+
+      if (!response.ok || !payload || !("links" in payload) || !payload.links) {
+        setDiscoverError((payload as { error?: string } | null)?.error ?? "Couldn't scan that page.");
+        return;
+      }
+
+      const data = payload as DiscoverPayload;
+      setDiscover({
+        baseUrl: data.baseUrl,
+        links: data.links,
+        cached: data.cached,
+        cachedAgeMs: data.cachedAgeMs,
+        fetchedAt: data.fetchedAt,
+      });
+    } catch {
+      setDiscoverError("Network problem — try again.");
+    } finally {
+      setDiscoverLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     const param = searchParams.get("url") ?? "";
     if (!param || param === lastFetchedUrl.current) {
       return;
     }
     setUrl(param);
+    setMode("article");
     void fetchArticle(param);
   }, [searchParams, fetchArticle]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await fetchArticle(url);
+    if (mode === "site") {
+      await fetchDiscover(url);
+    } else {
+      await fetchArticle(url);
+    }
   }
 
   function handleSelectHistory(target: string) {
     setUrl(target);
+    setMode("article");
     void fetchArticle(target);
   }
 
@@ -112,15 +186,24 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
     setHistory([]);
   }
 
+  function handleSelectDiscovered(target: string) {
+    setUrl(target);
+    setMode("article");
+    void fetchArticle(target);
+  }
+
   return (
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-3">
-        <label
-          htmlFor="news-url"
-          className="block text-xs font-bold uppercase tracking-[0.14em] text-foreground/70"
-        >
-          Article URL
-        </label>
+        <div className="flex items-center justify-between gap-2">
+          <label
+            htmlFor="news-url"
+            className="block text-xs font-bold uppercase tracking-[0.14em] text-foreground/70"
+          >
+            {mode === "site" ? "Section / homepage URL" : "Article URL"}
+          </label>
+          <ModeToggle mode={mode} onChange={setMode} />
+        </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <input
             id="news-url"
@@ -134,14 +217,20 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
           />
           <button
             type="submit"
-            disabled={loading || !url.trim()}
+            disabled={(loading || discoverLoading) || !url.trim()}
             className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-accent px-6 text-sm font-bold uppercase tracking-[0.14em] text-surface transition hover:bg-accent-2 disabled:opacity-50"
           >
-            {loading ? "Reading…" : "Read"}
+            {mode === "site"
+              ? discoverLoading
+                ? "Scanning…"
+                : "Find articles"
+              : loading
+                ? "Reading…"
+                : "Read"}
           </button>
         </div>
         <p className="text-xs text-foreground/60">
-          You provide the link, so you take responsibility for the source. Articles are cached briefly and not stored.
+          You provide the link, so you take responsibility for the source. Pages are cached locally and on the server to avoid repeat fetches.
         </p>
         {devSampleUrls.length > 0 ? (
           <div className="flex flex-wrap items-center gap-2 pt-1">
@@ -162,9 +251,26 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
         ) : null}
       </form>
 
-      {loading ? <LoadingState /> : null}
+      {loading ? <LoadingState label="Fetching the article…" /> : null}
       {error ? <ErrorState message={error} /> : null}
       {article && !loading ? <NewsArticleView article={article} /> : null}
+
+      {(discover.links.length > 0 || discoverLoading || discoverError) && !article ? (
+        <NewsSiteLinks
+          baseUrl={discover.baseUrl}
+          links={discover.links}
+          cached={discover.cached}
+          cachedAgeMs={discover.cachedAgeMs}
+          fetchedAt={discover.fetchedAt}
+          loading={discoverLoading}
+          error={discoverError}
+          onSelect={handleSelectDiscovered}
+          onDismiss={() => {
+            setDiscover(EMPTY_DISCOVER);
+            setDiscoverError(null);
+          }}
+        />
+      ) : null}
 
       <NewsHistoryPanel
         entries={history}
@@ -177,10 +283,31 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
   );
 }
 
-function LoadingState() {
+function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (next: Mode) => void }) {
+  return (
+    <div className="inline-flex overflow-hidden rounded-full border border-line bg-surface text-[11px] font-bold uppercase tracking-[0.14em]">
+      <button
+        type="button"
+        onClick={() => onChange("article")}
+        className={`px-3 py-1 transition ${mode === "article" ? "bg-accent text-surface" : "text-foreground/70 hover:text-accent"}`}
+      >
+        Article
+      </button>
+      <button
+        type="button"
+        onClick={() => onChange("site")}
+        className={`px-3 py-1 transition ${mode === "site" ? "bg-accent text-surface" : "text-foreground/70 hover:text-accent"}`}
+      >
+        Site
+      </button>
+    </div>
+  );
+}
+
+function LoadingState({ label }: { label: string }) {
   return (
     <div className="rounded-2xl border border-dashed border-line bg-surface-muted p-6 text-center text-sm font-semibold uppercase tracking-[0.14em] text-foreground/60">
-      Fetching the article…
+      {label}
     </div>
   );
 }
