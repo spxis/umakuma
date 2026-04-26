@@ -19,7 +19,6 @@ type Props = {
 };
 
 const pageSessionSeenGlyphs = new Set<string>();
-let pointerDownAt: { x: number; y: number } | null = null;
 
 export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
   const segments = tokenizeJapanese(text);
@@ -84,28 +83,32 @@ export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
           availability === "missing"
             ? "text-hot/80 decoration-hot/70 decoration-wavy underline"
             : "";
-        const tryOpen = (event?: { clientX: number; clientY: number }) => {
+        const tryOpen = () => {
           const selectionText = typeof window !== "undefined" ? window.getSelection()?.toString().trim() ?? "" : "";
-          const isDraggedSelection =
-            Boolean(event) &&
-            Boolean(pointerDownAt) &&
-            Math.hypot((event?.clientX ?? 0) - (pointerDownAt?.x ?? 0), (event?.clientY ?? 0) - (pointerDownAt?.y ?? 0)) > 4;
-          const isExactWordSelection = selectionText.length > 0 && selectionText === segment.text;
-          if ((selectionText.length > 0 && (!isExactWordSelection || isDraggedSelection)) || isLoading) {
+          if (isLoading) {
             return;
           }
-          setLoadingRun(primaryRun);
-          void openNewsGlyphCandidates(candidates)
+          const selectionCandidates = selectionText
+            ? buildCandidatesFromSelectedText(selectionText)
+            : [];
+          const lookupCandidates =
+            selectionCandidates.length > 0
+              ? [...selectionCandidates, ...candidates]
+              : candidates;
+          const lookupPrimary = lookupCandidates[0] ?? primaryRun;
+
+          setLoadingRun(lookupPrimary);
+          void openNewsGlyphCandidates(lookupCandidates)
             .then((opened) => {
               if (!opened) {
                 return;
               }
 
-              const clickedChars = extractKanjiTokens(primaryRun);
+              const clickedChars = extractKanjiTokens(lookupPrimary);
               setSeenRuns((prev) => {
                 const next = new Set(prev);
-                next.add(primaryRun);
-                pageSessionSeenGlyphs.add(primaryRun);
+                next.add(lookupPrimary);
+                pageSessionSeenGlyphs.add(lookupPrimary);
                 for (const token of clickedChars) {
                   next.add(token);
                   pageSessionSeenGlyphs.add(token);
@@ -124,11 +127,8 @@ export default function NewsTokenizedText({ text, emphasizeKanji }: Props) {
             tabIndex={isLoading ? -1 : 0}
             aria-disabled={isLoading}
             aria-label={`Look up ${segment.text}`}
-            onClick={(event) => {
-              tryOpen(event);
-            }}
-            onPointerDown={(event) => {
-              pointerDownAt = { x: event.clientX, y: event.clientY };
+            onClick={() => {
+              tryOpen();
             }}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
@@ -354,4 +354,31 @@ function trailingKana(text: string, maxChars: number): string {
     }
   }
   return out.reverse().join("");
+}
+
+function buildCandidatesFromSelectedText(raw: string): string[] {
+  const value = raw.replace(/\s+/g, "").trim();
+  if (!value || !KANJI_REGEX.test(value)) {
+    return [];
+  }
+
+  const out = [value];
+  const chars = Array.from(value);
+  let tail = 0;
+  for (let i = chars.length - 1; i >= 0; i -= 1) {
+    if (!KANA_REGEX.test(chars[i] ?? "")) {
+      break;
+    }
+    tail += 1;
+  }
+
+  for (let drop = 1; drop <= tail; drop += 1) {
+    const candidate = chars.slice(0, chars.length - drop).join("");
+    if (!candidate || !KANJI_REGEX.test(candidate)) {
+      continue;
+    }
+    out.push(candidate);
+  }
+
+  return Array.from(new Set(out));
 }
