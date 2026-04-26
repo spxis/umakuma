@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
+import { logNewsApiPerf } from "@/lib/news/newsApiPerf";
 import { discoverArticleLinks, type DiscoverError } from "@/lib/news/newsDiscover";
 
 const requestSchema = z.object({
@@ -10,28 +11,38 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const startedAtMs = Date.now();
+  const respond = (body: unknown, status: number, meta?: Record<string, number | string | boolean | null>) => {
+    logNewsApiPerf("/api/news/discover", startedAtMs, status, meta);
+    return NextResponse.json(body, { status });
+  };
+
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+      return respond({ error: "Unauthorized." }, 401);
     }
 
     const json = await request.json().catch(() => null);
     const parsed = requestSchema.safeParse(json);
     if (!parsed.success) {
-      return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+      return respond({ error: "Invalid request payload." }, 400);
     }
 
     const result = await discoverArticleLinks(parsed.data.url);
     if (!result.ok) {
       const { status, message } = mapErrorToResponse(result.error);
-      return NextResponse.json({ error: message }, { status });
+      return respond({ error: message }, status, {
+        errorKind: result.error.kind,
+      });
     }
 
-    return NextResponse.json(result.payload, { status: 200 });
+    return respond(result.payload, 200, {
+      links: result.payload.links.length,
+    });
   } catch (error) {
     console.error("[news/discover] failed", error);
-    return NextResponse.json({ error: "Couldn't scan that page." }, { status: 500 });
+    return respond({ error: "Couldn't scan that page." }, 500);
   }
 }
 

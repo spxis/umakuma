@@ -84,56 +84,62 @@ export async function discoverArticleLinks(rawUrl: string): Promise<DiscoverResu
     return { ok: false, error: fetched.error };
   }
 
-  const dom = new JSDOM(fetched.html, { url: fetched.finalUrl });
-  const baseHost = new URL(fetched.finalUrl).hostname.toLowerCase();
-  const seen = new Map<string, DiscoveredLink>();
+  try {
+    const dom = new JSDOM(fetched.html, { url: fetched.finalUrl });
+    const baseHost = new URL(fetched.finalUrl).hostname.toLowerCase();
+    const seen = new Map<string, DiscoveredLink>();
 
-  const anchors = dom.window.document.querySelectorAll("a[href]");
-  anchors.forEach((node) => {
-    const anchor = node as HTMLAnchorElement;
-    const href = anchor.getAttribute("href");
-    if (!href) {
-      return;
+    const anchors = dom.window.document.querySelectorAll("a[href]");
+    anchors.forEach((node) => {
+      const anchor = node as HTMLAnchorElement;
+      const href = anchor.getAttribute("href");
+      if (!href) {
+        return;
+      }
+
+      const target = resolveUrl(href, fetched.finalUrl);
+      if (!target) {
+        return;
+      }
+      if (target.hostname.toLowerCase() !== baseHost) {
+        return;
+      }
+      if (!looksLikeArticlePath(target)) {
+        return;
+      }
+      if (hasExcludedExtension(target.pathname)) {
+        return;
+      }
+
+      const cleanUrl = stripTrackingParams(target).toString();
+      if (seen.has(cleanUrl)) {
+        return;
+      }
+
+      const title = extractAnchorTitle(anchor);
+      if (!title || title.length < MIN_TITLE_LENGTH) {
+        return;
+      }
+
+      seen.set(cleanUrl, { url: cleanUrl, title });
+    });
+
+    if (seen.size === 0) {
+      return { ok: false, error: { kind: "no_links" } };
     }
 
-    const target = resolveUrl(href, fetched.finalUrl);
-    if (!target) {
-      return;
-    }
-    if (target.hostname.toLowerCase() !== baseHost) {
-      return;
-    }
-    if (!looksLikeArticlePath(target)) {
-      return;
-    }
-    if (hasExcludedExtension(target.pathname)) {
-      return;
-    }
+    const payload: DiscoverPayload = {
+      baseUrl: fetched.finalUrl,
+      links: Array.from(seen.values()).slice(0, MAX_RESULTS),
+      fetchedAt: new Date().toISOString(),
+    };
 
-    const cleanUrl = stripTrackingParams(target).toString();
-    if (seen.has(cleanUrl)) {
-      return;
-    }
-
-    const title = extractAnchorTitle(anchor);
-    if (!title || title.length < MIN_TITLE_LENGTH) {
-      return;
-    }
-
-    seen.set(cleanUrl, { url: cleanUrl, title });
-  });
-
-  if (seen.size === 0) {
-    return { ok: false, error: { kind: "no_links" } };
+    return { ok: true, payload };
+  } catch {
+    // Some publisher responses can include malformed HTML/URL values that break parsing.
+    // Return typed fetch failure so callers surface a user-facing status instead of 500.
+    return { ok: false, error: { kind: "fetch_failed" } };
   }
-
-  const payload: DiscoverPayload = {
-    baseUrl: fetched.finalUrl,
-    links: Array.from(seen.values()).slice(0, MAX_RESULTS),
-    fetchedAt: new Date().toISOString(),
-  };
-
-  return { ok: true, payload };
 }
 
 function parseAllowedUrl(input: string): URL | null {
