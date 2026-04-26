@@ -9,7 +9,6 @@ import NewsCacheBadge from "./NewsCacheBadge";
 import NewsReadingControls from "./NewsReadingControls";
 import NewsTokenizedText from "./NewsTokenizedText";
 import {
-  DEFAULT_NEWS_READING_PREFS,
   readReadingPrefs,
   textSizeClass,
   writeReadingPrefs,
@@ -40,19 +39,15 @@ export default function NewsArticleView({
   statsPanel,
 }: Props) {
   const items = interleaveAdSlots(article.blocks);
-  const [prefs, setPrefs] = useState<NewsReadingPrefs>(DEFAULT_NEWS_READING_PREFS);
-  const [hydrated, setHydrated] = useState(false);
+  const [prefs, setPrefs] = useState<NewsReadingPrefs>(() => readReadingPrefs());
 
   useEffect(() => {
     setPrefs(readReadingPrefs());
-    setHydrated(true);
   }, []);
 
   function updatePrefs(next: NewsReadingPrefs) {
     setPrefs(next);
-    if (hydrated) {
-      writeReadingPrefs(next);
-    }
+    writeReadingPrefs(next);
   }
 
   return (

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { DiscoveredLink, DiscoverPayload } from "@/lib/news/newsDiscover";
 import type { NewsArticle } from "@/lib/news/newsTypes";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 
 import NewsArticleView from "./NewsArticleView";
 import type { ArticlePanelTab } from "./NewsArticleView";
@@ -35,6 +36,8 @@ import {
 } from "./newsClientCache";
 
 type Mode = "article" | "site";
+const NEWS_READER_MODE_KEY = "uk:news-reader-mode";
+const NEWS_READER_TAB_KEY = "uk:news-reader-tab";
 
 type DiscoverState = {
   baseUrl: string | null;
@@ -59,8 +62,12 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
   const searchParams = useSearchParams();
   const initialUrlParam = searchParams.get("url") ?? "";
 
-  const [mode, setMode] = useState<Mode>("article");
-  const [activeTab, setActiveTab] = useState<ArticlePanelTab>("article");
+  const [mode, setMode] = useState<Mode>(() =>
+    getStoredEnum<Mode>(NEWS_READER_MODE_KEY, ["article", "site"], "article"),
+  );
+  const [activeTab, setActiveTab] = useState<ArticlePanelTab>(() =>
+    getStoredEnum<ArticlePanelTab>(NEWS_READER_TAB_KEY, ["article", "history", "stats"], "article"),
+  );
   const [url, setUrl] = useState(initialUrlParam);
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(false);
@@ -75,6 +82,14 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
   useEffect(() => {
     setHistory(readNewsHistory());
   }, []);
+
+  useEffect(() => {
+    setStoredEnum(NEWS_READER_MODE_KEY, mode);
+  }, [mode]);
+
+  useEffect(() => {
+    setStoredEnum(NEWS_READER_TAB_KEY, activeTab);
+  }, [activeTab]);
 
   useEffect(() => {
     const refresh = () => {
@@ -97,7 +112,6 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
       lastFetchedUrl.current = trimmed;
       setLoading(true);
       setError(null);
-      setActiveTab("article");
       setArticle(null);
       setDiscover(EMPTY_DISCOVER);
       setDiscoverError(null);
