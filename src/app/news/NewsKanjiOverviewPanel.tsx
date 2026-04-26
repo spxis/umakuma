@@ -20,6 +20,7 @@ type KanjiEntry = {
   jlptLevel: number | null;
   wkLevel: number | null;
   schoolGrade: number | null;
+  schoolGradePending: boolean;
   occurrenceCount: number;
 };
 
@@ -117,6 +118,7 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
           : null,
       wkLevel: wkByChar.get(char) ?? resolvedWkLevels[char] ?? null,
       schoolGrade: resolvedGrades[char] ?? null,
+      schoolGradePending: !(char in resolvedGrades),
       occurrenceCount: countsByChar.get(char) ?? 1,
     }));
   }, [countsByChar, orderedChars, refreshKey, resolvedGrades, resolvedWkLevels]);
@@ -136,7 +138,11 @@ export default function NewsKanjiOverviewPanel({ blocks }: Props) {
     entry.wkLevel === null ? "Unknown" : `WK ${entry.wkLevel}`,
   );
   const gradeGroups = buildGroups(entries, (entry) =>
-    entry.schoolGrade === null ? "Unknown" : `Grade ${entry.schoolGrade}`,
+    entry.schoolGradePending
+      ? "Loading"
+      : entry.schoolGrade === null
+        ? "Unknown"
+        : `Grade ${entry.schoolGrade}`,
   );
 
   const activeGroup =
@@ -389,6 +395,10 @@ function buildGroups(
 
 function compareLabels(a: string, b: string): number {
   const rank = (value: string) => {
+    if (value === "Loading") {
+      return Number.NEGATIVE_INFINITY;
+    }
+
     if (value === "Unknown") {
       return Number.POSITIVE_INFINITY;
     }
