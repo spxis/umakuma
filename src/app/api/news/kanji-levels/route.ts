@@ -8,6 +8,8 @@ import { logNewsApiPerf } from "@/lib/news/newsApiPerf";
 import { lookupKanjiLevelsByChars } from "@/lib/news/newsKanjiLookup";
 import { prisma } from "@/lib/prisma";
 
+export const runtime = "nodejs";
+
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
 
 const requestSchema = z.object({

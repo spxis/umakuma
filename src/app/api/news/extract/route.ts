@@ -6,6 +6,8 @@ import { authOptions } from "@/lib/auth";
 import { logNewsApiPerf } from "@/lib/news/newsApiPerf";
 import { extractArticle, type NewsExtractError } from "@/lib/news/newsExtract";
 
+export const runtime = "nodejs";
+
 const requestSchema = z.object({
   url: z.string().trim().min(8).max(2048),
 });

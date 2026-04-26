@@ -6,6 +6,8 @@ import { authOptions } from "@/lib/auth";
 import { logNewsApiPerf } from "@/lib/news/newsApiPerf";
 import { readingKanaForRun } from "@/lib/news/newsReadingKana";
 
+export const runtime = "nodejs";
+
 const requestSchema = z.object({
   runs: z.array(z.string().trim().min(1).max(40)).min(1).max(300),
 });

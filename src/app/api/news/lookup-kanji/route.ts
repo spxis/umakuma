@@ -7,6 +7,8 @@ import { decryptToken } from "@/lib/crypto";
 import { lookupRunInWaniKani } from "@/lib/news/newsKanjiLookup";
 import { prisma } from "@/lib/prisma";
 
+export const runtime = "nodejs";
+
 const KANJI_RUN_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
 
 const requestSchema = z.object({
