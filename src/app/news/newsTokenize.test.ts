@@ -28,4 +28,13 @@ describe("tokenizeJapanese", () => {
     expect(kanjiRuns).toEqual(["基調"]);
     expect(segments.some((segment) => segment.kind === "other" && segment.text.includes("にした"))).toBe(true);
   });
+
+  it("keeps indefinite pronoun suffix before following particle", () => {
+    const segments = tokenizeJapanese("誰かの声");
+    const kanjiRuns = segments.filter((segment) => segment.kind === "kanji").map((segment) => segment.text);
+
+    expect(kanjiRuns).toContain("誰か");
+    expect(kanjiRuns).not.toContain("誰");
+    expect(segments.some((segment) => segment.kind === "other" && segment.text.includes("の"))).toBe(true);
+  });
 });
