@@ -325,32 +325,22 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
           article={article}
           activeTab={activeTab}
           onTabChangeAction={setActiveTab}
-          historyCount={history.length}
+          historyCount={kanjiHistory.length}
           statsCount={kanjiHistory.length}
           historyPanel={
-            <div className="space-y-6">
-              <NewsHistoryPanel
-                entries={history}
-                activeUrl={article ? lastFetchedUrl.current : null}
-                onSelect={handleSelectHistory}
-                onRemove={handleRemoveHistory}
-                onClear={handleClearHistory}
-              />
-
-              <NewsKanjiHistoryPanel
-                entries={kanjiHistory}
-                onSelect={(run) => {
-                  void openNewsGlyphRun(run);
-                }}
-                onRemove={(run) => {
-                  setKanjiHistory(removeNewsKanjiHistory(run));
-                }}
-                onClear={() => {
-                  clearNewsKanjiHistory();
-                  setKanjiHistory([]);
-                }}
-              />
-            </div>
+            <NewsKanjiHistoryPanel
+              entries={kanjiHistory}
+              onSelect={(run) => {
+                void openNewsGlyphRun(run);
+              }}
+              onRemove={(run) => {
+                setKanjiHistory(removeNewsKanjiHistory(run));
+              }}
+              onClear={() => {
+                clearNewsKanjiHistory();
+                setKanjiHistory([]);
+              }}
+            />
           }
           statsPanel={<NewsStatsClient />}
         />
@@ -372,6 +362,14 @@ export default function NewsReader({ devSampleUrls = [] }: Props) {
           }}
         />
       ) : null}
+
+      <NewsHistoryPanel
+        entries={history}
+        activeUrl={article ? lastFetchedUrl.current : null}
+        onSelect={handleSelectHistory}
+        onRemove={handleRemoveHistory}
+        onClear={handleClearHistory}
+      />
     </div>
   );
 }
