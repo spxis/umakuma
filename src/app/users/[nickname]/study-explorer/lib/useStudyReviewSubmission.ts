@@ -11,6 +11,7 @@ import type {
 import { studyItemEnglishTitle } from "./studyExplorerUtils";
 
 const POST_SUBMIT_DELAY_MS = 500;
+const REVIEW_SUBMIT_TIMEOUT_MS = 1500;
 
 type Args = {
   accountId: string;
@@ -99,11 +100,28 @@ export function useStudyReviewSubmission({
       }
 
       try {
-        const response = await fetch(`/api/study/${accountId}/review`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ assignmentId, result }),
-        });
+        const submitController = new AbortController();
+        const submitTimeout = window.setTimeout(() => {
+          submitController.abort();
+        }, REVIEW_SUBMIT_TIMEOUT_MS);
+
+        let response: Response;
+        try {
+          response = await fetch(`/api/study/${accountId}/review`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ assignmentId, result }),
+            signal: submitController.signal,
+          });
+        } catch (networkError) {
+          if (networkError instanceof DOMException && networkError.name === "AbortError") {
+            throw new Error("Review submission timed out. Please retry.");
+          }
+          throw networkError;
+        } finally {
+          window.clearTimeout(submitTimeout);
+        }
+
         const payload = (await response.json()) as {
           error?: string;
           review?: ReviewSrsTransition;
