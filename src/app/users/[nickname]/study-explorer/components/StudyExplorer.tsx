@@ -424,6 +424,40 @@ export default function StudyExplorer({
     onSetModalSessionItemByAssignmentId: setModalSessionItemByAssignmentId,
   });
 
+  const hasActiveFilterConstraints =
+    viewedLevel !== null ||
+    typeFilter !== "all" ||
+    effectiveSrsFilter !== "all" ||
+    effectiveSrsStageFilter !== null ||
+    !effectiveShowLocked ||
+    effectiveRecentOnly ||
+    searchQuery.trim().length > 0;
+
+  useEffect(() => {
+    if (!hasActiveFilterConstraints) {
+      return;
+    }
+
+    if (isLoading || isValidating || isLoadingMore || !hasMorePages) {
+      return;
+    }
+
+    if (loadedItems.length === 0 || filteredItems.length > 0) {
+      return;
+    }
+
+    void loadMorePage();
+  }, [
+    filteredItems.length,
+    hasActiveFilterConstraints,
+    hasMorePages,
+    isLoading,
+    isLoadingMore,
+    isValidating,
+    loadMorePage,
+    loadedItems.length,
+  ]);
+
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <StudyExplorerPanel

@@ -283,7 +283,7 @@ export default function StudyExplorerPanel({
       <div className="p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-            Showing {formatNumber(filteredItems.length)} loaded items · {formatNumber(totalItems)} total in queue
+            Showing {formatNumber(filteredItems.length)} matching items · {formatNumber(totalItems)} total in queue
           </p>
           <div className="flex items-center gap-2">
             <button
