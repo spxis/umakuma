@@ -7,10 +7,10 @@
     "node": "24.x"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p ${WEB_PORT:-3203}",
     "build": "next build",
-    "start": "next start",
-    "test:smoke:local": "PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 playwright test -c playwright.smoke.local.config.ts",
+    "start": "next start -p ${WEB_PORT:-3203}",
+    "test:smoke:local": "PLAYWRIGHT_BASE_URL=http://127.0.0.1:${WEB_PORT:-3203} playwright test -c playwright.smoke.local.config.ts",
     "test:smoke:build": "pnpm build && PLAYWRIGHT_BASE_URL=http://127.0.0.1:3100 playwright test -c playwright.smoke.build.config.ts",
     "test:smoke:install": "playwright install chromium",
     "test:unit": "vitest run",

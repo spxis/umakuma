@@ -108,6 +108,7 @@ export default function HistoryItemDetailModal({
       isSubmittingSelected={false}
       submitInFlight={null}
       submitFeedback={null}
+      latestReviewTransition={null}
       reviewOutcomeByAssignmentId={{}}
       onMarkSkipped={() => {}}
       onClose={onClose}

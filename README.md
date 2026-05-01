@@ -41,9 +41,9 @@ pnpm db:push
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3203](http://localhost:3203) with your browser to see the result.
 
-Use [http://localhost:3000/admin](http://localhost:3000/admin) to add family accounts with an allowlisted Google OAuth account.
+Use [http://localhost:3203/admin](http://localhost:3203/admin) to add family accounts with an allowlisted Google OAuth account.
 
 ## WaniKani Sync Best Practices (Implemented)
 
