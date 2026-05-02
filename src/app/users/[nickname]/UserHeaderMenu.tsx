@@ -104,7 +104,7 @@ export default function UserHeaderMenu({ accountId, viewedWkUsername, viewerMenu
   }
 
   return (
-    <div ref={menuRef} className="relative">
+    <div ref={menuRef} className="relative z-[120]">
       <button
         type="button"
         aria-expanded={open}
@@ -118,7 +118,7 @@ export default function UserHeaderMenu({ accountId, viewedWkUsername, viewerMenu
       </button>
 
       {open ? (
-        <aside className="absolute right-0 mt-2 w-[min(88vw,300px)] rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.18)]">
+        <aside className="absolute right-0 z-[130] mt-2 w-[min(88vw,300px)] rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.18)]">
           <div className="space-y-3">
             <section>
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-accent">Account</p>

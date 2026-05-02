@@ -51,6 +51,7 @@ export default function UserDashboardTabs({
   availableProgressLevels = [],
   levelProgressByLevel = {},
   viewerMenuInfo,
+  learnContent,
 }: Props) {
   const tabStorageKey = `wr:user:${accountId}:dashboard-tab`;
   const safeProgressLevels = useMemo(
@@ -292,6 +293,11 @@ export default function UserDashboardTabs({
           </p>
         </div>
       </div>
+      {activeTab === "learn" ? (
+        <div className="mt-4" role="tabpanel">
+          {learnContent}
+        </div>
+      ) : null}
       {activeTab === "stats" ? (
         <div className="mt-4 space-y-4" role="tabpanel">
           <section className="rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">

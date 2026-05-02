@@ -436,41 +436,42 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
           availableProgressLevels={availableProgressLevels}
           levelProgressByLevel={levelProgressByLevel}
           viewerMenuInfo={viewerMenuInfo}
-        />
-
-        <ExplorerTabs
-          accountId={account.id}
-          maxLevel={account.wkLevel}
-          accountPendingReviews={account.pendingReviews}
-          initialSnapshot={{
-            level: account.wkLevel,
-            kanjiTotal: account.levelKanjiTotal,
-            kanjiLearned: account.levelKanjiLearned,
-            kanjiGuruPlus: account.levelKanjiGuruPlus,
-            kanjiLocked: account.levelKanjiLocked,
-            estimatedHoursRemaining: account.estimatedHoursRemaining,
-            items: levelKanjiItems,
-            syncedAt: account.lastSyncedAt.toISOString(),
-          }}
-          initialSrsFilter={initialSrsFilter}
-          jlptItems={jlptKanjiRows.map((row) => ({
-            kanji: row.kanji,
-            nLevel: row.nLevel,
-            strokeCount: row.strokeCount,
-            frequencyRank: row.frequencyRank,
-            schoolGrade: row.schoolGrade,
-            heisigKeyword: row.heisigKeyword,
-            unicodeHex: row.unicodeHex,
-            sourceJlpt: row.sourceJlpt,
-            primaryMeaning: row.primaryMeaning,
-            meanings: row.meanings,
-            onReadings: row.onReadings,
-            kunReadings: row.kunReadings,
-            nanoriReadings: row.nanoriReadings,
-            notes: row.notes,
-            wordExamples: row.wordExamples,
-          }))}
-          userKanjiItems={userKanjiIndex}
+          learnContent={(
+            <ExplorerTabs
+              accountId={account.id}
+              maxLevel={account.wkLevel}
+              accountPendingReviews={account.pendingReviews}
+              initialSnapshot={{
+                level: account.wkLevel,
+                kanjiTotal: account.levelKanjiTotal,
+                kanjiLearned: account.levelKanjiLearned,
+                kanjiGuruPlus: account.levelKanjiGuruPlus,
+                kanjiLocked: account.levelKanjiLocked,
+                estimatedHoursRemaining: account.estimatedHoursRemaining,
+                items: levelKanjiItems,
+                syncedAt: account.lastSyncedAt.toISOString(),
+              }}
+              initialSrsFilter={initialSrsFilter}
+              jlptItems={jlptKanjiRows.map((row) => ({
+                kanji: row.kanji,
+                nLevel: row.nLevel,
+                strokeCount: row.strokeCount,
+                frequencyRank: row.frequencyRank,
+                schoolGrade: row.schoolGrade,
+                heisigKeyword: row.heisigKeyword,
+                unicodeHex: row.unicodeHex,
+                sourceJlpt: row.sourceJlpt,
+                primaryMeaning: row.primaryMeaning,
+                meanings: row.meanings,
+                onReadings: row.onReadings,
+                kunReadings: row.kunReadings,
+                nanoriReadings: row.nanoriReadings,
+                notes: row.notes,
+                wordExamples: row.wordExamples,
+              }))}
+              userKanjiItems={userKanjiIndex}
+            />
+          )}
         />
       </main>
     </div>

@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type ItemSpreadRow = {
   radical: number;
   kanji: number;
@@ -105,6 +107,7 @@ export type UserDashboardTabsProps = {
   availableProgressLevels: number[];
   levelProgressByLevel: Record<number, LevelProgressSnapshot>;
   viewerMenuInfo: ViewerMenuInfo | null;
+  learnContent: ReactNode;
 };
 
 export type LiveData = {
