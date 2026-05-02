@@ -347,23 +347,23 @@ export default function UserDashboardTabs({
         <div className="mt-4 rounded-2xl border border-line bg-surface-muted p-4 sm:p-6" role="tabpanel">
           <h2 className="text-2xl font-black text-foreground">Read</h2>
           <p className="mt-2 text-sm text-foreground/75">
-            Read tools stay under this user page for now so you do not lose the John context.
+            Open the News Reader to practice reading and track your article history and stats.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
-              href={`/users/${encodeURIComponent(wkUsername)}?tab=read&read=news`}
+              href="/news"
               className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
             >
               Read News
             </Link>
             <Link
-              href={`/users/${encodeURIComponent(wkUsername)}?tab=read&read=history`}
+              href="/news/history"
               className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
             >
               News History
             </Link>
             <Link
-              href={`/users/${encodeURIComponent(wkUsername)}?tab=read&read=stats`}
+              href="/news/stats"
               className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
             >
               News Stats
