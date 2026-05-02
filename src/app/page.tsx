@@ -201,12 +201,6 @@ export default async function Home() {
             </div>
             <div className="flex w-full flex-wrap items-center justify-end gap-2 md:w-auto">
               <Link
-                href="/news"
-                className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-surface px-6 text-sm font-bold uppercase tracking-[0.14em] text-foreground transition hover:bg-surface-muted"
-              >
-                Read News
-              </Link>
-              <Link
                 href="/join"
                 className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-surface px-6 text-sm font-bold uppercase tracking-[0.14em] text-foreground transition hover:bg-surface-muted"
               >

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Noto_Sans_JP, Noto_Serif_JP, Space_Grotesk } from "next/font/google";
 import AppFooter from "./AppFooter";
+import TopRightUserCard from "./TopRightUserCard";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
 
@@ -63,6 +64,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: bootPreferencesScript }} />
       </head>
       <body className="min-h-full flex flex-col">
+        <TopRightUserCard />
         <main className="flex-1">{children}</main>
         <AppFooter />
         <ViewGlyphModalHost />
