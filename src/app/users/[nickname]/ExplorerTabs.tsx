@@ -300,7 +300,7 @@ export default function ExplorerTabs({
   }
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-3 rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
       <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
         <div
           className="inline-flex flex-wrap items-center rounded-full border border-line bg-surface p-1"

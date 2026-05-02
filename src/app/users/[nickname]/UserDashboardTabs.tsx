@@ -294,7 +294,7 @@ export default function UserDashboardTabs({
         </div>
       </div>
       {activeTab === "learn" ? (
-        <div className="mt-4 rounded-2xl border border-line bg-surface-muted p-3 sm:p-4" role="tabpanel">
+        <div className="mt-4" role="tabpanel">
           {learnContent}
         </div>
       ) : null}
