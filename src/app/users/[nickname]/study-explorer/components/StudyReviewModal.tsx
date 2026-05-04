@@ -34,7 +34,6 @@ export default function StudyReviewModal({
   onReveal,
   onSubmit,
   onStartLesson,
-  onResetToLessons,
   glyphViewerItems,
 }: Props) {
   const usedInWordsStorageKey = "wr:study-modal:used-in-words-collapsed";
@@ -65,6 +64,22 @@ export default function StudyReviewModal({
       setStoredEnum(viewerModeStorageKey, forcedViewerMode);
     });
   }, [forcedViewerMode]);
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("wr:study-viewer-mode", {
+        detail: { open: true, viewerMode },
+      }),
+    );
+
+    return () => {
+      window.dispatchEvent(
+        new CustomEvent("wr:study-viewer-mode", {
+          detail: { open: false, viewerMode: null },
+        }),
+      );
+    };
+  }, [viewerMode]);
 
   const [flashRevealKey, setFlashRevealKey] = useState<string | null>(null);
   const [flashCycleDoneKey, setFlashCycleDoneKey] = useState<string | null>(null);
@@ -441,7 +456,6 @@ export default function StudyReviewModal({
             onSubmit={onSubmit}
             onSkipCurrent={skipCurrentAndAdvance}
             onStartLesson={onStartLesson}
-            onResetToLessons={onResetToLessons}
             onAdvanceFlashOrNext={advanceFlashOrNext}
             onFlashTouchStart={handleFlashTouchStart}
             onFlashTouchEnd={handleFlashTouchEnd}

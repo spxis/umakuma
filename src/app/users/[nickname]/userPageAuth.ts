@@ -11,13 +11,39 @@ export async function resolveViewerMenuInfo(input: {
   const { viewerEmail, sessionName } = input;
 
   if (viewerEmail) {
-    const viewerAccount = await prisma.account.findFirst({
+    let viewerAccount = await prisma.account.findFirst({
       where: { joinedByEmail: viewerEmail },
       select: {
         nickname: true,
         wkUsername: true,
       },
     });
+
+    const fallbackNameCandidates = Array.from(
+      new Set(
+        [
+          sessionName?.trim() ?? "",
+          sessionName?.trim().split(/\s+/)[0] ?? "",
+        ].filter((value) => value.length > 0),
+      ),
+    );
+
+    if (!viewerAccount && fallbackNameCandidates.length > 0) {
+      viewerAccount = await prisma.account.findFirst({
+        where: {
+          OR: fallbackNameCandidates.map((candidate) => ({
+            nickname: {
+              equals: candidate,
+              mode: "insensitive",
+            },
+          })),
+        },
+        select: {
+          nickname: true,
+          wkUsername: true,
+        },
+      });
+    }
 
     return {
       provider: "google",

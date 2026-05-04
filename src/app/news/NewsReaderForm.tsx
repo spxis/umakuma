@@ -73,14 +73,14 @@ export default function NewsReaderForm({
           placeholder="https://..."
           value={url}
           onChange={(event) => onChangeUrl(event.target.value)}
-          className="h-11 flex-1 rounded-full border border-line bg-surface px-5 text-sm text-foreground placeholder:text-foreground/40 focus:border-accent focus:outline-none"
+          className="h-12 flex-1 rounded-full border border-line bg-surface px-5 text-sm text-foreground placeholder:text-foreground/40 focus:border-accent focus:outline-none"
           required
         />
         <button
           type="submit"
           data-submit-intent="news-submit"
           disabled={(loading || discoverLoading) || !url.trim()}
-          className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-accent px-6 text-sm font-bold uppercase tracking-[0.14em] text-surface transition hover:bg-accent-2 disabled:opacity-50"
+          className="inline-flex h-12 items-center justify-center rounded-full border border-line bg-accent px-6 text-sm font-bold uppercase tracking-[0.14em] text-surface transition hover:bg-accent-2 disabled:opacity-50"
         >
           {mode === "site"
             ? discoverLoading

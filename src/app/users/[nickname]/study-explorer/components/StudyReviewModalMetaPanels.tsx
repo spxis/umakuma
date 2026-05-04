@@ -11,6 +11,7 @@ import {
   readingDualScriptCard,
   readingWithPronunciation,
   readingsWithPronunciationList,
+  relatedTileLabelClass,
   relatedTilesClickable,
 } from "./StudyReviewModalHelpers";
 

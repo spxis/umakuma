@@ -10,6 +10,7 @@ type UserHeaderMenuProps = {
   accountId?: string;
   viewedWkUsername?: string;
   viewerMenuInfo: ViewerMenuInfo | null;
+  hidden?: boolean;
 };
 
 function getInitials(name: string | null): string {
@@ -30,7 +31,12 @@ function getInitials(name: string | null): string {
   return `${parts[0]?.[0] ?? ""}${parts[1]?.[0] ?? ""}`.toUpperCase();
 }
 
-export default function UserHeaderMenu({ accountId, viewedWkUsername, viewerMenuInfo }: UserHeaderMenuProps) {
+export default function UserHeaderMenu({
+  accountId,
+  viewedWkUsername,
+  viewerMenuInfo,
+  hidden = false,
+}: UserHeaderMenuProps) {
   const [open, setOpen] = useState(false);
   const [themeMode, setThemeMode] = useState<"light" | "dark">(() => {
     if (typeof window === "undefined") {
@@ -103,8 +109,14 @@ export default function UserHeaderMenu({ accountId, viewedWkUsername, viewerMenu
     document.documentElement.setAttribute("data-jp-font", next);
   }
 
+  if (hidden) {
+    return null;
+  }
+
+  const resolvedUserPageUsername = viewerMenuInfo?.wkUsername ?? viewedWkUsername ?? null;
+
   return (
-    <div ref={menuRef} className="relative z-[120]">
+    <div ref={menuRef} className="relative z-[450]">
       <button
         type="button"
         aria-expanded={open}
@@ -118,7 +130,7 @@ export default function UserHeaderMenu({ accountId, viewedWkUsername, viewerMenu
       </button>
 
       {open ? (
-        <aside className="absolute right-0 z-[130] mt-2 w-[min(88vw,300px)] rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.18)]">
+        <aside className="fixed right-4 top-20 z-[500] w-[min(88vw,300px)] rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.22)] sm:right-6 sm:top-24">
           <div className="space-y-3">
             <section>
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-accent">Account</p>
@@ -176,12 +188,12 @@ export default function UserHeaderMenu({ accountId, viewedWkUsername, viewerMenu
                 >
                   Manage users
                 </Link>
-                {viewerMenuInfo?.wkUsername ? (
+                {resolvedUserPageUsername ? (
                   <Link
-                    href={`/users/${encodeURIComponent(viewerMenuInfo.wkUsername)}`}
+                    href={`/users/${encodeURIComponent(resolvedUserPageUsername)}`}
                     className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
                   >
-                    Open my profile
+                    My page
                   </Link>
                 ) : null}
               </div>

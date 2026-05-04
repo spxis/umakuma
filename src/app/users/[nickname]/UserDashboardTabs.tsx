@@ -56,6 +56,7 @@ export default function UserDashboardTabs({
   readContent,
 }: Props) {
   const tabStorageKey = `wr:user:${accountId}:dashboard-tab`;
+  const levelProgressStorageKey = `wr:user:${accountId}:level-progress-level`;
   const safeProgressLevels = useMemo(
     () =>
       Array.from(
@@ -66,10 +67,26 @@ export default function UserDashboardTabs({
       ).sort((a, b) => a - b),
     [availableProgressLevels, wkLevel],
   );
-  const [activeTab, setActiveTab] = useState<TabId>(initialDashboardTab);
-  const levelProgressStorageKey = `wr:user:${accountId}:level-progress-level`;
-  const [selectedProgressLevel, setSelectedProgressLevel] = useState<number>(wkLevel);
+  const [activeTab, setActiveTab] = useState<TabId>(() => {
+    if (initialDashboardTab !== "learn") {
+      return initialDashboardTab;
+    }
+    return getStoredEnum(
+      tabStorageKey,
+      ["learn", "stats", "read"] as const,
+      "learn",
+    );
+  });
+  const [selectedProgressLevel, setSelectedProgressLevel] = useState<number>(() => {
+    if (typeof window === "undefined") {
+      return wkLevel;
+    }
+    const raw = window.localStorage.getItem(levelProgressStorageKey);
+    const parsed = Number(raw);
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : wkLevel;
+  });
   const [nowMs, setNowMs] = useState(() => Date.now());
+  const [flashViewerOpen, setFlashViewerOpen] = useState(false);
   const { data: liveData, mutate } = useSWR<LiveData>(
     `/api/accounts/${accountId}/live`,
     async (url: string) => {
@@ -82,31 +99,6 @@ export default function UserDashboardTabs({
     },
     { refreshInterval: 15_000, revalidateOnFocus: true },
   );
-  useEffect(() => {
-    if (initialDashboardTab !== "learn") {
-      setActiveTab(initialDashboardTab);
-      return;
-    }
-
-    const storedTab = getStoredEnum(
-      tabStorageKey,
-      ["learn", "stats", "read"] as const,
-      "learn",
-    );
-    setActiveTab(storedTab);
-  }, [initialDashboardTab, tabStorageKey]);
-
-  useEffect(() => {
-    const raw = window.localStorage.getItem(levelProgressStorageKey);
-    const parsed = Number(raw);
-    if (Number.isInteger(parsed) && safeProgressLevels.includes(parsed)) {
-      setSelectedProgressLevel(parsed);
-      return;
-    }
-
-    setSelectedProgressLevel(wkLevel);
-  }, [levelProgressStorageKey, safeProgressLevels, wkLevel]);
-
   useEffect(() => {
     const timer = window.setInterval(() => {
       setNowMs(Date.now());
@@ -157,22 +149,26 @@ export default function UserDashboardTabs({
   }, [activeTab]);
 
   useEffect(() => {
-    if (safeProgressLevels.length === 0) {
-      return;
-    }
+    const onStudyViewerModeChange = (event: Event) => {
+      const custom = event as CustomEvent<{ open?: boolean; viewerMode?: "detail" | "flash" | null }>;
+      setFlashViewerOpen(Boolean(custom.detail?.open) && custom.detail?.viewerMode === "flash");
+    };
 
-    if (safeProgressLevels.includes(selectedProgressLevel)) {
-      return;
-    }
+    window.addEventListener("wr:study-viewer-mode", onStudyViewerModeChange as EventListener);
+    return () => {
+      window.removeEventListener("wr:study-viewer-mode", onStudyViewerModeChange as EventListener);
+    };
+  }, []);
 
-    const next = safeProgressLevels.includes(wkLevel)
-      ? wkLevel
-      : safeProgressLevels[safeProgressLevels.length - 1] ?? wkLevel;
-    setSelectedProgressLevel(next);
-  }, [safeProgressLevels, selectedProgressLevel, wkLevel]);
+  const effectiveSelectedProgressLevel =
+    safeProgressLevels.includes(selectedProgressLevel)
+      ? selectedProgressLevel
+      : safeProgressLevels.includes(wkLevel)
+        ? wkLevel
+        : safeProgressLevels[safeProgressLevels.length - 1] ?? wkLevel;
 
   useEffect(() => {
-    if (!safeProgressLevels.includes(selectedProgressLevel)) {
+    if (!safeProgressLevels.includes(effectiveSelectedProgressLevel)) {
       return;
     }
 
@@ -180,10 +176,10 @@ export default function UserDashboardTabs({
       return;
     }
 
-    window.localStorage.setItem(levelProgressStorageKey, String(selectedProgressLevel));
-  }, [levelProgressStorageKey, safeProgressLevels, selectedProgressLevel]);
+    window.localStorage.setItem(levelProgressStorageKey, String(effectiveSelectedProgressLevel));
+  }, [effectiveSelectedProgressLevel, levelProgressStorageKey, safeProgressLevels]);
 
-  const selectedLevelProgress = levelProgressByLevel?.[selectedProgressLevel] ?? {
+  const selectedLevelProgress = levelProgressByLevel?.[effectiveSelectedProgressLevel] ?? {
     radical: levelRadicalProgress,
     kanji: levelKanjiProgress,
     vocabulary: levelVocabularyProgress,
@@ -192,46 +188,16 @@ export default function UserDashboardTabs({
   };
 
   const headerSection = (
-    <section className="rounded-[2rem] border border-line bg-surface/90 p-3 shadow-[0_24px_80px_rgba(15,111,255,0.15)] sm:p-8">
-      <div className="flex flex-col gap-2 sm:gap-3">
+    <section className="rounded-[2rem] border border-line bg-surface/90 p-3 shadow-[0_24px_80px_rgba(15,111,255,0.15)] sm:p-5">
+      <div className="flex flex-col gap-2.5">
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex flex-wrap items-center gap-2">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">User detail</p>
-            <Link
-              href="/"
-              className="inline-flex h-8 select-none items-center justify-center rounded-full border border-line bg-surface px-3 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted"
-            >
-              Leaderboard
-            </Link>
-          </div>
-          <div className="ml-auto hidden items-center justify-end gap-2 sm:flex">
-            <SegmentedControl
-              ariaLabel="User dashboard tabs"
-              value={activeTab}
-              onChange={switchTab}
-              size="md"
-              asTabs
-              options={[
-                { value: "learn", label: "Learn" },
-                { value: "stats", label: "Stats" },
-                { value: "read", label: "Read" },
-              ]}
-            />
-            <UserHeaderMenu
-              accountId={accountId}
-              viewedWkUsername={wkUsername}
-              viewerMenuInfo={viewerMenuInfo}
-            />
-          </div>
-          <div className="ml-auto sm:hidden">
-            <UserHeaderMenu
-              accountId={accountId}
-              viewedWkUsername={wkUsername}
-              viewerMenuInfo={viewerMenuInfo}
-            />
-          </div>
-        </div>
-        <div className="sm:hidden">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">User detail</p>
+          <Link
+            href="/"
+            className="inline-flex h-8 select-none items-center justify-center rounded-full border border-line bg-surface px-3 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted"
+          >
+            Leaderboard
+          </Link>
           <SegmentedControl
             ariaLabel="User dashboard tabs"
             value={activeTab}
@@ -244,10 +210,34 @@ export default function UserDashboardTabs({
               { value: "read", label: "Read" },
             ]}
           />
+          {totalPlayers > 1 ? (
+            <div className="ml-auto flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">
+              <Link
+                href={`/users/${encodeURIComponent(previousUser?.wkUsername ?? wkUsername)}`}
+                className="rounded-full border border-line bg-surface px-2 py-0.5 select-none hover:bg-surface-muted"
+                aria-label={`Previous user ${previousUser?.nickname ?? nickname}`}
+              >
+                {"< "}{previousUser?.nickname ?? nickname}
+              </Link>
+              <Link
+                href={`/users/${encodeURIComponent(nextUser?.wkUsername ?? wkUsername)}`}
+                className="rounded-full border border-line bg-surface px-2 py-0.5 select-none hover:bg-surface-muted"
+                aria-label={`Next user ${nextUser?.nickname ?? nickname}`}
+              >
+                {nextUser?.nickname ?? nickname}{" >"}
+              </Link>
+            </div>
+          ) : null}
+          <UserHeaderMenu
+            accountId={accountId}
+            viewedWkUsername={wkUsername}
+            viewerMenuInfo={viewerMenuInfo}
+            hidden={activeTab === "learn" && flashViewerOpen}
+          />
         </div>
         <div className="flex w-full items-start gap-2">
           <div className="flex min-w-0 items-center gap-2">
-            <h1 className="truncate text-2xl leading-[0.95] text-foreground sm:text-5xl">{nickname}</h1>
+            <h1 className="truncate text-2xl leading-[0.95] text-foreground sm:text-4xl">{nickname}</h1>
             {viewerMatchesAccount ? (
               <span className="inline-flex select-none items-center rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-800">
                 Me
@@ -255,30 +245,12 @@ export default function UserDashboardTabs({
             ) : null}
           </div>
           <div className="ml-auto shrink-0 text-right">
-            <p className="text-lg font-black uppercase tracking-[0.06em] text-foreground sm:text-4xl">
+            <p className="text-lg font-black uppercase tracking-[0.06em] text-foreground sm:text-3xl">
               <span>Rank #{globalRank}</span>
-              <span className="ml-1 text-sm font-bold text-foreground/65 sm:ml-2 sm:text-xl">
+              <span className="ml-1 text-sm font-bold text-foreground/65 sm:ml-2 sm:text-base">
                 of {formatNumber(totalPlayers)}
               </span>
             </p>
-            {totalPlayers > 1 ? (
-              <div className="mt-1 flex items-center justify-end gap-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">
-                <Link
-                  href={`/users/${encodeURIComponent(previousUser?.wkUsername ?? wkUsername)}`}
-                  className="rounded-full border border-line bg-surface px-2 py-0.5 select-none hover:bg-surface-muted"
-                  aria-label={`Previous user ${previousUser?.nickname ?? nickname}`}
-                >
-                  {"< "}{previousUser?.nickname ?? nickname}
-                </Link>
-                <Link
-                  href={`/users/${encodeURIComponent(nextUser?.wkUsername ?? wkUsername)}`}
-                  className="rounded-full border border-line bg-surface px-2 py-0.5 select-none hover:bg-surface-muted"
-                  aria-label={`Next user ${nextUser?.nickname ?? nickname}`}
-                >
-                  {nextUser?.nickname ?? nickname}{" >"}
-                </Link>
-              </div>
-            ) : null}
           </div>
         </div>
         <div className="flex items-center justify-between gap-3">
@@ -343,7 +315,7 @@ export default function UserDashboardTabs({
           <LevelProgressTabPanel
             accountId={accountId}
             currentWkLevel={wkLevel}
-            wkLevel={selectedProgressLevel}
+            wkLevel={effectiveSelectedProgressLevel}
             levelOptions={safeProgressLevels}
             levelProgressByLevel={levelProgressByLevel}
             onSelectLevel={setSelectedProgressLevel}
