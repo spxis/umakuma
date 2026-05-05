@@ -10,7 +10,7 @@ import type {
 } from "./studyExplorerTypes";
 import { studyItemEnglishTitle } from "./studyExplorerUtils";
 
-const POST_SUBMIT_DELAY_MS = 500;
+const POST_SUBMIT_DELAY_MS = 250;
 const REVIEW_SUBMIT_TIMEOUT_MS = 10000;
 
 type Args = {
