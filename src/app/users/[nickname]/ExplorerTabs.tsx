@@ -7,6 +7,7 @@ import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
 import LevelExplorer from "./level-explorer/components/LevelExplorer";
 import StudyExplorer from "./study-explorer/components/StudyExplorer";
 import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
+import type { StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
 
 type Props = {
   accountId: string;
@@ -16,6 +17,14 @@ type Props = {
   initialSrsFilter: SrsFilter;
   jlptItems: JlptItem[];
   userKanjiItems: UserKanjiItem[];
+  initialStudyFilters?: {
+    viewedLevel: number | null;
+    typeFilter: StudyTypeFilter;
+    srsFilter: StudySrsFilter;
+    srsStageFilter: StudySrsStageFilter | null;
+    recentOnly: boolean;
+    showLocked: boolean;
+  };
 };
 
 export default function ExplorerTabs({
@@ -26,6 +35,7 @@ export default function ExplorerTabs({
   initialSrsFilter,
   jlptItems,
   userKanjiItems,
+  initialStudyFilters,
 }: Props) {
   const previousPageKeyRef = useRef<string | null>(null);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
@@ -386,6 +396,7 @@ export default function ExplorerTabs({
           accountId={accountId}
           maxLevel={maxLevel}
           initialViewerMode={initialViewerMode}
+          initialFilters={initialStudyFilters}
           showEnglish={showEnglish}
           onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
           canToggleEnglish={!studyMode}

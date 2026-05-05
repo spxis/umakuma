@@ -8,7 +8,13 @@ import { getUserKanjiIndex } from "@/lib/wanikani";
 import ExplorerTabs from "./ExplorerTabs";
 import UserReadPanel from "./UserReadPanel";
 import UserDashboardTabs from "./UserDashboardTabs";
-import { getNewsDevSampleUrls, resolveInitialDashboardTab, resolveInitialReadTab } from "./userReadConfig";
+import {
+  getNewsDevSampleUrls,
+  resolveInitialDashboardTab,
+  resolveInitialReadTab,
+  resolveInitialSrsFilter,
+  resolveInitialStudyFilters,
+} from "./userReadConfig";
 import { canViewUserPage, resolveViewerMenuInfo } from "./userPageAuth";
 import type { ItemSpreadGroupDetails, LevelProgressSnapshot, SrsGroupKey, TypeProgress } from "./UserDashboardTabs.types";
 
@@ -63,27 +69,10 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   const query = await searchParams;
   const initialTab = query.tab === "jlpt" ? "jlpt" : query.tab === "level" ? "level" : "study";
   const shouldLoadJlptData = initialTab === "jlpt";
-  const allowedSrs = new Set([
-    "all",
-    "apprentice",
-    "guru",
-    "master",
-    "enlightened",
-    "burned",
-    "locked",
-  ]);
-  const initialSrsFilter = allowedSrs.has(query.srs ?? "")
-    ? (query.srs as
-        | "all"
-        | "apprentice"
-        | "guru"
-        | "master"
-        | "enlightened"
-        | "burned"
-        | "locked")
-    : "all";
+  const initialSrsFilter = resolveInitialSrsFilter(query);
   const initialDashboardTab = resolveInitialDashboardTab(query);
   const initialReadTab = resolveInitialReadTab(query);
+  const initialStudyFilters = resolveInitialStudyFilters(query);
 
   const account = await prisma.account.findFirst({
     where: { wkUsername: userKey },
@@ -450,6 +439,14 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
               accountId={account.id}
               maxLevel={account.wkLevel}
               accountPendingReviews={account.pendingReviews}
+              initialStudyFilters={{
+                viewedLevel: initialStudyFilters.viewedLevel,
+                typeFilter: initialStudyFilters.typeFilter,
+                srsFilter: initialStudyFilters.srsFilter,
+                srsStageFilter: initialStudyFilters.srsStageFilter,
+                recentOnly: initialStudyFilters.recentOnly,
+                showLocked: initialStudyFilters.showLocked,
+              }}
               initialSnapshot={{
                 level: account.wkLevel,
                 kanjiTotal: account.levelKanjiTotal,

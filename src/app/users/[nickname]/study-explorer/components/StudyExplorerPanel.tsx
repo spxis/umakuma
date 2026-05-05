@@ -142,6 +142,7 @@ export default function StudyExplorerPanel({
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
 
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
+  const showTypeCountPlaceholders = !hasData && typeCounts.all === 0 && filteredItems.length === 0 && !errorMessage;
   const showFilterPagingState =
     queueMode === "lesson" && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
   const srsStatuses =
@@ -233,6 +234,7 @@ export default function StudyExplorerPanel({
               kanji: typeFilter === "all" || typeFilter === "kanji",
               vocabulary: typeFilter === "all" || typeFilter === "vocabulary",
             }}
+            showPlaceholderCounts={showTypeCountPlaceholders}
             onClickAll={() => onSetTypeFilter("all")}
             onClickType={(type) => onSetTypeFilter(type)}
           />

@@ -37,6 +37,7 @@ export default function StudyExplorer({
   accountId,
   maxLevel,
   initialViewerMode = null,
+  initialFilters,
   showEnglish,
   onToggleShowEnglish,
   canToggleEnglish,
@@ -64,11 +65,11 @@ export default function StudyExplorer({
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
 
-  const [viewedLevel, setViewedLevel] = useState<number | null>(null);
+  const [viewedLevel, setViewedLevel] = useState<number | null>(initialFilters?.viewedLevel ?? null);
   const [hasHydratedViewedLevel, setHasHydratedViewedLevel] = useState(false);
-  const [typeFilter, setTypeFilter] = useState<StudyTypeFilter>("all");
-  const [srsFilter, setSrsFilter] = useState<StudySrsFilter>("all");
-  const [srsStageFilter, setSrsStageFilter] = useState<StudySrsStageFilter | null>(null);
+  const [typeFilter, setTypeFilter] = useState<StudyTypeFilter>(initialFilters?.typeFilter ?? "all");
+  const [srsFilter, setSrsFilter] = useState<StudySrsFilter>(initialFilters?.srsFilter ?? "all");
+  const [srsStageFilter, setSrsStageFilter] = useState<StudySrsStageFilter | null>(initialFilters?.srsStageFilter ?? null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
   const [revealedAssignmentIds, setRevealedAssignmentIds] = useState<Set<number>>(new Set());
@@ -80,8 +81,8 @@ export default function StudyExplorer({
   const [modalSessionItemByAssignmentId, setModalSessionItemByAssignmentId] = useState<Record<number, StudyQueueItem>>({});
   const [hiddenSubmittedAssignmentIds, setHiddenSubmittedAssignmentIds] = useState<Set<number>>(new Set());
   const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
-  const [showLocked, setShowLocked] = useState(true);
-  const [recentOnly, setRecentOnly] = useState(false);
+  const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? true);
+  const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
   const [searchQuery, setSearchQuery] = useState("");
   const [forcedViewerMode, setForcedViewerMode] = useState<"detail" | "flash" | null>(
     initialViewerMode,

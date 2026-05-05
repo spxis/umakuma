@@ -5,7 +5,8 @@ type SubjectType = "radical" | "kanji" | "vocabulary";
 
 type Props = {
   type: SubjectType;
-  count: number;
+  count?: number;
+  countLabel?: string;
   active: boolean;
   disabled?: boolean;
   onClick: () => void;
@@ -14,10 +15,13 @@ type Props = {
 export default function SubjectTypeFilterButton({
   type,
   count,
+  countLabel,
   active,
   disabled = false,
   onClick,
 }: Props) {
+  const resolvedCountLabel = countLabel ?? formatNumber(count ?? 0);
+
   return (
     <button
       type="button"
@@ -27,7 +31,7 @@ export default function SubjectTypeFilterButton({
         disabled ? disabledBadgeClass() : typeBadgeClass(type, active, false)
       }`}
     >
-      {subjectTypeFilterLabel(type)} ({formatNumber(count)})
+      {subjectTypeFilterLabel(type)} ({resolvedCountLabel})
     </button>
   );
 }

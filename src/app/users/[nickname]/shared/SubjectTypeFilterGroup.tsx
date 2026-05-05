@@ -18,6 +18,7 @@ type Props = {
   onClickAll: () => void;
   onClickType: (type: SubjectType) => void;
   className?: string;
+  showPlaceholderCounts?: boolean;
 };
 
 export default function SubjectTypeFilterGroup({
@@ -29,7 +30,10 @@ export default function SubjectTypeFilterGroup({
   onClickAll,
   onClickType,
   className,
+  showPlaceholderCounts = false,
 }: Props) {
+  const formatCount = (value: number): string => (showPlaceholderCounts ? "..." : formatNumber(value));
+
   return (
     <div className={className ?? "flex flex-wrap gap-2"}>
       <button
@@ -39,13 +43,13 @@ export default function SubjectTypeFilterGroup({
           allActive,
         )}`}
       >
-        {allLabel} ({formatNumber(allCount ?? counts.all)})
+        {allLabel} ({formatCount(allCount ?? counts.all)})
       </button>
       {(["radical", "kanji", "vocabulary"] as const).map((type) => (
         <SubjectTypeFilterButton
           key={type}
           type={type}
-          count={counts[type]}
+          countLabel={formatCount(counts[type])}
           active={activeTypes[type]}
           onClick={() => onClickType(type)}
         />

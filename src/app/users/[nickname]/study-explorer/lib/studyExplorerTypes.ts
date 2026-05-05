@@ -87,6 +87,14 @@ export type StudyExplorerProps = {
   studyMode: boolean;
   queueMode: "review" | "lesson";
   initialViewerMode?: "detail" | "flash" | null;
+  initialFilters?: {
+    viewedLevel: number | null;
+    typeFilter: StudyTypeFilter;
+    srsFilter: StudySrsFilter;
+    srsStageFilter: StudySrsStageFilter | null;
+    recentOnly: boolean;
+    showLocked: boolean;
+  };
 };
 
 export type StudyTypeFilter = "all" | "radical" | "kanji" | "vocabulary";

@@ -132,7 +132,7 @@ test("study keeps all type filter on reload", async ({ browser, baseURL }) => {
   const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&srs=all&jlpt=all&review=all&sticky=0&recent=0#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
-    const allTypeButton = page.getByRole("button", { name: /^All\s+L\d+\s+\(\d+\)$/i });
+    const allTypeButton = page.getByRole("button", { name: /^All\s+(Levels|L\d+)\s+\(\d+\)$/i });
     await expect(allTypeButton).toBeVisible();
 
     await allTypeButton.click();
@@ -151,7 +151,7 @@ test("study keeps all type filter on reload", async ({ browser, baseURL }) => {
 
 test("study keeps explicit level and vocab type on reload", async ({ browser, baseURL }) => {
   const user = smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&levels=10&type=vocabulary&srs=all&jlpt=all&review=all&sticky=0&recent=0#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&level=10&type=vocabulary&srs=all&jlpt=all&review=all&sticky=0&recent=0#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const levelButton = page.getByRole("button", { name: /^L10$/i });
@@ -169,10 +169,37 @@ test("study keeps explicit level and vocab type on reload", async ({ browser, ba
     });
 
     const params = new URL(page.url()).searchParams;
-    expect(params.get("levels"), "levels should stay pinned to L10").toBe("10");
+    expect(params.get("level"), "level should stay pinned to L10").toBe("10");
     expect(params.get("type"), "type should stay pinned to vocabulary").toBe("vocabulary");
 
     await expect(levelButton).toHaveClass(/bg-accent/);
     await expect(vocabButton).toHaveClass(/bg-vocabulary/);
+  });
+});
+
+test("study keeps srs stage filter on reload", async ({ browser, baseURL }) => {
+  const user = smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&level=6&type=kanji&srs=guru&srsStage=6&jlpt=all&review=all&sticky=0&recent=0#explorer`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const guruButton = page.getByRole("button", { name: /^guru\s*\(\d+\)$/i });
+    const srs6Button = page.getByRole("button", { name: /^SRS\s*6\s*\(\d+\)$/i });
+
+    await expect(guruButton).toBeVisible();
+    await expect(srs6Button).toBeVisible();
+    await expect(guruButton).toHaveClass(/bg-accent/);
+    await expect(srs6Button).toHaveClass(/bg-accent/);
+
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {
+      // Some pages keep lightweight polling alive; proceed with assertions.
+    });
+
+    const params = new URL(page.url()).searchParams;
+    expect(params.get("srs"), "srs should stay guru").toBe("guru");
+    expect(params.get("srsStage"), "srsStage should stay 6").toBe("6");
+
+    await expect(guruButton).toHaveClass(/bg-accent/);
+    await expect(srs6Button).toHaveClass(/bg-accent/);
   });
 });
