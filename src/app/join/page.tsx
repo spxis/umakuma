@@ -114,15 +114,21 @@ export default function JoinPage() {
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                void signIn("google", { callbackUrl: "/join" });
-              }}
-              className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
-            >
-              Sign in with Google
-            </button>
+            {!signedIn ? (
+              <button
+                type="button"
+                onClick={() => {
+                  void signIn("google", { callbackUrl: "/join" });
+                }}
+                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
+              >
+                Sign in with Google
+              </button>
+            ) : (
+              <span className="inline-flex h-10 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-xs font-black uppercase tracking-[0.12em] text-emerald-800">
+                Google already connected
+              </span>
+            )}
             <Link
               href="/signout?callbackUrl=/join"
               className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"

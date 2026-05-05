@@ -41,6 +41,7 @@ export default function UserHeaderMenu({
   hidden = false,
 }: UserHeaderMenuProps) {
   const [open, setOpen] = useState(false);
+  const [googleSignedIn, setGoogleSignedIn] = useState(false);
   const [themeMode, setThemeMode] = useState<"light" | "dark">(() => {
     if (typeof window === "undefined") {
       return "light";
@@ -65,6 +66,32 @@ export default function UserHeaderMenu({
   });
   const menuRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadSessionStatus() {
+      try {
+        const response = await fetch("/api/admin/session", { cache: "no-store" });
+        const data = (await response.json()) as { signedIn?: boolean };
+        if (!cancelled) {
+          setGoogleSignedIn(Boolean(data.signedIn));
+        }
+      } catch {
+        if (!cancelled) {
+          setGoogleSignedIn(false);
+        }
+      }
+    }
+
+    if (open) {
+      void loadSessionStatus();
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open]);
 
   useEffect(() => {
     function onPointerDown(event: MouseEvent) {
@@ -275,6 +302,21 @@ export default function UserHeaderMenu({
                   >
                     Manage invite
                   </Link>
+                ) : googleSignedIn ? (
+                  <>
+                    <Link
+                      href="/join"
+                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    >
+                      Continue with session
+                    </Link>
+                    <Link
+                      href="/signout?callbackUrl=/"
+                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    >
+                      Sign out
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <Link
