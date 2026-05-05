@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { decryptToken } from "@/lib/crypto";
@@ -118,7 +118,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     targetWkUsername: account.wkUsername,
   });
   if (!canViewThisPage) {
-    notFound();
+    redirect("/join?access=denied");
   }
 
   const levelKanjiItems = (account.levelKanjiItems ?? []) as LevelKanjiItem[];

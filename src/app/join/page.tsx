@@ -18,6 +18,7 @@ type SessionStatus = {
 };
 
 export default function JoinPage() {
+  const [accessDenied, setAccessDenied] = useState(false);
   const [nickname, setNickname] = useState("");
   const [token, setToken] = useState("");
   const [signedIn, setSignedIn] = useState(false);
@@ -28,6 +29,11 @@ export default function JoinPage() {
   const [status, setStatus] = useState<JoinStatus>({ type: "idle", message: "" });
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setAccessDenied(params.get("access") === "denied");
+    }
+
     async function loadSession() {
       try {
         const response = await fetch("/api/admin/session", { cache: "no-store" });
@@ -91,6 +97,11 @@ export default function JoinPage() {
         </Link>
 
         <section className="animate-enter rounded-[2rem] border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
+          {accessDenied ? (
+            <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+              You do not have access to that user page yet. Join with your Google account or use your invite code.
+            </div>
+          ) : null}
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Open signup</p>
           <h1 className="mt-2 text-4xl leading-[0.95] text-foreground sm:text-5xl">Join UmaKuma</h1>
           <p className="mt-3 text-sm text-slate-700 sm:text-base">

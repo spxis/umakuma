@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
@@ -37,7 +37,7 @@ export default async function UserHistoryPage({ params }: PageProps) {
     targetWkUsername: account.wkUsername,
   });
   if (!canViewThisPage) {
-    notFound();
+    redirect("/join?access=denied");
   }
 
   return (
