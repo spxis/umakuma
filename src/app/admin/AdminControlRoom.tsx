@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 import AdminStatusBadge from "./AdminStatusBadge";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
@@ -44,12 +44,15 @@ export default function AdminControlRoom({
 
       {googleConfigured ? (
         <div className="mt-4 flex flex-wrap gap-2">
-          <Link
-            href="/api/auth/signin/google?callbackUrl=/admin&prompt=select_account"
+          <button
+            type="button"
+            onClick={() => {
+              void signIn("google", { callbackUrl: "/admin" }, { prompt: "select_account" });
+            }}
             className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
           >
             Sign in with Google
-          </Link>
+          </button>
           <button
             type="button"
             onClick={onCompleteGoogleSignOut}
