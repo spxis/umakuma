@@ -89,6 +89,10 @@ export default function StudyExplorer({
   );
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
   const isModalOpen = selectedId !== null;
+  const effectiveViewedLevel =
+    queueMode === "review" && viewedLevel !== null && (viewedLevel < 1 || viewedLevel > maxLevel)
+      ? null
+      : viewedLevel;
   const effectiveSrsFilter: StudySrsFilter = queueMode === "lesson" ? "all" : srsFilter;
   const effectiveRecentOnly = queueMode === "lesson" ? false : recentOnly;
   const effectiveShowLocked = queueMode === "lesson" ? true : showLocked;
@@ -235,7 +239,7 @@ export default function StudyExplorer({
     maxLevel,
     loadedItems,
     queueMode,
-    viewedLevel,
+    viewedLevel: effectiveViewedLevel,
     typeFilter,
     effectiveSrsFilter,
     effectiveSrsStageFilter,
@@ -296,7 +300,6 @@ export default function StudyExplorer({
     srsStageFilterStorageKey,
     recentOnlyStorageKey,
     showLockedStorageKey,
-    maxLevel,
     viewedLevel,
     typeFilter,
     srsFilter,
@@ -356,7 +359,7 @@ export default function StudyExplorer({
     }
   }, [selectedId, selectedSubjectStorageKey]);
   const hasActiveFilterConstraints =
-    viewedLevel !== null ||
+    effectiveViewedLevel !== null ||
     typeFilter !== "all" ||
     effectiveSrsFilter !== "all" ||
     effectiveSrsStageFilter !== null ||
@@ -391,7 +394,7 @@ export default function StudyExplorer({
     isLoadingMore,
     loadMorePage,
     queueMode,
-    viewedLevel,
+    viewedLevel: effectiveViewedLevel,
     typeFilter,
     lessonLevelCounts,
     filteredItemsLength: filteredItems.length,
@@ -427,7 +430,7 @@ export default function StudyExplorer({
         studyMode={studyMode}
         levelOptions={levelOptions}
         availableLevels={availableLevels}
-        viewedLevel={viewedLevel}
+        viewedLevel={effectiveViewedLevel}
         typeFilter={typeFilter}
         srsFilter={effectiveSrsFilter}
         srsStageFilter={effectiveSrsStageFilter}
