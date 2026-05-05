@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
+import { formatRelativeFromNow } from "@/lib/timeFormat";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import UserHeaderMenu from "./UserHeaderMenu";
 import {
@@ -133,9 +133,6 @@ export default function UserDashboardTabs({
       justNowLabel: "just now",
     });
   }
-  function formatAbsoluteTime(timestampMs: number): string {
-    return formatDateTimeShort(timestampMs, "Unknown");
-  }
   function switchTab(next: TabId) {
     setActiveTab(next);
     setStoredEnum(tabStorageKey, next);
@@ -190,43 +187,22 @@ export default function UserDashboardTabs({
 
   const hasActivity = Boolean(lastActivityAt || liveData?.lastActivityAt);
   const updatedRelativeLabel = formatRelativeTime(liveLastSyncedMs);
-  const updatedAbsoluteLabel = formatAbsoluteTime(liveLastSyncedMs);
   const activeRelativeLabel = hasActivity ? formatRelativeTime(liveLastActivityMs) : "Unknown";
-  const activeAbsoluteLabel = hasActivity ? formatAbsoluteTime(liveLastActivityMs) : "Unknown";
 
   const headerSection = (
     <section className="rounded-[2rem] border border-line bg-surface/90 p-3 shadow-[0_24px_80px_rgba(15,111,255,0.15)] sm:p-4">
-      <div className="flex flex-col gap-3">
-        <div className="flex items-start gap-2">
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-accent sm:text-xs">
-              User dashboard
-            </p>
-            <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-2">
-              <h1 className="min-w-0 truncate text-xl font-black leading-none text-foreground sm:text-2xl">
-                {nickname}
-              </h1>
-              {viewerMatchesAccount ? (
-                <span className="inline-flex shrink-0 select-none items-center rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-800">
-                  Me
-                </span>
-              ) : null}
-            </div>
-            <p className="mt-1 min-w-0 truncate text-xs font-semibold text-foreground/70 sm:text-sm">
-              @{wkUsername}
-              {linkedEmail ? <span className="text-foreground/55"> · {linkedEmail}</span> : null}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="inline-flex shrink-0 flex-col rounded-2xl border border-line bg-surface-muted px-3 py-2 text-right leading-tight sm:px-4">
-              <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">Rank</span>
-              <span className="text-xl font-black text-foreground sm:text-3xl">#{globalRank}</span>
-              <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">
-                of {formatNumber(totalPlayers)} players
-              </span>
-            </div>
-
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <p className="min-w-0 truncate text-xs font-bold uppercase tracking-[0.14em] text-accent">
+            View user:
+            <span className="ml-1 text-lg font-black normal-case tracking-normal text-foreground sm:text-xl">{nickname}</span>
+          </p>
+          {viewerMatchesAccount ? (
+            <span className="inline-flex shrink-0 select-none items-center rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-800">
+              Me
+            </span>
+          ) : null}
+          <div className="ml-auto flex items-center gap-2">
             <UserHeaderMenu
               accountId={accountId}
               viewedWkUsername={wkUsername}
@@ -236,7 +212,7 @@ export default function UserDashboardTabs({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
           <SegmentedControl
             ariaLabel="User dashboard tabs"
             value={activeTab}
@@ -250,8 +226,15 @@ export default function UserDashboardTabs({
             ]}
           />
 
+          <p className="ml-auto shrink-0 text-right text-sm font-black uppercase tracking-[0.06em] text-foreground sm:text-xl">
+            <span>Rank #{globalRank}</span>
+            <span className="ml-1 text-xs font-bold text-foreground/65 sm:ml-2 sm:text-sm">
+              of {formatNumber(totalPlayers)}
+            </span>
+          </p>
+
           {canViewAllUserPages && totalPlayers > 1 ? (
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">
+            <div className="hidden items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:flex">
               <Link
                 href={`/users/${encodeURIComponent(previousUser?.wkUsername ?? wkUsername)}`}
                 className="rounded-full border border-line bg-surface px-2 py-0.5 select-none hover:bg-surface-muted"
@@ -270,18 +253,23 @@ export default function UserDashboardTabs({
           ) : null}
         </div>
 
-        <div className="grid gap-2 sm:grid-cols-2">
-          <div className="rounded-xl border border-line bg-surface-muted px-3 py-2">
-            <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">Updated</p>
-            <p className="mt-0.5 text-sm font-black text-foreground sm:text-base">{updatedRelativeLabel}</p>
-            <p className="text-[10px] font-semibold text-foreground/60 sm:text-xs">{updatedAbsoluteLabel}</p>
-          </div>
-
-          <div className="rounded-xl border border-line bg-surface-muted px-3 py-2">
-            <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">Active</p>
-            <p className="mt-0.5 text-sm font-black text-foreground sm:text-base">{activeRelativeLabel}</p>
-            <p className="text-[10px] font-semibold text-foreground/60 sm:text-xs">{activeAbsoluteLabel}</p>
-          </div>
+        <div className="flex items-center justify-between gap-3">
+          <p className="min-w-0 truncate text-xs text-foreground/70 sm:text-sm">
+            @{wkUsername}
+            {linkedEmail ? <span className="text-foreground/55"> · {linkedEmail}</span> : null}
+          </p>
+          <p className="shrink-0 text-right text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/55 sm:text-xs">
+            <span className="sm:hidden">
+              Upd {updatedRelativeLabel}
+              <span className="mx-1 text-foreground/35">|</span>
+              Act {activeRelativeLabel}
+            </span>
+            <span className="hidden sm:inline">
+              Updated {updatedRelativeLabel}
+              <span className="mx-2 text-foreground/35">|</span>
+              Active {activeRelativeLabel}
+            </span>
+          </p>
         </div>
       </div>
     </section>
