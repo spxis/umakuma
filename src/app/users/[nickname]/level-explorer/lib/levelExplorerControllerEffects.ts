@@ -5,7 +5,6 @@ import {
   JLPT_FILTER_ALLOWED,
   REVIEW_TIMING_ALLOWED,
   SRS_FILTER_ALLOWED,
-  TYPE_FILTER_ALLOWED,
   parseLevelExplorerUrlState,
   persistEnum,
   persistFlag,
@@ -197,10 +196,7 @@ export function useLevelExplorerStorageHydration({
       }
 
       if (!new URLSearchParams(window.location.search).has("type")) {
-        const type = readStoredEnum(window.localStorage, storageKeys.typeFilter, TYPE_FILTER_ALLOWED);
-        if (type) {
-          setTypeFilter(type);
-        }
+        setTypeFilter("all");
       }
 
       if (!new URLSearchParams(window.location.search).has("jlpt")) {
@@ -346,10 +342,6 @@ export function useLevelExplorerSelectionReconcile({
 
     if (!selectedItemFromAll || selectedItem) {
       return;
-    }
-
-    if (selectedItemFromAll.subjectType && typeFilter !== selectedItemFromAll.subjectType) {
-      setTypeFilter(selectedItemFromAll.subjectType);
     }
 
     if (selectedItemFromAll.subjectType && !visibleTypes[selectedItemFromAll.subjectType]) {
