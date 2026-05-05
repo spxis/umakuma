@@ -259,8 +259,7 @@ export default function StudyExplorerPanel({
               {srsStatuses.map((status) => {
                 const count = srsCounts[status];
                 const isSelected = srsFilter === status;
-                const unavailable = hasData && !isSelected && status !== "all" && count === 0;
-                const buttonDisabled = (filtersDisabled && !isSelected) || unavailable;
+                const buttonDisabled = filtersDisabled && !isSelected;
 
                 return (
                 <button
@@ -289,8 +288,7 @@ export default function StudyExplorerPanel({
                 {srsStageOptions.map((stage) => {
                   const count = srsStageCounts[stage] ?? 0;
                   const isSelected = srsStageFilter === stage;
-                  const unavailable = hasData && !isSelected && count === 0;
-                  const buttonDisabled = (filtersDisabled && !isSelected) || unavailable;
+                  const buttonDisabled = filtersDisabled && !isSelected;
 
                   return (
                   <button

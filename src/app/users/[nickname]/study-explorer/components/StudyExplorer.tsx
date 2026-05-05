@@ -124,6 +124,7 @@ export default function StudyExplorer({
   const isUnauthorized = Boolean(error && /unauthorized/i.test(error.message));
 
   const counts = data?.counts ?? persistedCounts;
+  const hasDisplayData = Boolean(data) || Boolean(cachedQueueData) || loadedItems.length > 0;
   const hasMorePages = loadedItems.length < totalItems;
   const typeCountsByLevelForEffects = data?.typeCountsByLevel ?? cachedQueueData?.typeCountsByLevel ?? EMPTY_TYPE_COUNTS_BY_LEVEL;
 
@@ -446,7 +447,7 @@ export default function StudyExplorer({
         loadMoreError={loadMoreError}
         isLoading={isLoading}
         isValidating={isValidating}
-        hasData={Boolean(data)}
+        hasData={hasDisplayData}
         isUnauthorized={isUnauthorized}
         errorMessage={error?.message ?? null}
         recentOnly={effectiveRecentOnly}
