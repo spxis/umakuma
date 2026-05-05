@@ -17,9 +17,14 @@ type SessionStatus = {
   } | null;
 };
 
-function startGoogleSignIn(callbackPath: string) {
-  const callbackUrl = encodeURIComponent(callbackPath);
-  window.location.assign(`/api/auth/signin/google?callbackUrl=${callbackUrl}`);
+async function startGoogleSignIn(callbackPath: string) {
+  try {
+    const { signIn } = await import("next-auth/react");
+    await signIn("google", { callbackUrl: callbackPath });
+  } catch {
+    const callbackUrl = encodeURIComponent(callbackPath);
+    window.location.assign(`/api/auth/signin/google?callbackUrl=${callbackUrl}`);
+  }
 }
 
 export default function JoinPage() {
@@ -122,7 +127,7 @@ export default function JoinPage() {
               <button
                 type="button"
                 onClick={() => {
-                  startGoogleSignIn("/join");
+                  void startGoogleSignIn("/join");
                 }}
                 className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
               >
