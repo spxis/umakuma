@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import type {
   QueueResponse,
@@ -125,6 +125,8 @@ export function useStudyExplorerEffects({
   setShowLocked,
   lastHandledStudyQueryRef,
 }: Args) {
+  const hasHydratedSrsStageFilterRef = useRef(false);
+
   useEffect(() => {
     const raw = window.localStorage.getItem(countsStorageKey);
     if (!raw) return;
@@ -239,16 +241,19 @@ export function useStudyExplorerEffects({
     const params = new URLSearchParams(window.location.search);
     const fromUrl = Number(params.get("srsStage"));
     if (Number.isInteger(fromUrl) && fromUrl >= 1 && fromUrl <= 9) {
+      hasHydratedSrsStageFilterRef.current = true;
       setSrsStageFilter(fromUrl as StudySrsStageFilter);
       return;
     }
 
     const stored = Number(window.localStorage.getItem(srsStageFilterStorageKey));
     if (Number.isInteger(stored) && stored >= 1 && stored <= 9) {
+      hasHydratedSrsStageFilterRef.current = true;
       setSrsStageFilter(stored as StudySrsStageFilter);
       return;
     }
 
+    hasHydratedSrsStageFilterRef.current = true;
     setSrsStageFilter(null);
   }, [setSrsStageFilter, srsStageFilterStorageKey]);
 
@@ -285,6 +290,10 @@ export function useStudyExplorerEffects({
   }, [srsStageFilter, srsStageFilterStorageKey]);
 
   useEffect(() => {
+    if (!hasHydratedTypeFilter || !hasHydratedViewedLevel || !hasHydratedSrsStageFilterRef.current) {
+      return;
+    }
+
     const params = new URLSearchParams(window.location.search);
     if (viewedLevel !== null) params.set("level", String(viewedLevel));
     else params.delete("level");
@@ -300,7 +309,7 @@ export function useStudyExplorerEffects({
     else params.delete("hideLocked");
     const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
     window.history.replaceState(null, "", next);
-  }, [viewedLevel, typeFilter, srsFilter, srsStageFilter, recentOnly, showLocked]);
+  }, [hasHydratedTypeFilter, hasHydratedViewedLevel, viewedLevel, typeFilter, srsFilter, srsStageFilter, recentOnly, showLocked]);
 
   useEffect(() => {
     if (!dataCounts) return;
