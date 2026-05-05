@@ -50,6 +50,7 @@ export type LeaderboardRow = {
 export type LeaderboardTab = "overall" | "radicals" | "kanji" | "vocabulary";
 export type SortDirection = "asc" | "desc";
 export type SortKey =
+  | "rank"
   | "nickname"
   | "wkLevel"
   | "reviewCount"
@@ -78,6 +79,7 @@ export type SortState = {
 
 export const ALL_TABS: LeaderboardTab[] = ["overall", "radicals", "kanji", "vocabulary"];
 export const ALL_SORT_KEYS: SortKey[] = [
+  "rank",
   "nickname",
   "wkLevel",
   "reviewCount",

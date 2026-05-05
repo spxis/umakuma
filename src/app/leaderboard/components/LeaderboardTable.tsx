@@ -229,6 +229,24 @@ export default function LeaderboardTable({
 
   const activeSort = sortByTab[activeTab];
 
+  const rankById = useMemo(() => {
+    const byScore = [...rows].sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      if (b.wkLevel !== a.wkLevel) {
+        return b.wkLevel - a.wkLevel;
+      }
+      if (b.reviewCount !== a.reviewCount) {
+        return b.reviewCount - a.reviewCount;
+      }
+
+      return a.nickname.localeCompare(b.nickname);
+    });
+
+    return new Map(byScore.map((row, index) => [row.id, index + 1]));
+  }, [rows]);
+
   const sortedRows = useMemo(() => {
     const rowsCopy = [...rows];
 
@@ -239,6 +257,7 @@ export default function LeaderboardTable({
       const kanjiTotal = kanjiCountFromRow(row);
       const activeSubjectType = subjectTypeForTab(activeTab);
 
+      if (key === "rank") return rankById.get(row.id) ?? Number.MAX_SAFE_INTEGER;
       if (key === "nickname") return row.nickname.toLowerCase();
       if (key === "wkLevel") return row.wkLevel;
       if (key === "reviewCount") return row.reviewCount;
@@ -284,7 +303,7 @@ export default function LeaderboardTable({
     });
 
     return rowsCopy;
-  }, [rows, activeSort, activeTab]);
+  }, [rows, activeSort, activeTab, rankById]);
 
   const allRowIds = sortedRows.map((row) => row.id);
   const allExpanded = allRowIds.length > 0 && allRowIds.every((id) => filteredExpanded.has(id));
@@ -376,6 +395,7 @@ export default function LeaderboardTable({
         activeTab={activeTab}
         activeSort={activeSort}
         sortedRows={sortedRows}
+        rankById={rankById}
         canViewAllUserPages={canViewAllUserPages}
         viewerWkUsername={viewerWkUsername}
         filteredExpanded={filteredExpanded}
@@ -397,6 +417,7 @@ export default function LeaderboardTable({
       <LeaderboardMobile
         activeTab={activeTab}
         sortedRows={sortedRows}
+        rankById={rankById}
         canViewAllUserPages={canViewAllUserPages}
         viewerWkUsername={viewerWkUsername}
         filteredExpanded={filteredExpanded}

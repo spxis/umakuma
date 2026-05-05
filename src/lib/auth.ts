@@ -1,6 +1,21 @@
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+function getFirstEnv(names: string[]): string | null {
+  for (const name of names) {
+    const value = process.env[name]?.trim();
+    if (value) {
+      return value;
+    }
+  }
+
+  return null;
+}
+
+const googleClientId = getFirstEnv(["AUTH_GOOGLE_ID", "GOOGLE_CLIENT_ID", "NEXTAUTH_GOOGLE_ID"]);
+const googleClientSecret = getFirstEnv(["AUTH_GOOGLE_SECRET", "GOOGLE_CLIENT_SECRET", "NEXTAUTH_GOOGLE_SECRET"]);
+const authSecret = getFirstEnv(["AUTH_SECRET", "NEXTAUTH_SECRET"]);
+
 function parseAdminEmailAllowlist(): Set<string> {
   const raw = process.env.ADMIN_GOOGLE_ALLOWED_EMAILS ?? "";
   return new Set(
@@ -22,21 +37,24 @@ export function isAdminEmail(email: string | null | undefined): boolean {
 }
 
 export function isGoogleAuthConfigured(): boolean {
-  return Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET);
+  return Boolean(googleClientId && googleClientSecret);
 }
 
 export const authOptions: NextAuthOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: process.env.AUTH_GOOGLE_ID ?? "",
-      clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
-      authorization: {
-        params: {
-          prompt: "select_account",
-        },
-      },
-    }),
-  ],
+  providers:
+    googleClientId && googleClientSecret
+      ? [
+          GoogleProvider({
+            clientId: googleClientId,
+            clientSecret: googleClientSecret,
+            authorization: {
+              params: {
+                prompt: "select_account",
+              },
+            },
+          }),
+        ]
+      : [],
   session: {
     strategy: "jwt",
   },
@@ -49,5 +67,5 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
   },
-  secret: process.env.AUTH_SECRET,
+  secret: authSecret ?? undefined,
 };

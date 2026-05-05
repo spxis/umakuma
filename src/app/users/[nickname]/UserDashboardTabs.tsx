@@ -207,6 +207,7 @@ export default function UserDashboardTabs({
               accountId={accountId}
               viewedWkUsername={wkUsername}
               viewerMenuInfo={viewerMenuInfo}
+              showAdminActions={canViewAllUserPages}
               hidden={activeTab === "learn" && flashViewerOpen}
             />
           </div>

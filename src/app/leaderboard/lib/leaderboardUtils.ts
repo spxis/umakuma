@@ -18,6 +18,7 @@ export function isLeaderboardTab(value: string | null): value is LeaderboardTab 
 
 export function isSortKey(value: string | null): value is SortKey {
   return value !== null && (([
+    "rank",
     "nickname",
     "wkLevel",
     "reviewCount",
@@ -196,7 +197,7 @@ export function subjectLastGuruedItemFromRow(
 
 export function nextDirection(current: SortState | null, key: SortKey): SortDirection {
   if (!current || current.key !== key) {
-    if (key === "nickname") {
+    if (key === "nickname" || key === "rank") {
       return "asc";
     }
     return "desc";

@@ -25,6 +25,7 @@ type Props = {
   activeTab: LeaderboardTab;
   activeSort: SortState;
   sortedRows: LeaderboardRow[];
+  rankById: Map<string, number>;
   canViewAllUserPages: boolean;
   viewerWkUsername: string | null;
   filteredExpanded: Set<string>;
@@ -54,6 +55,7 @@ export default function LeaderboardDesktop({
   activeTab,
   activeSort,
   sortedRows,
+  rankById,
   canViewAllUserPages,
   viewerWkUsername,
   filteredExpanded,
@@ -86,7 +88,11 @@ export default function LeaderboardDesktop({
       <table className="min-w-full">
         <thead className="border-b border-line bg-surface-muted text-left text-xs font-bold uppercase tracking-[0.14em] text-foreground/70">
           <tr>
-            <th className="px-4 py-3">#</th>
+            <th className="px-4 py-3">
+              <button type="button" onClick={() => onRequestSort("rank")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "rank")}`}>
+                # <span className="text-[10px]">{sortIcon(activeSort, "rank")}</span>
+              </button>
+            </th>
             <th className="px-4 py-3">
               <button type="button" onClick={() => onRequestSort("nickname")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "nickname")}`}>
                 Nickname <span className="text-[10px]">{sortIcon(activeSort, "nickname")}</span>
@@ -141,10 +147,10 @@ export default function LeaderboardDesktop({
           </tr>
         </thead>
         <tbody className="divide-y divide-line text-sm text-foreground/90">
-          {sortedRows.map((row, index) => (
+          {sortedRows.map((row) => (
             <Fragment key={row.id}>
               <tr className="transition hover:bg-surface-muted/80">
-                <td className="px-4 py-3 font-black">#{index + 1}</td>
+                <td className="px-4 py-3 font-black">#{rankById.get(row.id) ?? "-"}</td>
                 <td className="px-4 py-3 text-lg font-black text-foreground">
                   {canViewRowPage(row.wkUsername) ? (
                     <>

@@ -45,7 +45,11 @@ export default function SignOutActionButton({ callbackUrl, clearAdmin }: SignOut
       >
         {submitting ? "Signing out..." : "Sign out"}
       </button>
-      {errorMessage ? <p className="text-xs font-semibold text-red-700">{errorMessage}</p> : null}
+      {errorMessage ? (
+        <p className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-800">
+          {errorMessage}
+        </p>
+      ) : null}
     </div>
   );
 }

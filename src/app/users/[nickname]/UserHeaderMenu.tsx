@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
@@ -10,6 +11,7 @@ type UserHeaderMenuProps = {
   accountId?: string;
   viewedWkUsername?: string;
   viewerMenuInfo: ViewerMenuInfo | null;
+  showAdminActions?: boolean;
   hidden?: boolean;
 };
 
@@ -35,6 +37,7 @@ export default function UserHeaderMenu({
   accountId,
   viewedWkUsername,
   viewerMenuInfo,
+  showAdminActions = false,
   hidden = false,
 }: UserHeaderMenuProps) {
   const [open, setOpen] = useState(false);
@@ -61,13 +64,19 @@ export default function UserHeaderMenu({
     }
   });
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     function onPointerDown(event: MouseEvent) {
-      if (!menuRef.current) {
+      if (!menuRef.current && !panelRef.current) {
         return;
       }
-      if (!menuRef.current.contains(event.target as Node)) {
+
+      const target = event.target as Node;
+      const clickedTrigger = Boolean(menuRef.current?.contains(target));
+      const clickedPanel = Boolean(panelRef.current?.contains(target));
+
+      if (!clickedTrigger && !clickedPanel) {
         setOpen(false);
       }
     }
@@ -114,9 +123,10 @@ export default function UserHeaderMenu({
   }
 
   const resolvedUserPageUsername = viewerMenuInfo?.wkUsername ?? viewedWkUsername ?? null;
+  const showNavigationSection = Boolean(viewerMenuInfo || viewedWkUsername || showAdminActions || resolvedUserPageUsername);
 
   return (
-    <div ref={menuRef} className="relative z-[450]">
+    <div ref={menuRef} className="relative z-[1200]">
       <button
         type="button"
         aria-expanded={open}
@@ -129,9 +139,17 @@ export default function UserHeaderMenu({
         ≡
       </button>
 
-      {open ? (
-        <aside className="fixed right-4 top-20 z-[500] w-[min(88vw,300px)] rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.22)] sm:right-6 sm:top-24">
-          <div className="space-y-3">
+      {open && typeof document !== "undefined"
+        ? createPortal(
+          <>
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 z-[9990] bg-foreground/20 backdrop-blur-[1px]"
+            />
+            <aside ref={panelRef} className="fixed right-4 top-20 z-[9991] w-[min(88vw,300px)] rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.22)] sm:right-6 sm:top-24">
+            <div className="space-y-3">
             <section>
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-accent">Account</p>
               {viewerMenuInfo ? (
@@ -159,66 +177,76 @@ export default function UserHeaderMenu({
               )}
             </section>
 
-            <section className="border-t border-line pt-3">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Navigation</p>
-              <div className="mt-2 space-y-2">
-                {viewedWkUsername ? (
-                  <Link
-                    href={`/users/${encodeURIComponent(viewedWkUsername)}/history`}
+            {showNavigationSection ? (
+              <section className="border-t border-line pt-3">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Navigation</p>
+                <div className="mt-2 space-y-2">
+                  {viewerMenuInfo && viewedWkUsername ? (
+                    <Link
+                      href={`/users/${encodeURIComponent(viewedWkUsername)}/history`}
+                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    >
+                      History
+                    </Link>
+                  ) : null}
+                  {viewerMenuInfo ? (
+                    <Link
+                      href="/"
+                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    >
+                      Leaderboard
+                    </Link>
+                  ) : null}
+                  {showAdminActions ? (
+                    <>
+                      <Link
+                        href="/admin"
+                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      >
+                        Admin
+                      </Link>
+                      <Link
+                        href="/admin/users"
+                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      >
+                        Manage users
+                      </Link>
+                    </>
+                  ) : null}
+                  {viewerMenuInfo && resolvedUserPageUsername ? (
+                    <Link
+                      href={`/users/${encodeURIComponent(resolvedUserPageUsername)}`}
+                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    >
+                      My page
+                    </Link>
+                  ) : null}
+                </div>
+              </section>
+            ) : null}
+
+            {viewerMenuInfo ? (
+              <section className="border-t border-line pt-3">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Preferences</p>
+                <div className="mt-2 space-y-2">
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
                     className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
                   >
-                    History
-                  </Link>
-                ) : null}
-                <Link
-                  href="/"
-                  className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
-                >
-                  Leaderboard
-                </Link>
-                <Link
-                  href="/admin"
-                  className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
-                >
-                  Admin
-                </Link>
-                <Link
-                  href="/admin/users"
-                  className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
-                >
-                  Manage users
-                </Link>
-                {resolvedUserPageUsername ? (
-                  <Link
-                    href={`/users/${encodeURIComponent(resolvedUserPageUsername)}`}
+                    Theme: {themeMode === "light" ? "Light" : "Dark"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={toggleJpFont}
                     className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
                   >
-                    My page
-                  </Link>
-                ) : null}
-              </div>
-            </section>
-
-            <section className="border-t border-line pt-3">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Preferences</p>
-              <div className="mt-2 space-y-2">
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
-                >
-                  Theme: {themeMode === "light" ? "Light" : "Dark"}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={toggleJpFont}
-                  className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
-                >
-                  JP Font: {jpFontMode === "sans" ? "Sans" : "Serif"}
-                </button>
-              </div>
-            </section>
+                    JP Font: {jpFontMode === "sans" ? "Sans" : "Serif"}
+                  </button>
+                </div>
+              </section>
+            ) : null}
 
             <section className="border-t border-line pt-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Actions</p>
@@ -265,9 +293,12 @@ export default function UserHeaderMenu({
                 )}
               </div>
             </section>
-          </div>
-        </aside>
-      ) : null}
+            </div>
+            </aside>
+          </>,
+          document.body,
+        )
+        : null}
     </div>
   );
 }
