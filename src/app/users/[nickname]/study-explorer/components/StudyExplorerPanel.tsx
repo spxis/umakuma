@@ -238,53 +238,54 @@ export default function StudyExplorerPanel({
             onClickType={(type) => onSetTypeFilter(type)}
           />
 
-          <div className="ml-auto grid gap-2 justify-items-end">
-            <div className="flex flex-wrap justify-end gap-2">
-              {srsStatuses.map((status) => {
-                const count = srsCounts[status];
-                const disabled = queueMode === "lesson" || (status !== "all" && count === 0);
+          {queueMode !== "lesson" ? (
+            <div className="ml-auto grid gap-2 justify-items-end">
+              <div className="flex flex-wrap justify-end gap-2">
+                {srsStatuses.map((status) => {
+                  const count = srsCounts[status];
+                  const disabled = status !== "all" && count === 0;
 
-                return (
+                  return (
+                  <button
+                    key={status}
+                    type="button"
+                    onClick={() => onSetSrsFilter(status)}
+                    disabled={disabled}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : badgeClass(srsFilter === status)}`}
+                  >
+                    {srsFilterButtonLabel(status)} ({formatNumber(count)})
+                  </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-wrap justify-end gap-2">
                 <button
-                  key={status}
                   type="button"
-                  onClick={() => onSetSrsFilter(status)}
-                  disabled={disabled}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : badgeClass(srsFilter === status)}`}
+                  onClick={() => onSetSrsStageFilter(null)}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(allSrsStagesSelected)}`}
                 >
-                  {srsFilterButtonLabel(status)} ({formatNumber(count)})
+                  All SRS Stages
                 </button>
-                );
-              })}
-            </div>
+                {srsStageOptions.map((stage) => {
+                  const count = srsStageCounts[stage] ?? 0;
+                  const disabled = count === 0;
 
-            <div className="flex flex-wrap justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => onSetSrsStageFilter(null)}
-                disabled={queueMode === "lesson"}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${queueMode === "lesson" ? disabledBadgeClass() : badgeClass(allSrsStagesSelected)}`}
-              >
-                All SRS Stages
-              </button>
-              {srsStageOptions.map((stage) => {
-                const count = srsStageCounts[stage] ?? 0;
-                const disabled = queueMode === "lesson" || count === 0;
-
-                return (
-                <button
-                  key={stage}
-                  type="button"
-                  onClick={() => onSetSrsStageFilter(stage)}
-                  disabled={disabled}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : badgeClass(srsStageFilter === stage)}`}
-                >
-                  SRS {stage} ({formatNumber(count)})
-                </button>
-                );
-              })}
+                  return (
+                  <button
+                    key={stage}
+                    type="button"
+                    onClick={() => onSetSrsStageFilter(stage)}
+                    disabled={disabled}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : badgeClass(srsStageFilter === stage)}`}
+                  >
+                    SRS {stage} ({formatNumber(count)})
+                  </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </header>
 

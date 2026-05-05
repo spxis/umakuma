@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 
 import StudyExplorerModal from "./StudyExplorerModal";
@@ -18,11 +18,9 @@ import type {
   SubmitFeedback,
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
-import {
-  fetchStudyQueue,
-  readStoredQueue,
-} from "../lib/studyExplorerUtils";
+import { fetchStudyQueue, readStoredQueue } from "../lib/studyExplorerUtils";
 import { normalizeSrsStageFilter } from "../lib/studyExplorerSrs";
+import { resolveEffectiveViewedLevel } from "../lib/studyExplorerLevelBounds";
 import { useStudyReviewSubmission } from "../lib/useStudyReviewSubmission";
 import { useStudyExplorerEffects } from "../lib/useStudyExplorerEffects";
 import { useStudyExplorerDerivedData } from "../lib/useStudyExplorerDerivedData";
@@ -59,9 +57,7 @@ export default function StudyExplorer({
   );
   const [persistedCounts, setPersistedCounts] = useState<StudyCounts | null>(null);
   const [loadedItems, setLoadedItems] = useState<StudyQueueItem[]>(() => cachedQueueData?.items ?? []);
-  const [totalItems, setTotalItems] = useState<number>(
-    () => cachedQueueData?.pagination?.total ?? cachedQueueData?.items.length ?? 0,
-  );
+  const [totalItems, setTotalItems] = useState<number>(() => cachedQueueData?.pagination?.total ?? cachedQueueData?.items.length ?? 0);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
 
@@ -84,20 +80,13 @@ export default function StudyExplorer({
   const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? true);
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [forcedViewerMode, setForcedViewerMode] = useState<"detail" | "flash" | null>(
-    initialViewerMode,
-  );
+  const [forcedViewerMode, setForcedViewerMode] = useState<"detail" | "flash" | null>(initialViewerMode);
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
   const isModalOpen = selectedId !== null;
-  const effectiveViewedLevel =
-    queueMode === "review" && viewedLevel !== null && (viewedLevel < 1 || viewedLevel > maxLevel)
-      ? null
-      : viewedLevel;
   const effectiveSrsFilter: StudySrsFilter = queueMode === "lesson" ? "all" : srsFilter;
   const effectiveRecentOnly = queueMode === "lesson" ? false : recentOnly;
   const effectiveShowLocked = queueMode === "lesson" ? true : showLocked;
-  const effectiveSrsStageFilter: StudySrsStageFilter | null =
-    queueMode === "lesson" ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
+  const effectiveSrsStageFilter: StudySrsStageFilter | null = queueMode === "lesson" ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
   const initialPageSize = queueMode === "lesson" ? LESSON_API_PAGE_SIZE : REVIEW_API_PAGE_SIZE;
 
   useLayoutEffect(() => {
@@ -121,7 +110,19 @@ export default function StudyExplorer({
       revalidateOnFocus: !isModalOpen,
     },
   );
+
   const isUnauthorized = Boolean(error && /unauthorized/i.test(error.message));
+  const effectiveViewedLevel = useMemo(
+    () =>
+      resolveEffectiveViewedLevel({
+        queueMode,
+        viewedLevel,
+        maxLevel,
+        loadedItems,
+        rawLevelCounts: data?.levelCounts ?? cachedQueueData?.levelCounts,
+      }),
+    [cachedQueueData?.levelCounts, data?.levelCounts, loadedItems, maxLevel, queueMode, viewedLevel],
+  );
 
   const counts = data?.counts ?? persistedCounts;
   const hasMorePages = loadedItems.length < totalItems;
