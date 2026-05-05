@@ -40,6 +40,7 @@ export default function ExplorerTabs({
   const previousPageKeyRef = useRef<string | null>(null);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
+  const canRenderStudyModeState = typeof window !== "undefined";
   const isHydrated = typeof window !== "undefined";
   const [dashboardTab, setDashboardTab] = useState<string>("learn");
   const [studyMode, setStudyMode] = useState(() => {
@@ -381,12 +382,12 @@ export default function ExplorerTabs({
             type="button"
             onClick={() => setStudyMode((prev) => !prev)}
             className={`inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.1em] transition ${
-              studyMode
+              canRenderStudyModeState && studyMode
                 ? "border-hot bg-hot text-white"
                 : "border-line bg-surface text-foreground hover:bg-surface-muted"
             }`}
           >
-            Study Mode {studyMode ? "On" : "Off"}
+            {canRenderStudyModeState ? `Study Mode ${studyMode ? "On" : "Off"}` : "Study Mode"}
           </button>
         </div>
       </div>
