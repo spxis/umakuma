@@ -1,6 +1,7 @@
 "use client";
 
 import type { LevelItem } from "../../explorerTypes";
+import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import {
   ReadingListWithPronunciation,
@@ -90,10 +91,10 @@ export default function LevelExplorerDetailSection({
     primaryMeaning ||
     titleForDisplay(selectedItem, true) ||
     (isKanjiSubjectType(selectedItem.subjectType)
-      ? "Kanji"
+      ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular
       : isRadicalSubjectType(selectedItem.subjectType)
-        ? "Radical"
-        : "Vocabulary");
+        ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].singular
+        : SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular);
   const headerTitle = studyMode
     ? revealStudyReading
       ? revealedStudyTitle
@@ -271,7 +272,11 @@ export default function LevelExplorerDetailSection({
           hasPrimary={hasPrimaryRelatedPanel}
           hasVisuallySimilar={hasVisuallySimilarPanel}
           hasUsedInVocabulary={hasUsedInVocabularyPanel}
-          primaryTitle={isVocabularySubjectType(selectedItem.subjectType) ? "Kanji" : "Radicals"}
+          primaryTitle={
+            isVocabularySubjectType(selectedItem.subjectType)
+              ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular
+              : SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural
+          }
           primaryContent={
             isVocabularySubjectType(selectedItem.subjectType) ? (
               <VocabularyKanjiCards

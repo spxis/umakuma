@@ -1,13 +1,28 @@
 "use client";
 
 import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
+
+export const VIEW_GLYPH_SELECTOR_KINDS = {
+  vocabulary: SUBJECT_TYPES.vocabulary,
+  kanji: SUBJECT_TYPES.kanji,
+} as const;
+
+export type ViewGlyphSelectorKind = (typeof VIEW_GLYPH_SELECTOR_KINDS)[keyof typeof VIEW_GLYPH_SELECTOR_KINDS];
+
+export const VIEW_GLYPH_SELECTOR_ORIGINS = {
+  current: "current",
+  session: "session",
+} as const;
+
+export type ViewGlyphSelectorOrigin = (typeof VIEW_GLYPH_SELECTOR_ORIGINS)[keyof typeof VIEW_GLYPH_SELECTOR_ORIGINS];
 
 export type ViewGlyphSelectorEntry = {
   label: string;
   itemIndex: number | null;
-  kind: "vocabulary" | "kanji";
+  kind: ViewGlyphSelectorKind;
   exists: boolean;
-  origin?: "current" | "session";
+  origin?: ViewGlyphSelectorOrigin;
 };
 
 export type ViewGlyphViewerPayload = {

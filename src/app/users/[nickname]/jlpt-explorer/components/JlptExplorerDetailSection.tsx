@@ -1,4 +1,5 @@
 import jlptReadings from "@/data/jlptReadings.json";
+import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
 import { jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
@@ -76,7 +77,7 @@ export default function JlptExplorerDetailSection({
           <div className="mt-2 min-w-0">
             <p className="text-4xl font-black leading-tight text-foreground">
               {studyMode
-                ? "Kanji"
+                ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular
                 : jlptHeading(
                     selectedItem.primaryMeaning,
                     selectedUserMatch?.meanings,

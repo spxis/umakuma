@@ -1,4 +1,5 @@
 import { toRomaji } from "wanakana";
+import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import type {
   QueueResponse,
@@ -175,14 +176,14 @@ export function studyItemEnglishTitle(item: StudyQueueItem): string {
   }
 
   if (isKanjiSubjectType(item.subjectType)) {
-    return "Kanji";
+    return SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular;
   }
 
   if (isRadicalSubjectType(item.subjectType)) {
-    return "Radical";
+    return SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].singular;
   }
 
-  return "Vocabulary";
+  return SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular;
 }
 
 export function filterStudyItems(

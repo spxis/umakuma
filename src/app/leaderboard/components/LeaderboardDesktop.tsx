@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Fragment } from "react";
+import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import LeaderboardExpandedRow from "./LeaderboardExpandedRow";
 import type { LeaderboardRow, LeaderboardTab, SortKey, SortState } from "../lib/leaderboardTypes";
@@ -120,7 +121,12 @@ export default function LeaderboardDesktop({
               <>
                 {(() => {
                   const key = activeTab === "radicals" ? "radicalPercent" : activeTab === "kanji" ? "kanjiPercent" : "vocabularyPercent";
-                  const label = activeTab === "radicals" ? "Radicals" : activeTab === "kanji" ? "Kanji" : "Vocab";
+                  const label =
+                    activeTab === "radicals"
+                      ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural
+                      : activeTab === "kanji"
+                        ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular
+                        : SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].plural;
                   return (
                     <th className="px-4 py-3">
                       <button type="button" onClick={() => onRequestSort(key)} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, key)}`}>

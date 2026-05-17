@@ -13,9 +13,12 @@ import {
   SUBJECT_TYPE_DISPLAY,
   SUBJECT_TYPES,
   isSubjectType,
+  type SubjectType,
 } from "@/lib/domainConstants";
 import {
   VIEW_GLYPH_EVENT,
+  VIEW_GLYPH_SELECTOR_KINDS,
+  VIEW_GLYPH_SELECTOR_ORIGINS,
   type ViewGlyphSelectorEntry,
   type ViewGlyphViewerPayload,
 } from "@/lib/viewGlyphViewer";
@@ -29,6 +32,10 @@ function subjectSingularLabel(value: string | null | undefined): string {
 
 function viewerTitle(item: StudyQueueItem): string {
   return `View ${subjectSingularLabel(item.subjectType)}`;
+}
+
+function usedInVocabularyTargetType(subjectType: string | null | undefined): SubjectType {
+  return subjectType === SUBJECT_TYPES.radical ? SUBJECT_TYPES.kanji : SUBJECT_TYPES.vocabulary;
 }
 
 function firstNonEmpty(values: Array<string | null | undefined>): string {
@@ -88,7 +95,7 @@ export default function ViewGlyphModalHost() {
   }, [items]);
 
   const createSyntheticItem = useCallback(
-    (related: RelatedReference, subjectType: "radical" | "kanji" | "vocabulary"): StudyQueueItem | null => {
+    (related: RelatedReference, subjectType: SubjectType): StudyQueueItem | null => {
       if (!item) return null;
 
       return {
@@ -120,7 +127,7 @@ export default function ViewGlyphModalHost() {
   );
 
   const openBySubject = useCallback(
-    (subjectId: number, fallbackType: "radical" | "kanji" | "vocabulary") => {
+    (subjectId: number, fallbackType: SubjectType) => {
       const existingIndex = items.findIndex((entry) => entry.subjectId === subjectId);
       if (existingIndex >= 0) {
         setIndex(existingIndex);
@@ -131,13 +138,13 @@ export default function ViewGlyphModalHost() {
         return;
       }
 
-      const allRelated: Array<{ ref: RelatedReference; type: "radical" | "kanji" | "vocabulary" }> = [
-        ...((item.radicals as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: "radical" as const })),
-        ...((item.visuallySimilar as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: "kanji" as const })),
-        ...((item.componentKanji as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: "kanji" as const })),
+      const allRelated: Array<{ ref: RelatedReference; type: SubjectType }> = [
+        ...((item.radicals as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.radical })),
+        ...((item.visuallySimilar as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.kanji })),
+        ...((item.componentKanji as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.kanji })),
         ...((item.usedInVocabulary as RelatedReference[] | undefined) ?? []).map((ref) => ({
           ref,
-          type: item.subjectType === "radical" ? ("kanji" as const) : ("vocabulary" as const),
+          type: usedInVocabularyTargetType(item.subjectType),
         })),
       ];
 
@@ -204,7 +211,7 @@ export default function ViewGlyphModalHost() {
   const selectedReadingExplanationRaw = stripHtml(item.readingExplanation);
   const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
   const hasPrimaryRelatedPanel = hasRenderableRelatedItems(
-    item.subjectType === "vocabulary"
+    item.subjectType === SUBJECT_TYPES.vocabulary
       ? (item.componentKanji as RelatedReference[] | undefined)
       : (item.radicals as RelatedReference[] | undefined),
   );
@@ -212,7 +219,7 @@ export default function ViewGlyphModalHost() {
   const hasUsedInVocabularyPanel = hasRenderableRelatedItems(item.usedInVocabulary as RelatedReference[] | undefined);
 
   const vocabularyKanjiLinks: VocabularyKanjiLink[] =
-    item.subjectType === "vocabulary"
+    item.subjectType === SUBJECT_TYPES.vocabulary
       ? ((item.componentKanji as RelatedReference[] | undefined) ?? [])
           .filter((entry) => entry.label.trim().length > 0 && entry.label.trim() !== "-")
           .map((entry) => ({
@@ -262,9 +269,10 @@ export default function ViewGlyphModalHost() {
             {selector.map((entry, entryIndex) => {
               const selected = entry.itemIndex === index;
               const unavailable = !entry.exists || entry.itemIndex === null;
-              const isVocabulary = entry.kind === "vocabulary";
-              const isSessionEntry = entry.origin === "session";
-              const glyphType = isVocabulary ? "vocabulary" : "kanji";
+              const isSessionEntry = entry.origin === VIEW_GLYPH_SELECTOR_ORIGINS.session;
+              const glyphType = entry.kind === VIEW_GLYPH_SELECTOR_KINDS.vocabulary
+                ? VIEW_GLYPH_SELECTOR_KINDS.vocabulary
+                : VIEW_GLYPH_SELECTOR_KINDS.kanji;
               const sessionClass = isSessionEntry && !selected ? "ring-1 ring-current/35" : "";
               return (
                 <button
@@ -317,11 +325,11 @@ export default function ViewGlyphModalHost() {
             vocabularyKanjiLinks={vocabularyKanjiLinks}
             subjectById={subjectById}
             onJumpToRelatedSubject={async (subjectId) => {
-              const fallback = item.subjectType === "radical" ? "kanji" : "vocabulary";
+              const fallback = usedInVocabularyTargetType(item.subjectType);
               openBySubject(subjectId, fallback);
             }}
             onJumpToKanji={async (subjectId) => {
-              openBySubject(subjectId, "kanji");
+              openBySubject(subjectId, SUBJECT_TYPES.kanji);
             }}
           />
         </div>
