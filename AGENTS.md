@@ -40,10 +40,16 @@ This file is the single source of truth for agent behavior in this repo.
 - Inline string unions are only allowed when adding non-domain values (example: `"all" | SubjectType`).
 - Normalizer/helpers that return canonical domain values must return shared domain aliases (for example `SubjectType | null`) instead of duplicating literal unions.
 
+### Domain Display Label Pattern
+
+- For canonical domain display text (for example subject names/plurals/short labels), use a single shared source (for example `SUBJECT_TYPE_DISPLAY` in `src/lib/domainConstants.ts`) instead of duplicating strings like `"Radicals"`, `"Kanji"`, or `"Vocabulary"` across feature files.
+- UI/config code should reference the shared display map by canonical key (for example `SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular`) rather than hardcoding equivalent labels.
+- Inline copy is still allowed for non-domain prose/headings, but canonical domain labels used in pills, tabs, filters, and summary cards must come from the shared display source.
+
 ### Proactive Sweep Rule
 
 - When asked to remove literals/magic strings/constants drift, do a repo-wide sweep before finishing, not just local edits.
-- Required sweep includes both runtime comparisons and duplicated inline type unions for the same domain values.
+- Required sweep includes runtime comparisons, duplicated inline type unions, and duplicated canonical domain display labels for the same domain values.
 - If hits are found in the same domain area, fix them in the same pass and re-run quality checks before commit.
 
 ## Stack

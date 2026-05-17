@@ -78,9 +78,15 @@ Always run `pnpm quality:check` after non-trivial edits in `src/`. If lint issue
   (for example `SubjectType`, `WkStatus`) instead of duplicating inline string
   unions in type declarations. Inline unions are only for adding non-domain
   values (example: `"all" | SubjectType`).
+- **Domain display labels**: for canonical domain labels (for example subject
+  singular/plural/short names), use one shared source (for example
+  `SUBJECT_TYPE_DISPLAY` in `src/lib/domainConstants.ts`) and reference it by
+  canonical key (`SUBJECT_TYPES.*`) instead of duplicating strings like
+  `"Radicals"`, `"Kanji"`, `"Vocabulary"` across files.
 - **Proactive sweep**: when fixing literals/constants drift, run a repo-wide
-  sweep for both runtime literals and duplicated inline unions in the same
-  domain and fix all hits in one pass before commit.
+  sweep for runtime literals, duplicated inline type unions, and duplicated
+  canonical domain display labels in the same domain and fix all hits in one
+  pass before commit.
 
 ## Don't touch
 
