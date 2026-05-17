@@ -1,5 +1,6 @@
 import type { LevelItem, SrsFilter } from "../../explorerTypes";
 import type { JlptFilter, ReviewTimingFilter, TypeVisibility } from "../lib/levelExplorerState";
+import type { SubjectType } from "@/lib/domainConstants";
 import type {
   LevelItemCounts,
   LevelJlptCounts,
@@ -47,7 +48,7 @@ export type LevelExplorerContentProps = {
   onToggleLevel: (level: number) => Promise<void>;
   onSetStickyMerge: (next: boolean) => void;
   onEnableAllTypes: () => void;
-  onToggleTypeVisibility: (type: "radical" | "kanji" | "vocabulary") => void;
+  onToggleTypeVisibility: (type: SubjectType) => void;
   onSetFiltersCollapsed: (next: boolean) => void;
   onSetSrsFilter: (next: SrsFilter) => void;
   onSetJlptFilter: (next: JlptFilter) => void;
