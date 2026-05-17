@@ -1,19 +1,12 @@
 import type { ReactNode } from "react";
+import type { LearnedSrsGroup } from "@/lib/domainConstants";
+import type { ItemSpread } from "@/lib/itemSpread";
 
 export type ItemSpreadRow = {
   radical: number;
   kanji: number;
   vocabulary: number;
   total: number;
-};
-
-export type ItemSpread = {
-  apprentice: ItemSpreadRow;
-  guru: ItemSpreadRow;
-  master: ItemSpreadRow;
-  enlightened: ItemSpreadRow;
-  burned: ItemSpreadRow;
-  totals: ItemSpreadRow;
 };
 
 export type TypeProgress = {
@@ -36,7 +29,7 @@ export type LevelProgressSnapshot = {
   passedLevelUpGate: boolean;
 };
 
-export type SrsGroupKey = "apprentice" | "guru" | "master" | "enlightened" | "burned";
+export type SrsGroupKey = LearnedSrsGroup;
 
 export type ItemSpreadLevelBreakdown = {
   level: number;

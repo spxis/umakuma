@@ -1,3 +1,5 @@
+import { LEARNED_SRS_GROUPS, type LearnedSrsGroup } from "@/lib/domainConstants";
+
 export type ItemSpreadRow = {
   radical: number;
   kanji: number;
@@ -6,11 +8,8 @@ export type ItemSpreadRow = {
 };
 
 export type ItemSpread = {
-  apprentice: ItemSpreadRow;
-  guru: ItemSpreadRow;
-  master: ItemSpreadRow;
-  enlightened: ItemSpreadRow;
-  burned: ItemSpreadRow;
+  [key in LearnedSrsGroup]: ItemSpreadRow;
+} & {
   totals: ItemSpreadRow;
 };
 
@@ -29,14 +28,7 @@ export function isItemSpread(value: unknown): value is ItemSpread {
   }
 
   const record = value as Record<string, unknown>;
-  const keys: Array<keyof ItemSpread> = [
-    "apprentice",
-    "guru",
-    "master",
-    "enlightened",
-    "burned",
-    "totals",
-  ];
+  const keys: Array<keyof ItemSpread> = [...LEARNED_SRS_GROUPS, "totals"];
 
   return keys.every((key) => {
     const row = record[key];

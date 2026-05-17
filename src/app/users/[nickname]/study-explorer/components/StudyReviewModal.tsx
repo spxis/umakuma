@@ -8,6 +8,7 @@ import {
   isReviewQueueItem,
   isLessonQueueItem,
   isTerminalReviewOutcome,
+  STUDY_QUEUE_TYPES,
   STUDY_REVIEW_OUTCOMES,
   STUDY_REVIEW_MODAL_STORAGE_KEYS,
   STUDY_REVIEW_MODAL_TOUCH,

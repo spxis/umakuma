@@ -4,6 +4,11 @@ import { useMemo } from "react";
 
 import StudyReviewModal from "@/app/users/[nickname]/study-explorer/components/StudyReviewModal";
 import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import {
+  isSubjectType,
+  SUBJECT_STATUSES,
+  SUBJECT_TYPES,
+} from "@/lib/domainConstants";
 
 import type { StudyHistoryAttempt } from "./studyHistoryTypes";
 
@@ -30,13 +35,11 @@ function toStudyQueueItem(attempt: StudyHistoryAttempt): StudyQueueItem {
     queueType: "review",
     subjectId: attempt.subjectId,
     subjectType:
-      subject?.subjectType === "kanji" ||
-      subject?.subjectType === "radical" ||
-      subject?.subjectType === "vocabulary"
+      isSubjectType(subject?.subjectType)
         ? subject.subjectType
-        : attempt.subjectType === "kanji" || attempt.subjectType === "radical" || attempt.subjectType === "vocabulary"
+        : isSubjectType(attempt.subjectType)
           ? attempt.subjectType
-          : "kanji",
+          : SUBJECT_TYPES.kanji,
     wkLevel: typeof subject?.wkLevel === "number" ? subject.wkLevel : attempt.wkLevel ?? undefined,
     characters: subject?.characters ?? attempt.subjectLabel,
     meanings: toStringArray(subject?.meanings).length > 0 ? toStringArray(subject?.meanings) : [attempt.subjectMeaning ?? "-"],
@@ -58,7 +61,11 @@ function toStudyQueueItem(attempt: StudyHistoryAttempt): StudyQueueItem {
     srsStage: typeof subject?.srsStage === "number" ? subject.srsStage : attempt.srsStage ?? 1,
     status:
       subject?.status ??
-      (attempt.srsBucket === "unknown" ? "apprentice" : attempt.srsBucket === "burned" ? "burned" : attempt.srsBucket),
+      (attempt.srsBucket === "unknown"
+        ? SUBJECT_STATUSES.apprentice
+        : attempt.srsBucket === SUBJECT_STATUSES.burned
+          ? SUBJECT_STATUSES.burned
+          : attempt.srsBucket),
     startedAt: subject?.startedAt ?? null,
     passedAt: subject?.passedAt ?? null,
     availableAt: subject?.availableAt ?? null,

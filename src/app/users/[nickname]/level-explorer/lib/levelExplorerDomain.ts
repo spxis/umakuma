@@ -16,15 +16,21 @@ export const LEVEL_SUBJECT_STATUSES = {
   burned: SUBJECT_STATUSES.burned,
 } as const;
 
-export function isRadicalSubjectType(type: LevelItem["subjectType"]): boolean {
+export function isRadicalSubjectType(
+  type: LevelItem["subjectType"],
+): type is typeof LEVEL_SUBJECT_TYPES.radical {
   return type === LEVEL_SUBJECT_TYPES.radical;
 }
 
-export function isKanjiSubjectType(type: LevelItem["subjectType"]): boolean {
+export function isKanjiSubjectType(
+  type: LevelItem["subjectType"],
+): type is typeof LEVEL_SUBJECT_TYPES.kanji {
   return type === LEVEL_SUBJECT_TYPES.kanji;
 }
 
-export function isVocabularySubjectType(type: LevelItem["subjectType"]): boolean {
+export function isVocabularySubjectType(
+  type: LevelItem["subjectType"],
+): type is typeof LEVEL_SUBJECT_TYPES.vocabulary {
   return type === LEVEL_SUBJECT_TYPES.vocabulary;
 }
 

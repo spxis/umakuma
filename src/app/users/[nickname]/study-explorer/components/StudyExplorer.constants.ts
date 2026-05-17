@@ -2,6 +2,7 @@ import type {
   StudySrsFilter,
   StudySrsStageFilter,
 } from "../lib/studyExplorerTypes";
+import { STUDY_SRS_FILTERS } from "../lib/studyExplorerDomain";
 export {
   isAllStudySrsFilter,
   isAllStudyTypeFilter,
@@ -15,7 +16,6 @@ export {
   isStudySrsFilterValue,
   isStudyTypeFilterValue,
   isStudyViewerMode,
-  STUDY_SRS_FILTERS,
   STUDY_TYPE_FILTERS,
   isTerminalReviewOutcome,
   isVocabularySubjectType,
@@ -27,6 +27,7 @@ export {
   STUDY_VIEWER_MODES,
   usedInVocabularyTargetSubjectType,
 } from "../lib/studyExplorerDomain";
+export { STUDY_SRS_FILTERS };
 export type { StudyTerminalReviewOutcome } from "../lib/studyExplorerDomain";
 
 export const STUDY_EXPLORER_REVIEW_API_PAGE_SIZE = 120;

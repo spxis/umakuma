@@ -6,7 +6,7 @@ export const SUBJECT_TYPES = {
 
 export type SubjectType = (typeof SUBJECT_TYPES)[keyof typeof SUBJECT_TYPES];
 
-export const SUBJECT_STATUSES = {
+export const WK_STATUSES = {
   locked: "locked",
   apprentice: "apprentice",
   guru: "guru",
@@ -15,19 +15,40 @@ export const SUBJECT_STATUSES = {
   burned: "burned",
 } as const;
 
-export type SubjectStatus = (typeof SUBJECT_STATUSES)[keyof typeof SUBJECT_STATUSES];
+export type WkStatus = (typeof WK_STATUSES)[keyof typeof WK_STATUSES];
+
+// Back-compat alias while migrating existing imports to WK_STATUSES.
+export const SUBJECT_STATUSES = WK_STATUSES;
+export type SubjectStatus = WkStatus;
 
 export const SRS_BUCKETS = {
   unknown: "unknown",
-  locked: SUBJECT_STATUSES.locked,
-  apprentice: SUBJECT_STATUSES.apprentice,
-  guru: SUBJECT_STATUSES.guru,
-  master: SUBJECT_STATUSES.master,
-  enlightened: SUBJECT_STATUSES.enlightened,
-  burned: SUBJECT_STATUSES.burned,
+  locked: WK_STATUSES.locked,
+  apprentice: WK_STATUSES.apprentice,
+  guru: WK_STATUSES.guru,
+  master: WK_STATUSES.master,
+  enlightened: WK_STATUSES.enlightened,
+  burned: WK_STATUSES.burned,
 } as const;
 
 export type SrsBucket = (typeof SRS_BUCKETS)[keyof typeof SRS_BUCKETS];
+
+export const LEARNED_SRS_GROUPS = [
+  WK_STATUSES.apprentice,
+  WK_STATUSES.guru,
+  WK_STATUSES.master,
+  WK_STATUSES.enlightened,
+  WK_STATUSES.burned,
+] as const;
+
+export type LearnedSrsGroup = (typeof LEARNED_SRS_GROUPS)[number];
+
+export const SRS_PROGRESS_STATUSES = [
+  ...LEARNED_SRS_GROUPS,
+  WK_STATUSES.locked,
+] as const;
+
+export type SrsProgressStatus = (typeof SRS_PROGRESS_STATUSES)[number];
 
 export const SUBJECT_TYPE_VALUES: SubjectType[] = [
   SUBJECT_TYPES.radical,
@@ -36,12 +57,12 @@ export const SUBJECT_TYPE_VALUES: SubjectType[] = [
 ];
 
 export const SUBJECT_STATUS_VALUES: SubjectStatus[] = [
-  SUBJECT_STATUSES.locked,
-  SUBJECT_STATUSES.apprentice,
-  SUBJECT_STATUSES.guru,
-  SUBJECT_STATUSES.master,
-  SUBJECT_STATUSES.enlightened,
-  SUBJECT_STATUSES.burned,
+  WK_STATUSES.locked,
+  WK_STATUSES.apprentice,
+  WK_STATUSES.guru,
+  WK_STATUSES.master,
+  WK_STATUSES.enlightened,
+  WK_STATUSES.burned,
 ];
 
 export function isSubjectType(value: string | null | undefined): value is SubjectType {
@@ -50,12 +71,22 @@ export function isSubjectType(value: string | null | undefined): value is Subjec
 
 export function isSubjectStatus(value: string | null | undefined): value is SubjectStatus {
   return (
-    value === SUBJECT_STATUSES.locked ||
-    value === SUBJECT_STATUSES.apprentice ||
-    value === SUBJECT_STATUSES.guru ||
-    value === SUBJECT_STATUSES.master ||
-    value === SUBJECT_STATUSES.enlightened ||
-    value === SUBJECT_STATUSES.burned
+    value === WK_STATUSES.locked ||
+    value === WK_STATUSES.apprentice ||
+    value === WK_STATUSES.guru ||
+    value === WK_STATUSES.master ||
+    value === WK_STATUSES.enlightened ||
+    value === WK_STATUSES.burned
+  );
+}
+
+export function isLearnedSrsGroup(value: string | null | undefined): value is LearnedSrsGroup {
+  return (
+    value === WK_STATUSES.apprentice ||
+    value === WK_STATUSES.guru ||
+    value === WK_STATUSES.master ||
+    value === WK_STATUSES.enlightened ||
+    value === WK_STATUSES.burned
   );
 }
 

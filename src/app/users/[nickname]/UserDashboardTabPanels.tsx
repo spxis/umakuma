@@ -2,11 +2,22 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import {
+  LEARNED_SRS_GROUPS,
+  SUBJECT_STATUSES,
+  type SrsProgressStatus,
+} from "@/lib/domainConstants";
+import type { ItemSpread, ItemSpreadRow } from "@/lib/itemSpread";
+import {
+  formatNumber,
+  srsBadgeClass,
+  srsSegmentClass,
+  srsSegmentTextClass,
+  stageLabel,
+} from "./userDashboardSrsUi";
 
 import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
-import { SUBJECT_STATUSES, type SubjectStatus } from "@/lib/domainConstants";
 import type {
-  ItemSpread,
   ItemSpreadGroupDetails,
   LevelProgressSnapshot,
   SrsGroupKey,
@@ -108,21 +119,17 @@ type ItemSpreadTabPanelProps = {
 
 export function ItemSpreadTabPanel({ itemSpread, itemSpreadDetails }: ItemSpreadTabPanelProps) {
   const [detailedView, setDetailedView] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<Record<SrsGroupKey, boolean>>({
-    apprentice: false,
-    guru: false,
-    master: false,
-    enlightened: false,
-    burned: false,
-  });
+  const [expandedGroups, setExpandedGroups] = useState<Record<SrsGroupKey, boolean>>(() =>
+    Object.fromEntries(LEARNED_SRS_GROUPS.map((group) => [group, false])) as Record<SrsGroupKey, boolean>,
+  );
 
-  const groupedRows = [
-    ["apprentice", "Apprentice", itemSpread.apprentice],
-    ["guru", "Guru", itemSpread.guru],
-    ["master", "Master", itemSpread.master],
-    ["enlightened", "Enlightened", itemSpread.enlightened],
-    ["burned", "Burned", itemSpread.burned],
-  ] as const;
+  const groupedRows: Array<[SrsGroupKey, string, ItemSpreadRow]> = [
+    [SUBJECT_STATUSES.apprentice, "Apprentice", itemSpread.apprentice],
+    [SUBJECT_STATUSES.guru, "Guru", itemSpread.guru],
+    [SUBJECT_STATUSES.master, "Master", itemSpread.master],
+    [SUBJECT_STATUSES.enlightened, "Enlightened", itemSpread.enlightened],
+    [SUBJECT_STATUSES.burned, "Burned", itemSpread.burned],
+  ];
 
   const toggleExpanded = (group: SrsGroupKey) => {
     setExpandedGroups((prev) => ({ ...prev, [group]: !prev[group] }));
@@ -321,14 +328,14 @@ export function LevelProgressTabPanel({
               [subjectTypePluralLabel("kanji"), "kanji", levelKanjiProgress],
               [subjectTypePluralLabel("vocabulary"), "vocabulary", levelVocabularyProgress],
             ] as const).map(([label, type, progress]) => {
-              const stageCounts = [
-                ["apprentice", progress.apprentice],
-                ["guru", progress.guru],
-                ["master", progress.master],
-                ["enlightened", progress.enlightened],
-                ["burned", progress.burned],
-                ["locked", progress.locked],
-              ] as const;
+              const stageCounts: Array<[SrsProgressStatus, number]> = [
+                [SUBJECT_STATUSES.apprentice, progress.apprentice],
+                [SUBJECT_STATUSES.guru, progress.guru],
+                [SUBJECT_STATUSES.master, progress.master],
+                [SUBJECT_STATUSES.enlightened, progress.enlightened],
+                [SUBJECT_STATUSES.burned, progress.burned],
+                [SUBJECT_STATUSES.locked, progress.locked],
+              ];
               const visibleStages = stageCounts.filter(([, count]) => count > 0);
               const remainingToGuru = Math.max(0, progress.total - progress.guruOrHigher);
 
@@ -445,41 +452,17 @@ export function LevelProgressTabPanel({
   );
 }
 
-function srsSegmentClass(stage: SubjectStatus): string {
-  if (stage === SUBJECT_STATUSES.locked) return "bg-foreground/15";
-  if (stage === SUBJECT_STATUSES.apprentice) return "bg-hot";
-  if (stage === SUBJECT_STATUSES.guru) return "bg-accent";
-  if (stage === SUBJECT_STATUSES.master) return "bg-sky-500";
-  if (stage === SUBJECT_STATUSES.enlightened) return "bg-amber-500";
-  return "bg-emerald-500";
-}
-
-function srsSegmentTextClass(stage: SubjectStatus): string {
-  if (stage === SUBJECT_STATUSES.enlightened) return "text-slate-900";
-  if (stage === SUBJECT_STATUSES.locked) return "text-slate-900";
-  return "text-white";
-}
-
-function srsBadgeClass(stage: SubjectStatus): string {
-  if (stage === SUBJECT_STATUSES.apprentice) return "border-hot/40 bg-hot/10 text-hot";
-  if (stage === SUBJECT_STATUSES.guru) return "border-accent/40 bg-accent/10 text-accent";
-  if (stage === SUBJECT_STATUSES.master) return "border-sky-500/40 bg-sky-500/10 text-sky-700";
-  if (stage === SUBJECT_STATUSES.enlightened) return "border-amber-500/40 bg-amber-500/10 text-amber-800";
-  if (stage === SUBJECT_STATUSES.burned) return "border-emerald-500/40 bg-emerald-500/10 text-emerald-800";
-  return "border-foreground/30 bg-foreground/10 text-foreground";
-}
-
-function stageLabel(stage: SubjectStatus): string {
-  if (stage === SUBJECT_STATUSES.locked) return "Lock";
-  if (stage === SUBJECT_STATUSES.apprentice) return "Appr";
-  if (stage === SUBJECT_STATUSES.guru) return "Guru";
-  if (stage === SUBJECT_STATUSES.master) return "Mast";
-  if (stage === SUBJECT_STATUSES.enlightened) return "Enli";
-  if (stage === SUBJECT_STATUSES.burned) return "Burn";
-  return "Lock";
-}
-
-function SrsLink({ label, shortLabel, query, value }: { label: string; shortLabel: string; query: string; value: number }) {
+function SrsLink({
+  label,
+  shortLabel,
+  query,
+  value,
+}: {
+  label: string;
+  shortLabel: string;
+  query: SrsGroupKey;
+  value: number;
+}) {
   return (
     <Link
       href={`?srs=${query}#explorer`}
@@ -489,8 +472,4 @@ function SrsLink({ label, shortLabel, query, value }: { label: string; shortLabe
       <span className="mt-0.5 block text-xl font-black leading-none sm:text-4xl">{formatNumber(value)}</span>
     </Link>
   );
-}
-
-function formatNumber(input: number): string {
-  return new Intl.NumberFormat("en-US").format(input);
 }
