@@ -5,7 +5,7 @@ import { ensureKanjiLevels, ensureRunReadings, getCachedKanjiLevels, getCachedRu
 import { availabilityForRun, openNewsGlyphCandidatesWithOptions, prefetchNewsGlyphCandidates } from "./newsGlyphRunner";
 import { NEWS_KANJI_HISTORY_EVENT } from "./newsKanjiHistory";
 import { buildCandidatesFromSelectedText, buildLookupCandidates } from "./newsLookupCandidates";
-import { tokenizeJapanese } from "./newsTokenize";
+import { NEWS_TEXT_SEGMENT_KINDS, tokenizeJapanese } from "./newsTokenize";
 import {
   collectSeenGlyphs,
   extractKanjiTokens,
@@ -41,7 +41,7 @@ export default function NewsTokenizedText({
   const candidatesByIndex = useMemo(
     () =>
       segments.map((segment, index) =>
-        segment.kind === "kanji" ? buildLookupCandidates(segments, index) : [],
+        segment.kind === NEWS_TEXT_SEGMENT_KINDS.kanji ? buildLookupCandidates(segments, index) : [],
       ),
     [segments],
   );
@@ -76,7 +76,7 @@ export default function NewsTokenizedText({
   const availabilityByRun = useMemo<Record<string, "unknown" | "known" | "missing">>(() => {
     const map = new Map<string, "unknown" | "known" | "missing">();
     for (const segment of segments) {
-      if (segment.kind !== "kanji") {
+      if (segment.kind !== NEWS_TEXT_SEGMENT_KINDS.kanji) {
         continue;
       }
       if (!map.has(segment.text)) {
@@ -92,7 +92,7 @@ export default function NewsTokenizedText({
 
     for (let index = 0; index < segments.length; index += 1) {
       const segment = segments[index];
-      if (segment.kind !== "kanji") {
+      if (segment.kind !== NEWS_TEXT_SEGMENT_KINDS.kanji) {
         continue;
       }
 
@@ -150,7 +150,7 @@ export default function NewsTokenizedText({
   const articleKanjiRuns = useMemo(() => {
     const unique = new Set<string>();
     for (const segment of segments) {
-      if (segment.kind === "kanji") {
+      if (segment.kind === NEWS_TEXT_SEGMENT_KINDS.kanji) {
         unique.add(segment.text);
       }
     }
@@ -260,7 +260,7 @@ export default function NewsTokenizedText({
   return (
     <>
       {segments.map((segment, index) => {
-        if (segment.kind !== "kanji") {
+        if (segment.kind !== NEWS_TEXT_SEGMENT_KINDS.kanji) {
           return <span key={index}>{segment.text}</span>;
         }
 

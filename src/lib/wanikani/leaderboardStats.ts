@@ -15,7 +15,7 @@ import {
 import { getLevelKanjiSnapshot } from "./levelSnapshot";
 import { loadSubjectSummaries, loadSubjectTypes } from "./subjects";
 import { computeJlptKanjiProgress } from "./leaderboardJlpt";
-import { SUBJECT_TYPE_VALUES, WK_STATUSES, type SubjectType } from "@/lib/domainConstants";
+import { SUBJECT_TYPE_VALUES, SUBJECT_TYPES, WK_STATUSES, type SubjectType } from "@/lib/domainConstants";
 import type {
   ExistingLeaderboardState,
   LeaderboardStats,
@@ -239,10 +239,10 @@ export async function getLeaderboardStats(
     .sort((a, b) => b.getTime() - a.getTime())[0] ?? null;
 
   const radicalCount = allAssignmentData.filter(
-    (assignment) => assignment.subject_type === "radical" && assignment.srs_stage > 0,
+    (assignment) => assignment.subject_type === SUBJECT_TYPES.radical && assignment.srs_stage > 0,
   ).length;
   const vocabularyCount = allAssignmentData.filter(
-    (assignment) => assignment.subject_type === "vocabulary" && assignment.srs_stage > 0,
+    (assignment) => assignment.subject_type === SUBJECT_TYPES.vocabulary && assignment.srs_stage > 0,
   ).length;
 
   let apprenticeCount = 0;

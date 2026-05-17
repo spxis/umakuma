@@ -4,6 +4,7 @@ import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/s
 import type { LookupGlyphItem, LookupRunResult } from "@/lib/news/newsKanjiLookup";
 import {
   openViewGlyphViewer,
+  VIEW_GLYPH_SELECTOR_KINDS,
   type ViewGlyphSelectorEntry,
 } from "@/lib/viewGlyphViewer";
 
@@ -359,7 +360,7 @@ function buildViewerState(
     items.push(vocabItem);
     selector.push({
       label: run,
-      kind: "vocabulary",
+      kind: VIEW_GLYPH_SELECTOR_KINDS.vocabulary,
       exists: true,
       itemIndex: 0,
       origin: "current",
@@ -367,7 +368,7 @@ function buildViewerState(
   } else {
     selector.push({
       label: run,
-      kind: "vocabulary",
+      kind: VIEW_GLYPH_SELECTOR_KINDS.vocabulary,
       exists: false,
       itemIndex: null,
       origin: "current",
@@ -385,7 +386,7 @@ function buildViewerState(
     if (!info || info.subjectId === null) {
       selector.push({
         label: char,
-        kind: "kanji",
+        kind: VIEW_GLYPH_SELECTOR_KINDS.kanji,
         exists: false,
         itemIndex: null,
         origin: "current",
@@ -405,7 +406,7 @@ function buildViewerState(
 
     selector.push({
       label: char,
-      kind: "kanji",
+      kind: VIEW_GLYPH_SELECTOR_KINDS.kanji,
       exists: true,
       itemIndex: index,
       origin: "current",

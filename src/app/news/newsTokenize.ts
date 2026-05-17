@@ -12,8 +12,13 @@ const COUNTER_AFTER_DIGIT = new Set(["歳", "才", "人", "円", "年", "月", "
 const MAX_KANA_SUFFIX = 3;
 const MAX_KATAKANA_SUFFIX = 10;
 
+export const NEWS_TEXT_SEGMENT_KINDS = {
+  kanji: "kanji",
+  other: "other",
+} as const;
+
 export type NewsTextSegment = {
-  kind: "kanji" | "other";
+  kind: (typeof NEWS_TEXT_SEGMENT_KINDS)[keyof typeof NEWS_TEXT_SEGMENT_KINDS];
   text: string;
 };
 
@@ -34,7 +39,7 @@ export function tokenizeJapanese(text: string): NewsTextSegment[] {
       while (index < chars.length && !KANJI_REGEX.test(chars[index] ?? "")) {
         index += 1;
       }
-      segments.push({ kind: "other", text: chars.slice(start, index).join("") });
+      segments.push({ kind: NEWS_TEXT_SEGMENT_KINDS.other, text: chars.slice(start, index).join("") });
       continue;
     }
 
@@ -103,9 +108,9 @@ export function tokenizeJapanese(text: string): NewsTextSegment[] {
       const suffix = suffixCount > 0 ? chars.slice(kanjiEnd, suffixEnd).join("") : "";
       const rest = `${chars.slice(start + 1, kanjiEnd).join("")}${suffix}`;
 
-      segments.push({ kind: "kanji", text: "氏" });
+      segments.push({ kind: NEWS_TEXT_SEGMENT_KINDS.kanji, text: "氏" });
       if (rest) {
-        segments.push({ kind: "kanji", text: rest });
+        segments.push({ kind: NEWS_TEXT_SEGMENT_KINDS.kanji, text: rest });
       }
       continue;
     }
@@ -121,14 +126,14 @@ export function tokenizeJapanese(text: string): NewsTextSegment[] {
 
       for (const chunk of chunks) {
         if (chunk) {
-          segments.push({ kind: "kanji", text: chunk });
+          segments.push({ kind: NEWS_TEXT_SEGMENT_KINDS.kanji, text: chunk });
         }
       }
       continue;
     }
 
     const runEnd = suffixCount > 0 ? suffixEnd : kanjiEnd;
-    segments.push({ kind: "kanji", text: chars.slice(start, runEnd).join("") });
+    segments.push({ kind: NEWS_TEXT_SEGMENT_KINDS.kanji, text: chars.slice(start, runEnd).join("") });
   }
 
   return segments;

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
 import { formatRelativeFromNow } from "@/lib/timeFormat";
+import { isSubjectType } from "@/lib/domainConstants";
 import HistoryItemDetailModal from "@/app/shared/HistoryItemDetailModal";
 import StudyHistoryFilters from "@/app/shared/StudyHistoryFilters";
 import type { HistorySrsBucket, StudyHistoryPayload } from "@/app/shared/studyHistoryTypes";
@@ -434,7 +435,7 @@ export default function StudyHistoryTable({
 }
 
 function historyGlyphBoxClass(type: string): string {
-  if (type === "radical" || type === "kanji" || type === "vocabulary") {
+  if (isSubjectType(type)) {
     return typeGlyphBoxClass(type);
   }
   return "border-line bg-surface text-foreground";

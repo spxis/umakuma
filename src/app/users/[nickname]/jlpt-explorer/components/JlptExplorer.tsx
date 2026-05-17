@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import jlptReadings from "@/data/jlptReadings.json";
 import JlptExplorerContent from "./JlptExplorerContent";
@@ -255,7 +256,7 @@ export default function JlptExplorer({
       if (!selectedLevels.has(item.nLevel)) return false;
 
       const userMatch = userKanjiByChar.get(item.kanji);
-      if (wkFilter === "kanji" && !userMatch) return false;
+      if (wkFilter === SUBJECT_TYPES.kanji && !userMatch) return false;
       if (wkFilter === "none" && userMatch) return false;
 
       if (wkLevelFilter !== null) {

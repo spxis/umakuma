@@ -58,7 +58,7 @@ export async function getLevelKanjiSnapshot(
   );
 
   const kanjiCharsForLevel = levelSubjects.data
-    .filter((row) => (row.object ?? "") === "kanji")
+    .filter((row) => (row.object ?? "") === SUBJECT_TYPES.kanji)
     .map((row) => {
       const subject = subjectById.get(row.id);
       return subject?.characters ?? null;

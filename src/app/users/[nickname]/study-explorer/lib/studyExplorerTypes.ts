@@ -1,4 +1,5 @@
 import type { LevelItem, SrsFilter } from "../../explorerTypes";
+import type { SubjectType } from "@/lib/domainConstants";
 
 export type StudyQueueItem = LevelItem & {
   assignmentId: number;
@@ -101,7 +102,7 @@ export type StudyExplorerProps = {
   };
 };
 
-export type StudyTypeFilter = "all" | "radical" | "kanji" | "vocabulary";
+export type StudyTypeFilter = "all" | SubjectType;
 export type StudySrsFilter = Extract<
   SrsFilter,
   "all" | "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned"

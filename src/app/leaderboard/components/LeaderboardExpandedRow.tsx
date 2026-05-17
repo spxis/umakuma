@@ -6,7 +6,7 @@ import {
   LEADERBOARD_JLPT_LABEL_ROWS,
 } from "./Leaderboard.constants";
 
-import type { LeaderboardRow, LeaderboardTab } from "../lib/leaderboardTypes";
+import { LEADERBOARD_TABS, type LeaderboardRow, type LeaderboardTab } from "../lib/leaderboardTypes";
 import {
   deltaClass,
   formatDate,
@@ -72,8 +72,8 @@ export default function LeaderboardExpandedRow({
   }
 
   function focusDeltaForTab(tab: Exclude<LeaderboardTab, "overall">) {
-    if (tab === "radicals") return row.dailyDelta?.radicalCount;
-    if (tab === "kanji") return row.dailyDelta?.levelKanjiLearned;
+    if (tab === LEADERBOARD_TABS.radicals) return row.dailyDelta?.radicalCount;
+    if (tab === LEADERBOARD_TABS.kanji) return row.dailyDelta?.levelKanjiLearned;
     return row.dailyDelta?.vocabularyCount;
   }
 

@@ -1,3 +1,5 @@
+import type { SubjectType } from "@/lib/domainConstants";
+
 export type WaniKaniUserResponse = {
   data: {
     id: string;
@@ -162,7 +164,7 @@ export type LevelKanjiSnapshot = {
   estimatedHoursRemaining: number | null;
   items: Array<{
     subjectId: number;
-    subjectType: "kanji" | "radical" | "vocabulary";
+    subjectType: SubjectType;
     wkLevel: number;
     characters: string;
     meanings: string[];

@@ -23,6 +23,7 @@ import {
 
 const AD_INTERVAL = 4;
 const LARGE_ARTICLE_TEXT_LENGTH = 7000;
+const KANJI_TAB: ArticlePanelTab = "kanji";
 
 export type ArticlePanelTab = "article" | "kanji" | "history" | "stats";
 
@@ -132,7 +133,7 @@ export default function NewsArticleView({
         </section>
       ) : null}
 
-      {activeTab === "kanji" ? <NewsKanjiOverviewPanel blocks={article.blocks} /> : null}
+      {activeTab === KANJI_TAB ? <NewsKanjiOverviewPanel blocks={article.blocks} /> : null}
 
       {activeTab === "history" ? historyPanel : null}
       {activeTab === "stats" ? statsPanel : null}
@@ -176,8 +177,8 @@ function ArticleTabs({
       </button>
       <button
         type="button"
-        onClick={() => onChange("kanji")}
-        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === "kanji" ? "bg-accent text-surface" : "text-foreground/70"}`}
+        onClick={() => onChange(KANJI_TAB)}
+        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === KANJI_TAB ? "bg-accent text-surface" : "text-foreground/70"}`}
       >
         <span>Kanji</span>
         <span className="text-[10px] opacity-85">{kanjiCount}</span>

@@ -1,6 +1,7 @@
 import { fetchAllCollectionPages } from "./http";
 import { srsLabel } from "./helpers";
 import type { UserKanjiIndexItem } from "./types";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
 export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexItem[]> {
   const assignmentsCollection = await fetchAllCollectionPages("/assignments?subject_types=kanji", token);
@@ -17,7 +18,7 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
         available_at: string | null;
       },
     )
-    .filter((assignment) => assignment.subject_type === "kanji");
+    .filter((assignment) => assignment.subject_type === SUBJECT_TYPES.kanji);
 
   const ids = Array.from(new Set(assignments.map((assignment) => assignment.subject_id)));
   const subjectById = new Map<
@@ -42,7 +43,7 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
 
     const subjects = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token);
     for (const row of subjects.data) {
-      if ((row.object ?? "") !== "kanji") {
+      if ((row.object ?? "") !== SUBJECT_TYPES.kanji) {
         continue;
       }
 

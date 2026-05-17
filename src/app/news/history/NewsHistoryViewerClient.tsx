@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
@@ -81,7 +82,7 @@ export default function NewsHistoryViewerClient() {
     }
 
     return events.map((event, index) => {
-      const hasVocabulary = event.glyphs.some((glyph) => glyph.type === "vocabulary");
+      const hasVocabulary = event.glyphs.some((glyph) => glyph.type === SUBJECT_TYPES.vocabulary);
       const knownCount = event.glyphs.length;
       const kanjiCount = Array.from(event.run).filter((char) => /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/.test(char)).length;
       const totalCount = hasVocabulary ? Math.max(knownCount, kanjiCount + 1) : Math.max(knownCount, kanjiCount);

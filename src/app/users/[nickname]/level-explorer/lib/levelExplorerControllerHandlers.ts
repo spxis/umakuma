@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
+import type { SubjectType } from "@/lib/domainConstants";
 
 import type { Snapshot, SrsFilter } from "../../explorerTypes";
 import { buildLevelExplorerUrl } from "./levelExplorerState";
@@ -186,7 +187,7 @@ export function buildLevelExplorerControllerHandlers({
     setSrsFilter(nextStatus);
   };
 
-  const toggleTypeVisibility = (type: "radical" | "kanji" | "vocabulary") => {
+  const toggleTypeVisibility = (type: SubjectType) => {
     markHistoryPush();
     setVisibleTypesAndPersist({
       radical: type === LEVEL_TYPE_FILTERS.radical,

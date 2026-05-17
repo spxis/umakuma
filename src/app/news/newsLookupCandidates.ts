@@ -1,8 +1,10 @@
+import { NEWS_TEXT_SEGMENT_KINDS } from "./newsTokenize";
+
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
 const KANA_REGEX = /[\u3040-\u309F\u30A0-\u30FA\u30FC-\u30FF]/;
 const JAPANESE_WORD_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\u3040-\u309F\u30A0-\u30FA\u30FC-\u30FF々]/;
 
-type Segment = { kind: "kanji" | "other"; text: string };
+type Segment = { kind: (typeof NEWS_TEXT_SEGMENT_KINDS)[keyof typeof NEWS_TEXT_SEGMENT_KINDS]; text: string };
 
 export function buildLookupCandidates(segments: Segment[], index: number): string[] {
   const run = segments[index]?.text ?? "";
@@ -10,8 +12,8 @@ export function buildLookupCandidates(segments: Segment[], index: number): strin
     return [];
   }
 
-  const prevKana = trailingKana(segments[index - 1]?.kind === "other" ? segments[index - 1].text : "", 2);
-  const nextKana = leadingKana(segments[index + 1]?.kind === "other" ? segments[index + 1].text : "", 3);
+  const prevKana = trailingKana(segments[index - 1]?.kind === NEWS_TEXT_SEGMENT_KINDS.other ? segments[index - 1].text : "", 2);
+  const nextKana = leadingKana(segments[index + 1]?.kind === NEWS_TEXT_SEGMENT_KINDS.other ? segments[index + 1].text : "", 3);
   const suffixVariants = kanaPrefixVariants(nextKana);
 
   const out: string[] = [run];

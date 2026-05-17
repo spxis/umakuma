@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import { fetchAllCollectionPages } from "./http";
 import type { LeaderboardStats, WaniKaniAssignmentData } from "./types";
@@ -17,7 +18,7 @@ export async function computeJlptKanjiProgress(
       allAssignmentData
         .filter(
           (assignment) =>
-            assignment.subject_type === "kanji" && assignment.unlocked_at && assignment.srs_stage >= 5,
+            assignment.subject_type === SUBJECT_TYPES.kanji && assignment.unlocked_at && assignment.srs_stage >= 5,
         )
         .map((assignment) => assignment.subject_id),
     ),
@@ -35,7 +36,7 @@ export async function computeJlptKanjiProgress(
       const subjectChunk = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token);
 
       for (const row of subjectChunk.data) {
-        if ((row.object ?? "") !== "kanji") {
+        if ((row.object ?? "") !== SUBJECT_TYPES.kanji) {
           continue;
         }
 

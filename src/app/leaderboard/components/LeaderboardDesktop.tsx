@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import LeaderboardExpandedRow from "./LeaderboardExpandedRow";
-import type { LeaderboardRow, LeaderboardTab, SortKey, SortState } from "../lib/leaderboardTypes";
+import { LEADERBOARD_TABS, type LeaderboardRow, type LeaderboardTab, type SortKey, type SortState } from "../lib/leaderboardTypes";
 import {
   deltaClass,
   formatDate,
@@ -120,11 +120,11 @@ export default function LeaderboardDesktop({
             ) : (
               <>
                 {(() => {
-                  const key = activeTab === "radicals" ? "radicalPercent" : activeTab === "kanji" ? "kanjiPercent" : "vocabularyPercent";
+                  const key = activeTab === LEADERBOARD_TABS.radicals ? "radicalPercent" : activeTab === LEADERBOARD_TABS.kanji ? "kanjiPercent" : "vocabularyPercent";
                   const label =
-                    activeTab === "radicals"
+                    activeTab === LEADERBOARD_TABS.radicals
                       ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural
-                      : activeTab === "kanji"
+                      : activeTab === LEADERBOARD_TABS.kanji
                         ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular
                         : SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].plural;
                   return (
