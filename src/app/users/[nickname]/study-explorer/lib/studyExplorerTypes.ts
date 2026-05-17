@@ -5,6 +5,9 @@ export type StudyQueueItem = LevelItem & {
   queueType: "review" | "lesson";
 };
 
+export type StudyQueueMode = StudyQueueItem["queueType"];
+export type StudyViewerMode = "detail" | "flash";
+
 export type QueueResponse = {
   items: StudyQueueItem[];
   counts: {
@@ -77,6 +80,7 @@ export type SubmitInFlight = {
 };
 
 export type ReviewOutcome = "correct" | "wrong" | "skipped" | "lesson-started" | "reset-to-lessons";
+export type StudyReviewSubmitResult = Extract<ReviewOutcome, "correct" | "wrong">;
 
 export type StudyExplorerProps = {
   accountId: string;
@@ -85,8 +89,8 @@ export type StudyExplorerProps = {
   onToggleShowEnglish: () => void;
   canToggleEnglish: boolean;
   studyMode: boolean;
-  queueMode: "review" | "lesson";
-  initialViewerMode?: "detail" | "flash" | null;
+  queueMode: StudyQueueMode;
+  initialViewerMode?: StudyViewerMode | null;
   initialFilters?: {
     viewedLevel: number | null;
     typeFilter: StudyTypeFilter;

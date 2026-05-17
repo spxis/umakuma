@@ -2,17 +2,27 @@ import { useMemo } from "react";
 
 import type {
   QueueResponse,
+  StudyQueueMode,
   StudyQueueItem,
   StudySrsFilter,
   StudySrsStageFilter,
   StudyTypeFilter,
 } from "./studyExplorerTypes";
+import {
+  isAllStudySrsFilter,
+  isAllStudyTypeFilter,
+  isKanjiSubjectType,
+  isLessonQueueItem,
+  STUDY_QUEUE_TYPES,
+  STUDY_SUBJECT_STATUSES,
+  STUDY_SUBJECT_TYPES,
+} from "./studyExplorerDomain";
 import { filterStudyItems, isRecentStudyItem } from "./studyExplorerUtils";
 
 type Args = {
   maxLevel: number;
   loadedItems: StudyQueueItem[];
-  queueMode: "review" | "lesson";
+  queueMode: StudyQueueMode;
   viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
   effectiveSrsFilter: StudySrsFilter;
@@ -98,16 +108,16 @@ export function useStudyExplorerDerivedData({
     const countsByLevel: Record<number, number> = {};
 
     for (const item of loadedItems) {
-      if (item.queueType !== "lesson") {
+      if (!isLessonQueueItem(item)) {
         continue;
       }
       if (effectiveRecentOnly && !isRecentStudyItem(item)) {
         continue;
       }
-      if (typeFilter !== "all" && item.subjectType !== typeFilter) {
+      if (!isAllStudyTypeFilter(typeFilter) && item.subjectType !== typeFilter) {
         continue;
       }
-      if (!effectiveShowLocked && item.status === "locked") {
+      if (!effectiveShowLocked && item.status === STUDY_SUBJECT_STATUSES.locked) {
         continue;
       }
       if (typeof item.wkLevel !== "number") {
@@ -139,7 +149,7 @@ export function useStudyExplorerDerivedData({
   }, [cachedQueueData?.levelCounts, data?.levelCounts]);
 
   const lessonLevelCounts = useMemo(() => {
-    if (queueMode !== "lesson") {
+    if (queueMode !== STUDY_QUEUE_TYPES.lesson) {
       return lessonLevelCountsFromLoaded;
     }
 
@@ -182,13 +192,13 @@ export function useStudyExplorerDerivedData({
       if (effectiveRecentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
       if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
-      if (effectiveSrsFilter !== "all" && item.status !== effectiveSrsFilter) continue;
+      if (!isAllStudySrsFilter(effectiveSrsFilter) && item.status !== effectiveSrsFilter) continue;
       if (effectiveSrsStageFilter !== null && item.srsStage !== effectiveSrsStageFilter) continue;
-      if (!effectiveShowLocked && item.status === "locked") continue;
+      if (!effectiveShowLocked && item.status === STUDY_SUBJECT_STATUSES.locked) continue;
 
       out.all += 1;
-      if (item.subjectType === "radical") out.radical += 1;
-      else if (item.subjectType === "kanji") out.kanji += 1;
+      if (item.subjectType === STUDY_SUBJECT_TYPES.radical) out.radical += 1;
+      else if (isKanjiSubjectType(item.subjectType)) out.kanji += 1;
       else out.vocabulary += 1;
     }
     return out;
@@ -203,14 +213,16 @@ export function useStudyExplorerDerivedData({
   ]);
 
   const canUseServerTypeCounts =
-    queueMode === "review" &&
-    effectiveSrsFilter === "all" &&
+    queueMode === STUDY_QUEUE_TYPES.review &&
+    isAllStudySrsFilter(effectiveSrsFilter) &&
     effectiveSrsStageFilter === null &&
     !effectiveRecentOnly &&
-    effectiveShowLocked;
+    effectiveShowLocked &&
+    hiddenSubmittedAssignmentIds.size === 0 &&
+    submittingByAssignmentId.size === 0;
 
   const typeCounts =
-    queueMode === "lesson"
+    queueMode === STUDY_QUEUE_TYPES.lesson
       ? (lessonTypeCountsFromServer ?? loadedTypeCounts)
       : canUseServerTypeCounts && lessonTypeCountsFromServer
         ? lessonTypeCountsFromServer
@@ -234,22 +246,28 @@ export function useStudyExplorerDerivedData({
       if (effectiveRecentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
       if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
-      if (typeFilter !== "all" && item.subjectType !== typeFilter) continue;
-      if (!effectiveShowLocked && item.status === "locked") continue;
+      if (!isAllStudyTypeFilter(typeFilter) && item.subjectType !== typeFilter) continue;
+      if (!effectiveShowLocked && item.status === STUDY_SUBJECT_STATUSES.locked) continue;
 
       out.all += 1;
-      if (item.status === "locked") out.locked += 1;
-      if (item.status === "apprentice") out.apprentice += 1;
-      if (item.status === "guru") out.guru += 1;
-      if (item.status === "master") out.master += 1;
-      if (item.status === "enlightened") out.enlightened += 1;
-      if (item.status === "burned") out.burned += 1;
+      if (item.status === STUDY_SUBJECT_STATUSES.locked) out.locked += 1;
+      if (item.status === STUDY_SUBJECT_STATUSES.apprentice) out.apprentice += 1;
+      if (item.status === STUDY_SUBJECT_STATUSES.guru) out.guru += 1;
+      if (item.status === STUDY_SUBJECT_STATUSES.master) out.master += 1;
+      if (item.status === STUDY_SUBJECT_STATUSES.enlightened) out.enlightened += 1;
+      if (item.status === STUDY_SUBJECT_STATUSES.burned) out.burned += 1;
     }
     return out;
   }, [loadedItems, queueMode, effectiveRecentOnly, viewedLevel, typeFilter, effectiveShowLocked]);
 
   const canUseServerSrsCounts =
-    queueMode === "review" && viewedLevel === null && typeFilter === "all" && !effectiveRecentOnly && effectiveShowLocked;
+    queueMode === STUDY_QUEUE_TYPES.review &&
+    viewedLevel === null &&
+    isAllStudyTypeFilter(typeFilter) &&
+    !effectiveRecentOnly &&
+    effectiveShowLocked &&
+    hiddenSubmittedAssignmentIds.size === 0 &&
+    submittingByAssignmentId.size === 0;
 
   const srsCounts = canUseServerSrsCounts ? (srsCountsFromServer ?? srsCountsFromLoaded) : srsCountsFromLoaded;
 
@@ -257,11 +275,13 @@ export function useStudyExplorerDerivedData({
     const fromServer = data?.srsStageCounts ?? cachedQueueData?.srsStageCounts;
     if (
       fromServer &&
-      queueMode === "review" &&
+      queueMode === STUDY_QUEUE_TYPES.review &&
       viewedLevel === null &&
-      typeFilter === "all" &&
+      isAllStudyTypeFilter(typeFilter) &&
       !effectiveRecentOnly &&
-      effectiveShowLocked
+      effectiveShowLocked &&
+      hiddenSubmittedAssignmentIds.size === 0 &&
+      submittingByAssignmentId.size === 0
     ) {
       return fromServer;
     }
@@ -271,8 +291,8 @@ export function useStudyExplorerDerivedData({
       if (effectiveRecentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
       if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
-      if (typeFilter !== "all" && item.subjectType !== typeFilter) continue;
-      if (!effectiveShowLocked && item.status === "locked") continue;
+      if (!isAllStudyTypeFilter(typeFilter) && item.subjectType !== typeFilter) continue;
+      if (!effectiveShowLocked && item.status === STUDY_SUBJECT_STATUSES.locked) continue;
 
       if (!Number.isInteger(item.srsStage) || item.srsStage <= 0) {
         continue;
@@ -291,6 +311,8 @@ export function useStudyExplorerDerivedData({
     viewedLevel,
     typeFilter,
     effectiveShowLocked,
+    hiddenSubmittedAssignmentIds.size,
+    submittingByAssignmentId.size,
   ]);
 
   const modalItems = useMemo(() => {

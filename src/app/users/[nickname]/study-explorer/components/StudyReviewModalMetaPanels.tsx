@@ -1,6 +1,20 @@
-import type { StudyQueueItem } from "../lib/studyExplorerTypes";
+import type {
+  StudyQueueItem,
+  StudyReviewSubmitResult,
+  StudyViewerMode,
+} from "../lib/studyExplorerTypes";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
+import {
+  isLessonQueueItem,
+  isRadicalSubjectType,
+  isReviewQueueItem,
+  isVocabularySubjectType,
+  STUDY_REVIEW_OUTCOMES,
+  STUDY_REVIEW_META_TEXT,
+  STUDY_VIEWER_MODES,
+  usedInVocabularyTargetSubjectType,
+} from "./StudyExplorer.constants";
 import LevelExplorerReviewStatsCard from "../../level-explorer/components/LevelExplorerReviewStatsCard";
 import { parseWordExamples } from "../../jlpt-explorer/lib/jlptExplorerContentHelpers";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
@@ -18,7 +32,7 @@ import {
 type Props = {
   accountId: string;
   studyMode: boolean;
-  viewerMode: "detail" | "flash";
+  viewerMode: StudyViewerMode;
   selectedItem: StudyQueueItem;
   submitFeedback: { kind: "success" | "error"; message: string } | null;
   isSubmittingSelected: boolean;
@@ -43,7 +57,7 @@ type Props = {
   wrong: number;
   skipped: number;
   correct: number;
-  onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
+  onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => void;
   onSkipCurrent: () => void;
   onStartLesson: (assignmentId: number) => void;
   onToggleUsedKanjiCollapsed: () => void;
@@ -126,21 +140,21 @@ export default function StudyReviewModalMetaPanels({
   const wordExamples = parseWordExamples(selectedItem.jlptMeta?.wordExamples);
   return (
     <>
-      {!suppressDetails && ((!studyMode && viewerMode === "flash") || useStudyFlashLayout ? null : detailsRevealed ? (
+      {!suppressDetails && ((!studyMode && viewerMode === STUDY_VIEWER_MODES.flash) || useStudyFlashLayout ? null : detailsRevealed ? (
         <>
           <div className="mt-3 grid gap-2 lg:grid-cols-2">
             {readingDualScriptCard(
-              "Primary readings",
+              STUDY_REVIEW_META_TEXT.primaryReadings,
               readingWithPronunciation(primaryReadingHiragana, showEnglish),
               readingWithPronunciation(primaryReadingKatakana, showEnglish),
             )}
-            {readingCard("Secondary readings", readingsWithPronunciationList(secondaryReadingValue, showEnglish))}
+            {readingCard(STUDY_REVIEW_META_TEXT.secondaryReadings, readingsWithPronunciationList(secondaryReadingValue, showEnglish))}
           </div>
 
           <div className="mt-2 grid gap-2 lg:grid-cols-3">
-            {metricCard("Started", formatTimestampWithRelative(selectedItem.startedAt))}
-            {metricCard("Next review", formatTimestampWithRelative(selectedItem.availableAt))}
-            {metricCard("Passed", formatTimestampWithRelative(selectedItem.passedAt))}
+            {metricCard(STUDY_REVIEW_META_TEXT.started, formatTimestampWithRelative(selectedItem.startedAt))}
+            {metricCard(STUDY_REVIEW_META_TEXT.nextReview, formatTimestampWithRelative(selectedItem.availableAt))}
+            {metricCard(STUDY_REVIEW_META_TEXT.passed, formatTimestampWithRelative(selectedItem.passedAt))}
           </div>
 
           {hasRadicals || hasVisuallySimilar || hasUsedInVocabulary ? (
@@ -149,7 +163,7 @@ export default function StudyReviewModalMetaPanels({
                 <div className={`grid gap-2 ${hasRadicals && hasVisuallySimilar ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
                   {hasRadicals ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Radicals</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.radicals}</p>
                       {relatedTilesClickable(selectedItem.radicals as RelatedReference[] | undefined, (entry) => {
                         openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: "radical" });
                       })}
@@ -157,7 +171,7 @@ export default function StudyReviewModalMetaPanels({
                   ) : null}
                   {hasVisuallySimilar ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Visually similar</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.visuallySimilar}</p>
                       {relatedTilesClickable(selectedItem.visuallySimilar as RelatedReference[] | undefined, (entry) => {
                         openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: "kanji" });
                       })}
@@ -169,14 +183,16 @@ export default function StudyReviewModalMetaPanels({
               {hasUsedInVocabulary ? (
                 <div className="rounded-xl border border-line bg-surface px-3 py-2">
                   <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
-                    {selectedItem.subjectType === "radical" ? "Used in kanji" : "Used in vocabulary"}
+                    {isRadicalSubjectType(selectedItem.subjectType)
+                      ? STUDY_REVIEW_META_TEXT.usedInKanji
+                      : STUDY_REVIEW_META_TEXT.usedInVocabulary}
                   </p>
                   {relatedTilesClickable(selectedItem.usedInVocabulary as RelatedReference[] | undefined, (entry) => {
                     openSingleGlyph({
                       subjectId: entry.subjectId,
                       label: entry.label,
                       reading: entry.reading,
-                      subjectType: selectedItem.subjectType === "radical" ? "kanji" : "vocabulary",
+                      subjectType: usedInVocabularyTargetSubjectType(selectedItem.subjectType),
                     });
                   })}
                 </div>
@@ -187,7 +203,7 @@ export default function StudyReviewModalMetaPanels({
           {hasComponentKanji ? (
             <div className="mt-2">
               <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Component kanji</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.componentKanji}</p>
                 {relatedTilesClickable(selectedItem.componentKanji as RelatedReference[] | undefined, (entry) => {
                   openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: "kanji" });
                 })}
@@ -195,17 +211,17 @@ export default function StudyReviewModalMetaPanels({
             </div>
           ) : null}
 
-          {selectedItem.subjectType === "vocabulary" && usedKanjiItems.length > 0 ? (
+          {isVocabularySubjectType(selectedItem.subjectType) && usedKanjiItems.length > 0 ? (
             <div className="mt-2">
               <div className="rounded-xl border border-line bg-surface px-3 py-2">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Used kanji</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.usedKanji}</p>
                   <button
                     type="button"
                     onClick={onToggleUsedKanjiCollapsed}
                     className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
                   >
-                    {usedKanjiCollapsed ? "Expand" : "Collapse"}
+                    {usedKanjiCollapsed ? STUDY_REVIEW_META_TEXT.expand : STUDY_REVIEW_META_TEXT.collapse}
                   </button>
                 </div>
                 {!usedKanjiCollapsed ? (
@@ -244,22 +260,22 @@ export default function StudyReviewModalMetaPanels({
 
           {selectedItem.jlptMeta ? (
             <div className="mt-2 grid gap-2 lg:grid-cols-3">
-              {metricCard("JLPT meanings", selectedItem.jlptMeta.meanings.slice(0, 6).join(" • ") || "-")}
-              {metricCard("Stroke/Freq", `${selectedItem.jlptMeta.strokeCount ?? "-"} / ${selectedItem.jlptMeta.frequencyRank ?? "-"}`)}
-              {metricCard("Grade/Heisig", `${jlptGradeLabel} / ${selectedItem.jlptMeta.heisigKeyword ?? "-"}`)}
+              {metricCard(STUDY_REVIEW_META_TEXT.jlptMeanings, selectedItem.jlptMeta.meanings.slice(0, 6).join(" • ") || "-")}
+              {metricCard(STUDY_REVIEW_META_TEXT.strokeFreq, `${selectedItem.jlptMeta.strokeCount ?? "-"} / ${selectedItem.jlptMeta.frequencyRank ?? "-"}`)}
+              {metricCard(STUDY_REVIEW_META_TEXT.gradeHeisig, `${jlptGradeLabel} / ${selectedItem.jlptMeta.heisigKeyword ?? "-"}`)}
             </div>
           ) : null}
 
           {wordExamples.length > 0 ? (
             <div className="mt-2 rounded-xl border border-line bg-surface px-3 py-2">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Used in words</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.usedInWords}</p>
                 <button
                   type="button"
                   onClick={onToggleUsedInWordsCollapsed}
                   className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
                 >
-                  {usedInWordsCollapsed ? "Expand" : "Collapse"}
+                  {usedInWordsCollapsed ? STUDY_REVIEW_META_TEXT.expand : STUDY_REVIEW_META_TEXT.collapse}
                 </button>
               </div>
               {!usedInWordsCollapsed ? (
@@ -306,29 +322,29 @@ export default function StudyReviewModalMetaPanels({
         </>
       ) : null)}
 
-      {selectedItem.queueType === "review" && studyMode && (!requiresReveal || isAnswerRevealed) && !useStudyFlashLayout && !isOutcomeFinal ? (
+      {isReviewQueueItem(selectedItem) && studyMode && (!requiresReveal || isAnswerRevealed) && !useStudyFlashLayout && !isOutcomeFinal ? (
         <div className="relative mt-auto grid w-full gap-2 pt-3">
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={() => onSubmit(selectedItem.assignmentId, "wrong")}
+              onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.wrong)}
               disabled={isSubmittingSelected}
               aria-keyshortcuts="1"
               title="Wrong (Key: 1)"
               className="min-h-[4.25rem] w-full rounded-2xl border-2 border-red-300 bg-red-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-red-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <span className="block">Wrong</span>
+              <span className="block">{STUDY_REVIEW_META_TEXT.wrong}</span>
               <span className="mt-1 block text-xl leading-none">{wrong}</span>
             </button>
             <button
               type="button"
-              onClick={() => onSubmit(selectedItem.assignmentId, "correct")}
+              onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.correct)}
               disabled={isSubmittingSelected}
               aria-keyshortcuts="2"
               title="Correct (Key: 2)"
               className="min-h-[4.25rem] w-full rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-4 py-4 text-sm font-black uppercase tracking-[0.1em] text-emerald-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <span className="block">Correct</span>
+              <span className="block">{STUDY_REVIEW_META_TEXT.correct}</span>
               <span className="mt-1 block text-xl leading-none">{correct}</span>
             </button>
           </div>
@@ -338,7 +354,7 @@ export default function StudyReviewModalMetaPanels({
             disabled={isSubmittingSelected}
             className="min-h-[4rem] w-full rounded-2xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm font-black uppercase tracking-[0.1em] text-amber-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <span className="block">Skipped</span>
+            <span className="block">{STUDY_REVIEW_META_TEXT.skipped}</span>
             <span className="mt-1 block text-xl leading-none">{skipped}</span>
           </button>
 
@@ -348,7 +364,7 @@ export default function StudyReviewModalMetaPanels({
         </div>
       ) : null}
 
-      {selectedItem.queueType === "lesson" && !isOutcomeFinal ? (
+      {isLessonQueueItem(selectedItem) && !isOutcomeFinal ? (
         <div className="relative mt-auto w-full pt-3">
           <button
             type="button"
@@ -356,7 +372,7 @@ export default function StudyReviewModalMetaPanels({
             disabled={isSubmittingSelected}
             className="min-h-[4.25rem] w-full rounded-2xl border-2 border-accent/50 bg-accent/10 px-4 py-4 text-base font-black uppercase tracking-[0.1em] text-accent disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Add To My Reviews
+            {STUDY_REVIEW_META_TEXT.addToReviews}
           </button>
 
           {isSubmittingSelected ? (
@@ -365,12 +381,12 @@ export default function StudyReviewModalMetaPanels({
         </div>
       ) : null}
 
-      {selectedItem.queueType === "lesson" && isOutcomeFinal ? (
+      {isLessonQueueItem(selectedItem) && isOutcomeFinal ? (
         <div className="mt-auto w-full pt-3">
           <div className="flex min-h-[4.25rem] w-full items-center justify-center rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-4 py-4 text-center">
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.1em] text-emerald-800">Added To Reviews</p>
-              <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-emerald-700/80">Already submitted in this session</p>
+              <p className="text-sm font-black uppercase tracking-[0.1em] text-emerald-800">{STUDY_REVIEW_META_TEXT.addedToReviews}</p>
+              <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-emerald-700/80">{STUDY_REVIEW_META_TEXT.alreadySubmittedHint}</p>
             </div>
           </div>
         </div>

@@ -1,8 +1,11 @@
 import type { Snapshot } from "../../explorerTypes";
+import { LEVEL_SUBJECT_TYPES } from "./levelExplorerDomain";
 
 export function snapshotHasComponentKanjiData(snapshot: Snapshot): boolean {
-  const vocabularyItems = snapshot.items.filter((item) => item.subjectType === "vocabulary");
-  const kanjiItems = snapshot.items.filter((item) => item.subjectType === "kanji");
+  const vocabularyItems = snapshot.items.filter(
+    (item) => item.subjectType === LEVEL_SUBJECT_TYPES.vocabulary,
+  );
+  const kanjiItems = snapshot.items.filter((item) => item.subjectType === LEVEL_SUBJECT_TYPES.kanji);
 
   return (
     vocabularyItems.every((item) =>
@@ -18,7 +21,7 @@ export function snapshotHasComponentKanjiData(snapshot: Snapshot): boolean {
 }
 
 export function snapshotHasJlptMetaData(snapshot: Snapshot): boolean {
-  const kanjiItems = snapshot.items.filter((item) => item.subjectType === "kanji");
+  const kanjiItems = snapshot.items.filter((item) => item.subjectType === LEVEL_SUBJECT_TYPES.kanji);
   if (kanjiItems.length === 0) return true;
   return kanjiItems.every((item) => Object.hasOwn(item, "jlptMeta"));
 }
@@ -28,7 +31,7 @@ export function normalizeSnapshot(raw: Snapshot): Snapshot {
     ...raw,
     items: raw.items.map((item) => ({
       ...item,
-      subjectType: item.subjectType ?? "kanji",
+      subjectType: item.subjectType ?? LEVEL_SUBJECT_TYPES.kanji,
       wkLevel: item.wkLevel ?? raw.level,
       characters: item.characters ?? "?",
       meanings: item.meanings ?? [],

@@ -1,25 +1,13 @@
 import { useCallback, useEffect, useRef } from "react";
 
-import type {
-  QueueResponse,
-  StudyCounts,
-  StudyQueueItem,
-  StudySrsFilter,
-  StudySrsStageFilter,
-  StudyTypeFilter,
-} from "./studyExplorerTypes";
-import {
-  sameAssignmentList,
-  sameCounts,
-  sameLevelCounts,
-  sameTypeCounts,
-  sameTypeCountsByLevel,
-} from "./studyExplorerEffectsComparators";
+import type { QueueResponse, StudyCounts, StudyQueueMode, StudyQueueItem, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./studyExplorerTypes";
+import { isAllStudySrsFilter, isAllStudyTypeFilter, isStudySrsFilterValue, isStudyTypeFilterValue, STUDY_SRS_FILTERS, STUDY_TYPE_FILTERS } from "./studyExplorerDomain";
+import { sameAssignmentList, sameCounts, sameLevelCounts, sameTypeCounts, sameTypeCountsByLevel } from "./studyExplorerEffectsComparators";
 import { persistQueue, readStoredQueue } from "./studyExplorerUtils";
 
 type Args = {
   accountId: string;
-  queueMode: "review" | "lesson";
+  queueMode: StudyQueueMode;
   countsStorageKey: string;
   selectedSubjectStorageKey: string;
   typeFilterStorageKey: string;
@@ -126,6 +114,11 @@ export function useStudyExplorerEffects({
   lastHandledStudyQueryRef,
 }: Args) {
   const hasHydratedSrsStageFilterRef = useRef(false);
+  const hiddenSubmittedCountRef = useRef(hiddenSubmittedAssignmentIds.size);
+
+  useEffect(() => {
+    hiddenSubmittedCountRef.current = hiddenSubmittedAssignmentIds.size;
+  }, [hiddenSubmittedAssignmentIds]);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(countsStorageKey);
@@ -143,7 +136,7 @@ export function useStudyExplorerEffects({
 
   useEffect(() => {
     const urlType = new URLSearchParams(window.location.search).get("type");
-    if (urlType === "radical" || urlType === "kanji" || urlType === "vocabulary") {
+    if (isStudyTypeFilterValue(urlType) && !isAllStudyTypeFilter(urlType)) {
       setTypeFilter(urlType);
       setHasHydratedTypeFilter(true);
       return;
@@ -155,7 +148,7 @@ export function useStudyExplorerEffects({
       return;
     }
 
-    if (raw === "all" || raw === "radical" || raw === "kanji" || raw === "vocabulary") {
+    if (isStudyTypeFilterValue(raw)) {
       setTypeFilter(raw);
       setHasHydratedTypeFilter(true);
       return;
@@ -228,13 +221,12 @@ export function useStudyExplorerEffects({
 
   useEffect(() => {
     const urlSrs = new URLSearchParams(window.location.search).get("srs");
-    const validSrs = ["apprentice", "guru", "master", "enlightened", "locked", "burned"];
-    if (urlSrs && validSrs.includes(urlSrs)) {
-      setSrsFilter(urlSrs as "apprentice" | "guru" | "master" | "enlightened" | "locked" | "burned");
+    if (isStudySrsFilterValue(urlSrs) && !isAllStudySrsFilter(urlSrs)) {
+      setSrsFilter(urlSrs);
       return;
     }
 
-    setSrsFilter("all");
+    setSrsFilter(STUDY_SRS_FILTERS.all);
   }, [setSrsFilter]);
 
   useEffect(() => {
@@ -297,9 +289,9 @@ export function useStudyExplorerEffects({
     const params = new URLSearchParams(window.location.search);
     if (viewedLevel !== null) params.set("level", String(viewedLevel));
     else params.delete("level");
-    if (typeFilter !== "all") params.set("type", typeFilter);
+    if (!isAllStudyTypeFilter(typeFilter)) params.set("type", typeFilter);
     else params.delete("type");
-    if (srsFilter !== "all") params.set("srs", srsFilter);
+    if (!isAllStudySrsFilter(srsFilter)) params.set("srs", srsFilter);
     else params.delete("srs");
     if (srsStageFilter !== null) params.set("srsStage", String(srsStageFilter));
     else params.delete("srsStage");
@@ -313,6 +305,7 @@ export function useStudyExplorerEffects({
 
   useEffect(() => {
     if (!dataCounts) return;
+    if (hiddenSubmittedCountRef.current > 0) return;
     setPersistedCounts(dataCounts);
     window.localStorage.setItem(countsStorageKey, JSON.stringify(dataCounts));
   }, [countsStorageKey, dataCounts, setPersistedCounts]);
@@ -449,8 +442,8 @@ export function useStudyExplorerEffects({
 
   const clearAllFilters = useCallback(() => {
     setViewedLevel(null);
-    setTypeFilter("all");
-    setSrsFilter("all");
+    setTypeFilter(STUDY_TYPE_FILTERS.all);
+    setSrsFilter(STUDY_SRS_FILTERS.all);
     setSrsStageFilter(null);
     setShowLocked(true);
     setRecentOnly(false);
@@ -474,7 +467,7 @@ export function useStudyExplorerEffects({
     const query = params.toString();
     const next = `${window.location.pathname}${query ? `?${query}` : ""}#explorer`;
     window.history.pushState(null, "", next);
-    window.dispatchEvent(new CustomEvent("wr:explorer-search-clear", { detail: { scope: "all" } }));
+    window.dispatchEvent(new CustomEvent("wr:explorer-search-clear", { detail: { scope: STUDY_TYPE_FILTERS.all } }));
   }, [
     setRecentOnly,
     setSearchQuery,

@@ -68,6 +68,13 @@ Always run `pnpm quality:check` after non-trivial edits in `src/`. If lint issue
 - **Admin endpoints**: must verify `x-admin-key` via `src/lib/admin.ts`.
 - **Async UI**: distinguish loading from empty — see DRY learning #2 in
   `docs/DRY_LEARNINGS.md`.
+- **Component constants**: within a component group/folder, use one shared
+  constants file (for example `StudyExplorer.constants.ts`) rather than one
+  constants file per component file.
+- **Domain literals**: avoid inline runtime string comparisons for domain values
+  (for example queue type, subject type, status, review outcomes). Put domain
+  constants + predicate helpers in `lib/` and consume them from components.
+  Keep inline string unions only for TypeScript type declarations.
 
 ## Don't touch
 

@@ -5,12 +5,23 @@ import useSWR from "swr";
 
 import StudyExplorerModal from "./StudyExplorerModal";
 import StudyExplorerPanel from "./StudyExplorerPanel";
+import {
+  isAllStudySrsFilter,
+  isAllStudyTypeFilter,
+  STUDY_EXPLORER_EMPTY_TYPE_COUNTS_BY_LEVEL,
+  STUDY_EXPLORER_LESSON_API_PAGE_SIZE,
+  STUDY_EXPLORER_REVIEW_API_PAGE_SIZE,
+  STUDY_QUEUE_TYPES,
+  STUDY_SRS_FILTERS,
+  STUDY_TYPE_FILTERS,
+} from "./StudyExplorer.constants";
 import type {
   QueueResponse,
   ReviewOutcome,
   StudyCounts,
   StudyExplorerProps,
   StudyQueueItem,
+  StudyViewerMode,
   ReviewSrsTransition,
   StudySrsFilter,
   StudySrsStageFilter,
@@ -21,15 +32,18 @@ import type {
 import { fetchStudyQueue, readStoredQueue } from "../lib/studyExplorerUtils";
 import { normalizeSrsStageFilter } from "../lib/studyExplorerSrs";
 import { resolveEffectiveViewedLevel } from "../lib/studyExplorerLevelBounds";
+import { buildStudyExplorerStorageKeys, deriveInitialQueueState } from "../lib/studyExplorerState";
 import { useStudyReviewSubmission } from "../lib/useStudyReviewSubmission";
 import { useStudyExplorerEffects } from "../lib/useStudyExplorerEffects";
 import { useStudyExplorerDerivedData } from "../lib/useStudyExplorerDerivedData";
 import { useStudyQueuePagination } from "../lib/useStudyQueuePagination";
 import { useStudyQueueInfiniteLoad } from "../lib/useStudyQueueInfiniteLoad";
-
-const REVIEW_API_PAGE_SIZE = 120;
-const LESSON_API_PAGE_SIZE = 200;
-const EMPTY_TYPE_COUNTS_BY_LEVEL: Record<number, { all: number; radical: number; kanji: number; vocabulary: number }> = {};
+import {
+  useStudyCloseOnExplorerPageChange,
+  useStudyModalSessionSync,
+  useStudyToggleEnglishHotkey,
+  useStudyViewerModeSync,
+} from "../lib/useStudyExplorerUiEffects";
 
 export default function StudyExplorer({
   accountId,
@@ -42,29 +56,27 @@ export default function StudyExplorer({
   studyMode,
   queueMode,
 }: StudyExplorerProps) {
-  const countsStorageKey = `wr:study-queue-counts:${accountId}`;
-  const selectedSubjectStorageKey = `wr:study-selected-subject:${accountId}:${queueMode}`;
-  const typeFilterStorageKey = `wr:study-type-filter:${accountId}:${queueMode}`;
-  const viewedLevelStorageKey = `wr:study-viewed-level:${accountId}:${queueMode}`;
-  const srsStageFilterStorageKey = `wr:study-srs-stage-filter:${accountId}:${queueMode}`;
-  const recentOnlyStorageKey = `wr:study-recent-only:${accountId}:${queueMode}`;
-  const showLockedStorageKey = `wr:study-show-locked:${accountId}:${queueMode}`;
+  const storageKeys = useMemo(() => buildStudyExplorerStorageKeys(accountId, queueMode), [accountId, queueMode]);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const lastHandledStudyQueryRef = useRef("");
 
   const [cachedQueueData, setCachedQueueData] = useState<QueueResponse | undefined>(() =>
     readStoredQueue(accountId, queueMode),
   );
-  const [persistedCounts, setPersistedCounts] = useState<StudyCounts | null>(null);
-  const [loadedItems, setLoadedItems] = useState<StudyQueueItem[]>(() => cachedQueueData?.items ?? []);
-  const [totalItems, setTotalItems] = useState<number>(() => cachedQueueData?.pagination?.total ?? cachedQueueData?.items.length ?? 0);
+  const [persistedCounts, setPersistedCounts] = useState<StudyCounts | null>(() => deriveInitialQueueState(cachedQueueData).persistedCounts);
+  const [loadedItems, setLoadedItems] = useState<StudyQueueItem[]>(() => deriveInitialQueueState(cachedQueueData).loadedItems);
+  const [totalItems, setTotalItems] = useState<number>(() => deriveInitialQueueState(cachedQueueData).totalItems);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
 
   const [viewedLevel, setViewedLevel] = useState<number | null>(initialFilters?.viewedLevel ?? null);
   const [hasHydratedViewedLevel, setHasHydratedViewedLevel] = useState(false);
-  const [typeFilter, setTypeFilter] = useState<StudyTypeFilter>(initialFilters?.typeFilter ?? "all");
-  const [srsFilter, setSrsFilter] = useState<StudySrsFilter>(initialFilters?.srsFilter ?? "all");
+  const [typeFilter, setTypeFilter] = useState<StudyTypeFilter>(
+    initialFilters?.typeFilter ?? STUDY_TYPE_FILTERS.all,
+  );
+  const [srsFilter, setSrsFilter] = useState<StudySrsFilter>(
+    initialFilters?.srsFilter ?? STUDY_SRS_FILTERS.all,
+  );
   const [srsStageFilter, setSrsStageFilter] = useState<StudySrsStageFilter | null>(initialFilters?.srsStageFilter ?? null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
@@ -80,22 +92,28 @@ export default function StudyExplorer({
   const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? true);
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [forcedViewerMode, setForcedViewerMode] = useState<"detail" | "flash" | null>(initialViewerMode);
+  const [forcedViewerMode, setForcedViewerMode] = useState<StudyViewerMode | null>(initialViewerMode);
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
   const isModalOpen = selectedId !== null;
-  const effectiveSrsFilter: StudySrsFilter = queueMode === "lesson" ? "all" : srsFilter;
-  const effectiveRecentOnly = queueMode === "lesson" ? false : recentOnly;
-  const effectiveShowLocked = queueMode === "lesson" ? true : showLocked;
-  const effectiveSrsStageFilter: StudySrsStageFilter | null = queueMode === "lesson" ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
-  const initialPageSize = queueMode === "lesson" ? LESSON_API_PAGE_SIZE : REVIEW_API_PAGE_SIZE;
+  const effectiveSrsFilter: StudySrsFilter =
+    queueMode === STUDY_QUEUE_TYPES.lesson ? STUDY_SRS_FILTERS.all : srsFilter;
+  const effectiveRecentOnly = queueMode === STUDY_QUEUE_TYPES.lesson ? false : recentOnly;
+  const effectiveShowLocked = queueMode === STUDY_QUEUE_TYPES.lesson ? true : showLocked;
+  const effectiveSrsStageFilter: StudySrsStageFilter | null =
+    queueMode === STUDY_QUEUE_TYPES.lesson ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
+  const initialPageSize =
+    queueMode === STUDY_QUEUE_TYPES.lesson
+      ? STUDY_EXPLORER_LESSON_API_PAGE_SIZE
+      : STUDY_EXPLORER_REVIEW_API_PAGE_SIZE;
 
   useLayoutEffect(() => {
     const cached = readStoredQueue(accountId, queueMode);
+    const initialQueueState = deriveInitialQueueState(cached);
     queueMicrotask(() => {
       setCachedQueueData(cached);
-      setLoadedItems(cached?.items ?? []);
-      setTotalItems(cached?.pagination?.total ?? cached?.items.length ?? 0);
-      setPersistedCounts(cached?.counts ?? null);
+      setLoadedItems(initialQueueState.loadedItems);
+      setTotalItems(initialQueueState.totalItems);
+      setPersistedCounts(initialQueueState.persistedCounts);
       setLoadMoreError(null);
     });
   }, [accountId, queueMode]);
@@ -124,9 +142,10 @@ export default function StudyExplorer({
     [cachedQueueData?.levelCounts, data?.levelCounts, loadedItems, maxLevel, queueMode, viewedLevel],
   );
 
-  const counts = data?.counts ?? persistedCounts;
+  const counts = persistedCounts ?? data?.counts ?? null;
   const hasMorePages = loadedItems.length < totalItems;
-  const typeCountsByLevelForEffects = data?.typeCountsByLevel ?? cachedQueueData?.typeCountsByLevel ?? EMPTY_TYPE_COUNTS_BY_LEVEL;
+  const typeCountsByLevelForEffects =
+    data?.typeCountsByLevel ?? cachedQueueData?.typeCountsByLevel ?? STUDY_EXPLORER_EMPTY_TYPE_COUNTS_BY_LEVEL;
 
   useEffect(() => {
     if (!counts || typeof window === "undefined") {
@@ -134,7 +153,7 @@ export default function StudyExplorer({
     }
 
     try {
-      window.localStorage.setItem(countsStorageKey, JSON.stringify(counts));
+      window.localStorage.setItem(storageKeys.counts, JSON.stringify(counts));
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
@@ -148,75 +167,11 @@ export default function StudyExplorer({
         },
       }),
     );
-  }, [accountId, counts, countsStorageKey]);
+  }, [accountId, counts, storageKeys]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) {
-        return;
-      }
-
-      const target = event.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.tagName === "SELECT" ||
-          target.isContentEditable)
-      ) {
-        return;
-      }
-
-      if (event.key.toLowerCase() !== "e" || !canToggleEnglish) {
-        return;
-      }
-
-      event.preventDefault();
-      onToggleShowEnglish();
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [canToggleEnglish, onToggleShowEnglish]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const onExplorerPageChange = () => {
-      setSelectedId(null);
-    };
-
-    window.addEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
-    return () => {
-      window.removeEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const syncFromUrl = () => {
-      const viewer = new URLSearchParams(window.location.search).get("viewer");
-      setForcedViewerMode(viewer === "detail" || viewer === "flash" ? viewer : null);
-    };
-
-    syncFromUrl();
-    const onPopState = () => syncFromUrl();
-    window.addEventListener("popstate", onPopState);
-    return () => {
-      window.removeEventListener("popstate", onPopState);
-    };
-  }, []);
+  useStudyToggleEnglishHotkey(canToggleEnglish, onToggleShowEnglish);
+  useStudyCloseOnExplorerPageChange(setSelectedId);
+  useStudyViewerModeSync(setForcedViewerMode);
 
   const {
     levelOptions,
@@ -257,50 +212,23 @@ export default function StudyExplorer({
     revealedAssignmentIds,
   });
 
-  useEffect(() => {
-    if (selectedId === null) {
-      queueMicrotask(() => {
-        setModalSessionOrderByAssignmentId(null);
-        setModalSessionItemByAssignmentId({});
-      });
-      return;
-    }
-
-    queueMicrotask(() => {
-      setModalSessionOrderByAssignmentId((prev) => {
-        if (prev && prev.length > 0) {
-          return prev;
-        }
-        if (filteredItems.length === 0) {
-          return prev;
-        }
-        return filteredItems.map((item) => item.assignmentId);
-      });
-
-      setModalSessionItemByAssignmentId((prev) => {
-        if (filteredItems.length === 0) {
-          return prev;
-        }
-
-        const next = { ...prev };
-        for (const item of filteredItems) {
-          next[item.assignmentId] = item;
-        }
-        return next;
-      });
-    });
-  }, [filteredItems, selectedId]);
+  useStudyModalSessionSync({
+    selectedId,
+    filteredItems,
+    setModalSessionOrderByAssignmentId,
+    setModalSessionItemByAssignmentId,
+  });
 
   const { clearAllFilters } = useStudyExplorerEffects({
     accountId,
     queueMode,
-    countsStorageKey,
-    selectedSubjectStorageKey,
-    typeFilterStorageKey,
-    viewedLevelStorageKey,
-    srsStageFilterStorageKey,
-    recentOnlyStorageKey,
-    showLockedStorageKey,
+    countsStorageKey: storageKeys.counts,
+    selectedSubjectStorageKey: storageKeys.selectedSubject,
+    typeFilterStorageKey: storageKeys.typeFilter,
+    viewedLevelStorageKey: storageKeys.viewedLevel,
+    srsStageFilterStorageKey: storageKeys.srsStageFilter,
+    recentOnlyStorageKey: storageKeys.recentOnly,
+    showLockedStorageKey: storageKeys.showLocked,
     viewedLevel,
     typeFilter,
     srsFilter,
@@ -351,18 +279,18 @@ export default function StudyExplorer({
   useEffect(() => {
     try {
       if (selectedId === null) {
-        window.localStorage.removeItem(selectedSubjectStorageKey);
+        window.localStorage.removeItem(storageKeys.selectedSubject);
       } else {
-        window.localStorage.setItem(selectedSubjectStorageKey, String(selectedId));
+        window.localStorage.setItem(storageKeys.selectedSubject, String(selectedId));
       }
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
-  }, [selectedId, selectedSubjectStorageKey]);
+  }, [selectedId, storageKeys]);
   const hasActiveFilterConstraints =
     effectiveViewedLevel !== null ||
-    typeFilter !== "all" ||
-    effectiveSrsFilter !== "all" ||
+    !isAllStudyTypeFilter(typeFilter) ||
+    !isAllStudySrsFilter(effectiveSrsFilter) ||
     effectiveSrsStageFilter !== null ||
     !effectiveShowLocked ||
     effectiveRecentOnly ||
@@ -403,6 +331,7 @@ export default function StudyExplorer({
 
   const { submitReview, submitLessonStart, submitResetToLessons, closeReviewSession } = useStudyReviewSubmission({
     accountId,
+    queueMode,
     modalItems,
     selectedItem,
     hasPendingStudySubmissions,

@@ -1,4 +1,8 @@
 import type { LevelItem } from "../../explorerTypes";
+import {
+  isVocabularySubjectType,
+  LEVEL_SUBJECT_TYPES,
+} from "./levelExplorerDomain";
 
 export type VocabularyKanjiLink = {
   char: string;
@@ -14,7 +18,7 @@ export function buildSubjectById(items: LevelItem[]): Map<number, LevelItem> {
 export function buildKanjiByCharacter(items: LevelItem[]): Map<string, LevelItem> {
   return new Map(
     items
-      .filter((item) => item.subjectType === "kanji")
+      .filter((item) => item.subjectType === LEVEL_SUBJECT_TYPES.kanji)
       .map((item) => [item.characters, item]),
   );
 }
@@ -24,7 +28,7 @@ export function buildVocabularyKanjiLinks(
   subjectById: Map<number, LevelItem>,
   kanjiByCharacter: Map<string, LevelItem>,
 ): VocabularyKanjiLink[] {
-  if (!selectedItem || selectedItem.subjectType !== "vocabulary") {
+  if (!selectedItem || !isVocabularySubjectType(selectedItem.subjectType)) {
     return [];
   }
 

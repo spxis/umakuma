@@ -2,6 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { badgeClass, disabledBadgeClass, formatNumber, srsFilterButtonLabel } from "../lib/levelExplorerDisplay";
 import { useLevelExplorerResetSelection } from "../lib/useLevelExplorerResetSelection";
+import {
+  JLPT_FILTER_ALLOWED,
+  LEVEL_JLPT_FILTERS,
+  LEVEL_REVIEW_TIMING_FILTERS,
+  LEVEL_SRS_FILTERS,
+  REVIEW_TIMING_ALLOWED,
+  SRS_FILTER_ALLOWED,
+} from "../lib/levelExplorerState";
 import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
@@ -235,9 +243,9 @@ export default function LevelExplorerContent({
   const clearAllFilters = useCallback(() => {
     void onSelectAllLevelsAndClearSearch();
     onEnableAllTypes();
-    onSetSrsFilter("all");
-    onSetJlptFilter("all");
-    onSetReviewTimingFilter("all");
+    onSetSrsFilter(LEVEL_SRS_FILTERS.all);
+    onSetJlptFilter(LEVEL_JLPT_FILTERS.all);
+    onSetReviewTimingFilter(LEVEL_REVIEW_TIMING_FILTERS.all);
     onSetRecentOnly(false);
     onSetShowLocked(false);
     onSetSelectedSubjectId(null);
@@ -306,9 +314,9 @@ export default function LevelExplorerContent({
             onClickType={onToggleTypeVisibility}
           />
           <div className="ml-auto flex flex-wrap justify-end gap-2">
-            {(["all", "apprentice", "guru", "master", "enlightened", "burned", "locked"] as const).map((status) => {
+            {SRS_FILTER_ALLOWED.map((status) => {
               const count = counts[status];
-              const disabled = status !== "all" && count === 0;
+              const disabled = status !== LEVEL_SRS_FILTERS.all && count === 0;
 
               return (
                 <button
@@ -362,10 +370,10 @@ export default function LevelExplorerContent({
           {!filtersCollapsed ? (
             <div className="mt-3 space-y-3">
               <div className="flex flex-wrap gap-2">
-                {(["all", "none", "n5", "n4", "n3", "n2", "n1"] as const).map((level) => {
-                  const count = level === "all" ? counts.all : jlptCounts[level];
-                  const disabled = level !== "all" && count === 0;
-                  const isJlptLevel = level !== "all" && level !== "none";
+                {JLPT_FILTER_ALLOWED.map((level) => {
+                  const count = level === LEVEL_JLPT_FILTERS.all ? counts.all : jlptCounts[level];
+                  const disabled = level !== LEVEL_JLPT_FILTERS.all && count === 0;
+                  const isJlptLevel = level !== LEVEL_JLPT_FILTERS.all && level !== LEVEL_JLPT_FILTERS.none;
                   const active = jlptFilter === level;
                   const jlptStyle = active
                     ? "border-teal-500 bg-teal-500 text-white"
@@ -381,21 +389,27 @@ export default function LevelExplorerContent({
                         disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : badgeClass(active)
                       }`}
                     >
-                      {level === "all" ? "JLPT All" : level === "none" ? "No JLPT" : level.toUpperCase()} ({formatNumber(count)})
+                      {level === LEVEL_JLPT_FILTERS.all ? "JLPT All" : level === LEVEL_JLPT_FILTERS.none ? "No JLPT" : level.toUpperCase()} ({formatNumber(count)})
                     </button>
                   );
                 })}
               </div>
               <div className="flex flex-wrap gap-2">
-                {([
-                  ["all", "Review All", counts.all],
-                  ["overdue", "Overdue", reviewTimingCounts.overdue],
-                  ["next1h", "Starts <= 1h", reviewTimingCounts.next1h],
-                  ["next8h", "Starts <= 8h", reviewTimingCounts.next8h],
-                  ["next24h", "Starts <= 24h", reviewTimingCounts.next24h],
-                  ["next72h", "Starts <= 72h", reviewTimingCounts.next72h],
-                ] as const).map(([timing, label, count]) => {
-                  const disabled = timing !== "all" && count === 0;
+                {REVIEW_TIMING_ALLOWED.map((timing) => {
+                  const label =
+                    timing === LEVEL_REVIEW_TIMING_FILTERS.all
+                      ? "Review All"
+                      : timing === LEVEL_REVIEW_TIMING_FILTERS.overdue
+                        ? "Overdue"
+                        : timing === LEVEL_REVIEW_TIMING_FILTERS.next1h
+                          ? "Starts <= 1h"
+                          : timing === LEVEL_REVIEW_TIMING_FILTERS.next8h
+                            ? "Starts <= 8h"
+                            : timing === LEVEL_REVIEW_TIMING_FILTERS.next24h
+                              ? "Starts <= 24h"
+                              : "Starts <= 72h";
+                  const count = timing === LEVEL_REVIEW_TIMING_FILTERS.all ? counts.all : reviewTimingCounts[timing];
+                  const disabled = timing !== LEVEL_REVIEW_TIMING_FILTERS.all && count === 0;
 
                   return (
                     <button
@@ -412,7 +426,7 @@ export default function LevelExplorerContent({
                   );
                 })}
               </div>
-              {reviewTimingFilter === "overdue" && overdueOutsideSelectedLevels > 0 ? (
+              {reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.overdue && overdueOutsideSelectedLevels > 0 ? (
                 <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/55">
                   Showing {formatNumber(reviewTimingCounts.overdue)} overdue in selected levels, with {formatNumber(overdueOutsideSelectedLevels)} more overdue in other levels
                   ({formatNumber(accountPendingReviews)} total pending reviews).

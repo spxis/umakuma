@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { toRomaji } from "wanakana";
 
 import type { LevelItem } from "../../explorerTypes";
+import { isRadicalSubjectType } from "./levelExplorerDomain";
 
 export function stripHtml(input: string | undefined): string {
   if (!input) {
@@ -65,21 +66,21 @@ export function primaryReadingForDisplay(item: LevelItem): string | null {
   if (reading) {
     return reading;
   }
-  if (item.subjectType === "radical") {
+  if (isRadicalSubjectType(item.subjectType)) {
     return null;
   }
   return "-";
 }
 
 export function glyphSubtitleForDisplay(item: LevelItem): string | null {
-  if (item.subjectType === "radical") {
+  if (isRadicalSubjectType(item.subjectType)) {
     return item.meanings[0] ?? null;
   }
   return primaryReadingForDisplay(item);
 }
 
 export function englishSubtitleForDisplay(item: LevelItem): string | null {
-  if (item.subjectType === "radical") {
+  if (isRadicalSubjectType(item.subjectType)) {
     return item.meanings[0] ?? null;
   }
   const reading = primaryReadingForDisplay(item);

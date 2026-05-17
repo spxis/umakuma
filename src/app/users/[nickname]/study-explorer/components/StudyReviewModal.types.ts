@@ -2,6 +2,8 @@ import type {
   ReviewOutcome,
   ReviewSrsTransition,
   StudyQueueItem,
+  StudyReviewSubmitResult,
+  StudyViewerMode,
   SubmitFeedback,
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
@@ -18,7 +20,7 @@ export type StudyReviewModalProps = {
   accountId: string;
   showEnglish: boolean;
   canToggleEnglish: boolean;
-  forcedViewerMode: "detail" | "flash" | null;
+  forcedViewerMode: StudyViewerMode | null;
   studyMode: boolean;
   selectedItem: StudyQueueItem | null;
   selectedIndex: number;
@@ -39,7 +41,7 @@ export type StudyReviewModalProps = {
   onNext: (() => void) | null;
   onRestartFromBeginning: (() => void) | null;
   onReveal: (assignmentId: number) => void;
-  onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
+  onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => void;
   onStartLesson: (assignmentId: number) => void;
   onResetToLessons: (assignmentId: number) => void;
   glyphViewerItems?: StudyQueueItem[];

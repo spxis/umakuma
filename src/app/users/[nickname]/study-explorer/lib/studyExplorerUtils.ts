@@ -4,11 +4,20 @@ import type {
   QueueResponse,
   StoredQueuePayload,
   StudyCounts,
+  StudyQueueMode,
   StudyQueueItem,
   StudySrsFilter,
   StudySrsStageFilter,
   StudyTypeFilter,
 } from "./studyExplorerTypes";
+import {
+  isAllStudySrsFilter,
+  isAllStudyTypeFilter,
+  isKanjiSubjectType,
+  isRadicalSubjectType,
+  STUDY_QUEUE_TYPES,
+  STUDY_SUBJECT_STATUSES,
+} from "./studyExplorerDomain";
 
 export const STUDY_QUEUE_STORAGE_TTL_MS = 90_000;
 export const STUDY_RECENT_WINDOW_MS = 24 * 60 * 60 * 1000;
@@ -68,7 +77,7 @@ export function itemMatchesStudyQuery(item: StudyQueueItem, normalizedQuery: str
   return romaji.includes(normalizedQuery);
 }
 
-export function readStoredQueue(accountId: string, mode: "review" | "lesson"): QueueResponse | undefined {
+export function readStoredQueue(accountId: string, mode: StudyQueueMode): QueueResponse | undefined {
   if (typeof window === "undefined") {
     return undefined;
   }
@@ -98,7 +107,7 @@ export function readStoredQueue(accountId: string, mode: "review" | "lesson"): Q
 
 export function persistQueue(
   accountId: string,
-  queueMode: "review" | "lesson",
+  queueMode: StudyQueueMode,
   items: StudyQueueItem[],
   totalItems: number,
   counts: StudyCounts | null,
@@ -129,8 +138,8 @@ export function persistQueue(
       items,
       counts: counts ?? {
         all: items.length,
-        reviews: items.filter((item) => item.queueType === "review").length,
-        lessons: items.filter((item) => item.queueType === "lesson").length,
+        reviews: items.filter((item) => item.queueType === STUDY_QUEUE_TYPES.review).length,
+        lessons: items.filter((item) => item.queueType === STUDY_QUEUE_TYPES.lesson).length,
       },
       levelCounts,
       typeCounts,
@@ -165,11 +174,11 @@ export function studyItemEnglishTitle(item: StudyQueueItem): string {
     return meaning;
   }
 
-  if (item.subjectType === "kanji") {
+  if (isKanjiSubjectType(item.subjectType)) {
     return "Kanji";
   }
 
-  if (item.subjectType === "radical") {
+  if (isRadicalSubjectType(item.subjectType)) {
     return "Radical";
   }
 
@@ -178,7 +187,7 @@ export function studyItemEnglishTitle(item: StudyQueueItem): string {
 
 export function filterStudyItems(
   items: StudyQueueItem[],
-  queueMode: "review" | "lesson",
+  queueMode: StudyQueueMode,
   viewedLevel: number | null,
   typeFilter: StudyTypeFilter,
   srsFilter: StudySrsFilter,
@@ -205,11 +214,11 @@ export function filterStudyItems(
       return false;
     }
 
-    if (typeFilter !== "all" && item.subjectType !== typeFilter) {
+    if (!isAllStudyTypeFilter(typeFilter) && item.subjectType !== typeFilter) {
       return false;
     }
 
-    if (srsFilter !== "all" && item.status !== srsFilter) {
+    if (!isAllStudySrsFilter(srsFilter) && item.status !== srsFilter) {
       return false;
     }
 
@@ -217,7 +226,7 @@ export function filterStudyItems(
       return false;
     }
 
-    if (!showLocked && item.status === "locked") {
+    if (!showLocked && item.status === STUDY_SUBJECT_STATUSES.locked) {
       return false;
     }
 

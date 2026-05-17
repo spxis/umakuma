@@ -1,11 +1,21 @@
 import { useEffect } from "react";
 
-import type { ReviewOutcome, StudyQueueItem } from "./studyExplorerTypes";
+import type {
+  ReviewOutcome,
+  StudyQueueItem,
+  StudyReviewSubmitResult,
+  StudyViewerMode,
+} from "./studyExplorerTypes";
+import {
+  isReviewQueueItem,
+  STUDY_REVIEW_OUTCOMES,
+  STUDY_VIEWER_MODES,
+} from "./studyExplorerDomain";
 
 type UseStudyReviewModalKeyboardArgs = {
   selectedItem: StudyQueueItem | null;
   studyMode: boolean;
-  viewerMode: "detail" | "flash";
+  viewerMode: StudyViewerMode;
   flashRevealed: boolean;
   currentFlashKey: string;
   canUseFlashCycleNext: boolean;
@@ -16,7 +26,7 @@ type UseStudyReviewModalKeyboardArgs = {
   onGoNextItem: () => void;
   onAdvanceFlashOrNext: () => void;
   onReveal: (assignmentId: number) => void;
-  onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
+  onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => void;
   onSetFlashRevealKey: (value: string) => void;
   hasPrev: boolean;
   hasNext: boolean;
@@ -45,9 +55,11 @@ export function useStudyReviewModalKeyboard({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!selectedItem) return;
 
-      const requiresReveal = studyMode && selectedItem.queueType === "review";
+      const requiresReveal = studyMode && isReviewQueueItem(selectedItem);
       const selectedOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
-      const isOutcomeFinal = selectedOutcome === "correct" || selectedOutcome === "wrong";
+      const isOutcomeFinal =
+        selectedOutcome === STUDY_REVIEW_OUTCOMES.correct ||
+        selectedOutcome === STUDY_REVIEW_OUTCOMES.wrong;
       const key = event.key;
       const lowerKey = key.toLowerCase();
       const isPrevNav =
@@ -55,7 +67,13 @@ export function useStudyReviewModalKeyboard({
       const isNextNav =
         key === "ArrowRight" || key === "ArrowDown" || lowerKey === "d" || lowerKey === "s" || (key === "Enter" && !event.shiftKey);
 
-      if (!studyMode && viewerMode === "flash" && !flashRevealed && key === "Enter" && !event.shiftKey) {
+      if (
+        !studyMode &&
+        viewerMode === STUDY_VIEWER_MODES.flash &&
+        !flashRevealed &&
+        key === "Enter" &&
+        !event.shiftKey
+      ) {
         event.preventDefault();
         onSetFlashRevealKey(currentFlashKey);
         return;
@@ -79,11 +97,11 @@ export function useStudyReviewModalKeyboard({
       if (isNextNav && (hasNext || canUseFlashCycleNext)) return onAdvanceFlashOrNext();
 
       if (key === " ") {
-        if (!studyMode && viewerMode === "flash" && !flashRevealed && !event.shiftKey) {
+        if (!studyMode && viewerMode === STUDY_VIEWER_MODES.flash && !flashRevealed && !event.shiftKey) {
           onSetFlashRevealKey(currentFlashKey);
           return;
         }
-        if (requiresReveal && !isAnswerRevealed && selectedItem.queueType === "review") {
+        if (requiresReveal && !isAnswerRevealed && isReviewQueueItem(selectedItem)) {
           onReveal(selectedItem.assignmentId);
           return;
         }
@@ -91,12 +109,15 @@ export function useStudyReviewModalKeyboard({
         if (hasNext || canUseFlashCycleNext) return onAdvanceFlashOrNext();
       }
 
-      if ((key === "1" || key === "2" || key === "j" || key === "J" || key === "k" || key === "K") && selectedItem.queueType === "review") {
+      if ((key === "1" || key === "2" || key === "j" || key === "J" || key === "k" || key === "K") && isReviewQueueItem(selectedItem)) {
         if (!studyMode || isOutcomeFinal) return;
         const canSubmit = !requiresReveal || isAnswerRevealed;
         if (!canSubmit) return;
         const isWrong = key === "1" || key.toLowerCase() === "j";
-        onSubmit(selectedItem.assignmentId, isWrong ? "wrong" : "correct");
+        onSubmit(
+          selectedItem.assignmentId,
+          isWrong ? STUDY_REVIEW_OUTCOMES.wrong : STUDY_REVIEW_OUTCOMES.correct,
+        );
       }
     };
 

@@ -1,7 +1,24 @@
 import { toRomaji } from "wanakana";
 
 import type { LevelItem, Snapshot, SrsFilter } from "../../explorerTypes";
-import type { JlptFilter, ReviewTimingFilter, TypeFilter, TypeVisibility } from "./levelExplorerState";
+import {
+  LEVEL_JLPT_FILTERS,
+  LEVEL_REVIEW_TIMING_FILTERS,
+  LEVEL_SRS_FILTERS,
+  LEVEL_TYPE_FILTERS,
+  type JlptFilter,
+  type ReviewTimingFilter,
+  type TypeFilter,
+  type TypeVisibility,
+} from "./levelExplorerState";
+import {
+  isBurnedStatus,
+  isKanjiSubjectType,
+  isLockedStatus,
+  isRadicalSubjectType,
+  isVocabularySubjectType,
+  LEVEL_SUBJECT_TYPES,
+} from "./levelExplorerDomain";
 
 export type LevelItemCounts = {
   all: number;
@@ -102,11 +119,11 @@ export function passesReviewTimingFilter(
   reviewTimingFilter: ReviewTimingFilter,
   nowMs = Date.now(),
 ): boolean {
-  if (reviewTimingFilter === "all") {
+  if (reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.all) {
     return true;
   }
 
-  if (!item.availableAt || item.status === "burned") {
+  if (!item.availableAt || isBurnedStatus(item.status)) {
     return false;
   }
 
@@ -151,14 +168,14 @@ export function buildCombinedSnapshot(
   }
 
   const items = snapshots.flatMap((snapshot) => snapshot.items);
-  const kanjiItems = items.filter((item) => item.subjectType === "kanji");
+  const kanjiItems = items.filter((item) => isKanjiSubjectType(item.subjectType));
 
   return {
     level: selected[selected.length - 1],
     kanjiTotal: kanjiItems.length,
     kanjiLearned: kanjiItems.filter((item) => item.srsStage > 0).length,
     kanjiGuruPlus: kanjiItems.filter((item) => item.srsStage >= 5).length,
-    kanjiLocked: kanjiItems.filter((item) => item.status === "locked").length,
+    kanjiLocked: kanjiItems.filter((item) => isLockedStatus(item.status)).length,
     estimatedHoursRemaining: null,
     items,
     syncedAt: snapshots
@@ -183,9 +200,9 @@ export function filterAndSortLevelItems(
   },
 ): LevelItem[] {
   const typeOrder: Record<NonNullable<LevelItem["subjectType"]>, number> = {
-    radical: 0,
-    kanji: 1,
-    vocabulary: 2,
+    [LEVEL_SUBJECT_TYPES.radical]: 0,
+    [LEVEL_SUBJECT_TYPES.kanji]: 1,
+    [LEVEL_SUBJECT_TYPES.vocabulary]: 2,
   };
 
   const nowMs = Date.now();
@@ -199,23 +216,23 @@ export function filterAndSortLevelItems(
       const searchPass = options.searchMatchedSubjectIds
         ? options.searchMatchedSubjectIds.has(item.subjectId)
         : true;
-      const lockedVisibilityPass = options.showLocked || item.status !== "locked";
-      const srsPass = options.srsFilter === "all" ? true : item.status === options.srsFilter;
-      const typePass = options.typeFilter === "all" ? true : item.subjectType === options.typeFilter;
+      const lockedVisibilityPass = options.showLocked || !isLockedStatus(item.status);
+      const srsPass = options.srsFilter === LEVEL_SRS_FILTERS.all ? true : item.status === options.srsFilter;
+      const typePass = options.typeFilter === LEVEL_TYPE_FILTERS.all ? true : item.subjectType === options.typeFilter;
       const jlptPass =
-        options.jlptFilter === "all"
+        options.jlptFilter === LEVEL_JLPT_FILTERS.all
           ? true
-          : options.jlptFilter === "none"
+          : options.jlptFilter === LEVEL_JLPT_FILTERS.none
             ? !item.jlptLevel
-            : item.subjectType === "kanji" && item.jlptLevel === Number(options.jlptFilter.slice(1));
+            : isKanjiSubjectType(item.subjectType) && item.jlptLevel === Number(options.jlptFilter.slice(1));
       const burnedPass = true;
       const reviewTimingPass = passesReviewTimingFilter(item, options.reviewTimingFilter, nowMs);
       const visibilityPass =
-        item.subjectType === "radical"
+        isRadicalSubjectType(item.subjectType)
           ? options.visibleTypes.radical
-          : item.subjectType === "kanji"
+          : isKanjiSubjectType(item.subjectType)
             ? options.visibleTypes.kanji
-            : item.subjectType === "vocabulary"
+            : isVocabularySubjectType(item.subjectType)
               ? options.visibleTypes.vocabulary
               : true;
 
@@ -298,7 +315,7 @@ export function computeReviewTimingCounts(items: LevelItem[], nowMs = Date.now()
   };
 
   for (const item of items) {
-    if (!item.availableAt || item.status === "burned") {
+    if (!item.availableAt || isBurnedStatus(item.status)) {
       continue;
     }
 

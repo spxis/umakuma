@@ -3,7 +3,14 @@ import type { Dispatch, SetStateAction } from "react";
 import type { Snapshot, SrsFilter } from "../../explorerTypes";
 import { buildLevelExplorerUrl } from "./levelExplorerState";
 import { normalizeSnapshot } from "./levelExplorerSnapshotUtils";
-import { persistFlag, persistTypeVisibility, type JlptFilter, type ReviewTimingFilter, type TypeFilter } from "./levelExplorerState";
+import {
+  LEVEL_TYPE_FILTERS,
+  persistFlag,
+  persistTypeVisibility,
+  type JlptFilter,
+  type ReviewTimingFilter,
+  type TypeFilter,
+} from "./levelExplorerState";
 
 type VisibleTypes = { radical: boolean; kanji: boolean; vocabulary: boolean };
 
@@ -143,7 +150,7 @@ export function buildLevelExplorerControllerHandlers({
     markHistoryPush();
     setTypeFilter(nextType);
 
-    if (nextType !== "all" && !visibleTypes[nextType]) {
+    if (nextType !== LEVEL_TYPE_FILTERS.all && !visibleTypes[nextType]) {
       setVisibleTypesAndPersist({ ...visibleTypes, [nextType]: true });
     }
   };
@@ -182,19 +189,19 @@ export function buildLevelExplorerControllerHandlers({
   const toggleTypeVisibility = (type: "radical" | "kanji" | "vocabulary") => {
     markHistoryPush();
     setVisibleTypesAndPersist({
-      radical: type === "radical",
-      kanji: type === "kanji",
-      vocabulary: type === "vocabulary",
+      radical: type === LEVEL_TYPE_FILTERS.radical,
+      kanji: type === LEVEL_TYPE_FILTERS.kanji,
+      vocabulary: type === LEVEL_TYPE_FILTERS.vocabulary,
     });
     setSelectedSubjectId(null);
-    setTypeFilter("all");
+    setTypeFilter(LEVEL_TYPE_FILTERS.all);
   };
 
   const enableAllTypes = () => {
     markHistoryPush();
     setVisibleTypesAndPersist({ radical: true, kanji: true, vocabulary: true });
     setSelectedSubjectId(null);
-    setTypeFilter("all");
+    setTypeFilter(LEVEL_TYPE_FILTERS.all);
   };
 
   return {

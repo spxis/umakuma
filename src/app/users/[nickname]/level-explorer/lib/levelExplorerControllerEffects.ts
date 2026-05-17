@@ -2,6 +2,10 @@ import { useEffect, useRef, type Dispatch, type MutableRefObject, type SetStateA
 
 import type { LevelItem, Snapshot, SrsFilter } from "../../explorerTypes";
 import {
+  LEVEL_JLPT_FILTERS,
+  LEVEL_REVIEW_TIMING_FILTERS,
+  LEVEL_SRS_FILTERS,
+  LEVEL_TYPE_FILTERS,
   JLPT_FILTER_ALLOWED,
   REVIEW_TIMING_ALLOWED,
   SRS_FILTER_ALLOWED,
@@ -200,7 +204,7 @@ export function useLevelExplorerStorageHydration({
       }
 
       if (!new URLSearchParams(window.location.search).has("type")) {
-        setTypeFilter("all");
+        setTypeFilter(LEVEL_TYPE_FILTERS.all);
       }
 
       if (!new URLSearchParams(window.location.search).has("jlpt")) {
@@ -352,23 +356,23 @@ export function useLevelExplorerSelectionReconcile({
       setVisibleTypesAndPersist({ ...visibleTypes, [selectedItemFromAll.subjectType]: true });
     }
 
-    if (srsFilter !== "all" && selectedItemFromAll.status !== srsFilter) {
-      setSrsFilter("all");
+    if (srsFilter !== LEVEL_SRS_FILTERS.all && selectedItemFromAll.status !== srsFilter) {
+      setSrsFilter(LEVEL_SRS_FILTERS.all);
     }
 
-    if (jlptFilter !== "all") {
+    if (jlptFilter !== LEVEL_JLPT_FILTERS.all) {
       const matchesJlpt =
-        jlptFilter === "none"
+        jlptFilter === LEVEL_JLPT_FILTERS.none
           ? !selectedItemFromAll.jlptLevel
-          : selectedItemFromAll.subjectType === "kanji" &&
+          : selectedItemFromAll.subjectType === LEVEL_TYPE_FILTERS.kanji &&
             selectedItemFromAll.jlptLevel === Number(jlptFilter.slice(1));
       if (!matchesJlpt) {
-        setJlptFilter("all");
+        setJlptFilter(LEVEL_JLPT_FILTERS.all);
       }
     }
 
     if (!passesReviewTimingFilter(selectedItemFromAll, reviewTimingFilter)) {
-      setReviewTimingFilter("all");
+      setReviewTimingFilter(LEVEL_REVIEW_TIMING_FILTERS.all);
     }
   }, [
     hasHydratedUrlStateRef,
@@ -441,8 +445,8 @@ export function useLevelExplorerSearchEvents({
 
     const onClear = (event: Event) => {
       const custom = event as CustomEvent<{ scope?: "level" | "jlpt" | "all" }>;
-      const scope = custom.detail?.scope ?? "all";
-      if (scope === "all" || scope === "level") {
+      const scope = custom.detail?.scope ?? LEVEL_TYPE_FILTERS.all;
+      if (scope === LEVEL_TYPE_FILTERS.all || scope === "level") {
         setSearchMatchedSubjectIds(null);
         setSearchAvailableLevels(null);
       }

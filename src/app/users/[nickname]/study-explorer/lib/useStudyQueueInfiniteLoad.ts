@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
-import type { StudyQueueItem, StudyTypeFilter } from "./studyExplorerTypes";
+import type { StudyQueueItem, StudyQueueMode, StudyTypeFilter } from "./studyExplorerTypes";
+import { isAllStudyTypeFilter, STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 
 type Args = {
   sentinelRef: React.RefObject<HTMLDivElement | null>;
@@ -8,7 +9,7 @@ type Args = {
   hasMorePages: boolean;
   isLoadingMore: boolean;
   loadMorePage: () => Promise<void>;
-  queueMode: "review" | "lesson";
+  queueMode: StudyQueueMode;
   viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
   lessonLevelCounts: Record<number, number>;
@@ -86,7 +87,7 @@ export function useStudyQueueInfiniteLoad({
   }, [hasMorePages, isLoadingMore, loadMorePage, selectedItem, sentinelRef]);
 
   useEffect(() => {
-    if (queueMode !== "lesson") {
+    if (queueMode !== STUDY_QUEUE_TYPES.lesson) {
       return;
     }
     if (selectedItem || isLoadingMore || !hasMorePages) {
@@ -97,13 +98,13 @@ export function useStudyQueueInfiniteLoad({
   }, [hasMorePages, isLoadingMore, loadMorePage, queueMode, selectedItem]);
 
   useEffect(() => {
-    if (queueMode !== "lesson") {
+    if (queueMode !== STUDY_QUEUE_TYPES.lesson) {
       return;
     }
     if (selectedItem || isLoadingMore || !hasMorePages) {
       return;
     }
-    if (viewedLevel === null || typeFilter !== "all") {
+    if (viewedLevel === null || !isAllStudyTypeFilter(typeFilter)) {
       return;
     }
 

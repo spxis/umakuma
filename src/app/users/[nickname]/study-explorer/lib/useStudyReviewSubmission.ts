@@ -3,11 +3,13 @@ import { useCallback, useRef } from "react";
 import type {
   ReviewOutcome,
   StudyCounts,
+  StudyQueueMode,
   StudyQueueItem,
   ReviewSrsTransition,
   SubmitFeedback,
   SubmitInFlight,
 } from "./studyExplorerTypes";
+import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 import { studyItemEnglishTitle } from "./studyExplorerUtils";
 
 const POST_SUBMIT_DELAY_MS = 250;
@@ -15,6 +17,7 @@ const REVIEW_SUBMIT_TIMEOUT_MS = 10000;
 
 type Args = {
   accountId: string;
+  queueMode: StudyQueueMode;
   modalItems: StudyQueueItem[];
   selectedItem: StudyQueueItem | null;
   hasPendingStudySubmissions: boolean;
@@ -37,6 +40,7 @@ type Args = {
 
 export function useStudyReviewSubmission({
   accountId,
+  queueMode,
   modalItems,
   selectedItem,
   hasPendingStudySubmissions,
@@ -163,11 +167,22 @@ export function useStudyReviewSubmission({
         });
         onSetLoadedItems((prev) => prev.filter((item) => item.assignmentId !== assignmentId));
         onSetTotalItems((prev) => Math.max(0, prev - 1));
-        onSetPersistedCounts((prev) =>
-          prev
-            ? { ...prev, reviews: Math.max(0, prev.reviews - 1), all: Math.max(0, prev.all - 1) }
-            : prev,
-        );
+        onSetPersistedCounts((prev) => {
+          if (!prev) {
+            return prev;
+          }
+
+          const nextReviews =
+            queueMode === STUDY_QUEUE_TYPES.review ? Math.max(0, prev.reviews - 1) : prev.reviews;
+          const nextLessons =
+            queueMode === STUDY_QUEUE_TYPES.lesson ? Math.max(0, prev.lessons - 1) : prev.lessons;
+
+          return {
+            all: Math.max(0, nextReviews + nextLessons),
+            reviews: nextReviews,
+            lessons: nextLessons,
+          };
+        });
         onSetHasPendingStudySubmissions(true);
         onSetSelectedId(nextFocusedItem?.subjectId ?? null);
         onSetRevealedAssignmentIds((prev) => {
@@ -208,6 +223,7 @@ export function useStudyReviewSubmission({
     },
     [
       accountId,
+      queueMode,
       getSubmissionContext,
       onSetHasPendingStudySubmissions,
       onSetHiddenSubmittedAssignmentIds,

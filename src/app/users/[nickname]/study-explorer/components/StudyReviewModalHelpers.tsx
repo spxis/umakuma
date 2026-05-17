@@ -2,13 +2,18 @@ import type { JSX } from "react";
 import { toRomaji } from "wanakana";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
+import {
+  STUDY_REVIEW_HELPERS_REGEX,
+  STUDY_REVIEW_HELPERS_TEXT,
+  STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS,
+} from "./StudyExplorer.constants";
 
 import { formatRelativeFromNow } from "../../level-explorer/lib/levelExplorerDisplay";
 
 export function relatedTileLabelClass(label: string): string {
   const length = Array.from(label).length;
-  if (length <= 2) return "text-4xl";
-  if (length <= 4) return "text-3xl";
+  if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.large) return "text-4xl";
+  if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.medium) return "text-3xl";
   return "text-xl";
 }
 
@@ -19,26 +24,26 @@ export function hasRenderableRelatedItems(items: RelatedReference[] | undefined)
 
   return items.some((item) =>
     item.label
-      .split(/[、,]/)
+      .split(STUDY_REVIEW_HELPERS_REGEX.relatedSplit)
       .map((part) => part.trim())
-      .some((part) => Boolean(part) && part !== "-"),
+      .some((part) => Boolean(part) && part !== STUDY_REVIEW_HELPERS_TEXT.empty),
   );
 }
 
 export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element {
   if (!items || items.length === 0) {
-    return <p className="mt-1 text-sm font-semibold text-foreground/70">-</p>;
+    return <p className="mt-1 text-sm font-semibold text-foreground/70">{STUDY_REVIEW_HELPERS_TEXT.empty}</p>;
   }
 
   const expanded = items.flatMap((item) => {
     const parts = item.label
-      .split(/[、,]/)
+      .split(STUDY_REVIEW_HELPERS_REGEX.relatedSplit)
       .map((part) => part.trim())
-      .filter((part) => Boolean(part) && part !== "-");
+      .filter((part) => Boolean(part) && part !== STUDY_REVIEW_HELPERS_TEXT.empty);
 
     if (parts.length <= 1) {
       const normalizedLabel = item.label.trim();
-      if (!normalizedLabel || normalizedLabel === "-") {
+      if (!normalizedLabel || normalizedLabel === STUDY_REVIEW_HELPERS_TEXT.empty) {
         return [];
       }
 
@@ -53,7 +58,7 @@ export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element
   });
 
   if (expanded.length === 0) {
-    return <p className="mt-1 text-sm font-semibold text-foreground/70">-</p>;
+    return <p className="mt-1 text-sm font-semibold text-foreground/70">{STUDY_REVIEW_HELPERS_TEXT.empty}</p>;
   }
 
   return (
@@ -80,18 +85,18 @@ export function relatedTilesClickable(
   onSelect: (item: { subjectId: number; label: string; reading?: string | null }) => void,
 ): JSX.Element {
   if (!items || items.length === 0) {
-    return <p className="mt-1 text-sm font-semibold text-foreground/70">-</p>;
+    return <p className="mt-1 text-sm font-semibold text-foreground/70">{STUDY_REVIEW_HELPERS_TEXT.empty}</p>;
   }
 
   const expanded = items.flatMap((item) => {
     const parts = item.label
-      .split(/[、,]/)
+      .split(STUDY_REVIEW_HELPERS_REGEX.relatedSplit)
       .map((part) => part.trim())
-      .filter((part) => Boolean(part) && part !== "-");
+      .filter((part) => Boolean(part) && part !== STUDY_REVIEW_HELPERS_TEXT.empty);
 
     if (parts.length <= 1) {
       const normalizedLabel = item.label.trim();
-      if (!normalizedLabel || normalizedLabel === "-") {
+      if (!normalizedLabel || normalizedLabel === STUDY_REVIEW_HELPERS_TEXT.empty) {
         return [];
       }
 
@@ -107,7 +112,7 @@ export function relatedTilesClickable(
   });
 
   if (expanded.length === 0) {
-    return <p className="mt-1 text-sm font-semibold text-foreground/70">-</p>;
+    return <p className="mt-1 text-sm font-semibold text-foreground/70">{STUDY_REVIEW_HELPERS_TEXT.empty}</p>;
   }
 
   return (
@@ -151,7 +156,7 @@ export function readingCard(label: string, value: JSX.Element): JSX.Element {
 
 function splitReadingSegments(reading: string): string[] {
   const segments = reading
-    .split(/[.・]/)
+    .split(STUDY_REVIEW_HELPERS_REGEX.readingSplit)
     .map((segment) => segment.trim())
     .filter((segment) => segment.length > 0);
 
@@ -186,11 +191,11 @@ function renderSegmentedReading(reading: string): JSX.Element {
 
 function pronunciationForReading(reading: string): string | null {
   const trimmed = reading.trim();
-  if (!trimmed || trimmed === "-") {
+  if (!trimmed || trimmed === STUDY_REVIEW_HELPERS_TEXT.empty) {
     return null;
   }
 
-  const normalized = trimmed.replace(/[.・]/g, "");
+  const normalized = trimmed.replace(STUDY_REVIEW_HELPERS_REGEX.readingSplit, "");
   const romaji = toRomaji(normalized, { upcaseKatakana: false }).trim();
   if (!romaji || romaji === normalized) {
     return null;
@@ -214,7 +219,7 @@ export function readingWithPronunciation(reading: string, showPronunciation: boo
 }
 
 export function readingsWithPronunciationList(value: string, showPronunciation: boolean): JSX.Element {
-  if (!value || value === "-") {
+  if (!value || value === STUDY_REVIEW_HELPERS_TEXT.empty) {
     return <>{value}</>;
   }
 
@@ -249,12 +254,12 @@ export function readingDualScriptCard(label: string, hiraganaValue: JSX.Element,
 
 function formatTimestamp(value: string | null | undefined): string {
   if (!value) {
-    return "-";
+    return STUDY_REVIEW_HELPERS_TEXT.empty;
   }
 
   const parsed = new Date(value);
   if (Number.isNaN(parsed.getTime())) {
-    return "-";
+    return STUDY_REVIEW_HELPERS_TEXT.empty;
   }
 
   return parsed.toLocaleString();
@@ -262,8 +267,8 @@ function formatTimestamp(value: string | null | undefined): string {
 
 export function formatTimestampWithRelative(value: string | null | undefined): string {
   const absolute = formatTimestamp(value);
-  if (absolute === "-") {
-    return "-";
+  if (absolute === STUDY_REVIEW_HELPERS_TEXT.empty) {
+    return STUDY_REVIEW_HELPERS_TEXT.empty;
   }
 
   const relative = formatRelativeFromNow(value);

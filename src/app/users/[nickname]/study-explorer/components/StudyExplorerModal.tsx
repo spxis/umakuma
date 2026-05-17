@@ -1,8 +1,14 @@
 import StudyReviewModal from "./StudyReviewModal";
+import {
+  STUDY_REVIEW_OUTCOMES,
+  STUDY_REVIEW_TERMINAL_OUTCOMES,
+} from "./StudyExplorer.constants";
 import type {
   ReviewOutcome,
   ReviewSrsTransition,
   StudyQueueItem,
+  StudyReviewSubmitResult,
+  StudyViewerMode,
   SubmitFeedback,
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
@@ -11,7 +17,7 @@ type Props = {
   accountId: string;
   showEnglish: boolean;
   canToggleEnglish: boolean;
-  forcedViewerMode: "detail" | "flash" | null;
+  forcedViewerMode: StudyViewerMode | null;
   isUnauthorized: boolean;
   studyMode: boolean;
   selectedItem: StudyQueueItem | null;
@@ -32,7 +38,7 @@ type Props = {
   onSetRevealedAssignmentIds: React.Dispatch<React.SetStateAction<Set<number>>>;
   onClose: () => void;
   onToggleShowEnglish: () => void;
-  onSubmit: (assignmentId: number, result: "correct" | "wrong") => Promise<void>;
+  onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => Promise<void>;
   onStartLesson: (assignmentId: number) => Promise<void>;
   onResetToLessons: (assignmentId: number) => Promise<void>;
 };
@@ -92,11 +98,11 @@ export default function StudyExplorerModal({
       onMarkSkipped={(assignmentId: number) => {
         onSetReviewOutcomeByAssignmentId((prev) => {
           const current = prev[assignmentId];
-          if (current === "correct" || current === "wrong" || current === "skipped") {
+          if (current && STUDY_REVIEW_TERMINAL_OUTCOMES.has(current)) {
             return prev;
           }
 
-          return { ...prev, [assignmentId]: "skipped" };
+          return { ...prev, [assignmentId]: STUDY_REVIEW_OUTCOMES.skipped };
         });
       }}
       onClose={onClose}

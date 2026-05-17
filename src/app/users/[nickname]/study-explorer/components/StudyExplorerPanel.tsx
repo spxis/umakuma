@@ -5,6 +5,18 @@ import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel"
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import {
+  getSrsStageOptions,
+  isAllStudyTypeFilter,
+  isLessonLockedQueueItem,
+  isReviewQueueItem,
+  STUDY_PANEL_SRS_STATUSES,
+  STUDY_PANEL_TEXT,
+  STUDY_QUEUE_TYPES,
+  STUDY_SRS_FILTERS,
+  STUDY_SUBJECT_TYPES,
+  STUDY_TYPE_FILTERS,
+} from "./StudyExplorer.constants";
+import {
   formatNextReviewBadge,
   formatNumber,
   glyphSubtitleForDisplay,
@@ -19,7 +31,7 @@ import {
   typeCardClass,
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
-import type { StudyQueueItem, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "../lib/studyExplorerTypes";
+import type { StudyQueueItem, StudyQueueMode, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "../lib/studyExplorerTypes";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 
@@ -33,7 +45,7 @@ type Props = {
   typeFilter: StudyTypeFilter;
   srsFilter: StudySrsFilter;
   srsStageFilter: StudySrsStageFilter | null;
-  queueMode: "review" | "lesson";
+  queueMode: StudyQueueMode;
   lessonLevelCounts: Record<number, number>;
   typeCounts: { all: number; radical: number; kanji: number; vocabulary: number };
   srsCounts: {
@@ -123,27 +135,13 @@ export default function StudyExplorerPanel({
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
   const showTypeCountPlaceholders = !hasData && typeCounts.all === 0 && filteredItems.length === 0 && !errorMessage;
   const showFilterPagingState =
-    queueMode === "lesson" && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
+    queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
   const showLoadingOverlay = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
   const displayErrorMessage =
     errorMessage === "Failed to fetch"
-      ? "Couldn't refresh your study queue. Check your connection and try again."
+      ? STUDY_PANEL_TEXT.queueRefreshError
       : errorMessage;
-  const srsStatuses = ["all", "apprentice", "guru", "master", "enlightened", "burned", "locked"] as const;
-  const srsStageOptions: ReadonlyArray<StudySrsStageFilter> =
-    srsFilter === "apprentice"
-      ? ([1, 2, 3, 4] as const)
-      : srsFilter === "guru"
-        ? ([5, 6] as const)
-        : srsFilter === "master"
-          ? ([7] as const)
-          : srsFilter === "enlightened"
-            ? ([8] as const)
-            : srsFilter === "burned"
-              ? ([9] as const)
-              : srsFilter === "locked"
-                ? ([] as const)
-                : ([1, 2, 3, 4, 5, 6, 7, 8, 9] as const);
+  const srsStageOptions = getSrsStageOptions(srsFilter);
   const hasSrsStageOptions = srsStageOptions.length > 0;
   const allSrsStagesSelected = srsStageFilter === null || !hasSrsStageOptions;
   const lessonLevelOptions = Object.entries(lessonLevelCounts)
@@ -152,7 +150,7 @@ export default function StudyExplorerPanel({
     .sort((a, b) => a[0] - b[0]);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount =
-    queueMode === "lesson"
+    queueMode === STUDY_QUEUE_TYPES.lesson
       ? viewedLevel === null
         ? totalItems
         : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)
@@ -163,14 +161,14 @@ export default function StudyExplorerPanel({
       <header className="border-b border-line bg-surface-muted px-5 py-4">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-xl font-black text-foreground">Study</h2>
-            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Reviews due now and pending lessons across all levels</p>
+            <h2 className="text-xl font-black text-foreground">{STUDY_PANEL_TEXT.heading}</h2>
+            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
-          <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope="study" /></div>
+          <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} /></div>
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2">
-          {queueMode === "lesson" ? (
+          {queueMode === STUDY_QUEUE_TYPES.lesson ? (
             <>
               <button
                 type="button"
@@ -178,7 +176,7 @@ export default function StudyExplorerPanel({
                 disabled={filtersLoading}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
               >
-                All Levels ({formatNumber(totalLessonsInVisibleLevels)})
+                {STUDY_PANEL_TEXT.allLevelsLabel} ({formatNumber(totalLessonsInVisibleLevels)})
               </button>
               {lessonLevelOptions.map(([level, count]) => (
                 <button
@@ -200,7 +198,7 @@ export default function StudyExplorerPanel({
                 disabled={filtersLoading}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
               >
-                All Levels
+                {STUDY_PANEL_TEXT.allLevelsLabel}
               </button>
               {levelOptions.map((level) => (
                 (() => {
@@ -228,27 +226,27 @@ export default function StudyExplorerPanel({
         <div className="mt-2 flex flex-wrap items-start justify-between gap-2">
           <SubjectTypeFilterGroup
             counts={typeCounts}
-            allLabel={viewedLevel === null ? "All Levels" : `All L${viewedLevel}`}
+            allLabel={viewedLevel === null ? STUDY_PANEL_TEXT.allLevelsLabel : `All L${viewedLevel}`}
             allCount={allTypeCount}
-            allActive={typeFilter === "all"}
+            allActive={isAllStudyTypeFilter(typeFilter)}
             activeTypes={{
-              radical: typeFilter === "all" || typeFilter === "radical",
-              kanji: typeFilter === "all" || typeFilter === "kanji",
-              vocabulary: typeFilter === "all" || typeFilter === "vocabulary",
+              radical: isAllStudyTypeFilter(typeFilter) || typeFilter === STUDY_SUBJECT_TYPES.radical,
+              kanji: isAllStudyTypeFilter(typeFilter) || typeFilter === STUDY_SUBJECT_TYPES.kanji,
+              vocabulary: isAllStudyTypeFilter(typeFilter) || typeFilter === STUDY_SUBJECT_TYPES.vocabulary,
             }}
             showPlaceholderCounts={showTypeCountPlaceholders}
             disabled={filtersLoading}
-            onClickAll={() => onSetTypeFilter("all")}
+            onClickAll={() => onSetTypeFilter(STUDY_TYPE_FILTERS.all)}
             onClickType={(type) => onSetTypeFilter(type)}
           />
 
-          {queueMode !== "lesson" ? (
+          {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
             <div className="ml-auto grid gap-2 justify-items-end">
               <div className="flex flex-wrap justify-end gap-2">
-                {srsStatuses.map((status) => {
+                {STUDY_PANEL_SRS_STATUSES.map((status) => {
                   const count = srsCounts[status];
                   const isSelected = srsFilter === status;
-                  const unavailable = hasData && !isSelected && status !== "all" && count === 0;
+                  const unavailable = hasData && !isSelected && status !== STUDY_SRS_FILTERS.all && count === 0;
                   const disabled = (filtersLoading && !isSelected) || unavailable;
 
                   return (
@@ -326,7 +324,7 @@ export default function StudyExplorerPanel({
             >
               {canToggleEnglish ? (showEnglish ? "Hide English" : "Show English") : "Hints Hidden"}
             </button>
-            {queueMode !== "lesson" ? (
+            {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
               <>
                 <button
                   type="button"
@@ -380,7 +378,7 @@ export default function StudyExplorerPanel({
             <>
             <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))] lg:grid-cols-4">
               {filteredItems.map((item, index) => {
-                const reviewBadge = item.queueType === "review" ? formatNextReviewBadge(item.availableAt) : null;
+                const reviewBadge = isReviewQueueItem(item) ? formatNextReviewBadge(item.availableAt) : null;
 
                 return (
                   <UnifiedExplorerCard
@@ -442,7 +440,7 @@ export default function StudyExplorerPanel({
                           : (glyphSubtitleForDisplay(item) ?? "")
                     }
                     statusChip={
-                      item.queueType === "lesson" && item.status === "locked"
+                      isLessonLockedQueueItem(item)
                         ? undefined
                         : <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)}</span>
                     }
@@ -456,24 +454,24 @@ export default function StudyExplorerPanel({
             {hasMorePages ? (
               <div ref={sentinelRef} className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
                 {isLoadingMore
-                  ? "Loading more..."
+                  ? STUDY_PANEL_TEXT.loadingMore
                   : loadMoreError
-                    ? `Load error: ${loadMoreError}`
-                    : queueMode === "lesson"
-                      ? "Loading remaining lessons..."
-                      : "Scroll to load more..."}
+                    ? `${STUDY_PANEL_TEXT.genericLoadErrorPrefix} ${loadMoreError}`
+                    : queueMode === STUDY_QUEUE_TYPES.lesson
+                      ? STUDY_PANEL_TEXT.loadingRemainingLessons
+                      : STUDY_PANEL_TEXT.scrollToLoadMore}
               </div>
             ) : null}
             </>
           ) : showLoadingOverlay ? null : (
             <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
-              No study items match the current filters.{" "}
+              {STUDY_PANEL_TEXT.noMatches}{" "}
               <button
                 type="button"
                 onClick={onClearAllFilters}
                 className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
               >
-                Clear filters
+                {STUDY_PANEL_TEXT.clearFilters}
               </button>
             </div>
           )}
@@ -485,7 +483,7 @@ export default function StudyExplorerPanel({
             <div className="flex h-full items-center justify-center px-4 text-center text-base font-bold text-foreground/85">
                 <span className="inline-flex items-center gap-2">
                   <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
-                  <span>{showFilterPagingState ? "Loading selected level..." : "Loading study queue..."}</span>
+                    <span>{showFilterPagingState ? STUDY_PANEL_TEXT.loadingSelectedLevel : STUDY_PANEL_TEXT.loadingQueue}</span>
                 </span>
             </div>
           </div>

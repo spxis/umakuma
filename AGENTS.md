@@ -25,6 +25,19 @@ This file is the single source of truth for agent behavior in this repo.
 - Prefer importing types from those helper files instead of defining large type blocks inline in UI components.
 - When refactoring for LOC compliance, extract types/props first, then extract pure helpers/selectors, then split JSX sections into focused subcomponents.
 
+### Component Constants Pattern
+
+- For each component group/folder, keep **one** shared constants module instead of one constants file per component.
+- Preferred naming: `<Feature>.constants.ts` at the component-group level (example: `StudyExplorer.constants.ts`).
+- Components in that group should import from the shared constants module rather than defining local magic strings/numbers.
+- Do not create additional `*.constants.ts` files in the same component group unless explicitly requested.
+
+### Domain Literal Pattern
+
+- Do not compare domain values with inline string literals in feature code (for example `queueType`, `subjectType`, `status`, review outcomes).
+- Move domain literals and predicate helpers into a shared domain module under `lib/` (example: `studyExplorerDomain.ts`) and import those helpers/constants in both `lib/` and `components/`.
+- Keep string unions in type declarations where required, but runtime comparisons must use shared constants/predicates.
+
 ## Stack
 
 - Next.js 16 (App Router), React 19, TypeScript 5.

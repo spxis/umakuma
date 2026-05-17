@@ -1,8 +1,21 @@
-import type { ReviewOutcome, StudyQueueItem } from "../lib/studyExplorerTypes";
+import type {
+  ReviewOutcome,
+  StudyQueueItem,
+  StudyReviewSubmitResult,
+  StudyViewerMode,
+} from "../lib/studyExplorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
+import {
+  isLessonLockedQueueItem,
+  isLessonQueueItem,
+  isRadicalSubjectType,
+  STUDY_REVIEW_OUTCOMES,
+  STUDY_REVIEW_MODAL_SECTION_TEXT,
+  STUDY_VIEWER_MODES,
+} from "./StudyExplorer.constants";
 import type { LevelItem } from "../../explorerTypes";
 import LevelExplorerDetailSection from "../../level-explorer/components/LevelExplorerDetailSection";
 import {
@@ -22,7 +35,7 @@ type Props = {
   studyMode: boolean;
   showEnglish: boolean;
   canToggleEnglish: boolean;
-  viewerMode: "detail" | "flash";
+  viewerMode: StudyViewerMode;
   selectedItem: StudyQueueItem;
   selectedOutcome: ReviewOutcome | undefined;
   isSubmittingSelected: boolean;
@@ -53,7 +66,7 @@ type Props = {
   glyphViewerItems?: StudyQueueItem[];
   glyphViewerIndex?: number;
   onReveal: (assignmentId: number) => void;
-  onSubmit: (assignmentId: number, result: "correct" | "wrong") => void;
+  onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => void;
   onSkipCurrent: () => void;
   onStartLesson: (assignmentId: number) => void;
   onAdvanceFlashOrNext: () => void;
@@ -112,12 +125,12 @@ export default function StudyReviewModalSection({
   onToggleUsedInWordsCollapsed,
   onToggleShowEnglish,
 }: Props) {
-  const showStatusChip = !(selectedItem.queueType === "lesson" && selectedItem.status === "locked");
+  const showStatusChip = !isLessonLockedQueueItem(selectedItem);
   const resolvedViewerItems = glyphViewerItems && glyphViewerItems.length > 0 ? glyphViewerItems : [selectedItem];
   const resolvedViewerIndex = typeof glyphViewerIndex === "number" ? glyphViewerIndex : 0;
   const shouldUseUnifiedLessonDetail =
-    selectedItem.queueType === "lesson" &&
-    viewerMode === "detail" &&
+    isLessonQueueItem(selectedItem) &&
+    viewerMode === STUDY_VIEWER_MODES.detail &&
     !useStudyFlashLayout &&
     detailsRevealed;
 
@@ -137,7 +150,7 @@ export default function StudyReviewModalSection({
         usedInVocabulary: sanitizedRelatedItems(
           (selectedItem.usedInVocabulary as RelatedReference[] | undefined)?.length
             ? (selectedItem.usedInVocabulary as RelatedReference[] | undefined)
-            : selectedItem.subjectType === "radical"
+            : isRadicalSubjectType(selectedItem.subjectType)
               ? (selectedItem.componentKanji as RelatedReference[] | undefined)
               : (selectedItem.usedInVocabulary as RelatedReference[] | undefined),
         ),
@@ -148,7 +161,7 @@ export default function StudyReviewModalSection({
   return (
     <>
       <section className="rounded-2xl border-2 border-accent/35 bg-surface p-3 sm:p-5">
-        {!studyMode && viewerMode === "flash" ? (
+        {!studyMode && viewerMode === STUDY_VIEWER_MODES.flash ? (
           flashCycleDone ? (
             <button
               type="button"
@@ -158,10 +171,10 @@ export default function StudyReviewModalSection({
               className="flex min-h-[68vh] w-full select-none flex-col items-center justify-center rounded-2xl border border-line bg-surface-muted px-6 py-8 text-center hover:bg-surface"
             >
               <p className="text-2xl font-black uppercase tracking-[0.12em] text-foreground/80 sm:text-3xl">
-                Cards Are Done
+                {STUDY_REVIEW_MODAL_SECTION_TEXT.cardsDone}
               </p>
               <p className="mt-3 text-sm font-bold uppercase tracking-[0.1em] text-foreground/60 sm:text-base">
-                Click Or Press Next Again To Restart
+                {STUDY_REVIEW_MODAL_SECTION_TEXT.restartPrompt}
               </p>
             </button>
           ) : (
@@ -211,16 +224,16 @@ export default function StudyReviewModalSection({
                 {!flashRevealed ? (
                   <div className="mx-auto text-center">
                     <p className="text-base font-black uppercase tracking-[0.12em] text-foreground/70">
-                      Tap / Click To Reveal
+                      {STUDY_REVIEW_MODAL_SECTION_TEXT.tapToReveal}
                     </p>
                     <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">
-                      Enter Or Space
+                      {STUDY_REVIEW_MODAL_SECTION_TEXT.enterOrSpace}
                     </p>
                   </div>
                 ) : (
                   <div className="grid h-full gap-4 lg:grid-rows-2">
                     <div className="rounded-xl border border-line bg-surface-muted px-4 py-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">Reading</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
                       <p className="mt-2 text-5xl font-black leading-tight text-foreground">
                         {primaryReadingHiragana === "-" && secondaryReadingValue !== "-"
                           ? secondaryReadingValue
@@ -233,7 +246,7 @@ export default function StudyReviewModalSection({
                       ) : null}
                     </div>
                     <div className="rounded-xl border border-line bg-surface-muted px-4 py-4">
-                      <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">Meaning</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</p>
                       <p className="mt-2 text-4xl font-black leading-tight text-foreground">
                         {allMeanings[0] ?? selectedItem.characters}
                       </p>
@@ -272,7 +285,7 @@ export default function StudyReviewModalSection({
                   }
                 }}
                 className={`relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-3 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-5 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
-                title="View Item"
+                title={STUDY_REVIEW_MODAL_SECTION_TEXT.viewItemTitle}
               >
                 <div className="absolute left-1/2 top-3 z-10 flex max-w-[calc(100%-1.25rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-hidden px-1 sm:top-4">
                   <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
@@ -293,7 +306,7 @@ export default function StudyReviewModalSection({
                     }}
                     className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/75 hover:bg-surface-muted"
                   >
-                    Font
+                    {STUDY_REVIEW_MODAL_SECTION_TEXT.font}
                   </button>
                 </div>
 
@@ -304,14 +317,14 @@ export default function StudyReviewModalSection({
                 {detailsRevealed ? (
                   <div className="absolute inset-x-2 bottom-2 grid gap-2 sm:inset-x-3 sm:bottom-3">
                     <div className="rounded-xl border border-line bg-surface-muted/95 px-3 py-2.5">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Reading</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
                       <p className="mt-1 line-clamp-2 text-2xl font-black leading-tight text-foreground sm:text-3xl">
                         {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
                       </p>
                       {primaryReadingKatakana !== "-" ? <p className="line-clamp-1 text-sm font-semibold text-foreground/75 sm:text-base">{primaryReadingKatakana}</p> : null}
                     </div>
                     <div className="rounded-xl border border-line bg-surface-muted/95 px-3 py-2.5">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Meaning</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</p>
                       <p className="mt-1 line-clamp-2 text-[2rem] font-black leading-tight text-foreground sm:text-[2.2rem]">{allMeanings[0] ?? selectedItem.characters}</p>
                       {allMeanings.length > 1 ? <p className="line-clamp-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm">{allMeanings.slice(1).join(" • ")}</p> : null}
                     </div>
@@ -327,26 +340,26 @@ export default function StudyReviewModalSection({
                     disabled={isSubmittingSelected}
                     className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-2xl bg-surface-muted text-center transition-colors hover:bg-sky-100/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
                   >
-                    <p className="text-sm font-black uppercase tracking-[0.12em] text-foreground/80 sm:text-base">Show Answer</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">Space To Reveal</p>
+                    <p className="text-sm font-black uppercase tracking-[0.12em] text-foreground/80 sm:text-base">{STUDY_REVIEW_MODAL_SECTION_TEXT.showAnswer}</p>
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">{STUDY_REVIEW_MODAL_SECTION_TEXT.spaceToReveal}</p>
                   </button>
                 ) : isOutcomeFinal ? (
                   <div className="flex h-full w-full items-center justify-center rounded-2xl border-2 border-line bg-surface px-3 py-3 text-center sm:px-4 sm:py-4">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">Answer locked</p>
-                      <p className={`mt-2 text-2xl font-black uppercase ${selectedOutcome === "correct" ? "text-emerald-700" : "text-red-700"}`}>{selectedOutcome}</p>
-                      <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">Review submitted. This item is now read-only.</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.answerLocked}</p>
+                      <p className={`mt-2 text-2xl font-black uppercase ${selectedOutcome === STUDY_REVIEW_OUTCOMES.correct ? "text-emerald-700" : "text-red-700"}`}>{selectedOutcome}</p>
+                      <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">{STUDY_REVIEW_MODAL_SECTION_TEXT.readOnlyHint}</p>
                     </div>
                   </div>
                 ) : (
                   <div className="grid h-full grid-rows-2 gap-2">
                     <div className="grid grid-cols-2 gap-2">
-                      <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "wrong")} disabled={isSubmittingSelected} aria-keyshortcuts="1" title="Wrong (Key: 1)" className="h-full w-full cursor-pointer rounded-2xl border-2 border-red-300 bg-red-50 px-3 py-2 text-sm font-black uppercase tracking-[0.1em] text-red-800 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-4">
-                        <span className="block">Wrong</span>
+                      <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.wrong)} disabled={isSubmittingSelected} aria-keyshortcuts="1" title="Wrong (Key: 1)" className="h-full w-full cursor-pointer rounded-2xl border-2 border-red-300 bg-red-50 px-3 py-2 text-sm font-black uppercase tracking-[0.1em] text-red-800 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-4">
+                        <span className="block">{STUDY_REVIEW_MODAL_SECTION_TEXT.wrong}</span>
                         <span className="mt-1 block text-xl leading-none">{wrong}</span>
                       </button>
-                      <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, "correct")} disabled={isSubmittingSelected} aria-keyshortcuts="2" title="Correct (Key: 2)" className="h-full w-full cursor-pointer rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-3 py-2 text-sm font-black uppercase tracking-[0.1em] text-emerald-800 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-4">
-                        <span className="block">Correct</span>
+                      <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.correct)} disabled={isSubmittingSelected} aria-keyshortcuts="2" title="Correct (Key: 2)" className="h-full w-full cursor-pointer rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-3 py-2 text-sm font-black uppercase tracking-[0.1em] text-emerald-800 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-4">
+                        <span className="block">{STUDY_REVIEW_MODAL_SECTION_TEXT.correct}</span>
                         <span className="mt-1 block text-xl leading-none">{correct}</span>
                       </button>
                     </div>
@@ -356,7 +369,7 @@ export default function StudyReviewModalSection({
                       disabled={isSubmittingSelected}
                       className="h-full w-full cursor-pointer rounded-2xl border-2 border-amber-300 bg-amber-50 px-3 py-2 text-sm font-black uppercase tracking-[0.1em] text-amber-800 transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-3"
                     >
-                      <span className="block">Skipped</span>
+                      <span className="block">{STUDY_REVIEW_MODAL_SECTION_TEXT.skipped}</span>
                       <span className="mt-1 block text-xl leading-none">{skipped}</span>
                     </button>
                   </div>
@@ -375,8 +388,8 @@ export default function StudyReviewModalSection({
             </div>
             <button type="button" onClick={() => onReveal(selectedItem.assignmentId)} className="flex min-h-[20rem] w-full flex-col justify-center rounded-2xl border border-line bg-surface px-6 py-6 text-left hover:bg-surface-muted lg:h-full lg:min-h-0">
               <div className="mx-auto text-center">
-                <p className="text-base font-black uppercase tracking-[0.12em] text-foreground/70">Show Answer</p>
-                <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">Space To Reveal</p>
+                <p className="text-base font-black uppercase tracking-[0.12em] text-foreground/70">{STUDY_REVIEW_MODAL_SECTION_TEXT.showAnswer}</p>
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">{STUDY_REVIEW_MODAL_SECTION_TEXT.spaceToReveal}</p>
               </div>
             </button>
           </div>
@@ -410,7 +423,7 @@ export default function StudyReviewModalSection({
                 <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                   <div className="min-w-0">
                     <p className="text-3xl font-black text-foreground">{detailsRevealed ? (allMeanings[0] ?? selectedItem.characters) : "???"}</p>
-                    {detailsRevealed && allMeanings.length > 1 ? <p className="mt-1 hidden text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:block">Alt meanings: {allMeanings.slice(1).join(" • ")}</p> : null}
+                    {detailsRevealed && allMeanings.length > 1 ? <p className="mt-1 hidden text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:block">{STUDY_REVIEW_MODAL_SECTION_TEXT.altMeanings}: {allMeanings.slice(1).join(" • ")}</p> : null}
                   </div>
                   <div className="flex flex-nowrap justify-self-end gap-1">
                     <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
@@ -422,7 +435,7 @@ export default function StudyReviewModalSection({
                 </div>
                 {detailsRevealed && allMeanings.length > 1 ? (
                   <div className="mt-2 rounded-xl border border-line bg-surface px-3 py-2 sm:hidden">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Alt meanings</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.altMeanings}</p>
                     <p className="mt-1 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/80">{allMeanings.slice(1).join(" • ")}</p>
                   </div>
                 ) : null}

@@ -1,12 +1,30 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { toHiragana, toKatakana } from "wanakana";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 
 import type { RelatedReference, StudyReviewModalProps as Props } from "./StudyReviewModal.types";
+import {
+  isRadicalSubjectType,
+  isReviewQueueItem,
+  isLessonQueueItem,
+  isTerminalReviewOutcome,
+  STUDY_REVIEW_OUTCOMES,
+  STUDY_REVIEW_MODAL_STORAGE_KEYS,
+  STUDY_REVIEW_MODAL_TOUCH,
+  STUDY_REVIEW_MODAL_TRANSITION_CUE_DURATION_MS,
+  STUDY_REVIEW_MODAL_VIEWER_MODES,
+  STUDY_VIEWER_MODES,
+} from "./StudyExplorer.constants";
 import StudyReviewModalSection from "./StudyReviewModalSection";
 import { hasRenderableRelatedItems } from "./StudyReviewModalHelpers";
 import { useStudyReviewModalKeyboard } from "../lib/useStudyReviewModalKeyboard";
+import {
+  buildStudyReviewAllMeanings,
+  collectUsedKanjiItems,
+  countReviewOutcomes,
+  deriveJlptGradeLabel,
+  deriveStudyReviewReadings,
+} from "../lib/studyReviewModalDerivations";
 
 export default function StudyReviewModal({
   accountId,
@@ -36,9 +54,9 @@ export default function StudyReviewModal({
   onStartLesson,
   glyphViewerItems,
 }: Props) {
-  const usedInWordsStorageKey = "wr:study-modal:used-in-words-collapsed";
-  const usedKanjiStorageKey = "wr:study-modal:used-kanji-collapsed";
-  const viewerModeStorageKey = "wr:study-modal:viewer-mode";
+  const usedInWordsStorageKey = STUDY_REVIEW_MODAL_STORAGE_KEYS.usedInWordsCollapsed;
+  const usedKanjiStorageKey = STUDY_REVIEW_MODAL_STORAGE_KEYS.usedKanjiCollapsed;
+  const viewerModeStorageKey = STUDY_REVIEW_MODAL_STORAGE_KEYS.viewerMode;
 
   const [usedInWordsCollapsed, setUsedInWordsCollapsed] = usePersistedBoolean(usedInWordsStorageKey, {
     defaultValue: false,
@@ -50,8 +68,12 @@ export default function StudyReviewModal({
     mode: "one-is-true",
   });
 
-  const [viewerMode, setViewerMode] = useState<"detail" | "flash">(() => {
-    return getStoredEnum(viewerModeStorageKey, ["detail", "flash"] as const, "detail");
+  const [viewerMode, setViewerMode] = useState(() => {
+    return getStoredEnum(
+      viewerModeStorageKey,
+      STUDY_REVIEW_MODAL_VIEWER_MODES,
+      STUDY_VIEWER_MODES.detail,
+    );
   });
 
   useEffect(() => {
@@ -63,7 +85,7 @@ export default function StudyReviewModal({
       setViewerMode(forcedViewerMode);
       setStoredEnum(viewerModeStorageKey, forcedViewerMode);
     });
-  }, [forcedViewerMode]);
+  }, [forcedViewerMode, viewerModeStorageKey]);
 
   useEffect(() => {
     window.dispatchEvent(
@@ -94,14 +116,14 @@ export default function StudyReviewModal({
   const flashRevealed = flashRevealKey === currentFlashKey;
   const currentFlashCycleKey = `${viewerMode}:${selectedItem?.assignmentId ?? "none"}:${selectedIndex}:${filteredTotal}`;
   const flashCycleDone = flashCycleDoneKey === currentFlashCycleKey;
-  const canUseFlashCycleNext = !studyMode && viewerMode === "flash" && filteredTotal > 0;
+  const canUseFlashCycleNext = !studyMode && viewerMode === STUDY_VIEWER_MODES.flash && filteredTotal > 0;
   const displayIndex = filteredTotal > 0 ? Math.min(selectedIndex + 1, filteredTotal) : 0;
   const displayTotal = filteredTotal;
 
   const markCurrentAsSkippedIfUnresolved = useCallback(() => {
-    if (!studyMode || !selectedItem || selectedItem.queueType !== "review") return;
+    if (!studyMode || !selectedItem || !isReviewQueueItem(selectedItem)) return;
     const currentOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
-    if (currentOutcome === "correct" || currentOutcome === "wrong" || currentOutcome === "skipped") return;
+    if (isTerminalReviewOutcome(currentOutcome)) return;
     onMarkSkipped(selectedItem.assignmentId);
   }, [onMarkSkipped, reviewOutcomeByAssignmentId, selectedItem, studyMode]);
 
@@ -139,12 +161,12 @@ export default function StudyReviewModal({
   }, [canUseFlashCycleNext, currentFlashCycleKey, flashCycleDone, goNextItem, onNext, onRestartFromBeginning]);
 
   const skipCurrentAndAdvance = useCallback(() => {
-    if (!selectedItem || selectedItem.queueType !== "review") {
+    if (!selectedItem || selectedItem.queueType !== STUDY_QUEUE_TYPES.review) {
       return;
     }
 
     const currentOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
-    if (currentOutcome !== "correct" && currentOutcome !== "wrong" && currentOutcome !== "skipped") {
+    if (!isTerminalReviewOutcome(currentOutcome)) {
       onMarkSkipped(selectedItem.assignmentId);
     }
 
@@ -170,8 +192,14 @@ export default function StudyReviewModal({
     const dt = Date.now() - start.ts;
     const absDx = Math.abs(dx);
     const absDy = Math.abs(dy);
-    const isHorizontalSwipe = absDx >= 56 && absDx > absDy * 1.25 && dt <= 750;
-    const isVerticalSwipe = absDy >= 56 && absDy > absDx * 1.25 && dt <= 750;
+    const isHorizontalSwipe =
+      absDx >= STUDY_REVIEW_MODAL_TOUCH.minSwipeDistancePx &&
+      absDx > absDy * STUDY_REVIEW_MODAL_TOUCH.axisDominanceRatio &&
+      dt <= STUDY_REVIEW_MODAL_TOUCH.maxSwipeDurationMs;
+    const isVerticalSwipe =
+      absDy >= STUDY_REVIEW_MODAL_TOUCH.minSwipeDistancePx &&
+      absDy > absDx * STUDY_REVIEW_MODAL_TOUCH.axisDominanceRatio &&
+      dt <= STUDY_REVIEW_MODAL_TOUCH.maxSwipeDurationMs;
 
     if (isHorizontalSwipe) {
       if (dx < 0) {
@@ -233,7 +261,7 @@ export default function StudyReviewModal({
       setVisibleTransitionCue((current) =>
         current?.assignmentId === latestReviewTransition.assignmentId ? null : current,
       );
-    }, 900);
+    }, STUDY_REVIEW_MODAL_TRANSITION_CUE_DURATION_MS);
 
     return () => {
       window.clearTimeout(timeoutId);
@@ -264,74 +292,30 @@ export default function StudyReviewModal({
     return null;
   }
 
-  let correct = 0;
-  let skipped = 0;
-  let wrong = 0;
-  for (const outcome of Object.values(reviewOutcomeByAssignmentId)) {
-    if (outcome === "correct") correct += 1;
-    else if (outcome === "wrong") wrong += 1;
-    else if (outcome === "skipped") skipped += 1;
-  }
-
-  const allMeanings = Array.from(
-    new Set(
-      [
-        ...selectedItem.meanings,
-        ...(selectedItem.jlptMeta?.meanings ?? []),
-        ...(selectedItem.jlptMeta?.primaryMeaning ? [selectedItem.jlptMeta.primaryMeaning] : []),
-      ].filter((value) => value.trim().length > 0),
-    ),
-  );
-
-  const primaryReadings = selectedItem.primaryReadings ?? [];
-  const secondaryReadings = (selectedItem.readings ?? []).filter((reading) => !primaryReadings.includes(reading));
-  const requiresReveal = studyMode && selectedItem.queueType === "review";
-  const isLessonItem = selectedItem.queueType === "lesson";
+  const { correct, skipped, wrong } = countReviewOutcomes(reviewOutcomeByAssignmentId);
+  const allMeanings = buildStudyReviewAllMeanings(selectedItem);
+  const requiresReveal = studyMode && isReviewQueueItem(selectedItem);
+  const isLessonItem = isLessonQueueItem(selectedItem);
   const selectedOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
   const lessonAlreadySubmitted = isLessonItem && (isSelectedSubmitted || selectedOutcome === "lesson-started");
   const isOutcomeFinal =
-    selectedOutcome === "correct" ||
-    selectedOutcome === "wrong" ||
+    selectedOutcome === STUDY_REVIEW_OUTCOMES.correct ||
+    selectedOutcome === STUDY_REVIEW_OUTCOMES.wrong ||
     lessonAlreadySubmitted;
   const detailsRevealed = isOutcomeFinal || !requiresReveal || isAnswerRevealed;
-  const useStudyFlashLayout = studyMode && selectedItem.queueType === "review";
+  const useStudyFlashLayout = studyMode && isReviewQueueItem(selectedItem);
 
   const hasRadicals = hasRenderableRelatedItems(selectedItem.radicals as RelatedReference[] | undefined);
   const hasVisuallySimilar = hasRenderableRelatedItems(selectedItem.visuallySimilar as RelatedReference[] | undefined);
   const hasUsedInVocabulary =
     hasRenderableRelatedItems(selectedItem.usedInVocabulary as RelatedReference[] | undefined) ||
-    (selectedItem.subjectType === "radical" &&
+    (isRadicalSubjectType(selectedItem.subjectType) &&
       hasRenderableRelatedItems(selectedItem.componentKanji as RelatedReference[] | undefined));
   const hasComponentKanji = hasRenderableRelatedItems(selectedItem.componentKanji as RelatedReference[] | undefined);
-
-  const jlptOnReadings = selectedItem.jlptMeta?.onReadings ?? [];
-  const jlptKunReadings = selectedItem.jlptMeta?.kunReadings ?? [];
-  const primaryReadingHiraganaCandidate =
-    primaryReadings.find((reading) => reading.trim().length > 0) ??
-    (jlptOnReadings[0] ? toHiragana(jlptOnReadings[0]) : null);
-  const matchedPrimaryOn =
-    primaryReadingHiraganaCandidate
-      ? (jlptOnReadings.find((reading) => toHiragana(reading) === primaryReadingHiraganaCandidate) ??
-        toKatakana(primaryReadingHiraganaCandidate))
-      : null;
-
-  const primaryReadingHiragana = primaryReadingHiraganaCandidate ?? "-";
-  const primaryReadingKatakana = matchedPrimaryOn ?? "-";
-  const remainingOnReadings = jlptOnReadings.filter((reading) => reading !== matchedPrimaryOn);
-  const secondaryReadingParts = Array.from(
-    new Set(
-      [
-        ...remainingOnReadings,
-        ...jlptKunReadings,
-        ...(jlptOnReadings.length === 0 && jlptKunReadings.length === 0 ? secondaryReadings : []),
-      ].filter((reading) => reading.trim().length > 0),
-    ),
-  );
-  const secondaryReadingValue = secondaryReadingParts.length > 0 ? secondaryReadingParts.join(", ") : "-";
-  const usedKanjiItems = (selectedItem.componentKanji as RelatedReference[] | undefined)?.filter(
-    (item) => item.label.trim().length > 0 && item.label.trim() !== "-",
-  ) ?? [];
-  const jlptGradeLabel = typeof selectedItem.jlptMeta?.schoolGrade === "number" ? `Grade ${selectedItem.jlptMeta.schoolGrade}` : "-";
+  const { primaryReadingHiragana, primaryReadingKatakana, secondaryReadingValue } =
+    deriveStudyReviewReadings(selectedItem);
+  const usedKanjiItems = collectUsedKanjiItems(selectedItem);
+  const jlptGradeLabel = deriveJlptGradeLabel(selectedItem);
 
   return (
     <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-2 backdrop-blur-[2px] sm:p-6">
@@ -340,7 +324,7 @@ export default function StudyReviewModal({
           <button type="button" onClick={closeModal} className="justify-self-start whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-xs">Close</button>
           <div className="flex min-w-0 flex-nowrap items-center justify-center gap-1 sm:gap-2">
             <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70 sm:text-xs sm:tracking-[0.1em]">#{displayIndex} of {displayTotal}</p>
-            {studyMode && selectedItem.queueType === "review" ? (
+            {studyMode && isReviewQueueItem(selectedItem) ? (
               <div className="flex items-center gap-1">
                 <span className="rounded-full border border-red-200 bg-red-50 px-1.5 py-0.5 text-[10px] font-black uppercase text-red-800">W {wrong}</span>
                 <span className="rounded-full border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] font-black uppercase text-amber-800">S {skipped}</span>
@@ -352,26 +336,26 @@ export default function StudyReviewModal({
                 <button
                   type="button"
                   onClick={() => {
-                    setViewerMode("detail");
-                    setStoredEnum(viewerModeStorageKey, "detail");
+                    setViewerMode(STUDY_VIEWER_MODES.detail);
+                    setStoredEnum(viewerModeStorageKey, STUDY_VIEWER_MODES.detail);
                   }}
-                  className={`whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] sm:px-3 ${viewerMode === "detail" ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}
+                  className={`whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] sm:px-3 ${viewerMode === STUDY_VIEWER_MODES.detail ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}
                 >
                   Detail
                 </button>
                 <button
                   type="button"
                   onClick={() => {
-                    setViewerMode("flash");
-                    setStoredEnum(viewerModeStorageKey, "flash");
+                    setViewerMode(STUDY_VIEWER_MODES.flash);
+                    setStoredEnum(viewerModeStorageKey, STUDY_VIEWER_MODES.flash);
                   }}
-                  className={`whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] sm:px-3 ${viewerMode === "flash" ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}
+                  className={`whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] sm:px-3 ${viewerMode === STUDY_VIEWER_MODES.flash ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}
                 >
                   Flash
                 </button>
               </div>
             ) : null}
-            {viewerMode === "detail" && canToggleEnglish ? (
+            {viewerMode === STUDY_VIEWER_MODES.detail && canToggleEnglish ? (
               <button
                 type="button"
                 onClick={onToggleShowEnglish}
@@ -476,7 +460,7 @@ export default function StudyReviewModal({
               ? isLessonItem
                 ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev"
                 : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev • Space reveal (study) • 1/J wrong • 2/K correct • Skip counts once per item on leave"
-              : viewerMode === "flash"
+              : viewerMode === STUDY_VIEWER_MODES.flash
                 ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter/Space reveal • Enter next (revealed) • Shift+Enter prev • Shift+Space prev • Swipe ←/→ nav • Swipe ↑ reveal"
                 : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev"}
           </p>

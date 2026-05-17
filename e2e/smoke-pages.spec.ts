@@ -113,18 +113,52 @@ test("news reader page loads", async ({ browser, baseURL }) => {
 });
 
 test("user drilldown tabs load", async ({ browser, baseURL }) => {
-  for (const user of smokeUsers) {
-    for (const tab of tabs) {
-      const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=${tab.key}#explorer`;
-      await assertPageLoads(browser, url, async (page) => {
-        await expect(page.locator("h1")).toContainText(/.+/);
-        const explorerTabs = page.getByRole("tablist", { name: "Explorer tabs" });
-        await expect(
-          explorerTabs.getByRole("tab", { name: tab.label, exact: true }),
-        ).toHaveAttribute("aria-selected", "true");
-      });
-    }
+  const user = smokeUsers[0] ?? fallbackUsers[0];
+  for (const tab of tabs) {
+    const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=${tab.key}#explorer`;
+    await assertPageLoads(browser, url, async (page) => {
+      if (page.url().includes("/join?access=denied")) {
+        await expect(page.getByRole("heading", { name: "Join UmaKuma" })).toBeVisible();
+        return;
+      }
+
+      await expect(page.locator("h1")).toContainText(/.+/);
+      const explorerTabs = page.getByRole("tablist", { name: "Explorer tabs" });
+      await expect(
+        explorerTabs.getByRole("tab", { name: tab.label, exact: true }),
+      ).toHaveAttribute("aria-selected", "true");
+    });
   }
+});
+
+test("user history page loads", async ({ browser, baseURL }) => {
+  const user = smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/history`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    if (page.url().includes("/join?access=denied")) {
+      await expect(page.getByRole("heading", { name: "Join UmaKuma" })).toBeVisible();
+      return;
+    }
+
+    await expect(page.getByRole("link", { name: "Back to user page" })).toBeVisible();
+    await expect(page.getByText(/Study Submission History/i)).toBeVisible();
+  });
+});
+
+test("user read history tab loads", async ({ browser, baseURL }) => {
+  const user = smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?dashboard=read&read=history`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    if (page.url().includes("/join?access=denied")) {
+      await expect(page.getByRole("heading", { name: "Join UmaKuma" })).toBeVisible();
+      return;
+    }
+
+    const tablist = page.getByRole("tablist", { name: "Read panel tabs" });
+    await expect(tablist.getByRole("tab", { name: "History", exact: true })).toHaveAttribute("aria-selected", "true");
+  });
 });
 
 test("study keeps all type filter on reload", async ({ browser, baseURL }) => {

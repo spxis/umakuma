@@ -16,6 +16,10 @@ import {
 } from "../lib/levelExplorerControllerEffects";
 import {
   buildLevelExplorerStorageKeys,
+  LEVEL_JLPT_FILTERS,
+  LEVEL_REVIEW_TIMING_FILTERS,
+  LEVEL_SRS_FILTERS,
+  LEVEL_TYPE_FILTERS,
   parseLevelExplorerUrlState,
   readStoredEnum,
   readStoredFlag,
@@ -66,7 +70,7 @@ export default function LevelExplorerController({
   maxLevel,
   accountPendingReviews,
   initialSnapshot,
-  initialSrsFilter = "all",
+  initialSrsFilter = LEVEL_SRS_FILTERS.all,
   showEnglish = false,
   canToggleEnglish = false,
   onToggleShowEnglish,
@@ -78,9 +82,9 @@ export default function LevelExplorerController({
     const defaults = {
       selectedLevels: new Set<number>([initialSnapshot.level]),
       srsFilter: initialSrsFilter,
-      typeFilter: "all" as TypeFilter,
-      jlptFilter: "all" as JlptFilter,
-      reviewTimingFilter: "all" as ReviewTimingFilter,
+      typeFilter: LEVEL_TYPE_FILTERS.all as TypeFilter,
+      jlptFilter: LEVEL_JLPT_FILTERS.all as JlptFilter,
+      reviewTimingFilter: LEVEL_REVIEW_TIMING_FILTERS.all as ReviewTimingFilter,
       recentOnly: false,
       stickyMerge: false,
       selectedSubjectId: initialSnapshot.items[0]?.subjectId ?? null,
@@ -125,7 +129,7 @@ export default function LevelExplorerController({
     }
 
     const resolvedTypeFilter = params.has("type") ? parsed.type : storedTypeFilter;
-    const resolvedVisibleTypes = params.has("type") && parsed.type === "all"
+    const resolvedVisibleTypes = params.has("type") && parsed.type === LEVEL_TYPE_FILTERS.all
       ? { radical: true, kanji: true, vocabulary: true }
       : storedVisibleTypes;
 

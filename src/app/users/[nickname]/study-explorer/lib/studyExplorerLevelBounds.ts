@@ -1,7 +1,8 @@
-import type { StudyQueueItem } from "./studyExplorerTypes";
+import type { StudyQueueItem, StudyQueueMode } from "./studyExplorerTypes";
+import { isLessonQueueItem, STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 
 type Params = {
-  queueMode: "review" | "lesson";
+  queueMode: StudyQueueMode;
   viewedLevel: number | null;
   maxLevel: number;
   loadedItems: StudyQueueItem[];
@@ -33,7 +34,7 @@ export function resolveEffectiveViewedLevel({
   loadedItems,
   rawLevelCounts,
 }: Params): number | null {
-  if (queueMode === "review") {
+  if (queueMode === STUDY_QUEUE_TYPES.review) {
     if (viewedLevel !== null && (viewedLevel < 1 || viewedLevel > maxLevel)) {
       return null;
     }
@@ -41,13 +42,15 @@ export function resolveEffectiveViewedLevel({
     return viewedLevel;
   }
 
-  if (queueMode !== "lesson" || viewedLevel === null) {
+  if (queueMode !== STUDY_QUEUE_TYPES.lesson || viewedLevel === null) {
     return viewedLevel;
   }
 
   const lessonLevelCounts = normalizeLevelCounts(rawLevelCounts);
   const lessonLevelFromCounts = (lessonLevelCounts[viewedLevel] ?? 0) > 0;
-  const lessonLevelFromLoaded = loadedItems.some((item) => item.queueType === "lesson" && item.wkLevel === viewedLevel);
+  const lessonLevelFromLoaded = loadedItems.some(
+    (item) => isLessonQueueItem(item) && item.wkLevel === viewedLevel,
+  );
   if (!lessonLevelFromCounts && !lessonLevelFromLoaded) {
     return null;
   }
