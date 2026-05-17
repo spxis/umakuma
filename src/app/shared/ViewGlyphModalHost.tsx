@@ -10,15 +10,25 @@ import { hasRenderableRelatedItems } from "@/app/users/[nickname]/study-explorer
 import { newsGlyphButtonClass } from "@/app/news/newsGlyphBoxStyle";
 import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
 import {
+  SUBJECT_TYPE_DISPLAY,
+  SUBJECT_TYPES,
+  isSubjectType,
+} from "@/lib/domainConstants";
+import {
   VIEW_GLYPH_EVENT,
   type ViewGlyphSelectorEntry,
   type ViewGlyphViewerPayload,
 } from "@/lib/viewGlyphViewer";
 
+function subjectSingularLabel(value: string | null | undefined): string {
+  if (isSubjectType(value)) {
+    return SUBJECT_TYPE_DISPLAY[value].singular;
+  }
+  return SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular;
+}
+
 function viewerTitle(item: StudyQueueItem): string {
-  if (item.subjectType === "kanji") return "View Kanji";
-  if (item.subjectType === "radical") return "View Radical";
-  return "View Vocabulary";
+  return `View ${subjectSingularLabel(item.subjectType)}`;
 }
 
 function firstNonEmpty(values: Array<string | null | undefined>): string {
@@ -279,7 +289,7 @@ export default function ViewGlyphModalHost() {
                   title={
                     unavailable
                       ? `${entry.label} not found in WaniKani`
-                      : `${entry.kind === "vocabulary" ? "Vocabulary" : "Kanji"}: ${entry.label}`
+                      : `${SUBJECT_TYPE_DISPLAY[entry.kind].singular}: ${entry.label}`
                   }
                 >
                   <span>{entry.label}</span>

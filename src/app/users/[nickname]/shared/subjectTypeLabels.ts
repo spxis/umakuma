@@ -1,34 +1,15 @@
-export type ExplorerSubjectType = "radical" | "kanji" | "vocabulary";
+import { SUBJECT_TYPE_DISPLAY, type SubjectType } from "@/lib/domainConstants";
 
-const SUBJECT_TYPE_LABELS: Record<
-  ExplorerSubjectType,
-  { short: string; filter: string; plural: string }
-> = {
-  radical: {
-    short: "RADICAL",
-    filter: "radical",
-    plural: "Radicals",
-  },
-  kanji: {
-    short: "KANJI",
-    filter: "kanji",
-    plural: "Kanji",
-  },
-  vocabulary: {
-    short: "VOCAB",
-    filter: "vocab",
-    plural: "Vocab",
-  },
-};
+export type ExplorerSubjectType = SubjectType;
 
 export function subjectTypeShortLabel(type: ExplorerSubjectType): string {
-  return SUBJECT_TYPE_LABELS[type].short;
+  return SUBJECT_TYPE_DISPLAY[type].short;
 }
 
 export function subjectTypeFilterLabel(type: ExplorerSubjectType): string {
-  return SUBJECT_TYPE_LABELS[type].filter;
+  return SUBJECT_TYPE_DISPLAY[type].filter;
 }
 
 export function subjectTypePluralLabel(type: ExplorerSubjectType): string {
-  return SUBJECT_TYPE_LABELS[type].plural;
+  return SUBJECT_TYPE_DISPLAY[type].plural;
 }

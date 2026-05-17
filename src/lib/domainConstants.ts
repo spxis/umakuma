@@ -6,6 +6,35 @@ export const SUBJECT_TYPES = {
 
 export type SubjectType = (typeof SUBJECT_TYPES)[keyof typeof SUBJECT_TYPES];
 
+export const SUBJECT_TYPE_DISPLAY: Record<
+  SubjectType,
+  {
+    singular: string;
+    plural: string;
+    short: string;
+    filter: string;
+  }
+> = {
+  [SUBJECT_TYPES.radical]: {
+    singular: "Radical",
+    plural: "Radicals",
+    short: "RADICAL",
+    filter: "radical",
+  },
+  [SUBJECT_TYPES.kanji]: {
+    singular: "Kanji",
+    plural: "Kanji",
+    short: "KANJI",
+    filter: "kanji",
+  },
+  [SUBJECT_TYPES.vocabulary]: {
+    singular: "Vocabulary",
+    plural: "Vocab",
+    short: "VOCAB",
+    filter: "vocab",
+  },
+};
+
 export const WK_STATUSES = {
   locked: "locked",
   apprentice: "apprentice",
