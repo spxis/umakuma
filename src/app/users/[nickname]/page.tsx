@@ -182,10 +182,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
       (item): item is LevelKanjiItem =>
         typeof item === "object" &&
         item !== null &&
-        (item as LevelKanjiItem).subjectType !== undefined &&
-        ((item as LevelKanjiItem).subjectType === "radical" ||
-          (item as LevelKanjiItem).subjectType === "kanji" ||
-          (item as LevelKanjiItem).subjectType === "vocabulary"),
+        isSubjectType((item as LevelKanjiItem).subjectType),
     );
 
     progressItemsByLevel.set(row.level, items);
@@ -193,12 +190,12 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
 
   if (!progressItemsByLevel.has(account.wkLevel)) {
     const fallbackItems = levelKanjiItems.filter(
-      (item) => item.subjectType === "radical" || item.subjectType === "kanji" || item.subjectType === "vocabulary",
+      (item) => isSubjectType(item.subjectType),
     );
     progressItemsByLevel.set(account.wkLevel, fallbackItems);
   }
 
-  function computeTypeProgress(itemsForLevel: LevelKanjiItem[], type: "radical" | "kanji" | "vocabulary"): TypeProgress {
+  function computeTypeProgress(itemsForLevel: LevelKanjiItem[], type: SubjectType): TypeProgress {
     const items = itemsForLevel.filter((item) => item.subjectType === type);
     const locked = items.filter((item) => item.srsStage <= 0).length;
     const apprentice = items.filter((item) => item.srsStage >= 1 && item.srsStage <= 4).length;
