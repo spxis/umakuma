@@ -1,7 +1,7 @@
 "use client";
 
 import { LEVEL_PROGRESS_CARDS } from "@/app/users/[nickname]/UserDashboard.constants";
-import { LEARNED_SRS_GROUP_LABELS } from "@/lib/domainConstants";
+import { LEARNED_SRS_GROUP_LABELS, SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 
 type ItemSpreadRow = {
@@ -78,9 +78,15 @@ export default function UserProgressPanels({
           <h2 className="text-3xl font-black text-foreground">Item Spread</h2>
           <div className="flex items-center gap-2">
             <div className="hidden flex-wrap items-center gap-2 text-sm font-semibold text-slate-700 sm:flex">
-              <span className="subject-pill subject-pill--radical">Radicals</span>
-              <span className="subject-pill subject-pill--kanji">Kanji</span>
-              <span className="subject-pill subject-pill--vocabulary">Vocabulary</span>
+              <span className="subject-pill subject-pill--radical">
+                {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural}
+              </span>
+              <span className="subject-pill subject-pill--kanji">
+                {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular}
+              </span>
+              <span className="subject-pill subject-pill--vocabulary">
+                {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular}
+              </span>
             </div>
             <button
               type="button"

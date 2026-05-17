@@ -1,5 +1,5 @@
 import { EMPTY_ITEM_SPREAD, isItemSpread } from "@/lib/itemSpread";
-import { LEARNED_SRS_GROUP_LABELS } from "@/lib/domainConstants";
+import { LEARNED_SRS_GROUP_LABELS, SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import {
   LEADERBOARD_24H_FOCUS_LABEL_BY_TAB,
   LEADERBOARD_24H_OVERALL_LABELS,
@@ -166,9 +166,15 @@ export default function LeaderboardExpandedRow({
           {showItemSpreadPanel ? (
             <>
               <div className="mt-2 flex flex-wrap gap-1 text-[10px]">
-                <span className="subject-pill subject-pill--radical">Radical</span>
-                <span className="subject-pill subject-pill--kanji">Kanji</span>
-                <span className="subject-pill subject-pill--vocabulary">Vocabulary</span>
+                <span className="subject-pill subject-pill--radical">
+                  {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].singular}
+                </span>
+                <span className="subject-pill subject-pill--kanji">
+                  {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular}
+                </span>
+                <span className="subject-pill subject-pill--vocabulary">
+                  {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular}
+                </span>
               </div>
               <div className="mt-2 space-y-1">
                 {LEARNED_SRS_GROUP_LABELS.map(({ key, label }) => {

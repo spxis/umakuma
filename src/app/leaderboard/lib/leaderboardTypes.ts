@@ -1,4 +1,4 @@
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 export type { SubjectType } from "@/lib/domainConstants";
 
@@ -118,7 +118,16 @@ export const ALL_SORT_KEYS: SortKey[] = [
 
 export const TAB_CONFIG: Record<LeaderboardTab, { label: string; defaultSort: SortState }> = {
   [LEADERBOARD_TABS.overall]: { label: "Overall", defaultSort: { key: "score", direction: "desc" } },
-  [LEADERBOARD_TABS.radicals]: { label: "Radicals", defaultSort: { key: "radicalPercent", direction: "desc" } },
-  [LEADERBOARD_TABS.kanji]: { label: "Kanji", defaultSort: { key: "kanjiPercent", direction: "desc" } },
-  [LEADERBOARD_TABS.vocabulary]: { label: "Vocabulary", defaultSort: { key: "vocabularyPercent", direction: "desc" } },
+  [LEADERBOARD_TABS.radicals]: {
+    label: SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural,
+    defaultSort: { key: "radicalPercent", direction: "desc" },
+  },
+  [LEADERBOARD_TABS.kanji]: {
+    label: SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular,
+    defaultSort: { key: "kanjiPercent", direction: "desc" },
+  },
+  [LEADERBOARD_TABS.vocabulary]: {
+    label: SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular,
+    defaultSort: { key: "vocabularyPercent", direction: "desc" },
+  },
 };
