@@ -22,6 +22,7 @@ import {
   type TypeFilter,
 } from "./levelExplorerState";
 import { passesReviewTimingFilter } from "./levelExplorerSelectors";
+import { EXPLORER_SEARCH_SCOPES, type ExplorerSearchScope } from "../../explorerSearchDomain";
 
 type BaseSetters = {
   setSelectedLevels: Dispatch<SetStateAction<Set<number>>>;
@@ -427,8 +428,8 @@ export function useLevelExplorerSearchEvents({
     runFromUrl();
 
     const onSearch = (event: Event) => {
-      const custom = event as CustomEvent<{ query?: string; requestId?: string; scope?: "level" | "jlpt" }>;
-      if (custom.detail?.scope === "jlpt") {
+      const custom = event as CustomEvent<{ query?: string; requestId?: string; scope?: ExplorerSearchScope }>;
+      if (custom.detail?.scope === EXPLORER_SEARCH_SCOPES.jlpt) {
         return;
       }
 
@@ -444,9 +445,9 @@ export function useLevelExplorerSearchEvents({
     };
 
     const onClear = (event: Event) => {
-      const custom = event as CustomEvent<{ scope?: "level" | "jlpt" | "all" }>;
+      const custom = event as CustomEvent<{ scope?: ExplorerSearchScope }>;
       const scope = custom.detail?.scope ?? LEVEL_TYPE_FILTERS.all;
-      if (scope === LEVEL_TYPE_FILTERS.all || scope === "level") {
+      if (scope === LEVEL_TYPE_FILTERS.all || scope === EXPLORER_SEARCH_SCOPES.level) {
         setSearchMatchedSubjectIds(null);
         setSearchAvailableLevels(null);
       }

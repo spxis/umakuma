@@ -133,7 +133,7 @@ export function passesReviewTimingFilter(
   }
 
   const deltaMs = availableTime - nowMs;
-  if (reviewTimingFilter === "overdue") {
+  if (reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.overdue) {
     return deltaMs <= 0;
   }
 
@@ -142,11 +142,11 @@ export function passesReviewTimingFilter(
   }
 
   const windowMs =
-    reviewTimingFilter === "next1h"
+    reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.next1h
       ? 60 * 60 * 1000
-      : reviewTimingFilter === "next8h"
+      : reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.next8h
         ? 8 * 60 * 60 * 1000
-        : reviewTimingFilter === "next24h"
+        : reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.next24h
           ? 24 * 60 * 60 * 1000
           : 72 * 60 * 60 * 1000;
 

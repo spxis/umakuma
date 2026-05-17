@@ -1,12 +1,17 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import {
+  EXPLORER_SEARCH_SCOPES,
+  type ExplorerSearchBarScope,
+  type ExplorerSearchScope,
+} from "./explorerSearchDomain";
 
 type Props = {
-  scope?: "level" | "jlpt" | "study";
+  scope?: ExplorerSearchBarScope;
 };
 
-export default function ExplorerSearchBar({ scope = "level" }: Props) {
+export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level }: Props) {
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [isSubmitLocked, setIsSubmitLocked] = useState(false);
@@ -45,9 +50,9 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
     };
 
     const onClear = (event: Event) => {
-      const custom = event as CustomEvent<{ scope?: "level" | "jlpt" | "study" | "all" }>;
-      const targetScope = custom.detail?.scope ?? "all";
-      if (targetScope !== "all" && targetScope !== scope) {
+      const custom = event as CustomEvent<{ scope?: ExplorerSearchScope }>;
+      const targetScope = custom.detail?.scope ?? EXPLORER_SEARCH_SCOPES.all;
+      if (targetScope !== EXPLORER_SEARCH_SCOPES.all && targetScope !== scope) {
         return;
       }
 
@@ -79,9 +84,9 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
     const readQueryFromUrl = () => {
       const params = new URLSearchParams(window.location.search);
       const next = (
-        scope === "jlpt"
+        scope === EXPLORER_SEARCH_SCOPES.jlpt
           ? params.get("findJlpt")
-          : scope === "study"
+          : scope === EXPLORER_SEARCH_SCOPES.study
             ? params.get("findStudy")
             : params.get("findLevel")
       )?.trim() ?? "";
@@ -152,7 +157,7 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
 
     window.dispatchEvent(
       new CustomEvent("wr:explorer-search-clear", {
-        detail: { scope: "all" },
+        detail: { scope: EXPLORER_SEARCH_SCOPES.all },
       }),
     );
   }
@@ -170,9 +175,9 @@ export default function ExplorerSearchBar({ scope = "level" }: Props) {
               clearSearch();
             }
           }}
-          placeholder={scope === "jlpt" ? "Search JLPT kanji" : "Search kanji, hiragana, or romaji"}
+          placeholder={scope === EXPLORER_SEARCH_SCOPES.jlpt ? "Search JLPT kanji" : "Search kanji, hiragana, or romaji"}
           className="h-9 min-w-0 flex-1 rounded-full bg-transparent px-3 text-sm font-semibold text-foreground outline-none placeholder:text-foreground/50"
-          aria-label={scope === "jlpt" ? "Search JLPT explorer" : scope === "study" ? "Search study explorer" : "Search level explorer"}
+          aria-label={scope === EXPLORER_SEARCH_SCOPES.jlpt ? "Search JLPT explorer" : scope === EXPLORER_SEARCH_SCOPES.study ? "Search study explorer" : "Search level explorer"}
           disabled={isSearching}
         />
         <button

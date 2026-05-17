@@ -457,8 +457,8 @@ export default function LevelExplorerController({
         markHistoryPush();
         setSelectedSubjectId(null);
         setJlptFilter(level);
-        if (level !== "all") {
-          setTypeFilterAndEnsureVisible("kanji");
+        if (level !== LEVEL_JLPT_FILTERS.all) {
+          setTypeFilterAndEnsureVisible(LEVEL_TYPE_FILTERS.kanji);
         }
       }}
       onSetReviewTimingFilter={(timing) => {

@@ -8,6 +8,7 @@ import {
   LEVEL_SRS_FILTERS,
   LEVEL_TYPE_FILTERS,
 } from "./levelExplorerState";
+import { EXPLORER_SEARCH_SCOPES } from "../../explorerSearchDomain";
 import { itemMatchesLevelSearch } from "./levelExplorerSelectors";
 
 type BuildActionsArgs = {
@@ -86,7 +87,7 @@ export function buildLevelExplorerActions({
       const next = `${window.location.pathname}?${params.toString()}#explorer`;
       window.history.pushState(null, "", next);
       window.dispatchEvent(
-        new CustomEvent("wr:explorer-search-clear", { detail: { scope: "all" } }),
+        new CustomEvent("wr:explorer-search-clear", { detail: { scope: EXPLORER_SEARCH_SCOPES.all } }),
       );
     }
 
