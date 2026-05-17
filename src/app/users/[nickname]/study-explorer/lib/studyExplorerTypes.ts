@@ -1,9 +1,9 @@
 import type { LevelItem, SrsFilter } from "../../explorerTypes";
-import type { SubjectType } from "@/lib/domainConstants";
+import type { QueueType, SubjectType, WkStatus } from "@/lib/domainConstants";
 
 export type StudyQueueItem = LevelItem & {
   assignmentId: number;
-  queueType: "review" | "lesson";
+  queueType: QueueType;
 };
 
 export type StudyQueueMode = StudyQueueItem["queueType"];
@@ -62,7 +62,7 @@ export type SubmitFeedback = {
   message: string;
 };
 
-export type ReviewSrsGrouping = "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+export type ReviewSrsGrouping = WkStatus;
 
 export type ReviewSrsTransition = {
   assignmentId: number;
@@ -105,7 +105,7 @@ export type StudyExplorerProps = {
 export type StudyTypeFilter = "all" | SubjectType;
 export type StudySrsFilter = Extract<
   SrsFilter,
-  "all" | "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned"
+  "all" | WkStatus
 >;
 
 export type StudySrsStageFilter = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;

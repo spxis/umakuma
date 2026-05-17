@@ -7,6 +7,7 @@ import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { recordStudyReviewAttempt, recordSubmissionSnapshot } from "@/lib/studyHistory";
 import { clearStudyQueueCache } from "@/lib/studyQueueCache";
+import { WK_STATUSES, type WkStatus } from "@/lib/domainConstants";
 import { srsLabel } from "@/lib/wanikani/helpers";
 import { postWaniKani } from "@/lib/wanikani/http";
 
@@ -51,7 +52,7 @@ type ReviewSubmissionResponse = {
   };
 };
 
-type ReviewSrsGrouping = "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+type ReviewSrsGrouping = WkStatus;
 
 function toStageOrNull(value: unknown): number | null {
   if (typeof value !== "number" || !Number.isFinite(value)) {
@@ -84,12 +85,12 @@ function transitionDirection(params: {
   }
 
   const groupingOrder: ReviewSrsGrouping[] = [
-    "locked",
-    "apprentice",
-    "guru",
-    "master",
-    "enlightened",
-    "burned",
+    WK_STATUSES.locked,
+    WK_STATUSES.apprentice,
+    WK_STATUSES.guru,
+    WK_STATUSES.master,
+    WK_STATUSES.enlightened,
+    WK_STATUSES.burned,
   ];
   const previousIndex = groupingOrder.indexOf(previousGrouping);
   const nextIndex = groupingOrder.indexOf(newGrouping);

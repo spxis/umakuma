@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { SUBJECT_TYPES, type WkStatus } from "@/lib/domainConstants";
 
 import jlptReadings from "@/data/jlptReadings.json";
 import JlptExplorerContent from "./JlptExplorerContent";
@@ -219,7 +219,7 @@ export default function JlptExplorer({
       startedAt?: string | null;
       passedAt?: string | null;
       availableAt?: string | null;
-      status?: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+      status?: WkStatus;
       srsStage?: number;
       wkLevel?: number | null;
     }>();

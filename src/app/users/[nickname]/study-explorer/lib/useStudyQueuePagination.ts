@@ -1,12 +1,12 @@
 import { useCallback, useEffect } from "react";
 
-import type { StudyCounts, StudyQueueItem } from "./studyExplorerTypes";
+import type { StudyCounts, StudyQueueItem, StudyQueueMode } from "./studyExplorerTypes";
 import { sameAssignmentList } from "./studyExplorerEffectsComparators";
 import { fetchStudyQueue } from "./studyExplorerUtils";
 
 type Args = {
   accountId: string;
-  queueMode: "review" | "lesson";
+  queueMode: StudyQueueMode;
   initialPageSize: number;
   loadedItems: StudyQueueItem[];
   totalItems: number;

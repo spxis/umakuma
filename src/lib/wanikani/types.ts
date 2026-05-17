@@ -1,4 +1,4 @@
-import type { SubjectType } from "@/lib/domainConstants";
+import type { SubjectType, WkStatus } from "@/lib/domainConstants";
 
 export type WaniKaniUserResponse = {
   data: {
@@ -111,7 +111,7 @@ export type LeaderboardStats = {
     characters: string;
     meanings: string[];
     srsStage: number;
-    status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+    status: WkStatus;
     availableAt: string | null;
   }>;
   itemSpread: {
@@ -151,7 +151,7 @@ export type UserKanjiIndexItem = {
   passedAt: string | null;
   availableAt: string | null;
   srsStage: number;
-  status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+  status: WkStatus;
   wkLevel: number | null;
 };
 
@@ -198,7 +198,7 @@ export type LevelKanjiSnapshot = {
     readingExplanation: string;
     jlptLevel: number | null;
     srsStage: number;
-    status: "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned";
+    status: WkStatus;
     startedAt: string | null;
     passedAt: string | null;
     availableAt: string | null;
