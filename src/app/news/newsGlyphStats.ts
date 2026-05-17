@@ -1,7 +1,7 @@
 "use client";
 
 import { getStoredJson, setStoredJson } from "@/lib/clientStorage";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
 export const NEWS_GLYPH_STATS_EVENT = "uk:news-glyph-stats-changed";
 
@@ -9,7 +9,7 @@ const GLYPH_STATS_KEY = "uk:news-glyph-stats";
 const GLYPH_EVENTS_KEY = "uk:news-glyph-events";
 const MAX_EVENTS = 2000;
 
-export type NewsGlyphType = "kanji" | "vocabulary";
+export type NewsGlyphType = Extract<SubjectType, typeof SUBJECT_TYPES.kanji | typeof SUBJECT_TYPES.vocabulary>;
 const NEWS_GLYPH_TYPES = [SUBJECT_TYPES.kanji, SUBJECT_TYPES.vocabulary] as const;
 
 export type NewsGlyphStatEntry = {

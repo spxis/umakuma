@@ -1,6 +1,7 @@
 import { typeGlyphBoxClass } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
+import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
-export type NewsGlyphBoxType = "kanji" | "vocabulary";
+export type NewsGlyphBoxType = Extract<SubjectType, typeof SUBJECT_TYPES.kanji | typeof SUBJECT_TYPES.vocabulary>;
 
 export function newsGlyphBoxClass(type: NewsGlyphBoxType): string {
   return typeGlyphBoxClass(type);

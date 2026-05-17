@@ -6,7 +6,7 @@ import type {
   StudyTypeFilter,
   StudyViewerMode,
 } from "./studyExplorerTypes";
-import { WK_STATUSES, SUBJECT_TYPES } from "@/lib/domainConstants";
+import { WK_STATUSES, SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
 export const STUDY_QUEUE_TYPES = {
   review: "review",
@@ -150,7 +150,7 @@ export function isReviewQueueMode(queueMode: StudyQueueMode): boolean {
 
 export function usedInVocabularyTargetSubjectType(
   subjectType: StudyQueueItem["subjectType"],
-): "kanji" | "vocabulary" {
+): Extract<SubjectType, typeof SUBJECT_TYPES.kanji | typeof SUBJECT_TYPES.vocabulary> {
   return isRadicalSubjectType(subjectType)
     ? STUDY_SUBJECT_TYPES.kanji
     : STUDY_SUBJECT_TYPES.vocabulary;

@@ -1,7 +1,10 @@
 import { fetchAllCollectionPages } from "@/lib/wanikani/http";
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
-type NewsLookupSubjectType = Extract<SubjectType, "kanji" | "vocabulary">;
+type NewsLookupSubjectType = Extract<
+  SubjectType,
+  typeof SUBJECT_TYPES.kanji | typeof SUBJECT_TYPES.vocabulary
+>;
 
 export type LookupGlyphItem = {
   text: string;
@@ -55,7 +58,7 @@ async function lookupVocabulary(run: string, token: string): Promise<LookupGlyph
   }
 
   const collection = await fetchAllCollectionPages(
-    `/subjects?types=vocabulary&slugs=${encodeURIComponent(value)}`,
+    `/subjects?types=${SUBJECT_TYPES.vocabulary}&slugs=${encodeURIComponent(value)}`,
     token,
   );
 
@@ -122,7 +125,7 @@ async function lookupKanjiByChars(
     const chunk = unique.slice(i, i + CHUNK_SIZE);
     const slugs = chunk.map((char) => encodeURIComponent(char)).join(",");
     const collection = await fetchAllCollectionPages(
-      `/subjects?types=kanji&slugs=${slugs}`,
+      `/subjects?types=${SUBJECT_TYPES.kanji}&slugs=${slugs}`,
       token,
     );
 

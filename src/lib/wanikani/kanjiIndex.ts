@@ -4,7 +4,10 @@ import type { UserKanjiIndexItem } from "./types";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
 export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexItem[]> {
-  const assignmentsCollection = await fetchAllCollectionPages("/assignments?subject_types=kanji", token);
+  const assignmentsCollection = await fetchAllCollectionPages(
+    `/assignments?subject_types=${SUBJECT_TYPES.kanji}`,
+    token,
+  );
 
   const assignments = assignmentsCollection.data
     .map((row) =>

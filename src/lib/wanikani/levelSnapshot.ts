@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { SUBJECT_TYPES, WK_STATUSES } from "@/lib/domainConstants";
+import { SUBJECT_TYPES, SUBJECT_TYPE_VALUES, WK_STATUSES } from "@/lib/domainConstants";
 
 import { fetchAllCollectionPages, fetchWaniKani } from "./http";
 import { normalizeAssignmentType, srsLabel, toDate } from "./helpers";
@@ -9,12 +9,13 @@ export async function getLevelKanjiSnapshot(
   token: string,
   level: number,
 ): Promise<LevelKanjiSnapshot> {
+  const subjectTypeQuery = SUBJECT_TYPE_VALUES.join(",");
   const levelSubjectsResponse = await fetchWaniKani<WaniKaniCollectionResponse>(
-    `/subjects?types=kanji,radical,vocabulary&levels=${level}`,
+    `/subjects?types=${subjectTypeQuery}&levels=${level}`,
     token,
   );
   const levelAssignmentsResponse = await fetchWaniKani<WaniKaniCollectionResponse>(
-    `/assignments?subject_types=kanji,radical,vocabulary&levels=${level}`,
+    `/assignments?subject_types=${subjectTypeQuery}&levels=${level}`,
     token,
   );
 
@@ -171,7 +172,7 @@ export async function getLevelKanjiSnapshot(
 
       const srsStage = assignment?.srs_stage ?? 0;
       const locked = !assignment || !assignment.unlocked_at || srsStage <= 0;
-      const object = normalizeAssignmentType(subjectRow.object ?? "") ?? "kanji";
+      const object = normalizeAssignmentType(subjectRow.object ?? "") ?? SUBJECT_TYPES.kanji;
 
       return {
         subjectId: subjectRow.id,
