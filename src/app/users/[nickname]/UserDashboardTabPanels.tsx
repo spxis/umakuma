@@ -15,6 +15,11 @@ import {
   srsSegmentTextClass,
   stageLabel,
 } from "./userDashboardSrsUi";
+import {
+  DASHBOARD_SRS_LINKS,
+  DASHBOARD_SUBJECT_TYPES,
+  ITEM_SPREAD_STAGE_LABELS,
+} from "./UserDashboard.constants";
 
 import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
 import type {
@@ -57,6 +62,14 @@ export function MainTabPanel({
   totalKanjiCount,
   vocabularyCount,
 }: MainTabPanelProps) {
+  const srsCountsByGroup: Record<SrsGroupKey, number> = {
+    apprentice: apprenticeCount,
+    guru: guruCount,
+    master: masterCount,
+    enlightened: enlightenedCount,
+    burned: burnedCount,
+  };
+
   return (
     <div className="mt-3 sm:mt-4" role="tabpanel">
       <div className="grid grid-cols-3 gap-1.5 sm:gap-2 lg:grid-cols-5">
@@ -90,11 +103,9 @@ export function MainTabPanel({
         </article>
       </div>
       <div className="mt-2 grid grid-cols-4 gap-1.5 sm:mt-4 sm:gap-2 lg:grid-cols-8">
-        <SrsLink label="Apprentice" shortLabel="Appr" query={WK_STATUSES.apprentice} value={apprenticeCount} />
-        <SrsLink label="Guru" shortLabel="Guru" query={WK_STATUSES.guru} value={guruCount} />
-        <SrsLink label="Master" shortLabel="Mstr" query={WK_STATUSES.master} value={masterCount} />
-        <SrsLink label="Enlightened" shortLabel="Enl" query={WK_STATUSES.enlightened} value={enlightenedCount} />
-        <SrsLink label="Burned" shortLabel="Burn" query={WK_STATUSES.burned} value={burnedCount} />
+        {DASHBOARD_SRS_LINKS.map(({ key, label, shortLabel }) => (
+          <SrsLink key={key} label={label} shortLabel={shortLabel} query={key} value={srsCountsByGroup[key]} />
+        ))}
         <div className="rounded-lg border border-radical/40 bg-radical/10 px-1.5 py-1.5 text-center text-[10px] font-semibold text-radical sm:rounded-xl sm:px-3 sm:py-2 sm:text-sm">
           <span className="block"><span className="sm:hidden">Rad:</span><span className="hidden sm:inline">{subjectTypePluralLabel("radical")}:</span></span>
           <span className="mt-0.5 block text-xl font-black leading-none sm:text-4xl">{formatNumber(radicalCount)}</span>
@@ -123,13 +134,11 @@ export function ItemSpreadTabPanel({ itemSpread, itemSpreadDetails }: ItemSpread
     Object.fromEntries(LEARNED_SRS_GROUPS.map((group) => [group, false])) as Record<SrsGroupKey, boolean>,
   );
 
-  const groupedRows: Array<[SrsGroupKey, string, ItemSpreadRow]> = [
-    [WK_STATUSES.apprentice, "Apprentice", itemSpread.apprentice],
-    [WK_STATUSES.guru, "Guru", itemSpread.guru],
-    [WK_STATUSES.master, "Master", itemSpread.master],
-    [WK_STATUSES.enlightened, "Enlightened", itemSpread.enlightened],
-    [WK_STATUSES.burned, "Burned", itemSpread.burned],
-  ];
+  const groupedRows: Array<[SrsGroupKey, string, ItemSpreadRow]> = ITEM_SPREAD_STAGE_LABELS.map(({ key, label }) => [
+    key,
+    label,
+    itemSpread[key],
+  ]);
 
   const toggleExpanded = (group: SrsGroupKey) => {
     setExpandedGroups((prev) => ({ ...prev, [group]: !prev[group] }));
@@ -323,11 +332,10 @@ export function LevelProgressTabPanel({
         <>
           <p className="mt-3 text-lg text-foreground/75">Number of items Guru&apos;d in this level.</p>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
-            {([
-              [subjectTypePluralLabel("radical"), "radical", levelRadicalProgress],
-              [subjectTypePluralLabel("kanji"), "kanji", levelKanjiProgress],
-              [subjectTypePluralLabel("vocabulary"), "vocabulary", levelVocabularyProgress],
-            ] as const).map(([label, type, progress]) => {
+            {DASHBOARD_SUBJECT_TYPES.map((type) => {
+              const label = subjectTypePluralLabel(type);
+              const progress =
+                type === "radical" ? levelRadicalProgress : type === "kanji" ? levelKanjiProgress : levelVocabularyProgress;
               const stageCounts: Array<[SrsProgressStatus, number]> = [
                 [WK_STATUSES.apprentice, progress.apprentice],
                 [WK_STATUSES.guru, progress.guru],
@@ -420,11 +428,12 @@ export function LevelProgressTabPanel({
                   </span>
                 </div>
                 <div className="mt-2 grid gap-2 sm:grid-cols-3">
-                  {([
-                    [subjectTypePluralLabel("radical"), "radical", snapshot.radical],
-                    [subjectTypePluralLabel("kanji"), "kanji", snapshot.kanji],
-                    [subjectTypePluralLabel("vocabulary"), "vocabulary", snapshot.vocabulary],
-                  ] as const).map(([label, type, progress]) => (
+                  {DASHBOARD_SUBJECT_TYPES.map((type) => {
+                    const label = subjectTypePluralLabel(type);
+                    const progress =
+                      type === "radical" ? snapshot.radical : type === "kanji" ? snapshot.kanji : snapshot.vocabulary;
+
+                    return (
                     <div key={`${level}-${label}`} className="rounded-xl border border-line bg-surface-muted px-3 py-2">
                       <div className="flex items-center justify-between gap-2">
                         <span className={`subject-pill subject-pill--${type}`}>{label}</span>
@@ -436,7 +445,8 @@ export function LevelProgressTabPanel({
                         {formatNumber(progress.guruOrHigher)}/{formatNumber(progress.total)}
                       </p>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <p className="mt-2 text-sm font-semibold text-foreground/75">
                   {snapshot.passedLevelUpGate
