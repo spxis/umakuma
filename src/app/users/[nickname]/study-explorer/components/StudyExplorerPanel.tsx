@@ -41,6 +41,7 @@ type Props = {
   studyMode: boolean;
   levelOptions: number[];
   availableLevels: Set<number>;
+  reviewLevelCounts: Record<number, number>;
   viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
   srsFilter: StudySrsFilter;
@@ -88,6 +89,7 @@ export default function StudyExplorerPanel({
   studyMode,
   levelOptions,
   availableLevels,
+  reviewLevelCounts,
   viewedLevel,
   typeFilter,
   srsFilter,
@@ -144,6 +146,7 @@ export default function StudyExplorerPanel({
     .map(([level, count]) => [Number(level), count] as const)
     .filter(([, count]) => count > 0)
     .sort((a, b) => a[0] - b[0]);
+  const totalReviewsInVisibleLevels = Object.values(reviewLevelCounts).reduce((sum, count) => sum + count, 0);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
   const reviewLevelChips = groupStudyReviewLevelChips(levelOptions, availableLevels, viewedLevel, hasData);
@@ -168,7 +171,7 @@ export default function StudyExplorerPanel({
                 disabled={filtersLoading}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
               >
-                {STUDY_PANEL_TEXT.allLevelsLabel} <span className="ml-0.5 align-super text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(totalLessonsInVisibleLevels)})</span>
+                {STUDY_PANEL_TEXT.allLevelsLabel} <span className="ml-0.5 align-baseline text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(totalLessonsInVisibleLevels)})</span>
               </button>
               {lessonLevelOptions.map(([level, count]) => (
                 <button
@@ -178,7 +181,7 @@ export default function StudyExplorerPanel({
                   disabled={filtersLoading}
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && viewedLevel !== level ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
                 >
-                  L{level} <span className="ml-0.5 align-super text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(count)})</span>
+                  L{level} <span className="ml-0.5 align-baseline text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(count)})</span>
                 </button>
               ))}
             </>
@@ -190,7 +193,7 @@ export default function StudyExplorerPanel({
                 disabled={filtersLoading}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
               >
-                {STUDY_PANEL_TEXT.allLevelsLabel}
+                {STUDY_PANEL_TEXT.allLevelsLabel} <span className="ml-0.5 align-baseline text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(totalReviewsInVisibleLevels)})</span>
               </button>
               {reviewLevelChips.map((chip) => {
                 if (chip.kind === "range") {
@@ -207,6 +210,7 @@ export default function StudyExplorerPanel({
                 }
                 const isSelected = viewedLevel === chip.level;
                 const disabled = filtersLoading && !isSelected;
+                const levelCount = reviewLevelCounts[chip.level] ?? 0;
                 return (
                   <button
                     key={chip.level}
@@ -215,7 +219,7 @@ export default function StudyExplorerPanel({
                     disabled={disabled}
                     className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
                   >
-                    L{chip.level}
+                    L{chip.level} <span className="ml-0.5 align-baseline text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(levelCount)})</span>
                   </button>
                 );
               })}
@@ -257,7 +261,7 @@ export default function StudyExplorerPanel({
                     disabled={disabled}
                     className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
                   >
-                    {srsFilterButtonLabel(status)} <span className="ml-0.5 align-super text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(count)})</span>
+                    {srsFilterButtonLabel(status)} <span className="ml-0.5 align-baseline text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(count)})</span>
                   </button>
                   );
                 })}
@@ -286,7 +290,7 @@ export default function StudyExplorerPanel({
                     disabled={disabled}
                     className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
                   >
-                    SRS {stage} <span className="ml-0.5 align-super text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(count)})</span>
+                    SRS {stage} <span className="ml-0.5 align-baseline text-[10px] font-semibold tracking-normal opacity-75">({formatNumber(count)})</span>
                   </button>
                   );
                 })}

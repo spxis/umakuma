@@ -65,18 +65,63 @@ export function useStudyExplorerDerivedData({
     [maxLevel],
   );
 
-  const availableLevels = useMemo(() => {
-    const output = new Set<number>();
+  const reviewLevelCounts = useMemo(() => {
+    const countsByLevel: Record<number, number> = {};
     for (const item of loadedItems) {
+      if (item.queueType !== STUDY_QUEUE_TYPES.review) {
+        continue;
+      }
       if (effectiveRecentOnly && !isRecentStudyItem(item)) {
         continue;
       }
-      if (item.queueType === queueMode && typeof item.wkLevel === "number") {
-        output.add(item.wkLevel);
+      if (!isAllStudyTypeFilter(typeFilter) && item.subjectType !== typeFilter) {
+        continue;
       }
+      if (!isAllStudySrsFilter(effectiveSrsFilter) && item.status !== effectiveSrsFilter) {
+        continue;
+      }
+      if (effectiveSrsStageFilter !== null && item.srsStage !== effectiveSrsStageFilter) {
+        continue;
+      }
+      if (!effectiveShowLocked && item.status === STUDY_WK_STATUSES.locked) {
+        continue;
+      }
+      if (typeof item.wkLevel !== "number") {
+        continue;
+      }
+
+      countsByLevel[item.wkLevel] = (countsByLevel[item.wkLevel] ?? 0) + 1;
     }
+
+    return countsByLevel;
+  }, [
+    loadedItems,
+    effectiveRecentOnly,
+    typeFilter,
+    effectiveSrsFilter,
+    effectiveSrsStageFilter,
+    effectiveShowLocked,
+  ]);
+
+  const availableLevels = useMemo(() => {
+    const output = new Set<number>();
+    if (queueMode === STUDY_QUEUE_TYPES.review) {
+      for (const [levelRaw, count] of Object.entries(reviewLevelCounts)) {
+        const level = Number(levelRaw);
+        if (Number.isInteger(level) && count > 0) {
+          output.add(level);
+        }
+      }
+      return output;
+    }
+
+    for (const item of loadedItems) {
+      if (effectiveRecentOnly && !isRecentStudyItem(item)) continue;
+      if (item.queueType === queueMode && typeof item.wkLevel === "number") output.add(item.wkLevel);
+    }
+
     return output;
-  }, [loadedItems, queueMode, effectiveRecentOnly]);
+  }, [loadedItems, queueMode, effectiveRecentOnly, reviewLevelCounts]);
 
   const filteredItems = useMemo(
     () =>
@@ -352,6 +397,7 @@ export function useStudyExplorerDerivedData({
   return {
     levelOptions,
     availableLevels,
+    reviewLevelCounts,
     filteredItems,
     lessonLevelCountsFromServer,
     lessonLevelCounts,

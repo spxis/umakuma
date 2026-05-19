@@ -178,6 +178,7 @@ export default function StudyExplorer({
   const {
     levelOptions,
     availableLevels,
+    reviewLevelCounts,
     filteredItems,
     lessonLevelCountsFromServer,
     lessonLevelCounts,
@@ -364,6 +365,7 @@ export default function StudyExplorer({
         studyMode={studyMode}
         levelOptions={levelOptions}
         availableLevels={availableLevels}
+        reviewLevelCounts={reviewLevelCounts}
         viewedLevel={effectiveViewedLevel}
         typeFilter={typeFilter}
         srsFilter={effectiveSrsFilter}
