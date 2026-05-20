@@ -224,7 +224,7 @@ export default function StudyExplorerPanel({
           )}
         </div>
 
-        <div className={`mt-2 flex flex-wrap items-start justify-between gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
+        <div className={`mt-2 space-y-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
           <SubjectTypeFilterGroup
             counts={typeCounts}
             allLabel={viewedLevel === null ? STUDY_PANEL_TEXT.allLevelsLabel : `All L${viewedLevel}`}
@@ -242,8 +242,8 @@ export default function StudyExplorerPanel({
           />
 
           {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
-            <div className="ml-auto grid gap-2 justify-items-end">
-              <div className="flex flex-wrap justify-end gap-2">
+            <div className="grid gap-2">
+              <div className="flex flex-wrap gap-2">
                 {STUDY_PANEL_SRS_STATUSES.map((status) => {
                   const count = srsCounts[status];
                   const isSelected = srsFilter === status;
@@ -263,7 +263,7 @@ export default function StudyExplorerPanel({
                 })}
               </div>
 
-              <div className="flex flex-wrap justify-end gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => onSetSrsStageFilter(null)}
