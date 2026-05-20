@@ -67,6 +67,7 @@ type Props = {
   waitSortOrder: StudyWaitSortOrder;
   gridColumns: number;
   cacheFooterText: string;
+  cacheFooterTitle: string;
   sentinelRef: React.RefObject<HTMLDivElement | null>;
   onSetViewedLevel: (level: number | null) => void;
   onSetTypeFilter: (filter: StudyTypeFilter) => void;
@@ -110,6 +111,7 @@ export default function StudyExplorerPanel({
   waitSortOrder,
   gridColumns,
   cacheFooterText,
+  cacheFooterTitle,
   sentinelRef,
   onSetViewedLevel,
   onSetTypeFilter,
@@ -346,7 +348,6 @@ export default function StudyExplorerPanel({
               </button>
           </div>
         </div>
-
         {bulkModeEnabled ? (
           <ExplorerBulkSelectionPanel
             selectedCount={selectedSubjectIds.size}
@@ -491,7 +492,7 @@ export default function StudyExplorerPanel({
             </div>
           </div>
         </div>
-        <p className="mt-2 text-right text-[11px] font-medium text-foreground/55">{cacheFooterText}</p>
+        <p className="mt-2 text-right text-[11px] font-medium text-foreground/55" title={cacheFooterTitle}>{cacheFooterText}</p>
       </div>
     </>
   );

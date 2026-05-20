@@ -25,21 +25,37 @@ type CacheFooterArgs = {
   restoredCount: number;
   loadedCount: number;
   totalCount: number;
+  requestLimit: number;
 };
 
-export function buildStudyCacheFooterText({
+type StudyCacheTelemetry = {
+  text: string;
+  title: string;
+};
+
+export function buildStudyCacheTelemetry({
   cachedAtMs,
   restoredCount,
   loadedCount,
   totalCount,
-}: CacheFooterArgs): string {
+  requestLimit,
+}: CacheFooterArgs): StudyCacheTelemetry {
+  const safeTotal = Math.max(0, totalCount);
+  const safeLoaded = Math.max(0, loadedCount);
+  const safeRestored = Math.max(0, restoredCount);
+  const newCount = Math.max(0, safeLoaded - safeRestored);
+
   if (!cachedAtMs) {
-    return `Live data · ${loadedCount}/${totalCount} loaded`;
+    return {
+      text: `Live data · ${safeLoaded}/${safeTotal} loaded`,
+      title: `No warm cache was used. Initial request size: ${requestLimit}. Loaded now: ${safeLoaded}/${safeTotal}.`,
+    };
   }
 
   const ageSeconds = Math.max(0, Math.floor((Date.now() - cachedAtMs) / 1000));
-  const newCount = Math.max(0, loadedCount - restoredCount);
   const newLabel = newCount > 0 ? ` · +${newCount} new` : "";
-
-  return `Cache ${ageSeconds}s old · ${restoredCount} restored · ${loadedCount}/${totalCount} loaded${newLabel}`;
+  return {
+    text: `Cache ${ageSeconds}s old · ${safeRestored} restored · ${safeLoaded}/${safeTotal} loaded${newLabel}`,
+    title: `Cache hit. Restored from cache: ${safeRestored}. Newly fetched after restore: ${newCount}. Initial request size: ${requestLimit}. Currently loaded: ${safeLoaded}/${safeTotal}.`,
+  };
 }

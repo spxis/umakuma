@@ -17,6 +17,7 @@ import {
   readStoredQueueMeta,
   STUDY_RECENT_WINDOW_MS,
 } from "./studyExplorerUtils";
+import { buildStudyCacheTelemetry } from "./studyExplorerView";
 import type { StudyQueueItem } from "./studyExplorerTypes";
 
 function makeItem(overrides: Partial<StudyQueueItem> = {}): StudyQueueItem {
@@ -282,5 +283,39 @@ describe("study explorer state helpers", () => {
       restoredCount: 1,
       totalCount: 9,
     });
+  });
+
+  it("formats live cache telemetry text and title", () => {
+    expect(
+      buildStudyCacheTelemetry({
+        cachedAtMs: null,
+        restoredCount: 0,
+        loadedCount: 96,
+        totalCount: 356,
+        requestLimit: 96,
+      }),
+    ).toEqual({
+      text: "Live data · 96/356 loaded",
+      title: "No warm cache was used. Initial request size: 96. Loaded now: 96/356.",
+    });
+  });
+
+  it("formats cache-hit telemetry with age and new-count details", () => {
+    const nowSpy = vi.spyOn(Date, "now").mockReturnValue(200_000);
+
+    expect(
+      buildStudyCacheTelemetry({
+        cachedAtMs: 170_000,
+        restoredCount: 120,
+        loadedCount: 156,
+        totalCount: 356,
+        requestLimit: 96,
+      }),
+    ).toEqual({
+      text: "Cache 30s old · 120 restored · 156/356 loaded · +36 new",
+      title: "Cache hit. Restored from cache: 120. Newly fetched after restore: 36. Initial request size: 96. Currently loaded: 156/356.",
+    });
+
+    nowSpy.mockRestore();
   });
 });
