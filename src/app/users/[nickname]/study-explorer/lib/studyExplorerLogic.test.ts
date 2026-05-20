@@ -190,6 +190,7 @@ describe("study explorer state helpers", () => {
     expect(keys.counts).toBe("wr:study-queue-counts:acct-1");
     expect(keys.selectedSubject).toBe("wr:study-selected-subject:acct-1:review");
     expect(keys.typeFilter).toBe("wr:study-type-filter:acct-1:review");
+    expect(keys.waitSort).toBe("wr:study-wait-sort:acct-1:review");
   });
 
   it("derives initial queue state from cached payload", () => {

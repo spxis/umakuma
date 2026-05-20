@@ -9,6 +9,7 @@ export type StudyExplorerStorageKeys = {
   srsStageFilter: string;
   recentOnly: string;
   showLocked: string;
+  waitSort: string;
 };
 
 export function buildStudyExplorerStorageKeys(
@@ -23,6 +24,7 @@ export function buildStudyExplorerStorageKeys(
     srsStageFilter: `wr:study-srs-stage-filter:${accountId}:${queueMode}`,
     recentOnly: `wr:study-recent-only:${accountId}:${queueMode}`,
     showLocked: `wr:study-show-locked:${accountId}:${queueMode}`,
+    waitSort: `wr:study-wait-sort:${accountId}:${queueMode}`,
   };
 }
 

@@ -46,6 +46,10 @@ import {
   useStudyViewerModeSync,
 } from "../lib/useStudyExplorerUiEffects";
 
+function isStudyWaitSortOrder(value: string | null): value is StudyWaitSortOrder {
+  return value === "oldest_wait" || value === "newest_wait";
+}
+
 export default function StudyExplorer({
   accountId,
   maxLevel,
@@ -94,7 +98,19 @@ export default function StudyExplorer({
   const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
   const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? true);
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
-  const [waitSortOrder, setWaitSortOrder] = useState<StudyWaitSortOrder>("oldest_wait");
+  const [waitSortOrder, setWaitSortOrder] = useState<StudyWaitSortOrder>(() => {
+    if (typeof window === "undefined") {
+      return "oldest_wait";
+    }
+
+    const fromUrl = new URLSearchParams(window.location.search).get("waitSort");
+    if (isStudyWaitSortOrder(fromUrl)) {
+      return fromUrl;
+    }
+
+    const stored = window.localStorage.getItem(storageKeys.waitSort);
+    return isStudyWaitSortOrder(stored) ? stored : "oldest_wait";
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [forcedViewerMode, setForcedViewerMode] = useState<StudyViewerMode | null>(initialViewerMode);
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
@@ -291,6 +307,14 @@ export default function StudyExplorer({
   );
 
   useEffect(() => {
+    window.localStorage.setItem(storageKeys.waitSort, waitSortOrder);
+    const params = new URLSearchParams(window.location.search);
+    params.set("waitSort", waitSortOrder);
+    const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+    window.history.replaceState(null, "", next);
+  }, [storageKeys.waitSort, waitSortOrder]);
+
+  useEffect(() => {
     try {
       if (selectedId === null) {
         window.localStorage.removeItem(storageKeys.selectedSubject);
@@ -396,7 +420,6 @@ export default function StudyExplorer({
         hasData={Boolean(data)}
         isUnauthorized={isUnauthorized}
         errorMessage={error?.message ?? null}
-        recentOnly={effectiveRecentOnly}
         showLocked={effectiveShowLocked}
         sentinelRef={sentinelRef}
         onSetViewedLevel={setViewedLevel}
@@ -405,7 +428,6 @@ export default function StudyExplorer({
         onSetSrsStageFilter={setSrsStageFilter}
         onToggleShowEnglish={onToggleShowEnglish}
         onToggleShowLocked={() => setShowLocked((prev) => !prev)}
-        onToggleRecentOnly={() => setRecentOnly((prev) => !prev)}
         onSetWaitSortOrder={setWaitSortOrder}
         onSelectSubject={setSelectedId}
         onClearAllFilters={clearAllFilters}

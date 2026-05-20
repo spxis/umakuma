@@ -63,7 +63,6 @@ type Props = {
   hasData: boolean;
   isUnauthorized: boolean;
   errorMessage: string | null;
-  recentOnly: boolean;
   showLocked: boolean;
   waitSortOrder: StudyWaitSortOrder;
   sentinelRef: React.RefObject<HTMLDivElement | null>;
@@ -73,7 +72,6 @@ type Props = {
   onSetSrsStageFilter: (filter: StudySrsStageFilter | null) => void;
   onToggleShowEnglish: () => void;
   onToggleShowLocked: () => void;
-  onToggleRecentOnly: () => void;
   onSetWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;
   onSelectSubject: (subjectId: number) => void;
   onClearAllFilters: () => void;
@@ -106,7 +104,6 @@ export default function StudyExplorerPanel({
   hasData,
   isUnauthorized,
   errorMessage,
-  recentOnly,
   showLocked,
   waitSortOrder,
   sentinelRef,
@@ -116,7 +113,6 @@ export default function StudyExplorerPanel({
   onSetSrsStageFilter,
   onToggleShowEnglish,
   onToggleShowLocked,
-  onToggleRecentOnly,
   onSetWaitSortOrder,
   onSelectSubject,
   onClearAllFilters,
@@ -226,7 +222,6 @@ export default function StudyExplorerPanel({
             </>
           )}
         </div>
-
         <div className={`mt-2 space-y-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
           <SubjectTypeFilterGroup
             counts={typeCounts}
@@ -304,7 +299,6 @@ export default function StudyExplorerPanel({
           </div>
         </div>
       ) : null}
-
       <div className="p-5">
         <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           {showLoadingOverlay ? (
@@ -316,8 +310,7 @@ export default function StudyExplorerPanel({
               Showing {formatNumber(filteredItems.length)} matching items · {formatNumber(totalItems)} total in queue
             </p>
           )}
-          <div className={`w-full overflow-x-auto sm:ml-auto sm:w-auto ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
-            <div className="flex min-w-max items-center gap-2">
+          <div className={`flex w-full flex-wrap items-center gap-2 sm:ml-auto sm:w-auto ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
               <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}>Oldest Wait</button>
               <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}>Newest Wait</button>
               <button
@@ -337,13 +330,6 @@ export default function StudyExplorerPanel({
                   >
                     {showLocked ? STUDY_PANEL_TEXT.hideLocked : STUDY_PANEL_TEXT.showLocked}
                   </button>
-                  <button
-                    type="button"
-                    onClick={onToggleRecentOnly}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(recentOnly)}`}
-                  >
-                    {STUDY_PANEL_TEXT.recentOnly}
-                  </button>
                 </>
               ) : null}
               <button
@@ -353,7 +339,6 @@ export default function StudyExplorerPanel({
               >
                 {bulkModeEnabled ? STUDY_PANEL_TEXT.bulkOpsActive : STUDY_PANEL_TEXT.bulkOperations}
               </button>
-            </div>
           </div>
         </div>
 
