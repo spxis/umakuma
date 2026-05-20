@@ -545,3 +545,29 @@ test("study does not keep zero-count level selected for active type", async ({ b
     await expect(selectedZeroLevel).toHaveCount(0);
   });
 });
+
+test("study selected level still groups unavailable ranges", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for selected-level grouping checks in this environment.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&level=10&type=all&srs=all#explorer`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+    if ((await accessGate.count()) > 0) {
+      await expect(accessGate).toBeVisible();
+      return;
+    }
+
+    await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {
+      // Some pages keep lightweight polling alive; proceed with assertions.
+    });
+
+    const selectedLevel = page.locator("button.bg-accent").filter({ hasText: /^L10\s*\(\d+\)$/i });
+    await expect(selectedLevel.first()).toBeVisible();
+
+    const groupedDisabledLevels = page
+      .locator("button:disabled")
+      .filter({ hasText: /^L\d+-L\d+$/i });
+    await expect(groupedDisabledLevels.first()).toBeVisible();
+  });
+});

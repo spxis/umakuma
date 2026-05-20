@@ -152,7 +152,6 @@ export function useStudyExplorerDerivedData({
 
   const canUseServerReviewLevelCounts =
     queueMode === STUDY_QUEUE_TYPES.review &&
-    viewedLevel === null &&
     isAllStudySrsFilter(effectiveSrsFilter) &&
     effectiveSrsStageFilter === null &&
     !effectiveRecentOnly &&
@@ -160,7 +159,6 @@ export function useStudyExplorerDerivedData({
 
   const hasReliableReviewLevelAvailability =
     queueMode === STUDY_QUEUE_TYPES.review &&
-    viewedLevel === null &&
     isAllStudySrsFilter(effectiveSrsFilter) &&
     effectiveSrsStageFilter === null &&
     !effectiveRecentOnly &&
