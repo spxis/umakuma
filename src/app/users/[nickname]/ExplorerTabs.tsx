@@ -350,7 +350,7 @@ export default function ExplorerTabs({
     <section className="space-y-3 rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
       <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
         <div
-          className="inline-flex flex-wrap items-center rounded-full border border-line bg-surface p-1"
+          className="inline-flex w-full flex-nowrap items-center gap-0 overflow-x-auto rounded-full border border-line bg-surface p-1"
           role="tablist"
           aria-label="Explorer tabs"
         >
@@ -370,7 +370,8 @@ export default function ExplorerTabs({
             className={tabClass("level")}
             onClick={() => setActiveTab("level")}
           >
-            WaniKani Explorer
+            <span className="sm:hidden">WK Explorer</span>
+            <span className="hidden sm:inline">WaniKani Explorer</span>
           </button>
           <button
             type="button"
@@ -382,10 +383,10 @@ export default function ExplorerTabs({
             JLPT Explorer
           </button>
         </div>
-        <div className="flex flex-wrap items-center justify-start gap-2 md:justify-end">
+        <div className="flex w-full flex-nowrap items-center justify-start gap-2 overflow-x-auto md:justify-end">
           {activeTab === "study" ? (
             <div
-              className="inline-flex items-center rounded-full border border-line bg-surface p-1"
+              className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1"
               role="tablist"
               aria-label="Study queue mode"
             >
@@ -412,7 +413,7 @@ export default function ExplorerTabs({
           <button
             type="button"
             onClick={() => setStudyMode((prev) => !prev)}
-            className={`inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.1em] transition ${
+            className={`inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full border px-4 text-xs font-bold uppercase tracking-[0.1em] transition ${
               studyMode
                 ? "border-hot bg-hot text-white"
                 : "border-line bg-surface text-foreground hover:bg-surface-muted"
