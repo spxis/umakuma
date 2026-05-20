@@ -28,10 +28,11 @@ import type {
   SubmitFeedback,
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
-import { fetchStudyQueue, readStoredQueue, sortStudyItemsByWait } from "../lib/studyExplorerUtils";
+import { fetchStudyQueue, readStoredQueue, readStoredQueueMeta, sortStudyItemsByWait } from "../lib/studyExplorerUtils";
 import { normalizeSrsStageFilter } from "../lib/studyExplorerSrs";
 import { resolveEffectiveViewedLevel } from "../lib/studyExplorerLevelBounds";
 import { buildStudyExplorerStorageKeys, deriveInitialQueueState, readStoredStudyCounts } from "../lib/studyExplorerState";
+import { buildStudyCacheFooterText, getStudyGridColumns, isStudyWaitSortOrder } from "../lib/studyExplorerView";
 import { useStudyReviewSubmission } from "../lib/useStudyReviewSubmission";
 import { useStudyExplorerEffects } from "../lib/useStudyExplorerEffects";
 import { useStudyExplorerDerivedData } from "../lib/useStudyExplorerDerivedData";
@@ -43,26 +44,6 @@ import {
   useStudyToggleEnglishHotkey,
   useStudyViewerModeSync,
 } from "../lib/useStudyExplorerUiEffects";
-
-function isStudyWaitSortOrder(value: string | null): value is StudyWaitSortOrder {
-  return value === "oldest_wait" || value === "newest_wait";
-}
-
-function getStudyGridColumns(): number {
-  if (typeof window === "undefined") {
-    return 4;
-  }
-
-  if (window.matchMedia("(min-width: 1024px)").matches) {
-    return 4;
-  }
-
-  if (window.matchMedia("(min-width: 640px)").matches) {
-    return 2;
-  }
-
-  return 1;
-}
 
 export default function StudyExplorer({
   accountId,
@@ -200,6 +181,17 @@ export default function StudyExplorer({
   const counts = persistedCounts ?? data?.counts ?? null;
   const liveCounts = data?.counts ?? null;
   const hasMorePages = loadedItems.length < totalItems;
+  const cacheMeta = useMemo(() => readStoredQueueMeta(accountId, queueMode), [accountId, queueMode]);
+  const cacheFooterText = useMemo(
+    () =>
+      buildStudyCacheFooterText({
+        cachedAtMs: cacheMeta?.cachedAtMs ?? null,
+        restoredCount: cacheMeta?.restoredCount ?? 0,
+        loadedCount: loadedItems.length,
+        totalCount: totalItems,
+      }),
+    [cacheMeta?.cachedAtMs, cacheMeta?.restoredCount, loadedItems.length, totalItems],
+  );
   const typeCountsByLevelForEffects =
     data?.typeCountsByLevel ?? cachedQueueData?.typeCountsByLevel ?? STUDY_EXPLORER_EMPTY_TYPE_COUNTS_BY_LEVEL;
 
@@ -442,6 +434,7 @@ export default function StudyExplorer({
         filteredItems={sortedFilteredItems}
         waitSortOrder={waitSortOrder}
         gridColumns={gridColumns}
+        cacheFooterText={cacheFooterText}
         totalItems={totalItems}
         hasMorePages={hasMorePages}
         isLoadingMore={isLoadingMore}

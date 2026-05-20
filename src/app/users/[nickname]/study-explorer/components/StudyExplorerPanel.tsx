@@ -66,6 +66,7 @@ type Props = {
   showLocked: boolean;
   waitSortOrder: StudyWaitSortOrder;
   gridColumns: number;
+  cacheFooterText: string;
   sentinelRef: React.RefObject<HTMLDivElement | null>;
   onSetViewedLevel: (level: number | null) => void;
   onSetTypeFilter: (filter: StudyTypeFilter) => void;
@@ -108,6 +109,7 @@ export default function StudyExplorerPanel({
   showLocked,
   waitSortOrder,
   gridColumns,
+  cacheFooterText,
   sentinelRef,
   onSetViewedLevel,
   onSetTypeFilter,
@@ -327,15 +329,13 @@ export default function StudyExplorerPanel({
                 {canToggleEnglish ? (showEnglish ? STUDY_PANEL_TEXT.hideEnglish : STUDY_PANEL_TEXT.showEnglish) : STUDY_PANEL_TEXT.hintsHidden}
               </button>
               {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={onToggleShowLocked}
-                    className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
-                  >
-                    {showLocked ? STUDY_PANEL_TEXT.hideLocked : STUDY_PANEL_TEXT.showLocked}
-                  </button>
-                </>
+                <button
+                  type="button"
+                  onClick={onToggleShowLocked}
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+                >
+                  {showLocked ? STUDY_PANEL_TEXT.hideLocked : STUDY_PANEL_TEXT.showLocked}
+                </button>
               ) : null}
               <button
                 type="button"
@@ -367,7 +367,6 @@ export default function StudyExplorerPanel({
             onDone={toggleBulkMode}
           />
         ) : null}
-
         <div className={`relative ${showLoadingOverlay ? "min-h-[14rem]" : ""}`}>
           {filteredItems.length > 0 ? (
             <>
@@ -492,6 +491,7 @@ export default function StudyExplorerPanel({
             </div>
           </div>
         </div>
+        <p className="mt-2 text-right text-[11px] font-medium text-foreground/55">{cacheFooterText}</p>
       </div>
     </>
   );

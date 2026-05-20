@@ -14,6 +14,7 @@ import {
   filterStudyItems,
   groupStudyReviewLevelChips,
   isRecentStudyItem,
+  readStoredQueueMeta,
   STUDY_RECENT_WINDOW_MS,
 } from "./studyExplorerUtils";
 import type { StudyQueueItem } from "./studyExplorerTypes";
@@ -259,5 +260,27 @@ describe("study explorer state helpers", () => {
     });
 
     expect(readStoredStudyCounts("wr:study-queue-counts:acct-1")).toBeNull();
+  });
+
+  it("reads queue cache metadata from localStorage", () => {
+    vi.stubGlobal("window", {
+      localStorage: {
+        getItem: vi.fn().mockReturnValue(
+          JSON.stringify({
+            cachedAtMs: 123456,
+            data: {
+              items: [{ assignmentId: 1 }],
+              pagination: { total: 9 },
+            },
+          }),
+        ),
+      },
+    });
+
+    expect(readStoredQueueMeta("acct-1", "review")).toEqual({
+      cachedAtMs: 123456,
+      restoredCount: 1,
+      totalCount: 9,
+    });
   });
 });

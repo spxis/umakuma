@@ -107,6 +107,35 @@ export function readStoredQueue(accountId: string, mode: StudyQueueMode): QueueR
   }
 }
 
+export function readStoredQueueMeta(
+  accountId: string,
+  mode: StudyQueueMode,
+): { cachedAtMs: number; restoredCount: number; totalCount: number } | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const raw = window.localStorage.getItem(`wr:study-queue:${accountId}:${mode}`);
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const payload = JSON.parse(raw) as StoredQueuePayload;
+    if (!payload || typeof payload.cachedAtMs !== "number" || !payload.data) {
+      return null;
+    }
+
+    return {
+      cachedAtMs: payload.cachedAtMs,
+      restoredCount: payload.data.items.length,
+      totalCount: payload.data.pagination?.total ?? payload.data.items.length,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export function persistQueue(
   accountId: string,
   queueMode: StudyQueueMode,
