@@ -31,7 +31,7 @@ import {
   typeCardClass,
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
-import type { StudyQueueItem, StudyQueueMode, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "../lib/studyExplorerTypes";
+import type { StudyQueueItem, StudyQueueMode, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter, StudyWaitSortOrder } from "../lib/studyExplorerTypes";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass, groupStudyReviewLevelChips } from "../lib/studyExplorerUtils";
 
@@ -63,6 +63,7 @@ type Props = {
   errorMessage: string | null;
   recentOnly: boolean;
   showLocked: boolean;
+  waitSortOrder: StudyWaitSortOrder;
   sentinelRef: React.RefObject<HTMLDivElement | null>;
   onSetViewedLevel: (level: number | null) => void;
   onSetTypeFilter: (filter: StudyTypeFilter) => void;
@@ -71,6 +72,7 @@ type Props = {
   onToggleShowEnglish: () => void;
   onToggleShowLocked: () => void;
   onToggleRecentOnly: () => void;
+  onSetWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;
   onSelectSubject: (subjectId: number) => void;
   onClearAllFilters: () => void;
 };
@@ -103,6 +105,7 @@ export default function StudyExplorerPanel({
   errorMessage,
   recentOnly,
   showLocked,
+  waitSortOrder,
   sentinelRef,
   onSetViewedLevel,
   onSetTypeFilter,
@@ -111,6 +114,7 @@ export default function StudyExplorerPanel({
   onToggleShowEnglish,
   onToggleShowLocked,
   onToggleRecentOnly,
+  onSetWaitSortOrder,
   onSelectSubject,
   onClearAllFilters,
 }: Props) {
@@ -242,21 +246,12 @@ export default function StudyExplorerPanel({
                   const isSelected = srsFilter === status;
                   const unavailable = hasData && !isSelected && status !== STUDY_SRS_FILTERS.all && count === 0;
                   const disabled = (filtersLoading && !isSelected) || unavailable;
-                  const statusLabel =
-                    status === STUDY_SRS_FILTERS.all && viewedLevel !== null
-                      ? `All L${viewedLevel}`
-                      : srsFilterButtonLabel(status);
+                  const statusLabel = status === STUDY_SRS_FILTERS.all && viewedLevel !== null ? `All L${viewedLevel}` : srsFilterButtonLabel(status);
 
                   return (
-                  <button
-                    key={status}
-                    type="button"
-                    onClick={() => onSetSrsFilter(status)}
-                    disabled={disabled}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
-                  >
-                    {statusLabel} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
-                  </button>
+                    <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}>
+                      {statusLabel} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                    </button>
                   );
                 })}
               </div>
@@ -277,15 +272,9 @@ export default function StudyExplorerPanel({
                   const disabled = (filtersLoading && !isSelected) || unavailable;
 
                   return (
-                  <button
-                    key={stage}
-                    type="button"
-                    onClick={() => onSetSrsStageFilter(stage)}
-                    disabled={disabled}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
-                  >
-                    SRS {stage} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
-                  </button>
+                    <button key={stage} type="button" onClick={() => onSetSrsStageFilter(stage)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}>
+                      SRS {stage} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                    </button>
                   );
                 })}
               </div>
@@ -313,7 +302,9 @@ export default function StudyExplorerPanel({
               Showing {formatNumber(filteredItems.length)} matching items · {formatNumber(totalItems)} total in queue
             </p>
           )}
-          <div className="flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2">
+            <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}>Oldest Wait</button>
+            <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}>Newest Wait</button>
             <button
               type="button"
               onClick={onToggleShowEnglish}

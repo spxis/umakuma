@@ -10,6 +10,7 @@ import type {
   StudySrsFilter,
   StudySrsStageFilter,
   StudyTypeFilter,
+  StudyWaitSortOrder,
 } from "./studyExplorerTypes";
 import {
   isAllStudySrsFilter,
@@ -277,5 +278,20 @@ export function filterStudyItems(
     }
 
     return itemMatchesStudyQuery(item, normalizedQuery);
+  });
+}
+
+export function sortStudyItemsByWait(items: StudyQueueItem[], sortOrder: StudyWaitSortOrder): StudyQueueItem[] {
+  const direction = sortOrder === "oldest_wait" ? 1 : -1;
+
+  return [...items].sort((a, b) => {
+    const aMs = parseTimestampMs(a.availableAt) ?? parseTimestampMs(a.startedAt) ?? 0;
+    const bMs = parseTimestampMs(b.availableAt) ?? parseTimestampMs(b.startedAt) ?? 0;
+    const diff = aMs - bMs;
+    if (diff !== 0) {
+      return direction * diff;
+    }
+
+    return a.subjectId - b.subjectId;
   });
 }

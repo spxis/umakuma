@@ -26,10 +26,11 @@ import type {
   StudySrsFilter,
   StudySrsStageFilter,
   StudyTypeFilter,
+  StudyWaitSortOrder,
   SubmitFeedback,
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
-import { fetchStudyQueue, readStoredQueue } from "../lib/studyExplorerUtils";
+import { fetchStudyQueue, readStoredQueue, sortStudyItemsByWait } from "../lib/studyExplorerUtils";
 import { normalizeSrsStageFilter } from "../lib/studyExplorerSrs";
 import { resolveEffectiveViewedLevel } from "../lib/studyExplorerLevelBounds";
 import { buildStudyExplorerStorageKeys, deriveInitialQueueState, readStoredStudyCounts } from "../lib/studyExplorerState";
@@ -93,6 +94,7 @@ export default function StudyExplorer({
   const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
   const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? true);
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
+  const [waitSortOrder, setWaitSortOrder] = useState<StudyWaitSortOrder>("oldest_wait");
   const [searchQuery, setSearchQuery] = useState("");
   const [forcedViewerMode, setForcedViewerMode] = useState<StudyViewerMode | null>(initialViewerMode);
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
@@ -215,9 +217,14 @@ export default function StudyExplorer({
     revealedAssignmentIds,
   });
 
+  const sortedFilteredItems = useMemo(
+    () => sortStudyItemsByWait(filteredItems, waitSortOrder),
+    [filteredItems, waitSortOrder],
+  );
+
   useStudyModalSessionSync({
     selectedId,
-    filteredItems,
+    filteredItems: sortedFilteredItems,
     setModalSessionOrderByAssignmentId,
     setModalSessionItemByAssignmentId,
   });
@@ -375,7 +382,8 @@ export default function StudyExplorer({
         typeCounts={typeCounts}
         srsCounts={srsCounts}
         srsStageCounts={srsStageCounts}
-        filteredItems={filteredItems}
+        filteredItems={sortedFilteredItems}
+        waitSortOrder={waitSortOrder}
         totalItems={totalItems}
         hasMorePages={hasMorePages}
         isLoadingMore={isLoadingMore}
@@ -395,6 +403,7 @@ export default function StudyExplorer({
         onToggleShowEnglish={onToggleShowEnglish}
         onToggleShowLocked={() => setShowLocked((prev) => !prev)}
         onToggleRecentOnly={() => setRecentOnly((prev) => !prev)}
+        onSetWaitSortOrder={setWaitSortOrder}
         onSelectSubject={setSelectedId}
         onClearAllFilters={clearAllFilters}
       />
@@ -411,7 +420,7 @@ export default function StudyExplorer({
         modalItems={modalItems}
         prevItem={prevItem}
         nextItem={nextItem}
-        filteredItems={filteredItems}
+        filteredItems={sortedFilteredItems}
         isSelectedSubmitted={isSelectedSubmitted}
         isAnswerRevealed={isAnswerRevealed}
         isSubmittingSelected={isSubmittingSelected}
