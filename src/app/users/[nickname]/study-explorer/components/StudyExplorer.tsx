@@ -302,6 +302,7 @@ export default function StudyExplorer({
     totalItems,
     counts,
     levelCounts: lessonLevelCountsFromServer,
+    reviewLevelCounts,
     typeCounts: data?.typeCounts ?? cachedQueueData?.typeCounts ?? loadedTypeCounts,
     typeCountsByLevel: typeCountsByLevelForEffects,
     srsCounts: data?.srsCounts ?? cachedQueueData?.srsCounts,

@@ -244,7 +244,6 @@ export default function StudyExplorerPanel({
             }}
             showPlaceholderCounts={showTypeCountPlaceholders}
             disabled={filtersLoading}
-            hideZeroInactive={hasData}
             onClickAll={() => onSetTypeFilter(STUDY_TYPE_FILTERS.all)}
             onClickType={(type) => onSetTypeFilter(type)}
           />

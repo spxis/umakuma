@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 
 import type { QueueResponse, StudyCounts, StudyQueueMode, StudyQueueItem, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./studyExplorerTypes";
-import { isAllStudySrsFilter, isAllStudyTypeFilter, isStudySrsFilterValue, isStudyTypeFilterValue, STUDY_SRS_FILTERS, STUDY_TYPE_FILTERS } from "./studyExplorerDomain";
+import { isAllStudySrsFilter, isAllStudyTypeFilter, isStudySrsFilterValue, isStudyTypeFilterValue, STUDY_QUEUE_TYPES, STUDY_SRS_FILTERS, STUDY_TYPE_FILTERS } from "./studyExplorerDomain";
 import { sameAssignmentList, sameCounts, sameLevelCounts, sameTypeCounts, sameTypeCountsByLevel } from "./studyExplorerEffectsComparators";
 import { persistQueue, readStoredQueue } from "./studyExplorerUtils";
 import { resolveEffectiveSrsFilter, resolveEffectiveSrsStageFilter, resolveEffectiveTypeFilter, resolveEffectiveViewedLevelFilter } from "./studyExplorerState";
@@ -33,6 +33,7 @@ type Args = {
   totalItems: number;
   counts: StudyCounts | null;
   levelCounts: Record<number, number>;
+  reviewLevelCounts: Record<number, number>;
   typeCounts: NonNullable<QueueResponse["typeCounts"]>;
   typeCountsByLevel: NonNullable<QueueResponse["typeCountsByLevel"]>;
   srsCounts: QueueResponse["srsCounts"];
@@ -83,6 +84,7 @@ export function useStudyExplorerEffects({
   totalItems,
   counts,
   levelCounts,
+  reviewLevelCounts,
   typeCounts,
   typeCountsByLevel,
   srsCounts,
@@ -248,10 +250,7 @@ export function useStudyExplorerEffects({
 
   useEffect(() => {
     if (!hasData) return;
-
-    const selectedTypeCountAtViewedLevel = viewedLevel !== null
-      ? (typeCountsByLevel[viewedLevel]?.[typeFilter] ?? 0)
-      : typeCounts.all;
+    const selectedTypeCountAtViewedLevel = viewedLevel === null ? typeCounts.all : queueMode === STUDY_QUEUE_TYPES.review ? (reviewLevelCounts[viewedLevel] ?? 0) : (typeCountsByLevel[viewedLevel]?.[typeFilter] ?? 0);
 
     const nextViewedLevel = resolveEffectiveViewedLevelFilter(
       viewedLevel,
@@ -268,7 +267,7 @@ export function useStudyExplorerEffects({
 
     const nextSrsStageFilter = resolveEffectiveSrsStageFilter(srsStageFilter, srsStageCounts);
     if (nextSrsStageFilter !== srsStageFilter) setSrsStageFilter(nextSrsStageFilter);
-  }, [effectiveViewedLevel, hasData, srsCounts, srsFilter, srsStageCounts, srsStageFilter, setSrsFilter, setSrsStageFilter, setTypeFilter, setViewedLevel, typeCounts, typeCountsByLevel, typeFilter, viewedLevel]);
+  }, [effectiveViewedLevel, hasData, queueMode, reviewLevelCounts, srsCounts, srsFilter, srsStageCounts, srsStageFilter, setSrsFilter, setSrsStageFilter, setTypeFilter, setViewedLevel, typeCounts, typeCountsByLevel, typeFilter, viewedLevel]);
 
   useEffect(() => {
     if (!hasHydratedViewedLevel) return;
