@@ -313,34 +313,40 @@ test("study review all-level type count matches total queue", async ({ browser, 
   });
 });
 
-test("study radical chip count matches matching items when selected", async ({ browser, baseURL }) => {
-  test.skip(!accessibleStudyUser, "No accessible user page for study radical count checks in this environment.");
-  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&srs=all&type=all&recent=0#explorer`;
+[
+  { label: "Radical", namePattern: /^radical\s*\(\d+\)$/i },
+  { label: "Kanji", namePattern: /^kanji\s*\(\d+\)$/i },
+  { label: "Vocab", namePattern: /^vocab(?:ulary)?\s*\(\d+\)$/i },
+].forEach(({ label, namePattern }) => {
+  test(`study ${label.toLowerCase()} chip count matches matching items when selected`, async ({ browser, baseURL }) => {
+    test.skip(!accessibleStudyUser, `No accessible user page for study ${label.toLowerCase()} count checks in this environment.`);
+    const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+    const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&srs=all&type=all&recent=0#explorer`;
 
-  await assertPageLoads(browser, url, async (page) => {
-    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
-    if ((await accessGate.count()) > 0) {
-      await expect(accessGate).toBeVisible();
-      return;
-    }
+    await assertPageLoads(browser, url, async (page) => {
+      const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+      if ((await accessGate.count()) > 0) {
+        await expect(accessGate).toBeVisible();
+        return;
+      }
 
-    const radicalButton = page.getByRole("button", { name: /^radical\s*\(\d+\)$/i }).first();
-    await expect(radicalButton).toBeVisible();
-    await radicalButton.click();
+      const typeButton = page.getByRole("button", { name: namePattern }).first();
+      await expect(typeButton).toBeVisible();
+      await typeButton.click();
 
-    const selectedRadical = page.locator("button.bg-accent").filter({ hasText: /^radical\s*\(\d+\)$/i }).first();
-    await expect(selectedRadical).toBeVisible();
+      const selectedTypeButton = page.locator("button.bg-accent").filter({ hasText: namePattern }).first();
+      await expect(selectedTypeButton).toBeVisible();
 
-    const radicalText = (await selectedRadical.textContent()) ?? "";
-    const radicalCount = Number((radicalText.match(/\((\d+)\)/)?.[1]) ?? "0");
+      const selectedTypeText = (await selectedTypeButton.textContent()) ?? "";
+      const selectedTypeCount = Number((selectedTypeText.match(/\((\d+)\)/)?.[1]) ?? "0");
 
-    const summary = page.getByText(/Showing\s+\d+\s+matching items\s+·\s+\d+\s+total in queue/i).first();
-    await expect(summary).toBeVisible();
-    const summaryText = (await summary.textContent()) ?? "";
-    const matchingCount = Number((summaryText.match(/Showing\s+(\d+)\s+matching items/i)?.[1]) ?? "0");
+      const summary = page.getByText(/Showing\s+\d+\s+matching items\s+·\s+\d+\s+total in queue/i).first();
+      await expect(summary).toBeVisible();
+      const summaryText = (await summary.textContent()) ?? "";
+      const matchingCount = Number((summaryText.match(/Showing\s+(\d+)\s+matching items/i)?.[1]) ?? "0");
 
-    expect(matchingCount, "selected Radical chip count should equal visible matching-item count").toBe(radicalCount);
+      expect(matchingCount, `selected ${label} chip count should equal visible matching-item count`).toBe(selectedTypeCount);
+    });
   });
 });
 
