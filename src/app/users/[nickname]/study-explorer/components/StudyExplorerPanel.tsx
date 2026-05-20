@@ -136,6 +136,7 @@ export default function StudyExplorerPanel({
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
   const showLoadingOverlay = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
   const displayErrorMessage = errorMessage === "Failed to fetch" ? STUDY_PANEL_TEXT.queueRefreshError : errorMessage;
+  const hideControlsDuringInitialLoad = showLoadingOverlay && !hasData;
   const srsStageOptions = getSrsStageOptions(srsFilter);
   const hasSrsStageOptions = srsStageOptions.length > 0;
   const allSrsStagesSelected = srsStageFilter === null || !hasSrsStageOptions;
@@ -158,7 +159,7 @@ export default function StudyExplorerPanel({
           </div>
           <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} /></div>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className={`mt-3 flex flex-wrap gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
           {queueMode === STUDY_QUEUE_TYPES.lesson ? (
             <>
               <button
@@ -223,7 +224,7 @@ export default function StudyExplorerPanel({
           )}
         </div>
 
-        <div className="mt-2 flex flex-wrap items-start justify-between gap-2">
+        <div className={`mt-2 flex flex-wrap items-start justify-between gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
           <SubjectTypeFilterGroup
             counts={typeCounts}
             allLabel={viewedLevel === null ? STUDY_PANEL_TEXT.allLevelsLabel : `All L${viewedLevel}`}
@@ -304,15 +305,15 @@ export default function StudyExplorerPanel({
       <div className="p-5">
         <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           {showLoadingOverlay ? (
-            <p aria-hidden="true" className="text-xs font-semibold uppercase tracking-[0.08em] opacity-0 select-none">
-              Loading
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
+              Loading study queue and filters...
             </p>
           ) : (
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
               Showing {formatNumber(filteredItems.length)} matching items · {formatNumber(totalItems)} total in queue
             </p>
           )}
-          <div className="w-full overflow-x-auto sm:ml-auto sm:w-auto">
+          <div className={`w-full overflow-x-auto sm:ml-auto sm:w-auto ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
             <div className="flex min-w-max items-center gap-2">
               <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}>Oldest Wait</button>
               <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}>Newest Wait</button>
