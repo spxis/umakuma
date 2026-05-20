@@ -71,7 +71,7 @@ export function studyPanelAllGroupsLabel(viewedLevel: number | null): string {
 }
 
 export function studyPanelAllStatusesLabel(viewedLevel: number | null): string {
-  return viewedLevel === null ? STUDY_PANEL_TEXT.allStatusesLabel : `All L${viewedLevel} Statuses`;
+  return viewedLevel === null ? "Status: All" : `Status L${viewedLevel}: All`;
 }
 
 export function studyPanelAllSrsPluralLabel(viewedLevel: number | null): string {

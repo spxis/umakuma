@@ -249,7 +249,7 @@ export default function StudyExplorerPanel({
           />
           {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
             <div className="grid gap-2">
-              <div className="flex flex-wrap gap-2">
+              <div className="inline-flex max-w-full flex-wrap items-center gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Status filters">
                 {STUDY_PANEL_SRS_STATUSES.map((status) => {
                   const count = srsCounts[status];
                   const isSelected = srsFilter === status;
@@ -262,7 +262,7 @@ export default function StudyExplorerPanel({
                   }
 
                   return (
-                    <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? allBadgeClass(isSelected) : badgeClass(isSelected)}`}>
+                    <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-[0.08em] ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? allBadgeClass(isSelected) : badgeClass(isSelected)}`}>
                       {statusLabel} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
                     </button>
                   );
