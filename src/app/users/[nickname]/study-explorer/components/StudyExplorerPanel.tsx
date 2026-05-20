@@ -133,7 +133,6 @@ export default function StudyExplorerPanel({
   } = useStudyBulkReset({ filteredItems });
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
   const filtersLoading = !hasData;
-
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
   const showTypeCountPlaceholders = !hasData && typeCounts.all === 0 && filteredItems.length === 0 && !errorMessage;
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMorePages && filteredItems.length === 0;
@@ -161,7 +160,6 @@ export default function StudyExplorerPanel({
           </div>
           <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} /></div>
         </div>
-
         <div className="mt-3 flex flex-wrap gap-2">
           {queueMode === STUDY_QUEUE_TYPES.lesson ? (
             <>
