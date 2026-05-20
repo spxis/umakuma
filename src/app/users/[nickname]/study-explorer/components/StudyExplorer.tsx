@@ -147,17 +147,18 @@ export default function StudyExplorer({
   );
 
   const counts = persistedCounts ?? data?.counts ?? null;
+  const liveCounts = data?.counts ?? null;
   const hasMorePages = loadedItems.length < totalItems;
   const typeCountsByLevelForEffects =
     data?.typeCountsByLevel ?? cachedQueueData?.typeCountsByLevel ?? STUDY_EXPLORER_EMPTY_TYPE_COUNTS_BY_LEVEL;
 
   useEffect(() => {
-    if (!counts || typeof window === "undefined") {
+    if (!liveCounts || typeof window === "undefined") {
       return;
     }
 
     try {
-      window.localStorage.setItem(storageKeys.counts, JSON.stringify(counts));
+      window.localStorage.setItem(storageKeys.counts, JSON.stringify(liveCounts));
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
@@ -166,12 +167,12 @@ export default function StudyExplorer({
       new CustomEvent("wr:study-counts-updated", {
         detail: {
           accountId,
-          reviews: counts.reviews,
-          lessons: counts.lessons,
+          reviews: liveCounts.reviews,
+          lessons: liveCounts.lessons,
         },
       }),
     );
-  }, [accountId, counts, storageKeys]);
+  }, [accountId, liveCounts, storageKeys]);
 
   useStudyToggleEnglishHotkey(canToggleEnglish, onToggleShowEnglish);
   useStudyCloseOnExplorerPageChange(setSelectedId);
