@@ -116,12 +116,12 @@ export default function JlptExplorerContent({
   }, [effectiveVisibleCount, filteredItems.length]);
 
   useEffect(() => {
-    if (!hasMoreRemote || isLoadingMore || isLoadingData) {
+    if (!hasMoreRemote || isLoadingMore || isLoadingData || filteredItems.length > 0) {
       return;
     }
 
     void onLoadMoreRemote();
-  }, [hasMoreRemote, isLoadingData, isLoadingMore, onLoadMoreRemote]);
+  }, [filteredItems.length, hasMoreRemote, isLoadingData, isLoadingMore, onLoadMoreRemote]);
 
   const visibleItems = filteredItems.slice(0, effectiveVisibleCount);
   const selectedVisibleIndex = selectedItem

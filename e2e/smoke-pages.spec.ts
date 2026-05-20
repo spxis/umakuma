@@ -17,6 +17,11 @@ let accessibleStudyUser: string | null = null;
 
 const USER_ACCESS_GATE_TEXT = "You do not have access to that user page yet.";
 
+function extractCount(label: string): number {
+  const match = label.match(/\((\d+)\)/);
+  return Number(match?.[1] ?? "0");
+}
+
 function extractUsernames(payload: unknown): string[] {
   if (!payload || typeof payload !== "object") {
     return [];
@@ -357,5 +362,79 @@ test("study lesson mode hides review-only filters", async ({ browser, baseURL })
     await expect(page.getByRole("button", { name: /^All SRS Stages$/i })).toHaveCount(0);
     await expect(page.getByRole("button", { name: /^Recent Only$/i })).toHaveCount(0);
     await expect(page.getByRole("button", { name: /^(Hide|Show) Locked$/i })).toHaveCount(0);
+  });
+});
+
+test("level explorer keeps total count while visible list is paged", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for level explorer checks in this environment.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=level#explorer`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+    if ((await accessGate.count()) > 0) {
+      await expect(accessGate).toBeVisible();
+      return;
+    }
+
+    const summary = page.getByText(/Showing\s+\d+\s+of\s+\d+\s+items/i).first();
+    await expect(summary).toBeVisible();
+
+    const summaryText = (await summary.textContent()) ?? "";
+    const summaryMatch = summaryText.match(/Showing\s+(\d+)\s+of\s+(\d+)\s+items/i);
+    const visibleCount = Number(summaryMatch?.[1] ?? "0");
+    const filteredCount = Number(summaryMatch?.[2] ?? "0");
+
+    const allLevelsButton = page.getByRole("button", { name: /^All Levels\s*\(\d+\)$/i }).first();
+    await expect(allLevelsButton).toBeVisible();
+    const allLevelsText = (await allLevelsButton.textContent()) ?? "";
+    const allLevelsCount = extractCount(allLevelsText);
+
+    expect(filteredCount, "level explorer filtered total should match all-level chip count").toBe(allLevelsCount);
+    expect(visibleCount, "visible level items should never exceed filtered total").toBeLessThanOrEqual(filteredCount);
+  });
+});
+
+test("jlpt explorer keeps global counts with partial visible data", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for JLPT explorer checks in this environment.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study#explorer`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+    if ((await accessGate.count()) > 0) {
+      await expect(accessGate).toBeVisible();
+      return;
+    }
+
+    const jlptTab = page.getByRole("tab", { name: "JLPT Explorer", exact: true });
+    await expect(jlptTab).toBeVisible();
+    await jlptTab.click();
+    await expect(jlptTab).toHaveAttribute("aria-selected", "true");
+
+    const summary = page.getByText(/Showing\s+\d+\s+of\s+\d+\s+results/i).first();
+    await expect(summary).toBeVisible();
+    const summaryText = (await summary.textContent()) ?? "";
+    const summaryMatch = summaryText.match(/Showing\s+(\d+)\s+of\s+(\d+)\s+results/i);
+    const visibleCount = Number(summaryMatch?.[1] ?? "0");
+    const filteredCount = Number(summaryMatch?.[2] ?? "0");
+
+    const allJlptButton = page.getByRole("button", { name: /^JLPT All\s*\(\d+\)$/i }).first();
+    await expect(allJlptButton).toBeVisible();
+    const allJlptText = (await allJlptButton.textContent()) ?? "";
+    const allJlptCount = extractCount(allJlptText);
+
+    const n5Button = page.getByRole("button", { name: /^N5\s*\(\d+\)$/i }).first();
+    await expect(n5Button).toBeVisible();
+    const n5Text = (await n5Button.textContent()) ?? "";
+    const n5Count = extractCount(n5Text);
+
+    expect(allJlptCount, "JLPT all chip should match filtered total on first load").toBe(filteredCount);
+    expect(visibleCount, "visible JLPT cards should never exceed filtered total").toBeLessThanOrEqual(filteredCount);
+    expect(n5Count, "N5 chip count should be global and non-zero").toBeGreaterThan(0);
+
+    await n5Button.click();
+    await expect.poll(() => new URL(page.url()).searchParams.get("jlpt")).toBe("5");
+    await expect(page.getByText(/N5/i).first()).toBeVisible();
   });
 });

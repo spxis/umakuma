@@ -2,11 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
-import { SUBJECT_TYPES, type WkStatus } from "@/lib/domainConstants";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import jlptReadings from "@/data/jlptReadings.json";
 import JlptExplorerContent from "./JlptExplorerContent";
 import { matchesJlptSearch, normalizeSearch } from "../lib/jlptDisplay";
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
+import { buildJlptDerivedData, type JlptSummary } from "./JlptExplorer.derived";
 
 type Props = {
   accountId: string;
@@ -22,6 +23,12 @@ type Props = {
 type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;
 
 type JlptFilter = "all" | "kanji" | "none";
+
+type JlptRemoteResponse = {
+  jlptItems: JlptItem[];
+  summary?: JlptSummary | null;
+  pagination?: { offset: number; limit: number; total: number; hasMore: boolean };
+};
 
 const JLPT_REMOTE_PAGE_SIZE = 240;
 
@@ -41,10 +48,7 @@ export default function JlptExplorer({
   const [remoteTotal, setRemoteTotal] = useState<number>(items.length);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const { data: firstPageData } = useSWR<{
-    jlptItems: JlptItem[];
-    pagination?: { offset: number; limit: number; total: number; hasMore: boolean };
-  }>(
+  const { data: firstPageData } = useSWR<JlptRemoteResponse>(
     isActive && !hasInitialItems
       ? `/api/accounts/${accountId}/jlpt?offset=0&limit=${JLPT_REMOTE_PAGE_SIZE}&includeItems=1&includeUserIndex=0`
       : null,
@@ -53,17 +57,14 @@ export default function JlptExplorer({
       if (!response.ok) {
         throw new Error("Could not load JLPT explorer data.");
       }
-      return (await response.json()) as {
-        jlptItems: JlptItem[];
-        pagination?: { offset: number; limit: number; total: number; hasMore: boolean };
-      };
+      return (await response.json()) as JlptRemoteResponse;
     },
     { revalidateOnFocus: false },
   );
 
   const { data: userIndexData } = useSWR<{ userKanjiItems: UserKanjiItem[] }>(
     isActive && !hasInitialUserKanji
-      ? `/api/accounts/${accountId}/jlpt?offset=0&limit=0&includeItems=0&includeUserIndex=1`
+      ? `/api/accounts/${accountId}/jlpt?offset=0&limit=0&includeItems=0&includeUserIndex=1&includeSummary=0`
       : null,
     async (url: string) => {
       const response = await fetch(url, { cache: "no-store" });
@@ -83,6 +84,7 @@ export default function JlptExplorer({
   }, [firstPageData, hasInitialItems]);
 
   const effectiveItems = hasInitialItems ? items : pagedItems;
+  const remoteSummary = hasInitialItems ? null : (firstPageData?.summary ?? null);
   const effectiveUserKanjiItems = useMemo(
     () => (hasInitialUserKanji ? userKanjiItems : (userIndexData?.userKanjiItems ?? [])),
     [hasInitialUserKanji, userKanjiItems, userIndexData?.userKanjiItems],
@@ -204,21 +206,7 @@ export default function JlptExplorer({
   const lastHandledFindQueryRef = useRef<string>("");
 
   const userKanjiByChar = useMemo(() => {
-    const map = new Map<string, {
-      subjectId?: number;
-      characters: string;
-      meanings?: string[];
-      primaryReadings?: string[];
-      readings?: string[];
-      meaningExplanation?: string;
-      readingExplanation?: string;
-      startedAt?: string | null;
-      passedAt?: string | null;
-      availableAt?: string | null;
-      status?: WkStatus;
-      srsStage?: number;
-      wkLevel?: number | null;
-    }>();
+    const map = new Map<string, UserKanjiItem>();
 
     for (const item of effectiveUserKanjiItems) {
       const current = map.get(item.characters);
@@ -230,19 +218,10 @@ export default function JlptExplorer({
     return map;
   }, [effectiveUserKanjiItems]);
 
-  const counts = useMemo(() => {
-    const noneCount = effectiveItems.filter((item) => !userKanjiByChar.has(item.kanji)).length;
-    return {
-      all: effectiveItems.length,
-      kanji: effectiveItems.length - noneCount,
-      none: noneCount,
-      n5: effectiveItems.filter((item) => item.nLevel === 5).length,
-      n4: effectiveItems.filter((item) => item.nLevel === 4).length,
-      n3: effectiveItems.filter((item) => item.nLevel === 3).length,
-      n2: effectiveItems.filter((item) => item.nLevel === 2).length,
-      n1: effectiveItems.filter((item) => item.nLevel === 1).length,
-    };
-  }, [effectiveItems, userKanjiByChar]);
+  const { counts, availableWkLevels, wkLevelCounts, availableGrades, gradeCounts } = useMemo(
+    () => buildJlptDerivedData({ effectiveItems, userKanjiByChar, remoteSummary }),
+    [effectiveItems, remoteSummary, userKanjiByChar],
+  );
 
   const filteredItems = useMemo(() => {
     const normalizedQuery = normalizeSearch(query);
@@ -430,36 +409,6 @@ export default function JlptExplorer({
   }, [selectedKanji]);
 
   const selectedItem = selectedKanji ? filteredItems.find((item) => item.kanji === selectedKanji) ?? null : null;
-
-  const availableWkLevels = useMemo(() => {
-    const levels = new Set<number>();
-    for (const item of effectiveItems) {
-      const wkLevel = userKanjiByChar.get(item.kanji)?.wkLevel;
-      if (typeof wkLevel === "number") levels.add(wkLevel);
-    }
-    return Array.from(levels).sort((a, b) => a - b);
-  }, [effectiveItems, userKanjiByChar]);
-
-  const wkLevelCounts = useMemo(() => {
-    const counts = new Map<number | "none", number>();
-    for (const item of effectiveItems) {
-      const wkLevel = userKanjiByChar.get(item.kanji)?.wkLevel;
-      counts.set(typeof wkLevel === "number" ? wkLevel : "none", (counts.get(typeof wkLevel === "number" ? wkLevel : "none") ?? 0) + 1);
-    }
-    return counts;
-  }, [effectiveItems, userKanjiByChar]);
-
-  const { availableGrades, gradeCounts } = useMemo(() => {
-    const counts = new Map<number | "none", number>();
-    let noneCount = 0;
-    for (const item of effectiveItems) {
-      if (item.schoolGrade == null) noneCount++;
-      else counts.set(item.schoolGrade, (counts.get(item.schoolGrade) ?? 0) + 1);
-    }
-    if (noneCount > 0) counts.set("none", noneCount);
-    const grades = [...counts.keys()].filter((k): k is number => typeof k === "number").sort((a, b) => a - b);
-    return { availableGrades: grades, gradeCounts: counts };
-  }, [effectiveItems]);
 
   return (
     <JlptExplorerContent
