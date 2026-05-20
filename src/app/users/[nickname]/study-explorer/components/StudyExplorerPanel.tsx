@@ -263,7 +263,7 @@ export default function StudyExplorerPanel({
                   disabled={filtersLoading}
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && !allSrsStagesSelected ? disabledBadgeClass() : badgeClass(allSrsStagesSelected)}`}
                 >
-                  {viewedLevel === null ? "All SRS" : `All L${viewedLevel} SRS`}
+                  {viewedLevel === null ? "All SRS" : `All L${viewedLevel} SRS`} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(srsCounts.all)})</span>
                 </button>
                 {srsStageOptions.map((stage) => {
                   const count = srsStageCounts[stage] ?? 0;
