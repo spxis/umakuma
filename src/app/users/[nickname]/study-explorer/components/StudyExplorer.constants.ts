@@ -46,7 +46,7 @@ export const STUDY_PANEL_TEXT = {
   allLevelsLabel: "All Levels",
   allGroupsLabel: "All Groups",
   allStatusesLabel: "All Statuses",
-  allSrsPluralLabel: "All SRSs",
+  allSrsPluralLabel: "SRS: All",
   hintsHidden: "Hints Hidden",
   showEnglish: "Show English",
   hideEnglish: "Hide English",
@@ -75,7 +75,7 @@ export function studyPanelAllStatusesLabel(viewedLevel: number | null): string {
 }
 
 export function studyPanelAllSrsPluralLabel(viewedLevel: number | null): string {
-  return viewedLevel === null ? STUDY_PANEL_TEXT.allSrsPluralLabel : `All L${viewedLevel} SRSs`;
+  return viewedLevel === null ? STUDY_PANEL_TEXT.allSrsPluralLabel : `SRS L${viewedLevel}: All`;
 }
 
 export const STUDY_PANEL_SRS_STATUSES = [

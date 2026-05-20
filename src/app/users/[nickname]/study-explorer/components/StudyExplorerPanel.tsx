@@ -269,12 +269,14 @@ export default function StudyExplorerPanel({
                 })}
               </div>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="inline-flex max-w-full flex-wrap items-center gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="SRS stages">
                 <button
                   type="button"
                   onClick={() => onSetSrsStageFilter(null)}
                   disabled={filtersLoading}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && !allSrsStagesSelected ? disabledBadgeClass() : allBadgeClass(allSrsStagesSelected)}`}
+                  role="tab"
+                  aria-selected={allSrsStagesSelected}
+                  className={`rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-[0.08em] ${filtersLoading && !allSrsStagesSelected ? disabledBadgeClass() : allBadgeClass(allSrsStagesSelected)}`}
                 >
                   {studyPanelAllSrsPluralLabel(viewedLevel)} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(srsCounts.all)})</span>
                 </button>
@@ -283,14 +285,13 @@ export default function StudyExplorerPanel({
                   const isSelected = srsStageFilter === stage;
                   const unavailable = hasData && !isSelected && count === 0;
                   const disabled = (filtersLoading && !isSelected) || unavailable;
-
                   if (unavailable) {
                     return null;
                   }
 
                   return (
-                    <button key={stage} type="button" onClick={() => onSetSrsStageFilter(stage)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}>
-                      SRS {stage} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                    <button key={stage} type="button" onClick={() => onSetSrsStageFilter(stage)} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-[0.08em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}>
+                      {stage} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
                     </button>
                   );
                 })}
