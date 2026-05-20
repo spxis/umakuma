@@ -42,7 +42,6 @@ type Props = {
   studyMode: boolean;
   levelOptions: number[];
   availableLevels: Set<number>;
-  hasReliableReviewLevelAvailability: boolean;
   reviewLevelCounts: Record<number, number>;
   viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
@@ -86,7 +85,6 @@ export default function StudyExplorerPanel({
   studyMode,
   levelOptions,
   availableLevels,
-  hasReliableReviewLevelAvailability,
   reviewLevelCounts,
   viewedLevel,
   typeFilter,
@@ -150,7 +148,7 @@ export default function StudyExplorerPanel({
   const totalReviewsInVisibleLevels = Object.values(reviewLevelCounts).reduce((sum, count) => sum + count, 0);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
-  const reviewLevelChips = groupStudyReviewLevelChips(levelOptions, availableLevels, viewedLevel, hasData && (hasReliableReviewLevelAvailability || !hasMorePages));
+  const reviewLevelChips = groupStudyReviewLevelChips(levelOptions, availableLevels, viewedLevel, hasData);
   const levelTypeLabel = typeFilter === STUDY_SUBJECT_TYPES.radical ? "Radical" : typeFilter === STUDY_SUBJECT_TYPES.kanji ? "Kanji" : "Vocab";
   const levelRowAllLabel = queueMode === STUDY_QUEUE_TYPES.lesson ? STUDY_PANEL_TEXT.allLevelsLabel : isAllStudyTypeFilter(typeFilter) ? "All Levels" : `All ${levelTypeLabel} Levels`;
   const typeRowAllLabel = studyPanelAllGroupsLabel(viewedLevel);
