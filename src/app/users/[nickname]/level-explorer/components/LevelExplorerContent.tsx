@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { badgeClass, disabledBadgeClass, formatNumber, srsFilterButtonLabel } from "../lib/levelExplorerDisplay";
+import { allBadgeClass, badgeClass, disabledBadgeClass, formatNumber, srsFilterButtonLabel } from "../lib/levelExplorerDisplay";
 import { useLevelExplorerResetSelection } from "../lib/useLevelExplorerResetSelection";
 import {
   JLPT_FILTER_ALLOWED,
@@ -331,7 +331,7 @@ export default function LevelExplorerContent({
                   onClick={() => onSetSrsFilter(status)}
                   disabled={disabled}
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                    disabled ? disabledBadgeClass() : badgeClass(active)
+                    disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? allBadgeClass(active) : badgeClass(active)
                   }`}
                 >
                   {srsFilterButtonLabel(status)} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
@@ -393,9 +393,7 @@ export default function LevelExplorerContent({
                       type="button"
                       onClick={() => onSetJlptFilter(level)}
                       disabled={disabled}
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                        disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : badgeClass(active)
-                      }`}
+                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : allBadgeClass(active)}`}
                     >
                       {LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
                     </button>
@@ -418,9 +416,7 @@ export default function LevelExplorerContent({
                       type="button"
                       onClick={() => onSetReviewTimingFilter(timing)}
                       disabled={disabled}
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                        disabled ? disabledBadgeClass() : badgeClass(active)
-                      }`}
+                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${disabled ? disabledBadgeClass() : timing === LEVEL_REVIEW_TIMING_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}
                     >
                       {label} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
                     </button>

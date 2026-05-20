@@ -1,4 +1,4 @@
-import { badgeClass, disabledBadgeClass, formatNumber } from "../level-explorer/lib/levelExplorerDisplay";
+import { allBadgeClass, disabledBadgeClass, formatNumber } from "../level-explorer/lib/levelExplorerDisplay";
 import { SUBJECT_TYPE_VALUES, type SubjectType } from "@/lib/domainConstants";
 
 import SubjectTypeFilterButton from "./SubjectTypeFilterButton";
@@ -46,7 +46,7 @@ export default function SubjectTypeFilterGroup({
         type="button"
         disabled={disabled}
         onClick={onClickAll}
-        className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allDisabledStyle ? disabledBadgeClass() : `${allButtonClassName ?? badgeClass(allActive)}${disabled ? " cursor-not-allowed opacity-70" : ""}`}`}
+        className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allDisabledStyle ? disabledBadgeClass() : `${allButtonClassName ?? allBadgeClass(allActive)}${disabled ? " cursor-not-allowed opacity-70" : ""}`}`}
       >
         {allLabel} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatCount(allCount ?? counts.all)})</span>
       </button>

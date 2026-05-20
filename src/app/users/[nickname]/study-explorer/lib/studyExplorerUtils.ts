@@ -197,8 +197,8 @@ export function badgeClass(active: boolean): string {
 
 export function allBadgeClass(active: boolean): string {
   return active
-    ? "border-slate-500 bg-slate-300 text-slate-900"
-    : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200";
+    ? "border-line bg-surface-muted text-foreground"
+    : "border-line bg-surface text-foreground/75 hover:bg-surface-muted";
 }
 
 export function disabledBadgeClass(): string {

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import jlptReadings from "@/data/jlptReadings.json";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
-import { badgeClass, jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
+import { allBadgeClass, badgeClass, jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import {
   formatNumber,
   jlptHeading,
@@ -153,7 +153,7 @@ export default function JlptExplorerContent({
             <button
               type="button"
               onClick={() => onSetWkLevelFilter(null)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allBadgeClass(
                 wkLevelFilter === null,
               )}`}
             >
@@ -187,7 +187,7 @@ export default function JlptExplorerContent({
             <button
               type="button"
               onClick={() => onSetGradeFilter(null)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allBadgeClass(
                 gradeFilter === null,
               )}`}
             >
@@ -223,7 +223,7 @@ export default function JlptExplorerContent({
             <button
               type="button"
               onClick={() => onSetSelectedLevels(new Set([1, 2, 3, 4, 5]))}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allBadgeClass(
                 selectedLevels.size === 5,
               )}`}
             >

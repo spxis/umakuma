@@ -67,6 +67,12 @@ export function badgeClass(active: boolean): string {
     : "border-line bg-surface text-foreground hover:bg-surface-muted";
 }
 
+export function allBadgeClass(active: boolean): string {
+  return active
+    ? "border-line bg-surface-muted text-foreground"
+    : "border-line bg-surface text-foreground/75 hover:bg-surface-muted";
+}
+
 export function disabledBadgeClass(): string {
   return "cursor-not-allowed border-line bg-surface-muted text-foreground/45";
 }
