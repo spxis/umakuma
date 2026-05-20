@@ -4,7 +4,7 @@ import type { QueueResponse, StudyCounts, StudyQueueMode, StudyQueueItem, StudyS
 import { isAllStudySrsFilter, isAllStudyTypeFilter, isStudySrsFilterValue, isStudyTypeFilterValue, STUDY_SRS_FILTERS, STUDY_TYPE_FILTERS } from "./studyExplorerDomain";
 import { sameAssignmentList, sameCounts, sameLevelCounts, sameTypeCounts, sameTypeCountsByLevel } from "./studyExplorerEffectsComparators";
 import { persistQueue, readStoredQueue } from "./studyExplorerUtils";
-import { resolveEffectiveSrsStageFilter, resolveEffectiveTypeFilter, resolveEffectiveViewedLevelFilter } from "./studyExplorerState";
+import { resolveEffectiveSrsFilter, resolveEffectiveSrsStageFilter, resolveEffectiveTypeFilter, resolveEffectiveViewedLevelFilter } from "./studyExplorerState";
 
 type Args = {
   accountId: string;
@@ -255,9 +255,12 @@ export function useStudyExplorerEffects({
     const nextTypeFilter = resolveEffectiveTypeFilter(typeFilter, typeCounts);
     if (nextTypeFilter !== typeFilter) setTypeFilter(nextTypeFilter);
 
+    const nextSrsFilter = resolveEffectiveSrsFilter(srsFilter, srsCounts);
+    if (nextSrsFilter !== srsFilter) setSrsFilter(nextSrsFilter);
+
     const nextSrsStageFilter = resolveEffectiveSrsStageFilter(srsStageFilter, srsStageCounts);
     if (nextSrsStageFilter !== srsStageFilter) setSrsStageFilter(nextSrsStageFilter);
-  }, [effectiveViewedLevel, hasData, srsStageCounts, srsStageFilter, setSrsStageFilter, setTypeFilter, setViewedLevel, typeCounts, typeFilter, viewedLevel]);
+  }, [effectiveViewedLevel, hasData, srsCounts, srsFilter, srsStageCounts, srsStageFilter, setSrsFilter, setSrsStageFilter, setTypeFilter, setViewedLevel, typeCounts, typeFilter, viewedLevel]);
 
   useEffect(() => {
     if (!hasHydratedViewedLevel) return;

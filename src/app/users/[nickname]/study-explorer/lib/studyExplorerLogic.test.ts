@@ -6,6 +6,7 @@ import {
   buildStudyExplorerStorageKeys,
   deriveInitialQueueState,
   readStoredStudyCounts,
+  resolveEffectiveSrsFilter,
   resolveEffectiveSrsStageFilter,
   resolveEffectiveTypeFilter,
   resolveEffectiveViewedLevelFilter,
@@ -229,6 +230,34 @@ describe("study explorer state helpers", () => {
     expect(resolveEffectiveSrsStageFilter(4, { 4: 3, 5: 2 })).toBe(4);
     expect(resolveEffectiveSrsStageFilter(4, { 4: 0, 5: 2 })).toBeNull();
     expect(resolveEffectiveSrsStageFilter(4, undefined)).toBeNull();
+  });
+
+  it("falls back selected srs filter to all when selected bucket is zero", () => {
+    expect(
+      resolveEffectiveSrsFilter("master", {
+        all: 3,
+        locked: 0,
+        apprentice: 0,
+        guru: 3,
+        master: 0,
+        enlightened: 0,
+        burned: 0,
+      }),
+    ).toBe("all");
+  });
+
+  it("keeps selected srs filter when selected bucket is non-zero", () => {
+    expect(
+      resolveEffectiveSrsFilter("guru", {
+        all: 3,
+        locked: 0,
+        apprentice: 0,
+        guru: 3,
+        master: 0,
+        enlightened: 0,
+        burned: 0,
+      }),
+    ).toBe("guru");
   });
 
   it("falls back selected viewed level to all when selected level count is zero", () => {

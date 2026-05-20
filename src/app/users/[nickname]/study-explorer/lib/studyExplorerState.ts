@@ -1,5 +1,5 @@
-import type { QueueResponse, StudyCounts, StudyQueueMode, StudySrsStageFilter, StudyTypeFilter } from "./studyExplorerTypes";
-import { STUDY_TYPE_FILTERS } from "./studyExplorerDomain";
+import type { QueueResponse, StudyCounts, StudyQueueMode, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./studyExplorerTypes";
+import { STUDY_SRS_FILTERS, STUDY_TYPE_FILTERS } from "./studyExplorerDomain";
 
 export type StudyExplorerStorageKeys = {
   counts: string;
@@ -82,6 +82,25 @@ export function resolveEffectiveSrsStageFilter(
   }
 
   return (srsStageCounts?.[srsStageFilter] ?? 0) > 0 ? srsStageFilter : null;
+}
+
+export function resolveEffectiveSrsFilter(
+  srsFilter: StudySrsFilter,
+  srsCounts: {
+    all: number;
+    locked: number;
+    apprentice: number;
+    guru: number;
+    master: number;
+    enlightened: number;
+    burned: number;
+  } | undefined,
+): StudySrsFilter {
+  if (srsFilter === STUDY_SRS_FILTERS.all) {
+    return srsFilter;
+  }
+
+  return (srsCounts?.[srsFilter] ?? 0) > 0 ? srsFilter : STUDY_SRS_FILTERS.all;
 }
 
 export function resolveEffectiveViewedLevelFilter(

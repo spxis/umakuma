@@ -501,3 +501,26 @@ test("study pagination loads more on scroll reach", async ({ browser, baseURL })
     }).toBeGreaterThan(beforeShown);
   });
 });
+
+test("study does not keep zero-count status selected", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for study zero-status checks in this environment.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&level=14&type=kanji&srs=master#explorer`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+    if ((await accessGate.count()) > 0) {
+      await expect(accessGate).toBeVisible();
+      return;
+    }
+
+    await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {
+      // Some pages keep lightweight polling alive; proceed with assertions.
+    });
+
+    const selectedZeroStatus = page.locator("button.bg-accent").filter({
+      hasText: /^(APPR|GURU|MASTER|ENLIGHTENED|BURNED|LOCKED)\s*\(0\)$/i,
+    });
+    await expect(selectedZeroStatus).toHaveCount(0);
+  });
+});

@@ -19,6 +19,7 @@ type Props = {
   className?: string;
   showPlaceholderCounts?: boolean;
   disabled?: boolean;
+  hideZeroInactive?: boolean;
 };
 
 export default function SubjectTypeFilterGroup({
@@ -32,6 +33,7 @@ export default function SubjectTypeFilterGroup({
   className,
   showPlaceholderCounts = false,
   disabled = false,
+  hideZeroInactive = false,
 }: Props) {
   const formatCount = (value: number): string => (showPlaceholderCounts ? "..." : formatNumber(value));
   const allDisabledStyle = disabled && !allActive;
@@ -46,16 +48,23 @@ export default function SubjectTypeFilterGroup({
       >
         {allLabel} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatCount(allCount ?? counts.all)})</span>
       </button>
-      {SUBJECT_TYPE_VALUES.map((type) => (
-        <SubjectTypeFilterButton
-          key={type}
-          type={type}
-          countLabel={formatCount(counts[type])}
-          active={activeTypes[type]}
-          disabled={disabled}
-          onClick={() => onClickType(type)}
-        />
-      ))}
+      {SUBJECT_TYPE_VALUES.map((type) => {
+        const isInactiveZero = hideZeroInactive && !activeTypes[type] && counts[type] === 0;
+        if (isInactiveZero) {
+          return null;
+        }
+
+        return (
+          <SubjectTypeFilterButton
+            key={type}
+            type={type}
+            countLabel={formatCount(counts[type])}
+            active={activeTypes[type]}
+            disabled={disabled}
+            onClick={() => onClickType(type)}
+          />
+        );
+      })}
     </div>
   );
 }
