@@ -187,13 +187,40 @@ export default function StudyExplorer({
     if (!liveCounts || typeof window === "undefined") {
       return;
     }
-    const countsKey = `${accountId}:${liveCounts.reviews}:${liveCounts.lessons}`;
+    let storedReviews = 0;
+    let storedLessons = 0;
+    try {
+      const raw = window.localStorage.getItem(storageKeys.counts);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { reviews?: number; lessons?: number };
+        if (typeof parsed.reviews === "number") {
+          storedReviews = parsed.reviews;
+        }
+        if (typeof parsed.lessons === "number") {
+          storedLessons = parsed.lessons;
+        }
+      }
+    } catch {
+      // Ignore malformed cache values.
+    }
+
+    const mergedReviews =
+      queueMode === STUDY_QUEUE_TYPES.review ? liveCounts.reviews : storedReviews;
+    const mergedLessons =
+      queueMode === STUDY_QUEUE_TYPES.lesson ? liveCounts.lessons : storedLessons;
+    const mergedCounts = {
+      reviews: mergedReviews,
+      lessons: mergedLessons,
+      all: mergedReviews + mergedLessons,
+    };
+
+    const countsKey = `${accountId}:${mergedCounts.reviews}:${mergedCounts.lessons}`;
     if (lastBroadcastCountsRef.current === countsKey) {
       return;
     }
     lastBroadcastCountsRef.current = countsKey;
     try {
-      window.localStorage.setItem(storageKeys.counts, JSON.stringify(liveCounts));
+      window.localStorage.setItem(storageKeys.counts, JSON.stringify(mergedCounts));
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
@@ -201,12 +228,12 @@ export default function StudyExplorer({
       new CustomEvent("wr:study-counts-updated", {
         detail: {
           accountId,
-          reviews: liveCounts.reviews,
-          lessons: liveCounts.lessons,
+          reviews: mergedCounts.reviews,
+          lessons: mergedCounts.lessons,
         },
       }),
     );
-  }, [accountId, liveCounts, storageKeys]);
+  }, [accountId, liveCounts, queueMode, storageKeys.counts]);
   useStudyToggleEnglishHotkey(canToggleEnglish, onToggleShowEnglish);
   useStudyCloseOnExplorerPageChange(setSelectedId);
   useStudyViewerModeSync(setForcedViewerMode);

@@ -173,33 +173,10 @@ export default function ExplorerTabs({
       }
     };
 
-    const onStudyCountsUpdated = (event: Event) => {
-      const custom = event as CustomEvent<{ accountId?: string; reviews?: number; lessons?: number }>;
-      if (custom.detail?.accountId !== accountId) {
-        return;
-      }
-
-      if (typeof custom.detail?.reviews === "number" && typeof custom.detail?.lessons === "number") {
-        const nextReviews = custom.detail.reviews;
-        const nextLessons = custom.detail.lessons;
-        setStudyCounts((prev) => {
-          if (prev && prev.reviews === nextReviews && prev.lessons === nextLessons) {
-            return prev;
-          }
-          return { reviews: nextReviews, lessons: nextLessons };
-        });
-        return;
-      }
-
-      readCounts();
-    };
-
     readCounts();
-    window.addEventListener("wr:study-counts-updated", onStudyCountsUpdated as EventListener);
     window.addEventListener("focus", readCounts);
 
     return () => {
-      window.removeEventListener("wr:study-counts-updated", onStudyCountsUpdated as EventListener);
       window.removeEventListener("focus", readCounts);
     };
   }, [accountId, countsStorageKey]);
