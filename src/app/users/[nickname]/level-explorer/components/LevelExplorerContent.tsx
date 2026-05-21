@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
 import { allBadgeClass, badgeClass, disabledBadgeClass, formatNumber, srsFilterButtonLabel } from "../lib/levelExplorerDisplay";
 import { useLevelExplorerResetSelection } from "../lib/useLevelExplorerResetSelection";
 import {
@@ -10,7 +9,6 @@ import {
   REVIEW_TIMING_ALLOWED,
   SRS_FILTER_ALLOWED,
 } from "../lib/levelExplorerState";
-import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import {
@@ -20,7 +18,6 @@ import {
   LEVEL_EXPLORER_TEXT,
 } from "./LevelExplorer.constants";
 import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
-
 export default function LevelExplorerContent({
   accountId,
   levelOptions,
@@ -84,7 +81,6 @@ export default function LevelExplorerContent({
     filteredItems.length,
     Math.max(PAGE_SIZE, visibleCount, selectedItemIndex + 1),
   );
-
   useEffect(() => {
     if (!sentinelRef.current) {
       return;
@@ -105,13 +101,11 @@ export default function LevelExplorerContent({
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
   }, [effectiveVisibleCount, filteredItems.length]);
-
   const visibleItems = filteredItems.slice(0, effectiveVisibleCount);
   const selectedVisibleIndex = selectedItem
     ? visibleItems.findIndex((item) => item.subjectId === selectedItem.subjectId)
     : -1;
   const isPeekRevealed = studyMode && selectedItem !== null && peekSubjectId === selectedItem.subjectId;
-
   useEffect(() => {
     if (!selectedItem) {
       return;
@@ -130,14 +124,12 @@ export default function LevelExplorerContent({
       ) {
         return;
       }
-
       const key = event.key.toLowerCase();
       if (key === "e" && canToggleEnglish) {
         event.preventDefault();
         onToggleShowEnglish();
         return;
       }
-
       if (key === " " || event.code === "Space") {
         event.preventDefault();
         if (document.activeElement instanceof HTMLElement) {
@@ -148,7 +140,6 @@ export default function LevelExplorerContent({
         setPeekSubjectId(null);
         return;
       }
-
       if (key === "escape") {
         event.preventDefault();
         if (document.activeElement instanceof HTMLElement) {
@@ -159,7 +150,6 @@ export default function LevelExplorerContent({
         setPeekSubjectId(null);
         return;
       }
-
       const columns = Math.max(1, gridColumns);
       const delta =
         key === "l" || key === "a" || event.key === "ArrowLeft"
@@ -174,12 +164,10 @@ export default function LevelExplorerContent({
       if (delta === null) {
         return;
       }
-
       const currentIndex = filteredItems.findIndex((item) => item.subjectId === selectedItem.subjectId);
       if (currentIndex < 0) {
         return;
       }
-
       const nextIndex = currentIndex + delta;
       if (nextIndex < 0 || nextIndex >= filteredItems.length) {
         return;
@@ -187,16 +175,13 @@ export default function LevelExplorerContent({
       if (nextIndex === currentIndex) {
         return;
       }
-
       const nextItem = filteredItems[nextIndex];
       if (!nextItem) {
         return;
       }
-
       const currentRow = Math.floor(currentIndex / columns);
       const nextRow = Math.floor(nextIndex / columns);
       const movedToDifferentRow = currentRow !== nextRow;
-
       event.preventDefault();
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
@@ -204,7 +189,6 @@ export default function LevelExplorerContent({
       onMarkHistoryPush();
       onSetSelectedSubjectId(nextItem.subjectId);
       setPeekSubjectId(null);
-
       if (movedToDifferentRow) {
         window.requestAnimationFrame(() => {
           const nextCard = document.querySelector<HTMLElement>(
@@ -213,20 +197,17 @@ export default function LevelExplorerContent({
           if (!nextCard) {
             return;
           }
-
           const topOffset = 112;
           const targetTop = window.scrollY + nextCard.getBoundingClientRect().top - topOffset;
           window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
         });
       }
     };
-
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [canToggleEnglish, filteredItems, gridColumns, onMarkHistoryPush, onSetSelectedSubjectId, onToggleShowEnglish, selectedItem]);
-
   const {
     selectedSubjectIds,
     isResetting,
@@ -238,15 +219,9 @@ export default function LevelExplorerContent({
     resetSelected,
     resetSingle,
   } = useLevelExplorerResetSelection({ filteredItems, visibleItems });
-
-  const visibleDetailInsertIndex =
-    selectedVisibleIndex >= 0
-      ? Math.min(
-          visibleItems.length - 1,
-          Math.floor(selectedVisibleIndex / gridColumns) * gridColumns + (gridColumns - 1),
-        )
-      : -1;
-
+  const visibleDetailInsertIndex = selectedVisibleIndex >= 0
+    ? Math.min(visibleItems.length - 1, Math.floor(selectedVisibleIndex / gridColumns) * gridColumns + (gridColumns - 1))
+    : -1;
   const clearAllFilters = useCallback(() => {
     void onSelectAllLevelsAndClearSearch();
     onEnableAllTypes();
@@ -266,7 +241,6 @@ export default function LevelExplorerContent({
     onSetSelectedSubjectId,
     onSetSrsFilter,
   ]);
-
   return (
     <section id="explorer" className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="flex flex-col gap-3 border-b border-line bg-surface-muted px-5 py-4">
@@ -280,20 +254,32 @@ export default function LevelExplorerContent({
           </div>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-2">
-            {levelOptions.map((level) => (
+          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
+            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               <button
-                key={level}
                 type="button"
-                onClick={() => { void onToggleLevel(level); }}
-                disabled={searchAvailableLevels !== null && !searchAvailableLevels.has(level)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
-                  selectedLevels.has(level),
-                )}`}
+                onClick={() => { void onSelectAllLevelsAndClearSearch(); }}
+                role="tab"
+                aria-selected={selectedLevels.size === levelOptions.length}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.size === levelOptions.length)}`}
               >
-                L{level} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(levelItemCountsByLevel[level] ?? 0)})</span>
+                All <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(counts.all)})</span>
               </button>
-            ))}
+              {levelOptions.map((level) => (
+                <button
+                  key={level}
+                  type="button"
+                  onClick={() => { void onToggleLevel(level); }}
+                  disabled={searchAvailableLevels !== null && !searchAvailableLevels.has(level)}
+                  role="tab"
+                  aria-selected={selectedLevels.has(level)}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.has(level))}`}
+                >
+                  {level} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(levelItemCountsByLevel[level] ?? 0)})</span>
+                </button>
+              ))}
+            </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <button
@@ -306,49 +292,64 @@ export default function LevelExplorerContent({
             </button>
           </div>
         </div>
-        <div className="flex flex-wrap items-start justify-between gap-2">
-          <SubjectTypeFilterGroup
-            counts={counts}
-            allLabel={selectedLevelList.length === 1 ? `All L${selectedLevelList[0]}` : "All"}
-            allActive={visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary}
-            activeTypes={visibleTypes}
-            onClickAll={onEnableAllTypes}
-            onClickType={onToggleTypeVisibility}
-          />
-          <div className="ml-auto flex flex-wrap justify-end gap-2">
-            {SRS_FILTER_ALLOWED.map((status) => {
-              const count = counts[status];
-              const disabled = status !== LEVEL_SRS_FILTERS.all && count === 0;
-              const active = srsFilter === status;
-              if (disabled && !active) {
-                return null;
-              }
-
-              return (
-                <button
-                  key={status}
-                  type="button"
-                  onClick={() => onSetSrsFilter(status)}
-                  disabled={disabled}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
-                    disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? allBadgeClass(active) : badgeClass(active)
-                  }`}
-                >
-                  {srsFilterButtonLabel(status)} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
-                </button>
-              );
-            })}
+        <div className="grid gap-2">
+          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Grouping filters">
+            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grouping</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+              <button
+                type="button"
+                onClick={onEnableAllTypes}
+                role="tab"
+                aria-selected={visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary)}`}
+              >
+                All <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(counts.all)})</span>
+              </button>
+              {([
+                ["radical", "RADICAL", counts.radical],
+                ["kanji", "KANJI", counts.kanji],
+                ["vocabulary", "VOCAB", counts.vocabulary],
+              ] as const).map(([type, label, count]) => {
+                const active = (visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary) || visibleTypes[type];
+                const disabled = count === 0 && !active;
+                const tone = type === "radical"
+                  ? (active ? "border-radical bg-radical text-white" : "border-radical/50 bg-radical/10 text-radical hover:bg-radical/20")
+                  : type === "kanji"
+                    ? (active ? "border-kanji bg-kanji text-white" : "border-kanji/50 bg-kanji/10 text-kanji hover:bg-kanji/20")
+                    : (active ? "border-vocabulary bg-vocabulary text-white" : "border-vocabulary/50 bg-vocabulary/10 text-vocabulary hover:bg-vocabulary/20");
+                if (disabled) return null;
+                return (
+                  <button key={type} type="button" onClick={() => onToggleTypeVisibility(type)} disabled={disabled} role="tab" aria-selected={active} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : tone}`}>
+                    {label} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Status filters">
+            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Status</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+              {SRS_FILTER_ALLOWED.map((status) => {
+                const count = counts[status];
+                const disabled = status !== LEVEL_SRS_FILTERS.all && count === 0;
+                const active = srsFilter === status;
+                if (disabled && !active) return null;
+                return (
+                  <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}>
+                    {srsFilterButtonLabel(status)} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </header>
-
       <div className="border-b border-line px-5 py-4">
         <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">JLPT mix (kanji in selected levels)</p>
         <div className="mt-2 grid grid-cols-5 gap-2">
           {LEVEL_EXPLORER_JLPT_MIX_LEVELS.map((level) => {
             const label = LEVEL_EXPLORER_JLPT_FILTER_LABELS[level];
             const count = jlptCounts[level];
-
             return (
               <div key={level} className="rounded-xl border border-line bg-surface-muted p-2 text-center">
                 <p className="text-[10px] font-bold uppercase text-foreground/70">{label}</p>
@@ -358,7 +359,6 @@ export default function LevelExplorerContent({
           })}
         </div>
       </div>
-
       <div className="border-b border-line px-5 py-4">
         <section className="rounded-2xl border border-line bg-surface-muted/60 p-3 sm:p-4">
           <div className="flex items-center justify-between gap-3">
@@ -374,7 +374,9 @@ export default function LevelExplorerContent({
           </div>
           {!filtersCollapsed ? (
             <div className="mt-3 space-y-3">
-              <div className="flex flex-wrap gap-2">
+              <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT mix filters">
+                <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
+                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
                 {JLPT_FILTER_ALLOWED.map((level) => {
                   const count = level === LEVEL_JLPT_FILTERS.all ? counts.all : jlptCounts[level];
                   const disabled = level !== LEVEL_JLPT_FILTERS.all && count === 0;
@@ -386,21 +388,23 @@ export default function LevelExplorerContent({
                   if (disabled && !active) {
                     return null;
                   }
-
                   return (
                     <button
                       key={level}
                       type="button"
                       onClick={() => onSetJlptFilter(level)}
                       disabled={disabled}
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : allBadgeClass(active)}`}
+                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : allBadgeClass(active)}`}
                     >
-                      {LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                      {LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
                     </button>
                   );
                 })}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Review timing filters">
+                <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Timing</span>
+                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
                 {REVIEW_TIMING_ALLOWED.map((timing) => {
                   const label = LEVEL_EXPLORER_REVIEW_TIMING_LABELS[timing];
                   const count = timing === LEVEL_REVIEW_TIMING_FILTERS.all ? counts.all : reviewTimingCounts[timing];
@@ -409,31 +413,30 @@ export default function LevelExplorerContent({
                   if (disabled && !active) {
                     return null;
                   }
-
                   return (
                     <button
                       key={timing}
                       type="button"
                       onClick={() => onSetReviewTimingFilter(timing)}
                       disabled={disabled}
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${disabled ? disabledBadgeClass() : timing === LEVEL_REVIEW_TIMING_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}
+                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : timing === LEVEL_REVIEW_TIMING_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}
                     >
-                      {label} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                      {label} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
                     </button>
                   );
                 })}
+                </div>
               </div>
               {reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.overdue && overdueOutsideSelectedLevels > 0 ? (
                 <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/55">
                   Showing {formatNumber(reviewTimingCounts.overdue)} overdue in selected levels, with {formatNumber(overdueOutsideSelectedLevels)} more overdue in other levels
-                  <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
+                  <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
                 </p>
               ) : null}
             </div>
           ) : null}
         </section>
       </div>
-
       {loading ? <p className="px-5 py-4 text-sm text-foreground/70">Loading level data...</p> : null}
       {searchMatchedSubjectIds ? (
         <p className="px-5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
@@ -441,7 +444,6 @@ export default function LevelExplorerContent({
         </p>
       ) : null}
       {error ? <p className="px-5 py-4 text-sm text-red-700">{error}</p> : null}
-
       <div className="p-5">
         <LevelExplorerItemsGrid
           accountId={accountId}

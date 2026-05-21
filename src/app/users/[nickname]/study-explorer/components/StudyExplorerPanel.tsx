@@ -1,8 +1,8 @@
 import { useState } from "react";
-import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
+import StudyLevelFilters from "./StudyLevelFilters";
 import {
   getSrsStageOptions,
   isAllStudyTypeFilter,
@@ -11,12 +11,11 @@ import {
   STUDY_PANEL_SRS_STATUSES,
   STUDY_PANEL_TEXT,
   STUDY_QUEUE_TYPES,
+  STUDY_GROUPING_FILTERS,
   STUDY_SRS_FILTERS,
-  STUDY_SUBJECT_TYPES,
   STUDY_TYPE_FILTERS,
-  studyPanelAllGroupsLabel,
-  studyPanelAllSrsPluralLabel,
-  studyPanelAllStatusesLabel,
+  studyGroupingToneClass,
+  studySrsToneClass,
 } from "./StudyExplorer.constants";
 import {
   formatNextReviewBadge,
@@ -35,7 +34,7 @@ import {
 } from "../../level-explorer/lib/levelExplorerDisplay";
 import type { StudyQueueItem, StudyQueueMode, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter, StudyWaitSortOrder } from "../lib/studyExplorerTypes";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
-import { allBadgeClass, badgeClass, disabledBadgeClass, groupStudyReviewLevelChips } from "../lib/studyExplorerUtils";
+import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 type Props = {
   canToggleEnglish: boolean;
   showEnglish: boolean;
@@ -78,7 +77,6 @@ type Props = {
   onSelectSubject: (subjectId: number) => void;
   onClearAllFilters: () => void;
 };
-
 export default function StudyExplorerPanel({
   canToggleEnglish,
   showEnglish,
@@ -135,9 +133,6 @@ export default function StudyExplorerPanel({
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
   const showTypeCountPlaceholders = !hasData && typeCounts.all === 0 && filteredItems.length === 0 && !errorMessage;
   const displayErrorMessage = errorMessage === "Failed to fetch" ? STUDY_PANEL_TEXT.queueRefreshError : errorMessage;
-  const srsStageOptions = getSrsStageOptions(srsFilter);
-  const hasSrsStageOptions = srsStageOptions.length > 0;
-  const allSrsStagesSelected = srsStageFilter === null || !hasSrsStageOptions;
   const lessonLevelOptions = Object.entries(lessonLevelCounts)
     .map(([level, count]) => [Number(level), count] as const)
     .filter(([, count]) => count > 0)
@@ -149,13 +144,11 @@ export default function StudyExplorerPanel({
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
   const hideControlsDuringInitialLoad = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
   const showLoadingOverlay = hideControlsDuringInitialLoad;
-  const reviewLevelChips = groupStudyReviewLevelChips(levelOptions, availableLevels, viewedLevel, hasData);
-  const levelTypeLabel = typeFilter === STUDY_SUBJECT_TYPES.radical ? "Radical" : typeFilter === STUDY_SUBJECT_TYPES.kanji ? "Kanji" : "Vocab";
-  const levelRowAllLabel = queueMode === STUDY_QUEUE_TYPES.lesson ? STUDY_PANEL_TEXT.allLevelsLabel : isAllStudyTypeFilter(typeFilter) ? "All Levels" : `All ${levelTypeLabel} Levels`;
-  const typeRowAllLabel = studyPanelAllGroupsLabel(viewedLevel);
   const loadingFillCount = hasMoreMatchingItems && isLoadingMore && gridColumns > 1
     ? (gridColumns - (filteredItems.length % gridColumns)) % gridColumns
     : 0;
+  const allTypesSelected = isAllStudyTypeFilter(typeFilter);
+  const groupingCountLabel = (count: number) => showTypeCountPlaceholders ? "-" : formatNumber(count);
   return (
     <>
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -166,133 +159,90 @@ export default function StudyExplorerPanel({
           </div>
           <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} /></div>
         </div>
-        <div className={`mt-3 flex flex-wrap gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
-          {queueMode === STUDY_QUEUE_TYPES.lesson ? (
-            <>
+        <div className={`mt-3 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
+          <StudyLevelFilters
+            queueMode={queueMode}
+            filtersLoading={filtersLoading}
+            viewedLevel={viewedLevel}
+            levelOptions={levelOptions}
+            lessonLevelOptions={lessonLevelOptions}
+            availableLevels={availableLevels}
+            reviewLevelCounts={reviewLevelCounts}
+            totalLessonsInVisibleLevels={totalLessonsInVisibleLevels}
+            totalReviewsInVisibleLevels={totalReviewsInVisibleLevels}
+            onSetViewedLevel={onSetViewedLevel}
+          />
+        </div>
+        <div className={`mt-2 space-y-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
+          <div className="flex w-fit max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Grouping filters">
+            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grouping</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               <button
                 type="button"
-                onClick={() => onSetViewedLevel(null)}
+                onClick={() => onSetTypeFilter(STUDY_TYPE_FILTERS.all)}
                 disabled={filtersLoading}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : allBadgeClass(viewedLevel === null)}`}
+                role="tab"
+                aria-selected={allTypesSelected}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${filtersLoading && !allTypesSelected ? disabledBadgeClass() : badgeClass(allTypesSelected)}`}
               >
-                {STUDY_PANEL_TEXT.allLevelsLabel} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(totalLessonsInVisibleLevels)})</span>
+                All <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({groupingCountLabel(allTypeCount)})</span>
               </button>
-              {lessonLevelOptions.map(([level, count]) => (
-                <button
-                  key={level}
-                  type="button"
-                  onClick={() => onSetViewedLevel(level)}
-                  disabled={filtersLoading}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && viewedLevel !== level ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
-                >
-                  L{level} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
-                </button>
-              ))}
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                onClick={() => onSetViewedLevel(null)}
-                disabled={filtersLoading}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : allBadgeClass(viewedLevel === null)}`}
-              >
-                {levelRowAllLabel} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(totalReviewsInVisibleLevels)})</span>
-              </button>
-              {reviewLevelChips.map((chip) => {
-                if (chip.kind === "range") {
-                  return (
-                    <button
-                      key={`range-${chip.startLevel}-${chip.endLevel}`}
-                      type="button"
-                      disabled
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabledBadgeClass()}`}
-                    >
-                      {chip.startLevel === chip.endLevel ? `L${chip.startLevel}` : `L${chip.startLevel}-L${chip.endLevel}`}
-                    </button>
-                  );
+              {STUDY_GROUPING_FILTERS.map(([type, label]) => {
+                const count = typeCounts[type];
+                const isSelected = allTypesSelected || typeFilter === type;
+                const unavailable = hasData && !isSelected && count === 0;
+                const disabled = (filtersLoading && !isSelected) || unavailable;
+                if (unavailable) {
+                  return null;
                 }
-                const isSelected = viewedLevel === chip.level;
-                const disabled = filtersLoading && !isSelected;
-                const levelCount = reviewLevelCounts[chip.level] ?? 0;
                 return (
                   <button
-                    key={chip.level}
+                    key={type}
                     type="button"
-                    onClick={() => onSetViewedLevel(chip.level)}
+                    onClick={() => onSetTypeFilter(type)}
                     disabled={disabled}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
+                    role="tab"
+                    aria-selected={isSelected}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : studyGroupingToneClass(type, isSelected)}`}
                   >
-                    L{chip.level} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(levelCount)})</span>
+                    {label} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({groupingCountLabel(count)})</span>
                   </button>
                 );
               })}
-            </>
-          )}
-        </div>
-        <div className={`mt-2 space-y-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
-          <SubjectTypeFilterGroup
-            counts={typeCounts}
-            allLabel={typeRowAllLabel}
-            allCount={allTypeCount}
-            allActive={isAllStudyTypeFilter(typeFilter)}
-            activeTypes={{
-              radical: isAllStudyTypeFilter(typeFilter) || typeFilter === STUDY_SUBJECT_TYPES.radical,
-              kanji: isAllStudyTypeFilter(typeFilter) || typeFilter === STUDY_SUBJECT_TYPES.kanji,
-              vocabulary: isAllStudyTypeFilter(typeFilter) || typeFilter === STUDY_SUBJECT_TYPES.vocabulary,
-            }}
-            allButtonClassName={allBadgeClass(isAllStudyTypeFilter(typeFilter))}
-            showPlaceholderCounts={showTypeCountPlaceholders}
-            disabled={filtersLoading}
-            onClickAll={() => onSetTypeFilter(STUDY_TYPE_FILTERS.all)}
-            onClickType={(type) => onSetTypeFilter(type)}
-          />
+            </div>
+          </div>
           {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
-            <div className="grid gap-2">
-              <div className="inline-flex max-w-full flex-wrap items-center gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Status filters">
+            <div className="flex w-fit max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Status filters">
+              <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Status</span>
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
                 {STUDY_PANEL_SRS_STATUSES.map((status) => {
                   const count = srsCounts[status];
                   const isSelected = srsFilter === status;
                   const unavailable = hasData && !isSelected && status !== STUDY_SRS_FILTERS.all && count === 0;
                   const disabled = (filtersLoading && !isSelected) || unavailable;
-                  const statusLabel = status === STUDY_SRS_FILTERS.all ? studyPanelAllStatusesLabel(viewedLevel) : srsFilterButtonLabel(status);
-
-                  if (unavailable) {
-                    return null;
-                  }
-
+                  const statusLabel = status === STUDY_SRS_FILTERS.all ? "All" : srsFilterButtonLabel(status);
+                  const stageOptions = status === STUDY_SRS_FILTERS.all ? [] : getSrsStageOptions(status);
+                  const showStageButtons = isSelected && stageOptions.length > 1;
+                  const onClickStatus = () => { onSetSrsFilter(status); if (stageOptions.length > 1) onSetSrsStageFilter(null); };
+                  if (unavailable) return null;
                   return (
-                    <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-[0.08em] ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? allBadgeClass(isSelected) : badgeClass(isSelected)}`}>
-                      {statusLabel} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="inline-flex max-w-full flex-wrap items-center gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="SRS stages">
-                <button
-                  type="button"
-                  onClick={() => onSetSrsStageFilter(null)}
-                  disabled={filtersLoading}
-                  role="tab"
-                  aria-selected={allSrsStagesSelected}
-                  className={`rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-[0.08em] ${filtersLoading && !allSrsStagesSelected ? disabledBadgeClass() : allBadgeClass(allSrsStagesSelected)}`}
-                >
-                  {studyPanelAllSrsPluralLabel(viewedLevel)} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(srsCounts.all)})</span>
-                </button>
-                {srsStageOptions.map((stage) => {
-                  const count = srsStageCounts[stage] ?? 0;
-                  const isSelected = srsStageFilter === stage;
-                  const unavailable = hasData && !isSelected && count === 0;
-                  const disabled = (filtersLoading && !isSelected) || unavailable;
-                  if (unavailable) {
-                    return null;
-                  }
-
-                  return (
-                    <button key={stage} type="button" onClick={() => onSetSrsStageFilter(stage)} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-[0.08em] ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}>
-                      {stage} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
-                    </button>
+                    <div key={status} className="inline-flex items-center gap-1">
+                      <button type="button" onClick={onClickStatus} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? badgeClass(isSelected) : studySrsToneClass(status, isSelected)}`}>
+                        {statusLabel} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                      </button>
+                      {showStageButtons ? stageOptions.map((stage) => {
+                        const stageCount = srsStageCounts[stage] ?? 0;
+                        const stageSelected = srsStageFilter === stage;
+                        const stageUnavailable = hasData && !stageSelected && stageCount === 0;
+                        const stageDisabled = (filtersLoading && !stageSelected) || stageUnavailable;
+                        if (stageUnavailable) return null;
+                        return (
+                          <button key={`${status}-${stage}`} type="button" onClick={() => onSetSrsStageFilter(stage)} disabled={stageDisabled} role="tab" aria-selected={stageSelected} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<StudySrsFilter, "all">, stageSelected)}`}>
+                            {stage} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(stageCount)})</span>
+                          </button>
+                        );
+                      }) : null}
+                    </div>
                   );
                 })}
               </div>
@@ -300,7 +250,6 @@ export default function StudyExplorerPanel({
           ) : null}
         </div>
       </header>
-
       {displayErrorMessage ? (
         <div className="px-5 pt-4">
           <div className="rounded-2xl border border-red-300/70 bg-red-50 px-4 py-3 text-center text-sm font-semibold text-red-700">
@@ -374,7 +323,6 @@ export default function StudyExplorerPanel({
             <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))] lg:grid-cols-4">
               {filteredItems.map((item, index) => {
                 const reviewBadge = isReviewQueueItem(item) ? formatNextReviewBadge(item.availableAt) : null;
-
                 return (
                   <UnifiedExplorerCard
                     key={`${item.queueType}-${item.subjectId}`}
@@ -387,7 +335,6 @@ export default function StudyExplorerPanel({
                         })) {
                           return;
                         }
-
                         onSelectSubject(item.subjectId);
                       }
                     }}
@@ -454,7 +401,6 @@ export default function StudyExplorerPanel({
                   ))
                 : null}
             </div>
-
             {hasMoreMatchingItems ? (
               <div ref={sentinelRef} className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
                 {isLoadingMore
@@ -479,7 +425,6 @@ export default function StudyExplorerPanel({
               </button>
             </div>
           )}
-
           <div
             aria-hidden={!showLoadingOverlay}
             className={`absolute inset-0 z-10 rounded-2xl border border-line bg-surface/70 backdrop-blur-[1px] transition-opacity duration-200 ${showLoadingOverlay ? "opacity-100" : "pointer-events-none opacity-0"}`}

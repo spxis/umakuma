@@ -123,7 +123,12 @@ export default function ExplorerTabs({
       revalidateOnFocus: true,
       refreshInterval: 30_000,
       onSuccess: (nextCounts) => {
-        setStudyCounts(nextCounts);
+        setStudyCounts((prev) => {
+          if (prev && prev.reviews === nextCounts.reviews && prev.lessons === nextCounts.lessons) {
+            return prev;
+          }
+          return nextCounts;
+        });
         try {
           window.localStorage.setItem(
             countsStorageKey,
@@ -154,7 +159,14 @@ export default function ExplorerTabs({
       try {
         const parsed = JSON.parse(raw) as { reviews?: number; lessons?: number };
         if (typeof parsed.reviews === "number" && typeof parsed.lessons === "number") {
-          setStudyCounts({ reviews: parsed.reviews, lessons: parsed.lessons });
+          const nextReviews = parsed.reviews;
+          const nextLessons = parsed.lessons;
+          setStudyCounts((prev) => {
+            if (prev && prev.reviews === nextReviews && prev.lessons === nextLessons) {
+              return prev;
+            }
+            return { reviews: nextReviews, lessons: nextLessons };
+          });
         }
       } catch {
         // Ignore malformed cache values.
@@ -168,7 +180,14 @@ export default function ExplorerTabs({
       }
 
       if (typeof custom.detail?.reviews === "number" && typeof custom.detail?.lessons === "number") {
-        setStudyCounts({ reviews: custom.detail.reviews, lessons: custom.detail.lessons });
+        const nextReviews = custom.detail.reviews;
+        const nextLessons = custom.detail.lessons;
+        setStudyCounts((prev) => {
+          if (prev && prev.reviews === nextReviews && prev.lessons === nextLessons) {
+            return prev;
+          }
+          return { reviews: nextReviews, lessons: nextLessons };
+        });
         return;
       }
 
@@ -398,7 +417,7 @@ export default function ExplorerTabs({
                   onClick={() => setQueueMode(QUEUE_TYPES.review)}
                   className={queueModeSegmentClass(QUEUE_TYPES.review, queueMode)}
                 >
-                  Reviews <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({typeof studyCounts?.reviews === "number" ? studyCounts.reviews : "..."})</span>
+                  Reviews <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({typeof studyCounts?.reviews === "number" ? studyCounts.reviews : "..."})</span>
                 </button>
                 <button
                   type="button"
@@ -407,7 +426,7 @@ export default function ExplorerTabs({
                   onClick={() => setQueueMode(QUEUE_TYPES.lesson)}
                   className={queueModeSegmentClass(QUEUE_TYPES.lesson, queueMode)}
                 >
-                  Lessons <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."})</span>
+                  Lessons <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."})</span>
                 </button>
               </div>
             ) : null}

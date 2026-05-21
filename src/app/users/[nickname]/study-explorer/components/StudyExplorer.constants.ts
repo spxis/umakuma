@@ -3,7 +3,7 @@ import type {
   StudySrsStageFilter,
 } from "../lib/studyExplorerTypes";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
-import { STUDY_SRS_FILTERS } from "../lib/studyExplorerDomain";
+import { STUDY_SRS_FILTERS, STUDY_SUBJECT_TYPES } from "../lib/studyExplorerDomain";
 export {
   isAllStudySrsFilter,
   isAllStudyTypeFilter,
@@ -96,6 +96,51 @@ export function getSrsStageOptions(filter: StudySrsFilter): ReadonlyArray<StudyS
   if (filter === STUDY_SRS_FILTERS.burned) return [9] as const;
   if (filter === STUDY_SRS_FILTERS.locked) return [] as const;
   return [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+}
+
+export function studySrsToneClass(status: Exclude<StudySrsFilter, "all">, active: boolean): string {
+  if (status === STUDY_SRS_FILTERS.apprentice) {
+    return active
+      ? "border-pink-300 bg-pink-100 text-pink-700"
+      : "border-pink-200 bg-pink-50/70 text-pink-700 hover:bg-pink-100";
+  }
+  if (status === STUDY_SRS_FILTERS.guru) {
+    return active
+      ? "border-violet-300 bg-violet-100 text-violet-700"
+      : "border-violet-200 bg-violet-50/70 text-violet-700 hover:bg-violet-100";
+  }
+  if (status === STUDY_SRS_FILTERS.master) {
+    return active
+      ? "border-sky-300 bg-sky-100 text-sky-700"
+      : "border-sky-200 bg-sky-50/70 text-sky-700 hover:bg-sky-100";
+  }
+  if (status === STUDY_SRS_FILTERS.enlightened) {
+    return active
+      ? "border-amber-300 bg-amber-100 text-amber-700"
+      : "border-amber-200 bg-amber-50/70 text-amber-700 hover:bg-amber-100";
+  }
+  return active
+    ? "border-line bg-surface-muted text-foreground"
+    : "border-line bg-surface text-foreground/75 hover:bg-surface-muted";
+}
+
+export const STUDY_GROUPING_FILTERS = [
+  [STUDY_SUBJECT_TYPES.radical, "RADICAL"],
+  [STUDY_SUBJECT_TYPES.kanji, "KANJI"],
+  [STUDY_SUBJECT_TYPES.vocabulary, "VOCAB"],
+] as const;
+
+export function studyGroupingToneClass(
+  type: (typeof STUDY_GROUPING_FILTERS)[number][0],
+  active: boolean,
+): string {
+  if (type === STUDY_SUBJECT_TYPES.radical) {
+    return active ? "border-radical bg-radical text-white" : "border-radical/50 bg-radical/10 text-radical hover:bg-radical/20";
+  }
+  if (type === STUDY_SUBJECT_TYPES.kanji) {
+    return active ? "border-kanji bg-kanji text-white" : "border-kanji/50 bg-kanji/10 text-kanji hover:bg-kanji/20";
+  }
+  return active ? "border-vocabulary bg-vocabulary text-white" : "border-vocabulary/50 bg-vocabulary/10 text-vocabulary hover:bg-vocabulary/20";
 }
 
 export const STUDY_REVIEW_MODAL_STORAGE_KEYS = {

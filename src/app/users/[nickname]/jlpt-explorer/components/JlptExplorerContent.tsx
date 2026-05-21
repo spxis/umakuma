@@ -141,7 +141,7 @@ export default function JlptExplorerContent({
           <div>
             <h2 className="text-xl font-black text-foreground">JLPT Explorer</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">
-              Browse all N1-N5 kanji <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(items.length)} total)</span>
+              Browse all N1-N5 kanji <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(items.length)} total)</span>
             </p>
           </div>
           <div className="w-full lg:max-w-[38rem]">
@@ -149,59 +149,39 @@ export default function JlptExplorerContent({
           </div>
         </div>
         {availableWkLevels.length > 0 ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => onSetWkLevelFilter(null)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allBadgeClass(
-                wkLevelFilter === null,
-              )}`}
-            >
-              {JLPT_EXPLORER_TEXT.allLevels} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(items.length)})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
-                wkLevelFilter === "none",
-              )}`}
-            >
-              {JLPT_EXPLORER_TEXT.none} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(wkLevelCounts.get("none") ?? 0)})</span>
-            </button>
-            {availableWkLevels.map((level) => (
-              <button
-                key={level}
-                type="button"
-                onClick={() => onSetWkLevelFilter(wkLevelFilter === level ? null : level)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
-                  wkLevelFilter === level,
-                )}`}
-              >
-                L{level} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(wkLevelCounts.get(level) ?? 0)})</span>
+          <div className="mt-3 inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="WaniKani level filters">
+            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+              <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(wkLevelFilter === null)}`}>
+                All <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(items.length)})</span>
               </button>
-            ))}
+              <button type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === "none")}`}>
+                {JLPT_EXPLORER_TEXT.none} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(wkLevelCounts.get("none") ?? 0)})</span>
+              </button>
+              {availableWkLevels.map((level) => (
+                <button key={level} type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === level ? null : level)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === level)}`}>
+                  {level} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(wkLevelCounts.get(level) ?? 0)})</span>
+                </button>
+              ))}
+            </div>
           </div>
         ) : null}
         {availableGrades.length > 0 ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => onSetGradeFilter(null)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allBadgeClass(
-                gradeFilter === null,
-              )}`}
-            >
-              {JLPT_EXPLORER_TEXT.allGrades}
+          <div className="mt-3 inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
+            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+            <button type="button" onClick={() => onSetGradeFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(gradeFilter === null)}`}>
+              All
             </button>
             {gradeCounts.has("none") ? (
               <button
                 type="button"
                 onClick={() => onSetGradeFilter(gradeFilter === "none" ? null : "none")}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
                   gradeFilter === "none",
                 )}`}
               >
-                None <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(gradeCounts.get("none") ?? 0)})</span>
+                None <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(gradeCounts.get("none") ?? 0)})</span>
               </button>
             ) : null}
             {availableGrades.map((grade) => (
@@ -209,25 +189,28 @@ export default function JlptExplorerContent({
                 key={grade}
                 type="button"
                 onClick={() => onSetGradeFilter(gradeFilter === grade ? null : grade)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
                   gradeFilter === grade,
                 )}`}
               >
-                G{grade} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(gradeCounts.get(grade) ?? 0)})</span>
+                G{grade} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(gradeCounts.get(grade) ?? 0)})</span>
               </button>
             ))}
+            </div>
           </div>
         ) : null}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap gap-2">
+          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT level filters">
+            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
             <button
               type="button"
               onClick={() => onSetSelectedLevels(new Set([1, 2, 3, 4, 5]))}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allBadgeClass(
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(
                 selectedLevels.size === 5,
               )}`}
             >
-              {JLPT_EXPLORER_TEXT.jlptAll} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(counts.all)})</span>
+              All <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(counts.all)})</span>
             </button>
             {([
               [5, counts.n5],
@@ -240,15 +223,16 @@ export default function JlptExplorerContent({
                 key={level}
                 type="button"
                 onClick={() => onToggleNLevel(level)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${
                   selectedLevels.has(level)
                     ? "border-teal-500 bg-teal-500 text-white"
                     : "border-teal-300 bg-teal-100 text-teal-800 hover:bg-teal-200"
                 }`}
               >
-                N{level} <span className="ml-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                N{level} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
               </button>
             ))}
+            </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
             {onToggleShowEnglish ? (

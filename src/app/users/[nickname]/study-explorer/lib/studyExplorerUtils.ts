@@ -207,15 +207,15 @@ export function disabledBadgeClass(): string {
 
 export type StudyReviewLevelChip =
   | { kind: "single"; level: number }
-  | { kind: "range"; startLevel: number; endLevel: number };
+  | { kind: "range"; startLevel: number; endLevel: number; group?: "older" | "recent" };
 
-export function groupStudyReviewLevelChips(
-  levelOptions: number[],
+function appendReviewLevelChips(
+  grouped: StudyReviewLevelChip[],
+  levels: number[],
   availableLevels: Set<number>,
   viewedLevel: number | null,
   hasData: boolean,
-): StudyReviewLevelChip[] {
-  const grouped: StudyReviewLevelChip[] = [];
+): void {
   let rangeStart: number | null = null;
   let rangeEnd: number | null = null;
 
@@ -223,30 +223,93 @@ export function groupStudyReviewLevelChips(
     if (rangeStart === null || rangeEnd === null) {
       return;
     }
-
     grouped.push({ kind: "range", startLevel: rangeStart, endLevel: rangeEnd });
-
     rangeStart = null;
     rangeEnd = null;
   };
 
-  for (const level of levelOptions) {
+  for (const level of levels) {
     const isSelected = viewedLevel === level;
     const unavailable = hasData && !isSelected && !availableLevels.has(level);
-
     if (unavailable) {
-      if (rangeStart === null) {
-        rangeStart = level;
-      }
-      rangeEnd = level;
       continue;
     }
-
     flushRange();
     grouped.push({ kind: "single", level });
   }
 
   flushRange();
+}
+
+export function groupStudyReviewLevelChips(
+  levelOptions: number[],
+  availableLevels: Set<number>,
+  viewedLevel: number | null,
+  hasData: boolean,
+  recentStartLevel?: number,
+  showOlderLevels: boolean = false,
+): StudyReviewLevelChip[] {
+  const grouped: StudyReviewLevelChip[] = [];
+  if (recentStartLevel === undefined) {
+    appendReviewLevelChips(grouped, levelOptions, availableLevels, viewedLevel, hasData);
+    return grouped;
+  }
+
+  const activeLevels = levelOptions.filter((level) => !hasData || viewedLevel === level || availableLevels.has(level));
+  const olderLevels = activeLevels.filter((level) => level < recentStartLevel);
+  const recentLevels = activeLevels.filter((level) => level >= recentStartLevel);
+  const olderStart = olderLevels[0];
+  const olderEnd = olderLevels[olderLevels.length - 1];
+  const recentStart = recentLevels[0];
+  const recentEnd = recentLevels[recentLevels.length - 1];
+  let unavailableRangeStart: number | null = null;
+  let unavailableRangeEnd: number | null = null;
+  let olderGroupRendered = false;
+  let recentGroupRendered = false;
+
+  const flushUnavailableRange = () => {
+    if (unavailableRangeStart === null || unavailableRangeEnd === null) {
+      return;
+    }
+    grouped.push({ kind: "range", startLevel: unavailableRangeStart, endLevel: unavailableRangeEnd });
+    unavailableRangeStart = null;
+    unavailableRangeEnd = null;
+  };
+
+  for (const level of levelOptions) {
+    const isSelected = viewedLevel === level;
+    const unavailable = hasData && !isSelected && !availableLevels.has(level);
+    if (unavailable) {
+      if (unavailableRangeStart === null) {
+        unavailableRangeStart = level;
+      }
+      unavailableRangeEnd = level;
+      continue;
+    }
+
+    flushUnavailableRange();
+
+    const isOlder = level < recentStartLevel;
+    if (!showOlderLevels && isOlder && olderStart !== undefined && olderEnd !== undefined) {
+      if (!olderGroupRendered) {
+        grouped.push({ kind: "range", startLevel: olderStart, endLevel: olderEnd, group: "older" });
+        olderGroupRendered = true;
+      }
+      continue;
+    }
+
+    if (showOlderLevels && !isOlder && recentStart !== undefined && recentEnd !== undefined) {
+      if (!recentGroupRendered) {
+        grouped.push({ kind: "range", startLevel: recentStart, endLevel: recentEnd, group: "recent" });
+        recentGroupRendered = true;
+      }
+      continue;
+    }
+
+    grouped.push({ kind: "single", level });
+  }
+
+  flushUnavailableRange();
   return grouped;
 }
 

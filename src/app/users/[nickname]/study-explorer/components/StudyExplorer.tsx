@@ -1,8 +1,6 @@
 "use client";
-
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import useSWR from "swr";
-
 import StudyExplorerModal from "./StudyExplorerModal";
 import StudyExplorerPanel from "./StudyExplorerPanel";
 import {
@@ -44,7 +42,6 @@ import {
   useStudyToggleEnglishHotkey,
   useStudyViewerModeSync,
 } from "../lib/useStudyExplorerUiEffects";
-
 export default function StudyExplorer({
   accountId,
   maxLevel,
@@ -59,18 +56,13 @@ export default function StudyExplorer({
   const storageKeys = useMemo(() => buildStudyExplorerStorageKeys(accountId, queueMode), [accountId, queueMode]);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const lastHandledStudyQueryRef = useRef("");
-
-  const [cachedQueueData, setCachedQueueData] = useState<QueueResponse | undefined>(() =>
-    readStoredQueue(accountId, queueMode),
-  );
-  const [persistedCounts, setPersistedCounts] = useState<StudyCounts | null>(() =>
-    readStoredStudyCounts(storageKeys.counts),
-  );
-  const [loadedItems, setLoadedItems] = useState<StudyQueueItem[]>(() => deriveInitialQueueState(cachedQueueData).loadedItems);
-  const [totalItems, setTotalItems] = useState<number>(() => deriveInitialQueueState(cachedQueueData).totalItems);
+  const lastBroadcastCountsRef = useRef<string | null>(null);
+  const [cachedQueueData, setCachedQueueData] = useState<QueueResponse | undefined>(undefined);
+  const [persistedCounts, setPersistedCounts] = useState<StudyCounts | null>(null);
+  const [loadedItems, setLoadedItems] = useState<StudyQueueItem[]>([]);
+  const [totalItems, setTotalItems] = useState<number>(0);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
-
   const [viewedLevel, setViewedLevel] = useState<number | null>(initialFilters?.viewedLevel ?? null);
   const [hasHydratedViewedLevel, setHasHydratedViewedLevel] = useState(false);
   const [typeFilter, setTypeFilter] = useState<StudyTypeFilter>(
@@ -93,23 +85,12 @@ export default function StudyExplorer({
   const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
   const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? true);
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
-  const [gridColumns, setGridColumns] = useState<number>(() => getStudyGridColumns());
-  const [waitSortOrder, setWaitSortOrder] = useState<StudyWaitSortOrder>(() => {
-    if (typeof window === "undefined") {
-      return "oldest_wait";
-    }
-
-    const fromUrl = new URLSearchParams(window.location.search).get("waitSort");
-    if (isStudyWaitSortOrder(fromUrl)) {
-      return fromUrl;
-    }
-
-    const stored = window.localStorage.getItem(storageKeys.waitSort);
-    return isStudyWaitSortOrder(stored) ? stored : "oldest_wait";
-  });
+  const [gridColumns, setGridColumns] = useState<number>(4);
+  const [waitSortOrder, setWaitSortOrder] = useState<StudyWaitSortOrder>("oldest_wait");
   const [searchQuery, setSearchQuery] = useState("");
   const [forcedViewerMode, setForcedViewerMode] = useState<StudyViewerMode | null>(initialViewerMode);
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
+  const hasMounted = useSyncExternalStore(() => () => {}, () => true, () => false);
   const isModalOpen = selectedId !== null;
   const effectiveSrsFilter: StudySrsFilter =
     queueMode === STUDY_QUEUE_TYPES.lesson ? STUDY_SRS_FILTERS.all : srsFilter;
@@ -121,7 +102,6 @@ export default function StudyExplorer({
     () => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 40 : gridColumns * 24),
     [gridColumns, queueMode],
   );
-
   useLayoutEffect(() => {
     const cached = readStoredQueue(accountId, queueMode);
     const initialQueueState = deriveInitialQueueState(cached);
@@ -133,16 +113,27 @@ export default function StudyExplorer({
       setLoadMoreError(null);
     });
   }, [accountId, queueMode, storageKeys.counts]);
-
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
-
+    const fromUrl = new URLSearchParams(window.location.search).get("waitSort");
+    if (isStudyWaitSortOrder(fromUrl)) {
+      queueMicrotask(() => setWaitSortOrder(fromUrl));
+      return;
+    }
+    const stored = window.localStorage.getItem(storageKeys.waitSort);
+    if (isStudyWaitSortOrder(stored)) {
+      queueMicrotask(() => setWaitSortOrder(stored));
+    }
+  }, [storageKeys.waitSort]);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
     const updateGridColumns = () => {
       setGridColumns(getStudyGridColumns());
     };
-
     updateGridColumns();
     const sm = window.matchMedia("(min-width: 640px)");
     const lg = window.matchMedia("(min-width: 1024px)");
@@ -153,7 +144,6 @@ export default function StudyExplorer({
       lg.removeEventListener("change", updateGridColumns);
     };
   }, []);
-
   const { data, error, isLoading, isValidating, mutate: mutateQueue } = useSWR(
     `/api/study/${accountId}/queue?mode=${queueMode}&limit=${initialPageSize}&offset=0`,
     fetchStudyQueue,
@@ -164,7 +154,6 @@ export default function StudyExplorer({
       revalidateOnFocus: !isModalOpen,
     },
   );
-
   const isUnauthorized = Boolean(error && /unauthorized/i.test(error.message));
   const effectiveViewedLevel = useMemo(
     () =>
@@ -177,7 +166,6 @@ export default function StudyExplorer({
       }),
     [cachedQueueData?.levelCounts, data?.levelCounts, loadedItems, maxLevel, queueMode, viewedLevel],
   );
-
   const counts = persistedCounts ?? data?.counts ?? null;
   const liveCounts = data?.counts ?? null;
   const hasMorePages = loadedItems.length < totalItems;
@@ -195,18 +183,20 @@ export default function StudyExplorer({
   );
   const typeCountsByLevelForEffects =
     data?.typeCountsByLevel ?? cachedQueueData?.typeCountsByLevel ?? STUDY_EXPLORER_EMPTY_TYPE_COUNTS_BY_LEVEL;
-
   useEffect(() => {
     if (!liveCounts || typeof window === "undefined") {
       return;
     }
-
+    const countsKey = `${accountId}:${liveCounts.reviews}:${liveCounts.lessons}`;
+    if (lastBroadcastCountsRef.current === countsKey) {
+      return;
+    }
+    lastBroadcastCountsRef.current = countsKey;
     try {
       window.localStorage.setItem(storageKeys.counts, JSON.stringify(liveCounts));
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
-
     window.dispatchEvent(
       new CustomEvent("wr:study-counts-updated", {
         detail: {
@@ -217,11 +207,9 @@ export default function StudyExplorer({
       }),
     );
   }, [accountId, liveCounts, storageKeys]);
-
   useStudyToggleEnglishHotkey(canToggleEnglish, onToggleShowEnglish);
   useStudyCloseOnExplorerPageChange(setSelectedId);
   useStudyViewerModeSync(setForcedViewerMode);
-
   const {
     levelOptions,
     availableLevels,
@@ -261,19 +249,16 @@ export default function StudyExplorer({
     submittingByAssignmentId,
     revealedAssignmentIds,
   });
-
   const sortedFilteredItems = useMemo(
     () => sortStudyItemsByWait(filteredItems, waitSortOrder),
     [filteredItems, waitSortOrder],
   );
-
   useStudyModalSessionSync({
     selectedId,
     filteredItems: sortedFilteredItems,
     setModalSessionOrderByAssignmentId,
     setModalSessionItemByAssignmentId,
   });
-
   const { clearAllFilters } = useStudyExplorerEffects({
     accountId,
     queueMode,
@@ -324,16 +309,13 @@ export default function StudyExplorer({
     setShowLocked,
     lastHandledStudyQueryRef,
   });
-
   const handleSetSrsFilter = useCallback(
     (nextFilter: StudySrsFilter) => {
       setSrsFilter(nextFilter);
-
       setSrsStageFilter((current) => normalizeSrsStageFilter(nextFilter, current));
     },
     [setSrsFilter],
   );
-
   useEffect(() => {
     window.localStorage.setItem(storageKeys.waitSort, waitSortOrder);
     const params = new URLSearchParams(window.location.search);
@@ -341,7 +323,6 @@ export default function StudyExplorer({
     const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
     window.history.replaceState(null, "", next);
   }, [storageKeys.waitSort, waitSortOrder]);
-
   useEffect(() => {
     try {
       if (selectedId === null) {
@@ -361,7 +342,6 @@ export default function StudyExplorer({
     !effectiveShowLocked ||
     effectiveRecentOnly ||
     searchQuery.trim().length > 0;
-
   const { loadMorePage } = useStudyQueuePagination({
     accountId,
     queueMode,
@@ -381,7 +361,6 @@ export default function StudyExplorer({
     onSetTotalItems: setTotalItems,
     onSetPersistedCounts: setPersistedCounts,
   });
-
   useStudyQueueInfiniteLoad({
     sentinelRef,
     selectedItem,
@@ -389,7 +368,6 @@ export default function StudyExplorer({
     isLoadingMore,
     loadMorePage,
   });
-
   const { submitReview, submitLessonStart, submitResetToLessons, closeReviewSession } = useStudyReviewSubmission({
     accountId,
     queueMode,
@@ -412,81 +390,83 @@ export default function StudyExplorer({
     onSetModalSessionOrderByAssignmentId: setModalSessionOrderByAssignmentId,
     onSetModalSessionItemByAssignmentId: setModalSessionItemByAssignmentId,
   });
-
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
-      <StudyExplorerPanel
-        canToggleEnglish={canToggleEnglish}
-        showEnglish={showEnglish}
-        studyMode={studyMode}
-        levelOptions={levelOptions}
-        availableLevels={availableLevels}
-        reviewLevelCounts={reviewLevelCounts}
-        viewedLevel={effectiveViewedLevel}
-        typeFilter={typeFilter}
-        srsFilter={effectiveSrsFilter}
-        srsStageFilter={effectiveSrsStageFilter}
-        queueMode={queueMode}
-        lessonLevelCounts={lessonLevelCounts}
-        typeCounts={typeCounts}
-        srsCounts={srsCounts}
-        srsStageCounts={srsStageCounts}
-        filteredItems={sortedFilteredItems}
-        waitSortOrder={waitSortOrder}
-        gridColumns={gridColumns}
-        cacheFooterText={cacheTelemetry.text}
-        cacheFooterTitle={cacheTelemetry.title}
-        totalItems={totalItems}
-        hasMorePages={hasMorePages}
-        isLoadingMore={isLoadingMore}
-        loadMoreError={loadMoreError}
-        isLoading={isLoading}
-        isValidating={isValidating}
-        hasData={Boolean(data)}
-        isUnauthorized={isUnauthorized}
-        errorMessage={error?.message ?? null}
-        showLocked={effectiveShowLocked}
-        sentinelRef={sentinelRef}
-        onSetViewedLevel={setViewedLevel}
-        onSetTypeFilter={setTypeFilter}
-        onSetSrsFilter={handleSetSrsFilter}
-        onSetSrsStageFilter={setSrsStageFilter}
-        onToggleShowEnglish={onToggleShowEnglish}
-        onToggleShowLocked={() => setShowLocked((prev) => !prev)}
-        onSetWaitSortOrder={setWaitSortOrder}
-        onSelectSubject={setSelectedId}
-        onClearAllFilters={clearAllFilters}
-      />
-
-      <StudyExplorerModal
-        accountId={accountId}
-        showEnglish={showEnglish}
-        canToggleEnglish={canToggleEnglish}
-        forcedViewerMode={forcedViewerMode}
-        isUnauthorized={isUnauthorized}
-        studyMode={studyMode}
-        selectedItem={selectedItem}
-        selectedIndex={selectedIndex}
-        modalItems={modalItems}
-        prevItem={prevItem}
-        nextItem={nextItem}
-        filteredItems={sortedFilteredItems}
-        isSelectedSubmitted={isSelectedSubmitted}
-        isAnswerRevealed={isAnswerRevealed}
-        isSubmittingSelected={isSubmittingSelected}
-        submitInFlight={submitInFlight}
-        submitFeedback={submitFeedback}
-        latestReviewTransition={latestReviewTransition}
-        reviewOutcomeByAssignmentId={reviewOutcomeByAssignmentId}
-        onSetReviewOutcomeByAssignmentId={setReviewOutcomeByAssignmentId}
-        onSetSelectedId={setSelectedId}
-        onSetRevealedAssignmentIds={setRevealedAssignmentIds}
-        onClose={closeReviewSession}
-        onToggleShowEnglish={onToggleShowEnglish}
-        onSubmit={submitReview}
-        onStartLesson={submitLessonStart}
-        onResetToLessons={submitResetToLessons}
-      />
+      {hasMounted ? (
+        <>
+          <StudyExplorerPanel
+            canToggleEnglish={canToggleEnglish}
+            showEnglish={showEnglish}
+            studyMode={studyMode}
+            levelOptions={levelOptions}
+            availableLevels={availableLevels}
+            reviewLevelCounts={reviewLevelCounts}
+            viewedLevel={effectiveViewedLevel}
+            typeFilter={typeFilter}
+            srsFilter={effectiveSrsFilter}
+            srsStageFilter={effectiveSrsStageFilter}
+            queueMode={queueMode}
+            lessonLevelCounts={lessonLevelCounts}
+            typeCounts={typeCounts}
+            srsCounts={srsCounts}
+            srsStageCounts={srsStageCounts}
+            filteredItems={sortedFilteredItems}
+            waitSortOrder={waitSortOrder}
+            gridColumns={gridColumns}
+            cacheFooterText={cacheTelemetry.text}
+            cacheFooterTitle={cacheTelemetry.title}
+            totalItems={totalItems}
+            hasMorePages={hasMorePages}
+            isLoadingMore={isLoadingMore}
+            loadMoreError={loadMoreError}
+            isLoading={isLoading}
+            isValidating={isValidating}
+            hasData={Boolean(data)}
+            isUnauthorized={isUnauthorized}
+            errorMessage={error?.message ?? null}
+            showLocked={effectiveShowLocked}
+            sentinelRef={sentinelRef}
+            onSetViewedLevel={setViewedLevel}
+            onSetTypeFilter={setTypeFilter}
+            onSetSrsFilter={handleSetSrsFilter}
+            onSetSrsStageFilter={setSrsStageFilter}
+            onToggleShowEnglish={onToggleShowEnglish}
+            onToggleShowLocked={() => setShowLocked((prev) => !prev)}
+            onSetWaitSortOrder={setWaitSortOrder}
+            onSelectSubject={setSelectedId}
+            onClearAllFilters={clearAllFilters}
+          />
+          <StudyExplorerModal
+            accountId={accountId}
+            showEnglish={showEnglish}
+            canToggleEnglish={canToggleEnglish}
+            forcedViewerMode={forcedViewerMode}
+            isUnauthorized={isUnauthorized}
+            studyMode={studyMode}
+            selectedItem={selectedItem}
+            selectedIndex={selectedIndex}
+            modalItems={modalItems}
+            prevItem={prevItem}
+            nextItem={nextItem}
+            filteredItems={sortedFilteredItems}
+            isSelectedSubmitted={isSelectedSubmitted}
+            isAnswerRevealed={isAnswerRevealed}
+            isSubmittingSelected={isSubmittingSelected}
+            submitInFlight={submitInFlight}
+            submitFeedback={submitFeedback}
+            latestReviewTransition={latestReviewTransition}
+            reviewOutcomeByAssignmentId={reviewOutcomeByAssignmentId}
+            onSetReviewOutcomeByAssignmentId={setReviewOutcomeByAssignmentId}
+            onSetSelectedId={setSelectedId}
+            onSetRevealedAssignmentIds={setRevealedAssignmentIds}
+            onClose={closeReviewSession}
+            onToggleShowEnglish={onToggleShowEnglish}
+            onSubmit={submitReview}
+            onStartLesson={submitLessonStart}
+            onResetToLessons={submitResetToLessons}
+          />
+        </>
+      ) : <div className="border-b border-line bg-surface-muted px-5 py-4"><p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Loading study queue and filters...</p></div>}
     </section>
   );
 }

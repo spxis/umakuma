@@ -11,6 +11,7 @@ import {
   useLevelExplorerGridColumns,
   useLevelExplorerSearchEvents,
   useLevelExplorerSelectionReconcile,
+  useLevelExplorerStorageHydration,
   useLevelExplorerStoragePersistence,
   useLevelExplorerUrlHydration,
 } from "../lib/levelExplorerControllerEffects";
@@ -20,15 +21,6 @@ import {
   LEVEL_REVIEW_TIMING_FILTERS,
   LEVEL_SRS_FILTERS,
   LEVEL_TYPE_FILTERS,
-  parseLevelExplorerUrlState,
-  readStoredEnum,
-  readStoredFlag,
-  readStoredPositiveInteger,
-  readStoredTypeVisibility,
-  JLPT_FILTER_ALLOWED,
-  REVIEW_TIMING_ALLOWED,
-  SRS_FILTER_ALLOWED,
-  TYPE_FILTER_ALLOWED,
   type JlptFilter,
   type ReviewTimingFilter,
   type TypeFilter,
@@ -81,8 +73,8 @@ export default function LevelExplorerController({
 }: Props) {
   const storageKeys = useMemo(() => buildLevelExplorerStorageKeys(accountId), [accountId]);
 
-  const initialClientState = useMemo(() => {
-    const defaults = {
+  const initialClientState = useMemo(
+    () => ({
       selectedLevels: new Set<number>([initialSnapshot.level]),
       srsFilter: initialSrsFilter,
       typeFilter: LEVEL_TYPE_FILTERS.all as TypeFilter,
@@ -94,68 +86,9 @@ export default function LevelExplorerController({
       visibleTypes: { radical: true, kanji: true, vocabulary: true },
       filtersCollapsed: false,
       showLocked: false,
-    };
-
-    if (typeof window === "undefined") {
-      return defaults;
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const parsed = parseLevelExplorerUrlState(window.location.search, maxLevel, initialSnapshot.level);
-
-    let storedVisibleTypes = defaults.visibleTypes;
-    let storedSubjectId = defaults.selectedSubjectId;
-    let storedStickyMerge = defaults.stickyMerge;
-    let storedFiltersCollapsed = defaults.filtersCollapsed;
-    let storedRecentOnly = defaults.recentOnly;
-    let storedShowLocked = defaults.showLocked;
-    let storedSrsFilter = defaults.srsFilter;
-    let storedTypeFilter = defaults.typeFilter;
-    let storedJlptFilter = defaults.jlptFilter;
-    let storedReviewTimingFilter = defaults.reviewTimingFilter;
-
-    try {
-      storedVisibleTypes = readStoredTypeVisibility(window.localStorage, storageKeys.typeVisibility, defaults.visibleTypes);
-      storedSubjectId = readStoredPositiveInteger(window.localStorage, storageKeys.selectedSubject) ?? defaults.selectedSubjectId;
-      storedStickyMerge = readStoredFlag(window.localStorage, storageKeys.stickyMerge);
-      storedFiltersCollapsed = readStoredFlag(window.localStorage, storageKeys.filtersCollapsed);
-      storedRecentOnly = readStoredFlag(window.localStorage, storageKeys.recentOnly);
-      storedShowLocked = readStoredFlag(window.localStorage, storageKeys.showLocked);
-      storedSrsFilter = readStoredEnum(window.localStorage, storageKeys.srsFilter, SRS_FILTER_ALLOWED) ?? defaults.srsFilter;
-      storedTypeFilter = readStoredEnum(window.localStorage, storageKeys.typeFilter, TYPE_FILTER_ALLOWED) ?? defaults.typeFilter;
-      storedJlptFilter = readStoredEnum(window.localStorage, storageKeys.jlptFilter, JLPT_FILTER_ALLOWED) ?? defaults.jlptFilter;
-      storedReviewTimingFilter =
-        readStoredEnum(window.localStorage, storageKeys.reviewTimingFilter, REVIEW_TIMING_ALLOWED)
-        ?? defaults.reviewTimingFilter;
-    } catch {
-      // Ignore storage errors in restricted browsing modes.
-    }
-
-    const resolvedTypeFilter = params.has("type") ? parsed.type : storedTypeFilter;
-    const resolvedVisibleTypes = params.has("type") && parsed.type === LEVEL_TYPE_FILTERS.all
-      ? { radical: true, kanji: true, vocabulary: true }
-      : storedVisibleTypes;
-
-    return {
-      selectedLevels: parsed.levels,
-      srsFilter: params.has("srs") ? parsed.srs : storedSrsFilter,
-      typeFilter: resolvedTypeFilter,
-      jlptFilter: params.has("jlpt") ? parsed.jlpt : storedJlptFilter,
-      reviewTimingFilter: params.has("review") ? parsed.review : storedReviewTimingFilter,
-      recentOnly: params.has("recent") ? parsed.recentOnly : storedRecentOnly,
-      stickyMerge: params.has("sticky") ? parsed.stickyMerge : storedStickyMerge,
-      selectedSubjectId: params.has("subject") ? parsed.subjectId : storedSubjectId,
-      visibleTypes: resolvedVisibleTypes,
-      filtersCollapsed: storedFiltersCollapsed,
-      showLocked: storedShowLocked,
-    };
-  }, [
-    initialSnapshot.items,
-    initialSnapshot.level,
-    initialSrsFilter,
-    maxLevel,
-    storageKeys,
-  ]);
+    }),
+    [initialSnapshot.items, initialSnapshot.level, initialSrsFilter],
+  );
 
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(initialClientState.selectedLevels);
   const [snapshotsByLevel, setSnapshotsByLevel] = useState<Map<number, Snapshot>>(
@@ -179,7 +112,7 @@ export default function LevelExplorerController({
   const [pendingHistoryMode, setPendingHistoryMode] = useState<"replace" | "push">("replace");
 
   const applyingUrlStateRef = useRef(false);
-  const hasHydratedUrlStateRef = useRef(true);
+  const hasHydratedUrlStateRef = useRef(false);
   const lastHandledFindQueryRef = useRef("");
 
   useEffect(() => {
@@ -337,7 +270,21 @@ export default function LevelExplorerController({
     setReviewTimingFilter,
     setRecentOnly,
     setStickyMerge,
-    skipInitialApply: true,
+    skipInitialApply: false,
+  });
+
+  useLevelExplorerStorageHydration({
+    storageKeys,
+    setVisibleTypes,
+    setSelectedSubjectId,
+    setStickyMerge,
+    setFiltersCollapsed,
+    setSrsFilter,
+    setTypeFilter,
+    setJlptFilter,
+    setReviewTimingFilter,
+    setRecentOnly,
+    setShowLocked,
   });
 
   useEffect(() => {
