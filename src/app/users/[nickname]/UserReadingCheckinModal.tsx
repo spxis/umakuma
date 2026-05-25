@@ -146,8 +146,8 @@ export default function UserReadingCheckinModal({
   const showWaniKani = checkinMode === "wanikani" || checkinMode === "both";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-3 sm:p-6">
-      <div className="w-full max-w-2xl rounded-2xl border border-line bg-surface p-4 shadow-2xl sm:p-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-2 sm:p-6">
+      <div className="flex max-h-[95dvh] w-full max-w-2xl flex-col overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-2xl sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">Nightly check-in</p>
