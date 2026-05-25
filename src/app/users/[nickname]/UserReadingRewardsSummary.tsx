@@ -128,60 +128,54 @@ export default function UserReadingRewardsSummary({
           <h3 className="text-base font-black text-foreground">Money leaderboard</h3>
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">Goal by {formatCampaignDateLabel(READING_CAMPAIGN.goalDatePst)}</p>
         </div>
-        <div className="mt-2 overflow-x-auto">
-          <table className="w-full min-w-355 text-sm">
-            <thead>
-              <tr className="border-b border-line text-left text-xs uppercase tracking-[0.08em] text-foreground/65">
-                <th className="px-2 py-2">Rank</th>
-                <th className="px-2 py-2">Player</th>
-                <th className="px-2 py-2">WK level</th>
-                <th className="px-2 py-2">Kanji learned</th>
-                <th className="px-2 py-2">Radicals learned</th>
-                <th className="px-2 py-2">Vocab learned</th>
-                <th className="px-2 py-2">Current book</th>
-                <th className="px-2 py-2">Page</th>
-                <th className="px-2 py-2">Reading left</th>
-                <th className="px-2 py-2">Today / Next base (normal)</th>
-                <th className="px-2 py-2">Bonus progress</th>
-                <th className="px-2 py-2">Reviews today</th>
-                <th className="px-2 py-2">Cumulative earned</th>
-                <th className="px-2 py-2">Current streak</th>
-                <th className="px-2 py-2">Perfect days</th>
-              </tr>
-            </thead>
-            <tbody>
-              {isLoading && leaderboard.length === 0 ? (
-                <tr>
-                  <td colSpan={15} className="px-2 py-6">
-                    <div className="flex items-center justify-center gap-2 text-sm font-semibold text-foreground/70">
-                      <span className="inline-flex h-4 w-4 animate-spin rounded-full border-2 border-line border-t-accent" aria-hidden="true" />
-                      <span>Loading leaderboard...</span>
+        <p className="mt-2 text-xs text-foreground/65">
+          No right-scroll layout: each player is shown in a compact two-line summary.
+        </p>
+
+        {isLoading && leaderboard.length === 0 ? (
+          <div className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-line bg-surface-muted px-3 py-5 text-sm font-semibold text-foreground/70">
+            <span className="inline-flex h-4 w-4 animate-spin rounded-full border-2 border-line border-t-accent" aria-hidden="true" />
+            <span>Loading leaderboard...</span>
+          </div>
+        ) : null}
+
+        {!isLoading && leaderboard.length === 0 ? (
+          <div className="mt-3 rounded-lg border border-line bg-surface-muted px-3 py-5 text-center text-sm font-semibold text-foreground/65">
+            No tracked players yet. Turn players on above to start the leaderboard.
+          </div>
+        ) : null}
+
+        {leaderboard.length > 0 ? (
+          <ol className="mt-3 space-y-2">
+            {leaderboard.map((row, index) => (
+              <li key={row.accountId} className="rounded-lg border border-line bg-surface-muted/70 px-3 py-3">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex rounded-full border border-line bg-surface px-2 py-0.5 text-[11px] font-black text-foreground">
+                        #{index + 1}
+                      </span>
+                      <p className="text-sm font-black text-foreground">{row.nickname}</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.06em] text-foreground/65">WK {row.wkLevel}</p>
                     </div>
-                  </td>
-                </tr>
-              ) : null}
-              {!isLoading && leaderboard.length === 0 ? (
-                <tr>
-                  <td colSpan={15} className="px-2 py-6 text-center text-sm font-semibold text-foreground/65">
-                    No tracked players yet. Turn players on above to start the leaderboard.
-                  </td>
-                </tr>
-              ) : null}
-              {leaderboard.map((row, index) => (
-                <tr key={row.accountId} className="border-b border-line/60 text-foreground/85">
-                  <td className="px-2 py-2 font-black">#{index + 1}</td>
-                  <td className="px-2 py-2 font-semibold">{row.nickname}</td>
-                  <td className="px-2 py-2">{row.wkLevel}</td>
-                  <td className="px-2 py-2">{row.learnedKanji}</td>
-                  <td className="px-2 py-2">{row.learnedRadicals}</td>
-                  <td className="px-2 py-2">{row.learnedVocabulary}</td>
-                  <td className="px-2 py-2 max-w-48" title={row.currentBookTitle}>
-                    <div className="flex items-center gap-1.5">
-                      {row.currentBookTitle !== "-" ? (
-                        <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded border border-line bg-surface-muted text-[10px]" aria-hidden="true">
-                          B
-                        </span>
-                      ) : null}
+                    <div className="mt-1 flex flex-wrap gap-1.5 text-xs font-semibold text-foreground/80">
+                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">K {row.learnedKanji} (today {row.reviewKanjiToday})</span>
+                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">R {row.learnedRadicals} (today {row.reviewRadicalToday})</span>
+                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">V {row.learnedVocabulary} (today {row.reviewVocabularyToday})</span>
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-foreground/60">Cumulative earned</p>
+                    <p className="text-lg font-black text-accent">{formatYen(row.totalYen)}</p>
+                    <p className="text-xs font-semibold text-foreground/70">Streak {row.currentStreak}d • Perfect {row.perfectDays}</p>
+                  </div>
+                </div>
+
+                <div className="mt-2 grid gap-2 lg:grid-cols-3">
+                  <div className="rounded-md border border-line bg-surface px-2 py-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/65">Check-in</p>
+                    <div className="mt-1 flex items-center gap-1.5">
                       {row.currentBookThumbnailUrl ? (
                         <Image
                           src={row.currentBookThumbnailUrl}
@@ -191,50 +185,43 @@ export default function UserReadingRewardsSummary({
                           className="h-5 w-4 shrink-0 rounded border border-line object-cover"
                         />
                       ) : null}
-                      <span className="block min-w-0 truncate">{row.currentBookTitle}</span>
+                      <p className="min-w-0 truncate text-xs font-semibold text-foreground" title={row.currentBookTitle}>
+                        {row.currentBookTitle}
+                      </p>
                     </div>
-                  </td>
-                  <td className="px-2 py-2">{row.currentBookPage ?? "-"}</td>
-                  <td className="px-2 py-2">
-                    {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m
-                  </td>
-                  <td className="px-2 py-2">
-                    <div className="min-w-56 space-y-1.5 text-[11px] font-semibold text-foreground/85">
-                      <div className="rounded-md border border-line bg-surface-muted px-2 py-1">
-                        <p className="font-bold uppercase tracking-[0.06em] text-foreground/70">Today</p>
-                        <p className="mt-0.5">{formatYen(row.todayMinimumNormalYen)} to {formatYen(row.todayMaxNormalYen)}</p>
-                      </div>
-                      <div className="rounded-md border border-line bg-surface-muted px-2 py-1">
-                        <p className="font-bold uppercase tracking-[0.06em] text-foreground/70">Tomorrow</p>
-                        <p className="mt-0.5">Reset {formatYen(row.nextDayMaxNormalYenIfMissToday)} or perfect {formatYen(row.nextDayMaxNormalYenIfPerfectToday)}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-2 py-2">
-                    <div className="min-w-48 space-y-1 text-[11px] font-semibold text-foreground/85">
-                      <p className="rounded-md border border-line bg-surface-muted px-2 py-1">Week cap {formatYen(row.weekCapYen)}</p>
-                      <p className="rounded-md border border-line bg-surface-muted px-2 py-1">
+                    <p className="mt-1 text-xs text-foreground/75">
+                      Page {row.currentBookPage ?? "-"} • left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m
+                    </p>
+                  </div>
+
+                  <div className="rounded-md border border-line bg-surface px-2 py-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/65">Today / tomorrow base</p>
+                    <p className="mt-1 text-xs font-semibold text-foreground/85">
+                      Today {formatYen(row.todayMinimumNormalYen)} to {formatYen(row.todayMaxNormalYen)}
+                    </p>
+                    <p className="text-xs text-foreground/75">
+                      Tomorrow reset {formatYen(row.nextDayMaxNormalYenIfMissToday)} • perfect {formatYen(row.nextDayMaxNormalYenIfPerfectToday)}
+                    </p>
+                  </div>
+
+                  <div className="rounded-md border border-line bg-surface px-2 py-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/65">Bonus and cap</p>
+                    <p className="mt-1 text-xs font-semibold text-foreground/85">Week cap {formatYen(row.weekCapYen)}</p>
+                    <p className="text-xs text-foreground/75">
                       {row.minutesRemainingForThirtyBonus === 0
-                        ? `30m+ bonus ready (+${formatYen(READING_CAMPAIGN.minutesBonusYen)})`
+                        ? `30m bonus ready (+${formatYen(READING_CAMPAIGN.minutesBonusYen)})`
                         : `${row.minutesRemainingForThirtyBonus}m to +${formatYen(READING_CAMPAIGN.minutesBonusYen)}`}
-                      </p>
-                      <p className="rounded-md border border-line bg-surface-muted px-2 py-1 text-foreground/70">
-                        15p bonus +{formatYen(READING_CAMPAIGN.pagesBonusYen)}
-                      </p>
-                    </div>
-                  </td>
-                  <td className="px-2 py-2">
-                    Kanji {row.reviewKanjiToday} / Vocab {row.reviewVocabularyToday} / Radicals {row.reviewRadicalToday}
-                    {row.zeroReviewsBonusToday ? " (+0 bonus)" : row.reviewTotalToday > 0 ? ` (${row.reviewTotalToday} total)` : ""}
-                  </td>
-                  <td className="px-2 py-2 font-black text-accent">JPY {row.totalYen.toLocaleString("en-US")}</td>
-                  <td className="px-2 py-2">{row.currentStreak} days</td>
-                  <td className="px-2 py-2">{row.perfectDays}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </p>
+                    <p className="text-xs text-foreground/70">
+                      15p bonus +{formatYen(READING_CAMPAIGN.pagesBonusYen)}
+                      {row.zeroReviewsBonusToday ? " • zero-review bonus ready" : row.reviewTotalToday > 0 ? ` • ${row.reviewTotalToday} reviews today` : ""}
+                    </p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : null}
       </section>
     </>
   );
