@@ -308,10 +308,9 @@ export default function UserReadingCheckinModal({
               className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
               value={form.bookTitle}
               onChange={(event) => onBookChange(event.target.value)}
-              required
             >
-              <option value="" disabled>
-                Select a saved challenge book
+              <option value="">
+                No reading (reviews-only check-in)
               </option>
               {memberBooks.map((book) => (
                 <option key={book.id} value={book.title}>
@@ -378,7 +377,7 @@ export default function UserReadingCheckinModal({
           ) : null}
 
           <p className="sm:col-span-2 text-xs text-foreground/70">
-            Reviews-only check-in is allowed: set pages and minutes to 0.
+            Reviews-only check-in is allowed: set pages and minutes to 0. You can leave Book unselected.
           </p>
 
           <div className="sm:col-span-2 flex flex-wrap items-center gap-3">

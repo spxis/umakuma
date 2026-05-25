@@ -278,8 +278,10 @@ export async function POST(request: Request) {
           select: { title: true },
         });
 
+        const isReviewsOnlyCheckin = parsed.data.pagesRead === 0 && parsed.data.minutesRead === 0;
+
         const allowedBookTitles = new Set(challengeBooks.map((book) => book.title.trim()));
-        if (!allowedBookTitles.has(parsed.data.bookTitle.trim())) {
+        if (!isReviewsOnlyCheckin && !allowedBookTitles.has(parsed.data.bookTitle.trim())) {
           return NextResponse.json({ error: "Pick a saved challenge book before saving." }, { status: 400 });
         }
 
@@ -302,6 +304,7 @@ export async function POST(request: Request) {
 
         const nextPagesRead = (existing?.pagesRead ?? 0) + parsed.data.pagesRead;
         const nextMinutesRead = (existing?.minutesRead ?? 0) + parsed.data.minutesRead;
+        const normalizedBookTitle = parsed.data.bookTitle.trim() || existing?.bookTitle || "Reviews only";
 
         const readingSignoffEntry = getReadingSignoffEntryDelegate();
         const reviewQueue = currentReviewQueueFromAssignmentCache(account.assignmentCache);
@@ -316,7 +319,7 @@ export async function POST(request: Request) {
             data: {
               accountId: account.id,
               signoffDatePst: parsed.data.signoffDatePst,
-              bookTitle: parsed.data.bookTitle,
+              bookTitle: normalizedBookTitle,
               pagesRead: parsed.data.pagesRead,
               minutesRead: parsed.data.minutesRead,
               didWanikaniReviews: entryDidWanikaniReviews,
@@ -338,7 +341,7 @@ export async function POST(request: Request) {
             },
           },
           update: {
-            bookTitle: parsed.data.bookTitle,
+            bookTitle: normalizedBookTitle,
             pagesRead: nextPagesRead,
             minutesRead: nextMinutesRead,
             didWanikaniReviews: nextDidWanikaniReviews,
@@ -349,7 +352,7 @@ export async function POST(request: Request) {
           create: {
             accountId: account.id,
             signoffDatePst: parsed.data.signoffDatePst,
-            bookTitle: parsed.data.bookTitle,
+            bookTitle: normalizedBookTitle,
             pagesRead: parsed.data.pagesRead,
             minutesRead: parsed.data.minutesRead,
             didWanikaniReviews: nextDidWanikaniReviews,

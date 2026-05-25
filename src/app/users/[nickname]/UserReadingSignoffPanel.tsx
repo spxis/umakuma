@@ -341,17 +341,22 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
       return;
     }
 
+    const isReviewsOnlyCheckin = form.pagesRead === 0 && form.minutesRead === 0;
+
     setSubmitState("saving");
     setSubmitMessage("");
 
     try {
-      if (booksForMember(selectedMemberId).length < 3) {
+      if (!isReviewsOnlyCheckin && booksForMember(selectedMemberId).length < 3) {
         throw new Error("Add at least 3 books before saving check-in.");
       }
 
-      if (!form.bookTitle.trim()) {
+      if (!isReviewsOnlyCheckin && !form.bookTitle.trim()) {
         throw new Error("Pick a book from the collection before saving.");
       }
+
+      const fallbackBookTitle = modalExistingEntry?.bookTitle ?? booksForMember(selectedMemberId)[0]?.title ?? "Reviews only";
+      const submittedBookTitle = form.bookTitle.trim() || fallbackBookTitle;
 
       const response = await fetch("/api/reading-signoffs", {
         method: "POST",
@@ -361,7 +366,7 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
         body: JSON.stringify({
           accountId: selectedMemberId,
           signoffDatePst: form.signoffDatePst,
-          bookTitle: form.bookTitle.trim(),
+          bookTitle: submittedBookTitle,
           pagesRead: form.pagesRead,
           minutesRead: form.minutesRead,
           didWanikaniReviews: form.didWanikaniReviews,
