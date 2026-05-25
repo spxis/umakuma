@@ -272,16 +272,8 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
   }
 
   function requestCloseModal() {
-    if (!modalDirty) {
-      setModalOpen(false);
-      return;
-    }
-
-    const shouldClose = window.confirm("Discard your unsaved check-in changes?");
-    if (shouldClose) {
-      setModalOpen(false);
-      setModalDirty(false);
-    }
+    setModalOpen(false);
+    setModalDirty(false);
   }
 
   function updateForm(mutator: (input: FormState) => FormState) {

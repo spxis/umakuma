@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import type {
   ReadingChallengeBookRecord,
@@ -8,6 +8,7 @@ import type {
 } from "@/lib/readingSignoff";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
+import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 
 type Member = {
   id: string;
@@ -83,6 +84,17 @@ export default function UserReadingCheckinModal({
   onMinutesChange,
   onDidReviewsChange,
 }: UserReadingCheckinModalProps) {
+  const [discardConfirmOpen, setDiscardConfirmOpen] = useState(false);
+
+  function requestCloseWithConfirm() {
+    if (!isDirty) {
+      onRequestClose();
+      return;
+    }
+
+    setDiscardConfirmOpen(true);
+  }
+
   useEffect(() => {
     if (!open) {
       return;
@@ -94,14 +106,19 @@ export default function UserReadingCheckinModal({
       }
 
       event.preventDefault();
-      onRequestClose();
+      if (!isDirty) {
+        onRequestClose();
+        return;
+      }
+
+      setDiscardConfirmOpen(true);
     }
 
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, onRequestClose]);
+  }, [isDirty, onRequestClose, open]);
 
   if (!open || !form) {
     return null;
@@ -125,7 +142,7 @@ export default function UserReadingCheckinModal({
           </div>
           <button
             type="button"
-            onClick={onRequestClose}
+            onClick={requestCloseWithConfirm}
             className="rounded-full border border-line px-3 py-1 text-xs font-bold uppercase tracking-[0.08em]"
           >
             Close
@@ -376,6 +393,20 @@ export default function UserReadingCheckinModal({
             {isDirty ? <p className="text-xs text-foreground/65">Unsaved changes. Press Esc to close with confirmation.</p> : null}
           </div>
         </form>
+
+        <ExplorerConfirmDialog
+          open={discardConfirmOpen}
+          title="Discard check-in changes?"
+          description="You have unsaved edits in this check-in." 
+          confirmLabel="Discard changes"
+          cancelLabel="Keep editing"
+          tone="neutral"
+          onCancel={() => setDiscardConfirmOpen(false)}
+          onConfirm={() => {
+            setDiscardConfirmOpen(false);
+            onRequestClose();
+          }}
+        />
       </div>
     </div>
   );
