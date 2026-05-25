@@ -55,7 +55,7 @@ export type ItemSpreadGroupDetails = Record<
   }
 >;
 
-export type TabId = "learn" | "stats" | "read";
+export type TabId = "learn" | "stats" | "news" | "read";
 
 export type ViewerMenuInfo = {
   provider: "google" | "invite";
@@ -103,6 +103,7 @@ export type UserDashboardTabsProps = {
   canViewAllUserPages: boolean;
   initialDashboardTab: TabId;
   learnContent: ReactNode;
+  newsContent: ReactNode;
   readContent: ReactNode;
 };
 

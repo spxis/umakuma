@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { getUserKanjiIndex } from "@/lib/wanikani";
 import ExplorerTabs from "./ExplorerTabs";
 import UserReadPanel from "./UserReadPanel";
+import UserReadingSignoffPanel from "./UserReadingSignoffPanel";
 import UserDashboardTabs from "./UserDashboardTabs";
 import {
   QUEUE_TYPES,
@@ -471,13 +472,14 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
               userKanjiItems={userKanjiIndex}
             />
           )}
-          readContent={(
+          newsContent={(
             <UserReadPanel
               userWkLevel={account.wkLevel}
               devSampleUrls={getNewsDevSampleUrls()}
               initialTab={initialReadTab}
             />
           )}
+          readContent={<UserReadingSignoffPanel accountId={account.id} />}
         />
       </main>
     </div>

@@ -54,9 +54,10 @@ export default function UserDashboardTabs({
   canViewAllUserPages,
   initialDashboardTab,
   learnContent,
+  newsContent,
   readContent,
 }: Props) {
-  const tabStorageKey = `wr:user:${accountId}:dashboard-tab`;
+  const tabStorageKey = `wr:user:${accountId}:dashboard-tab-v2`;
   const levelProgressStorageKey = `wr:user:${accountId}:level-progress-level`;
   const safeProgressLevels = useMemo(
     () =>
@@ -74,7 +75,7 @@ export default function UserDashboardTabs({
     }
     return getStoredEnum(
       tabStorageKey,
-      ["learn", "stats", "read"] as const,
+      ["learn", "stats", "news", "read"] as const,
       "learn",
     );
   });
@@ -223,6 +224,7 @@ export default function UserDashboardTabs({
             options={[
               { value: "learn", label: "Learn" },
               { value: "stats", label: "Stats" },
+              { value: "news", label: "News" },
               { value: "read", label: "Read" },
             ]}
           />
@@ -327,6 +329,11 @@ export default function UserDashboardTabs({
             passedLevelUpGate={selectedLevelProgress.passedLevelUpGate}
           />
           </section>
+        </section>
+      ) : null}
+      {activeTab === "news" ? (
+        <section className="mt-4" role="tabpanel">
+          {newsContent}
         </section>
       ) : null}
       {activeTab === "read" ? (

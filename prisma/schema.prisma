@@ -173,3 +173,22 @@ model SubjectReviewStatsSnapshot {
   @@index([accountId, subjectId, capturedAt])
   @@index([accountId, capturedAt])
 }
+
+model ReadingSignoff {
+  id                 String   @id @default(cuid())
+  accountId          String
+  signoffDatePst     String
+  bookTitle          String
+  pagesRead          Int
+  minutesRead        Int
+  didWanikaniReviews Boolean  @default(false)
+  reviewsLeft        Int
+  apprenticeCount    Int
+  currentWkLevel     Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([accountId, signoffDatePst])
+  @@index([signoffDatePst])
+  @@index([accountId])
+}
