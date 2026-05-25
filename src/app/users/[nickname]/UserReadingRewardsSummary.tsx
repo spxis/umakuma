@@ -159,35 +159,31 @@ export default function UserReadingRewardsSummary({
                       #{index + 1}
                     </span>
                     <p className="text-sm font-black text-foreground">{row.nickname}</p>
-                    <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/65">
-                      WK {row.wkLevel}
-                    </span>
-                    <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[11px] font-semibold text-foreground/70">
-                      Streak {row.currentStreak}d
-                    </span>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/65">WK {row.wkLevel}</p>
+                    <p className="text-[11px] font-semibold text-foreground/70">Streak {row.currentStreak}d</p>
                   </div>
                   <p className="text-sm font-black text-accent">{formatYen(row.totalYen)}</p>
                 </div>
 
-                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px]">
-                  <span className="subject-pill subject-pill--kanji">
-                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular}
-                  </span>
-                  <span className="rounded-full border border-line bg-surface px-2 py-0.5 font-semibold text-foreground/80">
-                    Reviewed today {formatCount(row.reviewKanjiToday)}
-                  </span>
-                  <span className="rounded-full border border-line bg-surface px-2 py-0.5 font-semibold text-foreground/80">
-                    Learned {formatCount(row.learnedKanji)}
-                  </span>
-                  <span
-                    className="inline-flex max-w-[20rem] truncate rounded-full border border-line bg-surface px-2 py-0.5 font-semibold text-foreground/80"
-                    title={row.currentBookTitle}
-                  >
-                    Reading {row.currentBookTitle} · p{row.currentBookPage ?? "-"}
-                  </span>
-                  <span className="rounded-full border border-line bg-surface px-2 py-0.5 font-semibold text-foreground/80">
-                    Left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m
-                  </span>
+                <div className="mt-1 grid gap-x-3 gap-y-1 text-xs sm:grid-cols-[minmax(0,1.8fr)_auto] sm:items-center">
+                  <p className="min-w-0 truncate font-semibold text-foreground/80" title={row.currentBookTitle}>
+                    Reading
+                    <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
+                      (p{row.currentBookPage ?? "-"})
+                    </span>
+                    : {row.currentBookTitle}
+                    <span className="text-foreground/65"> - left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m</span>
+                  </p>
+                  <p className="font-semibold text-foreground/80 sm:text-right">
+                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular} reviewed
+                    <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
+                      ({formatCount(row.reviewKanjiToday)})
+                    </span>
+                    learned
+                    <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
+                      ({formatCount(row.learnedKanji)})
+                    </span>
+                  </p>
                 </div>
               </li>
             ))}
