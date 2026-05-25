@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { READING_CAMPAIGN, formatCampaignDateLabel } from "@/lib/readingSignoff";
 
@@ -166,14 +167,25 @@ export default function UserReadingRewardsSummary({
                 </div>
 
                 <div className="mt-1 grid gap-x-3 gap-y-1 text-xs sm:grid-cols-[minmax(0,1.8fr)_auto] sm:items-center">
-                  <p className="min-w-0 truncate font-semibold text-foreground/80" title={row.currentBookTitle}>
-                    Reading
-                    <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
-                      (p{row.currentBookPage ?? "-"})
-                    </span>
-                    : {row.currentBookTitle}
-                    <span className="text-foreground/65"> - left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m</span>
-                  </p>
+                  <div className="min-w-0 flex items-center gap-1.5 font-semibold text-foreground/80" title={row.currentBookTitle}>
+                    {row.currentBookThumbnailUrl ? (
+                      <Image
+                        src={row.currentBookThumbnailUrl}
+                        alt=""
+                        width={14}
+                        height={20}
+                        className="h-5 w-3.5 shrink-0 rounded border border-line object-cover"
+                      />
+                    ) : null}
+                    <p className="min-w-0 truncate">
+                      Reading
+                      <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
+                        (p{row.currentBookPage ?? "-"})
+                      </span>
+                      : {row.currentBookTitle}
+                      <span className="text-foreground/65"> - left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m</span>
+                    </p>
+                  </div>
                   <p className="font-semibold text-foreground/80 sm:text-right">
                     {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular} reviewed
                     <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
@@ -184,6 +196,21 @@ export default function UserReadingRewardsSummary({
                       ({formatCount(row.learnedKanji)})
                     </span>
                   </p>
+                </div>
+
+                <div className="mt-1 flex flex-wrap items-center gap-1 text-[10px]">
+                  <span className="subject-pill subject-pill--radical">
+                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural}
+                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedRadicals)})</span>
+                  </span>
+                  <span className="subject-pill subject-pill--kanji">
+                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular}
+                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedKanji)})</span>
+                  </span>
+                  <span className="subject-pill subject-pill--vocabulary">
+                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular}
+                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedVocabulary)})</span>
+                  </span>
                 </div>
               </li>
             ))}
