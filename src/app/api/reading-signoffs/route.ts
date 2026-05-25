@@ -1,28 +1,25 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
-import { authOptions } from "@/lib/auth";
-import {
-  INVITE_SESSION_COOKIE_NAME,
-  getCookieValue,
-  verifyInviteSessionToken,
-} from "@/lib/inviteSession";
 import { prisma } from "@/lib/prisma";
 import {
-  READING_CHALLENGE_BOOK_SEEDS_BY_NICKNAME,
   READING_BOOK_OPTIONS,
   isMonthKey,
   isPstDateKey,
-  normalizeIsbn,
-  toOpenLibraryBookUrl,
-  toOpenLibraryCoverUrl,
-  type ReadingChallengeBookRecord,
-  type ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
+import {
+  ensureSeedBooks,
+  getReadingChallengeBookDelegate,
+  getReadingChallengeMemberDelegate,
+  getReadingSignoffDelegate,
+  resolveViewerAccounts,
+  toChallengeBookRecord,
+  toReadingSignoffRecord,
+  type LatestSignoffSummary,
+} from "./readingSignoffsRoute.lib";
 
 const getQuerySchema = z.object({
   month: z.string().refine((value) => isMonthKey(value), {
@@ -49,193 +46,10 @@ const postBodySchema = z.object({
   didWanikaniReviews: z.boolean(),
 });
 
-type ViewerAccountSummary = {
-  id: string;
-  nickname: string;
-  wkUsername: string;
-};
-
-type ReadingSignoffDelegate = {
-  findMany: typeof prisma.readingSignoff.findMany;
-  upsert: typeof prisma.readingSignoff.upsert;
-};
-
-type ReadingChallengeBookDelegate = {
-  findMany: (args: {
-    where: { accountId: { in: string[] } };
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }];
-    select: {
-      id: true;
-      accountId: true;
-      isbn: true;
-      title: true;
-      thumbnailUrl: true;
-      infoUrl: true;
-    };
-  }) => Promise<Array<{
-    id: string;
-    accountId: string;
-    isbn: string;
-    title: string;
-    thumbnailUrl: string | null;
-    infoUrl: string | null;
-  }>>;
-  createMany: (args: {
-    data: Array<{
-      accountId: string;
-      isbn: string;
-      title: string;
-      thumbnailUrl: string | null;
-      infoUrl: string | null;
-    }>;
-    skipDuplicates: true;
-  }) => Promise<{ count: number }>;
-};
-
-function getReadingSignoffDelegate(): ReadingSignoffDelegate | null {
-  const delegate = (prisma as unknown as { readingSignoff?: ReadingSignoffDelegate }).readingSignoff;
-  return delegate ?? null;
-}
-
-function getReadingChallengeBookDelegate(): ReadingChallengeBookDelegate | null {
-  const delegate = (prisma as unknown as { readingChallengeBook?: ReadingChallengeBookDelegate }).readingChallengeBook;
-  return delegate ?? null;
-}
-
-function toReadingSignoffRecord(row: {
-  id: string;
-  accountId: string;
-  signoffDatePst: string;
-  bookTitle: string;
-  pagesRead: number;
-  minutesRead: number;
-  didWanikaniReviews: boolean;
-  reviewsLeft: number;
-  apprenticeCount: number;
-  currentWkLevel: number;
-  createdAt: Date;
-  updatedAt: Date;
-}): ReadingSignoffRecord {
-  return {
-    id: row.id,
-    accountId: row.accountId,
-    signoffDatePst: row.signoffDatePst,
-    bookTitle: row.bookTitle,
-    pagesRead: row.pagesRead,
-    minutesRead: row.minutesRead,
-    didWanikaniReviews: row.didWanikaniReviews,
-    reviewsLeft: row.reviewsLeft,
-    apprenticeCount: row.apprenticeCount,
-    currentWkLevel: row.currentWkLevel,
-    createdAt: row.createdAt.toISOString(),
-    updatedAt: row.updatedAt.toISOString(),
-  };
-}
-
-async function resolveViewerAccounts(request: Request): Promise<ViewerAccountSummary[]> {
-  if (await isAuthorizedAdmin(request)) {
-    return prisma.account.findMany({
-      orderBy: [{ nickname: "asc" }],
-      select: { id: true, nickname: true, wkUsername: true },
-    });
-  }
-
-  const inviteToken = getCookieValue(request.headers.get("cookie"), INVITE_SESSION_COOKIE_NAME);
-  const invitePayload = inviteToken ? verifyInviteSessionToken(inviteToken) : null;
-  if (invitePayload?.accountId) {
-    const inviteAccount = await prisma.account.findUnique({
-      where: { id: invitePayload.accountId },
-      select: {
-        id: true,
-        nickname: true,
-        wkUsername: true,
-        inviteCodeHash: true,
-      },
-    });
-
-    if (inviteAccount?.inviteCodeHash) {
-      return [{ id: inviteAccount.id, nickname: inviteAccount.nickname, wkUsername: inviteAccount.wkUsername }];
-    }
-  }
-
-  const session = await getServerSession(authOptions);
-  const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
-  if (!viewerEmail) {
-    return [];
-  }
-
-  return prisma.account.findMany({
-    where: { joinedByEmail: viewerEmail },
-    orderBy: [{ nickname: "asc" }],
-    select: { id: true, nickname: true, wkUsername: true },
-  });
-}
-
-function toChallengeBookRecord(row: {
-  id: string;
-  accountId: string;
-  isbn: string;
-  title: string;
-  thumbnailUrl: string | null;
-  infoUrl: string | null;
-}): ReadingChallengeBookRecord {
-  return {
-    id: row.id,
-    accountId: row.accountId,
-    isbn: row.isbn,
-    title: row.title,
-    thumbnailUrl: row.thumbnailUrl,
-    infoUrl: row.infoUrl,
-  };
-}
-
-async function ensureSeedBooks(
-  accounts: ViewerAccountSummary[],
-  challengeBooks: ReadingChallengeBookRecord[],
-  readingChallengeBook: ReadingChallengeBookDelegate,
-): Promise<void> {
-  const accountIdsWithBooks = new Set(challengeBooks.map((book) => book.accountId));
-  const seedsToInsert: Array<{
-    accountId: string;
-    isbn: string;
-    title: string;
-    thumbnailUrl: string | null;
-    infoUrl: string | null;
-  }> = [];
-
-  for (const account of accounts) {
-    if (accountIdsWithBooks.has(account.id)) {
-      continue;
-    }
-
-    const seedBooks = READING_CHALLENGE_BOOK_SEEDS_BY_NICKNAME[account.nickname.trim().toLowerCase()];
-    if (!seedBooks) {
-      continue;
-    }
-
-    for (const seedBook of seedBooks) {
-      const normalizedIsbn = normalizeIsbn(seedBook.isbn);
-      if (!normalizedIsbn) {
-        continue;
-      }
-
-      seedsToInsert.push({
-        accountId: account.id,
-        isbn: normalizedIsbn,
-        title: seedBook.title,
-        thumbnailUrl: toOpenLibraryCoverUrl(normalizedIsbn),
-        infoUrl: toOpenLibraryBookUrl(normalizedIsbn),
-      });
-    }
-  }
-
-  if (seedsToInsert.length > 0) {
-    await readingChallengeBook.createMany({
-      data: seedsToInsert,
-      skipDuplicates: true,
-    });
-  }
-}
+const patchBodySchema = z.object({
+  accountId: z.string().cuid(),
+  tracked: z.boolean(),
+});
 
 export async function GET(request: Request) {
   return withApiRouteTelemetry({
@@ -271,6 +85,7 @@ export async function GET(request: Request) {
 
         const readingSignoff = getReadingSignoffDelegate();
         const readingChallengeBook = getReadingChallengeBookDelegate();
+        const readingChallengeMember = getReadingChallengeMemberDelegate();
         if (!readingSignoff) {
           return NextResponse.json(
             { error: "Reading check-ins are not ready yet. Restart the dev server and try again." },
@@ -279,6 +94,13 @@ export async function GET(request: Request) {
         }
 
         if (!readingChallengeBook) {
+          return NextResponse.json(
+            { error: "Reading challenge setup is not ready yet. Restart the dev server and try again." },
+            { status: 503 },
+          );
+        }
+
+        if (!readingChallengeMember) {
           return NextResponse.json(
             { error: "Reading challenge setup is not ready yet. Restart the dev server and try again." },
             { status: 503 },
@@ -294,6 +116,27 @@ export async function GET(request: Request) {
           },
           orderBy: [{ signoffDatePst: "asc" }, { updatedAt: "desc" }],
         });
+
+        const latestSignoffs = await readingSignoff.findMany({
+          where: {
+            accountId: { in: targetAccountIds },
+          },
+          orderBy: [{ updatedAt: "desc" }],
+        });
+
+        const latestByAccountId = new Map<string, LatestSignoffSummary>();
+        for (const row of latestSignoffs) {
+          if (latestByAccountId.has(row.accountId)) {
+            continue;
+          }
+
+          latestByAccountId.set(row.accountId, {
+            accountId: row.accountId,
+            bookTitle: row.bookTitle,
+            pagesRead: row.pagesRead,
+            signoffDatePst: row.signoffDatePst,
+          });
+        }
 
         const challengeBooksRaw = await readingChallengeBook.findMany({
           where: {
@@ -328,12 +171,29 @@ export async function GET(request: Request) {
           },
         });
 
+        const trackedMembers = await readingChallengeMember.findMany({
+          where: {
+            accountId: { in: targetAccountIds },
+          },
+          select: {
+            accountId: true,
+            tracked: true,
+          },
+        });
+
+        const trackedByAccountId = new Map(trackedMembers.map((row) => [row.accountId, row.tracked]));
+        const trackedMemberAccountIds = targetAccountIds.filter((accountId) => trackedByAccountId.get(accountId) !== false);
+
         return NextResponse.json(
           {
             members: viewerAccounts,
             viewerCanChooseMember: await isAuthorizedAdmin(request),
+            trackedMemberAccountIds,
             challengeBooks: challengeBooksAfterSeed.map(toChallengeBookRecord),
             signoffs: signoffs.map(toReadingSignoffRecord),
+            latestSignoffs: targetAccountIds
+              .map((accountId) => latestByAccountId.get(accountId))
+              .filter((value): value is LatestSignoffSummary => Boolean(value)),
           },
           { status: 200 },
         );
@@ -416,6 +276,48 @@ export async function POST(request: Request) {
       } catch (error) {
         console.error(error);
         return NextResponse.json({ error: "Could not save reading signoff." }, { status: 500 });
+      }
+    },
+  });
+}
+
+export async function PATCH(request: Request) {
+  return withApiRouteTelemetry({
+    route: "/api/reading-signoffs",
+    method: "PATCH",
+    request,
+    execute: async () => {
+      try {
+        const parsed = patchBodySchema.safeParse(await request.json());
+        if (!parsed.success) {
+          return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+
+        if (!(await isAuthorizedAdmin(request))) {
+          return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+        }
+
+        const readingChallengeMember = getReadingChallengeMemberDelegate();
+        if (!readingChallengeMember) {
+          return NextResponse.json(
+            { error: "Reading challenge setup is not ready yet. Restart the dev server and try again." },
+            { status: 503 },
+          );
+        }
+
+        const saved = await readingChallengeMember.upsert({
+          where: { accountId: parsed.data.accountId },
+          update: { tracked: parsed.data.tracked },
+          create: {
+            accountId: parsed.data.accountId,
+            tracked: parsed.data.tracked,
+          },
+        });
+
+        return NextResponse.json({ trackedMember: saved }, { status: 200 });
+      } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: "Could not update tracked members." }, { status: 500 });
       }
     },
   });

@@ -206,3 +206,13 @@ model ReadingChallengeBook {
   @@unique([accountId, isbn])
   @@index([accountId])
 }
+
+model ReadingChallengeMember {
+  id        String   @id @default(cuid())
+  accountId String   @unique
+  tracked   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([accountId])
+}

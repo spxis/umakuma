@@ -4,58 +4,24 @@ import { useMemo, useState } from "react";
 import useSWR from "swr";
 
 import {
-  READING_CAMPAIGN,
   buildCalendarCells,
   campaignDaysRemaining,
   computeReadingLeaderboard,
-  dayKey,
-  formatMonthLabel,
   getTodayDateInputValue,
-  initials,
-  isCampaignDate,
   normalizeIsbn,
-  shiftMonth,
   toMonthKey,
   type ReadingChallengeBookRecord,
   type ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
+import UserReadingCalendar from "./UserReadingCalendar";
 import UserReadingCheckinModal from "./UserReadingCheckinModal";
 import UserReadingRewardsSummary from "./UserReadingRewardsSummary";
-
-type Member = {
-  id: string;
-  nickname: string;
-  wkUsername: string;
-};
-
-type ReadingSignoffResponse = {
-  members: Member[];
-  viewerCanChooseMember: boolean;
-  challengeBooks: ReadingChallengeBookRecord[];
-  signoffs: ReadingSignoffRecord[];
-};
-
-type UserReadingSignoffPanelProps = {
-  accountId: string;
-};
-
-type FormState = {
-  signoffDatePst: string;
-  bookTitle: string;
-  pagesRead: number;
-  minutesRead: number;
-  didWanikaniReviews: boolean;
-};
-
-function createFormState(dateKey: string, entry: ReadingSignoffRecord | null): FormState {
-  return {
-    signoffDatePst: dateKey,
-    bookTitle: entry?.bookTitle ?? "",
-    pagesRead: entry?.pagesRead ?? 10,
-    minutesRead: entry?.minutesRead ?? 20,
-    didWanikaniReviews: entry?.didWanikaniReviews ?? false,
-  };
-}
+import {
+  createFormState,
+  type FormState,
+  type ReadingSignoffResponse,
+  type UserReadingSignoffPanelProps,
+} from "./UserReadingSignoffPanel.types";
 
 export default function UserReadingSignoffPanel({ accountId }: UserReadingSignoffPanelProps) {
   const today = getTodayDateInputValue();
@@ -86,10 +52,30 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
 
   const members = useMemo(() => data?.members ?? [], [data?.members]);
   const viewerCanChooseMember = data?.viewerCanChooseMember ?? false;
+  const trackedMemberAccountIds = useMemo(() => data?.trackedMemberAccountIds ?? [], [data?.trackedMemberAccountIds]);
   const signoffs = useMemo(() => data?.signoffs ?? [], [data?.signoffs]);
   const challengeBooks = useMemo(() => data?.challengeBooks ?? [], [data?.challengeBooks]);
+  const latestSignoffs = useMemo(() => data?.latestSignoffs ?? [], [data?.latestSignoffs]);
   const todayMonthKey = today.slice(0, 7);
   const daysRemaining = campaignDaysRemaining(today);
+
+  const trackedMemberSet = useMemo(() => {
+    if (trackedMemberAccountIds.length === 0) {
+      return new Set(members.map((member) => member.id));
+    }
+
+    return new Set(trackedMemberAccountIds);
+  }, [members, trackedMemberAccountIds]);
+
+  const trackedMembers = useMemo(
+    () => members.filter((member) => trackedMemberSet.has(member.id)),
+    [members, trackedMemberSet],
+  );
+
+  const latestSignoffByAccountId = useMemo(
+    () => new Map(latestSignoffs.map((row) => [row.accountId, row])),
+    [latestSignoffs],
+  );
 
   const booksByAccountId = useMemo(() => {
     const map = new Map<string, ReadingChallengeBookRecord[]>();
@@ -102,16 +88,43 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
   }, [challengeBooks]);
 
   const leaderboard = useMemo(() => {
-    const rows = computeReadingLeaderboard(members, signoffs).map((row) => {
-      const member = members.find((candidate) => candidate.id === row.accountId);
+    const rows = computeReadingLeaderboard(trackedMembers, signoffs).map((row) => {
+      const member = trackedMembers.find((candidate) => candidate.id === row.accountId);
+      const latestSignoff = latestSignoffByAccountId.get(row.accountId);
       return {
         ...row,
         nickname: member?.nickname ?? row.accountId,
+        wkLevel: member?.wkLevel ?? 0,
+        learnedKanji: member?.learnedKanji ?? 0,
+        learnedRadicals: member?.learnedRadicals ?? 0,
+        learnedVocabulary: member?.learnedVocabulary ?? 0,
+        currentBookTitle: latestSignoff?.bookTitle ?? "-",
+        currentBookPage: latestSignoff?.pagesRead ?? null,
       };
     });
 
     return rows.sort((a, b) => b.totalYen - a.totalYen);
-  }, [members, signoffs]);
+  }, [latestSignoffByAccountId, signoffs, trackedMembers]);
+
+  async function toggleTrackedMember(memberId: string, tracked: boolean) {
+    try {
+      const response = await fetch("/api/reading-signoffs", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ accountId: memberId, tracked }),
+      });
+
+      const payload = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Could not update tracked members.");
+      }
+
+      await mutate();
+    } catch (error) {
+      setSubmitMessage(error instanceof Error ? error.message : "Could not update tracked members.");
+      setSubmitState("error");
+    }
+  }
 
   const signoffByDayAndMember = useMemo(() => {
     const byDayAndMember = new Map<string, Map<string, ReadingSignoffRecord>>();
@@ -285,7 +298,14 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
 
   return (
     <section className="space-y-4 rounded-2xl border border-line bg-surface-muted p-4 sm:p-6">
-      <UserReadingRewardsSummary daysRemaining={daysRemaining} leaderboard={leaderboard} />
+      <UserReadingRewardsSummary
+        daysRemaining={daysRemaining}
+        leaderboard={leaderboard}
+        members={members}
+        trackedMemberSet={trackedMemberSet}
+        showTrackingManager={viewerCanChooseMember}
+        onToggleTrackedMember={toggleTrackedMember}
+      />
 
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
@@ -299,129 +319,17 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
         </div>
       </header>
 
-      <section className="space-y-3 rounded-xl border border-line bg-surface p-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-base font-black text-foreground">Group calendar</h3>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="rounded-full border border-line px-3 py-1 text-xs font-bold uppercase tracking-[0.08em]"
-              onClick={() => setMonthKey((prev) => shiftMonth(prev, -1))}
-            >
-              Prev
-            </button>
-            <p className="min-w-[9rem] text-center text-sm font-bold text-foreground/80">{formatMonthLabel(monthKey)}</p>
-            <button
-              type="button"
-              className="rounded-full border border-line px-3 py-1 text-xs font-bold uppercase tracking-[0.08em]"
-              onClick={() => setMonthKey((prev) => shiftMonth(prev, 1))}
-            >
-              Next
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-line bg-surface-muted px-3 py-1 text-xs font-bold uppercase tracking-[0.08em]"
-              onClick={() => setMonthKey(todayMonthKey)}
-            >
-              Today
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
-          {[
-            "Sun",
-            "Mon",
-            "Tue",
-            "Wed",
-            "Thu",
-            "Fri",
-            "Sat",
-          ].map((weekday) => (
-            <div key={weekday}>{weekday}</div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-7 gap-1">
-          {calendarCells.map((day, index) => {
-            if (!day) {
-              return <div key={`blank-${index}`} className="min-h-[6rem] rounded-lg border border-dashed border-line/50 bg-surface-muted/60" />;
-            }
-
-            const key = dayKey(monthKey, day);
-            const byMember = signoffByDayAndMember.get(key) ?? new Map<string, ReadingSignoffRecord>();
-            const isToday = key === today;
-            const isCampaignStart = key === READING_CAMPAIGN.startDatePst;
-            const isCampaignGoal = key === READING_CAMPAIGN.goalDatePst;
-            const isInsideCampaign = isCampaignDate(key);
-
-            return (
-              <div
-                key={key}
-                className={`min-h-[6rem] rounded-lg border bg-surface p-1 ${
-                  isToday
-                    ? "border-accent shadow-[inset_0_0_0_1px_rgba(15,111,255,0.35)]"
-                    : isCampaignGoal
-                      ? "border-emerald-500 shadow-[inset_0_0_0_1px_rgba(16,185,129,0.4)]"
-                      : isCampaignStart
-                        ? "border-fuchsia-500 shadow-[inset_0_0_0_1px_rgba(217,70,239,0.3)]"
-                        : "border-line"
-                }`}
-              >
-                <p className="flex items-center justify-between text-xs font-black text-foreground">
-                  <span>{day}</span>
-                  <span className="flex items-center gap-1">
-                    {isCampaignStart ? (
-                      <span className="rounded-full border border-fuchsia-500/40 bg-fuchsia-500/10 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.08em] text-fuchsia-700">Start</span>
-                    ) : null}
-                    {isCampaignGoal ? (
-                      <span className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.08em] text-emerald-700">Goal</span>
-                    ) : null}
-                    {isToday ? (
-                      <span className="rounded-full border border-accent/40 bg-accent/10 px-1.5 py-0.5 text-[10px] uppercase tracking-[0.08em] text-accent">Today</span>
-                    ) : null}
-                  </span>
-                </p>
-                <div className="mt-1 space-y-1">
-                  <div className="space-y-1">
-                    {members.map((member) => {
-                      const entry = byMember.get(member.id);
-                      const hasReading = Boolean(entry && entry.pagesRead > 0 && entry.minutesRead > 0);
-                      const waniDone = Boolean(entry?.didWanikaniReviews);
-                      const statusClass = entry
-                        ? hasReading && waniDone
-                          ? "bg-emerald-100 text-emerald-800 border-emerald-300"
-                          : "bg-amber-100 text-amber-900 border-amber-300"
-                        : "bg-surface-muted text-foreground/55 border-line";
-                      return (
-                        <div
-                          key={`${key}-${member.id}`}
-                          className={`flex w-full items-center justify-between rounded border px-1 py-0.5 text-[10px] font-semibold ${statusClass}`}
-                        >
-                          <span>{initials(member.nickname)}</span>
-                          <span>
-                            {hasReading ? "R" : "-"}/{waniDone ? "W" : "-"}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => openCheckinModal(key)}
-                    className="mt-1 inline-flex w-full items-center justify-center rounded border border-line bg-surface-muted px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] transition hover:bg-surface"
-                    disabled={!isInsideCampaign}
-                  >
-                    Check in
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {isLoading ? <p className="text-sm text-foreground/70">Loading calendar...</p> : null}
-      </section>
+      <UserReadingCalendar
+        monthKey={monthKey}
+        today={today}
+        todayMonthKey={todayMonthKey}
+        isLoading={isLoading}
+        trackedMembers={trackedMembers}
+        calendarCells={calendarCells}
+        signoffByDayAndMember={signoffByDayAndMember}
+        onMonthChange={setMonthKey}
+        onOpenCheckinModal={openCheckinModal}
+      />
 
       <section className="rounded-xl border border-line bg-surface p-3">
         <h3 className="text-base font-black text-foreground">How to use</h3>

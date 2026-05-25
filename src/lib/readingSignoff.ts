@@ -81,6 +81,11 @@ export type ReadingLeaderboardInputMember = {
   id: string;
 };
 
+export type ReadingTrackedMember = {
+  accountId: string;
+  tracked: boolean;
+};
+
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const MONTH_PATTERN = /^\d{4}-\d{2}$/;
 const ISBN10_PATTERN = /^\d{9}[\dX]$/i;
