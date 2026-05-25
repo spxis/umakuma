@@ -167,28 +167,6 @@ export default function UserReadingRewardsSummary({
                 </div>
 
                 <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                  <div
-                    className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-1"
-                    title={row.currentBookTitle}
-                  >
-                    {row.currentBookThumbnailUrl ? (
-                      <Image
-                        src={row.currentBookThumbnailUrl}
-                        alt=""
-                        width={14}
-                        height={20}
-                        className="h-5 w-3.5 shrink-0 rounded border border-line object-cover"
-                      />
-                    ) : null}
-                    <p className="min-w-0 truncate text-xs font-semibold text-foreground/80">
-                      {row.currentBookTitle}
-                      <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
-                        (p{row.currentBookPage ?? "-"})
-                      </span>
-                      <span className="text-foreground/65"> - left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m</span>
-                    </p>
-                  </div>
-
                   <span className="inline-flex items-center rounded-full border border-radical bg-radical px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
                     {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short}
                     <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
@@ -207,6 +185,25 @@ export default function UserReadingRewardsSummary({
                       ({formatCount(row.reviewVocabularyToday)})
                     </span>
                   </span>
+                </div>
+
+                <div className="mt-1 flex min-w-0 items-center gap-1.5" title={row.currentBookTitle}>
+                  {row.currentBookThumbnailUrl ? (
+                    <Image
+                      src={row.currentBookThumbnailUrl}
+                      alt=""
+                      width={14}
+                      height={20}
+                      className="h-5 w-3.5 shrink-0 rounded border border-line object-cover"
+                    />
+                  ) : null}
+                  <p className="min-w-0 truncate text-xs font-semibold text-foreground/80">
+                    {row.currentBookTitle}
+                    <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
+                      (p{row.currentBookPage ?? "-"})
+                    </span>
+                    <span className="text-foreground/65"> - left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m</span>
+                  </p>
                 </div>
               </li>
             ))}
