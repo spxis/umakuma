@@ -90,13 +90,41 @@ async function fetchOpenLibraryTitleByIsbn(isbn: string): Promise<string | null>
   }
 }
 
+async function fetchGoogleBooksTitleByIsbn(isbn: string): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&maxResults=1`,
+      { cache: "no-store" },
+    );
+    if (!response.ok) {
+      return null;
+    }
+
+    const payload = (await response.json()) as {
+      items?: Array<{
+        volumeInfo?: { title?: string };
+      }>;
+    };
+
+    const title = payload.items?.[0]?.volumeInfo?.title?.trim() ?? null;
+    return title && title.length > 0 ? title : null;
+  } catch {
+    return null;
+  }
+}
+
 async function fetchBookTitleByIsbn(isbn: string): Promise<string | null> {
   const openBdTitle = await fetchOpenBdTitleByIsbn(isbn);
   if (openBdTitle) {
     return openBdTitle;
   }
 
-  return fetchOpenLibraryTitleByIsbn(isbn);
+  const openLibraryTitle = await fetchOpenLibraryTitleByIsbn(isbn);
+  if (openLibraryTitle) {
+    return openLibraryTitle;
+  }
+
+  return fetchGoogleBooksTitleByIsbn(isbn);
 }
 
 export async function POST(request: Request) {

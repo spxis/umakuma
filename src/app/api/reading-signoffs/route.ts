@@ -295,21 +295,28 @@ export async function PATCH(request: Request) {
         }
 
         const readingChallengeMember = getReadingChallengeMemberDelegate();
-        if (!readingChallengeMember) {
-          return NextResponse.json(
-            { error: "Reading challenge setup is not ready yet. Restart the dev server and try again." },
-            { status: 503 },
-          );
-        }
+        const saved = readingChallengeMember
+          ? await readingChallengeMember.upsert({
+              where: { accountId: parsed.data.accountId },
+              update: { tracked: parsed.data.tracked },
+              create: {
+                accountId: parsed.data.accountId,
+                tracked: parsed.data.tracked,
+              },
+            })
+          : await (async () => {
+              await prisma.$executeRaw`
+                INSERT INTO "ReadingChallengeMember" ("accountId", "tracked", "createdAt", "updatedAt")
+                VALUES (${parsed.data.accountId}, ${parsed.data.tracked}, NOW(), NOW())
+                ON CONFLICT ("accountId")
+                DO UPDATE SET "tracked" = EXCLUDED."tracked", "updatedAt" = NOW()
+              `;
 
-        const saved = await readingChallengeMember.upsert({
-          where: { accountId: parsed.data.accountId },
-          update: { tracked: parsed.data.tracked },
-          create: {
-            accountId: parsed.data.accountId,
-            tracked: parsed.data.tracked,
-          },
-        });
+              return {
+                accountId: parsed.data.accountId,
+                tracked: parsed.data.tracked,
+              };
+            })();
 
         return NextResponse.json({ trackedMember: saved }, { status: 200 });
       } catch (error) {
