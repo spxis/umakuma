@@ -127,7 +127,7 @@ export default function UserReadingCheckinModal({
   const pagesGoalForBonus = 15;
   const pagesToBonus = Math.max(0, pagesGoalForBonus - form.pagesRead);
   const bonusReady = pagesToBonus === 0;
-  const reviewsCompletedAllowed = selectedReviewQueue.total === 0;
+  const zeroReviewsBonusActive = selectedReviewQueue.total === 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-3 sm:p-6">
@@ -259,13 +259,10 @@ export default function UserReadingCheckinModal({
             type="button"
             className="rounded-xl border border-line bg-surface-muted px-3 py-2 text-left"
             onClick={onQuickWaniKani}
-            disabled={!reviewsCompletedAllowed}
           >
-            <p className="text-sm font-black text-foreground">WaniKani reviews to 0</p>
+            <p className="text-sm font-black text-foreground">WaniKani activity check-in</p>
             <p className="text-xs text-foreground/70">
-              {reviewsCompletedAllowed
-                ? "Checks off review completion for this check-in."
-                : "Unlocks when your current due reviews are 0."}
+              Marks WaniKani activity and sets reading counts to 0.
             </p>
           </button>
         </div>
@@ -283,8 +280,8 @@ export default function UserReadingCheckinModal({
               {subjectTypePluralLabel(SUBJECT_TYPES.vocabulary)} left: {selectedReviewQueue.vocabulary}
             </span>
           </div>
-          <p className={`mt-1 text-xs ${selectedReviewQueue.total === 0 ? "text-emerald-700" : "text-foreground/70"}`}>
-            {selectedReviewQueue.total === 0
+          <p className={`mt-1 text-xs ${zeroReviewsBonusActive ? "text-emerald-700" : "text-foreground/70"}`}>
+            {zeroReviewsBonusActive
               ? "Special bonus active: review queue is at 0."
               : `${selectedReviewQueue.total} total reviews currently due.`}
           </p>
@@ -354,19 +351,13 @@ export default function UserReadingCheckinModal({
           <label className="sm:col-span-2 flex items-center gap-2 rounded-lg border border-line bg-surface-muted px-3 py-2">
             <input
               type="checkbox"
-              checked={reviewsCompletedAllowed ? form.didWanikaniReviews : false}
-              disabled={!reviewsCompletedAllowed}
+              checked={form.didWanikaniReviews}
               onChange={(event) => {
-                if (!reviewsCompletedAllowed) {
-                  return;
-                }
-
                 onDidReviewsChange(event.target.checked);
               }}
             />
             <span className="text-sm font-semibold text-foreground/80">
-              Reviews completed
-              {!reviewsCompletedAllowed ? " (available only when current due reviews are 0)" : ""}
+              Did WaniKani activity
             </span>
           </label>
 
@@ -377,7 +368,7 @@ export default function UserReadingCheckinModal({
           ) : null}
 
           <p className="sm:col-span-2 text-xs text-foreground/70">
-            Reviews-only check-in is allowed: set pages and minutes to 0. You can leave Book unselected.
+            WaniKani-only check-in is allowed: set pages and minutes to 0, enable WaniKani activity, and leave Book unselected.
           </p>
 
           <div className="sm:col-span-2 flex flex-wrap items-center gap-3">

@@ -278,10 +278,16 @@ export async function POST(request: Request) {
           select: { title: true },
         });
 
-        const isReviewsOnlyCheckin = parsed.data.pagesRead === 0 && parsed.data.minutesRead === 0;
+        const hasReadingActivity = parsed.data.pagesRead > 0 || parsed.data.minutesRead > 0;
+        const hasWaniKaniActivity = parsed.data.didWanikaniReviews;
+        const isWaniKaniOnlyCheckin = !hasReadingActivity && hasWaniKaniActivity;
+
+        if (!hasReadingActivity && !hasWaniKaniActivity) {
+          return NextResponse.json({ error: "Choose reading activity, WaniKani activity, or both before saving." }, { status: 400 });
+        }
 
         const allowedBookTitles = new Set(challengeBooks.map((book) => book.title.trim()));
-        if (!isReviewsOnlyCheckin && !allowedBookTitles.has(parsed.data.bookTitle.trim())) {
+        if (hasReadingActivity && !allowedBookTitles.has(parsed.data.bookTitle.trim())) {
           return NextResponse.json({ error: "Pick a saved challenge book before saving." }, { status: 400 });
         }
 
@@ -304,7 +310,9 @@ export async function POST(request: Request) {
 
         const nextPagesRead = (existing?.pagesRead ?? 0) + parsed.data.pagesRead;
         const nextMinutesRead = (existing?.minutesRead ?? 0) + parsed.data.minutesRead;
-        const normalizedBookTitle = parsed.data.bookTitle.trim() || existing?.bookTitle || "Reviews only";
+        const normalizedBookTitle = isWaniKaniOnlyCheckin
+          ? "WaniKani only"
+          : parsed.data.bookTitle.trim() || existing?.bookTitle || "Reviews only";
 
         const readingSignoffEntry = getReadingSignoffEntryDelegate();
         const reviewQueue = currentReviewQueueFromAssignmentCache(account.assignmentCache);
@@ -312,7 +320,7 @@ export async function POST(request: Request) {
         const reviewCorrect = reviewQueue.kanji;
         const reviewIncorrect = reviewQueue.vocabulary;
         const reviewSuccessPercent = reviewQueue.radical;
-        const entryDidWanikaniReviews = reviewQueue.total === 0;
+        const entryDidWanikaniReviews = parsed.data.didWanikaniReviews;
 
         if (readingSignoffEntry) {
           await readingSignoffEntry.create({

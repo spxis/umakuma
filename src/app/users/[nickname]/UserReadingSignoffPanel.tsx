@@ -24,6 +24,7 @@ import {
   createFormState,
   type FormState,
   type ReadingSignoffResponse,
+  type TodayStats,
   type UserReadingSignoffPanelProps,
 } from "./UserReadingSignoffPanel.types";
 export default function UserReadingSignoffPanel({ accountId }: UserReadingSignoffPanelProps) {
@@ -162,15 +163,7 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
   );
 
   const todayStatsByAccountId = useMemo(() => {
-    const map = new Map<string, {
-      pagesRead: number;
-      minutesRead: number;
-      reviewKanji: number;
-      reviewVocabulary: number;
-      reviewRadical: number;
-      reviewTotal: number;
-      zeroReviewsBonus: boolean;
-    }>();
+    const map = new Map<string, TodayStats>();
 
     const byMember = signoffByDayAndMember.get(today) ?? new Map<string, ReadingSignoffRecord>();
     const byMemberEntries = signoffEntriesByDayAndMember.get(today) ?? new Map<string, ReadingSignoffEntryRecord[]>();
@@ -341,22 +334,30 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
       return;
     }
 
-    const isReviewsOnlyCheckin = form.pagesRead === 0 && form.minutesRead === 0;
+    const hasReadingActivity = form.pagesRead > 0 || form.minutesRead > 0;
+    const hasWaniKaniActivity = form.didWanikaniReviews;
+    const isWaniKaniOnlyCheckin = !hasReadingActivity && hasWaniKaniActivity;
 
     setSubmitState("saving");
     setSubmitMessage("");
 
     try {
-      if (!isReviewsOnlyCheckin && booksForMember(selectedMemberId).length < 3) {
+      if (!hasReadingActivity && !hasWaniKaniActivity) {
+        throw new Error("Choose reading activity, WaniKani activity, or both before saving.");
+      }
+
+      if (hasReadingActivity && booksForMember(selectedMemberId).length < 3) {
         throw new Error("Add at least 3 books before saving check-in.");
       }
 
-      if (!isReviewsOnlyCheckin && !form.bookTitle.trim()) {
+      if (hasReadingActivity && !form.bookTitle.trim()) {
         throw new Error("Pick a book from the collection before saving.");
       }
 
       const fallbackBookTitle = modalExistingEntry?.bookTitle ?? booksForMember(selectedMemberId)[0]?.title ?? "Reviews only";
-      const submittedBookTitle = form.bookTitle.trim() || fallbackBookTitle;
+      const submittedBookTitle = isWaniKaniOnlyCheckin
+        ? "WaniKani only"
+        : form.bookTitle.trim() || fallbackBookTitle;
 
       const response = await fetch("/api/reading-signoffs", {
         method: "POST",

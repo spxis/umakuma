@@ -45,6 +45,16 @@ export type FormState = {
   didWanikaniReviews: boolean;
 };
 
+export type TodayStats = {
+  pagesRead: number;
+  minutesRead: number;
+  reviewKanji: number;
+  reviewVocabulary: number;
+  reviewRadical: number;
+  reviewTotal: number;
+  zeroReviewsBonus: boolean;
+};
+
 export function createFormState(dateKey: string, entry: ReadingSignoffRecord | null): FormState {
   void entry;
   return {
