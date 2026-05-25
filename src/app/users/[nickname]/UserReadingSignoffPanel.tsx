@@ -483,7 +483,6 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
         onQuickReading={() => updateReadingMode(false)}
         onQuickWaniKani={updateWaniKaniOnlyMode}
         onQuickBoth={() => updateReadingMode(true)}
-        onDateChange={(nextDate) => updateFormField((prev) => ({ ...prev, signoffDatePst: nextDate }))}
         onBookChange={(nextBook) => updateFormField((prev) => ({ ...prev, bookTitle: nextBook }))}
         onPagesChange={(nextPages) => updateFormField((prev) => ({ ...prev, pagesRead: nextPages }))}
         onMinutesChange={(nextMinutes) => updateFormField((prev) => ({ ...prev, minutesRead: nextMinutes }))}

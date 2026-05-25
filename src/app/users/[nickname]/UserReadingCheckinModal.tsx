@@ -49,7 +49,6 @@ type UserReadingCheckinModalProps = {
   onQuickReading: () => void;
   onQuickWaniKani: () => void;
   onQuickBoth: () => void;
-  onDateChange: (nextDate: string) => void;
   onBookChange: (nextBook: string) => void;
   onPagesChange: (nextPages: number) => void;
   onMinutesChange: (nextMinutes: number) => void;
@@ -79,7 +78,6 @@ export default function UserReadingCheckinModal({
   onQuickReading,
   onQuickWaniKani,
   onQuickBoth,
-  onDateChange,
   onBookChange,
   onPagesChange,
   onMinutesChange,
@@ -324,20 +322,9 @@ export default function UserReadingCheckinModal({
         ) : null}
 
         <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={onSubmit}>
-          <label className="flex flex-col gap-1">
-            <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Date</span>
-            <input
-              type="date"
-              className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
-              value={form.signoffDatePst}
-              onChange={(event) => onDateChange(event.target.value)}
-              required
-            />
-          </label>
-
           {showReading ? (
             <>
-              <label className="flex flex-col gap-1">
+              <label className="flex flex-col gap-1 sm:col-span-2">
                 <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Book</span>
                 <select
                   className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
