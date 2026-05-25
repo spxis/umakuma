@@ -325,7 +325,7 @@ export default function UserReadingCheckinModal({
             <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Pages read</span>
             <input
               type="number"
-              min={1}
+              min={0}
               max={2000}
               className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
               value={form.pagesRead}
@@ -343,7 +343,7 @@ export default function UserReadingCheckinModal({
             <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Minutes read</span>
             <input
               type="number"
-              min={1}
+              min={0}
               max={1440}
               className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
               value={form.minutesRead}
@@ -376,6 +376,10 @@ export default function UserReadingCheckinModal({
               Previous saved snapshot: reviews left {modalExistingEntry.reviewsLeft}, apprentice {modalExistingEntry.apprenticeCount}, level {modalExistingEntry.currentWkLevel}
             </p>
           ) : null}
+
+          <p className="sm:col-span-2 text-xs text-foreground/70">
+            Reviews-only check-in is allowed: set pages and minutes to 0.
+          </p>
 
           <div className="sm:col-span-2 flex flex-wrap items-center gap-3">
             <button

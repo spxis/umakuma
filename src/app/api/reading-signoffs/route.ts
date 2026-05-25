@@ -35,8 +35,8 @@ const postBodySchema = z.object({
     message: "Invalid signoff date.",
   }),
   bookTitle: z.string().trim().min(1).max(180),
-  pagesRead: z.number().int().min(1).max(2000),
-  minutesRead: z.number().int().min(1).max(1440),
+  pagesRead: z.number().int().min(0).max(2000),
+  minutesRead: z.number().int().min(0).max(1440),
   didWanikaniReviews: z.boolean(),
 });
 

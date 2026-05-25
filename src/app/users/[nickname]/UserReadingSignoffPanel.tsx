@@ -463,7 +463,7 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
         }}
         onQuickWaniKani={() => {
           setModalDirty(true);
-          updateForm((prev) => ({ ...prev, didWanikaniReviews: true }));
+          updateForm((prev) => ({ ...prev, pagesRead: 0, minutesRead: 0, didWanikaniReviews: true }));
         }}
         onDateChange={(nextDate) => {
           setModalDirty(true);
