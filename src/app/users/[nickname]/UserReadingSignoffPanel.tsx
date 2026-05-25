@@ -7,6 +7,7 @@ import { buildCalendarCells, campaignDaysRemaining, computeReadingLeaderboard, g
 import UserReadingCalendar from "./UserReadingCalendar";
 import UserReadingCheckinModal from "./UserReadingCheckinModal";
 import UserReadingRewardsSummary from "./UserReadingRewardsSummary";
+import { applyReadingCheckinMode, getRememberedReadingCheckinMode, rememberReadingCheckinMode, type ReadingCheckinMode } from "./UserReadingSignoffPanel.mode";
 import { addReadingBookByIsbn, deleteReadingBookById, getRememberedBook, rememberSelectedBook } from "./UserReadingSignoffPanel.books";
 import { createFormState, type FormState, type ReadingSignoffResponse, type TodayStats, type UserReadingSignoffPanelProps } from "./UserReadingSignoffPanel.types";
 export default function UserReadingSignoffPanel({
@@ -248,17 +249,21 @@ export default function UserReadingSignoffPanel({
     const existingEntry = findEntry(memberId, dateKey);
     const memberBooks = booksForMember(memberId);
     const rememberedBook = getRememberedBook(memberId);
+    const rememberedMode = getRememberedReadingCheckinMode(memberId);
     const resolvedBookTitle = existingEntry?.bookTitle
       ?? (rememberedBook && memberBooks.some((book) => book.title === rememberedBook)
         ? rememberedBook
         : memberBooks[0]?.title ?? "");
-    setSelectedMemberId(memberId);
-    setForm({
+    const baseForm = {
       ...createFormState(dateKey, existingEntry),
       bookTitle: resolvedBookTitle,
-    });
-    if (resolvedBookTitle) {
-      rememberSelectedBook(memberId, resolvedBookTitle);
+    };
+    const nextForm = rememberedMode ? applyReadingCheckinMode(baseForm, rememberedMode) : baseForm;
+
+    setSelectedMemberId(memberId);
+    setForm(nextForm);
+    if (nextForm.bookTitle) {
+      rememberSelectedBook(memberId, nextForm.bookTitle);
     }
     setBookActionMessage("");
   }
@@ -388,25 +393,10 @@ export default function UserReadingSignoffPanel({
     }
   }
 
-  function updateReadingMode(includeWaniKani: boolean) {
+  function updateCheckinMode(mode: ReadingCheckinMode) {
+    rememberReadingCheckinMode(selectedMemberId, mode);
     setModalDirty(true);
-    updateForm((prev) => ({
-      ...prev,
-      pagesRead: Math.max(1, prev.pagesRead),
-      minutesRead: Math.max(10, prev.minutesRead),
-      didWanikaniReviews: includeWaniKani,
-    }));
-  }
-
-  function updateWaniKaniOnlyMode() {
-    setModalDirty(true);
-    updateForm((prev) => ({
-      ...prev,
-      bookTitle: "",
-      pagesRead: 0,
-      minutesRead: 0,
-      didWanikaniReviews: true,
-    }));
+    updateForm((prev) => applyReadingCheckinMode(prev, mode));
   }
 
   function updateFormField(mutator: (input: FormState) => FormState) {
@@ -482,9 +472,9 @@ export default function UserReadingSignoffPanel({
         }}
         onAddBook={addBookByIsbn}
         onDeleteBook={deleteBook}
-        onQuickReading={() => updateReadingMode(false)}
-        onQuickWaniKani={updateWaniKaniOnlyMode}
-        onQuickBoth={() => updateReadingMode(true)}
+        onQuickReading={() => updateCheckinMode("reading")}
+        onQuickWaniKani={() => updateCheckinMode("wanikani")}
+        onQuickBoth={() => updateCheckinMode("both")}
         onBookChange={(nextBook) => {
           rememberSelectedBook(selectedMemberId, nextBook);
           updateFormField((prev) => ({ ...prev, bookTitle: nextBook }));
