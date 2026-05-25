@@ -17,6 +17,8 @@ export const READING_CAMPAIGN = {
   weeklyPerfectScore: 9.1,
   pagesBonusThreshold: 15,
   pagesBonusYen: 250,
+  minutesBonusThreshold: 30,
+  minutesBonusYen: 500,
   zeroReviewsBonusYen: 150,
 } as const;
 
@@ -340,9 +342,14 @@ function computeDayScore(input: ReadingSignoffRecord | null): { perfect: boolean
   };
 }
 
+function dayMultiplierFromStreak(streakBeforeToday: number): number {
+  return Math.min(1 + 0.1 * streakBeforeToday, 1.6);
+}
+
 export function computeReadingLeaderboard(
   members: ReadingLeaderboardInputMember[],
   signoffs: ReadingSignoffRecord[],
+  asOfDateKey: string = getTodayDateInputValue(),
 ): ReadingLeaderboardRow[] {
   const signoffByMemberByDate = new Map<string, Map<string, ReadingSignoffRecord>>();
 
@@ -353,7 +360,9 @@ export function computeReadingLeaderboard(
   }
 
   const startDate = parseDateKeyAsUtc(READING_CAMPAIGN.startDatePst);
-  const endDate = parseDateKeyAsUtc(READING_CAMPAIGN.goalDatePst);
+  const endDate = parseDateKeyAsUtc(
+    asOfDateKey <= READING_CAMPAIGN.goalDatePst ? asOfDateKey : READING_CAMPAIGN.goalDatePst,
+  );
 
   return members.map((member) => {
     const byDate = signoffByMemberByDate.get(member.id) ?? new Map<string, ReadingSignoffRecord>();
@@ -361,15 +370,28 @@ export function computeReadingLeaderboard(
     let streak = 0;
     let perfectDays = 0;
     let pagesBonusTotal = 0;
+    let minutesBonusTotal = 0;
     let zeroReviewsBonusTotal = 0;
+    let weekStreak = 0;
+    let previousWeekIndex = -1;
 
     for (let cursor = new Date(startDate); cursor <= endDate; cursor.setUTCDate(cursor.getUTCDate() + 1)) {
       const dateKey = toDateKeyUtc(cursor);
       const record = byDate.get(dateKey) ?? null;
       const { perfect, score } = computeDayScore(record);
+      const weekIndex = Math.floor((cursor.getTime() - startDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
+
+      if (weekIndex !== previousWeekIndex) {
+        weekStreak = 0;
+        previousWeekIndex = weekIndex;
+      }
 
       if (record && record.pagesRead >= READING_CAMPAIGN.pagesBonusThreshold) {
         pagesBonusTotal += READING_CAMPAIGN.pagesBonusYen;
+      }
+
+      if (record && record.minutesRead > READING_CAMPAIGN.minutesBonusThreshold) {
+        minutesBonusTotal += READING_CAMPAIGN.minutesBonusYen;
       }
 
       if (record && record.didWanikaniReviews && record.reviewsLeft === 0) {
@@ -378,14 +400,15 @@ export function computeReadingLeaderboard(
 
       if (perfect) {
         streak += 1;
+        weekStreak += 1;
         perfectDays += 1;
       } else {
         streak = 0;
+        weekStreak = 0;
       }
 
-      const multiplier = perfect ? Math.min(1 + 0.1 * (streak - 1), 1.6) : 1;
+      const multiplier = perfect ? dayMultiplierFromStreak(Math.max(0, weekStreak - 1)) : 1;
       const weightedScore = score * multiplier;
-      const weekIndex = Math.floor((cursor.getTime() - startDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
 
       if (weekIndex >= 0 && weekIndex < weeklyScores.length) {
         weeklyScores[weekIndex] += weightedScore;
@@ -400,7 +423,7 @@ export function computeReadingLeaderboard(
 
     return {
       accountId: member.id,
-      totalYen: weeklyYen.reduce((sum, value) => sum + value, 0) + pagesBonusTotal + zeroReviewsBonusTotal,
+      totalYen: weeklyYen.reduce((sum, value) => sum + value, 0) + pagesBonusTotal + minutesBonusTotal + zeroReviewsBonusTotal,
       currentStreak: streak,
       perfectDays,
       weeklyYen,

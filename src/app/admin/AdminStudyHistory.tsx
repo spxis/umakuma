@@ -7,10 +7,11 @@ type Attempt = {
   id: string;
   accountId: string;
   nickname: string;
+  wkUsername: string;
   assignmentId: number;
   subjectId: number;
   subjectType: string;
-  result: string;
+  result: "correct" | "wrong" | "skipped";
   submittedAt: string;
 };
 
@@ -18,21 +19,44 @@ type HistoryData = {
   attempts: Attempt[];
   totals: Record<string, number>;
   accountCount: number;
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrevious: boolean;
+  };
 };
+
+function toLocalDateTimeInput(isoValue: string): string {
+  const date = new Date(isoValue);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  const offsetMs = date.getTimezoneOffset() * 60_000;
+  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
+}
 
 export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthorized: boolean }) {
   const [data, setData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<string>("");
   const [expanded, setExpanded] = useState(false);
+  const [editingAttemptId, setEditingAttemptId] = useState<string | null>(null);
+  const [editResult, setEditResult] = useState<"correct" | "wrong" | "skipped">("correct");
+  const [editSubmittedAt, setEditSubmittedAt] = useState("");
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (force = false) => {
     setExpanded(true);
-    if (data) return;
+    if (data && !force) return;
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/study-history?limit=100", { cache: "no-store" });
+      const res = await fetch("/api/admin/study-history?page=1&pageSize=100", { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to load study history.");
       setData((await res.json()) as HistoryData);
     } catch (err) {
@@ -41,6 +65,70 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
       setLoading(false);
     }
   }, [data]);
+
+  async function saveAttempt() {
+    if (!editingAttemptId) {
+      return;
+    }
+
+    setSaving(true);
+    setError(null);
+    setStatus("");
+    try {
+      const response = await fetch(`/api/admin/study-history/${encodeURIComponent(editingAttemptId)}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          result: editResult,
+          submittedAt: new Date(editSubmittedAt).toISOString(),
+        }),
+      });
+
+      const payload = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Could not update study attempt.");
+      }
+
+      setStatus("Study attempt updated.");
+      setEditingAttemptId(null);
+      await load(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not update study attempt.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function deleteAttempt(attempt: Attempt) {
+    const confirmed = window.confirm(`Delete this study attempt for ${attempt.nickname}?`);
+    if (!confirmed) {
+      return;
+    }
+
+    setSaving(true);
+    setError(null);
+    setStatus("");
+    try {
+      const response = await fetch(`/api/admin/study-history/${encodeURIComponent(attempt.id)}`, {
+        method: "DELETE",
+      });
+
+      const payload = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Could not delete study attempt.");
+      }
+
+      if (editingAttemptId === attempt.id) {
+        setEditingAttemptId(null);
+      }
+      setStatus("Study attempt deleted.");
+      await load(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not delete study attempt.");
+    } finally {
+      setSaving(false);
+    }
+  }
 
   if (!sessionAuthorized) return null;
 
@@ -61,7 +149,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
       <button
         type="button"
         onClick={() => (expanded ? setExpanded(false) : void load())}
-        className="text-sm font-bold uppercase tracking-[0.1em] text-foreground"
+        className="text-sm font-bold uppercase tracking-widest text-foreground"
       >
         Study Submission History {expanded ? "▲" : "▼"}
       </button>
@@ -70,6 +158,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
         <div className="mt-4 space-y-4">
           {loading && <p className="text-sm text-muted">Loading...</p>}
           {error && <p className="text-sm text-red-500">{error}</p>}
+          {status ? <p className="text-sm text-emerald-700">{status}</p> : null}
 
           {data && (
             <>
@@ -98,7 +187,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
                 </span>
               </div>
 
-              <div className="max-h-[32rem] overflow-auto rounded-lg border border-line">
+              <div className="max-h-128 overflow-auto rounded-lg border border-line">
                 <table className="w-full text-left text-xs">
                   <thead className="sticky top-0 bg-surface-muted text-[0.65rem] uppercase tracking-wider text-muted">
                     <tr>
@@ -108,25 +197,50 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
                       <th className="px-2 py-1.5">Type</th>
                       <th className="px-2 py-1.5">Subject</th>
                       <th className="px-2 py-1.5">Assignment</th>
+                      <th className="px-2 py-1.5">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-line/50">
                     {data.attempts.map((a) => (
                       <tr key={a.id} className="hover:bg-surface-muted/40">
                         <td className="whitespace-nowrap px-2 py-1 text-muted">
-                          <p className="font-semibold text-foreground/85">{formatDateTimeShort(a.submittedAt)}</p>
-                          <p className="text-[10px] uppercase tracking-[0.08em] text-foreground/55">
-                            {formatRelativeFromNow(a.submittedAt, {
-                              style: "short",
-                              allowFuture: false,
-                              noValueLabel: "-",
-                              invalidLabel: "-",
-                            })}
-                          </p>
+                          {editingAttemptId === a.id ? (
+                            <input
+                              type="datetime-local"
+                              className="h-8 rounded border border-line bg-surface px-2 text-xs"
+                              value={editSubmittedAt}
+                              onChange={(event) => setEditSubmittedAt(event.target.value)}
+                            />
+                          ) : (
+                            <>
+                              <p className="font-semibold text-foreground/85">{formatDateTimeShort(a.submittedAt)}</p>
+                              <p className="text-[10px] uppercase tracking-[0.08em] text-foreground/55">
+                                {formatRelativeFromNow(a.submittedAt, {
+                                  style: "short",
+                                  allowFuture: false,
+                                  noValueLabel: "-",
+                                  invalidLabel: "-",
+                                })}
+                              </p>
+                            </>
+                          )}
                         </td>
-                        <td className="px-2 py-1">{a.nickname}</td>
+                        <td className="px-2 py-1">
+                          <p>{a.nickname}</p>
+                          <p className="text-[10px] text-foreground/55">@{a.wkUsername}</p>
+                        </td>
                         <td className={`px-2 py-1 font-bold ${resultColor[a.result] ?? ""}`}>
-                          {a.result}
+                          {editingAttemptId === a.id ? (
+                            <select
+                              className="h-8 rounded border border-line bg-surface px-2 text-xs"
+                              value={editResult}
+                              onChange={(event) => setEditResult(event.target.value as "correct" | "wrong" | "skipped")}
+                            >
+                              <option value="correct">correct</option>
+                              <option value="wrong">wrong</option>
+                              <option value="skipped">skipped</option>
+                            </select>
+                          ) : a.result}
                         </td>
                         <td className="px-2 py-1">
                           <span
@@ -137,11 +251,67 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
                         </td>
                         <td className="px-2 py-1 font-mono">{a.subjectId}</td>
                         <td className="px-2 py-1 font-mono text-muted">{a.assignmentId}</td>
+                        <td className="px-2 py-1">
+                          <div className="flex flex-wrap gap-1">
+                            {editingAttemptId === a.id ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    void saveAttempt();
+                                  }}
+                                  disabled={saving || loading}
+                                  className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em]"
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setEditingAttemptId(null)}
+                                  disabled={saving || loading}
+                                  className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em]"
+                                >
+                                  Cancel
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingAttemptId(a.id);
+                                  setEditResult(a.result);
+                                  setEditSubmittedAt(toLocalDateTimeInput(a.submittedAt));
+                                }}
+                                disabled={saving || loading}
+                                className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em]"
+                              >
+                                Edit
+                              </button>
+                            )}
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                void deleteAttempt(a);
+                              }}
+                              disabled={saving || loading}
+                              className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-red-700"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
+
+              {data.pagination.total > data.attempts.length ? (
+                <p className="text-xs text-foreground/60">
+                  Showing {data.attempts.length} of {data.pagination.total} attempts. Use filters later for deeper slices.
+                </p>
+              ) : null}
             </>
           )}
         </div>

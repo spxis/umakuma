@@ -14,6 +14,12 @@ type LeaderboardRow = {
   currentBookPage: number | null;
   pagesRemainingForReadingPass: number;
   minutesRemainingForReadingPass: number;
+  minutesRemainingForThirtyBonus: number;
+  weekCapYen: number;
+  todayMaxNormalYen: number;
+  todayMinimumNormalYen: number;
+  nextDayMaxNormalYenIfPerfectToday: number;
+  nextDayMaxNormalYenIfMissToday: number;
   reviewKanjiToday: number;
   reviewVocabularyToday: number;
   reviewRadicalToday: number;
@@ -45,6 +51,10 @@ export default function UserReadingRewardsSummary({
   showTrackingManager,
   onToggleTrackedMember,
 }: UserReadingRewardsSummaryProps) {
+  const teamTotalYen = leaderboard.reduce((sum, row) => sum + row.totalYen, 0);
+  const leaderYen = leaderboard[0]?.totalYen ?? 0;
+  const leaderRemainingYen = Math.max(0, READING_CAMPAIGN.maxYen - leaderYen);
+
   return (
     <>
       <section className="rounded-2xl border border-line bg-[linear-gradient(135deg,rgba(15,111,255,0.14),rgba(56,189,248,0.1),rgba(244,114,182,0.12))] p-4 sm:p-5">
@@ -57,9 +67,20 @@ export default function UserReadingRewardsSummary({
             </p>
           </div>
           <div className="rounded-xl border border-accent/30 bg-surface/80 px-4 py-3 text-right">
-            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-foreground/65">Days to trip</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/65">Days to trip</p>
             <p className="text-3xl font-black text-foreground">{daysRemaining}</p>
             <p className="text-xs text-foreground/70">Trip: {formatCampaignDateLabel(READING_CAMPAIGN.tripDatePst)}</p>
+          </div>
+        </div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+          <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+            Team earned: <strong className="text-foreground">JPY {teamTotalYen.toLocaleString("en-US")}</strong>
+          </div>
+          <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+            Leader earned: <strong className="text-foreground">JPY {leaderYen.toLocaleString("en-US")}</strong>
+          </div>
+          <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+            Leader to 40,000: <strong className="text-foreground">JPY {leaderRemainingYen.toLocaleString("en-US")}</strong>
           </div>
         </div>
       </section>
@@ -102,7 +123,7 @@ export default function UserReadingRewardsSummary({
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">Goal by {formatCampaignDateLabel(READING_CAMPAIGN.goalDatePst)}</p>
         </div>
         <div className="mt-2 overflow-x-auto">
-          <table className="w-full min-w-[72rem] text-sm">
+          <table className="w-full min-w-6xl text-sm">
             <thead>
               <tr className="border-b border-line text-left text-xs uppercase tracking-[0.08em] text-foreground/65">
                 <th className="px-2 py-2">Rank</th>
@@ -114,6 +135,8 @@ export default function UserReadingRewardsSummary({
                 <th className="px-2 py-2">Current book</th>
                 <th className="px-2 py-2">Page</th>
                 <th className="px-2 py-2">Reading left</th>
+                <th className="px-2 py-2">Today / Next base</th>
+                <th className="px-2 py-2">Bonus progress</th>
                 <th className="px-2 py-2">Reviews today</th>
                 <th className="px-2 py-2">Cumulative earned</th>
                 <th className="px-2 py-2">Current streak</th>
@@ -123,7 +146,7 @@ export default function UserReadingRewardsSummary({
             <tbody>
               {isLoading && leaderboard.length === 0 ? (
                 <tr>
-                  <td colSpan={13} className="px-2 py-6">
+                  <td colSpan={15} className="px-2 py-6">
                     <div className="flex items-center justify-center gap-2 text-sm font-semibold text-foreground/70">
                       <span className="inline-flex h-4 w-4 animate-spin rounded-full border-2 border-line border-t-accent" aria-hidden="true" />
                       <span>Loading leaderboard...</span>
@@ -133,7 +156,7 @@ export default function UserReadingRewardsSummary({
               ) : null}
               {!isLoading && leaderboard.length === 0 ? (
                 <tr>
-                  <td colSpan={13} className="px-2 py-6 text-center text-sm font-semibold text-foreground/65">
+                  <td colSpan={15} className="px-2 py-6 text-center text-sm font-semibold text-foreground/65">
                     No tracked players yet. Turn players on above to start the leaderboard.
                   </td>
                 </tr>
@@ -146,10 +169,25 @@ export default function UserReadingRewardsSummary({
                   <td className="px-2 py-2">{row.learnedKanji}</td>
                   <td className="px-2 py-2">{row.learnedRadicals}</td>
                   <td className="px-2 py-2">{row.learnedVocabulary}</td>
-                  <td className="px-2 py-2 max-w-[12rem] truncate" title={row.currentBookTitle}>{row.currentBookTitle}</td>
+                  <td className="px-2 py-2 max-w-48 truncate" title={row.currentBookTitle}>{row.currentBookTitle}</td>
                   <td className="px-2 py-2">{row.currentBookPage ?? "-"}</td>
                   <td className="px-2 py-2">
                     {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m
+                  </td>
+                  <td className="px-2 py-2 text-xs font-semibold text-foreground/80">
+                    <p>Today max JPY {row.todayMaxNormalYen}</p>
+                    <p>Today min JPY {row.todayMinimumNormalYen}</p>
+                    <p>Next max JPY {row.nextDayMaxNormalYenIfPerfectToday}</p>
+                    <p className="text-foreground/65">Reset next JPY {row.nextDayMaxNormalYenIfMissToday}</p>
+                  </td>
+                  <td className="px-2 py-2 text-xs font-semibold text-foreground/80">
+                    <p>Week cap JPY {row.weekCapYen}</p>
+                    <p>
+                      {row.minutesRemainingForThirtyBonus === 0
+                        ? `30m+ bonus ready (+JPY ${READING_CAMPAIGN.minutesBonusYen})`
+                        : `${row.minutesRemainingForThirtyBonus}m to +JPY ${READING_CAMPAIGN.minutesBonusYen}`}
+                    </p>
+                    <p className="text-foreground/65">15p bonus: +JPY {READING_CAMPAIGN.pagesBonusYen}</p>
                   </td>
                   <td className="px-2 py-2">
                     Kanji {row.reviewKanjiToday} / Vocab {row.reviewVocabularyToday} / Radicals {row.reviewRadicalToday}

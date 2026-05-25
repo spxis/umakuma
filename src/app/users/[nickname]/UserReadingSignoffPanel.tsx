@@ -2,10 +2,12 @@
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { getStoredJson, setStoredJson } from "@/lib/clientStorage";
-import { buildCalendarCells, campaignDaysRemaining, computeReadingLeaderboard, getTodayDateInputValue, normalizeIsbn, type ReadingChallengeBookRecord, type ReadingSignoffEntryRecord, type ReadingSignoffRecord } from "@/lib/readingSignoff";
+import { getReadingDailyEarningsForecast } from "@/lib/readingEarnings";
+import { buildCalendarCells, campaignDaysRemaining, computeReadingLeaderboard, getTodayDateInputValue, type ReadingChallengeBookRecord, type ReadingSignoffEntryRecord, type ReadingSignoffRecord } from "@/lib/readingSignoff";
 import UserReadingCalendar from "./UserReadingCalendar";
 import UserReadingCheckinModal from "./UserReadingCheckinModal";
 import UserReadingRewardsSummary from "./UserReadingRewardsSummary";
+import { addReadingBookByIsbn, deleteReadingBookById, getRememberedBook, rememberSelectedBook } from "./UserReadingSignoffPanel.books";
 import { createFormState, type FormState, type ReadingSignoffResponse, type TodayStats, type UserReadingSignoffPanelProps } from "./UserReadingSignoffPanel.types";
 export default function UserReadingSignoffPanel({
   accountId,
@@ -21,6 +23,7 @@ export default function UserReadingSignoffPanel({
   const [selectedMemberId, setSelectedMemberId] = useState<string>(accountId);
   const [addIsbn, setAddIsbn] = useState("");
   const [bookActionMessage, setBookActionMessage] = useState("");
+  const [bookActionState, setBookActionState] = useState<"idle" | "adding" | "deleting">("idle");
   const [modalDirty, setModalDirty] = useState(false);
   const [submitState, setSubmitState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
@@ -56,23 +59,18 @@ export default function UserReadingSignoffPanel({
   const daysRemaining = campaignDaysRemaining(today);
 
   const trackedStorageKey = `reading-tracked-members:${accountId}`;
-  const serverDefaultTrackedMemberIds = useMemo(
-    () => (trackedMemberAccountIds.length === 0 ? members.map((member) => member.id) : trackedMemberAccountIds),
-    [members, trackedMemberAccountIds],
-  );
+  const serverDefaultTrackedMemberIds = useMemo(() => (trackedMemberAccountIds.length === 0 ? members.map((member) => member.id) : trackedMemberAccountIds), [members, trackedMemberAccountIds]);
 
   useEffect(() => {
     if (members.length === 0) {
       return;
     }
-
     setViewerTrackedMemberIds((prev) => {
       const validMemberIds = new Set(members.map((member) => member.id));
       if (prev === null) {
         const stored = getStoredJson<string[]>(trackedStorageKey, serverDefaultTrackedMemberIds);
         return stored.filter((id) => validMemberIds.has(id));
       }
-
       return prev.filter((id) => validMemberIds.has(id));
     });
   }, [members, serverDefaultTrackedMemberIds, trackedStorageKey]);
@@ -95,7 +93,6 @@ export default function UserReadingSignoffPanel({
     () => members.filter((member) => trackedMemberSet.has(member.id)),
     [members, trackedMemberSet],
   );
-
   const latestSignoffByAccountId = useMemo(
     () => new Map(latestSignoffs.map((row) => [row.accountId, row])),
     [latestSignoffs],
@@ -146,6 +143,21 @@ export default function UserReadingSignoffPanel({
     return byDayAndMember;
   }, [signoffEntries]);
 
+  const dailyForecastByAccountId = useMemo(
+    () =>
+      new Map(
+        trackedMembers.map((member) => [
+          member.id,
+          getReadingDailyEarningsForecast({
+            accountId: member.id,
+            signoffs,
+            todayDateKey: today,
+          }),
+        ]),
+      ),
+    [signoffs, today, trackedMembers],
+  );
+
   const reviewQueueByAccountId = useMemo(
     () => new Map(reviewQueues.map((row) => [row.accountId, row])),
     [reviewQueues],
@@ -182,9 +194,10 @@ export default function UserReadingSignoffPanel({
   }, [signoffByDayAndMember, signoffEntriesByDayAndMember, today, trackedMembers]);
 
   const leaderboard = useMemo(() => {
-    const rows = computeReadingLeaderboard(trackedMembers, signoffs).map((row) => {
+    const rows = computeReadingLeaderboard(trackedMembers, signoffs, today).map((row) => {
       const member = trackedMembers.find((candidate) => candidate.id === row.accountId);
       const latestSignoff = latestSignoffByAccountId.get(row.accountId);
+      const forecast = dailyForecastByAccountId.get(row.accountId);
       return {
         ...row,
         nickname: member?.nickname ?? row.accountId,
@@ -196,6 +209,12 @@ export default function UserReadingSignoffPanel({
         currentBookPage: latestSignoff?.pagesRead ?? null,
         pagesRemainingForReadingPass: Math.max(0, 15 - (todayStatsByAccountId.get(row.accountId)?.pagesRead ?? 0)),
         minutesRemainingForReadingPass: Math.max(0, 15 - (todayStatsByAccountId.get(row.accountId)?.minutesRead ?? 0)),
+        minutesRemainingForThirtyBonus: Math.max(0, 31 - (todayStatsByAccountId.get(row.accountId)?.minutesRead ?? 0)),
+        weekCapYen: forecast?.weekCapYen ?? 0,
+        todayMaxNormalYen: forecast?.todayMaxNormalYen ?? 0,
+        todayMinimumNormalYen: forecast?.todayMinimumNormalYen ?? 0,
+        nextDayMaxNormalYenIfPerfectToday: forecast?.nextDayMaxNormalYenIfPerfectToday ?? 0,
+        nextDayMaxNormalYenIfMissToday: forecast?.nextDayMaxNormalYenIfMissToday ?? 0,
         reviewKanjiToday: todayStatsByAccountId.get(row.accountId)?.reviewKanji ?? 0,
         reviewVocabularyToday: todayStatsByAccountId.get(row.accountId)?.reviewVocabulary ?? 0,
         reviewRadicalToday: todayStatsByAccountId.get(row.accountId)?.reviewRadical ?? 0,
@@ -205,7 +224,7 @@ export default function UserReadingSignoffPanel({
     });
 
     return rows.sort((a, b) => b.totalYen - a.totalYen);
-  }, [latestSignoffByAccountId, signoffs, todayStatsByAccountId, trackedMembers]);
+  }, [dailyForecastByAccountId, latestSignoffByAccountId, signoffs, today, todayStatsByAccountId, trackedMembers]);
 
   const calendarCells = useMemo(() => buildCalendarCells(monthKey), [monthKey]);
 
@@ -231,11 +250,20 @@ export default function UserReadingSignoffPanel({
 
   function setModalMember(memberId: string, dateKey: string) {
     const existingEntry = findEntry(memberId, dateKey);
+    const memberBooks = booksForMember(memberId);
+    const rememberedBook = getRememberedBook(memberId);
+    const resolvedBookTitle = existingEntry?.bookTitle
+      ?? (rememberedBook && memberBooks.some((book) => book.title === rememberedBook)
+        ? rememberedBook
+        : memberBooks[0]?.title ?? "");
     setSelectedMemberId(memberId);
     setForm({
       ...createFormState(dateKey, existingEntry),
-      bookTitle: existingEntry?.bookTitle ?? "",
+      bookTitle: resolvedBookTitle,
     });
+    if (resolvedBookTitle) {
+      rememberSelectedBook(memberId, resolvedBookTitle);
+    }
     setBookActionMessage("");
   }
 
@@ -263,36 +291,20 @@ export default function UserReadingSignoffPanel({
 
   async function addBookByIsbn() {
     setBookActionMessage("");
-    const normalizedIsbn = normalizeIsbn(addIsbn);
-    if (!normalizedIsbn) {
-      setBookActionMessage("Enter a valid ISBN-10 or ISBN-13.");
-      return;
-    }
 
     try {
-      const response = await fetch("/api/reading-books", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          accountId: selectedMemberId,
-          isbn: normalizedIsbn,
-        }),
+      setBookActionState("adding");
+      const message = await addReadingBookByIsbn({
+        accountId: selectedMemberId,
+        rawIsbn: addIsbn,
       });
-
-      const payload = (await response.json()) as { error?: string; existed?: boolean; refreshed?: boolean };
-      if (!response.ok) {
-        throw new Error(payload.error ?? "Could not add that book yet.");
-      }
-
-      if (payload.existed) {
-        setBookActionMessage(payload.refreshed ? "Book already in this collection. Metadata refreshed." : "Book already in this collection.");
-      } else {
-        setBookActionMessage("Book added.");
-      }
+      setBookActionMessage(message);
       setAddIsbn("");
       await mutate();
     } catch (error) {
       setBookActionMessage(error instanceof Error ? error.message : "Could not add that book yet.");
+    } finally {
+      setBookActionState("idle");
     }
   }
 
@@ -300,23 +312,14 @@ export default function UserReadingSignoffPanel({
     setBookActionMessage("");
 
     try {
-      const response = await fetch("/api/reading-books", {
-        method: "DELETE",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          accountId: selectedMemberId,
-          bookId,
-        }),
-      });
-
-      const payload = (await response.json()) as { error?: string };
-      if (!response.ok) {
-        throw new Error(payload.error ?? "Could not delete that book.");
-      }
-      setBookActionMessage("Book removed.");
+      setBookActionState("deleting");
+      const message = await deleteReadingBookById({ accountId: selectedMemberId, bookId });
+      setBookActionMessage(message);
       await mutate();
     } catch (error) {
       setBookActionMessage(error instanceof Error ? error.message : "Could not delete that book.");
+    } finally {
+      setBookActionState("idle");
     }
   }
 
@@ -350,6 +353,10 @@ export default function UserReadingSignoffPanel({
       const submittedBookTitle = isWaniKaniOnlyCheckin
         ? "WaniKani only"
         : form.bookTitle.trim() || fallbackBookTitle;
+
+      if (!isWaniKaniOnlyCheckin && submittedBookTitle.trim().length > 0) {
+        rememberSelectedBook(selectedMemberId, submittedBookTitle);
+      }
 
       const response = await fetch("/api/reading-signoffs", {
         method: "POST",
@@ -458,6 +465,7 @@ export default function UserReadingSignoffPanel({
         memberBooks={booksForMember(selectedMemberId)}
         addIsbn={addIsbn}
         bookActionMessage={bookActionMessage}
+        bookActionState={bookActionState}
         submitState={submitState}
         submitMessage={submitMessage}
         isDirty={modalDirty || addIsbn.trim().length > 0}
@@ -478,7 +486,10 @@ export default function UserReadingSignoffPanel({
         onQuickReading={() => updateReadingMode(false)}
         onQuickWaniKani={updateWaniKaniOnlyMode}
         onQuickBoth={() => updateReadingMode(true)}
-        onBookChange={(nextBook) => updateFormField((prev) => ({ ...prev, bookTitle: nextBook }))}
+        onBookChange={(nextBook) => {
+          rememberSelectedBook(selectedMemberId, nextBook);
+          updateFormField((prev) => ({ ...prev, bookTitle: nextBook }));
+        }}
         onPagesChange={(nextPages) => updateFormField((prev) => ({ ...prev, pagesRead: nextPages }))}
         onMinutesChange={(nextMinutes) => updateFormField((prev) => ({ ...prev, minutesRead: nextMinutes }))}
       />
