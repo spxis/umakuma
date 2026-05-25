@@ -6,7 +6,6 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 import {
-  READING_BOOK_OPTIONS,
   isMonthKey,
   isPstDateKey,
 } from "@/lib/readingSignoff";
@@ -33,14 +32,7 @@ const postBodySchema = z.object({
   signoffDatePst: z.string().refine((value) => isPstDateKey(value), {
     message: "Invalid signoff date.",
   }),
-  bookTitle: z
-    .string()
-    .trim()
-    .min(1)
-    .max(80)
-    .refine((value) => READING_BOOK_OPTIONS.includes(value as (typeof READING_BOOK_OPTIONS)[number]), {
-      message: "Invalid book choice.",
-    }),
+  bookTitle: z.string().trim().min(1).max(180),
   pagesRead: z.number().int().min(1).max(2000),
   minutesRead: z.number().int().min(1).max(1440),
   didWanikaniReviews: z.boolean(),
@@ -232,6 +224,16 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Account not found." }, { status: 404 });
         }
 
+        const challengeBooks = await prisma.readingChallengeBook.findMany({
+          where: { accountId: account.id },
+          select: { title: true },
+        });
+
+        const allowedBookTitles = new Set(challengeBooks.map((book) => book.title.trim()));
+        if (!allowedBookTitles.has(parsed.data.bookTitle.trim())) {
+          return NextResponse.json({ error: "Pick a saved challenge book before saving." }, { status: 400 });
+        }
+
         const readingSignoff = getReadingSignoffDelegate();
         if (!readingSignoff) {
           return NextResponse.json(
@@ -308,28 +310,21 @@ export async function PATCH(request: Request) {
         }
 
         const readingChallengeMember = getReadingChallengeMemberDelegate();
-        const saved = readingChallengeMember
-          ? await readingChallengeMember.upsert({
-              where: { accountId: parsed.data.accountId },
-              update: { tracked: parsed.data.tracked },
-              create: {
-                accountId: parsed.data.accountId,
-                tracked: parsed.data.tracked,
-              },
-            })
-          : await (async () => {
-              await prisma.$executeRaw`
-                INSERT INTO "ReadingChallengeMember" ("accountId", "tracked", "createdAt", "updatedAt")
-                VALUES (${parsed.data.accountId}, ${parsed.data.tracked}, NOW(), NOW())
-                ON CONFLICT ("accountId")
-                DO UPDATE SET "tracked" = EXCLUDED."tracked", "updatedAt" = NOW()
-              `;
+        if (!readingChallengeMember) {
+          return NextResponse.json(
+            { error: "Reading challenge setup is not ready yet. Restart the dev server and try again." },
+            { status: 503 },
+          );
+        }
 
-              return {
-                accountId: parsed.data.accountId,
-                tracked: parsed.data.tracked,
-              };
-            })();
+        const saved = await readingChallengeMember.upsert({
+          where: { accountId: parsed.data.accountId },
+          update: { tracked: parsed.data.tracked },
+          create: {
+            accountId: parsed.data.accountId,
+            tracked: parsed.data.tracked,
+          },
+        });
 
         return NextResponse.json({ trackedMember: saved }, { status: 200 });
       } catch (error) {

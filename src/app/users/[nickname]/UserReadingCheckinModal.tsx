@@ -253,13 +253,21 @@ export default function UserReadingCheckinModal({
 
           <label className="flex flex-col gap-1">
             <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Book</span>
-            <input
-              type="text"
+            <select
               className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
               value={form.bookTitle}
               onChange={(event) => onBookChange(event.target.value)}
               required
-            />
+            >
+              <option value="" disabled>
+                Select a saved challenge book
+              </option>
+              {memberBooks.map((book) => (
+                <option key={book.id} value={book.title}>
+                  {book.title}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="flex flex-col gap-1">

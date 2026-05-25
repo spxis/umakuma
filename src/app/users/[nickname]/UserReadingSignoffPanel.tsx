@@ -298,7 +298,7 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
         body: JSON.stringify({
           accountId: selectedMemberId,
           signoffDatePst: form.signoffDatePst,
-          bookTitle: form.bookTitle,
+          bookTitle: form.bookTitle.trim(),
           pagesRead: form.pagesRead,
           minutesRead: form.minutesRead,
           didWanikaniReviews: form.didWanikaniReviews,
