@@ -123,7 +123,7 @@ export default function UserReadingCalendar({
                   {activeMembers.map((member) => {
                     const entries = byMemberEntries.get(member.id) ?? [];
                     const daySignoff = byMember.get(member.id) ?? null;
-                    const logCount = entries.length > 0 ? entries.length : daySignoff ? 1 : 0;
+                    const hasEntryLogs = entries.length > 0;
                     const totalReviewKanji = entries.reduce((sum, entry) => sum + entry.reviewCorrect, 0);
                     const totalReviewVocabulary = entries.reduce((sum, entry) => sum + entry.reviewIncorrect, 0);
                     const totalReviewRadical = entries.reduce((sum, entry) => sum + (entry.reviewSuccessPercent ?? 0), 0);
@@ -135,9 +135,9 @@ export default function UserReadingCalendar({
                       >
                         <div className="flex items-center justify-between gap-1">
                           <span className="truncate">{member.nickname}</span>
-                          <span>{logCount} logs</span>
+                          <span>{hasEntryLogs ? `${entries.length} logs` : "Saved summary"}</span>
                         </div>
-                        {entries.length > 0 ? (
+                        {hasEntryLogs ? (
                           <div className="mt-0.5 space-y-0.5 text-[9px] font-semibold text-emerald-900/90">
                             {entries.map((entry) => (
                               <div key={entry.id} className="truncate">
@@ -160,12 +160,18 @@ export default function UserReadingCalendar({
                               Reviews total {daySignoff.reviewsLeft}
                               {daySignoff.didWanikaniReviews && daySignoff.reviewsLeft === 0 ? " (+0 bonus)" : ""}
                             </div>
+                            <div className="truncate text-emerald-800/80">Detailed logs unavailable for this day.</div>
                           </div>
                         ) : null}
                       </div>
                     );
                   })}
-                  {activeMembers.length === 0 ? (
+                  {activeMembers.length === 0 && isLoading ? (
+                    <div className="rounded border border-line bg-surface-muted px-1 py-0.5 text-[10px] font-semibold text-foreground/55">
+                      Loading...
+                    </div>
+                  ) : null}
+                  {activeMembers.length === 0 && !isLoading ? (
                     <div className="rounded border border-line bg-surface-muted px-1 py-0.5 text-[10px] font-semibold text-foreground/55">
                       No activity
                     </div>
