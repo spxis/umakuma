@@ -15,6 +15,8 @@ export const READING_CAMPAIGN = {
   maxYen: 40_000,
   weeklyCaps: [3500, 4000, 4500, 4750, 5000, 5250, 6000, 7000] as const,
   weeklyPerfectScore: 9.1,
+  pagesBonusThreshold: 15,
+  pagesBonusYen: 250,
 } as const;
 
 export type ReadingBookOption = (typeof READING_BOOK_OPTIONS)[number];
@@ -253,11 +255,16 @@ export function computeReadingLeaderboard(
     const weeklyScores = READING_CAMPAIGN.weeklyCaps.map(() => 0);
     let streak = 0;
     let perfectDays = 0;
+    let pagesBonusTotal = 0;
 
     for (let cursor = new Date(startDate); cursor <= endDate; cursor.setUTCDate(cursor.getUTCDate() + 1)) {
       const dateKey = toDateKeyUtc(cursor);
       const record = byDate.get(dateKey) ?? null;
       const { perfect, score } = computeDayScore(record);
+
+      if (record && record.pagesRead >= READING_CAMPAIGN.pagesBonusThreshold) {
+        pagesBonusTotal += READING_CAMPAIGN.pagesBonusYen;
+      }
 
       if (perfect) {
         streak += 1;
@@ -283,7 +290,7 @@ export function computeReadingLeaderboard(
 
     return {
       accountId: member.id,
-      totalYen: weeklyYen.reduce((sum, value) => sum + value, 0),
+      totalYen: weeklyYen.reduce((sum, value) => sum + value, 0) + pagesBonusTotal,
       currentStreak: streak,
       perfectDays,
       weeklyYen,

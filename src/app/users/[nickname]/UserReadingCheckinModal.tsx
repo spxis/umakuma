@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useEffect } from "react";
 
 import type { ReadingChallengeBookRecord, ReadingSignoffRecord } from "@/lib/readingSignoff";
 
@@ -29,8 +30,9 @@ type UserReadingCheckinModalProps = {
   bookActionMessage: string;
   submitState: SubmitState;
   submitMessage: string;
+  isDirty: boolean;
   modalExistingEntry: ReadingSignoffRecord | null;
-  onClose: () => void;
+  onRequestClose: () => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
   onMemberChange: (nextMemberId: string) => void;
   onAddIsbnChange: (value: string) => void;
@@ -57,8 +59,9 @@ export default function UserReadingCheckinModal({
   bookActionMessage,
   submitState,
   submitMessage,
+  isDirty,
   modalExistingEntry,
-  onClose,
+  onRequestClose,
   onSubmit,
   onMemberChange,
   onAddIsbnChange,
@@ -72,9 +75,33 @@ export default function UserReadingCheckinModal({
   onMinutesChange,
   onDidReviewsChange,
 }: UserReadingCheckinModalProps) {
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      event.preventDefault();
+      onRequestClose();
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open, onRequestClose]);
+
   if (!open || !form) {
     return null;
   }
+
+  const pagesGoalForBonus = 15;
+  const pagesToBonus = Math.max(0, pagesGoalForBonus - form.pagesRead);
+  const bonusReady = pagesToBonus === 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-3 sm:p-6">
@@ -89,7 +116,7 @@ export default function UserReadingCheckinModal({
           </div>
           <button
             type="button"
-            onClick={onClose}
+            onClick={onRequestClose}
             className="rounded-full border border-line px-3 py-1 text-xs font-bold uppercase tracking-[0.08em]"
           >
             Close
@@ -246,6 +273,11 @@ export default function UserReadingCheckinModal({
               onChange={(event) => onPagesChange(Number(event.target.value))}
               required
             />
+            <span className={`text-[11px] ${bonusReady ? "text-emerald-700" : "text-foreground/70"}`}>
+              {bonusReady
+                ? "Bonus unlocked: +JPY 250 for the extra 5 pages streak."
+                : `Read ${pagesToBonus} more page${pagesToBonus === 1 ? "" : "s"} to earn +JPY 250.`}
+            </span>
           </label>
 
           <label className="flex flex-col gap-1">
@@ -289,6 +321,7 @@ export default function UserReadingCheckinModal({
                 {submitMessage}
               </p>
             ) : null}
+            {isDirty ? <p className="text-xs text-foreground/65">Unsaved changes. Press Esc to close with confirmation.</p> : null}
           </div>
         </form>
       </div>

@@ -66,6 +66,7 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
   const [selectedMemberId, setSelectedMemberId] = useState<string>(accountId);
   const [addIsbn, setAddIsbn] = useState("");
   const [bookActionMessage, setBookActionMessage] = useState("");
+  const [modalDirty, setModalDirty] = useState(false);
   const [submitState, setSubmitState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
 
@@ -153,7 +154,21 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
     setSubmitState("idle");
     setSubmitMessage("");
     setAddIsbn("");
+    setModalDirty(false);
     setModalOpen(true);
+  }
+
+  function requestCloseModal() {
+    if (!modalDirty) {
+      setModalOpen(false);
+      return;
+    }
+
+    const shouldClose = window.confirm("Discard your unsaved check-in changes?");
+    if (shouldClose) {
+      setModalOpen(false);
+      setModalDirty(false);
+    }
   }
 
   function updateForm(mutator: (input: FormState) => FormState) {
@@ -257,6 +272,7 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
       setMonthKey(form.signoffDatePst.slice(0, 7));
       setSubmitState("saved");
       setSubmitMessage("Check-in saved.");
+      setModalDirty(false);
       await mutate();
       window.setTimeout(() => {
         setModalOpen(false);
@@ -426,20 +442,48 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
         bookActionMessage={bookActionMessage}
         submitState={submitState}
         submitMessage={submitMessage}
+        isDirty={modalDirty || addIsbn.trim().length > 0}
         modalExistingEntry={modalExistingEntry}
-        onClose={() => setModalOpen(false)}
+        onRequestClose={requestCloseModal}
         onSubmit={submitSignoff}
-        onMemberChange={(nextMemberId) => setModalMember(nextMemberId, modalDate)}
-        onAddIsbnChange={setAddIsbn}
+        onMemberChange={(nextMemberId) => {
+          setModalDirty(true);
+          setModalMember(nextMemberId, modalDate);
+        }}
+        onAddIsbnChange={(value) => {
+          setAddIsbn(value);
+          setModalDirty(true);
+        }}
         onAddBook={addBookByIsbn}
         onDeleteBook={deleteBook}
-        onQuickReading={() => updateForm((prev) => ({ ...prev, pagesRead: Math.max(1, prev.pagesRead), minutesRead: Math.max(10, prev.minutesRead) }))}
-        onQuickWaniKani={() => updateForm((prev) => ({ ...prev, didWanikaniReviews: true }))}
-        onDateChange={(nextDate) => updateForm((prev) => ({ ...prev, signoffDatePst: nextDate }))}
-        onBookChange={(nextBook) => updateForm((prev) => ({ ...prev, bookTitle: nextBook }))}
-        onPagesChange={(nextPages) => updateForm((prev) => ({ ...prev, pagesRead: nextPages }))}
-        onMinutesChange={(nextMinutes) => updateForm((prev) => ({ ...prev, minutesRead: nextMinutes }))}
-        onDidReviewsChange={(nextDidReviews) => updateForm((prev) => ({ ...prev, didWanikaniReviews: nextDidReviews }))}
+        onQuickReading={() => {
+          setModalDirty(true);
+          updateForm((prev) => ({ ...prev, pagesRead: Math.max(1, prev.pagesRead), minutesRead: Math.max(10, prev.minutesRead) }));
+        }}
+        onQuickWaniKani={() => {
+          setModalDirty(true);
+          updateForm((prev) => ({ ...prev, didWanikaniReviews: true }));
+        }}
+        onDateChange={(nextDate) => {
+          setModalDirty(true);
+          updateForm((prev) => ({ ...prev, signoffDatePst: nextDate }));
+        }}
+        onBookChange={(nextBook) => {
+          setModalDirty(true);
+          updateForm((prev) => ({ ...prev, bookTitle: nextBook }));
+        }}
+        onPagesChange={(nextPages) => {
+          setModalDirty(true);
+          updateForm((prev) => ({ ...prev, pagesRead: nextPages }));
+        }}
+        onMinutesChange={(nextMinutes) => {
+          setModalDirty(true);
+          updateForm((prev) => ({ ...prev, minutesRead: nextMinutes }));
+        }}
+        onDidReviewsChange={(nextDidReviews) => {
+          setModalDirty(true);
+          updateForm((prev) => ({ ...prev, didWanikaniReviews: nextDidReviews }));
+        }}
       />
     </section>
   );
