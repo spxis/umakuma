@@ -199,16 +199,16 @@ export default function UserReadingRewardsSummary({
                 </div>
 
                 <div className="mt-1 flex flex-wrap items-center gap-1 text-[10px]">
-                  <span className="subject-pill subject-pill--radical">
-                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural}
+                  <span className="inline-flex items-center rounded-full border border-radical bg-radical px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
+                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short}
                     <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedRadicals)})</span>
                   </span>
-                  <span className="subject-pill subject-pill--kanji">
-                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular}
+                  <span className="inline-flex items-center rounded-full border border-kanji bg-kanji px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
+                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].short}
                     <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedKanji)})</span>
                   </span>
-                  <span className="subject-pill subject-pill--vocabulary">
-                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular}
+                  <span className="inline-flex items-center rounded-full border border-vocabulary bg-vocabulary px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
+                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].short}
                     <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedVocabulary)})</span>
                   </span>
                 </div>
