@@ -4,6 +4,7 @@ import type { ReadingChallengeBookRecord, ReadingReviewQueueSnapshot, ReadingSig
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
 import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
+import { useBookStripAutoScroll } from "./UserReadingCheckinModal.bookStrip";
 import UserReadingCheckinModalAdminDateField from "./UserReadingCheckinModalAdminDateField";
 
 type Member = {
@@ -90,6 +91,12 @@ export default function UserReadingCheckinModal({
   const [showAddBookForm, setShowAddBookForm] = useState(false);
   const [previewBook, setPreviewBook] = useState<ReadingChallengeBookRecord | null>(null);
   const isBookActionLoading = bookActionState !== "idle";
+  const setBookCardRef = useBookStripAutoScroll({
+    open,
+    showReading: Boolean(form && (form.pagesRead > 0 || form.minutesRead > 0)),
+    selectedBookTitle: form?.bookTitle ?? "",
+    booksKey: memberBooks.map((book) => `${book.id}:${book.title}`).join("|"),
+  });
 
   function requestCloseWithConfirm() {
     if (!isDirty) {
@@ -103,7 +110,6 @@ export default function UserReadingCheckinModal({
     if (!open) {
       return;
     }
-
     function onKeyDown(event: KeyboardEvent) {
       if (event.key !== "Escape") {
         return;
@@ -125,7 +131,6 @@ export default function UserReadingCheckinModal({
   if (!open || !form) {
     return null;
   }
-
   const pagesGoalForBonus = 15;
   const pagesToBonus = Math.max(0, pagesGoalForBonus - form.pagesRead);
   const bonusReady = pagesToBonus === 0;
@@ -140,7 +145,6 @@ export default function UserReadingCheckinModal({
   function toggleBookPreview(book: ReadingChallengeBookRecord) {
     setPreviewBook((prev) => (prev?.id === book.id ? null : book));
   }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-2 sm:p-6">
       <div className="flex max-h-[95dvh] w-full max-w-2xl flex-col overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-2xl sm:p-5">
@@ -237,6 +241,7 @@ export default function UserReadingCheckinModal({
                   return (
                     <div
                       key={book.id}
+                      ref={setBookCardRef(book.title)}
                       className={`h-64 w-33 shrink-0 rounded-lg border p-1.5 ${selected ? "border-accent bg-accent/5" : "border-line bg-surface"}`}
                     >
                       <div className="flex h-full flex-col">
