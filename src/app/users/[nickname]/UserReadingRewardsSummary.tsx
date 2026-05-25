@@ -166,8 +166,11 @@ export default function UserReadingRewardsSummary({
                   <p className="text-sm font-black text-accent">{formatYen(row.totalYen)}</p>
                 </div>
 
-                <div className="mt-1 grid gap-x-3 gap-y-1 text-xs sm:grid-cols-[minmax(0,1.8fr)_auto] sm:items-center">
-                  <div className="min-w-0 flex items-center gap-1.5 font-semibold text-foreground/80" title={row.currentBookTitle}>
+                <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                  <div
+                    className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-1"
+                    title={row.currentBookTitle}
+                  >
                     {row.currentBookThumbnailUrl ? (
                       <Image
                         src={row.currentBookThumbnailUrl}
@@ -177,39 +180,32 @@ export default function UserReadingRewardsSummary({
                         className="h-5 w-3.5 shrink-0 rounded border border-line object-cover"
                       />
                     ) : null}
-                    <p className="min-w-0 truncate">
-                      Reading
+                    <p className="min-w-0 truncate text-xs font-semibold text-foreground/80">
+                      {row.currentBookTitle}
                       <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
                         (p{row.currentBookPage ?? "-"})
                       </span>
-                      : {row.currentBookTitle}
                       <span className="text-foreground/65"> - left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m</span>
                     </p>
                   </div>
-                  <p className="font-semibold text-foreground/80 sm:text-right">
-                    {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular} reviewed
-                    <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
-                      ({formatCount(row.reviewKanjiToday)})
-                    </span>
-                    learned
-                    <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
-                      ({formatCount(row.learnedKanji)})
-                    </span>
-                  </p>
-                </div>
 
-                <div className="mt-1 flex flex-wrap items-center gap-1 text-[10px]">
                   <span className="inline-flex items-center rounded-full border border-radical bg-radical px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
                     {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short}
-                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedRadicals)})</span>
+                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
+                      ({formatCount(row.reviewRadicalToday)})
+                    </span>
                   </span>
                   <span className="inline-flex items-center rounded-full border border-kanji bg-kanji px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
                     {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].short}
-                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedKanji)})</span>
+                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
+                      ({formatCount(row.reviewKanjiToday)})
+                    </span>
                   </span>
                   <span className="inline-flex items-center rounded-full border border-vocabulary bg-vocabulary px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
                     {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].short}
-                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatCount(row.learnedVocabulary)})</span>
+                    <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
+                      ({formatCount(row.reviewVocabularyToday)})
+                    </span>
                   </span>
                 </div>
               </li>
