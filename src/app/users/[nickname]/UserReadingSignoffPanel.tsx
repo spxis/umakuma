@@ -487,7 +487,6 @@ export default function UserReadingSignoffPanel({ accountId }: UserReadingSignof
         onBookChange={(nextBook) => updateFormField((prev) => ({ ...prev, bookTitle: nextBook }))}
         onPagesChange={(nextPages) => updateFormField((prev) => ({ ...prev, pagesRead: nextPages }))}
         onMinutesChange={(nextMinutes) => updateFormField((prev) => ({ ...prev, minutesRead: nextMinutes }))}
-        onDidReviewsChange={(nextDidReviews) => updateFormField((prev) => ({ ...prev, didWanikaniReviews: nextDidReviews }))}
       />
     </section>
   );

@@ -53,7 +53,6 @@ type UserReadingCheckinModalProps = {
   onBookChange: (nextBook: string) => void;
   onPagesChange: (nextPages: number) => void;
   onMinutesChange: (nextMinutes: number) => void;
-  onDidReviewsChange: (nextDidReviews: boolean) => void;
 };
 
 export default function UserReadingCheckinModal({
@@ -84,7 +83,6 @@ export default function UserReadingCheckinModal({
   onBookChange,
   onPagesChange,
   onMinutesChange,
-  onDidReviewsChange,
 }: UserReadingCheckinModalProps) {
   const [discardConfirmOpen, setDiscardConfirmOpen] = useState(false);
 
@@ -384,19 +382,6 @@ export default function UserReadingCheckinModal({
                 />
               </label>
             </>
-          ) : null}
-
-          {showWaniKani ? (
-            <label className="sm:col-span-2 flex items-center gap-2 rounded-lg border border-line bg-surface-muted px-3 py-2">
-              <input
-                type="checkbox"
-                checked={form.didWanikaniReviews}
-                onChange={(event) => {
-                  onDidReviewsChange(event.target.checked);
-                }}
-              />
-              <span className="text-sm font-semibold text-foreground/80">Did WaniKani activity</span>
-            </label>
           ) : null}
 
           {modalExistingEntry ? (
