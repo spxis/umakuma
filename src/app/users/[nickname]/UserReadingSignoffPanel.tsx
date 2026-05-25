@@ -440,6 +440,7 @@ export default function UserReadingSignoffPanel({
         todayMonthKey={todayMonthKey}
         isLoading={isLoading}
         trackedMembers={trackedMembers}
+        challengeBooks={challengeBooks}
         calendarCells={calendarCells}
         signoffByDayAndMember={signoffByDayAndMember}
         signoffEntriesByDayAndMember={signoffEntriesByDayAndMember}

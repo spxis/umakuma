@@ -45,7 +45,7 @@ export type ReadingSignoffDelegate = {
 export type ReadingChallengeBookDelegate = {
   findMany: (args: {
     where: { accountId: { in: string[] } };
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }];
+    orderBy: [{ createdAt: "asc" | "desc" }, { id: "asc" | "desc" }];
     select: {
       id: true;
       accountId: true;

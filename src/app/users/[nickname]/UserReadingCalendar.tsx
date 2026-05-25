@@ -1,13 +1,15 @@
+import Image from "next/image";
 import {
   READING_CAMPAIGN,
   dayKey,
   formatMonthLabel,
   isCampaignDate,
   shiftMonth,
+  type ReadingChallengeBookRecord,
   type ReadingSignoffEntryRecord,
   type ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
-import type { Dispatch, SetStateAction } from "react";
+import { useMemo, type Dispatch, type SetStateAction } from "react";
 
 import type { Member } from "./UserReadingSignoffPanel.types";
 
@@ -17,6 +19,7 @@ type UserReadingCalendarProps = {
   todayMonthKey: string;
   isLoading: boolean;
   trackedMembers: Member[];
+  challengeBooks: ReadingChallengeBookRecord[];
   calendarCells: Array<number | null>;
   signoffByDayAndMember: Map<string, Map<string, ReadingSignoffRecord>>;
   signoffEntriesByDayAndMember: Map<string, Map<string, ReadingSignoffEntryRecord[]>>;
@@ -32,12 +35,24 @@ export default function UserReadingCalendar({
   todayMonthKey,
   isLoading,
   trackedMembers,
+  challengeBooks,
   calendarCells,
   signoffByDayAndMember,
   signoffEntriesByDayAndMember,
   onMonthChange,
   onOpenCheckinModal,
 }: UserReadingCalendarProps) {
+  const thumbnailByMemberAndTitle = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const book of challengeBooks) {
+      if (!book.thumbnailUrl) {
+        continue;
+      }
+      map.set(`${book.accountId}::${book.title}`, book.thumbnailUrl);
+    }
+    return map;
+  }, [challengeBooks]);
+
   return (
     <section className="space-y-3 rounded-xl border border-line bg-surface p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -128,6 +143,23 @@ export default function UserReadingCalendar({
                     const totalReviewVocabulary = entries.reduce((sum, entry) => sum + entry.reviewIncorrect, 0);
                     const totalReviewRadical = entries.reduce((sum, entry) => sum + (entry.reviewSuccessPercent ?? 0), 0);
                     const totalReviewWork = entries.reduce((sum, entry) => sum + entry.reviewWorkDone, 0);
+                    let lastReadBookTitle: string | null = null;
+                    for (let index = entries.length - 1; index >= 0; index -= 1) {
+                      const entry = entries[index];
+                      if (entry.pagesRead > 0 || entry.minutesRead > 0) {
+                        lastReadBookTitle = entry.bookTitle;
+                        break;
+                      }
+                    }
+
+                    if (!lastReadBookTitle && daySignoff && (daySignoff.pagesRead > 0 || daySignoff.minutesRead > 0)) {
+                      lastReadBookTitle = daySignoff.bookTitle;
+                    }
+
+                    const lastReadBookThumbnail = lastReadBookTitle
+                      ? thumbnailByMemberAndTitle.get(`${member.id}::${lastReadBookTitle}`) ?? null
+                      : null;
+
                     return (
                       <div
                         key={`${key}-${member.id}`}
@@ -135,7 +167,20 @@ export default function UserReadingCalendar({
                       >
                         <div className="flex items-center justify-between gap-1">
                           <span className="truncate">{member.nickname}</span>
-                          <span>{hasEntryLogs ? `${entries.length} logs` : "Saved summary"}</span>
+                          <span className="flex items-center gap-1">
+                            {lastReadBookThumbnail ? (
+                              <span className="h-4 w-3 overflow-hidden rounded border border-emerald-400/70 bg-white" title={lastReadBookTitle ?? undefined}>
+                                <Image
+                                  src={lastReadBookThumbnail}
+                                  alt={lastReadBookTitle ?? "Last read book"}
+                                  width={24}
+                                  height={32}
+                                  className="h-full w-full object-cover"
+                                />
+                              </span>
+                            ) : null}
+                            <span>{hasEntryLogs ? `${entries.length} logs` : "Saved summary"}</span>
+                          </span>
                         </div>
                         {hasEntryLogs ? (
                           <div className="mt-0.5 space-y-0.5 text-[9px] font-semibold text-emerald-900/90">

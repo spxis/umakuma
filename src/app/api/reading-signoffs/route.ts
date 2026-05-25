@@ -154,7 +154,7 @@ export async function GET(request: Request) {
           where: {
             accountId: { in: targetAccountIds },
           },
-          orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+          orderBy: [{ createdAt: "desc" }, { id: "desc" }],
           select: {
             id: true,
             accountId: true,
@@ -173,7 +173,7 @@ export async function GET(request: Request) {
           where: {
             accountId: { in: targetAccountIds },
           },
-          orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+          orderBy: [{ createdAt: "desc" }, { id: "desc" }],
           select: {
             id: true,
             accountId: true,

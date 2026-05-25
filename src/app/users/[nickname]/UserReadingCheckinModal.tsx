@@ -83,6 +83,8 @@ export default function UserReadingCheckinModal({
   onMinutesChange,
 }: UserReadingCheckinModalProps) {
   const [discardConfirmOpen, setDiscardConfirmOpen] = useState(false);
+  const [showAddBookForm, setShowAddBookForm] = useState(false);
+  const [previewBook, setPreviewBook] = useState<ReadingChallengeBookRecord | null>(null);
 
   function requestCloseWithConfirm() {
     if (!isDirty) {
@@ -140,6 +142,10 @@ export default function UserReadingCheckinModal({
         : "nothing yet";
   const showReading = checkinMode === "reading" || checkinMode === "both";
   const showWaniKani = checkinMode === "wanikani" || checkinMode === "both";
+
+  function toggleBookPreview(book: ReadingChallengeBookRecord) {
+    setPreviewBook((prev) => (prev?.id === book.id ? null : book));
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-2 sm:p-6">
@@ -215,7 +221,18 @@ export default function UserReadingCheckinModal({
           <section className="mt-3 rounded-xl border border-line bg-surface-muted p-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h4 className="text-sm font-black text-foreground">Challenge books</h4>
-              <span className="text-xs text-foreground/70">Need at least 3 books to play</span>
+              <div className="ml-auto flex items-center gap-2">
+                <span className="text-xs text-foreground/70">Need at least 3 books to play</span>
+                <button
+                  type="button"
+                  onClick={() => setShowAddBookForm((prev) => !prev)}
+                  className="inline-flex h-8 items-center gap-1 rounded-full border border-line bg-surface px-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground"
+                  aria-expanded={showAddBookForm}
+                >
+                  <span className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-line text-[10px] leading-none">+</span>
+                  <span>{showAddBookForm ? "Hide add" : "Add books"}</span>
+                </button>
+              </div>
             </div>
             <div className="mt-2 overflow-x-auto pb-1">
               <div className="flex min-w-max gap-1.5">
@@ -224,47 +241,56 @@ export default function UserReadingCheckinModal({
                   return (
                     <div
                       key={book.id}
-                      className={`w-33 shrink-0 rounded-lg border p-1.5 ${selected ? "border-accent bg-accent/5" : "border-line bg-surface"}`}
+                      className={`h-64 w-33 shrink-0 rounded-lg border p-1.5 ${selected ? "border-accent bg-accent/5" : "border-line bg-surface"}`}
                     >
-                      <button
-                        type="button"
-                        className="w-full text-left"
-                        onClick={() => onBookChange(book.title)}
-                      >
-                        <div className="aspect-3/4 overflow-hidden rounded border border-line bg-surface-muted">
-                          {book.thumbnailUrl ? (
-                            <Image
-                              src={book.thumbnailUrl}
-                              alt={book.title}
-                              width={120}
-                              height={160}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-full w-full items-center justify-center text-[10px] text-foreground/60">No cover</div>
-                          )}
-                        </div>
-                        <p className="mt-1 line-clamp-2 text-xs font-semibold text-foreground">{book.title}</p>
-                        <p className="text-[10px] text-foreground/60">ISBN {book.isbn}</p>
-                      </button>
-                      <div className="mt-1 flex items-center justify-between gap-1">
-                        {book.infoUrl ? (
-                          <a
-                            href={book.infoUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent"
-                          >
-                            Open
-                          </a>
-                        ) : <span />}
+                      <div className="flex h-full flex-col">
                         <button
                           type="button"
-                          onClick={() => onDeleteBook(book.id)}
-                          className="text-[10px] font-bold uppercase tracking-[0.08em] text-rose-700"
+                          className="w-full text-left"
+                          onClick={() => toggleBookPreview(book)}
+                          aria-label={`Preview ${book.title}`}
                         >
-                          Delete
+                          <div className="aspect-3/4 overflow-hidden rounded border border-line bg-surface-muted">
+                            {book.thumbnailUrl ? (
+                              <Image
+                                src={book.thumbnailUrl}
+                                alt={book.title}
+                                width={120}
+                                height={160}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center text-[10px] text-foreground/60">No cover</div>
+                            )}
+                          </div>
                         </button>
+                        <button
+                          type="button"
+                          className="mt-1 w-full text-left"
+                          onClick={() => onBookChange(book.title)}
+                        >
+                          <p className="line-clamp-2 min-h-8 text-xs font-semibold text-foreground">{book.title}</p>
+                          <p className="text-[10px] text-foreground/60">ISBN {book.isbn}</p>
+                        </button>
+                        <div className="mt-auto flex items-center justify-between gap-1 pt-1">
+                          {book.infoUrl ? (
+                            <a
+                              href={book.infoUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent"
+                            >
+                              Open
+                            </a>
+                          ) : <span />}
+                          <button
+                            type="button"
+                            onClick={() => onDeleteBook(book.id)}
+                            className="text-[10px] font-bold uppercase tracking-[0.08em] text-rose-700"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );
@@ -272,12 +298,8 @@ export default function UserReadingCheckinModal({
               </div>
             </div>
 
-            <details className="mt-3 group">
-              <summary className="inline-flex h-10 cursor-pointer list-none items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] marker:hidden">
-                <span className="group-open:hidden">Add book</span>
-                <span className="hidden group-open:inline">Close add book</span>
-              </summary>
-              <div className="mt-2 flex flex-wrap items-end gap-2">
+            {showAddBookForm ? (
+              <div className="mt-3 flex flex-wrap items-end gap-2">
                 <label className="flex-1 min-w-48">
                   <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">Add by ISBN</span>
                   <input
@@ -299,9 +321,43 @@ export default function UserReadingCheckinModal({
                   Save book
                 </button>
               </div>
-            </details>
+            ) : null}
             {bookActionMessage ? <p className="mt-2 text-xs text-foreground/70">{bookActionMessage}</p> : null}
           </section>
+        ) : null}
+
+        {previewBook ? (
+          <div
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4"
+            onClick={() => setPreviewBook(null)}
+            role="dialog"
+            aria-label="Book cover preview"
+          >
+            <div className="max-h-[90vh] w-full max-w-xl" onClick={(event) => event.stopPropagation()}>
+              <button
+                type="button"
+                onClick={() => setPreviewBook(null)}
+                className="mb-2 ml-auto block rounded-full border border-white/40 bg-black/40 px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-white"
+              >
+                Close preview
+              </button>
+              <button type="button" className="w-full" onClick={() => setPreviewBook(null)}>
+                <div className="overflow-hidden rounded-xl border border-white/30 bg-black/20">
+                  {previewBook.thumbnailUrl ? (
+                    <Image
+                      src={previewBook.thumbnailUrl}
+                      alt={previewBook.title}
+                      width={640}
+                      height={900}
+                      className="h-auto w-full object-contain"
+                    />
+                  ) : (
+                    <div className="flex min-h-96 items-center justify-center text-sm font-semibold text-white/80">No cover available</div>
+                  )}
+                </div>
+              </button>
+            </div>
+          </div>
         ) : null}
 
         {showWaniKani ? (
