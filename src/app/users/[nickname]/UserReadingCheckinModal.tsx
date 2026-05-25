@@ -142,6 +142,8 @@ export default function UserReadingCheckinModal({
       : checkinMode === "wanikani"
         ? "WaniKani"
         : "nothing yet";
+  const showReading = checkinMode === "reading" || checkinMode === "both";
+  const showWaniKani = checkinMode === "wanikani" || checkinMode === "both";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-3 sm:p-6">
@@ -181,117 +183,31 @@ export default function UserReadingCheckinModal({
         ) : null}
 
         <section className="mt-4 rounded-xl border border-line bg-surface-muted p-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h4 className="text-sm font-black text-foreground">Challenge books</h4>
-            <span className="text-xs text-foreground/70">Need at least 3 books to play</span>
-          </div>
-          <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {memberBooks.map((book) => {
-              const selected = form.bookTitle === book.title;
-              return (
-                <div key={book.id} className={`rounded-lg border p-2 ${selected ? "border-accent bg-accent/5" : "border-line bg-surface"}`}>
-                  <button
-                    type="button"
-                    className="w-full text-left"
-                    onClick={() => onBookChange(book.title)}
-                  >
-                    <div className="aspect-[3/4] overflow-hidden rounded border border-line bg-surface-muted">
-                      {book.thumbnailUrl ? (
-                        <Image
-                          src={book.thumbnailUrl}
-                          alt={book.title}
-                          width={160}
-                          height={220}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[10px] text-foreground/60">No cover</div>
-                      )}
-                    </div>
-                    <p className="mt-1 line-clamp-2 text-xs font-semibold text-foreground">{book.title}</p>
-                    <p className="text-[10px] text-foreground/60">ISBN {book.isbn}</p>
-                  </button>
-                  <div className="mt-1 flex items-center justify-between gap-1">
-                    {book.infoUrl ? (
-                      <a
-                        href={book.infoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent"
-                      >
-                        Open
-                      </a>
-                    ) : <span />}
-                    <button
-                      type="button"
-                      onClick={() => onDeleteBook(book.id)}
-                      className="text-[10px] font-bold uppercase tracking-[0.08em] text-rose-700"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <details className="mt-3 group">
-            <summary className="inline-flex h-10 cursor-pointer list-none items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] marker:hidden">
-              <span className="group-open:hidden">Add book</span>
-              <span className="hidden group-open:inline">Close add book</span>
-            </summary>
-            <div className="mt-2 flex flex-wrap items-end gap-2">
-              <label className="flex-1 min-w-[12rem]">
-                <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">Add by ISBN</span>
-                <input
-                  type="text"
-                  maxLength={32}
-                  className="mt-1 h-10 w-full rounded-lg border border-line bg-surface px-3 text-sm"
-                  value={addIsbn}
-                  onChange={(event) => onAddIsbnChange(event.target.value)}
-                  placeholder="4-09-140108-2"
-                />
-              </label>
-              <button
-                type="button"
-                onClick={() => {
-                  void onAddBook();
-                }}
-                className="h-10 rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em]"
-              >
-                Save book
-              </button>
-            </div>
-          </details>
-          {bookActionMessage ? <p className="mt-2 text-xs text-foreground/70">{bookActionMessage}</p> : null}
-        </section>
-
-        <section className="mt-4 rounded-xl border border-line bg-surface-muted p-3">
-          <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Check-in mode</p>
+          <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">What are you checking in?</p>
           <div className="mt-2 grid gap-2 sm:grid-cols-3">
             <button
               type="button"
-              className={`rounded-xl border px-3 py-3 text-left ${checkinMode === "reading" ? "border-accent bg-accent/10" : "border-line bg-surface"}`}
+              className={`rounded-xl border px-3 py-3 text-left transition ${checkinMode === "reading" ? "border-accent bg-accent/10" : "border-line bg-surface hover:bg-surface-muted"}`}
               onClick={onQuickReading}
             >
               <p className="text-sm font-black text-foreground">Reading</p>
-              <p className="text-xs text-foreground/70">Logs reading only.</p>
+              <p className="text-xs text-foreground/70">Log book pages and minutes.</p>
             </button>
             <button
               type="button"
-              className={`rounded-xl border px-3 py-3 text-left ${checkinMode === "wanikani" ? "border-accent bg-accent/10" : "border-line bg-surface"}`}
+              className={`rounded-xl border px-3 py-3 text-left transition ${checkinMode === "wanikani" ? "border-accent bg-accent/10" : "border-line bg-surface hover:bg-surface-muted"}`}
               onClick={onQuickWaniKani}
             >
               <p className="text-sm font-black text-foreground">WaniKani</p>
-              <p className="text-xs text-foreground/70">Logs WaniKani only.</p>
+              <p className="text-xs text-foreground/70">Log WaniKani activity only.</p>
             </button>
             <button
               type="button"
-              className={`rounded-xl border px-3 py-3 text-left ${checkinMode === "both" ? "border-accent bg-accent/10" : "border-line bg-surface"}`}
+              className={`rounded-xl border px-3 py-3 text-left transition ${checkinMode === "both" ? "border-accent bg-accent/10" : "border-line bg-surface hover:bg-surface-muted"}`}
               onClick={onQuickBoth}
             >
               <p className="text-sm font-black text-foreground">Both</p>
-              <p className="text-xs text-foreground/70">Logs reading + WaniKani.</p>
+              <p className="text-xs text-foreground/70">Log reading and WaniKani.</p>
             </button>
           </div>
           <p className="mt-2 text-xs text-foreground/70">
@@ -299,44 +215,115 @@ export default function UserReadingCheckinModal({
           </p>
         </section>
 
-        <div className="mt-3 grid gap-2 sm:grid-cols-2">
-          <button
-            type="button"
-            className="rounded-xl border border-line bg-surface-muted px-3 py-2 text-left"
-            onClick={onQuickReading}
-          >
-            <p className="text-sm font-black text-foreground">Quick reading</p>
-            <p className="text-xs text-foreground/70">Sets reading mode in one click.</p>
-          </button>
-          <button
-            type="button"
-            className="rounded-xl border border-line bg-surface-muted px-3 py-2 text-left"
-            onClick={onQuickWaniKani}
-          >
-            <p className="text-sm font-black text-foreground">Quick WaniKani</p>
-            <p className="text-xs text-foreground/70">Sets WaniKani-only mode in one click.</p>
-          </button>
-        </div>
+        {showReading ? (
+          <section className="mt-3 rounded-xl border border-line bg-surface-muted p-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h4 className="text-sm font-black text-foreground">Challenge books</h4>
+              <span className="text-xs text-foreground/70">Need at least 3 books to play</span>
+            </div>
+            <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {memberBooks.map((book) => {
+                const selected = form.bookTitle === book.title;
+                return (
+                  <div key={book.id} className={`rounded-lg border p-2 ${selected ? "border-accent bg-accent/5" : "border-line bg-surface"}`}>
+                    <button
+                      type="button"
+                      className="w-full text-left"
+                      onClick={() => onBookChange(book.title)}
+                    >
+                      <div className="aspect-3/4 overflow-hidden rounded border border-line bg-surface-muted">
+                        {book.thumbnailUrl ? (
+                          <Image
+                            src={book.thumbnailUrl}
+                            alt={book.title}
+                            width={160}
+                            height={220}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-[10px] text-foreground/60">No cover</div>
+                        )}
+                      </div>
+                      <p className="mt-1 line-clamp-2 text-xs font-semibold text-foreground">{book.title}</p>
+                      <p className="text-[10px] text-foreground/60">ISBN {book.isbn}</p>
+                    </button>
+                    <div className="mt-1 flex items-center justify-between gap-1">
+                      {book.infoUrl ? (
+                        <a
+                          href={book.infoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[10px] font-bold uppercase tracking-[0.08em] text-accent"
+                        >
+                          Open
+                        </a>
+                      ) : <span />}
+                      <button
+                        type="button"
+                        onClick={() => onDeleteBook(book.id)}
+                        className="text-[10px] font-bold uppercase tracking-[0.08em] text-rose-700"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-        <section className="mt-3 rounded-xl border border-line bg-surface-muted p-3">
-          <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Current review queue snapshot</p>
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-foreground/85">
-            <span className="subject-pill subject-pill--radical">
-              {subjectTypePluralLabel(SUBJECT_TYPES.radical)} left: {selectedReviewQueue.radical}
-            </span>
-            <span className="subject-pill subject-pill--kanji">
-              {subjectTypePluralLabel(SUBJECT_TYPES.kanji)} left: {selectedReviewQueue.kanji}
-            </span>
-            <span className="subject-pill subject-pill--vocabulary">
-              {subjectTypePluralLabel(SUBJECT_TYPES.vocabulary)} left: {selectedReviewQueue.vocabulary}
-            </span>
-          </div>
-          <p className={`mt-1 text-xs ${zeroReviewsBonusActive ? "text-emerald-700" : "text-foreground/70"}`}>
-            {zeroReviewsBonusActive
-              ? "Special bonus active: review queue is at 0."
-              : `${selectedReviewQueue.total} total reviews currently due.`}
-          </p>
-        </section>
+            <details className="mt-3 group">
+              <summary className="inline-flex h-10 cursor-pointer list-none items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] marker:hidden">
+                <span className="group-open:hidden">Add book</span>
+                <span className="hidden group-open:inline">Close add book</span>
+              </summary>
+              <div className="mt-2 flex flex-wrap items-end gap-2">
+                <label className="flex-1 min-w-48">
+                  <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">Add by ISBN</span>
+                  <input
+                    type="text"
+                    maxLength={32}
+                    className="mt-1 h-10 w-full rounded-lg border border-line bg-surface px-3 text-sm"
+                    value={addIsbn}
+                    onChange={(event) => onAddIsbnChange(event.target.value)}
+                    placeholder="4-09-140108-2"
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    void onAddBook();
+                  }}
+                  className="h-10 rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em]"
+                >
+                  Save book
+                </button>
+              </div>
+            </details>
+            {bookActionMessage ? <p className="mt-2 text-xs text-foreground/70">{bookActionMessage}</p> : null}
+          </section>
+        ) : null}
+
+        {showWaniKani ? (
+          <section className="mt-3 rounded-xl border border-line bg-surface-muted p-3">
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Current review queue snapshot</p>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-foreground/85">
+              <span className="subject-pill subject-pill--radical">
+                {subjectTypePluralLabel(SUBJECT_TYPES.radical)} left: {selectedReviewQueue.radical}
+              </span>
+              <span className="subject-pill subject-pill--kanji">
+                {subjectTypePluralLabel(SUBJECT_TYPES.kanji)} left: {selectedReviewQueue.kanji}
+              </span>
+              <span className="subject-pill subject-pill--vocabulary">
+                {subjectTypePluralLabel(SUBJECT_TYPES.vocabulary)} left: {selectedReviewQueue.vocabulary}
+              </span>
+            </div>
+            <p className={`mt-1 text-xs ${zeroReviewsBonusActive ? "text-emerald-700" : "text-foreground/70"}`}>
+              {zeroReviewsBonusActive
+                ? "Special bonus active: review queue is at 0."
+                : `${selectedReviewQueue.total} total reviews currently due.`}
+            </p>
+          </section>
+        ) : null}
 
         <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={onSubmit}>
           <label className="flex flex-col gap-1">
@@ -350,68 +337,67 @@ export default function UserReadingCheckinModal({
             />
           </label>
 
-          <label className="flex flex-col gap-1">
-            <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Book</span>
-            <select
-              className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
-              value={form.bookTitle}
-              onChange={(event) => onBookChange(event.target.value)}
-              disabled={!hasReadingActivity}
-            >
-              <option value="">
-                No reading (WaniKani-only check-in)
-              </option>
-              {memberBooks.map((book) => (
-                <option key={book.id} value={book.title}>
-                  {book.title}
-                </option>
-              ))}
-            </select>
-          </label>
+          {showReading ? (
+            <>
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Book</span>
+                <select
+                  className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
+                  value={form.bookTitle}
+                  onChange={(event) => onBookChange(event.target.value)}
+                >
+                  <option value="">Pick a challenge book</option>
+                  {memberBooks.map((book) => (
+                    <option key={book.id} value={book.title}>
+                      {book.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-          <label className="flex flex-col gap-1">
-            <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Pages read</span>
-            <input
-              type="number"
-              min={0}
-              max={2000}
-              className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
-              value={form.pagesRead}
-              onChange={(event) => onPagesChange(Number(event.target.value))}
-              disabled={!hasReadingActivity}
-            />
-            <span className={`text-[11px] ${bonusReady ? "text-emerald-700" : "text-foreground/70"}`}>
-              {bonusReady
-                ? "Bonus unlocked: +JPY 250 for the extra 5 pages streak."
-                : `Read ${pagesToBonus} more page${pagesToBonus === 1 ? "" : "s"} to earn +JPY 250.`}
-            </span>
-          </label>
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Pages read</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={2000}
+                  className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
+                  value={form.pagesRead}
+                  onChange={(event) => onPagesChange(Number(event.target.value))}
+                />
+                <span className={`text-[11px] ${bonusReady ? "text-emerald-700" : "text-foreground/70"}`}>
+                  {bonusReady
+                    ? "Bonus unlocked: +JPY 250 for the extra 5 pages streak."
+                    : `Read ${pagesToBonus} more page${pagesToBonus === 1 ? "" : "s"} to earn +JPY 250.`}
+                </span>
+              </label>
 
-          <label className="flex flex-col gap-1">
-            <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Minutes read</span>
-            <input
-              type="number"
-              min={0}
-              max={1440}
-              className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
-              value={form.minutesRead}
-              onChange={(event) => onMinutesChange(Number(event.target.value))}
-              disabled={!hasReadingActivity}
-            />
-          </label>
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Minutes read</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={1440}
+                  className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
+                  value={form.minutesRead}
+                  onChange={(event) => onMinutesChange(Number(event.target.value))}
+                />
+              </label>
+            </>
+          ) : null}
 
-          <label className="sm:col-span-2 flex items-center gap-2 rounded-lg border border-line bg-surface-muted px-3 py-2">
-            <input
-              type="checkbox"
-              checked={form.didWanikaniReviews}
-              onChange={(event) => {
-                onDidReviewsChange(event.target.checked);
-              }}
-            />
-            <span className="text-sm font-semibold text-foreground/80">
-              Did WaniKani activity
-            </span>
-          </label>
+          {showWaniKani ? (
+            <label className="sm:col-span-2 flex items-center gap-2 rounded-lg border border-line bg-surface-muted px-3 py-2">
+              <input
+                type="checkbox"
+                checked={form.didWanikaniReviews}
+                onChange={(event) => {
+                  onDidReviewsChange(event.target.checked);
+                }}
+              />
+              <span className="text-sm font-semibold text-foreground/80">Did WaniKani activity</span>
+            </label>
+          ) : null}
 
           {modalExistingEntry ? (
             <p className="sm:col-span-2 text-xs text-foreground/70">
@@ -419,9 +405,11 @@ export default function UserReadingCheckinModal({
             </p>
           ) : null}
 
-          <p className="sm:col-span-2 text-xs text-foreground/70">
-            WaniKani-only check-in is valid: no reading numbers and no selected book.
-          </p>
+          {!showReading ? (
+            <p className="sm:col-span-2 text-xs text-foreground/70">
+              WaniKani-only check-in is valid: no reading numbers and no selected book.
+            </p>
+          ) : null}
 
           <div className="sm:col-span-2 flex flex-wrap items-center gap-3">
             <button
