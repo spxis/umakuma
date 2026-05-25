@@ -55,12 +55,12 @@ export default function UserReadingRewardsSummary({
         </div>
       </section>
 
-      {showTrackingManager ? (
-        <section className="rounded-xl border border-line bg-surface p-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-base font-black text-foreground">Tracked players</h3>
-            <p className="text-xs text-foreground/65">Admins can choose who appears in this challenge leaderboard.</p>
-          </div>
+      <section className="rounded-xl border border-line bg-surface p-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="text-base font-black text-foreground">Tracked players</h3>
+          <p className="text-xs text-foreground/65">Admins can choose who appears in this challenge leaderboard.</p>
+        </div>
+        {showTrackingManager ? (
           <div className="mt-2 flex flex-wrap gap-2">
             {members.map((member) => {
               const tracked = trackedMemberSet.has(member.id);
@@ -80,8 +80,12 @@ export default function UserReadingRewardsSummary({
               );
             })}
           </div>
-        </section>
-      ) : null}
+        ) : (
+          <p className="mt-2 text-xs text-foreground/60">
+            You can view this roster, but only admin accounts can change tracked players.
+          </p>
+        )}
+      </section>
 
       <section className="rounded-xl border border-line bg-surface p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">

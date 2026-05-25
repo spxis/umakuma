@@ -92,7 +92,9 @@ const ISBN10_PATTERN = /^\d{9}[\dX]$/i;
 const ISBN13_PATTERN = /^\d{13}$/;
 
 export function normalizeIsbn(input: string): string | null {
-  const compact = input.replace(/[^\dXx]/g, "").toUpperCase();
+  // Accept both ASCII and full-width JP input forms (digits, separators, and X).
+  const normalized = input.normalize("NFKC");
+  const compact = normalized.replace(/[^\dXx]/g, "").toUpperCase();
   if (ISBN10_PATTERN.test(compact) || ISBN13_PATTERN.test(compact)) {
     return compact;
   }
