@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { READING_CAMPAIGN, formatCampaignDateLabel } from "@/lib/readingSignoff";
 
 type LeaderboardRow = {
@@ -159,9 +160,15 @@ export default function UserReadingRewardsSummary({
                       <p className="text-xs font-semibold uppercase tracking-[0.06em] text-foreground/65">WK {row.wkLevel}</p>
                     </div>
                     <div className="mt-1 flex flex-wrap gap-1.5 text-xs font-semibold text-foreground/80">
-                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">K {row.learnedKanji} (today {row.reviewKanjiToday})</span>
-                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">R {row.learnedRadicals} (today {row.reviewRadicalToday})</span>
-                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">V {row.learnedVocabulary} (today {row.reviewVocabularyToday})</span>
+                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">
+                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular} learned {row.learnedKanji} (today {row.reviewKanjiToday})
+                      </span>
+                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">
+                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural} learned {row.learnedRadicals} (today {row.reviewRadicalToday})
+                      </span>
+                      <span className="rounded-full border border-line bg-surface px-2 py-0.5">
+                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].plural} learned {row.learnedVocabulary} (today {row.reviewVocabularyToday})
+                      </span>
                     </div>
                   </div>
 
