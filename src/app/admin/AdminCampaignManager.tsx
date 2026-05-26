@@ -1,16 +1,17 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  CAMPAIGN_STATUS_OPTIONS,
   campaignToForm,
   createDefaultCampaignForm,
   parseScoringRules,
   shouldConfirmActivation,
 } from "./AdminCampaignManager.lib";
+import AdminCampaignEditorForm from "./AdminCampaignEditorForm";
 import type {
   CampaignForm,
   CampaignMutationResponse,
   CampaignRecord,
+  CampaignStatusMutationResponse,
   CampaignStatus,
   CampaignsResponse,
 } from "./AdminCampaignManager.types";
@@ -34,6 +35,7 @@ export default function AdminCampaignManager() {
   const [loading, setLoading] = useState(true);
   const [savingEdit, setSavingEdit] = useState(false);
   const [savingCreate, setSavingCreate] = useState(false);
+  const [statusUpdating, setStatusUpdating] = useState<CampaignStatus | null>(null);
   const [status, setStatus] = useState<{ type: "idle" | "ok" | "error"; message: string }>({
     type: "idle",
     message: "",
@@ -213,6 +215,59 @@ export default function AdminCampaignManager() {
     }
   }
 
+  async function updateCampaignStatus(nextStatus: CampaignStatus) {
+    if (!selectedCampaign) {
+      setStatus({ type: "error", message: "Pick a campaign first." });
+      return;
+    }
+
+    setStatusUpdating(nextStatus);
+    setStatus({ type: "idle", message: "" });
+    try {
+      if (nextStatus === selectedCampaign.status) {
+        setStatus({ type: "ok", message: "Campaign already has that status." });
+        return;
+      }
+
+      if (shouldConfirmActivation({
+        nextStatus,
+        currentCampaignId: selectedCampaign.id,
+        campaigns,
+      })) {
+        const accepted = window.confirm(
+          "Set this campaign as active and mark other active campaigns as completed?",
+        );
+        if (!accepted) {
+          return;
+        }
+      }
+
+      const response = await fetch("/api/admin/reading-campaigns/status", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: selectedCampaign.id, status: nextStatus }),
+      });
+
+      const payload = (await response.json()) as CampaignStatusMutationResponse;
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Could not update campaign status.");
+      }
+
+      setEditForm((previous) => ({ ...previous, status: payload.campaign.status }));
+      setStatus({ type: "ok", message: `Campaign status set to ${payload.campaign.status}.` });
+      await refreshCampaigns(payload.campaign.id);
+    } catch (error) {
+      setStatus({
+        type: "error",
+        message: error instanceof Error ? error.message : "Could not update campaign status.",
+      });
+    } finally {
+      setStatusUpdating(null);
+    }
+  }
+
   return (
     <section id="reading-campaigns" className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -246,7 +301,7 @@ export default function AdminCampaignManager() {
             value={selectedCampaignId}
             onChange={(event) => setSelectedCampaignId(event.target.value)}
             className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={campaigns.length === 0 || loading}
+            disabled={campaigns.length === 0 || loading || Boolean(statusUpdating)}
           >
             {campaigns.length === 0 ? <option value="">No campaigns found</option> : null}
             {campaigns.map((campaign) => (
@@ -256,7 +311,50 @@ export default function AdminCampaignManager() {
             ))}
           </select>
 
-          <CampaignEditorForm form={editForm} onChange={updateEditForm} disabled={!selectedCampaign || savingEdit} />
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => {
+                void updateCampaignStatus("active");
+              }}
+              className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-emerald-50 px-3 text-xs font-bold uppercase tracking-widest text-emerald-800 transition hover:bg-emerald-100 disabled:opacity-60"
+              disabled={!selectedCampaign || Boolean(statusUpdating)}
+            >
+              {statusUpdating === "active" ? "Setting active..." : "Set active"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                void updateCampaignStatus("completed");
+              }}
+              className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-amber-50 px-3 text-xs font-bold uppercase tracking-widest text-amber-800 transition hover:bg-amber-100 disabled:opacity-60"
+              disabled={!selectedCampaign || Boolean(statusUpdating)}
+            >
+              {statusUpdating === "completed" ? "Updating..." : "Set completed"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                void updateCampaignStatus("archived");
+              }}
+              className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-slate-100 px-3 text-xs font-bold uppercase tracking-widest text-slate-800 transition hover:bg-slate-200 disabled:opacity-60"
+              disabled={!selectedCampaign || Boolean(statusUpdating)}
+            >
+              {statusUpdating === "archived" ? "Updating..." : "Set archived"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                void updateCampaignStatus("draft");
+              }}
+              className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-blue-50 px-3 text-xs font-bold uppercase tracking-widest text-blue-800 transition hover:bg-blue-100 disabled:opacity-60"
+              disabled={!selectedCampaign || Boolean(statusUpdating)}
+            >
+              {statusUpdating === "draft" ? "Updating..." : "Set draft"}
+            </button>
+          </div>
+
+          <AdminCampaignEditorForm form={editForm} onChange={updateEditForm} disabled={!selectedCampaign || savingEdit || Boolean(statusUpdating)} />
 
           <button
             type="button"
@@ -264,7 +362,7 @@ export default function AdminCampaignManager() {
               void saveCampaignEdits();
             }}
             className="mt-3 inline-flex h-10 items-center justify-center rounded-full border border-line bg-accent px-4 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:brightness-95 disabled:opacity-60"
-            disabled={!selectedCampaign || savingEdit}
+            disabled={!selectedCampaign || savingEdit || Boolean(statusUpdating)}
           >
             {savingEdit ? "Saving..." : "Save campaign changes"}
           </button>
@@ -272,7 +370,7 @@ export default function AdminCampaignManager() {
 
         <div className="rounded-xl border border-line bg-surface-muted/60 p-4">
           <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Create campaign</p>
-          <CampaignEditorForm form={createForm} onChange={updateCreateForm} disabled={savingCreate} includeIdInput />
+          <AdminCampaignEditorForm form={createForm} onChange={updateCreateForm} disabled={savingCreate || Boolean(statusUpdating)} includeIdInput />
 
           <button
             type="button"
@@ -280,7 +378,7 @@ export default function AdminCampaignManager() {
               void createCampaign();
             }}
             className="mt-3 inline-flex h-10 items-center justify-center rounded-full border border-line bg-accent px-4 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:brightness-95 disabled:opacity-60"
-            disabled={savingCreate}
+            disabled={savingCreate || Boolean(statusUpdating)}
           >
             {savingCreate ? "Creating..." : "Create campaign"}
           </button>
@@ -301,151 +399,5 @@ export default function AdminCampaignManager() {
         </div>
       ) : null}
     </section>
-  );
-}
-
-type CampaignEditorFormProps = {
-  form: CampaignForm;
-  onChange: <K extends keyof CampaignForm>(key: K, value: CampaignForm[K]) => void;
-  disabled: boolean;
-  includeIdInput?: boolean;
-};
-
-function CampaignEditorForm({ form, onChange, disabled, includeIdInput = false }: CampaignEditorFormProps) {
-  return (
-    <div className="mt-3 space-y-3">
-      {includeIdInput ? (
-        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor="campaign-id">
-          Campaign id (optional)
-          <input
-            id="campaign-id"
-            type="text"
-            value={form.id}
-            onChange={(event) => onChange("id", event.target.value)}
-            placeholder="challenge_40000_jpy"
-            className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={disabled}
-          />
-        </label>
-      ) : null}
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-slug-${includeIdInput ? "create" : "edit"}`}>
-          Slug
-          <input
-            id={`campaign-slug-${includeIdInput ? "create" : "edit"}`}
-            type="text"
-            value={form.slug}
-            onChange={(event) => onChange("slug", event.target.value)}
-            placeholder="fall-2026-reading-push"
-            className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={disabled}
-          />
-        </label>
-        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-status-${includeIdInput ? "create" : "edit"}`}>
-          Status
-          <select
-            id={`campaign-status-${includeIdInput ? "create" : "edit"}`}
-            value={form.status}
-            onChange={(event) => onChange("status", event.target.value as CampaignStatus)}
-            className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={disabled}
-          >
-            {CAMPAIGN_STATUS_OPTIONS.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-name-${includeIdInput ? "create" : "edit"}`}>
-        Name
-        <input
-          id={`campaign-name-${includeIdInput ? "create" : "edit"}`}
-          type="text"
-          value={form.name}
-          onChange={(event) => onChange("name", event.target.value)}
-          className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-          disabled={disabled}
-        />
-      </label>
-
-      <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-description-${includeIdInput ? "create" : "edit"}`}>
-        Description
-        <input
-          id={`campaign-description-${includeIdInput ? "create" : "edit"}`}
-          type="text"
-          value={form.description}
-          onChange={(event) => onChange("description", event.target.value)}
-          className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-          disabled={disabled}
-        />
-      </label>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-start-${includeIdInput ? "create" : "edit"}`}>
-          Start date (PST)
-          <input
-            id={`campaign-start-${includeIdInput ? "create" : "edit"}`}
-            type="date"
-            value={form.startDatePst}
-            onChange={(event) => onChange("startDatePst", event.target.value)}
-            className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={disabled}
-          />
-        </label>
-        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-goal-${includeIdInput ? "create" : "edit"}`}>
-          Goal date (PST)
-          <input
-            id={`campaign-goal-${includeIdInput ? "create" : "edit"}`}
-            type="date"
-            value={form.goalDatePst}
-            onChange={(event) => onChange("goalDatePst", event.target.value)}
-            className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={disabled}
-          />
-        </label>
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-trip-${includeIdInput ? "create" : "edit"}`}>
-          Trip date (PST)
-          <input
-            id={`campaign-trip-${includeIdInput ? "create" : "edit"}`}
-            type="date"
-            value={form.tripDatePst}
-            onChange={(event) => onChange("tripDatePst", event.target.value)}
-            className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={disabled}
-          />
-        </label>
-        <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-target-${includeIdInput ? "create" : "edit"}`}>
-          Target base yen
-          <input
-            id={`campaign-target-${includeIdInput ? "create" : "edit"}`}
-            type="number"
-            value={form.targetBaseYen}
-            min={0}
-            step={100}
-            onChange={(event) => onChange("targetBaseYen", Number(event.target.value || 0))}
-            className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={disabled}
-          />
-        </label>
-      </div>
-
-      <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor={`campaign-rules-${includeIdInput ? "create" : "edit"}`}>
-        Scoring rules (JSON)
-        <textarea
-          id={`campaign-rules-${includeIdInput ? "create" : "edit"}`}
-          value={form.scoringRulesText}
-          onChange={(event) => onChange("scoringRulesText", event.target.value)}
-          className="mt-1 min-h-57.5 w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-xs"
-          disabled={disabled}
-        />
-      </label>
-    </div>
   );
 }

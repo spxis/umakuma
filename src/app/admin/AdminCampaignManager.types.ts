@@ -39,3 +39,14 @@ export type CampaignMutationResponse = {
   campaign: CampaignRecord;
   error?: string;
 };
+
+export type CampaignStatusMutationResponse = {
+  campaign: {
+    id: string;
+    status: CampaignStatus;
+    slug: string;
+    name: string;
+    updatedAt: string;
+  };
+  error?: string;
+};

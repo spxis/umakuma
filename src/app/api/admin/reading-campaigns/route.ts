@@ -8,7 +8,7 @@ import { readingChallengeMutationSchema } from "@/lib/readingChallengeValidation
 
 const campaignMutationSchema = readingChallengeMutationSchema;
 
-const patchBodySchema = campaignMutationSchema.extend({
+const patchBodySchema = campaignMutationSchema.safeExtend({
   id: z.string().min(1).max(120),
 });
 

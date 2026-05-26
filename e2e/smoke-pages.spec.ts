@@ -189,6 +189,47 @@ test("user read history tab loads", async ({ browser, baseURL }) => {
   });
 });
 
+test("read check-ins campaign selector switches campaign fetch", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for read check-in campaign checks in this environment.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?dashboard=read`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+    if ((await accessGate.count()) > 0) {
+      await expect(accessGate).toBeVisible();
+      return;
+    }
+
+    const campaignSelect = page.locator("label:has-text('Campaign') select").first();
+    await expect(campaignSelect).toBeVisible();
+
+    const optionCount = await campaignSelect.locator("option").count();
+    if (optionCount <= 1) {
+      return;
+    }
+
+    const currentValue = await campaignSelect.inputValue();
+    const nextValue = await campaignSelect.locator("option").nth(1).getAttribute("value");
+    if (!nextValue || nextValue === currentValue) {
+      return;
+    }
+
+    const responsePromise = page.waitForResponse((response) => {
+      if (!response.url().includes("/api/reading-signoffs?")) {
+        return false;
+      }
+
+      const params = new URL(response.url()).searchParams;
+      return params.get("challengeId") === nextValue;
+    });
+
+    await campaignSelect.selectOption(nextValue);
+    await responsePromise;
+    await expect(campaignSelect).toHaveValue(nextValue);
+  });
+});
+
 test("study keeps all type filter on reload", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study filter checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
