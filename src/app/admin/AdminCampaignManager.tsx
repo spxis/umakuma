@@ -21,6 +21,8 @@ type AdminCampaignManagerProps = {
   checkingSession: boolean;
 };
 
+const CAMPAIGN_AUTH_REQUIRED_MESSAGE = "Sign in with an allowlisted Google account to load campaigns.";
+
 async function readApiErrorMessage(response: Response, fallbackMessage: string): Promise<string> {
   const contentType = response.headers.get("content-type") ?? "";
 
@@ -48,7 +50,7 @@ async function fetchCampaigns(): Promise<CampaignRecord[]> {
 
   if (!response.ok) {
     const fallbackMessage = response.status === 401
-      ? "Admin access is required before campaigns can load."
+      ? CAMPAIGN_AUTH_REQUIRED_MESSAGE
       : "Could not fetch campaigns.";
     throw new Error(await readApiErrorMessage(response, fallbackMessage));
   }
@@ -91,13 +93,15 @@ export default function AdminCampaignManager({ sessionAuthorized, checkingSessio
       setCampaigns([]);
       setSelectedCampaignId("");
       setEditForm(createDefaultCampaignForm());
-      setLoadError("Admin access is required before campaigns can load.");
+      setLoadError(CAMPAIGN_AUTH_REQUIRED_MESSAGE);
+      setStatus({ type: "idle", message: "" });
       setLoading(false);
       return;
     }
 
     setLoading(true);
     setLoadError("");
+    setStatus((previous) => (previous.type === "ok" ? previous : { type: "idle", message: "" }));
     try {
       const nextCampaigns = await fetchCampaigns();
       setCampaigns(nextCampaigns);
@@ -122,10 +126,6 @@ export default function AdminCampaignManager({ sessionAuthorized, checkingSessio
       }
     } catch (error) {
       setLoadError(error instanceof Error ? error.message : "Could not fetch campaigns.");
-      setStatus({
-        type: "error",
-        message: error instanceof Error ? error.message : "Could not refresh campaigns.",
-      });
     } finally {
       setLoading(false);
     }
@@ -341,7 +341,13 @@ export default function AdminCampaignManager({ sessionAuthorized, checkingSessio
       </div>
 
       {loadError ? (
-        <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <div
+          className={`mt-3 rounded-lg border px-3 py-2 text-sm ${
+            loadError === CAMPAIGN_AUTH_REQUIRED_MESSAGE
+              ? "border-amber-200 bg-amber-50 text-amber-800"
+              : "border-red-200 bg-red-50 text-red-700"
+          }`}
+        >
           {loadError}
         </div>
       ) : null}
