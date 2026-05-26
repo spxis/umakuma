@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth";
-
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { authOptions } from "@/lib/auth";
 import {
@@ -18,7 +17,6 @@ import {
   type ReadingSignoffEntryRecord,
   type ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
-
 export type ViewerAccountSummary = {
   id: string;
   nickname: string;
@@ -28,26 +26,76 @@ export type ViewerAccountSummary = {
   learnedRadicals: number;
   learnedVocabulary: number;
 };
-
 export type LatestSignoffSummary = {
   accountId: string;
   bookTitle: string;
   pagesRead: number;
   signoffDatePst: string;
 };
-
 export type ReadingSignoffDelegate = {
-  findMany: typeof prisma.readingSignoff.findMany;
-  findUnique: typeof prisma.readingSignoff.findUnique;
-  upsert: typeof prisma.readingSignoff.upsert;
+  findMany: (args: {
+    where: Record<string, unknown>;
+    orderBy?: Array<Record<string, "asc" | "desc">>;
+  }) => Promise<Array<{
+    id: string;
+    challengeId?: string | null;
+    accountId: string;
+    signoffDatePst: string;
+    bookTitle: string;
+    pagesRead: number;
+    minutesRead: number;
+    didWanikaniReviews: boolean;
+    reviewsLeft: number;
+    apprenticeCount: number;
+    currentWkLevel: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }>>;
+  findUnique: (args: {
+    where: { accountId_signoffDatePst: { accountId: string; signoffDatePst: string } };
+  }) => Promise<{
+    id: string;
+    challengeId?: string | null;
+    accountId: string;
+    signoffDatePst: string;
+    bookTitle: string;
+    pagesRead: number;
+    minutesRead: number;
+    didWanikaniReviews: boolean;
+    reviewsLeft: number;
+    apprenticeCount: number;
+    currentWkLevel: number;
+    createdAt: Date;
+    updatedAt: Date;
+  } | null>;
+  upsert: (args: {
+    where: { accountId_signoffDatePst: { accountId: string; signoffDatePst: string } };
+    update: Record<string, unknown>;
+    create: Record<string, unknown>;
+  }) => Promise<{
+    id: string;
+    challengeId?: string | null;
+    accountId: string;
+    signoffDatePst: string;
+    bookTitle: string;
+    pagesRead: number;
+    minutesRead: number;
+    didWanikaniReviews: boolean;
+    reviewsLeft: number;
+    apprenticeCount: number;
+    currentWkLevel: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }>;
 };
 
 export type ReadingChallengeBookDelegate = {
   findMany: (args: {
-    where: { accountId: { in: string[] } };
+    where: { accountId: { in: string[] }; challengeId?: string | null };
     orderBy: [{ createdAt: "asc" | "desc" }, { id: "asc" | "desc" }];
     select: {
       id: true;
+      challengeId?: true;
       accountId: true;
       isbn: true;
       title: true;
@@ -56,6 +104,7 @@ export type ReadingChallengeBookDelegate = {
     };
   }) => Promise<Array<{
     id: string;
+    challengeId?: string | null;
     accountId: string;
     isbn: string;
     title: string;
@@ -64,6 +113,7 @@ export type ReadingChallengeBookDelegate = {
   }>>;
   createMany: (args: {
     data: Array<{
+      challengeId?: string | null;
       accountId: string;
       isbn: string;
       title: string;
@@ -76,13 +126,19 @@ export type ReadingChallengeBookDelegate = {
 
 export type ReadingChallengeMemberDelegate = {
   findMany: (args: {
-    where: { accountId: { in: string[] } };
+    where: { accountId: { in: string[] }; challengeId?: string | null };
     select: { accountId: true; tracked: true };
   }) => Promise<Array<{ accountId: string; tracked: boolean }>>;
-  upsert: (args: {
-    where: { accountId: string };
-    update: { tracked: boolean };
-    create: { accountId: string; tracked: boolean };
+  findFirst: (args: {
+    where: { accountId: string; challengeId?: string | null };
+    select: { id: true; accountId: true; tracked: true };
+  }) => Promise<{ id: string; accountId: string; tracked: boolean } | null>;
+  update: (args: {
+    where: { id: string };
+    data: { tracked: boolean };
+  }) => Promise<{ accountId: string; tracked: boolean }>;
+  create: (args: {
+    data: { challengeId?: string | null; accountId: string; tracked: boolean };
   }) => Promise<{ accountId: string; tracked: boolean }>;
 };
 
@@ -123,6 +179,7 @@ function learnedCountsFromItemSpread(input: unknown): {
 
 export function toReadingSignoffRecord(row: {
   id: string;
+  challengeId?: string | null;
   accountId: string;
   signoffDatePst: string;
   bookTitle: string;
@@ -137,6 +194,7 @@ export function toReadingSignoffRecord(row: {
 }): ReadingSignoffRecord {
   return {
     id: row.id,
+    challengeId: row.challengeId ?? null,
     accountId: row.accountId,
     signoffDatePst: row.signoffDatePst,
     bookTitle: row.bookTitle,
@@ -153,6 +211,7 @@ export function toReadingSignoffRecord(row: {
 
 export function toReadingSignoffEntryRecord(row: {
   id: string;
+  challengeId?: string | null;
   accountId: string;
   signoffDatePst: string;
   bookTitle: string;
@@ -167,6 +226,7 @@ export function toReadingSignoffEntryRecord(row: {
 }): ReadingSignoffEntryRecord {
   return {
     id: row.id,
+    challengeId: row.challengeId ?? null,
     accountId: row.accountId,
     signoffDatePst: row.signoffDatePst,
     bookTitle: row.bookTitle,
@@ -183,6 +243,7 @@ export function toReadingSignoffEntryRecord(row: {
 
 export function toChallengeBookRecord(row: {
   id: string;
+  challengeId?: string | null;
   accountId: string;
   isbn: string;
   title: string;
@@ -191,6 +252,7 @@ export function toChallengeBookRecord(row: {
 }): ReadingChallengeBookRecord {
   return {
     id: row.id,
+    challengeId: row.challengeId ?? null,
     accountId: row.accountId,
     isbn: row.isbn,
     title: row.title,
@@ -272,9 +334,11 @@ export async function ensureSeedBooks(
   accounts: ViewerAccountSummary[],
   challengeBooks: ReadingChallengeBookRecord[],
   readingChallengeBook: ReadingChallengeBookDelegate,
+  challengeId: string | null,
 ): Promise<void> {
   const accountIdsWithBooks = new Set(challengeBooks.map((book) => book.accountId));
   const seedsToInsert: Array<{
+    challengeId?: string | null;
     accountId: string;
     isbn: string;
     title: string;
@@ -299,6 +363,7 @@ export async function ensureSeedBooks(
       }
 
       seedsToInsert.push({
+        challengeId,
         accountId: account.id,
         isbn: normalizedIsbn,
         title: seedBook.title,

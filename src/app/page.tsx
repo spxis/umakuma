@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { authOptions, isAdminEmail } from "@/lib/auth";
@@ -16,6 +17,19 @@ import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
 
 export const dynamic = "force-dynamic";
+
+type ReadingChallengeMemberDelegate = {
+  findMany: (args: {
+    where?: Record<string, unknown>;
+    select: { accountId: true; tracked: true };
+  }) => Promise<Array<{ accountId: string; tracked: boolean }>>;
+};
+
+function getReadingChallengeMemberDelegate(): ReadingChallengeMemberDelegate | null {
+  const delegate = (prisma as unknown as { readingChallengeMember?: ReadingChallengeMemberDelegate })
+    .readingChallengeMember;
+  return delegate ?? null;
+}
 
 type LeaderboardRow = {
   id: string;
@@ -213,12 +227,27 @@ export default async function Home() {
         },
       });
 
-      const trackedRows = await prisma.readingChallengeMember.findMany({
+      const activeChallengeId = await ensureActiveReadingChallengeId();
+      const readingChallengeMember = getReadingChallengeMemberDelegate();
+
+      const trackedRows = readingChallengeMember
+        ? await readingChallengeMember.findMany({
+            where: activeChallengeId
+              ? {
+                  OR: [{ challengeId: activeChallengeId }, { challengeId: null }],
+                }
+              : undefined,
+            select: {
+              accountId: true,
+              tracked: true,
+            },
+          })
+        : await prisma.readingChallengeMember.findMany({
         select: {
           accountId: true,
           tracked: true,
         },
-      });
+          });
 
       const trackedByAccountId = new Map(trackedRows.map((row) => [row.accountId, row.tracked]));
       const trackedChallengeAccountIds = leaderboard

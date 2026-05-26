@@ -5,6 +5,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
+import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
 import {
   currentReviewQueueFromAssignmentCache,
   isMonthKey,
@@ -22,6 +23,7 @@ import {
   toReadingSignoffRecord,
   type LatestSignoffSummary,
 } from "./readingSignoffsRoute.lib";
+import type { ReadingSignoffEntryDelegate } from "./readingSignoffsRoute.types";
 
 const getQuerySchema = z.object({
   month: z.string().refine((value) => isMonthKey(value), {
@@ -47,15 +49,19 @@ const patchBodySchema = z.object({
   tracked: z.boolean(),
 });
 
-type ReadingSignoffEntryDelegate = {
-  findMany: typeof prisma.readingSignoffEntry.findMany;
-  findFirst: typeof prisma.readingSignoffEntry.findFirst;
-  create: typeof prisma.readingSignoffEntry.create;
-};
-
 function getReadingSignoffEntryDelegate(): ReadingSignoffEntryDelegate | null {
   const delegate = (prisma as unknown as { readingSignoffEntry?: ReadingSignoffEntryDelegate }).readingSignoffEntry;
   return delegate ?? null;
+}
+
+function challengeReadScope(challengeId: string | null): Record<string, unknown> {
+  if (!challengeId) {
+    return {};
+  }
+
+  return {
+    OR: [{ challengeId }, { challengeId: null }],
+  };
 }
 
 export async function GET(request: Request) {
@@ -79,6 +85,8 @@ export async function GET(request: Request) {
         if (viewerAccounts.length === 0) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
+
+        const activeChallengeId = await ensureActiveReadingChallengeId();
 
         const viewerAccountIds = new Set(viewerAccounts.map((account) => account.id));
         const requestedAccountId = parsed.data.accountId ?? null;
@@ -113,6 +121,7 @@ export async function GET(request: Request) {
             signoffDatePst: {
               startsWith: `${parsed.data.month}-`,
             },
+            ...challengeReadScope(activeChallengeId),
           },
           orderBy: [{ signoffDatePst: "asc" }, { updatedAt: "desc" }],
         });
@@ -125,6 +134,7 @@ export async function GET(request: Request) {
                 signoffDatePst: {
                   startsWith: `${parsed.data.month}-`,
                 },
+                ...challengeReadScope(activeChallengeId),
               },
               orderBy: [{ signoffDatePst: "asc" }, { createdAt: "asc" }],
             })
@@ -133,6 +143,7 @@ export async function GET(request: Request) {
         const latestSignoffs = await readingSignoff.findMany({
           where: {
             accountId: { in: targetAccountIds },
+            ...challengeReadScope(activeChallengeId),
           },
           orderBy: [{ updatedAt: "desc" }],
         });
@@ -154,6 +165,7 @@ export async function GET(request: Request) {
         const challengeBooksRaw = await readingChallengeBook.findMany({
           where: {
             accountId: { in: targetAccountIds },
+            ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
           },
           orderBy: [{ createdAt: "desc" }, { id: "desc" }],
           select: {
@@ -167,12 +179,13 @@ export async function GET(request: Request) {
         });
 
         const challengeBooks = challengeBooksRaw.map(toChallengeBookRecord);
-        await ensureSeedBooks(viewerAccounts, challengeBooks, readingChallengeBook);
+        await ensureSeedBooks(viewerAccounts, challengeBooks, readingChallengeBook, activeChallengeId);
         await backfillStaleCoverUrls(challengeBooks);
 
         const challengeBooksAfterSeed = await readingChallengeBook.findMany({
           where: {
             accountId: { in: targetAccountIds },
+            ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
           },
           orderBy: [{ createdAt: "desc" }, { id: "desc" }],
           select: {
@@ -211,6 +224,7 @@ export async function GET(request: Request) {
               return readingChallengeMember.findMany({
                 where: {
                   accountId: { in: targetAccountIds },
+                  ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
                 },
                 select: {
                   accountId: true,
@@ -263,6 +277,8 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
+        const activeChallengeId = await ensureActiveReadingChallengeId();
+
         if (parsed.data.submittedAt && !viewerIsAdmin) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
@@ -283,9 +299,28 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Account not found." }, { status: 404 });
         }
 
-        const challengeBooks = await prisma.readingChallengeBook.findMany({
-          where: { accountId: account.id },
-          select: { title: true },
+        const readingChallengeBook = getReadingChallengeBookDelegate();
+        if (!readingChallengeBook) {
+          return NextResponse.json(
+            { error: "Reading challenge setup is not ready yet. Restart the dev server and try again." },
+            { status: 503 },
+          );
+        }
+
+        const challengeBooks = await readingChallengeBook.findMany({
+          where: {
+            accountId: { in: [account.id] },
+            ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
+          },
+          orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+          select: {
+            id: true,
+            accountId: true,
+            isbn: true,
+            title: true,
+            thumbnailUrl: true,
+            infoUrl: true,
+          },
         });
 
         const hasReadingActivity = parsed.data.pagesRead > 0 || parsed.data.minutesRead > 0;
@@ -318,6 +353,13 @@ export async function POST(request: Request) {
           },
         });
 
+        const existingChallengeId =
+          ((existing as { challengeId?: string | null } | null)?.challengeId ?? null);
+
+        if (existing && activeChallengeId && existingChallengeId && existingChallengeId !== activeChallengeId) {
+          return NextResponse.json({ error: "Signoff belongs to a different challenge." }, { status: 409 });
+        }
+
         const nextPagesRead = (existing?.pagesRead ?? 0) + parsed.data.pagesRead;
         const nextMinutesRead = (existing?.minutesRead ?? 0) + parsed.data.minutesRead;
         const normalizedBookTitle = isWaniKaniOnlyCheckin
@@ -335,6 +377,7 @@ export async function POST(request: Request) {
         if (readingSignoffEntry) {
           await readingSignoffEntry.create({
             data: {
+              ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
               accountId: account.id,
               signoffDatePst: parsed.data.signoffDatePst,
               createdAt: submittedAt ?? undefined,
@@ -360,6 +403,9 @@ export async function POST(request: Request) {
             },
           },
           update: {
+            ...(existingChallengeId ?? activeChallengeId
+              ? { challengeId: existingChallengeId ?? activeChallengeId }
+              : {}),
             bookTitle: normalizedBookTitle,
             pagesRead: nextPagesRead,
             minutesRead: nextMinutesRead,
@@ -369,6 +415,7 @@ export async function POST(request: Request) {
             currentWkLevel: account.wkLevel,
           },
           create: {
+            ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
             accountId: account.id,
             signoffDatePst: parsed.data.signoffDatePst,
             createdAt: submittedAt ?? undefined,
@@ -407,6 +454,8 @@ export async function PATCH(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
+        const activeChallengeId = await ensureActiveReadingChallengeId();
+
         const readingChallengeMember = getReadingChallengeMemberDelegate();
         if (!readingChallengeMember) {
           return NextResponse.json(
@@ -415,14 +464,26 @@ export async function PATCH(request: Request) {
           );
         }
 
-        const saved = await readingChallengeMember.upsert({
-          where: { accountId: parsed.data.accountId },
-          update: { tracked: parsed.data.tracked },
-          create: {
+        const existing = await readingChallengeMember.findFirst({
+          where: {
             accountId: parsed.data.accountId,
-            tracked: parsed.data.tracked,
+            ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
           },
+          select: { id: true, accountId: true, tracked: true },
         });
+
+        const saved = existing
+          ? await readingChallengeMember.update({
+              where: { id: existing.id },
+              data: { tracked: parsed.data.tracked },
+            })
+          : await readingChallengeMember.create({
+              data: {
+                ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
+                accountId: parsed.data.accountId,
+                tracked: parsed.data.tracked,
+              },
+            });
 
         return NextResponse.json({ trackedMember: saved }, { status: 200 });
       } catch (error) {

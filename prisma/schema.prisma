@@ -140,6 +140,37 @@ enum SubjectReviewSnapshotSource {
   submit
 }
 
+enum ReadingChallengeStatus {
+  draft
+  active
+  completed
+  archived
+}
+
+model ReadingChallenge {
+  id            String                @id @default(cuid())
+  slug          String                @unique
+  name          String
+  description   String
+  status        ReadingChallengeStatus @default(draft)
+  currencyCode  String                @default("JPY")
+  startDatePst  String
+  goalDatePst   String
+  tripDatePst   String
+  targetBaseYen Int
+  scoringRules  Json
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  signoffs      ReadingSignoff[]
+  signoffEntries ReadingSignoffEntry[]
+  books         ReadingChallengeBook[]
+  members       ReadingChallengeMember[]
+
+  @@index([status])
+  @@index([startDatePst, goalDatePst])
+}
+
 model StudyReviewAttempt {
   id           String            @id @default(cuid())
   accountId    String
@@ -176,6 +207,7 @@ model SubjectReviewStatsSnapshot {
 
 model ReadingSignoff {
   id                 String   @id @default(cuid())
+  challengeId        String?
   accountId          String
   signoffDatePst     String
   bookTitle          String
@@ -188,13 +220,17 @@ model ReadingSignoff {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
+  challenge          ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+
   @@unique([accountId, signoffDatePst])
+  @@index([challengeId, accountId])
   @@index([signoffDatePst])
   @@index([accountId])
 }
 
 model ReadingSignoffEntry {
   id                   String   @id @default(cuid())
+  challengeId          String?
   accountId            String
   signoffDatePst       String
   bookTitle            String
@@ -207,6 +243,9 @@ model ReadingSignoffEntry {
   reviewSuccessPercent Int?
   createdAt            DateTime @default(now())
 
+  challenge            ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+
+  @@index([challengeId, accountId, signoffDatePst])
   @@index([accountId, signoffDatePst])
   @@index([accountId, createdAt])
   @@index([signoffDatePst])
@@ -214,6 +253,7 @@ model ReadingSignoffEntry {
 
 model ReadingChallengeBook {
   id           String   @id @default(cuid())
+  challengeId  String?
   accountId    String
   isbn         String
   title        String
@@ -222,16 +262,24 @@ model ReadingChallengeBook {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  @@unique([accountId, isbn])
+  challenge    ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+
+  @@unique([accountId, isbn, challengeId])
+  @@index([challengeId, accountId])
   @@index([accountId])
 }
 
 model ReadingChallengeMember {
   id        String   @id @default(cuid())
-  accountId String   @unique
+  challengeId String?
+  accountId String
   tracked   Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  challenge ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+
+  @@unique([challengeId, accountId])
+  @@index([challengeId, accountId])
   @@index([accountId])
 }

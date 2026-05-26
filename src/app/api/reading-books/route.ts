@@ -3,6 +3,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
+import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
 import { normalizeIsbn, toOpenLibraryCoverUrl, toOpenLibraryBookUrl } from "@/lib/readingSignoff";
 
 const postBodySchema = z.object({
@@ -17,6 +18,7 @@ const deleteBodySchema = z.object({
 
 type ReadingBookRow = {
   id: string;
+  challengeId?: string | null;
   accountId: string;
   isbn: string;
   title: string;
@@ -25,20 +27,20 @@ type ReadingBookRow = {
 };
 
 type ReadingChallengeBookDelegate = {
-  create: (args: { data: { accountId: string; isbn: string; title: string; thumbnailUrl: string | null; infoUrl: string | null } }) => Promise<ReadingBookRow>;
+  create: (args: { data: { challengeId?: string | null; accountId: string; isbn: string; title: string; thumbnailUrl: string | null; infoUrl: string | null } }) => Promise<ReadingBookRow>;
   findFirst: (args: { where: Record<string, unknown>; select: Record<string, true> }) => Promise<ReadingBookRow | null>;
   findMany: (args: { where: Record<string, unknown>; orderBy?: Record<string, "asc" | "desc">; select: Record<string, true> }) => Promise<Array<ReadingBookRow & { updatedAt?: Date }>>;
   findUnique: (args: {
     where: { id: string };
-    select: { id: true; accountId: true; title: true };
-  }) => Promise<{ id: string; accountId: string; title: string } | null>;
+    select: { id: true; challengeId?: true; accountId: true; title: true };
+  }) => Promise<{ id: string; challengeId?: string | null; accountId: string; title: string } | null>;
   update: (args: { where: { id: string }; data: { title?: string; thumbnailUrl?: string | null; infoUrl?: string | null } }) => Promise<ReadingBookRow>;
   updateMany: (args: { where: Record<string, unknown>; data: { title?: string; thumbnailUrl?: string; infoUrl?: string } }) => Promise<{ count: number }>;
   delete: (args: { where: { id: string } }) => Promise<void>;
 };
 
 type ReadingSignoffDelegate = {
-  findFirst: (args: { where: { accountId: string; bookTitle: string }; select: { id: true } }) => Promise<{ id: string } | null>;
+  findFirst: (args: { where: Record<string, unknown>; select: { id: true } }) => Promise<{ id: string } | null>;
 };
 
 function getReadingChallengeBookDelegate(): ReadingChallengeBookDelegate | null {
@@ -307,6 +309,8 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
+        const activeChallengeId = await ensureActiveReadingChallengeId();
+
         const readingChallengeBook = getReadingChallengeBookDelegate();
         if (!readingChallengeBook) {
           return NextResponse.json(
@@ -324,6 +328,7 @@ export async function POST(request: Request) {
           where: {
             accountId: parsed.data.accountId,
             isbn,
+            ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
           },
           select: {
             id: true,
@@ -383,6 +388,7 @@ export async function POST(request: Request) {
 
         const created = await readingChallengeBook.create({
           data: {
+            ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
             accountId: parsed.data.accountId,
             isbn,
             title: resolvedTitle,
@@ -426,6 +432,8 @@ export async function DELETE(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
+        const activeChallengeId = await ensureActiveReadingChallengeId();
+
         const readingChallengeBook = getReadingChallengeBookDelegate();
         const readingSignoff = getReadingSignoffDelegate();
         if (!readingChallengeBook || !readingSignoff) {
@@ -439,6 +447,7 @@ export async function DELETE(request: Request) {
           where: { id: parsed.data.bookId },
           select: {
             id: true,
+            challengeId: true,
             accountId: true,
             title: true,
           },
@@ -448,10 +457,15 @@ export async function DELETE(request: Request) {
           return NextResponse.json({ error: "Book not found." }, { status: 404 });
         }
 
+        if (activeChallengeId && book.challengeId && book.challengeId !== activeChallengeId) {
+          return NextResponse.json({ error: "Book belongs to a different challenge." }, { status: 409 });
+        }
+
         const startedCheck = await readingSignoff.findFirst({
           where: {
             accountId: parsed.data.accountId,
             bookTitle: book.title,
+            ...(activeChallengeId ? { OR: [{ challengeId: activeChallengeId }, { challengeId: null }] } : {}),
           },
           select: { id: true },
         });

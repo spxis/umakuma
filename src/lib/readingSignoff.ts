@@ -1,3 +1,6 @@
+import { computeChallengeLeaderboard } from "@/lib/readingChallengeEngine";
+import { ACTIVE_READING_CHALLENGE } from "@/lib/readingChallengeRules";
+
 export const READING_BOOK_OPTIONS = [
   "Kumon Reading",
   "NHK Easy News",
@@ -9,18 +12,18 @@ export const READING_BOOK_OPTIONS = [
 ] as const;
 
 export const READING_CAMPAIGN = {
-  startDatePst: "2026-05-24",
-  goalDatePst: "2026-07-20",
-  tripDatePst: "2026-07-21",
-  maxYen: 40_000,
-  weeklyCaps: [3500, 4000, 4500, 4750, 5000, 5250, 6000, 7000] as const,
-  weeklyPerfectScore: 9.1,
-  pagesBonusThreshold: 15,
-  pagesBonusYen: 250,
-  minutesBonusThreshold: 30,
-  minutesBonusYen: 500,
-  zeroReviewsBonusYen: 150,
-} as const;
+  startDatePst: ACTIVE_READING_CHALLENGE.startDatePst,
+  goalDatePst: ACTIVE_READING_CHALLENGE.goalDatePst,
+  tripDatePst: ACTIVE_READING_CHALLENGE.tripDatePst,
+  maxYen: ACTIVE_READING_CHALLENGE.targetBaseYen,
+  weeklyCaps: ACTIVE_READING_CHALLENGE.scoringRules.weeklyCaps,
+  weeklyPerfectScore: ACTIVE_READING_CHALLENGE.scoringRules.weeklyPerfectScore,
+  pagesBonusThreshold: ACTIVE_READING_CHALLENGE.scoringRules.bonuses.pages.threshold,
+  pagesBonusYen: ACTIVE_READING_CHALLENGE.scoringRules.bonuses.pages.yen,
+  minutesBonusThreshold: ACTIVE_READING_CHALLENGE.scoringRules.bonuses.minutes.threshold,
+  minutesBonusYen: ACTIVE_READING_CHALLENGE.scoringRules.bonuses.minutes.yen,
+  zeroReviewsBonusYen: ACTIVE_READING_CHALLENGE.scoringRules.bonuses.zeroReviews.yen,
+};
 
 export type ReadingBookOption = (typeof READING_BOOK_OPTIONS)[number];
 
@@ -32,6 +35,7 @@ export type ReadingSignoffSnapshot = {
 
 export type ReadingSignoffRecord = {
   id: string;
+  challengeId?: string | null;
   accountId: string;
   signoffDatePst: string;
   bookTitle: string;
@@ -47,6 +51,7 @@ export type ReadingSignoffRecord = {
 
 export type ReadingSignoffEntryRecord = {
   id: string;
+  challengeId?: string | null;
   accountId: string;
   signoffDatePst: string;
   bookTitle: string;
@@ -70,6 +75,7 @@ export type ReadingReviewQueueSnapshot = {
 
 export type ReadingChallengeBookRecord = {
   id: string;
+  challengeId?: string | null;
   accountId: string;
   isbn: string;
   title: string;
@@ -328,105 +334,23 @@ export function currentReviewQueueFromAssignmentCache(
   return output;
 }
 
-function computeDayScore(input: ReadingSignoffRecord | null): { perfect: boolean; score: number } {
-  if (!input) {
-    return { perfect: false, score: 0 };
-  }
-
-  const readingDone = input.pagesRead >= 15 || input.minutesRead >= 15;
-  const waniDone = input.didWanikaniReviews;
-  const completion = (Number(readingDone) + Number(waniDone)) / 2;
-  return {
-    perfect: readingDone && waniDone,
-    score: completion,
-  };
-}
-
-function dayMultiplierFromStreak(streakBeforeToday: number): number {
-  return Math.min(1 + 0.1 * streakBeforeToday, 1.6);
-}
-
 export function computeReadingLeaderboard(
   members: ReadingLeaderboardInputMember[],
   signoffs: ReadingSignoffRecord[],
   asOfDateKey: string = getTodayDateInputValue(),
 ): ReadingLeaderboardRow[] {
-  const signoffByMemberByDate = new Map<string, Map<string, ReadingSignoffRecord>>();
-
-  for (const row of signoffs) {
-    const memberMap = signoffByMemberByDate.get(row.accountId) ?? new Map<string, ReadingSignoffRecord>();
-    memberMap.set(row.signoffDatePst, row);
-    signoffByMemberByDate.set(row.accountId, memberMap);
-  }
-
-  const startDate = parseDateKeyAsUtc(READING_CAMPAIGN.startDatePst);
-  const endDate = parseDateKeyAsUtc(
-    asOfDateKey <= READING_CAMPAIGN.goalDatePst ? asOfDateKey : READING_CAMPAIGN.goalDatePst,
-  );
-
-  return members.map((member) => {
-    const byDate = signoffByMemberByDate.get(member.id) ?? new Map<string, ReadingSignoffRecord>();
-    const weeklyScores = READING_CAMPAIGN.weeklyCaps.map(() => 0);
-    let streak = 0;
-    let perfectDays = 0;
-    let pagesBonusTotal = 0;
-    let minutesBonusTotal = 0;
-    let zeroReviewsBonusTotal = 0;
-    let weekStreak = 0;
-    let previousWeekIndex = -1;
-
-    for (let cursor = new Date(startDate); cursor <= endDate; cursor.setUTCDate(cursor.getUTCDate() + 1)) {
-      const dateKey = toDateKeyUtc(cursor);
-      const record = byDate.get(dateKey) ?? null;
-      const { perfect, score } = computeDayScore(record);
-      const weekIndex = Math.floor((cursor.getTime() - startDate.getTime()) / (7 * 24 * 60 * 60 * 1000));
-
-      if (weekIndex !== previousWeekIndex) {
-        weekStreak = 0;
-        previousWeekIndex = weekIndex;
-      }
-
-      if (record && record.pagesRead >= READING_CAMPAIGN.pagesBonusThreshold) {
-        pagesBonusTotal += READING_CAMPAIGN.pagesBonusYen;
-      }
-
-      if (record && record.minutesRead > READING_CAMPAIGN.minutesBonusThreshold) {
-        minutesBonusTotal += READING_CAMPAIGN.minutesBonusYen;
-      }
-
-      if (record && record.didWanikaniReviews && record.reviewsLeft === 0) {
-        zeroReviewsBonusTotal += READING_CAMPAIGN.zeroReviewsBonusYen;
-      }
-
-      if (perfect) {
-        streak += 1;
-        weekStreak += 1;
-        perfectDays += 1;
-      } else {
-        streak = 0;
-        weekStreak = 0;
-      }
-
-      const multiplier = perfect ? dayMultiplierFromStreak(Math.max(0, weekStreak - 1)) : 1;
-      const weightedScore = score * multiplier;
-
-      if (weekIndex >= 0 && weekIndex < weeklyScores.length) {
-        weeklyScores[weekIndex] += weightedScore;
-      }
-    }
-
-    const weeklyYen = weeklyScores.map((score, index) => {
-      const cap = READING_CAMPAIGN.weeklyCaps[index] ?? 0;
-      const payout = cap * (score / READING_CAMPAIGN.weeklyPerfectScore);
-      return Math.max(0, Math.min(cap, Math.round(payout)));
-    });
-
-    return {
-      accountId: member.id,
-      totalYen: weeklyYen.reduce((sum, value) => sum + value, 0) + pagesBonusTotal + minutesBonusTotal + zeroReviewsBonusTotal,
-      currentStreak: streak,
-      perfectDays,
-      weeklyYen,
-    };
+  const rows = computeChallengeLeaderboard({
+    challenge: ACTIVE_READING_CHALLENGE,
+    members,
+    signoffs,
+    asOfDateKey,
   });
+
+  return rows.map((row) => ({
+    accountId: row.accountId,
+    totalYen: row.totalYen,
+    currentStreak: row.currentStreak,
+    perfectDays: row.perfectDays,
+    weeklyYen: row.weeklyYen,
+  }));
 }
