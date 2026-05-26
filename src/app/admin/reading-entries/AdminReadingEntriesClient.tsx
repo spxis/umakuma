@@ -4,15 +4,11 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useAdminFeedback } from "@/app/admin/AdminFeedbackProvider";
 import AdminPanelHeader from "@/app/admin/AdminPanelHeader";
-
+import { getTodayDateInputValue } from "@/lib/readingSignoff";
 import AdminPaginationControls from "@/app/admin/AdminPaginationControls";
-
 import AdminReadingEntriesTable from "./AdminReadingEntriesTable";
-import type {
-  AdminReadingEntry,
-  EntryEditDraft,
-  ReadingEntriesResponse,
-} from "./AdminReadingEntries.types";
+import AdminTrackedPlayersManager from "./AdminTrackedPlayersManager";
+import type { AdminReadingEntry, EntryEditDraft, ReadingEntriesResponse } from "./AdminReadingEntries.types";
 
 function getErrorMessage(payload: unknown, fallback: string): string {
   if (payload && typeof payload === "object" && "error" in payload) {
@@ -58,6 +54,11 @@ type AdminReadingEntriesClientProps = {
   checkingSession?: boolean;
 };
 
+type TrackedMembersResponse = {
+  trackedMemberAccountIds?: string[];
+  error?: string;
+};
+
 export default function AdminReadingEntriesClient({
   embedded = false,
   sessionAuthorized: sessionAuthorizedProp,
@@ -80,11 +81,16 @@ export default function AdminReadingEntriesClient({
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
   const [draft, setDraft] = useState<EntryEditDraft | null>(null);
   const [saving, setSaving] = useState(false);
+  const [trackingLoading, setTrackingLoading] = useState(false);
+  const [trackingUpdatingAccountId, setTrackingUpdatingAccountId] = useState<string | null>(null);
+  const [trackedMemberIds, setTrackedMemberIds] = useState<string[]>([]);
 
   const entries = data?.entries ?? [];
   const members = data?.members ?? [];
+  const trackedMemberSet = useMemo(() => new Set(trackedMemberIds), [trackedMemberIds]);
   const pagination = data?.pagination ?? { page, pageSize, pageCount: 1, total: 0 };
   const localTimezoneLabel = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const trackingMonthKey = useMemo(() => (monthFilter.trim().length > 0 ? monthFilter.trim() : getTodayDateInputValue().slice(0, 7)), [monthFilter]);
 
   const queryString = useMemo(() => {
     const params = new URLSearchParams({
@@ -129,13 +135,83 @@ export default function AdminReadingEntriesClient({
     }
   }, [queryString, sessionAuthorized, showToast]);
 
+  const loadTrackedMembers = useCallback(async () => {
+    if (!sessionAuthorized) {
+      setTrackedMemberIds([]);
+      return;
+    }
+
+    setTrackingLoading(true);
+    try {
+      const response = await fetch(
+        `/api/reading-signoffs?month=${encodeURIComponent(trackingMonthKey)}`,
+        { cache: "no-store" },
+      );
+
+      const payload = (await response.json()) as TrackedMembersResponse;
+      if (!response.ok) {
+        throw new Error(getErrorMessage(payload, "Could not load tracked players."));
+      }
+
+      setTrackedMemberIds(payload.trackedMemberAccountIds ?? []);
+    } catch (error) {
+      showToast({ tone: "error", message: error instanceof Error ? error.message : "Could not load tracked players." });
+    } finally {
+      setTrackingLoading(false);
+    }
+  }, [sessionAuthorized, showToast, trackingMonthKey]);
+
   useEffect(() => {
     if (checkingSession || !sessionAuthorized) {
       return;
     }
 
-    void loadEntries();
-  }, [checkingSession, loadEntries, sessionAuthorized]);
+    void Promise.all([loadEntries(), loadTrackedMembers()]);
+  }, [checkingSession, loadEntries, loadTrackedMembers, sessionAuthorized]);
+
+  async function toggleTrackedMember(memberId: string, tracked: boolean) {
+    setTrackingUpdatingAccountId(memberId);
+
+    try {
+      const response = await fetch("/api/reading-signoffs", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accountId: memberId,
+          tracked,
+        }),
+      });
+
+      const payload = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(getErrorMessage(payload, "Could not update tracked players."));
+      }
+
+      setTrackedMemberIds((prev) => {
+        const next = new Set(prev);
+        if (tracked) {
+          next.add(memberId);
+        } else {
+          next.delete(memberId);
+        }
+        return Array.from(next);
+      });
+
+      showToast({
+        tone: "success",
+        message: tracked ? "Player added to tracked roster." : "Player removed from tracked roster.",
+      });
+    } catch (error) {
+      showToast({
+        tone: "error",
+        message: error instanceof Error ? error.message : "Could not update tracked players.",
+      });
+    } finally {
+      setTrackingUpdatingAccountId(null);
+    }
+  }
 
   function beginEdit(entry: AdminReadingEntry) {
     setEditingEntryId(entry.id);
@@ -262,6 +338,21 @@ export default function AdminReadingEntriesClient({
 
       {sessionAuthorized ? (
         <>
+          <AdminTrackedPlayersManager
+            members={members}
+            trackedMemberSet={trackedMemberSet}
+            trackingLoading={trackingLoading}
+            loading={loading}
+            saving={saving}
+            trackingUpdatingAccountId={trackingUpdatingAccountId}
+            onRefreshRoster={() => {
+              void loadTrackedMembers();
+            }}
+            onToggleTrackedMember={(memberId, tracked) => {
+              void toggleTrackedMember(memberId, tracked);
+            }}
+          />
+
           <div className="mt-4 grid gap-3 rounded-2xl border border-line bg-surface-muted p-4 sm:grid-cols-2 lg:grid-cols-6">
                 <label className="flex flex-col gap-1 lg:col-span-1">
                   <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Month</span>

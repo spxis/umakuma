@@ -30,29 +30,16 @@ type LeaderboardRow = {
   zeroReviewsBonusToday: boolean;
 };
 
-type MemberSummary = {
-  id: string;
-  nickname: string;
-};
-
 type UserReadingRewardsSummaryProps = {
   daysRemaining: number;
   isLoading: boolean;
   leaderboard: LeaderboardRow[];
-  members: MemberSummary[];
-  trackedMemberSet: Set<string>;
-  showTrackingManager: boolean;
-  onToggleTrackedMember: (memberId: string, tracked: boolean) => void;
 };
 
 export default function UserReadingRewardsSummary({
   daysRemaining,
   isLoading,
   leaderboard,
-  members,
-  trackedMemberSet,
-  showTrackingManager,
-  onToggleTrackedMember,
 }: UserReadingRewardsSummaryProps) {
   const teamTotalYen = leaderboard.reduce((sum, row) => sum + row.totalYen, 0);
   const leaderYen = leaderboard[0]?.totalYen ?? 0;
@@ -105,38 +92,6 @@ export default function UserReadingRewardsSummary({
 
       <section className="rounded-xl border border-line bg-surface p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-base font-black text-foreground">Tracked players</h3>
-          <p className="text-xs text-foreground/65">Admins can choose who appears in this challenge leaderboard.</p>
-        </div>
-        {showTrackingManager ? (
-          <div className="mt-2 flex flex-wrap gap-2">
-            {members.map((member) => {
-              const tracked = trackedMemberSet.has(member.id);
-              return (
-                <button
-                  key={member.id}
-                  type="button"
-                  onClick={() => onToggleTrackedMember(member.id, !tracked)}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] ${
-                    tracked
-                      ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                      : "border-line bg-surface-muted text-foreground/60"
-                  }`}
-                >
-                  {member.nickname}: {tracked ? "on" : "off"}
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <p className="mt-2 text-xs text-foreground/60">
-            You can view this roster, but only admin accounts can change tracked players.
-          </p>
-        )}
-      </section>
-
-      <section className="rounded-xl border border-line bg-surface p-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-base font-black text-foreground">Rewards leaderboard</h3>
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">Goal by {formatCampaignDateLabel(READING_CAMPAIGN.goalDatePst)}</p>
         </div>
@@ -153,13 +108,13 @@ export default function UserReadingRewardsSummary({
 
         {!isLoading && leaderboard.length === 0 ? (
           <div className="mt-3 rounded-lg border border-line bg-surface-muted px-3 py-5 text-center text-sm font-semibold text-foreground/65">
-            No tracked players yet. Turn players on above to start the leaderboard.
+            No tracked players yet. Ask an admin to manage tracked players from Admin &gt; Reading check-ins.
           </div>
         ) : null}
 
         {leaderboard.length > 0 ? (
           <div className="mt-3 overflow-x-auto rounded-lg border border-line">
-            <table className="w-full min-w-[820px] text-left text-xs">
+            <table className="w-full min-w-205 text-left text-xs">
               <thead className="bg-surface-muted text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
                 <tr>
                   <th className="px-2.5 py-2">Rank</th>

@@ -60,11 +60,12 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   const campaigns = useMemo<ReadingCampaignOption[]>(() => resolveReadingCampaignOptions(data?.campaigns, initialData?.selectedChallengeId ?? selectedCampaignId), [data?.campaigns, initialData?.selectedChallengeId, selectedCampaignId]);
   const campaignMonthBounds = useMemo(() => resolveCampaignMonthBounds({ campaigns, selectedCampaignId }), [campaigns, selectedCampaignId]);
   const setBoundedMonthKey = (nextMonth: SetStateAction<string>) => setMonthKey((prevMonth) => clampMonthKeyToBounds(typeof nextMonth === "function" ? nextMonth(prevMonth) : nextMonth, campaignMonthBounds));
-  const [viewerTrackedMemberIds, setViewerTrackedMemberIds] = useState<string[] | null>(null);
   const todayMonthKey = today.slice(0, 7);
   const daysRemaining = campaignDaysRemaining(today);
-  const trackedStorageKey = `reading-tracked-members:${accountId}`;
-  const serverDefaultTrackedMemberIds = useMemo(() => (trackedMemberAccountIds.length === 0 ? members.map((member) => member.id) : trackedMemberAccountIds), [members, trackedMemberAccountIds]);
+  const trackedMemberIds = useMemo(
+    () => (trackedMemberAccountIds.length === 0 ? members.map((member) => member.id) : trackedMemberAccountIds),
+    [members, trackedMemberAccountIds],
+  );
   useEffect(() => {
     setStoredJson(monthStorageKey, monthKey);
   }, [monthKey, monthStorageKey]);
@@ -82,32 +83,9 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       setSelectedCampaignId(nextSelectedCampaignId);
     }
   }, [campaigns, data?.selectedChallengeId, selectedCampaignId]);
-  useEffect(() => {
-    if (members.length === 0) {
-      return;
-    }
-    setViewerTrackedMemberIds((prev) => {
-      const validMemberIds = new Set(members.map((member) => member.id));
-      if (prev === null) {
-        const stored = getStoredJson<string[]>(trackedStorageKey, serverDefaultTrackedMemberIds);
-        return stored.filter((id) => validMemberIds.has(id));
-      }
-      return prev.filter((id) => validMemberIds.has(id));
-    });
-  }, [members, serverDefaultTrackedMemberIds, trackedStorageKey]);
-
-  useEffect(() => {
-    if (viewerTrackedMemberIds === null) {
-      return;
-    }
-    setStoredJson(trackedStorageKey, viewerTrackedMemberIds);
-  }, [trackedStorageKey, viewerTrackedMemberIds]);
   const trackedMemberSet = useMemo(() => {
-    if (!viewerTrackedMemberIds) {
-      return new Set(serverDefaultTrackedMemberIds);
-    }
-    return new Set(viewerTrackedMemberIds);
-  }, [serverDefaultTrackedMemberIds, viewerTrackedMemberIds]);
+    return new Set(trackedMemberIds);
+  }, [trackedMemberIds]);
 
   const trackedMembers = useMemo(() => members.filter((member) => trackedMemberSet.has(member.id)), [members, trackedMemberSet]);
   const latestSignoffByAccountId = useMemo(() => new Map(latestSignoffs.map((row) => [row.accountId, row])), [latestSignoffs]);
@@ -121,18 +99,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     }
     return map;
   }, [challengeBooks]);
-
-  function toggleTrackedMember(memberId: string, tracked: boolean) {
-    setViewerTrackedMemberIds((prev) => {
-      const current = new Set(prev ?? serverDefaultTrackedMemberIds);
-      if (tracked) {
-        current.add(memberId);
-      } else {
-        current.delete(memberId);
-      }
-      return Array.from(current);
-    });
-  }
 
   const signoffByDayAndMember = useMemo(() => {
     const byDayAndMember = new Map<string, Map<string, ReadingSignoffRecord>>();
@@ -423,10 +389,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
         daysRemaining={daysRemaining}
         isLoading={isLoading}
         leaderboard={leaderboard}
-        members={members}
-        trackedMemberSet={trackedMemberSet}
-        showTrackingManager={true}
-        onToggleTrackedMember={toggleTrackedMember}
       />
 
       <UserReadingCampaignHeader
