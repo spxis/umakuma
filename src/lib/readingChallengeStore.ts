@@ -12,6 +12,7 @@ type ReadingChallengeDelegate = {
     select: Record<string, true>;
   }) => Promise<Record<string, unknown> | null>;
   findMany: (args: {
+    where?: Record<string, unknown>;
     orderBy?: Array<Record<string, "asc" | "desc">>;
     select: Record<string, true>;
   }) => Promise<Array<Record<string, unknown>>>;
@@ -86,6 +87,11 @@ export async function listReadingCampaignOptions(): Promise<ReadingCampaignOptio
   }
 
   const rows = await readingChallenge.findMany({
+    where: {
+      status: {
+        in: ["active", "completed"],
+      },
+    },
     orderBy: [{ startDatePst: "desc" }],
     select: {
       id: true,

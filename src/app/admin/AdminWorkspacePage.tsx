@@ -6,8 +6,8 @@ import { FormEvent, useEffect, useState } from "react";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import AdminCampaignManager from "./AdminCampaignManager";
-import AdminChallengeSimulator from "./AdminChallengeSimulator";
 import AdminControlRoom from "./AdminControlRoom";
+import type { CampaignRecord } from "./AdminCampaignManager.types";
 import type { AdminSessionStatus, Status } from "./AdminPage.types";
 import AdminStudyHistory from "./AdminStudyHistory";
 import AdminUsersPanel from "./AdminUsersPanel";
@@ -21,6 +21,8 @@ import {
 
 type AdminWorkspacePageProps = {
   activeTab: AdminWorkspaceTab;
+  initialSession?: AdminSessionStatus;
+  initialCampaigns?: CampaignRecord[];
 };
 
 function tabClassName(isActive: boolean): string {
@@ -31,16 +33,21 @@ function tabClassName(isActive: boolean): string {
   }`;
 }
 
-export default function AdminWorkspacePage({ activeTab }: AdminWorkspacePageProps) {
+export default function AdminWorkspacePage({
+  activeTab,
+  initialSession,
+  initialCampaigns = [],
+}: AdminWorkspacePageProps) {
   const [nickname, setNickname] = useState("");
   const [token, setToken] = useState("");
-  const [sessionAuthorized, setSessionAuthorized] = useState(false);
-  const [checkingSession, setCheckingSession] = useState(true);
-  const [googleConfigured, setGoogleConfigured] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
-  const [emailAllowed, setEmailAllowed] = useState(false);
-  const [userName, setUserName] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const hasInitialSession = Boolean(initialSession);
+  const [sessionAuthorized, setSessionAuthorized] = useState(Boolean(initialSession?.authorized));
+  const [checkingSession, setCheckingSession] = useState(!hasInitialSession);
+  const [googleConfigured, setGoogleConfigured] = useState(Boolean(initialSession?.googleConfigured));
+  const [signedIn, setSignedIn] = useState(Boolean(initialSession?.signedIn));
+  const [emailAllowed, setEmailAllowed] = useState(Boolean(initialSession?.emailAllowed));
+  const [userName, setUserName] = useState<string | null>(initialSession?.user?.name ?? null);
+  const [userEmail, setUserEmail] = useState<string | null>(initialSession?.user?.email ?? null);
   const [status, setStatus] = useState<Status>({ type: "idle", message: "" });
   const [loading, setLoading] = useState(false);
   const [jlptRefreshing, setJlptRefreshing] = useState(false);
@@ -76,14 +83,18 @@ export default function AdminWorkspacePage({ activeTab }: AdminWorkspacePageProp
         setUserName(data.user?.name ?? null);
         setUserEmail(data.user?.email ?? null);
       } finally {
-        setCheckingSession(false);
+        if (!hasInitialSession) {
+          setCheckingSession(false);
+        }
       }
     }
 
     void getAdminSessionStatus().catch(() => {
-      setCheckingSession(false);
+      if (!hasInitialSession) {
+        setCheckingSession(false);
+      }
     });
-  }, []);
+  }, [hasInitialSession]);
 
   async function completeGoogleSignOut() {
     setLoading(true);
@@ -295,8 +306,11 @@ export default function AdminWorkspacePage({ activeTab }: AdminWorkspacePageProp
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Campaign workspace</p>
               <p className="mt-1 text-sm text-foreground/70">Edit campaign rules and run payout simulations.</p>
             </div>
-            <AdminCampaignManager sessionAuthorized={sessionAuthorized} checkingSession={checkingSession} />
-            <AdminChallengeSimulator />
+            <AdminCampaignManager
+              sessionAuthorized={sessionAuthorized}
+              checkingSession={checkingSession}
+              initialCampaigns={initialCampaigns}
+            />
           </section>
         ) : null}
 
@@ -316,7 +330,11 @@ export default function AdminWorkspacePage({ activeTab }: AdminWorkspacePageProp
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Users</p>
               <p className="mt-1 text-sm text-foreground/70">Manage accounts, refreshes, invite codes, and user history.</p>
             </div>
-            <AdminUsersPanel />
+            <AdminUsersPanel
+              sessionAuthorized={sessionAuthorized}
+              checkingSession={checkingSession}
+              viewerEmail={userEmail}
+            />
           </section>
         ) : null}
 
@@ -326,7 +344,11 @@ export default function AdminWorkspacePage({ activeTab }: AdminWorkspacePageProp
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Reading check-ins</p>
               <p className="mt-1 text-sm text-foreground/70">Browse and edit reading submissions across all members.</p>
             </div>
-            <AdminReadingEntriesClient embedded />
+            <AdminReadingEntriesClient
+              embedded
+              sessionAuthorized={sessionAuthorized}
+              checkingSession={checkingSession}
+            />
           </section>
         ) : null}
       </main>

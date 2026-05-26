@@ -11,6 +11,17 @@ const updateStatusSchema = z.object({
   status: readingChallengeStatusSchema,
 });
 
+const DELEGATE_UNAVAILABLE_MESSAGE = "Campaign storage is unavailable in the current Prisma client. Run pnpm prisma generate and restart the server.";
+
+type ReadingChallengeDelegate = {
+  update: typeof prisma.readingChallenge.update;
+  updateMany: typeof prisma.readingChallenge.updateMany;
+};
+
+function getReadingChallengeDelegate(): ReadingChallengeDelegate | null {
+  return (prisma as unknown as { readingChallenge?: ReadingChallengeDelegate }).readingChallenge ?? null;
+}
+
 function isRecordNotFoundError(error: unknown): boolean {
   if (!(error instanceof Error)) {
     return false;
@@ -20,8 +31,19 @@ function isRecordNotFoundError(error: unknown): boolean {
   return code === "P2025";
 }
 
-async function deactivateOtherActiveCampaigns(campaignId: string): Promise<void> {
-  await prisma.readingChallenge.updateMany({
+function isSchemaMismatchError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  return error.message.includes("Unknown argument")
+    || error.message.includes("Unknown field")
+    || error.message.includes("Cannot read properties of undefined")
+    || error.message.includes("PrismaClientValidationError");
+}
+
+async function deactivateOtherActiveCampaigns(readingChallenge: ReadingChallengeDelegate, campaignId: string): Promise<void> {
+  await readingChallenge.updateMany({
     where: {
       id: { not: campaignId },
       status: "active",
@@ -48,7 +70,12 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
-        const updated = await prisma.readingChallenge.update({
+        const readingChallenge = getReadingChallengeDelegate();
+        if (!readingChallenge) {
+          return NextResponse.json({ error: DELEGATE_UNAVAILABLE_MESSAGE }, { status: 503 });
+        }
+
+        const updated = await readingChallenge.update({
           where: { id: parsed.data.id },
           data: { status: parsed.data.status },
           select: {
@@ -61,13 +88,17 @@ export async function POST(request: Request) {
         });
 
         if (updated.status === "active") {
-          await deactivateOtherActiveCampaigns(updated.id);
+          await deactivateOtherActiveCampaigns(readingChallenge, updated.id);
         }
 
         return NextResponse.json({ campaign: updated }, { status: 200 });
       } catch (error) {
         if (isRecordNotFoundError(error)) {
           return NextResponse.json({ error: "Campaign not found." }, { status: 404 });
+        }
+
+        if (isSchemaMismatchError(error)) {
+          return NextResponse.json({ error: DELEGATE_UNAVAILABLE_MESSAGE }, { status: 503 });
         }
 
         console.error(error);

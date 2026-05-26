@@ -1,5 +1,8 @@
 import AdminWorkspacePage from "../AdminWorkspacePage";
+import { getAdminWorkspaceInitialSession } from "../adminWorkspaceServerState";
 
-export default function AdminAccountOperationsPage() {
-  return <AdminWorkspacePage activeTab="operations" />;
+export default async function AdminAccountOperationsPage() {
+  const initialSession = await getAdminWorkspaceInitialSession();
+
+  return <AdminWorkspacePage activeTab="operations" initialSession={initialSession} />;
 }

@@ -1,5 +1,8 @@
 import AdminWorkspacePage from "../AdminWorkspacePage";
+import { getAdminWorkspaceInitialSession } from "../adminWorkspaceServerState";
 
-export default function AdminReadingEntriesPage() {
-  return <AdminWorkspacePage activeTab="readingEntries" />;
+export default async function AdminReadingEntriesPage() {
+  const initialSession = await getAdminWorkspaceInitialSession();
+
+  return <AdminWorkspacePage activeTab="readingEntries" initialSession={initialSession} />;
 }

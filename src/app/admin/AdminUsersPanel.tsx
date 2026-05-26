@@ -3,12 +3,19 @@
 import { useEffect, useState } from "react";
 
 import AdminAccountsSection, { type AdminAccount } from "./AdminAccountsSection";
-import type { AdminSessionStatus, Status } from "./AdminPage.types";
+import type { Status } from "./AdminPage.types";
 
-export default function AdminUsersPanel() {
-  const [sessionAuthorized, setSessionAuthorized] = useState(false);
-  const [checkingSession, setCheckingSession] = useState(true);
-  const [viewerEmail, setViewerEmail] = useState<string | null>(null);
+type AdminUsersPanelProps = {
+  sessionAuthorized: boolean;
+  checkingSession: boolean;
+  viewerEmail: string | null;
+};
+
+export default function AdminUsersPanel({
+  sessionAuthorized,
+  checkingSession,
+  viewerEmail,
+}: AdminUsersPanelProps) {
   const [accounts, setAccounts] = useState<AdminAccount[]>([]);
   const [generatedInviteCodesByAccountId, setGeneratedInviteCodesByAccountId] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -26,28 +33,19 @@ export default function AdminUsersPanel() {
   }
 
   useEffect(() => {
-    async function loadSession() {
-      try {
-        const response = await fetch("/api/admin/session", { cache: "no-store" });
-        const data = (await response.json()) as AdminSessionStatus;
-        const authorized = Boolean(data.authorized);
-        setSessionAuthorized(authorized);
-        setViewerEmail(data.user?.email?.trim().toLowerCase() ?? null);
-
-        if (authorized) {
-          await loadAccounts();
-        } else {
-          setAccounts([]);
-        }
-      } finally {
-        setCheckingSession(false);
-      }
+    if (checkingSession) {
+      return;
     }
 
-    void loadSession().catch(() => {
-      setCheckingSession(false);
+    if (!sessionAuthorized) {
+      setAccounts([]);
+      return;
+    }
+
+    void loadAccounts().catch(() => {
+      setStatus({ type: "error", message: "Could not load account list." });
     });
-  }, []);
+  }, [checkingSession, sessionAuthorized]);
 
   async function refreshOne(accountId: string) {
     setLoading(true);

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { AdminSessionStatus, Status } from "@/app/admin/AdminPage.types";
+import type { Status } from "@/app/admin/AdminPage.types";
 
 import AdminReadingEntriesTable from "./AdminReadingEntriesTable";
 import type {
@@ -51,11 +51,18 @@ function fromDateTimeLocalInputValue(input: string): string | null {
 
 type AdminReadingEntriesClientProps = {
   embedded?: boolean;
+  sessionAuthorized?: boolean;
+  checkingSession?: boolean;
 };
 
-export default function AdminReadingEntriesClient({ embedded = false }: AdminReadingEntriesClientProps) {
-  const [sessionAuthorized, setSessionAuthorized] = useState(false);
-  const [checkingSession, setCheckingSession] = useState(true);
+export default function AdminReadingEntriesClient({
+  embedded = false,
+  sessionAuthorized: sessionAuthorizedProp,
+  checkingSession: checkingSessionProp,
+}: AdminReadingEntriesClientProps) {
+  const hasSessionProps = typeof sessionAuthorizedProp === "boolean" && typeof checkingSessionProp === "boolean";
+  const sessionAuthorized = hasSessionProps ? sessionAuthorizedProp : false;
+  const checkingSession = hasSessionProps ? checkingSessionProp : true;
   const [status, setStatus] = useState<Status>({ type: "idle", message: "" });
 
   const [monthFilter, setMonthFilter] = useState("");
@@ -123,29 +130,12 @@ export default function AdminReadingEntriesClient({ embedded = false }: AdminRea
   }, [queryString, sessionAuthorized]);
 
   useEffect(() => {
-    async function loadSession() {
-      try {
-        const response = await fetch("/api/admin/session", { cache: "no-store" });
-        const payload = (await response.json()) as AdminSessionStatus;
-
-        setSessionAuthorized(Boolean(payload.authorized));
-      } finally {
-        setCheckingSession(false);
-      }
-    }
-
-    void loadSession().catch(() => {
-      setCheckingSession(false);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!sessionAuthorized) {
+    if (checkingSession || !sessionAuthorized) {
       return;
     }
 
     void loadEntries();
-  }, [loadEntries, sessionAuthorized]);
+  }, [checkingSession, loadEntries, sessionAuthorized]);
 
   function beginEdit(entry: AdminReadingEntry) {
     setStatus({ type: "idle", message: "" });
