@@ -66,6 +66,13 @@ export default function UserReadingRewardsSummary({
     return value.toLocaleString("en-US");
   }
 
+  function hasTodayCheckin(row: LeaderboardRow): boolean {
+    return row.pagesRemainingForReadingPass < 15
+      || row.minutesRemainingForReadingPass < 15
+      || row.reviewTotalToday > 0
+      || row.zeroReviewsBonusToday;
+  }
+
   return (
     <>
       <section className="rounded-2xl border border-line bg-[linear-gradient(135deg,rgba(15,111,255,0.14),rgba(56,189,248,0.1),rgba(244,114,182,0.12))] p-4 sm:p-5">
@@ -151,67 +158,82 @@ export default function UserReadingRewardsSummary({
         ) : null}
 
         {leaderboard.length > 0 ? (
-          <ol className="mt-3 space-y-1.5">
-            {leaderboard.map((row, index) => (
-              <li key={row.accountId} className="rounded-lg border border-line bg-surface-muted/60 px-2.5 py-2">
-                <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1.5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-start">
-                  <div className="col-start-1 row-start-1 min-w-0 flex items-center gap-2">
-                    <span className="inline-flex rounded-full border border-line bg-surface px-2 py-0.5 text-[11px] font-black text-foreground">
-                      #{index + 1}
-                    </span>
-                    <p className="text-sm font-black text-foreground">{row.nickname}</p>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/65">WK {row.wkLevel}</p>
-                    <p className="text-[11px] font-semibold text-foreground/70">Streak {row.currentStreak}d</p>
-                  </div>
-                  <p className="col-start-2 row-start-1 text-right text-sm font-black text-accent sm:col-start-3 sm:row-span-2">{formatYen(row.totalYen)}</p>
+          <div className="mt-3 overflow-x-auto rounded-lg border border-line">
+            <table className="w-full min-w-[820px] text-left text-xs">
+              <thead className="bg-surface-muted text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
+                <tr>
+                  <th className="px-2.5 py-2">Rank</th>
+                  <th className="px-2.5 py-2">Player</th>
+                  <th className="px-2.5 py-2">Reviews today</th>
+                  <th className="px-2.5 py-2">Reading today</th>
+                  <th className="px-2.5 py-2 text-right">Reward</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line/60 bg-surface">
+                {leaderboard.map((row, index) => {
+                  const checkedInToday = hasTodayCheckin(row);
+                  const showBook = checkedInToday && row.currentBookTitle !== "-";
 
-                  <div className="col-span-2 col-start-1 row-start-2 min-w-0 sm:col-span-1 sm:col-start-2 sm:row-start-1">
-                    <div className="overflow-x-auto pb-0.5 sm:overflow-visible sm:pb-0">
-                      <div className="flex min-w-max items-center gap-1.5 sm:min-w-0 sm:flex-wrap">
-                        <span className="inline-flex items-center rounded-full border border-radical bg-radical px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
-                          {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short}
-                          <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
-                            ({formatCount(row.reviewRadicalToday)})
+                  return (
+                    <tr key={row.accountId} className="align-top">
+                      <td className="px-2.5 py-2 font-black text-foreground">#{index + 1}</td>
+                      <td className="px-2.5 py-2">
+                        <p className="text-sm font-black text-foreground">{row.nickname}</p>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/65">
+                          WK {row.wkLevel} • Streak {row.currentStreak}d
+                        </p>
+                      </td>
+                      <td className="px-2.5 py-2">
+                        <div className="flex flex-wrap gap-1">
+                          <span className="inline-flex items-center rounded-full border border-radical bg-radical px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
+                            {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short} {formatCount(row.reviewRadicalToday)}
                           </span>
-                        </span>
-                        <span className="inline-flex items-center rounded-full border border-kanji bg-kanji px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
-                          {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].short}
-                          <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
-                            ({formatCount(row.reviewKanjiToday)})
+                          <span className="inline-flex items-center rounded-full border border-kanji bg-kanji px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
+                            {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].short} {formatCount(row.reviewKanjiToday)}
                           </span>
-                        </span>
-                        <span className="inline-flex items-center rounded-full border border-vocabulary bg-vocabulary px-3 py-1 text-xs font-bold uppercase tracking-widest whitespace-nowrap text-white">
-                          {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].short}
-                          <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
-                            ({formatCount(row.reviewVocabularyToday)})
+                          <span className="inline-flex items-center rounded-full border border-vocabulary bg-vocabulary px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
+                            {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].short} {formatCount(row.reviewVocabularyToday)}
                           </span>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-1 flex min-w-0 items-center gap-1.5" title={row.currentBookTitle}>
-                      {row.currentBookThumbnailUrl ? (
-                        <Image
-                          src={row.currentBookThumbnailUrl}
-                          alt=""
-                          width={14}
-                          height={20}
-                          className="h-5 w-3.5 shrink-0 rounded border border-line object-cover"
-                        />
-                      ) : null}
-                      <p className="min-w-0 truncate text-xs font-semibold text-foreground/80">
-                        {row.currentBookTitle}
-                        <span className="ml-0.5 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">
-                          (p{row.currentBookPage ?? "-"})
-                        </span>
-                        <span className="text-foreground/65"> - left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ol>
+                          {row.zeroReviewsBonusToday ? (
+                            <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-700">
+                              0 reviews confirmed
+                            </span>
+                          ) : null}
+                        </div>
+                      </td>
+                      <td className="px-2.5 py-2">
+                        {checkedInToday ? (
+                          <div className="flex min-w-0 items-center gap-1.5" title={row.currentBookTitle}>
+                            {showBook && row.currentBookThumbnailUrl ? (
+                              <Image
+                                src={row.currentBookThumbnailUrl}
+                                alt=""
+                                width={14}
+                                height={20}
+                                className="h-5 w-3.5 shrink-0 rounded border border-line object-cover"
+                              />
+                            ) : null}
+                            <p className="min-w-0 truncate text-xs font-semibold text-foreground/80">
+                              {showBook ? row.currentBookTitle : "Check-in submitted"}
+                              {showBook ? (
+                                <span className="ml-1 text-[10px] text-foreground/60">(p{row.currentBookPage ?? "-"})</span>
+                              ) : null}
+                              <span className="ml-1 text-foreground/65">
+                                left {row.pagesRemainingForReadingPass}p / {row.minutesRemainingForReadingPass}m
+                              </span>
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="text-xs font-semibold text-foreground/60">No check-in yet today</p>
+                        )}
+                      </td>
+                      <td className="px-2.5 py-2 text-right text-sm font-black text-accent">{formatYen(row.totalYen)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         ) : null}
       </section>
     </>

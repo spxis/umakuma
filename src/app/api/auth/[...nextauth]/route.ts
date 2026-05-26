@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 
 import { authOptions } from "@/lib/auth";
+import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 
 const handler = NextAuth(authOptions);
 
@@ -25,11 +26,25 @@ function withDynamicNextAuthUrl(request: Request): void {
 }
 
 export async function GET(request: Request, context: unknown) {
-	withDynamicNextAuthUrl(request);
-	return handler(request, context);
+	return withApiRouteTelemetry({
+		route: "/api/auth/[...nextauth]",
+		method: "GET",
+		request,
+		execute: async () => {
+			withDynamicNextAuthUrl(request);
+			return handler(request, context);
+		},
+	});
 }
 
 export async function POST(request: Request, context: unknown) {
-	withDynamicNextAuthUrl(request);
-	return handler(request, context);
+	return withApiRouteTelemetry({
+		route: "/api/auth/[...nextauth]",
+		method: "POST",
+		request,
+		execute: async () => {
+			withDynamicNextAuthUrl(request);
+			return handler(request, context);
+		},
+	});
 }

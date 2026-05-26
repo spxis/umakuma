@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Noto_Sans_JP, Noto_Serif_JP, Space_Grotesk } from "next/font/google";
 import AppFooter from "./AppFooter";
+import ClientErrorReporter from "./ClientErrorReporter";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
 
@@ -46,6 +47,7 @@ export default function RootLayout({
       data-jp-font="sans"
     >
       <body className="min-h-full flex flex-col">
+        <ClientErrorReporter />
         <main className="flex-1">{children}</main>
         <AppFooter />
         <ViewGlyphModalHost />

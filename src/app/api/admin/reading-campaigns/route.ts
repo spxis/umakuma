@@ -4,6 +4,7 @@ import { z } from "zod";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
+import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
 import { readingChallengeMutationSchema } from "@/lib/readingChallengeValidation";
 
 const campaignMutationSchema = readingChallengeMutationSchema;
@@ -19,6 +20,15 @@ function isUniqueConstraintError(error: unknown): boolean {
 
   const code = (error as { code?: string }).code;
   return code === "P2002" || error.message.includes("Unique constraint");
+}
+
+function isMissingTableError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  const code = (error as { code?: string }).code;
+  return code === "P2021" || error.message.includes("does not exist");
 }
 
 async function deactivateOtherActiveCampaigns(campaignId: string): Promise<void> {
@@ -44,6 +54,8 @@ export async function GET(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
+        await ensureActiveReadingChallengeId();
+
         const campaigns = await prisma.readingChallenge.findMany({
           orderBy: [{ startDatePst: "desc" }, { createdAt: "desc" }],
           select: {
@@ -65,6 +77,10 @@ export async function GET(request: Request) {
 
         return NextResponse.json({ campaigns }, { status: 200 });
       } catch (error) {
+        if (isMissingTableError(error)) {
+          return NextResponse.json({ error: "Campaign storage is not ready. Run pnpm db:push and reload." }, { status: 503 });
+        }
+
         console.error(error);
         return NextResponse.json({ error: "Could not fetch campaigns." }, { status: 500 });
       }
@@ -129,6 +145,10 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Campaign id or slug is already used." }, { status: 409 });
         }
 
+        if (isMissingTableError(error)) {
+          return NextResponse.json({ error: "Campaign storage is not ready. Run pnpm db:push and reload." }, { status: 503 });
+        }
+
         console.error(error);
         return NextResponse.json({ error: "Could not create campaign." }, { status: 500 });
       }
@@ -191,6 +211,10 @@ export async function PATCH(request: Request) {
       } catch (error) {
         if (isUniqueConstraintError(error)) {
           return NextResponse.json({ error: "Campaign id or slug is already used." }, { status: 409 });
+        }
+
+        if (isMissingTableError(error)) {
+          return NextResponse.json({ error: "Campaign storage is not ready. Run pnpm db:push and reload." }, { status: 503 });
         }
 
         console.error(error);

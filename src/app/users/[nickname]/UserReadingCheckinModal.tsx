@@ -1,11 +1,10 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { ReadingChallengeBookRecord, ReadingReviewQueueSnapshot, ReadingSignoffRecord } from "@/lib/readingSignoff";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
-import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
 import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 import { useBookStripAutoScroll } from "./UserReadingCheckinModal.bookStrip";
 import UserReadingCheckinModalAdminDateField from "./UserReadingCheckinModalAdminDateField";
+import UserReadingCheckinModalReviewQueue from "./UserReadingCheckinModalReviewQueue";
 
 type Member = {
   id: string;
@@ -134,7 +133,6 @@ export default function UserReadingCheckinModal({
   const pagesGoalForBonus = 15;
   const pagesToBonus = Math.max(0, pagesGoalForBonus - form.pagesRead);
   const bonusReady = pagesToBonus === 0;
-  const zeroReviewsBonusActive = selectedReviewQueue.total === 0;
   const hasReadingActivity = form.pagesRead > 0 || form.minutesRead > 0;
   const hasWaniKaniActivity = form.didWanikaniReviews;
   const checkinMode: "none" | "reading" | "wanikani" | "both" = hasReadingActivity ? (hasWaniKaniActivity ? "both" : "reading") : (hasWaniKaniActivity ? "wanikani" : "none");
@@ -375,27 +373,7 @@ export default function UserReadingCheckinModal({
             </div>
           </div>
         ) : null}
-        {showWaniKani ? (
-          <section className="mt-3 rounded-xl border border-line bg-surface-muted p-3">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Current review queue snapshot</p>
-            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-foreground/85">
-              <span className="subject-pill subject-pill--radical">
-                {subjectTypePluralLabel(SUBJECT_TYPES.radical)} left: {selectedReviewQueue.radical}
-              </span>
-              <span className="subject-pill subject-pill--kanji">
-                {subjectTypePluralLabel(SUBJECT_TYPES.kanji)} left: {selectedReviewQueue.kanji}
-              </span>
-              <span className="subject-pill subject-pill--vocabulary">
-                {subjectTypePluralLabel(SUBJECT_TYPES.vocabulary)} left: {selectedReviewQueue.vocabulary}
-              </span>
-            </div>
-            <p className={`mt-1 text-xs ${zeroReviewsBonusActive ? "text-emerald-700" : "text-foreground/70"}`}>
-              {zeroReviewsBonusActive
-                ? "Special bonus active: review queue is at 0."
-                : `${selectedReviewQueue.total} total reviews currently due.`}
-            </p>
-          </section>
-        ) : null}
+        {showWaniKani ? <UserReadingCheckinModalReviewQueue selectedReviewQueue={selectedReviewQueue} /> : null}
         <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={onSubmit}>
           {showReading ? (
             <>

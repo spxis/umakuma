@@ -12,12 +12,9 @@ import UserReadingRewardsSummary from "./UserReadingRewardsSummary";
 import { clampMonthKeyToBounds, resolveCampaignMonthBounds, resolveReadingCampaignOptions, resolveSelectedReadingCampaignId } from "./UserReadingSignoffPanel.campaigns";
 import { applyReadingCheckinMode, getRememberedReadingCheckinMode, rememberReadingCheckinMode, type ReadingCheckinMode } from "./UserReadingSignoffPanel.mode";
 import { addReadingBookByIsbn, deleteReadingBookById, getRememberedBook, rememberSelectedBook } from "./UserReadingSignoffPanel.books";
+import { buildCheckinSavedMessage, type ReadingSignoffSubmitResponse } from "./UserReadingSignoffPanel.submit";
 import { createFormState, type FormState, type ReadingCampaignOption, type ReadingSignoffResponse, type TodayStats, type UserReadingSignoffPanelProps } from "./UserReadingSignoffPanel.types";
-export default function UserReadingSignoffPanel({
-  accountId,
-  initialMonthKey,
-  initialData,
-}: UserReadingSignoffPanelProps) {
+export default function UserReadingSignoffPanel({ accountId, initialMonthKey, initialData }: UserReadingSignoffPanelProps) {
   const today = getTodayDateInputValue();
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>(initialData?.selectedChallengeId ?? ACTIVE_READING_CHALLENGE.id);
   const initialMonthBounds = resolveCampaignMonthBounds({ selectedCampaignId });
@@ -41,7 +38,7 @@ export default function UserReadingSignoffPanel({
       const response = await fetch(url, { cache: "no-store" });
       const payload = (await response.json()) as ReadingSignoffResponse & { error?: string };
       if (!response.ok) {
-        throw new Error(payload.error ?? "Could not load reading signoffs.");
+        throw new Error(payload.error ?? "Could not load check-ins.");
       }
       return payload;
     },
@@ -393,14 +390,14 @@ export default function UserReadingSignoffPanel({
         }),
       });
 
-      const payload = (await response.json()) as { error?: string };
+      const payload = (await response.json()) as ReadingSignoffSubmitResponse;
       if (!response.ok) {
-        throw new Error(payload.error ?? "Could not save reading signoff.");
+        throw new Error(payload.error ?? "Could not save check-in.");
       }
 
       setMonthKey(form.signoffDatePst.slice(0, 7));
       setSubmitState("saved");
-      setSubmitMessage("Check-in saved.");
+      setSubmitMessage(buildCheckinSavedMessage(payload));
       setModalDirty(false);
       await mutate();
       window.setTimeout(() => {
@@ -408,7 +405,7 @@ export default function UserReadingSignoffPanel({
       }, 250);
     } catch (error) {
       setSubmitState("error");
-      setSubmitMessage(error instanceof Error ? error.message : "Could not save reading signoff.");
+      setSubmitMessage(error instanceof Error ? error.message : "Could not save check-in.");
     }
   }
   function updateCheckinMode(mode: ReadingCheckinMode) {

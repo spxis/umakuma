@@ -1,20 +1,20 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
-
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
-import {
-  currentReviewQueueFromAssignmentCache,
-  isMonthKey,
-  isPstDateKey,
-} from "@/lib/readingSignoff";
+import { currentReviewQueueFromAssignmentCache } from "@/lib/readingSignoff";
 import {
   challengeReadScope,
   getReadingSignoffEntryDelegate,
 } from "./readingSignoffsRoute.types";
+import {
+  getQuerySchema,
+  patchBodySchema,
+  postBodySchema,
+  prismaErrorCode,
+} from "./readingSignoffsRoute.validation";
 import {
   backfillStaleCoverUrls,
   ensureSeedBooks,
@@ -27,32 +27,7 @@ import {
   toReadingSignoffRecord,
   type LatestSignoffSummary,
 } from "./readingSignoffsRoute.lib";
-
-const getQuerySchema = z.object({
-  month: z.string().refine((value) => isMonthKey(value), {
-    message: "Invalid month key.",
-  }),
-  challengeId: z.string().min(1).max(120).optional(),
-  accountId: z.string().cuid().optional(),
-});
-
-const postBodySchema = z.object({
-  accountId: z.string().cuid(),
-  challengeId: z.string().min(1).max(120).optional(),
-  signoffDatePst: z.string().refine((value) => isPstDateKey(value), {
-    message: "Invalid signoff date.",
-  }),
-  submittedAt: z.string().datetime({ offset: true }).optional(),
-  bookTitle: z.string().trim().min(1).max(180),
-  pagesRead: z.number().int().min(0).max(2000),
-  minutesRead: z.number().int().min(0).max(1440),
-  didWanikaniReviews: z.boolean(),
-});
-
-const patchBodySchema = z.object({
-  accountId: z.string().cuid(),
-  tracked: z.boolean(),
-});
+import { toReadingReviewQueueSnapshot } from "./readingSignoffsRoute.reviewQueue";
 
 export async function GET(request: Request) {
   return withApiRouteTelemetry({
@@ -200,20 +175,12 @@ export async function GET(request: Request) {
           },
           select: {
             id: true,
+            pendingReviews: true,
             assignmentCache: true,
           },
         });
 
-        const reviewQueues = accountReviewQueues.map((row) => {
-          const queue = currentReviewQueueFromAssignmentCache(row.assignmentCache);
-          return {
-            accountId: row.id,
-            radical: queue.radical,
-            kanji: queue.kanji,
-            vocabulary: queue.vocabulary,
-            total: queue.total,
-          };
-        });
+        const reviewQueues = accountReviewQueues.map(toReadingReviewQueueSnapshot);
 
         const trackedMemberAccountIds = readingChallengeMember
           ? (() => {
@@ -292,6 +259,7 @@ export async function POST(request: Request) {
           where: { id: parsed.data.accountId },
           select: {
             id: true,
+            pendingReviews: true,
             apprenticeCount: true,
             wkLevel: true,
             assignmentCache: true,
@@ -327,10 +295,10 @@ export async function POST(request: Request) {
         });
 
         const hasReadingActivity = parsed.data.pagesRead > 0 || parsed.data.minutesRead > 0;
-        const hasWaniKaniActivity = parsed.data.didWanikaniReviews;
-        const isWaniKaniOnlyCheckin = !hasReadingActivity && hasWaniKaniActivity;
+        const requestedWaniKaniCredit = parsed.data.didWanikaniReviews;
+        const isWaniKaniOnlyCheckin = !hasReadingActivity && requestedWaniKaniCredit;
 
-        if (!hasReadingActivity && !hasWaniKaniActivity) {
+        if (!hasReadingActivity && !requestedWaniKaniCredit) {
           return NextResponse.json({ error: "Choose reading activity, WaniKani activity, or both before saving." }, { status: 400 });
         }
 
@@ -363,6 +331,22 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Signoff belongs to a different challenge." }, { status: 409 });
         }
 
+        const reviewQueue = currentReviewQueueFromAssignmentCache(account.assignmentCache);
+        const pendingReviewsAtSave = Math.max(0, account.pendingReviews ?? reviewQueue.total);
+        if (isWaniKaniOnlyCheckin && pendingReviewsAtSave > 0) {
+          return NextResponse.json(
+            {
+              error: `WaniKani credit requires 0 reviews due. ${pendingReviewsAtSave} review${pendingReviewsAtSave === 1 ? "" : "s"} still due.`,
+            },
+            { status: 400 },
+          );
+        }
+
+        const alreadyLockedZeroReviewCredit = Boolean(existing?.didWanikaniReviews && existing.reviewsLeft === 0);
+        const grantedWaniKaniCreditNow = requestedWaniKaniCredit && pendingReviewsAtSave === 0;
+        const didWanikaniReviewsForDay = alreadyLockedZeroReviewCredit || grantedWaniKaniCreditNow;
+        const reviewsLeftForDay = didWanikaniReviewsForDay ? 0 : pendingReviewsAtSave;
+
         const nextPagesRead = (existing?.pagesRead ?? 0) + parsed.data.pagesRead;
         const nextMinutesRead = (existing?.minutesRead ?? 0) + parsed.data.minutesRead;
         const normalizedBookTitle = isWaniKaniOnlyCheckin
@@ -370,12 +354,11 @@ export async function POST(request: Request) {
           : parsed.data.bookTitle.trim() || existing?.bookTitle || "Reviews only";
 
         const readingSignoffEntry = getReadingSignoffEntryDelegate();
-        const reviewQueue = currentReviewQueueFromAssignmentCache(account.assignmentCache);
-        const reviewWorkDone = reviewQueue.total;
+        const reviewWorkDone = pendingReviewsAtSave;
         const reviewCorrect = reviewQueue.kanji;
         const reviewIncorrect = reviewQueue.vocabulary;
         const reviewSuccessPercent = reviewQueue.radical;
-        const entryDidWanikaniReviews = parsed.data.didWanikaniReviews;
+        const entryDidWanikaniReviews = grantedWaniKaniCreditNow;
 
         if (readingSignoffEntry) {
           await readingSignoffEntry.create({
@@ -396,8 +379,6 @@ export async function POST(request: Request) {
           });
         }
 
-        const nextDidWanikaniReviews = Boolean(existing?.didWanikaniReviews || entryDidWanikaniReviews);
-
         const saved = await readingSignoff.upsert({
           where: {
             accountId_signoffDatePst: {
@@ -412,8 +393,8 @@ export async function POST(request: Request) {
             bookTitle: normalizedBookTitle,
             pagesRead: nextPagesRead,
             minutesRead: nextMinutesRead,
-            didWanikaniReviews: nextDidWanikaniReviews,
-            reviewsLeft: reviewQueue.total,
+            didWanikaniReviews: didWanikaniReviewsForDay,
+            reviewsLeft: reviewsLeftForDay,
             apprenticeCount: account.apprenticeCount,
             currentWkLevel: account.wkLevel,
           },
@@ -425,17 +406,34 @@ export async function POST(request: Request) {
             bookTitle: normalizedBookTitle,
             pagesRead: parsed.data.pagesRead,
             minutesRead: parsed.data.minutesRead,
-            didWanikaniReviews: nextDidWanikaniReviews,
-            reviewsLeft: reviewQueue.total,
+            didWanikaniReviews: didWanikaniReviewsForDay,
+            reviewsLeft: reviewsLeftForDay,
             apprenticeCount: account.apprenticeCount,
             currentWkLevel: account.wkLevel,
           },
         });
 
-        return NextResponse.json({ signoff: toReadingSignoffRecord(saved) }, { status: 201 });
+        return NextResponse.json(
+          {
+            signoff: toReadingSignoffRecord(saved),
+            waniKaniCreditRequested: requestedWaniKaniCredit,
+            waniKaniCreditGranted: didWanikaniReviewsForDay && reviewsLeftForDay === 0,
+            pendingReviewsAtSave,
+          },
+          { status: 201 },
+        );
       } catch (error) {
+        const code = prismaErrorCode(error);
+        if (code === "P2002") {
+          return NextResponse.json({ error: "This check-in was already saved. Refresh and try again." }, { status: 409 });
+        }
+
+        if (code === "P2003") {
+          return NextResponse.json({ error: "Selected campaign is invalid. Refresh and try again." }, { status: 409 });
+        }
+
         console.error(error);
-        return NextResponse.json({ error: "Could not save reading signoff." }, { status: 500 });
+        return NextResponse.json({ error: "Could not save check-in." }, { status: 500 });
       }
     },
   });

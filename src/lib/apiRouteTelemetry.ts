@@ -11,6 +11,33 @@ type Params<T> = {
   execute: ExecuteRoute<T>;
 };
 
+async function readResponseMessage(response: Response): Promise<string | undefined> {
+  const contentType = response.headers.get("content-type") ?? "";
+  const clone = response.clone();
+
+  if (contentType.includes("application/json")) {
+    try {
+      const payload = (await clone.json()) as { error?: unknown; message?: unknown };
+      if (typeof payload.error === "string" && payload.error.trim().length > 0) {
+        return payload.error;
+      }
+      if (typeof payload.message === "string" && payload.message.trim().length > 0) {
+        return payload.message;
+      }
+      return undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  try {
+    const text = (await clone.text()).trim();
+    return text.length > 0 ? text.slice(0, 240) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function withApiRouteTelemetry<T>({
   route,
   method,
@@ -31,9 +58,11 @@ export async function withApiRouteTelemetry<T>({
       if (status >= 500) {
         severity = "error";
         outcome = "error";
+        message = await readResponseMessage(response);
       } else if (status >= 400) {
         severity = "warning";
         outcome = "warn";
+        message = await readResponseMessage(response);
       }
     }
 

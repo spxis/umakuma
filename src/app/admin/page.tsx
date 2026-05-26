@@ -11,6 +11,8 @@ import type { AdminSessionStatus, Status } from "./AdminPage.types";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 
+type AdminWorkspaceTab = "operations" | "campaigns" | "history";
+
 export default function AdminPage() {
   const [nickname, setNickname] = useState("");
   const [token, setToken] = useState("");
@@ -25,6 +27,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [jlptRefreshing, setJlptRefreshing] = useState(false);
   const [jlptEnriching, setJlptEnriching] = useState(false);
+  const [activeTab, setActiveTab] = useState<AdminWorkspaceTab>("operations");
 
   const viewerMenuInfo: ViewerMenuInfo | null = signedIn
     ? {
@@ -190,84 +193,138 @@ export default function AdminPage() {
     <div className="relative overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
       <main className="relative mx-auto w-full max-w-6xl space-y-5">
-        <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
-          <div className="flex items-center gap-2">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Admin navigation</p>
+        <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm sm:p-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Admin workspace</p>
+              <h1 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">Manage accounts, campaigns, and logs</h1>
+              <p className="mt-1 text-sm text-foreground/70">Switch tabs to focus on one admin job at a time.</p>
+            </div>
             <div className="ml-auto">
               <UserHeaderMenu viewerMenuInfo={viewerMenuInfo} />
             </div>
           </div>
 
-          <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
-            <Link
-              href="/"
-              className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
+          <div className="mt-4 rounded-xl border border-line bg-surface-muted/70 p-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-foreground/60">Quick links</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Link
+                href="/"
+                className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-700 transition hover:bg-surface-muted"
+              >
+                Leaderboard
+              </Link>
+              <Link
+                href="/admin/users"
+                className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-700 transition hover:bg-surface-muted"
+              >
+                Users
+              </Link>
+              <Link
+                href="/admin/reading-entries"
+                className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-700 transition hover:bg-surface-muted"
+              >
+                Reading check-ins
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setActiveTab("operations")}
+              className={`inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${
+                activeTab === "operations"
+                  ? "border-accent bg-accent text-white"
+                  : "border-line bg-surface text-slate-700 hover:bg-surface-muted"
+              }`}
             >
-              Back to leaderboard
-            </Link>
-            <Link
-              href="/admin/users"
-              className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
+              Account operations
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("campaigns")}
+              className={`inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${
+                activeTab === "campaigns"
+                  ? "border-accent bg-accent text-white"
+                  : "border-line bg-surface text-slate-700 hover:bg-surface-muted"
+              }`}
             >
-              Manage users
-            </Link>
-            <Link
-              href="/admin/reading-entries"
-              className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
+              Campaign workspace
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("history")}
+              className={`inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${
+                activeTab === "history"
+                  ? "border-accent bg-accent text-white"
+                  : "border-line bg-surface text-slate-700 hover:bg-surface-muted"
+              }`}
             >
-              Reading check-ins
-            </Link>
-            <Link
-              href="#reading-campaigns"
-              className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
-            >
-              Campaign manager
-            </Link>
-            <Link
-              href="#challenge-simulator"
-              className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
-            >
-              Challenge simulator
-            </Link>
+              Submission history
+            </button>
           </div>
         </section>
 
-        <AdminControlRoom
-          nickname={nickname}
-          token={token}
-          sessionAuthorized={sessionAuthorized}
-          checkingSession={checkingSession}
-          googleConfigured={googleConfigured}
-          signedIn={signedIn}
-          emailAllowed={emailAllowed}
-          userName={userName}
-          userEmail={userEmail}
-          status={status}
-          loading={loading}
-          jlptRefreshing={jlptRefreshing}
-          jlptEnriching={jlptEnriching}
-          onSetNickname={setNickname}
-          onSetToken={setToken}
-          onAddAccount={addAccount}
-          onCompleteGoogleSignOut={() => {
-            void completeGoogleSignOut();
-          }}
-          onRefreshAll={() => {
-            void refreshAll();
-          }}
-          onRefreshJlptList={() => {
-            void refreshJlptList();
-          }}
-          onEnrichJlptKanji={() => {
-            void enrichJlptKanji();
-          }}
-        />
+        {activeTab === "operations" ? (
+          <section id="admin-operations" className="space-y-3">
+            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Account operations</p>
+              <p className="mt-1 text-sm text-foreground/70">Sign in, add family accounts, and run leaderboard or JLPT refresh actions.</p>
+            </div>
+            <AdminControlRoom
+              nickname={nickname}
+              token={token}
+              sessionAuthorized={sessionAuthorized}
+              checkingSession={checkingSession}
+              googleConfigured={googleConfigured}
+              signedIn={signedIn}
+              emailAllowed={emailAllowed}
+              userName={userName}
+              userEmail={userEmail}
+              status={status}
+              loading={loading}
+              jlptRefreshing={jlptRefreshing}
+              jlptEnriching={jlptEnriching}
+              onSetNickname={setNickname}
+              onSetToken={setToken}
+              onAddAccount={addAccount}
+              onCompleteGoogleSignOut={() => {
+                void completeGoogleSignOut();
+              }}
+              onRefreshAll={() => {
+                void refreshAll();
+              }}
+              onRefreshJlptList={() => {
+                void refreshJlptList();
+              }}
+              onEnrichJlptKanji={() => {
+                void enrichJlptKanji();
+              }}
+            />
+          </section>
+        ) : null}
 
-        <AdminCampaignManager />
+        {activeTab === "campaigns" ? (
+          <section className="space-y-3">
+            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Campaign workspace</p>
+              <p className="mt-1 text-sm text-foreground/70">Edit campaign rules and run payout simulations.</p>
+            </div>
+            <AdminCampaignManager sessionAuthorized={sessionAuthorized} checkingSession={checkingSession} />
+            <AdminChallengeSimulator />
+          </section>
+        ) : null}
 
-        <AdminChallengeSimulator />
-
-        <AdminStudyHistory sessionAuthorized={sessionAuthorized} />
+        {activeTab === "history" ? (
+          <section id="admin-history" className="space-y-3">
+            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Submission history</p>
+              <p className="mt-1 text-sm text-foreground/70">Review, edit, or remove study submissions in one place.</p>
+            </div>
+            <AdminStudyHistory sessionAuthorized={sessionAuthorized} />
+          </section>
+        ) : null}
       </main>
     </div>
   );

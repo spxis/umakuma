@@ -16,18 +16,52 @@ import type {
   CampaignsResponse,
 } from "./AdminCampaignManager.types";
 
+type AdminCampaignManagerProps = {
+  sessionAuthorized: boolean;
+  checkingSession: boolean;
+};
+
+async function readApiErrorMessage(response: Response, fallbackMessage: string): Promise<string> {
+  const contentType = response.headers.get("content-type") ?? "";
+
+  if (contentType.includes("application/json")) {
+    try {
+      const payload = (await response.json()) as { error?: string };
+      if (payload.error?.trim()) {
+        return payload.error;
+      }
+    } catch {
+      return fallbackMessage;
+    }
+  }
+
+  try {
+    const rawText = (await response.text()).trim();
+    return rawText.length > 0 ? rawText : fallbackMessage;
+  } catch {
+    return fallbackMessage;
+  }
+}
+
 async function fetchCampaigns(): Promise<CampaignRecord[]> {
   const response = await fetch("/api/admin/reading-campaigns", { cache: "no-store" });
-  const payload = (await response.json()) as CampaignsResponse;
 
   if (!response.ok) {
-    throw new Error(payload.error ?? "Could not fetch campaigns.");
+    const fallbackMessage = response.status === 401
+      ? "Admin access is required before campaigns can load."
+      : "Could not fetch campaigns.";
+    throw new Error(await readApiErrorMessage(response, fallbackMessage));
+  }
+
+  const payload = (await response.json()) as CampaignsResponse;
+  if (!Array.isArray(payload.campaigns)) {
+    throw new Error("Campaign response was invalid.");
   }
 
   return payload.campaigns;
 }
 
-export default function AdminCampaignManager() {
+export default function AdminCampaignManager({ sessionAuthorized, checkingSession }: AdminCampaignManagerProps) {
   const [campaigns, setCampaigns] = useState<CampaignRecord[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>("");
   const [editForm, setEditForm] = useState<CampaignForm>(createDefaultCampaignForm);
@@ -40,6 +74,7 @@ export default function AdminCampaignManager() {
     type: "idle",
     message: "",
   });
+  const [loadError, setLoadError] = useState<string>("");
   const selectedCampaignIdRef = useRef(selectedCampaignId);
 
   useEffect(() => {
@@ -52,7 +87,17 @@ export default function AdminCampaignManager() {
   );
 
   const refreshCampaigns = useCallback(async (preferredCampaignId?: string) => {
+    if (!sessionAuthorized) {
+      setCampaigns([]);
+      setSelectedCampaignId("");
+      setEditForm(createDefaultCampaignForm());
+      setLoadError("Admin access is required before campaigns can load.");
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
+    setLoadError("");
     try {
       const nextCampaigns = await fetchCampaigns();
       setCampaigns(nextCampaigns);
@@ -76,6 +121,7 @@ export default function AdminCampaignManager() {
         setEditForm(campaignToForm(selected));
       }
     } catch (error) {
+      setLoadError(error instanceof Error ? error.message : "Could not fetch campaigns.");
       setStatus({
         type: "error",
         message: error instanceof Error ? error.message : "Could not refresh campaigns.",
@@ -83,11 +129,15 @@ export default function AdminCampaignManager() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [sessionAuthorized]);
 
   useEffect(() => {
+    if (checkingSession) {
+      return;
+    }
+
     void refreshCampaigns();
-  }, [refreshCampaigns]);
+  }, [checkingSession, refreshCampaigns]);
 
   useEffect(() => {
     if (!selectedCampaign) {
@@ -284,11 +334,23 @@ export default function AdminCampaignManager() {
             void refreshCampaigns(selectedCampaignId || undefined);
           }}
           className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
-          disabled={loading}
+          disabled={loading || !sessionAuthorized || checkingSession}
         >
           {loading ? "Refreshing..." : "Refresh campaigns"}
         </button>
       </div>
+
+      {loadError ? (
+        <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {loadError}
+        </div>
+      ) : null}
+
+      {!checkingSession && sessionAuthorized && campaigns.length === 0 && !loadError ? (
+        <div className="mt-3 rounded-lg border border-line bg-surface-muted px-3 py-2 text-sm text-foreground/75">
+          No campaigns exist yet. Create your first campaign to enable editing.
+        </div>
+      ) : null}
 
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-line bg-surface-muted/60 p-4">
@@ -301,9 +363,11 @@ export default function AdminCampaignManager() {
             value={selectedCampaignId}
             onChange={(event) => setSelectedCampaignId(event.target.value)}
             className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm"
-            disabled={campaigns.length === 0 || loading || Boolean(statusUpdating)}
+            disabled={campaigns.length === 0 || loading || Boolean(statusUpdating) || !sessionAuthorized || checkingSession}
           >
-            {campaigns.length === 0 ? <option value="">No campaigns found</option> : null}
+            {campaigns.length === 0
+              ? <option value="">{loadError ? "Campaigns unavailable" : "Create a campaign first"}</option>
+              : null}
             {campaigns.map((campaign) => (
               <option key={campaign.id} value={campaign.id}>
                 {campaign.name} ({campaign.status})

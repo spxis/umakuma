@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
+import { emitBrowserTelemetry } from "@/lib/browserTelemetry";
 
 type AppErrorProps = {
   error: Error & { digest?: string };
@@ -11,6 +12,19 @@ type AppErrorProps = {
 export default function AppError({ error, reset }: AppErrorProps) {
   useEffect(() => {
     console.error("App route error:", error);
+    void emitBrowserTelemetry({
+      event: "client_error_boundary",
+      status: "error",
+      severity: "error",
+      message: error.message,
+      tags: {
+        source: "app/error",
+        path: window.location.pathname,
+      },
+      telemetry: {
+        digest: error.digest,
+      },
+    });
   }, [error]);
 
   return (

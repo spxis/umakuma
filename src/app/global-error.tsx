@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { emitBrowserTelemetry } from "@/lib/browserTelemetry";
 
 type GlobalErrorProps = {
   error: Error & { digest?: string };
@@ -10,6 +11,19 @@ type GlobalErrorProps = {
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
   useEffect(() => {
     console.error("Global app error:", error);
+    void emitBrowserTelemetry({
+      event: "client_error_boundary",
+      status: "error",
+      severity: "error",
+      message: error.message,
+      tags: {
+        source: "app/global-error",
+        path: window.location.pathname,
+      },
+      telemetry: {
+        digest: error.digest,
+      },
+    });
   }, [error]);
 
   return (
