@@ -9,6 +9,7 @@ import UserReadingCampaignHeader from "./UserReadingCampaignHeader";
 import UserReadingCalendar from "./UserReadingCalendar";
 import UserReadingCheckinModal from "./UserReadingCheckinModal";
 import UserReadingRewardsSummary from "./UserReadingRewardsSummary";
+import { resolveReadingCampaignOptions, resolveSelectedReadingCampaignId } from "./UserReadingSignoffPanel.campaigns";
 import { applyReadingCheckinMode, getRememberedReadingCheckinMode, rememberReadingCheckinMode, type ReadingCheckinMode } from "./UserReadingSignoffPanel.mode";
 import { addReadingBookByIsbn, deleteReadingBookById, getRememberedBook, rememberSelectedBook } from "./UserReadingSignoffPanel.books";
 import { createFormState, type FormState, type ReadingCampaignOption, type ReadingSignoffResponse, type TodayStats, type UserReadingSignoffPanelProps } from "./UserReadingSignoffPanel.types";
@@ -18,21 +19,14 @@ export default function UserReadingSignoffPanel({
   initialData,
 }: UserReadingSignoffPanelProps) {
   const today = getTodayDateInputValue();
-  const campaigns = useMemo<ReadingCampaignOption[]>(() => [{
-    id: ACTIVE_READING_CHALLENGE.id,
-    name: ACTIVE_READING_CHALLENGE.name,
-    startDatePst: ACTIVE_READING_CHALLENGE.startDatePst,
-    goalDatePst: ACTIVE_READING_CHALLENGE.goalDatePst,
-  }], []);
-  const [selectedCampaignId, setSelectedCampaignId] = useState<string>(ACTIVE_READING_CHALLENGE.id);
+  const [selectedCampaignId, setSelectedCampaignId] = useState<string>(initialData?.selectedChallengeId ?? ACTIVE_READING_CHALLENGE.id);
   const campaignStartMonthKey = READING_CAMPAIGN.startDatePst.slice(0, 7);
   const campaignGoalMonthKey = READING_CAMPAIGN.goalDatePst.slice(0, 7);
   const clampMonthToCampaign = (value: string): string => (value < campaignStartMonthKey ? campaignStartMonthKey : value > campaignGoalMonthKey ? campaignGoalMonthKey : value);
   const resolvedInitialMonthKey = clampMonthToCampaign(initialMonthKey ?? today.slice(0, 7));
-  const monthStorageKey = `reading-calendar-month:${accountId}`;
+  const monthStorageKey = `reading-calendar-month:${accountId}:${selectedCampaignId}`;
   const [monthKey, setMonthKey] = useState(() => clampMonthToCampaign(getStoredJson<string>(monthStorageKey, resolvedInitialMonthKey)));
-  const setBoundedMonthKey = (nextMonth: SetStateAction<string>) =>
-    setMonthKey((prevMonth) => clampMonthToCampaign(typeof nextMonth === "function" ? nextMonth(prevMonth) : nextMonth));
+  const setBoundedMonthKey = (nextMonth: SetStateAction<string>) => setMonthKey((prevMonth) => clampMonthToCampaign(typeof nextMonth === "function" ? nextMonth(prevMonth) : nextMonth));
   const [modalOpen, setModalOpen] = useState(false);
   const [modalDateKey, setModalDateKey] = useState(today);
   const [form, setForm] = useState<FormState | null>(null);
@@ -69,6 +63,7 @@ export default function UserReadingSignoffPanel({
   const reviewQueues = useMemo(() => data?.reviewQueues ?? [], [data?.reviewQueues]);
   const challengeBooks = useMemo(() => data?.challengeBooks ?? [], [data?.challengeBooks]);
   const latestSignoffs = useMemo(() => data?.latestSignoffs ?? [], [data?.latestSignoffs]);
+  const campaigns = useMemo<ReadingCampaignOption[]>(() => resolveReadingCampaignOptions(data?.campaigns, initialData?.selectedChallengeId ?? selectedCampaignId), [data?.campaigns, initialData?.selectedChallengeId, selectedCampaignId]);
   const [viewerTrackedMemberIds, setViewerTrackedMemberIds] = useState<string[] | null>(null);
   const todayMonthKey = today.slice(0, 7);
   const daysRemaining = campaignDaysRemaining(today);
@@ -78,6 +73,17 @@ export default function UserReadingSignoffPanel({
   useEffect(() => {
     setStoredJson(monthStorageKey, monthKey);
   }, [monthKey, monthStorageKey]);
+  useEffect(() => {
+    const nextSelectedCampaignId = resolveSelectedReadingCampaignId({
+      currentCampaignId: selectedCampaignId,
+      serverCampaignId: data?.selectedChallengeId,
+      campaigns,
+    });
+
+    if (nextSelectedCampaignId !== selectedCampaignId) {
+      setSelectedCampaignId(nextSelectedCampaignId);
+    }
+  }, [campaigns, data?.selectedChallengeId, selectedCampaignId]);
   useEffect(() => {
     if (members.length === 0) {
       return;
@@ -301,11 +307,9 @@ export default function UserReadingSignoffPanel({
     setModalOpen(false);
     setModalDirty(false);
   }
-
   function updateForm(mutator: (input: FormState) => FormState) {
     setForm((prev) => (prev ? mutator(prev) : prev));
   }
-
   async function addBookByIsbn() {
     setBookActionMessage("");
 
@@ -324,7 +328,6 @@ export default function UserReadingSignoffPanel({
       setBookActionState("idle");
     }
   }
-
   async function deleteBook(bookId: string) {
     setBookActionMessage("");
 
@@ -339,7 +342,6 @@ export default function UserReadingSignoffPanel({
       setBookActionState("idle");
     }
   }
-
   async function submitSignoff(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!form) {
@@ -409,13 +411,11 @@ export default function UserReadingSignoffPanel({
       setSubmitMessage(error instanceof Error ? error.message : "Could not save reading signoff.");
     }
   }
-
   function updateCheckinMode(mode: ReadingCheckinMode) {
     rememberReadingCheckinMode(selectedMemberId, mode);
     setModalDirty(true);
     updateForm((prev) => applyReadingCheckinMode(prev, mode));
   }
-
   function updateFormField(mutator: (input: FormState) => FormState) {
     setModalDirty(true);
     updateForm(mutator);

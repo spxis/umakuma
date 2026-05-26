@@ -130,7 +130,7 @@ export default function UserReadingRewardsSummary({
 
       <section className="rounded-xl border border-line bg-surface p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="text-base font-black text-foreground">Money leaderboard</h3>
+          <h3 className="text-base font-black text-foreground">Rewards leaderboard</h3>
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">Goal by {formatCampaignDateLabel(READING_CAMPAIGN.goalDatePst)}</p>
         </div>
         <p className="mt-2 text-xs text-foreground/65">

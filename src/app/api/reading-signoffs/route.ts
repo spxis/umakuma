@@ -5,7 +5,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
-import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
+import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
 import {
   currentReviewQueueFromAssignmentCache,
   isMonthKey,
@@ -77,10 +77,10 @@ export async function GET(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
-        const activeChallengeId = await ensureActiveReadingChallengeId();
-        const selectedChallengeId = parsed.data.challengeId ?? activeChallengeId;
+        const campaignSelection = await resolveReadingCampaignSelection(parsed.data.challengeId);
+        const selectedChallengeId = campaignSelection.selectedCampaignId;
 
-        if (parsed.data.challengeId && activeChallengeId && parsed.data.challengeId !== activeChallengeId) {
+        if (parsed.data.challengeId && parsed.data.challengeId !== selectedChallengeId) {
           return NextResponse.json({ error: "Selected campaign is not available yet." }, { status: 404 });
         }
 
@@ -236,6 +236,7 @@ export async function GET(request: Request) {
         return NextResponse.json(
           {
             members: viewerAccounts,
+            campaigns: campaignSelection.campaigns,
             selectedChallengeId,
             viewerCanChooseMember: await isAuthorizedAdmin(request),
             trackedMemberAccountIds: await trackedMemberAccountIds,
@@ -274,10 +275,10 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
-        const activeChallengeId = await ensureActiveReadingChallengeId();
-        const selectedChallengeId = parsed.data.challengeId ?? activeChallengeId;
+        const campaignSelection = await resolveReadingCampaignSelection(parsed.data.challengeId);
+        const selectedChallengeId = campaignSelection.selectedCampaignId;
 
-        if (parsed.data.challengeId && activeChallengeId && parsed.data.challengeId !== activeChallengeId) {
+        if (parsed.data.challengeId && parsed.data.challengeId !== selectedChallengeId) {
           return NextResponse.json({ error: "Selected campaign is not available yet." }, { status: 404 });
         }
 
@@ -456,7 +457,8 @@ export async function PATCH(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
-        const activeChallengeId = await ensureActiveReadingChallengeId();
+        const campaignSelection = await resolveReadingCampaignSelection();
+        const selectedChallengeId = campaignSelection.selectedCampaignId;
 
         const readingChallengeMember = getReadingChallengeMemberDelegate();
         if (!readingChallengeMember) {
@@ -469,7 +471,7 @@ export async function PATCH(request: Request) {
         const existing = await readingChallengeMember.findFirst({
           where: {
             accountId: parsed.data.accountId,
-            ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
+            ...(selectedChallengeId ? { challengeId: selectedChallengeId } : {}),
           },
           select: { id: true, accountId: true, tracked: true },
         });
@@ -481,7 +483,7 @@ export async function PATCH(request: Request) {
             })
           : await readingChallengeMember.create({
               data: {
-                ...(activeChallengeId ? { challengeId: activeChallengeId } : {}),
+                ...(selectedChallengeId ? { challengeId: selectedChallengeId } : {}),
                 accountId: parsed.data.accountId,
                 tracked: parsed.data.tracked,
               },

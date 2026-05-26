@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
 import AdminChallengeSimulator from "./AdminChallengeSimulator";
+import AdminCampaignManager from "./AdminCampaignManager";
 import AdminControlRoom from "./AdminControlRoom";
 import AdminStudyHistory from "./AdminStudyHistory";
 import type { AdminSessionStatus, Status } from "./AdminPage.types";
@@ -197,7 +198,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          <div className="mt-3 grid gap-2 sm:grid-cols-4">
+          <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
             <Link
               href="/"
               className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
@@ -215,6 +216,12 @@ export default function AdminPage() {
               className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
             >
               Reading check-ins
+            </Link>
+            <Link
+              href="#reading-campaigns"
+              className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
+            >
+              Campaign manager
             </Link>
             <Link
               href="#challenge-simulator"
@@ -255,6 +262,8 @@ export default function AdminPage() {
             void enrichJlptKanji();
           }}
         />
+
+        <AdminCampaignManager />
 
         <AdminChallengeSimulator />
 
