@@ -24,13 +24,34 @@ function toIsbn13FromIsbn10(isbn10: string): string | null {
   return `${body}${checkDigit}`;
 }
 
-function expandLookupIsbns(isbn: string): string[] {
-  if (isbn.length !== 10) {
-    return [isbn];
+function toIsbn10FromIsbn13(isbn13: string): string | null {
+  if (!/^978\d{10}$/.test(isbn13)) {
+    return null;
   }
 
-  const isbn13 = toIsbn13FromIsbn10(isbn);
-  return isbn13 ? [isbn13, isbn] : [isbn];
+  const body = isbn13.slice(3, 12);
+  let sum = 0;
+  for (let index = 0; index < body.length; index += 1) {
+    sum += Number(body[index]) * (10 - index);
+  }
+
+  const remainder = (11 - (sum % 11)) % 11;
+  const checkChar = remainder === 10 ? "X" : String(remainder);
+  return `${body}${checkChar}`;
+}
+
+function expandLookupIsbns(isbn: string): string[] {
+  if (isbn.length === 10) {
+    const isbn13 = toIsbn13FromIsbn10(isbn);
+    return isbn13 ? [isbn13, isbn] : [isbn];
+  }
+
+  if (isbn.length === 13) {
+    const isbn10 = toIsbn10FromIsbn13(isbn);
+    return isbn10 ? [isbn, isbn10] : [isbn];
+  }
+
+  return [isbn];
 }
 
 function noCoverResponse(): NextResponse {
@@ -175,6 +196,22 @@ export async function GET(request: Request) {
           const openLibraryImage = await fetchImageFromUrl(toOpenLibraryCoverUrl(candidateIsbn));
           if (openLibraryImage) {
             return openLibraryImage;
+          }
+        }
+
+        const amazonIsbn10 = lookupIsbns.find((value) => value.length === 10);
+        if (amazonIsbn10) {
+          const amazonUrls = [
+            `https://images-na.ssl-images-amazon.com/images/P/${amazonIsbn10}.09.LZZZZZZZ.jpg`,
+            `https://images-fe.ssl-images-amazon.com/images/P/${amazonIsbn10}.09.LZZZZZZZ.jpg`,
+            `https://images-na.ssl-images-amazon.com/images/P/${amazonIsbn10}.01.LZZZZZZZ.jpg`,
+            `https://m.media-amazon.com/images/P/${amazonIsbn10}.01._SCLZZZZZZZ_.jpg`,
+          ];
+          for (const amazonUrl of amazonUrls) {
+            const amazonImage = await fetchImageFromUrl(amazonUrl);
+            if (amazonImage) {
+              return amazonImage;
+            }
           }
         }
 
