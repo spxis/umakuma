@@ -9,6 +9,7 @@ import type {
 } from "@/lib/readingSignoff";
 
 import UserReadingBookCoverImage from "./UserReadingBookCoverImage";
+import UserReadingBookTitleSelect from "./UserReadingBookTitleSelect";
 import type { Member } from "./UserReadingSignoffPanel.types";
 
 type UserReadingMemberHistoryModalProps = {
@@ -359,21 +360,13 @@ function RowDisplay({
     return (
       <li className="rounded border border-accent/40 bg-surface p-2">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_auto_auto]">
-          <select
+          <UserReadingBookTitleSelect
+            options={bookOptions}
             value={draft.bookTitle}
-            onChange={(event) => onDraftChange({ ...draft, bookTitle: event.target.value })}
-            className="rounded border border-line bg-surface px-2 py-1 text-xs"
-            aria-label="Book"
-          >
-            {bookOptions.findIndex((option) => option.title === draft.bookTitle) === -1 ? (
-              <option value={draft.bookTitle}>{draft.bookTitle || "(unknown book)"}</option>
-            ) : null}
-            {bookOptions.map((option) => (
-              <option key={option.id} value={option.title}>
-                {option.title}
-              </option>
-            ))}
-          </select>
+            onChange={(nextTitle) => onDraftChange({ ...draft, bookTitle: nextTitle })}
+            ariaLabel="Book"
+            placeholder="Select book"
+          />
           <input
             type="number"
             min={0}
