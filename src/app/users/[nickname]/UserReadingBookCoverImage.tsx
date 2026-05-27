@@ -68,7 +68,7 @@ export default function UserReadingBookCoverImage({
       height={height}
       className={className}
       onError={handleError}
-      unoptimized={currentSrc === PLACEHOLDER_COVER_URL}
+      unoptimized={currentSrc === PLACEHOLDER_COVER_URL || currentSrc.startsWith("/api/")}
     />
   );
 }
