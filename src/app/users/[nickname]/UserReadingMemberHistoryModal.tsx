@@ -3,10 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 
 import type {
+  ReadingChallengeBookRecord,
   ReadingSignoffEntryRecord,
   ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
 
+import UserReadingBookCoverImage from "./UserReadingBookCoverImage";
 import type { Member } from "./UserReadingSignoffPanel.types";
 
 type UserReadingMemberHistoryModalProps = {
@@ -14,10 +16,17 @@ type UserReadingMemberHistoryModalProps = {
   member: Member | null;
   signoffs: ReadingSignoffRecord[];
   entries: ReadingSignoffEntryRecord[];
+  memberBooks: ReadingChallengeBookRecord[];
   isAdmin: boolean;
   onClose: () => void;
   onMutate: () => Promise<unknown> | unknown;
 };
+
+type BookLookup = { isbn: string; thumbnailUrl: string | null; title: string } | null;
+
+function normalizeTitleKey(title: string): string {
+  return title.trim().toLowerCase();
+}
 
 type EditDraft = {
   bookTitle: string;
@@ -52,6 +61,7 @@ export default function UserReadingMemberHistoryModal({
   member,
   signoffs,
   entries,
+  memberBooks,
   isAdmin,
   onClose,
   onMutate,
@@ -91,6 +101,18 @@ export default function UserReadingMemberHistoryModal({
       window.removeEventListener("keydown", onKeyDown, true);
     };
   }, [open, onClose]);
+
+  const bookByTitle = useMemo(() => {
+    const map = new Map<string, BookLookup>();
+    for (const book of memberBooks) {
+      map.set(normalizeTitleKey(book.title), {
+        isbn: book.isbn,
+        thumbnailUrl: book.thumbnailUrl,
+        title: book.title,
+      });
+    }
+    return map;
+  }, [memberBooks]);
 
   const groupedByDay = useMemo(() => {
     const byDay = new Map<string, { signoff: ReadingSignoffRecord | null; entries: ReadingSignoffEntryRecord[] }>();
@@ -187,17 +209,17 @@ export default function UserReadingMemberHistoryModal({
   return (
     <div
       role="presentation"
-      className="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto bg-black/60 p-4 sm:p-8"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 p-4 sm:p-8"
       onClick={onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-label={`${member.nickname} check-in history`}
-        className="relative w-full max-w-2xl rounded-2xl border border-line bg-surface p-5 text-left shadow-2xl"
+        className="relative flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl border border-line bg-surface text-left shadow-2xl"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start justify-between gap-3 border-b border-line px-5 pb-3 pt-5">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.12em] text-foreground/55">Check-in history</p>
             <h2 className="text-lg font-black text-foreground">{member.nickname}</h2>
@@ -216,12 +238,12 @@ export default function UserReadingMemberHistoryModal({
         </div>
 
         {errorMessage ? (
-          <p className="mt-3 rounded border border-red-400 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
+          <p className="mx-5 mt-3 rounded border border-red-400 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
             {errorMessage}
           </p>
         ) : null}
 
-        <div className="mt-4 max-h-[70vh] space-y-3 overflow-y-auto pr-1">
+        <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
           {groupedByDay.length === 0 ? (
             <p className="rounded border border-line bg-surface-muted px-3 py-4 text-center text-sm font-semibold text-foreground/65">
               No check-ins yet.
@@ -246,6 +268,7 @@ export default function UserReadingMemberHistoryModal({
                     pagesRead={day.signoff.pagesRead}
                     minutesRead={day.signoff.minutesRead}
                     didWanikaniReviews={day.signoff.didWanikaniReviews}
+                    book={bookByTitle.get(normalizeTitleKey(day.signoff.bookTitle)) ?? null}
                     isAdmin={isAdmin}
                     isEditing={editingId === day.signoff.id}
                     draft={editingId === day.signoff.id ? draft : null}
@@ -267,6 +290,7 @@ export default function UserReadingMemberHistoryModal({
                     pagesRead={entry.pagesRead}
                     minutesRead={entry.minutesRead}
                     didWanikaniReviews={entry.didWanikaniReviews}
+                    book={bookByTitle.get(normalizeTitleKey(entry.bookTitle)) ?? null}
                     isAdmin={isAdmin}
                     isEditing={editingId === entry.id}
                     draft={editingId === entry.id ? draft : null}
@@ -295,6 +319,7 @@ type RowDisplayProps = {
   pagesRead: number;
   minutesRead: number;
   didWanikaniReviews: boolean;
+  book: BookLookup;
   isAdmin: boolean;
   isEditing: boolean;
   draft: EditDraft | null;
@@ -313,6 +338,7 @@ function RowDisplay({
   pagesRead,
   minutesRead,
   didWanikaniReviews,
+  book,
   isAdmin,
   isEditing,
   draft,
@@ -385,11 +411,24 @@ function RowDisplay({
 
   return (
     <li className="flex items-center justify-between gap-2 rounded border border-line bg-surface px-2 py-1 text-xs">
-      <div className="min-w-0 flex-1">
-        <p className="truncate font-semibold text-foreground">{bookTitle}</p>
-        <p className="text-[10px] font-semibold text-foreground/65">
-          {pagesRead}p · {minutesRead}m{didWanikaniReviews ? " · WK" : ""}
-        </p>
+      <div className="flex min-w-0 flex-1 items-center gap-2">
+        {book?.isbn ? (
+          <UserReadingBookCoverImage
+            isbn={book.isbn}
+            title={book.title}
+            thumbnailUrl={book.thumbnailUrl}
+            width={28}
+            height={40}
+            size="small"
+            className="h-10 w-7 shrink-0 rounded object-cover"
+          />
+        ) : null}
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-semibold text-foreground">{bookTitle}</p>
+          <p className="text-[10px] font-semibold text-foreground/65">
+            {pagesRead}p · {minutesRead}m{didWanikaniReviews ? " · WK" : ""}
+          </p>
+        </div>
       </div>
       {isAdmin ? (
         <div className="flex gap-1">

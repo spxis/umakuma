@@ -107,7 +107,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
 
   const trackedMembers = useMemo(() => members.filter((member) => trackedMemberSet.has(member.id)), [members, trackedMemberSet]);
   const latestSignoffByAccountId = useMemo(() => new Map(latestSignoffs.map((row) => [row.accountId, row])), [latestSignoffs]);
-
   const booksByAccountId = useMemo(() => {
     const map = new Map<string, ReadingChallengeBookRecord[]>();
     for (const book of challengeBooks) {
@@ -450,8 +449,9 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
         onOpenMemberHistory={setHistoryMember}
       />
       <UserReadingMemberHistoryModal open={historyMember !== null} member={historyMember}
-        signoffs={historyMember ? signoffs.filter((row) => row.accountId === historyMember.id) : []}
-        entries={historyMember ? signoffEntries.filter((row) => row.accountId === historyMember.id) : []}
+        signoffs={historyMember ? signoffs.filter((r) => r.accountId === historyMember.id) : []}
+        entries={historyMember ? signoffEntries.filter((r) => r.accountId === historyMember.id) : []}
+        memberBooks={historyMember ? challengeBooks.filter((r) => r.accountId === historyMember.id) : []}
         isAdmin={viewerCanChooseMember} onClose={() => setHistoryMember(null)} onMutate={mutate} />
       <UserReadingCheckinModal
         open={modalOpen}

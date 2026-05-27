@@ -112,8 +112,12 @@ function noCoverResponse(): NextResponse {
 }
 
 const MIN_VALID_COVER_BYTES = 1024;
+// Google Books returns a grey "image not available" placeholder (~2KB at any
+// zoom) when a volume has no cover. A higher floor lets us reject it without
+// dropping real Google covers (which are typically 8KB+).
+const MIN_VALID_GOOGLE_COVER_BYTES = 4096;
 
-async function fetchImageFromUrl(url: string): Promise<NextResponse | null> {
+async function fetchImageFromUrl(url: string, minBytes: number = MIN_VALID_COVER_BYTES): Promise<NextResponse | null> {
   try {
     const response = await fetch(url, { cache: "no-store" });
     if (!response.ok) {
@@ -126,7 +130,7 @@ async function fetchImageFromUrl(url: string): Promise<NextResponse | null> {
     }
 
     const body = await response.arrayBuffer();
-    if (body.byteLength < MIN_VALID_COVER_BYTES) {
+    if (body.byteLength < minBytes) {
       return null;
     }
 
@@ -243,7 +247,7 @@ export async function GET(request: Request) {
           const googleCoverUrl = await fetchGoogleBooksCoverUrlByIsbn(candidateIsbn);
           if (googleCoverUrl) {
             for (const variant of googleBooksCoverUrlsForSize(googleCoverUrl, size)) {
-              const googleImage = await fetchImageFromUrl(variant);
+              const googleImage = await fetchImageFromUrl(variant, MIN_VALID_GOOGLE_COVER_BYTES);
               if (googleImage) {
                 return googleImage;
               }
