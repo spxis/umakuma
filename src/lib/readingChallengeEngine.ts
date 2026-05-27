@@ -174,6 +174,7 @@ export function computeChallengeLeaderboard(input: {
 
     let streak = 0;
     let weekStreak = 0;
+    let checkinStreak = 0;
     let previousWeekIndex = -1;
     let perfectDays = 0;
 
@@ -198,9 +199,19 @@ export function computeChallengeLeaderboard(input: {
         streak += 1;
         weekStreak += 1;
         perfectDays += 1;
-      } else {
+      } else if (!(dateKey === input.asOfDateKey && !record)) {
+        // Today with no check-in yet is "still in progress" — don't reset the
+        // streak until the day actually ends.
         streak = 0;
         weekStreak = 0;
+      }
+
+      // Display streak counts any day with a check-in (perfect or not).
+      // Today with no check-in yet is still "in progress" — preserve it.
+      if (record) {
+        checkinStreak += 1;
+      } else if (dateKey !== input.asOfDateKey) {
+        checkinStreak = 0;
       }
 
       const multiplier = outcome.perfect ? dayMultiplierFromStreak(challenge, Math.max(0, weekStreak - 1)) : 1;
@@ -251,7 +262,7 @@ export function computeChallengeLeaderboard(input: {
       totalYen: baseYen + bonusYen,
       baseYen,
       bonusYen,
-      currentStreak: streak,
+      currentStreak: checkinStreak,
       perfectDays,
       weeklyYen: weeklyBaseYen.map((value, index) => value + weeklyBonusYen[index]),
       weeklyBaseYen,
