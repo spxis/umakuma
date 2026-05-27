@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 
 import type { ReadingChallengeBookRecord } from "@/lib/readingSignoff";
 
 import UserReadingBooksEditor from "./UserReadingBooksEditor";
+import UserReadingBookCoverImage from "./UserReadingBookCoverImage";
 import {
   getReadingBookCatalog,
   getRememberedBook,
@@ -42,8 +43,10 @@ export default function UserReadingDashboardBooksSection({
   onDeleteBook,
 }: UserReadingDashboardBooksSectionProps) {
   const [editorOpen, setEditorOpen] = useState(false);
+  const [catalogMenuOpen, setCatalogMenuOpen] = useState(false);
   const [selectedBookByMemberId, setSelectedBookByMemberId] = useState<Record<string, string>>({});
   const [selectedCatalogIsbnByMemberId, setSelectedCatalogIsbnByMemberId] = useState<Record<string, string>>({});
+  const catalogMenuRef = useRef<HTMLDivElement | null>(null);
   const rememberedSelectedBook = useMemo(() => {
     const remembered = getRememberedBook(selectedMemberId);
     if (remembered && memberBooks.some((book) => book.title === remembered)) {
@@ -60,6 +63,7 @@ export default function UserReadingDashboardBooksSection({
     { revalidateOnFocus: false },
   );
   const selectedCatalogIsbn = selectedCatalogIsbnByMemberId[selectedMemberId] ?? "";
+  const selectedCatalogBook = catalogBooks.find((book) => book.isbn === selectedCatalogIsbn) ?? null;
 
   useEffect(() => {
     if (!editorOpen) {
@@ -81,6 +85,25 @@ export default function UserReadingDashboardBooksSection({
     };
   }, [editorOpen]);
 
+  useEffect(() => {
+    if (!editorOpen || !catalogMenuOpen) {
+      return;
+    }
+
+    function onMouseDown(event: MouseEvent) {
+      if (catalogMenuRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      setCatalogMenuOpen(false);
+    }
+
+    window.addEventListener("mousedown", onMouseDown);
+    return () => {
+      window.removeEventListener("mousedown", onMouseDown);
+    };
+  }, [catalogMenuOpen, editorOpen]);
+
   function handleSelectedBookChange(nextBookTitle: string) {
     setSelectedBookByMemberId((previous) => ({
       ...previous,
@@ -98,6 +121,14 @@ export default function UserReadingDashboardBooksSection({
     }
 
     await onAddBookByIsbn(selectedCatalogIsbn);
+  }
+
+  function handleCatalogBookSelect(nextIsbn: string) {
+    setSelectedCatalogIsbnByMemberId((previous) => ({
+      ...previous,
+      [selectedMemberId]: nextIsbn,
+    }));
+    setCatalogMenuOpen(false);
   }
 
   return (
@@ -166,25 +197,76 @@ export default function UserReadingDashboardBooksSection({
               <label className="flex flex-col gap-1">
                 <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Pick from local books</span>
                 <div className="flex flex-wrap items-center gap-2">
-                  <select
-                    className="h-10 min-w-60 flex-1 rounded-lg border border-line bg-surface px-3 text-sm"
-                    value={selectedCatalogIsbn}
-                    onChange={(event) => {
-                      const nextIsbn = event.target.value;
-                      setSelectedCatalogIsbnByMemberId((previous) => ({
-                        ...previous,
-                        [selectedMemberId]: nextIsbn,
-                      }));
-                    }}
-                    disabled={catalogLoading || catalogBooks.length === 0}
-                  >
-                    <option value="">Pick a saved local book</option>
-                    {catalogBooks.map((book) => (
-                      <option key={`catalog-${book.isbn}`} value={book.isbn}>
-                        {book.title}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative min-w-60 flex-1" ref={catalogMenuRef}>
+                    <button
+                      type="button"
+                      className="flex h-10 w-full items-center justify-between rounded-lg border border-line bg-surface px-3 text-sm text-left"
+                      onClick={() => {
+                        if (catalogLoading || catalogBooks.length === 0) {
+                          return;
+                        }
+                        setCatalogMenuOpen((previous) => !previous);
+                      }}
+                      disabled={catalogLoading || catalogBooks.length === 0}
+                      aria-haspopup="listbox"
+                      aria-expanded={catalogMenuOpen}
+                    >
+                      <span className="flex min-w-0 items-center gap-2">
+                        {selectedCatalogBook ? (
+                          <UserReadingBookCoverImage
+                            isbn={selectedCatalogBook.isbn}
+                            title={selectedCatalogBook.title}
+                            thumbnailUrl={selectedCatalogBook.thumbnailUrl}
+                            width={20}
+                            height={28}
+                            size="small"
+                            className="h-7 w-5 shrink-0 rounded object-cover"
+                          />
+                        ) : null}
+                        <span className="truncate">{selectedCatalogBook?.title ?? "Select book"}</span>
+                      </span>
+                      <span className="text-xs text-foreground/65" aria-hidden="true">
+                        ▾
+                      </span>
+                    </button>
+
+                    {catalogMenuOpen ? (
+                      <div
+                        className="absolute left-0 right-0 top-[calc(100%+0.25rem)] z-20 max-h-72 overflow-y-auto rounded-lg border border-line bg-surface shadow-lg"
+                        role="listbox"
+                        aria-label="Select book"
+                      >
+                        {catalogBooks.map((book) => {
+                          const active = book.isbn === selectedCatalogIsbn;
+                          return (
+                            <button
+                              key={`catalog-${book.isbn}`}
+                              type="button"
+                              className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm ${
+                                active ? "bg-brand/15" : "hover:bg-surface-muted"
+                              }`}
+                              onClick={() => {
+                                handleCatalogBookSelect(book.isbn);
+                              }}
+                              role="option"
+                              aria-selected={active}
+                            >
+                              <UserReadingBookCoverImage
+                                isbn={book.isbn}
+                                title={book.title}
+                                thumbnailUrl={book.thumbnailUrl}
+                                width={20}
+                                height={28}
+                                size="small"
+                                className="h-7 w-5 shrink-0 rounded object-cover"
+                              />
+                              <span className="truncate">{book.title}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
                   <button
                     type="button"
                     className="h-10 rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em]"

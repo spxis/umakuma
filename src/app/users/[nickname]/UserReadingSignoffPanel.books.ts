@@ -11,6 +11,7 @@ type AddBookPayload = {
 export type ReadingBookCatalogOption = {
   isbn: string;
   title: string;
+  thumbnailUrl: string | null;
 };
 
 export async function getReadingBookCatalog(accountId: string): Promise<ReadingBookCatalogOption[]> {

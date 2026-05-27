@@ -28,6 +28,7 @@ type ReadingChallengeBookDelegate = {
 type BookCatalogOption = {
   isbn: string;
   title: string;
+  thumbnailUrl: string | null;
 };
 
 const querySchema = z.object({
@@ -45,6 +46,11 @@ function normalizeCatalogTitle(title: string): string {
 
 function isFallbackCatalogTitle(title: string): boolean {
   return /^isbn[:\s]/i.test(title.trim());
+}
+
+function normalizeCatalogThumbnail(value: string | null): string | null {
+  const trimmed = value?.trim() ?? "";
+  return trimmed.length > 0 ? trimmed : null;
 }
 
 function buildCatalogOptions(rows: ReadingBookRow[]): BookCatalogOption[] {
@@ -67,6 +73,7 @@ function buildCatalogOptions(rows: ReadingBookRow[]): BookCatalogOption[] {
       uniqueByTitle.set(normalizedTitle, {
         isbn,
         title,
+        thumbnailUrl: normalizeCatalogThumbnail(row.thumbnailUrl),
       });
       continue;
     }
@@ -75,6 +82,15 @@ function buildCatalogOptions(rows: ReadingBookRow[]): BookCatalogOption[] {
       uniqueByTitle.set(normalizedTitle, {
         isbn,
         title,
+        thumbnailUrl: normalizeCatalogThumbnail(row.thumbnailUrl),
+      });
+      continue;
+    }
+
+    if (!existing.thumbnailUrl) {
+      uniqueByTitle.set(normalizedTitle, {
+        ...existing,
+        thumbnailUrl: normalizeCatalogThumbnail(row.thumbnailUrl),
       });
     }
   }
