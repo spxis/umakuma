@@ -289,14 +289,14 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   function updateForm(mutator: (input: FormState) => FormState) {
     setForm((prev) => (prev ? mutator(prev) : prev));
   }
-  async function addBookByIsbn() {
+  async function addBookByIsbn(rawIsbn: string = addIsbn) {
     setBookActionMessage("");
 
     try {
       setBookActionState("adding");
       const message = await addReadingBookByIsbn({
         accountId: selectedMemberId,
-        rawIsbn: addIsbn,
+        rawIsbn,
       });
       setBookActionMessage(message);
       setAddIsbn("");
@@ -429,6 +429,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
         onSelectedMemberChange={setSelectedMemberId}
         onAddIsbnChange={setAddIsbn}
         onAddBook={addBookByIsbn}
+        onAddBookByIsbn={addBookByIsbn}
         onDeleteBook={deleteBook}
       />
 

@@ -8,6 +8,29 @@ type AddBookPayload = {
   book?: { title?: string | null };
 };
 
+export type ReadingBookCatalogOption = {
+  isbn: string;
+  title: string;
+};
+
+export async function getReadingBookCatalog(accountId: string): Promise<ReadingBookCatalogOption[]> {
+  const query = new URLSearchParams({ accountId });
+  const response = await fetch(`/api/reading-books/catalog?${query.toString()}`, {
+    cache: "no-store",
+  });
+
+  const payload = (await response.json()) as {
+    error?: string;
+    books?: ReadingBookCatalogOption[];
+  };
+
+  if (!response.ok) {
+    throw new Error(payload.error ?? "Could not load books yet.");
+  }
+
+  return payload.books ?? [];
+}
+
 function isFallbackBookTitle(title: string, isbn: string): boolean {
   const normalizedTitle = title.trim().toLowerCase();
   const normalizedIsbn = isbn.trim().toLowerCase();

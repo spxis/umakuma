@@ -1,9 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
+import useSWR from "swr";
 
 import type { ReadingChallengeBookRecord } from "@/lib/readingSignoff";
 
 import UserReadingBooksEditor from "./UserReadingBooksEditor";
-import { getRememberedBook, rememberSelectedBook } from "./UserReadingSignoffPanel.books";
+import {
+  getReadingBookCatalog,
+  getRememberedBook,
+  rememberSelectedBook,
+  type ReadingBookCatalogOption,
+} from "./UserReadingSignoffPanel.books";
 import type { Member } from "./UserReadingSignoffPanel.types";
 
 type UserReadingDashboardBooksSectionProps = {
@@ -17,6 +23,7 @@ type UserReadingDashboardBooksSectionProps = {
   onSelectedMemberChange: (nextMemberId: string) => void;
   onAddIsbnChange: (value: string) => void;
   onAddBook: () => Promise<void>;
+  onAddBookByIsbn: (isbn: string) => Promise<void>;
   onDeleteBook: (bookId: string) => Promise<void>;
 };
 
@@ -31,10 +38,12 @@ export default function UserReadingDashboardBooksSection({
   onSelectedMemberChange,
   onAddIsbnChange,
   onAddBook,
+  onAddBookByIsbn,
   onDeleteBook,
 }: UserReadingDashboardBooksSectionProps) {
   const [editorOpen, setEditorOpen] = useState(false);
   const [selectedBookByMemberId, setSelectedBookByMemberId] = useState<Record<string, string>>({});
+  const [selectedCatalogIsbnByMemberId, setSelectedCatalogIsbnByMemberId] = useState<Record<string, string>>({});
   const rememberedSelectedBook = useMemo(() => {
     const remembered = getRememberedBook(selectedMemberId);
     if (remembered && memberBooks.some((book) => book.title === remembered)) {
@@ -45,6 +54,12 @@ export default function UserReadingDashboardBooksSection({
   }, [memberBooks, selectedMemberId]);
 
   const selectedBookTitle = selectedBookByMemberId[selectedMemberId] ?? rememberedSelectedBook;
+  const { data: catalogBooks = [], isLoading: catalogLoading } = useSWR<ReadingBookCatalogOption[]>(
+    editorOpen ? `/api/reading-books/catalog?accountId=${encodeURIComponent(selectedMemberId)}` : null,
+    () => getReadingBookCatalog(selectedMemberId),
+    { revalidateOnFocus: false },
+  );
+  const selectedCatalogIsbn = selectedCatalogIsbnByMemberId[selectedMemberId] ?? "";
 
   useEffect(() => {
     if (!editorOpen) {
@@ -75,6 +90,14 @@ export default function UserReadingDashboardBooksSection({
     if (nextBookTitle.trim().length > 0) {
       rememberSelectedBook(selectedMemberId, nextBookTitle);
     }
+  }
+
+  async function handleAddCatalogBook() {
+    if (!selectedCatalogIsbn) {
+      return;
+    }
+
+    await onAddBookByIsbn(selectedCatalogIsbn);
   }
 
   return (
@@ -138,6 +161,47 @@ export default function UserReadingDashboardBooksSection({
                 </select>
               </label>
             ) : null}
+
+            <div className="mt-4 rounded-xl border border-line bg-surface-muted p-3">
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Pick from local books</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    className="h-10 min-w-60 flex-1 rounded-lg border border-line bg-surface px-3 text-sm"
+                    value={selectedCatalogIsbn}
+                    onChange={(event) => {
+                      const nextIsbn = event.target.value;
+                      setSelectedCatalogIsbnByMemberId((previous) => ({
+                        ...previous,
+                        [selectedMemberId]: nextIsbn,
+                      }));
+                    }}
+                    disabled={catalogLoading || catalogBooks.length === 0}
+                  >
+                    <option value="">Pick a saved local book</option>
+                    {catalogBooks.map((book) => (
+                      <option key={`catalog-${book.isbn}`} value={book.isbn}>
+                        {book.title}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="h-10 rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em]"
+                    disabled={catalogLoading || !selectedCatalogIsbn}
+                    onClick={() => {
+                      void handleAddCatalogBook();
+                    }}
+                  >
+                    Add selected
+                  </button>
+                </div>
+              </label>
+              {catalogLoading ? <p className="mt-2 text-xs text-foreground/70">Loading local books...</p> : null}
+              {!catalogLoading && catalogBooks.length === 0 ? (
+                <p className="mt-2 text-xs text-foreground/70">No local books found yet. Add one by ISBN first.</p>
+              ) : null}
+            </div>
 
             <div className="mt-4">
               <UserReadingBooksEditor
