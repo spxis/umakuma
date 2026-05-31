@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
@@ -129,6 +129,28 @@ export default function StudyExplorerPanel({
     setSelectedSubjectIds,
   } = useStudyBulkReset({ filteredItems });
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+    try {
+      return window.localStorage.getItem("wr:study:mobile-filters-open") === "1";
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    try {
+      window.localStorage.setItem("wr:study:mobile-filters-open", mobileFiltersOpen ? "1" : "0");
+    } catch {
+      // Ignore storage access errors in restricted modes.
+    }
+  }, [mobileFiltersOpen]);
+
   const filtersLoading = !hasData;
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
   const showTypeCountPlaceholders = !hasData && typeCounts.all === 0 && filteredItems.length === 0 && !errorMessage;
@@ -149,17 +171,31 @@ export default function StudyExplorerPanel({
     : 0;
   const allTypesSelected = isAllStudyTypeFilter(typeFilter);
   const groupingCountLabel = (count: number) => showTypeCountPlaceholders ? "-" : formatNumber(count);
+  const mobileFilterSectionClass = hideControlsDuringInitialLoad
+    ? "hidden"
+    : mobileFiltersOpen
+      ? "block"
+      : "hidden sm:block";
   return (
     <>
       <header className="border-b border-line bg-surface-muted px-5 py-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-xl font-black text-foreground">{STUDY_PANEL_TEXT.heading}</h2>
-            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">{STUDY_PANEL_TEXT.subtitle}</p>
+            <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
-          <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} /></div>
+          <button
+            type="button"
+            onClick={() => setMobileFiltersOpen((open) => !open)}
+            aria-expanded={mobileFiltersOpen}
+            aria-controls="study-filters-panel"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground sm:hidden"
+          >
+            {mobileFiltersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}
+          </button>
         </div>
-        <div className={`mt-3 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
+        <div id="study-filters-panel" className={`mt-3 space-y-2 ${mobileFilterSectionClass}`}>
+          <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} /></div>
           <StudyLevelFilters
             queueMode={queueMode}
             filtersLoading={filtersLoading}
@@ -172,8 +208,6 @@ export default function StudyExplorerPanel({
             totalReviewsInVisibleLevels={totalReviewsInVisibleLevels}
             onSetViewedLevel={onSetViewedLevel}
           />
-        </div>
-        <div className={`mt-2 space-y-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
           <div className="flex w-fit max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Grouping filters">
             <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grouping</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">

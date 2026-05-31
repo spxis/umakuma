@@ -158,6 +158,21 @@ export default function UserDashboardTabs({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(window.location.search);
+    if (activeTab === "learn") {
+      params.delete("dashboard");
+    } else {
+      params.set("dashboard", activeTab);
+    }
+
+    const nextQuery = params.toString();
+    const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ""}${window.location.hash}`;
+    const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (nextUrl !== currentUrl) {
+      window.history.replaceState(null, "", nextUrl);
+    }
+
     window.dispatchEvent(new CustomEvent("wr:dashboard-tab-change", { detail: { tab: activeTab } }));
   }, [activeTab]);
 
@@ -205,7 +220,7 @@ export default function UserDashboardTabs({
   const activeRelativeLabel = hasActivity ? formatRelativeTime(liveLastActivityMs) : "Unknown";
 
   const headerSection = (
-    <section className="rounded-[2rem] border border-line bg-surface/90 p-3 shadow-[0_24px_80px_rgba(15,111,255,0.15)] sm:p-4">
+    <section className="rounded-4xl border border-line bg-surface/90 p-3 shadow-[0_24px_80px_rgba(15,111,255,0.15)] sm:p-4">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <p className="min-w-0 truncate text-xs font-bold uppercase tracking-[0.14em] text-accent">
@@ -218,6 +233,10 @@ export default function UserDashboardTabs({
             </span>
           ) : null}
           <div className="ml-auto flex items-center gap-2">
+            <p className="shrink-0 text-sm font-black uppercase tracking-[0.06em] text-foreground sm:text-base">
+              #{globalRank}
+              <span className="ml-1 text-xs font-bold text-foreground/65">/ {formatNumber(totalPlayers)}</span>
+            </p>
             <UserHeaderMenu
               accountId={accountId}
               viewedWkUsername={wkUsername}
@@ -242,13 +261,6 @@ export default function UserDashboardTabs({
               { value: "read", label: "Read" },
             ]}
           />
-
-          <p className="ml-auto shrink-0 text-right text-sm font-black uppercase tracking-[0.06em] text-foreground sm:text-xl">
-            <span>Rank #{globalRank}</span>
-            <span className="ml-1 text-xs font-bold text-foreground/65 sm:ml-2 sm:text-sm">
-              of {formatNumber(totalPlayers)}
-            </span>
-          </p>
 
           {canViewAllUserPages && totalPlayers > 1 ? (
             <div className="hidden items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:flex">

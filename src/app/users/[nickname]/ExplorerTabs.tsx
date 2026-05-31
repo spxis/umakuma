@@ -323,26 +323,26 @@ export default function ExplorerTabs({
   function tabClass(tab: "study" | "level" | "jlpt"): string {
     const active = activeTab === tab;
     return active
-      ? "inline-flex h-8 items-center justify-center rounded-full border border-accent bg-accent px-4 text-xs font-bold uppercase tracking-[0.1em] text-white"
-      : "inline-flex h-8 items-center justify-center rounded-full px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted";
+      ? "inline-flex h-7 flex-1 items-center justify-center rounded-full border border-accent bg-accent px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-white sm:h-8 sm:flex-none sm:px-4 sm:text-xs sm:tracking-[0.1em]"
+      : "inline-flex h-7 flex-1 items-center justify-center rounded-full px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-foreground hover:bg-surface-muted sm:h-8 sm:flex-none sm:px-4 sm:text-xs sm:tracking-[0.1em]";
   }
 
   function queueModeSegmentClass(mode: QueueType, activeMode: QueueType): string {
     const active = mode === activeMode;
     if (!active) {
-      return "inline-flex h-8 items-center justify-center rounded-full px-4 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted";
+      return "inline-flex h-7 flex-1 items-center justify-center rounded-full px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-foreground hover:bg-surface-muted sm:h-8 sm:px-4 sm:text-xs sm:tracking-[0.1em]";
     }
 
     return mode === QUEUE_TYPES.review
-      ? "inline-flex h-8 items-center justify-center rounded-full border border-amber-500 bg-amber-500 px-4 text-xs font-bold uppercase tracking-[0.1em] text-white"
-      : "inline-flex h-8 items-center justify-center rounded-full border border-sky-500 bg-sky-500 px-4 text-xs font-bold uppercase tracking-[0.1em] text-white";
+      ? "inline-flex h-7 flex-1 items-center justify-center rounded-full border border-amber-500 bg-amber-500 px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-white sm:h-8 sm:px-4 sm:text-xs sm:tracking-[0.1em]"
+      : "inline-flex h-7 flex-1 items-center justify-center rounded-full border border-sky-500 bg-sky-500 px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-white sm:h-8 sm:px-4 sm:text-xs sm:tracking-[0.1em]";
   }
 
   return (
     <section className="space-y-3 rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
       <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
         <div
-          className="inline-flex w-full flex-nowrap items-center gap-0 overflow-x-auto rounded-full border border-line bg-surface p-1 pr-2"
+          className="inline-flex w-full flex-nowrap items-center gap-0 rounded-full border border-line bg-surface p-1"
           role="tablist"
           aria-label="Explorer tabs"
         >
@@ -375,11 +375,11 @@ export default function ExplorerTabs({
             JLPT Explorer
           </button>
         </div>
-        <div className="w-full overflow-x-auto md:overflow-visible">
-          <div className="flex min-w-max items-center gap-2 pr-1 md:ml-auto md:min-w-0 md:justify-end">
+        <div className="w-full">
+          <div className="grid w-full grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-center gap-2 pr-1 md:flex md:w-auto md:items-center md:gap-2 md:pr-1 md:justify-end">
             {activeTab === "study" ? (
               <div
-                className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1"
+                className="inline-flex w-full items-center rounded-full border border-line bg-surface p-1"
                 role="tablist"
                 aria-label="Study queue mode"
               >
@@ -406,13 +406,14 @@ export default function ExplorerTabs({
             <button
               type="button"
               onClick={() => setStudyMode((prev) => !prev)}
-              className={`inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-full border px-4 text-xs font-bold uppercase tracking-widest transition ${
+              className={`inline-flex h-9 w-full items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:w-auto sm:px-4 sm:text-xs sm:tracking-widest ${
                 studyMode
                   ? "border-hot bg-hot text-white"
                   : "border-line bg-surface text-foreground hover:bg-surface-muted"
               }`}
             >
-              {`Study Mode ${studyMode ? "On" : "Off"}`}
+              <span className="sm:hidden">Mode {studyMode ? "On" : "Off"}</span>
+              <span className="hidden sm:inline">Study Mode {studyMode ? "On" : "Off"}</span>
             </button>
           </div>
         </div>

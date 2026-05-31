@@ -43,6 +43,8 @@ export const STUDY_PANEL_TEXT = {
   heading: "Study",
   subtitle: "Reviews due now and pending lessons across all levels",
   searchScope: "study",
+  showFilters: "Show filters",
+  hideFilters: "Hide filters",
   allLevelsLabel: "All Levels",
   allGroupsLabel: "All Groups",
   allStatusesLabel: "All Statuses",

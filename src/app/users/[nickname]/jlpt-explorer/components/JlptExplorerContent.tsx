@@ -54,6 +54,28 @@ export default function JlptExplorerContent({
   const selectedIndex = selectedItem
     ? filteredItems.findIndex((item) => item.kanji === selectedItem.kanji)
     : -1;
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+    try {
+      return window.localStorage.getItem("wr:jlpt:mobile-filters-open") === "1";
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    try {
+      window.localStorage.setItem("wr:jlpt:mobile-filters-open", mobileFiltersOpen ? "1" : "0");
+    } catch {
+      // Ignore storage access errors in restricted modes.
+    }
+  }, [mobileFiltersOpen]);
+
   // --- Kanji stats/history state ---
   const [statsOpen, setStatsOpen] = useState(false);
   const [kanjiStats, setKanjiStats] = useState<KanjiStats | null>(null);
@@ -134,22 +156,33 @@ export default function JlptExplorerContent({
           Math.floor(selectedVisibleIndex / gridColumns) * gridColumns + (gridColumns - 1),
         )
       : -1;
+  const mobileFilterSectionClass = mobileFiltersOpen ? "block" : "hidden sm:block";
   return (
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface-muted px-5 py-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-xl font-black text-foreground">JLPT Explorer</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">
               Browse all N1-N5 kanji <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(items.length)} total)</span>
             </p>
           </div>
+          <button
+            type="button"
+            onClick={() => setMobileFiltersOpen((open) => !open)}
+            aria-expanded={mobileFiltersOpen}
+            aria-controls="jlpt-filters-panel"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground sm:hidden"
+          >
+            {mobileFiltersOpen ? JLPT_EXPLORER_TEXT.hideFilters : JLPT_EXPLORER_TEXT.showFilters}
+          </button>
+        </div>
+        <div id="jlpt-filters-panel" className={`mt-3 space-y-3 ${mobileFilterSectionClass}`}>
           <div className="w-full lg:max-w-[38rem]">
             <ExplorerSearchBar scope="jlpt" />
           </div>
-        </div>
-        {availableWkLevels.length > 0 ? (
-          <div className="mt-3 inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="WaniKani level filters">
+          {availableWkLevels.length > 0 ? (
+          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="WaniKani level filters">
             <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(wkLevelFilter === null)}`}>
@@ -165,9 +198,9 @@ export default function JlptExplorerContent({
               ))}
             </div>
           </div>
-        ) : null}
-        {availableGrades.length > 0 ? (
-          <div className="mt-3 inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
+          ) : null}
+          {availableGrades.length > 0 ? (
+          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
             <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
             <button type="button" onClick={() => onSetGradeFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(gradeFilter === null)}`}>
@@ -198,8 +231,8 @@ export default function JlptExplorerContent({
             ))}
             </div>
           </div>
-        ) : null}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          ) : null}
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT level filters">
             <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
@@ -255,6 +288,7 @@ export default function JlptExplorerContent({
               {stickyLevels ? JLPT_EXPLORER_TEXT.stickyOn : JLPT_EXPLORER_TEXT.stickyOff}
             </button>
           </div>
+        </div>
         </div>
       </header>
       <div className="p-5">

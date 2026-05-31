@@ -1,22 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { allBadgeClass, badgeClass, disabledBadgeClass, formatNumber, srsFilterButtonLabel } from "../lib/levelExplorerDisplay";
 import { useLevelExplorerResetSelection } from "../lib/useLevelExplorerResetSelection";
-import {
-  JLPT_FILTER_ALLOWED,
-  LEVEL_JLPT_FILTERS,
-  LEVEL_REVIEW_TIMING_FILTERS,
-  LEVEL_SRS_FILTERS,
-  REVIEW_TIMING_ALLOWED,
-  SRS_FILTER_ALLOWED,
-} from "../lib/levelExplorerState";
+import { JLPT_FILTER_ALLOWED, LEVEL_JLPT_FILTERS, LEVEL_REVIEW_TIMING_FILTERS, LEVEL_SRS_FILTERS, REVIEW_TIMING_ALLOWED, SRS_FILTER_ALLOWED } from "../lib/levelExplorerState";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
-import {
-  LEVEL_EXPLORER_JLPT_FILTER_LABELS,
-  LEVEL_EXPLORER_JLPT_MIX_LEVELS,
-  LEVEL_EXPLORER_REVIEW_TIMING_LABELS,
-  LEVEL_EXPLORER_TEXT,
-} from "./LevelExplorer.constants";
+import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_JLPT_MIX_LEVELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS, LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
 export default function LevelExplorerContent({
   accountId,
@@ -241,18 +229,29 @@ export default function LevelExplorerContent({
     onSetSelectedSubjectId,
     onSetSrsFilter,
   ]);
+  const mobileFilterSectionClass = filtersCollapsed ? "hidden sm:block" : "block";
   return (
     <section id="explorer" className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="flex flex-col gap-3 border-b border-line bg-surface-muted px-5 py-4">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-xl font-black text-foreground">WaniKani Explorer</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Select one level at a time</p>
           </div>
+          <button
+            type="button"
+            onClick={() => onSetFiltersCollapsed(!filtersCollapsed)}
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.1em] text-foreground sm:hidden"
+            aria-expanded={!filtersCollapsed}
+            aria-controls="wk-filters-panel"
+          >
+            {filtersCollapsed ? "Show filters" : "Hide filters"}
+          </button>
+        </div>
+        <div id="wk-filters-panel" className={`space-y-3 ${mobileFilterSectionClass}`}>
           <div className="w-full lg:max-w-[38rem]">
             <ExplorerSearchBar scope="level" />
           </div>
-        </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
             <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
@@ -343,8 +342,9 @@ export default function LevelExplorerContent({
             </div>
           </div>
         </div>
+        </div>
       </header>
-      <div className="border-b border-line px-5 py-4">
+      <div className={`border-b border-line px-5 py-4 ${mobileFilterSectionClass}`}>
         <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">JLPT mix (kanji in selected levels)</p>
         <div className="mt-2 grid grid-cols-5 gap-2">
           {LEVEL_EXPLORER_JLPT_MIX_LEVELS.map((level) => {
@@ -359,17 +359,17 @@ export default function LevelExplorerContent({
           })}
         </div>
       </div>
-      <div className="border-b border-line px-5 py-4">
+      <div className={`border-b border-line px-5 py-4 ${mobileFilterSectionClass}`}>
         <section className="rounded-2xl border border-line bg-surface-muted/60 p-3 sm:p-4">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-foreground/70">Filters</p>
             <button
               type="button"
               onClick={() => onSetFiltersCollapsed(!filtersCollapsed)}
-              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground"
+              className="hidden rounded-full border border-line bg-surface px-3 py-2 text-xs font-bold uppercase leading-none tracking-[0.1em] text-foreground sm:inline-flex"
               aria-expanded={!filtersCollapsed}
             >
-              {filtersCollapsed ? "Expand" : "Collapse"}
+              {filtersCollapsed ? "Show filters" : "Hide filters"}
             </button>
           </div>
           {!filtersCollapsed ? (

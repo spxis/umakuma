@@ -3,6 +3,8 @@ export const JLPT_EXPLORER_TEXT = {
   none: "None",
   allGrades: "All Grades",
   jlptAll: "JLPT All",
+  showFilters: "Show filters",
+  hideFilters: "Hide filters",
   showEnglish: "Show English",
   hideEnglish: "Hide English",
   hintsHidden: "Hints Hidden",
