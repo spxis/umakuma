@@ -16,7 +16,7 @@ export default function StudyFilterSection({
   children,
 }: Props) {
   return (
-    <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1">
+    <div className="flex w-full max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1">
       <button
         type="button"
         onClick={onToggle}

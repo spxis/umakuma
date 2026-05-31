@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef } from "react";
-
 import type { QueueResponse, StudyCounts, StudyQueueMode, StudyQueueItem, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./studyExplorerTypes";
 import { isAllStudySrsFilter, isAllStudyTypeFilter, isStudySrsFilterValue, isStudyTypeFilterValue, STUDY_QUEUE_TYPES, STUDY_SRS_FILTERS, STUDY_TYPE_FILTERS } from "./studyExplorerDomain";
 import { sameAssignmentList, sameCounts, sameLevelCounts, sameTypeCounts, sameTypeCountsByLevel } from "./studyExplorerEffectsComparators";
@@ -109,11 +108,15 @@ export function useStudyExplorerEffects({
 }: Args) {
   const hasHydratedSrsStageFilterRef = useRef(false);
   const hiddenSubmittedCountRef = useRef(hiddenSubmittedAssignmentIds.size);
+  const loadedItemsRef = useRef(loadedItems);
 
   useEffect(() => {
     hiddenSubmittedCountRef.current = hiddenSubmittedAssignmentIds.size;
   }, [hiddenSubmittedAssignmentIds]);
 
+  useEffect(() => {
+    loadedItemsRef.current = loadedItems;
+  }, [loadedItems]);
   useEffect(() => {
     const raw = window.localStorage.getItem(countsStorageKey);
     if (!raw) return;
@@ -319,10 +322,11 @@ export function useStudyExplorerEffects({
   }, [hasHydratedTypeFilter, hasHydratedViewedLevel, viewedLevel, typeFilter, srsFilter, srsStageFilter, recentOnly, showLocked]);
 
   useEffect(() => {
-    if (!dataCounts) return;
+    if (!dataCounts || !Number.isFinite(dataCounts.all) || !Number.isFinite(dataCounts.reviews) || !Number.isFinite(dataCounts.lessons)) return;
     if (hiddenSubmittedCountRef.current > 0) return;
-    setPersistedCounts((prev) => (sameCounts(prev, dataCounts) ? prev : dataCounts));
-    window.localStorage.setItem(countsStorageKey, JSON.stringify(dataCounts));
+    const serializedCounts = JSON.stringify(dataCounts);
+    if (window.localStorage.getItem(countsStorageKey) === serializedCounts) return;
+    window.localStorage.setItem(countsStorageKey, serializedCounts);
   }, [countsStorageKey, dataCounts, setPersistedCounts]);
 
   useEffect(() => {
@@ -330,27 +334,24 @@ export function useStudyExplorerEffects({
 
     const fresh = dataItems.filter((item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId));
     const freshIds = new Set(fresh.map((item) => item.assignmentId));
-    const visiblePrev = loadedItems.filter((item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId));
-    const mergedVisibleCount =
-      visiblePrev.length === 0
-        ? fresh.length
-        : fresh.length + visiblePrev.filter((item) => !freshIds.has(item.assignmentId)).length;
+    const currentLoadedItems = loadedItemsRef.current;
+    const priorVisible = currentLoadedItems.filter((item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId));
+    const merged =
+      priorVisible.length === 0 ? fresh : [...fresh, ...priorVisible.filter((item) => !freshIds.has(item.assignmentId))];
+    const mergedVisibleCount = merged.length;
 
-    setLoadedItems((prev) => {
-      const priorVisible = prev.filter((item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId));
-      const merged =
-        priorVisible.length === 0 ? fresh : [...fresh, ...priorVisible.filter((item) => !freshIds.has(item.assignmentId))];
-
-      return sameAssignmentList(prev, merged) ? prev : merged;
-    });
+    if (!sameAssignmentList(currentLoadedItems, merged)) {
+      setLoadedItems(merged);
+      loadedItemsRef.current = merged;
+    }
 
     const nextTotalRaw = dataPaginationTotal ?? fresh.length;
-    setTotalItems(Math.max(nextTotalRaw, mergedVisibleCount));
+    const nextTotal = Math.max(nextTotalRaw, mergedVisibleCount);
+    setTotalItems((prevTotal) => (prevTotal === nextTotal ? prevTotal : nextTotal));
   }, [
     dataItems,
     dataPaginationTotal,
     hiddenSubmittedAssignmentIds,
-    loadedItems,
     setLoadedItems,
     setTotalItems,
   ]);

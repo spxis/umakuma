@@ -96,7 +96,7 @@ export default function StudyLevelFilters({
     mobileShowAllOptions || selected ? "" : "hidden sm:inline-flex";
 
   return (
-    <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
+    <div className="flex w-full max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
       <button
         type="button"
         onClick={onToggleMobileShowAllOptions}
