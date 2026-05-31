@@ -14,9 +14,8 @@ type Props = {
   reviewLevelCounts: Record<number, number>;
   totalLessonsInVisibleLevels: number;
   totalReviewsInVisibleLevels: number;
-  mobileCollapsed: boolean;
-  onToggleMobileCollapsed: () => void;
-  sectionId: string;
+  mobileShowAllOptions: boolean;
+  onToggleMobileShowAllOptions: () => void;
   onSetViewedLevel: (level: number | null) => void;
 };
 
@@ -52,9 +51,8 @@ export default function StudyLevelFilters({
   reviewLevelCounts,
   totalLessonsInVisibleLevels,
   totalReviewsInVisibleLevels,
-  mobileCollapsed,
-  onToggleMobileCollapsed,
-  sectionId,
+  mobileShowAllOptions,
+  onToggleMobileShowAllOptions,
   onSetViewedLevel,
 }: Props) {
   const activeReviewLevels = useMemo(
@@ -94,31 +92,28 @@ export default function StudyLevelFilters({
     return total;
   };
 
+  const mobileVisibilityClass = (selected: boolean) =>
+    mobileShowAllOptions || selected ? "" : "hidden sm:inline-flex";
+
   return (
-    <div className="inline-flex max-w-full flex-col gap-1 rounded-xl border border-line bg-surface px-1.5 py-1">
+    <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
       <button
         type="button"
-        onClick={onToggleMobileCollapsed}
-        aria-expanded={!mobileCollapsed}
-        aria-controls={sectionId}
-        className="inline-flex h-7 w-fit items-center gap-1 px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70"
+        onClick={onToggleMobileShowAllOptions}
+        aria-pressed={!mobileShowAllOptions}
+        className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70"
+        title={mobileShowAllOptions ? "Compact Level" : "Expand Level"}
       >
         Level
-        <span className="sm:hidden">{mobileCollapsed ? "+" : "-"}</span>
       </button>
-      <div
-        id={sectionId}
-        className={`${mobileCollapsed ? "hidden sm:flex" : "flex"} min-w-0 flex-1 flex-wrap items-center gap-1`}
-        role="tablist"
-        aria-label="Level filters"
-      >
+      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
         <button
           type="button"
           onClick={() => selectLevel(null)}
           disabled={filtersLoading}
           role="tab"
           aria-selected={viewedLevel === null}
-          className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
+          className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(viewedLevel === null)} ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
         >
           All <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(queueMode === STUDY_QUEUE_TYPES.lesson ? totalLessonsInVisibleLevels : totalReviewsInVisibleLevels)})</span>
         </button>
@@ -131,7 +126,7 @@ export default function StudyLevelFilters({
                 disabled={filtersLoading}
                 role="tab"
                 aria-selected={viewedLevel === level}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${filtersLoading && viewedLevel !== level ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
+                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(viewedLevel === level)} ${filtersLoading && viewedLevel !== level ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
               >
                 {level} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
               </button>
@@ -166,6 +161,8 @@ export default function StudyLevelFilters({
                     role="tab"
                     aria-selected={groupedChipSelected}
                     className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${
+                      mobileVisibilityClass(groupedChipSelected)
+                    } ${
                       !isGroupedChip || filtersLoading
                         ? disabledBadgeClass()
                         : groupedLevelBadgeClass(groupedChipSelected)
@@ -190,7 +187,7 @@ export default function StudyLevelFilters({
                   disabled={disabled}
                   role="tab"
                   aria-selected={isSelected}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(isSelected)} ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
                 >
                   {chip.level} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(levelCount)})</span>
                 </button>
