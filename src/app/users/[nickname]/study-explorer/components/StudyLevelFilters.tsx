@@ -14,6 +14,9 @@ type Props = {
   reviewLevelCounts: Record<number, number>;
   totalLessonsInVisibleLevels: number;
   totalReviewsInVisibleLevels: number;
+  mobileCollapsed: boolean;
+  onToggleMobileCollapsed: () => void;
+  sectionId: string;
   onSetViewedLevel: (level: number | null) => void;
 };
 
@@ -49,6 +52,9 @@ export default function StudyLevelFilters({
   reviewLevelCounts,
   totalLessonsInVisibleLevels,
   totalReviewsInVisibleLevels,
+  mobileCollapsed,
+  onToggleMobileCollapsed,
+  sectionId,
   onSetViewedLevel,
 }: Props) {
   const activeReviewLevels = useMemo(
@@ -89,9 +95,23 @@ export default function StudyLevelFilters({
   };
 
   return (
-    <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
-      <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+    <div className="inline-flex max-w-full flex-col gap-1 rounded-xl border border-line bg-surface px-1.5 py-1">
+      <button
+        type="button"
+        onClick={onToggleMobileCollapsed}
+        aria-expanded={!mobileCollapsed}
+        aria-controls={sectionId}
+        className="inline-flex h-7 w-fit items-center gap-1 px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70"
+      >
+        Level
+        <span className="sm:hidden">{mobileCollapsed ? "+" : "-"}</span>
+      </button>
+      <div
+        id={sectionId}
+        className={`${mobileCollapsed ? "hidden sm:flex" : "flex"} min-w-0 flex-1 flex-wrap items-center gap-1`}
+        role="tablist"
+        aria-label="Level filters"
+      >
         <button
           type="button"
           onClick={() => selectLevel(null)}

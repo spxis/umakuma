@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
+import StudyFilterSection from "./StudyFilterSection";
 import StudyLevelFilters from "./StudyLevelFilters";
 import {
   getSrsStageOptions,
@@ -33,8 +34,10 @@ import {
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
 import type { StudyQueueItem, StudyQueueMode, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter, StudyWaitSortOrder } from "../lib/studyExplorerTypes";
+import { useStudyMobileFilterSections } from "./useStudyMobileFilterSections";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
+
 type Props = {
   canToggleEnglish: boolean;
   showEnglish: boolean;
@@ -150,6 +153,7 @@ export default function StudyExplorerPanel({
       // Ignore storage access errors in restricted modes.
     }
   }, [mobileFiltersOpen]);
+  const { sectionsOpen: mobileFilterSectionsOpen, toggleSection: toggleMobileFilterSection } = useStudyMobileFilterSections();
 
   const filtersLoading = !hasData;
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
@@ -206,11 +210,18 @@ export default function StudyExplorerPanel({
             reviewLevelCounts={reviewLevelCounts}
             totalLessonsInVisibleLevels={totalLessonsInVisibleLevels}
             totalReviewsInVisibleLevels={totalReviewsInVisibleLevels}
+            mobileCollapsed={!mobileFilterSectionsOpen.level}
+            onToggleMobileCollapsed={() => toggleMobileFilterSection("level")}
+            sectionId="study-level-filters"
             onSetViewedLevel={onSetViewedLevel}
           />
-          <div className="flex w-fit max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Grouping filters">
-            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grouping</span>
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+          <StudyFilterSection
+            title="Grouping"
+            isOpen={mobileFilterSectionsOpen.grouping}
+            onToggle={() => toggleMobileFilterSection("grouping")}
+            sectionId="study-grouping-filters"
+            ariaLabel="Grouping filters"
+          >
               <button
                 type="button"
                 onClick={() => onSetTypeFilter(STUDY_TYPE_FILTERS.all)}
@@ -243,12 +254,15 @@ export default function StudyExplorerPanel({
                   </button>
                 );
               })}
-            </div>
-          </div>
+          </StudyFilterSection>
           {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
-            <div className="flex w-fit max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Status filters">
-              <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Status</span>
-              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+            <StudyFilterSection
+              title="Status"
+              isOpen={mobileFilterSectionsOpen.status}
+              onToggle={() => toggleMobileFilterSection("status")}
+              sectionId="study-status-filters"
+              ariaLabel="Status filters"
+            >
                 {STUDY_PANEL_SRS_STATUSES.map((status) => {
                   const count = srsCounts[status];
                   const isSelected = srsFilter === status;
@@ -279,8 +293,7 @@ export default function StudyExplorerPanel({
                     </div>
                   );
                 })}
-              </div>
-            </div>
+            </StudyFilterSection>
           ) : null}
         </div>
       </header>
