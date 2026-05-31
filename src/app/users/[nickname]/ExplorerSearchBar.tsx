@@ -15,12 +15,10 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [isSubmitLocked, setIsSubmitLocked] = useState(false);
-  const [searchState, setSearchState] = useState<"idle" | "searching" | "done" | "error">("idle");
   const [srStatus, setSrStatus] = useState("");
   const activeRequestIdRef = useRef<string | null>(null);
   const submitLockedRef = useRef(false);
   const throttleUntilRef = useRef(0);
-  const clearIndicatorTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -38,15 +36,7 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
       submitLockedRef.current = false;
       setIsSubmitLocked(false);
       setIsSearching(false);
-      setSearchState(custom.detail?.ok ? "done" : "error");
       setSrStatus(custom.detail?.ok ? "Search complete." : custom.detail?.message ?? "No matches found.");
-
-      if (clearIndicatorTimeoutRef.current !== null) {
-        window.clearTimeout(clearIndicatorTimeoutRef.current);
-      }
-      clearIndicatorTimeoutRef.current = window.setTimeout(() => {
-        setSearchState("idle");
-      }, 1200);
     };
 
     const onClear = (event: Event) => {
@@ -60,7 +50,6 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
       submitLockedRef.current = false;
       setIsSubmitLocked(false);
       setIsSearching(false);
-      setSearchState("idle");
       setSrStatus("Search cleared.");
       setQuery("");
     };
@@ -70,9 +59,6 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
     return () => {
       window.removeEventListener("wr:explorer-search-complete", onComplete as EventListener);
       window.removeEventListener("wr:explorer-search-clear", onClear as EventListener);
-      if (clearIndicatorTimeoutRef.current !== null) {
-        window.clearTimeout(clearIndicatorTimeoutRef.current);
-      }
     };
   }, [scope]);
 
@@ -125,7 +111,6 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
     const requestId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     activeRequestIdRef.current = requestId;
     setIsSearching(true);
-    setSearchState("searching");
     setSrStatus("Searching...");
 
     const params = new URLSearchParams(window.location.search);
@@ -197,30 +182,6 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
             "Search"
           )}
         </button>
-        <span
-          className="inline-flex h-7 w-7 items-center justify-center"
-          role="status"
-          aria-live="polite"
-          aria-label={
-            searchState === "searching"
-              ? "Searching"
-              : searchState === "done"
-                ? "Search complete"
-                : searchState === "error"
-                  ? "Search failed"
-                  : "Search idle"
-          }
-        >
-          {searchState === "searching" ? (
-            <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-accent/70 border-t-transparent" />
-          ) : null}
-          {searchState === "done" ? (
-            <span className="inline-flex h-3.5 w-3.5 rounded-full bg-emerald-500" />
-          ) : null}
-          {searchState === "error" ? (
-            <span className="inline-flex h-3.5 w-3.5 rounded-full bg-red-500" />
-          ) : null}
-        </span>
       </div>
       <span className="sr-only" aria-live="polite">
         {srStatus}
