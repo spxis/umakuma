@@ -263,16 +263,16 @@ export default function StudyExplorerPanel({
                 {STUDY_PANEL_SRS_STATUSES.map((status) => {
                   const count = srsCounts[status];
                   const isSelected = srsFilter === status;
-                  const hiddenInCompactMode = !mobileFilterSectionsOpen.status && !isSelected;
+                  const hideStatusOnCollapsedMobile = !mobileFilterSectionsOpen.status && !isSelected;
                   const unavailable = hasData && !isSelected && status !== STUDY_SRS_FILTERS.all && count === 0;
                   const disabled = (filtersLoading && !isSelected) || unavailable;
                   const statusLabel = status === STUDY_SRS_FILTERS.all ? "All" : srsFilterButtonLabel(status);
                   const stageOptions = status === STUDY_SRS_FILTERS.all ? [] : getSrsStageOptions(status);
                   const showStageButtons = isSelected && stageOptions.length > 1;
                   const onClickStatus = () => { setMobileFilterSectionOpen("status", false); onSetSrsFilter(status); if (stageOptions.length > 1) onSetSrsStageFilter(null); };
-                  if (unavailable || hiddenInCompactMode) return null;
+                  if (unavailable) return null;
                   return (
-                    <div key={status} className="inline-flex items-center gap-1">
+                    <div key={status} className={`inline-flex items-center gap-1 ${hideStatusOnCollapsedMobile ? "hidden sm:inline-flex" : ""}`}>
                       <button type="button" onClick={onClickStatus} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? badgeClass(isSelected) : studySrsToneClass(status, isSelected)}`}>
                         {statusLabel} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
                       </button>
