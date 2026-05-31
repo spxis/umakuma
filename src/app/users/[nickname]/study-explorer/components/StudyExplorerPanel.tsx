@@ -299,35 +299,39 @@ export default function StudyExplorerPanel({
             </p>
           ) : (
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-              Showing {formatNumber(filteredItems.length)} matching items · {formatNumber(totalItems)} total in queue
+              <span className="sm:hidden">Showing {formatNumber(filteredItems.length)}/{formatNumber(totalItems)} items</span>
+              <span className="hidden sm:inline">Showing {formatNumber(filteredItems.length)} matching items · {formatNumber(totalItems)} total in queue</span>
             </p>
           )}
-          <div className={`flex w-full flex-wrap items-center gap-2 sm:ml-auto sm:w-auto ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
-              <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}>Oldest Wait</button>
-              <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}>Newest Wait</button>
+          <div className={`flex w-full items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
+              <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.oldestWaitShort}</span><span className="hidden sm:inline">Oldest Wait</span></button>
+              <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.newestWaitShort}</span><span className="hidden sm:inline">Newest Wait</span></button>
               <button
                 type="button"
                 onClick={onToggleShowEnglish}
                 disabled={!canToggleEnglish}
-                className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex-1 whitespace-nowrap rounded-full border border-line bg-surface px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em]"
               >
-                {canToggleEnglish ? (showEnglish ? STUDY_PANEL_TEXT.hideEnglish : STUDY_PANEL_TEXT.showEnglish) : STUDY_PANEL_TEXT.hintsHidden}
+                <span className="sm:hidden">{STUDY_PANEL_TEXT.englishShort}</span>
+                <span className="hidden sm:inline">{canToggleEnglish ? (showEnglish ? STUDY_PANEL_TEXT.hideEnglish : STUDY_PANEL_TEXT.showEnglish) : STUDY_PANEL_TEXT.hintsHidden}</span>
               </button>
               {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
                 <button
                   type="button"
                   onClick={onToggleShowLocked}
-                  className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+                  className="flex-1 whitespace-nowrap rounded-full border border-line bg-surface px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground hover:bg-surface-muted sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em]"
                 >
-                  {showLocked ? STUDY_PANEL_TEXT.hideLocked : STUDY_PANEL_TEXT.showLocked}
+                  <span className="sm:hidden">{STUDY_PANEL_TEXT.lockedShort}</span>
+                  <span className="hidden sm:inline">{showLocked ? STUDY_PANEL_TEXT.hideLocked : STUDY_PANEL_TEXT.showLocked}</span>
                 </button>
               ) : null}
               <button
                 type="button"
                 onClick={toggleBulkMode}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(bulkModeEnabled)}`}
+                className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(bulkModeEnabled)}`}
               >
-                {bulkModeEnabled ? STUDY_PANEL_TEXT.bulkOpsActive : STUDY_PANEL_TEXT.bulkOperations}
+                <span className="sm:hidden">{STUDY_PANEL_TEXT.bulkShort}</span>
+                <span className="hidden sm:inline">{bulkModeEnabled ? STUDY_PANEL_TEXT.bulkOpsActive : STUDY_PANEL_TEXT.bulkOperations}</span>
               </button>
           </div>
         </div>
