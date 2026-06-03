@@ -33,53 +33,11 @@ import {
   typeCardClass,
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
-import type { StudyQueueItem, StudyQueueMode, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter, StudyWaitSortOrder } from "../lib/studyExplorerTypes";
+import type { StudySrsFilter } from "../lib/studyExplorerTypes";
+import type { StudyExplorerPanelProps } from "./StudyExplorerPanel.types";
 import { useStudyMobileFilterSections } from "./useStudyMobileFilterSections";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
-
-type Props = {
-  canToggleEnglish: boolean;
-  showEnglish: boolean;
-  studyMode: boolean;
-  levelOptions: number[];
-  availableLevels: Set<number>;
-  reviewLevelCounts: Record<number, number>;
-  viewedLevel: number | null;
-  typeFilter: StudyTypeFilter;
-  srsFilter: StudySrsFilter;
-  srsStageFilter: StudySrsStageFilter | null;
-  queueMode: StudyQueueMode;
-  lessonLevelCounts: Record<number, number>;
-  typeCounts: { all: number; radical: number; kanji: number; vocabulary: number };
-  srsCounts: { all: number; locked: number; apprentice: number; guru: number; master: number; enlightened: number; burned: number };
-  srsStageCounts: Record<number, number>;
-  filteredItems: StudyQueueItem[];
-  totalItems: number;
-  hasMorePages: boolean;
-  isLoadingMore: boolean;
-  loadMoreError: string | null;
-  isLoading: boolean;
-  isValidating: boolean;
-  hasData: boolean;
-  isUnauthorized: boolean;
-  errorMessage: string | null;
-  showLocked: boolean;
-  waitSortOrder: StudyWaitSortOrder;
-  gridColumns: number;
-  cacheFooterText: string;
-  cacheFooterTitle: string;
-  sentinelRef: React.RefObject<HTMLDivElement | null>;
-  onSetViewedLevel: (level: number | null) => void;
-  onSetTypeFilter: (filter: StudyTypeFilter) => void;
-  onSetSrsFilter: (filter: StudySrsFilter) => void;
-  onSetSrsStageFilter: (filter: StudySrsStageFilter | null) => void;
-  onToggleShowEnglish: () => void;
-  onToggleShowLocked: () => void;
-  onSetWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;
-  onSelectSubject: (subjectId: number) => void;
-  onClearAllFilters: () => void;
-};
 export default function StudyExplorerPanel({
   canToggleEnglish,
   showEnglish,
@@ -121,7 +79,7 @@ export default function StudyExplorerPanel({
   onSetWaitSortOrder,
   onSelectSubject,
   onClearAllFilters,
-}: Props) {
+}: StudyExplorerPanelProps) {
   const {
     bulkModeEnabled,
     selectedSubjectIds,
@@ -142,7 +100,6 @@ export default function StudyExplorerPanel({
       return false;
     }
   });
-
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -154,7 +111,6 @@ export default function StudyExplorerPanel({
     }
   }, [mobileFiltersOpen]);
   const { sectionsOpen: mobileFilterSectionsOpen, toggleSection: toggleMobileFilterSection, setSectionOpen: setMobileFilterSectionOpen } = useStudyMobileFilterSections();
-
   const filtersLoading = !hasData;
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
   const showTypeCountPlaceholders = !hasData && typeCounts.all === 0 && filteredItems.length === 0 && !errorMessage;
@@ -180,6 +136,17 @@ export default function StudyExplorerPanel({
     : mobileFiltersOpen
       ? "block"
       : "hidden sm:block";
+  const closeStatusSection = () => setMobileFilterSectionOpen("status", false);
+  const closeStatusSectionReliably = () => {
+    closeStatusSection();
+    if (typeof window !== "undefined") {
+      window.requestAnimationFrame(() => {
+        closeStatusSection();
+      });
+    }
+  };
+  const openAllMobileFilterSections = () => { setMobileFilterSectionOpen("level", true); setMobileFilterSectionOpen("grouping", true); setMobileFilterSectionOpen("status", true); };
+  const handleResetFilters = () => { onClearAllFilters(); setMobileFiltersOpen(true); openAllMobileFilterSections(); };
   return (
     <>
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -188,15 +155,24 @@ export default function StudyExplorerPanel({
             <h2 className="text-xl font-black text-foreground">{STUDY_PANEL_TEXT.heading}</h2>
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => setMobileFiltersOpen((open) => !open)}
-            aria-expanded={mobileFiltersOpen}
-            aria-controls="study-filters-panel"
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground sm:hidden"
-          >
-            {mobileFiltersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}
-          </button>
+          <div className="flex items-center gap-2 sm:hidden">
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground"
+            >
+              {STUDY_PANEL_TEXT.resetFilters}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen((open) => !open)}
+              aria-expanded={mobileFiltersOpen}
+              aria-controls="study-filters-panel"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground"
+            >
+              {mobileFiltersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}
+            </button>
+          </div>
         </div>
         <div id="study-filters-panel" className={`mt-3 space-y-2 ${mobileFilterSectionClass}`}>
           <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} /></div>
@@ -269,10 +245,23 @@ export default function StudyExplorerPanel({
                   const statusLabel = status === STUDY_SRS_FILTERS.all ? "All" : srsFilterButtonLabel(status);
                   const stageOptions = status === STUDY_SRS_FILTERS.all ? [] : getSrsStageOptions(status);
                   const showStageButtons = isSelected && stageOptions.length > 1;
-                  const onClickStatus = () => { setMobileFilterSectionOpen("status", false); onSetSrsFilter(status); if (stageOptions.length > 1) onSetSrsStageFilter(null); };
+                  const onClickStatus = () => {
+                    onSetSrsFilter(status);
+                    if (stageOptions.length > 1) {
+                      onSetSrsStageFilter(null);
+                    }
+                    closeStatusSectionReliably();
+                  };
                   if (unavailable) return null;
                   return (
-                    <div key={status} className={`inline-flex items-center gap-1 ${hideStatusOnCollapsedMobile ? "hidden sm:inline-flex" : ""}`}>
+                    <div
+                      key={status}
+                      className={
+                        hideStatusOnCollapsedMobile
+                          ? "hidden sm:inline-flex sm:items-center sm:gap-1"
+                          : "inline-flex items-center gap-1"
+                      }
+                    >
                       <button type="button" onClick={onClickStatus} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? badgeClass(isSelected) : studySrsToneClass(status, isSelected)}`}>
                         {statusLabel} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
                       </button>
@@ -283,7 +272,18 @@ export default function StudyExplorerPanel({
                         const stageDisabled = (filtersLoading && !stageSelected) || stageUnavailable;
                         if (stageUnavailable) return null;
                         return (
-                          <button key={`${status}-${stage}`} type="button" onClick={() => { setMobileFilterSectionOpen("status", false); onSetSrsStageFilter(stage); }} disabled={stageDisabled} role="tab" aria-selected={stageSelected} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.status || stageSelected ? "" : "hidden sm:inline-flex"} ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<StudySrsFilter, "all">, stageSelected)}`}>
+                          <button
+                            key={`${status}-${stage}`}
+                            type="button"
+                            onClick={() => {
+                              onSetSrsStageFilter(stage);
+                              closeStatusSectionReliably();
+                            }}
+                            disabled={stageDisabled}
+                            role="tab"
+                            aria-selected={stageSelected}
+                            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.status || stageSelected ? "" : "hidden sm:inline-flex"} ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<StudySrsFilter, "all">, stageSelected)}`}
+                          >
                             {stage} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(stageCount)})</span>
                           </button>
                         );
@@ -467,7 +467,7 @@ export default function StudyExplorerPanel({
               {STUDY_PANEL_TEXT.noMatches}{" "}
               <button
                 type="button"
-                onClick={onClearAllFilters}
+                onClick={handleResetFilters}
                 className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
               >
                 {STUDY_PANEL_TEXT.clearFilters}

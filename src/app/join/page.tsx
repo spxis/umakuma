@@ -106,24 +106,25 @@ export default function JoinPage() {
           Back to leaderboard
         </Link>
 
-        <section className="animate-enter rounded-[2rem] border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
+        <section className="animate-enter rounded-4xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
           {accessDenied ? (
             <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
               You do not have access to that user page yet. Join with your Google account or use your invite code.
             </div>
           ) : null}
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Open signup</p>
-          <h1 className="mt-2 text-4xl leading-[0.95] text-foreground sm:text-5xl">Join UmaKuma</h1>
-          <p className="mt-3 text-sm text-slate-700 sm:text-base">
-            First choose how to access your account. Invite code works without Google.
-          </p>
+          {!signedIn ? (
+            <>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Open signup</p>
+              <h1 className="mt-2 text-4xl leading-[0.95] text-foreground sm:text-5xl">Join UmaKuma</h1>
+              <p className="mt-3 text-sm text-slate-700 sm:text-base">
+                First choose how to access your account. Invite code works without Google.
+              </p>
 
-          <div className="mt-5">
-            <InviteCodeAccessPanel postLoginCallbackUrl="/join" />
-          </div>
+              <div className="mt-5">
+                <InviteCodeAccessPanel postLoginCallbackUrl="/join" />
+              </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            {!signedIn ? (
+              <div className="mt-4 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => {
@@ -133,18 +134,29 @@ export default function JoinPage() {
               >
                 Sign in with Google
               </button>
-            ) : (
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Session</p>
+              <h1 className="mt-2 text-3xl leading-[0.95] text-foreground sm:text-4xl">You are signed in</h1>
+              <p className="mt-2 text-sm text-slate-700 sm:text-base">
+                Active account: <span className="font-bold text-foreground">{userName ?? "Google user"}</span>
+                {userEmail ? <span className="text-foreground/70"> ({userEmail})</span> : null}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
               <span className="inline-flex h-10 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-xs font-black uppercase tracking-[0.12em] text-emerald-800">
                 Google already connected
               </span>
-            )}
-            <Link
-              href="/signout?callbackUrl=/join"
-              className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
-            >
-              Sign out
-            </Link>
-          </div>
+              <Link
+                href="/signout?callbackUrl=/join"
+                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
+              >
+                Sign out
+              </Link>
+              </div>
+            </>
+          )}
 
           <div className="mt-4 rounded-2xl border border-line bg-surface-muted px-4 py-3 text-sm text-slate-700">
             <p className="font-semibold">

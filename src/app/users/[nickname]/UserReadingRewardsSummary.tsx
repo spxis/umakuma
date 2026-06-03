@@ -74,31 +74,62 @@ export default function UserReadingRewardsSummary({
   return (
     <>
       <section className="rounded-2xl border border-line bg-[linear-gradient(135deg,rgba(15,111,255,0.14),rgba(56,189,248,0.1),rgba(244,114,182,0.12))] p-4 sm:p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-accent">Japan mission</p>
-            <h2 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">
-              {campaignTargetBaseYen.toLocaleString("en-US")} yen challenge
-            </h2>
-            <p className="mt-1 text-sm text-foreground/75">
-              {campaignName}: start {formatCampaignDateLabel(campaignStartDatePst)} to goal {formatCampaignDateLabel(campaignGoalDatePst)}.
-            </p>
+        <div className="hidden sm:block">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-accent">Japan mission</p>
+              <h2 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">
+                {campaignTargetBaseYen.toLocaleString("en-US")} yen challenge
+              </h2>
+              <p className="mt-1 text-sm text-foreground/75">
+                {campaignName}: start {formatCampaignDateLabel(campaignStartDatePst)} to goal {formatCampaignDateLabel(campaignGoalDatePst)}.
+              </p>
+            </div>
+            <div className="rounded-xl border border-accent/30 bg-surface/80 px-4 py-3 text-right">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/65">Days to trip</p>
+              <p className="text-3xl font-black text-foreground">{daysRemaining}</p>
+              <p className="text-xs text-foreground/70">Trip: {formatCampaignDateLabel(campaignTripDatePst)}</p>
+            </div>
           </div>
-          <div className="rounded-xl border border-accent/30 bg-surface/80 px-4 py-3 text-right">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/65">Days to trip</p>
-            <p className="text-3xl font-black text-foreground">{daysRemaining}</p>
-            <p className="text-xs text-foreground/70">Trip: {formatCampaignDateLabel(campaignTripDatePst)}</p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+              Team earned: <strong className="text-foreground">JPY {teamTotalYen.toLocaleString("en-US")}</strong>
+            </div>
+            <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+              Leader earned: <strong className="text-foreground">JPY {leaderYen.toLocaleString("en-US")}</strong>
+            </div>
+            <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+              Leader to {campaignTargetBaseYen.toLocaleString("en-US")}: <strong className="text-foreground">JPY {leaderRemainingYen.toLocaleString("en-US")}</strong>
+            </div>
           </div>
         </div>
-        <div className="mt-3 grid gap-2 sm:grid-cols-3">
-          <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
-            Team earned: <strong className="text-foreground">JPY {teamTotalYen.toLocaleString("en-US")}</strong>
-          </div>
-          <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
-            Leader earned: <strong className="text-foreground">JPY {leaderYen.toLocaleString("en-US")}</strong>
-          </div>
-          <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
-            Leader to {campaignTargetBaseYen.toLocaleString("en-US")}: <strong className="text-foreground">JPY {leaderRemainingYen.toLocaleString("en-US")}</strong>
+
+        <div className="sm:hidden">
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-accent">Japan mission</p>
+          <h2 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">
+            {campaignTargetBaseYen.toLocaleString("en-US")} yen challenge
+          </h2>
+          <p className="mt-1 text-sm text-foreground/75">
+            {campaignName}: start {formatCampaignDateLabel(campaignStartDatePst)} to goal {formatCampaignDateLabel(campaignGoalDatePst)}.
+          </p>
+
+          <div className="mt-3 grid grid-cols-[minmax(0,1fr)_9.5rem] items-stretch gap-2">
+            <div className="space-y-2">
+              <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+                Team earned: <strong className="text-foreground">JPY {teamTotalYen.toLocaleString("en-US")}</strong>
+              </div>
+              <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+                Leader earned: <strong className="text-foreground">JPY {leaderYen.toLocaleString("en-US")}</strong>
+              </div>
+              <div className="rounded-xl border border-line bg-surface/70 px-3 py-2 text-xs font-semibold text-foreground/75">
+                Leader to {campaignTargetBaseYen.toLocaleString("en-US")}: <strong className="text-foreground">JPY {leaderRemainingYen.toLocaleString("en-US")}</strong>
+              </div>
+            </div>
+            <div className="rounded-xl border border-accent/30 bg-surface/80 px-3 py-3 text-right">
+              <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/65">Days to trip</p>
+              <p className="text-3xl font-black text-foreground">{daysRemaining}</p>
+              <p className="text-xs text-foreground/70">Trip: {formatCampaignDateLabel(campaignTripDatePst)}</p>
+            </div>
           </div>
         </div>
       </section>

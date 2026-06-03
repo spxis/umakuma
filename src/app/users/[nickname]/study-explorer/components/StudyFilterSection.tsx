@@ -27,7 +27,9 @@ export default function StudyFilterSection({
         title={isOpen ? `Compact ${title}` : `Expand ${title}`}
       >
         {title}
-        <span className={`ml-1 text-[11px] leading-none ${isCollapsedOnMobile ? "opacity-70" : "opacity-0"}`}>+</span>
+        {isCollapsedOnMobile ? (
+          <span className="ml-1 text-[11px] leading-none opacity-70 sm:hidden">+</span>
+        ) : null}
       </button>
       <div
         className="flex min-w-0 flex-1 flex-wrap items-center gap-1"

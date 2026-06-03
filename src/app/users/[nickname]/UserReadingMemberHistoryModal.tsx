@@ -1,13 +1,10 @@
 "use client";
-
 import { useEffect, useMemo, useState } from "react";
-
 import type {
   ReadingChallengeBookRecord,
   ReadingSignoffEntryRecord,
   ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
-
 import UserReadingBookCoverImage from "./UserReadingBookCoverImage";
 import UserReadingBookTitleSelect from "./UserReadingBookTitleSelect";
 import type { Member } from "./UserReadingSignoffPanel.types";
@@ -22,7 +19,6 @@ type UserReadingMemberHistoryModalProps = {
   onClose: () => void;
   onMutate: () => Promise<unknown> | unknown;
 };
-
 type BookLookup = { isbn: string; thumbnailUrl: string | null; title: string } | null;
 
 function normalizeTitleKey(title: string): string {
@@ -224,10 +220,7 @@ export default function UserReadingMemberHistoryModal({
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.12em] text-foreground/55">Check-in history</p>
             <h2 className="text-lg font-black text-foreground">{member.nickname}</h2>
-            <p className="text-xs text-foreground/65">
-              {groupedByDay.length} day{groupedByDay.length === 1 ? "" : "s"} with activity
-              {isAdmin ? " · admin edit mode" : ""}
-            </p>
+            <p className="text-xs text-foreground/65">{groupedByDay.length} day{groupedByDay.length === 1 ? "" : "s"} with activity{isAdmin ? " · admin edit mode" : ""}</p>
           </div>
           <button
             type="button"
@@ -252,13 +245,13 @@ export default function UserReadingMemberHistoryModal({
           ) : null}
           {groupedByDay.map((day) => (
             <section key={day.dateKey} className="rounded-lg border border-line bg-surface-muted/40 p-3">
-              <header className="mb-2 flex items-baseline justify-between gap-2">
+              <header className="mb-2 flex items-center justify-between gap-2">
                 <h3 className="text-sm font-black text-foreground">{day.dateKey}</h3>
                 {day.signoff ? (
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/55">
-                    Day total: {day.signoff.pagesRead}p · {day.signoff.minutesRead}m
-                    {day.signoff.didWanikaniReviews ? " · WK" : ""}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/55">Day total: {day.signoff.pagesRead}p · {day.signoff.minutesRead}m</span>
+                    <WkStatusBadge didWanikaniReviews={day.signoff.didWanikaniReviews} />
+                  </div>
                 ) : null}
               </header>
               <ul className="space-y-2">
@@ -359,38 +352,47 @@ function RowDisplay({
   if (isEditing && draft) {
     return (
       <li className="rounded border border-accent/40 bg-surface p-2">
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_auto_auto]">
+        <p className="mb-1.5 text-[11px] font-semibold text-foreground/75">Edit this day: set book, pages, minutes, and WK status.</p>
+        <div className="space-y-1.5">
           <UserReadingBookTitleSelect
             options={bookOptions}
             value={draft.bookTitle}
             onChange={(nextTitle) => onDraftChange({ ...draft, bookTitle: nextTitle })}
-            ariaLabel="Book"
+            ariaLabel="Book title"
             placeholder="Select book"
           />
-          <input
-            type="number"
-            min={0}
-            value={draft.pagesRead}
-            onChange={(event) => onDraftChange({ ...draft, pagesRead: Number(event.target.value) || 0 })}
-            className="w-20 rounded border border-line bg-surface px-2 py-1 text-xs"
-            aria-label="Pages read"
-          />
-          <input
-            type="number"
-            min={0}
-            value={draft.minutesRead}
-            onChange={(event) => onDraftChange({ ...draft, minutesRead: Number(event.target.value) || 0 })}
-            className="w-20 rounded border border-line bg-surface px-2 py-1 text-xs"
-            aria-label="Minutes read"
-          />
-          <label className="flex items-center gap-1 text-[11px] font-semibold text-foreground/75">
-            <input
-              type="checkbox"
-              checked={draft.didWanikaniReviews}
-              onChange={(event) => onDraftChange({ ...draft, didWanikaniReviews: event.target.checked })}
-            />
-            WK
-          </label>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-foreground/65">
+              <span>Pages</span>
+              <input
+                type="number"
+                min={0}
+                value={draft.pagesRead}
+                onChange={(event) => onDraftChange({ ...draft, pagesRead: Number(event.target.value) || 0 })}
+                className="w-16 rounded border border-line bg-surface px-2 py-1 text-xs"
+                aria-label="Pages read"
+              />
+            </label>
+            <label className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-foreground/65">
+              <span>Minutes</span>
+              <input
+                type="number"
+                min={0}
+                value={draft.minutesRead}
+                onChange={(event) => onDraftChange({ ...draft, minutesRead: Number(event.target.value) || 0 })}
+                className="w-16 rounded border border-line bg-surface px-2 py-1 text-xs"
+                aria-label="Minutes read"
+              />
+            </label>
+            <label className="inline-flex items-center gap-1 text-[11px] font-semibold text-foreground/75">
+              <input
+                type="checkbox"
+                checked={draft.didWanikaniReviews}
+                onChange={(event) => onDraftChange({ ...draft, didWanikaniReviews: event.target.checked })}
+              />
+              WaniKani done
+            </label>
+          </div>
         </div>
         <div className="mt-2 flex justify-end gap-2">
           <button
@@ -413,7 +415,6 @@ function RowDisplay({
       </li>
     );
   }
-
   return (
     <li className="flex items-center justify-between gap-2 rounded border border-line bg-surface px-2 py-1 text-xs">
       <div className="flex min-w-0 flex-1 items-center gap-2">
@@ -430,9 +431,10 @@ function RowDisplay({
         ) : null}
         <div className="min-w-0 flex-1">
           <p className="truncate font-semibold text-foreground">{bookTitle}</p>
-          <p className="text-[10px] font-semibold text-foreground/65">
-            {pagesRead}p · {minutesRead}m{didWanikaniReviews ? " · WK" : ""}
-          </p>
+          <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
+            <p className="text-[10px] font-semibold text-foreground/65">{pagesRead}p · {minutesRead}m</p>
+            <WkStatusBadge didWanikaniReviews={didWanikaniReviews} compact />
+          </div>
         </div>
       </div>
       {isAdmin ? (
@@ -477,5 +479,21 @@ function RowDisplay({
         </div>
       ) : null}
     </li>
+  );
+}
+
+function WkStatusBadge({ didWanikaniReviews, compact = false }: { didWanikaniReviews: boolean; compact?: boolean }) {
+  const toneClasses = didWanikaniReviews ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-red-200 bg-red-50 text-red-700";
+  return (
+    <span className={`inline-flex items-center gap-1 rounded-full border font-bold uppercase tracking-[0.08em] ${toneClasses} ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-0.5 text-[10px]"}`}>
+      <svg viewBox="0 0 12 12" aria-hidden="true" className="h-3 w-3">
+        {didWanikaniReviews ? (
+          <path d="M3.25 6.2 5.15 8.1 8.75 4.5" className="fill-none stroke-emerald-700" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+        ) : (
+          <path d="M3.7 3.7 8.3 8.3M8.3 3.7 3.7 8.3" className="fill-none stroke-red-700" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+        )}
+      </svg>
+      <span>{didWanikaniReviews ? "WK done" : "WK not done"}</span>
+    </span>
   );
 }

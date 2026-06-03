@@ -45,6 +45,7 @@ export const STUDY_PANEL_TEXT = {
   searchScope: "study",
   showFilters: "Show filters",
   hideFilters: "Hide filters",
+  resetFilters: "Reset filters",
   oldestWaitShort: "Old",
   newestWaitShort: "New",
   englishShort: "Eng",

@@ -42,13 +42,13 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${bodySans.variable} ${displaySans.variable} ${jpSans.variable} ${jpSerif.variable} h-full antialiased`}
+      className={`${bodySans.variable} ${displaySans.variable} ${jpSans.variable} ${jpSerif.variable} h-full overflow-x-clip antialiased`}
       data-theme="light"
       data-jp-font="sans"
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full overflow-x-clip flex flex-col">
         <ClientErrorReporter />
-        <main className="flex-1">{children}</main>
+        <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
         <AppFooter />
         <ViewGlyphModalHost />
       </body>

@@ -177,10 +177,15 @@ export default function UserReadingCalendar({
                     const entries = byMemberEntries.get(member.id) ?? [];
                     const daySignoff = byMember.get(member.id) ?? null;
                     const hasEntryLogs = entries.length > 0;
-                    const totalReviewKanji = entries.reduce((sum, entry) => sum + entry.reviewCorrect, 0);
-                    const totalReviewVocabulary = entries.reduce((sum, entry) => sum + entry.reviewIncorrect, 0);
-                    const totalReviewRadical = entries.reduce((sum, entry) => sum + (entry.reviewSuccessPercent ?? 0), 0);
-                    const totalReviewWork = entries.reduce((sum, entry) => sum + entry.reviewWorkDone, 0);
+                    const totalPages = hasEntryLogs
+                      ? entries.reduce((sum, entry) => sum + entry.pagesRead, 0)
+                      : (daySignoff?.pagesRead ?? 0);
+                    const totalMinutes = hasEntryLogs
+                      ? entries.reduce((sum, entry) => sum + entry.minutesRead, 0)
+                      : (daySignoff?.minutesRead ?? 0);
+                    const didWanikani = hasEntryLogs
+                      ? entries.some((entry) => entry.didWanikaniReviews)
+                      : Boolean(daySignoff?.didWanikaniReviews);
                     let lastReadBookTitle: string | null = null;
                     for (let index = entries.length - 1; index >= 0; index -= 1) {
                       const entry = entries[index];
@@ -203,52 +208,26 @@ export default function UserReadingCalendar({
                         type="button"
                         key={`${key}-${member.id}`}
                         onClick={() => onOpenMemberHistory(member)}
-                        className="w-full rounded border border-emerald-300 bg-emerald-100 px-1 py-1 text-left text-[10px] font-semibold text-emerald-800 transition hover:border-emerald-500 hover:bg-emerald-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                        className="w-full rounded border border-emerald-300 bg-emerald-100 px-1.5 py-1 text-left text-[10px] font-semibold text-emerald-800 transition hover:border-emerald-500 hover:bg-emerald-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                         title={`See ${member.nickname}'s check-in history`}
                       >
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="truncate">{member.nickname}</span>
-                          <span className="flex items-center gap-1">
-                            {lastReadBookThumbnail ? (
-                              <span className="h-4 w-3 overflow-hidden rounded border border-emerald-400/70 bg-white" title={lastReadBookTitle ?? undefined}>
-                                <Image
-                                  src={lastReadBookThumbnail}
-                                  alt={lastReadBookTitle ?? "Last read book"}
-                                  width={24}
-                                  height={32}
-                                  className="h-full w-full object-cover"
-                                />
-                              </span>
-                            ) : null}
-                            <span>{hasEntryLogs ? `${entries.length} logs` : "Saved summary"}</span>
-                          </span>
+                        <div className="flex items-start gap-1">
+                          {lastReadBookThumbnail ? (
+                            <span className="hidden h-4 w-3 shrink-0 overflow-hidden rounded border border-emerald-400/70 bg-white lg:block" title={lastReadBookTitle ?? undefined}>
+                              <Image
+                                src={lastReadBookThumbnail}
+                                alt={lastReadBookTitle ?? "Last read book"}
+                                width={24}
+                                height={32}
+                                className="h-full w-full object-cover"
+                              />
+                            </span>
+                          ) : null}
+                          <span className="break-words text-[11px] font-black leading-tight text-emerald-900">{member.nickname}</span>
                         </div>
-                        {hasEntryLogs ? (
-                          <div className="mt-0.5 space-y-0.5 text-[9px] font-semibold text-emerald-900/90">
-                            {entries.map((entry) => (
-                              <div key={entry.id} className="truncate">
-                                +{entry.pagesRead}p {entry.minutesRead}m {entry.didWanikaniReviews ? "WK" : "Read"}
-                              </div>
-                            ))}
-                            {entries.length > 0 ? (
-                              <div className="truncate">
-                                Reviews Kanji {totalReviewKanji} / Vocab {totalReviewVocabulary} / Radicals {totalReviewRadical}
-                                {totalReviewWork === 0 ? " (+0 bonus)" : ""}
-                              </div>
-                            ) : null}
-                          </div>
-                        ) : daySignoff ? (
-                          <div className="mt-0.5 space-y-0.5 text-[9px] font-semibold text-emerald-900/90">
-                            <div className="truncate">
-                              {daySignoff.pagesRead}p {daySignoff.minutesRead}m {daySignoff.didWanikaniReviews ? "WK" : "Read"}
-                            </div>
-                            <div className="truncate">
-                              Reviews total {daySignoff.reviewsLeft}
-                              {daySignoff.didWanikaniReviews && daySignoff.reviewsLeft === 0 ? " (+0 bonus)" : ""}
-                            </div>
-                            <div className="truncate text-emerald-800/80">Detailed logs unavailable for this day.</div>
-                          </div>
-                        ) : null}
+                        <div className="mt-0.5 truncate text-[9px] font-semibold text-emerald-900/85">
+                          {hasEntryLogs ? `${entries.length} log${entries.length === 1 ? "" : "s"}` : "Summary"} · {totalPages}p · {totalMinutes}m · {didWanikani ? "WK yes" : "WK no"}
+                        </div>
                       </button>
                     );
                   })}

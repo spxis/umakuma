@@ -166,7 +166,7 @@ export default function StudyExplorer({
       }),
     [cachedQueueData?.levelCounts, data?.levelCounts, loadedItems, maxLevel, queueMode, viewedLevel],
   );
-  const counts = persistedCounts ?? data?.counts ?? null;
+  const counts = data?.counts ?? persistedCounts ?? null;
   const liveCounts = data?.counts ?? null;
   const hasMorePages = loadedItems.length < totalItems;
   const cacheMeta = useMemo(() => readStoredQueueMeta(accountId, queueMode), [accountId, queueMode]);

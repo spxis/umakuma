@@ -15,6 +15,9 @@ type UserHeaderMenuProps = {
   hidden?: boolean;
 };
 
+const MENU_BUTTON_CLASS =
+  "inline-flex h-8 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface";
+
 function getInitials(name: string | null): string {
   if (!name) {
     return "??";
@@ -183,7 +186,7 @@ export default function UserHeaderMenu({
               onClick={() => setOpen(false)}
               className="fixed inset-0 z-[9990] bg-foreground/20 backdrop-blur-[1px]"
             />
-            <aside ref={panelRef} className="fixed right-4 top-20 z-[9991] w-[min(88vw,300px)] rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.22)] sm:right-6 sm:top-24">
+            <aside ref={panelRef} className="fixed inset-x-3 bottom-3 top-3 z-[9991] overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.22)] sm:inset-x-auto sm:bottom-auto sm:right-6 sm:top-24 sm:w-[min(88vw,320px)] sm:max-h-[calc(100dvh-7rem)]">
             <div className="space-y-3">
             <section>
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-accent">Account</p>
@@ -215,11 +218,11 @@ export default function UserHeaderMenu({
             {showNavigationSection ? (
               <section className="border-t border-line pt-3">
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Navigation</p>
-                <div className="mt-2 space-y-2">
+                <div className="mt-2 grid grid-cols-2 gap-2">
                   {viewerMenuInfo && viewedWkUsername ? (
                     <Link
                       href={`/users/${encodeURIComponent(viewedWkUsername)}/history`}
-                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      className={`${MENU_BUTTON_CLASS} col-span-2`}
                     >
                       History
                     </Link>
@@ -227,7 +230,7 @@ export default function UserHeaderMenu({
                   {viewerMenuInfo ? (
                     <Link
                       href="/"
-                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      className={MENU_BUTTON_CLASS}
                     >
                       Leaderboard
                     </Link>
@@ -236,31 +239,31 @@ export default function UserHeaderMenu({
                     <>
                       <Link
                         href="/news"
-                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                        className={MENU_BUTTON_CLASS}
                       >
                         News
                       </Link>
                       <Link
                         href="/news/stats"
-                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                        className={MENU_BUTTON_CLASS}
                       >
                         News stats
                       </Link>
                       <Link
                         href="/news/history"
-                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                        className={MENU_BUTTON_CLASS}
                       >
                         News history
                       </Link>
                       <Link
                         href="/join"
-                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                        className={MENU_BUTTON_CLASS}
                       >
                         Join
                       </Link>
                       <Link
                         href="/invite"
-                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                        className={MENU_BUTTON_CLASS}
                       >
                         Invite
                       </Link>
@@ -270,13 +273,13 @@ export default function UserHeaderMenu({
                     <>
                       <Link
                         href="/admin"
-                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                        className={MENU_BUTTON_CLASS}
                       >
                         Admin
                       </Link>
                       <Link
                         href="/admin/users"
-                        className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                        className={MENU_BUTTON_CLASS}
                       >
                         Manage users
                       </Link>
@@ -285,7 +288,7 @@ export default function UserHeaderMenu({
                   {viewerMenuInfo && resolvedUserPageUsername ? (
                     <Link
                       href={`/users/${encodeURIComponent(resolvedUserPageUsername)}`}
-                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      className={`${MENU_BUTTON_CLASS} col-span-2`}
                     >
                       My page
                     </Link>
@@ -302,7 +305,7 @@ export default function UserHeaderMenu({
                         <Link
                           key={link.label}
                           href={link.href}
-                          className="inline-flex h-9 items-center justify-center rounded-full border border-line bg-surface px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface-muted"
+                          className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted"
                         >
                           {link.label}
                         </Link>
@@ -316,11 +319,11 @@ export default function UserHeaderMenu({
             {viewerMenuInfo ? (
               <section className="border-t border-line pt-3">
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Preferences</p>
-                <div className="mt-2 space-y-2">
+                <div className="mt-2 space-y-1.5">
                   <button
                     type="button"
                     onClick={toggleTheme}
-                    className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    className={MENU_BUTTON_CLASS}
                   >
                     Theme: {themeMode === "light" ? "Light" : "Dark"}
                   </button>
@@ -328,7 +331,7 @@ export default function UserHeaderMenu({
                   <button
                     type="button"
                     onClick={toggleJpFont}
-                    className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    className={MENU_BUTTON_CLASS}
                   >
                     JP Font: {jpFontMode === "sans" ? "Sans" : "Serif"}
                   </button>
@@ -338,28 +341,28 @@ export default function UserHeaderMenu({
 
             <section className="border-t border-line pt-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Actions</p>
-              <div className="mt-2 space-y-2">
+              <div className="mt-2 space-y-1.5">
                 {accountId ? (
                   <UserAdminRefreshButton
                     accountId={accountId}
                     label="Refresh user"
                     ariaLabel="Refresh user"
                     showMessage={false}
-                    buttonClassName="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    buttonClassName={MENU_BUTTON_CLASS}
                   />
                 ) : null}
 
                 {viewerMenuInfo?.provider === "google" ? (
                   <Link
                     href="/signout?callbackUrl=/"
-                    className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    className={MENU_BUTTON_CLASS}
                   >
                     Sign out
                   </Link>
                 ) : viewerMenuInfo?.provider === "invite" ? (
                   <Link
                     href="/invite"
-                    className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                    className={MENU_BUTTON_CLASS}
                   >
                     Manage invite
                   </Link>
@@ -367,13 +370,13 @@ export default function UserHeaderMenu({
                   <>
                     <Link
                       href="/join"
-                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      className={MENU_BUTTON_CLASS}
                     >
                       Continue with session
                     </Link>
                     <Link
                       href="/signout?callbackUrl=/"
-                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      className={MENU_BUTTON_CLASS}
                     >
                       Sign out
                     </Link>
@@ -382,13 +385,13 @@ export default function UserHeaderMenu({
                   <>
                     <Link
                       href="/login"
-                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      className={MENU_BUTTON_CLASS}
                     >
                       Login with Google
                     </Link>
                     <Link
                       href="/invite"
-                      className="inline-flex h-9 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-3 text-xs font-bold uppercase tracking-[0.12em] text-foreground transition hover:bg-surface"
+                      className={MENU_BUTTON_CLASS}
                     >
                       Use invite code
                     </Link>
