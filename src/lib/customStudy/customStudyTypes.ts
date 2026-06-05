@@ -6,7 +6,6 @@ export type CustomLibraryImportPayload = {
     id: string;
     name: string;
     description?: string;
-    itemsPerLevel?: number;
   };
   items: CustomLibraryItemPayload[];
 };
@@ -14,6 +13,7 @@ export type CustomLibraryImportPayload = {
 export type CustomLibraryItemPayload = {
   id: string;
   type: CustomStudyItemType;
+  level: number;
   characters: string;
   meanings: string[];
   readings?: string[];
@@ -22,7 +22,6 @@ export type CustomLibraryItemPayload = {
   readingMnemonic?: string;
   synonyms?: string[];
   notes?: string;
-  level?: number;
 };
 
 export type CustomLibraryListRow = {

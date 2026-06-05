@@ -3,7 +3,7 @@ import { z } from "zod";
 const customLibraryItemSchema = z.object({
   id: z.string().trim().min(1).max(120),
   type: z.enum(["kanji", "vocabulary", "phrase"]),
-  level: z.number().int().min(1).max(60).optional(),
+  level: z.number().int().min(1).max(60),
   characters: z.string().trim().min(1).max(120),
   meanings: z.array(z.string().trim().min(1).max(180)).min(1).max(20),
   readings: z.array(z.string().trim().min(1).max(120)).max(20).optional(),
@@ -21,7 +21,6 @@ export const customLibraryPayloadSchema = z
       id: z.string().trim().min(1).max(120),
       name: z.string().trim().min(1).max(120),
       description: z.string().trim().min(1).max(500).optional(),
-      itemsPerLevel: z.number().int().min(1).max(200).optional(),
     }),
     items: z.array(customLibraryItemSchema).min(1).max(10_000),
   })
