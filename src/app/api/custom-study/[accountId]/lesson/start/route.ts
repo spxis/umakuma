@@ -66,6 +66,10 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Study item not found." }, { status: 404 });
         }
 
+        if (!state.item || typeof state.item.wkLevel !== "number") {
+          return NextResponse.json({ error: "Study item is unavailable." }, { status: 404 });
+        }
+
         if (state.srsStage > 0) {
           return NextResponse.json({ ok: true, skipped: true, reason: "already-started-or-unavailable" });
         }
@@ -86,8 +90,10 @@ export async function POST(request: Request, context: RouteContext) {
           },
         });
 
+        const validLevelStates = levelStates.filter((row) => Boolean(row.item && typeof row.item.wkLevel === "number"));
+
         const { currentLevel } = resolveCurrentCustomLevel(
-          levelStates.map((row) => ({
+          validLevelStates.map((row) => ({
             ukLevel: row.item.wkLevel,
             srsStage: row.srsStage,
             passedAt: row.passedAt,

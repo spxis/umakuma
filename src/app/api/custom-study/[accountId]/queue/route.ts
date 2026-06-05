@@ -148,15 +148,17 @@ export async function GET(request: Request, context: RouteContext) {
           },
         });
 
+        const validStates = states.filter((row) => Boolean(row.item && typeof row.item.id === "number"));
+
         const { currentLevel } = resolveCurrentCustomLevel(
-          states.map((row) => ({
+          validStates.map((row) => ({
             ukLevel: row.item.wkLevel,
             srsStage: row.srsStage,
             passedAt: row.passedAt,
           })),
         );
 
-        const lessons = states.filter(
+        const lessons = validStates.filter(
           (row) =>
             isCustomLessonState(row.srsStage) &&
             isCustomLevelUnlocked({
@@ -164,7 +166,7 @@ export async function GET(request: Request, context: RouteContext) {
               currentLevel,
             }),
         );
-        const reviews = states.filter((row) =>
+        const reviews = validStates.filter((row) =>
           isCustomReviewReady({
             srsStage: row.srsStage,
             availableAt: row.availableAt,

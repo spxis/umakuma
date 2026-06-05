@@ -100,6 +100,10 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ ok: true, skipped: true, reason: "already-reviewed-or-unavailable" });
         }
 
+        if (!state.item) {
+          return NextResponse.json({ ok: true, skipped: true, reason: "already-reviewed-or-unavailable" });
+        }
+
         const now = new Date();
         if (
           isCustomLessonState(state.srsStage) ||
