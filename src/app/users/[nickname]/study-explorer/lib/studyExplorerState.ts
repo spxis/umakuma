@@ -15,16 +15,19 @@ export type StudyExplorerStorageKeys = {
 export function buildStudyExplorerStorageKeys(
   accountId: string,
   queueMode: StudyQueueMode,
+  scopeKey?: string,
 ): StudyExplorerStorageKeys {
+  const suffix = scopeKey ? `:${scopeKey}` : "";
+
   return {
-    counts: `wr:study-queue-counts:${accountId}`,
-    selectedSubject: `wr:study-selected-subject:${accountId}:${queueMode}`,
-    typeFilter: `wr:study-type-filter:${accountId}:${queueMode}`,
-    viewedLevel: `wr:study-viewed-level:${accountId}:${queueMode}`,
-    srsStageFilter: `wr:study-srs-stage-filter:${accountId}:${queueMode}`,
-    recentOnly: `wr:study-recent-only:${accountId}:${queueMode}`,
-    showLocked: `wr:study-show-locked:${accountId}:${queueMode}`,
-    waitSort: `wr:study-wait-sort:${accountId}:${queueMode}`,
+    counts: `wr:study-queue-counts:${accountId}${suffix}`,
+    selectedSubject: `wr:study-selected-subject:${accountId}:${queueMode}${suffix}`,
+    typeFilter: `wr:study-type-filter:${accountId}:${queueMode}${suffix}`,
+    viewedLevel: `wr:study-viewed-level:${accountId}:${queueMode}${suffix}`,
+    srsStageFilter: `wr:study-srs-stage-filter:${accountId}:${queueMode}${suffix}`,
+    recentOnly: `wr:study-recent-only:${accountId}:${queueMode}${suffix}`,
+    showLocked: `wr:study-show-locked:${accountId}:${queueMode}${suffix}`,
+    waitSort: `wr:study-wait-sort:${accountId}:${queueMode}${suffix}`,
   };
 }
 

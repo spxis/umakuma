@@ -8,6 +8,7 @@ import { resolveEffectiveSrsFilter, resolveEffectiveSrsStageFilter, resolveEffec
 type Args = {
   accountId: string;
   queueMode: StudyQueueMode;
+  queueStorageScopeKey?: string;
   countsStorageKey: string;
   selectedSubjectStorageKey: string;
   typeFilterStorageKey: string;
@@ -59,6 +60,7 @@ type Args = {
 export function useStudyExplorerEffects({
   accountId,
   queueMode,
+  queueStorageScopeKey,
   countsStorageKey,
   selectedSubjectStorageKey,
   typeFilterStorageKey,
@@ -374,18 +376,7 @@ export function useStudyExplorerEffects({
       },
     };
 
-    persistQueue(
-      accountId,
-      queueMode,
-      loadedItems,
-      totalItems,
-      counts ?? null,
-      levelCounts,
-      typeCounts,
-      typeCountsByLevel,
-      srsCounts,
-      srsStageCounts,
-    );
+    persistQueue(accountId, queueMode, loadedItems, totalItems, counts ?? null, levelCounts, typeCounts, typeCountsByLevel, srsCounts, srsStageCounts, queueStorageScopeKey);
     setCachedQueueData((prev) => {
       if (!prev) {
         return nextPayload;
@@ -409,22 +400,10 @@ export function useStudyExplorerEffects({
 
       return unchanged ? prev : nextPayload;
     });
-  }, [
-    accountId,
-    counts,
-    levelCounts,
-    loadedItems,
-    queueMode,
-    setCachedQueueData,
-    totalItems,
-    typeCounts,
-    typeCountsByLevel,
-    srsCounts,
-    srsStageCounts,
-  ]);
+  }, [accountId, counts, levelCounts, loadedItems, queueStorageScopeKey, queueMode, setCachedQueueData, totalItems, typeCounts, typeCountsByLevel, srsCounts, srsStageCounts]);
 
   useEffect(() => {
-    setCachedQueueData(readStoredQueue(accountId, queueMode));
+    setCachedQueueData(readStoredQueue(accountId, queueMode, queueStorageScopeKey));
     setLoadMoreError(null);
 
     try {
@@ -440,7 +419,7 @@ export function useStudyExplorerEffects({
     } catch {
       setSelectedId(null);
     }
-  }, [accountId, queueMode, selectedSubjectStorageKey, setCachedQueueData, setLoadMoreError, setSelectedId]);
+  }, [accountId, queueMode, queueStorageScopeKey, selectedSubjectStorageKey, setCachedQueueData, setLoadMoreError, setSelectedId]);
 
   useEffect(() => {
     const runFromUrl = () => {

@@ -59,6 +59,10 @@ model Account {
   lastSyncedAt   DateTime @default(now())
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  customStudyLibraries      CustomStudyLibrary[]
+  customStudyStates         CustomStudyState[]
+  customStudyReviewAttempts CustomStudyReviewAttempt[]
 }
 
 model LevelSnapshot {
@@ -145,6 +149,16 @@ enum ReadingChallengeStatus {
   active
   completed
   archived
+}
+
+enum CustomStudySourceType {
+  json_upload
+}
+
+enum CustomStudyItemType {
+  kanji
+  vocabulary
+  phrase
 }
 
 model ReadingChallenge {
@@ -283,4 +297,101 @@ model ReadingChallengeMember {
   @@unique([challengeId, accountId])
   @@index([challengeId, accountId])
   @@index([accountId])
+}
+
+model CustomStudyLibrary {
+  id            String                @id @default(cuid())
+  accountId     String
+  externalKey   String
+  name          String
+  description   String?
+  schemaVersion Int                   @default(1)
+  sourceType    CustomStudySourceType @default(json_upload)
+  itemCount     Int                   @default(0)
+  isActive      Boolean               @default(false)
+  lastImportedAt DateTime             @default(now())
+  metadata      Json?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  account        Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  items          CustomStudyItem[]
+  states         CustomStudyState[]
+  reviewAttempts CustomStudyReviewAttempt[]
+
+  @@unique([accountId, externalKey])
+  @@index([accountId, isActive])
+}
+
+model CustomStudyItem {
+  id              Int                 @id @default(autoincrement())
+  libraryId       String
+  externalId      String
+  itemType        CustomStudyItemType
+  characters      String
+  meanings        String[]
+  readings        String[]            @default([])
+  primaryReading  String?
+  meaningMnemonic String?
+  readingMnemonic String?
+  synonyms        String[]            @default([])
+  notes           String?
+  metadata        Json?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  library        CustomStudyLibrary       @relation(fields: [libraryId], references: [id], onDelete: Cascade)
+  states         CustomStudyState[]
+  reviewAttempts CustomStudyReviewAttempt[]
+
+  @@unique([libraryId, externalId])
+  @@index([libraryId, itemType])
+}
+
+model CustomStudyState {
+  id            Int      @id @default(autoincrement())
+  accountId     String
+  libraryId     String
+  itemId        Int
+  srsStage      Int      @default(0)
+  availableAt   DateTime?
+  unlockedAt    DateTime?
+  startedAt     DateTime?
+  passedAt      DateTime?
+  burnedAt      DateTime?
+  lastReviewedAt DateTime?
+  reviewCount   Int      @default(0)
+  correctCount  Int      @default(0)
+  wrongCount    Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  account        Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  library        CustomStudyLibrary       @relation(fields: [libraryId], references: [id], onDelete: Cascade)
+  item           CustomStudyItem          @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  reviewAttempts CustomStudyReviewAttempt[]
+
+  @@unique([accountId, itemId])
+  @@index([accountId, libraryId, srsStage, availableAt])
+  @@index([accountId, libraryId, updatedAt])
+}
+
+model CustomStudyReviewAttempt {
+  id               String            @id @default(cuid())
+  accountId        String
+  libraryId        String
+  stateId          Int
+  itemId           Int
+  result           StudyReviewResult
+  previousSrsStage Int?
+  newSrsStage      Int?
+  submittedAt      DateTime          @default(now())
+
+  account Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  library CustomStudyLibrary @relation(fields: [libraryId], references: [id], onDelete: Cascade)
+  state   CustomStudyState   @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  item    CustomStudyItem    @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, libraryId, submittedAt])
+  @@index([accountId, itemId, submittedAt])
 }

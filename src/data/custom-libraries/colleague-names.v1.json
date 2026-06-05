@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 1,
+  "library": {
+    "id": "colleague-names-v1",
+    "name": "Colleague names",
+    "description": "First and last names from the colleague list as vocabulary study items."
+  },
+  "items": [
+    {
+      "id": "surname-nakamura",
+      "type": "vocabulary",
+      "characters": "中村",
+      "meanings": ["Nakamura (surname)"],
+      "readings": ["なかむら"],
+      "primaryReading": "なかむら",
+      "synonyms": ["Nakamura"],
+      "notes": "From 中村洸太"
+    },
+    {
+      "id": "given-kota",
+      "type": "vocabulary",
+      "characters": "洸太",
+      "meanings": ["Kota (given name)"],
+      "readings": ["こうた"],
+      "primaryReading": "こうた",
+      "synonyms": ["Kota"],
+      "notes": "From 中村洸太"
+    },
+    {
+      "id": "surname-matsushita",
+      "type": "vocabulary",
+      "characters": "松下",
+      "meanings": ["Matsushita (surname)"],
+      "readings": ["まつした"],
+      "primaryReading": "まつした",
+      "synonyms": ["Matsushita"],
+      "notes": "From 松下展之"
+    },
+    {
+      "id": "given-nobuyuki",
+      "type": "vocabulary",
+      "characters": "展之",
+      "meanings": ["Nobuyuki (given name)"],
+      "readings": ["のぶゆき"],
+      "primaryReading": "のぶゆき",
+      "synonyms": ["Nobuyuki"],
+      "notes": "From 松下展之"
+    },
+    {
+      "id": "surname-hyodo",
+      "type": "vocabulary",
+      "characters": "兵頭",
+      "meanings": ["Hyodo (surname)"],
+      "readings": ["ひょうどう"],
+      "primaryReading": "ひょうどう",
+      "synonyms": ["Hyodo"],
+      "notes": "From 兵頭直樹"
+    },
+    {
+      "id": "given-naoki",
+      "type": "vocabulary",
+      "characters": "直樹",
+      "meanings": ["Naoki (given name)"],
+      "readings": ["なおき"],
+      "primaryReading": "なおき",
+      "synonyms": ["Naoki"],
+      "notes": "From 兵頭直樹"
+    },
+    {
+      "id": "surname-takemura",
+      "type": "vocabulary",
+      "characters": "竹村",
+      "meanings": ["Takemura (surname)"],
+      "readings": ["たけむら"],
+      "primaryReading": "たけむら",
+      "synonyms": ["Takemura"],
+      "notes": "From 竹村悠人"
+    },
+    {
+      "id": "given-yuto",
+      "type": "vocabulary",
+      "characters": "悠人",
+      "meanings": ["Yuto (given name)"],
+      "readings": ["ゆうと"],
+      "primaryReading": "ゆうと",
+      "synonyms": ["Yuto"],
+      "notes": "From 竹村悠人"
+    },
+    {
+      "id": "surname-muryoi",
+      "type": "vocabulary",
+      "characters": "無量井",
+      "meanings": ["Muryoi (surname)"],
+      "readings": ["むりょうい"],
+      "primaryReading": "むりょうい",
+      "synonyms": ["Muryoi"],
+      "notes": "From 無量井健"
+    },
+    {
+      "id": "given-ken",
+      "type": "vocabulary",
+      "characters": "健",
+      "meanings": ["Ken (given name)"],
+      "readings": ["けん"],
+      "primaryReading": "けん",
+      "synonyms": ["Ken"],
+      "notes": "From 無量井健"
+    },
+    {
+      "id": "surname-ishimori",
+      "type": "vocabulary",
+      "characters": "石森",
+      "meanings": ["Ishimori (surname)"],
+      "readings": ["いしもり"],
+      "primaryReading": "いしもり",
+      "synonyms": ["Ishimori"],
+      "notes": "From 石森大貴"
+    },
+    {
+      "id": "given-daiki",
+      "type": "vocabulary",
+      "characters": "大貴",
+      "meanings": ["Daiki (given name)"],
+      "readings": ["だいき"],
+      "primaryReading": "だいき",
+      "synonyms": ["Daiki"],
+      "notes": "From 石森大貴"
+    },
+    {
+      "id": "surname-setoyama",
+      "type": "vocabulary",
+      "characters": "瀬戸山",
+      "meanings": ["Setoyama (surname)"],
+      "readings": ["せとやま"],
+      "primaryReading": "せとやま",
+      "synonyms": ["Setoyama"],
+      "notes": "From 瀬戸山雅人"
+    },
+    {
+      "id": "given-masato",
+      "type": "vocabulary",
+      "characters": "雅人",
+      "meanings": ["Masato (given name)"],
+      "readings": ["まさと"],
+      "primaryReading": "まさと",
+      "synonyms": ["Masato"],
+      "notes": "From 瀬戸山雅人"
+    },
+    {
+      "id": "surname-misosaku",
+      "type": "vocabulary",
+      "characters": "美曽作",
+      "meanings": ["Misosaku (surname)"],
+      "readings": ["みそさく"],
+      "primaryReading": "みそさく",
+      "synonyms": ["Misosaku"],
+      "notes": "From 美曽作孝裕"
+    },
+    {
+      "id": "given-takahiro",
+      "type": "vocabulary",
+      "characters": "孝裕",
+      "meanings": ["Takahiro (given name)"],
+      "readings": ["たかひろ"],
+      "primaryReading": "たかひろ",
+      "synonyms": ["Takahiro"],
+      "notes": "From 美曽作孝裕"
+    },
+    {
+      "id": "surname-suginohara",
+      "type": "vocabulary",
+      "characters": "杉之原",
+      "meanings": ["Suginohara (surname)"],
+      "readings": ["すぎのはら"],
+      "primaryReading": "すぎのはら",
+      "synonyms": ["Suginohara"],
+      "notes": "From 杉之原大資"
+    },
+    {
+      "id": "given-daisuke",
+      "type": "vocabulary",
+      "characters": "大資",
+      "meanings": ["Daisuke (given name)"],
+      "readings": ["だいすけ"],
+      "primaryReading": "だいすけ",
+      "synonyms": ["Daisuke"],
+      "notes": "From 杉之原大資"
+    },
+    {
+      "id": "surname-nakahara",
+      "type": "vocabulary",
+      "characters": "中原",
+      "meanings": ["Nakahara (surname)"],
+      "readings": ["なかはら"],
+      "primaryReading": "なかはら",
+      "synonyms": ["Nakahara"],
+      "notes": "From 中原陸"
+    },
+    {
+      "id": "given-riku",
+      "type": "vocabulary",
+      "characters": "陸",
+      "meanings": ["Riku (given name)"],
+      "readings": ["りく"],
+      "primaryReading": "りく",
+      "synonyms": ["Riku"],
+      "notes": "From 中原陸"
+    },
+    {
+      "id": "surname-kajita",
+      "type": "vocabulary",
+      "characters": "梶田",
+      "meanings": ["Kajita (surname)"],
+      "readings": ["かじた"],
+      "primaryReading": "かじた",
+      "synonyms": ["Kajita"],
+      "notes": "From 梶田英邦"
+    },
+    {
+      "id": "given-hidekuni",
+      "type": "vocabulary",
+      "characters": "英邦",
+      "meanings": ["Hidekuni (given name)"],
+      "readings": ["ひでくに"],
+      "primaryReading": "ひでくに",
+      "synonyms": ["Hidekuni"],
+      "notes": "From 梶田英邦"
+    },
+    {
+      "id": "surname-mori",
+      "type": "vocabulary",
+      "characters": "森",
+      "meanings": ["Mori (surname)"],
+      "readings": ["もり"],
+      "primaryReading": "もり",
+      "synonyms": ["Mori"],
+      "notes": "From 森久由生"
+    },
+    {
+      "id": "given-hisayuki",
+      "type": "vocabulary",
+      "characters": "久由生",
+      "meanings": ["Hisayuki (given name)"],
+      "readings": ["ひさゆき"],
+      "primaryReading": "ひさゆき",
+      "synonyms": ["Hisayuki"],
+      "notes": "From 森久由生"
+    },
+    {
+      "id": "surname-kuramae",
+      "type": "vocabulary",
+      "characters": "蔵前",
+      "meanings": ["Kuramae (surname)"],
+      "readings": ["くらまえ"],
+      "primaryReading": "くらまえ",
+      "synonyms": ["Kuramae"],
+      "notes": "From 蔵前友紀"
+    },
+    {
+      "id": "given-yuki",
+      "type": "vocabulary",
+      "characters": "友紀",
+      "meanings": ["Yuki (given name)"],
+      "readings": ["ゆき"],
+      "primaryReading": "ゆき",
+      "synonyms": ["Yuki"],
+      "notes": "From 蔵前友紀"
+    },
+    {
+      "id": "surname-nagamine",
+      "type": "vocabulary",
+      "characters": "長峯",
+      "meanings": ["Nagamine (surname)"],
+      "readings": ["ながみね"],
+      "primaryReading": "ながみね",
+      "synonyms": ["Nagamine"],
+      "notes": "From 長峯広雅"
+    },
+    {
+      "id": "given-hiromasa",
+      "type": "vocabulary",
+      "characters": "広雅",
+      "meanings": ["Hiromasa (given name)"],
+      "readings": ["ひろまさ"],
+      "primaryReading": "ひろまさ",
+      "synonyms": ["Hiromasa"],
+      "notes": "From 長峯広雅"
+    },
+    {
+      "id": "surname-fukunaga",
+      "type": "vocabulary",
+      "characters": "福永",
+      "meanings": ["Fukunaga (surname)"],
+      "readings": ["ふくなが"],
+      "primaryReading": "ふくなが",
+      "synonyms": ["Fukunaga"],
+      "notes": "From 福永円香"
+    },
+    {
+      "id": "given-madoka",
+      "type": "vocabulary",
+      "characters": "円香",
+      "meanings": ["Madoka (given name)"],
+      "readings": ["まどか"],
+      "primaryReading": "まどか",
+      "synonyms": ["Madoka"],
+      "notes": "From 福永円香"
+    },
+    {
+      "id": "surname-fujita",
+      "type": "vocabulary",
+      "characters": "藤田",
+      "meanings": ["Fujita (surname)"],
+      "readings": ["ふじた"],
+      "primaryReading": "ふじた",
+      "synonyms": ["Fujita"],
+      "notes": "From 藤田周"
+    },
+    {
+      "id": "given-shuu",
+      "type": "vocabulary",
+      "characters": "周",
+      "meanings": ["Shuu (given name)"],
+      "readings": ["しゅう"],
+      "primaryReading": "しゅう",
+      "synonyms": ["Shuu"],
+      "notes": "From 藤田周"
+    },
+    {
+      "id": "surname-inoue",
+      "type": "vocabulary",
+      "characters": "井上",
+      "meanings": ["Inoue (surname)"],
+      "readings": ["いのうえ"],
+      "primaryReading": "いのうえ",
+      "synonyms": ["Inoue"],
+      "notes": "From 井上葵唯"
+    },
+    {
+      "id": "given-aoi",
+      "type": "vocabulary",
+      "characters": "葵唯",
+      "meanings": ["Aoi (given name)"],
+      "readings": ["あおい"],
+      "primaryReading": "あおい",
+      "synonyms": ["Aoi"],
+      "notes": "From 井上葵唯"
+    },
+    {
+      "id": "surname-kato",
+      "type": "vocabulary",
+      "characters": "加藤",
+      "meanings": ["Kato (surname)"],
+      "readings": ["かとう"],
+      "primaryReading": "かとう",
+      "synonyms": ["Kato"],
+      "notes": "From 加藤俊介"
+    },
+    {
+      "id": "given-shunsuke",
+      "type": "vocabulary",
+      "characters": "俊介",
+      "meanings": ["Shunsuke (given name)"],
+      "readings": ["しゅんすけ"],
+      "primaryReading": "しゅんすけ",
+      "synonyms": ["Shunsuke"],
+      "notes": "From 加藤俊介"
+    },
+    {
+      "id": "surname-shimomura",
+      "type": "vocabulary",
+      "characters": "下村",
+      "meanings": ["Shimomura (surname)"],
+      "readings": ["しもむら"],
+      "primaryReading": "しもむら",
+      "synonyms": ["Shimomura"],
+      "notes": "From 下村智貴"
+    },
+    {
+      "id": "given-tomoki",
+      "type": "vocabulary",
+      "characters": "智貴",
+      "meanings": ["Tomoki (given name)"],
+      "readings": ["ともき"],
+      "primaryReading": "ともき",
+      "synonyms": ["Tomoki"],
+      "notes": "From 下村智貴"
+    },
+    {
+      "id": "surname-sakakibara",
+      "type": "vocabulary",
+      "characters": "榊原",
+      "meanings": ["Sakakibara (surname)"],
+      "readings": ["さかきばら"],
+      "primaryReading": "さかきばら",
+      "synonyms": ["Sakakibara"],
+      "notes": "From 榊原光希"
+    },
+    {
+      "id": "given-mitsuki",
+      "type": "vocabulary",
+      "characters": "光希",
+      "meanings": ["Mitsuki (given name)"],
+      "readings": ["みつき"],
+      "primaryReading": "みつき",
+      "synonyms": ["Mitsuki"],
+      "notes": "From 榊原光希"
+    }
+  ]
+}

@@ -24,6 +24,12 @@ import {
 export const STUDY_QUEUE_STORAGE_TTL_MS = 90_000;
 export const STUDY_RECENT_WINDOW_MS = 24 * 60 * 60 * 1000;
 
+function studyQueueStorageKey(accountId: string, mode: StudyQueueMode, scopeKey?: string): string {
+  return scopeKey
+    ? `wr:study-queue:${accountId}:${mode}:${scopeKey}`
+    : `wr:study-queue:${accountId}:${mode}`;
+}
+
 function parseTimestampMs(value: string | null | undefined): number | null {
   if (!value) {
     return null;
@@ -79,12 +85,17 @@ export function itemMatchesStudyQuery(item: StudyQueueItem, normalizedQuery: str
   return romaji.includes(normalizedQuery);
 }
 
-export function readStoredQueue(accountId: string, mode: StudyQueueMode): QueueResponse | undefined {
+export function readStoredQueue(
+  accountId: string,
+  mode: StudyQueueMode,
+  scopeKey?: string,
+): QueueResponse | undefined {
   if (typeof window === "undefined") {
     return undefined;
   }
 
-  const raw = window.localStorage.getItem(`wr:study-queue:${accountId}:${mode}`);
+  const key = studyQueueStorageKey(accountId, mode, scopeKey);
+  const raw = window.localStorage.getItem(key);
   if (!raw) {
     return undefined;
   }
@@ -96,13 +107,13 @@ export function readStoredQueue(accountId: string, mode: StudyQueueMode): QueueR
     }
 
     if (Date.now() - payload.cachedAtMs > STUDY_QUEUE_STORAGE_TTL_MS) {
-      window.localStorage.removeItem(`wr:study-queue:${accountId}:${mode}`);
+      window.localStorage.removeItem(key);
       return undefined;
     }
 
     return payload.data;
   } catch {
-    window.localStorage.removeItem(`wr:study-queue:${accountId}:${mode}`);
+    window.localStorage.removeItem(key);
     return undefined;
   }
 }
@@ -110,12 +121,13 @@ export function readStoredQueue(accountId: string, mode: StudyQueueMode): QueueR
 export function readStoredQueueMeta(
   accountId: string,
   mode: StudyQueueMode,
+  scopeKey?: string,
 ): { cachedAtMs: number; restoredCount: number; totalCount: number } | null {
   if (typeof window === "undefined") {
     return null;
   }
 
-  const raw = window.localStorage.getItem(`wr:study-queue:${accountId}:${mode}`);
+  const raw = window.localStorage.getItem(studyQueueStorageKey(accountId, mode, scopeKey));
   if (!raw) {
     return null;
   }
@@ -158,6 +170,7 @@ export function persistQueue(
     burned: number;
   },
   srsStageCounts?: Record<number, number>,
+  scopeKey?: string,
 ): void {
   if (typeof window === "undefined") {
     return;
@@ -186,7 +199,7 @@ export function persistQueue(
     },
   };
 
-  window.localStorage.setItem(`wr:study-queue:${accountId}:${queueMode}`, JSON.stringify(payload));
+  window.localStorage.setItem(studyQueueStorageKey(accountId, queueMode, scopeKey), JSON.stringify(payload));
 }
 
 export function badgeClass(active: boolean): string {

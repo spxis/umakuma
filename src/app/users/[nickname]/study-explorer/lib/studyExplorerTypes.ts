@@ -8,6 +8,7 @@ export type StudyQueueItem = LevelItem & {
 
 export type StudyQueueMode = StudyQueueItem["queueType"];
 export type StudyViewerMode = "detail" | "flash";
+export type StudySource = "wanikani" | "custom";
 
 export type QueueResponse = {
   items: StudyQueueItem[];
@@ -85,6 +86,8 @@ export type StudyReviewSubmitResult = Extract<ReviewOutcome, "correct" | "wrong"
 
 export type StudyExplorerProps = {
   accountId: string;
+  studySource: StudySource;
+  customLibraryId: string | null;
   maxLevel: number;
   showEnglish: boolean;
   onToggleShowEnglish: () => void;

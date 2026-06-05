@@ -5,7 +5,8 @@ import { sameAssignmentList } from "./studyExplorerEffectsComparators";
 import { fetchStudyQueue } from "./studyExplorerUtils";
 
 type Args = {
-  accountId: string;
+  queueApiBasePath: string;
+  customLibraryId: string | null;
   queueMode: StudyQueueMode;
   initialPageSize: number;
   loadedItems: StudyQueueItem[];
@@ -25,7 +26,8 @@ type Args = {
 };
 
 export function useStudyQueuePagination({
-  accountId,
+  queueApiBasePath,
+  customLibraryId,
   queueMode,
   initialPageSize,
   loadedItems,
@@ -49,8 +51,17 @@ export function useStudyQueuePagination({
     onSetIsLoadingMore(true);
     onSetLoadMoreError(null);
     try {
+      const params = new URLSearchParams({
+        mode: queueMode,
+        limit: String(initialPageSize),
+        offset: String(loadedItems.length),
+      });
+      if (customLibraryId) {
+        params.set("libraryId", customLibraryId);
+      }
+
       const payload = await fetchStudyQueue(
-        `/api/study/${accountId}/queue?mode=${queueMode}&limit=${initialPageSize}&offset=${loadedItems.length}`,
+        `${queueApiBasePath}/queue?${params.toString()}`,
       );
       const payloadVisibleItems = payload.items.filter(
         (item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId),
@@ -73,7 +84,7 @@ export function useStudyQueuePagination({
       onSetIsLoadingMore(false);
     }
   }, [
-    accountId,
+    customLibraryId,
     hasMorePages,
     hiddenSubmittedAssignmentIds,
     initialPageSize,
@@ -84,6 +95,7 @@ export function useStudyQueuePagination({
     onSetLoadedItems,
     onSetPersistedCounts,
     onSetTotalItems,
+    queueApiBasePath,
     queueMode,
     totalItems,
   ]);

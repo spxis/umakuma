@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import useSWR from "swr";
 
 import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
 import LevelExplorer from "./level-explorer/components/LevelExplorer";
 import StudyExplorer from "./study-explorer/components/StudyExplorer";
+import StudySourceControls from "./StudySourceControls";
+import { useStudySourceState } from "./useStudySourceState";
 import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
 import type { StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";
@@ -54,13 +55,21 @@ export default function ExplorerTabs({
   const [studyMode, setStudyMode] = useState(() => (typeof initialStudyMode === "boolean" ? initialStudyMode : true));
   const [activeTab, setActiveTab] = useState<"study" | "level" | "jlpt">(initialTab);
   const [showEnglish, setShowEnglish] = useState(false);
-  const [studyCounts, setStudyCounts] = useState<{ reviews: number; lessons: number } | null>(null);
   const [queueMode, setQueueMode] = useState<QueueType>(
     initialQueueMode === QUEUE_TYPES.review || initialQueueMode === QUEUE_TYPES.lesson
       ? initialQueueMode
       : QUEUE_TYPES.review,
   );
   const [initialViewerMode, setInitialViewerMode] = useState<"detail" | "flash" | null>(null);
+
+  const {
+    studySource,
+    setStudySource,
+    customLibraryId,
+    setCustomLibraryId,
+    studyCounts,
+    applySourceFromSearchParams,
+  } = useStudySourceState({ accountId, countsStorageKey, isHydrated });
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -94,6 +103,7 @@ export default function ExplorerTabs({
       }
 
       setShowEnglish(window.localStorage.getItem(showEnglishStorageKey) === "1");
+      applySourceFromSearchParams(params);
 
       const viewer = params.get("viewer");
       setInitialViewerMode(viewer === "detail" || viewer === "flash" ? viewer : null);
@@ -102,80 +112,13 @@ export default function ExplorerTabs({
     return () => {
       window.clearTimeout(timer);
     };
-  }, [accountId, initialQueueMode, initialStudyMode, showEnglishStorageKey]);
-
-  useSWR<{ reviews: number; lessons: number }>(
-    `/api/study/${accountId}/counts`,
-    async (url: string) => {
-      const response = await fetch(url, { cache: "no-store" });
-      const payload = (await response.json()) as { reviews?: number; lessons?: number; error?: string };
-      if (!response.ok || typeof payload.reviews !== "number" || typeof payload.lessons !== "number") {
-        throw new Error(payload.error ?? "Could not load study counts.");
-      }
-
-      return { reviews: payload.reviews, lessons: payload.lessons };
-    },
-    {
-      revalidateOnFocus: true,
-      refreshInterval: 30_000,
-      onSuccess: (nextCounts) => {
-        setStudyCounts((prev) => {
-          if (prev && prev.reviews === nextCounts.reviews && prev.lessons === nextCounts.lessons) {
-            return prev;
-          }
-          return nextCounts;
-        });
-        try {
-          window.localStorage.setItem(
-            countsStorageKey,
-            JSON.stringify({
-              reviews: nextCounts.reviews,
-              lessons: nextCounts.lessons,
-              all: nextCounts.reviews + nextCounts.lessons,
-            }),
-          );
-        } catch {
-          // Ignore storage errors in restricted browsing modes.
-        }
-      },
-    },
-  );
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const readCounts = () => {
-      const raw = window.localStorage.getItem(countsStorageKey);
-      if (!raw) {
-        return;
-      }
-
-      try {
-        const parsed = JSON.parse(raw) as { reviews?: number; lessons?: number };
-        if (typeof parsed.reviews === "number" && typeof parsed.lessons === "number") {
-          const nextReviews = parsed.reviews;
-          const nextLessons = parsed.lessons;
-          setStudyCounts((prev) => {
-            if (prev && prev.reviews === nextReviews && prev.lessons === nextLessons) {
-              return prev;
-            }
-            return { reviews: nextReviews, lessons: nextLessons };
-          });
-        }
-      } catch {
-        // Ignore malformed cache values.
-      }
-    };
-
-    readCounts();
-    window.addEventListener("focus", readCounts);
-
-    return () => {
-      window.removeEventListener("focus", readCounts);
-    };
-  }, [accountId, countsStorageKey]);
+  }, [
+    accountId,
+    applySourceFromSearchParams,
+    initialQueueMode,
+    initialStudyMode,
+    showEnglishStorageKey,
+  ]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {
@@ -280,13 +223,15 @@ export default function ExplorerTabs({
       } else if (urlStudyMode === "off" || urlStudyMode === "0") {
         setStudyMode(false);
       }
+
+      applySourceFromSearchParams(params);
     };
 
     window.addEventListener("popstate", onPopState);
     return () => {
       window.removeEventListener("popstate", onPopState);
     };
-  }, [isHydrated]);
+  }, [applySourceFromSearchParams, isHydrated]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {
@@ -378,6 +323,15 @@ export default function ExplorerTabs({
         <div className="w-full">
           <div className="grid w-full grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-center gap-2 pr-1 md:flex md:w-auto md:items-center md:gap-2 md:pr-1 md:justify-end">
             {activeTab === "study" ? (
+              <StudySourceControls
+                accountId={accountId}
+                studySource={studySource}
+                onSetStudySource={setStudySource}
+                customLibraryId={customLibraryId}
+                onSetCustomLibraryId={setCustomLibraryId}
+              />
+            ) : null}
+            {activeTab === "study" ? (
               <div
                 className="inline-flex w-full items-center rounded-full border border-line bg-surface p-1"
                 role="tablist"
@@ -422,6 +376,8 @@ export default function ExplorerTabs({
       <div className={activeTab === "study" ? "block" : "hidden"}>
         <StudyExplorer
           accountId={accountId}
+          studySource={studySource}
+          customLibraryId={customLibraryId}
           maxLevel={maxLevel}
           initialViewerMode={initialViewerMode}
           initialFilters={initialStudyFilters}

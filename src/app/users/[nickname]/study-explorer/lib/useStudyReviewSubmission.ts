@@ -17,6 +17,8 @@ const REVIEW_SUBMIT_TIMEOUT_MS = 10000;
 
 type Args = {
   accountId: string;
+  studyApiBasePath: string;
+  customLibraryId: string | null;
   queueMode: StudyQueueMode;
   modalItems: StudyQueueItem[];
   selectedItem: StudyQueueItem | null;
@@ -40,6 +42,8 @@ type Args = {
 
 export function useStudyReviewSubmission({
   accountId,
+  studyApiBasePath,
+  customLibraryId,
   queueMode,
   modalItems,
   selectedItem,
@@ -126,10 +130,14 @@ export function useStudyReviewSubmission({
 
         let response: Response;
         try {
-          response = await fetch(`/api/study/${accountId}/review`, {
+          response = await fetch(`${studyApiBasePath}/review`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ assignmentId, result }),
+            body: JSON.stringify({
+              assignmentId,
+              result,
+              ...(customLibraryId ? { libraryId: customLibraryId } : {}),
+            }),
             signal: submitController.signal,
           });
         } catch (networkError) {
@@ -223,6 +231,7 @@ export function useStudyReviewSubmission({
     },
     [
       accountId,
+      customLibraryId,
       queueMode,
       getSubmissionContext,
       onSetHasPendingStudySubmissions,
@@ -239,6 +248,7 @@ export function useStudyReviewSubmission({
       onSetSubmittingByAssignmentId,
       onSetTotalItems,
       removeFromModalSession,
+      studyApiBasePath,
       inFlightAssignmentIdsRef,
     ],
   );
@@ -257,10 +267,13 @@ export function useStudyReviewSubmission({
       onSetSubmittingByAssignmentId((prev) => new Set(prev).add(assignmentId));
 
       try {
-        const response = await fetch(`/api/study/${accountId}/lesson/start`, {
+        const response = await fetch(`${studyApiBasePath}/lesson/start`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ assignmentId }),
+          body: JSON.stringify({
+            assignmentId,
+            ...(customLibraryId ? { libraryId: customLibraryId } : {}),
+          }),
         });
         const payload = (await response.json()) as { error?: string };
         if (!response.ok) throw new Error(payload.error ?? "Could not start lesson.");
@@ -303,7 +316,7 @@ export function useStudyReviewSubmission({
       }
     },
     [
-      accountId,
+      customLibraryId,
       getSubmissionContext,
       onSetHasPendingStudySubmissions,
       onSetHiddenSubmittedAssignmentIds,
@@ -313,6 +326,7 @@ export function useStudyReviewSubmission({
       onSetSubmitFeedback,
       onSetSubmitInFlight,
       onSetSubmittingByAssignmentId,
+      studyApiBasePath,
     ],
   );
 
