@@ -685,6 +685,82 @@
       ],
       "notes": "From 榊原光希",
       "level": 4
+    },
+    {
+      "id": "kanji-ken",
+      "type": "kanji",
+      "characters": "健",
+      "meanings": [
+        "Healthy",
+        "Strong"
+      ],
+      "readings": [
+        "ケン",
+        "すこやか"
+      ],
+      "primaryReading": "ケン",
+      "synonyms": [
+        "health"
+      ],
+      "notes": "Kanji entry paired with given-ken.",
+      "level": 1
+    },
+    {
+      "id": "kanji-riku",
+      "type": "kanji",
+      "characters": "陸",
+      "meanings": [
+        "Land",
+        "Shore"
+      ],
+      "readings": [
+        "リク",
+        "おか"
+      ],
+      "primaryReading": "リク",
+      "synonyms": [
+        "ground"
+      ],
+      "notes": "Kanji entry paired with given-riku.",
+      "level": 2
+    },
+    {
+      "id": "kanji-mori",
+      "type": "kanji",
+      "characters": "森",
+      "meanings": [
+        "Forest",
+        "Woods"
+      ],
+      "readings": [
+        "シン",
+        "もり"
+      ],
+      "primaryReading": "シン",
+      "synonyms": [
+        "forest"
+      ],
+      "notes": "Kanji entry paired with surname-mori.",
+      "level": 3
+    },
+    {
+      "id": "kanji-shuu",
+      "type": "kanji",
+      "characters": "周",
+      "meanings": [
+        "Circumference",
+        "Around"
+      ],
+      "readings": [
+        "シュウ",
+        "まわり"
+      ],
+      "primaryReading": "シュウ",
+      "synonyms": [
+        "surround"
+      ],
+      "notes": "Kanji entry paired with given-shuu.",
+      "level": 4
     }
   ]
 }
