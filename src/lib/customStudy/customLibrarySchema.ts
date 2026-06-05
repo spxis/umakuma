@@ -27,12 +27,18 @@ export const customLibraryPayloadSchema = z
   .superRefine((payload, ctx) => {
     const duplicateIds = new Set<string>();
     const seenIds = new Set<string>();
+    const seenLevels = new Set<number>();
+    let maxLevel = 0;
 
     for (const item of payload.items) {
       if (seenIds.has(item.id)) {
         duplicateIds.add(item.id);
       }
       seenIds.add(item.id);
+      seenLevels.add(item.level);
+      if (item.level > maxLevel) {
+        maxLevel = item.level;
+      }
     }
 
     if (duplicateIds.size > 0) {
@@ -40,6 +46,22 @@ export const customLibraryPayloadSchema = z
         code: z.ZodIssueCode.custom,
         message: `Duplicate item IDs: ${Array.from(duplicateIds).join(", ")}`,
       });
+    }
+
+    if (maxLevel > 0) {
+      const missingLevels: number[] = [];
+      for (let level = 1; level <= maxLevel; level += 1) {
+        if (!seenLevels.has(level)) {
+          missingLevels.push(level);
+        }
+      }
+
+      if (missingLevels.length > 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Levels must be contiguous from 1 to ${maxLevel}. Missing levels: ${missingLevels.join(", ")}`,
+        });
+      }
     }
   });
 
