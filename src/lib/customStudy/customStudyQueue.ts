@@ -12,7 +12,7 @@ export type CustomStateQueueRow = {
   passedAt: Date | null;
   item: {
     id: number;
-    wkLevel: number;
+    wkLevel?: number | null;
     itemType: CustomStudyItemType;
     characters: string;
     meanings: string[];
@@ -68,13 +68,17 @@ export function customQueueTypeFromState(params: {
 }
 
 export function mapCustomQueueItem(row: CustomStateQueueRow, now: Date) {
+  const level = typeof row.item.wkLevel === "number" && Number.isFinite(row.item.wkLevel) && row.item.wkLevel > 0
+    ? Math.trunc(row.item.wkLevel)
+    : 1;
+
   return {
     subjectId: row.item.id,
     assignmentId: row.id,
     queueType: customQueueTypeFromState({ stage: row.srsStage, now, availableAt: row.availableAt }),
     subjectType: customItemTypeToSubjectType(row.item.itemType),
-    wkLevel: row.item.wkLevel,
-    ukLevel: row.item.wkLevel,
+    wkLevel: level,
+    ukLevel: level,
     characters: row.item.characters,
     meanings: row.item.meanings,
     readings: row.item.readings,

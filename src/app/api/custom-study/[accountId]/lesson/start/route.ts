@@ -4,6 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
+import { customItemSupportsWkLevel, resolveCustomItemLevel } from "@/lib/customStudy/customItemLevel";
 import { isCustomLevelUnlocked, resolveCurrentCustomLevel } from "@/lib/customStudy/customLevelUnlock";
 import { initialCustomLessonState } from "@/lib/customStudy/customSrs";
 import { prisma } from "@/lib/prisma";
@@ -56,7 +57,7 @@ export async function POST(request: Request, context: RouteContext) {
             unlockedAt: true,
             item: {
               select: {
-                wkLevel: true,
+                ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
               },
             },
           },
@@ -66,7 +67,7 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Study item not found." }, { status: 404 });
         }
 
-        if (!state.item || typeof state.item.wkLevel !== "number") {
+        if (!state.item) {
           return NextResponse.json({ error: "Study item is unavailable." }, { status: 404 });
         }
 
@@ -84,23 +85,23 @@ export async function POST(request: Request, context: RouteContext) {
             passedAt: true,
             item: {
               select: {
-                wkLevel: true,
+                ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
               },
             },
           },
         });
 
-        const validLevelStates = levelStates.filter((row) => Boolean(row.item && typeof row.item.wkLevel === "number"));
+        const validLevelStates = levelStates.filter((row) => Boolean(row.item));
 
         const { currentLevel } = resolveCurrentCustomLevel(
           validLevelStates.map((row) => ({
-            ukLevel: row.item.wkLevel,
+            ukLevel: resolveCustomItemLevel(row.item),
             srsStage: row.srsStage,
             passedAt: row.passedAt,
           })),
         );
 
-        if (!isCustomLevelUnlocked({ itemLevel: state.item.wkLevel, currentLevel })) {
+        if (!isCustomLevelUnlocked({ itemLevel: resolveCustomItemLevel(state.item), currentLevel })) {
           return NextResponse.json({ error: "This level is locked. Reach 75% guru on the current level first." }, { status: 409 });
         }
 

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
+import { customItemSupportsWkLevel, resolveCustomItemLevel } from "@/lib/customStudy/customItemLevel";
 import { isCustomLevelUnlocked, resolveCurrentCustomLevel } from "@/lib/customStudy/customLevelUnlock";
 import { isCustomReviewReady } from "@/lib/customStudy/customStudyQueue";
 import { prisma } from "@/lib/prisma";
@@ -56,17 +57,17 @@ export async function GET(request: Request, context: RouteContext) {
             availableAt: true,
             item: {
               select: {
-                wkLevel: true,
+                ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
               },
             },
           },
         });
 
-        const validStates = states.filter((row) => Boolean(row.item && typeof row.item.wkLevel === "number"));
+        const validStates = states.filter((row) => Boolean(row.item));
 
         const { currentLevel } = resolveCurrentCustomLevel(
           validStates.map((row) => ({
-            ukLevel: row.item.wkLevel,
+            ukLevel: resolveCustomItemLevel(row.item),
             srsStage: row.srsStage,
             passedAt: row.passedAt,
           })),
@@ -76,7 +77,7 @@ export async function GET(request: Request, context: RouteContext) {
           (row) =>
             row.srsStage <= 0 &&
             isCustomLevelUnlocked({
-              itemLevel: row.item.wkLevel,
+              itemLevel: resolveCustomItemLevel(row.item),
               currentLevel,
             }),
         ).length;

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
+import { customItemSupportsWkLevel, resolveCustomItemLevel } from "@/lib/customStudy/customItemLevel";
 import { isCustomLevelUnlocked, resolveCurrentCustomLevel } from "@/lib/customStudy/customLevelUnlock";
 import {
   isCustomLessonState,
@@ -135,7 +136,7 @@ export async function GET(request: Request, context: RouteContext) {
             item: {
               select: {
                 id: true,
-                wkLevel: true,
+                ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
                 itemType: true,
                 characters: true,
                 meanings: true,
@@ -152,7 +153,7 @@ export async function GET(request: Request, context: RouteContext) {
 
         const { currentLevel } = resolveCurrentCustomLevel(
           validStates.map((row) => ({
-            ukLevel: row.item.wkLevel,
+            ukLevel: resolveCustomItemLevel(row.item),
             srsStage: row.srsStage,
             passedAt: row.passedAt,
           })),
@@ -162,7 +163,7 @@ export async function GET(request: Request, context: RouteContext) {
           (row) =>
             isCustomLessonState(row.srsStage) &&
             isCustomLevelUnlocked({
-              itemLevel: row.item.wkLevel,
+              itemLevel: resolveCustomItemLevel(row.item),
               currentLevel,
             }),
         );
