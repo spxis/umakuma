@@ -4,6 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
+import { isCustomLevelUnlocked, resolveCurrentCustomLevel } from "@/lib/customStudy/customLevelUnlock";
 import {
   isCustomLessonState,
   isCustomReviewReady,
@@ -147,7 +148,21 @@ export async function GET(request: Request, context: RouteContext) {
           },
         });
 
-        const lessons = states.filter((row) => isCustomLessonState(row.srsStage));
+        const { currentLevel } = resolveCurrentCustomLevel(
+          states.map((row) => ({
+            wkLevel: row.item.wkLevel,
+            srsStage: row.srsStage,
+          })),
+        );
+
+        const lessons = states.filter(
+          (row) =>
+            isCustomLessonState(row.srsStage) &&
+            isCustomLevelUnlocked({
+              itemLevel: row.item.wkLevel,
+              currentLevel,
+            }),
+        );
         const reviews = states.filter((row) =>
           isCustomReviewReady({
             srsStage: row.srsStage,

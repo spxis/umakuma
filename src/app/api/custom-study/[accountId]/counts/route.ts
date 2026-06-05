@@ -4,6 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
+import { isCustomLevelUnlocked, resolveCurrentCustomLevel } from "@/lib/customStudy/customLevelUnlock";
 import { isCustomReviewReady } from "@/lib/customStudy/customStudyQueue";
 import { prisma } from "@/lib/prisma";
 
@@ -52,10 +53,29 @@ export async function GET(request: Request, context: RouteContext) {
           select: {
             srsStage: true,
             availableAt: true,
+            item: {
+              select: {
+                wkLevel: true,
+              },
+            },
           },
         });
 
-        const lessons = states.filter((row) => row.srsStage <= 0).length;
+        const { currentLevel } = resolveCurrentCustomLevel(
+          states.map((row) => ({
+            wkLevel: row.item.wkLevel,
+            srsStage: row.srsStage,
+          })),
+        );
+
+        const lessons = states.filter(
+          (row) =>
+            row.srsStage <= 0 &&
+            isCustomLevelUnlocked({
+              itemLevel: row.item.wkLevel,
+              currentLevel,
+            }),
+        ).length;
         const reviews = states.filter((row) =>
           isCustomReviewReady({
             srsStage: row.srsStage,

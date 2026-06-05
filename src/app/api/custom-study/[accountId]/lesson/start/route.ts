@@ -4,6 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
+import { isCustomLevelUnlocked, resolveCurrentCustomLevel } from "@/lib/customStudy/customLevelUnlock";
 import { initialCustomLessonState } from "@/lib/customStudy/customSrs";
 import { prisma } from "@/lib/prisma";
 
@@ -53,6 +54,11 @@ export async function POST(request: Request, context: RouteContext) {
             srsStage: true,
             startedAt: true,
             unlockedAt: true,
+            item: {
+              select: {
+                wkLevel: true,
+              },
+            },
           },
         });
 
@@ -62,6 +68,32 @@ export async function POST(request: Request, context: RouteContext) {
 
         if (state.srsStage > 0) {
           return NextResponse.json({ ok: true, skipped: true, reason: "already-started-or-unavailable" });
+        }
+
+        const levelStates = await prisma.customStudyState.findMany({
+          where: {
+            accountId,
+            libraryId: library.id,
+          },
+          select: {
+            srsStage: true,
+            item: {
+              select: {
+                wkLevel: true,
+              },
+            },
+          },
+        });
+
+        const { currentLevel } = resolveCurrentCustomLevel(
+          levelStates.map((row) => ({
+            wkLevel: row.item.wkLevel,
+            srsStage: row.srsStage,
+          })),
+        );
+
+        if (!isCustomLevelUnlocked({ itemLevel: state.item.wkLevel, currentLevel })) {
+          return NextResponse.json({ error: "This level is locked. Reach 75% guru on the current level first." }, { status: 409 });
         }
 
         const now = new Date();
