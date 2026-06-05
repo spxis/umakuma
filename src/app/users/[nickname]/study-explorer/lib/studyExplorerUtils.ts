@@ -2,6 +2,7 @@ import { toRomaji } from "wanakana";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import type {
+  UpcomingReviewsResponse,
   QueueResponse,
   StoredQueuePayload,
   StudyCounts,
@@ -53,6 +54,15 @@ export async function fetchStudyQueue(url: string): Promise<QueueResponse> {
   const data = (await response.json()) as QueueResponse & { error?: string };
   if (!response.ok) {
     throw new Error(data.error ?? "Could not fetch study queue.");
+  }
+  return data;
+}
+
+export async function fetchUpcomingReviews(url: string): Promise<UpcomingReviewsResponse> {
+  const response = await fetch(url);
+  const data = (await response.json()) as UpcomingReviewsResponse & { error?: string };
+  if (!response.ok) {
+    throw new Error(data.error ?? "Could not fetch upcoming study reviews.");
   }
   return data;
 }

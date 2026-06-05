@@ -71,6 +71,10 @@ export const STUDY_PANEL_TEXT = {
   genericLoadErrorPrefix: "Load error:",
   clearFilters: "Clear filters",
   noMatches: "No study items match the current filters.",
+  showUpcomingReviews: "Show upcoming reviews",
+  loadingUpcomingReviews: "Loading upcoming reviews...",
+  noUpcomingReviews: "No upcoming reviews found.",
+  upcomingReviewLoadError: "Could not load upcoming reviews right now.",
   queueRefreshError: "Couldn't refresh your study queue. Check your connection and try again.",
 } as const;
 

@@ -1,5 +1,6 @@
 import type { RefObject } from "react";
 import type {
+  UpcomingReviewItem,
   StudyQueueItem,
   StudyQueueMode,
   StudySrsFilter,
@@ -34,6 +35,10 @@ type StudyExplorerPanelProps = {
   hasData: boolean;
   isUnauthorized: boolean;
   errorMessage: string | null;
+  showUpcomingReviews: boolean;
+  upcomingItems: UpcomingReviewItem[];
+  isLoadingUpcomingReviews: boolean;
+  upcomingErrorMessage: string | null;
   showLocked: boolean;
   waitSortOrder: StudyWaitSortOrder;
   gridColumns: number;
@@ -46,6 +51,7 @@ type StudyExplorerPanelProps = {
   onSetSrsStageFilter: (filter: StudySrsStageFilter | null) => void;
   onToggleShowEnglish: () => void;
   onToggleShowLocked: () => void;
+  onToggleShowUpcomingReviews: () => void;
   onSetWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;
   onSelectSubject: (subjectId: number) => void;
   onClearAllFilters: () => void;

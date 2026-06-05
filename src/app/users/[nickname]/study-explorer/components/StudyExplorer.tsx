@@ -12,8 +12,8 @@ import {
   STUDY_TYPE_FILTERS,
 } from "./StudyExplorer.constants";
 import type {
-  QueueResponse,
   ReviewOutcome,
+  QueueResponse,
   StudyCounts,
   StudyExplorerProps,
   StudyQueueItem,
@@ -26,16 +26,18 @@ import type {
   SubmitFeedback,
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
-import { fetchStudyQueue, readStoredQueue, readStoredQueueMeta, sortStudyItemsByWait } from "../lib/studyExplorerUtils";
+import { fetchStudyQueue, fetchUpcomingReviews, readStoredQueue, readStoredQueueMeta, sortStudyItemsByWait } from "../lib/studyExplorerUtils";
 import { normalizeSrsStageFilter } from "../lib/studyExplorerSrs";
 import { resolveEffectiveViewedLevel } from "../lib/studyExplorerLevelBounds";
 import { buildStudyExplorerStorageKeys, deriveInitialQueueState, readStoredStudyCounts } from "../lib/studyExplorerState";
 import {
   buildStudyApiBasePath,
+  buildStudyUpcomingRequestUrl,
   buildStudyQueueRequestUrl,
   buildStudyQueueStorageScopeKey,
 } from "../lib/studyExplorerApi";
 import { buildStudyCacheTelemetry, getStudyGridColumns, isStudyWaitSortOrder } from "../lib/studyExplorerView";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { useStudyReviewSubmission } from "../lib/useStudyReviewSubmission";
 import { useStudyExplorerEffects } from "../lib/useStudyExplorerEffects";
 import { useStudyExplorerDerivedData } from "../lib/useStudyExplorerDerivedData";
@@ -93,6 +95,7 @@ export default function StudyExplorer({
   const [hiddenSubmittedAssignmentIds, setHiddenSubmittedAssignmentIds] = useState<Set<number>>(new Set());
   const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
   const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? true);
+  const [showUpcomingReviews, setShowUpcomingReviews] = usePersistedBoolean(`wr:study:show-upcoming-reviews:${accountId}:${queueStorageScopeKey}`, { defaultValue: false });
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
   const [gridColumns, setGridColumns] = useState<number>(4);
   const [waitSortOrder, setWaitSortOrder] = useState<StudyWaitSortOrder>("oldest_wait");
@@ -297,6 +300,8 @@ export default function StudyExplorer({
     () => sortStudyItemsByWait(filteredItems, waitSortOrder),
     [filteredItems, waitSortOrder],
   );
+  const upcomingRequestUrl = queueMode === STUDY_QUEUE_TYPES.review && showUpcomingReviews && sortedFilteredItems.length === 0 ? buildStudyUpcomingRequestUrl({ studyApiBasePath, studySource, customLibraryId, limit: 8 }) : null;
+  const { data: upcomingData, error: upcomingError, isLoading: isLoadingUpcoming, isValidating: isValidatingUpcoming } = useSWR(upcomingRequestUrl, fetchUpcomingReviews, { keepPreviousData: false, revalidateOnFocus: false });
   useStudyModalSessionSync({
     selectedId,
     filteredItems: sortedFilteredItems,
@@ -453,10 +458,14 @@ export default function StudyExplorer({
             totalItems={totalItems} hasMorePages={hasMorePages} isLoadingMore={isLoadingMore}
             loadMoreError={loadMoreError} isLoading={isLoading} isValidating={isValidating}
             hasData={Boolean(data)} isUnauthorized={isUnauthorized} errorMessage={error?.message ?? null}
+            showUpcomingReviews={showUpcomingReviews} upcomingItems={upcomingData?.items ?? []}
+            isLoadingUpcomingReviews={showUpcomingReviews && (isLoadingUpcoming || isValidatingUpcoming)}
+            upcomingErrorMessage={upcomingError?.message ?? null}
             showLocked={effectiveShowLocked} sentinelRef={sentinelRef}
             onSetViewedLevel={setViewedLevel} onSetTypeFilter={setTypeFilter} onSetSrsFilter={handleSetSrsFilter}
             onSetSrsStageFilter={setSrsStageFilter} onToggleShowEnglish={onToggleShowEnglish}
             onToggleShowLocked={() => setShowLocked((prev) => !prev)}
+            onToggleShowUpcomingReviews={() => setShowUpcomingReviews((prev) => !prev)}
             onSetWaitSortOrder={setWaitSortOrder} onSelectSubject={setSelectedId} onClearAllFilters={clearAllFilters}
           />
           <StudyExplorerModal

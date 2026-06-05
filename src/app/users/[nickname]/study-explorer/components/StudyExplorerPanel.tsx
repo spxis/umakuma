@@ -4,6 +4,7 @@ import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import StudyFilterSection from "./StudyFilterSection";
 import StudyLevelFilters from "./StudyLevelFilters";
+import StudyUpcomingReviewsSection from "./StudyUpcomingReviewsSection";
 import {
   getSrsStageOptions,
   isAllStudyTypeFilter,
@@ -33,7 +34,6 @@ import {
   typeCardClass,
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
-import type { StudySrsFilter } from "../lib/studyExplorerTypes";
 import type { StudyExplorerPanelProps } from "./StudyExplorerPanel.types";
 import { useStudyMobileFilterSections } from "./useStudyMobileFilterSections";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
@@ -64,6 +64,10 @@ export default function StudyExplorerPanel({
   hasData,
   isUnauthorized,
   errorMessage,
+  showUpcomingReviews,
+  upcomingItems,
+  isLoadingUpcomingReviews,
+  upcomingErrorMessage,
   showLocked,
   waitSortOrder,
   gridColumns,
@@ -76,6 +80,7 @@ export default function StudyExplorerPanel({
   onSetSrsStageFilter,
   onToggleShowEnglish,
   onToggleShowLocked,
+  onToggleShowUpcomingReviews,
   onSetWaitSortOrder,
   onSelectSubject,
   onClearAllFilters,
@@ -136,12 +141,11 @@ export default function StudyExplorerPanel({
     : mobileFiltersOpen
       ? "block"
       : "hidden sm:block";
-  const closeStatusSection = () => setMobileFilterSectionOpen("status", false);
   const closeStatusSectionReliably = () => {
-    closeStatusSection();
+    setMobileFilterSectionOpen("status", false);
     if (typeof window !== "undefined") {
       window.requestAnimationFrame(() => {
-        closeStatusSection();
+        setMobileFilterSectionOpen("status", false);
       });
     }
   };
@@ -282,7 +286,7 @@ export default function StudyExplorerPanel({
                             disabled={stageDisabled}
                             role="tab"
                             aria-selected={stageSelected}
-                            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.status || stageSelected ? "" : "hidden sm:inline-flex"} ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<StudySrsFilter, "all">, stageSelected)}`}
+                            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.status || stageSelected ? "" : "hidden sm:inline-flex"} ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<typeof status, "all">, stageSelected)}`}
                           >
                             {stage} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(stageCount)})</span>
                           </button>
@@ -464,14 +468,16 @@ export default function StudyExplorerPanel({
             </>
           ) : showLoadingOverlay ? null : (
             <div className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
-              {STUDY_PANEL_TEXT.noMatches}{" "}
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                className="font-bold text-accent underline underline-offset-2 hover:text-accent-2"
-              >
-                {STUDY_PANEL_TEXT.clearFilters}
-              </button>
+              <p>{STUDY_PANEL_TEXT.noMatches}{" "}<button type="button" onClick={handleResetFilters} className="font-bold text-accent underline underline-offset-2 hover:text-accent-2">{STUDY_PANEL_TEXT.clearFilters}</button></p>
+              {queueMode === STUDY_QUEUE_TYPES.review ? (
+                <StudyUpcomingReviewsSection
+                  showUpcomingReviews={showUpcomingReviews}
+                  upcomingItems={upcomingItems}
+                  isLoadingUpcomingReviews={isLoadingUpcomingReviews}
+                  upcomingErrorMessage={upcomingErrorMessage}
+                  onToggleShowUpcomingReviews={onToggleShowUpcomingReviews}
+                />
+              ) : null}
             </div>
           )}
           <div

@@ -33,3 +33,25 @@ export function buildStudyQueueRequestUrl(params: {
 
   return `${params.studyApiBasePath}/queue?${query.toString()}`;
 }
+
+export function buildStudyUpcomingRequestUrl(params: {
+  studyApiBasePath: string;
+  studySource: StudySource;
+  customLibraryId: string | null;
+  limit?: number;
+}): string | null {
+  if (params.studySource === "custom" && !params.customLibraryId) {
+    return null;
+  }
+
+  const query = new URLSearchParams();
+  if (params.customLibraryId) {
+    query.set("libraryId", params.customLibraryId);
+  }
+  if (typeof params.limit === "number" && Number.isInteger(params.limit) && params.limit > 0) {
+    query.set("limit", String(params.limit));
+  }
+
+  const suffix = query.size > 0 ? `?${query.toString()}` : "";
+  return `${params.studyApiBasePath}/upcoming${suffix}`;
+}

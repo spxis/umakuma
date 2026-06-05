@@ -51,6 +51,21 @@ export type QueueResponse = {
   };
 };
 
+export type UpcomingReviewItem = {
+  subjectId: number;
+  subjectType: SubjectType;
+  wkLevel: number | null;
+  characters: string;
+  primaryMeaning: string | null;
+  primaryReading: string | null;
+  availableAt: string;
+};
+
+export type UpcomingReviewsResponse = {
+  items: UpcomingReviewItem[];
+  totalUpcoming: number;
+};
+
 export type StudyCounts = QueueResponse["counts"];
 
 export type StoredQueuePayload = {
