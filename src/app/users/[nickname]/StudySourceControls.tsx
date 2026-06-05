@@ -18,6 +18,8 @@ type Props = {
   onSetStudySource: (next: StudySource) => void;
   customLibraryId: string | null;
   onSetCustomLibraryId: (next: string | null) => void;
+  showSourceTabs?: boolean;
+  showCustomActions?: boolean;
 };
 
 function sourceButtonClass(active: boolean): string {
@@ -32,6 +34,8 @@ export default function StudySourceControls({
   onSetStudySource,
   customLibraryId,
   onSetCustomLibraryId,
+  showSourceTabs = true,
+  showCustomActions = true,
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
@@ -122,31 +126,38 @@ export default function StudySourceControls({
   }
 
   const libraries = data?.libraries ?? [];
+  const showCustomControls = showCustomActions && studySource === "custom";
+
+  if (!showSourceTabs && !showCustomControls) {
+    return null;
+  }
 
   return (
     <div className="inline-flex items-center gap-2">
-      <div className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Study source">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={studySource === "wanikani"}
-          onClick={() => onSetStudySource("wanikani")}
-          className={sourceButtonClass(studySource === "wanikani")}
-        >
-          WaniKani
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={studySource === "custom"}
-          onClick={() => onSetStudySource("custom")}
-          className={sourceButtonClass(studySource === "custom")}
-        >
-          Custom
-        </button>
-      </div>
+      {showSourceTabs ? (
+        <div className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Study source">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={studySource === "wanikani"}
+            onClick={() => onSetStudySource("wanikani")}
+            className={sourceButtonClass(studySource === "wanikani")}
+          >
+            WaniKani
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={studySource === "custom"}
+            onClick={() => onSetStudySource("custom")}
+            className={sourceButtonClass(studySource === "custom")}
+          >
+            Custom
+          </button>
+        </div>
+      ) : null}
 
-      {studySource === "custom" ? (
+      {showCustomControls ? (
         <>
           <select
             value={customLibraryId ?? ""}

@@ -5,6 +5,9 @@ import { prisma } from "@/lib/prisma";
 import { customLibraryPayloadSchema } from "./customLibrarySchema";
 import type { CustomLibraryImportSummary, CustomLibraryImportPayload } from "./customStudyTypes";
 
+const DEFAULT_ITEMS_PER_LEVEL = 10;
+const MAX_CUSTOM_WK_LEVEL = 60;
+
 function uniqueTrimmed(input: string[] | undefined): string[] {
   if (!input) {
     return [];
@@ -13,17 +16,49 @@ function uniqueTrimmed(input: string[] | undefined): string[] {
   return Array.from(new Set(input.map((value) => value.trim()).filter(Boolean)));
 }
 
+function clampLevel(value: number): number {
+  return Math.min(MAX_CUSTOM_WK_LEVEL, Math.max(1, Math.trunc(value)));
+}
+
+function resolveItemsPerLevel(value: number | undefined): number {
+  if (!Number.isFinite(value) || typeof value !== "number" || value <= 0) {
+    return DEFAULT_ITEMS_PER_LEVEL;
+  }
+
+  return Math.max(1, Math.trunc(value));
+}
+
+function resolveItemLevel(params: {
+  explicitLevel: number | undefined;
+  index: number;
+  itemsPerLevel: number;
+}): number {
+  if (typeof params.explicitLevel === "number" && Number.isFinite(params.explicitLevel)) {
+    return clampLevel(params.explicitLevel);
+  }
+
+  return clampLevel(Math.floor(params.index / params.itemsPerLevel) + 1);
+}
+
 function normalizePayload(payload: CustomLibraryImportPayload): CustomLibraryImportPayload {
+  const itemsPerLevel = resolveItemsPerLevel(payload.library.itemsPerLevel);
+
   return {
     schemaVersion: payload.schemaVersion,
     library: {
       id: payload.library.id.trim(),
       name: payload.library.name.trim(),
       description: payload.library.description?.trim(),
+      itemsPerLevel,
     },
-    items: payload.items.map((item) => ({
+    items: payload.items.map((item, index) => ({
       id: item.id.trim(),
       type: item.type,
+      level: resolveItemLevel({
+        explicitLevel: item.level,
+        index,
+        itemsPerLevel,
+      }),
       characters: item.characters.trim(),
       meanings: uniqueTrimmed(item.meanings),
       readings: uniqueTrimmed(item.readings),
@@ -79,6 +114,9 @@ export async function importCustomLibraryPayload(input: {
             name: payload.library.name,
             description: payload.library.description,
             schemaVersion: payload.schemaVersion,
+            metadata: {
+              itemsPerLevel: payload.library.itemsPerLevel,
+            },
             lastImportedAt: now,
             isActive: true,
           },
@@ -91,6 +129,9 @@ export async function importCustomLibraryPayload(input: {
             description: payload.library.description,
             schemaVersion: payload.schemaVersion,
             sourceType: "json_upload",
+            metadata: {
+              itemsPerLevel: payload.library.itemsPerLevel,
+            },
             isActive: true,
             lastImportedAt: now,
           },
@@ -128,6 +169,7 @@ export async function importCustomLibraryPayload(input: {
             readingMnemonic: item.readingMnemonic,
             synonyms: item.synonyms,
             notes: item.notes,
+            wkLevel: item.level ?? 1,
           },
         });
         updatedCount += 1;
@@ -145,6 +187,7 @@ export async function importCustomLibraryPayload(input: {
             readingMnemonic: item.readingMnemonic,
             synonyms: item.synonyms,
             notes: item.notes,
+            wkLevel: item.level ?? 1,
           },
         });
         createdCount += 1;

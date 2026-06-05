@@ -41,6 +41,15 @@ const emptyTypeCounts = {
   [SUBJECT_TYPES.vocabulary]: 0,
 };
 
+function createEmptyTypeCounts() {
+  return {
+    all: 0,
+    [SUBJECT_TYPES.radical]: 0,
+    [SUBJECT_TYPES.kanji]: 0,
+    [SUBJECT_TYPES.vocabulary]: 0,
+  };
+}
+
 function sortQueueRows(rows: CustomStateQueueRow[], mode: "review" | "lesson" | "all"): CustomStateQueueRow[] {
   if (mode === QUEUE_TYPES.lesson) {
     return [...rows].sort((a, b) => a.item.id - b.item.id);
@@ -125,6 +134,7 @@ export async function GET(request: Request, context: RouteContext) {
             item: {
               select: {
                 id: true,
+                wkLevel: true,
                 itemType: true,
                 characters: true,
                 meanings: true,
@@ -165,6 +175,27 @@ export async function GET(request: Request, context: RouteContext) {
           { ...emptyTypeCounts },
         );
 
+        const levelCounts = allItems.reduce<Record<number, number>>((acc, item) => {
+          if (typeof item.wkLevel !== "number" || item.wkLevel <= 0) {
+            return acc;
+          }
+
+          acc[item.wkLevel] = (acc[item.wkLevel] ?? 0) + 1;
+          return acc;
+        }, {});
+
+        const typeCountsByLevel = allItems.reduce<Record<number, ReturnType<typeof createEmptyTypeCounts>>>((acc, item) => {
+          if (typeof item.wkLevel !== "number" || item.wkLevel <= 0) {
+            return acc;
+          }
+
+          const row = acc[item.wkLevel] ?? createEmptyTypeCounts();
+          row.all += 1;
+          row[item.subjectType] += 1;
+          acc[item.wkLevel] = row;
+          return acc;
+        }, {});
+
         const srsCounts = allItems.reduce(
           (acc, item) => {
             acc.all += 1;
@@ -190,9 +221,9 @@ export async function GET(request: Request, context: RouteContext) {
           {
             items: pagedItems,
             counts,
-            levelCounts: {},
+            levelCounts,
             typeCounts,
-            typeCountsByLevel: {},
+            typeCountsByLevel,
             srsCounts,
             srsStageCounts,
             pagination: {

@@ -12,6 +12,7 @@ export type CustomStateQueueRow = {
   passedAt: Date | null;
   item: {
     id: number;
+    wkLevel: number;
     itemType: CustomStudyItemType;
     characters: string;
     meanings: string[];
@@ -72,6 +73,7 @@ export function mapCustomQueueItem(row: CustomStateQueueRow, now: Date) {
     assignmentId: row.id,
     queueType: customQueueTypeFromState({ stage: row.srsStage, now, availableAt: row.availableAt }),
     subjectType: customItemTypeToSubjectType(row.item.itemType),
+    wkLevel: row.item.wkLevel,
     characters: row.item.characters,
     meanings: row.item.meanings,
     readings: row.item.readings,

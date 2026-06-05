@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
 import LevelExplorer from "./level-explorer/components/LevelExplorer";
@@ -263,6 +264,10 @@ export default function ExplorerTabs({
     };
   }, []);
 
+  const sourceControlsSlot = typeof document === "undefined"
+    ? null
+    : document.getElementById("wr-study-source-controls-slot");
+
   if (dashboardTab !== "learn") return null;
 
   function tabClass(tab: "study" | "level" | "jlpt"): string {
@@ -285,6 +290,29 @@ export default function ExplorerTabs({
 
   return (
     <section className="space-y-3 rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
+      {activeTab === "study" ? (
+        <div className="sm:hidden">
+          <StudySourceControls
+            accountId={accountId}
+            studySource={studySource}
+            onSetStudySource={setStudySource}
+            customLibraryId={customLibraryId}
+            onSetCustomLibraryId={setCustomLibraryId}
+          />
+        </div>
+      ) : null}
+      {activeTab === "study" && sourceControlsSlot
+        ? createPortal(
+            <StudySourceControls
+              accountId={accountId}
+              studySource={studySource}
+              onSetStudySource={setStudySource}
+              customLibraryId={customLibraryId}
+              onSetCustomLibraryId={setCustomLibraryId}
+            />,
+            sourceControlsSlot,
+          )
+        : null}
       <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
         <div
           className="inline-flex w-full flex-nowrap items-center gap-0 rounded-full border border-line bg-surface p-1"
@@ -320,20 +348,11 @@ export default function ExplorerTabs({
             JLPT Explorer
           </button>
         </div>
-        <div className="w-full">
-          <div className="grid w-full grid-cols-[minmax(0,2fr)_minmax(0,1fr)] items-center gap-2 pr-1 md:flex md:w-auto md:items-center md:gap-2 md:pr-1 md:justify-end">
-            {activeTab === "study" ? (
-              <StudySourceControls
-                accountId={accountId}
-                studySource={studySource}
-                onSetStudySource={setStudySource}
-                customLibraryId={customLibraryId}
-                onSetCustomLibraryId={setCustomLibraryId}
-              />
-            ) : null}
+        <div className="w-full overflow-x-auto md:overflow-visible">
+          <div className="flex min-w-max items-center gap-2 pr-1 md:ml-auto md:min-w-0 md:justify-end">
             {activeTab === "study" ? (
               <div
-                className="inline-flex w-full items-center rounded-full border border-line bg-surface p-1"
+                className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1"
                 role="tablist"
                 aria-label="Study queue mode"
               >
@@ -360,7 +379,7 @@ export default function ExplorerTabs({
             <button
               type="button"
               onClick={() => setStudyMode((prev) => !prev)}
-              className={`inline-flex h-9 w-full items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:w-auto sm:px-4 sm:text-xs sm:tracking-widest ${
+              className={`inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest ${
                 studyMode
                   ? "border-hot bg-hot text-white"
                   : "border-line bg-surface text-foreground hover:bg-surface-muted"

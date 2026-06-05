@@ -232,18 +232,21 @@ export default function UserDashboardTabs({
               Me
             </span>
           ) : null}
-          <div className="ml-auto flex items-center gap-2">
-            <p className="shrink-0 text-sm font-black uppercase tracking-[0.06em] text-foreground sm:text-base">
-              #{globalRank}
-              <span className="ml-1 text-xs font-bold text-foreground/65">/ {formatNumber(totalPlayers)}</span>
-            </p>
-            <UserHeaderMenu
-              accountId={accountId}
-              viewedWkUsername={wkUsername}
-              viewerMenuInfo={viewerMenuInfo}
-              showAdminActions={canViewAllUserPages}
-              hidden={activeTab === "learn" && flashViewerOpen}
-            />
+          <div className="ml-auto flex flex-col items-end gap-2">
+            <div className="flex items-center gap-2">
+              <p className="shrink-0 text-sm font-black uppercase tracking-[0.06em] text-foreground sm:text-base">
+                #{globalRank}
+                <span className="ml-1 text-xs font-bold text-foreground/65">/ {formatNumber(totalPlayers)}</span>
+              </p>
+              <UserHeaderMenu
+                accountId={accountId}
+                viewedWkUsername={wkUsername}
+                viewerMenuInfo={viewerMenuInfo}
+                showAdminActions={canViewAllUserPages}
+                hidden={activeTab === "learn" && flashViewerOpen}
+              />
+            </div>
+            <div id="wr-study-source-controls-slot" className="hidden sm:flex min-h-8 items-center" />
           </div>
         </div>
 

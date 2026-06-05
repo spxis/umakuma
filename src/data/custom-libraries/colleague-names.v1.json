@@ -3,7 +3,8 @@
   "library": {
     "id": "colleague-names-v1",
     "name": "Colleague names",
-    "description": "First and last names from the colleague list as vocabulary study items."
+    "description": "First and last names from the colleague list as vocabulary study items.",
+    "itemsPerLevel": 10
   },
   "items": [
     {

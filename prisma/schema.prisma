@@ -328,6 +328,7 @@ model CustomStudyItem {
   libraryId       String
   externalId      String
   itemType        CustomStudyItemType
+  wkLevel         Int                 @default(1)
   characters      String
   meanings        String[]
   readings        String[]            @default([])
@@ -346,6 +347,7 @@ model CustomStudyItem {
 
   @@unique([libraryId, externalId])
   @@index([libraryId, itemType])
+  @@index([libraryId, wkLevel])
 }
 
 model CustomStudyState {
