@@ -77,6 +77,7 @@ export async function POST(request: Request, context: RouteContext) {
           },
           select: {
             srsStage: true,
+            passedAt: true,
             item: {
               select: {
                 wkLevel: true,
@@ -87,8 +88,9 @@ export async function POST(request: Request, context: RouteContext) {
 
         const { currentLevel } = resolveCurrentCustomLevel(
           levelStates.map((row) => ({
-            wkLevel: row.item.wkLevel,
+            ukLevel: row.item.wkLevel,
             srsStage: row.srsStage,
+            passedAt: row.passedAt,
           })),
         );
 

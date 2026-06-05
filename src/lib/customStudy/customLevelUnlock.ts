@@ -2,13 +2,14 @@ export const CUSTOM_LEVEL_UNLOCK_THRESHOLD = 0.75;
 export const CUSTOM_LEVEL_COMPLETE_SRS_STAGE = 5;
 
 export type CustomLevelUnlockState = {
-  wkLevel: number;
+  ukLevel: number;
   srsStage: number;
+  passedAt?: Date | null;
 };
 
 type CustomLevelStatRow = {
   total: number;
-  guruOrHigher: number;
+  guruEver: number;
 };
 
 function normalizeLevel(level: number): number {
@@ -28,15 +29,15 @@ export function resolveCurrentCustomLevel(states: CustomLevelUnlockState[]): {
   let maxLevel = 0;
 
   for (const state of states) {
-    const level = normalizeLevel(state.wkLevel);
+    const level = normalizeLevel(state.ukLevel);
     if (level > maxLevel) {
       maxLevel = level;
     }
 
-    const row = levelStats[level] ?? { total: 0, guruOrHigher: 0 };
+    const row = levelStats[level] ?? { total: 0, guruEver: 0 };
     row.total += 1;
-    if (state.srsStage >= CUSTOM_LEVEL_COMPLETE_SRS_STAGE) {
-      row.guruOrHigher += 1;
+    if (state.srsStage >= CUSTOM_LEVEL_COMPLETE_SRS_STAGE || Boolean(state.passedAt)) {
+      row.guruEver += 1;
     }
     levelStats[level] = row;
   }
@@ -48,7 +49,7 @@ export function resolveCurrentCustomLevel(states: CustomLevelUnlockState[]): {
       break;
     }
 
-    if (row.guruOrHigher / row.total >= CUSTOM_LEVEL_UNLOCK_THRESHOLD) {
+    if (row.guruEver / row.total >= CUSTOM_LEVEL_UNLOCK_THRESHOLD) {
       currentLevel = level + 1;
       continue;
     }

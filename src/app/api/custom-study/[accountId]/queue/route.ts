@@ -150,8 +150,9 @@ export async function GET(request: Request, context: RouteContext) {
 
         const { currentLevel } = resolveCurrentCustomLevel(
           states.map((row) => ({
-            wkLevel: row.item.wkLevel,
+            ukLevel: row.item.wkLevel,
             srsStage: row.srsStage,
+            passedAt: row.passedAt,
           })),
         );
 
