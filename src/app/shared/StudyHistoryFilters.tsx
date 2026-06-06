@@ -1,6 +1,7 @@
 "use client";
 
 import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
+import FilterChipLabel from "@/app/users/[nickname]/shared/FilterChipLabel";
 
 import { srsBucketBadgeClass, srsBucketLabel, titleCaseSrsBucket } from "./studyHistoryUi";
 
@@ -21,10 +22,6 @@ type Props = {
   srsBucketAllCount: number;
   srsBucketCounts: Record<HistorySrsBucket, number>;
 };
-
-function chipLabelWithCount(label: string, count: number): string {
-  return `${label} (${count.toLocaleString("en-US")})`;
-}
 
 function studyChipClass(active: boolean): string {
   return active
@@ -77,7 +74,7 @@ export default function StudyHistoryFilters({
               onClick={() => setResultFilter(result)}
               className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${resultChipClass(result, resultFilter === result)}`}
             >
-              {chipLabelWithCount(result, resultCounts[result] ?? 0)}
+              <FilterChipLabel label={result} count={(resultCounts[result] ?? 0).toLocaleString("en-US")} />
             </button>
           ))}
         </div>
@@ -89,7 +86,7 @@ export default function StudyHistoryFilters({
             onClick={() => setLevelFilter("all")}
             className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${studyChipClass(levelFilter === "all")}`}
           >
-            {chipLabelWithCount("All", levelAllCount)}
+            <FilterChipLabel label="All" count={levelAllCount.toLocaleString("en-US")} />
           </button>
           {availableLevels.map((level) => (
             <button
@@ -98,7 +95,7 @@ export default function StudyHistoryFilters({
               onClick={() => setLevelFilter(level)}
               className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${studyChipClass(levelFilter === level)}`}
             >
-              {chipLabelWithCount(String(level), levelCounts[level] ?? 0)}
+              <FilterChipLabel label={String(level)} count={(levelCounts[level] ?? 0).toLocaleString("en-US")} />
             </button>
           ))}
         </div>
@@ -110,7 +107,7 @@ export default function StudyHistoryFilters({
             onClick={() => setSrsBucketFilter("all")}
             className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${studyChipClass(srsBucketFilter === "all")}`}
           >
-            {chipLabelWithCount("SRS all", srsBucketAllCount)}
+            <FilterChipLabel label="SRS all" count={srsBucketAllCount.toLocaleString("en-US")} />
           </button>
           {availableSrsBuckets
             .filter((bucket) => bucket !== "unknown")
@@ -124,7 +121,7 @@ export default function StudyHistoryFilters({
                   title={titleCaseSrsBucket(bucket)}
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${srsBucketBadgeClass(bucket, selected)}`}
                 >
-                  {chipLabelWithCount(srsBucketLabel(bucket), srsBucketCounts[bucket] ?? 0)}
+                  <FilterChipLabel label={srsBucketLabel(bucket)} count={(srsBucketCounts[bucket] ?? 0).toLocaleString("en-US")} />
                 </button>
               );
             })}
