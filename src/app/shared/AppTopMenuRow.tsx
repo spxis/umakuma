@@ -36,6 +36,14 @@ function userTabHref(username: string | null, tab: "learn" | "wk" | "jlpt" | "st
   return `/users/${encodeURIComponent(username)}/${segment}`;
 }
 
+function userHistoryHref(username: string | null): string {
+  if (!username) {
+    return "/join";
+  }
+
+  return `/users/${encodeURIComponent(username)}/history`;
+}
+
 export default function AppTopMenuRow({
   viewerMenuInfo,
   primaryWkUsername = null,
@@ -52,6 +60,7 @@ export default function AppTopMenuRow({
     { label: "Study", href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
     { label: "WK Explorer", href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
     { label: "JLPT Explorer", href: userTabHref(resolvedWkUsername, "jlpt"), dashboard: "jlpt" },
+    { label: "History", href: userHistoryHref(resolvedWkUsername), dashboard: null },
     { label: "Stats", href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
     { label: "News", href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
     { label: "Read", href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },

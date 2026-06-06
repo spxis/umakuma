@@ -204,6 +204,7 @@ export default function UserHeaderMenu({
         { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/study` },
         { label: "WK Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/wk` },
         { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt` },
+        { label: "History", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/history` },
         { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },
         { label: "News", dashboard: "news", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news` },
         { label: "Read", dashboard: "read", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/read` },
@@ -216,9 +217,6 @@ export default function UserHeaderMenu({
     ...dashboardPageLinks,
   ].filter((link): link is { label: string; href: string; dashboard: "learn" | "wk" | "jlpt" | "stats" | "news" | "read" | null } => Boolean(link));
   const pageLinks = [
-    viewerMenuInfo && viewedWkUsername
-      ? { label: "History", href: `/users/${encodeURIComponent(viewedWkUsername)}/history` }
-      : null,
     viewerMenuInfo && resolvedUserPageUsername
       ? { label: "News stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news?read=stats` }
       : null,
