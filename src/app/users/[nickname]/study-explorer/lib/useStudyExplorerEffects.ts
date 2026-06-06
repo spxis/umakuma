@@ -320,7 +320,7 @@ export function useStudyExplorerEffects({
     else params.delete("type");
     if (!isAllStudySrsFilter(srsFilter)) params.set("srs", srsFilter);
     else params.delete("srs");
-    if (srsStageFilter !== null) params.set("srsStage", String(srsStageFilter));
+    if (!isAllStudySrsFilter(srsFilter) && srsStageFilter !== null) params.set("srsStage", String(srsStageFilter));
     else params.delete("srsStage");
     if (recentOnly) params.set("recent", "1");
     else params.delete("recent");
