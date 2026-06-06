@@ -27,6 +27,7 @@ export default function StudySourceLibraryItemsManager({
   onLibrariesChanged,
   onLibraryDeleted,
 }: Props) {
+  const [levelFilter, setLevelFilter] = useState<number | "all">("all");
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [isDeletingItems, setIsDeletingItems] = useState(false);
@@ -53,7 +54,15 @@ export default function StudySourceLibraryItemsManager({
     { revalidateOnFocus: true },
   );
 
-  const items = data?.items ?? [];
+  const items = useMemo(() => data?.items ?? [], [data?.items]);
+  const availableLevels = useMemo(
+    () => Array.from(new Set(items.map((item) => item.level))).sort((a, b) => a - b),
+    [items],
+  );
+  const filteredItems = useMemo(
+    () => (levelFilter === "all" ? items : items.filter((item) => item.level === levelFilter)),
+    [items, levelFilter],
+  );
   const selectedItems = items.filter((item) => selectedItemIds.includes(item.id));
   const selectedItemDetails = selectedItems.slice(0, 12).map((item) => `${item.characters} (${item.type}, L${item.level})`);
   const selectedItemOverflow = selectedItems.length > selectedItemDetails.length
@@ -64,6 +73,7 @@ export default function StudySourceLibraryItemsManager({
     : selectedItemDetails;
 
   useEffect(() => {
+    setLevelFilter("all");
     setSelectedItemIds([]);
     setMessage(null);
   }, [libraryId]);
@@ -152,15 +162,33 @@ export default function StudySourceLibraryItemsManager({
   return (
     <div className="space-y-2 rounded-xl border border-line bg-surface px-3 py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Library items ({items.length})</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Library items ({filteredItems.length}/{items.length})</p>
+          <label className="inline-flex items-center gap-2 text-xs font-semibold text-foreground/70">
+            <span>Level</span>
+            <select
+              value={String(levelFilter)}
+              onChange={(event) => {
+                const next = event.target.value;
+                setLevelFilter(next === "all" ? "all" : Number(next));
+              }}
+              className="h-8 rounded-lg border border-line bg-surface px-2 text-xs font-semibold text-foreground"
+            >
+              <option value="all">All levels</option>
+              {availableLevels.map((level) => (
+                <option key={level} value={String(level)}>L{level}</option>
+              ))}
+            </select>
+          </label>
+        </div>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => setSelectedItemIds(items.map((item) => item.id))}
-            disabled={isLoading || items.length === 0}
+            onClick={() => setSelectedItemIds(filteredItems.map((item) => item.id))}
+            disabled={isLoading || filteredItems.length === 0}
             className="inline-flex h-8 items-center justify-center rounded-lg border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Select all
+            Select visible
           </button>
           <button
             type="button"
@@ -194,38 +222,53 @@ export default function StudySourceLibraryItemsManager({
         </div>
       </div>
 
-      <div className="max-h-60 overflow-auto rounded-lg border border-line bg-surface">
+      <div className="max-h-72 overflow-auto rounded-lg border border-line bg-surface">
         {isLoading ? (
           <p className="px-3 py-2 text-xs text-foreground/65">Loading items...</p>
         ) : items.length === 0 ? (
           <p className="px-3 py-2 text-xs text-foreground/65">No items in this library.</p>
+        ) : filteredItems.length === 0 ? (
+          <p className="px-3 py-2 text-xs text-foreground/65">No items at this level.</p>
         ) : (
-          <ul className="divide-y divide-line">
-            {items.map((item) => {
-              const isSelected = selectedItemIds.includes(item.id);
-              return (
-                <li key={item.id} className="px-3 py-2">
-                  <label className="flex cursor-pointer items-start gap-2">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleItem(item.id)}
-                      className="mt-0.5 h-4 w-4 rounded border-line"
-                    />
-                    <div className="min-w-0 flex-1 text-xs">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-semibold text-foreground">{item.characters}</span>
-                        <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70">{item.type}</span>
-                        <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/60">L{item.level}</span>
-                      </div>
-                      <p className="truncate text-foreground/70">{item.meanings[0] ?? "No meaning"}</p>
-                      {item.primaryReading ? <p className="truncate text-foreground/60">{item.primaryReading}</p> : null}
-                    </div>
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
+          <table className="min-w-full border-separate border-spacing-0 text-xs">
+            <thead className="sticky top-0 z-1 bg-surface-muted/95 backdrop-blur">
+              <tr>
+                <th scope="col" className="w-10 border-b border-line px-2 py-2 text-left font-bold uppercase tracking-[0.08em] text-foreground/70">Sel</th>
+                <th scope="col" className="w-14 border-b border-line px-2 py-2 text-left font-bold uppercase tracking-[0.08em] text-foreground/70">Level</th>
+                <th scope="col" className="border-b border-line px-2 py-2 text-left font-bold uppercase tracking-[0.08em] text-foreground/70">Term</th>
+                <th scope="col" className="border-b border-line px-2 py-2 text-left font-bold uppercase tracking-[0.08em] text-foreground/70">Meaning</th>
+                <th scope="col" className="border-b border-line px-2 py-2 text-left font-bold uppercase tracking-[0.08em] text-foreground/70">Reading</th>
+                <th scope="col" className="w-26 border-b border-line px-2 py-2 text-left font-bold uppercase tracking-[0.08em] text-foreground/70">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredItems.map((item) => {
+                const isSelected = selectedItemIds.includes(item.id);
+                const displayMeaning = item.meanings.length > 0 ? item.meanings.join(", ") : "No meaning";
+                const displayReading = item.primaryReading ?? item.readings[0] ?? "-";
+                return (
+                  <tr key={item.id} className="odd:bg-surface even:bg-black/[0.02]">
+                    <td className="border-b border-line px-2 py-2 align-top">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleItem(item.id)}
+                        className="mt-0.5 h-4 w-4 rounded border-line"
+                        aria-label={`Select ${item.characters}`}
+                      />
+                    </td>
+                    <td className="border-b border-line px-2 py-2 align-top text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/70">L{item.level}</td>
+                    <td className="max-w-42 border-b border-line px-2 py-2 align-top font-semibold text-foreground" title={item.characters}>{item.characters}</td>
+                    <td className="max-w-56 border-b border-line px-2 py-2 align-top text-foreground/80" title={displayMeaning}>{displayMeaning}</td>
+                    <td className="max-w-44 border-b border-line px-2 py-2 align-top text-foreground/75" title={displayReading}>{displayReading}</td>
+                    <td className="border-b border-line px-2 py-2 align-top">
+                      <span className="inline-flex rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70">{item.type}</span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
       </div>
 
