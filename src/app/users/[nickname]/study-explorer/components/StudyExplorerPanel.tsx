@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
@@ -38,6 +38,7 @@ import type { StudyExplorerPanelProps } from "./StudyExplorerPanel.types";
 import { useStudyMobileFilterSections } from "./useStudyMobileFilterSections";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 export default function StudyExplorerPanel({
   canToggleEnglish,
   showEnglish,
@@ -95,26 +96,9 @@ export default function StudyExplorerPanel({
     setSelectedSubjectIds,
   } = useStudyBulkReset({ filteredItems });
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
-    try {
-      return window.localStorage.getItem("wr:study:mobile-filters-open") === "1";
-    } catch {
-      return false;
-    }
+  const [filtersOpen, setFiltersOpen] = usePersistedBoolean("wr:study:filters-open", {
+    defaultValue: true,
   });
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    try {
-      window.localStorage.setItem("wr:study:mobile-filters-open", mobileFiltersOpen ? "1" : "0");
-    } catch {
-      // Ignore storage access errors in restricted modes.
-    }
-  }, [mobileFiltersOpen]);
   const { sectionsOpen: mobileFilterSectionsOpen, toggleSection: toggleMobileFilterSection, setSectionOpen: setMobileFilterSectionOpen } = useStudyMobileFilterSections();
   const filtersLoading = !hasData;
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
@@ -138,9 +122,9 @@ export default function StudyExplorerPanel({
   const groupingCountLabel = (count: number) => showTypeCountPlaceholders ? "-" : formatNumber(count);
   const mobileFilterSectionClass = hideControlsDuringInitialLoad
     ? "hidden"
-    : mobileFiltersOpen
+    : filtersOpen
       ? "block"
-      : "hidden sm:block";
+      : "hidden";
   const closeStatusSectionReliably = () => {
     setMobileFilterSectionOpen("status", false);
     if (typeof window !== "undefined") {
@@ -150,7 +134,7 @@ export default function StudyExplorerPanel({
     }
   };
   const openAllMobileFilterSections = () => { setMobileFilterSectionOpen("level", true); setMobileFilterSectionOpen("grouping", true); setMobileFilterSectionOpen("status", true); };
-  const handleResetFilters = () => { onClearAllFilters(); setMobileFiltersOpen(true); openAllMobileFilterSections(); };
+  const handleResetFilters = () => { onClearAllFilters(); setFiltersOpen(true); openAllMobileFilterSections(); };
   return (
     <>
       <header className="border-b border-line bg-surface-muted px-5 py-4">
@@ -159,22 +143,16 @@ export default function StudyExplorerPanel({
             <h2 className="text-xl font-black text-foreground">{STUDY_PANEL_TEXT.heading}</h2>
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
-          <div className="flex items-center gap-2 sm:hidden">
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={handleResetFilters}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground"
-            >
-              {STUDY_PANEL_TEXT.resetFilters}
-            </button>
-            <button
-              type="button"
-              onClick={() => setMobileFiltersOpen((open) => !open)}
-              aria-expanded={mobileFiltersOpen}
+              onClick={() => setFiltersOpen((open) => !open)}
+              aria-expanded={filtersOpen}
+              aria-label={filtersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}
               aria-controls="study-filters-panel"
               className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground"
             >
-              {mobileFiltersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}
+              Filters
             </button>
           </div>
         </div>
