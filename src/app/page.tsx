@@ -297,13 +297,11 @@ export default async function Home() {
         readingSignoffs,
         challengeToday,
       ).sort((a, b) => b.totalYen - a.totalYen);
-
       challengeTeamYen = challengeRows.reduce((sum, row) => sum + row.totalYen, 0);
 
       const nicknameByAccountId = new Map(leaderboard.map((row) => [row.id, row.nickname]));
       const leader = challengeRows[0] ?? null;
       const second = challengeRows[1] ?? null;
-
       challengeLeaderName = leader ? (nicknameByAccountId.get(leader.accountId) ?? "Top player") : "No leader yet";
       challengeLeaderYen = leader?.totalYen ?? 0;
       challengeSecondName = second ? (nicknameByAccountId.get(second.accountId) ?? "-") : "-";
@@ -312,10 +310,16 @@ export default async function Home() {
 
     void refreshPromise;
   } catch (error) {
-    runtimeError = error instanceof Error ? error.message : "Unknown server error";
-    setupMessage = "Leaderboard will appear after DATABASE_URL is configured and synced.";
+    console.error("Home leaderboard query failed", error);
+    const isDatabaseConnectionError =
+      error instanceof Error && /can't reach database server|ECONNREFUSED|P1001/i.test(error.message);
+    runtimeError = isDatabaseConnectionError
+      ? "Could not connect to the database."
+      : "Could not load leaderboard data right now.";
+    setupMessage = isDatabaseConnectionError
+      ? "Check DATABASE_URL and database availability, then refresh this page."
+      : "Refresh in a moment. If this keeps happening, check server logs.";
   }
-
   const totalReviews = leaderboard.reduce((sum, row) => sum + row.reviewCount, 0);
   const averageLevel =
     leaderboard.length > 0
