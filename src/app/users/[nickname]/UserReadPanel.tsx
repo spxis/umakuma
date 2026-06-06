@@ -26,8 +26,8 @@ export default function UserReadPanel({
     <section className="space-y-4 rounded-2xl border border-line bg-surface-muted p-4 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-black text-foreground">News</h2>
-          <p className="mt-1 text-sm text-foreground/75">
+          <h2 className="text-xl font-black text-foreground">News</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
             Read news without leaving this user page.
           </p>
         </div>

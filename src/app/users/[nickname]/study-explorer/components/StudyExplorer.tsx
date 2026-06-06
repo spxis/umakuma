@@ -53,6 +53,9 @@ export default function StudyExplorer({
   accountId,
   studySource,
   customLibraryId,
+  studySourceHeaderLabel,
+  studySourceIsCustom,
+  onOpenStudySourceManager,
   maxLevel,
   initialViewerMode = null,
   initialFilters,
@@ -121,7 +124,6 @@ export default function StudyExplorer({
     studySource,
     customLibraryId,
   });
-
   useLayoutEffect(() => {
     const cached = readStoredQueue(accountId, queueMode, queueStorageScopeKey);
     const initialQueueState = deriveInitialQueueState(cached);
@@ -223,7 +225,6 @@ export default function StudyExplorer({
     } catch {
       // Ignore malformed cache values.
     }
-
     const mergedReviews =
       queueMode === STUDY_QUEUE_TYPES.review ? liveCounts.reviews : storedReviews;
     const mergedLessons =
@@ -233,7 +234,6 @@ export default function StudyExplorer({
       lessons: mergedLessons,
       all: mergedReviews + mergedLessons,
     };
-
     const countsKey = `${accountId}:${mergedCounts.reviews}:${mergedCounts.lessons}`;
     if (lastBroadcastCountsRef.current === countsKey) {
       return;
@@ -445,11 +445,13 @@ export default function StudyExplorer({
     onSetModalSessionItemByAssignmentId: setModalSessionItemByAssignmentId,
   });
   return (
-    <section className="overflow-hidden rounded-4xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+    <section className="space-y-3">
       {hasMounted ? (
         <>
           <StudyExplorerPanel
             canToggleEnglish={canToggleEnglish} showEnglish={showEnglish} studyMode={studyMode}
+            studySourceHeaderLabel={studySourceHeaderLabel}
+            studySourceIsCustom={studySourceIsCustom}
             levelOptions={levelOptions} availableLevels={availableLevels} reviewLevelCounts={reviewLevelCounts}
             viewedLevel={effectiveViewedLevel} typeFilter={typeFilter} srsFilter={effectiveSrsFilter}
             srsStageFilter={effectiveSrsStageFilter} queueMode={queueMode} lessonLevelCounts={lessonLevelCounts}
@@ -467,6 +469,7 @@ export default function StudyExplorer({
             onSetSrsStageFilter={setSrsStageFilter} onToggleShowEnglish={onToggleShowEnglish}
             onToggleShowLocked={() => setShowLocked((prev) => !prev)}
             onToggleShowUpcomingReviews={() => setShowUpcomingReviews((prev) => !prev)}
+            onOpenStudySourceManager={onOpenStudySourceManager}
             onSetWaitSortOrder={setWaitSortOrder} onSelectSubject={setSelectedId} onClearAllFilters={clearAllFilters}
           />
           <StudyExplorerModal
@@ -485,11 +488,11 @@ export default function StudyExplorer({
           />
         </>
       ) : (
-        <div className="border-b border-line bg-surface-muted px-5 py-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-            Loading study queue and filters...
-          </p>
-        </div>
+        <section className="overflow-hidden rounded-4xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+          <div className="border-b border-line bg-surface-muted px-5 py-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Loading study queue and filters...</p>
+          </div>
+        </section>
       )}
     </section>
   );

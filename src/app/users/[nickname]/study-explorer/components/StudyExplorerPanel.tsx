@@ -38,11 +38,14 @@ import type { StudyExplorerPanelProps } from "./StudyExplorerPanel.types";
 import { useStudyMobileFilterSections } from "./useStudyMobileFilterSections";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
+import FilterChipLabel from "../../shared/FilterChipLabel";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 export default function StudyExplorerPanel({
   canToggleEnglish,
   showEnglish,
   studyMode,
+  studySourceHeaderLabel,
+  studySourceIsCustom,
   levelOptions,
   availableLevels,
   reviewLevelCounts,
@@ -82,6 +85,7 @@ export default function StudyExplorerPanel({
   onToggleShowEnglish,
   onToggleShowLocked,
   onToggleShowUpcomingReviews,
+  onOpenStudySourceManager,
   onSetWaitSortOrder,
   onSelectSubject,
   onClearAllFilters,
@@ -137,10 +141,20 @@ export default function StudyExplorerPanel({
   const handleResetFilters = () => { onClearAllFilters(); setFiltersOpen(true); openAllMobileFilterSections(); };
   return (
     <>
+      <section className="overflow-hidden rounded-4xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface-muted px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-xl font-black text-foreground">{STUDY_PANEL_TEXT.heading}</h2>
+            <button
+              type="button"
+              onClick={onOpenStudySourceManager}
+              className="group inline-flex max-w-full items-center gap-2 rounded-md px-1 py-0.5 text-left"
+              title={studySourceIsCustom ? "Change custom library" : "Manage custom libraries"}
+            >
+              <h2 className="truncate text-xl font-black text-foreground" title={`Study - ${studySourceHeaderLabel}`}>{`Study - ${studySourceHeaderLabel}`}</h2>
+              <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">{studySourceIsCustom ? "Change" : "Manage"}</span>
+            </button>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? "Tap title to change library" : "Tap title to manage custom libraries"}</p>
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
           <div className="flex items-center gap-2">
@@ -153,14 +167,13 @@ export default function StudyExplorerPanel({
               className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold leading-none text-foreground"
             >
               <span>{filtersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}</span>
-              <span aria-hidden="true" className="text-[10px] leading-none">
-                {filtersOpen ? "▴" : "▾"}
-              </span>
+              <span aria-hidden="true" className="text-[10px] leading-none">{filtersOpen ? "▴" : "▾"}</span>
             </button>
           </div>
         </div>
         <div id="study-filters-panel" className={`mt-3 rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)] ${mobileFilterSectionClass}`}>
-          <div className="flex justify-end">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
             <div className="w-full md:w-1/2">
               <ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} />
             </div>
@@ -194,7 +207,7 @@ export default function StudyExplorerPanel({
                 aria-selected={allTypesSelected}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.grouping || allTypesSelected ? "" : "hidden sm:inline-flex"} ${filtersLoading && !allTypesSelected ? disabledBadgeClass() : badgeClass(allTypesSelected)}`}
               >
-                All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({groupingCountLabel(allTypeCount)})</span>
+                <FilterChipLabel label="All" count={groupingCountLabel(allTypeCount)} />
               </button>
               {STUDY_GROUPING_FILTERS.map(([type, label]) => {
                 const count = typeCounts[type];
@@ -214,7 +227,7 @@ export default function StudyExplorerPanel({
                     aria-selected={isSelected}
                     className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.grouping || typeFilter === type ? "" : "hidden sm:inline-flex"} ${disabled && !isSelected ? disabledBadgeClass() : studyGroupingToneClass(type, isSelected)}`}
                   >
-                    {label} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({groupingCountLabel(count)})</span>
+                    <FilterChipLabel label={label} count={groupingCountLabel(count)} />
                   </button>
                 );
               })}
@@ -253,7 +266,7 @@ export default function StudyExplorerPanel({
                       }
                     >
                       <button type="button" onClick={onClickStatus} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? badgeClass(isSelected) : studySrsToneClass(status, isSelected)}`}>
-                        {statusLabel} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
+                        <FilterChipLabel label={statusLabel} count={formatNumber(count)} />
                       </button>
                       {showStageButtons ? stageOptions.map((stage) => {
                         const stageCount = srsStageCounts[stage] ?? 0;
@@ -274,7 +287,7 @@ export default function StudyExplorerPanel({
                             aria-selected={stageSelected}
                             className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.status || stageSelected ? "" : "hidden sm:inline-flex"} ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<typeof status, "all">, stageSelected)}`}
                           >
-                            {stage} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(stageCount)})</span>
+                              <FilterChipLabel label={stage} count={formatNumber(stageCount)} />
                           </button>
                         );
                       }) : null}
@@ -286,6 +299,8 @@ export default function StudyExplorerPanel({
           </div>
         </div>
       </header>
+      </section>
+      <section className="overflow-hidden rounded-4xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       {displayErrorMessage ? (
         <div className="px-5 pt-4">
           <div className="rounded-2xl border border-red-300/70 bg-red-50 px-4 py-3 text-center text-sm font-semibold text-red-700">
@@ -296,13 +311,10 @@ export default function StudyExplorerPanel({
       <div className="p-5">
         <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           {showLoadingOverlay ? (
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-              Loading study queue and filters...
-            </p>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Loading study queue and filters...</p>
           ) : (
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-              <span className="sm:hidden">Showing {formatNumber(filteredItems.length)}/{formatNumber(totalItems)} items</span>
-              <span className="hidden sm:inline">Showing {formatNumber(filteredItems.length)} matching items · {formatNumber(totalItems)} total in queue</span>
+              Showing {formatNumber(filteredItems.length)}/{formatNumber(totalItems)} items
             </p>
           )}
           <div className={`flex w-full items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
@@ -481,6 +493,7 @@ export default function StudyExplorerPanel({
         </div>
         <p className="mt-2 text-right text-[11px] font-medium text-foreground/55" title={cacheFooterTitle}>{cacheFooterText}</p>
       </div>
+      </section>
     </>
   );
 }

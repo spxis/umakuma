@@ -96,7 +96,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       serverCampaignId: data?.selectedChallengeId,
       campaigns,
     });
-
     if (nextSelectedCampaignId !== selectedCampaignId) {
       setSelectedCampaignId(nextSelectedCampaignId);
     }
@@ -104,7 +103,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   const trackedMemberSet = useMemo(() => {
     return new Set(trackedMemberIds);
   }, [trackedMemberIds]);
-
   const trackedMembers = useMemo(() => members.filter((member) => trackedMemberSet.has(member.id)), [members, trackedMemberSet]);
   const latestSignoffByAccountId = useMemo(() => new Map(latestSignoffs.map((row) => [row.accountId, row])), [latestSignoffs]);
   const booksByAccountId = useMemo(() => {
@@ -116,7 +114,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     }
     return map;
   }, [challengeBooks]);
-
   const signoffByDayAndMember = useMemo(() => {
     const byDayAndMember = new Map<string, Map<string, ReadingSignoffRecord>>();
     for (const signoff of signoffs) {
@@ -126,7 +123,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     }
     return byDayAndMember;
   }, [signoffs]);
-
   const signoffEntriesByDayAndMember = useMemo(() => {
     const byDayAndMember = new Map<string, Map<string, ReadingSignoffEntryRecord[]>>();
     for (const entry of signoffEntries) {
@@ -136,10 +132,8 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       dayMap.set(entry.accountId, list);
       byDayAndMember.set(entry.signoffDatePst, dayMap);
     }
-
     return byDayAndMember;
   }, [signoffEntries]);
-
   const dailyForecastByAccountId = useMemo(
     () =>
       new Map(
@@ -154,15 +148,12 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       ),
     [signoffs, today, trackedMembers],
   );
-
   const reviewQueueByAccountId = useMemo(
     () => new Map(reviewQueues.map((row) => [row.accountId, row])),
     [reviewQueues],
   );
-
   const todayStatsByAccountId = useMemo(() => {
     const map = new Map<string, TodayStats>();
-
     const byMember = signoffByDayAndMember.get(today) ?? new Map<string, ReadingSignoffRecord>();
     const byMemberEntries = signoffEntriesByDayAndMember.get(today) ?? new Map<string, ReadingSignoffEntryRecord[]>();
 
@@ -402,8 +393,16 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     setModalDirty(true);
     updateForm(mutator);
   }
+
   return (
     <section className="space-y-4 rounded-2xl border border-line bg-surface-muted p-4 sm:p-6">
+      <div>
+        <h2 className="text-xl font-black text-foreground">Read</h2>
+        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
+          Reading check-ins and challenge progress.
+        </p>
+      </div>
+
       <UserReadingRewardsSummary
         campaignName={selectedCampaignName}
         campaignStartDatePst={selectedCampaignStartDatePst}

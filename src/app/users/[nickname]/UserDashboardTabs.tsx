@@ -1,9 +1,10 @@
 "use client";
+
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
+
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { formatRelativeFromNow } from "@/lib/timeFormat";
-import SegmentedControl from "@/app/shared/SegmentedControl";
+
 import UserHeaderMenu from "./UserHeaderMenu";
 import {
   ItemSpreadTabPanel,
@@ -11,12 +12,14 @@ import {
   MainTabPanel,
 } from "./UserDashboardTabPanels";
 import type { LiveData, TabId, UserDashboardTabsProps as Props } from "./UserDashboardTabs.types";
+
+function isDashboardTabId(value: string | null): value is TabId {
+  return value === "learn" || value === "stats" || value === "news" || value === "read";
+}
+
 export default function UserDashboardTabs({
   accountId,
-  nickname,
   wkUsername,
-  linkedEmail,
-  viewerMatchesAccount,
   lastSyncedAt,
   lastActivityAt,
   wkLevel,
@@ -51,6 +54,7 @@ export default function UserDashboardTabs({
 }: Props) {
   const tabStorageKey = `wr:user:${accountId}:dashboard-tab-v2`;
   const levelProgressStorageKey = `wr:user:${accountId}:level-progress-level`;
+
   const safeProgressLevels = useMemo(
     () =>
       Array.from(
@@ -61,6 +65,7 @@ export default function UserDashboardTabs({
       ).sort((a, b) => a - b),
     [availableProgressLevels, wkLevel],
   );
+
   const [activeTab, setActiveTab] = useState<TabId>(initialDashboardTab);
   const [selectedProgressLevel, setSelectedProgressLevel] = useState<number>(() => {
     if (typeof window === "undefined") {
@@ -70,8 +75,8 @@ export default function UserDashboardTabs({
     const parsed = Number(raw);
     return Number.isInteger(parsed) && parsed > 0 ? parsed : wkLevel;
   });
-  const [nowMs, setNowMs] = useState(() => Date.now());
   const [flashViewerOpen, setFlashViewerOpen] = useState(false);
+
   const { data: liveData, mutate } = useSWR<LiveData>(
     `/api/accounts/${accountId}/live`,
     async (url: string) => {
@@ -84,16 +89,8 @@ export default function UserDashboardTabs({
     },
     { refreshInterval: 15_000, revalidateOnFocus: true },
   );
+
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setNowMs(Date.now());
-    }, 30_000);
-    return () => {
-      window.clearInterval(timer);
-    };
-  }, []);
-  useEffect(() => {
-    // Avoid SSR/client hydration mismatch: only read localStorage after mount.
     if (initialDashboardTab !== "learn") {
       return;
     }
@@ -123,50 +120,49 @@ export default function UserDashboardTabs({
       }
       void mutate();
     };
+
     window.addEventListener("wr:user-refreshed", onUserRefreshed as EventListener);
     return () => {
       window.removeEventListener("wr:user-refreshed", onUserRefreshed as EventListener);
     };
   }, [accountId, mutate]);
-  const liveLastSyncedMs = new Date(liveData?.lastSyncedAt ?? lastSyncedAt).getTime();
-  const liveLastActivityMs = new Date(liveData?.lastActivityAt ?? lastActivityAt ?? "").getTime();
-  function formatRelativeTime(timestampMs: number): string {
-    return formatRelativeFromNow(timestampMs, {
-      nowMs,
-      style: "long",
-      allowFuture: false,
-      noValueLabel: "unknown",
-      invalidLabel: "unknown",
-      justNowLabel: "just now",
-    });
-  }
-  function switchTab(next: TabId) {
-    setActiveTab(next);
-    setStoredEnum(tabStorageKey, next);
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("wr:dashboard-tab-change", { detail: { tab: next } }));
-    }
-  }
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const params = new URLSearchParams(window.location.search);
-    if (activeTab === "learn") {
-      params.delete("dashboard");
-    } else {
-      params.set("dashboard", activeTab);
+    if (typeof window === "undefined") {
+      return;
     }
 
+    const params = new URLSearchParams(window.location.search);
+    params.delete("dashboard");
+
     const nextQuery = params.toString();
-    const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ""}${window.location.hash}`;
+    const nextPath = `/users/${encodeURIComponent(wkUsername)}/${activeTab}`;
+    const nextUrl = `${nextPath}${nextQuery ? `?${nextQuery}` : ""}${window.location.hash}`;
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     if (nextUrl !== currentUrl) {
       window.history.replaceState(null, "", nextUrl);
     }
 
     window.dispatchEvent(new CustomEvent("wr:dashboard-tab-change", { detail: { tab: activeTab } }));
-  }, [activeTab]);
+  }, [activeTab, wkUsername]);
+
+  useEffect(() => {
+    const onDashboardTabRequest = (event: Event) => {
+      const custom = event as CustomEvent<{ tab?: string }>;
+      const next = custom.detail?.tab ?? null;
+      if (!isDashboardTabId(next) || next === activeTab) {
+        return;
+      }
+
+      setActiveTab(next);
+      setStoredEnum(tabStorageKey, next);
+    };
+
+    window.addEventListener("wr:dashboard-tab-request", onDashboardTabRequest as EventListener);
+    return () => {
+      window.removeEventListener("wr:dashboard-tab-request", onDashboardTabRequest as EventListener);
+    };
+  }, [activeTab, tabStorageKey]);
 
   useEffect(() => {
     const onStudyViewerModeChange = (event: Event) => {
@@ -207,85 +203,41 @@ export default function UserDashboardTabs({
     passedLevelUpGate,
   };
 
-  const hasActivity = Boolean(lastActivityAt || liveData?.lastActivityAt);
-  const updatedRelativeLabel = formatRelativeTime(liveLastSyncedMs);
-  const activeRelativeLabel = hasActivity ? formatRelativeTime(liveLastActivityMs) : "Unknown";
+  const showTopHeader = activeTab !== "learn";
 
-  const headerSection = (
-    <section className="rounded-4xl border border-line bg-surface/90 p-3 shadow-[0_24px_80px_rgba(15,111,255,0.15)] sm:p-4">
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <p className="min-w-0 truncate text-xs font-bold uppercase tracking-[0.14em] text-accent">
-            View user:
-            <span className="ml-1 text-lg font-black normal-case tracking-normal text-foreground sm:text-xl">{nickname}</span>
-          </p>
-          {viewerMatchesAccount ? (
-            <span className="inline-flex shrink-0 select-none items-center rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-800">
-              Me
-            </span>
-          ) : null}
-        </div>
-
-        <div className="flex items-center gap-2">
-          <SegmentedControl
-            ariaLabel="User dashboard tabs"
-            value={activeTab}
-            onChange={switchTab}
-            size="md"
-            asTabs
-            mobileFill
-            className="flex w-full items-center rounded-full border border-line bg-surface p-1 sm:inline-flex sm:w-auto"
-            options={[
-              { value: "learn", label: "Learn" },
-              { value: "stats", label: "Stats" },
-              { value: "news", label: "News" },
-              { value: "read", label: "Read" },
-            ]}
-          />
-          <div id="wr-study-source-controls-slot" className="hidden min-h-8 items-center sm:flex" />
-          <div className="ml-auto">
+  return (
+    <>
+      {showTopHeader ? (
+        <section className="flex justify-end">
+          <div className="ml-auto flex items-center gap-2">
             <UserHeaderMenu
               accountId={accountId}
               viewedWkUsername={wkUsername}
               viewerMenuInfo={viewerMenuInfo}
               showAdminActions={canViewAllUserPages}
-              hidden={activeTab === "learn" && flashViewerOpen}
+              hidden={flashViewerOpen}
+              lastSyncedAt={liveData?.lastSyncedAt ?? lastSyncedAt}
+              lastActivityAt={liveData?.lastActivityAt ?? lastActivityAt}
             />
           </div>
-        </div>
+        </section>
+      ) : null}
 
-        <div className="flex items-center justify-between gap-3">
-          <p className="min-w-0 truncate text-xs text-foreground/70 sm:text-sm">
-            @{wkUsername}
-            {linkedEmail ? <span className="text-foreground/55"> · {linkedEmail}</span> : null}
-          </p>
-          <p className="shrink-0 text-right text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/55 sm:text-xs">
-            <span className="sm:hidden">
-              Upd {updatedRelativeLabel}
-              <span className="mx-1 text-foreground/35">|</span>
-              Act {activeRelativeLabel}
-            </span>
-            <span className="hidden sm:inline">
-              Updated {updatedRelativeLabel}
-              <span className="mx-2 text-foreground/35">|</span>
-              Active {activeRelativeLabel}
-            </span>
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-
-  return (
-    <>
-      {headerSection}
       {activeTab === "learn" ? (
-        <section className="mt-4" role="tabpanel">
+        <section role="tabpanel">
           {learnContent}
         </section>
       ) : null}
+
       {activeTab === "stats" ? (
         <section className="mt-4 space-y-4" role="tabpanel">
+          <section className="rounded-4xl border border-line bg-surface/90 px-5 py-4 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+            <h2 className="text-xl font-black text-foreground">Stats</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
+              Progress snapshot and distribution at a glance.
+            </p>
+          </section>
+
           <section className="rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/65">Snapshot</p>
             <MainTabPanel
@@ -308,32 +260,34 @@ export default function UserDashboardTabs({
 
           <section className="rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/65">Item spread</p>
-          <ItemSpreadTabPanel itemSpread={itemSpread} itemSpreadDetails={itemSpreadDetails} />
+            <ItemSpreadTabPanel itemSpread={itemSpread} itemSpreadDetails={itemSpreadDetails} />
           </section>
 
           <section className="rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/65">Level progress</p>
-          <LevelProgressTabPanel
-            accountId={accountId}
-            currentWkLevel={wkLevel}
-            wkLevel={effectiveSelectedProgressLevel}
-            levelOptions={safeProgressLevels}
-            levelProgressByLevel={levelProgressByLevel}
-            onSelectLevel={setSelectedProgressLevel}
-            levelRadicalProgress={selectedLevelProgress.radical}
-            levelKanjiProgress={selectedLevelProgress.kanji}
-            levelVocabularyProgress={selectedLevelProgress.vocabulary}
-            remainingToLevelUp={selectedLevelProgress.remainingToLevelUp}
-            passedLevelUpGate={selectedLevelProgress.passedLevelUpGate}
-          />
+            <LevelProgressTabPanel
+              accountId={accountId}
+              currentWkLevel={wkLevel}
+              wkLevel={effectiveSelectedProgressLevel}
+              levelOptions={safeProgressLevels}
+              levelProgressByLevel={levelProgressByLevel}
+              onSelectLevel={setSelectedProgressLevel}
+              levelRadicalProgress={selectedLevelProgress.radical}
+              levelKanjiProgress={selectedLevelProgress.kanji}
+              levelVocabularyProgress={selectedLevelProgress.vocabulary}
+              remainingToLevelUp={selectedLevelProgress.remainingToLevelUp}
+              passedLevelUpGate={selectedLevelProgress.passedLevelUpGate}
+            />
           </section>
         </section>
       ) : null}
+
       {activeTab === "news" ? (
         <section className="mt-4" role="tabpanel">
           {newsContent}
         </section>
       ) : null}
+
       {activeTab === "read" ? (
         <section className="mt-4" role="tabpanel">
           {readContent}
