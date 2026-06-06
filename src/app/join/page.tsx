@@ -183,7 +183,11 @@ export default function JoinPage() {
                   <p className="mt-1 text-sm text-foreground/75">
                     Sign in with Google before joining with your token.
                   </p>
-                  {signedIn ? (
+                  {checking ? (
+                    <p className="mt-3 rounded-xl border border-line bg-surface px-3 py-2 text-xs font-semibold text-foreground/70">
+                      Checking your Google session...
+                    </p>
+                  ) : signedIn ? (
                     <>
                       <p className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">
                         Signed in{userEmail ? ` as ${userEmail}` : " with Google"}.
@@ -226,7 +230,11 @@ export default function JoinPage() {
                 Connect Google first, then submit your display name and WaniKani token.
               </p>
 
-              {!signedIn ? (
+              {checking ? (
+                <div className="mt-4 rounded-2xl border border-line bg-surface-muted px-4 py-3 text-sm font-semibold text-foreground/70">
+                  Checking your Google session...
+                </div>
+              ) : !signedIn ? (
                 <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
                   Sign in with Google before joining. Use the login tab to continue.
                   <div className="mt-3">
@@ -260,13 +268,6 @@ export default function JoinPage() {
               )}
             </>
           )}
-
-          <div className="mt-4 rounded-2xl border border-line bg-surface-muted px-4 py-3 text-sm text-slate-700">
-            <p className="font-semibold">
-              {checking ? "Checking session..." : signedIn ? `Signed in: ${userName ?? "Google user"}` : "Not signed in"}
-            </p>
-            <p className="mt-1 text-xs">{userEmail ?? "No Google account in session."}</p>
-          </div>
 
           {flow === "join" ? (
             <form onSubmit={join} className="mt-7 space-y-4">
@@ -302,7 +303,7 @@ export default function JoinPage() {
 
               <button
                 type="submit"
-                disabled={loading || !signedIn}
+                disabled={loading || checking || !signedIn}
                 className="inline-flex h-12 items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? "Joining..." : "Join leaderboard"}
