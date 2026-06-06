@@ -67,9 +67,13 @@ export function resolveInitialStudyFilters(query: QueryShape): {
 }
 
 export function resolveInitialDashboardTab(query: QueryShape): TabId {
+  if (query.dashboard === "wk") return "wk";
+  if (query.dashboard === "jlpt") return "jlpt";
   if (query.dashboard === "news") return "news";
   if (query.dashboard === "stats") return "stats";
   if (query.dashboard === "read") return "read";
+  if (query.tab === "level") return "wk";
+  if (query.tab === "jlpt") return "jlpt";
   if (query.tab === "read") return "news";
   if (query.tab === "news") return "news";
   if (query.tab === "stats") return "stats";

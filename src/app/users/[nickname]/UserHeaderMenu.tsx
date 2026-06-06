@@ -45,7 +45,7 @@ function getInitials(name: string | null): string {
 }
 
 function isDashboardMenuTab(value: string | null): value is "learn" | "stats" | "news" | "read" {
-  return value === "learn" || value === "stats" || value === "news" || value === "read";
+  return value === "learn" || value === "wk" || value === "jlpt" || value === "stats" || value === "news" || value === "read";
 }
 
 function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
@@ -201,6 +201,8 @@ export default function UserHeaderMenu({
   const dashboardPageLinks = resolvedUserPageUsername
     ? [
         { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/learn` },
+        { label: "WK Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/wk` },
+        { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt` },
         { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },
         { label: "News", dashboard: "news", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news` },
         { label: "Read", dashboard: "read", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/read` },
@@ -211,7 +213,7 @@ export default function UserHeaderMenu({
       ? { label: "Leaderboard", href: "/", dashboard: null }
       : null,
     ...dashboardPageLinks,
-  ].filter((link): link is { label: string; href: string; dashboard: "learn" | "stats" | "news" | "read" | null } => Boolean(link));
+  ].filter((link): link is { label: string; href: string; dashboard: "learn" | "wk" | "jlpt" | "stats" | "news" | "read" | null } => Boolean(link));
   const pageLinks = [
     viewerMenuInfo && viewedWkUsername
       ? { label: "History", href: `/users/${encodeURIComponent(viewedWkUsername)}/history` }

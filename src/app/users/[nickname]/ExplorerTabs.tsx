@@ -45,15 +45,27 @@ export default function ExplorerTabs({
   jlptItems,
   userKanjiItems,
   initialStudyFilters,
-  initialTab = "study",
 }: Props) {
+  const resolveExplorerDashboardTab = (): "learn" | "wk" | "jlpt" => {
+    if (typeof window === "undefined") {
+      return "learn";
+    }
+
+    const segment = window.location.pathname.split("/").filter(Boolean)[2] ?? "";
+    return segment === "wk" || segment === "jlpt" ? segment : "learn";
+  };
   const previousPageKeyRef = useRef<string | null>(null);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
   const isHydrated = typeof window !== "undefined";
-  const [dashboardTab, setDashboardTab] = useState<string>("learn");
+  const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(resolveExplorerDashboardTab);
   const [studyMode, setStudyMode] = useState(() => (typeof initialStudyMode === "boolean" ? initialStudyMode : true));
-  const [activeTab, setActiveTab] = useState<"study" | "level" | "jlpt">(initialTab);
+  const forcedTab = dashboardTab === "wk"
+    ? "level"
+    : dashboardTab === "jlpt"
+      ? "jlpt"
+      : "study";
+  const effectiveActiveTab = forcedTab;
   const [showEnglish, setShowEnglish] = useState(false);
   const [activeCustomLibraryName, setActiveCustomLibraryName] = useState<string | null>(null);
   const [studySourceModalRequestId, setStudySourceModalRequestId] = useState(0);
@@ -77,9 +89,6 @@ export default function ExplorerTabs({
     }
     const timer = window.setTimeout(() => {
       const params = new URLSearchParams(window.location.search);
-      const urlTab = params.get("tab") === "jlpt" ? "jlpt" : params.get("tab") === "level" ? "level" : "study";
-      setActiveTab(urlTab);
-
       const urlMode = params.get("mode");
       if (urlMode === QUEUE_TYPES.review || urlMode === QUEUE_TYPES.lesson) {
         setQueueMode(urlMode);
@@ -146,13 +155,7 @@ export default function ExplorerTabs({
       return;
     }
     const params = new URLSearchParams(window.location.search);
-    const raw = params.get("tab");
-    const tabInUrl = raw === "jlpt" ? "jlpt" : raw === "level" ? "level" : "study";
     let changed = false;
-    if (tabInUrl !== activeTab) {
-      params.set("tab", activeTab);
-      changed = true;
-    }
     const modeInUrl = params.get("mode");
     if (modeInUrl !== queueMode) {
       params.set("mode", queueMode);
@@ -168,13 +171,13 @@ export default function ExplorerTabs({
       const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
       window.history.replaceState(null, "", next);
     }
-  }, [activeTab, isHydrated, queueMode, studyMode]);
+  }, [effectiveActiveTab, isHydrated, queueMode, studyMode]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
-    const pageKey = activeTab === "study" ? `${activeTab}:${queueMode}` : activeTab;
+    const pageKey = effectiveActiveTab === "study" ? `${effectiveActiveTab}:${queueMode}` : effectiveActiveTab;
     if (previousPageKeyRef.current === null) {
       previousPageKeyRef.current = pageKey;
       return;
@@ -183,12 +186,12 @@ export default function ExplorerTabs({
     if (previousPageKeyRef.current !== pageKey) {
       window.dispatchEvent(
         new CustomEvent("wr:explorer-page-change", {
-          detail: { activeTab, queueMode },
+          detail: { activeTab: effectiveActiveTab, queueMode },
         }),
       );
       previousPageKeyRef.current = pageKey;
     }
-  }, [activeTab, isHydrated, queueMode]);
+  }, [effectiveActiveTab, isHydrated, queueMode]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {
@@ -207,7 +210,6 @@ export default function ExplorerTabs({
     }
     const onPopState = () => {
       const params = new URLSearchParams(window.location.search);
-      setActiveTab(params.get("tab") === "jlpt" ? "jlpt" : params.get("tab") === "level" ? "level" : "study");
       const urlMode = params.get("mode");
       if (urlMode === QUEUE_TYPES.review || urlMode === QUEUE_TYPES.lesson) setQueueMode(urlMode);
       const urlStudyMode = params.get("studyMode");
@@ -238,16 +240,17 @@ export default function ExplorerTabs({
 
     window.dispatchEvent(
       new CustomEvent("wr:explorer-search", {
-        detail: { query, scope: activeTab },
+        detail: { query, scope: effectiveActiveTab },
       }),
     );
-  }, [activeTab, isHydrated]);
+  }, [effectiveActiveTab, isHydrated]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onDashboardTabChange = (event: Event) => {
       const custom = event as CustomEvent<{ tab?: string }>;
-      setDashboardTab(custom.detail?.tab ?? "learn");
+      const next = custom.detail?.tab;
+      setDashboardTab(next === "wk" || next === "jlpt" ? next : "learn");
     };
     window.addEventListener("wr:dashboard-tab-change", onDashboardTabChange as EventListener);
     return () => {
@@ -262,13 +265,6 @@ export default function ExplorerTabs({
   const openStudySourceManager = () => {
     setStudySourceModalRequestId((current) => current + 1);
   };
-  if (dashboardTab !== "learn") return null;
-  function tabClass(tab: "study" | "level" | "jlpt"): string {
-    const active = activeTab === tab;
-    return active
-      ? "inline-flex h-7 flex-1 items-center justify-center rounded-full border border-accent bg-accent px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-white sm:h-8 sm:flex-none sm:px-4 sm:text-xs sm:tracking-[0.1em]"
-      : "inline-flex h-7 flex-1 items-center justify-center rounded-full px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-foreground hover:bg-surface-muted sm:h-8 sm:flex-none sm:px-4 sm:text-xs sm:tracking-[0.1em]";
-  }
 
   function queueModeSegmentClass(mode: QueueType, activeMode: QueueType): string {
     const active = mode === activeMode;
@@ -303,43 +299,9 @@ export default function ExplorerTabs({
         openRequestId={studySourceModalRequestId}
       />
       <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
-        <div
-          className="inline-flex w-full flex-nowrap items-center gap-0 rounded-full border border-line bg-surface p-1"
-          role="tablist"
-          aria-label="Explorer tabs"
-        >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "study"}
-            className={tabClass("study")}
-            onClick={() => setActiveTab("study")}
-          >
-            Study
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "level"}
-            className={tabClass("level")}
-            onClick={() => setActiveTab("level")}
-          >
-            <span className="sm:hidden">WK Explorer</span>
-            <span className="hidden sm:inline">WK Explorer</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "jlpt"}
-            className={tabClass("jlpt")}
-            onClick={() => setActiveTab("jlpt")}
-          >
-            JLPT Explorer
-          </button>
-        </div>
-        <div className="w-full overflow-x-auto md:overflow-visible">
+        <div className="w-full overflow-x-auto md:col-start-2 md:overflow-visible">
           <div className="flex min-w-max items-center gap-2 pr-1 md:ml-auto md:min-w-0 md:justify-end">
-            {activeTab === "study" ? (
+            {effectiveActiveTab === "study" ? (
               <div
                 className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1"
                 role="tablist"
@@ -381,7 +343,7 @@ export default function ExplorerTabs({
         </div>
       </div>
 
-      <div className={activeTab === "study" ? "block" : "hidden"}>
+      <div className={effectiveActiveTab === "study" ? "block" : "hidden"}>
         <StudyExplorer
           accountId={accountId}
           studySource={studySource}
@@ -400,10 +362,10 @@ export default function ExplorerTabs({
         />
       </div>
 
-      <div className={activeTab === "level" ? "block" : "hidden"}>
+      <div className={effectiveActiveTab === "level" ? "block" : "hidden"}>
         <LevelExplorer
           accountId={accountId}
-          isActive={activeTab === "level"}
+          isActive={effectiveActiveTab === "level"}
           maxLevel={maxLevel}
           accountPendingReviews={accountPendingReviews}
           levelItemCountsByLevel={levelItemCountsByLevel}
@@ -416,10 +378,10 @@ export default function ExplorerTabs({
         />
       </div>
 
-      <div className={activeTab === "jlpt" ? "block" : "hidden"}>
+      <div className={effectiveActiveTab === "jlpt" ? "block" : "hidden"}>
         <JlptExplorer
           accountId={accountId}
-          isActive={activeTab === "jlpt"}
+          isActive={effectiveActiveTab === "jlpt"}
           items={jlptItems}
           showEnglish={showEnglish}
           canToggleEnglish={!studyMode}

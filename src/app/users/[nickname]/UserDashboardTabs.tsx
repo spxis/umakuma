@@ -12,7 +12,7 @@ import {
 import type { TabId, UserDashboardTabsProps as Props } from "./UserDashboardTabs.types";
 
 function isDashboardTabId(value: string | null): value is TabId {
-  return value === "learn" || value === "stats" || value === "news" || value === "read";
+  return value === "learn" || value === "wk" || value === "jlpt" || value === "stats" || value === "news" || value === "read";
 }
 
 function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): TabId | null {
@@ -90,7 +90,7 @@ export default function UserDashboardTabs({
 
     const persistedTab = getStoredEnum(
       tabStorageKey,
-      ["learn", "stats", "news", "read"] as const,
+      ["learn", "wk", "jlpt", "stats", "news", "read"] as const,
       "learn",
     );
 
@@ -193,7 +193,7 @@ export default function UserDashboardTabs({
 
   return (
     <>
-      {activeTab === "learn" ? (
+      {activeTab === "learn" || activeTab === "wk" || activeTab === "jlpt" ? (
         <section role="tabpanel">
           {learnContent}
         </section>

@@ -27,7 +27,7 @@ function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
   return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
 }
 
-function userTabHref(username: string | null, tab: "learn" | "stats" | "news" | "read"): string {
+function userTabHref(username: string | null, tab: "learn" | "wk" | "jlpt" | "stats" | "news" | "read"): string {
   if (!username) {
     return "/join";
   }
@@ -49,6 +49,8 @@ export default function AppTopMenuRow({
   const links: MainLink[] = [
     { label: "Leaderboard", href: "/", dashboard: null },
     { label: "Study", href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
+    { label: "WK Explorer", href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
+    { label: "JLPT Explorer", href: userTabHref(resolvedWkUsername, "jlpt"), dashboard: "jlpt" },
     { label: "Stats", href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
     { label: "News", href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
     { label: "Read", href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },

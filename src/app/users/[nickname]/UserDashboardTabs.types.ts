@@ -55,7 +55,7 @@ export type ItemSpreadGroupDetails = Record<
   }
 >;
 
-export type TabId = "learn" | "stats" | "news" | "read";
+export type TabId = "learn" | "wk" | "jlpt" | "stats" | "news" | "read";
 
 export type ViewerMenuInfo = {
   provider: "google" | "invite";
