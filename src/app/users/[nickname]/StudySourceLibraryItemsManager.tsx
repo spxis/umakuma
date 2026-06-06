@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
+import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 
 type CustomLibraryItemRow = {
@@ -19,6 +20,14 @@ type Props = {
   onLibrariesChanged: () => Promise<unknown>;
   onLibraryDeleted: (fallbackActiveLibraryId: string | null) => void;
 };
+
+function customLibraryTypeLabel(type: CustomLibraryItemRow["type"]): string {
+  if (type === SUBJECT_TYPES.kanji || type === SUBJECT_TYPES.vocabulary) {
+    return SUBJECT_TYPE_DISPLAY[type].short;
+  }
+
+  return type.toUpperCase();
+}
 
 export default function StudySourceLibraryItemsManager({
   accountId,
@@ -64,7 +73,9 @@ export default function StudySourceLibraryItemsManager({
     [items, levelFilter],
   );
   const selectedItems = items.filter((item) => selectedItemIds.includes(item.id));
-  const selectedItemDetails = selectedItems.slice(0, 12).map((item) => `${item.characters} (${item.type}, L${item.level})`);
+  const selectedItemDetails = selectedItems
+    .slice(0, 12)
+    .map((item) => `${item.characters} (${customLibraryTypeLabel(item.type)}, L${item.level})`);
   const selectedItemOverflow = selectedItems.length > selectedItemDetails.length
     ? selectedItems.length - selectedItemDetails.length
     : 0;
@@ -262,7 +273,7 @@ export default function StudySourceLibraryItemsManager({
                     <td className="max-w-56 border-b border-line px-2 py-2 align-top text-foreground/80" title={displayMeaning}>{displayMeaning}</td>
                     <td className="max-w-44 border-b border-line px-2 py-2 align-top text-foreground/75" title={displayReading}>{displayReading}</td>
                     <td className="border-b border-line px-2 py-2 align-top">
-                      <span className="inline-flex rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70">{item.type}</span>
+                      <span className="inline-flex rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70">{customLibraryTypeLabel(item.type)}</span>
                     </td>
                   </tr>
                 );
