@@ -208,7 +208,7 @@ export default function StudyExplorerPanel({
               </button>
               {STUDY_GROUPING_FILTERS.map(([type, label]) => {
                 const count = typeCounts[type];
-                const isSelected = allTypesSelected || typeFilter === type;
+                const isSelected = typeFilter === type || (allTypesSelected && count > 0);
                 const unavailable = hasData && !isSelected && count === 0;
                 const disabled = (filtersLoading && !isSelected) || unavailable;
                 return (
