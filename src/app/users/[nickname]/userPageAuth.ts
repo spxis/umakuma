@@ -31,6 +31,7 @@ export async function resolveViewerMenuInfo(input: {
   sessionName: string | null;
 }): Promise<ViewerMenuInfo | null> {
   const { viewerEmail, sessionName } = input;
+  const viewerIsAdmin = isAdminEmail(viewerEmail);
 
   if (viewerEmail) {
     let viewerAccount = await prisma.account.findFirst({
@@ -72,6 +73,7 @@ export async function resolveViewerMenuInfo(input: {
       name: viewerAccount?.nickname ?? sessionName ?? viewerEmail.split("@")[0] ?? "Google user",
       email: viewerEmail,
       wkUsername: viewerAccount?.wkUsername ?? null,
+      isAdmin: viewerIsAdmin,
     };
   }
 
@@ -101,5 +103,6 @@ export async function resolveViewerMenuInfo(input: {
     name: inviteAccount.nickname,
     email: inviteAccount.joinedByEmail,
     wkUsername: inviteAccount.wkUsername,
+    isAdmin: false,
   };
 }

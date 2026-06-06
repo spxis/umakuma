@@ -76,6 +76,7 @@ function AdminWorkspacePageContent({
         name: userName?.trim() || userEmail?.split("@")[0] || "Google user",
         email: userEmail,
         wkUsername: null,
+        isAdmin: emailAllowed,
       }
     : null;
 

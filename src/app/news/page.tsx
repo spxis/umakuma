@@ -102,7 +102,7 @@ export default async function NewsPage() {
           ) : (
             <div className="rounded-2xl border border-line bg-surface-muted p-6 text-sm text-foreground/80">
               Please{" "}
-              <Link href="/join?flow=google" className="font-bold uppercase tracking-[0.12em] text-accent underline">
+              <Link href="/login" className="font-bold uppercase tracking-[0.12em] text-accent underline">
                 sign in
               </Link>{" "}
               to use the News Reader.

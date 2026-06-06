@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
 import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { refreshDueAccounts } from "@/lib/sync";
@@ -84,10 +85,9 @@ export default async function Home() {
     sessionName: session?.user?.name?.trim() ?? null,
   });
   const canViewAllUserPages = isAdminEmail(viewerEmail);
+  if (viewerEmail && !canViewAllUserPages && !viewerMenuInfo?.wkUsername) redirect("/join");
   const viewerWkUsername = viewerMenuInfo?.wkUsername ?? null;
-  const readingChallengeHref = viewerWkUsername
-    ? `/users/${encodeURIComponent(viewerWkUsername)}?dashboard=read`
-    : "/join";
+  const readingChallengeHref = viewerWkUsername ? `/users/${encodeURIComponent(viewerWkUsername)}?dashboard=read` : "/join";
   const challengeToday = getTodayDateInputValue();
 
   let challengeGoalDatePst = READING_CAMPAIGN.goalDatePst;
@@ -352,12 +352,14 @@ export default async function Home() {
               </p>
             </div>
             <div className="flex w-full flex-wrap items-center justify-end gap-2 md:w-auto">
-              <Link
-                href="/join"
-                className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-surface px-6 text-sm font-bold uppercase tracking-[0.14em] text-foreground transition hover:bg-surface-muted"
-              >
-                Join Board
-              </Link>
+              {!session?.user?.email ? (
+                <Link
+                  href="/join"
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-line bg-surface px-6 text-sm font-bold uppercase tracking-[0.14em] text-foreground transition hover:bg-surface-muted"
+                >
+                  Join Board
+                </Link>
+              ) : null}
               <LeaderboardAdminActions />
               <UserHeaderMenu viewerMenuInfo={viewerMenuInfo} />
             </div>

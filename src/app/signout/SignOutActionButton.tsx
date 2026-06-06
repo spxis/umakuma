@@ -25,8 +25,7 @@ export default function SignOutActionButton({ callbackUrl, clearAdmin }: SignOut
         }
       }
 
-      const result = await signOut({ callbackUrl, redirect: false });
-      window.location.assign(result?.url ?? callbackUrl);
+      await signOut({ callbackUrl });
     } catch {
       setSubmitting(false);
       setErrorMessage("Could not sign out automatically. Please try again.");
@@ -34,14 +33,14 @@ export default function SignOutActionButton({ callbackUrl, clearAdmin }: SignOut
   }
 
   return (
-    <div className="space-y-2">
+    <div className="w-full space-y-2">
       <button
         type="button"
         disabled={submitting}
         onClick={() => {
           void onSignOut();
         }}
-        className="inline-flex h-11 items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-11 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {submitting ? "Signing out..." : "Sign out"}
       </button>

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-type InviteSessionStatus = {
+export type InviteSessionStatus = {
   signedIn?: boolean;
   account?: {
     id: string;
@@ -14,33 +14,17 @@ type InviteSessionStatus = {
 };
 
 type Props = {
-  postLoginCallbackUrl?: string;
+  initialSession: InviteSessionStatus;
 };
 
-export default function InviteCodeAccessPanel({
-  postLoginCallbackUrl = "/",
-}: Props) {
+export default function InviteCodeAccessPanel({ initialSession }: Props) {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [session, setSession] = useState<InviteSessionStatus>({ signedIn: false });
+  const [session, setSession] = useState<InviteSessionStatus>(initialSession);
   const [status, setStatus] = useState<{ kind: "idle" | "ok" | "error"; message: string }>({
     kind: "idle",
     message: "",
   });
-
-  useEffect(() => {
-    async function loadSession() {
-      try {
-        const response = await fetch("/api/invite/session", { cache: "no-store" });
-        const payload = (await response.json()) as InviteSessionStatus;
-        setSession(payload);
-      } catch {
-        setSession({ signedIn: false });
-      }
-    }
-
-    void loadSession();
-  }, []);
 
   async function submitInviteCode(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -88,9 +72,6 @@ export default function InviteCodeAccessPanel({
   return (
     <section className="rounded-2xl border border-line bg-surface-muted p-4">
       <p className="text-xs font-bold uppercase tracking-[0.14em] text-foreground/65">Invite Access</p>
-      <p className="mt-1 text-sm text-foreground/80">
-        Enter your 6-character invite code to open your user page directly.
-      </p>
 
       {session.signedIn && session.account ? (
         <div className="mt-3 space-y-2">
@@ -117,7 +98,7 @@ export default function InviteCodeAccessPanel({
           </div>
         </div>
       ) : (
-        <form onSubmit={submitInviteCode} className="mt-3 space-y-3">
+        <form onSubmit={submitInviteCode} className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <input
             type="text"
             inputMode="text"
@@ -130,12 +111,12 @@ export default function InviteCodeAccessPanel({
               setCode(normalized.slice(0, 6));
             }}
             placeholder="ABC123"
-            className="w-full rounded-2xl border border-line bg-surface px-4 py-3 text-center text-lg font-black uppercase tracking-[0.25em] text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+            className="h-11 w-full rounded-2xl border border-line bg-surface px-4 text-center text-base font-black uppercase tracking-[0.25em] text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
           />
           <button
             type="submit"
             disabled={loading || code.length !== 6}
-            className="inline-flex h-11 items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex h-11 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Signing in..." : "Use Invite Code"}
           </button>
@@ -153,10 +134,6 @@ export default function InviteCodeAccessPanel({
           {status.message}
         </p>
       ) : null}
-
-      <p className="mt-3 text-xs text-foreground/65">
-        Prefer Google? Continue to <Link href={postLoginCallbackUrl} className="font-semibold text-accent underline underline-offset-2">Google sign-in</Link>.
-      </p>
     </section>
   );
 }

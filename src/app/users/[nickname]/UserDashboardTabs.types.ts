@@ -62,6 +62,7 @@ export type ViewerMenuInfo = {
   name: string;
   email: string | null;
   wkUsername: string | null;
+  isAdmin: boolean;
 };
 
 export type UserDashboardTabsProps = {

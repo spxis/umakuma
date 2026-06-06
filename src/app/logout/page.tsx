@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import AuthAccessScreen from "../AuthAccessScreen";
 import { authOptions } from "@/lib/auth";
 
 type PageProps = {
@@ -19,17 +18,21 @@ function normalizeCallbackUrl(value: string | string[] | undefined): string {
   return raw;
 }
 
-export default async function LoginPage({ searchParams }: PageProps) {
+export default async function LogoutPage({ searchParams }: PageProps) {
   const query = await searchParams;
   const callbackUrl = normalizeCallbackUrl(query.callbackUrl);
   const session = await getServerSession(authOptions);
-  if (session?.user?.email) {
+  if (!session?.user?.email) {
     redirect(
       callbackUrl === "/"
-        ? "/logout"
-        : `/logout?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+        ? "/login"
+        : `/login?callbackUrl=${encodeURIComponent(callbackUrl)}`,
     );
   }
 
-  return <AuthAccessScreen activeTab="google" googleCallbackPath={callbackUrl} />;
+  redirect(
+    callbackUrl === "/"
+      ? "/signout"
+      : `/signout?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+  );
 }
