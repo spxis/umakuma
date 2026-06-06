@@ -5,10 +5,8 @@ import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
 import { currentReviewQueueFromAssignmentCache } from "@/lib/readingSignoff";
-import {
-  challengeReadScope,
-  getReadingSignoffEntryDelegate,
-} from "./readingSignoffsRoute.types";
+import { emitSumilabuTelemetry } from "@/lib/sumilabuTelemetry";
+import { challengeReadScope, getReadingSignoffEntryDelegate } from "./readingSignoffsRoute.types";
 import {
   getQuerySchema,
   patchBodySchema,
@@ -36,42 +34,37 @@ export async function GET(request: Request) {
     request,
     execute: async () => {
       try {
+        const routeStartedAtMs = Date.now();
+        const phaseMetrics: Record<string, number> = {};
         const url = new URL(request.url);
         const parsed = getQuerySchema.safeParse({
           month: url.searchParams.get("month") ?? "",
           challengeId: url.searchParams.get("challengeId") ?? undefined,
           accountId: url.searchParams.get("accountId") ?? undefined,
         });
-
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
         }
-
         const viewerAccounts = await resolveViewerAccounts(request);
         if (viewerAccounts.length === 0) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
-
         const campaignSelection = await resolveReadingCampaignSelection(parsed.data.challengeId);
         const selectedChallengeId = campaignSelection.selectedCampaignId;
-
         if (parsed.data.challengeId && parsed.data.challengeId !== selectedChallengeId) {
           return NextResponse.json({ error: "Selected campaign is not available yet." }, { status: 404 });
         }
-
         const viewerAccountIds = new Set(viewerAccounts.map((account) => account.id));
         const requestedAccountId = parsed.data.accountId ?? null;
         if (requestedAccountId && !viewerAccountIds.has(requestedAccountId)) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
-
-        const targetAccountIds = requestedAccountId
-          ? [requestedAccountId]
-          : viewerAccounts.map((account) => account.id);
-
+        const targetAccountIds = requestedAccountId ? [requestedAccountId] : viewerAccounts.map((account) => account.id);
+        const readScope = challengeReadScope(selectedChallengeId);
         const readingSignoff = getReadingSignoffDelegate();
         const readingChallengeBook = getReadingChallengeBookDelegate();
         const readingChallengeMember = getReadingChallengeMemberDelegate();
+        const readingSignoffEntry = getReadingSignoffEntryDelegate();
         if (!readingSignoff) {
           return NextResponse.json(
             { error: "Reading check-ins are not ready yet. Restart the dev server and try again." },
@@ -85,54 +78,6 @@ export async function GET(request: Request) {
             { status: 503 },
           );
         }
-
-        const signoffs = await readingSignoff.findMany({
-          where: {
-            accountId: { in: targetAccountIds },
-            signoffDatePst: {
-              startsWith: `${parsed.data.month}-`,
-            },
-            ...challengeReadScope(selectedChallengeId),
-          },
-          orderBy: [{ signoffDatePst: "asc" }, { updatedAt: "desc" }],
-        });
-
-        const readingSignoffEntry = getReadingSignoffEntryDelegate();
-        const signoffEntries = readingSignoffEntry
-          ? await readingSignoffEntry.findMany({
-              where: {
-                accountId: { in: targetAccountIds },
-                signoffDatePst: {
-                  startsWith: `${parsed.data.month}-`,
-                },
-                ...challengeReadScope(selectedChallengeId),
-              },
-              orderBy: [{ signoffDatePst: "asc" }, { createdAt: "asc" }],
-            })
-          : [];
-
-        const latestSignoffs = await readingSignoff.findMany({
-          where: {
-            accountId: { in: targetAccountIds },
-            ...challengeReadScope(selectedChallengeId),
-          },
-          orderBy: [{ updatedAt: "desc" }],
-        });
-
-        const latestByAccountId = new Map<string, LatestSignoffSummary>();
-        for (const row of latestSignoffs) {
-          if (latestByAccountId.has(row.accountId)) {
-            continue;
-          }
-
-          latestByAccountId.set(row.accountId, {
-            accountId: row.accountId,
-            bookTitle: row.bookTitle,
-            pagesRead: row.pagesRead,
-            signoffDatePst: row.signoffDatePst,
-          });
-        }
-
         const challengeBookQuery: Parameters<typeof readingChallengeBook.findMany>[0] = {
           where: {
             accountId: { in: targetAccountIds },
@@ -149,56 +94,120 @@ export async function GET(request: Request) {
             infoUrl: true,
           },
         };
-
-        const challengeBooksRaw = await readingChallengeBook.findMany(challengeBookQuery);
+        const parallelReadsStartedAtMs = Date.now();
+        const [signoffs, signoffEntries, latestSignoffs, challengeBooksRaw, accountReviewQueues, trackedMemberAccountIds, viewerCanChooseMember] =
+          await Promise.all([
+            readingSignoff.findMany({
+              where: {
+                accountId: { in: targetAccountIds },
+                signoffDatePst: {
+                  startsWith: `${parsed.data.month}-`,
+                },
+                ...readScope,
+              },
+              orderBy: [{ signoffDatePst: "asc" }, { updatedAt: "desc" }],
+            }),
+            readingSignoffEntry
+              ? readingSignoffEntry.findMany({
+                  where: {
+                    accountId: { in: targetAccountIds },
+                    signoffDatePst: {
+                      startsWith: `${parsed.data.month}-`,
+                    },
+                    ...readScope,
+                  },
+                  orderBy: [{ signoffDatePst: "asc" }, { createdAt: "asc" }],
+                })
+              : Promise.resolve([]),
+            readingSignoff.findMany({
+              where: {
+                accountId: { in: targetAccountIds },
+                ...readScope,
+              },
+              orderBy: [{ updatedAt: "desc" }],
+            }),
+            readingChallengeBook.findMany(challengeBookQuery),
+            prisma.account.findMany({
+              where: {
+                id: { in: targetAccountIds },
+              },
+              select: {
+                id: true,
+                pendingReviews: true,
+                assignmentCache: true,
+              },
+            }),
+            readingChallengeMember
+              ? readingChallengeMember.findMany({
+                  where: {
+                    accountId: { in: targetAccountIds },
+                    ...(selectedChallengeId ? { challengeId: selectedChallengeId } : {}),
+                  },
+                  select: {
+                    accountId: true,
+                    tracked: true,
+                  },
+                }).then((trackedMembers) => {
+                  const trackedByAccountId = new Map(trackedMembers.map((row) => [row.accountId, row.tracked]));
+                  return targetAccountIds.filter((accountId) => trackedByAccountId.get(accountId) !== false);
+                })
+              : Promise.resolve(targetAccountIds),
+            isAuthorizedAdmin(request),
+          ]);
+        phaseMetrics.parallel_reads_ms = Date.now() - parallelReadsStartedAtMs;
+        const latestByAccountId = new Map<string, LatestSignoffSummary>();
+        for (const row of latestSignoffs) {
+          if (latestByAccountId.has(row.accountId)) {
+            continue;
+          }
+          latestByAccountId.set(row.accountId, {
+            accountId: row.accountId,
+            bookTitle: row.bookTitle,
+            pagesRead: row.pagesRead,
+            signoffDatePst: row.signoffDatePst,
+          });
+        }
         const challengeBooks = challengeBooksRaw.map(toChallengeBookRecord);
+        const seedBooksStartedAtMs = Date.now();
         await ensureSeedBooks(viewerAccounts, challengeBooks, readingChallengeBook, selectedChallengeId);
-
+        phaseMetrics.seed_books_ms = Date.now() - seedBooksStartedAtMs;
+        const challengeBookRefreshStartedAtMs = Date.now();
         const challengeBooksAfterSeed = await readingChallengeBook.findMany(challengeBookQuery);
+        phaseMetrics.challenge_book_refresh_ms = Date.now() - challengeBookRefreshStartedAtMs;
         const challengeBookRecords = challengeBooksAfterSeed.map(toChallengeBookRecord);
         // Do cover URL healing in the background so read page data is not blocked by external APIs.
         void backfillStaleCoverUrls(challengeBookRecords).catch(() => {
           // Best effort only: stale covers can be healed in subsequent requests.
         });
-
-        const accountReviewQueues = await prisma.account.findMany({
-          where: {
-            id: { in: targetAccountIds },
+        const reviewQueues = accountReviewQueues.map(toReadingReviewQueueSnapshot);
+        void emitSumilabuTelemetry({
+          event: "reading_signoffs_get_perf",
+          status: "ok",
+          severity: "info",
+          durationMs: Date.now() - routeStartedAtMs,
+          tags: {
+            route: "/api/reading-signoffs",
+            challenge_id: selectedChallengeId ?? "none",
           },
-          select: {
-            id: true,
-            pendingReviews: true,
-            assignmentCache: true,
+          metrics: {
+            ...phaseMetrics,
+            target_accounts: targetAccountIds.length,
+            viewer_accounts: viewerAccounts.length,
+            signoffs: signoffs.length,
+            signoff_entries: signoffEntries.length,
+            review_queues: reviewQueues.length,
+          },
+          telemetry: {
+            month: parsed.data.month,
           },
         });
-
-        const reviewQueues = accountReviewQueues.map(toReadingReviewQueueSnapshot);
-
-        const trackedMemberAccountIds = readingChallengeMember
-          ? (() => {
-              return readingChallengeMember.findMany({
-                where: {
-                  accountId: { in: targetAccountIds },
-                  ...(selectedChallengeId ? { challengeId: selectedChallengeId } : {}),
-                },
-                select: {
-                  accountId: true,
-                  tracked: true,
-                },
-              }).then((trackedMembers) => {
-                const trackedByAccountId = new Map(trackedMembers.map((row) => [row.accountId, row.tracked]));
-                return targetAccountIds.filter((accountId) => trackedByAccountId.get(accountId) !== false);
-              });
-            })()
-          : Promise.resolve(targetAccountIds);
-
         return NextResponse.json(
           {
             members: viewerAccounts,
             campaigns: campaignSelection.campaigns,
             selectedChallengeId,
-            viewerCanChooseMember: await isAuthorizedAdmin(request),
-            trackedMemberAccountIds: await trackedMemberAccountIds,
+            viewerCanChooseMember,
+            trackedMemberAccountIds,
             challengeBooks: challengeBookRecords,
             signoffs: signoffs.map(toReadingSignoffRecord),
             signoffEntries: signoffEntries.map(toReadingSignoffEntryRecord),
