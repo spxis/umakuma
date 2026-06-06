@@ -104,6 +104,9 @@ export type StudyExplorerProps = {
   accountId: string;
   studySource: StudySource;
   customLibraryId: string | null;
+  studySourceHeaderLabel: string;
+  studySourceIsCustom: boolean;
+  onOpenStudySourceManager: () => void;
   maxLevel: number;
   showEnglish: boolean;
   onToggleShowEnglish: () => void;

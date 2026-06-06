@@ -325,7 +325,7 @@ export default function ExplorerTabs({
             onClick={() => setActiveTab("level")}
           >
             <span className="sm:hidden">WK Explorer</span>
-            <span className="hidden sm:inline">WaniKani Explorer</span>
+            <span className="hidden sm:inline">WK Explorer</span>
           </button>
           <button
             type="button"

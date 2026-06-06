@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { formatNumber } from "../../level-explorer/lib/levelExplorerDisplay";
+import FilterChipLabel from "../../shared/FilterChipLabel";
 import { STUDY_QUEUE_TYPES } from "./StudyExplorer.constants";
 import type { StudyQueueMode } from "../lib/studyExplorerTypes";
 import { badgeClass, disabledBadgeClass, groupStudyReviewLevelChips, type StudyReviewLevelChip } from "../lib/studyExplorerUtils";
@@ -119,7 +120,10 @@ export default function StudyLevelFilters({
           aria-selected={viewedLevel === null}
           className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(viewedLevel === null)} ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
         >
-          All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(queueMode === STUDY_QUEUE_TYPES.lesson ? totalLessonsInVisibleLevels : totalReviewsInVisibleLevels)})</span>
+          <FilterChipLabel
+            label="All"
+            count={formatNumber(queueMode === STUDY_QUEUE_TYPES.lesson ? totalLessonsInVisibleLevels : totalReviewsInVisibleLevels)}
+          />
         </button>
         {queueMode === STUDY_QUEUE_TYPES.lesson
           ? lessonLevelOptions.map(([level, count]) => (
@@ -132,7 +136,7 @@ export default function StudyLevelFilters({
                 aria-selected={viewedLevel === level}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(viewedLevel === level)} ${filtersLoading && viewedLevel !== level ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
               >
-                {level} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
+                <FilterChipLabel label={level} count={formatNumber(count)} />
               </button>
             ))
           : reviewLevelChips.map((chip) => {
@@ -172,10 +176,9 @@ export default function StudyLevelFilters({
                         : groupedLevelBadgeClass(groupedChipSelected)
                     }`}
                   >
-                    {chip.startLevel === chip.endLevel ? chip.startLevel : `${chip.startLevel}-${chip.endLevel}`}
-                    {isGroupedChip ? (
-                      <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
-                    ) : null}
+                    {isGroupedChip
+                      ? <FilterChipLabel label={chip.startLevel === chip.endLevel ? chip.startLevel : `${chip.startLevel}-${chip.endLevel}`} count={formatNumber(count)} />
+                      : (chip.startLevel === chip.endLevel ? chip.startLevel : `${chip.startLevel}-${chip.endLevel}`)}
                   </button>
                 );
               }
@@ -193,7 +196,7 @@ export default function StudyLevelFilters({
                   aria-selected={isSelected}
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(isSelected)} ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
                 >
-                  {chip.level} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(levelCount)})</span>
+                  <FilterChipLabel label={chip.level} count={formatNumber(levelCount)} />
                 </button>
               );
             })}

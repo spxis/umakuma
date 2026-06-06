@@ -5,7 +5,7 @@ import useSWR from "swr";
 
 import type { StudySource } from "./study-explorer/lib/studyExplorerTypes";
 
-type StudyCounts = { reviews: number; lessons: number };
+type StudyCounts = { reviews: number; reviewsTotal: number; lessons: number };
 
 type Args = {
   accountId: string;
@@ -92,19 +92,28 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     countsApiPath,
     async (url: string) => {
       const response = await fetch(url, { cache: "no-store" });
-      const payload = (await response.json()) as { reviews?: number; lessons?: number; error?: string };
+      const payload = (await response.json()) as { reviews?: number; reviewsTotal?: number; lessons?: number; error?: string };
       if (!response.ok || typeof payload.reviews !== "number" || typeof payload.lessons !== "number") {
         throw new Error(payload.error ?? "Could not load study counts.");
       }
 
-      return { reviews: payload.reviews, lessons: payload.lessons };
+      return {
+        reviews: payload.reviews,
+        reviewsTotal: typeof payload.reviewsTotal === "number" ? payload.reviewsTotal : payload.reviews,
+        lessons: payload.lessons,
+      };
     },
     {
       revalidateOnFocus: true,
       refreshInterval: 30_000,
       onSuccess: (nextCounts) => {
         setStudyCounts((prev) => {
-          if (prev && prev.reviews === nextCounts.reviews && prev.lessons === nextCounts.lessons) {
+          if (
+            prev &&
+            prev.reviews === nextCounts.reviews &&
+            prev.reviewsTotal === nextCounts.reviewsTotal &&
+            prev.lessons === nextCounts.lessons
+          ) {
             return prev;
           }
           return nextCounts;
@@ -115,6 +124,7 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
             countsStorageKey,
             JSON.stringify({
               reviews: nextCounts.reviews,
+              reviewsTotal: nextCounts.reviewsTotal,
               lessons: nextCounts.lessons,
               all: nextCounts.reviews + nextCounts.lessons,
             }),
@@ -138,15 +148,21 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
       }
 
       try {
-        const parsed = JSON.parse(raw) as { reviews?: number; lessons?: number };
+        const parsed = JSON.parse(raw) as { reviews?: number; reviewsTotal?: number; lessons?: number };
         if (typeof parsed.reviews === "number" && typeof parsed.lessons === "number") {
           const nextReviews = parsed.reviews;
+          const nextReviewsTotal = typeof parsed.reviewsTotal === "number" ? parsed.reviewsTotal : parsed.reviews;
           const nextLessons = parsed.lessons;
           setStudyCounts((prev) => {
-            if (prev && prev.reviews === nextReviews && prev.lessons === nextLessons) {
+            if (
+              prev &&
+              prev.reviews === nextReviews &&
+              prev.reviewsTotal === nextReviewsTotal &&
+              prev.lessons === nextLessons
+            ) {
               return prev;
             }
-            return { reviews: nextReviews, lessons: nextLessons };
+            return { reviews: nextReviews, reviewsTotal: nextReviewsTotal, lessons: nextLessons };
           });
         }
       } catch {

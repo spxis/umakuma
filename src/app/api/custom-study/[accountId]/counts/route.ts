@@ -88,10 +88,12 @@ export async function GET(request: Request, context: RouteContext) {
             now,
           }),
         ).length;
+        const reviewsTotal = validStates.filter((row) => row.srsStage > 0 && row.srsStage < 9).length;
 
         return NextResponse.json(
           {
             reviews,
+            reviewsTotal,
             lessons,
             all: reviews + lessons,
           },

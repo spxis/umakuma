@@ -3,6 +3,11 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
+import {
+  CUSTOM_LIBRARY_NAME_ALLOWED_REGEX,
+  CUSTOM_LIBRARY_NAME_MAX_LENGTH,
+  CUSTOM_LIBRARY_NAME_MIN_LENGTH,
+} from "@/lib/customStudy/customLibraryNameValidation";
 import { prisma } from "@/lib/prisma";
 
 type RouteContext = {
@@ -11,6 +16,11 @@ type RouteContext = {
 
 const selectLibrarySchema = z.object({
   libraryId: z.string().trim().min(1),
+});
+
+const renameLibrarySchema = z.object({
+  libraryId: z.string().trim().min(1),
+  name: z.string().trim().min(CUSTOM_LIBRARY_NAME_MIN_LENGTH).max(CUSTOM_LIBRARY_NAME_MAX_LENGTH).regex(CUSTOM_LIBRARY_NAME_ALLOWED_REGEX),
 });
 
 export async function GET(request: Request, context: RouteContext) {
@@ -100,6 +110,57 @@ export async function POST(request: Request, context: RouteContext) {
       } catch (error) {
         console.error(error);
         return NextResponse.json({ error: "Could not select custom library." }, { status: 500 });
+      }
+    },
+  });
+}
+
+export async function PATCH(request: Request, context: RouteContext) {
+  return withApiRouteTelemetry({
+    route: "/api/custom-study/[accountId]/libraries",
+    method: "PATCH",
+    request,
+    execute: async () => {
+      try {
+        const { accountId } = await context.params;
+        if (!(await canAccessAccount(request, accountId))) {
+          return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+        }
+
+        const json = await request.json();
+        const parsed = renameLibrarySchema.safeParse(json);
+        if (!parsed.success) {
+          return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+
+        const ownedLibrary = await prisma.customStudyLibrary.findFirst({
+          where: {
+            id: parsed.data.libraryId,
+            accountId,
+          },
+          select: { id: true },
+        });
+
+        if (!ownedLibrary) {
+          return NextResponse.json({ error: "Library not found." }, { status: 404 });
+        }
+
+        const updatedLibrary = await prisma.customStudyLibrary.update({
+          where: { id: parsed.data.libraryId },
+          data: { name: parsed.data.name },
+          select: {
+            id: true,
+            name: true,
+          },
+        });
+
+        return NextResponse.json({
+          ok: true,
+          library: updatedLibrary,
+        });
+      } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: "Could not rename custom library." }, { status: 500 });
       }
     },
   });

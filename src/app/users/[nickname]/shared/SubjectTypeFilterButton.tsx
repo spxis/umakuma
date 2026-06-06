@@ -1,5 +1,6 @@
 import { disabledBadgeClass, formatNumber, typeBadgeClass } from "../level-explorer/lib/levelExplorerDisplay";
 import { subjectTypeFilterLabel } from "./subjectTypeLabels";
+import FilterChipLabel from "./FilterChipLabel";
 import type { SubjectType } from "@/lib/domainConstants";
 
 type Props = {
@@ -31,7 +32,7 @@ export default function SubjectTypeFilterButton({
         showDisabledStyle ? disabledBadgeClass() : `${typeBadgeClass(type, active, false)}${disabled ? " cursor-not-allowed opacity-70" : ""}`
       }`}
     >
-      {subjectTypeFilterLabel(type)} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({resolvedCountLabel})</span>
+      <FilterChipLabel label={subjectTypeFilterLabel(type)} count={resolvedCountLabel} />
     </button>
   );
 }

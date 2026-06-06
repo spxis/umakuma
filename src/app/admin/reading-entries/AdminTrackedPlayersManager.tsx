@@ -36,7 +36,7 @@ export default function AdminTrackedPlayersManager({
         <div className="flex flex-wrap items-center gap-2">
           {challengeMember ? (
             <Link
-              href={`/users/${encodeURIComponent(challengeMember.wkUsername)}?dashboard=read`}
+              href={`/users/${encodeURIComponent(challengeMember.wkUsername)}/read`}
               className="h-9 rounded-full border border-line bg-white px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/80 hover:bg-surface"
             >
               Open challenge page

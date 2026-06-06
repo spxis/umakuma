@@ -13,6 +13,8 @@ type StudyExplorerPanelProps = {
   canToggleEnglish: boolean;
   showEnglish: boolean;
   studyMode: boolean;
+  studySourceHeaderLabel: string;
+  studySourceIsCustom: boolean;
   levelOptions: number[];
   availableLevels: Set<number>;
   reviewLevelCounts: Record<number, number>;
@@ -52,6 +54,7 @@ type StudyExplorerPanelProps = {
   onToggleShowEnglish: () => void;
   onToggleShowLocked: () => void;
   onToggleShowUpcomingReviews: () => void;
+  onOpenStudySourceManager: () => void;
   onSetWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;
   onSelectSubject: (subjectId: number) => void;
   onClearAllFilters: () => void;

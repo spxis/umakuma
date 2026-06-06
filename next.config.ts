@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+	rewrites: async () => [
+		{
+			source: "/users/:nickname/:dashboard(learn|stats|news|read)",
+			destination: "/users/:nickname?dashboard=:dashboard",
+		},
+	],
 	images: {
 		dangerouslyAllowSVG: true,
 		contentDispositionType: "inline",

@@ -42,14 +42,16 @@ try {
                   tag: account.tokenTag,
                 });
 
-                const [reviews, lessons] = await Promise.all([
+                const [reviews, lessons, reviewsTotal] = await Promise.all([
                   fetchAssignmentCount("/assignments?immediately_available_for_review=true", token),
                   fetchAssignmentCount("/assignments?srs_stages=0", token),
+                  fetchAssignmentCount("/assignments?srs_stages=1,2,3,4,5,6,7,8", token),
                 ]);
 
                 return NextResponse.json(
                   {
                     reviews,
+                    reviewsTotal,
                     lessons,
                     all: reviews + lessons,
                   },
