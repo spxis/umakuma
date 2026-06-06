@@ -188,7 +188,7 @@ export default function JlptExplorerContent({
             <div className="mt-2 space-y-2">
           {availableWkLevels.length > 0 ? (
             <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="WaniKani level filters">
-              <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
+              <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
                 <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === null)}`}>
                   <FilterChipLabel label="All" count={formatNumber(items.length)} />
@@ -206,7 +206,7 @@ export default function JlptExplorerContent({
           ) : null}
           {availableGrades.length > 0 ? (
             <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
-              <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
+              <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               <button type="button" onClick={() => onSetGradeFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(gradeFilter === null)}`}>
                 All
@@ -239,7 +239,7 @@ export default function JlptExplorerContent({
           ) : null}
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT level filters">
-            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
+            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
             <button
               type="button"
