@@ -4,8 +4,8 @@ import { getServerSession } from "next-auth";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import StudyHistoryTable from "@/app/shared/StudyHistoryTable";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import HistoryScopedStudyHistoryTable from "./HistoryScopedStudyHistoryTable";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;
@@ -64,12 +64,7 @@ export default async function UserHistoryPage({ params }: PageProps) {
             Study attempt history for {account.nickname}.
           </p>
         </section>
-        <StudyHistoryTable
-          endpoint={`/api/study/${account.id}/history`}
-          showUserColumn={false}
-          heading="Study attempts"
-          collapsible={false}
-        />
+        <HistoryScopedStudyHistoryTable accountId={account.id} />
       </main>
     </div>
   );
