@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import jlptReadings from "@/data/jlptReadings.json";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
-import { allBadgeClass, badgeClass, jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
+import { badgeClass, jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import {
   formatNumber,
   jlptHeading,
@@ -191,7 +191,7 @@ export default function JlptExplorerContent({
             <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="WaniKani level filters">
               <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-                <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(wkLevelFilter === null)}`}>
+                <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === null)}`}>
                   <FilterChipLabel label="All" count={formatNumber(items.length)} />
                 </button>
                 <button type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === "none")}`}>
@@ -209,7 +209,7 @@ export default function JlptExplorerContent({
             <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
               <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-              <button type="button" onClick={() => onSetGradeFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(gradeFilter === null)}`}>
+              <button type="button" onClick={() => onSetGradeFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(gradeFilter === null)}`}>
                 All
               </button>
               {gradeCounts.has("none") ? (
@@ -245,7 +245,7 @@ export default function JlptExplorerContent({
             <button
               type="button"
               onClick={() => onSetSelectedLevels(new Set([1, 2, 3, 4, 5]))}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
                 selectedLevels.size === 5,
               )}`}
             >
