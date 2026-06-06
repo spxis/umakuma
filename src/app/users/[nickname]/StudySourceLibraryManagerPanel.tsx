@@ -3,11 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 
+import SegmentedControl from "@/app/shared/SegmentedControl";
 import StudySourceLibraryItemsManager from "./StudySourceLibraryItemsManager";
 import {
   CUSTOM_LIBRARY_AI_PROMPT,
   SAMPLE_CUSTOM_LIBRARY_JSON,
 } from "./StudySourceControls.constants";
+
+type LibrariesTab = "upload" | "manage";
 
 type UploadedLibraryMeta = {
   name: string | null;
@@ -31,10 +34,12 @@ type Props = {
 export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const [activeTab, setActiveTab] = useState<LibrariesTab>("upload");
   const [draftLibraryId, setDraftLibraryId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState("");
   const [renameMessage, setRenameMessage] = useState<string | null>(null);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [uploadedLibraryMeta, setUploadedLibraryMeta] = useState<UploadedLibraryMeta | null>(null);
   const [isRenaming, setIsRenaming] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -75,6 +80,20 @@ export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }
   useEffect(() => {
     setRenameDraft(selectedLibrary?.name ?? "");
   }, [selectedLibrary?.id, selectedLibrary?.name]);
+
+  useEffect(() => {
+    if (!copyMessage) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setCopyMessage(null);
+    }, 2200);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [copyMessage]);
 
   async function selectLibrary(nextLibraryId: string): Promise<void> {
     const response = await fetch(librariesPath, {
@@ -178,6 +197,28 @@ export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }
     }
   }
 
+  async function handleCopySampleJson(): Promise<void> {
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(SAMPLE_CUSTOM_LIBRARY_JSON);
+      } else if (typeof document !== "undefined") {
+        const textarea = document.createElement("textarea");
+        textarea.value = SAMPLE_CUSTOM_LIBRARY_JSON;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+
+      setCopyMessage("Sample JSON copied.");
+    } catch {
+      setCopyMessage("Could not copy sample JSON.");
+    }
+  }
+
   function handleLibraryDeleted(): void {
     const remaining = libraries.filter((library) => library.id !== draftLibraryId);
     const fallback = remaining.find((library) => library.isActive) ?? remaining[0] ?? null;
@@ -203,137 +244,169 @@ export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }
   return (
     <section className="space-y-4">
       <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
-        <h1 className="text-2xl font-black text-foreground">Libraries</h1>
-        <p className="mt-1 text-sm text-foreground/70">Upload, rename, activate, and prune your custom study libraries.</p>
-        <p className="mt-1 text-xs text-foreground/60">Signed in as {wkUsername}</p>
-      </div>
-
-      <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
-        <h2 className="text-base font-black text-foreground">Choose library</h2>
-        <p className="mt-1 text-sm text-foreground/70">Set which custom library is active for study mode.</p>
-
-        <div className="mt-3 grid gap-2 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-          <div className="space-y-1">
-            <label htmlFor="library-manager-select" className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Library</label>
-            <select
-              id="library-manager-select"
-              value={draftLibraryId ?? ""}
-              onChange={(event) => {
-                setDraftLibraryId(event.target.value || null);
-                setRenameMessage(null);
-              }}
-              className="h-10 w-full rounded-xl border border-line bg-surface px-3 text-sm font-semibold text-foreground"
-              disabled={isLoading || libraries.length === 0}
-            >
-              {libraries.length === 0 ? <option value="">No custom libraries yet</option> : null}
-              {libraries.map((library) => (
-                <option key={library.id} value={library.id}>
-                  {library.name} ({library.itemCount}){library.isActive ? " • active" : ""}
-                </option>
-              ))}
-            </select>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-black text-foreground">Libraries</h1>
+            <p className="mt-1 text-sm text-foreground/70">Upload, rename, activate, and prune your custom study libraries.</p>
+            <p className="mt-1 text-xs text-foreground/60">Signed in as {wkUsername}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              void handleSetActiveLibrary();
-            }}
-            disabled={!draftLibraryId || isLoading}
-            className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            Set active library
-          </button>
-        </div>
-      </div>
-
-      <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
-        <h2 className="text-base font-black text-foreground">Rename library</h2>
-        <div className="mt-3 grid gap-2 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-          <div className="space-y-1">
-            <label htmlFor="library-manager-rename" className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Library name</label>
-            <input
-              id="library-manager-rename"
-              value={renameDraft}
-              onChange={(event) => {
-                setRenameDraft(event.target.value);
-                setRenameMessage(null);
-              }}
-              className="h-10 w-full rounded-xl border border-line bg-surface px-3 text-sm text-foreground"
-              placeholder="Custom library name"
-              disabled={!selectedLibrary}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              void renameLibrary();
-            }}
-            disabled={!selectedLibrary || isRenaming}
-            className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isRenaming ? "Saving..." : "Save name"}
-          </button>
-        </div>
-        {renameMessage ? <p className="mt-2 text-sm text-foreground/70">{renameMessage}</p> : null}
-      </div>
-
-      <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
-        <h2 className="text-base font-black text-foreground">Upload custom library</h2>
-        <div className="mt-3 space-y-3">
-          <div className="overflow-x-auto rounded-xl border border-line bg-black/[0.04] p-3">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Sample custom library JSON</p>
-            <pre className="mt-2 text-[11px] leading-relaxed text-foreground/85">{SAMPLE_CUSTOM_LIBRARY_JSON}</pre>
-          </div>
-          <div className="rounded-xl border border-dashed border-line bg-black/[0.03] p-3">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">AI prompt</p>
-            <p className="mt-2 text-[11px] leading-relaxed text-foreground/85 whitespace-pre-wrap">{CUSTOM_LIBRARY_AI_PROMPT}</p>
-          </div>
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="application/json,.json"
-            onChange={(event) => {
-              void handleUploadFile(event);
-            }}
-            className="hidden"
+          <SegmentedControl
+            ariaLabel="Libraries tabs"
+            value={activeTab}
+            onChange={(value) => setActiveTab(value as LibrariesTab)}
+            size="sm"
+            options={[
+              { value: "upload", label: "Upload" },
+              { value: "manage", label: "Manage" },
+            ]}
           />
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isUploading}
-            className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isUploading ? "Uploading..." : "Upload JSON"}
-          </button>
+        </div>
+      </div>
 
-          {uploadMessage ? <p className="text-sm text-foreground/70">{uploadMessage}</p> : null}
-          {uploadedLibraryMeta ? (
-            <div className="rounded-xl border border-line bg-black/[0.03] px-3 py-2 text-xs text-foreground/80">
-              <p className="font-semibold text-foreground">Uploaded library metadata</p>
-              <p>Name: {uploadedLibraryMeta.name ?? "Unknown"}</p>
-              <p>Source: {uploadedLibraryMeta.source ?? "Unknown"}</p>
-              <p>Language: {uploadedLibraryMeta.language ?? "Unknown"}</p>
-              <p>Items: {typeof uploadedLibraryMeta.itemCount === "number" ? uploadedLibraryMeta.itemCount : "Unknown"}</p>
+      {activeTab === "upload" ? (
+        <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
+          <h2 className="text-base font-black text-foreground">Upload custom library</h2>
+          <p className="mt-1 text-sm text-foreground/70">Keep the sample JSON on the left and upload actions on the right.</p>
+
+          <div className="mt-3 grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
+            <div className="space-y-3">
+              <div className="rounded-xl border border-line bg-black/[0.04] p-3">
+                <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Sample custom library JSON</p>
+                <pre className="mt-2 overflow-auto rounded-lg border border-line/70 bg-surface p-2 text-[11px] leading-relaxed text-foreground/85" style={{ maxHeight: "20lh" }}>
+                  {SAMPLE_CUSTOM_LIBRARY_JSON}
+                </pre>
+              </div>
+              <div className="rounded-xl border border-dashed border-line bg-black/[0.03] p-3">
+                <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">AI prompt</p>
+                <p className="mt-2 text-[11px] leading-relaxed text-foreground/85 whitespace-pre-wrap">{CUSTOM_LIBRARY_AI_PROMPT}</p>
+              </div>
             </div>
-          ) : null}
-        </div>
-      </div>
 
-      <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
-        <h2 className="text-base font-black text-foreground">Manage items</h2>
-        <p className="mt-1 text-sm text-foreground/70">Select a library and remove items or the whole library with confirmations.</p>
-
-        <div className="mt-3">
-          <StudySourceLibraryItemsManager
-            accountId={accountId}
-            libraryId={draftLibraryId}
-            libraryName={selectedLibrary?.name ?? null}
-            onLibrariesChanged={() => mutate()}
-            onLibraryDeleted={handleLibraryDeleted}
-          />
+            <div className="space-y-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="application/json,.json"
+                onChange={(event) => {
+                  void handleUploadFile(event);
+                }}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  void handleCopySampleJson();
+                }}
+                className="inline-flex h-10 w-full items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted"
+              >
+                Copy JSON
+              </button>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                className="inline-flex h-10 w-full items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isUploading ? "Uploading..." : "Upload JSON"}
+              </button>
+              {copyMessage ? <p className="text-sm text-foreground/70">{copyMessage}</p> : null}
+              {uploadMessage ? <p className="text-sm text-foreground/70">{uploadMessage}</p> : null}
+              {uploadedLibraryMeta ? (
+                <div className="rounded-xl border border-line bg-black/[0.03] px-3 py-2 text-xs text-foreground/80">
+                  <p className="font-semibold text-foreground">Uploaded library metadata</p>
+                  <p>Name: {uploadedLibraryMeta.name ?? "Unknown"}</p>
+                  <p>Source: {uploadedLibraryMeta.source ?? "Unknown"}</p>
+                  <p>Language: {uploadedLibraryMeta.language ?? "Unknown"}</p>
+                  <p>Items: {typeof uploadedLibraryMeta.itemCount === "number" ? uploadedLibraryMeta.itemCount : "Unknown"}</p>
+                </div>
+              ) : null}
+            </div>
+          </div>
         </div>
-      </div>
+      ) : null}
+
+      {activeTab === "manage" ? (
+        <>
+          <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
+            <h2 className="text-base font-black text-foreground">Choose and rename library</h2>
+            <p className="mt-1 text-sm text-foreground/70">Choose a library on the left and rename it on the right.</p>
+
+            <div className="mt-3 grid gap-3 md:grid-cols-2 md:gap-4">
+              <div className="space-y-1 rounded-xl border border-line bg-black/[0.02] p-3">
+                <label htmlFor="library-manager-select" className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Choose library</label>
+                <select
+                  id="library-manager-select"
+                  value={draftLibraryId ?? ""}
+                  onChange={(event) => {
+                    setDraftLibraryId(event.target.value || null);
+                    setRenameMessage(null);
+                  }}
+                  className="h-10 w-full rounded-xl border border-line bg-surface px-3 text-sm font-semibold text-foreground"
+                  disabled={isLoading || libraries.length === 0}
+                >
+                  {libraries.length === 0 ? <option value="">No custom libraries yet</option> : null}
+                  {libraries.map((library) => (
+                    <option key={library.id} value={library.id}>
+                      {library.name} ({library.itemCount}){library.isActive ? " • active" : ""}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => {
+                    void handleSetActiveLibrary();
+                  }}
+                  disabled={!draftLibraryId || isLoading}
+                  className="inline-flex h-10 w-full items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  Set active library
+                </button>
+              </div>
+
+              <div className="space-y-1 rounded-xl border border-line bg-black/[0.02] p-3">
+                <label htmlFor="library-manager-rename" className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Rename library</label>
+                <input
+                  id="library-manager-rename"
+                  value={renameDraft}
+                  onChange={(event) => {
+                    setRenameDraft(event.target.value);
+                    setRenameMessage(null);
+                  }}
+                  className="h-10 w-full rounded-xl border border-line bg-surface px-3 text-sm text-foreground"
+                  placeholder="Custom library name"
+                  disabled={!selectedLibrary}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    void renameLibrary();
+                  }}
+                  disabled={!selectedLibrary || isRenaming}
+                  className="inline-flex h-10 w-full items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isRenaming ? "Saving..." : "Save name"}
+                </button>
+              </div>
+            </div>
+            {renameMessage ? <p className="mt-2 text-sm text-foreground/70">{renameMessage}</p> : null}
+          </div>
+
+          <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
+            <h2 className="text-base font-black text-foreground">Manage items</h2>
+            <p className="mt-1 text-sm text-foreground/70">Select a library and remove items or the whole library with confirmations.</p>
+
+            <div className="mt-3">
+              <StudySourceLibraryItemsManager
+                accountId={accountId}
+                libraryId={draftLibraryId}
+                libraryName={selectedLibrary?.name ?? null}
+                onLibrariesChanged={() => mutate()}
+                onLibraryDeleted={handleLibraryDeleted}
+              />
+            </div>
+          </div>
+        </>
+      ) : null}
     </section>
   );
 }
