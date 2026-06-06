@@ -119,7 +119,7 @@ export default function StudyLevelFilters({
           aria-selected={viewedLevel === null}
           className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(viewedLevel === null)} ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
         >
-          All <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(queueMode === STUDY_QUEUE_TYPES.lesson ? totalLessonsInVisibleLevels : totalReviewsInVisibleLevels)})</span>
+          All <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(queueMode === STUDY_QUEUE_TYPES.lesson ? totalLessonsInVisibleLevels : totalReviewsInVisibleLevels)})</span>
         </button>
         {queueMode === STUDY_QUEUE_TYPES.lesson
           ? lessonLevelOptions.map(([level, count]) => (
@@ -132,7 +132,7 @@ export default function StudyLevelFilters({
                 aria-selected={viewedLevel === level}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(viewedLevel === level)} ${filtersLoading && viewedLevel !== level ? disabledBadgeClass() : badgeClass(viewedLevel === level)}`}
               >
-                {level} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(count)})</span>
+                {level} <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(count)})</span>
               </button>
             ))
           : reviewLevelChips.map((chip) => {
@@ -174,7 +174,7 @@ export default function StudyLevelFilters({
                   >
                     {chip.startLevel === chip.endLevel ? chip.startLevel : `${chip.startLevel}-${chip.endLevel}`}
                     {isGroupedChip ? (
-                      <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70"> ({formatNumber(count)})</span>
+                      <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(count)})</span>
                     ) : null}
                   </button>
                 );
@@ -193,7 +193,7 @@ export default function StudyLevelFilters({
                   aria-selected={isSelected}
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(isSelected)} ${disabled && !isSelected ? disabledBadgeClass() : badgeClass(isSelected)}`}
                 >
-                  {chip.level} <span className="ml-0 -mr-px align-baseline text-[10px] font-semibold tracking-normal opacity-70">({formatNumber(levelCount)})</span>
+                  {chip.level} <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(levelCount)})</span>
                 </button>
               );
             })}
