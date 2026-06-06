@@ -352,7 +352,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   const viewerMatchesAccount = Boolean(viewerEmail && linkedEmail && viewerEmail === linkedEmail);
 
   return (
-    <div className="px-2 py-3 sm:px-6 sm:py-8 lg:px-8">
+    <div className="px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
         primaryWkUsername={account.wkUsername}

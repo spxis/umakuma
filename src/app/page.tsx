@@ -330,7 +330,7 @@ export default async function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden pb-12">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
-      <main className="relative mx-auto w-full max-w-6xl px-4 pt-8 sm:px-6 lg:px-8">
+      <main className="relative mx-auto w-full max-w-6xl px-4 pt-4 sm:px-6 lg:px-8">
         <AppTopMenuRow
           viewerMenuInfo={viewerMenuInfo}
           primaryWkUsername={viewerWkUsername}
