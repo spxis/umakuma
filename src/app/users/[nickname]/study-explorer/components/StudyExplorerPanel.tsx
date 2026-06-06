@@ -211,9 +211,6 @@ export default function StudyExplorerPanel({
                 const isSelected = allTypesSelected || typeFilter === type;
                 const unavailable = hasData && !isSelected && count === 0;
                 const disabled = (filtersLoading && !isSelected) || unavailable;
-                if (unavailable) {
-                  return null;
-                }
                 return (
                   <button
                     key={type}
