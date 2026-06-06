@@ -243,23 +243,24 @@ export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }
 
   return (
     <section className="space-y-4">
+      <div className="flex justify-end">
+        <SegmentedControl
+          ariaLabel="Libraries tabs"
+          value={activeTab}
+          onChange={(value) => setActiveTab(value as LibrariesTab)}
+          size="sm"
+          options={[
+            { value: "upload", label: "Upload" },
+            { value: "manage", label: "Manage" },
+          ]}
+        />
+      </div>
+
       <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-black text-foreground">Libraries</h1>
-            <p className="mt-1 text-sm text-foreground/70">Upload, rename, activate, and prune your custom study libraries.</p>
-            <p className="mt-1 text-xs text-foreground/60">Signed in as {wkUsername}</p>
-          </div>
-          <SegmentedControl
-            ariaLabel="Libraries tabs"
-            value={activeTab}
-            onChange={(value) => setActiveTab(value as LibrariesTab)}
-            size="sm"
-            options={[
-              { value: "upload", label: "Upload" },
-              { value: "manage", label: "Manage" },
-            ]}
-          />
+        <div>
+          <h1 className="text-2xl font-black text-foreground">Libraries</h1>
+          <p className="mt-1 text-sm text-foreground/70">Upload, rename, activate, and prune your custom study libraries.</p>
+          <p className="mt-1 text-xs text-foreground/60">Signed in as {wkUsername}</p>
         </div>
       </div>
 
