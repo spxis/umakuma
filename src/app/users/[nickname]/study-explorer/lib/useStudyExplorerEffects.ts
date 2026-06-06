@@ -39,6 +39,7 @@ type Args = {
   srsCounts: QueueResponse["srsCounts"];
   srsStageCounts: Record<number, number> | undefined;
   dataItems: StudyQueueItem[] | undefined;
+  dataCached: boolean | undefined;
   dataPaginationTotal: number | undefined;
   dataCounts: StudyCounts | undefined;
   setCachedQueueData: React.Dispatch<React.SetStateAction<QueueResponse | undefined>>;
@@ -91,6 +92,7 @@ export function useStudyExplorerEffects({
   srsCounts,
   srsStageCounts,
   dataItems,
+  dataCached,
   dataPaginationTotal,
   dataCounts,
   setCachedQueueData,
@@ -349,8 +351,17 @@ export function useStudyExplorerEffects({
 
     const nextTotalRaw = dataPaginationTotal ?? fresh.length;
     const nextTotal = Math.max(nextTotalRaw, mergedVisibleCount);
-    setTotalItems((prevTotal) => (prevTotal === nextTotal ? prevTotal : nextTotal));
+    setTotalItems((prevTotal) => {
+      // Local fallback payloads do not include server cache metadata, so avoid
+      // shrinking a known-good total while SWR is transitioning keys.
+      if (dataCached === undefined && nextTotal < prevTotal) {
+        return prevTotal;
+      }
+
+      return prevTotal === nextTotal ? prevTotal : nextTotal;
+    });
   }, [
+    dataCached,
     dataItems,
     dataPaginationTotal,
     hiddenSubmittedAssignmentIds,

@@ -11,6 +11,7 @@ export type StudyViewerMode = "detail" | "flash";
 export type StudySource = "wanikani" | "custom";
 
 export type QueueResponse = {
+  cached?: boolean;
   items: StudyQueueItem[];
   counts: {
     all: number;
