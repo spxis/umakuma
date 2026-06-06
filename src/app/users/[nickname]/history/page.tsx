@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 
-import { authOptions } from "@/lib/auth";
+import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
+import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import StudyHistoryTable from "@/app/shared/StudyHistoryTable";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
@@ -24,7 +24,13 @@ export default async function UserHistoryPage({ params }: PageProps) {
 
   const account = await prisma.account.findFirst({
     where: { wkUsername: userKey },
-    select: { id: true, nickname: true, wkUsername: true },
+    select: {
+      id: true,
+      nickname: true,
+      wkUsername: true,
+      lastSyncedAt: true,
+      lastActivityAt: true,
+    },
   });
 
   if (!account) {
@@ -41,21 +47,28 @@ export default async function UserHistoryPage({ params }: PageProps) {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
-      <main className="relative mx-auto w-full max-w-6xl space-y-5">
-        <div className="flex flex-wrap items-center gap-2">
-          <Link href={`/users/${encodeURIComponent(account.wkUsername)}`} className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.12em] text-foreground">
-            Back to user page
-          </Link>
-          <Link href="/" className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.12em] text-foreground">
-            Leaderboard
-          </Link>
-        </div>
-
+    <div className="px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
+      <AppTopMenuRow
+        viewerMenuInfo={viewerMenuInfo}
+        primaryWkUsername={account.wkUsername}
+        accountId={account.id}
+        showAdminActions={isAdminEmail(viewerEmail)}
+        lastSyncedAt={account.lastSyncedAt.toISOString()}
+        lastActivityAt={account.lastActivityAt ? account.lastActivityAt.toISOString() : null}
+        className="mb-2"
+      />
+      <main className="space-y-3">
+        <section className="rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
+          <h1 className="text-xl font-black text-foreground">History</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
+            Study attempt history for {account.nickname}.
+          </p>
+        </section>
         <StudyHistoryTable
           endpoint={`/api/study/${account.id}/history`}
           showUserColumn={false}
-          heading={`${account.nickname} Study Submission History`}
+          heading="Study attempts"
+          collapsible={false}
         />
       </main>
     </div>

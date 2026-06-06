@@ -5,7 +5,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { createPortal } from "react-dom";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
-
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
 
@@ -25,6 +24,7 @@ const MENU_LIST_GROUP_CLASS = "mt-2 overflow-hidden rounded-xl border border-lin
 const MENU_LIST_ITEM_CLASS = "flex h-10 w-full items-center px-3 text-sm font-semibold text-foreground transition hover:bg-surface-muted";
 const MENU_LIST_ITEM_DIVIDER_CLASS = "border-t border-line";
 const MENU_LIST_ITEM_ACTIVE_CLASS = "bg-surface-muted text-accent";
+const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "jlpt", "stats", "news", "read"]);
 
 function getInitials(name: string | null): string {
   if (!name) {
@@ -196,7 +196,9 @@ export default function UserHeaderMenu({
       ? (searchParams?.get("dashboard") as "learn" | "stats" | "news" | "read")
       : "learn";
   const isOnResolvedUserDashboard = Boolean(
-    userBasePath && pathname && (pathname === userBasePath || pathname.startsWith(`${userBasePath}/`)),
+    userBasePath &&
+    pathname &&
+    (pathname === userBasePath || (dashboardPathSegment && DASHBOARD_ROUTE_SEGMENTS.has(dashboardPathSegment))),
   );
   const adminSignedIn = Boolean(viewerMenuInfo?.provider === "google" && viewerMenuInfo.isAdmin);
   const dashboardPageLinks = resolvedUserPageUsername

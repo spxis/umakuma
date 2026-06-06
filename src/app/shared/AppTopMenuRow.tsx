@@ -23,6 +23,8 @@ type MainLink = {
   dashboard: TabId | null;
 };
 
+const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "jlpt", "stats", "news", "read"]);
+
 function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
   return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
 }
@@ -67,8 +69,14 @@ export default function AppTopMenuRow({
   ];
   const dividerAfterLabels = new Set(["Leaderboard", "JLPT Explorer", "Read"]);
   const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
+  const routeSegment =
+    pathname && userBasePath && pathname.startsWith(`${userBasePath}/`)
+      ? pathname.slice(userBasePath.length + 1).split("/")[0] ?? null
+      : null;
   const isOnResolvedUserDashboard = Boolean(
-    pathname && userBasePath && (pathname === userBasePath || pathname.startsWith(`${userBasePath}/`)),
+    pathname &&
+    userBasePath &&
+    (pathname === userBasePath || (routeSegment && DASHBOARD_ROUTE_SEGMENTS.has(routeSegment))),
   );
 
   return (
