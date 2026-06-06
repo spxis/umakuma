@@ -342,12 +342,12 @@ export default function StudySourceControls({
       />
 
       {isModalOpen ? (
-        <div className="fixed inset-0 z-10020 flex items-center justify-center bg-black/45 p-4 sm:items-start sm:justify-end sm:pt-20 sm:pr-6" role="presentation">
+        <div className="fixed inset-0 z-10020 flex items-center justify-center bg-black/45 p-4" role="presentation">
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="custom-study-library-modal-title"
-            className="w-full max-w-2xl rounded-2xl border border-line bg-surface shadow-[0_20px_55px_rgba(8,16,36,0.28)]"
+            className="flex max-h-[75vh] min-h-115 w-[min(92vw,56rem)] min-w-[320px] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_20px_55px_rgba(8,16,36,0.28)] sm:min-h-130"
           >
             <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4">
               <div>
@@ -356,7 +356,7 @@ export default function StudySourceControls({
               </div>
             </div>
 
-            <div className="space-y-4 px-5 py-4">
+            <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-4">
               <div className="space-y-2">
                 <label htmlFor="custom-library-select" className="block text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Library</label>
                 <select
