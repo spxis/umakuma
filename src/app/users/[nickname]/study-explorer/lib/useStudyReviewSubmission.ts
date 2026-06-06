@@ -14,6 +14,7 @@ import { studyItemEnglishTitle } from "./studyExplorerUtils";
 
 const POST_SUBMIT_DELAY_MS = 250;
 const REVIEW_SUBMIT_TIMEOUT_MS = 10000;
+const LESSON_AUTO_ADVANCE_DELAY_MS = 1000;
 
 type Args = {
   accountId: string;
@@ -255,7 +256,7 @@ export function useStudyReviewSubmission({
 
   const submitLessonStart = useCallback(
     async (assignmentId: number) => {
-      const { itemForSubmit } = getSubmissionContext(assignmentId);
+      const { itemForSubmit, nextFocusedItem } = getSubmissionContext(assignmentId);
 
       onSetSubmitInFlight({
         assignmentId,
@@ -296,6 +297,16 @@ export function useStudyReviewSubmission({
         });
         onSetReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: "lesson-started" }));
         onSetHasPendingStudySubmissions(true);
+
+        await new Promise<void>((resolve) => {
+          window.setTimeout(resolve, LESSON_AUTO_ADVANCE_DELAY_MS);
+        });
+
+        onSetSelectedId((currentSelectedId) =>
+          currentSelectedId === itemForSubmit?.subjectId
+            ? (nextFocusedItem?.subjectId ?? null)
+            : currentSelectedId,
+        );
       } catch (submitError) {
         onSetSubmitFeedback({
           kind: "error",
@@ -320,6 +331,7 @@ export function useStudyReviewSubmission({
       getSubmissionContext,
       onSetHasPendingStudySubmissions,
       onSetHiddenSubmittedAssignmentIds,
+      onSetSelectedId,
       onSetModalSessionItemByAssignmentId,
       onSetRevealedAssignmentIds,
       onSetReviewOutcomeByAssignmentId,
