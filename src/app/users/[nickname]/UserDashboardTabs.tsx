@@ -153,7 +153,7 @@ export default function UserDashboardTabs({
     const nextUrl = `${nextPath}${nextQuery ? `?${nextQuery}` : ""}${window.location.hash}`;
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     if (nextUrl !== currentUrl) {
-      window.history.replaceState(null, "", nextUrl);
+      window.history.pushState(null, "", nextUrl);
     }
 
     window.dispatchEvent(new CustomEvent("wr:dashboard-tab-change", { detail: { tab: activeTab } }));
