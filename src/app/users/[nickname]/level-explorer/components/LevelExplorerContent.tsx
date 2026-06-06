@@ -9,6 +9,22 @@ import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_JLPT_MIX_LEVELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS } from "./LevelExplorer.constants";
 import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
 
+function wkStatusToneClass(status: (typeof SRS_FILTER_ALLOWED)[number], active: boolean): string {
+  if (status === LEVEL_SRS_FILTERS.apprentice) {
+    return active ? "border-pink-300 bg-pink-100 text-pink-700" : "border-pink-200 bg-pink-50/70 text-pink-700 hover:bg-pink-100";
+  }
+  if (status === LEVEL_SRS_FILTERS.guru) {
+    return active ? "border-violet-300 bg-violet-100 text-violet-700" : "border-violet-200 bg-violet-50/70 text-violet-700 hover:bg-violet-100";
+  }
+  if (status === LEVEL_SRS_FILTERS.master) {
+    return active ? "border-sky-300 bg-sky-100 text-sky-700" : "border-sky-200 bg-sky-50/70 text-sky-700 hover:bg-sky-100";
+  }
+  if (status === LEVEL_SRS_FILTERS.enlightened) {
+    return active ? "border-amber-300 bg-amber-100 text-amber-700" : "border-amber-200 bg-amber-50/70 text-amber-700 hover:bg-amber-100";
+  }
+  return active ? "border-line bg-surface-muted text-foreground" : "border-line bg-surface text-foreground/75 hover:bg-surface-muted";
+}
+
 export default function LevelExplorerContent({
   accountId,
   levelOptions,
@@ -331,7 +347,7 @@ export default function LevelExplorerContent({
                 const active = srsFilter === status;
                 if (disabled && !active) return null;
                 return (
-                  <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : badgeClass(active)}`}>
+                  <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? badgeClass(active) : wkStatusToneClass(status, active)}`}>
                     <FilterChipLabel label={srsFilterButtonLabel(status)} count={count} />
                   </button>
                 );
