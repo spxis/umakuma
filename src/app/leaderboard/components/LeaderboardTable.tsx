@@ -29,49 +29,53 @@ type Props = {
   viewerWkUsername: string | null;
 };
 
+function createDefaultSortByTab(): Record<LeaderboardTab, SortState> {
+  return {
+    overall: TAB_CONFIG.overall.defaultSort,
+    radicals: TAB_CONFIG.radicals.defaultSort,
+    kanji: TAB_CONFIG.kanji.defaultSort,
+    vocabulary: TAB_CONFIG.vocabulary.defaultSort,
+  };
+}
+
 export default function LeaderboardTable({
   rows,
   canViewAllUserPages,
   viewerWkUsername,
 }: Props) {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<LeaderboardTab>(() => {
-    if (typeof window === "undefined") {
-      return "overall";
-    }
+  const [activeTab, setActiveTab] = useState<LeaderboardTab>("overall");
+  const [sortByTab, setSortByTab] = useState<Record<LeaderboardTab, SortState>>(
+    createDefaultSortByTab,
+  );
 
+  const expandedStorageKey = "wr:leaderboard:expanded-rows";
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [showItemSpreadPanel, setShowItemSpreadPanel] = useState(true);
+  const [showLevelProgressPanel, setShowLevelProgressPanel] = useState(true);
+  const [hasHydratedClientState, setHasHydratedClientState] = useState(false);
+
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tabFromQuery = params.get("tab");
+    const sortFromQuery = params.get("sort");
+    const dirFromQuery = params.get("dir");
+
+    let nextActiveTab: LeaderboardTab = "overall";
     if (isLeaderboardTab(tabFromQuery)) {
-      return tabFromQuery;
-    }
-
-    try {
-      const tabFromStorage = window.localStorage.getItem("wr:leaderboard:active-tab");
-      if (isLeaderboardTab(tabFromStorage)) {
-        return tabFromStorage;
+      nextActiveTab = tabFromQuery;
+    } else {
+      try {
+        const tabFromStorage = window.localStorage.getItem("wr:leaderboard:active-tab");
+        if (isLeaderboardTab(tabFromStorage)) {
+          nextActiveTab = tabFromStorage;
+        }
+      } catch {
+        // Ignore storage errors in restricted browsing modes.
       }
-    } catch {
-      // Ignore storage errors in restricted browsing modes.
     }
 
-    return "overall";
-  });
-
-  const [sortByTab, setSortByTab] = useState<Record<LeaderboardTab, SortState>>(() => {
-    const defaults: Record<LeaderboardTab, SortState> = {
-      overall: TAB_CONFIG.overall.defaultSort,
-      radicals: TAB_CONFIG.radicals.defaultSort,
-      kanji: TAB_CONFIG.kanji.defaultSort,
-      vocabulary: TAB_CONFIG.vocabulary.defaultSort,
-    };
-
-    if (typeof window === "undefined") {
-      return defaults;
-    }
-
-    let output = { ...defaults };
-
+    let nextSortByTab = createDefaultSortByTab();
     try {
       const stored = window.localStorage.getItem("wr:leaderboard:sort-by-tab");
       if (stored) {
@@ -82,21 +86,16 @@ export default function LeaderboardTable({
             continue;
           }
 
-          output[tab] = { key: candidate.key, direction: candidate.direction };
+          nextSortByTab[tab] = { key: candidate.key, direction: candidate.direction };
         }
       }
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
 
-    const params = new URLSearchParams(window.location.search);
-    const tabFromQuery = params.get("tab");
-    const sortFromQuery = params.get("sort");
-    const dirFromQuery = params.get("dir");
-
     if (isLeaderboardTab(tabFromQuery) && isSortKey(sortFromQuery) && isSortDirection(dirFromQuery)) {
-      output = {
-        ...output,
+      nextSortByTab = {
+        ...nextSortByTab,
         [tabFromQuery]: {
           key: sortFromQuery,
           direction: dirFromQuery,
@@ -104,51 +103,30 @@ export default function LeaderboardTable({
       };
     }
 
-    return output;
-  });
-
-  const expandedStorageKey = "wr:leaderboard:expanded-rows";
-  const [expanded, setExpanded] = useState<Set<string>>(() => {
-    if (typeof window === "undefined") {
-      return new Set();
-    }
-
     try {
-      const stored = window.localStorage.getItem(expandedStorageKey);
-      if (!stored) {
-        return new Set();
+      const expandedStored = window.localStorage.getItem(expandedStorageKey);
+      if (expandedStored) {
+        const parsed = JSON.parse(expandedStored) as string[];
+        if (Array.isArray(parsed)) {
+          setExpanded(new Set(parsed));
+        }
       }
-
-      const parsed = JSON.parse(stored) as string[];
-      return Array.isArray(parsed) ? new Set(parsed) : new Set();
     } catch {
-      return new Set();
-    }
-  });
-
-  const [showItemSpreadPanel, setShowItemSpreadPanel] = useState(() => {
-    if (typeof window === "undefined") {
-      return true;
+      setExpanded(new Set());
     }
 
     try {
-      return window.localStorage.getItem("wr:leaderboard:item-spread-open") !== "0";
+      setShowItemSpreadPanel(window.localStorage.getItem("wr:leaderboard:item-spread-open") !== "0");
+      setShowLevelProgressPanel(window.localStorage.getItem("wr:leaderboard:level-progress-open") !== "0");
     } catch {
-      return true;
-    }
-  });
-
-  const [showLevelProgressPanel, setShowLevelProgressPanel] = useState(() => {
-    if (typeof window === "undefined") {
-      return true;
+      setShowItemSpreadPanel(true);
+      setShowLevelProgressPanel(true);
     }
 
-    try {
-      return window.localStorage.getItem("wr:leaderboard:level-progress-open") !== "0";
-    } catch {
-      return true;
-    }
-  });
+    setActiveTab(nextActiveTab);
+    setSortByTab(nextSortByTab);
+    setHasHydratedClientState(true);
+  }, []);
 
   const validRowIds = useMemo(() => new Set(rows.map((row) => row.id)), [rows]);
   const [adminAuthorized, setAdminAuthorized] = useState(false);
@@ -175,14 +153,22 @@ export default function LeaderboardTable({
   );
 
   useEffect(() => {
+    if (!hasHydratedClientState) {
+      return;
+    }
+
     try {
       window.localStorage.setItem(expandedStorageKey, JSON.stringify(Array.from(filteredExpanded)));
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }
-  }, [expandedStorageKey, filteredExpanded]);
+  }, [expandedStorageKey, filteredExpanded, hasHydratedClientState]);
 
   useEffect(() => {
+    if (!hasHydratedClientState) {
+      return;
+    }
+
     try {
       window.localStorage.setItem("wr:leaderboard:active-tab", activeTab);
       window.localStorage.setItem("wr:leaderboard:sort-by-tab", JSON.stringify(sortByTab));
@@ -197,7 +183,7 @@ export default function LeaderboardTable({
     const hash = window.location.hash || "";
     const next = `${window.location.pathname}?${params.toString()}${hash}`;
     window.history.replaceState(window.history.state, "", next);
-  }, [activeTab, sortByTab]);
+  }, [activeTab, hasHydratedClientState, sortByTab]);
 
   const persistPanelState = (key: string, value: boolean, setter: (next: boolean) => void) => {
     setter(value);

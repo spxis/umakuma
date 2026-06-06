@@ -113,6 +113,7 @@ export function useStudyExplorerEffects({
   const hasHydratedSrsStageFilterRef = useRef(false);
   const hiddenSubmittedCountRef = useRef(hiddenSubmittedAssignmentIds.size);
   const loadedItemsRef = useRef(loadedItems);
+  const totalItemsRef = useRef(totalItems);
 
   useEffect(() => {
     hiddenSubmittedCountRef.current = hiddenSubmittedAssignmentIds.size;
@@ -121,6 +122,10 @@ export function useStudyExplorerEffects({
   useEffect(() => {
     loadedItemsRef.current = loadedItems;
   }, [loadedItems]);
+
+  useEffect(() => {
+    totalItemsRef.current = totalItems;
+  }, [totalItems]);
   useEffect(() => {
     const raw = window.localStorage.getItem(countsStorageKey);
     if (!raw) return;
@@ -351,15 +356,15 @@ export function useStudyExplorerEffects({
 
     const nextTotalRaw = dataPaginationTotal ?? fresh.length;
     const nextTotal = Math.max(nextTotalRaw, mergedVisibleCount);
-    setTotalItems((prevTotal) => {
-      // Local fallback payloads do not include server cache metadata, so avoid
-      // shrinking a known-good total while SWR is transitioning keys.
-      if (dataCached === undefined && nextTotal < prevTotal) {
-        return prevTotal;
-      }
+    const currentTotal = totalItemsRef.current;
+    // Local fallback payloads do not include server cache metadata, so avoid
+    // shrinking a known-good total while SWR is transitioning keys.
+    const stableTotal = dataCached === undefined && nextTotal < currentTotal ? currentTotal : nextTotal;
 
-      return prevTotal === nextTotal ? prevTotal : nextTotal;
-    });
+    if (stableTotal !== currentTotal) {
+      totalItemsRef.current = stableTotal;
+      setTotalItems(stableTotal);
+    }
   }, [
     dataCached,
     dataItems,
