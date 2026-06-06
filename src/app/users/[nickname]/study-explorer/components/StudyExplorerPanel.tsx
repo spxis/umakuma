@@ -116,9 +116,8 @@ export default function StudyExplorerPanel({
   const totalReviewsInVisibleLevels = Object.values(reviewLevelCounts).reduce((sum, count) => sum + count, 0);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
-  const studyHeaderLabel = viewedLevel === null
-    ? `Study - ${studySourceHeaderLabel}`
-    : `Study - ${studySourceHeaderLabel} (${viewedLevel})`;
+  const studyLevelHeaderLabel = viewedLevel === null ? "All levels" : `L${viewedLevel}`;
+  const studyHeaderLabel = `Study - ${studySourceHeaderLabel} (${studyLevelHeaderLabel})`;
   const hasMoreMatchingItems = hasMorePages && filteredItems.length < allTypeCount;
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
   const hideControlsDuringInitialLoad = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
