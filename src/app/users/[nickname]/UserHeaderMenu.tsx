@@ -24,7 +24,7 @@ const MENU_LIST_GROUP_CLASS = "mt-2 overflow-hidden rounded-xl border border-lin
 const MENU_LIST_ITEM_CLASS = "flex h-10 w-full items-center px-3 text-sm font-semibold text-foreground transition hover:bg-surface-muted";
 const MENU_LIST_ITEM_DIVIDER_CLASS = "border-t border-line";
 const MENU_LIST_ITEM_ACTIVE_CLASS = "bg-surface-muted text-accent";
-const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "jlpt", "stats", "news", "read"]);
+const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
 
 function getInitials(name: string | null): string {
   if (!name) {
@@ -44,7 +44,7 @@ function getInitials(name: string | null): string {
   return `${parts[0]?.[0] ?? ""}${parts[1]?.[0] ?? ""}`.toUpperCase();
 }
 
-function isDashboardMenuTab(value: string | null): value is "learn" | "stats" | "news" | "read" {
+function isDashboardMenuTab(value: string | null): value is "learn" | "wk" | "jlpt" | "stats" | "news" | "read" {
   return value === "learn" || value === "wk" || value === "jlpt" || value === "stats" || value === "news" || value === "read";
 }
 
@@ -189,7 +189,7 @@ export default function UserHeaderMenu({
   const dashboardPathSegment = userBasePath && pathname?.startsWith(`${userBasePath}/`)
     ? pathname.slice(userBasePath.length + 1).split("/")[0] ?? null
     : null;
-  const normalizedDashboardPathSegment = dashboardPathSegment === "study" ? "learn" : dashboardPathSegment;
+  const normalizedDashboardPathSegment = dashboardPathSegment === "study" ? "learn" : dashboardPathSegment === "wk-explorer" ? "wk" : dashboardPathSegment === "jlpt-explorer" ? "jlpt" : dashboardPathSegment;
   const currentDashboardTab = normalizedDashboardPathSegment
     ? normalizedDashboardPathSegment
     : isDashboardMenuTab(searchParams?.get("dashboard") ?? null)
@@ -204,8 +204,8 @@ export default function UserHeaderMenu({
   const dashboardPageLinks = resolvedUserPageUsername
     ? [
         { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/study` },
-        { label: "WK Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/wk` },
-        { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt` },
+        { label: "WK Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/wk-explorer` },
+        { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt-explorer` },
         { label: "History", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/history` },
         { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },
         { label: "News", dashboard: "news", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news` },

@@ -142,7 +142,7 @@ export default function StudyExplorerPanel({
   const handleResetFilters = () => { onClearAllFilters(); setFiltersOpen(true); openAllMobileFilterSections(); };
   return (
     <>
-      <section className="overflow-hidden rounded-4xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+      <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface/90 px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <div>
@@ -294,7 +294,7 @@ export default function StudyExplorerPanel({
         </div>
       </header>
       </section>
-      <section className="overflow-hidden rounded-4xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+      <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       {displayErrorMessage ? (
         <div className="px-5 pt-4">
           <div className="rounded-2xl border border-red-300/70 bg-red-50 px-4 py-3 text-center text-sm font-semibold text-red-700">

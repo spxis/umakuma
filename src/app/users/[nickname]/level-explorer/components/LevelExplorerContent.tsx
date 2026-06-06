@@ -251,7 +251,7 @@ export default function LevelExplorerContent({
   const mobileFilterSectionClass = filtersCollapsed ? "hidden" : "block";
   return (
     <>
-    <section id="explorer" className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+    <section id="explorer" className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="flex flex-col gap-3 border-b border-line bg-surface/90 px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <div>
@@ -434,7 +434,7 @@ export default function LevelExplorerContent({
         </div>
       </div>
     </section>
-    <section className="mt-3 overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+    <section className="mt-3 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       {loading ? <p className="px-5 py-4 text-sm text-foreground/70">Loading level data...</p> : null}
       {searchMatchedSubjectIds ? (
         <p className="px-5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">

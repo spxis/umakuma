@@ -52,7 +52,7 @@ export default async function SignOutPage({ searchParams }: PageProps) {
           Back to leaderboard
         </Link>
 
-        <section className="animate-enter rounded-4xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
+        <section className="animate-enter rounded-2xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
           <div className="mb-5 inline-flex rounded-full border border-line bg-surface-muted p-1">
             <Link
               href="/logout"

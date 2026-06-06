@@ -336,7 +336,7 @@ export default async function Home() {
           showAdminActions={canViewAllUserPages}
           className="mb-2"
         />
-        <section className="animate-enter rounded-4xl border border-line/80 bg-surface/85 p-5 shadow-[0_24px_80px_rgba(15,111,255,0.17)] backdrop-blur sm:p-8">
+        <section className="animate-enter rounded-2xl border border-line/80 bg-surface/85 p-5 shadow-[0_24px_80px_rgba(15,111,255,0.17)] backdrop-blur sm:p-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.25em] text-accent">
@@ -391,7 +391,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="animate-enter animate-enter-delay-1 mt-6 overflow-hidden rounded-4xl border border-line bg-linear-to-br from-amber-100/90 via-orange-100/80 to-rose-100/80 shadow-[0_24px_70px_rgba(237,137,54,0.2)]">
+        <section className="animate-enter animate-enter-delay-1 mt-6 overflow-hidden rounded-2xl border border-line bg-linear-to-br from-amber-100/90 via-orange-100/80 to-rose-100/80 shadow-[0_24px_70px_rgba(237,137,54,0.2)]">
           <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-[1.3fr,0.9fr] lg:items-end">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-800/90">
@@ -449,7 +449,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="animate-enter animate-enter-delay-2 mt-6 overflow-hidden rounded-4xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+        <section className="animate-enter animate-enter-delay-2 mt-6 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
           {runtimeError ? (
             <div className="border-b border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-900">
               <p className="font-bold uppercase tracking-[0.08em]">Runtime error detected</p>

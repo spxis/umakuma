@@ -28,7 +28,7 @@ export default function NewsSiteLinks({
 }: Props) {
   if (loading) {
     return (
-      <section className="rounded-[1.75rem] border border-dashed border-line bg-surface-muted p-6 text-center text-sm font-semibold uppercase tracking-[0.14em] text-foreground/60">
+      <section className="rounded-2xl border border-dashed border-line bg-surface-muted p-6 text-center text-sm font-semibold uppercase tracking-[0.14em] text-foreground/60">
         Scanning page for article links…
       </section>
     );
@@ -36,7 +36,7 @@ export default function NewsSiteLinks({
 
   if (error) {
     return (
-      <section className="flex items-start justify-between gap-3 rounded-[1.75rem] border border-hot/60 bg-hot/10 p-4 text-sm text-foreground">
+      <section className="flex items-start justify-between gap-3 rounded-2xl border border-hot/60 bg-hot/10 p-4 text-sm text-foreground">
         <span>{error}</span>
         <button
           type="button"
@@ -54,7 +54,7 @@ export default function NewsSiteLinks({
   }
 
   return (
-    <section className="space-y-3 rounded-[1.75rem] border border-line/80 bg-surface/85 p-5 shadow-[0_18px_60px_-40px_rgba(15,111,255,0.4)]">
+    <section className="space-y-3 rounded-2xl border border-line/80 bg-surface/85 p-5 shadow-[0_18px_60px_-40px_rgba(15,111,255,0.4)]">
       <header className="flex items-start justify-between gap-3">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">

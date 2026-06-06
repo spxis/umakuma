@@ -30,7 +30,7 @@ export default function AppError({ error, reset }: AppErrorProps) {
   return (
     <div className="relative min-h-screen overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
       <main className="relative mx-auto w-full max-w-3xl">
-        <section className="rounded-[2rem] border border-red-300 bg-red-50/95 p-6 shadow-[0_16px_48px_rgba(220,38,38,0.15)] sm:p-8">
+        <section className="rounded-2xl border border-red-300 bg-red-50/95 p-6 shadow-[0_16px_48px_rgba(220,38,38,0.15)] sm:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.12em] text-red-700">Something went wrong</p>
           <h1 className="mt-2 text-3xl font-black text-red-900 sm:text-4xl">We hit an unexpected error</h1>
           <p className="mt-3 text-base text-red-900/80 sm:text-lg">

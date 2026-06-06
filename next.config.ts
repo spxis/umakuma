@@ -6,6 +6,18 @@ const nextConfig: NextConfig = {
 			source: "/users/:nickname/study",
 			destination: "/users/:nickname?dashboard=learn",
 		},
+			{
+				source: "/users/:nickname/wk-explorer",
+				destination: "/users/:nickname?dashboard=wk",
+			},
+			{
+				source: "/users/:nickname/jlpt-explorer",
+				destination: "/users/:nickname?dashboard=jlpt",
+			},
+			{
+				source: "/users/:nickname/:dashboard(wk|jlpt)",
+				destination: "/users/:nickname?dashboard=:dashboard",
+			},
 		{
 			source: "/users/:nickname/:dashboard(learn|stats|news|read)",
 			destination: "/users/:nickname?dashboard=:dashboard",

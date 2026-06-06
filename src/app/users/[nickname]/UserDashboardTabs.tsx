@@ -16,7 +16,7 @@ function isDashboardTabId(value: string | null): value is TabId {
 }
 
 function dashboardPathSegmentForTab(tab: TabId): string {
-  return tab === "learn" ? "study" : tab;
+  return tab === "learn" ? "study" : tab === "wk" ? "wk-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab;
 }
 
 function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): TabId | null {
@@ -31,6 +31,12 @@ function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): 
   const segment = pathname.slice(userBasePath.length + 1).split("/")[0] ?? null;
   if (segment === "study") {
     return "learn";
+  }
+  if (segment === "wk-explorer") {
+    return "wk";
+  }
+  if (segment === "jlpt-explorer") {
+    return "jlpt";
   }
   return isDashboardTabId(segment) ? segment : null;
 }
@@ -208,7 +214,7 @@ export default function UserDashboardTabs({
 
       {activeTab === "stats" ? (
         <section className="mt-4 space-y-4" role="tabpanel">
-          <section className="rounded-4xl border border-line bg-surface/90 px-5 py-4 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+          <section className="rounded-2xl border border-line bg-surface/90 px-5 py-4 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
             <h2 className="text-xl font-black text-foreground">Stats</h2>
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
               Progress snapshot and distribution at a glance.

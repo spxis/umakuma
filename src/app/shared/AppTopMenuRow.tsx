@@ -23,7 +23,7 @@ type MainLink = {
   dashboard: TabId | null;
 };
 
-const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "jlpt", "stats", "news", "read"]);
+const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
 
 function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
   return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
@@ -34,7 +34,7 @@ function userTabHref(username: string | null, tab: "learn" | "wk" | "jlpt" | "st
     return "/join";
   }
 
-  const segment = tab === "learn" ? "study" : tab;
+  const segment = tab === "learn" ? "study" : tab === "wk" ? "wk-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab;
   return `/users/${encodeURIComponent(username)}/${segment}`;
 }
 

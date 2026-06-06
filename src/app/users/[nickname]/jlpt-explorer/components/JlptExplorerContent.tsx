@@ -160,7 +160,7 @@ export default function JlptExplorerContent({
   const mobileFilterSectionClass = mobileFiltersOpen ? "block" : "hidden";
   return (
     <>
-    <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+    <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface/90 px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <div>
@@ -289,7 +289,7 @@ export default function JlptExplorerContent({
         </div>
       </header>
     </section>
-    <section className="mt-3 overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+    <section className="mt-3 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <div className="p-5">
         {isLoadingData ? (
           <div className="mb-3 rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/75">

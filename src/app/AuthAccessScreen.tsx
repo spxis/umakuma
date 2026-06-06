@@ -100,7 +100,7 @@ export default async function AuthAccessScreen({
           Back to leaderboard
         </Link>
 
-        <section className="animate-enter rounded-4xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
+        <section className="animate-enter rounded-2xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
           {accessDenied ? (
             <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
               You do not have access to that user page yet. Use your invite code to continue.

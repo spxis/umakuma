@@ -73,7 +73,7 @@ export default function UserProgressPanels({
 
   return (
     <>
-      <section className="rounded-[2rem] border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.08)] sm:p-8">
+      <section className="rounded-2xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.08)] sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-3xl font-black text-foreground">Item Spread</h2>
           <div className="flex items-center gap-2">
@@ -122,7 +122,7 @@ export default function UserProgressPanels({
         ) : null}
       </section>
 
-      <section className="rounded-[2rem] border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.08)] sm:p-8">
+      <section className="rounded-2xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.08)] sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-3xl font-black text-foreground">Level Progress</h2>
           <div className="flex items-center gap-2">

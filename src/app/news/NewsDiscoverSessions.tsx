@@ -28,7 +28,7 @@ export default function NewsDiscoverSessions({
   }
 
   return (
-    <section className="space-y-3 rounded-[1.75rem] border border-line/80 bg-surface/85 p-5 shadow-[0_18px_60px_-40px_rgba(15,111,255,0.4)]">
+    <section className="space-y-3 rounded-2xl border border-line/80 bg-surface/85 p-5 shadow-[0_18px_60px_-40px_rgba(15,111,255,0.4)]">
       <header className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent">Scanned sites</p>
