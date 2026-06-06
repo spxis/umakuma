@@ -67,7 +67,7 @@ export default function AppTopMenuRow({
     { label: "News", href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
     { label: "Read", href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },
   ];
-  const dividerAfterLabels = new Set(["Leaderboard", "JLPT Explorer", "Read"]);
+  const dividerAfterLabels = new Set(["Leaderboard", "JLPT Explorer"]);
   const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
   const routeSegment =
     pathname && userBasePath && pathname.startsWith(`${userBasePath}/`)
