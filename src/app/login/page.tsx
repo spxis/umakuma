@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function LoginPage() {
-  redirect("/join?flow=login");
+  redirect("/join?flow=google");
 }

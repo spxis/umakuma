@@ -155,7 +155,7 @@ export default function InviteCodeAccessPanel({
       ) : null}
 
       <p className="mt-3 text-xs text-foreground/65">
-        Prefer Google? Continue to <Link href={postLoginCallbackUrl} className="font-semibold text-accent underline underline-offset-2">signup</Link> and sign in there.
+        Prefer Google? Continue to <Link href={postLoginCallbackUrl} className="font-semibold text-accent underline underline-offset-2">Google sign-in</Link>.
       </p>
     </section>
   );

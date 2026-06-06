@@ -384,7 +384,7 @@ export default function UserHeaderMenu({
                 ) : (
                   <>
                     <Link
-                      href="/join?flow=login"
+                      href="/join?flow=google"
                       className={MENU_BUTTON_CLASS}
                     >
                       Login with Google
