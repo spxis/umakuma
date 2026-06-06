@@ -3,6 +3,7 @@ import { allBadgeClass, badgeClass, disabledBadgeClass, formatNumber, srsFilterB
 import { useLevelExplorerResetSelection } from "../lib/useLevelExplorerResetSelection";
 import { JLPT_FILTER_ALLOWED, LEVEL_JLPT_FILTERS, LEVEL_REVIEW_TIMING_FILTERS, LEVEL_SRS_FILTERS, REVIEW_TIMING_ALLOWED, SRS_FILTER_ALLOWED } from "../lib/levelExplorerState";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
+import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_JLPT_MIX_LEVELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS } from "./LevelExplorer.constants";
@@ -241,15 +242,13 @@ export default function LevelExplorerContent({
             <h2 className="text-xl font-black text-foreground">WaniKani Explorer</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Select one level at a time</p>
           </div>
-          <button
-            type="button"
-            onClick={() => onSetFiltersCollapsed(!filtersCollapsed)}
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold leading-none text-foreground"
-            aria-expanded={!filtersCollapsed}
-            aria-controls="wk-filters-panel"
-          >
-            {filtersCollapsed ? "Show filters" : "Hide filters"}
-          </button>
+          <ExplorerFilterToggleButton
+            expanded={!filtersCollapsed}
+            onToggle={() => onSetFiltersCollapsed(!filtersCollapsed)}
+            controlsId="wk-filters-panel"
+            showLabel="Show filters"
+            hideLabel="Hide filters"
+          />
         </div>
         <div id="wk-filters-panel" className={`space-y-3 ${mobileFilterSectionClass}`}>
           <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">

@@ -11,6 +11,7 @@ import {
 import { JLPT_EXPLORER_TEXT } from "./JlptExplorer.constants";
 import { jlptStatusClass } from "../lib/jlptExplorerContentHelpers";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
+import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
 import type {
@@ -168,15 +169,13 @@ export default function JlptExplorerContent({
               <FilterChipLabel label="Browse all N1-N5 kanji" count={`${formatNumber(items.length)} total`} />
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setMobileFiltersOpen((open) => !open)}
-            aria-expanded={mobileFiltersOpen}
-            aria-controls="jlpt-filters-panel"
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold leading-none text-foreground"
-          >
-            {mobileFiltersOpen ? JLPT_EXPLORER_TEXT.hideFilters : JLPT_EXPLORER_TEXT.showFilters}
-          </button>
+          <ExplorerFilterToggleButton
+            expanded={mobileFiltersOpen}
+            onToggle={() => setMobileFiltersOpen((open) => !open)}
+            controlsId="jlpt-filters-panel"
+            showLabel={JLPT_EXPLORER_TEXT.showFilters}
+            hideLabel={JLPT_EXPLORER_TEXT.hideFilters}
+          />
         </div>
         <div id="jlpt-filters-panel" className={`mt-3 ${mobileFilterSectionClass}`}>
           <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">

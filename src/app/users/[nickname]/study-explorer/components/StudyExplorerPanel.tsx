@@ -38,6 +38,7 @@ import type { StudyExplorerPanelProps } from "./StudyExplorerPanel.types";
 import { useStudyMobileFilterSections } from "./useStudyMobileFilterSections";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
+import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 export default function StudyExplorerPanel({
@@ -158,17 +159,13 @@ export default function StudyExplorerPanel({
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setFiltersOpen((open) => !open)}
-              aria-expanded={filtersOpen}
-              aria-label={filtersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}
-              aria-controls="study-filters-panel"
-              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold leading-none text-foreground"
-            >
-              <span>{filtersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}</span>
-              <span aria-hidden="true" className="text-[10px] leading-none">{filtersOpen ? "▴" : "▾"}</span>
-            </button>
+            <ExplorerFilterToggleButton
+              expanded={filtersOpen}
+              onToggle={() => setFiltersOpen((open) => !open)}
+              controlsId="study-filters-panel"
+              showLabel={STUDY_PANEL_TEXT.showFilters}
+              hideLabel={STUDY_PANEL_TEXT.hideFilters}
+            />
           </div>
         </div>
         <div id="study-filters-panel" className={`mt-3 rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)] ${mobileFilterSectionClass}`}>
