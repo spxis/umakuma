@@ -79,9 +79,9 @@ export const SRS_BUCKET_SHORT_LABELS: Record<SrsBucket, string> = {
   [SRS_BUCKETS.apprentice]: "APPR",
   [SRS_BUCKETS.guru]: "GURU",
   [SRS_BUCKETS.master]: "MASTER",
-  [SRS_BUCKETS.enlightened]: "ENL",
-  [SRS_BUCKETS.burned]: "BURN",
-  [SRS_BUCKETS.locked]: "LOCK",
+  [SRS_BUCKETS.enlightened]: "ENLIGHT",
+  [SRS_BUCKETS.burned]: "BURNED",
+  [SRS_BUCKETS.locked]: "LOCKED",
   [SRS_BUCKETS.unknown]: "UNK",
 };
 

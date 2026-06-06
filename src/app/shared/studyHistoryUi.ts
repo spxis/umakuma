@@ -4,8 +4,7 @@ import {
   SRS_BUCKET_SHORT_LABELS,
   SRS_BUCKET_TITLE_LABELS,
 } from "@/lib/domainConstants";
-import { srsFilterButtonLabel } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplayClasses";
-import { STUDY_SRS_FILTERS, studySrsToneClass } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
+import { studySrsToneClass } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
 
 type SrsBucketUiMeta = {
   shortLabel: string;
@@ -13,22 +12,22 @@ type SrsBucketUiMeta = {
 
 const SRS_BUCKET_UI_META: Record<HistorySrsBucket, SrsBucketUiMeta> = {
   [SRS_BUCKETS.apprentice]: {
-    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.apprentice),
+    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.apprentice],
   },
   [SRS_BUCKETS.guru]: {
-    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.guru),
+    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.guru],
   },
   [SRS_BUCKETS.master]: {
-    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.master),
+    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.master],
   },
   [SRS_BUCKETS.enlightened]: {
-    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.enlightened),
+    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.enlightened],
   },
   [SRS_BUCKETS.burned]: {
-    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.burned),
+    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.burned],
   },
   [SRS_BUCKETS.locked]: {
-    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.locked),
+    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.locked],
   },
   [SRS_BUCKETS.unknown]: {
     shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.unknown],
