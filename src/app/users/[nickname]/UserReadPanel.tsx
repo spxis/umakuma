@@ -23,7 +23,7 @@ export default function UserReadPanel({
   const [activeTab, setActiveTab] = useState<ReadPanelTab>(initialTab);
 
   return (
-    <section className="space-y-4 rounded-2xl border border-line bg-surface-muted p-4 sm:p-6">
+    <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-black text-foreground">News</h2>

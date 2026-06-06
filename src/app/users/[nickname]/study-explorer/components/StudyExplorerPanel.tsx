@@ -142,7 +142,7 @@ export default function StudyExplorerPanel({
   return (
     <>
       <section className="overflow-hidden rounded-4xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
-      <header className="border-b border-line bg-surface-muted px-5 py-4">
+      <header className="border-b border-line bg-surface/90 px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <div>
             <button

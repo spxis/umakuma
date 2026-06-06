@@ -395,7 +395,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   }
 
   return (
-    <section className="space-y-4 rounded-2xl border border-line bg-surface-muted p-4 sm:p-6">
+    <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
       <div>
         <h2 className="text-xl font-black text-foreground">Read</h2>
         <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
