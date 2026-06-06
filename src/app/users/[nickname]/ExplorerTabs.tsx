@@ -301,32 +301,30 @@ export default function ExplorerTabs({
       <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
         <div className="w-full overflow-x-auto md:col-start-2 md:overflow-visible">
           <div className="flex min-w-max items-center gap-2 pr-1 md:ml-auto md:min-w-0 md:justify-end">
-            {effectiveActiveTab === "study" ? (
-              <div
-                className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1"
-                role="tablist"
-                aria-label="Study queue mode"
+            <div
+              className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1"
+              role="tablist"
+              aria-label="Study queue mode"
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected={queueMode === QUEUE_TYPES.review}
+                onClick={() => setQueueMode(QUEUE_TYPES.review)}
+                className={queueModeSegmentClass(QUEUE_TYPES.review, queueMode)}
               >
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={queueMode === QUEUE_TYPES.review}
-                  onClick={() => setQueueMode(QUEUE_TYPES.review)}
-                  className={queueModeSegmentClass(QUEUE_TYPES.review, queueMode)}
-                >
-                  <FilterChipLabel label="Reviews" count={reviewCountLabel()} />
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={queueMode === QUEUE_TYPES.lesson}
-                  onClick={() => setQueueMode(QUEUE_TYPES.lesson)}
-                  className={queueModeSegmentClass(QUEUE_TYPES.lesson, queueMode)}
-                >
-                  <FilterChipLabel label="Lessons" count={typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."} />
-                </button>
-              </div>
-            ) : null}
+                <FilterChipLabel label="Reviews" count={reviewCountLabel()} />
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={queueMode === QUEUE_TYPES.lesson}
+                onClick={() => setQueueMode(QUEUE_TYPES.lesson)}
+                className={queueModeSegmentClass(QUEUE_TYPES.lesson, queueMode)}
+              >
+                <FilterChipLabel label="Lessons" count={typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."} />
+              </button>
+            </div>
             <button
               type="button"
               onClick={() => setStudyMode((prev) => !prev)}

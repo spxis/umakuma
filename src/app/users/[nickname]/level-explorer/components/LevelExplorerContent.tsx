@@ -252,49 +252,54 @@ export default function LevelExplorerContent({
           </button>
         </div>
         <div id="wk-filters-panel" className={`space-y-3 ${mobileFilterSectionClass}`}>
-          <div className="w-full lg:max-w-[38rem]">
-            <ExplorerSearchBar scope="level" />
-          </div>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
-            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-              <button
-                type="button"
-                onClick={() => { void onSelectAllLevelsAndClearSearch(); }}
-                role="tab"
-                aria-selected={selectedLevels.size === levelOptions.length}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.size === levelOptions.length)}`}
-              >
-                <FilterChipLabel label="All" count={counts.all} />
-              </button>
-              {levelOptions.map((level) => (
-                <button
-                  key={level}
-                  type="button"
-                  onClick={() => { void onToggleLevel(level); }}
-                  disabled={searchAvailableLevels !== null && !searchAvailableLevels.has(level)}
-                  role="tab"
-                  aria-selected={selectedLevels.has(level)}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.has(level))}`}
-                >
-                  <FilterChipLabel label={level} count={levelItemCountsByLevel[level] ?? 0} />
-                </button>
-              ))}
+          <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
+              <div className="w-full md:w-1/2">
+                <ExplorerSearchBar scope="level" />
+              </div>
             </div>
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <button
-              type="button"
-              onClick={onToggleShowEnglish}
-              disabled={!canToggleEnglish}
-              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
-            </button>
-          </div>
-        </div>
-        <div className="grid gap-2">
+            <div className="mt-2 space-y-2">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
+                <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
+                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => { void onSelectAllLevelsAndClearSearch(); }}
+                    role="tab"
+                    aria-selected={selectedLevels.size === levelOptions.length}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.size === levelOptions.length)}`}
+                  >
+                    <FilterChipLabel label="All" count={counts.all} />
+                  </button>
+                  {levelOptions.map((level) => (
+                    <button
+                      key={level}
+                      type="button"
+                      onClick={() => { void onToggleLevel(level); }}
+                      disabled={searchAvailableLevels !== null && !searchAvailableLevels.has(level)}
+                      role="tab"
+                      aria-selected={selectedLevels.has(level)}
+                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.has(level))}`}
+                    >
+                      <FilterChipLabel label={level} count={levelItemCountsByLevel[level] ?? 0} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="ml-auto flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={onToggleShowEnglish}
+                  disabled={!canToggleEnglish}
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
+                </button>
+              </div>
+            </div>
+            <div className="grid gap-2">
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Grouping filters">
             <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grouping</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
@@ -344,6 +349,67 @@ export default function LevelExplorerContent({
               })}
             </div>
           </div>
+          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT mix filters">
+            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+              {JLPT_FILTER_ALLOWED.map((level) => {
+                const count = level === LEVEL_JLPT_FILTERS.all ? counts.all : jlptCounts[level];
+                const disabled = level !== LEVEL_JLPT_FILTERS.all && count === 0;
+                const isJlptLevel = level !== LEVEL_JLPT_FILTERS.all && level !== LEVEL_JLPT_FILTERS.none;
+                const active = jlptFilter === level;
+                const jlptStyle = active
+                  ? "border-teal-500 bg-teal-500 text-white"
+                  : "border-teal-300 bg-teal-100 text-teal-800 hover:bg-teal-200";
+                if (disabled && !active) {
+                  return null;
+                }
+                return (
+                  <button
+                    key={level}
+                    type="button"
+                    onClick={() => onSetJlptFilter(level)}
+                    disabled={disabled}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : allBadgeClass(active)}`}
+                  >
+                    <FilterChipLabel label={LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} count={count} />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Review timing filters">
+            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Timing</span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+              {REVIEW_TIMING_ALLOWED.map((timing) => {
+                const label = LEVEL_EXPLORER_REVIEW_TIMING_LABELS[timing];
+                const count = timing === LEVEL_REVIEW_TIMING_FILTERS.all ? counts.all : reviewTimingCounts[timing];
+                const disabled = timing !== LEVEL_REVIEW_TIMING_FILTERS.all && count === 0;
+                const active = reviewTimingFilter === timing;
+                if (disabled && !active) {
+                  return null;
+                }
+                return (
+                  <button
+                    key={timing}
+                    type="button"
+                    onClick={() => onSetReviewTimingFilter(timing)}
+                    disabled={disabled}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : timing === LEVEL_REVIEW_TIMING_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}
+                  >
+                    <FilterChipLabel label={label} count={count} />
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.overdue && overdueOutsideSelectedLevels > 0 ? (
+            <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/55">
+              Showing {formatNumber(reviewTimingCounts.overdue)} overdue in selected levels, with {formatNumber(overdueOutsideSelectedLevels)} more overdue in other levels
+              <span className="ml-1 text-[11px] font-semibold text-current/80">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
+            </p>
+          ) : null}
+            </div>
+            </div>
         </div>
         </div>
       </header>
@@ -361,76 +427,6 @@ export default function LevelExplorerContent({
             );
           })}
         </div>
-      </div>
-      <div className={`border-b border-line px-5 py-4 ${mobileFilterSectionClass}`}>
-        <section className="rounded-2xl border border-line bg-surface-muted/60 p-3 sm:p-4">
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-foreground/70">Filters</p>
-          </div>
-          {!filtersCollapsed ? (
-            <div className="mt-3 space-y-3">
-              <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT mix filters">
-                <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
-                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-                {JLPT_FILTER_ALLOWED.map((level) => {
-                  const count = level === LEVEL_JLPT_FILTERS.all ? counts.all : jlptCounts[level];
-                  const disabled = level !== LEVEL_JLPT_FILTERS.all && count === 0;
-                  const isJlptLevel = level !== LEVEL_JLPT_FILTERS.all && level !== LEVEL_JLPT_FILTERS.none;
-                  const active = jlptFilter === level;
-                  const jlptStyle = active
-                    ? "border-teal-500 bg-teal-500 text-white"
-                    : "border-teal-300 bg-teal-100 text-teal-800 hover:bg-teal-200";
-                  if (disabled && !active) {
-                    return null;
-                  }
-                  return (
-                    <button
-                      key={level}
-                      type="button"
-                      onClick={() => onSetJlptFilter(level)}
-                      disabled={disabled}
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : allBadgeClass(active)}`}
-                    >
-                      <FilterChipLabel label={LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} count={count} />
-                    </button>
-                  );
-                })}
-                </div>
-              </div>
-              <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Review timing filters">
-                <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Timing</span>
-                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-                {REVIEW_TIMING_ALLOWED.map((timing) => {
-                  const label = LEVEL_EXPLORER_REVIEW_TIMING_LABELS[timing];
-                  const count = timing === LEVEL_REVIEW_TIMING_FILTERS.all ? counts.all : reviewTimingCounts[timing];
-                  const disabled = timing !== LEVEL_REVIEW_TIMING_FILTERS.all && count === 0;
-                  const active = reviewTimingFilter === timing;
-                  if (disabled && !active) {
-                    return null;
-                  }
-                  return (
-                    <button
-                      key={timing}
-                      type="button"
-                      onClick={() => onSetReviewTimingFilter(timing)}
-                      disabled={disabled}
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : timing === LEVEL_REVIEW_TIMING_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}
-                    >
-                      <FilterChipLabel label={label} count={count} />
-                    </button>
-                  );
-                })}
-                </div>
-              </div>
-              {reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.overdue && overdueOutsideSelectedLevels > 0 ? (
-                <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/55">
-                  Showing {formatNumber(reviewTimingCounts.overdue)} overdue in selected levels, with {formatNumber(overdueOutsideSelectedLevels)} more overdue in other levels
-                  <span className="ml-1 text-[11px] font-semibold text-current/80">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
-                </p>
-              ) : null}
-            </div>
-          ) : null}
-        </section>
       </div>
     </section>
     <section className="mt-3 overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">

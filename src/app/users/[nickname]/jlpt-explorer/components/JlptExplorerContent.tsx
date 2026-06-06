@@ -180,60 +180,65 @@ export default function JlptExplorerContent({
             {mobileFiltersOpen ? JLPT_EXPLORER_TEXT.hideFilters : JLPT_EXPLORER_TEXT.showFilters}
           </button>
         </div>
-        <div id="jlpt-filters-panel" className={`mt-3 space-y-3 ${mobileFilterSectionClass}`}>
-          <div className="w-full lg:max-w-[38rem]">
-            <ExplorerSearchBar scope="jlpt" />
-          </div>
-          {availableWkLevels.length > 0 ? (
-          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="WaniKani level filters">
-            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-              <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(wkLevelFilter === null)}`}>
-                <FilterChipLabel label="All" count={formatNumber(items.length)} />
-              </button>
-              <button type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === "none")}`}>
-                <FilterChipLabel label={JLPT_EXPLORER_TEXT.none} count={formatNumber(wkLevelCounts.get("none") ?? 0)} />
-              </button>
-              {availableWkLevels.map((level) => (
-                <button key={level} type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === level ? null : level)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === level)}`}>
-                  <FilterChipLabel label={level} count={formatNumber(wkLevelCounts.get(level) ?? 0)} />
-                </button>
-              ))}
+        <div id="jlpt-filters-panel" className={`mt-3 ${mobileFilterSectionClass}`}>
+          <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
+              <div className="w-full md:w-1/2">
+                <ExplorerSearchBar scope="jlpt" />
+              </div>
             </div>
-          </div>
+            <div className="mt-2 space-y-2">
+          {availableWkLevels.length > 0 ? (
+            <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="WaniKani level filters">
+              <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+                <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(wkLevelFilter === null)}`}>
+                  <FilterChipLabel label="All" count={formatNumber(items.length)} />
+                </button>
+                <button type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === "none")}`}>
+                  <FilterChipLabel label={JLPT_EXPLORER_TEXT.none} count={formatNumber(wkLevelCounts.get("none") ?? 0)} />
+                </button>
+                {availableWkLevels.map((level) => (
+                  <button key={level} type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === level ? null : level)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === level)}`}>
+                    <FilterChipLabel label={level} count={formatNumber(wkLevelCounts.get(level) ?? 0)} />
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : null}
           {availableGrades.length > 0 ? (
-          <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
-            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
-            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-            <button type="button" onClick={() => onSetGradeFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(gradeFilter === null)}`}>
-              All
-            </button>
-            {gradeCounts.has("none") ? (
-              <button
-                type="button"
-                onClick={() => onSetGradeFilter(gradeFilter === "none" ? null : "none")}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
-                  gradeFilter === "none",
-                )}`}
-              >
-                <FilterChipLabel label="None" count={formatNumber(gradeCounts.get("none") ?? 0)} />
+            <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
+              <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+              <button type="button" onClick={() => onSetGradeFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(gradeFilter === null)}`}>
+                All
               </button>
-            ) : null}
-            {availableGrades.map((grade) => (
-              <button
-                key={grade}
-                type="button"
-                onClick={() => onSetGradeFilter(gradeFilter === grade ? null : grade)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
-                  gradeFilter === grade,
-                )}`}
-              >
-                <FilterChipLabel label={`G${grade}`} count={formatNumber(gradeCounts.get(grade) ?? 0)} />
-              </button>
-            ))}
+              {gradeCounts.has("none") ? (
+                <button
+                  type="button"
+                  onClick={() => onSetGradeFilter(gradeFilter === "none" ? null : "none")}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
+                    gradeFilter === "none",
+                  )}`}
+                >
+                  <FilterChipLabel label="None" count={formatNumber(gradeCounts.get("none") ?? 0)} />
+                </button>
+              ) : null}
+              {availableGrades.map((grade) => (
+                <button
+                  key={grade}
+                  type="button"
+                  onClick={() => onSetGradeFilter(gradeFilter === grade ? null : grade)}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
+                    gradeFilter === grade,
+                  )}`}
+                >
+                  <FilterChipLabel label={`G${grade}`} count={formatNumber(gradeCounts.get(grade) ?? 0)} />
+                </button>
+              ))}
+              </div>
             </div>
-          </div>
           ) : null}
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT level filters">
@@ -292,6 +297,8 @@ export default function JlptExplorerContent({
             </button>
           </div>
         </div>
+            </div>
+          </div>
         </div>
       </header>
     </section>
