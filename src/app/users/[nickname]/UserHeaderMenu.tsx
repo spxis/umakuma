@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { createPortal } from "react-dom";
+import { formatRelativeFromNow } from "@/lib/timeFormat";
 
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
@@ -13,10 +15,16 @@ type UserHeaderMenuProps = {
   viewerMenuInfo: ViewerMenuInfo | null;
   showAdminActions?: boolean;
   hidden?: boolean;
+  lastSyncedAt?: string | null;
+  lastActivityAt?: string | null;
 };
 
 const MENU_BUTTON_CLASS =
   "inline-flex h-8 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface";
+const MENU_LIST_GROUP_CLASS = "mt-2 overflow-hidden rounded-xl border border-line bg-surface";
+const MENU_LIST_ITEM_CLASS = "flex h-10 w-full items-center px-3 text-sm font-semibold text-foreground transition hover:bg-surface-muted";
+const MENU_LIST_ITEM_DIVIDER_CLASS = "border-t border-line";
+const MENU_LIST_ITEM_ACTIVE_CLASS = "bg-surface-muted text-accent";
 
 function getInitials(name: string | null): string {
   if (!name) {
@@ -36,14 +44,29 @@ function getInitials(name: string | null): string {
   return `${parts[0]?.[0] ?? ""}${parts[1]?.[0] ?? ""}`.toUpperCase();
 }
 
+function isDashboardMenuTab(value: string | null): value is "learn" | "stats" | "news" | "read" {
+  return value === "learn" || value === "stats" || value === "news" || value === "read";
+}
+
+function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
+  return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+}
+
 export default function UserHeaderMenu({
   accountId,
   viewedWkUsername,
   viewerMenuInfo,
   showAdminActions = false,
   hidden = false,
+  lastSyncedAt = null,
+  lastActivityAt = null,
 }: UserHeaderMenuProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
+  const [refreshingLeaderboard, setRefreshingLeaderboard] = useState(false);
+  const [nowMs, setNowMs] = useState(() => Date.now());
   const [themeMode, setThemeMode] = useState<"light" | "dark">(() => {
     if (typeof window === "undefined") {
       return "light";
@@ -99,6 +122,16 @@ export default function UserHeaderMenu({
     };
   }, []);
 
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setNowMs(Date.now());
+    }, 30_000);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, []);
+
   function toggleTheme() {
     const next = themeMode === "light" ? "dark" : "light";
     setThemeMode(next);
@@ -121,21 +154,119 @@ export default function UserHeaderMenu({
     document.documentElement.setAttribute("data-jp-font", next);
   }
 
+  const hasSyncStatus = Boolean(lastSyncedAt);
+  const hasActivityStatus = Boolean(lastActivityAt);
+  const updatedRelativeLabel = hasSyncStatus
+    ? formatRelativeFromNow(new Date(lastSyncedAt as string).getTime(), {
+      nowMs,
+      style: "long",
+      allowFuture: false,
+      noValueLabel: "unknown",
+      invalidLabel: "unknown",
+      justNowLabel: "just now",
+    })
+    : null;
+  const activeRelativeLabel = hasActivityStatus
+    ? formatRelativeFromNow(new Date(lastActivityAt as string).getTime(), {
+      nowMs,
+      style: "long",
+      allowFuture: false,
+      noValueLabel: "unknown",
+      invalidLabel: "unknown",
+      justNowLabel: "just now",
+    })
+    : "Unknown";
+
   if (hidden) {
     return null;
   }
 
   const resolvedUserPageUsername = viewerMenuInfo?.wkUsername ?? viewedWkUsername ?? null;
+  const encodedResolvedUserPageUsername = resolvedUserPageUsername
+    ? encodeURIComponent(resolvedUserPageUsername)
+    : null;
+  const userBasePath = encodedResolvedUserPageUsername ? `/users/${encodedResolvedUserPageUsername}` : null;
+  const dashboardPathSegment = userBasePath && pathname?.startsWith(`${userBasePath}/`)
+    ? pathname.slice(userBasePath.length + 1).split("/")[0] ?? null
+    : null;
+  const currentDashboardTab = isDashboardMenuTab(dashboardPathSegment)
+    ? dashboardPathSegment
+    : isDashboardMenuTab(searchParams?.get("dashboard") ?? null)
+      ? (searchParams?.get("dashboard") as "learn" | "stats" | "news" | "read")
+      : "learn";
+  const isOnResolvedUserDashboard = Boolean(
+    userBasePath && pathname && (pathname === userBasePath || pathname.startsWith(`${userBasePath}/`)),
+  );
   const adminSignedIn = Boolean(viewerMenuInfo?.provider === "google" && viewerMenuInfo.isAdmin);
   const dashboardPageLinks = resolvedUserPageUsername
     ? [
-        { label: "Learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}?dashboard=learn` },
-        { label: "Stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}?dashboard=stats` },
-        { label: "News", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}?dashboard=news` },
-        { label: "Read", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}?dashboard=read` },
+        { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/learn` },
+        { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },
+        { label: "News", dashboard: "news", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news` },
+        { label: "Read", dashboard: "read", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/read` },
       ]
     : [];
-  const showNavigationSection = Boolean(viewerMenuInfo || viewedWkUsername || showAdminActions || resolvedUserPageUsername);
+  const navigationLinks = [
+    viewerMenuInfo
+      ? { label: "Leaderboard", href: "/", dashboard: null }
+      : null,
+    ...dashboardPageLinks,
+  ].filter((link): link is { label: string; href: string; dashboard: "learn" | "stats" | "news" | "read" | null } => Boolean(link));
+  const pageLinks = [
+    viewerMenuInfo && viewedWkUsername
+      ? { label: "History", href: `/users/${encodeURIComponent(viewedWkUsername)}/history` }
+      : null,
+    viewerMenuInfo && resolvedUserPageUsername
+      ? { label: "News stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news?read=stats` }
+      : null,
+    viewerMenuInfo && resolvedUserPageUsername
+      ? { label: "News history", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news?read=history` }
+      : null,
+    viewerMenuInfo && resolvedUserPageUsername
+      ? { label: "My page", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}` }
+      : null,
+  ].filter((link): link is { label: string; href: string } => Boolean(link));
+  const adminLinks = [
+    adminSignedIn && !showAdminActions
+      ? { label: "Admin", href: "/admin" }
+      : null,
+    showAdminActions
+      ? { label: "Admin", href: "/admin" }
+      : null,
+    showAdminActions
+      ? { label: "Manage users", href: "/admin/users" }
+      : null,
+  ].filter((link): link is { label: string; href: string } => Boolean(link));
+  const canRefreshLeaderboard = adminSignedIn || showAdminActions;
+
+  async function refreshLeaderboard() {
+    setRefreshingLeaderboard(true);
+    try {
+      const response = await fetch("/api/leaderboard/refresh", { method: "POST" });
+      if (!response.ok) {
+        throw new Error("Refresh failed.");
+      }
+
+      router.refresh();
+      setOpen(false);
+    } catch {
+      // Keep the menu stable and avoid noisy UI errors.
+    } finally {
+      setRefreshingLeaderboard(false);
+    }
+  }
+
+  function linkIsActive(href: string): boolean {
+    if (!pathname) {
+      return false;
+    }
+
+    if (href === "/") {
+      return pathname === "/";
+    }
+
+    return pathname === href || pathname.startsWith(`${href}/`);
+  }
 
   return (
     <div ref={menuRef} className="relative z-[1200]">
@@ -178,6 +309,13 @@ export default function UserHeaderMenu({
                       {viewerMenuInfo.email ? (
                         <p className="truncate text-xs text-foreground/70">{viewerMenuInfo.email}</p>
                       ) : null}
+                      {hasSyncStatus ? (
+                        <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/55">
+                          Updated {updatedRelativeLabel}
+                          <span className="mx-2 text-foreground/35">|</span>
+                          Active {activeRelativeLabel}
+                        </p>
+                      ) : null}
                     </div>
                   </div>
                   {viewerMenuInfo.wkUsername ? (
@@ -189,95 +327,91 @@ export default function UserHeaderMenu({
               )}
             </section>
 
-            {showNavigationSection ? (
+            {navigationLinks.length > 0 ? (
               <section className="border-t border-line pt-3">
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Navigation</p>
-                <div className="mt-2 grid grid-cols-2 gap-2">
-                  {viewerMenuInfo && viewedWkUsername ? (
+                <div className={MENU_LIST_GROUP_CLASS}>
+                  {navigationLinks.map((link, index) => {
+                    const active = link.dashboard
+                      ? isOnResolvedUserDashboard && currentDashboardTab === link.dashboard
+                      : linkIsActive(link.href);
+
+                    return (
+                      <Link
+                        key={link.label}
+                        href={link.href}
+                        onClick={(event) => {
+                          if (
+                            link.dashboard &&
+                            isOnResolvedUserDashboard &&
+                            isPlainLeftClick(event)
+                          ) {
+                            event.preventDefault();
+                            window.dispatchEvent(
+                              new CustomEvent("wr:dashboard-tab-request", {
+                                detail: { tab: link.dashboard },
+                              }),
+                            );
+                          }
+                          setOpen(false);
+                        }}
+                        className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${active ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            ) : null}
+
+            {pageLinks.length > 0 ? (
+              <section className="border-t border-line pt-3">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Pages</p>
+                <div className={MENU_LIST_GROUP_CLASS}>
+                  {pageLinks.map((link, index) => (
                     <Link
-                      href={`/users/${encodeURIComponent(viewedWkUsername)}/history`}
-                      className={`${MENU_BUTTON_CLASS} col-span-2`}
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
                     >
-                      History
+                      {link.label}
                     </Link>
-                  ) : null}
-                  {viewerMenuInfo ? (
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {adminLinks.length > 0 ? (
+              <section className="border-t border-line pt-3">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Admin</p>
+                <div className={MENU_LIST_GROUP_CLASS}>
+                  {adminLinks.map((link, index) => (
                     <Link
-                      href="/"
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+                {canRefreshLeaderboard ? (
+                  <div className="mt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        refreshLeaderboard().catch(() => {
+                          // Handled in refreshLeaderboard.
+                        });
+                      }}
+                      disabled={refreshingLeaderboard}
                       className={MENU_BUTTON_CLASS}
                     >
-                      Leaderboard
-                    </Link>
-                  ) : null}
-                  {viewerMenuInfo ? (
-                    <>
-                      <Link
-                        href="/news"
-                        className={MENU_BUTTON_CLASS}
-                      >
-                        News
-                      </Link>
-                      <Link
-                        href="/news/stats"
-                        className={MENU_BUTTON_CLASS}
-                      >
-                        News stats
-                      </Link>
-                      <Link
-                        href="/news/history"
-                        className={MENU_BUTTON_CLASS}
-                      >
-                        News history
-                      </Link>
-                      {adminSignedIn && !showAdminActions ? (
-                        <Link href="/admin" className={MENU_BUTTON_CLASS}>
-                          Admin
-                        </Link>
-                      ) : null}
-                    </>
-                  ) : null}
-                  {showAdminActions ? (
-                    <>
-                      <Link
-                        href="/admin"
-                        className={MENU_BUTTON_CLASS}
-                      >
-                        Admin
-                      </Link>
-                      <Link
-                        href="/admin/users"
-                        className={MENU_BUTTON_CLASS}
-                      >
-                        Manage users
-                      </Link>
-                    </>
-                  ) : null}
-                  {viewerMenuInfo && resolvedUserPageUsername ? (
-                    <Link
-                      href={`/users/${encodeURIComponent(resolvedUserPageUsername)}`}
-                      className={`${MENU_BUTTON_CLASS} col-span-2`}
-                    >
-                      My page
-                    </Link>
-                  ) : null}
-                </div>
-
-                {dashboardPageLinks.length > 0 ? (
-                  <div className="mt-3 rounded-xl border border-line bg-surface-muted/70 p-2">
-                    <p className="px-1 text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">
-                      Top pages
-                    </p>
-                    <div className="mt-2 grid grid-cols-2 gap-2">
-                      {dashboardPageLinks.map((link) => (
-                        <Link
-                          key={link.label}
-                          href={link.href}
-                          className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted"
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </div>
+                      {refreshingLeaderboard ? "Refreshing leaderboard..." : "Refresh leaderboard"}
+                    </button>
                   </div>
                 ) : null}
               </section>

@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { MouseEvent as ReactMouseEvent } from "react";
 
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
-import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
+import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 
 type AppTopMenuRowProps = {
   viewerMenuInfo: ViewerMenuInfo | null;
@@ -16,7 +20,12 @@ type AppTopMenuRowProps = {
 type MainLink = {
   label: string;
   href: string;
+  dashboard: TabId | null;
 };
+
+function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
+  return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+}
 
 function userTabHref(username: string | null, tab: "learn" | "stats" | "news" | "read"): string {
   if (!username) {
@@ -35,14 +44,19 @@ export default function AppTopMenuRow({
   lastActivityAt = null,
   className,
 }: AppTopMenuRowProps) {
+  const pathname = usePathname();
   const resolvedWkUsername = primaryWkUsername ?? viewerMenuInfo?.wkUsername ?? null;
   const links: MainLink[] = [
-    { label: "Leaderboard", href: "/" },
-    { label: "Study", href: userTabHref(resolvedWkUsername, "learn") },
-    { label: "Stats", href: userTabHref(resolvedWkUsername, "stats") },
-    { label: "News", href: userTabHref(resolvedWkUsername, "news") },
-    { label: "Read", href: userTabHref(resolvedWkUsername, "read") },
+    { label: "Leaderboard", href: "/", dashboard: null },
+    { label: "Study", href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
+    { label: "Stats", href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
+    { label: "News", href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
+    { label: "Read", href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },
   ];
+  const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
+  const isOnResolvedUserDashboard = Boolean(
+    pathname && userBasePath && (pathname === userBasePath || pathname.startsWith(`${userBasePath}/`)),
+  );
 
   return (
     <section className={`flex items-center justify-between gap-3 ${className ?? ""}`}>
@@ -51,6 +65,18 @@ export default function AppTopMenuRow({
           <Link
             key={`${link.label}-${link.href}`}
             href={link.href}
+            onClick={(event) => {
+              if (!link.dashboard || !isOnResolvedUserDashboard || !isPlainLeftClick(event)) {
+                return;
+              }
+
+              event.preventDefault();
+              window.dispatchEvent(
+                new CustomEvent("wr:dashboard-tab-request", {
+                  detail: { tab: link.dashboard },
+                }),
+              );
+            }}
             className="transition hover:text-foreground/80"
           >
             {link.label}

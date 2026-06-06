@@ -13,7 +13,6 @@ import {
   parseDateKeyAsUtc,
   type ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
-import LeaderboardAdminActions from "./LeaderboardAdminActions";
 import AppTopMenuRow from "./shared/AppTopMenuRow";
 import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
@@ -360,7 +359,6 @@ export default async function Home() {
                   Join Board
                 </Link>
               ) : null}
-              <LeaderboardAdminActions />
             </div>
           </div>
 
