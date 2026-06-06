@@ -116,6 +116,9 @@ export default function StudyExplorerPanel({
   const totalReviewsInVisibleLevels = Object.values(reviewLevelCounts).reduce((sum, count) => sum + count, 0);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
+  const studyHeaderLabel = viewedLevel === null
+    ? `Study - ${studySourceHeaderLabel}`
+    : `Study - ${studySourceHeaderLabel} (${viewedLevel})`;
   const hasMoreMatchingItems = hasMorePages && filteredItems.length < allTypeCount;
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
   const hideControlsDuringInitialLoad = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
@@ -152,7 +155,7 @@ export default function StudyExplorerPanel({
               className="group inline-flex max-w-full items-center gap-2 rounded-md px-1 py-0.5 text-left"
               title={studySourceIsCustom ? "Change study library" : "Choose study library"}
             >
-              <h2 className="truncate text-xl font-black text-foreground" title={`Study - ${studySourceHeaderLabel}`}>{`Study - ${studySourceHeaderLabel}`}</h2>
+              <h2 className="truncate text-xl font-black text-foreground" title={studyHeaderLabel}>{studyHeaderLabel}</h2>
               <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">Change</span>
             </button>
             <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? "Tap title to change library" : "Tap title to choose library"}</p>
