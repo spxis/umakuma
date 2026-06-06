@@ -1,7 +1,6 @@
 "use client";
 
 import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
-import SegmentedControl from "@/app/shared/SegmentedControl";
 
 import { srsBucketBadgeClass, srsBucketLabel, titleCaseSrsBucket } from "./studyHistoryUi";
 
@@ -22,6 +21,22 @@ function studyChipClass(active: boolean): string {
     : "border-line bg-surface text-foreground hover:bg-surface-muted";
 }
 
+function resultChipClass(result: "all" | "correct" | "wrong" | "skipped", active: boolean): string {
+  if (!active) {
+    return studyChipClass(false);
+  }
+  if (result === "correct") {
+    return "border-emerald-600 bg-emerald-600 text-white";
+  }
+  if (result === "wrong") {
+    return "border-red-600 bg-red-600 text-white";
+  }
+  if (result === "skipped") {
+    return "border-amber-500 bg-amber-500 text-white";
+  }
+  return studyChipClass(true);
+}
+
 export default function StudyHistoryFilters({
   resultFilter,
   setResultFilter,
@@ -33,52 +48,47 @@ export default function StudyHistoryFilters({
   availableSrsBuckets,
 }: Props) {
   return (
-    <section className="mt-3 rounded-2xl border border-line/70 bg-surface-muted/50 p-2.5 sm:p-3">
-      <div className="flex flex-wrap items-start gap-3">
-        <div className="space-y-1.5 rounded-xl border border-line/60 bg-surface/75 p-2.5">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/65">Result</p>
-          <SegmentedControl
-            ariaLabel="Result filter"
-            className="inline-flex items-center rounded-full border border-line bg-surface p-1"
-            value={resultFilter}
-            onChange={setResultFilter}
-            size="sm"
-            options={[
-              { value: "all", label: "All", activeClassName: "bg-accent text-white", inactiveClassName: "text-foreground/80 hover:bg-surface-muted" },
-              { value: "correct", label: "Correct", activeClassName: "bg-emerald-600 text-white", inactiveClassName: "text-foreground/80 hover:bg-surface-muted" },
-              { value: "wrong", label: "Wrong", activeClassName: "bg-red-600 text-white", inactiveClassName: "text-foreground/80 hover:bg-surface-muted" },
-              { value: "skipped", label: "Skipped", activeClassName: "bg-accent text-white", inactiveClassName: "text-foreground/80 hover:bg-surface-muted" },
-            ]}
-          />
-        </div>
+    <section className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
+      <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
 
-        <div className="space-y-1.5 rounded-xl border border-line/60 bg-surface/75 p-2.5">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/65">Level</p>
-          <div className="flex flex-wrap items-center gap-1">
+      <div className="mt-2 space-y-2">
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line px-2.5 py-2">
+          <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">Result</span>
+          {(["all", "correct", "wrong", "skipped"] as const).map((result) => (
             <button
+              key={result}
               type="button"
-              onClick={() => setLevelFilter("all")}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${studyChipClass(levelFilter === "all")}`}
+              onClick={() => setResultFilter(result)}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${resultChipClass(result, resultFilter === result)}`}
             >
-              All
+              {result}
             </button>
-            {availableLevels.map((level) => (
-              <button
-                key={`lvl-${level}`}
-                type="button"
-                onClick={() => setLevelFilter(level)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${studyChipClass(levelFilter === level)}`}
-              >
-                L{level}
-              </button>
-            ))}
-          </div>
+          ))}
         </div>
-      </div>
 
-      <div className="mt-3 rounded-xl border border-line/60 bg-surface/75 p-2.5">
-        <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/65">SRS bucket</p>
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line px-2.5 py-2">
+          <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">Level</span>
+          <button
+            type="button"
+            onClick={() => setLevelFilter("all")}
+            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${studyChipClass(levelFilter === "all")}`}
+          >
+            All
+          </button>
+          {availableLevels.map((level) => (
+            <button
+              key={`lvl-${level}`}
+              type="button"
+              onClick={() => setLevelFilter(level)}
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${studyChipClass(levelFilter === level)}`}
+            >
+              {level}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line px-2.5 py-2">
+          <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">SRS bucket</span>
           <button
             type="button"
             onClick={() => setSrsBucketFilter("all")}

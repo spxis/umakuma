@@ -180,6 +180,18 @@ export default function StudyHistoryTable({
 
       {!expanded ? null : (
         <>
+          <div className="mt-3">
+            <StudyHistoryFilters
+              resultFilter={resultFilter}
+              setResultFilter={handleSetResultFilter}
+              levelFilter={levelFilter}
+              setLevelFilter={handleSetLevelFilter}
+              availableLevels={data?.availableLevels ?? []}
+              srsBucketFilter={srsBucketFilter}
+              setSrsBucketFilter={handleSetSrsBucketFilter}
+              availableSrsBuckets={data?.availableSrsBuckets ?? []}
+            />
+          </div>
           <div className="mt-3 flex flex-wrap items-center gap-3 text-sm sm:text-base">
             <span>Total: <strong>{totalAttempts}</strong></span>
             <span>Correct: <strong className="text-emerald-600">{totals.correct ?? 0}</strong></span>
@@ -187,17 +199,6 @@ export default function StudyHistoryTable({
             {(totals.skipped ?? 0) > 0 ? <span>Skipped: <strong className="text-amber-500">{totals.skipped}</strong></span> : null}
             {showUserColumn ? <span>Accounts: <strong>{data?.accountCount ?? 0}</strong></span> : null}
           </div>
-
-          <StudyHistoryFilters
-            resultFilter={resultFilter}
-            setResultFilter={handleSetResultFilter}
-            levelFilter={levelFilter}
-            setLevelFilter={handleSetLevelFilter}
-            availableLevels={data?.availableLevels ?? []}
-            srsBucketFilter={srsBucketFilter}
-            setSrsBucketFilter={handleSetSrsBucketFilter}
-            availableSrsBuckets={data?.availableSrsBuckets ?? []}
-          />
 
           {isLoading ? <p className="mt-4 text-base text-foreground/70">Loading...</p> : null}
           {error ? <p className="mt-4 text-base text-red-600">{error.message}</p> : null}
