@@ -355,7 +355,7 @@ export default function LevelExplorerContent({
             </div>
           </div>
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT mix filters">
-            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
+            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               {JLPT_FILTER_ALLOWED.map((level) => {
                 const count = level === LEVEL_JLPT_FILTERS.all ? counts.all : jlptCounts[level];
@@ -383,7 +383,7 @@ export default function LevelExplorerContent({
             </div>
           </div>
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Review timing filters">
-            <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Timing</span>
+            <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Timing</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               {REVIEW_TIMING_ALLOWED.map((timing) => {
                 const label = LEVEL_EXPLORER_REVIEW_TIMING_LABELS[timing];
