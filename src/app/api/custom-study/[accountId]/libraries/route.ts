@@ -23,6 +23,10 @@ const renameLibrarySchema = z.object({
   name: z.string().trim().min(CUSTOM_LIBRARY_NAME_MIN_LENGTH).max(CUSTOM_LIBRARY_NAME_MAX_LENGTH).regex(CUSTOM_LIBRARY_NAME_ALLOWED_REGEX),
 });
 
+const deleteLibrarySchema = z.object({
+  libraryId: z.string().trim().min(1),
+});
+
 export async function GET(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
     route: "/api/custom-study/[accountId]/libraries",
@@ -161,6 +165,78 @@ export async function PATCH(request: Request, context: RouteContext) {
       } catch (error) {
         console.error(error);
         return NextResponse.json({ error: "Could not rename custom library." }, { status: 500 });
+      }
+    },
+  });
+}
+
+export async function DELETE(request: Request, context: RouteContext) {
+  return withApiRouteTelemetry({
+    route: "/api/custom-study/[accountId]/libraries",
+    method: "DELETE",
+    request,
+    execute: async () => {
+      try {
+        const { accountId } = await context.params;
+        if (!(await canAccessAccount(request, accountId))) {
+          return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+        }
+
+        const json = await request.json();
+        const parsed = deleteLibrarySchema.safeParse(json);
+        if (!parsed.success) {
+          return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+
+        const ownedLibrary = await prisma.customStudyLibrary.findFirst({
+          where: {
+            id: parsed.data.libraryId,
+            accountId,
+          },
+          select: {
+            id: true,
+            isActive: true,
+          },
+        });
+        if (!ownedLibrary) {
+          return NextResponse.json({ error: "Library not found." }, { status: 404 });
+        }
+
+        const fallbackActiveLibraryId = await prisma.$transaction(async (tx) => {
+          await tx.customStudyLibrary.delete({
+            where: { id: parsed.data.libraryId },
+          });
+
+          if (!ownedLibrary.isActive) {
+            return null;
+          }
+
+          const fallbackLibrary = await tx.customStudyLibrary.findFirst({
+            where: { accountId },
+            orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
+            select: { id: true },
+          });
+
+          if (!fallbackLibrary) {
+            return null;
+          }
+
+          await tx.customStudyLibrary.update({
+            where: { id: fallbackLibrary.id },
+            data: { isActive: true },
+          });
+
+          return fallbackLibrary.id;
+        });
+
+        return NextResponse.json({
+          ok: true,
+          deletedLibraryId: parsed.data.libraryId,
+          fallbackActiveLibraryId,
+        });
+      } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: "Could not delete custom library." }, { status: 500 });
       }
     },
   });

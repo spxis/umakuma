@@ -1,38 +1,23 @@
 "use client";
-
 import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
-
 import {
   CUSTOM_LIBRARY_NAME_MAX_LENGTH,
   CUSTOM_LIBRARY_NAME_MIN_LENGTH,
   getCustomLibraryNameValidationMessage,
   sanitizeCustomLibraryNameInput,
 } from "@/lib/customStudy/customLibraryNameValidation";
+import { CUSTOM_LIBRARY_AI_PROMPT, SAMPLE_CUSTOM_LIBRARY_JSON } from "./StudySourceControls.constants";
+import StudySourceLibraryItemsManager from "./StudySourceLibraryItemsManager";
 import type { StudySource } from "./study-explorer/lib/studyExplorerTypes";
-
 type CustomLibraryRow = {
   id: string;
   name: string;
   itemCount: number;
   isActive: boolean;
 };
-
 const DROPDOWN_WANIKANI_VALUE = "";
-const SAMPLE_CUSTOM_LIBRARY_JSON = JSON.stringify(
-  {
-    schemaVersion: 1,
-    library: { id: "jlpt-n5-core", name: "JLPT N5 core", description: "Starter set with contiguous levels" },
-    items: [
-      { id: "kanji-ichi", type: "kanji", level: 1, characters: "一", meanings: ["one"], readings: ["いち", "いつ"], primaryReading: "いち" },
-      { id: "vocab-nihon", type: "vocabulary", level: 2, characters: "日本", meanings: ["Japan"], readings: ["にほん", "にっぽん"] },
-    ],
-  },
-  null, 2,
-);
-
 type UploadedLibraryMeta = { fileName: string; libraryName: string; externalKey: string; importedCount: number; createdCount: number; updatedCount: number; removedCount: number };
-
 type Props = {
   accountId: string;
   studySource: StudySource;
@@ -42,7 +27,6 @@ type Props = {
   onActiveLibraryNameChange?: (name: string | null) => void;
   openRequestId?: number;
 };
-
 export default function StudySourceControls({
   accountId,
   studySource,
@@ -331,6 +315,17 @@ export default function StudySourceControls({
     setIsModalOpen(false);
   }
 
+  function handleLibraryDeleted(fallbackActiveLibraryId: string | null): void {
+    setUploadedLibraryMeta(null);
+    setUploadMessage("Library deleted.");
+    setDraftLibraryId(fallbackActiveLibraryId);
+    onSetCustomLibraryId(fallbackActiveLibraryId);
+
+    if (!fallbackActiveLibraryId) {
+      onSetStudySource("wanikani");
+    }
+  }
+
   return (
     <>
       <input
@@ -445,10 +440,18 @@ export default function StudySourceControls({
                 <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Prompt for AI</p>
                 <textarea
                   readOnly
-                  value="Generate valid UmaKuma custom study JSON. Use schemaVersion 1. Include library object with id and name. Include items array with unique id, type (kanji|vocabulary|phrase), level (1-60), characters, and meanings. Optional fields: readings, primaryReading, meaningMnemonic, readingMnemonic, synonyms, notes. Ensure levels are contiguous from 1 to highest level with no gaps. Output strict JSON only, no markdown."
+                  value={CUSTOM_LIBRARY_AI_PROMPT}
                   className="h-24 w-full resize-none rounded-xl border border-line bg-surface px-3 py-2 text-xs text-foreground/80"
                 />
               </div>
+
+              <StudySourceLibraryItemsManager
+                accountId={accountId}
+                libraryId={draftLibraryId}
+                libraryName={selectedLibraryName}
+                onLibrariesChanged={mutate}
+                onLibraryDeleted={handleLibraryDeleted}
+              />
 
               {renameMessage ? <p className="text-sm text-foreground/70">{renameMessage}</p> : null}
               {!renameMessage && draftLibraryId && renameValidationMessage ? <p className="text-sm text-foreground/70">{renameValidationMessage}</p> : null}
