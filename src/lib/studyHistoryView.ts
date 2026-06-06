@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import {
+  SRS_BUCKETS,
   isWkStatus,
   srsBucketFromStage,
   type SrsBucket,
@@ -33,6 +34,11 @@ export type StudyHistoryRow = {
 export type StudyHistoryPage = {
   attempts: StudyHistoryRow[];
   totals: Record<string, number>;
+  resultCounts: Record<"all" | "correct" | "wrong" | "skipped", number>;
+  levelAllCount: number;
+  levelCounts: Record<number, number>;
+  srsBucketAllCount: number;
+  srsBucketCounts: Record<SrsBucket, number>;
   accountCount: number;
   availableLevels: number[];
   availableSrs: number[];
@@ -273,7 +279,7 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
     }
   }
 
-  let rows: StudyHistoryRow[] = attempts.map((row) => {
+  const allRows: StudyHistoryRow[] = attempts.map((row) => {
     const account = accountMap.get(row.accountId);
     const fallbackUser = row.accountId;
     const key = `${row.accountId}:${row.subjectId}`;
@@ -299,17 +305,53 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
     };
   });
 
-  if (typeof args.level === "number") {
-    rows = rows.filter((row) => row.wkLevel === args.level);
+  function applyFilters(
+    source: StudyHistoryRow[],
+    filters: Pick<QueryArgs, "result" | "level" | "srs" | "srsBucket">,
+  ): StudyHistoryRow[] {
+    let next = source;
+
+    if (filters.result) {
+      next = next.filter((row) => row.result === filters.result);
+    }
+
+    if (typeof filters.level === "number") {
+      next = next.filter((row) => row.wkLevel === filters.level);
+    }
+
+    if (typeof filters.srs === "number") {
+      next = next.filter((row) => row.srsStage === filters.srs);
+    }
+
+    if (filters.srsBucket) {
+      next = next.filter((row) => row.srsBucket === filters.srsBucket);
+    }
+
+    return next;
   }
 
-  if (typeof args.srs === "number") {
-    rows = rows.filter((row) => row.srsStage === args.srs);
-  }
+  const rowsForResultCounts = applyFilters(allRows, {
+    level: args.level,
+    srs: args.srs,
+    srsBucket: args.srsBucket,
+  });
+  const rowsForLevelCounts = applyFilters(allRows, {
+    result: args.result,
+    srs: args.srs,
+    srsBucket: args.srsBucket,
+  });
+  const rowsForSrsBucketCounts = applyFilters(allRows, {
+    result: args.result,
+    level: args.level,
+    srs: args.srs,
+  });
 
-  if (args.srsBucket) {
-    rows = rows.filter((row) => row.srsBucket === args.srsBucket);
-  }
+  let rows = applyFilters(allRows, {
+    result: args.result,
+    level: args.level,
+    srs: args.srs,
+    srsBucket: args.srsBucket,
+  });
 
   const compareSign = args.sortDir === "asc" ? 1 : -1;
   rows = rows.sort((a, b) => {
@@ -345,23 +387,61 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
     totalsByResult[row.result] = (totalsByResult[row.result] ?? 0) + 1;
   }
 
+  const resultCounts: Record<"all" | "correct" | "wrong" | "skipped", number> = {
+    all: rowsForResultCounts.length,
+    correct: 0,
+    wrong: 0,
+    skipped: 0,
+  };
+  for (const row of rowsForResultCounts) {
+    if (row.result === "correct" || row.result === "wrong" || row.result === "skipped") {
+      resultCounts[row.result] += 1;
+    }
+  }
+
+  const levelCounts: Record<number, number> = {};
+  for (const row of rowsForLevelCounts) {
+    if (typeof row.wkLevel !== "number") {
+      continue;
+    }
+    levelCounts[row.wkLevel] = (levelCounts[row.wkLevel] ?? 0) + 1;
+  }
+
+  const srsBucketCounts: Record<SrsBucket, number> = {
+    [SRS_BUCKETS.apprentice]: 0,
+    [SRS_BUCKETS.guru]: 0,
+    [SRS_BUCKETS.master]: 0,
+    [SRS_BUCKETS.enlightened]: 0,
+    [SRS_BUCKETS.burned]: 0,
+    [SRS_BUCKETS.locked]: 0,
+    [SRS_BUCKETS.unknown]: 0,
+  };
+  for (const row of rowsForSrsBucketCounts) {
+    srsBucketCounts[row.srsBucket] += 1;
+  }
+
   const filteredTotal = rows.length;
   const totalPages = Math.max(1, Math.ceil(filteredTotal / args.pageSize));
   const page = Math.min(args.page, totalPages);
   const pageStart = (page - 1) * args.pageSize;
   const pagedRows = rows.slice(pageStart, pageStart + args.pageSize);
   const availableLevels = Array.from(
-    new Set(rows.map((row) => row.wkLevel).filter((level): level is number => typeof level === "number")),
+    new Set(rowsForLevelCounts.map((row) => row.wkLevel).filter((level): level is number => typeof level === "number")),
   ).sort((a, b) => a - b);
   const availableSrs = Array.from(
     new Set(rows.map((row) => row.srsStage).filter((srs): srs is number => typeof srs === "number")),
   ).sort((a, b) => a - b);
-  const availableSrsBuckets = Array.from(new Set(rows.map((row) => row.srsBucket)));
+  const availableSrsBuckets = Array.from(new Set(rowsForSrsBucketCounts.map((row) => row.srsBucket)));
   const accountCount = new Set(rows.map((row) => row.accountId)).size;
 
   return {
     attempts: pagedRows,
     totals: totalsByResult,
+    resultCounts,
+    levelAllCount: rowsForLevelCounts.length,
+    levelCounts,
+    srsBucketAllCount: rowsForSrsBucketCounts.length,
+    srsBucketCounts,
     accountCount,
     availableLevels,
     availableSrs,

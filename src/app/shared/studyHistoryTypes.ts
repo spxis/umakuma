@@ -48,6 +48,11 @@ export type StudyHistoryAttempt = {
 export type StudyHistoryPayload = {
   attempts: StudyHistoryAttempt[];
   totals: Record<string, number>;
+  resultCounts: Record<"all" | "correct" | "wrong" | "skipped", number>;
+  levelAllCount: number;
+  levelCounts: Record<number, number>;
+  srsBucketAllCount: number;
+  srsBucketCounts: Record<HistorySrsBucket, number>;
   accountCount: number;
   availableLevels: number[];
   availableSrs: number[];

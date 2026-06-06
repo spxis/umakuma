@@ -21,6 +21,9 @@ type Props = {
   persistenceKey?: string;
 };
 
+const EMPTY_RESULT_COUNTS = { all: 0, correct: 0, wrong: 0, skipped: 0 };
+const EMPTY_SRS_BUCKET_COUNTS = { apprentice: 0, guru: 0, master: 0, enlightened: 0, burned: 0, locked: 0, unknown: 0 };
+
 function sortIcon(activeSortBy: SortBy, sortBy: SortBy, sortDir: SortDir): string {
   return activeSortBy === sortBy ? (sortDir === "desc" ? "v" : "^") : "<>";
 }
@@ -118,6 +121,8 @@ export default function StudyHistoryTable({
 
   const totals = data?.totals ?? {};
   const totalAttempts = Object.values(totals).reduce((sum, value) => sum + value, 0);
+  const resultCounts = data?.resultCounts ?? EMPTY_RESULT_COUNTS;
+  const srsBucketCounts = data?.srsBucketCounts ?? EMPTY_SRS_BUCKET_COUNTS;
   const selectedAttemptIdForModal = selectedAttemptId && data?.attempts.some((row) => row.id === selectedAttemptId)
     ? selectedAttemptId
     : null;
@@ -141,7 +146,6 @@ export default function StudyHistoryTable({
       setSortDir(nextSortBy === "submittedAt" ? "desc" : "asc");
       return;
     }
-
     setSortDir((prev) => (prev === "desc" ? "asc" : "desc"));
   }
 
@@ -149,21 +153,15 @@ export default function StudyHistoryTable({
     setPage(1);
     setResultFilter(value);
   }
-
   function handleSetLevelFilter(value: number | "all") {
     setPage(1);
     setLevelFilter(value);
   }
-
   function handleSetSrsBucketFilter(value: HistorySrsBucket | "all") {
     setPage(1);
     setSrsBucketFilter(value);
   }
-  const typeColor: Record<string, string> = {
-    radical: "bg-sky-100 text-sky-700",
-    kanji: "bg-pink-100 text-pink-700",
-    vocabulary: "bg-violet-100 text-violet-700",
-  };
+  const typeColor: Record<string, string> = { radical: "bg-sky-100 text-sky-700", kanji: "bg-pink-100 text-pink-700", vocabulary: "bg-violet-100 text-violet-700" };
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-4 shadow-sm sm:p-5">
       {collapsible ? (
@@ -177,19 +175,23 @@ export default function StudyHistoryTable({
       ) : (
         <h2 className="text-base font-bold uppercase tracking-[0.1em] text-foreground sm:text-lg">{heading}</h2>
       )}
-
       {!expanded ? null : (
         <>
           <div className="mt-3">
             <StudyHistoryFilters
               resultFilter={resultFilter}
               setResultFilter={handleSetResultFilter}
+              resultCounts={resultCounts}
               levelFilter={levelFilter}
               setLevelFilter={handleSetLevelFilter}
               availableLevels={data?.availableLevels ?? []}
+              levelAllCount={data?.levelAllCount ?? 0}
+              levelCounts={data?.levelCounts ?? {}}
               srsBucketFilter={srsBucketFilter}
               setSrsBucketFilter={handleSetSrsBucketFilter}
               availableSrsBuckets={data?.availableSrsBuckets ?? []}
+              srsBucketAllCount={data?.srsBucketAllCount ?? 0}
+              srsBucketCounts={srsBucketCounts}
             />
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3 text-sm sm:text-base">
@@ -199,10 +201,8 @@ export default function StudyHistoryTable({
             {(totals.skipped ?? 0) > 0 ? <span>Skipped: <strong className="text-amber-500">{totals.skipped}</strong></span> : null}
             {showUserColumn ? <span>Accounts: <strong>{data?.accountCount ?? 0}</strong></span> : null}
           </div>
-
           {isLoading ? <p className="mt-4 text-base text-foreground/70">Loading...</p> : null}
           {error ? <p className="mt-4 text-base text-red-600">{error.message}</p> : null}
-
           {data ? (
         <div className="mt-3 space-y-3">
           <div className="sm:hidden overflow-hidden rounded-lg border border-line bg-surface">

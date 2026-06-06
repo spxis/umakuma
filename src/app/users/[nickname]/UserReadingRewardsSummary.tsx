@@ -178,13 +178,13 @@ export default function UserReadingRewardsSummary({
 
                     <div className="mt-2 flex flex-wrap gap-1">
                       <span className="inline-flex items-center rounded-full border border-radical bg-radical px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
-                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short} {formatCount(row.reviewRadicalToday)}
+                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short} ({formatCount(row.reviewRadicalToday)})
                       </span>
                       <span className="inline-flex items-center rounded-full border border-kanji bg-kanji px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
-                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].short} {formatCount(row.reviewKanjiToday)}
+                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].short} ({formatCount(row.reviewKanjiToday)})
                       </span>
                       <span className="inline-flex items-center rounded-full border border-vocabulary bg-vocabulary px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
-                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].short} {formatCount(row.reviewVocabularyToday)}
+                        {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].short} ({formatCount(row.reviewVocabularyToday)})
                       </span>
                       {row.zeroReviewsBonusToday ? (
                         <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-700">
@@ -254,13 +254,13 @@ export default function UserReadingRewardsSummary({
                         <td className="px-2.5 py-2">
                           <div className="flex flex-wrap gap-1">
                             <span className="inline-flex items-center rounded-full border border-radical bg-radical px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
-                              {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short} {formatCount(row.reviewRadicalToday)}
+                              {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].short} ({formatCount(row.reviewRadicalToday)})
                             </span>
                             <span className="inline-flex items-center rounded-full border border-kanji bg-kanji px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
-                              {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].short} {formatCount(row.reviewKanjiToday)}
+                              {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].short} ({formatCount(row.reviewKanjiToday)})
                             </span>
                             <span className="inline-flex items-center rounded-full border border-vocabulary bg-vocabulary px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white">
-                              {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].short} {formatCount(row.reviewVocabularyToday)}
+                              {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].short} ({formatCount(row.reviewVocabularyToday)})
                             </span>
                             {row.zeroReviewsBonusToday ? (
                               <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] text-emerald-700">
