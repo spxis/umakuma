@@ -8,7 +8,6 @@ import { getCachedStudyQueue, setCachedStudyQueue } from "@/lib/studyQueueCache"
 import { QUEUE_TYPES, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { srsLabel } from "@/lib/wanikani/helpers";
 import {
-  fetchAssignmentCount,
   hydrateMissingSubjects,
   normalizeSubjectType,
   queueRowsFromState,
@@ -39,6 +38,7 @@ export async function GET(request: Request, context: RouteContext) {
         const offsetParam = Number(url.searchParams.get("offset") ?? "");
         const limit = Number.isInteger(limitParam) && limitParam > 0 ? Math.min(limitParam, 200) : null;
         const offset = Number.isInteger(offsetParam) && offsetParam >= 0 ? offsetParam : 0;
+        const canUseServerCache = limit === null;
 
     const { accountId } = await context.params;
     if (!(await canAccessAccount(request, accountId))) {
@@ -64,8 +64,8 @@ export async function GET(request: Request, context: RouteContext) {
       tag: account.tokenTag,
     });
 
-    const cached = getCachedStudyQueue(accountId, mode);
-    if (cached) {
+    const cached = canUseServerCache ? getCachedStudyQueue(accountId, mode) : null;
+    if (canUseServerCache && cached) {
       const cachedItems = cached.items as Array<{
         queueType: typeof QUEUE_TYPES.review | typeof QUEUE_TYPES.lesson;
       }>;
@@ -124,16 +124,91 @@ export async function GET(request: Request, context: RouteContext) {
         subjectById.set(subjectId, { object: row.object, data: row.data });
       }
     }
-
     if (lessonState) {
       for (const [subjectId, row] of lessonState.subjectById.entries()) {
         subjectById.set(subjectId, { object: row.object, data: row.data });
       }
     }
 
+    const sortedQueued = [...queued].sort((a, b) => {
+      const aReview = a.queueType === QUEUE_TYPES.review ? 0 : 1;
+      const bReview = b.queueType === QUEUE_TYPES.review ? 0 : 1;
+      if (aReview !== bReview) {
+        return aReview - bReview;
+      }
+
+      const aLevel = subjectById.get(a.data.subject_id)?.data.level ?? 999;
+      const bLevel = subjectById.get(b.data.subject_id)?.data.level ?? 999;
+      if (aLevel !== bLevel) {
+        return aLevel - bLevel;
+      }
+
+      return a.data.subject_id - b.data.subject_id;
+    });
+
+    const totalRows = sortedQueued.length;
+    const pagedRows = limit === null ? sortedQueued : sortedQueued.slice(offset, offset + limit);
+
+    const counts = {
+      reviews: reviewAssignments.length,
+      lessons: lessonAssignments.length,
+      all: reviewAssignments.length + lessonAssignments.length,
+    };
+
+    const emptyTypeCounts = {
+      all: 0,
+      [SUBJECT_TYPES.radical]: 0,
+      [SUBJECT_TYPES.kanji]: 0,
+      [SUBJECT_TYPES.vocabulary]: 0,
+    };
+    const levelCounts: Record<number, number> = {};
+    const typeCounts = { ...emptyTypeCounts };
+    const typeCountsByLevel: Record<number, typeof emptyTypeCounts> = {};
+    const srsCounts = {
+      all: 0,
+      locked: 0,
+      apprentice: 0,
+      guru: 0,
+      master: 0,
+      enlightened: 0,
+      burned: 0,
+    };
+    const srsStageCounts: Record<number, number> = {};
+
+    for (const row of sortedQueued) {
+      const subjectType = normalizeSubjectType(row.data.subject_type);
+      const level = subjectById.get(row.data.subject_id)?.data.level;
+      const status = srsLabel(row.data.srs_stage, row.data.srs_stage <= 0 || !row.data.unlocked_at);
+
+      typeCounts.all += 1;
+      typeCounts[subjectType] += 1;
+      srsCounts.all += 1;
+      srsCounts[status] += 1;
+
+      if (Number.isInteger(row.data.srs_stage) && row.data.srs_stage > 0) {
+        srsStageCounts[row.data.srs_stage] = (srsStageCounts[row.data.srs_stage] ?? 0) + 1;
+      }
+
+      if (typeof level === "number") {
+        levelCounts[level] = (levelCounts[level] ?? 0) + 1;
+        const bucket = typeCountsByLevel[level] ?? { ...emptyTypeCounts };
+        bucket.all += 1;
+        bucket[subjectType] += 1;
+        typeCountsByLevel[level] = bucket;
+      }
+    }
+
+    const pageSubjectById = new Map<number, { object: string; data: SubjectData }>();
+    for (const row of pagedRows) {
+      const subject = subjectById.get(row.data.subject_id);
+      if (subject) {
+        pageSubjectById.set(row.data.subject_id, subject);
+      }
+    }
+
     const relatedSubjectIds = new Set<number>();
-    for (const row of queued) {
-      const subject = subjectById.get(row.data.subject_id)?.data;
+    for (const row of pagedRows) {
+      const subject = pageSubjectById.get(row.data.subject_id)?.data;
       if (!subject) {
         continue;
       }
@@ -152,14 +227,14 @@ export async function GET(request: Request, context: RouteContext) {
     }
 
     if (relatedSubjectIds.size > 0) {
-      await hydrateMissingSubjects(token, subjectById, Array.from(relatedSubjectIds));
+      await hydrateMissingSubjects(token, pageSubjectById, Array.from(relatedSubjectIds));
     }
 
     const kanjiChars = Array.from(
       new Set(
-        queued
+        pagedRows
           .filter((row) => normalizeSubjectType(row.data.subject_type) === SUBJECT_TYPES.kanji)
-          .map((row) => subjectById.get(row.data.subject_id)?.data.characters)
+          .map((row) => pageSubjectById.get(row.data.subject_id)?.data.characters)
           .filter((value): value is string => Boolean(value)),
       ),
     );
@@ -187,7 +262,7 @@ export async function GET(request: Request, context: RouteContext) {
     const jlptByKanji = new Map(jlptRows.map((row) => [row.kanji, row]));
 
     const relatedReferenceFromId = (subjectId: number) => {
-      const related = subjectById.get(subjectId);
+      const related = pageSubjectById.get(subjectId);
       const meaning =
         (related?.data.meanings ?? [])
           .find((item) => (item.primary ?? true) && typeof item.meaning === "string" && item.meaning.length > 0)
@@ -212,225 +287,115 @@ export async function GET(request: Request, context: RouteContext) {
       };
     };
 
-    const items = queued
-      .map((row) => {
-        const subject = subjectById.get(row.data.subject_id);
-        const subjectData = subject?.data;
-        const subjectType = normalizeSubjectType(row.data.subject_type);
-        const label = subjectData?.characters ?? subjectData?.slug ?? `#${row.data.subject_id}`;
-        const primaryMeanings = (subjectData?.meanings ?? []).map((item) => item.meaning);
-        const auxiliaryMeanings = (subjectData?.auxiliary_meanings ?? []).map((item) => item.meaning);
-        const meanings = Array.from(new Set([...primaryMeanings, ...auxiliaryMeanings]));
-        const readings = (subjectData?.readings ?? [])
-          .filter((item) => item.accepted_answer ?? true)
-          .map((item) => item.reading);
-        const primaryReadings = (subjectData?.readings ?? [])
-          .filter((item) => item.primary)
-          .map((item) => item.reading);
+    const items = pagedRows.map((row) => {
+      const subject = pageSubjectById.get(row.data.subject_id);
+      const subjectData = subject?.data;
+      const subjectType = normalizeSubjectType(row.data.subject_type);
+      const label = subjectData?.characters ?? subjectData?.slug ?? `#${row.data.subject_id}`;
+      const primaryMeanings = (subjectData?.meanings ?? []).map((item) => item.meaning);
+      const auxiliaryMeanings = (subjectData?.auxiliary_meanings ?? []).map((item) => item.meaning);
+      const meanings = Array.from(new Set([...primaryMeanings, ...auxiliaryMeanings]));
+      const readings = (subjectData?.readings ?? [])
+        .filter((item) => item.accepted_answer ?? true)
+        .map((item) => item.reading);
+      const primaryReadings = (subjectData?.readings ?? [])
+        .filter((item) => item.primary)
+        .map((item) => item.reading);
 
-        const componentSubjectIds = subjectData?.component_subject_ids ?? [];
-        const amalgamationSubjectIds = subjectData?.amalgamation_subject_ids ?? [];
-        const visuallySimilarSubjectIds = subjectData?.visually_similar_subject_ids ?? [];
-        const relatedSubjectType = (subjectId: number) => normalizeSubjectType(subjectById.get(subjectId)?.object ?? "");
+      const componentSubjectIds = subjectData?.component_subject_ids ?? [];
+      const amalgamationSubjectIds = subjectData?.amalgamation_subject_ids ?? [];
+      const visuallySimilarSubjectIds = subjectData?.visually_similar_subject_ids ?? [];
+      const relatedSubjectType = (subjectId: number) => normalizeSubjectType(pageSubjectById.get(subjectId)?.object ?? "");
 
-        const radicals =
-          subjectType === SUBJECT_TYPES.kanji
-            ? componentSubjectIds
-                .filter((subjectId) => relatedSubjectType(subjectId) === SUBJECT_TYPES.radical)
-                .map(relatedReferenceFromId)
-            : [];
+      const radicals =
+        subjectType === SUBJECT_TYPES.kanji
+          ? componentSubjectIds
+              .filter((subjectId) => relatedSubjectType(subjectId) === SUBJECT_TYPES.radical)
+              .map(relatedReferenceFromId)
+          : [];
 
-        const usedInVocabulary =
-          subjectType === SUBJECT_TYPES.kanji
+      const usedInVocabulary =
+        subjectType === SUBJECT_TYPES.kanji
+          ? amalgamationSubjectIds
+              .filter((subjectId) => relatedSubjectType(subjectId) === SUBJECT_TYPES.vocabulary)
+              .map(relatedReferenceFromId)
+          : subjectType === SUBJECT_TYPES.radical
             ? amalgamationSubjectIds
-                .filter((subjectId) => relatedSubjectType(subjectId) === SUBJECT_TYPES.vocabulary)
-                .map(relatedReferenceFromId)
-            : subjectType === SUBJECT_TYPES.radical
-              ? amalgamationSubjectIds
-                  .filter((subjectId) => relatedSubjectType(subjectId) === SUBJECT_TYPES.kanji)
-                  .map(relatedReferenceFromId)
-              : [];
-
-        const visuallySimilar =
-          subjectType === SUBJECT_TYPES.kanji
-            ? visuallySimilarSubjectIds.map(relatedReferenceFromId)
-            : [];
-
-        const componentKanji =
-          subjectType === SUBJECT_TYPES.vocabulary
-            ? componentSubjectIds
                 .filter((subjectId) => relatedSubjectType(subjectId) === SUBJECT_TYPES.kanji)
                 .map(relatedReferenceFromId)
             : [];
 
-        const jlpt = subjectType === SUBJECT_TYPES.kanji ? jlptByKanji.get(subjectData?.characters ?? "") : null;
-        const jlptMeta = jlpt
-          ? {
-              primaryMeaning: jlpt.primaryMeaning,
-              meanings: jlpt.meanings,
-              onReadings: jlpt.onReadings,
-              kunReadings: jlpt.kunReadings,
-              nanoriReadings: jlpt.nanoriReadings,
-              wordExamples: jlpt.wordExamples,
-              strokeCount: jlpt.strokeCount,
-              frequencyRank: jlpt.frequencyRank,
-              schoolGrade: jlpt.schoolGrade,
-              heisigKeyword: jlpt.heisigKeyword,
-            }
-          : null;
+      const visuallySimilar =
+        subjectType === SUBJECT_TYPES.kanji
+          ? visuallySimilarSubjectIds.map(relatedReferenceFromId)
+          : [];
 
-        return {
-          subjectId: row.data.subject_id,
-          assignmentId: row.assignmentId,
-          queueType: row.queueType,
-          subjectType,
-          wkLevel: subjectData?.level ?? null,
-          characters: label,
-          meanings,
-          readings,
-          primaryReadings,
-          radicals,
-          visuallySimilar,
-          usedInVocabulary,
-          componentKanji,
-          meaningExplanation: subjectData?.meaning_mnemonic ?? "",
-          readingExplanation: subjectData?.reading_mnemonic ?? "",
-          jlptLevel: jlpt?.nLevel ?? null,
-          jlptMeta,
-          srsStage: row.data.srs_stage,
-          status: srsLabel(row.data.srs_stage, row.data.srs_stage <= 0 || !row.data.unlocked_at),
-          startedAt: row.data.started_at,
-          passedAt: row.data.passed_at,
-          availableAt: row.data.available_at,
-        };
-      })
-      .sort((a, b) => {
-        const aReview = a.queueType === QUEUE_TYPES.review ? 0 : 1;
-        const bReview = b.queueType === QUEUE_TYPES.review ? 0 : 1;
-        if (aReview !== bReview) {
-          return aReview - bReview;
-        }
+      const componentKanji =
+        subjectType === SUBJECT_TYPES.vocabulary
+          ? componentSubjectIds
+              .filter((subjectId) => relatedSubjectType(subjectId) === SUBJECT_TYPES.kanji)
+              .map(relatedReferenceFromId)
+          : [];
 
-        const aLevel = a.wkLevel ?? 999;
-        const bLevel = b.wkLevel ?? 999;
-        if (aLevel !== bLevel) {
-          return aLevel - bLevel;
-        }
-
-        return a.subjectId - b.subjectId;
-      });
-
-    const counts =
-      mode === "all"
+      const jlpt = subjectType === SUBJECT_TYPES.kanji ? jlptByKanji.get(subjectData?.characters ?? "") : null;
+      const jlptMeta = jlpt
         ? {
-            all: items.length,
-          reviews: reviewAssignments.length,
-          lessons: lessonAssignments.length,
+            primaryMeaning: jlpt.primaryMeaning,
+            meanings: jlpt.meanings,
+            onReadings: jlpt.onReadings,
+            kunReadings: jlpt.kunReadings,
+            nanoriReadings: jlpt.nanoriReadings,
+            wordExamples: jlpt.wordExamples,
+            strokeCount: jlpt.strokeCount,
+            frequencyRank: jlpt.frequencyRank,
+            schoolGrade: jlpt.schoolGrade,
+            heisigKeyword: jlpt.heisigKeyword,
           }
-        : mode === QUEUE_TYPES.lesson
-          ? {
-              lessons: items.length,
-              reviews: await fetchAssignmentCount("/assignments?immediately_available_for_review=true", token),
-              all: 0,
-            }
-          : {
-              reviews: items.length,
-              lessons: await fetchAssignmentCount("/assignments?srs_stages=0", token),
-              all: 0,
-            };
+        : null;
 
-    counts.all = counts.reviews + counts.lessons;
+      return {
+        subjectId: row.data.subject_id,
+        assignmentId: row.assignmentId,
+        queueType: row.queueType,
+        subjectType,
+        wkLevel: subjectData?.level ?? null,
+        characters: label,
+        meanings,
+        readings,
+        primaryReadings,
+        radicals,
+        visuallySimilar,
+        usedInVocabulary,
+        componentKanji,
+        meaningExplanation: subjectData?.meaning_mnemonic ?? "",
+        readingExplanation: subjectData?.reading_mnemonic ?? "",
+        jlptLevel: jlpt?.nLevel ?? null,
+        jlptMeta,
+        srsStage: row.data.srs_stage,
+        status: srsLabel(row.data.srs_stage, row.data.srs_stage <= 0 || !row.data.unlocked_at),
+        startedAt: row.data.started_at,
+        passedAt: row.data.passed_at,
+        availableAt: row.data.available_at,
+      };
+    });
 
-    const levelCounts = items.reduce<Record<number, number>>((acc, item) => {
-      if (typeof item.wkLevel !== "number") {
-        return acc;
-      }
-
-      acc[item.wkLevel] = (acc[item.wkLevel] ?? 0) + 1;
-      return acc;
-    }, {});
-
-    const emptyTypeCounts = {
-      all: 0,
-      [SUBJECT_TYPES.radical]: 0,
-      [SUBJECT_TYPES.kanji]: 0,
-      [SUBJECT_TYPES.vocabulary]: 0,
-    };
-    const typeCounts = items.reduce<typeof emptyTypeCounts>((acc, item) => {
-      acc.all += 1;
-      if (item.subjectType === SUBJECT_TYPES.radical) {
-        acc[SUBJECT_TYPES.radical] += 1;
-      } else if (item.subjectType === SUBJECT_TYPES.kanji) {
-        acc[SUBJECT_TYPES.kanji] += 1;
-      } else {
-        acc[SUBJECT_TYPES.vocabulary] += 1;
-      }
-
-      return acc;
-    }, { ...emptyTypeCounts });
-
-    const typeCountsByLevel = items.reduce<Record<number, typeof emptyTypeCounts>>((acc, item) => {
-      if (typeof item.wkLevel !== "number") {
-        return acc;
-      }
-
-      const bucket = acc[item.wkLevel] ?? { ...emptyTypeCounts };
-      bucket.all += 1;
-      if (item.subjectType === SUBJECT_TYPES.radical) {
-        bucket[SUBJECT_TYPES.radical] += 1;
-      } else if (item.subjectType === SUBJECT_TYPES.kanji) {
-        bucket[SUBJECT_TYPES.kanji] += 1;
-      } else {
-        bucket[SUBJECT_TYPES.vocabulary] += 1;
-      }
-
-      acc[item.wkLevel] = bucket;
-      return acc;
-    }, {});
-
-    const emptySrsCounts = {
-      all: 0,
-      locked: 0,
-      apprentice: 0,
-      guru: 0,
-      master: 0,
-      enlightened: 0,
-      burned: 0,
-    };
-
-    const srsCounts = items.reduce<typeof emptySrsCounts>((acc, item) => {
-      acc.all += 1;
-      acc[item.status] = (acc[item.status] ?? 0) + 1;
-      return acc;
-    }, { ...emptySrsCounts });
-
-    const srsStageCounts = items.reduce<Record<number, number>>((acc, item) => {
-      const stage = item.srsStage;
-      if (!Number.isInteger(stage) || stage <= 0) {
-        return acc;
-      }
-
-      acc[stage] = (acc[stage] ?? 0) + 1;
-      return acc;
-    }, {});
-
-    setCachedStudyQueue(
-      accountId,
-      mode,
-      items,
-      counts,
-      levelCounts,
-      typeCounts,
-      typeCountsByLevel,
-      srsCounts,
-      srsStageCounts,
-    );
-
-    const pagedItems = limit === null ? items : items.slice(offset, offset + limit);
+    if (canUseServerCache) {
+      setCachedStudyQueue(
+        accountId,
+        mode,
+        items,
+        counts,
+        levelCounts,
+        typeCounts,
+        typeCountsByLevel,
+        srsCounts,
+        srsStageCounts,
+      );
+    }
 
     return NextResponse.json(
       {
-        items: pagedItems,
+        items,
         counts,
         levelCounts,
         typeCounts,
@@ -439,9 +404,9 @@ export async function GET(request: Request, context: RouteContext) {
         srsStageCounts,
         pagination: {
           offset,
-          limit: limit ?? items.length,
-          total: items.length,
-          hasMore: limit === null ? false : offset + limit < items.length,
+          limit: limit ?? totalRows,
+          total: totalRows,
+          hasMore: limit === null ? false : offset + limit < totalRows,
         },
         cached: false,
       },

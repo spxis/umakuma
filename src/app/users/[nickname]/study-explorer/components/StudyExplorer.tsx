@@ -111,7 +111,7 @@ export default function StudyExplorer({
   const effectiveSrsStageFilter: StudySrsStageFilter | null =
     queueMode === STUDY_QUEUE_TYPES.lesson ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
   const initialPageSize = useMemo(
-    () => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 40 : gridColumns * 24),
+    () => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 24 : gridColumns * 12),
     [gridColumns, queueMode],
   );
   const queueRequestUrl = buildStudyQueueRequestUrl({
@@ -169,7 +169,7 @@ export default function StudyExplorer({
     fetchStudyQueue,
     {
       fallbackData: cachedQueueData,
-      keepPreviousData: false,
+      keepPreviousData: true,
       refreshInterval: isModalOpen ? 0 : 30_000,
       revalidateOnFocus: !isModalOpen,
     },

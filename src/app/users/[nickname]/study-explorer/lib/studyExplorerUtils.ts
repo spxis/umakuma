@@ -22,7 +22,7 @@ import {
   STUDY_WK_STATUSES,
 } from "./studyExplorerDomain";
 
-export const STUDY_QUEUE_STORAGE_TTL_MS = 90_000;
+export const STUDY_QUEUE_STORAGE_TTL_MS = 5 * 60_000;
 export const STUDY_RECENT_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 function studyQueueStorageKey(accountId: string, mode: StudyQueueMode, scopeKey?: string): string {
