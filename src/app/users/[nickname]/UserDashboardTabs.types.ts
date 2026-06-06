@@ -71,8 +71,6 @@ export type UserDashboardTabsProps = {
   wkUsername: string;
   linkedEmail: string | null;
   viewerMatchesAccount: boolean;
-  lastSyncedAt: string;
-  lastActivityAt: string | null;
   wkLevel: number;
   levelKanjiLearned: number;
   levelKanjiTotal: number;
@@ -96,15 +94,8 @@ export type UserDashboardTabsProps = {
   passedLevelUpGate: boolean;
   availableProgressLevels: number[];
   levelProgressByLevel: Record<number, LevelProgressSnapshot>;
-  viewerMenuInfo: ViewerMenuInfo | null;
-  canViewAllUserPages: boolean;
   initialDashboardTab: TabId;
   learnContent: ReactNode;
   newsContent: ReactNode;
   readContent: ReactNode;
-};
-
-export type LiveData = {
-  lastSyncedAt: string;
-  lastActivityAt: string | null;
 };

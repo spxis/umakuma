@@ -9,6 +9,7 @@ import ExplorerTabs from "./ExplorerTabs";
 import UserReadPanel from "./UserReadPanel";
 import UserReadingSignoffSection from "./UserReadingSignoffSection";
 import UserDashboardTabs from "./UserDashboardTabs";
+import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import {
   QUEUE_TYPES,
   LEARNED_SRS_GROUPS,
@@ -351,100 +352,104 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   const viewerMatchesAccount = Boolean(viewerEmail && linkedEmail && viewerEmail === linkedEmail);
 
   return (
-    <div className="relative min-h-screen overflow-hidden px-2 py-3 sm:px-6 sm:py-8 lg:px-8">
-      <main className="relative mx-auto w-full max-w-6xl space-y-3 sm:space-y-6">
-        <UserDashboardTabs
-          accountId={account.id}
-          nickname={account.nickname}
-          wkUsername={account.wkUsername}
-          linkedEmail={account.joinedByEmail}
-          viewerMatchesAccount={viewerMatchesAccount}
-          lastSyncedAt={account.lastSyncedAt.toISOString()}
-          lastActivityAt={account.lastActivityAt ? account.lastActivityAt.toISOString() : null}
-          wkLevel={account.wkLevel}
-          levelKanjiLearned={account.levelKanjiLearned}
-          levelKanjiTotal={account.levelKanjiTotal}
-          levelKanjiLocked={account.levelKanjiLocked}
-          totalLearnedKanji={totalLearnedKanji}
-          estimatedHoursRemaining={account.estimatedHoursRemaining}
-          apprenticeCount={account.apprenticeCount}
-          guruCount={account.guruCount}
-          masterCount={account.masterCount}
-          enlightenedCount={account.enlightenedCount}
-          burnedCount={account.burnedCount}
-          radicalCount={account.radicalCount}
-          totalKanjiCount={itemSpread.totals.kanji}
-          vocabularyCount={account.vocabularyCount}
-          itemSpread={itemSpread}
-          itemSpreadDetails={itemSpreadDetails}
-          levelRadicalProgress={levelRadicalProgress}
-          levelKanjiProgress={levelKanjiProgress}
-          levelVocabularyProgress={levelVocabularyProgress}
-          remainingToLevelUp={remainingToLevelUp}
-          passedLevelUpGate={passedLevelUpGate}
-          availableProgressLevels={availableProgressLevels}
-          levelProgressByLevel={levelProgressByLevel}
-          viewerMenuInfo={viewerMenuInfo}
-          canViewAllUserPages={isAdminEmail(viewerEmail)}
-          initialDashboardTab={initialDashboardTab}
-          learnContent={(
-            <ExplorerTabs
-              accountId={account.id}
-              maxLevel={account.wkLevel}
-              accountPendingReviews={account.pendingReviews}
-              levelItemCountsByLevel={levelItemCountsByLevel}
-              initialTab={initialTab}
-              initialQueueMode={initialQueueMode}
-              initialStudyMode={initialStudyMode}
-              initialStudyFilters={{
-                viewedLevel: initialStudyFilters.viewedLevel,
-                typeFilter: initialStudyFilters.typeFilter,
-                srsFilter: initialStudyFilters.srsFilter,
-                srsStageFilter: initialStudyFilters.srsStageFilter,
-                recentOnly: initialStudyFilters.recentOnly,
-                showLocked: initialStudyFilters.showLocked,
-              }}
-              initialSnapshot={{
-                level: account.wkLevel,
-                kanjiTotal: account.levelKanjiTotal,
-                kanjiLearned: account.levelKanjiLearned,
-                kanjiGuruPlus: account.levelKanjiGuruPlus,
-                kanjiLocked: account.levelKanjiLocked,
-                estimatedHoursRemaining: account.estimatedHoursRemaining,
-                items: levelKanjiItems,
-                syncedAt: account.lastSyncedAt.toISOString(),
-              }}
-              initialSrsFilter={initialSrsFilter}
-              jlptItems={jlptKanjiRows.map((row) => ({
-                kanji: row.kanji,
-                nLevel: row.nLevel,
-                strokeCount: row.strokeCount,
-                frequencyRank: row.frequencyRank,
-                schoolGrade: row.schoolGrade,
-                heisigKeyword: row.heisigKeyword,
-                unicodeHex: row.unicodeHex,
-                sourceJlpt: row.sourceJlpt,
-                primaryMeaning: row.primaryMeaning,
-                meanings: row.meanings,
-                onReadings: row.onReadings,
-                kunReadings: row.kunReadings,
-                nanoriReadings: row.nanoriReadings,
-                notes: row.notes,
-                wordExamples: row.wordExamples,
-              }))}
-              userKanjiItems={userKanjiIndex}
-            />
-          )}
-          newsContent={(
-            <UserReadPanel
-              userWkLevel={account.wkLevel}
-              devSampleUrls={getNewsDevSampleUrls()}
-              initialTab={initialReadTab}
-            />
-          )}
-          readContent={<UserReadingSignoffSection accountId={account.id} />}
-        />
-      </main>
+    <div className="px-2 py-3 sm:px-6 sm:py-8 lg:px-8">
+      <AppTopMenuRow
+        viewerMenuInfo={viewerMenuInfo}
+        primaryWkUsername={account.wkUsername}
+        accountId={account.id}
+        showAdminActions={isAdminEmail(viewerEmail)}
+        lastSyncedAt={account.lastSyncedAt.toISOString()}
+        lastActivityAt={account.lastActivityAt ? account.lastActivityAt.toISOString() : null}
+        className="mb-2"
+      />
+
+      <UserDashboardTabs
+        accountId={account.id}
+        nickname={account.nickname}
+        wkUsername={account.wkUsername}
+        linkedEmail={account.joinedByEmail}
+        viewerMatchesAccount={viewerMatchesAccount}
+        wkLevel={account.wkLevel}
+        levelKanjiLearned={account.levelKanjiLearned}
+        levelKanjiTotal={account.levelKanjiTotal}
+        levelKanjiLocked={account.levelKanjiLocked}
+        totalLearnedKanji={totalLearnedKanji}
+        estimatedHoursRemaining={account.estimatedHoursRemaining}
+        apprenticeCount={account.apprenticeCount}
+        guruCount={account.guruCount}
+        masterCount={account.masterCount}
+        enlightenedCount={account.enlightenedCount}
+        burnedCount={account.burnedCount}
+        radicalCount={account.radicalCount}
+        totalKanjiCount={itemSpread.totals.kanji}
+        vocabularyCount={account.vocabularyCount}
+        itemSpread={itemSpread}
+        itemSpreadDetails={itemSpreadDetails}
+        levelRadicalProgress={levelRadicalProgress}
+        levelKanjiProgress={levelKanjiProgress}
+        levelVocabularyProgress={levelVocabularyProgress}
+        remainingToLevelUp={remainingToLevelUp}
+        passedLevelUpGate={passedLevelUpGate}
+        availableProgressLevels={availableProgressLevels}
+        levelProgressByLevel={levelProgressByLevel}
+        initialDashboardTab={initialDashboardTab}
+        learnContent={(
+          <ExplorerTabs
+            accountId={account.id}
+            maxLevel={account.wkLevel}
+            accountPendingReviews={account.pendingReviews}
+            levelItemCountsByLevel={levelItemCountsByLevel}
+            initialTab={initialTab}
+            initialQueueMode={initialQueueMode}
+            initialStudyMode={initialStudyMode}
+            initialStudyFilters={{
+              viewedLevel: initialStudyFilters.viewedLevel,
+              typeFilter: initialStudyFilters.typeFilter,
+              srsFilter: initialStudyFilters.srsFilter,
+              srsStageFilter: initialStudyFilters.srsStageFilter,
+              recentOnly: initialStudyFilters.recentOnly,
+              showLocked: initialStudyFilters.showLocked,
+            }}
+            initialSnapshot={{
+              level: account.wkLevel,
+              kanjiTotal: account.levelKanjiTotal,
+              kanjiLearned: account.levelKanjiLearned,
+              kanjiGuruPlus: account.levelKanjiGuruPlus,
+              kanjiLocked: account.levelKanjiLocked,
+              estimatedHoursRemaining: account.estimatedHoursRemaining,
+              items: levelKanjiItems,
+              syncedAt: account.lastSyncedAt.toISOString(),
+            }}
+            initialSrsFilter={initialSrsFilter}
+            jlptItems={jlptKanjiRows.map((row) => ({
+              kanji: row.kanji,
+              nLevel: row.nLevel,
+              strokeCount: row.strokeCount,
+              frequencyRank: row.frequencyRank,
+              schoolGrade: row.schoolGrade,
+              heisigKeyword: row.heisigKeyword,
+              unicodeHex: row.unicodeHex,
+              sourceJlpt: row.sourceJlpt,
+              primaryMeaning: row.primaryMeaning,
+              meanings: row.meanings,
+              onReadings: row.onReadings,
+              kunReadings: row.kunReadings,
+              nanoriReadings: row.nanoriReadings,
+              notes: row.notes,
+              wordExamples: row.wordExamples,
+            }))}
+            userKanjiItems={userKanjiIndex}
+          />
+        )}
+        newsContent={(
+          <UserReadPanel
+            userWkLevel={account.wkLevel}
+            devSampleUrls={getNewsDevSampleUrls()}
+            initialTab={initialReadTab}
+          />
+        )}
+        readContent={<UserReadingSignoffSection accountId={account.id} />}
+      />
     </div>
   );
 }

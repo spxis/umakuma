@@ -14,25 +14,21 @@ import {
   type ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
 import LeaderboardAdminActions from "./LeaderboardAdminActions";
-import UserHeaderMenu from "./users/[nickname]/UserHeaderMenu";
+import AppTopMenuRow from "./shared/AppTopMenuRow";
 import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
-
 export const dynamic = "force-dynamic";
-
 type ReadingChallengeMemberDelegate = {
   findMany: (args: {
     where?: Record<string, unknown>;
     select: { accountId: true; tracked: true };
   }) => Promise<Array<{ accountId: string; tracked: boolean }>>;
 };
-
 function getReadingChallengeMemberDelegate(): ReadingChallengeMemberDelegate | null {
   const delegate = (prisma as unknown as { readingChallengeMember?: ReadingChallengeMemberDelegate })
     .readingChallengeMember;
   return delegate ?? null;
 }
-
 type LeaderboardRow = {
   id: string;
   nickname: string;
@@ -72,11 +68,9 @@ type LeaderboardRow = {
     levelKanjiLearned: number;
   } | null;
 };
-
 function formatNumber(input: number): string {
   return new Intl.NumberFormat("en-US").format(input);
 }
-
 export default async function Home() {
   const session = await getServerSession(authOptions);
   const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
@@ -87,7 +81,7 @@ export default async function Home() {
   const canViewAllUserPages = isAdminEmail(viewerEmail);
   if (viewerEmail && !canViewAllUserPages && !viewerMenuInfo?.wkUsername) redirect("/join");
   const viewerWkUsername = viewerMenuInfo?.wkUsername ?? null;
-  const readingChallengeHref = viewerWkUsername ? `/users/${encodeURIComponent(viewerWkUsername)}?dashboard=read` : "/join";
+  const readingChallengeHref = viewerWkUsername ? `/users/${encodeURIComponent(viewerWkUsername)}/read` : "/join";
   const challengeToday = getTodayDateInputValue();
 
   let challengeGoalDatePst = READING_CAMPAIGN.goalDatePst;
@@ -337,6 +331,12 @@ export default async function Home() {
     <div className="relative min-h-screen overflow-hidden pb-12">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
       <main className="relative mx-auto w-full max-w-6xl px-4 pt-8 sm:px-6 lg:px-8">
+        <AppTopMenuRow
+          viewerMenuInfo={viewerMenuInfo}
+          primaryWkUsername={viewerWkUsername}
+          showAdminActions={canViewAllUserPages}
+          className="mb-2"
+        />
         <section className="animate-enter rounded-4xl border border-line/80 bg-surface/85 p-5 shadow-[0_24px_80px_rgba(15,111,255,0.17)] backdrop-blur sm:p-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
@@ -361,7 +361,6 @@ export default async function Home() {
                 </Link>
               ) : null}
               <LeaderboardAdminActions />
-              <UserHeaderMenu viewerMenuInfo={viewerMenuInfo} />
             </div>
           </div>
 

@@ -1,17 +1,14 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-
 import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
 import LevelExplorer from "./level-explorer/components/LevelExplorer";
+import FilterChipLabel from "./shared/FilterChipLabel";
 import StudyExplorer from "./study-explorer/components/StudyExplorer";
 import StudySourceControls from "./StudySourceControls";
 import { useStudySourceState } from "./useStudySourceState";
 import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
 import type { StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";
-
 const CUSTOM_STUDY_MAX_LEVEL = 4;
 
 type Props = {
@@ -58,13 +55,14 @@ export default function ExplorerTabs({
   const [studyMode, setStudyMode] = useState(() => (typeof initialStudyMode === "boolean" ? initialStudyMode : true));
   const [activeTab, setActiveTab] = useState<"study" | "level" | "jlpt">(initialTab);
   const [showEnglish, setShowEnglish] = useState(false);
+  const [activeCustomLibraryName, setActiveCustomLibraryName] = useState<string | null>(null);
+  const [studySourceModalRequestId, setStudySourceModalRequestId] = useState(0);
   const [queueMode, setQueueMode] = useState<QueueType>(
     initialQueueMode === QUEUE_TYPES.review || initialQueueMode === QUEUE_TYPES.lesson
       ? initialQueueMode
       : QUEUE_TYPES.review,
   );
   const [initialViewerMode, setInitialViewerMode] = useState<"detail" | "flash" | null>(null);
-
   const {
     studySource,
     setStudySource,
@@ -73,12 +71,10 @@ export default function ExplorerTabs({
     studyCounts,
     applySourceFromSearchParams,
   } = useStudySourceState({ accountId, countsStorageKey, isHydrated });
-
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
-
     const timer = window.setTimeout(() => {
       const params = new URLSearchParams(window.location.search);
       const urlTab = params.get("tab") === "jlpt" ? "jlpt" : params.get("tab") === "level" ? "level" : "study";
@@ -127,7 +123,6 @@ export default function ExplorerTabs({
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
-
     try {
       window.localStorage.setItem("wr:study-mode", studyMode ? "1" : "0");
     } catch {
@@ -139,7 +134,6 @@ export default function ExplorerTabs({
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
-
     try {
       window.localStorage.setItem(`wr:study-queue-mode:${accountId}`, queueMode);
     } catch {
@@ -151,7 +145,6 @@ export default function ExplorerTabs({
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
-
     const params = new URLSearchParams(window.location.search);
     const raw = params.get("tab");
     const tabInUrl = raw === "jlpt" ? "jlpt" : raw === "level" ? "level" : "study";
@@ -181,7 +174,6 @@ export default function ExplorerTabs({
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
-
     const pageKey = activeTab === "study" ? `${activeTab}:${queueMode}` : activeTab;
     if (previousPageKeyRef.current === null) {
       previousPageKeyRef.current = pageKey;
@@ -202,7 +194,6 @@ export default function ExplorerTabs({
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
-
     try {
       window.localStorage.setItem(showEnglishStorageKey, showEnglish ? "1" : "0");
     } catch {
@@ -214,7 +205,6 @@ export default function ExplorerTabs({
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
-
     const onPopState = () => {
       const params = new URLSearchParams(window.location.search);
       setActiveTab(params.get("tab") === "jlpt" ? "jlpt" : params.get("tab") === "level" ? "level" : "study");
@@ -240,7 +230,6 @@ export default function ExplorerTabs({
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
-
     const params = new URLSearchParams(window.location.search);
     const query = (params.get("findLevel") ?? params.get("findJlpt") ?? params.get("findStudy") ?? "").trim();
     if (!query) {
@@ -266,12 +255,14 @@ export default function ExplorerTabs({
     };
   }, []);
 
-  const sourceControlsSlot = typeof document === "undefined"
-    ? null
-    : document.getElementById("wr-study-source-controls-slot");
-
+  const studySourceHeaderLabel = studySource === "custom"
+    ? (activeCustomLibraryName?.trim() || "Custom")
+    : "WaniKani";
+  const studySourceIsCustom = studySource === "custom";
+  const openStudySourceManager = () => {
+    setStudySourceModalRequestId((current) => current + 1);
+  };
   if (dashboardTab !== "learn") return null;
-
   function tabClass(tab: "study" | "level" | "jlpt"): string {
     const active = activeTab === tab;
     return active
@@ -290,31 +281,27 @@ export default function ExplorerTabs({
       : "inline-flex h-7 flex-1 items-center justify-center rounded-full border border-sky-500 bg-sky-500 px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-white sm:h-8 sm:px-4 sm:text-xs sm:tracking-[0.1em]";
   }
 
+  function reviewCountLabel(): string {
+    if (typeof studyCounts?.reviews !== "number") {
+      return "...";
+    }
+    const total = typeof studyCounts.reviewsTotal === "number"
+      ? studyCounts.reviewsTotal
+      : studyCounts.reviews;
+    return `${studyCounts.reviews}/${total}`;
+  }
+
   return (
-    <section className="space-y-3 rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
-      {activeTab === "study" ? (
-        <div className="sm:hidden">
-          <StudySourceControls
-            accountId={accountId}
-            studySource={studySource}
-            onSetStudySource={setStudySource}
-            customLibraryId={customLibraryId}
-            onSetCustomLibraryId={setCustomLibraryId}
-          />
-        </div>
-      ) : null}
-      {activeTab === "study" && sourceControlsSlot
-        ? createPortal(
-            <StudySourceControls
-              accountId={accountId}
-              studySource={studySource}
-              onSetStudySource={setStudySource}
-              customLibraryId={customLibraryId}
-              onSetCustomLibraryId={setCustomLibraryId}
-            />,
-            sourceControlsSlot,
-          )
-        : null}
+    <section className="space-y-3">
+      <StudySourceControls
+        accountId={accountId}
+        studySource={studySource}
+        onSetStudySource={setStudySource}
+        customLibraryId={customLibraryId}
+        onSetCustomLibraryId={setCustomLibraryId}
+        onActiveLibraryNameChange={setActiveCustomLibraryName}
+        openRequestId={studySourceModalRequestId}
+      />
       <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
         <div
           className="inline-flex w-full flex-nowrap items-center gap-0 rounded-full border border-line bg-surface p-1"
@@ -365,7 +352,7 @@ export default function ExplorerTabs({
                   onClick={() => setQueueMode(QUEUE_TYPES.review)}
                   className={queueModeSegmentClass(QUEUE_TYPES.review, queueMode)}
                 >
-                  Reviews <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({typeof studyCounts?.reviews === "number" ? studyCounts.reviews : "..."})</span>
+                  <FilterChipLabel label="Reviews" count={reviewCountLabel()} />
                 </button>
                 <button
                   type="button"
@@ -374,7 +361,7 @@ export default function ExplorerTabs({
                   onClick={() => setQueueMode(QUEUE_TYPES.lesson)}
                   className={queueModeSegmentClass(QUEUE_TYPES.lesson, queueMode)}
                 >
-                  Lessons <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."})</span>
+                  <FilterChipLabel label="Lessons" count={typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."} />
                 </button>
               </div>
             ) : null}
@@ -399,6 +386,9 @@ export default function ExplorerTabs({
           accountId={accountId}
           studySource={studySource}
           customLibraryId={customLibraryId}
+          studySourceHeaderLabel={studySourceHeaderLabel}
+          studySourceIsCustom={studySourceIsCustom}
+          onOpenStudySourceManager={openStudySourceManager}
           maxLevel={studySource === "custom" ? CUSTOM_STUDY_MAX_LEVEL : maxLevel}
           initialViewerMode={initialViewerMode}
           initialFilters={initialStudyFilters}

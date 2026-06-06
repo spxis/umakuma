@@ -1,17 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import useSWR from "swr";
 
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 
-import UserHeaderMenu from "./UserHeaderMenu";
 import {
   ItemSpreadTabPanel,
   LevelProgressTabPanel,
   MainTabPanel,
 } from "./UserDashboardTabPanels";
-import type { LiveData, TabId, UserDashboardTabsProps as Props } from "./UserDashboardTabs.types";
+import type { TabId, UserDashboardTabsProps as Props } from "./UserDashboardTabs.types";
 
 function isDashboardTabId(value: string | null): value is TabId {
   return value === "learn" || value === "stats" || value === "news" || value === "read";
@@ -33,8 +31,6 @@ function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): 
 export default function UserDashboardTabs({
   accountId,
   wkUsername,
-  lastSyncedAt,
-  lastActivityAt,
   wkLevel,
   levelKanjiLearned,
   levelKanjiTotal,
@@ -58,8 +54,6 @@ export default function UserDashboardTabs({
   passedLevelUpGate,
   availableProgressLevels = [],
   levelProgressByLevel = {},
-  viewerMenuInfo,
-  canViewAllUserPages,
   initialDashboardTab,
   learnContent,
   newsContent,
@@ -88,20 +82,6 @@ export default function UserDashboardTabs({
     const parsed = Number(raw);
     return Number.isInteger(parsed) && parsed > 0 ? parsed : wkLevel;
   });
-  const [flashViewerOpen, setFlashViewerOpen] = useState(false);
-
-  const { data: liveData, mutate } = useSWR<LiveData>(
-    `/api/accounts/${accountId}/live`,
-    async (url: string) => {
-      const response = await fetch(url, { cache: "no-store" });
-      const payload = (await response.json()) as LiveData;
-      if (!response.ok) {
-        throw new Error("Could not fetch live account data.");
-      }
-      return payload;
-    },
-    { refreshInterval: 15_000, revalidateOnFocus: true },
-  );
 
   useEffect(() => {
     if (initialDashboardTab !== "learn") {
@@ -124,21 +104,6 @@ export default function UserDashboardTabs({
       };
     }
   }, [activeTab, initialDashboardTab, tabStorageKey]);
-
-  useEffect(() => {
-    const onUserRefreshed = (event: Event) => {
-      const custom = event as CustomEvent<{ accountId?: string }>;
-      if (custom.detail?.accountId !== accountId) {
-        return;
-      }
-      void mutate();
-    };
-
-    window.addEventListener("wr:user-refreshed", onUserRefreshed as EventListener);
-    return () => {
-      window.removeEventListener("wr:user-refreshed", onUserRefreshed as EventListener);
-    };
-  }, [accountId, mutate]);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -199,18 +164,6 @@ export default function UserDashboardTabs({
     };
   }, [activeTab, tabStorageKey, wkUsername]);
 
-  useEffect(() => {
-    const onStudyViewerModeChange = (event: Event) => {
-      const custom = event as CustomEvent<{ open?: boolean; viewerMode?: "detail" | "flash" | null }>;
-      setFlashViewerOpen(Boolean(custom.detail?.open) && custom.detail?.viewerMode === "flash");
-    };
-
-    window.addEventListener("wr:study-viewer-mode", onStudyViewerModeChange as EventListener);
-    return () => {
-      window.removeEventListener("wr:study-viewer-mode", onStudyViewerModeChange as EventListener);
-    };
-  }, []);
-
   const effectiveSelectedProgressLevel =
     safeProgressLevels.includes(selectedProgressLevel)
       ? selectedProgressLevel
@@ -238,26 +191,8 @@ export default function UserDashboardTabs({
     passedLevelUpGate,
   };
 
-  const showTopHeader = activeTab !== "learn";
-
   return (
     <>
-      {showTopHeader ? (
-        <section className="flex justify-end">
-          <div className="ml-auto flex items-center gap-2">
-            <UserHeaderMenu
-              accountId={accountId}
-              viewedWkUsername={wkUsername}
-              viewerMenuInfo={viewerMenuInfo}
-              showAdminActions={canViewAllUserPages}
-              hidden={flashViewerOpen}
-              lastSyncedAt={liveData?.lastSyncedAt ?? lastSyncedAt}
-              lastActivityAt={liveData?.lastActivityAt ?? lastActivityAt}
-            />
-          </div>
-        </section>
-      ) : null}
-
       {activeTab === "learn" ? (
         <section role="tabpanel">
           {learnContent}
