@@ -263,7 +263,7 @@ export default function LevelExplorerContent({
                 aria-selected={selectedLevels.size === levelOptions.length}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.size === levelOptions.length)}`}
               >
-                All <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(counts.all)})</span>
+                All <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(counts.all)})</span>
               </button>
               {levelOptions.map((level) => (
                 <button
@@ -275,7 +275,7 @@ export default function LevelExplorerContent({
                   aria-selected={selectedLevels.has(level)}
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.has(level))}`}
                 >
-                  {level} <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(levelItemCountsByLevel[level] ?? 0)})</span>
+                  {level} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(levelItemCountsByLevel[level] ?? 0)})</span>
                 </button>
               ))}
             </div>
@@ -302,7 +302,7 @@ export default function LevelExplorerContent({
                 aria-selected={visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary)}`}
               >
-                All <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(counts.all)})</span>
+                All <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(counts.all)})</span>
               </button>
               {([
                 ["radical", "RADICAL", counts.radical],
@@ -319,7 +319,7 @@ export default function LevelExplorerContent({
                 if (disabled) return null;
                 return (
                   <button key={type} type="button" onClick={() => onToggleTypeVisibility(type)} disabled={disabled} role="tab" aria-selected={active} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : tone}`}>
-                    {label} <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(count)})</span>
+                    {label} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(count)})</span>
                   </button>
                 );
               })}
@@ -335,7 +335,7 @@ export default function LevelExplorerContent({
                 if (disabled && !active) return null;
                 return (
                   <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}>
-                    {srsFilterButtonLabel(status)} <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(count)})</span>
+                    {srsFilterButtonLabel(status)} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(count)})</span>
                   </button>
                 );
               })}
@@ -396,7 +396,7 @@ export default function LevelExplorerContent({
                       disabled={disabled}
                       className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : allBadgeClass(active)}`}
                     >
-                      {LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(count)})</span>
+                      {LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(count)})</span>
                     </button>
                   );
                 })}
@@ -421,7 +421,7 @@ export default function LevelExplorerContent({
                       disabled={disabled}
                       className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : timing === LEVEL_REVIEW_TIMING_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}
                     >
-                      {label} <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(count)})</span>
+                      {label} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(count)})</span>
                     </button>
                   );
                 })}
@@ -430,7 +430,7 @@ export default function LevelExplorerContent({
               {reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.overdue && overdueOutsideSelectedLevels > 0 ? (
                 <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/55">
                   Showing {formatNumber(reviewTimingCounts.overdue)} overdue in selected levels, with {formatNumber(overdueOutsideSelectedLevels)} more overdue in other levels
-                  <span className="ml-1 inline-block align-bottom text-[10px] font-semibold leading-none text-foreground/55">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
+                  <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
                 </p>
               ) : null}
             </div>
