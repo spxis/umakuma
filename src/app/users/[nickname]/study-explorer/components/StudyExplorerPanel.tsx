@@ -150,12 +150,12 @@ export default function StudyExplorerPanel({
               type="button"
               onClick={onOpenStudySourceManager}
               className="group inline-flex max-w-full items-center gap-2 rounded-md px-1 py-0.5 text-left"
-              title={studySourceIsCustom ? "Change custom library" : "Manage custom libraries"}
+              title={studySourceIsCustom ? "Change study library" : "Choose study library"}
             >
               <h2 className="truncate text-xl font-black text-foreground" title={`Study - ${studySourceHeaderLabel}`}>{`Study - ${studySourceHeaderLabel}`}</h2>
-              <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">{studySourceIsCustom ? "Change" : "Manage"}</span>
+              <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">Change</span>
             </button>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? "Tap title to change library" : "Tap title to manage custom libraries"}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? "Tap title to change library" : "Tap title to choose library"}</p>
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
           <div className="flex items-center gap-2">

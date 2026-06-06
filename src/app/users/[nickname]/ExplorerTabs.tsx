@@ -13,6 +13,7 @@ const CUSTOM_STUDY_MAX_LEVEL = 4;
 
 type Props = {
   accountId: string;
+  viewedWkUsername: string;
   maxLevel: number;
   accountPendingReviews: number;
   levelItemCountsByLevel: Record<number, number>;
@@ -35,6 +36,7 @@ type Props = {
 
 export default function ExplorerTabs({
   accountId,
+  viewedWkUsername,
   maxLevel,
   accountPendingReviews,
   levelItemCountsByLevel,
@@ -291,6 +293,7 @@ export default function ExplorerTabs({
     <section className="space-y-3">
       <StudySourceControls
         accountId={accountId}
+        viewedWkUsername={viewedWkUsername}
         studySource={studySource}
         onSetStudySource={setStudySource}
         customLibraryId={customLibraryId}
@@ -356,7 +359,7 @@ export default function ExplorerTabs({
           initialFilters={initialStudyFilters}
           showEnglish={showEnglish}
           onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
-          canToggleEnglish={!studyMode}
+          canToggleEnglish
           studyMode={studyMode}
           queueMode={queueMode}
         />
@@ -372,7 +375,7 @@ export default function ExplorerTabs({
           initialSnapshot={initialSnapshot}
           initialSrsFilter={initialSrsFilter}
           showEnglish={showEnglish}
-          canToggleEnglish={!studyMode}
+          canToggleEnglish
           onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
           studyMode={studyMode}
         />
@@ -384,7 +387,7 @@ export default function ExplorerTabs({
           isActive={effectiveActiveTab === "jlpt"}
           items={jlptItems}
           showEnglish={showEnglish}
-          canToggleEnglish={!studyMode}
+          canToggleEnglish
           onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
           studyMode={studyMode}
           userKanjiItems={userKanjiItems}

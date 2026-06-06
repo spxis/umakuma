@@ -46,6 +46,14 @@ function userHistoryHref(username: string | null): string {
   return `/users/${encodeURIComponent(username)}/history`;
 }
 
+function userLibrariesHref(username: string | null): string {
+  if (!username) {
+    return "/join";
+  }
+
+  return `/users/${encodeURIComponent(username)}/libraries`;
+}
+
 export default function AppTopMenuRow({
   viewerMenuInfo,
   primaryWkUsername = null,
@@ -66,8 +74,9 @@ export default function AppTopMenuRow({
     { label: "Stats", href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
     { label: "News", href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
     { label: "Read", href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },
+    { label: "Libraries", href: userLibrariesHref(resolvedWkUsername), dashboard: null },
   ];
-  const dividerAfterLabels = new Set(["Leaderboard", "JLPT Explorer"]);
+  const dividerAfterLabels = new Set(["Leaderboard", "Read"]);
   const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
   const routeSegment =
     pathname && userBasePath && pathname.startsWith(`${userBasePath}/`)

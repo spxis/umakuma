@@ -51,7 +51,6 @@ function isDashboardMenuTab(value: string | null): value is "learn" | "wk" | "jl
 function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
   return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
 }
-
 export default function UserHeaderMenu({
   accountId,
   viewedWkUsername,
@@ -210,6 +209,7 @@ export default function UserHeaderMenu({
         { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },
         { label: "News", dashboard: "news", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news` },
         { label: "Read", dashboard: "read", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/read` },
+        { label: "Libraries", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/libraries` },
       ]
     : [];
   const navigationLinks = [

@@ -396,6 +396,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         learnContent={(
           <ExplorerTabs
             accountId={account.id}
+            viewedWkUsername={account.wkUsername}
             maxLevel={account.wkLevel}
             accountPendingReviews={account.pendingReviews}
             levelItemCountsByLevel={levelItemCountsByLevel}
