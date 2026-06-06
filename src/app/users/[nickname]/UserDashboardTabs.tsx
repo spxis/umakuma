@@ -17,6 +17,19 @@ function isDashboardTabId(value: string | null): value is TabId {
   return value === "learn" || value === "stats" || value === "news" || value === "read";
 }
 
+function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): TabId | null {
+  const userBasePath = `/users/${encodeURIComponent(wkUsername)}`;
+  if (pathname === userBasePath) {
+    return "learn";
+  }
+  if (!pathname.startsWith(`${userBasePath}/`)) {
+    return null;
+  }
+
+  const segment = pathname.slice(userBasePath.length + 1).split("/")[0] ?? null;
+  return isDashboardTabId(segment) ? segment : null;
+}
+
 export default function UserDashboardTabs({
   accountId,
   wkUsername,
@@ -163,6 +176,28 @@ export default function UserDashboardTabs({
       window.removeEventListener("wr:dashboard-tab-request", onDashboardTabRequest as EventListener);
     };
   }, [activeTab, tabStorageKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const syncTabFromLocation = () => {
+      const next = resolveDashboardTabFromPathname(window.location.pathname, wkUsername);
+      if (!next || next === activeTab) {
+        return;
+      }
+
+      setActiveTab(next);
+      setStoredEnum(tabStorageKey, next);
+    };
+
+    syncTabFromLocation();
+    window.addEventListener("popstate", syncTabFromLocation);
+    return () => {
+      window.removeEventListener("popstate", syncTabFromLocation);
+    };
+  }, [activeTab, tabStorageKey, wkUsername]);
 
   useEffect(() => {
     const onStudyViewerModeChange = (event: Event) => {

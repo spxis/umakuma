@@ -11,6 +11,7 @@ import {
 import { JLPT_EXPLORER_TEXT } from "./JlptExplorer.constants";
 import { jlptStatusClass } from "../lib/jlptExplorerContentHelpers";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
+import FilterChipLabel from "../../shared/FilterChipLabel";
 import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
 import type {
   KanjiStats,
@@ -56,12 +57,13 @@ export default function JlptExplorerContent({
     : -1;
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(() => {
     if (typeof window === "undefined") {
-      return false;
+      return true;
     }
     try {
-      return window.localStorage.getItem("wr:jlpt:mobile-filters-open") === "1";
+      const stored = window.localStorage.getItem("wr:jlpt:mobile-filters-open");
+      return stored === null ? true : stored === "1";
     } catch {
-      return false;
+      return true;
     }
   });
 
@@ -156,15 +158,16 @@ export default function JlptExplorerContent({
           Math.floor(selectedVisibleIndex / gridColumns) * gridColumns + (gridColumns - 1),
         )
       : -1;
-  const mobileFilterSectionClass = mobileFiltersOpen ? "block" : "hidden sm:block";
+  const mobileFilterSectionClass = mobileFiltersOpen ? "block" : "hidden";
   return (
+    <>
     <section className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface-muted px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-xl font-black text-foreground">JLPT Explorer</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">
-              Browse all N1-N5 kanji <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(items.length)} total)</span>
+              <FilterChipLabel label="Browse all N1-N5 kanji" count={`${formatNumber(items.length)} total`} />
             </p>
           </div>
           <button
@@ -172,7 +175,7 @@ export default function JlptExplorerContent({
             onClick={() => setMobileFiltersOpen((open) => !open)}
             aria-expanded={mobileFiltersOpen}
             aria-controls="jlpt-filters-panel"
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground sm:hidden"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold leading-none text-foreground"
           >
             {mobileFiltersOpen ? JLPT_EXPLORER_TEXT.hideFilters : JLPT_EXPLORER_TEXT.showFilters}
           </button>
@@ -186,14 +189,14 @@ export default function JlptExplorerContent({
             <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(wkLevelFilter === null)}`}>
-                All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(items.length)})</span>
+                <FilterChipLabel label="All" count={formatNumber(items.length)} />
               </button>
               <button type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === "none")}`}>
-                {JLPT_EXPLORER_TEXT.none} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(wkLevelCounts.get("none") ?? 0)})</span>
+                <FilterChipLabel label={JLPT_EXPLORER_TEXT.none} count={formatNumber(wkLevelCounts.get("none") ?? 0)} />
               </button>
               {availableWkLevels.map((level) => (
                 <button key={level} type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === level ? null : level)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === level)}`}>
-                  {level} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(wkLevelCounts.get(level) ?? 0)})</span>
+                  <FilterChipLabel label={level} count={formatNumber(wkLevelCounts.get(level) ?? 0)} />
                 </button>
               ))}
             </div>
@@ -214,7 +217,7 @@ export default function JlptExplorerContent({
                   gradeFilter === "none",
                 )}`}
               >
-                None <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(gradeCounts.get("none") ?? 0)})</span>
+                <FilterChipLabel label="None" count={formatNumber(gradeCounts.get("none") ?? 0)} />
               </button>
             ) : null}
             {availableGrades.map((grade) => (
@@ -226,7 +229,7 @@ export default function JlptExplorerContent({
                   gradeFilter === grade,
                 )}`}
               >
-                G{grade} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(gradeCounts.get(grade) ?? 0)})</span>
+                <FilterChipLabel label={`G${grade}`} count={formatNumber(gradeCounts.get(grade) ?? 0)} />
               </button>
             ))}
             </div>
@@ -243,7 +246,7 @@ export default function JlptExplorerContent({
                 selectedLevels.size === 5,
               )}`}
             >
-              All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(counts.all)})</span>
+              <FilterChipLabel label="All" count={formatNumber(counts.all)} />
             </button>
             {([
               [5, counts.n5],
@@ -262,7 +265,7 @@ export default function JlptExplorerContent({
                     : "border-teal-300 bg-teal-100 text-teal-800 hover:bg-teal-200"
                 }`}
               >
-                N{level} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
+                <FilterChipLabel label={`N${level}`} count={formatNumber(count)} />
               </button>
             ))}
             </div>
@@ -291,6 +294,8 @@ export default function JlptExplorerContent({
         </div>
         </div>
       </header>
+    </section>
+    <section className="mt-3 overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <div className="p-5">
         {isLoadingData ? (
           <div className="mb-3 rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/75">
@@ -395,5 +400,6 @@ export default function JlptExplorerContent({
         ) : null}
       </div>
     </section>
+    </>
   );
 }

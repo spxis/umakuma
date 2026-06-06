@@ -3,9 +3,11 @@ import { allBadgeClass, badgeClass, disabledBadgeClass, formatNumber, srsFilterB
 import { useLevelExplorerResetSelection } from "../lib/useLevelExplorerResetSelection";
 import { JLPT_FILTER_ALLOWED, LEVEL_JLPT_FILTERS, LEVEL_REVIEW_TIMING_FILTERS, LEVEL_SRS_FILTERS, REVIEW_TIMING_ALLOWED, SRS_FILTER_ALLOWED } from "../lib/levelExplorerState";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
+import FilterChipLabel from "../../shared/FilterChipLabel";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_JLPT_MIX_LEVELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS, LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
+
 export default function LevelExplorerContent({
   accountId,
   levelOptions,
@@ -229,8 +231,9 @@ export default function LevelExplorerContent({
     onSetSelectedSubjectId,
     onSetSrsFilter,
   ]);
-  const mobileFilterSectionClass = filtersCollapsed ? "hidden sm:block" : "block";
+  const mobileFilterSectionClass = filtersCollapsed ? "hidden" : "block";
   return (
+    <>
     <section id="explorer" className="overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="flex flex-col gap-3 border-b border-line bg-surface-muted px-5 py-4">
         <div className="flex items-start justify-between gap-3">
@@ -241,7 +244,7 @@ export default function LevelExplorerContent({
           <button
             type="button"
             onClick={() => onSetFiltersCollapsed(!filtersCollapsed)}
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.1em] text-foreground sm:hidden"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold leading-none text-foreground"
             aria-expanded={!filtersCollapsed}
             aria-controls="wk-filters-panel"
           >
@@ -263,7 +266,7 @@ export default function LevelExplorerContent({
                 aria-selected={selectedLevels.size === levelOptions.length}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.size === levelOptions.length)}`}
               >
-                All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(counts.all)})</span>
+                <FilterChipLabel label="All" count={counts.all} />
               </button>
               {levelOptions.map((level) => (
                 <button
@@ -275,7 +278,7 @@ export default function LevelExplorerContent({
                   aria-selected={selectedLevels.has(level)}
                   className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.has(level))}`}
                 >
-                  {level} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(levelItemCountsByLevel[level] ?? 0)})</span>
+                  <FilterChipLabel label={level} count={levelItemCountsByLevel[level] ?? 0} />
                 </button>
               ))}
             </div>
@@ -302,7 +305,7 @@ export default function LevelExplorerContent({
                 aria-selected={visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary)}`}
               >
-                All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(counts.all)})</span>
+                <FilterChipLabel label="All" count={counts.all} />
               </button>
               {([
                 ["radical", "RADICAL", counts.radical],
@@ -319,7 +322,7 @@ export default function LevelExplorerContent({
                 if (disabled) return null;
                 return (
                   <button key={type} type="button" onClick={() => onToggleTypeVisibility(type)} disabled={disabled} role="tab" aria-selected={active} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : tone}`}>
-                    {label} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
+                    <FilterChipLabel label={label} count={count} />
                   </button>
                 );
               })}
@@ -335,7 +338,7 @@ export default function LevelExplorerContent({
                 if (disabled && !active) return null;
                 return (
                   <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}>
-                    {srsFilterButtonLabel(status)} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
+                    <FilterChipLabel label={srsFilterButtonLabel(status)} count={count} />
                   </button>
                 );
               })}
@@ -363,14 +366,6 @@ export default function LevelExplorerContent({
         <section className="rounded-2xl border border-line bg-surface-muted/60 p-3 sm:p-4">
           <div className="flex items-center justify-between gap-3">
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-foreground/70">Filters</p>
-            <button
-              type="button"
-              onClick={() => onSetFiltersCollapsed(!filtersCollapsed)}
-              className="hidden rounded-full border border-line bg-surface px-3 py-2 text-xs font-bold uppercase leading-none tracking-[0.1em] text-foreground sm:inline-flex"
-              aria-expanded={!filtersCollapsed}
-            >
-              {filtersCollapsed ? "Show filters" : "Hide filters"}
-            </button>
           </div>
           {!filtersCollapsed ? (
             <div className="mt-3 space-y-3">
@@ -396,7 +391,7 @@ export default function LevelExplorerContent({
                       disabled={disabled}
                       className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : allBadgeClass(active)}`}
                     >
-                      {LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
+                      <FilterChipLabel label={LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} count={count} />
                     </button>
                   );
                 })}
@@ -421,7 +416,7 @@ export default function LevelExplorerContent({
                       disabled={disabled}
                       className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : timing === LEVEL_REVIEW_TIMING_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}
                     >
-                      {label} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
+                      <FilterChipLabel label={label} count={count} />
                     </button>
                   );
                 })}
@@ -430,13 +425,15 @@ export default function LevelExplorerContent({
               {reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.overdue && overdueOutsideSelectedLevels > 0 ? (
                 <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/55">
                   Showing {formatNumber(reviewTimingCounts.overdue)} overdue in selected levels, with {formatNumber(overdueOutsideSelectedLevels)} more overdue in other levels
-                  <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
+                  <span className="ml-1 text-[11px] font-semibold text-current/80">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
                 </p>
               ) : null}
             </div>
           ) : null}
         </section>
       </div>
+    </section>
+    <section className="mt-3 overflow-hidden rounded-[2rem] border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       {loading ? <p className="px-5 py-4 text-sm text-foreground/70">Loading level data...</p> : null}
       {searchMatchedSubjectIds ? (
         <p className="px-5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
@@ -493,5 +490,6 @@ export default function LevelExplorerContent({
         />
       </div>
     </section>
+    </>
   );
 }
