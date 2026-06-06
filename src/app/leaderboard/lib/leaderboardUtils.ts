@@ -25,6 +25,12 @@ export function isSortKey(value: string | null): value is SortKey {
     "wkLevel",
     "reviewCount",
     "score",
+    "pendingReviews",
+    "apprenticeCount",
+    "guruCount",
+    "masterCount",
+    "enlightenedCount",
+    "burnedCount",
     "lastActivityAt",
     "radicalLearned",
     "radicalTotal",
@@ -128,9 +134,7 @@ export function learnedPercent(learned: number, total: number): number {
 }
 
 export function subjectTypeForTab(tab: LeaderboardTab): SubjectType | null {
-  if (tab === TABS.radicals) return SUBJECT_TYPES.radical;
-  if (tab === TABS.kanji) return SUBJECT_TYPES.kanji;
-  if (tab === TABS.vocabulary) return SUBJECT_TYPES.vocabulary;
+  if (tab === TABS.dueNow) return null;
   return null;
 }
 
@@ -276,19 +280,7 @@ export function tabClass(activeTab: LeaderboardTab, tab: LeaderboardTab): string
       : "border-line bg-surface text-foreground";
   }
 
-  if (tab === TABS.radicals) {
-    return activeTab === tab
-      ? "border-radical bg-radical text-white"
-      : "border-radical/40 bg-radical/10 text-radical";
-  }
-
-  if (tab === TABS.kanji) {
-    return activeTab === tab
-      ? "border-kanji bg-kanji text-white"
-      : "border-kanji/40 bg-kanji/10 text-kanji";
-  }
-
   return activeTab === tab
-    ? "border-vocabulary bg-vocabulary text-white"
-    : "border-vocabulary/40 bg-vocabulary/10 text-vocabulary";
+    ? "border-amber-300 bg-amber-100 text-amber-900"
+    : "border-amber-200 bg-amber-50 text-amber-800";
 }

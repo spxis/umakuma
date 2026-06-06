@@ -72,9 +72,8 @@ export default function LeaderboardExpandedRow({
   }
 
   function focusDeltaForTab(tab: Exclude<LeaderboardTab, "overall">) {
-    if (tab === LEADERBOARD_TABS.radicals) return row.dailyDelta?.radicalCount;
-    if (tab === LEADERBOARD_TABS.kanji) return row.dailyDelta?.levelKanjiLearned;
-    return row.dailyDelta?.vocabularyCount;
+    if (tab === LEADERBOARD_TABS.dueNow) return row.dailyDelta?.reviewCount;
+    return row.dailyDelta?.reviewCount;
   }
 
   return (

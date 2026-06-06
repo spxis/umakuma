@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { Fragment } from "react";
-import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import LeaderboardExpandedRow from "./LeaderboardExpandedRow";
-import { LEADERBOARD_TABS, type LeaderboardRow, type LeaderboardTab, type SortKey, type SortState } from "../lib/leaderboardTypes";
+import {
+  LEADERBOARD_TABS,
+  type LeaderboardRow,
+  type LeaderboardTab,
+  type SortKey,
+  type SortState,
+} from "../lib/leaderboardTypes";
 import {
   deltaClass,
   formatDate,
@@ -15,11 +20,6 @@ import {
   learnedPercent,
   learnedRadicalsFromRow,
   learnedVocabularyFromRow,
-  stageCountForSubject,
-  subjectLastGuruedAtFromRow,
-  subjectLastGuruedItemFromRow,
-  subjectTotalsForRow,
-  subjectTypeForTab,
 } from "../lib/leaderboardUtils";
 
 type Props = {
@@ -43,13 +43,6 @@ type Props = {
 
 function headerClassFor(activeSort: SortState, sortKey: SortKey): string {
   return activeSort.key !== sortKey ? "text-foreground/70" : "text-accent";
-}
-
-function sortIcon(activeSort: SortState, sortKey: SortKey): string {
-  if (activeSort.key !== sortKey) {
-    return "<>";
-  }
-  return activeSort.direction === "desc" ? "v" : "^";
 }
 
 export default function LeaderboardDesktop({
@@ -91,72 +84,54 @@ export default function LeaderboardDesktop({
           <tr>
             <th className="px-4 py-3">
               <button type="button" onClick={() => onRequestSort("rank")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "rank")}`}>
-                # <span className="text-[10px]">{sortIcon(activeSort, "rank")}</span>
+                #
               </button>
             </th>
             <th className="px-4 py-3">
               <button type="button" onClick={() => onRequestSort("nickname")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "nickname")}`}>
-                Nickname <span className="text-[10px]">{sortIcon(activeSort, "nickname")}</span>
+                Nickname
               </button>
             </th>
             <th className="px-4 py-3">
               <button type="button" onClick={() => onRequestSort("wkLevel")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "wkLevel")}`}>
-                Level <span className="text-[10px]">{sortIcon(activeSort, "wkLevel")}</span>
+                Level
               </button>
             </th>
-            {activeTab === "overall" ? (
-              <th className="px-4 py-3">
-                <button type="button" onClick={() => onRequestSort("reviewCount")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "reviewCount")}`}>
-                  Reviewed <span className="text-[10px]">{sortIcon(activeSort, "reviewCount")}</span>
-                </button>
-              </th>
-            ) : null}
-            {activeTab === "overall" ? (
+            {activeTab === LEADERBOARD_TABS.overall ? (
               <>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("radicalPercent")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "radicalPercent")}`}>Radicals (G+) <span className="text-[10px]">{sortIcon(activeSort, "radicalPercent")}</span></button></th>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("kanjiPercent")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "kanjiPercent")}`}>Kanji (G+) <span className="text-[10px]">{sortIcon(activeSort, "kanjiPercent")}</span></button></th>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("vocabularyPercent")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "vocabularyPercent")}`}>Vocab (G+) <span className="text-[10px]">{sortIcon(activeSort, "vocabularyPercent")}</span></button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("radicalPercent")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "radicalPercent")}`}>Radicals</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("kanjiPercent")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "kanjiPercent")}`}>Kanji</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("vocabularyPercent")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "vocabularyPercent")}`}>Vocab</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("score")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "score")}`}>Score</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("lastActivityAt")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "lastActivityAt")}`}>Last activity</button></th>
               </>
             ) : (
               <>
-                {(() => {
-                  const key = activeTab === LEADERBOARD_TABS.radicals ? "radicalPercent" : activeTab === LEADERBOARD_TABS.kanji ? "kanjiPercent" : "vocabularyPercent";
-                  const label =
-                    activeTab === LEADERBOARD_TABS.radicals
-                      ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural
-                      : activeTab === LEADERBOARD_TABS.kanji
-                        ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular
-                        : SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].plural;
-                  return (
-                    <th className="px-4 py-3">
-                      <button type="button" onClick={() => onRequestSort(key)} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, key)}`}>
-                        {label} (G+) <span className="text-[10px]">{sortIcon(activeSort, key)}</span>
-                      </button>
-                    </th>
-                  );
-                })()}
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("subjectApprentice")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "subjectApprentice")}`}>Apprentice <span className="text-[10px]">{sortIcon(activeSort, "subjectApprentice")}</span></button></th>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("subjectGuru")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "subjectGuru")}`}>Guru <span className="text-[10px]">{sortIcon(activeSort, "subjectGuru")}</span></button></th>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("subjectMaster")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "subjectMaster")}`}>Master <span className="text-[10px]">{sortIcon(activeSort, "subjectMaster")}</span></button></th>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("subjectEnlightened")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "subjectEnlightened")}`}>Enlightened <span className="text-[10px]">{sortIcon(activeSort, "subjectEnlightened")}</span></button></th>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("subjectBurned")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "subjectBurned")}`}>Burned <span className="text-[10px]">{sortIcon(activeSort, "subjectBurned")}</span></button></th>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("subjectLastGuruedAt")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "subjectLastGuruedAt")}`}>Last Passed Guru <span className="text-[10px]">{sortIcon(activeSort, "subjectLastGuruedAt")}</span></button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("pendingReviews")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "pendingReviews")}`}>Due now</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("apprenticeCount")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "apprenticeCount")}`}>Apprentice</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("guruCount")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "guruCount")}`}>Guru</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("masterCount")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "masterCount")}`}>Master</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("enlightenedCount")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "enlightenedCount")}`}>Enlightened</button></th>
+                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("burnedCount")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "burnedCount")}`}>Burned</button></th>
               </>
             )}
-            {activeTab === "overall" ? (
-              <>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("score")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "score")}`}>Score <span className="text-[10px]">{sortIcon(activeSort, "score")}</span></button></th>
-                <th className="px-4 py-3"><button type="button" onClick={() => onRequestSort("lastActivityAt")} className={`inline-flex items-center gap-1 ${headerClassFor(activeSort, "lastActivityAt")}`}>Last Activity <span className="text-[10px]">{sortIcon(activeSort, "lastActivityAt")}</span></button></th>
-              </>
-            ) : null}
-            <th className="px-4 py-3">More</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-line text-sm text-foreground/90">
           {sortedRows.map((row) => (
             <Fragment key={row.id}>
               <tr className="transition hover:bg-surface-muted/80">
-                <td className="px-4 py-3 font-black">#{rankById.get(row.id) ?? "-"}</td>
+                <td className="px-4 py-3 font-black">
+                  <button
+                    type="button"
+                    onClick={() => onToggleRow(row.id)}
+                    aria-label={filteredExpanded.has(row.id) ? "Collapse row" : "Expand row"}
+                    className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-sm font-black text-foreground"
+                  >
+                    <span>{filteredExpanded.has(row.id) ? "▾" : "▸"}</span>
+                    <span>#{rankById.get(row.id) ?? "-"}</span>
+                  </button>
+                </td>
                 <td className="px-4 py-3 text-lg font-black text-foreground">
                   {canViewRowPage(row.wkUsername) ? (
                     <>
@@ -171,55 +146,28 @@ export default function LeaderboardDesktop({
                   )}
                 </td>
                 <td className="px-4 py-3 text-lg font-black text-accent"><p>{row.wkLevel}</p><p className={`mt-0.5 text-[10px] font-semibold ${deltaClass(row.dailyDelta?.wkLevel)}`}>{formatDelta(row.dailyDelta?.wkLevel)}</p></td>
-                {activeTab === "overall" ? (
-                  <td className="px-4 py-3 font-semibold"><p>{formatNumber(row.reviewCount)}</p><p className={`mt-0.5 text-[10px] font-semibold ${deltaClass(row.dailyDelta?.reviewCount)}`}>{formatDelta(row.dailyDelta?.reviewCount)}</p></td>
-                ) : null}
-                {activeTab === "overall" ? (
+                {activeTab === LEADERBOARD_TABS.overall ? (
                   <>
                     <td className="px-4 py-3"><span className="subject-pill subject-pill--radical">{formatNumber(learnedRadicalsFromRow(row))}</span><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(row.radicalCount)} ({learnedPercent(learnedRadicalsFromRow(row), row.radicalCount)}%)</p></td>
                     <td className="px-4 py-3"><span className="subject-pill subject-pill--kanji">{formatNumber(learnedKanjiFromRow(row))}</span><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(kanjiCountFromRow(row))} ({learnedPercent(learnedKanjiFromRow(row), kanjiCountFromRow(row))}%)</p></td>
                     <td className="px-4 py-3"><span className="subject-pill subject-pill--vocabulary">{formatNumber(learnedVocabularyFromRow(row))}</span><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(row.vocabularyCount)} ({learnedPercent(learnedVocabularyFromRow(row), row.vocabularyCount)}%)</p></td>
-                  </>
-                ) : (
-                  (() => {
-                    const subjectType = subjectTypeForTab(activeTab) ?? SUBJECT_TYPES.radical;
-                    const totals = subjectTotalsForRow(row, subjectType);
-                    const lastItem = subjectLastGuruedItemFromRow(row, subjectType);
-                    const lastAt = subjectLastGuruedAtFromRow(row, subjectType);
-
-                    return (
-                      <>
-                        <td className="px-4 py-3"><span className={`subject-pill ${subjectType === SUBJECT_TYPES.radical ? "subject-pill--radical" : subjectType === SUBJECT_TYPES.kanji ? "subject-pill--kanji" : "subject-pill--vocabulary"}`}>{formatNumber(totals.learned)}</span><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(totals.total)} ({totals.percent}%)</p></td>
-                        <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(stageCountForSubject(row, subjectType, "apprentice"))}</td>
-                        <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(stageCountForSubject(row, subjectType, "guru"))}</td>
-                        <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(stageCountForSubject(row, subjectType, "master"))}</td>
-                        <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(stageCountForSubject(row, subjectType, "enlightened"))}</td>
-                        <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(stageCountForSubject(row, subjectType, "burned"))}</td>
-                        <td className="px-4 py-3 text-xs text-foreground/75"><p className="font-bold text-foreground">{lastItem?.label ?? "-"}</p><p className="mt-0.5 text-[11px]">{lastItem?.reading ?? ""}</p><p className="mt-1 text-[10px] text-foreground/60">{lastAt ? formatDate(lastAt) : "-"}</p></td>
-                      </>
-                    );
-                  })()
-                )}
-                {activeTab === "overall" ? (
-                  <>
                     <td className="px-4 py-3 text-lg font-black text-hot"><p>{formatNumber(row.score)}</p><p className={`mt-0.5 text-[10px] font-semibold ${deltaClass(row.dailyDelta?.score)}`}>{formatDelta(row.dailyDelta?.score)}</p></td>
                     <td className="px-4 py-3 text-xs uppercase tracking-[0.08em] text-foreground/60"><p>{row.lastActivityAt ? formatDate(row.lastActivityAt) : "-"}</p><p className="mt-1 text-[10px] font-semibold normal-case tracking-normal text-foreground/50">{formatSince(row.lastActivityAt)}</p></td>
                   </>
-                ) : null}
-                <td className="px-4 py-3">
-                  <button
-                    type="button"
-                    onClick={() => onToggleRow(row.id)}
-                    aria-label={filteredExpanded.has(row.id) ? "Collapse row" : "Expand row"}
-                    className="rounded-full border border-line bg-surface px-3 py-1 text-sm font-black text-foreground"
-                  >
-                    {filteredExpanded.has(row.id) ? "▾" : "▸"}
-                  </button>
-                </td>
+                ) : (
+                  <>
+                    <td className="px-4 py-3 text-lg font-black text-accent">{formatNumber(row.pendingReviews)}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(row.apprenticeCount)}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(row.guruCount)}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(row.masterCount)}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(row.enlightenedCount)}</td>
+                    <td className="px-4 py-3 text-sm font-semibold text-foreground/80">{formatNumber(row.burnedCount)}</td>
+                  </>
+                )}
               </tr>
               {filteredExpanded.has(row.id) ? (
                 <tr className="bg-surface-muted/40">
-                  <td colSpan={activeTab === "overall" ? 10 : 11} className="px-4 py-4">
+                  <td colSpan={activeTab === LEADERBOARD_TABS.overall ? 8 : 9} className="px-4 py-4">
                     <LeaderboardExpandedRow
                       row={row}
                       activeTab={activeTab}

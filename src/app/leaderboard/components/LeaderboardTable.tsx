@@ -17,9 +17,6 @@ import {
   learnedRadicalsFromRow,
   learnedVocabularyFromRow,
   nextDirection,
-  stageCountForSubject,
-  subjectLastGuruedAtFromRow,
-  subjectTypeForTab,
   tabClass,
 } from "../lib/leaderboardUtils";
 
@@ -32,9 +29,7 @@ type Props = {
 function createDefaultSortByTab(): Record<LeaderboardTab, SortState> {
   return {
     overall: TAB_CONFIG.overall.defaultSort,
-    radicals: TAB_CONFIG.radicals.defaultSort,
-    kanji: TAB_CONFIG.kanji.defaultSort,
-    vocabulary: TAB_CONFIG.vocabulary.defaultSort,
+    dueNow: TAB_CONFIG.dueNow.defaultSort,
   };
 }
 
@@ -241,13 +236,18 @@ export default function LeaderboardTable({
       const kanjiLearned = learnedKanjiFromRow(row);
       const vocabularyLearned = learnedVocabularyFromRow(row);
       const kanjiTotal = kanjiCountFromRow(row);
-      const activeSubjectType = subjectTypeForTab(activeTab);
 
       if (key === "rank") return rankById.get(row.id) ?? Number.MAX_SAFE_INTEGER;
       if (key === "nickname") return row.nickname.toLowerCase();
       if (key === "wkLevel") return row.wkLevel;
       if (key === "reviewCount") return row.reviewCount;
       if (key === "score") return row.score;
+      if (key === "pendingReviews") return row.pendingReviews;
+      if (key === "apprenticeCount") return row.apprenticeCount;
+      if (key === "guruCount") return row.guruCount;
+      if (key === "masterCount") return row.masterCount;
+      if (key === "enlightenedCount") return row.enlightenedCount;
+      if (key === "burnedCount") return row.burnedCount;
       if (key === "lastActivityAt") return row.lastActivityAt ? new Date(row.lastActivityAt).getTime() : 0;
       if (key === "radicalLearned") return radicalsLearned;
       if (key === "radicalTotal") return row.radicalCount;
@@ -257,16 +257,6 @@ export default function LeaderboardTable({
       if (key === "kanjiPercent") return learnedPercent(kanjiLearned, kanjiTotal);
       if (key === "vocabularyLearned") return vocabularyLearned;
       if (key === "vocabularyTotal") return row.vocabularyCount;
-      if (key === "subjectApprentice") return activeSubjectType ? stageCountForSubject(row, activeSubjectType, "apprentice") : 0;
-      if (key === "subjectGuru") return activeSubjectType ? stageCountForSubject(row, activeSubjectType, "guru") : 0;
-      if (key === "subjectMaster") return activeSubjectType ? stageCountForSubject(row, activeSubjectType, "master") : 0;
-      if (key === "subjectEnlightened") return activeSubjectType ? stageCountForSubject(row, activeSubjectType, "enlightened") : 0;
-      if (key === "subjectBurned") return activeSubjectType ? stageCountForSubject(row, activeSubjectType, "burned") : 0;
-      if (key === "subjectLastGuruedAt") {
-        if (!activeSubjectType) return 0;
-        const value = subjectLastGuruedAtFromRow(row, activeSubjectType);
-        return value ? new Date(value).getTime() : 0;
-      }
       return learnedPercent(vocabularyLearned, row.vocabularyCount);
     };
 
@@ -289,7 +279,7 @@ export default function LeaderboardTable({
     });
 
     return rowsCopy;
-  }, [rows, activeSort, activeTab, rankById]);
+  }, [rows, activeSort, rankById]);
 
   const allRowIds = sortedRows.map((row) => row.id);
   const allExpanded = allRowIds.length > 0 && allRowIds.every((id) => filteredExpanded.has(id));

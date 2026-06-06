@@ -1,5 +1,3 @@
-import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
-
 export type { SubjectType } from "@/lib/domainConstants";
 
 export type GuruedItemSummary = {
@@ -51,9 +49,7 @@ export type LeaderboardRow = {
 
 export const LEADERBOARD_TABS = {
   overall: "overall",
-  radicals: "radicals",
-  kanji: SUBJECT_TYPES.kanji,
-  vocabulary: SUBJECT_TYPES.vocabulary,
+  dueNow: "dueNow",
 } as const;
 
 export type LeaderboardTab = (typeof LEADERBOARD_TABS)[keyof typeof LEADERBOARD_TABS];
@@ -64,6 +60,12 @@ export type SortKey =
   | "wkLevel"
   | "reviewCount"
   | "score"
+  | "pendingReviews"
+  | "apprenticeCount"
+  | "guruCount"
+  | "masterCount"
+  | "enlightenedCount"
+  | "burnedCount"
   | "lastActivityAt"
   | "radicalLearned"
   | "radicalTotal"
@@ -88,9 +90,7 @@ export type SortState = {
 
 export const ALL_TABS: LeaderboardTab[] = [
   LEADERBOARD_TABS.overall,
-  LEADERBOARD_TABS.radicals,
-  LEADERBOARD_TABS.kanji,
-  LEADERBOARD_TABS.vocabulary,
+  LEADERBOARD_TABS.dueNow,
 ];
 export const ALL_SORT_KEYS: SortKey[] = [
   "rank",
@@ -98,6 +98,12 @@ export const ALL_SORT_KEYS: SortKey[] = [
   "wkLevel",
   "reviewCount",
   "score",
+  "pendingReviews",
+  "apprenticeCount",
+  "guruCount",
+  "masterCount",
+  "enlightenedCount",
+  "burnedCount",
   "lastActivityAt",
   "radicalLearned",
   "radicalTotal",
@@ -118,16 +124,8 @@ export const ALL_SORT_KEYS: SortKey[] = [
 
 export const TAB_CONFIG: Record<LeaderboardTab, { label: string; defaultSort: SortState }> = {
   [LEADERBOARD_TABS.overall]: { label: "Overall", defaultSort: { key: "score", direction: "desc" } },
-  [LEADERBOARD_TABS.radicals]: {
-    label: SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural,
-    defaultSort: { key: "radicalPercent", direction: "desc" },
-  },
-  [LEADERBOARD_TABS.kanji]: {
-    label: SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular,
-    defaultSort: { key: "kanjiPercent", direction: "desc" },
-  },
-  [LEADERBOARD_TABS.vocabulary]: {
-    label: SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular,
-    defaultSort: { key: "vocabularyPercent", direction: "desc" },
+  [LEADERBOARD_TABS.dueNow]: {
+    label: "Due now",
+    defaultSort: { key: "pendingReviews", direction: "desc" },
   },
 };
