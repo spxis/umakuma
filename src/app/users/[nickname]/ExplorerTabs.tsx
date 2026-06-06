@@ -298,48 +298,50 @@ export default function ExplorerTabs({
         onActiveLibraryNameChange={setActiveCustomLibraryName}
         openRequestId={studySourceModalRequestId}
       />
-      <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
-        <div className="w-full overflow-x-auto md:col-start-2 md:overflow-visible">
-          <div className="flex min-w-max items-center gap-2 pr-1 md:ml-auto md:min-w-0 md:justify-end">
-            <div
-              className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1"
-              role="tablist"
-              aria-label="Study queue mode"
-            >
+      {effectiveActiveTab === "study" ? (
+        <div className="grid gap-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
+          <div className="w-full overflow-x-auto md:col-start-2 md:overflow-visible">
+            <div className="flex min-w-max items-center gap-2 pr-1 md:ml-auto md:min-w-0 md:justify-end">
+              <div
+                className="inline-flex shrink-0 items-center rounded-full border border-line bg-surface p-1"
+                role="tablist"
+                aria-label="Study queue mode"
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={queueMode === QUEUE_TYPES.review}
+                  onClick={() => setQueueMode(QUEUE_TYPES.review)}
+                  className={queueModeSegmentClass(QUEUE_TYPES.review, queueMode)}
+                >
+                  <FilterChipLabel label="Reviews" count={reviewCountLabel()} />
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={queueMode === QUEUE_TYPES.lesson}
+                  onClick={() => setQueueMode(QUEUE_TYPES.lesson)}
+                  className={queueModeSegmentClass(QUEUE_TYPES.lesson, queueMode)}
+                >
+                  <FilterChipLabel label="Lessons" count={typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."} />
+                </button>
+              </div>
               <button
                 type="button"
-                role="tab"
-                aria-selected={queueMode === QUEUE_TYPES.review}
-                onClick={() => setQueueMode(QUEUE_TYPES.review)}
-                className={queueModeSegmentClass(QUEUE_TYPES.review, queueMode)}
+                onClick={() => setStudyMode((prev) => !prev)}
+                className={`inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest ${
+                  studyMode
+                    ? "border-hot bg-hot text-white"
+                    : "border-line bg-surface text-foreground hover:bg-surface-muted"
+                }`}
               >
-                <FilterChipLabel label="Reviews" count={reviewCountLabel()} />
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={queueMode === QUEUE_TYPES.lesson}
-                onClick={() => setQueueMode(QUEUE_TYPES.lesson)}
-                className={queueModeSegmentClass(QUEUE_TYPES.lesson, queueMode)}
-              >
-                <FilterChipLabel label="Lessons" count={typeof studyCounts?.lessons === "number" ? studyCounts.lessons : "..."} />
+                <span className="sm:hidden">Mode {studyMode ? "On" : "Off"}</span>
+                <span className="hidden sm:inline">Study Mode {studyMode ? "On" : "Off"}</span>
               </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setStudyMode((prev) => !prev)}
-              className={`inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest ${
-                studyMode
-                  ? "border-hot bg-hot text-white"
-                  : "border-line bg-surface text-foreground hover:bg-surface-muted"
-              }`}
-            >
-              <span className="sm:hidden">Mode {studyMode ? "On" : "Off"}</span>
-              <span className="hidden sm:inline">Study Mode {studyMode ? "On" : "Off"}</span>
-            </button>
           </div>
         </div>
-      </div>
+      ) : null}
 
       <div className={effectiveActiveTab === "study" ? "block" : "hidden"}>
         <StudyExplorer

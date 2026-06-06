@@ -37,13 +37,11 @@ export default function NewsReaderForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <label
-          htmlFor="news-url"
-          className="block text-xs font-bold uppercase tracking-[0.14em] text-foreground/70"
-        >
+      <div className="space-y-2">
+        <label htmlFor="news-url" className="block text-xs font-bold uppercase tracking-[0.14em] text-foreground/70">
           {mode === "site" ? "Section / homepage URL" : "Article URL"}
         </label>
+        <div className="flex justify-end">
         <SegmentedControl
           ariaLabel="News mode"
           value={mode}
@@ -64,6 +62,7 @@ export default function NewsReaderForm({
             },
           ]}
         />
+        </div>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row">
         <input

@@ -21,8 +21,6 @@ import type {
 export default function JlptExplorerContent({
   items,
   showEnglish,
-  canToggleEnglish = true,
-  onToggleShowEnglish,
   studyMode,
   counts,
   selectedLevels,
@@ -276,16 +274,6 @@ export default function JlptExplorerContent({
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
-            {onToggleShowEnglish ? (
-              <button
-                type="button"
-                onClick={onToggleShowEnglish}
-                disabled={!canToggleEnglish}
-                className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {canToggleEnglish ? (showEnglish ? JLPT_EXPLORER_TEXT.hideEnglish : JLPT_EXPLORER_TEXT.showEnglish) : JLPT_EXPLORER_TEXT.hintsHidden}
-              </button>
-            ) : null}
             <button
               type="button"
               onClick={() => onSetStickyLevels(!stickyLevels)}

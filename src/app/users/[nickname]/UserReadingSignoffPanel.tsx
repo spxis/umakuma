@@ -393,26 +393,25 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     setModalDirty(true);
     updateForm(mutator);
   }
-
   return (
-    <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
-      <div>
-        <h2 className="text-xl font-black text-foreground">Read</h2>
-        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-          Reading check-ins and challenge progress.
-        </p>
-      </div>
-
-      <UserReadingRewardsSummary
-        campaignName={selectedCampaignName}
-        campaignStartDatePst={selectedCampaignStartDatePst}
-        campaignGoalDatePst={selectedCampaignGoalDatePst}
-        campaignTripDatePst={selectedCampaignTripDatePst}
-        campaignTargetBaseYen={selectedCampaignTargetBaseYen}
-        daysRemaining={daysRemaining}
-        isLoading={isLoading}
-        leaderboard={leaderboard}
-      />
+    <section className="space-y-3">
+      <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
+        <div>
+          <h2 className="text-xl font-black text-foreground">Read</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Reading check-ins and challenge progress.</p>
+        </div>
+        <UserReadingRewardsSummary
+          campaignName={selectedCampaignName}
+          campaignStartDatePst={selectedCampaignStartDatePst}
+          campaignGoalDatePst={selectedCampaignGoalDatePst}
+          campaignTripDatePst={selectedCampaignTripDatePst}
+          campaignTargetBaseYen={selectedCampaignTargetBaseYen}
+          daysRemaining={daysRemaining}
+          isLoading={isLoading}
+          leaderboard={leaderboard}
+        />
+      </section>
+      <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
       <UserReadingCampaignHeader
         campaigns={campaigns}
         selectedCampaignId={selectedCampaignId}
@@ -447,6 +446,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
         onOpenCheckinModal={openCheckinModal}
         onOpenMemberHistory={setHistoryMember}
       />
+      </section>
       <UserReadingMemberHistoryModal open={historyMember !== null} member={historyMember}
         signoffs={historyMember ? signoffs.filter((r) => r.accountId === historyMember.id) : []}
         entries={historyMember ? signoffEntries.filter((r) => r.accountId === historyMember.id) : []}
