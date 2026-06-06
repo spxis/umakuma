@@ -10,7 +10,6 @@ import type { HistorySrsBucket, StudyHistoryPayload } from "@/app/shared/studyHi
 import { srsBucketBadgeClass, srsBucketLabel } from "@/app/shared/studyHistoryUi";
 import { typeGlyphBoxClass } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
-
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 type SortDir = "asc" | "desc";
 
@@ -31,7 +30,6 @@ function formatHistoryDateCompact(value: string): string {
   if (!Number.isFinite(date.getTime())) {
     return "-";
   }
-
   const monthDay = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "2-digit",
@@ -41,7 +39,6 @@ function formatHistoryDateCompact(value: string): string {
     minute: "2-digit",
     hour12: true,
   }).format(date).toLowerCase();
-
   return `${monthDay.toUpperCase()} (${time})`;
 }
 
@@ -49,11 +46,9 @@ function resultIcon(result: string): { icon: string; className: string; label: s
   if (result === "correct") {
     return { icon: "✓", className: "text-emerald-600", label: "Correct" };
   }
-
   if (result === "wrong") {
     return { icon: "✕", className: "text-red-600", label: "Wrong" };
   }
-
   return { icon: "•", className: "text-amber-600", label: "Skipped" };
 }
 
@@ -123,11 +118,9 @@ export default function StudyHistoryTable({
 
   const totals = data?.totals ?? {};
   const totalAttempts = Object.values(totals).reduce((sum, value) => sum + value, 0);
-
-  const selectedAttemptIdForModal =
-    selectedAttemptId && data?.attempts.some((row) => row.id === selectedAttemptId)
-      ? selectedAttemptId
-      : null;
+  const selectedAttemptIdForModal = selectedAttemptId && data?.attempts.some((row) => row.id === selectedAttemptId)
+    ? selectedAttemptId
+    : null;
 
   useEffect(() => {
     if (!collapsible || typeof window === "undefined") {
@@ -166,7 +159,6 @@ export default function StudyHistoryTable({
     setPage(1);
     setSrsBucketFilter(value);
   }
-
   const typeColor: Record<string, string> = {
     radical: "bg-sky-100 text-sky-700",
     kanji: "bg-pink-100 text-pink-700",
@@ -197,9 +189,6 @@ export default function StudyHistoryTable({
           </div>
 
           <StudyHistoryFilters
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            setPage={setPage}
             resultFilter={resultFilter}
             setResultFilter={handleSetResultFilter}
             levelFilter={levelFilter}
@@ -387,11 +376,24 @@ export default function StudyHistoryTable({
       ) : null}
 
       {data ? (
-        <div className="mt-3 flex items-center justify-between gap-2 text-sm">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm">
           <p className="font-semibold text-foreground/70">
             Page {data.pagination.page} of {data.pagination.totalPages} · {data.pagination.total} rows
           </p>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/65">Page size</label>
+            <select
+              value={pageSize}
+              onChange={(event) => {
+                setPage(1);
+                setPageSize(Number(event.target.value));
+              }}
+              className="h-9 rounded-full border border-line bg-surface px-3 text-sm font-bold shadow-sm"
+            >
+              {[10, 25, 50, 100].map((size) => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
             <button
               type="button"
               disabled={!data.pagination.hasPrevious}
@@ -485,10 +487,7 @@ function historyGlyphBoxClass(type: string): string {
 }
 
 function historyGlyphButtonClass(type: string, size: "compact" | "large"): string {
-  const sizeClass =
-    size === "compact"
-      ? "min-h-11 min-w-11 px-2 text-2xl"
-      : "min-h-14 min-w-14 px-3 text-4xl";
+  const sizeClass = size === "compact" ? "min-h-11 min-w-11 px-2 text-2xl" : "min-h-14 min-w-14 px-3 text-4xl";
 
   return [
     "inline-flex shrink-0 items-center justify-center rounded-xl border font-black leading-none",
