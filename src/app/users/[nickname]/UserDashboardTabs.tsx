@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
@@ -12,21 +11,14 @@ import {
   MainTabPanel,
 } from "./UserDashboardTabPanels";
 import type { LiveData, TabId, UserDashboardTabsProps as Props } from "./UserDashboardTabs.types";
-function formatNumber(input: number): string {
-  return new Intl.NumberFormat("en-US").format(input);
-}
 export default function UserDashboardTabs({
   accountId,
   nickname,
   wkUsername,
-  previousUser,
-  nextUser,
   linkedEmail,
   viewerMatchesAccount,
   lastSyncedAt,
   lastActivityAt,
-  globalRank,
-  totalPlayers,
   wkLevel,
   levelKanjiLearned,
   levelKanjiTotal,
@@ -232,22 +224,6 @@ export default function UserDashboardTabs({
               Me
             </span>
           ) : null}
-          <div className="ml-auto flex flex-col items-end gap-2">
-            <div className="flex items-center gap-2">
-              <p className="shrink-0 text-sm font-black uppercase tracking-[0.06em] text-foreground sm:text-base">
-                #{globalRank}
-                <span className="ml-1 text-xs font-bold text-foreground/65">/ {formatNumber(totalPlayers)}</span>
-              </p>
-              <UserHeaderMenu
-                accountId={accountId}
-                viewedWkUsername={wkUsername}
-                viewerMenuInfo={viewerMenuInfo}
-                showAdminActions={canViewAllUserPages}
-                hidden={activeTab === "learn" && flashViewerOpen}
-              />
-            </div>
-            <div id="wr-study-source-controls-slot" className="hidden sm:flex min-h-8 items-center" />
-          </div>
         </div>
 
         <div className="flex items-center gap-2">
@@ -266,25 +242,16 @@ export default function UserDashboardTabs({
               { value: "read", label: "Read" },
             ]}
           />
-
-          {canViewAllUserPages && totalPlayers > 1 ? (
-            <div className="hidden items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:flex">
-              <Link
-                href={`/users/${encodeURIComponent(previousUser?.wkUsername ?? wkUsername)}`}
-                className="rounded-full border border-line bg-surface px-2 py-0.5 select-none hover:bg-surface-muted"
-                aria-label={`Previous user ${previousUser?.nickname ?? nickname}`}
-              >
-                {"< "}{previousUser?.nickname ?? nickname}
-              </Link>
-              <Link
-                href={`/users/${encodeURIComponent(nextUser?.wkUsername ?? wkUsername)}`}
-                className="rounded-full border border-line bg-surface px-2 py-0.5 select-none hover:bg-surface-muted"
-                aria-label={`Next user ${nextUser?.nickname ?? nickname}`}
-              >
-                {nextUser?.nickname ?? nickname}{" >"}
-              </Link>
-            </div>
-          ) : null}
+          <div id="wr-study-source-controls-slot" className="hidden min-h-8 items-center sm:flex" />
+          <div className="ml-auto">
+            <UserHeaderMenu
+              accountId={accountId}
+              viewedWkUsername={wkUsername}
+              viewerMenuInfo={viewerMenuInfo}
+              showAdminActions={canViewAllUserPages}
+              hidden={activeTab === "learn" && flashViewerOpen}
+            />
+          </div>
         </div>
 
         <div className="flex items-center justify-between gap-3">

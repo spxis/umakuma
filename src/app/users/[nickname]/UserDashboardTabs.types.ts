@@ -68,14 +68,10 @@ export type UserDashboardTabsProps = {
   accountId: string;
   nickname: string;
   wkUsername: string;
-  previousUser: { nickname: string; wkUsername: string } | null;
-  nextUser: { nickname: string; wkUsername: string } | null;
   linkedEmail: string | null;
   viewerMatchesAccount: boolean;
   lastSyncedAt: string;
   lastActivityAt: string | null;
-  globalRank: number;
-  totalPlayers: number;
   wkLevel: number;
   levelKanjiLearned: number;
   levelKanjiTotal: number;

@@ -162,26 +162,6 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     },
   })) as LevelSnapshotRow[];
 
-  const rankedAccounts = await prisma.account.findMany({
-    orderBy: [{ score: "desc" }, { wkLevel: "desc" }, { reviewCount: "desc" }],
-    select: { id: true, nickname: true, wkUsername: true },
-  });
-  const rankedIndex = rankedAccounts.findIndex((row) => row.id === account.id);
-  const globalRank = Math.max(1, rankedIndex + 1);
-  const totalPlayers = rankedAccounts.length;
-  const rankSlotIndex =
-    rankedAccounts.length > 0
-      ? Math.min(Math.max(globalRank - 1, 0), rankedAccounts.length - 1)
-      : -1;
-  const previousRanked =
-    rankedAccounts.length > 1
-      ? rankedAccounts[(rankSlotIndex - 1 + rankedAccounts.length) % rankedAccounts.length]
-      : null;
-  const nextRanked =
-    rankedAccounts.length > 1
-      ? rankedAccounts[(rankSlotIndex + 1) % rankedAccounts.length]
-      : null;
-
   const progressItemsByLevel = new Map<number, LevelKanjiItem[]>();
 
   for (const row of levelSnapshots) {
@@ -381,24 +361,6 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
           viewerMatchesAccount={viewerMatchesAccount}
           lastSyncedAt={account.lastSyncedAt.toISOString()}
           lastActivityAt={account.lastActivityAt ? account.lastActivityAt.toISOString() : null}
-          globalRank={globalRank}
-          totalPlayers={totalPlayers}
-          previousUser={
-            previousRanked
-              ? {
-                  nickname: previousRanked.nickname,
-                  wkUsername: previousRanked.wkUsername,
-                }
-              : null
-          }
-          nextUser={
-            nextRanked
-              ? {
-                  nickname: nextRanked.nickname,
-                  wkUsername: nextRanked.wkUsername,
-                }
-              : null
-          }
           wkLevel={account.wkLevel}
           levelKanjiLearned={account.levelKanjiLearned}
           levelKanjiTotal={account.levelKanjiTotal}

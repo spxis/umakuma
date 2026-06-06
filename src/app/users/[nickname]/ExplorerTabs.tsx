@@ -12,6 +12,8 @@ import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTyp
 import type { StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";
 
+const CUSTOM_STUDY_MAX_LEVEL = 4;
+
 type Props = {
   accountId: string;
   maxLevel: number;
@@ -397,7 +399,7 @@ export default function ExplorerTabs({
           accountId={accountId}
           studySource={studySource}
           customLibraryId={customLibraryId}
-          maxLevel={maxLevel}
+          maxLevel={studySource === "custom" ? CUSTOM_STUDY_MAX_LEVEL : maxLevel}
           initialViewerMode={initialViewerMode}
           initialFilters={initialStudyFilters}
           showEnglish={showEnglish}
