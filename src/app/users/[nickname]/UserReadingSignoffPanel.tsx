@@ -49,7 +49,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       fallbackData: monthKey === resolvedInitialMonthKey ? (initialData ?? undefined) : undefined,
       keepPreviousData: true,
       revalidateOnFocus: true,
-      revalidateOnMount: !initialData,
+      revalidateOnMount: true,
     },
   );
   const members = useMemo(() => data?.members ?? [], [data?.members]);
