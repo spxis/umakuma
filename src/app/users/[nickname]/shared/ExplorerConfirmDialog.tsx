@@ -10,6 +10,7 @@ type Props = {
   details?: string[];
   detailsTitle?: string;
   requirePhrase?: string;
+  overlayZIndexClass?: string;
   busy?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -25,6 +26,7 @@ export default function ExplorerConfirmDialog({
   details,
   detailsTitle = "Selected Items",
   requirePhrase,
+  overlayZIndexClass = "z-50",
   busy = false,
   onConfirm,
   onCancel,
@@ -76,7 +78,7 @@ export default function ExplorerConfirmDialog({
       : "border-accent bg-accent text-white hover:bg-accent-2";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/35 p-4 backdrop-blur-[2px]">
+    <div className={`fixed inset-0 ${overlayZIndexClass} flex items-center justify-center bg-foreground/35 p-4 backdrop-blur-[2px]`}>
       <div
         role="dialog"
         aria-modal="true"

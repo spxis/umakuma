@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
+import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 
 type CustomLibraryItemRow = {
   id: string;
@@ -30,6 +31,8 @@ export default function StudySourceLibraryItemsManager({
   const [message, setMessage] = useState<string | null>(null);
   const [isDeletingItems, setIsDeletingItems] = useState(false);
   const [isDeletingLibrary, setIsDeletingLibrary] = useState(false);
+  const [deleteItemsConfirmOpen, setDeleteItemsConfirmOpen] = useState(false);
+  const [deleteLibraryConfirmOpen, setDeleteLibraryConfirmOpen] = useState(false);
 
   const itemsPath = useMemo(
     () => (libraryId ? `/api/custom-study/${accountId}/libraries/items?libraryId=${encodeURIComponent(libraryId)}` : null),
@@ -51,6 +54,14 @@ export default function StudySourceLibraryItemsManager({
   );
 
   const items = data?.items ?? [];
+  const selectedItems = items.filter((item) => selectedItemIds.includes(item.id));
+  const selectedItemDetails = selectedItems.slice(0, 12).map((item) => `${item.characters} (${item.type}, L${item.level})`);
+  const selectedItemOverflow = selectedItems.length > selectedItemDetails.length
+    ? selectedItems.length - selectedItemDetails.length
+    : 0;
+  const deleteItemDetails = selectedItemOverflow > 0
+    ? [...selectedItemDetails, `+${selectedItemOverflow} more item${selectedItemOverflow === 1 ? "" : "s"}`]
+    : selectedItemDetails;
 
   useEffect(() => {
     setSelectedItemIds([]);
@@ -90,10 +101,12 @@ export default function StudySourceLibraryItemsManager({
       }
 
       const deletedCount = body.deletedCount ?? 0;
+      setDeleteItemsConfirmOpen(false);
       setMessage(`Deleted ${deletedCount} item${deletedCount === 1 ? "" : "s"}.`);
       setSelectedItemIds([]);
       await Promise.all([mutate(), onLibrariesChanged()]);
     } catch (error) {
+      setDeleteItemsConfirmOpen(false);
       setMessage(error instanceof Error ? error.message : "Could not delete library items.");
     } finally {
       setIsDeletingItems(false);
@@ -119,11 +132,13 @@ export default function StudySourceLibraryItemsManager({
         throw new Error(body.error ?? "Could not delete custom library.");
       }
 
+      setDeleteLibraryConfirmOpen(false);
       setSelectedItemIds([]);
       setMessage("Library deleted.");
       await onLibrariesChanged();
       onLibraryDeleted(body.fallbackActiveLibraryId ?? null);
     } catch (error) {
+      setDeleteLibraryConfirmOpen(false);
       setMessage(error instanceof Error ? error.message : "Could not delete custom library.");
     } finally {
       setIsDeletingLibrary(false);
@@ -158,7 +173,7 @@ export default function StudySourceLibraryItemsManager({
           <button
             type="button"
             onClick={() => {
-              void deleteSelectedItems();
+              setDeleteItemsConfirmOpen(true);
             }}
             disabled={isDeletingItems || selectedItemIds.length === 0}
             className="inline-flex h-8 items-center justify-center rounded-lg border border-red-300 bg-red-50 px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
@@ -168,7 +183,7 @@ export default function StudySourceLibraryItemsManager({
           <button
             type="button"
             onClick={() => {
-              void deleteLibrary();
+              setDeleteLibraryConfirmOpen(true);
             }}
             disabled={isDeletingLibrary}
             className="inline-flex h-8 items-center justify-center rounded-lg border border-red-300 bg-red-50 px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-red-700 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
@@ -215,6 +230,36 @@ export default function StudySourceLibraryItemsManager({
       </div>
 
       {message ? <p className="text-xs text-foreground/70">{message}</p> : null}
+
+      <ExplorerConfirmDialog
+        open={deleteItemsConfirmOpen}
+        title={`Delete ${selectedItemIds.length} selected item${selectedItemIds.length === 1 ? "" : "s"}?`}
+        description="This removes the selected items from this library."
+        confirmLabel="Delete selected"
+        cancelLabel="Cancel"
+        details={deleteItemDetails}
+        detailsTitle="Items to delete"
+        overlayZIndexClass="z-10030"
+        busy={isDeletingItems}
+        onCancel={() => setDeleteItemsConfirmOpen(false)}
+        onConfirm={() => {
+          void deleteSelectedItems();
+        }}
+      />
+
+      <ExplorerConfirmDialog
+        open={deleteLibraryConfirmOpen}
+        title="Delete library?"
+        description={`This permanently removes ${libraryName ?? "this library"} and all of its items.`}
+        confirmLabel="Delete library"
+        cancelLabel="Keep library"
+        overlayZIndexClass="z-10030"
+        busy={isDeletingLibrary}
+        onCancel={() => setDeleteLibraryConfirmOpen(false)}
+        onConfirm={() => {
+          void deleteLibrary();
+        }}
+      />
     </div>
   );
 }
