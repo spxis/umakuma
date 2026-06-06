@@ -22,34 +22,16 @@ const DROPDOWN_WANIKANI_VALUE = "";
 const SAMPLE_CUSTOM_LIBRARY_JSON = JSON.stringify(
   {
     schemaVersion: 1,
-    library: {
-      id: "jlpt-n5-core",
-      name: "JLPT N5 core",
-      description: "Starter set with contiguous levels",
-    },
+    library: { id: "jlpt-n5-core", name: "JLPT N5 core", description: "Starter set with contiguous levels" },
     items: [
-      {
-        id: "kanji-ichi",
-        type: "kanji",
-        level: 1,
-        characters: "一",
-        meanings: ["one"],
-        readings: ["いち", "いつ"],
-        primaryReading: "いち",
-      },
-      {
-        id: "vocab-nihon",
-        type: "vocabulary",
-        level: 2,
-        characters: "日本",
-        meanings: ["Japan"],
-        readings: ["にほん", "にっぽん"],
-      },
+      { id: "kanji-ichi", type: "kanji", level: 1, characters: "一", meanings: ["one"], readings: ["いち", "いつ"], primaryReading: "いち" },
+      { id: "vocab-nihon", type: "vocabulary", level: 2, characters: "日本", meanings: ["Japan"], readings: ["にほん", "にっぽん"] },
     ],
   },
-  null,
-  2,
+  null, 2,
 );
+
+type UploadedLibraryMeta = { fileName: string; libraryName: string; externalKey: string; importedCount: number; createdCount: number; updatedCount: number; removedCount: number };
 
 type Props = {
   accountId: string;
@@ -80,6 +62,7 @@ export default function StudySourceControls({
   const [renameMessage, setRenameMessage] = useState<string | null>(null);
   const [isRenaming, setIsRenaming] = useState(false);
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+  const [uploadedLibraryMeta, setUploadedLibraryMeta] = useState<UploadedLibraryMeta | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
   const librariesPath = useMemo(() => `/api/custom-study/${accountId}/libraries`, [accountId]);
@@ -157,6 +140,7 @@ export default function StudySourceControls({
     setDraftLibraryId(studySource === "custom" ? resolvedCurrentLibraryId : null);
     setPendingCustomSelection(studySource !== "custom");
     setUploadMessage(null);
+    setUploadedLibraryMeta(null);
     setRenameMessage(null);
     setIsModalOpen(true);
   }, [customLibraryId, data?.libraries, openRequestId, studySource]);
@@ -221,6 +205,7 @@ export default function StudySourceControls({
   async function handleUploadFile(file: File): Promise<void> {
     setIsUploading(true);
     setUploadMessage(null);
+    setUploadedLibraryMeta(null);
     setRenameMessage(null);
 
     try {
@@ -233,8 +218,8 @@ export default function StudySourceControls({
       });
       const body = (await response.json()) as {
         error?: string;
-        summary?: { importedCount?: number };
-        library?: { id?: string; name?: string };
+        summary?: { importedCount?: number; createdCount?: number; updatedCount?: number; removedCount?: number };
+        library?: { id?: string; externalKey?: string; name?: string };
       };
 
       if (!response.ok) {
@@ -247,14 +232,22 @@ export default function StudySourceControls({
       }
 
       setUploadMessage(`Imported ${body.summary?.importedCount ?? 0} items.`);
+      setUploadedLibraryMeta({
+        fileName: file.name,
+        libraryName: body.library?.name ?? "Custom library",
+        externalKey: body.library?.externalKey ?? "Unknown",
+        importedCount: body.summary?.importedCount ?? 0,
+        createdCount: body.summary?.createdCount ?? 0,
+        updatedCount: body.summary?.updatedCount ?? 0,
+        removedCount: body.summary?.removedCount ?? 0,
+      });
       await mutate();
     } catch (error) {
+      setUploadedLibraryMeta(null);
       setUploadMessage(error instanceof Error ? error.message : "Could not import custom library.");
     } finally {
       setIsUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   }
 
@@ -283,6 +276,7 @@ export default function StudySourceControls({
       && trimmedRenameDraft !== selectedLibraryName
       && !renameValidationMessage,
   );
+  const isApplyDisabled = isUploading || !draftLibraryId || draftLibraryId === DROPDOWN_WANIKANI_VALUE;
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -353,7 +347,7 @@ export default function StudySourceControls({
       />
 
       {isModalOpen ? (
-        <div className="fixed inset-0 z-[10020] flex items-center justify-center bg-black/45 p-4 sm:items-start sm:justify-end sm:pt-20 sm:pr-6" role="presentation">
+        <div className="fixed inset-0 z-10020 flex items-center justify-center bg-black/45 p-4 sm:items-start sm:justify-end sm:pt-20 sm:pr-6" role="presentation">
           <div
             role="dialog"
             aria-modal="true"
@@ -457,10 +451,19 @@ export default function StudySourceControls({
               </div>
 
               {renameMessage ? <p className="text-sm text-foreground/70">{renameMessage}</p> : null}
-              {!renameMessage && draftLibraryId && renameValidationMessage ? (
-                <p className="text-sm text-foreground/70">{renameValidationMessage}</p>
-              ) : null}
+              {!renameMessage && draftLibraryId && renameValidationMessage ? <p className="text-sm text-foreground/70">{renameValidationMessage}</p> : null}
               {uploadMessage ? <p className="text-sm text-foreground/70">{uploadMessage}</p> : null}
+              {uploadedLibraryMeta ? (
+                <div className="space-y-1 rounded-xl border border-line bg-surface px-3 py-2 text-xs text-foreground/75">
+                  <p className="font-bold text-foreground">Uploaded library</p>
+                  <p>Name: {uploadedLibraryMeta.libraryName}</p>
+                  <p>Key: {uploadedLibraryMeta.externalKey}</p>
+                  <p>File: {uploadedLibraryMeta.fileName}</p>
+                  <p>
+                    Items: {uploadedLibraryMeta.importedCount} ({uploadedLibraryMeta.createdCount} new, {uploadedLibraryMeta.updatedCount} updated, {uploadedLibraryMeta.removedCount} removed)
+                  </p>
+                </div>
+              ) : null}
               {pendingCustomSelection && libraries.length === 0 ? (
                 <p className="text-sm text-foreground/70">Upload a JSON file to create your first custom library.</p>
               ) : null}
@@ -479,6 +482,7 @@ export default function StudySourceControls({
                 onClick={() => {
                   void applySelectedLibrary();
                 }}
+                disabled={isApplyDisabled}
                 className="inline-flex h-9 w-full items-center justify-center rounded-full border border-accent bg-accent px-4 text-xs font-bold uppercase tracking-[0.08em] text-white disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Use selected library
