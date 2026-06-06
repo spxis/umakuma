@@ -153,9 +153,13 @@ export async function GET(request: Request) {
         const challengeBooksRaw = await readingChallengeBook.findMany(challengeBookQuery);
         const challengeBooks = challengeBooksRaw.map(toChallengeBookRecord);
         await ensureSeedBooks(viewerAccounts, challengeBooks, readingChallengeBook, selectedChallengeId);
-        await backfillStaleCoverUrls(challengeBooks);
 
         const challengeBooksAfterSeed = await readingChallengeBook.findMany(challengeBookQuery);
+        const challengeBookRecords = challengeBooksAfterSeed.map(toChallengeBookRecord);
+        // Do cover URL healing in the background so read page data is not blocked by external APIs.
+        void backfillStaleCoverUrls(challengeBookRecords).catch(() => {
+          // Best effort only: stale covers can be healed in subsequent requests.
+        });
 
         const accountReviewQueues = await prisma.account.findMany({
           where: {
@@ -195,7 +199,7 @@ export async function GET(request: Request) {
             selectedChallengeId,
             viewerCanChooseMember: await isAuthorizedAdmin(request),
             trackedMemberAccountIds: await trackedMemberAccountIds,
-            challengeBooks: challengeBooksAfterSeed.map(toChallengeBookRecord),
+            challengeBooks: challengeBookRecords,
             signoffs: signoffs.map(toReadingSignoffRecord),
             signoffEntries: signoffEntries.map(toReadingSignoffEntryRecord),
             reviewQueues,
