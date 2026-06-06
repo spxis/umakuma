@@ -4,6 +4,8 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import InviteCodeAccessPanel from "../InviteCodeAccessPanel";
 
+type AuthFlow = "login" | "join";
+
 type JoinStatus = {
   type: "idle" | "ok" | "error";
   message: string;
@@ -27,8 +29,14 @@ async function startGoogleSignIn(callbackPath: string) {
   }
 }
 
+function isAuthFlow(value: string | null): value is AuthFlow {
+  return value === "login" || value === "join";
+}
+
 export default function JoinPage() {
   const [accessDenied, setAccessDenied] = useState(false);
+  const [flow, setFlow] = useState<AuthFlow>("join");
+  const [hasHydratedFlow, setHasHydratedFlow] = useState(false);
   const [nickname, setNickname] = useState("");
   const [token, setToken] = useState("");
   const [signedIn, setSignedIn] = useState(false);
@@ -39,10 +47,12 @@ export default function JoinPage() {
   const [status, setStatus] = useState<JoinStatus>({ type: "idle", message: "" });
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      setAccessDenied(params.get("access") === "denied");
-    }
+    const params = new URLSearchParams(window.location.search);
+    const denied = params.get("access") === "denied";
+    const flowFromQuery = params.get("flow");
+    setAccessDenied(denied);
+    setFlow(isAuthFlow(flowFromQuery) ? flowFromQuery : denied ? "login" : "join");
+    setHasHydratedFlow(true);
 
     async function loadSession() {
       try {
@@ -60,6 +70,23 @@ export default function JoinPage() {
       setChecking(false);
     });
   }, []);
+
+  useEffect(() => {
+    if (!hasHydratedFlow) {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (flow === "join") {
+      params.delete("flow");
+    } else {
+      params.set("flow", flow);
+    }
+
+    const query = params.toString();
+    const next = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
+    window.history.replaceState(window.history.state, "", next);
+  }, [flow, hasHydratedFlow]);
 
   async function join(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -112,49 +139,125 @@ export default function JoinPage() {
               You do not have access to that user page yet. Join with your Google account or use your invite code.
             </div>
           ) : null}
-          {!signedIn ? (
+
+          <div className="mb-5 inline-flex rounded-full border border-line bg-surface-muted p-1">
+            <button
+              type="button"
+              onClick={() => setFlow("login")}
+              aria-pressed={flow === "login"}
+              className={`inline-flex h-9 items-center justify-center rounded-full px-4 text-xs font-black uppercase tracking-[0.12em] transition ${
+                flow === "login"
+                  ? "border border-line bg-surface text-foreground"
+                  : "text-foreground/70 hover:bg-surface"
+              }`}
+            >
+              Login
+            </button>
+            <button
+              type="button"
+              onClick={() => setFlow("join")}
+              aria-pressed={flow === "join"}
+              className={`inline-flex h-9 items-center justify-center rounded-full px-4 text-xs font-black uppercase tracking-[0.12em] transition ${
+                flow === "join"
+                  ? "border border-line bg-surface text-foreground"
+                  : "text-foreground/70 hover:bg-surface"
+              }`}
+            >
+              Join
+            </button>
+          </div>
+
+          {flow === "login" ? (
             <>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Open signup</p>
-              <h1 className="mt-2 text-4xl leading-[0.95] text-foreground sm:text-5xl">Join UmaKuma</h1>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Account access</p>
+              <h1 className="mt-2 text-4xl leading-[0.95] text-foreground sm:text-5xl">Log in</h1>
               <p className="mt-3 text-sm text-slate-700 sm:text-base">
-                First choose how to access your account. Invite code works without Google.
+                Use an invite code for direct access, or sign in with Google for account setup and admin access.
               </p>
 
-              <div className="mt-5">
+              <div className="mt-5 grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
                 <InviteCodeAccessPanel postLoginCallbackUrl="/join" />
-              </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  void startGoogleSignIn("/join");
-                }}
-                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
-              >
-                Sign in with Google
-              </button>
+                <aside className="rounded-2xl border border-line bg-surface-muted p-4">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">Google</p>
+                  <p className="mt-1 text-sm text-foreground/75">
+                    Sign in with Google before joining with your token.
+                  </p>
+                  {signedIn ? (
+                    <>
+                      <p className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">
+                        Signed in{userEmail ? ` as ${userEmail}` : " with Google"}.
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setFlow("join")}
+                          className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
+                        >
+                          Continue to join
+                        </button>
+                        <Link
+                          href="/signout?callbackUrl=/join?flow=login"
+                          className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
+                        >
+                          Sign out
+                        </Link>
+                      </div>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        void startGoogleSignIn("/join");
+                      }}
+                      className="mt-3 inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
+                    >
+                      Sign in with Google
+                    </button>
+                  )}
+                </aside>
               </div>
             </>
           ) : (
             <>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Session</p>
-              <h1 className="mt-2 text-3xl leading-[0.95] text-foreground sm:text-4xl">You are signed in</h1>
-              <p className="mt-2 text-sm text-slate-700 sm:text-base">
-                Active account: <span className="font-bold text-foreground">{userName ?? "Google user"}</span>
-                {userEmail ? <span className="text-foreground/70"> ({userEmail})</span> : null}
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Create account</p>
+              <h1 className="mt-2 text-4xl leading-[0.95] text-foreground sm:text-5xl">Join UmaKuma</h1>
+              <p className="mt-3 text-sm text-slate-700 sm:text-base">
+                Connect Google first, then submit your display name and WaniKani token.
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-              <span className="inline-flex h-10 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-xs font-black uppercase tracking-[0.12em] text-emerald-800">
-                Google already connected
-              </span>
-              <Link
-                href="/signout?callbackUrl=/join"
-                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
-              >
-                Sign out
-              </Link>
-              </div>
+
+              {!signedIn ? (
+                <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+                  Sign in with Google before joining. Use the login tab to continue.
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      onClick={() => setFlow("login")}
+                      className="inline-flex h-10 items-center justify-center rounded-full border border-amber-300 bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-amber-900 transition hover:bg-amber-100"
+                    >
+                      Open login tab
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <p className="mt-2 text-sm text-slate-700 sm:text-base">
+                    Active account: <span className="font-bold text-foreground">{userName ?? "Google user"}</span>
+                    {userEmail ? <span className="text-foreground/70"> ({userEmail})</span> : null}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <span className="inline-flex h-10 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-xs font-black uppercase tracking-[0.12em] text-emerald-800">
+                      Google connected
+                    </span>
+                    <Link
+                      href="/signout?callbackUrl=/join"
+                      className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
+                    >
+                      Sign out
+                    </Link>
+                  </div>
+                </>
+              )}
             </>
           )}
 
@@ -165,47 +268,49 @@ export default function JoinPage() {
             <p className="mt-1 text-xs">{userEmail ?? "No Google account in session."}</p>
           </div>
 
-          <form onSubmit={join} className="mt-7 space-y-4">
-            <label className="block">
-              <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
-                Display name
-              </span>
-              <input
-                type="text"
-                required
-                minLength={2}
-                maxLength={32}
-                value={nickname}
-                onChange={(event) => setNickname(event.target.value)}
-                className="w-full rounded-2xl border border-line bg-surface-muted px-4 py-3 text-base text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
-                placeholder="How your name appears on leaderboard"
-              />
-            </label>
+          {flow === "join" ? (
+            <form onSubmit={join} className="mt-7 space-y-4">
+              <label className="block">
+                <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
+                  Display name
+                </span>
+                <input
+                  type="text"
+                  required
+                  minLength={2}
+                  maxLength={32}
+                  value={nickname}
+                  onChange={(event) => setNickname(event.target.value)}
+                  className="w-full rounded-2xl border border-line bg-surface-muted px-4 py-3 text-base text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                  placeholder="How your name appears on leaderboard"
+                />
+              </label>
 
-            <label className="block">
-              <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
-                WaniKani API token
-              </span>
-              <input
-                type="password"
-                required
-                value={token}
-                onChange={(event) => setToken(event.target.value)}
-                className="w-full rounded-2xl border border-line bg-surface-muted px-4 py-3 text-base text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
-                placeholder="Paste personal token"
-              />
-            </label>
+              <label className="block">
+                <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
+                  WaniKani API token
+                </span>
+                <input
+                  type="password"
+                  required
+                  value={token}
+                  onChange={(event) => setToken(event.target.value)}
+                  className="w-full rounded-2xl border border-line bg-surface-muted px-4 py-3 text-base text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                  placeholder="Paste personal token"
+                />
+              </label>
 
-            <button
-              type="submit"
-              disabled={loading || !signedIn}
-              className="inline-flex h-12 items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading ? "Joining..." : "Join leaderboard"}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={loading || !signedIn}
+                className="inline-flex h-12 items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading ? "Joining..." : "Join leaderboard"}
+              </button>
+            </form>
+          ) : null}
 
-          {status.message ? (
+          {flow === "join" && status.message ? (
             <p
               className={`mt-5 rounded-2xl px-4 py-3 text-sm font-semibold ${
                 status.type === "error"
