@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState, type SetStateAction } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { getStoredJson, setStoredJson } from "@/lib/clientStorage";
 import { ACTIVE_READING_CHALLENGE } from "@/lib/readingChallengeRules";
@@ -11,18 +11,21 @@ import UserReadingCalendar from "./UserReadingCalendar";
 import UserReadingCheckinModal from "./UserReadingCheckinModal";
 import UserReadingMemberHistoryModal from "./UserReadingMemberHistoryModal";
 import UserReadingRewardsSummary from "./UserReadingRewardsSummary";
-import { clampMonthKeyToBounds, resolveCampaignMonthBounds, resolveReadingCampaignOptions, resolveSelectedReadingCampaignId } from "./UserReadingSignoffPanel.campaigns";
+import { resolveCampaignMonthBounds, resolveReadingCampaignOptions, resolveSelectedReadingCampaignId } from "./UserReadingSignoffPanel.campaigns";
 import { applyReadingCheckinMode, getRememberedReadingCheckinMode, rememberReadingCheckinMode, type ReadingCheckinMode } from "./UserReadingSignoffPanel.mode";
 import { addReadingBookByIsbn, deleteReadingBookById, getRememberedBook, rememberSelectedBook } from "./UserReadingSignoffPanel.books";
 import { buildCheckinSavedMessage, type ReadingSignoffSubmitResponse } from "./UserReadingSignoffPanel.submit";
-import { createFormState, type FormState, type Member, type ReadingCampaignOption, type ReadingSignoffResponse, type TodayStats, type UserReadingSignoffPanelProps } from "./UserReadingSignoffPanel.types";
+import { fetchReadingSignoffs } from "./UserReadingSignoffPanel.api";
+import { buildTodayStatsByAccountId } from "./UserReadingSignoffPanel.stats";
+import { createFormState, type FormState, type Member, type ReadingCampaignOption, type ReadingSignoffResponse, type UserReadingSignoffPanelProps } from "./UserReadingSignoffPanel.types";
+
 export default function UserReadingSignoffPanel({ accountId, initialMonthKey, initialData }: UserReadingSignoffPanelProps) {
   const today = getTodayDateInputValue();
+  const todayMonthKey = today.slice(0, 7);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>(initialData?.selectedChallengeId ?? ACTIVE_READING_CHALLENGE.id);
-  const initialMonthBounds = resolveCampaignMonthBounds({ selectedCampaignId });
-  const resolvedInitialMonthKey = clampMonthKeyToBounds(initialMonthKey ?? today.slice(0, 7), initialMonthBounds);
+  const resolvedInitialMonthKey = initialMonthKey ?? todayMonthKey;
   const monthStorageKey = `reading-calendar-month:${accountId}:${selectedCampaignId}`;
-  const [monthKey, setMonthKey] = useState(() => clampMonthKeyToBounds(getStoredJson<string>(monthStorageKey, resolvedInitialMonthKey), initialMonthBounds));
+  const [monthKey, setMonthKey] = useState(() => getStoredJson<string>(monthStorageKey, resolvedInitialMonthKey));
   const [modalOpen, setModalOpen] = useState(false);
   const [modalDateKey, setModalDateKey] = useState(today);
   const [form, setForm] = useState<FormState | null>(null);
@@ -34,17 +37,21 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   const [historyMember, setHistoryMember] = useState<Member | null>(null);
   const [submitState, setSubmitState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
-  const swrKey = `/api/reading-signoffs?month=${encodeURIComponent(monthKey)}&challengeId=${encodeURIComponent(selectedCampaignId)}`;
-  const { data, mutate, isLoading } = useSWR<ReadingSignoffResponse>(
-    swrKey,
-    async (url: string) => {
-      const response = await fetch(url, { cache: "no-store" });
-      const payload = (await response.json()) as ReadingSignoffResponse & { error?: string };
-      if (!response.ok) {
-        throw new Error(payload.error ?? "Could not load check-ins.");
-      }
-      return payload;
+  const summarySwrKey = `/api/reading-signoffs?month=${encodeURIComponent(todayMonthKey)}&challengeId=${encodeURIComponent(selectedCampaignId)}`;
+  const calendarSwrKey = `/api/reading-signoffs?month=${encodeURIComponent(monthKey)}&challengeId=${encodeURIComponent(selectedCampaignId)}`;
+  const { data: summaryData, mutate: mutateSummary, isLoading: isSummaryLoading } = useSWR<ReadingSignoffResponse>(
+    summarySwrKey,
+    fetchReadingSignoffs,
+    {
+      fallbackData: todayMonthKey === resolvedInitialMonthKey ? (initialData ?? undefined) : undefined,
+      keepPreviousData: true,
+      revalidateOnFocus: true,
+      revalidateOnMount: true,
     },
+  );
+  const { data: calendarData, mutate: mutateCalendar, isLoading: isCalendarLoading } = useSWR<ReadingSignoffResponse>(
+    calendarSwrKey,
+    fetchReadingSignoffs,
     {
       fallbackData: monthKey === resolvedInitialMonthKey ? (initialData ?? undefined) : undefined,
       keepPreviousData: true,
@@ -52,15 +59,28 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       revalidateOnMount: true,
     },
   );
-  const members = useMemo(() => data?.members ?? [], [data?.members]);
-  const viewerCanChooseMember = data?.viewerCanChooseMember ?? false;
-  const trackedMemberAccountIds = useMemo(() => data?.trackedMemberAccountIds ?? [], [data?.trackedMemberAccountIds]);
-  const signoffs = useMemo(() => data?.signoffs ?? [], [data?.signoffs]);
-  const signoffEntries = useMemo(() => data?.signoffEntries ?? [], [data?.signoffEntries]);
-  const reviewQueues = useMemo(() => data?.reviewQueues ?? [], [data?.reviewQueues]);
-  const challengeBooks = useMemo(() => data?.challengeBooks ?? [], [data?.challengeBooks]);
-  const latestSignoffs = useMemo(() => data?.latestSignoffs ?? [], [data?.latestSignoffs]);
-  const campaigns = useMemo<ReadingCampaignOption[]>(() => resolveReadingCampaignOptions(data?.campaigns, initialData?.selectedChallengeId ?? selectedCampaignId), [data?.campaigns, initialData?.selectedChallengeId, selectedCampaignId]);
+  const baseData = summaryData ?? calendarData;
+  const members = useMemo(() => baseData?.members ?? [], [baseData?.members]);
+  const viewerCanChooseMember = baseData?.viewerCanChooseMember ?? false;
+  const trackedMemberAccountIds = useMemo(
+    () => baseData?.trackedMemberAccountIds ?? [],
+    [baseData?.trackedMemberAccountIds],
+  );
+  const signoffs = useMemo(() => calendarData?.signoffs ?? [], [calendarData?.signoffs]);
+  const signoffEntries = useMemo(() => calendarData?.signoffEntries ?? [], [calendarData?.signoffEntries]);
+  const reviewQueues = useMemo(() => baseData?.reviewQueues ?? [], [baseData?.reviewQueues]);
+  const challengeBooks = useMemo(
+    () => summaryData?.challengeBooks ?? calendarData?.challengeBooks ?? [],
+    [calendarData?.challengeBooks, summaryData?.challengeBooks],
+  );
+  const latestSignoffs = useMemo(
+    () => summaryData?.latestSignoffs ?? calendarData?.latestSignoffs ?? [],
+    [calendarData?.latestSignoffs, summaryData?.latestSignoffs],
+  );
+  const campaigns = useMemo<ReadingCampaignOption[]>(
+    () => resolveReadingCampaignOptions(baseData?.campaigns, initialData?.selectedChallengeId ?? selectedCampaignId),
+    [baseData?.campaigns, initialData?.selectedChallengeId, selectedCampaignId],
+  );
   const selectedCampaign = useMemo(
     () => campaigns.find((campaign) => campaign.id === selectedCampaignId) ?? campaigns[0] ?? null,
     [campaigns, selectedCampaignId],
@@ -71,8 +91,13 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   const selectedCampaignTripDatePst = selectedCampaign?.tripDatePst ?? ACTIVE_READING_CHALLENGE.tripDatePst;
   const selectedCampaignTargetBaseYen = selectedCampaign?.targetBaseYen ?? ACTIVE_READING_CHALLENGE.targetBaseYen;
   const campaignMonthBounds = useMemo(() => resolveCampaignMonthBounds({ campaigns, selectedCampaignId }), [campaigns, selectedCampaignId]);
-  const setBoundedMonthKey = (nextMonth: SetStateAction<string>) => setMonthKey((prevMonth) => clampMonthKeyToBounds(typeof nextMonth === "function" ? nextMonth(prevMonth) : nextMonth, campaignMonthBounds));
-  const todayMonthKey = today.slice(0, 7);
+  async function mutateAllReadingData() {
+    if (summarySwrKey === calendarSwrKey) {
+      await mutateSummary();
+      return;
+    }
+    await Promise.all([mutateSummary(), mutateCalendar()]);
+  }
   const daysRemaining = useMemo(() => {
     const todayDate = parseDateKeyAsUtc(today);
     const tripDate = parseDateKeyAsUtc(selectedCampaignTripDatePst);
@@ -88,22 +113,28 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     setStoredJson(monthStorageKey, monthKey);
   }, [monthKey, monthStorageKey]);
   useEffect(() => {
-    setMonthKey((previousMonthKey) => clampMonthKeyToBounds(previousMonthKey, campaignMonthBounds));
-  }, [campaignMonthBounds]);
+    setMonthKey((previousMonthKey) => {
+      if (previousMonthKey >= campaignMonthBounds.startMonthKey && previousMonthKey <= campaignMonthBounds.goalMonthKey) {
+        return previousMonthKey;
+      }
+      return todayMonthKey;
+    });
+  }, [campaignMonthBounds, todayMonthKey]);
   useEffect(() => {
     const nextSelectedCampaignId = resolveSelectedReadingCampaignId({
       currentCampaignId: selectedCampaignId,
-      serverCampaignId: data?.selectedChallengeId,
+      serverCampaignId: baseData?.selectedChallengeId,
       campaigns,
     });
     if (nextSelectedCampaignId !== selectedCampaignId) {
       setSelectedCampaignId(nextSelectedCampaignId);
     }
-  }, [campaigns, data?.selectedChallengeId, selectedCampaignId]);
+  }, [baseData?.selectedChallengeId, campaigns, selectedCampaignId]);
   const trackedMemberSet = useMemo(() => {
     return new Set(trackedMemberIds);
   }, [trackedMemberIds]);
   const trackedMembers = useMemo(() => members.filter((member) => trackedMemberSet.has(member.id)), [members, trackedMemberSet]);
+  const memberByAccountId = useMemo(() => new Map(trackedMembers.map((member) => [member.id, member])), [trackedMembers]);
   const latestSignoffByAccountId = useMemo(() => new Map(latestSignoffs.map((row) => [row.accountId, row])), [latestSignoffs]);
   const booksByAccountId = useMemo(() => {
     const map = new Map<string, ReadingChallengeBookRecord[]>();
@@ -152,40 +183,23 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     () => new Map(reviewQueues.map((row) => [row.accountId, row])),
     [reviewQueues],
   );
-  const todayStatsByAccountId = useMemo(() => {
-    const map = new Map<string, TodayStats>();
-    const byMember = signoffByDayAndMember.get(today) ?? new Map<string, ReadingSignoffRecord>();
-    const byMemberEntries = signoffEntriesByDayAndMember.get(today) ?? new Map<string, ReadingSignoffEntryRecord[]>();
-
-    for (const member of trackedMembers) {
-      const daySignoff = byMember.get(member.id);
-      const entries = byMemberEntries.get(member.id) ?? [];
-      const reviewKanji = entries.reduce((sum, entry) => sum + entry.reviewCorrect, 0);
-      const reviewVocabulary = entries.reduce((sum, entry) => sum + entry.reviewIncorrect, 0);
-      const reviewRadical = entries.reduce((sum, entry) => sum + (entry.reviewSuccessPercent ?? 0), 0);
-      const reviewTotal = entries.reduce((sum, entry) => sum + entry.reviewWorkDone, 0);
-      const fallbackTotal = daySignoff?.reviewsLeft ?? 0;
-      const effectiveTotal = reviewTotal > 0 || entries.length > 0 ? reviewTotal : fallbackTotal;
-
-      map.set(member.id, {
-        pagesRead: daySignoff?.pagesRead ?? 0,
-        minutesRead: daySignoff?.minutesRead ?? 0,
-        reviewKanji,
-        reviewVocabulary,
-        reviewRadical,
-        reviewTotal: effectiveTotal,
-        zeroReviewsBonus: Boolean(daySignoff?.didWanikaniReviews && effectiveTotal === 0),
-      });
-    }
-
-    return map;
-  }, [signoffByDayAndMember, signoffEntriesByDayAndMember, today, trackedMembers]);
+  const todayStatsByAccountId = useMemo(
+    () =>
+      buildTodayStatsByAccountId({
+        trackedMembers,
+        signoffByDayAndMember,
+        signoffEntriesByDayAndMember,
+        today,
+      }),
+    [signoffByDayAndMember, signoffEntriesByDayAndMember, today, trackedMembers],
+  );
 
   const leaderboard = useMemo(() => {
     const rows = computeReadingLeaderboard(trackedMembers, signoffs, today).map((row) => {
-      const member = trackedMembers.find((candidate) => candidate.id === row.accountId);
+      const member = memberByAccountId.get(row.accountId);
       const latestSignoff = latestSignoffByAccountId.get(row.accountId);
       const forecast = dailyForecastByAccountId.get(row.accountId);
+      const todayStats = todayStatsByAccountId.get(row.accountId);
       const currentBook = (booksByAccountId.get(row.accountId) ?? []).find((book) => book.title === (latestSignoff?.bookTitle ?? ""));
       const currentBookThumbnailUrl = currentBook?.thumbnailUrl ?? null;
       return {
@@ -199,35 +213,31 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
         currentBookIsbn: currentBook?.isbn ?? null,
         currentBookThumbnailUrl,
         currentBookPage: latestSignoff?.pagesRead ?? null,
-        pagesRemainingForReadingPass: Math.max(0, 15 - (todayStatsByAccountId.get(row.accountId)?.pagesRead ?? 0)),
-        minutesRemainingForReadingPass: Math.max(0, 15 - (todayStatsByAccountId.get(row.accountId)?.minutesRead ?? 0)),
-        minutesRemainingForThirtyBonus: Math.max(0, 31 - (todayStatsByAccountId.get(row.accountId)?.minutesRead ?? 0)),
+        pagesRemainingForReadingPass: Math.max(0, 15 - (todayStats?.pagesRead ?? 0)),
+        minutesRemainingForReadingPass: Math.max(0, 15 - (todayStats?.minutesRead ?? 0)),
+        minutesRemainingForThirtyBonus: Math.max(0, 31 - (todayStats?.minutesRead ?? 0)),
         weekCapYen: forecast?.weekCapYen ?? 0,
         todayMaxNormalYen: forecast?.todayMaxNormalYen ?? 0,
         todayMinimumNormalYen: forecast?.todayMinimumNormalYen ?? 0,
         nextDayMaxNormalYenIfPerfectToday: forecast?.nextDayMaxNormalYenIfPerfectToday ?? 0,
         nextDayMaxNormalYenIfMissToday: forecast?.nextDayMaxNormalYenIfMissToday ?? 0,
-        reviewKanjiToday: todayStatsByAccountId.get(row.accountId)?.reviewKanji ?? 0,
-        reviewVocabularyToday: todayStatsByAccountId.get(row.accountId)?.reviewVocabulary ?? 0,
-        reviewRadicalToday: todayStatsByAccountId.get(row.accountId)?.reviewRadical ?? 0,
-        reviewTotalToday: todayStatsByAccountId.get(row.accountId)?.reviewTotal ?? 0,
-        zeroReviewsBonusToday: todayStatsByAccountId.get(row.accountId)?.zeroReviewsBonus ?? false,
+        reviewKanjiToday: todayStats?.reviewKanji ?? 0,
+        reviewVocabularyToday: todayStats?.reviewVocabulary ?? 0,
+        reviewRadicalToday: todayStats?.reviewRadical ?? 0,
+        reviewTotalToday: todayStats?.reviewTotal ?? 0,
+        zeroReviewsBonusToday: todayStats?.zeroReviewsBonus ?? false,
       };
     });
 
     return rows.sort((a, b) => b.totalYen - a.totalYen);
-  }, [booksByAccountId, dailyForecastByAccountId, latestSignoffByAccountId, signoffs, today, todayStatsByAccountId, trackedMembers]);
-
+  }, [booksByAccountId, dailyForecastByAccountId, latestSignoffByAccountId, memberByAccountId, signoffs, today, todayStatsByAccountId, trackedMembers]);
   const calendarCells = useMemo(() => buildCalendarCells(monthKey), [monthKey]);
-
   function findEntry(memberId: string, dateKey: string): ReadingSignoffRecord | null {
     return signoffByDayAndMember.get(dateKey)?.get(memberId) ?? null;
   }
-
   function booksForMember(memberId: string): ReadingChallengeBookRecord[] {
     return booksByAccountId.get(memberId) ?? [];
   }
-
   const modalMember = members.find((member) => member.id === selectedMemberId) ?? null;
   const accountMember = members.find((member) => member.id === accountId) ?? null;
   const selectedReviewQueue = reviewQueueByAccountId.get(selectedMemberId) ?? {
@@ -239,7 +249,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   };
   const modalDate = form?.signoffDatePst ?? modalDateKey;
   const modalExistingEntry = findEntry(selectedMemberId, modalDate);
-
   function setModalMember(memberId: string, dateKey: string) {
     const existingEntry = findEntry(memberId, dateKey);
     const memberBooks = booksForMember(memberId);
@@ -254,7 +263,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       bookTitle: resolvedBookTitle,
     };
     const nextForm = rememberedMode ? applyReadingCheckinMode(baseForm, rememberedMode) : baseForm;
-
     setSelectedMemberId(memberId);
     setForm(nextForm);
     if (nextForm.bookTitle) {
@@ -262,7 +270,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     }
     setBookActionMessage("");
   }
-
   function openCheckinModal(dateKey: string) {
     const defaultMemberId = members.some((member) => member.id === accountId)
       ? accountId
@@ -275,7 +282,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     setModalDirty(false);
     setModalOpen(true);
   }
-
   function requestCloseModal() {
     setModalOpen(false);
     setModalDirty(false);
@@ -285,7 +291,6 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   }
   async function addBookByIsbn(rawIsbn: string = addIsbn) {
     setBookActionMessage("");
-
     try {
       setBookActionState("adding");
       const message = await addReadingBookByIsbn({
@@ -294,7 +299,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       });
       setBookActionMessage(message);
       setAddIsbn("");
-      await mutate();
+      await mutateAllReadingData();
     } catch (error) {
       setBookActionMessage(error instanceof Error ? error.message : "Could not add that book yet.");
     } finally {
@@ -303,12 +308,11 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   }
   async function deleteBook(bookId: string) {
     setBookActionMessage("");
-
     try {
       setBookActionState("deleting");
       const message = await deleteReadingBookById({ accountId: selectedMemberId, bookId });
       setBookActionMessage(message);
-      await mutate();
+      await mutateAllReadingData();
     } catch (error) {
       setBookActionMessage(error instanceof Error ? error.message : "Could not delete that book.");
     } finally {
@@ -320,36 +324,28 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
     if (!form) {
       return;
     }
-
     const hasReadingActivity = form.pagesRead > 0 || form.minutesRead > 0;
     const hasWaniKaniActivity = form.didWanikaniReviews;
     const isWaniKaniOnlyCheckin = !hasReadingActivity && hasWaniKaniActivity;
-
     setSubmitState("saving");
     setSubmitMessage("");
-
     try {
       if (!hasReadingActivity && !hasWaniKaniActivity) {
         throw new Error("Choose reading activity, WaniKani activity, or both before saving.");
       }
-
       if (hasReadingActivity && booksForMember(selectedMemberId).length < 3) {
         throw new Error("Add at least 3 books before saving check-in.");
       }
-
       if (hasReadingActivity && !form.bookTitle.trim()) {
         throw new Error("Pick a book from the collection before saving.");
       }
-
       const fallbackBookTitle = modalExistingEntry?.bookTitle ?? booksForMember(selectedMemberId)[0]?.title ?? "Reviews only";
       const submittedBookTitle = isWaniKaniOnlyCheckin
         ? "WaniKani only"
         : form.bookTitle.trim() || fallbackBookTitle;
-
       if (!isWaniKaniOnlyCheckin && submittedBookTitle.trim().length > 0) {
         rememberSelectedBook(selectedMemberId, submittedBookTitle);
       }
-
       const response = await fetch("/api/reading-signoffs", {
         method: "POST",
         headers: {
@@ -365,17 +361,15 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
           didWanikaniReviews: form.didWanikaniReviews,
         }),
       });
-
       const payload = (await response.json()) as ReadingSignoffSubmitResponse;
       if (!response.ok) {
         throw new Error(payload.error ?? "Could not save check-in.");
       }
-
       setMonthKey(form.signoffDatePst.slice(0, 7));
       setSubmitState("saved");
       setSubmitMessage(buildCheckinSavedMessage(payload));
       setModalDirty(false);
-      await mutate();
+      await mutateAllReadingData();
       window.setTimeout(() => {
         setModalOpen(false);
       }, 250);
@@ -407,7 +401,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
           campaignTripDatePst={selectedCampaignTripDatePst}
           campaignTargetBaseYen={selectedCampaignTargetBaseYen}
           daysRemaining={daysRemaining}
-          isLoading={isLoading}
+          isLoading={isSummaryLoading}
           leaderboard={leaderboard}
         />
       </section>
@@ -435,14 +429,14 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
         monthKey={monthKey}
         today={today}
         todayMonthKey={todayMonthKey}
-        isLoading={isLoading}
+        isLoading={isCalendarLoading}
         trackedMembers={trackedMembers}
         challengeBooks={challengeBooks}
         calendarCells={calendarCells}
         signoffByDayAndMember={signoffByDayAndMember}
         signoffEntriesByDayAndMember={signoffEntriesByDayAndMember}
         viewerCanChooseMember={viewerCanChooseMember}
-        onMonthChange={setBoundedMonthKey}
+        onMonthChange={setMonthKey}
         onOpenCheckinModal={openCheckinModal}
         onOpenMemberHistory={setHistoryMember}
       />
@@ -451,7 +445,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
         signoffs={historyMember ? signoffs.filter((r) => r.accountId === historyMember.id) : []}
         entries={historyMember ? signoffEntries.filter((r) => r.accountId === historyMember.id) : []}
         memberBooks={historyMember ? challengeBooks.filter((r) => r.accountId === historyMember.id) : []}
-        isAdmin={viewerCanChooseMember} onClose={() => setHistoryMember(null)} onMutate={mutate} />
+        isAdmin={viewerCanChooseMember} onClose={() => setHistoryMember(null)} onMutate={mutateAllReadingData} />
       <UserReadingCheckinModal
         open={modalOpen}
         form={form}

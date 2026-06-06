@@ -56,6 +56,7 @@ export default function AppTopMenuRow({
     { label: "News", href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
     { label: "Read", href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },
   ];
+  const dividerAfterLabels = new Set(["Leaderboard", "JLPT Explorer", "Read"]);
   const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
   const isOnResolvedUserDashboard = Boolean(
     pathname && userBasePath && (pathname === userBasePath || pathname.startsWith(`${userBasePath}/`)),
@@ -65,25 +66,29 @@ export default function AppTopMenuRow({
     <section className={`flex items-center justify-between gap-3 ${className ?? ""}`}>
       <nav className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/50 sm:text-[11px]">
         {links.map((link) => (
-          <Link
-            key={`${link.label}-${link.href}`}
-            href={link.href}
-            onClick={(event) => {
-              if (!link.dashboard || !isOnResolvedUserDashboard || !isPlainLeftClick(event)) {
-                return;
-              }
+          <span key={`${link.label}-${link.href}`} className="inline-flex items-center gap-x-3">
+            <Link
+              href={link.href}
+              onClick={(event) => {
+                if (!link.dashboard || !isOnResolvedUserDashboard || !isPlainLeftClick(event)) {
+                  return;
+                }
 
-              event.preventDefault();
-              window.dispatchEvent(
-                new CustomEvent("wr:dashboard-tab-request", {
-                  detail: { tab: link.dashboard },
-                }),
-              );
-            }}
-            className="transition hover:text-foreground/80"
-          >
-            {link.label}
-          </Link>
+                event.preventDefault();
+                window.dispatchEvent(
+                  new CustomEvent("wr:dashboard-tab-request", {
+                    detail: { tab: link.dashboard },
+                  }),
+                );
+              }}
+              className="transition hover:text-foreground/80"
+            >
+              {link.label}
+            </Link>
+            {dividerAfterLabels.has(link.label) ? (
+              <span aria-hidden="true" className="text-foreground/35">|</span>
+            ) : null}
+          </span>
         ))}
       </nav>
 
