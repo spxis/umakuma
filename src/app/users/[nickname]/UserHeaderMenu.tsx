@@ -272,7 +272,7 @@ export default function UserHeaderMenu({
   }
 
   return (
-    <div ref={menuRef} className="relative z-[1200]">
+    <div ref={menuRef} className="relative z-10">
       <button
         type="button"
         aria-expanded={open}
