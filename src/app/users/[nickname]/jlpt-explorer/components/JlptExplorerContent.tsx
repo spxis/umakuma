@@ -164,7 +164,7 @@ export default function JlptExplorerContent({
           <div>
             <h2 className="text-xl font-black text-foreground">JLPT Explorer</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">
-              Browse all N1-N5 kanji <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(items.length)} total)</span>
+              Browse all N1-N5 kanji <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(items.length)} total)</span>
             </p>
           </div>
           <button
@@ -186,14 +186,14 @@ export default function JlptExplorerContent({
             <span className="px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
               <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${allBadgeClass(wkLevelFilter === null)}`}>
-                All <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(items.length)})</span>
+                All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(items.length)})</span>
               </button>
               <button type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === "none")}`}>
-                {JLPT_EXPLORER_TEXT.none} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(wkLevelCounts.get("none") ?? 0)})</span>
+                {JLPT_EXPLORER_TEXT.none} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(wkLevelCounts.get("none") ?? 0)})</span>
               </button>
               {availableWkLevels.map((level) => (
                 <button key={level} type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === level ? null : level)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === level)}`}>
-                  {level} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(wkLevelCounts.get(level) ?? 0)})</span>
+                  {level} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(wkLevelCounts.get(level) ?? 0)})</span>
                 </button>
               ))}
             </div>
@@ -214,7 +214,7 @@ export default function JlptExplorerContent({
                   gradeFilter === "none",
                 )}`}
               >
-                None <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(gradeCounts.get("none") ?? 0)})</span>
+                None <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(gradeCounts.get("none") ?? 0)})</span>
               </button>
             ) : null}
             {availableGrades.map((grade) => (
@@ -226,7 +226,7 @@ export default function JlptExplorerContent({
                   gradeFilter === grade,
                 )}`}
               >
-                G{grade} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(gradeCounts.get(grade) ?? 0)})</span>
+                G{grade} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(gradeCounts.get(grade) ?? 0)})</span>
               </button>
             ))}
             </div>
@@ -243,7 +243,7 @@ export default function JlptExplorerContent({
                 selectedLevels.size === 5,
               )}`}
             >
-              All <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(counts.all)})</span>
+              All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(counts.all)})</span>
             </button>
             {([
               [5, counts.n5],
@@ -262,7 +262,7 @@ export default function JlptExplorerContent({
                     : "border-teal-300 bg-teal-100 text-teal-800 hover:bg-teal-200"
                 }`}
               >
-                N{level} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(count)})</span>
+                N{level} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
               </button>
             ))}
             </div>

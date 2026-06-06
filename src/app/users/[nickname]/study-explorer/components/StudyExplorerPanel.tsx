@@ -194,7 +194,7 @@ export default function StudyExplorerPanel({
                 aria-selected={allTypesSelected}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.grouping || allTypesSelected ? "" : "hidden sm:inline-flex"} ${filtersLoading && !allTypesSelected ? disabledBadgeClass() : badgeClass(allTypesSelected)}`}
               >
-                All <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({groupingCountLabel(allTypeCount)})</span>
+                All <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({groupingCountLabel(allTypeCount)})</span>
               </button>
               {STUDY_GROUPING_FILTERS.map(([type, label]) => {
                 const count = typeCounts[type];
@@ -214,7 +214,7 @@ export default function StudyExplorerPanel({
                     aria-selected={isSelected}
                     className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.grouping || typeFilter === type ? "" : "hidden sm:inline-flex"} ${disabled && !isSelected ? disabledBadgeClass() : studyGroupingToneClass(type, isSelected)}`}
                   >
-                    {label} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({groupingCountLabel(count)})</span>
+                    {label} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({groupingCountLabel(count)})</span>
                   </button>
                 );
               })}
@@ -253,7 +253,7 @@ export default function StudyExplorerPanel({
                       }
                     >
                       <button type="button" onClick={onClickStatus} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? badgeClass(isSelected) : studySrsToneClass(status, isSelected)}`}>
-                        {statusLabel} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(count)})</span>
+                        {statusLabel} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(count)})</span>
                       </button>
                       {showStageButtons ? stageOptions.map((stage) => {
                         const stageCount = srsStageCounts[stage] ?? 0;
@@ -274,7 +274,7 @@ export default function StudyExplorerPanel({
                             aria-selected={stageSelected}
                             className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.status || stageSelected ? "" : "hidden sm:inline-flex"} ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<typeof status, "all">, stageSelected)}`}
                           >
-                            {stage} <span className="ml-1 inline-block align-text-bottom text-[10px] font-semibold leading-tight text-foreground/55">({formatNumber(stageCount)})</span>
+                            {stage} <span className="ml-0.5 text-[11px] font-semibold leading-none text-current/80">({formatNumber(stageCount)})</span>
                           </button>
                         );
                       }) : null}
