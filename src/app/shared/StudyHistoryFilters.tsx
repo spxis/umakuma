@@ -106,7 +106,7 @@ export default function StudyHistoryFilters({
                   type="button"
                   onClick={() => setSrsBucketFilter(bucket)}
                   title={titleCaseSrsBucket(bucket)}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${selected ? srsBucketBadgeClass(bucket) : studyChipClass(false)}`}
+                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${srsBucketBadgeClass(bucket, selected)}`}
                 >
                   {srsBucketLabel(bucket)}
                 </button>

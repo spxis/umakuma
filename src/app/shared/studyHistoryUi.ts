@@ -4,40 +4,34 @@ import {
   SRS_BUCKET_SHORT_LABELS,
   SRS_BUCKET_TITLE_LABELS,
 } from "@/lib/domainConstants";
+import { srsFilterButtonLabel } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplayClasses";
+import { STUDY_SRS_FILTERS, studySrsToneClass } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
 
 type SrsBucketUiMeta = {
   shortLabel: string;
-  badgeClass: string;
 };
 
 const SRS_BUCKET_UI_META: Record<HistorySrsBucket, SrsBucketUiMeta> = {
   [SRS_BUCKETS.apprentice]: {
-    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.apprentice],
-    badgeClass: "border-amber-300 text-amber-700 bg-amber-50",
+    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.apprentice),
   },
   [SRS_BUCKETS.guru]: {
-    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.guru],
-    badgeClass: "border-violet-300 text-violet-700 bg-violet-50",
+    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.guru),
   },
   [SRS_BUCKETS.master]: {
-    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.master],
-    badgeClass: "border-sky-300 text-sky-700 bg-sky-50",
+    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.master),
   },
   [SRS_BUCKETS.enlightened]: {
-    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.enlightened],
-    badgeClass: "border-emerald-300 text-emerald-700 bg-emerald-50",
+    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.enlightened),
   },
   [SRS_BUCKETS.burned]: {
-    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.burned],
-    badgeClass: "border-slate-300 text-slate-700 bg-slate-100",
+    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.burned),
   },
   [SRS_BUCKETS.locked]: {
-    shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.locked],
-    badgeClass: "border-gray-300 text-gray-600 bg-gray-100",
+    shortLabel: srsFilterButtonLabel(STUDY_SRS_FILTERS.locked),
   },
   [SRS_BUCKETS.unknown]: {
     shortLabel: SRS_BUCKET_SHORT_LABELS[SRS_BUCKETS.unknown],
-    badgeClass: "border-gray-300 text-gray-500 bg-white",
   },
 };
 
@@ -45,8 +39,14 @@ export function srsBucketLabel(value: HistorySrsBucket): string {
   return SRS_BUCKET_UI_META[value].shortLabel;
 }
 
-export function srsBucketBadgeClass(value: HistorySrsBucket): string {
-  return SRS_BUCKET_UI_META[value].badgeClass;
+export function srsBucketBadgeClass(value: HistorySrsBucket, active = true): string {
+  if (value === SRS_BUCKETS.unknown) {
+    return active
+      ? "border-gray-300 text-gray-500 bg-white"
+      : "border-line bg-surface text-foreground hover:bg-surface-muted";
+  }
+
+  return studySrsToneClass(value, active);
 }
 
 export function titleCaseSrsBucket(value: HistorySrsBucket): string {
