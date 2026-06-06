@@ -192,14 +192,10 @@ export default function JoinPage() {
                       <p className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">
                         Signed in{userEmail ? ` as ${userEmail}` : " with Google"}.
                       </p>
+                      <p className="mt-2 text-xs font-semibold text-foreground/70">
+                        Ready to join. Use the Join tab above.
+                      </p>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setFlow("join")}
-                          className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
-                        >
-                          Continue to join
-                        </button>
                         <Link
                           href="/signout?callbackUrl=/join?flow=login"
                           className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-slate-800 transition hover:bg-surface-muted"
@@ -236,16 +232,7 @@ export default function JoinPage() {
                 </div>
               ) : !signedIn ? (
                 <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
-                  Sign in with Google before joining. Use the login tab to continue.
-                  <div className="mt-3">
-                    <button
-                      type="button"
-                      onClick={() => setFlow("login")}
-                      className="inline-flex h-10 items-center justify-center rounded-full border border-amber-300 bg-white px-4 text-xs font-black uppercase tracking-[0.12em] text-amber-900 transition hover:bg-amber-100"
-                    >
-                      Open login tab
-                    </button>
-                  </div>
+                  Sign in with Google in the Login tab above to unlock join.
                 </div>
               ) : (
                 <>
@@ -269,7 +256,7 @@ export default function JoinPage() {
             </>
           )}
 
-          {flow === "join" ? (
+          {flow === "join" && signedIn ? (
             <form onSubmit={join} className="mt-7 space-y-4">
               <label className="block">
                 <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.14em] text-slate-600">
@@ -303,7 +290,7 @@ export default function JoinPage() {
 
               <button
                 type="submit"
-                disabled={loading || checking || !signedIn}
+                disabled={loading}
                 className="inline-flex h-12 items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? "Joining..." : "Join leaderboard"}
