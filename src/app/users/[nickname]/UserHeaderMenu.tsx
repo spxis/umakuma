@@ -189,8 +189,9 @@ export default function UserHeaderMenu({
   const dashboardPathSegment = userBasePath && pathname?.startsWith(`${userBasePath}/`)
     ? pathname.slice(userBasePath.length + 1).split("/")[0] ?? null
     : null;
-  const currentDashboardTab = isDashboardMenuTab(dashboardPathSegment)
-    ? dashboardPathSegment
+  const normalizedDashboardPathSegment = dashboardPathSegment === "study" ? "learn" : dashboardPathSegment;
+  const currentDashboardTab = normalizedDashboardPathSegment
+    ? normalizedDashboardPathSegment
     : isDashboardMenuTab(searchParams?.get("dashboard") ?? null)
       ? (searchParams?.get("dashboard") as "learn" | "stats" | "news" | "read")
       : "learn";
@@ -200,7 +201,7 @@ export default function UserHeaderMenu({
   const adminSignedIn = Boolean(viewerMenuInfo?.provider === "google" && viewerMenuInfo.isAdmin);
   const dashboardPageLinks = resolvedUserPageUsername
     ? [
-        { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/learn` },
+        { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/study` },
         { label: "WK Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/wk` },
         { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt` },
         { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },

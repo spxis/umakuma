@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
 	rewrites: async () => [
 		{
+			source: "/users/:nickname/study",
+			destination: "/users/:nickname?dashboard=learn",
+		},
+		{
 			source: "/users/:nickname/:dashboard(learn|stats|news|read)",
 			destination: "/users/:nickname?dashboard=:dashboard",
 		},

@@ -15,6 +15,10 @@ function isDashboardTabId(value: string | null): value is TabId {
   return value === "learn" || value === "wk" || value === "jlpt" || value === "stats" || value === "news" || value === "read";
 }
 
+function dashboardPathSegmentForTab(tab: TabId): string {
+  return tab === "learn" ? "study" : tab;
+}
+
 function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): TabId | null {
   const userBasePath = `/users/${encodeURIComponent(wkUsername)}`;
   if (pathname === userBasePath) {
@@ -25,6 +29,9 @@ function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): 
   }
 
   const segment = pathname.slice(userBasePath.length + 1).split("/")[0] ?? null;
+  if (segment === "study") {
+    return "learn";
+  }
   return isDashboardTabId(segment) ? segment : null;
 }
 
@@ -114,7 +121,7 @@ export default function UserDashboardTabs({
     params.delete("dashboard");
 
     const nextQuery = params.toString();
-    const nextPath = `/users/${encodeURIComponent(wkUsername)}/${activeTab}`;
+    const nextPath = `/users/${encodeURIComponent(wkUsername)}/${dashboardPathSegmentForTab(activeTab)}`;
     const nextUrl = `${nextPath}${nextQuery ? `?${nextQuery}` : ""}${window.location.hash}`;
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     if (nextUrl !== currentUrl) {

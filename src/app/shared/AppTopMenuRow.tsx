@@ -32,7 +32,8 @@ function userTabHref(username: string | null, tab: "learn" | "wk" | "jlpt" | "st
     return "/join";
   }
 
-  return `/users/${encodeURIComponent(username)}/${tab}`;
+  const segment = tab === "learn" ? "study" : tab;
+  return `/users/${encodeURIComponent(username)}/${segment}`;
 }
 
 export default function AppTopMenuRow({
