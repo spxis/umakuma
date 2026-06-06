@@ -332,7 +332,7 @@ export default function LevelExplorerContent({
                 const active = srsFilter === status;
                 if (disabled && !active) return null;
                 return (
-                  <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}>
+                  <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : badgeClass(active)}`}>
                     <FilterChipLabel label={srsFilterButtonLabel(status)} count={count} />
                   </button>
                 );
@@ -359,7 +359,7 @@ export default function LevelExplorerContent({
                     type="button"
                     onClick={() => onSetJlptFilter(level)}
                     disabled={disabled}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : allBadgeClass(active)}`}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : level === LEVEL_JLPT_FILTERS.all ? badgeClass(active) : allBadgeClass(active)}`}
                   >
                     <FilterChipLabel label={LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} count={count} />
                   </button>
@@ -384,7 +384,7 @@ export default function LevelExplorerContent({
                     type="button"
                     onClick={() => onSetReviewTimingFilter(timing)}
                     disabled={disabled}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : timing === LEVEL_REVIEW_TIMING_FILTERS.all ? allBadgeClass(active) : badgeClass(active)}`}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : badgeClass(active)}`}
                   >
                     <FilterChipLabel label={label} count={count} />
                   </button>
