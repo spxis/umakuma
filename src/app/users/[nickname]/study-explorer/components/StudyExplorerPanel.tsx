@@ -159,8 +159,13 @@ export default function StudyExplorerPanel({
             </button>
           </div>
         </div>
-        <div id="study-filters-panel" className={`mt-3 space-y-2 ${mobileFilterSectionClass}`}>
-          <div className="w-full lg:max-w-[38rem]"><ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} /></div>
+        <div id="study-filters-panel" className={`mt-3 rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)] ${mobileFilterSectionClass}`}>
+          <div className="flex justify-end">
+            <div className="w-full md:w-1/2">
+              <ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} />
+            </div>
+          </div>
+          <div className="mt-2 space-y-2">
           <StudyLevelFilters
             queueMode={queueMode}
             filtersLoading={filtersLoading}
@@ -278,6 +283,7 @@ export default function StudyExplorerPanel({
                 })}
             </StudyFilterSection>
           ) : null}
+          </div>
         </div>
       </header>
       {displayErrorMessage ? (
