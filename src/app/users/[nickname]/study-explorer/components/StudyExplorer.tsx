@@ -43,18 +43,14 @@ import { useStudyExplorerEffects } from "../lib/useStudyExplorerEffects";
 import { useStudyExplorerDerivedData } from "../lib/useStudyExplorerDerivedData";
 import { useStudyQueuePagination } from "../lib/useStudyQueuePagination";
 import { useStudyQueueInfiniteLoad } from "../lib/useStudyQueueInfiniteLoad";
-import {
-  useStudyCloseOnExplorerPageChange,
-  useStudyModalSessionSync,
-  useStudyToggleEnglishHotkey,
-  useStudyViewerModeSync,
-} from "../lib/useStudyExplorerUiEffects";
+import { useStudyCloseOnExplorerPageChange, useStudyModalSessionSync, useStudyToggleEnglishHotkey, useStudyViewerModeSync } from "../lib/useStudyExplorerUiEffects";
 export default function StudyExplorer({
   accountId,
   studySource,
   customLibraryId,
   studySourceHeaderLabel,
   studySourceIsCustom,
+  studySourceLevel,
   onOpenStudySourceManager,
   maxLevel,
   initialViewerMode = null,
@@ -452,6 +448,7 @@ export default function StudyExplorer({
             canToggleEnglish={canToggleEnglish} showEnglish={showEnglish} studyMode={studyMode}
             studySourceHeaderLabel={studySourceHeaderLabel}
             studySourceIsCustom={studySourceIsCustom}
+            studySourceLevel={studySourceLevel}
             levelOptions={levelOptions} availableLevels={availableLevels} reviewLevelCounts={reviewLevelCounts}
             viewedLevel={effectiveViewedLevel} typeFilter={typeFilter} srsFilter={effectiveSrsFilter}
             srsStageFilter={effectiveSrsStageFilter} queueMode={queueMode} lessonLevelCounts={lessonLevelCounts}

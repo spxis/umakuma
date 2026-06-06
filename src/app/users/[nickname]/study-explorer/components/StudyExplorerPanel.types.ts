@@ -15,6 +15,7 @@ type StudyExplorerPanelProps = {
   studyMode: boolean;
   studySourceHeaderLabel: string;
   studySourceIsCustom: boolean;
+  studySourceLevel: number | null;
   levelOptions: number[];
   availableLevels: Set<number>;
   reviewLevelCounts: Record<number, number>;

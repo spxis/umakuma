@@ -29,6 +29,7 @@ try {
                     tokenEncrypted: true,
                     tokenIv: true,
                     tokenTag: true,
+                    wkLevel: true,
                   },
                 });
 
@@ -54,6 +55,7 @@ try {
                     reviewsTotal,
                     lessons,
                     all: reviews + lessons,
+                    currentLevel: account.wkLevel,
                   },
                   {
                     headers: {

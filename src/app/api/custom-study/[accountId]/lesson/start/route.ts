@@ -86,13 +86,13 @@ export async function POST(request: Request, context: RouteContext) {
             item: {
               select: {
                 ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
+                itemType: true,
               },
             },
           },
         });
 
         const validLevelStates = levelStates.filter((row) => Boolean(row.item));
-
         const { currentLevel } = resolveCurrentCustomLevel(
           validLevelStates.map((row) => ({
             ukLevel: resolveCustomItemLevel(row.item),
@@ -102,7 +102,7 @@ export async function POST(request: Request, context: RouteContext) {
         );
 
         if (!isCustomLevelUnlocked({ itemLevel: resolveCustomItemLevel(state.item), currentLevel })) {
-          return NextResponse.json({ error: "This level is locked. Reach 75% guru on the current level first." }, { status: 409 });
+          return NextResponse.json({ error: "This level is locked. Reach 90% guru on your current level first." }, { status: 409 });
         }
 
         const now = new Date();

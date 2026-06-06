@@ -5,7 +5,13 @@ import useSWR from "swr";
 
 import type { StudySource } from "./study-explorer/lib/studyExplorerTypes";
 
-type StudyCounts = { reviews: number; reviewsTotal: number; lessons: number };
+type StudySourceCounts = {
+  reviews: number;
+  reviewsTotal: number;
+  lessons: number;
+  currentLevel: number | null;
+  maxLevel: number | null;
+};
 
 type Args = {
   accountId: string;
@@ -18,7 +24,7 @@ type Result = {
   setStudySource: React.Dispatch<React.SetStateAction<StudySource>>;
   customLibraryId: string | null;
   setCustomLibraryId: React.Dispatch<React.SetStateAction<string | null>>;
-  studyCounts: StudyCounts | null;
+  studyCounts: StudySourceCounts | null;
   applySourceFromSearchParams: (params: URLSearchParams) => void;
 };
 
@@ -54,7 +60,7 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     const storedLibrary = window.localStorage.getItem(customLibraryStorageKey)?.trim();
     return storedLibrary ? storedLibrary : null;
   });
-  const [studyCounts, setStudyCounts] = useState<StudyCounts | null>(null);
+  const [studyCounts, setStudyCounts] = useState<StudySourceCounts | null>(null);
 
   const applySourceFromSearchParams = useCallback((params: URLSearchParams) => {
     const sourceFromUrl = params.get("source");
@@ -88,11 +94,18 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     [accountId, customLibraryId, studySource],
   );
 
-  useSWR<StudyCounts>(
+  useSWR<StudySourceCounts>(
     countsApiPath,
     async (url: string) => {
       const response = await fetch(url, { cache: "no-store" });
-      const payload = (await response.json()) as { reviews?: number; reviewsTotal?: number; lessons?: number; error?: string };
+      const payload = (await response.json()) as {
+        reviews?: number;
+        reviewsTotal?: number;
+        lessons?: number;
+        currentLevel?: number;
+        maxLevel?: number;
+        error?: string;
+      };
       if (!response.ok || typeof payload.reviews !== "number" || typeof payload.lessons !== "number") {
         throw new Error(payload.error ?? "Could not load study counts.");
       }
@@ -101,6 +114,8 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
         reviews: payload.reviews,
         reviewsTotal: typeof payload.reviewsTotal === "number" ? payload.reviewsTotal : payload.reviews,
         lessons: payload.lessons,
+        currentLevel: typeof payload.currentLevel === "number" ? payload.currentLevel : null,
+        maxLevel: typeof payload.maxLevel === "number" ? payload.maxLevel : null,
       };
     },
     {
@@ -112,7 +127,9 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
             prev &&
             prev.reviews === nextCounts.reviews &&
             prev.reviewsTotal === nextCounts.reviewsTotal &&
-            prev.lessons === nextCounts.lessons
+            prev.lessons === nextCounts.lessons &&
+            prev.currentLevel === nextCounts.currentLevel &&
+            prev.maxLevel === nextCounts.maxLevel
           ) {
             return prev;
           }
@@ -127,6 +144,8 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
               reviewsTotal: nextCounts.reviewsTotal,
               lessons: nextCounts.lessons,
               all: nextCounts.reviews + nextCounts.lessons,
+              currentLevel: nextCounts.currentLevel,
+              maxLevel: nextCounts.maxLevel,
             }),
           );
         } catch {
@@ -148,21 +167,37 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
       }
 
       try {
-        const parsed = JSON.parse(raw) as { reviews?: number; reviewsTotal?: number; lessons?: number };
+        const parsed = JSON.parse(raw) as {
+          reviews?: number;
+          reviewsTotal?: number;
+          lessons?: number;
+          currentLevel?: number;
+          maxLevel?: number;
+        };
         if (typeof parsed.reviews === "number" && typeof parsed.lessons === "number") {
           const nextReviews = parsed.reviews;
           const nextReviewsTotal = typeof parsed.reviewsTotal === "number" ? parsed.reviewsTotal : parsed.reviews;
           const nextLessons = parsed.lessons;
+          const nextCurrentLevel = typeof parsed.currentLevel === "number" ? parsed.currentLevel : null;
+          const nextMaxLevel = typeof parsed.maxLevel === "number" ? parsed.maxLevel : null;
           setStudyCounts((prev) => {
             if (
               prev &&
               prev.reviews === nextReviews &&
               prev.reviewsTotal === nextReviewsTotal &&
-              prev.lessons === nextLessons
+              prev.lessons === nextLessons &&
+              prev.currentLevel === nextCurrentLevel &&
+              prev.maxLevel === nextMaxLevel
             ) {
               return prev;
             }
-            return { reviews: nextReviews, reviewsTotal: nextReviewsTotal, lessons: nextLessons };
+            return {
+              reviews: nextReviews,
+              reviewsTotal: nextReviewsTotal,
+              lessons: nextLessons,
+              currentLevel: nextCurrentLevel,
+              maxLevel: nextMaxLevel,
+            };
           });
         }
       } catch {

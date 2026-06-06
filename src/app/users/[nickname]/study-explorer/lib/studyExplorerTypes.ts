@@ -106,6 +106,7 @@ export type StudyExplorerProps = {
   customLibraryId: string | null;
   studySourceHeaderLabel: string;
   studySourceIsCustom: boolean;
+  studySourceLevel: number | null;
   onOpenStudySourceManager: () => void;
   maxLevel: number;
   showEnglish: boolean;

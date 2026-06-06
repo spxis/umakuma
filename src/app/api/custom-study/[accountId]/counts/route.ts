@@ -58,6 +58,7 @@ export async function GET(request: Request, context: RouteContext) {
             item: {
               select: {
                 ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
+                itemType: true,
               },
             },
           },
@@ -65,7 +66,7 @@ export async function GET(request: Request, context: RouteContext) {
 
         const validStates = states.filter((row) => Boolean(row.item));
 
-        const { currentLevel } = resolveCurrentCustomLevel(
+        const { currentLevel, maxLevel } = resolveCurrentCustomLevel(
           validStates.map((row) => ({
             ukLevel: resolveCustomItemLevel(row.item),
             srsStage: row.srsStage,
@@ -96,6 +97,8 @@ export async function GET(request: Request, context: RouteContext) {
             reviewsTotal,
             lessons,
             all: reviews + lessons,
+            currentLevel,
+            maxLevel,
           },
           {
             headers: {

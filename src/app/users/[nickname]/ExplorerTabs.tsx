@@ -9,7 +9,6 @@ import { useStudySourceState } from "./useStudySourceState";
 import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
 import type { StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";
-const CUSTOM_STUDY_MAX_LEVEL = 4;
 
 type Props = {
   accountId: string;
@@ -264,6 +263,15 @@ export default function ExplorerTabs({
     ? (activeCustomLibraryName?.trim() || "Custom")
     : "WaniKani";
   const studySourceIsCustom = studySource === "custom";
+  const studySourceLevel = studySource === "custom"
+    ? (typeof studyCounts?.currentLevel === "number" ? studyCounts.currentLevel : 1)
+    : (typeof studyCounts?.currentLevel === "number" ? studyCounts.currentLevel : maxLevel);
+  const effectiveStudyMaxLevel = studySource === "custom"
+    ? Math.max(
+      typeof studyCounts?.maxLevel === "number" ? studyCounts.maxLevel : 1,
+      typeof studySourceLevel === "number" ? studySourceLevel : 1,
+    )
+    : maxLevel;
   const openStudySourceManager = () => {
     setStudySourceModalRequestId((current) => current + 1);
   };
@@ -353,8 +361,9 @@ export default function ExplorerTabs({
           customLibraryId={customLibraryId}
           studySourceHeaderLabel={studySourceHeaderLabel}
           studySourceIsCustom={studySourceIsCustom}
+          studySourceLevel={studySourceLevel}
           onOpenStudySourceManager={openStudySourceManager}
-          maxLevel={studySource === "custom" ? CUSTOM_STUDY_MAX_LEVEL : maxLevel}
+          maxLevel={effectiveStudyMaxLevel}
           initialViewerMode={initialViewerMode}
           initialFilters={initialStudyFilters}
           showEnglish={showEnglish}
