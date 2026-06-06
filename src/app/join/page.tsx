@@ -51,16 +51,27 @@ export default function JoinPage() {
     const denied = params.get("access") === "denied";
     const flowFromQuery = params.get("flow");
     setAccessDenied(denied);
-    setFlow(isAuthFlow(flowFromQuery) ? flowFromQuery : denied ? "login" : "join");
+    const hasFlowQuery = isAuthFlow(flowFromQuery);
+    setFlow(hasFlowQuery ? flowFromQuery : "login");
     setHasHydratedFlow(true);
 
     async function loadSession() {
       try {
         const response = await fetch("/api/admin/session", { cache: "no-store" });
         const data = (await response.json()) as SessionStatus;
-        setSignedIn(Boolean(data.signedIn));
+        const isSignedIn = Boolean(data.signedIn);
+        setSignedIn(isSignedIn);
         setUserName(data.user?.name ?? null);
         setUserEmail(data.user?.email ?? null);
+
+        if (hasFlowQuery && flowFromQuery === "join" && !isSignedIn) {
+          setFlow("login");
+          return;
+        }
+
+        if (!hasFlowQuery) {
+          setFlow(isSignedIn ? "join" : "login");
+        }
       } finally {
         setChecking(false);
       }
@@ -156,11 +167,12 @@ export default function JoinPage() {
             <button
               type="button"
               onClick={() => setFlow("join")}
+              disabled={checking || !signedIn}
               aria-pressed={flow === "join"}
               className={`inline-flex h-9 items-center justify-center rounded-full px-4 text-xs font-black uppercase tracking-[0.12em] transition ${
                 flow === "join"
                   ? "border border-line bg-surface text-foreground"
-                  : "text-foreground/70 hover:bg-surface"
+                  : "text-foreground/70 hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50"
               }`}
             >
               Join
@@ -229,10 +241,6 @@ export default function JoinPage() {
               {checking ? (
                 <div className="mt-4 rounded-2xl border border-line bg-surface-muted px-4 py-3 text-sm font-semibold text-foreground/70">
                   Checking your Google session...
-                </div>
-              ) : !signedIn ? (
-                <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
-                  Sign in with Google in the Login tab above to unlock join.
                 </div>
               ) : (
                 <>
