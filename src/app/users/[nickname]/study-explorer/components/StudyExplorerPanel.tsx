@@ -150,9 +150,12 @@ export default function StudyExplorerPanel({
               aria-expanded={filtersOpen}
               aria-label={filtersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}
               aria-controls="study-filters-panel"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.08em] text-foreground"
+              className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold leading-none text-foreground"
             >
-              Filters
+              <span>{filtersOpen ? STUDY_PANEL_TEXT.hideFilters : STUDY_PANEL_TEXT.showFilters}</span>
+              <span aria-hidden="true" className="text-[10px] leading-none">
+                {filtersOpen ? "▴" : "▾"}
+              </span>
             </button>
           </div>
         </div>
