@@ -59,8 +59,13 @@ export default function StudySourceControls({
   );
 
   const libraries = useMemo(() => data?.libraries ?? [], [data?.libraries]);
+  const hasLoadedLibraries = data !== undefined;
 
   useEffect(() => {
+    if (!hasLoadedLibraries) {
+      return;
+    }
+
     if (libraries.length === 0) {
       onSetCustomLibraryId(null);
       if (studySource === "custom") {
@@ -81,7 +86,7 @@ export default function StudySourceControls({
 
     const activeLibrary = libraries.find((library) => library.isActive) ?? libraries[0];
     onSetCustomLibraryId(activeLibrary?.id ?? null);
-  }, [customLibraryId, libraries, onSetCustomLibraryId, onSetStudySource, studySource]);
+  }, [customLibraryId, hasLoadedLibraries, libraries, onSetCustomLibraryId, onSetStudySource, studySource]);
 
   useEffect(() => {
     const activeLibrary = libraries.find((library) => library.id === customLibraryId)
