@@ -39,6 +39,7 @@ type Props = {
   resetFeedback: { kind: "success" | "error"; message: string } | null;
   recentOnly: boolean;
   showLocked: boolean;
+  allowHideLocked: boolean;
   sentinelRef: React.RefObject<HTMLDivElement | null>;
   onClearFilters: () => void;
   onSelectItem: (subjectId: number) => void;
@@ -79,6 +80,7 @@ export default function LevelExplorerItemsGrid({
   isResetting,
   recentOnly,
   showLocked,
+  allowHideLocked,
   sentinelRef,
   onClearFilters,
   onSelectItem,
@@ -162,13 +164,15 @@ export default function LevelExplorerItemsGrid({
           >
             {LEVEL_EXPLORER_TEXT.recentOnly}
           </button>
-          <button
-            type="button"
-            onClick={() => onSetShowLocked(!showLocked)}
-            className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted"
-          >
-            {showLocked ? LEVEL_EXPLORER_TEXT.hideLocked : LEVEL_EXPLORER_TEXT.showLocked}
-          </button>
+          {allowHideLocked ? (
+            <button
+              type="button"
+              onClick={() => onSetShowLocked(!showLocked)}
+              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted"
+            >
+              {showLocked ? LEVEL_EXPLORER_TEXT.hideLocked : LEVEL_EXPLORER_TEXT.showLocked}
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={() => {

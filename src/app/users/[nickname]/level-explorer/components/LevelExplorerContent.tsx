@@ -8,7 +8,6 @@ import FilterChipLabel from "../../shared/FilterChipLabel";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_JLPT_MIX_LEVELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS } from "./LevelExplorer.constants";
 import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
-
 function wkStatusToneClass(status: (typeof SRS_FILTER_ALLOWED)[number], active: boolean): string {
   if (status === LEVEL_SRS_FILTERS.apprentice) {
     return active ? "border-pink-300 bg-pink-100 text-pink-700" : "border-pink-200 bg-pink-50/70 text-pink-700 hover:bg-pink-100";
@@ -45,6 +44,7 @@ export default function LevelExplorerContent({
   reviewTimingFilter,
   recentOnly,
   showLocked,
+  allowHideLocked,
   showEnglish,
   canToggleEnglish,
   studyMode,
@@ -237,9 +237,10 @@ export default function LevelExplorerContent({
     onSetJlptFilter(LEVEL_JLPT_FILTERS.all);
     onSetReviewTimingFilter(LEVEL_REVIEW_TIMING_FILTERS.all);
     onSetRecentOnly(false);
-    onSetShowLocked(false);
+    onSetShowLocked(!allowHideLocked);
     onSetSelectedSubjectId(null);
   }, [
+    allowHideLocked,
     onEnableAllTypes,
     onSelectAllLevelsAndClearSearch,
     onSetJlptFilter,
@@ -468,6 +469,7 @@ export default function LevelExplorerContent({
           resetFeedback={resetFeedback}
           recentOnly={recentOnly}
           showLocked={showLocked}
+          allowHideLocked={allowHideLocked}
           sentinelRef={sentinelRef}
           onClearFilters={clearAllFilters}
           onSelectItem={(subjectId) => {

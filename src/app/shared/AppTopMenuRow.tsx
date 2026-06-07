@@ -23,7 +23,11 @@ type MainLink = {
   dashboard: TabId | null;
 };
 
-const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
+const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "library-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
+
+function isDashboardTabId(value: string | null): value is TabId {
+  return value === "learn" || value === "wk" || value === "jlpt" || value === "stats" || value === "news" || value === "read";
+}
 
 function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
   return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
@@ -34,7 +38,7 @@ function userTabHref(username: string | null, tab: "learn" | "wk" | "jlpt" | "st
     return "/join";
   }
 
-  const segment = tab === "learn" ? "study" : tab === "wk" ? "wk-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab;
+  const segment = tab === "learn" ? "study" : tab === "wk" ? "library-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab;
   return `/users/${encodeURIComponent(username)}/${segment}`;
 }
 
@@ -68,7 +72,7 @@ export default function AppTopMenuRow({
   const links: MainLink[] = [
     { label: "Leaderboard", href: "/", dashboard: null },
     { label: "Study", href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
-    { label: "WK Explorer", href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
+    { label: "LIB Explorer", href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
     { label: "JLPT Explorer", href: userTabHref(resolvedWkUsername, "jlpt"), dashboard: "jlpt" },
     { label: "History", href: userHistoryHref(resolvedWkUsername), dashboard: null },
     { label: "Stats", href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
@@ -82,11 +86,37 @@ export default function AppTopMenuRow({
     pathname && userBasePath && pathname.startsWith(`${userBasePath}/`)
       ? pathname.slice(userBasePath.length + 1).split("/")[0] ?? null
       : null;
+  const normalizedDashboardPathSegment = routeSegment === "study"
+    ? "learn"
+    : routeSegment === "wk-explorer" || routeSegment === "library-explorer"
+      ? "wk"
+      : routeSegment === "jlpt-explorer"
+        ? "jlpt"
+        : routeSegment;
+  const currentDashboardTab = isDashboardTabId(normalizedDashboardPathSegment)
+    ? normalizedDashboardPathSegment
+    : null;
   const isOnResolvedUserDashboard = Boolean(
     pathname &&
     userBasePath &&
     (pathname === userBasePath || (routeSegment && DASHBOARD_ROUTE_SEGMENTS.has(routeSegment))),
   );
+
+  function linkIsActive(link: MainLink): boolean {
+    if (!pathname) {
+      return false;
+    }
+
+    if (link.dashboard && isOnResolvedUserDashboard) {
+      return currentDashboardTab === link.dashboard;
+    }
+
+    if (link.href === "/") {
+      return pathname === "/";
+    }
+
+    return pathname === link.href || pathname.startsWith(`${link.href}/`);
+  }
 
   return (
     <section className={`flex items-center justify-between gap-3 ${className ?? ""}`}>
@@ -107,7 +137,7 @@ export default function AppTopMenuRow({
                   }),
                 );
               }}
-              className="transition hover:text-foreground/80"
+              className={`transition ${linkIsActive(link) ? "font-black text-foreground" : "hover:text-foreground/80"}`}
             >
               {link.label}
             </Link>

@@ -7,7 +7,7 @@ type TabDef = {
 
 const tabs: TabDef[] = [
   { key: "study", label: "Study" },
-  { key: "level", label: "WK Explorer" },
+  { key: "level", label: "LIB Explorer" },
   { key: "jlpt", label: "JLPT Explorer" },
 ];
 

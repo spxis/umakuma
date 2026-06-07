@@ -29,6 +29,7 @@ export type LevelExplorerContentProps = {
   reviewTimingFilter: ReviewTimingFilter;
   recentOnly: boolean;
   showLocked: boolean;
+  allowHideLocked: boolean;
   showEnglish: boolean;
   canToggleEnglish: boolean;
   studyMode: boolean;

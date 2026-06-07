@@ -70,6 +70,7 @@ export function resolveInitialDashboardTab(query: QueryShape): TabId {
   if (query.dashboard === "study") return "learn";
   if (query.dashboard === "wk") return "wk";
   if (query.dashboard === "wk-explorer") return "wk";
+  if (query.dashboard === "library-explorer") return "wk";
   if (query.dashboard === "jlpt") return "jlpt";
   if (query.dashboard === "jlpt-explorer") return "jlpt";
   if (query.dashboard === "news") return "news";

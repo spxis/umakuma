@@ -53,7 +53,15 @@ export default function ExplorerTabs({
     }
 
     const segment = window.location.pathname.split("/").filter(Boolean)[2] ?? "";
-    return segment === "wk" || segment === "jlpt" ? segment : "learn";
+    if (segment === "wk" || segment === "wk-explorer" || segment === "library-explorer") {
+      return "wk";
+    }
+
+    if (segment === "jlpt" || segment === "jlpt-explorer") {
+      return "jlpt";
+    }
+
+    return "learn";
   };
   const previousPageKeyRef = useRef<string | null>(null);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
@@ -273,8 +281,8 @@ export default function ExplorerTabs({
     )
     : maxLevel;
   const levelExplorerTitle = studySource === "custom"
-    ? `${studySourceHeaderLabel} Library Explorer`
-    : "WaniKani Library Explorer";
+    ? `Library Explorer - ${studySourceHeaderLabel}`
+    : "Library Explorer - WaniKani";
   const levelExplorerPendingReviews = studySource === "custom"
     ? (typeof studyCounts?.reviews === "number" ? studyCounts.reviews : 0)
     : accountPendingReviews;
@@ -297,7 +305,7 @@ export default function ExplorerTabs({
       syncedAt: new Date().toISOString(),
     } as Snapshot;
   }, [initialSnapshot, studySource, studySourceLevel]);
-  const levelExplorerKey = `level-explorer:${studySource}:${customLibraryId ?? "none"}`;
+  const levelExplorerKey = `level-explorer:${studySource}:${customLibraryId ?? "none"}:${studySource === "custom" ? effectiveStudyMaxLevel : maxLevel}`;
   const openStudySourceManager = () => {
     setStudySourceModalRequestId((current) => current + 1);
   };

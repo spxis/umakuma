@@ -7,7 +7,6 @@ import { createPortal } from "react-dom";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
-
 type UserHeaderMenuProps = {
   accountId?: string;
   viewedWkUsername?: string;
@@ -17,30 +16,25 @@ type UserHeaderMenuProps = {
   lastSyncedAt?: string | null;
   lastActivityAt?: string | null;
 };
-
 const MENU_BUTTON_CLASS =
   "inline-flex h-8 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface";
 const MENU_LIST_GROUP_CLASS = "mt-2 overflow-hidden rounded-xl border border-line bg-surface";
 const MENU_LIST_ITEM_CLASS = "flex h-10 w-full items-center px-3 text-sm font-semibold text-foreground transition hover:bg-surface-muted";
 const MENU_LIST_ITEM_DIVIDER_CLASS = "border-t border-line";
 const MENU_LIST_ITEM_ACTIVE_CLASS = "bg-surface-muted text-accent";
-const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
-
+const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "library-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
 function getInitials(name: string | null): string {
   if (!name) {
     return "??";
   }
-
   const trimmed = name.trim();
   if (!trimmed) {
     return "??";
   }
-
   const parts = trimmed.split(/\s+/).filter(Boolean);
   if (parts.length === 1) {
     return parts[0].slice(0, 2).toUpperCase();
   }
-
   return `${parts[0]?.[0] ?? ""}${parts[1]?.[0] ?? ""}`.toUpperCase();
 }
 
@@ -51,6 +45,7 @@ function isDashboardMenuTab(value: string | null): value is "learn" | "wk" | "jl
 function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
   return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
 }
+
 export default function UserHeaderMenu({
   accountId,
   viewedWkUsername,
@@ -70,7 +65,6 @@ export default function UserHeaderMenu({
     if (typeof window === "undefined") {
       return "light";
     }
-
     try {
       return window.localStorage.getItem("wr:theme") === "dark" ? "dark" : "light";
     } catch {
@@ -81,7 +75,6 @@ export default function UserHeaderMenu({
     if (typeof window === "undefined") {
       return "sans";
     }
-
     try {
       return window.localStorage.getItem("wr:jp-font") === "serif" ? "serif" : "sans";
     } catch {
@@ -96,11 +89,9 @@ export default function UserHeaderMenu({
       if (!menuRef.current && !panelRef.current) {
         return;
       }
-
       const target = event.target as Node;
       const clickedTrigger = Boolean(menuRef.current?.contains(target));
       const clickedPanel = Boolean(panelRef.current?.contains(target));
-
       if (!clickedTrigger && !clickedPanel) {
         setOpen(false);
       }
@@ -111,10 +102,8 @@ export default function UserHeaderMenu({
         setOpen(false);
       }
     }
-
     window.addEventListener("mousedown", onPointerDown);
     window.addEventListener("keydown", onEscape);
-
     return () => {
       window.removeEventListener("mousedown", onPointerDown);
       window.removeEventListener("keydown", onEscape);
@@ -188,11 +177,25 @@ export default function UserHeaderMenu({
   const dashboardPathSegment = userBasePath && pathname?.startsWith(`${userBasePath}/`)
     ? pathname.slice(userBasePath.length + 1).split("/")[0] ?? null
     : null;
-  const normalizedDashboardPathSegment = dashboardPathSegment === "study" ? "learn" : dashboardPathSegment === "wk-explorer" ? "wk" : dashboardPathSegment === "jlpt-explorer" ? "jlpt" : dashboardPathSegment;
-  const currentDashboardTab = normalizedDashboardPathSegment
+  const normalizedDashboardPathSegment = dashboardPathSegment === "study"
+    ? "learn"
+    : dashboardPathSegment === "wk-explorer" || dashboardPathSegment === "library-explorer"
+      ? "wk"
+      : dashboardPathSegment === "jlpt-explorer"
+        ? "jlpt"
+        : dashboardPathSegment;
+  const dashboardFromQuery = searchParams?.get("dashboard") ?? null;
+  const normalizedDashboardQuery = dashboardFromQuery === "study"
+    ? "learn"
+    : dashboardFromQuery === "wk-explorer" || dashboardFromQuery === "library-explorer"
+      ? "wk"
+      : dashboardFromQuery === "jlpt-explorer"
+        ? "jlpt"
+        : dashboardFromQuery;
+  const currentDashboardTab = isDashboardMenuTab(normalizedDashboardPathSegment)
     ? normalizedDashboardPathSegment
-    : isDashboardMenuTab(searchParams?.get("dashboard") ?? null)
-      ? (searchParams?.get("dashboard") as "learn" | "stats" | "news" | "read")
+    : isDashboardMenuTab(normalizedDashboardQuery)
+      ? normalizedDashboardQuery
       : "learn";
   const isOnResolvedUserDashboard = Boolean(
     userBasePath &&
@@ -203,7 +206,7 @@ export default function UserHeaderMenu({
   const dashboardPageLinks = resolvedUserPageUsername
     ? [
         { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/study` },
-        { label: "WK Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/wk-explorer` },
+        { label: "LIB Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/library-explorer` },
         { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt-explorer` },
         { label: "History", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/history` },
         { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },
@@ -241,7 +244,6 @@ export default function UserHeaderMenu({
       : null,
   ].filter((link): link is { label: string; href: string } => Boolean(link));
   const canRefreshLeaderboard = adminSignedIn || showAdminActions;
-
   async function refreshLeaderboard() {
     setRefreshingLeaderboard(true);
     try {
@@ -263,11 +265,9 @@ export default function UserHeaderMenu({
     if (!pathname) {
       return false;
     }
-
     if (href === "/") {
       return pathname === "/";
     }
-
     return pathname === href || pathname.startsWith(`${href}/`);
   }
 

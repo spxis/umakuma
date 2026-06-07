@@ -77,11 +77,17 @@ export default function LevelExplorerController({
   onToggleShowEnglish,
   studyMode = false,
 }: Props) {
+  const forceShowLocked = explorerSource === "custom";
+  const allowHideLocked = !forceShowLocked;
   const storageKeys = useMemo(() => buildLevelExplorerStorageKeys(accountId), [accountId]);
 
   const initialClientState = useMemo(
     () => ({
-      selectedLevels: new Set<number>([initialSnapshot.level]),
+      selectedLevels: new Set<number>(
+        explorerSource === "custom"
+          ? Array.from({ length: Math.max(1, maxLevel) }, (_, index) => index + 1)
+          : [initialSnapshot.level],
+      ),
       srsFilter: initialSrsFilter,
       typeFilter: LEVEL_TYPE_FILTERS.all as TypeFilter,
       jlptFilter: LEVEL_JLPT_FILTERS.all as JlptFilter,
@@ -91,9 +97,9 @@ export default function LevelExplorerController({
       selectedSubjectId: initialSnapshot.items[0]?.subjectId ?? null,
       visibleTypes: { radical: true, kanji: true, vocabulary: true },
       filtersCollapsed: false,
-      showLocked: false,
+      showLocked: forceShowLocked,
     }),
-    [initialSnapshot.items, initialSnapshot.level, initialSrsFilter],
+    [explorerSource, forceShowLocked, initialSnapshot.items, initialSnapshot.level, initialSrsFilter, maxLevel],
   );
 
   const [selectedLevels, setSelectedLevels] = useState<Set<number>>(initialClientState.selectedLevels);
@@ -120,6 +126,7 @@ export default function LevelExplorerController({
   const applyingUrlStateRef = useRef(false);
   const hasHydratedUrlStateRef = useRef(false);
   const lastHandledFindQueryRef = useRef("");
+  const ensureLevelLoadedRef = useRef<(level: number) => Promise<Snapshot | undefined>>(() => Promise.resolve(undefined));
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -272,6 +279,10 @@ export default function LevelExplorerController({
     setReviewTimingFilter,
   });
 
+  useEffect(() => {
+    ensureLevelLoadedRef.current = ensureLevelLoaded;
+  }, [ensureLevelLoaded]);
+
   useLevelExplorerUrlHydration({
     maxLevel,
     initialLevel: initialSnapshot.level,
@@ -286,7 +297,7 @@ export default function LevelExplorerController({
     setReviewTimingFilter,
     setRecentOnly,
     setStickyMerge,
-    skipInitialApply: false,
+    skipInitialApply: forceShowLocked,
   });
 
   useLevelExplorerStorageHydration({
@@ -302,6 +313,20 @@ export default function LevelExplorerController({
     setRecentOnly,
     setShowLocked,
   });
+
+  useEffect(() => {
+    if (!forceShowLocked || !customLibraryId) {
+      return;
+    }
+
+    const allLevels = new Set(Array.from({ length: Math.max(1, maxLevel) }, (_, index) => index + 1));
+
+    void (async () => {
+      for (const level of allLevels.values()) {
+        await ensureLevelLoadedRef.current(level);
+      }
+    })();
+  }, [customLibraryId, forceShowLocked, maxLevel]);
 
   useEffect(() => {
     if (!isActive) {
@@ -396,6 +421,7 @@ export default function LevelExplorerController({
       reviewTimingFilter={reviewTimingFilter}
       recentOnly={recentOnly}
       showLocked={showLocked}
+      allowHideLocked={allowHideLocked}
       showEnglish={showEnglish}
       canToggleEnglish={canToggleEnglish}
       studyMode={studyMode}
@@ -439,6 +465,10 @@ export default function LevelExplorerController({
         setRecentOnly(next);
       }}
       onSetShowLocked={(next) => {
+        if (forceShowLocked) {
+          return;
+        }
+
         markHistoryPush();
         setSelectedSubjectId(null);
         setShowLocked(next);

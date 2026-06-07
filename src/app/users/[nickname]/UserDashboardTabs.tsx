@@ -16,7 +16,7 @@ function isDashboardTabId(value: string | null): value is TabId {
 }
 
 function dashboardPathSegmentForTab(tab: TabId): string {
-  return tab === "learn" ? "study" : tab === "wk" ? "wk-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab;
+  return tab === "learn" ? "study" : tab === "wk" ? "library-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab;
 }
 
 function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): TabId | null {
@@ -32,7 +32,7 @@ function resolveDashboardTabFromPathname(pathname: string, wkUsername: string): 
   if (segment === "study") {
     return "learn";
   }
-  if (segment === "wk-explorer") {
+  if (segment === "wk-explorer" || segment === "library-explorer") {
     return "wk";
   }
   if (segment === "jlpt-explorer") {

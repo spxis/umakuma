@@ -63,6 +63,9 @@ export default function StudySourceControls({
   useEffect(() => {
     if (libraries.length === 0) {
       onSetCustomLibraryId(null);
+      if (studySource === "custom") {
+        onSetStudySource("wanikani");
+      }
       return;
     }
 
@@ -70,9 +73,15 @@ export default function StudySourceControls({
       return;
     }
 
+    if (customLibraryId && studySource === "custom") {
+      onSetCustomLibraryId(null);
+      onSetStudySource("wanikani");
+      return;
+    }
+
     const activeLibrary = libraries.find((library) => library.isActive) ?? libraries[0];
     onSetCustomLibraryId(activeLibrary?.id ?? null);
-  }, [customLibraryId, libraries, onSetCustomLibraryId]);
+  }, [customLibraryId, libraries, onSetCustomLibraryId, onSetStudySource, studySource]);
 
   useEffect(() => {
     const activeLibrary = libraries.find((library) => library.id === customLibraryId)
