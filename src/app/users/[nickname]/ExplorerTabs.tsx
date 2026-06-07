@@ -65,6 +65,7 @@ export default function ExplorerTabs({
   };
   const previousPageKeyRef = useRef<string | null>(null);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
+  const customLibraryNameStorageKey = `wr:study-custom-library-name:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
   const isHydrated = typeof window !== "undefined";
   const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(resolveExplorerDashboardTab);
@@ -76,7 +77,14 @@ export default function ExplorerTabs({
       : "study";
   const effectiveActiveTab = forcedTab;
   const [showEnglish, setShowEnglish] = useState(false);
-  const [activeCustomLibraryName, setActiveCustomLibraryName] = useState<string | null>(null);
+  const [activeCustomLibraryName, setActiveCustomLibraryName] = useState<string | null>(() => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const stored = window.localStorage.getItem(customLibraryNameStorageKey)?.trim();
+    return stored ? stored : null;
+  });
   const [studySourceModalRequestId, setStudySourceModalRequestId] = useState(0);
   const [queueMode, setQueueMode] = useState<QueueType>(
     initialQueueMode === QUEUE_TYPES.review || initialQueueMode === QUEUE_TYPES.lesson
@@ -158,6 +166,23 @@ export default function ExplorerTabs({
       // Ignore storage errors in restricted browsing modes.
     }
   }, [accountId, isHydrated, queueMode]);
+
+  useEffect(() => {
+    if (!isHydrated || typeof window === "undefined") {
+      return;
+    }
+
+    try {
+      const normalizedName = activeCustomLibraryName?.trim() ?? "";
+      if (normalizedName) {
+        window.localStorage.setItem(customLibraryNameStorageKey, normalizedName);
+      } else {
+        window.localStorage.removeItem(customLibraryNameStorageKey);
+      }
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [activeCustomLibraryName, customLibraryNameStorageKey, isHydrated]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {

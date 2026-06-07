@@ -89,12 +89,16 @@ export default function StudySourceControls({
   }, [customLibraryId, hasLoadedLibraries, libraries, onSetCustomLibraryId, onSetStudySource, studySource]);
 
   useEffect(() => {
+    if (!hasLoadedLibraries) {
+      return;
+    }
+
     const activeLibrary = libraries.find((library) => library.id === customLibraryId)
       ?? libraries.find((library) => library.isActive)
       ?? libraries[0]
       ?? null;
     onActiveLibraryNameChange?.(activeLibrary?.name ?? null);
-  }, [customLibraryId, libraries, onActiveLibraryNameChange]);
+  }, [customLibraryId, hasLoadedLibraries, libraries, onActiveLibraryNameChange]);
 
   useEffect(() => {
     if (isModalOpen) {

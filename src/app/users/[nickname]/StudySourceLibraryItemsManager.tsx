@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
-import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
+import { shortSubjectTypeLabel, subjectTypePillClass } from "./level-explorer/lib/levelExplorerDisplay";
 
 type CustomLibraryItemRow = {
   id: string;
@@ -20,10 +20,6 @@ type Props = {
   onLibrariesChanged: () => Promise<unknown>;
   onLibraryDeleted: (fallbackActiveLibraryId: string | null) => void;
 };
-
-function customLibraryTypeLabel(type: CustomLibraryItemRow["type"]): string {
-  return SUBJECT_TYPE_DISPLAY[type].short;
-}
 
 export default function StudySourceLibraryItemsManager({
   accountId,
@@ -71,7 +67,7 @@ export default function StudySourceLibraryItemsManager({
   const selectedItems = items.filter((item) => selectedItemIds.includes(item.id));
   const selectedItemDetails = selectedItems
     .slice(0, 12)
-    .map((item) => `${item.characters} (${customLibraryTypeLabel(item.type)}, L${item.level})`);
+    .map((item) => `${item.characters} (${shortSubjectTypeLabel(item.type)}, L${item.level})`);
   const selectedItemOverflow = selectedItems.length > selectedItemDetails.length
     ? selectedItems.length - selectedItemDetails.length
     : 0;
@@ -269,7 +265,7 @@ export default function StudySourceLibraryItemsManager({
                     <td className="max-w-56 border-b border-line px-2 py-2 align-top text-foreground/80" title={displayMeaning}>{displayMeaning}</td>
                     <td className="max-w-44 border-b border-line px-2 py-2 align-top text-foreground/75" title={displayReading}>{displayReading}</td>
                     <td className="border-b border-line px-2 py-2 align-top">
-                      <span className="inline-flex rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70">{customLibraryTypeLabel(item.type)}</span>
+                      <span className={`${subjectTypePillClass(item.type)} inline-flex`}>{shortSubjectTypeLabel(item.type)}</span>
                     </td>
                   </tr>
                 );
