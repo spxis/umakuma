@@ -287,7 +287,7 @@ export default function LevelExplorerContent({
                     aria-selected={selectedLevels.size === levelOptions.length}
                     className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.size === levelOptions.length)}`}
                   >
-                    <FilterChipLabel label="All" count={counts.all} />
+                    <FilterChipLabel label="All" count={levelOptions.reduce((sum, level) => sum + (levelItemCountsByLevel[level] ?? 0), 0)} />
                   </button>
                   {levelOptions.map((level) => (
                     <button
