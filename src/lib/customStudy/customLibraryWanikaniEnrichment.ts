@@ -1,6 +1,7 @@
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
 import { readCustomItemRelationships, resolveCustomItemSubjectType, type CustomItemRelationships } from "./customItemMetadata";
+import { repairCustomSourceItemData } from "./customLibraryDataRepair";
 import { rebalanceAutoItemLevels } from "./customLibraryLevelBalancing";
 import type { CustomLibraryItemPayload } from "./customStudyTypes";
 import {
@@ -155,8 +156,12 @@ export async function enrichCustomLibraryItemsWithWaniKani(params: {
 
     const isKanjiItem = item.type === "kanji" && sourceKanji.length > 0;
     const shouldAttachRadicals = sourceKanji.length > 0 && (isKanjiItem || isSingleWord(item.characters));
+    const repairedData = repairCustomSourceItemData({
+      item,
+      wkKanjiByCharacter,
+    });
 
-    if (!isKanjiItem && componentKanji.length === 0 && !shouldAttachRadicals) {
+    if (!isKanjiItem && componentKanji.length === 0 && !shouldAttachRadicals && !repairedData.hasDataRepair) {
       return item;
     }
 
@@ -192,6 +197,9 @@ export async function enrichCustomLibraryItemsWithWaniKani(params: {
 
     return {
       ...item,
+      meanings: repairedData.meanings,
+      readings: repairedData.readings,
+      primaryReading: repairedData.primaryReading,
       metadata,
     };
   });
