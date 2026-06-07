@@ -145,7 +145,7 @@ export async function enrichCustomLibraryItemsWithWaniKani(params: {
     );
 
     const isKanjiItem = item.type === "kanji" && sourceKanji.length > 0;
-    const shouldAttachRadicals = isKanjiItem || (item.type === "vocabulary" && isSingleWord(item.characters));
+    const shouldAttachRadicals = sourceKanji.length > 0 && (isKanjiItem || isSingleWord(item.characters));
 
     if (!isKanjiItem && componentKanji.length === 0 && !shouldAttachRadicals) {
       return item;
@@ -259,8 +259,8 @@ export async function enrichCustomLibraryItemsWithWaniKani(params: {
       .map((character) => wkKanjiByCharacter.get(character))
       .filter((row): row is WkSubject => row !== undefined);
 
-    const shouldExtractRadicals = item.type === "kanji" || (item.type === "vocabulary" && isSingleWord(item.characters));
-    if (!shouldExtractRadicals || sourceKanji.length === 0) {
+    const shouldExtractRadicals = sourceKanji.length > 0 && (item.type === "kanji" || isSingleWord(item.characters));
+    if (!shouldExtractRadicals) {
       continue;
     }
 

@@ -21,7 +21,7 @@ export async function getOwnedCustomLibrary(params: {
     return null;
   }
 
-  await ensureCustomLibraryWaniKaniBackfill({
+  void ensureCustomLibraryWaniKaniBackfill({
     accountId: params.accountId,
     libraryId: library.id,
   });

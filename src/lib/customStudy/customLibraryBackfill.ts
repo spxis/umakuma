@@ -33,9 +33,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function mapItemToPayload(item: CustomLibraryItemRow): CustomLibraryItemPayload {
+  const normalizedItemType = item.itemType === "phrase" ? "vocabulary" : item.itemType;
+
   return {
     id: item.externalId,
-    type: item.itemType,
+    type: normalizedItemType,
     level: item.wkLevel,
     characters: item.characters,
     meanings: item.meanings,

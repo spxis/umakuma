@@ -28,6 +28,11 @@ type Result = {
   applySourceFromSearchParams: (params: URLSearchParams) => void;
 };
 
+type ScopedStudyCounts = {
+  scopeKey: string;
+  counts: StudySourceCounts;
+};
+
 export function useStudySourceState({ accountId, countsStorageKey, isHydrated }: Args): Result {
   const studySourceStorageKey = `wr:study-source:${accountId}`;
   const customLibraryStorageKey = `wr:study-custom-library:${accountId}`;
@@ -60,7 +65,15 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     const storedLibrary = window.localStorage.getItem(customLibraryStorageKey)?.trim();
     return storedLibrary ? storedLibrary : null;
   });
-  const [studyCounts, setStudyCounts] = useState<StudySourceCounts | null>(null);
+  const [scopedStudyCounts, setScopedStudyCounts] = useState<ScopedStudyCounts | null>(null);
+
+  const scopedCountsStorageKey = useMemo(() => {
+    if (studySource === "custom") {
+      return `wr:study-source-counts:${accountId}:custom:${customLibraryId ?? "none"}`;
+    }
+
+    return `wr:study-source-counts:${accountId}:wanikani`;
+  }, [accountId, customLibraryId, studySource]);
 
   const applySourceFromSearchParams = useCallback((params: URLSearchParams) => {
     const sourceFromUrl = params.get("source");
@@ -122,21 +135,38 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
       revalidateOnFocus: true,
       refreshInterval: 30_000,
       onSuccess: (nextCounts) => {
-        setStudyCounts((prev) => {
+        setScopedStudyCounts((prev) => {
           if (
             prev &&
-            prev.reviews === nextCounts.reviews &&
-            prev.reviewsTotal === nextCounts.reviewsTotal &&
-            prev.lessons === nextCounts.lessons &&
-            prev.currentLevel === nextCounts.currentLevel &&
-            prev.maxLevel === nextCounts.maxLevel
+            prev.scopeKey === scopedCountsStorageKey &&
+            prev.counts.reviews === nextCounts.reviews &&
+            prev.counts.reviewsTotal === nextCounts.reviewsTotal &&
+            prev.counts.lessons === nextCounts.lessons &&
+            prev.counts.currentLevel === nextCounts.currentLevel &&
+            prev.counts.maxLevel === nextCounts.maxLevel
           ) {
             return prev;
           }
-          return nextCounts;
+
+          return {
+            scopeKey: scopedCountsStorageKey,
+            counts: nextCounts,
+          };
         });
 
         try {
+          window.localStorage.setItem(
+            scopedCountsStorageKey,
+            JSON.stringify({
+              reviews: nextCounts.reviews,
+              reviewsTotal: nextCounts.reviewsTotal,
+              lessons: nextCounts.lessons,
+              all: nextCounts.reviews + nextCounts.lessons,
+              currentLevel: nextCounts.currentLevel,
+              maxLevel: nextCounts.maxLevel,
+            }),
+          );
+
           window.localStorage.setItem(
             countsStorageKey,
             JSON.stringify({
@@ -161,7 +191,7 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     }
 
     const readCounts = () => {
-      const raw = window.localStorage.getItem(countsStorageKey);
+      const raw = window.localStorage.getItem(scopedCountsStorageKey);
       if (!raw) {
         return;
       }
@@ -180,23 +210,28 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
           const nextLessons = parsed.lessons;
           const nextCurrentLevel = typeof parsed.currentLevel === "number" ? parsed.currentLevel : null;
           const nextMaxLevel = typeof parsed.maxLevel === "number" ? parsed.maxLevel : null;
-          setStudyCounts((prev) => {
+          setScopedStudyCounts((prev) => {
             if (
               prev &&
-              prev.reviews === nextReviews &&
-              prev.reviewsTotal === nextReviewsTotal &&
-              prev.lessons === nextLessons &&
-              prev.currentLevel === nextCurrentLevel &&
-              prev.maxLevel === nextMaxLevel
+              prev.scopeKey === scopedCountsStorageKey &&
+              prev.counts.reviews === nextReviews &&
+              prev.counts.reviewsTotal === nextReviewsTotal &&
+              prev.counts.lessons === nextLessons &&
+              prev.counts.currentLevel === nextCurrentLevel &&
+              prev.counts.maxLevel === nextMaxLevel
             ) {
               return prev;
             }
+
             return {
-              reviews: nextReviews,
-              reviewsTotal: nextReviewsTotal,
-              lessons: nextLessons,
-              currentLevel: nextCurrentLevel,
-              maxLevel: nextMaxLevel,
+              scopeKey: scopedCountsStorageKey,
+              counts: {
+                reviews: nextReviews,
+                reviewsTotal: nextReviewsTotal,
+                lessons: nextLessons,
+                currentLevel: nextCurrentLevel,
+                maxLevel: nextMaxLevel,
+              },
             };
           });
         }
@@ -210,7 +245,11 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     return () => {
       window.removeEventListener("focus", readCounts);
     };
-  }, [countsStorageKey]);
+  }, [scopedCountsStorageKey]);
+
+  const studyCounts = scopedStudyCounts?.scopeKey === scopedCountsStorageKey
+    ? scopedStudyCounts.counts
+    : null;
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {
