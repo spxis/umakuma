@@ -176,6 +176,13 @@ async function runCustomLibraryBackfill(params: { accountId: string; libraryId: 
   );
 }
 
+export async function backfillCustomLibraryWaniKaniEnrichment(params: {
+  accountId: string;
+  libraryId: string;
+}): Promise<void> {
+  await runCustomLibraryBackfill(params);
+}
+
 export async function ensureCustomLibraryWaniKaniBackfill(params: {
   accountId: string;
   libraryId: string;

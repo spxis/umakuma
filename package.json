@@ -31,6 +31,7 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:backfill:reading-challenge": "node scripts/backfill-reading-challenge-ids.mjs",
+    "db:backfill:custom-study": "pnpm dlx tsx scripts/backfill-custom-study-enrichment.ts",
     "db:seed:jlpt": "node scripts/seed-jlpt.mjs",
     "db:seed:jlpt:readings": "node scripts/build-jlpt-readings.mjs",
     "db:seed:kanji-levels": "node scripts/build-kanji-levels.mjs",
