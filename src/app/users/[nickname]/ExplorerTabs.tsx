@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
 import LevelExplorer from "./level-explorer/components/LevelExplorer";
 import FilterChipLabel from "./shared/FilterChipLabel";
@@ -272,6 +272,32 @@ export default function ExplorerTabs({
       typeof studySourceLevel === "number" ? studySourceLevel : 1,
     )
     : maxLevel;
+  const levelExplorerTitle = studySource === "custom"
+    ? `${studySourceHeaderLabel} Library Explorer`
+    : "WaniKani Library Explorer";
+  const levelExplorerPendingReviews = studySource === "custom"
+    ? (typeof studyCounts?.reviews === "number" ? studyCounts.reviews : 0)
+    : accountPendingReviews;
+  const levelExplorerLevelItemCountsByLevel = studySource === "custom"
+    ? {}
+    : levelItemCountsByLevel;
+  const levelExplorerInitialSnapshot = useMemo(() => {
+    if (studySource !== "custom") {
+      return initialSnapshot;
+    }
+
+    return {
+      level: Math.max(1, studySourceLevel),
+      kanjiTotal: 0,
+      kanjiLearned: 0,
+      kanjiGuruPlus: 0,
+      kanjiLocked: 0,
+      estimatedHoursRemaining: null,
+      items: [],
+      syncedAt: new Date().toISOString(),
+    } as Snapshot;
+  }, [initialSnapshot, studySource, studySourceLevel]);
+  const levelExplorerKey = `level-explorer:${studySource}:${customLibraryId ?? "none"}`;
   const openStudySourceManager = () => {
     setStudySourceModalRequestId((current) => current + 1);
   };
@@ -376,12 +402,16 @@ export default function ExplorerTabs({
 
       <div className={effectiveActiveTab === "level" ? "block" : "hidden"}>
         <LevelExplorer
+          key={levelExplorerKey}
           accountId={accountId}
           isActive={effectiveActiveTab === "level"}
-          maxLevel={maxLevel}
-          accountPendingReviews={accountPendingReviews}
-          levelItemCountsByLevel={levelItemCountsByLevel}
-          initialSnapshot={initialSnapshot}
+          explorerTitle={levelExplorerTitle}
+          explorerSource={studySource}
+          customLibraryId={customLibraryId}
+          maxLevel={studySource === "custom" ? effectiveStudyMaxLevel : maxLevel}
+          accountPendingReviews={levelExplorerPendingReviews}
+          levelItemCountsByLevel={levelExplorerLevelItemCountsByLevel}
+          initialSnapshot={levelExplorerInitialSnapshot}
           initialSrsFilter={initialSrsFilter}
           showEnglish={showEnglish}
           canToggleEnglish

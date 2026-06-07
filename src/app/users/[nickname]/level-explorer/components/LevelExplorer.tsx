@@ -6,6 +6,9 @@ import LevelExplorerScreen from "./LevelExplorerScreen";
 type Props = {
   accountId: string;
   isActive?: boolean;
+  explorerTitle: string;
+  explorerSource: "wanikani" | "custom";
+  customLibraryId: string | null;
   maxLevel: number;
   accountPendingReviews: number;
   levelItemCountsByLevel: Record<number, number>;

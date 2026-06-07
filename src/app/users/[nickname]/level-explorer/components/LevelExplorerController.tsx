@@ -47,6 +47,9 @@ import { isVocabularySubjectType } from "../lib/levelExplorerDomain";
 type Props = {
   accountId: string;
   isActive?: boolean;
+  explorerTitle: string;
+  explorerSource: "wanikani" | "custom";
+  customLibraryId: string | null;
   maxLevel: number;
   accountPendingReviews: number;
   levelItemCountsByLevel: Record<number, number>;
@@ -61,6 +64,9 @@ type Props = {
 export default function LevelExplorerController({
   accountId,
   isActive = true,
+  explorerTitle,
+  explorerSource,
+  customLibraryId,
   maxLevel,
   accountPendingReviews,
   levelItemCountsByLevel,
@@ -145,6 +151,8 @@ export default function LevelExplorerController({
     enableAllTypes,
   } = buildLevelExplorerControllerHandlers({
     accountId,
+    explorerSource,
+    customLibraryId,
     initialLevel: initialSnapshot.level,
     storageKeys,
     pendingHistoryMode,
@@ -175,6 +183,14 @@ export default function LevelExplorerController({
     () => buildCombinedSnapshot(selectedLevels, snapshotsByLevel, normalizeSnapshot(initialSnapshot)),
     [initialSnapshot, selectedLevels, snapshotsByLevel],
   );
+
+  const levelItemCountsByLevelEffective = useMemo(() => {
+    const merged = { ...levelItemCountsByLevel };
+    for (const [level, snapshot] of snapshotsByLevel.entries()) {
+      merged[level] = snapshot.items.length;
+    }
+    return merged;
+  }, [levelItemCountsByLevel, snapshotsByLevel]);
 
   const filteredItems = useMemo(
     () =>
@@ -361,8 +377,9 @@ export default function LevelExplorerController({
   return (
     <LevelExplorerContent
       accountId={accountId}
+      explorerTitle={explorerTitle}
       levelOptions={levelOptions}
-      levelItemCountsByLevel={levelItemCountsByLevel}
+      levelItemCountsByLevel={levelItemCountsByLevelEffective}
       selectedLevels={selectedLevels}
       searchAvailableLevels={searchAvailableLevels}
       stickyMerge={stickyMerge}

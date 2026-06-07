@@ -17,6 +17,8 @@ type VisibleTypes = { radical: boolean; kanji: boolean; vocabulary: boolean };
 
 type Params = {
   accountId: string;
+  explorerSource: "wanikani" | "custom";
+  customLibraryId: string | null;
   initialLevel: number;
   storageKeys: { typeVisibility: string; stickyMerge: string; filtersCollapsed: string };
   pendingHistoryMode: "replace" | "push";
@@ -45,6 +47,8 @@ type Params = {
 
 export function buildLevelExplorerControllerHandlers({
   accountId,
+  explorerSource,
+  customLibraryId,
   initialLevel,
   storageKeys,
   pendingHistoryMode,
@@ -113,7 +117,33 @@ export function buildLevelExplorerControllerHandlers({
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/accounts/${accountId}/levels/${level}`, { cache: "no-store" });
+      const url =
+        explorerSource === "custom"
+          ? customLibraryId
+            ? `/api/custom-study/${accountId}/levels/${level}?libraryId=${encodeURIComponent(customLibraryId)}`
+            : null
+          : `/api/accounts/${accountId}/levels/${level}`;
+
+      if (!url) {
+        const emptySnapshot: Snapshot = {
+          level,
+          kanjiTotal: 0,
+          kanjiLearned: 0,
+          kanjiGuruPlus: 0,
+          kanjiLocked: 0,
+          estimatedHoursRemaining: null,
+          items: [],
+        };
+        setSnapshotsByLevel((prev) => {
+          const map = new Map(prev);
+          map.set(level, emptySnapshot);
+          return map;
+        });
+        setError("");
+        return emptySnapshot;
+      }
+
+      const response = await fetch(url, { cache: "no-store" });
       const data = (await response.json()) as { error?: string; snapshot?: Snapshot };
 
       if (!response.ok || !data.snapshot) {

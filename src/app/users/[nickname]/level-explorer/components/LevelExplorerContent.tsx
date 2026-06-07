@@ -27,6 +27,7 @@ function wkStatusToneClass(status: (typeof SRS_FILTER_ALLOWED)[number], active: 
 
 export default function LevelExplorerContent({
   accountId,
+  explorerTitle,
   levelOptions,
   levelItemCountsByLevel,
   selectedLevels,
@@ -255,7 +256,7 @@ export default function LevelExplorerContent({
       <header className="flex flex-col gap-3 border-b border-line bg-surface/90 px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-xl font-black text-foreground">WaniKani Explorer</h2>
+            <h2 className="text-xl font-black text-foreground">{explorerTitle}</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Select one level at a time</p>
           </div>
           <ExplorerFilterToggleButton

@@ -10,6 +10,7 @@ import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
 
 export type LevelExplorerContentProps = {
   accountId: string;
+  explorerTitle: string;
   levelOptions: number[];
   levelItemCountsByLevel: Record<number, number>;
   selectedLevels: Set<number>;
