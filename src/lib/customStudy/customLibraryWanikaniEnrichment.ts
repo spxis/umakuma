@@ -15,6 +15,12 @@ import {
 } from "./customLibraryWanikaniLookup";
 
 const AUTO_ITEM_PREFIX = "auto:wk";
+const MAX_WANIKANI_LEVEL = 60;
+const SUBJECT_TYPE_ORDER: Record<SubjectType, number> = {
+  [SUBJECT_TYPES.radical]: 0,
+  [SUBJECT_TYPES.kanji]: 1,
+  [SUBJECT_TYPES.vocabulary]: 2,
+};
 
 type SourceRef = {
   sourceItemId: string;
@@ -48,6 +54,74 @@ function readWkSubjectId(metadata: unknown): number | null {
   return Number.isInteger(subjectId) && subjectId > 0 ? subjectId : null;
 }
 
+function normalizeLevel(level: number): number {
+  if (!Number.isFinite(level)) {
+    return 1;
+  }
+
+  return Math.max(1, Math.trunc(level));
+}
+
+function sourceMaxLevel(items: CustomLibraryItemPayload[]): number {
+  return items.reduce((max, item) => Math.max(max, normalizeLevel(item.level)), 1);
+}
+
+function readWkSubjectLevel(metadata: unknown): number | null {
+  if (!isRecord(metadata) || !isRecord(metadata.wk) || typeof metadata.wk.level !== "number") {
+    return null;
+  }
+
+  return Math.max(1, Math.min(MAX_WANIKANI_LEVEL, Math.trunc(metadata.wk.level)));
+}
+
+function rebalanceAutoItemLevels(params: {
+  sourceItems: CustomLibraryItemPayload[];
+  autoItems: CustomLibraryItemPayload[];
+}): CustomLibraryItemPayload[] {
+  if (params.autoItems.length === 0) {
+    return params.autoItems;
+  }
+
+  const maxSourceLevel = sourceMaxLevel(params.sourceItems);
+  if (maxSourceLevel <= 1) {
+    return params.autoItems;
+  }
+
+  const sorted = [...params.autoItems].sort((left, right) => {
+    const leftWkLevel = readWkSubjectLevel(left.metadata) ?? normalizeLevel(left.level);
+    const rightWkLevel = readWkSubjectLevel(right.metadata) ?? normalizeLevel(right.level);
+    if (leftWkLevel !== rightWkLevel) {
+      return leftWkLevel - rightWkLevel;
+    }
+
+    const leftTypeOrder = SUBJECT_TYPE_ORDER[resolveCustomItemSubjectType(left.type, left.metadata)];
+    const rightTypeOrder = SUBJECT_TYPE_ORDER[resolveCustomItemSubjectType(right.type, right.metadata)];
+    if (leftTypeOrder !== rightTypeOrder) {
+      return leftTypeOrder - rightTypeOrder;
+    }
+
+    const byCharacters = left.characters.localeCompare(right.characters, undefined, { sensitivity: "base" });
+    if (byCharacters !== 0) {
+      return byCharacters;
+    }
+
+    return left.id.localeCompare(right.id, undefined, { sensitivity: "base" });
+  });
+
+  const total = sorted.length;
+  return sorted.map((item, index) => {
+    const balancedLevel = Math.min(maxSourceLevel, Math.floor((index * maxSourceLevel) / total) + 1);
+    if (item.level === balancedLevel) {
+      return item;
+    }
+
+    return {
+      ...item,
+      level: balancedLevel,
+    };
+  });
+}
+
 export async function enrichCustomLibraryItemsWithWaniKani(params: {
   token: string;
   items: CustomLibraryItemPayload[];
@@ -56,10 +130,13 @@ export async function enrichCustomLibraryItemsWithWaniKani(params: {
     return params.items;
   }
 
+  const sourceItems = params.items.filter((item) => !item.id.startsWith(AUTO_ITEM_PREFIX));
+  const existingAutoItems = params.items.filter((item) => item.id.startsWith(AUTO_ITEM_PREFIX));
+
   const sourceRefsByKanji = new Map<string, SourceRef[]>();
   const allKanjiCharacters = new Set<string>();
 
-  for (const item of params.items) {
+  for (const item of sourceItems) {
     for (const character of extractKanjiCharacters(item.characters)) {
       allKanjiCharacters.add(character);
       const refs = sourceRefsByKanji.get(character) ?? [];
@@ -131,7 +208,7 @@ export async function enrichCustomLibraryItemsWithWaniKani(params: {
     });
   }
 
-  const enrichedSourceItems = params.items.map((item) => {
+  const enrichedSourceItems = sourceItems.map((item) => {
     const sourceKanji = extractKanjiCharacters(item.characters)
       .map((character) => wkKanjiByCharacter.get(character))
       .filter((row): row is WkSubject => row !== undefined);
@@ -190,7 +267,7 @@ export async function enrichCustomLibraryItemsWithWaniKani(params: {
   const existingByGlyph = new Set<string>();
   const existingByWkSubject = new Set<string>();
 
-  for (const item of enrichedSourceItems) {
+  for (const item of [...enrichedSourceItems, ...existingAutoItems]) {
     const subjectType = resolveCustomItemSubjectType(item.type, item.metadata);
     existingByGlyph.add(`${subjectType}:${item.characters.trim()}`);
 
@@ -333,19 +410,18 @@ export async function enrichCustomLibraryItemsWithWaniKani(params: {
     existingByWkSubject.add(`${SUBJECT_TYPES.radical}:${radical.subjectId}`);
   }
 
-  const typeOrder: Record<SubjectType, number> = {
-    [SUBJECT_TYPES.radical]: 0,
-    [SUBJECT_TYPES.kanji]: 1,
-    [SUBJECT_TYPES.vocabulary]: 2,
-  };
+  const rebalancedAutoItems = rebalanceAutoItemLevels({
+    sourceItems: enrichedSourceItems,
+    autoItems: [...existingAutoItems, ...autoKanjiItems, ...autoRadicalItems],
+  });
 
-  return [...enrichedSourceItems, ...autoKanjiItems, ...autoRadicalItems].sort((left, right) => {
+  return [...enrichedSourceItems, ...rebalancedAutoItems].sort((left, right) => {
     if (left.level !== right.level) {
       return left.level - right.level;
     }
 
-    const leftTypeOrder = typeOrder[resolveCustomItemSubjectType(left.type, left.metadata)];
-    const rightTypeOrder = typeOrder[resolveCustomItemSubjectType(right.type, right.metadata)];
+    const leftTypeOrder = SUBJECT_TYPE_ORDER[resolveCustomItemSubjectType(left.type, left.metadata)];
+    const rightTypeOrder = SUBJECT_TYPE_ORDER[resolveCustomItemSubjectType(right.type, right.metadata)];
     if (leftTypeOrder !== rightTypeOrder) {
       return leftTypeOrder - rightTypeOrder;
     }
