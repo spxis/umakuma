@@ -124,21 +124,19 @@ export function shouldUseServerReviewAggregateCounts({
   srsStageFilter,
   recentOnly,
   showLocked,
-  hiddenSubmittedCount,
 }: {
   queueMode: StudyQueueMode;
   srsFilter: StudySrsFilter;
   srsStageFilter: StudySrsStageFilter | null;
   recentOnly: boolean;
   showLocked: boolean;
-  hiddenSubmittedCount: number;
+  hiddenSubmittedCount?: number;
 }): boolean {
   return (
     queueMode === STUDY_QUEUE_TYPES.review &&
     srsFilter === STUDY_SRS_FILTERS.all &&
     srsStageFilter === null &&
     !recentOnly &&
-    showLocked &&
-    hiddenSubmittedCount === 0
+    showLocked
   );
 }

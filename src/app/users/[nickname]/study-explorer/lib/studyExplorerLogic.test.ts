@@ -283,7 +283,7 @@ describe("study explorer state helpers", () => {
     expect(resolveEffectiveViewedLevelFilter(null, null, 0)).toBeNull();
   });
 
-  it("uses server review aggregates only when no local hidden submissions exist", () => {
+  it("uses server review aggregates for default review filters", () => {
     expect(
       shouldUseServerReviewAggregateCounts({
         queueMode: "review",
@@ -303,6 +303,38 @@ describe("study explorer state helpers", () => {
         recentOnly: false,
         showLocked: true,
         hiddenSubmittedCount: 1,
+      }),
+    ).toBe(true);
+  });
+
+  it("does not use server review aggregates when review filters narrow the queue", () => {
+    expect(
+      shouldUseServerReviewAggregateCounts({
+        queueMode: "review",
+        srsFilter: "guru",
+        srsStageFilter: null,
+        recentOnly: false,
+        showLocked: true,
+      }),
+    ).toBe(false);
+
+    expect(
+      shouldUseServerReviewAggregateCounts({
+        queueMode: "review",
+        srsFilter: "all",
+        srsStageFilter: 5,
+        recentOnly: false,
+        showLocked: true,
+      }),
+    ).toBe(false);
+
+    expect(
+      shouldUseServerReviewAggregateCounts({
+        queueMode: "review",
+        srsFilter: "all",
+        srsStageFilter: null,
+        recentOnly: true,
+        showLocked: true,
       }),
     ).toBe(false);
   });
