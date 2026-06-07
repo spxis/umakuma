@@ -6,6 +6,7 @@ import ExplorerSearchBar from "../../ExplorerSearchBar";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
+import LevelExplorerLevelFilters from "./LevelExplorerLevelFilters";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_JLPT_MIX_LEVELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS } from "./LevelExplorer.constants";
 import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
 function wkStatusToneClass(status: (typeof SRS_FILTER_ALLOWED)[number], active: boolean): string {
@@ -277,33 +278,14 @@ export default function LevelExplorerContent({
             </div>
             <div className="mt-2 space-y-2">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
-                <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
-                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => { void onSelectAllLevelsAndClearSearch(); }}
-                    role="tab"
-                    aria-selected={selectedLevels.size === levelOptions.length}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.size === levelOptions.length)}`}
-                  >
-                    <FilterChipLabel label="All" count={levelOptions.reduce((sum, level) => sum + (levelItemCountsByLevel[level] ?? 0), 0)} />
-                  </button>
-                  {levelOptions.map((level) => (
-                    <button
-                      key={level}
-                      type="button"
-                      onClick={() => { void onToggleLevel(level); }}
-                      disabled={searchAvailableLevels !== null && !searchAvailableLevels.has(level)}
-                      role="tab"
-                      aria-selected={selectedLevels.has(level)}
-                      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(selectedLevels.has(level))}`}
-                    >
-                      <FilterChipLabel label={level} count={levelItemCountsByLevel[level] ?? 0} />
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <LevelExplorerLevelFilters
+                levelOptions={levelOptions}
+                levelItemCountsByLevel={levelItemCountsByLevel}
+                selectedLevels={selectedLevels}
+                searchAvailableLevels={searchAvailableLevels}
+                onSelectAllLevelsAndClearSearch={onSelectAllLevelsAndClearSearch}
+                onToggleLevel={onToggleLevel}
+              />
             </div>
             <div className="grid gap-2">
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Grouping filters">
