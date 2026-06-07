@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions, isAdminEmail, isGoogleAuthConfigured } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
+import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
 import type { CampaignRecord } from "./AdminCampaignManager.types";
 import type { AdminSessionStatus } from "./AdminPage.types";
@@ -21,6 +22,10 @@ function getReadingChallengeDelegate(): ReadingChallengeDelegate | null {
 export async function getAdminWorkspaceInitialSession(): Promise<AdminSessionStatus> {
   const session = await getServerSession(authOptions);
   const userEmail = session?.user?.email ?? null;
+  const viewerMenuInfo = await resolveViewerMenuInfo({
+    viewerEmail: userEmail,
+    sessionName: session?.user?.name ?? null,
+  });
 
   return {
     authorized: isAdminEmail(userEmail),
@@ -28,8 +33,9 @@ export async function getAdminWorkspaceInitialSession(): Promise<AdminSessionSta
     signedIn: Boolean(userEmail),
     emailAllowed: isAdminEmail(userEmail),
     user: {
-      name: session?.user?.name ?? null,
+      name: viewerMenuInfo?.name ?? session?.user?.name ?? null,
       email: userEmail,
+      wkUsername: viewerMenuInfo?.wkUsername ?? null,
     },
   };
 }

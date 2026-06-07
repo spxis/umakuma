@@ -11,5 +11,6 @@ export type AdminSessionStatus = {
   user?: {
     name?: string | null;
     email?: string | null;
+    wkUsername?: string | null;
   } | null;
 };

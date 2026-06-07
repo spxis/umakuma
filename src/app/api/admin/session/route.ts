@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { authOptions, isAdminEmail, isGoogleAuthConfigured } from "@/lib/auth";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
+import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
 export async function GET(request: Request) {
   return withApiRouteTelemetry({
@@ -14,6 +15,10 @@ export async function GET(request: Request) {
       try {
         const session = await getServerSession(authOptions);
         const userEmail = session?.user?.email ?? null;
+        const viewerMenuInfo = await resolveViewerMenuInfo({
+          viewerEmail: userEmail,
+          sessionName: session?.user?.name ?? null,
+        });
 
         return NextResponse.json({
           authorized: await isAuthorizedAdmin(request),
@@ -21,14 +26,25 @@ export async function GET(request: Request) {
           signedIn: Boolean(userEmail),
           emailAllowed: isAdminEmail(userEmail),
           user: {
-            name: session?.user?.name ?? null,
+            name: viewerMenuInfo?.name ?? session?.user?.name ?? null,
             email: userEmail,
+            wkUsername: viewerMenuInfo?.wkUsername ?? null,
           },
         });
       } catch (error) {
         console.error(error);
         return NextResponse.json(
-          { authorized: false, googleConfigured: false, signedIn: false, emailAllowed: false, user: null },
+          {
+            authorized: false,
+            googleConfigured: false,
+            signedIn: false,
+            emailAllowed: false,
+            user: {
+              name: null,
+              email: null,
+              wkUsername: null,
+            },
+          },
           { status: 500 },
         );
       }

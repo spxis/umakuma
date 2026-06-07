@@ -66,6 +66,7 @@ function AdminWorkspacePageContent({
   const [emailAllowed, setEmailAllowed] = useState(Boolean(initialSession?.emailAllowed));
   const [userName, setUserName] = useState<string | null>(initialSession?.user?.name ?? null);
   const [userEmail, setUserEmail] = useState<string | null>(initialSession?.user?.email ?? null);
+  const [userWkUsername, setUserWkUsername] = useState<string | null>(initialSession?.user?.wkUsername ?? null);
   const [loading, setLoading] = useState(false);
   const [jlptRefreshing, setJlptRefreshing] = useState(false);
   const [jlptEnriching, setJlptEnriching] = useState(false);
@@ -75,7 +76,7 @@ function AdminWorkspacePageContent({
         provider: "google",
         name: userName?.trim() || userEmail?.split("@")[0] || "Google user",
         email: userEmail,
-        wkUsername: null,
+        wkUsername: userWkUsername,
         isAdmin: emailAllowed,
       }
     : null;
@@ -100,6 +101,7 @@ function AdminWorkspacePageContent({
         setEmailAllowed(Boolean(data.emailAllowed));
         setUserName(data.user?.name ?? null);
         setUserEmail(data.user?.email ?? null);
+        setUserWkUsername((previous) => data.user?.wkUsername ?? previous);
       } finally {
         if (!hasInitialSession) {
           setCheckingSession(false);
