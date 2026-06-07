@@ -225,12 +225,13 @@ function AdminWorkspacePageContent({
   }
 
   return (
-    <div className="relative overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative overflow-hidden px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
-      <main className="relative mx-auto w-full max-w-6xl space-y-5">
+      <main className="relative mx-auto w-full max-w-6xl space-y-3">
         <AppTopMenuRow
           viewerMenuInfo={viewerMenuInfo}
           showAdminActions={true}
+          className="mb-2"
         />
 
         <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm sm:p-6">

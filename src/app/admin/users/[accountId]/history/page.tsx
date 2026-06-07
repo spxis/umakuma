@@ -20,11 +20,12 @@ export default async function AdminUserHistoryPage({ params }: PageProps) {
   const { accountId } = await params;
 
   return (
-    <div className="relative overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
-      <main className="relative mx-auto w-full max-w-6xl space-y-5">
+    <div className="relative overflow-hidden px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
+      <main className="relative mx-auto w-full max-w-6xl space-y-3">
         <AppTopMenuRow
           viewerMenuInfo={viewerMenuInfo}
           showAdminActions={true}
+          className="mb-2"
         />
 
         <div className="flex flex-wrap items-center gap-2">
