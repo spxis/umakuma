@@ -21,6 +21,10 @@ function clampLevel(value: number): number {
   return Math.min(MAX_CUSTOM_WK_LEVEL, Math.max(1, Math.trunc(value)));
 }
 
+function normalizeImportedItemType(type: string): "kanji" | "vocabulary" {
+  return type === "kanji" ? "kanji" : "vocabulary";
+}
+
 function normalizePayload(payload: CustomLibraryImportPayload): CustomLibraryImportPayload {
   return {
     schemaVersion: payload.schemaVersion,
@@ -31,7 +35,7 @@ function normalizePayload(payload: CustomLibraryImportPayload): CustomLibraryImp
     },
     items: payload.items.map((item) => ({
       id: item.id.trim(),
-      type: item.type,
+      type: normalizeImportedItemType(item.type),
       level: clampLevel(item.level),
       characters: item.characters.trim(),
       meanings: uniqueTrimmed(item.meanings),

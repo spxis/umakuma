@@ -1,8 +1,15 @@
 import { z } from "zod";
 
+const customLibraryItemTypeSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .transform((value) => (value === "phrase" ? "vocabulary" : value))
+  .pipe(z.enum(["kanji", "vocabulary"]));
+
 const customLibraryItemSchema = z.object({
   id: z.string().trim().min(1).max(120),
-  type: z.enum(["kanji", "vocabulary", "phrase"]),
+  type: customLibraryItemTypeSchema,
   level: z.number().int().min(1).max(60),
   characters: z.string().trim().min(1).max(120),
   meanings: z.array(z.string().trim().min(1).max(180)).min(1).max(20),

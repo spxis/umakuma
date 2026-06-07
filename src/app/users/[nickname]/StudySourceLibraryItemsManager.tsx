@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
-import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
+import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 
 type CustomLibraryItemRow = {
   id: string;
-  type: "kanji" | "vocabulary" | "phrase";
+  type: "kanji" | "vocabulary";
   level: number;
   characters: string;
   meanings: string[];
@@ -22,11 +22,7 @@ type Props = {
 };
 
 function customLibraryTypeLabel(type: CustomLibraryItemRow["type"]): string {
-  if (type === SUBJECT_TYPES.kanji || type === SUBJECT_TYPES.vocabulary) {
-    return SUBJECT_TYPE_DISPLAY[type].short;
-  }
-
-  return type.toUpperCase();
+  return SUBJECT_TYPE_DISPLAY[type].short;
 }
 
 export default function StudySourceLibraryItemsManager({

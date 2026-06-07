@@ -64,7 +64,7 @@ export async function GET(request: Request, context: RouteContext) {
         return NextResponse.json({
           items: items.map((item) => ({
             id: item.externalId,
-            type: item.itemType,
+            type: item.itemType === "kanji" ? "kanji" : "vocabulary",
             level: item.wkLevel,
             characters: item.characters,
             meanings: item.meanings,
