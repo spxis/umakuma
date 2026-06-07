@@ -414,6 +414,7 @@ export default function ExplorerTabs({
           accountId={accountId}
           isActive={effectiveActiveTab === "level"}
           explorerTitle={levelExplorerTitle}
+          onOpenStudySourceManager={openStudySourceManager}
           explorerSource={studySource}
           customLibraryId={customLibraryId}
           maxLevel={studySource === "custom" ? effectiveStudyMaxLevel : maxLevel}

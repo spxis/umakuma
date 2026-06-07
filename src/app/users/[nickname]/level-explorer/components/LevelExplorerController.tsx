@@ -48,6 +48,7 @@ type Props = {
   accountId: string;
   isActive?: boolean;
   explorerTitle: string;
+  onOpenStudySourceManager: () => void;
   explorerSource: "wanikani" | "custom";
   customLibraryId: string | null;
   maxLevel: number;
@@ -65,6 +66,7 @@ export default function LevelExplorerController({
   accountId,
   isActive = true,
   explorerTitle,
+  onOpenStudySourceManager,
   explorerSource,
   customLibraryId,
   maxLevel,
@@ -403,6 +405,7 @@ export default function LevelExplorerController({
     <LevelExplorerContent
       accountId={accountId}
       explorerTitle={explorerTitle}
+      onOpenStudySourceManager={onOpenStudySourceManager}
       levelOptions={levelOptions}
       levelItemCountsByLevel={levelItemCountsByLevelEffective}
       selectedLevels={selectedLevels}

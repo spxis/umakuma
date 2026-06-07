@@ -9,24 +9,17 @@ import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_JLPT_MIX_LEVELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS } from "./LevelExplorer.constants";
 import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
 function wkStatusToneClass(status: (typeof SRS_FILTER_ALLOWED)[number], active: boolean): string {
-  if (status === LEVEL_SRS_FILTERS.apprentice) {
-    return active ? "border-pink-300 bg-pink-100 text-pink-700" : "border-pink-200 bg-pink-50/70 text-pink-700 hover:bg-pink-100";
-  }
-  if (status === LEVEL_SRS_FILTERS.guru) {
-    return active ? "border-violet-300 bg-violet-100 text-violet-700" : "border-violet-200 bg-violet-50/70 text-violet-700 hover:bg-violet-100";
-  }
-  if (status === LEVEL_SRS_FILTERS.master) {
-    return active ? "border-sky-300 bg-sky-100 text-sky-700" : "border-sky-200 bg-sky-50/70 text-sky-700 hover:bg-sky-100";
-  }
-  if (status === LEVEL_SRS_FILTERS.enlightened) {
-    return active ? "border-amber-300 bg-amber-100 text-amber-700" : "border-amber-200 bg-amber-50/70 text-amber-700 hover:bg-amber-100";
-  }
+  if (status === LEVEL_SRS_FILTERS.apprentice) return active ? "border-pink-300 bg-pink-100 text-pink-700" : "border-pink-200 bg-pink-50/70 text-pink-700 hover:bg-pink-100";
+  if (status === LEVEL_SRS_FILTERS.guru) return active ? "border-violet-300 bg-violet-100 text-violet-700" : "border-violet-200 bg-violet-50/70 text-violet-700 hover:bg-violet-100";
+  if (status === LEVEL_SRS_FILTERS.master) return active ? "border-sky-300 bg-sky-100 text-sky-700" : "border-sky-200 bg-sky-50/70 text-sky-700 hover:bg-sky-100";
+  if (status === LEVEL_SRS_FILTERS.enlightened) return active ? "border-amber-300 bg-amber-100 text-amber-700" : "border-amber-200 bg-amber-50/70 text-amber-700 hover:bg-amber-100";
   return active ? "border-line bg-surface-muted text-foreground" : "border-line bg-surface text-foreground/75 hover:bg-surface-muted";
 }
 
 export default function LevelExplorerContent({
   accountId,
   explorerTitle,
+  onOpenStudySourceManager,
   levelOptions,
   levelItemCountsByLevel,
   selectedLevels,
@@ -82,9 +75,7 @@ export default function LevelExplorerContent({
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [peekSubjectId, setPeekSubjectId] = useState<number | null>(null);
-  const selectedItemIndex = selectedItem
-    ? filteredItems.findIndex((item) => item.subjectId === selectedItem.subjectId)
-    : -1;
+  const selectedItemIndex = selectedItem ? filteredItems.findIndex((item) => item.subjectId === selectedItem.subjectId) : -1;
   const effectiveVisibleCount = Math.min(
     filteredItems.length,
     Math.max(PAGE_SIZE, visibleCount, selectedItemIndex + 1),
@@ -257,7 +248,15 @@ export default function LevelExplorerContent({
       <header className="flex flex-col gap-3 border-b border-line bg-surface/90 px-5 py-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-xl font-black text-foreground">{explorerTitle}</h2>
+            <button
+              type="button"
+              onClick={onOpenStudySourceManager}
+              className="group inline-flex max-w-full items-center gap-2 rounded-md px-1 py-0.5 text-left"
+              title="Change study library"
+            >
+              <h2 className="truncate text-xl font-black text-foreground" title={explorerTitle}>{explorerTitle}</h2>
+              <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">Change</span>
+            </button>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Select one level at a time</p>
           </div>
           <ExplorerFilterToggleButton

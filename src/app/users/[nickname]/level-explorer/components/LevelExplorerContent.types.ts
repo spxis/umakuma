@@ -11,6 +11,7 @@ import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
 export type LevelExplorerContentProps = {
   accountId: string;
   explorerTitle: string;
+  onOpenStudySourceManager: () => void;
   levelOptions: number[];
   levelItemCountsByLevel: Record<number, number>;
   selectedLevels: Set<number>;

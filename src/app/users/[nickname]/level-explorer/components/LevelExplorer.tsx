@@ -7,6 +7,7 @@ type Props = {
   accountId: string;
   isActive?: boolean;
   explorerTitle: string;
+  onOpenStudySourceManager: () => void;
   explorerSource: "wanikani" | "custom";
   customLibraryId: string | null;
   maxLevel: number;
