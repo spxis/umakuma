@@ -128,7 +128,10 @@ export default function LevelExplorerController({
   const applyingUrlStateRef = useRef(false);
   const hasHydratedUrlStateRef = useRef(false);
   const lastHandledFindQueryRef = useRef("");
-  const ensureLevelLoadedRef = useRef<(level: number) => Promise<Snapshot | undefined>>(() => Promise.resolve(undefined));
+  const ensureLevelLoadedRef = useRef<(
+    level: number,
+    forceReload?: boolean,
+  ) => Promise<Snapshot | undefined>>(() => Promise.resolve(undefined));
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -325,7 +328,7 @@ export default function LevelExplorerController({
 
     void (async () => {
       for (const level of allLevels.values()) {
-        await ensureLevelLoadedRef.current(level);
+        await ensureLevelLoadedRef.current(level, true);
       }
     })();
   }, [customLibraryId, forceShowLocked, maxLevel]);
