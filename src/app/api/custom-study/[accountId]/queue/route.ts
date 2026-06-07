@@ -138,6 +138,7 @@ export async function GET(request: Request, context: RouteContext) {
                 id: true,
                 ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
                 itemType: true,
+                metadata: true,
                 characters: true,
                 meanings: true,
                 readings: true,

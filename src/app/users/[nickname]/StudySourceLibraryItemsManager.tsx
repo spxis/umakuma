@@ -5,7 +5,7 @@ import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 
 type CustomLibraryItemRow = {
   id: string;
-  type: "kanji" | "vocabulary";
+  type: "radical" | "kanji" | "vocabulary";
   level: number;
   characters: string;
   meanings: string[];

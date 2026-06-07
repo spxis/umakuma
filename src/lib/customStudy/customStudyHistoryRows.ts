@@ -2,6 +2,7 @@ import { SRS_BUCKETS, type SrsBucket } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import type { StudyHistoryRow } from "@/lib/studyHistoryView";
 
+import { readCustomItemRelationships } from "./customItemMetadata";
 import { toCustomSrsGrouping } from "./customSrs";
 import { customItemTypeToSubjectType } from "./customStudyQueue";
 
@@ -86,6 +87,7 @@ export async function getCustomStudyHistoryRows(args: Args): Promise<StudyHistor
         item: {
           select: {
             itemType: true,
+            metadata: true,
             wkLevel: true,
             characters: true,
             meanings: true,
@@ -112,7 +114,8 @@ export async function getCustomStudyHistoryRows(args: Args): Promise<StudyHistor
   const wkUsername = account?.wkUsername ?? fallbackUser;
 
   return attempts.map((row) => {
-    const subjectType = customItemTypeToSubjectType(row.item.itemType);
+    const subjectType = customItemTypeToSubjectType(row.item.itemType, row.item.metadata);
+    const relationships = readCustomItemRelationships(row.item.metadata);
     const reading = row.item.primaryReading ?? row.item.readings[0] ?? null;
     const meaning = row.item.meanings[0] ?? null;
     const stage = typeof row.newSrsStage === "number" ? row.newSrsStage : row.state?.srsStage ?? null;
@@ -142,6 +145,10 @@ export async function getCustomStudyHistoryRows(args: Args): Promise<StudyHistor
         meanings: row.item.meanings,
         readings: row.item.readings,
         primaryReadings: reading ? [reading] : row.item.readings,
+        radicals: relationships.radicals,
+        visuallySimilar: relationships.visuallySimilar,
+        usedInVocabulary: relationships.usedInVocabulary,
+        componentKanji: relationships.componentKanji,
         meaningExplanation: row.item.meaningMnemonic ?? undefined,
         readingExplanation: row.item.readingMnemonic ?? undefined,
         startedAt: row.state?.startedAt?.toISOString() ?? null,

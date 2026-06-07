@@ -1,7 +1,8 @@
 import type { CustomStudyItemType } from "@prisma/client";
 
-import { QUEUE_TYPES, SUBJECT_TYPES, type QueueType, type SubjectType } from "@/lib/domainConstants";
+import { QUEUE_TYPES, type QueueType, type SubjectType } from "@/lib/domainConstants";
 
+import { readCustomItemRelationships, resolveCustomItemSubjectType } from "./customItemMetadata";
 import { toCustomSrsGrouping } from "./customSrs";
 
 export type CustomStateQueueRow = {
@@ -14,6 +15,7 @@ export type CustomStateQueueRow = {
     id: number;
     wkLevel?: number | null;
     itemType: CustomStudyItemType;
+    metadata?: unknown;
     characters: string;
     meanings: string[];
     readings: string[];
@@ -23,12 +25,8 @@ export type CustomStateQueueRow = {
   };
 };
 
-export function customItemTypeToSubjectType(itemType: CustomStudyItemType): SubjectType {
-  if (itemType === "kanji") {
-    return SUBJECT_TYPES.kanji;
-  }
-
-  return SUBJECT_TYPES.vocabulary;
+export function customItemTypeToSubjectType(itemType: CustomStudyItemType, metadata?: unknown): SubjectType {
+  return resolveCustomItemSubjectType(itemType, metadata);
 }
 
 export function isCustomLessonState(stage: number): boolean {
@@ -71,18 +69,24 @@ export function mapCustomQueueItem(row: CustomStateQueueRow, now: Date) {
   const level = typeof row.item.wkLevel === "number" && Number.isFinite(row.item.wkLevel) && row.item.wkLevel > 0
     ? Math.trunc(row.item.wkLevel)
     : 1;
+  const subjectType = resolveCustomItemSubjectType(row.item.itemType, row.item.metadata);
+  const relationships = readCustomItemRelationships(row.item.metadata);
 
   return {
     subjectId: row.item.id,
     assignmentId: row.id,
     queueType: customQueueTypeFromState({ stage: row.srsStage, now, availableAt: row.availableAt }),
-    subjectType: customItemTypeToSubjectType(row.item.itemType),
+    subjectType,
     wkLevel: level,
     ukLevel: level,
     characters: row.item.characters,
     meanings: row.item.meanings,
     readings: row.item.readings,
     primaryReadings: row.item.primaryReading ? [row.item.primaryReading] : row.item.readings,
+    radicals: relationships.radicals,
+    visuallySimilar: relationships.visuallySimilar,
+    usedInVocabulary: relationships.usedInVocabulary,
+    componentKanji: relationships.componentKanji,
     meaningExplanation: row.item.meaningMnemonic ?? "",
     readingExplanation: row.item.readingMnemonic ?? "",
     srsStage: row.srsStage,

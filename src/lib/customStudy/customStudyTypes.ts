@@ -22,6 +22,7 @@ export type CustomLibraryItemPayload = {
   readingMnemonic?: string;
   synonyms?: string[];
   notes?: string;
+  metadata?: Record<string, unknown>;
 };
 
 export type CustomLibraryListRow = {

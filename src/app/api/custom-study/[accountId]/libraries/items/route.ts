@@ -4,6 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
+import { resolveCustomItemSubjectType } from "@/lib/customStudy/customItemMetadata";
 import { prisma } from "@/lib/prisma";
 
 type RouteContext = {
@@ -53,6 +54,7 @@ export async function GET(request: Request, context: RouteContext) {
           select: {
             externalId: true,
             itemType: true,
+            metadata: true,
             wkLevel: true,
             characters: true,
             meanings: true,
@@ -64,7 +66,7 @@ export async function GET(request: Request, context: RouteContext) {
         return NextResponse.json({
           items: items.map((item) => ({
             id: item.externalId,
-            type: item.itemType === "kanji" ? "kanji" : "vocabulary",
+            type: resolveCustomItemSubjectType(item.itemType, item.metadata),
             level: item.wkLevel,
             characters: item.characters,
             meanings: item.meanings,

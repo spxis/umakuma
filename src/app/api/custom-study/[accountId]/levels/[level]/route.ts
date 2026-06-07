@@ -5,6 +5,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
 import { customItemSupportsWkLevel, resolveCustomItemLevel } from "@/lib/customStudy/customItemLevel";
+import { readCustomItemRelationships } from "@/lib/customStudy/customItemMetadata";
 import { customItemTypeToSubjectType } from "@/lib/customStudy/customStudyQueue";
 import { toCustomSrsGrouping } from "@/lib/customStudy/customSrs";
 import { SUBJECT_TYPES, WK_STATUSES } from "@/lib/domainConstants";
@@ -70,6 +71,7 @@ export async function GET(request: Request, context: RouteContext) {
                 id: true,
                 externalId: true,
                 itemType: true,
+                metadata: true,
                 ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
                 characters: true,
                 meanings: true,
@@ -87,28 +89,32 @@ export async function GET(request: Request, context: RouteContext) {
           .filter((row) => resolveCustomItemLevel(row.item) === level)
           .sort((left, right) => left.item.externalId.localeCompare(right.item.externalId, undefined, { numeric: true }));
 
-        const allItems = levelRows.map((row) => ({
-          subjectId: row.item.id,
-          subjectType: customItemTypeToSubjectType(row.item.itemType),
-          wkLevel: level,
-          characters: row.item.characters,
-          meanings: row.item.meanings,
-          readings: row.item.readings,
-          primaryReadings: row.item.primaryReading ? [row.item.primaryReading] : row.item.readings,
-          radicals: [],
-          visuallySimilar: [],
-          usedInVocabulary: [],
-          componentKanji: [],
-          meaningExplanation: row.item.meaningMnemonic ?? "",
-          readingExplanation: row.item.readingMnemonic ?? "",
-          jlptLevel: null,
-          jlptMeta: null,
-          srsStage: row.srsStage,
-          status: toCustomSrsGrouping(row.srsStage),
-          startedAt: row.startedAt?.toISOString() ?? null,
-          passedAt: row.passedAt?.toISOString() ?? null,
-          availableAt: row.availableAt?.toISOString() ?? null,
-        }));
+        const allItems = levelRows.map((row) => {
+          const relationships = readCustomItemRelationships(row.item.metadata);
+
+          return {
+            subjectId: row.item.id,
+            subjectType: customItemTypeToSubjectType(row.item.itemType, row.item.metadata),
+            wkLevel: level,
+            characters: row.item.characters,
+            meanings: row.item.meanings,
+            readings: row.item.readings,
+            primaryReadings: row.item.primaryReading ? [row.item.primaryReading] : row.item.readings,
+            radicals: relationships.radicals,
+            visuallySimilar: relationships.visuallySimilar,
+            usedInVocabulary: relationships.usedInVocabulary,
+            componentKanji: relationships.componentKanji,
+            meaningExplanation: row.item.meaningMnemonic ?? "",
+            readingExplanation: row.item.readingMnemonic ?? "",
+            jlptLevel: null,
+            jlptMeta: null,
+            srsStage: row.srsStage,
+            status: toCustomSrsGrouping(row.srsStage),
+            startedAt: row.startedAt?.toISOString() ?? null,
+            passedAt: row.passedAt?.toISOString() ?? null,
+            availableAt: row.availableAt?.toISOString() ?? null,
+          };
+        });
 
         const kanjiItems = allItems.filter((item) => item.subjectType === SUBJECT_TYPES.kanji);
         const kanjiTotal = kanjiItems.length;

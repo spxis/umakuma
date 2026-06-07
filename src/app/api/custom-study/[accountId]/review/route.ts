@@ -91,6 +91,7 @@ export async function POST(request: Request, context: RouteContext) {
             item: {
               select: {
                 itemType: true,
+                metadata: true,
               },
             },
           },
@@ -157,7 +158,7 @@ export async function POST(request: Request, context: RouteContext) {
           review: {
             assignmentId: state.id,
             subjectId: state.itemId,
-            subjectType: customItemTypeToSubjectType(state.item.itemType),
+            subjectType: customItemTypeToSubjectType(state.item.itemType, state.item.metadata),
             previousSrsStage,
             newSrsStage,
             previousGrouping,

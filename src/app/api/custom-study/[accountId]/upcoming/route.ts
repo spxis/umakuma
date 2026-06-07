@@ -5,7 +5,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
 import { customItemSupportsWkLevel, resolveCustomItemLevel } from "@/lib/customStudy/customItemLevel";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { customItemTypeToSubjectType } from "@/lib/customStudy/customStudyQueue";
 import { prisma } from "@/lib/prisma";
 
 type RouteContext = {
@@ -82,6 +82,7 @@ export async function GET(request: Request, context: RouteContext) {
                   id: true,
                   ...(customItemSupportsWkLevel ? { wkLevel: true } : {}),
                   itemType: true,
+                  metadata: true,
                   characters: true,
                   meanings: true,
                   readings: true,
@@ -98,7 +99,7 @@ export async function GET(request: Request, context: RouteContext) {
           .filter((row) => row.availableAt !== null)
           .map((row): UpcomingReviewItem => ({
             subjectId: row.item.id,
-            subjectType: row.item.itemType === "kanji" ? SUBJECT_TYPES.kanji : SUBJECT_TYPES.vocabulary,
+            subjectType: customItemTypeToSubjectType(row.item.itemType, row.item.metadata),
             wkLevel: resolveCustomItemLevel(row.item),
             characters: row.item.characters,
             primaryMeaning: row.item.meanings[0] ?? null,

@@ -1,8 +1,11 @@
 import { ZodError } from "zod";
+import { Prisma } from "@prisma/client";
 
+import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 
 import { customLibraryPayloadSchema } from "./customLibrarySchema";
+import { enrichCustomLibraryItemsWithWaniKani } from "./customLibraryWanikaniEnrichment";
 import type { CustomLibraryImportSummary, CustomLibraryImportPayload } from "./customStudyTypes";
 
 const MAX_CUSTOM_WK_LEVEL = 60;
@@ -72,6 +75,38 @@ export async function importCustomLibraryPayload(input: {
   }
 
   const payload = normalizePayload(parsed.data);
+  let enrichedItems = payload.items;
+
+  try {
+    const account = await prisma.account.findUnique({
+      where: { id: input.accountId },
+      select: {
+        tokenEncrypted: true,
+        tokenIv: true,
+        tokenTag: true,
+      },
+    });
+
+    if (account) {
+      const token = decryptToken({
+        encrypted: account.tokenEncrypted,
+        iv: account.tokenIv,
+        tag: account.tokenTag,
+      });
+
+      enrichedItems = await enrichCustomLibraryItemsWithWaniKani({
+        token,
+        items: payload.items,
+      });
+    }
+  } catch (error) {
+    console.error("WaniKani import enrichment failed. Continuing without enrichment.", error);
+  }
+
+  const effectivePayload: CustomLibraryImportPayload = {
+    ...payload,
+    items: enrichedItems,
+  };
   const now = new Date();
 
   return prisma.$transaction(
@@ -79,8 +114,8 @@ export async function importCustomLibraryPayload(input: {
       const existingLibrary = await tx.customStudyLibrary.findUnique({
         where: {
           accountId_externalKey: {
-            accountId: input.accountId,
-            externalKey: payload.library.id,
+                    accountId: input.accountId,
+                    externalKey: effectivePayload.library.id,
           },
         },
         select: { id: true },
@@ -90,9 +125,9 @@ export async function importCustomLibraryPayload(input: {
         ? await tx.customStudyLibrary.update({
             where: { id: existingLibrary.id },
             data: {
-              name: payload.library.name,
-              description: payload.library.description,
-              schemaVersion: payload.schemaVersion,
+              name: effectivePayload.library.name,
+              description: effectivePayload.library.description,
+              schemaVersion: effectivePayload.schemaVersion,
               lastImportedAt: now,
               isActive: true,
             },
@@ -100,10 +135,10 @@ export async function importCustomLibraryPayload(input: {
         : await tx.customStudyLibrary.create({
             data: {
               accountId: input.accountId,
-              externalKey: payload.library.id,
-              name: payload.library.name,
-              description: payload.library.description,
-              schemaVersion: payload.schemaVersion,
+              externalKey: effectivePayload.library.id,
+              name: effectivePayload.library.name,
+              description: effectivePayload.library.description,
+              schemaVersion: effectivePayload.schemaVersion,
               sourceType: "json_upload",
               isActive: true,
               lastImportedAt: now,
@@ -127,23 +162,27 @@ export async function importCustomLibraryPayload(input: {
       let createdCount = 0;
       let updatedCount = 0;
 
-      for (const item of payload.items) {
+      for (const item of effectivePayload.items) {
         const existing = existingItemMap.get(item.id);
+        const metadata = item.metadata as Prisma.InputJsonValue | undefined;
         if (existing) {
+          const updateData = {
+            itemType: item.type,
+            characters: item.characters,
+            meanings: item.meanings,
+            readings: item.readings,
+            primaryReading: item.primaryReading,
+            meaningMnemonic: item.meaningMnemonic,
+            readingMnemonic: item.readingMnemonic,
+            synonyms: item.synonyms,
+            notes: item.notes,
+            wkLevel: item.level,
+            ...(metadata === undefined ? {} : { metadata }),
+          };
+
           await tx.customStudyItem.update({
             where: { id: existing.id },
-            data: {
-              itemType: item.type,
-              characters: item.characters,
-              meanings: item.meanings,
-              readings: item.readings,
-              primaryReading: item.primaryReading,
-              meaningMnemonic: item.meaningMnemonic,
-              readingMnemonic: item.readingMnemonic,
-              synonyms: item.synonyms,
-              notes: item.notes,
-              wkLevel: item.level,
-            },
+            data: updateData,
           });
           updatedCount += 1;
         } else {
@@ -160,6 +199,7 @@ export async function importCustomLibraryPayload(input: {
               readingMnemonic: item.readingMnemonic,
               synonyms: item.synonyms,
               notes: item.notes,
+              metadata: metadata ?? Prisma.JsonNull,
               wkLevel: item.level,
             },
           });
@@ -167,7 +207,7 @@ export async function importCustomLibraryPayload(input: {
         }
       }
 
-      const incomingItemIds = payload.items.map((item) => item.id);
+      const incomingItemIds = effectivePayload.items.map((item) => item.id);
       const removedResult = await tx.customStudyItem.deleteMany({
         where: {
           libraryId: library.id,
@@ -201,10 +241,10 @@ export async function importCustomLibraryPayload(input: {
 
       return {
         libraryId: library.id,
-        externalKey: payload.library.id,
-        libraryName: payload.library.name,
+        externalKey: effectivePayload.library.id,
+        libraryName: effectivePayload.library.name,
         createdLibrary: existingLibrary === null,
-        importedCount: payload.items.length,
+        importedCount: effectivePayload.items.length,
         createdCount,
         updatedCount,
         removedCount: removedResult.count,
