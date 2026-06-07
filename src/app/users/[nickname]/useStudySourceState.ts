@@ -33,6 +33,12 @@ type ScopedStudyCounts = {
   counts: StudySourceCounts;
 };
 
+function readLibraryIdFromParams(params: URLSearchParams): string | null {
+  const value = params.get("libraryId") ?? params.get("libraryid");
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}
+
 export function useStudySourceState({ accountId, countsStorageKey, isHydrated }: Args): Result {
   const studySourceStorageKey = `wr:study-source:${accountId}`;
   const customLibraryStorageKey = `wr:study-custom-library:${accountId}`;
@@ -57,7 +63,7 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     }
 
     const params = new URLSearchParams(window.location.search);
-    const libraryFromUrl = params.get("libraryId")?.trim();
+    const libraryFromUrl = readLibraryIdFromParams(params);
     if (libraryFromUrl) {
       return libraryFromUrl;
     }
@@ -86,7 +92,7 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
       setStudySource("wanikani");
     }
 
-    const libraryFromUrl = params.get("libraryId")?.trim();
+    const libraryFromUrl = readLibraryIdFromParams(params);
     if (libraryFromUrl) {
       setCustomLibraryId(libraryFromUrl);
     } else if (typeof window !== "undefined") {
@@ -268,6 +274,8 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     }
 
     const params = new URLSearchParams(window.location.search);
+    // Canonicalize on `libraryId` but keep reading legacy `libraryid` for old links.
+    params.delete("libraryid");
     if (studySource === "custom") {
       params.set("source", "custom");
       if (customLibraryId) {
@@ -278,6 +286,7 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     } else {
       params.delete("source");
       params.delete("libraryId");
+      params.delete("libraryid");
     }
 
     const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
