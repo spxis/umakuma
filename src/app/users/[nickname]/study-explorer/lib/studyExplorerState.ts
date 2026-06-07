@@ -123,7 +123,6 @@ export function shouldUseServerReviewAggregateCounts({
   srsFilter,
   srsStageFilter,
   recentOnly,
-  showLocked,
 }: {
   queueMode: StudyQueueMode;
   srsFilter: StudySrsFilter;
@@ -136,7 +135,6 @@ export function shouldUseServerReviewAggregateCounts({
     queueMode === STUDY_QUEUE_TYPES.review &&
     srsFilter === STUDY_SRS_FILTERS.all &&
     srsStageFilter === null &&
-    !recentOnly &&
-    showLocked
+    !recentOnly
   );
 }

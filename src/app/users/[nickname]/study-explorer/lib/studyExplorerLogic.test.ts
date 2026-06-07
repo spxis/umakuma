@@ -305,6 +305,17 @@ describe("study explorer state helpers", () => {
         hiddenSubmittedCount: 1,
       }),
     ).toBe(true);
+
+    expect(
+      shouldUseServerReviewAggregateCounts({
+        queueMode: "review",
+        srsFilter: "all",
+        srsStageFilter: null,
+        recentOnly: false,
+        showLocked: false,
+        hiddenSubmittedCount: 0,
+      }),
+    ).toBe(true);
   });
 
   it("does not use server review aggregates when review filters narrow the queue", () => {
