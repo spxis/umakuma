@@ -1,6 +1,7 @@
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
 import { readCustomItemRelationships, resolveCustomItemSubjectType, type CustomItemRelationships } from "./customItemMetadata";
+import { rebalanceAutoItemLevels } from "./customLibraryLevelBalancing";
 import type { CustomLibraryItemPayload } from "./customStudyTypes";
 import {
   decrementLevel,
@@ -15,7 +16,6 @@ import {
 } from "./customLibraryWanikaniLookup";
 
 const AUTO_ITEM_PREFIX = "auto:wk";
-const MAX_WANIKANI_LEVEL = 60;
 const SUBJECT_TYPE_ORDER: Record<SubjectType, number> = {
   [SUBJECT_TYPES.radical]: 0,
   [SUBJECT_TYPES.kanji]: 1,
@@ -52,74 +52,6 @@ function readWkSubjectId(metadata: unknown): number | null {
 
   const subjectId = metadata.wk.subjectId;
   return Number.isInteger(subjectId) && subjectId > 0 ? subjectId : null;
-}
-
-function normalizeLevel(level: number): number {
-  if (!Number.isFinite(level)) {
-    return 1;
-  }
-
-  return Math.max(1, Math.trunc(level));
-}
-
-function sourceMaxLevel(items: CustomLibraryItemPayload[]): number {
-  return items.reduce((max, item) => Math.max(max, normalizeLevel(item.level)), 1);
-}
-
-function readWkSubjectLevel(metadata: unknown): number | null {
-  if (!isRecord(metadata) || !isRecord(metadata.wk) || typeof metadata.wk.level !== "number") {
-    return null;
-  }
-
-  return Math.max(1, Math.min(MAX_WANIKANI_LEVEL, Math.trunc(metadata.wk.level)));
-}
-
-function rebalanceAutoItemLevels(params: {
-  sourceItems: CustomLibraryItemPayload[];
-  autoItems: CustomLibraryItemPayload[];
-}): CustomLibraryItemPayload[] {
-  if (params.autoItems.length === 0) {
-    return params.autoItems;
-  }
-
-  const maxSourceLevel = sourceMaxLevel(params.sourceItems);
-  if (maxSourceLevel <= 1) {
-    return params.autoItems;
-  }
-
-  const sorted = [...params.autoItems].sort((left, right) => {
-    const leftWkLevel = readWkSubjectLevel(left.metadata) ?? normalizeLevel(left.level);
-    const rightWkLevel = readWkSubjectLevel(right.metadata) ?? normalizeLevel(right.level);
-    if (leftWkLevel !== rightWkLevel) {
-      return leftWkLevel - rightWkLevel;
-    }
-
-    const leftTypeOrder = SUBJECT_TYPE_ORDER[resolveCustomItemSubjectType(left.type, left.metadata)];
-    const rightTypeOrder = SUBJECT_TYPE_ORDER[resolveCustomItemSubjectType(right.type, right.metadata)];
-    if (leftTypeOrder !== rightTypeOrder) {
-      return leftTypeOrder - rightTypeOrder;
-    }
-
-    const byCharacters = left.characters.localeCompare(right.characters, undefined, { sensitivity: "base" });
-    if (byCharacters !== 0) {
-      return byCharacters;
-    }
-
-    return left.id.localeCompare(right.id, undefined, { sensitivity: "base" });
-  });
-
-  const total = sorted.length;
-  return sorted.map((item, index) => {
-    const balancedLevel = Math.min(maxSourceLevel, Math.floor((index * maxSourceLevel) / total) + 1);
-    if (item.level === balancedLevel) {
-      return item;
-    }
-
-    return {
-      ...item,
-      level: balancedLevel,
-    };
-  });
 }
 
 export async function enrichCustomLibraryItemsWithWaniKani(params: {
