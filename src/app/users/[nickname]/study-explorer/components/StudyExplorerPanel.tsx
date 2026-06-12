@@ -4,20 +4,17 @@ import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import StudyFilterSection from "./StudyFilterSection";
 import StudyLevelFilters from "./StudyLevelFilters";
+import StudyStatusFilters from "./StudyStatusFilters";
 import StudyUpcomingReviewsSection from "./StudyUpcomingReviewsSection";
 import {
-  getSrsStageOptions,
   isAllStudyTypeFilter,
   isLessonLockedQueueItem,
   isReviewQueueItem,
-  STUDY_PANEL_SRS_STATUSES,
   STUDY_PANEL_TEXT,
   STUDY_QUEUE_TYPES,
   STUDY_GROUPING_FILTERS,
-  STUDY_SRS_FILTERS,
   STUDY_TYPE_FILTERS,
   studyGroupingToneClass,
-  studySrsToneClass,
 } from "./StudyExplorer.constants";
 import {
   formatNextReviewBadge,
@@ -26,7 +23,6 @@ import {
   glyphTextSizeClass,
   jlptLevelPillClass,
   shortSubjectTypeLabel,
-  srsFilterButtonLabel,
   statusClass,
   statusShortLabel,
   subjectTypePillClass,
@@ -133,14 +129,6 @@ export default function StudyExplorerPanel({
     : filtersOpen
       ? "block"
       : "hidden";
-  const closeStatusSectionReliably = () => {
-    setMobileFilterSectionOpen("status", false);
-    if (typeof window !== "undefined") {
-      window.requestAnimationFrame(() => {
-        setMobileFilterSectionOpen("status", false);
-      });
-    }
-  };
   const openAllMobileFilterSections = () => { setMobileFilterSectionOpen("level", true); setMobileFilterSectionOpen("grouping", true); setMobileFilterSectionOpen("status", true); };
   const handleResetFilters = () => { onClearAllFilters(); setFiltersOpen(true); openAllMobileFilterSections(); };
   return (
@@ -201,7 +189,14 @@ export default function StudyExplorerPanel({
           >
               <button
                 type="button"
-                onClick={() => { setMobileFilterSectionOpen("grouping", false); onSetTypeFilter(STUDY_TYPE_FILTERS.all); }}
+                onClick={() => {
+                  if (!mobileFilterSectionsOpen.grouping && allTypesSelected) {
+                    setMobileFilterSectionOpen("grouping", true);
+                    return;
+                  }
+                  setMobileFilterSectionOpen("grouping", false);
+                  onSetTypeFilter(STUDY_TYPE_FILTERS.all);
+                }}
                 disabled={filtersLoading}
                 role="tab"
                 aria-selected={allTypesSelected}
@@ -218,7 +213,14 @@ export default function StudyExplorerPanel({
                   <button
                     key={type}
                     type="button"
-                    onClick={() => { setMobileFilterSectionOpen("grouping", false); onSetTypeFilter(type); }}
+                    onClick={() => {
+                      if (!mobileFilterSectionsOpen.grouping && isSelected) {
+                        setMobileFilterSectionOpen("grouping", true);
+                        return;
+                      }
+                      setMobileFilterSectionOpen("grouping", false);
+                      onSetTypeFilter(type);
+                    }}
                     disabled={disabled}
                     role="tab"
                     aria-selected={isSelected}
@@ -230,68 +232,19 @@ export default function StudyExplorerPanel({
               })}
           </StudyFilterSection>
           {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
-            <StudyFilterSection
-              title="Status"
+            <StudyStatusFilters
               isOpen={mobileFilterSectionsOpen.status}
-              onToggle={() => toggleMobileFilterSection("status")}
-              ariaLabel="Status filters"
-            >
-                {STUDY_PANEL_SRS_STATUSES.map((status) => {
-                  const count = srsCounts[status];
-                  const isSelected = srsFilter === status;
-                  const hideStatusOnCollapsedMobile = !mobileFilterSectionsOpen.status && !isSelected;
-                  const unavailable = hasData && !isSelected && status !== STUDY_SRS_FILTERS.all && count === 0;
-                  const disabled = (filtersLoading && !isSelected) || unavailable;
-                  const statusLabel = status === STUDY_SRS_FILTERS.all ? "All" : srsFilterButtonLabel(status);
-                  const stageOptions = status === STUDY_SRS_FILTERS.all ? [] : getSrsStageOptions(status);
-                  const showStageButtons = isSelected && stageOptions.length > 1;
-                  const onClickStatus = () => {
-                    onSetSrsFilter(status);
-                    if (stageOptions.length > 1) {
-                      onSetSrsStageFilter(null);
-                    }
-                    closeStatusSectionReliably();
-                  };
-                  if (unavailable) return null;
-                  return (
-                    <div
-                      key={status}
-                      className={
-                        hideStatusOnCollapsedMobile
-                          ? "hidden sm:inline-flex sm:items-center sm:gap-1"
-                          : "inline-flex items-center gap-1"
-                      }
-                    >
-                      <button type="button" onClick={onClickStatus} disabled={disabled} role="tab" aria-selected={isSelected} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? badgeClass(isSelected) : studySrsToneClass(status, isSelected)}`}>
-                        <FilterChipLabel label={statusLabel} count={formatNumber(count)} />
-                      </button>
-                      {showStageButtons ? stageOptions.map((stage) => {
-                        const stageCount = srsStageCounts[stage] ?? 0;
-                        const stageSelected = srsStageFilter === stage;
-                        const stageUnavailable = hasData && !stageSelected && stageCount === 0;
-                        const stageDisabled = (filtersLoading && !stageSelected) || stageUnavailable;
-                        if (stageUnavailable) return null;
-                        return (
-                          <button
-                            key={`${status}-${stage}`}
-                            type="button"
-                            onClick={() => {
-                              onSetSrsStageFilter(stage);
-                              closeStatusSectionReliably();
-                            }}
-                            disabled={stageDisabled}
-                            role="tab"
-                            aria-selected={stageSelected}
-                            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.status || stageSelected ? "" : "hidden sm:inline-flex"} ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<typeof status, "all">, stageSelected)}`}
-                          >
-                              <FilterChipLabel label={stage} count={formatNumber(stageCount)} />
-                          </button>
-                        );
-                      }) : null}
-                    </div>
-                  );
-                })}
-            </StudyFilterSection>
+              filtersLoading={filtersLoading}
+              hasData={hasData}
+              srsFilter={srsFilter}
+              srsStageFilter={srsStageFilter}
+              srsCounts={srsCounts}
+              srsStageCounts={srsStageCounts}
+              onToggleSection={() => toggleMobileFilterSection("status")}
+              onSetSectionOpen={(isOpen) => setMobileFilterSectionOpen("status", isOpen)}
+              onSetSrsFilter={onSetSrsFilter}
+              onSetSrsStageFilter={onSetSrsStageFilter}
+            />
           ) : null}
           </div>
         </div>

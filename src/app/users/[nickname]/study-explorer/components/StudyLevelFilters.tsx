@@ -96,6 +96,7 @@ export default function StudyLevelFilters({
   const mobileVisibilityClass = (selected: boolean) =>
     mobileShowAllOptions || selected ? "" : "hidden sm:inline-flex";
   const isCollapsedOnMobile = !mobileShowAllOptions;
+  const shouldExpandForSelectedTap = (isSelected: boolean) => isCollapsedOnMobile && isSelected;
 
   return (
     <div className="flex w-full max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
@@ -114,7 +115,13 @@ export default function StudyLevelFilters({
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
         <button
           type="button"
-          onClick={() => selectLevel(null)}
+          onClick={() => {
+            if (shouldExpandForSelectedTap(viewedLevel === null)) {
+              onToggleMobileShowAllOptions();
+              return;
+            }
+            selectLevel(null);
+          }}
           disabled={filtersLoading}
           role="tab"
           aria-selected={viewedLevel === null}
@@ -130,7 +137,13 @@ export default function StudyLevelFilters({
               <button
                 key={level}
                 type="button"
-                onClick={() => selectLevel(level)}
+                onClick={() => {
+                  if (shouldExpandForSelectedTap(viewedLevel === level)) {
+                    onToggleMobileShowAllOptions();
+                    return;
+                  }
+                  selectLevel(level);
+                }}
                 disabled={filtersLoading}
                 role="tab"
                 aria-selected={viewedLevel === level}
@@ -155,11 +168,19 @@ export default function StudyLevelFilters({
                     onClick={
                       isOlderGroupChip
                         ? () => {
+                            if (shouldExpandForSelectedTap(groupedChipSelected)) {
+                              onToggleMobileShowAllOptions();
+                              return;
+                            }
                             setOlderLevelsExpanded(true);
                             onSetViewedLevel(boundaryLevelForGroup(viewedLevel, chip.startLevel, chip.endLevel));
                           }
                         : isRecentGroupChip
                           ? () => {
+                              if (shouldExpandForSelectedTap(groupedChipSelected)) {
+                                onToggleMobileShowAllOptions();
+                                return;
+                              }
                               setOlderLevelsExpanded(false);
                               onSetViewedLevel(boundaryLevelForGroup(viewedLevel, chip.startLevel, chip.endLevel));
                             }
@@ -190,7 +211,13 @@ export default function StudyLevelFilters({
                 <button
                   key={chip.level}
                   type="button"
-                  onClick={() => selectLevel(chip.level)}
+                  onClick={() => {
+                    if (shouldExpandForSelectedTap(isSelected)) {
+                      onToggleMobileShowAllOptions();
+                      return;
+                    }
+                    selectLevel(chip.level);
+                  }}
                   disabled={disabled}
                   role="tab"
                   aria-selected={isSelected}
