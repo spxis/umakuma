@@ -16,7 +16,6 @@ type Args = {
   isLoading: boolean;
   isValidating: boolean;
   hiddenSubmittedAssignmentIds: Set<number>;
-  filteredItemsLength: number;
   hasActiveFilterConstraints: boolean;
   onSetIsLoadingMore: React.Dispatch<React.SetStateAction<boolean>>;
   onSetLoadMoreError: React.Dispatch<React.SetStateAction<string | null>>;
@@ -37,7 +36,6 @@ export function useStudyQueuePagination({
   isLoading,
   isValidating,
   hiddenSubmittedAssignmentIds,
-  filteredItemsLength,
   hasActiveFilterConstraints,
   onSetIsLoadingMore,
   onSetLoadMoreError,
@@ -100,6 +98,56 @@ export function useStudyQueuePagination({
     totalItems,
   ]);
 
+  const hydrateAllPagesForFilters = useCallback(async () => {
+    if (isLoadingMore || !hasMorePages) {
+      return;
+    }
+
+    onSetIsLoadingMore(true);
+    onSetLoadMoreError(null);
+    try {
+      const params = new URLSearchParams({ mode: queueMode });
+      if (customLibraryId) {
+        params.set("libraryId", customLibraryId);
+      }
+
+      const payload = await fetchStudyQueue(`${queueApiBasePath}/queue?${params.toString()}`);
+      const payloadVisibleItems = payload.items.filter(
+        (item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId),
+      );
+
+      onSetLoadedItems((prev) => {
+        const payloadIds = new Set(payloadVisibleItems.map((item) => item.assignmentId));
+        const merged = [
+          ...payloadVisibleItems,
+          ...prev.filter((item) => !payloadIds.has(item.assignmentId)),
+        ];
+        return sameAssignmentList(prev, merged) ? prev : merged;
+      });
+      const hydratedTotal = payload.pagination?.total ?? payloadVisibleItems.length;
+      onSetTotalItems(Math.max(hydratedTotal, payloadVisibleItems.length));
+      if (payload.counts) {
+        onSetPersistedCounts(payload.counts);
+      }
+    } catch (loadError) {
+      onSetLoadMoreError(loadError instanceof Error ? loadError.message : "Could not refresh filtered study items.");
+    } finally {
+      onSetIsLoadingMore(false);
+    }
+  }, [
+    customLibraryId,
+    hasMorePages,
+    hiddenSubmittedAssignmentIds,
+    isLoadingMore,
+    onSetIsLoadingMore,
+    onSetLoadMoreError,
+    onSetLoadedItems,
+    onSetPersistedCounts,
+    onSetTotalItems,
+    queueApiBasePath,
+    queueMode,
+  ]);
+
   useEffect(() => {
     if (!hasActiveFilterConstraints) {
       return;
@@ -109,20 +157,14 @@ export function useStudyQueuePagination({
       return;
     }
 
-    if (loadedItems.length === 0 || filteredItemsLength > 0) {
-      return;
-    }
-
-    void loadMorePage();
+    void hydrateAllPagesForFilters();
   }, [
-    filteredItemsLength,
     hasActiveFilterConstraints,
     hasMorePages,
     isLoading,
     isLoadingMore,
     isValidating,
-    loadMorePage,
-    loadedItems.length,
+    hydrateAllPagesForFilters,
   ]);
 
   return { loadMorePage };

@@ -401,7 +401,6 @@ export default function StudyExplorer({
     isLoading,
     isValidating,
     hiddenSubmittedAssignmentIds,
-    filteredItemsLength: filteredItems.length,
     hasActiveFilterConstraints,
     onSetIsLoadingMore: setIsLoadingMore,
     onSetLoadMoreError: setLoadMoreError,

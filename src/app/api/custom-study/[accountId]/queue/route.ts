@@ -110,7 +110,7 @@ export async function GET(request: Request, context: RouteContext) {
         }
 
         const mode = parsed.data.mode ?? QUEUE_TYPES.review;
-        const limit = parsed.data.limit ?? 50;
+        const limit = typeof parsed.data.limit === "number" ? parsed.data.limit : null;
         const offset = parsed.data.offset ?? 0;
 
         const library = await getOwnedCustomLibrary({
@@ -184,7 +184,7 @@ export async function GET(request: Request, context: RouteContext) {
               : [...reviews, ...lessons];
         const sortedRows = sortQueueRows(rowsForMode, mode);
         const allItems = sortedRows.map((row) => mapCustomQueueItem(row as CustomStateQueueRow, now));
-        const pagedItems = allItems.slice(offset, offset + limit);
+        const pagedItems = limit === null ? allItems : allItems.slice(offset, offset + limit);
 
         const typeCounts = allItems.reduce(
           (acc, item) => {
@@ -248,9 +248,9 @@ export async function GET(request: Request, context: RouteContext) {
             srsStageCounts,
             pagination: {
               offset,
-              limit,
+              limit: limit ?? totalForMode,
               total: totalForMode,
-              hasMore: offset + limit < totalForMode,
+              hasMore: limit === null ? false : offset + limit < totalForMode,
             },
             cached: false,
           },
