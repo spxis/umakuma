@@ -206,7 +206,7 @@ export default function UserHeaderMenu({
   const dashboardPageLinks = resolvedUserPageUsername
     ? [
         { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/study` },
-        { label: "LIB Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/library-explorer` },
+        { label: "Library Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/library-explorer` },
         { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt-explorer` },
         { label: "History", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/history` },
         { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },

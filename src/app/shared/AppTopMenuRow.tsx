@@ -69,10 +69,11 @@ export default function AppTopMenuRow({
 }: AppTopMenuRowProps) {
   const pathname = usePathname();
   const resolvedWkUsername = primaryWkUsername ?? viewerMenuInfo?.wkUsername ?? null;
+  const canSeeAdminTopLink = showAdminActions || Boolean(viewerMenuInfo?.provider === "google" && viewerMenuInfo.isAdmin);
   const links: MainLink[] = [
     { label: "Leaderboard", href: "/", dashboard: null },
     { label: "Study", href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
-    { label: "LIB Explorer", href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
+    { label: "Library Explorer", href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
     { label: "JLPT Explorer", href: userTabHref(resolvedWkUsername, "jlpt"), dashboard: "jlpt" },
     { label: "History", href: userHistoryHref(resolvedWkUsername), dashboard: null },
     { label: "Stats", href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
@@ -80,7 +81,16 @@ export default function AppTopMenuRow({
     { label: "Read", href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },
     { label: "Libraries", href: userLibrariesHref(resolvedWkUsername), dashboard: null },
   ];
-  const dividerAfterLabels = new Set(["Leaderboard", "History", "Read"]);
+  if (canSeeAdminTopLink) {
+    links.push({ label: "Admin", href: "/admin", dashboard: null });
+  }
+
+  const dividerAfterLabels = new Set([
+    "Leaderboard",
+    "History",
+    "Read",
+    ...(canSeeAdminTopLink ? ["Libraries"] : []),
+  ]);
   const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
   const routeSegment =
     pathname && userBasePath && pathname.startsWith(`${userBasePath}/`)
