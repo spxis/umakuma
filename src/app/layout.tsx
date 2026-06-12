@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Noto_Sans_JP, Noto_Serif_JP, Space_Grotesk } from "next/font/google";
 import AppFooter from "./AppFooter";
+import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
@@ -48,6 +49,7 @@ export default function RootLayout({
     >
       <body className="min-h-full overflow-x-clip flex flex-col">
         <ClientErrorReporter />
+        <ClientApiActivityHint />
         <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
         <AppFooter />
         <ViewGlyphModalHost />
