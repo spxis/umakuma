@@ -23,6 +23,7 @@ import { shouldUseServerReviewAggregateCounts } from "./studyExplorerState";
 type Args = {
   maxLevel: number;
   loadedItems: StudyQueueItem[];
+  totalItems: number;
   queueMode: StudyQueueMode;
   viewedLevel: number | null;
   typeFilter: StudyTypeFilter;
@@ -61,6 +62,7 @@ function normalizePositiveLevelCounts(raw: Record<number, number> | Record<strin
 export function useStudyExplorerDerivedData({
   maxLevel,
   loadedItems,
+  totalItems,
   queueMode,
   viewedLevel,
   typeFilter,
@@ -161,6 +163,13 @@ export function useStudyExplorerDerivedData({
       hiddenSubmittedCount: hiddenSubmittedAssignmentIds.size,
     });
 
+  const isQueueFullyHydrated = loadedItems.length >= totalItems;
+  const shouldPreferLoadedAggregates =
+    hiddenSubmittedAssignmentIds.size > 0 && isQueueFullyHydrated;
+
+  const canUseServerReviewLevelAggregates =
+    canUseServerReviewLevelCounts && !shouldPreferLoadedAggregates;
+
   const hasReliableReviewLevelAvailability =
     queueMode === STUDY_QUEUE_TYPES.review &&
     isAllStudySrsFilter(effectiveSrsFilter) &&
@@ -170,7 +179,7 @@ export function useStudyExplorerDerivedData({
     Object.keys(reviewLevelCountsFromServer).length > 0;
 
   const effectiveReviewLevelCounts =
-    canUseServerReviewLevelCounts && Object.keys(reviewLevelCountsFromServer).length > 0
+    canUseServerReviewLevelAggregates && Object.keys(reviewLevelCountsFromServer).length > 0
       ? reviewLevelCountsFromServer
       : reviewLevelCounts;
 
@@ -322,7 +331,7 @@ export function useStudyExplorerDerivedData({
       recentOnly: effectiveRecentOnly,
       showLocked: effectiveShowLocked,
       hiddenSubmittedCount: hiddenSubmittedAssignmentIds.size,
-    });
+    }) && !shouldPreferLoadedAggregates;
 
   const typeCounts =
     queueMode === STUDY_QUEUE_TYPES.lesson
@@ -372,6 +381,7 @@ export function useStudyExplorerDerivedData({
       showLocked: effectiveShowLocked,
       hiddenSubmittedCount: hiddenSubmittedAssignmentIds.size,
     }) &&
+    !shouldPreferLoadedAggregates &&
     viewedLevel === null &&
     isAllStudyTypeFilter(typeFilter);
 
@@ -389,6 +399,7 @@ export function useStudyExplorerDerivedData({
         showLocked: effectiveShowLocked,
         hiddenSubmittedCount: hiddenSubmittedAssignmentIds.size,
       }) &&
+      !shouldPreferLoadedAggregates &&
       viewedLevel === null &&
       isAllStudyTypeFilter(typeFilter)
     ) {
@@ -423,6 +434,7 @@ export function useStudyExplorerDerivedData({
     effectiveSrsFilter,
     effectiveSrsStageFilter,
     hiddenSubmittedAssignmentIds,
+    shouldPreferLoadedAggregates,
   ]);
 
   const modalItems = useMemo(() => {

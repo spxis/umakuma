@@ -275,6 +275,7 @@ export default function StudyExplorer({
   } = useStudyExplorerDerivedData({
     maxLevel,
     loadedItems,
+    totalItems,
     queueMode,
     viewedLevel: effectiveViewedLevel,
     typeFilter,
