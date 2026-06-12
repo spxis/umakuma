@@ -59,8 +59,13 @@ export default function StudyReviewModal({
   const usedInWordsStorageKey = STUDY_REVIEW_MODAL_STORAGE_KEYS.usedInWordsCollapsed;
   const usedKanjiStorageKey = STUDY_REVIEW_MODAL_STORAGE_KEYS.usedKanjiCollapsed;
   const viewerModeStorageKey = STUDY_REVIEW_MODAL_STORAGE_KEYS.viewerMode;
+  const usedInVocabularyStorageKey = STUDY_REVIEW_MODAL_STORAGE_KEYS.usedInVocabularyCollapsed;
 
   const [usedInWordsCollapsed, setUsedInWordsCollapsed] = usePersistedBoolean(usedInWordsStorageKey, {
+    defaultValue: false,
+    mode: "one-is-true",
+  });
+  const [usedInVocabularyCollapsed, setUsedInVocabularyCollapsed] = usePersistedBoolean(usedInVocabularyStorageKey, {
     defaultValue: false,
     mode: "one-is-true",
   });
@@ -430,6 +435,7 @@ export default function StudyReviewModal({
             hasUsedInVocabulary={hasUsedInVocabulary}
             hasComponentKanji={hasComponentKanji}
             usedKanjiItems={usedKanjiItems}
+            usedInVocabularyCollapsed={usedInVocabularyCollapsed}
             usedKanjiCollapsed={usedKanjiCollapsed}
             usedInWordsCollapsed={usedInWordsCollapsed}
             jlptGradeLabel={jlptGradeLabel}
@@ -446,6 +452,9 @@ export default function StudyReviewModal({
             onFlashTouchStart={handleFlashTouchStart}
             onFlashTouchEnd={handleFlashTouchEnd}
             onSetFlashRevealKey={setFlashRevealKey}
+            onToggleUsedInVocabularyCollapsed={() => {
+              setUsedInVocabularyCollapsed((prev) => !prev);
+            }}
             onToggleUsedKanjiCollapsed={() => {
               setUsedKanjiCollapsed((prev) => !prev);
             }}

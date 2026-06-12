@@ -57,6 +57,7 @@ type Props = {
   hasUsedInVocabulary: boolean;
   hasComponentKanji: boolean;
   usedKanjiItems: RelatedReference[];
+  usedInVocabularyCollapsed: boolean;
   usedKanjiCollapsed: boolean;
   usedInWordsCollapsed: boolean;
   jlptGradeLabel: string;
@@ -73,6 +74,7 @@ type Props = {
   onFlashTouchStart: (event: React.TouchEvent) => void;
   onFlashTouchEnd: (event: React.TouchEvent) => void;
   onSetFlashRevealKey: (value: string) => void;
+  onToggleUsedInVocabularyCollapsed: () => void;
   onToggleUsedKanjiCollapsed: () => void;
   onToggleUsedInWordsCollapsed: () => void;
   onToggleShowEnglish: () => void;
@@ -105,6 +107,7 @@ export default function StudyReviewModalSection({
   hasUsedInVocabulary,
   hasComponentKanji,
   usedKanjiItems,
+  usedInVocabularyCollapsed,
   usedKanjiCollapsed,
   usedInWordsCollapsed,
   jlptGradeLabel,
@@ -121,6 +124,7 @@ export default function StudyReviewModalSection({
   onFlashTouchStart,
   onFlashTouchEnd,
   onSetFlashRevealKey,
+  onToggleUsedInVocabularyCollapsed,
   onToggleUsedKanjiCollapsed,
   onToggleUsedInWordsCollapsed,
   onToggleShowEnglish,
@@ -467,6 +471,7 @@ export default function StudyReviewModalSection({
         hasUsedInVocabulary={hasUsedInVocabulary}
         hasComponentKanji={hasComponentKanji}
         usedKanjiItems={usedKanjiItems}
+        usedInVocabularyCollapsed={usedInVocabularyCollapsed}
         usedKanjiCollapsed={usedKanjiCollapsed}
         usedInWordsCollapsed={usedInWordsCollapsed}
         jlptGradeLabel={jlptGradeLabel}
@@ -476,6 +481,7 @@ export default function StudyReviewModalSection({
         onSubmit={onSubmit}
         onSkipCurrent={onSkipCurrent}
         onStartLesson={onStartLesson}
+        onToggleUsedInVocabularyCollapsed={onToggleUsedInVocabularyCollapsed}
         onToggleUsedKanjiCollapsed={onToggleUsedKanjiCollapsed}
         onToggleUsedInWordsCollapsed={onToggleUsedInWordsCollapsed}
       />

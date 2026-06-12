@@ -52,6 +52,7 @@ type Props = {
   hasUsedInVocabulary: boolean;
   hasComponentKanji: boolean;
   usedKanjiItems: RelatedReference[];
+  usedInVocabularyCollapsed: boolean;
   usedKanjiCollapsed: boolean;
   usedInWordsCollapsed: boolean;
   jlptGradeLabel: string;
@@ -61,6 +62,7 @@ type Props = {
   onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => void;
   onSkipCurrent: () => void;
   onStartLesson: (assignmentId: number) => void;
+  onToggleUsedInVocabularyCollapsed: () => void;
   onToggleUsedKanjiCollapsed: () => void;
   onToggleUsedInWordsCollapsed: () => void;
 };
@@ -87,6 +89,7 @@ export default function StudyReviewModalMetaPanels({
   hasUsedInVocabulary,
   hasComponentKanji,
   usedKanjiItems,
+  usedInVocabularyCollapsed,
   usedKanjiCollapsed,
   usedInWordsCollapsed,
   jlptGradeLabel,
@@ -96,6 +99,7 @@ export default function StudyReviewModalMetaPanels({
   onSubmit,
   onSkipCurrent,
   onStartLesson,
+  onToggleUsedInVocabularyCollapsed,
   onToggleUsedKanjiCollapsed,
   onToggleUsedInWordsCollapsed,
 }: Props) {
@@ -183,19 +187,30 @@ export default function StudyReviewModalMetaPanels({
 
               {hasUsedInVocabulary ? (
                 <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
-                    {isRadicalSubjectType(selectedItem.subjectType)
-                      ? STUDY_REVIEW_META_TEXT.usedInKanji
-                      : STUDY_REVIEW_META_TEXT.usedInVocabulary}
-                  </p>
-                  {relatedTilesClickable(selectedItem.usedInVocabulary as RelatedReference[] | undefined, (entry) => {
-                    openSingleGlyph({
-                      subjectId: entry.subjectId,
-                      label: entry.label,
-                      reading: entry.reading,
-                      subjectType: usedInVocabularyTargetSubjectType(selectedItem.subjectType),
-                    });
-                  })}
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
+                      {isRadicalSubjectType(selectedItem.subjectType)
+                        ? STUDY_REVIEW_META_TEXT.usedInKanji
+                        : STUDY_REVIEW_META_TEXT.usedInVocabulary}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={onToggleUsedInVocabularyCollapsed}
+                      className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
+                    >
+                      {usedInVocabularyCollapsed ? STUDY_REVIEW_META_TEXT.expand : STUDY_REVIEW_META_TEXT.collapse}
+                    </button>
+                  </div>
+                  {!usedInVocabularyCollapsed
+                    ? relatedTilesClickable(selectedItem.usedInVocabulary as RelatedReference[] | undefined, (entry) => {
+                        openSingleGlyph({
+                          subjectId: entry.subjectId,
+                          label: entry.label,
+                          reading: entry.reading,
+                          subjectType: usedInVocabularyTargetSubjectType(selectedItem.subjectType),
+                        });
+                      })
+                    : null}
                 </div>
               ) : null}
             </div>

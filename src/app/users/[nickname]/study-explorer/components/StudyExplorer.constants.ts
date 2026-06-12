@@ -156,6 +156,7 @@ export function studyGroupingToneClass(
 }
 
 export const STUDY_REVIEW_MODAL_STORAGE_KEYS = {
+  usedInVocabularyCollapsed: "wr:study-modal:used-in-vocabulary-collapsed",
   usedInWordsCollapsed: "wr:study-modal:used-in-words-collapsed",
   usedKanjiCollapsed: "wr:study-modal:used-kanji-collapsed",
   viewerMode: "wr:study-modal:viewer-mode",
