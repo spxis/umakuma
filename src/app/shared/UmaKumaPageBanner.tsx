@@ -1,12 +1,12 @@
 import Image, { type StaticImageData } from "next/image";
 
-import adminBanner from "@/images/umakuma-hero2.png";
-import leaderboardHero from "@/images/umakuma-hero1.png";
+import adminBanner from "@/images/umakuma-hero2-transparent.png";
+import leaderboardHero from "@/images/umakuma-hero1-transparent.png";
 import kumaClose from "@/images/kuma-close.png";
 import umaClose from "@/images/uma-close.png";
 import umaKumaLeft from "@/images/umakuma-1.png";
 import umaKumaRight from "@/images/umakuma-2.png";
-import userBanner from "@/images/umakuma-banner1.png";
+import userBanner from "@/images/umakuma-banner1-transparent.png";
 
 type UmaKumaPageBannerVariant = "leaderboard" | "user" | "admin";
 
@@ -20,6 +20,7 @@ type BannerConfig = {
   leftDesktopImage?: StaticImageData;
   rightDesktopImage?: StaticImageData;
   frameClassName: string;
+  centerImageFrameClassName: string;
   centerImageClassName: string;
   sideImageClassName?: string;
 };
@@ -30,7 +31,8 @@ const BANNER_CONFIG_BY_VARIANT: Record<UmaKumaPageBannerVariant, BannerConfig> =
     leftDesktopImage: umaClose,
     rightDesktopImage: kumaClose,
     frameClassName: "h-28 sm:h-36 lg:h-44",
-    centerImageClassName: "h-20 w-auto sm:h-24 lg:h-28",
+    centerImageFrameClassName: "h-16 w-56 sm:h-20 sm:w-72 lg:h-24 lg:w-[420px]",
+    centerImageClassName: "object-contain object-center",
     sideImageClassName: "h-24 w-auto xl:h-28",
   },
   user: {
@@ -38,13 +40,15 @@ const BANNER_CONFIG_BY_VARIANT: Record<UmaKumaPageBannerVariant, BannerConfig> =
     leftDesktopImage: umaKumaLeft,
     rightDesktopImage: umaKumaRight,
     frameClassName: "h-24 sm:h-32 lg:h-40",
-    centerImageClassName: "h-16 w-auto sm:h-20 lg:h-24",
+    centerImageFrameClassName: "h-14 w-40 sm:h-16 sm:w-52 lg:h-20 lg:w-64",
+    centerImageClassName: "object-contain object-center",
     sideImageClassName: "h-24 w-auto xl:h-28",
   },
   admin: {
     centerImage: adminBanner,
     frameClassName: "h-24 sm:h-32 lg:h-40",
-    centerImageClassName: "h-16 w-auto sm:h-20 lg:h-24",
+    centerImageFrameClassName: "h-14 w-40 sm:h-16 sm:w-52 lg:h-20 lg:w-64",
+    centerImageClassName: "object-contain object-center",
   },
 };
 
@@ -54,7 +58,7 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
   return (
     <section
       aria-hidden="true"
-      className={`overflow-hidden rounded-2xl border border-line/80 bg-[#f5f6f8] shadow-[0_18px_40px_rgba(8,16,36,0.12)] ${className ?? ""}`}
+      className={`overflow-hidden rounded-2xl border border-white bg-white ${className ?? ""}`}
     >
       <div className={`relative ${config.frameClassName}`}>
         <div className="grid h-full grid-cols-1 items-center lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
@@ -69,12 +73,16 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
             ) : null}
           </div>
           <div className="flex h-full items-center justify-center px-2 sm:px-3">
-            <Image
-              src={config.centerImage}
-              alt=""
-              priority={variant === "leaderboard"}
-              className={config.centerImageClassName}
-            />
+              <div className={`relative overflow-hidden bg-white ${config.centerImageFrameClassName}`}>
+                <Image
+                  src={config.centerImage}
+                  alt=""
+                  fill
+                  priority={variant === "leaderboard"}
+                  className={config.centerImageClassName}
+                  sizes="(min-width: 1024px) 420px, 256px"
+                />
+              </div>
           </div>
           <div className="hidden h-full items-center justify-end pr-4 lg:flex">
             {config.rightDesktopImage ? (
@@ -87,7 +95,6 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
             ) : null}
           </div>
         </div>
-          <div className="absolute inset-0 bg-linear-to-r from-[#f5f6f8]/55 via-transparent to-[#f5f6f8]/40" />
       </div>
     </section>
   );
