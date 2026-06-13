@@ -1,0 +1,1890 @@
+{
+  "schemaVersion": 1,
+  "library": {
+    "id": "fukuri-slack-standup",
+    "name": "Fukuri Slack & Standup",
+    "description": "Slack status/comm & standup phrases, ranked easiest(1)->hardest by JLPT/grade/WaniKani; 20 items per level"
+  },
+  "items": [
+    {
+      "id": "phras-agarimasu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "上がります",
+      "meanings": [
+        "Heading out"
+      ],
+      "readings": [
+        "あがります"
+      ],
+      "primaryReading": "あがります",
+      "notes": "Signing off for the day; \"leaving\" the work shift"
+    },
+    {
+      "id": "phras-kyou-yaru-koto",
+      "type": "phrase",
+      "level": 1,
+      "characters": "今日やること",
+      "meanings": [
+        "Today's work"
+      ],
+      "readings": [
+        "きょうやること"
+      ],
+      "primaryReading": "きょうやること",
+      "notes": "\"What I'm doing today\""
+    },
+    {
+      "id": "phras-fe-kanryou",
+      "type": "phrase",
+      "level": 1,
+      "characters": "FE完了",
+      "meanings": [
+        "FE complete"
+      ],
+      "notes": "FE work complete"
+    },
+    {
+      "id": "phras-tasuku-ryou",
+      "type": "phrase",
+      "level": 1,
+      "characters": "タスク量",
+      "meanings": [
+        "Volume of tasks"
+      ],
+      "readings": [
+        "たすくりょう"
+      ],
+      "primaryReading": "たすくりょう",
+      "notes": "Amount of pending work"
+    },
+    {
+      "id": "vocab-burokku",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "ブロック",
+      "meanings": [
+        "Blocked"
+      ],
+      "readings": [
+        "ぶろっく"
+      ],
+      "primaryReading": "ぶろっく",
+      "notes": "\"Blocked\"; tech-context loanword"
+    },
+    {
+      "id": "phras-ittan-modori",
+      "type": "phrase",
+      "level": 1,
+      "characters": "一旦戻り",
+      "meanings": [
+        "Stepped out (casual)"
+      ],
+      "readings": [
+        "いったんもどり"
+      ],
+      "primaryReading": "いったんもどり",
+      "notes": "Hisayuki shorthand for \"back briefly\""
+    },
+    {
+      "id": "phras-ohiru-ni-dete-kimasu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "お昼に出てきます",
+      "meanings": [
+        "Going to lunch / Going to lunch (runner)"
+      ],
+      "readings": [
+        "おひるにでてきます"
+      ],
+      "primaryReading": "おひるにでてきます",
+      "notes": "\"Going out for lunch\""
+    },
+    {
+      "id": "phras-yoroshiku-onegai-shimasu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "よろしくお願いします",
+      "meanings": [
+        "Thanks in advance"
+      ],
+      "readings": [
+        "よろしくおねがいします"
+      ],
+      "primaryReading": "よろしくおねがいします",
+      "notes": "Closes almost every request"
+    },
+    {
+      "id": "phras-kinou-yatta-koto",
+      "type": "phrase",
+      "level": 1,
+      "characters": "昨日やったこと",
+      "meanings": [
+        "Yesterday's work"
+      ],
+      "readings": [
+        "きのうやったこと"
+      ],
+      "primaryReading": "きのうやったこと",
+      "notes": "\"What I did yesterday\""
+    },
+    {
+      "id": "phras-ohiru-itte-kimasu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "お昼行ってきます",
+      "meanings": [
+        "Going to lunch"
+      ],
+      "readings": [
+        "おひるいってきます"
+      ],
+      "primaryReading": "おひるいってきます",
+      "notes": "Hisayuki's variant; less formal than Marcano's"
+    },
+    {
+      "id": "phras-machi",
+      "type": "phrase",
+      "level": 1,
+      "characters": "待ち",
+      "meanings": [
+        "Waiting on"
+      ],
+      "readings": [
+        "まち"
+      ],
+      "primaryReading": "まち",
+      "notes": "Suffix: \"waiting on [X]\""
+    },
+    {
+      "id": "phras-yotei-ga-kaburu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "予定がかぶる",
+      "meanings": [
+        "Schedule conflict"
+      ],
+      "readings": [
+        "よていがかぶる"
+      ],
+      "primaryReading": "よていがかぶる",
+      "notes": "Casual conflict phrase: \"schedules overlap\""
+    },
+    {
+      "id": "phras-yotei-ga-hairu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "予定が入る",
+      "meanings": [
+        "Schedule overlap"
+      ],
+      "readings": [
+        "よていがはいる"
+      ],
+      "primaryReading": "よていがはいる",
+      "notes": "Schedule conflict; \"another event came in\""
+    },
+    {
+      "id": "phras-oshirase-desu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "お知らせです",
+      "meanings": [
+        "Heads up"
+      ],
+      "readings": [
+        "おしらせです"
+      ],
+      "primaryReading": "おしらせです",
+      "notes": "Used for announcements"
+    },
+    {
+      "id": "phras-hayame-ni-agarimasu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "早めに上がります",
+      "meanings": [
+        "Going home (early)"
+      ],
+      "readings": [
+        "はやめにあがります"
+      ],
+      "primaryReading": "はやめにあがります",
+      "notes": "Signing off early for the day"
+    },
+    {
+      "id": "phras-honjitsu-wa-hayame-ni-taikin-shimasu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "本日は早めに退勤します",
+      "meanings": [
+        "Leaving early today"
+      ],
+      "readings": [
+        "ほんじつははやめにたいきんします"
+      ],
+      "primaryReading": "ほんじつははやめにたいきんします",
+      "notes": "Formal early-out"
+    },
+    {
+      "id": "phras-api-machi",
+      "type": "phrase",
+      "level": 1,
+      "characters": "API待ち",
+      "meanings": [
+        "Awaiting API"
+      ],
+      "readings": [
+        "えーぴーあいまち"
+      ],
+      "primaryReading": "えーぴーあいまち",
+      "notes": "\"Blocked on API\"; you've been in this state often"
+    },
+    {
+      "id": "phras-be-mitaiou",
+      "type": "phrase",
+      "level": 1,
+      "characters": "BE未対応",
+      "meanings": [
+        "BE pending"
+      ],
+      "notes": "BE not yet handled"
+    },
+    {
+      "id": "phras-qa-izon-nashi",
+      "type": "phrase",
+      "level": 1,
+      "characters": "QA依存なし",
+      "meanings": [
+        "No QA dependency"
+      ],
+      "notes": "\"No QA dependency\""
+    },
+    {
+      "id": "vocab-pre-prd",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "pre-PRD",
+      "meanings": [
+        "Pre-PRD"
+      ],
+      "notes": "Pre-PRD doc state"
+    },
+    {
+      "id": "phras-tasuku-ryou-haaku",
+      "type": "phrase",
+      "level": 2,
+      "characters": "タスク量把握",
+      "meanings": [
+        "Task volume grasp"
+      ],
+      "readings": [
+        "たすくりょうはあく"
+      ],
+      "primaryReading": "たすくりょうはあく",
+      "notes": "Understanding workload"
+    },
+    {
+      "id": "phras-foroo-shimasu",
+      "type": "phrase",
+      "level": 2,
+      "characters": "フォローします",
+      "meanings": [
+        "Will follow up"
+      ],
+      "readings": [
+        "ふぉろーします"
+      ],
+      "primaryReading": "ふぉろーします",
+      "notes": "Follow up on"
+    },
+    {
+      "id": "vocab-burokkaa",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "ブロッカー",
+      "meanings": [
+        "Blocker"
+      ],
+      "readings": [
+        "ぶろっかー"
+      ],
+      "primaryReading": "ぶろっかー",
+      "notes": "\"Blocker\"; the thing that blocks"
+    },
+    {
+      "id": "phras-maaji-shimashita",
+      "type": "phrase",
+      "level": 2,
+      "characters": "マージしました",
+      "meanings": [
+        "Merged"
+      ],
+      "readings": [
+        "まーじしました"
+      ],
+      "primaryReading": "まーじしました",
+      "notes": "\"Merged\" (PR)"
+    },
+    {
+      "id": "phras-maaji-machi",
+      "type": "phrase",
+      "level": 2,
+      "characters": "マージ待ち",
+      "meanings": [
+        "Awaiting merge"
+      ],
+      "readings": [
+        "まーじまち"
+      ],
+      "primaryReading": "まーじまち",
+      "notes": "\"Awaiting merge\""
+    },
+    {
+      "id": "phras-ririisu-shimasu",
+      "type": "phrase",
+      "level": 2,
+      "characters": "リリースします",
+      "meanings": [
+        "Will release"
+      ],
+      "readings": [
+        "りりーすします"
+      ],
+      "primaryReading": "りりーすします",
+      "notes": "Same; less casual"
+    },
+    {
+      "id": "phras-ririisu-mae",
+      "type": "phrase",
+      "level": 2,
+      "characters": "リリース前",
+      "meanings": [
+        "Pre-release"
+      ],
+      "readings": [
+        "りりーすまえ"
+      ],
+      "primaryReading": "りりーすまえ",
+      "notes": "\"Pre-release\""
+    },
+    {
+      "id": "phras-ririisu-ato",
+      "type": "phrase",
+      "level": 2,
+      "characters": "リリース後",
+      "meanings": [
+        "Post-release"
+      ],
+      "readings": [
+        "りりーすあと"
+      ],
+      "primaryReading": "りりーすあと",
+      "notes": "\"Post-release\""
+    },
+    {
+      "id": "phras-ririisu-zumi",
+      "type": "phrase",
+      "level": 2,
+      "characters": "リリース済み",
+      "meanings": [
+        "Live / shipped"
+      ],
+      "readings": [
+        "りりーすずみ"
+      ],
+      "primaryReading": "りりーすずみ",
+      "notes": "Already shipped to prod"
+    },
+    {
+      "id": "phras-rebyuu-machi",
+      "type": "phrase",
+      "level": 2,
+      "characters": "レビュー待ち",
+      "meanings": [
+        "In review / Awaiting review"
+      ],
+      "readings": [
+        "れびゅーまち"
+      ],
+      "primaryReading": "れびゅーまち",
+      "notes": "\"Awaiting review\"; PR-status phrase"
+    },
+    {
+      "id": "phras-ittan-burokku",
+      "type": "phrase",
+      "level": 2,
+      "characters": "一旦ブロック",
+      "meanings": [
+        "Currently blocked"
+      ],
+      "notes": "\"Temporarily blocked\""
+    },
+    {
+      "id": "phras-ta-chiimu-izon",
+      "type": "phrase",
+      "level": 2,
+      "characters": "他チーム依存",
+      "meanings": [
+        "Cross-team dependency"
+      ],
+      "notes": "Dependency on another team"
+    },
+    {
+      "id": "phras-taishou-no-chiketto",
+      "type": "phrase",
+      "level": 2,
+      "characters": "対象のチケット",
+      "meanings": [
+        "Tickets in scope"
+      ],
+      "notes": "Target tickets"
+    },
+    {
+      "id": "phras-tobashite-ok",
+      "type": "phrase",
+      "level": 2,
+      "characters": "飛ばしてOK",
+      "meanings": [
+        "Skip your turn"
+      ],
+      "readings": [
+        "とばしてOK"
+      ],
+      "primaryReading": "とばしてOK",
+      "notes": "\"OK to skip\"; informal"
+    },
+    {
+      "id": "phras-taihen-moushiwake-gozaimasen-ga",
+      "type": "phrase",
+      "level": 2,
+      "characters": "大変申し訳ございませんが",
+      "meanings": [
+        "Apology + action"
+      ],
+      "readings": [
+        "たいへんもうしわけございませんが"
+      ],
+      "primaryReading": "たいへんもうしわけございませんが",
+      "notes": "Maximum-polite apology lead-in"
+    },
+    {
+      "id": "phras-karuku-kyouyuu-sasete-kudasai",
+      "type": "phrase",
+      "level": 2,
+      "characters": "軽く共有させてください",
+      "meanings": [
+        "Quick share"
+      ],
+      "notes": "\"Let me briefly share\""
+    },
+    {
+      "id": "phras-gokaitou-wo-onegai-shimasu",
+      "type": "phrase",
+      "level": 2,
+      "characters": "ご回答をお願いします",
+      "meanings": [
+        "Polite reply request"
+      ],
+      "readings": [
+        "ごかいとうをおねがいします"
+      ],
+      "primaryReading": "ごかいとうをおねがいします",
+      "notes": "Asking for a response"
+    },
+    {
+      "id": "phras-taiou-machi",
+      "type": "phrase",
+      "level": 2,
+      "characters": "対応待ち",
+      "meanings": [
+        "Awaiting branch"
+      ],
+      "readings": [
+        "たいおうまち"
+      ],
+      "primaryReading": "たいおうまち",
+      "notes": "Waiting for action by someone"
+    },
+    {
+      "id": "phras-itten-kyouyuu-desu",
+      "type": "phrase",
+      "level": 2,
+      "characters": "一点共有です",
+      "meanings": [
+        "One thing to share"
+      ],
+      "readings": [
+        "いってんきょうゆうです"
+      ],
+      "primaryReading": "いってんきょうゆうです",
+      "notes": "Common opener for a quick FYI post"
+    },
+    {
+      "id": "phras-shukkin-shimashita",
+      "type": "phrase",
+      "level": 2,
+      "characters": "出勤しました",
+      "meanings": [
+        "Clocking in"
+      ],
+      "readings": [
+        "しゅっきんしました"
+      ],
+      "primaryReading": "しゅっきんしました",
+      "notes": "Most popular start-of-day post (23 uses); often paired with 🏠 リモート or 🏢 オフィス"
+    },
+    {
+      "id": "phras-nochihodo-gorenraku-shimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "後ほどご連絡します",
+      "meanings": [
+        "Will report back later"
+      ],
+      "readings": [
+        "のちほどごれんらくします"
+      ],
+      "primaryReading": "のちほどごれんらくします",
+      "notes": "Common closer for in-progress items"
+    },
+    {
+      "id": "phras-hassei-shimashita",
+      "type": "phrase",
+      "level": 3,
+      "characters": "発生しました",
+      "meanings": [
+        "Issue occurred"
+      ],
+      "readings": [
+        "はっせいしました"
+      ],
+      "primaryReading": "はっせいしました",
+      "notes": "\"〜が発生しました\"; bugs, errors, incidents"
+    },
+    {
+      "id": "phras-kyuukei-kaishi",
+      "type": "phrase",
+      "level": 3,
+      "characters": "休憩開始",
+      "meanings": [
+        "Break started"
+      ],
+      "readings": [
+        "きゅうけいかいし"
+      ],
+      "primaryReading": "きゅうけいかいし",
+      "notes": "Marcano's short break announcement"
+    },
+    {
+      "id": "phras-kyuu-ni-sumimasen-ga",
+      "type": "phrase",
+      "level": 3,
+      "characters": "急にすみませんが",
+      "meanings": [
+        "Sorry to ask suddenly"
+      ],
+      "readings": [
+        "きゅうにすみませんが"
+      ],
+      "primaryReading": "きゅうにすみませんが",
+      "notes": "Softening unexpected requests"
+    },
+    {
+      "id": "vocab-soudan",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "相談",
+      "meanings": [
+        "Help needed"
+      ],
+      "readings": [
+        "そうだん"
+      ],
+      "primaryReading": "そうだん",
+      "notes": "\"Consultation\"; asking for input or help"
+    },
+    {
+      "id": "phras-henshin-osokunari-suimasen",
+      "type": "phrase",
+      "level": 3,
+      "characters": "返信遅くなりすいません",
+      "meanings": [
+        "Sorry for the late reply"
+      ],
+      "readings": [
+        "へんしんおそくなりすいません"
+      ],
+      "primaryReading": "へんしんおそくなりすいません",
+      "notes": "Common opener for delayed responses"
+    },
+    {
+      "id": "vocab-kyouyuu",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "共有",
+      "meanings": [
+        "Share / Announcement"
+      ],
+      "readings": [
+        "きょうゆう"
+      ],
+      "primaryReading": "きょうゆう",
+      "notes": "\"Things to share\""
+    },
+    {
+      "id": "phras-kyouyuu-shimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "共有します",
+      "meanings": [
+        "Shared / FYI"
+      ],
+      "readings": [
+        "きょうゆうします"
+      ],
+      "primaryReading": "きょうゆうします",
+      "notes": "Posting info for the team"
+    },
+    {
+      "id": "phras-otsukaresama-desu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "お疲れ様です",
+      "meanings": [
+        "Good work today"
+      ],
+      "readings": [
+        "おつかれさまです"
+      ],
+      "primaryReading": "おつかれさまです",
+      "notes": "Default Slack greeting throughout the day"
+    },
+    {
+      "id": "phras-approve-shimashita",
+      "type": "phrase",
+      "level": 3,
+      "characters": "Approveしました",
+      "meanings": [
+        "Approved"
+      ],
+      "readings": [
+        "あぷろーぶしました"
+      ],
+      "primaryReading": "あぷろーぶしました",
+      "notes": "Marcano's PR-approval phrase"
+    },
+    {
+      "id": "vocab-high-priority-designation",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "High priority",
+      "meanings": [
+        "High-priority designation"
+      ],
+      "notes": "Used as-is; English priority"
+    },
+    {
+      "id": "vocab-low-priority-designation",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "Low priority",
+      "meanings": [
+        "Low-priority designation"
+      ],
+      "notes": "Same"
+    },
+    {
+      "id": "phras-daily-sanka-okuremasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "daily参加遅れます",
+      "meanings": [
+        "Will be late (var) / Will be late to daily"
+      ],
+      "readings": [
+        "でいりーさんかおくれます"
+      ],
+      "primaryReading": "でいりーさんかおくれます",
+      "notes": "Late to standup"
+    },
+    {
+      "id": "phras-pre-prd-rebyuu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "pre-PRDレビュー",
+      "meanings": [
+        "Pre-PRD review"
+      ],
+      "readings": [
+        "ぷれぴーあーるでぃーれびゅー"
+      ],
+      "primaryReading": "ぷれぴーあーるでぃーれびゅー",
+      "notes": "Internal term; PRD = Product Requirements Document"
+    },
+    {
+      "id": "phras-ohayou-gozaimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "おはようございます",
+      "meanings": [
+        "Good morning"
+      ],
+      "readings": [
+        "おはようございます"
+      ],
+      "primaryReading": "おはようございます",
+      "notes": "Posted at start of day; team norm"
+    },
+    {
+      "id": "phras-ohiru-tabete-kara-kaerimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "お昼食べてから帰ります",
+      "meanings": [
+        "Going to lunch (casual)"
+      ],
+      "readings": [
+        "おひるたべてからかえります"
+      ],
+      "primaryReading": "おひるたべてからかえります",
+      "notes": "Hisayuki's casual lunch-then-return phrasing"
+    },
+    {
+      "id": "phras-sorry-late-to-daily",
+      "type": "phrase",
+      "level": 3,
+      "characters": "ちょっとだけdaily参加遅れます",
+      "meanings": [
+        "Sorry late to daily"
+      ],
+      "notes": "Takemura's actual phrasing"
+    },
+    {
+      "id": "phras-plan-adjustment-ask",
+      "type": "phrase",
+      "level": 3,
+      "characters": "どのパターンで実行するか相談させてください",
+      "meanings": [
+        "Plan adjustment ask"
+      ],
+      "notes": "Buzz pattern: \"please discuss which pattern to execute\""
+    },
+    {
+      "id": "vocab-reset-to-start",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "スクワッドに戻した上で",
+      "meanings": [
+        "Reset to start"
+      ],
+      "notes": "\"Once reset to squad\""
+    },
+    {
+      "id": "vocab-sudden-item-add",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "スタンドアップの前後で20分ほどお時間いただけませんか",
+      "meanings": [
+        "Sudden item add"
+      ],
+      "notes": "Hyodo pattern for pre-standup time-grab"
+    },
+    {
+      "id": "phras-vote-with-stamp",
+      "type": "phrase",
+      "level": 4,
+      "characters": "スタンプいただけたらと思います",
+      "meanings": [
+        "Vote with stamp"
+      ],
+      "notes": "Buzz pattern: \"please stamp your choice\""
+    },
+    {
+      "id": "phras-sutanpu-de-kimemashou",
+      "type": "phrase",
+      "level": 4,
+      "characters": "スタンプで決めましょう",
+      "meanings": [
+        "Stamping decision"
+      ],
+      "readings": [
+        "すたんぷできめましょう"
+      ],
+      "primaryReading": "すたんぷできめましょう",
+      "notes": "Squad decision-by-emoji ritual"
+    },
+    {
+      "id": "vocab-not-picking-up-tasks",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "タスク量把握しておらず",
+      "meanings": [
+        "Not picking up tasks"
+      ],
+      "notes": "Buzz signature: \"I haven't grasped the task volume\" — humble decline of pickup"
+    },
+    {
+      "id": "phras-maaji-shichau-nee",
+      "type": "phrase",
+      "level": 4,
+      "characters": "マージしちゃうねー",
+      "meanings": [
+        "Will merge"
+      ],
+      "readings": [
+        "まーじしちゃうねー"
+      ],
+      "primaryReading": "まーじしちゃうねー",
+      "notes": "Hisayuki casual merge-announce"
+    },
+    {
+      "id": "phras-ririisu-shimasu-nee",
+      "type": "phrase",
+      "level": 4,
+      "characters": "リリースしますねー",
+      "meanings": [
+        "About to release"
+      ],
+      "readings": [
+        "りりーすしますねー"
+      ],
+      "primaryReading": "りりーすしますねー",
+      "notes": "Casual release-announce"
+    },
+    {
+      "id": "phras-rebyuu-onegai-shimasu",
+      "type": "phrase",
+      "level": 4,
+      "characters": "レビューお願いします",
+      "meanings": [
+        "Asking for review"
+      ],
+      "readings": [
+        "れびゅーおねがいします"
+      ],
+      "primaryReading": "れびゅーおねがいします",
+      "notes": "Standard PR review request (already in your awareness)"
+    },
+    {
+      "id": "vocab-locally-verified",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "ローカルで一通り動作確認済み",
+      "meanings": [
+        "Locally verified"
+      ],
+      "notes": "\"Verified end-to-end locally\"; your phrasing"
+    },
+    {
+      "id": "vocab-locally-tested",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "ローカルで動作確認",
+      "meanings": [
+        "Locally tested"
+      ],
+      "notes": "Local verification"
+    },
+    {
+      "id": "phras-ika-nitten-kyouyuu-desu",
+      "type": "phrase",
+      "level": 4,
+      "characters": "以下2点共有です",
+      "meanings": [
+        "Cross-team mention opener"
+      ],
+      "readings": [
+        "いかにてんきょうゆうです"
+      ],
+      "primaryReading": "いかにてんきょうゆうです",
+      "notes": "Common channel announcement pattern"
+    },
+    {
+      "id": "phras-shounin-maaji",
+      "type": "phrase",
+      "level": 4,
+      "characters": "承認 / マージ",
+      "meanings": [
+        "Manage approval"
+      ],
+      "notes": "Approve/merge state"
+    },
+    {
+      "id": "phras-jibun-wa-sukippu-de",
+      "type": "phrase",
+      "level": 4,
+      "characters": "自分はスキップで",
+      "meanings": [
+        "Skip me today"
+      ],
+      "readings": [
+        "じぶんはすきっぷで"
+      ],
+      "primaryReading": "じぶんはすきっぷで",
+      "notes": "Casual \"skip me\""
+    },
+    {
+      "id": "phras-susumete-itadakeru-to",
+      "type": "phrase",
+      "level": 4,
+      "characters": "進めていただけると",
+      "meanings": [
+        "Please proceed without me"
+      ],
+      "notes": "\"Please proceed\"; (already added — high frequency)"
+    },
+    {
+      "id": "phras-susumete-itadakeru-to-tasukarimasu",
+      "type": "phrase",
+      "level": 4,
+      "characters": "進めていただけると助かります",
+      "meanings": [
+        "If late / behind"
+      ],
+      "notes": "Buzz closer: \"would be helpful if you could proceed\""
+    },
+    {
+      "id": "phras-ma-ni-awa-nakatta-baai",
+      "type": "phrase",
+      "level": 4,
+      "characters": "間に合わなかった場合",
+      "meanings": [
+        "If I'm late / Schedule deferral"
+      ],
+      "readings": [
+        "まにあわなかったばあい"
+      ],
+      "primaryReading": "まにあわなかったばあい",
+      "notes": "(Already added — high frequency)"
+    },
+    {
+      "id": "vocab-kanryou",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "完了",
+      "meanings": [
+        "Completed"
+      ],
+      "readings": [
+        "かんりょう"
+      ],
+      "primaryReading": "かんりょう",
+      "notes": "Done / finished"
+    },
+    {
+      "id": "phras-kanryou-shimashita",
+      "type": "phrase",
+      "level": 4,
+      "characters": "完了しました",
+      "meanings": [
+        "Completed"
+      ],
+      "readings": [
+        "かんりょうしました"
+      ],
+      "primaryReading": "かんりょうしました",
+      "notes": "Task done; common in PR/ticket comments"
+    },
+    {
+      "id": "phras-api-hitsuyou",
+      "type": "phrase",
+      "level": 4,
+      "characters": "API必要",
+      "meanings": [
+        "Need API"
+      ],
+      "readings": [
+        "えーぴーあいひつよう"
+      ],
+      "primaryReading": "えーぴーあいひつよう",
+      "notes": "\"Need API\"; cross-team dependency"
+    },
+    {
+      "id": "vocab-mokuhyou",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "目標",
+      "meanings": [
+        "Target / Goal"
+      ],
+      "readings": [
+        "もくひょう"
+      ],
+      "primaryReading": "もくひょう",
+      "notes": "\"目標：…\" header in daily reports"
+    },
+    {
+      "id": "phras-sukoshi-seki-hazushimasu",
+      "type": "phrase",
+      "level": 4,
+      "characters": "少し席外します",
+      "meanings": [
+        "Stepping away briefly"
+      ],
+      "readings": [
+        "すこしせきはずします"
+      ],
+      "primaryReading": "すこしせきはずします",
+      "notes": "Shorter casual version for quick steps away"
+    },
+    {
+      "id": "phras-seki-wo-hazushimasu",
+      "type": "phrase",
+      "level": 4,
+      "characters": "席を外します",
+      "meanings": [
+        "Stepping away / Stepping out"
+      ],
+      "readings": [
+        "せきをはずします"
+      ],
+      "primaryReading": "せきをはずします",
+      "notes": "Standard AFK message (5 uses)"
+    },
+    {
+      "id": "phras-taiou-shimasu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "対応します",
+      "meanings": [
+        "Working on it"
+      ],
+      "readings": [
+        "たいおうします"
+      ],
+      "primaryReading": "たいおうします",
+      "notes": "\"I'll handle it\""
+    },
+    {
+      "id": "phras-taiou-chuu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "対応中",
+      "meanings": [
+        "In progress"
+      ],
+      "readings": [
+        "たいおうちゅう"
+      ],
+      "primaryReading": "たいおうちゅう",
+      "notes": "\"Currently handling\""
+    },
+    {
+      "id": "phras-taiou-chuu-desu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "対応中です",
+      "meanings": [
+        "In progress"
+      ],
+      "readings": [
+        "たいおうちゅうです"
+      ],
+      "primaryReading": "たいおうちゅうです",
+      "notes": "Status update on ongoing work"
+    },
+    {
+      "id": "phras-karuku-gosoudan",
+      "type": "phrase",
+      "level": 5,
+      "characters": "軽くご相談",
+      "meanings": [
+        "Quick consult"
+      ],
+      "notes": "(Already added — reinforce)"
+    },
+    {
+      "id": "phras-renraku-jikou",
+      "type": "phrase",
+      "level": 5,
+      "characters": "連絡事項",
+      "meanings": [
+        "Contact / Notice"
+      ],
+      "readings": [
+        "れんらくじこう"
+      ],
+      "primaryReading": "れんらくじこう",
+      "notes": "Announcement; common standup closer"
+    },
+    {
+      "id": "phras-fuzai-ni-shimasu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "不在にします",
+      "meanings": [
+        "Being away / absent"
+      ],
+      "readings": [
+        "ふざいにします"
+      ],
+      "primaryReading": "ふざいにします",
+      "notes": "Longer or all-day absence"
+    },
+    {
+      "id": "phras-gyoumu-ryou",
+      "type": "phrase",
+      "level": 5,
+      "characters": "業務量",
+      "meanings": [
+        "Task volume"
+      ],
+      "readings": [
+        "ぎょうむりょう"
+      ],
+      "primaryReading": "ぎょうむりょう",
+      "notes": "Workload"
+    },
+    {
+      "id": "vocab-genjou",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "現状",
+      "meanings": [
+        "Currently / current state"
+      ],
+      "readings": [
+        "げんじょう"
+      ],
+      "primaryReading": "げんじょう",
+      "notes": "Already on sheet; flag for very high frequency in this channel"
+    },
+    {
+      "id": "phras-tsuzuki-wa-ashita-ni-shimasu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "続きは明日にします",
+      "meanings": [
+        "Will pick this up tomorrow"
+      ],
+      "readings": [
+        "つづきはあしたにします"
+      ],
+      "primaryReading": "つづきはあしたにします",
+      "notes": "Deferring continuation"
+    },
+    {
+      "id": "phras-gokakunin-wo-onegai-shimasu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "ご確認をお願いします",
+      "meanings": [
+        "Awaiting confirmation"
+      ],
+      "readings": [
+        "ごかくにんをおねがいします"
+      ],
+      "primaryReading": "ごかくにんをおねがいします",
+      "notes": "Standard confirmation request"
+    },
+    {
+      "id": "phras-saikai-shimasu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "再開します",
+      "meanings": [
+        "Resuming work"
+      ],
+      "readings": [
+        "さいかいします"
+      ],
+      "primaryReading": "さいかいします",
+      "notes": "\"Resuming\"; common after lunch"
+    },
+    {
+      "id": "phras-dousa-kakunin-zumi",
+      "type": "phrase",
+      "level": 5,
+      "characters": "動作確認済み",
+      "meanings": [
+        "Confirmed working"
+      ],
+      "readings": [
+        "どうさかくにんずみ"
+      ],
+      "primaryReading": "どうさかくにんずみ",
+      "notes": "\"Behavior confirmed\"; QA pass"
+    },
+    {
+      "id": "phras-kakunin-machi",
+      "type": "phrase",
+      "level": 5,
+      "characters": "確認待ち",
+      "meanings": [
+        "Awaiting confirmation"
+      ],
+      "readings": [
+        "かくにんまち"
+      ],
+      "primaryReading": "かくにんまち",
+      "notes": "Waiting for someone to verify"
+    },
+    {
+      "id": "phras-asu-mo-keizoku-shimasu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "明日も継続します",
+      "meanings": [
+        "Continuing tomorrow"
+      ],
+      "readings": [
+        "あすもけいぞくします"
+      ],
+      "primaryReading": "あすもけいぞくします",
+      "notes": "Multi-day work continuation"
+    },
+    {
+      "id": "phras-kyuukei-shuuryou-shimashita",
+      "type": "phrase",
+      "level": 5,
+      "characters": "休憩終了しました",
+      "meanings": [
+        "Break ended"
+      ],
+      "readings": [
+        "きゅうけいしゅうりょうしました"
+      ],
+      "primaryReading": "きゅうけいしゅうりょうしました",
+      "notes": "Marking end of break period"
+    },
+    {
+      "id": "phras-kyuukei-kaishi-shimashita",
+      "type": "phrase",
+      "level": 5,
+      "characters": "休憩開始しました",
+      "meanings": [
+        "Break starting"
+      ],
+      "readings": [
+        "きゅうけいかいしします"
+      ],
+      "primaryReading": "きゅうけいかいしします",
+      "notes": "Marking start of break period"
+    },
+    {
+      "id": "vocab-modorimashita",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "戻りました",
+      "meanings": [
+        "I'm back"
+      ],
+      "readings": [
+        "もどりました"
+      ],
+      "primaryReading": "もどりました",
+      "notes": "Standard return message"
+    },
+    {
+      "id": "phras-kore-wo-yuusen",
+      "type": "phrase",
+      "level": 5,
+      "characters": "これを優先",
+      "meanings": [
+        "Prioritize this"
+      ],
+      "notes": "\"Prioritize this\""
+    },
+    {
+      "id": "vocab-yuusen",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "優先",
+      "meanings": [
+        "Prioritize"
+      ],
+      "readings": [
+        "ゆうせん"
+      ],
+      "primaryReading": "ゆうせん",
+      "notes": "Prioritize"
+    },
+    {
+      "id": "phras-yuusen-do",
+      "type": "phrase",
+      "level": 5,
+      "characters": "優先度",
+      "meanings": [
+        "Priority assignment"
+      ],
+      "readings": [
+        "ゆうせんど"
+      ],
+      "primaryReading": "ゆうせんど",
+      "notes": "Priority/precedence"
+    },
+    {
+      "id": "phras-yuusen-teki-ni",
+      "type": "phrase",
+      "level": 6,
+      "characters": "優先的に",
+      "meanings": [
+        "Priority selection"
+      ],
+      "readings": [
+        "ゆうせんてきに"
+      ],
+      "primaryReading": "ゆうせんてきに",
+      "notes": "Preferentially"
+    },
+    {
+      "id": "phras-kakunin-shimashita",
+      "type": "phrase",
+      "level": 6,
+      "characters": "確認しました",
+      "meanings": [
+        "Confirmed"
+      ],
+      "readings": [
+        "かくにんしました"
+      ],
+      "primaryReading": "かくにんしました",
+      "notes": "Acknowledging you've seen something"
+    },
+    {
+      "id": "phras-kakunin-shimasu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "確認します",
+      "meanings": [
+        "Will check"
+      ],
+      "readings": [
+        "かくにんします"
+      ],
+      "primaryReading": "かくにんします",
+      "notes": "\"I'll look into it\""
+    },
+    {
+      "id": "phras-kakunin-chuu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "確認中",
+      "meanings": [
+        "Confirming"
+      ],
+      "readings": [
+        "かくにんちゅう"
+      ],
+      "primaryReading": "かくにんちゅう",
+      "notes": "\"Currently confirming/checking\""
+    },
+    {
+      "id": "phras-chousei-zumi",
+      "type": "phrase",
+      "level": 6,
+      "characters": "調整済み",
+      "meanings": [
+        "Already adjusted"
+      ],
+      "readings": [
+        "ちょうせいずみ"
+      ],
+      "primaryReading": "ちょうせいずみ",
+      "notes": "Already coordinated"
+    },
+    {
+      "id": "phras-gotaiou-wo-onegai-itashimasu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "ご対応をお願いいたします",
+      "meanings": [
+        "Action requested"
+      ],
+      "readings": [
+        "ごたいおうをおねがいいたします"
+      ],
+      "primaryReading": "ごたいおうをおねがいいたします",
+      "notes": "Polite action request closer"
+    },
+    {
+      "id": "vocab-komarigoto",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "困りごと",
+      "meanings": [
+        "Blocker (softer)"
+      ],
+      "readings": [
+        "こまりごと"
+      ],
+      "primaryReading": "こまりごと",
+      "notes": "\"Troubles\"; softer, surfaces real issues better"
+    },
+    {
+      "id": "phras-jissou-chuu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "実装中",
+      "meanings": [
+        "In implementation"
+      ],
+      "readings": [
+        "じっそうちゅう"
+      ],
+      "primaryReading": "じっそうちゅう",
+      "notes": "Currently being implemented"
+    },
+    {
+      "id": "phras-shounin-shimashita",
+      "type": "phrase",
+      "level": 6,
+      "characters": "承認しました",
+      "meanings": [
+        "Approved / Approved (var)"
+      ],
+      "readings": [
+        "しょうにんしました"
+      ],
+      "primaryReading": "しょうにんしました",
+      "notes": "Used for code reviews, time-off, expenses"
+    },
+    {
+      "id": "phras-draft-joutai",
+      "type": "phrase",
+      "level": 6,
+      "characters": "Draft状態",
+      "meanings": [
+        "Draft state"
+      ],
+      "notes": "Draft state for PR"
+    },
+    {
+      "id": "vocab-gaitou",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "該当",
+      "meanings": [
+        "Subject (technical)"
+      ],
+      "readings": [
+        "がいとう"
+      ],
+      "primaryReading": "がいとう",
+      "notes": "\"Relevant\" / \"applicable\""
+    },
+    {
+      "id": "phras-gaitou-chiketto",
+      "type": "phrase",
+      "level": 6,
+      "characters": "該当チケット",
+      "meanings": [
+        "Subject tickets"
+      ],
+      "notes": "Relevant tickets"
+    },
+    {
+      "id": "phras-kyuukei-shuuryou",
+      "type": "phrase",
+      "level": 6,
+      "characters": "休憩終了",
+      "meanings": [
+        "Break finished"
+      ],
+      "readings": [
+        "きゅうけいしゅうりょう"
+      ],
+      "primaryReading": "きゅうけいしゅうりょう",
+      "notes": "Pair with 休憩開始"
+    },
+    {
+      "id": "phras-ittan-kyuukei-shimasu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "一旦休憩します",
+      "meanings": [
+        "Briefly stepping away"
+      ],
+      "readings": [
+        "いったんきゅうけいします"
+      ],
+      "primaryReading": "いったんきゅうけいします",
+      "notes": "\"For now I'll take a break\"; common pattern"
+    },
+    {
+      "id": "phras-ittan-modorimasu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "一旦戻ります",
+      "meanings": [
+        "Briefly returning"
+      ],
+      "readings": [
+        "いったんもどります"
+      ],
+      "primaryReading": "いったんもどります",
+      "notes": "Common \"back for a bit\" phrasing"
+    },
+    {
+      "id": "phras-kyouyuu-jikou-ga-arimasu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "共有事項があります",
+      "meanings": [
+        "Topic share opener"
+      ],
+      "notes": "\"I have something to share\""
+    },
+    {
+      "id": "vocab-seiyaku",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "成約",
+      "meanings": [
+        "Contract close"
+      ],
+      "readings": [
+        "せいやく"
+      ],
+      "primaryReading": "せいやく",
+      "notes": "Closing a deal/contract"
+    },
+    {
+      "id": "phras-seiyaku-ritsu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "成約率",
+      "meanings": [
+        "Contract closing rate"
+      ],
+      "readings": [
+        "せいやくりつ"
+      ],
+      "primaryReading": "せいやくりつ",
+      "notes": "Close rate as a percentage"
+    },
+    {
+      "id": "vocab-riseki",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "離席",
+      "meanings": [
+        "Away from keyboard"
+      ],
+      "readings": [
+        "りせき"
+      ],
+      "primaryReading": "りせき",
+      "notes": "AFK; used in calendar blocks for deep work"
+    },
+    {
+      "id": "phras-riseki-shimasu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "離席します",
+      "meanings": [
+        "Leaving desk"
+      ],
+      "readings": [
+        "りせきします"
+      ],
+      "primaryReading": "りせきします",
+      "notes": "Formal-sounding alternative"
+    },
+    {
+      "id": "phras-go-ninshiki-wo-onegai-shimasu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "ご認識をお願いします",
+      "meanings": [
+        "Update closer"
+      ],
+      "readings": [
+        "ごにんしきをおねがいします"
+      ],
+      "primaryReading": "ごにんしきをおねがいします",
+      "notes": "Common channel-wide announcement closer"
+    },
+    {
+      "id": "phras-ninshiki-awase",
+      "type": "phrase",
+      "level": 7,
+      "characters": "認識合わせ",
+      "meanings": [
+        "Aware / shared"
+      ],
+      "readings": [
+        "にんしきあわせ"
+      ],
+      "primaryReading": "にんしきあわせ",
+      "notes": "\"Aligning understanding\"; a meeting to confirm shared meaning"
+    },
+    {
+      "id": "phras-ninshiki-gacchi",
+      "type": "phrase",
+      "level": 7,
+      "characters": "認識合致",
+      "meanings": [
+        "Confirmed (alt)"
+      ],
+      "readings": [
+        "にんしきがっち"
+      ],
+      "primaryReading": "にんしきがっち",
+      "notes": "\"Understanding matches\"; common agreement"
+    },
+    {
+      "id": "phras-sutoppu-joutai",
+      "type": "phrase",
+      "level": 7,
+      "characters": "ストップ状態",
+      "meanings": [
+        "On hold / stopped"
+      ],
+      "readings": [
+        "すとっぷじょうたい"
+      ],
+      "primaryReading": "すとっぷじょうたい",
+      "notes": "A project that's halted"
+    },
+    {
+      "id": "vocab-horyuu",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "保留",
+      "meanings": [
+        "Pending / On hold"
+      ],
+      "readings": [
+        "ほりゅう"
+      ],
+      "primaryReading": "ほりゅう",
+      "notes": "On hold; awaiting decision"
+    },
+    {
+      "id": "vocab-michakushu",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "未着手",
+      "meanings": [
+        "Not picked up / Not yet started"
+      ],
+      "readings": [
+        "みちゃくしゅ"
+      ],
+      "primaryReading": "みちゃくしゅ",
+      "notes": "Already added; reinforcing"
+    },
+    {
+      "id": "phras-chakushu-chuu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "着手中",
+      "meanings": [
+        "Already started"
+      ],
+      "readings": [
+        "ちゃくしゅちゅう"
+      ],
+      "primaryReading": "ちゃくしゅちゅう",
+      "notes": "Currently in progress"
+    },
+    {
+      "id": "phras-chakushu-mae",
+      "type": "phrase",
+      "level": 7,
+      "characters": "着手前",
+      "meanings": [
+        "Awaiting kickoff"
+      ],
+      "readings": [
+        "ちゃくしゅまえ"
+      ],
+      "primaryReading": "ちゃくしゅまえ",
+      "notes": "Before starting work"
+    },
+    {
+      "id": "phras-chakushu-zumi",
+      "type": "phrase",
+      "level": 7,
+      "characters": "着手済み",
+      "meanings": [
+        "Picked up"
+      ],
+      "readings": [
+        "ちゃくしゅずみ"
+      ],
+      "primaryReading": "ちゃくしゅずみ",
+      "notes": "\"Already started\"; alternate to 作業中"
+    },
+    {
+      "id": "vocab-jisseki",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "実績",
+      "meanings": [
+        "Achievement / Results"
+      ],
+      "readings": [
+        "じっせき"
+      ],
+      "primaryReading": "じっせき",
+      "notes": "\"Performance figures\" — appears constantly in sales daily reports"
+    },
+    {
+      "id": "phras-honban-ririisu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "本番リリース",
+      "meanings": [
+        "Released to prod"
+      ],
+      "readings": [
+        "ほんばんりりーす"
+      ],
+      "primaryReading": "ほんばんりりーす",
+      "notes": "\"Production release\""
+    },
+    {
+      "id": "vocab-currently-halted",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "作業を一旦停止",
+      "meanings": [
+        "Currently halted"
+      ],
+      "notes": "\"Pause work for now\""
+    },
+    {
+      "id": "phras-taikin-shimashita",
+      "type": "phrase",
+      "level": 7,
+      "characters": "退勤しました",
+      "meanings": [
+        "Done for the day"
+      ],
+      "readings": [
+        "たいきんしました"
+      ],
+      "primaryReading": "たいきんしました",
+      "notes": "Most popular EOD post (12 uses)"
+    },
+    {
+      "id": "phras-taikin-shimasu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "退勤します",
+      "meanings": [
+        "Logging off (alt)"
+      ],
+      "readings": [
+        "たいきんします"
+      ],
+      "primaryReading": "たいきんします",
+      "notes": "Present-tense; slightly less common than 〜しました"
+    },
+    {
+      "id": "phras-shouchi-shimashita",
+      "type": "phrase",
+      "level": 7,
+      "characters": "承知しました",
+      "meanings": [
+        "Got it / understood"
+      ],
+      "readings": [
+        "しょうちしました"
+      ],
+      "primaryReading": "しょうちしました",
+      "notes": "More formal than 分かりました; standard work reply"
+    },
+    {
+      "id": "phras-sashikomi-de-moushiwake-nai-no-desu-ga",
+      "type": "phrase",
+      "level": 7,
+      "characters": "差し込みで申し訳ないのですが",
+      "meanings": [
+        "Drop-in request opener"
+      ],
+      "readings": [
+        "さしこみでもうしわけないのですが"
+      ],
+      "primaryReading": "さしこみでもうしわけないのですが",
+      "notes": "Daisuke and Riku both use this constantly"
+    },
+    {
+      "id": "phras-shounin-machi",
+      "type": "phrase",
+      "level": 7,
+      "characters": "承認待ち",
+      "meanings": [
+        "Awaiting approval"
+      ],
+      "readings": [
+        "しょうにんまち"
+      ],
+      "primaryReading": "しょうにんまち",
+      "notes": "Awaiting approval"
+    },
+    {
+      "id": "vocab-ruikei",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "累計",
+      "meanings": [
+        "Cumulative / Total"
+      ],
+      "readings": [
+        "るいけい"
+      ],
+      "primaryReading": "るいけい",
+      "notes": "Running totals in monthly reports"
+    },
+    {
+      "id": "vocab-teitai",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "停滞",
+      "meanings": [
+        "Stalled"
+      ],
+      "readings": [
+        "ていたい"
+      ],
+      "primaryReading": "ていたい",
+      "notes": "Project stagnating"
+    },
+    {
+      "id": "phras-kadou-shimasu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "稼働します",
+      "meanings": [
+        "Starting work (alt)"
+      ],
+      "readings": [
+        "かどうします"
+      ],
+      "primaryReading": "かどうします",
+      "notes": "Shorter alternative for clocking in"
+    },
+    {
+      "id": "vocab-shinchoku",
+      "type": "vocabulary",
+      "level": 8,
+      "characters": "進捗",
+      "meanings": [
+        "Progress"
+      ],
+      "readings": [
+        "しんちょく"
+      ],
+      "primaryReading": "しんちょく",
+      "notes": "\"進捗どうですか\" = \"how's progress?\" — 捗 not on WK"
+    },
+    {
+      "id": "phras-shinchoku-ritsu",
+      "type": "phrase",
+      "level": 8,
+      "characters": "進捗率",
+      "meanings": [
+        "Progress rate"
+      ],
+      "readings": [
+        "しんちょくりつ"
+      ],
+      "primaryReading": "しんちょくりつ",
+      "notes": "Common KPI in daily reports"
+    }
+  ]
+}

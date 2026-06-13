@@ -1,0 +1,2832 @@
+{
+  "schemaVersion": 1,
+  "library": {
+    "id": "fukuri-work-japanese",
+    "name": "Fukuri Work Japanese (WK/JLPT)",
+    "description": "Work-channel phrases & vocab, ranked easiest(1)->hardest by JLPT/grade/WaniKani level; 20 items per level"
+  },
+  "items": [
+    {
+      "id": "phras-ikimashou",
+      "type": "phrase",
+      "level": 1,
+      "characters": "いきましょう",
+      "meanings": [
+        "Going (continuing)"
+      ],
+      "readings": [
+        "いきましょう"
+      ],
+      "primaryReading": "いきましょう",
+      "notes": "Standalone: \"let's go!\""
+    },
+    {
+      "id": "phras-shimasu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "します",
+      "meanings": [
+        "Will do (commitment)"
+      ],
+      "readings": [
+        "します"
+      ],
+      "primaryReading": "します",
+      "notes": "Standard polite future-tense"
+    },
+    {
+      "id": "phras-doko-ka",
+      "type": "phrase",
+      "level": 1,
+      "characters": "どこか",
+      "meanings": [
+        "Sometime / wherever"
+      ],
+      "readings": [
+        "どこか"
+      ],
+      "primaryReading": "どこか",
+      "notes": "\"Somewhere\"; vague locator"
+    },
+    {
+      "id": "vocab-sumimasen",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "すみません",
+      "meanings": [
+        "Sorry for the inconvenience"
+      ],
+      "readings": [
+        "すみません"
+      ],
+      "primaryReading": "すみません",
+      "notes": "Marcano's signature softener — every request starts with this"
+    },
+    {
+      "id": "vocab-chotto",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "ちょっと",
+      "meanings": [
+        "A bit / slightly"
+      ],
+      "readings": [
+        "ちょっと"
+      ],
+      "primaryReading": "ちょっと",
+      "notes": "Universal softener; Hisayuki uses this constantly"
+    },
+    {
+      "id": "phras-chotto-dake",
+      "type": "phrase",
+      "level": 1,
+      "characters": "ちょっとだけ",
+      "meanings": [
+        "A little (alt)"
+      ],
+      "readings": [
+        "ちょっとだけ"
+      ],
+      "primaryReading": "ちょっとだけ",
+      "notes": "\"Just a little\"; useful for I'll be a bit late\""
+    },
+    {
+      "id": "phras-moshi-yokereba",
+      "type": "phrase",
+      "level": 1,
+      "characters": "もしよければ",
+      "meanings": [
+        "If possible / if you could"
+      ],
+      "readings": [
+        "もしよければ"
+      ],
+      "primaryReading": "もしよければ",
+      "notes": "Polite request softener"
+    },
+    {
+      "id": "phras-kyou-wa-sonna-kanji-desu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "今日はそんな感じです",
+      "meanings": [
+        "That's it for today"
+      ],
+      "readings": [
+        "きょうはそんなかんじです"
+      ],
+      "primaryReading": "きょうはそんなかんじです",
+      "notes": "Casual close"
+    },
+    {
+      "id": "vocab-nen-me",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "年目",
+      "meanings": [
+        "Nth year"
+      ],
+      "readings": [
+        "ねんめ"
+      ],
+      "primaryReading": "ねんめ",
+      "notes": "\"2年目\" = \"2nd year\"; common for tenure/anniversary"
+    },
+    {
+      "id": "phras-nani-ka-areba",
+      "type": "phrase",
+      "level": 1,
+      "characters": "何かあれば",
+      "meanings": [
+        "If there's anything"
+      ],
+      "readings": [
+        "なにかあれば"
+      ],
+      "primaryReading": "なにかあれば",
+      "notes": "\"If there's anything...\" (open invitation)"
+    },
+    {
+      "id": "phras-omakase-shimasu",
+      "type": "phrase",
+      "level": 1,
+      "characters": "お任せします",
+      "meanings": [
+        "At your discretion"
+      ],
+      "readings": [
+        "おまかせします"
+      ],
+      "primaryReading": "おまかせします",
+      "notes": "\"I leave it to you\""
+    },
+    {
+      "id": "vocab-makaseru",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "任せる",
+      "meanings": [
+        "Leaving to you"
+      ],
+      "readings": [
+        "まかせる"
+      ],
+      "primaryReading": "まかせる",
+      "notes": "\"Leave it to\""
+    },
+    {
+      "id": "vocab-kurai",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "くらい",
+      "meanings": [
+        "About / approximately"
+      ],
+      "readings": [
+        "くらい"
+      ],
+      "primaryReading": "くらい",
+      "notes": "\"Around\"; 21時くらいに〜"
+    },
+    {
+      "id": "phras-mazu-wa",
+      "type": "phrase",
+      "level": 1,
+      "characters": "まずは",
+      "meanings": [
+        "Anyway (alt)"
+      ],
+      "readings": [
+        "まずは"
+      ],
+      "primaryReading": "まずは",
+      "notes": "\"First\"; ordering markers"
+    },
+    {
+      "id": "phras-ima-no-tokoro",
+      "type": "phrase",
+      "level": 1,
+      "characters": "今のところ",
+      "meanings": [
+        "For the moment"
+      ],
+      "readings": [
+        "いまのところ"
+      ],
+      "primaryReading": "いまのところ",
+      "notes": "\"At the moment\""
+    },
+    {
+      "id": "phras-sore-de-ikimashou",
+      "type": "phrase",
+      "level": 1,
+      "characters": "それで行きましょう",
+      "meanings": [
+        "Let's go with that"
+      ],
+      "readings": [
+        "それでいきましょう"
+      ],
+      "primaryReading": "それでいきましょう",
+      "notes": "Agreement after deciding"
+    },
+    {
+      "id": "vocab-kana",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "かな",
+      "meanings": [
+        "Wonder if"
+      ],
+      "readings": [
+        "かな"
+      ],
+      "primaryReading": "かな",
+      "notes": "Casual self-questioning particle: 〜かなぁ"
+    },
+    {
+      "id": "vocab-kamo",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "かも",
+      "meanings": [
+        "Probably (informal)"
+      ],
+      "readings": [
+        "かも"
+      ],
+      "primaryReading": "かも",
+      "notes": "Shortened かもしれない; Hisayuki's most-used hedge"
+    },
+    {
+      "id": "vocab-gokyouyuu",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "ご共有",
+      "meanings": [
+        "Just an FYI"
+      ],
+      "readings": [
+        "ごきょうゆう"
+      ],
+      "primaryReading": "ごきょうゆう",
+      "notes": "More polite; \"for your information\""
+    },
+    {
+      "id": "vocab-zakkuri",
+      "type": "vocabulary",
+      "level": 1,
+      "characters": "ざっくり",
+      "meanings": [
+        "Roughly"
+      ],
+      "readings": [
+        "ざっくり"
+      ],
+      "primaryReading": "ざっくり",
+      "notes": "\"Roughly speaking\"; very common in dev discussions"
+    },
+    {
+      "id": "vocab-zatto",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "ざっと",
+      "meanings": [
+        "Roughly"
+      ],
+      "readings": [
+        "ざっと"
+      ],
+      "primaryReading": "ざっと",
+      "notes": "\"Roughly\"; quick scan implication"
+    },
+    {
+      "id": "vocab-shichau",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "しちゃう",
+      "meanings": [
+        "Will do (casual)"
+      ],
+      "readings": [
+        "しちゃう"
+      ],
+      "primaryReading": "しちゃう",
+      "notes": "Casual: \"I'll just go ahead and do it\""
+    },
+    {
+      "id": "phras-sore-dewa",
+      "type": "phrase",
+      "level": 2,
+      "characters": "それでは",
+      "meanings": [
+        "Right then"
+      ],
+      "readings": [
+        "それでは"
+      ],
+      "primaryReading": "それでは",
+      "notes": "\"Well then\"; transition word for next step"
+    },
+    {
+      "id": "phras-dame-sou",
+      "type": "phrase",
+      "level": 2,
+      "characters": "だめそう",
+      "meanings": [
+        "Seems bad"
+      ],
+      "readings": [
+        "だめそう"
+      ],
+      "primaryReading": "だめそう",
+      "notes": "\"Seems no good\""
+    },
+    {
+      "id": "vocab-ppoi",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "っぽい",
+      "meanings": [
+        "Looks like (var)"
+      ],
+      "readings": [
+        "っぽい"
+      ],
+      "primaryReading": "っぽい",
+      "notes": "Same; written either way"
+    },
+    {
+      "id": "phras-desu-yo-ne",
+      "type": "phrase",
+      "level": 2,
+      "characters": "ですよね",
+      "meanings": [
+        "Right? / isn't it?"
+      ],
+      "readings": [
+        "ですよね"
+      ],
+      "primaryReading": "ですよね",
+      "notes": "Soft agreement seeking; everyone uses"
+    },
+    {
+      "id": "vocab-tonikaku",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "とにかく",
+      "meanings": [
+        "At any rate / regardless"
+      ],
+      "readings": [
+        "とにかく"
+      ],
+      "primaryReading": "とにかく",
+      "notes": "\"In any case\"; common pivot word"
+    },
+    {
+      "id": "phras-to-wa-ie",
+      "type": "phrase",
+      "level": 2,
+      "characters": "とはいえ",
+      "meanings": [
+        "That said / however"
+      ],
+      "readings": [
+        "とはいえ"
+      ],
+      "primaryReading": "とはいえ",
+      "notes": "\"Having said that\""
+    },
+    {
+      "id": "vocab-douzo",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "どうぞ",
+      "meanings": [
+        "Please go ahead"
+      ],
+      "readings": [
+        "どうぞ"
+      ],
+      "primaryReading": "どうぞ",
+      "notes": "Yielding the floor"
+    },
+    {
+      "id": "vocab-narigachi",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "なりがち",
+      "meanings": [
+        "Tend to / inclined to"
+      ],
+      "readings": [
+        "なりがち"
+      ],
+      "primaryReading": "なりがち",
+      "notes": "\"Tends to become\"; 「ビッグバンリリースになりやすい」"
+    },
+    {
+      "id": "vocab-naruhodo",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "なるほど",
+      "meanings": [
+        "Got it / understood"
+      ],
+      "readings": [
+        "なるほど"
+      ],
+      "primaryReading": "なるほど",
+      "notes": "\"I see / makes sense\"; Hisayuki uses this often before pivoting"
+    },
+    {
+      "id": "phras-hobo-hobo",
+      "type": "phrase",
+      "level": 2,
+      "characters": "ほぼほぼ",
+      "meanings": [
+        "Pretty much done"
+      ],
+      "readings": [
+        "ほぼほぼ"
+      ],
+      "primaryReading": "ほぼほぼ",
+      "notes": "Doubled for emphasis; \"essentially done\""
+    },
+    {
+      "id": "vocab-poi",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "ぽい",
+      "meanings": [
+        "Looks like"
+      ],
+      "readings": [
+        "ぽい"
+      ],
+      "primaryReading": "ぽい",
+      "notes": "Casual suffix: 「マージ待ちっぽいです」"
+    },
+    {
+      "id": "phras-yosa-sou",
+      "type": "phrase",
+      "level": 2,
+      "characters": "よさそう",
+      "meanings": [
+        "Seems good"
+      ],
+      "readings": [
+        "よさそう"
+      ],
+      "primaryReading": "よさそう",
+      "notes": "\"Seems good\"; common positive evaluation"
+    },
+    {
+      "id": "vocab-sutanpu",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "スタンプ",
+      "meanings": [
+        "Stamp / vote"
+      ],
+      "readings": [
+        "すたんぷ"
+      ],
+      "primaryReading": "すたんぷ",
+      "notes": "Slack stamp/emoji-vote (e.g. \"stamp your preference\")"
+    },
+    {
+      "id": "vocab-mochibe",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "モチベ",
+      "meanings": [
+        "Mood/motivation"
+      ],
+      "readings": [
+        "もちべ"
+      ],
+      "primaryReading": "もちべ",
+      "notes": "Shortened モチベーション (motivation)"
+    },
+    {
+      "id": "vocab-bettou",
+      "type": "vocabulary",
+      "level": 2,
+      "characters": "別途",
+      "meanings": [
+        "Separate discussion (alt)"
+      ],
+      "readings": [
+        "べっとう"
+      ],
+      "primaryReading": "べっとう",
+      "notes": "Same root"
+    },
+    {
+      "id": "phras-taiou-fuyou",
+      "type": "phrase",
+      "level": 2,
+      "characters": "対応不要",
+      "meanings": [
+        "Already addressed"
+      ],
+      "readings": [
+        "たいおうふよう"
+      ],
+      "primaryReading": "たいおうふよう",
+      "notes": "\"No action needed\""
+    },
+    {
+      "id": "phras-ga-hashiru",
+      "type": "phrase",
+      "level": 2,
+      "characters": "が走る",
+      "meanings": [
+        "Will run / will happen"
+      ],
+      "readings": [
+        "がはしる"
+      ],
+      "primaryReading": "がはしる",
+      "notes": "\"作業が走る\" = \"the work runs\"; sounds odd literally but means \"kicks off\""
+    },
+    {
+      "id": "phras-kore-kara",
+      "type": "phrase",
+      "level": 2,
+      "characters": "これから",
+      "meanings": [
+        "Going forward"
+      ],
+      "readings": [
+        "これから"
+      ],
+      "primaryReading": "これから",
+      "notes": "Used for plans/intentions ahead"
+    },
+    {
+      "id": "vocab-sou",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "そう",
+      "meanings": [
+        "Seems like"
+      ],
+      "readings": [
+        "そう"
+      ],
+      "primaryReading": "そう",
+      "notes": "Verb-stem + そう = \"looks like\""
+    },
+    {
+      "id": "phras-tai",
+      "type": "phrase",
+      "level": 3,
+      "characters": "たい",
+      "meanings": [
+        "Want to / wish to"
+      ],
+      "readings": [
+        "たい"
+      ],
+      "primaryReading": "たい",
+      "notes": "Verb-stem + たい = \"want to\""
+    },
+    {
+      "id": "vocab-demo",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "でも",
+      "meanings": [
+        "Then again"
+      ],
+      "readings": [
+        "でも"
+      ],
+      "primaryReading": "でも",
+      "notes": "\"But\"; common pivot"
+    },
+    {
+      "id": "phras-tsukuritai",
+      "type": "phrase",
+      "level": 3,
+      "characters": "作りたい",
+      "meanings": [
+        "Want to make"
+      ],
+      "readings": [
+        "つくりたい"
+      ],
+      "primaryReading": "つくりたい",
+      "notes": "Common dev-context want"
+    },
+    {
+      "id": "phras-ii-kanji",
+      "type": "phrase",
+      "level": 3,
+      "characters": "いい感じ",
+      "meanings": [
+        "Feels right"
+      ],
+      "readings": [
+        "いいかんじ"
+      ],
+      "primaryReading": "いいかんじ",
+      "notes": "\"Feels good\"; nice for positive feedback"
+    },
+    {
+      "id": "phras-ojikan-desu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "お時間です",
+      "meanings": [
+        "Time's up"
+      ],
+      "readings": [
+        "おじかんです"
+      ],
+      "primaryReading": "おじかんです",
+      "notes": "\"Time's up\"; polite way to wrap things"
+    },
+    {
+      "id": "phras-sonna-kanji",
+      "type": "phrase",
+      "level": 3,
+      "characters": "そんな感じ",
+      "meanings": [
+        "That kind of thing"
+      ],
+      "readings": [
+        "そんなかんじ"
+      ],
+      "primaryReading": "そんなかんじ",
+      "notes": "\"Something like that\""
+    },
+    {
+      "id": "phras-onegai-ga-arimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "お願いがあります",
+      "meanings": [
+        "Quick request"
+      ],
+      "readings": [
+        "おねがいがあります"
+      ],
+      "primaryReading": "おねがいがあります",
+      "notes": "\"I have a request\""
+    },
+    {
+      "id": "phras-kana-to-omoimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "かなと思います",
+      "meanings": [
+        "I think / I'm thinking"
+      ],
+      "readings": [
+        "かなとおもいます"
+      ],
+      "primaryReading": "かなとおもいます",
+      "notes": "かな adds uncertainty; softer than plain 思います"
+    },
+    {
+      "id": "phras-yoroshiku-onegai-itashimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "よろしくお願いいたします",
+      "meanings": [
+        "Thank you in advance"
+      ],
+      "readings": [
+        "よろしくおねがいいたします"
+      ],
+      "primaryReading": "よろしくおねがいいたします",
+      "notes": "Formal version of よろしくお願いします"
+    },
+    {
+      "id": "phras-yoroshiku-onegai-shimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "よろしくお願いします",
+      "meanings": [
+        "Looking forward"
+      ],
+      "readings": [
+        "よろしくおねがいします"
+      ],
+      "primaryReading": "よろしくおねがいします",
+      "notes": "(Already on sheet — flagging frequency)"
+    },
+    {
+      "id": "phras-omoimasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "思います",
+      "meanings": [
+        "I think"
+      ],
+      "readings": [
+        "おもいます"
+      ],
+      "primaryReading": "おもいます",
+      "notes": "Polite version"
+    },
+    {
+      "id": "vocab-omotte",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "思って",
+      "meanings": [
+        "Thinking"
+      ],
+      "readings": [
+        "おもって"
+      ],
+      "primaryReading": "おもって",
+      "notes": "Casual thought-trailoff: 〜だなぁって思って"
+    },
+    {
+      "id": "phras-oshirase-made",
+      "type": "phrase",
+      "level": 3,
+      "characters": "お知らせまで",
+      "meanings": [
+        "Just so you know (var)"
+      ],
+      "readings": [
+        "おしらせまで"
+      ],
+      "primaryReading": "おしらせまで",
+      "notes": "\"Just letting you know\""
+    },
+    {
+      "id": "vocab-wakarimashita",
+      "type": "vocabulary",
+      "level": 3,
+      "characters": "分かりました",
+      "meanings": [
+        "Got it / understood"
+      ],
+      "readings": [
+        "わかりました"
+      ],
+      "primaryReading": "わかりました",
+      "notes": "Standard acknowledgment"
+    },
+    {
+      "id": "phras-omachi-shite-imasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "お待ちしています",
+      "meanings": [
+        "Awaiting"
+      ],
+      "readings": [
+        "おまちしています"
+      ],
+      "primaryReading": "おまちしています",
+      "notes": "\"I'm waiting\"; polite anticipation"
+    },
+    {
+      "id": "phras-daijoubu-de-areba",
+      "type": "phrase",
+      "level": 3,
+      "characters": "大丈夫であれば",
+      "meanings": [
+        "If that's okay"
+      ],
+      "readings": [
+        "だいじょうぶであれば"
+      ],
+      "primaryReading": "だいじょうぶであれば",
+      "notes": "Conditional check-in"
+    },
+    {
+      "id": "phras-hajimemashou-ka",
+      "type": "phrase",
+      "level": 3,
+      "characters": "始めましょうか",
+      "meanings": [
+        "Let's begin / shall we start?"
+      ],
+      "readings": [
+        "はじめましょうか"
+      ],
+      "primaryReading": "はじめましょうか",
+      "notes": "Soft \"shall we start?\"; less assertive than 始めます"
+    },
+    {
+      "id": "phras-hajimemasu",
+      "type": "phrase",
+      "level": 3,
+      "characters": "始めます",
+      "meanings": [
+        "Let's begin"
+      ],
+      "readings": [
+        "はじめます"
+      ],
+      "primaryReading": "はじめます",
+      "notes": "\"I'll start\" — standard standup opener"
+    },
+    {
+      "id": "phras-itadakemasu-ka",
+      "type": "phrase",
+      "level": 3,
+      "characters": "いただけますか",
+      "meanings": [
+        "Could you (var)"
+      ],
+      "readings": [
+        "いただけますか"
+      ],
+      "primaryReading": "いただけますか",
+      "notes": "More polite request ending"
+    },
+    {
+      "id": "phras-moraemasu-ka",
+      "type": "phrase",
+      "level": 4,
+      "characters": "もらえますか",
+      "meanings": [
+        "Could you"
+      ],
+      "readings": [
+        "もらえますか"
+      ],
+      "primaryReading": "もらえますか",
+      "notes": "Soft request ending: 〜してもらえますか"
+    },
+    {
+      "id": "phras-nai-to",
+      "type": "phrase",
+      "level": 4,
+      "characters": "ないと",
+      "meanings": [
+        "Need to (var)"
+      ],
+      "readings": [
+        "ないと"
+      ],
+      "primaryReading": "ないと",
+      "notes": "Shortened; \"need to\""
+    },
+    {
+      "id": "phras-nai-to-ikenai",
+      "type": "phrase",
+      "level": 4,
+      "characters": "ないといけない",
+      "meanings": [
+        "Have to / need to"
+      ],
+      "readings": [
+        "ないといけない"
+      ],
+      "primaryReading": "ないといけない",
+      "notes": "Necessity construction"
+    },
+    {
+      "id": "vocab-otagai",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "お互い",
+      "meanings": [
+        "Mutual"
+      ],
+      "readings": [
+        "おたがい"
+      ],
+      "primaryReading": "おたがい",
+      "notes": "\"Mutual\"; team-positive register"
+    },
+    {
+      "id": "vocab-tara",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "たら",
+      "meanings": [
+        "If/when X happens"
+      ],
+      "readings": [
+        "たら"
+      ],
+      "primaryReading": "たら",
+      "notes": "Conditional ending; very common"
+    },
+    {
+      "id": "phras-kamoshirenai",
+      "type": "phrase",
+      "level": 4,
+      "characters": "かもしれない",
+      "meanings": [
+        "Maybe / possibly"
+      ],
+      "readings": [
+        "かもしれない"
+      ],
+      "primaryReading": "かもしれない",
+      "notes": "Full form of かも"
+    },
+    {
+      "id": "phras-sou-ieba",
+      "type": "phrase",
+      "level": 4,
+      "characters": "そういえば",
+      "meanings": [
+        "Anyway / by the way"
+      ],
+      "readings": [
+        "そういえば"
+      ],
+      "primaryReading": "そういえば",
+      "notes": "\"Speaking of which\"; topic shift"
+    },
+    {
+      "id": "phras-sou-ieba-omoidashita",
+      "type": "phrase",
+      "level": 4,
+      "characters": "そういえば思い出した",
+      "meanings": [
+        "Just remembered"
+      ],
+      "readings": [
+        "そういえばおもいだした"
+      ],
+      "primaryReading": "そういえばおもいだした",
+      "notes": "\"Oh that reminds me\""
+    },
+    {
+      "id": "phras-darou-ka",
+      "type": "phrase",
+      "level": 4,
+      "characters": "だろうか",
+      "meanings": [
+        "Wondering / uncertain"
+      ],
+      "readings": [
+        "だろうか"
+      ],
+      "primaryReading": "だろうか",
+      "notes": "Self-questioning literary form"
+    },
+    {
+      "id": "phras-deshou-ka",
+      "type": "phrase",
+      "level": 4,
+      "characters": "でしょうか",
+      "meanings": [
+        "I wonder if"
+      ],
+      "readings": [
+        "でしょうか"
+      ],
+      "primaryReading": "でしょうか",
+      "notes": "Polite uncertain question ending"
+    },
+    {
+      "id": "phras-ni-tsuite",
+      "type": "phrase",
+      "level": 4,
+      "characters": "について",
+      "meanings": [
+        "About specific topic / About / regarding"
+      ],
+      "readings": [
+        "について"
+      ],
+      "primaryReading": "について",
+      "notes": "Already added — high frequency"
+    },
+    {
+      "id": "vocab-yappari",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "やっぱり",
+      "meanings": [
+        "As expected"
+      ],
+      "readings": [
+        "やっぱり"
+      ],
+      "primaryReading": "やっぱり",
+      "notes": "\"As I thought\""
+    },
+    {
+      "id": "phras-ato-de-renraku-shimasu",
+      "type": "phrase",
+      "level": 4,
+      "characters": "後で連絡します",
+      "meanings": [
+        "Follow up later"
+      ],
+      "readings": [
+        "あとでれんらくします"
+      ],
+      "primaryReading": "あとでれんらくします",
+      "notes": "\"I'll message you after\""
+    },
+    {
+      "id": "phras-dekireba-ii-na-to-omotte-masu",
+      "type": "phrase",
+      "level": 4,
+      "characters": "できればいいなと思ってます",
+      "meanings": [
+        "I'd be happy if (we) could"
+      ],
+      "readings": [
+        "できればいいなとおもってます"
+      ],
+      "primaryReading": "できればいいなとおもってます",
+      "notes": "Buzz's signature soft-proposal"
+    },
+    {
+      "id": "phras-yoi-shuumatsu-wo",
+      "type": "phrase",
+      "level": 4,
+      "characters": "よい週末を",
+      "meanings": [
+        "Have a good weekend"
+      ],
+      "readings": [
+        "よいしゅうまつを"
+      ],
+      "primaryReading": "よいしゅうまつを",
+      "notes": "Friday afternoon closer; very common"
+    },
+    {
+      "id": "vocab-rashii",
+      "type": "vocabulary",
+      "level": 4,
+      "characters": "らしい",
+      "meanings": [
+        "Apparently"
+      ],
+      "readings": [
+        "らしい"
+      ],
+      "primaryReading": "らしい",
+      "notes": "Hearsay/inference: 〜らしいです"
+    },
+    {
+      "id": "phras-mondai-nai-desu",
+      "type": "phrase",
+      "level": 4,
+      "characters": "問題ないです",
+      "meanings": [
+        "That works for me"
+      ],
+      "readings": [
+        "もんだいないです"
+      ],
+      "primaryReading": "もんだいないです",
+      "notes": "\"No problem on my end\""
+    },
+    {
+      "id": "phras-saki-hodo-ohanashi-shita",
+      "type": "phrase",
+      "level": 4,
+      "characters": "先ほどお話しした",
+      "meanings": [
+        "About what was discussed"
+      ],
+      "readings": [
+        "さきほどおはなしした"
+      ],
+      "primaryReading": "さきほどおはなしした",
+      "notes": "Referencing a recent conversation"
+    },
+    {
+      "id": "phras-koko-saikin",
+      "type": "phrase",
+      "level": 4,
+      "characters": "ここ最近",
+      "meanings": [
+        "Recently"
+      ],
+      "readings": [
+        "ここさいきん"
+      ],
+      "primaryReading": "ここさいきん",
+      "notes": "\"Recently\"; common opener"
+    },
+    {
+      "id": "phras-mtg-wo-ireru",
+      "type": "phrase",
+      "level": 4,
+      "characters": "MTGを入れる",
+      "meanings": [
+        "Schedule MTG"
+      ],
+      "readings": [
+        "えむてぃーじーをいれる"
+      ],
+      "primaryReading": "えむてぃーじーをいれる",
+      "notes": "\"Put a meeting on the calendar\""
+    },
+    {
+      "id": "phras-arigatai-desu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "ありがたいです",
+      "meanings": [
+        "I'm grateful"
+      ],
+      "readings": [
+        "ありがたいです"
+      ],
+      "primaryReading": "ありがたいです",
+      "notes": "More feeling-heavy than ありがとう"
+    },
+    {
+      "id": "phras-ojikan-aru-toki",
+      "type": "phrase",
+      "level": 5,
+      "characters": "お時間ある時",
+      "meanings": [
+        "If you have time"
+      ],
+      "readings": [
+        "おじかんあるとき"
+      ],
+      "primaryReading": "おじかんあるとき",
+      "notes": "Casual variant"
+    },
+    {
+      "id": "phras-ojikan-aru-toki-ni",
+      "type": "phrase",
+      "level": 5,
+      "characters": "お時間ある時に",
+      "meanings": [
+        "If you have time"
+      ],
+      "readings": [
+        "おじかんあるときに"
+      ],
+      "primaryReading": "おじかんあるときに",
+      "notes": "\"When you have time\"; standard non-urgent request opener"
+    },
+    {
+      "id": "vocab-gomennasai",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "ごめんなさい",
+      "meanings": [
+        "I'm sorry (apologetic)"
+      ],
+      "readings": [
+        "ごめんなさい"
+      ],
+      "primaryReading": "ごめんなさい",
+      "notes": "More apologetic than すいません; for actual mistakes"
+    },
+    {
+      "id": "vocab-chokotto",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "ちょこっと",
+      "meanings": [
+        "Just slightly"
+      ],
+      "readings": [
+        "ちょこっと"
+      ],
+      "primaryReading": "ちょこっと",
+      "notes": "\"Just a tiny bit\"; Hisayuki: 「ちょこっと実装変えるかも」"
+    },
+    {
+      "id": "phras-dou-desu-ka",
+      "type": "phrase",
+      "level": 5,
+      "characters": "どうですか",
+      "meanings": [
+        "What do you think?"
+      ],
+      "readings": [
+        "どうですか"
+      ],
+      "primaryReading": "どうですか",
+      "notes": "Casual opinion ask"
+    },
+    {
+      "id": "phras-naruhodo-desu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "なるほどです",
+      "meanings": [
+        "Got it / I see"
+      ],
+      "readings": [
+        "なるほどです"
+      ],
+      "primaryReading": "なるほどです",
+      "notes": "Polite form of なるほど"
+    },
+    {
+      "id": "phras-nanka-areba",
+      "type": "phrase",
+      "level": 5,
+      "characters": "なんかあれば",
+      "meanings": [
+        "Anything from you?"
+      ],
+      "readings": [
+        "なんかあれば"
+      ],
+      "primaryReading": "なんかあれば",
+      "notes": "Buzz's go-to soft prompt for input"
+    },
+    {
+      "id": "vocab-bucchake",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "ぶっちゃけ",
+      "meanings": [
+        "Honestly speaking (casual)"
+      ],
+      "readings": [
+        "ぶっちゃけ"
+      ],
+      "primaryReading": "ぶっちゃけ",
+      "notes": "Very casual \"to be real\""
+    },
+    {
+      "id": "phras-okkee-desu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "オッケーです",
+      "meanings": [
+        "Okay / sounds good"
+      ],
+      "readings": [
+        "おっけーです"
+      ],
+      "primaryReading": "おっけーです",
+      "notes": "Very common casual confirmation"
+    },
+    {
+      "id": "phras-sukejuuru-kan",
+      "type": "phrase",
+      "level": 5,
+      "characters": "スケジュール感",
+      "meanings": [
+        "Schedule sense"
+      ],
+      "notes": "Already added — high frequency"
+    },
+    {
+      "id": "vocab-yasui",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "やすい",
+      "meanings": [
+        "Hard to / prone to"
+      ],
+      "readings": [
+        "やすい"
+      ],
+      "primaryReading": "やすい",
+      "notes": "Verb-stem + やすい = \"easy to / prone to\""
+    },
+    {
+      "id": "phras-omatase-shimashita",
+      "type": "phrase",
+      "level": 5,
+      "characters": "お待たせしました",
+      "meanings": [
+        "Sorry to keep you waiting"
+      ],
+      "readings": [
+        "おまたせしました"
+      ],
+      "primaryReading": "おまたせしました",
+      "notes": "Standard opener when you're late or finishing setup"
+    },
+    {
+      "id": "phras-chotto-omachi-kudasai",
+      "type": "phrase",
+      "level": 5,
+      "characters": "ちょっとお待ちください",
+      "meanings": [
+        "Wait a moment"
+      ],
+      "readings": [
+        "ちょっとおまちください"
+      ],
+      "primaryReading": "ちょっとおまちください",
+      "notes": "Polite hold"
+    },
+    {
+      "id": "phras-chotto-matte",
+      "type": "phrase",
+      "level": 5,
+      "characters": "ちょっと待って",
+      "meanings": [
+        "Hold on / wait"
+      ],
+      "readings": [
+        "ちょっとまって"
+      ],
+      "primaryReading": "ちょっとまって",
+      "notes": "Casual; ください makes it polite"
+    },
+    {
+      "id": "phras-mitai-na",
+      "type": "phrase",
+      "level": 5,
+      "characters": "みたいな",
+      "meanings": [
+        "Something like that"
+      ],
+      "readings": [
+        "みたいな"
+      ],
+      "primaryReading": "みたいな",
+      "notes": "Casual \"like / similar to\""
+    },
+    {
+      "id": "phras-tasukarimasu",
+      "type": "phrase",
+      "level": 5,
+      "characters": "助かります",
+      "meanings": [
+        "That's helpful"
+      ],
+      "readings": [
+        "たすかります"
+      ],
+      "primaryReading": "たすかります",
+      "notes": "\"You're saving me\""
+    },
+    {
+      "id": "vocab-daitai",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "大体",
+      "meanings": [
+        "Roughly speaking"
+      ],
+      "readings": [
+        "だいたい"
+      ],
+      "primaryReading": "だいたい",
+      "notes": "\"Mostly / roughly\""
+    },
+    {
+      "id": "vocab-tatoeba",
+      "type": "vocabulary",
+      "level": 5,
+      "characters": "例えば",
+      "meanings": [
+        "For example"
+      ],
+      "readings": [
+        "たとえば"
+      ],
+      "primaryReading": "たとえば",
+      "notes": "Used constantly when explaining"
+    },
+    {
+      "id": "phras-sanka-suru",
+      "type": "phrase",
+      "level": 5,
+      "characters": "参加する",
+      "meanings": [
+        "Participate / Join"
+      ],
+      "readings": [
+        "さんかする"
+      ],
+      "primaryReading": "さんかする",
+      "notes": "\"ミーティングに参加します\" = \"I'll join the meeting\""
+    },
+    {
+      "id": "phras-shitsurei-desu-ga",
+      "type": "phrase",
+      "level": 6,
+      "characters": "失礼ですが",
+      "meanings": [
+        "Forgive me but"
+      ],
+      "readings": [
+        "しつれいですが"
+      ],
+      "primaryReading": "しつれいですが",
+      "notes": "\"Excuse me but\""
+    },
+    {
+      "id": "vocab-yahari",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "やはり",
+      "meanings": [
+        "As expected (alt)"
+      ],
+      "readings": [
+        "やはり"
+      ],
+      "primaryReading": "やはり",
+      "notes": "More formal yappari"
+    },
+    {
+      "id": "phras-shite-ikimasu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "していきます",
+      "meanings": [
+        "Will continue doing"
+      ],
+      "readings": [
+        "していきます"
+      ],
+      "primaryReading": "していきます",
+      "notes": "〜ていく progressive aspect"
+    },
+    {
+      "id": "phras-tte-kanji",
+      "type": "phrase",
+      "level": 6,
+      "characters": "って感じ",
+      "meanings": [
+        "That kind of feeling / That feeling"
+      ],
+      "readings": [
+        "ってかんじ"
+      ],
+      "primaryReading": "ってかんじ",
+      "notes": "Buzz's signature ending; \"そんな感じです\""
+    },
+    {
+      "id": "vocab-ichiou",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "一応",
+      "meanings": [
+        "Just in case / for now"
+      ],
+      "readings": [
+        "いちおう"
+      ],
+      "primaryReading": "いちおう",
+      "notes": "\"一応共有しときます\"; \"sharing just in case\""
+    },
+    {
+      "id": "vocab-hobo",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "ほぼ",
+      "meanings": [
+        "Pretty much"
+      ],
+      "readings": [
+        "ほぼ"
+      ],
+      "primaryReading": "ほぼ",
+      "notes": "\"Almost / mostly\"; very common in tech contexts"
+    },
+    {
+      "id": "vocab-awasete",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "合わせて",
+      "meanings": [
+        "Cross-reference"
+      ],
+      "readings": [
+        "あわせて"
+      ],
+      "primaryReading": "あわせて",
+      "notes": "\"Combined with\"; useful for adding context"
+    },
+    {
+      "id": "phras-taiou-chuu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "対応中",
+      "meanings": [
+        "Doing it now"
+      ],
+      "readings": [
+        "たいおうちゅう"
+      ],
+      "primaryReading": "たいおうちゅう",
+      "notes": "\"In progress\""
+    },
+    {
+      "id": "phras-taiou-zumi",
+      "type": "phrase",
+      "level": 6,
+      "characters": "対応済み",
+      "meanings": [
+        "Done / completed"
+      ],
+      "readings": [
+        "たいおうずみ"
+      ],
+      "primaryReading": "たいおうずみ",
+      "notes": "\"Already handled\""
+    },
+    {
+      "id": "phras-ato-de-taiou-shimasu",
+      "type": "phrase",
+      "level": 6,
+      "characters": "後で対応します",
+      "meanings": [
+        "Will deal with it later"
+      ],
+      "readings": [
+        "あとでたいおうします"
+      ],
+      "primaryReading": "あとでたいおうします",
+      "notes": "\"I'll handle it later\""
+    },
+    {
+      "id": "phras-okigaru-ni",
+      "type": "phrase",
+      "level": 6,
+      "characters": "お気軽に",
+      "meanings": [
+        "Casually / feel free"
+      ],
+      "readings": [
+        "おきがるに"
+      ],
+      "primaryReading": "おきがるに",
+      "notes": "\"Feel free to\"; common request softener"
+    },
+    {
+      "id": "phras-okigaru-ni-douzo",
+      "type": "phrase",
+      "level": 6,
+      "characters": "お気軽にどうぞ",
+      "meanings": [
+        "Feel free to (extended)"
+      ],
+      "readings": [
+        "おきがるにどうぞ"
+      ],
+      "primaryReading": "おきがるにどうぞ",
+      "notes": "Ishimori's signature closer"
+    },
+    {
+      "id": "vocab-shoushou",
+      "type": "vocabulary",
+      "level": 6,
+      "characters": "少々",
+      "meanings": [
+        "Brief / quick"
+      ],
+      "readings": [
+        "しょうしょう"
+      ],
+      "primaryReading": "しょうしょう",
+      "notes": "\"A little / briefly\""
+    },
+    {
+      "id": "phras-shoushou-omachi-kudasai",
+      "type": "phrase",
+      "level": 6,
+      "characters": "少々お待ちください",
+      "meanings": [
+        "Brief moment"
+      ],
+      "readings": [
+        "しょうしょうおまちください"
+      ],
+      "primaryReading": "しょうしょうおまちください",
+      "notes": "\"Please wait a moment\""
+    },
+    {
+      "id": "phras-taiou-ga-hitsuyou-deshitara-oshirase-kudasai",
+      "type": "phrase",
+      "level": 6,
+      "characters": "対応が必要でしたらお知らせください",
+      "meanings": [
+        "Please let me know if action is needed"
+      ],
+      "readings": [
+        "たいおうがひつようでしたらおしらせください"
+      ],
+      "primaryReading": "たいおうがひつようでしたらおしらせください",
+      "notes": "Your phrasing — natural and clear"
+    },
+    {
+      "id": "phras-no-ken",
+      "type": "phrase",
+      "level": 6,
+      "characters": "の件",
+      "meanings": [
+        "The matter"
+      ],
+      "readings": [
+        "のけん"
+      ],
+      "primaryReading": "のけん",
+      "notes": "\"The X matter\"; opens discussions about specific topics"
+    },
+    {
+      "id": "phras-no-ken-ni-tsuite",
+      "type": "phrase",
+      "level": 6,
+      "characters": "の件について",
+      "meanings": [
+        "Regarding the matter of"
+      ],
+      "readings": [
+        "のけんについて"
+      ],
+      "primaryReading": "のけんについて",
+      "notes": "Standard subject-introduction phrase"
+    },
+    {
+      "id": "phras-senjitsu-ohanashi-shita-toori",
+      "type": "phrase",
+      "level": 6,
+      "characters": "先日お話した通り",
+      "meanings": [
+        "Like we discussed"
+      ],
+      "readings": [
+        "せんじつおはなししたとおり"
+      ],
+      "primaryReading": "せんじつおはなししたとおり",
+      "notes": "Referring to an earlier discussion"
+    },
+    {
+      "id": "phras-senjitsu-no-ken",
+      "type": "phrase",
+      "level": 6,
+      "characters": "先日の件",
+      "meanings": [
+        "Yesterday's matter"
+      ],
+      "readings": [
+        "せんじつのけん"
+      ],
+      "primaryReading": "せんじつのけん",
+      "notes": "\"About what we discussed earlier\""
+    },
+    {
+      "id": "phras-sankou-made-ni",
+      "type": "phrase",
+      "level": 6,
+      "characters": "参考までに",
+      "meanings": [
+        "For info purposes"
+      ],
+      "readings": [
+        "さんこうまでに"
+      ],
+      "primaryReading": "さんこうまでに",
+      "notes": "\"For your reference\""
+    },
+    {
+      "id": "phras-itadakeru-to-tasukarimasu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "いただけると助かります",
+      "meanings": [
+        "Would be saved if (less formal)"
+      ],
+      "readings": [
+        "いただけるとたすかります"
+      ],
+      "primaryReading": "いただけるとたすかります",
+      "notes": "More casual variant; \"would help me\""
+    },
+    {
+      "id": "vocab-hazu",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "はず",
+      "meanings": [
+        "Should/probably"
+      ],
+      "readings": [
+        "はず"
+      ],
+      "primaryReading": "はず",
+      "notes": "\"Should be / expected to be\""
+    },
+    {
+      "id": "phras-oomaka-ni",
+      "type": "phrase",
+      "level": 7,
+      "characters": "大まかに",
+      "meanings": [
+        "Roughly speaking"
+      ],
+      "readings": [
+        "おおまかに"
+      ],
+      "primaryReading": "おおまかに",
+      "notes": "\"Broadly speaking\""
+    },
+    {
+      "id": "phras-oisogashii-naka",
+      "type": "phrase",
+      "level": 7,
+      "characters": "お忙しい中",
+      "meanings": [
+        "Apologize for tight schedule"
+      ],
+      "readings": [
+        "おいそがしいなか"
+      ],
+      "primaryReading": "おいそがしいなか",
+      "notes": "\"While you're busy\"; common business opener"
+    },
+    {
+      "id": "vocab-oisogi",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "お急ぎ",
+      "meanings": [
+        "Urgent / fast"
+      ],
+      "readings": [
+        "おいそぎ"
+      ],
+      "primaryReading": "おいそぎ",
+      "notes": "Urgency marker"
+    },
+    {
+      "id": "phras-isogi-de-wa-nai-desu-ga",
+      "type": "phrase",
+      "level": 7,
+      "characters": "急ぎではないですが",
+      "meanings": [
+        "Not urgent but"
+      ],
+      "readings": [
+        "いそぎではないですが"
+      ],
+      "primaryReading": "いそぎではないですが",
+      "notes": "Common \"take your time\" qualifier"
+    },
+    {
+      "id": "phras-kyuu-ni-onegai-shite-shimai",
+      "type": "phrase",
+      "level": 7,
+      "characters": "急にお願いしてしまい",
+      "meanings": [
+        "Sorry for the sudden request"
+      ],
+      "readings": [
+        "きゅうにおねがいしてしまい"
+      ],
+      "primaryReading": "きゅうにおねがいしてしまい",
+      "notes": "Apologizing for last-minute asks; you used this naturally"
+    },
+    {
+      "id": "vocab-goiken",
+      "type": "vocabulary",
+      "level": 7,
+      "characters": "ご意見",
+      "meanings": [
+        "Your opinion"
+      ],
+      "readings": [
+        "ごいけん"
+      ],
+      "primaryReading": "ごいけん",
+      "notes": "Polite \"your opinion\""
+    },
+    {
+      "id": "phras-otsukaresama-deshita",
+      "type": "phrase",
+      "level": 7,
+      "characters": "お疲れさまでした",
+      "meanings": [
+        "Take it slow / take it easy"
+      ],
+      "readings": [
+        "おつかれさまでした"
+      ],
+      "primaryReading": "おつかれさまでした",
+      "notes": "(Already in your sheet — flagging that it's the closer for every daily report)"
+    },
+    {
+      "id": "phras-otsukaresama-desu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "お疲れさまです",
+      "meanings": [
+        "Job well done"
+      ],
+      "readings": [
+        "おつかれさまです"
+      ],
+      "primaryReading": "おつかれさまです",
+      "notes": "Mid-day greeting variant"
+    },
+    {
+      "id": "phras-ai-ni-tsukutte-morau",
+      "type": "phrase",
+      "level": 7,
+      "characters": "AIに作ってもらう",
+      "meanings": [
+        "Generated by AI"
+      ],
+      "notes": "Your phrasing: \"Geminiが作ってくれたやつ\""
+    },
+    {
+      "id": "phras-ai-ni-kangaete-morau",
+      "type": "phrase",
+      "level": 7,
+      "characters": "AIに考えてもらう",
+      "meanings": [
+        "Get help from AI"
+      ],
+      "notes": "\"Have AI think for us\"; Peacock is comfortable with this"
+    },
+    {
+      "id": "phras-leafea-ofisu-houmon",
+      "type": "phrase",
+      "level": 7,
+      "characters": "Leafeaオフィス訪問",
+      "meanings": [
+        "Out at the office"
+      ],
+      "notes": "Visitor at the Leafea office"
+    },
+    {
+      "id": "phras-mtg-wo-kyanseru",
+      "type": "phrase",
+      "level": 7,
+      "characters": "MTGをキャンセル",
+      "meanings": [
+        "Schedule cancel"
+      ],
+      "notes": "Cancel a meeting"
+    },
+    {
+      "id": "phras-arigatou-gozaimasu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "ありがとうございます",
+      "meanings": [
+        "I appreciate it"
+      ],
+      "readings": [
+        "ありがとうございます"
+      ],
+      "primaryReading": "ありがとうございます",
+      "notes": "After every contribution"
+    },
+    {
+      "id": "phras-ikaga-deshou-ka",
+      "type": "phrase",
+      "level": 7,
+      "characters": "いかがでしょうか",
+      "meanings": [
+        "How does that sound?"
+      ],
+      "readings": [
+        "いかがでしょうか"
+      ],
+      "primaryReading": "いかがでしょうか",
+      "notes": "Formal opinion ask"
+    },
+    {
+      "id": "phras-ohayou-gozaimasu",
+      "type": "phrase",
+      "level": 7,
+      "characters": "おはようございます",
+      "meanings": [
+        "Good morning (opener)"
+      ],
+      "readings": [
+        "おはようございます"
+      ],
+      "primaryReading": "おはようございます",
+      "notes": "Standard morning standup opener (kana-only)"
+    },
+    {
+      "id": "phras-ojikan-ga-arimashitara",
+      "type": "phrase",
+      "level": 7,
+      "characters": "お時間がありましたら",
+      "meanings": [
+        "If you have time (var)"
+      ],
+      "readings": [
+        "おじかんがありましたら"
+      ],
+      "primaryReading": "おじかんがありましたら",
+      "notes": "More formal variant"
+    },
+    {
+      "id": "phras-shite-ikimashou",
+      "type": "phrase",
+      "level": 7,
+      "characters": "していきましょう",
+      "meanings": [
+        "Going (continuing)"
+      ],
+      "readings": [
+        "していきましょう"
+      ],
+      "primaryReading": "していきましょう",
+      "notes": "Inclusive \"let's continue doing X\""
+    },
+    {
+      "id": "phras-dekimasu-deshou-ka",
+      "type": "phrase",
+      "level": 7,
+      "characters": "できますでしょうか",
+      "meanings": [
+        "Wouldn't it be possible to"
+      ],
+      "readings": [
+        "できますでしょうか"
+      ],
+      "primaryReading": "できますでしょうか",
+      "notes": "Maximally polite ability-check"
+    },
+    {
+      "id": "phras-sukuwaddo-menshon",
+      "type": "phrase",
+      "level": 8,
+      "characters": "スクワッドメンション",
+      "meanings": [
+        "Squad ping"
+      ],
+      "notes": "Mentioning the squad subteam"
+    },
+    {
+      "id": "phras-sutanpu-itadaketara",
+      "type": "phrase",
+      "level": 8,
+      "characters": "スタンプいただけたら",
+      "meanings": [
+        "Take a stamp"
+      ],
+      "readings": [
+        "すたんぷいただけたら"
+      ],
+      "primaryReading": "すたんぷいただけたら",
+      "notes": "\"If you could stamp\""
+    },
+    {
+      "id": "phras-myuuto-ni-natte-masu",
+      "type": "phrase",
+      "level": 8,
+      "characters": "ミュートになってます",
+      "meanings": [
+        "You're on mute"
+      ],
+      "readings": [
+        "みゅーとになってます"
+      ],
+      "primaryReading": "みゅーとになってます",
+      "notes": "Universally needed"
+    },
+    {
+      "id": "phras-rebyuu-onegai-shimasu",
+      "type": "phrase",
+      "level": 8,
+      "characters": "レビューお願いします",
+      "meanings": [
+        "Could I get a review (var)"
+      ],
+      "readings": [
+        "れびゅーおねがいします"
+      ],
+      "primaryReading": "れびゅーおねがいします",
+      "notes": "Marcano's shorter version; equally fine"
+    },
+    {
+      "id": "vocab-touzen",
+      "type": "vocabulary",
+      "level": 8,
+      "characters": "当然",
+      "meanings": [
+        "Of course / naturally"
+      ],
+      "readings": [
+        "とうぜん"
+      ],
+      "primaryReading": "とうぜん",
+      "notes": "Strong agreement: \"当然ですよね\" = \"of course, right?\""
+    },
+    {
+      "id": "phras-otagai-sonchou-shimashou",
+      "type": "phrase",
+      "level": 8,
+      "characters": "お互い尊重しましょう",
+      "meanings": [
+        "Mutual respect"
+      ],
+      "readings": [
+        "おたがいそんちょうしましょう"
+      ],
+      "primaryReading": "おたがいそんちょうしましょう",
+      "notes": "\"Let's respect each other\""
+    },
+    {
+      "id": "vocab-gosoudan",
+      "type": "vocabulary",
+      "level": 8,
+      "characters": "ご相談",
+      "meanings": [
+        "Discussion item"
+      ],
+      "readings": [
+        "ごそうだん"
+      ],
+      "primaryReading": "ごそうだん",
+      "notes": "\"Discussion topic\"; opens a thinking-aloud request"
+    },
+    {
+      "id": "phras-gosoudan-desu",
+      "type": "phrase",
+      "level": 8,
+      "characters": "ご相談です",
+      "meanings": [
+        "Open consultation"
+      ],
+      "notes": "Opening a consultation message"
+    },
+    {
+      "id": "phras-bettou-soudan",
+      "type": "phrase",
+      "level": 8,
+      "characters": "別途相談",
+      "meanings": [
+        "Resolve via discussion"
+      ],
+      "readings": [
+        "べっとうそうだん"
+      ],
+      "primaryReading": "べっとうそうだん",
+      "notes": "\"Separate discussion\"; deferring to another conversation"
+    },
+    {
+      "id": "phras-shokai-na-node",
+      "type": "phrase",
+      "level": 8,
+      "characters": "初回なので",
+      "meanings": [
+        "For the first time"
+      ],
+      "readings": [
+        "しょかいなので"
+      ],
+      "primaryReading": "しょかいなので",
+      "notes": "\"Since it's the first time\"; cushion for trying new things"
+    },
+    {
+      "id": "vocab-hikitsuzuki",
+      "type": "vocabulary",
+      "level": 8,
+      "characters": "引き続き",
+      "meanings": [
+        "Continuously / ongoing"
+      ],
+      "readings": [
+        "ひきつづき"
+      ],
+      "primaryReading": "ひきつづき",
+      "notes": "\"ストア実装は引き続き\"; for ongoing work"
+    },
+    {
+      "id": "phras-hikitsuzuki-onegai-shimasu",
+      "type": "phrase",
+      "level": 8,
+      "characters": "引き続きお願いします",
+      "meanings": [
+        "Please continue"
+      ],
+      "readings": [
+        "ひきつづきおねがいします"
+      ],
+      "primaryReading": "ひきつづきおねがいします",
+      "notes": "Common ongoing-work closer"
+    },
+    {
+      "id": "vocab-fukumete",
+      "type": "vocabulary",
+      "level": 8,
+      "characters": "含めて",
+      "meanings": [
+        "Including overall"
+      ],
+      "readings": [
+        "ふくめて"
+      ],
+      "primaryReading": "ふくめて",
+      "notes": "\"Including...\""
+    },
+    {
+      "id": "phras-nen-no-tame",
+      "type": "phrase",
+      "level": 8,
+      "characters": "念のため",
+      "meanings": [
+        "Just to be sure"
+      ],
+      "readings": [
+        "ねんのため"
+      ],
+      "primaryReading": "ねんのため",
+      "notes": "(Already added) — flag: you use this naturally"
+    },
+    {
+      "id": "phras-nen-no-tame-no-kakunin-desu",
+      "type": "phrase",
+      "level": 8,
+      "characters": "念のための確認です",
+      "meanings": [
+        "Just keeping a record"
+      ],
+      "readings": [
+        "ねんのためのかくにんです"
+      ],
+      "primaryReading": "ねんのためのかくにんです",
+      "notes": "Standard \"this is just a confirmation\""
+    },
+    {
+      "id": "phras-nen-no-tame-kyouyuu",
+      "type": "phrase",
+      "level": 8,
+      "characters": "念のため共有",
+      "meanings": [
+        "Just in case (FYI)"
+      ],
+      "readings": [
+        "ねんのためきょうゆう"
+      ],
+      "primaryReading": "ねんのためきょうゆう",
+      "notes": "Hyodo signature: \"sharing just in case\""
+    },
+    {
+      "id": "phras-kojinteki-ni-wa",
+      "type": "phrase",
+      "level": 8,
+      "characters": "個人的には",
+      "meanings": [
+        "Personal preference"
+      ],
+      "notes": "\"Personally...\""
+    },
+    {
+      "id": "vocab-handan",
+      "type": "vocabulary",
+      "level": 8,
+      "characters": "判断",
+      "meanings": [
+        "Make a judgment"
+      ],
+      "readings": [
+        "はんだん"
+      ],
+      "primaryReading": "はんだん",
+      "notes": "Judgment / decision"
+    },
+    {
+      "id": "phras-gokakunin-omachi-shite-imasu",
+      "type": "phrase",
+      "level": 8,
+      "characters": "ご確認お待ちしています",
+      "meanings": [
+        "Awaiting your check"
+      ],
+      "readings": [
+        "ごかくにんおまちしています"
+      ],
+      "primaryReading": "ごかくにんおまちしています",
+      "notes": "Standard PR review closer"
+    },
+    {
+      "id": "phras-mtg-no-jikan-itadakemasen-ka",
+      "type": "phrase",
+      "level": 8,
+      "characters": "MTGの時間いただけませんか",
+      "meanings": [
+        "Pull me into a meeting"
+      ],
+      "notes": "Asking for meeting time"
+    },
+    {
+      "id": "phras-jizen-ni",
+      "type": "phrase",
+      "level": 9,
+      "characters": "事前に",
+      "meanings": [
+        "In advance (casual)"
+      ],
+      "readings": [
+        "じぜんに"
+      ],
+      "primaryReading": "じぜんに",
+      "notes": "Casual equivalent of 予め; more common in speech"
+    },
+    {
+      "id": "phras-shiyou-kakunin",
+      "type": "phrase",
+      "level": 9,
+      "characters": "仕様確認",
+      "meanings": [
+        "Spec confirmation"
+      ],
+      "readings": [
+        "しようかくにん"
+      ],
+      "primaryReading": "しようかくにん",
+      "notes": "Already added — very high frequency"
+    },
+    {
+      "id": "phras-yuusen-do-handan",
+      "type": "phrase",
+      "level": 9,
+      "characters": "優先度判断",
+      "meanings": [
+        "Triage / prioritize"
+      ],
+      "notes": "Priority assessment"
+    },
+    {
+      "id": "phras-kanou-de-areba",
+      "type": "phrase",
+      "level": 9,
+      "characters": "可能であれば",
+      "meanings": [
+        "If possible"
+      ],
+      "readings": [
+        "かのうであれば"
+      ],
+      "primaryReading": "かのうであれば",
+      "notes": "Standard \"if possible\" softener"
+    },
+    {
+      "id": "phras-gohoukoku-made",
+      "type": "phrase",
+      "level": 9,
+      "characters": "ご報告まで",
+      "meanings": [
+        "Sharing for record"
+      ],
+      "readings": [
+        "ごほうこくまで"
+      ],
+      "primaryReading": "ごほうこくまで",
+      "notes": "\"Just reporting/FYI\"; standard"
+    },
+    {
+      "id": "vocab-hitomazu",
+      "type": "vocabulary",
+      "level": 9,
+      "characters": "ひとまず",
+      "meanings": [
+        "For now (slightly elevated)"
+      ],
+      "readings": [
+        "ひとまず"
+      ],
+      "primaryReading": "ひとまず",
+      "notes": "\"For now\"; slightly elevated 一旦"
+    },
+    {
+      "id": "phras-kari-ni",
+      "type": "phrase",
+      "level": 9,
+      "characters": "仮に",
+      "meanings": [
+        "Tentative"
+      ],
+      "readings": [
+        "かりに"
+      ],
+      "primaryReading": "かりに",
+      "notes": "\"Tentatively\""
+    },
+    {
+      "id": "phras-gutai-kan",
+      "type": "phrase",
+      "level": 9,
+      "characters": "具体感",
+      "meanings": [
+        "Concretely"
+      ],
+      "readings": [
+        "ぐたいかん"
+      ],
+      "primaryReading": "ぐたいかん",
+      "notes": "\"Sense of concreteness\""
+    },
+    {
+      "id": "phras-gutai-teki-ni-wa",
+      "type": "phrase",
+      "level": 9,
+      "characters": "具体的には",
+      "meanings": [
+        "Anchoring (concretely)"
+      ],
+      "readings": [
+        "ぐたいてきには"
+      ],
+      "primaryReading": "ぐたいてきには",
+      "notes": "\"Specifically\"; design discussion go-to"
+    },
+    {
+      "id": "phras-kyuu-na-chousei",
+      "type": "phrase",
+      "level": 9,
+      "characters": "急な調整",
+      "meanings": [
+        "Apologies for sudden ask"
+      ],
+      "readings": [
+        "きゅうなちょうせい"
+      ],
+      "primaryReading": "きゅうなちょうせい",
+      "notes": "Unplanned coordination"
+    },
+    {
+      "id": "phras-kono-ken-ni-tsuite",
+      "type": "phrase",
+      "level": 9,
+      "characters": "この件について",
+      "meanings": [
+        "About this 〜"
+      ],
+      "readings": [
+        "このけんについて"
+      ],
+      "primaryReading": "このけんについて",
+      "notes": "Formal \"regarding this matter\""
+    },
+    {
+      "id": "phras-kachi-ari-sou-da-na",
+      "type": "phrase",
+      "level": 9,
+      "characters": "価値ありそうだな",
+      "meanings": [
+        "Worth doing / Worth a try"
+      ],
+      "readings": [
+        "かちありそうだな"
+      ],
+      "primaryReading": "かちありそうだな",
+      "notes": "Hisayuki self-talk pattern: 「〜は価値ありそうだなって思って」"
+    },
+    {
+      "id": "phras-eikyou-wa-nai",
+      "type": "phrase",
+      "level": 9,
+      "characters": "影響はない",
+      "meanings": [
+        "No impact"
+      ],
+      "notes": "\"No impact\""
+    },
+    {
+      "id": "vocab-toriaezu",
+      "type": "vocabulary",
+      "level": 9,
+      "characters": "とりあえず",
+      "meanings": [
+        "Anyway"
+      ],
+      "readings": [
+        "とりあえず"
+      ],
+      "primaryReading": "とりあえず",
+      "notes": "\"For now\"; \"first\"; common dev pivot word"
+    },
+    {
+      "id": "vocab-ittan",
+      "type": "vocabulary",
+      "level": 9,
+      "characters": "いったん",
+      "meanings": [
+        "For now"
+      ],
+      "readings": [
+        "いったん"
+      ],
+      "primaryReading": "いったん",
+      "notes": "Hiragana variant of 一旦; Hisayuki uses both"
+    },
+    {
+      "id": "vocab-ittan-2",
+      "type": "vocabulary",
+      "level": 9,
+      "characters": "一旦",
+      "meanings": [
+        "At least"
+      ],
+      "readings": [
+        "いったん"
+      ],
+      "primaryReading": "いったん",
+      "notes": "\"For now\"; \"for the time being\"; Buzz/Hisayuki signature softener"
+    },
+    {
+      "id": "phras-gokyouryoku-yoroshiku-onegai-itashimasu",
+      "type": "phrase",
+      "level": 9,
+      "characters": "ご協力よろしくお願いいたします",
+      "meanings": [
+        "Apologies for the trouble"
+      ],
+      "readings": [
+        "ごきょうりょくよろしくおねがいいたします"
+      ],
+      "primaryReading": "ごきょうりょくよろしくおねがいいたします",
+      "notes": "Formal closer for collaboration asks"
+    },
+    {
+      "id": "vocab-kyouyuu",
+      "type": "vocabulary",
+      "level": 9,
+      "characters": "共有",
+      "meanings": [
+        "Sharing"
+      ],
+      "readings": [
+        "きょうゆう"
+      ],
+      "primaryReading": "きょうゆう",
+      "notes": "Critical word in this channel; \"sharing\""
+    },
+    {
+      "id": "phras-kyouyuu-shimasu",
+      "type": "phrase",
+      "level": 9,
+      "characters": "共有します",
+      "meanings": [
+        "Share an update"
+      ],
+      "readings": [
+        "きょうゆうします"
+      ],
+      "primaryReading": "きょうゆうします",
+      "notes": "Sharing a status or info"
+    },
+    {
+      "id": "phras-kyouyuu-nomi-desu",
+      "type": "phrase",
+      "level": 9,
+      "characters": "共有のみです",
+      "meanings": [
+        "FYI / for sharing"
+      ],
+      "readings": [
+        "きょうゆうのみです"
+      ],
+      "primaryReading": "きょうゆうのみです",
+      "notes": "\"For sharing only\"; no action needed"
+    },
+    {
+      "id": "phras-kyouyuu-made",
+      "type": "phrase",
+      "level": 10,
+      "characters": "共有まで",
+      "meanings": [
+        "Sharing for awareness"
+      ],
+      "readings": [
+        "きょうゆうまで"
+      ],
+      "primaryReading": "きょうゆうまで",
+      "notes": "Closer phrase: \"just sharing FYI\""
+    },
+    {
+      "id": "phras-taiou-houshin-wo-kimetai",
+      "type": "phrase",
+      "level": 10,
+      "characters": "対応方針を決めたい",
+      "meanings": [
+        "Decide approach"
+      ],
+      "readings": [
+        "たいおうほうしんをきめたい"
+      ],
+      "primaryReading": "たいおうほうしんをきめたい",
+      "notes": "Common cross-team coordination opener"
+    },
+    {
+      "id": "phras-sashikomi-de-moushiwake-nai",
+      "type": "phrase",
+      "level": 10,
+      "characters": "差し込みで申し訳ない",
+      "meanings": [
+        "Sorry to interrupt"
+      ],
+      "readings": [
+        "さしこみでもうしわけない"
+      ],
+      "primaryReading": "さしこみでもうしわけない",
+      "notes": "\"Sorry to interrupt with this\""
+    },
+    {
+      "id": "vocab-arakajime",
+      "type": "vocabulary",
+      "level": 10,
+      "characters": "予め",
+      "meanings": [
+        "In advance / beforehand"
+      ],
+      "readings": [
+        "あらかじめ"
+      ],
+      "primaryReading": "あらかじめ",
+      "notes": "\"予め共有しておきます\" = \"sharing in advance\""
+    },
+    {
+      "id": "vocab-suimasen",
+      "type": "vocabulary",
+      "level": 10,
+      "characters": "すいません",
+      "meanings": [
+        "Sorry / excuse me"
+      ],
+      "readings": [
+        "すいません"
+      ],
+      "primaryReading": "すいません",
+      "notes": "Casual すみません; said constantly throughout meetings"
+    },
+    {
+      "id": "phras-wo-medo-ni",
+      "type": "phrase",
+      "level": 10,
+      "characters": "を目処に",
+      "meanings": [
+        "As a target"
+      ],
+      "readings": [
+        "をめどに"
+      ],
+      "primaryReading": "をめどに",
+      "notes": "\"Aiming for [date]\""
+    },
+    {
+      "id": "phras-otesuki-no-toki-ni",
+      "type": "phrase",
+      "level": 10,
+      "characters": "お手すきの時に",
+      "meanings": [
+        "Sorry to bother"
+      ],
+      "readings": [
+        "おてすきのときに"
+      ],
+      "primaryReading": "おてすきのときに",
+      "notes": "Non-urgent request opener; \"when you're free\""
+    },
+    {
+      "id": "phras-otesuki-no-sai-ni",
+      "type": "phrase",
+      "level": 10,
+      "characters": "お手すきの際に",
+      "meanings": [
+        "When you're free"
+      ],
+      "readings": [
+        "おてすきのさいに"
+      ],
+      "primaryReading": "おてすきのさいに",
+      "notes": "Already added; flag your use of this is appropriate"
+    },
+    {
+      "id": "phras-otesuki-no-sai-ni-2",
+      "type": "phrase",
+      "level": 10,
+      "characters": "お手隙の際に",
+      "meanings": [
+        "If you have a moment"
+      ],
+      "readings": [
+        "おてすきのさいに"
+      ],
+      "primaryReading": "おてすきのさいに",
+      "notes": "(Your style — slightly more literary kanji choice)"
+    },
+    {
+      "id": "phras-sashikomi-de-kyoushuku-desu-ga",
+      "type": "phrase",
+      "level": 10,
+      "characters": "差し込みで恐縮ですが",
+      "meanings": [
+        "Sorry to insert request"
+      ],
+      "readings": [
+        "さしこみできょうしゅくですが"
+      ],
+      "primaryReading": "さしこみできょうしゅくですが",
+      "notes": "Heavier-formality interrupt"
+    },
+    {
+      "id": "phras-sashikomi-kyoushuku-desu",
+      "type": "phrase",
+      "level": 10,
+      "characters": "差し込み恐縮です",
+      "meanings": [
+        "Sorry to interrupt (very polite)"
+      ],
+      "readings": [
+        "さしこみきょうしゅくです"
+      ],
+      "primaryReading": "さしこみきょうしゅくです",
+      "notes": "Compact version"
+    },
+    {
+      "id": "phras-isogi-kyoushuku-desu",
+      "type": "phrase",
+      "level": 10,
+      "characters": "急ぎ恐縮です",
+      "meanings": [
+        "Apologetic ask (sudden)"
+      ],
+      "readings": [
+        "いそぎきょうしゅくです"
+      ],
+      "primaryReading": "いそぎきょうしゅくです",
+      "notes": "\"Sorry for the urgency\""
+    },
+    {
+      "id": "phras-izure-ni-seyo",
+      "type": "phrase",
+      "level": 10,
+      "characters": "いずれにせよ",
+      "meanings": [
+        "At any rate"
+      ],
+      "readings": [
+        "いずれにせよ"
+      ],
+      "primaryReading": "いずれにせよ",
+      "notes": "\"Either way\"; transition phrase"
+    },
+    {
+      "id": "phras-genmitsu-ni-wa",
+      "type": "phrase",
+      "level": 10,
+      "characters": "厳密には",
+      "meanings": [
+        "Strictly speaking"
+      ],
+      "readings": [
+        "げんみつには"
+      ],
+      "primaryReading": "げんみつには",
+      "notes": "Used when qualifying an answer; your kind of phrase"
+    },
+    {
+      "id": "phras-itadakeru-to-saiwai-desu",
+      "type": "phrase",
+      "level": 10,
+      "characters": "いただけると幸いです",
+      "meanings": [
+        "Would be saved if (var)"
+      ],
+      "readings": [
+        "いただけるとさいわいです"
+      ],
+      "primaryReading": "いただけるとさいわいです",
+      "notes": "\"I would be grateful if\""
+    },
+    {
+      "id": "phras-itadakeru-to-koujin-desu",
+      "type": "phrase",
+      "level": 10,
+      "characters": "いただけると幸甚です",
+      "meanings": [
+        "Would be saved if (humble)"
+      ],
+      "readings": [
+        "いただけるとこうじんです"
+      ],
+      "primaryReading": "いただけるとこうじんです",
+      "notes": "Very formal closer; literally \"it would be my great fortune\""
+    },
+    {
+      "id": "phras-oisogashii-tokoro-osoreirimasu-ga",
+      "type": "phrase",
+      "level": 10,
+      "characters": "お忙しいところ恐れ入りますが",
+      "meanings": [
+        "Sorry to bother (busy)"
+      ],
+      "readings": [
+        "おいそがしいところおそれいりますが"
+      ],
+      "primaryReading": "おいそがしいところおそれいりますが",
+      "notes": "Very formal busy-time softener"
+    },
+    {
+      "id": "vocab-gokyouji",
+      "type": "vocabulary",
+      "level": 10,
+      "characters": "ご教示",
+      "meanings": [
+        "Guidance request"
+      ],
+      "readings": [
+        "ごきょうじ"
+      ],
+      "primaryReading": "ごきょうじ",
+      "notes": "\"Guidance\"; very polite ask"
+    },
+    {
+      "id": "phras-gokyouji-kudasai",
+      "type": "phrase",
+      "level": 10,
+      "characters": "ご教示ください",
+      "meanings": [
+        "Guidance / instruction"
+      ],
+      "notes": "\"Please advise me\""
+    },
+    {
+      "id": "vocab-gokansei",
+      "type": "vocabulary",
+      "level": 10,
+      "characters": "互換性",
+      "meanings": [
+        "Compatibility approach"
+      ],
+      "readings": [
+        "ごかんせい"
+      ],
+      "primaryReading": "ごかんせい",
+      "notes": "Compatibility"
+    },
+    {
+      "id": "vocab-seiyaku",
+      "type": "vocabulary",
+      "level": 11,
+      "characters": "制約",
+      "meanings": [
+        "Constraints"
+      ],
+      "readings": [
+        "せいやく"
+      ],
+      "primaryReading": "せいやく",
+      "notes": "Constraints"
+    },
+    {
+      "id": "vocab-kigu",
+      "type": "vocabulary",
+      "level": 11,
+      "characters": "危惧",
+      "meanings": [
+        "Worry / concern"
+      ],
+      "readings": [
+        "きぐ"
+      ],
+      "primaryReading": "きぐ",
+      "notes": "\"Concern\"; tone slightly heavier than 気になる"
+    },
+    {
+      "id": "phras-goui-keisei",
+      "type": "phrase",
+      "level": 11,
+      "characters": "合意形成",
+      "meanings": [
+        "Decided / consensus formed"
+      ],
+      "readings": [
+        "ごういけいせい"
+      ],
+      "primaryReading": "ごういけいせい",
+      "notes": "\"Building consensus\"; nice tech meeting word"
+    },
+    {
+      "id": "vocab-jisshitsu",
+      "type": "vocabulary",
+      "level": 11,
+      "characters": "実質",
+      "meanings": [
+        "Practically"
+      ],
+      "readings": [
+        "じっしつ"
+      ],
+      "primaryReading": "じっしつ",
+      "notes": "\"Practically / effectively\""
+    },
+    {
+      "id": "phras-sashitsukae-nakereba",
+      "type": "phrase",
+      "level": 11,
+      "characters": "差し支えなければ",
+      "meanings": [
+        "If acceptable"
+      ],
+      "readings": [
+        "さしつかえなければ"
+      ],
+      "primaryReading": "さしつかえなければ",
+      "notes": "\"If it doesn't cause trouble\"; polite request softener"
+    }
+  ]
+}
