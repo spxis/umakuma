@@ -8,6 +8,8 @@ type Props = {
   primaryContent: ReactNode;
   visuallySimilarContent: ReactNode;
   usedInVocabularyContent: ReactNode;
+  usedInVocabularyCollapsed?: boolean;
+  onToggleUsedInVocabularyCollapsed?: (() => void) | null;
 };
 
 export default function LevelRelatedPanels({
@@ -18,6 +20,8 @@ export default function LevelRelatedPanels({
   primaryContent,
   visuallySimilarContent,
   usedInVocabularyContent,
+  usedInVocabularyCollapsed = false,
+  onToggleUsedInVocabularyCollapsed = null,
 }: Props) {
   if (!hasPrimary && !hasVisuallySimilar && !hasUsedInVocabulary) {
     return null;
@@ -50,8 +54,19 @@ export default function LevelRelatedPanels({
       {hasUsedInVocabulary ? (
         <div className="grid gap-3 lg:grid-cols-1">
           <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Used in vocabulary</p>
-            {usedInVocabularyContent}
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs font-bold uppercase text-foreground/70">Used in vocabulary</p>
+              {onToggleUsedInVocabularyCollapsed ? (
+                <button
+                  type="button"
+                  onClick={onToggleUsedInVocabularyCollapsed}
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted"
+                >
+                  {usedInVocabularyCollapsed ? "Expand" : "Collapse"}
+                </button>
+              ) : null}
+            </div>
+            {!usedInVocabularyCollapsed ? usedInVocabularyContent : null}
           </article>
         </div>
       ) : null}

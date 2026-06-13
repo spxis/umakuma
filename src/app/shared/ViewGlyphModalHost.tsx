@@ -22,6 +22,11 @@ import {
   type ViewGlyphSelectorEntry,
   type ViewGlyphViewerPayload,
 } from "@/lib/viewGlyphViewer";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+
+const VIEW_GLYPH_STORAGE_KEYS = {
+  usedInVocabularyCollapsed: "wr:view-glyph:used-in-vocabulary-collapsed",
+} as const;
 
 function subjectSingularLabel(value: string | null | undefined): string {
   if (isSubjectType(value)) {
@@ -53,6 +58,13 @@ export default function ViewGlyphModalHost() {
   const [index, setIndex] = useState(0);
   const [accountId, setAccountId] = useState("");
   const [showEnglish, setShowEnglish] = useState(true);
+  const [usedInVocabularyCollapsed, setUsedInVocabularyCollapsed] = usePersistedBoolean(
+    VIEW_GLYPH_STORAGE_KEYS.usedInVocabularyCollapsed,
+    {
+      defaultValue: false,
+      mode: "one-is-true",
+    },
+  );
   const [customTitle, setCustomTitle] = useState<string | undefined>(undefined);
   const [selector, setSelector] = useState<ViewGlyphSelectorEntry[]>([]);
 
@@ -322,6 +334,8 @@ export default function ViewGlyphModalHost() {
             hasPrimaryRelatedPanel={hasPrimaryRelatedPanel}
             hasVisuallySimilarPanel={hasVisuallySimilarPanel}
             hasUsedInVocabularyPanel={hasUsedInVocabularyPanel}
+            usedInVocabularyCollapsed={usedInVocabularyCollapsed}
+            onToggleUsedInVocabularyCollapsed={() => setUsedInVocabularyCollapsed((value) => !value)}
             vocabularyKanjiLinks={vocabularyKanjiLinks}
             subjectById={subjectById}
             onJumpToRelatedSubject={async (subjectId) => {

@@ -52,6 +52,8 @@ type Props = {
   hasPrimaryRelatedPanel: boolean;
   hasVisuallySimilarPanel: boolean;
   hasUsedInVocabularyPanel: boolean;
+  usedInVocabularyCollapsed?: boolean;
+  onToggleUsedInVocabularyCollapsed?: (() => void) | null;
   vocabularyKanjiLinks: VocabularyKanjiLink[];
   subjectById: Map<number, LevelItem>;
   onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
@@ -77,6 +79,8 @@ export default function LevelExplorerDetailSection({
   hasPrimaryRelatedPanel,
   hasVisuallySimilarPanel,
   hasUsedInVocabularyPanel,
+  usedInVocabularyCollapsed = false,
+  onToggleUsedInVocabularyCollapsed = null,
   vocabularyKanjiLinks,
   subjectById,
   onJumpToRelatedSubject,
@@ -273,6 +277,8 @@ export default function LevelExplorerDetailSection({
           hasPrimary={hasPrimaryRelatedPanel}
           hasVisuallySimilar={hasVisuallySimilarPanel}
           hasUsedInVocabulary={hasUsedInVocabularyPanel}
+          usedInVocabularyCollapsed={usedInVocabularyCollapsed}
+          onToggleUsedInVocabularyCollapsed={onToggleUsedInVocabularyCollapsed}
           primaryTitle={
             isVocabularySubjectType(selectedItem.subjectType)
               ? SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular
