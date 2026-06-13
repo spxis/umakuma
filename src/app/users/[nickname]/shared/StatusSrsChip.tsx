@@ -8,7 +8,7 @@ type PillChipProps = {
 };
 
 export function PillChip({ className = "", children }: PillChipProps) {
-  return <span className={`subject-pill inline-flex min-h-6 items-center justify-center whitespace-nowrap ${className}`}>{children}</span>;
+  return <span className={`subject-pill whitespace-nowrap ${className}`}>{children}</span>;
 }
 
 type StatusSrsChipProps = {

@@ -133,7 +133,7 @@ export default function LevelExplorerDetailSection({
   const isEyeOn = usesStudyPeekToggle ? !isStudyHidden : showEnglish;
 
   const renderHeaderChipRow = (className: string) => (
-    <div className={className}>
+    <div className={`${className} items-center`}>
       <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
       {typeof selectedItem.wkLevel === "number" ? (
         <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span>
