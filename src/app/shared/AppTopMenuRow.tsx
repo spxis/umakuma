@@ -85,12 +85,6 @@ export default function AppTopMenuRow({
     links.push({ label: "Admin", href: "/admin", dashboard: null });
   }
 
-  const dividerAfterLabels = new Set([
-    "Leaderboard",
-    "History",
-    "Read",
-    ...(canSeeAdminTopLink ? ["Libraries"] : []),
-  ]);
   const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
   const routeSegment =
     pathname && userBasePath && pathname.startsWith(`${userBasePath}/`)
@@ -131,7 +125,7 @@ export default function AppTopMenuRow({
   return (
     <section className={`flex items-center justify-between gap-3 ${className ?? ""}`}>
       <nav className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/50 sm:text-[11px]">
-        {links.map((link) => (
+        {links.map((link, index) => (
           <span key={`${link.label}-${link.href}`} className="inline-flex items-center gap-x-3">
             <Link
               href={link.href}
@@ -151,7 +145,7 @@ export default function AppTopMenuRow({
             >
               {link.label}
             </Link>
-            {dividerAfterLabels.has(link.label) ? (
+            {index < links.length - 1 ? (
               <span aria-hidden="true" className="text-foreground/35">|</span>
             ) : null}
           </span>
