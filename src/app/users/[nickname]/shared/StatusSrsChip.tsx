@@ -14,16 +14,14 @@ export function PillChip({ className = "", children }: PillChipProps) {
 type StatusSrsChipProps = {
   status: LevelItem["status"];
   srsStage: number;
-  includeBorder?: boolean;
 };
 
 export default function StatusSrsChip({
   status,
   srsStage,
-  includeBorder = false,
 }: StatusSrsChipProps) {
   return (
-    <PillChip className={`${includeBorder ? "border-line " : ""}${statusClass(status)}`}>
+    <PillChip className={statusClass(status)}>
       {statusShortLabel(status)} - SRS {srsStage}
     </PillChip>
   );

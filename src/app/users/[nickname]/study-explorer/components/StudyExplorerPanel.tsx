@@ -420,7 +420,7 @@ export default function StudyExplorerPanel({
                     rightChip={
                       isLessonLockedQueueItem(item)
                         ? <SrsOnlyChip srsStage={item.srsStage} />
-                        : <StatusSrsChip status={item.status} srsStage={item.srsStage} includeBorder />
+                        : <StatusSrsChip status={item.status} srsStage={item.srsStage} />
                     }
                   />
                 );

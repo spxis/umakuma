@@ -123,6 +123,14 @@ export default function LevelExplorerDetailSection({
   const headerTitleKey = `${selectedItem.subjectId}:${headerTitle ?? ""}`;
   const isHeaderTitleExpanded = expandedHeaderTitleKey === headerTitleKey;
   const shouldClampHeaderTitle = clampLongTitle && Boolean(headerTitle) && !isHeaderTitleExpanded;
+  const usesStudyPeekToggle = studyMode && Boolean(onTogglePeek);
+  const canRenderEyeToggle = usesStudyPeekToggle || Boolean(onToggleShowEnglish);
+  const eyeToggleTitle = usesStudyPeekToggle
+    ? (isStudyHidden ? LEVEL_EXPLORER_TEXT.peek : LEVEL_EXPLORER_TEXT.hidePeek)
+    : canToggleEnglish
+      ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish)
+      : LEVEL_EXPLORER_TEXT.hintsHidden;
+  const isEyeOn = usesStudyPeekToggle ? !isStudyHidden : showEnglish;
 
   const renderHeaderChipRow = (className: string) => (
     <div className={className}>
@@ -141,16 +149,22 @@ export default function LevelExplorerDetailSection({
         <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
       ) : null}
       {nextReviewBadge ? <ReviewTimingChip label={nextReviewBadge.label} className={nextReviewBadge.className} /> : null}
-      {onToggleShowEnglish ? (
+      {canRenderEyeToggle ? (
         <button
           type="button"
-          onClick={onToggleShowEnglish}
-          disabled={!canToggleEnglish}
+          onClick={() => {
+            if (usesStudyPeekToggle) {
+              onTogglePeek?.();
+              return;
+            }
+            onToggleShowEnglish?.();
+          }}
+          disabled={usesStudyPeekToggle ? false : !canToggleEnglish}
           className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-          title={canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
-          aria-label={canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
+          title={eyeToggleTitle}
+          aria-label={eyeToggleTitle}
         >
-          {showEnglish ? (
+          {isEyeOn ? (
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
               <circle cx="12" cy="12" r="3" />
@@ -221,17 +235,6 @@ export default function LevelExplorerDetailSection({
 
         <div className="min-w-0">
           {renderHeaderChipRow("hidden flex-wrap justify-end gap-1 sm:flex")}
-          {studyMode && onTogglePeek ? (
-            <div className="mt-2 flex justify-end">
-              <button
-                type="button"
-                onClick={onTogglePeek}
-                className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground"
-              >
-                {isStudyHidden ? LEVEL_EXPLORER_TEXT.peek : LEVEL_EXPLORER_TEXT.hidePeek}
-              </button>
-            </div>
-          ) : null}
           <div className="mt-2 min-w-0">
             {studyMode && isStudyHidden ? (
               <>

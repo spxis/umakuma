@@ -349,7 +349,7 @@ export default function LevelExplorerItemsGrid({
               rightChip={
                 item.status === LEVEL_WK_STATUSES.locked
                   ? <SrsOnlyChip srsStage={item.srsStage} />
-                  : <StatusSrsChip status={item.status} srsStage={item.srsStage} includeBorder />
+                    : <StatusSrsChip status={item.status} srsStage={item.srsStage} />
               }
             />
 
