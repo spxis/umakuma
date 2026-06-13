@@ -137,9 +137,10 @@ export default function StudyReviewModalSection({
     viewerMode === STUDY_VIEWER_MODES.detail &&
     !useStudyFlashLayout &&
     detailsRevealed;
+  const flashSectionLayoutClass = useStudyFlashLayout ? "flex min-h-0 flex-1 flex-col" : "";
   const sectionFrameClass = shouldUseUnifiedLessonDetail
-    ? ""
-    : "rounded-2xl border-2 border-accent/35 bg-surface p-3 sm:p-5";
+    ? flashSectionLayoutClass
+    : `rounded-2xl border-2 border-accent/35 bg-surface p-3 sm:p-5 ${flashSectionLayoutClass}`;
 
   const selectedMeaningExplanation = stripHtml(selectedItem.meaningExplanation) || "-";
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
@@ -270,7 +271,7 @@ export default function StudyReviewModalSection({
           )
         ) : useStudyFlashLayout ? (
           <>
-            <div className="grid h-full min-h-0 grid-rows-2 gap-2 lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch">
+            <div className="grid min-h-0 flex-1 grid-rows-2 gap-2 lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch">
               <div
                 role="button"
                 tabIndex={0}
