@@ -13,17 +13,17 @@ import {
 export function statusClass(status: LevelItem["status"]): string {
   switch (status) {
     case LEVEL_WK_STATUSES.locked:
-      return "bg-surface-muted text-foreground/70";
+      return "border-line bg-surface-muted text-foreground/70";
     case LEVEL_WK_STATUSES.apprentice:
-      return "bg-pink-100 text-pink-700";
+      return "border-pink-300 bg-pink-100 text-pink-700";
     case LEVEL_WK_STATUSES.guru:
-      return "bg-violet-100 text-violet-700";
+      return "border-violet-300 bg-violet-100 text-violet-700";
     case LEVEL_WK_STATUSES.master:
-      return "bg-sky-100 text-sky-700";
+      return "border-sky-300 bg-sky-100 text-sky-700";
     case LEVEL_WK_STATUSES.enlightened:
-      return "bg-amber-100 text-amber-700";
+      return "border-amber-300 bg-amber-100 text-amber-700";
     case LEVEL_WK_STATUSES.burned:
-      return "bg-surface-muted text-foreground/80";
+      return "border-line bg-surface-muted text-foreground/80";
   }
 }
 
