@@ -6,6 +6,7 @@ type RelatedEntry = {
   label: string;
   wkLevel: number | null;
   reading: string | null;
+  meaning: string | null;
   fallbackKey?: string;
 };
 
@@ -30,6 +31,7 @@ function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
           label: item.label,
           wkLevel: item.wkLevel ?? null,
           reading: item.reading ?? null,
+          meaning: item.meaning ?? null,
         },
       ];
     }
@@ -39,6 +41,7 @@ function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
       label: segment,
       wkLevel: item.wkLevel ?? null,
       reading: null,
+      meaning: null,
       fallbackKey: `${item.subjectId}-${segment}-${index}`,
     }));
   });
@@ -82,12 +85,20 @@ export function RelatedReferenceCards({
         const isClickable = linked !== null || typeof entry.wkLevel === "number";
         const relationType = linked?.subjectType ?? fallbackType;
         const reading = typeof entry.reading === "string" && entry.reading.trim() ? entry.reading : null;
+        const meaning = typeof entry.meaning === "string" && entry.meaning.trim() ? entry.meaning : null;
         const subtitle = (() => {
-          if (!reading) return null;
-          if (!showEnglish) return reading;
+          if (reading) {
+            if (!showEnglish) return reading;
 
-          const pronunciation = pronunciationForReading(reading);
-          return pronunciation ? `${reading} / ${pronunciation}` : reading;
+            const pronunciation = pronunciationForReading(reading);
+            return pronunciation ? `${reading} / ${pronunciation}` : reading;
+          }
+
+          if (!showEnglish || !meaning) {
+            return null;
+          }
+
+          return meaning;
         })();
         const key = entry.fallbackKey ?? `${entry.subjectId}-${entry.label}-${index}`;
 

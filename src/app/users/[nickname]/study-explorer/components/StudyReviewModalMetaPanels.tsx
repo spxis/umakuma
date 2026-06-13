@@ -27,8 +27,11 @@ import {
   readingWithPronunciation,
   readingsWithPronunciationList,
   relatedTileLabelClass,
-  relatedTilesClickable,
 } from "./StudyReviewModalHelpers";
+import { RelatedReferenceCards } from "../../level-explorer/components/LevelExplorerReferenceCards";
+import type { LevelItem } from "../../explorerTypes";
+
+const EMPTY_SUBJECT_BY_ID = new Map<number, LevelItem>();
 
 type Props = {
   accountId: string;
@@ -143,6 +146,39 @@ export default function StudyReviewModalMetaPanels({
   }
 
   const wordExamples = parseWordExamples(selectedItem.jlptMeta?.wordExamples);
+
+  const openFromRelatedItems = (
+    items: RelatedReference[] | undefined,
+    subjectId: number,
+    fallbackType: SubjectType,
+  ) => {
+    const entry = (items ?? []).find((item) => item.subjectId === subjectId);
+    openSingleGlyph({
+      subjectId,
+      label: entry?.label ?? String(subjectId),
+      reading: entry?.reading ?? null,
+      meaning: entry?.meaning ?? null,
+      subjectType: fallbackType,
+    });
+  };
+
+  const renderSharedRelatedCards = (
+    items: RelatedReference[] | undefined,
+    fallbackType: SubjectType,
+    options?: { large?: boolean },
+  ) => (
+    <RelatedReferenceCards
+      items={items ?? []}
+      large={options?.large}
+      showEnglish={showEnglish}
+      subjectById={EMPTY_SUBJECT_BY_ID}
+      fallbackType={fallbackType}
+      onJumpToRelatedSubject={async (subjectId) => {
+        openFromRelatedItems(items, subjectId, fallbackType);
+      }}
+    />
+  );
+
   return (
     <>
       {!suppressDetails && ((!studyMode && viewerMode === STUDY_VIEWER_MODES.flash) || useStudyFlashLayout ? null : detailsRevealed ? (
@@ -169,17 +205,21 @@ export default function StudyReviewModalMetaPanels({
                   {hasRadicals ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
                       <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.radicals}</p>
-                      {relatedTilesClickable(selectedItem.radicals as RelatedReference[] | undefined, (entry) => {
-                        openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: SUBJECT_TYPES.radical });
-                      })}
+                      {renderSharedRelatedCards(
+                        selectedItem.radicals as RelatedReference[] | undefined,
+                        SUBJECT_TYPES.radical,
+                        { large: true },
+                      )}
                     </div>
                   ) : null}
                   {hasVisuallySimilar ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
                       <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.visuallySimilar}</p>
-                      {relatedTilesClickable(selectedItem.visuallySimilar as RelatedReference[] | undefined, (entry) => {
-                        openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: SUBJECT_TYPES.kanji });
-                      })}
+                      {renderSharedRelatedCards(
+                        selectedItem.visuallySimilar as RelatedReference[] | undefined,
+                        SUBJECT_TYPES.kanji,
+                        { large: true },
+                      )}
                     </div>
                   ) : null}
                 </div>
@@ -202,14 +242,11 @@ export default function StudyReviewModalMetaPanels({
                     </button>
                   </div>
                   {!usedInVocabularyCollapsed
-                    ? relatedTilesClickable(selectedItem.usedInVocabulary as RelatedReference[] | undefined, (entry) => {
-                        openSingleGlyph({
-                          subjectId: entry.subjectId,
-                          label: entry.label,
-                          reading: entry.reading,
-                          subjectType: usedInVocabularyTargetSubjectType(selectedItem.subjectType),
-                        });
-                      })
+                    ? renderSharedRelatedCards(
+                        selectedItem.usedInVocabulary as RelatedReference[] | undefined,
+                        usedInVocabularyTargetSubjectType(selectedItem.subjectType),
+                        { large: true },
+                      )
                     : null}
                 </div>
               ) : null}
@@ -220,9 +257,11 @@ export default function StudyReviewModalMetaPanels({
             <div className="mt-2">
               <div className="rounded-xl border border-line bg-surface px-3 py-2">
                 <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.componentKanji}</p>
-                {relatedTilesClickable(selectedItem.componentKanji as RelatedReference[] | undefined, (entry) => {
-                  openSingleGlyph({ subjectId: entry.subjectId, label: entry.label, reading: entry.reading, subjectType: SUBJECT_TYPES.kanji });
-                })}
+                {renderSharedRelatedCards(
+                  selectedItem.componentKanji as RelatedReference[] | undefined,
+                  SUBJECT_TYPES.kanji,
+                  { large: true },
+                )}
               </div>
             </div>
           ) : null}
@@ -240,36 +279,9 @@ export default function StudyReviewModalMetaPanels({
                     {usedKanjiCollapsed ? STUDY_REVIEW_META_TEXT.expand : STUDY_REVIEW_META_TEXT.collapse}
                   </button>
                 </div>
-                {!usedKanjiCollapsed ? (
-                  <ul className="mt-2 space-y-2 text-foreground/90">
-                    {usedKanjiItems.map((item, index) => (
-                      <li
-                        key={`${selectedItem.subjectId}-${item.subjectId}-${item.label}-${index}`}
-                        className="rounded-lg border border-line bg-surface-muted px-3 py-2"
-                      >
-                        <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              openSingleGlyph({
-                                subjectId: item.subjectId,
-                                label: item.label,
-                                reading: item.reading ?? null,
-                                meaning: item.meaning ?? null,
-                                subjectType: SUBJECT_TYPES.kanji,
-                              });
-                            }}
-                            className={`cursor-pointer text-left font-black leading-none text-foreground hover:opacity-85 ${relatedTileLabelClass(item.label)}`}
-                          >
-                            {item.label}
-                          </button>
-                          <p className="text-2xl font-bold leading-none text-foreground/80">{item.reading || "-"}</p>
-                        </div>
-                        <p className="mt-1 text-sm text-foreground/85">{item.meaning || "-"}</p>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
+                {!usedKanjiCollapsed
+                  ? renderSharedRelatedCards(usedKanjiItems, SUBJECT_TYPES.kanji, { large: true })
+                  : null}
               </div>
             </div>
           ) : null}
