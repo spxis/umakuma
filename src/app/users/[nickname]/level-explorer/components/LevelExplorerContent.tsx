@@ -270,9 +270,9 @@ export default function LevelExplorerContent({
         </div>
         <div id="wk-filters-panel" className={`space-y-3 ${mobileFilterSectionClass}`}>
           <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
               <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
-              <div className="w-full md:w-1/2">
+              <div className="w-full min-w-0 sm:w-1/2">
                 <ExplorerSearchBar scope="level" />
               </div>
             </div>
