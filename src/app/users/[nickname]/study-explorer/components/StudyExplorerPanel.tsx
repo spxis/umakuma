@@ -88,19 +88,9 @@ export default function StudyExplorerPanel({
   onSelectSubject,
   onClearAllFilters,
 }: StudyExplorerPanelProps) {
-  const {
-    bulkModeEnabled,
-    selectedSubjectIds,
-    selectedItems,
-    selectedPreview,
-    applyBulkSelection,
-    toggleBulkMode,
-    setSelectedSubjectIds,
-  } = useStudyBulkReset({ filteredItems });
+  const { bulkModeEnabled, selectedSubjectIds, selectedItems, selectedPreview, applyBulkSelection, toggleBulkMode, setSelectedSubjectIds } = useStudyBulkReset({ filteredItems });
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
-  const [filtersOpen, setFiltersOpen] = usePersistedBoolean("wr:study:filters-open", {
-    defaultValue: true,
-  });
+  const [filtersOpen, setFiltersOpen] = usePersistedBoolean("wr:study:filters-open", { defaultValue: true });
   const { sectionsOpen: mobileFilterSectionsOpen, toggleSection: toggleMobileFilterSection, setSectionOpen: setMobileFilterSectionOpen } = useStudyMobileFilterSections();
   const filtersLoading = !hasData;
   const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
