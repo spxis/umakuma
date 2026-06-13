@@ -173,7 +173,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
   async function deleteAttempt(attempt: Attempt) {
     const confirmed = await confirmAction({
       title: "Delete study attempt",
-      description: `Delete this study attempt for ${attempt.nickname}?`,
+      description: `Scope: 1 study attempt for ${attempt.nickname}. Time: immediate. Risk: destructive delete that cannot be undone from this screen. Continue?`,
       confirmLabel: "Delete",
       tone: "danger",
     });

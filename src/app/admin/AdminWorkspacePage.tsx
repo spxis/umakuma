@@ -14,6 +14,8 @@ import type { AdminSessionStatus } from "./AdminPage.types";
 import AdminStudyHistory from "./AdminStudyHistory";
 import AdminUsersPanel from "./AdminUsersPanel";
 import AdminCatalogPanel from "./AdminCatalogPanel";
+import AdminJlptCatalogPanel from "./AdminJlptCatalogPanel";
+import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types";
 import AdminReadingEntriesClient from "./reading-entries/AdminReadingEntriesClient";
 import {
   ADMIN_WORKSPACE_COOKIE_KEY,
@@ -72,6 +74,7 @@ function AdminWorkspacePageContent({
   const [loading, setLoading] = useState(false);
   const [jlptRefreshing, setJlptRefreshing] = useState(false);
   const [jlptEnriching, setJlptEnriching] = useState(false);
+  const [operationScope, setOperationScope] = useState<AdminOperationsScopeResponse | null>(null);
 
   const viewerMenuInfo: ViewerMenuInfo | null = signedIn
     ? {
@@ -118,6 +121,29 @@ function AdminWorkspacePageContent({
     });
   }, [hasInitialSession]);
 
+  useEffect(() => {
+    async function loadOperationScope() {
+      if (checkingSession || !sessionAuthorized) {
+        setOperationScope(null);
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/admin/operations-scope", { cache: "no-store" });
+        const payload = (await response.json()) as AdminOperationsScopeResponse & { error?: string };
+        if (!response.ok) {
+          throw new Error(payload.error ?? "Could not load operation scope.");
+        }
+
+        setOperationScope(payload);
+      } catch {
+        setOperationScope(null);
+      }
+    }
+
+    void loadOperationScope();
+  }, [checkingSession, sessionAuthorized]);
+
   async function completeGoogleSignOut() {
     const accepted = await confirmAction({
       title: "Sign out of admin",
@@ -142,7 +168,7 @@ function AdminWorkspacePageContent({
     const accepted = await confirmAction({
       title: "Save account",
       description:
-        "This stores the nickname and API token for this account. If an existing account matches, token and profile fields may be updated. Continue?",
+        "Scope: 1 account row. Time: usually under 1 minute. Risk: non-destructive upsert/update. This stores nickname and API token, and can update an existing matching account. Continue?",
       confirmLabel: "Save account",
       cancelLabel: "Cancel",
       tone: "danger",
@@ -182,7 +208,7 @@ function AdminWorkspacePageContent({
     const accepted = await confirmAction({
       title: "Refresh all stats",
       description:
-        "This queues a global leaderboard refresh and may trigger many upstream API calls across all accounts. Continue?",
+        `Scope: about ${operationScope?.counts.accountsTotal ?? "-"} accounts. Time: about ${operationScope?.estimates.refreshAllMinutes ?? "-"} minute(s). Risk: non-destructive stat refresh. This may trigger many upstream API calls. Continue?`,
       confirmLabel: "Refresh all",
       cancelLabel: "Cancel",
       tone: "danger",
@@ -216,7 +242,7 @@ function AdminWorkspacePageContent({
     const accepted = await confirmAction({
       title: "Refresh JLPT list",
       description:
-        "This reloads JLPT source data and updates JLPT records used by the app. Existing values may be overwritten. Continue?",
+        `Scope: about ${operationScope?.counts.jlptTotal ?? "-"} JLPT rows. Time: about ${operationScope?.estimates.jlptRefreshMinutes ?? "-"} minute(s). Risk: destructive and additive. This can overwrite levels, insert new rows, and remove stale rows not in the latest source. Continue?`,
       confirmLabel: "Refresh JLPT",
       cancelLabel: "Cancel",
       tone: "danger",
@@ -250,7 +276,7 @@ function AdminWorkspacePageContent({
     const accepted = await confirmAction({
       title: "Enrich JLPT data",
       description:
-        "This writes enriched JLPT metadata in bulk for pending records. It can take time and updates stored fields. Continue?",
+        `Scope: up to ${operationScope?.estimates.jlptEnrichBatchSize ?? 250} rows this run, remaining missing rows ${operationScope?.counts.jlptMissingEnrichment ?? "-"}. Time: about 1 to 3 minute(s) per batch. Risk: non-destructive additive updates to enrichment fields. Continue?`,
       confirmLabel: "Run enrichment",
       cancelLabel: "Cancel",
       tone: "danger",
@@ -369,6 +395,7 @@ function AdminWorkspacePageContent({
               loading={loading}
               jlptRefreshing={jlptRefreshing}
               jlptEnriching={jlptEnriching}
+              operationScope={operationScope}
               onSetNickname={setNickname}
               onSetToken={setToken}
               onAddAccount={addAccount}
@@ -384,6 +411,10 @@ function AdminWorkspacePageContent({
               onEnrichJlptKanji={() => {
                 void enrichJlptKanji();
               }}
+            />
+            <AdminJlptCatalogPanel
+              sessionAuthorized={sessionAuthorized}
+              checkingSession={checkingSession}
             />
           </section>
         ) : null}

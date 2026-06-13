@@ -26,6 +26,7 @@ export default function AdminControlRoom({
   loading,
   jlptRefreshing,
   jlptEnriching,
+  operationScope,
   onSetNickname,
   onSetToken,
   onAddAccount,
@@ -155,6 +156,23 @@ export default function AdminControlRoom({
             >
               {jlptEnriching ? "Enriching JLPT..." : "Enrich JLPT Data"}
             </button>
+          </div>
+
+          <div className="rounded-xl border border-line bg-surface px-3 py-3 text-xs text-foreground/70">
+            <p className="font-bold uppercase tracking-[0.08em] text-foreground/60">Action scope</p>
+            <p className="mt-1">
+              Save account: touches 1 account row (upsert/update), usually under 1 minute, non-destructive.
+            </p>
+            <p className="mt-1">
+              Refresh all stats: touches about {operationScope?.counts.accountsTotal ?? "-"} accounts, about {operationScope?.estimates.refreshAllMinutes ?? "-"} minute(s), non-destructive.
+            </p>
+            <p className="mt-1">
+              Refresh JLPT list: touches about {operationScope?.counts.jlptTotal ?? "-"} JLPT rows, about {operationScope?.estimates.jlptRefreshMinutes ?? "-"} minute(s), destructive and additive (can remove stale rows and add new rows).
+            </p>
+            <p className="mt-1">
+              Enrich JLPT data: touches up to {operationScope?.estimates.jlptEnrichBatchSize ?? "-"} rows per run, about 1 to 3 minute(s) per batch, additive updates only.
+              Remaining batches: {operationScope?.estimates.jlptEnrichRemainingBatches ?? "-"}.
+            </p>
           </div>
 
         </form>

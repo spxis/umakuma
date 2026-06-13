@@ -51,7 +51,7 @@ export default function AdminUsersPanel({
     const target = accounts.find((account) => account.id === accountId);
     const accepted = await confirmAction({
       title: "Refresh user",
-      description: `This calls WaniKani and updates cached stats for ${target?.nickname ?? "this user"}. Continue?`,
+      description: `Scope: 1 account (${target?.nickname ?? "this user"}). Time: usually under 1 minute. Risk: non-destructive stat refresh. Continue?`,
       confirmLabel: "Refresh user",
       cancelLabel: "Cancel",
       tone: "danger",
@@ -92,7 +92,7 @@ export default function AdminUsersPanel({
     const accepted = await confirmAction({
       title: "Set invite code",
       description:
-        `This generates and stores a new invite code for ${target?.nickname ?? "this user"}. Older code access may stop working. Continue?`,
+        `Scope: 1 account (${target?.nickname ?? "this user"}). Time: immediate. Risk: destructive replacement of previous invite access plus additive creation of a new code. Continue?`,
       confirmLabel: "Set invite code",
       cancelLabel: "Cancel",
       tone: "danger",
@@ -143,7 +143,7 @@ export default function AdminUsersPanel({
     const accepted = await confirmAction({
       title: "Reset invite code",
       description:
-        `This removes active invite access for ${target?.nickname ?? "this user"} until a new code is generated. Continue?`,
+        `Scope: 1 account (${target?.nickname ?? "this user"}). Time: immediate. Risk: destructive removal of current invite access until a new code is generated. Continue?`,
       confirmLabel: "Reset invite",
       cancelLabel: "Cancel",
       tone: "danger",

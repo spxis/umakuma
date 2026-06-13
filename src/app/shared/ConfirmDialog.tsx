@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect } from "react";
+
 type ConfirmDialogProps = {
   open: boolean;
   title: string;
@@ -21,6 +25,24 @@ export default function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape" && !busy) {
+        event.preventDefault();
+        onCancel();
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [busy, onCancel, open]);
+
   if (!open) {
     return null;
   }
@@ -40,7 +62,7 @@ export default function ConfirmDialog({
       >
         <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/60">Confirm action</p>
         <h3 className="mt-1 text-xl font-bold text-foreground">{title}</h3>
-        <p className="mt-2 text-sm text-foreground/80">{description}</p>
+        <p className="mt-2 whitespace-pre-line text-sm text-foreground/80">{description}</p>
 
         <div className="mt-5 flex items-center justify-end gap-2">
           <button

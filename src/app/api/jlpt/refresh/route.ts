@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { isAuthorizedAdmin } from "@/lib/admin";
+import { clearJlptCatalogCache } from "@/lib/jlptCatalogCache";
 import { prisma } from "@/lib/prisma";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 
@@ -71,6 +72,8 @@ try {
                     },
                   },
                 });
+
+                clearJlptCatalogCache();
 
                 return NextResponse.json({ ok: true, count: records.length });
               } catch (error) {

@@ -278,7 +278,7 @@ export default function AdminReadingEntriesClient({
   async function deleteEntry(entry: AdminReadingEntry) {
     const confirmed = await confirmAction({
       title: "Delete check-in",
-      description: `Delete this check-in for ${entry.nickname} on ${entry.signoffDatePst}?`,
+      description: `Scope: 1 check-in for ${entry.nickname} on ${entry.signoffDatePst}. Time: immediate. Risk: destructive delete and cannot be undone from this screen. Continue?`,
       confirmLabel: "Delete",
       tone: "danger",
     });

@@ -170,6 +170,15 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
     return `Missing levels: ${missing}, extra levels: ${extra}, duplicate rows: ${duplicates}.`;
   }, [status]);
 
+  const fullSyncEstimateMinutes = useMemo(() => {
+    const totalSubjects = status?.counts.totalSubjects ?? 0;
+    if (totalSubjects <= 0) {
+      return null;
+    }
+
+    return Math.max(2, Math.ceil(totalSubjects / 500));
+  }, [status?.counts.totalSubjects]);
+
   async function triggerSync(runType: "full" | "incremental", mode: "dry-run" | "apply") {
     if (!canRunSync) {
       return;
@@ -180,8 +189,8 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
         title: runType === "full" ? "Run full catalog sync" : "Run incremental catalog sync",
         description:
           runType === "full"
-            ? "This fetches the full WaniKani subject catalog and writes catalog rows in bulk. It can take longer and update many records. Continue?"
-            : "This fetches recent subject changes and writes catalog updates using the stored cursor. Continue?",
+            ? `Scope: up to ${status?.counts.totalSubjects ?? "-"} subjects across ${status?.counts.levels ?? "-"} levels. Time: about ${fullSyncEstimateMinutes ?? "-"} minute(s). Risk: non-destructive additive upsert/update. This fetches the full catalog and writes rows in bulk. Continue?`
+            : "Scope: recent changed subjects only. Time: about 1 minute. Risk: non-destructive additive upsert/update. This fetches recent changes and writes updates using the stored cursor. Continue?",
         confirmLabel: "Run sync",
         cancelLabel: "Cancel",
         tone: "danger",
@@ -318,6 +327,10 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
             Refresh status
           </button>
         </div>
+
+        <p className="mt-2 text-xs text-foreground/70">
+          Scope guide: incremental apply updates recent changes only (about 1 minute). Full apply may touch up to {status?.counts.totalSubjects ?? "-"} rows and usually takes about {fullSyncEstimateMinutes ?? "-"} minute(s). Both are non-destructive upsert/update flows.
+        </p>
 
         <div className="mt-3 grid gap-2 text-xs text-foreground/70 sm:grid-cols-2">
           <p>Last full sync: {formatDateTime(status?.state.lastFullSyncCompletedAt ?? null)}</p>

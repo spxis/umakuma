@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
+import { clearJlptCatalogCache } from "@/lib/jlptCatalogCache";
 import { prisma } from "@/lib/prisma";
 
 type KanjiApiPayload = {
@@ -204,6 +205,10 @@ export async function POST(request: Request) {
     }
 
     const remaining = await prisma.jlptKanji.count({ where });
+
+    if (updated > 0) {
+      clearJlptCatalogCache();
+    }
 
     return NextResponse.json({
       ok: true,

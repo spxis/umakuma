@@ -1,5 +1,7 @@
 import type { FormEvent } from "react";
 
+import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types";
+
 export type AdminControlRoomProps = {
   nickname: string;
   token: string;
@@ -13,6 +15,7 @@ export type AdminControlRoomProps = {
   loading: boolean;
   jlptRefreshing: boolean;
   jlptEnriching: boolean;
+  operationScope: AdminOperationsScopeResponse | null;
   onSetNickname: (value: string) => void;
   onSetToken: (value: string) => void;
   onAddAccount: (event: FormEvent<HTMLFormElement>) => void;
