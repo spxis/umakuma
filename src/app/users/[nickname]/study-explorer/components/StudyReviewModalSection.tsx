@@ -301,6 +301,7 @@ export default function StudyReviewModalSection({
                       {statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}
                     </span>
                   ) : null}
+                  {canToggleEnglish ? <button type="button" onClick={(event) => { event.preventDefault(); event.stopPropagation(); onToggleShowEnglish(); }} className="rounded-full border border-line bg-surface p-1 text-foreground/75 hover:bg-surface-muted" title={showEnglish ? "Hide English" : "Show English"} aria-label={showEnglish ? "Hide English" : "Show English"}><svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" /><circle cx="12" cy="12" r="3" /></svg></button> : null}
                   <button
                     type="button"
                     onClick={(event) => {
