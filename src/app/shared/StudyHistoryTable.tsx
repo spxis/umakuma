@@ -10,9 +10,11 @@ import type { HistorySrsBucket, StudyHistoryPayload } from "@/app/shared/studyHi
 import { srsBucketBadgeClass, srsBucketLabel } from "@/app/shared/studyHistoryUi";
 import { typeGlyphBoxClass } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+import StudyHistoryHeader from "@/app/shared/StudyHistoryHeader";
+
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 type SortDir = "asc" | "desc";
-
 type Props = {
   endpoint: string;
   showUserColumn?: boolean;
@@ -20,14 +22,12 @@ type Props = {
   collapsible?: boolean;
   persistenceKey?: string;
 };
-
 const EMPTY_RESULT_COUNTS = { all: 0, correct: 0, wrong: 0, skipped: 0 };
 const EMPTY_SRS_BUCKET_COUNTS = { apprentice: 0, guru: 0, master: 0, enlightened: 0, burned: 0, locked: 0, unknown: 0 };
 
 function sortIcon(activeSortBy: SortBy, sortBy: SortBy, sortDir: SortDir): string {
   return activeSortBy === sortBy ? (sortDir === "desc" ? "v" : "^") : "<>";
 }
-
 function formatHistoryDateCompact(value: string): string {
   const date = new Date(value);
   if (!Number.isFinite(date.getTime())) {
@@ -44,7 +44,6 @@ function formatHistoryDateCompact(value: string): string {
   }).format(date).toLowerCase();
   return `${monthDay.toUpperCase()} (${time})`;
 }
-
 function resultIcon(result: string): { icon: string; className: string; label: string } {
   if (result === "correct") {
     return { icon: "✓", className: "text-emerald-600", label: "Correct" };
@@ -83,6 +82,7 @@ export default function StudyHistoryTable({
   const [levelFilter, setLevelFilter] = useState<number | "all">("all");
   const [srsBucketFilter, setSrsBucketFilter] = useState<HistorySrsBucket | "all">("all");
   const [selectedAttemptId, setSelectedAttemptId] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = usePersistedBoolean(`wr:study-history:filters-open:${endpoint}`, { defaultValue: true });
 
   const query = useMemo(() => {
     const params = new URLSearchParams({
@@ -164,20 +164,18 @@ export default function StudyHistoryTable({
   const typeColor: Record<string, string> = { radical: "bg-sky-100 text-sky-700", kanji: "bg-pink-100 text-pink-700", vocabulary: "bg-violet-100 text-violet-700" };
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-4 shadow-sm sm:p-5">
-      {collapsible ? (
-        <button
-          type="button"
-          onClick={() => setExpanded((value) => !value)}
-          className="text-base font-bold uppercase tracking-[0.1em] text-foreground sm:text-lg"
-        >
-          {heading} {expanded ? "▲" : "▼"}
-        </button>
-      ) : (
-        <h2 className="text-base font-bold uppercase tracking-[0.1em] text-foreground sm:text-lg">{heading}</h2>
-      )}
+      <StudyHistoryHeader
+        heading={heading}
+        collapsible={collapsible}
+        expanded={expanded}
+        onToggleExpanded={() => setExpanded((value) => !value)}
+        filtersOpen={filtersOpen}
+        onToggleFilters={() => setFiltersOpen((value) => !value)}
+      />
       {!expanded ? null : (
         <>
           <div className="mt-3">
+            {filtersOpen ? (
             <StudyHistoryFilters
               resultFilter={resultFilter}
               setResultFilter={handleSetResultFilter}
@@ -193,6 +191,7 @@ export default function StudyHistoryTable({
               srsBucketAllCount={data?.srsBucketAllCount ?? 0}
               srsBucketCounts={srsBucketCounts}
             />
+            ) : null}
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3 text-sm sm:text-base">
             <span>Total: <strong>{totalAttempts}</strong></span>
