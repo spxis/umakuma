@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 
 import type { NewsArticle, NewsArticleBlock } from "@/lib/news/newsTypes";
 
+import SegmentedControl from "../shared/SegmentedControl";
 import NewsCacheBadge from "./NewsCacheBadge";
 import NewsKanjiOverviewPanel from "./NewsKanjiOverviewPanel";
 import { countUniqueArticleKanji } from "./NewsKanjiOverviewPanel";
@@ -60,6 +61,14 @@ export default function NewsArticleView({
 
   return (
     <article className="space-y-6">
+      <ArticleTabs
+        activeTab={activeTab}
+        onChange={onTabChangeAction}
+        kanjiCount={kanjiCount}
+        historyCount={historyCount}
+        statsCount={statsCount}
+      />
+
       <header className="space-y-2 border-b border-line pb-4">
         <div className="flex flex-wrap items-center gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-accent">
@@ -83,14 +92,6 @@ export default function NewsArticleView({
       </header>
 
       <NewsReadingControls prefs={prefs} onChange={updatePrefs} userWkLevel={userWkLevel} />
-
-      <ArticleTabs
-        activeTab={activeTab}
-        onChange={onTabChangeAction}
-        kanjiCount={kanjiCount}
-        historyCount={historyCount}
-        statsCount={statsCount}
-      />
 
       {activeTab === "article" ? (
         <section className="relative overflow-hidden rounded-2xl border border-accent/25 bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(245,249,255,0.9)_100%)] px-4 py-5 shadow-[0_18px_50px_rgba(11,40,90,0.14)] sm:px-6 sm:py-7">
@@ -167,38 +168,19 @@ function ArticleTabs({
   statsCount: number;
 }) {
   return (
-    <div className="inline-flex flex-wrap overflow-hidden rounded-full border border-line bg-surface-muted text-[11px] font-bold uppercase tracking-[0.12em]">
-      <button
-        type="button"
-        onClick={() => onChange("article")}
-        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === "article" ? "bg-accent text-surface" : "text-foreground/70"}`}
-      >
-        <span>Article</span>
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange(KANJI_TAB)}
-        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === KANJI_TAB ? "bg-accent text-surface" : "text-foreground/70"}`}
-      >
-        <span>Kanji</span>
-        <span className="text-[10px] opacity-85">{kanjiCount}</span>
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange("history")}
-        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === "history" ? "bg-accent text-surface" : "text-foreground/70"}`}
-      >
-        <span>History</span>
-        <span className="text-[10px] opacity-85">{historyCount}</span>
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange("stats")}
-        className={`inline-flex items-center gap-1 px-3 py-1 ${activeTab === "stats" ? "bg-accent text-surface" : "text-foreground/70"}`}
-      >
-        <span>Stats</span>
-        <span className="text-[10px] opacity-85">{statsCount}</span>
-      </button>
+    <div className="flex justify-end">
+      <SegmentedControl<ArticlePanelTab>
+        ariaLabel="Article view tabs"
+        value={activeTab}
+        onChange={onChange}
+        size="sm"
+        options={[
+          { value: "article", label: "Article" },
+          { value: KANJI_TAB, label: `Kanji ${kanjiCount}` },
+          { value: "history", label: `History ${historyCount}` },
+          { value: "stats", label: `Stats ${statsCount}` },
+        ]}
+      />
     </div>
   );
 }
