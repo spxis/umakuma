@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 import AppTopMenuRow from "../shared/AppTopMenuRow";
+import SegmentedControl from "../shared/SegmentedControl";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import AdminCampaignManager from "./AdminCampaignManager";
 import AdminControlRoom from "./AdminControlRoom";
@@ -20,6 +22,7 @@ import {
   ADMIN_WORKSPACE_COOKIE_KEY,
   ADMIN_WORKSPACE_COOKIE_MAX_AGE_SECONDS,
   type AdminWorkspaceTab,
+  routeForAdminWorkspaceTab,
 } from "./AdminWorkspaceTabs";
 
 type AdminWorkspacePageProps = {
@@ -53,6 +56,7 @@ function AdminWorkspacePageContent({
   initialSession,
   initialCampaigns = [],
 }: AdminWorkspacePageProps) {
+  const router = useRouter();
   const { showToast, confirmAction } = useAdminFeedback();
   const [nickname, setNickname] = useState("");
   const [token, setToken] = useState("");
@@ -360,8 +364,27 @@ function AdminWorkspacePageContent({
           className="mb-2"
         />
 
+        <section className="w-full overflow-x-auto lg:flex lg:justify-end">
+          <SegmentedControl<AdminWorkspaceTab>
+            ariaLabel="Admin workspace tabs"
+            asTabs
+            size="sm"
+            value={activeTab}
+            onChange={(nextTab) => {
+              router.push(routeForAdminWorkspaceTab(nextTab));
+            }}
+            options={[
+              { value: "operations", label: "Account operations" },
+              { value: "data", label: "Data catalogs" },
+              { value: "campaigns", label: "Campaign workspace" },
+              { value: "history", label: "Submission history" },
+              { value: "users", label: "Users" },
+              { value: "readingEntries", label: "Reading check-ins" },
+            ]}
+          />
+        </section>
+
         <AdminWorkspaceHeader
-          activeTab={activeTab}
           checkingSession={checkingSession}
           sessionAuthorized={sessionAuthorized}
           signedIn={signedIn}

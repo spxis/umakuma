@@ -1,12 +1,9 @@
-import Link from "next/link";
 import Image from "next/image";
 
 import adminBanner from "@/images/umakuma-hero2-transparent.png";
 import AdminStatusBadge from "./AdminStatusBadge";
-import { type AdminWorkspaceTab, routeForAdminWorkspaceTab } from "./AdminWorkspaceTabs";
 
 type AdminWorkspaceHeaderProps = {
-  activeTab: AdminWorkspaceTab;
   checkingSession: boolean;
   sessionAuthorized: boolean;
   signedIn: boolean;
@@ -15,16 +12,7 @@ type AdminWorkspaceHeaderProps = {
   userName: string | null;
 };
 
-function tabClassName(isActive: boolean): string {
-  return `inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${
-    isActive
-      ? "border-accent bg-accent text-white"
-      : "border-line bg-surface text-slate-700 hover:bg-surface-muted"
-  }`;
-}
-
 export default function AdminWorkspaceHeader({
-  activeTab,
   checkingSession,
   sessionAuthorized,
   signedIn,
@@ -63,27 +51,6 @@ export default function AdminWorkspaceHeader({
             {signedIn ? userEmail ?? userName ?? "Signed in" : "Not signed in"}
           </span>
         </div>
-      </div>
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        <Link href={routeForAdminWorkspaceTab("operations")} className={tabClassName(activeTab === "operations")}>
-          Account operations
-        </Link>
-        <Link href={routeForAdminWorkspaceTab("data")} className={tabClassName(activeTab === "data")}>
-          Data catalogs
-        </Link>
-        <Link href={routeForAdminWorkspaceTab("campaigns")} className={tabClassName(activeTab === "campaigns")}>
-          Campaign workspace
-        </Link>
-        <Link href={routeForAdminWorkspaceTab("history")} className={tabClassName(activeTab === "history")}>
-          Submission history
-        </Link>
-        <Link href={routeForAdminWorkspaceTab("users")} className={tabClassName(activeTab === "users")}>
-          Users
-        </Link>
-        <Link href={routeForAdminWorkspaceTab("readingEntries")} className={tabClassName(activeTab === "readingEntries")}>
-          Reading check-ins
-        </Link>
       </div>
     </section>
   );
