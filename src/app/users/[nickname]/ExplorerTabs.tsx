@@ -39,6 +39,7 @@ export default function ExplorerTabs({
   maxLevel,
   accountPendingReviews,
   levelItemCountsByLevel,
+  initialTab = "study",
   initialQueueMode = null,
   initialStudyMode = null,
   initialSnapshot,
@@ -47,28 +48,14 @@ export default function ExplorerTabs({
   userKanjiItems,
   initialStudyFilters,
 }: Props) {
-  const resolveExplorerDashboardTab = (): "learn" | "wk" | "jlpt" => {
-    if (typeof window === "undefined") {
-      return "learn";
-    }
-
-    const segment = window.location.pathname.split("/").filter(Boolean)[2] ?? "";
-    if (segment === "wk" || segment === "wk-explorer" || segment === "library-explorer") {
-      return "wk";
-    }
-
-    if (segment === "jlpt" || segment === "jlpt-explorer") {
-      return "jlpt";
-    }
-
-    return "learn";
-  };
   const previousPageKeyRef = useRef<string | null>(null);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const customLibraryNameStorageKey = `wr:study-custom-library-name:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
   const isHydrated = typeof window !== "undefined";
-  const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(resolveExplorerDashboardTab);
+  const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(
+    initialTab === "level" ? "wk" : initialTab === "jlpt" ? "jlpt" : "learn",
+  );
   const [studyMode, setStudyMode] = useState(() => (typeof initialStudyMode === "boolean" ? initialStudyMode : true));
   const forcedTab = dashboardTab === "wk"
     ? "level"

@@ -1,6 +1,6 @@
 import Image, { type StaticImageData } from "next/image";
 
-import adminBanner from "@/images/umakuma-banner2.png";
+import adminBanner from "@/images/umakuma-hero2.png";
 import leaderboardHero from "@/images/umakuma-hero1.png";
 import userBanner from "@/images/umakuma-banner1.png";
 
