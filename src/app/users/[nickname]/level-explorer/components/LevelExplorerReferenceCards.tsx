@@ -94,10 +94,6 @@ export function RelatedReferenceCards({
             return pronunciation ? `${reading} / ${pronunciation}` : reading;
           }
 
-          if (!showEnglish || !meaning) {
-            return null;
-          }
-
           return meaning;
         })();
         const key = entry.fallbackKey ?? `${entry.subjectId}-${entry.label}-${index}`;
