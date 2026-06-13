@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
 import AppTopMenuRow from "../shared/AppTopMenuRow";
+import UmaKumaPageBanner from "../shared/UmaKumaPageBanner";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import AdminCampaignManager from "./AdminCampaignManager";
 import AdminControlRoom from "./AdminControlRoom";
@@ -235,6 +236,7 @@ function AdminWorkspacePageContent({
           showAdminActions={true}
           className="mb-2"
         />
+        <UmaKumaPageBanner variant="admin" className="mb-3" />
 
         <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm sm:p-6">
           <div className="flex flex-wrap items-center gap-2">

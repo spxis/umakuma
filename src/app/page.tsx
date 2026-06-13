@@ -16,6 +16,7 @@ import {
 import AppTopMenuRow from "./shared/AppTopMenuRow";
 import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
+import UmaKumaPageBanner from "./shared/UmaKumaPageBanner";
 export const dynamic = "force-dynamic";
 type ReadingChallengeMemberDelegate = {
   findMany: (args: {
@@ -336,6 +337,7 @@ export default async function Home() {
           showAdminActions={canViewAllUserPages}
           className="mb-2"
         />
+        <UmaKumaPageBanner variant="leaderboard" className="mb-3" />
         <section className="animate-enter rounded-2xl border border-line/80 bg-surface/85 p-5 shadow-[0_24px_80px_rgba(15,111,255,0.17)] backdrop-blur sm:p-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
