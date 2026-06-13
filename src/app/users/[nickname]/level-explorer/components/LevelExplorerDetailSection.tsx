@@ -93,7 +93,7 @@ export default function LevelExplorerDetailSection({
   onJumpToKanji,
   onResetToLessons = null,
 }: Props) {
-  const { fontFamily } = useGlyphFontPreference();
+  const { fontFamily, toggle: toggleGlyphFont } = useGlyphFontPreference();
   const lockMeaningToggleToTitle = titleMeaningToggleOnly && !studyMode;
   const showEnglishForGlyphSubtitle = lockMeaningToggleToTitle ? false : showEnglish;
   const showEnglishForReadings = lockMeaningToggleToTitle ? true : showEnglish;
@@ -164,6 +164,20 @@ export default function LevelExplorerDetailSection({
           )}
         </button>
       ) : null}
+      <button
+        type="button"
+        onClick={toggleGlyphFont}
+        className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted"
+        title="Font"
+        aria-label="Font"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 20h16" />
+          <path d="M8 20V6a2 2 0 0 1 2-2h4" />
+          <path d="M10 12h8" />
+          <path d="M14 4v16" />
+        </svg>
+      </button>
     </div>
   );
 

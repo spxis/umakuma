@@ -19,6 +19,7 @@ import {
 import type { LevelItem } from "../../explorerTypes";
 import LevelExplorerDetailSection from "../../level-explorer/components/LevelExplorerDetailSection";
 import {
+  ReadingWithPronunciation,
   glyphTextSizeClass,
   jlptLevelPillClass,
   shortSubjectTypeLabel,
@@ -145,6 +146,8 @@ export default function StudyReviewModalSection({
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
   const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
   const { fontFamily: glyphFontFamily, toggle: toggleGlyphFont } = useGlyphFontPreference();
+  const flashReadingHint = primaryReadingHiragana !== "-" ? primaryReadingHiragana : secondaryReadingValue;
+  const showFlashReadingHint = showEnglish && flashReadingHint.trim().length > 0 && flashReadingHint !== "-";
 
   const sanitizedRelatedItems = (items: RelatedReference[] | undefined) =>
     (items ?? []).map((item) => ({ ...item, wkLevel: null }));
@@ -347,6 +350,11 @@ export default function StudyReviewModalSection({
                 <p style={{ fontFamily: glyphFontFamily }} className="px-2 text-center text-[clamp(2.8rem,10.4vw,5.4rem)] font-black leading-none text-current sm:text-[clamp(3.6rem,8vw,7rem)]">
                   {selectedItem.characters}
                 </p>
+                {showFlashReadingHint ? (
+                  <p className="mt-2 px-2 text-center text-xl font-semibold leading-tight text-foreground/80 sm:text-2xl">
+                    <ReadingWithPronunciation reading={flashReadingHint} />
+                  </p>
+                ) : null}
 
                 {detailsRevealed ? (
                   <div className="absolute inset-x-2 bottom-2 grid gap-2 sm:inset-x-3 sm:bottom-3">

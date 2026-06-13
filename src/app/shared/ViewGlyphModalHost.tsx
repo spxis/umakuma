@@ -245,18 +245,20 @@ export default function ViewGlyphModalHost() {
   return (
     <div className="fixed inset-0 z-[90] bg-[rgba(6,12,26,0.56)] p-3 backdrop-blur-[1px] sm:p-6">
       <div className="mx-auto flex h-[90dvh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]">
-        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 border-b border-line bg-surface-muted px-3 py-2 sm:px-4">
-          <button
-            type="button"
-            onClick={closeModal}
-            className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]"
-          >
-            Close
-          </button>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-line bg-surface-muted px-3 py-2 sm:px-4">
+          <div className="flex min-w-0 items-center justify-start">
+            <button
+              type="button"
+              onClick={closeModal}
+              className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]"
+            >
+              Close
+            </button>
+          </div>
           <p className="truncate text-center text-xs font-black uppercase tracking-[0.1em] text-foreground/80 sm:text-sm">
             {customTitle ?? viewerTitle(item)}
           </p>
-          <div className="inline-flex items-center gap-1">
+          <div className="inline-flex min-w-0 items-center justify-end gap-1">
             <button
               type="button"
               onClick={() => setIndex((prev) => Math.max(0, prev - 1))}
