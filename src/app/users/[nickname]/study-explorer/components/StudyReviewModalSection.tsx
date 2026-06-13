@@ -355,22 +355,6 @@ export default function StudyReviewModalSection({
                   </p>
                 ) : null}
 
-                {detailsRevealed ? (
-                  <div className="absolute inset-x-2 bottom-2 grid gap-2 sm:inset-x-3 sm:bottom-3">
-                    <div className="rounded-xl border border-line bg-surface-muted/95 px-3 py-2.5">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
-                      <p className="mt-1 line-clamp-2 text-2xl font-black leading-tight text-foreground sm:text-3xl">
-                        {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
-                      </p>
-                      {primaryReadingKatakana !== "-" ? <p className="line-clamp-1 text-sm font-semibold text-foreground/75 sm:text-base">{primaryReadingKatakana}</p> : null}
-                    </div>
-                    <div className="rounded-xl border border-line bg-surface-muted/95 px-3 py-2.5">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</p>
-                      <p className="mt-1 line-clamp-2 text-[2rem] font-black leading-tight text-foreground sm:text-[2.2rem]">{allMeanings[0] ?? selectedItem.characters}</p>
-                      {allMeanings.length > 1 ? <p className="line-clamp-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm">{allMeanings.slice(1).join(" • ")}</p> : null}
-                    </div>
-                  </div>
-                ) : null}
               </div>
 
               <div className="relative h-full rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
@@ -393,26 +377,58 @@ export default function StudyReviewModalSection({
                     </div>
                   </div>
                 ) : (
-                  <div className="grid h-full grid-rows-2 gap-2">
-                    <div className="grid grid-cols-2 gap-2">
-                      <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.wrong)} disabled={isSubmittingSelected} aria-keyshortcuts="1" title="Wrong (Key: 1)" className="h-full w-full cursor-pointer rounded-2xl border-2 border-red-300 bg-red-50 px-3 py-2 text-sm font-black uppercase tracking-[0.1em] text-red-800 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-4">
+                  <div className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)_auto] gap-2">
+                    <div className="grid min-h-0 gap-2 sm:grid-cols-2">
+                      <div className="rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
+                        <p className="mt-1 line-clamp-2 text-3xl font-black leading-tight text-foreground sm:text-4xl">
+                          {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
+                        </p>
+                        {primaryReadingKatakana !== "-" ? (
+                          <p className="line-clamp-1 text-sm font-semibold text-foreground/75 sm:text-base">{primaryReadingKatakana}</p>
+                        ) : null}
+                      </div>
+                      <div className="rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</p>
+                        <p className="mt-1 line-clamp-2 text-3xl font-black leading-tight text-foreground sm:text-4xl">{allMeanings[0] ?? selectedItem.characters}</p>
+                        {allMeanings.length > 1 ? (
+                          <p className="line-clamp-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm">{allMeanings.slice(1).join(" • ")}</p>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.wrong)}
+                        disabled={isSubmittingSelected}
+                        aria-keyshortcuts="1"
+                        title="Wrong (Key: 1)"
+                        className="min-h-20 w-full cursor-pointer rounded-2xl border-2 border-red-300 bg-red-50 px-2 py-2 text-xs font-black uppercase tracking-[0.1em] text-red-800 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-24 sm:px-3 sm:text-sm"
+                      >
                         <span className="block">{STUDY_REVIEW_MODAL_SECTION_TEXT.wrong}</span>
-                        <span className="mt-1 block text-xl leading-none">{wrong}</span>
+                        <span className="mt-1 block text-3xl leading-none sm:text-[2rem]">{wrong}</span>
                       </button>
-                      <button type="button" onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.correct)} disabled={isSubmittingSelected} aria-keyshortcuts="2" title="Correct (Key: 2)" className="h-full w-full cursor-pointer rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-3 py-2 text-sm font-black uppercase tracking-[0.1em] text-emerald-800 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-4">
+                      <button
+                        type="button"
+                        onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.correct)}
+                        disabled={isSubmittingSelected}
+                        aria-keyshortcuts="2"
+                        title="Correct (Key: 2)"
+                        className="min-h-20 w-full cursor-pointer rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-2 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-800 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-24 sm:px-3 sm:text-sm"
+                      >
                         <span className="block">{STUDY_REVIEW_MODAL_SECTION_TEXT.correct}</span>
-                        <span className="mt-1 block text-xl leading-none">{correct}</span>
+                        <span className="mt-1 block text-3xl leading-none sm:text-[2rem]">{correct}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onSkipCurrent}
+                        disabled={isSubmittingSelected}
+                        className="min-h-20 w-full cursor-pointer rounded-2xl border-2 border-amber-300 bg-amber-50 px-2 py-2 text-xs font-black uppercase tracking-[0.1em] text-amber-800 transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-24 sm:px-3 sm:text-sm"
+                      >
+                        <span className="block">{STUDY_REVIEW_MODAL_SECTION_TEXT.skipped}</span>
+                        <span className="mt-1 block text-3xl leading-none sm:text-[2rem]">{skipped}</span>
                       </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={onSkipCurrent}
-                      disabled={isSubmittingSelected}
-                      className="h-full w-full cursor-pointer rounded-2xl border-2 border-amber-300 bg-amber-50 px-3 py-2 text-sm font-black uppercase tracking-[0.1em] text-amber-800 transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-3"
-                    >
-                      <span className="block">{STUDY_REVIEW_MODAL_SECTION_TEXT.skipped}</span>
-                      <span className="mt-1 block text-xl leading-none">{skipped}</span>
-                    </button>
                   </div>
                 )}
 
