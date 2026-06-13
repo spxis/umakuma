@@ -7,7 +7,7 @@ import { fetchWaniKani } from "../src/lib/wanikani/http";
 import type { WaniKaniCollectionResponse } from "../src/lib/wanikani/types";
 
 const DEFAULT_SUBJECTS_PATH = "/subjects?types=radical,kanji,vocabulary&hidden=true";
-const SYNC_LOCK_MS = 45 * 60 * 1000;
+const SYNC_LOCK_MS = 30 * 60 * 1000;
 const GLOBAL_STATE_ID = "global";
 const DEFAULT_ACCOUNT_MATCH = "john";
 
@@ -17,6 +17,7 @@ type Args = {
   maxPages: number | null;
   tokenFromArg: string | null;
   accountLike: string;
+  updatedAfterOverride: Date | null;
 };
 
 type SubjectUpsertRow = {
@@ -43,13 +44,16 @@ type SubjectUpsertRow = {
 
 type SyncProgressStats = {
   mode: "apply" | "dry-run";
+  syncType: "incremental";
   pagesProcessed: number;
   fetchedCount: number;
   upsertedCount: number;
   changedCount: number;
   skippedCount: number;
   parseErrorCount: number;
-  fullResumePath: string | null;
+  incrementalResumePath: string | null;
+  cursorDataUpdatedAt: string | null;
+  cursorSubjectId: number | null;
   updatedAt: string;
 };
 
@@ -76,12 +80,20 @@ function parseArgs(): Args {
   const rawMaxPages = maxPagesArg ? Number(maxPagesArg.replace("--max-pages=", "")) : NaN;
   const maxPages = Number.isFinite(rawMaxPages) && rawMaxPages > 0 ? Math.floor(rawMaxPages) : null;
 
+  const updatedAfterArg = args.find((arg) => arg.startsWith("--updated-after="));
+  const updatedAfterRaw = updatedAfterArg ? updatedAfterArg.replace("--updated-after=", "").trim() : "";
+  const updatedAfterParsed = updatedAfterRaw ? new Date(updatedAfterRaw) : null;
+  if (updatedAfterRaw && (!updatedAfterParsed || Number.isNaN(updatedAfterParsed.getTime()))) {
+    throw new Error("Invalid --updated-after value. Use an ISO timestamp.");
+  }
+
   return {
     apply,
     resume,
     maxPages,
     tokenFromArg,
     accountLike,
+    updatedAfterOverride: updatedAfterParsed,
   };
 }
 
@@ -104,7 +116,7 @@ function parseResumePath(input: unknown): string | null {
   }
 
   const row = input as Record<string, unknown>;
-  return typeof row.fullResumePath === "string" ? row.fullResumePath : null;
+  return typeof row.incrementalResumePath === "string" ? row.incrementalResumePath : null;
 }
 
 function toIntArray(input: unknown): number[] {
@@ -147,9 +159,7 @@ function parseSubjectRow(
     return null;
   }
 
-  const dataUpdatedAt =
-    toDate(row.data_updated_at ?? fallbackDataUpdatedAt) ??
-    new Date();
+  const dataUpdatedAt = toDate(row.data_updated_at ?? fallbackDataUpdatedAt) ?? new Date();
 
   return {
     wkSubjectId: row.id,
@@ -216,10 +226,41 @@ async function resolveToken(args: Args): Promise<ResolvedToken | null> {
   };
 }
 
-async function bootstrapWkCatalog() {
+function updateCursor(
+  current: { dataUpdatedAt: Date | null; subjectId: number | null },
+  candidate: { dataUpdatedAt: Date; subjectId: number },
+): { dataUpdatedAt: Date; subjectId: number } {
+  const currentDate = current.dataUpdatedAt;
+  const currentId = current.subjectId;
+
+  if (!currentDate) {
+    return { dataUpdatedAt: candidate.dataUpdatedAt, subjectId: candidate.subjectId };
+  }
+
+  if (candidate.dataUpdatedAt.getTime() > currentDate.getTime()) {
+    return { dataUpdatedAt: candidate.dataUpdatedAt, subjectId: candidate.subjectId };
+  }
+
+  if (
+    candidate.dataUpdatedAt.getTime() === currentDate.getTime() &&
+    (currentId === null || candidate.subjectId > currentId)
+  ) {
+    return { dataUpdatedAt: candidate.dataUpdatedAt, subjectId: candidate.subjectId };
+  }
+
+  return {
+    dataUpdatedAt: currentDate,
+    subjectId: currentId ?? candidate.subjectId,
+  };
+}
+
+function buildUpdatedAfterPath(updatedAfter: Date): string {
+  return `${DEFAULT_SUBJECTS_PATH}&updated_after=${encodeURIComponent(updatedAfter.toISOString())}`;
+}
+
+async function syncWkCatalogIncremental() {
   const args = parseArgs();
   const tokenResult = await resolveToken(args);
-
   if (!tokenResult) {
     throw new Error(
       `Missing token. Set WK_CATALOG_API_TOKEN/WANIKANI_API_TOKEN, pass --token, or ensure a matching account exists for --account-like=${args.accountLike}.`,
@@ -227,12 +268,6 @@ async function bootstrapWkCatalog() {
   }
 
   const mode = args.apply ? "apply" : "dry-run";
-  const maxPages = args.maxPages ?? (args.apply ? null : 1);
-
-  console.log(`Mode: ${mode}`);
-  console.log(`Token source: ${tokenResult.source}`);
-  console.log(`Resume enabled: ${args.resume ? "yes" : "no"}`);
-  console.log(`Max pages: ${maxPages ?? "all"}`);
 
   let claimedLock = false;
   let runId: string | null = null;
@@ -247,14 +282,35 @@ async function bootstrapWkCatalog() {
 
   const startedAtMs = Date.now();
 
-  let nextPath: string | null = DEFAULT_SUBJECTS_PATH;
-  if (args.apply) {
-    const state = await prisma.wkCatalogSyncState.upsert({
-      where: { id: GLOBAL_STATE_ID },
-      create: { id: GLOBAL_STATE_ID },
-      update: {},
-    });
+  const state = await prisma.wkCatalogSyncState.upsert({
+    where: { id: GLOBAL_STATE_ID },
+    create: { id: GLOBAL_STATE_ID },
+    update: {},
+  });
 
+  let nextPath: string | null = null;
+  const resumePath = args.resume ? parseResumePath(state.lastRunStats) : null;
+  if (resumePath) {
+    nextPath = resumePath;
+  } else {
+    const initialCursor = args.updatedAfterOverride ?? state.lastCursorDataUpdatedAt;
+    if (!initialCursor) {
+      throw new Error(
+        "No incremental cursor found. Run full bootstrap with --apply first or pass --updated-after=<ISO timestamp>.",
+      );
+    }
+
+    nextPath = buildUpdatedAfterPath(initialCursor);
+    cursorDataUpdatedAt = initialCursor;
+    cursorSubjectId = state.lastCursorSubjectId;
+  }
+
+  console.log(`Mode: ${mode}`);
+  console.log(`Token source: ${tokenResult.source}`);
+  console.log(`Resume enabled: ${args.resume ? "yes" : "no"}`);
+  console.log(`Max pages: ${args.maxPages ?? "all"}`);
+
+  if (args.apply) {
     const claim = await prisma.wkCatalogSyncState.updateMany({
       where: {
         id: GLOBAL_STATE_ID,
@@ -269,7 +325,7 @@ async function bootstrapWkCatalog() {
         syncLockUntil: nowPlus(SYNC_LOCK_MS),
         lastStatus: "running",
         lastError: null,
-        lastFullSyncStartedAt: new Date(),
+        lastIncrementalSyncStartedAt: new Date(),
       },
     });
 
@@ -279,23 +335,15 @@ async function bootstrapWkCatalog() {
 
     claimedLock = true;
 
-    const resumePath = args.resume ? parseResumePath(state.lastRunStats) : null;
-    if (resumePath) {
-      nextPath = resumePath;
-      console.log(`Resuming from saved cursor path: ${resumePath}`);
-    }
-
-    cursorDataUpdatedAt = state.lastCursorDataUpdatedAt;
-    cursorSubjectId = state.lastCursorSubjectId;
-
     const run = await prisma.wkCatalogSyncRun.create({
       data: {
-        runType: "full",
+        runType: "incremental",
         status: "running",
         cursorFromDataUpdatedAt: cursorDataUpdatedAt,
         cursorFromSubjectId: cursorSubjectId,
         stats: {
           mode,
+          syncType: "incremental",
           resumePath,
         } as Prisma.InputJsonValue,
       },
@@ -307,7 +355,7 @@ async function bootstrapWkCatalog() {
 
   try {
     while (nextPath) {
-      if (maxPages && pagesProcessed >= maxPages) {
+      if (args.maxPages && pagesProcessed >= args.maxPages) {
         break;
       }
 
@@ -332,23 +380,28 @@ async function bootstrapWkCatalog() {
       }
 
       if (normalizedRows.length > 0) {
-        const existingRows = args.apply
-          ? await prisma.wkSubjectCatalog.findMany({
-              where: {
-                wkSubjectId: {
-                  in: normalizedRows.map((row) => row.wkSubjectId),
-                },
-              },
-              select: {
-                wkSubjectId: true,
-                dataUpdatedAt: true,
-              },
-            })
-          : [];
+        const existingRows = await prisma.wkSubjectCatalog.findMany({
+          where: {
+            wkSubjectId: {
+              in: normalizedRows.map((row) => row.wkSubjectId),
+            },
+          },
+          select: {
+            wkSubjectId: true,
+            dataUpdatedAt: true,
+          },
+        });
 
         const existingById = new Map(existingRows.map((row) => [row.wkSubjectId, row.dataUpdatedAt]));
 
         for (const row of normalizedRows) {
+          const nextCursor = updateCursor(
+            { dataUpdatedAt: cursorDataUpdatedAt, subjectId: cursorSubjectId },
+            { dataUpdatedAt: row.dataUpdatedAt, subjectId: row.wkSubjectId },
+          );
+          cursorDataUpdatedAt = nextCursor.dataUpdatedAt;
+          cursorSubjectId = nextCursor.subjectId;
+
           const existingUpdatedAt = existingById.get(row.wkSubjectId);
           const unchanged =
             existingUpdatedAt !== undefined &&
@@ -411,12 +464,6 @@ async function bootstrapWkCatalog() {
             upsertedCount += 1;
           }
         }
-
-        const lastRow = normalizedRows[normalizedRows.length - 1];
-        if (lastRow) {
-          cursorDataUpdatedAt = lastRow.dataUpdatedAt;
-          cursorSubjectId = lastRow.wkSubjectId;
-        }
       }
 
       nextPath = extractNextPath(collection.pages.next_url);
@@ -428,13 +475,16 @@ async function bootstrapWkCatalog() {
       if (args.apply && runId) {
         const progressStats: SyncProgressStats = {
           mode,
+          syncType: "incremental",
           pagesProcessed,
           fetchedCount,
           upsertedCount,
           changedCount,
           skippedCount,
           parseErrorCount,
-          fullResumePath: nextPath,
+          incrementalResumePath: nextPath,
+          cursorDataUpdatedAt: cursorDataUpdatedAt ? cursorDataUpdatedAt.toISOString() : null,
+          cursorSubjectId,
           updatedAt: new Date().toISOString(),
         };
 
@@ -472,13 +522,16 @@ async function bootstrapWkCatalog() {
     if (args.apply && runId) {
       const finalStats: SyncProgressStats = {
         mode,
+        syncType: "incremental",
         pagesProcessed,
         fetchedCount,
         upsertedCount,
         changedCount,
         skippedCount,
         parseErrorCount,
-        fullResumePath: nextPath,
+        incrementalResumePath: nextPath,
+        cursorDataUpdatedAt: cursorDataUpdatedAt ? cursorDataUpdatedAt.toISOString() : null,
+        cursorSubjectId,
         updatedAt: new Date().toISOString(),
       };
 
@@ -505,7 +558,7 @@ async function bootstrapWkCatalog() {
             syncLockUntil: null,
             lastStatus: "ok",
             lastError: null,
-            lastFullSyncCompletedAt: completedAt,
+            lastIncrementalSyncCompletedAt: completedAt,
             lastCursorDataUpdatedAt: cursorDataUpdatedAt,
             lastCursorSubjectId: cursorSubjectId,
             lastRunStats: finalStats as Prisma.InputJsonValue,
@@ -515,7 +568,7 @@ async function bootstrapWkCatalog() {
     }
   } catch (error) {
     if (args.apply && runId) {
-      const message = error instanceof Error ? error.message.slice(0, 400) : "unknown-bootstrap-error";
+      const message = error instanceof Error ? error.message.slice(0, 400) : "unknown-incremental-error";
 
       await prisma.$transaction([
         prisma.wkCatalogSyncRun.update({
@@ -539,7 +592,7 @@ async function bootstrapWkCatalog() {
         }),
       ]);
     } else if (args.apply && claimedLock) {
-      const message = error instanceof Error ? error.message.slice(0, 400) : "unknown-bootstrap-error";
+      const message = error instanceof Error ? error.message.slice(0, 400) : "unknown-incremental-error";
       await prisma.wkCatalogSyncState.update({
         where: { id: GLOBAL_STATE_ID },
         data: {
@@ -555,7 +608,7 @@ async function bootstrapWkCatalog() {
   }
 }
 
-bootstrapWkCatalog()
+syncWkCatalogIncremental()
   .catch((error) => {
     console.error(error);
     process.exitCode = 1;
