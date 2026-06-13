@@ -270,6 +270,20 @@ function AdminWorkspacePageContent({
           </div>
         </section>
 
+        {checkingSession ? (
+          <section className="rounded-xl border border-line bg-surface-muted px-4 py-3">
+            <p className="text-sm font-semibold text-foreground/75">Checking admin session...</p>
+          </section>
+        ) : null}
+
+        {!checkingSession && !sessionAuthorized ? (
+          <section className="rounded-xl border border-line bg-surface-muted px-4 py-3">
+            <p className="text-sm font-semibold text-foreground/75">
+              Admin tools are hidden until you sign in with an allowlisted Google account. Open Account operations to sign in or switch account.
+            </p>
+          </section>
+        ) : null}
+
         {activeTab === "operations" ? (
           <section id="admin-operations" className="space-y-3">
             <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
