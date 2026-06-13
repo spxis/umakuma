@@ -171,11 +171,9 @@ export default function LevelExplorerDetailSection({
         title="Font"
         aria-label="Font"
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 20h16" />
-          <path d="M8 20V6a2 2 0 0 1 2-2h4" />
-          <path d="M10 12h8" />
-          <path d="M14 4v16" />
+        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none">
+          <text x="6.1" y="13.3" fontSize="10.5" fontWeight="700" fill="currentColor" textAnchor="middle">A</text>
+          <text x="16.9" y="16.8" fontSize="11" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
         </svg>
       </button>
     </div>
