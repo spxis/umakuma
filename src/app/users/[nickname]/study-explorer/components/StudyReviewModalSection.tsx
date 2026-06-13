@@ -137,6 +137,9 @@ export default function StudyReviewModalSection({
     viewerMode === STUDY_VIEWER_MODES.detail &&
     !useStudyFlashLayout &&
     detailsRevealed;
+  const sectionFrameClass = shouldUseUnifiedLessonDetail
+    ? ""
+    : "rounded-2xl border-2 border-accent/35 bg-surface p-3 sm:p-5";
 
   const selectedMeaningExplanation = stripHtml(selectedItem.meaningExplanation) || "-";
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
@@ -164,7 +167,7 @@ export default function StudyReviewModalSection({
 
   return (
     <>
-      <section className="rounded-2xl border-2 border-accent/35 bg-surface p-3 sm:p-5">
+      <section className={sectionFrameClass}>
         {!studyMode && viewerMode === STUDY_VIEWER_MODES.flash ? (
           flashCycleDone ? (
             <button

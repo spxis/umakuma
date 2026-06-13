@@ -229,7 +229,7 @@ export default function LevelExplorerDetailSection({
                       className="w-full cursor-pointer text-left"
                       title={isHeaderTitleExpanded ? "Collapse title" : "Expand title"}
                     >
-                      <p className={`text-4xl font-black leading-tight text-foreground ${shouldClampHeaderTitle ? "line-clamp-3" : ""}`}>{headerTitle}</p>
+                      <p className={`text-4xl font-black leading-tight text-foreground ${shouldClampHeaderTitle ? "line-clamp-2" : ""}`}>{headerTitle}</p>
                     </button>
                   ) : (
                     <p className="text-4xl font-black leading-tight text-foreground">{headerTitle}</p>
