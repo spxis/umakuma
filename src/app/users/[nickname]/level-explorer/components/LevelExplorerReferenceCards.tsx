@@ -58,12 +58,14 @@ export function RelatedReferenceCards({
   large,
   showEnglish,
   subjectById,
+  fallbackType,
   onJumpToRelatedSubject,
 }: {
   items: RelatedReference[];
   large?: boolean;
   showEnglish: boolean;
   subjectById: Map<number, LevelItem>;
+  fallbackType?: LevelItem["subjectType"];
   onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
 }) {
   if (items.length === 0) {
@@ -78,7 +80,7 @@ export function RelatedReferenceCards({
       {expandedItems.map((entry, index) => {
         const linked = subjectById.get(entry.subjectId) ?? null;
         const isClickable = linked !== null || typeof entry.wkLevel === "number";
-        const relationType = linked?.subjectType;
+        const relationType = linked?.subjectType ?? fallbackType;
         const reading = typeof entry.reading === "string" && entry.reading.trim() ? entry.reading : null;
         const subtitle = (() => {
           if (!reading) return null;

@@ -298,6 +298,7 @@ export default function LevelExplorerDetailSection({
                 large={isKanjiSubjectType(selectedItem.subjectType)}
                 showEnglish={showEnglish}
                 subjectById={subjectById}
+                fallbackType={SUBJECT_TYPES.radical}
                 onJumpToRelatedSubject={onJumpToRelatedSubject}
               />
             )
@@ -308,6 +309,7 @@ export default function LevelExplorerDetailSection({
               large={isKanjiSubjectType(selectedItem.subjectType)}
               showEnglish={showEnglish}
               subjectById={subjectById}
+              fallbackType={SUBJECT_TYPES.kanji}
               onJumpToRelatedSubject={onJumpToRelatedSubject}
             />
           }
@@ -317,6 +319,11 @@ export default function LevelExplorerDetailSection({
               large
               showEnglish={showEnglish}
               subjectById={subjectById}
+              fallbackType={
+                isRadicalSubjectType(selectedItem.subjectType)
+                  ? SUBJECT_TYPES.kanji
+                  : SUBJECT_TYPES.vocabulary
+              }
               onJumpToRelatedSubject={onJumpToRelatedSubject}
             />
           }
