@@ -373,7 +373,7 @@ export default function ExplorerTabs({
           <div className="flex w-full items-center gap-2 md:ml-auto md:w-auto md:justify-end">
             {effectiveActiveTab === "study" ? (
               <div
-                className="inline-flex min-w-0 flex-1 items-center rounded-full border border-line bg-surface p-1 md:flex-none"
+                className="inline-flex min-w-0 flex-[2_1_0%] items-center rounded-full border border-line bg-surface p-1 md:flex-none"
                 role="tablist"
                 aria-label="Study queue mode"
               >
@@ -400,7 +400,7 @@ export default function ExplorerTabs({
             <button
               type="button"
               onClick={() => setStudyMode((prev) => !prev)}
-              className={`inline-flex h-9 min-w-0 flex-1 items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest md:flex-none ${
+              className={`inline-flex h-9 min-w-0 flex-[1_1_0%] items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest md:flex-none ${
                 studyMode
                   ? "border-hot bg-hot text-white"
                   : "border-line bg-surface text-foreground hover:bg-surface-muted"
