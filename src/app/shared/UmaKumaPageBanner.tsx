@@ -31,7 +31,7 @@ const BANNER_CONFIG_BY_VARIANT: Record<UmaKumaPageBannerVariant, BannerConfig> =
     rightDesktopImage: kumaClose,
     frameClassName: "h-28 sm:h-36 lg:h-44",
     centerImageFrameClassName: "h-16 w-56 sm:h-20 sm:w-72 lg:h-24 lg:w-[420px]",
-    sideImageClassName: "h-16 w-auto lg:h-24 xl:h-28",
+    sideImageClassName: "h-10 w-auto sm:h-12 md:h-16 lg:h-24 xl:h-28",
   },
   user: {
     centerImage: userBanner,
@@ -39,7 +39,7 @@ const BANNER_CONFIG_BY_VARIANT: Record<UmaKumaPageBannerVariant, BannerConfig> =
     rightDesktopImage: umaKumaRight,
     frameClassName: "h-24 sm:h-32 lg:h-40",
     centerImageFrameClassName: "h-14 w-40 sm:h-16 sm:w-52 lg:h-20 lg:w-64",
-    sideImageClassName: "h-16 w-auto lg:h-24 xl:h-28",
+    sideImageClassName: "h-10 w-auto sm:h-12 md:h-16 lg:h-24 xl:h-28",
   },
   admin: {
     centerImage: adminBanner,
@@ -57,8 +57,8 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
       className={`overflow-hidden rounded-2xl border border-white bg-white ${className ?? ""}`}
     >
       <div className={`relative ${config.frameClassName}`}>
-        <div className="grid h-full grid-cols-1 items-center md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-          <div className="hidden h-full items-center justify-start pl-3 md:flex lg:pl-4">
+        <div className="grid h-full grid-cols-[auto_minmax(0,1fr)_auto] items-center">
+          <div className="flex h-full items-center justify-start pl-2 sm:pl-3 lg:pl-4">
             {config.leftDesktopImage ? (
               <Image
                 src={config.leftDesktopImage}
@@ -81,7 +81,7 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
                 />
               </div>
           </div>
-          <div className="hidden h-full items-center justify-end pr-3 md:flex lg:pr-4">
+          <div className="flex h-full items-center justify-end pr-2 sm:pr-3 lg:pr-4">
             {config.rightDesktopImage ? (
               <Image
                 src={config.rightDesktopImage}
