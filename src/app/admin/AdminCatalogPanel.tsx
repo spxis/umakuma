@@ -180,8 +180,8 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
         title: runType === "full" ? "Run full catalog sync" : "Run incremental catalog sync",
         description:
           runType === "full"
-            ? "This may take a while and writes catalog rows. Continue?"
-            : "This writes catalog updates from recent changes. Continue?",
+            ? "This fetches the full WaniKani subject catalog and writes catalog rows in bulk. It can take longer and update many records. Continue?"
+            : "This fetches recent subject changes and writes catalog updates using the stored cursor. Continue?",
         confirmLabel: "Run sync",
         cancelLabel: "Cancel",
         tone: "danger",

@@ -16,7 +16,7 @@ export default function AdminUsersPanel({
   checkingSession,
   viewerEmail,
 }: AdminUsersPanelProps) {
-  const { showToast } = useAdminFeedback();
+  const { showToast, confirmAction } = useAdminFeedback();
   const [accounts, setAccounts] = useState<AdminAccount[]>([]);
   const [generatedInviteCodesByAccountId, setGeneratedInviteCodesByAccountId] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -48,6 +48,19 @@ export default function AdminUsersPanel({
   }, [checkingSession, sessionAuthorized, showToast]);
 
   async function refreshOne(accountId: string) {
+    const target = accounts.find((account) => account.id === accountId);
+    const accepted = await confirmAction({
+      title: "Refresh user",
+      description: `This calls WaniKani and updates cached stats for ${target?.nickname ?? "this user"}. Continue?`,
+      confirmLabel: "Refresh user",
+      cancelLabel: "Cancel",
+      tone: "danger",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -75,6 +88,20 @@ export default function AdminUsersPanel({
   }
 
   async function assignInviteCode(accountId: string): Promise<string | null> {
+    const target = accounts.find((account) => account.id === accountId);
+    const accepted = await confirmAction({
+      title: "Set invite code",
+      description:
+        `This generates and stores a new invite code for ${target?.nickname ?? "this user"}. Older code access may stop working. Continue?`,
+      confirmLabel: "Set invite code",
+      cancelLabel: "Cancel",
+      tone: "danger",
+    });
+
+    if (!accepted) {
+      return null;
+    }
+
     setLoading(true);
 
     try {
@@ -112,6 +139,20 @@ export default function AdminUsersPanel({
   }
 
   async function resetInviteCode(accountId: string) {
+    const target = accounts.find((account) => account.id === accountId);
+    const accepted = await confirmAction({
+      title: "Reset invite code",
+      description:
+        `This removes active invite access for ${target?.nickname ?? "this user"} until a new code is generated. Continue?`,
+      confirmLabel: "Reset invite",
+      cancelLabel: "Cancel",
+      tone: "danger",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
     setLoading(true);
 
     try {

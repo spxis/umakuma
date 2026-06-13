@@ -57,7 +57,7 @@ function AdminWorkspacePageContent({
   initialSession,
   initialCampaigns = [],
 }: AdminWorkspacePageProps) {
-  const { showToast } = useAdminFeedback();
+  const { showToast, confirmAction } = useAdminFeedback();
   const [nickname, setNickname] = useState("");
   const [token, setToken] = useState("");
   const hasInitialSession = Boolean(initialSession);
@@ -119,12 +119,39 @@ function AdminWorkspacePageContent({
   }, [hasInitialSession]);
 
   async function completeGoogleSignOut() {
+    const accepted = await confirmAction({
+      title: "Sign out of admin",
+      description:
+        "This will end your current Google admin session in this browser and return you to the signout flow. Continue?",
+      confirmLabel: "Sign out",
+      cancelLabel: "Cancel",
+      tone: "neutral",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
     setLoading(true);
     window.location.href = "/signout?callbackUrl=/admin&clearAdmin=1";
   }
 
   async function addAccount(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const accepted = await confirmAction({
+      title: "Save account",
+      description:
+        "This stores the nickname and API token for this account. If an existing account matches, token and profile fields may be updated. Continue?",
+      confirmLabel: "Save account",
+      cancelLabel: "Cancel",
+      tone: "danger",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -152,6 +179,19 @@ function AdminWorkspacePageContent({
   }
 
   async function refreshAll() {
+    const accepted = await confirmAction({
+      title: "Refresh all stats",
+      description:
+        "This queues a global leaderboard refresh and may trigger many upstream API calls across all accounts. Continue?",
+      confirmLabel: "Refresh all",
+      cancelLabel: "Cancel",
+      tone: "danger",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -173,6 +213,19 @@ function AdminWorkspacePageContent({
   }
 
   async function refreshJlptList() {
+    const accepted = await confirmAction({
+      title: "Refresh JLPT list",
+      description:
+        "This reloads JLPT source data and updates JLPT records used by the app. Existing values may be overwritten. Continue?",
+      confirmLabel: "Refresh JLPT",
+      cancelLabel: "Cancel",
+      tone: "danger",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
     setJlptRefreshing(true);
 
     try {
@@ -194,6 +247,19 @@ function AdminWorkspacePageContent({
   }
 
   async function enrichJlptKanji() {
+    const accepted = await confirmAction({
+      title: "Enrich JLPT data",
+      description:
+        "This writes enriched JLPT metadata in bulk for pending records. It can take time and updates stored fields. Continue?",
+      confirmLabel: "Run enrichment",
+      cancelLabel: "Cancel",
+      tone: "danger",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
     setJlptEnriching(true);
 
     try {
