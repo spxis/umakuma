@@ -6,7 +6,7 @@ import { normalizeAssignmentType, toDate } from "../src/lib/wanikani/helpers";
 import { fetchWaniKani } from "../src/lib/wanikani/http";
 import type { WaniKaniCollectionResponse } from "../src/lib/wanikani/types";
 
-const DEFAULT_SUBJECTS_PATH = "/subjects?types=radical,kanji,vocabulary&hidden=true";
+const DEFAULT_SUBJECTS_PATH = "/subjects?types=radical,kanji,vocabulary";
 const SYNC_LOCK_MS = 30 * 60 * 1000;
 const GLOBAL_STATE_ID = "global";
 const DEFAULT_ACCOUNT_MATCH = "john";
