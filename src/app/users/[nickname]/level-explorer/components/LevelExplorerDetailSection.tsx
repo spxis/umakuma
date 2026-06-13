@@ -125,8 +125,51 @@ export default function LevelExplorerDetailSection({
   const isHeaderTitleExpanded = expandedHeaderTitleKey === headerTitleKey;
   const shouldClampHeaderTitle = clampLongTitle && Boolean(headerTitle) && !isHeaderTitleExpanded;
 
+  const renderHeaderChipRow = (className: string) => (
+    <div className={className}>
+      <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
+      {typeof selectedItem.wkLevel === "number" ? (
+        <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span>
+      ) : null}
+      {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? (
+        <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span>
+      ) : null}
+      {selectedItem.jlptLevel ? (
+        <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span>
+      ) : null}
+      <span className={`subject-pill ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}</span>
+      {isNewGlyphWithinHours(selectedItem) ? (
+        <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
+      ) : null}
+      {nextReviewBadge ? <span className={`subject-pill ${nextReviewBadge.className}`}>{nextReviewBadge.label}</span> : null}
+      {onToggleShowEnglish ? (
+        <button
+          type="button"
+          onClick={onToggleShowEnglish}
+          disabled={!canToggleEnglish}
+          className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+          title={canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
+          aria-label={canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
+        >
+          {showEnglish ? (
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
+              <path d="M4 4l16 16" />
+            </svg>
+          )}
+        </button>
+      ) : null}
+    </div>
+  );
+
   return (
     <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
+      {renderHeaderChipRow("mb-2 flex flex-wrap justify-start gap-1 sm:hidden")}
       <div className="grid gap-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-3">
         <div className="inline-flex sm:self-start">
           <div
@@ -166,38 +209,7 @@ export default function LevelExplorerDetailSection({
         </div>
 
         <div className="min-w-0">
-          <div className="flex flex-wrap justify-start gap-1 sm:justify-end">
-            <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-            {typeof selectedItem.wkLevel === "number" ? (
-              <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span>
-            ) : null}
-            {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? (
-              <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span>
-            ) : null}
-            {selectedItem.jlptLevel ? (
-              <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span>
-            ) : null}
-            <span className={`subject-pill ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}</span>
-            {isNewGlyphWithinHours(selectedItem) ? (
-              <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
-            ) : null}
-            {nextReviewBadge ? <span className={`subject-pill ${nextReviewBadge.className}`}>{nextReviewBadge.label}</span> : null}
-            {onToggleShowEnglish ? (
-              <button
-                type="button"
-                onClick={onToggleShowEnglish}
-                disabled={!canToggleEnglish}
-                className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-                title={canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
-                aria-label={canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              </button>
-            ) : null}
-          </div>
+          {renderHeaderChipRow("hidden flex-wrap justify-end gap-1 sm:flex")}
           {studyMode && onTogglePeek ? (
             <div className="mt-2 flex justify-end">
               <button
