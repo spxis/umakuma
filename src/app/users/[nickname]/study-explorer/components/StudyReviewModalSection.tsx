@@ -333,7 +333,7 @@ export default function StudyReviewModalSection({
                           {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
                         </p>
                         {primaryReadingKatakana !== "-" ? (
-                          <p className="line-clamp-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">{primaryReadingKatakana}</p>
+                          <p className="line-clamp-1 text-xs font-semibold leading-tight text-foreground/70 sm:text-sm">{primaryReadingKatakana}</p>
                         ) : null}
                       </div>
                       <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
