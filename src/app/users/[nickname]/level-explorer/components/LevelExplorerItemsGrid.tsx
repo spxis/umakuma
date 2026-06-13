@@ -2,7 +2,7 @@ import { Fragment, useMemo, useState } from "react";
 
 import type { LevelItem } from "../../explorerTypes";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
-import StatusSrsChip, { SrsOnlyChip } from "../../shared/StatusSrsChip";
+import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import { ReadingWithPronunciation, badgeClass, formatNextReviewBadge, formatNumber, glyphSubtitleForDisplay, glyphTextSizeClass, isNewGlyphWithinHours, jlptLevelPillClass, lockedCardStateClass, shortSubjectTypeLabel, subjectTypePillClass, titleForDisplay, typeCardClass, typeGlyphBoxClass } from "../lib/levelExplorerDisplay";
 import { LEVEL_WK_STATUSES } from "../lib/levelExplorerDomain";
@@ -340,9 +340,7 @@ export default function LevelExplorerItemsGrid({
                         return <span />;
                       }
                       return (
-                        <span className={`subject-pill whitespace-nowrap ${nextReviewBadge.className}`}>
-                          {nextReviewBadge.label}
-                        </span>
+                          <ReviewTimingChip label={nextReviewBadge.label} className={nextReviewBadge.className} />
                       );
                     })()
                   : <span />

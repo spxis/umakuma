@@ -29,7 +29,7 @@ import {
   VocabularyKanjiCards,
   type VocabularyKanjiLink,
 } from "./LevelExplorerReferenceCards";
-import StatusSrsChip from "../../shared/StatusSrsChip";
+import StatusSrsChip, { ReviewTimingChip } from "../../shared/StatusSrsChip";
 import {
   isKanjiSubjectType,
   isRadicalSubjectType,
@@ -140,7 +140,7 @@ export default function LevelExplorerDetailSection({
       {isNewGlyphWithinHours(selectedItem) ? (
         <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
       ) : null}
-      {nextReviewBadge ? <span className={`subject-pill ${nextReviewBadge.className}`}>{nextReviewBadge.label}</span> : null}
+      {nextReviewBadge ? <ReviewTimingChip label={nextReviewBadge.label} className={nextReviewBadge.className} /> : null}
       {onToggleShowEnglish ? (
         <button
           type="button"

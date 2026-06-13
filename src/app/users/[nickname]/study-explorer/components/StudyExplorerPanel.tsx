@@ -34,7 +34,7 @@ import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipLabel from "../../shared/FilterChipLabel";
-import StatusSrsChip, { SrsOnlyChip } from "../../shared/StatusSrsChip";
+import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 export default function StudyExplorerPanel({
@@ -413,7 +413,7 @@ export default function StudyExplorerPanel({
                     }
                     statusChip={
                       reviewBadge
-                        ? <span className={`subject-pill whitespace-nowrap ${reviewBadge.className}`}>{reviewBadge.label}</span>
+                        ? <ReviewTimingChip label={reviewBadge.label} className={reviewBadge.className} />
                         : <span />
                     }
                     middleChip={undefined}

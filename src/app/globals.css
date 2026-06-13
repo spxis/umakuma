@@ -201,6 +201,11 @@ button,
 }
 
 .subject-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.5rem;
+  line-height: 1;
   border-width: 1px;
   border-style: solid;
   border-radius: 9999px;
