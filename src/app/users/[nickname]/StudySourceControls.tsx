@@ -262,7 +262,7 @@ export default function StudySourceControls({
                 disabled={isLoading}
                 className="inline-flex h-9 w-full items-center justify-center rounded-full border border-accent bg-accent px-4 text-xs font-bold uppercase tracking-[0.08em] text-white disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Use selected library
+                Use library
               </button>
             </div>
           </div>
