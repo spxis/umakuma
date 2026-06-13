@@ -2,8 +2,8 @@ import Image, { type StaticImageData } from "next/image";
 
 import adminBanner from "@/images/umakuma-hero2-transparent.png";
 import leaderboardHero from "@/images/umakuma-hero1-transparent.png";
-import kumaClose from "@/images/kuma-close.png";
-import umaClose from "@/images/uma-close.png";
+import kumaClose from "@/images/kuma-close-transparent.png";
+import umaClose from "@/images/uma-close-transparent.png";
 import umaKumaLeft from "@/images/umakuma-1.png";
 import umaKumaRight from "@/images/umakuma-2.png";
 import userBanner from "@/images/umakuma-banner1-transparent.png";
