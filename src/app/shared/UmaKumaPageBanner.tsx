@@ -54,7 +54,7 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
   return (
     <section
       aria-hidden="true"
-      className={`overflow-hidden rounded-2xl border border-line/80 bg-surface/80 shadow-[0_18px_40px_rgba(8,16,36,0.12)] ${className ?? ""}`}
+      className={`overflow-hidden rounded-2xl border border-line/80 bg-[#f5f6f8] shadow-[0_18px_40px_rgba(8,16,36,0.12)] ${className ?? ""}`}
     >
       <div className={`relative ${config.frameClassName}`}>
         <div className="grid h-full grid-cols-1 items-center lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
@@ -87,7 +87,7 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
             ) : null}
           </div>
         </div>
-        <div className="absolute inset-0 bg-linear-to-r from-surface/50 via-transparent to-surface/35" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#f5f6f8]/55 via-transparent to-[#f5f6f8]/40" />
       </div>
     </section>
   );
