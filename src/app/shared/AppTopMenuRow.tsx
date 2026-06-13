@@ -69,7 +69,7 @@ export default function AppTopMenuRow({
 }: AppTopMenuRowProps) {
   const pathname = usePathname();
   const resolvedWkUsername = primaryWkUsername ?? viewerMenuInfo?.wkUsername ?? null;
-  const canSeeAdminTopLink = showAdminActions || Boolean(viewerMenuInfo?.provider === "google" && viewerMenuInfo.isAdmin);
+  const canSeeAdminTopLink = showAdminActions;
   const links: MainLink[] = [
     { label: "Leaderboard", href: "/", dashboard: null },
     { label: "Study", href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
