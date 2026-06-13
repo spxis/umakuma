@@ -52,9 +52,9 @@ export default function UnifiedExplorerCard({
       </div>
 
       <div className="mt-3 grid grid-cols-3 items-center gap-2">
-        <span className="justify-self-start">{statusChip}</span>
-        <span className="justify-self-center">{middleChip ?? <span />}</span>
-        <span className="justify-self-end">{rightChip}</span>
+        <span className="inline-flex items-center justify-self-start leading-none">{statusChip}</span>
+        <span className="inline-flex items-center justify-self-center leading-none">{middleChip ?? <span />}</span>
+        <span className="inline-flex items-center justify-self-end leading-none">{rightChip}</span>
       </div>
     </button>
   );
