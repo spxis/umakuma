@@ -324,7 +324,7 @@ export default function StudyReviewModal({
   const jlptGradeLabel = deriveJlptGradeLabel(selectedItem);
 
   return (
-    <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-2 backdrop-blur-[2px] sm:p-6">
+    <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-4 backdrop-blur-[2px] sm:p-6">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)]">
         <div className="border-b border-line bg-surface-muted">
           <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1 px-2 py-2 sm:gap-2 sm:px-6 sm:py-3">
