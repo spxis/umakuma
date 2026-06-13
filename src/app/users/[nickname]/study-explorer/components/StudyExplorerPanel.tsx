@@ -152,7 +152,10 @@ export default function StudyExplorerPanel({
         </div>
         <div id="study-filters-panel" className={`mt-3 rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)] ${mobileFilterSectionClass}`}>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
+            <div className="flex items-center justify-between gap-2 sm:shrink-0 sm:justify-start">
+              <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
+              <button type="button" onClick={handleResetFilters} className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted sm:h-8 sm:text-xs">Clear all</button>
+            </div>
             <div className="w-full min-w-0 sm:w-1/2">
               <ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} />
             </div>
