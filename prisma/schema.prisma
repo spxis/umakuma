@@ -132,10 +132,94 @@ model JlptKanji {
   @@index([nLevel])
 }
 
+model WkSubjectCatalog {
+  wkSubjectId               Int      @id
+  object                    String   @default("subject")
+  subjectType               String
+  level                     Int
+  slug                      String?
+  characters                String?
+  documentUrl               String?
+  dataUpdatedAt             DateTime
+  hiddenAt                  DateTime?
+  meanings                  Json?
+  readings                  Json?
+  componentSubjectIds       Int[]    @default([])
+  amalgamationSubjectIds    Int[]    @default([])
+  visuallySimilarSubjectIds Int[]    @default([])
+  meaningMnemonic           String?
+  meaningHint               String?
+  readingMnemonic           String?
+  readingHint               String?
+  rawData                   Json
+  documentVersion           Int      @default(1)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  @@index([subjectType, level])
+  @@index([level])
+  @@index([dataUpdatedAt])
+  @@index([hiddenAt])
+}
+
+model WkCatalogSyncState {
+  id                           String              @id @default("global")
+  isSyncing                    Boolean             @default(false)
+  syncLockUntil                DateTime?
+  nextSyncAllowedAt            DateTime            @default(now())
+  lastStatus                   WkCatalogSyncStatus @default(idle)
+  lastError                    String?
+  lastFullSyncStartedAt        DateTime?
+  lastFullSyncCompletedAt      DateTime?
+  lastIncrementalSyncStartedAt DateTime?
+  lastIncrementalSyncCompletedAt DateTime?
+  lastCursorDataUpdatedAt      DateTime?
+  lastCursorSubjectId          Int?
+  lastRunStats                 Json?
+  createdAt                    DateTime            @default(now())
+  updatedAt                    DateTime            @updatedAt
+}
+
+model WkCatalogSyncRun {
+  id                      String               @id @default(cuid())
+  runType                 WkCatalogSyncRunType
+  status                  WkCatalogSyncStatus  @default(running)
+  startedAt               DateTime             @default(now())
+  completedAt             DateTime?
+  durationMs              Int?
+  cursorFromDataUpdatedAt DateTime?
+  cursorFromSubjectId     Int?
+  cursorToDataUpdatedAt   DateTime?
+  cursorToSubjectId       Int?
+  fetchedCount            Int                  @default(0)
+  upsertedCount           Int                  @default(0)
+  changedCount            Int                  @default(0)
+  errorCount              Int                  @default(0)
+  errorMessage            String?
+  stats                   Json?
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+
+  @@index([runType, startedAt])
+  @@index([status, startedAt])
+}
+
 enum StudyReviewResult {
   correct
   wrong
   skipped
+}
+
+enum WkCatalogSyncStatus {
+  idle
+  running
+  ok
+  error
+}
+
+enum WkCatalogSyncRunType {
+  full
+  incremental
 }
 
 enum SubjectReviewSnapshotSource {
