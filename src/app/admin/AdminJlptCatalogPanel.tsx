@@ -13,6 +13,7 @@ import {
   type JlptCatalogSortDir,
 } from "@/lib/jlptCatalogTypes";
 
+import { useAdminFeedback } from "./AdminFeedbackProvider";
 import AdminPaginationControls from "./AdminPaginationControls";
 
 type AdminJlptCatalogPanelProps = {
@@ -28,6 +29,12 @@ function sortIndicator(activeSortBy: JlptCatalogSortBy, activeSortDir: JlptCatal
   }
 
   return activeSortDir === "asc" ? "^" : "v";
+}
+
+function enrichmentBadgeClass(hasEnrichment: boolean): string {
+  return hasEnrichment
+    ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+    : "border-amber-200 bg-amber-50 text-amber-800";
 }
 
 function buildCatalogUrl(input: {
@@ -61,6 +68,7 @@ function buildCatalogUrl(input: {
 }
 
 export default function AdminJlptCatalogPanel({ sessionAuthorized, checkingSession }: AdminJlptCatalogPanelProps) {
+  const { confirmAction } = useAdminFeedback();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<(typeof PAGE_SIZE_OPTIONS)[number]>(40);
   const [nLevel, setNLevel] = useState<"all" | "1" | "2" | "3" | "4" | "5">("all");
@@ -135,11 +143,27 @@ export default function AdminJlptCatalogPanel({ sessionAuthorized, checkingSessi
     download: true,
   });
 
+  async function triggerDownload() {
+    const accepted = await confirmAction({
+      title: "Download JLPT JSON snapshot",
+      description: `Scope: up to ${data?.summary.filteredRows ?? "-"} filtered rows (max 5000 rows per export). Time: usually under 1 minute. Risk: non-destructive file export. Continue?`,
+      confirmLabel: "Download JSON",
+      cancelLabel: "Cancel",
+      tone: "neutral",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
+    window.location.assign(downloadUrl);
+  }
+
   return (
     <section className="rounded-xl border border-line bg-surface p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">JLPT catalog viewer</p>
+          <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Browse and manage</p>
           <p className="mt-1 text-sm text-foreground/75">
             Browse JLPT DB rows, filter enrichment state, and export current results to JSON for offline work.
           </p>
@@ -154,14 +178,18 @@ export default function AdminJlptCatalogPanel({ sessionAuthorized, checkingSessi
             disabled={isLoading || isValidating || checkingSession || !sessionAuthorized}
             className="rounded-full border border-line bg-surface-muted px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground transition hover:bg-surface disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Refresh
+            Refresh list
           </button>
-          <a
-            href={downloadUrl}
-            className="rounded-full border border-line bg-surface-muted px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground transition hover:bg-surface"
+          <button
+            type="button"
+            onClick={() => {
+              void triggerDownload();
+            }}
+            disabled={checkingSession || !sessionAuthorized}
+            className="rounded-full border border-line bg-surface-muted px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground transition hover:bg-surface disabled:cursor-not-allowed disabled:opacity-60"
           >
             Download JSON
-          </a>
+          </button>
         </div>
       </div>
 
@@ -319,9 +347,13 @@ export default function AdminJlptCatalogPanel({ sessionAuthorized, checkingSessi
               </thead>
               <tbody className="divide-y divide-line/50 bg-surface">
                 {data.items.map((item) => (
-                  <tr key={item.kanji}>
+                  <tr key={item.kanji} className="align-top">
                     <td className="px-2 py-2 text-xl font-black text-foreground">{item.kanji}</td>
-                    <td className="px-2 py-2">N{item.nLevel}</td>
+                    <td className="px-2 py-2">
+                      <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] text-blue-800">
+                        N{item.nLevel}
+                      </span>
+                    </td>
                     <td className="px-2 py-2">{item.primaryMeaning ?? "-"}</td>
                     <td className="px-2 py-2">
                       <span className="text-[11px] text-foreground/65">
@@ -331,7 +363,7 @@ export default function AdminJlptCatalogPanel({ sessionAuthorized, checkingSessi
                     <td className="px-2 py-2">{item.strokeCount ?? "-"}</td>
                     <td className="px-2 py-2">{item.sourceJlpt ?? "-"}</td>
                     <td className="px-2 py-2">
-                      <span className={item.enrichedAt ? "text-emerald-700" : "text-amber-700"}>
+                      <span className={`inline-flex rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] ${enrichmentBadgeClass(Boolean(item.enrichedAt))}`}>
                         {item.enrichedAt ? formatRelativeFromNow(item.enrichedAt, { style: "short", allowFuture: false }) : "missing"}
                       </span>
                     </td>

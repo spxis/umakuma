@@ -1,4 +1,4 @@
-export const ADMIN_WORKSPACE_TABS = ["operations", "campaigns", "history", "users", "readingEntries", "catalog"] as const;
+export const ADMIN_WORKSPACE_TABS = ["operations", "data", "campaigns", "history", "users", "readingEntries"] as const;
 
 export type AdminWorkspaceTab = (typeof ADMIN_WORKSPACE_TABS)[number];
 
@@ -7,14 +7,18 @@ export const ADMIN_WORKSPACE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 180;
 
 export const ADMIN_WORKSPACE_ROUTES: Record<AdminWorkspaceTab, string> = {
   operations: "/admin/account-operations",
+  data: "/admin/data",
   campaigns: "/admin/campaign-workspace",
   history: "/admin/submission-history",
   users: "/admin/users",
   readingEntries: "/admin/reading-entries",
-  catalog: "/admin/wk-catalog",
 };
 
 export function parseAdminWorkspaceTab(value: string | undefined, fallback: AdminWorkspaceTab = "operations"): AdminWorkspaceTab {
+  if (value === "jlpt" || value === "catalog") {
+    return "data";
+  }
+
   if (value && ADMIN_WORKSPACE_TABS.includes(value as AdminWorkspaceTab)) {
     return value as AdminWorkspaceTab;
   }

@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types";
 
 export type AdminControlRoomProps = {
+  viewMode?: "all" | "accounts" | "jlpt";
   nickname: string;
   token: string;
   sessionAuthorized: boolean;

@@ -8,13 +8,13 @@ import UmaKumaPageBanner from "../shared/UmaKumaPageBanner";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import AdminCampaignManager from "./AdminCampaignManager";
 import AdminControlRoom from "./AdminControlRoom";
+import AdminDataWorkspaceSection from "./AdminDataWorkspaceSection";
+import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import type { CampaignRecord } from "./AdminCampaignManager.types";
 import AdminFeedbackProvider, { useAdminFeedback } from "./AdminFeedbackProvider";
 import type { AdminSessionStatus } from "./AdminPage.types";
 import AdminStudyHistory from "./AdminStudyHistory";
 import AdminUsersPanel from "./AdminUsersPanel";
-import AdminCatalogPanel from "./AdminCatalogPanel";
-import AdminJlptCatalogPanel from "./AdminJlptCatalogPanel";
 import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types";
 import AdminReadingEntriesClient from "./reading-entries/AdminReadingEntriesClient";
 import {
@@ -26,6 +26,7 @@ import {
 
 type AdminWorkspacePageProps = {
   activeTab: AdminWorkspaceTab;
+  initialDataCatalog?: "wk" | "jlpt";
   initialSession?: AdminSessionStatus;
   initialCampaigns?: CampaignRecord[];
 };
@@ -40,6 +41,7 @@ function tabClassName(isActive: boolean): string {
 
 export default function AdminWorkspacePage({
   activeTab,
+  initialDataCatalog,
   initialSession,
   initialCampaigns = [],
 }: AdminWorkspacePageProps) {
@@ -47,6 +49,7 @@ export default function AdminWorkspacePage({
     <AdminFeedbackProvider>
       <AdminWorkspacePageContent
         activeTab={activeTab}
+        initialDataCatalog={initialDataCatalog}
         initialSession={initialSession}
         initialCampaigns={initialCampaigns}
       />
@@ -56,6 +59,7 @@ export default function AdminWorkspacePage({
 
 function AdminWorkspacePageContent({
   activeTab,
+  initialDataCatalog,
   initialSession,
   initialCampaigns = [],
 }: AdminWorkspacePageProps) {
@@ -72,6 +76,7 @@ function AdminWorkspacePageContent({
   const [userEmail, setUserEmail] = useState<string | null>(initialSession?.user?.email ?? null);
   const [userWkUsername, setUserWkUsername] = useState<string | null>(initialSession?.user?.wkUsername ?? null);
   const [loading, setLoading] = useState(false);
+  const [dataCatalogView, setDataCatalogView] = useState<"wk" | "jlpt">(initialDataCatalog ?? "wk");
   const [jlptRefreshing, setJlptRefreshing] = useState(false);
   const [jlptEnriching, setJlptEnriching] = useState(false);
   const [operationScope, setOperationScope] = useState<AdminOperationsScopeResponse | null>(null);
@@ -120,6 +125,10 @@ function AdminWorkspacePageContent({
       }
     });
   }, [hasInitialSession]);
+
+  useEffect(() => {
+    setDataCatalogView(initialDataCatalog ?? "wk");
+  }, [initialDataCatalog]);
 
   useEffect(() => {
     async function loadOperationScope() {
@@ -320,6 +329,37 @@ function AdminWorkspacePageContent({
     }
   }
 
+  const controlRoomProps: Omit<AdminControlRoomProps, "viewMode"> = {
+    nickname,
+    token,
+    sessionAuthorized,
+    checkingSession,
+    googleConfigured,
+    signedIn,
+    emailAllowed,
+    userName,
+    userEmail,
+    loading,
+    jlptRefreshing,
+    jlptEnriching,
+    operationScope,
+    onSetNickname: setNickname,
+    onSetToken: setToken,
+    onAddAccount: addAccount,
+    onCompleteGoogleSignOut: () => {
+      void completeGoogleSignOut();
+    },
+    onRefreshAll: () => {
+      void refreshAll();
+    },
+    onRefreshJlptList: () => {
+      void refreshJlptList();
+    },
+    onEnrichJlptKanji: () => {
+      void enrichJlptKanji();
+    },
+  };
+
   return (
     <div className="relative overflow-hidden px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
@@ -335,7 +375,7 @@ function AdminWorkspacePageContent({
           <div className="flex flex-wrap items-center gap-2">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Admin workspace</p>
-              <h1 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">Manage accounts, campaigns, and logs</h1>
+              <h1 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">Manage accounts, data, campaigns, and logs</h1>
               <p className="mt-1 text-sm text-foreground/70">Switch tabs to focus on one admin job at a time.</p>
             </div>
           </div>
@@ -343,6 +383,9 @@ function AdminWorkspacePageContent({
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href={routeForAdminWorkspaceTab("operations")} className={tabClassName(activeTab === "operations")}>
               Account operations
+            </Link>
+            <Link href={routeForAdminWorkspaceTab("data")} className={tabClassName(activeTab === "data")}>
+              Data catalogs
             </Link>
             <Link href={routeForAdminWorkspaceTab("campaigns")} className={tabClassName(activeTab === "campaigns")}>
               Campaign workspace
@@ -355,9 +398,6 @@ function AdminWorkspacePageContent({
             </Link>
             <Link href={routeForAdminWorkspaceTab("readingEntries")} className={tabClassName(activeTab === "readingEntries")}>
               Reading check-ins
-            </Link>
-            <Link href={routeForAdminWorkspaceTab("catalog")} className={tabClassName(activeTab === "catalog")}>
-              WK catalog
             </Link>
           </div>
         </section>
@@ -380,43 +420,23 @@ function AdminWorkspacePageContent({
           <section id="admin-operations" className="space-y-3">
             <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Account operations</p>
-              <p className="mt-1 text-sm text-foreground/70">Sign in, add family accounts, and run leaderboard or JLPT refresh actions.</p>
+              <p className="mt-1 text-sm text-foreground/70">Sign in, add family accounts, and run leaderboard refresh actions.</p>
             </div>
             <AdminControlRoom
-              nickname={nickname}
-              token={token}
-              sessionAuthorized={sessionAuthorized}
-              checkingSession={checkingSession}
-              googleConfigured={googleConfigured}
-              signedIn={signedIn}
-              emailAllowed={emailAllowed}
-              userName={userName}
-              userEmail={userEmail}
-              loading={loading}
-              jlptRefreshing={jlptRefreshing}
-              jlptEnriching={jlptEnriching}
-              operationScope={operationScope}
-              onSetNickname={setNickname}
-              onSetToken={setToken}
-              onAddAccount={addAccount}
-              onCompleteGoogleSignOut={() => {
-                void completeGoogleSignOut();
-              }}
-              onRefreshAll={() => {
-                void refreshAll();
-              }}
-              onRefreshJlptList={() => {
-                void refreshJlptList();
-              }}
-              onEnrichJlptKanji={() => {
-                void enrichJlptKanji();
-              }}
-            />
-            <AdminJlptCatalogPanel
-              sessionAuthorized={sessionAuthorized}
-              checkingSession={checkingSession}
+              viewMode="accounts"
+              {...controlRoomProps}
             />
           </section>
+        ) : null}
+
+        {activeTab === "data" ? (
+          <AdminDataWorkspaceSection
+            dataCatalogView={dataCatalogView}
+            onChangeDataCatalogView={setDataCatalogView}
+            sessionAuthorized={sessionAuthorized}
+            checkingSession={checkingSession}
+            controlRoomProps={controlRoomProps}
+          />
         ) : null}
 
         {activeTab === "campaigns" ? (
@@ -471,18 +491,6 @@ function AdminWorkspacePageContent({
           </section>
         ) : null}
 
-        {activeTab === "catalog" ? (
-          <section id="admin-catalog" className="space-y-3">
-            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">WK catalog</p>
-              <p className="mt-1 text-sm text-foreground/70">Track freshness, run sync jobs, and spot catalog drift before user-facing integration.</p>
-            </div>
-            <AdminCatalogPanel
-              sessionAuthorized={sessionAuthorized}
-              checkingSession={checkingSession}
-            />
-          </section>
-        ) : null}
       </main>
     </div>
   );
