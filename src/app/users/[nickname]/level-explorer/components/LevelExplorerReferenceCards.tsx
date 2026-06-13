@@ -152,7 +152,7 @@ export function VocabularyKanjiCards({
   }
 
   return (
-    <div className="mt-2 flex flex-wrap justify-center gap-2">
+    <div className="mt-2 flex flex-wrap justify-start gap-2">
       {links.map((item) => {
         const subtitle = (() => {
           if (!showEnglish) return item.reading;

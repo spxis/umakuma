@@ -270,7 +270,7 @@ export default function StudyReviewModalSection({
           )
         ) : useStudyFlashLayout ? (
           <>
-            <div className="grid h-[calc(100dvh-11.5rem)] min-h-[26rem] grid-rows-2 gap-2 lg:min-h-[68vh] lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch">
+            <div className="grid h-full min-h-0 grid-rows-2 gap-2 lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch">
               <div
                 role="button"
                 tabIndex={0}
