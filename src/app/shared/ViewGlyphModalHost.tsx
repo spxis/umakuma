@@ -249,7 +249,7 @@ export default function ViewGlyphModalHost() {
           <button
             type="button"
             onClick={closeModal}
-            className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-black uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+            className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]"
           >
             Close
           </button>
@@ -261,7 +261,7 @@ export default function ViewGlyphModalHost() {
               type="button"
               onClick={() => setIndex((prev) => Math.max(0, prev - 1))}
               disabled={index <= 0}
-              className="min-h-9 min-w-20 cursor-pointer rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-black uppercase text-foreground disabled:opacity-40"
+              className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]"
             >
               Prev
             </button>
@@ -269,7 +269,7 @@ export default function ViewGlyphModalHost() {
               type="button"
               onClick={() => setIndex((prev) => Math.min(items.length - 1, prev + 1))}
               disabled={index >= items.length - 1}
-              className="min-h-9 min-w-20 cursor-pointer rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-black uppercase text-foreground disabled:opacity-40"
+              className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]"
             >
               Next
             </button>
