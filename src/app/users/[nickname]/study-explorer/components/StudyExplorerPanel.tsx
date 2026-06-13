@@ -37,6 +37,7 @@ import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 export default function StudyExplorerPanel({
   canToggleEnglish,
   showEnglish,
@@ -118,6 +119,7 @@ export default function StudyExplorerPanel({
   const hasMoreMatchingItems = hasMorePages && filteredItems.length < allTypeCount;
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
   const hideControlsDuringInitialLoad = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
+  const { toggle: toggleGlyphFont } = useGlyphFontPreference();
   const showLoadingOverlay = hideControlsDuringInitialLoad;
   const loadingFillCount = hasMoreMatchingItems && isLoadingMore && gridColumns > 1
     ? (gridColumns - (filteredItems.length % gridColumns)) % gridColumns
@@ -270,15 +272,6 @@ export default function StudyExplorerPanel({
           <div className={`flex w-full items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
               <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.oldestWaitShort}</span><span className="hidden sm:inline">Oldest Wait</span></button>
               <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.newestWaitShort}</span><span className="hidden sm:inline">Newest Wait</span></button>
-              <button
-                type="button"
-                onClick={onToggleShowEnglish}
-                disabled={!canToggleEnglish}
-                className="flex-1 whitespace-nowrap rounded-full border border-line bg-surface px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em]"
-              >
-                <span className="sm:hidden">{STUDY_PANEL_TEXT.englishShort}</span>
-                <span className="hidden sm:inline">{canToggleEnglish ? (showEnglish ? STUDY_PANEL_TEXT.hideEnglish : STUDY_PANEL_TEXT.showEnglish) : STUDY_PANEL_TEXT.hintsHidden}</span>
-              </button>
               {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
                 <button
                   type="button"
@@ -297,6 +290,40 @@ export default function StudyExplorerPanel({
                 <span className="sm:hidden">{STUDY_PANEL_TEXT.bulkShort}</span>
                 <span className="hidden sm:inline">{bulkModeEnabled ? STUDY_PANEL_TEXT.bulkOpsActive : STUDY_PANEL_TEXT.bulkOperations}</span>
               </button>
+              <div className="ml-auto inline-flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={onToggleShowEnglish}
+                  disabled={!canToggleEnglish}
+                  className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                  title={canToggleEnglish ? (showEnglish ? STUDY_PANEL_TEXT.hideEnglish : STUDY_PANEL_TEXT.showEnglish) : STUDY_PANEL_TEXT.hintsHidden}
+                  aria-label={canToggleEnglish ? (showEnglish ? STUDY_PANEL_TEXT.hideEnglish : STUDY_PANEL_TEXT.showEnglish) : STUDY_PANEL_TEXT.hintsHidden}
+                >
+                  {showEnglish ? (
+                    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
+                      <path d="M4 4l16 16" />
+                    </svg>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleGlyphFont}
+                  className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted"
+                  title="Font"
+                  aria-label="Font"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none">
+                    <text x="6.3" y="14.1" fontSize="12.6" fontWeight="700" fill="currentColor" textAnchor="middle">A</text>
+                    <text x="17.0" y="17.7" fontSize="13.4" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
+                  </svg>
+                </button>
+              </div>
           </div>
         </div>
         {bulkModeEnabled ? (
