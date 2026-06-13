@@ -378,21 +378,21 @@ export default function StudyReviewModalSection({
                   </div>
                 ) : (
                   <div className="flex h-full min-h-0 flex-col">
-                    <div className="grid min-h-0 content-start gap-2 overflow-y-auto sm:grid-cols-2">
-                      <div className="rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
+                    <div className="grid min-h-0 flex-1 auto-rows-fr gap-2 overflow-y-auto sm:grid-cols-2">
+                      <div className="h-full rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
-                        <p className="mt-1 line-clamp-2 text-2xl font-black leading-tight text-foreground sm:text-4xl">
-                          {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
+                        <p className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">
+                          <span>{primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}</span>
+                          {primaryReadingKatakana !== "-" ? (
+                            <span className="text-base font-semibold leading-tight text-foreground/75 sm:text-2xl">/ {primaryReadingKatakana}</span>
+                          ) : null}
                         </p>
-                        {primaryReadingKatakana !== "-" ? (
-                          <p className="line-clamp-1 text-sm font-semibold text-foreground/75 sm:text-base">{primaryReadingKatakana}</p>
-                        ) : null}
                       </div>
-                      <div className="rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
+                      <div className="h-full rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</p>
-                        <p className="mt-1 line-clamp-2 text-2xl font-black leading-tight text-foreground sm:text-4xl">{allMeanings[0] ?? selectedItem.characters}</p>
+                        <p className="mt-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">{allMeanings[0] ?? selectedItem.characters}</p>
                         {allMeanings.length > 1 ? (
-                          <p className="line-clamp-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm">{allMeanings.slice(1).join(" • ")}</p>
+                          <p className="mt-1 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm">{allMeanings.slice(1).join(" • ")}</p>
                         ) : null}
                       </div>
                     </div>
