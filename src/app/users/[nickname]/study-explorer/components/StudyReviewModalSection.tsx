@@ -406,6 +406,7 @@ export default function StudyReviewModalSection({
               accountId={accountId}
               selectedItem={unifiedDetailItem}
               showEnglish={showEnglish}
+              clampLongTitle
               canToggleEnglish={canToggleEnglish}
               onToggleShowEnglish={onToggleShowEnglish}
               hideTimeStats

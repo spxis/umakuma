@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import type { LevelItem } from "../../explorerTypes";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
@@ -40,6 +42,7 @@ type Props = {
   accountId: string;
   selectedItem: LevelItem;
   showEnglish: boolean;
+  clampLongTitle?: boolean;
   titleMeaningToggleOnly?: boolean;
   canToggleEnglish?: boolean;
   onToggleShowEnglish?: (() => void) | null;
@@ -68,6 +71,7 @@ export default function LevelExplorerDetailSection({
   accountId,
   selectedItem,
   showEnglish,
+  clampLongTitle = false,
   titleMeaningToggleOnly = false,
   canToggleEnglish = true,
   onToggleShowEnglish = null,
@@ -94,6 +98,7 @@ export default function LevelExplorerDetailSection({
   const showEnglishForGlyphSubtitle = lockMeaningToggleToTitle ? false : showEnglish;
   const showEnglishForReadings = lockMeaningToggleToTitle ? true : showEnglish;
   const showEnglishForKanjiCards = lockMeaningToggleToTitle ? false : showEnglish;
+  const [expandedHeaderTitleKey, setExpandedHeaderTitleKey] = useState<string | null>(null);
   const isStudyHidden = studyMode && !revealStudyReading;
   const canShowReadings = !isStudyHidden;
   const primaryMeaning = selectedItem.meanings.find((entry) => entry.trim().length > 0) ?? "";
@@ -116,6 +121,9 @@ export default function LevelExplorerDetailSection({
       ? titleForDisplay(selectedItem, false)
       : null
     : null;
+  const headerTitleKey = `${selectedItem.subjectId}:${headerTitle ?? ""}`;
+  const isHeaderTitleExpanded = expandedHeaderTitleKey === headerTitleKey;
+  const shouldClampHeaderTitle = clampLongTitle && Boolean(headerTitle) && !isHeaderTitleExpanded;
 
   return (
     <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
@@ -209,7 +217,24 @@ export default function LevelExplorerDetailSection({
               </>
             ) : (
               <>
-                {headerTitle ? <p className="text-4xl font-black leading-tight text-foreground">{headerTitle}</p> : null}
+                {headerTitle ? (
+                  clampLongTitle ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedHeaderTitleKey((value) =>
+                          value === headerTitleKey ? null : headerTitleKey,
+                        )
+                      }
+                      className="w-full cursor-pointer text-left"
+                      title={isHeaderTitleExpanded ? "Collapse title" : "Expand title"}
+                    >
+                      <p className={`text-4xl font-black leading-tight text-foreground ${shouldClampHeaderTitle ? "line-clamp-3" : ""}`}>{headerTitle}</p>
+                    </button>
+                  ) : (
+                    <p className="text-4xl font-black leading-tight text-foreground">{headerTitle}</p>
+                  )
+                ) : null}
                 {headerSubtitle ? <p className="mt-1 text-2xl font-semibold text-foreground/85">{headerSubtitle}</p> : null}
               </>
             )}

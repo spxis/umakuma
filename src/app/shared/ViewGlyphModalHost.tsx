@@ -324,6 +324,7 @@ export default function ViewGlyphModalHost() {
             accountId={accountId}
             selectedItem={item}
             showEnglish={showEnglish}
+            clampLongTitle
             titleMeaningToggleOnly
             canToggleEnglish
             onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
