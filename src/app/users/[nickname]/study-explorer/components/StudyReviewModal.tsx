@@ -383,20 +383,21 @@ export default function StudyReviewModal({
           </div>
           </div>
 
-          {studyMode && isReviewQueueItem(selectedItem) ? (
-            <div className="grid grid-cols-3 gap-2 border-t border-line/70 px-2 pb-2 sm:px-6 sm:pb-3">
-              <div className="rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-red-800">
-                W {wrong}
-              </div>
-              <div className="rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-amber-800">
-                S {skipped}
-              </div>
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-800">
-                C {correct}
-              </div>
-            </div>
-          ) : null}
         </div>
+
+        {studyMode && isReviewQueueItem(selectedItem) ? (
+          <div className="grid grid-cols-3 border-b border-line/70 bg-surface">
+            <div className="border-r border-red-200 bg-red-50 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-red-800">
+              Wrong {wrong}
+            </div>
+            <div className="border-r border-amber-200 bg-amber-50 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-amber-800">
+              Skipped {skipped}
+            </div>
+            <div className="bg-emerald-50 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-800">
+              Correct {correct}
+            </div>
+          </div>
+        ) : null}
 
         <div
           className={`relative flex min-h-0 flex-1 flex-col px-3 py-3 sm:px-6 sm:py-5 ${useStudyFlashLayout ? "overflow-hidden" : "overflow-y-auto"}`}
