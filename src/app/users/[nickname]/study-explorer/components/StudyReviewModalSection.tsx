@@ -202,7 +202,7 @@ export default function StudyReviewModalSection({
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? (
-                    <span className={`whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${statusClass(selectedItem.status)}`}>
+                    <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>
                       {statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}
                     </span>
                   ) : null}
@@ -297,7 +297,7 @@ export default function StudyReviewModalSection({
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? (
-                    <span className={`inline-flex whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${statusClass(selectedItem.status)}`}>
+                    <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>
                       {statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}
                     </span>
                   ) : null}
@@ -435,7 +435,7 @@ export default function StudyReviewModalSection({
                     {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                     {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                     {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
-                    {showStatusChip ? <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}</span> : null}
+                    {showStatusChip ? <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}</span> : null}
                   </div>
                 </div>
                 {detailsRevealed && allMeanings.length > 1 ? (
