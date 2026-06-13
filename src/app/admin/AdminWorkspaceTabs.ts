@@ -1,4 +1,4 @@
-export const ADMIN_WORKSPACE_TABS = ["operations", "campaigns", "history", "users", "readingEntries"] as const;
+export const ADMIN_WORKSPACE_TABS = ["operations", "campaigns", "history", "users", "readingEntries", "catalog"] as const;
 
 export type AdminWorkspaceTab = (typeof ADMIN_WORKSPACE_TABS)[number];
 
@@ -11,6 +11,7 @@ export const ADMIN_WORKSPACE_ROUTES: Record<AdminWorkspaceTab, string> = {
   history: "/admin/submission-history",
   users: "/admin/users",
   readingEntries: "/admin/reading-entries",
+  catalog: "/admin/wk-catalog",
 };
 
 export function parseAdminWorkspaceTab(value: string | undefined, fallback: AdminWorkspaceTab = "operations"): AdminWorkspaceTab {

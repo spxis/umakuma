@@ -13,6 +13,7 @@ import AdminFeedbackProvider, { useAdminFeedback } from "./AdminFeedbackProvider
 import type { AdminSessionStatus } from "./AdminPage.types";
 import AdminStudyHistory from "./AdminStudyHistory";
 import AdminUsersPanel from "./AdminUsersPanel";
+import AdminCatalogPanel from "./AdminCatalogPanel";
 import AdminReadingEntriesClient from "./reading-entries/AdminReadingEntriesClient";
 import {
   ADMIN_WORKSPACE_COOKIE_KEY,
@@ -263,6 +264,9 @@ function AdminWorkspacePageContent({
             <Link href={routeForAdminWorkspaceTab("readingEntries")} className={tabClassName(activeTab === "readingEntries")}>
               Reading check-ins
             </Link>
+            <Link href={routeForAdminWorkspaceTab("catalog")} className={tabClassName(activeTab === "catalog")}>
+              WK catalog
+            </Link>
           </div>
         </section>
 
@@ -350,6 +354,19 @@ function AdminWorkspacePageContent({
             </div>
             <AdminReadingEntriesClient
               embedded
+              sessionAuthorized={sessionAuthorized}
+              checkingSession={checkingSession}
+            />
+          </section>
+        ) : null}
+
+        {activeTab === "catalog" ? (
+          <section id="admin-catalog" className="space-y-3">
+            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">WK catalog</p>
+              <p className="mt-1 text-sm text-foreground/70">Track freshness, run sync jobs, and spot catalog drift before user-facing integration.</p>
+            </div>
+            <AdminCatalogPanel
               sessionAuthorized={sessionAuthorized}
               checkingSession={checkingSession}
             />
