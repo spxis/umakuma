@@ -294,7 +294,7 @@ export default function UserHeaderMenu({
               onClick={() => setOpen(false)}
               className="fixed inset-0 z-[9990] bg-foreground/20 backdrop-blur-[1px]"
             />
-            <aside ref={panelRef} className="fixed inset-x-3 bottom-3 top-3 z-[9991] overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.22)] sm:inset-x-auto sm:bottom-auto sm:right-6 sm:top-24 sm:w-[min(88vw,320px)] sm:max-h-[calc(100dvh-7rem)]">
+            <aside ref={panelRef} className="fixed inset-x-[22px] bottom-[22px] top-[22px] z-[9991] overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.22)] sm:inset-x-auto sm:bottom-auto sm:right-6 sm:top-24 sm:w-[min(88vw,320px)] sm:max-h-[calc(100dvh-7rem)]">
             <div className="space-y-3">
             <section>
               <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-accent">Account</p>
