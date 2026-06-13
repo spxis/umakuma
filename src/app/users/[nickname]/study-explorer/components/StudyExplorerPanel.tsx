@@ -136,8 +136,8 @@ export default function StudyExplorerPanel({
     <>
       <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface/90 px-5 py-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
+        <div className="grid gap-2 sm:flex sm:items-start sm:justify-between sm:gap-3">
+          <div className="order-2 min-w-0 sm:order-1">
             <button
               type="button"
               onClick={onOpenStudySourceManager}
@@ -150,7 +150,7 @@ export default function StudyExplorerPanel({
             <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? "Tap title to change library" : "Tap title to choose library"}</p>
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
             <ExplorerFilterToggleButton
               expanded={filtersOpen}
               onToggle={() => setFiltersOpen((open) => !open)}
