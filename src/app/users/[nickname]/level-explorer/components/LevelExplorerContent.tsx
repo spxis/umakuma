@@ -247,8 +247,8 @@ export default function LevelExplorerContent({
     <>
     <section id="explorer" className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="flex flex-col gap-3 border-b border-line bg-surface/90 px-5 py-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
+        <div className="grid gap-2 sm:flex sm:items-start sm:justify-between sm:gap-3">
+          <div className="order-2 min-w-0 sm:order-1">
             <button
               type="button"
               onClick={onOpenStudySourceManager}
@@ -260,13 +260,15 @@ export default function LevelExplorerContent({
             </button>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Select one level at a time</p>
           </div>
-          <ExplorerFilterToggleButton
-            expanded={!filtersCollapsed}
-            onToggle={() => onSetFiltersCollapsed(!filtersCollapsed)}
-            controlsId="wk-filters-panel"
-            showLabel="Show filters"
-            hideLabel="Hide filters"
-          />
+          <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
+            <ExplorerFilterToggleButton
+              expanded={!filtersCollapsed}
+              onToggle={() => onSetFiltersCollapsed(!filtersCollapsed)}
+              controlsId="wk-filters-panel"
+              showLabel="Show filters"
+              hideLabel="Hide filters"
+            />
+          </div>
         </div>
         <div id="wk-filters-panel" className={`space-y-3 ${mobileFilterSectionClass}`}>
           <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">

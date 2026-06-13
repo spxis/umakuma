@@ -162,20 +162,22 @@ export default function JlptExplorerContent({
     <>
     <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
       <header className="border-b border-line bg-surface/90 px-5 py-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
+        <div className="grid gap-2 sm:flex sm:items-start sm:justify-between sm:gap-3">
+          <div className="order-2 min-w-0 sm:order-1">
             <h2 className="text-xl font-black text-foreground">JLPT Explorer</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">
               <FilterChipLabel label="Browse all N1-N5 kanji" count={`${formatNumber(items.length)} total`} />
             </p>
           </div>
-          <ExplorerFilterToggleButton
-            expanded={mobileFiltersOpen}
-            onToggle={() => setMobileFiltersOpen((open) => !open)}
-            controlsId="jlpt-filters-panel"
-            showLabel={JLPT_EXPLORER_TEXT.showFilters}
-            hideLabel={JLPT_EXPLORER_TEXT.hideFilters}
-          />
+          <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
+            <ExplorerFilterToggleButton
+              expanded={mobileFiltersOpen}
+              onToggle={() => setMobileFiltersOpen((open) => !open)}
+              controlsId="jlpt-filters-panel"
+              showLabel={JLPT_EXPLORER_TEXT.showFilters}
+              hideLabel={JLPT_EXPLORER_TEXT.hideFilters}
+            />
+          </div>
         </div>
         <div id="jlpt-filters-panel" className={`mt-3 ${mobileFilterSectionClass}`}>
           <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
