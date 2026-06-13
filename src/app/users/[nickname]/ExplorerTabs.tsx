@@ -406,7 +406,7 @@ export default function ExplorerTabs({
                   : "border-line bg-surface text-foreground hover:bg-surface-muted"
               }`}
             >
-              <span className="sm:hidden">Mode {studyMode ? "On" : "Off"}</span>
+              <span className="sm:hidden">Study {studyMode ? "On" : "Off"}</span>
               <span className="hidden sm:inline">Study Mode {studyMode ? "On" : "Off"}</span>
             </button>
           </div>
