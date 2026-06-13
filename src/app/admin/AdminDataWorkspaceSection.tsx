@@ -1,9 +1,9 @@
 "use client";
 
 import AdminCatalogPanel from "./AdminCatalogPanel";
-import AdminControlRoom from "./AdminControlRoom";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import AdminJlptCatalogPanel from "./AdminJlptCatalogPanel";
+import AdminJlptCatalogOperationsPanel from "./AdminJlptCatalogOperationsPanel";
 
 type AdminDataWorkspaceSectionProps = {
   dataCatalogView: "wk" | "jlpt";
@@ -61,7 +61,11 @@ export default function AdminDataWorkspaceSection({
 
       {dataCatalogView === "jlpt" ? (
         <>
-          <AdminControlRoom viewMode="jlpt" {...controlRoomProps} />
+          <AdminJlptCatalogOperationsPanel
+            sessionAuthorized={sessionAuthorized}
+            checkingSession={checkingSession}
+            controlRoomProps={controlRoomProps}
+          />
           <AdminJlptCatalogPanel
             sessionAuthorized={sessionAuthorized}
             checkingSession={checkingSession}
