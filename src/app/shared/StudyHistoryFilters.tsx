@@ -64,6 +64,20 @@ export default function StudyHistoryFilters({
 }: Props) {
   const [filtersOpen, setFiltersOpen] = usePersistedBoolean("wr:study-history:filters-open", { defaultValue: true });
 
+  if (!filtersOpen) {
+    return (
+      <div className="flex justify-end">
+        <ExplorerFilterToggleButton
+          expanded={false}
+          onToggle={() => setFiltersOpen(true)}
+          controlsId="study-history-filters-panel"
+          showLabel="Show filters"
+          hideLabel="Hide filters"
+        />
+      </div>
+    );
+  }
+
   return (
     <section className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
       <div className="flex items-center justify-between gap-2">
@@ -77,7 +91,7 @@ export default function StudyHistoryFilters({
         />
       </div>
 
-      <div id="study-history-filters-panel" className={`mt-2 space-y-2 ${filtersOpen ? "" : "hidden"}`}>
+      <div id="study-history-filters-panel" className="mt-2 space-y-2">
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line px-2.5 py-2">
           <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">Result</span>
           {(["all", "correct", "wrong", "skipped"] as const).map((result) => (
