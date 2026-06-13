@@ -24,11 +24,10 @@ import {
   jlptLevelPillClass,
   shortSubjectTypeLabel,
   stripHtml,
-  statusClass,
-  statusShortLabel,
   subjectTypePillClass,
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
+import StatusSrsChip from "../../shared/StatusSrsChip";
 import StudyReviewModalMetaPanels from "./StudyReviewModalMetaPanels";
 
 type Props = {
@@ -208,9 +207,7 @@ export default function StudyReviewModalSection({
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? (
-                    <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>
-                      {statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}
-                    </span>
+                    <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} />
                   ) : null}
                 </div>
                 <p style={{ fontFamily: glyphFontFamily }} className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">
@@ -303,9 +300,7 @@ export default function StudyReviewModalSection({
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? (
-                    <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>
-                      {statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}
-                    </span>
+                    <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} />
                   ) : null}
                   {canToggleEnglish ? (
                     <button
@@ -476,7 +471,7 @@ export default function StudyReviewModalSection({
                     {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                     {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                     {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
-                    {showStatusChip ? <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}</span> : null}
+                    {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
                   </div>
                 </div>
                 {detailsRevealed && allMeanings.length > 1 ? (

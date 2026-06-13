@@ -2,8 +2,9 @@ import { Fragment, useMemo, useState } from "react";
 
 import type { LevelItem } from "../../explorerTypes";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
+import StatusSrsChip, { SrsOnlyChip } from "../../shared/StatusSrsChip";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
-import { ReadingWithPronunciation, badgeClass, formatNextReviewBadge, formatNumber, glyphSubtitleForDisplay, glyphTextSizeClass, isNewGlyphWithinHours, jlptLevelPillClass, lockedCardStateClass, shortSubjectTypeLabel, statusClass, statusShortLabel, subjectTypePillClass, titleForDisplay, typeCardClass, typeGlyphBoxClass } from "../lib/levelExplorerDisplay";
+import { ReadingWithPronunciation, badgeClass, formatNextReviewBadge, formatNumber, glyphSubtitleForDisplay, glyphTextSizeClass, isNewGlyphWithinHours, jlptLevelPillClass, lockedCardStateClass, shortSubjectTypeLabel, subjectTypePillClass, titleForDisplay, typeCardClass, typeGlyphBoxClass } from "../lib/levelExplorerDisplay";
 import { LEVEL_WK_STATUSES } from "../lib/levelExplorerDomain";
 import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import LevelExplorerDetailSection from "./LevelExplorerDetailSection";
@@ -332,31 +333,25 @@ export default function LevelExplorerItemsGrid({
                 })()
               }
               statusChip={
-                <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${statusClass(item.status)}`}>
-                  {statusShortLabel(item.status)}
-                </span>
-              }
-              middleChip={
                 item.status !== LEVEL_WK_STATUSES.burned
                   ? (() => {
                       const nextReviewBadge = formatNextReviewBadge(item.availableAt);
                       if (!nextReviewBadge) {
-                        return undefined;
+                        return <span />;
                       }
                       return (
-                        <span
-                          className={`rounded-full border px-2 py-1 text-[11px] font-bold uppercase tracking-[0.03em] whitespace-nowrap ${nextReviewBadge.className}`}
-                        >
+                        <span className={`subject-pill whitespace-nowrap ${nextReviewBadge.className}`}>
                           {nextReviewBadge.label}
                         </span>
                       );
                     })()
-                  : undefined
+                  : <span />
               }
+              middleChip={undefined}
               rightChip={
-                <span className="rounded-full border border-line bg-surface px-2 py-1 text-xs font-bold text-foreground">
-                  SRS {item.srsStage}
-                </span>
+                item.status === LEVEL_WK_STATUSES.locked
+                  ? <SrsOnlyChip srsStage={item.srsStage} />
+                  : <StatusSrsChip status={item.status} srsStage={item.srsStage} includeBorder />
               }
             />
 

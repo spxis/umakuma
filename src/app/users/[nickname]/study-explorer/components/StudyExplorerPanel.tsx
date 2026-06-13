@@ -23,8 +23,6 @@ import {
   glyphTextSizeClass,
   jlptLevelPillClass,
   shortSubjectTypeLabel,
-  statusClass,
-  statusShortLabel,
   subjectTypePillClass,
   titleForDisplay,
   typeCardClass,
@@ -36,6 +34,7 @@ import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipLabel from "../../shared/FilterChipLabel";
+import StatusSrsChip, { SrsOnlyChip } from "../../shared/StatusSrsChip";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 export default function StudyExplorerPanel({
@@ -420,8 +419,8 @@ export default function StudyExplorerPanel({
                     middleChip={undefined}
                     rightChip={
                       isLessonLockedQueueItem(item)
-                        ? <span className="subject-pill border-line bg-surface text-foreground whitespace-nowrap">SRS {item.srsStage}</span>
-                        : <span className={`subject-pill border-line whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)} - SRS {item.srsStage}</span>
+                        ? <SrsOnlyChip srsStage={item.srsStage} />
+                        : <StatusSrsChip status={item.status} srsStage={item.srsStage} includeBorder />
                     }
                   />
                 );

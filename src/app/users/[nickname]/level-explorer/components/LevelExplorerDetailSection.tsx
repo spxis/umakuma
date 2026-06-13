@@ -18,8 +18,6 @@ import {
   jlptLevelPillClass,
   secondaryReadingsForDisplay,
   shortSubjectTypeLabel,
-  statusClass,
-  statusShortLabel,
   subjectTypePillClass,
   titleForDisplay,
   typeGlyphBoxClass,
@@ -31,6 +29,7 @@ import {
   VocabularyKanjiCards,
   type VocabularyKanjiLink,
 } from "./LevelExplorerReferenceCards";
+import StatusSrsChip from "../../shared/StatusSrsChip";
 import {
   isKanjiSubjectType,
   isRadicalSubjectType,
@@ -137,7 +136,7 @@ export default function LevelExplorerDetailSection({
       {selectedItem.jlptLevel ? (
         <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span>
       ) : null}
-      <span className={`subject-pill ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}</span>
+      <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} />
       {isNewGlyphWithinHours(selectedItem) ? (
         <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
       ) : null}
