@@ -34,6 +34,7 @@
     "db:backfill:custom-study": "pnpm dlx tsx scripts/backfill-custom-study-enrichment.ts",
     "db:bootstrap:wk-catalog": "pnpm dlx tsx scripts/bootstrap-wk-catalog.ts",
     "db:sync:wk-catalog": "pnpm dlx tsx scripts/sync-wk-catalog-incremental.ts",
+    "db:export:wk-catalog:levels": "pnpm dlx tsx scripts/export-wk-catalog-level-json.ts",
     "db:seed:jlpt": "node scripts/seed-jlpt.mjs",
     "db:seed:jlpt:readings": "node scripts/build-jlpt-readings.mjs",
     "db:seed:kanji-levels": "node scripts/build-kanji-levels.mjs",

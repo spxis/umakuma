@@ -1,0 +1,4219 @@
+{
+  "level": 33,
+  "exportedAt": "2026-06-13T11:45:16.981Z",
+  "counts": {
+    "total": 36,
+    "radicals": 6,
+    "kanji": 28,
+    "vocabulary": 2
+  },
+  "radicals": [
+    {
+      "wkSubjectId": 344,
+      "object": "radical",
+      "subjectType": "radical",
+      "level": 33,
+      "slug": "interval",
+      "characters": "間",
+      "documentUrl": "https://www.wanikani.com/radicals/interval",
+      "dataUpdatedAt": "2025-10-01T06:09:49.127Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Interval",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": null,
+      "componentSubjectIds": [],
+      "amalgamationSubjectIds": [
+        1513
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "This radical is the same as the kanji. It means <radical>interval</radical>.",
+      "meaningHint": null,
+      "readingMnemonic": null,
+      "readingHint": null,
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:40:19.256Z",
+      "updatedAt": "2026-06-13T11:40:19.256Z",
+      "rawData": {
+        "slug": "interval",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Interval",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "間",
+        "created_at": "2013-03-18T16:52:51.616756Z",
+        "document_url": "https://www.wanikani.com/radicals/interval",
+        "lesson_position": 9,
+        "character_images": [
+          {
+            "url": "https://files.wanikani.com/8xs8ajwv9iswan1v7a4644hgjrv3",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "original"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/nnlx7g0ayezr1b7c98j5assgrw8m",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "1024px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/llvknbgi49vduxi0auz7itflp2oj",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "512x512",
+              "style_name": "512px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/xi78e5wf5vcn4p6ugoaxxzcxrzud",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "256x256",
+              "style_name": "256px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/6it2ns8v6z5q2598ffak2ahtch9a",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "128x128",
+              "style_name": "128px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/r9t5hr0saznzt5fgyfrtbc5lrowt",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "64x64",
+              "style_name": "64px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/05tz10nr25suckd2fsp56cav7o1n",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "32x32",
+              "style_name": "32px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/yl73fnuqsf5j0db0xpylohnpjzig",
+            "metadata": {
+              "inline_styles": true
+            },
+            "content_type": "image/svg+xml"
+          }
+        ],
+        "meaning_mnemonic": "This radical is the same as the kanji. It means <radical>interval</radical>.",
+        "auxiliary_meanings": [],
+        "amalgamation_subject_ids": [
+          1513
+        ],
+        "spaced_repetition_system_id": 1
+      }
+    },
+    {
+      "wkSubjectId": 345,
+      "object": "radical",
+      "subjectType": "radical",
+      "level": 33,
+      "slug": "receive",
+      "characters": "享",
+      "documentUrl": "https://www.wanikani.com/radicals/receive",
+      "dataUpdatedAt": "2025-10-01T06:09:49.131Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Receive",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": null,
+      "componentSubjectIds": [],
+      "amalgamationSubjectIds": [
+        1529,
+        1927,
+        2275,
+        2377
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "Put a lid on the mouth of a child and what will you <radical>receive</radical>? At best, a very unimpressed look from that poor child. If you want to receive nice things, putting lids on children’s mouths isn’t the way to go about it.",
+      "meaningHint": null,
+      "readingMnemonic": null,
+      "readingHint": null,
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:40:19.336Z",
+      "updatedAt": "2026-06-13T11:40:19.336Z",
+      "rawData": {
+        "slug": "receive",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Receive",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "享",
+        "created_at": "2013-03-18T16:56:46.624811Z",
+        "document_url": "https://www.wanikani.com/radicals/receive",
+        "lesson_position": 12,
+        "character_images": [
+          {
+            "url": "https://files.wanikani.com/59cqjxqpuc0fk3kssttrr9xrjilm",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "original"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/haa59p4zs4e9rga1igfaxqxe219a",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "1024px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/eo9bgnfl3xm0h2dycazrt4mil6po",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "512x512",
+              "style_name": "512px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/d3kgx07n7tfu0xb7q8m48t5gh4zq",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "256x256",
+              "style_name": "256px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/mawnr1loiw2hdspfb7bfvvluubkg",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "128x128",
+              "style_name": "128px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/r689ont476ga40gj6wulrtzk2tjx",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "64x64",
+              "style_name": "64px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/9mhvjisv1uefclcjziyew1rs00z4",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "32x32",
+              "style_name": "32px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/20370zryemzwukhk8ycuzbh4gt9c",
+            "metadata": {
+              "inline_styles": true
+            },
+            "content_type": "image/svg+xml"
+          }
+        ],
+        "meaning_mnemonic": "Put a lid on the mouth of a child and what will you <radical>receive</radical>? At best, a very unimpressed look from that poor child. If you want to receive nice things, putting lids on children’s mouths isn’t the way to go about it.",
+        "auxiliary_meanings": [],
+        "amalgamation_subject_ids": [
+          1529,
+          1927,
+          2275,
+          2377
+        ],
+        "spaced_repetition_system_id": 1
+      }
+    },
+    {
+      "wkSubjectId": 346,
+      "object": "radical",
+      "subjectType": "radical",
+      "level": 33,
+      "slug": "inside",
+      "characters": "内",
+      "documentUrl": "https://www.wanikani.com/radicals/inside",
+      "dataUpdatedAt": "2026-05-28T17:09:19.684Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Inside",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": null,
+      "componentSubjectIds": [],
+      "amalgamationSubjectIds": [
+        1536
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "This is the <radical>inside</radical> radical, since it looks like a person (人) inside a… head (冂)? I guess if you think about it, every person is sort of trapped inside their own head. Imagine a second, tinier version of you sitting up inside that head of yours, like a mecha pilot. Yep, that's real you. The you <em>inside</em>.",
+      "meaningHint": null,
+      "readingMnemonic": null,
+      "readingHint": null,
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:40:19.410Z",
+      "updatedAt": "2026-06-13T11:40:19.410Z",
+      "rawData": {
+        "slug": "inside",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Inside",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "内",
+        "created_at": "2013-03-18T16:59:37.192751Z",
+        "document_url": "https://www.wanikani.com/radicals/inside",
+        "lesson_position": 13,
+        "character_images": [
+          {
+            "url": "https://files.wanikani.com/oirpvoxcp1tkyus4po3dkhwaipj3",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "original"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/i8qruf8n7jimg4mdjiwximbdfcg6",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "1024px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/eskf5api21tftnmbyaonetooo1h9",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "512x512",
+              "style_name": "512px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/52eqq5b67urmtq2rfvkrcltiyzoc",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "256x256",
+              "style_name": "256px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/43500f0yajbz1u0x1iltz7wdlnk8",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "128x128",
+              "style_name": "128px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/cpau3v4srbfidfldye86cywj870r",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "64x64",
+              "style_name": "64px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/daowu8qfnd361vl3yh5qbk3xcs1m",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "32x32",
+              "style_name": "32px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/myh9etukbl7jtwn5maydqv3un6b2",
+            "metadata": {
+              "inline_styles": true
+            },
+            "content_type": "image/svg+xml"
+          }
+        ],
+        "meaning_mnemonic": "This is the <radical>inside</radical> radical, since it looks like a person (人) inside a… head (冂)? I guess if you think about it, every person is sort of trapped inside their own head. Imagine a second, tinier version of you sitting up inside that head of yours, like a mecha pilot. Yep, that's real you. The you <em>inside</em>.",
+        "auxiliary_meanings": [],
+        "amalgamation_subject_ids": [
+          1536
+        ],
+        "spaced_repetition_system_id": 1
+      }
+    },
+    {
+      "wkSubjectId": 347,
+      "object": "radical",
+      "subjectType": "radical",
+      "level": 33,
+      "slug": "storehouse",
+      "characters": "蔵",
+      "documentUrl": "https://www.wanikani.com/radicals/storehouse",
+      "dataUpdatedAt": "2025-10-01T06:09:49.133Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Storehouse",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": null,
+      "componentSubjectIds": [],
+      "amalgamationSubjectIds": [
+        1540,
+        1546
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "Your flowers become your servants. You plant them, you water them, you bring them up, then you cut them down and put them in your <radical>storehouse</radical>. They do what you want because they become YOUR servants, not the other way around. That's why you can tell them to sit in the storehouse where they wait until you come to eat them.",
+      "meaningHint": null,
+      "readingMnemonic": null,
+      "readingHint": null,
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:40:19.486Z",
+      "updatedAt": "2026-06-13T11:40:19.486Z",
+      "rawData": {
+        "slug": "storehouse",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Storehouse",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "蔵",
+        "created_at": "2013-03-18T17:00:31.968599Z",
+        "document_url": "https://www.wanikani.com/radicals/storehouse",
+        "lesson_position": 14,
+        "character_images": [
+          {
+            "url": "https://files.wanikani.com/f456uewpesuyn154n2to2lqgrmmr",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "original"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/etrfgzsjspdo9g7l5k56jevotqge",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "1024px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/i3qee9h2cyyy7jdo2tkm29kc45lj",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "512x512",
+              "style_name": "512px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/90as3g75pnmupzm6ii18g287v8x0",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "256x256",
+              "style_name": "256px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/5gwrui747osi7h0ptiyrv0eg9m4m",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "128x128",
+              "style_name": "128px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/uvrubahn6d0toi4g07rw271gp7nq",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "64x64",
+              "style_name": "64px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/nvf5z5w91bms5mi83uahv5rl1eud",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "32x32",
+              "style_name": "32px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/xczbb15b4pxy2ukj1dyrsojidvgv",
+            "metadata": {
+              "inline_styles": true
+            },
+            "content_type": "image/svg+xml"
+          }
+        ],
+        "meaning_mnemonic": "Your flowers become your servants. You plant them, you water them, you bring them up, then you cut them down and put them in your <radical>storehouse</radical>. They do what you want because they become YOUR servants, not the other way around. That's why you can tell them to sit in the storehouse where they wait until you come to eat them.",
+        "auxiliary_meanings": [],
+        "amalgamation_subject_ids": [
+          1540,
+          1546
+        ],
+        "spaced_repetition_system_id": 1
+      }
+    },
+    {
+      "wkSubjectId": 382,
+      "object": "radical",
+      "subjectType": "radical",
+      "level": 33,
+      "slug": "wide",
+      "characters": "広",
+      "documentUrl": "https://www.wanikani.com/radicals/wide",
+      "dataUpdatedAt": "2025-10-01T06:09:49.384Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Wide",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": null,
+      "componentSubjectIds": [],
+      "amalgamationSubjectIds": [
+        1524,
+        1798
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "This radical is the same as the kanji. It means <radical>wide</radical>.",
+      "meaningHint": null,
+      "readingMnemonic": null,
+      "readingHint": null,
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:40:22.865Z",
+      "updatedAt": "2026-06-13T11:40:22.865Z",
+      "rawData": {
+        "slug": "wide",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Wide",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "広",
+        "created_at": "2013-06-24T22:38:44.900488Z",
+        "document_url": "https://www.wanikani.com/radicals/wide",
+        "lesson_position": 15,
+        "character_images": [
+          {
+            "url": "https://files.wanikani.com/ps1pe5o0awmy6j0yflz6dzuym7ak",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "original"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/0usbr0aimjkqc0dyopdexigy9oa1",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "1024px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/rgkurmxpckq4cdnqjn4g2kkpvxoe",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "512x512",
+              "style_name": "512px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/341qdzhgaovfpjhlat6e2f53oob0",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "256x256",
+              "style_name": "256px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/yue6mbfmxxeg8ff6fkweh0b5mlhf",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "128x128",
+              "style_name": "128px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/5jzsdeio90a5gmg7g3n01bsrz2l8",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "64x64",
+              "style_name": "64px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/1d7uxpi42fktna4dc8byms0cmr3n",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "32x32",
+              "style_name": "32px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/7jt9i49gsda8h9atopyafq1rq0oq",
+            "metadata": {
+              "inline_styles": true
+            },
+            "content_type": "image/svg+xml"
+          }
+        ],
+        "meaning_mnemonic": "This radical is the same as the kanji. It means <radical>wide</radical>.",
+        "auxiliary_meanings": [],
+        "amalgamation_subject_ids": [
+          1524,
+          1798
+        ],
+        "spaced_repetition_system_id": 1
+      }
+    },
+    {
+      "wkSubjectId": 428,
+      "object": "radical",
+      "subjectType": "radical",
+      "level": 33,
+      "slug": "boot",
+      "characters": "堇",
+      "documentUrl": "https://www.wanikani.com/radicals/boot",
+      "dataUpdatedAt": "2026-01-28T21:32:24.066Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Boot",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": null,
+      "componentSubjectIds": [],
+      "amalgamationSubjectIds": [
+        1570,
+        2446,
+        9388
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "There's something made of leather with some dirt on the bottom of it. It's a <radical>boot</radical>!",
+      "meaningHint": null,
+      "readingMnemonic": null,
+      "readingHint": null,
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:40:26.128Z",
+      "updatedAt": "2026-06-13T11:40:26.128Z",
+      "rawData": {
+        "slug": "boot",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Boot",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "堇",
+        "created_at": "2015-06-26T22:31:21.086165Z",
+        "document_url": "https://www.wanikani.com/radicals/boot",
+        "lesson_position": 4,
+        "character_images": [
+          {
+            "url": "https://files.wanikani.com/nl1bjdzpleamybogbg6l04qef7ih",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "original"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/13dylzeuqu34a2svg0xjdt5fykmr",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "1024x1024",
+              "style_name": "1024px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/hdk3edrbntimmum2gx0wrypqophx",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "512x512",
+              "style_name": "512px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/gpwhqtk2p2ukbf5ra8ipwzrphrez",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "256x256",
+              "style_name": "256px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/qe3i164foqm2za8yqodwn3z6ubdl",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "128x128",
+              "style_name": "128px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/6vur5v7u93uuui5ka5foj3rygbag",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "64x64",
+              "style_name": "64px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/c30tv2abxc5bhl9420l0ui6n9m2k",
+            "metadata": {
+              "color": "#000000",
+              "dimensions": "32x32",
+              "style_name": "32px"
+            },
+            "content_type": "image/png"
+          },
+          {
+            "url": "https://files.wanikani.com/tpi4fh0yk5t53v07js60v2b4n23j",
+            "metadata": {
+              "inline_styles": true
+            },
+            "content_type": "image/svg+xml"
+          }
+        ],
+        "meaning_mnemonic": "There's something made of leather with some dirt on the bottom of it. It's a <radical>boot</radical>!",
+        "auxiliary_meanings": [],
+        "amalgamation_subject_ids": [
+          1570,
+          2446,
+          9388
+        ],
+        "spaced_repetition_system_id": 1
+      }
+    }
+  ],
+  "kanji": [
+    {
+      "wkSubjectId": 1513,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "簡",
+      "characters": "簡",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%B0%A1",
+      "dataUpdatedAt": "2026-06-09T23:30:48.265Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Simplicity",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "かん",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        85,
+        344
+      ],
+      "amalgamationSubjectIds": [
+        5598,
+        5936
+      ],
+      "visuallySimilarSubjectIds": [
+        1854
+      ],
+      "meaningMnemonic": "You line up stalks of <radical>bamboo</radical> with an equal <radical>interval</radical> between each one. This pattern creates a sense of <kanji>simplicity</kanji>.",
+      "meaningHint": "Bamboo, interval, bamboo, interval, bamboo… Almost like a binary rhythm: 1, 0, 1, 0, 1. Now that's simplicity. It doesn't get simpler than that!",
+      "readingMnemonic": "That kind of <kanji>simplicity</kanji> is what Genghis <reading>Khan</reading> (かん) always demanded. Everything he decided was based on simplicity.",
+      "readingHint": "Simplicity is how he took over the world. Attack or don't attack? Boom, simple. If he hadn't stuck to simplicity, he wouldn't have been able to do what he did. Complex thoughts just get in the way of expansionist ambitions, you know?",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.115Z",
+      "updatedAt": "2026-06-13T11:41:49.115Z",
+      "rawData": {
+        "slug": "簡",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Simplicity",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "かん",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "簡",
+        "created_at": "2013-03-18T17:02:54.049667Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%B0%A1",
+        "meaning_hint": "Bamboo, interval, bamboo, interval, bamboo… Almost like a binary rhythm: 1, 0, 1, 0, 1. Now that's simplicity. It doesn't get simpler than that!",
+        "reading_hint": "Simplicity is how he took over the world. Attack or don't attack? Boom, simple. If he hadn't stuck to simplicity, he wouldn't have been able to do what he did. Complex thoughts just get in the way of expansionist ambitions, you know?",
+        "lesson_position": 18,
+        "meaning_mnemonic": "You line up stalks of <radical>bamboo</radical> with an equal <radical>interval</radical> between each one. This pattern creates a sense of <kanji>simplicity</kanji>. ",
+        "reading_mnemonic": "That kind of <kanji>simplicity</kanji> is what Genghis <reading>Khan</reading> (かん) always demanded. Everything he decided was based on simplicity.",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Simple"
+          }
+        ],
+        "component_subject_ids": [
+          85,
+          344
+        ],
+        "amalgamation_subject_ids": [
+          5598,
+          5936
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1854
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1515,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "誌",
+      "characters": "誌",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%AA%8C",
+      "dataUpdatedAt": "2025-10-01T06:09:57.462Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Magazine",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "し",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        117,
+        97,
+        65
+      ],
+      "amalgamationSubjectIds": [
+        5621
+      ],
+      "visuallySimilarSubjectIds": [
+        1411,
+        1543
+      ],
+      "meaningMnemonic": "To <radical>say</radical> what's in a <radical>samurai</radical>'s <radical>heart</radical> you start a <kanji>magazine</kanji>. You go around writing about and interviewing all the samurai so you can share what they say to everyone who wants to read!",
+      "meaningHint": "Why hadn't anyone thought of making a samurai magazine before?!",
+      "readingMnemonic": "Unfortunately, your <kanji>magazine</kanji> helps the <reading>shee</reading>p (し) samurai find other samurai... and kill them. None of the samurai want to share their feelings with your magazine anymore, oh no!",
+      "readingHint": "The sheep samurai is ruining your magazine! Maybe you should start a new magazine called, \"All the places the sheep samurai will be, so stay away!\" to make up for all the damage you've caused.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.270Z",
+      "updatedAt": "2026-06-13T11:41:49.270Z",
+      "rawData": {
+        "slug": "誌",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Magazine",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "し",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "誌",
+        "created_at": "2013-03-18T17:04:01.663595Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%AA%8C",
+        "meaning_hint": "Why hadn't anyone thought of making a samurai magazine before?!",
+        "reading_hint": "The sheep samurai is ruining your magazine! Maybe you should start a new magazine called, \"All the places the sheep samurai will be, so stay away!\" to make up for all the damage you've caused.",
+        "lesson_position": 19,
+        "meaning_mnemonic": "To <radical>say</radical> what's in a <radical>samurai</radical>'s <radical>heart</radical> you start a <kanji>magazine</kanji>. You go around writing about and interviewing all the samurai so you can share what they say to everyone who wants to read!",
+        "reading_mnemonic": "Unfortunately, your <kanji>magazine</kanji> helps the <reading>shee</reading>p (し) samurai find other samurai... and kill them. None of the samurai want to share their feelings with your magazine anymore, oh no!",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          117,
+          97,
+          65
+        ],
+        "amalgamation_subject_ids": [
+          5621
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1411,
+          1543
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1516,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "窓",
+      "characters": "窓",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%AA%93",
+      "dataUpdatedAt": "2025-10-01T06:09:57.462Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Window",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "kunyomi",
+          "primary": true,
+          "reading": "まど",
+          "accepted_answer": true
+        },
+        {
+          "type": "onyomi",
+          "primary": false,
+          "reading": "そう",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        170,
+        140,
+        65
+      ],
+      "amalgamationSubjectIds": [
+        5622,
+        5623,
+        9061
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "The <radical>hole</radical> leading to the <radical>private</radical> <radical>heart</radical> of your house is the <kanji>window</kanji>. Or maybe it's just the window to your soul, and not your house. Like the poetry people say.",
+      "meaningHint": "Imagine someone looking into a hole that shows your private heart. That's a window. A window you probably should have kept closed. Now everyone is looking in.",
+      "readingMnemonic": "You realize that a ton of people are looking into your <kanji>window</kanji> and seeing all your private things. This makes you <reading>mad</reading> (まど)! What right do they have to know your private thoughts and desires?!",
+      "readingHint": "Look out your window back at the faces. Try to express how mad you are at them with your face through the glass. Make as many mad faces that you can think of.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.347Z",
+      "updatedAt": "2026-06-13T11:41:49.347Z",
+      "rawData": {
+        "slug": "窓",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Window",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "kunyomi",
+            "primary": true,
+            "reading": "まど",
+            "accepted_answer": true
+          },
+          {
+            "type": "onyomi",
+            "primary": false,
+            "reading": "そう",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "窓",
+        "created_at": "2013-03-18T17:04:27.384650Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%AA%93",
+        "meaning_hint": "Imagine someone looking into a hole that shows your private heart. That's a window. A window you probably should have kept closed. Now everyone is looking in.",
+        "reading_hint": "Look out your window back at the faces. Try to express how mad you are at them with your face through the glass. Make as many mad faces that you can think of.",
+        "lesson_position": 20,
+        "meaning_mnemonic": "The <radical>hole</radical> leading to the <radical>private</radical> <radical>heart</radical> of your house is the <kanji>window</kanji>. Or maybe it's just the window to your soul, and not your house. Like the poetry people say.",
+        "reading_mnemonic": "You realize that a ton of people are looking into your <kanji>window</kanji> and seeing all your private things. This makes you <reading>mad</reading> (まど)! What right do they have to know your private thoughts and desires?!",
+        "auxiliary_meanings": [
+          {
+            "type": "blacklist",
+            "meaning": "Widow"
+          }
+        ],
+        "component_subject_ids": [
+          170,
+          140,
+          65
+        ],
+        "amalgamation_subject_ids": [
+          5622,
+          5623,
+          9061
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": []
+      }
+    },
+    {
+      "wkSubjectId": 1517,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "否",
+      "characters": "否",
+      "documentUrl": "https://www.wanikani.com/kanji/%E5%90%A6",
+      "dataUpdatedAt": "2025-10-01T06:09:57.470Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "No",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "ひ",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "いな",
+          "accepted_answer": false
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "いや",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        96,
+        16
+      ],
+      "amalgamationSubjectIds": [
+        5624,
+        5625,
+        5626,
+        5849,
+        5850,
+        6025,
+        6309
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "The <radical>Not</radical> <radical>Mouth</radical> says “<kanji>no</kanji>”. What else would you expect from something named the “Not Mouth”? The Not Mouth will always say “no”, regardless of the question.",
+      "meaningHint": "Imagine encountering this Not Mouth. Ask it a question. It answers, “No”. Imagine doing this over and over until you believe that the Not Mouth always says “no”.",
+      "readingMnemonic": "You ask the Not Mouth if it is afraid of <reading>he</reading>at (ひ). The Not Mouth says, “<kanji>no</kanji>”. So you set the Not Mouth on fire. The Not Mouth then screams, “NONONONONONONONONONOOOOOO~!” Looks like someone can’t handle the heat.",
+      "readingHint": "Listen as the Not Mouth continues to scream in bloodcurdling agony. Hear the flames flicker as they lick across the Not Mouth’s being. Seems as though the heat was too much for the Not Mouth.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.424Z",
+      "updatedAt": "2026-06-13T11:41:49.424Z",
+      "rawData": {
+        "slug": "否",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "No",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "ひ",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "いな",
+            "accepted_answer": false
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "いや",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "否",
+        "created_at": "2013-03-18T17:04:52.564283Z",
+        "document_url": "https://www.wanikani.com/kanji/%E5%90%A6",
+        "meaning_hint": "Imagine encountering this Not Mouth. Ask it a question. It answers, “No”. Imagine doing this over and over until you believe that the Not Mouth always says “no”.",
+        "reading_hint": "Listen as the Not Mouth continues to scream in bloodcurdling agony. Hear the flames flicker as they lick across the Not Mouth’s being. Seems as though the heat was too much for the Not Mouth.",
+        "lesson_position": 21,
+        "meaning_mnemonic": "The <radical>Not</radical> <radical>Mouth</radical> says “<kanji>no</kanji>”. What else would you expect from something named the “Not Mouth”? The Not Mouth will always say “no”, regardless of the question.",
+        "reading_mnemonic": "You ask the Not Mouth if it is afraid of <reading>he</reading>at (ひ). The Not Mouth says, “<kanji>no</kanji>”. So you set the Not Mouth on fire. The Not Mouth then screams, “NONONONONONONONONONOOOOOO~!” Looks like someone can’t handle the heat.",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Not"
+          }
+        ],
+        "component_subject_ids": [
+          96,
+          16
+        ],
+        "amalgamation_subject_ids": [
+          5624,
+          5625,
+          5626,
+          5849,
+          5850,
+          6025,
+          6309
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": []
+      }
+    },
+    {
+      "wkSubjectId": 1518,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "筋",
+      "characters": "筋",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%AD%8B",
+      "dataUpdatedAt": "2025-10-01T06:09:57.475Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Muscle",
+          "primary": true,
+          "accepted_answer": true
+        },
+        {
+          "meaning": "Tendon",
+          "primary": false,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "きん",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "すじ",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        85,
+        43,
+        13
+      ],
+      "amalgamationSubjectIds": [
+        5627,
+        5628,
+        5838
+      ],
+      "visuallySimilarSubjectIds": [
+        1058
+      ],
+      "meaningMnemonic": "This <radical>bamboo</radical> absorbed the <radical>moon</radical>'s <radical>power</radical>, and you want that power in your body, so you surgically insert them into your body to replace your <kanji>muscle</kanji>s and <kanji>tendon</kanji>s.",
+      "meaningHint": "Picture your new bamboo muscles glowing under your skin with the moon's power. You flex and feel the power coursing through you!",
+      "readingMnemonic": "Your special <kanji>muscle</kanji>s and <kanji>tendon</kanji>s have become famous and the <reading>Kin</reading>g (きん) of England has requested that you appear in his court! It looks like he wants you to teach his barber surgeons how you got your new muscles.",
+      "readingHint": "Imagine standing before the King, explaining in detail how you cut yourself open and replaced your weak human meat with the special muscles you have now. He's staring intently at you, but more so at your shining body than your mouth as you talk.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.500Z",
+      "updatedAt": "2026-06-13T11:41:49.500Z",
+      "rawData": {
+        "slug": "筋",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Muscle",
+            "primary": true,
+            "accepted_answer": true
+          },
+          {
+            "meaning": "Tendon",
+            "primary": false,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "きん",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "すじ",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "筋",
+        "created_at": "2013-03-18T17:05:22.386526Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%AD%8B",
+        "meaning_hint": "Picture your new bamboo muscles glowing under your skin with the moon's power. You flex and feel the power coursing through you!",
+        "reading_hint": "Imagine standing before the King, explaining in detail how you cut yourself open and replaced your weak human meat with the special muscles you have now. He's staring intently at you, but more so at your shining body than your mouth as you talk.",
+        "lesson_position": 22,
+        "meaning_mnemonic": "This <radical>bamboo</radical> absorbed the <radical>moon</radical>'s <radical>power</radical>, and you want that power in your body, so you surgically insert them into your body to replace your <kanji>muscle</kanji>s and <kanji>tendon</kanji>s.",
+        "reading_mnemonic": "Your special <kanji>muscle</kanji>s and <kanji>tendon</kanji>s have become famous and the <reading>Kin</reading>g (きん) of England has requested that you appear in his court! It looks like he wants you to teach his barber surgeons how you got your new muscles.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          85,
+          43,
+          13
+        ],
+        "amalgamation_subject_ids": [
+          5627,
+          5628,
+          5838
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1058
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1521,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "宣",
+      "characters": "宣",
+      "documentUrl": "https://www.wanikani.com/kanji/%E5%AE%A3",
+      "dataUpdatedAt": "2025-10-06T04:33:10.923Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Proclaim",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "せん",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "のたま",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        78,
+        1,
+        293
+      ],
+      "amalgamationSubjectIds": [
+        5634,
+        5635,
+        5840
+      ],
+      "visuallySimilarSubjectIds": [
+        1677
+      ],
+      "meaningMnemonic": "Someone climbs onto the <radical>roof</radical> from the <radical>ground</radical> when <radical>dawn</radical> comes to <kanji>proclaim</kanji> that a new day has begun! They proclaim this at the top of their lungs!",
+      "meaningHint": "Picture a shadowy shape on top of the roof, proclaiming to the entire town that the new day is here! It's come! And it's also time to get up.",
+      "readingMnemonic": "The thing that climbs up on the roof to <kanji>proclaim</kanji> that the new day is here is a <reading>cen</reading>taur (せん). Ohoho, did you think I was going to say it was a rooster? Wrong! Centaurs are taller than humans and roosters, so when they climb onto the roof with their horse legs they can see dawn starting before anyone else.",
+      "readingHint": "Picture that shadow on the roof, proclaiming it's a new day, but this time make sure you picture the outline of this centaur. He has a human top half and a horse bottom half. And he's yelling down at you, \"HEY THE SUN IS UP IT'S DAWN GET OUT OF BED!\"",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.728Z",
+      "updatedAt": "2026-06-13T11:41:49.728Z",
+      "rawData": {
+        "slug": "宣",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Proclaim",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "せん",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "のたま",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "宣",
+        "created_at": "2013-03-18T17:06:51.080820Z",
+        "document_url": "https://www.wanikani.com/kanji/%E5%AE%A3",
+        "meaning_hint": "Picture a shadowy shape on top of the roof, proclaiming to the entire town that the new day is here! It's come! And it's also time to get up.",
+        "reading_hint": "Picture that shadow on the roof, proclaiming it's a new day, but this time make sure you picture the outline of this centaur. He has a human top half and a horse bottom half. And he's yelling down at you, \"HEY THE SUN IS UP IT'S DAWN GET OUT OF BED!\"",
+        "lesson_position": 24,
+        "meaning_mnemonic": "Someone climbs onto the <radical>roof</radical> from the <radical>ground</radical> when <radical>dawn</radical> comes to <kanji>proclaim</kanji> that a new day has begun! They proclaim this at the top of their lungs!",
+        "reading_mnemonic": "The thing that climbs up on the roof to <kanji>proclaim</kanji> that the new day is here is a <reading>cen</reading>taur (せん). Ohoho, did you think I was going to say it was a rooster? Wrong! Centaurs are taller than humans and roosters, so when they climb onto the roof with their horse legs they can see dawn starting before anyone else.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          78,
+          1,
+          293
+        ],
+        "amalgamation_subject_ids": [
+          5634,
+          5635,
+          5840
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1677
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1522,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "尊",
+      "characters": "尊",
+      "documentUrl": "https://www.wanikani.com/kanji/%E5%B0%8A",
+      "dataUpdatedAt": "2025-11-25T01:52:39.908Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Revered",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "そん",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "とうと",
+          "accepted_answer": false
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "たっと",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        8767,
+        182,
+        74
+      ],
+      "amalgamationSubjectIds": [
+        5636,
+        5637,
+        5851,
+        5852
+      ],
+      "visuallySimilarSubjectIds": [
+        991
+      ],
+      "meaningMnemonic": "The <radical>horns</radical> of the creatures who drink <radical>alcohol</radical> have a <radical>measurement</radical> so large that they are <kanji>revered</kanji> the world over. The horns are revered both for their size and potency. The horns can be used in medicine, so they are very valuable, those alcoholic monster horns.",
+      "meaningHint": "Look at one of these revered horns. Pick it up and feel its weight. It measures very large. Your arms are getting tired from the weight.",
+      "readingMnemonic": "The reason you are interested in these <kanji>revered</kanji> horns so much is that your <reading>son</reading> (そん) is sick and you need one of these revered horns to make a medicine for your son. Only with the revered power of the horns will you be able to save your son’s life.",
+      "readingHint": "Good thing you already have one of these revered horns. Now imagine yourself grinding it up into a powder to mix into a potion for your son to drink. Hear the horn grinding away as you physically break the horn up into millions of tiny pieces.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.802Z",
+      "updatedAt": "2026-06-13T11:41:49.802Z",
+      "rawData": {
+        "slug": "尊",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Revered",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "そん",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "とうと",
+            "accepted_answer": false
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "たっと",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "尊",
+        "created_at": "2013-03-18T17:07:17.364560Z",
+        "document_url": "https://www.wanikani.com/kanji/%E5%B0%8A",
+        "meaning_hint": "Look at one of these revered horns. Pick it up and feel its weight. It measures very large. Your arms are getting tired from the weight.",
+        "reading_hint": "Good thing you already have one of these revered horns. Now imagine yourself grinding it up into a powder to mix into a potion for your son to drink. Hear the horn grinding away as you physically break the horn up into millions of tiny pieces.",
+        "lesson_position": 25,
+        "meaning_mnemonic": "The <radical>horns</radical> of the creatures who drink <radical>alcohol</radical> have a <radical>measurement</radical> so large that they are <kanji>revered</kanji> the world over. The horns are revered both for their size and potency. The horns can be used in medicine, so they are very valuable, those alcoholic monster horns.",
+        "reading_mnemonic": "The reason you are interested in these <kanji>revered</kanji> horns so much is that your <reading>son</reading> (そん) is sick and you need one of these revered horns to make a medicine for your son. Only with the revered power of the horns will you be able to save your son’s life.",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Reverence"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Precious"
+          }
+        ],
+        "component_subject_ids": [
+          8767,
+          182,
+          74
+        ],
+        "amalgamation_subject_ids": [
+          5636,
+          5637,
+          5851,
+          5852
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          991
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1523,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "忠",
+      "characters": "忠",
+      "documentUrl": "https://www.wanikani.com/kanji/%E5%BF%A0",
+      "dataUpdatedAt": "2025-10-01T06:09:57.522Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Loyalty",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "ちゅう",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        49,
+        65
+      ],
+      "amalgamationSubjectIds": [
+        5638,
+        5639,
+        6548
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "Those that are in the <radical>middle</radical> of your <radical>heart</radical> are the ones you have the most <kanji>loyalty</kanji> towards. The middle of your heart is the most sacred, special place for people, so it makes sense that those you keep in the middle of your heart are those you are most loyal to.",
+      "meaningHint": "Who do you feel the most loyalty towards? Imagine them in the middle of your heart. Feel them in your chest. Imagine them, literally inside the middle of your heart.",
+      "readingMnemonic": "You pictured <reading>Chew</reading>bacca (ちゅう), didn’t you? No? Well you should have. Chewbacca deserves everyone’s <kanji>loyalty</kanji>. Chewbacca is super loyal to you, so he deserves your loyalty back.",
+      "readingHint": "Chewbacca is very loyal. Focus on your loyalty to Chewbacca. Picture him right in the middle of your heart and hear his Chewbacca yell. Also keep in mind that this kanji shares its reading with 中 which is also included in this kanji.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.876Z",
+      "updatedAt": "2026-06-13T11:41:49.876Z",
+      "rawData": {
+        "slug": "忠",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Loyalty",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "ちゅう",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "忠",
+        "created_at": "2013-03-18T17:07:42.253675Z",
+        "document_url": "https://www.wanikani.com/kanji/%E5%BF%A0",
+        "meaning_hint": "Who do you feel the most loyalty towards? Imagine them in the middle of your heart. Feel them in your chest. Imagine them, literally inside the middle of your heart.",
+        "reading_hint": "Chewbacca is very loyal. Focus on your loyalty to Chewbacca. Picture him right in the middle of your heart and hear his Chewbacca yell. Also keep in mind that this kanji shares its reading with 中 which is also included in this kanji.",
+        "lesson_position": 26,
+        "meaning_mnemonic": "Those that are in the <radical>middle</radical> of your <radical>heart</radical> are the ones you have the most <kanji>loyalty</kanji> towards. The middle of your heart is the most sacred, special place for people, so it makes sense that those you keep in the middle of your heart are those you are most loyal to.",
+        "reading_mnemonic": "You pictured <reading>Chew</reading>bacca (ちゅう), didn’t you? No? Well you should have. Chewbacca deserves everyone’s <kanji>loyalty</kanji>. Chewbacca is super loyal to you, so he deserves your loyalty back.",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Loyal"
+          }
+        ],
+        "component_subject_ids": [
+          49,
+          65
+        ],
+        "amalgamation_subject_ids": [
+          5638,
+          5639,
+          6548
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": []
+      }
+    },
+    {
+      "wkSubjectId": 1524,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "拡",
+      "characters": "拡",
+      "documentUrl": "https://www.wanikani.com/kanji/%E6%8B%A1",
+      "dataUpdatedAt": "2025-10-01T06:09:57.529Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Extend",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "かく",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "ひろ",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        63,
+        382
+      ],
+      "amalgamationSubjectIds": [
+        5640,
+        5641,
+        5642
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "To make your <radical>fingers</radical> <radical>wide</radical> you <kanji>extend</kanji> them.",
+      "meaningHint": "Extend your fingers right now and see how wide you can make them.",
+      "readingMnemonic": "As you <kanji>extend</kanji> your fingers a <reading>cock</reading> (かく) comes running by and runs straight into them. Bu-COCK!",
+      "readingHint": "You poked the cock right in the eye with your extended fingers. Maybe you shouldn't be doing that in public. Innocent cocks could get hurt.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:49.956Z",
+      "updatedAt": "2026-06-13T11:41:49.956Z",
+      "rawData": {
+        "slug": "拡",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Extend",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "かく",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "ひろ",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "拡",
+        "created_at": "2013-03-18T17:08:13.328377Z",
+        "document_url": "https://www.wanikani.com/kanji/%E6%8B%A1",
+        "meaning_hint": "Extend your fingers right now and see how wide you can make them.",
+        "reading_hint": "You poked the cock right in the eye with your extended fingers. Maybe you shouldn't be doing that in public. Innocent cocks could get hurt.",
+        "lesson_position": 27,
+        "meaning_mnemonic": "To make your <radical>fingers</radical> <radical>wide</radical> you <kanji>extend</kanji> them.",
+        "reading_mnemonic": "As you <kanji>extend</kanji> your fingers a <reading>cock</reading> (かく) comes running by and runs straight into them. Bu-COCK!",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Expand"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Extension"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Spread"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Enlarge"
+          }
+        ],
+        "component_subject_ids": [
+          63,
+          382
+        ],
+        "amalgamation_subject_ids": [
+          5640,
+          5641,
+          5642
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": []
+      }
+    },
+    {
+      "wkSubjectId": 1525,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "操",
+      "characters": "操",
+      "documentUrl": "https://www.wanikani.com/kanji/%E6%93%8D",
+      "dataUpdatedAt": "2025-10-01T06:09:57.533Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Manipulate",
+          "primary": true,
+          "accepted_answer": true
+        },
+        {
+          "meaning": "Chastity",
+          "primary": false,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "そう",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "あやつ",
+          "accepted_answer": false
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "みさお",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        63,
+        8830
+      ],
+      "amalgamationSubjectIds": [
+        5643,
+        5644,
+        5645,
+        5646,
+        7834
+      ],
+      "visuallySimilarSubjectIds": [
+        2127,
+        1678
+      ],
+      "meaningMnemonic": "If someone has their <radical>fingers</radical> in your <radical>syrup</radical>, it's just another way of saying they <kanji>manipulate</kanji>d you. Cause only slimy people manipulate other people, so their fingers are slimy and sticky because they're covered in your syrup from mucking up your life.\n\nThis also has another meaning: <kanji>chastity</kanji>. Just imagine if someone wanted you to keep your chastity and they called s.e.x. when someone \"puts their fingers in your syrup.\" That would be pretty effective, right? Cause it's like, super gross.",
+      "meaningHint": "\"Ah golly gee wiz, he sure got his fingers all up in my syrup again, dagnabbit.\" You know, this saying we say all the time when someone manipulates us into doing something.",
+      "readingMnemonic": "If you want to <kanji>manipulate</kanji> someone else it's going to have a permanent effect on your <reading>sou</reading>l (そう). Being manipulative isn't cool. And your soul will suffer forever for it.",
+      "readingHint": "What happens to your soul, you ask? It gets covered in syrup. That's probably where the syrup fingers phrase came from in the first place.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.030Z",
+      "updatedAt": "2026-06-13T11:41:50.030Z",
+      "rawData": {
+        "slug": "操",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Manipulate",
+            "primary": true,
+            "accepted_answer": true
+          },
+          {
+            "meaning": "Chastity",
+            "primary": false,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "そう",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "あやつ",
+            "accepted_answer": false
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "みさお",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "操",
+        "created_at": "2013-03-18T17:08:55.793641Z",
+        "document_url": "https://www.wanikani.com/kanji/%E6%93%8D",
+        "meaning_hint": "\"Ah golly gee wiz, he sure got his fingers all up in my syrup again, dagnabbit.\" You know, this saying we say all the time when someone manipulates us into doing something.",
+        "reading_hint": "What happens to your soul, you ask? It gets covered in syrup. That's probably where the syrup fingers phrase came from in the first place.",
+        "lesson_position": 28,
+        "meaning_mnemonic": "If someone has their <radical>fingers</radical> in your <radical>syrup</radical>, it's just another way of saying they <kanji>manipulate</kanji>d you. Cause only slimy people manipulate other people, so their fingers are slimy and sticky because they're covered in your syrup from mucking up your life.\n\nThis also has another meaning: <kanji>chastity</kanji>. Just imagine if someone wanted you to keep your chastity and they called s.e.x. when someone \"puts their fingers in your syrup.\" That would be pretty effective, right? Cause it's like, super gross.",
+        "reading_mnemonic": "If you want to <kanji>manipulate</kanji> someone else it's going to have a permanent effect on your <reading>sou</reading>l (そう). Being manipulative isn't cool. And your soul will suffer forever for it.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          63,
+          8830
+        ],
+        "amalgamation_subject_ids": [
+          5643,
+          5644,
+          5645,
+          5646,
+          7834
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          2127,
+          1678
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1526,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "敬",
+      "characters": "敬",
+      "documentUrl": "https://www.wanikani.com/kanji/%E6%95%AC",
+      "dataUpdatedAt": "2025-10-01T06:09:57.535Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Respect",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "けい",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "うやま",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        255,
+        60
+      ],
+      "amalgamationSubjectIds": [
+        5637,
+        5647,
+        5851,
+        5852
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "Writing a <radical>poem</radical> about <radical>winter</radical> is the only way to get <kanji>respect</kanji> from other poets.",
+      "meaningHint": "Even better, write a poem about winter IN winter. Then they'll really respect you.",
+      "readingMnemonic": "Once you have their <kanji>respect</kanji> you get <reading>ca</reading>ke (けい)!",
+      "readingHint": "The cake has the word RESPECT in fancy, cursive letters. Imagine eating that cake and taste the respect of your poet peers. Mm mm!",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.103Z",
+      "updatedAt": "2026-06-13T11:41:50.103Z",
+      "rawData": {
+        "slug": "敬",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Respect",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "けい",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "うやま",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "敬",
+        "created_at": "2013-03-18T17:10:06.179435Z",
+        "document_url": "https://www.wanikani.com/kanji/%E6%95%AC",
+        "meaning_hint": "Even better, write a poem about winter IN winter. Then they'll really respect you.",
+        "reading_hint": "The cake has the word RESPECT in fancy, cursive letters. Imagine eating that cake and taste the respect of your poet peers. Mm mm!",
+        "lesson_position": 29,
+        "meaning_mnemonic": "Writing a <radical>poem</radical> about <radical>winter</radical> is the only way to get <kanji>respect</kanji> from other poets.",
+        "reading_mnemonic": "Once you have their <kanji>respect</kanji> you get <reading>ca</reading>ke (けい)!",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Honor"
+          }
+        ],
+        "component_subject_ids": [
+          255,
+          60
+        ],
+        "amalgamation_subject_ids": [
+          5637,
+          5647,
+          5851,
+          5852
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": []
+      }
+    },
+    {
+      "wkSubjectId": 1527,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "暮",
+      "characters": "暮",
+      "documentUrl": "https://www.wanikani.com/kanji/%E6%9A%AE",
+      "dataUpdatedAt": "2026-05-07T09:07:11.153Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Livelihood",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "ぼ",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "く",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        356,
+        22
+      ],
+      "amalgamationSubjectIds": [
+        5648,
+        5649,
+        5853,
+        6029,
+        6994,
+        7776
+      ],
+      "visuallySimilarSubjectIds": [
+        2455,
+        1648,
+        1562,
+        1474,
+        838
+      ],
+      "meaningMnemonic": "A <radical>greenhouse</radical> is already really good when it comes to a plant's livelihood. But add the <radical>sun</radical> into that equation and you have something really great for the plants. Their <kanji>livelihood</kanji> will be awesome, now!",
+      "meaningHint": "Just feel happy that your plants have such a nice livelihood now that the sun is out. They look so healthy and fresh!",
+      "readingMnemonic": "From out of nowhere, <reading>Bo</reading>bo (ぼ) the notorious clown thief starts picking the plants, ending their <kanji>livelihood</kanji>. Bobo needs the flowers for his clown acts, so he uses the livelihood of the flowers to support his own livelihood.",
+      "readingHint": "Look at Bobo do what he needs to do to maintain his own livelihood. Hear the flowers screaming as they are plucked from their homes.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.176Z",
+      "updatedAt": "2026-06-13T11:41:50.176Z",
+      "rawData": {
+        "slug": "暮",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Livelihood",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "ぼ",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "く",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "暮",
+        "created_at": "2013-03-18T17:10:40.767824Z",
+        "document_url": "https://www.wanikani.com/kanji/%E6%9A%AE",
+        "meaning_hint": "Just feel happy that your plants have such a nice livelihood now that the sun is out. They look so healthy and fresh!",
+        "reading_hint": "Look at Bobo do what he needs to do to maintain his own livelihood. Hear the flowers screaming as they are plucked from their homes.",
+        "lesson_position": 30,
+        "meaning_mnemonic": "A <radical>greenhouse</radical> is already really good when it comes to a plant's livelihood. But add the <radical>sun</radical> into that equation and you have something really great for the plants. Their <kanji>livelihood</kanji> will be awesome, now!",
+        "reading_mnemonic": "From out of nowhere, <reading>Bo</reading>bo (ぼ) the notorious clown thief starts picking the plants, ending their <kanji>livelihood</kanji>. Bobo needs the flowers for his clown acts, so he uses the livelihood of the flowers to support his own livelihood.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          356,
+          22
+        ],
+        "amalgamation_subject_ids": [
+          5648,
+          5649,
+          5853,
+          6029,
+          6994,
+          7776
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          2455,
+          1648,
+          1562,
+          1474,
+          838
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1528,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "灰",
+      "characters": "灰",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%81%B0",
+      "dataUpdatedAt": "2025-11-06T18:20:25.969Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Ash",
+          "primary": true,
+          "accepted_answer": true
+        },
+        {
+          "meaning": "Ashes",
+          "primary": false,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "kunyomi",
+          "primary": true,
+          "reading": "はい",
+          "accepted_answer": true
+        },
+        {
+          "type": "onyomi",
+          "primary": false,
+          "reading": "かい",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        116,
+        46
+      ],
+      "amalgamationSubjectIds": [
+        5650,
+        5651,
+        5652
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "On a <radical>cliff</radical>, a <radical>fire</radical> burns to <kanji>ashes</kanji>. The ashes then blow off the cliff, and follow the wind wherever it may go.",
+      "meaningHint": "See the light from the fire as the ashes fly off the cliff. The wind carries some of the ashes over to you. Feel the ashes as they strike your face and wipe the black ash with your hands.",
+      "readingMnemonic": "The <kanji>ashes</kanji> inspire you to write a <reading>hai</reading>ku (はい). Using the ashes you write a haiku on a rock for everyone to enjoy.",
+      "readingHint": "Ashes on my face. Falling from the cliff of fire. Gives my life meaning. Or just come up with your own haiku. Whatever works for you.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.249Z",
+      "updatedAt": "2026-06-13T11:41:50.249Z",
+      "rawData": {
+        "slug": "灰",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Ash",
+            "primary": true,
+            "accepted_answer": true
+          },
+          {
+            "meaning": "Ashes",
+            "primary": false,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "kunyomi",
+            "primary": true,
+            "reading": "はい",
+            "accepted_answer": true
+          },
+          {
+            "type": "onyomi",
+            "primary": false,
+            "reading": "かい",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "灰",
+        "created_at": "2013-03-18T17:11:06.899028Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%81%B0",
+        "meaning_hint": "See the light from the fire as the ashes fly off the cliff. The wind carries some of the ashes over to you. Feel the ashes as they strike your face and wipe the black ash with your hands.",
+        "reading_hint": "Ashes on my face. Falling from the cliff of fire. Gives my life meaning. Or just come up with your own haiku. Whatever works for you.",
+        "lesson_position": 31,
+        "meaning_mnemonic": "On a <radical>cliff</radical>, a <radical>fire</radical> burns to <kanji>ashes</kanji>. The ashes then blow off the cliff, and follow the wind wherever it may go.",
+        "reading_mnemonic": "The <kanji>ashes</kanji> inspire you to write a <reading>hai</reading>ku (はい). Using the ashes you write a haiku on a rock for everyone to enjoy.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          116,
+          46
+        ],
+        "amalgamation_subject_ids": [
+          5650,
+          5651,
+          5652
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": []
+      }
+    },
+    {
+      "wkSubjectId": 1529,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "熟",
+      "characters": "熟",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%86%9F",
+      "dataUpdatedAt": "2026-03-06T01:55:24.656Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Ripen",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "じゅく",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "う",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        345,
+        223,
+        131
+      ],
+      "amalgamationSubjectIds": [
+        5653,
+        5654,
+        5655,
+        5656
+      ],
+      "visuallySimilarSubjectIds": [
+        1927,
+        882,
+        1167
+      ],
+      "meaningMnemonic": "If you <radical>receive</radical> something edible, arrange it in a <radical>circle</radical> and <radical>boil</radical> it. That way, it’ll <kanji>ripen</kanji> more quickly.",
+      "meaningHint": "Picture yourself receiving something, arranging it in a circle in the pan, and leaving it to boil. See how quickly that stuff ripens? Now it’s all ripe and yummy.",
+      "readingMnemonic": "Once everything you received has <kanji>ripen</kanji>ed, you kick back near your <reading>juke</reading>box (じゅく) and eat it. The jukebox sets the mood, making the ripened treat feels twice as sweet.",
+      "readingHint": "Imagine the jukebox playing music to accompany your ripened treat. Ahh, jukebox music and ripened goodies. Can life get any sweeter?",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.322Z",
+      "updatedAt": "2026-06-13T11:41:50.322Z",
+      "rawData": {
+        "slug": "熟",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Ripen",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "じゅく",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "う",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "熟",
+        "created_at": "2013-03-18T17:13:11.320277Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%86%9F",
+        "meaning_hint": "Picture yourself receiving something, arranging it in a circle in the pan, and leaving it to boil. See how quickly that stuff ripens? Now it’s all ripe and yummy.",
+        "reading_hint": "Imagine the jukebox playing music to accompany your ripened treat. Ahh, jukebox music and ripened goodies. Can life get any sweeter?",
+        "lesson_position": 32,
+        "meaning_mnemonic": "If you <radical>receive</radical> something edible, arrange it in a <radical>circle</radical> and <radical>boil</radical> it. That way, it’ll <kanji>ripen</kanji> more quickly.",
+        "reading_mnemonic": "Once everything you received has <kanji>ripen</kanji>ed, you kick back near your <reading>juke</reading>box (じゅく) and eat it. The jukebox sets the mood, making the ripened treat feels twice as sweet.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          345,
+          223,
+          131
+        ],
+        "amalgamation_subject_ids": [
+          5653,
+          5654,
+          5655,
+          5656
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1927,
+          882,
+          1167
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1530,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "異",
+      "characters": "異",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%95%B0",
+      "dataUpdatedAt": "2025-11-26T18:59:46.609Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Differ",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "い",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "こと",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        51,
+        269
+      ],
+      "amalgamationSubjectIds": [
+        5657,
+        5658,
+        5659,
+        5660,
+        5854,
+        8724
+      ],
+      "visuallySimilarSubjectIds": [
+        676
+      ],
+      "meaningMnemonic": "Put a <radical>rice paddy</radical> <radical>together</radical> with other paddies and you'll see how much they <kanji>differ</kanji>. When you're driving or taking a train through the countryside it may seem like all of those rice paddies blurring together are all the same, but they can differ quite a bit!",
+      "meaningHint": "Try to picture how each rice paddy differs from the next. Can you think of any differences in the ones you've seen?",
+      "readingMnemonic": "To see how rice paddies <kanji>differ</kanji>, you need an <reading>ea</reading>gle's (い) eye view. It can be hard to see from the ground, so soar up into the sky like an eagle and look down at the rice paddies together.",
+      "readingHint": "Aha! As an eagle you can easily see that all of the rice paddies have differing colors, shapes, and (if you fly low) smells. They differ a lot!",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.395Z",
+      "updatedAt": "2026-06-13T11:41:50.395Z",
+      "rawData": {
+        "slug": "異",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Differ",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "い",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "こと",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "異",
+        "created_at": "2013-03-18T17:13:32.672980Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%95%B0",
+        "meaning_hint": "Try to picture how each rice paddy differs from the next. Can you think of any differences in the ones you've seen?",
+        "reading_hint": "Aha! As an eagle you can easily see that all of the rice paddies have differing colors, shapes, and (if you fly low) smells. They differ a lot!",
+        "lesson_position": 33,
+        "meaning_mnemonic": "Put a <radical>rice paddy</radical> <radical>together</radical> with other paddies and you'll see how much they <kanji>differ</kanji>. When you're driving or taking a train through the countryside it may seem like all of those rice paddies blurring together are all the same, but they can differ quite a bit!",
+        "reading_mnemonic": "To see how rice paddies <kanji>differ</kanji>, you need an <reading>ea</reading>gle's (い) eye view. It can be hard to see from the ground, so soar up into the sky like an eagle and look down at the rice paddies together.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          51,
+          269
+        ],
+        "amalgamation_subject_ids": [
+          5657,
+          5658,
+          5659,
+          5660,
+          5854,
+          8724
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          676
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1531,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "皇",
+      "characters": "皇",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%9A%87",
+      "dataUpdatedAt": "2026-03-19T02:32:26.949Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Emperor",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "こう",
+          "accepted_answer": true
+        },
+        {
+          "type": "onyomi",
+          "primary": false,
+          "reading": "おう",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        52,
+        48
+      ],
+      "amalgamationSubjectIds": [
+        5661,
+        5662,
+        5663,
+        5664,
+        7027,
+        7356,
+        7400
+      ],
+      "visuallySimilarSubjectIds": [
+        638
+      ],
+      "meaningMnemonic": "Social commentary aside, the <radical>white</radical> <radical>king</radical> is the king that wears all white. Traditionally, this is someone better than a king. The <kanji>emperor</kanji>!",
+      "meaningHint": "See the emperor, garbed all in white. There are other kings, but the emperor's white clothing shows his status above the rest.",
+      "readingMnemonic": "Who is the <kanji>emperor</kanji>? It is <reading>こう</reading>いち. こういち the emperor stands over his subjects.",
+      "readingHint": "How did こういち become emperor?! His first decree as emperor is that everybody must learn kanji now.\n\nNote: from now on, Emperor こういち will be a recurring character for the reading mnemonic of こう.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.469Z",
+      "updatedAt": "2026-06-13T11:41:50.469Z",
+      "rawData": {
+        "slug": "皇",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Emperor",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "こう",
+            "accepted_answer": true
+          },
+          {
+            "type": "onyomi",
+            "primary": false,
+            "reading": "おう",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "皇",
+        "created_at": "2013-03-18T17:14:05.414370Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%9A%87",
+        "meaning_hint": "See the emperor, garbed all in white. There are other kings, but the emperor's white clothing shows his status above the rest.",
+        "reading_hint": "How did こういち become emperor?! His first decree as emperor is that everybody must learn kanji now.\n\nNote: from now on, Emperor こういち will be a recurring character for the reading mnemonic of こう.",
+        "lesson_position": 34,
+        "meaning_mnemonic": "Social commentary aside, the <radical>white</radical> <radical>king</radical> is the king that wears all white. Traditionally, this is someone better than a king. The <kanji>emperor</kanji>!",
+        "reading_mnemonic": "Who is the <kanji>emperor</kanji>? It is <reading>こう</reading>いち. こういち the emperor stands over his subjects. ",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          52,
+          48
+        ],
+        "amalgamation_subject_ids": [
+          5661,
+          5662,
+          5663,
+          5664,
+          7027,
+          7356,
+          7400
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          638
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1532,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "盛",
+      "characters": "盛",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%9B%9B",
+      "dataUpdatedAt": "2026-05-07T04:08:43.391Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Pile",
+          "primary": true,
+          "accepted_answer": true
+        },
+        {
+          "meaning": "Prosperous",
+          "primary": false,
+          "accepted_answer": true
+        },
+        {
+          "meaning": "Heap",
+          "primary": false,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "せい",
+          "accepted_answer": true
+        },
+        {
+          "type": "onyomi",
+          "primary": false,
+          "reading": "じょう",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "も",
+          "accepted_answer": false
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "さか",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        263,
+        84
+      ],
+      "amalgamationSubjectIds": [
+        5665,
+        5841,
+        6038,
+        6265
+      ],
+      "visuallySimilarSubjectIds": [
+        1442
+      ],
+      "meaningMnemonic": "If you <radical>become</radical> a <radical>plate</radical>, I will <kanji>pile</kanji> food up upon you. With such a huge pile, everyone will think you're <kanji>prosperous</kanji>.",
+      "meaningHint": "If you have piles of something, you're prosperous. If you become a plate, that's the best thing that can happen to you.",
+      "readingMnemonic": "You're so <kanji>prosperous</kanji> you use your <reading>sa</reading>ber (せい) to cut the food pile and shove the bits into your plate mouth. In fact, your entire family is using your special saber to cut and eat off of you. A normal knife wouldn't be able to get through all this food!",
+      "readingHint": "You know a family is seriously prosperous when they don't use forks, they use a magical saber to cut their food. Wowee wow wow.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.542Z",
+      "updatedAt": "2026-06-13T11:41:50.542Z",
+      "rawData": {
+        "slug": "盛",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Pile",
+            "primary": true,
+            "accepted_answer": true
+          },
+          {
+            "meaning": "Prosperous",
+            "primary": false,
+            "accepted_answer": true
+          },
+          {
+            "meaning": "Heap",
+            "primary": false,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "せい",
+            "accepted_answer": true
+          },
+          {
+            "type": "onyomi",
+            "primary": false,
+            "reading": "じょう",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "も",
+            "accepted_answer": false
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "さか",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "盛",
+        "created_at": "2013-03-18T17:14:32.027328Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%9B%9B",
+        "meaning_hint": "If you have piles of something, you're prosperous. If you become a plate, that's the best thing that can happen to you.",
+        "reading_hint": "You know a family is seriously prosperous when they don't use forks, they use a magical saber to cut their food. Wowee wow wow.",
+        "lesson_position": 35,
+        "meaning_mnemonic": "If you <radical>become</radical> a <radical>plate</radical>, I will <kanji>pile</kanji> food up upon you. With such a huge pile, everyone will think you're <kanji>prosperous</kanji>.",
+        "reading_mnemonic": "You're so <kanji>prosperous</kanji> you use your <reading>sa</reading>ber (せい) to cut the food pile and shove the bits into your plate mouth. In fact, your entire family is using your special saber to cut and eat off of you. A normal knife wouldn't be able to get through all this food!",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Pile Up"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Head Up"
+          }
+        ],
+        "component_subject_ids": [
+          263,
+          84
+        ],
+        "amalgamation_subject_ids": [
+          5665,
+          5841,
+          6038,
+          6265
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1442
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1533,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "砂",
+      "characters": "砂",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%A0%82",
+      "dataUpdatedAt": "2025-11-25T02:11:59.650Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Sand",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "さ",
+          "accepted_answer": true
+        },
+        {
+          "type": "onyomi",
+          "primary": false,
+          "reading": "しゃ",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "すな",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        54,
+        198
+      ],
+      "amalgamationSubjectIds": [
+        5666,
+        5667,
+        5668,
+        6807,
+        9127,
+        9128
+      ],
+      "visuallySimilarSubjectIds": [
+        1364,
+        800
+      ],
+      "meaningMnemonic": "If you grind a <radical>stone</radical> down to more than just a <radical>few</radical> pieces, it will become <kanji>sand</kanji>. Stones that get broken up enough will become sand, and you pick up a few grains in your hand.",
+      "meaningHint": "Feel these few grains of sand between your fingertips. Imagine the stones that they originally came from. Nature is crazy.",
+      "readingMnemonic": "After breaking up your stone into <kanji>sand</kanji>, you fetch your special sand <reading>sa</reading>w (さ). A few bits are still too chunky, so you'll have to use a sand saw now.",
+      "readingHint": "You may wonder what a sand saw is. Well, it's a saw for cutting sand into even finer little pieces. How does it work? It's a mystery!",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.616Z",
+      "updatedAt": "2026-06-13T11:41:50.616Z",
+      "rawData": {
+        "slug": "砂",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Sand",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "さ",
+            "accepted_answer": true
+          },
+          {
+            "type": "onyomi",
+            "primary": false,
+            "reading": "しゃ",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "すな",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "砂",
+        "created_at": "2013-03-18T17:14:56.498014Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%A0%82",
+        "meaning_hint": "Feel these few grains of sand between your fingertips. Imagine the stones that they originally came from. Nature is crazy.",
+        "reading_hint": "You may wonder what a sand saw is. Well, it's a saw for cutting sand into even finer little pieces. How does it work? It's a mystery!",
+        "lesson_position": 36,
+        "meaning_mnemonic": "If you grind a <radical>stone</radical> down to more than just a <radical>few</radical> pieces, it will become <kanji>sand</kanji>. Stones that get broken up enough will become sand, and you pick up a few grains in your hand.",
+        "reading_mnemonic": "After breaking up your stone into <kanji>sand</kanji>, you fetch your special sand <reading>sa</reading>w (さ). A few bits are still too chunky, so you'll have to use a sand saw now.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          54,
+          198
+        ],
+        "amalgamation_subject_ids": [
+          5666,
+          5667,
+          5668,
+          6807,
+          9127,
+          9128
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1364,
+          800
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1535,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "糖",
+      "characters": "糖",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%B3%96",
+      "dataUpdatedAt": "2026-04-20T16:15:58.261Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Sugar",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "とう",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        98,
+        62,
+        8761,
+        105,
+        16
+      ],
+      "amalgamationSubjectIds": [
+        5667,
+        5670,
+        5671,
+        8375
+      ],
+      "visuallySimilarSubjectIds": [
+        1979
+      ],
+      "meaningMnemonic": "Drag some <radical>rice</radical> over to a <radical>canopy</radical> where you use a <radical>stick</radical> to mash it up inside <radical>Wolverine</radical>'s <radical>mouth</radical>. Scrape out the mashed-up rice paste, and voila — you've made <kanji>sugar</kanji>!",
+      "meaningHint": "Taste that sweet, sweet sugar. Not many people know, but this is how it's made. The canopy is needed for temperature control, and Wolverine… well, he's got special enzymes in his mouth or something.",
+      "readingMnemonic": "You learned how to make this kind of <kanji>sugar</kanji> in <reading>とう</reading>きょう. You found a special とうきょう sugar sensei and they introduced you to all the secret methods you know now.",
+      "readingHint": "Whenever you taste this sugar, you picture とうきょう. It's the place where you fell in love with these strange sugar-making techniques, after all.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.762Z",
+      "updatedAt": "2026-06-13T11:41:50.762Z",
+      "rawData": {
+        "slug": "糖",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Sugar",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "とう",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "糖",
+        "created_at": "2013-03-18T17:15:58.701587Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%B3%96",
+        "meaning_hint": "Taste that sweet, sweet sugar. Not many people know, but this is how it's made. The canopy is needed for temperature control, and Wolverine… well, he's got special enzymes in his mouth or something.",
+        "reading_hint": "Whenever you taste this sugar, you picture とうきょう. It's the place where you fell in love with these strange sugar-making techniques, after all.",
+        "lesson_position": 37,
+        "meaning_mnemonic": "Drag some <radical>rice</radical> over to a <radical>canopy</radical> where you use a <radical>stick</radical> to mash it up inside <radical>Wolverine</radical>'s <radical>mouth</radical>. Scrape out the mashed-up rice paste, and voila — you've made <kanji>sugar</kanji>!",
+        "reading_mnemonic": "You learned how to make this kind of <kanji>sugar</kanji> in <reading>とう</reading>きょう. You found a special とうきょう sugar sensei and they introduced you to all the secret methods you know now.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          98,
+          62,
+          8761,
+          105,
+          16
+        ],
+        "amalgamation_subject_ids": [
+          5667,
+          5670,
+          5671,
+          8375
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1979
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1536,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "納",
+      "characters": "納",
+      "documentUrl": "https://www.wanikani.com/kanji/%E7%B4%8D",
+      "dataUpdatedAt": "2026-05-28T17:08:41.975Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Supply",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "のう",
+          "accepted_answer": true
+        },
+        {
+          "type": "onyomi",
+          "primary": false,
+          "reading": "なっ",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "おさ",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        86,
+        346
+      ],
+      "amalgamationSubjectIds": [
+        5672,
+        5673,
+        5674,
+        5828,
+        5847,
+        5848,
+        8194
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "The <radical>thread</radical> you have <radical>inside</radical> is your whole <kanji>supply</kanji>. When you're outside sewing and you run out, you just go inside, look through your supply, and pick a new one.",
+      "meaningHint": "Go inside your house or shed, it doesn't matter where, and look happily at your thread supply. You have thread in all sizes, shapes, and especially colors.",
+      "readingMnemonic": "You have this <kanji>supply</kanji> because <reading>No</reading>stradamus (のう) had a prediction, saying you would. And that if you didn't keep a good supply of thread inside, you'd run out.",
+      "readingHint": "Nostradamus says you should have a large supply of everything you use regularly. Thread, water, canned foods. You can't see the future, but he can, and if he's telling you to stock up on your inside supplies I think you should listen.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.835Z",
+      "updatedAt": "2026-06-13T11:41:50.835Z",
+      "rawData": {
+        "slug": "納",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Supply",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "のう",
+            "accepted_answer": true
+          },
+          {
+            "type": "onyomi",
+            "primary": false,
+            "reading": "なっ",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "おさ",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "納",
+        "created_at": "2013-03-18T17:16:49.378679Z",
+        "document_url": "https://www.wanikani.com/kanji/%E7%B4%8D",
+        "meaning_hint": "Go inside your house or shed, it doesn't matter where, and look happily at your thread supply. You have thread in all sizes, shapes, and especially colors.",
+        "reading_hint": "Nostradamus says you should have a large supply of everything you use regularly. Thread, water, canned foods. You can't see the future, but he can, and if he's telling you to stock up on your inside supplies I think you should listen.",
+        "lesson_position": 38,
+        "meaning_mnemonic": "The <radical>thread</radical> you have <radical>inside</radical> is your whole <kanji>supply</kanji>. When you're outside sewing and you run out, you just go inside, look through your supply, and pick a new one.",
+        "reading_mnemonic": "You have this <kanji>supply</kanji> because <reading>No</reading>stradamus (のう) had a prediction, saying you would. And that if you didn't keep a good supply of thread inside, you'd run out.",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Store"
+          }
+        ],
+        "component_subject_ids": [
+          86,
+          346
+        ],
+        "amalgamation_subject_ids": [
+          5672,
+          5673,
+          5674,
+          5828,
+          5847,
+          5848,
+          8194
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": []
+      }
+    },
+    {
+      "wkSubjectId": 1537,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "肺",
+      "characters": "肺",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%82%BA",
+      "dataUpdatedAt": "2025-10-02T17:25:49.560Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Lung",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "はい",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        43,
+        267
+      ],
+      "amalgamationSubjectIds": [
+        5675,
+        5676,
+        5677,
+        5719
+      ],
+      "visuallySimilarSubjectIds": [
+        1198,
+        2219
+      ],
+      "meaningMnemonic": "There is a <radical>moon</radical> and a <radical>city</radical> inside your <kanji>lung</kanji>. Inside of your lung there is a city and above that city lies a moon. It’s a pretty sight, but also very strange. Moons and cities don’t usually reside inside lungs.",
+      "meaningHint": "Imagine having a moon and a city inside your lung. Feel their presence as you breathe in and breathe out. Also, 月 often refers to internal organs as well, so remember that when you see this kanji.",
+      "readingMnemonic": "Having a moon and city inside your <kanji>lung</kanji> inspires you to write a <reading>hai</reading>ku (はい). Perhaps the city and moon are just metaphorical. Either way, a haiku is the best way to go about things here.",
+      "readingHint": "The city and moon\nInside my lung, forgotten.\nWhere is the answer?\n\nOr just think of your own haiku. Be creative!",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.908Z",
+      "updatedAt": "2026-06-13T11:41:50.908Z",
+      "rawData": {
+        "slug": "肺",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Lung",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "はい",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "肺",
+        "created_at": "2013-03-18T17:17:19.730415Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%82%BA",
+        "meaning_hint": "Imagine having a moon and a city inside your lung. Feel their presence as you breathe in and breathe out. Also, 月 often refers to internal organs as well, so remember that when you see this kanji.",
+        "reading_hint": "The city and moon\nInside my lung, forgotten.\nWhere is the answer?\n\nOr just think of your own haiku. Be creative!",
+        "lesson_position": 39,
+        "meaning_mnemonic": "There is a <radical>moon</radical> and a <radical>city</radical> inside your <kanji>lung</kanji>. Inside of your lung there is a city and above that city lies a moon. It’s a pretty sight, but also very strange. Moons and cities don’t usually reside inside lungs.",
+        "reading_mnemonic": "Having a moon and city inside your <kanji>lung</kanji> inspires you to write a <reading>hai</reading>ku (はい). Perhaps the city and moon are just metaphorical. Either way, a haiku is the best way to go about things here.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          43,
+          267
+        ],
+        "amalgamation_subject_ids": [
+          5675,
+          5676,
+          5677,
+          5719
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1198,
+          2219
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1538,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "著",
+      "characters": "著",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%91%97",
+      "dataUpdatedAt": "2026-02-04T06:24:21.947Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Author",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "ちょ",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "いちじる",
+          "accepted_answer": false
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "あらわ",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        90,
+        203
+      ],
+      "amalgamationSubjectIds": [
+        5678,
+        5679,
+        5680,
+        5855,
+        8172
+      ],
+      "visuallySimilarSubjectIds": [
+        719,
+        2008,
+        1022
+      ],
+      "meaningMnemonic": "If you want to give <radical>flowers</radical> to <radical>someone</radical>, give them to an <kanji>author</kanji>. Authors really love flowers, because they help them think of flowery language they can use to sound smart in their books.",
+      "meaningHint": "Imagine a time when a book you were reading used flowery language and you couldn't understand. Imagine the annoyance with the author for being so overwrought and flowery.",
+      "readingMnemonic": "Unfortunately, the <kanji>author</kanji> is allergic to touching flowers, so they hold them with a pair of <reading>cho</reading>psticks (ちょ). They hold them real close to their face with the chopsticks, so they can still use them to think of fancy, author-ly words.",
+      "readingHint": "Picture the author trying to use chopsticks to hold some little flowers. It looks like they're having a hard time, but people will do anything to be a great author, I suppose.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:50.981Z",
+      "updatedAt": "2026-06-13T11:41:50.981Z",
+      "rawData": {
+        "slug": "著",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Author",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "ちょ",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "いちじる",
+            "accepted_answer": false
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "あらわ",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "著",
+        "created_at": "2013-03-18T17:17:40.678296Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%91%97",
+        "meaning_hint": "Imagine a time when a book you were reading used flowery language and you couldn't understand. Imagine the annoyance with the author for being so overwrought and flowery.",
+        "reading_hint": "Picture the author trying to use chopsticks to hold some little flowers. It looks like they're having a hard time, but people will do anything to be a great author, I suppose.",
+        "lesson_position": 40,
+        "meaning_mnemonic": "If you want to give <radical>flowers</radical> to <radical>someone</radical>, give them to an <kanji>author</kanji>. Authors really love flowers, because they help them think of flowery language they can use to sound smart in their books.",
+        "reading_mnemonic": "Unfortunately, the <kanji>author</kanji> is allergic to touching flowers, so they hold them with a pair of <reading>cho</reading>psticks (ちょ). They hold them real close to their face with the chopsticks, so they can still use them to think of fancy, author-ly words.",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Renowned"
+          }
+        ],
+        "component_subject_ids": [
+          90,
+          203
+        ],
+        "amalgamation_subject_ids": [
+          5678,
+          5679,
+          5680,
+          5855,
+          8172
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          719,
+          2008,
+          1022
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1539,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "蒸",
+      "characters": "蒸",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%92%B8",
+      "dataUpdatedAt": "2026-05-07T05:02:42.180Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Steam",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "じょう",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "む",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        90,
+        8794,
+        131
+      ],
+      "amalgamationSubjectIds": [
+        5681,
+        5682,
+        5856,
+        5857
+      ],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "If you take the <radical>flowers</radical> off some <radical>coral</radical> and <radical>boil</radical> them, <kanji>steam</kanji> comes out.",
+      "meaningHint": "Steam comes out of the coral flowers because they hold a lot of water. They're flowers, but they're coral flowers, so they came from the ocean. Of course there's water in them, and if you boil that water steam will come out.",
+      "readingMnemonic": "As you watch the <kanji>steam</kanji> coming off the coral flowers, someone appears behind you. It’s <reading>Joe</reading> (じょう), the big farmhand. \"Are you steaming coral?\" he asks. \"Smelled it a mile away. I love steaming me some coral.”",
+      "readingHint": "It's weird that Joe is so sensitive to the smell of steaming coral. He's lived as a farmhand nowhere near the sea all his life... at least that's what he told you. And now he's in your house breathing in the steam really deeply with his nose practically in the pot.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:51.124Z",
+      "updatedAt": "2026-06-13T11:41:51.124Z",
+      "rawData": {
+        "slug": "蒸",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Steam",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "じょう",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "む",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "蒸",
+        "created_at": "2013-03-18T17:18:10.013117Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%92%B8",
+        "meaning_hint": "Steam comes out of the coral flowers because they hold a lot of water. They're flowers, but they're coral flowers, so they came from the ocean. Of course there's water in them, and if you boil that water steam will come out.",
+        "reading_hint": "It's weird that Joe is so sensitive to the smell of steaming coral. He's lived as a farmhand nowhere near the sea all his life... at least that's what he told you. And now he's in your house breathing in the steam really deeply with his nose practically in the pot.",
+        "lesson_position": 41,
+        "meaning_mnemonic": "If you take the <radical>flowers</radical> off some <radical>coral</radical> and <radical>boil</radical> them, <kanji>steam</kanji> comes out.",
+        "reading_mnemonic": "As you watch the <kanji>steam</kanji> coming off the coral flowers, someone appears behind you. It’s <reading>Joe</reading> (じょう), the big farmhand. \"Are you steaming coral?\" he asks. \"Smelled it a mile away. I love steaming me some coral.”",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          90,
+          8794,
+          131
+        ],
+        "amalgamation_subject_ids": [
+          5681,
+          5682,
+          5856,
+          5857
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": []
+      }
+    },
+    {
+      "wkSubjectId": 1540,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "蔵",
+      "characters": "蔵",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%94%B5",
+      "dataUpdatedAt": "2025-10-01T06:09:57.663Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Storehouse",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "ぞう",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "くら",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        347
+      ],
+      "amalgamationSubjectIds": [
+        5683,
+        5684,
+        5685
+      ],
+      "visuallySimilarSubjectIds": [
+        1546
+      ],
+      "meaningMnemonic": "The <radical>storehouse</radical> radical and the <kanji>storehouse</kanji> kanji meanings are the same. If you know the radical, you know the kanji!",
+      "meaningHint": "Your brain is like a storehouse, you know? Hopefully that's where you kept your storehouse knowledge.",
+      "readingMnemonic": "You have a <kanji>storehouse</kanji>. Inside is where you keep all your <reading>zo</reading>mbies (ぞう).",
+      "readingHint": "Be really proud of your storehouse. You've collected a lot of zombies and put them in there, where they'll keep fresh a long time!",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:51.198Z",
+      "updatedAt": "2026-06-13T11:41:51.198Z",
+      "rawData": {
+        "slug": "蔵",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Storehouse",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "ぞう",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "くら",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "蔵",
+        "created_at": "2013-03-18T17:18:33.078344Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%94%B5",
+        "meaning_hint": "Your brain is like a storehouse, you know? Hopefully that's where you kept your storehouse knowledge.",
+        "reading_hint": "Be really proud of your storehouse. You've collected a lot of zombies and put them in there, where they'll keep fresh a long time!",
+        "lesson_position": 42,
+        "meaning_mnemonic": "The <radical>storehouse</radical> radical and the <kanji>storehouse</kanji> kanji meanings are the same. If you know the radical, you know the kanji!",
+        "reading_mnemonic": "You have a <kanji>storehouse</kanji>. Inside is where you keep all your <reading>zo</reading>mbies (ぞう).",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          347
+        ],
+        "amalgamation_subject_ids": [
+          5683,
+          5684,
+          5685
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1546
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1541,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "装",
+      "characters": "装",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%A3%85",
+      "dataUpdatedAt": "2026-05-28T18:11:05.090Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Attire",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "そう",
+          "accepted_answer": true
+        },
+        {
+          "type": "onyomi",
+          "primary": false,
+          "reading": "しょう",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "よそお",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        8826,
+        97,
+        320
+      ],
+      "amalgamationSubjectIds": [
+        5686,
+        5687,
+        5688,
+        5689,
+        5858,
+        6558,
+        7246,
+        8030,
+        8544,
+        8687,
+        9310
+      ],
+      "visuallySimilarSubjectIds": [
+        2227,
+        1230,
+        1219,
+        1194,
+        1836,
+        1839
+      ],
+      "meaningMnemonic": "If you see <radical>icicle</radical>s hanging off of a <radical>samurai</radical>'s <radical>clothes</radical>, don't worry, those are just part of his winter <kanji>attire</kanji>. Samurai have to travel and fight in all sorts of conditions, so it only makes sense that they have attire for every season.",
+      "meaningHint": "Picture a samurai in his winter attire. His helmet is white and fuzzy and he has decorative icicles hanging down off of his armor.",
+      "readingMnemonic": "<kanji>Attire</kanji> like this is important because it reflects your <reading>soul</reading> (そう). The samurai is wearing clothing with icicles because that's how his heart feels too: frozen over because he has to fight in this horrible winter weather.",
+      "readingHint": "Picture the kind of attire you'd wear as a samurai to reflect your soul. Mine would be bright pink and covered in horses and bananas and daisies to show that I have a happy, kind soul and that I don't want to be killed by anyone else.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:51.271Z",
+      "updatedAt": "2026-06-13T11:41:51.271Z",
+      "rawData": {
+        "slug": "装",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Attire",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "そう",
+            "accepted_answer": true
+          },
+          {
+            "type": "onyomi",
+            "primary": false,
+            "reading": "しょう",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "よそお",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "装",
+        "created_at": "2013-03-18T17:18:59.375950Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%A3%85",
+        "meaning_hint": "Picture a samurai in his winter attire. His helmet is white and fuzzy and he has decorative icicles hanging down off of his armor.",
+        "reading_hint": "Picture the kind of attire you'd wear as a samurai to reflect your soul. Mine would be bright pink and covered in horses and bananas and daisies to show that I have a happy, kind soul and that I don't want to be killed by anyone else.",
+        "lesson_position": 43,
+        "meaning_mnemonic": "If you see <radical>icicle</radical>s hanging off of a <radical>samurai</radical>'s <radical>clothes</radical>, don't worry, those are just part of his winter <kanji>attire</kanji>. Samurai have to travel and fight in all sorts of conditions, so it only makes sense that they have attire for every season.",
+        "reading_mnemonic": "<kanji>Attire</kanji> like this is important because it reflects your <reading>soul</reading> (そう). The samurai is wearing clothing with icicles because that's how his heart feels too: frozen over because he has to fight in this horrible winter weather.",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Clothing"
+          }
+        ],
+        "component_subject_ids": [
+          8826,
+          97,
+          320
+        ],
+        "amalgamation_subject_ids": [
+          5686,
+          5687,
+          5688,
+          5689,
+          5858,
+          6558,
+          7246,
+          8030,
+          8544,
+          8687,
+          9310
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          2227,
+          1230,
+          1219,
+          1194,
+          1836,
+          1839
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1542,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "裏",
+      "characters": "裏",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%A3%8F",
+      "dataUpdatedAt": "2026-06-10T05:30:37.962Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Backside",
+          "primary": true,
+          "accepted_answer": true
+        },
+        {
+          "meaning": "Underside",
+          "primary": false,
+          "accepted_answer": true
+        },
+        {
+          "meaning": "Reverse",
+          "primary": false,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "kunyomi",
+          "primary": true,
+          "reading": "うら",
+          "accepted_answer": true
+        },
+        {
+          "type": "onyomi",
+          "primary": false,
+          "reading": "り",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        8,
+        125,
+        8770
+      ],
+      "amalgamationSubjectIds": [
+        5690,
+        5691,
+        5692,
+        5693,
+        5694,
+        5842
+      ],
+      "visuallySimilarSubjectIds": [
+        720
+      ],
+      "meaningMnemonic": "There's a <radical>lid</radical> on your <radical>village</radical>, so you <radical>kick</radical> it over on its <kanji>backside</kanji> to see what's on its <kanji>underside</kanji>.",
+      "meaningHint": "You've been curious about what's on the lid (and your village's) backside for years, and you finally can't take it anymore so you kick the lid as hard as you can!",
+      "readingMnemonic": "It turns out your village's own <kanji>backside</kanji> is covered in <reading>ura</reading>nium (うら). Eureka! You're all gonna be rich!",
+      "readingHint": "Wait, isn't uranium bad for people? This explains why all of the villagers' backsides are covered in weird glowing, green lumps.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:51.344Z",
+      "updatedAt": "2026-06-13T11:41:51.344Z",
+      "rawData": {
+        "slug": "裏",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Backside",
+            "primary": true,
+            "accepted_answer": true
+          },
+          {
+            "meaning": "Underside",
+            "primary": false,
+            "accepted_answer": true
+          },
+          {
+            "meaning": "Reverse",
+            "primary": false,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "kunyomi",
+            "primary": true,
+            "reading": "うら",
+            "accepted_answer": true
+          },
+          {
+            "type": "onyomi",
+            "primary": false,
+            "reading": "り",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "裏",
+        "created_at": "2013-03-18T17:19:27.769130Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%A3%8F",
+        "meaning_hint": "You've been curious about what's on the lid (and your village's) backside for years, and you finally can't take it anymore so you kick the lid as hard as you can!",
+        "reading_hint": "Wait, isn't uranium bad for people? This explains why all of the villagers' backsides are covered in weird glowing, green lumps.",
+        "lesson_position": 44,
+        "meaning_mnemonic": "There's a <radical>lid</radical> on your <radical>village</radical>, so you <radical>kick</radical> it over on its <kanji>backside</kanji> to see what's on its <kanji>underside</kanji>.",
+        "reading_mnemonic": "It turns out your village's own <kanji>backside</kanji> is covered in <reading>ura</reading>nium (うら). Eureka! You're all gonna be rich!",
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Back"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Rear"
+          }
+        ],
+        "component_subject_ids": [
+          8,
+          125,
+          8770
+        ],
+        "amalgamation_subject_ids": [
+          5690,
+          5691,
+          5692,
+          5693,
+          5694,
+          5842
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          720
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1543,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "諸",
+      "characters": "諸",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%AB%B8",
+      "dataUpdatedAt": "2026-02-16T21:11:03.858Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Various",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "しょ",
+          "accepted_answer": true
+        },
+        {
+          "type": "kunyomi",
+          "primary": false,
+          "reading": "もろ",
+          "accepted_answer": false
+        }
+      ],
+      "componentSubjectIds": [
+        117,
+        203
+      ],
+      "amalgamationSubjectIds": [
+        5695,
+        5696,
+        5843
+      ],
+      "visuallySimilarSubjectIds": [
+        1411,
+        1515,
+        1641,
+        1699,
+        9393
+      ],
+      "meaningMnemonic": "They <radical>say</radical> <radical>someone</radical> with <kanji>various</kanji> talents is important. Various talents can include speaking various languages so if you are someone who knows various languages you can say things that various peoples will comprehend.",
+      "meaningHint": "You are someone who can say things in various languages. Speak some of these various languages now. You are someone who is good at saying things. Nice job.",
+      "readingMnemonic": "You’re so good at speaking <kanji>various</kanji> languages that you decide to put on a <reading>sho</reading>w (しょ). At the show, you say a lot of things in various languages and everyone is impressed.",
+      "readingHint": "Imagine yourself at this show. The spotlight is on and all eyes are watching. You feel kind of nervous, but you speak the various languages with ease.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:51.416Z",
+      "updatedAt": "2026-06-13T11:41:51.416Z",
+      "rawData": {
+        "slug": "諸",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Various",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "しょ",
+            "accepted_answer": true
+          },
+          {
+            "type": "kunyomi",
+            "primary": false,
+            "reading": "もろ",
+            "accepted_answer": false
+          }
+        ],
+        "hidden_at": null,
+        "characters": "諸",
+        "created_at": "2013-03-18T17:19:54.472411Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%AB%B8",
+        "meaning_hint": "You are someone who can say things in various languages. Speak some of these various languages now. You are someone who is good at saying things. Nice job.",
+        "reading_hint": "Imagine yourself at this show. The spotlight is on and all eyes are watching. You feel kind of nervous, but you speak the various languages with ease.",
+        "lesson_position": 45,
+        "meaning_mnemonic": "They <radical>say</radical> <radical>someone</radical> with <kanji>various</kanji> talents is important. Various talents can include speaking various languages so if you are someone who knows various languages you can say things that various peoples will comprehend.",
+        "reading_mnemonic": "You’re so good at speaking <kanji>various</kanji> languages that you decide to put on a <reading>sho</reading>w (しょ). At the show, you say a lot of things in various languages and everyone is impressed.",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          117,
+          203
+        ],
+        "amalgamation_subject_ids": [
+          5695,
+          5696,
+          5843
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1411,
+          1515,
+          1641,
+          1699,
+          9393
+        ]
+      }
+    },
+    {
+      "wkSubjectId": 1544,
+      "object": "kanji",
+      "subjectType": "kanji",
+      "level": 33,
+      "slug": "賃",
+      "characters": "賃",
+      "documentUrl": "https://www.wanikani.com/kanji/%E8%B3%83",
+      "dataUpdatedAt": "2026-04-06T17:50:26.709Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Rent",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "type": "onyomi",
+          "primary": true,
+          "reading": "ちん",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        75,
+        48,
+        94
+      ],
+      "amalgamationSubjectIds": [
+        5697,
+        5698
+      ],
+      "visuallySimilarSubjectIds": [
+        1133,
+        1470,
+        1324
+      ],
+      "meaningMnemonic": "The <radical>leader</radical> who is <radical>king</radical> of every <radical>shellfish</radical> sets the <kanji>rent</kanji> for everyone. If you rent a home in King Shellfish's kingdom, the rent will be set by the great shellfish leader himself.",
+      "meaningHint": "King Shellfish loves when people rent from him. Imagine him rolling in all of the rent money (shellfish) he collected from all the people who rent from him. Hear his shell clattering as he frolics on all the dead shells from the shellfish.",
+      "readingMnemonic": "If you don't have enough shellfish to pay your <kanji>rent</kanji>, King Shellfish will punch you in the <reading>chin</reading> (ちん).",
+      "readingHint": "Feel your entire body shaking, but especially your chin, as you tell him you're two shellfish short on rent this month. The last thing you see is his big fist coming right for your chin.",
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:41:51.489Z",
+      "updatedAt": "2026-06-13T11:41:51.489Z",
+      "rawData": {
+        "slug": "賃",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Rent",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "type": "onyomi",
+            "primary": true,
+            "reading": "ちん",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "賃",
+        "created_at": "2013-03-18T17:20:22.329958Z",
+        "document_url": "https://www.wanikani.com/kanji/%E8%B3%83",
+        "meaning_hint": "King Shellfish loves when people rent from him. Imagine him rolling in all of the rent money (shellfish) he collected from all the people who rent from him. Hear his shell clattering as he frolics on all the dead shells from the shellfish.",
+        "reading_hint": "Feel your entire body shaking, but especially your chin, as you tell him you're two shellfish short on rent this month. The last thing you see is his big fist coming right for your chin.",
+        "lesson_position": 46,
+        "meaning_mnemonic": "The <radical>leader</radical> who is <radical>king</radical> of every <radical>shellfish</radical> sets the <kanji>rent</kanji> for everyone. If you rent a home in King Shellfish's kingdom, the rent will be set by the great shellfish leader himself.",
+        "reading_mnemonic": "If you don't have enough shellfish to pay your <kanji>rent</kanji>, King Shellfish will punch you in the <reading>chin</reading> (ちん).",
+        "auxiliary_meanings": [],
+        "component_subject_ids": [
+          75,
+          48,
+          94
+        ],
+        "amalgamation_subject_ids": [
+          5697,
+          5698
+        ],
+        "spaced_repetition_system_id": 1,
+        "visually_similar_subject_ids": [
+          1133,
+          1470,
+          1324
+        ]
+      }
+    }
+  ],
+  "vocabulary": [
+    {
+      "wkSubjectId": 2873,
+      "object": "vocabulary",
+      "subjectType": "vocabulary",
+      "level": 33,
+      "slug": "年次",
+      "characters": "年次",
+      "documentUrl": "https://www.wanikani.com/vocabulary/%E5%B9%B4%E6%AC%A1",
+      "dataUpdatedAt": "2025-09-01T04:01:43.306Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Annual",
+          "primary": true,
+          "accepted_answer": true
+        },
+        {
+          "meaning": "Yearly",
+          "primary": false,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "primary": true,
+          "reading": "ねんじ",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        546,
+        616
+      ],
+      "amalgamationSubjectIds": [],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "The <kanji>year</kanji> that is <kanji>next</kanji> is coming up. What will you do in the year that is next that you did this year too? What do you do that is <vocabulary>annual</vocabulary>?\n\n年次 is a formal term typically used in business settings, such as in 年次報告書 (annual report) or 年次休暇 (annual leave).",
+      "meaningHint": null,
+      "readingMnemonic": "This is a jukugo word, which usually means on'yomi readings from the kanji. If you know the readings of your kanji you'll know how to read this as well.",
+      "readingHint": null,
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:43:33.496Z",
+      "updatedAt": "2026-06-13T11:43:33.496Z",
+      "rawData": {
+        "slug": "年次",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Annual",
+            "primary": true,
+            "accepted_answer": true
+          },
+          {
+            "meaning": "Yearly",
+            "primary": false,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "primary": true,
+            "reading": "ねんじ",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "年次",
+        "created_at": "2012-03-09T00:42:27.000000Z",
+        "document_url": "https://www.wanikani.com/vocabulary/%E5%B9%B4%E6%AC%A1",
+        "lesson_position": 3,
+        "parts_of_speech": [
+          "noun",
+          "の adjective"
+        ],
+        "meaning_mnemonic": "The <kanji>year</kanji> that is <kanji>next</kanji> is coming up. What will you do in the year that is next that you did this year too? What do you do that is <vocabulary>annual</vocabulary>?\n\n年次 is a formal term typically used in business settings, such as in 年次報告書 (annual report) or 年次休暇 (annual leave).",
+        "reading_mnemonic": "This is a jukugo word, which usually means on'yomi readings from the kanji. If you know the readings of your kanji you'll know how to read this as well.",
+        "context_sentences": [
+          {
+            "en": "This year's annual convention came to a successful end.",
+            "ja": "今年の年次大会は無事終了いたしました。"
+          },
+          {
+            "en": "That information was in the annual report mailed to stockholders.",
+            "ja": "その情報は株主に郵送された年次報告書に記載されていました。"
+          },
+          {
+            "en": "At our company, unused yearly paid leave cannot be carried forward to the following year.",
+            "ja": "当社では、未消化の年次休暇は次の年に繰り越すことができません。"
+          }
+        ],
+        "auxiliary_meanings": [],
+        "pronunciation_audios": [
+          {
+            "url": "https://files.wanikani.com/rebsf0wmwkiklxlh0fi1ntoo0ykw",
+            "metadata": {
+              "gender": "female",
+              "source_id": 27447,
+              "pronunciation": "ねんじ",
+              "voice_actor_id": 1,
+              "voice_actor_name": "Kyoko",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/webm"
+          },
+          {
+            "url": "https://files.wanikani.com/b5rp62zbd0uxtb1o8vra3y0h4ukc",
+            "metadata": {
+              "gender": "female",
+              "source_id": 27447,
+              "pronunciation": "ねんじ",
+              "voice_actor_id": 1,
+              "voice_actor_name": "Kyoko",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/mpeg"
+          },
+          {
+            "url": "https://files.wanikani.com/9tuitr0t9lsyjsqu3ac3fvi6s0hq",
+            "metadata": {
+              "gender": "male",
+              "source_id": 10571,
+              "pronunciation": "ねんじ",
+              "voice_actor_id": 2,
+              "voice_actor_name": "Kenichi",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/webm"
+          },
+          {
+            "url": "https://files.wanikani.com/sver0iny3a6axj1z958hh42vcs1x",
+            "metadata": {
+              "gender": "male",
+              "source_id": 10571,
+              "pronunciation": "ねんじ",
+              "voice_actor_id": 2,
+              "voice_actor_name": "Kenichi",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/mpeg"
+          }
+        ],
+        "component_subject_ids": [
+          546,
+          616
+        ],
+        "spaced_repetition_system_id": 1
+      }
+    },
+    {
+      "wkSubjectId": 3825,
+      "object": "vocabulary",
+      "subjectType": "vocabulary",
+      "level": 33,
+      "slug": "園",
+      "characters": "園",
+      "documentUrl": "https://www.wanikani.com/vocabulary/%E5%9C%92",
+      "dataUpdatedAt": "2025-09-01T04:01:44.163Z",
+      "hiddenAt": null,
+      "meanings": [
+        {
+          "meaning": "Garden",
+          "primary": true,
+          "accepted_answer": true
+        }
+      ],
+      "readings": [
+        {
+          "primary": true,
+          "reading": "その",
+          "accepted_answer": true
+        },
+        {
+          "primary": false,
+          "reading": "えん",
+          "accepted_answer": true
+        }
+      ],
+      "componentSubjectIds": [
+        960
+      ],
+      "amalgamationSubjectIds": [],
+      "visuallySimilarSubjectIds": [],
+      "meaningMnemonic": "The kanji and the word are exactly the same. That means they share meanings as well.\n\nThis word is generally used in the names of gardens, like エデンの園 and 桜の園. It's also used in phrases like 学びの園, which means \"school\" and carries the connotation of being a haven for learning.",
+      "meaningHint": null,
+      "readingMnemonic": "This word uses the kun'yomi reading, which you didn't learn the kanji, so here's a mnemonic to help you:\n\nWhich <vocabulary>garden</vocabulary> is the Garden of Eden? <reading>その</reading> garden! That garden right next to you is the Garden of Eden!\n\nIt can also use the on'yomi, though, which you've already learned. When it takes the on'yomi and is used as a standalone word, it usually refers to some kind of institution, like a 幼稚園.",
+      "readingHint": null,
+      "documentVersion": 1,
+      "createdAt": "2026-06-13T11:45:05.090Z",
+      "updatedAt": "2026-06-13T11:45:05.090Z",
+      "rawData": {
+        "slug": "園",
+        "level": 33,
+        "meanings": [
+          {
+            "meaning": "Garden",
+            "primary": true,
+            "accepted_answer": true
+          }
+        ],
+        "readings": [
+          {
+            "primary": true,
+            "reading": "その",
+            "accepted_answer": true
+          },
+          {
+            "primary": false,
+            "reading": "えん",
+            "accepted_answer": true
+          }
+        ],
+        "hidden_at": null,
+        "characters": "園",
+        "created_at": "2012-09-20T18:59:51.869338Z",
+        "document_url": "https://www.wanikani.com/vocabulary/%E5%9C%92",
+        "lesson_position": 78,
+        "parts_of_speech": [
+          "noun",
+          "suffix"
+        ],
+        "meaning_mnemonic": "The kanji and the word are exactly the same. That means they share meanings as well.\n\nThis word is generally used in the names of gardens, like エデンの園 and 桜の園. It's also used in phrases like 学びの園, which means \"school\" and carries the connotation of being a haven for learning.",
+        "reading_mnemonic": "This word uses the kun'yomi reading, which you didn't learn the kanji, so here's a mnemonic to help you:\n\nWhich <vocabulary>garden</vocabulary> is the Garden of Eden? <reading>その</reading> garden! That garden right next to you is the Garden of Eden!\n\nIt can also use the on'yomi, though, which you've already learned. When it takes the on'yomi and is used as a standalone word, it usually refers to some kind of institution, like a 幼稚園.",
+        "context_sentences": [
+          {
+            "en": "It's said that what Adam and Eve ate in the Garden of Eden might have been a banana instead of an apple.",
+            "ja": "エデンの園でアダムとイブが食べたのは、実はリンゴじゃなくてバナナだったかもしれないんだって。"
+          },
+          {
+            "en": "I had a part-time job where I packed apples in boxes at an apple orchard.",
+            "ja": "リンゴ園でリンゴを箱づめするアルバイトをしていました。"
+          },
+          {
+            "en": "All of the teachers at our preschool are really good teachers.",
+            "ja": "うちの園の先生たちは、みんな良い先生ばかりです。"
+          }
+        ],
+        "auxiliary_meanings": [
+          {
+            "type": "whitelist",
+            "meaning": "Park"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Kindergarten"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Daycare"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Nursery"
+          },
+          {
+            "type": "whitelist",
+            "meaning": "Orchard"
+          }
+        ],
+        "pronunciation_audios": [
+          {
+            "url": "https://files.wanikani.com/88heum4o2e3bffna689yy1rowbmp",
+            "metadata": {
+              "gender": "male",
+              "source_id": 3849,
+              "pronunciation": "えん",
+              "voice_actor_id": 2,
+              "voice_actor_name": "Kenichi",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/webm"
+          },
+          {
+            "url": "https://files.wanikani.com/tciyz3z70crhm9dg6gpofg0vgmmf",
+            "metadata": {
+              "gender": "female",
+              "source_id": 22422,
+              "pronunciation": "えん",
+              "voice_actor_id": 1,
+              "voice_actor_name": "Kyoko",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/webm"
+          },
+          {
+            "url": "https://files.wanikani.com/bqfe3a1cjgue0apyqs1azu1bjk5e",
+            "metadata": {
+              "gender": "female",
+              "source_id": 22422,
+              "pronunciation": "えん",
+              "voice_actor_id": 1,
+              "voice_actor_name": "Kyoko",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/mpeg"
+          },
+          {
+            "url": "https://files.wanikani.com/h76pqsdcpt8uzgvai0k2umqodjj7",
+            "metadata": {
+              "gender": "male",
+              "source_id": 41014,
+              "pronunciation": "その",
+              "voice_actor_id": 2,
+              "voice_actor_name": "Kenichi",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/webm"
+          },
+          {
+            "url": "https://files.wanikani.com/89ihws1bg2b9nmiv924re6vny1fh",
+            "metadata": {
+              "gender": "male",
+              "source_id": 3849,
+              "pronunciation": "えん",
+              "voice_actor_id": 2,
+              "voice_actor_name": "Kenichi",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/mpeg"
+          },
+          {
+            "url": "https://files.wanikani.com/rsav4yqnq35pcjhf3y5dsykn8bsd",
+            "metadata": {
+              "gender": "female",
+              "source_id": 41013,
+              "pronunciation": "その",
+              "voice_actor_id": 1,
+              "voice_actor_name": "Kyoko",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/webm"
+          },
+          {
+            "url": "https://files.wanikani.com/jjwp5dpo9ocfkel4dl2hx3cuinwe",
+            "metadata": {
+              "gender": "female",
+              "source_id": 41013,
+              "pronunciation": "その",
+              "voice_actor_id": 1,
+              "voice_actor_name": "Kyoko",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/mpeg"
+          },
+          {
+            "url": "https://files.wanikani.com/y5nvstgytvzfwyma2cjumoa9xk9m",
+            "metadata": {
+              "gender": "male",
+              "source_id": 41014,
+              "pronunciation": "その",
+              "voice_actor_id": 2,
+              "voice_actor_name": "Kenichi",
+              "voice_description": "Tokyo accent"
+            },
+            "content_type": "audio/mpeg"
+          }
+        ],
+        "component_subject_ids": [
+          960
+        ],
+        "spaced_repetition_system_id": 1
+      }
+    }
+  ]
+}
