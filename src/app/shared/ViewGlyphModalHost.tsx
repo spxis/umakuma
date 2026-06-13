@@ -261,7 +261,7 @@ export default function ViewGlyphModalHost() {
               type="button"
               onClick={() => setIndex((prev) => Math.max(0, prev - 1))}
               disabled={index <= 0}
-              className="rounded-full border border-line bg-surface px-2 py-1 text-[11px] font-black uppercase text-foreground disabled:opacity-40"
+              className="min-h-9 min-w-20 cursor-pointer rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-black uppercase text-foreground disabled:opacity-40"
             >
               Prev
             </button>
@@ -269,7 +269,7 @@ export default function ViewGlyphModalHost() {
               type="button"
               onClick={() => setIndex((prev) => Math.min(items.length - 1, prev + 1))}
               disabled={index >= items.length - 1}
-              className="rounded-full border border-line bg-surface px-2 py-1 text-[11px] font-black uppercase text-foreground disabled:opacity-40"
+              className="min-h-9 min-w-20 cursor-pointer rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-black uppercase text-foreground disabled:opacity-40"
             >
               Next
             </button>
@@ -324,6 +324,7 @@ export default function ViewGlyphModalHost() {
             accountId={accountId}
             selectedItem={item}
             showEnglish={showEnglish}
+            titleMeaningToggleOnly
             canToggleEnglish
             onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
             hideTimeStats={false}

@@ -203,7 +203,7 @@ export default function StudyReviewModalSection({
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? (
                     <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>
-                      {statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}
+                      {statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}
                     </span>
                   ) : null}
                 </div>
@@ -298,10 +298,10 @@ export default function StudyReviewModalSection({
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? (
                     <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>
-                      {statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}
+                      {statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}
                     </span>
                   ) : null}
-                  {canToggleEnglish ? <button type="button" onClick={(event) => { event.preventDefault(); event.stopPropagation(); onToggleShowEnglish(); }} className="rounded-full border border-line bg-surface p-1 text-foreground/75 hover:bg-surface-muted" title={showEnglish ? "Hide English" : "Show English"} aria-label={showEnglish ? "Hide English" : "Show English"}><svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" /><circle cx="12" cy="12" r="3" /></svg></button> : null}
+                  {canToggleEnglish ? <button type="button" onClick={(event) => { event.preventDefault(); event.stopPropagation(); onToggleShowEnglish(); }} className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface p-1 text-foreground/75 hover:bg-surface-muted" title={showEnglish ? "Hide English" : "Show English"} aria-label={showEnglish ? "Hide English" : "Show English"}><svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" /><circle cx="12" cy="12" r="3" /></svg></button> : null}
                   <button
                     type="button"
                     onClick={(event) => {
@@ -309,9 +309,11 @@ export default function StudyReviewModalSection({
                       event.stopPropagation();
                       toggleGlyphFont();
                     }}
-                    className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/75 hover:bg-surface-muted"
+                    className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface p-1 text-foreground/75 hover:bg-surface-muted"
+                    title={STUDY_REVIEW_MODAL_SECTION_TEXT.font}
+                    aria-label={STUDY_REVIEW_MODAL_SECTION_TEXT.font}
                   >
-                    {STUDY_REVIEW_MODAL_SECTION_TEXT.font}
+                    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h16" /><path d="M8 20V6a2 2 0 0 1 2-2h4" /><path d="M10 12h8" /><path d="M14 4v16" /></svg>
                   </button>
                 </div>
 
@@ -435,7 +437,7 @@ export default function StudyReviewModalSection({
                     {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                     {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                     {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
-                    {showStatusChip ? <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} · SRS {selectedItem.srsStage}</span> : null}
+                    {showStatusChip ? <span className={`subject-pill whitespace-nowrap ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}</span> : null}
                   </div>
                 </div>
                 {detailsRevealed && allMeanings.length > 1 ? (

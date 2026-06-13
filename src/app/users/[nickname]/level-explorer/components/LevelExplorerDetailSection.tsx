@@ -40,6 +40,7 @@ type Props = {
   accountId: string;
   selectedItem: LevelItem;
   showEnglish: boolean;
+  titleMeaningToggleOnly?: boolean;
   canToggleEnglish?: boolean;
   onToggleShowEnglish?: (() => void) | null;
   hideTimeStats?: boolean;
@@ -67,6 +68,7 @@ export default function LevelExplorerDetailSection({
   accountId,
   selectedItem,
   showEnglish,
+  titleMeaningToggleOnly = false,
   canToggleEnglish = true,
   onToggleShowEnglish = null,
   hideTimeStats = false,
@@ -88,6 +90,10 @@ export default function LevelExplorerDetailSection({
   onResetToLessons = null,
 }: Props) {
   const { fontFamily } = useGlyphFontPreference();
+  const lockMeaningToggleToTitle = titleMeaningToggleOnly && !studyMode;
+  const showEnglishForGlyphSubtitle = lockMeaningToggleToTitle ? false : showEnglish;
+  const showEnglishForReadings = lockMeaningToggleToTitle ? true : showEnglish;
+  const showEnglishForKanjiCards = lockMeaningToggleToTitle ? false : showEnglish;
   const isStudyHidden = studyMode && !revealStudyReading;
   const canShowReadings = !isStudyHidden;
   const primaryMeaning = selectedItem.meanings.find((entry) => entry.trim().length > 0) ?? "";
@@ -133,7 +139,7 @@ export default function LevelExplorerDetailSection({
 
                 const subtitle = studyMode
                   ? glyphSubtitleForDisplay(selectedItem)
-                  : showEnglish
+                  : showEnglishForGlyphSubtitle
                     ? englishSubtitleForDisplay(selectedItem)
                     : glyphSubtitleForDisplay(selectedItem);
 
@@ -153,7 +159,6 @@ export default function LevelExplorerDetailSection({
 
         <div className="min-w-0">
           <div className="flex flex-wrap justify-start gap-1 sm:justify-end">
-            <span className={`subject-pill ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}</span>
             <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
             {typeof selectedItem.wkLevel === "number" ? (
               <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span>
@@ -164,6 +169,7 @@ export default function LevelExplorerDetailSection({
             {selectedItem.jlptLevel ? (
               <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span>
             ) : null}
+            <span className={`subject-pill ${statusClass(selectedItem.status)}`}>{statusShortLabel(selectedItem.status)} - SRS {selectedItem.srsStage}</span>
             {isNewGlyphWithinHours(selectedItem) ? (
               <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
             ) : null}
@@ -173,7 +179,7 @@ export default function LevelExplorerDetailSection({
                 type="button"
                 onClick={onToggleShowEnglish}
                 disabled={!canToggleEnglish}
-                className="subject-pill border-line bg-surface text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
                 title={canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
                 aria-label={canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
               >
@@ -219,7 +225,7 @@ export default function LevelExplorerDetailSection({
               {isRadicalSubjectType(selectedItem.subjectType) ? (
                 "Not applicable"
               ) : (
-                <ReadingListWithPronunciation readings={selectedItem.primaryReadings ?? []} mode={showEnglish ? "inline" : "plain"} />
+                <ReadingListWithPronunciation readings={selectedItem.primaryReadings ?? []} mode={showEnglishForReadings ? "inline" : "plain"} />
               )}
             </p>
           </div>
@@ -229,7 +235,7 @@ export default function LevelExplorerDetailSection({
               {isRadicalSubjectType(selectedItem.subjectType) ? (
                 "Not applicable"
               ) : (
-                <ReadingListWithPronunciation readings={secondaryReadingsForDisplay(selectedItem)} mode={showEnglish ? "inline" : "plain"} />
+                <ReadingListWithPronunciation readings={secondaryReadingsForDisplay(selectedItem)} mode={showEnglishForReadings ? "inline" : "plain"} />
               )}
             </p>
           </div>
@@ -290,7 +296,7 @@ export default function LevelExplorerDetailSection({
             isVocabularySubjectType(selectedItem.subjectType) ? (
               <VocabularyKanjiCards
                 links={vocabularyKanjiLinks}
-                showEnglish={showEnglish}
+                showEnglish={showEnglishForKanjiCards}
                 selectedSubjectId={selectedItem.subjectId}
                 onJumpToKanji={onJumpToKanji}
               />

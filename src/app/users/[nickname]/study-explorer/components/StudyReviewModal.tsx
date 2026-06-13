@@ -357,13 +357,13 @@ export default function StudyReviewModal({
             ) : null}
           </div>
           <div className="flex items-center justify-self-end gap-1 sm:gap-2">
-            <button type="button" onClick={goPrev} disabled={!onPrev || !prevLabel} className="whitespace-nowrap rounded-full border border-line bg-surface px-2 py-1 text-[11px] font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-xs sm:uppercase sm:tracking-[0.1em]">
+            <button type="button" onClick={goPrev} disabled={!onPrev || !prevLabel} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
               <span className="sm:hidden" aria-hidden>
                 Prev
               </span>
               <span className="hidden sm:inline">Prev {prevLabel ?? "-"}</span>
             </button>
-            <button type="button" onClick={advanceFlashOrNext} disabled={!(onNext || canUseFlashCycleNext)} className="whitespace-nowrap rounded-full border border-line bg-surface px-2 py-1 text-[11px] font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-xs sm:uppercase sm:tracking-[0.1em]">
+            <button type="button" onClick={advanceFlashOrNext} disabled={!(onNext || canUseFlashCycleNext)} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
               <span className="sm:hidden" aria-hidden>
                 {!onNext && canUseFlashCycleNext ? (flashCycleDone ? "Restart" : "Next") : "Next"}
               </span>
