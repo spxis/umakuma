@@ -413,12 +413,16 @@ export default function StudyExplorerPanel({
                           : (glyphSubtitleForDisplay(item) ?? "")
                     }
                     statusChip={
-                      isLessonLockedQueueItem(item)
-                        ? undefined
-                        : <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)}</span>
+                      reviewBadge
+                        ? <span className={`subject-pill whitespace-nowrap ${reviewBadge.className}`}>{reviewBadge.label}</span>
+                        : <span />
                     }
-                    middleChip={reviewBadge ? <span className={`rounded-full border px-3 py-1 text-xs font-bold uppercase whitespace-nowrap ${reviewBadge.className}`}>{reviewBadge.label}</span> : undefined}
-                    rightChip={<span className="rounded-full border border-line bg-surface px-2 py-1 text-xs font-bold text-foreground">SRS {item.srsStage}</span>}
+                    middleChip={undefined}
+                    rightChip={
+                      isLessonLockedQueueItem(item)
+                        ? <span className="subject-pill border-line bg-surface text-foreground whitespace-nowrap">SRS {item.srsStage}</span>
+                        : <span className={`subject-pill border-line whitespace-nowrap ${statusClass(item.status)}`}>{statusShortLabel(item.status)} - SRS {item.srsStage}</span>
+                    }
                   />
                 );
               })}
