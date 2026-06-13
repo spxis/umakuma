@@ -315,7 +315,7 @@ export default function StudyReviewModalSection({
                         event.stopPropagation();
                         onToggleShowEnglish();
                       }}
-                      className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface p-1 text-foreground/75 hover:bg-surface-muted"
+                      className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground/75 hover:bg-surface-muted"
                       title={showEnglish ? "Hide English" : "Show English"}
                       aria-label={showEnglish ? "Hide English" : "Show English"}
                     >
@@ -339,7 +339,7 @@ export default function StudyReviewModalSection({
                       event.stopPropagation();
                       toggleGlyphFont();
                     }}
-                    className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface p-1 text-foreground/75 hover:bg-surface-muted"
+                    className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground/75 hover:bg-surface-muted"
                     title={STUDY_REVIEW_MODAL_SECTION_TEXT.font}
                     aria-label={STUDY_REVIEW_MODAL_SECTION_TEXT.font}
                   >
