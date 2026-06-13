@@ -21,7 +21,6 @@ type BannerConfig = {
   rightDesktopImage?: StaticImageData;
   frameClassName: string;
   centerImageFrameClassName: string;
-  centerImageClassName: string;
   sideImageClassName?: string;
 };
 
@@ -32,7 +31,6 @@ const BANNER_CONFIG_BY_VARIANT: Record<UmaKumaPageBannerVariant, BannerConfig> =
     rightDesktopImage: kumaClose,
     frameClassName: "h-28 sm:h-36 lg:h-44",
     centerImageFrameClassName: "h-16 w-56 sm:h-20 sm:w-72 lg:h-24 lg:w-[420px]",
-    centerImageClassName: "object-contain object-center",
     sideImageClassName: "h-24 w-auto xl:h-28",
   },
   user: {
@@ -41,14 +39,12 @@ const BANNER_CONFIG_BY_VARIANT: Record<UmaKumaPageBannerVariant, BannerConfig> =
     rightDesktopImage: umaKumaRight,
     frameClassName: "h-24 sm:h-32 lg:h-40",
     centerImageFrameClassName: "h-14 w-40 sm:h-16 sm:w-52 lg:h-20 lg:w-64",
-    centerImageClassName: "object-contain object-center",
     sideImageClassName: "h-24 w-auto xl:h-28",
   },
   admin: {
     centerImage: adminBanner,
     frameClassName: "h-24 sm:h-32 lg:h-40",
     centerImageFrameClassName: "h-14 w-40 sm:h-16 sm:w-52 lg:h-20 lg:w-64",
-    centerImageClassName: "object-contain object-center",
   },
 };
 
@@ -79,7 +75,8 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
                   alt=""
                   fill
                   priority={variant === "leaderboard"}
-                  className={config.centerImageClassName}
+                  className="h-full w-full"
+                  style={{ objectFit: "contain", objectPosition: "center" }}
                   sizes="(min-width: 1024px) 420px, 256px"
                 />
               </div>
