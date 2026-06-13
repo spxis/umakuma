@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useAdminFeedback } from "./AdminFeedbackProvider";
+import AdminCatalogBrowser from "./AdminCatalogBrowser";
 
 type CatalogStatusResponse = {
   now: string;
@@ -371,6 +372,11 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
           <p className="mt-2 text-sm text-foreground/70">No sync runs yet.</p>
         )}
       </div>
+
+      <AdminCatalogBrowser
+        sessionAuthorized={sessionAuthorized}
+        checkingSession={checkingSession}
+      />
     </section>
   );
 }

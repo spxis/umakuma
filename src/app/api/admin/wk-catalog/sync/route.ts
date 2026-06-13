@@ -4,6 +4,7 @@ import { z } from "zod";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
+import { clearCatalogBrowseCache } from "@/lib/wanikani/catalogBrowseCache";
 import { runCatalogSync } from "@/lib/wanikani/catalogSync";
 
 const syncRequestSchema = z.object({
@@ -42,6 +43,10 @@ export async function POST(request: Request) {
           maxPages: mode === "dry-run" ? 1 : MAX_PAGES_BY_RUN_TYPE[runType],
           accountLike: "john",
         });
+
+        if (mode === "apply") {
+          clearCatalogBrowseCache();
+        }
 
         const state = await prisma.wkCatalogSyncState.findUnique({
           where: { id: "global" },
