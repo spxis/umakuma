@@ -3,7 +3,6 @@
 import { FormEvent, useEffect, useState } from "react";
 
 import AppTopMenuRow from "../shared/AppTopMenuRow";
-import UmaKumaPageBanner from "../shared/UmaKumaPageBanner";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import AdminCampaignManager from "./AdminCampaignManager";
 import AdminControlRoom from "./AdminControlRoom";
@@ -360,7 +359,6 @@ function AdminWorkspacePageContent({
           showAdminActions={true}
           className="mb-2"
         />
-        <UmaKumaPageBanner variant="admin" className="mb-3" />
 
         <AdminWorkspaceHeader
           activeTab={activeTab}

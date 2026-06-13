@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 
 import SegmentedControl from "@/app/shared/SegmentedControl";
+import userBanner from "@/images/umakuma-banner1-transparent.png";
 import StudySourceLibraryItemsManager from "./StudySourceLibraryItemsManager";
 import {
   CUSTOM_LIBRARY_AI_PROMPT,
@@ -257,10 +259,22 @@ export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }
       </div>
 
       <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5">
-        <div>
-          <h1 className="text-2xl font-black text-foreground">Libraries</h1>
-          <p className="mt-1 text-sm text-foreground/70">Upload, rename, activate, and prune your custom study libraries.</p>
-          <p className="mt-1 text-xs text-foreground/60">Signed in as {wkUsername}</p>
+        <div className="flex items-center gap-3">
+          <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-lg border border-line bg-white sm:h-14 sm:w-24">
+            <Image
+              src={userBanner}
+              alt=""
+              fill
+              className="h-full w-full"
+              style={{ objectFit: "contain", objectPosition: "center" }}
+              sizes="96px"
+            />
+          </div>
+          <div>
+            <h1 className="text-2xl font-black text-foreground">Libraries</h1>
+            <p className="mt-1 text-sm text-foreground/70">Upload, rename, activate, and prune your custom study libraries.</p>
+            <p className="mt-1 text-xs text-foreground/60">Signed in as {wkUsername}</p>
+          </div>
         </div>
       </div>
 
