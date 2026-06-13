@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
 import AppTopMenuRow from "../shared/AppTopMenuRow";
@@ -15,13 +14,13 @@ import AdminFeedbackProvider, { useAdminFeedback } from "./AdminFeedbackProvider
 import type { AdminSessionStatus } from "./AdminPage.types";
 import AdminStudyHistory from "./AdminStudyHistory";
 import AdminUsersPanel from "./AdminUsersPanel";
+import AdminWorkspaceHeader from "./AdminWorkspaceHeader";
 import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types";
 import AdminReadingEntriesClient from "./reading-entries/AdminReadingEntriesClient";
 import {
   ADMIN_WORKSPACE_COOKIE_KEY,
   ADMIN_WORKSPACE_COOKIE_MAX_AGE_SECONDS,
   type AdminWorkspaceTab,
-  routeForAdminWorkspaceTab,
 } from "./AdminWorkspaceTabs";
 
 type AdminWorkspacePageProps = {
@@ -30,14 +29,6 @@ type AdminWorkspacePageProps = {
   initialSession?: AdminSessionStatus;
   initialCampaigns?: CampaignRecord[];
 };
-
-function tabClassName(isActive: boolean): string {
-  return `inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${
-    isActive
-      ? "border-accent bg-accent text-white"
-      : "border-line bg-surface text-slate-700 hover:bg-surface-muted"
-  }`;
-}
 
 export default function AdminWorkspacePage({
   activeTab,
@@ -371,36 +362,15 @@ function AdminWorkspacePageContent({
         />
         <UmaKumaPageBanner variant="admin" className="mb-3" />
 
-        <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm sm:p-6">
-          <div className="flex flex-wrap items-center gap-2">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Admin workspace</p>
-              <h1 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">Manage accounts, data, campaigns, and logs</h1>
-              <p className="mt-1 text-sm text-foreground/70">Switch tabs to focus on one admin job at a time.</p>
-            </div>
-          </div>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Link href={routeForAdminWorkspaceTab("operations")} className={tabClassName(activeTab === "operations")}>
-              Account operations
-            </Link>
-            <Link href={routeForAdminWorkspaceTab("data")} className={tabClassName(activeTab === "data")}>
-              Data catalogs
-            </Link>
-            <Link href={routeForAdminWorkspaceTab("campaigns")} className={tabClassName(activeTab === "campaigns")}>
-              Campaign workspace
-            </Link>
-            <Link href={routeForAdminWorkspaceTab("history")} className={tabClassName(activeTab === "history")}>
-              Submission history
-            </Link>
-            <Link href={routeForAdminWorkspaceTab("users")} className={tabClassName(activeTab === "users")}>
-              Users
-            </Link>
-            <Link href={routeForAdminWorkspaceTab("readingEntries")} className={tabClassName(activeTab === "readingEntries")}>
-              Reading check-ins
-            </Link>
-          </div>
-        </section>
+        <AdminWorkspaceHeader
+          activeTab={activeTab}
+          checkingSession={checkingSession}
+          sessionAuthorized={sessionAuthorized}
+          signedIn={signedIn}
+          emailAllowed={emailAllowed}
+          userEmail={userEmail}
+          userName={userName}
+        />
 
         {checkingSession ? (
           <section className="rounded-xl border border-line bg-surface-muted px-4 py-3">

@@ -1,4 +1,3 @@
-import AdminStatusBadge from "./AdminStatusBadge";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import AdminPanelHeader from "./AdminPanelHeader";
 
@@ -45,14 +44,6 @@ export default function AdminControlRoom({
         label="Account operations"
         title="Admin panel"
         description="Manage family accounts, rotate tokens, and push fresh stats to the leaderboard."
-        actions={
-        <AdminStatusBadge
-          checkingSession={checkingSession}
-          sessionAuthorized={sessionAuthorized}
-          signedIn={signedIn}
-          emailAllowed={emailAllowed}
-        />
-        }
       />
       <p className="mt-2 text-xs text-foreground/65">Admin access requires Google OAuth and allowlisted emails.</p>
 
