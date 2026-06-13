@@ -255,7 +255,7 @@ export default function ViewGlyphModalHost() {
               Close
             </button>
           </div>
-          <p className="truncate text-center text-xs font-black uppercase tracking-[0.1em] text-foreground/80 sm:text-sm">
+          <p className="truncate text-center text-sm font-black uppercase tracking-[0.1em] text-foreground/80 sm:text-base">
             {customTitle ?? viewerTitle(item)}
           </p>
           <div className="inline-flex min-w-0 items-center justify-end gap-1">

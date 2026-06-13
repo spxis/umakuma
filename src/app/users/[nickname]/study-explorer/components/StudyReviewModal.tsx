@@ -332,7 +332,7 @@ export default function StudyReviewModal({
               <button type="button" onClick={closeModal} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">Close</button>
             </div>
             <div className="flex min-w-0 flex-nowrap items-center justify-center gap-1 sm:gap-2">
-              <p className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70 sm:text-xs sm:tracking-[0.1em]">#{displayIndex} of {displayTotal}</p>
+              <p className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm sm:tracking-[0.1em]">#{displayIndex} of {displayTotal}</p>
               {!studyMode ? (
                 <div className="inline-flex items-center rounded-full border border-line bg-surface p-1">
                   <button

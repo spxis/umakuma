@@ -344,8 +344,8 @@ export default function StudyReviewModalSection({
                     aria-label={STUDY_REVIEW_MODAL_SECTION_TEXT.font}
                   >
                     <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none">
-                      <text x="6.1" y="13.3" fontSize="10.5" fontWeight="700" fill="currentColor" textAnchor="middle">A</text>
-                      <text x="16.9" y="16.8" fontSize="11" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
+                      <text x="6.3" y="14.1" fontSize="12.6" fontWeight="700" fill="currentColor" textAnchor="middle">A</text>
+                      <text x="17.0" y="17.7" fontSize="13.4" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
                     </svg>
                   </button>
                 </div>
@@ -354,7 +354,7 @@ export default function StudyReviewModalSection({
                   {selectedItem.characters}
                 </p>
                 {showFlashReadingHint ? (
-                  <p className="pointer-events-none absolute left-1/2 top-1/2 w-full -translate-x-1/2 translate-y-[2.35rem] px-2 text-center text-xl font-semibold leading-tight text-foreground/80 sm:translate-y-[2.8rem] sm:text-2xl">
+                  <p className="pointer-events-none absolute left-1/2 top-1/2 w-full -translate-x-1/2 translate-y-[2.7rem] px-2 text-center text-xl font-semibold leading-tight text-foreground/80 sm:translate-y-[4.4rem] sm:text-2xl lg:translate-y-[4.9rem]">
                     <ReadingWithPronunciation reading={flashReadingHint} />
                   </p>
                 ) : null}

@@ -172,8 +172,8 @@ export default function LevelExplorerDetailSection({
         aria-label="Font"
       >
         <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none">
-          <text x="6.1" y="13.3" fontSize="10.5" fontWeight="700" fill="currentColor" textAnchor="middle">A</text>
-          <text x="16.9" y="16.8" fontSize="11" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
+          <text x="6.3" y="14.1" fontSize="12.6" fontWeight="700" fill="currentColor" textAnchor="middle">A</text>
+          <text x="17.0" y="17.7" fontSize="13.4" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
         </svg>
       </button>
     </div>
