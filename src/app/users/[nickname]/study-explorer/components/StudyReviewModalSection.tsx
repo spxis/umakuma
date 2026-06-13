@@ -1,13 +1,11 @@
 import type {
-  ReviewOutcome,
   StudyQueueItem,
-  StudyReviewSubmitResult,
-  StudyViewerMode,
 } from "../lib/studyExplorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
+import type { StudyReviewModalSectionProps as Props } from "./StudyReviewModalSection.types";
 import {
   isLessonLockedQueueItem,
   isLessonQueueItem,
@@ -29,56 +27,6 @@ import {
 } from "../../level-explorer/lib/levelExplorerDisplay";
 import StatusSrsChip from "../../shared/StatusSrsChip";
 import StudyReviewModalMetaPanels from "./StudyReviewModalMetaPanels";
-
-type Props = {
-  accountId: string;
-  studyMode: boolean;
-  showEnglish: boolean;
-  canToggleEnglish: boolean;
-  viewerMode: StudyViewerMode;
-  selectedItem: StudyQueueItem;
-  selectedOutcome: ReviewOutcome | undefined;
-  isSubmittingSelected: boolean;
-  submitFeedback: { kind: "success" | "error"; message: string } | null;
-  requiresReveal: boolean;
-  isAnswerRevealed: boolean;
-  isOutcomeFinal: boolean;
-  detailsRevealed: boolean;
-  useStudyFlashLayout: boolean;
-  flashCycleDone: boolean;
-  flashRevealed: boolean;
-  currentFlashKey: string;
-  allMeanings: string[];
-  primaryReadingHiragana: string;
-  primaryReadingKatakana: string;
-  secondaryReadingValue: string;
-  hasRadicals: boolean;
-  hasVisuallySimilar: boolean;
-  hasUsedInVocabulary: boolean;
-  hasComponentKanji: boolean;
-  usedKanjiItems: RelatedReference[];
-  usedInVocabularyCollapsed: boolean;
-  usedKanjiCollapsed: boolean;
-  usedInWordsCollapsed: boolean;
-  jlptGradeLabel: string;
-  wrong: number;
-  skipped: number;
-  correct: number;
-  glyphViewerItems?: StudyQueueItem[];
-  glyphViewerIndex?: number;
-  onReveal: (assignmentId: number) => void;
-  onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => void;
-  onSkipCurrent: () => void;
-  onStartLesson: (assignmentId: number) => void;
-  onAdvanceFlashOrNext: () => void;
-  onFlashTouchStart: (event: React.TouchEvent) => void;
-  onFlashTouchEnd: (event: React.TouchEvent) => void;
-  onSetFlashRevealKey: (value: string) => void;
-  onToggleUsedInVocabularyCollapsed: () => void;
-  onToggleUsedKanjiCollapsed: () => void;
-  onToggleUsedInWordsCollapsed: () => void;
-  onToggleShowEnglish: () => void;
-};
 
 export default function StudyReviewModalSection({
   accountId,
