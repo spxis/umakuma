@@ -28,6 +28,44 @@ const VIEW_GLYPH_STORAGE_KEYS = {
   usedInVocabularyCollapsed: "wr:view-glyph:used-in-vocabulary-collapsed",
 } as const;
 
+const VIEW_GLYPH_MODAL_DELTA_DESKTOP_PX = 25;
+const VIEW_GLYPH_MODAL_DELTA_MOBILE_PX = 10;
+const VIEW_GLYPH_MODAL_MIN_SIZE_PX = 320;
+
+type ViewGlyphFrameSize = {
+  width: number;
+  height: number;
+};
+
+function resolveViewGlyphFrameSize(parentRect?: DOMRect | null): ViewGlyphFrameSize {
+  const isMobile = window.matchMedia("(max-width: 639px)").matches;
+  const delta = isMobile ? VIEW_GLYPH_MODAL_DELTA_MOBILE_PX : VIEW_GLYPH_MODAL_DELTA_DESKTOP_PX;
+  const baseWidth = parentRect?.width ?? window.innerWidth;
+  const baseHeight = parentRect?.height ?? window.innerHeight;
+
+  return {
+    width: Math.max(VIEW_GLYPH_MODAL_MIN_SIZE_PX, Math.round(baseWidth - delta)),
+    height: Math.max(VIEW_GLYPH_MODAL_MIN_SIZE_PX, Math.round(baseHeight - delta)),
+  };
+}
+
+function resolveParentFrameRect(): DOMRect | null {
+  const activeElement = document.activeElement;
+  if (activeElement instanceof HTMLElement) {
+    const activeFrame = activeElement.closest<HTMLElement>("[data-view-glyph-parent-frame='true']");
+    if (activeFrame) {
+      return activeFrame.getBoundingClientRect();
+    }
+  }
+
+  const parentFrame = document.querySelector<HTMLElement>("[data-view-glyph-parent-frame='true']");
+  if (!parentFrame) {
+    return null;
+  }
+
+  return parentFrame.getBoundingClientRect();
+}
+
 function subjectSingularLabel(value: string | null | undefined): string {
   if (isSubjectType(value)) {
     return SUBJECT_TYPE_DISPLAY[value].singular;
@@ -68,6 +106,7 @@ export default function ViewGlyphModalHost() {
   const [customTitle, setCustomTitle] = useState<string | undefined>(undefined);
   const [selector, setSelector] = useState<ViewGlyphSelectorEntry[]>([]);
   const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
+  const [frameSize, setFrameSize] = useState<ViewGlyphFrameSize | null>(null);
 
   useEffect(() => {
     const onOpen = (event: Event) => {
@@ -82,6 +121,7 @@ export default function ViewGlyphModalHost() {
       setCustomTitle(detail.title);
       setSelector(Array.isArray(detail.selector) ? detail.selector : []);
       setTagOverrides({});
+      setFrameSize(resolveViewGlyphFrameSize(resolveParentFrameRect()));
     };
 
     window.addEventListener(VIEW_GLYPH_EVENT, onOpen);
@@ -105,6 +145,7 @@ export default function ViewGlyphModalHost() {
     setCustomTitle(undefined);
     setSelector([]);
     setTagOverrides({});
+    setFrameSize(null);
   }, []);
 
   const toggleStudyTag = useCallback(async (tag: "favorite" | "trouble") => {
@@ -230,6 +271,10 @@ export default function ViewGlyphModalHost() {
       return;
     }
 
+    const onResize = () => {
+      setFrameSize(resolveViewGlyphFrameSize(resolveParentFrameRect()));
+    };
+
     const onKeyDownCapture = (event: KeyboardEvent) => {
       event.stopPropagation();
       if (typeof event.stopImmediatePropagation === "function") {
@@ -260,9 +305,11 @@ export default function ViewGlyphModalHost() {
     document.body.style.overscrollBehavior = "contain";
 
     window.addEventListener("keydown", onKeyDownCapture, true);
+    window.addEventListener("resize", onResize);
 
     return () => {
       window.removeEventListener("keydown", onKeyDownCapture, true);
+      window.removeEventListener("resize", onResize);
       document.body.style.overflow = overflow;
       document.body.style.overscrollBehavior = overscrollBehavior;
     };
@@ -295,9 +342,13 @@ export default function ViewGlyphModalHost() {
           }))
       : [];
 
+  const modalFrameStyle = frameSize
+    ? { width: `${frameSize.width}px`, height: `${frameSize.height}px` }
+    : { width: "calc(100vw - 25px)", height: "calc(100dvh - 25px)" };
+
   return (
-    <div className="fixed inset-0 z-[90] bg-[rgba(6,12,26,0.56)] p-3 backdrop-blur-[1px] sm:p-6">
-      <div className="mx-auto flex h-[90dvh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]">
+    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-[rgba(6,12,26,0.56)] p-1 backdrop-blur-[1px] sm:p-3">
+      <div style={modalFrameStyle} className="mx-auto flex max-h-[calc(100dvh-8px)] w-full max-w-[calc(100vw-8px)] flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]">
         <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-line bg-surface-muted px-3 py-2 sm:px-4">
           <div className="flex min-w-0 items-center justify-start">
             <button
