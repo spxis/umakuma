@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useState } from "react";
 import AppTopMenuRow from "../shared/AppTopMenuRow";
 import SegmentedControl from "../shared/SegmentedControl";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
+import { usePersistedTab } from "@/lib/usePersistedTab";
 import AdminCampaignManager from "./AdminCampaignManager";
 import AdminControlRoom from "./AdminControlRoom";
 import AdminDataWorkspaceSection from "./AdminDataWorkspaceSection";
@@ -70,7 +71,8 @@ function AdminWorkspacePageContent({
   const [userEmail, setUserEmail] = useState<string | null>(initialSession?.user?.email ?? null);
   const [userWkUsername, setUserWkUsername] = useState<string | null>(initialSession?.user?.wkUsername ?? null);
   const [loading, setLoading] = useState(false);
-  const [dataCatalogView, setDataCatalogView] = useState<"wk" | "jlpt">(initialDataCatalog ?? "wk");
+  const dataCatalogOptions = ["wk", "jlpt"] as const;
+  const [dataCatalogView, setDataCatalogView] = usePersistedTab<"wk" | "jlpt">("wr:admin:data-catalog-view", dataCatalogOptions, initialDataCatalog ?? "wk");
   const [jlptRefreshing, setJlptRefreshing] = useState(false);
   const [jlptEnriching, setJlptEnriching] = useState(false);
   const [operationScope, setOperationScope] = useState<AdminOperationsScopeResponse | null>(null);
@@ -121,8 +123,13 @@ function AdminWorkspacePageContent({
   }, [hasInitialSession]);
 
   useEffect(() => {
-    setDataCatalogView(initialDataCatalog ?? "wk");
-  }, [initialDataCatalog]);
+    // Keep the dedicated JLPT route pinned to JLPT.
+    if (initialDataCatalog === "jlpt" && dataCatalogView !== "jlpt") {
+      const restoreTimer = window.setTimeout(() => setDataCatalogView("jlpt"), 0);
+
+      return () => window.clearTimeout(restoreTimer);
+    }
+  }, [dataCatalogView, initialDataCatalog, setDataCatalogView]);
 
   useEffect(() => {
     async function loadOperationScope() {

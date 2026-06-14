@@ -20,6 +20,7 @@ import { fetchReadingSignoffs } from "./UserReadingSignoffPanel.api";
 import { buildTodayStatsByAccountId } from "./UserReadingSignoffPanel.stats";
 import { createFormState, type FormState, type Member, type ReadingCampaignOption, type ReadingSignoffResponse, type UserReadingSignoffPanelProps } from "./UserReadingSignoffPanel.types";
 import SegmentedControl from "@/app/shared/SegmentedControl";
+import { usePersistedTab } from "@/lib/usePersistedTab";
 
 export default function UserReadingSignoffPanel({ accountId, initialMonthKey, initialData }: UserReadingSignoffPanelProps) {
   const today = getTodayDateInputValue();
@@ -38,7 +39,12 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   const [historyMember, setHistoryMember] = useState<Member | null>(null);
   const [submitState, setSubmitState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
-  const [activeReadTab, setActiveReadTab] = useState<"challenge" | "checkins">("challenge");
+  const readTabOptions = useMemo(() => ["challenge", "checkins"] as const, []);
+  const [activeReadTab, setActiveReadTab] = usePersistedTab<"challenge" | "checkins">(
+    `wr:user:${accountId}:read-signoff-tab`,
+    readTabOptions,
+    "challenge",
+  );
   const summarySwrKey = `/api/reading-signoffs?month=${encodeURIComponent(todayMonthKey)}&challengeId=${encodeURIComponent(selectedCampaignId)}`;
   const calendarSwrKey = `/api/reading-signoffs?month=${encodeURIComponent(monthKey)}&challengeId=${encodeURIComponent(selectedCampaignId)}`;
   const { data: summaryData, mutate: mutateSummary, isLoading: isSummaryLoading } = useSWR<ReadingSignoffResponse>(
@@ -116,6 +122,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       setSelectedCampaignId(nextSelectedCampaignId);
     }
   }, [baseData?.selectedChallengeId, campaigns, selectedCampaignId]);
+
   const trackedMemberSet = useMemo(() => new Set(trackedMemberIds), [trackedMemberIds]);
   const trackedMembers = useMemo(() => members.filter((member) => trackedMemberSet.has(member.id)), [members, trackedMemberSet]);
   const memberByAccountId = useMemo(() => new Map(trackedMembers.map((member) => [member.id, member])), [trackedMembers]);

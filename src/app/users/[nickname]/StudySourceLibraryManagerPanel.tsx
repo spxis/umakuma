@@ -6,6 +6,7 @@ import useSWR from "swr";
 
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import userBanner from "@/images/umakuma-banner1-transparent.png";
+import { usePersistedTab } from "@/lib/usePersistedTab";
 import StudySourceLibraryItemsManager from "./StudySourceLibraryItemsManager";
 import {
   CUSTOM_LIBRARY_AI_PROMPT,
@@ -35,8 +36,12 @@ type Props = {
 
 export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [activeTab, setActiveTab] = useState<LibrariesTab>("upload");
+  const tabOptions = useMemo(() => ["upload", "manage"] as const, []);
+  const [activeTab, setActiveTab] = usePersistedTab<LibrariesTab>(
+    `wr:user:${accountId}:libraries-tab`,
+    tabOptions,
+    "upload",
+  );
   const [draftLibraryId, setDraftLibraryId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState("");
   const [renameMessage, setRenameMessage] = useState<string | null>(null);

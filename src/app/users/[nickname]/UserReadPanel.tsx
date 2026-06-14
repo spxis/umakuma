@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import NewsReader from "@/app/news/NewsReader";
 import NewsHistoryViewerClient from "@/app/news/history/NewsHistoryViewerClient";
 import NewsStatsClient from "@/app/news/stats/NewsStatsClient";
+import { usePersistedTab } from "@/lib/usePersistedTab";
 
 type ReadPanelTab = "news" | "history" | "stats";
 
@@ -20,7 +21,12 @@ export default function UserReadPanel({
   devSampleUrls = [],
   initialTab = "news",
 }: UserReadPanelProps) {
-  const [activeTab, setActiveTab] = useState<ReadPanelTab>(initialTab);
+  const tabOptions = useMemo(() => ["news", "history", "stats"] as const, []);
+  const [activeTab, setActiveTab] = usePersistedTab<ReadPanelTab>(
+    "wr:user:read-panel-tab",
+    tabOptions,
+    initialTab,
+  );
 
   return (
     <section className="space-y-3">
