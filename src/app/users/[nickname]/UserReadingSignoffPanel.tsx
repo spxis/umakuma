@@ -1,8 +1,10 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { ACTIVE_READING_CHALLENGE } from "@/lib/readingChallengeRules";
 import { getReadingDailyEarningsForecast } from "@/lib/readingEarnings";
+import userBanner from "@/images/umakuma-banner1-transparent.png";
 import { buildCalendarCells, computeReadingLeaderboard, getTodayDateInputValue, parseDateKeyAsUtc, type ReadingChallengeBookRecord, type ReadingSignoffEntryRecord, type ReadingSignoffRecord } from "@/lib/readingSignoff";
 import UserReadingCampaignHeader from "./UserReadingCampaignHeader";
 import UserReadingDashboardBooksSection from "./UserReadingDashboardBooksSection";
@@ -62,21 +64,12 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   const baseData = summaryData ?? calendarData;
   const members = useMemo(() => baseData?.members ?? [], [baseData?.members]);
   const viewerCanChooseMember = baseData?.viewerCanChooseMember ?? false;
-  const trackedMemberAccountIds = useMemo(
-    () => baseData?.trackedMemberAccountIds ?? [],
-    [baseData?.trackedMemberAccountIds],
-  );
+  const trackedMemberAccountIds = useMemo(() => baseData?.trackedMemberAccountIds ?? [], [baseData?.trackedMemberAccountIds]);
   const signoffs = useMemo(() => calendarData?.signoffs ?? [], [calendarData?.signoffs]);
   const signoffEntries = useMemo(() => calendarData?.signoffEntries ?? [], [calendarData?.signoffEntries]);
   const reviewQueues = useMemo(() => baseData?.reviewQueues ?? [], [baseData?.reviewQueues]);
-  const challengeBooks = useMemo(
-    () => summaryData?.challengeBooks ?? calendarData?.challengeBooks ?? [],
-    [calendarData?.challengeBooks, summaryData?.challengeBooks],
-  );
-  const latestSignoffs = useMemo(
-    () => summaryData?.latestSignoffs ?? calendarData?.latestSignoffs ?? [],
-    [calendarData?.latestSignoffs, summaryData?.latestSignoffs],
-  );
+  const challengeBooks = useMemo(() => summaryData?.challengeBooks ?? calendarData?.challengeBooks ?? [], [calendarData?.challengeBooks, summaryData?.challengeBooks]);
+  const latestSignoffs = useMemo(() => summaryData?.latestSignoffs ?? calendarData?.latestSignoffs ?? [], [calendarData?.latestSignoffs, summaryData?.latestSignoffs]);
   const campaigns = useMemo<ReadingCampaignOption[]>(
     () => resolveReadingCampaignOptions(baseData?.campaigns, initialData?.selectedChallengeId ?? selectedCampaignId),
     [baseData?.campaigns, initialData?.selectedChallengeId, selectedCampaignId],
@@ -123,9 +116,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       setSelectedCampaignId(nextSelectedCampaignId);
     }
   }, [baseData?.selectedChallengeId, campaigns, selectedCampaignId]);
-  const trackedMemberSet = useMemo(() => {
-    return new Set(trackedMemberIds);
-  }, [trackedMemberIds]);
+  const trackedMemberSet = useMemo(() => new Set(trackedMemberIds), [trackedMemberIds]);
   const trackedMembers = useMemo(() => members.filter((member) => trackedMemberSet.has(member.id)), [members, trackedMemberSet]);
   const memberByAccountId = useMemo(() => new Map(trackedMembers.map((member) => [member.id, member])), [trackedMembers]);
   const latestSignoffByAccountId = useMemo(() => new Map(latestSignoffs.map((row) => [row.accountId, row])), [latestSignoffs]);
@@ -233,13 +224,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   }
   const modalMember = members.find((member) => member.id === selectedMemberId) ?? null;
   const accountMember = members.find((member) => member.id === accountId) ?? null;
-  const selectedReviewQueue = reviewQueueByAccountId.get(selectedMemberId) ?? {
-    accountId: selectedMemberId,
-    radical: 0,
-    kanji: 0,
-    vocabulary: 0,
-    total: 0,
-  };
+  const selectedReviewQueue = reviewQueueByAccountId.get(selectedMemberId) ?? { accountId: selectedMemberId, radical: 0, kanji: 0, vocabulary: 0, total: 0 };
   const modalDate = form?.signoffDatePst ?? modalDateKey;
   const modalExistingEntry = findEntry(selectedMemberId, modalDate);
   function setModalMember(memberId: string, dateKey: string) {
@@ -382,32 +367,37 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   }
   return (
     <section className="space-y-3">
+      <div className="flex justify-end">
+        <SegmentedControl
+          ariaLabel="Read sections"
+          value={activeReadTab}
+          onChange={(value) => setActiveReadTab(value as "challenge" | "checkins")}
+          size="sm"
+          options={[{ value: "challenge", label: "Challenge" }, { value: "checkins", label: "Check-ins" }]}
+        />
+      </div>
       <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+          <div className="overflow-hidden rounded-xl border border-line/70 bg-surface">
+            <Image src={userBanner} alt="UmaKuma" width={96} height={60} className="h-13 w-24 object-contain p-1.5" />
+          </div>
           <div>
             <h2 className="text-xl font-black text-foreground">Read</h2>
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Reading check-ins and challenge progress.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Track challenge rewards and daily check-ins.</p>
           </div>
-          <SegmentedControl
-            ariaLabel="Read sections"
-            value={activeReadTab}
-            onChange={(value) => setActiveReadTab(value as "challenge" | "checkins")}
-            size="sm"
-            options={[{ value: "challenge", label: "Challenge" }, { value: "checkins", label: "Check-ins" }]}
-          />
         </div>
         {activeReadTab === "challenge" ? (
           <div className="space-y-4">
-          <UserReadingRewardsSummary
-            campaignName={selectedCampaignName}
-            campaignStartDatePst={selectedCampaignStartDatePst}
-            campaignGoalDatePst={selectedCampaignGoalDatePst}
-            campaignTripDatePst={selectedCampaignTripDatePst}
-            campaignTargetBaseYen={selectedCampaignTargetBaseYen}
-            daysRemaining={daysRemaining}
-            isLoading={isSummaryLoading}
-            leaderboard={leaderboard}
-          />
+            <UserReadingRewardsSummary
+              campaignName={selectedCampaignName}
+              campaignStartDatePst={selectedCampaignStartDatePst}
+              campaignGoalDatePst={selectedCampaignGoalDatePst}
+              campaignTripDatePst={selectedCampaignTripDatePst}
+              campaignTargetBaseYen={selectedCampaignTargetBaseYen}
+              daysRemaining={daysRemaining}
+              isLoading={isSummaryLoading}
+              leaderboard={leaderboard}
+            />
           </div>
         ) : (
           <div className="space-y-4">

@@ -22,12 +22,9 @@ export default function UserReadingCampaignHeader({
   return (
     <header className="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h2 className="text-2xl font-black text-foreground">Read check-ins</h2>
+        <h2 className="text-2xl font-black text-foreground">Check-ins</h2>
         <p className="mt-1 text-sm text-foreground/75">
           Use one daily check-in button to update reading and WaniKani progress.
-        </p>
-        <p className="mt-1 text-xs text-foreground/60">
-          Every player needs 3 challenge books saved in the modal.
         </p>
       </div>
 
