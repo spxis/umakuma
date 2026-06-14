@@ -152,7 +152,7 @@ export default function UserReadingRewardsSummary({
 
         {!isLoading && leaderboard.length === 0 ? (
           <div className="mt-3 rounded-lg border border-line bg-surface-muted px-3 py-5 text-center text-sm font-semibold text-foreground/65">
-            No tracked players yet. Ask an admin to manage tracked players from Admin &gt; Reading check-ins.
+                No tracked players yet. Ask an admin to manage tracked players from Admin &gt; Check-ins.
           </div>
         ) : null}
 

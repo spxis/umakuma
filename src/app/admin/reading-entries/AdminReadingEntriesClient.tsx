@@ -319,7 +319,7 @@ export default function AdminReadingEntriesClient({
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
       <AdminPanelHeader
-        label="Reading check-ins"
+        label="Check-ins"
         title={embedded ? "Manage reading check-ins" : "All reading check-ins"}
         description="Browse daily reading check-ins across all members and correct incorrect submissions."
       />

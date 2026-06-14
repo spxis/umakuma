@@ -56,7 +56,7 @@ export default function AdminTrackedPlayersManager({
 
       {members.length === 0 ? (
         <p className="mt-3 text-sm text-foreground/70">
-          {loading ? "Loading members..." : "No members yet. Add users first in Account operations."}
+          {loading ? "Loading members..." : "No members yet. Add users first in Accounts."}
         </p>
       ) : (
         <div className="mt-3 flex flex-wrap gap-2">

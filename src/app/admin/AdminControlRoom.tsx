@@ -41,7 +41,7 @@ export default function AdminControlRoom({
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
       <AdminPanelHeader
-        label="Account operations"
+        label="Accounts"
         title="Admin panel"
         description="Manage family accounts, rotate tokens, and push fresh stats to the leaderboard."
       />

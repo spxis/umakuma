@@ -374,12 +374,12 @@ function AdminWorkspacePageContent({
               router.push(routeForAdminWorkspaceTab(nextTab));
             }}
             options={[
-              { value: "operations", label: "Account operations" },
-              { value: "data", label: "Data catalogs" },
-              { value: "campaigns", label: "Campaign workspace" },
-              { value: "history", label: "Submission history" },
+              { value: "operations", label: "Accounts" },
+              { value: "data", label: "Data" },
+              { value: "campaigns", label: "Campaigns" },
+              { value: "history", label: "History" },
               { value: "users", label: "Users" },
-              { value: "readingEntries", label: "Reading check-ins" },
+              { value: "readingEntries", label: "Check-ins" },
             ]}
           />
         </section>
@@ -402,7 +402,7 @@ function AdminWorkspacePageContent({
         {!checkingSession && !sessionAuthorized ? (
           <section className="rounded-xl border border-line bg-surface-muted px-4 py-3">
             <p className="text-sm font-semibold text-foreground/75">
-              Admin tools are hidden until you sign in with an allowlisted Google account. Open Account operations to sign in or switch account.
+              Admin tools are hidden until you sign in with an allowlisted Google account. Open Accounts to sign in or switch account.
             </p>
           </section>
         ) : null}
@@ -410,7 +410,7 @@ function AdminWorkspacePageContent({
         {activeTab === "operations" ? (
           <section id="admin-operations" className="space-y-3">
             <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Account operations</p>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Accounts</p>
               <p className="mt-1 text-sm text-foreground/70">Sign in, add family accounts, and run leaderboard refresh actions.</p>
             </div>
             <AdminControlRoom
@@ -433,7 +433,7 @@ function AdminWorkspacePageContent({
         {activeTab === "campaigns" ? (
           <section className="space-y-3">
             <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Campaign workspace</p>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Campaigns</p>
               <p className="mt-1 text-sm text-foreground/70">Edit campaign rules and run payout simulations.</p>
             </div>
             <AdminCampaignManager
@@ -447,7 +447,7 @@ function AdminWorkspacePageContent({
         {activeTab === "history" ? (
           <section id="admin-history" className="space-y-3">
             <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Submission history</p>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">History</p>
               <p className="mt-1 text-sm text-foreground/70">Review, edit, or remove study submissions in one place.</p>
             </div>
             <AdminStudyHistory sessionAuthorized={sessionAuthorized} />
@@ -471,7 +471,7 @@ function AdminWorkspacePageContent({
         {activeTab === "readingEntries" ? (
           <section id="admin-reading-entries" className="space-y-3">
             <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Reading check-ins</p>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Check-ins</p>
               <p className="mt-1 text-sm text-foreground/70">Browse and edit reading submissions across all members.</p>
             </div>
             <AdminReadingEntriesClient

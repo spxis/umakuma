@@ -31,7 +31,7 @@ export default function AdminDataWorkspaceSection({
   return (
     <section id="admin-data" className="space-y-3">
       <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-        <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Data catalogs</p>
+        <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Data</p>
         <p className="mt-1 text-sm text-foreground/70">Use one place for WaniKani and JLPT data browse, sync, and export workflows.</p>
       </div>
 

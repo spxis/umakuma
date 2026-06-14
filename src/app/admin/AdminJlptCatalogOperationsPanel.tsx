@@ -37,7 +37,7 @@ export default function AdminJlptCatalogOperationsPanel({
   if (!sessionAuthorized) {
     return (
       <p className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-slate-700">
-        JLPT tools are hidden. Sign in with an allowlisted Google account from Account operations.
+        JLPT tools are hidden. Sign in with an allowlisted Google account from Accounts.
       </p>
     );
   }

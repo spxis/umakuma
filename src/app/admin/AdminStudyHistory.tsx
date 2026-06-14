@@ -266,7 +266,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
   if (!sessionAuthorized) {
     return (
       <p className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-slate-700">
-        Submission history is hidden. Sign in with an allowlisted Google account.
+        History is hidden. Sign in with an allowlisted Google account.
       </p>
     );
   }
@@ -274,7 +274,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
       <AdminPanelHeader
-        label="Submission history"
+        label="History"
         title="Study submission history"
         description="Review, edit, or remove study submissions in one place."
       />

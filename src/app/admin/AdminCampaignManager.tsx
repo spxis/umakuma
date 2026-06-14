@@ -304,7 +304,7 @@ export default function AdminCampaignManager({
   return (
     <section id="reading-campaigns" className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
       <AdminPanelHeader
-        label="Campaign workspace"
+        label="Campaigns"
         title="Manage campaign definitions"
         description="Edit an existing campaign, or create a draft for experiments."
         actions={
