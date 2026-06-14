@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 
 import type { LevelItem } from "../../explorerTypes";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
@@ -8,6 +8,7 @@ import { ReadingWithPronunciation, badgeClass, formatNextReviewBadge, formatNumb
 import { LEVEL_WK_STATUSES } from "../lib/levelExplorerDomain";
 import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import LevelExplorerDetailSection from "./LevelExplorerDetailSection";
+import LevelCardTagOverlay from "./LevelCardTagOverlay";
 
 type VocabularyKanjiLink = {
   char: string;
@@ -105,6 +106,12 @@ export default function LevelExplorerItemsGrid({
   });
   const [bulkAnchorIndex, setBulkAnchorIndex] = useState<number | null>(null);
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
+  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
+
+  const resolveStudyTags = useCallback(
+    (item: LevelItem) => tagOverrides[item.subjectId] ?? item.studyTags ?? { favorite: false, trouble: false },
+    [tagOverrides],
+  );
 
   const selectedItems = useMemo(
     () => filteredItems.filter((item) => selectedSubjectIds.has(item.subjectId)),
@@ -114,6 +121,49 @@ export default function LevelExplorerItemsGrid({
   const selectedPreview = useMemo(() => {
     return selectedItems.map((item) => item.characters);
   }, [selectedItems]);
+
+  const selectedItemWithTags = useMemo(
+    () =>
+      selectedItem
+        ? {
+            ...selectedItem,
+            studyTags: resolveStudyTags(selectedItem),
+          }
+        : null,
+    [resolveStudyTags, selectedItem],
+  );
+
+  const onToggleStudyTag = useCallback(
+    async (subjectId: number, tag: "favorite" | "trouble", enabled: boolean) => {
+      const fallbackFromItems = filteredItems.find((entry) => entry.subjectId === subjectId)?.studyTags;
+      const fallback = fallbackFromItems ?? { favorite: false, trouble: false };
+      const current = tagOverrides[subjectId] ?? fallback;
+      const next = { ...current, [tag]: enabled };
+
+      setTagOverrides((prev) => ({ ...prev, [subjectId]: next }));
+
+      try {
+        const response = await fetch(`/api/study/${accountId}/tags`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ subjectId, tag, enabled }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Tag update failed.");
+        }
+
+        window.dispatchEvent(
+          new CustomEvent("wr:study-tags-updated", {
+            detail: { accountId, subjectId },
+          }),
+        );
+      } catch {
+        setTagOverrides((prev) => ({ ...prev, [subjectId]: current }));
+      }
+    },
+    [accountId, filteredItems, tagOverrides],
+  );
 
   const applyBulkSelection = ({
     subjectId,
@@ -237,9 +287,13 @@ export default function LevelExplorerItemsGrid({
       ) : (
         <>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {visibleItems.map((item, index) => (
-              <Fragment key={`${item.subjectType}-${item.subjectId}`}>
+            {visibleItems.map((item, index) => {
+              const cardItem = { ...item, studyTags: resolveStudyTags(item) };
+
+              return (
+                <Fragment key={`${item.subjectType}-${item.subjectId}`}>
             <UnifiedExplorerCard
+              activateOn="glyph-box"
               onClick={(meta) => {
                 if (
                   applyBulkSelection({
@@ -317,15 +371,22 @@ export default function LevelExplorerItemsGrid({
                 </>
               }
               glyphClassName={`${typeGlyphBoxClass(item.subjectType)} ${item.status === LEVEL_WK_STATUSES.locked || item.srsStage <= 0 ? "opacity-60" : ""}`}
-              glyphText={item.characters}
-              glyphTextClassName={`${glyphTextSizeClass(item.characters)} whitespace-nowrap`}
+              glyphText={cardItem.characters}
+              glyphTextClassName={`${glyphTextSizeClass(cardItem.characters)} whitespace-nowrap`}
+              glyphOverlay={
+                <LevelCardTagOverlay
+                  item={cardItem}
+                  bulkModeEnabled={bulkModeEnabled}
+                  onToggleStudyTag={onToggleStudyTag}
+                />
+              }
               glyphSubtitle={
                 studyMode ? (
                   <span className="text-foreground/45">...</span>
                 ) : showEnglish ? (
-                  titleForDisplay(item, true)
+                  titleForDisplay(cardItem, true)
                 ) : (() => {
-                  const subtitle = glyphSubtitleForDisplay(item);
+                  const subtitle = glyphSubtitleForDisplay(cardItem);
                   if (!subtitle) {
                     return null;
                   }
@@ -356,7 +417,13 @@ export default function LevelExplorerItemsGrid({
             {selectedItem && !bulkModeEnabled && index === visibleDetailInsertIndex ? (
               <LevelExplorerDetailSection
                 accountId={accountId}
-                selectedItem={selectedItem}
+                selectedItem={selectedItemWithTags ?? selectedItem}
+                studyTags={(selectedItemWithTags ?? selectedItem).studyTags ?? { favorite: false, trouble: false }}
+                onToggleStudyTag={(tag) => {
+                  const effectiveSelected = selectedItemWithTags ?? selectedItem;
+                  const current = effectiveSelected.studyTags ?? { favorite: false, trouble: false };
+                  void onToggleStudyTag(effectiveSelected.subjectId, tag, !current[tag]);
+                }}
                 showEnglish={showEnglish}
                 canToggleEnglish={canToggleEnglish}
                 onToggleShowEnglish={onToggleShowEnglish}
@@ -384,8 +451,9 @@ export default function LevelExplorerItemsGrid({
                 resetBusy={isResetting}
               />
             ) : null}
-              </Fragment>
-            ))}
+                </Fragment>
+              );
+            })}
           </div>
           {visibleItems.length < filteredItems.length ? (
             <div
