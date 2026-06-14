@@ -63,8 +63,7 @@ export default function StudyExplorer({
   includeTrouble,
   queueTagFilter = "all",
 }: StudyExplorerProps) {
-  const queueStorageScopeKey = buildStudyQueueStorageScopeKey(studySource, customLibraryId);
-  const canRestoreCachedQueue = queueTagFilter === "all";
+  const queueStorageScopeKey = buildStudyQueueStorageScopeKey(studySource, customLibraryId, queueTagFilter);
   const studyApiBasePath = buildStudyApiBasePath(accountId, studySource);
   const storageKeys = useMemo(() => buildStudyExplorerStorageKeys(accountId, queueMode, queueStorageScopeKey), [accountId, queueMode, queueStorageScopeKey]);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -118,7 +117,7 @@ export default function StudyExplorer({
   );
   const queueRequestUrl = buildStudyQueueRequestUrl({ studyApiBasePath, queueMode, initialPageSize, studySource, customLibraryId, includeTrouble, queueTagFilter });
   useLayoutEffect(() => {
-    const cached = canRestoreCachedQueue ? readStoredQueue(accountId, queueMode, queueStorageScopeKey) : undefined;
+    const cached = readStoredQueue(accountId, queueMode, queueStorageScopeKey);
     const initialQueueState = deriveInitialQueueState(cached);
     queueMicrotask(() => {
       setCachedQueueData(cached);
@@ -127,7 +126,7 @@ export default function StudyExplorer({
       setPersistedCounts(readStoredStudyCounts(storageKeys.counts));
       setLoadMoreError(null);
     });
-  }, [accountId, canRestoreCachedQueue, queueMode, queueRequestUrl, queueStorageScopeKey, storageKeys.counts]);
+  }, [accountId, queueMode, queueRequestUrl, queueStorageScopeKey, storageKeys.counts]);
   useEffect(() => {
     if (typeof window === "undefined") {
       return;

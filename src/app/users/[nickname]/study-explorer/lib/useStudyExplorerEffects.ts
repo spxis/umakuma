@@ -375,6 +375,10 @@ export function useStudyExplorerEffects({
   ]);
 
   useEffect(() => {
+    if (dataItems === undefined && loadedItems.length === 0 && totalItems === 0) {
+      return;
+    }
+
     const nextCounts = counts ?? { all: loadedItems.length, reviews: 0, lessons: 0 };
     const nextPayload: QueueResponse = {
       items: loadedItems,
@@ -416,7 +420,7 @@ export function useStudyExplorerEffects({
 
       return unchanged ? prev : nextPayload;
     });
-  }, [accountId, counts, levelCounts, loadedItems, queueStorageScopeKey, queueMode, setCachedQueueData, totalItems, typeCounts, typeCountsByLevel, srsCounts, srsStageCounts]);
+  }, [accountId, counts, dataItems, levelCounts, loadedItems, queueStorageScopeKey, queueMode, setCachedQueueData, totalItems, typeCounts, typeCountsByLevel, srsCounts, srsStageCounts]);
 
   useEffect(() => {
     setCachedQueueData(readStoredQueue(accountId, queueMode, queueStorageScopeKey));

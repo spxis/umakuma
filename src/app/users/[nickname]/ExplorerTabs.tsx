@@ -5,6 +5,8 @@ import LevelExplorer from "./level-explorer/components/LevelExplorer";
 import FilterChipLabel from "./shared/FilterChipLabel";
 import StudyExplorer from "./study-explorer/components/StudyExplorer";
 import StudySourceControls from "./StudySourceControls";
+import { parseStudyTagFilter, resolveStudyTagFilter } from "./studyTagFilterState";
+import { formatReviewCountLabel, queueModeSegmentClass } from "./explorerTabsView";
 import { useStudySourceState } from "./useStudySourceState";
 import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
 import type { StudySrsFilter, StudySrsStageFilter, StudyTagFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
@@ -53,6 +55,7 @@ export default function ExplorerTabs({
   const customLibraryNameStorageKey = `wr:study-custom-library-name:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
   const troubleMixStorageKey = `wr:study-trouble-mix:${accountId}`;
+  const queueTagFilterStorageKey = `wr:study-queue-tag-filter:${accountId}`;
   const isHydrated = typeof window !== "undefined";
   const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(
     initialTab === "level" ? "wk" : initialTab === "jlpt" ? "jlpt" : "learn",
@@ -127,6 +130,7 @@ export default function ExplorerTabs({
 
       const viewer = params.get("viewer");
       setInitialViewerMode(viewer === "detail" || viewer === "flash" ? viewer : null);
+      setQueueTagFilter(resolveStudyTagFilter(params, window.localStorage.getItem(queueTagFilterStorageKey)));
     }, 0);
 
     return () => {
@@ -137,6 +141,7 @@ export default function ExplorerTabs({
     applySourceFromSearchParams,
     initialQueueMode,
     initialStudyMode,
+    queueTagFilterStorageKey,
     showEnglishStorageKey,
   ]);
 
@@ -206,11 +211,24 @@ export default function ExplorerTabs({
       params.set("studyMode", nextStudyMode);
       changed = true;
     }
+    try {
+      window.localStorage.setItem(queueTagFilterStorageKey, queueTagFilter);
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+    const tagInUrl = params.get("tag");
+    if (queueTagFilter !== "all" && tagInUrl !== queueTagFilter) {
+      params.set("tag", queueTagFilter);
+      changed = true;
+    } else if (queueTagFilter === "all" && tagInUrl !== null) {
+      params.delete("tag");
+      changed = true;
+    }
     if (changed) {
       const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
       window.history.replaceState(null, "", next);
     }
-  }, [effectiveActiveTab, isHydrated, queueMode, studyMode]);
+  }, [effectiveActiveTab, isHydrated, queueMode, queueTagFilter, queueTagFilterStorageKey, studyMode]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {
@@ -257,6 +275,7 @@ export default function ExplorerTabs({
       } else if (urlStudyMode === "off" || urlStudyMode === "0") {
         setStudyMode(false);
       }
+      setQueueTagFilter(parseStudyTagFilter(params.get("tag")) ?? "all");
 
       applySourceFromSearchParams(params);
     };
@@ -340,27 +359,6 @@ export default function ExplorerTabs({
     setStudySourceModalRequestId((current) => current + 1);
   };
 
-  function queueModeSegmentClass(mode: QueueType, activeMode: QueueType): string {
-    const active = mode === activeMode;
-    if (!active) {
-      return "inline-flex h-7 flex-1 items-center justify-center rounded-full px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-foreground hover:bg-surface-muted sm:h-8 sm:px-4 sm:text-xs sm:tracking-[0.1em]";
-    }
-
-    return mode === QUEUE_TYPES.review
-      ? "inline-flex h-7 flex-1 items-center justify-center rounded-full border border-amber-500 bg-amber-500 px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-white sm:h-8 sm:px-4 sm:text-xs sm:tracking-[0.1em]"
-      : "inline-flex h-7 flex-1 items-center justify-center rounded-full border border-sky-500 bg-sky-500 px-2.5 text-[11px] font-bold uppercase tracking-[0.06em] text-white sm:h-8 sm:px-4 sm:text-xs sm:tracking-[0.1em]";
-  }
-
-  function reviewCountLabel(): string {
-    if (typeof studyCounts?.reviews !== "number") {
-      return "...";
-    }
-    const total = typeof studyCounts.reviewsTotal === "number"
-      ? studyCounts.reviewsTotal
-      : studyCounts.reviews;
-    return `${studyCounts.reviews}/${total}`;
-  }
-
   return (
     <section className="space-y-3">
       <StudySourceControls
@@ -389,7 +387,7 @@ export default function ExplorerTabs({
                   onClick={() => setQueueMode(QUEUE_TYPES.review)}
                   className={queueModeSegmentClass(QUEUE_TYPES.review, queueMode)}
                 >
-                  <FilterChipLabel label="Reviews" count={reviewCountLabel()} />
+                  <FilterChipLabel label="Reviews" count={formatReviewCountLabel(studyCounts)} />
                 </button>
                 <button
                   type="button"

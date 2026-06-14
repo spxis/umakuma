@@ -15,8 +15,17 @@ function isMissingStudyTagTableError(error: unknown): boolean {
     return false;
   }
 
-  const candidate = error as { code?: string; meta?: { table?: string } };
-  return candidate.code === "P2021" && candidate.meta?.table === "public.StudySubjectTag";
+  const candidate = error as { code?: string; message?: string; meta?: { table?: string } };
+  if (candidate.code !== "P2021") {
+    return false;
+  }
+
+  const table = candidate.meta?.table ?? "";
+  if (table.includes("StudySubjectTag")) {
+    return true;
+  }
+
+  return (candidate.message ?? "").includes("StudySubjectTag");
 }
 
 const querySchema = z.object({

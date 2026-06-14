@@ -1,4 +1,4 @@
-import type { StudyQueueMode, StudySource } from "./studyExplorerTypes";
+import type { StudyQueueMode, StudySource, StudyTagFilter } from "./studyExplorerTypes";
 import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 
 export function buildStudyApiBasePath(accountId: string, studySource: StudySource): string {
@@ -8,8 +8,9 @@ export function buildStudyApiBasePath(accountId: string, studySource: StudySourc
 export function buildStudyQueueStorageScopeKey(
   studySource: StudySource,
   customLibraryId: string | null,
+  queueTagFilter: StudyTagFilter = "all",
 ): string {
-  return `${studySource}:${customLibraryId ?? "none"}`;
+  return `${studySource}:${customLibraryId ?? "none"}:${queueTagFilter}`;
 }
 
 export function buildStudyQueueRequestUrl(params: {
