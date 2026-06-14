@@ -148,23 +148,25 @@ export async function GET(request: Request, context: RouteContext) {
 
       const injectCandidates = troubleIds
         .filter((subjectId) => !reviewedSubjectIds.has(subjectId))
-        .filter((subjectId) => normalizeSubjectType(subjectById.get(subjectId)?.object ?? "") === SUBJECT_TYPES.kanji)
         .sort((a, b) => a - b);
 
       const maxInject = troubleInjectionCount(reviewAssignments.length, injectCandidates.length);
-      const injectedRows = injectCandidates.slice(0, maxInject).map((subjectId) => ({
-        assignmentId: -subjectId,
-        queueType: QUEUE_TYPES.review,
-        data: {
-          subject_id: subjectId,
-          subject_type: SUBJECT_TYPES.kanji,
-          srs_stage: 1,
-          unlocked_at: new Date(0).toISOString(),
-          started_at: null,
-          passed_at: null,
-          available_at: new Date().toISOString(),
-        },
-      }));
+      const injectedRows = injectCandidates.slice(0, maxInject).map((subjectId) => {
+        const subjectType = normalizeSubjectType(subjectById.get(subjectId)?.object ?? "");
+        return {
+          assignmentId: -subjectId,
+          queueType: QUEUE_TYPES.review,
+          data: {
+            subject_id: subjectId,
+            subject_type: subjectType,
+            srs_stage: 1,
+            unlocked_at: new Date(0).toISOString(),
+            started_at: null,
+            passed_at: null,
+            available_at: new Date().toISOString(),
+          },
+        };
+      });
 
       reviewRowsWithTrouble = mergeTroubleRows(reviewAssignments, injectedRows);
     }

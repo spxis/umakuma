@@ -5,7 +5,6 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
 import { clearStudyQueueCache } from "@/lib/studyQueueCache";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -119,10 +118,10 @@ export async function POST(request: Request, context: RouteContext) {
 
         const subject = await prisma.wkSubjectCatalog.findUnique({
           where: { wkSubjectId: parsedBody.data.subjectId },
-          select: { subjectType: true },
+          select: { wkSubjectId: true },
         });
-        if (!subject || subject.subjectType !== SUBJECT_TYPES.kanji) {
-          return NextResponse.json({ error: "Only kanji can be tagged." }, { status: 400 });
+        if (!subject) {
+          return NextResponse.json({ error: "Subject not found." }, { status: 404 });
         }
 
         let current: { favorite: boolean; trouble: boolean } | null = null;

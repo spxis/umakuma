@@ -7,7 +7,6 @@ import {
   isRadicalSubjectType,
   isReviewQueueItem,
   isLessonQueueItem,
-  isKanjiSubjectType,
   isTerminalReviewOutcome,
   STUDY_QUEUE_TYPES,
   STUDY_REVIEW_OUTCOMES,
@@ -368,7 +367,7 @@ export default function StudyReviewModal({
               ) : null}
             </div>
             <div className="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
-              {selectedItem && isKanjiSubjectType(selectedItem.subjectType) ? (
+              {selectedItem ? (
                 <>
                   <button type="button" onClick={() => void toggleStudyTag("favorite")} className={`min-h-9 min-w-9 rounded-full border px-2 py-1.5 text-sm font-bold ${selectedTags.favorite ? "border-amber-500 bg-amber-500 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`} title="Toggle favorite">★</button>
                   <button type="button" onClick={() => void toggleStudyTag("trouble")} className={`min-h-9 min-w-9 rounded-full border px-2 py-1.5 text-sm font-bold ${selectedTags.trouble ? "border-red-500 bg-red-500 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`} title="Toggle trouble">!</button>
