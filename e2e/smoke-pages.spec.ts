@@ -692,3 +692,91 @@ test("study first-load groups zero levels for narrowed review filters", async ({
     await expect(groupedDisabledLevels.first()).toBeVisible();
   });
 });
+
+test("study desktop card click opens modal and shows item data", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for desktop click/view checks in this environment.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&type=all&srs=all#explorer`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+    if ((await accessGate.count()) > 0) {
+      await expect(accessGate).toBeVisible();
+      return;
+    }
+
+    const firstCard = page.locator("[data-explorer-card-subject-id]").first();
+    await expect(firstCard).toBeVisible();
+
+    const glyphHitbox = firstCard.locator("[data-explorer-glyph-hitbox='true']").first();
+    await expect(glyphHitbox).toBeVisible();
+    await glyphHitbox.click();
+
+    const studyModal = page.locator("div.fixed.inset-0.z-50").first();
+    await expect(studyModal).toBeVisible();
+    await expect(studyModal.getByRole("button", { name: "Close", exact: true })).toBeVisible();
+    await expect(studyModal.getByText(/Show answer|Primary reading/i).first()).toBeVisible();
+  });
+});
+
+test("study mobile trouble/favorite clicks do not open modal and card tap still opens", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for mobile click/view checks in this environment.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&type=all&srs=all#explorer`;
+
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+  });
+  const page = await context.newPage();
+  const badResponses: string[] = [];
+  const pageErrors: string[] = [];
+
+  page.on("response", (response) => {
+    if (response.status() >= 500) {
+      badResponses.push(`${response.status()} ${response.url()}`);
+    }
+  });
+  page.on("pageerror", (error) => {
+    pageErrors.push(String(error));
+  });
+
+  await page.goto(url, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 3_000 }).catch(() => {
+    // Some pages keep lightweight polling alive; proceed with assertions.
+  });
+
+  const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+  if ((await accessGate.count()) > 0) {
+    await expect(accessGate).toBeVisible();
+    await context.close();
+    return;
+  }
+
+  const firstCard = page.locator("[data-explorer-card-subject-id]").first();
+  await expect(firstCard).toBeVisible();
+
+  const troubleButton = firstCard.getByRole("button", { name: "Toggle trouble", exact: true }).first();
+  await expect(troubleButton).toBeVisible();
+  await troubleButton.click();
+  await expect(page.locator("div.fixed.inset-0.z-50")).toHaveCount(0);
+
+  const favoriteButton = firstCard.getByRole("button", { name: "Toggle favorite", exact: true }).first();
+  await expect(favoriteButton).toBeVisible();
+  await favoriteButton.click();
+  await expect(page.locator("div.fixed.inset-0.z-50")).toHaveCount(0);
+
+  const glyphHitbox = firstCard.locator("[data-explorer-glyph-hitbox='true']").first();
+  await expect(glyphHitbox).toBeVisible();
+  await glyphHitbox.click();
+
+  const studyModal = page.locator("div.fixed.inset-0.z-50").first();
+  await expect(studyModal).toBeVisible();
+  await expect(studyModal.getByRole("button", { name: "Close", exact: true })).toBeVisible();
+  await expect(studyModal.getByText(/Show answer|Primary reading/i).first()).toBeVisible();
+
+  expect(pageErrors, "mobile study click flow page errors").toEqual([]);
+  expect(badResponses, "mobile study click flow 500+ responses").toEqual([]);
+  await context.close();
+});
