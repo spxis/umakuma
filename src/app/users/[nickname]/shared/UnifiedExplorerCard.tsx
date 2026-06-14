@@ -39,12 +39,25 @@ export default function UnifiedExplorerCard({
   const { fontFamily } = useGlyphFontPreference();
   const rootCursorClass = activateOn === "card" ? "cursor-pointer" : "cursor-default";
   const glyphCursorClass = activateOn === "glyph-box" ? "cursor-pointer" : "";
+  const isInteractiveDescendant = (target: EventTarget | null): boolean => {
+    if (!(target instanceof HTMLElement)) {
+      return false;
+    }
+
+    return Boolean(
+      target.closest("button, input, select, textarea, a, [role='button'], [role='checkbox'], [role='switch']"),
+    );
+  };
 
   return (
     <div
       role="button"
       tabIndex={0}
       onClick={(event) => {
+        if (event.target !== event.currentTarget && isInteractiveDescendant(event.target)) {
+          return;
+        }
+
         if (activateOn === "glyph-box" && event.detail > 0) {
           const target = event.target as HTMLElement | null;
           if (!target?.closest('[data-explorer-glyph-hitbox="true"]')) {
@@ -54,6 +67,10 @@ export default function UnifiedExplorerCard({
         onClick({ shiftKey: event.shiftKey });
       }}
       onKeyDown={(event) => {
+        if (event.target !== event.currentTarget && isInteractiveDescendant(event.target)) {
+          return;
+        }
+
         if (event.key !== "Enter" && event.key !== " ") {
           return;
         }
