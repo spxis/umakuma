@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { ACTIVE_READING_CHALLENGE } from "@/lib/readingChallengeRules";
 import { getReadingDailyEarningsForecast } from "@/lib/readingEarnings";
-import userBanner from "@/images/umakuma-banner1-transparent.png";
+import umaKumaLeft from "@/images/umakuma-1.png";
 import { buildCalendarCells, computeReadingLeaderboard, getTodayDateInputValue, parseDateKeyAsUtc, type ReadingChallengeBookRecord, type ReadingSignoffEntryRecord, type ReadingSignoffRecord } from "@/lib/readingSignoff";
 import UserReadingCampaignHeader from "./UserReadingCampaignHeader";
 import UserReadingDashboardBooksSection from "./UserReadingDashboardBooksSection";
@@ -379,13 +379,15 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
       <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           <div className="overflow-hidden rounded-xl border border-line/70 bg-surface">
-            <Image src={userBanner} alt="UmaKuma" width={96} height={60} className="h-13 w-24 object-contain p-1.5" />
+            <Image src={umaKumaLeft} alt="Uma and Kuma" width={96} height={60} className="h-13 w-24 object-contain p-1.5" />
           </div>
           <div>
             <h2 className="text-xl font-black text-foreground">Read</h2>
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Track challenge rewards and daily check-ins.</p>
           </div>
         </div>
+      </section>
+      <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
         {activeReadTab === "challenge" ? (
           <div className="space-y-4">
             <UserReadingRewardsSummary
