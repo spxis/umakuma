@@ -363,7 +363,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         lastActivityAt={account.lastActivityAt ? account.lastActivityAt.toISOString() : null}
         className="mb-2"
       />
-      {initialDashboardTab !== "read" ? <UmaKumaPageBanner variant="user" className="mb-3" /> : null}
+      {initialDashboardTab !== "read" && initialDashboardTab !== "stats" ? <UmaKumaPageBanner variant="user" className="mb-3" /> : null}
 
       <UserDashboardTabs
         accountId={account.id}
