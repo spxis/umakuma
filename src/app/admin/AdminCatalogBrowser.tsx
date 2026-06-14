@@ -331,18 +331,13 @@ export default function AdminCatalogBrowser({ sessionAuthorized, checkingSession
               <thead className="bg-surface-muted text-foreground/65">
                 <tr>
                   <th className="px-2 py-2">
-                    <button type="button" onClick={() => toggleSort("wkSubjectId")} className="font-bold">
-                      ID {sortIndicator(sortBy, sortDir, "wkSubjectId")}
+                    <button type="button" onClick={() => toggleSort("level")} className="font-bold">
+                      Level {sortIndicator(sortBy, sortDir, "level")}
                     </button>
                   </th>
                   <th className="px-2 py-2">
                     <button type="button" onClick={() => toggleSort("subjectType")} className="font-bold">
                       Type {sortIndicator(sortBy, sortDir, "subjectType")}
-                    </button>
-                  </th>
-                  <th className="px-2 py-2">
-                    <button type="button" onClick={() => toggleSort("level")} className="font-bold">
-                      Level {sortIndicator(sortBy, sortDir, "level")}
                     </button>
                   </th>
                   <th className="px-2 py-2">Subject</th>
@@ -353,19 +348,23 @@ export default function AdminCatalogBrowser({ sessionAuthorized, checkingSession
                       Data updated {sortIndicator(sortBy, sortDir, "dataUpdatedAt")}
                     </button>
                   </th>
+                  <th className="px-2 py-2">
+                    <button type="button" onClick={() => toggleSort("wkSubjectId")} className="font-bold">
+                      ID {sortIndicator(sortBy, sortDir, "wkSubjectId")}
+                    </button>
+                  </th>
                   <th className="px-2 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line/50 bg-surface">
                 {data.items.map((item) => (
                   <tr key={item.wkSubjectId} className="align-top">
-                    <td className="px-2 py-2 font-mono text-xs">{item.wkSubjectId}</td>
+                    <td className="px-2 py-2">{item.level}</td>
                     <td className="px-2 py-2">
                       <span className={`inline-flex rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] ${typeBadgeClass(item.subjectType)}`}>
                         {SUBJECT_TYPE_DISPLAY[item.subjectType].short}
                       </span>
                     </td>
-                    <td className="px-2 py-2">{item.level}</td>
                     <td className="px-2 py-2">
                       <p className="font-semibold text-foreground">{item.characters ?? item.slug ?? "-"}</p>
                       <p className="text-[11px] text-foreground/60">{item.slug ?? "No slug"}</p>
@@ -380,6 +379,7 @@ export default function AdminCatalogBrowser({ sessionAuthorized, checkingSession
                       <p>{formatDateTimeShort(item.dataUpdatedAt)}</p>
                       <p className="text-[11px] text-foreground/60">{formatRelativeFromNow(item.dataUpdatedAt, { style: "short", allowFuture: false })}</p>
                     </td>
+                    <td className="px-2 py-2 font-mono text-xs">{item.wkSubjectId}</td>
                     <td className="px-2 py-2">
                       <div className="flex flex-wrap gap-1">
                         <button

@@ -69,6 +69,7 @@ type ManualSyncResponse = {
 };
 
 type AdminCatalogPanelProps = {
+  viewMode?: "catalog" | "operations" | "all";
   sessionAuthorized: boolean;
   checkingSession: boolean;
 };
@@ -119,13 +120,15 @@ function statusClassName(status: string): string {
   return "border-line bg-surface-muted text-foreground/80";
 }
 
-export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }: AdminCatalogPanelProps) {
+export default function AdminCatalogPanel({ viewMode = "all", sessionAuthorized, checkingSession }: AdminCatalogPanelProps) {
   const { showToast, confirmAction } = useAdminFeedback();
   const [status, setStatus] = useState<CatalogStatusResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
 
   const canRunSync = sessionAuthorized && !checkingSession && !syncing;
+  const showOperations = viewMode !== "catalog";
+  const showCatalog = viewMode !== "operations";
 
   const loadStatus = useCallback(async () => {
     if (!sessionAuthorized || checkingSession) {
@@ -244,7 +247,7 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
 
   return (
     <section className="space-y-3">
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {showOperations ? <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <article className="rounded-xl border border-line bg-surface p-4">
           <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Subjects</p>
           <p className="mt-1 text-2xl font-black text-foreground">{status?.counts.totalSubjects ?? "-"}</p>
@@ -272,9 +275,9 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
           <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Drift</p>
           <p className="mt-1 text-sm font-semibold text-foreground/80">{driftSummary}</p>
         </article>
-      </div>
+      </div> : null}
 
-      <div className="rounded-xl border border-line bg-surface p-4">
+      {showOperations ? <div className="rounded-xl border border-line bg-surface p-4">
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -344,9 +347,9 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
         {status?.state.lastError ? (
           <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-800">Last error: {status.state.lastError}</p>
         ) : null}
-      </div>
+      </div> : null}
 
-      <div className="rounded-xl border border-line bg-surface p-4">
+      {showOperations ? <div className="rounded-xl border border-line bg-surface p-4">
         <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Recent runs</p>
         {status?.latestRuns.length ? (
           <div className="mt-3 overflow-x-auto">
@@ -384,12 +387,12 @@ export default function AdminCatalogPanel({ sessionAuthorized, checkingSession }
         ) : (
           <p className="mt-2 text-sm text-foreground/70">No sync runs yet.</p>
         )}
-      </div>
+      </div> : null}
 
-      <AdminCatalogBrowser
+      {showCatalog ? <AdminCatalogBrowser
         sessionAuthorized={sessionAuthorized}
         checkingSession={checkingSession}
-      />
+      /> : null}
     </section>
   );
 }

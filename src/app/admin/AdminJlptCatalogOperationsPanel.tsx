@@ -54,17 +54,17 @@ export default function AdminJlptCatalogOperationsPanel({
           <p className="mt-1 text-2xl font-black text-foreground">{operationScope?.counts.jlptMissingEnrichment ?? "-"}</p>
         </article>
         <article className="rounded-xl border border-line bg-surface p-4">
-          <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Remaining batches</p>
-          <p className="mt-1 text-2xl font-black text-foreground">{operationScope?.estimates.jlptEnrichRemainingBatches ?? "-"}</p>
-          <p className="mt-1 text-xs text-foreground/65">Batch size {operationScope?.estimates.jlptEnrichBatchSize ?? "-"}</p>
-        </article>
-
-        <article className="rounded-xl border border-line bg-surface p-4">
           <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Sync state</p>
           <p className={`mt-1 inline-flex rounded-full border px-2 py-1 text-xs font-bold uppercase tracking-[0.08em] ${runningClassName}`}>
             {runningState}
           </p>
           <p className="mt-2 text-xs text-foreground/60">{runningState === "idle" ? "No active JLPT job" : "JLPT job in progress"}</p>
+        </article>
+
+        <article className="rounded-xl border border-line bg-surface p-4">
+          <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Remaining batches</p>
+          <p className="mt-1 text-2xl font-black text-foreground">{operationScope?.estimates.jlptEnrichRemainingBatches ?? "-"}</p>
+          <p className="mt-1 text-xs text-foreground/65">Batch size {operationScope?.estimates.jlptEnrichBatchSize ?? "-"}</p>
         </article>
       </div>
 

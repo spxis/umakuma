@@ -324,36 +324,36 @@ export default function AdminJlptCatalogPanel({ sessionAuthorized, checkingSessi
               <thead className="bg-surface-muted text-foreground/65">
                 <tr>
                   <th className="px-2 py-2">
-                    <button type="button" onClick={() => toggleSort("kanji")} className="font-bold">
-                      Kanji {sortIndicator(sortBy, sortDir, "kanji")}
+                    <button type="button" onClick={() => toggleSort("nLevel")} className="font-bold">
+                      JLPT {sortIndicator(sortBy, sortDir, "nLevel")}
                     </button>
                   </th>
                   <th className="px-2 py-2">
-                    <button type="button" onClick={() => toggleSort("nLevel")} className="font-bold">
-                      JLPT {sortIndicator(sortBy, sortDir, "nLevel")}
+                    <button type="button" onClick={() => toggleSort("kanji")} className="font-bold">
+                      Kanji {sortIndicator(sortBy, sortDir, "kanji")}
                     </button>
                   </th>
                   <th className="px-2 py-2">Primary meaning</th>
                   <th className="px-2 py-2">Readings</th>
                   <th className="px-2 py-2">Stroke</th>
                   <th className="px-2 py-2">Source JLPT</th>
+                  <th className="px-2 py-2">Updated</th>
                   <th className="px-2 py-2">
                     <button type="button" onClick={() => toggleSort("enrichedAt")} className="font-bold">
                       Enriched {sortIndicator(sortBy, sortDir, "enrichedAt")}
                     </button>
                   </th>
-                  <th className="px-2 py-2">Updated</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line/50 bg-surface">
                 {data.items.map((item) => (
                   <tr key={item.kanji} className="align-top">
-                    <td className="px-2 py-2 text-xl font-black text-foreground">{item.kanji}</td>
                     <td className="px-2 py-2">
                       <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] text-blue-800">
                         N{item.nLevel}
                       </span>
                     </td>
+                    <td className="px-2 py-2 text-xl font-black text-foreground">{item.kanji}</td>
                     <td className="px-2 py-2">{item.primaryMeaning ?? "-"}</td>
                     <td className="px-2 py-2">
                       <span className="text-[11px] text-foreground/65">
@@ -362,12 +362,12 @@ export default function AdminJlptCatalogPanel({ sessionAuthorized, checkingSessi
                     </td>
                     <td className="px-2 py-2">{item.strokeCount ?? "-"}</td>
                     <td className="px-2 py-2">{item.sourceJlpt ?? "-"}</td>
+                    <td className="px-2 py-2">{formatDateTimeShort(item.updatedAt)}</td>
                     <td className="px-2 py-2">
                       <span className={`inline-flex rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] ${enrichmentBadgeClass(Boolean(item.enrichedAt))}`}>
                         {item.enrichedAt ? formatRelativeFromNow(item.enrichedAt, { style: "short", allowFuture: false }) : "missing"}
                       </span>
                     </td>
-                    <td className="px-2 py-2">{formatDateTimeShort(item.updatedAt)}</td>
                   </tr>
                 ))}
               </tbody>
