@@ -10,7 +10,6 @@ import UserReadPanel from "./UserReadPanel";
 import UserReadingSignoffSection from "./UserReadingSignoffSection";
 import UserDashboardTabs from "./UserDashboardTabs";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
-import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import {
   QUEUE_TYPES,
   LEARNED_SRS_GROUPS,
@@ -363,7 +362,6 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         lastActivityAt={account.lastActivityAt ? account.lastActivityAt.toISOString() : null}
         className="mb-2"
       />
-      {initialDashboardTab !== "read" && initialDashboardTab !== "stats" ? <UmaKumaPageBanner variant="user" className="mb-3" /> : null}
 
       <UserDashboardTabs
         accountId={account.id}
