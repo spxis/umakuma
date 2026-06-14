@@ -1,8 +1,5 @@
-import AdminWorkspacePage from "../AdminWorkspacePage";
-import { getAdminWorkspaceInitialSession } from "../adminWorkspaceServerState";
+import { redirect } from "next/navigation";
 
 export default async function AdminAccountOperationsPage() {
-  const initialSession = await getAdminWorkspaceInitialSession();
-
-  return <AdminWorkspacePage activeTab="operations" initialSession={initialSession} />;
+  redirect("/admin/users");
 }

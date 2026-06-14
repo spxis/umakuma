@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
+
+import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types";
 
 import { useAdminFeedback } from "./AdminFeedbackProvider";
 import AdminAccountsSection, { type AdminAccount } from "./AdminAccountsSection";
@@ -9,17 +11,42 @@ type AdminUsersPanelProps = {
   sessionAuthorized: boolean;
   checkingSession: boolean;
   viewerEmail: string | null;
+  loading: boolean;
+  nickname: string;
+  token: string;
+  operationScope: AdminOperationsScopeResponse | null;
+  onSetNickname: (value: string) => void;
+  onSetToken: (value: string) => void;
+  onAddAccount: (event: FormEvent<HTMLFormElement>) => void;
+  onRefreshAll: () => Promise<void>;
 };
+
+function actionButtonClassName(isPrimary: boolean): string {
+  return `inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition disabled:cursor-not-allowed disabled:opacity-60 ${
+    isPrimary
+      ? "border-accent bg-accent text-white"
+      : "border-line bg-surface text-slate-700 hover:bg-surface-muted"
+  }`;
+}
 
 export default function AdminUsersPanel({
   sessionAuthorized,
   checkingSession,
   viewerEmail,
+  loading,
+  nickname,
+  token,
+  operationScope,
+  onSetNickname,
+  onSetToken,
+  onAddAccount,
+  onRefreshAll,
 }: AdminUsersPanelProps) {
   const { showToast, confirmAction } = useAdminFeedback();
   const [accounts, setAccounts] = useState<AdminAccount[]>([]);
   const [generatedInviteCodesByAccountId, setGeneratedInviteCodesByAccountId] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   async function loadAccounts() {
     const response = await fetch("/api/accounts", {
@@ -61,7 +88,7 @@ export default function AdminUsersPanel({
       return;
     }
 
-    setLoading(true);
+    setBusy(true);
 
     try {
       const response = await fetch(`/api/accounts/${accountId}/refresh`, {
@@ -83,7 +110,7 @@ export default function AdminUsersPanel({
     } catch (error) {
       showToast({ tone: "error", message: error instanceof Error ? error.message : "Could not refresh user." });
     } finally {
-      setLoading(false);
+      setBusy(false);
     }
   }
 
@@ -102,7 +129,7 @@ export default function AdminUsersPanel({
       return null;
     }
 
-    setLoading(true);
+    setBusy(true);
 
     try {
       const response = await fetch(`/api/accounts/${accountId}/invite-code`, {
@@ -134,7 +161,7 @@ export default function AdminUsersPanel({
       showToast({ tone: "error", message: error instanceof Error ? error.message : "Could not assign invite code." });
       return null;
     } finally {
-      setLoading(false);
+      setBusy(false);
     }
   }
 
@@ -153,7 +180,7 @@ export default function AdminUsersPanel({
       return;
     }
 
-    setLoading(true);
+    setBusy(true);
 
     try {
       const response = await fetch(`/api/accounts/${accountId}/invite-code`, {
@@ -179,8 +206,26 @@ export default function AdminUsersPanel({
     } catch (error) {
       showToast({ tone: "error", message: error instanceof Error ? error.message : "Could not reset invite code." });
     } finally {
-      setLoading(false);
+      setBusy(false);
     }
+  }
+
+  async function refreshAllUsers() {
+    const accepted = await confirmAction({
+      title: "Refresh all stats",
+      description:
+        `Scope: about ${operationScope?.counts.accountsTotal ?? "-"} accounts. Time: about ${operationScope?.estimates.refreshAllMinutes ?? "-"} minute(s). Risk: non-destructive stat refresh. Continue?`,
+      confirmLabel: "Refresh all",
+      cancelLabel: "Cancel",
+      tone: "danger",
+    });
+
+    if (!accepted) {
+      return;
+    }
+
+    await onRefreshAll();
+    await loadAccounts();
   }
 
   return (
@@ -195,16 +240,110 @@ export default function AdminUsersPanel({
         </p>
       ) : null}
 
+      {sessionAuthorized ? (
+        <section className="rounded-2xl border border-line bg-surface/90 p-4 shadow-sm">
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setIsAddModalOpen(true)}
+              disabled={loading || busy}
+              className={actionButtonClassName(true)}
+            >
+              Add user
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                void refreshAllUsers();
+              }}
+              disabled={loading || busy}
+              className={actionButtonClassName(false)}
+            >
+              Refresh all stats
+            </button>
+          </div>
+        </section>
+      ) : null}
+
       <AdminAccountsSection
         sessionAuthorized={sessionAuthorized}
         accounts={accounts}
-        loading={loading}
+        loading={loading || busy}
         viewerEmail={viewerEmail}
         generatedInviteCodesByAccountId={generatedInviteCodesByAccountId}
         onRefreshOne={refreshOne}
         onAssignInviteCode={assignInviteCode}
         onResetInviteCode={resetInviteCode}
       />
+
+      {isAddModalOpen ? (
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-foreground/35 p-4 backdrop-blur-[2px]">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Add user"
+            className="w-full max-w-lg rounded-2xl border border-line bg-surface p-5 shadow-[0_20px_55px_rgba(8,16,36,0.25)]"
+          >
+            <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/60">Users</p>
+            <h3 className="mt-1 text-xl font-bold text-foreground">Add user</h3>
+            <p className="mt-2 text-sm text-foreground/80">Add a family account with nickname and WaniKani API token.</p>
+
+            <form
+              className="mt-4 space-y-3"
+              onSubmit={async (event) => {
+                await onAddAccount(event);
+                if (!nickname.trim() && !token.trim()) {
+                  setIsAddModalOpen(false);
+                }
+                await loadAccounts();
+              }}
+            >
+              <label className="block">
+                <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Family nickname</span>
+                <input
+                  type="text"
+                  required
+                  minLength={2}
+                  maxLength={32}
+                  value={nickname}
+                  onChange={(event) => onSetNickname(event.target.value)}
+                  className="w-full rounded-xl border border-line bg-surface-muted px-4 py-3 text-base text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                  placeholder="e.g. John"
+                />
+              </label>
+
+              <label className="block">
+                <span className="mb-1.5 block text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">WaniKani API token</span>
+                <input
+                  type="password"
+                  required
+                  value={token}
+                  onChange={(event) => onSetToken(event.target.value)}
+                  className="w-full rounded-xl border border-line bg-surface-muted px-4 py-3 text-base text-slate-900 outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+                  placeholder="Paste personal token"
+                />
+              </label>
+
+              <div className="mt-5 flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAddModalOpen(false)}
+                  className="rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading || busy}
+                  className="rounded-full border border-accent bg-accent px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-55"
+                >
+                  Save user
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

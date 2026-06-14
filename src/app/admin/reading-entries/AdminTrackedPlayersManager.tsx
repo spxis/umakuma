@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import type { AdminReadingEntryMember } from "./AdminReadingEntries.types";
 
 type AdminTrackedPlayersManagerProps = {
@@ -24,7 +22,6 @@ export default function AdminTrackedPlayersManager({
   onToggleTrackedMember,
 }: AdminTrackedPlayersManagerProps) {
   const controlsDisabled = trackingLoading || loading || saving || Boolean(trackingUpdatingAccountId);
-  const challengeMember = members.find((member) => trackedMemberSet.has(member.id)) ?? members[0] ?? null;
 
   return (
     <div className="mt-4 rounded-2xl border border-line bg-surface-muted p-4">
@@ -34,15 +31,6 @@ export default function AdminTrackedPlayersManager({
           <p className="mt-1 text-sm text-foreground/75">Choose who appears in the reading challenge leaderboard.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {challengeMember ? (
-            <Link
-              href={`/users/${encodeURIComponent(challengeMember.wkUsername)}/read`}
-              className="h-9 rounded-full border border-line bg-white px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/80 hover:bg-surface"
-            >
-              Open challenge page
-            </Link>
-          ) : null}
-
           <button
             type="button"
             onClick={onRefreshRoster}
@@ -56,7 +44,7 @@ export default function AdminTrackedPlayersManager({
 
       {members.length === 0 ? (
         <p className="mt-3 text-sm text-foreground/70">
-          {loading ? "Loading members..." : "No members yet. Add users first in Accounts."}
+          {loading ? "Loading members..." : "No members yet. Add users first in Users."}
         </p>
       ) : (
         <div className="mt-3 flex flex-wrap gap-2">

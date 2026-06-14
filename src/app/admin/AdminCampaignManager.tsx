@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { usePersistedTab } from "@/lib/usePersistedTab";
+
 import AdminCampaignEditorForm from "./AdminCampaignEditorForm";
 import AdminChallengeSimulator from "./AdminChallengeSimulator";
 import { useAdminFeedback } from "./AdminFeedbackProvider";
@@ -31,6 +33,16 @@ type AdminCampaignManagerProps = {
   initialCampaigns?: CampaignRecord[];
 };
 
+type CampaignWorkspaceTab = "manage" | "simulator";
+
+function campaignWorkspaceTabClassName(isActive: boolean): string {
+  return `inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${
+    isActive
+      ? "border-accent bg-accent text-white"
+      : "border-line bg-surface text-slate-700 hover:bg-surface-muted"
+  }`;
+}
+
 export default function AdminCampaignManager({
   sessionAuthorized,
   checkingSession,
@@ -49,6 +61,12 @@ export default function AdminCampaignManager({
   const [loading, setLoading] = useState(!checkingSession && sessionAuthorized && initialCampaigns.length === 0);
   const [saving, setSaving] = useState(false);
   const [statusUpdating, setStatusUpdating] = useState<CampaignStatus | null>(null);
+  const workspaceTabOptions = ["manage", "simulator"] as const;
+  const [workspaceTab, setWorkspaceTab] = usePersistedTab<CampaignWorkspaceTab>(
+    "wr:admin:campaign-workspace-tab",
+    workspaceTabOptions,
+    "manage",
+  );
 
   const selectedCampaignIdRef = useRef(selectedCampaignId);
   const editorModeRef = useRef(editorMode);
@@ -327,7 +345,24 @@ export default function AdminCampaignManager({
         </div>
       ) : null}
 
-      <div className="mt-4 rounded-xl border border-line bg-surface-muted/60 p-4">
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setWorkspaceTab("manage")}
+          className={campaignWorkspaceTabClassName(workspaceTab === "manage")}
+        >
+          Manage
+        </button>
+        <button
+          type="button"
+          onClick={() => setWorkspaceTab("simulator")}
+          className={campaignWorkspaceTabClassName(workspaceTab === "simulator")}
+        >
+          Simulator
+        </button>
+      </div>
+
+      {workspaceTab === "manage" ? <div className="mt-4 rounded-xl border border-line bg-surface-muted/60 p-4">
         <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_auto_auto] lg:items-end">
           <label className="block text-xs font-bold uppercase tracking-widest text-foreground/70" htmlFor="campaign-picker">
             Campaign
@@ -426,10 +461,10 @@ export default function AdminCampaignManager({
         >
           {saving ? "Saving..." : editorMode === "edit" ? "Save campaign changes" : "Create campaign"}
         </button>
-      </div>
+      </div> : null}
 
-      {simulatorChallenge ? <AdminChallengeSimulator challenge={simulatorChallenge} /> : null}
-      {!simulatorChallenge ? (
+      {workspaceTab === "simulator" && simulatorChallenge ? <AdminChallengeSimulator challenge={simulatorChallenge} /> : null}
+      {workspaceTab === "simulator" && !simulatorChallenge ? (
         <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
           Simulator preview is paused until campaign fields and scoring rules are valid JSON.
         </div>

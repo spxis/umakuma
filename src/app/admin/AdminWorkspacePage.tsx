@@ -8,7 +8,6 @@ import SegmentedControl from "../shared/SegmentedControl";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import { usePersistedTab } from "@/lib/usePersistedTab";
 import AdminCampaignManager from "./AdminCampaignManager";
-import AdminControlRoom from "./AdminControlRoom";
 import AdminDataWorkspaceSection from "./AdminDataWorkspaceSection";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import type { CampaignRecord } from "./AdminCampaignManager.types";
@@ -381,7 +380,6 @@ function AdminWorkspacePageContent({
               router.push(routeForAdminWorkspaceTab(nextTab));
             }}
             options={[
-              { value: "operations", label: "Accounts" },
               { value: "data", label: "Data" },
               { value: "campaigns", label: "Campaigns" },
               { value: "history", label: "History" },
@@ -409,21 +407,8 @@ function AdminWorkspacePageContent({
         {!checkingSession && !sessionAuthorized ? (
           <section className="rounded-xl border border-line bg-surface-muted px-4 py-3">
             <p className="text-sm font-semibold text-foreground/75">
-              Admin tools are hidden until you sign in with an allowlisted Google account. Open Accounts to sign in or switch account.
+              Admin tools are hidden until you sign in with an allowlisted Google account.
             </p>
-          </section>
-        ) : null}
-
-        {activeTab === "operations" ? (
-          <section id="admin-operations" className="space-y-3">
-            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Accounts</p>
-              <p className="mt-1 text-sm text-foreground/70">Sign in, add family accounts, and run leaderboard refresh actions.</p>
-            </div>
-            <AdminControlRoom
-              viewMode="accounts"
-              {...controlRoomProps}
-            />
           </section>
         ) : null}
 
@@ -471,6 +456,14 @@ function AdminWorkspacePageContent({
               sessionAuthorized={sessionAuthorized}
               checkingSession={checkingSession}
               viewerEmail={userEmail}
+              loading={loading}
+              nickname={nickname}
+              token={token}
+              operationScope={operationScope}
+              onSetNickname={setNickname}
+              onSetToken={setToken}
+              onAddAccount={addAccount}
+              onRefreshAll={refreshAll}
             />
           </section>
         ) : null}

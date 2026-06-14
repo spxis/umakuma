@@ -8,7 +8,7 @@ import {
 
 export default async function AdminPage() {
   const cookieStore = await cookies();
-  const rememberedTab = parseAdminWorkspaceTab(cookieStore.get(ADMIN_WORKSPACE_COOKIE_KEY)?.value, "operations");
+  const rememberedTab = parseAdminWorkspaceTab(cookieStore.get(ADMIN_WORKSPACE_COOKIE_KEY)?.value, "users");
 
   redirect(routeForAdminWorkspaceTab(rememberedTab));
 }
