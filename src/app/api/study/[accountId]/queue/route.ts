@@ -50,7 +50,9 @@ export async function GET(request: Request, context: RouteContext) {
             : "all";
         const limit = Number.isInteger(limitParam) && limitParam > 0 ? Math.min(limitParam, 200) : null;
         const offset = Number.isInteger(offsetParam) && offsetParam >= 0 ? offsetParam : 0;
-        const canUseServerCache = limit === null;
+        const isFirstPage = offset === 0;
+        const cacheModeKey = `${mode}:${includeTrouble ? "trouble-on" : "trouble-off"}:${tagFilter}:limit-${limit ?? "all"}`;
+        const canUseServerCache = isFirstPage;
 
     const { accountId } = await context.params;
     if (!(await canAccessAccount(request, accountId))) {
@@ -76,7 +78,7 @@ export async function GET(request: Request, context: RouteContext) {
       tag: account.tokenTag,
     });
 
-    const cached = canUseServerCache ? getCachedStudyQueue(accountId, mode) : null;
+    const cached = canUseServerCache ? getCachedStudyQueue(accountId, cacheModeKey) : null;
     if (canUseServerCache && cached) {
       const cachedItems = cached.items as Array<{
         queueType: typeof QUEUE_TYPES.review | typeof QUEUE_TYPES.lesson;
@@ -448,7 +450,7 @@ export async function GET(request: Request, context: RouteContext) {
     if (canUseServerCache) {
       setCachedStudyQueue(
         accountId,
-        mode,
+        cacheModeKey,
         items,
         counts,
         tagCounts,
