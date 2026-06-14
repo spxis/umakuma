@@ -11,6 +11,15 @@ type RouteContext = {
   params: Promise<{ accountId: string }>;
 };
 
+function isMissingStudyTagTableError(error: unknown): boolean {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const candidate = error as { code?: string; meta?: { table?: string } };
+  return candidate.code === "P2021" && candidate.meta?.table === "public.StudySubjectTag";
+}
+
 const querySchema = z.object({
   subjectIds: z
     .string()
@@ -63,14 +72,21 @@ export async function GET(request: Request, context: RouteContext) {
             }
           : { accountId };
 
-        const rows = await prisma.studySubjectTag.findMany({
-          where,
-          select: {
-            subjectId: true,
-            favorite: true,
-            trouble: true,
-          },
-        });
+        let rows: Array<{ subjectId: number; favorite: boolean; trouble: boolean }> = [];
+        try {
+          rows = await prisma.studySubjectTag.findMany({
+            where,
+            select: {
+              subjectId: true,
+              favorite: true,
+              trouble: true,
+            },
+          });
+        } catch (error) {
+          if (!isMissingStudyTagTableError(error)) {
+            throw error;
+          }
+        }
 
         return NextResponse.json({
           tags: rows,
@@ -109,18 +125,26 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Only kanji can be tagged." }, { status: 400 });
         }
 
-        const current = await prisma.studySubjectTag.findUnique({
-          where: {
-            accountId_subjectId: {
-              accountId,
-              subjectId: parsedBody.data.subjectId,
+        let current: { favorite: boolean; trouble: boolean } | null = null;
+        try {
+          current = await prisma.studySubjectTag.findUnique({
+            where: {
+              accountId_subjectId: {
+                accountId,
+                subjectId: parsedBody.data.subjectId,
+              },
             },
-          },
-          select: {
-            favorite: true,
-            trouble: true,
-          },
-        });
+            select: {
+              favorite: true,
+              trouble: true,
+            },
+          });
+        } catch (error) {
+          if (isMissingStudyTagTableError(error)) {
+            return NextResponse.json({ error: "Study tags are unavailable until database updates are applied." }, { status: 503 });
+          }
+          throw error;
+        }
 
         const nextFavorite = parsedBody.data.tag === "favorite"
           ? parsedBody.data.enabled
@@ -130,12 +154,19 @@ export async function POST(request: Request, context: RouteContext) {
           : (current?.trouble ?? false);
 
         if (!nextFavorite && !nextTrouble) {
-          await prisma.studySubjectTag.deleteMany({
-            where: {
-              accountId,
-              subjectId: parsedBody.data.subjectId,
-            },
-          });
+          try {
+            await prisma.studySubjectTag.deleteMany({
+              where: {
+                accountId,
+                subjectId: parsedBody.data.subjectId,
+              },
+            });
+          } catch (error) {
+            if (isMissingStudyTagTableError(error)) {
+              return NextResponse.json({ error: "Study tags are unavailable until database updates are applied." }, { status: 503 });
+            }
+            throw error;
+          }
           clearStudyQueueCache(accountId);
           return NextResponse.json({
             tag: {
@@ -146,29 +177,37 @@ export async function POST(request: Request, context: RouteContext) {
           });
         }
 
-        const saved = await prisma.studySubjectTag.upsert({
-          where: {
-            accountId_subjectId: {
+        let saved: { subjectId: number; favorite: boolean; trouble: boolean };
+        try {
+          saved = await prisma.studySubjectTag.upsert({
+            where: {
+              accountId_subjectId: {
+                accountId,
+                subjectId: parsedBody.data.subjectId,
+              },
+            },
+            create: {
               accountId,
               subjectId: parsedBody.data.subjectId,
+              favorite: nextFavorite,
+              trouble: nextTrouble,
             },
-          },
-          create: {
-            accountId,
-            subjectId: parsedBody.data.subjectId,
-            favorite: nextFavorite,
-            trouble: nextTrouble,
-          },
-          update: {
-            favorite: nextFavorite,
-            trouble: nextTrouble,
-          },
-          select: {
-            subjectId: true,
-            favorite: true,
-            trouble: true,
-          },
-        });
+            update: {
+              favorite: nextFavorite,
+              trouble: nextTrouble,
+            },
+            select: {
+              subjectId: true,
+              favorite: true,
+              trouble: true,
+            },
+          });
+        } catch (error) {
+          if (isMissingStudyTagTableError(error)) {
+            return NextResponse.json({ error: "Study tags are unavailable until database updates are applied." }, { status: 503 });
+          }
+          throw error;
+        }
 
         clearStudyQueueCache(accountId);
 

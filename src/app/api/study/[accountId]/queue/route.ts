@@ -19,10 +19,12 @@ import {
   troubleInjectionCount,
   type StudySubjectTagMap,
 } from "./queueRouteTags";
+import { fetchStudyTagRows } from "./queueRouteTagRows";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
 };
+
 export async function GET(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
     route: "/api/study/[accountId]/queue",
@@ -134,17 +136,7 @@ export async function GET(request: Request, context: RouteContext) {
       }
     }
 
-    const tagRows = await prisma.studySubjectTag.findMany({
-      where: {
-        accountId,
-        OR: [{ favorite: true }, { trouble: true }],
-      },
-      select: {
-        subjectId: true,
-        favorite: true,
-        trouble: true,
-      },
-    });
+    const tagRows = await fetchStudyTagRows(accountId);
     const tagBySubjectId: StudySubjectTagMap = new Map(
       tagRows.map((row) => [row.subjectId, { favorite: row.favorite, trouble: row.trouble }]),
     );

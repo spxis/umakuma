@@ -14,6 +14,7 @@ import ExplorerSearchBar from "../../ExplorerSearchBar";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import type {
   KanjiStats,
   JlptExplorerContentProps as Props,
@@ -54,28 +55,10 @@ export default function JlptExplorerContent({
   const selectedIndex = selectedItem
     ? filteredItems.findIndex((item) => item.kanji === selectedItem.kanji)
     : -1;
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(() => {
-    if (typeof window === "undefined") {
-      return true;
-    }
-    try {
-      const stored = window.localStorage.getItem("wr:jlpt:mobile-filters-open");
-      return stored === null ? true : stored === "1";
-    } catch {
-      return true;
-    }
+  const [mobileFiltersOpen, setMobileFiltersOpen] = usePersistedBoolean("wr:jlpt:mobile-filters-open", {
+    defaultValue: true,
+    mode: "one-is-true",
   });
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    try {
-      window.localStorage.setItem("wr:jlpt:mobile-filters-open", mobileFiltersOpen ? "1" : "0");
-    } catch {
-      // Ignore storage access errors in restricted modes.
-    }
-  }, [mobileFiltersOpen]);
 
   // --- Kanji stats/history state ---
   const [statsOpen, setStatsOpen] = useState(false);
