@@ -321,6 +321,23 @@ export default function AdminCampaignManager({
 
   return (
     <section id="reading-campaigns" className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
+      <div className="mb-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setWorkspaceTab("manage")}
+          className={campaignWorkspaceTabClassName(workspaceTab === "manage")}
+        >
+          Manage
+        </button>
+        <button
+          type="button"
+          onClick={() => setWorkspaceTab("simulator")}
+          className={campaignWorkspaceTabClassName(workspaceTab === "simulator")}
+        >
+          Simulator
+        </button>
+      </div>
+
       <AdminPanelHeader
         label="Campaigns"
         title="Manage campaign definitions"
@@ -344,23 +361,6 @@ export default function AdminCampaignManager({
           No campaigns exist yet. Create your first draft campaign.
         </div>
       ) : null}
-
-      <div className="mt-3 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setWorkspaceTab("manage")}
-          className={campaignWorkspaceTabClassName(workspaceTab === "manage")}
-        >
-          Manage
-        </button>
-        <button
-          type="button"
-          onClick={() => setWorkspaceTab("simulator")}
-          className={campaignWorkspaceTabClassName(workspaceTab === "simulator")}
-        >
-          Simulator
-        </button>
-      </div>
 
       {workspaceTab === "manage" ? <div className="mt-4 rounded-xl border border-line bg-surface-muted/60 p-4">
         <div className="grid gap-2 lg:grid-cols-[minmax(0,1fr)_auto_auto] lg:items-end">

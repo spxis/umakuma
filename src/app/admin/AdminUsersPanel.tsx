@@ -241,28 +241,26 @@ export default function AdminUsersPanel({
       ) : null}
 
       {sessionAuthorized ? (
-        <section className="rounded-2xl border border-line bg-surface/90 p-4 shadow-sm">
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setIsAddModalOpen(true)}
-              disabled={loading || busy}
-              className={actionButtonClassName(true)}
-            >
-              Add user
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                void refreshAllUsers();
-              }}
-              disabled={loading || busy}
-              className={actionButtonClassName(false)}
-            >
-              Refresh all stats
-            </button>
-          </div>
-        </section>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            disabled={loading || busy}
+            className={actionButtonClassName(true)}
+          >
+            Add user
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              void refreshAllUsers();
+            }}
+            disabled={loading || busy}
+            className={actionButtonClassName(false)}
+          >
+            Refresh all stats
+          </button>
+        </div>
       ) : null}
 
       <AdminAccountsSection
