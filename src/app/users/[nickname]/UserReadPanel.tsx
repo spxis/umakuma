@@ -24,7 +24,7 @@ export default function UserReadPanel({
 
   return (
     <section className="space-y-3">
-      <div className="flex justify-end">
+      <div className="flex justify-end sm:pr-1">
         <SegmentedControl
           ariaLabel="Read panel tabs"
           value={activeTab}

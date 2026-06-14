@@ -17,6 +17,7 @@ import { buildCheckinSavedMessage, type ReadingSignoffSubmitResponse } from "./U
 import { fetchReadingSignoffs } from "./UserReadingSignoffPanel.api";
 import { buildTodayStatsByAccountId } from "./UserReadingSignoffPanel.stats";
 import { createFormState, type FormState, type Member, type ReadingCampaignOption, type ReadingSignoffResponse, type UserReadingSignoffPanelProps } from "./UserReadingSignoffPanel.types";
+import SegmentedControl from "@/app/shared/SegmentedControl";
 
 export default function UserReadingSignoffPanel({ accountId, initialMonthKey, initialData }: UserReadingSignoffPanelProps) {
   const today = getTodayDateInputValue();
@@ -35,6 +36,7 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   const [historyMember, setHistoryMember] = useState<Member | null>(null);
   const [submitState, setSubmitState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [submitMessage, setSubmitMessage] = useState<string>("");
+  const [activeReadTab, setActiveReadTab] = useState<"challenge" | "checkins">("challenge");
   const summarySwrKey = `/api/reading-signoffs?month=${encodeURIComponent(todayMonthKey)}&challengeId=${encodeURIComponent(selectedCampaignId)}`;
   const calendarSwrKey = `/api/reading-signoffs?month=${encodeURIComponent(monthKey)}&challengeId=${encodeURIComponent(selectedCampaignId)}`;
   const { data: summaryData, mutate: mutateSummary, isLoading: isSummaryLoading } = useSWR<ReadingSignoffResponse>(
@@ -380,58 +382,72 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
   }
   return (
     <section className="space-y-3">
+      <div className="flex justify-end sm:pr-1">
+        <SegmentedControl
+          ariaLabel="Read sections"
+          value={activeReadTab}
+          onChange={(value) => setActiveReadTab(value as "challenge" | "checkins")}
+          size="sm"
+          options={[{ value: "challenge", label: "Challenge" }, { value: "checkins", label: "Check-ins" }]}
+        />
+      </div>
       <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
         <div>
           <h2 className="text-xl font-black text-foreground">Read</h2>
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Reading check-ins and challenge progress.</p>
         </div>
-        <UserReadingRewardsSummary
-          campaignName={selectedCampaignName}
-          campaignStartDatePst={selectedCampaignStartDatePst}
-          campaignGoalDatePst={selectedCampaignGoalDatePst}
-          campaignTripDatePst={selectedCampaignTripDatePst}
-          campaignTargetBaseYen={selectedCampaignTargetBaseYen}
-          daysRemaining={daysRemaining}
-          isLoading={isSummaryLoading}
-          leaderboard={leaderboard}
-        />
       </section>
-      <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
-      <UserReadingCampaignHeader
-        campaigns={campaigns}
-        selectedCampaignId={selectedCampaignId}
-        onCampaignChange={setSelectedCampaignId}
-      />
-      <UserReadingDashboardBooksSection
-        viewerCanChooseMember={viewerCanChooseMember}
-        members={members}
-        selectedMemberId={selectedMemberId}
-        memberBooks={booksForMember(selectedMemberId)}
-        addIsbn={addIsbn}
-        bookActionMessage={bookActionMessage}
-        bookActionState={bookActionState}
-        onSelectedMemberChange={setSelectedMemberId}
-        onAddIsbnChange={setAddIsbn}
-        onAddBook={addBookByIsbn}
-        onAddBookByIsbn={addBookByIsbn}
-        onDeleteBook={deleteBook}
-      />
-      <UserReadingCalendar
-        monthKey={monthKey}
-        today={today}
-        todayMonthKey={todayMonthKey}
-        isLoading={isCalendarLoading}
-        trackedMembers={trackedMembers}
-        challengeBooks={challengeBooks}
-        calendarCells={calendarCells}
-        signoffByDayAndMember={signoffByDayAndMember}
-        signoffEntriesByDayAndMember={signoffEntriesByDayAndMember}
-        viewerCanChooseMember={viewerCanChooseMember}
-        onMonthChange={setMonthKey}
-        onOpenCheckinModal={openCheckinModal}
-        onOpenMemberHistory={setHistoryMember}
-      />
-      </section>
+      {activeReadTab === "challenge" ? (
+        <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
+          <UserReadingRewardsSummary
+            campaignName={selectedCampaignName}
+            campaignStartDatePst={selectedCampaignStartDatePst}
+            campaignGoalDatePst={selectedCampaignGoalDatePst}
+            campaignTripDatePst={selectedCampaignTripDatePst}
+            campaignTargetBaseYen={selectedCampaignTargetBaseYen}
+            daysRemaining={daysRemaining}
+            isLoading={isSummaryLoading}
+            leaderboard={leaderboard}
+          />
+        </section>
+      ) : (
+        <section className="space-y-4 rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
+          <UserReadingCampaignHeader
+            campaigns={campaigns}
+            selectedCampaignId={selectedCampaignId}
+            onCampaignChange={setSelectedCampaignId}
+          />
+          <UserReadingDashboardBooksSection
+            viewerCanChooseMember={viewerCanChooseMember}
+            members={members}
+            selectedMemberId={selectedMemberId}
+            memberBooks={booksForMember(selectedMemberId)}
+            addIsbn={addIsbn}
+            bookActionMessage={bookActionMessage}
+            bookActionState={bookActionState}
+            onSelectedMemberChange={setSelectedMemberId}
+            onAddIsbnChange={setAddIsbn}
+            onAddBook={addBookByIsbn}
+            onAddBookByIsbn={addBookByIsbn}
+            onDeleteBook={deleteBook}
+          />
+          <UserReadingCalendar
+            monthKey={monthKey}
+            today={today}
+            todayMonthKey={todayMonthKey}
+            isLoading={isCalendarLoading}
+            trackedMembers={trackedMembers}
+            challengeBooks={challengeBooks}
+            calendarCells={calendarCells}
+            signoffByDayAndMember={signoffByDayAndMember}
+            signoffEntriesByDayAndMember={signoffEntriesByDayAndMember}
+            viewerCanChooseMember={viewerCanChooseMember}
+            onMonthChange={setMonthKey}
+            onOpenCheckinModal={openCheckinModal}
+            onOpenMemberHistory={setHistoryMember}
+          />
+        </section>
+      )}
       <UserReadingMemberHistoryModal open={historyMember !== null} member={historyMember}
         signoffs={historyMember ? signoffs.filter((r) => r.accountId === historyMember.id) : []}
         entries={historyMember ? signoffEntries.filter((r) => r.accountId === historyMember.id) : []}
