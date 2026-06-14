@@ -26,7 +26,7 @@ export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStu
         }}
         aria-label="Toggle trouble"
         title="Toggle trouble"
-        className={`inline-flex h-7 min-w-7 items-center justify-center rounded-md border border-transparent bg-transparent px-1.5 text-xs font-black leading-none ${
+        className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-1.5 text-xs font-black leading-none ${
           item.studyTags?.trouble
             ? "text-black"
             : "text-foreground/20 hover:text-foreground/45"
@@ -46,13 +46,24 @@ export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStu
         }}
         aria-label="Toggle favorite"
         title="Toggle favorite"
-        className={`inline-flex h-7 min-w-7 items-center justify-center rounded-md border border-transparent bg-transparent px-0 text-base font-black leading-none ${
+        className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-0 text-base font-black leading-none ${
           item.studyTags?.favorite
             ? "text-black"
             : "text-foreground/20 hover:text-foreground/45"
         }`}
       >
-        ★
+        {item.studyTags?.favorite ? (
+          "★"
+        ) : (
+          <svg viewBox="0 0 20 20" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M7 8v5.8" />
+            <path d="M10 8v6.6" />
+            <path d="M13 8v4.6" />
+            <path d="M4.7 8.2h10.8" />
+            <path d="M3.8 8.2V15a1.2 1.2 0 0 0 1.2 1.2h8.6a1.2 1.2 0 0 0 1.2-1.2V8.2" />
+            <path d="M10.2 4.2h3.8c1 0 1.8.8 1.8 1.8v2.2" />
+          </svg>
+        )}
       </button>
     </div>
   );
