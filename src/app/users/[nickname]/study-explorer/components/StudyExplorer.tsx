@@ -44,6 +44,8 @@ import { useStudyExplorerDerivedData } from "../lib/useStudyExplorerDerivedData"
 import { useStudyQueuePagination } from "../lib/useStudyQueuePagination";
 import { useStudyQueueInfiniteLoad } from "../lib/useStudyQueueInfiniteLoad";
 import { useStudyCloseOnExplorerPageChange, useStudyModalSessionSync, useStudyToggleEnglishHotkey, useStudyViewerModeSync } from "../lib/useStudyExplorerUiEffects";
+import { useStudyTagSync } from "../lib/useStudyTagSync";
+import { useStudyCardTagToggle } from "../lib/useStudyCardTagToggle";
 export default function StudyExplorer({
   accountId,
   studySource,
@@ -249,11 +251,7 @@ export default function StudyExplorer({
   useStudyToggleEnglishHotkey(canToggleEnglish, onToggleShowEnglish);
   useStudyCloseOnExplorerPageChange(setSelectedId);
   useStudyViewerModeSync(setForcedViewerMode);
-  useEffect(() => {
-    const onTagsUpdated = () => { void mutateQueue(); };
-    window.addEventListener("wr:study-tags-updated", onTagsUpdated);
-    return () => window.removeEventListener("wr:study-tags-updated", onTagsUpdated);
-  }, [mutateQueue]);
+  useStudyTagSync(mutateQueue);
   const {
     levelOptions,
     availableLevels,
@@ -441,6 +439,7 @@ export default function StudyExplorer({
     onSetModalSessionOrderByAssignmentId: setModalSessionOrderByAssignmentId,
     onSetModalSessionItemByAssignmentId: setModalSessionItemByAssignmentId,
   });
+  const handleToggleStudyTag = useStudyCardTagToggle(accountId, mutateQueue, setLoadedItems);
   return (
     <section className="space-y-3">
       {hasMounted ? (
@@ -468,7 +467,8 @@ export default function StudyExplorer({
             onToggleShowLocked={() => setShowLocked((prev) => !prev)}
             onToggleShowUpcomingReviews={() => setShowUpcomingReviews((prev) => !prev)}
             onOpenStudySourceManager={onOpenStudySourceManager}
-            onSetWaitSortOrder={setWaitSortOrder} onSelectSubject={setSelectedId} onClearAllFilters={clearAllFilters}
+            onSetWaitSortOrder={setWaitSortOrder} onSelectSubject={setSelectedId}
+            onToggleStudyTag={handleToggleStudyTag} onClearAllFilters={clearAllFilters}
           />
           <StudyExplorerModal
             accountId={accountId} showEnglish={showEnglish} canToggleEnglish={canToggleEnglish}

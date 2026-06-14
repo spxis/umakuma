@@ -37,6 +37,7 @@ import FilterChipLabel from "../../shared/FilterChipLabel";
 import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
+import StudyCardTagOverlay from "./StudyCardTagOverlay";
 export default function StudyExplorerPanel({
   canToggleEnglish,
   showEnglish,
@@ -86,6 +87,7 @@ export default function StudyExplorerPanel({
   onOpenStudySourceManager,
   onSetWaitSortOrder,
   onSelectSubject,
+  onToggleStudyTag,
   onClearAllFilters,
 }: StudyExplorerPanelProps) {
   const { bulkModeEnabled, selectedSubjectIds, selectedItems, selectedPreview, applyBulkSelection, toggleBulkMode, setSelectedSubjectIds } = useStudyBulkReset({ filteredItems });
@@ -409,7 +411,7 @@ export default function StudyExplorerPanel({
                           #{index + 1}
                         </span>
                       ) : (
-                        `${item.studyTags?.favorite ? "★" : ""}${item.studyTags?.trouble ? "!" : ""}#${index + 1}`
+                        `#${index + 1}`
                       )
                     }
                     topRight={
@@ -423,6 +425,7 @@ export default function StudyExplorerPanel({
                     glyphClassName={typeGlyphBoxClass(item.subjectType)}
                     glyphText={item.characters}
                     glyphTextClassName={glyphTextSizeClass(item.characters)}
+                    glyphOverlay={<StudyCardTagOverlay item={item} bulkModeEnabled={bulkModeEnabled} onToggleStudyTag={onToggleStudyTag} />}
                     glyphSubtitle={
                       studyMode
                         ? <span className="text-foreground/45">...</span>

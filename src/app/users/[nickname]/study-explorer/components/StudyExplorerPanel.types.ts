@@ -58,6 +58,7 @@ type StudyExplorerPanelProps = {
   onOpenStudySourceManager: () => void;
   onSetWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;
   onSelectSubject: (subjectId: number) => void;
+  onToggleStudyTag: (subjectId: number, tag: "favorite" | "trouble", enabled: boolean) => void;
   onClearAllFilters: () => void;
 };
 
