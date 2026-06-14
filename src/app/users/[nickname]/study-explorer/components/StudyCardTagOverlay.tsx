@@ -33,9 +33,8 @@ export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStu
         }`}
       >
         <svg viewBox="0 0 20 20" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M10 3.2 17.2 16H2.8L10 3.2Z" />
-          <path d="M10 7.4v4.8" />
-          <circle cx="10" cy="14.7" r="0.9" fill="currentColor" stroke="none" />
+          <path d="M3.8 6h8.8a2 2 0 0 1 2 2v4.2a2 2 0 0 1-2 2H9.2l.8 3.2a1.7 1.7 0 0 1-3.3.8L5.6 14.2H3.8a1.8 1.8 0 0 1-1.8-1.8V7.8A1.8 1.8 0 0 1 3.8 6Z" />
+          <path d="M14.6 6v8.2" />
         </svg>
       </button>
       <button
@@ -52,18 +51,7 @@ export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStu
             : "text-foreground/20 hover:text-foreground/45"
         }`}
       >
-        {item.studyTags?.favorite ? (
-          "★"
-        ) : (
-          <svg viewBox="0 0 20 20" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 8v5.8" />
-            <path d="M10 8v6.6" />
-            <path d="M13 8v4.6" />
-            <path d="M4.7 8.2h10.8" />
-            <path d="M3.8 8.2V15a1.2 1.2 0 0 0 1.2 1.2h8.6a1.2 1.2 0 0 0 1.2-1.2V8.2" />
-            <path d="M10.2 4.2h3.8c1 0 1.8.8 1.8 1.8v2.2" />
-          </svg>
-        )}
+        ★
       </button>
     </div>
   );
