@@ -249,6 +249,11 @@ export default function StudyExplorer({
   useStudyToggleEnglishHotkey(canToggleEnglish, onToggleShowEnglish);
   useStudyCloseOnExplorerPageChange(setSelectedId);
   useStudyViewerModeSync(setForcedViewerMode);
+  useEffect(() => {
+    const onTagsUpdated = () => { void mutateQueue(); };
+    window.addEventListener("wr:study-tags-updated", onTagsUpdated);
+    return () => window.removeEventListener("wr:study-tags-updated", onTagsUpdated);
+  }, [mutateQueue]);
   const {
     levelOptions,
     availableLevels,

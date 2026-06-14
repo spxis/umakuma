@@ -129,7 +129,9 @@ export default function StudyReviewModal({
     const enabled = !current[tag];
     setTagOverrides((prev) => ({ ...prev, [selectedItem.subjectId]: { ...current, [tag]: enabled } }));
     try {
-      await fetch(`/api/study/${accountId}/tags`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subjectId: selectedItem.subjectId, tag, enabled }) });
+      const response = await fetch(`/api/study/${accountId}/tags`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subjectId: selectedItem.subjectId, tag, enabled }) });
+      if (!response.ok) throw new Error("Tag update failed.");
+      window.dispatchEvent(new CustomEvent("wr:study-tags-updated", { detail: { accountId, subjectId: selectedItem.subjectId } }));
     } catch {
       setTagOverrides((prev) => ({ ...prev, [selectedItem.subjectId]: current }));
     }
