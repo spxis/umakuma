@@ -106,11 +106,12 @@ export default function StudyExplorerPanel({
   const studyLevelHeaderLabel = `L${Math.max(1, studySourceLevel ?? 1)}`;
   const studyHeaderLabel = `Study - ${studySourceHeaderLabel} (${studyLevelHeaderLabel})`;
   const hasMoreMatchingItems = hasMorePages && filteredItems.length < allTypeCount;
+  const shouldShowLoadMoreUi = hasMoreMatchingItems && filteredItems.length > 1;
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
   const hideControlsDuringInitialLoad = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
   const { toggle: toggleGlyphFont } = useGlyphFontPreference();
   const showLoadingOverlay = hideControlsDuringInitialLoad;
-  const loadingFillCount = hasMoreMatchingItems && isLoadingMore && gridColumns > 1
+  const loadingFillCount = shouldShowLoadMoreUi && isLoadingMore && gridColumns > 1
     ? (gridColumns - (filteredItems.length % gridColumns)) % gridColumns
     : 0;
   const allTypesSelected = isAllStudyTypeFilter(typeFilter);
@@ -454,14 +455,8 @@ export default function StudyExplorerPanel({
                 : null}
             </div>
             {hasMoreMatchingItems ? (
-              <div ref={sentinelRef} className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
-                {isLoadingMore
-                  ? STUDY_PANEL_TEXT.loadingMore
-                  : loadMoreError
-                    ? `${STUDY_PANEL_TEXT.genericLoadErrorPrefix} ${loadMoreError}`
-                    : queueMode === STUDY_QUEUE_TYPES.lesson
-                      ? STUDY_PANEL_TEXT.loadingRemainingLessons
-                      : STUDY_PANEL_TEXT.scrollToLoadMore}
+              <div ref={sentinelRef} className={shouldShowLoadMoreUi ? "mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60" : "h-px w-full opacity-0 pointer-events-none"} aria-hidden={!shouldShowLoadMoreUi}>
+                {shouldShowLoadMoreUi ? (isLoadingMore ? STUDY_PANEL_TEXT.loadingMore : loadMoreError ? `${STUDY_PANEL_TEXT.genericLoadErrorPrefix} ${loadMoreError}` : queueMode === STUDY_QUEUE_TYPES.lesson ? STUDY_PANEL_TEXT.loadingRemainingLessons : STUDY_PANEL_TEXT.scrollToLoadMore) : null}
               </div>
             ) : null}
             </>
