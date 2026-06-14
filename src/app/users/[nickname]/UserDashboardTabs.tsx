@@ -221,7 +221,7 @@ export default function UserDashboardTabs({
             </p>
           </section>
 
-          <section className="rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
+          <section className="rounded-2xl border border-line bg-surface/90 p-3 sm:p-4">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/65">Snapshot</p>
             <MainTabPanel
               wkLevel={wkLevel}
@@ -241,12 +241,12 @@ export default function UserDashboardTabs({
             />
           </section>
 
-          <section className="rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
+          <section className="rounded-2xl border border-line bg-surface/90 p-3 sm:p-4">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/65">Item spread</p>
             <ItemSpreadTabPanel itemSpread={itemSpread} itemSpreadDetails={itemSpreadDetails} />
           </section>
 
-          <section className="rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
+          <section className="rounded-2xl border border-line bg-surface/90 p-3 sm:p-4">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/65">Level progress</p>
             <LevelProgressTabPanel
               accountId={accountId}
