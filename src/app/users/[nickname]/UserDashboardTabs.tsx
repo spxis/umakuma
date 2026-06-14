@@ -217,15 +217,17 @@ export default function UserDashboardTabs({
       {activeTab === "stats" ? (
         <section className="mt-4 space-y-4" role="tabpanel">
           <section className="rounded-2xl border border-line bg-surface/90 px-5 py-4 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
-            <h2 className="flex items-center gap-3 text-xl font-black text-foreground sm:gap-4">
-              <span className="overflow-hidden rounded-xl border border-line/70 bg-surface">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+              <div className="overflow-hidden rounded-xl border border-line/70 bg-surface">
                 <Image src={umaKumaLeft} alt="Uma and Kuma" width={96} height={60} className="h-13 w-24 object-contain p-1.5" />
-              </span>
-              <span>Stats</span>
-            </h2>
-            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-              Progress snapshot and distribution at a glance.
-            </p>
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-foreground">Stats</h2>
+                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
+                  Progress snapshot and distribution at a glance.
+                </p>
+              </div>
+            </div>
           </section>
 
           <section className="rounded-2xl border border-line bg-surface/90 p-3 sm:p-4">
