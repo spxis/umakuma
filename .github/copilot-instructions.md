@@ -105,3 +105,9 @@ Always run `pnpm quality:check` after non-trivial edits in `src/`. If lint issue
   Commits, subject ≤ 50 chars.
 - Don't create new markdown docs to describe your changes unless asked.
 - Prefer editing existing files over creating new ones.
+
+## Self-improvement defaults
+
+- After user corrections, persist concise lessons to repo memory so the same miss is not repeated.
+- For "make this like that page" requests, require exact structural placement parity (same container slot/order) before visual polish.
+- Before closing UI parity tasks, verify no extra wrapper cards/borders were introduced.

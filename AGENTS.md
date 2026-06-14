@@ -52,6 +52,18 @@ This file is the single source of truth for agent behavior in this repo.
 - Required sweep includes runtime comparisons, duplicated inline type unions, and duplicated canonical domain display labels for the same domain values.
 - If hits are found in the same domain area, fix them in the same pass and re-run quality checks before commit.
 
+### Self-Improvement Loop (Mandatory)
+
+- After any user-reported miss or correction, record a concise, reusable rule in repository memory (`/memories/repo/umakuma-conventions.md`) before ending the task.
+- If the miss reflects a durable repo behavior expectation (not a one-off preference), also add/update the rule in this file so future agents inherit it.
+- For UI parity requests (for example "make X like Y"), treat parity as **structural** first: match container order/slot placement before styling tweaks.
+- Before commit on UI parity tasks, run a checklist in this order:
+	1. Controls are in the same container slot as the reference page.
+	2. No extra wrapper card/border was introduced.
+	3. Button/tab classes follow the same active/inactive pattern.
+	4. Empty/loading/error states still match repo conventions.
+- Do not mark the task done until the requested pattern is matched exactly (not approximately).
+
 ## Stack
 
 - Next.js 16 (App Router), React 19, TypeScript 5.
