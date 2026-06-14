@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import jlptReadings from "@/data/jlptReadings.json";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import { badgeClass, jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
@@ -59,6 +59,7 @@ export default function JlptExplorerContent({
     defaultValue: true,
     mode: "one-is-true",
   });
+  const hasMounted = useSyncExternalStore(() => () => {}, () => true, () => false);
 
   // --- Kanji stats/history state ---
   const [statsOpen, setStatsOpen] = useState(false);
@@ -140,7 +141,8 @@ export default function JlptExplorerContent({
           Math.floor(selectedVisibleIndex / gridColumns) * gridColumns + (gridColumns - 1),
         )
       : -1;
-  const mobileFilterSectionClass = mobileFiltersOpen ? "block" : "hidden";
+  const effectiveMobileFiltersOpen = hasMounted ? mobileFiltersOpen : true;
+  const mobileFilterSectionClass = effectiveMobileFiltersOpen ? "block" : "hidden";
   return (
     <>
     <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
@@ -154,7 +156,7 @@ export default function JlptExplorerContent({
           </div>
           <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
             <ExplorerFilterToggleButton
-              expanded={mobileFiltersOpen}
+              expanded={effectiveMobileFiltersOpen}
               onToggle={() => setMobileFiltersOpen((open) => !open)}
               controlsId="jlpt-filters-panel"
               showLabel={JLPT_EXPLORER_TEXT.showFilters}
