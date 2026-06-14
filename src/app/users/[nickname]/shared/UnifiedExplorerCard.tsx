@@ -5,6 +5,7 @@ import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 
 type Props = {
   onClick: (meta?: { shiftKey: boolean }) => void;
+  activateOn?: "card" | "glyph-box";
   className: string;
   indexLabel: ReactNode;
   topRight: ReactNode;
@@ -21,6 +22,7 @@ type Props = {
 
 export default function UnifiedExplorerCard({
   onClick,
+  activateOn = "card",
   className,
   indexLabel,
   topRight,
@@ -35,22 +37,48 @@ export default function UnifiedExplorerCard({
   rightChip,
 }: Props) {
   const { fontFamily } = useGlyphFontPreference();
+  const rootCursorClass = activateOn === "card" ? "cursor-pointer" : "cursor-default";
+  const glyphCursorClass = activateOn === "glyph-box" ? "cursor-pointer" : "";
 
   return (
-    <button
-      type="button"
-      onClick={(event) => onClick({ shiftKey: event.shiftKey })}
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={(event) => {
+        if (activateOn === "glyph-box" && event.detail > 0) {
+          const target = event.target as HTMLElement | null;
+          if (!target?.closest('[data-explorer-glyph-hitbox="true"]')) {
+            return;
+          }
+        }
+        onClick({ shiftKey: event.shiftKey });
+      }}
+      onKeyDown={(event) => {
+        if (event.key !== "Enter" && event.key !== " ") {
+          return;
+        }
+        event.preventDefault();
+        onClick({ shiftKey: event.shiftKey });
+      }}
       data-explorer-card-subject-id={dataSubjectId} // Added data-explorer-card-subject-id attribute
-      className={`group/explorer-card ${className} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70`}
+      className={`group/explorer-card focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${rootCursorClass} ${className}`}
     >
       <div className="flex min-h-[2.35rem] items-start justify-between gap-2">
         <span className="text-[10px] font-semibold text-foreground/45">{indexLabel}</span>
         <div className="flex min-h-[2.2rem] flex-wrap content-start items-start justify-end gap-1">{topRight}</div>
       </div>
 
-      <div className={`relative mt-2 flex h-[8rem] flex-col justify-center rounded-xl border px-3 py-2 ${glyphClassName}`}>
+      <div
+        data-explorer-glyph-hitbox="true"
+        className={`relative mt-2 flex h-[8rem] flex-col justify-center rounded-xl border px-3 py-2 ${glyphCursorClass} ${glyphClassName}`}
+      >
         {glyphOverlay}
-        <p style={{ fontFamily }} className={`${glyphTextClassName} text-center font-black leading-none`}>{glyphText}</p>
+        <p
+          style={{ fontFamily }}
+          className={`${glyphTextClassName} text-center font-black leading-none`}
+        >
+          {glyphText}
+        </p>
         <p className="mt-1 min-h-[1.35rem] truncate whitespace-nowrap text-center text-base font-semibold text-foreground/70">{glyphSubtitle ?? ""}</p>
       </div>
 
@@ -59,6 +87,6 @@ export default function UnifiedExplorerCard({
         <span className="inline-flex items-center justify-self-center leading-none">{middleChip ?? <span />}</span>
         <span className="inline-flex items-center justify-self-end leading-none">{rightChip}</span>
       </div>
-    </button>
+    </div>
   );
 }

@@ -10,6 +10,7 @@ import UserReadPanel from "./UserReadPanel";
 import UserReadingSignoffSection from "./UserReadingSignoffSection";
 import UserDashboardTabs from "./UserDashboardTabs";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
+import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import {
   QUEUE_TYPES,
   LEARNED_SRS_GROUPS,
@@ -350,6 +351,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   const passedLevelUpGate = currentLevelProgress.passedLevelUpGate;
   const linkedEmail = account.joinedByEmail?.trim().toLowerCase() ?? null;
   const viewerMatchesAccount = Boolean(viewerEmail && linkedEmail && viewerEmail === linkedEmail);
+  const showUserBanner = initialDashboardTab === "learn" || initialDashboardTab === "wk" || initialDashboardTab === "jlpt";
 
   return (
     <div className="px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
@@ -362,6 +364,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         lastActivityAt={account.lastActivityAt ? account.lastActivityAt.toISOString() : null}
         className="mb-2"
       />
+      {showUserBanner ? <UmaKumaPageBanner variant="user" className="mb-3" /> : null}
 
       <UserDashboardTabs
         accountId={account.id}

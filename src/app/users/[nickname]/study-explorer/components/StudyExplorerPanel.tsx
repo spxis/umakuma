@@ -377,6 +377,7 @@ export default function StudyExplorerPanel({
                 return (
                   <UnifiedExplorerCard
                     key={`${item.queueType}-${item.subjectId}`}
+                    activateOn={isUnauthorized ? "card" : "glyph-box"}
                     onClick={(meta) => {
                       if (!isUnauthorized) {
                         if (applyBulkSelection({

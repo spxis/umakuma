@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
-
 import type { RelatedReference, StudyReviewModalProps as Props } from "./StudyReviewModal.types";
 import {
   isRadicalSubjectType,
@@ -18,6 +17,7 @@ import {
 } from "./StudyExplorer.constants";
 import StudyReviewModalSection from "./StudyReviewModalSection";
 import { hasRenderableRelatedItems } from "./StudyReviewModalHelpers";
+import StudyReviewTagButtons from "./StudyReviewTagButtons";
 import { useStudyReviewModalKeyboard } from "../lib/useStudyReviewModalKeyboard";
 import {
   buildStudyReviewAllMeanings,
@@ -26,7 +26,6 @@ import {
   deriveJlptGradeLabel,
   deriveStudyReviewReadings,
 } from "../lib/studyReviewModalDerivations";
-
 export default function StudyReviewModal({
   accountId,
   showEnglish,
@@ -79,7 +78,6 @@ export default function StudyReviewModal({
       STUDY_VIEWER_MODES.detail,
     );
   });
-
   useEffect(() => {
     if (!forcedViewerMode) {
       return;
@@ -283,7 +281,6 @@ export default function StudyReviewModal({
       window.clearTimeout(timeoutId);
     };
   }, [latestReviewTransition]);
-
   useStudyReviewModalKeyboard({
     selectedItem,
     studyMode,
@@ -370,10 +367,13 @@ export default function StudyReviewModal({
             </div>
             <div className="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
               {selectedItem ? (
-                <>
-                  <button type="button" onClick={() => void toggleStudyTag("favorite")} className={`min-h-9 min-w-9 rounded-full border px-2 py-1.5 text-sm font-bold ${selectedTags.favorite ? "border-amber-500 bg-amber-500 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`} title="Toggle favorite">★</button>
-                  <button type="button" onClick={() => void toggleStudyTag("trouble")} className={`min-h-9 min-w-9 rounded-full border px-2 py-1.5 text-sm font-bold ${selectedTags.trouble ? "border-red-500 bg-red-500 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`} title="Toggle trouble">!</button>
-                </>
+                <StudyReviewTagButtons
+                  selectedItem={selectedItem}
+                  selectedTags={selectedTags}
+                  onToggleStudyTag={(tag) => {
+                    void toggleStudyTag(tag);
+                  }}
+                />
               ) : null}
               <button type="button" onClick={goPrev} disabled={!onPrev || !prevLabel} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
                 <span className="sm:hidden" aria-hidden>
@@ -389,7 +389,6 @@ export default function StudyReviewModal({
               </button>
             </div>
           </div>
-
         </div>
 
         {studyMode && isReviewQueueItem(selectedItem) ? (

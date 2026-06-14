@@ -67,6 +67,7 @@ export default function ViewGlyphModalHost() {
   );
   const [customTitle, setCustomTitle] = useState<string | undefined>(undefined);
   const [selector, setSelector] = useState<ViewGlyphSelectorEntry[]>([]);
+  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
 
   useEffect(() => {
     const onOpen = (event: Event) => {
@@ -80,6 +81,7 @@ export default function ViewGlyphModalHost() {
       setAccountId(detail.accountId ?? "");
       setCustomTitle(detail.title);
       setSelector(Array.isArray(detail.selector) ? detail.selector : []);
+      setTagOverrides({});
     };
 
     window.addEventListener(VIEW_GLYPH_EVENT, onOpen);
@@ -89,6 +91,9 @@ export default function ViewGlyphModalHost() {
   }, []);
 
   const item = items[index] ?? null;
+  const selectedTags = item
+    ? (tagOverrides[item.subjectId] ?? item.studyTags ?? { favorite: false, trouble: false })
+    : { favorite: false, trouble: false };
   const hasPreviousItem = index > 0;
   const hasNextItem = index < items.length - 1;
   const showNavigationButtons = hasPreviousItem || hasNextItem;
@@ -99,7 +104,52 @@ export default function ViewGlyphModalHost() {
     setAccountId("");
     setCustomTitle(undefined);
     setSelector([]);
+    setTagOverrides({});
   }, []);
+
+  const toggleStudyTag = useCallback(async (tag: "favorite" | "trouble") => {
+    if (!item || !accountId) {
+      return;
+    }
+
+    const current = tagOverrides[item.subjectId] ?? item.studyTags ?? { favorite: false, trouble: false };
+    const next = { ...current, [tag]: !current[tag] };
+
+    setTagOverrides((prev) => ({ ...prev, [item.subjectId]: next }));
+    setItems((prev) =>
+      prev.map((entry) =>
+        entry.subjectId === item.subjectId
+          ? { ...entry, studyTags: next }
+          : entry,
+      ),
+    );
+
+    try {
+      const response = await fetch(`/api/study/${accountId}/tags`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subjectId: item.subjectId, tag, enabled: next[tag] }),
+      });
+      if (!response.ok) {
+        throw new Error("Tag update failed.");
+      }
+
+      window.dispatchEvent(
+        new CustomEvent("wr:study-tags-updated", {
+          detail: { accountId, subjectId: item.subjectId },
+        }),
+      );
+    } catch {
+      setTagOverrides((prev) => ({ ...prev, [item.subjectId]: current }));
+      setItems((prev) =>
+        prev.map((entry) =>
+          entry.subjectId === item.subjectId
+            ? { ...entry, studyTags: current }
+            : entry,
+        ),
+      );
+    }
+  }, [accountId, item, tagOverrides]);
 
   const subjectById = useMemo(() => {
     const map = new Map<number, LevelItem>();
@@ -334,6 +384,8 @@ export default function ViewGlyphModalHost() {
           <LevelExplorerDetailSection
             accountId={accountId}
             selectedItem={item}
+            studyTags={selectedTags}
+            onToggleStudyTag={accountId ? (tag) => { void toggleStudyTag(tag); } : null}
             showEnglish={showEnglish}
             clampLongTitle
             titleMeaningToggleOnly
