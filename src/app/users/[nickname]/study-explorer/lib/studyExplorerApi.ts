@@ -1,4 +1,5 @@
 import type { StudyQueueMode, StudySource } from "./studyExplorerTypes";
+import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 
 export function buildStudyApiBasePath(accountId: string, studySource: StudySource): string {
   return studySource === "custom" ? `/api/custom-study/${accountId}` : `/api/study/${accountId}`;
@@ -17,6 +18,8 @@ export function buildStudyQueueRequestUrl(params: {
   initialPageSize: number;
   studySource: StudySource;
   customLibraryId: string | null;
+  includeTrouble: boolean;
+  queueTagFilter?: "all" | "favorite" | "trouble";
 }): string | null {
   if (params.studySource === "custom" && !params.customLibraryId) {
     return null;
@@ -29,6 +32,12 @@ export function buildStudyQueueRequestUrl(params: {
   });
   if (params.customLibraryId) {
     query.set("libraryId", params.customLibraryId);
+  }
+  if (params.queueMode === STUDY_QUEUE_TYPES.review) {
+    query.set("includeTrouble", params.includeTrouble ? "1" : "0");
+  }
+  if (params.queueTagFilter && params.queueTagFilter !== "all") {
+    query.set("tag", params.queueTagFilter);
   }
 
   return `${params.studyApiBasePath}/queue?${query.toString()}`;

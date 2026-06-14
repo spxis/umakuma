@@ -7,6 +7,7 @@ import {
   isRadicalSubjectType,
   isReviewQueueItem,
   isLessonQueueItem,
+  isKanjiSubjectType,
   isTerminalReviewOutcome,
   STUDY_QUEUE_TYPES,
   STUDY_REVIEW_OUTCOMES,
@@ -68,12 +69,10 @@ export default function StudyReviewModal({
     defaultValue: false,
     mode: "one-is-true",
   });
-
   const [usedKanjiCollapsed, setUsedKanjiCollapsed] = usePersistedBoolean(usedKanjiStorageKey, {
     defaultValue: false,
     mode: "one-is-true",
   });
-
   const [viewerMode, setViewerMode] = useState(() => {
     return getStoredEnum(
       viewerModeStorageKey,
@@ -86,7 +85,6 @@ export default function StudyReviewModal({
     if (!forcedViewerMode) {
       return;
     }
-
     queueMicrotask(() => {
       setViewerMode(forcedViewerMode);
       setStoredEnum(viewerModeStorageKey, forcedViewerMode);
@@ -99,7 +97,6 @@ export default function StudyReviewModal({
         detail: { open: true, viewerMode },
       }),
     );
-
     return () => {
       window.dispatchEvent(
         new CustomEvent("wr:study-viewer-mode", {
@@ -111,13 +108,13 @@ export default function StudyReviewModal({
 
   const [flashRevealKey, setFlashRevealKey] = useState<string | null>(null);
   const [flashCycleDoneKey, setFlashCycleDoneKey] = useState<string | null>(null);
+  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
   const [visibleTransitionCue, setVisibleTransitionCue] = useState<{
     assignmentId: number;
     tone: "positive" | "negative";
     message: string;
   } | null>(null);
   const flashTouchStartRef = useRef<{ x: number; y: number; ts: number } | null>(null);
-
   const currentFlashKey = `${viewerMode}:${selectedItem?.assignmentId ?? "none"}`;
   const flashRevealed = flashRevealKey === currentFlashKey;
   const currentFlashCycleKey = `${viewerMode}:${selectedItem?.assignmentId ?? "none"}:${selectedIndex}:${filteredTotal}`;
@@ -125,7 +122,19 @@ export default function StudyReviewModal({
   const canUseFlashCycleNext = !studyMode && viewerMode === STUDY_VIEWER_MODES.flash && filteredTotal > 0;
   const displayIndex = filteredTotal > 0 ? Math.min(selectedIndex + 1, filteredTotal) : 0;
   const displayTotal = filteredTotal;
+  const selectedTags = selectedItem ? (tagOverrides[selectedItem.subjectId] ?? selectedItem.studyTags ?? { favorite: false, trouble: false }) : { favorite: false, trouble: false };
 
+  const toggleStudyTag = useCallback(async (tag: "favorite" | "trouble") => {
+    if (!selectedItem) return;
+    const current = tagOverrides[selectedItem.subjectId] ?? selectedItem.studyTags ?? { favorite: false, trouble: false };
+    const enabled = !current[tag];
+    setTagOverrides((prev) => ({ ...prev, [selectedItem.subjectId]: { ...current, [tag]: enabled } }));
+    try {
+      await fetch(`/api/study/${accountId}/tags`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subjectId: selectedItem.subjectId, tag, enabled }) });
+    } catch {
+      setTagOverrides((prev) => ({ ...prev, [selectedItem.subjectId]: current }));
+    }
+  }, [accountId, selectedItem, tagOverrides]);
   const markCurrentAsSkippedIfUnresolved = useCallback(() => {
     if (!studyMode || !selectedItem || !isReviewQueueItem(selectedItem)) return;
     const currentOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
@@ -359,6 +368,12 @@ export default function StudyReviewModal({
               ) : null}
             </div>
             <div className="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
+              {selectedItem && isKanjiSubjectType(selectedItem.subjectType) ? (
+                <>
+                  <button type="button" onClick={() => void toggleStudyTag("favorite")} className={`min-h-9 min-w-9 rounded-full border px-2 py-1.5 text-sm font-bold ${selectedTags.favorite ? "border-amber-500 bg-amber-500 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`} title="Toggle favorite">★</button>
+                  <button type="button" onClick={() => void toggleStudyTag("trouble")} className={`min-h-9 min-w-9 rounded-full border px-2 py-1.5 text-sm font-bold ${selectedTags.trouble ? "border-red-500 bg-red-500 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`} title="Toggle trouble">!</button>
+                </>
+              ) : null}
               <button type="button" onClick={goPrev} disabled={!onPrev || !prevLabel} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
                 <span className="sm:hidden" aria-hidden>
                   Prev

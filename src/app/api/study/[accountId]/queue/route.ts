@@ -14,11 +14,15 @@ import {
   type SubjectData,
 } from "./queueRouteUtils";
 import { hydrateQueueSyncState } from "./queueRouteSync";
+import {
+  mergeTroubleRows,
+  troubleInjectionCount,
+  type StudySubjectTagMap,
+} from "./queueRouteTags";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
 };
-
 export async function GET(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
     route: "/api/study/[accountId]/queue",
@@ -36,6 +40,12 @@ export async function GET(request: Request, context: RouteContext) {
               : QUEUE_TYPES.review;
         const limitParam = Number(url.searchParams.get("limit") ?? "");
         const offsetParam = Number(url.searchParams.get("offset") ?? "");
+        const includeTrouble = url.searchParams.get("includeTrouble") !== "0";
+        const tagFilter = url.searchParams.get("tag") === "favorite"
+          ? "favorite"
+          : url.searchParams.get("tag") === "trouble"
+            ? "trouble"
+            : "all";
         const limit = Number.isInteger(limitParam) && limitParam > 0 ? Math.min(limitParam, 200) : null;
         const offset = Number.isInteger(offsetParam) && offsetParam >= 0 ? offsetParam : 0;
         const canUseServerCache = limit === null;
@@ -75,6 +85,7 @@ export async function GET(request: Request, context: RouteContext) {
         {
           items: pagedItems,
           counts: cached.counts,
+          tagCounts: cached.tagCounts ?? { favorite: 0, trouble: 0 },
           levelCounts: cached.levelCounts ?? {},
           typeCounts: cached.typeCounts ?? { all: 0, radical: 0, kanji: 0, vocabulary: 0 },
           typeCountsByLevel: cached.typeCountsByLevel ?? {},
@@ -111,13 +122,6 @@ export async function GET(request: Request, context: RouteContext) {
 
     const reviewAssignments = reviewState ? queueRowsFromState(reviewState, QUEUE_TYPES.review) : [];
     const lessonAssignments = lessonState ? queueRowsFromState(lessonState, QUEUE_TYPES.lesson) : [];
-    const queued =
-      mode === "all"
-        ? [...reviewAssignments, ...lessonAssignments]
-        : mode === QUEUE_TYPES.lesson
-          ? lessonAssignments
-          : reviewAssignments;
-
     const subjectById = new Map<number, { object: string; data: SubjectData }>();
     if (reviewState) {
       for (const [subjectId, row] of reviewState.subjectById.entries()) {
@@ -129,6 +133,59 @@ export async function GET(request: Request, context: RouteContext) {
         subjectById.set(subjectId, { object: row.object, data: row.data });
       }
     }
+
+    const tagRows = await prisma.studySubjectTag.findMany({
+      where: {
+        accountId,
+        OR: [{ favorite: true }, { trouble: true }],
+      },
+      select: {
+        subjectId: true,
+        favorite: true,
+        trouble: true,
+      },
+    });
+    const tagBySubjectId: StudySubjectTagMap = new Map(
+      tagRows.map((row) => [row.subjectId, { favorite: row.favorite, trouble: row.trouble }]),
+    );
+    let reviewRowsWithTrouble = reviewAssignments;
+    if (mode !== QUEUE_TYPES.lesson && includeTrouble) {
+      const reviewedSubjectIds = new Set(reviewAssignments.map((row) => row.data.subject_id));
+      const troubleIds = tagRows.filter((row) => row.trouble).map((row) => row.subjectId);
+      await hydrateMissingSubjects(token, subjectById, troubleIds);
+
+      const injectCandidates = troubleIds
+        .filter((subjectId) => !reviewedSubjectIds.has(subjectId))
+        .filter((subjectId) => normalizeSubjectType(subjectById.get(subjectId)?.object ?? "") === SUBJECT_TYPES.kanji)
+        .sort((a, b) => a - b);
+
+      const maxInject = troubleInjectionCount(reviewAssignments.length, injectCandidates.length);
+      const injectedRows = injectCandidates.slice(0, maxInject).map((subjectId) => ({
+        assignmentId: -subjectId,
+        queueType: QUEUE_TYPES.review,
+        data: {
+          subject_id: subjectId,
+          subject_type: SUBJECT_TYPES.kanji,
+          srs_stage: 1,
+          unlocked_at: new Date(0).toISOString(),
+          started_at: null,
+          passed_at: null,
+          available_at: new Date().toISOString(),
+        },
+      }));
+
+      reviewRowsWithTrouble = mergeTroubleRows(reviewAssignments, injectedRows);
+    }
+
+    const unfilteredQueued =
+      mode === "all"
+        ? [...reviewRowsWithTrouble, ...lessonAssignments]
+        : mode === QUEUE_TYPES.lesson
+          ? lessonAssignments
+          : reviewRowsWithTrouble;
+    const queued = tagFilter === "all"
+      ? unfilteredQueued
+      : unfilteredQueued.filter((row) => (tagBySubjectId.get(row.data.subject_id)?.[tagFilter] ?? false));
 
     const sortedQueued = [...queued].sort((a, b) => {
       const aReview = a.queueType === QUEUE_TYPES.review ? 0 : 1;
@@ -153,6 +210,11 @@ export async function GET(request: Request, context: RouteContext) {
       reviews: reviewAssignments.length,
       lessons: lessonAssignments.length,
       all: reviewAssignments.length + lessonAssignments.length,
+    };
+
+    const tagCounts = {
+      favorite: 0,
+      trouble: 0,
     };
 
     const emptyTypeCounts = {
@@ -353,10 +415,20 @@ export async function GET(request: Request, context: RouteContext) {
           }
         : null;
 
+      const tags = tagBySubjectId.get(row.data.subject_id) ?? { favorite: false, trouble: false };
+      if (tags.favorite) {
+        tagCounts.favorite += 1;
+      }
+      if (tags.trouble) {
+        tagCounts.trouble += 1;
+      }
+
       return {
         subjectId: row.data.subject_id,
         assignmentId: row.assignmentId,
         queueType: row.queueType,
+        isInjectedTrouble: row.assignmentId < 0,
+        studyTags: tags,
         subjectType,
         wkLevel: subjectData?.level ?? null,
         characters: label,
@@ -385,6 +457,7 @@ export async function GET(request: Request, context: RouteContext) {
         mode,
         items,
         counts,
+        tagCounts,
         levelCounts,
         typeCounts,
         typeCountsByLevel,
@@ -397,6 +470,7 @@ export async function GET(request: Request, context: RouteContext) {
       {
         items,
         counts,
+        tagCounts,
         levelCounts,
         typeCounts,
         typeCountsByLevel,

@@ -60,6 +60,8 @@ export default function StudyExplorer({
   canToggleEnglish,
   studyMode,
   queueMode,
+  includeTrouble,
+  queueTagFilter = "all",
 }: StudyExplorerProps) {
   const queueStorageScopeKey = buildStudyQueueStorageScopeKey(studySource, customLibraryId);
   const studyApiBasePath = buildStudyApiBasePath(accountId, studySource);
@@ -113,13 +115,7 @@ export default function StudyExplorer({
     () => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 24 : gridColumns * 12),
     [gridColumns, queueMode],
   );
-  const queueRequestUrl = buildStudyQueueRequestUrl({
-    studyApiBasePath,
-    queueMode,
-    initialPageSize,
-    studySource,
-    customLibraryId,
-  });
+  const queueRequestUrl = buildStudyQueueRequestUrl({ studyApiBasePath, queueMode, initialPageSize, studySource, customLibraryId, includeTrouble, queueTagFilter });
   useLayoutEffect(() => {
     const cached = readStoredQueue(accountId, queueMode, queueStorageScopeKey);
     const initialQueueState = deriveInitialQueueState(cached);

@@ -5,6 +5,10 @@ type CachedStudyQueue = {
     reviews: number;
     lessons: number;
   };
+  tagCounts?: {
+    favorite: number;
+    trouble: number;
+  };
   levelCounts?: Record<number, number>;
   typeCounts?: {
     all: number;
@@ -91,6 +95,7 @@ export function setCachedStudyQueue(
   mode: string,
   items: unknown[],
   counts: { all: number; reviews: number; lessons: number },
+  tagCounts?: { favorite: number; trouble: number },
   levelCounts?: Record<number, number>,
   typeCounts?: { all: number; radical: number; kanji: number; vocabulary: number },
   typeCountsByLevel?: Record<
@@ -111,6 +116,7 @@ export function setCachedStudyQueue(
   cache.set(cacheKey(accountId, mode), {
     items,
     counts,
+    tagCounts,
     levelCounts,
     typeCounts,
     typeCountsByLevel,

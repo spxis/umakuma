@@ -73,10 +73,14 @@ export function primaryReadingForDisplay(item: LevelItem): string | null {
 }
 
 export function glyphSubtitleForDisplay(item: LevelItem): string | null {
+  const tagPrefix = item.studyTags?.favorite || item.studyTags?.trouble
+    ? `${item.studyTags.favorite ? "★" : ""}${item.studyTags.trouble ? "!" : ""} `
+    : "";
   if (isRadicalSubjectType(item.subjectType)) {
-    return item.meanings[0] ?? null;
+    return (item.meanings[0] ?? null) ? `${tagPrefix}${item.meanings[0]}` : null;
   }
-  return primaryReadingForDisplay(item);
+  const reading = primaryReadingForDisplay(item);
+  return reading ? `${tagPrefix}${reading}` : reading;
 }
 
 export function englishSubtitleForDisplay(item: LevelItem): string | null {
@@ -92,14 +96,17 @@ export function englishSubtitleForDisplay(item: LevelItem): string | null {
 }
 
 export function titleForDisplay(item: LevelItem, showEnglish: boolean): string {
+  const tagPrefix = item.studyTags?.favorite || item.studyTags?.trouble
+    ? `${item.studyTags.favorite ? "★" : ""}${item.studyTags.trouble ? "!" : ""} `
+    : "";
   if (showEnglish) {
-    return item.meanings.join(", ") || "-";
+    return `${tagPrefix}${item.meanings.join(", ") || "-"}`;
   }
   const subtitle = glyphSubtitleForDisplay(item);
   if (subtitle && subtitle !== "-") {
     return subtitle;
   }
-  return item.characters || "-";
+  return `${tagPrefix}${item.characters || "-"}`;
 }
 
 export function glyphHasReading(item: LevelItem): boolean {

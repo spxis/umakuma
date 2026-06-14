@@ -137,6 +137,9 @@ export function useStudyReviewSubmission({
             body: JSON.stringify({
               assignmentId,
               result,
+              ...(itemForSubmit?.isInjectedTrouble
+                ? { practiceSubjectId: itemForSubmit.subjectId, practiceType: "trouble" as const }
+                : {}),
               ...(customLibraryId ? { libraryId: customLibraryId } : {}),
             }),
             signal: submitController.signal,
@@ -181,8 +184,12 @@ export function useStudyReviewSubmission({
             return prev;
           }
 
+          const consumeReviewCount = !(itemForSubmit?.isInjectedTrouble);
+
           const nextReviews =
-            queueMode === STUDY_QUEUE_TYPES.review ? Math.max(0, prev.reviews - 1) : prev.reviews;
+            queueMode === STUDY_QUEUE_TYPES.review && consumeReviewCount
+              ? Math.max(0, prev.reviews - 1)
+              : prev.reviews;
           const nextLessons =
             queueMode === STUDY_QUEUE_TYPES.lesson ? Math.max(0, prev.lessons - 1) : prev.lessons;
 

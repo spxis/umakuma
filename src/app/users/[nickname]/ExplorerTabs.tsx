@@ -7,7 +7,7 @@ import StudyExplorer from "./study-explorer/components/StudyExplorer";
 import StudySourceControls from "./StudySourceControls";
 import { useStudySourceState } from "./useStudySourceState";
 import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
-import type { StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
+import type { StudySrsFilter, StudySrsStageFilter, StudyTagFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";
 
 type Props = {
@@ -52,6 +52,7 @@ export default function ExplorerTabs({
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const customLibraryNameStorageKey = `wr:study-custom-library-name:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
+  const troubleMixStorageKey = `wr:study-trouble-mix:${accountId}`;
   const isHydrated = typeof window !== "undefined";
   const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(
     initialTab === "level" ? "wk" : initialTab === "jlpt" ? "jlpt" : "learn",
@@ -78,6 +79,13 @@ export default function ExplorerTabs({
       ? initialQueueMode
       : QUEUE_TYPES.review,
   );
+  const [includeTrouble, setIncludeTrouble] = useState<boolean>(() => {
+    if (typeof window === "undefined") {
+      return true;
+    }
+    return window.localStorage.getItem(troubleMixStorageKey) !== "0";
+  });
+  const [queueTagFilter, setQueueTagFilter] = useState<StudyTagFilter>("all");
   const [initialViewerMode, setInitialViewerMode] = useState<"detail" | "flash" | null>(null);
   const {
     studySource,
@@ -158,7 +166,17 @@ export default function ExplorerTabs({
     if (!isHydrated || typeof window === "undefined") {
       return;
     }
+    try {
+      window.localStorage.setItem(troubleMixStorageKey, includeTrouble ? "1" : "0");
+    } catch {
+      // Ignore storage errors in restricted browsing modes.
+    }
+  }, [includeTrouble, isHydrated, troubleMixStorageKey]);
 
+  useEffect(() => {
+    if (!isHydrated || typeof window === "undefined") {
+      return;
+    }
     try {
       const normalizedName = activeCustomLibraryName?.trim() ?? "";
       if (normalizedName) {
@@ -396,6 +414,27 @@ export default function ExplorerTabs({
               <span className="sm:hidden">Study {studyMode ? "On" : "Off"}</span>
               <span className="hidden sm:inline">Study Mode {studyMode ? "On" : "Off"}</span>
             </button>
+            {effectiveActiveTab === "study" && queueMode === QUEUE_TYPES.review ? (
+              <div className="inline-flex min-w-0 flex-[2_1_0%] items-center rounded-full border border-line bg-surface p-1 md:flex-none" role="tablist" aria-label="Study tag filter">
+                <button type="button" role="tab" aria-selected={queueTagFilter === "all"} onClick={() => setQueueTagFilter("all")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "all" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>All</button>
+                <button type="button" role="tab" aria-selected={queueTagFilter === "trouble"} onClick={() => setQueueTagFilter("trouble")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "trouble" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Trouble</button>
+                <button type="button" role="tab" aria-selected={queueTagFilter === "favorite"} onClick={() => setQueueTagFilter("favorite")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "favorite" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Favorites</button>
+              </div>
+            ) : null}
+            {effectiveActiveTab === "study" && queueMode === QUEUE_TYPES.review ? (
+              <button
+                type="button"
+                onClick={() => setIncludeTrouble((prev) => !prev)}
+                className={`inline-flex h-9 min-w-0 flex-[1_1_0%] items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest md:flex-none ${
+                  includeTrouble
+                    ? "border-amber-500 bg-amber-500 text-white"
+                    : "border-line bg-surface text-foreground hover:bg-surface-muted"
+                }`}
+              >
+                <span className="sm:hidden">Trouble mix {includeTrouble ? "On" : "Off"}</span>
+                <span className="hidden sm:inline">Trouble mix {includeTrouble ? "On" : "Off"}</span>
+              </button>
+            ) : null}
           </div>
         </div>
       </div>
@@ -417,6 +456,8 @@ export default function ExplorerTabs({
           canToggleEnglish
           studyMode={studyMode}
           queueMode={queueMode}
+          includeTrouble={includeTrouble}
+          queueTagFilter={queueTagFilter}
         />
       </div>
 

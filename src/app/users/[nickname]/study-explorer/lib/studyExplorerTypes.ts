@@ -4,6 +4,11 @@ import type { QueueType, SubjectType, WkStatus } from "@/lib/domainConstants";
 export type StudyQueueItem = LevelItem & {
   assignmentId: number;
   queueType: QueueType;
+  isInjectedTrouble?: boolean;
+  studyTags?: {
+    favorite: boolean;
+    trouble: boolean;
+  };
 };
 
 export type StudyQueueMode = StudyQueueItem["queueType"];
@@ -13,6 +18,10 @@ export type StudySource = "wanikani" | "custom";
 export type QueueResponse = {
   cached?: boolean;
   items: StudyQueueItem[];
+  tagCounts?: {
+    favorite: number;
+    trouble: number;
+  };
   counts: {
     all: number;
     reviews: number;
@@ -51,6 +60,8 @@ export type QueueResponse = {
     hasMore: boolean;
   };
 };
+
+export type StudyTagFilter = "all" | "favorite" | "trouble";
 
 export type UpcomingReviewItem = {
   subjectId: number;
@@ -114,6 +125,8 @@ export type StudyExplorerProps = {
   canToggleEnglish: boolean;
   studyMode: boolean;
   queueMode: StudyQueueMode;
+  includeTrouble: boolean;
+  queueTagFilter?: StudyTagFilter;
   initialViewerMode?: StudyViewerMode | null;
   initialFilters?: {
     viewedLevel: number | null;

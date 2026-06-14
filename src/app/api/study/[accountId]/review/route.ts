@@ -16,7 +16,9 @@ type RouteContext = {
 };
 
 const reviewSchema = z.object({
-  assignmentId: z.number().int().positive(),
+  assignmentId: z.number().int(),
+  practiceSubjectId: z.number().int().positive().optional(),
+  practiceType: z.enum(["trouble"]).optional(),
   result: z.enum(["correct", "wrong"]),
 });
 
@@ -140,6 +142,28 @@ export async function POST(request: Request, context: RouteContext) {
     });
 
     const incorrect = parsed.data.result === "wrong" ? 1 : 0;
+
+    if (parsed.data.practiceType === "trouble" && typeof parsed.data.practiceSubjectId === "number") {
+      clearStudyQueueCache(accountId);
+      return NextResponse.json({
+        ok: true,
+        practice: true,
+        review: {
+          assignmentId: parsed.data.assignmentId,
+          subjectId: parsed.data.practiceSubjectId,
+          subjectType: "kanji",
+          previousSrsStage: null,
+          newSrsStage: null,
+          previousGrouping: null,
+          newGrouping: null,
+          transition: "unknown",
+        },
+      });
+    }
+
+    if (parsed.data.assignmentId <= 0) {
+      return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+    }
 
     let submissionResponse: ReviewSubmissionResponse | null = null;
 

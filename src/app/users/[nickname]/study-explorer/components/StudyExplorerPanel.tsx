@@ -408,7 +408,7 @@ export default function StudyExplorerPanel({
                           #{index + 1}
                         </span>
                       ) : (
-                        `#${index + 1}`
+                        `${item.studyTags?.favorite ? "★" : ""}${item.studyTags?.trouble ? "!" : ""}#${index + 1}`
                       )
                     }
                     topRight={

@@ -30,6 +30,11 @@ export type LevelItem = {
   startedAt?: string | null;
   passedAt?: string | null;
   availableAt: string | null;
+  isInjectedTrouble?: boolean;
+  studyTags?: {
+    favorite: boolean;
+    trouble: boolean;
+  };
 };
 
 export type Snapshot = {
