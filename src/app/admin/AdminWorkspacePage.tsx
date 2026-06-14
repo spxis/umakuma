@@ -428,6 +428,7 @@ function AdminWorkspacePageContent({
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Campaigns</p>
               <p className="mt-1 text-sm text-foreground/70">Edit campaign rules and run payout simulations.</p>
             </div>
+
             <AdminCampaignManager
               sessionAuthorized={sessionAuthorized}
               checkingSession={checkingSession}

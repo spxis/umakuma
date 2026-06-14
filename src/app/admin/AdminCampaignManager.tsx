@@ -320,8 +320,8 @@ export default function AdminCampaignManager({
   const formDisabled = saving || Boolean(statusUpdating) || loading || !sessionAuthorized || checkingSession;
 
   return (
-    <section id="reading-campaigns" className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
-      <div className="mb-3 flex flex-wrap gap-2">
+    <>
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={() => setWorkspaceTab("manage")}
@@ -338,6 +338,7 @@ export default function AdminCampaignManager({
         </button>
       </div>
 
+      <section id="reading-campaigns" className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
       <AdminPanelHeader
         label="Campaigns"
         title="Manage campaign definitions"
@@ -469,6 +470,7 @@ export default function AdminCampaignManager({
           Simulator preview is paused until campaign fields and scoring rules are valid JSON.
         </div>
       ) : null}
-    </section>
+      </section>
+    </>
   );
 }
