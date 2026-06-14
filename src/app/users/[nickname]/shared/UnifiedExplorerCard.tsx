@@ -39,13 +39,13 @@ export default function UnifiedExplorerCard({
   const { fontFamily } = useGlyphFontPreference();
   const rootCursorClass = activateOn === "card" ? "cursor-pointer" : "cursor-default";
   const glyphCursorClass = activateOn === "glyph-box" ? "cursor-pointer" : "";
-  const isInteractiveDescendant = (target: EventTarget | null): boolean => {
+  const getInteractiveAncestor = (target: EventTarget | null): HTMLElement | null => {
     if (!(target instanceof HTMLElement)) {
-      return false;
+      return null;
     }
 
-    return Boolean(
-      target.closest("button, input, select, textarea, a, [role='button'], [role='checkbox'], [role='switch']"),
+    return target.closest(
+      "button, input, select, textarea, a, [role='button'], [role='checkbox'], [role='switch']",
     );
   };
 
@@ -54,7 +54,8 @@ export default function UnifiedExplorerCard({
       role="button"
       tabIndex={0}
       onClick={(event) => {
-        if (event.target !== event.currentTarget && isInteractiveDescendant(event.target)) {
+        const interactiveAncestor = getInteractiveAncestor(event.target);
+        if (interactiveAncestor && interactiveAncestor !== event.currentTarget) {
           return;
         }
 
@@ -67,7 +68,8 @@ export default function UnifiedExplorerCard({
         onClick({ shiftKey: event.shiftKey });
       }}
       onKeyDown={(event) => {
-        if (event.target !== event.currentTarget && isInteractiveDescendant(event.target)) {
+        const interactiveAncestor = getInteractiveAncestor(event.target);
+        if (interactiveAncestor && interactiveAncestor !== event.currentTarget) {
           return;
         }
 
