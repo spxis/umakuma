@@ -50,6 +50,7 @@ export default function ExplorerTabs({
   initialStudyFilters,
 }: Props) {
   const previousPageKeyRef = useRef<string | null>(null);
+  const queueTagFilterHydratedRef = useRef(false);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const customLibraryNameStorageKey = `wr:study-custom-library-name:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
@@ -130,6 +131,7 @@ export default function ExplorerTabs({
       const viewer = params.get("viewer");
       setInitialViewerMode(viewer === "detail" || viewer === "flash" ? viewer : null);
       setQueueTagFilter(resolveStudyTagFilter(params, window.localStorage.getItem(queueTagFilterStorageKey)));
+      queueTagFilterHydratedRef.current = true;
     }, 0);
 
     return () => {
@@ -194,7 +196,7 @@ export default function ExplorerTabs({
   }, [activeCustomLibraryName, customLibraryNameStorageKey, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated || typeof window === "undefined") {
+    if (!isHydrated || typeof window === "undefined" || !queueTagFilterHydratedRef.current) {
       return;
     }
     const params = new URLSearchParams(window.location.search);
