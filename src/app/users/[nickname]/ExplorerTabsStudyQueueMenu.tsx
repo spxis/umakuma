@@ -147,7 +147,7 @@ export default function ExplorerTabsStudyQueueMenu({
           <button
             type="button"
             onClick={() => onSetIncludeTrouble(!includeTrouble)}
-            className={`mt-2 inline-flex h-9 w-full items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest ${
+            className={`mt-2 inline-flex h-9 w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest ${
               includeTrouble
                 ? "border-amber-500 bg-amber-500 text-white"
                 : "border-line bg-surface text-foreground hover:bg-surface-muted"
