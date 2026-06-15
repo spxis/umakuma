@@ -6,6 +6,8 @@ import { formatReviewCountLabel, queueModeSegmentClass } from "./explorerTabsVie
 import type { StudyTagFilter } from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";
 
+const HOVER_CLOSE_DELAY_MS = 220;
+
 type Props = {
   queueMode: QueueType;
   queueTagFilter: StudyTagFilter;
@@ -26,10 +28,40 @@ export default function ExplorerTabsStudyQueueMenu({
   onSetIncludeTrouble,
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const hoverCloseTimerRef = useRef<number | null>(null);
   const [isHoverOpen, setIsHoverOpen] = useState(false);
   const [isPinnedOpen, setIsPinnedOpen] = useState(false);
   const isPinnedOpenForReview = queueMode === QUEUE_TYPES.review && isPinnedOpen;
   const isMenuOpen = queueMode === QUEUE_TYPES.review && (isHoverOpen || isPinnedOpenForReview);
+
+  const cancelHoverCloseTimer = () => {
+    if (hoverCloseTimerRef.current === null) {
+      return;
+    }
+    window.clearTimeout(hoverCloseTimerRef.current);
+    hoverCloseTimerRef.current = null;
+  };
+
+  const openHoverMenu = () => {
+    cancelHoverCloseTimer();
+    if (queueMode === QUEUE_TYPES.review) {
+      setIsHoverOpen(true);
+    }
+  };
+
+  const closeHoverMenuSoon = () => {
+    cancelHoverCloseTimer();
+    hoverCloseTimerRef.current = window.setTimeout(() => {
+      setIsHoverOpen(false);
+      hoverCloseTimerRef.current = null;
+    }, HOVER_CLOSE_DELAY_MS);
+  };
+
+  useEffect(() => {
+    return () => {
+      cancelHoverCloseTimer();
+    };
+  }, []);
 
   useEffect(() => {
     if (!isPinnedOpenForReview) {
@@ -62,11 +94,13 @@ export default function ExplorerTabsStudyQueueMenu({
 
   const handleReviewClick = () => {
     onSetQueueMode(QUEUE_TYPES.review);
+    setIsHoverOpen(true);
     setIsPinnedOpen((prev) => (queueMode === QUEUE_TYPES.review ? !prev : true));
   };
 
   const handleLessonsClick = () => {
     onSetQueueMode(QUEUE_TYPES.lesson);
+    setIsHoverOpen(false);
     setIsPinnedOpen(false);
   };
 
@@ -74,8 +108,8 @@ export default function ExplorerTabsStudyQueueMenu({
     <div
       ref={containerRef}
       className="relative inline-flex min-w-0 flex-[2_1_0%] md:flex-none"
-      onMouseEnter={() => setIsHoverOpen(true)}
-      onMouseLeave={() => setIsHoverOpen(false)}
+      onMouseEnter={openHoverMenu}
+      onMouseLeave={closeHoverMenuSoon}
     >
       <div className="inline-flex min-w-0 flex-1 items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Study queue mode">
         <button
@@ -100,7 +134,11 @@ export default function ExplorerTabsStudyQueueMenu({
       </div>
 
       {isMenuOpen ? (
-        <div className="absolute left-0 top-full z-[80] mt-2 w-[min(100vw-2rem,26rem)] rounded-2xl border border-line bg-surface p-2 shadow-[0_14px_30px_rgba(8,16,36,0.2)]">
+        <div
+          className="absolute left-0 top-full z-[80] mt-2 w-[min(100vw-2rem,26rem)] rounded-2xl border border-line bg-surface p-2 shadow-[0_14px_30px_rgba(8,16,36,0.2)]"
+          onMouseEnter={openHoverMenu}
+          onMouseLeave={closeHoverMenuSoon}
+        >
           <div className="inline-flex w-full items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Study tag filter">
             <button type="button" role="tab" aria-selected={queueTagFilter === "all"} onClick={() => onSetQueueTagFilter("all")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "all" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>All</button>
             <button type="button" role="tab" aria-selected={queueTagFilter === "trouble"} onClick={() => onSetQueueTagFilter("trouble")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "trouble" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Trouble</button>
