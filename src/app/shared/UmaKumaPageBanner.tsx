@@ -50,6 +50,7 @@ const BANNER_CONFIG_BY_VARIANT: Record<UmaKumaPageBannerVariant, BannerConfig> =
 
 export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBannerProps) {
   const config = BANNER_CONFIG_BY_VARIANT[variant];
+  const shouldPrioritize = variant === "leaderboard" || variant === "user";
 
   return (
     <section
@@ -63,7 +64,7 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
               <Image
                 src={config.leftDesktopImage}
                 alt=""
-                priority={variant === "leaderboard"}
+                priority={shouldPrioritize}
                 className={config.sideImageClassName}
               />
             ) : null}
@@ -74,7 +75,7 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
                   src={config.centerImage}
                   alt=""
                   fill
-                  priority={variant === "leaderboard"}
+                  priority={shouldPrioritize}
                   className="h-full w-full"
                   style={{ objectFit: "contain", objectPosition: "center" }}
                   sizes="(min-width: 1024px) 420px, 256px"
@@ -86,7 +87,7 @@ export default function UmaKumaPageBanner({ variant, className }: UmaKumaPageBan
               <Image
                 src={config.rightDesktopImage}
                 alt=""
-                priority={variant === "leaderboard"}
+                priority={shouldPrioritize}
                 className={config.sideImageClassName}
               />
             ) : null}

@@ -50,7 +50,7 @@ export default function ExplorerTabs({
   initialStudyFilters,
 }: Props) {
   const previousPageKeyRef = useRef<string | null>(null);
-  const queueTagFilterHydratedRef = useRef(false);
+  const clientStateHydratedRef = useRef(false);
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const customLibraryNameStorageKey = `wr:study-custom-library-name:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
@@ -68,26 +68,14 @@ export default function ExplorerTabs({
       : "study";
   const effectiveActiveTab = forcedTab;
   const [showEnglish, setShowEnglish] = useState(false);
-  const [activeCustomLibraryName, setActiveCustomLibraryName] = useState<string | null>(() => {
-    if (typeof window === "undefined") {
-      return null;
-    }
-
-    const stored = window.localStorage.getItem(customLibraryNameStorageKey)?.trim();
-    return stored ? stored : null;
-  });
+  const [activeCustomLibraryName, setActiveCustomLibraryName] = useState<string | null>(null);
   const [studySourceModalRequestId, setStudySourceModalRequestId] = useState(0);
   const [queueMode, setQueueMode] = useState<QueueType>(
     initialQueueMode === QUEUE_TYPES.review || initialQueueMode === QUEUE_TYPES.lesson
       ? initialQueueMode
       : QUEUE_TYPES.review,
   );
-  const [includeTrouble, setIncludeTrouble] = useState<boolean>(() => {
-    if (typeof window === "undefined") {
-      return true;
-    }
-    return window.localStorage.getItem(troubleMixStorageKey) !== "0";
-  });
+  const [includeTrouble, setIncludeTrouble] = useState<boolean>(true);
   const [queueTagFilter, setQueueTagFilter] = useState<StudyTagFilter>("all");
   const [initialViewerMode, setInitialViewerMode] = useState<"detail" | "flash" | null>(null);
   const {
@@ -126,12 +114,15 @@ export default function ExplorerTabs({
       }
 
       setShowEnglish(window.localStorage.getItem(showEnglishStorageKey) === "1");
+      setIncludeTrouble(window.localStorage.getItem(troubleMixStorageKey) !== "0");
+      const storedLibraryName = window.localStorage.getItem(customLibraryNameStorageKey)?.trim();
+      setActiveCustomLibraryName(storedLibraryName ? storedLibraryName : null);
       applySourceFromSearchParams(params);
 
       const viewer = params.get("viewer");
       setInitialViewerMode(viewer === "detail" || viewer === "flash" ? viewer : null);
       setQueueTagFilter(resolveStudyTagFilter(params, window.localStorage.getItem(queueTagFilterStorageKey)));
-      queueTagFilterHydratedRef.current = true;
+      clientStateHydratedRef.current = true;
     }, 0);
 
     return () => {
@@ -142,12 +133,14 @@ export default function ExplorerTabs({
     applySourceFromSearchParams,
     initialQueueMode,
     initialStudyMode,
+    customLibraryNameStorageKey,
     queueTagFilterStorageKey,
     showEnglishStorageKey,
+    troubleMixStorageKey,
   ]);
 
   useEffect(() => {
-    if (!isHydrated || typeof window === "undefined") {
+    if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
       return;
     }
     try {
@@ -158,7 +151,7 @@ export default function ExplorerTabs({
   }, [isHydrated, studyMode]);
 
   useEffect(() => {
-    if (!isHydrated || typeof window === "undefined") {
+    if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
       return;
     }
     try {
@@ -169,7 +162,7 @@ export default function ExplorerTabs({
   }, [accountId, isHydrated, queueMode]);
 
   useEffect(() => {
-    if (!isHydrated || typeof window === "undefined") {
+    if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
       return;
     }
     try {
@@ -180,7 +173,7 @@ export default function ExplorerTabs({
   }, [includeTrouble, isHydrated, troubleMixStorageKey]);
 
   useEffect(() => {
-    if (!isHydrated || typeof window === "undefined") {
+    if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
       return;
     }
     try {
@@ -196,7 +189,7 @@ export default function ExplorerTabs({
   }, [activeCustomLibraryName, customLibraryNameStorageKey, isHydrated]);
 
   useEffect(() => {
-    if (!isHydrated || typeof window === "undefined" || !queueTagFilterHydratedRef.current) {
+    if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
       return;
     }
     const params = new URLSearchParams(window.location.search);
@@ -252,7 +245,7 @@ export default function ExplorerTabs({
   }, [effectiveActiveTab, isHydrated, queueMode]);
 
   useEffect(() => {
-    if (!isHydrated || typeof window === "undefined") {
+    if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
       return;
     }
     try {
