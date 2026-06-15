@@ -139,7 +139,7 @@ export default function ExplorerTabsStudyQueueMenu({
           onMouseEnter={openHoverMenu}
           onMouseLeave={closeHoverMenuSoon}
         >
-          <span aria-hidden="true" className="pointer-events-none absolute -top-[9px] left-[calc(25%-0.625rem)] h-0 w-0 border-x-[10px] border-b-[10px] border-x-transparent border-b-line">
+          <span aria-hidden="true" className="pointer-events-none absolute -top-[10px] left-[calc(25%-0.625rem)] h-0 w-0 border-x-[10px] border-b-[10px] border-x-transparent border-b-line">
             <span className="absolute left-1/2 top-[1px] h-0 w-0 -translate-x-1/2 border-x-[9px] border-b-[9px] border-x-transparent border-b-surface" />
           </span>
           <div className="inline-flex w-full items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Study tag filter">
