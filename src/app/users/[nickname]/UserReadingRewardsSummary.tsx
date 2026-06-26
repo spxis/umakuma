@@ -198,6 +198,7 @@ export default function UserReadingRewardsSummary({
                         <div className="flex min-w-0 items-center gap-1.5" title={row.currentBookTitle}>
                           {showBook ? (
                             <UserReadingBookCoverImage
+                              accountId={row.accountId}
                               isbn={row.currentBookIsbn ?? undefined}
                               title={row.currentBookTitle}
                               thumbnailUrl={row.currentBookThumbnailUrl}
@@ -274,6 +275,7 @@ export default function UserReadingRewardsSummary({
                             <div className="flex min-w-0 items-center gap-1.5" title={row.currentBookTitle}>
                               {showBook ? (
                                 <UserReadingBookCoverImage
+                                  accountId={row.accountId}
                                   isbn={row.currentBookIsbn ?? undefined}
                                   title={row.currentBookTitle}
                                   thumbnailUrl={row.currentBookThumbnailUrl}

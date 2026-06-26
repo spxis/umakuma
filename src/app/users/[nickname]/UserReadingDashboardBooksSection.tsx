@@ -214,6 +214,7 @@ export default function UserReadingDashboardBooksSection({
                       <span className="flex min-w-0 items-center gap-2">
                         {selectedCatalogBook ? (
                           <UserReadingBookCoverImage
+                            accountId={selectedMemberId}
                             isbn={selectedCatalogBook.isbn}
                             title={selectedCatalogBook.title}
                             thumbnailUrl={selectedCatalogBook.thumbnailUrl}
@@ -252,6 +253,7 @@ export default function UserReadingDashboardBooksSection({
                               aria-selected={active}
                             >
                               <UserReadingBookCoverImage
+                                accountId={selectedMemberId}
                                 isbn={book.isbn}
                                 title={book.title}
                                 thumbnailUrl={book.thumbnailUrl}

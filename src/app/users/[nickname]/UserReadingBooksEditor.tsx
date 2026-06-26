@@ -159,6 +159,7 @@ export default function UserReadingBooksEditor({
                     >
                       <div className="aspect-3/4 overflow-hidden rounded border border-line bg-surface-muted">
                         <UserReadingBookCoverImage
+                          accountId={book.accountId}
                           isbn={book.isbn}
                           title={book.title}
                           thumbnailUrl={book.thumbnailUrl}
@@ -288,6 +289,7 @@ export default function UserReadingBooksEditor({
             <button type="button" className="w-full" onClick={() => setPreviewBook(null)}>
               <div className="overflow-hidden rounded-xl border border-white/30 bg-black/20">
                 <UserReadingBookCoverImage
+                  accountId={previewBook.accountId}
                   isbn={previewBook.isbn}
                   title={previewBook.title}
                   thumbnailUrl={previewBook.thumbnailUrl}

@@ -10,6 +10,7 @@ export type StudyExplorerStorageKeys = {
   recentOnly: string;
   showLocked: string;
   waitSort: string;
+  waitRandomOrder: string;
 };
 
 export function buildStudyExplorerStorageKeys(
@@ -28,6 +29,7 @@ export function buildStudyExplorerStorageKeys(
     recentOnly: `wr:study-recent-only:${accountId}:${queueMode}${suffix}`,
     showLocked: `wr:study-show-locked:${accountId}:${queueMode}${suffix}`,
     waitSort: `wr:study-wait-sort:${accountId}:${queueMode}${suffix}`,
+    waitRandomOrder: `wr:study-wait-random-order:${accountId}:${queueMode}${suffix}`,
   };
 }
 

@@ -1,12 +1,15 @@
 // Shared HTTP fetcher for the News reader. Goal: look like a normal Chrome
 // reader, never hammer a host, and surface clear typed errors.
 
+import { isSafeOutboundUrl, parseHttpUrl } from "@/lib/safeOutboundUrl";
+
 const CHROME_UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36";
 
 const FETCH_TIMEOUT_MS = 15_000;
 const FETCH_TIMEOUT_FALLBACK_MS = 30_000;
 const MAX_BYTES = 4 * 1024 * 1024;
+const MAX_REDIRECT_HOPS = 5;
 
 export type NewsHttpError =
   | { kind: "fetch_failed"; status?: number }
@@ -65,11 +68,10 @@ async function fetchNewsHtmlOnce(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch(url, {
-      headers,
-      redirect: "follow",
-      signal: controller.signal,
-    });
+    const response = await fetchWithValidatedRedirects(url, headers, controller.signal);
+    if (!response) {
+      return { ok: false, error: { kind: "fetch_failed" } };
+    }
 
     if (!response.ok) {
       return { ok: false, error: { kind: "fetch_failed", status: response.status } };
@@ -96,6 +98,40 @@ async function fetchNewsHtmlOnce(
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function fetchWithValidatedRedirects(url: string, headers: HeadersInit, signal: AbortSignal): Promise<Response | null> {
+  let current = url;
+
+  for (let hop = 0; hop <= MAX_REDIRECT_HOPS; hop += 1) {
+    const parsed = parseHttpUrl(current);
+    if (!parsed) {
+      return null;
+    }
+
+    if (!(await isSafeOutboundUrl(parsed))) {
+      return null;
+    }
+
+    const response = await fetch(parsed.toString(), {
+      headers,
+      redirect: "manual",
+      signal,
+    });
+
+    if (response.status < 300 || response.status >= 400) {
+      return response;
+    }
+
+    const location = response.headers.get("location");
+    if (!location) {
+      return response;
+    }
+
+    current = new URL(location, parsed).toString();
+  }
+
+  return null;
 }
 
 function buildHeaders(url: string, profile: HeaderProfile, includeReferer: boolean): HeadersInit {

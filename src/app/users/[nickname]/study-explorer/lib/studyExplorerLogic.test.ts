@@ -17,6 +17,7 @@ import {
   groupStudyReviewLevelChips,
   isRecentStudyItem,
   readStoredQueueMeta,
+  sortStudyItemsByWait,
   STUDY_RECENT_WINDOW_MS,
 } from "./studyExplorerUtils";
 import { buildStudyCacheTelemetry } from "./studyExplorerView";
@@ -207,6 +208,7 @@ describe("study explorer state helpers", () => {
     expect(keys.selectedSubject).toBe("wr:study-selected-subject:acct-1:review");
     expect(keys.typeFilter).toBe("wr:study-type-filter:acct-1:review");
     expect(keys.waitSort).toBe("wr:study-wait-sort:acct-1:review");
+    expect(keys.waitRandomOrder).toBe("wr:study-wait-random-order:acct-1:review");
   });
 
   it("derives initial queue state from cached payload", () => {
@@ -426,5 +428,18 @@ describe("study explorer state helpers", () => {
     });
 
     nowSpy.mockRestore();
+  });
+});
+
+describe("study wait sorting", () => {
+  it("uses persisted random assignment order for random wait sort", () => {
+    const items = [
+      makeItem({ assignmentId: 10, subjectId: 110 }),
+      makeItem({ assignmentId: 11, subjectId: 111 }),
+      makeItem({ assignmentId: 12, subjectId: 112 }),
+    ];
+
+    const sorted = sortStudyItemsByWait(items, "random_wait", [12, 10, 11]);
+    expect(sorted.map((item) => item.assignmentId)).toEqual([12, 10, 11]);
   });
 });

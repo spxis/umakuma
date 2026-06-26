@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 
 type UserReadingBookCoverImageProps = {
+  accountId?: string;
   isbn?: string;
   title: string;
   thumbnailUrl: string | null;
@@ -22,6 +23,7 @@ function normalizeCoverUrl(value: string | null | undefined): string | null {
 }
 
 export default function UserReadingBookCoverImage({
+  accountId,
   isbn,
   title,
   thumbnailUrl,
@@ -32,8 +34,23 @@ export default function UserReadingBookCoverImage({
   size = "large",
 }: UserReadingBookCoverImageProps) {
   const coverProxyUrl = useMemo(
-    () => (isbn ? `/api/reading-books/cover?isbn=${encodeURIComponent(isbn)}&size=${size}&v=6` : null),
-    [isbn, size],
+    () => {
+      if (!isbn) {
+        return null;
+      }
+
+      const params = new URLSearchParams({
+        isbn,
+        size,
+        v: "6",
+      });
+      if (accountId) {
+        params.set("accountId", accountId);
+      }
+
+      return `/api/reading-books/cover?${params.toString()}`;
+    },
+    [accountId, isbn, size],
   );
   const openLibraryUrl = useMemo(
     () => (isbn ? `https://covers.openlibrary.org/b/isbn/${isbn}-${size === "large" ? "L" : "M"}.jpg?default=false` : null),

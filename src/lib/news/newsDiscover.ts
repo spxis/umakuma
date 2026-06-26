@@ -1,4 +1,5 @@
 import { fetchNewsHtml, type NewsHttpError } from "./newsHttp";
+import { isBlockedHostnameLiteral, parseHttpUrl } from "@/lib/safeOutboundUrl";
 
 const MAX_RESULTS = 30;
 const MIN_TITLE_LENGTH = 6;
@@ -214,26 +215,11 @@ function stripHtmlTags(input: string): string {
 }
 
 function parseAllowedUrl(input: string): URL | null {
-  try {
-    const url = new URL(input.trim());
-    if (url.protocol !== "http:" && url.protocol !== "https:") {
-      return null;
-    }
-    return url;
-  } catch {
-    return null;
-  }
+  return parseHttpUrl(input);
 }
 
 function isBlockedHost(hostname: string): boolean {
-  const lowered = hostname.toLowerCase();
-  if (lowered === "localhost" || lowered.endsWith(".local")) {
-    return true;
-  }
-  if (/^\d+\.\d+\.\d+\.\d+$/.test(lowered)) {
-    return true;
-  }
-  return false;
+  return isBlockedHostnameLiteral(hostname);
 }
 
 function resolveUrl(href: string, base: string): URL | null {

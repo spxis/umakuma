@@ -19,7 +19,7 @@ type UserReadingMemberHistoryModalProps = {
   onClose: () => void;
   onMutate: () => Promise<unknown> | unknown;
 };
-type BookLookup = { isbn: string; thumbnailUrl: string | null; title: string } | null;
+type BookLookup = { accountId: string; isbn: string; thumbnailUrl: string | null; title: string } | null;
 
 function normalizeTitleKey(title: string): string {
   return title.trim().toLowerCase();
@@ -52,7 +52,6 @@ function toDraftFromSignoff(signoff: ReadingSignoffRecord): EditDraft {
     signoffDatePst: signoff.signoffDatePst,
   };
 }
-
 export default function UserReadingMemberHistoryModal({
   open,
   member,
@@ -103,6 +102,7 @@ export default function UserReadingMemberHistoryModal({
     const map = new Map<string, BookLookup>();
     for (const book of memberBooks) {
       map.set(normalizeTitleKey(book.title), {
+        accountId: book.accountId,
         isbn: book.isbn,
         thumbnailUrl: book.thumbnailUrl,
         title: book.title,
@@ -420,7 +420,7 @@ function RowDisplay({
       <div className="flex min-w-0 flex-1 items-center gap-2">
         {book?.isbn ? (
           <UserReadingBookCoverImage
-            isbn={book.isbn}
+            accountId={book.accountId} isbn={book.isbn}
             title={book.title}
             thumbnailUrl={book.thumbnailUrl}
             width={28}

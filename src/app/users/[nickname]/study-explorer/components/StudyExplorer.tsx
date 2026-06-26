@@ -22,11 +22,10 @@ import type {
   StudySrsFilter,
   StudySrsStageFilter,
   StudyTypeFilter,
-  StudyWaitSortOrder,
   SubmitFeedback,
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
-import { fetchStudyQueue, fetchUpcomingReviews, readStoredQueue, readStoredQueueMeta, sortStudyItemsByWait } from "../lib/studyExplorerUtils";
+import { fetchStudyQueue, fetchUpcomingReviews, readStoredQueue, readStoredQueueMeta } from "../lib/studyExplorerUtils";
 import { normalizeSrsStageFilter } from "../lib/studyExplorerSrs";
 import { resolveEffectiveViewedLevel } from "../lib/studyExplorerLevelBounds";
 import { buildStudyExplorerStorageKeys, deriveInitialQueueState, readStoredStudyCounts } from "../lib/studyExplorerState";
@@ -36,7 +35,7 @@ import {
   buildStudyQueueRequestUrl,
   buildStudyQueueStorageScopeKey,
 } from "../lib/studyExplorerApi";
-import { buildStudyCacheTelemetry, getStudyGridColumns, isStudyWaitSortOrder } from "../lib/studyExplorerView";
+import { buildStudyCacheTelemetry, getStudyGridColumns } from "../lib/studyExplorerView";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { useStudyReviewSubmission } from "../lib/useStudyReviewSubmission";
 import { useStudyExplorerEffects } from "../lib/useStudyExplorerEffects";
@@ -46,6 +45,7 @@ import { useStudyQueueInfiniteLoad } from "../lib/useStudyQueueInfiniteLoad";
 import { useStudyCloseOnExplorerPageChange, useStudyModalSessionSync, useStudyToggleEnglishHotkey, useStudyViewerModeSync } from "../lib/useStudyExplorerUiEffects";
 import { useStudyTagSync } from "../lib/useStudyTagSync";
 import { useStudyCardTagToggle } from "../lib/useStudyCardTagToggle";
+import { useStudyWaitSort } from "../lib/useStudyWaitSort";
 export default function StudyExplorer({
   accountId,
   studySource,
@@ -79,12 +79,8 @@ export default function StudyExplorer({
   const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
   const [viewedLevel, setViewedLevel] = useState<number | null>(initialFilters?.viewedLevel ?? null);
   const [hasHydratedViewedLevel, setHasHydratedViewedLevel] = useState(false);
-  const [typeFilter, setTypeFilter] = useState<StudyTypeFilter>(
-    initialFilters?.typeFilter ?? STUDY_TYPE_FILTERS.all,
-  );
-  const [srsFilter, setSrsFilter] = useState<StudySrsFilter>(
-    initialFilters?.srsFilter ?? STUDY_SRS_FILTERS.all,
-  );
+  const [typeFilter, setTypeFilter] = useState<StudyTypeFilter>(initialFilters?.typeFilter ?? STUDY_TYPE_FILTERS.all);
+  const [srsFilter, setSrsFilter] = useState<StudySrsFilter>(initialFilters?.srsFilter ?? STUDY_SRS_FILTERS.all);
   const [srsStageFilter, setSrsStageFilter] = useState<StudySrsStageFilter | null>(initialFilters?.srsStageFilter ?? null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [submittingByAssignmentId, setSubmittingByAssignmentId] = useState<Set<number>>(new Set());
@@ -101,7 +97,6 @@ export default function StudyExplorer({
   const [showUpcomingReviews, setShowUpcomingReviews] = usePersistedBoolean(`wr:study:show-upcoming-reviews:${accountId}:${queueStorageScopeKey}`, { defaultValue: false });
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
   const [gridColumns, setGridColumns] = useState<number>(4);
-  const [waitSortOrder, setWaitSortOrder] = useState<StudyWaitSortOrder>("oldest_wait");
   const [searchQuery, setSearchQuery] = useState("");
   const [forcedViewerMode, setForcedViewerMode] = useState<StudyViewerMode | null>(initialViewerMode);
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
@@ -113,10 +108,7 @@ export default function StudyExplorer({
   const effectiveShowLocked = queueMode === STUDY_QUEUE_TYPES.lesson ? true : showLocked;
   const effectiveSrsStageFilter: StudySrsStageFilter | null =
     queueMode === STUDY_QUEUE_TYPES.lesson ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
-  const initialPageSize = useMemo(
-    () => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 24 : gridColumns * 12),
-    [gridColumns, queueMode],
-  );
+  const initialPageSize = useMemo(() => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 24 : gridColumns * 12), [gridColumns, queueMode]);
   const queueRequestUrl = buildStudyQueueRequestUrl({ studyApiBasePath, queueMode, initialPageSize, studySource, customLibraryId, includeTrouble, queueTagFilter });
   useLayoutEffect(() => {
     const cached = readStoredQueue(accountId, queueMode, queueStorageScopeKey);
@@ -129,20 +121,6 @@ export default function StudyExplorer({
       setLoadMoreError(null);
     });
   }, [accountId, queueMode, queueRequestUrl, queueStorageScopeKey, storageKeys.counts]);
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    const fromUrl = new URLSearchParams(window.location.search).get("waitSort");
-    if (isStudyWaitSortOrder(fromUrl)) {
-      queueMicrotask(() => setWaitSortOrder(fromUrl));
-      return;
-    }
-    const stored = window.localStorage.getItem(storageKeys.waitSort);
-    if (isStudyWaitSortOrder(stored)) {
-      queueMicrotask(() => setWaitSortOrder(stored));
-    }
-  }, [storageKeys.waitSort]);
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -292,10 +270,11 @@ export default function StudyExplorer({
     submittingByAssignmentId,
     revealedAssignmentIds,
   });
-  const sortedFilteredItems = useMemo(
-    () => sortStudyItemsByWait(filteredItems, waitSortOrder),
-    [filteredItems, waitSortOrder],
-  );
+  const { waitSortOrder, sortedFilteredItems, setWaitSortOrder } = useStudyWaitSort({
+    filteredItems,
+    waitSortStorageKey: storageKeys.waitSort,
+    waitRandomOrderStorageKey: storageKeys.waitRandomOrder,
+  });
   const upcomingRequestUrl = queueMode === STUDY_QUEUE_TYPES.review && showUpcomingReviews && sortedFilteredItems.length === 0 ? buildStudyUpcomingRequestUrl({ studyApiBasePath, studySource, customLibraryId, limit: 8 }) : null;
   const { data: upcomingData, error: upcomingError, isLoading: isLoadingUpcoming, isValidating: isValidatingUpcoming } = useSWR(upcomingRequestUrl, fetchUpcomingReviews, { keepPreviousData: false, revalidateOnFocus: false });
   useStudyModalSessionSync({
@@ -363,13 +342,6 @@ export default function StudyExplorer({
     },
     [setSrsFilter, setSrsStageFilter],
   );
-  useEffect(() => {
-    window.localStorage.setItem(storageKeys.waitSort, waitSortOrder);
-    const params = new URLSearchParams(window.location.search);
-    params.set("waitSort", waitSortOrder);
-    const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
-    window.history.replaceState(null, "", next);
-  }, [storageKeys.waitSort, waitSortOrder]);
   useEffect(() => {
     try {
       if (selectedId === null) {

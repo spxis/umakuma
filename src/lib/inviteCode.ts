@@ -4,7 +4,12 @@ const INVITE_CODE_LENGTH = 6;
 const INVITE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 function getInviteCodeSecret(): string {
-  return process.env.INVITE_CODE_SECRET ?? process.env.AUTH_SECRET ?? "umakuma-invite-code-fallback";
+  const secret = process.env.INVITE_CODE_SECRET ?? process.env.AUTH_SECRET;
+  if (!secret) {
+    throw new Error("INVITE_CODE_SECRET or AUTH_SECRET is required.");
+  }
+
+  return secret;
 }
 
 export function normalizeInviteCode(input: string): string {

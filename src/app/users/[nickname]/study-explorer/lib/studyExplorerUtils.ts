@@ -402,7 +402,33 @@ export function filterStudyItems(
   });
 }
 
-export function sortStudyItemsByWait(items: StudyQueueItem[], sortOrder: StudyWaitSortOrder): StudyQueueItem[] {
+export function sortStudyItemsByWait(
+  items: StudyQueueItem[],
+  sortOrder: StudyWaitSortOrder,
+  randomOrderByAssignmentId: number[] | null = null,
+): StudyQueueItem[] {
+  if (sortOrder === "random_wait") {
+    const randomOrderIndex = new Map<number, number>();
+    (randomOrderByAssignmentId ?? []).forEach((assignmentId, index) => {
+      randomOrderIndex.set(assignmentId, index);
+    });
+
+    return [...items].sort((a, b) => {
+      const aIndex = randomOrderIndex.get(a.assignmentId);
+      const bIndex = randomOrderIndex.get(b.assignmentId);
+      if (aIndex !== undefined && bIndex !== undefined) {
+        return aIndex - bIndex;
+      }
+      if (aIndex !== undefined) {
+        return -1;
+      }
+      if (bIndex !== undefined) {
+        return 1;
+      }
+      return a.subjectId - b.subjectId;
+    });
+  }
+
   const direction = sortOrder === "oldest_wait" ? 1 : -1;
 
   return [...items].sort((a, b) => {
@@ -415,4 +441,14 @@ export function sortStudyItemsByWait(items: StudyQueueItem[], sortOrder: StudyWa
 
     return a.subjectId - b.subjectId;
   });
+}
+
+export function shuffleStudyAssignmentIds(items: StudyQueueItem[]): number[] {
+  const shuffled = items.map((item) => item.assignmentId);
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+
+  return shuffled;
 }

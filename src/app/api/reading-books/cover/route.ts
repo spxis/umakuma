@@ -4,10 +4,12 @@ import { z } from "zod";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
 import { normalizeIsbn } from "@/lib/readingSignoff";
+import { isSafeOutboundUrl, parseHttpUrl } from "@/lib/safeOutboundUrl";
 
 const querySchema = z.object({
   isbn: z.string().min(1).max(32),
   size: z.enum(["small", "large"]).optional(),
+  accountId: z.string().cuid().optional(),
 });
 
 type CoverSize = "small" | "large";
@@ -80,7 +82,7 @@ function expandLookupIsbns(isbn: string): string[] {
 
 type ReadingChallengeBookCoverDelegate = {
   findFirst: (args: {
-    where: { isbn: { in: string[] }; manualCoverUrl?: { not: null } };
+    where: { isbn: { in: string[] }; accountId?: string; manualCoverUrl?: { not: null } };
     select: { manualCoverUrl?: true; thumbnailUrl?: true };
   }) => Promise<{ manualCoverUrl?: string | null; thumbnailUrl?: string | null } | null>;
 };
@@ -89,7 +91,11 @@ function readingBookDelegate(): ReadingChallengeBookCoverDelegate | null {
   return (prisma as unknown as { readingChallengeBook?: ReadingChallengeBookCoverDelegate }).readingChallengeBook ?? null;
 }
 
-async function fetchManualCoverUrl(lookupIsbns: string[]): Promise<string | null> {
+async function fetchManualCoverUrl(lookupIsbns: string[], accountId: string | null): Promise<string | null> {
+  if (!accountId) {
+    return null;
+  }
+
   const delegate = readingBookDelegate();
   if (!delegate) {
     return null;
@@ -97,7 +103,7 @@ async function fetchManualCoverUrl(lookupIsbns: string[]): Promise<string | null
 
   try {
     const row = await delegate.findFirst({
-      where: { isbn: { in: lookupIsbns }, manualCoverUrl: { not: null } },
+      where: { isbn: { in: lookupIsbns }, accountId, manualCoverUrl: { not: null } },
       select: { manualCoverUrl: true },
     });
     return row?.manualCoverUrl?.trim() || null;
@@ -149,7 +155,16 @@ async function fetchImageFromUrl(
 ): Promise<NextResponse | null> {
   const { minBytes = MIN_VALID_COVER_BYTES, rejectPng = false } = options;
   try {
-    const response = await fetch(url, { cache: "no-store" });
+    const parsedUrl = parseHttpUrl(url);
+    if (!parsedUrl) {
+      return null;
+    }
+
+    if (!(await isSafeOutboundUrl(parsedUrl))) {
+      return null;
+    }
+
+    const response = await fetch(parsedUrl.toString(), { cache: "no-store" });
     if (!response.ok) {
       return null;
     }
@@ -262,7 +277,7 @@ export async function GET(request: Request) {
         const size: CoverSize = parsed.data.size ?? "small";
         const lookupIsbns = expandLookupIsbns(isbn);
 
-        const manualOverrideUrl = await fetchManualCoverUrl(lookupIsbns);
+        const manualOverrideUrl = await fetchManualCoverUrl(lookupIsbns, parsed.data.accountId ?? null);
         if (manualOverrideUrl) {
           const manualImage = await fetchImageFromUrl(manualOverrideUrl);
           if (manualImage) {

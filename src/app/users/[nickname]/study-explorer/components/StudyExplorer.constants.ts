@@ -48,6 +48,8 @@ export const STUDY_PANEL_TEXT = {
   resetFilters: "Reset filters",
   oldestWaitShort: "Old",
   newestWaitShort: "New",
+  randomizeWaitShort: "Rnd",
+  randomizeWait: "Randomize",
   englishShort: "Eng",
   lockedShort: "Lock",
   bulkShort: "Bulk",

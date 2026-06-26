@@ -16,6 +16,7 @@ type UserReadingBookTitleSelectProps = {
 
 type BookTitleOption = {
   key: string;
+  accountId?: string;
   title: string;
   isbn?: string;
   thumbnailUrl: string | null;
@@ -34,6 +35,7 @@ export default function UserReadingBookTitleSelect({
   const titleOptions = useMemo(() => {
     const mapped: BookTitleOption[] = options.map((option) => ({
       key: option.id,
+      accountId: option.accountId,
       title: option.title,
       isbn: option.isbn,
       thumbnailUrl: option.thumbnailUrl,
@@ -90,6 +92,7 @@ export default function UserReadingBookTitleSelect({
         <span className="flex min-w-0 items-center gap-2">
           {selectedOption ? (
             <UserReadingBookCoverImage
+              accountId={selectedOption.accountId}
               isbn={selectedOption.isbn}
               title={selectedOption.title}
               thumbnailUrl={selectedOption.thumbnailUrl}
@@ -129,6 +132,7 @@ export default function UserReadingBookTitleSelect({
                 }}
               >
                 <UserReadingBookCoverImage
+                  accountId={option.accountId}
                   isbn={option.isbn}
                   title={option.title}
                   thumbnailUrl={option.thumbnailUrl}
