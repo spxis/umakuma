@@ -6,6 +6,7 @@ import StudyFilterSection from "./StudyFilterSection";
 import StudyLevelFilters from "./StudyLevelFilters";
 import StudyStatusFilters from "./StudyStatusFilters";
 import StudyUpcomingReviewsSection from "./StudyUpcomingReviewsSection";
+import StudyLoadingShimmerOverlay from "./StudyLoadingShimmerOverlay";
 import {
   isAllStudyTypeFilter,
   isLessonLockedQueueItem,
@@ -113,6 +114,7 @@ export default function StudyExplorerPanel({
   const hideControlsDuringInitialLoad = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
   const { toggle: toggleGlyphFont } = useGlyphFontPreference();
   const showLoadingOverlay = hideControlsDuringInitialLoad;
+  const loadingSkeletonCardCount = Math.max(4, gridColumns * 2);
   const loadingFillCount = shouldShowLoadMoreUi && isLoadingMore && gridColumns > 1
     ? (gridColumns - (filteredItems.length % gridColumns)) % gridColumns
     : 0;
@@ -479,17 +481,11 @@ export default function StudyExplorerPanel({
               ) : null}
             </div>
           )}
-          <div
-            aria-hidden={!showLoadingOverlay}
-            className={`absolute inset-0 z-10 rounded-2xl border border-line bg-surface/70 backdrop-blur-[1px] transition-opacity duration-200 ${showLoadingOverlay ? "opacity-100" : "pointer-events-none opacity-0"}`}
-          >
-            <div className="flex h-full items-center justify-center px-4 text-center text-base font-bold text-foreground/85">
-                <span className="inline-flex items-center gap-2">
-                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-accent/30 border-t-accent" />
-                    <span>{showFilterPagingState ? STUDY_PANEL_TEXT.loadingSelectedLevel : STUDY_PANEL_TEXT.loadingQueue}</span>
-                </span>
-            </div>
-          </div>
+          <StudyLoadingShimmerOverlay
+            show={showLoadingOverlay}
+            loadingSkeletonCardCount={loadingSkeletonCardCount}
+            showFilterPagingState={showFilterPagingState}
+          />
         </div>
         <p className="mt-2 text-right text-[11px] font-medium text-foreground/55" title={cacheFooterTitle}>{cacheFooterText}</p>
       </div>

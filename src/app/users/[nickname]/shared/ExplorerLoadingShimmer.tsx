@@ -3,6 +3,7 @@ type Props = {
   cardCount?: number;
   className?: string;
   showLabel?: boolean;
+  showFilterRow?: boolean;
 };
 
 export default function ExplorerLoadingShimmer({
@@ -10,14 +11,17 @@ export default function ExplorerLoadingShimmer({
   cardCount = 8,
   className,
   showLabel = true,
+  showFilterRow = true,
 }: Props) {
   return (
     <div className={`rounded-2xl border border-line bg-surface-muted p-4 ${className ?? ""}`}>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
-        <span className="shimmer-surface h-7 w-20 rounded-full border border-line/70" />
-        <span className="shimmer-surface h-7 w-18 rounded-full border border-line/70" />
-      </div>
+      {showFilterRow ? (
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
+          <span className="shimmer-surface h-7 w-20 rounded-full border border-line/70" />
+          <span className="shimmer-surface h-7 w-18 rounded-full border border-line/70" />
+        </div>
+      ) : null}
       <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(230px,1fr))] lg:grid-cols-4">
         {Array.from({ length: cardCount }, (_, index) => (
           <div key={`explorer-skeleton-${index}`} className="rounded-2xl border border-line/80 bg-surface p-3">

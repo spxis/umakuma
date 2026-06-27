@@ -176,6 +176,34 @@ input[type="reset"] {
   animation: srs-shift-negative 850ms ease-out both;
 }
 
+@keyframes shimmer-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-surface {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface-muted) 82%, var(--line) 18%);
+}
+
+.shimmer-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  animation: shimmer-slide 1.2s ease-in-out infinite;
+}
+
+:root[data-theme="dark"] .shimmer-surface::after {
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.2) 50%, transparent 65%);
+}
+
 button,
 [role="button"],
 .subject-pill,
