@@ -391,11 +391,13 @@ export default function ExplorerTabs({
               <ExplorerTabsStudyQueueMenu
                 queueMode={queueMode}
                 queueTagFilter={queueTagFilter}
+                includeTrouble={includeTrouble}
                 studyMode={studyMode}
                 reviewedVisible={reviewedVisible === true}
                 studyCounts={studyCounts}
                 onSetQueueMode={setQueueMode}
                 onSetQueueTagFilter={setQueueTagFilter}
+                onSetIncludeTrouble={setIncludeTrouble}
                 onSetReviewedVisible={handleSetReviewedVisible}
               />
             ) : null}

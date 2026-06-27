@@ -11,22 +11,26 @@ const HOVER_CLOSE_DELAY_MS = 220;
 type Props = {
   queueMode: QueueType;
   queueTagFilter: StudyTagFilter;
+  includeTrouble: boolean;
   studyMode: boolean;
   reviewedVisible: boolean;
   studyCounts: { reviews?: number; reviewsTotal?: number; lessons?: number } | null;
   onSetQueueMode: (mode: QueueType) => void;
   onSetQueueTagFilter: (filter: StudyTagFilter) => void;
+  onSetIncludeTrouble: (enabled: boolean) => void;
   onSetReviewedVisible: (visible: boolean) => void;
 };
 
 export default function ExplorerTabsStudyQueueMenu({
   queueMode,
   queueTagFilter,
+  includeTrouble,
   studyMode,
   reviewedVisible,
   studyCounts,
   onSetQueueMode,
   onSetQueueTagFilter,
+  onSetIncludeTrouble,
   onSetReviewedVisible,
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -148,6 +152,26 @@ export default function ExplorerTabsStudyQueueMenu({
             <button type="button" role="tab" aria-selected={queueTagFilter === "all"} onClick={() => onSetQueueTagFilter("all")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "all" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>All</button>
             <button type="button" role="tab" aria-selected={queueTagFilter === "trouble"} onClick={() => onSetQueueTagFilter("trouble")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "trouble" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Trouble</button>
             <button type="button" role="tab" aria-selected={queueTagFilter === "favorite"} onClick={() => onSetQueueTagFilter("favorite")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "favorite" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Favorites</button>
+          </div>
+          <div className="mt-2 inline-flex w-full items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Trouble practice mix">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={!includeTrouble}
+              onClick={() => onSetIncludeTrouble(false)}
+              className={queueModeSegmentClass(QUEUE_TYPES.review, includeTrouble ? QUEUE_TYPES.lesson : QUEUE_TYPES.review)}
+            >
+              Trouble mix off
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={includeTrouble}
+              onClick={() => onSetIncludeTrouble(true)}
+              className={queueModeSegmentClass(QUEUE_TYPES.review, includeTrouble ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}
+            >
+              Trouble mix on
+            </button>
           </div>
           {!studyMode ? (
             <div className="mt-2 inline-flex w-full items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Reviewed visibility filter">
