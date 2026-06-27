@@ -64,6 +64,7 @@ export default function StudyExplorerPanel({
   hasMorePages,
   isLoadingMore,
   loadMoreError,
+  isAwaitingInitialQueueState,
   isLoading,
   isValidating,
   hasData,
@@ -95,7 +96,7 @@ export default function StudyExplorerPanel({
   const [filtersOpen, setFiltersOpen] = usePersistedBoolean("wr:study:filters-open", { defaultValue: true });
   const { sectionsOpen: mobileFilterSectionsOpen, toggleSection: toggleMobileFilterSection, setSectionOpen: setMobileFilterSectionOpen } = useStudyMobileFilterSections();
   const filtersLoading = !hasData;
-  const showLoadingIndicator = (isLoading || isValidating || !hasData) && filteredItems.length === 0 && !errorMessage;
+  const showLoadingIndicator = (isLoading || isValidating || !hasData || isAwaitingInitialQueueState) && filteredItems.length === 0 && !errorMessage;
   const showTypeCountPlaceholders = !hasData && typeCounts.all === 0 && filteredItems.length === 0 && !errorMessage;
   const displayErrorMessage = errorMessage === "Failed to fetch" ? STUDY_PANEL_TEXT.queueRefreshError : errorMessage;
   const lessonLevelOptions = Object.entries(lessonLevelCounts)

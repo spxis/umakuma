@@ -33,6 +33,7 @@ type StudyExplorerPanelProps = {
   hasMorePages: boolean;
   isLoadingMore: boolean;
   loadMoreError: string | null;
+  isAwaitingInitialQueueState: boolean;
   isLoading: boolean;
   isValidating: boolean;
   hasData: boolean;

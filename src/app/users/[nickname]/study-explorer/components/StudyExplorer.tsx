@@ -162,6 +162,8 @@ export default function StudyExplorer({
       revalidateOnFocus: !isModalOpen,
     },
   );
+  const isUsingFallbackQueueData = Boolean(cachedQueueData && data === cachedQueueData);
+  const isAwaitingInitialQueueState = !error && (!data || isLoading || isValidating || isUsingFallbackQueueData);
   const isUnauthorized = Boolean(error && /unauthorized/i.test(error.message));
   const effectiveViewedLevel = useMemo(
     () =>
@@ -443,6 +445,7 @@ export default function StudyExplorer({
             cacheFooterText={cacheTelemetry.text} cacheFooterTitle={cacheTelemetry.title}
             totalItems={totalItems} hasMorePages={hasMorePages} isLoadingMore={isLoadingMore}
             loadMoreError={loadMoreError} isLoading={isLoading} isValidating={isValidating}
+            isAwaitingInitialQueueState={isAwaitingInitialQueueState}
             hasData={Boolean(data)} isUnauthorized={isUnauthorized} errorMessage={error?.message ?? null}
             showUpcomingReviews={showUpcomingReviews} upcomingItems={upcomingData?.items ?? []}
             isLoadingUpcomingReviews={showUpcomingReviews && (isLoadingUpcoming || isValidatingUpcoming)}
