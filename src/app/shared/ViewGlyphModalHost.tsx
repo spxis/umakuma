@@ -12,7 +12,6 @@ import {
   shouldHydrateViewGlyphItem,
 } from "@/app/shared/viewGlyphModalHydration";
 import {
-  firstNonEmpty,
   resolveParentFrameRect,
   resolveViewGlyphFrameSize,
   usedInVocabularyTargetType,
@@ -38,6 +37,11 @@ const VIEW_GLYPH_STORAGE_KEYS = {
   usedInVocabularyCollapsed: "wr:view-glyph:used-in-vocabulary-collapsed",
 } as const;
 
+type ViewGlyphStackEntry = {
+  index: number;
+  frameSize: ViewGlyphFrameSize | null;
+};
+
 export default function ViewGlyphModalHost() {
   const [items, setItems] = useState<StudyQueueItem[]>([]);
   const [index, setIndex] = useState(0);
@@ -54,6 +58,7 @@ export default function ViewGlyphModalHost() {
   const [selector, setSelector] = useState<ViewGlyphSelectorEntry[]>([]);
   const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
   const [frameSize, setFrameSize] = useState<ViewGlyphFrameSize | null>(null);
+  const [stack, setStack] = useState<ViewGlyphStackEntry[]>([]);
 
   useEffect(() => {
     const onOpen = (event: Event) => {
@@ -68,6 +73,7 @@ export default function ViewGlyphModalHost() {
       setCustomTitle(detail.title);
       setSelector(Array.isArray(detail.selector) ? detail.selector : []);
       setTagOverrides({});
+      setStack([]);
       setFrameSize(resolveViewGlyphFrameSize(resolveParentFrameRect()));
     };
 
@@ -84,6 +90,7 @@ export default function ViewGlyphModalHost() {
   const hasPreviousItem = index > 0;
   const hasNextItem = index < items.length - 1;
   const showNavigationButtons = hasPreviousItem || hasNextItem;
+  const canStepBack = stack.length > 0;
 
   const closeModal = useCallback(() => {
     setItems([]);
@@ -92,8 +99,40 @@ export default function ViewGlyphModalHost() {
     setCustomTitle(undefined);
     setSelector([]);
     setTagOverrides({});
+    setStack([]);
     setFrameSize(null);
   }, []);
+
+  const pushStackAndOpen = useCallback(
+    (nextIndex: number) => {
+      if (nextIndex === index) {
+        return;
+      }
+
+      setStack((prev) => [...prev, { index, frameSize }]);
+      setFrameSize((current) => resolveViewGlyphFrameSize(current ?? resolveParentFrameRect()));
+      setIndex(nextIndex);
+    },
+    [frameSize, index],
+  );
+
+  const stepBackOrClose = useCallback(() => {
+    if (!canStepBack) {
+      closeModal();
+      return;
+    }
+
+    setStack((prev) => {
+      const previous = prev[prev.length - 1];
+      if (!previous) {
+        return prev;
+      }
+
+      setIndex(previous.index);
+      setFrameSize(previous.frameSize);
+      return prev.slice(0, -1);
+    });
+  }, [canStepBack, closeModal]);
 
   const toggleStudyTag = useCallback(async (tag: "favorite" | "trouble") => {
     if (!item || !accountId) {
@@ -147,47 +186,18 @@ export default function ViewGlyphModalHost() {
     return map;
   }, [items]);
 
-  const createSyntheticItem = useCallback(
-    (related: RelatedReference, subjectType: SubjectType): StudyQueueItem | null => {
-      if (!item) return null;
-      return {
-        assignmentId: -1,
-        queueType: "review",
-        subjectId: related.subjectId,
-        subjectType,
-        wkLevel: related.wkLevel ?? item.wkLevel,
-        characters: firstNonEmpty([related.label]),
-        meanings: [firstNonEmpty([related.meaning, "-"])],
-        readings: related.reading ? [related.reading] : [],
-        primaryReadings: related.reading ? [related.reading] : [],
-        radicals: [],
-        visuallySimilar: [],
-        usedInVocabulary: [],
-        componentKanji: [],
-        meaningExplanation: undefined,
-        readingExplanation: undefined,
-        jlptLevel: item.jlptLevel ?? null,
-        jlptMeta: null,
-        srsStage: item.srsStage,
-        status: item.status,
-        startedAt: null,
-        passedAt: null,
-        availableAt: null,
-      };
-    },
-    [item],
-  );
-
   const openBySubject = useCallback(
     async (subjectId: number, fallbackType: SubjectType) => {
+      if (!item || !accountId) {
+        return;
+      }
+
       const existingIndex = items.findIndex((entry) => entry.subjectId === subjectId);
       if (existingIndex >= 0) {
-        setIndex(existingIndex);
+        pushStackAndOpen(existingIndex);
         return;
       }
-      if (!item) {
-        return;
-      }
+
       const allRelated: Array<{ ref: RelatedReference; type: SubjectType }> = [
         ...((item.radicals as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.radical })),
         ...((item.visuallySimilar as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.kanji })),
@@ -218,29 +228,11 @@ export default function ViewGlyphModalHost() {
           nextIndex = prev.length;
           return [...prev, hydrated];
         });
-        setIndex(nextIndex);
+        pushStackAndOpen(nextIndex);
         return;
       }
-
-      const synthetic = createSyntheticItem(found?.ref ?? { subjectId, label: "-" }, found?.type ?? fallbackType);
-      if (!synthetic) {
-        return;
-      }
-
-      let nextIndex = 0;
-      setItems((prev) => {
-        const alreadyExistingIndex = prev.findIndex((entry) => entry.subjectId === synthetic.subjectId);
-        if (alreadyExistingIndex >= 0) {
-          nextIndex = alreadyExistingIndex;
-          return prev;
-        }
-
-        nextIndex = prev.length;
-        return [...prev, synthetic];
-      });
-      setIndex(nextIndex);
     },
-    [accountId, createSyntheticItem, item, items],
+    [accountId, item, items, pushStackAndOpen],
   );
 
   useEffect(() => {
@@ -260,7 +252,7 @@ export default function ViewGlyphModalHost() {
 
       if (event.key === "Escape") {
         event.preventDefault();
-        closeModal();
+        stepBackOrClose();
         return;
       }
 
@@ -290,7 +282,7 @@ export default function ViewGlyphModalHost() {
       document.body.style.overflow = overflow;
       document.body.style.overscrollBehavior = overscrollBehavior;
     };
-  }, [closeModal, item, items.length]);
+  }, [item, items.length, stepBackOrClose]);
 
   useEffect(() => {
     if (!item || !accountId || !shouldHydrateViewGlyphItem(item)) {
@@ -356,19 +348,28 @@ export default function ViewGlyphModalHost() {
     : { width: "calc(100vw - 25px)", height: "calc(100dvh - 25px)" };
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-[rgba(6,12,26,0.56)] p-1 backdrop-blur-[1px] sm:p-3">
+    <div className="fixed inset-0 z-90 flex items-center justify-center bg-[rgba(6,12,26,0.56)] p-1 backdrop-blur-[1px] sm:p-3">
       <div style={modalFrameStyle} className="mx-auto flex max-h-[calc(100dvh-8px)] w-full max-w-[calc(100vw-8px)] flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]">
         <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-line bg-surface-muted px-3 py-2 sm:px-4">
           <div className="flex min-w-0 items-center justify-start">
+            {canStepBack ? (
+              <button
+                type="button"
+                onClick={stepBackOrClose}
+                className="mr-2 min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
+              >
+                Back
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={closeModal}
-              className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]"
+              className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
             >
               Close
             </button>
           </div>
-          <p className="truncate text-center text-sm font-black uppercase tracking-[0.1em] text-foreground/80 sm:text-base">
+          <p className="truncate text-center text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
             {customTitle ?? viewerTitle(item)}
           </p>
           {showNavigationButtons ? (
@@ -377,7 +378,7 @@ export default function ViewGlyphModalHost() {
                 <button
                   type="button"
                   onClick={() => setIndex((prev) => Math.max(0, prev - 1))}
-                  className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]"
+                  className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
                 >
                   Prev
                 </button>
@@ -386,7 +387,7 @@ export default function ViewGlyphModalHost() {
                 <button
                   type="button"
                   onClick={() => setIndex((prev) => Math.min(items.length - 1, prev + 1))}
-                  className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]"
+                  className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
                 >
                   Next
                 </button>

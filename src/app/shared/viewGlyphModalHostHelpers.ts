@@ -15,7 +15,9 @@ export type ViewGlyphFrameSize = {
   height: number;
 };
 
-export function resolveViewGlyphFrameSize(parentRect?: DOMRect | null): ViewGlyphFrameSize {
+export function resolveViewGlyphFrameSize(
+  parentRect?: { width: number; height: number } | null,
+): ViewGlyphFrameSize {
   const isMobile = window.matchMedia("(max-width: 639px)").matches;
   const delta = isMobile ? VIEW_GLYPH_MODAL_DELTA_MOBILE_PX : VIEW_GLYPH_MODAL_DELTA_DESKTOP_PX;
   const baseWidth = parentRect?.width ?? window.innerWidth;
