@@ -1,7 +1,7 @@
 import { allBadgeClass, disabledBadgeClass, formatNumber } from "../level-explorer/lib/levelExplorerDisplay";
 import { SUBJECT_TYPE_VALUES, type SubjectType } from "@/lib/domainConstants";
 
-import FilterChipLabel from "./FilterChipLabel";
+import FilterChipButton from "./FilterChipButton";
 import SubjectTypeFilterButton from "./SubjectTypeFilterButton";
 
 type Props = {
@@ -43,14 +43,15 @@ export default function SubjectTypeFilterGroup({
 
   return (
     <div className={className ?? "flex flex-wrap gap-2"}>
-      <button
+      <FilterChipButton
         type="button"
         disabled={disabled}
         onClick={onClickAll}
-        className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${allDisabledStyle ? disabledBadgeClass() : `${allButtonClassName ?? allBadgeClass(allActive)}${disabled ? " cursor-not-allowed opacity-70" : ""}`}`}
-      >
-        <FilterChipLabel label={allLabel} count={formatCount(allCount ?? counts.all)} />
-      </button>
+        toneClassName={allDisabledStyle ? disabledBadgeClass() : `${allButtonClassName ?? allBadgeClass(allActive)}${disabled ? " cursor-not-allowed opacity-70" : ""}`}
+        className="transition"
+        label={allLabel}
+        count={formatCount(allCount ?? counts.all)}
+      />
       {SUBJECT_TYPE_VALUES.map((type) => {
         const isInactiveZero = hideZeroInactive && !activeTypes[type] && counts[type] === 0;
         if (isInactiveZero) {

@@ -1,6 +1,6 @@
 import { disabledBadgeClass, formatNumber, typeBadgeClass } from "../level-explorer/lib/levelExplorerDisplay";
 import { subjectTypeFilterLabel } from "./subjectTypeLabels";
-import FilterChipLabel from "./FilterChipLabel";
+import FilterChipButton from "./FilterChipButton";
 import type { SubjectType } from "@/lib/domainConstants";
 
 type Props = {
@@ -24,15 +24,14 @@ export default function SubjectTypeFilterButton({
   const showDisabledStyle = disabled && !active;
 
   return (
-    <button
+    <FilterChipButton
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${
-        showDisabledStyle ? disabledBadgeClass() : `${typeBadgeClass(type, active, false)}${disabled ? " cursor-not-allowed opacity-70" : ""}`
-      }`}
-    >
-      <FilterChipLabel label={subjectTypeFilterLabel(type)} count={resolvedCountLabel} />
-    </button>
+      toneClassName={showDisabledStyle ? disabledBadgeClass() : `${typeBadgeClass(type, active, false)}${disabled ? " cursor-not-allowed opacity-70" : ""}`}
+      className="transition"
+      label={subjectTypeFilterLabel(type)}
+      count={resolvedCountLabel}
+    />
   );
 }

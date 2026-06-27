@@ -9,7 +9,7 @@ import {
 import type { StudySrsFilter, StudySrsStageFilter } from "../lib/studyExplorerTypes";
 import { srsFilterButtonLabel, formatNumber } from "../../level-explorer/lib/levelExplorerDisplay";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
-import FilterChipLabel from "../../shared/FilterChipLabel";
+import FilterChipButton from "../../shared/FilterChipButton";
 
 type Props = {
   isOpen: boolean;
@@ -87,16 +87,16 @@ export default function StudyStatusFilters({
                 : "inline-flex items-center gap-1"
             }
           >
-            <button
+            <FilterChipButton
               type="button"
               onClick={onClickStatus}
               disabled={disabled}
               role="tab"
               aria-selected={isSelected}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? badgeClass(isSelected) : studySrsToneClass(status, isSelected)}`}
-            >
-              <FilterChipLabel label={statusLabel} count={formatNumber(count)} />
-            </button>
+              toneClassName={disabled && !isSelected ? disabledBadgeClass() : status === STUDY_SRS_FILTERS.all ? badgeClass(isSelected) : studySrsToneClass(status, isSelected)}
+              label={statusLabel}
+              count={formatNumber(count)}
+            />
             {showStageButtons ? stageOptions.map((stage) => {
               const stageCount = srsStageCounts[stage] ?? 0;
               const stageSelected = srsStageFilter === stage;
@@ -104,7 +104,7 @@ export default function StudyStatusFilters({
               const stageDisabled = (filtersLoading && !stageSelected) || stageUnavailable;
               if (stageUnavailable) return null;
               return (
-                <button
+                <FilterChipButton
                   key={`${status}-${stage}`}
                   type="button"
                   onClick={() => {
@@ -118,10 +118,11 @@ export default function StudyStatusFilters({
                   disabled={stageDisabled}
                   role="tab"
                   aria-selected={stageSelected}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${isOpen || stageSelected ? "" : "hidden sm:inline-flex"} ${stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<typeof status, "all">, stageSelected)}`}
-                >
-                  <FilterChipLabel label={stage} count={formatNumber(stageCount)} />
-                </button>
+                  className={isOpen || stageSelected ? "" : "hidden sm:inline-flex"}
+                  toneClassName={stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<typeof status, "all">, stageSelected)}
+                  label={stage}
+                  count={formatNumber(stageCount)}
+                />
               );
             }) : null}
           </div>

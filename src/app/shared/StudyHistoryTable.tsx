@@ -7,11 +7,11 @@ import { isSubjectType } from "@/lib/domainConstants";
 import HistoryItemDetailModal from "@/app/shared/HistoryItemDetailModal";
 import StudyHistoryFilters from "@/app/shared/StudyHistoryFilters";
 import type { HistorySrsBucket, StudyHistoryPayload } from "@/app/shared/studyHistoryTypes";
-import { srsBucketBadgeClass, srsBucketLabel } from "@/app/shared/studyHistoryUi";
 import { typeGlyphBoxClass } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import StudyHistoryHeader from "@/app/shared/StudyHistoryHeader";
+import StudyHistoryAttemptMetaChips from "@/app/shared/StudyHistoryAttemptMetaChips";
 
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 type SortDir = "asc" | "desc";
@@ -161,7 +161,6 @@ export default function StudyHistoryTable({
     setPage(1);
     setSrsBucketFilter(value);
   }
-  const typeColor: Record<string, string> = { radical: "bg-sky-100 text-sky-700", kanji: "bg-pink-100 text-pink-700", vocabulary: "bg-violet-100 text-violet-700" };
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-4 shadow-sm sm:p-5">
       <StudyHistoryHeader
@@ -232,24 +231,14 @@ export default function StudyHistoryTable({
                     <p className="pr-5 text-[10px] font-bold uppercase tracking-[0.05em] text-foreground/70 leading-tight whitespace-nowrap">
                       {formatHistoryDateCompact(row.submittedAt)} · {formatRelativeFromNow(row.submittedAt, { style: "short", allowFuture: false, noValueLabel: "-", invalidLabel: "-" })}
                     </p>
-                    <div className="mt-0.5 flex flex-nowrap items-center gap-0.5 overflow-hidden whitespace-nowrap pr-5">
-                      <span className={`inline-block rounded px-1 py-0.5 text-[9px] font-bold uppercase ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
-                        {row.subjectType}
-                      </span>
-                      {typeof row.wkLevel === "number" ? (
-                        <span className="inline-block rounded border border-line px-1 py-0.5 text-[9px] font-bold uppercase text-foreground/80">
-                          L{row.wkLevel}
-                        </span>
-                      ) : null}
-                      {typeof row.srsStage === "number" ? (
-                        <span className="inline-block rounded border border-line px-1 py-0.5 text-[9px] font-bold uppercase text-foreground/80">
-                          S{row.srsStage}
-                        </span>
-                      ) : null}
-                      <span className={`inline-block rounded border px-1 py-0.5 text-[9px] font-bold uppercase ${srsBucketBadgeClass(row.srsBucket)}`}>
-                        {srsBucketLabel(row.srsBucket)}
-                      </span>
-                    </div>
+                    <StudyHistoryAttemptMetaChips
+                      subjectType={row.subjectType}
+                      wkLevel={typeof row.wkLevel === "number" ? row.wkLevel : null}
+                      srsStage={typeof row.srsStage === "number" ? row.srsStage : null}
+                      srsBucket={row.srsBucket}
+                      compact
+                      className="mt-0.5 flex flex-nowrap items-center gap-0.5 overflow-hidden whitespace-nowrap pr-5"
+                    />
                     {showUserColumn ? (
                       <p className="mt-0.5 truncate pr-5 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/60 leading-tight">{row.nickname}</p>
                     ) : null}
@@ -282,7 +271,7 @@ export default function StudyHistoryTable({
             </div>
           </div>
 
-          <div className="hidden max-h-[42rem] overflow-auto rounded-lg border border-line sm:block">
+          <div className="hidden max-h-168 overflow-auto rounded-lg border border-line sm:block">
             <table className="w-full text-left text-sm sm:text-base">
             <thead className="sticky top-0 bg-surface-muted text-xs uppercase tracking-wider text-muted sm:text-sm">
               <tr>
@@ -310,24 +299,12 @@ export default function StudyHistoryTable({
                     <p className="text-[11px] uppercase tracking-[0.08em] text-foreground/55">
                       {formatRelativeFromNow(row.submittedAt, { style: "short", allowFuture: false, noValueLabel: "-", invalidLabel: "-" })}
                     </p>
-                    <div className="mt-1 flex flex-wrap items-center gap-1">
-                      <span className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${typeColor[row.subjectType] ?? "bg-gray-100 text-gray-600"}`}>
-                        {row.subjectType}
-                      </span>
-                      {typeof row.wkLevel === "number" ? (
-                        <span className="inline-block rounded border border-line px-1.5 py-0.5 text-[10px] font-bold uppercase text-foreground/80">
-                          L{row.wkLevel}
-                        </span>
-                      ) : null}
-                      {typeof row.srsStage === "number" ? (
-                        <span className="inline-block rounded border border-line px-1.5 py-0.5 text-[10px] font-bold uppercase text-foreground/80">
-                          S{row.srsStage}
-                        </span>
-                      ) : null}
-                      <span className={`inline-block rounded border px-1.5 py-0.5 text-[10px] font-bold uppercase ${srsBucketBadgeClass(row.srsBucket)}`}>
-                        {srsBucketLabel(row.srsBucket)}
-                      </span>
-                    </div>
+                    <StudyHistoryAttemptMetaChips
+                      subjectType={row.subjectType}
+                      wkLevel={typeof row.wkLevel === "number" ? row.wkLevel : null}
+                      srsStage={typeof row.srsStage === "number" ? row.srsStage : null}
+                      srsBucket={row.srsBucket}
+                    />
                   </td>
                   {showUserColumn ? <td className="px-3 py-2 align-top">{row.nickname}</td> : null}
                   <td className="px-3 py-2 align-top">
