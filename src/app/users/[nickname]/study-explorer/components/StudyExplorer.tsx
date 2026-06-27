@@ -94,7 +94,7 @@ export default function StudyExplorer({
   const [modalSessionItemByAssignmentId, setModalSessionItemByAssignmentId] = useState<Record<number, StudyQueueItem>>({});
   const [hiddenSubmittedAssignmentIds, setHiddenSubmittedAssignmentIds] = useState<Set<number>>(new Set());
   const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
-  const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? true);
+  const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? false);
   const [showUpcomingReviews, setShowUpcomingReviews] = usePersistedBoolean(`wr:study:show-upcoming-reviews:${accountId}:${queueStorageScopeKey}`, { defaultValue: false });
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
   const [gridColumns, setGridColumns] = useState<number>(4);
@@ -110,7 +110,16 @@ export default function StudyExplorer({
   const effectiveSrsStageFilter: StudySrsStageFilter | null =
     queueMode === STUDY_QUEUE_TYPES.lesson ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
   const initialPageSize = useMemo(() => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 24 : gridColumns * 12), [gridColumns, queueMode]);
-  const queueRequestUrl = buildStudyQueueRequestUrl({ studyApiBasePath, queueMode, initialPageSize, studySource, customLibraryId, includeTrouble, queueTagFilter });
+  const queueRequestUrl = buildStudyQueueRequestUrl({
+    studyApiBasePath,
+    queueMode,
+    initialPageSize,
+    studySource,
+    customLibraryId,
+    includeTrouble,
+    includeReviewed: queueMode === STUDY_QUEUE_TYPES.review && !studyMode && showLocked,
+    queueTagFilter,
+  });
   useLayoutEffect(() => {
     const cached = readStoredQueue(accountId, queueMode, queueStorageScopeKey);
     const initialQueueState = deriveInitialQueueState(cached);

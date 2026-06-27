@@ -11,10 +11,10 @@ export type HistorySubjectData = {
   meanings?: string[];
   readings?: string[];
   primaryReadings?: string[];
-  radicals?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null }>;
-  visuallySimilar?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null }>;
-  usedInVocabulary?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null }>;
-  componentKanji?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null }>;
+  radicals?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null; meaning?: string | null }>;
+  visuallySimilar?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null; meaning?: string | null }>;
+  usedInVocabulary?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null; meaning?: string | null }>;
+  componentKanji?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null; meaning?: string | null }>;
   meaningExplanation?: string;
   readingExplanation?: string;
   jlptLevel?: number | null;

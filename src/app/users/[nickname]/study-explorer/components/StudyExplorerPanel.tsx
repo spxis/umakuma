@@ -273,28 +273,15 @@ export default function StudyExplorerPanel({
               <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.oldestWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.oldestWait}</span></button>
               <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.newestWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.newestWait}</span></button>
               <button type="button" onClick={() => onSetWaitSortOrder("random_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "random_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.randomizeWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.randomizeWait}</span></button>
-              {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
+              {queueMode !== STUDY_QUEUE_TYPES.lesson && !studyMode ? (
                 <button
                   type="button"
                   onClick={onToggleShowLocked}
-                  className="flex-1 whitespace-nowrap rounded-full border border-line bg-surface px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground hover:bg-surface-muted sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em]"
-                  title={showLocked ? STUDY_PANEL_TEXT.hideLocked : STUDY_PANEL_TEXT.showLocked}
-                  aria-label={showLocked ? STUDY_PANEL_TEXT.hideLocked : STUDY_PANEL_TEXT.showLocked}
+                  className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(showLocked)}`}
+                  title={showLocked ? STUDY_PANEL_TEXT.reviewedOn : STUDY_PANEL_TEXT.reviewedOff}
+                  aria-label={showLocked ? STUDY_PANEL_TEXT.reviewedOn : STUDY_PANEL_TEXT.reviewedOff}
                 >
-                  <span className="inline-flex w-full items-center justify-center" aria-hidden="true">
-                    {showLocked ? (
-                      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="4" y="11" width="16" height="9" rx="2" />
-                        <path d="M8 11V8a4 4 0 1 1 8 0v3" />
-                      </svg>
-                    ) : (
-                      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="4" y="11" width="16" height="9" rx="2" />
-                        <path d="M16 11V8a4 4 0 1 0-8 0" />
-                      </svg>
-                    )}
-                  </span>
-                  <span className="sr-only">{showLocked ? STUDY_PANEL_TEXT.hideLocked : STUDY_PANEL_TEXT.showLocked}</span>
+                  {showLocked ? STUDY_PANEL_TEXT.reviewedOn : STUDY_PANEL_TEXT.reviewedOff}
                 </button>
               ) : null}
               <button

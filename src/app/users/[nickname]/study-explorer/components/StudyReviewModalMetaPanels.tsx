@@ -266,7 +266,7 @@ export default function StudyReviewModalMetaPanels({
             </div>
           ) : null}
 
-          {isVocabularySubjectType(selectedItem.subjectType) && usedKanjiItems.length > 0 ? (
+          {isVocabularySubjectType(selectedItem.subjectType) && usedKanjiItems.length > 0 && !hasComponentKanji ? (
             <div className="mt-2">
               <div className="rounded-xl border border-line bg-surface px-3 py-2">
                 <div className="flex items-center justify-between gap-2">

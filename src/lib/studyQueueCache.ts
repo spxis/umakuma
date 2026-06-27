@@ -135,8 +135,9 @@ export function setCachedStudyQueue(
 export function getCachedStudyQueueSyncState(
   accountId: string,
   mode: string,
+  variant: string = "default",
 ): CachedStudyQueueSyncState | null {
-  const key = cacheKey(accountId, mode);
+  const key = cacheKey(accountId, mode, variant);
   const state = syncStateCache.get(key);
   if (!state) {
     return null;
@@ -153,6 +154,7 @@ export function getCachedStudyQueueSyncState(
 export function setCachedStudyQueueSyncState(
   accountId: string,
   mode: string,
+  variant: string,
   state: {
     assignmentById: Map<number, unknown>;
     subjectById: Map<number, unknown>;
@@ -161,7 +163,7 @@ export function setCachedStudyQueueSyncState(
     lastFullSyncAtMs: number;
   },
 ): void {
-  syncStateCache.set(cacheKey(accountId, mode), {
+  syncStateCache.set(cacheKey(accountId, mode, variant), {
     assignmentById: state.assignmentById,
     subjectById: state.subjectById,
     assignmentCheckpoint: state.assignmentCheckpoint,

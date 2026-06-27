@@ -458,7 +458,7 @@ export function useStudyExplorerEffects({
     setTypeFilter(STUDY_TYPE_FILTERS.all);
     setSrsFilter(STUDY_SRS_FILTERS.all);
     setSrsStageFilter(null);
-    setShowLocked(true);
+    setShowLocked(false);
     setRecentOnly(false);
     setSelectedId(null);
     setSearchQuery("");

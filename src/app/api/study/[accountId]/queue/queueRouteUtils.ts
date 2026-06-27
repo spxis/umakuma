@@ -57,9 +57,11 @@ export function normalizeSubjectType(input: string): SubjectType {
   return SUBJECT_TYPES.vocabulary;
 }
 
-export function modePathParam(mode: QueueMode): string {
+export function modePathParam(mode: QueueMode, includeReviewed: boolean = false): string {
   return mode === QUEUE_TYPES.review
-    ? "immediately_available_for_review=true"
+    ? includeReviewed
+      ? "srs_stages=1,2,3,4,5,6,7,8,9"
+      : "immediately_available_for_review=true"
     : "srs_stages=0";
 }
 
@@ -86,8 +88,8 @@ export async function hydrateMissingSubjects(
   }
 }
 
-export function buildImmediateAssignmentsPath(mode: QueueMode): string {
-  return `/assignments?${modePathParam(mode)}`;
+export function buildImmediateAssignmentsPath(mode: QueueMode, includeReviewed: boolean = false): string {
+  return `/assignments?${modePathParam(mode, includeReviewed)}`;
 }
 
 export function toAssignmentRows(collection: WaniKaniCollectionResponse): AssignmentRow[] {

@@ -7,18 +7,9 @@ import { prisma } from "@/lib/prisma";
 import { getCachedStudyQueue, setCachedStudyQueue } from "@/lib/studyQueueCache";
 import { QUEUE_TYPES, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { srsLabel } from "@/lib/wanikani/helpers";
-import {
-  hydrateMissingSubjects,
-  normalizeSubjectType,
-  queueRowsFromState,
-  type SubjectData,
-} from "./queueRouteUtils";
+import { hydrateMissingSubjects, normalizeSubjectType, queueRowsFromState, type SubjectData } from "./queueRouteUtils";
 import { hydrateQueueSyncState } from "./queueRouteSync";
-import {
-  mergeTroubleRows,
-  troubleInjectionCount,
-  type StudySubjectTagMap,
-} from "./queueRouteTags";
+import { mergeTroubleRows, troubleInjectionCount, type StudySubjectTagMap } from "./queueRouteTags";
 import { fetchStudyTagRows } from "./queueRouteTagRows";
 
 type RouteContext = {
@@ -43,6 +34,7 @@ export async function GET(request: Request, context: RouteContext) {
         const limitParam = Number(url.searchParams.get("limit") ?? "");
         const offsetParam = Number(url.searchParams.get("offset") ?? "");
         const includeTrouble = url.searchParams.get("includeTrouble") !== "0";
+        const includeReviewed = mode !== QUEUE_TYPES.lesson && url.searchParams.get("includeReviewed") === "1";
         const tagFilter = url.searchParams.get("tag") === "favorite"
           ? "favorite"
           : url.searchParams.get("tag") === "trouble"
@@ -76,8 +68,7 @@ export async function GET(request: Request, context: RouteContext) {
       tag: account.tokenTag,
     });
 
-    const cacheVariant =
-      mode === QUEUE_TYPES.review ? `trouble:${includeTrouble ? "1" : "0"}` : "default";
+    const cacheVariant = mode === QUEUE_TYPES.review ? `trouble:${includeTrouble ? "1" : "0"}:reviewed:${includeReviewed ? "1" : "0"}` : "default";
     const cached = canUseServerCache ? getCachedStudyQueue(accountId, mode, cacheVariant) : null;
     if (canUseServerCache && cached) {
       const cachedItems = cached.items as Array<{
@@ -119,12 +110,16 @@ export async function GET(request: Request, context: RouteContext) {
       );
     }
 
-    const reviewState =
-      mode === QUEUE_TYPES.lesson ? null : await hydrateQueueSyncState(accountId, QUEUE_TYPES.review, token);
+    const reviewState = mode === QUEUE_TYPES.lesson ? null : await hydrateQueueSyncState(accountId, QUEUE_TYPES.review, token);
+    const reviewedState = includeReviewed ? await hydrateQueueSyncState(accountId, QUEUE_TYPES.review, token, { includeReviewed: true }) : null;
     const lessonState =
       mode === QUEUE_TYPES.review ? null : await hydrateQueueSyncState(accountId, QUEUE_TYPES.lesson, token);
 
     const reviewAssignments = reviewState ? queueRowsFromState(reviewState, QUEUE_TYPES.review) : [];
+    const reviewedAssignmentIds = new Set(reviewAssignments.map((row) => row.assignmentId));
+    const reviewedAssignments = reviewedState
+      ? queueRowsFromState(reviewedState, QUEUE_TYPES.review).filter((row) => !reviewedAssignmentIds.has(row.assignmentId)).map((row) => ({ ...row, data: { ...row.data, srs_stage: 0, unlocked_at: null, available_at: null } }))
+      : [];
     const lessonAssignments = lessonState ? queueRowsFromState(lessonState, QUEUE_TYPES.lesson) : [];
     const subjectById = new Map<number, { object: string; data: SubjectData }>();
     if (reviewState) {
@@ -137,6 +132,11 @@ export async function GET(request: Request, context: RouteContext) {
         subjectById.set(subjectId, { object: row.object, data: row.data });
       }
     }
+    if (reviewedState) {
+      for (const [subjectId, row] of reviewedState.subjectById.entries()) {
+        subjectById.set(subjectId, { object: row.object, data: row.data });
+      }
+    }
 
     const tagRows = await fetchStudyTagRows(accountId);
     const tagBySubjectId: StudySubjectTagMap = new Map(
@@ -144,7 +144,7 @@ export async function GET(request: Request, context: RouteContext) {
     );
     let reviewRowsWithTrouble = reviewAssignments;
     if (mode !== QUEUE_TYPES.lesson && includeTrouble) {
-      const reviewedSubjectIds = new Set(reviewAssignments.map((row) => row.data.subject_id));
+      const reviewedSubjectIds = new Set([...reviewAssignments, ...reviewedAssignments].map((row) => row.data.subject_id));
       const troubleIds = tagRows.filter((row) => row.trouble).map((row) => row.subjectId);
       await hydrateMissingSubjects(token, subjectById, troubleIds);
 
@@ -173,12 +173,11 @@ export async function GET(request: Request, context: RouteContext) {
       reviewRowsWithTrouble = mergeTroubleRows(reviewAssignments, injectedRows);
     }
 
-    const unfilteredQueued =
-      mode === "all"
-        ? [...reviewRowsWithTrouble, ...lessonAssignments]
-        : mode === QUEUE_TYPES.lesson
-          ? lessonAssignments
-          : reviewRowsWithTrouble;
+    const unfilteredQueued = mode === "all"
+      ? [...reviewRowsWithTrouble, ...reviewedAssignments, ...lessonAssignments]
+      : mode === QUEUE_TYPES.lesson
+        ? lessonAssignments
+        : [...reviewRowsWithTrouble, ...reviewedAssignments];
     const queued = tagFilter === "all"
       ? unfilteredQueued
       : unfilteredQueued.filter((row) => (tagBySubjectId.get(row.data.subject_id)?.[tagFilter] ?? false));

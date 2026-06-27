@@ -22,6 +22,7 @@ export function buildStudyQueueRequestUrl(params: {
   studySource: StudySource;
   customLibraryId: string | null;
   includeTrouble: boolean;
+  includeReviewed: boolean;
   queueTagFilter?: "all" | "favorite" | "trouble";
 }): string | null {
   if (params.studySource === "custom" && !params.customLibraryId) {
@@ -38,6 +39,9 @@ export function buildStudyQueueRequestUrl(params: {
   }
   if (params.queueMode === STUDY_QUEUE_TYPES.review) {
     query.set("includeTrouble", params.includeTrouble ? "1" : "0");
+    if (params.includeReviewed) {
+      query.set("includeReviewed", "1");
+    }
   }
   if (params.queueTagFilter && params.queueTagFilter !== "all") {
     query.set("tag", params.queueTagFilter);

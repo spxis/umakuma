@@ -62,7 +62,7 @@ export function resolveInitialStudyFilters(query: QueryShape): {
     srsFilter: resolveInitialSrsFilter(query),
     srsStageFilter,
     recentOnly: query.recent === "1",
-    showLocked: query.hideLocked !== "1",
+    showLocked: query.hideLocked === "0",
   };
 }
 

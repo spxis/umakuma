@@ -20,13 +20,18 @@ import {
 } from "./queueRouteUtils";
 import { QUEUE_TYPES } from "@/lib/domainConstants";
 
-function queueModeSignature(mode: QueueMode): string {
-  return mode === QUEUE_TYPES.lesson ? "lesson-srs0-v2" : "review-immediate-v1";
+function queueModeSignature(mode: QueueMode, includeReviewed: boolean): string {
+  if (mode === QUEUE_TYPES.lesson) {
+    return "lesson-srs0-v2";
+  }
+
+  return includeReviewed ? "review-all-started-v1" : "review-immediate-v1";
 }
 
 async function fetchEligibleAssignmentIds(
   token: string,
   mode: QueueMode,
+  includeReviewed: boolean,
   assignmentIds: number[],
 ): Promise<Set<number>> {
   const output = new Set<number>();
@@ -38,7 +43,7 @@ async function fetchEligibleAssignmentIds(
     }
 
     const collection = await fetchAllCollectionPages(
-      `/assignments?ids=${chunk}&${modePathParam(mode)}`,
+      `/assignments?ids=${chunk}&${modePathParam(mode, includeReviewed)}`,
       token,
     );
 
@@ -54,10 +59,13 @@ export async function hydrateQueueSyncState(
   accountId: string,
   mode: QueueMode,
   token: string,
+  options?: { includeReviewed?: boolean },
 ): Promise<QueueSyncState> {
   const nowMs = Date.now();
-  const signature = queueModeSignature(mode);
-  const cachedState = getCachedStudyQueueSyncState(accountId, mode);
+  const includeReviewed = mode === QUEUE_TYPES.review && Boolean(options?.includeReviewed);
+  const cacheVariant = includeReviewed ? "reviewed" : "default";
+  const signature = queueModeSignature(mode, includeReviewed);
+  const cachedState = getCachedStudyQueueSyncState(accountId, mode, cacheVariant);
   const assignmentById = new Map<number, AssignmentRow>();
   const subjectById = new Map<number, CachedSubjectRow>();
 
@@ -81,7 +89,7 @@ export async function hydrateQueueSyncState(
 
   if (shouldFullResync) {
     assignmentById.clear();
-    const fullCollection = await fetchAllCollectionPages(buildImmediateAssignmentsPath(mode), token);
+    const fullCollection = await fetchAllCollectionPages(buildImmediateAssignmentsPath(mode, includeReviewed), token);
     for (const row of toAssignmentRows(fullCollection)) {
       assignmentById.set(row.id, row);
     }
@@ -99,6 +107,7 @@ export async function hydrateQueueSyncState(
       const eligibleUpdatedIds = await fetchEligibleAssignmentIds(
         token,
         mode,
+        includeReviewed,
         updatedRows.map((row) => row.id),
       );
 
@@ -146,7 +155,7 @@ export async function hydrateQueueSyncState(
 
   trimSubjectCache(subjectById, queueSubjectIds);
 
-  setCachedStudyQueueSyncState(accountId, mode, {
+  setCachedStudyQueueSyncState(accountId, mode, cacheVariant, {
     assignmentById: assignmentById as Map<number, unknown>,
     subjectById: subjectById as Map<number, unknown>,
     assignmentCheckpoint,

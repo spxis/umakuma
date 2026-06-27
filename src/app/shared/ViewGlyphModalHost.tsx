@@ -1,7 +1,5 @@
 "use client";
-
 import { useCallback, useEffect, useMemo, useState } from "react";
-
 import type { LevelItem, RelatedReference } from "@/app/users/[nickname]/explorerTypes";
 import LevelExplorerDetailSection from "@/app/users/[nickname]/level-explorer/components/LevelExplorerDetailSection";
 import type { VocabularyKanjiLink } from "@/app/users/[nickname]/level-explorer/components/LevelExplorerReferenceCards";
@@ -9,6 +7,18 @@ import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplor
 import { hasRenderableRelatedItems } from "@/app/users/[nickname]/study-explorer/components/StudyReviewModalHelpers";
 import { newsGlyphButtonClass } from "@/app/news/newsGlyphBoxStyle";
 import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import {
+  fetchHydratedViewGlyphSubject,
+  shouldHydrateViewGlyphItem,
+} from "@/app/shared/viewGlyphModalHydration";
+import {
+  firstNonEmpty,
+  resolveParentFrameRect,
+  resolveViewGlyphFrameSize,
+  usedInVocabularyTargetType,
+  viewerTitle,
+  type ViewGlyphFrameSize,
+} from "@/app/shared/viewGlyphModalHostHelpers";
 import {
   SUBJECT_TYPE_DISPLAY,
   SUBJECT_TYPES,
@@ -27,69 +37,6 @@ import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 const VIEW_GLYPH_STORAGE_KEYS = {
   usedInVocabularyCollapsed: "wr:view-glyph:used-in-vocabulary-collapsed",
 } as const;
-
-const VIEW_GLYPH_MODAL_DELTA_DESKTOP_PX = 25;
-const VIEW_GLYPH_MODAL_DELTA_MOBILE_PX = 10;
-const VIEW_GLYPH_MODAL_MIN_SIZE_PX = 320;
-
-type ViewGlyphFrameSize = {
-  width: number;
-  height: number;
-};
-
-function resolveViewGlyphFrameSize(parentRect?: DOMRect | null): ViewGlyphFrameSize {
-  const isMobile = window.matchMedia("(max-width: 639px)").matches;
-  const delta = isMobile ? VIEW_GLYPH_MODAL_DELTA_MOBILE_PX : VIEW_GLYPH_MODAL_DELTA_DESKTOP_PX;
-  const baseWidth = parentRect?.width ?? window.innerWidth;
-  const baseHeight = parentRect?.height ?? window.innerHeight;
-
-  return {
-    width: Math.max(VIEW_GLYPH_MODAL_MIN_SIZE_PX, Math.round(baseWidth - delta)),
-    height: Math.max(VIEW_GLYPH_MODAL_MIN_SIZE_PX, Math.round(baseHeight - delta)),
-  };
-}
-
-function resolveParentFrameRect(): DOMRect | null {
-  const activeElement = document.activeElement;
-  if (activeElement instanceof HTMLElement) {
-    const activeFrame = activeElement.closest<HTMLElement>("[data-view-glyph-parent-frame='true']");
-    if (activeFrame) {
-      return activeFrame.getBoundingClientRect();
-    }
-  }
-
-  const parentFrame = document.querySelector<HTMLElement>("[data-view-glyph-parent-frame='true']");
-  if (!parentFrame) {
-    return null;
-  }
-
-  return parentFrame.getBoundingClientRect();
-}
-
-function subjectSingularLabel(value: string | null | undefined): string {
-  if (isSubjectType(value)) {
-    return SUBJECT_TYPE_DISPLAY[value].singular;
-  }
-  return SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular;
-}
-
-function viewerTitle(item: StudyQueueItem): string {
-  return `View ${subjectSingularLabel(item.subjectType)}`;
-}
-
-function usedInVocabularyTargetType(subjectType: string | null | undefined): SubjectType {
-  return subjectType === SUBJECT_TYPES.radical ? SUBJECT_TYPES.kanji : SUBJECT_TYPES.vocabulary;
-}
-
-function firstNonEmpty(values: Array<string | null | undefined>): string {
-  for (const value of values) {
-    if (typeof value === "string" && value.trim().length > 0) {
-      return value;
-    }
-  }
-
-  return "-";
-}
 
 export default function ViewGlyphModalHost() {
   const [items, setItems] = useState<StudyQueueItem[]>([]);
@@ -203,7 +150,6 @@ export default function ViewGlyphModalHost() {
   const createSyntheticItem = useCallback(
     (related: RelatedReference, subjectType: SubjectType): StudyQueueItem | null => {
       if (!item) return null;
-
       return {
         assignmentId: -1,
         queueType: "review",
@@ -233,17 +179,15 @@ export default function ViewGlyphModalHost() {
   );
 
   const openBySubject = useCallback(
-    (subjectId: number, fallbackType: SubjectType) => {
+    async (subjectId: number, fallbackType: SubjectType) => {
       const existingIndex = items.findIndex((entry) => entry.subjectId === subjectId);
       if (existingIndex >= 0) {
         setIndex(existingIndex);
         return;
       }
-
       if (!item) {
         return;
       }
-
       const allRelated: Array<{ ref: RelatedReference; type: SubjectType }> = [
         ...((item.radicals as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.radical })),
         ...((item.visuallySimilar as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.kanji })),
@@ -255,15 +199,48 @@ export default function ViewGlyphModalHost() {
       ];
 
       const found = allRelated.find((entry) => entry.ref.subjectId === subjectId);
+      const resolvedType = found?.type ?? fallbackType;
+      const hydrated = await fetchHydratedViewGlyphSubject({
+        accountId,
+        subjectId,
+        fallbackType: resolvedType,
+        fallbackItem: item,
+      });
+      if (hydrated) {
+        let nextIndex = 0;
+        setItems((prev) => {
+          const alreadyExistingIndex = prev.findIndex((entry) => entry.subjectId === hydrated.subjectId);
+          if (alreadyExistingIndex >= 0) {
+            nextIndex = alreadyExistingIndex;
+            return prev;
+          }
+
+          nextIndex = prev.length;
+          return [...prev, hydrated];
+        });
+        setIndex(nextIndex);
+        return;
+      }
+
       const synthetic = createSyntheticItem(found?.ref ?? { subjectId, label: "-" }, found?.type ?? fallbackType);
       if (!synthetic) {
         return;
       }
 
-      setItems([synthetic]);
-      setIndex(0);
+      let nextIndex = 0;
+      setItems((prev) => {
+        const alreadyExistingIndex = prev.findIndex((entry) => entry.subjectId === synthetic.subjectId);
+        if (alreadyExistingIndex >= 0) {
+          nextIndex = alreadyExistingIndex;
+          return prev;
+        }
+
+        nextIndex = prev.length;
+        return [...prev, synthetic];
+      });
+      setIndex(nextIndex);
     },
-    [createSyntheticItem, item, items],
+    [accountId, createSyntheticItem, item, items],
   );
 
   useEffect(() => {
@@ -314,6 +291,38 @@ export default function ViewGlyphModalHost() {
       document.body.style.overscrollBehavior = overscrollBehavior;
     };
   }, [closeModal, item, items.length]);
+
+  useEffect(() => {
+    if (!item || !accountId || !shouldHydrateViewGlyphItem(item)) {
+      return;
+    }
+
+    let cancelled = false;
+    const fallbackType = isSubjectType(item.subjectType) ? item.subjectType : SUBJECT_TYPES.kanji;
+
+    void fetchHydratedViewGlyphSubject({
+      accountId,
+      subjectId: item.subjectId,
+      fallbackType,
+      fallbackItem: item,
+    }).then((hydrated) => {
+      if (cancelled || !hydrated) {
+        return;
+      }
+
+      setItems((prev) =>
+        prev.map((entry) =>
+          entry.subjectId === hydrated.subjectId
+            ? { ...entry, ...hydrated, studyTags: entry.studyTags }
+            : entry,
+        ),
+      );
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [accountId, item]);
 
   if (!item) {
     return null;
@@ -456,10 +465,10 @@ export default function ViewGlyphModalHost() {
             subjectById={subjectById}
             onJumpToRelatedSubject={async (subjectId) => {
               const fallback = usedInVocabularyTargetType(item.subjectType);
-              openBySubject(subjectId, fallback);
+              await openBySubject(subjectId, fallback);
             }}
             onJumpToKanji={async (subjectId) => {
-              openBySubject(subjectId, SUBJECT_TYPES.kanji);
+              await openBySubject(subjectId, SUBJECT_TYPES.kanji);
             }}
           />
         </div>
