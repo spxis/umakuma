@@ -77,6 +77,7 @@ export default function ExplorerTabs({
   );
   const [includeTrouble, setIncludeTrouble] = useState<boolean>(false);
   const [queueTagFilter, setQueueTagFilter] = useState<StudyTagFilter>("all");
+  const [reviewedVisible, setReviewedVisible] = useState<boolean | null>(null);
   const [initialViewerMode, setInitialViewerMode] = useState<"detail" | "flash" | null>(null);
   const {
     studySource,
@@ -122,6 +123,12 @@ export default function ExplorerTabs({
       const viewer = params.get("viewer");
       setInitialViewerMode(viewer === "detail" || viewer === "flash" ? viewer : null);
       setQueueTagFilter(resolveStudyTagFilter(params, window.localStorage.getItem(queueTagFilterStorageKey)));
+      const urlHideLocked = params.get("hideLocked");
+      if (urlHideLocked === "0") {
+        setReviewedVisible(true);
+      } else if (urlHideLocked === "1") {
+        setReviewedVisible(false);
+      }
       clientStateHydratedRef.current = true;
     }, 0);
 
@@ -352,6 +359,18 @@ export default function ExplorerTabs({
   const openStudySourceManager = () => {
     setStudySourceModalRequestId((current) => current + 1);
   };
+  const handleSetReviewedVisible = (visible: boolean) => {
+    setReviewedVisible(visible);
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    params.set("hideLocked", visible ? "0" : "1");
+    const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+    window.history.replaceState(null, "", next);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  };
 
   return (
     <section className="space-y-3">
@@ -372,9 +391,12 @@ export default function ExplorerTabs({
               <ExplorerTabsStudyQueueMenu
                 queueMode={queueMode}
                 queueTagFilter={queueTagFilter}
+                studyMode={studyMode}
+                reviewedVisible={reviewedVisible === true}
                 studyCounts={studyCounts}
                 onSetQueueMode={setQueueMode}
                 onSetQueueTagFilter={setQueueTagFilter}
+                onSetReviewedVisible={handleSetReviewedVisible}
               />
             ) : null}
             <button
@@ -412,6 +434,7 @@ export default function ExplorerTabs({
           queueMode={queueMode}
           includeTrouble={includeTrouble}
           queueTagFilter={queueTagFilter}
+          onReviewedVisibilityChange={(visible) => setReviewedVisible(visible)}
         />
       </div>
 

@@ -42,7 +42,6 @@ type StudyExplorerPanelProps = {
   upcomingItems: UpcomingReviewItem[];
   isLoadingUpcomingReviews: boolean;
   upcomingErrorMessage: string | null;
-  showLocked: boolean;
   waitSortOrder: StudyWaitSortOrder;
   gridColumns: number;
   cacheFooterText: string;
@@ -53,7 +52,6 @@ type StudyExplorerPanelProps = {
   onSetSrsFilter: (filter: StudySrsFilter) => void;
   onSetSrsStageFilter: (filter: StudySrsStageFilter | null) => void;
   onToggleShowEnglish: () => void;
-  onToggleShowLocked: () => void;
   onToggleShowUpcomingReviews: () => void;
   onOpenStudySourceManager: () => void;
   onSetWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;

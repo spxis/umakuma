@@ -73,7 +73,6 @@ export default function StudyExplorerPanel({
   upcomingItems,
   isLoadingUpcomingReviews,
   upcomingErrorMessage,
-  showLocked,
   waitSortOrder,
   gridColumns,
   cacheFooterText,
@@ -84,7 +83,6 @@ export default function StudyExplorerPanel({
   onSetSrsFilter,
   onSetSrsStageFilter,
   onToggleShowEnglish,
-  onToggleShowLocked,
   onToggleShowUpcomingReviews,
   onOpenStudySourceManager,
   onSetWaitSortOrder,
@@ -273,17 +271,6 @@ export default function StudyExplorerPanel({
               <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.oldestWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.oldestWait}</span></button>
               <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.newestWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.newestWait}</span></button>
               <button type="button" onClick={() => onSetWaitSortOrder("random_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "random_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.randomizeWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.randomizeWait}</span></button>
-              {queueMode !== STUDY_QUEUE_TYPES.lesson && !studyMode ? (
-                <button
-                  type="button"
-                  onClick={onToggleShowLocked}
-                  className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(showLocked)}`}
-                  title={showLocked ? STUDY_PANEL_TEXT.reviewedOn : STUDY_PANEL_TEXT.reviewedOff}
-                  aria-label={showLocked ? STUDY_PANEL_TEXT.reviewedOn : STUDY_PANEL_TEXT.reviewedOff}
-                >
-                  {showLocked ? STUDY_PANEL_TEXT.reviewedOn : STUDY_PANEL_TEXT.reviewedOff}
-                </button>
-              ) : null}
               <button
                 type="button"
                 onClick={toggleBulkMode}

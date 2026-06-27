@@ -11,17 +11,23 @@ const HOVER_CLOSE_DELAY_MS = 220;
 type Props = {
   queueMode: QueueType;
   queueTagFilter: StudyTagFilter;
+  studyMode: boolean;
+  reviewedVisible: boolean;
   studyCounts: { reviews?: number; reviewsTotal?: number; lessons?: number } | null;
   onSetQueueMode: (mode: QueueType) => void;
   onSetQueueTagFilter: (filter: StudyTagFilter) => void;
+  onSetReviewedVisible: (visible: boolean) => void;
 };
 
 export default function ExplorerTabsStudyQueueMenu({
   queueMode,
   queueTagFilter,
+  studyMode,
+  reviewedVisible,
   studyCounts,
   onSetQueueMode,
   onSetQueueTagFilter,
+  onSetReviewedVisible,
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const hoverCloseTimerRef = useRef<number | null>(null);
@@ -143,6 +149,28 @@ export default function ExplorerTabsStudyQueueMenu({
             <button type="button" role="tab" aria-selected={queueTagFilter === "trouble"} onClick={() => onSetQueueTagFilter("trouble")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "trouble" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Trouble</button>
             <button type="button" role="tab" aria-selected={queueTagFilter === "favorite"} onClick={() => onSetQueueTagFilter("favorite")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "favorite" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Favorites</button>
           </div>
+          {!studyMode ? (
+            <div className="mt-2 inline-flex w-full items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Reviewed visibility filter">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={!reviewedVisible}
+                onClick={() => onSetReviewedVisible(false)}
+                className={queueModeSegmentClass(QUEUE_TYPES.review, reviewedVisible ? QUEUE_TYPES.lesson : QUEUE_TYPES.review)}
+              >
+                Reviewed OFF
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={reviewedVisible}
+                onClick={() => onSetReviewedVisible(true)}
+                className={queueModeSegmentClass(QUEUE_TYPES.review, reviewedVisible ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}
+              >
+                Reviewed ON
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>

@@ -65,6 +65,7 @@ export default function StudyExplorer({
   queueMode,
   includeTrouble,
   queueTagFilter = "all",
+  onReviewedVisibilityChange,
 }: StudyExplorerProps) {
   const queueStorageScopeKey = buildStudyQueueStorageScopeKey(studySource, customLibraryId, queueTagFilter);
   const studyApiBasePath = buildStudyApiBasePath(accountId, studySource);
@@ -120,6 +121,9 @@ export default function StudyExplorer({
     includeReviewed: queueMode === STUDY_QUEUE_TYPES.review && !studyMode && showLocked,
     queueTagFilter,
   });
+  useEffect(() => {
+    onReviewedVisibilityChange?.(showLocked);
+  }, [onReviewedVisibilityChange, showLocked]);
   useLayoutEffect(() => {
     const cached = readStoredQueue(accountId, queueMode, queueStorageScopeKey);
     const initialQueueState = deriveInitialQueueState(cached);
@@ -443,10 +447,9 @@ export default function StudyExplorer({
             showUpcomingReviews={showUpcomingReviews} upcomingItems={upcomingData?.items ?? []}
             isLoadingUpcomingReviews={showUpcomingReviews && (isLoadingUpcoming || isValidatingUpcoming)}
             upcomingErrorMessage={upcomingError?.message ?? null}
-            showLocked={effectiveShowLocked} sentinelRef={sentinelRef}
+            sentinelRef={sentinelRef}
             onSetViewedLevel={setViewedLevel} onSetTypeFilter={setTypeFilter} onSetSrsFilter={handleSetSrsFilter}
             onSetSrsStageFilter={setSrsStageFilter} onToggleShowEnglish={onToggleShowEnglish}
-            onToggleShowLocked={() => setShowLocked((prev) => !prev)}
             onToggleShowUpcomingReviews={() => setShowUpcomingReviews((prev) => !prev)}
             onOpenStudySourceManager={onOpenStudySourceManager}
             onSetWaitSortOrder={setWaitSortOrder} onSelectSubject={setSelectedId}

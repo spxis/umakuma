@@ -211,18 +211,21 @@ export function useStudyExplorerEffects({
   }, [recentOnlyStorageKey, setRecentOnly]);
 
   useEffect(() => {
-    const urlHideLocked = new URLSearchParams(window.location.search).get("hideLocked");
-    if (urlHideLocked !== null) {
-      setShowLocked(urlHideLocked !== "1");
-      return;
-    }
+    const syncShowLocked = () => {
+      const urlHideLocked = new URLSearchParams(window.location.search).get("hideLocked");
+      if (urlHideLocked !== null) {
+        setShowLocked(urlHideLocked !== "1");
+        return;
+      }
+      const raw = window.localStorage.getItem(showLockedStorageKey);
+      if (raw) {
+        setShowLocked(raw === "1");
+      }
+    };
 
-    const raw = window.localStorage.getItem(showLockedStorageKey);
-    if (!raw) {
-      return;
-    }
-
-    setShowLocked(raw === "1");
+    syncShowLocked();
+    window.addEventListener("popstate", syncShowLocked);
+    return () => window.removeEventListener("popstate", syncShowLocked);
   }, [setShowLocked, showLockedStorageKey]);
 
   useEffect(() => {

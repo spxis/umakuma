@@ -127,6 +127,7 @@ export type StudyExplorerProps = {
   queueMode: StudyQueueMode;
   includeTrouble: boolean;
   queueTagFilter?: StudyTagFilter;
+  onReviewedVisibilityChange?: (visible: boolean) => void;
   initialViewerMode?: StudyViewerMode | null;
   initialFilters?: {
     viewedLevel: number | null;
