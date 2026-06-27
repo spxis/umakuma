@@ -134,6 +134,13 @@ export function useStudyReviewSubmission({
           return next;
         });
         onSetSelectedId(nextVisibleItem?.subjectId ?? itemForSubmit.subjectId ?? null);
+        inFlightAssignmentIdsRef.current.delete(assignmentId);
+        onSetSubmittingByAssignmentId((prev) => {
+          const next = new Set(prev);
+          next.delete(assignmentId);
+          return next;
+        });
+        onSetSubmitInFlight(null);
         return;
       }
 
