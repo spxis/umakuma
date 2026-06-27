@@ -22,20 +22,41 @@ export default function StudyLoadingShimmerOverlay({
       <div className="h-full space-y-3 p-4 sm:p-5">
         <div className="rounded-2xl border border-line/80 bg-surface px-3 py-3">
           {filtersOpen ? (
-            <div className="space-y-2">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="shimmer-surface h-3 w-34 rounded" />
-                <span className="shimmer-surface h-7 w-22 rounded-full border border-line/70" />
+            <div className="space-y-2.5">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="shimmer-surface h-3 w-12 rounded" />
+                  <span className="shimmer-surface h-7 w-20 rounded-full border border-line/70" />
+                </div>
+                <div className="flex w-full items-center gap-2 sm:w-1/2">
+                  <span className="shimmer-surface h-7 flex-1 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-18 rounded-full border border-line/70" />
+                </div>
               </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="shimmer-surface h-7 w-24 rounded-full border border-line/70" />
-                <span className="shimmer-surface h-7 w-24 rounded-full border border-line/70" />
-                <span className="shimmer-surface h-7 w-24 rounded-full border border-line/70" />
-                <span className="shimmer-surface h-7 w-32 rounded-full border border-line/70" />
-              </div>
-              <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_16rem]">
-                <span className="shimmer-surface h-7 rounded-full border border-line/70" />
-                <span className="shimmer-surface h-7 rounded-full border border-line/70" />
+
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-1.5">
+                  <span className="shimmer-surface h-3 w-10 rounded" />
+                  <span className="shimmer-surface h-7 w-14 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-14 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-14 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-14 rounded-full border border-line/70" />
+                  <span className="shimmer-surface hidden h-7 w-14 rounded-full border border-line/70 sm:inline-flex" />
+                  <span className="shimmer-surface hidden h-7 w-14 rounded-full border border-line/70 sm:inline-flex" />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="shimmer-surface h-3 w-14 rounded" />
+                  <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="shimmer-surface h-3 w-10 rounded" />
+                  <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
+                  <span className="shimmer-surface h-7 w-16 rounded-full border border-line/70" />
+                </div>
               </div>
             </div>
           ) : (

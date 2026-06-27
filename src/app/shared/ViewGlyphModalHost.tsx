@@ -1,12 +1,20 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { LevelItem, RelatedReference } from "@/app/users/[nickname]/explorerTypes";
-import LevelExplorerDetailSection from "@/app/users/[nickname]/level-explorer/components/LevelExplorerDetailSection";
-import type { VocabularyKanjiLink } from "@/app/users/[nickname]/level-explorer/components/LevelExplorerReferenceCards";
-import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
-import { hasRenderableRelatedItems } from "@/app/users/[nickname]/study-explorer/components/StudyReviewModalHelpers";
+
+import { useCallback, useEffect, useState } from "react";
 import { newsGlyphButtonClass } from "@/app/news/newsGlyphBoxStyle";
+import type { RelatedReference } from "@/app/users/[nickname]/explorerTypes";
+import {
+  buildStudyReviewAllMeanings,
+  collectUsedKanjiItems,
+  deriveJlptGradeLabel,
+  deriveStudyReviewReadings,
+} from "@/app/users/[nickname]/study-explorer/lib/studyReviewModalDerivations";
 import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import {
+  STUDY_VIEWER_MODES,
+} from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
+import { hasRenderableRelatedItems } from "@/app/users/[nickname]/study-explorer/components/StudyReviewModalHelpers";
+import StudyReviewModalSection from "@/app/users/[nickname]/study-explorer/components/StudyReviewModalSection";
 import {
   fetchHydratedViewGlyphSubject,
   shouldHydrateViewGlyphItem,
@@ -14,7 +22,6 @@ import {
 import {
   resolveParentFrameRect,
   resolveViewGlyphFrameSize,
-  usedInVocabularyTargetType,
   viewerTitle,
   type ViewGlyphFrameSize,
 } from "@/app/shared/viewGlyphModalHostHelpers";
@@ -24,6 +31,7 @@ import {
   isSubjectType,
   type SubjectType,
 } from "@/lib/domainConstants";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import {
   VIEW_GLYPH_EVENT,
   VIEW_GLYPH_SELECTOR_KINDS,
@@ -31,10 +39,11 @@ import {
   type ViewGlyphSelectorEntry,
   type ViewGlyphViewerPayload,
 } from "@/lib/viewGlyphViewer";
-import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 
 const VIEW_GLYPH_STORAGE_KEYS = {
   usedInVocabularyCollapsed: "wr:view-glyph:used-in-vocabulary-collapsed",
+  usedKanjiCollapsed: "wr:view-glyph:used-kanji-collapsed",
+  usedInWordsCollapsed: "wr:view-glyph:used-in-words-collapsed",
 } as const;
 
 type ViewGlyphStackEntry = {
@@ -54,9 +63,22 @@ export default function ViewGlyphModalHost() {
       mode: "one-is-true",
     },
   );
+  const [usedKanjiCollapsed, setUsedKanjiCollapsed] = usePersistedBoolean(
+    VIEW_GLYPH_STORAGE_KEYS.usedKanjiCollapsed,
+    {
+      defaultValue: false,
+      mode: "one-is-true",
+    },
+  );
+  const [usedInWordsCollapsed, setUsedInWordsCollapsed] = usePersistedBoolean(
+    VIEW_GLYPH_STORAGE_KEYS.usedInWordsCollapsed,
+    {
+      defaultValue: false,
+      mode: "one-is-true",
+    },
+  );
   const [customTitle, setCustomTitle] = useState<string | undefined>(undefined);
   const [selector, setSelector] = useState<ViewGlyphSelectorEntry[]>([]);
-  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
   const [frameSize, setFrameSize] = useState<ViewGlyphFrameSize | null>(null);
   const [stack, setStack] = useState<ViewGlyphStackEntry[]>([]);
 
@@ -72,7 +94,6 @@ export default function ViewGlyphModalHost() {
       setAccountId(detail.accountId ?? "");
       setCustomTitle(detail.title);
       setSelector(Array.isArray(detail.selector) ? detail.selector : []);
-      setTagOverrides({});
       setStack([]);
       setFrameSize(resolveViewGlyphFrameSize(resolveParentFrameRect()));
     };
@@ -84,9 +105,6 @@ export default function ViewGlyphModalHost() {
   }, []);
 
   const item = items[index] ?? null;
-  const selectedTags = item
-    ? (tagOverrides[item.subjectId] ?? item.studyTags ?? { favorite: false, trouble: false })
-    : { favorite: false, trouble: false };
   const hasPreviousItem = index > 0;
   const hasNextItem = index < items.length - 1;
   const showNavigationButtons = hasPreviousItem || hasNextItem;
@@ -98,7 +116,6 @@ export default function ViewGlyphModalHost() {
     setAccountId("");
     setCustomTitle(undefined);
     setSelector([]);
-    setTagOverrides({});
     setStack([]);
     setFrameSize(null);
   }, []);
@@ -134,58 +151,6 @@ export default function ViewGlyphModalHost() {
     });
   }, [canStepBack, closeModal]);
 
-  const toggleStudyTag = useCallback(async (tag: "favorite" | "trouble") => {
-    if (!item || !accountId) {
-      return;
-    }
-
-    const current = tagOverrides[item.subjectId] ?? item.studyTags ?? { favorite: false, trouble: false };
-    const next = { ...current, [tag]: !current[tag] };
-
-    setTagOverrides((prev) => ({ ...prev, [item.subjectId]: next }));
-    setItems((prev) =>
-      prev.map((entry) =>
-        entry.subjectId === item.subjectId
-          ? { ...entry, studyTags: next }
-          : entry,
-      ),
-    );
-
-    try {
-      const response = await fetch(`/api/study/${accountId}/tags`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subjectId: item.subjectId, tag, enabled: next[tag] }),
-      });
-      if (!response.ok) {
-        throw new Error("Tag update failed.");
-      }
-
-      window.dispatchEvent(
-        new CustomEvent("wr:study-tags-updated", {
-          detail: { accountId, subjectId: item.subjectId },
-        }),
-      );
-    } catch {
-      setTagOverrides((prev) => ({ ...prev, [item.subjectId]: current }));
-      setItems((prev) =>
-        prev.map((entry) =>
-          entry.subjectId === item.subjectId
-            ? { ...entry, studyTags: current }
-            : entry,
-        ),
-      );
-    }
-  }, [accountId, item, tagOverrides]);
-
-  const subjectById = useMemo(() => {
-    const map = new Map<number, LevelItem>();
-    for (const entry of items) {
-      map.set(entry.subjectId, entry);
-    }
-    return map;
-  }, [items]);
-
   const openBySubject = useCallback(
     async (subjectId: number, fallbackType: SubjectType) => {
       if (!item || !accountId) {
@@ -204,7 +169,7 @@ export default function ViewGlyphModalHost() {
         ...((item.componentKanji as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.kanji })),
         ...((item.usedInVocabulary as RelatedReference[] | undefined) ?? []).map((ref) => ({
           ref,
-          type: usedInVocabularyTargetType(item.subjectType),
+          type: item.subjectType === SUBJECT_TYPES.radical ? SUBJECT_TYPES.kanji : SUBJECT_TYPES.vocabulary,
         })),
       ];
 
@@ -216,21 +181,23 @@ export default function ViewGlyphModalHost() {
         fallbackType: resolvedType,
         fallbackItem: item,
       });
-      if (hydrated) {
-        let nextIndex = 0;
-        setItems((prev) => {
-          const alreadyExistingIndex = prev.findIndex((entry) => entry.subjectId === hydrated.subjectId);
-          if (alreadyExistingIndex >= 0) {
-            nextIndex = alreadyExistingIndex;
-            return prev;
-          }
 
-          nextIndex = prev.length;
-          return [...prev, hydrated];
-        });
-        pushStackAndOpen(nextIndex);
+      if (!hydrated) {
         return;
       }
+
+      let nextIndex = 0;
+      setItems((prev) => {
+        const alreadyExistingIndex = prev.findIndex((entry) => entry.subjectId === hydrated.subjectId);
+        if (alreadyExistingIndex >= 0) {
+          nextIndex = alreadyExistingIndex;
+          return prev;
+        }
+
+        nextIndex = prev.length;
+        return [...prev, hydrated];
+      });
+      pushStackAndOpen(nextIndex);
     },
     [accountId, item, items, pushStackAndOpen],
   );
@@ -265,7 +232,6 @@ export default function ViewGlyphModalHost() {
       if (event.key === "ArrowRight") {
         event.preventDefault();
         setIndex((prev) => Math.min(items.length - 1, prev + 1));
-        return;
       }
     };
 
@@ -320,28 +286,14 @@ export default function ViewGlyphModalHost() {
     return null;
   }
 
-  const selectedMeaningExplanation = stripHtml(item.meaningExplanation) || "-";
-  const selectedReadingExplanationRaw = stripHtml(item.readingExplanation);
-  const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
-  const hasPrimaryRelatedPanel = hasRenderableRelatedItems(
-    item.subjectType === SUBJECT_TYPES.vocabulary
-      ? (item.componentKanji as RelatedReference[] | undefined)
-      : (item.radicals as RelatedReference[] | undefined),
-  );
-  const hasVisuallySimilarPanel = hasRenderableRelatedItems(item.visuallySimilar as RelatedReference[] | undefined);
-  const hasUsedInVocabularyPanel = hasRenderableRelatedItems(item.usedInVocabulary as RelatedReference[] | undefined);
-
-  const vocabularyKanjiLinks: VocabularyKanjiLink[] =
-    item.subjectType === SUBJECT_TYPES.vocabulary
-      ? ((item.componentKanji as RelatedReference[] | undefined) ?? [])
-          .filter((entry) => entry.label.trim().length > 0 && entry.label.trim() !== "-")
-          .map((entry) => ({
-            char: entry.label,
-            subjectId: entry.subjectId,
-            reading: entry.reading ?? "-",
-            wkLevel: entry.wkLevel ?? null,
-          }))
-      : [];
+  const allMeanings = buildStudyReviewAllMeanings(item);
+  const { primaryReadingHiragana, primaryReadingKatakana, secondaryReadingValue } = deriveStudyReviewReadings(item);
+  const hasRadicals = hasRenderableRelatedItems(item.radicals as RelatedReference[] | undefined);
+  const hasVisuallySimilar = hasRenderableRelatedItems(item.visuallySimilar as RelatedReference[] | undefined);
+  const hasUsedInVocabulary = hasRenderableRelatedItems(item.usedInVocabulary as RelatedReference[] | undefined);
+  const hasComponentKanji = hasRenderableRelatedItems(item.componentKanji as RelatedReference[] | undefined);
+  const usedKanjiItems = collectUsedKanjiItems(item);
+  const jlptGradeLabel = deriveJlptGradeLabel(item);
 
   const modalFrameStyle = frameSize
     ? { width: `${frameSize.width}px`, height: `${frameSize.height}px` }
@@ -408,6 +360,7 @@ export default function ViewGlyphModalHost() {
                 ? VIEW_GLYPH_SELECTOR_KINDS.vocabulary
                 : VIEW_GLYPH_SELECTOR_KINDS.kanji;
               const sessionClass = isSessionEntry && !selected ? "ring-1 ring-current/35" : "";
+
               return (
                 <button
                   key={`${entry.label}-${entry.kind}-${entryIndex}`}
@@ -442,35 +395,56 @@ export default function ViewGlyphModalHost() {
         ) : null}
 
         <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
-          <LevelExplorerDetailSection
+          <StudyReviewModalSection
             accountId={accountId}
-            selectedItem={item}
-            studyTags={selectedTags}
-            onToggleStudyTag={accountId ? (tag) => { void toggleStudyTag(tag); } : null}
-            showEnglish={showEnglish}
-            clampLongTitle
-            titleMeaningToggleOnly
-            canToggleEnglish
-            onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
-            hideTimeStats={false}
             studyMode={false}
-            selectedMeaningExplanation={selectedMeaningExplanation}
-            selectedReadingExplanationRaw={selectedReadingExplanationRaw}
-            showReadingExplanation={showReadingExplanation}
-            hasPrimaryRelatedPanel={hasPrimaryRelatedPanel}
-            hasVisuallySimilarPanel={hasVisuallySimilarPanel}
-            hasUsedInVocabularyPanel={hasUsedInVocabularyPanel}
+            showEnglish={showEnglish}
+            canToggleEnglish
+            viewerMode={STUDY_VIEWER_MODES.detail}
+            selectedItem={item}
+            isPracticeItem={false}
+            selectedOutcome={undefined}
+            isSubmittingSelected={false}
+            submitFeedback={null}
+            requiresReveal={false}
+            isAnswerRevealed
+            isOutcomeFinal
+            detailsRevealed
+            useStudyFlashLayout={false}
+            flashCycleDone={false}
+            flashRevealed={false}
+            currentFlashKey={`view-glyph:${item.subjectId}`}
+            allMeanings={allMeanings}
+            primaryReadingHiragana={primaryReadingHiragana}
+            primaryReadingKatakana={primaryReadingKatakana}
+            secondaryReadingValue={secondaryReadingValue}
+            hasRadicals={hasRadicals}
+            hasVisuallySimilar={hasVisuallySimilar}
+            hasUsedInVocabulary={hasUsedInVocabulary}
+            hasComponentKanji={hasComponentKanji}
+            usedKanjiItems={usedKanjiItems}
             usedInVocabularyCollapsed={usedInVocabularyCollapsed}
+            usedKanjiCollapsed={usedKanjiCollapsed}
+            usedInWordsCollapsed={usedInWordsCollapsed}
+            jlptGradeLabel={jlptGradeLabel}
+            wrong={0}
+            skipped={0}
+            correct={0}
+            glyphViewerItems={items}
+            glyphViewerIndex={index}
+            onReveal={() => {}}
+            onSubmit={() => {}}
+            onSkipCurrent={() => {}}
+            onStartLesson={() => {}}
+            onAdvanceFlashOrNext={() => {}}
+            onFlashTouchStart={() => {}}
+            onFlashTouchEnd={() => {}}
+            onSetFlashRevealKey={() => {}}
             onToggleUsedInVocabularyCollapsed={() => setUsedInVocabularyCollapsed((value) => !value)}
-            vocabularyKanjiLinks={vocabularyKanjiLinks}
-            subjectById={subjectById}
-            onJumpToRelatedSubject={async (subjectId) => {
-              const fallback = usedInVocabularyTargetType(item.subjectType);
-              await openBySubject(subjectId, fallback);
-            }}
-            onJumpToKanji={async (subjectId) => {
-              await openBySubject(subjectId, SUBJECT_TYPES.kanji);
-            }}
+            onToggleUsedKanjiCollapsed={() => setUsedKanjiCollapsed((value) => !value)}
+            onToggleUsedInWordsCollapsed={() => setUsedInWordsCollapsed((value) => !value)}
+            onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
+            onOpenRelatedSubject={openBySubject}
           />
         </div>
       </div>

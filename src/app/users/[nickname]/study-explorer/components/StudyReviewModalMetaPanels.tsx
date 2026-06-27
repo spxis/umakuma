@@ -68,6 +68,7 @@ type Props = {
   onToggleUsedInVocabularyCollapsed: () => void;
   onToggleUsedKanjiCollapsed: () => void;
   onToggleUsedInWordsCollapsed: () => void;
+  onOpenRelatedSubject?: (subjectId: number, fallbackType: SubjectType) => void | Promise<void>;
 };
 
 export default function StudyReviewModalMetaPanels({
@@ -105,6 +106,7 @@ export default function StudyReviewModalMetaPanels({
   onToggleUsedInVocabularyCollapsed,
   onToggleUsedKanjiCollapsed,
   onToggleUsedInWordsCollapsed,
+  onOpenRelatedSubject,
 }: Props) {
   function openSingleGlyph(params: {
     subjectId: number;
@@ -152,6 +154,11 @@ export default function StudyReviewModalMetaPanels({
     subjectId: number,
     fallbackType: SubjectType,
   ) => {
+    if (onOpenRelatedSubject && subjectId > 0) {
+      void onOpenRelatedSubject(subjectId, fallbackType);
+      return;
+    }
+
     const entry = (items ?? []).find((item) => item.subjectId === subjectId);
     openSingleGlyph({
       subjectId,

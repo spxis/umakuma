@@ -3,7 +3,6 @@ import type {
 } from "../lib/studyExplorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
-
 import type { RelatedReference } from "./StudyReviewModal.types";
 import type { StudyReviewModalSectionProps as Props } from "./StudyReviewModalSection.types";
 import {
@@ -77,6 +76,7 @@ export default function StudyReviewModalSection({
   onToggleUsedKanjiCollapsed,
   onToggleUsedInWordsCollapsed,
   onToggleShowEnglish,
+  onOpenRelatedSubject,
 }: Props) {
   const showStatusChip = !isLessonLockedQueueItem(selectedItem);
   const resolvedViewerItems = glyphViewerItems && glyphViewerItems.length > 0 ? glyphViewerItems : [selectedItem];
@@ -97,10 +97,8 @@ export default function StudyReviewModalSection({
   const { fontFamily: glyphFontFamily, toggle: toggleGlyphFont } = useGlyphFontPreference();
   const flashReadingHint = primaryReadingHiragana !== "-" ? primaryReadingHiragana : secondaryReadingValue;
   const showFlashReadingHint = showEnglish && flashReadingHint.trim().length > 0 && flashReadingHint !== "-";
-
   const sanitizedRelatedItems = (items: RelatedReference[] | undefined) =>
     (items ?? []).map((item) => ({ ...item, wkLevel: null }));
-
   const unifiedDetailItem: StudyQueueItem = shouldUseUnifiedLessonDetail
     ? {
         ...selectedItem,
@@ -164,7 +162,6 @@ export default function StudyReviewModalSection({
                   {selectedItem.characters}
                 </p>
               </button>
-
               <button
                 type="button"
                 onClick={(event) => {
@@ -493,6 +490,7 @@ export default function StudyReviewModalSection({
         onToggleUsedInVocabularyCollapsed={onToggleUsedInVocabularyCollapsed}
         onToggleUsedKanjiCollapsed={onToggleUsedKanjiCollapsed}
         onToggleUsedInWordsCollapsed={onToggleUsedInWordsCollapsed}
+        onOpenRelatedSubject={onOpenRelatedSubject}
       />
     </>
   );

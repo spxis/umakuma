@@ -5,6 +5,7 @@ import type {
   StudyReviewSubmitResult,
   StudyViewerMode,
 } from "../lib/studyExplorerTypes";
+import type { SubjectType } from "@/lib/domainConstants";
 import type { RelatedReference } from "./StudyReviewModal.types";
 
 export type StudyReviewModalSectionProps = {
@@ -56,4 +57,5 @@ export type StudyReviewModalSectionProps = {
   onToggleUsedKanjiCollapsed: () => void;
   onToggleUsedInWordsCollapsed: () => void;
   onToggleShowEnglish: () => void;
+  onOpenRelatedSubject?: (subjectId: number, fallbackType: SubjectType) => void | Promise<void>;
 };
