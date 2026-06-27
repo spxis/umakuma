@@ -81,6 +81,38 @@ Primary alias:
 
 - `https://umakuma.vercel.app`
 
+### Fast deploy and status (copy/paste)
+
+Use these when you need a quick yes/no on production.
+
+1. Kick off deploy (from any directory):
+
+```bash
+git -C '/Users/john/Projects/umakuma' push origin main
+```
+
+2. Check deployment queue/status quickly:
+
+```bash
+pnpm --dir '/Users/john/Projects/umakuma' deploy:status
+```
+
+3. Inspect the latest deployment details (status, aliases, build output):
+
+```bash
+pnpm --dir '/Users/john/Projects/umakuma' deploy:status:latest
+```
+
+4. If you want the project-local command equivalents:
+
+```bash
+pnpm deploy:push
+pnpm deploy:status
+pnpm deploy:status:latest
+```
+
+Expected success state: latest deployment shows `Ready` and aliases include `https://umakuma.com`.
+
 ### Important GitHub Scope Note
 
 If a push includes files in `.github/workflows/*`, GitHub may reject the push when the current OAuth token does not include `workflow` scope.
