@@ -1,5 +1,7 @@
 import type { LevelItem, RelatedReference } from "../../explorerTypes";
-import { pronunciationForReading, relatedReferenceCardClass } from "../lib/levelExplorerDisplay";
+import { pronunciationForReading } from "../lib/levelExplorerDisplay";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
 
 type RelatedEntry = {
   subjectId: number;
@@ -47,15 +49,6 @@ function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
   });
 }
 
-function labelClass(label: string, size: "normal" | "large"): string {
-  if (size === "normal") return "text-xl";
-
-  const length = Array.from(label).length;
-  if (length <= 2) return "text-4xl";
-  if (length <= 4) return "text-3xl";
-  return "text-2xl";
-}
-
 export function RelatedReferenceCards({
   items,
   large,
@@ -84,6 +77,7 @@ export function RelatedReferenceCards({
         const linked = subjectById.get(entry.subjectId) ?? null;
         const isClickable = linked !== null || typeof entry.wkLevel === "number";
         const relationType = linked?.subjectType ?? fallbackType;
+        const referenceWkLevel = entry.wkLevel ?? linked?.wkLevel ?? null;
         const reading = typeof entry.reading === "string" && entry.reading.trim() ? entry.reading : null;
         const meaning = typeof entry.meaning === "string" && entry.meaning.trim() ? entry.meaning : null;
         const subtitle = (() => {
@@ -100,36 +94,29 @@ export function RelatedReferenceCards({
 
         if (!isClickable) {
           return (
-            <span
+            <GlyphReferenceTile
               key={key}
-              className={`${relatedReferenceCardClass(relationType, false, size)} inline-flex flex-col items-center`}
-            >
-              <span className={`${labelClass(entry.label, size)} font-black leading-none`}>{entry.label}</span>
-              {subtitle ? (
-                <span className="mt-1 text-center text-sm font-semibold leading-none text-foreground/70">
-                  {subtitle}
-                </span>
-              ) : null}
-            </span>
+              glyph={entry.label}
+              subtitle={subtitle}
+              subjectType={relationType}
+              wkLevel={referenceWkLevel}
+              size={size}
+            />
           );
         }
 
         return (
-          <button
+          <GlyphReferenceTile
             key={key}
-            type="button"
+            glyph={entry.label}
+            subtitle={subtitle}
+            subjectType={relationType}
+            wkLevel={referenceWkLevel}
+            size={size}
             onClick={() => {
               void onJumpToRelatedSubject(entry.subjectId, entry.wkLevel ?? linked?.wkLevel ?? null);
             }}
-            className={`${relatedReferenceCardClass(relationType, true, size)} inline-flex flex-col items-center`}
-          >
-            <span className={`${labelClass(entry.label, size)} font-black leading-none`}>{entry.label}</span>
-            {subtitle ? (
-              <span className="mt-1 text-center text-sm font-semibold leading-none text-foreground/70">
-                {subtitle}
-              </span>
-            ) : null}
-          </button>
+          />
         );
       })}
     </div>
@@ -161,21 +148,17 @@ export function VocabularyKanjiCards({
         })();
 
         return (
-          <button
+          <GlyphReferenceTile
             key={`${selectedSubjectId}-${item.subjectId}`}
-            type="button"
+            glyph={item.char}
+            subtitle={subtitle}
+            subjectType={SUBJECT_TYPES.kanji}
+            wkLevel={item.wkLevel}
+            size="large"
             onClick={() => {
               void onJumpToKanji(item.subjectId, item.wkLevel);
             }}
-            className="inline-flex cursor-pointer flex-col items-center rounded-xl border border-kanji/50 bg-kanji/10 px-4 py-3 text-center text-kanji transition hover:bg-kanji/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
-          >
-            <span className="text-4xl font-black leading-none">{item.char}</span>
-            {subtitle ? (
-              <span className="mt-1 w-full text-center text-sm font-semibold leading-none text-foreground/70">
-                {subtitle}
-              </span>
-            ) : null}
-          </button>
+          />
         );
       })}
     </div>

@@ -28,6 +28,7 @@ import {
   readingsWithPronunciationList,
   relatedTileLabelClass,
 } from "./StudyReviewModalHelpers";
+import { stripHtml } from "../../level-explorer/lib/levelExplorerDisplay";
 import { RelatedReferenceCards } from "../../level-explorer/components/LevelExplorerReferenceCards";
 import type { LevelItem } from "../../explorerTypes";
 
@@ -148,6 +149,10 @@ export default function StudyReviewModalMetaPanels({
   }
 
   const wordExamples = parseWordExamples(selectedItem.jlptMeta?.wordExamples);
+  const selectedMeaningExplanation = stripHtml(selectedItem.meaningExplanation) || "-";
+  const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
+  const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
+  const showReadingCards = !isRadicalSubjectType(selectedItem.subjectType);
 
   const openFromRelatedItems = (
     items: RelatedReference[] | undefined,
@@ -190,19 +195,28 @@ export default function StudyReviewModalMetaPanels({
     <>
       {!suppressDetails && ((!studyMode && viewerMode === STUDY_VIEWER_MODES.flash) || useStudyFlashLayout ? null : detailsRevealed ? (
         <>
-          <div className="mt-3 grid gap-2 lg:grid-cols-2">
-            {readingDualScriptCard(
-              STUDY_REVIEW_META_TEXT.primaryReadings,
-              readingWithPronunciation(primaryReadingHiragana, showEnglish),
-              readingWithPronunciation(primaryReadingKatakana, showEnglish),
-            )}
-            {readingCard(STUDY_REVIEW_META_TEXT.secondaryReadings, readingsWithPronunciationList(secondaryReadingValue, showEnglish))}
-          </div>
+          {showReadingCards ? (
+            <div className="mt-3 grid gap-2 lg:grid-cols-2">
+              {readingDualScriptCard(
+                STUDY_REVIEW_META_TEXT.primaryReadings,
+                readingWithPronunciation(primaryReadingHiragana, showEnglish),
+                readingWithPronunciation(primaryReadingKatakana, showEnglish),
+              )}
+              {readingCard(STUDY_REVIEW_META_TEXT.secondaryReadings, readingsWithPronunciationList(secondaryReadingValue, showEnglish))}
+            </div>
+          ) : null}
 
-          <div className="mt-2 grid gap-2 lg:grid-cols-3">
-            {metricCard(STUDY_REVIEW_META_TEXT.started, formatTimestampWithRelative(selectedItem.startedAt))}
-            {metricCard(STUDY_REVIEW_META_TEXT.nextReview, formatTimestampWithRelative(selectedItem.availableAt))}
-            {metricCard(STUDY_REVIEW_META_TEXT.passed, formatTimestampWithRelative(selectedItem.passedAt))}
+          <div className={`mt-2 grid gap-2 ${showReadingExplanation ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
+            <article className="rounded-xl border border-line bg-surface p-3 text-sm">
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Meaning explanation</p>
+              <p className="mt-2 text-foreground/90">{selectedMeaningExplanation}</p>
+            </article>
+            {showReadingExplanation ? (
+              <article className="rounded-xl border border-line bg-surface p-3 text-sm">
+                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Reading explanation</p>
+                <p className="mt-2 text-foreground/90">{selectedReadingExplanationRaw}</p>
+              </article>
+            ) : null}
           </div>
 
           {hasRadicals || hasVisuallySimilar || hasUsedInVocabulary ? (
@@ -345,6 +359,12 @@ export default function StudyReviewModalMetaPanels({
               ) : null}
             </div>
           ) : null}
+
+          <div className="mt-2 grid gap-2 lg:grid-cols-3">
+            {metricCard(STUDY_REVIEW_META_TEXT.started, formatTimestampWithRelative(selectedItem.startedAt))}
+            {metricCard(STUDY_REVIEW_META_TEXT.nextReview, formatTimestampWithRelative(selectedItem.availableAt))}
+            {metricCard(STUDY_REVIEW_META_TEXT.passed, formatTimestampWithRelative(selectedItem.passedAt))}
+          </div>
 
           <div className="mt-2">
             <LevelExplorerReviewStatsCard

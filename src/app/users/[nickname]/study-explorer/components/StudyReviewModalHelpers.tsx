@@ -7,15 +7,9 @@ import {
   STUDY_REVIEW_HELPERS_TEXT,
   STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS,
 } from "./StudyExplorer.constants";
+import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
 
 import { formatRelativeFromNow } from "../../level-explorer/lib/levelExplorerDisplay";
-
-export function relatedTileLabelClass(label: string): string {
-  const length = Array.from(label).length;
-  if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.large) return "text-4xl";
-  if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.medium) return "text-3xl";
-  return "text-xl";
-}
 
 export function hasRenderableRelatedItems(items: RelatedReference[] | undefined): boolean {
   if (!items || items.length === 0) {
@@ -28,6 +22,13 @@ export function hasRenderableRelatedItems(items: RelatedReference[] | undefined)
       .map((part) => part.trim())
       .some((part) => Boolean(part) && part !== STUDY_REVIEW_HELPERS_TEXT.empty),
   );
+}
+
+export function relatedTileLabelClass(label: string): string {
+  const length = Array.from(label).length;
+  if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.large) return "text-4xl";
+  if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.medium) return "text-3xl";
+  return "text-xl";
 }
 
 export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element {
@@ -64,17 +65,11 @@ export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element
   return (
     <div className="mt-2 flex flex-wrap gap-2">
       {expanded.map((entry) => (
-        <span
+        <GlyphReferenceTile
           key={entry.key}
-          className="inline-flex min-w-[4.5rem] flex-col items-center rounded-xl border border-line bg-surface px-3 py-2 text-center"
-        >
-          <span className={`font-black leading-none text-foreground ${relatedTileLabelClass(entry.label)}`}>
-            {entry.label}
-          </span>
-          {entry.reading ? (
-            <span className="mt-1 text-xs font-semibold leading-none text-foreground/70">{entry.reading}</span>
-          ) : null}
-        </span>
+          glyph={entry.label}
+          subtitle={entry.reading}
+        />
       ))}
     </div>
   );
@@ -118,19 +113,12 @@ export function relatedTilesClickable(
   return (
     <div className="mt-2 flex flex-wrap gap-2">
       {expanded.map((entry) => (
-        <button
-          type="button"
+        <GlyphReferenceTile
           key={entry.key}
           onClick={() => onSelect(entry)}
-          className="inline-flex min-w-[4.5rem] cursor-pointer flex-col items-center rounded-xl border border-line bg-surface px-3 py-2 text-center transition-colors hover:bg-surface-muted"
-        >
-          <span className={`font-black leading-none text-foreground ${relatedTileLabelClass(entry.label)}`}>
-            {entry.label}
-          </span>
-          {entry.reading ? (
-            <span className="mt-1 text-xs font-semibold leading-none text-foreground/70">{entry.reading}</span>
-          ) : null}
-        </button>
+          glyph={entry.label}
+          subtitle={entry.reading}
+        />
       ))}
     </div>
   );

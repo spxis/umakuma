@@ -7,11 +7,11 @@ import { isSubjectType } from "@/lib/domainConstants";
 import HistoryItemDetailModal from "@/app/shared/HistoryItemDetailModal";
 import StudyHistoryFilters from "@/app/shared/StudyHistoryFilters";
 import type { HistorySrsBucket, StudyHistoryPayload } from "@/app/shared/studyHistoryTypes";
-import { typeGlyphBoxClass } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
-import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
+import { pronunciationForReading } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import StudyHistoryHeader from "@/app/shared/StudyHistoryHeader";
 import StudyHistoryAttemptMetaChips from "@/app/shared/StudyHistoryAttemptMetaChips";
+import GlyphReferenceTile from "@/app/users/[nickname]/shared/GlyphReferenceTile";
 
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 type SortDir = "asc" | "desc";
@@ -61,7 +61,6 @@ export default function StudyHistoryTable({
   collapsible = true,
   persistenceKey,
 }: Props) {
-  const { fontFamily } = useGlyphFontPreference();
   const storageKey = persistenceKey ?? `wr:study-history:open:${endpoint}`;
   const [expanded, setExpanded] = useState(() => {
     if (!collapsible || typeof window === "undefined") {
@@ -246,24 +245,16 @@ export default function StudyHistoryTable({
 
                   <div className="min-w-0 pr-5">
                     <div className="flex items-center gap-2 leading-tight">
-                      <button
-                        type="button"
+                      <GlyphReferenceTile
+                        glyph={row.subjectLabel}
+                        subtitle={historySubjectSubtitle(row.subjectReading, row.subjectMeaning)}
+                        subjectType={historySubjectType(row.subjectType)}
+                        wkLevel={row.wkLevel}
+                        size="large"
                         onClick={() => {
                           setSelectedAttemptId(row.id);
                         }}
-                        className={historyGlyphButtonClass(row.subjectType, "compact")}
-                      >
-                        <span
-                          style={{ fontFamily }}
-                          className={`text-center font-black leading-none ${row.subjectLabel.length > 2 ? "text-lg" : "text-2xl"}`}
-                        >
-                          {row.subjectLabel}
-                        </span>
-                      </button>
-                      <div className="flex min-w-0 flex-col justify-center leading-tight">
-                        <p className="truncate text-[13px] font-semibold text-foreground/90">{row.subjectReading ? row.subjectReading : "-"}</p>
-                        <p className="truncate text-[12px] text-foreground/75">{row.subjectMeaning ? row.subjectMeaning : "-"}</p>
-                      </div>
+                      />
                     </div>
                   </div>
                 </div>
@@ -273,7 +264,7 @@ export default function StudyHistoryTable({
 
           <div className="hidden max-h-168 overflow-auto rounded-lg border border-line sm:block">
             <table className="w-full text-left text-sm sm:text-base">
-            <thead className="sticky top-0 bg-surface-muted text-xs uppercase tracking-wider text-muted sm:text-sm">
+            <thead className="sticky top-0 z-20 bg-surface-muted text-xs uppercase tracking-wider text-muted sm:text-sm">
               <tr>
                 <th className="w-[30%] px-3 py-2">
                   <button type="button" onClick={() => toggleSort("submittedAt")} className="font-bold">Time {sortIcon(sortBy, "submittedAt", sortDir)}</button>
@@ -310,24 +301,16 @@ export default function StudyHistoryTable({
                   <td className="px-3 py-2 align-top">
                     <div className="min-w-0">
                       <div className="flex items-center gap-3 leading-tight">
-                        <button
-                          type="button"
+                        <GlyphReferenceTile
+                          glyph={row.subjectLabel}
+                          subtitle={historySubjectSubtitle(row.subjectReading, row.subjectMeaning)}
+                          subjectType={historySubjectType(row.subjectType)}
+                          wkLevel={row.wkLevel}
+                          size="large"
                           onClick={() => {
                             setSelectedAttemptId(row.id);
                           }}
-                          className={historyGlyphButtonClass(row.subjectType, "large")}
-                        >
-                          <span
-                            style={{ fontFamily }}
-                            className={`text-center font-black leading-none ${row.subjectLabel.length > 2 ? "text-2xl" : "text-4xl"}`}
-                          >
-                            {row.subjectLabel}
-                          </span>
-                        </button>
-                        <div className="flex min-w-0 flex-col justify-center">
-                          <p className="truncate text-lg font-semibold text-foreground/90 sm:text-xl">{row.subjectReading ? row.subjectReading : "-"}</p>
-                          <p className="truncate text-base text-foreground/75 sm:text-lg">{row.subjectMeaning ? row.subjectMeaning : "-"}</p>
-                        </div>
+                        />
                       </div>
                     </div>
                   </td>
@@ -456,20 +439,16 @@ export default function StudyHistoryTable({
   );
 }
 
-function historyGlyphBoxClass(type: string): string {
-  if (isSubjectType(type)) {
-    return typeGlyphBoxClass(type);
-  }
-  return "border-line bg-surface text-foreground";
+function historySubjectType(type: string) {
+  return isSubjectType(type) ? type : undefined;
 }
 
-function historyGlyphButtonClass(type: string, size: "compact" | "large"): string {
-  const sizeClass = size === "compact" ? "min-h-11 min-w-11 px-2 text-2xl" : "min-h-14 min-w-14 px-3 text-4xl";
+function historySubjectSubtitle(reading: string | null, meaning: string | null): string {
+  const normalizedReading = reading?.trim();
+  if (normalizedReading) {
+    const pronunciation = pronunciationForReading(normalizedReading);
+    return pronunciation ? `${normalizedReading} / ${pronunciation}` : normalizedReading;
+  }
 
-  return [
-    "inline-flex shrink-0 items-center justify-center rounded-xl border font-black leading-none",
-    "cursor-pointer transition hover:brightness-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70",
-    sizeClass,
-    historyGlyphBoxClass(type),
-  ].join(" ");
+  return meaning?.trim() || "-";
 }

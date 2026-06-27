@@ -46,14 +46,12 @@ const VIEW_GLYPH_STORAGE_KEYS = {
   usedInWordsCollapsed: "wr:view-glyph:used-in-words-collapsed",
 } as const;
 
-type ViewGlyphStackEntry = {
-  index: number;
-  frameSize: ViewGlyphFrameSize | null;
-};
-
 export default function ViewGlyphModalHost() {
   const [items, setItems] = useState<StudyQueueItem[]>([]);
-  const [index, setIndex] = useState(0);
+  const [navigationState, setNavigationState] = useState<{ trail: number[]; position: number }>({
+    trail: [],
+    position: 0,
+  });
   const [accountId, setAccountId] = useState("");
   const [showEnglish, setShowEnglish] = useState(true);
   const [usedInVocabularyCollapsed, setUsedInVocabularyCollapsed] = usePersistedBoolean(
@@ -80,7 +78,6 @@ export default function ViewGlyphModalHost() {
   const [customTitle, setCustomTitle] = useState<string | undefined>(undefined);
   const [selector, setSelector] = useState<ViewGlyphSelectorEntry[]>([]);
   const [frameSize, setFrameSize] = useState<ViewGlyphFrameSize | null>(null);
-  const [stack, setStack] = useState<ViewGlyphStackEntry[]>([]);
 
   useEffect(() => {
     const onOpen = (event: Event) => {
@@ -90,11 +87,11 @@ export default function ViewGlyphModalHost() {
       }
 
       setItems(detail.items);
-      setIndex(Math.max(0, Math.min(detail.startIndex ?? 0, detail.items.length - 1)));
+      const startIndex = Math.max(0, Math.min(detail.startIndex ?? 0, detail.items.length - 1));
+      setNavigationState({ trail: [startIndex], position: 0 });
       setAccountId(detail.accountId ?? "");
       setCustomTitle(detail.title);
       setSelector(Array.isArray(detail.selector) ? detail.selector : []);
-      setStack([]);
       setFrameSize(resolveViewGlyphFrameSize(resolveParentFrameRect()));
     };
 
@@ -104,52 +101,75 @@ export default function ViewGlyphModalHost() {
     };
   }, []);
 
-  const item = items[index] ?? null;
-  const hasPreviousItem = index > 0;
-  const hasNextItem = index < items.length - 1;
-  const showNavigationButtons = hasPreviousItem || hasNextItem;
-  const canStepBack = stack.length > 0;
+  const currentIndex = navigationState.trail[navigationState.position] ?? 0;
+  const item = items[currentIndex] ?? null;
+  const hasPreviousItem = navigationState.position > 0 || currentIndex > 0;
+  const hasNextItem = navigationState.position < navigationState.trail.length - 1 || currentIndex < items.length - 1;
 
   const closeModal = useCallback(() => {
     setItems([]);
-    setIndex(0);
+    setNavigationState({ trail: [], position: 0 });
     setAccountId("");
     setCustomTitle(undefined);
     setSelector([]);
-    setStack([]);
     setFrameSize(null);
   }, []);
 
-  const pushStackAndOpen = useCallback(
+  const openIndexInPlace = useCallback(
     (nextIndex: number) => {
-      if (nextIndex === index) {
-        return;
-      }
+      setNavigationState((prev) => {
+        const current = prev.trail[prev.position];
+        if (current === nextIndex) {
+          return prev;
+        }
 
-      setStack((prev) => [...prev, { index, frameSize }]);
-      setFrameSize((current) => resolveViewGlyphFrameSize(current ?? resolveParentFrameRect()));
-      setIndex(nextIndex);
+        const baseTrail = prev.trail.slice(0, prev.position + 1);
+        return {
+          trail: [...baseTrail, nextIndex],
+          position: baseTrail.length,
+        };
+      });
     },
-    [frameSize, index],
+    [],
   );
 
-  const stepBackOrClose = useCallback(() => {
-    if (!canStepBack) {
-      closeModal();
-      return;
-    }
+  const goPrevious = useCallback(() => {
+    setNavigationState((prev) => {
+      if (prev.position > 0) {
+        return { ...prev, position: prev.position - 1 };
+      }
 
-    setStack((prev) => {
-      const previous = prev[prev.length - 1];
-      if (!previous) {
+      const current = prev.trail[prev.position] ?? currentIndex;
+      if (current <= 0) {
         return prev;
       }
 
-      setIndex(previous.index);
-      setFrameSize(previous.frameSize);
-      return prev.slice(0, -1);
+      const baseTrail = prev.trail.slice(0, prev.position + 1);
+      return {
+        trail: [...baseTrail, current - 1],
+        position: baseTrail.length,
+      };
     });
-  }, [canStepBack, closeModal]);
+  }, [currentIndex]);
+
+  const goNext = useCallback(() => {
+    setNavigationState((prev) => {
+      if (prev.position < prev.trail.length - 1) {
+        return { ...prev, position: prev.position + 1 };
+      }
+
+      const current = prev.trail[prev.position] ?? currentIndex;
+      if (current >= items.length - 1) {
+        return prev;
+      }
+
+      const baseTrail = prev.trail.slice(0, prev.position + 1);
+      return {
+        trail: [...baseTrail, current + 1],
+        position: baseTrail.length,
+      };
+    });
+  }, [currentIndex, items.length]);
 
   const openBySubject = useCallback(
     async (subjectId: number, fallbackType: SubjectType) => {
@@ -159,7 +179,7 @@ export default function ViewGlyphModalHost() {
 
       const existingIndex = items.findIndex((entry) => entry.subjectId === subjectId);
       if (existingIndex >= 0) {
-        pushStackAndOpen(existingIndex);
+        openIndexInPlace(existingIndex);
         return;
       }
 
@@ -197,9 +217,9 @@ export default function ViewGlyphModalHost() {
         nextIndex = prev.length;
         return [...prev, hydrated];
       });
-      pushStackAndOpen(nextIndex);
+      openIndexInPlace(nextIndex);
     },
-    [accountId, item, items, pushStackAndOpen],
+    [accountId, item, items, openIndexInPlace],
   );
 
   useEffect(() => {
@@ -219,19 +239,19 @@ export default function ViewGlyphModalHost() {
 
       if (event.key === "Escape") {
         event.preventDefault();
-        stepBackOrClose();
+        closeModal();
         return;
       }
 
       if (event.key === "ArrowLeft") {
         event.preventDefault();
-        setIndex((prev) => Math.max(0, prev - 1));
+        goPrevious();
         return;
       }
 
       if (event.key === "ArrowRight") {
         event.preventDefault();
-        setIndex((prev) => Math.min(items.length - 1, prev + 1));
+        goNext();
       }
     };
 
@@ -248,7 +268,7 @@ export default function ViewGlyphModalHost() {
       document.body.style.overflow = overflow;
       document.body.style.overscrollBehavior = overscrollBehavior;
     };
-  }, [item, items.length, stepBackOrClose]);
+  }, [closeModal, goNext, goPrevious, item]);
 
   useEffect(() => {
     if (!item || !accountId || !shouldHydrateViewGlyphItem(item)) {
@@ -304,15 +324,6 @@ export default function ViewGlyphModalHost() {
       <div style={modalFrameStyle} className="mx-auto flex max-h-[calc(100dvh-8px)] w-full max-w-[calc(100vw-8px)] flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]">
         <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-line bg-surface-muted px-3 py-2 sm:px-4">
           <div className="flex min-w-0 items-center justify-start">
-            {canStepBack ? (
-              <button
-                type="button"
-                onClick={stepBackOrClose}
-                className="mr-2 min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
-              >
-                Back
-              </button>
-            ) : null}
             <button
               type="button"
               onClick={closeModal}
@@ -324,36 +335,30 @@ export default function ViewGlyphModalHost() {
           <p className="truncate text-center text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
             {customTitle ?? viewerTitle(item)}
           </p>
-          {showNavigationButtons ? (
-            <div className="inline-flex min-w-0 items-center justify-end gap-1">
-              {hasPreviousItem ? (
-                <button
-                  type="button"
-                  onClick={() => setIndex((prev) => Math.max(0, prev - 1))}
-                  className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
-                >
-                  Prev
-                </button>
-              ) : null}
-              {hasNextItem ? (
-                <button
-                  type="button"
-                  onClick={() => setIndex((prev) => Math.min(items.length - 1, prev + 1))}
-                  className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
-                >
-                  Next
-                </button>
-              ) : null}
-            </div>
-          ) : (
-            <div />
-          )}
+          <div className="inline-flex min-w-0 items-center justify-end gap-1">
+            <button
+              type="button"
+              onClick={goPrevious}
+              disabled={!hasPreviousItem}
+              className="min-h-9 min-w-20 whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
+            >
+              Prev
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              disabled={!hasNextItem}
+              className="min-h-9 min-w-20 whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
+            >
+              Next
+            </button>
+          </div>
         </div>
 
         {selector.length > 0 ? (
           <div className="flex flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
             {selector.map((entry, entryIndex) => {
-              const selected = entry.itemIndex === index;
+              const selected = entry.itemIndex === currentIndex;
               const unavailable = !entry.exists || entry.itemIndex === null;
               const isSessionEntry = entry.origin === VIEW_GLYPH_SELECTOR_ORIGINS.session;
               const glyphType = entry.kind === VIEW_GLYPH_SELECTOR_KINDS.vocabulary
@@ -369,7 +374,7 @@ export default function ViewGlyphModalHost() {
                     if (entry.itemIndex === null) {
                       return;
                     }
-                    setIndex(entry.itemIndex);
+                    openIndexInPlace(entry.itemIndex);
                   }}
                   disabled={entry.itemIndex === null}
                   className={
@@ -431,7 +436,7 @@ export default function ViewGlyphModalHost() {
             skipped={0}
             correct={0}
             glyphViewerItems={items}
-            glyphViewerIndex={index}
+            glyphViewerIndex={currentIndex}
             onReveal={() => {}}
             onSubmit={() => {}}
             onSkipCurrent={() => {}}

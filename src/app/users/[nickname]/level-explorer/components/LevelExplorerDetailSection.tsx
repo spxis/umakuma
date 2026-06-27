@@ -234,8 +234,8 @@ export default function LevelExplorerDetailSection({
   return (
     <section data-view-glyph-parent-frame="true" className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
       {renderHeaderChipRow("mb-2 flex flex-wrap justify-start gap-1 sm:hidden")}
-      <div className="grid gap-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-3">
-        <div className="inline-flex sm:self-start">
+      <div className="grid gap-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-x-3">
+        <div className="inline-flex sm:self-center">
           <div
             className={`inline-flex rounded-2xl border ${
               glyphHasReading(selectedItem)
