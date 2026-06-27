@@ -4,6 +4,7 @@ import { useLevelExplorerResetSelection } from "../lib/useLevelExplorerResetSele
 import { JLPT_FILTER_ALLOWED, LEVEL_JLPT_FILTERS, LEVEL_REVIEW_TIMING_FILTERS, LEVEL_SRS_FILTERS, REVIEW_TIMING_ALLOWED, SRS_FILTER_ALLOWED } from "../lib/levelExplorerState";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
+import ExplorerLoadingShimmer from "../../shared/ExplorerLoadingShimmer";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import LevelExplorerLevelFilters from "./LevelExplorerLevelFilters";
@@ -423,7 +424,11 @@ export default function LevelExplorerContent({
       </div>
     </section>
     <section className="mt-3 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
-      {loading ? <p className="px-5 py-4 text-sm text-foreground/70">Loading level data...</p> : null}
+      {loading ? (
+        <div className="px-5 py-4">
+          <ExplorerLoadingShimmer label="Loading level data..." cardCount={8} />
+        </div>
+      ) : null}
       {searchMatchedSubjectIds ? (
         <p className="px-5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
           Showing {formatNumber(searchMatchedSubjectIds.size)} search result{searchMatchedSubjectIds.size === 1 ? "" : "s"}
