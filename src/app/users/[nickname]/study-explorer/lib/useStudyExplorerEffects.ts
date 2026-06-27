@@ -345,8 +345,8 @@ export function useStudyExplorerEffects({
     const freshIds = new Set(fresh.map((item) => item.assignmentId));
     const currentLoadedItems = loadedItemsRef.current;
     const priorVisible = currentLoadedItems.filter((item) => !hiddenSubmittedAssignmentIds.has(item.assignmentId));
-    const merged =
-      priorVisible.length === 0 ? fresh : [...fresh, ...priorVisible.filter((item) => !freshIds.has(item.assignmentId))];
+    const isAuthoritativeFullSnapshot = Number.isInteger(dataPaginationTotal) && (dataPaginationTotal ?? -1) >= 0 && fresh.length >= (dataPaginationTotal ?? 0);
+    const merged = isAuthoritativeFullSnapshot || priorVisible.length === 0 ? fresh : [...fresh, ...priorVisible.filter((item) => !freshIds.has(item.assignmentId))];
     const mergedVisibleCount = merged.length;
 
     if (!sameAssignmentList(currentLoadedItems, merged)) {
@@ -355,10 +355,8 @@ export function useStudyExplorerEffects({
     }
 
     const nextTotalRaw = dataPaginationTotal ?? fresh.length;
-    const nextTotal = Math.max(nextTotalRaw, mergedVisibleCount);
+    const nextTotal = isAuthoritativeFullSnapshot ? nextTotalRaw : Math.max(nextTotalRaw, mergedVisibleCount);
     const currentTotal = totalItemsRef.current;
-    // Local fallback payloads do not include server cache metadata, so avoid
-    // shrinking a known-good total while SWR is transitioning keys.
     const stableTotal = dataCached === undefined && nextTotal < currentTotal ? currentTotal : nextTotal;
 
     if (stableTotal !== currentTotal) {
