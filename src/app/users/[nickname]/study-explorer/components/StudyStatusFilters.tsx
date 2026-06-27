@@ -1,6 +1,7 @@
 import StudyFilterSection from "./StudyFilterSection";
 import {
   getSrsStageOptions,
+  STUDY_PANEL_TEXT,
   STUDY_PANEL_SRS_STATUSES,
   STUDY_SRS_FILTERS,
   studySrsToneClass,
@@ -48,10 +49,10 @@ export default function StudyStatusFilters({
 }: Props) {
   return (
     <StudyFilterSection
-      title="Status"
+      title={STUDY_PANEL_TEXT.status}
       isOpen={isOpen}
       onToggle={onToggleSection}
-      ariaLabel="Status filters"
+      ariaLabel={STUDY_PANEL_TEXT.statusFilters}
     >
       {STUDY_PANEL_SRS_STATUSES.map((status) => {
         const count = srsCounts[status];
@@ -59,7 +60,7 @@ export default function StudyStatusFilters({
         const hideStatusOnCollapsedMobile = !isOpen && !isSelected;
         const unavailable = hasData && !isSelected && status !== STUDY_SRS_FILTERS.all && count === 0;
         const disabled = (filtersLoading && !isSelected) || unavailable;
-        const statusLabel = status === STUDY_SRS_FILTERS.all ? "All" : srsFilterButtonLabel(status);
+        const statusLabel = status === STUDY_SRS_FILTERS.all ? STUDY_PANEL_TEXT.all : srsFilterButtonLabel(status);
         const stageOptions = status === STUDY_SRS_FILTERS.all ? [] : getSrsStageOptions(status);
         const showStageButtons = isSelected && stageOptions.length > 1;
 

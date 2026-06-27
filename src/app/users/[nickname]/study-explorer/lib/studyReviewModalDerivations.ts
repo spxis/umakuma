@@ -11,7 +11,12 @@ export function countReviewOutcomes(
   let skipped = 0;
   let wrong = 0;
 
-  for (const outcome of Object.values(reviewOutcomeByAssignmentId)) {
+  for (const [assignmentIdRaw, outcome] of Object.entries(reviewOutcomeByAssignmentId)) {
+    const assignmentId = Number(assignmentIdRaw);
+    if (!Number.isInteger(assignmentId) || assignmentId <= 0) {
+      continue;
+    }
+
     if (outcome === STUDY_REVIEW_OUTCOMES.correct) correct += 1;
     else if (outcome === STUDY_REVIEW_OUTCOMES.wrong) wrong += 1;
     else if (outcome === STUDY_REVIEW_OUTCOMES.skipped) skipped += 1;

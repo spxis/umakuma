@@ -135,12 +135,12 @@ export default function StudyExplorerPanel({
               type="button"
               onClick={onOpenStudySourceManager}
                 className="group inline-flex max-w-full cursor-pointer items-center gap-2 rounded-md px-1 py-0.5 text-left"
-              title={studySourceIsCustom ? "Change study library" : "Choose study library"}
+              title={studySourceIsCustom ? STUDY_PANEL_TEXT.changeStudyLibrary : STUDY_PANEL_TEXT.chooseStudyLibrary}
             >
               <h2 className="truncate text-xl font-black text-foreground underline decoration-dotted decoration-[1px] decoration-foreground/25 underline-offset-[0.18em] transition-[text-decoration-color] duration-150 group-hover:decoration-foreground/45 group-focus-visible:decoration-foreground/55" title={studyHeaderLabel}>{studyHeaderLabel}</h2>
-              <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">Change</span>
+              <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">{STUDY_PANEL_TEXT.change}</span>
             </button>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? "Tap title to change library" : "Tap title to choose library"}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? STUDY_PANEL_TEXT.tapTitleToChangeLibrary : STUDY_PANEL_TEXT.tapTitleToChooseLibrary}</p>
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
           <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
@@ -156,8 +156,8 @@ export default function StudyExplorerPanel({
         <div id="study-filters-panel" className={`mt-3 rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)] ${mobileFilterSectionClass}`}>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
             <div className="flex items-center justify-between gap-2 sm:shrink-0 sm:justify-start">
-              <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
-              <button type="button" onClick={handleResetFilters} className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted sm:h-8 sm:text-xs">Clear all</button>
+              <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">{STUDY_PANEL_TEXT.filters}</p>
+              <button type="button" onClick={handleResetFilters} className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted sm:h-8 sm:text-xs">{STUDY_PANEL_TEXT.clearAll}</button>
             </div>
             <div className="w-full min-w-0 sm:w-1/2">
               <ExplorerSearchBar scope={STUDY_PANEL_TEXT.searchScope} />
@@ -179,10 +179,10 @@ export default function StudyExplorerPanel({
             onSetViewedLevel={(level) => { setMobileFilterSectionOpen("level", false); onSetViewedLevel(level); }}
           />
           <StudyFilterSection
-            title="Grouping"
+            title={STUDY_PANEL_TEXT.grouping}
             isOpen={mobileFilterSectionsOpen.grouping}
             onToggle={() => toggleMobileFilterSection("grouping")}
-            ariaLabel="Grouping filters"
+            ariaLabel={STUDY_PANEL_TEXT.groupingFilters}
           >
               <button
                 type="button"
@@ -199,7 +199,7 @@ export default function StudyExplorerPanel({
                 aria-selected={allTypesSelected}
                 className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.grouping || allTypesSelected ? "" : "hidden sm:inline-flex"} ${filtersLoading && !allTypesSelected ? disabledBadgeClass() : badgeClass(allTypesSelected)}`}
               >
-                <FilterChipLabel label="All" count={groupingCountLabel(allTypeCount)} />
+                <FilterChipLabel label={STUDY_PANEL_TEXT.all} count={groupingCountLabel(allTypeCount)} />
               </button>
               {STUDY_GROUPING_FILTERS.map(([type, label]) => {
                 const count = typeCounts[type];
@@ -258,15 +258,15 @@ export default function StudyExplorerPanel({
       <div className="p-5">
         <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           {showLoadingOverlay ? (
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Loading study queue and filters...</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">{STUDY_PANEL_TEXT.loadingQueueAndFilters}</p>
           ) : (
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
               Showing {formatNumber(filteredItems.length)}/{formatNumber(totalItems)} items
             </p>
           )}
           <div className={`flex w-full items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
-              <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.oldestWaitShort}</span><span className="hidden sm:inline">Oldest Wait</span></button>
-              <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.newestWaitShort}</span><span className="hidden sm:inline">Newest Wait</span></button>
+              <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.oldestWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.oldestWait}</span></button>
+              <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.newestWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.newestWait}</span></button>
               <button type="button" onClick={() => onSetWaitSortOrder("random_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "random_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.randomizeWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.randomizeWait}</span></button>
               {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
                 <button
@@ -338,8 +338,8 @@ export default function StudyExplorerPanel({
                   type="button"
                   onClick={toggleGlyphFont}
                   className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted"
-                  title="Font"
-                  aria-label="Font"
+                  title={STUDY_PANEL_TEXT.font}
+                  aria-label={STUDY_PANEL_TEXT.font}
                 >
                   <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none">
                     <text x="6.3" y="14.1" fontSize="12.6" fontWeight="700" fill="currentColor" textAnchor="middle">A</text>

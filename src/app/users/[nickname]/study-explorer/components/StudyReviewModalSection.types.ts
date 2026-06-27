@@ -14,6 +14,7 @@ export type StudyReviewModalSectionProps = {
   canToggleEnglish: boolean;
   viewerMode: StudyViewerMode;
   selectedItem: StudyQueueItem;
+  isPracticeItem: boolean;
   selectedOutcome: ReviewOutcome | undefined;
   isSubmittingSelected: boolean;
   submitFeedback: { kind: "success" | "error"; message: string } | null;

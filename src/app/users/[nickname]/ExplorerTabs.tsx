@@ -54,7 +54,7 @@ export default function ExplorerTabs({
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const customLibraryNameStorageKey = `wr:study-custom-library-name:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
-  const troubleMixStorageKey = `wr:study-trouble-mix:${accountId}`;
+  const troubleMixStorageKey = `wr:study-trouble-mix-v2:${accountId}`;
   const queueTagFilterStorageKey = `wr:study-queue-tag-filter:${accountId}`;
   const isHydrated = typeof window !== "undefined";
   const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(
@@ -75,7 +75,7 @@ export default function ExplorerTabs({
       ? initialQueueMode
       : QUEUE_TYPES.review,
   );
-  const [includeTrouble, setIncludeTrouble] = useState<boolean>(true);
+  const [includeTrouble, setIncludeTrouble] = useState<boolean>(false);
   const [queueTagFilter, setQueueTagFilter] = useState<StudyTagFilter>("all");
   const [initialViewerMode, setInitialViewerMode] = useState<"detail" | "flash" | null>(null);
   const {
@@ -114,7 +114,7 @@ export default function ExplorerTabs({
       }
 
       setShowEnglish(window.localStorage.getItem(showEnglishStorageKey) === "1");
-      setIncludeTrouble(window.localStorage.getItem(troubleMixStorageKey) !== "0");
+      setIncludeTrouble(window.localStorage.getItem(troubleMixStorageKey) === "1");
       const storedLibraryName = window.localStorage.getItem(customLibraryNameStorageKey)?.trim();
       setActiveCustomLibraryName(storedLibraryName ? storedLibraryName : null);
       applySourceFromSearchParams(params);
@@ -372,11 +372,9 @@ export default function ExplorerTabs({
               <ExplorerTabsStudyQueueMenu
                 queueMode={queueMode}
                 queueTagFilter={queueTagFilter}
-                includeTrouble={includeTrouble}
                 studyCounts={studyCounts}
                 onSetQueueMode={setQueueMode}
                 onSetQueueTagFilter={setQueueTagFilter}
-                onSetIncludeTrouble={setIncludeTrouble}
               />
             ) : null}
             <button

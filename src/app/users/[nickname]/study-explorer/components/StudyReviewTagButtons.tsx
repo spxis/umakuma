@@ -1,5 +1,6 @@
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
 import {
+  STUDY_PANEL_TEXT,
   isKanjiSubjectType,
   isRadicalSubjectType,
   isVocabularySubjectType,
@@ -31,7 +32,7 @@ export default function StudyReviewTagButtons({
         type="button"
         onClick={() => onToggleStudyTag("favorite")}
         className={`min-h-9 min-w-9 cursor-pointer rounded-md border border-transparent bg-transparent px-2 py-1.5 text-base font-bold leading-none ${selectedTags.favorite ? activeToneClass : "text-foreground/20 hover:text-foreground/45"}`}
-        title="Toggle favorite"
+        title={STUDY_PANEL_TEXT.toggleFavorite}
       >
         ★
       </button>
@@ -39,7 +40,7 @@ export default function StudyReviewTagButtons({
         type="button"
         onClick={() => onToggleStudyTag("trouble")}
         className={`min-h-9 min-w-9 cursor-pointer rounded-md border border-transparent bg-transparent px-2 py-1.5 text-sm font-bold leading-none ${selectedTags.trouble ? activeToneClass : "text-foreground/20 hover:text-foreground/45"}`}
-        title="Toggle trouble"
+        title={STUDY_PANEL_TEXT.toggleTrouble}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="8" />

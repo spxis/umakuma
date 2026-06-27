@@ -17,6 +17,7 @@ import {
 } from "./StudyExplorer.constants";
 import StudyReviewModalSection from "./StudyReviewModalSection";
 import { hasRenderableRelatedItems } from "./StudyReviewModalHelpers";
+import StudyReviewModalStatusStrip from "./StudyReviewModalStatusStrip";
 import StudyReviewTagButtons from "./StudyReviewTagButtons";
 import { useStudyReviewModalKeyboard } from "../lib/useStudyReviewModalKeyboard";
 import {
@@ -135,7 +136,7 @@ export default function StudyReviewModal({
     }
   }, [accountId, selectedItem, tagOverrides]);
   const markCurrentAsSkippedIfUnresolved = useCallback(() => {
-    if (!studyMode || !selectedItem || !isReviewQueueItem(selectedItem)) return;
+    if (!studyMode || !selectedItem || !isReviewQueueItem(selectedItem) || selectedItem.isInjectedTrouble) return;
     const currentOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
     if (isTerminalReviewOutcome(currentOutcome)) return;
     onMarkSkipped(selectedItem.assignmentId);
@@ -305,15 +306,16 @@ export default function StudyReviewModal({
     return null;
   }
 
+  const isPracticeItem = Boolean(selectedItem.isInjectedTrouble);
   const { correct, skipped, wrong } = countReviewOutcomes(reviewOutcomeByAssignmentId);
   const allMeanings = buildStudyReviewAllMeanings(selectedItem);
   const requiresReveal = studyMode && isReviewQueueItem(selectedItem);
   const isLessonItem = isLessonQueueItem(selectedItem);
-  const selectedOutcome = reviewOutcomeByAssignmentId[selectedItem.assignmentId];
+  const selectedOutcome = isPracticeItem ? undefined : reviewOutcomeByAssignmentId[selectedItem.assignmentId];
   const lessonAlreadySubmitted = isLessonItem && (isSelectedSubmitted || selectedOutcome === "lesson-started");
   const isOutcomeFinal =
-    selectedOutcome === STUDY_REVIEW_OUTCOMES.correct ||
-    selectedOutcome === STUDY_REVIEW_OUTCOMES.wrong ||
+    (!isPracticeItem && selectedOutcome === STUDY_REVIEW_OUTCOMES.correct) ||
+    (!isPracticeItem && selectedOutcome === STUDY_REVIEW_OUTCOMES.wrong) ||
     lessonAlreadySubmitted;
   const detailsRevealed = isOutcomeFinal || !requiresReveal || isAnswerRevealed;
   const useStudyFlashLayout = studyMode && isReviewQueueItem(selectedItem);
@@ -391,19 +393,14 @@ export default function StudyReviewModal({
           </div>
         </div>
 
-        {studyMode && isReviewQueueItem(selectedItem) ? (
-          <div className="grid grid-cols-3 border-b border-line/70 bg-surface">
-            <div className="border-r border-red-200 bg-red-50 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-red-800">
-              Wrong {wrong}
-            </div>
-            <div className="border-r border-amber-200 bg-amber-50 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-amber-800">
-              Skipped {skipped}
-            </div>
-            <div className="bg-emerald-50 py-1 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-800">
-              Correct {correct}
-            </div>
-          </div>
-        ) : null}
+        <StudyReviewModalStatusStrip
+          studyMode={studyMode}
+          selectedItem={selectedItem}
+          isPracticeItem={isPracticeItem}
+          wrong={wrong}
+          skipped={skipped}
+          correct={correct}
+        />
 
         <div
           className={`relative flex min-h-0 flex-1 flex-col px-3 py-3 sm:px-6 sm:py-5 ${useStudyFlashLayout ? "overflow-hidden" : "overflow-y-auto"}`}
@@ -431,6 +428,7 @@ export default function StudyReviewModal({
             canToggleEnglish={canToggleEnglish}
             viewerMode={viewerMode}
             selectedItem={selectedItem}
+            isPracticeItem={isPracticeItem}
             selectedOutcome={selectedOutcome}
             isSubmittingSelected={isSubmittingSelected}
             submitFeedback={submitFeedback}
@@ -486,7 +484,9 @@ export default function StudyReviewModal({
             {studyMode
               ? isLessonItem
                 ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev"
-                : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev • Space reveal (study) • 1/J wrong • 2/K correct • Skip counts once per item on leave"
+                : isPracticeItem
+                  ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev • Space reveal (study) • 1/J again • 2/K done"
+                  : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev • Space reveal (study) • 1/J wrong • 2/K correct • Skip counts once per item on leave"
               : viewerMode === STUDY_VIEWER_MODES.flash
                 ? "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter/Space reveal • Enter next (revealed) • Shift+Enter prev • Shift+Space prev • Swipe ←/→ nav • Swipe ↑ reveal"
                 : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev"}

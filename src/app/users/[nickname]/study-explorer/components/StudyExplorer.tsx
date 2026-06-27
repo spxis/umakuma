@@ -7,6 +7,7 @@ import {
   isAllStudySrsFilter,
   isAllStudyTypeFilter,
   STUDY_EXPLORER_EMPTY_TYPE_COUNTS_BY_LEVEL,
+  STUDY_PANEL_TEXT,
   STUDY_QUEUE_TYPES,
   STUDY_SRS_FILTERS,
   STUDY_TYPE_FILTERS,
@@ -460,7 +461,7 @@ export default function StudyExplorer({
       ) : (
         <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
           <div className="border-b border-line bg-surface-muted px-5 py-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">Loading study queue and filters...</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">{STUDY_PANEL_TEXT.loadingQueueAndFilters}</p>
           </div>
         </section>
       )}

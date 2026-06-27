@@ -1,9 +1,10 @@
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
 import {
+  STUDY_PANEL_TEXT,
   isKanjiSubjectType,
   isRadicalSubjectType,
   isVocabularySubjectType,
-} from "../lib/studyExplorerDomain";
+} from "./StudyExplorer.constants";
 
 type Props = {
   item: StudyQueueItem;
@@ -38,8 +39,8 @@ export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStu
           event.stopPropagation();
           onToggleStudyTag(item.subjectId, "trouble", !(item.studyTags?.trouble ?? false));
         }}
-        aria-label="Toggle trouble"
-        title="Toggle trouble"
+        aria-label={STUDY_PANEL_TEXT.toggleTrouble}
+        title={STUDY_PANEL_TEXT.toggleTrouble}
         className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-1.5 text-xs font-black leading-none ${
           item.studyTags?.trouble
             ? activeToneClass
@@ -59,8 +60,8 @@ export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStu
           event.stopPropagation();
           onToggleStudyTag(item.subjectId, "favorite", !(item.studyTags?.favorite ?? false));
         }}
-        aria-label="Toggle favorite"
-        title="Toggle favorite"
+        aria-label={STUDY_PANEL_TEXT.toggleFavorite}
+        title={STUDY_PANEL_TEXT.toggleFavorite}
         className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-0 text-base font-black leading-none ${
           item.studyTags?.favorite
             ? activeToneClass

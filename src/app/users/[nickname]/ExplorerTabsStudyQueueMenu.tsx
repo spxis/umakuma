@@ -11,21 +11,17 @@ const HOVER_CLOSE_DELAY_MS = 220;
 type Props = {
   queueMode: QueueType;
   queueTagFilter: StudyTagFilter;
-  includeTrouble: boolean;
   studyCounts: { reviews?: number; reviewsTotal?: number; lessons?: number } | null;
   onSetQueueMode: (mode: QueueType) => void;
   onSetQueueTagFilter: (filter: StudyTagFilter) => void;
-  onSetIncludeTrouble: (next: boolean) => void;
 };
 
 export default function ExplorerTabsStudyQueueMenu({
   queueMode,
   queueTagFilter,
-  includeTrouble,
   studyCounts,
   onSetQueueMode,
   onSetQueueTagFilter,
-  onSetIncludeTrouble,
 }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const hoverCloseTimerRef = useRef<number | null>(null);
@@ -147,18 +143,6 @@ export default function ExplorerTabsStudyQueueMenu({
             <button type="button" role="tab" aria-selected={queueTagFilter === "trouble"} onClick={() => onSetQueueTagFilter("trouble")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "trouble" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Trouble</button>
             <button type="button" role="tab" aria-selected={queueTagFilter === "favorite"} onClick={() => onSetQueueTagFilter("favorite")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "favorite" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Favorites</button>
           </div>
-          <button
-            type="button"
-            onClick={() => onSetIncludeTrouble(!includeTrouble)}
-            className={`mt-2 inline-flex h-9 w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest ${
-              includeTrouble
-                ? "border-amber-500 bg-amber-500 text-white"
-                : "border-line bg-surface text-foreground hover:bg-surface-muted"
-            }`}
-          >
-            <span className="sm:hidden">Trouble mix {includeTrouble ? "On" : "Off"}</span>
-            <span className="hidden sm:inline">Trouble mix {includeTrouble ? "On" : "Off"}</span>
-          </button>
         </div>
       ) : null}
     </div>

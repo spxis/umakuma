@@ -54,8 +54,8 @@ const MAX_SYNC_CACHE_KEYS = 200;
 const cache = new Map<string, CachedStudyQueue>();
 const syncStateCache = new Map<string, CachedStudyQueueSyncState>();
 
-function cacheKey(accountId: string, mode: string): string {
-  return `${accountId}:${mode}`;
+function cacheKey(accountId: string, mode: string, variant: string = "default"): string {
+  return `${accountId}:${mode}:${variant}`;
 }
 
 function trimOldestEntries<T extends { cachedAtMs: number }>(
@@ -75,8 +75,12 @@ function trimOldestEntries<T extends { cachedAtMs: number }>(
   }
 }
 
-export function getCachedStudyQueue(accountId: string, mode: string): CachedStudyQueue | null {
-  const key = cacheKey(accountId, mode);
+export function getCachedStudyQueue(
+  accountId: string,
+  mode: string,
+  variant: string = "default",
+): CachedStudyQueue | null {
+  const key = cacheKey(accountId, mode, variant);
   const value = cache.get(key);
   if (!value) {
     return null;
@@ -93,6 +97,7 @@ export function getCachedStudyQueue(accountId: string, mode: string): CachedStud
 export function setCachedStudyQueue(
   accountId: string,
   mode: string,
+  variant: string,
   items: unknown[],
   counts: { all: number; reviews: number; lessons: number },
   tagCounts?: { favorite: number; trouble: number },
@@ -113,7 +118,7 @@ export function setCachedStudyQueue(
   },
   srsStageCounts?: Record<number, number>,
 ): void {
-  cache.set(cacheKey(accountId, mode), {
+  cache.set(cacheKey(accountId, mode, variant), {
     items,
     counts,
     tagCounts,

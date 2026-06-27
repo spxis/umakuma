@@ -90,13 +90,17 @@ export function useStudyReviewSubmission({
       const itemForSubmit =
         modalItems.find((item) => item.assignmentId === assignmentId) ?? selectedItem ?? null;
       const submittedIndex = modalItems.findIndex((item) => item.assignmentId === assignmentId);
+      const nextVisibleItem =
+        submittedIndex >= 0
+          ? modalItems[submittedIndex + 1] ?? modalItems[submittedIndex - 1] ?? itemForSubmit
+          : itemForSubmit;
       const remainingAfterSubmit = modalItems.filter((item) => item.assignmentId !== assignmentId);
       const nextFocusedItem =
         remainingAfterSubmit[submittedIndex] ??
         remainingAfterSubmit[Math.max(0, submittedIndex - 1)] ??
         null;
 
-      return { itemForSubmit, nextFocusedItem };
+      return { itemForSubmit, nextFocusedItem, nextVisibleItem };
     },
     [modalItems, selectedItem],
   );
@@ -108,7 +112,7 @@ export function useStudyReviewSubmission({
       }
       inFlightAssignmentIdsRef.current.add(assignmentId);
 
-      const { itemForSubmit, nextFocusedItem } = getSubmissionContext(assignmentId);
+      const { itemForSubmit, nextFocusedItem, nextVisibleItem } = getSubmissionContext(assignmentId);
 
       onSetSubmitInFlight({
         assignmentId,
@@ -121,6 +125,16 @@ export function useStudyReviewSubmission({
 
       if (itemForSubmit) {
         onSetModalSessionItemByAssignmentId((prev) => ({ ...prev, [assignmentId]: itemForSubmit }));
+      }
+
+      if (itemForSubmit?.isInjectedTrouble && result === "wrong") {
+        onSetRevealedAssignmentIds((prev) => {
+          const next = new Set(prev);
+          next.delete(assignmentId);
+          return next;
+        });
+        onSetSelectedId(nextVisibleItem?.subjectId ?? itemForSubmit.subjectId ?? null);
+        return;
       }
 
       try {
@@ -170,7 +184,9 @@ export function useStudyReviewSubmission({
           window.setTimeout(resolve, POST_SUBMIT_DELAY_MS);
         });
 
-        onSetReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: result }));
+        if (!itemForSubmit?.isInjectedTrouble) {
+          onSetReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: result }));
+        }
 
         onSetHiddenSubmittedAssignmentIds((prev) => {
           const next = new Set(prev);
@@ -199,7 +215,9 @@ export function useStudyReviewSubmission({
             lessons: nextLessons,
           };
         });
-        onSetHasPendingStudySubmissions(true);
+        if (!itemForSubmit?.isInjectedTrouble) {
+          onSetHasPendingStudySubmissions(true);
+        }
         onSetSelectedId(nextFocusedItem?.subjectId ?? null);
         onSetRevealedAssignmentIds((prev) => {
           const next = new Set(prev);

@@ -1,6 +1,8 @@
 import type { StudyQueueMode, StudySource, StudyTagFilter } from "./studyExplorerTypes";
 import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 
+const STUDY_QUEUE_STORAGE_SCOPE_VERSION = "v2";
+
 export function buildStudyApiBasePath(accountId: string, studySource: StudySource): string {
   return studySource === "custom" ? `/api/custom-study/${accountId}` : `/api/study/${accountId}`;
 }
@@ -10,7 +12,7 @@ export function buildStudyQueueStorageScopeKey(
   customLibraryId: string | null,
   queueTagFilter: StudyTagFilter = "all",
 ): string {
-  return `${studySource}:${customLibraryId ?? "none"}:${queueTagFilter}`;
+  return `${STUDY_QUEUE_STORAGE_SCOPE_VERSION}:${studySource}:${customLibraryId ?? "none"}:${queueTagFilter}`;
 }
 
 export function buildStudyQueueRequestUrl(params: {

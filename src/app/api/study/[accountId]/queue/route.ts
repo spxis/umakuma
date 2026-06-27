@@ -76,7 +76,9 @@ export async function GET(request: Request, context: RouteContext) {
       tag: account.tokenTag,
     });
 
-    const cached = canUseServerCache ? getCachedStudyQueue(accountId, mode) : null;
+    const cacheVariant =
+      mode === QUEUE_TYPES.review ? `trouble:${includeTrouble ? "1" : "0"}` : "default";
+    const cached = canUseServerCache ? getCachedStudyQueue(accountId, mode, cacheVariant) : null;
     if (canUseServerCache && cached) {
       const cachedItems = cached.items as Array<{
         queueType: typeof QUEUE_TYPES.review | typeof QUEUE_TYPES.lesson;
@@ -449,6 +451,7 @@ export async function GET(request: Request, context: RouteContext) {
       setCachedStudyQueue(
         accountId,
         mode,
+        cacheVariant,
         items,
         counts,
         tagCounts,

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { formatNumber } from "../../level-explorer/lib/levelExplorerDisplay";
 import FilterChipLabel from "../../shared/FilterChipLabel";
-import { STUDY_QUEUE_TYPES } from "./StudyExplorer.constants";
+import { STUDY_PANEL_TEXT, STUDY_QUEUE_TYPES } from "./StudyExplorer.constants";
 import type { StudyQueueMode } from "../lib/studyExplorerTypes";
 import { badgeClass, disabledBadgeClass, groupStudyReviewLevelChips, type StudyReviewLevelChip } from "../lib/studyExplorerUtils";
 
@@ -99,15 +99,15 @@ export default function StudyLevelFilters({
   const shouldExpandForSelectedTap = (isSelected: boolean) => isCollapsedOnMobile && isSelected;
 
   return (
-    <div className="flex w-full max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Level filters">
+    <div className="flex w-full max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label={STUDY_PANEL_TEXT.levelFilters}>
       <button
         type="button"
         onClick={onToggleMobileShowAllOptions}
         aria-pressed={!mobileShowAllOptions}
         className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70"
-        title={mobileShowAllOptions ? "Compact Level" : "Expand Level"}
+        title={mobileShowAllOptions ? STUDY_PANEL_TEXT.compactLevel : STUDY_PANEL_TEXT.expandLevel}
       >
-        Level
+        {STUDY_PANEL_TEXT.level}
         {isCollapsedOnMobile ? (
           <span className="ml-1 text-[11px] leading-none opacity-70 sm:hidden">+</span>
         ) : null}
@@ -128,7 +128,7 @@ export default function StudyLevelFilters({
           className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileVisibilityClass(viewedLevel === null)} ${filtersLoading && viewedLevel !== null ? disabledBadgeClass() : badgeClass(viewedLevel === null)}`}
         >
           <FilterChipLabel
-            label="All"
+            label={STUDY_PANEL_TEXT.all}
             count={formatNumber(queueMode === STUDY_QUEUE_TYPES.lesson ? totalLessonsInVisibleLevels : totalReviewsInVisibleLevels)}
           />
         </button>
@@ -231,7 +231,7 @@ export default function StudyLevelFilters({
           <button
             type="button"
             onClick={onToggleMobileShowAllOptions}
-            aria-label="Expand level filters"
+            aria-label={STUDY_PANEL_TEXT.expandLevelFilters}
             className="ml-auto inline-flex h-7 items-center px-1 text-[12px] font-semibold tracking-[0.2em] text-foreground/35 sm:hidden"
           >
             ...
