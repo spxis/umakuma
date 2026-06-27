@@ -5,12 +5,14 @@ type Props = {
   show: boolean;
   loadingSkeletonCardCount: number;
   showFilterPagingState: boolean;
+  filtersOpen: boolean;
 };
 
 export default function StudyLoadingShimmerOverlay({
   show,
   loadingSkeletonCardCount,
   showFilterPagingState,
+  filtersOpen,
 }: Props) {
   return (
     <div
@@ -19,14 +21,29 @@ export default function StudyLoadingShimmerOverlay({
     >
       <div className="h-full space-y-3 p-4 sm:p-5">
         <div className="rounded-2xl border border-line/80 bg-surface px-3 py-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="shimmer-surface h-3 w-34 rounded" />
-            <div className="flex items-center gap-2">
-              <span className="shimmer-surface h-7 w-14 rounded-full border border-line/70" />
-              <span className="shimmer-surface h-7 w-14 rounded-full border border-line/70" />
-              <span className="shimmer-surface h-7 w-14 rounded-full border border-line/70" />
+          {filtersOpen ? (
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="shimmer-surface h-3 w-34 rounded" />
+                <span className="shimmer-surface h-7 w-22 rounded-full border border-line/70" />
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="shimmer-surface h-7 w-24 rounded-full border border-line/70" />
+                <span className="shimmer-surface h-7 w-24 rounded-full border border-line/70" />
+                <span className="shimmer-surface h-7 w-24 rounded-full border border-line/70" />
+                <span className="shimmer-surface h-7 w-32 rounded-full border border-line/70" />
+              </div>
+              <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_16rem]">
+                <span className="shimmer-surface h-7 rounded-full border border-line/70" />
+                <span className="shimmer-surface h-7 rounded-full border border-line/70" />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="shimmer-surface h-3 w-26 rounded" />
+              <span className="shimmer-surface h-7 w-28 rounded-full border border-line/70" />
+            </div>
+          )}
         </div>
         <ExplorerLoadingShimmer
           label={showFilterPagingState ? STUDY_PANEL_TEXT.loadingSelectedLevel : STUDY_PANEL_TEXT.loadingQueue}

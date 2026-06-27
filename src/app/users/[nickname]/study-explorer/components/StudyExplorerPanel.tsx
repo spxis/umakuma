@@ -485,6 +485,7 @@ export default function StudyExplorerPanel({
             show={showLoadingOverlay}
             loadingSkeletonCardCount={loadingSkeletonCardCount}
             showFilterPagingState={showFilterPagingState}
+            filtersOpen={filtersOpen}
           />
         </div>
         <p className="mt-2 text-right text-[11px] font-medium text-foreground/55" title={cacheFooterTitle}>{cacheFooterText}</p>
