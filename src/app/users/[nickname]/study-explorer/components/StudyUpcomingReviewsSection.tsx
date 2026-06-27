@@ -1,7 +1,8 @@
 import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
 
 import type { UpcomingReviewItem } from "../lib/studyExplorerTypes";
-import { shortSubjectTypeLabel, subjectTypePillClass } from "../../level-explorer/lib/levelExplorerDisplay";
+import { shortSubjectTypeLabel } from "../../level-explorer/lib/levelExplorerDisplay";
+import { NeutralPill, SubjectTypePill } from "../../shared/ExplorerPill";
 import { STUDY_PANEL_TEXT } from "./StudyExplorer.constants";
 
 type StudyUpcomingReviewsSectionProps = {
@@ -50,9 +51,9 @@ export default function StudyUpcomingReviewsSection({
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-1.5">
                       <span className="text-sm font-bold text-foreground">{item.characters}</span>
-                      <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
+                      <SubjectTypePill type={item.subjectType}>{shortSubjectTypeLabel(item.subjectType)}</SubjectTypePill>
                       {typeof item.wkLevel === "number" ? (
-                        <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span>
+                        <NeutralPill>L{item.wkLevel}</NeutralPill>
                       ) : null}
                     </div>
                     {(item.primaryMeaning || item.primaryReading) ? (

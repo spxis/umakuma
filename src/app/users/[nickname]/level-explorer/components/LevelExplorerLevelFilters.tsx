@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import FilterChipLabel from "../../shared/FilterChipLabel";
+import FilterChipButton from "../../shared/FilterChipButton";
 import { badgeClass, disabledBadgeClass, formatNumber } from "../lib/levelExplorerDisplay";
 import { groupStudyReviewLevelChips, type StudyReviewLevelChip } from "../../study-explorer/lib/studyExplorerUtils";
 
@@ -127,24 +127,24 @@ export default function LevelExplorerLevelFilters({
         Level
       </span>
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-        <button
+        <FilterChipButton
           type="button"
           onClick={() => {
             void onSelectAllLevelsAndClearSearch();
           }}
           role="tab"
           aria-selected={isAllSelected}
-          className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${badgeClass(isAllSelected)}`}
-        >
-          <FilterChipLabel label="All" count={formatNumber(allLevelCount)} />
-        </button>
+          toneClassName={badgeClass(isAllSelected)}
+          label="All"
+          count={formatNumber(allLevelCount)}
+        />
 
         {shouldGroupLevels
           ? groupedLevelChips.map((chip) => {
               if (chip.kind === "single") {
                 const isSelected = selectedLevels.has(chip.level);
                 return (
-                  <button
+                  <FilterChipButton
                     key={chip.level}
                     type="button"
                     onClick={() => {
@@ -152,13 +152,10 @@ export default function LevelExplorerLevelFilters({
                     }}
                     role="tab"
                     aria-selected={isSelected}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${badgeClass(isSelected)}`}
-                  >
-                    <FilterChipLabel
-                      label={chip.level}
-                      count={formatNumber(levelItemCountsByLevel[chip.level] ?? 0)}
-                    />
-                  </button>
+                    toneClassName={badgeClass(isSelected)}
+                    label={chip.level}
+                    count={formatNumber(levelItemCountsByLevel[chip.level] ?? 0)}
+                  />
                 );
               }
 
@@ -173,7 +170,7 @@ export default function LevelExplorerLevelFilters({
               const count = countForGroupedChip(chip);
 
               return (
-                <button
+                <FilterChipButton
                   key={`range-${chip.startLevel}-${chip.endLevel}-${chip.group ?? "disabled"}`}
                   type="button"
                   onClick={
@@ -204,31 +201,22 @@ export default function LevelExplorerLevelFilters({
                   disabled={!isGroupedChip}
                   role="tab"
                   aria-selected={isSelected}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${
+                  toneClassName={
                     !isGroupedChip
                       ? disabledBadgeClass()
                       : groupedLevelBadgeClass(isSelected)
-                  }`}
-                >
-                  {isGroupedChip ? (
-                    <FilterChipLabel
-                      label={
-                        chip.startLevel === chip.endLevel
-                          ? chip.startLevel
-                          : `${chip.startLevel}-${chip.endLevel}`
-                      }
-                      count={formatNumber(count)}
-                    />
-                  ) : chip.startLevel === chip.endLevel ? (
-                    chip.startLevel
-                  ) : (
-                    `${chip.startLevel}-${chip.endLevel}`
-                  )}
-                </button>
+                  }
+                  label={
+                    chip.startLevel === chip.endLevel
+                      ? chip.startLevel
+                      : `${chip.startLevel}-${chip.endLevel}`
+                  }
+                  count={isGroupedChip ? formatNumber(count) : undefined}
+                />
               );
             })
           : levelOptions.map((level) => (
-              <button
+              <FilterChipButton
                 key={level}
                 type="button"
                 onClick={() => {
@@ -237,13 +225,10 @@ export default function LevelExplorerLevelFilters({
                 disabled={searchAvailableLevels !== null && !searchAvailableLevels.has(level)}
                 role="tab"
                 aria-selected={selectedLevels.has(level)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${badgeClass(selectedLevels.has(level))}`}
-              >
-                <FilterChipLabel
-                  label={level}
-                  count={formatNumber(levelItemCountsByLevel[level] ?? 0)}
-                />
-              </button>
+                toneClassName={badgeClass(selectedLevels.has(level))}
+                label={level}
+                count={formatNumber(levelItemCountsByLevel[level] ?? 0)}
+              />
             ))}
       </div>
     </div>

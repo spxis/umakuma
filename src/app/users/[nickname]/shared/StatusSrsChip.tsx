@@ -1,6 +1,7 @@
 import type { LevelItem } from "../explorerTypes";
 import type { ReactNode } from "react";
 import { statusClass, statusShortLabel } from "../level-explorer/lib/levelExplorerDisplay";
+import { ExplorerPill } from "./ExplorerPill";
 
 type PillChipProps = {
   className?: string;
@@ -8,7 +9,7 @@ type PillChipProps = {
 };
 
 export function PillChip({ className = "", children }: PillChipProps) {
-  return <span className={`subject-pill whitespace-nowrap ${className}`}>{children}</span>;
+  return <ExplorerPill className={className}>{children}</ExplorerPill>;
 }
 
 type StatusSrsChipProps = {

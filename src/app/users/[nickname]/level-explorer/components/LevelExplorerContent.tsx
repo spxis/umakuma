@@ -5,7 +5,7 @@ import { JLPT_FILTER_ALLOWED, LEVEL_JLPT_FILTERS, LEVEL_REVIEW_TIMING_FILTERS, L
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import ExplorerSplitLoadingShimmer from "../../shared/ExplorerSplitLoadingShimmer";
-import FilterChipLabel from "../../shared/FilterChipLabel";
+import FilterChipButton from "../../shared/FilterChipButton";
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import LevelExplorerLevelFilters from "./LevelExplorerLevelFilters";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_JLPT_MIX_LEVELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS } from "./LevelExplorer.constants";
@@ -297,15 +297,15 @@ export default function LevelExplorerContent({
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="Grouping filters">
             <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grouping</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-              <button
+              <FilterChipButton
                 type="button"
                 onClick={onEnableAllTypes}
                 role="tab"
                 aria-selected={visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary)}`}
-              >
-                <FilterChipLabel label="All" count={counts.all} />
-              </button>
+                toneClassName={badgeClass(visibleTypes.radical && visibleTypes.kanji && visibleTypes.vocabulary)}
+                label="All"
+                count={counts.all}
+              />
               {([
                 ["radical", "RADICAL", counts.radical],
                 ["kanji", "KANJI", counts.kanji],
@@ -320,9 +320,7 @@ export default function LevelExplorerContent({
                     : (active ? "border-vocabulary bg-vocabulary text-white" : "border-vocabulary/50 bg-vocabulary/10 text-vocabulary hover:bg-vocabulary/20");
                 if (disabled) return null;
                 return (
-                  <button key={type} type="button" onClick={() => onToggleTypeVisibility(type)} disabled={disabled} role="tab" aria-selected={active} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : tone}`}>
-                    <FilterChipLabel label={label} count={count} />
-                  </button>
+                  <FilterChipButton key={type} type="button" onClick={() => onToggleTypeVisibility(type)} disabled={disabled} role="tab" aria-selected={active} toneClassName={disabled ? disabledBadgeClass() : tone} label={label} count={count} />
                 );
               })}
             </div>
@@ -336,9 +334,7 @@ export default function LevelExplorerContent({
                 const active = srsFilter === status;
                 if (disabled && !active) return null;
                 return (
-                  <button key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? badgeClass(active) : wkStatusToneClass(status, active)}`}>
-                    <FilterChipLabel label={srsFilterButtonLabel(status)} count={count} />
-                  </button>
+                  <FilterChipButton key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} toneClassName={disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? badgeClass(active) : wkStatusToneClass(status, active)} label={srsFilterButtonLabel(status)} count={count} />
                 );
               })}
             </div>
@@ -358,15 +354,15 @@ export default function LevelExplorerContent({
                   return null;
                 }
                 return (
-                  <button
+                  <FilterChipButton
                     key={level}
                     type="button"
                     onClick={() => onSetJlptFilter(level)}
                     disabled={disabled}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : level === LEVEL_JLPT_FILTERS.all ? badgeClass(active) : allBadgeClass(active)}`}
-                  >
-                    <FilterChipLabel label={LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]} count={count} />
-                  </button>
+                    toneClassName={disabled ? disabledBadgeClass() : isJlptLevel ? jlptStyle : level === LEVEL_JLPT_FILTERS.all ? badgeClass(active) : allBadgeClass(active)}
+                    label={LEVEL_EXPLORER_JLPT_FILTER_LABELS[level]}
+                    count={count}
+                  />
                 );
               })}
             </div>
@@ -383,15 +379,15 @@ export default function LevelExplorerContent({
                   return null;
                 }
                 return (
-                  <button
+                  <FilterChipButton
                     key={timing}
                     type="button"
                     onClick={() => onSetReviewTimingFilter(timing)}
                     disabled={disabled}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${disabled ? disabledBadgeClass() : badgeClass(active)}`}
-                  >
-                    <FilterChipLabel label={label} count={count} />
-                  </button>
+                    toneClassName={disabled ? disabledBadgeClass() : badgeClass(active)}
+                    label={label}
+                    count={count}
+                  />
                 );
               })}
             </div>

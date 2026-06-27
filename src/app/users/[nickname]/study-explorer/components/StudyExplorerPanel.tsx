@@ -34,7 +34,8 @@ import { useStudyMobileFilterSections } from "./useStudyMobileFilterSections";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
-import FilterChipLabel from "../../shared/FilterChipLabel";
+import FilterChipButton from "../../shared/FilterChipButton";
+import { NeutralPill } from "../../shared/ExplorerPill";
 import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
@@ -186,7 +187,7 @@ export default function StudyExplorerPanel({
             onToggle={() => toggleMobileFilterSection("grouping")}
             ariaLabel={STUDY_PANEL_TEXT.groupingFilters}
           >
-              <button
+              <FilterChipButton
                 type="button"
                 onClick={() => {
                   if (!mobileFilterSectionsOpen.grouping && allTypesSelected) {
@@ -199,17 +200,18 @@ export default function StudyExplorerPanel({
                 disabled={filtersLoading}
                 role="tab"
                 aria-selected={allTypesSelected}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.grouping || allTypesSelected ? "" : "hidden sm:inline-flex"} ${filtersLoading && !allTypesSelected ? disabledBadgeClass() : badgeClass(allTypesSelected)}`}
-              >
-                <FilterChipLabel label={STUDY_PANEL_TEXT.all} count={groupingCountLabel(allTypeCount)} />
-              </button>
+                className={mobileFilterSectionsOpen.grouping || allTypesSelected ? "" : "hidden sm:inline-flex"}
+                toneClassName={filtersLoading && !allTypesSelected ? disabledBadgeClass() : badgeClass(allTypesSelected)}
+                label={STUDY_PANEL_TEXT.all}
+                count={groupingCountLabel(allTypeCount)}
+              />
               {STUDY_GROUPING_FILTERS.map(([type, label]) => {
                 const count = typeCounts[type];
                 const isSelected = typeFilter === type || (allTypesSelected && count > 0);
                 const unavailable = hasData && !isSelected && count === 0;
                 const disabled = (filtersLoading && !isSelected) || unavailable;
                 return (
-                  <button
+                  <FilterChipButton
                     key={type}
                     type="button"
                     onClick={() => {
@@ -223,10 +225,11 @@ export default function StudyExplorerPanel({
                     disabled={disabled}
                     role="tab"
                     aria-selected={isSelected}
-                    className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] whitespace-nowrap ${mobileFilterSectionsOpen.grouping || typeFilter === type ? "" : "hidden sm:inline-flex"} ${disabled && !isSelected ? disabledBadgeClass() : studyGroupingToneClass(type, isSelected)}`}
-                  >
-                    <FilterChipLabel label={label} count={groupingCountLabel(count)} />
-                  </button>
+                    className={mobileFilterSectionsOpen.grouping || typeFilter === type ? "" : "hidden sm:inline-flex"}
+                    toneClassName={disabled && !isSelected ? disabledBadgeClass() : studyGroupingToneClass(type, isSelected)}
+                    label={label}
+                    count={groupingCountLabel(count)}
+                  />
                 );
               })}
           </StudyFilterSection>
@@ -421,8 +424,8 @@ export default function StudyExplorerPanel({
                     topRight={
                       <>
                         <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
-                        {typeof item.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span> : null}
-                        {typeof item.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{item.jlptMeta.schoolGrade}</span> : null}
+                          {typeof item.wkLevel === "number" ? <NeutralPill>L{item.wkLevel}</NeutralPill> : null}
+                          {typeof item.jlptMeta?.schoolGrade === "number" ? <NeutralPill>G{item.jlptMeta.schoolGrade}</NeutralPill> : null}
                         {item.jlptLevel ? <span className={jlptLevelPillClass()}>N{item.jlptLevel}</span> : null}
                       </>
                     }

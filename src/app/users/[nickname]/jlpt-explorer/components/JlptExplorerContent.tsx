@@ -14,6 +14,8 @@ import ExplorerSearchBar from "../../ExplorerSearchBar";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import ExplorerSplitLoadingShimmer from "../../shared/ExplorerSplitLoadingShimmer";
 import FilterChipLabel from "../../shared/FilterChipLabel";
+import FilterChipButton from "../../shared/FilterChipButton";
+import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import type {
@@ -178,16 +180,10 @@ export default function JlptExplorerContent({
             <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="WaniKani level filters">
               <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Level</span>
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-                <button type="button" onClick={() => onSetWkLevelFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === null)}`}>
-                  <FilterChipLabel label="All" count={formatNumber(items.length)} />
-                </button>
-                <button type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === "none")}`}>
-                  <FilterChipLabel label={JLPT_EXPLORER_TEXT.none} count={formatNumber(wkLevelCounts.get("none") ?? 0)} />
-                </button>
+                <FilterChipButton type="button" onClick={() => onSetWkLevelFilter(null)} toneClassName={badgeClass(wkLevelFilter === null)} label="All" count={formatNumber(items.length)} />
+                <FilterChipButton type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === "none" ? null : "none")} toneClassName={badgeClass(wkLevelFilter === "none")} label={JLPT_EXPLORER_TEXT.none} count={formatNumber(wkLevelCounts.get("none") ?? 0)} />
                 {availableWkLevels.map((level) => (
-                  <button key={level} type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === level ? null : level)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(wkLevelFilter === level)}`}>
-                    <FilterChipLabel label={level} count={formatNumber(wkLevelCounts.get(level) ?? 0)} />
-                  </button>
+                  <FilterChipButton key={level} type="button" onClick={() => onSetWkLevelFilter(wkLevelFilter === level ? null : level)} toneClassName={badgeClass(wkLevelFilter === level)} label={level} count={formatNumber(wkLevelCounts.get(level) ?? 0)} />
                 ))}
               </div>
             </div>
@@ -196,31 +192,25 @@ export default function JlptExplorerContent({
             <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
               <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-              <button type="button" onClick={() => onSetGradeFilter(null)} className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(gradeFilter === null)}`}>
-                All
-              </button>
+              <FilterChipButton type="button" onClick={() => onSetGradeFilter(null)} toneClassName={badgeClass(gradeFilter === null)} label="All" />
               {gradeCounts.has("none") ? (
-                <button
+                <FilterChipButton
                   type="button"
                   onClick={() => onSetGradeFilter(gradeFilter === "none" ? null : "none")}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
-                    gradeFilter === "none",
-                  )}`}
-                >
-                  <FilterChipLabel label="None" count={formatNumber(gradeCounts.get("none") ?? 0)} />
-                </button>
+                  toneClassName={badgeClass(gradeFilter === "none")}
+                  label="None"
+                  count={formatNumber(gradeCounts.get("none") ?? 0)}
+                />
               ) : null}
               {availableGrades.map((grade) => (
-                <button
+                <FilterChipButton
                   key={grade}
                   type="button"
                   onClick={() => onSetGradeFilter(gradeFilter === grade ? null : grade)}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
-                    gradeFilter === grade,
-                  )}`}
-                >
-                  <FilterChipLabel label={`G${grade}`} count={formatNumber(gradeCounts.get(grade) ?? 0)} />
-                </button>
+                  toneClassName={badgeClass(gradeFilter === grade)}
+                  label={`G${grade}`}
+                  count={formatNumber(gradeCounts.get(grade) ?? 0)}
+                />
               ))}
               </div>
             </div>
@@ -229,15 +219,7 @@ export default function JlptExplorerContent({
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT level filters">
             <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-            <button
-              type="button"
-              onClick={() => onSetSelectedLevels(new Set([1, 2, 3, 4, 5]))}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${badgeClass(
-                selectedLevels.size === 5,
-              )}`}
-            >
-              <FilterChipLabel label="All" count={formatNumber(counts.all)} />
-            </button>
+            <FilterChipButton type="button" onClick={() => onSetSelectedLevels(new Set([1, 2, 3, 4, 5]))} toneClassName={badgeClass(selectedLevels.size === 5)} label="All" count={formatNumber(counts.all)} />
             {([
               [5, counts.n5],
               [4, counts.n4],
@@ -245,31 +227,28 @@ export default function JlptExplorerContent({
               [2, counts.n2],
               [1, counts.n1],
             ] as const).map(([level, count]) => (
-              <button
+              <FilterChipButton
                 key={level}
                 type="button"
                 onClick={() => onToggleNLevel(level)}
-                className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${
+                toneClassName={
                   selectedLevels.has(level)
                     ? "border-teal-500 bg-teal-500 text-white"
                     : "border-teal-300 bg-teal-100 text-teal-800 hover:bg-teal-200"
-                }`}
-              >
-                <FilterChipLabel label={`N${level}`} count={formatNumber(count)} />
-              </button>
+                }
+                label={`N${level}`}
+                count={formatNumber(count)}
+              />
             ))}
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <button
+            <FilterChipButton
               type="button"
               onClick={() => onSetStickyLevels(!stickyLevels)}
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] ${
-                stickyLevels ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground"
-              }`}
-            >
-              {stickyLevels ? JLPT_EXPLORER_TEXT.stickyOn : JLPT_EXPLORER_TEXT.stickyOff}
-            </button>
+              toneClassName={stickyLevels ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground"}
+              label={stickyLevels ? JLPT_EXPLORER_TEXT.stickyOn : JLPT_EXPLORER_TEXT.stickyOff}
+            />
           </div>
         </div>
             </div>
@@ -312,12 +291,12 @@ export default function JlptExplorerContent({
                   topRight={
                     <>
                       {typeof userMatch?.wkLevel === "number" ? (
-                        <span className="subject-pill border-line bg-surface text-foreground">L{userMatch.wkLevel}</span>
+                        <NeutralPill>L{userMatch.wkLevel}</NeutralPill>
                       ) : null}
                       {typeof item.schoolGrade === "number" ? (
-                        <span className="subject-pill border-line bg-surface text-foreground">G{item.schoolGrade}</span>
+                        <NeutralPill>G{item.schoolGrade}</NeutralPill>
                       ) : null}
-                      <span className={jlptLevelPillClass()}>N{item.nLevel}</span>
+                      <ExplorerPill className={jlptLevelPillClass()}>N{item.nLevel}</ExplorerPill>
                     </>
                   }
                   glyphClassName={`border-kanji/50 bg-kanji/10 ${userMatch ? "text-kanji" : "text-foreground"}`}
@@ -333,14 +312,14 @@ export default function JlptExplorerContent({
                           : readingLabelFromList(fallbackReadings, showEnglish)
                   }
                   statusChip={
-                    <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${jlptStatusClass(userMatch?.status)}`}>
+                    <ExplorerPill className={`px-3 py-1 text-xs font-bold ${jlptStatusClass(userMatch?.status)}`}>
                       {userMatch?.status ?? "untracked"}
-                    </span>
+                    </ExplorerPill>
                   }
                   rightChip={
-                    <span className="rounded-full border border-line bg-surface px-2 py-1 text-xs font-bold text-foreground">
+                    <NeutralPill className="px-2 py-1 text-xs font-bold">
                       {userMatch ? `SRS ${userMatch.srsStage ?? 0}` : "-"}
-                    </span>
+                    </NeutralPill>
                   }
                 />
                 {selectedItem && index === visibleDetailInsertIndex ? (

@@ -5,6 +5,7 @@ import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
 import { jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import { formatDate, jlptHeading, readingLabel, stripReadingSeparators } from "../lib/jlptDisplay";
 import { jlptStatusClass, parseWordExamples } from "../lib/jlptExplorerContentHelpers";
+import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
 import type { JlptReadingsRecord, KanjiStats } from "./JlptExplorerContent.types";
 
@@ -63,15 +64,15 @@ export default function JlptExplorerDetailSection({
 
         <div className="min-w-0">
           <div className="flex flex-wrap justify-start gap-1 sm:justify-end">
-            <span className={`subject-pill ${jlptStatusClass(selectedUserMatch?.status)}`}>
+            <ExplorerPill className={jlptStatusClass(selectedUserMatch?.status)}>
               {selectedUserMatch?.status ?? "untracked"}
-            </span>
+            </ExplorerPill>
             {typeof selectedUserMatch?.wkLevel === "number" ? (
-              <span className="subject-pill border-line bg-surface text-foreground">L{selectedUserMatch.wkLevel}</span>
+              <NeutralPill>L{selectedUserMatch.wkLevel}</NeutralPill>
             ) : null}
-            <span className={jlptLevelPillClass()}>N{selectedItem.nLevel}</span>
+            <ExplorerPill className={jlptLevelPillClass()}>N{selectedItem.nLevel}</ExplorerPill>
             {selectedUserMatch ? (
-              <span className="subject-pill border-line bg-surface text-foreground">SRS {selectedUserMatch.srsStage ?? 0}</span>
+              <NeutralPill>SRS {selectedUserMatch.srsStage ?? 0}</NeutralPill>
             ) : null}
           </div>
           <div className="mt-2 min-w-0">

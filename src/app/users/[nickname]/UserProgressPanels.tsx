@@ -3,6 +3,7 @@
 import { LEVEL_PROGRESS_CARDS } from "@/app/users/[nickname]/UserDashboard.constants";
 import { LEARNED_SRS_GROUP_LABELS, SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+import { ExplorerPill, SubjectTypePill } from "./shared/ExplorerPill";
 
 type ItemSpreadRow = {
   radical: number;
@@ -78,15 +79,15 @@ export default function UserProgressPanels({
           <h2 className="text-3xl font-black text-foreground">Item Spread</h2>
           <div className="flex items-center gap-2">
             <div className="hidden flex-wrap items-center gap-2 text-sm font-semibold text-slate-700 sm:flex">
-              <span className="subject-pill subject-pill--radical">
+              <SubjectTypePill type={SUBJECT_TYPES.radical}>
                 {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].plural}
-              </span>
-              <span className="subject-pill subject-pill--kanji">
+              </SubjectTypePill>
+              <SubjectTypePill type={SUBJECT_TYPES.kanji}>
                 {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular}
-              </span>
-              <span className="subject-pill subject-pill--vocabulary">
+              </SubjectTypePill>
+              <SubjectTypePill type={SUBJECT_TYPES.vocabulary}>
                 {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular}
-              </span>
+              </SubjectTypePill>
             </div>
             <button
               type="button"
@@ -109,12 +110,12 @@ export default function UserProgressPanels({
                 className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.9fr_0.9fr] items-center gap-2 rounded-xl border border-line bg-surface-muted px-3 py-2"
               >
                 <p className="text-xl font-semibold text-slate-800">{label}</p>
-                <span className="subject-pill subject-pill--radical justify-center">{formatNumber(row.radical)}</span>
-                <span className="subject-pill subject-pill--kanji justify-center">{formatNumber(row.kanji)}</span>
-                <span className="subject-pill subject-pill--vocabulary justify-center">{formatNumber(row.vocabulary)}</span>
-                <span className="rounded-full border border-line bg-white px-3 py-1 text-center text-2xl font-black text-foreground">
+                <SubjectTypePill type={SUBJECT_TYPES.radical} className="justify-center">{formatNumber(row.radical)}</SubjectTypePill>
+                <SubjectTypePill type={SUBJECT_TYPES.kanji} className="justify-center">{formatNumber(row.kanji)}</SubjectTypePill>
+                <SubjectTypePill type={SUBJECT_TYPES.vocabulary} className="justify-center">{formatNumber(row.vocabulary)}</SubjectTypePill>
+                <ExplorerPill className="border-line bg-white px-3 py-1 text-center text-2xl font-black text-foreground">
                   {formatNumber(row.total)}
-                </span>
+                </ExplorerPill>
               </div>
               );
             })}
@@ -148,7 +149,7 @@ export default function UserProgressPanels({
                 return (
                 <article key={label} className="overflow-hidden rounded-2xl border border-line bg-white">
                   <div className="flex items-center gap-2 px-4 py-3">
-                    <span className={`subject-pill subject-pill--${key}`}>{label}</span>
+                    <SubjectTypePill type={key}>{label}</SubjectTypePill>
                   </div>
                   <div className="h-2 bg-slate-200">
                     <div

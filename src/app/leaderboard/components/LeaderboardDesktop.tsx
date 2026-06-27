@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Fragment } from "react";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
 
 import LeaderboardExpandedRow from "./LeaderboardExpandedRow";
 import {
@@ -148,9 +150,9 @@ export default function LeaderboardDesktop({
                 <td className="px-4 py-3 text-lg font-black text-accent"><p>{row.wkLevel}</p><p className={`mt-0.5 text-[10px] font-semibold ${deltaClass(row.dailyDelta?.wkLevel)}`}>{formatDelta(row.dailyDelta?.wkLevel)}</p></td>
                 {activeTab === LEADERBOARD_TABS.overall ? (
                   <>
-                    <td className="px-4 py-3"><span className="subject-pill subject-pill--radical">{formatNumber(learnedRadicalsFromRow(row))}</span><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(row.radicalCount)} ({learnedPercent(learnedRadicalsFromRow(row), row.radicalCount)}%)</p></td>
-                    <td className="px-4 py-3"><span className="subject-pill subject-pill--kanji">{formatNumber(learnedKanjiFromRow(row))}</span><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(kanjiCountFromRow(row))} ({learnedPercent(learnedKanjiFromRow(row), kanjiCountFromRow(row))}%)</p></td>
-                    <td className="px-4 py-3"><span className="subject-pill subject-pill--vocabulary">{formatNumber(learnedVocabularyFromRow(row))}</span><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(row.vocabularyCount)} ({learnedPercent(learnedVocabularyFromRow(row), row.vocabularyCount)}%)</p></td>
+                    <td className="px-4 py-3"><SubjectTypePill type={SUBJECT_TYPES.radical}>{formatNumber(learnedRadicalsFromRow(row))}</SubjectTypePill><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(row.radicalCount)} ({learnedPercent(learnedRadicalsFromRow(row), row.radicalCount)}%)</p></td>
+                    <td className="px-4 py-3"><SubjectTypePill type={SUBJECT_TYPES.kanji}>{formatNumber(learnedKanjiFromRow(row))}</SubjectTypePill><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(kanjiCountFromRow(row))} ({learnedPercent(learnedKanjiFromRow(row), kanjiCountFromRow(row))}%)</p></td>
+                    <td className="px-4 py-3"><SubjectTypePill type={SUBJECT_TYPES.vocabulary}>{formatNumber(learnedVocabularyFromRow(row))}</SubjectTypePill><p className="mt-1 text-[10px] font-semibold text-foreground/60">/ {formatNumber(row.vocabularyCount)} ({learnedPercent(learnedVocabularyFromRow(row), row.vocabularyCount)}%)</p></td>
                     <td className="px-4 py-3 text-lg font-black text-hot"><p>{formatNumber(row.score)}</p><p className={`mt-0.5 text-[10px] font-semibold ${deltaClass(row.dailyDelta?.score)}`}>{formatDelta(row.dailyDelta?.score)}</p></td>
                     <td className="px-4 py-3 text-xs uppercase tracking-[0.08em] text-foreground/60"><p>{row.lastActivityAt ? formatDate(row.lastActivityAt) : "-"}</p><p className="mt-1 text-[10px] font-semibold normal-case tracking-normal text-foreground/50">{formatSince(row.lastActivityAt)}</p></td>
                   </>

@@ -1,5 +1,6 @@
 import { EMPTY_ITEM_SPREAD, isItemSpread } from "@/lib/itemSpread";
 import { LEARNED_SRS_GROUP_LABELS, SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
+import { ExplorerPill, SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
 import {
   LEADERBOARD_24H_FOCUS_LABEL_BY_TAB,
   LEADERBOARD_24H_OVERALL_LABELS,
@@ -137,15 +138,15 @@ export default function LeaderboardExpandedRow({
         <div className="rounded-2xl border border-line bg-surface p-4">
           <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">Level {row.wkLevel} Kanji</p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <span className="rounded-full border border-line bg-surface-muted px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/80">
+            <ExplorerPill className="border-line bg-surface-muted px-3 py-1 text-xs font-bold tracking-[0.08em] text-foreground/80">
               Learned: {formatNumber(row.levelKanjiLearned)}
-            </span>
-            <span className="rounded-full border border-line bg-surface-muted px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/80">
+            </ExplorerPill>
+            <ExplorerPill className="border-line bg-surface-muted px-3 py-1 text-xs font-bold tracking-[0.08em] text-foreground/80">
               Total: {formatNumber(row.levelKanjiTotal)}
-            </span>
-            <span className="rounded-full border border-line bg-surface-muted px-3 py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/80">
+            </ExplorerPill>
+            <ExplorerPill className="border-line bg-surface-muted px-3 py-1 text-xs font-bold tracking-[0.08em] text-foreground/80">
               Locked: {formatNumber(row.levelKanjiLocked)}
-            </span>
+            </ExplorerPill>
           </div>
         </div>
       </div>
@@ -165,15 +166,15 @@ export default function LeaderboardExpandedRow({
           {showItemSpreadPanel ? (
             <>
               <div className="mt-2 flex flex-wrap gap-1 text-[10px]">
-                <span className="subject-pill subject-pill--radical">
+                <SubjectTypePill type={SUBJECT_TYPES.radical}>
                   {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.radical].singular}
-                </span>
-                <span className="subject-pill subject-pill--kanji">
+                </SubjectTypePill>
+                <SubjectTypePill type={SUBJECT_TYPES.kanji}>
                   {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular}
-                </span>
-                <span className="subject-pill subject-pill--vocabulary">
+                </SubjectTypePill>
+                <SubjectTypePill type={SUBJECT_TYPES.vocabulary}>
                   {SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.vocabulary].singular}
-                </span>
+                </SubjectTypePill>
               </div>
               <div className="mt-2 space-y-1">
                 {LEARNED_SRS_GROUP_LABELS.map(({ key, label }) => {
