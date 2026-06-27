@@ -12,7 +12,7 @@ import { JLPT_EXPLORER_TEXT } from "./JlptExplorer.constants";
 import { jlptStatusClass } from "../lib/jlptExplorerContentHelpers";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
-import ExplorerLoadingShimmer from "../../shared/ExplorerLoadingShimmer";
+import ExplorerSplitLoadingShimmer from "../../shared/ExplorerSplitLoadingShimmer";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
@@ -281,7 +281,7 @@ export default function JlptExplorerContent({
       <div className="p-5">
         {isLoadingData ? (
           <div className="mb-3">
-            <ExplorerLoadingShimmer label="Loading JLPT explorer..." cardCount={8} />
+            <ExplorerSplitLoadingShimmer label="Loading JLPT explorer..." cardCount={8} />
           </div>
         ) : null}
         <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
