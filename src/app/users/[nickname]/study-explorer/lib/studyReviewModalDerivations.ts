@@ -26,15 +26,31 @@ export function countReviewOutcomes(
 }
 
 export function buildStudyReviewAllMeanings(selectedItem: StudyQueueItem): string[] {
-  return Array.from(
-    new Set(
-      [
-        ...selectedItem.meanings,
-        ...(selectedItem.jlptMeta?.meanings ?? []),
-        ...(selectedItem.jlptMeta?.primaryMeaning ? [selectedItem.jlptMeta.primaryMeaning] : []),
-      ].filter((value) => value.trim().length > 0),
-    ),
-  );
+  const seen = new Set<string>();
+  const deduped: string[] = [];
+  const values = [
+    ...selectedItem.meanings,
+    ...(selectedItem.jlptMeta?.meanings ?? []),
+    ...(selectedItem.jlptMeta?.primaryMeaning ? [selectedItem.jlptMeta.primaryMeaning] : []),
+  ];
+
+  for (const rawValue of values) {
+    const cleaned = rawValue.replace(/\s+/g, " ").trim();
+    if (cleaned.length === 0) {
+      continue;
+    }
+
+    // Dedupe cross-source meaning variants while keeping display text from the first source.
+    const normalized = cleaned.toLocaleLowerCase();
+    if (seen.has(normalized)) {
+      continue;
+    }
+
+    seen.add(normalized);
+    deduped.push(cleaned);
+  }
+
+  return deduped;
 }
 
 export function deriveStudyReviewReadings(selectedItem: StudyQueueItem): {

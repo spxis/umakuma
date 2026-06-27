@@ -247,16 +247,15 @@ export default function StudyHistoryTable({
                     <div className="flex items-center gap-2 leading-tight">
                       <GlyphReferenceTile
                         glyph={row.subjectLabel}
-                        subtitle={null}
+                        subtitle={historySubjectSubtitle(row.subjectReading, row.subjectMeaning)}
                         subjectType={historySubjectType(row.subjectType)}
                         wkLevel={row.wkLevel}
-                        className="min-h-12 min-w-12"
+                        size="large"
                         onClick={() => {
                           setSelectedAttemptId(row.id);
                         }}
                       />
                       <div className="min-w-0">
-                        <p className="truncate text-[12px] font-semibold text-foreground/90">{historySubjectReading(row.subjectReading)}</p>
                         <p className="truncate text-[11px] text-foreground/75">{historySubjectMeaning(row.subjectMeaning)}</p>
                       </div>
                     </div>
@@ -307,17 +306,15 @@ export default function StudyHistoryTable({
                       <div className="flex items-center gap-3 leading-tight">
                         <GlyphReferenceTile
                           glyph={row.subjectLabel}
-                          subtitle={null}
+                          subtitle={historySubjectSubtitle(row.subjectReading, row.subjectMeaning)}
                           subjectType={historySubjectType(row.subjectType)}
                           wkLevel={row.wkLevel}
                           size="large"
-                          className="min-h-14 min-w-14"
                           onClick={() => {
                             setSelectedAttemptId(row.id);
                           }}
                         />
                         <div className="flex min-w-0 flex-col justify-center">
-                          <p className="truncate text-lg font-semibold text-foreground/90 sm:text-xl">{historySubjectReading(row.subjectReading)}</p>
                           <p className="truncate text-base text-foreground/75 sm:text-lg">{historySubjectMeaning(row.subjectMeaning)}</p>
                         </div>
                       </div>
@@ -452,17 +449,17 @@ function historySubjectType(type: string) {
   return isSubjectType(type) ? type : undefined;
 }
 
-function historySubjectReading(reading: string | null): string {
-  const normalizedReading = reading?.trim();
-  if (!normalizedReading) {
-    return "-";
-  }
-
-  const pronunciation = pronunciationForReading(normalizedReading);
-  return pronunciation ? `${normalizedReading} / ${pronunciation}` : normalizedReading;
-}
-
 function historySubjectMeaning(meaning: string | null): string {
   const normalizedMeaning = meaning?.trim();
   return normalizedMeaning || "-";
+}
+
+function historySubjectSubtitle(reading: string | null, meaning: string | null): string {
+  const normalizedReading = reading?.trim();
+  if (normalizedReading) {
+    const pronunciation = pronunciationForReading(normalizedReading);
+    return pronunciation ? `${normalizedReading} / ${pronunciation}` : normalizedReading;
+  }
+
+  return meaning?.trim() || "-";
 }
