@@ -2,16 +2,26 @@ import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 import { shortSubjectTypeLabel, subjectTypePillClass } from "./level-explorer/lib/levelExplorerDisplay";
-
-type CustomLibraryItemRow = {
-  id: string;
-  type: "radical" | "kanji" | "vocabulary";
-  level: number;
-  characters: string;
-  meanings: string[];
-  readings: string[];
-  primaryReading: string | null;
-};
+import {
+  getLocalStorageItem,
+  getStoredEnum,
+  getStoredPositiveInt,
+  setLocalStorageItem,
+  setStoredEnum,
+} from "@/lib/clientStorage";
+import {
+  buildDeleteItemDetails,
+  buildPreferenceStorageKeys,
+  computeLibraryTypeCounts,
+  filterAndSortLibraryItems,
+  isValidLibraryItemsPageSize,
+  PAGE_SIZE_OPTIONS,
+  SORT_ORDER_OPTIONS,
+  TYPE_FILTER_OPTIONS,
+  type CustomLibraryItemRow,
+  type LibraryItemTypeFilter,
+  type LibrarySortOrder,
+} from "./StudySourceLibraryItemsManager.lib";
 
 type Props = {
   accountId: string;
@@ -29,6 +39,12 @@ export default function StudySourceLibraryItemsManager({
   onLibraryDeleted,
 }: Props) {
   const [levelFilter, setLevelFilter] = useState<number | "all">("all");
+  const [typeFilter, setTypeFilter] = useState<LibraryItemTypeFilter>("all");
+  const [sortOrder, setSortOrder] = useState<LibrarySortOrder>("level-asc");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [pageSize, setPageSize] = useState<number>(50);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasHydratedPreferences, setHasHydratedPreferences] = useState(false);
   const [selectedItemIds, setSelectedItemIds] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [isDeletingItems, setIsDeletingItems] = useState(false);
@@ -56,27 +72,90 @@ export default function StudySourceLibraryItemsManager({
   );
 
   const items = useMemo(() => data?.items ?? [], [data?.items]);
+  const preferenceStorageKeys = useMemo(
+    () => buildPreferenceStorageKeys(accountId),
+    [accountId],
+  );
+
+  useEffect(() => {
+    const storedTypeFilter = getStoredEnum(preferenceStorageKeys.typeFilter, TYPE_FILTER_OPTIONS, "all");
+    const storedSortOrder = getStoredEnum(preferenceStorageKeys.sortOrder, SORT_ORDER_OPTIONS, "level-asc");
+    const storedPageSize = getStoredPositiveInt(preferenceStorageKeys.pageSize);
+    const storedSearchQuery = getLocalStorageItem(preferenceStorageKeys.searchQuery) ?? "";
+
+    setTypeFilter(storedTypeFilter);
+    setSortOrder(storedSortOrder);
+    if (storedPageSize && isValidLibraryItemsPageSize(storedPageSize)) {
+      setPageSize(storedPageSize);
+    }
+    setSearchQuery(storedSearchQuery);
+    setHasHydratedPreferences(true);
+  }, [preferenceStorageKeys]);
+
+  useEffect(() => {
+    if (!hasHydratedPreferences) {
+      return;
+    }
+    setStoredEnum(preferenceStorageKeys.typeFilter, typeFilter);
+  }, [hasHydratedPreferences, preferenceStorageKeys.typeFilter, typeFilter]);
+
+  useEffect(() => {
+    if (!hasHydratedPreferences) {
+      return;
+    }
+    setStoredEnum(preferenceStorageKeys.sortOrder, sortOrder);
+  }, [hasHydratedPreferences, preferenceStorageKeys.sortOrder, sortOrder]);
+
+  useEffect(() => {
+    if (!hasHydratedPreferences) {
+      return;
+    }
+    setLocalStorageItem(preferenceStorageKeys.pageSize, String(pageSize));
+  }, [hasHydratedPreferences, preferenceStorageKeys.pageSize, pageSize]);
+
+  useEffect(() => {
+    if (!hasHydratedPreferences) {
+      return;
+    }
+    setLocalStorageItem(preferenceStorageKeys.searchQuery, searchQuery);
+  }, [hasHydratedPreferences, preferenceStorageKeys.searchQuery, searchQuery]);
+
   const availableLevels = useMemo(
     () => Array.from(new Set(items.map((item) => item.level))).sort((a, b) => a - b),
     [items],
   );
+  const typeCounts = useMemo(() => computeLibraryTypeCounts(items), [items]);
+
   const filteredItems = useMemo(
-    () => (levelFilter === "all" ? items : items.filter((item) => item.level === levelFilter)),
-    [items, levelFilter],
+    () => filterAndSortLibraryItems({ items, levelFilter, typeFilter, sortOrder, searchQuery }),
+    [items, levelFilter, typeFilter, sortOrder, searchQuery],
   );
+
+  const pageCount = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, pageCount));
+  }, [pageCount]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [levelFilter, typeFilter, searchQuery, sortOrder, pageSize]);
+
+  const pagedItems = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredItems.slice(start, start + pageSize);
+  }, [currentPage, filteredItems, pageSize]);
+
+  const pageStartIndex = filteredItems.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const pageEndIndex = Math.min(filteredItems.length, currentPage * pageSize);
+
   const selectedItems = items.filter((item) => selectedItemIds.includes(item.id));
-  const selectedItemDetails = selectedItems
-    .slice(0, 12)
-    .map((item) => `${item.characters} (${shortSubjectTypeLabel(item.type)}, L${item.level})`);
-  const selectedItemOverflow = selectedItems.length > selectedItemDetails.length
-    ? selectedItems.length - selectedItemDetails.length
-    : 0;
-  const deleteItemDetails = selectedItemOverflow > 0
-    ? [...selectedItemDetails, `+${selectedItemOverflow} more item${selectedItemOverflow === 1 ? "" : "s"}`]
-    : selectedItemDetails;
+  const deleteItemDetails = useMemo(() => buildDeleteItemDetails(selectedItems), [selectedItems]);
 
   useEffect(() => {
     setLevelFilter("all");
+    setTypeFilter("all");
+    setCurrentPage(1);
     setSelectedItemIds([]);
     setMessage(null);
   }, [libraryId]);
@@ -165,8 +244,9 @@ export default function StudySourceLibraryItemsManager({
   return (
     <div className="space-y-2 rounded-xl border border-line bg-surface px-3 py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Library items ({filteredItems.length}/{items.length})</p>
+          <p className="text-[11px] font-semibold text-foreground/60">Rad {typeCounts.radical} · Kanji {typeCounts.kanji} · Vocab {typeCounts.vocabulary}</p>
           <label className="inline-flex items-center gap-2 text-xs font-semibold text-foreground/70">
             <span>Level</span>
             <select
@@ -183,15 +263,60 @@ export default function StudySourceLibraryItemsManager({
               ))}
             </select>
           </label>
+          <label className="inline-flex items-center gap-2 text-xs font-semibold text-foreground/70">
+            <span>Type</span>
+            <select
+              value={typeFilter}
+              onChange={(event) => {
+                setTypeFilter(event.target.value as LibraryItemTypeFilter);
+              }}
+              className="h-8 rounded-lg border border-line bg-surface px-2 text-xs font-semibold text-foreground"
+            >
+              <option value="all">All types</option>
+              <option value="radical">Radicals</option>
+              <option value="kanji">Kanji</option>
+              <option value="vocabulary">Vocabulary</option>
+            </select>
+          </label>
+          <label className="inline-flex items-center gap-2 text-xs font-semibold text-foreground/70">
+            <span>Sort</span>
+            <select
+              value={sortOrder}
+              onChange={(event) => {
+                setSortOrder(event.target.value as LibrarySortOrder);
+              }}
+              className="h-8 rounded-lg border border-line bg-surface px-2 text-xs font-semibold text-foreground"
+            >
+              <option value="level-asc">Level asc</option>
+              <option value="level-desc">Level desc</option>
+            </select>
+          </label>
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+            }}
+            placeholder="Search term, meaning, reading"
+            className="h-8 min-w-46 rounded-lg border border-line bg-surface px-2 text-xs font-semibold text-foreground"
+          />
         </div>
         <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setSelectedItemIds(pagedItems.map((item) => item.id))}
+            disabled={isLoading || pagedItems.length === 0}
+            className="inline-flex h-8 items-center justify-center rounded-lg border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Select page
+          </button>
           <button
             type="button"
             onClick={() => setSelectedItemIds(filteredItems.map((item) => item.id))}
             disabled={isLoading || filteredItems.length === 0}
             className="inline-flex h-8 items-center justify-center rounded-lg border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Select visible
+            Select filtered
           </button>
           <button
             type="button"
@@ -225,13 +350,68 @@ export default function StudySourceLibraryItemsManager({
         </div>
       </div>
 
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-line bg-black/[0.02] px-2 py-1.5">
+        <div className="inline-flex items-center gap-2 text-[11px] font-semibold text-foreground/70">
+          <span>Showing {pageStartIndex}-{pageEndIndex} of {filteredItems.length}</span>
+          <label className="inline-flex items-center gap-1">
+            <span>Rows</span>
+            <select
+              value={String(pageSize)}
+              onChange={(event) => {
+                setPageSize(Number(event.target.value));
+              }}
+              className="h-7 rounded-md border border-line bg-surface px-1.5 text-[11px] font-semibold text-foreground"
+            >
+              {PAGE_SIZE_OPTIONS.map((size) => (
+                <option key={size} value={String(size)}>{size}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="inline-flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setCurrentPage(1)}
+            disabled={currentPage === 1}
+            className="inline-flex h-7 items-center rounded-md border border-line bg-surface px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            First
+          </button>
+          <button
+            type="button"
+            onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+            disabled={currentPage === 1}
+            className="inline-flex h-7 items-center rounded-md border border-line bg-surface px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Prev
+          </button>
+          <span className="px-1 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/70">Page {currentPage}/{pageCount}</span>
+          <button
+            type="button"
+            onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))}
+            disabled={currentPage >= pageCount}
+            className="inline-flex h-7 items-center rounded-md border border-line bg-surface px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Next
+          </button>
+          <button
+            type="button"
+            onClick={() => setCurrentPage(pageCount)}
+            disabled={currentPage >= pageCount}
+            className="inline-flex h-7 items-center rounded-md border border-line bg-surface px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Last
+          </button>
+        </div>
+      </div>
+
       <div className="max-h-72 overflow-auto rounded-lg border border-line bg-surface">
         {isLoading ? (
           <p className="px-3 py-2 text-xs text-foreground/65">Loading items...</p>
         ) : items.length === 0 ? (
           <p className="px-3 py-2 text-xs text-foreground/65">No items in this library.</p>
         ) : filteredItems.length === 0 ? (
-          <p className="px-3 py-2 text-xs text-foreground/65">No items at this level.</p>
+          <p className="px-3 py-2 text-xs text-foreground/65">No items match this filter.</p>
         ) : (
           <table className="min-w-full border-separate border-spacing-0 text-xs">
             <thead className="sticky top-0 z-1 bg-surface-muted/95 backdrop-blur">
@@ -245,7 +425,7 @@ export default function StudySourceLibraryItemsManager({
               </tr>
             </thead>
             <tbody>
-              {filteredItems.map((item) => {
+              {pagedItems.map((item) => {
                 const isSelected = selectedItemIds.includes(item.id);
                 const displayMeaning = item.meanings.length > 0 ? item.meanings.join(", ") : "No meaning";
                 const displayReading = item.primaryReading ?? item.readings[0] ?? "-";
