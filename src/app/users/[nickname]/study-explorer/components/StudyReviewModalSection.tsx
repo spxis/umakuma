@@ -193,16 +193,18 @@ export default function StudyReviewModalSection({
                   <div className="grid h-full gap-4 lg:grid-rows-2">
                     <div className="rounded-xl border border-line bg-surface-muted px-4 py-4">
                       <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
-                      <p className="mt-2 text-5xl font-black leading-tight text-foreground">
-                        {primaryReadingHiragana === "-" && secondaryReadingValue !== "-"
-                          ? secondaryReadingValue
-                          : primaryReadingHiragana}
-                      </p>
-                      {primaryReadingKatakana !== "-" ? (
-                        <p className="mt-2 text-4xl font-black leading-tight text-foreground/75">
-                          {primaryReadingKatakana}
+                      <div className="mt-2 flex min-w-0 items-end gap-3">
+                        <p className="line-clamp-1 text-5xl font-black leading-tight text-foreground">
+                          {primaryReadingHiragana === "-" && secondaryReadingValue !== "-"
+                            ? secondaryReadingValue
+                            : primaryReadingHiragana}
                         </p>
-                      ) : null}
+                        {primaryReadingKatakana !== "-" ? (
+                          <p className="line-clamp-1 text-4xl font-black leading-tight text-foreground/75">
+                            {primaryReadingKatakana}
+                          </p>
+                        ) : null}
+                      </div>
                     </div>
                     <div className="rounded-xl border border-line bg-surface-muted px-4 py-4">
                       <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</p>
@@ -347,12 +349,14 @@ export default function StudyReviewModalSection({
                             </button>
                           ) : null}
                         </div>
-                        <p className="mt-1 line-clamp-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">
-                          {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
-                        </p>
-                        {primaryReadingKatakana !== "-" ? (
-                          <p className="line-clamp-1 text-xs font-semibold leading-tight text-foreground/70 sm:text-sm">{primaryReadingKatakana}</p>
-                        ) : null}
+                        <div className="mt-1 flex min-w-0 items-end gap-2">
+                          <p className="line-clamp-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">
+                            {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
+                          </p>
+                          {primaryReadingKatakana !== "-" ? (
+                            <p className="line-clamp-1 text-xs font-semibold leading-tight text-foreground/70 sm:text-sm">{primaryReadingKatakana}</p>
+                          ) : null}
+                        </div>
                       </div>
                       <StudyReviewMeaningCard
                         allMeanings={allMeanings}
