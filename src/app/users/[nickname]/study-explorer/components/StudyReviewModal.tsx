@@ -334,9 +334,9 @@ export default function StudyReviewModal({
     <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-4 backdrop-blur-[2px] sm:p-6">
       <div data-view-glyph-parent-frame="true" className="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)]">
         <div className="border-b border-line bg-surface-muted">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1 px-2 py-2 sm:gap-2 sm:px-6 sm:py-3">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1 px-2 py-2 sm:gap-2 sm:px-4 sm:py-3">
             <div className="flex min-w-0 items-center justify-start">
-              <button type="button" onClick={closeModal} aria-label="Close" className="min-h-8 min-w-14 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground hover:bg-surface-muted sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">X</button>
+              <button type="button" onClick={closeModal} aria-label="Close" className="h-8 cursor-pointer rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted sm:h-9 sm:px-3.5 sm:text-sm">X</button>
             </div>
             <div className="flex min-w-0 flex-nowrap items-center justify-center gap-1 sm:gap-2">
               <p className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm sm:tracking-[0.1em]">#{displayIndex} of {displayTotal}</p>
@@ -375,17 +375,33 @@ export default function StudyReviewModal({
                   }}
                 />
               ) : null}
-              <button type="button" onClick={goPrev} disabled={!onPrev || !prevLabel} aria-label="Previous" className="min-h-8 min-w-14 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
-                <span className="sm:hidden" aria-hidden>
-                  {"<"}
-                </span>
-                <span className="hidden sm:inline">{"<"} {prevLabel ?? "-"}</span>
+              <button
+                type="button"
+                onClick={goPrev}
+                disabled={!onPrev || !prevLabel}
+                aria-label="Previous"
+                title={prevLabel ? `< ${prevLabel}` : "Previous"}
+                className="h-8 w-12 cursor-pointer rounded-full border border-line bg-surface text-xs font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-14 sm:text-sm"
+              >
+                {"<"}
               </button>
-              <button type="button" onClick={advanceFlashOrNext} disabled={!(onNext || canUseFlashCycleNext)} aria-label={onNext ? "Next" : flashCycleDone ? "Restart" : "Next"} className="min-h-8 min-w-14 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
-                <span className="sm:hidden" aria-hidden>
-                  {!onNext && canUseFlashCycleNext ? (flashCycleDone ? "Restart" : ">") : ">"}
-                </span>
-                <span className="hidden sm:inline">{!onNext && canUseFlashCycleNext ? (flashCycleDone ? "Restart" : ">") : `> ${nextLabel ?? "-"}`}</span>
+              <button
+                type="button"
+                onClick={advanceFlashOrNext}
+                disabled={!(onNext || canUseFlashCycleNext)}
+                aria-label={onNext ? "Next" : flashCycleDone ? "Restart" : "Next"}
+                title={
+                  !onNext && canUseFlashCycleNext
+                    ? flashCycleDone
+                      ? "Restart"
+                      : "Next"
+                    : nextLabel
+                      ? `> ${nextLabel}`
+                      : "Next"
+                }
+                className="h-8 w-12 cursor-pointer rounded-full border border-line bg-surface text-xs font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-14 sm:text-sm"
+              >
+                {!onNext && canUseFlashCycleNext ? (flashCycleDone ? "R" : ">") : ">"}
               </button>
             </div>
           </div>

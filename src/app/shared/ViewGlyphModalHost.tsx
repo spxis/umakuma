@@ -320,13 +320,13 @@ export default function ViewGlyphModalHost() {
   return (
     <div className="fixed inset-0 z-90 flex items-center justify-center bg-[rgba(6,12,26,0.56)] p-1 backdrop-blur-[1px] sm:p-3">
       <div style={modalFrameStyle} className="mx-auto flex max-h-[calc(100dvh-8px)] w-full max-w-[calc(100vw-8px)] flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-line bg-surface-muted px-3 py-2 sm:px-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-line bg-surface-muted px-2.5 py-2 sm:px-3.5">
           <div className="flex min-w-0 items-center justify-start">
             <button
               type="button"
               onClick={closeModal}
               aria-label="Close"
-              className="min-h-8 min-w-14 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground hover:bg-surface-muted sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
+              className="h-8 cursor-pointer rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted sm:h-9 sm:px-3.5 sm:text-sm"
             >
               X
             </button>
@@ -340,7 +340,7 @@ export default function ViewGlyphModalHost() {
               onClick={goPrevious}
               disabled={!hasPreviousItem}
               aria-label="Previous"
-              className="min-h-8 min-w-14 whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
+              className="h-8 w-12 rounded-full border border-line bg-surface text-xs font-bold text-foreground sm:h-9 sm:w-14 sm:text-sm disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
             >
               {"<"}
             </button>
@@ -349,7 +349,7 @@ export default function ViewGlyphModalHost() {
               onClick={goNext}
               disabled={!hasNextItem}
               aria-label="Next"
-              className="min-h-8 min-w-14 whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
+              className="h-8 w-12 rounded-full border border-line bg-surface text-xs font-bold text-foreground sm:h-9 sm:w-14 sm:text-sm disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
             >
               {">"}
             </button>
