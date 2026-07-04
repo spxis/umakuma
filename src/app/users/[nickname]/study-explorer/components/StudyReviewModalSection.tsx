@@ -1,6 +1,4 @@
-import type {
-  StudyQueueItem,
-} from "../lib/studyExplorerTypes";
+import type { StudyQueueItem } from "../lib/studyExplorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 import type { RelatedReference } from "./StudyReviewModal.types";
@@ -90,9 +88,7 @@ export default function StudyReviewModalSection({
     detailsRevealed;
   const isFlashLayoutMode = (!studyMode && viewerMode === STUDY_VIEWER_MODES.flash) || useStudyFlashLayout;
   const flashSectionLayoutClass = useStudyFlashLayout ? "flex min-h-0 flex-1 flex-col" : "";
-  const sectionFrameClass = shouldUseUnifiedLessonDetail
-    ? flashSectionLayoutClass
-    : `rounded-2xl bg-surface p-3 sm:p-5 ${showSectionBorder && !isFlashLayoutMode ? "border-2 border-accent/35" : ""} ${flashSectionLayoutClass}`;
+  const sectionFrameClass = shouldUseUnifiedLessonDetail ? flashSectionLayoutClass : `rounded-2xl bg-surface p-3 sm:p-5 ${showSectionBorder && !isFlashLayoutMode ? "border-2 border-accent/35" : ""} ${flashSectionLayoutClass}`;
 
   const selectedMeaningExplanation = stripHtml(selectedItem.meaningExplanation) || "-";
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
@@ -303,7 +299,6 @@ export default function StudyReviewModalSection({
                     <ReadingWithPronunciation reading={flashReadingHint} />
                   </p>
                 ) : null}
-
               </div>
 
               <div className="relative h-full rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
@@ -434,9 +429,7 @@ export default function StudyReviewModalSection({
               <div className="self-start">
                 <div className="mb-2 flex flex-wrap gap-1 sm:hidden">
                   <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                  {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
-                  {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
-                  {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
+                  {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null} {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null} {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
                 </div>
                 <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">

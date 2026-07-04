@@ -300,9 +300,36 @@ export default function StudyReviewModalMetaPanels({
                     {usedKanjiCollapsed ? STUDY_REVIEW_META_TEXT.expand : STUDY_REVIEW_META_TEXT.collapse}
                   </button>
                 </div>
-                {!usedKanjiCollapsed
-                    className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
-                  : null}
+                {!usedKanjiCollapsed ? (
+                  <ul className="mt-2 space-y-2 text-foreground/90">
+                    {usedKanjiItems.map((item, index) => (
+                      <li
+                        key={`${selectedItem.subjectId}-${item.subjectId}-${item.label}-${index}`}
+                        className="rounded-lg border border-line bg-surface-muted px-3 py-2"
+                      >
+                        <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              openSingleGlyph({
+                                subjectId: item.subjectId,
+                                label: item.label,
+                                reading: item.reading ?? null,
+                                meaning: item.meaning ?? null,
+                                subjectType: SUBJECT_TYPES.kanji,
+                              });
+                            }}
+                            className={`cursor-pointer text-left font-black leading-none text-foreground hover:opacity-85 ${relatedTileLabelClass(item.label)}`}
+                          >
+                            {item.label}
+                          </button>
+                          <p className="text-2xl font-bold leading-none text-foreground/80">{item.reading || "-"}</p>
+                        </div>
+                        <p className="mt-1 text-sm text-foreground/85">{item.meaning || "-"}</p>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
             </div>
           ) : null}
@@ -328,7 +355,7 @@ export default function StudyReviewModalMetaPanels({
                 </button>
               </div>
               {!usedInWordsCollapsed ? (
-                  className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
+                <ul className="mt-2 space-y-2 text-foreground/90">
                   {wordExamples.map((example, index) => (
                     <li
                       key={`${selectedItem.subjectId}-${example.written}-${example.pronounced}-${index}`}
