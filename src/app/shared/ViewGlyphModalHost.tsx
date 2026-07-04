@@ -328,7 +328,7 @@ export default function ViewGlyphModalHost() {
               type="button"
               onClick={closeModal}
               aria-label="Close"
-              className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
+              className="min-h-8 min-w-14 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground hover:bg-surface-muted sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest"
             >
               X
             </button>
@@ -342,7 +342,7 @@ export default function ViewGlyphModalHost() {
               onClick={goPrevious}
               disabled={!hasPreviousItem}
               aria-label="Previous"
-              className="min-h-9 min-w-20 whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
+              className="min-h-8 min-w-14 whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
             >
               {"<"}
             </button>
@@ -351,7 +351,7 @@ export default function ViewGlyphModalHost() {
               onClick={goNext}
               disabled={!hasNextItem}
               aria-label="Next"
-              className="min-h-9 min-w-20 whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
+              className="min-h-8 min-w-14 whitespace-nowrap rounded-full border border-line bg-surface px-2.5 py-1 text-xs font-bold text-foreground sm:min-h-9 sm:min-w-20 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-widest disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
             >
               {">"}
             </button>

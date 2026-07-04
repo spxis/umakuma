@@ -81,14 +81,11 @@ export default function StudyReviewModalSection({
   const showStatusChip = !isLessonLockedQueueItem(selectedItem);
   const resolvedViewerItems = glyphViewerItems && glyphViewerItems.length > 0 ? glyphViewerItems : [selectedItem];
   const resolvedViewerIndex = typeof glyphViewerIndex === "number" ? glyphViewerIndex : 0;
-  const shouldUseUnifiedLessonDetail =
-    isLessonQueueItem(selectedItem) &&
-    viewerMode === STUDY_VIEWER_MODES.detail &&
-    !useStudyFlashLayout &&
-    detailsRevealed;
+  const shouldUseUnifiedLessonDetail = isLessonQueueItem(selectedItem) && viewerMode === STUDY_VIEWER_MODES.detail && !useStudyFlashLayout && detailsRevealed;
   const isFlashLayoutMode = (!studyMode && viewerMode === STUDY_VIEWER_MODES.flash) || useStudyFlashLayout;
   const flashSectionLayoutClass = useStudyFlashLayout ? "flex min-h-0 flex-1 flex-col" : "";
-  const sectionFrameClass = shouldUseUnifiedLessonDetail ? flashSectionLayoutClass : `rounded-2xl bg-surface p-3 sm:p-5 ${showSectionBorder && !isFlashLayoutMode ? "border-2 border-accent/35" : ""} ${flashSectionLayoutClass}`;
+  const sectionPaddingClass = useStudyFlashLayout ? "p-2 sm:p-3" : "p-3 sm:p-5";
+  const sectionFrameClass = shouldUseUnifiedLessonDetail ? flashSectionLayoutClass : `rounded-2xl bg-surface ${sectionPaddingClass} ${showSectionBorder && !isFlashLayoutMode ? "border-2 border-accent/35" : ""} ${flashSectionLayoutClass}`;
 
   const selectedMeaningExplanation = stripHtml(selectedItem.meaningExplanation) || "-";
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
@@ -216,7 +213,7 @@ export default function StudyReviewModalSection({
           )
         ) : useStudyFlashLayout ? (
           <>
-            <div className="grid min-h-0 flex-1 grid-rows-[35fr_65fr] gap-2 lg:grid-cols-2 lg:grid-rows-1 lg:items-stretch">
+            <div className="grid min-h-0 flex-1 grid-rows-[35fr_65fr] gap-1.5 lg:grid-cols-2 lg:grid-rows-1 lg:gap-2 lg:items-stretch">
               <div
                 role="button"
                 tabIndex={0}
@@ -237,7 +234,7 @@ export default function StudyReviewModalSection({
                     });
                   }
                 }}
-                className={`relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-3 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-5 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
+                className={`relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-2.5 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
                 title={STUDY_REVIEW_MODAL_SECTION_TEXT.viewItemTitle}
               >
                 <div className="absolute left-1/2 top-3 z-10 flex max-w-[calc(100%-1.25rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-hidden px-1 sm:top-4">
@@ -301,7 +298,7 @@ export default function StudyReviewModalSection({
                 ) : null}
               </div>
 
-              <div className="relative h-full rounded-2xl border border-line bg-surface-muted p-3 sm:p-4">
+              <div className="relative h-full rounded-2xl border border-line bg-surface-muted p-2.5 sm:p-3">
                 {!detailsRevealed ? (
                   <button
                     type="button"
