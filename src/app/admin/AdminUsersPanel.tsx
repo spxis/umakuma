@@ -1,25 +1,11 @@
 "use client";
 
-import { type FormEvent, useEffect, useState } from "react";
-
-import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types";
+import { useEffect, useState } from "react";
+import type { AdminUsersPanelProps } from "./AdminUsersPanel.types";
 
 import { useAdminFeedback } from "./AdminFeedbackProvider";
-import AdminAccountsSection, { type AdminAccount } from "./AdminAccountsSection";
-
-type AdminUsersPanelProps = {
-  sessionAuthorized: boolean;
-  checkingSession: boolean;
-  viewerEmail: string | null;
-  loading: boolean;
-  nickname: string;
-  token: string;
-  operationScope: AdminOperationsScopeResponse | null;
-  onSetNickname: (value: string) => void;
-  onSetToken: (value: string) => void;
-  onAddAccount: (event: FormEvent<HTMLFormElement>) => void;
-  onRefreshAll: () => Promise<void>;
-};
+import AdminAccountsSection from "./AdminAccountsSection";
+import type { AdminAccount } from "./AdminAccountsSection.types";
 
 function actionButtonClassName(isPrimary: boolean): string {
   return `inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition disabled:cursor-not-allowed disabled:opacity-60 ${

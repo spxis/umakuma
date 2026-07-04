@@ -1,10 +1,4 @@
-type LoadingStateProps = {
-  label: string;
-};
-
-type ErrorStateProps = {
-  message: string;
-};
+import type { ErrorStateProps, LoadingStateProps } from "./NewsReaderStatus.types";
 
 export function NewsReaderLoadingState({ label }: LoadingStateProps) {
   return (

@@ -9,10 +9,12 @@ import {
   SrsProgressChart,
   SuccessFailureSplitChart,
   SuccessRateTrendChart,
-  type ActivityPoint,
-  type SuccessRatePoint,
-  type TrendPoint,
 } from "./LevelExplorerReviewStatsCharts";
+import type {
+  ActivityPoint,
+  SuccessRatePoint,
+  TrendPoint,
+} from "./LevelExplorerReviewStatsCharts.types";
 
 type SubjectHistory = {
   latest: {

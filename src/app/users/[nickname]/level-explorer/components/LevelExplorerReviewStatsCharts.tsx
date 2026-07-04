@@ -1,21 +1,8 @@
-type TrendPoint = {
-  timeMs: number;
-  label: string;
-  correct: number;
-  wrong: number;
-};
-
-type SuccessRatePoint = {
-  timeMs: number;
-  label: string;
-  rate: number;
-};
-
-type ActivityPoint = {
-  timeMs: number;
-  label: string;
-  reviews: number;
-};
+import type {
+  ActivityPoint,
+  SuccessRatePoint,
+  TrendPoint,
+} from "./LevelExplorerReviewStatsCharts.types";
 
 export function SuccessFailureSplitChart({ correct, wrong }: { correct: number; wrong: number }) {
   const total = Math.max(0, correct) + Math.max(0, wrong);
@@ -256,5 +243,3 @@ export function ReviewActivityTrendChart({ points }: { points: ActivityPoint[] }
     </div>
   );
 }
-
-export type { TrendPoint, SuccessRatePoint, ActivityPoint };

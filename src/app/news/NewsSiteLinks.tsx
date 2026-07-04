@@ -1,19 +1,7 @@
 "use client";
 
 import NewsCacheBadge from "./NewsCacheBadge";
-import type { DiscoveredLink } from "@/lib/news/newsDiscover";
-
-type Props = {
-  baseUrl: string | null;
-  links: DiscoveredLink[];
-  cached: boolean;
-  cachedAgeMs?: number;
-  fetchedAt?: string;
-  loading: boolean;
-  error: string | null;
-  onSelect: (url: string) => void;
-  onDismiss: () => void;
-};
+import type { NewsSiteLinksProps } from "./NewsSiteLinks.types";
 
 export default function NewsSiteLinks({
   baseUrl,
@@ -25,7 +13,7 @@ export default function NewsSiteLinks({
   error,
   onSelect,
   onDismiss,
-}: Props) {
+}: NewsSiteLinksProps) {
   if (loading) {
     return (
       <section className="rounded-2xl border border-dashed border-line bg-surface-muted p-6 text-center text-sm font-semibold uppercase tracking-[0.14em] text-foreground/60">

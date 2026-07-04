@@ -2,22 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
-export type InviteSessionStatus = {
-  signedIn?: boolean;
-  account?: {
-    id: string;
-    nickname: string;
-    wkUsername: string;
-  };
-  error?: string;
-};
-
-type Props = {
-  initialSession: InviteSessionStatus;
-};
-
-export default function InviteCodeAccessPanel({ initialSession }: Props) {
+import type {
+  InviteCodeAccessPanelProps,
+  InviteSessionStatus,
+} from "./InviteCodeAccessPanel.types";
+export default function InviteCodeAccessPanel({
+  initialSession,
+}: InviteCodeAccessPanelProps) {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [session, setSession] = useState<InviteSessionStatus>(initialSession);

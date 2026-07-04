@@ -2,19 +2,7 @@
 
 import SegmentedControl from "../shared/SegmentedControl";
 import { hostnameOf } from "./newsReaderUtils";
-
-type Mode = "article" | "site";
-
-type Props = {
-  mode: Mode;
-  onChangeMode: (mode: Mode) => void;
-  url: string;
-  onChangeUrl: (value: string) => void;
-  loading: boolean;
-  discoverLoading: boolean;
-  devSampleUrls: string[];
-  onSubmit: (explicitSubmit: boolean) => void;
-};
+import type { NewsReaderFormProps } from "./NewsReaderForm.types";
 
 export default function NewsReaderForm({
   mode,
@@ -25,7 +13,7 @@ export default function NewsReaderForm({
   discoverLoading,
   devSampleUrls,
   onSubmit,
-}: Props) {
+}: NewsReaderFormProps) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nativeEvent = event.nativeEvent as SubmitEvent;

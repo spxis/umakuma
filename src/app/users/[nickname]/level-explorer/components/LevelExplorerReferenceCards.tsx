@@ -1,23 +1,12 @@
-import type { LevelItem, RelatedReference } from "../../explorerTypes";
+import type { RelatedReference } from "../../explorerTypes";
 import { pronunciationForReading } from "../lib/levelExplorerDisplay";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
-
-type RelatedEntry = {
-  subjectId: number;
-  label: string;
-  wkLevel: number | null;
-  reading: string | null;
-  meaning: string | null;
-  fallbackKey?: string;
-};
-
-export type VocabularyKanjiLink = {
-  char: string;
-  subjectId: number;
-  reading: string;
-  wkLevel: number | null;
-};
+import type {
+  RelatedEntry,
+  RelatedReferenceCardsProps,
+  VocabularyKanjiCardsProps,
+} from "./LevelExplorerReferenceCards.types";
 
 function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
   return items.flatMap((item) => {
@@ -56,14 +45,7 @@ export function RelatedReferenceCards({
   subjectById,
   fallbackType,
   onJumpToRelatedSubject,
-}: {
-  items: RelatedReference[];
-  large?: boolean;
-  showEnglish: boolean;
-  subjectById: Map<number, LevelItem>;
-  fallbackType?: LevelItem["subjectType"];
-  onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
-}) {
+}: RelatedReferenceCardsProps) {
   if (items.length === 0) {
     return <p className="mt-2 text-foreground/60">-</p>;
   }
@@ -128,12 +110,7 @@ export function VocabularyKanjiCards({
   showEnglish,
   selectedSubjectId,
   onJumpToKanji,
-}: {
-  links: VocabularyKanjiLink[];
-  showEnglish: boolean;
-  selectedSubjectId: number;
-  onJumpToKanji: (subjectId: number, wkLevel: number | null) => Promise<void>;
-}) {
+}: VocabularyKanjiCardsProps) {
   if (links.length === 0) {
     return <p className="mt-2 text-foreground/60">-</p>;
   }

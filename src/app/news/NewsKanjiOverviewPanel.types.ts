@@ -1,3 +1,5 @@
+import type { NewsArticleBlock } from "@/lib/news/newsTypes";
+
 export type KanjiEntry = {
   char: string;
   jlptLevel: number | null;
@@ -13,3 +15,7 @@ export type AllCountFilter = "all" | "2+" | "5+" | "10+" | "25+" | "50+";
 export type AllCoverageFilter = "all" | "wk-known" | "wk-unknown" | "no-level-data";
 
 export type JlptRecord = Record<string, { nLevel?: number }>;
+
+export type NewsKanjiOverviewPanelProps = {
+  blocks: NewsArticleBlock[];
+};

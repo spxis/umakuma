@@ -2,15 +2,7 @@
 
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
-import type { NewsHistoryEntry } from "./newsHistory";
-
-type Props = {
-  entries: NewsHistoryEntry[];
-  activeUrl: string | null;
-  onSelect: (url: string) => void;
-  onRemove: (url: string) => void;
-  onClear: () => void;
-};
+import type { NewsHistoryPanelProps } from "./NewsHistoryPanel.types";
 
 export default function NewsHistoryPanel({
   entries,
@@ -18,7 +10,7 @@ export default function NewsHistoryPanel({
   onSelect,
   onRemove,
   onClear,
-}: Props) {
+}: NewsHistoryPanelProps) {
   if (entries.length === 0) {
     return (
       <section className="rounded-2xl border border-dashed border-line bg-surface-muted p-4 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55">

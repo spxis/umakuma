@@ -2,11 +2,11 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { DiscoveredLink, DiscoverPayload } from "@/lib/news/newsDiscover";
+import type { DiscoverPayload } from "@/lib/news/newsDiscover";
 import type { NewsArticle } from "@/lib/news/newsTypes";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import NewsArticleView from "./NewsArticleView";
-import type { ArticlePanelTab } from "./NewsArticleView";
+import type { ArticlePanelTab } from "./NewsArticleView.types";
 import NewsDiscoverSessions from "./NewsDiscoverSessions";
 import NewsReaderForm from "./NewsReaderForm";
 import NewsHistoryPanel from "./NewsHistoryPanel";
@@ -40,36 +40,24 @@ import {
   writeDiscoverCache,
 } from "./newsClientCache";
 import { fallbackNewsError } from "./newsReaderUtils";
+import type {
+  DiscoverState,
+  FetchDiscoverOptions,
+  Mode,
+  NewsReaderProps,
+  RouteChanges,
+} from "./NewsReader.types";
 
-type Mode = "article" | "site";
 const NEWS_READER_MODE_KEY = "uk:news-reader-mode";
 const NEWS_READER_TAB_KEY = "uk:news-reader-tab";
-type DiscoverState = {
-  baseUrl: string | null;
-  links: DiscoveredLink[];
-  cached: boolean;
-  cachedAgeMs?: number;
-  fetchedAt?: string;
-};
 const EMPTY_DISCOVER: DiscoverState = { baseUrl: null, links: [], cached: false };
-
-type Props = {
-  devSampleUrls?: string[];
-  userWkLevel?: number | null;
-};
-type RouteChanges = {
-  url?: string | null;
-  site?: string | null;
-};
-type FetchDiscoverOptions = {
-  forceRefresh?: boolean;
-  preserveArticle?: boolean;
-  navigation?: "replace" | "push";
-};
 
 const NEWS_SCAN_TIMEOUT_MS = 8_000;
 
-export default function NewsReader({ devSampleUrls = [], userWkLevel = null }: Props) {
+export default function NewsReader({
+  devSampleUrls = [],
+  userWkLevel = null,
+}: NewsReaderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
