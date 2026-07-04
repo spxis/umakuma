@@ -403,7 +403,7 @@ export default function StudyReviewModal({
         />
 
         <div
-          className={`relative flex min-h-0 flex-1 flex-col px-3 py-3 sm:px-6 sm:py-5 ${useStudyFlashLayout ? "overflow-hidden" : "overflow-y-auto"}`}
+          className={`relative flex min-h-0 flex-1 flex-col ${useStudyFlashLayout ? "px-1.5 py-1.5 sm:px-3 sm:py-3 overflow-hidden" : "px-3 py-3 sm:px-6 sm:py-5 overflow-y-auto"}`}
           onTouchStart={handleFlashTouchStart}
           onTouchEnd={handleFlashTouchEnd}
         >

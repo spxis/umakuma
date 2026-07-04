@@ -84,7 +84,7 @@ export default function StudyReviewModalSection({
   const shouldUseUnifiedLessonDetail = isLessonQueueItem(selectedItem) && viewerMode === STUDY_VIEWER_MODES.detail && !useStudyFlashLayout && detailsRevealed;
   const isFlashLayoutMode = (!studyMode && viewerMode === STUDY_VIEWER_MODES.flash) || useStudyFlashLayout;
   const flashSectionLayoutClass = useStudyFlashLayout ? "flex min-h-0 flex-1 flex-col" : "";
-  const sectionPaddingClass = useStudyFlashLayout ? "p-2 sm:p-3" : "p-3 sm:p-5";
+  const sectionPaddingClass = useStudyFlashLayout ? "p-1.5 sm:p-2" : "p-3 sm:p-5";
   const sectionFrameClass = shouldUseUnifiedLessonDetail ? flashSectionLayoutClass : `rounded-2xl bg-surface ${sectionPaddingClass} ${showSectionBorder && !isFlashLayoutMode ? "border-2 border-accent/35" : ""} ${flashSectionLayoutClass}`;
 
   const selectedMeaningExplanation = stripHtml(selectedItem.meaningExplanation) || "-";
