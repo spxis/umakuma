@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
@@ -23,6 +24,7 @@ import {
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
 import StatusSrsChip from "../../shared/StatusSrsChip";
+import StudyReviewFlashActionRow from "./StudyReviewFlashActionRow";
 import StudyReviewModalMetaPanels from "./StudyReviewModalMetaPanels";
 import StudyReviewMeaningCard from "./StudyReviewMeaningCard";
 
@@ -91,8 +93,17 @@ export default function StudyReviewModalSection({
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
   const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
   const { fontFamily: glyphFontFamily, toggle: toggleGlyphFont } = useGlyphFontPreference();
+  const [meaningPeekState, setMeaningPeekState] = useState<{ assignmentId: number; open: boolean }>({
+    assignmentId: -1,
+    open: false,
+  });
   const flashReadingHint = primaryReadingHiragana !== "-" ? primaryReadingHiragana : secondaryReadingValue;
   const showFlashReadingHint = showEnglish && flashReadingHint.trim().length > 0 && flashReadingHint !== "-";
+  const hasMeaningExplanation = selectedMeaningExplanation !== "-";
+  const hasAltMeanings = allMeanings.length > 1;
+  const hasScrollableMeaningDetails = hasAltMeanings || hasMeaningExplanation || showReadingExplanation;
+  const meaningPeekExpanded = meaningPeekState.assignmentId === selectedItem.assignmentId ? meaningPeekState.open : false;
+
   const sanitizedRelatedItems = (items: RelatedReference[] | undefined) =>
     (items ?? []).map((item) => ({ ...item, wkLevel: null }));
   const unifiedDetailItem: StudyQueueItem = shouldUseUnifiedLessonDetail
@@ -150,9 +161,7 @@ export default function StudyReviewModalSection({
                   {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
-                  {showStatusChip ? (
-                    <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} />
-                  ) : null}
+                  {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
                 </div>
                 <p style={{ fontFamily: glyphFontFamily }} className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">
                   {selectedItem.characters}
@@ -321,7 +330,23 @@ export default function StudyReviewModalSection({
                   <div className="flex h-full min-h-0 flex-col">
                     <div className="relative flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
                       <div className="shrink-0 rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
+                          {hasScrollableMeaningDetails ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setMeaningPeekState((state) => ({
+                                  assignmentId: selectedItem.assignmentId,
+                                  open: state.assignmentId === selectedItem.assignmentId ? !state.open : true,
+                                }));
+                              }}
+                              className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
+                            >
+                              {meaningPeekExpanded ? "Close peek" : "Peek"}
+                            </button>
+                          ) : null}
+                        </div>
                         <p className="mt-1 line-clamp-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">
                           {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
                         </p>
@@ -334,47 +359,25 @@ export default function StudyReviewModalSection({
                         fallbackMeaning={selectedItem.characters}
                         selectedMeaningExplanation={selectedMeaningExplanation}
                         selectedReadingExplanationRaw={selectedReadingExplanationRaw}
+                        peekExpanded={meaningPeekExpanded}
+                        onTogglePeek={() => {
+                          setMeaningPeekState((state) => ({
+                            assignmentId: selectedItem.assignmentId,
+                            open: state.assignmentId === selectedItem.assignmentId ? !state.open : true,
+                          }));
+                        }}
                       />
                     </div>
-                    <div className="mt-2 grid shrink-0 grid-cols-3 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.wrong)}
-                        disabled={isSubmittingSelected}
-                        aria-keyshortcuts="1"
-                        title={isPracticeItem ? "Again (Key: 1)" : "Wrong (Key: 1)"}
-                        className="min-h-20 w-full cursor-pointer rounded-2xl border-2 border-red-300 bg-red-50 px-2 py-2 text-xs font-black uppercase tracking-[0.1em] text-red-800 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-24 sm:px-3 sm:text-sm"
-                      >
-                        <span className="block">{isPracticeItem ? STUDY_REVIEW_MODAL_SECTION_TEXT.practiceAgain : STUDY_REVIEW_MODAL_SECTION_TEXT.wrong}</span>
-                        {!isPracticeItem ? (
-                          <span className="mt-1 block text-3xl leading-none sm:text-[2rem]">{wrong}</span>
-                        ) : null}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={onSkipCurrent}
-                        disabled={isSubmittingSelected}
-                        className="min-h-20 w-full cursor-pointer rounded-2xl border-2 border-amber-300 bg-amber-50 px-2 py-2 text-xs font-black uppercase tracking-[0.1em] text-amber-800 transition-colors hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-24 sm:px-3 sm:text-sm"
-                      >
-                          <span className="block">{isPracticeItem ? STUDY_REVIEW_MODAL_SECTION_TEXT.practiceLater : STUDY_REVIEW_MODAL_SECTION_TEXT.skipped}</span>
-                          {!isPracticeItem ? (
-                            <span className="mt-1 block text-3xl leading-none sm:text-[2rem]">{skipped}</span>
-                          ) : null}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.correct)}
-                        disabled={isSubmittingSelected}
-                        aria-keyshortcuts="2"
-                        title={isPracticeItem ? "Done (Key: 2)" : "Correct (Key: 2)"}
-                        className="min-h-20 w-full cursor-pointer rounded-2xl border-2 border-emerald-300 bg-emerald-50 px-2 py-2 text-xs font-black uppercase tracking-[0.1em] text-emerald-800 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 disabled:cursor-not-allowed disabled:opacity-50 sm:min-h-24 sm:px-3 sm:text-sm"
-                      >
-                          <span className="block">{isPracticeItem ? STUDY_REVIEW_MODAL_SECTION_TEXT.practiceDone : STUDY_REVIEW_MODAL_SECTION_TEXT.correct}</span>
-                          {!isPracticeItem ? (
-                            <span className="mt-1 block text-3xl leading-none sm:text-[2rem]">{correct}</span>
-                          ) : null}
-                      </button>
-                    </div>
+                    <StudyReviewFlashActionRow
+                      isPracticeItem={isPracticeItem}
+                      assignmentId={selectedItem.assignmentId}
+                      wrong={wrong}
+                      skipped={skipped}
+                      correct={correct}
+                      isSubmittingSelected={isSubmittingSelected}
+                      onSubmit={onSubmit}
+                      onSkipCurrent={onSkipCurrent}
+                    />
                   </div>
                 )}
 

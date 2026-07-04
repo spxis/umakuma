@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { STUDY_REVIEW_MODAL_SECTION_TEXT } from "./StudyExplorer.constants";
 
 type Props = {
@@ -7,6 +5,8 @@ type Props = {
   fallbackMeaning: string;
   selectedMeaningExplanation: string;
   selectedReadingExplanationRaw: string;
+  peekExpanded: boolean;
+  onTogglePeek: () => void;
 };
 
 export default function StudyReviewMeaningCard({
@@ -14,9 +14,9 @@ export default function StudyReviewMeaningCard({
   fallbackMeaning,
   selectedMeaningExplanation,
   selectedReadingExplanationRaw,
+  peekExpanded,
+  onTogglePeek,
 }: Props) {
-  const [peekExpanded, setPeekExpanded] = useState(false);
-
   const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
   const hasMeaningExplanation = selectedMeaningExplanation !== "-";
   const hasInlineExplanations = hasMeaningExplanation || showReadingExplanation;
@@ -57,25 +57,16 @@ export default function StudyReviewMeaningCard({
   );
 
   return (
-    <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3 flex flex-col">
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</p>
-        {hasScrollableMeaningDetails ? (
-          <button
-            type="button"
-            onClick={() => setPeekExpanded((value) => !value)}
-            className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
-          >
-            {peekExpanded ? "Close peek" : "Peek"}
-          </button>
-        ) : null}
-      </div>
-      <p className="mt-1 line-clamp-2 text-2xl font-black leading-tight text-foreground sm:text-4xl">{allMeanings[0] ?? fallbackMeaning}</p>
+    <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3 flex flex-col">
+      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</p>
       {hasScrollableMeaningDetails ? (
         <div className="mt-2 min-h-0 flex-1 space-y-1.5 overflow-y-auto rounded-lg border border-line/60 bg-surface-muted/70 px-2 py-1.5 text-[10px] leading-relaxed text-foreground/75">
+          <p className="text-2xl font-black leading-tight text-foreground sm:text-4xl">{allMeanings[0] ?? fallbackMeaning}</p>
           {meaningDetailContent}
         </div>
-      ) : null}
+      ) : (
+        <p className="mt-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">{allMeanings[0] ?? fallbackMeaning}</p>
+      )}
       {hasScrollableMeaningDetails && peekExpanded ? (
         <div className="absolute inset-0 z-20 rounded-xl border border-line bg-surface p-2.5 shadow-[0_12px_26px_rgba(8,16,36,0.16)] sm:p-3">
           <div className="flex h-full min-h-0 flex-col">
@@ -83,7 +74,7 @@ export default function StudyReviewMeaningCard({
               <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/60">Meaning details</p>
               <button
                 type="button"
-                onClick={() => setPeekExpanded(false)}
+                onClick={onTogglePeek}
                 className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
               >
                 Close peek
