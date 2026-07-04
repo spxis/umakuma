@@ -213,7 +213,7 @@ export default function StudyReviewModalSection({
           )
         ) : useStudyFlashLayout ? (
           <>
-            <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,35fr)_minmax(0,65fr)] gap-1.5 lg:grid-cols-2 lg:grid-rows-1 lg:gap-2 lg:items-stretch">
+            <div className="grid h-full min-h-0 flex-1 grid-rows-[35%_65%] gap-1.5 lg:grid-cols-2 lg:grid-rows-1 lg:gap-2 lg:items-stretch">
               <div
                 role="button"
                 tabIndex={0}
@@ -298,7 +298,7 @@ export default function StudyReviewModalSection({
                 ) : null}
               </div>
 
-              <div className="relative h-full rounded-2xl border border-line bg-surface-muted p-2.5 sm:p-3">
+              <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface-muted p-2.5 sm:p-3">
                 {!detailsRevealed ? (
                   <button
                     type="button"
@@ -319,7 +319,7 @@ export default function StudyReviewModalSection({
                   </div>
                 ) : (
                   <div className="flex h-full min-h-0 flex-col">
-                    <div className="relative flex min-h-0 flex-1 flex-col gap-2 overflow-hidden">
+                    <div className="relative flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
                       <div className="shrink-0 rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
                         <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
                         <p className="mt-1 line-clamp-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">
@@ -336,7 +336,7 @@ export default function StudyReviewModalSection({
                         selectedReadingExplanationRaw={selectedReadingExplanationRaw}
                       />
                     </div>
-                    <div className="grid grid-cols-3 gap-2 py-2">
+                    <div className="mt-2 grid shrink-0 grid-cols-3 gap-2">
                       <button
                         type="button"
                         onClick={() => onSubmit(selectedItem.assignmentId, STUDY_REVIEW_OUTCOMES.wrong)}
