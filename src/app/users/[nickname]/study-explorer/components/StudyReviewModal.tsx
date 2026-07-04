@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { lockBodyScroll } from "@/lib/bodyScrollLock";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import type { RelatedReference, StudyReviewModalProps as Props } from "./StudyReviewModal.types";
@@ -232,12 +233,9 @@ export default function StudyReviewModal({
 
   useEffect(() => {
     if (!selectedItem) return;
-    const { overflow, overscrollBehavior } = document.body.style;
-    document.body.style.overflow = "hidden";
-    document.body.style.overscrollBehavior = "contain";
+    const unlockBodyScroll = lockBodyScroll();
     return () => {
-      document.body.style.overflow = overflow;
-      document.body.style.overscrollBehavior = overscrollBehavior;
+      unlockBodyScroll();
     };
   }, [selectedItem]);
 

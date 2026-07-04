@@ -31,6 +31,7 @@ import {
   isSubjectType,
   type SubjectType,
 } from "@/lib/domainConstants";
+import { lockBodyScroll } from "@/lib/bodyScrollLock";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import {
   VIEW_GLYPH_EVENT,
@@ -255,9 +256,7 @@ export default function ViewGlyphModalHost() {
       }
     };
 
-    const { overflow, overscrollBehavior } = document.body.style;
-    document.body.style.overflow = "hidden";
-    document.body.style.overscrollBehavior = "contain";
+    const unlockBodyScroll = lockBodyScroll();
 
     window.addEventListener("keydown", onKeyDownCapture, true);
     window.addEventListener("resize", onResize);
@@ -265,8 +264,7 @@ export default function ViewGlyphModalHost() {
     return () => {
       window.removeEventListener("keydown", onKeyDownCapture, true);
       window.removeEventListener("resize", onResize);
-      document.body.style.overflow = overflow;
-      document.body.style.overscrollBehavior = overscrollBehavior;
+      unlockBodyScroll();
     };
   }, [closeModal, goNext, goPrevious, item]);
 
