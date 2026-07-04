@@ -78,6 +78,7 @@ export default function StudyReviewModalSection({
   onToggleUsedInWordsCollapsed,
   onToggleShowEnglish,
   onOpenRelatedSubject,
+  showSectionBorder = true,
 }: Props) {
   const showStatusChip = !isLessonLockedQueueItem(selectedItem);
   const resolvedViewerItems = glyphViewerItems && glyphViewerItems.length > 0 ? glyphViewerItems : [selectedItem];
@@ -87,10 +88,11 @@ export default function StudyReviewModalSection({
     viewerMode === STUDY_VIEWER_MODES.detail &&
     !useStudyFlashLayout &&
     detailsRevealed;
+  const isFlashLayoutMode = (!studyMode && viewerMode === STUDY_VIEWER_MODES.flash) || useStudyFlashLayout;
   const flashSectionLayoutClass = useStudyFlashLayout ? "flex min-h-0 flex-1 flex-col" : "";
   const sectionFrameClass = shouldUseUnifiedLessonDetail
     ? flashSectionLayoutClass
-    : `rounded-2xl border-2 border-accent/35 bg-surface p-3 sm:p-5 ${flashSectionLayoutClass}`;
+    : `rounded-2xl bg-surface p-3 sm:p-5 ${showSectionBorder && !isFlashLayoutMode ? "border-2 border-accent/35" : ""} ${flashSectionLayoutClass}`;
 
   const selectedMeaningExplanation = stripHtml(selectedItem.meaningExplanation) || "-";
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
@@ -430,12 +432,19 @@ export default function StudyReviewModalSection({
                 <p style={{ fontFamily: glyphFontFamily }} className={`text-center font-black leading-none ${glyphTextSizeClass(selectedItem.characters)}`}>{selectedItem.characters}</p>
               </div>
               <div className="self-start">
+                <div className="mb-2 flex flex-wrap gap-1 sm:hidden">
+                  <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
+                  {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
+                  {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
+                  {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
+                  {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
+                </div>
                 <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                   <div className="min-w-0">
                     <p className="text-3xl font-black text-foreground">{detailsRevealed ? (allMeanings[0] ?? selectedItem.characters) : "???"}</p>
                     {detailsRevealed && allMeanings.length > 1 ? <p className="mt-1 hidden text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:block">{STUDY_REVIEW_MODAL_SECTION_TEXT.altMeanings}: {allMeanings.slice(1).join(" • ")}</p> : null}
                   </div>
-                  <div className="flex flex-nowrap justify-self-end gap-1">
+                  <div className="hidden flex-nowrap justify-self-end gap-1 sm:flex">
                     <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
                     {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                     {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}

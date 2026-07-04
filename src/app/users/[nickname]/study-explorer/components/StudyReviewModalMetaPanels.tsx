@@ -257,7 +257,7 @@ export default function StudyReviewModalMetaPanels({
                     <button
                       type="button"
                       onClick={onToggleUsedInVocabularyCollapsed}
-                      className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
+                      className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
                     >
                       {usedInVocabularyCollapsed ? STUDY_REVIEW_META_TEXT.expand : STUDY_REVIEW_META_TEXT.collapse}
                     </button>
@@ -295,13 +295,13 @@ export default function StudyReviewModalMetaPanels({
                   <button
                     type="button"
                     onClick={onToggleUsedKanjiCollapsed}
-                    className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
+                    className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
                   >
                     {usedKanjiCollapsed ? STUDY_REVIEW_META_TEXT.expand : STUDY_REVIEW_META_TEXT.collapse}
                   </button>
                 </div>
                 {!usedKanjiCollapsed
-                  ? renderSharedRelatedCards(usedKanjiItems, SUBJECT_TYPES.kanji, { large: true })
+                    className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
                   : null}
               </div>
             </div>
@@ -322,13 +322,13 @@ export default function StudyReviewModalMetaPanels({
                 <button
                   type="button"
                   onClick={onToggleUsedInWordsCollapsed}
-                  className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
                 >
                   {usedInWordsCollapsed ? STUDY_REVIEW_META_TEXT.expand : STUDY_REVIEW_META_TEXT.collapse}
                 </button>
               </div>
               {!usedInWordsCollapsed ? (
-                <ul className="mt-2 space-y-2 text-foreground/90">
+                  className="rounded-full border border-line bg-surface px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted"
                   {wordExamples.map((example, index) => (
                     <li
                       key={`${selectedItem.subjectId}-${example.written}-${example.pronounced}-${index}`}

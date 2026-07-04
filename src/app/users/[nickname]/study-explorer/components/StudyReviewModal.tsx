@@ -338,7 +338,7 @@ export default function StudyReviewModal({
         <div className="border-b border-line bg-surface-muted">
           <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1 px-2 py-2 sm:gap-2 sm:px-6 sm:py-3">
             <div className="flex min-w-0 items-center justify-start">
-              <button type="button" onClick={closeModal} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">Close</button>
+              <button type="button" onClick={closeModal} aria-label="Close" className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">X</button>
             </div>
             <div className="flex min-w-0 flex-nowrap items-center justify-center gap-1 sm:gap-2">
               <p className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm sm:tracking-[0.1em]">#{displayIndex} of {displayTotal}</p>
@@ -377,17 +377,17 @@ export default function StudyReviewModal({
                   }}
                 />
               ) : null}
-              <button type="button" onClick={goPrev} disabled={!onPrev || !prevLabel} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
+              <button type="button" onClick={goPrev} disabled={!onPrev || !prevLabel} aria-label="Previous" className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
                 <span className="sm:hidden" aria-hidden>
-                  Prev
+                  {"<"}
                 </span>
-                <span className="hidden sm:inline">Prev {prevLabel ?? "-"}</span>
+                <span className="hidden sm:inline">{"<"} {prevLabel ?? "-"}</span>
               </button>
-              <button type="button" onClick={advanceFlashOrNext} disabled={!(onNext || canUseFlashCycleNext)} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
+              <button type="button" onClick={advanceFlashOrNext} disabled={!(onNext || canUseFlashCycleNext)} aria-label={onNext ? "Next" : flashCycleDone ? "Restart" : "Next"} className="min-h-9 min-w-20 cursor-pointer whitespace-nowrap rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm sm:uppercase sm:tracking-[0.1em]">
                 <span className="sm:hidden" aria-hidden>
-                  {!onNext && canUseFlashCycleNext ? (flashCycleDone ? "Restart" : "Next") : "Next"}
+                  {!onNext && canUseFlashCycleNext ? (flashCycleDone ? "Restart" : ">") : ">"}
                 </span>
-                <span className="hidden sm:inline">{!onNext && canUseFlashCycleNext ? (flashCycleDone ? "Restart" : "Next") : `Next ${nextLabel ?? "-"}`}</span>
+                <span className="hidden sm:inline">{!onNext && canUseFlashCycleNext ? (flashCycleDone ? "Restart" : ">") : `> ${nextLabel ?? "-"}`}</span>
               </button>
             </div>
           </div>

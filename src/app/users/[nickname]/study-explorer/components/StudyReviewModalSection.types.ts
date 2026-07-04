@@ -58,4 +58,5 @@ export type StudyReviewModalSectionProps = {
   onToggleUsedInWordsCollapsed: () => void;
   onToggleShowEnglish: () => void;
   onOpenRelatedSubject?: (subjectId: number, fallbackType: SubjectType) => void | Promise<void>;
+  showSectionBorder?: boolean;
 };
