@@ -4,14 +4,7 @@ import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
 import { newsGlyphButtonClass } from "./newsGlyphBoxStyle";
-import type { NewsKanjiHistoryEntry } from "./newsKanjiHistory";
-
-type Props = {
-  entries: NewsKanjiHistoryEntry[];
-  onSelect: (run: string) => void;
-  onRemove: (run: string) => void;
-  onClear: () => void;
-};
+import type { NewsKanjiHistoryPanelProps } from "./NewsKanjiHistoryPanel.types";
 
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
 
@@ -33,7 +26,7 @@ export default function NewsKanjiHistoryPanel({
   onSelect,
   onRemove,
   onClear,
-}: Props) {
+}: NewsKanjiHistoryPanelProps) {
   if (entries.length === 0) {
     return (
       <section className="rounded-2xl border border-dashed border-line bg-surface-muted p-4 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55">

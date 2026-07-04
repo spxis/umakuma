@@ -20,6 +20,7 @@ import type {
   EntrySortMode,
   GroupMode,
   JlptRecord,
+  NewsKanjiOverviewPanelProps,
 } from "./NewsKanjiOverviewPanel.types";
 import {
   buildGroups,
@@ -29,10 +30,6 @@ import {
   SegmentButton,
   sortGroupsForDisplay,
 } from "./newsKanjiOverviewHelpers";
-
-type Props = {
-  blocks: NewsArticleBlock[];
-};
 
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
 const GROUP_MODE_STORAGE_KEY = "news:kanji-group-mode";
@@ -48,7 +45,7 @@ export function countUniqueArticleKanji(blocks: NewsArticleBlock[]): number {
   return extractArticleKanjiData(blocks).orderedChars.length;
 }
 
-export default function NewsKanjiOverviewPanel({ blocks }: Props) {
+export default function NewsKanjiOverviewPanel({ blocks }: NewsKanjiOverviewPanelProps) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [levelVersion, setLevelVersion] = useState(0);
   const [groupMode, setGroupMode] = useState<GroupMode>(() =>

@@ -6,16 +6,10 @@ import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/Statu
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import { ReadingWithPronunciation, badgeClass, formatNextReviewBadge, formatNumber, glyphSubtitleForDisplay, glyphTextSizeClass, isNewGlyphWithinHours, jlptLevelPillClass, lockedCardStateClass, shortSubjectTypeLabel, subjectTypePillClass, titleForDisplay, typeCardClass, typeGlyphBoxClass } from "../lib/levelExplorerDisplay";
 import { LEVEL_WK_STATUSES } from "../lib/levelExplorerDomain";
+import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
 import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import LevelExplorerDetailSection from "./LevelExplorerDetailSection";
 import LevelCardTagOverlay from "./LevelCardTagOverlay";
-
-type VocabularyKanjiLink = {
-  char: string;
-  subjectId: number;
-  reading: string;
-  wkLevel: number | null;
-};
 
 type Props = {
   accountId: string;

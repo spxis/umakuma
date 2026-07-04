@@ -17,17 +17,15 @@ import {
   type NewsKanjiCapGrade,
   type NewsKanjiCapJlpt,
   type NewsKanjiCapWk,
-  type NewsReadingPrefs,
   type NewsTextSize,
 } from "./newsReadingPrefs";
+import type { NewsReadingControlsProps } from "./NewsReadingControls.types";
 
-type Props = {
-  prefs: NewsReadingPrefs;
-  onChange: (next: NewsReadingPrefs) => void;
-  userWkLevel?: number | null;
-};
-
-export default function NewsReadingControls({ prefs, onChange, userWkLevel = null }: Props) {
+export default function NewsReadingControls({
+  prefs,
+  onChange,
+  userWkLevel = null,
+}: NewsReadingControlsProps) {
   const hasKnownWkLevel = typeof userWkLevel === "number" && Number.isFinite(userWkLevel);
   const normalizedWkLevel = hasKnownWkLevel
     ? Math.max(1, Math.min(60, Math.floor(userWkLevel)))

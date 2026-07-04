@@ -1,18 +1,8 @@
 "use client";
 
 import NewsCacheBadge from "./NewsCacheBadge";
-import type { DiscoverCacheSession } from "./newsClientCache";
 import { hostnameOf } from "./newsReaderUtils";
-
-type Props = {
-  sessions: DiscoverCacheSession[];
-  activeQueryUrl: string | null;
-  loading: boolean;
-  onOpen: (queryUrl: string) => void;
-  onRefresh: (queryUrl: string) => void;
-  onRemove: (queryUrl: string) => void;
-  onClearAll: () => void;
-};
+import type { NewsDiscoverSessionsProps } from "./NewsDiscoverSessions.types";
 
 export default function NewsDiscoverSessions({
   sessions,
@@ -22,7 +12,7 @@ export default function NewsDiscoverSessions({
   onRefresh,
   onRemove,
   onClearAll,
-}: Props) {
+}: NewsDiscoverSessionsProps) {
   if (sessions.length === 0) {
     return null;
   }

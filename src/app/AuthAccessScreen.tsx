@@ -4,19 +4,12 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import GoogleSignInButton from "./GoogleSignInButton";
-import InviteCodeAccessPanel, { type InviteSessionStatus } from "./InviteCodeAccessPanel";
+import InviteCodeAccessPanel from "./InviteCodeAccessPanel";
+import type { AuthAccessScreenProps } from "./AuthAccessScreen.types";
+import type { InviteSessionStatus } from "./InviteCodeAccessPanel.types";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
 import { prisma } from "@/lib/prisma";
-
-type AuthTab = "invite" | "google";
-
-type Props = {
-  activeTab: AuthTab;
-  accessDenied?: boolean;
-  allowGoogleRouteRedirects?: boolean;
-  googleCallbackPath?: string;
-};
 
 const TAB_BASE_CLASS =
   "inline-flex h-9 items-center justify-center rounded-full px-4 text-xs font-black uppercase tracking-[0.12em] transition";
@@ -32,7 +25,7 @@ export default async function AuthAccessScreen({
   accessDenied = false,
   allowGoogleRouteRedirects = true,
   googleCallbackPath = "/",
-}: Props) {
+}: AuthAccessScreenProps) {
   const session = await getServerSession(authOptions);
   const googleEmail = session?.user?.email?.trim().toLowerCase() ?? null;
   const isGoogleSignedIn = Boolean(googleEmail);

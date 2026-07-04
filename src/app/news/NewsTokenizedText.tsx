@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import type { NewsKanjiCapBasis, NewsKanjiCapGrade, NewsKanjiCapJlpt, NewsKanjiCapWk } from "./newsReadingPrefs";
 import { ensureKanjiLevels, ensureRunReadings, getCachedKanjiLevels, getCachedRunReadings, hasFreshKanjiLevel, hasFreshRunReading, isRunReadingPending, shouldRefreshKanjiLevel, shouldRefreshRunReading } from "./newsEnrichmentCache";
 import { availabilityForRun, openNewsGlyphCandidatesWithOptions, prefetchNewsGlyphCandidates } from "./newsGlyphRunner";
 import { NEWS_KANJI_HISTORY_EVENT } from "./newsKanjiHistory";
@@ -14,16 +13,7 @@ import {
   NEWS_TOKENIZED_KANJI_REGEX,
   shouldDeemphasizeSegment,
 } from "./newsTokenizedTextHelpers";
-
-type Props = {
-  text: string;
-  emphasizeKanji: boolean;
-  kanjiCapBasis: NewsKanjiCapBasis;
-  kanjiCapJlpt: NewsKanjiCapJlpt;
-  kanjiCapWk: NewsKanjiCapWk;
-  kanjiCapGrade: NewsKanjiCapGrade;
-  largeArticleMode: boolean;
-};
+import type { NewsTokenizedTextProps } from "./NewsTokenizedText.types";
 
 const pageSessionSeenGlyphs = new Set<string>();
 const STARTUP_PREFETCH_LIMIT = 10;
@@ -36,7 +26,7 @@ export default function NewsTokenizedText({
   kanjiCapWk,
   kanjiCapGrade,
   largeArticleMode,
-}: Props) {
+}: NewsTokenizedTextProps) {
   const segments = useMemo(() => tokenizeJapanese(text), [text]);
   const candidatesByIndex = useMemo(
     () =>
@@ -403,4 +393,3 @@ export default function NewsTokenizedText({
     </>
   );
 }
-

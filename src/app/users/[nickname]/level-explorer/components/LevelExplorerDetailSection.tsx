@@ -27,8 +27,8 @@ import LevelExplorerReviewStatsCard from "./LevelExplorerReviewStatsCard";
 import {
   RelatedReferenceCards,
   VocabularyKanjiCards,
-  type VocabularyKanjiLink,
 } from "./LevelExplorerReferenceCards";
+import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
 import StatusSrsChip, { ReviewTimingChip } from "../../shared/StatusSrsChip";
 import {
   isKanjiSubjectType,

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import type { ReactNode } from "react";
 
 import type { NewsArticle, NewsArticleBlock } from "@/lib/news/newsTypes";
 
@@ -15,29 +14,19 @@ import {
   readReadingPrefs,
   textSizeClass,
   writeReadingPrefs,
-  type NewsKanjiCapBasis,
-  type NewsKanjiCapGrade,
-  type NewsKanjiCapJlpt,
-  type NewsKanjiCapWk,
   type NewsReadingPrefs,
 } from "./newsReadingPrefs";
+import type {
+  ArticlePanelTab,
+  ArticleTabsProps,
+  BlockViewProps,
+  NewsArticleViewProps,
+  RenderItem,
+} from "./NewsArticleView.types";
 
 const AD_INTERVAL = 4;
 const LARGE_ARTICLE_TEXT_LENGTH = 7000;
 const KANJI_TAB: ArticlePanelTab = "kanji";
-
-export type ArticlePanelTab = "article" | "kanji" | "history" | "stats";
-
-type Props = {
-  article: NewsArticle;
-  userWkLevel: number | null;
-  activeTab: ArticlePanelTab;
-  onTabChangeAction: (next: ArticlePanelTab) => void;
-  historyCount: number;
-  statsCount: number;
-  historyPanel: ReactNode;
-  statsPanel: ReactNode;
-};
 
 export default function NewsArticleView({
   article,
@@ -48,7 +37,7 @@ export default function NewsArticleView({
   statsCount,
   historyPanel,
   statsPanel,
-}: Props) {
+}: NewsArticleViewProps) {
   const items = interleaveAdSlots(article.blocks);
   const kanjiCount = countUniqueArticleKanji(article.blocks);
   const largeArticleMode = article.textLength >= LARGE_ARTICLE_TEXT_LENGTH;
@@ -160,13 +149,7 @@ function ArticleTabs({
   kanjiCount,
   historyCount,
   statsCount,
-}: {
-  activeTab: ArticlePanelTab;
-  onChange: (next: ArticlePanelTab) => void;
-  kanjiCount: number;
-  historyCount: number;
-  statsCount: number;
-}) {
+}: ArticleTabsProps) {
   return (
     <div className="flex justify-end">
       <SegmentedControl<ArticlePanelTab>
@@ -203,15 +186,7 @@ function BlockView({
   kanjiCapWk,
   kanjiCapGrade,
   largeArticleMode,
-}: {
-  block: NewsArticleBlock;
-  emphasizeKanji: boolean;
-  kanjiCapBasis: NewsKanjiCapBasis;
-  kanjiCapJlpt: NewsKanjiCapJlpt;
-  kanjiCapWk: NewsKanjiCapWk;
-  kanjiCapGrade: NewsKanjiCapGrade;
-  largeArticleMode: boolean;
-}) {
+}: BlockViewProps) {
   const content = (
     <NewsTokenizedText
       text={block.text}
@@ -248,8 +223,6 @@ function AdPlaceholder() {
     </div>
   );
 }
-
-type RenderItem = { kind: "block"; block: NewsArticleBlock } | { kind: "ad" };
 
 function interleaveAdSlots(blocks: NewsArticleBlock[]): RenderItem[] {
   const out: RenderItem[] = [];

@@ -1,20 +1,14 @@
 "use client";
 
 import { formatRelativeFromNow } from "@/lib/timeFormat";
-
-type Props = {
-  cached: boolean;
-  cachedAgeMs?: number;
-  fetchedAt?: string;
-  className?: string;
-};
+import type { NewsCacheBadgeProps } from "./NewsCacheBadge.types";
 
 export default function NewsCacheBadge({
   cached,
   cachedAgeMs,
   fetchedAt,
   className = "",
-}: Props) {
+}: NewsCacheBadgeProps) {
   if (cached) {
     const age = formatAge(cachedAgeMs, fetchedAt);
     return (

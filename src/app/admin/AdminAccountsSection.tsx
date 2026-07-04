@@ -7,36 +7,12 @@ import { formatDateShort, formatDateTimeShort } from "@/lib/timeFormat";
 
 import AdminPanelHeader from "./AdminPanelHeader";
 import AdminPaginationControls from "./AdminPaginationControls";
-
-export type AdminAccount = {
-  id: string;
-  nickname: string;
-  wkUsername: string;
-  wkLevel: number;
-  pendingReviews: number;
-  lastSyncedAt: string;
-  lastSyncStatus: string;
-  isSyncing: boolean;
-  syncLockUntil: string | null;
-  joinedByName: string | null;
-  joinedByEmail: string | null;
-  inviteCodeUpdatedAt: string | null;
-  createdAt: string;
-};
-
-type AdminAccountsSectionProps = {
-  sessionAuthorized: boolean;
-  accounts: AdminAccount[];
-  loading: boolean;
-  viewerEmail?: string | null;
-  generatedInviteCodesByAccountId?: Record<string, string>;
-  onRefreshOne: (accountId: string) => void;
-  onAssignInviteCode: (accountId: string) => Promise<string | null>;
-  onResetInviteCode: (accountId: string) => Promise<void>;
-};
-
-type SortBy = "nickname" | "wkLevel" | "pendingReviews" | "lastSyncedAt" | "createdAt";
-type SortDir = "asc" | "desc";
+import type {
+  AdminAccount,
+  AdminAccountsSectionProps,
+  SortBy,
+  SortDir,
+} from "./AdminAccountsSection.types";
 
 function sortIndicator(activeSortBy: SortBy, sortBy: SortBy, sortDir: SortDir): string {
   if (activeSortBy !== sortBy) {
