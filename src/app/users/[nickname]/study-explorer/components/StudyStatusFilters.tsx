@@ -83,8 +83,8 @@ export default function StudyStatusFilters({
             key={status}
             className={
               hideStatusOnCollapsedMobile
-                ? "hidden sm:inline-flex sm:items-center sm:gap-1"
-                : "inline-flex items-center gap-1"
+                ? "hidden sm:flex sm:max-w-full sm:flex-wrap sm:items-center sm:gap-1"
+                : "flex max-w-full flex-wrap items-center gap-1"
             }
           >
             <FilterChipButton
