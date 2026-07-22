@@ -345,7 +345,7 @@ export async function POST(request: Request) {
         }
 
         const alreadyLockedZeroReviewCredit = Boolean(existing?.didWanikaniReviews && existing.reviewsLeft === 0);
-        const grantedWaniKaniCreditNow = requestedWaniKaniCredit && pendingReviewsAtSave === 0;
+        const grantedWaniKaniCreditNow = pendingReviewsAtSave === 0;
         const didWanikaniReviewsForDay = alreadyLockedZeroReviewCredit || grantedWaniKaniCreditNow;
         const reviewsLeftForDay = didWanikaniReviewsForDay ? 0 : pendingReviewsAtSave;
 

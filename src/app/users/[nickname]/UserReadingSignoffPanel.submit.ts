@@ -6,12 +6,12 @@ export type ReadingSignoffSubmitResponse = {
 };
 
 export function buildCheckinSavedMessage(payload: ReadingSignoffSubmitResponse): string {
-  if (!payload.waniKaniCreditRequested) {
-    return "Check-in saved.";
-  }
-
   if (payload.waniKaniCreditGranted) {
     return "Check-in saved. 0-review credit confirmed.";
+  }
+
+  if (!payload.waniKaniCreditRequested) {
+    return "Check-in saved.";
   }
 
   const savedPendingReviews = Math.max(0, payload.pendingReviewsAtSave ?? 0);
