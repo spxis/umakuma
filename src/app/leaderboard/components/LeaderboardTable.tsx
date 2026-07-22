@@ -124,24 +124,7 @@ export default function LeaderboardTable({
   }, []);
 
   const validRowIds = useMemo(() => new Set(rows.map((row) => row.id)), [rows]);
-  const [adminAuthorized, setAdminAuthorized] = useState(false);
   const [refreshingRowIds, setRefreshingRowIds] = useState<Set<string>>(new Set());
-
-  useEffect(() => {
-    async function loadAdminStatus() {
-      try {
-        const response = await fetch("/api/admin/session", { cache: "no-store" });
-        const data = (await response.json()) as { authorized?: boolean };
-        setAdminAuthorized(Boolean(data.authorized));
-      } catch {
-        setAdminAuthorized(false);
-      }
-    }
-
-    loadAdminStatus().catch(() => {
-      setAdminAuthorized(false);
-    });
-  }, []);
   const filteredExpanded = useMemo(
     () => new Set(Array.from(expanded).filter((id) => validRowIds.has(id))),
     [expanded, validRowIds],
@@ -379,7 +362,7 @@ export default function LeaderboardTable({
         showLevelProgressPanel={showLevelProgressPanel}
         onRequestSort={requestSort}
         onToggleRow={toggle}
-        canRefreshAdmin={adminAuthorized}
+        canRefreshAdmin={canViewAllUserPages}
         refreshingRowIds={refreshingRowIds}
         onRefreshUser={refreshUser}
         onToggleItemSpreadPanel={() =>
@@ -398,7 +381,7 @@ export default function LeaderboardTable({
         viewerWkUsername={viewerWkUsername}
         filteredExpanded={filteredExpanded}
         onToggleRow={toggle}
-        canRefreshAdmin={adminAuthorized}
+        canRefreshAdmin={canViewAllUserPages}
         refreshingRowIds={refreshingRowIds}
         onRefreshUser={refreshUser}
       />

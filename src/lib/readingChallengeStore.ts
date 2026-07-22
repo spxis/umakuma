@@ -121,8 +121,10 @@ export async function resolveReadingCampaignSelection(preferredId?: string | nul
   campaigns: ReadingCampaignOption[];
   selectedCampaignId: string | null;
 }> {
-  const campaigns = await listReadingCampaignOptions();
-  const activeChallengeId = await ensureActiveReadingChallengeId();
+  const [campaigns, activeChallengeId] = await Promise.all([
+    listReadingCampaignOptions(),
+    ensureActiveReadingChallengeId(),
+  ]);
 
   if (campaigns.length === 0) {
     return {

@@ -3,7 +3,7 @@ import { Archivo_Black, Noto_Sans_JP, Noto_Serif_JP, Space_Grotesk } from "next/
 import AppFooter from "./AppFooter";
 import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
-import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
+import ViewGlyphModalHostLoader from "./shared/ViewGlyphModalHostLoader";
 import "./globals.css";
 
 const bodySans = Space_Grotesk({
@@ -21,12 +21,14 @@ const jpSans = Noto_Sans_JP({
   variable: "--font-jp-sans",
   weight: ["400", "500", "700"],
   subsets: ["latin"],
+  preload: false,
 });
 
 const jpSerif = Noto_Serif_JP({
   variable: "--font-jp-serif",
   weight: ["400", "500", "700"],
   subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -52,7 +54,7 @@ export default function RootLayout({
         <ClientApiActivityHint />
         <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
         <AppFooter />
-        <ViewGlyphModalHost />
+        <ViewGlyphModalHostLoader />
       </body>
     </html>
   );

@@ -1,8 +1,7 @@
-import { prisma } from "@/lib/prisma";
-import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
 import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import Link from "next/link";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { refreshDueAccounts } from "@/lib/sync";
@@ -17,67 +16,33 @@ import AppTopMenuRow from "./shared/AppTopMenuRow";
 import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
 import UmaKumaPageBanner from "./shared/UmaKumaPageBanner";
+import {
+  attachDailyDeltas,
+  loadHomeChallengeRows,
+  loadLeaderboardRows,
+  type LeaderboardRow,
+} from "./homePageData";
 export const dynamic = "force-dynamic";
-type ReadingChallengeMemberDelegate = {
-  findMany: (args: {
-    where?: Record<string, unknown>;
-    select: { accountId: true; tracked: true };
-  }) => Promise<Array<{ accountId: string; tracked: boolean }>>;
-};
-function getReadingChallengeMemberDelegate(): ReadingChallengeMemberDelegate | null {
-  const delegate = (prisma as unknown as { readingChallengeMember?: ReadingChallengeMemberDelegate })
-    .readingChallengeMember;
-  return delegate ?? null;
-}
-type LeaderboardRow = {
-  id: string;
-  nickname: string;
-  wkUsername: string;
-  wkLevel: number;
-  reviewCount: number;
-  burnedCount: number;
-  pendingReviews: number;
-  radicalCount: number;
-  vocabularyCount: number;
-  apprenticeCount: number;
-  guruCount: number;
-  masterCount: number;
-  enlightenedCount: number;
-  levelKanjiTotal: number;
-  levelKanjiLearned: number;
-  levelKanjiGuruPlus: number;
-  levelKanjiLocked: number;
-  itemSpread: unknown;
-  jlptCounts: unknown;
-  lastActivityAt: Date | null;
-  lastRadicalGuruedAt: Date | null;
-  lastKanjiGuruedAt: Date | null;
-  lastVocabularyGuruedAt: Date | null;
-  lastRadicalGuruedItem: unknown;
-  lastKanjiGuruedItem: unknown;
-  lastVocabularyGuruedItem: unknown;
-  score: number;
-  lastSyncedAt: Date;
-  dailyDelta?: {
-    score: number;
-    reviewCount: number;
-    wkLevel: number;
-    radicalCount: number;
-    vocabularyCount: number;
-    burnedCount: number;
-    levelKanjiLearned: number;
-  } | null;
-};
 function formatNumber(input: number): string {
   return new Intl.NumberFormat("en-US").format(input);
 }
 export default async function Home() {
+  const campaignSelectionPromise = resolveReadingCampaignSelection().catch((error) => {
+    console.error("Could not resolve active campaign selection", error);
+    return null;
+  });
   const session = await getServerSession(authOptions);
   const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
-  const viewerMenuInfo = await resolveViewerMenuInfo({
-    viewerEmail,
-    sessionName: session?.user?.name?.trim() ?? null,
-  });
+  const [viewerMenuInfo, leaderboardResult] = await Promise.all([
+    resolveViewerMenuInfo({
+      viewerEmail,
+      sessionName: session?.user?.name?.trim() ?? null,
+    }),
+    loadLeaderboardRows().then(
+      (rows) => ({ rows, error: null }),
+      (error: unknown) => ({ rows: [], error }),
+    ),
+  ]);
   const canViewAllUserPages = isAdminEmail(viewerEmail);
   if (viewerEmail && !canViewAllUserPages && !viewerMenuInfo?.wkUsername) redirect("/join");
   const viewerWkUsername = viewerMenuInfo?.wkUsername ?? null;
@@ -86,16 +51,22 @@ export default async function Home() {
 
   let challengeGoalDatePst = READING_CAMPAIGN.goalDatePst;
   let challengeTargetBaseYen = READING_CAMPAIGN.maxYen;
-  try {
-    const campaignSelection = await resolveReadingCampaignSelection();
+  const campaignSelection = await campaignSelectionPromise;
+  if (campaignSelection) {
     const selectedCampaign = campaignSelection.campaigns.find(
       (campaign) => campaign.id === campaignSelection.selectedCampaignId,
     ) ?? null;
     challengeGoalDatePst = selectedCampaign?.goalDatePst ?? challengeGoalDatePst;
     challengeTargetBaseYen = selectedCampaign?.targetBaseYen ?? challengeTargetBaseYen;
-  } catch (error) {
-    console.error("Could not resolve active campaign selection", error);
   }
+
+  after(async () => {
+    try {
+      await refreshDueAccounts(1);
+    } catch (error) {
+      console.error("Post-response refresh failed", error);
+    }
+  });
 
   const challengeDaysLeft = (() => {
     const todayDate = parseDateKeyAsUtc(challengeToday);
@@ -116,153 +87,23 @@ export default async function Home() {
   let challengeSecondYen = 0;
 
   try {
-    const refreshPromise = refreshDueAccounts(1).catch((error) => {
-      console.error("Non-blocking refresh failed", error);
-      return { refreshed: 0, skipped: 0 };
-    });
-
-    leaderboard = await prisma.account.findMany({
-      orderBy: [{ score: "desc" }, { wkLevel: "desc" }, { reviewCount: "desc" }],
-      select: {
-        id: true,
-        nickname: true,
-        wkUsername: true,
-        wkLevel: true,
-        reviewCount: true,
-        burnedCount: true,
-        pendingReviews: true,
-        radicalCount: true,
-        vocabularyCount: true,
-        apprenticeCount: true,
-        guruCount: true,
-        masterCount: true,
-        enlightenedCount: true,
-        levelKanjiTotal: true,
-        levelKanjiLearned: true,
-        levelKanjiGuruPlus: true,
-        levelKanjiLocked: true,
-        itemSpread: true,
-        jlptCounts: true,
-        lastActivityAt: true,
-        lastRadicalGuruedAt: true,
-        lastKanjiGuruedAt: true,
-        lastVocabularyGuruedAt: true,
-        lastRadicalGuruedItem: true,
-        lastKanjiGuruedItem: true,
-        lastVocabularyGuruedItem: true,
-        score: true,
-        lastSyncedAt: true,
-      },
-    });
+    if (leaderboardResult.error) {
+      throw leaderboardResult.error;
+    }
+    leaderboard = leaderboardResult.rows;
 
     if (leaderboard.length > 0) {
       const accountIds = leaderboard.map((row) => row.id);
-      const snapshots = await prisma.dailyAccountSnapshot.findMany({
-        where: { accountId: { in: accountIds } },
-        orderBy: [{ snapshotDatePst: "desc" }],
-        select: {
-          accountId: true,
-          score: true,
-          reviewCount: true,
-          wkLevel: true,
-          radicalCount: true,
-          vocabularyCount: true,
-          burnedCount: true,
-          levelKanjiLearned: true,
-        },
+      const activeChallengeId = campaignSelection?.selectedCampaignId ?? null;
+      const [snapshots, readingSignoffRows, trackedRows] = await loadHomeChallengeRows({
+        accountIds,
+        activeChallengeId,
+        startDatePst: READING_CAMPAIGN.startDatePst,
+        endDatePst: challengeToday <= READING_CAMPAIGN.goalDatePst
+          ? challengeToday
+          : READING_CAMPAIGN.goalDatePst,
       });
-
-      const latestTwoByAccount = new Map<
-        string,
-        Array<{
-          score: number;
-          reviewCount: number;
-          wkLevel: number;
-          radicalCount: number;
-          vocabularyCount: number;
-          burnedCount: number;
-          levelKanjiLearned: number;
-        }>
-      >();
-
-      for (const snapshot of snapshots) {
-        const current = latestTwoByAccount.get(snapshot.accountId) ?? [];
-        if (current.length >= 2) {
-          continue;
-        }
-
-        current.push({
-          score: snapshot.score,
-          reviewCount: snapshot.reviewCount,
-          wkLevel: snapshot.wkLevel,
-          radicalCount: snapshot.radicalCount,
-          vocabularyCount: snapshot.vocabularyCount,
-          burnedCount: snapshot.burnedCount,
-          levelKanjiLearned: snapshot.levelKanjiLearned,
-        });
-        latestTwoByAccount.set(snapshot.accountId, current);
-      }
-
-      leaderboard = leaderboard.map((row) => {
-        const snapshotsForAccount = latestTwoByAccount.get(row.id) ?? [];
-        const previous = snapshotsForAccount[1] ?? null;
-
-        if (!previous) {
-          return { ...row, dailyDelta: null };
-        }
-
-        return {
-          ...row,
-          dailyDelta: {
-            score: row.score - previous.score,
-            reviewCount: row.reviewCount - previous.reviewCount,
-            wkLevel: row.wkLevel - previous.wkLevel,
-            radicalCount: row.radicalCount - previous.radicalCount,
-            vocabularyCount: row.vocabularyCount - previous.vocabularyCount,
-            burnedCount: row.burnedCount - previous.burnedCount,
-            levelKanjiLearned: row.levelKanjiLearned - previous.levelKanjiLearned,
-          },
-        };
-      });
-
-      const readingSignoffRows = await prisma.readingSignoff.findMany({
-        select: {
-          id: true,
-          accountId: true,
-          signoffDatePst: true,
-          bookTitle: true,
-          pagesRead: true,
-          minutesRead: true,
-          didWanikaniReviews: true,
-          reviewsLeft: true,
-          apprenticeCount: true,
-          currentWkLevel: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      });
-
-      const activeChallengeId = await ensureActiveReadingChallengeId();
-      const readingChallengeMember = getReadingChallengeMemberDelegate();
-
-      const trackedRows = readingChallengeMember
-        ? await readingChallengeMember.findMany({
-            where: activeChallengeId
-              ? {
-                  OR: [{ challengeId: activeChallengeId }, { challengeId: null }],
-                }
-              : undefined,
-            select: {
-              accountId: true,
-              tracked: true,
-            },
-          })
-        : await prisma.readingChallengeMember.findMany({
-        select: {
-          accountId: true,
-          tracked: true,
-        },
-          });
+      leaderboard = attachDailyDeltas(leaderboard, snapshots);
 
       const trackedByAccountId = new Map(trackedRows.map((row) => [row.accountId, row.tracked]));
       const trackedChallengeAccountIds = leaderboard
@@ -302,7 +143,6 @@ export default async function Home() {
       challengeSecondYen = second?.totalYen ?? 0;
     }
 
-    void refreshPromise;
   } catch (error) {
     console.error("Home leaderboard query failed", error);
     const isDatabaseConnectionError =
