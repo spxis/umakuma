@@ -149,7 +149,7 @@ export default function StudyReviewModalSection({
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
                 </div>
-                <p style={{ fontFamily: glyphFontFamily }} className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">
+                <p style={{ fontFamily: glyphFontFamily }} className={`text-center font-black leading-none text-current ${glyphTextSizeClass(selectedItem.characters)}`}>
                   {selectedItem.characters}
                 </p>
               </button>
@@ -285,7 +285,7 @@ export default function StudyReviewModalSection({
                   </button>
                 </div>
 
-                <p style={{ fontFamily: glyphFontFamily }} className="px-2 text-center text-[clamp(2.8rem,10.4vw,5.4rem)] font-black leading-none text-current sm:text-[clamp(3.6rem,8vw,7rem)]">
+                <p style={{ fontFamily: glyphFontFamily }} className={`px-2 text-center font-black leading-none text-current ${glyphTextSizeClass(selectedItem.characters)}`}>
                   {selectedItem.characters}
                 </p>
                 {showFlashReadingHint ? (
@@ -381,7 +381,7 @@ export default function StudyReviewModalSection({
           <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
             <div className={`relative flex min-h-[20rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
               <GlyphLevelLabel level={selectedItem.wkLevel} className="right-4 top-4" />
-              <p style={{ fontFamily: glyphFontFamily }} className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">{selectedItem.characters}</p>
+              <p style={{ fontFamily: glyphFontFamily }} className={`text-center font-black leading-none text-current ${glyphTextSizeClass(selectedItem.characters)}`}>{selectedItem.characters}</p>
             </div>
             <button type="button" onClick={() => onReveal(selectedItem.assignmentId)} className="flex min-h-[20rem] w-full flex-col justify-center rounded-2xl border border-line bg-surface px-6 py-6 text-left hover:bg-surface-muted lg:h-full lg:min-h-0">
               <div className="mx-auto text-center">
