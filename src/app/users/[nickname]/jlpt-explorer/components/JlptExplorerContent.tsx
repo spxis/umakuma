@@ -290,9 +290,6 @@ export default function JlptExplorerContent({
                   indexLabel={`#${index + 1}`}
                   topRight={
                     <>
-                      {typeof userMatch?.wkLevel === "number" ? (
-                        <NeutralPill>L{userMatch.wkLevel}</NeutralPill>
-                      ) : null}
                       {typeof item.schoolGrade === "number" ? (
                         <NeutralPill>G{item.schoolGrade}</NeutralPill>
                       ) : null}
@@ -300,6 +297,7 @@ export default function JlptExplorerContent({
                     </>
                   }
                   glyphClassName={`border-kanji/50 bg-kanji/10 ${userMatch ? "text-kanji" : "text-foreground"}`}
+                  wkLevel={userMatch?.wkLevel}
                   glyphText={item.kanji}
                   glyphTextClassName="text-6xl"
                   glyphSubtitle={

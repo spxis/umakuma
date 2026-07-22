@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
+import GlyphLevelLabel from "./GlyphLevelLabel";
 
 type Props = {
   onClick: (meta?: { shiftKey: boolean }) => void;
@@ -11,6 +12,7 @@ type Props = {
   topRight: ReactNode;
   glyphClassName: string;
   dataSubjectId?: number; // Added optional dataSubjectId
+  wkLevel?: number | null;
   glyphText: string;
   glyphTextClassName: string;
   glyphSubtitle?: ReactNode;
@@ -28,6 +30,7 @@ export default function UnifiedExplorerCard({
   topRight,
   glyphClassName,
   dataSubjectId, // Destructured dataSubjectId
+  wkLevel,
   glyphText,
   glyphTextClassName,
   glyphSubtitle,
@@ -92,6 +95,7 @@ export default function UnifiedExplorerCard({
         className={`relative mt-2 flex h-[8rem] flex-col justify-center rounded-xl border px-3 py-2 ${glyphCursorClass} ${glyphClassName}`}
       >
         {glyphOverlay}
+        <GlyphLevelLabel level={wkLevel} />
         <p
           style={{ fontFamily }}
           className={`${glyphTextClassName} text-center font-black leading-none`}

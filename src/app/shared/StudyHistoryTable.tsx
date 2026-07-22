@@ -232,7 +232,6 @@ export default function StudyHistoryTable({
                     </p>
                     <StudyHistoryAttemptMetaChips
                       subjectType={row.subjectType}
-                      wkLevel={typeof row.wkLevel === "number" ? row.wkLevel : null}
                       srsStage={typeof row.srsStage === "number" ? row.srsStage : null}
                       srsBucket={row.srsBucket}
                       compact
@@ -295,7 +294,6 @@ export default function StudyHistoryTable({
                     </p>
                     <StudyHistoryAttemptMetaChips
                       subjectType={row.subjectType}
-                      wkLevel={typeof row.wkLevel === "number" ? row.wkLevel : null}
                       srsStage={typeof row.srsStage === "number" ? row.srsStage : null}
                       srsBucket={row.srsBucket}
                     />

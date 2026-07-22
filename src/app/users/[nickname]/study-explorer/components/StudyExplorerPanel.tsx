@@ -399,12 +399,12 @@ export default function StudyExplorerPanel({
                     topRight={
                       <>
                         <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
-                          {typeof item.wkLevel === "number" ? <NeutralPill>L{item.wkLevel}</NeutralPill> : null}
-                          {typeof item.jlptMeta?.schoolGrade === "number" ? <NeutralPill>G{item.jlptMeta.schoolGrade}</NeutralPill> : null}
+                        {typeof item.jlptMeta?.schoolGrade === "number" ? <NeutralPill>G{item.jlptMeta.schoolGrade}</NeutralPill> : null}
                         {item.jlptLevel ? <span className={jlptLevelPillClass()}>N{item.jlptLevel}</span> : null}
                       </>
                     }
                     glyphClassName={typeGlyphBoxClass(item.subjectType)}
+                    wkLevel={item.wkLevel}
                     glyphText={item.characters}
                     glyphTextClassName={glyphTextSizeClass(item.characters)}
                     glyphOverlay={<StudyCardTagOverlay item={item} bulkModeEnabled={bulkModeEnabled} onToggleStudyTag={onToggleStudyTag} />}

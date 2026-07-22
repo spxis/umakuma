@@ -2,7 +2,8 @@ import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
 
 import type { UpcomingReviewItem } from "../lib/studyExplorerTypes";
 import { shortSubjectTypeLabel } from "../../level-explorer/lib/levelExplorerDisplay";
-import { NeutralPill, SubjectTypePill } from "../../shared/ExplorerPill";
+import { SubjectTypePill } from "../../shared/ExplorerPill";
+import GlyphLevelLabel from "../../shared/GlyphLevelLabel";
 import { STUDY_PANEL_TEXT } from "./StudyExplorer.constants";
 
 type StudyUpcomingReviewsSectionProps = {
@@ -50,11 +51,11 @@ export default function StudyUpcomingReviewsSection({
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-sm font-bold text-foreground">{item.characters}</span>
+                      <span className="relative inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-line bg-surface px-2 pt-1 text-sm font-bold text-foreground">
+                        <GlyphLevelLabel level={item.wkLevel} className="right-1 top-1 text-[8px]" />
+                        {item.characters}
+                      </span>
                       <SubjectTypePill type={item.subjectType}>{shortSubjectTypeLabel(item.subjectType)}</SubjectTypePill>
-                      {typeof item.wkLevel === "number" ? (
-                        <NeutralPill>L{item.wkLevel}</NeutralPill>
-                      ) : null}
                     </div>
                     {(item.primaryMeaning || item.primaryReading) ? (
                       <p className="truncate text-[11px] text-foreground/70">

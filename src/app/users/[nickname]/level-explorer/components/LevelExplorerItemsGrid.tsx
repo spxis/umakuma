@@ -346,13 +346,6 @@ export default function LevelExplorerItemsGrid({
               topRight={
                 <>
                   <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
-                  {typeof item.wkLevel === "number" ? (
-                    <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span>
-                  ) : typeof selectedLevelList[selectedLevelList.length - 1] === "number" ? (
-                    <span className="subject-pill border-line bg-surface text-foreground">
-                      L{selectedLevelList[selectedLevelList.length - 1]}
-                    </span>
-                  ) : null}
                   {typeof item.jlptMeta?.schoolGrade === "number" ? (
                     <span className="subject-pill border-line bg-surface text-foreground">G{item.jlptMeta.schoolGrade}</span>
                   ) : null}
@@ -365,6 +358,7 @@ export default function LevelExplorerItemsGrid({
                 </>
               }
               glyphClassName={`${typeGlyphBoxClass(item.subjectType)} ${item.status === LEVEL_WK_STATUSES.locked || item.srsStage <= 0 ? "opacity-60" : ""}`}
+              wkLevel={item.wkLevel ?? selectedLevelList[selectedLevelList.length - 1]}
               glyphText={cardItem.characters}
               glyphTextClassName={`${glyphTextSizeClass(cardItem.characters)} whitespace-nowrap`}
               glyphOverlay={

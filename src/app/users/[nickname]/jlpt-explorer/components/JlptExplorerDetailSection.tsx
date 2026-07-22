@@ -2,6 +2,7 @@ import jlptReadings from "@/data/jlptReadings.json";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
+import GlyphLevelLabel from "../../shared/GlyphLevelLabel";
 import { jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import { formatDate, jlptHeading, readingLabel, stripReadingSeparators } from "../lib/jlptDisplay";
 import { jlptStatusClass, parseWordExamples } from "../lib/jlptExplorerContentHelpers";
@@ -54,7 +55,8 @@ export default function JlptExplorerDetailSection({
     <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
       <div className="grid gap-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-start sm:gap-x-3">
         <div className="inline-flex sm:self-start">
-          <div className="inline-flex min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center rounded-2xl border border-kanji/50 bg-kanji/10 px-4 py-3">
+          <div className="relative inline-flex min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center rounded-2xl border border-kanji/50 bg-kanji/10 px-4 py-3">
+            <GlyphLevelLabel level={selectedUserMatch?.wkLevel} />
             <p className="text-center text-4xl font-black leading-none text-kanji">{selectedItem.kanji}</p>
             {!studyMode && primary ? (
               <p className="mt-1 w-full text-center text-sm font-semibold text-foreground/85">{readingLabel(primary, showEnglish)}</p>
@@ -67,9 +69,6 @@ export default function JlptExplorerDetailSection({
             <ExplorerPill className={jlptStatusClass(selectedUserMatch?.status)}>
               {selectedUserMatch?.status ?? "untracked"}
             </ExplorerPill>
-            {typeof selectedUserMatch?.wkLevel === "number" ? (
-              <NeutralPill>L{selectedUserMatch.wkLevel}</NeutralPill>
-            ) : null}
             <ExplorerPill className={jlptLevelPillClass()}>N{selectedItem.nLevel}</ExplorerPill>
             {selectedUserMatch ? (
               <NeutralPill>SRS {selectedUserMatch.srsStage ?? 0}</NeutralPill>
