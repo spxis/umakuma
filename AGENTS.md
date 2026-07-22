@@ -62,6 +62,7 @@ This file is the single source of truth for agent behavior in this repo.
 	2. No extra wrapper card/border was introduced.
 	3. Button/tab classes follow the same active/inactive pattern.
 	4. Empty/loading/error states still match repo conventions.
+- For glyph parity, compare card, expanded detail, and modal typography classes; use the shared glyph sizing helper instead of hardcoded text sizes.
 - Do not mark the task done until the requested pattern is matched exactly (not approximately).
 
 ## Stack

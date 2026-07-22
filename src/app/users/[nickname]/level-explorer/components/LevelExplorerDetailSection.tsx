@@ -15,6 +15,7 @@ import {
   formatRelativeFromNow,
   glyphHasReading,
   glyphSubtitleForDisplay,
+  glyphTextSizeClass,
   isNewGlyphWithinHours,
   jlptLevelPillClass,
   secondaryReadingsForDisplay,
@@ -243,7 +244,7 @@ export default function LevelExplorerDetailSection({
           >
             <GlyphLevelLabel level={selectedItem.wkLevel} />
             <div>
-              <p style={{ fontFamily }} className="text-center text-4xl font-black leading-none text-current">
+              <p style={{ fontFamily }} className={`text-center font-black leading-none text-current ${glyphTextSizeClass(selectedItem.characters)}`}>
                 {selectedItem.characters}
               </p>
               {(() => {

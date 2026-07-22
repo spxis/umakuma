@@ -3,7 +3,7 @@ import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
 import GlyphLevelLabel from "../../shared/GlyphLevelLabel";
-import { jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
+import { glyphTextSizeClass, jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import { formatDate, jlptHeading, readingLabel, stripReadingSeparators } from "../lib/jlptDisplay";
 import { jlptStatusClass, parseWordExamples } from "../lib/jlptExplorerContentHelpers";
 import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
@@ -57,7 +57,7 @@ export default function JlptExplorerDetailSection({
         <div className="inline-flex sm:self-start">
           <div className="relative inline-flex min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center rounded-2xl border border-kanji/50 bg-kanji/10 px-4 py-3">
             <GlyphLevelLabel level={selectedUserMatch?.wkLevel} />
-            <p className="text-center text-4xl font-black leading-none text-kanji">{selectedItem.kanji}</p>
+            <p className={`text-center font-black leading-none text-kanji ${glyphTextSizeClass(selectedItem.kanji)}`}>{selectedItem.kanji}</p>
             {!studyMode && primary ? (
               <p className="mt-1 w-full text-center text-sm font-semibold text-foreground/85">{readingLabel(primary, showEnglish)}</p>
             ) : null}
