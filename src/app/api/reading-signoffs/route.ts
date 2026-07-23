@@ -4,15 +4,9 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
 import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
-import { currentReviewQueueFromAssignmentCache } from "@/lib/readingSignoff";
 import { emitSumilabuTelemetry } from "@/lib/sumilabuTelemetry";
 import { challengeReadScope, getReadingSignoffEntryDelegate } from "./readingSignoffsRoute.types";
-import {
-  getQuerySchema,
-  patchBodySchema,
-  postBodySchema,
-  prismaErrorCode,
-} from "./readingSignoffsRoute.validation";
+import { getQuerySchema, patchBodySchema, postBodySchema, prismaErrorCode } from "./readingSignoffsRoute.validation";
 import {
   backfillStaleCoverUrls,
   ensureSeedBooks,
@@ -25,7 +19,7 @@ import {
   toReadingSignoffRecord,
   type LatestSignoffSummary,
 } from "./readingSignoffsRoute.lib";
-import { toReadingReviewQueueSnapshot } from "./readingSignoffsRoute.reviewQueue";
+import { ReadingReviewRefreshError, refreshReadingCheckinReviewState, toReadingReviewQueueSnapshot } from "./readingSignoffsRoute.reviewQueue";
 
 export async function GET(request: Request) {
   return withApiRouteTelemetry({
@@ -264,6 +258,7 @@ export async function POST(request: Request) {
             apprenticeCount: true,
             wkLevel: true,
             assignmentCache: true,
+            tokenEncrypted: true, tokenIv: true, tokenTag: true,
           },
         });
 
@@ -333,8 +328,7 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: "Signoff belongs to a different challenge." }, { status: 409 });
         }
 
-        const reviewQueue = currentReviewQueueFromAssignmentCache(account.assignmentCache);
-        const pendingReviewsAtSave = Math.max(0, account.pendingReviews ?? reviewQueue.total);
+        const { reviewQueue, pendingReviewsAtSave } = await refreshReadingCheckinReviewState(account);
         if (isWaniKaniOnlyCheckin && pendingReviewsAtSave > 0) {
           return NextResponse.json(
             {
@@ -425,6 +419,9 @@ export async function POST(request: Request) {
           { status: 201 },
         );
       } catch (error) {
+        if (error instanceof ReadingReviewRefreshError) {
+          return NextResponse.json({ error: "Couldn't check WaniKani right now. Try saving again in a moment." }, { status: 502 });
+        }
         const code = prismaErrorCode(error);
         if (code === "P2002") {
           return NextResponse.json({ error: "This check-in was already saved. Refresh and try again." }, { status: 409 });
