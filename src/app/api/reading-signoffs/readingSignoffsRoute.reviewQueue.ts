@@ -5,6 +5,21 @@ import { fetchPendingReviews } from "@/lib/wanikani/pendingReviews";
 
 export class ReadingReviewRefreshError extends Error {}
 
+export function resolveReadingReviewCredit(input: {
+  requested: boolean;
+  pendingReviews: number;
+  alreadyGranted: boolean;
+}) {
+  const grantedNow = input.requested && input.pendingReviews === 0 && !input.alreadyGranted;
+  const grantedForDay = input.alreadyGranted || grantedNow;
+
+  return {
+    grantedNow,
+    grantedForDay,
+    reviewsLeftForDay: grantedForDay ? 0 : input.pendingReviews,
+  };
+}
+
 export async function refreshReadingCheckinReviewState(account: {
   id: string;
   assignmentCache: unknown;

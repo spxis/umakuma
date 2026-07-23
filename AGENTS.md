@@ -63,6 +63,7 @@ This file is the single source of truth for agent behavior in this repo.
 	3. Button/tab classes follow the same active/inactive pattern.
 	4. Empty/loading/error states still match repo conventions.
 - Do not mark the task done until the requested pattern is matched exactly (not approximately).
+- Reading check-ins must verify the live WaniKani queue at save time, but only grant review credit when the user explicitly submits WaniKani activity. A live zero queue qualifies even when no reviews were due; credit remains once per account/date.
 
 ## Stack
 

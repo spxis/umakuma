@@ -19,8 +19,7 @@ import {
   toReadingSignoffRecord,
   type LatestSignoffSummary,
 } from "./readingSignoffsRoute.lib";
-import { ReadingReviewRefreshError, refreshReadingCheckinReviewState, toReadingReviewQueueSnapshot } from "./readingSignoffsRoute.reviewQueue";
-
+import { ReadingReviewRefreshError, refreshReadingCheckinReviewState, resolveReadingReviewCredit, toReadingReviewQueueSnapshot } from "./readingSignoffsRoute.reviewQueue";
 export async function GET(request: Request) {
   return withApiRouteTelemetry({
     route: "/api/reading-signoffs",
@@ -339,9 +338,13 @@ export async function POST(request: Request) {
         }
 
         const alreadyLockedZeroReviewCredit = Boolean(existing?.didWanikaniReviews && existing.reviewsLeft === 0);
-        const grantedWaniKaniCreditNow = pendingReviewsAtSave === 0;
-        const didWanikaniReviewsForDay = alreadyLockedZeroReviewCredit || grantedWaniKaniCreditNow;
-        const reviewsLeftForDay = didWanikaniReviewsForDay ? 0 : pendingReviewsAtSave;
+        const reviewCredit = resolveReadingReviewCredit({
+          requested: requestedWaniKaniCredit,
+          pendingReviews: pendingReviewsAtSave,
+          alreadyGranted: alreadyLockedZeroReviewCredit,
+        });
+        const didWanikaniReviewsForDay = reviewCredit.grantedForDay;
+        const reviewsLeftForDay = reviewCredit.reviewsLeftForDay;
 
         const nextPagesRead = (existing?.pagesRead ?? 0) + parsed.data.pagesRead;
         const nextMinutesRead = (existing?.minutesRead ?? 0) + parsed.data.minutesRead;
@@ -354,7 +357,7 @@ export async function POST(request: Request) {
         const reviewCorrect = reviewQueue.kanji;
         const reviewIncorrect = reviewQueue.vocabulary;
         const reviewSuccessPercent = reviewQueue.radical;
-        const entryDidWanikaniReviews = grantedWaniKaniCreditNow;
+        const entryDidWanikaniReviews = reviewCredit.grantedNow;
 
         if (readingSignoffEntry) {
           await readingSignoffEntry.create({
@@ -413,7 +416,8 @@ export async function POST(request: Request) {
           {
             signoff: toReadingSignoffRecord(saved),
             waniKaniCreditRequested: requestedWaniKaniCredit,
-            waniKaniCreditGranted: didWanikaniReviewsForDay && reviewsLeftForDay === 0,
+            waniKaniCreditGranted: reviewCredit.grantedNow,
+            waniKaniCreditAlreadyGranted: alreadyLockedZeroReviewCredit,
             pendingReviewsAtSave,
           },
           { status: 201 },

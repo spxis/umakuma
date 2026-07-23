@@ -2,12 +2,17 @@ export type ReadingSignoffSubmitResponse = {
   error?: string;
   waniKaniCreditRequested?: boolean;
   waniKaniCreditGranted?: boolean;
+  waniKaniCreditAlreadyGranted?: boolean;
   pendingReviewsAtSave?: number;
 };
 
 export function buildCheckinSavedMessage(payload: ReadingSignoffSubmitResponse): string {
   if (payload.waniKaniCreditGranted) {
     return "Check-in saved. 0-review credit confirmed.";
+  }
+
+  if (payload.waniKaniCreditAlreadyGranted) {
+    return "Check-in saved. Today's 0-review credit was already counted.";
   }
 
   if (!payload.waniKaniCreditRequested) {
