@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 import type { StudyReviewModalSectionProps as Props } from "./StudyReviewModalSection.types";
 import {
   isLessonLockedQueueItem,
   isLessonQueueItem,
-  STUDY_REVIEW_OUTCOMES,
   STUDY_REVIEW_MODAL_SECTION_TEXT,
   STUDY_VIEWER_MODES,
 } from "./StudyExplorer.constants";
@@ -13,18 +11,14 @@ import type { LevelItem } from "../../explorerTypes";
 import LevelExplorerDetailSection from "../../level-explorer/components/LevelExplorerDetailSection";
 import {
   ReadingWithPronunciation,
-  jlptLevelPillClass,
-  shortSubjectTypeLabel,
   stripHtml,
-  subjectTypePillClass,
   typeGlyphBoxClass,
 } from "../../level-explorer/lib/levelExplorerDisplay";
-import StatusSrsChip from "../../shared/StatusSrsChip";
-import StudyReviewFlashActionRow from "./StudyReviewFlashActionRow";
 import StudyReviewModalMetaPanels from "./StudyReviewModalMetaPanels";
-import StudyReviewMeaningCard from "./StudyReviewMeaningCard";
 import { buildUnifiedDetailItem } from "./StudyReviewModalHelpers";
 import StudyReviewGlyphContent from "./StudyReviewGlyphContent";
+import StudyReviewAnswerPane from "./StudyReviewAnswerPane";
+import GlyphStatusChipRow from "../../shared/GlyphStatusChipRow";
 
 export default function StudyReviewModalSection({
   accountId,
@@ -93,16 +87,8 @@ export default function StudyReviewModalSection({
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
   const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
   const { fontFamily: glyphFontFamily, toggle: toggleGlyphFont } = useGlyphFontPreference();
-  const [meaningPeekState, setMeaningPeekState] = useState<{ assignmentId: number; open: boolean }>({
-    assignmentId: -1,
-    open: false,
-  });
   const flashReadingHint = primaryReadingHiragana !== "-" ? primaryReadingHiragana : secondaryReadingValue;
   const showFlashReadingHint = showEnglish && flashReadingHint.trim().length > 0 && flashReadingHint !== "-";
-  const hasMeaningExplanation = selectedMeaningExplanation !== "-";
-  const hasAltMeanings = allMeanings.length > 1;
-  const hasScrollableMeaningDetails = hasAltMeanings || hasMeaningExplanation || showReadingExplanation;
-  const meaningPeekExpanded = meaningPeekState.assignmentId === selectedItem.assignmentId ? meaningPeekState.open : false;
 
   const unifiedDetailItem = shouldUseUnifiedLessonDetail
     ? buildUnifiedDetailItem(selectedItem)
@@ -130,32 +116,20 @@ export default function StudyReviewModalSection({
           ) : (
             <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
               <div
-                role="button"
-                tabIndex={0}
-                onClick={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  onAdvanceFlashOrNext();
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    onAdvanceFlashOrNext();
-                  }
-                }}
                 onTouchStart={onFlashTouchStart}
                 onTouchEnd={onFlashTouchEnd}
                 className={`group/explorer-card relative flex min-h-[20rem] select-none items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
                   selectedItem.subjectType,
                 )}`}
               >
+                <button
+                  type="button"
+                  onClick={onAdvanceFlashOrNext}
+                  className="absolute inset-0 z-0 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+                  aria-label="Next card"
+                />
                 <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} />
-                <div className="absolute left-1/2 top-4 z-10 flex max-w-[calc(100%-1.5rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-x-auto px-1">
-                  <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                  {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
-                  {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
-                  {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
-                </div>
+                <GlyphStatusChipRow item={selectedItem} showStatus={showStatusChip} />
               </div>
               <button
                 type="button"
@@ -216,36 +190,23 @@ export default function StudyReviewModalSection({
           <>
             <div className="grid h-full min-h-0 flex-1 grid-rows-[35%_65%] gap-1.5 lg:grid-cols-2 lg:grid-rows-1 lg:gap-2 lg:items-stretch">
               <div
-                role="button"
-                tabIndex={0}
-                onClick={() => {
-                  openViewGlyphViewer({
-                    items: resolvedViewerItems,
-                    startIndex: Math.max(0, Math.min(resolvedViewerIndex, resolvedViewerItems.length - 1)),
-                    accountId,
-                  });
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
+                className={`group/explorer-card relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-2.5 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
+                title={STUDY_REVIEW_MODAL_SECTION_TEXT.viewItemTitle}
+              >
+                <button
+                  type="button"
+                  onClick={() => {
                     openViewGlyphViewer({
                       items: resolvedViewerItems,
                       startIndex: Math.max(0, Math.min(resolvedViewerIndex, resolvedViewerItems.length - 1)),
                       accountId,
                     });
-                  }
-                }}
-                className={`group/explorer-card relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-2.5 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
-                title={STUDY_REVIEW_MODAL_SECTION_TEXT.viewItemTitle}
-              >
+                  }}
+                  className="absolute inset-0 z-0 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+                  aria-label={STUDY_REVIEW_MODAL_SECTION_TEXT.viewItemTitle}
+                />
                 <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} className="px-2" />
-                <div className="absolute left-1/2 top-3 z-10 flex max-w-[calc(100%-1.25rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-hidden px-1 sm:top-4">
-                  <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                  {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
-                  {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
-                  {showStatusChip ? (
-                    <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} />
-                  ) : null}
+                <GlyphStatusChipRow item={selectedItem} showStatus={showStatusChip}>
                   {canToggleEnglish ? (
                     <button
                       type="button"
@@ -287,7 +248,7 @@ export default function StudyReviewModalSection({
                       <text x="17.0" y="17.7" fontSize="13.4" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
                     </svg>
                   </button>
-                </div>
+                </GlyphStatusChipRow>
 
                 {showFlashReadingHint ? (
                   <p className="pointer-events-none absolute left-1/2 top-1/2 w-full -translate-x-1/2 translate-y-[2.7rem] px-2 text-center text-xl font-semibold leading-tight text-foreground/80 sm:translate-y-[4.4rem] sm:text-2xl lg:translate-y-[4.9rem]">
@@ -307,69 +268,26 @@ export default function StudyReviewModalSection({
                     <p className="text-sm font-black uppercase tracking-[0.12em] text-foreground/80 sm:text-base">{STUDY_REVIEW_MODAL_SECTION_TEXT.showAnswer}</p>
                     <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">{STUDY_REVIEW_MODAL_SECTION_TEXT.spaceToReveal}</p>
                   </button>
-                ) : isOutcomeFinal ? (
-                  <div className="flex h-full w-full items-center justify-center rounded-2xl border-2 border-line bg-surface px-3 py-3 text-center sm:px-4 sm:py-4">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.answerLocked}</p>
-                      <p className={`mt-2 text-2xl font-black uppercase ${selectedOutcome === STUDY_REVIEW_OUTCOMES.correct ? "text-emerald-700" : "text-red-700"}`}>{selectedOutcome}</p>
-                      <p className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">{STUDY_REVIEW_MODAL_SECTION_TEXT.readOnlyHint}</p>
-                    </div>
-                  </div>
                 ) : (
-                  <div className="flex h-full min-h-0 flex-col">
-                    <div className="relative flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
-                      <div className="shrink-0 rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</p>
-                          {hasScrollableMeaningDetails ? (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setMeaningPeekState((state) => ({
-                                  assignmentId: selectedItem.assignmentId,
-                                  open: state.assignmentId === selectedItem.assignmentId ? !state.open : true,
-                                }));
-                              }}
-                              className="rounded-full border border-line bg-surface-muted px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface"
-                            >
-                              {meaningPeekExpanded ? "Close peek" : "Peek"}
-                            </button>
-                          ) : null}
-                        </div>
-                        <div className="mt-1 flex min-w-0 items-end gap-2">
-                          <p className="line-clamp-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">
-                            {primaryReadingHiragana === "-" && secondaryReadingValue !== "-" ? secondaryReadingValue : primaryReadingHiragana}
-                          </p>
-                          {primaryReadingKatakana !== "-" ? (
-                            <p className="line-clamp-1 text-xs font-semibold leading-tight text-foreground/70 sm:text-sm">{primaryReadingKatakana}</p>
-                          ) : null}
-                        </div>
-                      </div>
-                      <StudyReviewMeaningCard
-                        allMeanings={allMeanings}
-                        fallbackMeaning={selectedItem.characters}
-                        selectedMeaningExplanation={selectedMeaningExplanation}
-                        selectedReadingExplanationRaw={selectedReadingExplanationRaw}
-                        peekExpanded={meaningPeekExpanded}
-                        onTogglePeek={() => {
-                          setMeaningPeekState((state) => ({
-                            assignmentId: selectedItem.assignmentId,
-                            open: state.assignmentId === selectedItem.assignmentId ? !state.open : true,
-                          }));
-                        }}
-                      />
-                    </div>
-                    <StudyReviewFlashActionRow
-                      isPracticeItem={isPracticeItem}
-                      assignmentId={selectedItem.assignmentId}
-                      wrong={wrong}
-                      skipped={skipped}
-                      correct={correct}
-                      isSubmittingSelected={isSubmittingSelected}
-                      onSubmit={onSubmit}
-                      onSkipCurrent={onSkipCurrent}
-                    />
-                  </div>
+                  <StudyReviewAnswerPane
+                    allMeanings={allMeanings}
+                    fallbackMeaning={selectedItem.characters}
+                    primaryReadingHiragana={primaryReadingHiragana}
+                    primaryReadingKatakana={primaryReadingKatakana}
+                    secondaryReadingValue={secondaryReadingValue}
+                    selectedMeaningExplanation={selectedMeaningExplanation}
+                    selectedReadingExplanationRaw={selectedReadingExplanationRaw}
+                    isPracticeItem={isPracticeItem}
+                    assignmentId={selectedItem.assignmentId}
+                    selectedOutcome={selectedOutcome}
+                    isOutcomeFinal={isOutcomeFinal}
+                    wrong={wrong}
+                    skipped={skipped}
+                    correct={correct}
+                    isSubmittingSelected={isSubmittingSelected}
+                    onSubmit={onSubmit}
+                    onSkipCurrent={onSkipCurrent}
+                  />
                 )}
 
                 {isSubmittingSelected ? (
@@ -382,6 +300,7 @@ export default function StudyReviewModalSection({
           <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
             <div className={`group/explorer-card relative flex min-h-[20rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
               <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} />
+              <GlyphStatusChipRow item={selectedItem} showStatus={showStatusChip} />
             </div>
             <button type="button" onClick={() => onReveal(selectedItem.assignmentId)} className="flex min-h-[20rem] w-full flex-col justify-center rounded-2xl border border-line bg-surface px-6 py-6 text-left hover:bg-surface-muted lg:h-full lg:min-h-0">
               <div className="mx-auto text-center">
@@ -416,27 +335,16 @@ export default function StudyReviewModalSection({
             />
           ) : (
             <div>
-              <div className="mb-2 flex flex-wrap gap-1 sm:hidden">
-                <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
-                {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
-                {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
-              </div>
               <div className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-center">
               <div className={`group/explorer-card relative inline-flex min-h-[5.75rem] min-w-[5.75rem] items-center justify-center rounded-2xl border px-4 py-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
                 <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} />
+                <GlyphStatusChipRow item={selectedItem} showStatus={showStatusChip} />
               </div>
               <div className="self-start">
-                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-3">
                   <div className="min-w-0">
                     <p className="text-3xl font-black text-foreground">{detailsRevealed ? (allMeanings[0] ?? selectedItem.characters) : "???"}</p>
                     {detailsRevealed && allMeanings.length > 1 ? <p className="mt-1 hidden text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65 sm:block">{STUDY_REVIEW_MODAL_SECTION_TEXT.altMeanings}: {allMeanings.slice(1).join(" • ")}</p> : null}
-                  </div>
-                  <div className="hidden flex-nowrap justify-self-end gap-1 sm:flex">
-                    <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                    {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
-                    {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
-                    {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
                   </div>
                 </div>
                 {detailsRevealed && allMeanings.length > 1 ? (

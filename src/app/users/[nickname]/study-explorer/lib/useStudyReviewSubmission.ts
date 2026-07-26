@@ -11,6 +11,7 @@ import type {
 } from "./studyExplorerTypes";
 import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 import { studyItemEnglishTitle } from "./studyExplorerUtils";
+import { nextReviewSessionItem } from "./reviewSessionNavigation";
 
 const POST_SUBMIT_DELAY_MS = 250;
 const REVIEW_SUBMIT_TIMEOUT_MS = 10000;
@@ -67,24 +68,6 @@ export function useStudyReviewSubmission({
 }: Args) {
   const inFlightAssignmentIdsRef = useRef<Set<number>>(new Set());
 
-  const removeFromModalSession = useCallback(
-    (assignmentId: number) => {
-      onSetModalSessionOrderByAssignmentId((prev) =>
-        prev ? prev.filter((id) => id !== assignmentId) : prev,
-      );
-      onSetModalSessionItemByAssignmentId((prev) => {
-        if (!(assignmentId in prev)) {
-          return prev;
-        }
-
-        const next = { ...prev };
-        delete next[assignmentId];
-        return next;
-      });
-    },
-    [onSetModalSessionItemByAssignmentId, onSetModalSessionOrderByAssignmentId],
-  );
-
   const getSubmissionContext = useCallback(
     (assignmentId: number) => {
       const itemForSubmit =
@@ -94,11 +77,7 @@ export function useStudyReviewSubmission({
         submittedIndex >= 0
           ? modalItems[submittedIndex + 1] ?? modalItems[submittedIndex - 1] ?? itemForSubmit
           : itemForSubmit;
-      const remainingAfterSubmit = modalItems.filter((item) => item.assignmentId !== assignmentId);
-      const nextFocusedItem =
-        remainingAfterSubmit[submittedIndex] ??
-        remainingAfterSubmit[Math.max(0, submittedIndex - 1)] ??
-        null;
+      const nextFocusedItem = nextReviewSessionItem(modalItems, assignmentId);
 
       return { itemForSubmit, nextFocusedItem, nextVisibleItem };
     },
@@ -225,13 +204,12 @@ export function useStudyReviewSubmission({
         if (!itemForSubmit?.isInjectedTrouble) {
           onSetHasPendingStudySubmissions(true);
         }
-        onSetSelectedId(nextFocusedItem?.subjectId ?? null);
+        onSetSelectedId(nextFocusedItem?.subjectId ?? itemForSubmit?.subjectId ?? null);
         onSetRevealedAssignmentIds((prev) => {
           const next = new Set(prev);
           next.delete(assignmentId);
           return next;
         });
-        removeFromModalSession(assignmentId);
 
         if (typeof window !== "undefined") {
           window.dispatchEvent(
@@ -280,7 +258,6 @@ export function useStudyReviewSubmission({
       onSetSubmitInFlight,
       onSetSubmittingByAssignmentId,
       onSetTotalItems,
-      removeFromModalSession,
       studyApiBasePath,
       inFlightAssignmentIdsRef,
     ],

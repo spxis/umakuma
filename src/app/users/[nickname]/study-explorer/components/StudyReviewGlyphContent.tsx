@@ -30,7 +30,7 @@ export default function StudyReviewGlyphContent({
       ) : null}
       <p
         style={{ fontFamily }}
-        className={`${className} text-center font-black leading-none text-current ${glyphTextSizeClass(item.characters)}`}
+        className={`${className} pointer-events-none relative z-[1] text-center font-black leading-none text-current ${glyphTextSizeClass(item.characters)}`}
       >
         {item.characters}
       </p>

@@ -262,18 +262,6 @@ export function readingsWithPronunciationList(value: string, showPronunciation: 
   );
 }
 
-export function readingDualScriptCard(label: string, hiraganaValue: JSX.Element, katakanaValue: JSX.Element): JSX.Element {
-  return (
-    <div className="rounded-xl border border-line bg-surface px-3 py-2">
-      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{label}</p>
-      <div className="mt-1 flex items-center justify-between gap-3">
-        <p className="text-2xl font-black leading-tight text-foreground/95">{hiraganaValue}</p>
-        <p className="text-right text-2xl font-black leading-tight text-foreground/95">{katakanaValue}</p>
-      </div>
-    </div>
-  );
-}
-
 function formatTimestamp(value: string | null | undefined): string {
   if (!value) {
     return STUDY_REVIEW_HELPERS_TEXT.empty;

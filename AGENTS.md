@@ -124,6 +124,8 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - User-facing copy must follow `BRAND_CORE.md` / `BRAND.md` voice.
 - Keep primary glyph sizing identical across explorer lists, Review modals, and View Kanji/Radical/Vocabulary details by using the shared `glyphTextSizeClass` helper; do not add branch-specific responsive clamp sizes.
 - Place trouble at the glyph's bottom-left and favorite at its bottom-right in explorer cards, Review modals, and View Kanji/Radical/Vocabulary details; do not put these controls in modal navigation or title chip rows.
+- Keep submitted review items in the active modal session until the modal closes. Revisiting a submitted item must show its selected correct/wrong outcome read-only, including when it was the final item.
+- Review and View Glyph modals must use the same shared in-glyph status-chip row. Dual-script readings show hiragana and katakana with one shared pronunciation, never duplicate English for each script.
 - Admin confirmations must use shared dialog components (for example `ConfirmDialog` via `useAdminFeedback().confirmAction`). Do not use `window.confirm`.
 - Admin success/error action feedback should use shared toast feedback (for example `useAdminFeedback().showToast`) rather than inline status banners like "Saved" blocks inside cards.
 

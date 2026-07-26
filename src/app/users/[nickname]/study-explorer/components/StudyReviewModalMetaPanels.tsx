@@ -23,14 +23,13 @@ import {
   formatTimestampWithRelative,
   metricCard,
   readingCard,
-  readingDualScriptCard,
-  readingWithPronunciation,
   readingsWithPronunciationList,
   relatedTileLabelClass,
 } from "./StudyReviewModalHelpers";
 import { stripHtml } from "../../level-explorer/lib/levelExplorerDisplay";
 import { RelatedReferenceCards } from "../../level-explorer/components/LevelExplorerReferenceCards";
 import type { LevelItem } from "../../explorerTypes";
+import ReadingScriptPair from "../../shared/ReadingScriptPair";
 
 const EMPTY_SUBJECT_BY_ID = new Map<number, LevelItem>();
 
@@ -197,10 +196,13 @@ export default function StudyReviewModalMetaPanels({
         <>
           {showReadingCards ? (
             <div className="mt-3 grid gap-2 lg:grid-cols-2">
-              {readingDualScriptCard(
+              {readingCard(
                 STUDY_REVIEW_META_TEXT.primaryReadings,
-                readingWithPronunciation(primaryReadingHiragana, showEnglish),
-                readingWithPronunciation(primaryReadingKatakana, showEnglish),
+                <ReadingScriptPair
+                  hiragana={primaryReadingHiragana}
+                  katakana={primaryReadingKatakana}
+                  showPronunciation={showEnglish}
+                />,
               )}
               {readingCard(STUDY_REVIEW_META_TEXT.secondaryReadings, readingsWithPronunciationList(secondaryReadingValue, showEnglish))}
             </div>

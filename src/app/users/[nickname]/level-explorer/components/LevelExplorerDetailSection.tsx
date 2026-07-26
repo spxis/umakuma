@@ -16,10 +16,7 @@ import {
   glyphSubtitleForDisplay,
   glyphTextSizeClass,
   isNewGlyphWithinHours,
-  jlptLevelPillClass,
   secondaryReadingsForDisplay,
-  shortSubjectTypeLabel,
-  subjectTypePillClass,
   titleForDisplay,
   typeGlyphBoxClass,
 } from "../lib/levelExplorerDisplay";
@@ -30,7 +27,7 @@ import {
   VocabularyKanjiCards,
 } from "./LevelExplorerReferenceCards";
 import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
-import StatusSrsChip, { ReviewTimingChip } from "../../shared/StatusSrsChip";
+import { ReviewTimingChip } from "../../shared/StatusSrsChip";
 import {
   isKanjiSubjectType,
   isRadicalSubjectType,
@@ -39,6 +36,7 @@ import {
 import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import GlyphTagOverlay from "../../shared/GlyphTagOverlay";
+import GlyphStatusChipRow from "../../shared/GlyphStatusChipRow";
 
 type Props = {
   accountId: string;
@@ -139,16 +137,8 @@ export default function LevelExplorerDetailSection({
       : LEVEL_EXPLORER_TEXT.hintsHidden;
   const isEyeOn = usesStudyPeekToggle ? !isStudyHidden : showEnglish;
 
-  const renderHeaderChipRow = (className: string) => (
-    <div className={`${className} items-center`}>
-      <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-      {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? (
-        <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span>
-      ) : null}
-      {selectedItem.jlptLevel ? (
-        <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span>
-      ) : null}
-      <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} />
+  const glyphChipControls = (
+    <>
       {isNewGlyphWithinHours(selectedItem) ? (
         <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
       ) : null}
@@ -193,19 +183,18 @@ export default function LevelExplorerDetailSection({
           <text x="17.0" y="17.7" fontSize="13.4" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
         </svg>
       </button>
-    </div>
+    </>
   );
 
   return (
     <section data-view-glyph-parent-frame="true" className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
-      {renderHeaderChipRow("mb-2 flex flex-wrap justify-start gap-1 sm:hidden")}
       <div className="grid gap-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-x-3">
-        <div className="inline-flex sm:self-center">
+        <div className="flex sm:self-center">
           <div
-            className={`group/explorer-card relative inline-flex rounded-2xl border ${
+            className={`group/explorer-card relative flex min-w-0 flex-1 rounded-2xl border pt-12 sm:min-w-64 ${
               glyphHasReading(selectedItem)
-                ? "min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center px-4 py-3"
-                : "min-h-[5.75rem] min-w-[5.75rem] items-center justify-center px-4 py-3"
+                ? "min-h-[8rem] flex-col items-center justify-center px-4 pb-3"
+                : "min-h-[8rem] items-center justify-center px-4 pb-3"
             } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
           >
             <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
@@ -216,6 +205,7 @@ export default function LevelExplorerDetailSection({
                 onToggleStudyTag={onToggleStudyTag}
               />
             ) : null}
+            <GlyphStatusChipRow item={selectedItem}>{glyphChipControls}</GlyphStatusChipRow>
             <div>
               <p style={{ fontFamily }} className={`text-center font-black leading-none text-current ${glyphTextSizeClass(selectedItem.characters)}`}>
                 {selectedItem.characters}
@@ -246,7 +236,6 @@ export default function LevelExplorerDetailSection({
         </div>
 
         <div className="min-w-0">
-          {renderHeaderChipRow("hidden flex-wrap justify-end gap-1 sm:flex")}
           <div className="mt-2 min-w-0">
             {studyMode && isStudyHidden ? (
               <>
