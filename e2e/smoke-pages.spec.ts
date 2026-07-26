@@ -129,7 +129,7 @@ test("home page loads", async ({ browser, baseURL }) => {
 test("news reader page loads", async ({ browser, baseURL }) => {
   const url = `${baseURL}/news`;
   await assertPageLoads(browser, url, async (page) => {
-    await expect(page.getByRole("heading", { name: "Read News" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "News moved to user dashboards" })).toBeVisible();
   });
 });
 
@@ -139,7 +139,7 @@ test("user drilldown tabs load", async ({ browser, baseURL }) => {
       const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=${tab.key}#explorer`;
       await assertPageLoads(browser, url, async (page) => {
         if (page.url().includes("/join?access=denied")) {
-          await expect(page.getByRole("heading", { name: "Join UmaKuma" })).toBeVisible();
+          await expect(page.getByText(USER_ACCESS_GATE_TEXT)).toBeVisible();
           return;
         }
 
@@ -165,7 +165,7 @@ test("user history page loads", async ({ browser, baseURL }) => {
 
   await assertPageLoads(browser, url, async (page) => {
     if (page.url().includes("/join?access=denied")) {
-      await expect(page.getByRole("heading", { name: "Join UmaKuma" })).toBeVisible();
+      await expect(page.getByText(USER_ACCESS_GATE_TEXT)).toBeVisible();
       return;
     }
 
@@ -180,7 +180,7 @@ test("user read history tab loads", async ({ browser, baseURL }) => {
 
   await assertPageLoads(browser, url, async (page) => {
     if (page.url().includes("/join?access=denied")) {
-      await expect(page.getByRole("heading", { name: "Join UmaKuma" })).toBeVisible();
+      await expect(page.getByText(USER_ACCESS_GATE_TEXT)).toBeVisible();
       return;
     }
 
