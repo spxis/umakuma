@@ -126,6 +126,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Place trouble at the glyph's bottom-left and favorite at its bottom-right in explorer cards, Review modals, and View Kanji/Radical/Vocabulary details; do not put these controls in modal navigation or title chip rows.
 - Keep submitted review items in the active modal session until the modal closes. Revisiting a submitted item must show its selected correct/wrong outcome read-only, including when it was the final item.
 - Review and View Glyph modals must use the same shared in-glyph status-chip row. Dual-script readings show hiragana and katakana with one shared pronunciation, never duplicate English for each script.
+- Review and View Glyph modal glyph containers must use the same full-height presentation so in-glyph chips never compress the glyph content.
 - Admin confirmations must use shared dialog components (for example `ConfirmDialog` via `useAdminFeedback().confirmAction`). Do not use `window.confirm`.
 - Admin success/error action feedback should use shared toast feedback (for example `useAdminFeedback().showToast`) rather than inline status banners like "Saved" blocks inside cards.
 

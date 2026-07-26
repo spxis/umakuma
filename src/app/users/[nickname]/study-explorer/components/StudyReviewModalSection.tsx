@@ -335,12 +335,12 @@ export default function StudyReviewModalSection({
             />
           ) : (
             <div>
-              <div className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-center">
-              <div className={`group/explorer-card relative inline-flex min-h-[5.75rem] min-w-[5.75rem] items-center justify-center rounded-2xl border px-4 py-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
+              <div className="grid gap-3 lg:grid-cols-2 lg:items-stretch">
+              <div className={`group/explorer-card relative flex min-h-[20rem] items-center justify-center rounded-2xl border px-4 py-12 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
                 <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} />
                 <GlyphStatusChipRow item={selectedItem} showStatus={showStatusChip} />
               </div>
-              <div className="self-start">
+              <div className="self-center">
                 <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-3">
                   <div className="min-w-0">
                     <p className="text-3xl font-black text-foreground">{detailsRevealed ? (allMeanings[0] ?? selectedItem.characters) : "???"}</p>
