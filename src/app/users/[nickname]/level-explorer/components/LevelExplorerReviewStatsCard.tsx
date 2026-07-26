@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+import {
+  buildReviewOutcomeSeries,
+  summarizeReviewOutcomes,
+} from "@/lib/reviewStatsOutcomes";
 
-import { formatDate } from "../lib/levelExplorerDisplay";
 import {
   CorrectWrongTrendChart,
   ReviewActivityTrendChart,
@@ -16,48 +19,32 @@ import type {
   TrendPoint,
 } from "./LevelExplorerReviewStatsCharts.types";
 
-type SubjectHistory = {
-  latest: {
-    percentageCorrect: number;
-    meaningCorrect: number;
-    meaningIncorrect: number;
-    readingCorrect: number;
-    readingIncorrect: number;
-    capturedAt: string;
-    source: string;
-  } | null;
-  trend: Array<{
-    capturedAt: string;
-    percentageCorrect: number;
-    totalAnswers: number;
-    correctAnswers: number;
-    wrongAnswers: number;
-    source: string;
-  }>;
+type ReviewAttempt = {
+  result: "correct" | "wrong" | "skipped";
+  submittedAt: string;
 };
 
-type ApiReviewTransition = {
-  createdAt: string;
-  startingSrsStage: number;
-  endingSrsStage: number;
+type SubjectHistory = {
+  attempts: {
+    history: ReviewAttempt[];
+  };
 };
 
 type CachedHistoryPayload = {
   fetchedAt: number;
-  history: SubjectHistory | null;
-  transitions: ApiReviewTransition[];
+  attempts: ReviewAttempt[];
 };
 
 const HISTORY_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const reviewStatsHistoryCache = new Map<string, CachedHistoryPayload>();
 
-async function fetchSubjectHistoryPayload(url: string): Promise<{ history?: SubjectHistory; transitions?: ApiReviewTransition[] }> {
+async function fetchSubjectHistoryPayload(url: string): Promise<{ history?: SubjectHistory }> {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Could not load review stats");
   }
 
-  return response.json() as Promise<{ history?: SubjectHistory; transitions?: ApiReviewTransition[] }>;
+  return response.json() as Promise<{ history?: SubjectHistory }>;
 }
 
 function formatGraphDateLabel(input: string): string {
@@ -119,8 +106,7 @@ export default function LevelExplorerReviewStatsCard({
     mode: "one-is-true",
   });
 
-  const [history, setHistory] = useState<SubjectHistory | null>(null);
-  const [transitions, setTransitions] = useState<ApiReviewTransition[]>([]);
+  const [attempts, setAttempts] = useState<ReviewAttempt[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [refreshNonce, setRefreshNonce] = useState(0);
@@ -134,8 +120,7 @@ export default function LevelExplorerReviewStatsCard({
         if (cancelled) {
           return;
         }
-        setHistory(cached.history);
-        setTransitions(cached.transitions);
+        setAttempts(cached.attempts);
         setError(null);
         setLoading(false);
       });
@@ -149,8 +134,7 @@ export default function LevelExplorerReviewStatsCard({
       if (cancelled) {
         return;
       }
-      setHistory(null);
-      setTransitions([]);
+      setAttempts([]);
       setError(null);
       setLoading(true);
     });
@@ -161,36 +145,15 @@ export default function LevelExplorerReviewStatsCard({
           return;
         }
 
-        const nextHistory = data.history ?? null;
-        const nextTransitions = Array.isArray(data.transitions) ? data.transitions : [];
-        setHistory(nextHistory);
-        setTransitions(nextTransitions);
+        const nextAttempts = Array.isArray(data.history?.attempts.history)
+          ? data.history.attempts.history
+          : [];
+        setAttempts(nextAttempts);
         setError(null);
         reviewStatsHistoryCache.set(cacheKey, {
           fetchedAt: Date.now(),
-          history: nextHistory,
-          transitions: nextTransitions,
+          attempts: nextAttempts,
         });
-
-        void fetchSubjectHistoryPayload(`/api/study/${accountId}/subjects/${subjectId}/history?refresh=1&transitions=1`)
-          .then((freshData) => {
-            if (cancelled) {
-              return;
-            }
-
-            const freshHistory = freshData.history ?? null;
-            const freshTransitions = Array.isArray(freshData.transitions) ? freshData.transitions : [];
-            setHistory(freshHistory);
-            setTransitions(freshTransitions);
-            reviewStatsHistoryCache.set(cacheKey, {
-              fetchedAt: Date.now(),
-              history: freshHistory,
-              transitions: freshTransitions,
-            });
-          })
-          .catch(() => {
-            // Keep existing local data when background refresh fails.
-          });
       })
       .catch(() => {
         if (cancelled) {
@@ -244,58 +207,56 @@ export default function LevelExplorerReviewStatsCard({
   }, [accountId, subjectId]);
 
   const totals = useMemo(() => {
-    if (!history?.latest) return { correct: 0, wrong: 0 };
-    return {
-      correct: Math.max(0, history.latest.meaningCorrect + history.latest.readingCorrect),
-      wrong: Math.max(0, history.latest.meaningIncorrect + history.latest.readingIncorrect),
-    };
-  }, [history?.latest]);
+    return summarizeReviewOutcomes(attempts);
+  }, [attempts]);
+
+  const outcomeSeries = useMemo(() => {
+    return buildReviewOutcomeSeries([...attempts].reverse());
+  }, [attempts]);
 
   const trendPoints = useMemo(() => {
-    const rows = history?.trend ?? [];
-    return rows
+    return outcomeSeries
       .map((row) => {
-        const timeMs = new Date(row.capturedAt).getTime();
+        const timeMs = new Date(row.submittedAt).getTime();
         if (!Number.isFinite(timeMs)) return null;
+
         return {
           timeMs,
-          label: formatGraphDateLabel(row.capturedAt),
-          correct: Math.max(0, row.correctAnswers),
-          wrong: Math.max(0, row.wrongAnswers),
+          label: formatGraphDateLabel(row.submittedAt),
+          success: row.success,
+          failure: row.failure,
         };
       })
       .filter((row): row is TrendPoint => row !== null)
       .sort((a, b) => a.timeMs - b.timeMs)
       .slice(-60);
-  }, [history?.trend]);
+  }, [outcomeSeries]);
 
   const successRatePoints = useMemo(() => {
-    const rows = history?.trend ?? [];
-    return rows
+    return outcomeSeries
       .map((row) => {
-        const timeMs = new Date(row.capturedAt).getTime();
+        const timeMs = new Date(row.submittedAt).getTime();
         if (!Number.isFinite(timeMs)) return null;
 
-        const total = Math.max(1, row.correctAnswers + row.wrongAnswers);
         return {
           timeMs,
-          label: formatGraphDateLabel(row.capturedAt),
-          rate: Math.round((row.correctAnswers / total) * 100),
+          label: formatGraphDateLabel(row.submittedAt),
+          rate: Math.round((row.success / row.total) * 100),
         };
       })
       .filter((row): row is SuccessRatePoint => row !== null)
       .sort((a, b) => a.timeMs - b.timeMs)
       .slice(-60);
-  }, [history?.trend]);
+  }, [outcomeSeries]);
 
   const activityPoints = useMemo(() => {
-    if (!transitions.length) {
+    if (!attempts.length) {
       return [] as ActivityPoint[];
     }
 
     const byDay = new Map<string, number>();
-    for (const row of transitions) {
-      const parsed = new Date(row.createdAt);
+    for (const row of attempts) {
+      const parsed = new Date(row.submittedAt);
       if (Number.isNaN(parsed.getTime())) continue;
 
       const key = parsed.toISOString().slice(0, 10);
@@ -315,40 +276,32 @@ export default function LevelExplorerReviewStatsCard({
       .filter((row): row is ActivityPoint => row !== null)
       .sort((a, b) => a.timeMs - b.timeMs)
       .slice(-90);
-  }, [transitions]);
+  }, [attempts]);
 
   return (
     <Collapsible open={open} onToggle={() => setOpen((prev) => !prev)} label="Review Stats">
       {loading ? <p className="text-xs text-foreground/60">Loading stats...</p> : null}
       {!loading && error ? <p className="text-xs text-red-600">{error}</p> : null}
-      {!loading && !error && !history?.latest ? <p className="text-xs text-foreground/60">No stats yet.</p> : null}
+      {!loading && !error && attempts.length === 0 ? <p className="text-xs text-foreground/60">No stats yet.</p> : null}
 
-      {!loading && !error && history?.latest ? (
+      {!loading && !error && attempts.length > 0 ? (
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
-            <p className="mb-1 text-sm font-bold">Latest Snapshot</p>
+            <p className="mb-1 text-sm font-bold">Review Outcomes</p>
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <div>Correct %:</div>
-              <div>{history.latest.percentageCorrect ?? "-"}</div>
-              <div>Meaning Correct:</div>
-              <div>{history.latest.meaningCorrect ?? "-"}</div>
-              <div>Meaning Incorrect:</div>
-              <div>{history.latest.meaningIncorrect ?? "-"}</div>
-              <div>Reading Correct:</div>
-              <div>{history.latest.readingCorrect ?? "-"}</div>
-              <div>Reading Incorrect:</div>
-              <div>{history.latest.readingIncorrect ?? "-"}</div>
-              <div>Captured At:</div>
-              <div>{history.latest.capturedAt ? formatDate(history.latest.capturedAt) : "-"}</div>
-              <div>Source:</div>
-              <div>{history.latest.source}</div>
+              <div>Successful reviews:</div>
+              <div>{totals.success}</div>
+              <div>Failed reviews:</div>
+              <div>{totals.failure}</div>
+              <div>Total reviews:</div>
+              <div>{totals.success + totals.failure}</div>
               <div>Current SRS:</div>
               <div>{currentSrsStage}</div>
             </div>
           </div>
 
           <div className="space-y-3">
-            <SuccessFailureSplitChart correct={totals.correct} wrong={totals.wrong} />
+            <SuccessFailureSplitChart success={totals.success} failure={totals.failure} />
             <SrsProgressChart currentSrsStage={currentSrsStage} />
             <CorrectWrongTrendChart points={trendPoints} />
             <SuccessRateTrendChart points={successRatePoints} />

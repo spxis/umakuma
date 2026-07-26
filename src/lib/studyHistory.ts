@@ -222,7 +222,6 @@ export async function getSubjectHistory(accountId: string, subjectId: number) {
     prisma.studyReviewAttempt.findMany({
       where: { accountId, subjectId },
       orderBy: { submittedAt: "desc" },
-      take: 120,
     }),
   ]);
 
@@ -267,6 +266,11 @@ export async function getSubjectHistory(accountId: string, subjectId: number) {
     attempts: {
       totals: attemptTotals,
       recent: attempts.slice(0, 20).map((row) => ({
+        assignmentId: row.assignmentId,
+        result: row.result,
+        submittedAt: row.submittedAt.toISOString(),
+      })),
+      history: attempts.map((row) => ({
         assignmentId: row.assignmentId,
         result: row.result,
         submittedAt: row.submittedAt.toISOString(),

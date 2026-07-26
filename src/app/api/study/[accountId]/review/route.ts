@@ -202,7 +202,7 @@ export async function POST(request: Request, context: RouteContext) {
       submissionResponse?.resources_updated?.assignment?.data?.subject_type ??
       "unknown";
 
-    const historyWork = Promise.allSettled([
+    const historyResults = await Promise.allSettled([
       typeof subjectId === "number" && Number.isInteger(subjectId) && subjectId > 0
         ? recordStudyReviewAttempt({
             accountId,
@@ -217,9 +217,9 @@ export async function POST(request: Request, context: RouteContext) {
         data: submissionResponse?.resources_updated?.review_statistic?.data,
       }),
     ]);
-    historyWork.catch((historyError) => {
-      console.error("Failed to persist local study history", historyError);
-    });
+    if (historyResults.some((result) => result.status === "rejected")) {
+      console.error("Failed to persist local study history");
+    }
 
     const previousSrsStage = toStageOrNull(submissionResponse?.data?.starting_srs_stage);
     const newSrsStage =

@@ -1,8 +1,8 @@
 export type TrendPoint = {
   timeMs: number;
   label: string;
-  correct: number;
-  wrong: number;
+  success: number;
+  failure: number;
 };
 
 export type SuccessRatePoint = {
