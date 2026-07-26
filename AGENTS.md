@@ -122,6 +122,8 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 
 - Distinguish loading from empty (see `docs/DRY_LEARNINGS.md` #2).
 - User-facing copy must follow `BRAND_CORE.md` / `BRAND.md` voice.
+- Keep primary glyph sizing identical across explorer lists, Review modals, and View Kanji/Radical/Vocabulary details by using the shared `glyphTextSizeClass` helper; do not add branch-specific responsive clamp sizes.
+- Place trouble at the glyph's bottom-left and favorite at its bottom-right in explorer cards, Review modals, and View Kanji/Radical/Vocabulary details; do not put these controls in modal navigation or title chip rows.
 - Admin confirmations must use shared dialog components (for example `ConfirmDialog` via `useAdminFeedback().confirmAction`). Do not use `window.confirm`.
 - Admin success/error action feedback should use shared toast feedback (for example `useAdminFeedback().showToast`) rather than inline status banners like "Saved" blocks inside cards.
 

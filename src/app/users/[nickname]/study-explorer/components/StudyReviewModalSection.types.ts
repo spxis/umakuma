@@ -15,6 +15,7 @@ export type StudyReviewModalSectionProps = {
   canToggleEnglish: boolean;
   viewerMode: StudyViewerMode;
   selectedItem: StudyQueueItem;
+  selectedTags?: { favorite: boolean; trouble: boolean };
   isPracticeItem: boolean;
   selectedOutcome: ReviewOutcome | undefined;
   isSubmittingSelected: boolean;
@@ -57,6 +58,7 @@ export type StudyReviewModalSectionProps = {
   onToggleUsedKanjiCollapsed: () => void;
   onToggleUsedInWordsCollapsed: () => void;
   onToggleShowEnglish: () => void;
+  onToggleStudyTag?: (tag: "favorite" | "trouble") => void;
   onOpenRelatedSubject?: (subjectId: number, fallbackType: SubjectType) => void | Promise<void>;
   showSectionBorder?: boolean;
 };

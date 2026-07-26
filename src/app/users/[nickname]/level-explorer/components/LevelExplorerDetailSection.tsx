@@ -14,6 +14,7 @@ import {
   formatRelativeFromNow,
   glyphHasReading,
   glyphSubtitleForDisplay,
+  glyphTextSizeClass,
   isNewGlyphWithinHours,
   jlptLevelPillClass,
   secondaryReadingsForDisplay,
@@ -37,6 +38,7 @@ import {
 } from "../lib/levelExplorerDomain";
 import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
+import GlyphTagOverlay from "../../shared/GlyphTagOverlay";
 
 type Props = {
   accountId: string;
@@ -136,14 +138,6 @@ export default function LevelExplorerDetailSection({
       ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish)
       : LEVEL_EXPLORER_TEXT.hintsHidden;
   const isEyeOn = usesStudyPeekToggle ? !isStudyHidden : showEnglish;
-  const activeToneClass =
-    isRadicalSubjectType(selectedItem.subjectType)
-      ? "text-radical"
-      : isKanjiSubjectType(selectedItem.subjectType)
-        ? "text-kanji"
-        : isVocabularySubjectType(selectedItem.subjectType)
-          ? "text-vocabulary"
-          : "text-foreground";
 
   const renderHeaderChipRow = (className: string) => (
     <div className={`${className} items-center`}>
@@ -159,33 +153,6 @@ export default function LevelExplorerDetailSection({
         <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
       ) : null}
       {nextReviewBadge ? <ReviewTimingChip label={nextReviewBadge.label} className={nextReviewBadge.className} /> : null}
-      {onToggleStudyTag ? (
-        <>
-          <button
-            type="button"
-            onClick={() => onToggleStudyTag("trouble")}
-            className={`subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface ${studyTags?.trouble ? activeToneClass : "text-foreground/45 hover:text-foreground/75"}`}
-            title="Toggle trouble"
-            aria-label="Toggle trouble"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="8" />
-              <path d="M9.2 15.4c.8-.9 1.8-1.4 2.8-1.4s2 .5 2.8 1.4" />
-              <circle cx="9.1" cy="10.1" r="0.9" fill="currentColor" stroke="none" />
-              <circle cx="14.9" cy="10.1" r="0.9" fill="currentColor" stroke="none" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => onToggleStudyTag("favorite")}
-            className={`subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface ${studyTags?.favorite ? activeToneClass : "text-foreground/45 hover:text-foreground/75"}`}
-            title="Toggle favorite"
-            aria-label="Toggle favorite"
-          >
-            <span aria-hidden="true" className="text-sm leading-none">★</span>
-          </button>
-        </>
-      ) : null}
       {canRenderEyeToggle ? (
         <button
           type="button"
@@ -242,8 +209,15 @@ export default function LevelExplorerDetailSection({
             } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
           >
             <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
+            {onToggleStudyTag ? (
+              <GlyphTagOverlay
+                subjectType={selectedItem.subjectType}
+                studyTags={studyTags ?? { favorite: false, trouble: false }}
+                onToggleStudyTag={onToggleStudyTag}
+              />
+            ) : null}
             <div>
-              <p style={{ fontFamily }} className="text-center text-4xl font-black leading-none text-current">
+              <p style={{ fontFamily }} className={`text-center font-black leading-none text-current ${glyphTextSizeClass(selectedItem.characters)}`}>
                 {selectedItem.characters}
               </p>
               {(() => {

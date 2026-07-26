@@ -15,6 +15,7 @@ import {
 } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
 import { hasRenderableRelatedItems } from "@/app/users/[nickname]/study-explorer/components/StudyReviewModalHelpers";
 import StudyReviewModalSection from "@/app/users/[nickname]/study-explorer/components/StudyReviewModalSection";
+import { updateStudyTag } from "@/app/users/[nickname]/study-explorer/lib/studyTagApi";
 import {
   fetchHydratedViewGlyphSubject,
   shouldHydrateViewGlyphItem,
@@ -223,6 +224,40 @@ export default function ViewGlyphModalHost() {
     [accountId, item, items, openIndexInPlace],
   );
 
+  const toggleStudyTag = useCallback(
+    async (tag: "favorite" | "trouble") => {
+      if (!item || !accountId) {
+        return;
+      }
+
+      const currentTags = item.studyTags ?? { favorite: false, trouble: false };
+      const enabled = !currentTags[tag];
+      const nextTags = { ...currentTags, [tag]: enabled };
+      setItems((prev) =>
+        prev.map((entry) =>
+          entry.subjectId === item.subjectId ? { ...entry, studyTags: nextTags } : entry,
+        ),
+      );
+
+      const saved = await updateStudyTag(accountId, item.subjectId, tag, enabled);
+      if (!saved) {
+        setItems((prev) =>
+          prev.map((entry) =>
+            entry.subjectId === item.subjectId ? { ...entry, studyTags: currentTags } : entry,
+          ),
+        );
+        return;
+      }
+
+      window.dispatchEvent(
+        new CustomEvent("wr:study-tags-updated", {
+          detail: { accountId, subjectId: item.subjectId },
+        }),
+      );
+    },
+    [accountId, item],
+  );
+
   useEffect(() => {
     if (!item) {
       return;
@@ -289,7 +324,7 @@ export default function ViewGlyphModalHost() {
       setItems((prev) =>
         prev.map((entry) =>
           entry.subjectId === hydrated.subjectId
-            ? { ...entry, ...hydrated, studyTags: entry.studyTags }
+            ? { ...entry, ...hydrated, studyTags: entry.studyTags ?? hydrated.studyTags }
             : entry,
         ),
       );
@@ -408,6 +443,7 @@ export default function ViewGlyphModalHost() {
             canToggleEnglish
             viewerMode={STUDY_VIEWER_MODES.detail}
             selectedItem={item}
+            selectedTags={item.studyTags ?? { favorite: false, trouble: false }}
             isPracticeItem={false}
             selectedOutcome={undefined}
             isSubmittingSelected={false}
@@ -450,6 +486,7 @@ export default function ViewGlyphModalHost() {
             onToggleUsedKanjiCollapsed={() => setUsedKanjiCollapsed((value) => !value)}
             onToggleUsedInWordsCollapsed={() => setUsedInWordsCollapsed((value) => !value)}
             onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
+            onToggleStudyTag={accountId ? (tag) => void toggleStudyTag(tag) : undefined}
             onOpenRelatedSubject={openBySubject}
             showSectionBorder={false}
           />

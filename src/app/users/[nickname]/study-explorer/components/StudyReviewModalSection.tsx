@@ -13,7 +13,6 @@ import type { LevelItem } from "../../explorerTypes";
 import LevelExplorerDetailSection from "../../level-explorer/components/LevelExplorerDetailSection";
 import {
   ReadingWithPronunciation,
-  glyphTextSizeClass,
   jlptLevelPillClass,
   shortSubjectTypeLabel,
   stripHtml,
@@ -24,8 +23,8 @@ import StatusSrsChip from "../../shared/StatusSrsChip";
 import StudyReviewFlashActionRow from "./StudyReviewFlashActionRow";
 import StudyReviewModalMetaPanels from "./StudyReviewModalMetaPanels";
 import StudyReviewMeaningCard from "./StudyReviewMeaningCard";
-import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import { buildUnifiedDetailItem } from "./StudyReviewModalHelpers";
+import StudyReviewGlyphContent from "./StudyReviewGlyphContent";
 
 export default function StudyReviewModalSection({
   accountId,
@@ -34,6 +33,7 @@ export default function StudyReviewModalSection({
   canToggleEnglish,
   viewerMode,
   selectedItem,
+  selectedTags,
   isPracticeItem,
   selectedOutcome,
   isSubmittingSelected,
@@ -76,6 +76,7 @@ export default function StudyReviewModalSection({
   onToggleUsedKanjiCollapsed,
   onToggleUsedInWordsCollapsed,
   onToggleShowEnglish,
+  onToggleStudyTag,
   onOpenRelatedSubject,
   showSectionBorder = true,
 }: Props) {
@@ -128,12 +129,19 @@ export default function StudyReviewModalSection({
             </button>
           ) : (
             <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
-              <button
-                type="button"
+              <div
+                role="button"
+                tabIndex={0}
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
                   onAdvanceFlashOrNext();
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    onAdvanceFlashOrNext();
+                  }
                 }}
                 onTouchStart={onFlashTouchStart}
                 onTouchEnd={onFlashTouchEnd}
@@ -141,17 +149,14 @@ export default function StudyReviewModalSection({
                   selectedItem.subjectType,
                 )}`}
               >
-                <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
+                <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} />
                 <div className="absolute left-1/2 top-4 z-10 flex max-w-[calc(100%-1.5rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-x-auto px-1">
                   <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
                 </div>
-                <p style={{ fontFamily: glyphFontFamily }} className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">
-                  {selectedItem.characters}
-                </p>
-              </button>
+              </div>
               <button
                 type="button"
                 onClick={(event) => {
@@ -233,7 +238,7 @@ export default function StudyReviewModalSection({
                 className={`group/explorer-card relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-2.5 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
                 title={STUDY_REVIEW_MODAL_SECTION_TEXT.viewItemTitle}
               >
-                <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
+                <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} className="px-2" />
                 <div className="absolute left-1/2 top-3 z-10 flex max-w-[calc(100%-1.25rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-hidden px-1 sm:top-4">
                   <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
@@ -284,9 +289,6 @@ export default function StudyReviewModalSection({
                   </button>
                 </div>
 
-                <p style={{ fontFamily: glyphFontFamily }} className="px-2 text-center text-[clamp(2.8rem,10.4vw,5.4rem)] font-black leading-none text-current sm:text-[clamp(3.6rem,8vw,7rem)]">
-                  {selectedItem.characters}
-                </p>
                 {showFlashReadingHint ? (
                   <p className="pointer-events-none absolute left-1/2 top-1/2 w-full -translate-x-1/2 translate-y-[2.7rem] px-2 text-center text-xl font-semibold leading-tight text-foreground/80 sm:translate-y-[4.4rem] sm:text-2xl lg:translate-y-[4.9rem]">
                     <ReadingWithPronunciation reading={flashReadingHint} />
@@ -379,8 +381,7 @@ export default function StudyReviewModalSection({
         ) : requiresReveal && !isAnswerRevealed ? (
           <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
             <div className={`group/explorer-card relative flex min-h-[20rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
-              <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
-              <p style={{ fontFamily: glyphFontFamily }} className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">{selectedItem.characters}</p>
+              <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} />
             </div>
             <button type="button" onClick={() => onReveal(selectedItem.assignmentId)} className="flex min-h-[20rem] w-full flex-col justify-center rounded-2xl border border-line bg-surface px-6 py-6 text-left hover:bg-surface-muted lg:h-full lg:min-h-0">
               <div className="mx-auto text-center">
@@ -410,6 +411,8 @@ export default function StudyReviewModalSection({
               subjectById={new Map<number, LevelItem>()}
               onJumpToRelatedSubject={async () => {}}
               onJumpToKanji={async () => {}}
+              studyTags={selectedTags}
+              onToggleStudyTag={onToggleStudyTag}
             />
           ) : (
             <div>
@@ -421,8 +424,7 @@ export default function StudyReviewModalSection({
               </div>
               <div className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-center">
               <div className={`group/explorer-card relative inline-flex min-h-[5.75rem] min-w-[5.75rem] items-center justify-center rounded-2xl border px-4 py-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
-                <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
-                <p style={{ fontFamily: glyphFontFamily }} className={`text-center font-black leading-none ${glyphTextSizeClass(selectedItem.characters)}`}>{selectedItem.characters}</p>
+                <StudyReviewGlyphContent item={selectedItem} fontFamily={glyphFontFamily} studyTags={selectedTags} onToggleStudyTag={onToggleStudyTag} />
               </div>
               <div className="self-start">
                 <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">

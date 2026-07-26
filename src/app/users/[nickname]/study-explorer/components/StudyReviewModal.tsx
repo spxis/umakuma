@@ -19,7 +19,7 @@ import {
 import StudyReviewModalSection from "./StudyReviewModalSection";
 import { hasRenderableRelatedItems } from "./StudyReviewModalHelpers";
 import StudyReviewModalStatusStrip from "./StudyReviewModalStatusStrip";
-import StudyReviewTagButtons from "./StudyReviewTagButtons";
+import StudyReviewModalHeader from "./StudyReviewModalHeader";
 import { useStudyReviewModalKeyboard } from "../lib/useStudyReviewModalKeyboard";
 import {
   buildStudyReviewAllMeanings,
@@ -333,79 +333,26 @@ export default function StudyReviewModal({
   return (
     <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-4 backdrop-blur-[2px] sm:p-6">
       <div data-view-glyph-parent-frame="true" className="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)]">
-        <div className="border-b border-line bg-surface-muted">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1 px-2 py-2 sm:gap-2 sm:px-4 sm:py-3">
-            <div className="flex min-w-0 items-center justify-start">
-              <button type="button" onClick={closeModal} aria-label="Close" className="h-8 cursor-pointer rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted sm:h-9 sm:px-3.5 sm:text-sm">X</button>
-            </div>
-            <div className="flex min-w-0 flex-nowrap items-center justify-center gap-1 sm:gap-2">
-              <p className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm sm:tracking-[0.1em]">#{displayIndex} of {displayTotal}</p>
-              {!studyMode ? (
-                <div className="inline-flex items-center rounded-full border border-line bg-surface p-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setViewerMode(STUDY_VIEWER_MODES.detail);
-                      setStoredEnum(viewerModeStorageKey, STUDY_VIEWER_MODES.detail);
-                    }}
-                    className={`whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] sm:px-3 ${viewerMode === STUDY_VIEWER_MODES.detail ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}
-                  >
-                    Detail
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setViewerMode(STUDY_VIEWER_MODES.flash);
-                      setStoredEnum(viewerModeStorageKey, STUDY_VIEWER_MODES.flash);
-                    }}
-                    className={`whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-[0.08em] sm:px-3 ${viewerMode === STUDY_VIEWER_MODES.flash ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}
-                  >
-                    Flash
-                  </button>
-                </div>
-              ) : null}
-            </div>
-            <div className="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
-              {selectedItem ? (
-                <StudyReviewTagButtons
-                  selectedItem={selectedItem}
-                  selectedTags={selectedTags}
-                  onToggleStudyTag={(tag) => {
-                    void toggleStudyTag(tag);
-                  }}
-                />
-              ) : null}
-              <button
-                type="button"
-                onClick={goPrev}
-                disabled={!onPrev || !prevLabel}
-                aria-label="Previous"
-                title={prevLabel ? `< ${prevLabel}` : "Previous"}
-                className="h-8 w-12 cursor-pointer rounded-full border border-line bg-surface text-xs font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-14 sm:text-sm"
-              >
-                {"<"}
-              </button>
-              <button
-                type="button"
-                onClick={advanceFlashOrNext}
-                disabled={!(onNext || canUseFlashCycleNext)}
-                aria-label={onNext ? "Next" : flashCycleDone ? "Restart" : "Next"}
-                title={
-                  !onNext && canUseFlashCycleNext
-                    ? flashCycleDone
-                      ? "Restart"
-                      : "Next"
-                    : nextLabel
-                      ? `> ${nextLabel}`
-                      : "Next"
-                }
-                className="h-8 w-12 cursor-pointer rounded-full border border-line bg-surface text-xs font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-14 sm:text-sm"
-              >
-                {!onNext && canUseFlashCycleNext ? (flashCycleDone ? "R" : ">") : ">"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <StudyReviewModalHeader
+          displayIndex={displayIndex}
+          displayTotal={displayTotal}
+          studyMode={studyMode}
+          viewerMode={viewerMode}
+          prevLabel={prevLabel}
+          nextLabel={nextLabel}
+          canGoPrev={Boolean(onPrev && prevLabel)}
+          hasNext={Boolean(onNext)}
+          canAdvance={Boolean(onNext || canUseFlashCycleNext)}
+          flashCycleDone={flashCycleDone}
+          canUseFlashCycleNext={canUseFlashCycleNext}
+          onClose={closeModal}
+          onSetViewerMode={(mode) => {
+            setViewerMode(mode);
+            setStoredEnum(viewerModeStorageKey, mode);
+          }}
+          onPrev={goPrev}
+          onAdvance={advanceFlashOrNext}
+        />
 
         <StudyReviewModalStatusStrip
           studyMode={studyMode}
@@ -442,6 +389,7 @@ export default function StudyReviewModal({
             canToggleEnglish={canToggleEnglish}
             viewerMode={viewerMode}
             selectedItem={selectedItem}
+            selectedTags={selectedTags}
             isPracticeItem={isPracticeItem}
             selectedOutcome={selectedOutcome}
             isSubmittingSelected={isSubmittingSelected}
@@ -490,6 +438,9 @@ export default function StudyReviewModal({
               setUsedInWordsCollapsed((prev) => !prev);
             }}
             onToggleShowEnglish={onToggleShowEnglish}
+            onToggleStudyTag={(tag) => {
+              void toggleStudyTag(tag);
+            }}
           />
         </div>
 
