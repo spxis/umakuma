@@ -9,6 +9,7 @@ export type VocabularyKanjiLink = {
   subjectId: number;
   reading: string;
   wkLevel: number | null;
+  successRate?: number;
 };
 
 export function buildSubjectById(items: LevelItem[]): Map<number, LevelItem> {
@@ -50,6 +51,11 @@ export function buildVocabularyKanjiLinks(
             : typeof found?.wkLevel === "number"
               ? found.wkLevel
               : null,
+              ...(
+                typeof (component.successRate ?? found?.successRate) === "number"
+                  ? { successRate: component.successRate ?? found?.successRate }
+                  : {}
+              ),
       };
     })
     .filter((item) => Boolean(item.char));
@@ -70,6 +76,7 @@ export function buildVocabularyKanjiLinks(
         subjectId: found.subjectId,
         reading: (found.primaryReadings ?? [])[0] ?? "-",
         wkLevel: typeof found.wkLevel === "number" ? found.wkLevel : null,
+        ...(typeof found.successRate === "number" ? { successRate: found.successRate } : {}),
       };
     })
     .filter((value): value is VocabularyKanjiLink => value !== null);

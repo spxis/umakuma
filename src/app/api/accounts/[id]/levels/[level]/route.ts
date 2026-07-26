@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getLevelKanjiSnapshot } from "@/lib/wanikani";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { withReviewSuccessRates } from "@/lib/reviewSuccessRates";
 
 type RouteContext = {
   params: Promise<{ id: string; level: string }>;
@@ -214,6 +215,10 @@ try {
                 ) {
                   const items = cached.items as unknown[];
                   const pagedItems = limit === null ? items : items.slice(offset, offset + limit);
+                  const itemsWithSuccessRates = await withReviewSuccessRates(
+                    id,
+                    pagedItems as Array<Record<string, unknown>>,
+                  );
 
                   return NextResponse.json({
                     snapshot: {
@@ -223,7 +228,7 @@ try {
                       kanjiGuruPlus: cached.kanjiGuruPlus,
                       kanjiLocked: cached.kanjiLocked,
                       estimatedHoursRemaining: cached.estimatedHoursRemaining,
-                      items: pagedItems,
+                      items: itemsWithSuccessRates,
                       syncedAt: cached.syncedAt,
                       fromCache: true,
                     },
@@ -299,6 +304,10 @@ try {
 
                 const savedItems = saved.items as unknown[];
                 const pagedItems = limit === null ? savedItems : savedItems.slice(offset, offset + limit);
+                const itemsWithSuccessRates = await withReviewSuccessRates(
+                  id,
+                  pagedItems as Array<Record<string, unknown>>,
+                );
 
                 return NextResponse.json({
                   snapshot: {
@@ -308,7 +317,7 @@ try {
                     kanjiGuruPlus: saved.kanjiGuruPlus,
                     kanjiLocked: saved.kanjiLocked,
                     estimatedHoursRemaining: saved.estimatedHoursRemaining,
-                    items: pagedItems,
+                    items: itemsWithSuccessRates,
                     syncedAt: saved.syncedAt,
                     fromCache: false,
                   },

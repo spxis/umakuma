@@ -32,7 +32,7 @@ export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStu
     : "pointer-events-none opacity-0 group-hover/explorer-card:pointer-events-auto group-hover/explorer-card:opacity-100 group-focus-within/explorer-card:pointer-events-auto group-focus-within/explorer-card:opacity-100 [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100";
 
   return (
-    <div className={`absolute inset-x-1 top-1 z-10 flex items-start justify-between transition-opacity ${visibilityClass}`}>
+    <div className={`absolute inset-x-1 bottom-1 z-10 flex items-end justify-between transition-opacity ${visibilityClass}`}>
       <button
         type="button"
         onClick={(event) => {

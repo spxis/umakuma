@@ -10,6 +10,7 @@ import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
 import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import LevelExplorerDetailSection from "./LevelExplorerDetailSection";
 import LevelCardTagOverlay from "./LevelCardTagOverlay";
+import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 
 type Props = {
   accountId: string;
@@ -346,13 +347,6 @@ export default function LevelExplorerItemsGrid({
               topRight={
                 <>
                   <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
-                  {typeof item.wkLevel === "number" ? (
-                    <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span>
-                  ) : typeof selectedLevelList[selectedLevelList.length - 1] === "number" ? (
-                    <span className="subject-pill border-line bg-surface text-foreground">
-                      L{selectedLevelList[selectedLevelList.length - 1]}
-                    </span>
-                  ) : null}
                   {typeof item.jlptMeta?.schoolGrade === "number" ? (
                     <span className="subject-pill border-line bg-surface text-foreground">G{item.jlptMeta.schoolGrade}</span>
                   ) : null}
@@ -368,11 +362,17 @@ export default function LevelExplorerItemsGrid({
               glyphText={cardItem.characters}
               glyphTextClassName={`${glyphTextSizeClass(cardItem.characters)} whitespace-nowrap`}
               glyphOverlay={
-                <LevelCardTagOverlay
-                  item={cardItem}
-                  bulkModeEnabled={bulkModeEnabled}
-                  onToggleStudyTag={onToggleStudyTag}
-                />
+                <>
+                  <GlyphMetadataBadges
+                    level={item.wkLevel ?? selectedLevelList[selectedLevelList.length - 1]}
+                    successRate={item.successRate}
+                  />
+                  <LevelCardTagOverlay
+                    item={cardItem}
+                    bulkModeEnabled={bulkModeEnabled}
+                    onToggleStudyTag={onToggleStudyTag}
+                  />
+                </>
               }
               glyphSubtitle={
                 studyMode ? (

@@ -11,6 +11,7 @@ import { hydrateMissingSubjects, normalizeSubjectType, queueRowsFromState, type 
 import { hydrateQueueSyncState } from "./queueRouteSync";
 import { mergeTroubleRows, troubleInjectionCount, type StudySubjectTagMap } from "./queueRouteTags";
 import { fetchStudyTagRows } from "./queueRouteTagRows";
+import { withReviewSuccessRates } from "@/lib/reviewSuccessRates";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -73,12 +74,14 @@ export async function GET(request: Request, context: RouteContext) {
     if (canUseServerCache && cached) {
       const cachedItems = cached.items as Array<{
         queueType: typeof QUEUE_TYPES.review | typeof QUEUE_TYPES.lesson;
+        subjectId?: number;
       }>;
       const pagedItems = limit === null ? cachedItems : cachedItems.slice(offset, offset + limit);
+      const itemsWithSuccessRates = await withReviewSuccessRates(accountId, pagedItems);
 
       return NextResponse.json(
         {
-          items: pagedItems,
+          items: itemsWithSuccessRates,
           counts: cached.counts,
           tagCounts: cached.tagCounts ?? { favorite: 0, trouble: 0 },
           levelCounts: cached.levelCounts ?? {},
@@ -344,7 +347,7 @@ export async function GET(request: Request, context: RouteContext) {
       };
     };
 
-    const items = pagedRows.map((row) => {
+    const rawItems = pagedRows.map((row) => {
       const subject = pageSubjectById.get(row.data.subject_id);
       const subjectData = subject?.data;
       const subjectType = normalizeSubjectType(row.data.subject_type);
@@ -445,6 +448,7 @@ export async function GET(request: Request, context: RouteContext) {
         availableAt: row.data.available_at,
       };
     });
+    const items = await withReviewSuccessRates(accountId, rawItems);
 
     if (canUseServerCache) {
       setCachedStudyQueue(

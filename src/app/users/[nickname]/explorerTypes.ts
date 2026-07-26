@@ -5,6 +5,7 @@ export type RelatedReference = {
   subjectId: number;
   label: string;
   wkLevel?: number | null;
+  successRate?: number;
   reading?: string | null;
   meaning?: string | null;
 };
@@ -13,6 +14,7 @@ export type LevelItem = {
   subjectId: number;
   subjectType?: SubjectType;
   wkLevel?: number;
+  successRate?: number;
   characters: string;
   meanings: string[];
   readings?: string[];
@@ -64,6 +66,7 @@ export type UserKanjiItem = {
   status?: WkStatus;
   srsStage?: number;
   wkLevel?: number | null;
+  successRate?: number;
 };
 
 export type SrsFilter =

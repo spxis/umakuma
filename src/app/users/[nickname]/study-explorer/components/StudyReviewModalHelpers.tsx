@@ -10,6 +10,19 @@ import {
 import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
 
 import { formatRelativeFromNow } from "../../level-explorer/lib/levelExplorerDisplay";
+import type { StudyQueueItem } from "../lib/studyExplorerTypes";
+import { isRadicalSubjectType } from "./StudyExplorer.constants";
+
+export function buildUnifiedDetailItem(selectedItem: StudyQueueItem): StudyQueueItem {
+  return {
+    ...selectedItem,
+    usedInVocabulary: selectedItem.usedInVocabulary?.length
+      ? selectedItem.usedInVocabulary
+      : isRadicalSubjectType(selectedItem.subjectType)
+        ? selectedItem.componentKanji
+        : selectedItem.usedInVocabulary,
+  };
+}
 
 export function hasRenderableRelatedItems(items: RelatedReference[] | undefined): boolean {
   if (!items || items.length === 0) {
@@ -48,12 +61,20 @@ export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element
         return [];
       }
 
-      return [{ label: normalizedLabel, reading: item.reading?.trim() || null, key: `${item.subjectId}-${normalizedLabel}` }];
+      return [{
+        label: normalizedLabel,
+        reading: item.reading?.trim() || null,
+        wkLevel: item.wkLevel,
+        successRate: item.successRate,
+        key: `${item.subjectId}-${normalizedLabel}`,
+      }];
     }
 
     return parts.map((part, index) => ({
       label: part,
       reading: null,
+      wkLevel: item.wkLevel,
+      successRate: item.successRate,
       key: `${item.subjectId}-${part}-${index}`,
     }));
   });
@@ -69,6 +90,8 @@ export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element
           key={entry.key}
           glyph={entry.label}
           subtitle={entry.reading}
+          wkLevel={entry.wkLevel}
+          successRate={entry.successRate}
         />
       ))}
     </div>
@@ -95,13 +118,22 @@ export function relatedTilesClickable(
         return [];
       }
 
-      return [{ subjectId: item.subjectId, label: normalizedLabel, reading: item.reading?.trim() || null, key: `${item.subjectId}-${normalizedLabel}` }];
+      return [{
+        subjectId: item.subjectId,
+        label: normalizedLabel,
+        reading: item.reading?.trim() || null,
+        wkLevel: item.wkLevel,
+        successRate: item.successRate,
+        key: `${item.subjectId}-${normalizedLabel}`,
+      }];
     }
 
     return parts.map((part, index) => ({
       subjectId: item.subjectId,
       label: part,
       reading: null,
+      wkLevel: item.wkLevel,
+      successRate: item.successRate,
       key: `${item.subjectId}-${part}-${index}`,
     }));
   });
@@ -118,6 +150,8 @@ export function relatedTilesClickable(
           onClick={() => onSelect(entry)}
           glyph={entry.label}
           subtitle={entry.reading}
+          wkLevel={entry.wkLevel}
+          successRate={entry.successRate}
         />
       ))}
     </div>

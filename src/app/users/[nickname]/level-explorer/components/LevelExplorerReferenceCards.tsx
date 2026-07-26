@@ -21,6 +21,7 @@ function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
           subjectId: item.subjectId,
           label: item.label,
           wkLevel: item.wkLevel ?? null,
+          successRate: item.successRate,
           reading: item.reading ?? null,
           meaning: item.meaning ?? null,
         },
@@ -31,6 +32,7 @@ function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
       subjectId: item.subjectId,
       label: segment,
       wkLevel: item.wkLevel ?? null,
+      successRate: item.successRate,
       reading: null,
       meaning: null,
       fallbackKey: `${item.subjectId}-${segment}-${index}`,
@@ -60,6 +62,7 @@ export function RelatedReferenceCards({
         const isClickable = linked !== null || typeof entry.wkLevel === "number";
         const relationType = linked?.subjectType ?? fallbackType;
         const referenceWkLevel = entry.wkLevel ?? linked?.wkLevel ?? null;
+        const referenceSuccessRate = entry.successRate ?? linked?.successRate;
         const reading = typeof entry.reading === "string" && entry.reading.trim() ? entry.reading : null;
         const meaning = typeof entry.meaning === "string" && entry.meaning.trim() ? entry.meaning : null;
         const subtitle = (() => {
@@ -82,6 +85,7 @@ export function RelatedReferenceCards({
               subtitle={subtitle}
               subjectType={relationType}
               wkLevel={referenceWkLevel}
+              successRate={referenceSuccessRate}
               size={size}
             />
           );
@@ -94,6 +98,7 @@ export function RelatedReferenceCards({
             subtitle={subtitle}
             subjectType={relationType}
             wkLevel={referenceWkLevel}
+            successRate={referenceSuccessRate}
             size={size}
             onClick={() => {
               void onJumpToRelatedSubject(entry.subjectId, entry.wkLevel ?? linked?.wkLevel ?? null);
@@ -131,6 +136,7 @@ export function VocabularyKanjiCards({
             subtitle={subtitle}
             subjectType={SUBJECT_TYPES.kanji}
             wkLevel={item.wkLevel}
+            successRate={item.successRate}
             size="large"
             onClick={() => {
               void onJumpToKanji(item.subjectId, item.wkLevel);

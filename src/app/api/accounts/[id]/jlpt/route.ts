@@ -5,6 +5,7 @@ import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { getUserKanjiIndex } from "@/lib/wanikani";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
+import { withReviewSuccessRates } from "@/lib/reviewSuccessRates";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -75,7 +76,7 @@ export async function GET(_: Request, context: RouteContext) {
           tag: account.tokenTag,
         });
 
-        const [userKanjiItems, jlptItems, jlptTotal, jlptSummaryRows] = await Promise.all([
+        const [rawUserKanjiItems, jlptItems, jlptTotal, jlptSummaryRows] = await Promise.all([
           includeUserIndex ? getUserKanjiIndex(token) : Promise.resolve([]),
           includeItems
             ? prisma.jlptKanji.findMany({
@@ -111,6 +112,9 @@ export async function GET(_: Request, context: RouteContext) {
               })
             : Promise.resolve([]),
         ]);
+        const userKanjiItems = includeUserIndex
+          ? await withReviewSuccessRates(id, rawUserKanjiItems)
+          : [];
 
         const nLevelCounts = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
         const wkLevelCounts: Record<string, number> = {};

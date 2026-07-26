@@ -30,6 +30,7 @@ import {
 import { canViewUserPage, resolveViewerMenuInfo } from "./userPageAuth";
 import type { ItemSpreadGroupDetails, LevelProgressSnapshot, SrsGroupKey, TypeProgress } from "./UserDashboardTabs.types";
 import type { JlptKanjiRow } from "@/lib/jlptTypes";
+import { withReviewSuccessRates } from "@/lib/reviewSuccessRates";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;
@@ -45,6 +46,7 @@ type LevelKanjiItem = {
   status: WkStatus;
   availableAt: string | null;
   subjectType?: SubjectType;
+  successRate?: number;
 };
 
 type LevelSnapshotRow = {
@@ -121,15 +123,21 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     redirect("/join?access=denied");
   }
 
-  const levelKanjiItems = (account.levelKanjiItems ?? []) as LevelKanjiItem[];
+  const levelKanjiItems = await withReviewSuccessRates(
+    account.id,
+    (account.levelKanjiItems ?? []) as LevelKanjiItem[],
+  );
   const itemSpread = isItemSpread(account.itemSpread) ? account.itemSpread : EMPTY_ITEM_SPREAD;
   const userKanjiIndex = shouldLoadJlptData
-    ? await getUserKanjiIndex(
-        decryptToken({
-          encrypted: account.tokenEncrypted,
-          iv: account.tokenIv,
-          tag: account.tokenTag,
-        }),
+    ? await withReviewSuccessRates(
+        account.id,
+        await getUserKanjiIndex(
+          decryptToken({
+            encrypted: account.tokenEncrypted,
+            iv: account.tokenIv,
+            tag: account.tokenTag,
+          }),
+        ),
       )
     : [];
   const jlptKanjiRows = shouldLoadJlptData

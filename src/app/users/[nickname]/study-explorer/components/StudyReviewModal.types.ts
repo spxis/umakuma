@@ -12,6 +12,7 @@ export type RelatedReference = {
   subjectId: number;
   label: string;
   wkLevel?: number | null;
+  successRate?: number;
   reading?: string | null;
   meaning?: string | null;
 };

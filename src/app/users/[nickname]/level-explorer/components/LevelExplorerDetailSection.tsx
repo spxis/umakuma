@@ -36,6 +36,7 @@ import {
   isVocabularySubjectType,
 } from "../lib/levelExplorerDomain";
 import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
+import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 
 type Props = {
   accountId: string;
@@ -147,9 +148,6 @@ export default function LevelExplorerDetailSection({
   const renderHeaderChipRow = (className: string) => (
     <div className={`${className} items-center`}>
       <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-      {typeof selectedItem.wkLevel === "number" ? (
-        <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span>
-      ) : null}
       {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? (
         <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span>
       ) : null}
@@ -237,12 +235,13 @@ export default function LevelExplorerDetailSection({
       <div className="grid gap-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-x-3">
         <div className="inline-flex sm:self-center">
           <div
-            className={`inline-flex rounded-2xl border ${
+            className={`group/explorer-card relative inline-flex rounded-2xl border ${
               glyphHasReading(selectedItem)
                 ? "min-h-[5.75rem] min-w-[5.75rem] flex-col items-center justify-center px-4 py-3"
                 : "min-h-[5.75rem] min-w-[5.75rem] items-center justify-center px-4 py-3"
             } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
           >
+            <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
             <div>
               <p style={{ fontFamily }} className="text-center text-4xl font-black leading-none text-current">
                 {selectedItem.characters}

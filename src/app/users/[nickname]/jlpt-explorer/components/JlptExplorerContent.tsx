@@ -17,6 +17,7 @@ import FilterChipLabel from "../../shared/FilterChipLabel";
 import FilterChipButton from "../../shared/FilterChipButton";
 import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
+import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import type {
   KanjiStats,
@@ -290,9 +291,6 @@ export default function JlptExplorerContent({
                   indexLabel={`#${index + 1}`}
                   topRight={
                     <>
-                      {typeof userMatch?.wkLevel === "number" ? (
-                        <NeutralPill>L{userMatch.wkLevel}</NeutralPill>
-                      ) : null}
                       {typeof item.schoolGrade === "number" ? (
                         <NeutralPill>G{item.schoolGrade}</NeutralPill>
                       ) : null}
@@ -302,6 +300,12 @@ export default function JlptExplorerContent({
                   glyphClassName={`border-kanji/50 bg-kanji/10 ${userMatch ? "text-kanji" : "text-foreground"}`}
                   glyphText={item.kanji}
                   glyphTextClassName="text-6xl"
+                  glyphOverlay={
+                    <GlyphMetadataBadges
+                      level={userMatch?.wkLevel}
+                      successRate={userMatch?.successRate}
+                    />
+                  }
                   glyphSubtitle={
                     studyMode
                       ? <span className="text-foreground/45">...</span>

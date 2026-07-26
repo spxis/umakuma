@@ -1,13 +1,10 @@
 import { useState } from "react";
-import type { StudyQueueItem } from "../lib/studyExplorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
-import type { RelatedReference } from "./StudyReviewModal.types";
 import type { StudyReviewModalSectionProps as Props } from "./StudyReviewModalSection.types";
 import {
   isLessonLockedQueueItem,
   isLessonQueueItem,
-  isRadicalSubjectType,
   STUDY_REVIEW_OUTCOMES,
   STUDY_REVIEW_MODAL_SECTION_TEXT,
   STUDY_VIEWER_MODES,
@@ -27,6 +24,8 @@ import StatusSrsChip from "../../shared/StatusSrsChip";
 import StudyReviewFlashActionRow from "./StudyReviewFlashActionRow";
 import StudyReviewModalMetaPanels from "./StudyReviewModalMetaPanels";
 import StudyReviewMeaningCard from "./StudyReviewMeaningCard";
+import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
+import { buildUnifiedDetailItem } from "./StudyReviewModalHelpers";
 
 export default function StudyReviewModalSection({
   accountId,
@@ -104,22 +103,8 @@ export default function StudyReviewModalSection({
   const hasScrollableMeaningDetails = hasAltMeanings || hasMeaningExplanation || showReadingExplanation;
   const meaningPeekExpanded = meaningPeekState.assignmentId === selectedItem.assignmentId ? meaningPeekState.open : false;
 
-  const sanitizedRelatedItems = (items: RelatedReference[] | undefined) =>
-    (items ?? []).map((item) => ({ ...item, wkLevel: null }));
-  const unifiedDetailItem: StudyQueueItem = shouldUseUnifiedLessonDetail
-    ? {
-        ...selectedItem,
-        radicals: sanitizedRelatedItems(selectedItem.radicals as RelatedReference[] | undefined),
-        visuallySimilar: sanitizedRelatedItems(selectedItem.visuallySimilar as RelatedReference[] | undefined),
-        usedInVocabulary: sanitizedRelatedItems(
-          (selectedItem.usedInVocabulary as RelatedReference[] | undefined)?.length
-            ? (selectedItem.usedInVocabulary as RelatedReference[] | undefined)
-            : isRadicalSubjectType(selectedItem.subjectType)
-              ? (selectedItem.componentKanji as RelatedReference[] | undefined)
-              : (selectedItem.usedInVocabulary as RelatedReference[] | undefined),
-        ),
-        componentKanji: sanitizedRelatedItems(selectedItem.componentKanji as RelatedReference[] | undefined),
-      }
+  const unifiedDetailItem = shouldUseUnifiedLessonDetail
+    ? buildUnifiedDetailItem(selectedItem)
     : selectedItem;
 
   return (
@@ -152,13 +137,13 @@ export default function StudyReviewModalSection({
                 }}
                 onTouchStart={onFlashTouchStart}
                 onTouchEnd={onFlashTouchEnd}
-                className={`relative flex min-h-[20rem] select-none items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
+                className={`group/explorer-card relative flex min-h-[20rem] select-none items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(
                   selectedItem.subjectType,
                 )}`}
               >
+                <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
                 <div className="absolute left-1/2 top-4 z-10 flex max-w-[calc(100%-1.5rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-x-auto px-1">
                   <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                  {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
@@ -245,12 +230,12 @@ export default function StudyReviewModalSection({
                     });
                   }
                 }}
-                className={`relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-2.5 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
+                className={`group/explorer-card relative flex h-full cursor-pointer flex-col justify-center overflow-hidden rounded-2xl border p-2.5 transition-colors hover:bg-violet-100/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}
                 title={STUDY_REVIEW_MODAL_SECTION_TEXT.viewItemTitle}
               >
+                <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
                 <div className="absolute left-1/2 top-3 z-10 flex max-w-[calc(100%-1.25rem)] -translate-x-1/2 flex-nowrap items-center justify-center gap-1 overflow-hidden px-1 sm:top-4">
                   <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                  {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                   {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                   {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                   {showStatusChip ? (
@@ -393,7 +378,8 @@ export default function StudyReviewModalSection({
           </>
         ) : requiresReveal && !isAnswerRevealed ? (
           <div className="grid min-h-[68vh] gap-3 lg:grid-cols-2 lg:items-stretch">
-            <div className={`flex min-h-[20rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
+            <div className={`group/explorer-card relative flex min-h-[20rem] items-center justify-center rounded-2xl border p-6 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
+              <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
               <p style={{ fontFamily: glyphFontFamily }} className="text-center text-[clamp(5rem,14vw,11rem)] font-black leading-none text-current">{selectedItem.characters}</p>
             </div>
             <button type="button" onClick={() => onReveal(selectedItem.assignmentId)} className="flex min-h-[20rem] w-full flex-col justify-center rounded-2xl border border-line bg-surface px-6 py-6 text-left hover:bg-surface-muted lg:h-full lg:min-h-0">
@@ -429,13 +415,13 @@ export default function StudyReviewModalSection({
             <div>
               <div className="mb-2 flex flex-wrap gap-1 sm:hidden">
                 <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                 {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                 {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                 {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}
               </div>
               <div className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-center">
-              <div className={`inline-flex min-h-[5.75rem] min-w-[5.75rem] items-center justify-center rounded-2xl border px-4 py-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
+              <div className={`group/explorer-card relative inline-flex min-h-[5.75rem] min-w-[5.75rem] items-center justify-center rounded-2xl border px-4 py-3 ${typeGlyphBoxClass(selectedItem.subjectType)}`}>
+                <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
                 <p style={{ fontFamily: glyphFontFamily }} className={`text-center font-black leading-none ${glyphTextSizeClass(selectedItem.characters)}`}>{selectedItem.characters}</p>
               </div>
               <div className="self-start">
@@ -446,7 +432,6 @@ export default function StudyReviewModalSection({
                   </div>
                   <div className="hidden flex-nowrap justify-self-end gap-1 sm:flex">
                     <span className={subjectTypePillClass(selectedItem.subjectType)}>{shortSubjectTypeLabel(selectedItem.subjectType)}</span>
-                    {typeof selectedItem.wkLevel === "number" ? <span className="subject-pill border-line bg-surface text-foreground">L{selectedItem.wkLevel}</span> : null}
                     {typeof selectedItem.jlptMeta?.schoolGrade === "number" ? <span className="subject-pill border-line bg-surface text-foreground">G{selectedItem.jlptMeta.schoolGrade}</span> : null}
                     {selectedItem.jlptLevel ? <span className={jlptLevelPillClass()}>N{selectedItem.jlptLevel}</span> : null}
                     {showStatusChip ? <StatusSrsChip status={selectedItem.status} srsStage={selectedItem.srsStage} /> : null}

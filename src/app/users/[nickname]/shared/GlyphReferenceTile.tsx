@@ -2,12 +2,14 @@
 
 import type { SubjectType } from "@/lib/domainConstants";
 import { relatedReferenceCardClass } from "../level-explorer/lib/levelExplorerDisplay";
+import GlyphMetadataBadges from "./GlyphMetadataBadges";
 
 type GlyphReferenceTileProps = {
   glyph: string;
   subtitle?: string | null;
   subjectType?: SubjectType;
   wkLevel?: number | null;
+  successRate?: number | null;
   size?: "normal" | "large";
   onClick?: () => void;
   className?: string;
@@ -22,19 +24,12 @@ function glyphClass(label: string, size: "normal" | "large"): string {
   return "text-2xl";
 }
 
-function levelBadge(level: number) {
-  return (
-    <span className="pointer-events-none absolute right-1.5 top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full border border-transparent bg-transparent px-1.5 text-[9px] font-black leading-none tracking-[0.04em] text-foreground/65 opacity-50 transition-all duration-150 group-hover/glyph-tile:opacity-100 group-hover/glyph-tile:border-line/70 group-focus-within/glyph-tile:opacity-100 group-focus-within/glyph-tile:border-line/70 group-focus-visible/glyph-tile:opacity-100 group-focus-visible/glyph-tile:border-line/70">
-      L{level}
-    </span>
-  );
-}
-
 export default function GlyphReferenceTile({
   glyph,
   subtitle,
   subjectType,
   wkLevel,
+  successRate,
   size = "normal",
   onClick,
   className,
@@ -53,7 +48,7 @@ export default function GlyphReferenceTile({
   if (isClickable) {
     return (
       <button type="button" onClick={onClick} className={baseClass}>
-        {typeof wkLevel === "number" ? levelBadge(wkLevel) : null}
+        <GlyphMetadataBadges level={wkLevel} successRate={successRate} hoverGroup="glyph-tile" />
         <span className="inline-flex translate-y-[3px] flex-col items-center">
           <span className={`${glyphClass(glyph, size)} font-black leading-none`}>{glyph}</span>
           {subtitleText ? (
@@ -68,7 +63,7 @@ export default function GlyphReferenceTile({
 
   return (
     <span className={baseClass}>
-      {typeof wkLevel === "number" ? levelBadge(wkLevel) : null}
+      <GlyphMetadataBadges level={wkLevel} successRate={successRate} hoverGroup="glyph-tile" />
       <span className="inline-flex translate-y-[3px] flex-col items-center">
         <span className={`${glyphClass(glyph, size)} font-black leading-none`}>{glyph}</span>
         {subtitleText ? (
