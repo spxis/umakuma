@@ -66,6 +66,15 @@ model Account {
   studySubjectTags          StudySubjectTag[]
 }
 
+model InviteRateLimit {
+  key       String   @id
+  attempts  Int      @default(0)
+  resetAt   DateTime
+  updatedAt DateTime @updatedAt
+
+  @@index([resetAt])
+}
+
 model LevelSnapshot {
   id                String   @id @default(cuid())
   accountId         String

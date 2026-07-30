@@ -10,7 +10,7 @@ export function normalizeSrsStageFilter(
   }
 
   if (nextFilter === STUDY_SRS_FILTERS.all) {
-    return null;
+    return currentStage;
   }
 
   if (nextFilter === STUDY_SRS_FILTERS.apprentice && currentStage >= 1 && currentStage <= 4) return currentStage;

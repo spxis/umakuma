@@ -4,7 +4,7 @@ import { z } from "zod";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
 import { normalizeIsbn } from "@/lib/readingSignoff";
-import { isSafeOutboundUrl, parseHttpUrl } from "@/lib/safeOutboundUrl";
+import { fetchSafeImage } from "@/lib/safeImageFetch";
 
 const querySchema = z.object({
   isbn: z.string().min(1).max(32),
@@ -154,44 +154,18 @@ async function fetchImageFromUrl(
   options: FetchImageOptions = {},
 ): Promise<NextResponse | null> {
   const { minBytes = MIN_VALID_COVER_BYTES, rejectPng = false } = options;
-  try {
-    const parsedUrl = parseHttpUrl(url);
-    if (!parsedUrl) {
-      return null;
-    }
-
-    if (!(await isSafeOutboundUrl(parsedUrl))) {
-      return null;
-    }
-
-    const response = await fetch(parsedUrl.toString(), { cache: "no-store" });
-    if (!response.ok) {
-      return null;
-    }
-
-    const contentType = response.headers.get("content-type") ?? "";
-    if (!contentType.startsWith("image/")) {
-      return null;
-    }
-    if (rejectPng && /^image\/png/i.test(contentType)) {
-      return null;
-    }
-
-    const body = await response.arrayBuffer();
-    if (body.byteLength < minBytes) {
-      return null;
-    }
-
-    return new NextResponse(body, {
-      status: 200,
-      headers: {
-        "content-type": contentType,
-        "cache-control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
-      },
-    });
-  } catch {
+  const image = await fetchSafeImage(url, { minBytes, rejectPng });
+  if (!image) {
     return null;
   }
+
+  return new NextResponse(new Uint8Array(image.body).buffer, {
+    status: 200,
+    headers: {
+      "content-type": image.contentType,
+      "cache-control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
+    },
+  });
 }
 
 // NDL (National Diet Library) Japan no longer serves anonymous thumbnail

@@ -255,6 +255,10 @@ function appendReviewLevelChips(
     const isSelected = viewedLevel === level;
     const unavailable = hasData && !isSelected && !availableLevels.has(level);
     if (unavailable) {
+      if (rangeStart === null) {
+        rangeStart = level;
+      }
+      rangeEnd = level;
       continue;
     }
     flushRange();

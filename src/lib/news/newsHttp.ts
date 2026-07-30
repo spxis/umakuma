@@ -2,6 +2,7 @@
 // reader, never hammer a host, and surface clear typed errors.
 
 import { isSafeOutboundUrl, parseHttpUrl } from "@/lib/safeOutboundUrl";
+import { readResponseBytesWithLimit } from "@/lib/httpBodyLimits";
 
 const CHROME_UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36";
@@ -82,8 +83,8 @@ async function fetchNewsHtmlOnce(
       return { ok: false, error: { kind: "not_html" } };
     }
 
-    const buffer = await response.arrayBuffer();
-    if (buffer.byteLength > MAX_BYTES) {
+    const buffer = await readResponseBytesWithLimit(response, MAX_BYTES);
+    if (!buffer) {
       return { ok: false, error: { kind: "too_large" } };
     }
 

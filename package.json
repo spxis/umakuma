@@ -22,10 +22,11 @@
     "constants:check": "node scripts/check-component-constants.mjs",
     "study:magic-check": "node scripts/check-study-magic-strings.mjs",
     "level:magic-check": "node scripts/check-level-magic-strings.mjs",
-    "loc:check": "echo 'LOC gate disabled'",
-    "quality:check": "pnpm lint && pnpm constants:check && pnpm study:magic-check && pnpm level:magic-check && pnpm loc:check",
+    "loc:check": "node scripts/check-max-loc.mjs",
+    "security:check": "pnpm audit --prod --audit-level high",
+    "quality:check": "pnpm lint && pnpm constants:check && pnpm study:magic-check && pnpm level:magic-check && pnpm loc:check && pnpm test:unit",
     "quality:fix": "pnpm lint:fix && pnpm quality:check",
-    "preflight:prod": "pnpm quality:check && pnpm build",
+    "preflight:prod": "pnpm quality:check && pnpm security:check && pnpm build",
     "deploy:push": "git push origin main",
     "deploy:status": "npx --yes vercel@54.18.0 ls umakuma",
     "deploy:status:latest": "npx --yes vercel@54.18.0 ls umakuma | rg -o 'https://umakuma-[^[:space:]]+' -m1 | xargs -I{} npx --yes vercel@54.18.0 inspect {}",
@@ -50,8 +51,8 @@
     "@types/kuromoji": "^0.1.3",
     "jsdom": "^29.0.2",
     "kuromoji": "^0.1.2",
-    "next": "16.2.2",
-    "next-auth": "^4.24.13",
+    "next": "16.2.12",
+    "next-auth": "^4.24.15",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "swr": "^2.4.1",
@@ -71,5 +72,14 @@
     "tailwindcss": "^4",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "@babel/core": "^7.29.6",
+      "eslint-plugin-react-hooks": "7.0.1",
+      "postcss": "^8.5.18",
+      "sharp": "^0.35.0",
+      "undici": "^7.28.0"
+    }
   }
 }

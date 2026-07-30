@@ -4,6 +4,7 @@ import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import { hashInviteCode, isValidInviteCodeShape, normalizeInviteCode } from "@/lib/inviteCode";
+import { clearInviteAttempts, consumeInviteAttempt } from "@/lib/inviteRateLimit";
 import {
   createInviteSessionToken,
   INVITE_SESSION_COOKIE_NAME,
@@ -16,59 +17,6 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 const inviteLoginSchema = z.object({
   code: z.string().trim().min(1),
 });
-
-const INVITE_ATTEMPT_WINDOW_MS = 10 * 60 * 1000;
-const MAX_INVITE_ATTEMPTS_PER_WINDOW = 12;
-
-type InviteAttemptState = {
-  count: number;
-  resetAtMs: number;
-};
-
-const inviteAttemptByKey = new Map<string, InviteAttemptState>();
-
-function getInviteAttemptKey(request: Request): string {
-  const forwardedFor = request.headers.get("x-forwarded-for") ?? "";
-  const firstForwarded = forwardedFor.split(",")[0]?.trim();
-  const forwardedHost = request.headers.get("x-forwarded-host")?.trim();
-  const fallbackHost = request.headers.get("host")?.trim();
-  const clientPart = firstForwarded || forwardedHost || fallbackHost || "unknown";
-  return `invite:${clientPart.toLowerCase()}`;
-}
-
-function isInviteRateLimited(key: string): boolean {
-  const nowMs = Date.now();
-  const state = inviteAttemptByKey.get(key);
-  if (!state) {
-    return false;
-  }
-
-  if (state.resetAtMs <= nowMs) {
-    inviteAttemptByKey.delete(key);
-    return false;
-  }
-
-  return state.count >= MAX_INVITE_ATTEMPTS_PER_WINDOW;
-}
-
-function registerInviteFailure(key: string): void {
-  const nowMs = Date.now();
-  const state = inviteAttemptByKey.get(key);
-  if (!state || state.resetAtMs <= nowMs) {
-    inviteAttemptByKey.set(key, {
-      count: 1,
-      resetAtMs: nowMs + INVITE_ATTEMPT_WINDOW_MS,
-    });
-    return;
-  }
-
-  state.count += 1;
-  inviteAttemptByKey.set(key, state);
-}
-
-function clearInviteFailures(key: string): void {
-  inviteAttemptByKey.delete(key);
-}
 
 export async function GET(request: Request) {
   return withApiRouteTelemetry({
@@ -127,8 +75,7 @@ export async function POST(request: Request) {
     request,
     execute: async () => {
       try {
-        const attemptKey = getInviteAttemptKey(request);
-        if (isInviteRateLimited(attemptKey)) {
+        if (await consumeInviteAttempt(request)) {
           return NextResponse.json({ error: "Too many attempts. Try again later." }, { status: 429 });
         }
 
@@ -154,11 +101,10 @@ export async function POST(request: Request) {
         });
 
         if (!account) {
-          registerInviteFailure(attemptKey);
           return NextResponse.json({ error: "Invite code is invalid." }, { status: 401 });
         }
 
-        clearInviteFailures(attemptKey);
+        await clearInviteAttempts(request);
 
         const cookieStore = await cookies();
         cookieStore.set({

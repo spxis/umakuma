@@ -189,7 +189,10 @@ export async function POST(request: Request, context: RouteContext) {
         return NextResponse.json({ error: "Rate limited by WaniKani. Please retry in a moment." }, { status: 429 });
       }
 
-      return NextResponse.json({ error: message }, { status: 502 });
+      return NextResponse.json(
+        { error: "Couldn't submit that review to WaniKani. Try again in a moment." },
+        { status: 502 },
+      );
     }
 
     // Fire-and-forget: persist history without blocking the response
