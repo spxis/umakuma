@@ -80,15 +80,8 @@ function expandLookupIsbns(isbn: string): string[] {
   return [isbn];
 }
 
-type ReadingChallengeBookCoverDelegate = {
-  findFirst: (args: {
-    where: { isbn: { in: string[] }; accountId?: string; manualCoverUrl?: { not: null } };
-    select: { manualCoverUrl?: true; thumbnailUrl?: true };
-  }) => Promise<{ manualCoverUrl?: string | null; thumbnailUrl?: string | null } | null>;
-};
-
-function readingBookDelegate(): ReadingChallengeBookCoverDelegate | null {
-  return (prisma as unknown as { readingChallengeBook?: ReadingChallengeBookCoverDelegate }).readingChallengeBook ?? null;
+function readingBookDelegate(): typeof prisma.readingChallengeBook | null {
+  return prisma.readingChallengeBook;
 }
 
 async function fetchManualCoverUrl(lookupIsbns: string[], accountId: string | null): Promise<string | null> {

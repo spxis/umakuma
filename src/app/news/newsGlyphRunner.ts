@@ -1,6 +1,6 @@
 "use client";
 
-import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 import type { LookupGlyphItem, LookupRunResult } from "@/lib/news/newsKanjiLookup";
 import {
   openViewGlyphViewer,

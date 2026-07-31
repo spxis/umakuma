@@ -1,3 +1,5 @@
+import "server-only";
+
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 
 export const INVITE_SESSION_COOKIE_NAME = "umakuma_invite_session";

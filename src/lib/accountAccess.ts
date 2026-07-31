@@ -1,3 +1,5 @@
+import "server-only";
+
 import { getServerSession } from "next-auth";
 
 import { isAuthorizedAdmin } from "@/lib/admin";

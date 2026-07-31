@@ -1,3 +1,5 @@
+import "server-only";
+
 import { decryptToken } from "@/lib/crypto";
 import { upsertDailySnapshot } from "@/lib/dailySnapshot";
 import type { Prisma } from "@prisma/client";

@@ -1,4 +1,4 @@
-import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 import { isSubjectType, type SubjectType } from "@/lib/domainConstants";
 
 type CatalogSubjectPayload = {

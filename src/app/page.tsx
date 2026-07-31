@@ -18,16 +18,8 @@ import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
 import UmaKumaPageBanner from "./shared/UmaKumaPageBanner";
 export const dynamic = "force-dynamic";
-type ReadingChallengeMemberDelegate = {
-  findMany: (args: {
-    where?: Record<string, unknown>;
-    select: { accountId: true; tracked: true };
-  }) => Promise<Array<{ accountId: string; tracked: boolean }>>;
-};
-function getReadingChallengeMemberDelegate(): ReadingChallengeMemberDelegate | null {
-  const delegate = (prisma as unknown as { readingChallengeMember?: ReadingChallengeMemberDelegate })
-    .readingChallengeMember;
-  return delegate ?? null;
+function getReadingChallengeMemberDelegate(): typeof prisma.readingChallengeMember | null {
+  return prisma.readingChallengeMember;
 }
 type LeaderboardRow = {
   id: string;

@@ -32,131 +32,20 @@ export type LatestSignoffSummary = {
   pagesRead: number;
   signoffDatePst: string;
 };
-export type ReadingSignoffDelegate = {
-  findMany: (args: {
-    where: Record<string, unknown>;
-    orderBy?: Array<Record<string, "asc" | "desc">>;
-  }) => Promise<Array<{
-    id: string;
-    challengeId?: string | null;
-    accountId: string;
-    signoffDatePst: string;
-    bookTitle: string;
-    pagesRead: number;
-    minutesRead: number;
-    didWanikaniReviews: boolean;
-    reviewsLeft: number;
-    apprenticeCount: number;
-    currentWkLevel: number;
-    createdAt: Date;
-    updatedAt: Date;
-  }>>;
-  findUnique: (args: {
-    where: { accountId_signoffDatePst: { accountId: string; signoffDatePst: string } };
-  }) => Promise<{
-    id: string;
-    challengeId?: string | null;
-    accountId: string;
-    signoffDatePst: string;
-    bookTitle: string;
-    pagesRead: number;
-    minutesRead: number;
-    didWanikaniReviews: boolean;
-    reviewsLeft: number;
-    apprenticeCount: number;
-    currentWkLevel: number;
-    createdAt: Date;
-    updatedAt: Date;
-  } | null>;
-  upsert: (args: {
-    where: { accountId_signoffDatePst: { accountId: string; signoffDatePst: string } };
-    update: Record<string, unknown>;
-    create: Record<string, unknown>;
-  }) => Promise<{
-    id: string;
-    challengeId?: string | null;
-    accountId: string;
-    signoffDatePst: string;
-    bookTitle: string;
-    pagesRead: number;
-    minutesRead: number;
-    didWanikaniReviews: boolean;
-    reviewsLeft: number;
-    apprenticeCount: number;
-    currentWkLevel: number;
-    createdAt: Date;
-    updatedAt: Date;
-  }>;
-};
-
-export type ReadingChallengeBookDelegate = {
-  findMany: (args: {
-    where: { accountId: { in: string[] }; challengeId?: string | null };
-    orderBy: [{ createdAt: "asc" | "desc" }, { id: "asc" | "desc" }];
-    select: {
-      id: true;
-      challengeId?: true;
-      accountId: true;
-      isbn: true;
-      title: true;
-      thumbnailUrl: true;
-      manualCoverUrl: true;
-      infoUrl: true;
-    };
-  }) => Promise<Array<{
-    id: string;
-    challengeId?: string | null;
-    accountId: string;
-    isbn: string;
-    title: string;
-    thumbnailUrl: string | null;
-    manualCoverUrl: string | null;
-    infoUrl: string | null;
-  }>>;
-  createMany: (args: {
-    data: Array<{
-      challengeId?: string | null;
-      accountId: string;
-      isbn: string;
-      title: string;
-      thumbnailUrl: string | null;
-      infoUrl: string | null;
-    }>;
-    skipDuplicates: true;
-  }) => Promise<{ count: number }>;
-};
-
-export type ReadingChallengeMemberDelegate = {
-  findMany: (args: {
-    where: { accountId: { in: string[] }; challengeId?: string | null };
-    select: { accountId: true; tracked: true };
-  }) => Promise<Array<{ accountId: string; tracked: boolean }>>;
-  findFirst: (args: {
-    where: { accountId: string; challengeId?: string | null };
-    select: { id: true; accountId: true; tracked: true };
-  }) => Promise<{ id: string; accountId: string; tracked: boolean } | null>;
-  update: (args: {
-    where: { id: string };
-    data: { tracked: boolean };
-  }) => Promise<{ accountId: string; tracked: boolean }>;
-  create: (args: {
-    data: { challengeId?: string | null; accountId: string; tracked: boolean };
-  }) => Promise<{ accountId: string; tracked: boolean }>;
-};
+export type ReadingSignoffDelegate = typeof prisma.readingSignoff;
+export type ReadingChallengeBookDelegate = typeof prisma.readingChallengeBook;
+export type ReadingChallengeMemberDelegate = typeof prisma.readingChallengeMember;
 
 export function getReadingSignoffDelegate(): ReadingSignoffDelegate | null {
-  const delegate = (prisma as unknown as { readingSignoff?: ReadingSignoffDelegate }).readingSignoff;
-  return delegate ?? null;
+  return prisma.readingSignoff;
 }
 
 export function getReadingChallengeBookDelegate(): ReadingChallengeBookDelegate | null {
-  const delegate = (prisma as unknown as { readingChallengeBook?: ReadingChallengeBookDelegate }).readingChallengeBook;
-  return delegate ?? null;
+  return prisma.readingChallengeBook;
 }
 
 export function getReadingChallengeMemberDelegate(): ReadingChallengeMemberDelegate | null {
-  const delegate = (prisma as unknown as { readingChallengeMember?: ReadingChallengeMemberDelegate }).readingChallengeMember;
-  return delegate ?? null;
+  return prisma.readingChallengeMember;
 }
 
 function learnedCountsFromItemSpread(input: unknown): {

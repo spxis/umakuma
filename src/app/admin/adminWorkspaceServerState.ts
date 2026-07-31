@@ -8,15 +8,8 @@ import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import type { CampaignRecord } from "./AdminCampaignManager.types";
 import type { AdminSessionStatus } from "./AdminPage.types";
 
-type ReadingChallengeDelegate = {
-  findMany: (args: {
-    orderBy: Array<Record<string, "asc" | "desc">>;
-    select: Record<string, true>;
-  }) => Promise<CampaignRecord[]>;
-};
-
-function getReadingChallengeDelegate(): ReadingChallengeDelegate | null {
-  return (prisma as unknown as { readingChallenge?: ReadingChallengeDelegate }).readingChallenge ?? null;
+function getReadingChallengeDelegate(): typeof prisma.readingChallenge | null {
+  return prisma.readingChallenge;
 }
 
 export async function getAdminWorkspaceInitialSession(): Promise<AdminSessionStatus> {
@@ -74,7 +67,13 @@ export async function getAdminWorkspaceInitialCampaigns(
       },
     });
 
-    return campaigns;
+    return campaigns.map((campaign) => ({
+      ...campaign,
+      currencyCode: "JPY",
+      scoringRules: campaign.scoringRules as Record<string, unknown>,
+      createdAt: campaign.createdAt.toISOString(),
+      updatedAt: campaign.updatedAt.toISOString(),
+    }));
   } catch {
     return [];
   }

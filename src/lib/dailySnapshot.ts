@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/lib/prisma";
 
 const VANCOUVER_TZ = "America/Vancouver";

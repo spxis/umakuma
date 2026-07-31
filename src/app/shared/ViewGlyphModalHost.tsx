@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { newsGlyphButtonClass } from "@/app/news/newsGlyphBoxStyle";
-import type { RelatedReference } from "@/app/users/[nickname]/explorerTypes";
+import type { RelatedReference } from "@/lib/glyphTypes";
 import {
   buildStudyReviewAllMeanings,
   collectUsedKanjiItems,
   deriveJlptGradeLabel,
   deriveStudyReviewReadings,
 } from "@/app/users/[nickname]/study-explorer/lib/studyReviewModalDerivations";
-import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 import {
   STUDY_VIEWER_MODES,
 } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";

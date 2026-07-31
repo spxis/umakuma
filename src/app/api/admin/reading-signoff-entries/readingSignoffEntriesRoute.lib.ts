@@ -1,33 +1,14 @@
 import { prisma } from "@/lib/prisma";
 
-export type ReadingSignoffEntryDelegate = {
-  findMany: typeof prisma.readingSignoffEntry.findMany;
-  findUnique: typeof prisma.readingSignoffEntry.findUnique;
-  count: typeof prisma.readingSignoffEntry.count;
-  updateMany: typeof prisma.readingSignoffEntry.updateMany;
-  deleteMany: typeof prisma.readingSignoffEntry.deleteMany;
-  update: typeof prisma.readingSignoffEntry.update;
-  delete: typeof prisma.readingSignoffEntry.delete;
-};
-
-export type ReadingSignoffDelegate = {
-  findMany: typeof prisma.readingSignoff.findMany;
-  findUnique: typeof prisma.readingSignoff.findUnique;
-  count: typeof prisma.readingSignoff.count;
-  update: typeof prisma.readingSignoff.update;
-  delete: typeof prisma.readingSignoff.delete;
-  upsert: typeof prisma.readingSignoff.upsert;
-  deleteMany: typeof prisma.readingSignoff.deleteMany;
-};
+export type ReadingSignoffEntryDelegate = typeof prisma.readingSignoffEntry;
+export type ReadingSignoffDelegate = typeof prisma.readingSignoff;
 
 export function getReadingSignoffEntryDelegate(): ReadingSignoffEntryDelegate | null {
-  const delegate = (prisma as unknown as { readingSignoffEntry?: ReadingSignoffEntryDelegate }).readingSignoffEntry;
-  return delegate ?? null;
+  return prisma.readingSignoffEntry;
 }
 
 export function getReadingSignoffDelegate(): ReadingSignoffDelegate | null {
-  const delegate = (prisma as unknown as { readingSignoff?: ReadingSignoffDelegate }).readingSignoff;
-  return delegate ?? null;
+  return prisma.readingSignoff;
 }
 
 export type AdminReadingSignoffEntryRecord = {

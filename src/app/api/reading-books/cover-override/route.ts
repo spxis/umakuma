@@ -11,20 +11,8 @@ const bodySchema = z.object({
   manualCoverUrl: z.union([z.string().url().max(2048), z.null()]),
 });
 
-type ReadingChallengeBookCoverOverrideDelegate = {
-  findUnique: (args: {
-    where: { id: string };
-    select: { id: true; accountId: true };
-  }) => Promise<{ id: string; accountId: string } | null>;
-  update: (args: {
-    where: { id: string };
-    data: { manualCoverUrl: string | null };
-  }) => Promise<{ id: string; manualCoverUrl: string | null }>;
-};
-
-function getDelegate(): ReadingChallengeBookCoverOverrideDelegate | null {
-  const delegate = (prisma as unknown as { readingChallengeBook?: ReadingChallengeBookCoverOverrideDelegate }).readingChallengeBook;
-  return delegate ?? null;
+function getDelegate(): typeof prisma.readingChallengeBook | null {
+  return prisma.readingChallengeBook;
 }
 
 export async function POST(request: Request) {

@@ -1,4 +1,4 @@
-import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 import {
   SUBJECT_TYPE_DISPLAY,
   SUBJECT_TYPES,

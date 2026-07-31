@@ -1,3 +1,5 @@
+import "server-only";
+
 import { prisma } from "@/lib/prisma";
 import { fetchAllCollectionPages } from "@/lib/wanikani/http";
 import type { WaniKaniCollectionResponse } from "@/lib/wanikani/types";

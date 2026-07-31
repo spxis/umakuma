@@ -1,43 +1,8 @@
-import type { WkStatus, SubjectType } from "@/lib/domainConstants";
-import type { JlptKanjiRow, JlptMeta } from "@/lib/jlptTypes";
+import type { WkStatus } from "@/lib/domainConstants";
+import type { LevelItem } from "@/lib/glyphTypes";
+import type { JlptKanjiRow } from "@/lib/jlptTypes";
 
-export type RelatedReference = {
-  subjectId: number;
-  label: string;
-  wkLevel?: number | null;
-  successRate?: number;
-  reading?: string | null;
-  meaning?: string | null;
-};
-
-export type LevelItem = {
-  subjectId: number;
-  subjectType?: SubjectType;
-  wkLevel?: number;
-  successRate?: number;
-  characters: string;
-  meanings: string[];
-  readings?: string[];
-  primaryReadings?: string[];
-  radicals?: RelatedReference[];
-  visuallySimilar?: RelatedReference[];
-  usedInVocabulary?: RelatedReference[];
-  componentKanji?: RelatedReference[];
-  meaningExplanation?: string;
-  readingExplanation?: string;
-  jlptLevel?: number | null;
-  jlptMeta?: JlptMeta | null;
-  srsStage: number;
-  status: WkStatus;
-  startedAt?: string | null;
-  passedAt?: string | null;
-  availableAt: string | null;
-  isInjectedTrouble?: boolean;
-  studyTags?: {
-    favorite: boolean;
-    trouble: boolean;
-  };
-};
+export type { LevelItem, RelatedReference } from "@/lib/glyphTypes";
 
 export type Snapshot = {
   level: number;

@@ -16,15 +16,10 @@ const patchBodySchema = campaignMutationSchema.safeExtend({
 
 const DELEGATE_UNAVAILABLE_MESSAGE = "Campaign storage is unavailable in the current Prisma client. Run pnpm prisma generate and restart the server.";
 
-type ReadingChallengeDelegate = {
-  findMany: typeof prisma.readingChallenge.findMany;
-  create: typeof prisma.readingChallenge.create;
-  update: typeof prisma.readingChallenge.update;
-  updateMany: typeof prisma.readingChallenge.updateMany;
-};
+type ReadingChallengeDelegate = typeof prisma.readingChallenge;
 
 function getReadingChallengeDelegate(): ReadingChallengeDelegate | null {
-  return (prisma as unknown as { readingChallenge?: ReadingChallengeDelegate }).readingChallenge ?? null;
+  return prisma.readingChallenge;
 }
 
 function buildFallbackCampaign() {

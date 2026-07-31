@@ -16,41 +16,12 @@ const deleteBodySchema = z.object({
   bookId: z.string().cuid(),
 });
 
-type ReadingBookRow = {
-  id: string;
-  challengeId?: string | null;
-  accountId: string;
-  isbn: string;
-  title: string;
-  thumbnailUrl: string | null;
-  infoUrl: string | null;
-};
-
-type ReadingChallengeBookDelegate = {
-  create: (args: { data: { challengeId?: string | null; accountId: string; isbn: string; title: string; thumbnailUrl: string | null; infoUrl: string | null } }) => Promise<ReadingBookRow>;
-  findFirst: (args: { where: Record<string, unknown>; select: Record<string, true> }) => Promise<ReadingBookRow | null>;
-  findMany: (args: { where: Record<string, unknown>; orderBy?: Record<string, "asc" | "desc">; select: Record<string, true> }) => Promise<Array<ReadingBookRow & { updatedAt?: Date }>>;
-  findUnique: (args: {
-    where: { id: string };
-    select: { id: true; challengeId?: true; accountId: true; title: true };
-  }) => Promise<{ id: string; challengeId?: string | null; accountId: string; title: string } | null>;
-  update: (args: { where: { id: string }; data: { title?: string; thumbnailUrl?: string | null; infoUrl?: string | null } }) => Promise<ReadingBookRow>;
-  updateMany: (args: { where: Record<string, unknown>; data: { title?: string; thumbnailUrl?: string; infoUrl?: string } }) => Promise<{ count: number }>;
-  delete: (args: { where: { id: string } }) => Promise<void>;
-};
-
-type ReadingSignoffDelegate = {
-  findFirst: (args: { where: Record<string, unknown>; select: { id: true } }) => Promise<{ id: string } | null>;
-};
-
-function getReadingChallengeBookDelegate(): ReadingChallengeBookDelegate | null {
-  const delegate = (prisma as unknown as { readingChallengeBook?: ReadingChallengeBookDelegate }).readingChallengeBook;
-  return delegate ?? null;
+function getReadingChallengeBookDelegate(): typeof prisma.readingChallengeBook | null {
+  return prisma.readingChallengeBook;
 }
 
-function getReadingSignoffDelegate(): ReadingSignoffDelegate | null {
-  const delegate = (prisma as unknown as { readingSignoff?: ReadingSignoffDelegate }).readingSignoff;
-  return delegate ?? null;
+function getReadingSignoffDelegate(): typeof prisma.readingSignoff | null {
+  return prisma.readingSignoff;
 }
 
 function toHttpsUrl(value: string | null | undefined): string | null {
@@ -84,7 +55,7 @@ type SharedBookMetadata = {
 };
 
 async function getSharedBookMetadataByIsbn(
-  readingChallengeBook: ReadingChallengeBookDelegate,
+  readingChallengeBook: typeof prisma.readingChallengeBook,
   isbn: string,
 ): Promise<SharedBookMetadata> {
   const rows = await readingChallengeBook.findMany({
@@ -147,7 +118,7 @@ function buildMetadataUpdateData(input: {
 }
 
 async function propagateSharedMetadata(
-  readingChallengeBook: ReadingChallengeBookDelegate,
+  readingChallengeBook: typeof prisma.readingChallengeBook,
   isbn: string,
   metadata: SharedBookMetadata,
 ): Promise<void> {

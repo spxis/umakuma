@@ -1,15 +1,8 @@
-import type { LevelItem, SrsFilter } from "../../explorerTypes";
-import type { QueueType, SubjectType, WkStatus } from "@/lib/domainConstants";
+import type { SrsFilter } from "../../explorerTypes";
+import type { SubjectType, WkStatus } from "@/lib/domainConstants";
+import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 
-export type StudyQueueItem = LevelItem & {
-  assignmentId: number;
-  queueType: QueueType;
-  isInjectedTrouble?: boolean;
-  studyTags?: {
-    favorite: boolean;
-    trouble: boolean;
-  };
-};
+export type { StudyQueueItem } from "@/lib/studyQueueTypes";
 
 export type StudyQueueMode = StudyQueueItem["queueType"];
 export type StudyViewerMode = "detail" | "flash";

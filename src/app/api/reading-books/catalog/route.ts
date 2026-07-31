@@ -17,14 +17,6 @@ type ReadingBookRow = {
   updatedAt?: Date;
 };
 
-type ReadingChallengeBookDelegate = {
-  findMany: (args: {
-    where: Record<string, unknown>;
-    orderBy?: Record<string, "asc" | "desc">;
-    select: Record<string, true>;
-  }) => Promise<ReadingBookRow[]>;
-};
-
 type BookCatalogOption = {
   isbn: string;
   title: string;
@@ -35,9 +27,8 @@ const querySchema = z.object({
   accountId: z.string().cuid(),
 });
 
-function getReadingChallengeBookDelegate(): ReadingChallengeBookDelegate | null {
-  const delegate = (prisma as unknown as { readingChallengeBook?: ReadingChallengeBookDelegate }).readingChallengeBook;
-  return delegate ?? null;
+function getReadingChallengeBookDelegate(): typeof prisma.readingChallengeBook | null {
+  return prisma.readingChallengeBook;
 }
 
 function normalizeCatalogTitle(title: string): string {

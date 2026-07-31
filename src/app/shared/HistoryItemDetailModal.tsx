@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 
 import StudyReviewModal from "@/app/users/[nickname]/study-explorer/components/StudyReviewModal";
-import type { StudyQueueItem } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
+import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 import {
   isSubjectType,
   WK_STATUSES,

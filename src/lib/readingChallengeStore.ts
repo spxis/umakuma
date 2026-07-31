@@ -1,75 +1,12 @@
+import "server-only";
+
 import { prisma } from "@/lib/prisma";
 import { ACTIVE_READING_CHALLENGE } from "@/lib/readingChallengeRules";
 
-type ReadingChallengeDelegate = {
-  findFirst: (args: {
-    where?: Record<string, unknown>;
-    orderBy?: Array<Record<string, "asc" | "desc">>;
-    select: Record<string, true>;
-  }) => Promise<Record<string, unknown> | null>;
-  findUnique: (args: {
-    where: { slug: string };
-    select: Record<string, true>;
-  }) => Promise<Record<string, unknown> | null>;
-  findMany: (args: {
-    where?: Record<string, unknown>;
-    orderBy?: Array<Record<string, "asc" | "desc">>;
-    select: Record<string, true>;
-  }) => Promise<Array<Record<string, unknown>>>;
-  create: (args: {
-    data: {
-      id: string;
-      slug: string;
-      name: string;
-      description: string;
-      status: string;
-      startDatePst: string;
-      goalDatePst: string;
-      tripDatePst: string;
-      targetBaseYen: number;
-      currencyCode: string;
-      scoringRules: unknown;
-    };
-    select: { id: true };
-  }) => Promise<{ id: string }>;
-  update: (args: {
-    where: { id: string };
-    data: { status: string };
-    select: { id: true };
-  }) => Promise<{ id: string }>;
-  upsert: (args: {
-    where: { slug: string };
-    update: {
-      name: string;
-      description: string;
-      status: string;
-      startDatePst: string;
-      goalDatePst: string;
-      tripDatePst: string;
-      targetBaseYen: number;
-      currencyCode: string;
-      scoringRules: unknown;
-    };
-    create: {
-      id: string;
-      slug: string;
-      name: string;
-      description: string;
-      status: string;
-      startDatePst: string;
-      goalDatePst: string;
-      tripDatePst: string;
-      targetBaseYen: number;
-      currencyCode: string;
-      scoringRules: unknown;
-    };
-    select: { id: true };
-  }) => Promise<{ id: string }>;
-};
+type ReadingChallengeDelegate = typeof prisma.readingChallenge;
 
 function getReadingChallengeDelegate(): ReadingChallengeDelegate | null {
-  const delegate = (prisma as unknown as { readingChallenge?: ReadingChallengeDelegate }).readingChallenge;
-  return delegate ?? null;
+  return prisma.readingChallenge;
 }
 
 export type ReadingCampaignOption = {
