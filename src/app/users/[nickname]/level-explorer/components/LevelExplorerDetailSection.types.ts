@@ -1,0 +1,33 @@
+import type { LevelItem } from "../../explorerTypes";
+import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
+
+export type LevelExplorerDetailSectionProps = {
+  accountId: string;
+  selectedItem: LevelItem;
+  showEnglish: boolean;
+  clampLongTitle?: boolean;
+  titleMeaningToggleOnly?: boolean;
+  canToggleEnglish?: boolean;
+  onToggleShowEnglish?: (() => void) | null;
+  hideTimeStats?: boolean;
+  studyMode: boolean;
+  revealStudyReading?: boolean;
+  onTogglePeek?: (() => void) | null;
+  selectedMeaningExplanation: string;
+  selectedReadingExplanationRaw: string;
+  showReadingExplanation: boolean;
+  hasPrimaryRelatedPanel: boolean;
+  hasVisuallySimilarPanel: boolean;
+  hasUsedInVocabularyPanel: boolean;
+  usedInVocabularyCollapsed?: boolean;
+  onToggleUsedInVocabularyCollapsed?: (() => void) | null;
+  vocabularyKanjiLinks: VocabularyKanjiLink[];
+  subjectById: Map<number, LevelItem>;
+  onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
+  onJumpToKanji: (subjectId: number, wkLevel: number | null) => Promise<void>;
+  onResetToLessons?: (() => void) | null;
+  resetDisabled?: boolean;
+  resetBusy?: boolean;
+  studyTags?: { favorite: boolean; trouble: boolean };
+  onToggleStudyTag?: ((tag: "favorite" | "trouble") => void) | null;
+};

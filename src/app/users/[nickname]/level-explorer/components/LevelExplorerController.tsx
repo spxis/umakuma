@@ -1,48 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import LevelExplorerContent from "./LevelExplorerContent";
 import type { Snapshot, SrsFilter } from "../../explorerTypes";
-import { stripHtml } from "../lib/levelExplorerDisplay";
 import { buildLevelExplorerActions } from "../lib/levelExplorerControllerActions";
 import { buildLevelExplorerControllerHandlers } from "../lib/levelExplorerControllerHandlers";
 import {
-  useLevelExplorerGridColumns,
-  useLevelExplorerSearchEvents,
-  useLevelExplorerSelectionReconcile,
-  useLevelExplorerStorageHydration,
-  useLevelExplorerStoragePersistence,
-  useLevelExplorerUrlHydration,
-} from "../lib/levelExplorerControllerEffects";
-import {
   buildLevelExplorerStorageKeys,
   LEVEL_JLPT_FILTERS,
-  LEVEL_REVIEW_TIMING_FILTERS,
   LEVEL_SRS_FILTERS,
   LEVEL_TYPE_FILTERS,
-  type JlptFilter,
-  type ReviewTimingFilter,
-  type TypeFilter,
 } from "../lib/levelExplorerState";
-import {
-  buildCombinedSnapshot,
-  computeJlptCounts,
-  computeLevelItemCounts,
-  computeReviewTimingCounts,
-  filterAndSortLevelItems,
-} from "../lib/levelExplorerSelectors";
-import {
-  buildKanjiByCharacter,
-  buildSubjectById,
-  buildVocabularyKanjiLinks,
-} from "../lib/levelExplorerItemDetails";
-import {
-  snapshotHasComponentKanjiData,
-  snapshotHasJlptMetaData,
-  normalizeSnapshot,
-} from "../lib/levelExplorerSnapshotUtils";
-import { isVocabularySubjectType } from "../lib/levelExplorerDomain";
+import { useLevelExplorerControllerEffects } from "../lib/useLevelExplorerControllerEffects";
+import { useLevelExplorerControllerState } from "../lib/useLevelExplorerControllerState";
+import { useLevelExplorerDerivedData } from "../lib/useLevelExplorerDerivedData";
 
 type Props = {
   accountId: string;
@@ -83,47 +55,50 @@ export default function LevelExplorerController({
   const allowHideLocked = !forceShowLocked;
   const storageKeys = useMemo(() => buildLevelExplorerStorageKeys(accountId), [accountId]);
 
-  const initialClientState = useMemo(
-    () => ({
-      selectedLevels: new Set<number>(
-        explorerSource === "custom"
-          ? Array.from({ length: Math.max(1, maxLevel) }, (_, index) => index + 1)
-          : [initialSnapshot.level],
-      ),
-      srsFilter: initialSrsFilter,
-      typeFilter: LEVEL_TYPE_FILTERS.all as TypeFilter,
-      jlptFilter: LEVEL_JLPT_FILTERS.all as JlptFilter,
-      reviewTimingFilter: LEVEL_REVIEW_TIMING_FILTERS.all as ReviewTimingFilter,
-      recentOnly: false,
-      stickyMerge: false,
-      selectedSubjectId: initialSnapshot.items[0]?.subjectId ?? null,
-      visibleTypes: { radical: true, kanji: true, vocabulary: true },
-      filtersCollapsed: false,
-      showLocked: forceShowLocked,
-    }),
-    [explorerSource, forceShowLocked, initialSnapshot.items, initialSnapshot.level, initialSrsFilter, maxLevel],
-  );
-
-  const [selectedLevels, setSelectedLevels] = useState<Set<number>>(initialClientState.selectedLevels);
-  const [snapshotsByLevel, setSnapshotsByLevel] = useState<Map<number, Snapshot>>(
-    new Map([[initialSnapshot.level, normalizeSnapshot(initialSnapshot)]]),
-  );
-  const [srsFilter, setSrsFilter] = useState<SrsFilter>(initialClientState.srsFilter);
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>(initialClientState.typeFilter);
-  const [jlptFilter, setJlptFilter] = useState<JlptFilter>(initialClientState.jlptFilter);
-  const [reviewTimingFilter, setReviewTimingFilter] = useState<ReviewTimingFilter>(initialClientState.reviewTimingFilter);
-  const [recentOnly, setRecentOnly] = useState(initialClientState.recentOnly);
-  const [showLocked, setShowLocked] = useState(initialClientState.showLocked);
-  const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(initialClientState.selectedSubjectId);
-  const [visibleTypes, setVisibleTypes] = useState(initialClientState.visibleTypes);
-  const [stickyMerge, setStickyMerge] = useState(initialClientState.stickyMerge);
-  const [filtersCollapsed, setFiltersCollapsed] = useState(initialClientState.filtersCollapsed);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [searchMatchedSubjectIds, setSearchMatchedSubjectIds] = useState<Set<number> | null>(null);
-  const [searchAvailableLevels, setSearchAvailableLevels] = useState<Set<number> | null>(null);
-  const [gridColumns, setGridColumns] = useState(1);
-  const [pendingHistoryMode, setPendingHistoryMode] = useState<"replace" | "push">("replace");
+  const {
+    selectedLevels,
+    setSelectedLevels,
+    snapshotsByLevel,
+    setSnapshotsByLevel,
+    srsFilter,
+    setSrsFilter,
+    typeFilter,
+    setTypeFilter,
+    jlptFilter,
+    setJlptFilter,
+    reviewTimingFilter,
+    setReviewTimingFilter,
+    recentOnly,
+    setRecentOnly,
+    showLocked,
+    setShowLocked,
+    selectedSubjectId,
+    setSelectedSubjectId,
+    visibleTypes,
+    setVisibleTypes,
+    stickyMerge,
+    setStickyMerge,
+    filtersCollapsed,
+    setFiltersCollapsed,
+    loading,
+    setLoading,
+    error,
+    setError,
+    searchMatchedSubjectIds,
+    setSearchMatchedSubjectIds,
+    searchAvailableLevels,
+    setSearchAvailableLevels,
+    gridColumns,
+    setGridColumns,
+    pendingHistoryMode,
+    setPendingHistoryMode,
+  } = useLevelExplorerControllerState({
+    explorerSource,
+    maxLevel,
+    initialSnapshot,
+    initialSrsFilter,
+    forceShowLocked,
+  });
 
   const applyingUrlStateRef = useRef(false);
   const hasHydratedUrlStateRef = useRef(false);
@@ -146,7 +121,7 @@ export default function LevelExplorerController({
     return () => {
       window.removeEventListener("wr:explorer-page-change", onExplorerPageChange as EventListener);
     };
-  }, []);
+  }, [setSelectedSubjectId]);
 
   const levelOptions = useMemo(() => Array.from({ length: maxLevel }, (_, index) => index + 1), [maxLevel]);
 
@@ -191,74 +166,41 @@ export default function LevelExplorerController({
     setSrsFilter,
   });
 
-  const combinedSnapshot = useMemo(
-    () => buildCombinedSnapshot(selectedLevels, snapshotsByLevel, normalizeSnapshot(initialSnapshot)),
-    [initialSnapshot, selectedLevels, snapshotsByLevel],
-  );
-
-  const levelItemCountsByLevelEffective = useMemo(() => {
-    const merged = { ...levelItemCountsByLevel };
-    for (const [level, snapshot] of snapshotsByLevel.entries()) {
-      merged[level] = snapshot.items.length;
-    }
-    return merged;
-  }, [levelItemCountsByLevel, snapshotsByLevel]);
-
-  const filteredItems = useMemo(
-    () =>
-      filterAndSortLevelItems(combinedSnapshot.items, {
-        recentOnly,
-        showLocked,
-        srsFilter,
-        typeFilter,
-        jlptFilter,
-        reviewTimingFilter,
-        visibleTypes,
-        searchMatchedSubjectIds,
-      }),
-    [
-      combinedSnapshot.items,
-      recentOnly,
-      showLocked,
-      srsFilter,
-      typeFilter,
-      jlptFilter,
-      reviewTimingFilter,
-      visibleTypes,
-      searchMatchedSubjectIds,
-    ],
-  );
-
-  const selectedItem = filteredItems.find((item) => item.subjectId === selectedSubjectId) ?? null;
-  const selectedItemFromAll =
-    selectedSubjectId === null ? null : combinedSnapshot.items.find((item) => item.subjectId === selectedSubjectId) ?? null;
-
-  const counts = useMemo(() => computeLevelItemCounts(combinedSnapshot.items), [combinedSnapshot.items]);
-  const jlptCounts = useMemo(() => computeJlptCounts(combinedSnapshot.items), [combinedSnapshot.items]);
-  const reviewTimingCounts = useMemo(
-    () => computeReviewTimingCounts(combinedSnapshot.items),
-    [combinedSnapshot.items],
-  );
-  const overdueOutsideSelectedLevels = Math.max(0, accountPendingReviews - reviewTimingCounts.overdue);
-  const selectedLevelList = Array.from(selectedLevels.values()).sort((a, b) => a - b);
-  const subjectById = useMemo(() => buildSubjectById(combinedSnapshot.items), [combinedSnapshot.items]);
-  const kanjiByCharacter = useMemo(() => buildKanjiByCharacter(combinedSnapshot.items), [combinedSnapshot.items]);
-
-  const vocabularyKanjiLinks = useMemo(
-    () => buildVocabularyKanjiLinks(selectedItem, subjectById, kanjiByCharacter),
-    [selectedItem, subjectById, kanjiByCharacter],
-  );
-
-  const hasPrimaryRelatedPanel = selectedItem
-    ? isVocabularySubjectType(selectedItem.subjectType)
-      ? vocabularyKanjiLinks.length > 0
-      : (selectedItem.radicals?.length ?? 0) > 0
-    : false;
-  const hasVisuallySimilarPanel = (selectedItem?.visuallySimilar?.length ?? 0) > 0;
-  const hasUsedInVocabularyPanel = (selectedItem?.usedInVocabulary?.length ?? 0) > 0;
-  const selectedMeaningExplanation = stripHtml(selectedItem?.meaningExplanation) || "-";
-  const selectedReadingExplanationRaw = stripHtml(selectedItem?.readingExplanation);
-  const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
+  const {
+    combinedSnapshot,
+    levelItemCountsByLevelEffective,
+    filteredItems,
+    selectedItem,
+    selectedItemFromAll,
+    counts,
+    jlptCounts,
+    reviewTimingCounts,
+    overdueOutsideSelectedLevels,
+    selectedLevelList,
+    subjectById,
+    vocabularyKanjiLinks,
+    hasPrimaryRelatedPanel,
+    hasVisuallySimilarPanel,
+    hasUsedInVocabularyPanel,
+    selectedMeaningExplanation,
+    selectedReadingExplanationRaw,
+    showReadingExplanation,
+  } = useLevelExplorerDerivedData({
+    initialSnapshot,
+    selectedLevels,
+    snapshotsByLevel,
+    levelItemCountsByLevel,
+    selectedSubjectId,
+    accountPendingReviews,
+    recentOnly,
+    showLocked,
+    srsFilter,
+    typeFilter,
+    jlptFilter,
+    reviewTimingFilter,
+    visibleTypes,
+    searchMatchedSubjectIds,
+  });
 
   const actions = buildLevelExplorerActions({
     maxLevel,
@@ -284,16 +226,34 @@ export default function LevelExplorerController({
     setReviewTimingFilter,
   });
 
-  useEffect(() => {
-    ensureLevelLoadedRef.current = ensureLevelLoaded;
-  }, [ensureLevelLoaded]);
-
-  useLevelExplorerUrlHydration({
+  useLevelExplorerControllerEffects({
+    isActive,
     maxLevel,
-    initialLevel: initialSnapshot.level,
-    ensureLevelLoaded: (level) => ensureLevelLoaded(level),
+    initialSnapshot,
+    forceShowLocked,
+    customLibraryId,
+    storageKeys,
     applyingUrlStateRef,
     hasHydratedUrlStateRef,
+    lastHandledFindQueryRef,
+    ensureLevelLoadedRef,
+    ensureLevelLoaded,
+    writeUrlState,
+    searchAndReveal: actions.searchAndReveal,
+    snapshotsByLevel,
+    selectedLevels,
+    selectedSubjectId,
+    selectedItem,
+    selectedItemFromAll,
+    srsFilter,
+    typeFilter,
+    jlptFilter,
+    reviewTimingFilter,
+    recentOnly,
+    showLocked,
+    stickyMerge,
+    visibleTypes,
+    pendingHistoryMode,
     setSelectedLevels,
     setSelectedSubjectId,
     setSrsFilter,
@@ -301,107 +261,14 @@ export default function LevelExplorerController({
     setJlptFilter,
     setReviewTimingFilter,
     setRecentOnly,
-    setStickyMerge,
-    skipInitialApply: forceShowLocked,
-  });
-
-  useLevelExplorerStorageHydration({
-    storageKeys,
-    setVisibleTypes,
-    setSelectedSubjectId,
+    setShowLocked,
     setStickyMerge,
     setFiltersCollapsed,
-    setSrsFilter,
-    setTypeFilter,
-    setJlptFilter,
-    setReviewTimingFilter,
-    setRecentOnly,
-    setShowLocked,
-  });
-
-  useEffect(() => {
-    if (!forceShowLocked || !customLibraryId) {
-      return;
-    }
-
-    const allLevels = new Set(Array.from({ length: Math.max(1, maxLevel) }, (_, index) => index + 1));
-
-    void (async () => {
-      for (const level of allLevels.values()) {
-        await ensureLevelLoadedRef.current(level, true);
-      }
-    })();
-  }, [customLibraryId, forceShowLocked, maxLevel]);
-
-  useEffect(() => {
-    if (!isActive) {
-      return;
-    }
-
-    if (!hasHydratedUrlStateRef.current) {
-      return;
-    }
-
-    // Allow explicit user actions (push mode) to update URL even if hydration is still settling.
-    if (applyingUrlStateRef.current && pendingHistoryMode !== "push") {
-      return;
-    }
-
-    writeUrlState();
-  }, [
-    isActive,
-    pendingHistoryMode,
-    selectedLevels,
-    selectedSubjectId,
-    srsFilter,
-    typeFilter,
-    jlptFilter,
-    reviewTimingFilter,
-    stickyMerge,
-    writeUrlState,
-  ]);
-
-  useLevelExplorerGridColumns(setGridColumns);
-
-  useLevelExplorerStoragePersistence({
-    storageKeys,
-    srsFilter,
-    typeFilter,
-    jlptFilter,
-    reviewTimingFilter,
-    recentOnly,
-    showLocked,
-    selectedSubjectId,
-  });
-
-  useEffect(() => {
-    const current = snapshotsByLevel.get(initialSnapshot.level);
-    if (current && (!snapshotHasComponentKanjiData(current) || !snapshotHasJlptMetaData(current))) {
-      void ensureLevelLoaded(initialSnapshot.level, true);
-    }
-  }, [ensureLevelLoaded, initialSnapshot.level, snapshotsByLevel]);
-
-  useLevelExplorerSelectionReconcile({
-    selectedItem,
-    selectedItemFromAll,
-    typeFilter,
-    visibleTypes,
-    srsFilter,
-    jlptFilter,
-    reviewTimingFilter,
-    hasHydratedUrlStateRef,
-    setTypeFilter,
+    setVisibleTypes,
     setVisibleTypesAndPersist,
-    setSrsFilter,
-    setJlptFilter,
-    setReviewTimingFilter,
-  });
-
-  useLevelExplorerSearchEvents({
-    searchAndReveal: actions.searchAndReveal,
+    setGridColumns,
     setSearchMatchedSubjectIds,
     setSearchAvailableLevels,
-    lastHandledFindQueryRef,
   });
 
   return (

@@ -2,72 +2,22 @@
 
 import { useState } from "react";
 
-import type { LevelItem } from "../../explorerTypes";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
-import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
-import {
-  ReadingListWithPronunciation,
-  ReadingWithPronunciation,
-  englishSubtitleForDisplay,
-  formatDate,
-  formatNextReviewBadge,
-  formatRelativeFromNow,
-  glyphHasReading,
-  glyphSubtitleForDisplay,
-  glyphTextSizeClass,
-  isNewGlyphWithinHours,
-  secondaryReadingsForDisplay,
-  titleForDisplay,
-  typeGlyphBoxClass,
-} from "../lib/levelExplorerDisplay";
+import { titleForDisplay } from "../lib/levelExplorerDisplay";
 import LevelRelatedPanels from "./LevelRelatedPanels";
 import LevelExplorerReviewStatsCard from "./LevelExplorerReviewStatsCard";
 import {
   RelatedReferenceCards,
   VocabularyKanjiCards,
 } from "./LevelExplorerReferenceCards";
-import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
-import { ReviewTimingChip } from "../../shared/StatusSrsChip";
+import LevelExplorerDetailGlyphBox from "./LevelExplorerDetailGlyphBox";
+import LevelExplorerDetailFacts from "./LevelExplorerDetailFacts";
 import {
   isKanjiSubjectType,
   isRadicalSubjectType,
   isVocabularySubjectType,
 } from "../lib/levelExplorerDomain";
-import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
-import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
-import GlyphTagOverlay from "../../shared/GlyphTagOverlay";
-import GlyphStatusChipRow from "../../shared/GlyphStatusChipRow";
-
-type Props = {
-  accountId: string;
-  selectedItem: LevelItem;
-  showEnglish: boolean;
-  clampLongTitle?: boolean;
-  titleMeaningToggleOnly?: boolean;
-  canToggleEnglish?: boolean;
-  onToggleShowEnglish?: (() => void) | null;
-  hideTimeStats?: boolean;
-  studyMode: boolean;
-  revealStudyReading?: boolean;
-  onTogglePeek?: (() => void) | null;
-  selectedMeaningExplanation: string;
-  selectedReadingExplanationRaw: string;
-  showReadingExplanation: boolean;
-  hasPrimaryRelatedPanel: boolean;
-  hasVisuallySimilarPanel: boolean;
-  hasUsedInVocabularyPanel: boolean;
-  usedInVocabularyCollapsed?: boolean;
-  onToggleUsedInVocabularyCollapsed?: (() => void) | null;
-  vocabularyKanjiLinks: VocabularyKanjiLink[];
-  subjectById: Map<number, LevelItem>;
-  onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
-  onJumpToKanji: (subjectId: number, wkLevel: number | null) => Promise<void>;
-  onResetToLessons?: (() => void) | null;
-  resetDisabled?: boolean;
-  resetBusy?: boolean;
-  studyTags?: { favorite: boolean; trouble: boolean };
-  onToggleStudyTag?: ((tag: "favorite" | "trouble") => void) | null;
-};
+import type { LevelExplorerDetailSectionProps as Props } from "./LevelExplorerDetailSection.types";
 
 export default function LevelExplorerDetailSection({
   accountId,
@@ -97,7 +47,6 @@ export default function LevelExplorerDetailSection({
   studyTags,
   onToggleStudyTag = null,
 }: Props) {
-  const { fontFamily, toggle: toggleGlyphFont } = useGlyphFontPreference();
   const lockMeaningToggleToTitle = titleMeaningToggleOnly && !studyMode;
   const showEnglishForGlyphSubtitle = lockMeaningToggleToTitle ? false : showEnglish;
   const showEnglishForReadings = lockMeaningToggleToTitle ? true : showEnglish;
@@ -106,7 +55,6 @@ export default function LevelExplorerDetailSection({
   const isStudyHidden = studyMode && !revealStudyReading;
   const canShowReadings = !isStudyHidden;
   const primaryMeaning = selectedItem.meanings.find((entry) => entry.trim().length > 0) ?? "";
-  const nextReviewBadge = formatNextReviewBadge(selectedItem.availableAt);
   const revealedStudyTitle =
     primaryMeaning ||
     titleForDisplay(selectedItem, true) ||
@@ -128,111 +76,23 @@ export default function LevelExplorerDetailSection({
   const headerTitleKey = `${selectedItem.subjectId}:${headerTitle ?? ""}`;
   const isHeaderTitleExpanded = expandedHeaderTitleKey === headerTitleKey;
   const shouldClampHeaderTitle = clampLongTitle && Boolean(headerTitle) && !isHeaderTitleExpanded;
-  const usesStudyPeekToggle = studyMode && Boolean(onTogglePeek);
-  const canRenderEyeToggle = usesStudyPeekToggle || Boolean(onToggleShowEnglish);
-  const eyeToggleTitle = usesStudyPeekToggle
-    ? (isStudyHidden ? LEVEL_EXPLORER_TEXT.peek : LEVEL_EXPLORER_TEXT.hidePeek)
-    : canToggleEnglish
-      ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish)
-      : LEVEL_EXPLORER_TEXT.hintsHidden;
-  const isEyeOn = usesStudyPeekToggle ? !isStudyHidden : showEnglish;
-
-  const glyphChipControls = (
-    <>
-      {isNewGlyphWithinHours(selectedItem) ? (
-        <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>
-      ) : null}
-      {nextReviewBadge ? <ReviewTimingChip label={nextReviewBadge.label} className={nextReviewBadge.className} /> : null}
-      {canRenderEyeToggle ? (
-        <button
-          type="button"
-          onClick={() => {
-            if (usesStudyPeekToggle) {
-              onTogglePeek?.();
-              return;
-            }
-            onToggleShowEnglish?.();
-          }}
-          disabled={usesStudyPeekToggle ? false : !canToggleEnglish}
-          className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-          title={eyeToggleTitle}
-          aria-label={eyeToggleTitle}
-        >
-          {isEyeOn ? (
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
-              <path d="M4 4l16 16" />
-            </svg>
-          )}
-        </button>
-      ) : null}
-      <button
-        type="button"
-        onClick={toggleGlyphFont}
-        className="subject-pill inline-flex cursor-pointer items-center justify-center border-line bg-surface text-foreground hover:bg-surface-muted"
-        title="Font"
-        aria-label="Font"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-3.5 w-3.5" fill="none">
-          <text x="6.3" y="14.1" fontSize="12.6" fontWeight="700" fill="currentColor" textAnchor="middle">A</text>
-          <text x="17.0" y="17.7" fontSize="13.4" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
-        </svg>
-      </button>
-    </>
-  );
 
   return (
     <section data-view-glyph-parent-frame="true" className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
       <div className="grid gap-2 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-x-3">
         <div className="flex sm:self-center">
-          <div
-            className={`group/explorer-card relative flex min-w-0 flex-1 rounded-2xl border pt-12 sm:min-w-64 ${
-              glyphHasReading(selectedItem)
-                ? "min-h-[8rem] flex-col items-center justify-center px-4 pb-3"
-                : "min-h-[8rem] items-center justify-center px-4 pb-3"
-            } ${typeGlyphBoxClass(selectedItem.subjectType)}`}
-          >
-            <GlyphMetadataBadges level={selectedItem.wkLevel} successRate={selectedItem.successRate} />
-            {onToggleStudyTag ? (
-              <GlyphTagOverlay
-                subjectType={selectedItem.subjectType}
-                studyTags={studyTags ?? { favorite: false, trouble: false }}
-                onToggleStudyTag={onToggleStudyTag}
-              />
-            ) : null}
-            <GlyphStatusChipRow item={selectedItem}>{glyphChipControls}</GlyphStatusChipRow>
-            <div>
-              <p style={{ fontFamily }} className={`text-center font-black leading-none text-current ${glyphTextSizeClass(selectedItem.characters)}`}>
-                {selectedItem.characters}
-              </p>
-              {(() => {
-                if (studyMode && isStudyHidden) {
-                  return <p className="mt-1 w-full text-center text-sm font-semibold text-foreground/55">...</p>;
-                }
-
-                const subtitle = studyMode
-                  ? glyphSubtitleForDisplay(selectedItem)
-                  : showEnglishForGlyphSubtitle
-                    ? englishSubtitleForDisplay(selectedItem)
-                    : glyphSubtitleForDisplay(selectedItem);
-
-                if (!subtitle) {
-                  return null;
-                }
-
-                return (
-                  <p className="mt-1 w-full text-center text-sm font-semibold text-foreground/85">
-                    <ReadingWithPronunciation reading={subtitle} />
-                  </p>
-                );
-              })()}
-            </div>
-          </div>
+          <LevelExplorerDetailGlyphBox
+            selectedItem={selectedItem}
+            studyMode={studyMode}
+            isStudyHidden={isStudyHidden}
+            showEnglishForGlyphSubtitle={showEnglishForGlyphSubtitle}
+            canToggleEnglish={canToggleEnglish}
+            showEnglish={showEnglish}
+            onToggleShowEnglish={onToggleShowEnglish}
+            onTogglePeek={onTogglePeek}
+            studyTags={studyTags}
+            onToggleStudyTag={onToggleStudyTag}
+          />
         </div>
 
         <div className="min-w-0">
@@ -269,68 +129,17 @@ export default function LevelExplorerDetailSection({
         </div>
       </div>
 
-      {canShowReadings ? (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Primary reading</p>
-            <p className="mt-1 text-lg font-semibold text-foreground/90 sm:text-xl">
-              {isRadicalSubjectType(selectedItem.subjectType) ? (
-                "Not applicable"
-              ) : (
-                <ReadingListWithPronunciation readings={selectedItem.primaryReadings ?? []} mode={showEnglishForReadings ? "inline" : "plain"} />
-              )}
-            </p>
-          </div>
-          <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Secondary readings</p>
-            <p className="mt-1 text-lg font-semibold text-foreground/90 sm:text-xl">
-              {isRadicalSubjectType(selectedItem.subjectType) ? (
-                "Not applicable"
-              ) : (
-                <ReadingListWithPronunciation readings={secondaryReadingsForDisplay(selectedItem)} mode={showEnglishForReadings ? "inline" : "plain"} />
-              )}
-            </p>
-          </div>
-        </div>
-      ) : null}
-
-      {!hideTimeStats ? (
-        <div className={`${canShowReadings ? "mt-3" : "mt-4"} grid gap-3 sm:grid-cols-2 lg:grid-cols-3`}>
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-          <p className="text-xs font-bold uppercase text-foreground/70">Started</p>
-          <p className="mt-1 font-semibold text-foreground/90">
-            {formatDate(selectedItem.startedAt)}
-            {formatRelativeFromNow(selectedItem.startedAt) ? ` (${formatRelativeFromNow(selectedItem.startedAt)})` : ""}
-          </p>
-        </div>
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-          <p className="text-xs font-bold uppercase text-foreground/70">Next review</p>
-          <p className="mt-1 font-semibold text-foreground/90">{formatDate(selectedItem.availableAt)}</p>
-        </div>
-        <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-          <p className="text-xs font-bold uppercase text-foreground/70">Passed</p>
-          <p className="mt-1 font-semibold text-foreground/90">
-            {formatDate(selectedItem.passedAt)}
-            {formatRelativeFromNow(selectedItem.passedAt) ? ` (${formatRelativeFromNow(selectedItem.passedAt)})` : ""}
-          </p>
-        </div>
-        </div>
-      ) : null}
-
-      {!studyMode || revealStudyReading ? (
-        <div className={`mt-4 grid gap-3 ${showReadingExplanation ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
-          <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Meaning explanation</p>
-            <p className="mt-2 text-foreground/90">{selectedMeaningExplanation}</p>
-          </article>
-          {showReadingExplanation ? (
-            <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-              <p className="text-xs font-bold uppercase text-foreground/70">Reading explanation</p>
-              <p className="mt-2 text-foreground/90">{selectedReadingExplanationRaw}</p>
-            </article>
-          ) : null}
-        </div>
-      ) : null}
+      <LevelExplorerDetailFacts
+        selectedItem={selectedItem}
+        canShowReadings={canShowReadings}
+        showEnglishForReadings={showEnglishForReadings}
+        hideTimeStats={hideTimeStats}
+        studyMode={studyMode}
+        revealStudyReading={revealStudyReading}
+        selectedMeaningExplanation={selectedMeaningExplanation}
+        selectedReadingExplanationRaw={selectedReadingExplanationRaw}
+        showReadingExplanation={showReadingExplanation}
+      />
 
       {!studyMode || revealStudyReading ? (
         <LevelRelatedPanels

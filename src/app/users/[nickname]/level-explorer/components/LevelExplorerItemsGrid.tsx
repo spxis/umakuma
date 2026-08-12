@@ -1,58 +1,16 @@
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment } from "react";
 
-import type { LevelItem } from "../../explorerTypes";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
 import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
-import { ReadingWithPronunciation, badgeClass, formatNextReviewBadge, formatNumber, glyphSubtitleForDisplay, glyphTextSizeClass, isNewGlyphWithinHours, jlptLevelPillClass, lockedCardStateClass, shortSubjectTypeLabel, subjectTypePillClass, titleForDisplay, typeCardClass, typeGlyphBoxClass } from "../lib/levelExplorerDisplay";
+import { ReadingWithPronunciation, formatNextReviewBadge, formatNumber, glyphSubtitleForDisplay, glyphTextSizeClass, isNewGlyphWithinHours, jlptLevelPillClass, lockedCardStateClass, shortSubjectTypeLabel, subjectTypePillClass, titleForDisplay, typeCardClass, typeGlyphBoxClass } from "../lib/levelExplorerDisplay";
 import { LEVEL_WK_STATUSES } from "../lib/levelExplorerDomain";
-import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
-import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
+import { useLevelExplorerBulkSelection } from "../lib/useLevelExplorerBulkSelection";
 import LevelExplorerDetailSection from "./LevelExplorerDetailSection";
 import LevelCardTagOverlay from "./LevelCardTagOverlay";
+import LevelExplorerGridToolbar from "./LevelExplorerGridToolbar";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
-
-type Props = {
-  accountId: string;
-  filteredItems: LevelItem[];
-  visibleItems: LevelItem[];
-  selectedItem: LevelItem | null;
-  visibleDetailInsertIndex: number;
-  selectedLevelList: number[];
-  studyMode: boolean;
-  showEnglish: boolean;
-  canToggleEnglish: boolean;
-  isPeekRevealed: boolean;
-  selectedMeaningExplanation: string;
-  selectedReadingExplanationRaw: string;
-  showReadingExplanation: boolean;
-  hasPrimaryRelatedPanel: boolean;
-  hasVisuallySimilarPanel: boolean;
-  hasUsedInVocabularyPanel: boolean;
-  vocabularyKanjiLinks: VocabularyKanjiLink[];
-  subjectById: Map<number, LevelItem>;
-  selectedSubjectIds: Set<number>;
-  isResetting: boolean;
-  resetFeedback: { kind: "success" | "error"; message: string } | null;
-  recentOnly: boolean;
-  showLocked: boolean;
-  allowHideLocked: boolean;
-  sentinelRef: React.RefObject<HTMLDivElement | null>;
-  onClearFilters: () => void;
-  onSelectItem: (subjectId: number) => void;
-  onTogglePeek: (subjectId: number) => void;
-  onSetRecentOnly: (next: boolean) => void;
-  onSetShowLocked: (next: boolean) => void;
-  onToggleShowEnglish: () => void;
-  onToggleSubjectSelection: (subjectId: number) => void;
-  onSelectSubjectIds: (subjectIds: number[]) => void;
-  onSelectVisibleSubjects: () => void;
-  onClearSelection: () => void;
-  onResetSelected: () => void;
-  onResetSingle: (subjectId: number) => void;
-  onJumpToRelatedSubject: (subjectId: number, targetLevel?: number | null) => Promise<void>;
-  onJumpToKanji: (subjectId: number, wkLevel: number | null) => Promise<void>;
-};
+import type { LevelExplorerItemsGridProps as Props } from "./LevelExplorerItemsGrid.types";
 
 export default function LevelExplorerItemsGrid({
   accountId,
@@ -92,155 +50,50 @@ export default function LevelExplorerItemsGrid({
   onJumpToRelatedSubject,
   onJumpToKanji,
 }: Props) {
-  const [bulkModeEnabled, setBulkModeEnabled] = useState(() => {
-    try {
-      return typeof window !== "undefined" && window.localStorage.getItem("wr:level-bulk-mode") === "1";
-    } catch {
-      return false;
-    }
+  const {
+    bulkModeEnabled,
+    showAllSelectedInBar,
+    setShowAllSelectedInBar,
+    selectedItems,
+    selectedPreview,
+    resolveStudyTags,
+    onToggleStudyTag,
+    applyBulkSelection,
+    toggleBulkMode,
+    exitBulkMode,
+  } = useLevelExplorerBulkSelection({
+    accountId,
+    filteredItems,
+    visibleItems,
+    selectedSubjectIds,
+    onToggleSubjectSelection,
+    onSelectSubjectIds,
+    onClearSelection,
   });
-  const [bulkAnchorIndex, setBulkAnchorIndex] = useState<number | null>(null);
-  const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
-  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
 
-  const resolveStudyTags = useCallback(
-    (item: LevelItem) => tagOverrides[item.subjectId] ?? item.studyTags ?? { favorite: false, trouble: false },
-    [tagOverrides],
-  );
-
-  const selectedItems = useMemo(
-    () => filteredItems.filter((item) => selectedSubjectIds.has(item.subjectId)),
-    [filteredItems, selectedSubjectIds],
-  );
-
-  const selectedPreview = useMemo(() => {
-    return selectedItems.map((item) => item.characters);
-  }, [selectedItems]);
-
-  const selectedItemWithTags = useMemo(
-    () =>
-      selectedItem
-        ? {
-            ...selectedItem,
-            studyTags: resolveStudyTags(selectedItem),
-          }
-        : null,
-    [resolveStudyTags, selectedItem],
-  );
-
-  const onToggleStudyTag = useCallback(
-    async (subjectId: number, tag: "favorite" | "trouble", enabled: boolean) => {
-      const fallbackFromItems = filteredItems.find((entry) => entry.subjectId === subjectId)?.studyTags;
-      const fallback = fallbackFromItems ?? { favorite: false, trouble: false };
-      const current = tagOverrides[subjectId] ?? fallback;
-      const next = { ...current, [tag]: enabled };
-
-      setTagOverrides((prev) => ({ ...prev, [subjectId]: next }));
-
-      try {
-        const response = await fetch(`/api/study/${accountId}/tags`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ subjectId, tag, enabled }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Tag update failed.");
-        }
-
-        window.dispatchEvent(
-          new CustomEvent("wr:study-tags-updated", {
-            detail: { accountId, subjectId },
-          }),
-        );
-      } catch {
-        setTagOverrides((prev) => ({ ...prev, [subjectId]: current }));
+  const selectedItemWithTags = selectedItem
+    ? {
+        ...selectedItem,
+        studyTags: resolveStudyTags(selectedItem),
       }
-    },
-    [accountId, filteredItems, tagOverrides],
-  );
-
-  const applyBulkSelection = ({
-    subjectId,
-    shiftKey,
-    sourceIndex,
-  }: {
-    subjectId: number;
-    shiftKey: boolean;
-    sourceIndex: number;
-  }) => {
-    if (!bulkModeEnabled) {
-      return false;
-    }
-
-    if (shiftKey && bulkAnchorIndex !== null) {
-      const start = Math.min(bulkAnchorIndex, sourceIndex);
-      const end = Math.max(bulkAnchorIndex, sourceIndex);
-      const rangeIds = visibleItems.slice(start, end + 1).map((item) => item.subjectId);
-      if (rangeIds.length > 0) {
-        onSelectSubjectIds(rangeIds);
-      }
-      return true;
-    }
-
-    onToggleSubjectSelection(subjectId);
-    setBulkAnchorIndex(sourceIndex);
-    return true;
-  };
+    : null;
 
   return (
     <>
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-          Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} items
-        </p>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onToggleShowEnglish}
-            disabled={!canToggleEnglish}
-            className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {canToggleEnglish ? (showEnglish ? LEVEL_EXPLORER_TEXT.hideEnglish : LEVEL_EXPLORER_TEXT.showEnglish) : LEVEL_EXPLORER_TEXT.hintsHidden}
-          </button>
-          <button
-            type="button"
-            onClick={() => onSetRecentOnly(!recentOnly)}
-            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(recentOnly)}`}
-          >
-            {LEVEL_EXPLORER_TEXT.recentOnly}
-          </button>
-          {allowHideLocked ? (
-            <button
-              type="button"
-              onClick={() => onSetShowLocked(!showLocked)}
-              className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition hover:bg-surface-muted"
-            >
-              {showLocked ? LEVEL_EXPLORER_TEXT.hideLocked : LEVEL_EXPLORER_TEXT.showLocked}
-            </button>
-          ) : null}
-          <button
-            type="button"
-            onClick={() => {
-              setBulkModeEnabled((previous) => {
-                const next = !previous;
-                if (!next) {
-                  onClearSelection();
-                  setBulkAnchorIndex(null);
-                  setShowAllSelectedInBar(false);
-                }
-                try { window.localStorage.setItem("wr:level-bulk-mode", next ? "1" : "0"); } catch { /* ignore */ }
-                return next;
-              });
-            }}
-            className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.1em] transition ${badgeClass(
-              bulkModeEnabled,
-            )}`}
-          >
-            {bulkModeEnabled ? LEVEL_EXPLORER_TEXT.bulkOpsActive : LEVEL_EXPLORER_TEXT.bulkOperations}
-          </button>
-        </div>
-      </div>
+      <LevelExplorerGridToolbar
+        visibleCount={visibleItems.length}
+        totalCount={filteredItems.length}
+        showEnglish={showEnglish}
+        canToggleEnglish={canToggleEnglish}
+        recentOnly={recentOnly}
+        showLocked={showLocked}
+        allowHideLocked={allowHideLocked}
+        bulkModeEnabled={bulkModeEnabled}
+        onToggleShowEnglish={onToggleShowEnglish}
+        onSetRecentOnly={onSetRecentOnly}
+        onSetShowLocked={onSetShowLocked}
+        onToggleBulkMode={toggleBulkMode}
+      />
       {bulkModeEnabled ? (
         <ExplorerBulkSelectionPanel
           selectedCount={selectedSubjectIds.size}
@@ -259,13 +112,7 @@ export default function LevelExplorerItemsGrid({
           onToggleFullList={() => setShowAllSelectedInBar((value) => !value)}
           onSelectVisible={onSelectVisibleSubjects}
           onClearSelection={onClearSelection}
-          onDone={() => {
-            setBulkModeEnabled(false);
-            onClearSelection();
-            setBulkAnchorIndex(null);
-            setShowAllSelectedInBar(false);
-            try { window.localStorage.setItem("wr:level-bulk-mode", "0"); } catch { /* ignore */ }
-          }}
+          onDone={exitBulkMode}
         />
       ) : null}
       {filteredItems.length === 0 ? (
