@@ -161,6 +161,7 @@ export default function ExplorerTabsStudyQueueMenu({
               className={overlayOptionClass(queueTagFilter === "all")}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Due reviews</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Study reviews that are currently due</p>
             </button>
             <button
               type="button"
@@ -171,6 +172,7 @@ export default function ExplorerTabsStudyQueueMenu({
               className={overlayOptionClass(queueTagFilter === "trouble")}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Trouble</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Focus on items marked as trouble</p>
             </button>
             <button
               type="button"
@@ -181,6 +183,7 @@ export default function ExplorerTabsStudyQueueMenu({
               className={overlayOptionClass(queueTagFilter === "favorite")}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Favorites</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Review items marked as favorites</p>
             </button>
           </div>
           <div className="mt-1 space-y-1 border-t border-line pt-1" role="tablist" aria-label="Review queue mix">
@@ -193,6 +196,7 @@ export default function ExplorerTabsStudyQueueMenu({
               className={overlayOptionClass(!includeTrouble)}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Due only</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Show only due review items</p>
             </button>
             <button
               type="button"
@@ -203,6 +207,7 @@ export default function ExplorerTabsStudyQueueMenu({
               className={overlayOptionClass(includeTrouble)}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Due + trouble</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Mix due reviews with trouble items</p>
             </button>
           </div>
           {!studyMode ? (
@@ -216,6 +221,7 @@ export default function ExplorerTabsStudyQueueMenu({
                 className={overlayOptionClass(!reviewedVisible)}
               >
                 <p className="text-xs font-black uppercase tracking-[0.08em]">Reviewed OFF</p>
+                <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Hide reviewed items from the list</p>
               </button>
               <button
                 type="button"
@@ -226,6 +232,7 @@ export default function ExplorerTabsStudyQueueMenu({
                 className={overlayOptionClass(reviewedVisible)}
               >
                 <p className="text-xs font-black uppercase tracking-[0.08em]">Reviewed ON</p>
+                <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Keep reviewed items visible in the list</p>
               </button>
             </div>
           ) : null}

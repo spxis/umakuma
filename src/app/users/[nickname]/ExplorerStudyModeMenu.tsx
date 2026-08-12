@@ -106,7 +106,7 @@ export default function ExplorerStudyModeMenu({
         aria-haspopup="menu"
         aria-expanded={isMenuOpen}
       >
-        <span>{studyModeBehavior === "oneshot" ? "Quick mode" : studyMode ? "Session" : "Off"}</span>
+        <span>Study mode</span>
       </button>
       {isMenuOpen ? (
         <div
@@ -123,7 +123,6 @@ export default function ExplorerStudyModeMenu({
                 type="button"
                 role="menuitemradio"
                 aria-checked={active}
-                onMouseEnter={() => handleSelectMode(mode.value)}
                 onClick={() => {
                   handleSelectMode(mode.value);
                   setIsPinnedOpen(false);
