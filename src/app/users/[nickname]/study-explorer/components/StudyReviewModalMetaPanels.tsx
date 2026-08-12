@@ -63,6 +63,7 @@ type Props = {
   skipped: number;
   correct: number;
   onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => void;
+  onRetry?: () => void;
   onSkipCurrent: () => void;
   onStartLesson: (assignmentId: number) => void;
   onToggleUsedInVocabularyCollapsed: () => void;
@@ -101,6 +102,7 @@ export default function StudyReviewModalMetaPanels({
   skipped,
   correct,
   onSubmit,
+  onRetry,
   onSkipCurrent,
   onStartLesson,
   onToggleUsedInVocabularyCollapsed,
@@ -152,7 +154,7 @@ export default function StudyReviewModalMetaPanels({
   const selectedReadingExplanationRaw = stripHtml(selectedItem.readingExplanation);
   const showReadingExplanation = selectedReadingExplanationRaw.length > 0;
   const showReadingCards = !isRadicalSubjectType(selectedItem.subjectType);
-
+  const retryableSubmitFeedback = submitFeedback && submitFeedback.kind === "error" && submitFeedback.message.includes("Please retry.");
   const openFromRelatedItems = (
     items: RelatedReference[] | undefined,
     subjectId: number,
@@ -477,9 +479,19 @@ export default function StudyReviewModalMetaPanels({
       ) : null}
 
       {submitFeedback ? (
-        <p className={`mt-3 rounded-xl border px-4 py-3 text-sm font-black uppercase tracking-[0.08em] ${submitFeedback.kind === "success" ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-red-300 bg-red-50 text-red-800"}`}>
-          {submitFeedback.message}
-        </p>
+        retryableSubmitFeedback && onRetry ? (
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-3 w-full rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-left text-sm font-black uppercase tracking-[0.08em] text-red-800 transition hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 cursor-pointer"
+          >
+            {submitFeedback.message}
+          </button>
+        ) : (
+          <p className={`mt-3 rounded-xl border px-4 py-3 text-sm font-black uppercase tracking-[0.08em] ${submitFeedback.kind === "success" ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-red-300 bg-red-50 text-red-800"}`}>
+            {submitFeedback.message}
+          </p>
+        )
       ) : null}
 
     </>

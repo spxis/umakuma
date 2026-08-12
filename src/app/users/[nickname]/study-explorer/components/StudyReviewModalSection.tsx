@@ -390,6 +390,7 @@ export default function StudyReviewModalSection({
         skipped={skipped}
         correct={correct}
         onSubmit={onSubmit}
+        onRetry={selectedOutcome ? () => onSubmit(selectedItem.assignmentId, selectedOutcome) : undefined}
         onSkipCurrent={onSkipCurrent}
         onStartLesson={onStartLesson}
         onToggleUsedInVocabularyCollapsed={onToggleUsedInVocabularyCollapsed}

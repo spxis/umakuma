@@ -81,10 +81,15 @@ h3 {
 button,
 [role="button"],
 a[href],
+summary,
+label,
 input[type="button"],
 input[type="submit"],
 input[type="reset"],
-summary,
+input[type="checkbox"],
+input[type="radio"],
+select,
+textarea,
 [data-clickable="true"] {
   cursor: pointer;
   -webkit-user-select: none;
@@ -94,7 +99,10 @@ summary,
 
 button:disabled,
 [disabled],
-[aria-disabled="true"] {
+[aria-disabled="true"],
+input:disabled,
+select:disabled,
+textarea:disabled {
   cursor: not-allowed;
 }
 
