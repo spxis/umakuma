@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 
-import type { StudyCounts, StudyQueueItem, StudyQueueMode } from "./studyExplorerTypes";
+import type { StudyCounts, StudyQueueItem, StudyQueueMode, StudyWaitSortOrder } from "./studyExplorerTypes";
+import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 import { sameAssignmentList } from "./studyExplorerEffectsComparators";
 import { fetchStudyQueue } from "./studyExplorerUtils";
 
@@ -8,6 +9,7 @@ type Args = {
   queueApiBasePath: string;
   customLibraryId: string | null;
   queueMode: StudyQueueMode;
+  waitSortOrder: StudyWaitSortOrder;
   initialPageSize: number;
   loadedItems: StudyQueueItem[];
   totalItems: number;
@@ -28,6 +30,7 @@ export function useStudyQueuePagination({
   queueApiBasePath,
   customLibraryId,
   queueMode,
+  waitSortOrder,
   initialPageSize,
   loadedItems,
   totalItems,
@@ -56,6 +59,9 @@ export function useStudyQueuePagination({
       });
       if (customLibraryId) {
         params.set("libraryId", customLibraryId);
+      }
+      if (queueMode === STUDY_QUEUE_TYPES.review && (waitSortOrder === "easiest" || waitSortOrder === "hardest")) {
+        params.set("sort", waitSortOrder);
       }
 
       const payload = await fetchStudyQueue(
@@ -95,6 +101,7 @@ export function useStudyQueuePagination({
     onSetTotalItems,
     queueApiBasePath,
     queueMode,
+    waitSortOrder,
     totalItems,
   ]);
 
@@ -109,6 +116,9 @@ export function useStudyQueuePagination({
       const params = new URLSearchParams({ mode: queueMode });
       if (customLibraryId) {
         params.set("libraryId", customLibraryId);
+      }
+      if (queueMode === STUDY_QUEUE_TYPES.review && (waitSortOrder === "easiest" || waitSortOrder === "hardest")) {
+        params.set("sort", waitSortOrder);
       }
 
       const payload = await fetchStudyQueue(`${queueApiBasePath}/queue?${params.toString()}`);
@@ -146,6 +156,7 @@ export function useStudyQueuePagination({
     onSetTotalItems,
     queueApiBasePath,
     queueMode,
+    waitSortOrder,
   ]);
 
   useEffect(() => {

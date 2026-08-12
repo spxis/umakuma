@@ -26,7 +26,7 @@ import type {
   SubmitFeedback,
   SubmitInFlight,
 } from "../lib/studyExplorerTypes";
-import { fetchStudyQueue, fetchUpcomingReviews, readStoredQueue, readStoredQueueMeta } from "../lib/studyExplorerUtils";
+import { fetchStudyQueue, fetchUpcomingReviews, readStoredQueue, readStoredQueueMeta, sortStudyItemsByWait } from "../lib/studyExplorerUtils";
 import { normalizeSrsStageFilter } from "../lib/studyExplorerSrs";
 import { resolveEffectiveViewedLevel } from "../lib/studyExplorerLevelBounds";
 import { buildStudyExplorerStorageKeys, deriveInitialQueueState, readStoredStudyCounts } from "../lib/studyExplorerState";
@@ -104,6 +104,15 @@ export default function StudyExplorer({
   const [hasHydratedTypeFilter, setHasHydratedTypeFilter] = useState(false);
   const hasMounted = useSyncExternalStore(() => () => {}, () => true, () => false);
   const isModalOpen = selectedId !== null;
+  const { hasHydratedWaitSort, waitSortOrder, waitRandomOrderByAssignmentId, setWaitSortOrder } = useStudyWaitSort({
+    filteredItems: loadedItems,
+    waitSortStorageKey: storageKeys.waitSort,
+    waitRandomOrderStorageKey: storageKeys.waitRandomOrder,
+  });
+  const supportsDifficultySort = !studySourceIsCustom && queueMode === STUDY_QUEUE_TYPES.review;
+  const effectiveWaitSortOrder = !supportsDifficultySort && (waitSortOrder === "easiest" || waitSortOrder === "hardest")
+    ? "oldest_wait"
+    : waitSortOrder;
   const effectiveSrsFilter: StudySrsFilter =
     queueMode === STUDY_QUEUE_TYPES.lesson ? STUDY_SRS_FILTERS.all : srsFilter;
   const effectiveRecentOnly = queueMode === STUDY_QUEUE_TYPES.lesson ? false : recentOnly;
@@ -111,7 +120,7 @@ export default function StudyExplorer({
   const effectiveSrsStageFilter: StudySrsStageFilter | null =
     queueMode === STUDY_QUEUE_TYPES.lesson ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
   const initialPageSize = useMemo(() => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 24 : gridColumns * 12), [gridColumns, queueMode]);
-  const queueRequestUrl = buildStudyQueueRequestUrl({
+  const queueRequestUrl = hasHydratedWaitSort ? buildStudyQueueRequestUrl({
     studyApiBasePath,
     queueMode,
     initialPageSize,
@@ -119,8 +128,9 @@ export default function StudyExplorer({
     customLibraryId,
     includeTrouble,
     includeReviewed: queueMode === STUDY_QUEUE_TYPES.review && !studyMode && showLocked,
+    waitSortOrder: effectiveWaitSortOrder,
     queueTagFilter,
-  });
+  }) : null;
   useEffect(() => {
     onReviewedVisibilityChange?.(showLocked);
   }, [onReviewedVisibilityChange, showLocked]);
@@ -286,11 +296,10 @@ export default function StudyExplorer({
     submittingByAssignmentId,
     revealedAssignmentIds,
   });
-  const { waitSortOrder, sortedFilteredItems, setWaitSortOrder } = useStudyWaitSort({
-    filteredItems,
-    waitSortStorageKey: storageKeys.waitSort,
-    waitRandomOrderStorageKey: storageKeys.waitRandomOrder,
-  });
+  const sortedFilteredItems = useMemo(
+    () => sortStudyItemsByWait(filteredItems, effectiveWaitSortOrder, waitRandomOrderByAssignmentId),
+    [effectiveWaitSortOrder, filteredItems, waitRandomOrderByAssignmentId],
+  );
   const upcomingRequestUrl = queueMode === STUDY_QUEUE_TYPES.review && showUpcomingReviews && sortedFilteredItems.length === 0 ? buildStudyUpcomingRequestUrl({ studyApiBasePath, studySource, customLibraryId, limit: 8 }) : null;
   const { data: upcomingData, error: upcomingError, isLoading: isLoadingUpcoming, isValidating: isValidatingUpcoming } = useSWR(upcomingRequestUrl, fetchUpcomingReviews, { keepPreviousData: false, revalidateOnFocus: false });
   useStudyModalSessionSync({
@@ -381,6 +390,7 @@ export default function StudyExplorer({
     queueApiBasePath: studyApiBasePath,
     customLibraryId,
     queueMode,
+    waitSortOrder: effectiveWaitSortOrder,
     initialPageSize,
     loadedItems,
     totalItems,
@@ -441,7 +451,7 @@ export default function StudyExplorer({
             viewedLevel={effectiveViewedLevel} typeFilter={typeFilter} srsFilter={effectiveSrsFilter}
             srsStageFilter={effectiveSrsStageFilter} queueMode={queueMode} lessonLevelCounts={lessonLevelCounts}
             typeCounts={typeCounts} srsCounts={srsCounts} srsStageCounts={srsStageCounts}
-            filteredItems={sortedFilteredItems} waitSortOrder={waitSortOrder} gridColumns={gridColumns}
+            filteredItems={sortedFilteredItems} waitSortOrder={effectiveWaitSortOrder} gridColumns={gridColumns}
             cacheFooterText={cacheTelemetry.text} cacheFooterTitle={cacheTelemetry.title}
             totalItems={totalItems} hasMorePages={hasMorePages} isLoadingMore={isLoadingMore}
             loadMoreError={loadMoreError} isLoading={isLoading} isValidating={isValidating}

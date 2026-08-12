@@ -139,4 +139,9 @@ export type StudySrsFilter = Extract<
 >;
 
 export type StudySrsStageFilter = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-export type StudyWaitSortOrder = "oldest_wait" | "newest_wait" | "random_wait";
+export type StudyWaitSortOrder =
+  | "oldest_wait"
+  | "newest_wait"
+  | "random_wait"
+  | "easiest"
+  | "hardest";

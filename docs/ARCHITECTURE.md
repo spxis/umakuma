@@ -99,6 +99,26 @@ The app is intentionally designed to avoid excessive WaniKani API usage while ke
 
 This means many visitors can hit the site, but reads still use cached DB data and only a small number of stale accounts are refreshed opportunistically.
 
+### Review difficulty sorting
+
+`Easiest` and `Hardest` rank the complete due-review queue before pagination. The tunable formula lives in `src/lib/reviewDifficulty.ts`:
+
+`ease = 55% smoothed local success + 30% SRS stage + 10% lower WK level + 5% recent Guru pass`
+
+- Local success uses a Bayesian prior of 2 correct answers from 4 attempts. Sparse history therefore stays near 50% instead of treating one correct answer as mastery.
+- SRS stage is normalized from Apprentice 1 through Burned. Higher stages rank easier because a correct answer removes the item for longer.
+- Lower WaniKani level is a modest familiarity prior, not the dominant signal.
+- A Guru pass contributes a small bonus that fades to zero over 90 days.
+- Missing history uses the neutral success prior. Missing level receives no level bonus. Subject ID is the deterministic tie-breaker.
+
+Performance budget:
+
+- Default, date, and random sorts add no history query.
+- Difficulty sorts add no WaniKani request.
+- History is aggregated in Postgres using the indexed `(accountId, subjectId, submittedAt)` path. The API receives at most 2 count rows per subject, never raw attempt history.
+- Aggregates are cached in-process for 60 seconds and reused for pagination and displayed success rates.
+- Keep ranking before pagination. Do not replace aggregation with raw `findMany` history reads.
+
 ### Refresh modes
 
 - Automatic stale refresh:

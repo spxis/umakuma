@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { resolveEffectiveViewedLevel } from "./studyExplorerLevelBounds";
+import { buildStudyQueueRequestUrl } from "./studyExplorerApi";
 import { normalizeSrsStageFilter } from "./studyExplorerSrs";
 import {
   buildStudyExplorerStorageKeys,
@@ -441,5 +442,37 @@ describe("study wait sorting", () => {
 
     const sorted = sortStudyItemsByWait(items, "random_wait", [12, 10, 11]);
     expect(sorted.map((item) => item.assignmentId)).toEqual([12, 10, 11]);
+  });
+
+  it("preserves API order for difficulty sorts", () => {
+    const items = [
+      makeItem({ assignmentId: 12, subjectId: 112 }),
+      makeItem({ assignmentId: 10, subjectId: 110 }),
+    ];
+
+    expect(sortStudyItemsByWait(items, "easiest")).toBe(items);
+    expect(sortStudyItemsByWait(items, "hardest")).toBe(items);
+  });
+});
+
+describe("study queue request sorting", () => {
+  const baseParams = {
+    studyApiBasePath: "/api/study/acct-1",
+    queueMode: "review" as const,
+    initialPageSize: 48,
+    studySource: "wanikani" as const,
+    customLibraryId: null,
+    includeTrouble: false,
+    includeReviewed: false,
+    queueTagFilter: "all" as const,
+  };
+
+  it("requests server difficulty ordering only for difficulty modes", () => {
+    expect(buildStudyQueueRequestUrl({ ...baseParams, waitSortOrder: "easiest" }))
+      .toContain("sort=easiest");
+    expect(buildStudyQueueRequestUrl({ ...baseParams, waitSortOrder: "hardest" }))
+      .toContain("sort=hardest");
+    expect(buildStudyQueueRequestUrl({ ...baseParams, waitSortOrder: "oldest_wait" }))
+      .not.toContain("sort=");
   });
 });

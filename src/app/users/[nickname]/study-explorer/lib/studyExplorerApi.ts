@@ -1,4 +1,4 @@
-import type { StudyQueueMode, StudySource, StudyTagFilter } from "./studyExplorerTypes";
+import type { StudyQueueMode, StudySource, StudyTagFilter, StudyWaitSortOrder } from "./studyExplorerTypes";
 import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 
 const STUDY_QUEUE_STORAGE_SCOPE_VERSION = "v2";
@@ -23,6 +23,7 @@ export function buildStudyQueueRequestUrl(params: {
   customLibraryId: string | null;
   includeTrouble: boolean;
   includeReviewed: boolean;
+  waitSortOrder: StudyWaitSortOrder;
   queueTagFilter?: "all" | "favorite" | "trouble";
 }): string | null {
   if (params.studySource === "custom" && !params.customLibraryId) {
@@ -41,6 +42,9 @@ export function buildStudyQueueRequestUrl(params: {
     query.set("includeTrouble", params.includeTrouble ? "1" : "0");
     if (params.includeReviewed) {
       query.set("includeReviewed", "1");
+    }
+    if (params.waitSortOrder === "easiest" || params.waitSortOrder === "hardest") {
+      query.set("sort", params.waitSortOrder);
     }
   }
   if (params.queueTagFilter && params.queueTagFilter !== "all") {

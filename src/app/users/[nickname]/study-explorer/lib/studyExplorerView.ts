@@ -1,7 +1,11 @@
 import type { StudyWaitSortOrder } from "./studyExplorerTypes";
 
 export function isStudyWaitSortOrder(value: string | null): value is StudyWaitSortOrder {
-  return value === "oldest_wait" || value === "newest_wait" || value === "random_wait";
+  return value === "oldest_wait" ||
+    value === "newest_wait" ||
+    value === "random_wait" ||
+    value === "easiest" ||
+    value === "hardest";
 }
 
 export function getStudyGridColumns(): number {

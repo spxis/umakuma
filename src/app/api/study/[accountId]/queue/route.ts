@@ -4,6 +4,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
+import { applyReviewSuccessRates, withReviewSuccessRates } from "@/lib/reviewSuccessRates";
 import { getCachedStudyQueue, setCachedStudyQueue } from "@/lib/studyQueueCache";
 import { QUEUE_TYPES, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { srsLabel } from "@/lib/wanikani/helpers";
@@ -11,7 +12,7 @@ import { hydrateMissingSubjects, normalizeSubjectType, queueRowsFromState, type 
 import { hydrateQueueSyncState } from "./queueRouteSync";
 import { mergeTroubleRows, troubleInjectionCount, type StudySubjectTagMap } from "./queueRouteTags";
 import { fetchStudyTagRows } from "./queueRouteTagRows";
-import { withReviewSuccessRates } from "@/lib/reviewSuccessRates";
+import { parseReviewDifficultySort, sortQueueRows } from "./queueRouteDifficulty";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -25,6 +26,10 @@ export async function GET(request: Request, context: RouteContext) {
     execute: async () => {
       try {
         const url = new URL(request.url);
+        const parsedDifficultySort = parseReviewDifficultySort(url.searchParams.get("sort"));
+        if (!parsedDifficultySort.success) {
+          return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
         const modeParam = url.searchParams.get("mode");
         const mode =
           modeParam === QUEUE_TYPES.lesson
@@ -36,6 +41,7 @@ export async function GET(request: Request, context: RouteContext) {
         const offsetParam = Number(url.searchParams.get("offset") ?? "");
         const includeTrouble = url.searchParams.get("includeTrouble") === "1";
         const includeReviewed = mode !== QUEUE_TYPES.lesson && url.searchParams.get("includeReviewed") === "1";
+        const difficultySort = mode === QUEUE_TYPES.review ? parsedDifficultySort.data : undefined;
         const tagFilter = url.searchParams.get("tag") === "favorite"
           ? "favorite"
           : url.searchParams.get("tag") === "trouble"
@@ -69,7 +75,7 @@ export async function GET(request: Request, context: RouteContext) {
       tag: account.tokenTag,
     });
 
-    const cacheVariant = mode === QUEUE_TYPES.review ? `trouble:${includeTrouble ? "1" : "0"}:reviewed:${includeReviewed ? "1" : "0"}` : "default";
+    const cacheVariant = mode === QUEUE_TYPES.review ? `trouble:${includeTrouble ? "1" : "0"}:reviewed:${includeReviewed ? "1" : "0"}:sort:${difficultySort ?? "default"}` : "default";
     const cached = canUseServerCache ? getCachedStudyQueue(accountId, mode, cacheVariant) : null;
     if (canUseServerCache && cached) {
       const cachedItems = cached.items as Array<{
@@ -77,11 +83,9 @@ export async function GET(request: Request, context: RouteContext) {
         subjectId?: number;
       }>;
       const pagedItems = limit === null ? cachedItems : cachedItems.slice(offset, offset + limit);
-      const itemsWithSuccessRates = await withReviewSuccessRates(accountId, pagedItems);
-
       return NextResponse.json(
         {
-          items: itemsWithSuccessRates,
+          items: pagedItems,
           counts: cached.counts,
           tagCounts: cached.tagCounts ?? { favorite: 0, trouble: 0 },
           levelCounts: cached.levelCounts ?? {},
@@ -185,20 +189,11 @@ export async function GET(request: Request, context: RouteContext) {
       ? unfilteredQueued
       : unfilteredQueued.filter((row) => (tagBySubjectId.get(row.data.subject_id)?.[tagFilter] ?? false));
 
-    const sortedQueued = [...queued].sort((a, b) => {
-      const aReview = a.queueType === QUEUE_TYPES.review ? 0 : 1;
-      const bReview = b.queueType === QUEUE_TYPES.review ? 0 : 1;
-      if (aReview !== bReview) {
-        return aReview - bReview;
-      }
-
-      const aLevel = subjectById.get(a.data.subject_id)?.data.level ?? 999;
-      const bLevel = subjectById.get(b.data.subject_id)?.data.level ?? 999;
-      if (aLevel !== bLevel) {
-        return aLevel - bLevel;
-      }
-
-      return a.data.subject_id - b.data.subject_id;
+    const { sortedRows: sortedQueued, performanceBySubjectId } = await sortQueueRows({
+      accountId,
+      rows: queued,
+      subjectById,
+      difficultySort,
     });
 
     const totalRows = sortedQueued.length;
@@ -448,7 +443,9 @@ export async function GET(request: Request, context: RouteContext) {
         availableAt: row.data.available_at,
       };
     });
-    const items = await withReviewSuccessRates(accountId, rawItems);
+    const items = difficultySort
+      ? applyReviewSuccessRates(rawItems, performanceBySubjectId)
+      : await withReviewSuccessRates(accountId, rawItems);
 
     if (canUseServerCache) {
       setCachedStudyQueue(

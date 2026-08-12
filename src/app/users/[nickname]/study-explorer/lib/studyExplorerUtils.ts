@@ -411,6 +411,10 @@ export function sortStudyItemsByWait(
   sortOrder: StudyWaitSortOrder,
   randomOrderByAssignmentId: number[] | null = null,
 ): StudyQueueItem[] {
+  if (sortOrder === "easiest" || sortOrder === "hardest") {
+    return items;
+  }
+
   if (sortOrder === "random_wait") {
     const randomOrderIndex = new Map<number, number>();
     (randomOrderByAssignmentId ?? []).forEach((assignmentId, index) => {

@@ -269,10 +269,16 @@ export default function StudyExplorerPanel({
               Showing {formatNumber(filteredItems.length)}/{formatNumber(totalItems)} items
             </p>
           )}
-          <div className={`flex w-full items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
+          <div className={`flex w-full flex-wrap items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
               <button type="button" onClick={() => onSetWaitSortOrder("oldest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "oldest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.oldestWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.oldestWait}</span></button>
               <button type="button" onClick={() => onSetWaitSortOrder("newest_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "newest_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.newestWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.newestWait}</span></button>
               <button type="button" onClick={() => onSetWaitSortOrder("random_wait")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "random_wait")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.randomizeWaitShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.randomizeWait}</span></button>
+              {!studySourceIsCustom && queueMode === STUDY_QUEUE_TYPES.review ? (
+                <>
+                  <button type="button" onClick={() => onSetWaitSortOrder("easiest")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "easiest")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.easiestShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.easiest}</span></button>
+                  <button type="button" onClick={() => onSetWaitSortOrder("hardest")} className={`flex-1 whitespace-nowrap rounded-full border px-2 py-1 text-[10px] font-bold uppercase tracking-[0.06em] sm:flex-none sm:px-3 sm:text-xs sm:tracking-[0.1em] ${badgeClass(waitSortOrder === "hardest")}`}><span className="sm:hidden">{STUDY_PANEL_TEXT.hardestShort}</span><span className="hidden sm:inline">{STUDY_PANEL_TEXT.hardest}</span></button>
+                </>
+              ) : null}
               <button
                 type="button"
                 onClick={toggleBulkMode}

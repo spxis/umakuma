@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { StudyQueueItem, StudyWaitSortOrder } from "./studyExplorerTypes";
 import { isStudyWaitSortOrder } from "./studyExplorerView";
-import { shuffleStudyAssignmentIds, sortStudyItemsByWait } from "./studyExplorerUtils";
+import { shuffleStudyAssignmentIds } from "./studyExplorerUtils";
 
 type UseStudyWaitSortArgs = {
   filteredItems: StudyQueueItem[];
@@ -11,8 +11,9 @@ type UseStudyWaitSortArgs = {
 };
 
 type UseStudyWaitSortResult = {
+  hasHydratedWaitSort: boolean;
   waitSortOrder: StudyWaitSortOrder;
-  sortedFilteredItems: StudyQueueItem[];
+  waitRandomOrderByAssignmentId: number[] | null;
   setWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;
 };
 
@@ -46,6 +47,7 @@ export function useStudyWaitSort({
 }: UseStudyWaitSortArgs): UseStudyWaitSortResult {
   const [waitSortOrder, setWaitSortOrderState] = useState<StudyWaitSortOrder>("oldest_wait");
   const [waitRandomOrderByAssignmentId, setWaitRandomOrderByAssignmentId] = useState<number[] | null>(null);
+  const [hasHydratedWaitSort, setHasHydratedWaitSort] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -63,6 +65,7 @@ export function useStudyWaitSort({
     }
 
     queueMicrotask(() => setWaitRandomOrderByAssignmentId(readStoredRandomOrder(waitRandomOrderStorageKey)));
+    queueMicrotask(() => setHasHydratedWaitSort(true));
   }, [waitRandomOrderStorageKey, waitSortStorageKey]);
 
   useEffect(() => {
@@ -99,10 +102,5 @@ export function useStudyWaitSort({
     [filteredItems],
   );
 
-  const sortedFilteredItems = useMemo(
-    () => sortStudyItemsByWait(filteredItems, waitSortOrder, waitRandomOrderByAssignmentId),
-    [filteredItems, waitRandomOrderByAssignmentId, waitSortOrder],
-  );
-
-  return { waitSortOrder, sortedFilteredItems, setWaitSortOrder };
+  return { hasHydratedWaitSort, waitSortOrder, waitRandomOrderByAssignmentId, setWaitSortOrder };
 }
