@@ -24,6 +24,10 @@ const performanceCache = new Map<string, {
   performance: Map<number, ReviewPerformance>;
 }>();
 
+export function clearReviewPerformanceCache(accountId: string): void {
+  performanceCache.delete(accountId);
+}
+
 function prunePerformanceCache(nowMs: number, currentAccountId: string): void {
   for (const [accountId, entry] of performanceCache) {
     if (entry.expiresAtMs <= nowMs) {

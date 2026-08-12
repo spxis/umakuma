@@ -9,12 +9,14 @@ type Params<T> = {
   method: HttpMethod;
   request?: Request;
   execute: ExecuteRoute<T>;
+  getMetrics?: () => Record<string, unknown>;
 };
 
 export async function withApiRouteTelemetry<T>({
   route,
   method,
   execute,
+  getMetrics,
 }: Params<T>): Promise<T> {
   const startedAtMs = Date.now();
   let status = 200;
@@ -55,6 +57,7 @@ export async function withApiRouteTelemetry<T>({
         method,
         http_status: status,
       },
+      metrics: getMetrics?.(),
     });
   }
 }

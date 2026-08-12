@@ -23,8 +23,6 @@ type Args = {
   queueMode: StudyQueueMode;
   modalItems: StudyQueueItem[];
   selectedItem: StudyQueueItem | null;
-  hasPendingStudySubmissions: boolean;
-  mutateQueue: () => Promise<unknown>;
   onSetLoadedItems: React.Dispatch<React.SetStateAction<StudyQueueItem[]>>;
   onSetTotalItems: React.Dispatch<React.SetStateAction<number>>;
   onSetPersistedCounts: React.Dispatch<React.SetStateAction<StudyCounts | null>>;
@@ -35,7 +33,6 @@ type Args = {
   onSetRevealedAssignmentIds: React.Dispatch<React.SetStateAction<Set<number>>>;
   onSetReviewOutcomeByAssignmentId: React.Dispatch<React.SetStateAction<Record<number, ReviewOutcome>>>;
   onSetHiddenSubmittedAssignmentIds: React.Dispatch<React.SetStateAction<Set<number>>>;
-  onSetHasPendingStudySubmissions: React.Dispatch<React.SetStateAction<boolean>>;
   onSetSelectedId: React.Dispatch<React.SetStateAction<number | null>>;
   onSetModalSessionOrderByAssignmentId: React.Dispatch<React.SetStateAction<number[] | null>>;
   onSetModalSessionItemByAssignmentId: React.Dispatch<React.SetStateAction<Record<number, StudyQueueItem>>>;
@@ -48,8 +45,6 @@ export function useStudyReviewSubmission({
   queueMode,
   modalItems,
   selectedItem,
-  hasPendingStudySubmissions,
-  mutateQueue,
   onSetLoadedItems,
   onSetTotalItems,
   onSetPersistedCounts,
@@ -60,7 +55,6 @@ export function useStudyReviewSubmission({
   onSetRevealedAssignmentIds,
   onSetReviewOutcomeByAssignmentId,
   onSetHiddenSubmittedAssignmentIds,
-  onSetHasPendingStudySubmissions,
   onSetSelectedId,
   onSetModalSessionOrderByAssignmentId,
   onSetModalSessionItemByAssignmentId,
@@ -196,9 +190,6 @@ export function useStudyReviewSubmission({
             lessons: nextLessons,
           };
         });
-        if (!itemForSubmit?.isInjectedTrouble) {
-          onSetHasPendingStudySubmissions(true);
-        }
         onSetSelectedId(nextFocusedItem?.subjectId ?? itemForSubmit?.subjectId ?? null);
         onSetRevealedAssignmentIds((prev) => {
           const next = new Set(prev);
@@ -240,7 +231,6 @@ export function useStudyReviewSubmission({
       customLibraryId,
       queueMode,
       getSubmissionContext,
-      onSetHasPendingStudySubmissions,
       onSetHiddenSubmittedAssignmentIds,
       onSetLoadedItems,
       onSetModalSessionItemByAssignmentId,
@@ -300,8 +290,6 @@ export function useStudyReviewSubmission({
           return next;
         });
         onSetReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: "lesson-started" }));
-        onSetHasPendingStudySubmissions(true);
-
         await new Promise<void>((resolve) => {
           window.setTimeout(resolve, LESSON_AUTO_ADVANCE_DELAY_MS);
         });
@@ -333,7 +321,6 @@ export function useStudyReviewSubmission({
     [
       customLibraryId,
       getSubmissionContext,
-      onSetHasPendingStudySubmissions,
       onSetHiddenSubmittedAssignmentIds,
       onSetSelectedId,
       onSetModalSessionItemByAssignmentId,
@@ -394,11 +381,6 @@ export function useStudyReviewSubmission({
   );
 
   const closeReviewSession = useCallback(() => {
-    if (hasPendingStudySubmissions) {
-      void mutateQueue();
-      onSetHasPendingStudySubmissions(false);
-    }
-
     onSetSelectedId(null);
     onSetReviewOutcomeByAssignmentId({});
     onSetModalSessionOrderByAssignmentId(null);
@@ -407,9 +389,6 @@ export function useStudyReviewSubmission({
     onSetSubmitInFlight(null);
     onSetRevealedAssignmentIds(new Set());
   }, [
-    hasPendingStudySubmissions,
-    mutateQueue,
-    onSetHasPendingStudySubmissions,
     onSetModalSessionItemByAssignmentId,
     onSetModalSessionOrderByAssignmentId,
     onSetReviewOutcomeByAssignmentId,

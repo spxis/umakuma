@@ -94,7 +94,6 @@ export default function StudyExplorer({
   const [modalSessionOrderByAssignmentId, setModalSessionOrderByAssignmentId] = useState<number[] | null>(null);
   const [modalSessionItemByAssignmentId, setModalSessionItemByAssignmentId] = useState<Record<number, StudyQueueItem>>({});
   const [hiddenSubmittedAssignmentIds, setHiddenSubmittedAssignmentIds] = useState<Set<number>>(new Set());
-  const [hasPendingStudySubmissions, setHasPendingStudySubmissions] = useState(false);
   const [showLocked, setShowLocked] = useState(initialFilters?.showLocked ?? false);
   const [showUpcomingReviews, setShowUpcomingReviews] = usePersistedBoolean(`wr:study:show-upcoming-reviews:${accountId}:${queueStorageScopeKey}`, { defaultValue: false });
   const [recentOnly, setRecentOnly] = useState(initialFilters?.recentOnly ?? false);
@@ -420,8 +419,6 @@ export default function StudyExplorer({
     queueMode,
     modalItems,
     selectedItem,
-    hasPendingStudySubmissions,
-    mutateQueue,
     onSetLoadedItems: setLoadedItems,
     onSetTotalItems: setTotalItems,
     onSetPersistedCounts: setPersistedCounts,
@@ -432,7 +429,6 @@ export default function StudyExplorer({
     onSetRevealedAssignmentIds: setRevealedAssignmentIds,
     onSetReviewOutcomeByAssignmentId: setReviewOutcomeByAssignmentId,
     onSetHiddenSubmittedAssignmentIds: setHiddenSubmittedAssignmentIds,
-    onSetHasPendingStudySubmissions: setHasPendingStudySubmissions,
     onSetSelectedId: setSelectedId,
     onSetModalSessionOrderByAssignmentId: setModalSessionOrderByAssignmentId,
     onSetModalSessionItemByAssignmentId: setModalSessionItemByAssignmentId,

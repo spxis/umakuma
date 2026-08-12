@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
@@ -6,7 +6,9 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { recordStudyReviewAttempt, recordSubmissionSnapshot } from "@/lib/studyHistory";
+import { clearReviewPerformanceCache } from "@/lib/reviewSuccessRates";
 import { clearStudyQueueCache } from "@/lib/studyQueueCache";
+import { emitSumilabuTelemetry } from "@/lib/sumilabuTelemetry";
 import { WK_STATUSES, type WkStatus } from "@/lib/domainConstants";
 import { srsLabel } from "@/lib/wanikani/helpers";
 import { postWaniKani } from "@/lib/wanikani/http";
@@ -105,10 +107,13 @@ function transitionDirection(params: {
 }
 
 export async function POST(request: Request, context: RouteContext) {
+  const performanceMetrics: Record<string, number> = {};
+
   return withApiRouteTelemetry({
     route: "/api/study/[accountId]/review",
     method: "POST",
     request,
+    getMetrics: () => performanceMetrics,
     execute: async () => {
       try {
         const { accountId } = await context.params;
@@ -167,6 +172,7 @@ export async function POST(request: Request, context: RouteContext) {
 
     let submissionResponse: ReviewSubmissionResponse | null = null;
 
+    const waniKaniStartedAtMs = Date.now();
     try {
       submissionResponse = await postWaniKani<ReviewSubmissionResponse>("/reviews", token, {
         review: {
@@ -193,9 +199,10 @@ export async function POST(request: Request, context: RouteContext) {
         { error: "Couldn't submit that review to WaniKani. Try again in a moment." },
         { status: 502 },
       );
+    } finally {
+      performanceMetrics.wanikani_submit_ms = Date.now() - waniKaniStartedAtMs;
     }
 
-    // Fire-and-forget: persist history without blocking the response
     const subjectId =
       submissionResponse?.resources_updated?.review_statistic?.data?.subject_id ??
       submissionResponse?.data?.subject_id;
@@ -205,24 +212,40 @@ export async function POST(request: Request, context: RouteContext) {
       submissionResponse?.resources_updated?.assignment?.data?.subject_type ??
       "unknown";
 
-    const historyResults = await Promise.allSettled([
-      typeof subjectId === "number" && Number.isInteger(subjectId) && subjectId > 0
-        ? recordStudyReviewAttempt({
-            accountId,
-            assignmentId: parsed.data.assignmentId,
-            subjectId,
-            subjectType,
-            result: parsed.data.result,
-          })
-        : Promise.resolve(),
-      recordSubmissionSnapshot({
-        accountId,
-        data: submissionResponse?.resources_updated?.review_statistic?.data,
-      }),
-    ]);
-    if (historyResults.some((result) => result.status === "rejected")) {
-      console.error("Failed to persist local study history");
-    }
+    performanceMetrics.history_deferred = 1;
+    after(async () => {
+      const historyStartedAtMs = Date.now();
+      const historyResults = await Promise.allSettled([
+        typeof subjectId === "number" && Number.isInteger(subjectId) && subjectId > 0
+          ? recordStudyReviewAttempt({
+              accountId,
+              assignmentId: parsed.data.assignmentId,
+              subjectId,
+              subjectType,
+              result: parsed.data.result,
+            })
+          : Promise.resolve(),
+        recordSubmissionSnapshot({
+          accountId,
+          data: submissionResponse?.resources_updated?.review_statistic?.data,
+        }),
+      ]);
+      clearReviewPerformanceCache(accountId);
+      const failedWrites = historyResults.filter((result) => result.status === "rejected").length;
+      if (failedWrites > 0) {
+        console.error("Failed to persist local study history");
+      }
+      await emitSumilabuTelemetry({
+        event: "study_review_history",
+        status: failedWrites > 0 ? "error" : "ok",
+        severity: failedWrites > 0 ? "error" : "info",
+        durationMs: Date.now() - historyStartedAtMs,
+        metrics: {
+          attempted_writes: historyResults.length,
+          failed_writes: failedWrites,
+        },
+      });
+    });
 
     const previousSrsStage = toStageOrNull(submissionResponse?.data?.starting_srs_stage);
     const newSrsStage =
