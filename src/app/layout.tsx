@@ -1,33 +1,9 @@
 import type { Metadata } from "next";
-import { Archivo_Black, Noto_Sans_JP, Noto_Serif_JP, Space_Grotesk } from "next/font/google";
 import AppFooter from "./AppFooter";
 import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
-
-const bodySans = Space_Grotesk({
-  variable: "--font-body-sans",
-  subsets: ["latin"],
-});
-
-const displaySans = Archivo_Black({
-  variable: "--font-display-sans",
-  weight: "400",
-  subsets: ["latin"],
-});
-
-const jpSans = Noto_Sans_JP({
-  variable: "--font-jp-sans",
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-});
-
-const jpSerif = Noto_Serif_JP({
-  variable: "--font-jp-serif",
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "UmaKuma",
@@ -43,7 +19,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${bodySans.variable} ${displaySans.variable} ${jpSans.variable} ${jpSerif.variable} h-full overflow-x-clip antialiased`}
+      className="h-full overflow-x-clip antialiased"
       data-theme="light"
       data-jp-font="sans"
     >

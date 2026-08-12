@@ -5,6 +5,7 @@ import {
   isLessonLockedQueueItem,
   isLessonQueueItem,
   STUDY_REVIEW_MODAL_SECTION_TEXT,
+  STUDY_REVIEW_OUTCOMES,
   STUDY_VIEWER_MODES,
 } from "./StudyExplorer.constants";
 import type { LevelItem } from "../../explorerTypes";
@@ -390,7 +391,7 @@ export default function StudyReviewModalSection({
         skipped={skipped}
         correct={correct}
         onSubmit={onSubmit}
-        onRetry={selectedOutcome ? () => onSubmit(selectedItem.assignmentId, selectedOutcome) : undefined}
+        onRetry={selectedOutcome && (selectedOutcome === STUDY_REVIEW_OUTCOMES.correct || selectedOutcome === STUDY_REVIEW_OUTCOMES.wrong) ? () => onSubmit(selectedItem.assignmentId, selectedOutcome) : undefined}
         onSkipCurrent={onSkipCurrent}
         onStartLesson={onStartLesson}
         onToggleUsedInVocabularyCollapsed={onToggleUsedInVocabularyCollapsed}

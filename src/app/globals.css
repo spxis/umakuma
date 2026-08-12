@@ -13,6 +13,10 @@
   --radical: #10b4e8;
   --kanji: #ff3b82;
   --vocabulary: #8b5cf6;
+  --font-body-sans: "Segoe UI Variable", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display-sans: "Arial Black", "Segoe UI", sans-serif;
+  --font-jp-sans: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", "Meiryo", sans-serif;
+  --font-jp-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Georgia", serif;
   --font-jp-current: var(--font-jp-sans);
 }
 
