@@ -13,7 +13,6 @@ import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 import { studyItemEnglishTitle } from "./studyExplorerUtils";
 import { nextReviewSessionItem } from "./reviewSessionNavigation";
 
-const POST_SUBMIT_DELAY_MS = 250;
 const REVIEW_SUBMIT_TIMEOUT_MS = 10000;
 const LESSON_AUTO_ADVANCE_DELAY_MS = 1000;
 
@@ -165,10 +164,6 @@ export function useStudyReviewSubmission({
         if (payload.review && (payload.review.transition === "promoted" || payload.review.transition === "demoted")) {
           onSetLatestReviewTransition(payload.review);
         }
-
-        await new Promise<void>((resolve) => {
-          window.setTimeout(resolve, POST_SUBMIT_DELAY_MS);
-        });
 
         if (!itemForSubmit?.isInjectedTrouble) {
           onSetReviewOutcomeByAssignmentId((prev) => ({ ...prev, [assignmentId]: result }));
@@ -400,9 +395,6 @@ export function useStudyReviewSubmission({
 
   const closeReviewSession = useCallback(() => {
     if (hasPendingStudySubmissions) {
-      void fetch(`/api/accounts/${accountId}/refresh`, { method: "POST" }).catch(() => {
-        // Non-blocking best-effort refresh after review session closes.
-      });
       void mutateQueue();
       onSetHasPendingStudySubmissions(false);
     }
@@ -415,7 +407,6 @@ export function useStudyReviewSubmission({
     onSetSubmitInFlight(null);
     onSetRevealedAssignmentIds(new Set());
   }, [
-    accountId,
     hasPendingStudySubmissions,
     mutateQueue,
     onSetHasPendingStudySubmissions,
