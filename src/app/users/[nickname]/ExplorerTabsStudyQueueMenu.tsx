@@ -40,6 +40,12 @@ export default function ExplorerTabsStudyQueueMenu({
   const isPinnedOpenForReview = queueMode === QUEUE_TYPES.review && isPinnedOpen;
   const isMenuOpen = queueMode === QUEUE_TYPES.review && (isHoverOpen || isPinnedOpenForReview);
 
+  const overlayOptionClass = (active: boolean): string => {
+    return active
+      ? "w-full rounded-lg px-3 py-2 text-left transition bg-accent/12 text-accent"
+      : "w-full rounded-lg px-3 py-2 text-left transition text-foreground hover:bg-surface-muted";
+  };
+
   const cancelHoverCloseTimer = () => {
     if (hoverCloseTimerRef.current === null) {
       return;
@@ -141,57 +147,85 @@ export default function ExplorerTabsStudyQueueMenu({
 
       {isMenuOpen ? (
         <div
-          className="absolute left-0 top-full z-[80] mt-2 w-[min(100vw-2rem,26rem)] rounded-2xl border border-line bg-surface p-2 shadow-[0_14px_30px_rgba(8,16,36,0.2)]"
+          className="absolute left-0 top-full z-80 mt-2 w-[min(100vw-2rem,26rem)] rounded-xl border border-line bg-surface p-2 shadow-[0_18px_42px_rgba(8,16,36,0.16)]"
           onMouseEnter={openHoverMenu}
           onMouseLeave={closeHoverMenuSoon}
         >
-          <span aria-hidden="true" className="pointer-events-none absolute -top-[10px] left-[calc(25%-0.625rem)] h-0 w-0 border-x-[10px] border-b-[10px] border-x-transparent border-b-line">
-            <span className="absolute left-1/2 top-[1px] h-0 w-0 -translate-x-1/2 border-x-[9px] border-b-[9px] border-x-transparent border-b-surface" />
-          </span>
-          <div className="inline-flex w-full items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Review filter">
-            <button type="button" role="tab" aria-selected={queueTagFilter === "all"} onClick={() => onSetQueueTagFilter("all")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "all" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Due reviews</button>
-            <button type="button" role="tab" aria-selected={queueTagFilter === "trouble"} onClick={() => onSetQueueTagFilter("trouble")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "trouble" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Trouble</button>
-            <button type="button" role="tab" aria-selected={queueTagFilter === "favorite"} onClick={() => onSetQueueTagFilter("favorite")} className={queueModeSegmentClass(QUEUE_TYPES.review, queueTagFilter === "favorite" ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}>Favorites</button>
+          <div role="tablist" aria-label="Review filter" className="space-y-1">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={queueTagFilter === "all"}
+              onMouseEnter={() => onSetQueueTagFilter("all")}
+              onClick={() => onSetQueueTagFilter("all")}
+              className={overlayOptionClass(queueTagFilter === "all")}
+            >
+              <p className="text-xs font-black uppercase tracking-[0.08em]">Due reviews</p>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={queueTagFilter === "trouble"}
+              onMouseEnter={() => onSetQueueTagFilter("trouble")}
+              onClick={() => onSetQueueTagFilter("trouble")}
+              className={overlayOptionClass(queueTagFilter === "trouble")}
+            >
+              <p className="text-xs font-black uppercase tracking-[0.08em]">Trouble</p>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={queueTagFilter === "favorite"}
+              onMouseEnter={() => onSetQueueTagFilter("favorite")}
+              onClick={() => onSetQueueTagFilter("favorite")}
+              className={overlayOptionClass(queueTagFilter === "favorite")}
+            >
+              <p className="text-xs font-black uppercase tracking-[0.08em]">Favorites</p>
+            </button>
           </div>
-          <div className="mt-2 inline-flex w-full items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Review queue mix">
+          <div className="mt-1 space-y-1 border-t border-line pt-1" role="tablist" aria-label="Review queue mix">
             <button
               type="button"
               role="tab"
               aria-selected={!includeTrouble}
+              onMouseEnter={() => onSetIncludeTrouble(false)}
               onClick={() => onSetIncludeTrouble(false)}
-              className={queueModeSegmentClass(QUEUE_TYPES.review, includeTrouble ? QUEUE_TYPES.lesson : QUEUE_TYPES.review)}
+              className={overlayOptionClass(!includeTrouble)}
             >
-              Due only
+              <p className="text-xs font-black uppercase tracking-[0.08em]">Due only</p>
             </button>
             <button
               type="button"
               role="tab"
               aria-selected={includeTrouble}
+              onMouseEnter={() => onSetIncludeTrouble(true)}
               onClick={() => onSetIncludeTrouble(true)}
-              className={queueModeSegmentClass(QUEUE_TYPES.review, includeTrouble ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}
+              className={overlayOptionClass(includeTrouble)}
             >
-              Due + trouble
+              <p className="text-xs font-black uppercase tracking-[0.08em]">Due + trouble</p>
             </button>
           </div>
           {!studyMode ? (
-            <div className="mt-2 inline-flex w-full items-center rounded-full border border-line bg-surface p-1" role="tablist" aria-label="Reviewed visibility filter">
+            <div className="mt-1 space-y-1 border-t border-line pt-1" role="tablist" aria-label="Reviewed visibility filter">
               <button
                 type="button"
                 role="tab"
                 aria-selected={!reviewedVisible}
+                onMouseEnter={() => onSetReviewedVisible(false)}
                 onClick={() => onSetReviewedVisible(false)}
-                className={queueModeSegmentClass(QUEUE_TYPES.review, reviewedVisible ? QUEUE_TYPES.lesson : QUEUE_TYPES.review)}
+                className={overlayOptionClass(!reviewedVisible)}
               >
-                Reviewed OFF
+                <p className="text-xs font-black uppercase tracking-[0.08em]">Reviewed OFF</p>
               </button>
               <button
                 type="button"
                 role="tab"
                 aria-selected={reviewedVisible}
+                onMouseEnter={() => onSetReviewedVisible(true)}
                 onClick={() => onSetReviewedVisible(true)}
-                className={queueModeSegmentClass(QUEUE_TYPES.review, reviewedVisible ? QUEUE_TYPES.review : QUEUE_TYPES.lesson)}
+                className={overlayOptionClass(reviewedVisible)}
               >
-                Reviewed ON
+                <p className="text-xs font-black uppercase tracking-[0.08em]">Reviewed ON</p>
               </button>
             </div>
           ) : null}

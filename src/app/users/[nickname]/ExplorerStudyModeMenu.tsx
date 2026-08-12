@@ -106,8 +106,7 @@ export default function ExplorerStudyModeMenu({
         aria-haspopup="menu"
         aria-expanded={isMenuOpen}
       >
-        <span className="sm:hidden">{studyModeBehavior === "oneshot" ? "Quick" : studyMode ? "Session" : "Off"}</span>
-        <span className="hidden sm:inline">{studyModeBehavior === "oneshot" ? "Quick mode" : studyMode ? "Session" : "Off"}</span>
+        <span>{studyModeBehavior === "oneshot" ? "Quick mode" : studyMode ? "Session" : "Off"}</span>
       </button>
       {isMenuOpen ? (
         <div
