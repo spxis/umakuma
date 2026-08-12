@@ -30,9 +30,7 @@ import { stripHtml } from "../../level-explorer/lib/levelExplorerDisplay";
 import { RelatedReferenceCards } from "../../level-explorer/components/LevelExplorerReferenceCards";
 import type { LevelItem } from "../../explorerTypes";
 import ReadingScriptPair from "../../shared/ReadingScriptPair";
-
 const EMPTY_SUBJECT_BY_ID = new Map<number, LevelItem>();
-
 type Props = {
   accountId: string;
   studyMode: boolean;
@@ -71,7 +69,6 @@ type Props = {
   onToggleUsedInWordsCollapsed: () => void;
   onOpenRelatedSubject?: (subjectId: number, fallbackType: SubjectType) => void | Promise<void>;
 };
-
 export default function StudyReviewModalMetaPanels({
   accountId,
   studyMode,
