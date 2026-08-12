@@ -116,6 +116,12 @@ export default function ExplorerTabsStudyQueueMenu({
     setIsPinnedOpen(false);
   };
 
+  const closeMenuImmediately = () => {
+    cancelHoverCloseTimer();
+    setIsHoverOpen(false);
+    setIsPinnedOpen(false);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -157,7 +163,10 @@ export default function ExplorerTabsStudyQueueMenu({
               role="tab"
               aria-selected={queueTagFilter === "all"}
               onMouseEnter={() => onSetQueueTagFilter("all")}
-              onClick={() => onSetQueueTagFilter("all")}
+              onClick={() => {
+                onSetQueueTagFilter("all");
+                closeMenuImmediately();
+              }}
               className={overlayOptionClass(queueTagFilter === "all")}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Due reviews</p>
@@ -168,7 +177,10 @@ export default function ExplorerTabsStudyQueueMenu({
               role="tab"
               aria-selected={queueTagFilter === "trouble"}
               onMouseEnter={() => onSetQueueTagFilter("trouble")}
-              onClick={() => onSetQueueTagFilter("trouble")}
+              onClick={() => {
+                onSetQueueTagFilter("trouble");
+                closeMenuImmediately();
+              }}
               className={overlayOptionClass(queueTagFilter === "trouble")}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Trouble</p>
@@ -179,7 +191,10 @@ export default function ExplorerTabsStudyQueueMenu({
               role="tab"
               aria-selected={queueTagFilter === "favorite"}
               onMouseEnter={() => onSetQueueTagFilter("favorite")}
-              onClick={() => onSetQueueTagFilter("favorite")}
+              onClick={() => {
+                onSetQueueTagFilter("favorite");
+                closeMenuImmediately();
+              }}
               className={overlayOptionClass(queueTagFilter === "favorite")}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Favorites</p>
@@ -192,7 +207,10 @@ export default function ExplorerTabsStudyQueueMenu({
               role="tab"
               aria-selected={!includeTrouble}
               onMouseEnter={() => onSetIncludeTrouble(false)}
-              onClick={() => onSetIncludeTrouble(false)}
+              onClick={() => {
+                onSetIncludeTrouble(false);
+                closeMenuImmediately();
+              }}
               className={overlayOptionClass(!includeTrouble)}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Due only</p>
@@ -203,7 +221,10 @@ export default function ExplorerTabsStudyQueueMenu({
               role="tab"
               aria-selected={includeTrouble}
               onMouseEnter={() => onSetIncludeTrouble(true)}
-              onClick={() => onSetIncludeTrouble(true)}
+              onClick={() => {
+                onSetIncludeTrouble(true);
+                closeMenuImmediately();
+              }}
               className={overlayOptionClass(includeTrouble)}
             >
               <p className="text-xs font-black uppercase tracking-[0.08em]">Due + trouble</p>
@@ -217,7 +238,10 @@ export default function ExplorerTabsStudyQueueMenu({
                 role="tab"
                 aria-selected={!reviewedVisible}
                 onMouseEnter={() => onSetReviewedVisible(false)}
-                onClick={() => onSetReviewedVisible(false)}
+                onClick={() => {
+                  onSetReviewedVisible(false);
+                  closeMenuImmediately();
+                }}
                 className={overlayOptionClass(!reviewedVisible)}
               >
                 <p className="text-xs font-black uppercase tracking-[0.08em]">Reviewed OFF</p>
@@ -228,7 +252,10 @@ export default function ExplorerTabsStudyQueueMenu({
                 role="tab"
                 aria-selected={reviewedVisible}
                 onMouseEnter={() => onSetReviewedVisible(true)}
-                onClick={() => onSetReviewedVisible(true)}
+                onClick={() => {
+                  onSetReviewedVisible(true);
+                  closeMenuImmediately();
+                }}
                 className={overlayOptionClass(reviewedVisible)}
               >
                 <p className="text-xs font-black uppercase tracking-[0.08em]">Reviewed ON</p>
