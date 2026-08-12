@@ -1,35 +1,11 @@
 import { WK_STATUSES, type WkStatus } from "@/lib/domainConstants";
+import { parseJlptWordExamples } from "@/lib/jlptWordExamples";
+import type { JlptWordExample } from "@/lib/jlptTypes";
 
-export type JlptWordExample = {
-  written: string;
-  pronounced: string;
-  gloss: string;
-};
+export type { JlptWordExample } from "@/lib/jlptTypes";
 
 export function parseWordExamples(input: unknown): JlptWordExample[] {
-  if (!Array.isArray(input)) {
-    return [];
-  }
-
-  const rows: JlptWordExample[] = [];
-  for (const value of input) {
-    if (!value || typeof value !== "object") {
-      continue;
-    }
-
-    const record = value as Record<string, unknown>;
-    const written = typeof record.written === "string" ? record.written.trim() : "";
-    const pronounced = typeof record.pronounced === "string" ? record.pronounced.trim() : "";
-    const gloss = typeof record.gloss === "string" ? record.gloss.trim() : "";
-
-    if (!written && !pronounced) {
-      continue;
-    }
-
-    rows.push({ written, pronounced, gloss });
-  }
-
-  return rows;
+  return parseJlptWordExamples(input);
 }
 
 export function jlptStatusClass(

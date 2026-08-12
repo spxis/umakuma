@@ -4,6 +4,8 @@ import { Prisma } from "@prisma/client";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { clearJlptCatalogCache } from "@/lib/jlptCatalogCache";
+import { addWaniKaniKanjiToWordExamples } from "@/lib/jlptWordExampleCatalog";
+import type { JlptWordExample } from "@/lib/jlptTypes";
 import { prisma } from "@/lib/prisma";
 
 type KanjiApiPayload = {
@@ -32,12 +34,6 @@ type WordsApiMeaning = {
 type WordsApiEntry = {
   variants?: unknown;
   meanings?: unknown;
-};
-
-type JlptWordExample = {
-  written: string;
-  pronounced: string;
-  gloss: string;
 };
 
 function uniqueStrings(values: unknown): string[] {
@@ -87,7 +83,7 @@ async function fetchKanjiDetails(kanji: string) {
   const nanoriReadings = uniqueStrings(payload.name_readings);
   const notes = uniqueStrings(payload.notes);
 
-  const wordExamples: JlptWordExample[] = Array.isArray(wordsPayload)
+  const rawWordExamples: JlptWordExample[] = Array.isArray(wordsPayload)
     ? (wordsPayload as WordsApiEntry[])
         .map((entry) => {
           const variants = Array.isArray(entry.variants) ? (entry.variants as WordsApiVariant[]) : [];
@@ -115,6 +111,7 @@ async function fetchKanjiDetails(kanji: string) {
         .filter((entry): entry is JlptWordExample => entry !== null)
         .slice(0, 12)
     : [];
+  const wordExamples = await addWaniKaniKanjiToWordExamples(prisma, rawWordExamples);
 
   return {
     strokeCount: typeof payload.stroke_count === "number" ? payload.stroke_count : null,

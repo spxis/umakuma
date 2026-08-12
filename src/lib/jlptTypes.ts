@@ -1,3 +1,12 @@
+import type { RelatedReference } from "@/lib/glyphTypes";
+
+export type JlptWordExample = {
+  written: string;
+  pronounced: string;
+  gloss: string;
+  kanjiItems?: RelatedReference[];
+};
+
 export type JlptMeta = {
   primaryMeaning: string | null;
   meanings: string[];

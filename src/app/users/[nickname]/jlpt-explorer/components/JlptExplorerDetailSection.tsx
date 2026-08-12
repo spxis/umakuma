@@ -9,6 +9,7 @@ import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
 import type { JlptReadingsRecord, KanjiStats } from "./JlptExplorerContent.types";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
+import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
 
 type Props = {
   selectedItem: JlptItem;
@@ -224,6 +225,20 @@ export default function JlptExplorerDetailSection({
                   <p className="text-base font-bold text-foreground">{example.written || "-"}</p>
                   <p className="text-xs font-semibold text-foreground/70">{example.pronounced || "-"}</p>
                   <p className="mt-1 text-sm text-foreground/85">{example.gloss || "-"}</p>
+                  {example.kanjiItems?.length ? (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {example.kanjiItems.map((item) => (
+                        <GlyphReferenceTile
+                          key={`${example.written}-${item.subjectId}`}
+                          glyph={item.label}
+                          subtitle={item.reading ?? item.meaning}
+                          subjectType={SUBJECT_TYPES.kanji}
+                          wkLevel={item.wkLevel}
+                          successRate={userKanjiByChar.get(item.label)?.successRate}
+                        />
+                      ))}
+                    </div>
+                  ) : null}
                 </li>
               ))}
             </ul>

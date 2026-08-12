@@ -382,6 +382,9 @@ export default function StudyReviewModalMetaPanels({
                         <p className="text-2xl font-bold leading-none text-foreground/80">{example.pronounced || "-"}</p>
                       </div>
                       <p className="mt-1 text-sm text-foreground/85">{example.gloss || "-"}</p>
+                      {example.kanjiItems?.length
+                        ? renderSharedRelatedCards(example.kanjiItems, SUBJECT_TYPES.kanji)
+                        : null}
                     </li>
                   ))}
                 </ul>
