@@ -174,13 +174,21 @@ export async function POST(request: Request, context: RouteContext) {
 
     const waniKaniStartedAtMs = Date.now();
     try {
-      submissionResponse = await postWaniKani<ReviewSubmissionResponse>("/reviews", token, {
-        review: {
-          assignment_id: parsed.data.assignmentId,
-          incorrect_meaning_answers: incorrect,
-          incorrect_reading_answers: incorrect,
+      submissionResponse = await postWaniKani<ReviewSubmissionResponse>(
+        "/reviews",
+        token,
+        {
+          review: {
+            assignment_id: parsed.data.assignmentId,
+            incorrect_meaning_answers: incorrect,
+            incorrect_reading_answers: incorrect,
+          },
         },
-      });
+        (timing) => {
+          performanceMetrics.wanikani_throttle_wait_ms = timing.throttleWaitMs;
+          performanceMetrics.wanikani_network_ms = timing.networkMs;
+        },
+      );
     } catch (error) {
       const message = error instanceof Error ? error.message : "WaniKani API error";
 

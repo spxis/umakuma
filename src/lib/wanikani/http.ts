@@ -10,6 +10,10 @@ type TokenThrottleState = {
   requestChain: Promise<void>;
   lastRequestStartedAt: number;
 };
+type RequestTiming = {
+  throttleWaitMs: number;
+  networkMs: number;
+};
 
 const throttleByToken = new Map<string, TokenThrottleState>();
 
@@ -33,8 +37,13 @@ function getThrottleState(token: string): TokenThrottleState {
   return created;
 }
 
-async function runThrottledRequest<T>(token: string, work: () => Promise<T>): Promise<T> {
+async function runThrottledRequest<T>(
+  token: string,
+  work: () => Promise<T>,
+  onTiming?: (timing: RequestTiming) => void,
+): Promise<T> {
   const state = getThrottleState(token);
+  const queuedAtMs = Date.now();
 
   const run = state.requestChain.then(async () => {
     const now = Date.now();
@@ -44,7 +53,15 @@ async function runThrottledRequest<T>(token: string, work: () => Promise<T>): Pr
     }
 
     state.lastRequestStartedAt = Date.now();
-    return work();
+    const requestStartedAtMs = Date.now();
+    try {
+      return await work();
+    } finally {
+      onTiming?.({
+        throttleWaitMs: requestStartedAtMs - queuedAtMs,
+        networkMs: Date.now() - requestStartedAtMs,
+      });
+    }
   });
 
   state.requestChain = run.then(
@@ -141,6 +158,7 @@ export async function postWaniKani<TResponse>(
   path: string,
   token: string,
   body: unknown,
+  onTiming?: (timing: RequestTiming) => void,
 ): Promise<TResponse> {
   const headers: Record<string, string> = {
     Authorization: `Bearer ${token}`,
@@ -148,13 +166,16 @@ export async function postWaniKani<TResponse>(
     "Content-Type": "application/json",
   };
 
-  const response = await runThrottledRequest(token, () =>
-    fetch(`${BASE_URL}${path}`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(body),
-      cache: "no-store",
-    }),
+  const response = await runThrottledRequest(
+    token,
+    () =>
+      fetch(`${BASE_URL}${path}`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(body),
+        cache: "no-store",
+      }),
+    onTiming,
   );
 
   if (!response.ok) {
