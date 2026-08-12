@@ -54,7 +54,7 @@ export default function ExplorerTabs({
   const countsStorageKey = `wr:study-queue-counts:${accountId}`;
   const customLibraryNameStorageKey = `wr:study-custom-library-name:${accountId}`;
   const showEnglishStorageKey = `wr:explorer-show-english:${accountId}`;
-  const troubleMixStorageKey = `wr:study-trouble-mix-v2:${accountId}`;
+  const troubleMixStorageKey = `wr:study-trouble-mix-v3:${accountId}`;
   const queueTagFilterStorageKey = `wr:study-queue-tag-filter:${accountId}`;
   const isHydrated = typeof window !== "undefined";
   const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(

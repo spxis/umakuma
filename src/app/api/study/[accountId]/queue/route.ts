@@ -34,7 +34,7 @@ export async function GET(request: Request, context: RouteContext) {
               : QUEUE_TYPES.review;
         const limitParam = Number(url.searchParams.get("limit") ?? "");
         const offsetParam = Number(url.searchParams.get("offset") ?? "");
-        const includeTrouble = url.searchParams.get("includeTrouble") !== "0";
+        const includeTrouble = url.searchParams.get("includeTrouble") === "1";
         const includeReviewed = mode !== QUEUE_TYPES.lesson && url.searchParams.get("includeReviewed") === "1";
         const tagFilter = url.searchParams.get("tag") === "favorite"
           ? "favorite"
