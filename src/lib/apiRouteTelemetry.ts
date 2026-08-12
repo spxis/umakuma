@@ -1,3 +1,5 @@
+import { after } from "next/server";
+
 import { emitSumilabuTelemetry } from "@/lib/sumilabuTelemetry";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS" | "HEAD";
@@ -46,18 +48,20 @@ export async function withApiRouteTelemetry<T>({
     message = "Unhandled route error";
     throw error;
   } finally {
-    void emitSumilabuTelemetry({
-      event: "api_route",
-      status: outcome,
-      severity,
-      message,
-      durationMs: Date.now() - startedAtMs,
-      tags: {
-        route,
-        method,
-        http_status: status,
-      },
-      metrics: getMetrics?.(),
+    after(() => {
+      return emitSumilabuTelemetry({
+        event: "api_route",
+        status: outcome,
+        severity,
+        message,
+        durationMs: Date.now() - startedAtMs,
+        tags: {
+          route,
+          method,
+          http_status: status,
+        },
+        metrics: getMetrics?.(),
+      });
     });
   }
 }
