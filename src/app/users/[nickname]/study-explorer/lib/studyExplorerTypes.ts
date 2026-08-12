@@ -7,6 +7,7 @@ export type { StudyQueueItem } from "@/lib/studyQueueTypes";
 export type StudyQueueMode = StudyQueueItem["queueType"];
 export type StudyViewerMode = "detail" | "flash";
 export type StudySource = "wanikani" | "custom";
+export type StudyModeBehavior = "off" | "session" | "oneshot";
 
 export type QueueResponse = {
   cached?: boolean;
@@ -117,6 +118,7 @@ export type StudyExplorerProps = {
   onToggleShowEnglish: () => void;
   canToggleEnglish: boolean;
   studyMode: boolean;
+  studyModeBehavior?: StudyModeBehavior;
   queueMode: StudyQueueMode;
   includeTrouble: boolean;
   queueTagFilter?: StudyTagFilter;

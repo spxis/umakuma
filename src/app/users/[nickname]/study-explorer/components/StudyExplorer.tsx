@@ -62,6 +62,7 @@ export default function StudyExplorer({
   onToggleShowEnglish,
   canToggleEnglish,
   studyMode,
+  studyModeBehavior = "session",
   queueMode,
   includeTrouble,
   queueTagFilter = "all",
@@ -304,6 +305,7 @@ export default function StudyExplorer({
   useStudyModalSessionSync({
     selectedId,
     filteredItems: sortedFilteredItems,
+    studyModeBehavior,
     setModalSessionOrderByAssignmentId,
     setModalSessionItemByAssignmentId,
   });
@@ -417,6 +419,7 @@ export default function StudyExplorer({
     studyApiBasePath,
     customLibraryId,
     queueMode,
+    studyModeBehavior,
     modalItems,
     selectedItem,
     onSetLoadedItems: setLoadedItems,

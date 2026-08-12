@@ -5,10 +5,17 @@ import LevelExplorer from "./level-explorer/components/LevelExplorer";
 import StudyExplorer from "./study-explorer/components/StudyExplorer";
 import StudySourceControls from "./StudySourceControls";
 import ExplorerTabsStudyQueueMenu from "./ExplorerTabsStudyQueueMenu";
+import ExplorerStudyModeMenu from "./ExplorerStudyModeMenu";
 import { parseStudyTagFilter, resolveStudyTagFilter } from "./studyTagFilterState";
 import { useStudySourceState } from "./useStudySourceState";
+import { useStudyModeState } from "./useStudyModeState";
 import type { JlptItem, Snapshot, SrsFilter, UserKanjiItem } from "./explorerTypes";
-import type { StudySrsFilter, StudySrsStageFilter, StudyTagFilter, StudyTypeFilter } from "./study-explorer/lib/studyExplorerTypes";
+import type {
+  StudySrsFilter,
+  StudySrsStageFilter,
+  StudyTagFilter,
+  StudyTypeFilter,
+} from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";
 
 type Props = {
@@ -60,7 +67,19 @@ export default function ExplorerTabs({
   const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(
     initialTab === "level" ? "wk" : initialTab === "jlpt" ? "jlpt" : "learn",
   );
-  const [studyMode, setStudyMode] = useState(() => (typeof initialStudyMode === "boolean" ? initialStudyMode : true));
+  const {
+    studyMode,
+    setStudyMode,
+    studyModeBehavior,
+    setStudyModeBehavior,
+    syncFromUrlAndStorage,
+    writeToUrl,
+  } = useStudyModeState({
+    isHydrated,
+    initialStudyMode,
+    clientStateHydratedRef,
+  });
+  const [studyModeMenuOpen, setStudyModeMenuOpen] = useState(false);
   const forcedTab = dashboardTab === "wk"
     ? "level"
     : dashboardTab === "jlpt"
@@ -102,17 +121,7 @@ export default function ExplorerTabs({
           : QUEUE_TYPES.review);
       }
 
-      const urlStudyMode = params.get("studyMode");
-      if (urlStudyMode === "on" || urlStudyMode === "1") {
-        setStudyMode(true);
-      } else if (urlStudyMode === "off" || urlStudyMode === "0") {
-        setStudyMode(false);
-      } else if (typeof initialStudyMode !== "boolean") {
-        const storedStudyMode = window.localStorage.getItem("wr:study-mode");
-        if (storedStudyMode !== null) {
-          setStudyMode(storedStudyMode === "1");
-        }
-      }
+      syncFromUrlAndStorage(params);
 
       setShowEnglish(window.localStorage.getItem(showEnglishStorageKey) === "1");
       setIncludeTrouble(window.localStorage.getItem(troubleMixStorageKey) === "1");
@@ -143,19 +152,9 @@ export default function ExplorerTabs({
     customLibraryNameStorageKey,
     queueTagFilterStorageKey,
     showEnglishStorageKey,
+    syncFromUrlAndStorage,
     troubleMixStorageKey,
   ]);
-
-  useEffect(() => {
-    if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
-      return;
-    }
-    try {
-      window.localStorage.setItem("wr:study-mode", studyMode ? "1" : "0");
-    } catch {
-      // Ignore storage errors in restricted browsing modes.
-    }
-  }, [isHydrated, studyMode]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
@@ -206,12 +205,7 @@ export default function ExplorerTabs({
       params.set("mode", queueMode);
       changed = true;
     }
-    const studyModeInUrl = params.get("studyMode");
-    const nextStudyMode = studyMode ? "on" : "off";
-    if (studyModeInUrl !== nextStudyMode) {
-      params.set("studyMode", nextStudyMode);
-      changed = true;
-    }
+    changed = writeToUrl(params) || changed;
     try {
       window.localStorage.setItem(queueTagFilterStorageKey, queueTagFilter);
     } catch {
@@ -229,7 +223,16 @@ export default function ExplorerTabs({
       const next = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
       window.history.replaceState(null, "", next);
     }
-  }, [effectiveActiveTab, isHydrated, queueMode, queueTagFilter, queueTagFilterStorageKey, studyMode]);
+  }, [
+    effectiveActiveTab,
+    isHydrated,
+    queueMode,
+    queueTagFilter,
+    queueTagFilterStorageKey,
+    studyMode,
+    studyModeBehavior,
+    writeToUrl,
+  ]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {
@@ -270,12 +273,7 @@ export default function ExplorerTabs({
       const params = new URLSearchParams(window.location.search);
       const urlMode = params.get("mode");
       if (urlMode === QUEUE_TYPES.review || urlMode === QUEUE_TYPES.lesson) setQueueMode(urlMode);
-      const urlStudyMode = params.get("studyMode");
-      if (urlStudyMode === "on" || urlStudyMode === "1") {
-        setStudyMode(true);
-      } else if (urlStudyMode === "off" || urlStudyMode === "0") {
-        setStudyMode(false);
-      }
+      syncFromUrlAndStorage(params);
       setQueueTagFilter(parseStudyTagFilter(params.get("tag")) ?? "all");
 
       applySourceFromSearchParams(params);
@@ -285,7 +283,7 @@ export default function ExplorerTabs({
     return () => {
       window.removeEventListener("popstate", onPopState);
     };
-  }, [applySourceFromSearchParams, isHydrated]);
+  }, [applySourceFromSearchParams, isHydrated, syncFromUrlAndStorage]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined") {
@@ -401,18 +399,17 @@ export default function ExplorerTabs({
                 onSetReviewedVisible={handleSetReviewedVisible}
               />
             ) : null}
-            <button
-              type="button"
-              onClick={() => setStudyMode((prev) => !prev)}
-              className={`inline-flex h-9 min-w-0 flex-[1_1_0%] items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest md:flex-none ${
-                studyMode
-                  ? "border-hot bg-hot text-white"
-                  : "border-line bg-surface text-foreground hover:bg-surface-muted"
-              }`}
-            >
-              <span className="sm:hidden">Study {studyMode ? "On" : "Off"}</span>
-              <span className="hidden sm:inline">Study Mode {studyMode ? "On" : "Off"}</span>
-            </button>
+            <ExplorerStudyModeMenu
+              studyMode={studyMode}
+              studyModeBehavior={studyModeBehavior}
+              studyModeMenuOpen={studyModeMenuOpen}
+              onToggleMenu={() => setStudyModeMenuOpen((prev) => !prev)}
+              onCloseMenu={() => setStudyModeMenuOpen(false)}
+              onSelectMode={(mode) => {
+                setStudyModeBehavior(mode);
+                setStudyMode(mode !== "off");
+              }}
+            />
           </div>
         </div>
       </div>
@@ -433,6 +430,7 @@ export default function ExplorerTabs({
           onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
           canToggleEnglish
           studyMode={studyMode}
+          studyModeBehavior={studyModeBehavior}
           queueMode={queueMode}
           includeTrouble={includeTrouble}
           queueTagFilter={queueTagFilter}

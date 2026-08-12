@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import type { StudyQueueItem, StudyViewerMode } from "./studyExplorerTypes";
+import type { StudyModeBehavior, StudyQueueItem, StudyViewerMode } from "./studyExplorerTypes";
 import { isStudyViewerMode } from "./studyExplorerDomain";
 
 type SetState<T> = React.Dispatch<React.SetStateAction<T>>;
@@ -85,6 +85,7 @@ export function useStudyViewerModeSync(setForcedViewerMode: SetState<StudyViewer
 type ModalSessionArgs = {
   selectedId: number | null;
   filteredItems: StudyQueueItem[];
+  studyModeBehavior: StudyModeBehavior;
   setModalSessionOrderByAssignmentId: SetState<number[] | null>;
   setModalSessionItemByAssignmentId: SetState<Record<number, StudyQueueItem>>;
 };
@@ -92,6 +93,7 @@ type ModalSessionArgs = {
 export function useStudyModalSessionSync({
   selectedId,
   filteredItems,
+  studyModeBehavior,
   setModalSessionOrderByAssignmentId,
   setModalSessionItemByAssignmentId,
 }: ModalSessionArgs) {
@@ -105,12 +107,17 @@ export function useStudyModalSessionSync({
     }
 
     queueMicrotask(() => {
+      const selectedItem = filteredItems.find((item) => item.subjectId === selectedId) ?? null;
+
       setModalSessionOrderByAssignmentId((prev) => {
         if (prev && prev.length > 0) {
           return prev;
         }
         if (filteredItems.length === 0) {
           return prev;
+        }
+        if (studyModeBehavior === "oneshot") {
+          return selectedItem ? [selectedItem.assignmentId] : prev;
         }
         return filteredItems.map((item) => item.assignmentId);
       });
@@ -121,11 +128,18 @@ export function useStudyModalSessionSync({
         }
 
         const next = { ...prev };
+        if (studyModeBehavior === "oneshot") {
+          if (selectedItem) {
+            next[selectedItem.assignmentId] = selectedItem;
+          }
+          return next;
+        }
+
         for (const item of filteredItems) {
           next[item.assignmentId] = item;
         }
         return next;
       });
     });
-  }, [filteredItems, selectedId, setModalSessionItemByAssignmentId, setModalSessionOrderByAssignmentId]);
+  }, [filteredItems, selectedId, setModalSessionItemByAssignmentId, setModalSessionOrderByAssignmentId, studyModeBehavior]);
 }

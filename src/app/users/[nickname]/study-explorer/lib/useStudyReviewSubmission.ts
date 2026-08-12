@@ -2,6 +2,7 @@ import { useCallback, useRef } from "react";
 
 import type {
   ReviewOutcome,
+  StudyModeBehavior,
   StudyCounts,
   StudyQueueMode,
   StudyQueueItem,
@@ -21,6 +22,7 @@ type Args = {
   studyApiBasePath: string;
   customLibraryId: string | null;
   queueMode: StudyQueueMode;
+  studyModeBehavior: StudyModeBehavior;
   modalItems: StudyQueueItem[];
   selectedItem: StudyQueueItem | null;
   onSetLoadedItems: React.Dispatch<React.SetStateAction<StudyQueueItem[]>>;
@@ -43,6 +45,7 @@ export function useStudyReviewSubmission({
   studyApiBasePath,
   customLibraryId,
   queueMode,
+  studyModeBehavior,
   modalItems,
   selectedItem,
   onSetLoadedItems,
@@ -197,6 +200,10 @@ export function useStudyReviewSubmission({
           return next;
         });
 
+        if (studyModeBehavior === "oneshot") {
+          onSetSelectedId(null);
+        }
+
         if (typeof window !== "undefined") {
           window.dispatchEvent(
             new CustomEvent("wr:study-review-submitted", {
@@ -230,6 +237,7 @@ export function useStudyReviewSubmission({
       accountId,
       customLibraryId,
       queueMode,
+      studyModeBehavior,
       getSubmissionContext,
       onSetHiddenSubmittedAssignmentIds,
       onSetLoadedItems,
@@ -299,6 +307,10 @@ export function useStudyReviewSubmission({
             ? (nextFocusedItem?.subjectId ?? null)
             : currentSelectedId,
         );
+
+        if (studyModeBehavior === "oneshot") {
+          onSetSelectedId(null);
+        }
       } catch (submitError) {
         onSetSubmitFeedback({
           kind: "error",
@@ -329,6 +341,7 @@ export function useStudyReviewSubmission({
       onSetSubmitFeedback,
       onSetSubmitInFlight,
       onSetSubmittingByAssignmentId,
+      studyModeBehavior,
       studyApiBasePath,
     ],
   );
