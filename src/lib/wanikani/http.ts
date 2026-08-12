@@ -7,12 +7,22 @@ import type {
 
 const BASE_URL = "https://api.wanikani.com/v2";
 type TokenThrottleState = {
-  requestChain: Promise<void>;
+  running: boolean;
+  writeQueue: QueuedRequest<unknown>[];
+  readQueue: QueuedRequest<unknown>[];
   lastRequestStartedAt: number;
 };
 type RequestTiming = {
   throttleWaitMs: number;
   networkMs: number;
+};
+type RequestPriority = "read" | "write";
+type QueuedRequest<T> = {
+  queuedAtMs: number;
+  work: () => Promise<T>;
+  onTiming?: (timing: RequestTiming) => void;
+  resolve: (value: T) => void;
+  reject: (reason?: unknown) => void;
 };
 
 const throttleByToken = new Map<string, TokenThrottleState>();
@@ -30,46 +40,65 @@ function getThrottleState(token: string): TokenThrottleState {
   }
 
   const created: TokenThrottleState = {
-    requestChain: Promise.resolve(),
+    running: false,
+    writeQueue: [],
+    readQueue: [],
     lastRequestStartedAt: 0,
   };
   throttleByToken.set(token, created);
   return created;
 }
 
-async function runThrottledRequest<T>(
+async function drainThrottleQueue(state: TokenThrottleState): Promise<void> {
+  if (state.running) return;
+
+  const request = state.writeQueue.shift() ?? state.readQueue.shift();
+  if (!request) return;
+
+  state.running = true;
+  const now = Date.now();
+  const waitMs = Math.max(0, state.lastRequestStartedAt + EFFECTIVE_WANIKANI_REQUEST_GAP_MS - now);
+  if (waitMs > 0) {
+    await sleep(waitMs);
+  }
+
+  state.lastRequestStartedAt = Date.now();
+  const requestStartedAtMs = Date.now();
+  try {
+    request.resolve(await request.work());
+  } catch (error) {
+    request.reject(error);
+  } finally {
+    request.onTiming?.({
+      throttleWaitMs: requestStartedAtMs - request.queuedAtMs,
+      networkMs: Date.now() - requestStartedAtMs,
+    });
+    state.running = false;
+    void drainThrottleQueue(state);
+  }
+}
+
+function runThrottledRequest<T>(
   token: string,
+  priority: RequestPriority,
   work: () => Promise<T>,
   onTiming?: (timing: RequestTiming) => void,
 ): Promise<T> {
   const state = getThrottleState(token);
-  const queuedAtMs = Date.now();
-
-  const run = state.requestChain.then(async () => {
-    const now = Date.now();
-    const waitMs = Math.max(0, state.lastRequestStartedAt + EFFECTIVE_WANIKANI_REQUEST_GAP_MS - now);
-    if (waitMs > 0) {
-      await sleep(waitMs);
-    }
-
-    state.lastRequestStartedAt = Date.now();
-    const requestStartedAtMs = Date.now();
-    try {
-      return await work();
-    } finally {
-      onTiming?.({
-        throttleWaitMs: requestStartedAtMs - queuedAtMs,
-        networkMs: Date.now() - requestStartedAtMs,
-      });
-    }
+  const promise = new Promise<T>((resolve, reject) => {
+    const request: QueuedRequest<T> = {
+      queuedAtMs: Date.now(),
+      work,
+      onTiming,
+      resolve,
+      reject,
+    };
+    const queue = priority === "write" ? state.writeQueue : state.readQueue;
+    queue.push(request as QueuedRequest<unknown>);
   });
 
-  state.requestChain = run.then(
-    () => undefined,
-    () => undefined,
-  );
-
-  return run;
+  void drainThrottleQueue(state);
+  return promise;
 }
 
 export async function fetchWaniKani<T>(
@@ -90,7 +119,7 @@ export async function fetchWaniKani<T>(
     headers["If-Modified-Since"] = conditionalHeaders.ifModifiedSince;
   }
 
-  const response = await runThrottledRequest(token, () =>
+  const response = await runThrottledRequest(token, "read", () =>
     fetch(`${BASE_URL}${path}`, {
       headers,
       cache: "no-store",
@@ -168,6 +197,7 @@ export async function postWaniKani<TResponse>(
 
   const response = await runThrottledRequest(
     token,
+    "write",
     () =>
       fetch(`${BASE_URL}${path}`, {
         method: "POST",
@@ -196,7 +226,7 @@ export async function putWaniKani<TResponse>(
     "Content-Type": "application/json",
   };
 
-  const response = await runThrottledRequest(token, () =>
+  const response = await runThrottledRequest(token, "write", () =>
     fetch(`${BASE_URL}${path}`, {
       method: "PUT",
       headers,
