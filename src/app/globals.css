@@ -13,6 +13,10 @@
   --radical: #10b4e8;
   --kanji: #ff3b82;
   --vocabulary: #8b5cf6;
+  --font-body-sans: "Segoe UI Variable", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display-sans: "Arial Black", "Segoe UI", sans-serif;
+  --font-jp-sans: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", "Meiryo", sans-serif;
+  --font-jp-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Georgia", serif;
   --font-jp-current: var(--font-jp-sans);
 }
 
@@ -80,12 +84,30 @@ h3 {
 
 button,
 [role="button"],
+a[href],
+summary,
+label,
 input[type="button"],
 input[type="submit"],
-input[type="reset"] {
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+textarea,
+[data-clickable="true"] {
+  cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
+}
+
+button:disabled,
+[disabled],
+[aria-disabled="true"],
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed;
 }
 
 .noise-overlay {
