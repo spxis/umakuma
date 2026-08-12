@@ -80,12 +80,22 @@ h3 {
 
 button,
 [role="button"],
+a[href],
 input[type="button"],
 input[type="submit"],
-input[type="reset"] {
+input[type="reset"],
+summary,
+[data-clickable="true"] {
+  cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
+}
+
+button:disabled,
+[disabled],
+[aria-disabled="true"] {
+  cursor: not-allowed;
 }
 
 .noise-overlay {
