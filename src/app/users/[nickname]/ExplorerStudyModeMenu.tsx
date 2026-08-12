@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   STUDY_MODE_BEHAVIOR_OPTIONS,
@@ -8,24 +8,51 @@ import type { StudyModeBehavior } from "./study-explorer/lib/studyExplorerTypes"
 type Props = {
   studyMode: boolean;
   studyModeBehavior: StudyModeBehavior;
-  studyModeMenuOpen: boolean;
-  onToggleMenu: () => void;
-  onCloseMenu: () => void;
   onSelectMode: (mode: StudyModeBehavior) => void;
 };
+
+const HOVER_CLOSE_DELAY_MS = 220;
 
 export default function ExplorerStudyModeMenu({
   studyMode,
   studyModeBehavior,
-  studyModeMenuOpen,
-  onToggleMenu,
-  onCloseMenu,
   onSelectMode,
 }: Props) {
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const hoverCloseTimerRef = useRef<number | null>(null);
+  const [isHoverOpen, setIsHoverOpen] = useState(false);
+  const [isPinnedOpen, setIsPinnedOpen] = useState(false);
+  const isMenuOpen = isHoverOpen || isPinnedOpen;
+
+  const cancelHoverCloseTimer = () => {
+    if (hoverCloseTimerRef.current === null) {
+      return;
+    }
+    window.clearTimeout(hoverCloseTimerRef.current);
+    hoverCloseTimerRef.current = null;
+  };
+
+  const openHoverMenu = () => {
+    cancelHoverCloseTimer();
+    setIsHoverOpen(true);
+  };
+
+  const closeHoverMenuSoon = () => {
+    cancelHoverCloseTimer();
+    hoverCloseTimerRef.current = window.setTimeout(() => {
+      setIsHoverOpen(false);
+      hoverCloseTimerRef.current = null;
+    }, HOVER_CLOSE_DELAY_MS);
+  };
 
   useEffect(() => {
-    if (!studyModeMenuOpen || typeof window === "undefined") {
+    return () => {
+      cancelHoverCloseTimer();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isPinnedOpen || typeof window === "undefined") {
       return;
     }
 
@@ -36,13 +63,13 @@ export default function ExplorerStudyModeMenu({
       }
 
       if (!menuRef.current.contains(target)) {
-        onCloseMenu();
+        setIsPinnedOpen(false);
       }
     };
 
     const onEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onCloseMenu();
+        setIsPinnedOpen(false);
       }
     };
 
@@ -52,30 +79,42 @@ export default function ExplorerStudyModeMenu({
       window.removeEventListener("mousedown", onPointerDown);
       window.removeEventListener("keydown", onEscape);
     };
-  }, [onCloseMenu, studyModeMenuOpen]);
+  }, [isPinnedOpen]);
+
+  const handleSelectMode = (mode: StudyModeBehavior) => {
+    onSelectMode(mode);
+  };
 
   return (
-    <div ref={menuRef} className="relative inline-flex min-w-0 flex-[1_1_0%] md:flex-none">
+    <div
+      ref={menuRef}
+      className="relative inline-flex min-w-0 flex-[1_1_0%] md:flex-none"
+      onMouseEnter={openHoverMenu}
+      onMouseLeave={closeHoverMenuSoon}
+    >
       <button
         type="button"
-        onClick={onToggleMenu}
+        onClick={() => {
+          setIsPinnedOpen((prev) => !prev);
+          setIsHoverOpen(true);
+        }}
         className={`inline-flex h-9 min-w-0 w-full items-center justify-center whitespace-nowrap rounded-full border px-2.5 text-[10px] font-bold uppercase tracking-[0.06em] transition sm:h-10 sm:px-4 sm:text-xs sm:tracking-widest ${
           studyMode
             ? "border-hot bg-hot text-white"
             : "border-line bg-surface text-foreground hover:bg-surface-muted"
         }`}
         aria-haspopup="menu"
-        aria-expanded={studyModeMenuOpen}
+        aria-expanded={isMenuOpen}
       >
-        <span className="sm:hidden">Mode {studyModeBehavior === "oneshot" ? "Quick" : studyMode ? "Session" : "Off"}</span>
-        <span className="hidden sm:inline">
-          Study mode {studyModeBehavior === "oneshot" ? "Quick mode" : studyMode ? "Session" : "Off"}
-        </span>
+        <span className="sm:hidden">{studyModeBehavior === "oneshot" ? "Quick" : studyMode ? "Session" : "Off"}</span>
+        <span className="hidden sm:inline">{studyModeBehavior === "oneshot" ? "Quick mode" : studyMode ? "Session" : "Off"}</span>
       </button>
-      {studyModeMenuOpen ? (
+      {isMenuOpen ? (
         <div
           role="menu"
           className="absolute right-0 top-full z-30 mt-2 w-64 rounded-xl border border-line bg-surface p-2 shadow-[0_18px_42px_rgba(8,16,36,0.16)]"
+          onMouseEnter={openHoverMenu}
+          onMouseLeave={closeHoverMenuSoon}
         >
           {STUDY_MODE_BEHAVIOR_OPTIONS.map((mode) => {
             const active = mode.value === studyModeBehavior;
@@ -85,9 +124,10 @@ export default function ExplorerStudyModeMenu({
                 type="button"
                 role="menuitemradio"
                 aria-checked={active}
+                onMouseEnter={() => handleSelectMode(mode.value)}
                 onClick={() => {
-                  onSelectMode(mode.value);
-                  onCloseMenu();
+                  handleSelectMode(mode.value);
+                  setIsPinnedOpen(false);
                 }}
                 className={`w-full rounded-lg px-3 py-2 text-left transition ${
                   active ? "bg-accent/12 text-accent" : "text-foreground hover:bg-surface-muted"

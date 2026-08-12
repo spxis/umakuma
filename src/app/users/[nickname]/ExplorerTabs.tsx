@@ -79,7 +79,6 @@ export default function ExplorerTabs({
     initialStudyMode,
     clientStateHydratedRef,
   });
-  const [studyModeMenuOpen, setStudyModeMenuOpen] = useState(false);
   const forcedTab = dashboardTab === "wk"
     ? "level"
     : dashboardTab === "jlpt"
@@ -402,9 +401,6 @@ export default function ExplorerTabs({
             <ExplorerStudyModeMenu
               studyMode={studyMode}
               studyModeBehavior={studyModeBehavior}
-              studyModeMenuOpen={studyModeMenuOpen}
-              onToggleMenu={() => setStudyModeMenuOpen((prev) => !prev)}
-              onCloseMenu={() => setStudyModeMenuOpen(false)}
               onSelectMode={(mode) => {
                 setStudyModeBehavior(mode);
                 setStudyMode(mode !== "off");
