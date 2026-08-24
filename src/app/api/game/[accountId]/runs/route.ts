@@ -1,0 +1,65 @@
+import { GameSubjectCategory } from "@prisma/client";
+import { NextResponse } from "next/server";
+import { z } from "zod";
+
+import { canAccessAccount } from "@/lib/accountAccess";
+import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
+import { isGameBatchSize, isGameCategory } from "@/lib/gameMode";
+import { buildGameQuestions, hydrateGameQuestions, loadGamePool, toGameRunSummary } from "@/lib/gameModeServer";
+import { prisma } from "@/lib/prisma";
+
+const bodySchema = z.object({
+  batchSize: z.number().int().refine(isGameBatchSize),
+  level: z.number().int().min(1).max(60).nullable(),
+  category: z.string().refine(isGameCategory),
+});
+
+export async function POST(request: Request, context: { params: Promise<{ accountId: string }> }) {
+  return withApiRouteTelemetry({
+    route: "/api/game/[accountId]/runs",
+    method: "POST",
+    request,
+    execute: async () => {
+      try {
+        const json = await request.json();
+        const parsed = bodySchema.safeParse(json);
+        if (!parsed.success) {
+          return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+
+        const { accountId } = await context.params;
+        if (!(await canAccessAccount(request, accountId))) {
+          return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+        }
+
+        const { items } = await loadGamePool(accountId, parsed.data.level, parsed.data.category);
+        const questionInputs = buildGameQuestions(items, parsed.data.batchSize);
+        const run = await prisma.$transaction(async (tx) => {
+          await tx.gameRun.updateMany({
+            where: { accountId, status: "active" },
+            data: { status: "abandoned" },
+          });
+          return tx.gameRun.create({
+            data: {
+              accountId,
+              batchSize: parsed.data.batchSize,
+              level: parsed.data.level,
+              category: parsed.data.category as GameSubjectCategory,
+              questionCount: parsed.data.batchSize,
+              questions: { create: questionInputs },
+            },
+            include: { questions: { orderBy: { position: "asc" } } },
+          });
+        });
+        const questions = await hydrateGameQuestions(run.questions);
+
+        return NextResponse.json({ run: toGameRunSummary(run), questions }, { status: 201 });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "Could not start the game.";
+        const status = message.includes("eligible") || message.includes("distinct") ? 422 : 500;
+        if (status === 500) console.error("Failed to start game", error);
+        return NextResponse.json({ error: status === 422 ? message : "Could not start the game." }, { status });
+      }
+    },
+  });
+}

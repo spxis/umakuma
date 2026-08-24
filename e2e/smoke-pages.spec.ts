@@ -729,7 +729,7 @@ test("study mode menu exposes and persists all review modes", async ({ browser, 
     await expect(modeButton).toBeVisible();
     await modeButton.click();
 
-    for (const label of ["Session", "Quick", "Side-by-Side"]) {
+    for (const label of ["Session", "Quick", "Side-by-Side", "Game"]) {
       await expect(page.getByRole("menuitemradio", { name: label, exact: true })).toBeVisible();
     }
     await expect(page.getByRole("menuitemradio", { name: "OFF", exact: true })).toHaveCount(0);

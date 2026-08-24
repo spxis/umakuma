@@ -64,6 +64,7 @@ model Account {
   customStudyStates         CustomStudyState[]
   customStudyReviewAttempts CustomStudyReviewAttempt[]
   studySubjectTags          StudySubjectTag[]
+  gameRuns                  GameRun[]
 }
 
 model InviteRateLimit {
@@ -238,6 +239,24 @@ enum SubjectReviewSnapshotSource {
   submit
 }
 
+enum GameRunStatus {
+  active
+  completed
+  abandoned
+}
+
+enum GameSubjectCategory {
+  radical
+  kanji
+  vocabulary
+  mixed
+}
+
+enum GameAnswerType {
+  reading
+  meaning
+}
+
 enum ReadingChallengeStatus {
   draft
   active
@@ -290,6 +309,51 @@ model StudyReviewAttempt {
 
   @@index([accountId, subjectId, submittedAt])
   @@index([accountId, submittedAt])
+}
+
+model GameRun {
+  id            String              @id @default(cuid())
+  accountId     String
+  batchSize     Int
+  level         Int?
+  category      GameSubjectCategory
+  questionCount Int
+  answeredCount Int                 @default(0)
+  correctCount  Int                 @default(0)
+  currentStreak Int                 @default(0)
+  bestStreak    Int                 @default(0)
+  score         Int                 @default(0)
+  durationMs    Int?
+  status        GameRunStatus       @default(active)
+  startedAt     DateTime            @default(now())
+  completedAt   DateTime?
+  completedDatePst String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  account   Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  questions GameQuestion[]
+
+  @@index([accountId, completedAt])
+  @@index([status, batchSize, level, category, completedDatePst])
+}
+
+model GameQuestion {
+  id                String         @id @default(cuid())
+  runId             String
+  position          Int
+  targetSubjectId   Int
+  leftSubjectId     Int
+  rightSubjectId    Int
+  answerType        GameAnswerType
+  selectedSubjectId Int?
+  correct           Boolean?
+  answeredAt        DateTime?
+
+  run GameRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, position])
+  @@index([runId])
 }
 
 model StudySubjectTag {

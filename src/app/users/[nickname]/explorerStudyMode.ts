@@ -23,6 +23,11 @@ export const STUDY_MODE_BEHAVIOR_OPTIONS: ReadonlyArray<{
     label: "Side-by-Side",
     description: "Choose between two similar items",
   },
+  {
+    value: "game",
+    label: "Game",
+    description: "Timed rounds and family scoreboards",
+  },
 ];
 
 export function parseStudyModeBehavior(input: string | null): StudyModeBehavior | null {
@@ -30,7 +35,7 @@ export function parseStudyModeBehavior(input: string | null): StudyModeBehavior 
     return "session";
   }
 
-  if (input === "session" || input === "oneshot" || input === "side-by-side") {
+  if (input === "session" || input === "oneshot" || input === "side-by-side" || input === "game") {
     return input;
   }
 

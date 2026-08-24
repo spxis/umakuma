@@ -7,7 +7,7 @@ export type { StudyQueueItem } from "@/lib/studyQueueTypes";
 export type StudyQueueMode = StudyQueueItem["queueType"];
 export type StudyViewerMode = "detail" | "flash";
 export type StudySource = "wanikani" | "custom";
-export type StudyModeBehavior = "session" | "oneshot" | "side-by-side";
+export type StudyModeBehavior = "session" | "oneshot" | "side-by-side" | "game";
 export type StudyReviewAnswerType = "combined" | "reading" | "meaning";
 
 export type StudyComparisonOption = {
