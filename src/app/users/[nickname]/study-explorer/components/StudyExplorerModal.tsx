@@ -1,13 +1,19 @@
 import StudyReviewModal from "./StudyReviewModal";
+import StudySideBySideModal from "./StudySideBySideModal";
 import {
+  STUDY_QUEUE_TYPES,
   STUDY_REVIEW_OUTCOMES,
   STUDY_REVIEW_TERMINAL_OUTCOMES,
 } from "./StudyExplorer.constants";
 import type {
   ReviewOutcome,
   ReviewSrsTransition,
+  StudyQueueMode,
   StudyQueueItem,
+  StudyReviewAnswerType,
+  StudyModeBehavior,
   StudyReviewSubmitResult,
+  StudySource,
   StudyViewerMode,
   SubmitFeedback,
   SubmitInFlight,
@@ -20,6 +26,9 @@ type Props = {
   forcedViewerMode: StudyViewerMode | null;
   isUnauthorized: boolean;
   studyMode: boolean;
+  studyModeBehavior: StudyModeBehavior;
+  studySource: StudySource;
+  queueMode: StudyQueueMode;
   selectedItem: StudyQueueItem | null;
   selectedIndex: number;
   modalItems: StudyQueueItem[];
@@ -38,7 +47,7 @@ type Props = {
   onSetRevealedAssignmentIds: React.Dispatch<React.SetStateAction<Set<number>>>;
   onClose: () => void;
   onToggleShowEnglish: () => void;
-  onSubmit: (assignmentId: number, result: StudyReviewSubmitResult) => Promise<void>;
+  onSubmit: (assignmentId: number, result: StudyReviewSubmitResult, answerType?: StudyReviewAnswerType) => Promise<void>;
   onStartLesson: (assignmentId: number) => Promise<void>;
   onResetToLessons: (assignmentId: number) => Promise<void>;
 };
@@ -50,6 +59,9 @@ export default function StudyExplorerModal({
   forcedViewerMode,
   isUnauthorized,
   studyMode,
+  studyModeBehavior,
+  studySource,
+  queueMode,
   selectedItem,
   selectedIndex,
   modalItems,
@@ -74,6 +86,26 @@ export default function StudyExplorerModal({
 }: Props) {
   if (isUnauthorized) {
     return null;
+  }
+
+  if (
+    studyModeBehavior === "side-by-side" &&
+    studySource === "wanikani" &&
+    queueMode === STUDY_QUEUE_TYPES.review &&
+    selectedItem &&
+    !selectedItem.isInjectedTrouble
+  ) {
+    return (
+      <StudySideBySideModal
+        accountId={accountId}
+        selectedItem={selectedItem}
+        selectedIndex={selectedIndex}
+        total={modalItems.length}
+        isSubmitting={isSubmittingSelected}
+        onClose={onClose}
+        onSubmit={onSubmit}
+      />
+    );
   }
 
   return (

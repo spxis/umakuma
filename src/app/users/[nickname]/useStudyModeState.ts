@@ -28,10 +28,10 @@ export function useStudyModeState({
   clientStateHydratedRef,
 }: Args): StudyModeState {
   const [studyMode, setStudyMode] = useState(() =>
-    typeof initialStudyMode === "boolean" ? initialStudyMode : true,
+    true,
   );
   const [studyModeBehavior, setStudyModeBehavior] = useState<StudyModeBehavior>(() =>
-    typeof initialStudyMode === "boolean" && !initialStudyMode ? "off" : "session",
+    "session",
   );
 
   const syncFromUrlAndStorage = useCallback((params: URLSearchParams) => {
@@ -39,11 +39,12 @@ export function useStudyModeState({
     if (urlStudyMode === "on" || urlStudyMode === "1") {
       setStudyMode(true);
     } else if (urlStudyMode === "off" || urlStudyMode === "0") {
-      setStudyMode(false);
+      setStudyMode(true);
+      setStudyModeBehavior("session");
     } else if (typeof initialStudyMode !== "boolean") {
       const storedStudyMode = window.localStorage.getItem("wr:study-mode");
       if (storedStudyMode !== null) {
-        setStudyMode(storedStudyMode === "1");
+        setStudyMode(true);
       }
     }
 
@@ -65,7 +66,7 @@ export function useStudyModeState({
     let changed = false;
 
     const studyModeInUrl = params.get("studyMode");
-    const nextStudyMode = studyMode ? "on" : "off";
+    const nextStudyMode = "on";
     if (studyModeInUrl !== nextStudyMode) {
       params.set("studyMode", nextStudyMode);
       changed = true;

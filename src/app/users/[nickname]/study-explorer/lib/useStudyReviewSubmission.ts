@@ -7,6 +7,7 @@ import type {
   StudyQueueMode,
   StudyQueueItem,
   ReviewSrsTransition,
+  StudyReviewAnswerType,
   SubmitFeedback,
   SubmitInFlight,
 } from "./studyExplorerTypes";
@@ -81,7 +82,11 @@ export function useStudyReviewSubmission({
   );
 
   const submitReview = useCallback(
-    async (assignmentId: number, result: "correct" | "wrong") => {
+    async (
+      assignmentId: number,
+      result: "correct" | "wrong",
+      answerType: StudyReviewAnswerType = "combined",
+    ) => {
       if (inFlightAssignmentIdsRef.current.has(assignmentId)) {
         return;
       }
@@ -133,6 +138,7 @@ export function useStudyReviewSubmission({
             body: JSON.stringify({
               assignmentId,
               result,
+              answerType,
               ...(itemForSubmit?.isInjectedTrouble
                 ? { practiceSubjectId: itemForSubmit.subjectId, practiceType: "trouble" as const }
                 : {}),

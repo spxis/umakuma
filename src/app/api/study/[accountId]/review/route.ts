@@ -22,6 +22,7 @@ const reviewSchema = z.object({
   practiceSubjectId: z.number().int().positive().optional(),
   practiceType: z.enum(["trouble"]).optional(),
   result: z.enum(["correct", "wrong"]),
+  answerType: z.enum(["combined", "reading", "meaning"]).default("combined"),
 });
 
 type ReviewSubmissionResponse = {
@@ -147,6 +148,8 @@ export async function POST(request: Request, context: RouteContext) {
     });
 
     const incorrect = parsed.data.result === "wrong" ? 1 : 0;
+    const incorrectMeaningAnswers = parsed.data.answerType === "reading" ? 0 : incorrect;
+    const incorrectReadingAnswers = parsed.data.answerType === "meaning" ? 0 : incorrect;
 
     if (parsed.data.practiceType === "trouble" && typeof parsed.data.practiceSubjectId === "number") {
       clearStudyQueueCache(accountId);
@@ -180,8 +183,8 @@ export async function POST(request: Request, context: RouteContext) {
         {
           review: {
             assignment_id: parsed.data.assignmentId,
-            incorrect_meaning_answers: incorrect,
-            incorrect_reading_answers: incorrect,
+            incorrect_meaning_answers: incorrectMeaningAnswers,
+            incorrect_reading_answers: incorrectReadingAnswers,
           },
         },
         (timing) => {

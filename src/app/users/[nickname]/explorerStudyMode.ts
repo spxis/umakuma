@@ -9,24 +9,28 @@ export const STUDY_MODE_BEHAVIOR_OPTIONS: ReadonlyArray<{
   description: string;
 }> = [
   {
-    value: "off",
-    label: "Off",
-    description: "No study mode helpers",
-  },
-  {
     value: "session",
     label: "Session",
     description: "Review visible items in one session",
   },
   {
     value: "oneshot",
-    label: "Quick mode",
+    label: "Quick",
     description: "Review clicked item only, then close",
+  },
+  {
+    value: "side-by-side",
+    label: "Side-by-Side",
+    description: "Choose between two similar items",
   },
 ];
 
 export function parseStudyModeBehavior(input: string | null): StudyModeBehavior | null {
-  if (input === "off" || input === "session" || input === "oneshot") {
+  if (input === "off") {
+    return "session";
+  }
+
+  if (input === "session" || input === "oneshot" || input === "side-by-side") {
     return input;
   }
 

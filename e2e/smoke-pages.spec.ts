@@ -719,6 +719,29 @@ test("study desktop card click opens modal and shows item data", async ({ browse
   });
 });
 
+test("study mode menu exposes and persists all review modes", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for study mode checks in this environment.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&studyMode=session#explorer`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const modeButton = page.getByRole("button", { name: "MODE", exact: true });
+    await expect(modeButton).toBeVisible();
+    await modeButton.click();
+
+    for (const label of ["Session", "Quick", "Side-by-Side"]) {
+      await expect(page.getByRole("menuitemradio", { name: label, exact: true })).toBeVisible();
+    }
+    await expect(page.getByRole("menuitemradio", { name: "OFF", exact: true })).toHaveCount(0);
+
+    await page.getByRole("menuitemradio", { name: "Side-by-Side", exact: true }).click();
+    await expect(page).toHaveURL(/studyMode=side-by-side/);
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await modeButton.click();
+    await expect(page.getByRole("menuitemradio", { name: "Side-by-Side", exact: true })).toHaveAttribute("aria-checked", "true");
+  });
+});
+
 test("study mobile trouble/favorite clicks do not open modal and card tap still opens", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for mobile click/view checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];

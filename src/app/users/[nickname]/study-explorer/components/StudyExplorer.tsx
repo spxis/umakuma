@@ -470,6 +470,7 @@ export default function StudyExplorer({
           <StudyExplorerModal
             accountId={accountId} showEnglish={showEnglish} canToggleEnglish={canToggleEnglish}
             forcedViewerMode={forcedViewerMode} isUnauthorized={isUnauthorized} studyMode={studyMode}
+            studyModeBehavior={studyModeBehavior} studySource={studySource} queueMode={queueMode}
             selectedItem={selectedItem} selectedIndex={selectedIndex} modalItems={modalItems}
             prevItem={prevItem} nextItem={nextItem} filteredItems={sortedFilteredItems}
             isSelectedSubmitted={isSelectedSubmitted} isAnswerRevealed={isAnswerRevealed}

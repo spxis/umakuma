@@ -85,12 +85,6 @@ export default function ExplorerStudyModeMenu({
     onSelectMode(mode);
   };
 
-  const triggerLabel = studyModeBehavior === "oneshot"
-    ? "Quick mode"
-    : studyModeBehavior === "off"
-      ? "Off"
-      : "Study mode";
-
   return (
     <div
       ref={menuRef}
@@ -112,7 +106,7 @@ export default function ExplorerStudyModeMenu({
         aria-haspopup="menu"
         aria-expanded={isMenuOpen}
       >
-        <span>{triggerLabel}</span>
+        <span>MODE</span>
       </button>
       {isMenuOpen ? (
         <div

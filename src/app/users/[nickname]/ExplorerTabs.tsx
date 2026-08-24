@@ -403,7 +403,7 @@ export default function ExplorerTabs({
               studyModeBehavior={studyModeBehavior}
               onSelectMode={(mode) => {
                 setStudyModeBehavior(mode);
-                setStudyMode(mode !== "off");
+                setStudyMode(true);
               }}
             />
           </div>

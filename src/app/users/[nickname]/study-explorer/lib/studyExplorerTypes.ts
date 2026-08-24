@@ -7,7 +7,23 @@ export type { StudyQueueItem } from "@/lib/studyQueueTypes";
 export type StudyQueueMode = StudyQueueItem["queueType"];
 export type StudyViewerMode = "detail" | "flash";
 export type StudySource = "wanikani" | "custom";
-export type StudyModeBehavior = "off" | "session" | "oneshot";
+export type StudyModeBehavior = "session" | "oneshot" | "side-by-side";
+export type StudyReviewAnswerType = "combined" | "reading" | "meaning";
+
+export type StudyComparisonOption = {
+  subjectId: number;
+  subjectType: SubjectType;
+  wkLevel: number;
+  characters: string;
+  primaryMeaning: string | null;
+  primaryReading: string | null;
+};
+
+export type StudyComparisonResponse = {
+  answerType: Exclude<StudyReviewAnswerType, "combined">;
+  prompt: string;
+  distractor: StudyComparisonOption;
+};
 
 export type QueueResponse = {
   cached?: boolean;
