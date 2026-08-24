@@ -17,20 +17,12 @@ import {
 import { prisma } from "@/lib/prisma";
 
 const querySchema = z.object({
-  batchSize: z.coerce.number().int().refine(isGameBatchSize),
+  batchSize: z.union([z.literal("any"), z.coerce.number().int().refine(isGameBatchSize)]),
   level: z.union([z.literal("any"), z.literal("all"), z.coerce.number().int().min(1).max(60)]),
   category: z.union([z.literal("all"), z.enum(GAME_CATEGORIES)]),
   range: z.enum(GAME_DATE_RANGES),
   metric: z.enum(GAME_METRICS),
 });
-
-function isBetter(candidate: GameLeaderboardEntry, current: GameLeaderboardEntry, metric: GameMetric): boolean {
-  if (metric === "time") return candidate.durationMs < current.durationMs;
-  if (metric === "streak") return candidate.bestStreak > current.bestStreak;
-  return candidate.score > current.score || (
-    candidate.score === current.score && candidate.durationMs < current.durationMs
-  );
-}
 
 function sortEntries(entries: GameLeaderboardEntry[], metric: GameMetric): GameLeaderboardEntry[] {
   return [...entries].sort((left, right) => {
@@ -72,11 +64,11 @@ export async function GET(request: Request, context: { params: Promise<{ account
           completedDatePst: true,
           account: { select: { nickname: true, wkUsername: true } },
         } as const;
-        const [runs, recentRuns] = await Promise.all([
+        const [runs, recentRuns, members] = await Promise.all([
           prisma.gameRun.findMany({
             where: {
               status: "completed",
-              batchSize: parsed.data.batchSize,
+              batchSize: parsed.data.batchSize === "any" ? undefined : parsed.data.batchSize,
               level: parsed.data.level === "any"
                 ? undefined
                 : parsed.data.level === "all"
@@ -94,6 +86,10 @@ export async function GET(request: Request, context: { params: Promise<{ account
             orderBy: { completedAt: "desc" },
             take: 12,
             select: runSelect,
+          }),
+          prisma.account.findMany({
+            orderBy: { nickname: "asc" },
+            select: { id: true, nickname: true, wkUsername: true },
           }),
         ]);
 
@@ -117,20 +113,16 @@ export async function GET(request: Request, context: { params: Promise<{ account
           };
         }
 
-        const bestByDateAndAccount = new Map<string, GameLeaderboardEntry>();
-        for (const run of runs) {
+        const entries = runs.flatMap((run) => {
           const entry = toEntry(run);
-          if (!entry) continue;
-          const key = `${entry.completedDatePst}:${entry.accountId}`;
-          const current = bestByDateAndAccount.get(key);
-          if (!current || isBetter(entry, current, parsed.data.metric)) bestByDateAndAccount.set(key, entry);
-        }
+          return entry ? [entry] : [];
+        });
 
         return NextResponse.json({
           days: dateKeys.map((date) => ({
             date,
             entries: sortEntries(
-              Array.from(bestByDateAndAccount.values()).filter((entry) => entry.completedDatePst === date),
+              entries.filter((entry) => entry.completedDatePst === date),
               parsed.data.metric,
             ),
           })),
@@ -138,6 +130,11 @@ export async function GET(request: Request, context: { params: Promise<{ account
             const entry = toEntry(run);
             return entry ? [entry] : [];
           }),
+          members: members.map((member) => ({
+            accountId: member.id,
+            nickname: member.nickname,
+            wkUsername: member.wkUsername,
+          })),
         }, { status: 200 });
       } catch (error) {
         console.error("Failed to load game leaderboard", error);

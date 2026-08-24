@@ -100,8 +100,13 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   const currentQuestion = activeGame?.questions[questionIndex] ?? null;
   const finishedRun = phase === "results" ? activeGame?.run ?? null : null;
 
-  async function startGame() {
-    if (!canStart) return;
+  async function startGame(gameSelection: GameSelection = selection) {
+    const gameAvailableCount = setup
+      ? gameSelection.level === null
+        ? setup.totalCounts[gameSelection.category]
+        : setup.countsByLevel[gameSelection.level]?.[gameSelection.category] ?? 0
+      : 0;
+    if (!setup || gameAvailableCount < gameSelection.batchSize || starting) return;
     setStarting(true);
     setGameError(null);
     try {
@@ -109,9 +114,9 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          batchSize: selection.batchSize,
-          level: selection.level,
-          category: selection.category,
+          batchSize: gameSelection.batchSize,
+          level: gameSelection.level,
+          category: gameSelection.category,
         }),
       });
       const payload = (await response.json()) as ActiveGame & { error?: string };
@@ -218,7 +223,29 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 <div><p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.time}</p><p className="mt-1 text-xl font-black sm:text-3xl">{formatGameDuration(finishedRun.durationMs)}</p></div>
                 <div><p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.streak}</p><p className="mt-1 text-xl font-black sm:text-3xl">{finishedRun.bestStreak}</p></div>
               </div>
-              <button type="button" onClick={resetToLobby} className="mt-7 rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black uppercase text-white hover:brightness-95">{GAME_COPY.playAgain}</button>
+              <p className="mt-5 text-sm font-bold text-foreground/65">
+                {GAME_CATEGORY_LABELS[finishedRun.category]} · {finishedRun.level === null ? "All levels" : `Level ${finishedRun.level}`} · {finishedRun.questionCount} questions
+              </p>
+              <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  type="button"
+                  disabled={starting}
+                  onClick={() => void startGame({ batchSize: finishedRun.batchSize, level: finishedRun.level, category: finishedRun.category })}
+                  className="rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
+                >
+                  {starting ? GAME_COPY.starting : "Play same settings"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelection({ batchSize: finishedRun.batchSize, level: finishedRun.level, category: finishedRun.category });
+                    resetToLobby();
+                  }}
+                  className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black uppercase text-foreground hover:bg-surface-muted"
+                >
+                  Change settings
+                </button>
+              </div>
             </section>
           ) : (
             <section ref={setupRef} aria-label="Game setup" className="grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:grid-cols-4 sm:px-6">
@@ -250,7 +277,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
 
           {gameError ? <p className="text-sm font-bold text-red-700">{gameError}</p> : null}
           <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(19rem,1fr)]">
-            <GameLeaderboard days={leaderboardState.key === leaderboardKey ? leaderboardState.data?.days ?? [] : []} metric={leaderboardFilters.metric} loading={leaderboardState.key !== leaderboardKey} />
+            <GameLeaderboard days={leaderboardState.key === leaderboardKey ? leaderboardState.data?.days ?? [] : []} members={leaderboardState.data?.members ?? []} metric={leaderboardFilters.metric} loading={leaderboardState.key !== leaderboardKey} />
             <GameRecentGames entries={leaderboardState.data?.recent ?? []} loading={!leaderboardState.data} onChallenge={challengeRecentRun} />
           </div>
       </main>

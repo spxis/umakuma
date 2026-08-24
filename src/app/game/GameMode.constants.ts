@@ -29,7 +29,7 @@ export const GAME_COPY = {
 
 export const GAME_STORAGE_KEYS = {
   selection: "umakuma:game:selection",
-  leaderboardFilters: "umakuma:game:leaderboard-filters",
+  leaderboardFilters: "umakuma:game:leaderboard-filters:v2",
 } as const;
 
 export const GAME_CATEGORY_LABELS: Record<GameCategory, string> = {

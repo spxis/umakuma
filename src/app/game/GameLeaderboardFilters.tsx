@@ -14,7 +14,8 @@ export default function GameLeaderboardFilters({ filters, setup, onChange }: Pro
     <section aria-label="Leaderboard filters" className="flex flex-wrap items-end gap-2 border-y border-line bg-surface/70 px-3 py-3 sm:px-4">
       <label className="grid gap-1 text-[10px] font-bold uppercase text-foreground/55">
         Questions
-        <select value={filters.batchSize} onChange={(event) => onChange({ ...filters, batchSize: Number(event.target.value) as Filters["batchSize"] })} className={SELECT_CLASS}>
+        <select value={filters.batchSize} onChange={(event) => onChange({ ...filters, batchSize: event.target.value === "any" ? "any" : Number(event.target.value) as Filters["batchSize"] })} className={SELECT_CLASS}>
+          <option value="any">Any</option>
           {setup.batchSizes.map((size) => <option key={size} value={size}>{size}</option>)}
         </select>
       </label>

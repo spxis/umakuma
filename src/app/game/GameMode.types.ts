@@ -26,6 +26,11 @@ export type GameLeaderboardDay = {
 export type GameLeaderboardResponse = {
   days: GameLeaderboardDay[];
   recent: GameLeaderboardEntry[];
+  members: Array<{
+    accountId: string;
+    nickname: string;
+    wkUsername: string;
+  }>;
 };
 
 export type GameModeClientProps = {
@@ -48,7 +53,7 @@ export type GameSelection = {
 };
 
 export type GameLeaderboardFilters = {
-  batchSize: GameBatchSize;
+  batchSize: "any" | GameBatchSize;
   level: "any" | number | null;
   mode: GameLeaderboardMode;
   range: GameDateRange;

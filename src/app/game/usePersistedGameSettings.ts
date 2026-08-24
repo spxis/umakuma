@@ -15,7 +15,7 @@ import type { GameLeaderboardFilters, GameSelection } from "./GameMode.types";
 
 const DEFAULT_SELECTION: GameSelection = { batchSize: 10, level: null, category: "mixed" };
 const DEFAULT_FILTERS: GameLeaderboardFilters = {
-  batchSize: 10,
+  batchSize: "any",
   level: "any",
   mode: "all",
   range: "today",
@@ -41,7 +41,11 @@ function readFilters(): GameLeaderboardFilters {
     level = Number(stored.level);
   }
   return {
-    batchSize: isGameBatchSize(Number(stored.batchSize)) ? Number(stored.batchSize) as GameLeaderboardFilters["batchSize"] : DEFAULT_FILTERS.batchSize,
+    batchSize: stored.batchSize === "any"
+      ? "any"
+      : isGameBatchSize(Number(stored.batchSize))
+        ? Number(stored.batchSize) as GameLeaderboardFilters["batchSize"]
+        : DEFAULT_FILTERS.batchSize,
     level,
     mode: stored.mode === "all" || (typeof stored.mode === "string" && GAME_CATEGORIES.includes(stored.mode)) ? stored.mode : DEFAULT_FILTERS.mode,
     range: typeof stored.range === "string" && GAME_DATE_RANGES.includes(stored.range) ? stored.range : DEFAULT_FILTERS.range,

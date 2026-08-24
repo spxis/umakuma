@@ -4,6 +4,7 @@ import type { GameLeaderboardDay } from "./GameMode.types";
 
 type Props = {
   days: GameLeaderboardDay[];
+  members: Array<{ accountId: string; nickname: string; wkUsername: string }>;
   metric: GameMetric;
   loading: boolean;
 };
@@ -14,7 +15,11 @@ function metricValue(entry: GameLeaderboardDay["entries"][number], metric: GameM
   return entry.score.toLocaleString();
 }
 
-export default function GameLeaderboard({ days, metric, loading }: Props) {
+export default function GameLeaderboard({ days, members, metric, loading }: Props) {
+  const playedAccountIds = new Set(days.flatMap((day) => day.entries.map((entry) => entry.accountId)));
+  const membersWithoutRuns = members.filter((member) => !playedAccountIds.has(member.accountId));
+  const playedRunCount = days.reduce((count, day) => count + day.entries.length, 0);
+
   return (
     <section className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_18px_45px_rgba(8,16,36,0.1)]">
       <div className="flex items-center justify-between border-b border-line bg-surface-muted px-4 py-3 sm:px-6">
@@ -23,8 +28,6 @@ export default function GameLeaderboard({ days, metric, loading }: Props) {
       </div>
       {loading ? (
         <p className="px-5 py-10 text-center text-sm font-bold text-foreground/60">Loading scoreboard...</p>
-      ) : days.every((day) => day.entries.length === 0) ? (
-        <p className="px-5 py-10 text-center text-sm font-bold text-foreground/60">{GAME_COPY.noScores}</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full min-w-xl border-collapse text-left">
@@ -45,7 +48,7 @@ export default function GameLeaderboard({ days, metric, loading }: Props) {
             </thead>
             <tbody>
               {days.flatMap((day) => day.entries.map((entry, index) => (
-                <tr key={`${day.date}:${entry.accountId}`} className="border-b border-line/70 last:border-b-0">
+                <tr key={entry.runId} className="border-b border-line/70 last:border-b-0">
                   <td className="px-4 py-3 text-sm font-bold text-foreground/65 sm:px-6">{day.date}</td>
                   <td className="px-4 py-3 text-lg font-black text-hot">#{index + 1}</td>
                   <td className="px-4 py-3">
@@ -64,6 +67,20 @@ export default function GameLeaderboard({ days, metric, loading }: Props) {
                   <td className="px-4 py-3 text-right text-sm font-bold text-foreground/65 sm:px-6">{entry.correctCount}/{entry.questionCount}</td>
                 </tr>
               )))}
+              {membersWithoutRuns.map((member, index) => (
+                <tr key={`not-played:${member.accountId}`} className="border-b border-line/70 last:border-b-0 text-foreground/45">
+                  <td className="px-4 py-3 text-sm font-bold sm:px-6">-</td>
+                  <td className="px-4 py-3 text-lg font-black">#{playedRunCount + index + 1}</td>
+                  <td className="px-4 py-3">
+                    <p className="font-black">{member.nickname}</p>
+                    <p className="text-xs font-semibold">@{member.wkUsername}</p>
+                  </td>
+                  <td className="px-4 py-3 text-sm font-bold" colSpan={3}>Not played</td>
+                  <td className="px-4 py-3 text-right text-xl font-black">{metric === "time" ? "-" : "0"}</td>
+                  {metric !== "time" ? <td className="px-4 py-3 text-right text-sm font-bold">-</td> : null}
+                  <td className="px-4 py-3 text-right text-sm font-bold sm:px-6">0/0</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
