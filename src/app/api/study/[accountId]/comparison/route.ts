@@ -136,7 +136,15 @@ export async function GET(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "No comparison item is available." }, { status: 404 });
         }
 
-        const ranked = candidates
+        const targetCharacters = target.characters?.trim();
+        const distinctCandidates = targetCharacters
+          ? candidates.filter((candidate) => candidate.characters?.trim() !== targetCharacters)
+          : candidates;
+        if (distinctCandidates.length === 0) {
+          return NextResponse.json({ error: "No distinct comparison item is available." }, { status: 404 });
+        }
+
+        const ranked = distinctCandidates
           .map((candidate) => ({ candidate, score: candidateScore(target, candidate) }))
           .sort((left, right) => right.score - left.score);
         const topScore = ranked[0]?.score ?? 0;

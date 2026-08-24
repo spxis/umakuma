@@ -10,6 +10,7 @@ import type {
   StudyReviewSubmitResult,
 } from "../lib/studyExplorerTypes";
 import { typeGlyphBoxClass } from "../../level-explorer/lib/levelExplorerDisplay";
+import StudyModalCloseButton from "./StudyModalCloseButton";
 
 type Props = {
   accountId: string;
@@ -103,26 +104,13 @@ export default function StudySideBySideModal({
     <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-2 backdrop-blur-[2px] sm:p-6">
       <div className="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)] sm:rounded-[1.8rem]">
         <header className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-line bg-surface-muted px-3 py-2 sm:px-6 sm:py-3">
-          <button type="button" onClick={onClose} className="min-h-9 w-fit rounded-full border border-line bg-surface px-4 text-sm font-bold text-foreground hover:bg-surface-muted">Close</button>
+          <StudyModalCloseButton onClick={onClose} />
           <p className="text-xs font-bold uppercase text-foreground/70">#{selectedIndex + 1} of {total}</p>
           <span />
         </header>
 
         <main className="flex min-h-0 flex-1 flex-col p-3 sm:p-6">
-          <div className="mb-3 shrink-0 rounded-xl border border-line bg-surface-muted px-3 py-3 text-center sm:mb-5 sm:px-5 sm:py-4">
-            {comparison ? (
-              <>
-                <p className="text-[10px] font-bold uppercase text-foreground/60 sm:text-xs">Choose the item with this {comparison.answerType}</p>
-                <p className="mt-1 text-2xl font-black text-foreground sm:text-4xl">{comparison.prompt}</p>
-              </>
-            ) : error ? (
-              <p className="text-sm font-bold text-red-700">{error}</p>
-            ) : (
-              <p className="text-sm font-bold text-foreground/65">Loading comparison...</p>
-            )}
-          </div>
-
-          <div className="grid min-h-0 flex-1 grid-cols-2 gap-2 sm:gap-5">
+          <div className="grid h-80 min-h-[20rem] shrink-0 grid-cols-2 gap-2 sm:gap-5">
             {options.map((option) => (
               <button
                 key={option.subjectId}
@@ -136,7 +124,18 @@ export default function StudySideBySideModal({
               </button>
             ))}
           </div>
-          <p className="mt-3 shrink-0 text-center text-xs font-semibold text-foreground/60">Tap the matching item</p>
+          <div className="mt-3 flex min-h-0 flex-1 flex-col items-center justify-center rounded-xl border border-line bg-surface-muted px-3 py-3 text-center sm:mt-5 sm:px-5 sm:py-4">
+            {comparison ? (
+              <>
+                <p className="text-[10px] font-bold uppercase text-foreground/60 sm:text-xs">Choose the item with this {comparison.answerType}</p>
+                <p className="mt-1 text-2xl font-black text-foreground sm:text-4xl">{comparison.prompt}</p>
+              </>
+            ) : error ? (
+              <p className="text-sm font-bold text-red-700">{error}</p>
+            ) : (
+              <p className="text-sm font-bold text-foreground/65">Loading comparison...</p>
+            )}
+          </div>
         </main>
       </div>
     </div>
