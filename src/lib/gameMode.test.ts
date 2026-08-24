@@ -4,6 +4,7 @@ import {
   GAME_BATCH_SIZES,
   calculateGameScore,
   formatGameDuration,
+  formatGameScore,
   gameDateKeys,
   gamePoolItemMatches,
 } from "@/lib/gameMode";
@@ -13,38 +14,25 @@ describe("Game Mode", () => {
     expect(GAME_BATCH_SIZES).toEqual([5, 10, 15, 20, 25, 50]);
   });
 
-  it("scores accuracy near 1,000 with a bounded speed bonus", () => {
-    expect(calculateGameScore(10, 10, 8_100)).toBe(1_099);
-    expect(calculateGameScore(10, 10, 10_000)).toBe(1_080);
-    expect(calculateGameScore(10, 10, 12_000)).toBe(1_060);
-    expect(calculateGameScore(10, 10, 18_000)).toBe(1_000);
-    expect(calculateGameScore(0, 10, 1_000)).toBe(0);
-    expect(calculateGameScore(1, 0.5, 1_000)).toBe(0);
+  it("rewards every tenth and higher levels", () => {
+    expect(formatGameScore(calculateGameScore(10, 10, 10_000, 7))).toBe("1,063.4");
+    expect(formatGameScore(calculateGameScore(10, 10, 20_000, 7))).toBe("1,053.4");
+    expect(formatGameScore(calculateGameScore(10, 10, 30_000, 7))).toBe("1,043.4");
+    expect(formatGameScore(calculateGameScore(10, 10, 30_000, 17))).toBe("1,048.4");
+    expect(formatGameScore(calculateGameScore(10, 10, 30_000, 1))).toBe("1,040.4");
+    expect(formatGameScore(calculateGameScore(10, 10, 30_000, 60))).toBe("1,069.9");
   });
 
-  it("distinguishes ten perfect runs inside a two-second window", () => {
-    const durations = [10_000, 10_200, 10_400, 10_600, 10_800, 11_100, 11_300, 11_500, 11_700, 12_000];
-    const scores = durations.map((durationMs) => calculateGameScore(10, 10, durationMs));
-
-    expect(new Set(scores).size).toBe(10);
-    expect(scores).toEqual([1_080, 1_078, 1_076, 1_074, 1_072, 1_069, 1_067, 1_065, 1_063, 1_060]);
-  });
-
-  it("gives every tenth a unique perfect score", () => {
-    const scores = Array.from({ length: 21 }, (_, index) => calculateGameScore(10, 10, 10_000 + index * 100));
-    expect(new Set(scores).size).toBe(21);
-    expect(scores[0]).toBe(1_080);
-    expect(scores[20]).toBe(1_060);
-  });
-
-  it("distinguishes 8.1 seconds from 8.2 seconds", () => {
-    expect(calculateGameScore(10, 10, 8_100)).toBe(1_099);
-    expect(calculateGameScore(10, 10, 8_200)).toBe(1_098);
+  it("gives adjacent tenths distinct scores while speed bonus remains", () => {
+    expect(calculateGameScore(10, 10, 8_100, 7) - calculateGameScore(10, 10, 8_200, 7)).toBe(1);
+    expect(calculateGameScore(10, 10, 30_000, 7) - calculateGameScore(10, 10, 30_100, 7)).toBe(1);
   });
 
   it("keeps accuracy more valuable than speed", () => {
-    expect(calculateGameScore(9, 10, 0)).toBeLessThan(calculateGameScore(10, 10, 20_000));
-    expect(calculateGameScore(49, 50, 0)).toBeLessThan(calculateGameScore(50, 50, 100_000));
+    expect(calculateGameScore(9, 10, 0, 60)).toBeLessThan(calculateGameScore(10, 10, 100_000, 1));
+    expect(calculateGameScore(49, 50, 0, 60)).toBeLessThan(calculateGameScore(50, 50, 100_000, 1));
+    expect(calculateGameScore(0, 10, 1_000, 60)).toBe(0);
+    expect(calculateGameScore(1, 0.5, 1_000, 60)).toBe(0);
   });
 
   it("formats game duration to tenths of a second", () => {

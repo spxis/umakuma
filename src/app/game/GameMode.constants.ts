@@ -15,7 +15,7 @@ export const GAME_COPY = {
   recentGames: "Recent games",
   noScores: "No completed games yet.",
   noRecentGames: "No recent games yet.",
-  scoreRule: "Accuracy earns up to 1,000 points. Faster answers add a small bonus, but accuracy always wins.",
+  scoreRule: "Accuracy earns up to 1,000 points. Level and every 0.1 second add bounded bonuses, but accuracy always wins.",
   notEnoughItems: "This combination does not have enough started items.",
   chooseMatch: "Choose the matching item",
   score: "Score",
@@ -55,3 +55,6 @@ export const GAME_METRIC_LABELS: Record<GameMetric, string> = {
   time: "Time",
   streak: "Best streak",
 };
+
+export const GAME_MIXED_PILL_CLASS = "subject-pill border-line bg-surface-muted text-foreground";
+export const GAME_LEVEL_PILL_CLASS = "subject-pill border-accent/30 bg-accent/10 text-accent";

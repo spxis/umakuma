@@ -64,7 +64,7 @@ export async function POST(
               currentStreak,
               bestStreak,
               ...(complete
-                ? completedRunValues(question.run.startedAt, correctCount, question.run.questionCount, bestStreak)
+                ? completedRunValues(question.run.startedAt, correctCount, question.run.questionCount, bestStreak, question.run.level)
                 : {}),
             },
           });

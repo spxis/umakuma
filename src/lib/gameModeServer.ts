@@ -255,7 +255,7 @@ export async function hydrateGameQuestions(
   });
 }
 
-export function completedRunValues(startedAt: Date, correctCount: number, questionCount: number, bestStreak: number) {
+export function completedRunValues(startedAt: Date, correctCount: number, questionCount: number, bestStreak: number, level: number | null) {
   const completedAt = new Date();
   const durationMs = Math.max(0, completedAt.getTime() - startedAt.getTime());
   return {
@@ -263,7 +263,7 @@ export function completedRunValues(startedAt: Date, correctCount: number, questi
     completedAt,
     completedDatePst: getVancouverDateKey(completedAt),
     durationMs,
-    score: calculateGameScore(correctCount, questionCount, durationMs),
+    score: calculateGameScore(correctCount, questionCount, durationMs, level),
     currentStreak: 0,
     bestStreak,
   };

@@ -81,7 +81,7 @@ export function isGameCategory(value: string): value is GameCategory {
   return GAME_CATEGORIES.includes(value as GameCategory);
 }
 
-export function calculateGameScore(correctCount: number, questionCount: number, durationMs: number): number {
+export function calculateGameScore(correctCount: number, questionCount: number, durationMs: number, level: number | null): number {
   if (
     !Number.isFinite(correctCount) ||
     !Number.isFinite(questionCount) ||
@@ -97,13 +97,24 @@ export function calculateGameScore(correctCount: number, questionCount: number, 
   }
   const boundedCorrect = Math.max(0, Math.min(Math.trunc(correctCount), boundedQuestionCount));
   const accuracy = boundedCorrect / boundedQuestionCount;
-  const accuracyScore = Math.round(1_000 * accuracy);
-  const maximumSpeedBonus = Math.max(0, Math.floor(1_000 / boundedQuestionCount) - 1);
-  const fastestDistinctPaceMs = boundedQuestionCount * 810;
-  const tenthsBeyondFastestPace = Math.floor(Math.max(0, durationMs - fastestDistinctPaceMs) / 100);
-  const availableSpeedBonus = Math.max(0, maximumSpeedBonus - tenthsBeyondFastestPace);
-  const speedBonus = Math.round(availableSpeedBonus * accuracy);
-  return accuracyScore + speedBonus;
+  const accuracyScoreUnits = Math.round(10_000 * accuracy);
+  const boundedLevel = level === null || !Number.isFinite(level) ? 0 : Math.max(1, Math.min(60, Math.trunc(level)));
+  const maximumModifierUnits = Math.max(0, Math.floor(10_000 / boundedQuestionCount) - 1);
+  const maximumLevelBonusUnits = Math.round(maximumModifierUnits * 0.3);
+  const maximumSpeedBonusUnits = maximumModifierUnits - maximumLevelBonusUnits;
+  const levelBonusUnits = Math.round(maximumLevelBonusUnits * (boundedLevel / 60));
+  const elapsedTenths = Math.floor(Math.max(0, durationMs) / 100);
+  const speedBonusUnits = Math.max(0, maximumSpeedBonusUnits - elapsedTenths);
+  const modifierUnits = Math.round((levelBonusUnits + speedBonusUnits) * accuracy);
+  return accuracyScoreUnits + modifierUnits;
+}
+
+export function formatGameScore(score: number): string {
+  if (!Number.isFinite(score)) return "0.0";
+  return (score / 10).toLocaleString("en-US", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
 }
 
 export function gamePoolItemMatches(

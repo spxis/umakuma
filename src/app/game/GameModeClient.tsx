@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { formatGameDuration, type GameLeaderboardEntry, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
+import { formatGameDuration, formatGameScore, type GameLeaderboardEntry, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
+import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
 import GameLeaderboard from "./GameLeaderboard";
 import GameLeaderboardFilters from "./GameLeaderboardFilters";
 import GameRecentGames from "./GameRecentGames";
 import GameRunner from "./GameRunner";
-import { GAME_CATEGORY_LABELS, GAME_COPY } from "./GameMode.constants";
+import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_LEVEL_PILL_CLASS, GAME_MIXED_PILL_CLASS } from "./GameMode.constants";
 import type {
   ActiveGame,
   GameLeaderboardResponse,
@@ -217,15 +218,21 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
           {phase === "results" && finishedRun ? (
             <section className="border-y border-line bg-surface-muted px-4 py-8 text-center sm:py-12">
               <p className="text-xs font-black uppercase text-hot">{GAME_COPY.complete}</p>
-              <p className="mt-2 text-7xl font-black leading-none text-accent sm:text-9xl">{finishedRun.score.toLocaleString()}</p>
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-sm font-black text-foreground/65">
+                <span className={GAME_LEVEL_PILL_CLASS}>{finishedRun.level === null ? "All levels" : `L${finishedRun.level}`}</span>
+                {finishedRun.category === "mixed" ? (
+                  <span className={GAME_MIXED_PILL_CLASS}>Mixed</span>
+                ) : (
+                  <SubjectTypePill type={finishedRun.category}>{GAME_CATEGORY_LABELS[finishedRun.category]}</SubjectTypePill>
+                )}
+                <span>{finishedRun.questionCount} questions</span>
+              </div>
+              <p className="mt-3 text-7xl font-black leading-none text-accent sm:text-9xl">{formatGameScore(finishedRun.score)}</p>
               <div className="mx-auto mt-6 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
                 <div><p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.score}</p><p className="mt-1 text-xl font-black sm:text-3xl">{finishedRun.correctCount}/{finishedRun.questionCount}</p></div>
                 <div><p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.time}</p><p className="mt-1 text-xl font-black sm:text-3xl">{formatGameDuration(finishedRun.durationMs)}</p></div>
                 <div><p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.streak}</p><p className="mt-1 text-xl font-black sm:text-3xl">{finishedRun.bestStreak}</p></div>
               </div>
-              <p className="mt-5 text-sm font-bold text-foreground/65">
-                {GAME_CATEGORY_LABELS[finishedRun.category]} · {finishedRun.level === null ? "All levels" : `Level ${finishedRun.level}`} · {finishedRun.questionCount} questions
-              </p>
               <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
                 <button
                   type="button"

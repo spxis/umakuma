@@ -103,7 +103,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             category: run.category,
             batchSize: run.batchSize as GameLeaderboardEntry["batchSize"],
             level: run.level,
-            score: calculateGameScore(run.correctCount, run.questionCount, run.durationMs),
+            score: calculateGameScore(run.correctCount, run.questionCount, run.durationMs, run.level),
             durationMs: run.durationMs,
             bestStreak: run.bestStreak,
             correctCount: run.correctCount,
