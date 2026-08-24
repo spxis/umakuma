@@ -14,16 +14,24 @@ describe("Game Mode", () => {
   });
 
   it("scores accuracy near 1,000 with a bounded speed bonus", () => {
-    expect(calculateGameScore(10, 10, 16_000)).toBe(1_083);
-    expect(calculateGameScore(10, 10, 50_000)).toBe(1_050);
-    expect(calculateGameScore(10, 10, 100_000)).toBe(1_000);
+    expect(calculateGameScore(10, 10, 10_000)).toBe(1_050);
+    expect(calculateGameScore(10, 10, 12_000)).toBe(1_040);
+    expect(calculateGameScore(10, 10, 20_000)).toBe(1_000);
     expect(calculateGameScore(0, 10, 1_000)).toBe(0);
     expect(calculateGameScore(1, 0.5, 1_000)).toBe(0);
   });
 
+  it("distinguishes ten perfect runs inside a two-second window", () => {
+    const durations = [10_000, 10_200, 10_400, 10_600, 10_800, 11_100, 11_300, 11_500, 11_700, 12_000];
+    const scores = durations.map((durationMs) => calculateGameScore(10, 10, durationMs));
+
+    expect(new Set(scores).size).toBe(10);
+    expect(scores).toEqual([1_050, 1_049, 1_048, 1_047, 1_046, 1_044, 1_043, 1_042, 1_041, 1_040]);
+  });
+
   it("keeps accuracy more valuable than speed", () => {
-    expect(calculateGameScore(9, 10, 0)).toBeLessThan(calculateGameScore(10, 10, 100_000));
-    expect(calculateGameScore(49, 50, 0)).toBeLessThan(calculateGameScore(50, 50, 500_000));
+    expect(calculateGameScore(9, 10, 0)).toBeLessThan(calculateGameScore(10, 10, 20_000));
+    expect(calculateGameScore(49, 50, 0)).toBeLessThan(calculateGameScore(50, 50, 100_000));
   });
 
   it("formats game duration to tenths of a second", () => {

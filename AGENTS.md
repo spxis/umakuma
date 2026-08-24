@@ -130,6 +130,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Admin confirmations must use shared dialog components (for example `ConfirmDialog` via `useAdminFeedback().confirmAction`). Do not use `window.confirm`.
 - Admin success/error action feedback should use shared toast feedback (for example `useAdminFeedback().showToast`) rather than inline status banners like "Saved" blocks inside cards.
 - Invite sessions, including test accounts, must expose a direct sign-out action in the global user menu; do not require users to open the invite-management page first.
+- Game scoring must distinguish tenths-of-a-second results across a 2-second span for perfect 10-question rounds, while keeping the maximum speed bonus below the value of one correct answer so accuracy always outranks speed.
 
 ## Don't touch
 
