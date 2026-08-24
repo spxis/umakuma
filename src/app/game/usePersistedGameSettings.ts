@@ -34,9 +34,12 @@ function readSelection(): GameSelection {
 
 function readFilters(): GameLeaderboardFilters {
   const stored = getStoredJson<Partial<GameLeaderboardFilters>>(GAME_STORAGE_KEYS.leaderboardFilters, {});
-  const level = stored.level === "any" || stored.level === null || (Number.isInteger(stored.level) && Number(stored.level) > 0)
-    ? stored.level
-    : DEFAULT_FILTERS.level;
+  let level: GameLeaderboardFilters["level"] = DEFAULT_FILTERS.level;
+  if (stored.level === "any" || stored.level === null) {
+    level = stored.level;
+  } else if (Number.isInteger(stored.level) && Number(stored.level) > 0) {
+    level = Number(stored.level);
+  }
   return {
     batchSize: isGameBatchSize(Number(stored.batchSize)) ? Number(stored.batchSize) as GameLeaderboardFilters["batchSize"] : DEFAULT_FILTERS.batchSize,
     level,

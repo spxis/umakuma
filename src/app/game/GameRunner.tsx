@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { lockBodyScroll } from "@/lib/bodyScrollLock";
 import { formatGameDuration, type GameQuestionPayload } from "@/lib/gameMode";
+import ConfirmDialog from "@/app/shared/ConfirmDialog";
 import { GAME_COPY } from "./GameMode.constants";
 
 type Props = {
@@ -36,12 +37,13 @@ export default function GameRunner({
   onExit,
 }: Props) {
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [exitConfirmOpen, setExitConfirmOpen] = useState(false);
 
   useEffect(() => lockBodyScroll(), []);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.repeat || answering || feedback || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) {
+      if (event.repeat || answering || feedback || exitConfirmOpen || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) {
         return;
       }
       const target = event.target;
@@ -56,14 +58,26 @@ export default function GameRunner({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [answering, feedback, onAnswer, question.options]);
+  }, [answering, exitConfirmOpen, feedback, onAnswer, question.options]);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape" && !exitConfirmOpen) {
+        event.preventDefault();
+        setExitConfirmOpen(true);
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [exitConfirmOpen]);
 
   return (
     <div className="fixed inset-0 z-100 bg-background p-2 sm:p-5">
       <main className="mx-auto flex h-full w-full max-w-7xl flex-col">
         <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-line pb-2 text-xs font-black uppercase text-foreground/60 sm:pb-3">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-            <button type="button" onClick={onExit} className="h-9 rounded-full border border-line bg-surface px-3 text-xs font-black text-foreground hover:bg-surface-muted">Exit</button>
+            <button type="button" onClick={() => setExitConfirmOpen(true)} className="h-9 rounded-full border border-line bg-surface px-3 text-xs font-black text-foreground hover:bg-surface-muted">Exit</button>
             <span className="truncate">{questionIndex + 1}/{questionTotal}</span>
           </div>
           <span className="hidden whitespace-nowrap sm:inline">{correctCount} {GAME_COPY.correct}</span>
@@ -102,6 +116,15 @@ export default function GameRunner({
         </div>
         {error ? <p className="mt-2 shrink-0 text-center text-sm font-bold text-red-700">{error}</p> : null}
       </main>
+      <ConfirmDialog
+        open={exitConfirmOpen}
+        title="Leave this round?"
+        description="Your answers and time for this round will be lost."
+        confirmLabel="Leave round"
+        overlayZIndexClass="z-110"
+        onConfirm={onExit}
+        onCancel={() => setExitConfirmOpen(false)}
+      />
     </div>
   );
 }

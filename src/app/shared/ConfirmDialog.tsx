@@ -9,6 +9,7 @@ type ConfirmDialogProps = {
   confirmLabel: string;
   cancelLabel?: string;
   tone?: "danger" | "neutral";
+  overlayZIndexClass?: string;
   busy?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -21,6 +22,7 @@ export default function ConfirmDialog({
   confirmLabel,
   cancelLabel = "Cancel",
   tone = "danger",
+  overlayZIndexClass = "z-60",
   busy = false,
   onConfirm,
   onCancel,
@@ -53,7 +55,7 @@ export default function ConfirmDialog({
       : "border-accent bg-accent text-white hover:bg-accent-2";
 
   return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center bg-foreground/35 p-4 backdrop-blur-[2px]">
+    <div className={`fixed inset-0 ${overlayZIndexClass} flex items-center justify-center bg-foreground/35 p-4 backdrop-blur-[2px]`}>
       <div
         role="dialog"
         aria-modal="true"
