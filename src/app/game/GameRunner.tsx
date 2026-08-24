@@ -39,6 +39,25 @@ export default function GameRunner({
 
   useEffect(() => lockBodyScroll(), []);
 
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.repeat || answering || feedback || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) {
+        return;
+      }
+      const target = event.target;
+      if (target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      event.preventDefault();
+      const option = question.options[event.key === "ArrowLeft" ? 0 : 1];
+      onAnswer(option.subjectId);
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [answering, feedback, onAnswer, question.options]);
+
   return (
     <div className="fixed inset-0 z-100 bg-background p-2 sm:p-5">
       <main className="mx-auto flex h-full w-full max-w-7xl flex-col">
@@ -58,7 +77,7 @@ export default function GameRunner({
           ) : null}
         </div>
         <div className="mt-2 grid h-80 min-h-80 shrink-0 grid-cols-2 gap-2 sm:mt-4 sm:gap-5">
-          {question.options.map((option) => {
+          {question.options.map((option, optionIndex) => {
             const selectedFeedback = feedback?.subjectId === option.subjectId ? feedback : null;
             return (
               <button
@@ -68,6 +87,9 @@ export default function GameRunner({
                 onClick={() => onAnswer(option.subjectId)}
                 className={`relative flex min-w-0 items-center justify-center overflow-hidden rounded-2xl border p-2 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:cursor-wait sm:p-5 ${choiceTone(option.subjectType)} ${selectedFeedback ? (selectedFeedback.correct ? "ring-8 ring-emerald-500 bg-emerald-100" : "ring-8 ring-red-500 bg-red-100") : "hover:brightness-95"}`}
               >
+                <span aria-hidden="true" className="absolute left-2 top-2 text-lg font-black text-foreground/50 sm:left-4 sm:top-4">
+                  {optionIndex === 0 ? "←" : "→"}
+                </span>
                 <span className="absolute right-2 top-2 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.level}</span>
                 <span className="break-all text-center text-5xl font-black leading-none [font-family:var(--font-jp-current)] sm:text-9xl">{option.characters}</span>
               </button>

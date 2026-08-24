@@ -6,11 +6,11 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import {
   GAME_DATE_RANGES,
+  GAME_CATEGORIES,
   GAME_METRICS,
   calculateGameScore,
   gameDateKeys,
   isGameBatchSize,
-  isGameCategory,
   type GameLeaderboardEntry,
   type GameMetric,
 } from "@/lib/gameMode";
@@ -18,8 +18,8 @@ import { prisma } from "@/lib/prisma";
 
 const querySchema = z.object({
   batchSize: z.coerce.number().int().refine(isGameBatchSize),
-  level: z.union([z.literal("all"), z.coerce.number().int().min(1).max(60)]),
-  category: z.string().refine(isGameCategory),
+  level: z.union([z.literal("any"), z.literal("all"), z.coerce.number().int().min(1).max(60)]),
+  category: z.union([z.literal("all"), z.enum(GAME_CATEGORIES)]),
   range: z.enum(GAME_DATE_RANGES),
   metric: z.enum(GAME_METRICS),
 });
@@ -58,37 +58,55 @@ export async function GET(request: Request, context: { params: Promise<{ account
         }
 
         const dateKeys = gameDateKeys(parsed.data.range, getVancouverDateKey(new Date()));
-        const runs = await prisma.gameRun.findMany({
-          where: {
-            status: "completed",
-            batchSize: parsed.data.batchSize,
-            level: parsed.data.level === "all" ? null : parsed.data.level,
-            category: parsed.data.category,
-            completedDatePst: { in: dateKeys },
-            durationMs: { not: null },
-          },
-          orderBy: { completedAt: "desc" },
-          select: {
-            id: true,
-            accountId: true,
-            durationMs: true,
-            bestStreak: true,
-            correctCount: true,
-            questionCount: true,
-            completedAt: true,
-            completedDatePst: true,
-            account: { select: { nickname: true, wkUsername: true } },
-          },
-        });
+        const runSelect = {
+          id: true,
+          accountId: true,
+          batchSize: true,
+          level: true,
+          category: true,
+          durationMs: true,
+          bestStreak: true,
+          correctCount: true,
+          questionCount: true,
+          completedAt: true,
+          completedDatePst: true,
+          account: { select: { nickname: true, wkUsername: true } },
+        } as const;
+        const [runs, recentRuns] = await Promise.all([
+          prisma.gameRun.findMany({
+            where: {
+              status: "completed",
+              batchSize: parsed.data.batchSize,
+              level: parsed.data.level === "any"
+                ? undefined
+                : parsed.data.level === "all"
+                  ? null
+                  : parsed.data.level,
+              category: parsed.data.category === "all" ? undefined : parsed.data.category,
+              completedDatePst: { in: dateKeys },
+              durationMs: { not: null },
+            },
+            orderBy: { completedAt: "desc" },
+            select: runSelect,
+          }),
+          prisma.gameRun.findMany({
+            where: { status: "completed", durationMs: { not: null } },
+            orderBy: { completedAt: "desc" },
+            take: 12,
+            select: runSelect,
+          }),
+        ]);
 
-        const bestByDateAndAccount = new Map<string, GameLeaderboardEntry>();
-        for (const run of runs) {
-          if (run.durationMs === null || !run.completedAt || !run.completedDatePst) continue;
-          const entry: GameLeaderboardEntry = {
+        function toEntry(run: (typeof runs)[number]): GameLeaderboardEntry | null {
+          if (run.durationMs === null || !run.completedAt || !run.completedDatePst) return null;
+          return {
             runId: run.id,
             accountId: run.accountId,
             nickname: run.account.nickname,
             wkUsername: run.account.wkUsername,
+            category: run.category,
+            batchSize: run.batchSize as GameLeaderboardEntry["batchSize"],
+            level: run.level,
             score: calculateGameScore(run.correctCount, run.questionCount, run.durationMs),
             durationMs: run.durationMs,
             bestStreak: run.bestStreak,
@@ -97,6 +115,12 @@ export async function GET(request: Request, context: { params: Promise<{ account
             completedAt: run.completedAt.toISOString(),
             completedDatePst: run.completedDatePst,
           };
+        }
+
+        const bestByDateAndAccount = new Map<string, GameLeaderboardEntry>();
+        for (const run of runs) {
+          const entry = toEntry(run);
+          if (!entry) continue;
           const key = `${entry.completedDatePst}:${entry.accountId}`;
           const current = bestByDateAndAccount.get(key);
           if (!current || isBetter(entry, current, parsed.data.metric)) bestByDateAndAccount.set(key, entry);
@@ -110,6 +134,10 @@ export async function GET(request: Request, context: { params: Promise<{ account
               parsed.data.metric,
             ),
           })),
+          recent: recentRuns.flatMap((run) => {
+            const entry = toEntry(run);
+            return entry ? [entry] : [];
+          }),
         }, { status: 200 });
       } catch (error) {
         console.error("Failed to load game leaderboard", error);

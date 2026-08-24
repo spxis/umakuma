@@ -9,6 +9,7 @@ export type GameBatchSize = (typeof GAME_BATCH_SIZES)[number];
 export type GameCategory = (typeof GAME_CATEGORIES)[number];
 export type GameDateRange = (typeof GAME_DATE_RANGES)[number];
 export type GameMetric = (typeof GAME_METRICS)[number];
+export type GameLeaderboardMode = "all" | GameCategory;
 export type GameAnswerType = "reading" | "meaning";
 
 export type GamePoolItem = {
@@ -60,6 +61,9 @@ export type GameLeaderboardEntry = {
   accountId: string;
   nickname: string;
   wkUsername: string;
+  category: GameCategory;
+  batchSize: GameBatchSize;
+  level: number | null;
   score: number;
   durationMs: number;
   bestStreak: number;
@@ -130,8 +134,9 @@ export function gameDateKeys(range: GameDateRange, todayKey: string): string[] {
 
 export function formatGameDuration(durationMs: number | null): string {
   if (durationMs === null || !Number.isFinite(durationMs) || durationMs < 0) return "-";
-  const totalSeconds = Math.floor(durationMs / 1000);
+  const totalTenths = Math.floor(durationMs / 100);
+  const totalSeconds = Math.floor(totalTenths / 10);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = String(totalSeconds % 60).padStart(2, "0");
-  return `${minutes}:${seconds}`;
+  return `${minutes}:${seconds}.${totalTenths % 10}`;
 }

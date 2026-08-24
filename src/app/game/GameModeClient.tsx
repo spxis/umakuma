@@ -1,19 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { formatGameDuration, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
+import { formatGameDuration, type GameLeaderboardEntry, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
 import GameLeaderboard from "./GameLeaderboard";
+import GameLeaderboardFilters from "./GameLeaderboardFilters";
+import GameRecentGames from "./GameRecentGames";
 import GameRunner from "./GameRunner";
-import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_METRIC_LABELS, GAME_RANGE_LABELS } from "./GameMode.constants";
+import { GAME_CATEGORY_LABELS, GAME_COPY } from "./GameMode.constants";
 import type {
   ActiveGame,
   GameLeaderboardResponse,
+  GameLeaderboardFilters as LeaderboardFilters,
   GameModeClientProps,
   GamePhase,
   GameSelection,
   GameSetupResponse,
 } from "./GameMode.types";
+import { usePersistedGameSettings } from "./usePersistedGameSettings";
 
 const ANSWER_FLASH_MS = 250;
 
@@ -21,13 +25,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   const [phase, setPhase] = useState<GamePhase>("lobby");
   const [setup, setSetup] = useState<GameSetupResponse | null>(null);
   const [setupError, setSetupError] = useState<string | null>(null);
-  const [selection, setSelection] = useState<GameSelection>({
-    batchSize: 10,
-    level: null,
-    category: "mixed",
-    range: "today",
-    metric: "score",
-  });
+  const { selection: [selection, setSelection], filters: [leaderboardFilters, setLeaderboardFilters] } = usePersistedGameSettings();
   const [activeGame, setActiveGame] = useState<ActiveGame | null>(null);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [feedback, setFeedback] = useState<{ subjectId: number; correct: boolean } | null>(null);
@@ -36,7 +34,8 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   const [gameError, setGameError] = useState<string | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
-  const leaderboardKey = `${selection.batchSize}:${selection.level ?? "all"}:${selection.category}:${selection.range}:${selection.metric}:${leaderboardRefresh}`;
+  const setupRef = useRef<HTMLElement | null>(null);
+  const leaderboardKey = `${leaderboardFilters.batchSize}:${leaderboardFilters.level ?? "all"}:${leaderboardFilters.mode}:${leaderboardFilters.range}:${leaderboardFilters.metric}:${leaderboardRefresh}`;
   const [leaderboardState, setLeaderboardState] = useState<{
     key: string;
     data: GameLeaderboardResponse | null;
@@ -60,11 +59,11 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   useEffect(() => {
     const controller = new AbortController();
     const params = new URLSearchParams({
-      batchSize: String(selection.batchSize),
-      level: selection.level === null ? "all" : String(selection.level),
-      category: selection.category,
-      range: selection.range,
-      metric: selection.metric,
+      batchSize: String(leaderboardFilters.batchSize),
+      level: leaderboardFilters.level === "any" ? "any" : leaderboardFilters.level === null ? "all" : String(leaderboardFilters.level),
+      category: leaderboardFilters.mode,
+      range: leaderboardFilters.range,
+      metric: leaderboardFilters.metric,
     });
     void fetch(`/api/game/${accountId}/leaderboard?${params}`, { signal: controller.signal, cache: "no-store" })
       .then(async (response) => {
@@ -77,7 +76,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
         setGameError(error instanceof Error ? error.message : "Could not load scoreboard.");
       });
     return () => controller.abort();
-  }, [accountId, leaderboardKey, selection]);
+  }, [accountId, leaderboardFilters, leaderboardKey]);
 
   useEffect(() => {
     if (phase !== "playing" || !activeGame) return;
@@ -163,6 +162,12 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
     setGameError(null);
   }
 
+  function challengeRecentRun(entry: GameLeaderboardEntry) {
+    setSelection({ batchSize: entry.batchSize, level: entry.level, category: entry.category });
+    resetToLobby();
+    window.requestAnimationFrame(() => setupRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
+  }
+
   if (!setup && !setupError) {
     return <p className="py-24 text-center text-sm font-bold text-foreground/65">{GAME_COPY.loading}</p>;
   }
@@ -210,7 +215,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
               <button type="button" onClick={resetToLobby} className="mt-7 rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black uppercase text-white hover:brightness-95">{GAME_COPY.playAgain}</button>
             </section>
           ) : (
-            <section className="grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:grid-cols-4 sm:px-6">
+            <section ref={setupRef} aria-label="Game setup" className="grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:grid-cols-4 sm:px-6">
               <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.questions}
                 <select value={selection.batchSize} onChange={(event) => setSelection((value) => ({ ...value, batchSize: Number(event.target.value) as GameSelection["batchSize"] }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
                   {setup?.batchSizes.map((size) => <option key={size} value={size}>{size}</option>)}
@@ -235,17 +240,13 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
             </section>
           )}
 
-          <section className="flex flex-wrap gap-2">
-            <div className="inline-flex rounded-full border border-line bg-surface p-1">
-              {Object.entries(GAME_RANGE_LABELS).map(([value, label]) => <button key={value} type="button" onClick={() => setSelection((current) => ({ ...current, range: value as GameSelection["range"] }))} className={`rounded-full px-3 py-1.5 text-xs font-bold ${selection.range === value ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}>{label}</button>)}
-            </div>
-            <div className="inline-flex rounded-full border border-line bg-surface p-1">
-              {Object.entries(GAME_METRIC_LABELS).map(([value, label]) => <button key={value} type="button" onClick={() => setSelection((current) => ({ ...current, metric: value as GameSelection["metric"] }))} className={`rounded-full px-3 py-1.5 text-xs font-bold ${selection.metric === value ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}>{label}</button>)}
-            </div>
-          </section>
+          <GameLeaderboardFilters filters={leaderboardFilters} setup={setup!} onChange={(filters: LeaderboardFilters) => setLeaderboardFilters(filters)} />
 
           {gameError ? <p className="text-sm font-bold text-red-700">{gameError}</p> : null}
-          <GameLeaderboard days={leaderboardState.key === leaderboardKey ? leaderboardState.data?.days ?? [] : []} metric={selection.metric} loading={leaderboardState.key !== leaderboardKey} />
+          <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(19rem,1fr)]">
+            <GameLeaderboard days={leaderboardState.key === leaderboardKey ? leaderboardState.data?.days ?? [] : []} metric={leaderboardFilters.metric} loading={leaderboardState.key !== leaderboardKey} />
+            <GameRecentGames entries={leaderboardState.data?.recent ?? []} loading={!leaderboardState.data} onChallenge={challengeRecentRun} />
+          </div>
       </main>
       <p className="text-center text-xs font-semibold text-foreground/45">Playing as {nickname}</p>
     </div>

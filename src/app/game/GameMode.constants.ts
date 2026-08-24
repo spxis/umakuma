@@ -1,4 +1,4 @@
-import type { GameCategory, GameDateRange, GameMetric } from "@/lib/gameMode";
+import type { GameCategory, GameDateRange, GameLeaderboardMode, GameMetric } from "@/lib/gameMode";
 
 export const GAME_COPY = {
   title: "Game Mode",
@@ -12,7 +12,9 @@ export const GAME_COPY = {
   category: "Category",
   questions: "Questions",
   scoreboard: "Family scoreboard",
+  recentGames: "Recent games",
   noScores: "No completed games yet.",
+  noRecentGames: "No recent games yet.",
   scoreRule: "Accuracy earns up to 1,000 points. Faster answers add a small bonus, but accuracy always wins.",
   notEnoughItems: "This combination does not have enough started items.",
   chooseMatch: "Choose the matching item",
@@ -25,11 +27,21 @@ export const GAME_COPY = {
   questionsCorrect: "correct",
 } as const;
 
+export const GAME_STORAGE_KEYS = {
+  selection: "umakuma:game:selection",
+  leaderboardFilters: "umakuma:game:leaderboard-filters",
+} as const;
+
 export const GAME_CATEGORY_LABELS: Record<GameCategory, string> = {
   radical: "Radicals",
   kanji: "Kanji",
   vocabulary: "Vocabulary",
   mixed: "Mixed",
+};
+
+export const GAME_LEADERBOARD_MODE_LABELS: Record<GameLeaderboardMode, string> = {
+  all: "Overall",
+  ...GAME_CATEGORY_LABELS,
 };
 
 export const GAME_RANGE_LABELS: Record<GameDateRange, string> = {

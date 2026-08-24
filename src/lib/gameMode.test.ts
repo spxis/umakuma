@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   GAME_BATCH_SIZES,
   calculateGameScore,
+  formatGameDuration,
   gameDateKeys,
   gamePoolItemMatches,
 } from "@/lib/gameMode";
@@ -23,6 +24,12 @@ describe("Game Mode", () => {
   it("keeps accuracy more valuable than speed", () => {
     expect(calculateGameScore(9, 10, 0)).toBeLessThan(calculateGameScore(10, 10, 100_000));
     expect(calculateGameScore(49, 50, 0)).toBeLessThan(calculateGameScore(50, 50, 500_000));
+  });
+
+  it("formats game duration to tenths of a second", () => {
+    expect(formatGameDuration(13_987)).toBe("0:13.9");
+    expect(formatGameDuration(61_040)).toBe("1:01.0");
+    expect(formatGameDuration(null)).toBe("-");
   });
 
   it("includes started burned items and excludes locked or unstarted items", () => {

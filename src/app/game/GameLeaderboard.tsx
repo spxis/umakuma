@@ -1,5 +1,5 @@
 import { formatGameDuration, type GameMetric } from "@/lib/gameMode";
-import { GAME_COPY, GAME_METRIC_LABELS } from "./GameMode.constants";
+import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_METRIC_LABELS } from "./GameMode.constants";
 import type { GameLeaderboardDay } from "./GameMode.types";
 
 type Props = {
@@ -33,6 +33,9 @@ export default function GameLeaderboard({ days, metric, loading }: Props) {
                 <th className="px-4 py-3 sm:px-6">Day</th>
                 <th className="px-4 py-3">Rank</th>
                 <th className="px-4 py-3">Player</th>
+                <th className="px-4 py-3">Mode</th>
+                <th className="px-4 py-3">Level</th>
+                <th className="px-4 py-3 text-right">Questions</th>
                 <th className="px-4 py-3 text-right">{GAME_METRIC_LABELS[metric]}</th>
                 {metric !== "time" ? (
                   <th className="px-4 py-3 text-right">Time</th>
@@ -49,6 +52,9 @@ export default function GameLeaderboard({ days, metric, loading }: Props) {
                     <p className="font-black text-foreground">{entry.nickname}</p>
                     <p className="text-xs font-semibold text-foreground/55">@{entry.wkUsername}</p>
                   </td>
+                  <td className="px-4 py-3 text-sm font-bold text-foreground/65">{GAME_CATEGORY_LABELS[entry.category]}</td>
+                  <td className="px-4 py-3 text-sm font-bold text-foreground/65">{entry.level === null ? "All" : entry.level}</td>
+                  <td className="px-4 py-3 text-right text-sm font-bold text-foreground/65">{entry.questionCount}</td>
                   <td className="px-4 py-3 text-right text-xl font-black text-accent">{metricValue(entry, metric)}</td>
                   {metric !== "time" ? (
                     <td className="px-4 py-3 text-right text-sm font-bold text-foreground/65">

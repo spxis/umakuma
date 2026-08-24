@@ -3,6 +3,7 @@ import type {
   GameCategory,
   GameDateRange,
   GameLeaderboardEntry,
+  GameLeaderboardMode,
   GameMetric,
   GameQuestionPayload,
   GameRunSummary,
@@ -24,6 +25,7 @@ export type GameLeaderboardDay = {
 
 export type GameLeaderboardResponse = {
   days: GameLeaderboardDay[];
+  recent: GameLeaderboardEntry[];
 };
 
 export type GameModeClientProps = {
@@ -43,6 +45,12 @@ export type GameSelection = {
   batchSize: GameBatchSize;
   level: number | null;
   category: GameCategory;
+};
+
+export type GameLeaderboardFilters = {
+  batchSize: GameBatchSize;
+  level: "any" | number | null;
+  mode: GameLeaderboardMode;
   range: GameDateRange;
   metric: GameMetric;
 };
