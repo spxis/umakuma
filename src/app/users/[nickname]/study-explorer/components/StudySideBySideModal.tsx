@@ -11,6 +11,7 @@ import type {
 } from "../lib/studyExplorerTypes";
 import { typeGlyphBoxClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import StudyModalCloseButton from "./StudyModalCloseButton";
+import { STUDY_REVIEW_MODAL_SECTION_TEXT } from "./StudyExplorer.constants";
 
 type Props = {
   accountId: string;
@@ -43,6 +44,8 @@ export default function StudySideBySideModal({
   }>({ subjectId: 0, comparison: null, error: null });
   const comparison = result.subjectId === selectedItem.subjectId ? result.comparison : null;
   const error = result.subjectId === selectedItem.subjectId ? result.error : null;
+  const [selection, setSelection] = useState<{ targetSubjectId: number; selectedSubjectId: number } | null>(null);
+  const activeSelection = selection?.targetSubjectId === selectedItem.subjectId ? selection : null;
   const targetOnLeft = selectedItem.subjectId % 2 === 0;
 
   useEffect(() => {
@@ -78,10 +81,15 @@ export default function StudySideBySideModal({
   }, []);
 
   const choose = (subjectId: number) => {
-    if (!comparison || isSubmitting) return;
+    if (!comparison || isSubmitting || activeSelection) return;
+    setSelection({ targetSubjectId: selectedItem.subjectId, selectedSubjectId: subjectId });
+  };
+
+  const continueReview = () => {
+    if (!comparison || !activeSelection || isSubmitting) return;
     onSubmit(
       selectedItem.assignmentId,
-      subjectId === selectedItem.subjectId ? "correct" : "wrong",
+      activeSelection.selectedSubjectId === selectedItem.subjectId ? "correct" : "wrong",
       comparison.answerType,
     );
   };
@@ -110,25 +118,71 @@ export default function StudySideBySideModal({
         </header>
 
         <main className="flex min-h-0 flex-1 flex-col p-3 sm:p-6">
-          <div className="grid h-80 min-h-[20rem] shrink-0 grid-cols-2 gap-2 sm:gap-5">
-            {options.map((option) => (
-              <button
-                key={option.subjectId}
-                type="button"
-                disabled={isSubmitting}
-                onClick={() => choose(option.subjectId)}
-                className={`relative flex min-w-0 flex-col items-center justify-center overflow-hidden rounded-2xl border p-2 transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:opacity-50 sm:p-6 ${typeGlyphBoxClass(option.subjectType)}`}
-              >
-                <span className="absolute right-2 top-2 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.wkLevel}</span>
-                <span style={{ fontFamily }} className="max-w-full break-all text-center text-[clamp(3rem,15vw,10rem)] font-black leading-none">{option.characters}</span>
-              </button>
-            ))}
+          <div className="grid h-80 min-h-80 shrink-0 grid-cols-2 gap-2 sm:gap-5">
+            {options.map((option) => {
+              const isCorrectOption = option.subjectId === selectedItem.subjectId;
+              const isSelectedOption = activeSelection?.selectedSubjectId === option.subjectId;
+              const resultTone = activeSelection
+                ? isCorrectOption
+                  ? "border-emerald-500"
+                  : isSelectedOption
+                    ? "border-red-500"
+                    : null
+                : null;
+
+              return (
+                <button
+                  key={option.subjectId}
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={() => choose(option.subjectId)}
+                  className={`relative flex min-w-0 flex-col items-center justify-center overflow-hidden rounded-2xl border p-2 transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:opacity-50 sm:p-6 ${typeGlyphBoxClass(option.subjectType)}`}
+                >
+                  {resultTone ? <span aria-hidden className={`pointer-events-none absolute inset-0 z-20 rounded-2xl border-4 ${resultTone}`} /> : null}
+                  {activeSelection && (isCorrectOption || isSelectedOption) ? (
+                    <span className={`absolute left-2 top-2 z-30 rounded-full px-2 py-1 text-[10px] font-black uppercase text-white sm:left-4 sm:top-4 sm:text-xs ${isCorrectOption ? "bg-emerald-600" : "bg-red-600"}`}>
+                      {isCorrectOption ? STUDY_REVIEW_MODAL_SECTION_TEXT.correct : STUDY_REVIEW_MODAL_SECTION_TEXT.notQuite}
+                    </span>
+                  ) : null}
+                  <span className="absolute right-2 top-2 z-30 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.wkLevel}</span>
+                  <span style={{ fontFamily }} className={`max-w-full break-all text-center font-black leading-none ${activeSelection ? "text-[clamp(2.5rem,10vw,6rem)]" : "text-[clamp(3rem,15vw,10rem)]"}`}>{option.characters}</span>
+                  {activeSelection ? (
+                    <span className="mt-4 grid w-full gap-2 text-left sm:grid-cols-2">
+                      <span className="rounded-lg border border-line bg-surface/90 px-2 py-2">
+                        <span className="block text-[9px] font-bold uppercase text-foreground/60">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</span>
+                        <span className="mt-1 block truncate text-sm font-black text-foreground sm:text-lg">{option.primaryReading ?? "-"}</span>
+                      </span>
+                      <span className="rounded-lg border border-line bg-surface/90 px-2 py-2">
+                        <span className="block text-[9px] font-bold uppercase text-foreground/60">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</span>
+                        <span className="mt-1 block truncate text-sm font-black text-foreground sm:text-lg">{option.primaryMeaning ?? "-"}</span>
+                      </span>
+                    </span>
+                  ) : null}
+                </button>
+              );
+            })}
           </div>
           <div className="mt-3 flex min-h-0 flex-1 flex-col items-center justify-center rounded-xl border border-line bg-surface-muted px-3 py-3 text-center sm:mt-5 sm:px-5 sm:py-4">
             {comparison ? (
               <>
-                <p className="text-[10px] font-bold uppercase text-foreground/60 sm:text-xs">Choose the item with this {comparison.answerType}</p>
+                <p className={`text-[10px] font-bold uppercase sm:text-xs ${activeSelection ? (activeSelection.selectedSubjectId === selectedItem.subjectId ? "text-emerald-700" : "text-red-700") : "text-foreground/60"}`}>
+                  {activeSelection
+                    ? activeSelection.selectedSubjectId === selectedItem.subjectId
+                      ? STUDY_REVIEW_MODAL_SECTION_TEXT.correct
+                      : STUDY_REVIEW_MODAL_SECTION_TEXT.notQuite
+                    : `Choose the item with this ${comparison.answerType}`}
+                </p>
                 <p className="mt-1 text-2xl font-black text-foreground sm:text-4xl">{comparison.prompt}</p>
+                {activeSelection ? (
+                  <button
+                    type="button"
+                    onClick={continueReview}
+                    disabled={isSubmitting}
+                    className="mt-4 min-h-10 rounded-full border border-accent bg-accent px-6 py-2 text-sm font-black uppercase text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isSubmitting ? STUDY_REVIEW_MODAL_SECTION_TEXT.submitting : STUDY_REVIEW_MODAL_SECTION_TEXT.continue}
+                  </button>
+                ) : null}
               </>
             ) : error ? (
               <p className="text-sm font-bold text-red-700">{error}</p>
