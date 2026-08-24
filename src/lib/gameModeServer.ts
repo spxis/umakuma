@@ -257,12 +257,13 @@ export async function hydrateGameQuestions(
 
 export function completedRunValues(startedAt: Date, correctCount: number, questionCount: number, bestStreak: number) {
   const completedAt = new Date();
+  const durationMs = Math.max(0, completedAt.getTime() - startedAt.getTime());
   return {
     status: GameRunStatus.completed,
     completedAt,
     completedDatePst: getVancouverDateKey(completedAt),
-    durationMs: Math.max(0, completedAt.getTime() - startedAt.getTime()),
-    score: calculateGameScore(correctCount, questionCount),
+    durationMs,
+    score: calculateGameScore(correctCount, questionCount, durationMs),
     currentStreak: 0,
     bestStreak,
   };

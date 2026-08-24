@@ -13,7 +13,7 @@ export const GAME_COPY = {
   questions: "Questions",
   scoreboard: "Family scoreboard",
   noScores: "No completed games yet.",
-  scoreRule: "Score = accuracy × 10,000. Time and best streak rank separately.",
+  scoreRule: "Accuracy earns up to 1,000 points. Faster answers add a small bonus, but accuracy always wins.",
   notEnoughItems: "This combination does not have enough started items.",
   chooseMatch: "Choose the matching item",
   score: "Score",

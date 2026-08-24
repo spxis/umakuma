@@ -12,10 +12,17 @@ describe("Game Mode", () => {
     expect(GAME_BATCH_SIZES).toEqual([5, 10, 15, 20, 25, 50]);
   });
 
-  it("normalizes accuracy to a 10,000 point score", () => {
-    expect(calculateGameScore(8, 10)).toBe(8_000);
-    expect(calculateGameScore(25, 25)).toBe(10_000);
-    expect(calculateGameScore(0, 10)).toBe(0);
+  it("scores accuracy near 1,000 with a bounded speed bonus", () => {
+    expect(calculateGameScore(10, 10, 16_000)).toBe(1_083);
+    expect(calculateGameScore(10, 10, 50_000)).toBe(1_050);
+    expect(calculateGameScore(10, 10, 100_000)).toBe(1_000);
+    expect(calculateGameScore(0, 10, 1_000)).toBe(0);
+    expect(calculateGameScore(1, 0.5, 1_000)).toBe(0);
+  });
+
+  it("keeps accuracy more valuable than speed", () => {
+    expect(calculateGameScore(9, 10, 0)).toBeLessThan(calculateGameScore(10, 10, 100_000));
+    expect(calculateGameScore(49, 50, 0)).toBeLessThan(calculateGameScore(50, 50, 500_000));
   });
 
   it("includes started burned items and excludes locked or unstarted items", () => {

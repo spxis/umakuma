@@ -77,13 +77,28 @@ export function isGameCategory(value: string): value is GameCategory {
   return GAME_CATEGORIES.includes(value as GameCategory);
 }
 
-export function calculateGameScore(correctCount: number, questionCount: number): number {
-  if (!Number.isFinite(correctCount) || !Number.isFinite(questionCount) || questionCount <= 0) {
+export function calculateGameScore(correctCount: number, questionCount: number, durationMs: number): number {
+  if (
+    !Number.isFinite(correctCount) ||
+    !Number.isFinite(questionCount) ||
+    !Number.isFinite(durationMs) ||
+    questionCount <= 0
+  ) {
     return 0;
   }
 
-  const boundedCorrect = Math.max(0, Math.min(Math.trunc(correctCount), Math.trunc(questionCount)));
-  return Math.round(10_000 * (boundedCorrect / Math.trunc(questionCount)));
+  const boundedQuestionCount = Math.trunc(questionCount);
+  if (boundedQuestionCount <= 0) {
+    return 0;
+  }
+  const boundedCorrect = Math.max(0, Math.min(Math.trunc(correctCount), boundedQuestionCount));
+  const accuracy = boundedCorrect / boundedQuestionCount;
+  const accuracyScore = Math.round(1_000 * accuracy);
+  const averageDurationMs = Math.max(0, durationMs) / boundedQuestionCount;
+  const speedFactor = Math.max(0, 1 - averageDurationMs / 10_000);
+  const maximumSpeedBonus = Math.max(0, Math.floor(1_000 / boundedQuestionCount) - 1);
+  const speedBonus = Math.round(maximumSpeedBonus * speedFactor * accuracy);
+  return accuracyScore + speedBonus;
 }
 
 export function gamePoolItemMatches(

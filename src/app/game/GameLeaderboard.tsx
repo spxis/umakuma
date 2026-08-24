@@ -34,6 +34,9 @@ export default function GameLeaderboard({ days, metric, loading }: Props) {
                 <th className="px-4 py-3">Rank</th>
                 <th className="px-4 py-3">Player</th>
                 <th className="px-4 py-3 text-right">{GAME_METRIC_LABELS[metric]}</th>
+                {metric !== "time" ? (
+                  <th className="px-4 py-3 text-right">Time</th>
+                ) : null}
                 <th className="px-4 py-3 text-right sm:px-6">Accuracy</th>
               </tr>
             </thead>
@@ -47,6 +50,11 @@ export default function GameLeaderboard({ days, metric, loading }: Props) {
                     <p className="text-xs font-semibold text-foreground/55">@{entry.wkUsername}</p>
                   </td>
                   <td className="px-4 py-3 text-right text-xl font-black text-accent">{metricValue(entry, metric)}</td>
+                  {metric !== "time" ? (
+                    <td className="px-4 py-3 text-right text-sm font-bold text-foreground/65">
+                      {formatGameDuration(entry.durationMs)}
+                    </td>
+                  ) : null}
                   <td className="px-4 py-3 text-right text-sm font-bold text-foreground/65 sm:px-6">{entry.correctCount}/{entry.questionCount}</td>
                 </tr>
               )))}

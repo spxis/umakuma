@@ -7,6 +7,7 @@ import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import {
   GAME_DATE_RANGES,
   GAME_METRICS,
+  calculateGameScore,
   gameDateKeys,
   isGameBatchSize,
   isGameCategory,
@@ -26,14 +27,16 @@ const querySchema = z.object({
 function isBetter(candidate: GameLeaderboardEntry, current: GameLeaderboardEntry, metric: GameMetric): boolean {
   if (metric === "time") return candidate.durationMs < current.durationMs;
   if (metric === "streak") return candidate.bestStreak > current.bestStreak;
-  return candidate.score > current.score;
+  return candidate.score > current.score || (
+    candidate.score === current.score && candidate.durationMs < current.durationMs
+  );
 }
 
 function sortEntries(entries: GameLeaderboardEntry[], metric: GameMetric): GameLeaderboardEntry[] {
   return [...entries].sort((left, right) => {
     if (metric === "time") return left.durationMs - right.durationMs;
     if (metric === "streak") return right.bestStreak - left.bestStreak;
-    return right.score - left.score;
+    return right.score - left.score || left.durationMs - right.durationMs;
   });
 }
 
@@ -68,7 +71,6 @@ export async function GET(request: Request, context: { params: Promise<{ account
           select: {
             id: true,
             accountId: true,
-            score: true,
             durationMs: true,
             bestStreak: true,
             correctCount: true,
@@ -87,7 +89,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             accountId: run.accountId,
             nickname: run.account.nickname,
             wkUsername: run.account.wkUsername,
-            score: run.score,
+            score: calculateGameScore(run.correctCount, run.questionCount, run.durationMs),
             durationMs: run.durationMs,
             bestStreak: run.bestStreak,
             correctCount: run.correctCount,
