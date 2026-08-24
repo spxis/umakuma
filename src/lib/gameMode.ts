@@ -98,10 +98,11 @@ export function calculateGameScore(correctCount: number, questionCount: number, 
   const boundedCorrect = Math.max(0, Math.min(Math.trunc(correctCount), boundedQuestionCount));
   const accuracy = boundedCorrect / boundedQuestionCount;
   const accuracyScore = Math.round(1_000 * accuracy);
-  const speedWindowMs = boundedQuestionCount * 2_000;
-  const speedFactor = Math.max(0, 1 - Math.max(0, durationMs) / speedWindowMs);
   const maximumSpeedBonus = Math.max(0, Math.floor(1_000 / boundedQuestionCount) - 1);
-  const speedBonus = Math.round(maximumSpeedBonus * speedFactor * accuracy);
+  const fullBonusPaceMs = boundedQuestionCount * 1_000;
+  const tenthsBeyondFullBonusPace = Math.floor(Math.max(0, durationMs - fullBonusPaceMs) / 100);
+  const availableSpeedBonus = Math.max(0, maximumSpeedBonus - tenthsBeyondFullBonusPace);
+  const speedBonus = Math.round(availableSpeedBonus * accuracy);
   return accuracyScore + speedBonus;
 }
 

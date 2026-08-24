@@ -14,8 +14,8 @@ describe("Game Mode", () => {
   });
 
   it("scores accuracy near 1,000 with a bounded speed bonus", () => {
-    expect(calculateGameScore(10, 10, 10_000)).toBe(1_050);
-    expect(calculateGameScore(10, 10, 12_000)).toBe(1_040);
+    expect(calculateGameScore(10, 10, 10_000)).toBe(1_099);
+    expect(calculateGameScore(10, 10, 12_000)).toBe(1_079);
     expect(calculateGameScore(10, 10, 20_000)).toBe(1_000);
     expect(calculateGameScore(0, 10, 1_000)).toBe(0);
     expect(calculateGameScore(1, 0.5, 1_000)).toBe(0);
@@ -26,7 +26,14 @@ describe("Game Mode", () => {
     const scores = durations.map((durationMs) => calculateGameScore(10, 10, durationMs));
 
     expect(new Set(scores).size).toBe(10);
-    expect(scores).toEqual([1_050, 1_049, 1_048, 1_047, 1_046, 1_044, 1_043, 1_042, 1_041, 1_040]);
+    expect(scores).toEqual([1_099, 1_097, 1_095, 1_093, 1_091, 1_088, 1_086, 1_084, 1_082, 1_079]);
+  });
+
+  it("gives every tenth a unique perfect score", () => {
+    const scores = Array.from({ length: 21 }, (_, index) => calculateGameScore(10, 10, 10_000 + index * 100));
+    expect(new Set(scores).size).toBe(21);
+    expect(scores[0]).toBe(1_099);
+    expect(scores[20]).toBe(1_079);
   });
 
   it("keeps accuracy more valuable than speed", () => {
