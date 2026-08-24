@@ -5,17 +5,9 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { createPortal } from "react-dom";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
+import InviteSessionActions from "./InviteSessionActions";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
-import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
-type UserHeaderMenuProps = {
-  accountId?: string;
-  viewedWkUsername?: string;
-  viewerMenuInfo: ViewerMenuInfo | null;
-  showAdminActions?: boolean;
-  hidden?: boolean;
-  lastSyncedAt?: string | null;
-  lastActivityAt?: string | null;
-};
+import type { UserHeaderMenuProps } from "./UserHeaderMenu.types";
 const MENU_BUTTON_CLASS =
   "inline-flex h-8 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface";
 const MENU_LIST_GROUP_CLASS = "mt-2 overflow-hidden rounded-xl border border-line bg-surface";
@@ -206,6 +198,7 @@ export default function UserHeaderMenu({
   const dashboardPageLinks = resolvedUserPageUsername
     ? [
         { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/study` },
+        { label: "Game", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/game` },
         { label: "Library Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/library-explorer` },
         { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt-explorer` },
         { label: "History", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/history` },
@@ -464,12 +457,7 @@ export default function UserHeaderMenu({
                     Sign out
                   </Link>
                 ) : viewerMenuInfo?.provider === "invite" ? (
-                  <Link
-                    href="/invite"
-                    className={MENU_BUTTON_CLASS}
-                  >
-                    Manage invite
-                  </Link>
+                  <InviteSessionActions buttonClassName={MENU_BUTTON_CLASS} />
                 ) : (
                   <>
                     <Link

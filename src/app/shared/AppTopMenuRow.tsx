@@ -50,6 +50,14 @@ function userHistoryHref(username: string | null): string {
   return `/users/${encodeURIComponent(username)}/history`;
 }
 
+function userGameHref(username: string | null): string {
+  if (!username) {
+    return "/join";
+  }
+
+  return `/users/${encodeURIComponent(username)}/game`;
+}
+
 function userLibrariesHref(username: string | null): string {
   if (!username) {
     return "/join";
@@ -73,6 +81,7 @@ export default function AppTopMenuRow({
   const links: MainLink[] = [
     { label: "Leaderboard", href: "/", dashboard: null },
     { label: "Study", href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
+    { label: "Game", href: userGameHref(resolvedWkUsername), dashboard: null },
     { label: "Library Explorer", href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
     { label: "JLPT Explorer", href: userTabHref(resolvedWkUsername, "jlpt"), dashboard: "jlpt" },
     { label: "History", href: userHistoryHref(resolvedWkUsername), dashboard: null },

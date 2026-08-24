@@ -7,7 +7,6 @@ export const GAME_COPY = {
   loadError: "Could not load Game Mode.",
   start: "Start game",
   starting: "Starting...",
-  backToStudy: "Back to study",
   allLevels: "All levels",
   level: "Level",
   category: "Category",

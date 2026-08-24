@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { formatGameDuration, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
@@ -189,16 +188,13 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   }
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-3 pb-10 sm:px-6 lg:px-8">
+    <div className="w-full pb-10">
       <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line py-5 sm:py-7">
         <div>
           <p className="text-xs font-black uppercase text-hot">@{wkUsername}</p>
           <h1 className="mt-1 text-4xl font-black text-foreground sm:text-6xl">{GAME_COPY.title}</h1>
           <p className="mt-2 text-sm font-semibold text-foreground/65">{GAME_COPY.subtitle}</p>
         </div>
-        <Link href={`/users/${encodeURIComponent(wkUsername)}/study`} className="rounded-full border border-line bg-surface px-4 py-2 text-sm font-bold text-foreground hover:bg-surface-muted">
-          {GAME_COPY.backToStudy}
-        </Link>
       </header>
 
       <main className="space-y-5 py-5 sm:py-7">
@@ -231,7 +227,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                   {setup?.categories.map((category) => <option key={category} value={category}>{GAME_CATEGORY_LABELS[category]}</option>)}
                 </select>
               </label>
-              <div className="flex flex-col justify-end">
+              <div className="flex flex-col sm:pt-6">
                 <button type="button" disabled={!canStart} onClick={() => void startGame()} className="h-11 rounded-lg border border-hot bg-hot px-5 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-45">{starting ? GAME_COPY.starting : GAME_COPY.start}</button>
                 <p className="mt-1 text-center text-[10px] font-bold text-foreground/50">{availableCount} items</p>
               </div>

@@ -129,6 +129,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Review and View Glyph modal glyph containers must use the same full-height presentation so in-glyph chips never compress the glyph content.
 - Admin confirmations must use shared dialog components (for example `ConfirmDialog` via `useAdminFeedback().confirmAction`). Do not use `window.confirm`.
 - Admin success/error action feedback should use shared toast feedback (for example `useAdminFeedback().showToast`) rather than inline status banners like "Saved" blocks inside cards.
+- Invite sessions, including test accounts, must expose a direct sign-out action in the global user menu; do not require users to open the invite-management page first.
 
 ## Don't touch
 

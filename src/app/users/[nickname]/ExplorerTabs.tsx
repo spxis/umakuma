@@ -403,7 +403,7 @@ export default function ExplorerTabs({
               studyModeBehavior={studyModeBehavior}
               onSelectMode={(mode) => {
                 if (mode === "game") {
-                  window.location.assign(`/game?accountId=${encodeURIComponent(accountId)}`);
+                  window.location.assign(`/users/${encodeURIComponent(viewedWkUsername)}/game`);
                   return;
                 }
                 setStudyModeBehavior(mode);
