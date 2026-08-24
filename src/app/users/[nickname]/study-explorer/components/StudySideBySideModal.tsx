@@ -122,6 +122,12 @@ export default function StudySideBySideModal({
             {options.map((option) => {
               const isCorrectOption = option.subjectId === selectedItem.subjectId;
               const isSelectedOption = activeSelection?.selectedSubjectId === option.subjectId;
+              const revealedLabel = comparison?.answerType === "reading"
+                ? STUDY_REVIEW_MODAL_SECTION_TEXT.reading
+                : STUDY_REVIEW_MODAL_SECTION_TEXT.meaning;
+              const revealedValue = comparison?.answerType === "reading"
+                ? option.primaryReading
+                : option.primaryMeaning;
               const resultTone = activeSelection
                 ? isCorrectOption
                   ? "border-emerald-500"
@@ -147,15 +153,9 @@ export default function StudySideBySideModal({
                   <span className="absolute right-2 top-2 z-30 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.wkLevel}</span>
                   <span style={{ fontFamily }} className={`max-w-full break-all text-center font-black leading-none ${activeSelection ? "text-[clamp(2.5rem,10vw,6rem)]" : "text-[clamp(3rem,15vw,10rem)]"}`}>{option.characters}</span>
                   {activeSelection ? (
-                    <span className="mt-4 grid w-full gap-2 text-left sm:grid-cols-2">
-                      <span className="rounded-lg border border-line bg-surface/90 px-2 py-2">
-                        <span className="block text-[9px] font-bold uppercase text-foreground/60">{STUDY_REVIEW_MODAL_SECTION_TEXT.reading}</span>
-                        <span className="mt-1 block truncate text-sm font-black text-foreground sm:text-lg">{option.primaryReading ?? "-"}</span>
-                      </span>
-                      <span className="rounded-lg border border-line bg-surface/90 px-2 py-2">
-                        <span className="block text-[9px] font-bold uppercase text-foreground/60">{STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}</span>
-                        <span className="mt-1 block truncate text-sm font-black text-foreground sm:text-lg">{option.primaryMeaning ?? "-"}</span>
-                      </span>
+                    <span className="mt-4 w-full rounded-lg border border-line bg-surface/90 px-2 py-2 text-left">
+                      <span className="block text-[9px] font-bold uppercase text-foreground/60">{revealedLabel}</span>
+                      <span className="mt-1 block truncate text-sm font-black text-foreground sm:text-lg">{revealedValue ?? "-"}</span>
                     </span>
                   ) : null}
                 </button>
