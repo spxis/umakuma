@@ -140,6 +140,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
 - A push to `main` only triggers the production workflow; it is not itself a deployment. Run `pnpm preflight:prod` before pushing, then verify GitHub `CI` succeeds, the `Deploy to Vercel` workflow's `deploy` job completes `vercel deploy --prod`, and the canonical production alias returns HTTP 200. Investigate and fix failed workflow steps before reporting deployment success.
+- When work is paused or reprioritized but may resume later, preserve useful uncommitted changes on a named WIP branch or stash before returning to the priority task. Do not discard that work merely to clean the current branch.
 - Do not create markdown docs to describe changes unless asked.
 - Prefer editing existing files over creating new ones.
 
