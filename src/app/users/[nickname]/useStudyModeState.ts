@@ -79,7 +79,7 @@ export function useStudyModeState({
     }
 
     return changed;
-  }, [studyMode, studyModeBehavior]);
+  }, [studyModeBehavior]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
