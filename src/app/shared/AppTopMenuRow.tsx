@@ -93,6 +93,9 @@ export default function AppTopMenuRow({
   if (canSeeAdminTopLink) {
     links.push({ label: "Admin", href: "/admin", dashboard: null });
   }
+  const mobileLinks = links.filter((link) =>
+    link.label === "Leaderboard" || link.label === "Study" || link.label === "Game" || link.label === "Admin"
+  );
 
   const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
   const routeSegment =
@@ -133,7 +136,22 @@ export default function AppTopMenuRow({
 
   return (
     <section className={`flex items-center justify-between gap-3 ${className ?? ""}`}>
-      <nav className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/50 sm:text-[11px]">
+      <nav className="flex min-w-0 items-center gap-x-1.5 overflow-hidden whitespace-nowrap text-[9px] font-semibold uppercase tracking-widest text-foreground/50 sm:hidden">
+        {mobileLinks.map((link, index) => (
+          <span key={`mobile-${link.label}-${link.href}`} className="inline-flex items-center gap-x-1.5">
+            <Link
+              href={link.href}
+              className={`transition ${linkIsActive(link) ? "font-black text-foreground" : "hover:text-foreground/80"}`}
+            >
+              {link.label}
+            </Link>
+            {index < mobileLinks.length - 1 ? (
+              <span aria-hidden="true" className="text-foreground/35">|</span>
+            ) : null}
+          </span>
+        ))}
+      </nav>
+      <nav className="hidden flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/50 sm:flex">
         {links.map((link, index) => (
           <span key={`${link.label}-${link.href}`} className="inline-flex items-center gap-x-3">
             <Link
