@@ -19,6 +19,7 @@ export type RelatedReference = {
 
 export type StudyReviewModalProps = {
   accountId: string;
+  currentLevel: number | null;
   showEnglish: boolean;
   canToggleEnglish: boolean;
   forcedViewerMode: StudyViewerMode | null;

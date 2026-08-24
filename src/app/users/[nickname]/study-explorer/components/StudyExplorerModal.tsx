@@ -21,6 +21,7 @@ import type {
 
 type Props = {
   accountId: string;
+  currentLevel: number | null;
   showEnglish: boolean;
   canToggleEnglish: boolean;
   forcedViewerMode: StudyViewerMode | null;
@@ -54,6 +55,7 @@ type Props = {
 
 export default function StudyExplorerModal({
   accountId,
+  currentLevel,
   showEnglish,
   canToggleEnglish,
   forcedViewerMode,
@@ -111,6 +113,7 @@ export default function StudyExplorerModal({
   return (
     <StudyReviewModal
       accountId={accountId}
+      currentLevel={currentLevel}
       showEnglish={showEnglish}
       canToggleEnglish={canToggleEnglish}
       forcedViewerMode={forcedViewerMode}

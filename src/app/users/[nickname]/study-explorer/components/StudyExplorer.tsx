@@ -468,7 +468,7 @@ export default function StudyExplorer({
             onToggleStudyTag={handleToggleStudyTag} onClearAllFilters={clearAllFilters}
           />
           <StudyExplorerModal
-            accountId={accountId} showEnglish={showEnglish} canToggleEnglish={canToggleEnglish}
+            accountId={accountId} currentLevel={studySourceLevel} showEnglish={showEnglish} canToggleEnglish={canToggleEnglish}
             forcedViewerMode={forcedViewerMode} isUnauthorized={isUnauthorized} studyMode={studyMode}
             studyModeBehavior={studyModeBehavior} studySource={studySource} queueMode={queueMode}
             selectedItem={selectedItem} selectedIndex={selectedIndex} modalItems={modalItems}

@@ -101,6 +101,7 @@ export default function HistoryItemDetailModal({
   return (
     <StudyReviewModal
       accountId={selectedAttempt.accountId}
+      currentLevel={null}
       showEnglish
       canToggleEnglish={false}
       forcedViewerMode="detail"

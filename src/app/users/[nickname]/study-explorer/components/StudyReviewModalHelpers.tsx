@@ -37,6 +37,19 @@ export function hasRenderableRelatedItems(items: RelatedReference[] | undefined)
   );
 }
 
+export function filterStudyModeRelatedItems(
+  items: RelatedReference[] | undefined,
+  studyMode: boolean,
+  currentLevel: number | null,
+): RelatedReference[] | undefined {
+  if (!studyMode || !items || typeof currentLevel !== "number") {
+    return items;
+  }
+
+  const maxRelatedLevel = currentLevel + 2;
+  return items.filter((item) => typeof item.wkLevel !== "number" || item.wkLevel <= maxRelatedLevel);
+}
+
 export function relatedTileLabelClass(label: string): string {
   const length = Array.from(label).length;
   if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.large) return "text-4xl";

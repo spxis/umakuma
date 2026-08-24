@@ -1,0 +1,12 @@
+{
+  "nickname": "UmaKuma Test",
+  "expectedWkUsername": "replace-with-test-wanikani-username",
+  "token": "paste-personal-access-token-here",
+  "automation": {
+    "startAvailableLessons": true,
+    "submitDueReviews": true,
+    "reviewResult": "correct",
+    "pollIntervalMinutes": 15,
+    "maxWritesPerCycle": 100
+  }
+}

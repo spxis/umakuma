@@ -17,7 +17,7 @@ import {
   STUDY_VIEWER_MODES,
 } from "./StudyExplorer.constants";
 import StudyReviewModalSection from "./StudyReviewModalSection";
-import { hasRenderableRelatedItems } from "./StudyReviewModalHelpers";
+import { filterStudyModeRelatedItems, hasRenderableRelatedItems } from "./StudyReviewModalHelpers";
 import StudyReviewModalStatusStrip from "./StudyReviewModalStatusStrip";
 import StudyReviewModalHeader from "./StudyReviewModalHeader";
 import { useStudyReviewModalKeyboard } from "../lib/useStudyReviewModalKeyboard";
@@ -30,6 +30,7 @@ import {
 } from "../lib/studyReviewModalDerivations";
 export default function StudyReviewModal({
   accountId,
+  currentLevel,
   showEnglish,
   canToggleEnglish,
   forcedViewerMode,
@@ -317,14 +318,20 @@ export default function StudyReviewModal({
     lessonAlreadySubmitted;
   const detailsRevealed = isOutcomeFinal || !requiresReveal || isAnswerRevealed;
   const useStudyFlashLayout = studyMode && isReviewQueueItem(selectedItem);
+  const displayedItem = {
+    ...selectedItem,
+    visuallySimilar: filterStudyModeRelatedItems(selectedItem.visuallySimilar, studyMode, currentLevel),
+    usedInVocabulary: filterStudyModeRelatedItems(selectedItem.usedInVocabulary, studyMode, currentLevel),
+    componentKanji: filterStudyModeRelatedItems(selectedItem.componentKanji, studyMode, currentLevel),
+  };
 
-  const hasRadicals = hasRenderableRelatedItems(selectedItem.radicals as RelatedReference[] | undefined);
-  const hasVisuallySimilar = hasRenderableRelatedItems(selectedItem.visuallySimilar as RelatedReference[] | undefined);
+  const hasRadicals = hasRenderableRelatedItems(displayedItem.radicals as RelatedReference[] | undefined);
+  const hasVisuallySimilar = hasRenderableRelatedItems(displayedItem.visuallySimilar as RelatedReference[] | undefined);
   const hasUsedInVocabulary =
-    hasRenderableRelatedItems(selectedItem.usedInVocabulary as RelatedReference[] | undefined) ||
-    (isRadicalSubjectType(selectedItem.subjectType) &&
-      hasRenderableRelatedItems(selectedItem.componentKanji as RelatedReference[] | undefined));
-  const hasComponentKanji = hasRenderableRelatedItems(selectedItem.componentKanji as RelatedReference[] | undefined);
+    hasRenderableRelatedItems(displayedItem.usedInVocabulary as RelatedReference[] | undefined) ||
+    (isRadicalSubjectType(displayedItem.subjectType) &&
+      hasRenderableRelatedItems(displayedItem.componentKanji as RelatedReference[] | undefined));
+  const hasComponentKanji = hasRenderableRelatedItems(displayedItem.componentKanji as RelatedReference[] | undefined);
   const { primaryReadingHiragana, primaryReadingKatakana, secondaryReadingValue } =
     deriveStudyReviewReadings(selectedItem);
   const usedKanjiItems = collectUsedKanjiItems(selectedItem);
@@ -388,7 +395,7 @@ export default function StudyReviewModal({
             showEnglish={showEnglish}
             canToggleEnglish={canToggleEnglish}
             viewerMode={viewerMode}
-            selectedItem={selectedItem}
+            selectedItem={displayedItem}
             selectedTags={selectedTags}
             isPracticeItem={isPracticeItem}
             selectedOutcome={selectedOutcome}
