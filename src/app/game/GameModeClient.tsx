@@ -34,6 +34,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   const [gameError, setGameError] = useState<string | null>(null);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
+  const [challengeRequest, setChallengeRequest] = useState(0);
   const setupRef = useRef<HTMLElement | null>(null);
   const leaderboardKey = `${leaderboardFilters.batchSize}:${leaderboardFilters.level ?? "all"}:${leaderboardFilters.mode}:${leaderboardFilters.range}:${leaderboardFilters.metric}:${leaderboardRefresh}`;
   const [leaderboardState, setLeaderboardState] = useState<{
@@ -84,6 +85,11 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
     const timer = window.setInterval(() => setElapsedMs(Date.now() - startedAtMs), 100);
     return () => window.clearInterval(timer);
   }, [activeGame, phase]);
+
+  useEffect(() => {
+    if (challengeRequest === 0 || phase !== "lobby") return;
+    setupRef.current?.scrollIntoView({ block: "center" });
+  }, [challengeRequest, phase]);
 
   const availableCount = setup
     ? selection.level === null
@@ -165,7 +171,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   function challengeRecentRun(entry: GameLeaderboardEntry) {
     setSelection({ batchSize: entry.batchSize, level: entry.level, category: entry.category });
     resetToLobby();
-    window.requestAnimationFrame(() => setupRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
+    setChallengeRequest((request) => request + 1);
   }
 
   if (!setup && !setupError) {
