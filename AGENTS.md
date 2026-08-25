@@ -127,7 +127,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Keep submitted review items in the active modal session until the modal closes. Revisiting a submitted item must show its selected correct/wrong outcome read-only, including when it was the final item.
 - Review and View Glyph modals must use the same shared in-glyph status-chip row. Dual-script readings show hiragana and katakana with one shared pronunciation, never duplicate English for each script.
 - Review and View Glyph modal glyph containers must use the same full-height presentation so in-glyph chips never compress the glyph content.
-- In mobile Study filters, selecting any Status chip must leave the Status section expanded so sibling statuses and available numbered stages remain visible; selecting a numbered stage may compact the section.
+- In mobile Study filters, selecting a Status chip drills into that status: hide sibling statuses and show its available numbered stages immediately. Expanding the section returns to all statuses.
 - Admin confirmations must use shared dialog components (for example `ConfirmDialog` via `useAdminFeedback().confirmAction`). Do not use `window.confirm`.
 - Admin success/error action feedback should use shared toast feedback (for example `useAdminFeedback().showToast`) rather than inline status banners like "Saved" blocks inside cards.
 - Invite sessions, including test accounts, must expose a direct sign-out action in the global user menu; do not require users to open the invite-management page first.

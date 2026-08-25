@@ -73,7 +73,7 @@ export default function StudyStatusFilters({
           if (stageOptions.length > 1) {
             onSetSrsStageFilter(null);
           }
-          onSetSectionOpen(true);
+          closeStatusSectionReliably(onSetSectionOpen);
         };
 
         if (unavailable) return null;
@@ -118,7 +118,7 @@ export default function StudyStatusFilters({
                   disabled={stageDisabled}
                   role="tab"
                   aria-selected={stageSelected}
-                  className={isOpen || stageSelected ? "" : "hidden sm:inline-flex"}
+                  className={isOpen || isSelected ? "" : "hidden sm:inline-flex"}
                   toneClassName={stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<typeof status, "all">, stageSelected)}
                   label={stage}
                   count={formatNumber(stageCount)}
