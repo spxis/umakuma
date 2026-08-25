@@ -73,7 +73,7 @@ export default function StudyStatusFilters({
           if (stageOptions.length > 1) {
             onSetSrsStageFilter(null);
           }
-          closeStatusSectionReliably(onSetSectionOpen);
+          onSetSectionOpen(true);
         };
 
         if (unavailable) return null;
