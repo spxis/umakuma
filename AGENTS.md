@@ -132,6 +132,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Invite sessions, including test accounts, must expose a direct sign-out action in the global user menu; do not require users to open the invite-management page first.
 - Game scoring must reward 0.1-second differences while the speed bonus remains and include a bounded Level 1–60 bonus. Keep combined level and speed modifiers below one correct answer for every batch size so accuracy always outranks both.
 - Game rounds must use disjoint targets and distractors with unique distractors when the pool permits, then balance and shuffle correct-answer sides. Constrained pools may reuse non-target choices as a fallback.
+- Level-specific game leaderboards may list only accounts whose WaniKani level is at least the selected report level. Any/All-level reports may include every account.
 
 ## Don't touch
 

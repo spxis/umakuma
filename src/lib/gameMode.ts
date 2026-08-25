@@ -81,6 +81,13 @@ export function isGameCategory(value: string): value is GameCategory {
   return GAME_CATEGORIES.includes(value as GameCategory);
 }
 
+export function gameLeaderboardMemberIsEligible(
+  wkLevel: number,
+  reportLevel: "any" | "all" | number,
+): boolean {
+  return typeof reportLevel !== "number" || wkLevel >= reportLevel;
+}
+
 export function calculateGameScore(correctCount: number, questionCount: number, durationMs: number, level: number | null): number {
   if (
     !Number.isFinite(correctCount) ||

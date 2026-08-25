@@ -10,6 +10,7 @@ import {
   GAME_METRICS,
   calculateGameScore,
   gameDateKeys,
+  gameLeaderboardMemberIsEligible,
   isGameBatchSize,
   type GameLeaderboardEntry,
   type GameMetric,
@@ -89,7 +90,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
           }),
           prisma.account.findMany({
             orderBy: { nickname: "asc" },
-            select: { id: true, nickname: true, wkUsername: true },
+            select: { id: true, nickname: true, wkUsername: true, wkLevel: true },
           }),
         ]);
 
@@ -130,11 +131,13 @@ export async function GET(request: Request, context: { params: Promise<{ account
             const entry = toEntry(run);
             return entry ? [entry] : [];
           }),
-          members: members.map((member) => ({
-            accountId: member.id,
-            nickname: member.nickname,
-            wkUsername: member.wkUsername,
-          })),
+          members: members
+            .filter((member) => gameLeaderboardMemberIsEligible(member.wkLevel, parsed.data.level))
+            .map((member) => ({
+              accountId: member.id,
+              nickname: member.nickname,
+              wkUsername: member.wkUsername,
+            })),
         }, { status: 200 });
       } catch (error) {
         console.error("Failed to load game leaderboard", error);

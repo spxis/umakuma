@@ -6,6 +6,7 @@ import {
   formatGameDuration,
   formatGameScore,
   gameDateKeys,
+  gameLeaderboardMemberIsEligible,
   gamePoolItemMatches,
 } from "@/lib/gameMode";
 
@@ -70,6 +71,14 @@ describe("Game Mode", () => {
     expect(gamePoolItemMatches(item, 12, "mixed")).toBe(true);
     expect(gamePoolItemMatches(item, 11, "mixed")).toBe(false);
     expect(gamePoolItemMatches(item, 12, "kanji")).toBe(false);
+  });
+
+  it("excludes members below a level-specific leaderboard", () => {
+    expect(gameLeaderboardMemberIsEligible(17, 18)).toBe(false);
+    expect(gameLeaderboardMemberIsEligible(18, 18)).toBe(true);
+    expect(gameLeaderboardMemberIsEligible(19, 18)).toBe(true);
+    expect(gameLeaderboardMemberIsEligible(1, "any")).toBe(true);
+    expect(gameLeaderboardMemberIsEligible(1, "all")).toBe(true);
   });
 
   it("builds today, yesterday, and seven-day date keys", () => {
