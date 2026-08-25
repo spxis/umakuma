@@ -170,16 +170,30 @@ export function buildGameQuestions(pool: GameCatalogItem[], batchSize: GameBatch
   const targets = shuffle(pool).slice(0, batchSize);
   if (targets.length < batchSize) throw new Error(`Only ${targets.length} eligible items are available.`);
 
+  const targetIds = new Set(targets.map((target) => target.subjectId));
+  const unusedDistractors = new Set(
+    pool.filter((item) => !targetIds.has(item.subjectId)).map((item) => item.subjectId),
+  );
+  const targetSides = shuffle([
+    ...Array.from({ length: Math.ceil(batchSize / 2) }, () => true),
+    ...Array.from({ length: Math.floor(batchSize / 2) }, () => false),
+  ]);
+
   return targets.map((target, position) => {
-    const distractor = chooseDistractor(target, pool);
+    const unusedPool = pool.filter((item) => unusedDistractors.has(item.subjectId));
+    const nonTargetPool = pool.filter((item) => !targetIds.has(item.subjectId));
+    const distractor = chooseDistractor(target, unusedPool)
+      ?? chooseDistractor(target, nonTargetPool)
+      ?? chooseDistractor(target, pool);
     if (!distractor) throw new Error("Not enough distinct items are available.");
+    unusedDistractors.delete(distractor.subjectId);
     const canAskReading =
       target.subjectType !== SUBJECT_TYPES.radical &&
       Boolean(target.primaryReading) &&
       Boolean(distractor.primaryReading) &&
       target.primaryReading !== distractor.primaryReading;
     const answerType = canAskReading && Math.random() < 0.5 ? GameAnswerType.reading : GameAnswerType.meaning;
-    const targetOnLeft = Math.random() < 0.5;
+    const targetOnLeft = targetSides[position]!;
     return {
       position,
       targetSubjectId: target.subjectId,
