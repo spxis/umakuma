@@ -266,7 +266,7 @@ export default function StudyExplorerPanel({
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">{STUDY_PANEL_TEXT.loadingQueueAndFilters}</p>
           ) : (
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-              Showing {formatNumber(filteredItems.length)}/{formatNumber(totalItems)} items
+              Showing {formatNumber(filteredItems.length)}/{formatNumber(allTypeCount)} items
             </p>
           )}
           <div className={`flex w-full flex-wrap items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
