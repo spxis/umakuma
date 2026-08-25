@@ -284,7 +284,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
 
           {gameError ? <p className="text-sm font-bold text-red-700">{gameError}</p> : null}
           <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(19rem,1fr)]">
-            <GameLeaderboard days={leaderboardState.key === leaderboardKey ? leaderboardState.data?.days ?? [] : []} members={leaderboardState.data?.members ?? []} metric={leaderboardFilters.metric} loading={leaderboardState.key !== leaderboardKey} />
+            <GameLeaderboard days={leaderboardState.key === leaderboardKey ? leaderboardState.data?.days ?? [] : []} members={leaderboardState.key === leaderboardKey ? leaderboardState.data?.members ?? [] : []} metric={leaderboardFilters.metric} loading={leaderboardState.key !== leaderboardKey} />
             <GameRecentGames entries={leaderboardState.data?.recent ?? []} loading={!leaderboardState.data} onChallenge={challengeRecentRun} />
           </div>
       </main>
