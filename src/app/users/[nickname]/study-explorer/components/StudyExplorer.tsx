@@ -341,7 +341,7 @@ export default function StudyExplorer({
     typeCounts: data?.typeCounts ?? cachedQueueData?.typeCounts ?? loadedTypeCounts,
     typeCountsByLevel: typeCountsByLevelForEffects,
     srsCounts: data?.srsCounts ?? cachedQueueData?.srsCounts,
-    srsStageCounts: data?.srsStageCounts ?? cachedQueueData?.srsStageCounts,
+    srsStageCounts,
     dataItems: data?.items,
     dataCached: data?.cached,
     dataPaginationTotal: data?.pagination?.total,
