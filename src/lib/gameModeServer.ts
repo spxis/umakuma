@@ -7,6 +7,7 @@ import { SUBJECT_TYPES, isSubjectType, type SubjectType } from "@/lib/domainCons
 import {
   calculateGameScore,
   gamePoolItemMatches,
+  isUltraGameBatchSize,
   type GameCategory,
   type GameOption,
   type GameQuestionPayload,
@@ -236,6 +237,7 @@ export function toGameRunSummary(run: {
     ...run,
     batchSize: run.batchSize,
     category: run.category as GameCategory,
+    ultraMode: isUltraGameBatchSize(run.batchSize),
     startedAt: run.startedAt.toISOString(),
     completedAt: run.completedAt?.toISOString() ?? null,
   };

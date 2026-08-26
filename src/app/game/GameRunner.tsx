@@ -9,6 +9,7 @@ type Props = {
   question: GameQuestionPayload;
   questionIndex: number;
   questionTotal: number;
+  ultraMode: boolean;
   correctCount: number;
   elapsedMs: number;
   answering: boolean;
@@ -28,6 +29,7 @@ export default function GameRunner({
   question,
   questionIndex,
   questionTotal,
+  ultraMode,
   correctCount,
   elapsedMs,
   answering,
@@ -80,7 +82,7 @@ export default function GameRunner({
         <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-line pb-2 text-xs font-black uppercase text-foreground/60 sm:pb-3">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button type="button" onClick={() => setExitConfirmOpen(true)} className="h-9 rounded-full border border-line bg-surface px-3 text-xs font-black text-foreground hover:bg-surface-muted">Exit</button>
-            <span className="truncate">{questionIndex + 1}/{questionTotal}</span>
+            <span className="truncate">{questionIndex + 1}/{ultraMode ? "∞" : questionTotal}</span>
           </div>
           <span className="hidden whitespace-nowrap sm:inline">{correctCount} {GAME_COPY.correct}</span>
           <span className="hidden text-right sm:inline">{formatGameDuration(elapsedMs)}</span>

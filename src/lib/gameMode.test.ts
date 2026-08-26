@@ -2,18 +2,23 @@ import { describe, expect, it } from "vitest";
 
 import {
   GAME_BATCH_SIZES,
+  GAME_ULTRA_BATCH_SIZE,
   calculateGameScore,
   formatGameDuration,
   formatGameScore,
+  gameAnswerProgress,
   gameDateKeys,
   gameLeaderboardMemberIsEligible,
   gameOptionIndexForKey,
+  isUltraGameBatchSize,
   gamePoolItemMatches,
 } from "@/lib/gameMode";
 
 describe("Game Mode", () => {
   it("supports every agreed batch size", () => {
     expect(GAME_BATCH_SIZES).toEqual([5, 10, 15, 20, 25, 50]);
+    expect(isUltraGameBatchSize(GAME_ULTRA_BATCH_SIZE)).toBe(true);
+    expect(isUltraGameBatchSize(50)).toBe(false);
   });
 
   it("maps arrows and number keys to regular and hard-mode choices", () => {
@@ -33,6 +38,29 @@ describe("Game Mode", () => {
     expect(gameOptionIndexForKey("5", 2)).toBeNull();
     expect(gameOptionIndexForKey("3", 2)).toBe(1);
     expect(gameOptionIndexForKey("6", 2)).toBe(1);
+  });
+
+  it("keeps Ultra running through perfect cycles and stops on a miss", () => {
+    expect(gameAnswerProgress({ ultraMode: true, correct: true, answeredCount: 4, questionCount: 5, appendedQuestionCount: 5 })).toEqual({
+      complete: false,
+      appendCycle: false,
+      questionCount: 5,
+    });
+    expect(gameAnswerProgress({ ultraMode: true, correct: true, answeredCount: 5, questionCount: 5, appendedQuestionCount: 5 })).toEqual({
+      complete: false,
+      appendCycle: true,
+      questionCount: 10,
+    });
+    expect(gameAnswerProgress({ ultraMode: true, correct: false, answeredCount: 7, questionCount: 10, appendedQuestionCount: 0 })).toEqual({
+      complete: true,
+      appendCycle: false,
+      questionCount: 7,
+    });
+    expect(gameAnswerProgress({ ultraMode: false, correct: true, answeredCount: 5, questionCount: 5, appendedQuestionCount: 0 })).toEqual({
+      complete: true,
+      appendCycle: false,
+      questionCount: 5,
+    });
   });
 
   it("rewards every tenth and higher levels", () => {

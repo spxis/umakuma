@@ -6,11 +6,13 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import {
   GAME_DATE_RANGES,
+  GAME_ULTRA_BATCH_SIZE,
   GAME_CATEGORIES,
   GAME_METRICS,
   calculateGameScore,
   gameDateKeys,
   gameLeaderboardMemberIsEligible,
+  isUltraGameBatchSize,
   isGameBatchSize,
   type GameLeaderboardEntry,
   type GameMetric,
@@ -24,6 +26,7 @@ const querySchema = z.object({
   range: z.enum(GAME_DATE_RANGES),
   metric: z.enum(GAME_METRICS),
   hardMode: z.enum(["all", "hard"]).default("all"),
+  ultraMode: z.enum(["all", "ultra"]).default("all"),
 });
 
 function sortEntries(entries: GameLeaderboardEntry[], metric: GameMetric): GameLeaderboardEntry[] {
@@ -79,6 +82,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
                   : parsed.data.level,
               category: parsed.data.category === "all" ? undefined : parsed.data.category,
               hardMode: parsed.data.hardMode === "hard" ? true : undefined,
+              ...(parsed.data.ultraMode === "ultra" ? { batchSize: GAME_ULTRA_BATCH_SIZE } : {}),
               completedDatePst: { in: dateKeys },
               durationMs: { not: null },
             },
@@ -106,6 +110,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             wkUsername: run.account.wkUsername,
             category: run.category,
             hardMode: run.hardMode,
+            ultraMode: isUltraGameBatchSize(run.batchSize),
             batchSize: run.batchSize as GameLeaderboardEntry["batchSize"],
             level: run.level,
             score: calculateGameScore(run.correctCount, run.questionCount, run.durationMs, run.level),

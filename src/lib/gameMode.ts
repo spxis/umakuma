@@ -1,6 +1,7 @@
 import type { SubjectType } from "@/lib/domainConstants";
 
 export const GAME_BATCH_SIZES = [5, 10, 15, 20, 25, 50] as const;
+export const GAME_ULTRA_BATCH_SIZE = -1;
 export const GAME_CATEGORIES = ["radical", "kanji", "vocabulary", "mixed"] as const;
 export const GAME_DATE_RANGES = ["today", "yesterday", "seven-days"] as const;
 export const GAME_METRICS = ["score", "time", "streak"] as const;
@@ -45,6 +46,7 @@ export type GameRunSummary = {
   level: number | null;
   category: GameCategory;
   hardMode: boolean;
+  ultraMode: boolean;
   questionCount: number;
   answeredCount: number;
   correctCount: number;
@@ -64,6 +66,7 @@ export type GameLeaderboardEntry = {
   wkUsername: string;
   category: GameCategory;
   hardMode: boolean;
+  ultraMode: boolean;
   batchSize: number;
   level: number | null;
   score: number;
@@ -79,6 +82,10 @@ export function isGameBatchSize(value: number): value is GameBatchSize {
   return GAME_BATCH_SIZES.includes(value as GameBatchSize);
 }
 
+export function isUltraGameBatchSize(value: number): boolean {
+  return value === GAME_ULTRA_BATCH_SIZE;
+}
+
 export function isGameCategory(value: string): value is GameCategory {
   return GAME_CATEGORIES.includes(value as GameCategory);
 }
@@ -88,6 +95,33 @@ export function gameOptionIndexForKey(key: string, optionCount: 2 | 3): number |
   if (optionCount === 3 && (key === "ArrowUp" || key === "ArrowDown" || key === "2" || key === "5")) return 1;
   if (key === "ArrowRight" || key === "3" || key === "6") return optionCount - 1;
   return null;
+}
+
+export function gameAnswerProgress({
+  ultraMode,
+  correct,
+  answeredCount,
+  questionCount,
+  appendedQuestionCount,
+}: {
+  ultraMode: boolean;
+  correct: boolean;
+  answeredCount: number;
+  questionCount: number;
+  appendedQuestionCount: number;
+}): { complete: boolean; appendCycle: boolean; questionCount: number } {
+  if (!ultraMode) {
+    return { complete: answeredCount >= questionCount, appendCycle: false, questionCount };
+  }
+  if (!correct) {
+    return { complete: true, appendCycle: false, questionCount: answeredCount };
+  }
+  const appendCycle = answeredCount >= questionCount;
+  return {
+    complete: false,
+    appendCycle,
+    questionCount: appendCycle ? questionCount + appendedQuestionCount : questionCount,
+  };
 }
 
 export function gameLeaderboardMemberIsEligible(

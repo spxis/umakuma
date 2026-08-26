@@ -24,6 +24,7 @@ export const GAME_COPY = {
   correct: "Correct",
   complete: "Round complete",
   hardMode: "Hard mode",
+  ultraMode: "Ultra mode",
   regularMode: "Regular",
   playAgain: "Play again",
   questionsCorrect: "correct",

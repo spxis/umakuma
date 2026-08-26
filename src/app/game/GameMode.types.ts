@@ -51,6 +51,7 @@ export type GameSelection = {
   level: number | null;
   category: GameCategory;
   hardMode: boolean;
+  ultraMode: boolean;
 };
 
 export type GameLeaderboardFilters = {
@@ -60,4 +61,5 @@ export type GameLeaderboardFilters = {
   range: GameDateRange;
   metric: GameMetric;
   hardMode: boolean;
+  ultraMode: boolean;
 };

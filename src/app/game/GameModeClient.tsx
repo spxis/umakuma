@@ -41,7 +41,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
   const [challengeRequest, setChallengeRequest] = useState(0);
   const setupRef = useRef<HTMLElement | null>(null);
-  const leaderboardKey = `${leaderboardFilters.batchSize}:${leaderboardFilters.level ?? "all"}:${leaderboardFilters.mode}:${leaderboardFilters.range}:${leaderboardFilters.metric}:${leaderboardFilters.hardMode}:${leaderboardRefresh}`;
+  const leaderboardKey = `${leaderboardFilters.batchSize}:${leaderboardFilters.level ?? "all"}:${leaderboardFilters.mode}:${leaderboardFilters.range}:${leaderboardFilters.metric}:${leaderboardFilters.hardMode}:${leaderboardFilters.ultraMode}:${leaderboardRefresh}`;
   const [leaderboardState, setLeaderboardState] = useState<{
     key: string;
     data: GameLeaderboardResponse | null;
@@ -71,6 +71,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
       range: leaderboardFilters.range,
       metric: leaderboardFilters.metric,
       hardMode: leaderboardFilters.hardMode ? "hard" : "all",
+      ultraMode: leaderboardFilters.ultraMode ? "ultra" : "all",
     });
     void fetch(`/api/game/${accountId}/leaderboard?${params}`, { signal: controller.signal, cache: "no-store" })
       .then(async (response) => {
@@ -103,7 +104,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
       : setup.countsByLevel[selection.level]?.[selection.category] ?? 0
     : 0;
   const minimumItems = selection.hardMode ? 3 : 2;
-  const canStart = Boolean(setup && availableCount >= (selection.batchSize === "all" ? minimumItems : selection.batchSize) && !starting);
+  const canStart = Boolean(setup && availableCount >= (selection.ultraMode || selection.batchSize === "all" ? minimumItems : selection.batchSize) && !starting);
   const currentQuestion = activeGame?.questions[questionIndex] ?? null;
   const finishedRun = phase === "results" ? activeGame?.run ?? null : null;
 
@@ -114,7 +115,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
         : setup.countsByLevel[gameSelection.level]?.[gameSelection.category] ?? 0
       : 0;
     const gameMinimumItems = gameSelection.hardMode ? 3 : 2;
-    if (!setup || gameAvailableCount < (gameSelection.batchSize === "all" ? gameMinimumItems : gameSelection.batchSize) || starting) return;
+    if (!setup || gameAvailableCount < (gameSelection.ultraMode || gameSelection.batchSize === "all" ? gameMinimumItems : gameSelection.batchSize) || starting) return;
     setStarting(true);
     setGameError(null);
     try {
@@ -126,6 +127,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
           level: gameSelection.level,
           category: gameSelection.category,
           hardMode: gameSelection.hardMode,
+          ultraMode: gameSelection.ultraMode,
         }),
       });
       const payload = (await response.json()) as ActiveGame & { error?: string };
@@ -152,12 +154,12 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ questionId: question.id, selectedSubjectId }),
       });
-      const payload = (await response.json()) as { correct?: boolean; run?: GameRunSummary; error?: string };
+      const payload = (await response.json()) as { correct?: boolean; run?: GameRunSummary; appendedQuestions?: GameQuestionPayload[]; error?: string };
       if (!response.ok || typeof payload.correct !== "boolean" || !payload.run) {
         throw new Error(payload.error ?? "Could not record the answer.");
       }
       setFeedback({ subjectId: selectedSubjectId, correct: payload.correct });
-      setActiveGame((current) => current ? { ...current, run: payload.run! } : current);
+      setActiveGame((current) => current ? { ...current, run: payload.run!, questions: [...current.questions, ...(payload.appendedQuestions ?? [])] } : current);
       window.setTimeout(() => {
         if (payload.run?.status === "completed") {
           setPhase("results");
@@ -183,7 +185,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   }
 
   function challengeRecentRun(entry: GameLeaderboardEntry) {
-    setSelection({ batchSize: gameSelectionBatchSize(entry.batchSize), level: entry.level, category: entry.category, hardMode: entry.hardMode });
+    setSelection({ batchSize: gameSelectionBatchSize(entry.batchSize), level: entry.level, category: entry.category, hardMode: entry.hardMode, ultraMode: entry.ultraMode });
     resetToLobby();
     setChallengeRequest((request) => request + 1);
   }
@@ -201,6 +203,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
         question={currentQuestion}
         questionIndex={questionIndex}
         questionTotal={activeGame.questions.length}
+        ultraMode={activeGame.run.ultraMode}
         correctCount={activeGame.run.correctCount}
         elapsedMs={elapsedMs}
         answering={answering}
@@ -234,7 +237,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                   <SubjectTypePill type={finishedRun.category}>{GAME_CATEGORY_LABELS[finishedRun.category]}</SubjectTypePill>
                 )}
                 <span>{finishedRun.questionCount} questions</span>
-                <span>{finishedRun.hardMode ? GAME_COPY.hardMode : GAME_COPY.regularMode}</span>
+                <span>{finishedRun.ultraMode ? (finishedRun.hardMode ? "Ultra hard" : GAME_COPY.ultraMode) : finishedRun.hardMode ? GAME_COPY.hardMode : GAME_COPY.regularMode}</span>
               </div>
               <p className="mt-3 text-7xl font-black leading-none text-accent sm:text-9xl">{formatGameScore(finishedRun.score)}</p>
               <div className="mx-auto mt-6 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
@@ -246,7 +249,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 <button
                   type="button"
                   disabled={starting}
-                  onClick={() => void startGame({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category, hardMode: finishedRun.hardMode })}
+                  onClick={() => void startGame({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category, hardMode: finishedRun.hardMode, ultraMode: finishedRun.ultraMode })}
                   className="rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
                 >
                   {starting ? GAME_COPY.starting : "Play same settings"}
@@ -254,7 +257,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 <button
                   type="button"
                   onClick={() => {
-                    setSelection({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category, hardMode: finishedRun.hardMode });
+                    setSelection({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category, hardMode: finishedRun.hardMode, ultraMode: finishedRun.ultraMode });
                     resetToLobby();
                   }}
                   className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black uppercase text-foreground hover:bg-surface-muted"
@@ -264,16 +267,16 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
               </div>
             </section>
           ) : (
-            <section ref={setupRef} aria-label="Game setup" className="grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:grid-cols-5 sm:px-6">
-              <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.questions}
+            <section ref={setupRef} aria-label="Game setup" className={`grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:px-6 ${selection.ultraMode ? "sm:grid-cols-5" : "sm:grid-cols-6"}`}>
+              {!selection.ultraMode ? <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.questions}
                 <select value={selection.batchSize} onChange={(event) => setSelection((value) => ({ ...value, batchSize: event.target.value === "all" ? "all" : Number(event.target.value) as GameSelection["batchSize"] }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
                   <option value="all">All</option>
                   {setup?.batchSizes.map((size) => <option key={size} value={size}>{size}</option>)}
                 </select>
-              </label>
+              </label> : null}
               <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.level}
                 <select value={selection.level ?? "all"} onChange={(event) => setSelection((value) => ({ ...value, level: event.target.value === "all" ? null : Number(event.target.value) }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
-                  <option value="all">{GAME_COPY.allLevels}</option>
+                  {!selection.ultraMode ? <option value="all">{GAME_COPY.allLevels}</option> : null}
                   {setup?.levels.map((level) => <option key={level} value={level}>Level {level}</option>)}
                 </select>
               </label>
@@ -287,20 +290,19 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 </select>
               </label>
               <div className="flex flex-col sm:pt-6">
-                <button
-                  type="button"
-                  aria-pressed={selection.hardMode}
-                  onClick={() => setSelection((value) => ({ ...value, hardMode: !value.hardMode }))}
-                  className={`h-11 rounded-lg border px-5 text-sm font-black uppercase transition ${selection.hardMode ? "border-red-600 bg-red-600 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}
-                >
+                <label className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-black uppercase text-foreground hover:bg-surface-muted">
+                  <input type="checkbox" checked={selection.hardMode} onChange={(event) => setSelection((value) => ({ ...value, hardMode: event.target.checked }))} className="h-4 w-4 accent-red-600" />
                   {GAME_COPY.hardMode}
-                </button>
+                </label>
+              </div>
+              <div className="flex flex-col sm:pt-6">
+                <button type="button" aria-pressed={selection.ultraMode} onClick={() => setSelection((value) => ({ ...value, ultraMode: !value.ultraMode, level: value.ultraMode ? value.level : value.level ?? setup?.account.wkLevel ?? 1 }))} className={`h-11 rounded-lg border px-5 text-sm font-black uppercase transition ${selection.ultraMode ? "border-fuchsia-700 bg-fuchsia-700 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>{GAME_COPY.ultraMode}</button>
               </div>
               <div className="flex flex-col sm:pt-6">
                 <button type="button" disabled={!canStart} onClick={() => void startGame()} className="h-11 rounded-lg border border-hot bg-hot px-5 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-45">{starting ? GAME_COPY.starting : GAME_COPY.start}</button>
                 <p className="mt-1 text-center text-[10px] font-bold text-foreground/50">{availableCount} items</p>
               </div>
-              <p className="sm:col-span-5 text-xs font-semibold text-foreground/60">{availableCount < (selection.batchSize === "all" ? minimumItems : selection.batchSize) ? GAME_COPY.notEnoughItems : GAME_COPY.scoreRule}</p>
+              <p className={selection.ultraMode ? "sm:col-span-5 text-xs font-semibold text-foreground/60" : "sm:col-span-6 text-xs font-semibold text-foreground/60"}>{availableCount < (selection.ultraMode || selection.batchSize === "all" ? minimumItems : selection.batchSize) ? GAME_COPY.notEnoughItems : selection.ultraMode ? "Keep going until the first wrong answer. Time and streak keep running." : GAME_COPY.scoreRule}</p>
             </section>
           )}
 

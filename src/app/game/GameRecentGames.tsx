@@ -34,7 +34,7 @@ export default function GameRecentGames({ entries, loading, onChallenge }: Props
                   )}
                   <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All levels" : `L${entry.level}`}</span>
                   <span>{entry.questionCount} questions</span>
-                  <span>{entry.hardMode ? GAME_COPY.hardMode : GAME_COPY.regularMode}</span>
+                  <span>{entry.ultraMode ? (entry.hardMode ? "Ultra hard" : GAME_COPY.ultraMode) : entry.hardMode ? GAME_COPY.hardMode : GAME_COPY.regularMode}</span>
                 </span>
                 <span className="mt-1 block text-[10px] font-bold uppercase text-foreground/45">{formatRelativeFromNow(entry.completedAt, { style: "short" })}</span>
               </span>

@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { isGameBatchSize, isGameCategory } from "@/lib/gameMode";
+import { GAME_ULTRA_BATCH_SIZE, isGameBatchSize, isGameCategory } from "@/lib/gameMode";
 import { buildGameQuestions, hydrateGameQuestions, loadGamePool, toGameRunSummary } from "@/lib/gameModeServer";
 import { prisma } from "@/lib/prisma";
 
@@ -13,6 +13,10 @@ const bodySchema = z.object({
   level: z.number().int().min(1).max(60).nullable(),
   category: z.string().refine(isGameCategory),
   hardMode: z.boolean().default(false),
+  ultraMode: z.boolean().default(false),
+}).refine((body) => !body.ultraMode || body.level !== null, {
+  message: "Ultra Mode requires a level.",
+  path: ["level"],
 });
 
 export async function POST(request: Request, context: { params: Promise<{ accountId: string }> }) {
@@ -34,8 +38,8 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
         }
 
         const { items } = await loadGamePool(accountId, parsed.data.level, parsed.data.category);
-        const batchSize = parsed.data.batchSize === "all" ? items.length : parsed.data.batchSize;
-        const questionInputs = buildGameQuestions(items, batchSize, parsed.data.hardMode);
+        const questionCount = parsed.data.ultraMode || parsed.data.batchSize === "all" ? items.length : parsed.data.batchSize;
+        const questionInputs = buildGameQuestions(items, questionCount, parsed.data.hardMode);
         const run = await prisma.$transaction(async (tx) => {
           await tx.gameRun.updateMany({
             where: { accountId, status: "active" },
@@ -44,11 +48,11 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           return tx.gameRun.create({
             data: {
               accountId,
-              batchSize,
+              batchSize: parsed.data.ultraMode ? GAME_ULTRA_BATCH_SIZE : questionCount,
               level: parsed.data.level,
               category: parsed.data.category as GameSubjectCategory,
               hardMode: parsed.data.hardMode,
-              questionCount: batchSize,
+              questionCount,
               questions: { create: questionInputs },
             },
             include: { questions: { orderBy: { position: "asc" } } },

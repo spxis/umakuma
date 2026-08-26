@@ -65,7 +65,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                     )}
                   </td>
                   <td className="px-4 py-3 text-sm font-black text-foreground/65">
-                    {entry.hardMode ? <span className="text-red-600">Hard</span> : GAME_COPY.regularMode}
+                    {entry.ultraMode ? <span className="text-fuchsia-700">{entry.hardMode ? "Ultra hard" : "Ultra"}</span> : entry.hardMode ? <span className="text-red-600">Hard</span> : GAME_COPY.regularMode}
                   </td>
                   <td className="px-4 py-3 text-sm font-bold text-foreground/65">
                     <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All levels" : `L${entry.level}`}</span>

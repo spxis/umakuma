@@ -13,7 +13,7 @@ import {
 import { GAME_STORAGE_KEYS } from "./GameMode.constants";
 import type { GameLeaderboardFilters, GameSelection } from "./GameMode.types";
 
-const DEFAULT_SELECTION: GameSelection = { batchSize: 10, level: null, category: "mixed", hardMode: false };
+const DEFAULT_SELECTION: GameSelection = { batchSize: 10, level: null, category: "mixed", hardMode: false, ultraMode: false };
 const DEFAULT_FILTERS: GameLeaderboardFilters = {
   batchSize: "any",
   level: "any",
@@ -21,6 +21,7 @@ const DEFAULT_FILTERS: GameLeaderboardFilters = {
   range: "today",
   metric: "score",
   hardMode: false,
+  ultraMode: false,
 };
 const subscribe = () => () => {};
 
@@ -35,6 +36,7 @@ function readSelection(): GameSelection {
     level: stored.level === null || (Number.isInteger(stored.level) && Number(stored.level) > 0) ? stored.level as number | null : DEFAULT_SELECTION.level,
     category: typeof stored.category === "string" && isGameCategory(stored.category) ? stored.category : DEFAULT_SELECTION.category,
     hardMode: stored.hardMode === true,
+    ultraMode: stored.ultraMode === true,
   };
 }
 
@@ -57,6 +59,7 @@ function readFilters(): GameLeaderboardFilters {
     range: typeof stored.range === "string" && GAME_DATE_RANGES.includes(stored.range) ? stored.range : DEFAULT_FILTERS.range,
     metric: typeof stored.metric === "string" && GAME_METRICS.includes(stored.metric) ? stored.metric : DEFAULT_FILTERS.metric,
     hardMode: stored.hardMode === true,
+    ultraMode: stored.ultraMode === true,
   };
 }
 

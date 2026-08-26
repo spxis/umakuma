@@ -3,7 +3,8 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { completedRunValues, toGameRunSummary } from "@/lib/gameModeServer";
+import { gameAnswerProgress, isUltraGameBatchSize } from "@/lib/gameMode";
+import { buildGameQuestions, completedRunValues, hydrateGameQuestions, loadGamePool, toGameRunSummary } from "@/lib/gameModeServer";
 import { prisma } from "@/lib/prisma";
 
 const bodySchema = z.object({
@@ -30,6 +31,26 @@ export async function POST(
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
+        const pendingQuestion = await prisma.gameQuestion.findUnique({
+          where: { id: parsed.data.questionId },
+          include: { run: true },
+        });
+        if (!pendingQuestion || pendingQuestion.runId !== runId || pendingQuestion.run.accountId !== accountId) {
+          throw new Error("Game question not found.");
+        }
+        const pendingUltraMode = isUltraGameBatchSize(pendingQuestion.run.batchSize);
+        const shouldAppendUltraCycle =
+          pendingUltraMode &&
+          parsed.data.selectedSubjectId === pendingQuestion.targetSubjectId &&
+          pendingQuestion.position + 1 >= pendingQuestion.run.questionCount;
+        const nextCyclePool = shouldAppendUltraCycle
+          ? (await loadGamePool(accountId, pendingQuestion.run.level, pendingQuestion.run.category)).items
+          : [];
+        const nextCycleInputs = shouldAppendUltraCycle
+          ? buildGameQuestions(nextCyclePool, nextCyclePool.length, pendingQuestion.run.hardMode)
+              .map((question) => ({ ...question, position: question.position + pendingQuestion.run.questionCount }))
+          : [];
+
         const outcome = await prisma.$transaction(async (tx) => {
           const question = await tx.gameQuestion.findUnique({
             where: { id: parsed.data.questionId },
@@ -55,7 +76,17 @@ export async function POST(
           const correctCount = question.run.correctCount + (correct ? 1 : 0);
           const currentStreak = correct ? question.run.currentStreak + 1 : 0;
           const bestStreak = Math.max(question.run.bestStreak, currentStreak);
-          const complete = answeredCount >= question.run.questionCount;
+          const ultraMode = isUltraGameBatchSize(question.run.batchSize);
+          const progress = gameAnswerProgress({
+            ultraMode,
+            correct,
+            answeredCount,
+            questionCount: question.run.questionCount,
+            appendedQuestionCount: nextCycleInputs.length,
+          });
+          if (progress.appendCycle) {
+            await tx.gameQuestion.createMany({ data: nextCycleInputs.map((nextQuestion) => ({ ...nextQuestion, runId })) });
+          }
           const run = await tx.gameRun.update({
             where: { id: runId },
             data: {
@@ -63,15 +94,22 @@ export async function POST(
               correctCount,
               currentStreak,
               bestStreak,
-              ...(complete
-                ? completedRunValues(question.run.startedAt, correctCount, question.run.questionCount, bestStreak, question.run.level)
+              questionCount: progress.questionCount,
+              ...(progress.complete
+                ? completedRunValues(question.run.startedAt, correctCount, progress.questionCount, bestStreak, question.run.level)
                 : {}),
             },
           });
-          return { correct, run };
+          return { correct, run, appendedFromPosition: progress.appendCycle ? question.run.questionCount : null };
         });
 
-        return NextResponse.json({ correct: outcome.correct, run: toGameRunSummary(outcome.run) }, { status: 200 });
+        const appendedQuestions = outcome.appendedFromPosition === null
+          ? []
+          : await hydrateGameQuestions(await prisma.gameQuestion.findMany({
+              where: { runId, position: { gte: outcome.appendedFromPosition } },
+              orderBy: { position: "asc" },
+            }));
+        return NextResponse.json({ correct: outcome.correct, run: toGameRunSummary(outcome.run), appendedQuestions }, { status: 200 });
       } catch (error) {
         const message = error instanceof Error ? error.message : "Could not record the answer.";
         const expected = /not found|already|current question|Invalid answer/.test(message);
