@@ -40,7 +40,6 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                 <th className="px-4 py-3">Mode</th>
                 <th className="px-4 py-3">Difficulty</th>
                 <th className="px-4 py-3">Level</th>
-                <th className="px-4 py-3 text-right">Questions</th>
                 <th className="px-4 py-3 text-right">{GAME_METRIC_LABELS[metric]}</th>
                 {metric !== "time" ? (
                   <th className="px-4 py-3 text-right">Time</th>
@@ -70,7 +69,6 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                   <td className="px-4 py-3 text-sm font-bold text-foreground/65">
                     <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All levels" : `L${entry.level}`}</span>
                   </td>
-                  <td className="px-4 py-3 text-right text-sm font-bold text-foreground/65">{entry.questionCount}</td>
                   <td className="px-4 py-3 text-right text-xl font-black text-accent">{metricValue(entry, metric)}</td>
                   {metric !== "time" ? (
                     <td className="px-4 py-3 text-right text-sm font-bold text-foreground/65">
@@ -88,7 +86,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                     <p className="font-black">{member.nickname}</p>
                     <p className="text-xs font-semibold">@{member.wkUsername}</p>
                   </td>
-                  <td className="px-4 py-3 text-sm font-bold" colSpan={4}>Not played</td>
+                  <td className="px-4 py-3 text-sm font-bold" colSpan={3}>Not played</td>
                   <td className="px-4 py-3 text-right text-xl font-black">{metric === "time" ? "-" : "0"}</td>
                   {metric !== "time" ? <td className="px-4 py-3 text-right text-sm font-bold">-</td> : null}
                   <td className="px-4 py-3 text-right text-sm font-bold sm:px-6">0/0</td>
