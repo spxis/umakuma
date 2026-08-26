@@ -274,7 +274,11 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
               </label>
               <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.category}
                 <select value={selection.category} onChange={(event) => setSelection((value) => ({ ...value, category: event.target.value as GameSelection["category"] }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
-                  {setup?.categories.map((category) => <option key={category} value={category}>{GAME_CATEGORY_LABELS[category]}</option>)}
+                  {setup?.categories.map((category) => (
+                    <option key={category} value={category}>
+                      {GAME_CATEGORY_LABELS[category]} ({selection.level === null ? setup.totalCounts[category] : setup.countsByLevel[selection.level]?.[category] ?? 0})
+                    </option>
+                  ))}
                 </select>
               </label>
               <div className="flex flex-col sm:pt-6">
