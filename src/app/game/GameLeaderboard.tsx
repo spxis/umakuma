@@ -1,6 +1,6 @@
 import { formatGameDuration, formatGameScore, type GameMetric } from "@/lib/gameMode";
 import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
-import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, GAME_MIXED_PILL_CLASS } from "./GameMode.constants";
+import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, GAME_MIXED_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
 import type { GameLeaderboardDay } from "./GameMode.types";
 
 type Props = {
@@ -56,7 +56,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                     <p className="text-xs font-semibold text-foreground/55">@{entry.wkUsername}</p>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex flex-wrap items-center gap-1.5 text-sm font-bold text-foreground/65">
+                    <div className="flex flex-nowrap items-center gap-1.5 whitespace-nowrap text-sm font-bold text-foreground/65">
                       <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
                     {entry.category === "mixed" ? (
                       <span className={GAME_MIXED_PILL_CLASS}>Mixed</span>
@@ -66,7 +66,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm font-black text-foreground/65">
-                    {entry.ultraMode ? <span className="text-fuchsia-700">{entry.hardMode ? "Ultra hard" : "Ultra"}</span> : entry.hardMode ? <span className="text-red-600">Hard</span> : GAME_COPY.regularMode}
+                    <span className={entry.ultraMode ? "text-fuchsia-700" : entry.hardMode ? "text-red-600" : undefined}>{gameDifficultyLabel(entry.hardMode, entry.ultraMode)}</span>
                   </td>
                   <td className="px-4 py-3 text-right text-xl font-black text-accent">{metricValue(entry, metric)}</td>
                   {metric !== "time" ? (

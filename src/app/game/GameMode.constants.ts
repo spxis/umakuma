@@ -61,3 +61,8 @@ export const GAME_METRIC_LABELS: Record<GameMetric, string> = {
 
 export const GAME_MIXED_PILL_CLASS = "subject-pill border-line bg-surface-muted text-foreground";
 export const GAME_LEVEL_PILL_CLASS = "subject-pill border-accent/30 bg-accent/10 text-accent";
+
+export function gameDifficultyLabel(hardMode: boolean, ultraMode: boolean): string {
+  if (ultraMode) return hardMode ? "Ultra hard" : "Ultra";
+  return hardMode ? "Hard" : GAME_COPY.regularMode;
+}
