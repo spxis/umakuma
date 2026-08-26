@@ -19,13 +19,20 @@ describe("Game Mode", () => {
   it("maps arrows and number keys to regular and hard-mode choices", () => {
     expect(gameOptionIndexForKey("ArrowLeft", 3)).toBe(0);
     expect(gameOptionIndexForKey("ArrowUp", 3)).toBe(1);
+    expect(gameOptionIndexForKey("ArrowDown", 3)).toBe(1);
     expect(gameOptionIndexForKey("ArrowRight", 3)).toBe(2);
     expect(gameOptionIndexForKey("1", 3)).toBe(0);
     expect(gameOptionIndexForKey("2", 3)).toBe(1);
     expect(gameOptionIndexForKey("3", 3)).toBe(2);
+    expect(gameOptionIndexForKey("4", 3)).toBe(0);
+    expect(gameOptionIndexForKey("5", 3)).toBe(1);
+    expect(gameOptionIndexForKey("6", 3)).toBe(2);
     expect(gameOptionIndexForKey("2", 2)).toBeNull();
     expect(gameOptionIndexForKey("ArrowUp", 2)).toBeNull();
+    expect(gameOptionIndexForKey("ArrowDown", 2)).toBeNull();
+    expect(gameOptionIndexForKey("5", 2)).toBeNull();
     expect(gameOptionIndexForKey("3", 2)).toBe(1);
+    expect(gameOptionIndexForKey("6", 2)).toBe(1);
   });
 
   it("rewards every tenth and higher levels", () => {

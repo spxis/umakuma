@@ -84,9 +84,9 @@ export function isGameCategory(value: string): value is GameCategory {
 }
 
 export function gameOptionIndexForKey(key: string, optionCount: 2 | 3): number | null {
-  if (key === "ArrowLeft" || key === "1") return 0;
-  if (optionCount === 3 && (key === "ArrowUp" || key === "2")) return 1;
-  if (key === "ArrowRight" || key === "3") return optionCount - 1;
+  if (key === "ArrowLeft" || key === "1" || key === "4") return 0;
+  if (optionCount === 3 && (key === "ArrowUp" || key === "ArrowDown" || key === "2" || key === "5")) return 1;
+  if (key === "ArrowRight" || key === "3" || key === "6") return optionCount - 1;
   return null;
 }
 
