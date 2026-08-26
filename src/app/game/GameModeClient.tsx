@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { formatGameDuration, formatGameScore, type GameLeaderboardEntry, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
+import { formatGameDuration, formatGameScore, isGameBatchSize, type GameLeaderboardEntry, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
 import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
 import GameLeaderboard from "./GameLeaderboard";
 import GameLeaderboardFilters from "./GameLeaderboardFilters";
@@ -21,6 +21,10 @@ import type {
 import { usePersistedGameSettings } from "./usePersistedGameSettings";
 
 const ANSWER_FLASH_MS = 250;
+
+function gameSelectionBatchSize(batchSize: number): GameSelection["batchSize"] {
+  return isGameBatchSize(batchSize) ? batchSize : "all";
+}
 
 export default function GameModeClient({ accountId, nickname, wkUsername }: GameModeClientProps) {
   const [phase, setPhase] = useState<GamePhase>("lobby");
@@ -97,7 +101,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
       ? setup.totalCounts[selection.category]
       : setup.countsByLevel[selection.level]?.[selection.category] ?? 0
     : 0;
-  const canStart = Boolean(setup && availableCount >= selection.batchSize && !starting);
+  const canStart = Boolean(setup && availableCount >= (selection.batchSize === "all" ? 2 : selection.batchSize) && !starting);
   const currentQuestion = activeGame?.questions[questionIndex] ?? null;
   const finishedRun = phase === "results" ? activeGame?.run ?? null : null;
 
@@ -107,7 +111,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
         ? setup.totalCounts[gameSelection.category]
         : setup.countsByLevel[gameSelection.level]?.[gameSelection.category] ?? 0
       : 0;
-    if (!setup || gameAvailableCount < gameSelection.batchSize || starting) return;
+    if (!setup || gameAvailableCount < (gameSelection.batchSize === "all" ? 2 : gameSelection.batchSize) || starting) return;
     setStarting(true);
     setGameError(null);
     try {
@@ -175,7 +179,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   }
 
   function challengeRecentRun(entry: GameLeaderboardEntry) {
-    setSelection({ batchSize: entry.batchSize, level: entry.level, category: entry.category });
+    setSelection({ batchSize: gameSelectionBatchSize(entry.batchSize), level: entry.level, category: entry.category });
     resetToLobby();
     setChallengeRequest((request) => request + 1);
   }
@@ -237,7 +241,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 <button
                   type="button"
                   disabled={starting}
-                  onClick={() => void startGame({ batchSize: finishedRun.batchSize, level: finishedRun.level, category: finishedRun.category })}
+                  onClick={() => void startGame({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category })}
                   className="rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
                 >
                   {starting ? GAME_COPY.starting : "Play same settings"}
@@ -245,7 +249,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 <button
                   type="button"
                   onClick={() => {
-                    setSelection({ batchSize: finishedRun.batchSize, level: finishedRun.level, category: finishedRun.category });
+                    setSelection({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category });
                     resetToLobby();
                   }}
                   className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black uppercase text-foreground hover:bg-surface-muted"
@@ -257,7 +261,8 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
           ) : (
             <section ref={setupRef} aria-label="Game setup" className="grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:grid-cols-4 sm:px-6">
               <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.questions}
-                <select value={selection.batchSize} onChange={(event) => setSelection((value) => ({ ...value, batchSize: Number(event.target.value) as GameSelection["batchSize"] }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
+                <select value={selection.batchSize} onChange={(event) => setSelection((value) => ({ ...value, batchSize: event.target.value === "all" ? "all" : Number(event.target.value) as GameSelection["batchSize"] }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
+                  <option value="all">All</option>
                   {setup?.batchSizes.map((size) => <option key={size} value={size}>{size}</option>)}
                 </select>
               </label>
@@ -276,7 +281,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 <button type="button" disabled={!canStart} onClick={() => void startGame()} className="h-11 rounded-lg border border-hot bg-hot px-5 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-45">{starting ? GAME_COPY.starting : GAME_COPY.start}</button>
                 <p className="mt-1 text-center text-[10px] font-bold text-foreground/50">{availableCount} items</p>
               </div>
-              <p className="sm:col-span-4 text-xs font-semibold text-foreground/60">{availableCount < selection.batchSize ? GAME_COPY.notEnoughItems : GAME_COPY.scoreRule}</p>
+              <p className="sm:col-span-4 text-xs font-semibold text-foreground/60">{availableCount < (selection.batchSize === "all" ? 2 : selection.batchSize) ? GAME_COPY.notEnoughItems : GAME_COPY.scoreRule}</p>
             </section>
           )}
 

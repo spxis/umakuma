@@ -47,7 +47,7 @@ export type ActiveGame = {
 };
 
 export type GameSelection = {
-  batchSize: GameBatchSize;
+  batchSize: "all" | GameBatchSize;
   level: number | null;
   category: GameCategory;
 };

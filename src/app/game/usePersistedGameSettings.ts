@@ -26,7 +26,11 @@ const subscribe = () => () => {};
 function readSelection(): GameSelection {
   const stored = getStoredJson<Partial<GameSelection>>(GAME_STORAGE_KEYS.selection, {});
   return {
-    batchSize: isGameBatchSize(Number(stored.batchSize)) ? Number(stored.batchSize) as GameSelection["batchSize"] : DEFAULT_SELECTION.batchSize,
+    batchSize: stored.batchSize === "all"
+      ? "all"
+      : isGameBatchSize(Number(stored.batchSize))
+        ? Number(stored.batchSize) as GameSelection["batchSize"]
+        : DEFAULT_SELECTION.batchSize,
     level: stored.level === null || (Number.isInteger(stored.level) && Number(stored.level) > 0) ? stored.level as number | null : DEFAULT_SELECTION.level,
     category: typeof stored.category === "string" && isGameCategory(stored.category) ? stored.category : DEFAULT_SELECTION.category,
   };

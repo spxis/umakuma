@@ -7,7 +7,6 @@ import { SUBJECT_TYPES, isSubjectType, type SubjectType } from "@/lib/domainCons
 import {
   calculateGameScore,
   gamePoolItemMatches,
-  type GameBatchSize,
   type GameCategory,
   type GameOption,
   type GameQuestionPayload,
@@ -166,7 +165,10 @@ export async function loadGamePool(
   return { account: { nickname: account.nickname, wkUsername: account.wkUsername, wkLevel: account.wkLevel }, items };
 }
 
-export function buildGameQuestions(pool: GameCatalogItem[], batchSize: GameBatchSize) {
+export function buildGameQuestions(pool: GameCatalogItem[], batchSize: number) {
+  if (!Number.isInteger(batchSize) || batchSize < 2) {
+    throw new Error("At least 2 eligible items are required.");
+  }
   const targets = shuffle(pool).slice(0, batchSize);
   if (targets.length < batchSize) throw new Error(`Only ${targets.length} eligible items are available.`);
 
@@ -223,7 +225,7 @@ export function toGameRunSummary(run: {
 }): GameRunSummary {
   return {
     ...run,
-    batchSize: run.batchSize as GameBatchSize,
+    batchSize: run.batchSize,
     category: run.category as GameCategory,
     startedAt: run.startedAt.toISOString(),
     completedAt: run.completedAt?.toISOString() ?? null,

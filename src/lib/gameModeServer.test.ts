@@ -37,4 +37,18 @@ describe("buildGameQuestions", () => {
     expect(questions).toHaveLength(5);
     expect(new Set(questions.map((question) => question.targetSubjectId)).size).toBe(5);
   });
+
+  it("uses every eligible item for an all-items round", () => {
+    const pool = Array.from({ length: 7 }, (_, index) => gameItem(index + 1));
+    const questions = buildGameQuestions(pool, pool.length);
+
+    expect(questions).toHaveLength(pool.length);
+    expect(new Set(questions.map((question) => question.targetSubjectId))).toEqual(
+      new Set(pool.map((item) => item.subjectId)),
+    );
+  });
+
+  it("rejects an all-items pool without two choices", () => {
+    expect(() => buildGameQuestions([gameItem(1)], 1)).toThrow("At least 2 eligible items are required.");
+  });
 });

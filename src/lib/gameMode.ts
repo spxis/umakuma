@@ -41,7 +41,7 @@ export type GameQuestionPayload = {
 export type GameRunSummary = {
   id: string;
   accountId: string;
-  batchSize: GameBatchSize;
+  batchSize: number;
   level: number | null;
   category: GameCategory;
   questionCount: number;
@@ -62,7 +62,7 @@ export type GameLeaderboardEntry = {
   nickname: string;
   wkUsername: string;
   category: GameCategory;
-  batchSize: GameBatchSize;
+  batchSize: number;
   level: number | null;
   score: number;
   durationMs: number;

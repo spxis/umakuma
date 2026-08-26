@@ -9,7 +9,7 @@ import { buildGameQuestions, hydrateGameQuestions, loadGamePool, toGameRunSummar
 import { prisma } from "@/lib/prisma";
 
 const bodySchema = z.object({
-  batchSize: z.number().int().refine(isGameBatchSize),
+  batchSize: z.union([z.literal("all"), z.number().int().refine(isGameBatchSize)]),
   level: z.number().int().min(1).max(60).nullable(),
   category: z.string().refine(isGameCategory),
 });
@@ -33,7 +33,8 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
         }
 
         const { items } = await loadGamePool(accountId, parsed.data.level, parsed.data.category);
-        const questionInputs = buildGameQuestions(items, parsed.data.batchSize);
+        const batchSize = parsed.data.batchSize === "all" ? items.length : parsed.data.batchSize;
+        const questionInputs = buildGameQuestions(items, batchSize);
         const run = await prisma.$transaction(async (tx) => {
           await tx.gameRun.updateMany({
             where: { accountId, status: "active" },
@@ -42,10 +43,10 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           return tx.gameRun.create({
             data: {
               accountId,
-              batchSize: parsed.data.batchSize,
+              batchSize,
               level: parsed.data.level,
               category: parsed.data.category as GameSubjectCategory,
-              questionCount: parsed.data.batchSize,
+              questionCount: batchSize,
               questions: { create: questionInputs },
             },
             include: { questions: { orderBy: { position: "asc" } } },
