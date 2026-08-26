@@ -50,6 +50,7 @@ export type GameSelection = {
   batchSize: "all" | GameBatchSize;
   level: number | null;
   category: GameCategory;
+  hardMode: boolean;
 };
 
 export type GameLeaderboardFilters = {
@@ -58,4 +59,5 @@ export type GameLeaderboardFilters = {
   mode: GameLeaderboardMode;
   range: GameDateRange;
   metric: GameMetric;
+  hardMode: boolean;
 };

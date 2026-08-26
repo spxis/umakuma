@@ -23,6 +23,7 @@ const querySchema = z.object({
   category: z.union([z.literal("all"), z.enum(GAME_CATEGORIES)]),
   range: z.enum(GAME_DATE_RANGES),
   metric: z.enum(GAME_METRICS),
+  hardMode: z.enum(["all", "hard"]).default("all"),
 });
 
 function sortEntries(entries: GameLeaderboardEntry[], metric: GameMetric): GameLeaderboardEntry[] {
@@ -57,6 +58,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
           batchSize: true,
           level: true,
           category: true,
+          hardMode: true,
           durationMs: true,
           bestStreak: true,
           correctCount: true,
@@ -76,6 +78,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
                   ? null
                   : parsed.data.level,
               category: parsed.data.category === "all" ? undefined : parsed.data.category,
+              hardMode: parsed.data.hardMode === "hard" ? true : undefined,
               completedDatePst: { in: dateKeys },
               durationMs: { not: null },
             },
@@ -102,6 +105,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             nickname: run.account.nickname,
             wkUsername: run.account.wkUsername,
             category: run.category,
+            hardMode: run.hardMode,
             batchSize: run.batchSize as GameLeaderboardEntry["batchSize"],
             level: run.level,
             score: calculateGameScore(run.correctCount, run.questionCount, run.durationMs, run.level),

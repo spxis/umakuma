@@ -40,7 +40,7 @@ export async function POST(
           }
           if (question.run.status !== "active") throw new Error("This game is already complete.");
           if (question.position !== question.run.answeredCount) throw new Error("Answer the current question first.");
-          if (![question.leftSubjectId, question.rightSubjectId].includes(parsed.data.selectedSubjectId)) {
+          if (![question.leftSubjectId, question.middleSubjectId, question.rightSubjectId].includes(parsed.data.selectedSubjectId)) {
             throw new Error("Invalid answer choice.");
           }
 

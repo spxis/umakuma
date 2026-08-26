@@ -51,4 +51,25 @@ describe("buildGameQuestions", () => {
   it("rejects an all-items pool without two choices", () => {
     expect(() => buildGameQuestions([gameItem(1)], 1)).toThrow("At least 2 eligible items are required.");
   });
+
+  it("builds hard-mode questions with three distinct choices", () => {
+    const questions = buildGameQuestions(Array.from({ length: 12 }, (_, index) => gameItem(index + 1)), 6, true);
+
+    expect(questions).toHaveLength(6);
+    for (const question of questions) {
+      expect(question.middleSubjectId).not.toBeNull();
+      expect(new Set([question.leftSubjectId, question.middleSubjectId, question.rightSubjectId]).size).toBe(3);
+    }
+
+    const targetPositions = questions.map((question) =>
+      [question.leftSubjectId, question.middleSubjectId, question.rightSubjectId].indexOf(question.targetSubjectId),
+    );
+    expect(targetPositions.filter((position) => position === 0)).toHaveLength(2);
+    expect(targetPositions.filter((position) => position === 1)).toHaveLength(2);
+    expect(targetPositions.filter((position) => position === 2)).toHaveLength(2);
+  });
+
+  it("requires three eligible items for hard mode", () => {
+    expect(() => buildGameQuestions([gameItem(1), gameItem(2)], 2, true)).toThrow("At least 3 eligible items are required.");
+  });
 });

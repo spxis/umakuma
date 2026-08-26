@@ -39,6 +39,7 @@ export default function GameLeaderboardFilters({ filters, setup, onChange }: Pro
       <div className="inline-flex rounded-lg border border-line bg-surface p-1">
         {Object.entries(GAME_METRIC_LABELS).map(([value, label]) => <button key={value} type="button" onClick={() => onChange({ ...filters, metric: value as Filters["metric"] })} className={`rounded-md px-2.5 py-1.5 text-xs font-bold ${filters.metric === value ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}>{label}</button>)}
       </div>
+      <button type="button" aria-pressed={filters.hardMode} onClick={() => onChange({ ...filters, hardMode: !filters.hardMode })} className={`h-9 rounded-lg border px-3 text-xs font-black uppercase ${filters.hardMode ? "border-red-600 bg-red-600 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>Hard mode</button>
     </section>
   );
 }

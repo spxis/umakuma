@@ -41,7 +41,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
   const [challengeRequest, setChallengeRequest] = useState(0);
   const setupRef = useRef<HTMLElement | null>(null);
-  const leaderboardKey = `${leaderboardFilters.batchSize}:${leaderboardFilters.level ?? "all"}:${leaderboardFilters.mode}:${leaderboardFilters.range}:${leaderboardFilters.metric}:${leaderboardRefresh}`;
+  const leaderboardKey = `${leaderboardFilters.batchSize}:${leaderboardFilters.level ?? "all"}:${leaderboardFilters.mode}:${leaderboardFilters.range}:${leaderboardFilters.metric}:${leaderboardFilters.hardMode}:${leaderboardRefresh}`;
   const [leaderboardState, setLeaderboardState] = useState<{
     key: string;
     data: GameLeaderboardResponse | null;
@@ -70,6 +70,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
       category: leaderboardFilters.mode,
       range: leaderboardFilters.range,
       metric: leaderboardFilters.metric,
+      hardMode: leaderboardFilters.hardMode ? "hard" : "all",
     });
     void fetch(`/api/game/${accountId}/leaderboard?${params}`, { signal: controller.signal, cache: "no-store" })
       .then(async (response) => {
@@ -101,7 +102,8 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
       ? setup.totalCounts[selection.category]
       : setup.countsByLevel[selection.level]?.[selection.category] ?? 0
     : 0;
-  const canStart = Boolean(setup && availableCount >= (selection.batchSize === "all" ? 2 : selection.batchSize) && !starting);
+  const minimumItems = selection.hardMode ? 3 : 2;
+  const canStart = Boolean(setup && availableCount >= (selection.batchSize === "all" ? minimumItems : selection.batchSize) && !starting);
   const currentQuestion = activeGame?.questions[questionIndex] ?? null;
   const finishedRun = phase === "results" ? activeGame?.run ?? null : null;
 
@@ -111,7 +113,8 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
         ? setup.totalCounts[gameSelection.category]
         : setup.countsByLevel[gameSelection.level]?.[gameSelection.category] ?? 0
       : 0;
-    if (!setup || gameAvailableCount < (gameSelection.batchSize === "all" ? 2 : gameSelection.batchSize) || starting) return;
+    const gameMinimumItems = gameSelection.hardMode ? 3 : 2;
+    if (!setup || gameAvailableCount < (gameSelection.batchSize === "all" ? gameMinimumItems : gameSelection.batchSize) || starting) return;
     setStarting(true);
     setGameError(null);
     try {
@@ -122,6 +125,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
           batchSize: gameSelection.batchSize,
           level: gameSelection.level,
           category: gameSelection.category,
+          hardMode: gameSelection.hardMode,
         }),
       });
       const payload = (await response.json()) as ActiveGame & { error?: string };
@@ -179,7 +183,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   }
 
   function challengeRecentRun(entry: GameLeaderboardEntry) {
-    setSelection({ batchSize: gameSelectionBatchSize(entry.batchSize), level: entry.level, category: entry.category });
+    setSelection({ batchSize: gameSelectionBatchSize(entry.batchSize), level: entry.level, category: entry.category, hardMode: entry.hardMode });
     resetToLobby();
     setChallengeRequest((request) => request + 1);
   }
@@ -230,6 +234,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                   <SubjectTypePill type={finishedRun.category}>{GAME_CATEGORY_LABELS[finishedRun.category]}</SubjectTypePill>
                 )}
                 <span>{finishedRun.questionCount} questions</span>
+                <span>{finishedRun.hardMode ? GAME_COPY.hardMode : GAME_COPY.regularMode}</span>
               </div>
               <p className="mt-3 text-7xl font-black leading-none text-accent sm:text-9xl">{formatGameScore(finishedRun.score)}</p>
               <div className="mx-auto mt-6 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
@@ -241,7 +246,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 <button
                   type="button"
                   disabled={starting}
-                  onClick={() => void startGame({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category })}
+                  onClick={() => void startGame({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category, hardMode: finishedRun.hardMode })}
                   className="rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
                 >
                   {starting ? GAME_COPY.starting : "Play same settings"}
@@ -249,7 +254,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 <button
                   type="button"
                   onClick={() => {
-                    setSelection({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category });
+                    setSelection({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category, hardMode: finishedRun.hardMode });
                     resetToLobby();
                   }}
                   className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black uppercase text-foreground hover:bg-surface-muted"
@@ -259,7 +264,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
               </div>
             </section>
           ) : (
-            <section ref={setupRef} aria-label="Game setup" className="grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:grid-cols-4 sm:px-6">
+            <section ref={setupRef} aria-label="Game setup" className="grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:grid-cols-5 sm:px-6">
               <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.questions}
                 <select value={selection.batchSize} onChange={(event) => setSelection((value) => ({ ...value, batchSize: event.target.value === "all" ? "all" : Number(event.target.value) as GameSelection["batchSize"] }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
                   <option value="all">All</option>
@@ -282,10 +287,20 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 </select>
               </label>
               <div className="flex flex-col sm:pt-6">
+                <button
+                  type="button"
+                  aria-pressed={selection.hardMode}
+                  onClick={() => setSelection((value) => ({ ...value, hardMode: !value.hardMode }))}
+                  className={`h-11 rounded-lg border px-5 text-sm font-black uppercase transition ${selection.hardMode ? "border-red-600 bg-red-600 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}
+                >
+                  {GAME_COPY.hardMode}
+                </button>
+              </div>
+              <div className="flex flex-col sm:pt-6">
                 <button type="button" disabled={!canStart} onClick={() => void startGame()} className="h-11 rounded-lg border border-hot bg-hot px-5 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-45">{starting ? GAME_COPY.starting : GAME_COPY.start}</button>
                 <p className="mt-1 text-center text-[10px] font-bold text-foreground/50">{availableCount} items</p>
               </div>
-              <p className="sm:col-span-4 text-xs font-semibold text-foreground/60">{availableCount < (selection.batchSize === "all" ? 2 : selection.batchSize) ? GAME_COPY.notEnoughItems : GAME_COPY.scoreRule}</p>
+              <p className="sm:col-span-5 text-xs font-semibold text-foreground/60">{availableCount < (selection.batchSize === "all" ? minimumItems : selection.batchSize) ? GAME_COPY.notEnoughItems : GAME_COPY.scoreRule}</p>
             </section>
           )}
 

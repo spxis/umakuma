@@ -317,6 +317,7 @@ model GameRun {
   batchSize     Int
   level         Int?
   category      GameSubjectCategory
+  hardMode      Boolean             @default(false)
   questionCount Int
   answeredCount Int                 @default(0)
   correctCount  Int                 @default(0)
@@ -344,6 +345,7 @@ model GameQuestion {
   position          Int
   targetSubjectId   Int
   leftSubjectId     Int
+  middleSubjectId   Int?
   rightSubjectId    Int
   answerType        GameAnswerType
   selectedSubjectId Int?

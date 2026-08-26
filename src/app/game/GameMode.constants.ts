@@ -23,6 +23,8 @@ export const GAME_COPY = {
   streak: "Best streak",
   correct: "Correct",
   complete: "Round complete",
+  hardMode: "Hard mode",
+  regularMode: "Regular",
   playAgain: "Play again",
   questionsCorrect: "correct",
 } as const;

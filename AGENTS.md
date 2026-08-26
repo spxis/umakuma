@@ -136,6 +136,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Game scoring must reward 0.1-second differences while the speed bonus remains and include a bounded Level 1–60 bonus. Keep combined level and speed modifiers below one correct answer for every batch size so accuracy always outranks both.
 - Game rounds must use disjoint targets and distractors with unique distractors when the pool permits, then balance and shuffle correct-answer sides. Constrained pools may reuse non-target choices as a fallback.
 - Game Questions must offer `All` in both controls: setup `All` starts a round with every eligible item for the selected level/category, while scoreboard `All` includes every question-count size.
+- Game Hard Mode uses three distinct left/middle/right choices with keyboard controls Left/Up/Right and `1`/`2`/`3`; runs default to regular mode for backward compatibility, and scoreboards must expose hard-mode filtering plus a Difficulty column.
 - Level-specific game leaderboards may list only accounts whose WaniKani level is at least the selected report level. Any/All-level reports may include every account.
 
 ## Don't touch

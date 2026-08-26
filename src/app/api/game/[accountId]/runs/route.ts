@@ -12,6 +12,7 @@ const bodySchema = z.object({
   batchSize: z.union([z.literal("all"), z.number().int().refine(isGameBatchSize)]),
   level: z.number().int().min(1).max(60).nullable(),
   category: z.string().refine(isGameCategory),
+  hardMode: z.boolean().default(false),
 });
 
 export async function POST(request: Request, context: { params: Promise<{ accountId: string }> }) {
@@ -34,7 +35,7 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
 
         const { items } = await loadGamePool(accountId, parsed.data.level, parsed.data.category);
         const batchSize = parsed.data.batchSize === "all" ? items.length : parsed.data.batchSize;
-        const questionInputs = buildGameQuestions(items, batchSize);
+        const questionInputs = buildGameQuestions(items, batchSize, parsed.data.hardMode);
         const run = await prisma.$transaction(async (tx) => {
           await tx.gameRun.updateMany({
             where: { accountId, status: "active" },
@@ -46,6 +47,7 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
               batchSize,
               level: parsed.data.level,
               category: parsed.data.category as GameSubjectCategory,
+              hardMode: parsed.data.hardMode,
               questionCount: batchSize,
               questions: { create: questionInputs },
             },

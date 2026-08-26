@@ -165,9 +165,10 @@ export async function loadGamePool(
   return { account: { nickname: account.nickname, wkUsername: account.wkUsername, wkLevel: account.wkLevel }, items };
 }
 
-export function buildGameQuestions(pool: GameCatalogItem[], batchSize: number) {
-  if (!Number.isInteger(batchSize) || batchSize < 2) {
-    throw new Error("At least 2 eligible items are required.");
+export function buildGameQuestions(pool: GameCatalogItem[], batchSize: number, hardMode = false) {
+  const minimumItems = hardMode ? 3 : 2;
+  if (!Number.isInteger(batchSize) || batchSize < minimumItems) {
+    throw new Error(`At least ${minimumItems} eligible items are required.`);
   }
   const targets = shuffle(pool).slice(0, batchSize);
   if (targets.length < batchSize) throw new Error(`Only ${targets.length} eligible items are available.`);
@@ -176,31 +177,38 @@ export function buildGameQuestions(pool: GameCatalogItem[], batchSize: number) {
   const unusedDistractors = new Set(
     pool.filter((item) => !targetIds.has(item.subjectId)).map((item) => item.subjectId),
   );
-  const targetSides = shuffle([
-    ...Array.from({ length: Math.ceil(batchSize / 2) }, () => true),
-    ...Array.from({ length: Math.floor(batchSize / 2) }, () => false),
-  ]);
+  const targetPositions = shuffle(Array.from({ length: batchSize }, (_, index) => index % (hardMode ? 3 : 2)));
 
   return targets.map((target, position) => {
-    const unusedPool = pool.filter((item) => unusedDistractors.has(item.subjectId));
-    const nonTargetPool = pool.filter((item) => !targetIds.has(item.subjectId));
-    const distractor = chooseDistractor(target, unusedPool)
+    const chooseNextDistractor = (excludedSubjectIds: Set<number>) => {
+      const unusedPool = pool.filter((item) => unusedDistractors.has(item.subjectId) && !excludedSubjectIds.has(item.subjectId));
+      const nonTargetPool = pool.filter((item) => !targetIds.has(item.subjectId) && !excludedSubjectIds.has(item.subjectId));
+      const fallbackPool = pool.filter((item) => !excludedSubjectIds.has(item.subjectId));
+      return chooseDistractor(target, unusedPool)
       ?? chooseDistractor(target, nonTargetPool)
-      ?? chooseDistractor(target, pool);
-    if (!distractor) throw new Error("Not enough distinct items are available.");
-    unusedDistractors.delete(distractor.subjectId);
-    const canAskReading =
-      target.subjectType !== SUBJECT_TYPES.radical &&
-      Boolean(target.primaryReading) &&
-      Boolean(distractor.primaryReading) &&
-      target.primaryReading !== distractor.primaryReading;
+      ?? chooseDistractor(target, fallbackPool);
+    };
+    const firstDistractor = chooseNextDistractor(new Set([target.subjectId]));
+    if (!firstDistractor) throw new Error("Not enough distinct items are available.");
+    unusedDistractors.delete(firstDistractor.subjectId);
+    const secondDistractor = hardMode
+      ? chooseNextDistractor(new Set([target.subjectId, firstDistractor.subjectId]))
+      : null;
+    if (hardMode && !secondDistractor) throw new Error("Not enough distinct items are available.");
+    if (secondDistractor) unusedDistractors.delete(secondDistractor.subjectId);
+    const distractors = secondDistractor ? [firstDistractor, secondDistractor] : [firstDistractor];
+    const canAskReading = target.subjectType !== SUBJECT_TYPES.radical && Boolean(target.primaryReading) && distractors.every(
+      (distractor) => Boolean(distractor.primaryReading) && target.primaryReading !== distractor.primaryReading,
+    );
     const answerType = canAskReading && Math.random() < 0.5 ? GameAnswerType.reading : GameAnswerType.meaning;
-    const targetOnLeft = targetSides[position]!;
+    const options = [...distractors];
+    options.splice(targetPositions[position]!, 0, target);
     return {
       position,
       targetSubjectId: target.subjectId,
-      leftSubjectId: targetOnLeft ? target.subjectId : distractor.subjectId,
-      rightSubjectId: targetOnLeft ? distractor.subjectId : target.subjectId,
+      leftSubjectId: options[0]!.subjectId,
+      middleSubjectId: hardMode ? options[1]!.subjectId : null,
+      rightSubjectId: options[hardMode ? 2 : 1]!.subjectId,
       answerType,
     };
   });
@@ -212,6 +220,7 @@ export function toGameRunSummary(run: {
   batchSize: number;
   level: number | null;
   category: GameSubjectCategory;
+  hardMode: boolean;
   questionCount: number;
   answeredCount: number;
   correctCount: number;
@@ -233,9 +242,9 @@ export function toGameRunSummary(run: {
 }
 
 export async function hydrateGameQuestions(
-  questions: Array<{ id: string; position: number; targetSubjectId: number; leftSubjectId: number; rightSubjectId: number; answerType: GameAnswerType }>,
+  questions: Array<{ id: string; position: number; targetSubjectId: number; leftSubjectId: number; middleSubjectId: number | null; rightSubjectId: number; answerType: GameAnswerType }>,
 ): Promise<GameQuestionPayload[]> {
-  const subjectIds = Array.from(new Set(questions.flatMap((row) => [row.targetSubjectId, row.leftSubjectId, row.rightSubjectId])));
+  const subjectIds = Array.from(new Set(questions.flatMap((row) => [row.targetSubjectId, row.leftSubjectId, row.middleSubjectId, row.rightSubjectId]).filter((id): id is number => id !== null)));
   const rows = await prisma.wkSubjectCatalog.findMany({
     where: { wkSubjectId: { in: subjectIds } },
     select: { wkSubjectId: true, subjectType: true, level: true, characters: true, slug: true, meanings: true, readings: true },
@@ -257,8 +266,9 @@ export async function hydrateGameQuestions(
   return questions.map((question) => {
     const target = optionById.get(question.targetSubjectId);
     const left = optionById.get(question.leftSubjectId);
+    const middle = question.middleSubjectId === null ? null : optionById.get(question.middleSubjectId);
     const right = optionById.get(question.rightSubjectId);
-    if (!target || !left || !right) throw new Error("Game question subjects are unavailable.");
+    if (!target || !left || (question.middleSubjectId !== null && !middle) || !right) throw new Error("Game question subjects are unavailable.");
     const prompt = question.answerType === GameAnswerType.reading ? target.primaryReading : target.primaryMeaning;
     if (!prompt) throw new Error("Game question prompt is unavailable.");
     return {
@@ -266,7 +276,7 @@ export async function hydrateGameQuestions(
       position: question.position,
       answerType: question.answerType,
       prompt,
-      options: [left, right],
+      options: middle ? [left, middle, right] : [left, right],
     };
   });
 }

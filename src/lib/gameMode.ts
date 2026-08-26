@@ -35,7 +35,7 @@ export type GameQuestionPayload = {
   position: number;
   answerType: GameAnswerType;
   prompt: string;
-  options: [GameOption, GameOption];
+  options: [GameOption, GameOption] | [GameOption, GameOption, GameOption];
 };
 
 export type GameRunSummary = {
@@ -44,6 +44,7 @@ export type GameRunSummary = {
   batchSize: number;
   level: number | null;
   category: GameCategory;
+  hardMode: boolean;
   questionCount: number;
   answeredCount: number;
   correctCount: number;
@@ -62,6 +63,7 @@ export type GameLeaderboardEntry = {
   nickname: string;
   wkUsername: string;
   category: GameCategory;
+  hardMode: boolean;
   batchSize: number;
   level: number | null;
   score: number;
@@ -79,6 +81,13 @@ export function isGameBatchSize(value: number): value is GameBatchSize {
 
 export function isGameCategory(value: string): value is GameCategory {
   return GAME_CATEGORIES.includes(value as GameCategory);
+}
+
+export function gameOptionIndexForKey(key: string, optionCount: 2 | 3): number | null {
+  if (key === "ArrowLeft" || key === "1") return 0;
+  if (optionCount === 3 && (key === "ArrowUp" || key === "2")) return 1;
+  if (key === "ArrowRight" || key === "3") return optionCount - 1;
+  return null;
 }
 
 export function gameLeaderboardMemberIsEligible(
