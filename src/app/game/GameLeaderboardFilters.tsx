@@ -15,7 +15,7 @@ export default function GameLeaderboardFilters({ filters, setup, onChange }: Pro
       <label className="grid gap-1 text-[10px] font-bold uppercase text-foreground/55">
         Questions
         <select value={filters.batchSize} onChange={(event) => onChange({ ...filters, batchSize: event.target.value === "any" ? "any" : Number(event.target.value) as Filters["batchSize"] })} className={SELECT_CLASS}>
-          <option value="any">Any</option>
+          <option value="any">All</option>
           {setup.batchSizes.map((size) => <option key={size} value={size}>{size}</option>)}
         </select>
       </label>
