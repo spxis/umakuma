@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "next dev -p ${WEB_PORT:-6400}",
     "dev:6400": "next dev -p 6400",
+    "dev:local": "node scripts/local-db.mjs run -- next dev -p 6400",
     "build": "next build",
     "start": "next start -p ${WEB_PORT:-6400}",
     "start:6400": "next start -p 6400",
@@ -46,7 +47,15 @@
     "db:backfill:jlpt-word-kanji": "pnpm dlx tsx scripts/backfill-jlpt-word-example-kanji.ts",
     "db:backfill:jlpt-word-kanji:dry": "pnpm db:backfill:jlpt-word-kanji --dry-run",
     "test-account:run": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/automate-test-account.ts",
-    "test:news:candidates": "node scripts/news-candidate-analysis.mjs"
+    "test:news:candidates": "node scripts/news-candidate-analysis.mjs",
+    "db:backup": "node scripts/local-db.mjs backup",
+    "local:db:up": "node scripts/local-db.mjs up",
+    "local:db:down": "node scripts/local-db.mjs down",
+    "local:db:reset": "node scripts/local-db.mjs reset",
+    "local:db:restore": "node scripts/local-db.mjs restore",
+    "local:db:push": "node scripts/local-db.mjs push",
+    "local:db:psql": "node scripts/local-db.mjs psql",
+    "local:seed": "NODE_OPTIONS='--conditions=react-server' node scripts/local-db.mjs run -- pnpm dlx tsx scripts/seed-local-test-user.ts"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",

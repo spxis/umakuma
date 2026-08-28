@@ -1,0 +1,29 @@
+# Local development database.
+#
+# Disposable Postgres matching the Neon production major version, so the app can
+# be run and tested without touching the shared cloud database. Managed through
+# `pnpm local:db:*` — see README "Local development database".
+name: umakuma-local
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: umakuma-localdb
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: umakuma
+      POSTGRES_PASSWORD: umakuma
+      POSTGRES_DB: umakuma
+    ports:
+      # Deliberately not 5432, so it cannot collide with a local Postgres install.
+      - "55432:5432"
+    volumes:
+      - umakuma-localdb:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umakuma -d umakuma"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  umakuma-localdb:

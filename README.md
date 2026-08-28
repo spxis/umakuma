@@ -45,6 +45,52 @@ Open [http://localhost:6400](http://localhost:6400) with your browser to see the
 
 Use [http://localhost:6400/admin](http://localhost:6400/admin) to add family accounts with an allowlisted Google OAuth account.
 
+## Local development database
+
+Run and test the whole app without a WaniKani account, a personal access token,
+or any connection to the shared Neon database.
+
+Requires Docker and the Postgres client tools (`pg_dump` / `pg_restore`).
+
+```bash
+pnpm db:backup          # dump the remote DB from .env into ./backups (verified)
+pnpm local:db:up        # start the disposable Postgres container
+pnpm local:db:restore   # load the newest ./backups dump, then push the schema
+pnpm local:seed         # create the synthetic test user
+pnpm dev:local          # run the dev server against the local database
+```
+
+Then sign in at `http://127.0.0.1:6400/invite` with code `TEST01`.
+
+The seeded account is entirely synthetic. Its `assignmentCache` is generated
+from the real `WkSubjectCatalog` rows in the restored dump, so the games,
+explorers and study queue behave like a real player's, and it signs in through
+the normal invite-code flow rather than any bypass added to the app.
+
+`pnpm local:seed` also replaces every stored WaniKani token in the local
+database with a placeholder and parks each account's `nextSyncAllowedAt`, so
+local runs can never call the WaniKani API or mutate real review data.
+
+Options:
+
+```bash
+pnpm local:seed -- --level 30        # different WaniKani level (default 12)
+pnpm local:seed -- --nickname Ayu    # a second test user
+pnpm local:seed -- --remove          # delete the test user
+```
+
+Managing the container:
+
+```bash
+pnpm local:db:down      # stop it, keeping the data volume
+pnpm local:db:reset     # destroy the volume and recreate an empty schema
+pnpm local:db:psql      # open psql against it
+```
+
+The seeder refuses to run against any host that is not localhost, and
+`docker-compose.local.yml` binds port 55432 so it cannot collide with a local
+Postgres install.
+
 ## WaniKani Sync Best Practices (Implemented)
 
 - Respect rate limits by serializing API requests with a minimum gap (`LEADERBOARD_REQUEST_GAP_MS`, default 1000).
