@@ -21,9 +21,9 @@ import { PrismaClient, type Prisma } from "@prisma/client";
 import { encryptToken } from "../src/lib/crypto";
 import { hashInviteCode } from "../src/lib/inviteCode";
 import { seededRandom, type RandomSource } from "../src/lib/gameRandom";
+import { mockTokenForAccount } from "../src/lib/wanikani/mockApi";
 
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "host.docker.internal"]);
-const PLACEHOLDER_TOKEN = "local-test-token-not-a-real-wanikani-token";
 const PARKED_SYNC_AT = new Date("2999-01-01T00:00:00.000Z");
 const SRS_STAGES = { apprentice: [1, 2, 3, 4], guru: [5, 6], master: [7], enlightened: [8], burned: [9] } as const;
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -153,19 +153,24 @@ async function main() {
   }
 
   // Safety: a local copy of production still carries real encrypted tokens.
-  // Replace them so local runs can never call WaniKani or mutate real reviews,
-  // and park every account so no background sync fires.
-  const scrubbed = encryptToken(PLACEHOLDER_TOKEN);
-  const scrub = await prisma.account.updateMany({
-    data: {
-      tokenEncrypted: scrubbed.encrypted,
-      tokenIv: scrubbed.iv,
-      tokenTag: scrubbed.tag,
-      nextSyncAllowedAt: PARKED_SYNC_AT,
-      lastSyncedAt: new Date(),
-    },
-  });
-  console.log(`Scrubbed WaniKani tokens and parked sync on ${scrub.count} account(s).`);
+  // Every account gets a mock token instead, so a local run can never reach the
+  // real WaniKani API. The token encodes its own account id, which is how the
+  // offline stand-in attributes a request.
+  const existing = await prisma.account.findMany({ select: { id: true } });
+  for (const row of existing) {
+    const mock = encryptToken(mockTokenForAccount(row.id));
+    await prisma.account.update({
+      where: { id: row.id },
+      data: {
+        tokenEncrypted: mock.encrypted,
+        tokenIv: mock.iv,
+        tokenTag: mock.tag,
+        nextSyncAllowedAt: PARKED_SYNC_AT,
+        lastSyncedAt: new Date(),
+      },
+    });
+  }
+  console.log(`Replaced WaniKani tokens with mock tokens on ${existing.length} account(s).`);
 
   const subjects = await prisma.wkSubjectCatalog.findMany({
     where: { level: { lte: options.level }, hiddenAt: null, characters: { not: null } },
@@ -195,14 +200,15 @@ async function main() {
     enlightenedCount: rows.filter((row) => row.stage === 8).length,
   };
 
+  const placeholder = encryptToken(mockTokenForAccount("pending"));
   const shared = {
     nickname: options.nickname,
     wkUsername: options.nickname.toLowerCase(),
     wkLevel: options.level,
     inviteCodeHash: hashInviteCode(options.code),
-    tokenEncrypted: scrubbed.encrypted,
-    tokenIv: scrubbed.iv,
-    tokenTag: scrubbed.tag,
+    tokenEncrypted: placeholder.encrypted,
+    tokenIv: placeholder.iv,
+    tokenTag: placeholder.tag,
     assignmentCache,
     assignmentCacheUpdatedAt: new Date(),
     itemSpread: buildItemSpread(rows),
@@ -218,6 +224,17 @@ async function main() {
     where: { wkUserId },
     create: { wkUserId, ...shared },
     update: shared,
+  });
+
+  // The mock token embeds the account id, which only exists after the upsert.
+  const accountToken = encryptToken(mockTokenForAccount(account.id));
+  await prisma.account.update({
+    where: { id: account.id },
+    data: {
+      tokenEncrypted: accountToken.encrypted,
+      tokenIv: accountToken.iv,
+      tokenTag: accountToken.tag,
+    },
   });
 
   // Give Revenge real signal: trouble tags plus a wrong-heavy review history.

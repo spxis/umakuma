@@ -41,7 +41,13 @@ function compose(...args) {
 }
 
 function localEnv() {
-  return { ...process.env, DATABASE_URL: LOCAL_DATABASE_URL, DIRECT_URL: LOCAL_DATABASE_URL };
+  return {
+    ...process.env,
+    DATABASE_URL: LOCAL_DATABASE_URL,
+    DIRECT_URL: LOCAL_DATABASE_URL,
+    // Answer WaniKani calls from the local database instead of the network.
+    WANIKANI_MOCK: "1",
+  };
 }
 
 function requireContainer() {

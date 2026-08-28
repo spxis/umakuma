@@ -6,6 +6,30 @@ import type {
 } from "./types";
 
 const BASE_URL = "https://api.wanikani.com/v2";
+
+/**
+ * Local development can answer WaniKani calls from the database instead of the
+ * network. Requires WANIKANI_MOCK=1 and the absence of Vercel's own environment
+ * variable, so a deployed environment can never take this path.
+ */
+function wanikaniMockEnabled(): boolean {
+  return process.env.WANIKANI_MOCK === "1" && !process.env.VERCEL;
+}
+
+/** Single network choke point, so the offline stand-in covers every caller. */
+async function wanikaniFetch(
+  path: string,
+  token: string,
+  init: { method?: string; headers: Record<string, string>; body?: string },
+): Promise<Response> {
+  if (wanikaniMockEnabled()) {
+    // Imported lazily so the mock never reaches a production bundle.
+    const { mockWaniKaniFetch } = await import("./mockApi");
+    return mockWaniKaniFetch(path, { method: init.method, body: init.body }, token);
+  }
+
+  return fetch(`${BASE_URL}${path}`, { ...init, cache: "no-store" });
+}
 type TokenThrottleState = {
   running: boolean;
   writeQueue: QueuedRequest<unknown>[];
@@ -120,10 +144,7 @@ export async function fetchWaniKani<T>(
   }
 
   const response = await runThrottledRequest(token, "read", () =>
-    fetch(`${BASE_URL}${path}`, {
-      headers,
-      cache: "no-store",
-    }),
+    wanikaniFetch(path, token, { headers }),
   );
 
   const responseHeaders: WaniKaniResponseHeaders = {
@@ -198,13 +219,7 @@ export async function postWaniKani<TResponse>(
   const response = await runThrottledRequest(
     token,
     "write",
-    () =>
-      fetch(`${BASE_URL}${path}`, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(body),
-        cache: "no-store",
-      }),
+    () => wanikaniFetch(path, token, { method: "POST", headers, body: JSON.stringify(body) }),
     onTiming,
   );
 
@@ -227,12 +242,7 @@ export async function putWaniKani<TResponse>(
   };
 
   const response = await runThrottledRequest(token, "write", () =>
-    fetch(`${BASE_URL}${path}`, {
-      method: "PUT",
-      headers,
-      body: JSON.stringify(body ?? {}),
-      cache: "no-store",
-    }),
+    wanikaniFetch(path, token, { method: "PUT", headers, body: JSON.stringify(body ?? {}) }),
   );
 
   if (!response.ok) {

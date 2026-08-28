@@ -68,8 +68,16 @@ explorers and study queue behave like a real player's, and it signs in through
 the normal invite-code flow rather than any bypass added to the app.
 
 `pnpm local:seed` also replaces every stored WaniKani token in the local
-database with a placeholder and parks each account's `nextSyncAllowedAt`, so
-local runs can never call the WaniKani API or mutate real review data.
+database with a mock token and parks each account's `nextSyncAllowedAt`, so a
+local run can never reach the real WaniKani API or mutate real review data.
+
+Local runs answer WaniKani calls from the database instead of the network
+(`src/lib/wanikani/mockApi.ts`). Subjects replay `WkSubjectCatalog.rawData`, and
+assignments come from the account's `assignmentCache`; submitting a review writes
+the new SRS stage back to that cache. This is what makes the Study queue,
+lessons and review submission usable offline. It is enabled by `WANIKANI_MOCK=1`,
+which `pnpm dev:local` sets and which is refused whenever Vercel's own
+environment variable is present.
 
 Options:
 

@@ -145,6 +145,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Revenge draws targets from trouble-tagged items first, then lowest `reviewEaseScore`, while distractors still come from the full pool so choices stay confusable.
 - Shiritori chains on `primaryReading` only, so the next link is derivable from the answered word alone. Words whose reading ends in ん are never targets; a chain ends when the pool has no remaining continuation.
 - `toGameRunSummary` must build its result field by field. Callers pass runs with `questions` included, and spreading the row would ship every `targetSubjectId` to the client.
+- All WaniKani network traffic goes through `wanikaniFetch` in `src/lib/wanikani/http.ts`. Add new calls there, never a bare `fetch` to the API, so the offline stand-in in `src/lib/wanikani/mockApi.ts` keeps covering every caller. The mock requires `WANIKANI_MOCK=1` **and** the absence of Vercel's environment variable, and must never be reachable in a deployed environment.
 
 ## Don't touch
 
