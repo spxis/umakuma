@@ -1,23 +1,42 @@
-import { GameSubjectCategory } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { GAME_ULTRA_BATCH_SIZE, isGameBatchSize, isGameCategory } from "@/lib/gameMode";
-import { buildGameQuestions, hydrateGameQuestions, loadGamePool, toGameRunSummary } from "@/lib/gameModeServer";
-import { prisma } from "@/lib/prisma";
+import {
+  GAME_KINDS,
+  gameKindRules,
+  isGameBatchSize,
+  isGameCategory,
+  isGameKind,
+  isGameTimeLimitMs,
+} from "@/lib/gameMode";
+import { hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
+import {
+  findResumableDailyRun,
+  GameRunConflictError,
+  persistGameRun,
+  planGameRun,
+  type GameRunRequest,
+} from "@/lib/gameRunCreate";
 
 const bodySchema = z.object({
-  batchSize: z.union([z.literal("all"), z.number().int().refine(isGameBatchSize)]),
-  level: z.number().int().min(1).max(60).nullable(),
+  kind: z.string().refine(isGameKind).default(GAME_KINDS.match),
+  batchSize: z.union([z.literal("all"), z.number().int().refine(isGameBatchSize)]).default("all"),
+  level: z.number().int().min(1).max(60).nullable().default(null),
   category: z.string().refine(isGameCategory),
   hardMode: z.boolean().default(false),
   ultraMode: z.boolean().default(false),
-}).refine((body) => !body.ultraMode || body.level !== null, {
-  message: "Ultra Mode requires a level.",
-  path: ["level"],
-});
+  timeLimitMs: z.number().int().refine(isGameTimeLimitMs).nullable().default(null),
+})
+  .refine((body) => !body.ultraMode || body.level !== null, {
+    message: "Ultra Mode requires a level.",
+    path: ["level"],
+  })
+  .refine((body) => !gameKindRules(body.kind).usesTimeLimit || body.timeLimitMs !== null, {
+    message: "This game requires a time limit.",
+    path: ["timeLimitMs"],
+  });
 
 export async function POST(request: Request, context: { params: Promise<{ accountId: string }> }) {
   return withApiRouteTelemetry({
@@ -37,33 +56,39 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
-        const { items } = await loadGamePool(accountId, parsed.data.level, parsed.data.category);
-        const questionCount = parsed.data.ultraMode || parsed.data.batchSize === "all" ? items.length : parsed.data.batchSize;
-        const questionInputs = buildGameQuestions(items, questionCount, parsed.data.hardMode);
-        const run = await prisma.$transaction(async (tx) => {
-          await tx.gameRun.updateMany({
-            where: { accountId, status: "active" },
-            data: { status: "abandoned" },
-          });
-          return tx.gameRun.create({
-            data: {
-              accountId,
-              batchSize: parsed.data.ultraMode ? GAME_ULTRA_BATCH_SIZE : questionCount,
-              level: parsed.data.level,
-              category: parsed.data.category as GameSubjectCategory,
-              hardMode: parsed.data.hardMode,
-              questionCount,
-              questions: { create: questionInputs },
-            },
-            include: { questions: { orderBy: { position: "asc" } } },
-          });
-        });
+        const rules = gameKindRules(parsed.data.kind);
+        const gameRequest: GameRunRequest = {
+          kind: parsed.data.kind,
+          batchSize: parsed.data.batchSize,
+          level: rules.usesLevel ? parsed.data.level : null,
+          category: rules.fixedCategory ?? parsed.data.category,
+          hardMode: rules.usesHardMode ? parsed.data.hardMode : false,
+          ultraMode: rules.usesUltraMode ? parsed.data.ultraMode : false,
+          timeLimitMs: rules.usesTimeLimit ? parsed.data.timeLimitMs : null,
+        };
+
+        if (rules.oncePerDay) {
+          const resumable = await findResumableDailyRun(accountId);
+          if (resumable) {
+            return NextResponse.json({
+              run: toGameRunSummary(resumable),
+              questions: await hydrateGameQuestions(resumable.questions),
+              resumed: true,
+            }, { status: 200 });
+          }
+        }
+
+        const plan = await planGameRun(accountId, gameRequest);
+        const run = await persistGameRun(accountId, gameRequest, plan);
         const questions = await hydrateGameQuestions(run.questions);
 
         return NextResponse.json({ run: toGameRunSummary(run), questions }, { status: 201 });
       } catch (error) {
+        if (error instanceof GameRunConflictError) {
+          return NextResponse.json({ error: error.message }, { status: 409 });
+        }
         const message = error instanceof Error ? error.message : "Could not start the game.";
-        const status = message.includes("eligible") || message.includes("distinct") ? 422 : 500;
+        const status = message.includes("eligible") || message.includes("distinct") || message.includes("available") ? 422 : 500;
         if (status === 500) console.error("Failed to start game", error);
         return NextResponse.json({ error: status === 422 ? message : "Could not start the game." }, { status });
       }

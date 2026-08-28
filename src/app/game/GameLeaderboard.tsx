@@ -1,6 +1,6 @@
-import { formatGameDuration, formatGameScore, type GameMetric } from "@/lib/gameMode";
+import { formatGameDuration, formatGameScore, gameKindRules, type GameMetric } from "@/lib/gameMode";
 import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
-import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, GAME_MIXED_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
+import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, GAME_MIXED_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
 import type { GameLeaderboardDay } from "./GameMode.types";
 
 type Props = {
@@ -37,7 +37,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                 <th className="px-4 py-3 sm:px-6">Day</th>
                 <th className="px-4 py-3">Rank</th>
                 <th className="px-4 py-3">Player</th>
-                <th className="px-4 py-3">Level / Mode</th>
+                <th className="px-4 py-3">Game</th>
                 <th className="px-4 py-3">Difficulty</th>
                 <th className="px-4 py-3 text-right">{GAME_METRIC_LABELS[metric]}</th>
                 {metric !== "time" ? (
@@ -57,7 +57,12 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-nowrap items-center gap-1.5 whitespace-nowrap text-sm font-bold text-foreground/65">
-                      <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
+                      <span className={`subject-pill border-line bg-surface-muted ${GAME_KIND_ACCENT[entry.kind].text}`}>
+                        <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {GAME_KIND_LABELS[entry.kind]}
+                      </span>
+                      {gameKindRules(entry.kind).usesLevel ? (
+                        <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
+                      ) : null}
                     {entry.category === "mixed" ? (
                       <span className={GAME_MIXED_PILL_CLASS}>Mixed</span>
                     ) : (

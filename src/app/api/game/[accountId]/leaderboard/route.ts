@@ -9,17 +9,20 @@ import {
   GAME_ULTRA_BATCH_SIZE,
   GAME_CATEGORIES,
   GAME_METRICS,
-  calculateGameScore,
   gameDateKeys,
   gameLeaderboardMemberIsEligible,
   isUltraGameBatchSize,
   isGameBatchSize,
+  isGameKind,
+  resolveGameScore,
+  type GameKind,
   type GameLeaderboardEntry,
   type GameMetric,
 } from "@/lib/gameMode";
 import { prisma } from "@/lib/prisma";
 
 const querySchema = z.object({
+  kind: z.union([z.literal("any"), z.string().refine(isGameKind)]).default("any"),
   batchSize: z.union([z.literal("any"), z.coerce.number().int().refine(isGameBatchSize)]),
   level: z.union([z.literal("any"), z.literal("all"), z.coerce.number().int().min(1).max(60)]),
   category: z.union([z.literal("all"), z.enum(GAME_CATEGORIES)]),
@@ -58,6 +61,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
         const runSelect = {
           id: true,
           accountId: true,
+          kind: true,
           batchSize: true,
           level: true,
           category: true,
@@ -74,6 +78,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
           prisma.gameRun.findMany({
             where: {
               status: "completed",
+              kind: parsed.data.kind === "any" ? undefined : parsed.data.kind,
               batchSize: parsed.data.batchSize === "any" ? undefined : parsed.data.batchSize,
               level: parsed.data.level === "any"
                 ? undefined
@@ -90,7 +95,11 @@ export async function GET(request: Request, context: { params: Promise<{ account
             select: runSelect,
           }),
           prisma.gameRun.findMany({
-            where: { status: "completed", durationMs: { not: null } },
+            where: {
+              status: "completed",
+              durationMs: { not: null },
+              kind: parsed.data.kind === "any" ? undefined : parsed.data.kind,
+            },
             orderBy: { completedAt: "desc" },
             take: 12,
             select: runSelect,
@@ -108,12 +117,19 @@ export async function GET(request: Request, context: { params: Promise<{ account
             accountId: run.accountId,
             nickname: run.account.nickname,
             wkUsername: run.account.wkUsername,
+            kind: run.kind as GameKind,
             category: run.category,
             hardMode: run.hardMode,
             ultraMode: isUltraGameBatchSize(run.batchSize),
             batchSize: run.batchSize as GameLeaderboardEntry["batchSize"],
             level: run.level,
-            score: calculateGameScore(run.correctCount, run.questionCount, run.durationMs, run.level),
+            score: resolveGameScore({
+              kind: run.kind as GameKind,
+              correctCount: run.correctCount,
+              questionCount: run.questionCount,
+              durationMs: run.durationMs,
+              level: run.level,
+            }),
             durationMs: run.durationMs,
             bestStreak: run.bestStreak,
             correctCount: run.correctCount,

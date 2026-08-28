@@ -1,0 +1,268 @@
+import "server-only";
+
+import { GameKind as PrismaGameKind, GameSubjectCategory } from "@prisma/client";
+
+import { getVancouverDateKey } from "@/lib/dailySnapshot";
+import {
+  GAME_ENDLESS_CYCLE_SIZE,
+  GAME_KINDS,
+  GAME_ULTRA_BATCH_SIZE,
+  gameKindRules,
+  type GameCategory,
+  type GameKind,
+} from "@/lib/gameMode";
+import { loadDailyPool, loadRevengePool, loadShiritoriPool } from "@/lib/gameModePools";
+import { loadGamePool } from "@/lib/gameModeServer";
+import { seededRandom, shuffleWith } from "@/lib/gameRandom";
+import {
+  buildGameQuestions,
+  buildGameQuestionsFromTargets,
+  buildShiritoriQuestion,
+  shiritoriOpeningKeys,
+  shiritoriPlayableTargets,
+  type GameQuestionInput,
+} from "@/lib/gameQuestionBuilder";
+import { prisma } from "@/lib/prisma";
+
+export const DAILY_ALREADY_PLAYED = "You already played today's Daily Challenge.";
+
+export class GameRunConflictError extends Error {}
+
+export type GameRunRequest = {
+  kind: GameKind;
+  batchSize: "all" | number;
+  level: number | null;
+  category: GameCategory;
+  hardMode: boolean;
+  ultraMode: boolean;
+  timeLimitMs: number | null;
+};
+
+export type GameRunPlan = {
+  questions: GameQuestionInput[];
+  questionCount: number;
+  batchSize: number;
+  level: number | null;
+  category: GameCategory;
+  hardMode: boolean;
+  dailyKey: string | null;
+  seed: string | null;
+  timeLimitMs: number | null;
+};
+
+function resolveBatchSize(request: GameRunRequest, poolSize: number): number {
+  const rules = gameKindRules(request.kind);
+  if (rules.fixedQuestionCount !== null) return Math.min(rules.fixedQuestionCount, poolSize);
+  if (request.ultraMode || request.batchSize === "all") return poolSize;
+  return request.batchSize;
+}
+
+async function planMatchRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+  const { items } = await loadGamePool(accountId, request.level, request.category);
+  const questionCount = resolveBatchSize(request, items.length);
+  return {
+    questions: buildGameQuestions(items, questionCount, request.hardMode),
+    questionCount,
+    batchSize: request.ultraMode ? GAME_ULTRA_BATCH_SIZE : questionCount,
+    level: request.level,
+    category: request.category,
+    hardMode: request.hardMode,
+    dailyKey: null,
+    seed: null,
+    timeLimitMs: null,
+  };
+}
+
+async function planRevengeRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+  const requestedSize = request.batchSize === "all" ? Number.MAX_SAFE_INTEGER : request.batchSize;
+  const { items, targets } = await loadRevengePool(
+    accountId,
+    request.category,
+    request.batchSize === "all" ? GAME_ENDLESS_CYCLE_SIZE : request.batchSize,
+  );
+  const minimumItems = request.hardMode ? 3 : 2;
+  if (items.length < minimumItems) {
+    throw new Error(`At least ${minimumItems} eligible items are required.`);
+  }
+  const chosen = shuffleWith(targets).slice(0, Math.min(requestedSize, targets.length));
+  if (chosen.length === 0) throw new Error("No eligible items are available.");
+
+  return {
+    questions: buildGameQuestionsFromTargets(chosen, items, request.hardMode),
+    questionCount: chosen.length,
+    batchSize: chosen.length,
+    level: null,
+    category: request.category,
+    hardMode: request.hardMode,
+    dailyKey: null,
+    seed: null,
+    timeLimitMs: null,
+  };
+}
+
+/**
+ * Every account plays the identical set. The first run of the day defines it and
+ * later runs copy those questions, so a mid-day level-up cannot shift the pool.
+ */
+async function planDailyRun(request: GameRunRequest): Promise<GameRunPlan> {
+  const dailyKey = getVancouverDateKey(new Date());
+  const rules = gameKindRules(request.kind);
+  const established = await prisma.gameRun.findFirst({
+    where: { kind: PrismaGameKind.daily, dailyKey },
+    orderBy: { createdAt: "asc" },
+    select: {
+      seed: true,
+      questions: {
+        orderBy: { position: "asc" },
+        select: {
+          position: true,
+          targetSubjectId: true,
+          leftSubjectId: true,
+          middleSubjectId: true,
+          rightSubjectId: true,
+          answerType: true,
+          promptOverride: true,
+        },
+      },
+    },
+  });
+
+  if (established && established.questions.length > 0) {
+    return {
+      questions: established.questions.map((question) => ({ ...question })),
+      questionCount: established.questions.length,
+      batchSize: established.questions.length,
+      level: null,
+      category: rules.fixedCategory ?? request.category,
+      hardMode: false,
+      dailyKey,
+      seed: established.seed,
+      timeLimitMs: null,
+    };
+  }
+
+  const { items } = await loadDailyPool();
+  const questionCount = Math.min(rules.fixedQuestionCount ?? items.length, items.length);
+  return {
+    questions: buildGameQuestions(items, questionCount, false, seededRandom(dailyKey)),
+    questionCount,
+    batchSize: questionCount,
+    level: null,
+    category: rules.fixedCategory ?? request.category,
+    hardMode: false,
+    dailyKey,
+    seed: dailyKey,
+    timeLimitMs: null,
+  };
+}
+
+async function planTimeAttackRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+  const { items } = await loadGamePool(accountId, request.level, request.category);
+  const questionCount = Math.min(GAME_ENDLESS_CYCLE_SIZE, items.length);
+  return {
+    questions: buildGameQuestions(items, questionCount, request.hardMode),
+    questionCount,
+    batchSize: questionCount,
+    level: request.level,
+    category: request.category,
+    hardMode: request.hardMode,
+    dailyKey: null,
+    seed: null,
+    timeLimitMs: request.timeLimitMs,
+  };
+}
+
+async function planShiritoriRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+  const { items } = await loadShiritoriPool(accountId);
+  const minimumItems = request.hardMode ? 3 : 2;
+  if (items.length < minimumItems) {
+    throw new Error(`At least ${minimumItems} eligible items are required.`);
+  }
+
+  const openings = shuffleWith(shiritoriOpeningKeys(items));
+  for (const chainKey of openings) {
+    if (shiritoriPlayableTargets(items, chainKey, new Set()).length === 0) continue;
+    const question = buildShiritoriQuestion({
+      pool: items,
+      chainKey,
+      position: 0,
+      usedSubjectIds: new Set(),
+      previousItem: null,
+      hardMode: request.hardMode,
+    });
+    if (!question) continue;
+    return {
+      questions: [question],
+      questionCount: 1,
+      batchSize: 1,
+      level: null,
+      category: "vocabulary",
+      hardMode: request.hardMode,
+      dailyKey: null,
+      seed: null,
+      timeLimitMs: null,
+    };
+  }
+  throw new Error("No eligible items are available.");
+}
+
+export async function planGameRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+  if (request.kind === GAME_KINDS.daily) return planDailyRun(request);
+  if (request.kind === GAME_KINDS.revenge) return planRevengeRun(accountId, request);
+  if (request.kind === GAME_KINDS.timeAttack) return planTimeAttackRun(accountId, request);
+  if (request.kind === GAME_KINDS.shiritori) return planShiritoriRun(accountId, request);
+  return planMatchRun(accountId, request);
+}
+
+/**
+ * Daily Challenge is one attempt per account per day. An unfinished attempt is
+ * resumed rather than replaced so a reload cannot burn the day's run.
+ */
+export async function findResumableDailyRun(accountId: string) {
+  const dailyKey = getVancouverDateKey(new Date());
+  const existing = await prisma.gameRun.findUnique({
+    where: { accountId_kind_dailyKey: { accountId, kind: PrismaGameKind.daily, dailyKey } },
+    include: { questions: { orderBy: { position: "asc" } } },
+  });
+  if (!existing) return null;
+  if (existing.status === "completed") throw new GameRunConflictError(DAILY_ALREADY_PLAYED);
+  // Starting another game abandons the active run; reclaim today's attempt and
+  // make sure it is the only run left active.
+  return prisma.$transaction(async (tx) => {
+    await tx.gameRun.updateMany({
+      where: { accountId, status: "active", id: { not: existing.id } },
+      data: { status: "abandoned" },
+    });
+    if (existing.status === "active") return existing;
+    return tx.gameRun.update({
+      where: { id: existing.id },
+      data: { status: "active" },
+      include: { questions: { orderBy: { position: "asc" } } },
+    });
+  });
+}
+
+export async function persistGameRun(accountId: string, request: GameRunRequest, plan: GameRunPlan) {
+  return prisma.$transaction(async (tx) => {
+    await tx.gameRun.updateMany({
+      where: { accountId, status: "active" },
+      data: { status: "abandoned" },
+    });
+    return tx.gameRun.create({
+      data: {
+        accountId,
+        kind: request.kind as PrismaGameKind,
+        batchSize: plan.batchSize,
+        level: plan.level,
+        category: plan.category as GameSubjectCategory,
+        hardMode: plan.hardMode,
+        dailyKey: plan.dailyKey,
+        seed: plan.seed,
+        timeLimitMs: plan.timeLimitMs,
+        questionCount: plan.questionCount,
+        questions: { create: plan.questions },
+      },
+      include: { questions: { orderBy: { position: "asc" } } },
+    });
+  });
+}

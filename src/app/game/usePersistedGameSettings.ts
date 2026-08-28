@@ -6,15 +6,27 @@ import { getStoredJson, setStoredJson } from "@/lib/clientStorage";
 import {
   GAME_CATEGORIES,
   GAME_DATE_RANGES,
+  GAME_KINDS,
   GAME_METRICS,
   isGameBatchSize,
   isGameCategory,
+  isGameKind,
+  isGameTimeLimitMs,
 } from "@/lib/gameMode";
 import { GAME_STORAGE_KEYS } from "./GameMode.constants";
 import type { GameLeaderboardFilters, GameSelection } from "./GameMode.types";
 
-const DEFAULT_SELECTION: GameSelection = { batchSize: 10, level: null, category: "mixed", hardMode: false, ultraMode: false };
+const DEFAULT_SELECTION: GameSelection = {
+  kind: GAME_KINDS.match,
+  batchSize: 10,
+  level: null,
+  category: "mixed",
+  hardMode: false,
+  ultraMode: false,
+  timeLimitMs: 60_000,
+};
 const DEFAULT_FILTERS: GameLeaderboardFilters = {
+  kind: "any",
   batchSize: "any",
   level: "any",
   mode: "all",
@@ -28,6 +40,10 @@ const subscribe = () => () => {};
 function readSelection(): GameSelection {
   const stored = getStoredJson<Partial<GameSelection>>(GAME_STORAGE_KEYS.selection, {});
   return {
+    kind: typeof stored.kind === "string" && isGameKind(stored.kind) ? stored.kind : DEFAULT_SELECTION.kind,
+    timeLimitMs: isGameTimeLimitMs(Number(stored.timeLimitMs))
+      ? Number(stored.timeLimitMs) as GameSelection["timeLimitMs"]
+      : DEFAULT_SELECTION.timeLimitMs,
     batchSize: stored.batchSize === "all"
       ? "all"
       : isGameBatchSize(Number(stored.batchSize))
@@ -49,6 +65,7 @@ function readFilters(): GameLeaderboardFilters {
     level = Number(stored.level);
   }
   return {
+    kind: typeof stored.kind === "string" && isGameKind(stored.kind) ? stored.kind : DEFAULT_FILTERS.kind,
     batchSize: stored.batchSize === "any"
       ? "any"
       : isGameBatchSize(Number(stored.batchSize))

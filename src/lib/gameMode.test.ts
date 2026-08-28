@@ -2,16 +2,21 @@ import { describe, expect, it } from "vitest";
 
 import {
   GAME_BATCH_SIZES,
+  GAME_KINDS,
   GAME_ULTRA_BATCH_SIZE,
   calculateGameScore,
+  calculateTimeAttackScore,
   formatGameDuration,
   formatGameScore,
   gameAnswerProgress,
   gameDateKeys,
   gameLeaderboardMemberIsEligible,
   gameOptionIndexForKey,
+  gameProgressFlags,
+  gameRunIsExpired,
   isUltraGameBatchSize,
   gamePoolItemMatches,
+  resolveGameScore,
 } from "@/lib/gameMode";
 
 describe("Game Mode", () => {
@@ -41,26 +46,81 @@ describe("Game Mode", () => {
   });
 
   it("keeps Ultra running through perfect cycles and stops on a miss", () => {
-    expect(gameAnswerProgress({ ultraMode: true, correct: true, answeredCount: 4, questionCount: 5, appendedQuestionCount: 5 })).toEqual({
+    const ultra = { endless: true, endsOnWrong: true };
+    expect(gameAnswerProgress({ ...ultra, correct: true, answeredCount: 4, questionCount: 5, appendedQuestionCount: 5 })).toEqual({
       complete: false,
       appendCycle: false,
       questionCount: 5,
     });
-    expect(gameAnswerProgress({ ultraMode: true, correct: true, answeredCount: 5, questionCount: 5, appendedQuestionCount: 5 })).toEqual({
+    expect(gameAnswerProgress({ ...ultra, correct: true, answeredCount: 5, questionCount: 5, appendedQuestionCount: 5 })).toEqual({
       complete: false,
       appendCycle: true,
       questionCount: 10,
     });
-    expect(gameAnswerProgress({ ultraMode: true, correct: false, answeredCount: 7, questionCount: 10, appendedQuestionCount: 0 })).toEqual({
+    expect(gameAnswerProgress({ ...ultra, correct: false, answeredCount: 7, questionCount: 10, appendedQuestionCount: 0 })).toEqual({
       complete: true,
       appendCycle: false,
       questionCount: 7,
     });
-    expect(gameAnswerProgress({ ultraMode: false, correct: true, answeredCount: 5, questionCount: 5, appendedQuestionCount: 0 })).toEqual({
+    expect(gameAnswerProgress({ endless: false, endsOnWrong: false, correct: true, answeredCount: 5, questionCount: 5, appendedQuestionCount: 0 })).toEqual({
       complete: true,
       appendCycle: false,
       questionCount: 5,
     });
+  });
+
+  it("maps each kind to its progress rules", () => {
+    expect(gameProgressFlags(GAME_KINDS.match, false)).toEqual({ endless: false, endsOnWrong: false });
+    expect(gameProgressFlags(GAME_KINDS.match, true)).toEqual({ endless: true, endsOnWrong: true });
+    expect(gameProgressFlags(GAME_KINDS.daily, false)).toEqual({ endless: false, endsOnWrong: false });
+    expect(gameProgressFlags(GAME_KINDS.revenge, false)).toEqual({ endless: false, endsOnWrong: false });
+    expect(gameProgressFlags(GAME_KINDS.timeAttack, false)).toEqual({ endless: true, endsOnWrong: false });
+    expect(gameProgressFlags(GAME_KINDS.shiritori, false)).toEqual({ endless: true, endsOnWrong: true });
+  });
+
+  it("keeps Time Attack running through a wrong answer and stops at the clock", () => {
+    const timeAttack = { endless: true, endsOnWrong: false };
+    expect(gameAnswerProgress({ ...timeAttack, correct: false, answeredCount: 4, questionCount: 10, appendedQuestionCount: 0 })).toEqual({
+      complete: false,
+      appendCycle: false,
+      questionCount: 10,
+    });
+    expect(gameAnswerProgress({ ...timeAttack, expired: true, correct: true, answeredCount: 9, questionCount: 10, appendedQuestionCount: 0 })).toEqual({
+      complete: true,
+      appendCycle: false,
+      questionCount: 9,
+    });
+  });
+
+  it("ends an endless run when nothing can be appended", () => {
+    expect(gameAnswerProgress({ endless: true, endsOnWrong: true, correct: true, answeredCount: 6, questionCount: 6, appendedQuestionCount: 0 })).toEqual({
+      complete: true,
+      appendCycle: false,
+      questionCount: 6,
+    });
+  });
+
+  it("expires only timed runs past the grace window", () => {
+    expect(gameRunIsExpired(GAME_KINDS.timeAttack, 60_000, 59_000)).toBe(false);
+    expect(gameRunIsExpired(GAME_KINDS.timeAttack, 60_000, 61_000)).toBe(false);
+    expect(gameRunIsExpired(GAME_KINDS.timeAttack, 60_000, 62_000)).toBe(true);
+    expect(gameRunIsExpired(GAME_KINDS.match, 60_000, 900_000)).toBe(false);
+    expect(gameRunIsExpired(GAME_KINDS.timeAttack, null, 900_000)).toBe(false);
+  });
+
+  it("pays Time Attack for volume and keeps the level bonus under one answer", () => {
+    expect(calculateTimeAttackScore(10, 10, 1)).toBe(5_008);
+    expect(calculateTimeAttackScore(10, 12, 1)).toBeLessThan(calculateTimeAttackScore(10, 10, 1));
+    expect(calculateTimeAttackScore(11, 11, 1)).toBeGreaterThan(calculateTimeAttackScore(10, 10, 60));
+    expect(calculateTimeAttackScore(0, 8, 60)).toBe(0);
+    expect(calculateTimeAttackScore(3, 0, 60)).toBe(0);
+  });
+
+  it("routes each kind to its own scoring formula", () => {
+    const base = { correctCount: 10, questionCount: 10, durationMs: 30_000, level: 7 };
+    expect(resolveGameScore({ ...base, kind: GAME_KINDS.match })).toBe(calculateGameScore(10, 10, 30_000, 7));
+    expect(resolveGameScore({ ...base, kind: GAME_KINDS.daily })).toBe(calculateGameScore(10, 10, 30_000, 7));
+    expect(resolveGameScore({ ...base, kind: GAME_KINDS.timeAttack })).toBe(calculateTimeAttackScore(10, 10, 7));
   });
 
   it("rewards every tenth and higher levels", () => {

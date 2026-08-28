@@ -2,20 +2,31 @@ import type {
   GameBatchSize,
   GameCategory,
   GameDateRange,
+  GameKind,
   GameLeaderboardEntry,
   GameLeaderboardMode,
   GameMetric,
   GameQuestionPayload,
   GameRunSummary,
+  GameTimeLimitMs,
 } from "@/lib/gameMode";
+
+export type GameKindAvailability = {
+  daily: { dateKey: string; playedToday: boolean; levelCap: number };
+  revenge: { available: number; troubleCount: number };
+  shiritori: { available: number };
+};
 
 export type GameSetupResponse = {
   account: { nickname: string; wkUsername: string; wkLevel: number };
+  kinds: GameKind[];
   batchSizes: GameBatchSize[];
+  timeLimitsMs: GameTimeLimitMs[];
   categories: GameCategory[];
   levels: number[];
   countsByLevel: Record<number, Record<GameCategory, number>>;
   totalCounts: Record<GameCategory, number>;
+  availability: GameKindAvailability;
 };
 
 export type GameLeaderboardDay = {
@@ -39,7 +50,7 @@ export type GameModeClientProps = {
   wkUsername: string;
 };
 
-export type GamePhase = "lobby" | "playing" | "results";
+export type GamePhase = "hub" | "lobby" | "playing" | "results";
 
 export type ActiveGame = {
   run: GameRunSummary;
@@ -47,14 +58,17 @@ export type ActiveGame = {
 };
 
 export type GameSelection = {
+  kind: GameKind;
   batchSize: "all" | GameBatchSize;
   level: number | null;
   category: GameCategory;
   hardMode: boolean;
   ultraMode: boolean;
+  timeLimitMs: GameTimeLimitMs;
 };
 
 export type GameLeaderboardFilters = {
+  kind: "any" | GameKind;
   batchSize: "any" | GameBatchSize;
   level: "any" | number | null;
   mode: GameLeaderboardMode;
@@ -62,4 +76,13 @@ export type GameLeaderboardFilters = {
   metric: GameMetric;
   hardMode: boolean;
   ultraMode: boolean;
+};
+
+/** Everything a hub card needs to describe and gate one game. */
+export type GameHubCard = {
+  kind: GameKind;
+  available: number;
+  minimumItems: number;
+  playable: boolean;
+  statusLabel: string | null;
 };

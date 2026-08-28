@@ -3,8 +3,16 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { gameAnswerProgress, isUltraGameBatchSize } from "@/lib/gameMode";
-import { buildGameQuestions, completedRunValues, hydrateGameQuestions, loadGamePool, toGameRunSummary } from "@/lib/gameModeServer";
+import {
+  gameAnswerProgress,
+  gameProgressFlags,
+  gameRunIsExpired,
+  isUltraGameBatchSize,
+  type GameCategory,
+  type GameKind,
+} from "@/lib/gameMode";
+import { completedRunValues, hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
+import { buildAppendedQuestions } from "@/lib/gameRunAppend";
 import { prisma } from "@/lib/prisma";
 
 const bodySchema = z.object({
@@ -38,17 +46,36 @@ export async function POST(
         if (!pendingQuestion || pendingQuestion.runId !== runId || pendingQuestion.run.accountId !== accountId) {
           throw new Error("Game question not found.");
         }
-        const pendingUltraMode = isUltraGameBatchSize(pendingQuestion.run.batchSize);
-        const shouldAppendUltraCycle =
-          pendingUltraMode &&
-          parsed.data.selectedSubjectId === pendingQuestion.targetSubjectId &&
-          pendingQuestion.position + 1 >= pendingQuestion.run.questionCount;
-        const nextCyclePool = shouldAppendUltraCycle
-          ? (await loadGamePool(accountId, pendingQuestion.run.level, pendingQuestion.run.category)).items
-          : [];
-        const nextCycleInputs = shouldAppendUltraCycle
-          ? buildGameQuestions(nextCyclePool, nextCyclePool.length, pendingQuestion.run.hardMode)
-              .map((question) => ({ ...question, position: question.position + pendingQuestion.run.questionCount }))
+
+        const pendingRun = pendingQuestion.run;
+        const pendingKind = pendingRun.kind as GameKind;
+        const pendingFlags = gameProgressFlags(pendingKind, isUltraGameBatchSize(pendingRun.batchSize));
+        const pendingExpired = gameRunIsExpired(
+          pendingKind,
+          pendingRun.timeLimitMs,
+          Date.now() - pendingRun.startedAt.getTime(),
+        );
+        const pendingCorrect = parsed.data.selectedSubjectId === pendingQuestion.targetSubjectId;
+        // Built outside the transaction so pool queries never hold a write lock.
+        const shouldAppend =
+          pendingFlags.endless &&
+          !pendingExpired &&
+          (!pendingFlags.endsOnWrong || pendingCorrect) &&
+          pendingQuestion.position + 1 >= pendingRun.questionCount;
+        const appendedInputs = shouldAppend
+          ? await buildAppendedQuestions(
+              {
+                id: pendingRun.id,
+                accountId,
+                kind: pendingKind,
+                batchSize: pendingRun.batchSize,
+                level: pendingRun.level,
+                category: pendingRun.category as GameCategory,
+                hardMode: pendingRun.hardMode,
+                questionCount: pendingRun.questionCount,
+              },
+              pendingQuestion.targetSubjectId,
+            )
           : [];
 
         const outcome = await prisma.$transaction(async (tx) => {
@@ -65,27 +92,36 @@ export async function POST(
             throw new Error("Invalid answer choice.");
           }
 
-          const correct = parsed.data.selectedSubjectId === question.targetSubjectId;
+          const kind = question.run.kind as GameKind;
+          const expired = gameRunIsExpired(
+            kind,
+            question.run.timeLimitMs,
+            Date.now() - question.run.startedAt.getTime(),
+          );
+          const correct = !expired && parsed.data.selectedSubjectId === question.targetSubjectId;
           const claimed = await tx.gameQuestion.updateMany({
             where: { id: question.id, correct: null },
             data: { selectedSubjectId: parsed.data.selectedSubjectId, correct, answeredAt: new Date() },
           });
           if (claimed.count !== 1) throw new Error("This question was already answered.");
 
-          const answeredCount = question.run.answeredCount + 1;
+          // An answer that lands after the clock expired closes the run without scoring.
+          const answeredCount = question.run.answeredCount + (expired ? 0 : 1);
           const correctCount = question.run.correctCount + (correct ? 1 : 0);
           const currentStreak = correct ? question.run.currentStreak + 1 : 0;
           const bestStreak = Math.max(question.run.bestStreak, currentStreak);
-          const ultraMode = isUltraGameBatchSize(question.run.batchSize);
+          const flags = gameProgressFlags(kind, isUltraGameBatchSize(question.run.batchSize));
           const progress = gameAnswerProgress({
-            ultraMode,
+            endless: flags.endless,
+            endsOnWrong: flags.endsOnWrong,
+            expired,
             correct,
             answeredCount,
             questionCount: question.run.questionCount,
-            appendedQuestionCount: nextCycleInputs.length,
+            appendedQuestionCount: appendedInputs.length,
           });
           if (progress.appendCycle) {
-            await tx.gameQuestion.createMany({ data: nextCycleInputs.map((nextQuestion) => ({ ...nextQuestion, runId })) });
+            await tx.gameQuestion.createMany({ data: appendedInputs.map((nextQuestion) => ({ ...nextQuestion, runId })) });
           }
           const run = await tx.gameRun.update({
             where: { id: runId },
@@ -96,11 +132,19 @@ export async function POST(
               bestStreak,
               questionCount: progress.questionCount,
               ...(progress.complete
-                ? completedRunValues(question.run.startedAt, correctCount, progress.questionCount, bestStreak, question.run.level)
+                ? completedRunValues({
+                    kind,
+                    startedAt: question.run.startedAt,
+                    correctCount,
+                    questionCount: progress.questionCount,
+                    bestStreak,
+                    level: question.run.level,
+                    timeLimitMs: question.run.timeLimitMs,
+                  })
                 : {}),
             },
           });
-          return { correct, run, appendedFromPosition: progress.appendCycle ? question.run.questionCount : null };
+          return { correct, expired, run, appendedFromPosition: progress.appendCycle ? question.run.questionCount : null };
         });
 
         const appendedQuestions = outcome.appendedFromPosition === null
@@ -109,7 +153,12 @@ export async function POST(
               where: { runId, position: { gte: outcome.appendedFromPosition } },
               orderBy: { position: "asc" },
             }));
-        return NextResponse.json({ correct: outcome.correct, run: toGameRunSummary(outcome.run), appendedQuestions }, { status: 200 });
+        return NextResponse.json({
+          correct: outcome.correct,
+          expired: outcome.expired,
+          run: toGameRunSummary(outcome.run),
+          appendedQuestions,
+        }, { status: 200 });
       } catch (error) {
         const message = error instanceof Error ? error.message : "Could not record the answer.";
         const expected = /not found|already|current question|Invalid answer/.test(message);

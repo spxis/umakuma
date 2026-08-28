@@ -1,87 +1,81 @@
 import "server-only";
 
-import { GameAnswerType, GameRunStatus, GameSubjectCategory } from "@prisma/client";
+import { GameAnswerType, GameKind, GameRunStatus, GameSubjectCategory } from "@prisma/client";
 
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
-import { SUBJECT_TYPES, isSubjectType, type SubjectType } from "@/lib/domainConstants";
+import { isSubjectType, type SubjectType } from "@/lib/domainConstants";
 import {
-  calculateGameScore,
+  GAME_KINDS,
   gamePoolItemMatches,
   isUltraGameBatchSize,
+  resolveGameScore,
   type GameCategory,
+  type GameKind as GameKindValue,
   type GameOption,
   type GameQuestionPayload,
   type GameRunSummary,
 } from "@/lib/gameMode";
+import { parseMeanings, parseReadings, type GameCatalogItem } from "@/lib/gameQuestionBuilder";
 import { prisma } from "@/lib/prisma";
 import { parseAssignmentCacheRows } from "@/lib/wanikani/helpers";
 
-export type GameCatalogItem = GameOption & {
-  assignmentId: number;
-  srsStage: number;
-  startedAt: string;
-  readings: string[];
+export {
+  buildGameQuestions,
+  buildGameQuestionsFromTargets,
+  buildShiritoriQuestion,
+  shiritoriChainKeyAfter,
+  shiritoriOpeningKeys,
+  shiritoriPlayableTargets,
+} from "@/lib/gameQuestionBuilder";
+export type { GameCatalogItem, GameQuestionInput } from "@/lib/gameQuestionBuilder";
+
+export const CATALOG_SELECT = {
+  wkSubjectId: true,
+  subjectType: true,
+  level: true,
+  characters: true,
+  slug: true,
+  meanings: true,
+  readings: true,
+  componentSubjectIds: true,
+  visuallySimilarSubjectIds: true,
+} as const;
+
+export type CatalogRow = {
+  wkSubjectId: number;
+  subjectType: string;
+  level: number;
+  characters: string | null;
+  slug: string | null;
+  meanings: unknown;
+  readings: unknown;
   componentSubjectIds: number[];
   visuallySimilarSubjectIds: number[];
 };
 
-function parseMeanings(raw: unknown): string[] {
-  if (!Array.isArray(raw)) return [];
-  const rows = raw.filter((value): value is Record<string, unknown> => Boolean(value) && typeof value === "object");
-  const primary = rows.filter((row) => row.primary === true);
-  const secondary = rows.filter((row) => row.primary !== true);
-  return [...primary, ...secondary]
-    .map((row) => row.meaning)
-    .filter((value): value is string => typeof value === "string" && value.trim().length > 0)
-    .map((value) => value.trim());
-}
+/** Shapes a catalog row into a playable item, or drops it when unusable. */
+export function toCatalogItem(
+  row: CatalogRow,
+  assignment: { assignmentId: number; srsStage: number; startedAt: string },
+): GameCatalogItem | null {
+  if (!isSubjectType(row.subjectType)) return null;
+  const meanings = parseMeanings(row.meanings);
+  const readings = parseReadings(row.readings);
+  const characters = row.characters?.trim() || row.slug?.trim();
+  if (!characters || meanings.length === 0) return null;
 
-function parseReadings(raw: unknown): string[] {
-  if (!Array.isArray(raw)) return [];
-  const rows = raw.filter((value): value is Record<string, unknown> => Boolean(value) && typeof value === "object");
-  const accepted = rows.filter((row) => row.accepted_answer !== false && typeof row.reading === "string");
-  const primary = accepted.filter((row) => row.primary === true);
-  const secondary = accepted.filter((row) => row.primary !== true);
-  return [...primary, ...secondary]
-    .map((row) => row.reading)
-    .filter((value): value is string => typeof value === "string" && value.trim().length > 0)
-    .map((value) => value.trim());
-}
-
-function shuffle<T>(items: T[]): T[] {
-  const output = [...items];
-  for (let index = output.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1));
-    [output[index], output[swapIndex]] = [output[swapIndex]!, output[index]!];
-  }
-  return output;
-}
-
-function hasOverlap(left: number[], right: number[]): boolean {
-  const rightSet = new Set(right);
-  return left.some((value) => rightSet.has(value));
-}
-
-function distractorScore(target: GameCatalogItem, candidate: GameCatalogItem): number {
-  let score = 0;
-  if (target.readings.some((reading) => candidate.readings.includes(reading))) score += 100;
-  if (target.visuallySimilarSubjectIds.includes(candidate.subjectId)) score += 70;
-  if (candidate.visuallySimilarSubjectIds.includes(target.subjectId)) score += 60;
-  if (hasOverlap(target.componentSubjectIds, candidate.componentSubjectIds)) score += 40;
-  if (target.subjectType === candidate.subjectType) score += 20;
-  score += Math.max(0, 10 - Math.abs(target.level - candidate.level));
-  return score;
-}
-
-function chooseDistractor(target: GameCatalogItem, pool: GameCatalogItem[]): GameCatalogItem | null {
-  const ranked = pool
-    .filter((candidate) => candidate.subjectId !== target.subjectId && candidate.characters !== target.characters)
-    .map((candidate) => ({ candidate, score: distractorScore(target, candidate) }))
-    .sort((left, right) => right.score - left.score);
-  if (ranked.length === 0) return null;
-  const topScore = ranked[0]!.score;
-  const topPool = ranked.filter((entry) => entry.score === topScore).slice(0, 12);
-  return topPool[Math.floor(Math.random() * topPool.length)]?.candidate ?? ranked[0]!.candidate;
+  return {
+    ...assignment,
+    subjectId: row.wkSubjectId,
+    subjectType: row.subjectType as SubjectType,
+    level: row.level,
+    characters,
+    primaryMeaning: meanings[0] ?? null,
+    primaryReading: readings[0] ?? null,
+    readings,
+    componentSubjectIds: row.componentSubjectIds,
+    visuallySimilarSubjectIds: row.visuallySimilarSubjectIds,
+  };
 }
 
 export async function loadGamePool(
@@ -124,104 +118,39 @@ export async function loadGamePool(
       hiddenAt: null,
       characters: { not: null },
     },
-    select: {
-      wkSubjectId: true,
-      subjectType: true,
-      level: true,
-      characters: true,
-      slug: true,
-      meanings: true,
-      readings: true,
-      componentSubjectIds: true,
-      visuallySimilarSubjectIds: true,
-    },
+    select: CATALOG_SELECT,
   });
   const catalogById = new Map(catalogRows.map((row) => [row.wkSubjectId, row]));
 
   const items = assignments.flatMap((assignment) => {
     const row = catalogById.get(assignment.subjectId);
     if (!row || !isSubjectType(row.subjectType)) return [];
-    const meanings = parseMeanings(row.meanings);
-    const readings = parseReadings(row.readings);
-    const characters = row.characters?.trim() || row.slug?.trim();
     const poolItem = {
       ...assignment,
       subjectType: row.subjectType as SubjectType,
       level: row.level,
     };
-    if (!characters || meanings.length === 0 || !gamePoolItemMatches(poolItem, level, category)) return [];
-
-    return [{
-      ...poolItem,
+    if (!gamePoolItemMatches(poolItem, level, category)) return [];
+    const item = toCatalogItem(row, {
+      assignmentId: assignment.assignmentId,
+      srsStage: assignment.srsStage,
       startedAt: assignment.startedAt!,
-      characters,
-      primaryMeaning: meanings[0] ?? null,
-      primaryReading: readings[0] ?? null,
-      readings,
-      componentSubjectIds: row.componentSubjectIds,
-      visuallySimilarSubjectIds: row.visuallySimilarSubjectIds,
-    }];
+    });
+    return item ? [item] : [];
   });
 
   return { account: { nickname: account.nickname, wkUsername: account.wkUsername, wkLevel: account.wkLevel }, items };
 }
 
-export function buildGameQuestions(pool: GameCatalogItem[], batchSize: number, hardMode = false) {
-  const minimumItems = hardMode ? 3 : 2;
-  if (!Number.isInteger(batchSize) || batchSize < minimumItems) {
-    throw new Error(`At least ${minimumItems} eligible items are required.`);
-  }
-  const targets = shuffle(pool).slice(0, batchSize);
-  if (targets.length < batchSize) throw new Error(`Only ${targets.length} eligible items are available.`);
-
-  const targetIds = new Set(targets.map((target) => target.subjectId));
-  const unusedDistractors = new Set(
-    pool.filter((item) => !targetIds.has(item.subjectId)).map((item) => item.subjectId),
-  );
-  const targetPositions = shuffle(Array.from({ length: batchSize }, (_, index) => index % (hardMode ? 3 : 2)));
-
-  return targets.map((target, position) => {
-    const chooseNextDistractor = (excludedSubjectIds: Set<number>) => {
-      const unusedPool = pool.filter((item) => unusedDistractors.has(item.subjectId) && !excludedSubjectIds.has(item.subjectId));
-      const nonTargetPool = pool.filter((item) => !targetIds.has(item.subjectId) && !excludedSubjectIds.has(item.subjectId));
-      const fallbackPool = pool.filter((item) => !excludedSubjectIds.has(item.subjectId));
-      return chooseDistractor(target, unusedPool)
-      ?? chooseDistractor(target, nonTargetPool)
-      ?? chooseDistractor(target, fallbackPool);
-    };
-    const firstDistractor = chooseNextDistractor(new Set([target.subjectId]));
-    if (!firstDistractor) throw new Error("Not enough distinct items are available.");
-    unusedDistractors.delete(firstDistractor.subjectId);
-    const secondDistractor = hardMode
-      ? chooseNextDistractor(new Set([target.subjectId, firstDistractor.subjectId]))
-      : null;
-    if (hardMode && !secondDistractor) throw new Error("Not enough distinct items are available.");
-    if (secondDistractor) unusedDistractors.delete(secondDistractor.subjectId);
-    const distractors = secondDistractor ? [firstDistractor, secondDistractor] : [firstDistractor];
-    const canAskReading = target.subjectType !== SUBJECT_TYPES.radical && Boolean(target.primaryReading) && distractors.every(
-      (distractor) => Boolean(distractor.primaryReading) && target.primaryReading !== distractor.primaryReading,
-    );
-    const answerType = canAskReading && Math.random() < 0.5 ? GameAnswerType.reading : GameAnswerType.meaning;
-    const options = [...distractors];
-    options.splice(targetPositions[position]!, 0, target);
-    return {
-      position,
-      targetSubjectId: target.subjectId,
-      leftSubjectId: options[0]!.subjectId,
-      middleSubjectId: hardMode ? options[1]!.subjectId : null,
-      rightSubjectId: options[hardMode ? 2 : 1]!.subjectId,
-      answerType,
-    };
-  });
-}
-
 export function toGameRunSummary(run: {
   id: string;
   accountId: string;
+  kind: GameKind;
   batchSize: number;
   level: number | null;
   category: GameSubjectCategory;
   hardMode: boolean;
+  timeLimitMs: number | null;
   questionCount: number;
   answeredCount: number;
   correctCount: number;
@@ -233,18 +162,42 @@ export function toGameRunSummary(run: {
   startedAt: Date;
   completedAt: Date | null;
 }): GameRunSummary {
+  // Built field by field on purpose: callers pass runs with `questions`
+  // included, and spreading would ship every targetSubjectId to the client.
   return {
-    ...run,
+    id: run.id,
+    accountId: run.accountId,
+    kind: run.kind as GameKindValue,
     batchSize: run.batchSize,
+    timeLimitMs: run.timeLimitMs,
+    level: run.level,
     category: run.category as GameCategory,
+    hardMode: run.hardMode,
     ultraMode: isUltraGameBatchSize(run.batchSize),
+    questionCount: run.questionCount,
+    answeredCount: run.answeredCount,
+    correctCount: run.correctCount,
+    currentStreak: run.currentStreak,
+    bestStreak: run.bestStreak,
+    score: run.score,
+    durationMs: run.durationMs,
+    status: run.status,
     startedAt: run.startedAt.toISOString(),
     completedAt: run.completedAt?.toISOString() ?? null,
   };
 }
 
 export async function hydrateGameQuestions(
-  questions: Array<{ id: string; position: number; targetSubjectId: number; leftSubjectId: number; middleSubjectId: number | null; rightSubjectId: number; answerType: GameAnswerType }>,
+  questions: Array<{
+    id: string;
+    position: number;
+    targetSubjectId: number;
+    leftSubjectId: number;
+    middleSubjectId: number | null;
+    rightSubjectId: number;
+    answerType: GameAnswerType;
+    promptOverride: string | null;
+  }>,
 ): Promise<GameQuestionPayload[]> {
   const subjectIds = Array.from(new Set(questions.flatMap((row) => [row.targetSubjectId, row.leftSubjectId, row.middleSubjectId, row.rightSubjectId]).filter((id): id is number => id !== null)));
   const rows = await prisma.wkSubjectCatalog.findMany({
@@ -271,7 +224,8 @@ export async function hydrateGameQuestions(
     const middle = question.middleSubjectId === null ? null : optionById.get(question.middleSubjectId);
     const right = optionById.get(question.rightSubjectId);
     if (!target || !left || (question.middleSubjectId !== null && !middle) || !right) throw new Error("Game question subjects are unavailable.");
-    const prompt = question.answerType === GameAnswerType.reading ? target.primaryReading : target.primaryMeaning;
+    const prompt = question.promptOverride
+      ?? (question.answerType === GameAnswerType.reading ? target.primaryReading : target.primaryMeaning);
     if (!prompt) throw new Error("Game question prompt is unavailable.");
     return {
       id: question.id,
@@ -283,15 +237,34 @@ export async function hydrateGameQuestions(
   });
 }
 
-export function completedRunValues(startedAt: Date, correctCount: number, questionCount: number, bestStreak: number, level: number | null) {
+export function completedRunValues({
+  kind,
+  startedAt,
+  correctCount,
+  questionCount,
+  bestStreak,
+  level,
+  timeLimitMs,
+}: {
+  kind: GameKindValue;
+  startedAt: Date;
+  correctCount: number;
+  questionCount: number;
+  bestStreak: number;
+  level: number | null;
+  timeLimitMs: number | null;
+}) {
   const completedAt = new Date();
-  const durationMs = Math.max(0, completedAt.getTime() - startedAt.getTime());
+  const elapsedMs = Math.max(0, completedAt.getTime() - startedAt.getTime());
+  // Time Attack always ran the full clock, so record the limit rather than the
+  // moment the last answer happened to land.
+  const durationMs = kind === GAME_KINDS.timeAttack && timeLimitMs !== null ? timeLimitMs : elapsedMs;
   return {
     status: GameRunStatus.completed,
     completedAt,
     completedDatePst: getVancouverDateKey(completedAt),
     durationMs,
-    score: calculateGameScore(correctCount, questionCount, durationMs, level),
+    score: resolveGameScore({ kind, correctCount, questionCount, durationMs, level }),
     currentStreak: 0,
     bestStreak,
   };

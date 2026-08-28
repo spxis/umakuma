@@ -1,23 +1,34 @@
 import { useEffect, useState } from "react";
 
 import { lockBodyScroll } from "@/lib/bodyScrollLock";
-import { formatGameDuration, gameOptionIndexForKey, type GameQuestionPayload } from "@/lib/gameMode";
+import {
+  GAME_KINDS,
+  formatGameDuration,
+  gameOptionIndexForKey,
+  type GameKind,
+  type GameQuestionPayload,
+} from "@/lib/gameMode";
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
-import { GAME_COPY } from "./GameMode.constants";
+import { GAME_COPY, GAME_KIND_LABELS } from "./GameMode.constants";
 
 type Props = {
   question: GameQuestionPayload;
   questionIndex: number;
   questionTotal: number;
-  ultraMode: boolean;
+  kind: GameKind;
+  endless: boolean;
   correctCount: number;
   elapsedMs: number;
+  remainingMs: number | null;
   answering: boolean;
   feedback: { subjectId: number; correct: boolean } | null;
   error: string | null;
   onAnswer: (subjectId: number) => void;
   onExit: () => void;
 };
+
+const URGENT_REMAINING_MS = 10_000;
+const CHAIN_ANSWER_TYPE = "chain";
 
 function choiceTone(subjectType: string): string {
   if (subjectType === "radical") return "border-radical/60 bg-radical/15 text-radical";
@@ -29,9 +40,11 @@ export default function GameRunner({
   question,
   questionIndex,
   questionTotal,
-  ultraMode,
+  kind,
+  endless,
   correctCount,
   elapsedMs,
+  remainingMs,
   answering,
   feedback,
   error,
@@ -76,21 +89,28 @@ export default function GameRunner({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [exitConfirmOpen]);
 
+  const isChain = question.answerType === CHAIN_ANSWER_TYPE;
+  const countLabel = kind === GAME_KINDS.shiritori ? GAME_COPY.chainLength.toLowerCase() : GAME_COPY.correct;
+  const clockValue = remainingMs === null ? formatGameDuration(elapsedMs) : formatGameDuration(remainingMs);
+  const clockUrgent = remainingMs !== null && remainingMs <= URGENT_REMAINING_MS;
+  const clockClass = clockUrgent ? "text-red-600" : undefined;
+
   return (
     <div className="fixed inset-0 z-100 bg-background p-2 sm:p-5">
       <main className="mx-auto flex h-full w-full max-w-7xl flex-col">
         <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-line pb-2 text-xs font-black uppercase text-foreground/60 sm:pb-3">
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button type="button" onClick={() => setExitConfirmOpen(true)} className="h-9 rounded-full border border-line bg-surface px-3 text-xs font-black text-foreground hover:bg-surface-muted">Exit</button>
-            <span className="truncate">{questionIndex + 1}/{ultraMode ? "∞" : questionTotal}</span>
+            <span className="truncate">{questionIndex + 1}/{endless ? "∞" : questionTotal}</span>
+            <span className="hidden truncate text-foreground/45 lg:inline">{GAME_KIND_LABELS[kind]}</span>
           </div>
-          <span className="hidden whitespace-nowrap sm:inline">{correctCount} {GAME_COPY.correct}</span>
-          <span className="hidden text-right sm:inline">{formatGameDuration(elapsedMs)}</span>
+          <span className="hidden whitespace-nowrap sm:inline">{correctCount} {countLabel}</span>
+          <span className={`hidden text-right sm:inline ${clockClass ?? ""}`}>{clockValue}</span>
           <button type="button" onClick={() => setDetailsOpen((value) => !value)} aria-expanded={detailsOpen} aria-label="Game details" className="justify-self-end h-9 w-9 rounded-full border border-line bg-surface text-base font-black text-foreground hover:bg-surface-muted sm:hidden">...</button>
           {detailsOpen ? (
             <div className="absolute right-0 top-full z-40 mt-2 flex rounded-xl border border-line bg-surface p-2 shadow-[0_14px_30px_rgba(8,16,36,0.18)] sm:hidden">
-              <span className="whitespace-nowrap px-3 py-1">{correctCount} {GAME_COPY.correct}</span>
-              <span className="whitespace-nowrap border-l border-line px-3 py-1">{formatGameDuration(elapsedMs)}</span>
+              <span className="whitespace-nowrap px-3 py-1">{correctCount} {countLabel}</span>
+              <span className={`whitespace-nowrap border-l border-line px-3 py-1 ${clockClass ?? ""}`}>{clockValue}</span>
             </div>
           ) : null}
         </div>
@@ -114,9 +134,13 @@ export default function GameRunner({
             );
           })}
         </div>
-        <div className="mt-2 flex min-h-0 flex-1 flex-col items-center justify-center rounded-xl border border-line bg-surface-muted px-3 py-3 text-center sm:mt-4 sm:px-5 sm:py-4">
-          <p className="text-[10px] font-bold uppercase text-foreground/60">{GAME_COPY.chooseMatch} · {question.answerType}</p>
-          <p className="mt-1 text-2xl font-black text-foreground sm:text-4xl">{question.prompt}</p>
+        <div className={`mt-2 flex min-h-0 flex-1 flex-col items-center justify-center rounded-xl border px-3 py-3 text-center sm:mt-4 sm:px-5 sm:py-4 ${clockUrgent ? "border-red-500 bg-red-50" : "border-line bg-surface-muted"}`}>
+          <p className="text-[10px] font-bold uppercase text-foreground/60">
+            {isChain ? GAME_COPY.chooseChain : `${GAME_COPY.chooseMatch} · ${question.answerType}`}
+          </p>
+          <p className={`mt-1 font-black text-foreground ${isChain ? "text-3xl [font-family:var(--font-jp-current)] sm:text-5xl" : "text-2xl sm:text-4xl"}`}>
+            {question.prompt}
+          </p>
         </div>
         {error ? <p className="mt-2 shrink-0 text-center text-sm font-bold text-red-700">{error}</p> : null}
       </main>

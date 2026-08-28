@@ -139,6 +139,12 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Game Hard Mode uses three distinct left/middle/right choices. Keyboard controls map Left/Up-or-Down/Right, `1`/`2`/`3`, and `4`/`5`/`6`; runs default to regular mode for backward compatibility, and scoreboards must expose hard-mode filtering plus a Difficulty column.
 - Game Ultra Mode uses `GameRun.batchSize = -1` as its persisted sentinel. It requires one level/category, hides Questions, may combine with Hard Mode, repeats shuffled full-pool cycles indefinitely, and completes on the first wrong answer with elapsed time and streak preserved.
 - Level-specific game leaderboards may list only accounts whose WaniKani level is at least the selected report level. Any/All-level reports may include every account.
+- Games live behind a hub at `/users/[nickname]/game`. Each game is a `GameRun.kind` enum value, and every per-kind behavior (which controls show, whether it is endless, whether a wrong answer ends it, fixed category/question count) comes from `GAME_KIND_RULES` in `src/lib/gameMode.ts`. Do not add new games with `batchSize` sentinels; Ultra keeps `-1` only for backward compatibility as a `match` variant.
+- Daily Challenge is one attempt per account per Vancouver day, enforced by the `(accountId, kind, dailyKey)` unique index. The first run of a day defines the question set and every later run copies those questions, so a mid-day level-up cannot change the day's questions. An unfinished attempt resumes rather than being replaced.
+- Time Attack is scored by `calculateTimeAttackScore`, not the match formula: the clock is fixed and the volume varies. Keep the level bonus below one correct answer so volume always outranks it. Timed runs close through the `runs/[runId]/complete` route; fixed-length runs must not, or a partial round could bank a perfect score.
+- Revenge draws targets from trouble-tagged items first, then lowest `reviewEaseScore`, while distractors still come from the full pool so choices stay confusable.
+- Shiritori chains on `primaryReading` only, so the next link is derivable from the answered word alone. Words whose reading ends in ん are never targets; a chain ends when the pool has no remaining continuation.
+- `toGameRunSummary` must build its result field by field. Callers pass runs with `questions` included, and spreading the row would ship every `targetSubjectId` to the client.
 
 ## Don't touch
 

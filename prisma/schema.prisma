@@ -255,6 +255,15 @@ enum GameSubjectCategory {
 enum GameAnswerType {
   reading
   meaning
+  chain
+}
+
+enum GameKind {
+  match
+  daily
+  revenge
+  time_attack
+  shiritori
 }
 
 enum ReadingChallengeStatus {
@@ -314,10 +323,14 @@ model StudyReviewAttempt {
 model GameRun {
   id            String              @id @default(cuid())
   accountId     String
+  kind          GameKind            @default(match)
   batchSize     Int
   level         Int?
   category      GameSubjectCategory
   hardMode      Boolean             @default(false)
+  dailyKey      String?
+  seed          String?
+  timeLimitMs   Int?
   questionCount Int
   answeredCount Int                 @default(0)
   correctCount  Int                 @default(0)
@@ -335,8 +348,10 @@ model GameRun {
   account   Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
   questions GameQuestion[]
 
+  @@unique([accountId, kind, dailyKey])
   @@index([accountId, completedAt])
   @@index([status, batchSize, level, category, completedDatePst])
+  @@index([kind, status, completedDatePst])
 }
 
 model GameQuestion {
@@ -348,6 +363,7 @@ model GameQuestion {
   middleSubjectId   Int?
   rightSubjectId    Int
   answerType        GameAnswerType
+  promptOverride    String?
   selectedSubjectId Int?
   correct           Boolean?
   answeredAt        DateTime?

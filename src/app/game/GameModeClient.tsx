@@ -1,16 +1,25 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { formatGameDuration, formatGameScore, isGameBatchSize, type GameLeaderboardEntry, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
-import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
+import {
+  GAME_KINDS,
+  gameKindRules,
+  gameProgressFlags,
+  isGameBatchSize,
+  type GameKind,
+  type GameLeaderboardEntry,
+} from "@/lib/gameMode";
 import GameLeaderboard from "./GameLeaderboard";
 import GameLeaderboardFilters from "./GameLeaderboardFilters";
 import GameRecentGames from "./GameRecentGames";
+import GameResultsPanel from "./GameResultsPanel";
 import GameRunner from "./GameRunner";
-import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_LEVEL_PILL_CLASS, GAME_MIXED_PILL_CLASS } from "./GameMode.constants";
+import GameSetupPanel from "./GameSetupPanel";
+import GamesHub from "./GamesHub";
+import { GAME_COPY } from "./GameMode.constants";
+import { buildGameHubCards } from "./gameHubCards";
 import type {
-  ActiveGame,
   GameLeaderboardResponse,
   GameLeaderboardFilters as LeaderboardFilters,
   GameModeClientProps,
@@ -18,30 +27,38 @@ import type {
   GameSelection,
   GameSetupResponse,
 } from "./GameMode.types";
+import { useGameSession } from "./useGameSession";
 import { usePersistedGameSettings } from "./usePersistedGameSettings";
-
-const ANSWER_FLASH_MS = 250;
 
 function gameSelectionBatchSize(batchSize: number): GameSelection["batchSize"] {
   return isGameBatchSize(batchSize) ? batchSize : "all";
 }
 
 export default function GameModeClient({ accountId, nickname, wkUsername }: GameModeClientProps) {
-  const [phase, setPhase] = useState<GamePhase>("lobby");
+  const [phase, setPhase] = useState<GamePhase>("hub");
   const [setup, setSetup] = useState<GameSetupResponse | null>(null);
   const [setupError, setSetupError] = useState<string | null>(null);
+  const [setupRefresh, setSetupRefresh] = useState(0);
   const { selection: [selection, setSelection], filters: [leaderboardFilters, setLeaderboardFilters] } = usePersistedGameSettings();
-  const [activeGame, setActiveGame] = useState<ActiveGame | null>(null);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [feedback, setFeedback] = useState<{ subjectId: number; correct: boolean } | null>(null);
-  const [starting, setStarting] = useState(false);
-  const [answering, setAnswering] = useState(false);
-  const [gameError, setGameError] = useState<string | null>(null);
-  const [elapsedMs, setElapsedMs] = useState(0);
   const [leaderboardRefresh, setLeaderboardRefresh] = useState(0);
-  const [challengeRequest, setChallengeRequest] = useState(0);
-  const setupRef = useRef<HTMLElement | null>(null);
-  const leaderboardKey = `${leaderboardFilters.batchSize}:${leaderboardFilters.level ?? "all"}:${leaderboardFilters.mode}:${leaderboardFilters.range}:${leaderboardFilters.metric}:${leaderboardFilters.hardMode}:${leaderboardFilters.ultraMode}:${leaderboardRefresh}`;
+  const setupRef = useRef<HTMLDivElement | null>(null);
+
+  const onStarted = useCallback(() => setPhase("playing"), []);
+  const onCompleted = useCallback(() => {
+    setPhase("results");
+    setLeaderboardRefresh((value) => value + 1);
+    setSetupRefresh((value) => value + 1);
+  }, []);
+  const session = useGameSession({ accountId, onStarted, onCompleted });
+
+  // On the hub the scoreboard follows the filter; inside a game it follows that game.
+  const leaderboardKind: "any" | GameKind = phase === "hub" ? leaderboardFilters.kind : selection.kind;
+  // Shiritori and Daily always record one category, so a leftover category
+  // filter would hide every run for them.
+  const leaderboardCategory = leaderboardKind !== "any" && gameKindRules(leaderboardKind).fixedCategory !== null
+    ? "all"
+    : leaderboardFilters.mode;
+  const leaderboardKey = `${leaderboardKind}:${leaderboardFilters.batchSize}:${leaderboardFilters.level ?? "all"}:${leaderboardCategory}:${leaderboardFilters.range}:${leaderboardFilters.metric}:${leaderboardFilters.hardMode}:${leaderboardFilters.ultraMode}:${leaderboardRefresh}`;
   const [leaderboardState, setLeaderboardState] = useState<{
     key: string;
     data: GameLeaderboardResponse | null;
@@ -60,14 +77,15 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
         setSetupError(error instanceof Error ? error.message : GAME_COPY.loadError);
       });
     return () => controller.abort();
-  }, [accountId]);
+  }, [accountId, setupRefresh]);
 
   useEffect(() => {
     const controller = new AbortController();
     const params = new URLSearchParams({
+      kind: leaderboardKind,
       batchSize: String(leaderboardFilters.batchSize),
       level: leaderboardFilters.level === "any" ? "any" : leaderboardFilters.level === null ? "all" : String(leaderboardFilters.level),
-      category: leaderboardFilters.mode,
+      category: leaderboardCategory,
       range: leaderboardFilters.range,
       metric: leaderboardFilters.metric,
       hardMode: leaderboardFilters.hardMode ? "hard" : "all",
@@ -81,139 +99,77 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
       })
       .catch((error: unknown) => {
         if (error instanceof DOMException && error.name === "AbortError") return;
-        setGameError(error instanceof Error ? error.message : "Could not load scoreboard.");
+        session.setError(error instanceof Error ? error.message : "Could not load scoreboard.");
       });
     return () => controller.abort();
-  }, [accountId, leaderboardFilters, leaderboardKey]);
+    // `session.setError` is stable; `leaderboardKey` captures every filter input.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountId, leaderboardKey]);
 
-  useEffect(() => {
-    if (phase !== "playing" || !activeGame) return;
-    const startedAtMs = new Date(activeGame.run.startedAt).getTime();
-    const timer = window.setInterval(() => setElapsedMs(Date.now() - startedAtMs), 100);
-    return () => window.clearInterval(timer);
-  }, [activeGame, phase]);
-
-  useEffect(() => {
-    if (challengeRequest === 0 || phase !== "lobby") return;
-    setupRef.current?.scrollIntoView({ block: "center" });
-  }, [challengeRequest, phase]);
-
-  const availableCount = setup
-    ? selection.level === null
-      ? setup.totalCounts[selection.category]
-      : setup.countsByLevel[selection.level]?.[selection.category] ?? 0
-    : 0;
-  const minimumItems = selection.hardMode ? 3 : 2;
-  const canStart = Boolean(setup && availableCount >= (selection.ultraMode || selection.batchSize === "all" ? minimumItems : selection.batchSize) && !starting);
-  const currentQuestion = activeGame?.questions[questionIndex] ?? null;
-  const finishedRun = phase === "results" ? activeGame?.run ?? null : null;
-
-  async function startGame(gameSelection: GameSelection = selection) {
-    const gameAvailableCount = setup
-      ? gameSelection.level === null
-        ? setup.totalCounts[gameSelection.category]
-        : setup.countsByLevel[gameSelection.level]?.[gameSelection.category] ?? 0
-      : 0;
-    const gameMinimumItems = gameSelection.hardMode ? 3 : 2;
-    if (!setup || gameAvailableCount < (gameSelection.ultraMode || gameSelection.batchSize === "all" ? gameMinimumItems : gameSelection.batchSize) || starting) return;
-    setStarting(true);
-    setGameError(null);
-    try {
-      const response = await fetch(`/api/game/${accountId}/runs`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          batchSize: gameSelection.batchSize,
-          level: gameSelection.level,
-          category: gameSelection.category,
-          hardMode: gameSelection.hardMode,
-          ultraMode: gameSelection.ultraMode,
-        }),
-      });
-      const payload = (await response.json()) as ActiveGame & { error?: string };
-      if (!response.ok) throw new Error(payload.error ?? "Could not start the game.");
-      setActiveGame(payload);
-      setQuestionIndex(0);
-      setFeedback(null);
-      setElapsedMs(0);
-      setPhase("playing");
-    } catch (error) {
-      setGameError(error instanceof Error ? error.message : "Could not start the game.");
-    } finally {
-      setStarting(false);
-    }
-  }
-
-  async function answerQuestion(question: GameQuestionPayload, selectedSubjectId: number) {
-    if (!activeGame || answering || feedback) return;
-    setAnswering(true);
-    setGameError(null);
-    try {
-      const response = await fetch(`/api/game/${accountId}/runs/${activeGame.run.id}/answer`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questionId: question.id, selectedSubjectId }),
-      });
-      const payload = (await response.json()) as { correct?: boolean; run?: GameRunSummary; appendedQuestions?: GameQuestionPayload[]; error?: string };
-      if (!response.ok || typeof payload.correct !== "boolean" || !payload.run) {
-        throw new Error(payload.error ?? "Could not record the answer.");
-      }
-      setFeedback({ subjectId: selectedSubjectId, correct: payload.correct });
-      setActiveGame((current) => current ? { ...current, run: payload.run!, questions: [...current.questions, ...(payload.appendedQuestions ?? [])] } : current);
-      window.setTimeout(() => {
-        if (payload.run?.status === "completed") {
-          setPhase("results");
-          setLeaderboardRefresh((value) => value + 1);
-        } else {
-          setQuestionIndex((value) => value + 1);
-        }
-        setFeedback(null);
-        setAnswering(false);
-      }, ANSWER_FLASH_MS);
-    } catch (error) {
-      setGameError(error instanceof Error ? error.message : "Could not record the answer.");
-      setAnswering(false);
-    }
-  }
-
-  function resetToLobby() {
+  function openLobby(kind: GameKind) {
+    const rules = gameKindRules(kind);
+    setSelection((value) => ({
+      ...value,
+      kind,
+      ultraMode: rules.usesUltraMode ? value.ultraMode : false,
+      hardMode: rules.usesHardMode ? value.hardMode : false,
+    }));
+    session.reset();
     setPhase("lobby");
-    setActiveGame(null);
-    setQuestionIndex(0);
-    setFeedback(null);
-    setGameError(null);
+    window.requestAnimationFrame(() => setupRef.current?.scrollIntoView({ block: "start", behavior: "smooth" }));
+  }
+
+  function backToHub() {
+    session.reset();
+    setPhase("hub");
   }
 
   function challengeRecentRun(entry: GameLeaderboardEntry) {
-    setSelection({ batchSize: gameSelectionBatchSize(entry.batchSize), level: entry.level, category: entry.category, hardMode: entry.hardMode, ultraMode: entry.ultraMode });
-    resetToLobby();
-    setChallengeRequest((request) => request + 1);
+    setSelection((value) => ({
+      ...value,
+      kind: entry.kind,
+      batchSize: gameSelectionBatchSize(entry.batchSize),
+      level: entry.level,
+      category: entry.category,
+      hardMode: entry.hardMode,
+      ultraMode: entry.ultraMode,
+    }));
+    session.reset();
+    setPhase("lobby");
+    window.requestAnimationFrame(() => setupRef.current?.scrollIntoView({ block: "start", behavior: "smooth" }));
   }
 
   if (!setup && !setupError) {
     return <p className="py-24 text-center text-sm font-bold text-foreground/65">{GAME_COPY.loading}</p>;
   }
-  if (setupError) {
-    return <p className="py-24 text-center text-sm font-bold text-red-700">{setupError}</p>;
+  if (setupError || !setup) {
+    return <p className="py-24 text-center text-sm font-bold text-red-700">{setupError ?? GAME_COPY.loadError}</p>;
   }
 
+  const activeGame = session.activeGame;
+  const currentQuestion = session.currentQuestion;
   if (phase === "playing" && currentQuestion && activeGame) {
+    const flags = gameProgressFlags(activeGame.run.kind, activeGame.run.ultraMode);
     return (
       <GameRunner
         question={currentQuestion}
-        questionIndex={questionIndex}
+        questionIndex={session.questionIndex}
         questionTotal={activeGame.questions.length}
-        ultraMode={activeGame.run.ultraMode}
+        kind={activeGame.run.kind}
+        endless={flags.endless}
         correctCount={activeGame.run.correctCount}
-        elapsedMs={elapsedMs}
-        answering={answering}
-        feedback={feedback}
-        error={gameError}
-        onAnswer={(subjectId) => void answerQuestion(currentQuestion, subjectId)}
-        onExit={resetToLobby}
+        elapsedMs={session.elapsedMs}
+        remainingMs={session.remainingMs}
+        answering={session.answering}
+        feedback={session.feedback}
+        error={session.error}
+        onAnswer={(subjectId) => void session.answerQuestion(currentQuestion, subjectId)}
+        onExit={backToHub}
       />
     );
   }
+
+  const finishedRun = phase === "results" ? activeGame?.run ?? null : null;
 
   return (
     <div className="w-full pb-10">
@@ -223,98 +179,83 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
           <h1 className="mt-1 text-4xl font-black text-foreground sm:text-6xl">{GAME_COPY.title}</h1>
           <p className="mt-2 text-sm font-semibold text-foreground/65">{GAME_COPY.subtitle}</p>
         </div>
+        {phase !== "hub" ? (
+          <button
+            type="button"
+            onClick={backToHub}
+            className="h-10 rounded-full border border-line bg-surface px-5 text-xs font-black uppercase text-foreground hover:bg-surface-muted"
+          >
+            {GAME_COPY.backToGames}
+          </button>
+        ) : null}
       </header>
 
       <main className="space-y-5 py-5 sm:py-7">
-          {phase === "results" && finishedRun ? (
-            <section className="border-y border-line bg-surface-muted px-4 py-8 text-center sm:py-12">
-              <p className="text-xs font-black uppercase text-hot">{GAME_COPY.complete}</p>
-              <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-sm font-black text-foreground/65">
-                <span className={GAME_LEVEL_PILL_CLASS}>{finishedRun.level === null ? "All levels" : `L${finishedRun.level}`}</span>
-                {finishedRun.category === "mixed" ? (
-                  <span className={GAME_MIXED_PILL_CLASS}>Mixed</span>
-                ) : (
-                  <SubjectTypePill type={finishedRun.category}>{GAME_CATEGORY_LABELS[finishedRun.category]}</SubjectTypePill>
-                )}
-                <span>{finishedRun.questionCount} questions</span>
-                <span>{finishedRun.ultraMode ? (finishedRun.hardMode ? "Ultra hard" : GAME_COPY.ultraMode) : finishedRun.hardMode ? GAME_COPY.hardMode : GAME_COPY.regularMode}</span>
-              </div>
-              <p className="mt-3 text-7xl font-black leading-none text-accent sm:text-9xl">{formatGameScore(finishedRun.score)}</p>
-              <div className="mx-auto mt-6 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
-                <div><p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.score}</p><p className="mt-1 text-xl font-black sm:text-3xl">{finishedRun.correctCount}/{finishedRun.questionCount}</p></div>
-                <div><p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.time}</p><p className="mt-1 text-xl font-black sm:text-3xl">{formatGameDuration(finishedRun.durationMs)}</p></div>
-                <div><p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.streak}</p><p className="mt-1 text-xl font-black sm:text-3xl">{finishedRun.bestStreak}</p></div>
-              </div>
-              <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
-                <button
-                  type="button"
-                  disabled={starting}
-                  onClick={() => void startGame({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category, hardMode: finishedRun.hardMode, ultraMode: finishedRun.ultraMode })}
-                  className="rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
-                >
-                  {starting ? GAME_COPY.starting : "Play same settings"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelection({ batchSize: gameSelectionBatchSize(finishedRun.batchSize), level: finishedRun.level, category: finishedRun.category, hardMode: finishedRun.hardMode, ultraMode: finishedRun.ultraMode });
-                    resetToLobby();
-                  }}
-                  className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black uppercase text-foreground hover:bg-surface-muted"
-                >
-                  Change settings
-                </button>
-              </div>
-            </section>
+        <div ref={setupRef}>
+          {finishedRun ? (
+            <GameResultsPanel
+              run={finishedRun}
+              starting={session.starting}
+              replayable={!gameKindRules(finishedRun.kind).oncePerDay}
+              onPlayAgain={() => void session.startGame({
+                ...selection,
+                kind: finishedRun.kind,
+                batchSize: gameSelectionBatchSize(finishedRun.batchSize),
+                level: finishedRun.level,
+                category: finishedRun.category,
+                hardMode: finishedRun.hardMode,
+                ultraMode: finishedRun.ultraMode,
+              })}
+              onChangeSettings={() => {
+                session.reset();
+                setPhase("lobby");
+              }}
+              onBackToGames={backToHub}
+            />
+          ) : phase === "lobby" ? (
+            <GameSetupPanel
+              setup={setup}
+              selection={selection}
+              starting={session.starting}
+              onChange={setSelection}
+              onStart={() => void session.startGame(selection)}
+              onBack={backToHub}
+            />
           ) : (
-            <section ref={setupRef} aria-label="Game setup" className={`grid gap-4 border-y border-line bg-surface/70 px-4 py-5 sm:px-6 ${selection.ultraMode ? "sm:grid-cols-5" : "sm:grid-cols-6"}`}>
-              {!selection.ultraMode ? <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.questions}
-                <select value={selection.batchSize} onChange={(event) => setSelection((value) => ({ ...value, batchSize: event.target.value === "all" ? "all" : Number(event.target.value) as GameSelection["batchSize"] }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
-                  <option value="all">All</option>
-                  {setup?.batchSizes.map((size) => <option key={size} value={size}>{size}</option>)}
-                </select>
-              </label> : null}
-              <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.level}
-                <select value={selection.level ?? "all"} onChange={(event) => setSelection((value) => ({ ...value, level: event.target.value === "all" ? null : Number(event.target.value) }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
-                  {!selection.ultraMode ? <option value="all">{GAME_COPY.allLevels}</option> : null}
-                  {setup?.levels.map((level) => <option key={level} value={level}>Level {level}</option>)}
-                </select>
-              </label>
-              <label className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.category}
-                <select value={selection.category} onChange={(event) => setSelection((value) => ({ ...value, category: event.target.value as GameSelection["category"] }))} className="mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground">
-                  {setup?.categories.map((category) => (
-                    <option key={category} value={category}>
-                      {GAME_CATEGORY_LABELS[category]} ({selection.level === null ? setup.totalCounts[category] : setup.countsByLevel[selection.level]?.[category] ?? 0})
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <div className="flex flex-col sm:pt-6">
-                <label className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-black uppercase text-foreground hover:bg-surface-muted">
-                  <input type="checkbox" checked={selection.hardMode} onChange={(event) => setSelection((value) => ({ ...value, hardMode: event.target.checked }))} className="h-4 w-4 accent-red-600" />
-                  {GAME_COPY.hardMode}
-                </label>
-              </div>
-              <div className="flex flex-col sm:pt-6">
-                <button type="button" aria-pressed={selection.ultraMode} onClick={() => setSelection((value) => ({ ...value, ultraMode: !value.ultraMode, level: value.ultraMode ? value.level : value.level ?? setup?.account.wkLevel ?? 1 }))} className={`h-11 rounded-lg border px-5 text-sm font-black uppercase transition ${selection.ultraMode ? "border-fuchsia-700 bg-fuchsia-700 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>{GAME_COPY.ultraMode}</button>
-              </div>
-              <div className="flex flex-col sm:pt-6">
-                <button type="button" disabled={!canStart} onClick={() => void startGame()} className="h-11 rounded-lg border border-hot bg-hot px-5 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-45">{starting ? GAME_COPY.starting : GAME_COPY.start}</button>
-                <p className="mt-1 text-center text-[10px] font-bold text-foreground/50">{availableCount} items</p>
-              </div>
-              <p className={selection.ultraMode ? "sm:col-span-5 text-xs font-semibold text-foreground/60" : "sm:col-span-6 text-xs font-semibold text-foreground/60"}>{availableCount < (selection.ultraMode || selection.batchSize === "all" ? minimumItems : selection.batchSize) ? GAME_COPY.notEnoughItems : selection.ultraMode ? "Keep going until the first wrong answer. Time and streak keep running." : GAME_COPY.scoreRule}</p>
-            </section>
+            <GamesHub
+              cards={buildGameHubCards(setup, selection)}
+              selectedKind={selection.kind}
+              onSelect={openLobby}
+            />
           )}
+        </div>
 
-          <GameLeaderboardFilters filters={leaderboardFilters} setup={setup!} onChange={(filters: LeaderboardFilters) => setLeaderboardFilters(filters)} />
+        <GameLeaderboardFilters
+          filters={leaderboardFilters}
+          setup={setup}
+          lockedKind={phase === "hub" ? null : selection.kind}
+          onChange={(filters: LeaderboardFilters) => setLeaderboardFilters(filters)}
+        />
 
-          {gameError ? <p className="text-sm font-bold text-red-700">{gameError}</p> : null}
-          <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(19rem,1fr)]">
-            <GameLeaderboard days={leaderboardState.key === leaderboardKey ? leaderboardState.data?.days ?? [] : []} members={leaderboardState.key === leaderboardKey ? leaderboardState.data?.members ?? [] : []} metric={leaderboardFilters.metric} loading={leaderboardState.key !== leaderboardKey} />
-            <GameRecentGames entries={leaderboardState.data?.recent ?? []} loading={!leaderboardState.data} onChallenge={challengeRecentRun} />
-          </div>
+        {session.error ? <p className="text-sm font-bold text-red-700">{session.error}</p> : null}
+        <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(19rem,1fr)]">
+          <GameLeaderboard
+            days={leaderboardState.key === leaderboardKey ? leaderboardState.data?.days ?? [] : []}
+            members={leaderboardState.key === leaderboardKey ? leaderboardState.data?.members ?? [] : []}
+            metric={leaderboardFilters.metric}
+            loading={leaderboardState.key !== leaderboardKey}
+          />
+          <GameRecentGames
+            entries={leaderboardState.data?.recent ?? []}
+            loading={!leaderboardState.data}
+            onChallenge={challengeRecentRun}
+          />
+        </div>
       </main>
-      <p className="text-center text-xs font-semibold text-foreground/45">Playing as {nickname}</p>
+      <p className="text-center text-xs font-semibold text-foreground/45">
+        Playing as {nickname}
+        {selection.kind === GAME_KINDS.daily ? ` · ${setup.availability.daily.dateKey}` : ""}
+      </p>
     </div>
   );
 }

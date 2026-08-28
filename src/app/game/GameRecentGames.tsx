@@ -1,7 +1,7 @@
-import { formatGameDuration, formatGameScore, type GameLeaderboardEntry } from "@/lib/gameMode";
+import { formatGameDuration, formatGameScore, gameKindRules, type GameLeaderboardEntry } from "@/lib/gameMode";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
-import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_LEVEL_PILL_CLASS, GAME_MIXED_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
+import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS, GAME_LEVEL_PILL_CLASS, GAME_MIXED_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
 
 type Props = {
   entries: GameLeaderboardEntry[];
@@ -27,7 +27,12 @@ export default function GameRecentGames({ entries, loading, onChallenge }: Props
               <span className="min-w-0">
                 <span className="block truncate text-sm font-black text-foreground">{entry.nickname}</span>
                 <span className="mt-1 flex flex-nowrap items-center gap-1.5 whitespace-nowrap text-xs font-semibold text-foreground/60">
-                  <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
+                  <span className={`subject-pill border-line bg-surface-muted ${GAME_KIND_ACCENT[entry.kind].text}`}>
+                    <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {GAME_KIND_LABELS[entry.kind]}
+                  </span>
+                  {gameKindRules(entry.kind).usesLevel ? (
+                    <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
+                  ) : null}
                   {entry.category === "mixed" ? (
                     <span className={GAME_MIXED_PILL_CLASS}>Mixed</span>
                   ) : (
