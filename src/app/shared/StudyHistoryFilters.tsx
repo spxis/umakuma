@@ -4,6 +4,7 @@ import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
 import FilterChipButton from "@/app/users/[nickname]/shared/FilterChipButton";
 
 import { srsBucketBadgeClass, srsBucketLabel, titleCaseSrsBucket } from "./studyHistoryUi";
+import FieldLabel from "../shared/FieldLabel";
 
 type ResultFilter = "all" | "correct" | "wrong" | "skipped";
 
@@ -62,7 +63,7 @@ export default function StudyHistoryFilters({
 }: Props) {
   return (
     <section id="study-history-filters-panel" className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
-      <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
+      <FieldLabel>Filters</FieldLabel>
 
       <div className="mt-2 space-y-2">
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line px-2.5 py-2">

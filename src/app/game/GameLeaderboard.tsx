@@ -1,7 +1,9 @@
 import { formatGameDuration, formatGameScore, gameKindRules, type GameMetric } from "@/lib/gameMode";
 import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
 import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, GAME_MIXED_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
+import GameLeaderboardMobile from "./GameLeaderboardMobile";
 import type { GameLeaderboardDay } from "./GameMode.types";
+import LoadingState from "../shared/LoadingState";
 
 type Props = {
   days: GameLeaderboardDay[];
@@ -28,10 +30,12 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
         <span className="text-xs font-bold uppercase text-foreground/60">{GAME_METRIC_LABELS[metric]}</span>
       </div>
       {loading ? (
-        <p className="px-5 py-10 text-center text-sm font-bold text-foreground/60">Loading scoreboard...</p>
+        <LoadingState label="scoreboard" />
       ) : (
-        <div className="overflow-x-auto xl:max-h-96 xl:overflow-y-auto">
-          <table className="w-full min-w-xl border-collapse text-left">
+        <>
+        <GameLeaderboardMobile days={days} members={members} metric={metric} />
+        <div className="hidden md:block xl:max-h-96 xl:overflow-y-auto">
+          <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-line text-[10px] font-bold uppercase text-foreground/55">
                 <th className="px-4 py-3 sm:px-6">Day</th>
@@ -99,6 +103,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
             </tbody>
           </table>
         </div>
+        </>
       )}
     </section>
   );

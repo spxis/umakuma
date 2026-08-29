@@ -6,6 +6,8 @@ import {
   secondaryReadingsForDisplay,
 } from "../lib/levelExplorerDisplay";
 import { isRadicalSubjectType } from "../lib/levelExplorerDomain";
+import FieldLabel from "../../../../shared/FieldLabel";
+import SurfaceCard from "../../../../shared/SurfaceCard";
 
 type Props = {
   selectedItem: LevelItem;
@@ -34,8 +36,8 @@ export default function LevelExplorerDetailFacts({
     <>
       {canShowReadings ? (
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Primary reading</p>
+          <SurfaceCard className="text-sm">
+            <FieldLabel>Primary reading</FieldLabel>
             <p className="mt-1 text-lg font-semibold text-foreground/90 sm:text-xl">
               {isRadicalSubjectType(selectedItem.subjectType) ? (
                 "Not applicable"
@@ -43,9 +45,9 @@ export default function LevelExplorerDetailFacts({
                 <ReadingListWithPronunciation readings={selectedItem.primaryReadings ?? []} mode={showEnglishForReadings ? "inline" : "plain"} />
               )}
             </p>
-          </div>
-          <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Secondary readings</p>
+          </SurfaceCard>
+          <SurfaceCard className="text-sm">
+            <FieldLabel>Secondary readings</FieldLabel>
             <p className="mt-1 text-lg font-semibold text-foreground/90 sm:text-xl">
               {isRadicalSubjectType(selectedItem.subjectType) ? (
                 "Not applicable"
@@ -53,42 +55,42 @@ export default function LevelExplorerDetailFacts({
                 <ReadingListWithPronunciation readings={secondaryReadingsForDisplay(selectedItem)} mode={showEnglishForReadings ? "inline" : "plain"} />
               )}
             </p>
-          </div>
+          </SurfaceCard>
         </div>
       ) : null}
 
       {!hideTimeStats ? (
         <div className={`${canShowReadings ? "mt-3" : "mt-4"} grid gap-3 sm:grid-cols-2 lg:grid-cols-3`}>
-          <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Started</p>
+          <SurfaceCard className="text-sm">
+            <FieldLabel>Started</FieldLabel>
             <p className="mt-1 font-semibold text-foreground/90">
               {formatDate(selectedItem.startedAt)}
               {formatRelativeFromNow(selectedItem.startedAt) ? ` (${formatRelativeFromNow(selectedItem.startedAt)})` : ""}
             </p>
-          </div>
-          <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Next review</p>
+          </SurfaceCard>
+          <SurfaceCard className="text-sm">
+            <FieldLabel>Next review</FieldLabel>
             <p className="mt-1 font-semibold text-foreground/90">{formatDate(selectedItem.availableAt)}</p>
-          </div>
-          <div className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Passed</p>
+          </SurfaceCard>
+          <SurfaceCard className="text-sm">
+            <FieldLabel>Passed</FieldLabel>
             <p className="mt-1 font-semibold text-foreground/90">
               {formatDate(selectedItem.passedAt)}
               {formatRelativeFromNow(selectedItem.passedAt) ? ` (${formatRelativeFromNow(selectedItem.passedAt)})` : ""}
             </p>
-          </div>
+          </SurfaceCard>
         </div>
       ) : null}
 
       {!studyMode || revealStudyReading ? (
         <div className={`mt-4 grid gap-3 ${showReadingExplanation ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
           <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <p className="text-xs font-bold uppercase text-foreground/70">Meaning explanation</p>
+            <FieldLabel>Meaning explanation</FieldLabel>
             <p className="mt-2 text-foreground/90">{selectedMeaningExplanation}</p>
           </article>
           {showReadingExplanation ? (
             <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-              <p className="text-xs font-bold uppercase text-foreground/70">Reading explanation</p>
+              <FieldLabel>Reading explanation</FieldLabel>
               <p className="mt-2 text-foreground/90">{selectedReadingExplanationRaw}</p>
             </article>
           ) : null}

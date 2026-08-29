@@ -8,6 +8,7 @@ import SegmentedControl from "@/app/shared/SegmentedControl";
 import userBanner from "@/images/umakuma-banner1-transparent.png";
 import { usePersistedTab } from "@/lib/usePersistedTab";
 import StudySourceLibraryItemsManager from "./StudySourceLibraryItemsManager";
+import FieldLabel from "../../shared/FieldLabel";
 import {
   CUSTOM_LIBRARY_AI_PROMPT,
   SAMPLE_CUSTOM_LIBRARY_JSON,
@@ -291,13 +292,13 @@ export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }
           <div className="mt-3 grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
             <div className="space-y-3">
               <div className="rounded-xl border border-line bg-black/[0.04] p-3">
-                <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Sample custom library JSON</p>
+                <FieldLabel>Sample custom library JSON</FieldLabel>
                 <pre className="mt-2 overflow-auto rounded-lg border border-line/70 bg-surface p-2 text-[11px] leading-relaxed text-foreground/85" style={{ maxHeight: "20lh" }}>
                   {SAMPLE_CUSTOM_LIBRARY_JSON}
                 </pre>
               </div>
               <div className="rounded-xl border border-dashed border-line bg-black/[0.03] p-3">
-                <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">AI prompt</p>
+                <FieldLabel>AI prompt</FieldLabel>
                 <p className="mt-2 text-[11px] leading-relaxed text-foreground/85 whitespace-pre-wrap">{CUSTOM_LIBRARY_AI_PROMPT}</p>
               </div>
             </div>

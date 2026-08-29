@@ -2,6 +2,7 @@ import { formatGameDuration, formatGameScore, gameKindRules, type GameLeaderboar
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
 import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS, GAME_LEVEL_PILL_CLASS, GAME_MIXED_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
+import LoadingState from "../shared/LoadingState";
 
 type Props = {
   entries: GameLeaderboardEntry[];
@@ -17,7 +18,7 @@ export default function GameRecentGames({ entries, loading, onChallenge }: Props
         <p className="text-xs font-semibold text-foreground/55">All modes. Select a run to challenge it.</p>
       </div>
       {loading ? (
-        <p className="px-4 py-10 text-center text-sm font-bold text-foreground/60">Loading recent games...</p>
+        <LoadingState label="recent games" />
       ) : entries.length === 0 ? (
         <p className="px-4 py-10 text-center text-sm font-bold text-foreground/60">{GAME_COPY.noRecentGames}</p>
       ) : (

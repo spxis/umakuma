@@ -9,6 +9,7 @@ import AdminPaginationControls from "@/app/admin/AdminPaginationControls";
 import AdminReadingEntriesTable from "./AdminReadingEntriesTable";
 import AdminTrackedPlayersManager from "./AdminTrackedPlayersManager";
 import type { AdminReadingEntry, EntryEditDraft, ReadingEntriesResponse } from "./AdminReadingEntries.types";
+import FieldLabel from "../../shared/FieldLabel";
 
 function getErrorMessage(payload: unknown, fallback: string): string {
   if (payload && typeof payload === "object" && "error" in payload) {
@@ -355,7 +356,7 @@ export default function AdminReadingEntriesClient({
 
           <div className="mt-4 grid gap-3 rounded-2xl border border-line bg-surface-muted p-4 sm:grid-cols-2 lg:grid-cols-6">
                 <label className="flex flex-col gap-1 lg:col-span-1">
-                  <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Month</span>
+                  <FieldLabel tone="muted" as="span">Month</FieldLabel>
                   <input
                     type="month"
                     className="h-10 rounded-lg border border-line bg-surface px-3 text-sm"
@@ -368,7 +369,7 @@ export default function AdminReadingEntriesClient({
                 </label>
 
                 <label className="flex flex-col gap-1 lg:col-span-2">
-                  <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Member</span>
+                  <FieldLabel tone="muted" as="span">Member</FieldLabel>
                   <select
                     className="h-10 rounded-lg border border-line bg-surface px-3 text-sm"
                     value={accountFilter}
@@ -387,7 +388,7 @@ export default function AdminReadingEntriesClient({
                 </label>
 
                 <label className="flex flex-col gap-1 lg:col-span-1">
-                  <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">View</span>
+                  <FieldLabel tone="muted" as="span">View</FieldLabel>
                   <select
                     className="h-10 rounded-lg border border-line bg-surface px-3 text-sm"
                     value={sourceFilter}
@@ -402,7 +403,7 @@ export default function AdminReadingEntriesClient({
                 </label>
 
                 <label className="flex flex-col gap-1 lg:col-span-1">
-                  <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Page size</span>
+                  <FieldLabel tone="muted" as="span">Page size</FieldLabel>
                   <select
                     className="h-10 rounded-lg border border-line bg-surface px-3 text-sm"
                     value={pageSize}

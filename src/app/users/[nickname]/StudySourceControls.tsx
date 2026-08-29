@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 
 import type { StudySource } from "./study-explorer/lib/studyExplorerTypes";
+import FieldLabel from "../../shared/FieldLabel";
 
 type CustomLibraryRow = {
   id: string;
@@ -229,7 +230,7 @@ export default function StudySourceControls({
               </div>
 
               <div className="rounded-xl border border-line bg-surface px-3 py-3">
-                <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Library manager</p>
+                <FieldLabel>Library manager</FieldLabel>
                 <p className="mt-1 text-xs text-foreground/70">Upload and manage libraries on the dedicated libraries page.</p>
                 <Link
                   href={manageLibrariesHref}

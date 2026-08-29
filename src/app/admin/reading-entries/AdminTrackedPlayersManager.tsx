@@ -1,4 +1,5 @@
 import type { AdminReadingEntryMember } from "./AdminReadingEntries.types";
+import FieldLabel from "../../shared/FieldLabel";
 
 type AdminTrackedPlayersManagerProps = {
   members: AdminReadingEntryMember[];
@@ -27,7 +28,7 @@ export default function AdminTrackedPlayersManager({
     <div className="mt-4 rounded-2xl border border-line bg-surface-muted p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Tracked players</p>
+          <FieldLabel tone="muted">Tracked players</FieldLabel>
           <p className="mt-1 text-sm text-foreground/75">Choose who appears in the reading challenge leaderboard.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">

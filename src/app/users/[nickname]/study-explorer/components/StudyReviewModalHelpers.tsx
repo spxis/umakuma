@@ -12,6 +12,7 @@ import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
 import { formatRelativeFromNow } from "../../level-explorer/lib/levelExplorerDisplay";
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
 import { isRadicalSubjectType } from "./StudyExplorer.constants";
+import FieldLabel from "../../../../shared/FieldLabel";
 
 export function buildUnifiedDetailItem(selectedItem: StudyQueueItem): StudyQueueItem {
   return {
@@ -174,7 +175,7 @@ export function relatedTilesClickable(
 export function metricCard(label: string, value: string): JSX.Element {
   return (
     <div className="rounded-xl border border-line bg-surface px-3 py-2">
-      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{label}</p>
+      <FieldLabel size="xs" tone="muted">{label}</FieldLabel>
       <p className="mt-1 text-sm font-black text-foreground/95">{value}</p>
     </div>
   );
@@ -183,7 +184,7 @@ export function metricCard(label: string, value: string): JSX.Element {
 export function readingCard(label: string, value: JSX.Element): JSX.Element {
   return (
     <div className="rounded-xl border border-line bg-surface px-3 py-2">
-      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{label}</p>
+      <FieldLabel size="xs" tone="muted">{label}</FieldLabel>
       <p className="mt-1 text-2xl font-black leading-tight text-foreground/95">{value}</p>
     </div>
   );

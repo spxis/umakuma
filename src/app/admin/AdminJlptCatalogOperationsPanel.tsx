@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { formatDateTimeShort } from "@/lib/timeFormat";
 
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
+import SurfaceCard from "../shared/SurfaceCard";
 
 type AdminJlptCatalogOperationsPanelProps = {
   sessionAuthorized: boolean;
@@ -138,7 +139,7 @@ export default function AdminJlptCatalogOperationsPanel({
         </article>
       </div>
 
-      <div className="rounded-xl border border-line bg-surface p-4">
+      <SurfaceCard tone="plain" padding="md">
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -168,9 +169,9 @@ export default function AdminJlptCatalogOperationsPanel({
           <p>Remaining batches: {operationScope?.estimates.jlptEnrichRemainingBatches ?? "-"}</p>
           <p>Scope snapshot: {formatDateTimeShort(operationScope?.generatedAt ?? null)}</p>
         </div>
-      </div>
+      </SurfaceCard>
 
-      <div className="rounded-xl border border-line bg-surface p-4">
+      <SurfaceCard tone="plain" padding="md">
         <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Recent runs</p>
         {recentRuns.length ? (
           <div className="mt-3 overflow-x-auto">
@@ -202,7 +203,7 @@ export default function AdminJlptCatalogOperationsPanel({
         ) : (
           <p className="mt-2 text-sm text-foreground/70">No JLPT runs yet.</p>
         )}
-      </div>
+      </SurfaceCard>
     </section>
   );
 }

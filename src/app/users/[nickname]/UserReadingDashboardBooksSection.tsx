@@ -12,6 +12,7 @@ import {
   type ReadingBookCatalogOption,
 } from "./UserReadingSignoffPanel.books";
 import type { Member } from "./UserReadingSignoffPanel.types";
+import FieldLabel from "../../shared/FieldLabel";
 
 type UserReadingDashboardBooksSectionProps = {
   viewerCanChooseMember: boolean;
@@ -178,7 +179,7 @@ export default function UserReadingDashboardBooksSection({
 
             {viewerCanChooseMember ? (
               <label className="mt-4 flex flex-col gap-1">
-                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">User</span>
+                <FieldLabel tone="muted" as="span">User</FieldLabel>
                 <select
                   className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
                   value={selectedMemberId}
@@ -195,7 +196,7 @@ export default function UserReadingDashboardBooksSection({
 
             <div className="mt-4 rounded-xl border border-line bg-surface-muted p-3">
               <label className="flex flex-col gap-1">
-                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Pick from local books</span>
+                <FieldLabel tone="muted" as="span">Pick from local books</FieldLabel>
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="relative min-w-60 flex-1" ref={catalogMenuRef}>
                     <button

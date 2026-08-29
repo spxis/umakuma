@@ -19,6 +19,7 @@ import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+import FieldLabel from "../../../../shared/FieldLabel";
 import type {
   KanjiStats,
   JlptExplorerContentProps as Props,
@@ -171,7 +172,7 @@ export default function JlptExplorerContent({
         <div id="jlpt-filters-panel" className={`mt-3 ${mobileFilterSectionClass}`}>
           <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
             <div className="flex items-center justify-between gap-3">
-              <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
+              <FieldLabel>Filters</FieldLabel>
               <div className="w-full md:w-1/2">
                 <ExplorerSearchBar scope="jlpt" />
               </div>

@@ -1,6 +1,7 @@
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { formatCampaignDateLabel } from "@/lib/readingSignoff";
 import UserReadingBookCoverImage from "./UserReadingBookCoverImage";
+import FieldLabel from "../../shared/FieldLabel";
 
 type LeaderboardRow = {
   accountId: string;
@@ -167,7 +168,7 @@ export default function UserReadingRewardsSummary({
                   <article key={`mobile-${row.accountId}`} className="rounded-lg border border-line bg-surface-muted/60 p-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">#{index + 1}</p>
+                        <FieldLabel tone="muted">#{index + 1}</FieldLabel>
                         <p className="text-base font-black text-foreground">{row.nickname}</p>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/65">
                           WK {row.wkLevel} • Streak {row.currentStreak}d

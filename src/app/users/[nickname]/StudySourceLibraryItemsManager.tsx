@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 import { shortSubjectTypeLabel, subjectTypePillClass } from "./level-explorer/lib/levelExplorerDisplay";
+import FieldLabel from "../../shared/FieldLabel";
 import {
   getLocalStorageItem,
   getStoredEnum,
@@ -245,7 +246,7 @@ export default function StudySourceLibraryItemsManager({
     <div className="space-y-2 rounded-xl border border-line bg-surface px-3 py-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Library items ({filteredItems.length}/{items.length})</p>
+          <FieldLabel>Library items ({filteredItems.length}/{items.length})</FieldLabel>
           <p className="text-[11px] font-semibold text-foreground/60">Rad {typeCounts.radical} · Kanji {typeCounts.kanji} · Vocab {typeCounts.vocabulary}</p>
           <label className="inline-flex items-center gap-2 text-xs font-semibold text-foreground/70">
             <span>Level</span>

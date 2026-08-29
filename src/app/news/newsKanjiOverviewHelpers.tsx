@@ -1,5 +1,6 @@
 import { newsGlyphButtonClass } from "./newsGlyphBoxStyle";
 import { openNewsGlyphRun } from "./newsGlyphRunner";
+import FieldLabel from "../shared/FieldLabel";
 import type {
   AllCountFilter,
   AllCoverageFilter,
@@ -86,9 +87,9 @@ export function GroupColumn({
         <div className="mt-2 space-y-2">
           {groups.map((group) => (
             <div key={group.label} className="rounded-lg border border-line/70 bg-surface-muted/60 p-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
+              <FieldLabel size="xs" tone="muted">
                 {group.label} ({group.entries.length})
-              </p>
+              </FieldLabel>
               <div className="mt-1 flex flex-wrap gap-1.5">
                 {group.entries.map((entry) => (
                   <div key={`${group.label}-${entry.char}`} className="relative inline-flex">

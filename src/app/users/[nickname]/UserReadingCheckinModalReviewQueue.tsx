@@ -2,6 +2,7 @@ import type { ReadingReviewQueueSnapshot } from "@/lib/readingSignoff";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
 import { ExplorerPill, SubjectTypePill } from "./shared/ExplorerPill";
+import FieldLabel from "../../shared/FieldLabel";
 
 type UserReadingCheckinModalReviewQueueProps = {
   selectedReviewQueue: ReadingReviewQueueSnapshot;
@@ -14,7 +15,7 @@ export default function UserReadingCheckinModalReviewQueue({
 
   return (
     <section className="mt-3 rounded-xl border border-line bg-surface-muted p-3">
-      <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Current review queue snapshot</p>
+      <FieldLabel tone="muted">Current review queue snapshot</FieldLabel>
       <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-foreground/85">
         <SubjectTypePill type={SUBJECT_TYPES.radical}>
           {subjectTypePluralLabel(SUBJECT_TYPES.radical)} left: {selectedReviewQueue.radical}

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+import FieldLabel from "../../../../shared/FieldLabel";
 import {
   buildReviewOutcomeSeries,
   summarizeReviewOutcomes,
@@ -74,7 +75,7 @@ function Collapsible({
   return (
     <div className="mt-2 rounded-xl border border-line bg-surface px-3 py-2">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{label}</p>
+        <FieldLabel size="xs" tone="muted">{label}</FieldLabel>
         <button
           type="button"
           onClick={onToggle}

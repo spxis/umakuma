@@ -1,8 +1,4 @@
-import type {
-  StudyQueueItem,
-  StudyReviewSubmitResult,
-  StudyViewerMode,
-} from "../lib/studyExplorerTypes";
+import type { StudyQueueItem, StudyReviewSubmitResult, StudyViewerMode } from "../lib/studyExplorerTypes";
 
 import type { RelatedReference } from "./StudyReviewModal.types";
 import {
@@ -30,6 +26,7 @@ import { stripHtml } from "../../level-explorer/lib/levelExplorerDisplay";
 import { RelatedReferenceCards } from "../../level-explorer/components/LevelExplorerReferenceCards";
 import type { LevelItem } from "../../explorerTypes";
 import ReadingScriptPair from "../../shared/ReadingScriptPair";
+import FieldLabel from "../../../../shared/FieldLabel";
 const EMPTY_SUBJECT_BY_ID = new Map<number, LevelItem>();
 type Props = {
   accountId: string;
@@ -209,12 +206,12 @@ export default function StudyReviewModalMetaPanels({
 
           <div className={`mt-2 grid gap-2 ${showReadingExplanation ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
             <article className="rounded-xl border border-line bg-surface p-3 text-sm">
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Meaning explanation</p>
+              <FieldLabel size="xs" tone="muted">Meaning explanation</FieldLabel>
               <p className="mt-2 text-foreground/90">{selectedMeaningExplanation}</p>
             </article>
             {showReadingExplanation ? (
               <article className="rounded-xl border border-line bg-surface p-3 text-sm">
-                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">Reading explanation</p>
+                <FieldLabel size="xs" tone="muted">Reading explanation</FieldLabel>
                 <p className="mt-2 text-foreground/90">{selectedReadingExplanationRaw}</p>
               </article>
             ) : null}
@@ -226,7 +223,7 @@ export default function StudyReviewModalMetaPanels({
                 <div className={`grid gap-2 ${hasRadicals && hasVisuallySimilar ? "lg:grid-cols-2" : "lg:grid-cols-1"}`}>
                   {hasRadicals ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.radicals}</p>
+                      <FieldLabel size="xs" tone="muted">{STUDY_REVIEW_META_TEXT.radicals}</FieldLabel>
                       {renderSharedRelatedCards(
                         selectedItem.radicals as RelatedReference[] | undefined,
                         SUBJECT_TYPES.radical,
@@ -236,7 +233,7 @@ export default function StudyReviewModalMetaPanels({
                   ) : null}
                   {hasVisuallySimilar ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.visuallySimilar}</p>
+                      <FieldLabel size="xs" tone="muted">{STUDY_REVIEW_META_TEXT.visuallySimilar}</FieldLabel>
                       {renderSharedRelatedCards(
                         selectedItem.visuallySimilar as RelatedReference[] | undefined,
                         SUBJECT_TYPES.kanji,
@@ -250,11 +247,11 @@ export default function StudyReviewModalMetaPanels({
               {hasUsedInVocabulary ? (
                 <div className="rounded-xl border border-line bg-surface px-3 py-2">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
+                    <FieldLabel size="xs" tone="muted">
                       {isRadicalSubjectType(selectedItem.subjectType)
                         ? STUDY_REVIEW_META_TEXT.usedInKanji
                         : STUDY_REVIEW_META_TEXT.usedInVocabulary}
-                    </p>
+                    </FieldLabel>
                     <button
                       type="button"
                       onClick={onToggleUsedInVocabularyCollapsed}
@@ -278,7 +275,7 @@ export default function StudyReviewModalMetaPanels({
           {hasComponentKanji ? (
             <div className="mt-2">
               <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.componentKanji}</p>
+                <FieldLabel size="xs" tone="muted">{STUDY_REVIEW_META_TEXT.componentKanji}</FieldLabel>
                 {renderSharedRelatedCards(
                   selectedItem.componentKanji as RelatedReference[] | undefined,
                   SUBJECT_TYPES.kanji,
@@ -292,7 +289,7 @@ export default function StudyReviewModalMetaPanels({
             <div className="mt-2">
               <div className="rounded-xl border border-line bg-surface px-3 py-2">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.usedKanji}</p>
+                  <FieldLabel size="xs" tone="muted">{STUDY_REVIEW_META_TEXT.usedKanji}</FieldLabel>
                   <button
                     type="button"
                     onClick={onToggleUsedKanjiCollapsed}
@@ -346,7 +343,7 @@ export default function StudyReviewModalMetaPanels({
           {wordExamples.length > 0 ? (
             <div className="mt-2 rounded-xl border border-line bg-surface px-3 py-2">
               <div className="flex items-center justify-between gap-2">
-                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_META_TEXT.usedInWords}</p>
+                <FieldLabel size="xs" tone="muted">{STUDY_REVIEW_META_TEXT.usedInWords}</FieldLabel>
                 <button
                   type="button"
                   onClick={onToggleUsedInWordsCollapsed}

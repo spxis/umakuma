@@ -1,6 +1,7 @@
 import type { ReviewOutcome, StudyReviewSubmitResult } from "../lib/studyExplorerTypes";
 import { STUDY_REVIEW_MODAL_SECTION_TEXT } from "./StudyExplorer.constants";
 import StudyReviewFlashActionRow from "./StudyReviewFlashActionRow";
+import FieldLabel from "../../../../shared/FieldLabel";
 
 type Props = {
   allMeanings: string[];
@@ -53,9 +54,9 @@ export default function StudyReviewAnswerPane({
     <div className="flex h-full min-h-0 flex-col">
       <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
         <section>
-          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
+          <FieldLabel size="xs" tone="muted">
             {STUDY_REVIEW_MODAL_SECTION_TEXT.reading}
-          </p>
+          </FieldLabel>
           <div className="mt-1 flex min-w-0 items-end gap-2">
             <p className="text-2xl font-black leading-tight text-foreground sm:text-4xl">{primaryReading}</p>
             {primaryReadingKatakana !== "-" ? (
@@ -67,9 +68,9 @@ export default function StudyReviewAnswerPane({
         </section>
 
         <section className="mt-3 border-t border-line/70 pt-3">
-          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">
+          <FieldLabel size="xs" tone="muted">
             {STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}
-          </p>
+          </FieldLabel>
           <p className="mt-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">
             {allMeanings[0] ?? fallbackMeaning}
           </p>

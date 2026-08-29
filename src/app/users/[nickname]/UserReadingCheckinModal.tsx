@@ -4,6 +4,7 @@ import ExplorerConfirmDialog from "./shared/ExplorerConfirmDialog";
 import UserReadingBooksEditor from "./UserReadingBooksEditor";
 import UserReadingCheckinModalAdminDateField from "./UserReadingCheckinModalAdminDateField";
 import UserReadingCheckinModalReviewQueue from "./UserReadingCheckinModalReviewQueue";
+import FieldLabel from "../../shared/FieldLabel";
 
 type Member = {
   id: string;
@@ -152,7 +153,7 @@ export default function UserReadingCheckinModal({
 
         {viewerCanChooseMember ? (
           <label className="mt-4 flex flex-col gap-1">
-            <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">User</span>
+            <FieldLabel tone="muted" as="span">User</FieldLabel>
             <select
               className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
               value={selectedMemberId}
@@ -169,7 +170,7 @@ export default function UserReadingCheckinModal({
         {allowSignoffDateEdit ? <UserReadingCheckinModalAdminDateField value={form.signoffDatePst} maxDate={maxSignoffDatePst} onChange={onSignoffDateChange} /> : null}
 
         <section className="mt-4 rounded-xl border border-line bg-surface-muted p-3">
-          <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">What are you checking in?</p>
+          <FieldLabel tone="muted">What are you checking in?</FieldLabel>
           <div className="mt-2 grid gap-2 sm:grid-cols-3">
             <button
               type="button"
@@ -221,7 +222,7 @@ export default function UserReadingCheckinModal({
           {showReading ? (
             <>
               <label className="flex flex-col gap-1 sm:col-span-2">
-                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Your Book</span>
+                <FieldLabel tone="muted" as="span">Your Book</FieldLabel>
                 <select
                   className="h-10 rounded-lg border border-line bg-surface-muted px-3 text-sm"
                   value={form.bookTitle}
@@ -237,7 +238,7 @@ export default function UserReadingCheckinModal({
               </label>
 
               <label className="flex flex-col gap-1">
-                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Pages read</span>
+                <FieldLabel tone="muted" as="span">Pages read</FieldLabel>
                 <input
                   type="number"
                   min={0}
@@ -254,7 +255,7 @@ export default function UserReadingCheckinModal({
               </label>
 
               <label className="flex flex-col gap-1">
-                <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">Minutes read</span>
+                <FieldLabel tone="muted" as="span">Minutes read</FieldLabel>
                 <input
                   type="number"
                   min={0}

@@ -20,6 +20,7 @@ import { buildUnifiedDetailItem } from "./StudyReviewModalHelpers";
 import StudyReviewGlyphContent from "./StudyReviewGlyphContent";
 import StudyReviewAnswerPane from "./StudyReviewAnswerPane";
 import GlyphStatusChipRow from "../../shared/GlyphStatusChipRow";
+import FieldLabel from "../../../../shared/FieldLabel";
 
 export default function StudyReviewModalSection({
   accountId,
@@ -350,7 +351,7 @@ export default function StudyReviewModalSection({
                 </div>
                 {detailsRevealed && allMeanings.length > 1 ? (
                   <div className="mt-2 rounded-xl border border-line bg-surface px-3 py-2 sm:hidden">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/65">{STUDY_REVIEW_MODAL_SECTION_TEXT.altMeanings}</p>
+                    <FieldLabel size="xs" tone="muted">{STUDY_REVIEW_MODAL_SECTION_TEXT.altMeanings}</FieldLabel>
                     <p className="mt-1 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/80">{allMeanings.slice(1).join(" • ")}</p>
                   </div>
                 ) : null}

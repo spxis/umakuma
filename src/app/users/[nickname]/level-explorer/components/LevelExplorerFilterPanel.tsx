@@ -12,6 +12,7 @@ import FilterChipButton from "../../shared/FilterChipButton";
 import LevelExplorerLevelFilters from "./LevelExplorerLevelFilters";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS } from "./LevelExplorer.constants";
 import type { LevelExplorerFilterPanelProps as Props } from "./LevelExplorerFilterPanel.types";
+import FieldLabel from "../../../../shared/FieldLabel";
 
 function wkStatusToneClass(status: (typeof SRS_FILTER_ALLOWED)[number], active: boolean): string {
   if (status === LEVEL_SRS_FILTERS.apprentice) return active ? "border-pink-300 bg-pink-100 text-pink-700" : "border-pink-200 bg-pink-50/70 text-pink-700 hover:bg-pink-100";
@@ -48,7 +49,7 @@ export default function LevelExplorerFilterPanel({
     <div className="rounded-2xl border border-line bg-surface px-3 py-3 shadow-[0_8px_18px_rgba(8,16,36,0.06)]">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
         <div className="flex items-center justify-between gap-2 sm:shrink-0 sm:justify-start">
-          <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">Filters</p>
+          <FieldLabel>Filters</FieldLabel>
           <button type="button" onClick={onClearAllFilters} className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted sm:h-8 sm:text-xs">Clear all</button>
         </div>
         <div className="w-full min-w-0 sm:w-1/2">

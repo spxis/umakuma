@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useAdminFeedback } from "./AdminFeedbackProvider";
 import AdminCatalogBrowser from "./AdminCatalogBrowser";
+import SurfaceCard from "../shared/SurfaceCard";
 
 type CatalogStatusResponse = {
   now: string;
@@ -277,7 +278,7 @@ export default function AdminCatalogPanel({ viewMode = "all", sessionAuthorized,
         </article>
       </div> : null}
 
-      {showOperations ? <div className="rounded-xl border border-line bg-surface p-4">
+      {showOperations ? <SurfaceCard tone="plain" padding="md">
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
@@ -347,9 +348,9 @@ export default function AdminCatalogPanel({ viewMode = "all", sessionAuthorized,
         {status?.state.lastError ? (
           <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-800">Last error: {status.state.lastError}</p>
         ) : null}
-      </div> : null}
+      </SurfaceCard> : null}
 
-      {showOperations ? <div className="rounded-xl border border-line bg-surface p-4">
+      {showOperations ? <SurfaceCard tone="plain" padding="md">
         <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Recent runs</p>
         {status?.latestRuns.length ? (
           <div className="mt-3 overflow-x-auto">
@@ -387,7 +388,7 @@ export default function AdminCatalogPanel({ viewMode = "all", sessionAuthorized,
         ) : (
           <p className="mt-2 text-sm text-foreground/70">No sync runs yet.</p>
         )}
-      </div> : null}
+      </SurfaceCard> : null}
 
       {showCatalog ? <AdminCatalogBrowser
         sessionAuthorized={sessionAuthorized}

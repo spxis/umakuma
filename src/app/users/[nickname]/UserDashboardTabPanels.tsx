@@ -11,18 +11,13 @@ import {
   type SubjectType,
 } from "@/lib/domainConstants";
 import type { ItemSpread, ItemSpreadRow } from "@/lib/itemSpread";
-import {
-  formatNumber,
-  srsBadgeClass,
-  srsSegmentClass,
-  srsSegmentTextClass,
-  stageLabel,
-} from "./userDashboardSrsUi";
+import { formatNumber, srsBadgeClass, srsSegmentClass, srsSegmentTextClass, stageLabel } from "./userDashboardSrsUi";
 import {
   DASHBOARD_SUBJECT_TYPES,
 } from "./UserDashboard.constants";
 
 import { subjectTypePluralLabel } from "./shared/subjectTypeLabels";
+import FieldLabel from "../../shared/FieldLabel";
 import type {
   ItemSpreadGroupDetails,
   LevelProgressSnapshot,
@@ -200,7 +195,7 @@ export function ItemSpreadTabPanel({ itemSpread, itemSpreadDetails }: ItemSpread
                         key={`${groupKey}-level-${levelRow.level}`}
                         className="grid grid-cols-[auto_1fr_1fr_1fr_auto] items-center gap-2 rounded-lg border border-line bg-surface-muted px-2 py-1.5"
                       >
-                        <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">L{levelRow.level}</span>
+                        <FieldLabel as="span">L{levelRow.level}</FieldLabel>
                         <span className="subject-pill subject-pill--radical justify-center">{formatNumber(levelRow.radical)}</span>
                         <span className="subject-pill subject-pill--kanji justify-center">{formatNumber(levelRow.kanji)}</span>
                         <span className="subject-pill subject-pill--vocabulary justify-center">{formatNumber(levelRow.vocabulary)}</span>
@@ -402,9 +397,9 @@ export function LevelProgressTabPanel({
                       <p className="text-4xl font-black text-foreground" title={`${progress.percent}% Guru+`}>
                         {formatNumber(progress.guruOrHigher)}/{formatNumber(progress.total)}
                       </p>
-                      <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">
+                      <FieldLabel tone="muted">
                         Remaining to Guru+: {formatNumber(remainingToGuru)}
-                      </p>
+                      </FieldLabel>
                     </div>
                     <a href="#explorer" className="text-lg font-bold text-foreground/80 hover:text-accent">
                       See all
@@ -438,9 +433,9 @@ export function LevelProgressTabPanel({
               <article key={`last5-${level}`} className="rounded-2xl border border-line bg-surface p-3">
                 <div className="flex items-center justify-between">
                   <p className="text-lg font-black uppercase tracking-[0.08em] text-foreground">Level {level}</p>
-                  <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/65">
+                  <FieldLabel tone="muted" as="span">
                     Kanji Guru+: {formatNumber(snapshot.kanji.guruOrHigher)}/{formatNumber(snapshot.kanji.total)}
-                  </span>
+                  </FieldLabel>
                 </div>
                 <div className="mt-2 grid gap-2 sm:grid-cols-3">
                   {DASHBOARD_SUBJECT_TYPES.map((type) => {
@@ -451,9 +446,9 @@ export function LevelProgressTabPanel({
                     <div key={`${level}-${label}`} className="rounded-xl border border-line bg-surface-muted px-3 py-2">
                       <div className="flex items-center justify-between gap-2">
                         <span className={`subject-pill subject-pill--${type}`}>{label}</span>
-                        <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">
+                        <FieldLabel as="span">
                           {formatNumber(progress.percent)}%
-                        </span>
+                        </FieldLabel>
                       </div>
                       <p className="mt-1 text-2xl font-black text-foreground">
                         {formatNumber(progress.guruOrHigher)}/{formatNumber(progress.total)}

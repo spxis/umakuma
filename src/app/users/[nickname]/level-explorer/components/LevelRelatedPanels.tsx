@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import FieldLabel from "../../../../shared/FieldLabel";
 
 type Props = {
   hasPrimary: boolean;
@@ -37,14 +38,14 @@ export default function LevelRelatedPanels({
         >
           {hasPrimary ? (
             <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-              <p className="text-xs font-bold uppercase text-foreground/70">{primaryTitle}</p>
+              <FieldLabel>{primaryTitle}</FieldLabel>
               {primaryContent}
             </article>
           ) : null}
 
           {hasVisuallySimilar ? (
             <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-              <p className="text-xs font-bold uppercase text-foreground/70">Visually similar</p>
+              <FieldLabel>Visually similar</FieldLabel>
               {visuallySimilarContent}
             </article>
           ) : null}
@@ -55,7 +56,7 @@ export default function LevelRelatedPanels({
         <div className="grid gap-3 lg:grid-cols-1">
           <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-xs font-bold uppercase text-foreground/70">Used in vocabulary</p>
+              <FieldLabel>Used in vocabulary</FieldLabel>
               {onToggleUsedInVocabularyCollapsed ? (
                 <button
                   type="button"
