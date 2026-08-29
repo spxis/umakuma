@@ -2,16 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
-import { formatRelativeFromNow } from "@/lib/timeFormat";
-import { isSubjectType } from "@/lib/domainConstants";
 import HistoryItemDetailModal from "@/app/shared/HistoryItemDetailModal";
 import StudyHistoryFilters from "@/app/shared/StudyHistoryFilters";
 import type { HistorySrsBucket, StudyHistoryPayload } from "@/app/shared/studyHistoryTypes";
-import { pronunciationForReading } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import StudyHistoryHeader from "@/app/shared/StudyHistoryHeader";
-import StudyHistoryAttemptMetaChips from "@/app/shared/StudyHistoryAttemptMetaChips";
-import GlyphReferenceTile from "@/app/users/[nickname]/shared/GlyphReferenceTile";
+import StudyHistoryRows from "@/app/shared/StudyHistoryRows";
 
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 type SortDir = "asc" | "desc";
@@ -26,32 +22,8 @@ const EMPTY_RESULT_COUNTS = { all: 0, correct: 0, wrong: 0, skipped: 0 };
 const EMPTY_SRS_BUCKET_COUNTS = { apprentice: 0, guru: 0, master: 0, enlightened: 0, burned: 0, locked: 0, unknown: 0 };
 
 function sortIcon(activeSortBy: SortBy, sortBy: SortBy, sortDir: SortDir): string {
-  return activeSortBy === sortBy ? (sortDir === "desc" ? "v" : "^") : "<>";
-}
-function formatHistoryDateCompact(value: string): string {
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) {
-    return "-";
-  }
-  const monthDay = new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-  }).format(date);
-  const time = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  }).format(date).toLowerCase();
-  return `${monthDay.toUpperCase()} (${time})`;
-}
-function resultIcon(result: string): { icon: string; className: string; label: string } {
-  if (result === "correct") {
-    return { icon: "✓", className: "text-emerald-600", label: "Correct" };
-  }
-  if (result === "wrong") {
-    return { icon: "✕", className: "text-red-600", label: "Wrong" };
-  }
-  return { icon: "•", className: "text-amber-600", label: "Skipped" };
+  // Real arrows: the old "v" / "^" / "<>" rendered as stray punctuation.
+  return activeSortBy === sortBy ? (sortDir === "desc" ? "↓" : "↑") : "↕";
 }
 
 export default function StudyHistoryTable({
@@ -202,141 +174,38 @@ export default function StudyHistoryTable({
           {error ? <p className="mt-4 text-base text-red-600">{error.message}</p> : null}
           {data ? (
         <div className="mt-3 space-y-3">
-          <div className="sm:hidden overflow-hidden rounded-lg border border-line bg-surface">
-            <div className="grid grid-cols-[52%_48%] bg-surface-muted px-2 py-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/65">
-              <p>Time</p>
-              <p>Subject</p>
-            </div>
-            <div className="divide-y divide-line/50">
-              {data.attempts.map((row) => (
-                <div key={`mobile-${row.id}`} className="relative grid grid-cols-[52%_48%] gap-0 bg-surface px-2 py-1.5 hover:bg-surface-muted/40">
-                  {(() => {
-                    const meta = resultIcon(row.result);
-                    return (
-                      <>
-                        <span
-                          className={`absolute right-2 top-1/2 -translate-y-1/2 text-base font-black leading-none ${meta.className}`}
-                          title={meta.label}
-                          aria-hidden
-                        >
-                          {meta.icon}
-                        </span>
-                        <span className="sr-only">{meta.label}</span>
-                      </>
-                    );
-                  })()}
-
-                  <div className="min-w-0">
-                    <p className="pr-5 text-[10px] font-bold uppercase tracking-[0.05em] text-foreground/70 leading-tight whitespace-nowrap">
-                      {formatHistoryDateCompact(row.submittedAt)} · {formatRelativeFromNow(row.submittedAt, { style: "short", allowFuture: false, noValueLabel: "-", invalidLabel: "-" })}
-                    </p>
-                    <StudyHistoryAttemptMetaChips
-                      subjectType={row.subjectType}
-                      wkLevel={typeof row.wkLevel === "number" ? row.wkLevel : null}
-                      srsStage={typeof row.srsStage === "number" ? row.srsStage : null}
-                      srsBucket={row.srsBucket}
-                      compact
-                      className="mt-0.5 flex flex-nowrap items-center gap-0.5 overflow-hidden whitespace-nowrap pr-5"
-                    />
-                    {showUserColumn ? (
-                      <p className="mt-0.5 truncate pr-5 text-[10px] font-bold uppercase tracking-[0.06em] text-foreground/60 leading-tight">{row.nickname}</p>
-                    ) : null}
-                  </div>
-
-                  <div className="min-w-0 pr-5">
-                    <div className="flex items-center gap-2 leading-tight">
-                      <GlyphReferenceTile
-                        glyph={row.subjectLabel}
-                        subtitle={historySubjectSubtitle(row.subjectReading, row.subjectMeaning)}
-                        subjectType={historySubjectType(row.subjectType)}
-                        wkLevel={row.wkLevel}
-                        size="large"
-                        onClick={() => {
-                          setSelectedAttemptId(row.id);
-                        }}
-                      />
-                      <div className="min-w-0">
-                        <p className="truncate text-[11px] text-foreground/75">{historySubjectMeaning(row.subjectMeaning)}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* One sort bar for both sizes; the rows below replace the old
+              wide table and the tall mobile cards. */}
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/55">
+            <span>Sort</span>
+            {([
+              ["submittedAt", "Time"],
+              ...(showUserColumn ? [["user", "User"] as const] : []),
+              ["subject", "Subject"],
+              ["result", "Result"],
+            ] as ReadonlyArray<readonly [SortBy, string]>).map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => toggleSort(key)}
+                aria-pressed={sortBy === key}
+                className={`rounded-full border px-3 py-1 transition ${
+                  sortBy === key
+                    ? "border-accent bg-accent text-white"
+                    : "border-line bg-surface text-foreground hover:bg-surface-muted"
+                }`}
+              >
+                {label} {sortIcon(sortBy, key, sortDir)}
+              </button>
+            ))}
           </div>
 
-          <div className="hidden max-h-168 overflow-auto rounded-lg border border-line sm:block">
-            <table className="w-full text-left text-sm sm:text-base">
-            <thead className="sticky top-0 z-20 bg-surface-muted text-xs uppercase tracking-wider text-muted sm:text-sm">
-              <tr>
-                <th className="w-[30%] px-3 py-2">
-                  <button type="button" onClick={() => toggleSort("submittedAt")} className="font-bold">Time {sortIcon(sortBy, "submittedAt", sortDir)}</button>
-                </th>
-                {showUserColumn ? (
-                  <th className="w-[14%] px-3 py-2">
-                    <button type="button" onClick={() => toggleSort("user")} className="font-bold">User {sortIcon(sortBy, "user", sortDir)}</button>
-                  </th>
-                ) : null}
-                <th className="px-3 py-2">
-                  <button type="button" onClick={() => toggleSort("subject")} className="font-bold">Subject {sortIcon(sortBy, "subject", sortDir)}</button>
-                </th>
-                <th className="w-[8%] px-3 py-2 text-center">
-                  <button type="button" onClick={() => toggleSort("result")} className="font-bold">Result {sortIcon(sortBy, "result", sortDir)}</button>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-line/50">
-              {data.attempts.map((row) => (
-                <tr key={row.id} className="hover:bg-surface-muted/40">
-                  <td className="px-3 py-2 align-top">
-                    <p className="font-semibold text-foreground/85">{formatHistoryDateCompact(row.submittedAt)}</p>
-                    <p className="text-[11px] uppercase tracking-[0.08em] text-foreground/55">
-                      {formatRelativeFromNow(row.submittedAt, { style: "short", allowFuture: false, noValueLabel: "-", invalidLabel: "-" })}
-                    </p>
-                    <StudyHistoryAttemptMetaChips
-                      subjectType={row.subjectType}
-                      wkLevel={typeof row.wkLevel === "number" ? row.wkLevel : null}
-                      srsStage={typeof row.srsStage === "number" ? row.srsStage : null}
-                      srsBucket={row.srsBucket}
-                    />
-                  </td>
-                  {showUserColumn ? <td className="px-3 py-2 align-top">{row.nickname}</td> : null}
-                  <td className="px-3 py-2 align-top">
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-3 leading-tight">
-                        <GlyphReferenceTile
-                          glyph={row.subjectLabel}
-                          subtitle={historySubjectSubtitle(row.subjectReading, row.subjectMeaning)}
-                          subjectType={historySubjectType(row.subjectType)}
-                          wkLevel={row.wkLevel}
-                          size="large"
-                          onClick={() => {
-                            setSelectedAttemptId(row.id);
-                          }}
-                        />
-                        <div className="flex min-w-0 flex-col justify-center">
-                          <p className="truncate text-base text-foreground/75 sm:text-lg">{historySubjectMeaning(row.subjectMeaning)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-3 py-2 align-middle text-center">
-                    {(() => {
-                      const meta = resultIcon(row.result);
-                      return (
-                        <>
-                          <span className={`text-2xl font-black leading-none ${meta.className}`} title={meta.label} aria-hidden>
-                            {meta.icon}
-                          </span>
-                          <span className="sr-only">{meta.label}</span>
-                        </>
-                      );
-                    })()}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-            </table>
+          <div className="max-h-168 overflow-auto">
+            <StudyHistoryRows
+              attempts={data.attempts}
+              showUser={showUserColumn}
+              onSelect={setSelectedAttemptId}
+            />
           </div>
         </div>
       ) : null}
@@ -445,21 +314,5 @@ export default function StudyHistoryTable({
   );
 }
 
-function historySubjectType(type: string) {
-  return isSubjectType(type) ? type : undefined;
-}
 
-function historySubjectMeaning(meaning: string | null): string {
-  const normalizedMeaning = meaning?.trim();
-  return normalizedMeaning || "-";
-}
 
-function historySubjectSubtitle(reading: string | null, meaning: string | null): string {
-  const normalizedReading = reading?.trim();
-  if (normalizedReading) {
-    const pronunciation = pronunciationForReading(normalizedReading);
-    return pronunciation ? `${normalizedReading} / ${pronunciation}` : normalizedReading;
-  }
-
-  return meaning?.trim() || "-";
-}

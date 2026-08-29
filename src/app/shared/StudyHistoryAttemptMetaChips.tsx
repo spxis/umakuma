@@ -6,6 +6,7 @@ import {
 import { PillChip } from "@/app/users/[nickname]/shared/StatusSrsChip";
 import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
 
+import { SRS_BUCKETS } from "@/lib/domainConstants";
 import { srsBucketBadgeClass, srsBucketLabel } from "./studyHistoryUi";
 
 type Props = {
@@ -42,7 +43,10 @@ export default function StudyHistoryAttemptMetaChips({
       <PillChip className={`${subjectTypeMetaClass(subjectType)} ${sizeClass}`}>{subjectTypeMetaLabel(subjectType)}</PillChip>
       {wkLevel !== null ? <PillChip className={`${NEUTRAL_CHIP_CLASS} ${sizeClass}`}>L{wkLevel}</PillChip> : null}
       {srsStage !== null ? <PillChip className={`${NEUTRAL_CHIP_CLASS} ${sizeClass}`}>S{srsStage}</PillChip> : null}
-      <PillChip className={`${srsBucketBadgeClass(srsBucket)} ${sizeClass}`}>{srsBucketLabel(srsBucket)}</PillChip>
+      {/* An unknown bucket says nothing; showing "UNK" on every row is noise. */}
+      {srsBucket === SRS_BUCKETS.unknown ? null : (
+        <PillChip className={`${srsBucketBadgeClass(srsBucket)} ${sizeClass}`}>{srsBucketLabel(srsBucket)}</PillChip>
+      )}
     </div>
   );
 }
