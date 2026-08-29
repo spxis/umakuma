@@ -171,8 +171,11 @@ export function ItemSpreadTabPanel({ itemSpread, itemSpreadDetails }: ItemSpread
 
           return (
             <div key={groupKey} className="overflow-hidden rounded-xl border border-line bg-surface-muted">
-              <div className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.9fr_0.9fr_auto] items-center gap-2 px-3 py-2">
-                <p className="text-xl font-semibold text-foreground">{label}</p>
+              {/* Fixed columns plus a content-sized button overflowed narrow phones,
+                  and the rounded container clipped the button rather than scrolling.
+                  Wrap on small screens; keep the original grid from sm up. */}
+              <div className="flex flex-wrap items-center gap-2 px-3 py-2 sm:grid sm:grid-cols-[1.2fr_0.8fr_0.8fr_0.9fr_0.9fr_auto]">
+                <p className="min-w-0 basis-full text-xl font-semibold text-foreground sm:basis-auto">{label}</p>
                 <span className="subject-pill subject-pill--radical justify-center">{formatNumber(row.radical)}</span>
                 <span className="subject-pill subject-pill--kanji justify-center">{formatNumber(row.kanji)}</span>
                 <span className="subject-pill subject-pill--vocabulary justify-center">{formatNumber(row.vocabulary)}</span>
@@ -183,7 +186,7 @@ export function ItemSpreadTabPanel({ itemSpread, itemSpreadDetails }: ItemSpread
                   type="button"
                   onClick={() => toggleExpanded(groupKey)}
                   disabled={!hasDetails}
-                  className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex h-8 shrink-0 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isExpanded ? "Hide" : "Expand"}
                 </button>

@@ -123,7 +123,7 @@ export default function ExplorerConfirmDialog({
             type="button"
             onClick={onCancel}
             disabled={busy}
-            className="rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-55"
+            className="rounded-full border border-line bg-surface px-4 py-2 text-sm font-bold text-foreground hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-55"
           >
             {cancelLabel}
           </button>
@@ -131,7 +131,7 @@ export default function ExplorerConfirmDialog({
             type="button"
             onClick={onConfirm}
               disabled={busy || !phraseMatches}
-            className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.08em] transition disabled:cursor-not-allowed disabled:opacity-55 ${confirmButtonClass}`}
+            className={`rounded-full border px-4 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-55 ${confirmButtonClass}`}
           >
             {busy ? "Working..." : confirmLabel}
           </button>
