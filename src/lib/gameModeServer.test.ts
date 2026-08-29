@@ -61,7 +61,7 @@ describe("buildGameQuestions", () => {
   });
 
   it("builds hard-mode questions with three distinct choices", () => {
-    const questions = buildGameQuestions(Array.from({ length: 12 }, (_, index) => gameItem(index + 1)), 6, true);
+    const questions = buildGameQuestions(Array.from({ length: 12 }, (_, index) => gameItem(index + 1)), 6, 3);
 
     expect(questions).toHaveLength(6);
     for (const question of questions) {
@@ -77,8 +77,30 @@ describe("buildGameQuestions", () => {
     expect(targetPositions.filter((position) => position === 2)).toHaveLength(2);
   });
 
+  it("builds quad questions with four distinct choices spread across the tiles", () => {
+    const questions = buildGameQuestions(Array.from({ length: 20 }, (_, index) => gameItem(index + 1)), 8, 4);
+
+    expect(questions).toHaveLength(8);
+    for (const question of questions) {
+      expect(question.optionSubjectIds).toHaveLength(4);
+      expect(new Set(question.optionSubjectIds).size).toBe(4);
+      expect(question.optionSubjectIds).toContain(question.targetSubjectId);
+    }
+
+    const slots = questions.map((question) => question.optionSubjectIds.indexOf(question.targetSubjectId));
+    for (const slot of [0, 1, 2, 3]) {
+      expect(slots.filter((value) => value === slot)).toHaveLength(2);
+    }
+  });
+
+  it("requires four eligible items for a quad round", () => {
+    expect(() => buildGameQuestions([gameItem(1), gameItem(2), gameItem(3)], 3, 4)).toThrow(
+      "At least 4 eligible items are required.",
+    );
+  });
+
   it("requires three eligible items for hard mode", () => {
-    expect(() => buildGameQuestions([gameItem(1), gameItem(2)], 2, true)).toThrow("At least 3 eligible items are required.");
+    expect(() => buildGameQuestions([gameItem(1), gameItem(2)], 2, 3)).toThrow("At least 3 eligible items are required.");
   });
 });
 
@@ -114,9 +136,9 @@ describe("buildGameQuestionsFromTargets", () => {
 describe("seeded question building", () => {
   it("produces the identical set for the same seed and a different one otherwise", () => {
     const pool = Array.from({ length: 40 }, (_, index) => gameItem(index + 1));
-    const first = buildGameQuestions(pool, 10, false, seededRandom("2026-08-28"));
-    const second = buildGameQuestions(pool, 10, false, seededRandom("2026-08-28"));
-    const other = buildGameQuestions(pool, 10, false, seededRandom("2026-08-29"));
+    const first = buildGameQuestions(pool, 10, 2, seededRandom("2026-08-28"));
+    const second = buildGameQuestions(pool, 10, 2, seededRandom("2026-08-28"));
+    const other = buildGameQuestions(pool, 10, 2, seededRandom("2026-08-29"));
 
     expect(second).toEqual(first);
     expect(other).not.toEqual(first);
@@ -140,7 +162,7 @@ describe("buildShiritoriQuestion", () => {
       position: 3,
       usedSubjectIds: new Set([1]),
       previousItem: pool[0]!,
-      hardMode: false,
+      choiceCount: 2,
       random: seededRandom("chain"),
     });
 
@@ -166,7 +188,7 @@ describe("buildShiritoriQuestion", () => {
         position: 0,
         usedSubjectIds: new Set(),
         previousItem: null,
-        hardMode: false,
+        choiceCount: 2,
         random: seededRandom(`lookahead-${attempt}`),
       });
       expect(question!.targetSubjectId).toBe(11);
@@ -181,7 +203,7 @@ describe("buildShiritoriQuestion", () => {
       position: 0,
       usedSubjectIds: new Set(),
       previousItem: null,
-      hardMode: false,
+      choiceCount: 2,
       random: seededRandom("dead-end"),
     });
 
@@ -196,7 +218,7 @@ describe("buildShiritoriQuestion", () => {
         position: 1,
         usedSubjectIds: new Set([2]),
         previousItem: pool[0]!,
-        hardMode: false,
+        choiceCount: 2,
         random: seededRandom("chain"),
       }),
     ).toBeNull();

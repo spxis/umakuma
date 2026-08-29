@@ -75,7 +75,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm font-black text-foreground/65">
-                    <span className={entry.ultraMode ? "text-fuchsia-700" : entry.hardMode ? "text-red-600" : undefined}>{gameDifficultyLabel(entry.hardMode, entry.ultraMode)}</span>
+                    <span className={entry.ultraMode ? "text-fuchsia-700" : entry.choiceCount >= 3 ? "text-red-600" : undefined}>{gameDifficultyLabel(entry.choiceCount, entry.ultraMode)}</span>
                   </td>
                   <td className="px-4 py-3 text-right text-xl font-black text-accent">{metricValue(entry, metric)}</td>
                   {metric !== "time" ? (

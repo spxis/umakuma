@@ -27,7 +27,7 @@ export function gameAvailableCount(
 /** The smallest pool that can produce a round for this selection. */
 export function gameRequiredCount(selection: GameSelection): number {
   const rules = gameKindRules(selection.kind);
-  const minimumItems = rules.usesHardMode && selection.hardMode ? 3 : 2;
+  const minimumItems = rules.usesHardMode ? selection.choiceCount : 2;
   if (selection.kind === GAME_KINDS.daily) return 1;
   if (!rules.usesBatchSize || selection.ultraMode || selection.batchSize === "all") return minimumItems;
   return Math.max(minimumItems, selection.batchSize);
@@ -60,7 +60,7 @@ export function buildGameHubCards(setup: GameSetupResponse, selection: GameSelec
     const rules = gameKindRules(kind);
     const level = rules.usesLevel ? selection.level : null;
     const available = gameAvailableCount(setup, kind, level, selection.category);
-    const minimumItems = rules.usesHardMode && selection.hardMode ? 3 : 2;
+    const minimumItems = rules.usesHardMode ? selection.choiceCount : 2;
     const required = kind === GAME_KINDS.daily ? 1 : minimumItems;
     const playedToday = kind === GAME_KINDS.daily && setup.availability.daily.playedToday;
     const playable = !playedToday && available >= required;

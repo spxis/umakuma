@@ -5,7 +5,9 @@ import {
   GAME_KINDS,
   GAME_ULTRA_BATCH_SIZE,
   calculateGameScore,
-  calculateTimeAttackScore,
+  accumulateItemScore,
+  calculateItemScore,
+  gameChoiceCountFrom,
   formatGameDuration,
   formatGameScore,
   gameAnswerProgress,
@@ -44,6 +46,18 @@ describe("Game Mode", () => {
     expect(gameOptionIndexForKey("5", 2)).toBeNull();
     expect(gameOptionIndexForKey("3", 2)).toBe(1);
     expect(gameOptionIndexForKey("6", 2)).toBe(1);
+  });
+
+  it("drives four tiles by number key, since no arrow names a corner", () => {
+    expect(gameOptionIndexForKey("1", 4)).toBe(0);
+    expect(gameOptionIndexForKey("2", 4)).toBe(1);
+    expect(gameOptionIndexForKey("3", 4)).toBe(2);
+    expect(gameOptionIndexForKey("4", 4)).toBe(3);
+    expect(gameOptionIndexForKey("5", 4)).toBeNull();
+    expect(gameOptionIndexForKey("ArrowLeft", 4)).toBeNull();
+    // Two and three tiles keep their arrow keys.
+    expect(gameOptionIndexForKey("ArrowLeft", 2)).toBe(0);
+    expect(gameOptionIndexForKey("ArrowRight", 3)).toBe(2);
   });
 
   it("keeps Ultra running through perfect cycles and stops on a miss", () => {
@@ -121,19 +135,38 @@ describe("Game Mode", () => {
     expect(gameRunIsExpired(GAME_KINDS.timeAttack, null, 900_000)).toBe(false);
   });
 
-  it("pays Time Attack for volume and keeps the level bonus under one answer", () => {
-    expect(calculateTimeAttackScore(10, 10, 1)).toBe(5_008);
-    expect(calculateTimeAttackScore(10, 12, 1)).toBeLessThan(calculateTimeAttackScore(10, 10, 1));
-    expect(calculateTimeAttackScore(11, 11, 1)).toBeGreaterThan(calculateTimeAttackScore(10, 10, 60));
-    expect(calculateTimeAttackScore(0, 8, 60)).toBe(0);
-    expect(calculateTimeAttackScore(3, 0, 60)).toBe(0);
+  it("pays each timed answer for being right and for being fast", () => {
+    // 100 points instantly, 50 at the far edge of the speed window.
+    expect(calculateItemScore(true, 0)).toBe(1_000);
+    expect(calculateItemScore(true, 2_000)).toBe(750);
+    expect(calculateItemScore(true, 4_000)).toBe(500);
+    expect(calculateItemScore(true, 30_000)).toBe(500);
+    expect(calculateItemScore(false, 0)).toBe(-500);
+  });
+
+  it("scales a timed run with volume and never goes negative", () => {
+    const fast = Array.from({ length: 60 }).reduce<number>((total) => accumulateItemScore(total, true, 500), 0);
+    const slow = Array.from({ length: 60 }).reduce<number>((total) => accumulateItemScore(total, true, 6_000), 0);
+    const magic = Array.from({ length: 100 }).reduce<number>((total) => accumulateItemScore(total, true, 500), 0);
+
+    expect(slow).toBe(30_000);            // 60 x 50 points
+    expect(fast).toBe(56_280);            // speed bonus on every answer
+    expect(magic).toBeGreaterThan(fast);  // a longer run always beats a shorter one
+    expect(accumulateItemScore(0, false, 100)).toBe(0);
+  });
+
+  it("reads a choice count from older runs that only stored hard mode", () => {
+    expect(gameChoiceCountFrom(4, false)).toBe(4);
+    expect(gameChoiceCountFrom(null, true)).toBe(3);
+    expect(gameChoiceCountFrom(null, false)).toBe(2);
+    expect(gameChoiceCountFrom(0, true)).toBe(3);
   });
 
   it("routes each kind to its own scoring formula", () => {
     const base = { correctCount: 10, questionCount: 10, durationMs: 30_000, level: 7 };
     expect(resolveGameScore({ ...base, kind: GAME_KINDS.match })).toBe(calculateGameScore(10, 10, 30_000, 7));
     expect(resolveGameScore({ ...base, kind: GAME_KINDS.daily })).toBe(calculateGameScore(10, 10, 30_000, 7));
-    expect(resolveGameScore({ ...base, kind: GAME_KINDS.timeAttack })).toBe(calculateTimeAttackScore(10, 10, 7));
+    expect(resolveGameScore({ ...base, kind: GAME_KINDS.timeAttack, accumulatedScore: 4_200 })).toBe(4_200);
   });
 
   it("rewards every tenth and higher levels", () => {

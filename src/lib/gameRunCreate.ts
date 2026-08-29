@@ -9,6 +9,7 @@ import {
   GAME_ULTRA_BATCH_SIZE,
   gameKindRules,
   type GameCategory,
+  type GameChoiceCount,
   type GameKind,
 } from "@/lib/gameMode";
 import { loadDailyPool, loadRevengePool, loadShiritoriPool } from "@/lib/gameModePools";
@@ -33,7 +34,7 @@ export type GameRunRequest = {
   batchSize: "all" | number;
   level: number | null;
   category: GameCategory;
-  hardMode: boolean;
+  choiceCount: GameChoiceCount;
   ultraMode: boolean;
   timeLimitMs: number | null;
 };
@@ -44,7 +45,7 @@ export type GameRunPlan = {
   batchSize: number;
   level: number | null;
   category: GameCategory;
-  hardMode: boolean;
+  choiceCount: GameChoiceCount;
   dailyKey: string | null;
   seed: string | null;
   timeLimitMs: number | null;
@@ -61,12 +62,12 @@ async function planMatchRun(accountId: string, request: GameRunRequest): Promise
   const { items } = await loadGamePool(accountId, request.level, request.category);
   const questionCount = resolveBatchSize(request, items.length);
   return {
-    questions: buildGameQuestions(items, questionCount, request.hardMode),
+    questions: buildGameQuestions(items, questionCount, request.choiceCount),
     questionCount,
     batchSize: request.ultraMode ? GAME_ULTRA_BATCH_SIZE : questionCount,
     level: request.level,
     category: request.category,
-    hardMode: request.hardMode,
+    choiceCount: request.choiceCount,
     dailyKey: null,
     seed: null,
     timeLimitMs: null,
@@ -80,7 +81,7 @@ async function planRevengeRun(accountId: string, request: GameRunRequest): Promi
     request.category,
     request.batchSize === "all" ? GAME_ENDLESS_CYCLE_SIZE : request.batchSize,
   );
-  const minimumItems = request.hardMode ? 3 : 2;
+  const minimumItems = request.choiceCount;
   if (items.length < minimumItems) {
     throw new Error(`At least ${minimumItems} eligible items are required.`);
   }
@@ -88,12 +89,12 @@ async function planRevengeRun(accountId: string, request: GameRunRequest): Promi
   if (chosen.length === 0) throw new Error("No eligible items are available.");
 
   return {
-    questions: buildGameQuestionsFromTargets(chosen, items, request.hardMode),
+    questions: buildGameQuestionsFromTargets(chosen, items, request.choiceCount),
     questionCount: chosen.length,
     batchSize: chosen.length,
     level: null,
     category: request.category,
-    hardMode: request.hardMode,
+    choiceCount: request.choiceCount,
     dailyKey: null,
     seed: null,
     timeLimitMs: null,
@@ -120,6 +121,7 @@ async function planDailyRun(request: GameRunRequest): Promise<GameRunPlan> {
           leftSubjectId: true,
           middleSubjectId: true,
           rightSubjectId: true,
+          optionSubjectIds: true,
           answerType: true,
           promptOverride: true,
         },
@@ -134,7 +136,7 @@ async function planDailyRun(request: GameRunRequest): Promise<GameRunPlan> {
       batchSize: established.questions.length,
       level: null,
       category: rules.fixedCategory ?? request.category,
-      hardMode: false,
+      choiceCount: 2,
       dailyKey,
       seed: established.seed,
       timeLimitMs: null,
@@ -144,12 +146,12 @@ async function planDailyRun(request: GameRunRequest): Promise<GameRunPlan> {
   const { items } = await loadDailyPool();
   const questionCount = Math.min(rules.fixedQuestionCount ?? items.length, items.length);
   return {
-    questions: buildGameQuestions(items, questionCount, false, seededRandom(dailyKey)),
+    questions: buildGameQuestions(items, questionCount, 2, seededRandom(dailyKey)),
     questionCount,
     batchSize: questionCount,
     level: null,
     category: rules.fixedCategory ?? request.category,
-    hardMode: false,
+    choiceCount: 2,
     dailyKey,
     seed: dailyKey,
     timeLimitMs: null,
@@ -160,12 +162,12 @@ async function planTimeAttackRun(accountId: string, request: GameRunRequest): Pr
   const { items } = await loadGamePool(accountId, request.level, request.category);
   const questionCount = Math.min(GAME_ENDLESS_CYCLE_SIZE, items.length);
   return {
-    questions: buildGameQuestions(items, questionCount, request.hardMode),
+    questions: buildGameQuestions(items, questionCount, request.choiceCount),
     questionCount,
     batchSize: questionCount,
     level: request.level,
     category: request.category,
-    hardMode: request.hardMode,
+    choiceCount: request.choiceCount,
     dailyKey: null,
     seed: null,
     timeLimitMs: request.timeLimitMs,
@@ -174,7 +176,7 @@ async function planTimeAttackRun(accountId: string, request: GameRunRequest): Pr
 
 async function planShiritoriRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
   const { items } = await loadShiritoriPool(accountId);
-  const minimumItems = request.hardMode ? 3 : 2;
+  const minimumItems = request.choiceCount;
   if (items.length < minimumItems) {
     throw new Error(`At least ${minimumItems} eligible items are required.`);
   }
@@ -188,7 +190,7 @@ async function planShiritoriRun(accountId: string, request: GameRunRequest): Pro
       position: 0,
       usedSubjectIds: new Set(),
       previousItem: null,
-      hardMode: request.hardMode,
+      choiceCount: request.choiceCount,
     });
     if (!question) continue;
     return {
@@ -197,7 +199,7 @@ async function planShiritoriRun(accountId: string, request: GameRunRequest): Pro
       batchSize: 1,
       level: null,
       category: "vocabulary",
-      hardMode: request.hardMode,
+      choiceCount: request.choiceCount,
       dailyKey: null,
       seed: null,
       timeLimitMs: null,
@@ -255,7 +257,8 @@ export async function persistGameRun(accountId: string, request: GameRunRequest,
         batchSize: plan.batchSize,
         level: plan.level,
         category: plan.category as GameSubjectCategory,
-        hardMode: plan.hardMode,
+        choiceCount: plan.choiceCount,
+        hardMode: plan.choiceCount >= 3,
         dailyKey: plan.dailyKey,
         seed: plan.seed,
         timeLimitMs: plan.timeLimitMs,

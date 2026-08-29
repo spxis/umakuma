@@ -112,7 +112,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
       ...value,
       kind,
       ultraMode: rules.usesUltraMode ? value.ultraMode : false,
-      hardMode: rules.usesHardMode ? value.hardMode : false,
+      choiceCount: rules.usesHardMode ? value.choiceCount : 2,
     }));
     session.reset();
     setPhase("lobby");
@@ -131,7 +131,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
       batchSize: gameSelectionBatchSize(entry.batchSize),
       level: entry.level,
       category: entry.category,
-      hardMode: entry.hardMode,
+      choiceCount: entry.choiceCount,
       ultraMode: entry.ultraMode,
     }));
     session.reset();
@@ -203,7 +203,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
                 batchSize: gameSelectionBatchSize(finishedRun.batchSize),
                 level: finishedRun.level,
                 category: finishedRun.category,
-                hardMode: finishedRun.hardMode,
+                choiceCount: finishedRun.choiceCount,
                 ultraMode: finishedRun.ultraMode,
               })}
               onChangeSettings={() => {

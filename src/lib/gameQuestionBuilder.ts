@@ -1,5 +1,5 @@
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
-import type { GameAnswerType, GameOption } from "@/lib/gameMode";
+import type { GameAnswerType, GameChoiceCount, GameOption } from "@/lib/gameMode";
 import { pickWith, shuffleWith, type RandomSource } from "@/lib/gameRandom";
 import {
   shiritoriDistractorScore,
@@ -20,6 +20,8 @@ export type GameCatalogItem = GameOption & {
 export type GameQuestionInput = {
   position: number;
   targetSubjectId: number;
+  /** Ordered tiles as shown. left/middle/right are kept for older readers. */
+  optionSubjectIds: number[];
   leftSubjectId: number;
   middleSubjectId: number | null;
   rightSubjectId: number;
@@ -90,36 +92,41 @@ function chooseDistractor(
   return pickWith(topPool, random)?.candidate ?? ranked[0]!.candidate;
 }
 
-/** Places the target at `slot` among the distractors and returns the option ids. */
+/**
+ * Places the target at `slot` among the distractors.
+ *
+ * `optionSubjectIds` is the real answer; left/middle/right are still written so
+ * questions created before Quad mode keep rendering from the same code path.
+ */
 function toOptionIds(
   target: GameCatalogItem,
   distractors: GameCatalogItem[],
   slot: number,
-  hardMode: boolean,
-): Pick<GameQuestionInput, "leftSubjectId" | "middleSubjectId" | "rightSubjectId"> {
+): Pick<GameQuestionInput, "optionSubjectIds" | "leftSubjectId" | "middleSubjectId" | "rightSubjectId"> {
   const options = [...distractors];
   options.splice(slot, 0, target);
+  const ids = options.map((option) => option.subjectId);
   return {
-    leftSubjectId: options[0]!.subjectId,
-    middleSubjectId: hardMode ? options[1]!.subjectId : null,
-    rightSubjectId: options[hardMode ? 2 : 1]!.subjectId,
+    optionSubjectIds: ids,
+    leftSubjectId: ids[0]!,
+    middleSubjectId: ids.length > 2 ? ids[1]! : null,
+    rightSubjectId: ids[ids.length - 1]!,
   };
 }
 
 export function buildGameQuestions(
   pool: GameCatalogItem[],
   batchSize: number,
-  hardMode = false,
+  choiceCount: GameChoiceCount = 2,
   random: RandomSource = Math.random,
 ): GameQuestionInput[] {
-  const minimumItems = hardMode ? 3 : 2;
-  if (!Number.isInteger(batchSize) || batchSize < minimumItems) {
-    throw new Error(`At least ${minimumItems} eligible items are required.`);
+  if (!Number.isInteger(batchSize) || batchSize < choiceCount) {
+    throw new Error(`At least ${choiceCount} eligible items are required.`);
   }
   const targets = shuffleWith(pool, random).slice(0, batchSize);
   if (targets.length < batchSize) throw new Error(`Only ${targets.length} eligible items are available.`);
 
-  return buildGameQuestionsFromTargets(targets, pool, hardMode, random);
+  return buildGameQuestionsFromTargets(targets, pool, choiceCount, random);
 }
 
 /**
@@ -129,20 +136,20 @@ export function buildGameQuestions(
 export function buildGameQuestionsFromTargets(
   targets: GameCatalogItem[],
   pool: GameCatalogItem[],
-  hardMode = false,
+  choiceCount: GameChoiceCount = 2,
   random: RandomSource = Math.random,
 ): GameQuestionInput[] {
-  const minimumItems = hardMode ? 3 : 2;
   if (targets.length === 0) {
-    throw new Error(`At least ${minimumItems} eligible items are required.`);
+    throw new Error(`At least ${choiceCount} eligible items are required.`);
   }
 
   const targetIds = new Set(targets.map((target) => target.subjectId));
   const unusedDistractors = new Set(
     pool.filter((item) => !targetIds.has(item.subjectId)).map((item) => item.subjectId),
   );
+  // Spread the correct answer evenly across the tiles.
   const targetPositions = shuffleWith(
-    Array.from({ length: targets.length }, (_, index) => index % (hardMode ? 3 : 2)),
+    Array.from({ length: targets.length }, (_, index) => index % choiceCount),
     random,
   );
 
@@ -155,15 +162,17 @@ export function buildGameQuestionsFromTargets(
       ?? chooseDistractor(target, nonTargetPool, random)
       ?? chooseDistractor(target, fallbackPool, random);
     };
-    const firstDistractor = chooseNextDistractor(new Set([target.subjectId]));
-    if (!firstDistractor) throw new Error("Not enough distinct items are available.");
-    unusedDistractors.delete(firstDistractor.subjectId);
-    const secondDistractor = hardMode
-      ? chooseNextDistractor(new Set([target.subjectId, firstDistractor.subjectId]))
-      : null;
-    if (hardMode && !secondDistractor) throw new Error("Not enough distinct items are available.");
-    if (secondDistractor) unusedDistractors.delete(secondDistractor.subjectId);
-    const distractors = secondDistractor ? [firstDistractor, secondDistractor] : [firstDistractor];
+
+    const excluded = new Set([target.subjectId]);
+    const distractors: GameCatalogItem[] = [];
+    while (distractors.length < choiceCount - 1) {
+      const next = chooseNextDistractor(excluded);
+      if (!next) throw new Error("Not enough distinct items are available.");
+      excluded.add(next.subjectId);
+      unusedDistractors.delete(next.subjectId);
+      distractors.push(next);
+    }
+
     const canAskReading = target.subjectType !== SUBJECT_TYPES.radical && Boolean(target.primaryReading) && distractors.every(
       (distractor) => Boolean(distractor.primaryReading) && target.primaryReading !== distractor.primaryReading,
     );
@@ -171,7 +180,7 @@ export function buildGameQuestionsFromTargets(
     return {
       position,
       targetSubjectId: target.subjectId,
-      ...toOptionIds(target, distractors, targetPositions[position]!, hardMode),
+      ...toOptionIds(target, distractors, targetPositions[position]!),
       answerType,
       promptOverride: null,
     };
@@ -217,7 +226,7 @@ export function buildShiritoriQuestion({
   position,
   usedSubjectIds,
   previousItem,
-  hardMode,
+  choiceCount,
   random = Math.random,
 }: {
   pool: GameCatalogItem[];
@@ -225,7 +234,7 @@ export function buildShiritoriQuestion({
   position: number;
   usedSubjectIds: Set<number>;
   previousItem: GameCatalogItem | null;
-  hardMode: boolean;
+  choiceCount: GameChoiceCount;
   random?: RandomSource;
 }): GameQuestionInput | null {
   const candidates = shiritoriPlayableTargets(pool, chainKey, usedSubjectIds);
@@ -244,7 +253,7 @@ export function buildShiritoriQuestion({
   const target = pickWith(withContinuation.length > 0 ? withContinuation : candidates, random);
   if (!target) return null;
 
-  const distractorCount = hardMode ? 2 : 1;
+  const distractorCount = choiceCount - 1;
   const ranked = pool
     .filter((item) => item.subjectId !== target.subjectId && Boolean(item.primaryReading))
     .map((item) => ({ item, score: shiritoriDistractorScore(item.primaryReading!, chainKey) }))
@@ -268,7 +277,7 @@ export function buildShiritoriQuestion({
   return {
     position,
     targetSubjectId: target.subjectId,
-    ...toOptionIds(target, distractors, Math.floor(random() * (hardMode ? 3 : 2)), hardMode),
+    ...toOptionIds(target, distractors, Math.floor(random() * choiceCount)),
     answerType: ANSWER_TYPES.chain,
     promptOverride,
   };

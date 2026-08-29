@@ -5,9 +5,11 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import {
   GAME_KINDS,
+  gameChoiceCountFrom,
   gameKindRules,
   isGameBatchSize,
   isGameCategory,
+  isGameChoiceCount,
   isGameKind,
   isGameTimeLimitMs,
 } from "@/lib/gameMode";
@@ -26,6 +28,7 @@ const bodySchema = z.object({
   level: z.number().int().min(1).max(60).nullable().default(null),
   category: z.string().refine(isGameCategory),
   hardMode: z.boolean().default(false),
+  choiceCount: z.number().int().refine(isGameChoiceCount).optional(),
   ultraMode: z.boolean().default(false),
   timeLimitMs: z.number().int().refine(isGameTimeLimitMs).nullable().default(null),
 })
@@ -62,7 +65,10 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           batchSize: parsed.data.batchSize,
           level: rules.usesLevel ? parsed.data.level : null,
           category: rules.fixedCategory ?? parsed.data.category,
-          hardMode: rules.usesHardMode ? parsed.data.hardMode : false,
+          // Older clients send only hardMode; treat that as three choices.
+          choiceCount: rules.usesHardMode
+            ? gameChoiceCountFrom(parsed.data.choiceCount, parsed.data.hardMode)
+            : 2,
           ultraMode: rules.usesUltraMode ? parsed.data.ultraMode : false,
           timeLimitMs: rules.usesTimeLimit ? parsed.data.timeLimitMs : null,
         };

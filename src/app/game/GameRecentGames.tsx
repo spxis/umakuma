@@ -39,7 +39,7 @@ export default function GameRecentGames({ entries, loading, onChallenge }: Props
                   ) : (
                     <SubjectTypePill type={entry.category}>{GAME_CATEGORY_LABELS[entry.category]}</SubjectTypePill>
                   )}
-                  <span>{gameDifficultyLabel(entry.hardMode, entry.ultraMode)}</span>
+                  <span>{gameDifficultyLabel(entry.choiceCount, entry.ultraMode)}</span>
                 </span>
                 <span className="mt-1 block text-[10px] font-bold uppercase text-foreground/45">{formatRelativeFromNow(entry.completedAt, { style: "short" })}</span>
               </span>

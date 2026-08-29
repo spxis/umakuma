@@ -4,7 +4,9 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import {
+  accumulateItemScore,
   gameAnswerProgress,
+  gameChoiceCountFrom,
   gameProgressFlags,
   gameRunIsExpired,
   isUltraGameBatchSize,
@@ -71,7 +73,7 @@ export async function POST(
                 batchSize: pendingRun.batchSize,
                 level: pendingRun.level,
                 category: pendingRun.category as GameCategory,
-                hardMode: pendingRun.hardMode,
+                choiceCount: gameChoiceCountFrom(pendingRun.choiceCount, pendingRun.hardMode),
                 questionCount: pendingRun.questionCount,
               },
               pendingQuestion.targetSubjectId,
@@ -88,7 +90,10 @@ export async function POST(
           }
           if (question.run.status !== "active") throw new Error("This game is already complete.");
           if (question.position !== question.run.answeredCount) throw new Error("Answer the current question first.");
-          if (![question.leftSubjectId, question.middleSubjectId, question.rightSubjectId].includes(parsed.data.selectedSubjectId)) {
+          const validChoices = question.optionSubjectIds.length > 0
+            ? question.optionSubjectIds
+            : [question.leftSubjectId, question.middleSubjectId, question.rightSubjectId];
+          if (!validChoices.includes(parsed.data.selectedSubjectId)) {
             throw new Error("Invalid answer choice.");
           }
 
@@ -98,6 +103,15 @@ export async function POST(
             question.run.timeLimitMs,
             Date.now() - question.run.startedAt.getTime(),
           );
+          // Read the previous answer time before claiming this one, so the gap
+          // between answers is what the speed bonus is measured against.
+          const previousAnswer = await tx.gameQuestion.findFirst({
+            where: { runId, answeredAt: { not: null } },
+            orderBy: { answeredAt: "desc" },
+            select: { answeredAt: true },
+          });
+          const responseMs = Date.now() - (previousAnswer?.answeredAt ?? question.run.startedAt).getTime();
+
           const correct = !expired && parsed.data.selectedSubjectId === question.targetSubjectId;
           const claimed = await tx.gameQuestion.updateMany({
             where: { id: question.id, correct: null },
@@ -111,6 +125,10 @@ export async function POST(
           const currentStreak = correct ? question.run.currentStreak + 1 : 0;
           const bestStreak = Math.max(question.run.bestStreak, currentStreak);
           const flags = gameProgressFlags(kind, isUltraGameBatchSize(question.run.batchSize));
+          // Timed games score as they go, per answer, rather than at the end.
+          const runningScore = question.run.timeLimitMs !== null && !expired
+            ? accumulateItemScore(question.run.score, correct, responseMs)
+            : question.run.score;
           const progress = gameAnswerProgress({
             endless: flags.endless,
             endsOnWrong: flags.endsOnWrong,
@@ -131,6 +149,7 @@ export async function POST(
               currentStreak,
               bestStreak,
               questionCount: progress.questionCount,
+              score: runningScore,
               ...(progress.complete
                 ? completedRunValues({
                     kind,
@@ -140,6 +159,7 @@ export async function POST(
                     bestStreak,
                     level: question.run.level,
                     timeLimitMs: question.run.timeLimitMs,
+                    accumulatedScore: runningScore,
                   })
                 : {}),
             },

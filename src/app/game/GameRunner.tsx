@@ -6,6 +6,7 @@ import {
   formatGameDuration,
   gameOptionIndexForKey,
   type GameKind,
+  type GameOption,
   type GameQuestionPayload,
 } from "@/lib/gameMode";
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
@@ -70,7 +71,7 @@ export default function GameRunner({
 
       event.preventDefault();
       const option = question.options[optionIndex];
-      onAnswer(option.subjectId);
+      if (option) onAnswer(option.subjectId);
     }
 
     window.addEventListener("keydown", onKeyDown);
@@ -89,11 +90,45 @@ export default function GameRunner({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [exitConfirmOpen]);
 
+  const optionCount = question.options.length;
+  const isQuad = optionCount === 4;
   const isChain = question.answerType === CHAIN_ANSWER_TYPE;
   const countLabel = kind === GAME_KINDS.shiritori ? GAME_COPY.chainLength.toLowerCase() : GAME_COPY.correct;
-  const clockValue = remainingMs === null ? formatGameDuration(elapsedMs) : formatGameDuration(remainingMs);
-  const clockUrgent = remainingMs !== null && remainingMs <= URGENT_REMAINING_MS;
-  const clockClass = clockUrgent ? "text-red-600" : undefined;
+  const isTimed = remainingMs !== null;
+  const clockValue = formatGameDuration(isTimed ? remainingMs : elapsedMs);
+  const clockUrgent = isTimed && remainingMs <= URGENT_REMAINING_MS;
+
+  function tile(option: GameOption, keyHint: string) {
+    const selectedFeedback = feedback?.subjectId === option.subjectId ? feedback : null;
+    return (
+      <button
+        key={option.subjectId}
+        type="button"
+        disabled={answering}
+        onClick={() => onAnswer(option.subjectId)}
+        className={`relative flex min-w-0 items-center justify-center overflow-hidden rounded-2xl border p-2 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:cursor-wait sm:p-5 ${choiceTone(option.subjectType)} ${selectedFeedback ? (selectedFeedback.correct ? "ring-8 ring-emerald-500 bg-emerald-100" : "ring-8 ring-red-500 bg-red-100") : "hover:brightness-95"}`}
+      >
+        <span aria-hidden="true" className="absolute left-2 top-2 text-lg font-black text-foreground/50 sm:left-4 sm:top-4">{keyHint}</span>
+        <span className="absolute right-2 top-2 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.level}</span>
+        <span className={`break-all text-center font-black leading-none [font-family:var(--font-jp-current)] ${optionCount >= 3 ? "text-4xl sm:text-6xl" : "text-5xl sm:text-9xl"}`}>
+          {option.characters}
+        </span>
+      </button>
+    );
+  }
+
+  const rowHint = (index: number) => (index === 0 ? "←" : index === optionCount - 1 ? "→" : "↑");
+
+  const prompt = (
+    <div className={`flex flex-1 flex-col items-center justify-center rounded-xl border px-3 py-3 text-center sm:px-5 sm:py-4 ${clockUrgent ? "border-red-500 bg-red-50" : "border-line bg-surface-muted"}`}>
+      <p className="text-[10px] font-bold uppercase text-foreground/60">
+        {isChain ? GAME_COPY.chooseChain : `${GAME_COPY.chooseMatch} · ${question.answerType}`}
+      </p>
+      <p className={`mt-1 font-black text-foreground ${isChain ? "text-3xl [font-family:var(--font-jp-current)] sm:text-5xl" : "text-2xl sm:text-4xl"}`}>
+        {question.prompt}
+      </p>
+    </div>
+  );
 
   return (
     <div className="fixed inset-0 z-100 bg-background p-2 sm:p-5">
@@ -105,43 +140,45 @@ export default function GameRunner({
             <span className="hidden truncate text-foreground/45 lg:inline">{GAME_KIND_LABELS[kind]}</span>
           </div>
           <span className="hidden whitespace-nowrap sm:inline">{correctCount} {countLabel}</span>
-          <span className={`hidden text-right sm:inline ${clockClass ?? ""}`}>{clockValue}</span>
-          <button type="button" onClick={() => setDetailsOpen((value) => !value)} aria-expanded={detailsOpen} aria-label="Game details" className="justify-self-end h-9 w-9 rounded-full border border-line bg-surface text-base font-black text-foreground hover:bg-surface-muted sm:hidden">...</button>
+          {/* A run against the clock leads with the clock. */}
+          {isTimed ? (
+            <span className={`justify-self-end text-3xl font-black leading-none tabular-nums sm:text-5xl ${clockUrgent ? "text-red-600" : "text-foreground"}`}>
+              {clockValue}
+            </span>
+          ) : (
+            <span className="hidden text-right sm:inline">{clockValue}</span>
+          )}
+          {!isTimed ? (
+            <button type="button" onClick={() => setDetailsOpen((value) => !value)} aria-expanded={detailsOpen} aria-label="Game details" className="justify-self-end h-9 w-9 rounded-full border border-line bg-surface text-base font-black text-foreground hover:bg-surface-muted sm:hidden">...</button>
+          ) : null}
           {detailsOpen ? (
             <div className="absolute right-0 top-full z-40 mt-2 flex rounded-xl border border-line bg-surface p-2 shadow-[0_14px_30px_rgba(8,16,36,0.18)] sm:hidden">
               <span className="whitespace-nowrap px-3 py-1">{correctCount} {countLabel}</span>
-              <span className={`whitespace-nowrap border-l border-line px-3 py-1 ${clockClass ?? ""}`}>{clockValue}</span>
+              <span className="whitespace-nowrap border-l border-line px-3 py-1">{clockValue}</span>
             </div>
           ) : null}
         </div>
-        <div className={`mt-2 grid h-80 min-h-80 shrink-0 gap-2 sm:mt-4 sm:gap-5 ${question.options.length === 3 ? "grid-cols-3" : "grid-cols-2"}`}>
-          {question.options.map((option, optionIndex) => {
-            const selectedFeedback = feedback?.subjectId === option.subjectId ? feedback : null;
-            return (
-              <button
-                key={option.subjectId}
-                type="button"
-                disabled={answering}
-                onClick={() => onAnswer(option.subjectId)}
-                className={`relative flex min-w-0 items-center justify-center overflow-hidden rounded-2xl border p-2 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:cursor-wait sm:p-5 ${choiceTone(option.subjectType)} ${selectedFeedback ? (selectedFeedback.correct ? "ring-8 ring-emerald-500 bg-emerald-100" : "ring-8 ring-red-500 bg-red-100") : "hover:brightness-95"}`}
-              >
-                <span aria-hidden="true" className="absolute left-2 top-2 text-lg font-black text-foreground/50 sm:left-4 sm:top-4">
-                  {optionIndex === 0 ? "←" : optionIndex === question.options.length - 1 ? "→" : "↑"}
-                </span>
-                <span className="absolute right-2 top-2 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.level}</span>
-                <span className={`break-all text-center font-black leading-none [font-family:var(--font-jp-current)] ${question.options.length === 3 ? "text-4xl sm:text-7xl" : "text-5xl sm:text-9xl"}`}>{option.characters}</span>
-              </button>
-            );
-          })}
-        </div>
-        <div className={`mt-2 flex min-h-0 flex-1 flex-col items-center justify-center rounded-xl border px-3 py-3 text-center sm:mt-4 sm:px-5 sm:py-4 ${clockUrgent ? "border-red-500 bg-red-50" : "border-line bg-surface-muted"}`}>
-          <p className="text-[10px] font-bold uppercase text-foreground/60">
-            {isChain ? GAME_COPY.chooseChain : `${GAME_COPY.chooseMatch} · ${question.answerType}`}
-          </p>
-          <p className={`mt-1 font-black text-foreground ${isChain ? "text-3xl [font-family:var(--font-jp-current)] sm:text-5xl" : "text-2xl sm:text-4xl"}`}>
-            {question.prompt}
-          </p>
-        </div>
+
+        {isQuad ? (
+          /* Two above, two below, and the word they are answering in between. */
+          <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2 sm:mt-4 sm:gap-4">
+            <div className="grid min-h-0 flex-1 grid-cols-2 gap-2 sm:gap-4">
+              {question.options.slice(0, 2).map((option, index) => tile(option, String(index + 1)))}
+            </div>
+            <div className="shrink-0">{prompt}</div>
+            <div className="grid min-h-0 flex-1 grid-cols-2 gap-2 sm:gap-4">
+              {question.options.slice(2).map((option, index) => tile(option, String(index + 3)))}
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className={`mt-2 grid h-80 min-h-80 shrink-0 gap-2 sm:mt-4 sm:gap-5 ${optionCount === 3 ? "grid-cols-3" : "grid-cols-2"}`}>
+              {question.options.map((option, index) => tile(option, rowHint(index)))}
+            </div>
+            <div className="mt-2 flex min-h-0 flex-1 flex-col sm:mt-4">{prompt}</div>
+          </>
+        )}
+
         {error ? <p className="mt-2 shrink-0 text-center text-sm font-bold text-red-700">{error}</p> : null}
       </main>
       <ConfirmDialog

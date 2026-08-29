@@ -48,6 +48,7 @@ export async function POST(
                 bestStreak: run.bestStreak,
                 level: run.level,
                 timeLimitMs: run.timeLimitMs,
+                accumulatedScore: run.score,
               }),
             },
           });

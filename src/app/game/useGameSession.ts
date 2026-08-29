@@ -76,7 +76,7 @@ export function useGameSession({
           batchSize: selection.batchSize,
           level: selection.level,
           category: selection.category,
-          hardMode: selection.hardMode,
+          choiceCount: selection.choiceCount,
           ultraMode: selection.ultraMode,
           timeLimitMs: rules.usesTimeLimit ? selection.timeLimitMs : null,
         }),

@@ -36,6 +36,7 @@ export const GAME_COPY = {
   correct: "Correct",
   complete: "Round complete",
   hardMode: "Hard mode",
+  choices: "Choices",
   ultraMode: "Ultra mode",
   regularMode: "Regular",
   playAgain: "Play again",
@@ -123,12 +124,18 @@ export const GAME_METRIC_LABELS: Record<GameMetric, string> = {
   streak: "Best streak",
 };
 
+export const GAME_CHOICE_COUNT_LABELS: Record<number, string> = {
+  2: "Double",
+  3: "Triple",
+  4: "Quad",
+};
+
 export const GAME_MIXED_PILL_CLASS = "subject-pill border-line bg-surface-muted text-foreground";
 export const GAME_LEVEL_PILL_CLASS = "subject-pill border-accent/30 bg-accent/10 text-accent";
 
-export function gameDifficultyLabel(hardMode: boolean, ultraMode: boolean): string {
-  if (ultraMode) return hardMode ? "Ultra hard" : "Ultra";
-  return hardMode ? "Hard" : GAME_COPY.regularMode;
+export function gameDifficultyLabel(choiceCount: number, ultraMode: boolean): string {
+  const choices = GAME_CHOICE_COUNT_LABELS[choiceCount] ?? GAME_CHOICE_COUNT_LABELS[2]!;
+  return ultraMode ? `Ultra ${choices.toLowerCase()}` : choices;
 }
 
 export function gameTimeLimitLabel(timeLimitMs: number): string {

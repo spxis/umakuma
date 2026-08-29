@@ -76,8 +76,8 @@ export default function GameLeaderboardMobile({ days, members, metric }: Props) 
                   ) : (
                     <SubjectTypePill type={entry.category}>{GAME_CATEGORY_LABELS[entry.category]}</SubjectTypePill>
                   )}
-                  <span className={entry.ultraMode ? "text-fuchsia-700" : entry.hardMode ? "text-red-600" : undefined}>
-                    {gameDifficultyLabel(entry.hardMode, entry.ultraMode)}
+                  <span className={entry.ultraMode ? "text-fuchsia-700" : entry.choiceCount >= 3 ? "text-red-600" : undefined}>
+                    {gameDifficultyLabel(entry.choiceCount, entry.ultraMode)}
                   </span>
                 </div>
                 <p className="mt-1 text-xs font-semibold text-foreground/55">

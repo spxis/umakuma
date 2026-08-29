@@ -6,6 +6,7 @@ import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { isSubjectType, type SubjectType } from "@/lib/domainConstants";
 import {
   GAME_KINDS,
+  gameChoiceCountFrom,
   gamePoolItemMatches,
   isUltraGameBatchSize,
   resolveGameScore,
@@ -150,6 +151,7 @@ export function toGameRunSummary(run: {
   level: number | null;
   category: GameSubjectCategory;
   hardMode: boolean;
+  choiceCount: number;
   timeLimitMs: number | null;
   questionCount: number;
   answeredCount: number;
@@ -173,6 +175,7 @@ export function toGameRunSummary(run: {
     level: run.level,
     category: run.category as GameCategory,
     hardMode: run.hardMode,
+    choiceCount: gameChoiceCountFrom(run.choiceCount, run.hardMode),
     ultraMode: isUltraGameBatchSize(run.batchSize),
     questionCount: run.questionCount,
     answeredCount: run.answeredCount,
@@ -195,11 +198,18 @@ export async function hydrateGameQuestions(
     leftSubjectId: number;
     middleSubjectId: number | null;
     rightSubjectId: number;
+    optionSubjectIds?: number[];
     answerType: GameAnswerType;
     promptOverride: string | null;
   }>,
 ): Promise<GameQuestionPayload[]> {
-  const subjectIds = Array.from(new Set(questions.flatMap((row) => [row.targetSubjectId, row.leftSubjectId, row.middleSubjectId, row.rightSubjectId]).filter((id): id is number => id !== null)));
+  // Questions created before Quad mode have no option list; fall back to the
+  // original left/middle/right columns for those.
+  const optionIdsFor = (row: { optionSubjectIds?: number[]; leftSubjectId: number; middleSubjectId: number | null; rightSubjectId: number }) =>
+    row.optionSubjectIds && row.optionSubjectIds.length > 0
+      ? row.optionSubjectIds
+      : [row.leftSubjectId, row.middleSubjectId, row.rightSubjectId].filter((id): id is number => id !== null);
+  const subjectIds = Array.from(new Set(questions.flatMap(optionIdsFor)));
   const rows = await prisma.wkSubjectCatalog.findMany({
     where: { wkSubjectId: { in: subjectIds } },
     select: { wkSubjectId: true, subjectType: true, level: true, characters: true, slug: true, meanings: true, readings: true },
@@ -220,10 +230,8 @@ export async function hydrateGameQuestions(
 
   return questions.map((question) => {
     const target = optionById.get(question.targetSubjectId);
-    const left = optionById.get(question.leftSubjectId);
-    const middle = question.middleSubjectId === null ? null : optionById.get(question.middleSubjectId);
-    const right = optionById.get(question.rightSubjectId);
-    if (!target || !left || (question.middleSubjectId !== null && !middle) || !right) throw new Error("Game question subjects are unavailable.");
+    const options = optionIdsFor(question).map((id) => optionById.get(id));
+    if (!target || options.some((option) => !option)) throw new Error("Game question subjects are unavailable.");
     const prompt = question.promptOverride
       ?? (question.answerType === GameAnswerType.reading ? target.primaryReading : target.primaryMeaning);
     if (!prompt) throw new Error("Game question prompt is unavailable.");
@@ -232,7 +240,7 @@ export async function hydrateGameQuestions(
       position: question.position,
       answerType: question.answerType,
       prompt,
-      options: middle ? [left, middle, right] : [left, right],
+      options: options as GameQuestionPayload["options"],
     };
   });
 }
@@ -245,6 +253,7 @@ export function completedRunValues({
   bestStreak,
   level,
   timeLimitMs,
+  accumulatedScore,
 }: {
   kind: GameKindValue;
   startedAt: Date;
@@ -253,6 +262,7 @@ export function completedRunValues({
   bestStreak: number;
   level: number | null;
   timeLimitMs: number | null;
+  accumulatedScore?: number;
 }) {
   const completedAt = new Date();
   const elapsedMs = Math.max(0, completedAt.getTime() - startedAt.getTime());
@@ -264,7 +274,7 @@ export function completedRunValues({
     completedAt,
     completedDatePst: getVancouverDateKey(completedAt),
     durationMs,
-    score: resolveGameScore({ kind, correctCount, questionCount, durationMs, level }),
+    score: resolveGameScore({ kind, correctCount, questionCount, durationMs, level, accumulatedScore }),
     currentStreak: 0,
     bestStreak,
   };

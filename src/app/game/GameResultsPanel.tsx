@@ -48,7 +48,7 @@ export default function GameResultsPanel({
         )}
         <span>{run.questionCount} questions</span>
         {run.timeLimitMs !== null ? <span>{gameTimeLimitLabel(run.timeLimitMs)}</span> : null}
-        <span>{gameDifficultyLabel(run.hardMode, run.ultraMode)}</span>
+        <span>{gameDifficultyLabel(run.choiceCount, run.ultraMode)}</span>
       </div>
       <p className={`mt-3 text-7xl font-black leading-none sm:text-9xl ${accent.text}`}>{formatGameScore(run.score)}</p>
       <div className="mx-auto mt-6 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">

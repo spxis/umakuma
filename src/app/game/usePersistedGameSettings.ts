@@ -10,6 +10,7 @@ import {
   GAME_METRICS,
   isGameBatchSize,
   isGameCategory,
+  isGameChoiceCount,
   isGameKind,
   isGameTimeLimitMs,
 } from "@/lib/gameMode";
@@ -21,7 +22,7 @@ const DEFAULT_SELECTION: GameSelection = {
   batchSize: 10,
   level: null,
   category: "mixed",
-  hardMode: false,
+  choiceCount: 2,
   ultraMode: false,
   timeLimitMs: 60_000,
 };
@@ -51,7 +52,9 @@ function readSelection(): GameSelection {
         : DEFAULT_SELECTION.batchSize,
     level: stored.level === null || (Number.isInteger(stored.level) && Number(stored.level) > 0) ? stored.level as number | null : DEFAULT_SELECTION.level,
     category: typeof stored.category === "string" && isGameCategory(stored.category) ? stored.category : DEFAULT_SELECTION.category,
-    hardMode: stored.hardMode === true,
+    choiceCount: isGameChoiceCount(Number(stored.choiceCount))
+      ? Number(stored.choiceCount) as GameSelection["choiceCount"]
+      : DEFAULT_SELECTION.choiceCount,
     ultraMode: stored.ultraMode === true,
   };
 }

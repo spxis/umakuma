@@ -6,6 +6,7 @@ import {
   isUltraGameBatchSize,
   gameEndlessCycleLimitReached,
   type GameCategory,
+  type GameChoiceCount,
   type GameKind,
 } from "@/lib/gameMode";
 import { loadShiritoriPool } from "@/lib/gameModePools";
@@ -25,7 +26,7 @@ export type AppendableRun = {
   batchSize: number;
   level: number | null;
   category: GameCategory;
-  hardMode: boolean;
+  choiceCount: GameChoiceCount;
   questionCount: number;
 };
 
@@ -43,7 +44,7 @@ async function appendCycle(run: AppendableRun): Promise<GameQuestionInput[]> {
     ? Math.min(items.length, GAME_ENDLESS_CYCLE_SIZE)
     : items.length;
   try {
-    return buildGameQuestions(items, cycleSize, run.hardMode).map((question) => ({
+    return buildGameQuestions(items, cycleSize, run.choiceCount).map((question) => ({
       ...question,
       position: question.position + run.questionCount,
     }));
@@ -76,7 +77,7 @@ async function appendShiritoriLink(
     position: run.questionCount,
     usedSubjectIds: new Set(priorQuestions.map((row) => row.targetSubjectId)),
     previousItem,
-    hardMode: run.hardMode,
+    choiceCount: run.choiceCount,
   });
   return question ? [question] : [];
 }

@@ -328,6 +328,7 @@ model GameRun {
   level         Int?
   category      GameSubjectCategory
   hardMode      Boolean             @default(false)
+  choiceCount   Int                 @default(2)
   dailyKey      String?
   seed          String?
   timeLimitMs   Int?
@@ -362,6 +363,7 @@ model GameQuestion {
   leftSubjectId     Int
   middleSubjectId   Int?
   rightSubjectId    Int
+  optionSubjectIds  Int[]          @default([])
   answerType        GameAnswerType
   promptOverride    String?
   selectedSubjectId Int?

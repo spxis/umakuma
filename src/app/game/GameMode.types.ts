@@ -1,6 +1,7 @@
 import type {
   GameBatchSize,
   GameCategory,
+  GameChoiceCount,
   GameDateRange,
   GameKind,
   GameLeaderboardEntry,
@@ -62,7 +63,7 @@ export type GameSelection = {
   batchSize: "all" | GameBatchSize;
   level: number | null;
   category: GameCategory;
-  hardMode: boolean;
+  choiceCount: GameChoiceCount;
   ultraMode: boolean;
   timeLimitMs: GameTimeLimitMs;
 };

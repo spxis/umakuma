@@ -35,8 +35,22 @@ export const GAME_ENDLESS_CYCLE_SIZE = 25;
  * being challenged long before they slip. Cap it at a few full rounds.
  */
 export const GAME_MAX_ENDLESS_CYCLES = 3;
-export const GAME_TIME_ATTACK_CORRECT_UNITS = 500;
-export const GAME_TIME_ATTACK_WRONG_UNITS = 250;
+/** Double, Triple and Quad: how many tiles a question offers. */
+export const GAME_CHOICE_COUNTS = [2, 3, 4] as const;
+
+/**
+ * Per-item scoring for timed games, in tenths of a point.
+ *
+ * A flat score per answer ignored how fast the answer came, which made a
+ * one-minute game feel arbitrary. Each correct answer is now worth up to 100
+ * points: half guaranteed, half earned by answering quickly, decaying to zero
+ * across the speed window. A wrong answer costs half of one item, so tapping at
+ * random cannot out-earn deliberate play.
+ */
+export const GAME_ITEM_BASE_UNITS = 500;
+export const GAME_ITEM_SPEED_UNITS = 500;
+export const GAME_ITEM_SPEED_WINDOW_MS = 4_000;
+export const GAME_ITEM_WRONG_UNITS = 500;
 export const GAME_TIME_ATTACK_GRACE_MS = 1_500;
 export const GAME_REVENGE_TARGET_POOL_MULTIPLIER = 3;
 export const GAME_REVENGE_MINIMUM_TARGET_POOL = 30;
@@ -49,6 +63,7 @@ export type GameLeaderboardMode = "all" | GameCategory;
 export type GameAnswerType = "reading" | "meaning" | "chain";
 export type GameKind = (typeof GAME_KINDS)[keyof typeof GAME_KINDS];
 export type GameTimeLimitMs = (typeof GAME_TIME_LIMITS_MS)[number];
+export type GameChoiceCount = (typeof GAME_CHOICE_COUNTS)[number];
 
 export type GameKindRules = {
   usesBatchSize: boolean;
@@ -155,7 +170,8 @@ export type GameQuestionPayload = {
   position: number;
   answerType: GameAnswerType;
   prompt: string;
-  options: [GameOption, GameOption] | [GameOption, GameOption, GameOption];
+  /** Two, three or four tiles, in display order. */
+  options: GameOption[];
 };
 
 export type GameRunSummary = {
@@ -167,6 +183,7 @@ export type GameRunSummary = {
   level: number | null;
   category: GameCategory;
   hardMode: boolean;
+  choiceCount: GameChoiceCount;
   ultraMode: boolean;
   questionCount: number;
   answeredCount: number;
@@ -188,6 +205,7 @@ export type GameLeaderboardEntry = {
   kind: GameKind;
   category: GameCategory;
   hardMode: boolean;
+  choiceCount: GameChoiceCount;
   ultraMode: boolean;
   batchSize: number;
   level: number | null;
@@ -259,10 +277,27 @@ export function gameRunIsExpired(
   return elapsedMs > timeLimitMs + GAME_TIME_ATTACK_GRACE_MS;
 }
 
-export function gameOptionIndexForKey(key: string, optionCount: 2 | 3): number | null {
-  if (key === "ArrowLeft" || key === "1" || key === "4") return 0;
-  if (optionCount === 3 && (key === "ArrowUp" || key === "ArrowDown" || key === "2" || key === "5")) return 1;
-  if (key === "ArrowRight" || key === "3" || key === "6") return optionCount - 1;
+/**
+ * Keyboard mapping for the answer tiles.
+ *
+ * Two and three tiles sit in a row, so the arrow keys read naturally and the
+ * number keys mirror them on both the top row and the numpad. Four tiles sit in
+ * a 2x2 grid, where no arrow key names a single corner, so Quad is driven by the
+ * number keys 1-4 in reading order.
+ */
+export function gameOptionIndexForKey(key: string, optionCount: number): number | null {
+  if (optionCount >= 4) {
+    const index = "1234".indexOf(key);
+    return index >= 0 && index < optionCount ? index : null;
+  }
+
+  if (key === "1" || key === "4") return 0;
+  if (optionCount === 3 && (key === "2" || key === "5")) return 1;
+  if (key === "3" || key === "6") return optionCount - 1;
+
+  if (key === "ArrowLeft") return 0;
+  if (optionCount === 3 && (key === "ArrowUp" || key === "ArrowDown")) return 1;
+  if (key === "ArrowRight") return optionCount - 1;
   return null;
 }
 
@@ -337,34 +372,29 @@ export function calculateGameScore(correctCount: number, questionCount: number, 
 }
 
 /**
- * Time Attack fixes the clock and varies the volume, so the match formula (which
- * normalizes to a fixed question count and pays for speed) cannot rank it. Each
- * correct answer is worth a flat amount, each wrong answer costs half of one, and
- * the level bonus stays below a single correct answer so volume always outranks it.
+ * Points for one answer in a timed game. `responseMs` is the time since the
+ * previous answer, so a fast run of answers is worth more than a slow one.
  */
-export function calculateTimeAttackScore(
-  correctCount: number,
-  answeredCount: number,
-  level: number | null,
-): number {
-  if (!Number.isFinite(correctCount) || !Number.isFinite(answeredCount)) {
-    return 0;
-  }
-  const answered = Math.max(0, Math.trunc(answeredCount));
-  if (answered <= 0) {
-    return 0;
-  }
-  const correct = Math.max(0, Math.min(Math.trunc(correctCount), answered));
-  const wrong = answered - correct;
-  const accuracy = correct / answered;
-  const boundedLevel =
-    level === null || !Number.isFinite(level) ? 0 : Math.max(1, Math.min(60, Math.trunc(level)));
-  const levelBonusUnits = Math.round(
-    (GAME_TIME_ATTACK_CORRECT_UNITS - 1) * (boundedLevel / 60) * accuracy,
-  );
-  const baseUnits =
-    correct * GAME_TIME_ATTACK_CORRECT_UNITS - wrong * GAME_TIME_ATTACK_WRONG_UNITS;
-  return Math.max(0, baseUnits + levelBonusUnits);
+export function calculateItemScore(correct: boolean, responseMs: number): number {
+  if (!correct) return -GAME_ITEM_WRONG_UNITS;
+  const elapsed = Number.isFinite(responseMs) ? Math.max(0, responseMs) : GAME_ITEM_SPEED_WINDOW_MS;
+  const remaining = Math.max(0, GAME_ITEM_SPEED_WINDOW_MS - elapsed) / GAME_ITEM_SPEED_WINDOW_MS;
+  return GAME_ITEM_BASE_UNITS + Math.round(GAME_ITEM_SPEED_UNITS * remaining);
+}
+
+/** Running total for a timed game, never negative. */
+export function accumulateItemScore(current: number, correct: boolean, responseMs: number): number {
+  return Math.max(0, current + calculateItemScore(correct, responseMs));
+}
+
+export function isGameChoiceCount(value: number): value is GameChoiceCount {
+  return GAME_CHOICE_COUNTS.includes(value as GameChoiceCount);
+}
+
+/** Historical runs stored only `hardMode`; three choices was what it meant. */
+export function gameChoiceCountFrom(choiceCount: number | null | undefined, hardMode: boolean): GameChoiceCount {
+  if (choiceCount && isGameChoiceCount(choiceCount)) return choiceCount;
+  return hardMode ? 3 : 2;
 }
 
 export function resolveGameScore({
@@ -373,15 +403,18 @@ export function resolveGameScore({
   questionCount,
   durationMs,
   level,
+  accumulatedScore,
 }: {
   kind: GameKind;
   correctCount: number;
   questionCount: number;
   durationMs: number;
   level: number | null;
+  /** Timed games score per answer as they go, so the run already has its total. */
+  accumulatedScore?: number;
 }): number {
   if (kind === GAME_KINDS.timeAttack) {
-    return calculateTimeAttackScore(correctCount, questionCount, level);
+    return Math.max(0, accumulatedScore ?? 0);
   }
   return calculateGameScore(correctCount, questionCount, durationMs, level);
 }

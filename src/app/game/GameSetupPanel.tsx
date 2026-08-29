@@ -1,6 +1,8 @@
 import { GAME_KINDS, gameKindRules } from "@/lib/gameMode";
+import { GAME_CHOICE_COUNTS, type GameChoiceCount } from "@/lib/gameMode";
 import {
   GAME_CATEGORY_LABELS,
+  GAME_CHOICE_COUNT_LABELS,
   GAME_COPY,
   GAME_KIND_ACCENT,
   GAME_KIND_EMOJI,
@@ -93,6 +95,20 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
           </label>
         ) : null}
 
+        {rules.usesHardMode ? (
+          <label className={LABEL_CLASS}>{GAME_COPY.choices}
+            <select
+              value={selection.choiceCount}
+              onChange={(event) => onChange((value) => ({ ...value, choiceCount: Number(event.target.value) as GameChoiceCount }))}
+              className={FIELD_CLASS}
+            >
+              {GAME_CHOICE_COUNTS.map((count) => (
+                <option key={count} value={count}>{GAME_CHOICE_COUNT_LABELS[count]} ({count})</option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+
         {rules.usesTimeLimit ? (
           <label className={LABEL_CLASS}>{GAME_COPY.timeLimit}
             <select
@@ -107,15 +123,6 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        {rules.usesHardMode ? (
-          <GameModeToggle
-            label={GAME_COPY.hardMode}
-            checked={selection.hardMode}
-            onChange={(checked) => onChange((value) => ({ ...value, hardMode: checked }))}
-            accentClass="accent-red-600"
-          />
-        ) : null}
-
         {rules.usesUltraMode ? (
           <GameModeToggle
             label={GAME_COPY.ultraMode}
