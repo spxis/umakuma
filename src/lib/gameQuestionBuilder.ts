@@ -125,10 +125,18 @@ export function buildGameQuestions(
   if (!Number.isInteger(batchSize) || batchSize < choiceCount) {
     throw new Error(`At least ${choiceCount} eligible items are required.`);
   }
-  const targets = shuffleWith(pool, random).slice(0, batchSize);
+  // A locked answer mode narrows the pool: radicals carry no reading, so they
+  // cannot be asked by reading or romaji and must not be drawn as targets.
+  const answerable = answerMode === "auto"
+    ? pool
+    : pool.filter((item) => candidateAnswerTypes(item, answerMode).length > 0);
+  if (answerable.length < choiceCount) {
+    throw new Error(`Only ${answerable.length} eligible items are available.`);
+  }
+  const targets = shuffleWith(answerable, random).slice(0, Math.min(batchSize, answerable.length));
   if (targets.length < batchSize) throw new Error(`Only ${targets.length} eligible items are available.`);
 
-  return buildGameQuestionsFromTargets(targets, pool, choiceCount, random, direction, answerMode);
+  return buildGameQuestionsFromTargets(targets, answerable, choiceCount, random, direction, answerMode);
 }
 
 /**
