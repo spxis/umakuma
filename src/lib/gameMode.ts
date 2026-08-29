@@ -21,6 +21,13 @@ export const GAME_KIND_VALUES = [
 ] as const;
 export const GAME_TIME_LIMITS_MS = [30_000, 60_000, 120_000] as const;
 export const GAME_DAILY_QUESTION_COUNT = 10;
+/**
+ * Daily Challenge sizes its pool to the regular players rather than to whoever
+ * happens to have the lowest level. Taking the minimum across every account let
+ * a single beginner pin the whole family to level 1. The cap is the lowest level
+ * among the top few accounts, so it tracks the people actually competing.
+ */
+export const GAME_DAILY_LEVEL_COHORT = 3;
 export const GAME_ENDLESS_CYCLE_SIZE = 25;
 /**
  * Ultra repeats the whole pool until a wrong answer. A small pool (a handful of

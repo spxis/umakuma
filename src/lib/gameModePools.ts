@@ -1,6 +1,7 @@
 import "server-only";
 
 import {
+  GAME_DAILY_LEVEL_COHORT,
   GAME_REVENGE_MINIMUM_TARGET_POOL,
   GAME_REVENGE_TARGET_POOL_MULTIPLIER,
   type GameCategory,
@@ -115,16 +116,26 @@ export async function loadRevengePool(
 }
 
 /**
+ * The level every Daily Challenge is built at: the lowest level among the top
+ * `GAME_DAILY_LEVEL_COHORT` accounts. Shared by the pool builder and the setup
+ * endpoint so the number shown always matches the number used.
+ */
+export async function resolveDailyLevelCap(): Promise<number> {
+  const rows = await prisma.account.findMany({
+    orderBy: { wkLevel: "desc" },
+    take: GAME_DAILY_LEVEL_COHORT,
+    select: { wkLevel: true },
+  });
+  if (rows.length === 0) return 1;
+  return Math.max(1, Math.min(...rows.map((row) => row.wkLevel)));
+}
+
+/**
  * Daily Challenge draws from the shared catalog rather than one account's
- * assignments, capped at the lowest WaniKani level in the family so every player
- * has plausibly unlocked every item.
+ * assignments, capped at the level the regular players share.
  */
 export async function loadDailyPool(): Promise<{ levelCap: number; items: GameCatalogItem[] }> {
-  const [{ _min }, accountCount] = await Promise.all([
-    prisma.account.aggregate({ _min: { wkLevel: true } }),
-    prisma.account.count(),
-  ]);
-  const levelCap = Math.max(1, accountCount === 0 ? 1 : _min.wkLevel ?? 1);
+  const levelCap = await resolveDailyLevelCap();
 
   const rows = await prisma.wkSubjectCatalog.findMany({
     where: { level: { lte: levelCap }, hiddenAt: null, characters: { not: null } },

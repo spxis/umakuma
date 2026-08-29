@@ -11,6 +11,7 @@ import {
   GAME_KIND_VALUES,
   GAME_TIME_LIMITS_MS,
 } from "@/lib/gameMode";
+import { resolveDailyLevelCap } from "@/lib/gameModePools";
 import { loadGamePool } from "@/lib/gameModeServer";
 import { shiritoriHeadKey, shiritoriTailKey } from "@/lib/gameShiritori";
 import { prisma } from "@/lib/prisma";
@@ -49,13 +50,13 @@ export async function GET(request: Request, context: { params: Promise<{ account
         ).length;
 
         const dailyKey = getVancouverDateKey(new Date());
-        const [troubleCount, dailyRun, levelFloor] = await Promise.all([
+        const [troubleCount, dailyRun, dailyLevelCap] = await Promise.all([
           prisma.studySubjectTag.count({ where: { accountId, trouble: true } }).catch(() => 0),
           prisma.gameRun.findUnique({
             where: { accountId_kind_dailyKey: { accountId, kind: PrismaGameKind.daily, dailyKey } },
             select: { status: true },
           }),
-          prisma.account.aggregate({ _min: { wkLevel: true } }),
+          resolveDailyLevelCap(),
         ]);
 
         return NextResponse.json({
@@ -71,7 +72,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             daily: {
               dateKey: dailyKey,
               playedToday: dailyRun?.status === "completed",
-              levelCap: Math.max(1, levelFloor._min.wkLevel ?? 1),
+              levelCap: dailyLevelCap,
             },
             revenge: { available: totalCounts.mixed, troubleCount },
             shiritori: { available: shiritoriAvailable },

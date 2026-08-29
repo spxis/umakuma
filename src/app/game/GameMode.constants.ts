@@ -83,7 +83,7 @@ export const GAME_KIND_TAGLINES: Record<GameKind, string> = {
 
 export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
   [GAME_KINDS.match]: "Pick the item that matches the meaning or reading. Choose your level, category and round length.",
-  [GAME_KINDS.daily]: "Ten questions drawn from items everyone in the family has unlocked. One attempt per day, same set for all players.",
+  [GAME_KINDS.daily]: "Ten questions pitched at the level the regular players share. One attempt per day, same set for everyone.",
   [GAME_KINDS.revenge]: "Targets the items you tagged as trouble first, then the ones your review history says you struggle with most.",
   [GAME_KINDS.timeAttack]: "Answer as many as you can before the clock runs out. Wrong answers cost you, but they do not end the run.",
   [GAME_KINDS.shiritori]: "Each word has to start with the kana the last one ended on. One wrong link ends the chain.",
