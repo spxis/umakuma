@@ -17,7 +17,7 @@ type Props = {
   onChange: (filters: Filters) => void;
 };
 
-const SELECT_CLASS = "h-9 rounded-lg border border-line bg-surface px-2.5 text-xs font-bold text-foreground";
+const SELECT_CLASS = "h-9 rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground";
 const GROUP_CLASS = "grid gap-1 text-[10px] font-bold uppercase text-foreground/55";
 
 export default function GameLeaderboardFilters({ filters, setup, lockedKind, onChange }: Props) {
@@ -32,7 +32,7 @@ export default function GameLeaderboardFilters({ filters, setup, lockedKind, onC
   return (
     <section aria-label="Leaderboard filters" className="flex flex-wrap items-end gap-2 border-y border-line bg-surface/70 px-3 py-3 sm:px-4">
       {lockedKind ? (
-        <span className={`inline-flex h-9 items-center gap-1.5 rounded-lg border-2 px-3 text-xs font-black uppercase ${GAME_KIND_ACCENT[lockedKind].border} ${GAME_KIND_ACCENT[lockedKind].text}`}>
+        <span className={`inline-flex h-9 items-center gap-1.5 rounded-full border-2 px-3 text-xs font-black uppercase ${GAME_KIND_ACCENT[lockedKind].border} ${GAME_KIND_ACCENT[lockedKind].text}`}>
           <span aria-hidden="true">{GAME_KIND_EMOJI[lockedKind]}</span>
           {GAME_KIND_LABELS[lockedKind]}
         </span>
@@ -80,18 +80,18 @@ export default function GameLeaderboardFilters({ filters, setup, lockedKind, onC
         </label>
       ) : null}
 
-      <div className="inline-flex rounded-lg border border-line bg-surface p-1">
-        {Object.entries(GAME_RANGE_LABELS).map(([value, label]) => <button key={value} type="button" onClick={() => onChange({ ...filters, range: value as Filters["range"] })} className={`rounded-md px-2.5 py-1.5 text-xs font-bold ${filters.range === value ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}>{label}</button>)}
+      <div className="inline-flex rounded-full border border-line bg-surface p-1">
+        {Object.entries(GAME_RANGE_LABELS).map(([value, label]) => <button key={value} type="button" onClick={() => onChange({ ...filters, range: value as Filters["range"] })} className={`rounded-full px-3 py-1.5 text-xs font-bold ${filters.range === value ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}>{label}</button>)}
       </div>
-      <div className="inline-flex rounded-lg border border-line bg-surface p-1">
-        {Object.entries(GAME_METRIC_LABELS).map(([value, label]) => <button key={value} type="button" onClick={() => onChange({ ...filters, metric: value as Filters["metric"] })} className={`rounded-md px-2.5 py-1.5 text-xs font-bold ${filters.metric === value ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}>{label}</button>)}
+      <div className="inline-flex rounded-full border border-line bg-surface p-1">
+        {Object.entries(GAME_METRIC_LABELS).map(([value, label]) => <button key={value} type="button" onClick={() => onChange({ ...filters, metric: value as Filters["metric"] })} className={`rounded-full px-3 py-1.5 text-xs font-bold ${filters.metric === value ? "bg-accent text-white" : "text-foreground hover:bg-surface-muted"}`}>{label}</button>)}
       </div>
 
       {showHard ? (
-        <button type="button" aria-pressed={filters.hardMode} onClick={() => onChange({ ...filters, hardMode: !filters.hardMode })} className={`h-9 rounded-lg border px-3 text-xs font-black uppercase ${filters.hardMode ? "border-red-600 bg-red-600 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>Hard mode</button>
+        <button type="button" aria-pressed={filters.hardMode} onClick={() => onChange({ ...filters, hardMode: !filters.hardMode })} className={`h-9 rounded-full border px-3 text-xs font-black uppercase ${filters.hardMode ? "border-red-600 bg-red-600 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>Hard mode</button>
       ) : null}
       {showUltra ? (
-        <button type="button" aria-pressed={filters.ultraMode} onClick={() => onChange({ ...filters, ultraMode: !filters.ultraMode })} className={`h-9 rounded-lg border px-3 text-xs font-black uppercase ${filters.ultraMode ? "border-fuchsia-700 bg-fuchsia-700 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>Ultra mode</button>
+        <button type="button" aria-pressed={filters.ultraMode} onClick={() => onChange({ ...filters, ultraMode: !filters.ultraMode })} className={`h-9 rounded-full border px-3 text-xs font-black uppercase ${filters.ultraMode ? "border-fuchsia-700 bg-fuchsia-700 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>Ultra mode</button>
       ) : null}
     </section>
   );

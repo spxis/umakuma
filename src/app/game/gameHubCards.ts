@@ -5,7 +5,7 @@ import {
   type GameKind,
 } from "@/lib/gameMode";
 import { GAME_COPY } from "./GameMode.constants";
-import type { GameHubCard, GameSelection, GameSetupResponse } from "./GameMode.types";
+import type { GameBlockedReason, GameHubCard, GameSelection, GameSetupResponse } from "./GameMode.types";
 
 /** Items a kind can actually draw from, given the level/category the player picked. */
 export function gameAvailableCount(
@@ -62,12 +62,20 @@ export function buildGameHubCards(setup: GameSetupResponse, selection: GameSelec
     const available = gameAvailableCount(setup, kind, level, selection.category);
     const minimumItems = rules.usesHardMode && selection.hardMode ? 3 : 2;
     const required = kind === GAME_KINDS.daily ? 1 : minimumItems;
+    const playedToday = kind === GAME_KINDS.daily && setup.availability.daily.playedToday;
+    const playable = !playedToday && available >= required;
+    const blockedReason: GameBlockedReason | null = playable
+      ? null
+      : playedToday
+        ? "played-today"
+        : "not-enough-items";
 
     return {
       kind,
       available,
       minimumItems,
-      playable: available >= required,
+      playable,
+      blockedReason,
       statusLabel: statusLabel(setup, kind, available),
     };
   });

@@ -7,6 +7,19 @@ import {
   STUDY_TYPE_FILTERS,
 } from "./study-explorer/lib/studyExplorerDomain";
 
+/**
+ * Canonical name for each dashboard view. Used by the top navigation and by the
+ * page heading, so the two cannot drift apart.
+ */
+export const DASHBOARD_TAB_LABELS: Record<TabId, string> = {
+  learn: "Study",
+  wk: "Library Explorer",
+  jlpt: "JLPT Explorer",
+  stats: "Stats",
+  news: "News",
+  read: "Read",
+};
+
 type QueryShape = {
   dashboard?: string;
   tab?: string;

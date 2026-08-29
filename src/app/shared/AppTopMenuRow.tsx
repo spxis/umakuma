@@ -6,6 +6,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
+import { DASHBOARD_TAB_LABELS } from "../users/[nickname]/userReadConfig";
 
 type AppTopMenuRowProps = {
   viewerMenuInfo: ViewerMenuInfo | null;
@@ -80,14 +81,14 @@ export default function AppTopMenuRow({
   const canSeeAdminTopLink = showAdminActions;
   const links: MainLink[] = [
     { label: "Leaderboard", href: "/", dashboard: null },
-    { label: "Study", href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
+    { label: DASHBOARD_TAB_LABELS.learn, href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
     { label: "Game", href: userGameHref(resolvedWkUsername), dashboard: null },
-    { label: "Library Explorer", href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
-    { label: "JLPT Explorer", href: userTabHref(resolvedWkUsername, "jlpt"), dashboard: "jlpt" },
+    { label: DASHBOARD_TAB_LABELS.wk, href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
+    { label: DASHBOARD_TAB_LABELS.jlpt, href: userTabHref(resolvedWkUsername, "jlpt"), dashboard: "jlpt" },
     { label: "History", href: userHistoryHref(resolvedWkUsername), dashboard: null },
-    { label: "Stats", href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
-    { label: "News", href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
-    { label: "Read", href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },
+    { label: DASHBOARD_TAB_LABELS.stats, href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
+    { label: DASHBOARD_TAB_LABELS.news, href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
+    { label: DASHBOARD_TAB_LABELS.read, href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },
     { label: "Libraries", href: userLibrariesHref(resolvedWkUsername), dashboard: null },
   ];
   if (canSeeAdminTopLink) {

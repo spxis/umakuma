@@ -78,11 +78,15 @@ export type GameLeaderboardFilters = {
   ultraMode: boolean;
 };
 
+/** Why a game cannot be started right now, so the card can say the real reason. */
+export type GameBlockedReason = "played-today" | "not-enough-items";
+
 /** Everything a hub card needs to describe and gate one game. */
 export type GameHubCard = {
   kind: GameKind;
   available: number;
   minimumItems: number;
   playable: boolean;
+  blockedReason: GameBlockedReason | null;
   statusLabel: string | null;
 };

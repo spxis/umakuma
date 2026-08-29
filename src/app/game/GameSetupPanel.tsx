@@ -20,7 +20,7 @@ type Props = {
   onBack: () => void;
 };
 
-const FIELD_CLASS = "mt-2 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm font-black text-foreground";
+const FIELD_CLASS = "mt-2 h-11 w-full rounded-full border border-line bg-surface px-4 text-sm font-black text-foreground";
 const LABEL_CLASS = "text-xs font-bold uppercase text-foreground/60";
 
 export default function GameSetupPanel({ setup, selection, starting, onChange, onStart, onBack }: Props) {
@@ -107,7 +107,7 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {rules.usesHardMode ? (
-          <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-black uppercase text-foreground hover:bg-surface-muted">
+          <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-5 text-sm font-black uppercase text-foreground hover:bg-surface-muted">
             <input
               type="checkbox"
               checked={selection.hardMode}
@@ -123,7 +123,7 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
             type="button"
             aria-pressed={selection.ultraMode}
             onClick={() => onChange((value) => ({ ...value, ultraMode: !value.ultraMode, level: value.ultraMode ? value.level : value.level ?? setup.account.wkLevel }))}
-            className={`h-11 rounded-lg border px-5 text-sm font-black uppercase transition ${selection.ultraMode ? "border-fuchsia-700 bg-fuchsia-700 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}
+            className={`h-11 rounded-full border px-5 text-sm font-black uppercase transition ${selection.ultraMode ? "border-fuchsia-700 bg-fuchsia-700 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}
           >
             {GAME_COPY.ultraMode}
           </button>
@@ -133,7 +133,7 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
           type="button"
           disabled={!playable || starting}
           onClick={onStart}
-          className={`h-11 rounded-lg border px-7 text-sm font-black uppercase transition disabled:cursor-not-allowed disabled:opacity-45 ${accent.solid} hover:brightness-95`}
+          className={`h-11 rounded-full border px-7 text-sm font-black uppercase transition disabled:cursor-not-allowed disabled:opacity-45 ${accent.solid} hover:brightness-95`}
         >
           {starting ? GAME_COPY.starting : GAME_COPY.start}
         </button>

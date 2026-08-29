@@ -22,6 +22,7 @@ import {
 } from "@/lib/domainConstants";
 import {
   getNewsDevSampleUrls,
+  DASHBOARD_TAB_LABELS,
   resolveInitialDashboardTab,
   resolveInitialReadTab,
   resolveInitialSrsFilter,
@@ -373,6 +374,10 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         className="mb-2"
       />
       {showUserBanner ? <UmaKumaPageBanner variant="user" className="mb-3" /> : null}
+
+      <h1 className="sr-only">
+        {DASHBOARD_TAB_LABELS[initialDashboardTab]} &ndash; {account.nickname}
+      </h1>
 
       <UserDashboardTabs
         accountId={account.id}
