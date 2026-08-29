@@ -29,6 +29,9 @@ export const GAME_COPY = {
   notEnoughItems: "This combination does not have enough started items.",
   notEnough: "Not enough items",
   chooseMatch: "Choose the matching item",
+  chooseAnswer: "Choose the answer",
+  direction: "Direction",
+  answerWith: "Answer with",
   chooseChain: "Choose the word that starts with this kana",
   score: "Score",
   time: "Time",
@@ -124,6 +127,24 @@ export const GAME_METRIC_LABELS: Record<GameMetric, string> = {
   streak: "Best streak",
 };
 
+/** Read is recognition and Find is recall, which is the harder of the two. */
+export const GAME_DIRECTION_LABELS: Record<string, string> = {
+  read: "Read",
+  find: "Find",
+};
+
+export const GAME_DIRECTION_HINTS: Record<string, string> = {
+  read: "See the character, choose what it means or how it reads.",
+  find: "See the meaning or reading, choose the character.",
+};
+
+export const GAME_ANSWER_MODE_LABELS: Record<string, string> = {
+  auto: "Mixed",
+  meaning: "Meaning",
+  reading: "Reading",
+  romaji: "Romaji",
+};
+
 export const GAME_CHOICE_COUNT_LABELS: Record<number, string> = {
   2: "Double",
   3: "Triple",
@@ -133,9 +154,10 @@ export const GAME_CHOICE_COUNT_LABELS: Record<number, string> = {
 export const GAME_MIXED_PILL_CLASS = "subject-pill border-line bg-surface-muted text-foreground";
 export const GAME_LEVEL_PILL_CLASS = "subject-pill border-accent/30 bg-accent/10 text-accent";
 
-export function gameDifficultyLabel(choiceCount: number, ultraMode: boolean): string {
+export function gameDifficultyLabel(choiceCount: number, ultraMode: boolean, direction?: string): string {
   const choices = GAME_CHOICE_COUNT_LABELS[choiceCount] ?? GAME_CHOICE_COUNT_LABELS[2]!;
-  return ultraMode ? `Ultra ${choices.toLowerCase()}` : choices;
+  const pair = direction ? `${GAME_DIRECTION_LABELS[direction] ?? ""} · ${choices}`.trim() : choices;
+  return ultraMode ? `Ultra · ${pair}` : pair;
 }
 
 export function gameTimeLimitLabel(timeLimitMs: number): string {

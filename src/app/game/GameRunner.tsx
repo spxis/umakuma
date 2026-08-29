@@ -6,7 +6,7 @@ import {
   formatGameDuration,
   gameOptionIndexForKey,
   type GameKind,
-  type GameOption,
+  type GameOptionTile,
   type GameQuestionPayload,
 } from "@/lib/gameMode";
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
@@ -93,12 +93,14 @@ export default function GameRunner({
   const optionCount = question.options.length;
   const isQuad = optionCount === 4;
   const isChain = question.answerType === CHAIN_ANSWER_TYPE;
+  // In Read mode the tiles carry text and the prompt carries the glyph.
+  const isTextAnswer = question.options.some((option) => option.label !== option.characters);
   const countLabel = kind === GAME_KINDS.shiritori ? GAME_COPY.chainLength.toLowerCase() : GAME_COPY.correct;
   const isTimed = remainingMs !== null;
   const clockValue = formatGameDuration(isTimed ? remainingMs : elapsedMs);
   const clockUrgent = isTimed && remainingMs <= URGENT_REMAINING_MS;
 
-  function tile(option: GameOption, keyHint: string) {
+  function tile(option: GameOptionTile, keyHint: string) {
     const selectedFeedback = feedback?.subjectId === option.subjectId ? feedback : null;
     return (
       <button
@@ -110,8 +112,12 @@ export default function GameRunner({
       >
         <span aria-hidden="true" className="absolute left-2 top-2 text-lg font-black text-foreground/50 sm:left-4 sm:top-4">{keyHint}</span>
         <span className="absolute right-2 top-2 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.level}</span>
-        <span className={`break-all text-center font-black leading-none [font-family:var(--font-jp-current)] ${optionCount >= 3 ? "text-4xl sm:text-6xl" : "text-5xl sm:text-9xl"}`}>
-          {option.characters}
+        <span className={`text-center font-black leading-tight ${
+          isTextAnswer
+            ? `break-words ${optionCount >= 3 ? "text-xl sm:text-3xl" : "text-2xl sm:text-5xl"}`
+            : `break-all [font-family:var(--font-jp-current)] leading-none ${optionCount >= 3 ? "text-4xl sm:text-6xl" : "text-5xl sm:text-9xl"}`
+        }`}>
+          {option.label}
         </span>
       </button>
     );
@@ -122,9 +128,13 @@ export default function GameRunner({
   const prompt = (
     <div className={`flex flex-1 flex-col items-center justify-center rounded-xl border px-3 py-3 text-center sm:px-5 sm:py-4 ${clockUrgent ? "border-red-500 bg-red-50" : "border-line bg-surface-muted"}`}>
       <p className="text-[10px] font-bold uppercase text-foreground/60">
-        {isChain ? GAME_COPY.chooseChain : `${GAME_COPY.chooseMatch} · ${question.answerType}`}
+        {isChain ? GAME_COPY.chooseChain : isTextAnswer ? `${GAME_COPY.chooseAnswer} · ${question.answerType}` : `${GAME_COPY.chooseMatch} · ${question.answerType}`}
       </p>
-      <p className={`mt-1 font-black text-foreground ${isChain ? "text-3xl [font-family:var(--font-jp-current)] sm:text-5xl" : "text-2xl sm:text-4xl"}`}>
+      <p className={`mt-1 font-black text-foreground ${
+        isChain || isTextAnswer
+          ? "text-4xl [font-family:var(--font-jp-current)] sm:text-6xl"
+          : "text-2xl sm:text-4xl"
+      }`}>
         {question.prompt}
       </p>
     </div>

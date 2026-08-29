@@ -4,12 +4,15 @@ import { GameKind as PrismaGameKind, GameSubjectCategory } from "@prisma/client"
 
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import {
+  GAME_DIRECTIONS,
   GAME_ENDLESS_CYCLE_SIZE,
   GAME_KINDS,
   GAME_ULTRA_BATCH_SIZE,
   gameKindRules,
   type GameCategory,
+  type GameAnswerMode,
   type GameChoiceCount,
+  type GameDirection,
   type GameKind,
 } from "@/lib/gameMode";
 import { loadDailyPool, loadRevengePool, loadShiritoriPool } from "@/lib/gameModePools";
@@ -35,6 +38,8 @@ export type GameRunRequest = {
   level: number | null;
   category: GameCategory;
   choiceCount: GameChoiceCount;
+  direction: GameDirection;
+  answerMode: GameAnswerMode;
   ultraMode: boolean;
   timeLimitMs: number | null;
 };
@@ -46,6 +51,8 @@ export type GameRunPlan = {
   level: number | null;
   category: GameCategory;
   choiceCount: GameChoiceCount;
+  direction: GameDirection;
+  answerMode: GameAnswerMode;
   dailyKey: string | null;
   seed: string | null;
   timeLimitMs: number | null;
@@ -62,12 +69,14 @@ async function planMatchRun(accountId: string, request: GameRunRequest): Promise
   const { items } = await loadGamePool(accountId, request.level, request.category);
   const questionCount = resolveBatchSize(request, items.length);
   return {
-    questions: buildGameQuestions(items, questionCount, request.choiceCount),
+    questions: buildGameQuestions(items, questionCount, request.choiceCount, Math.random, request.direction, request.answerMode),
     questionCount,
     batchSize: request.ultraMode ? GAME_ULTRA_BATCH_SIZE : questionCount,
     level: request.level,
     category: request.category,
     choiceCount: request.choiceCount,
+    direction: request.direction,
+    answerMode: request.answerMode,
     dailyKey: null,
     seed: null,
     timeLimitMs: null,
@@ -89,12 +98,14 @@ async function planRevengeRun(accountId: string, request: GameRunRequest): Promi
   if (chosen.length === 0) throw new Error("No eligible items are available.");
 
   return {
-    questions: buildGameQuestionsFromTargets(chosen, items, request.choiceCount),
+    questions: buildGameQuestionsFromTargets(chosen, items, request.choiceCount, Math.random, request.direction, request.answerMode),
     questionCount: chosen.length,
     batchSize: chosen.length,
     level: null,
     category: request.category,
     choiceCount: request.choiceCount,
+    direction: request.direction,
+    answerMode: request.answerMode,
     dailyKey: null,
     seed: null,
     timeLimitMs: null,
@@ -137,6 +148,8 @@ async function planDailyRun(request: GameRunRequest): Promise<GameRunPlan> {
       level: null,
       category: rules.fixedCategory ?? request.category,
       choiceCount: 2,
+      direction: "find",
+      answerMode: "auto",
       dailyKey,
       seed: established.seed,
       timeLimitMs: null,
@@ -146,12 +159,14 @@ async function planDailyRun(request: GameRunRequest): Promise<GameRunPlan> {
   const { items } = await loadDailyPool();
   const questionCount = Math.min(rules.fixedQuestionCount ?? items.length, items.length);
   return {
-    questions: buildGameQuestions(items, questionCount, 2, seededRandom(dailyKey)),
+    questions: buildGameQuestions(items, questionCount, 2, seededRandom(dailyKey), "find", "auto"),
     questionCount,
     batchSize: questionCount,
     level: null,
     category: rules.fixedCategory ?? request.category,
     choiceCount: 2,
+    direction: "find",
+    answerMode: "auto",
     dailyKey,
     seed: dailyKey,
     timeLimitMs: null,
@@ -162,12 +177,14 @@ async function planTimeAttackRun(accountId: string, request: GameRunRequest): Pr
   const { items } = await loadGamePool(accountId, request.level, request.category);
   const questionCount = Math.min(GAME_ENDLESS_CYCLE_SIZE, items.length);
   return {
-    questions: buildGameQuestions(items, questionCount, request.choiceCount),
+    questions: buildGameQuestions(items, questionCount, request.choiceCount, Math.random, request.direction, request.answerMode),
     questionCount,
     batchSize: questionCount,
     level: request.level,
     category: request.category,
     choiceCount: request.choiceCount,
+    direction: request.direction,
+    answerMode: request.answerMode,
     dailyKey: null,
     seed: null,
     timeLimitMs: request.timeLimitMs,
@@ -200,6 +217,9 @@ async function planShiritoriRun(accountId: string, request: GameRunRequest): Pro
       level: null,
       category: "vocabulary",
       choiceCount: request.choiceCount,
+      // Shiritori always shows words and asks for the next word.
+      direction: GAME_DIRECTIONS.find,
+      answerMode: "auto",
       dailyKey: null,
       seed: null,
       timeLimitMs: null,
@@ -258,6 +278,8 @@ export async function persistGameRun(accountId: string, request: GameRunRequest,
         level: plan.level,
         category: plan.category as GameSubjectCategory,
         choiceCount: plan.choiceCount,
+        direction: plan.direction,
+        answerMode: plan.answerMode,
         hardMode: plan.choiceCount >= 3,
         dailyKey: plan.dailyKey,
         seed: plan.seed,

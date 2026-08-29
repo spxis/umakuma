@@ -6,7 +6,9 @@ import {
   isUltraGameBatchSize,
   gameEndlessCycleLimitReached,
   type GameCategory,
+  type GameAnswerMode,
   type GameChoiceCount,
+  type GameDirection,
   type GameKind,
 } from "@/lib/gameMode";
 import { loadShiritoriPool } from "@/lib/gameModePools";
@@ -27,6 +29,8 @@ export type AppendableRun = {
   level: number | null;
   category: GameCategory;
   choiceCount: GameChoiceCount;
+  direction: GameDirection;
+  answerMode: GameAnswerMode;
   questionCount: number;
 };
 
@@ -44,7 +48,7 @@ async function appendCycle(run: AppendableRun): Promise<GameQuestionInput[]> {
     ? Math.min(items.length, GAME_ENDLESS_CYCLE_SIZE)
     : items.length;
   try {
-    return buildGameQuestions(items, cycleSize, run.choiceCount).map((question) => ({
+    return buildGameQuestions(items, cycleSize, run.choiceCount, Math.random, run.direction, run.answerMode).map((question) => ({
       ...question,
       position: question.position + run.questionCount,
     }));

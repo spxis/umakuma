@@ -1,8 +1,10 @@
 import type {
   GameBatchSize,
   GameCategory,
+  GameAnswerMode,
   GameChoiceCount,
   GameDateRange,
+  GameDirection,
   GameKind,
   GameLeaderboardEntry,
   GameLeaderboardMode,
@@ -64,6 +66,8 @@ export type GameSelection = {
   level: number | null;
   category: GameCategory;
   choiceCount: GameChoiceCount;
+  direction: GameDirection;
+  answerMode: GameAnswerMode;
   ultraMode: boolean;
   timeLimitMs: GameTimeLimitMs;
 };

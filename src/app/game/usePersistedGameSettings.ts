@@ -10,7 +10,9 @@ import {
   GAME_METRICS,
   isGameBatchSize,
   isGameCategory,
+  isGameAnswerMode,
   isGameChoiceCount,
+  isGameDirection,
   isGameKind,
   isGameTimeLimitMs,
 } from "@/lib/gameMode";
@@ -23,6 +25,8 @@ const DEFAULT_SELECTION: GameSelection = {
   level: null,
   category: "mixed",
   choiceCount: 2,
+  direction: "find",
+  answerMode: "auto",
   ultraMode: false,
   timeLimitMs: 60_000,
 };
@@ -55,6 +59,8 @@ function readSelection(): GameSelection {
     choiceCount: isGameChoiceCount(Number(stored.choiceCount))
       ? Number(stored.choiceCount) as GameSelection["choiceCount"]
       : DEFAULT_SELECTION.choiceCount,
+    direction: typeof stored.direction === "string" && isGameDirection(stored.direction) ? stored.direction : DEFAULT_SELECTION.direction,
+    answerMode: typeof stored.answerMode === "string" && isGameAnswerMode(stored.answerMode) ? stored.answerMode : DEFAULT_SELECTION.answerMode,
     ultraMode: stored.ultraMode === true,
   };
 }

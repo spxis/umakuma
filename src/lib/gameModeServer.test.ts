@@ -133,6 +133,57 @@ describe("buildGameQuestionsFromTargets", () => {
   });
 });
 
+describe("Read direction", () => {
+  // Two kanji that share a reading: fine as Find distractors, unusable in Read.
+  const sharedReading = [
+    { ...gameItem(1), characters: "青", primaryMeaning: "Blue", primaryReading: "せい", readings: ["せい"] },
+    { ...gameItem(2), characters: "星", primaryMeaning: "Star", primaryReading: "せい", readings: ["せい"] },
+    { ...gameItem(3), characters: "雪", primaryMeaning: "Snow", primaryReading: "ゆき", readings: ["ゆき"] },
+    { ...gameItem(4), characters: "雲", primaryMeaning: "Cloud", primaryReading: "くも", readings: ["くも"] },
+  ];
+
+  it("never puts the same answer on two tiles", () => {
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      const questions = buildGameQuestionsFromTargets(
+        sharedReading.slice(0, 2),
+        sharedReading,
+        2,
+        seededRandom(`read-${attempt}`),
+        "read",
+        "reading",
+      );
+      for (const question of questions) {
+        const readings = question.optionSubjectIds.map(
+          (id) => sharedReading.find((item) => item.subjectId === id)!.primaryReading,
+        );
+        expect(new Set(readings).size).toBe(readings.length);
+      }
+    }
+  });
+
+  it("still allows a shared reading as a distractor when finding the glyph", () => {
+    const questions = buildGameQuestionsFromTargets(
+      [sharedReading[0]!],
+      sharedReading,
+      2,
+      seededRandom("find"),
+      "find",
+      "reading",
+    );
+    expect(questions[0]!.optionSubjectIds).toHaveLength(2);
+  });
+
+  it("gives up rather than building an unanswerable question", () => {
+    const onlyOneReading = [
+      { ...gameItem(1), primaryMeaning: "A", primaryReading: "same", readings: ["same"] },
+      { ...gameItem(2), primaryMeaning: "B", primaryReading: "same", readings: ["same"] },
+    ];
+    expect(() =>
+      buildGameQuestionsFromTargets(onlyOneReading, onlyOneReading, 2, seededRandom("x"), "read", "reading"),
+    ).toThrow("Not enough distinct items are available.");
+  });
+});
+
 describe("seeded question building", () => {
   it("produces the identical set for the same seed and a different one otherwise", () => {
     const pool = Array.from({ length: 40 }, (_, index) => gameItem(index + 1));

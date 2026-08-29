@@ -6,16 +6,20 @@ import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { isSubjectType, type SubjectType } from "@/lib/domainConstants";
 import {
   GAME_KINDS,
+  GAME_DIRECTIONS,
   gameChoiceCountFrom,
   gamePoolItemMatches,
   isUltraGameBatchSize,
   resolveGameScore,
   type GameCategory,
   type GameKind as GameKindValue,
+  type GameDirection,
   type GameOption,
+  type GameOptionTile,
   type GameQuestionPayload,
   type GameRunSummary,
 } from "@/lib/gameMode";
+import { optionLabel, promptText } from "@/lib/gameAnswerText";
 import { parseMeanings, parseReadings, type GameCatalogItem } from "@/lib/gameQuestionBuilder";
 import { prisma } from "@/lib/prisma";
 import { parseAssignmentCacheRows } from "@/lib/wanikani/helpers";
@@ -152,6 +156,7 @@ export function toGameRunSummary(run: {
   category: GameSubjectCategory;
   hardMode: boolean;
   choiceCount: number;
+  direction: string;
   timeLimitMs: number | null;
   questionCount: number;
   answeredCount: number;
@@ -175,6 +180,7 @@ export function toGameRunSummary(run: {
     level: run.level,
     category: run.category as GameCategory,
     hardMode: run.hardMode,
+    direction: run.direction as GameDirection,
     choiceCount: gameChoiceCountFrom(run.choiceCount, run.hardMode),
     ultraMode: isUltraGameBatchSize(run.batchSize),
     questionCount: run.questionCount,
@@ -202,6 +208,7 @@ export async function hydrateGameQuestions(
     answerType: GameAnswerType;
     promptOverride: string | null;
   }>,
+  direction: GameDirection = GAME_DIRECTIONS.find,
 ): Promise<GameQuestionPayload[]> {
   // Questions created before Quad mode have no option list; fall back to the
   // original left/middle/right columns for those.
@@ -232,15 +239,17 @@ export async function hydrateGameQuestions(
     const target = optionById.get(question.targetSubjectId);
     const options = optionIdsFor(question).map((id) => optionById.get(id));
     if (!target || options.some((option) => !option)) throw new Error("Game question subjects are unavailable.");
-    const prompt = question.promptOverride
-      ?? (question.answerType === GameAnswerType.reading ? target.primaryReading : target.primaryMeaning);
+    const prompt = question.promptOverride ?? promptText(target, direction, question.answerType);
     if (!prompt) throw new Error("Game question prompt is unavailable.");
     return {
       id: question.id,
       position: question.position,
       answerType: question.answerType,
       prompt,
-      options: options as GameQuestionPayload["options"],
+      options: (options as GameOption[]).map((option) => ({
+        ...option,
+        label: optionLabel(option, direction, question.answerType),
+      })) satisfies GameOptionTile[],
     };
   });
 }

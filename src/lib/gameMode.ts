@@ -35,6 +35,19 @@ export const GAME_ENDLESS_CYCLE_SIZE = 25;
  * being challenged long before they slip. Cap it at a few full rounds.
  */
 export const GAME_MAX_ENDLESS_CYCLES = 3;
+/**
+ * Which side of the pair the player picks.
+ *
+ * `find` shows the meaning or reading and asks for the glyph. `read` shows the
+ * glyph and asks for its meaning, reading or romaji. Recognising a glyph is
+ * easier than recalling one, so Read is the gentler direction.
+ */
+export const GAME_DIRECTIONS = { find: "find", read: "read" } as const;
+export const GAME_DIRECTION_VALUES = [GAME_DIRECTIONS.find, GAME_DIRECTIONS.read] as const;
+
+/** What the text side of a question is. `auto` varies it per question. */
+export const GAME_ANSWER_MODES = ["auto", "meaning", "reading", "romaji"] as const;
+
 /** Double, Triple and Quad: how many tiles a question offers. */
 export const GAME_CHOICE_COUNTS = [2, 3, 4] as const;
 
@@ -60,7 +73,9 @@ export type GameCategory = (typeof GAME_CATEGORIES)[number];
 export type GameDateRange = (typeof GAME_DATE_RANGES)[number];
 export type GameMetric = (typeof GAME_METRICS)[number];
 export type GameLeaderboardMode = "all" | GameCategory;
-export type GameAnswerType = "reading" | "meaning" | "chain";
+export type GameAnswerType = "reading" | "meaning" | "chain" | "romaji";
+export type GameDirection = (typeof GAME_DIRECTIONS)[keyof typeof GAME_DIRECTIONS];
+export type GameAnswerMode = (typeof GAME_ANSWER_MODES)[number];
 export type GameKind = (typeof GAME_KINDS)[keyof typeof GAME_KINDS];
 export type GameTimeLimitMs = (typeof GAME_TIME_LIMITS_MS)[number];
 export type GameChoiceCount = (typeof GAME_CHOICE_COUNTS)[number];
@@ -165,13 +180,16 @@ export type GameOption = {
   primaryReading: string | null;
 };
 
+/** A tile as rendered: an option plus the text it displays for this direction. */
+export type GameOptionTile = GameOption & { label: string };
+
 export type GameQuestionPayload = {
   id: string;
   position: number;
   answerType: GameAnswerType;
   prompt: string;
   /** Two, three or four tiles, in display order. */
-  options: GameOption[];
+  options: GameOptionTile[];
 };
 
 export type GameRunSummary = {
@@ -184,6 +202,7 @@ export type GameRunSummary = {
   category: GameCategory;
   hardMode: boolean;
   choiceCount: GameChoiceCount;
+  direction: GameDirection;
   ultraMode: boolean;
   questionCount: number;
   answeredCount: number;
@@ -206,6 +225,7 @@ export type GameLeaderboardEntry = {
   category: GameCategory;
   hardMode: boolean;
   choiceCount: GameChoiceCount;
+  direction: GameDirection;
   ultraMode: boolean;
   batchSize: number;
   level: number | null;
@@ -385,6 +405,14 @@ export function calculateItemScore(correct: boolean, responseMs: number): number
 /** Running total for a timed game, never negative. */
 export function accumulateItemScore(current: number, correct: boolean, responseMs: number): number {
   return Math.max(0, current + calculateItemScore(correct, responseMs));
+}
+
+export function isGameDirection(value: string): value is GameDirection {
+  return GAME_DIRECTION_VALUES.includes(value as GameDirection);
+}
+
+export function isGameAnswerMode(value: string): value is GameAnswerMode {
+  return GAME_ANSWER_MODES.includes(value as GameAnswerMode);
 }
 
 export function isGameChoiceCount(value: number): value is GameChoiceCount {

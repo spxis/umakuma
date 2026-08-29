@@ -256,6 +256,13 @@ enum GameAnswerType {
   reading
   meaning
   chain
+  romaji
+}
+
+/// Which side of the pair the player picks: the glyph (find) or its text (read).
+enum GameDirection {
+  find
+  read
 }
 
 enum GameKind {
@@ -329,6 +336,8 @@ model GameRun {
   category      GameSubjectCategory
   hardMode      Boolean             @default(false)
   choiceCount   Int                 @default(2)
+  direction     GameDirection       @default(find)
+  answerMode    String              @default("auto")
   dailyKey      String?
   seed          String?
   timeLimitMs   Int?

@@ -1,5 +1,5 @@
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
-import type { GameAnswerType, GameChoiceCount, GameOption } from "@/lib/gameMode";
+import { GAME_DIRECTIONS, type GameAnswerMode, type GameAnswerType, type GameChoiceCount, type GameDirection, type GameOption } from "@/lib/gameMode";
+import { candidateAnswerTypes, labelsAreDistinct } from "@/lib/gameAnswerText";
 import { pickWith, shuffleWith, type RandomSource } from "@/lib/gameRandom";
 import {
   shiritoriDistractorScore,
@@ -119,6 +119,8 @@ export function buildGameQuestions(
   batchSize: number,
   choiceCount: GameChoiceCount = 2,
   random: RandomSource = Math.random,
+  direction: GameDirection = GAME_DIRECTIONS.find,
+  answerMode: GameAnswerMode = "auto",
 ): GameQuestionInput[] {
   if (!Number.isInteger(batchSize) || batchSize < choiceCount) {
     throw new Error(`At least ${choiceCount} eligible items are required.`);
@@ -126,7 +128,7 @@ export function buildGameQuestions(
   const targets = shuffleWith(pool, random).slice(0, batchSize);
   if (targets.length < batchSize) throw new Error(`Only ${targets.length} eligible items are available.`);
 
-  return buildGameQuestionsFromTargets(targets, pool, choiceCount, random);
+  return buildGameQuestionsFromTargets(targets, pool, choiceCount, random, direction, answerMode);
 }
 
 /**
@@ -138,6 +140,8 @@ export function buildGameQuestionsFromTargets(
   pool: GameCatalogItem[],
   choiceCount: GameChoiceCount = 2,
   random: RandomSource = Math.random,
+  direction: GameDirection = GAME_DIRECTIONS.find,
+  answerMode: GameAnswerMode = "auto",
 ): GameQuestionInput[] {
   if (targets.length === 0) {
     throw new Error(`At least ${choiceCount} eligible items are required.`);
@@ -154,29 +158,51 @@ export function buildGameQuestionsFromTargets(
   );
 
   return targets.map((target, position) => {
-    const chooseNextDistractor = (excludedSubjectIds: Set<number>) => {
-      const unusedPool = pool.filter((item) => unusedDistractors.has(item.subjectId) && !excludedSubjectIds.has(item.subjectId));
-      const nonTargetPool = pool.filter((item) => !targetIds.has(item.subjectId) && !excludedSubjectIds.has(item.subjectId));
-      const fallbackPool = pool.filter((item) => !excludedSubjectIds.has(item.subjectId));
+    const chooseNextDistractor = (
+      excludedSubjectIds: Set<number>,
+      accept: (item: GameCatalogItem) => boolean,
+    ) => {
+      const usable = (item: GameCatalogItem) => !excludedSubjectIds.has(item.subjectId) && accept(item);
+      const unusedPool = pool.filter((item) => unusedDistractors.has(item.subjectId) && usable(item));
+      const nonTargetPool = pool.filter((item) => !targetIds.has(item.subjectId) && usable(item));
+      const fallbackPool = pool.filter(usable);
       return chooseDistractor(target, unusedPool, random)
       ?? chooseDistractor(target, nonTargetPool, random)
       ?? chooseDistractor(target, fallbackPool, random);
     };
 
-    const excluded = new Set([target.subjectId]);
-    const distractors: GameCatalogItem[] = [];
-    while (distractors.length < choiceCount - 1) {
-      const next = chooseNextDistractor(excluded);
-      if (!next) throw new Error("Not enough distinct items are available.");
-      excluded.add(next.subjectId);
-      unusedDistractors.delete(next.subjectId);
-      distractors.push(next);
+    // The answer type is settled first, because it constrains which distractors
+    // are usable. The distractor engine deliberately favours items that share a
+    // reading, which makes Find hard but would make Read unanswerable by putting
+    // the same text on two tiles.
+    let answerType: GameAnswerType | null = null;
+    let distractors: GameCatalogItem[] = [];
+
+    for (const candidate of shuffleWith(candidateAnswerTypes(target, answerMode), random)) {
+      const excluded = new Set([target.subjectId]);
+      const picked: GameCatalogItem[] = [];
+      const accept = (item: GameCatalogItem) =>
+        candidateAnswerTypes(item, "auto").includes(candidate) &&
+        labelsAreDistinct([target, ...picked, item], direction, candidate);
+
+      while (picked.length < choiceCount - 1) {
+        const next = chooseNextDistractor(excluded, accept);
+        if (!next) break;
+        excluded.add(next.subjectId);
+        picked.push(next);
+      }
+
+      if (picked.length === choiceCount - 1) {
+        answerType = candidate;
+        distractors = picked;
+        break;
+      }
     }
 
-    const canAskReading = target.subjectType !== SUBJECT_TYPES.radical && Boolean(target.primaryReading) && distractors.every(
-      (distractor) => Boolean(distractor.primaryReading) && target.primaryReading !== distractor.primaryReading,
-    );
-    const answerType = canAskReading && random() < 0.5 ? ANSWER_TYPES.reading : ANSWER_TYPES.meaning;
+    if (!answerType || distractors.length !== choiceCount - 1) {
+      throw new Error("Not enough distinct items are available.");
+    }
+    for (const distractor of distractors) unusedDistractors.delete(distractor.subjectId);
     return {
       position,
       targetSubjectId: target.subjectId,

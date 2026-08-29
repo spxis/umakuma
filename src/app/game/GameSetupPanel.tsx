@@ -1,8 +1,11 @@
 import { GAME_KINDS, gameKindRules } from "@/lib/gameMode";
-import { GAME_CHOICE_COUNTS, type GameChoiceCount } from "@/lib/gameMode";
+import { GAME_ANSWER_MODES, GAME_CHOICE_COUNTS, GAME_DIRECTION_VALUES, type GameAnswerMode, type GameChoiceCount, type GameDirection } from "@/lib/gameMode";
 import {
   GAME_CATEGORY_LABELS,
+  GAME_ANSWER_MODE_LABELS,
   GAME_CHOICE_COUNT_LABELS,
+  GAME_DIRECTION_HINTS,
+  GAME_DIRECTION_LABELS,
   GAME_COPY,
   GAME_KIND_ACCENT,
   GAME_KIND_EMOJI,
@@ -32,6 +35,8 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
   const available = gameAvailableCount(setup, selection.kind, rules.usesLevel ? selection.level : null, selection.category);
   const playable = gameSelectionIsPlayable(setup, selection);
   const dailyPlayed = selection.kind === GAME_KINDS.daily && setup.availability.daily.playedToday;
+  // Daily is fixed for everyone and Shiritori always chains words.
+  const supportsDirection = !rules.oncePerDay && rules.fixedCategory !== "vocabulary";
 
   return (
     <section aria-label="Game setup" className="border-y border-line bg-surface/70 px-3 py-5 sm:px-5">
@@ -40,7 +45,10 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
           <span aria-hidden="true" className="text-3xl leading-none">{GAME_KIND_EMOJI[selection.kind]}</span>
           <div className="min-w-0">
             <h2 className={`text-xl font-black sm:text-2xl ${accent.text}`}>{GAME_KIND_LABELS[selection.kind]}</h2>
-            <p className="text-xs font-semibold text-foreground/60">{GAME_KIND_RULE_COPY[selection.kind]}</p>
+            <p className="text-xs font-semibold text-foreground/60">
+              {GAME_KIND_RULE_COPY[selection.kind]}
+              {supportsDirection ? ` ${GAME_DIRECTION_HINTS[selection.direction]}` : ""}
+            </p>
           </div>
         </div>
         <button
@@ -90,6 +98,34 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
                 <option key={category} value={category}>
                   {GAME_CATEGORY_LABELS[category]} ({gameAvailableCount(setup, selection.kind, rules.usesLevel ? selection.level : null, category)})
                 </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+
+        {supportsDirection ? (
+          <label className={LABEL_CLASS}>{GAME_COPY.direction}
+            <select
+              value={selection.direction}
+              onChange={(event) => onChange((value) => ({ ...value, direction: event.target.value as GameDirection }))}
+              className={FIELD_CLASS}
+            >
+              {GAME_DIRECTION_VALUES.map((value) => (
+                <option key={value} value={value}>{GAME_DIRECTION_LABELS[value]}</option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+
+        {supportsDirection ? (
+          <label className={LABEL_CLASS}>{GAME_COPY.answerWith}
+            <select
+              value={selection.answerMode}
+              onChange={(event) => onChange((value) => ({ ...value, answerMode: event.target.value as GameAnswerMode }))}
+              className={FIELD_CLASS}
+            >
+              {GAME_ANSWER_MODES.map((value) => (
+                <option key={value} value={value}>{GAME_ANSWER_MODE_LABELS[value]}</option>
               ))}
             </select>
           </label>

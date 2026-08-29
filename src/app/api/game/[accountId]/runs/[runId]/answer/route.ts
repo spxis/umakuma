@@ -11,6 +11,8 @@ import {
   gameRunIsExpired,
   isUltraGameBatchSize,
   type GameCategory,
+  type GameAnswerMode,
+  type GameDirection,
   type GameKind,
 } from "@/lib/gameMode";
 import { completedRunValues, hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
@@ -74,6 +76,8 @@ export async function POST(
                 level: pendingRun.level,
                 category: pendingRun.category as GameCategory,
                 choiceCount: gameChoiceCountFrom(pendingRun.choiceCount, pendingRun.hardMode),
+                direction: pendingRun.direction as GameDirection,
+                answerMode: pendingRun.answerMode as GameAnswerMode,
                 questionCount: pendingRun.questionCount,
               },
               pendingQuestion.targetSubjectId,
@@ -169,10 +173,13 @@ export async function POST(
 
         const appendedQuestions = outcome.appendedFromPosition === null
           ? []
-          : await hydrateGameQuestions(await prisma.gameQuestion.findMany({
-              where: { runId, position: { gte: outcome.appendedFromPosition } },
-              orderBy: { position: "asc" },
-            }));
+          : await hydrateGameQuestions(
+              await prisma.gameQuestion.findMany({
+                where: { runId, position: { gte: outcome.appendedFromPosition } },
+                orderBy: { position: "asc" },
+              }),
+              pendingRun.direction as GameDirection,
+            );
         return NextResponse.json({
           correct: outcome.correct,
           expired: outcome.expired,
