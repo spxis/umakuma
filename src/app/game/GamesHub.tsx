@@ -33,7 +33,7 @@ export default function GamesHub({ cards, selectedKind, onSelect }: Props) {
                 onClick={() => onSelect(card.kind)}
                 disabled={!card.playable}
                 aria-current={isSelected ? "true" : undefined}
-                className={`flex h-full w-full min-w-0 flex-col rounded-2xl border-2 bg-surface p-4 text-left transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface sm:p-5 ${isSelected ? accent.border : "border-line"}`}
+                className={`flex h-full w-full min-w-0 flex-col rounded-2xl border-2 bg-surface p-4 text-left transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:cursor-not-allowed disabled:hover:bg-surface sm:p-5 ${isSelected ? accent.border : "border-line"}`}
               >
                 <span className="flex min-w-0 flex-wrap items-start justify-between gap-x-3 gap-y-2">
                   <span className="flex min-w-0 flex-1 items-center gap-2">
@@ -52,7 +52,7 @@ export default function GamesHub({ cards, selectedKind, onSelect }: Props) {
                 <span className="mt-3 block flex-1 text-sm font-semibold leading-snug text-foreground/70">
                   {GAME_KIND_RULE_COPY[card.kind]}
                 </span>
-                <span className={`mt-4 inline-flex h-10 min-w-0 items-center justify-center rounded-full border px-5 text-center text-xs font-black uppercase ${card.playable ? accent.solid : "border-line bg-surface-muted text-foreground/50"}`}>
+                <span className={`mt-4 inline-flex h-10 min-w-0 items-center justify-center rounded-full border px-5 text-center text-sm font-black ${card.playable ? accent.solid : "border-line bg-surface-muted text-foreground/50"}`}>
                   {card.playable
                     ? GAME_COPY.play
                     : card.blockedReason === "played-today"

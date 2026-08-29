@@ -71,7 +71,7 @@ export default function GameResultsPanel({
             type="button"
             disabled={starting}
             onClick={onPlayAgain}
-            className="rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black uppercase text-white hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
+            className="rounded-full border border-hot bg-hot px-7 py-3 text-sm font-black text-white hover:brightness-95 disabled:cursor-wait disabled:opacity-60"
           >
             {starting ? GAME_COPY.starting : "Play same settings"}
           </button>
@@ -81,14 +81,14 @@ export default function GameResultsPanel({
         <button
           type="button"
           onClick={onChangeSettings}
-          className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black uppercase text-foreground hover:bg-surface-muted"
+          className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black text-foreground hover:bg-surface-muted"
         >
           Change settings
         </button>
         <button
           type="button"
           onClick={onBackToGames}
-          className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black uppercase text-foreground hover:bg-surface-muted"
+          className="rounded-full border border-line bg-surface px-7 py-3 text-sm font-black text-foreground hover:bg-surface-muted"
         >
           {GAME_COPY.backToGames}
         </button>

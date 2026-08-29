@@ -22,6 +22,12 @@ export const GAME_KIND_VALUES = [
 export const GAME_TIME_LIMITS_MS = [30_000, 60_000, 120_000] as const;
 export const GAME_DAILY_QUESTION_COUNT = 10;
 export const GAME_ENDLESS_CYCLE_SIZE = 25;
+/**
+ * Ultra repeats the whole pool until a wrong answer. A small pool (a handful of
+ * radicals at one level) would otherwise never end, because the player stops
+ * being challenged long before they slip. Cap it at a few full rounds.
+ */
+export const GAME_MAX_ENDLESS_CYCLES = 3;
 export const GAME_TIME_ATTACK_CORRECT_UNITS = 500;
 export const GAME_TIME_ATTACK_WRONG_UNITS = 250;
 export const GAME_TIME_ATTACK_GRACE_MS = 1_500;
@@ -229,6 +235,12 @@ export function gameProgressFlags(kind: GameKind, ultraMode: boolean): {
     return { endless: true, endsOnWrong: true };
   }
   return { endless: false, endsOnWrong: false };
+}
+
+/** True once an Ultra run has replayed the pool the maximum number of times. */
+export function gameEndlessCycleLimitReached(questionCount: number, poolSize: number): boolean {
+  if (!Number.isFinite(poolSize) || poolSize <= 0) return true;
+  return questionCount >= poolSize * GAME_MAX_ENDLESS_CYCLES;
 }
 
 export function gameRunIsExpired(

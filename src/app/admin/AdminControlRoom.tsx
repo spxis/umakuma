@@ -122,7 +122,7 @@ export default function AdminControlRoom({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex h-10 items-center justify-center rounded-full bg-accent px-5 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex h-10 items-center justify-center rounded-full bg-accent px-5 text-sm font-bold tracking-widest text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Save account
                 </button>
@@ -130,7 +130,7 @@ export default function AdminControlRoom({
                   type="button"
                   disabled={loading}
                   onClick={onRefreshAll}
-                  className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-5 text-sm font-bold uppercase tracking-widest text-slate-800 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-5 text-sm font-bold tracking-widest text-slate-800 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Refresh all stats
                 </button>
@@ -144,7 +144,7 @@ export default function AdminControlRoom({
                 type="button"
                 disabled={loading || jlptRefreshing || jlptEnriching}
                 onClick={onRefreshJlptList}
-                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-5 text-sm font-bold uppercase tracking-widest text-slate-800 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-5 text-sm font-bold tracking-widest text-slate-800 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {jlptRefreshing ? "Refreshing JLPT..." : "Refresh JLPT List"}
               </button>
@@ -152,7 +152,7 @@ export default function AdminControlRoom({
                 type="button"
                 disabled={loading || jlptRefreshing || jlptEnriching}
                 onClick={onEnrichJlptKanji}
-                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-5 text-sm font-bold uppercase tracking-widest text-slate-800 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-white px-5 text-sm font-bold tracking-widest text-slate-800 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {jlptEnriching ? "Enriching JLPT..." : "Enrich JLPT Data"}
               </button>

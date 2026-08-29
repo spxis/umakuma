@@ -67,7 +67,7 @@ export default function NewsReaderForm({
           type="submit"
           data-submit-intent="news-submit"
           disabled={(loading || discoverLoading) || !url.trim()}
-          className="inline-flex h-12 items-center justify-center rounded-full border border-line bg-accent px-6 text-sm font-bold uppercase tracking-[0.14em] text-surface transition hover:bg-accent-2 disabled:opacity-50"
+          className="inline-flex h-12 items-center justify-center rounded-full border border-line bg-accent px-6 text-sm font-bold tracking-[0.14em] text-surface transition hover:bg-accent-2 disabled:opacity-50"
         >
           {mode === "site"
             ? discoverLoading

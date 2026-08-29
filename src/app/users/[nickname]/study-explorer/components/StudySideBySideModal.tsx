@@ -178,7 +178,7 @@ export default function StudySideBySideModal({
                     type="button"
                     onClick={continueReview}
                     disabled={isSubmitting}
-                    className="mt-4 min-h-10 rounded-full border border-accent bg-accent px-6 py-2 text-sm font-black uppercase text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="mt-4 min-h-10 rounded-full border border-accent bg-accent px-6 py-2 text-sm font-black text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {isSubmitting ? STUDY_REVIEW_MODAL_SECTION_TEXT.submitting : STUDY_REVIEW_MODAL_SECTION_TEXT.continue}
                   </button>

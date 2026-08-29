@@ -187,8 +187,24 @@ export default function StudyReviewModal({
       onMarkSkipped(selectedItem.assignmentId);
     }
 
+    // Skip is a terminal outcome like correct and wrong, so it has to end the
+    // session when there is nothing to advance to. Quick mode reviews a single
+    // item, which would otherwise leave the modal open with nothing left to do.
+    if (!onNext && !canUseFlashCycleNext) {
+      onClose();
+      return;
+    }
+
     advanceFlashOrNext();
-  }, [advanceFlashOrNext, onMarkSkipped, reviewOutcomeByAssignmentId, selectedItem]);
+  }, [
+    advanceFlashOrNext,
+    canUseFlashCycleNext,
+    onClose,
+    onMarkSkipped,
+    onNext,
+    reviewOutcomeByAssignmentId,
+    selectedItem,
+  ]);
 
   const handleFlashTouchStart = useCallback((event: React.TouchEvent) => {
     const touch = event.changedTouches[0];

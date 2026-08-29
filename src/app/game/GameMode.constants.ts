@@ -50,6 +50,7 @@ export const GAME_COPY = {
   dailyReady: "Ready to play",
   dailyOneAttempt: "One attempt per day. Everyone gets the same questions.",
   resumedDaily: "Picking up today's unfinished attempt.",
+  ultraRule: "Keep going until the first wrong answer, or three full rounds of the pool. Time and streak keep running.",
 } as const;
 
 export const GAME_STORAGE_KEYS = {

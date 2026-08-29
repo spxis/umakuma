@@ -420,7 +420,7 @@ export default function StudyHistoryTable({
               />
               <button
                 type="submit"
-                className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold uppercase tracking-[0.08em]"
+                className="rounded-full border border-line bg-surface px-3 py-1.5 text-sm font-bold tracking-[0.08em]"
               >
                 Go
               </button>

@@ -10,6 +10,7 @@ import {
   formatGameScore,
   gameAnswerProgress,
   gameDateKeys,
+  gameEndlessCycleLimitReached,
   gameLeaderboardMemberIsEligible,
   gameOptionIndexForKey,
   gameProgressFlags,
@@ -90,6 +91,18 @@ describe("Game Mode", () => {
       appendCycle: false,
       questionCount: 9,
     });
+  });
+
+  it("stops Ultra after three full rounds so a tiny pool cannot run forever", () => {
+    // Seven radicals: the run ends at 21 answers even with no wrong answer.
+    expect(gameEndlessCycleLimitReached(7, 7)).toBe(false);
+    expect(gameEndlessCycleLimitReached(14, 7)).toBe(false);
+    expect(gameEndlessCycleLimitReached(20, 7)).toBe(false);
+    expect(gameEndlessCycleLimitReached(21, 7)).toBe(true);
+    // A large pool is effectively unbounded in a single sitting.
+    expect(gameEndlessCycleLimitReached(1_000, 1_823)).toBe(false);
+    // An empty pool has nothing left to serve.
+    expect(gameEndlessCycleLimitReached(0, 0)).toBe(true);
   });
 
   it("ends an endless run when nothing can be appended", () => {

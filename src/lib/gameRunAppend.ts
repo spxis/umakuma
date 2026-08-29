@@ -1,6 +1,13 @@
 import "server-only";
 
-import { GAME_ENDLESS_CYCLE_SIZE, GAME_KINDS, isUltraGameBatchSize, type GameCategory, type GameKind } from "@/lib/gameMode";
+import {
+  GAME_ENDLESS_CYCLE_SIZE,
+  GAME_KINDS,
+  isUltraGameBatchSize,
+  gameEndlessCycleLimitReached,
+  type GameCategory,
+  type GameKind,
+} from "@/lib/gameMode";
 import { loadShiritoriPool } from "@/lib/gameModePools";
 import { loadGamePool } from "@/lib/gameModeServer";
 import {
@@ -25,6 +32,11 @@ export type AppendableRun = {
 async function appendCycle(run: AppendableRun): Promise<GameQuestionInput[]> {
   const { items } = await loadGamePool(run.accountId, run.level, run.category);
   if (items.length === 0) return [];
+  // Ultra ends after a few full rounds so a tiny pool cannot run forever.
+  // Time Attack is bounded by its clock instead, so it keeps appending.
+  if (run.kind === GAME_KINDS.match && gameEndlessCycleLimitReached(run.questionCount, items.length)) {
+    return [];
+  }
   // Ultra replays the whole pool each cycle; Time Attack only needs enough
   // questions to outlast the clock, and questionCount grows every append.
   const cycleSize = run.kind === GAME_KINDS.timeAttack

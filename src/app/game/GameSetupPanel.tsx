@@ -8,6 +8,7 @@ import {
   GAME_KIND_RULE_COPY,
   gameTimeLimitLabel,
 } from "./GameMode.constants";
+import GameModeToggle from "./GameModeToggle";
 import { gameAvailableCount, gameRequiredCount, gameSelectionIsPlayable } from "./gameHubCards";
 import type { GameSelection, GameSetupResponse } from "./GameMode.types";
 
@@ -43,7 +44,7 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
         <button
           type="button"
           onClick={onBack}
-          className="h-9 shrink-0 rounded-full border border-line bg-surface px-4 text-xs font-black uppercase text-foreground hover:bg-surface-muted"
+          className="h-9 shrink-0 rounded-full border border-line bg-surface px-4 text-sm font-black text-foreground hover:bg-surface-muted"
         >
           {GAME_COPY.changeGame}
         </button>
@@ -107,33 +108,32 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {rules.usesHardMode ? (
-          <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-5 text-sm font-black uppercase text-foreground hover:bg-surface-muted">
-            <input
-              type="checkbox"
-              checked={selection.hardMode}
-              onChange={(event) => onChange((value) => ({ ...value, hardMode: event.target.checked }))}
-              className="h-4 w-4 accent-red-600"
-            />
-            {GAME_COPY.hardMode}
-          </label>
+          <GameModeToggle
+            label={GAME_COPY.hardMode}
+            checked={selection.hardMode}
+            onChange={(checked) => onChange((value) => ({ ...value, hardMode: checked }))}
+            accentClass="accent-red-600"
+          />
         ) : null}
 
         {rules.usesUltraMode ? (
-          <button
-            type="button"
-            aria-pressed={selection.ultraMode}
-            onClick={() => onChange((value) => ({ ...value, ultraMode: !value.ultraMode, level: value.ultraMode ? value.level : value.level ?? setup.account.wkLevel }))}
-            className={`h-11 rounded-full border px-5 text-sm font-black uppercase transition ${selection.ultraMode ? "border-fuchsia-700 bg-fuchsia-700 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}
-          >
-            {GAME_COPY.ultraMode}
-          </button>
+          <GameModeToggle
+            label={GAME_COPY.ultraMode}
+            checked={selection.ultraMode}
+            onChange={(checked) => onChange((value) => ({
+              ...value,
+              ultraMode: checked,
+              level: checked ? value.level ?? setup.account.wkLevel : value.level,
+            }))}
+            accentClass="accent-fuchsia-700"
+          />
         ) : null}
 
         <button
           type="button"
           disabled={!playable || starting}
           onClick={onStart}
-          className={`h-11 rounded-full border px-7 text-sm font-black uppercase transition disabled:cursor-not-allowed disabled:opacity-45 ${accent.solid} hover:brightness-95`}
+          className={`h-11 rounded-full border px-7 text-sm font-black transition disabled:cursor-not-allowed disabled:opacity-45 ${accent.solid} hover:brightness-95`}
         >
           {starting ? GAME_COPY.starting : GAME_COPY.start}
         </button>
@@ -150,7 +150,7 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
             : selection.kind === GAME_KINDS.daily
               ? GAME_COPY.dailyOneAttempt
               : selection.ultraMode
-                ? "Keep going until the first wrong answer. Time and streak keep running."
+                ? GAME_COPY.ultraRule
                 : available < gameRequiredCount(selection)
                   ? GAME_COPY.notEnoughItems
                   : GAME_COPY.scoreRule}

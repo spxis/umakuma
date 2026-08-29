@@ -183,7 +183,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
           <button
             type="button"
             onClick={backToHub}
-            className="h-10 rounded-full border border-line bg-surface px-5 text-xs font-black uppercase text-foreground hover:bg-surface-muted"
+            className="h-10 rounded-full border border-line bg-surface px-5 text-sm font-black text-foreground hover:bg-surface-muted"
           >
             {GAME_COPY.backToGames}
           </button>

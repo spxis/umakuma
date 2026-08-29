@@ -40,7 +40,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               <button
                 type="button"
                 onClick={reset}
-                className="mt-5 inline-flex h-10 items-center justify-center rounded-full border border-red-400 bg-white px-5 text-sm font-bold uppercase tracking-[0.08em] text-red-800 hover:bg-red-100"
+                className="mt-5 inline-flex h-10 items-center justify-center rounded-full border border-red-400 bg-white px-5 text-sm font-bold tracking-[0.08em] text-red-800 hover:bg-red-100"
               >
                 Retry
               </button>

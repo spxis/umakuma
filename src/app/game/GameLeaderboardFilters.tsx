@@ -1,5 +1,6 @@
 import { gameKindRules, type GameKind } from "@/lib/gameMode";
 import {
+  GAME_COPY,
   GAME_KIND_ACCENT,
   GAME_KIND_EMOJI,
   GAME_KIND_LABELS,
@@ -7,6 +8,7 @@ import {
   GAME_METRIC_LABELS,
   GAME_RANGE_LABELS,
 } from "./GameMode.constants";
+import GameModeToggle from "./GameModeToggle";
 import type { GameLeaderboardFilters as Filters, GameSetupResponse } from "./GameMode.types";
 
 type Props = {
@@ -88,10 +90,22 @@ export default function GameLeaderboardFilters({ filters, setup, lockedKind, onC
       </div>
 
       {showHard ? (
-        <button type="button" aria-pressed={filters.hardMode} onClick={() => onChange({ ...filters, hardMode: !filters.hardMode })} className={`h-9 rounded-full border px-3 text-xs font-black uppercase ${filters.hardMode ? "border-red-600 bg-red-600 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>Hard mode</button>
+        <GameModeToggle
+          size="sm"
+          label={GAME_COPY.hardMode}
+          checked={filters.hardMode}
+          onChange={(checked) => onChange({ ...filters, hardMode: checked })}
+          accentClass="accent-red-600"
+        />
       ) : null}
       {showUltra ? (
-        <button type="button" aria-pressed={filters.ultraMode} onClick={() => onChange({ ...filters, ultraMode: !filters.ultraMode })} className={`h-9 rounded-full border px-3 text-xs font-black uppercase ${filters.ultraMode ? "border-fuchsia-700 bg-fuchsia-700 text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"}`}>Ultra mode</button>
+        <GameModeToggle
+          size="sm"
+          label={GAME_COPY.ultraMode}
+          checked={filters.ultraMode}
+          onChange={(checked) => onChange({ ...filters, ultraMode: checked })}
+          accentClass="accent-fuchsia-700"
+        />
       ) : null}
     </section>
   );

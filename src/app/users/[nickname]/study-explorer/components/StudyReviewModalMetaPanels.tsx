@@ -438,7 +438,7 @@ export default function StudyReviewModalMetaPanels({
             type="button"
             onClick={onSkipCurrent}
             disabled={isSubmittingSelected}
-            className="min-h-[4rem] w-full rounded-2xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm font-black uppercase tracking-[0.1em] text-amber-800 disabled:cursor-not-allowed disabled:opacity-50"
+            className="min-h-[4rem] w-full rounded-2xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm font-black tracking-[0.1em] text-amber-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="block">{STUDY_REVIEW_META_TEXT.skipped}</span>
             <span className="mt-1 block text-xl leading-none">{skipped}</span>
@@ -483,7 +483,7 @@ export default function StudyReviewModalMetaPanels({
           <button
             type="button"
             onClick={onRetry}
-            className="mt-3 w-full rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-left text-sm font-black uppercase tracking-[0.08em] text-red-800 transition hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 cursor-pointer"
+            className="mt-3 w-full rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-left text-sm font-black tracking-[0.08em] text-red-800 transition hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 cursor-pointer"
           >
             {submitFeedback.message}
           </button>

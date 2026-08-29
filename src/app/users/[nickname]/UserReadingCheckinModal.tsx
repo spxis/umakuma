@@ -287,7 +287,7 @@ export default function UserReadingCheckinModal({
           <div className="sm:col-span-2 flex flex-wrap items-center gap-3">
             <button
               type="submit"
-              className="inline-flex h-10 items-center rounded-full border border-line bg-surface px-5 text-sm font-bold uppercase tracking-[0.08em] text-foreground transition hover:bg-surface-muted"
+              className="inline-flex h-10 items-center rounded-full border border-line bg-surface px-5 text-sm font-bold tracking-[0.08em] text-foreground transition hover:bg-surface-muted"
               disabled={submitState === "saving"}
             >
               {submitState === "saving" ? "Saving" : `Save ${saveScopeLabel} check-in`}

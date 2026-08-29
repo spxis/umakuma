@@ -23,7 +23,7 @@ export default function StudyHistoryHeader({
         <button
           type="button"
           onClick={onToggleExpanded}
-          className="text-base font-bold uppercase tracking-[0.1em] text-foreground sm:text-lg"
+          className="text-base font-bold tracking-[0.1em] text-foreground sm:text-lg"
         >
           {heading} {expanded ? "▲" : "▼"}
         </button>

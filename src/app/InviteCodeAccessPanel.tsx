@@ -107,7 +107,7 @@ export default function InviteCodeAccessPanel({
           <button
             type="submit"
             disabled={loading || code.length !== 6}
-            className="inline-flex h-11 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex h-11 w-full items-center justify-center rounded-full bg-accent px-5 text-sm font-black tracking-[0.12em] text-white transition hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Signing in..." : "Use Invite Code"}
           </button>
