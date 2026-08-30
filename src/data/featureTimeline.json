@@ -721,5 +721,14 @@
     "date": "2026-08-30",
     "version": "0.61.0",
     "summary": "The join page sends resolved members to their own page, and the header only offers links the viewer can actually open."
+  },
+  {
+    "id": "site-modes",
+    "name": "Developer and Advanced modes",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.62.0",
+    "summary": "Two global mode flags, toggled from the flags page; the footer wears DEV and ADV chips while they are on."
   }
 ]

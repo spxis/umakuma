@@ -2,6 +2,7 @@ import "server-only";
 
 import {
   FEATURE_FLAG_DEFINITIONS,
+  footerChipsFor,
   resolveFlagStates,
   type FeatureFlagKey,
   type FeatureFlagState,
@@ -44,4 +45,9 @@ export async function setFeatureFlag(key: FeatureFlagKey, enabled: boolean): Pro
   });
 
   cachedStates = null;
+}
+
+/** The concise mode chips the footer wears, for whichever flags are on. */
+export async function loadFooterModeChips(): Promise<string[]> {
+  return footerChipsFor(await loadFeatureFlagStates());
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AppFooter from "./AppFooter";
+import { loadFooterModeChips } from "@/lib/featureFlagsServer";
 import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
 import StudyTagListsModal from "./shared/StudyTagListsModal";
@@ -11,11 +12,13 @@ export const metadata: Metadata = {
   description: "Family WaniKani leaderboard",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const modeChips = await loadFooterModeChips();
+
   return (
     <html
       lang="en"
@@ -28,7 +31,7 @@ export default function RootLayout({
         <ClientErrorReporter />
         <ClientApiActivityHint />
         <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
-        <AppFooter />
+        <AppFooter modeChips={modeChips} />
         <StudyTagListsModal />
         <ViewGlyphModalHost />
       </body>

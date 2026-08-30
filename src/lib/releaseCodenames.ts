@@ -112,6 +112,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Soyokaze Soumen", ja: "そよ風素麺", reading: "そよかぜそうめん", gloss: "gentle-breeze noodles" },
   { romaji: "Takaramono Taiyaki", ja: "宝物鯛焼き", reading: "たからものたいやき", gloss: "treasure taiyaki" },
   { romaji: "Chikara Chawanmushi", ja: "力茶碗蒸し", reading: "ちからちゃわんむし", gloss: "power egg custard" },
+  { romaji: "Tsurutsuru Tsukimi", ja: "つるつる月見", reading: "つるつるつきみ", gloss: "silky moon-viewing" },
 ];
 
 export function codenameForMinor(minor: number): ReleaseCodename | null {

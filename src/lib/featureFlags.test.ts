@@ -4,6 +4,7 @@ import {
   FEATURE_FLAG_DEFINITIONS,
   FEATURE_FLAG_VALUES,
   FEATURE_FLAGS,
+  footerChipsFor,
   isFeatureFlagKey,
   resolveFlagStates,
 } from "./featureFlags";
@@ -76,5 +77,41 @@ describe("resolveFlagStates", () => {
       { key: FEATURE_FLAGS.openSignup, enabled: true, updatedAt: "2026-08-30T12:00:00.000Z" },
     ]);
     expect(states[0].updatedAt).toBe("2026-08-30T12:00:00.000Z");
+  });
+});
+
+describe("footerChipsFor", () => {
+  it("wears no chips while every mode is off", () => {
+    expect(footerChipsFor(resolveFlagStates([]))).toEqual([]);
+  });
+
+  it("wears a chip for each enabled mode, in registry order", () => {
+    const states = resolveFlagStates([
+      { key: FEATURE_FLAGS.advancedMode, enabled: true, updatedAt: null },
+      { key: FEATURE_FLAGS.developerMode, enabled: true, updatedAt: null },
+    ]);
+    expect(footerChipsFor(states)).toEqual(["DEV", "ADV"]);
+  });
+
+  it("never wears a chip for a silent flag like the signup door", () => {
+    const states = resolveFlagStates([
+      { key: FEATURE_FLAGS.openSignup, enabled: true, updatedAt: null },
+    ]);
+    expect(footerChipsFor(states)).toEqual([]);
+  });
+
+  it("keeps every chip concise", () => {
+    for (const key of FEATURE_FLAG_VALUES) {
+      const chip = FEATURE_FLAG_DEFINITIONS[key].footerChip;
+      if (chip) {
+        expect(chip.length, key).toBeLessThanOrEqual(4);
+      }
+    }
+  });
+
+  it("ships every mode off by default", () => {
+    for (const key of FEATURE_FLAG_VALUES) {
+      expect(FEATURE_FLAG_DEFINITIONS[key].defaultEnabled, key).toBe(false);
+    }
   });
 });

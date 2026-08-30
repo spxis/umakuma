@@ -15,6 +15,10 @@
 export const FEATURE_FLAGS = {
   /** The open-signup door: Google sign-in creates an account for anyone. */
   openSignup: "open_signup",
+  /** Site-wide developer mode: extra diagnostics and rough edges allowed. */
+  developerMode: "developer_mode",
+  /** Site-wide advanced mode: power-user surfaces beyond the daily basics. */
+  advancedMode: "advanced_mode",
 } as const;
 
 export type FeatureFlagKey = (typeof FEATURE_FLAGS)[keyof typeof FEATURE_FLAGS];
@@ -31,6 +35,8 @@ export type FeatureFlagDefinition = {
   description: string;
   /** What the flag reads as when no database row exists. */
   defaultEnabled: boolean;
+  /** Short chip shown in the footer while the flag is on; omit for silent flags. */
+  footerChip?: string;
 };
 
 export const FEATURE_FLAG_DEFINITIONS: Record<FeatureFlagKey, FeatureFlagDefinition> = {
@@ -41,7 +47,28 @@ export const FEATURE_FLAG_DEFINITIONS: Record<FeatureFlagKey, FeatureFlagDefinit
       "Anyone signing in with Google gets an account instead of bouncing to the invite page. Keep off until privacy, gating and the WaniKani-free surfaces have shipped.",
     defaultEnabled: false,
   },
+  [FEATURE_FLAGS.developerMode]: {
+    key: FEATURE_FLAGS.developerMode,
+    label: "Developer mode",
+    description:
+      "Site-wide developer switch. Nothing gates on it yet; surfaces that want extra diagnostics should check this flag. The footer wears a DEV chip while it is on.",
+    defaultEnabled: false,
+    footerChip: "DEV",
+  },
+  [FEATURE_FLAGS.advancedMode]: {
+    key: FEATURE_FLAGS.advancedMode,
+    label: "Advanced mode",
+    description:
+      "Site-wide power-user switch for surfaces beyond the daily basics. The footer wears an ADV chip while it is on.",
+    defaultEnabled: false,
+    footerChip: "ADV",
+  },
 };
+
+/** The footer chips for whichever flags are on, in registry order. */
+export function footerChipsFor(states: readonly FeatureFlagState[]): string[] {
+  return states.flatMap((state) => (state.enabled && state.footerChip ? [state.footerChip] : []));
+}
 
 export type FeatureFlagRow = {
   key: string;
