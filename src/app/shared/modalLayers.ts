@@ -20,6 +20,8 @@ export const MODAL_LAYERS = {
   lists: "z-80",
   /** The glyph viewer, which stacks above the lists panel it was opened from. */
   viewer: "z-90",
+  /** Stroke order, which can be raised from inside the glyph viewer. */
+  strokes: "z-[95]",
   /** The full-screen game runner. */
   game: "z-100",
   /** Confirmations raised from inside the game runner. */

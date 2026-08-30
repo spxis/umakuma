@@ -986,5 +986,15 @@
     "version": "0.86.0",
     "releasedAt": "2026-08-30T14:29:04Z",
     "summary": "Reported by John: the grade cards listed every reading a character has ever taken. They now use the readings from the joyo table, which is the cabinet-notified list for general use - so King correctly shows no kun reading, Sound files its in reading as on, and Life drops from twenty-one readings to ten. Both fonts are shown in the stroke view for comparison."
+  },
+  {
+    "id": "stroke-order-everywhere",
+    "area": "study",
+    "name": "Stroke order beyond the grades page",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.87.0",
+    "releasedAt": "2026-08-30T14:37:37Z",
+    "summary": "Stroke order moves into a shared button any surface can drop in, and the glyph viewer gains it for kanji. The data now covers every WaniKani kanji as well as the school grades - the characters WaniKani teaches past the joyo list were silently missing, and those are the ones a learner is least sure how to write."
   }
 ]

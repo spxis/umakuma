@@ -56,8 +56,18 @@ describe("attribution", () => {
 });
 
 describe("coverage", () => {
-  it("holds a file for every school grade band", () => {
-    expect(STROKE_ORDER_GRADES).toEqual([1, 2, 3, 4, 5, 6, 8, 9]);
+  it("holds a file for every school grade band, plus the non-school bucket", () => {
+    expect(STROKE_ORDER_GRADES).toEqual([0, 1, 2, 3, 4, 5, 6, 8, 9]);
+  });
+
+  /*
+   * WaniKani teaches past the joyo and jinmeiyo lists, and those are exactly
+   * the characters a learner is least sure how to write. They were silently
+   * missing until the build learned to include them.
+   */
+  it("covers a WaniKani character that no school grade teaches", () => {
+    expect(getStrokeOrder("嘘")?.strokeCount).toBeGreaterThan(0);
+    expect(getStrokeOrder("壺")?.strokeCount).toBeGreaterThan(0);
   });
 
   it("covers characters across the bands, not just the first", () => {

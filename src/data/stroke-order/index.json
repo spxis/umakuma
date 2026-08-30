@@ -9,6 +9,11 @@
   },
   "grades": [
     {
+      "grade": 0,
+      "file": "grade-00.json",
+      "count": 20
+    },
+    {
       "grade": 1,
       "file": "grade-01.json",
       "count": 80

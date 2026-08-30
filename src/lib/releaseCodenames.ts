@@ -137,6 +137,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Rinrin Ringo", ja: "りんりん林檎", reading: "りんりんりんご", gloss: "chiming apple" },
   { romaji: "Ruriiro Rusuban", ja: "瑠璃色留守番", reading: "るりいろるすばん", gloss: "lapis-blue homewatch" },
   { romaji: "Reimei Renge", ja: "黎明蓮華", reading: "れいめいれんげ", gloss: "dawn lotus" },
+  { romaji: "Rojiura Rokuro", ja: "路地裏轆轤", reading: "ろじうらろくろ", gloss: "back-alley potter's wheel" },
 ];
 
 /**

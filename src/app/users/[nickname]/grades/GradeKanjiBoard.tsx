@@ -7,7 +7,6 @@ import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import GradeKanjiGrid from "./GradeKanjiGrid";
-import GradeStrokeModal from "./GradeStrokeModal";
 import { GRADE_REVEAL_MODES, GRADE_REVEAL_STORAGE_KEY, type GradeRevealMode } from "./gradeExplorerView";
 
 type Props = {
@@ -31,7 +30,6 @@ export default function GradeKanjiBoard({ items }: Props) {
   const [mode, setMode] = useState<GradeRevealMode>(() =>
     getStoredEnum(GRADE_REVEAL_STORAGE_KEY, Object.values(GRADE_REVEAL_MODES), GRADE_REVEAL_MODES.shown));
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
-  const [strokesFor, setStrokesFor] = useState<SchoolGradeKanjiEntry | null>(null);
 
   function changeMode(next: GradeRevealMode) {
     setMode(next);
@@ -89,12 +87,8 @@ export default function GradeKanjiBoard({ items }: Props) {
                 })
             : undefined
         }
-        onShowStrokes={setStrokesFor}
       />
 
-      {strokesFor ? (
-        <GradeStrokeModal entry={strokesFor} onClose={() => setStrokesFor(null)} />
-      ) : null}
     </>
   );
 }

@@ -64,8 +64,14 @@ function loadGrade(grade: number): Map<string, StrokeOrderEntry> | null {
   return byKanji;
 }
 
-/** Every grade file the build produced, in school order. */
-export const STROKE_ORDER_GRADES = [1, 2, 3, 4, 5, 6, 8, 9] as const;
+/**
+ * Every stroke file, in lookup order.
+ *
+ * Bucket 0 holds the characters WaniKani teaches that no school grade covers -
+ * 嘘, 鰐, 壺 and the like. It is searched first because it is the smallest file
+ * by far, so a character that is in it costs almost nothing to find.
+ */
+export const STROKE_ORDER_GRADES = [0, 1, 2, 3, 4, 5, 6, 8, 9] as const;
 
 /**
  * The strokes for one character, searched grade by grade.

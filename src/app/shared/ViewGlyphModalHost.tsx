@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { newsGlyphButtonClass } from "@/app/news/newsGlyphBoxStyle";
 import ModalShell from "@/app/shared/ModalShell";
+import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 import { useViewGlyphWindowBindings } from "@/app/shared/useViewGlyphWindowBindings";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import type { RelatedReference } from "@/lib/glyphTypes";
@@ -350,6 +351,9 @@ export default function ViewGlyphModalHost() {
           {customTitle ?? viewerTitle(item)}
         </p>
         <div className="inline-flex min-w-0 items-center justify-end gap-1">
+          {item.subjectType === SUBJECT_TYPES.kanji && item.characters ? (
+            <StrokeOrderButton kanji={item.characters} meaning={item.meanings?.[0] ?? null} />
+          ) : null}
           <button
             type="button"
             onClick={goPrevious}

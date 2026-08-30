@@ -31,6 +31,7 @@ const KANJIVG_COMMIT = "61e39cfc29724132a6f8823b166296932985a0ff";
 const TARBALL = `https://codeload.github.com/KanjiVG/kanjivg/tar.gz/${KANJIVG_COMMIT}`;
 const OUT_DIR = path.join(process.cwd(), "src", "data", "stroke-order");
 const GRADES_DIR = path.join(process.cwd(), "src", "data", "school-grades");
+const WK_DIR = path.join(process.cwd(), "src", "data", "wk-catalog-levels");
 
 const ATTRIBUTION = {
   source: "KanjiVG",
@@ -51,6 +52,55 @@ async function wantedKanji() {
   }
 
   return byGrade;
+}
+
+/**
+ * Characters the live catalogue teaches that the committed level export does
+ * not yet list.
+ *
+ * `src/data/wk-catalog-levels` is a snapshot, and WaniKani has added kanji
+ * since it was taken, so these thirteen were silently missing stroke order
+ * while KanjiVG had every one of them. Regenerating that export with
+ * `export-wk-catalog-level-json` should make this list redundant; until then
+ * it is better to name them than to quietly ship gaps.
+ */
+const CATALOG_BEYOND_EXPORT = ["嘘", "叩", "飴", "鮭", "噛", "咳", "屁", "痒", "繋", "炒", "舐", "騙", "壺"];
+
+/**
+ * The kanji WaniKani teaches that no school grade covers.
+ *
+ * WaniKani goes beyond the joyo and jinmeiyo lists - 醤, 鰐, 嘘 and about
+ * seventeen others - and those are exactly the characters a learner is least
+ * sure how to write, so leaving them without stroke order would be backwards.
+ */
+async function wanikaniExtras(alreadyCovered) {
+  const extras = new Set();
+  let files;
+  try {
+    files = (await fs.readdir(WK_DIR)).filter((name) => name.startsWith("level-"));
+  } catch {
+    return extras;
+  }
+
+  for (const name of files) {
+    const parsed = JSON.parse(await fs.readFile(path.join(WK_DIR, name), "utf8"));
+    const rows = Array.isArray(parsed) ? parsed : (parsed.kanji ?? []);
+    for (const row of rows) {
+      const characters = row?.characters;
+      const type = row?.subjectType ?? row?.object;
+      if (type === "kanji" && typeof characters === "string" && [...characters].length === 1 && !alreadyCovered.has(characters)) {
+        extras.add(characters);
+      }
+    }
+  }
+
+  for (const kanji of CATALOG_BEYOND_EXPORT) {
+    if (!alreadyCovered.has(kanji)) {
+      extras.add(kanji);
+    }
+  }
+
+  return extras;
 }
 
 function codepointName(kanji) {
@@ -84,6 +134,12 @@ async function main() {
   const kanjiDir = path.join(tmp, extracted, "kanji");
 
   const byGrade = await wantedKanji();
+  const schoolCharacters = new Set([...byGrade.values()].flat());
+  const extras = await wanikaniExtras(schoolCharacters);
+  if (extras.size > 0) {
+    // Bucket 0: outside the school grades, so it sorts before them.
+    byGrade.set(0, [...extras]);
+  }
   await fs.mkdir(OUT_DIR, { recursive: true });
 
   let written = 0;

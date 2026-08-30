@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
-import { STROKE_ANIMATION_COPY } from "@/app/shared/strokeAnimationCopy";
+import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import { displayReading, readingsForGrade } from "./gradeExplorerView";
@@ -15,8 +15,6 @@ type Props = {
   hideReadings?: boolean;
   revealedKanji?: Set<string>;
   onReveal?: (kanji: string) => void;
-  /** Opens the stroke-order view for a character. */
-  onShowStrokes?: (entry: SchoolGradeKanjiEntry) => void;
 };
 
 function ReadingRow({ label, readings }: { label: string; readings: string[] }) {
@@ -39,7 +37,7 @@ function ReadingRow({ label, readings }: { label: string; readings: string[] }) 
  * WaniKani level, neither of which a school grade has, and it shows no readings
  * at all. A grade test asks for the on and kun readings, so those get the room.
  */
-export default function GradeKanjiGrid({ items, hrefFor, hideReadings = false, revealedKanji, onReveal, onShowStrokes }: Props) {
+export default function GradeKanjiGrid({ items, hrefFor, hideReadings = false, revealedKanji, onReveal }: Props) {
   if (items.length === 0) {
     return (
       <p className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
@@ -96,16 +94,12 @@ export default function GradeKanjiGrid({ items, hrefFor, hideReadings = false, r
         const shell = "rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition";
         return (
           <li key={entry.kanji} className="relative min-w-0">
-            {onShowStrokes ? (
-              <button
-                type="button"
-                onClick={() => onShowStrokes(entry)}
-                title={STROKE_ANIMATION_COPY.title}
-                className="absolute bottom-2 right-2 z-10 inline-flex h-7 items-center rounded-full border border-line bg-surface px-2.5 text-[10px] font-black uppercase tracking-[0.06em] text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
-              >
-                {STROKE_ANIMATION_COPY.open}
-              </button>
-            ) : null}
+            <StrokeOrderButton
+              kanji={entry.kanji}
+              grade={entry.grade}
+              meaning={entry.primaryMeaning ?? null}
+              className="absolute bottom-2 right-2 z-10"
+            />
             {onReveal ? (
               <button
                 type="button"
