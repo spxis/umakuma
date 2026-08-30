@@ -3,7 +3,11 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
-import { decryptToken } from "@/lib/crypto";
+import {
+  WANIKANI_REQUIRED_MESSAGE,
+  WANIKANI_REQUIRED_STATUS,
+  wanikaniConnection,
+} from "@/lib/wanikaniConnection";
 import { lookupRunInWaniKani } from "@/lib/news/newsKanjiLookup";
 import { prisma } from "@/lib/prisma";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
@@ -58,11 +62,14 @@ try {
                   );
                 }
 
-                const token = decryptToken({
-                  encrypted: account.tokenEncrypted,
-                  iv: account.tokenIv,
-                  tag: account.tokenTag,
-                });
+                const connection = wanikaniConnection(account);
+                if (!connection) {
+                  return NextResponse.json(
+                    { error: WANIKANI_REQUIRED_MESSAGE },
+                    { status: WANIKANI_REQUIRED_STATUS },
+                  );
+                }
+                const token = connection.token;
 
                 const result = await lookupRunInWaniKani(run, token);
 

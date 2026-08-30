@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 
 import { canAccessAccount } from "@/lib/accountAccess";
-import { decryptToken } from "@/lib/crypto";
+import {
+  WANIKANI_REQUIRED_MESSAGE,
+  WANIKANI_REQUIRED_STATUS,
+  wanikaniConnection,
+} from "@/lib/wanikaniConnection";
 import { prisma } from "@/lib/prisma";
 import { fetchAssignmentCount } from "../queue/queueRouteUtils";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
@@ -37,11 +41,14 @@ try {
                   return NextResponse.json({ error: "Account not found." }, { status: 404 });
                 }
 
-                const token = decryptToken({
-                  encrypted: account.tokenEncrypted,
-                  iv: account.tokenIv,
-                  tag: account.tokenTag,
-                });
+                const connection = wanikaniConnection(account);
+                if (!connection) {
+                  return NextResponse.json(
+                    { error: WANIKANI_REQUIRED_MESSAGE },
+                    { status: WANIKANI_REQUIRED_STATUS },
+                  );
+                }
+                const token = connection.token;
 
                 const [reviews, lessons, reviewsTotal] = await Promise.all([
                   fetchAssignmentCount("/assignments?immediately_available_for_review=true", token),

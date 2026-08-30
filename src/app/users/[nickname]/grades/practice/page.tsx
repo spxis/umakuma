@@ -40,7 +40,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   if (!account) {
     notFound();
   }
-  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: account.wkUsername })) {
+  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: decodeURIComponent(nickname) })) {
     redirect("/join?access=denied");
   }
 
@@ -71,7 +71,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
       {/* Site chrome on screen, gone on paper - a printed sheet is not a web page. */}
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
-        primaryWkUsername={account.wkUsername}
+        primaryWkUsername={decodeURIComponent(nickname)}
         accountId={account.id}
         showAdminActions={isAdminEmail(viewerEmail)}
         lastSyncedAt={account.lastSyncedAt?.toISOString() ?? null}
@@ -89,7 +89,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
 
         <div className="flex items-center gap-2 print:hidden">
           <Link
-            href={gradeHref(account.wkUsername, grade)}
+            href={gradeHref(decodeURIComponent(nickname), grade)}
             className="inline-flex h-9 items-center rounded-full border border-neutral-300 px-4 text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 transition hover:bg-neutral-100"
           >
             {PRACTICE_SHEET_COPY.back}

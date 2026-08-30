@@ -126,7 +126,7 @@ export async function GET(request: Request, context: RouteContext) {
         const candidates = await prisma.wkSubjectCatalog.findMany({
           where: {
             wkSubjectId: { not: target.wkSubjectId },
-            level: { lte: account.wkLevel },
+            level: { lte: account.wkLevel ?? 0 },
             hiddenAt: null,
             characters: { not: null },
           },

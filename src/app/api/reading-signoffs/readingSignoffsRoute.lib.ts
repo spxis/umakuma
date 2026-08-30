@@ -20,8 +20,9 @@ import {
 export type ViewerAccountSummary = {
   id: string;
   nickname: string;
-  wkUsername: string;
-  wkLevel: number;
+  /** Absent when the account has no WaniKani link. */
+  wkUsername: string | null;
+  wkLevel: number | null;
   learnedKanji: number;
   learnedRadicals: number;
   learnedVocabulary: number;

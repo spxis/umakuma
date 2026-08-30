@@ -489,11 +489,11 @@
     "id": "optional-wk-identity",
     "name": "Optional WaniKani connection",
     "area": "account",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-08-30",
-    "dateIsEstimate": true,
-    "release": 3,
-    "summary": "Split identity from the WaniKani link so an account can exist with no token."
+    "summary": "An account no longer requires WaniKani. The six connection fields are nullable, and every surface that used them now asks whether a connection exists instead of assuming one - WaniKani-derived boards leave unconnected accounts out rather than ranking them at level zero.",
+    "version": "0.95.0",
+    "releasedAt": "2026-08-30T15:40:00Z"
   },
   {
     "id": "capability-gating",

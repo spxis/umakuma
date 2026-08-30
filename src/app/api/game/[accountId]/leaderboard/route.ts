@@ -121,7 +121,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             runId: run.id,
             accountId: run.accountId,
             nickname: run.account.nickname,
-            wkUsername: run.account.wkUsername,
+            wkUsername: run.account.wkUsername ?? "",
             kind: run.kind as GameKind,
             category: run.category,
             hardMode: run.hardMode,
@@ -165,7 +165,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             return entry ? [entry] : [];
           }),
           members: members
-            .filter((member) => gameLeaderboardMemberIsEligible(member.wkLevel, parsed.data.level))
+            .filter((member) => gameLeaderboardMemberIsEligible(member.wkLevel ?? 0, parsed.data.level))
             .map((member) => ({
               accountId: member.id,
               nickname: member.nickname,

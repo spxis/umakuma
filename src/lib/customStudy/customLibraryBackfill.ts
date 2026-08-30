@@ -1,6 +1,6 @@
 import { Prisma, type CustomStudyItemType } from "@prisma/client";
 
-import { decryptToken } from "@/lib/crypto";
+import { wanikaniConnection } from "@/lib/wanikaniConnection";
 import { prisma } from "@/lib/prisma";
 
 import { enrichCustomLibraryItemsWithWaniKani } from "./customLibraryWanikaniEnrichment";
@@ -85,11 +85,13 @@ async function runCustomLibraryBackfill(params: { accountId: string; libraryId: 
     return;
   }
 
-  const token = decryptToken({
-    encrypted: account.tokenEncrypted,
-    iv: account.tokenIv,
-    tag: account.tokenTag,
-  });
+  // Enrichment reads WaniKani; without a connection there is nothing to add.
+  const connection = wanikaniConnection(account);
+  if (!connection) {
+    return;
+  }
+
+  const token = connection.token;
 
   const enrichedItems = await enrichCustomLibraryItemsWithWaniKani({
     token,

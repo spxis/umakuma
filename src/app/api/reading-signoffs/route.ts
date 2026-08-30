@@ -398,7 +398,7 @@ export async function POST(request: Request) {
             didWanikaniReviews: didWanikaniReviewsForDay,
             reviewsLeft: reviewsLeftForDay,
             apprenticeCount: account.apprenticeCount,
-            currentWkLevel: account.wkLevel,
+            currentWkLevel: account.wkLevel ?? 0,
           },
           create: {
             ...(selectedChallengeId ? { challengeId: selectedChallengeId } : {}),
@@ -411,7 +411,7 @@ export async function POST(request: Request) {
             didWanikaniReviews: didWanikaniReviewsForDay,
             reviewsLeft: reviewsLeftForDay,
             apprenticeCount: account.apprenticeCount,
-            currentWkLevel: account.wkLevel,
+            currentWkLevel: account.wkLevel ?? 0,
           },
         });
 

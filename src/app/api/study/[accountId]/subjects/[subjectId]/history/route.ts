@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { decryptToken } from "@/lib/crypto";
+import {
+  WANIKANI_REQUIRED_MESSAGE,
+  WANIKANI_REQUIRED_STATUS,
+  wanikaniConnection,
+} from "@/lib/wanikaniConnection";
 import { prisma } from "@/lib/prisma";
 import { STUDY_HISTORY_REFRESH_COOLDOWN_MS } from "@/lib/refreshPolicy";
 import {
@@ -50,11 +54,14 @@ export async function GET(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Account not found." }, { status: 404 });
         }
 
-        const token = decryptToken({
-          encrypted: account.tokenEncrypted,
-          iv: account.tokenIv,
-          tag: account.tokenTag,
-        });
+        const connection = wanikaniConnection(account);
+                if (!connection) {
+                  return NextResponse.json(
+                    { error: WANIKANI_REQUIRED_MESSAGE },
+                    { status: WANIKANI_REQUIRED_STATUS },
+                  );
+                }
+                const token = connection.token;
 
         if (refresh) {
           const latestSnapshot = await prisma.subjectReviewStatsSnapshot.findFirst({

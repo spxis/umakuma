@@ -206,6 +206,11 @@ async function resolveToken(args: Args): Promise<ResolvedToken | null> {
     return null;
   }
 
+  // The account exists but may have no WaniKani link to sync through.
+  if (!matched.tokenEncrypted || !matched.tokenIv || !matched.tokenTag) {
+    return null;
+  }
+
   return {
     token: decryptToken({
       encrypted: matched.tokenEncrypted,

@@ -27,7 +27,7 @@ export default async function GamePage({ params }: Props) {
     select: { id: true, nickname: true, wkUsername: true, lastSyncedAt: true, lastActivityAt: true },
   });
   if (!account) notFound();
-  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: account.wkUsername })) {
+  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: decodeURIComponent(nickname) })) {
     redirect("/join?access=denied");
   }
 
@@ -35,7 +35,7 @@ export default async function GamePage({ params }: Props) {
     <div className="px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
-        primaryWkUsername={account.wkUsername}
+        primaryWkUsername={decodeURIComponent(nickname)}
         accountId={account.id}
         showAdminActions={isAdminEmail(viewerEmail)}
         lastSyncedAt={account.lastSyncedAt.toISOString()}
@@ -46,7 +46,7 @@ export default async function GamePage({ params }: Props) {
       <GameModeClient
         accountId={account.id}
         nickname={account.nickname}
-        wkUsername={account.wkUsername}
+        wkUsername={decodeURIComponent(nickname)}
       />
     </div>
   );

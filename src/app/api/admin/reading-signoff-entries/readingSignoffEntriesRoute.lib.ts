@@ -61,7 +61,7 @@ type ReadingSignoffRow = {
 
 export function toAdminReadingSignoffEntryRecord(
   row: ReadingSignoffEntryRow,
-  memberByAccountId: Map<string, { nickname: string; wkUsername: string }>,
+  memberByAccountId: Map<string, { nickname: string; wkUsername: string | null }>,
 ): AdminReadingSignoffEntryRecord {
   const member = memberByAccountId.get(row.accountId);
   return {
@@ -87,7 +87,7 @@ export function toAdminReadingSignoffEntryRecord(
 
 export function toAdminReadingSignoffRecord(
   row: ReadingSignoffRow,
-  memberByAccountId: Map<string, { nickname: string; wkUsername: string }>,
+  memberByAccountId: Map<string, { nickname: string; wkUsername: string | null }>,
 ): AdminReadingSignoffEntryRecord {
   const member = memberByAccountId.get(row.accountId);
   return {

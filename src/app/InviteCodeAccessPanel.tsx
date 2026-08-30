@@ -67,15 +67,19 @@ export default function InviteCodeAccessPanel({
       {session.signedIn && session.account ? (
         <div className="mt-3 space-y-2">
           <p className="text-sm font-semibold text-foreground/85">
-            Signed in as {session.account.nickname} (@{session.account.wkUsername})
+            Signed in as {session.account.nickname}
+            {session.account.wkUsername ? ` (@${session.account.wkUsername})` : ""}
           </p>
           <div className="flex flex-wrap gap-2">
-            <Link
-              href={`/users/${encodeURIComponent(session.account.wkUsername)}?tab=study`}
-              className="inline-flex h-10 items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-4 text-xs font-black uppercase tracking-[0.12em] text-accent"
-            >
-              Open My Page
-            </Link>
+            {/* No WaniKani link means no user page to open yet. */}
+            {session.account.wkUsername ? (
+              <Link
+                href={`/users/${encodeURIComponent(session.account.wkUsername)}?tab=study`}
+                className="inline-flex h-10 items-center justify-center rounded-full border border-accent/30 bg-accent/10 px-4 text-xs font-black uppercase tracking-[0.12em] text-accent"
+              >
+                Open My Page
+              </Link>
+            ) : null}
             <button
               type="button"
               onClick={() => {

@@ -145,6 +145,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Ehon Enpitsu", ja: "絵本鉛筆", reading: "えほんえんぴつ", gloss: "picture-book pencil" },
   { romaji: "Origami Ohagi", ja: "折り紙おはぎ", reading: "おりがみおはぎ", gloss: "origami rice cake" },
   { romaji: "Kaze no Kakigoori", ja: "風のかき氷", reading: "かぜのかきごおり", gloss: "shaved ice on the breeze" },
+  { romaji: "Kingyo Kisetsu", ja: "金魚季節", reading: "きんぎょきせつ", gloss: "goldfish season" },
 ];
 
 /**

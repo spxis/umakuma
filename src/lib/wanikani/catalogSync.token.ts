@@ -1,4 +1,4 @@
-import { decryptToken } from "@/lib/crypto";
+import { wanikaniConnection } from "@/lib/wanikaniConnection";
 import { prisma } from "@/lib/prisma";
 
 import { DEFAULT_ACCOUNT_MATCH } from "./catalogSync.constants";
@@ -39,12 +39,14 @@ export async function resolveCatalogSyncToken(input: {
     return null;
   }
 
+  const connection = wanikaniConnection(matched);
+  if (!connection) {
+    // The account is there but has no WaniKani link to sync through.
+    return null;
+  }
+
   return {
-    token: decryptToken({
-      encrypted: matched.tokenEncrypted,
-      iv: matched.tokenIv,
-      tag: matched.tokenTag,
-    }),
+    token: connection.token,
     source: `account-like:${accountLike}`,
   };
 }

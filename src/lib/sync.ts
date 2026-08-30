@@ -1,6 +1,6 @@
 import "server-only";
 
-import { decryptToken } from "@/lib/crypto";
+import { wanikaniConnection } from "@/lib/wanikaniConnection";
 import { upsertDailySnapshot } from "@/lib/dailySnapshot";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
@@ -135,17 +135,24 @@ export async function refreshAccountById(accountId: string, force: boolean, igno
     return { refreshed: false, reason: "missing" };
   }
 
+  /*
+   * Syncing pulls the player's own WaniKani state. An account with no
+   * connection has none to pull, so this is a nothing-to-do rather than a
+   * failure - the caller sweeps every account and should not log an error for
+   * each unconnected one.
+   */
+  const connection = wanikaniConnection(account);
+  if (!connection) {
+    return { refreshed: false, reason: "disconnected" };
+  }
+
   try {
-    const token = decryptToken({
-      encrypted: account.tokenEncrypted,
-      iv: account.tokenIv,
-      tag: account.tokenTag,
-    });
+    const token = connection.token;
 
     const stats = await getLeaderboardStats(token, {
-      wkUserId: account.wkUserId,
-      wkUsername: account.wkUsername,
-      wkLevel: account.wkLevel,
+      wkUserId: connection.wkUserId ?? "",
+      wkUsername: connection.wkUsername ?? "",
+      wkLevel: connection.wkLevel ?? 0,
       reviewCount: account.reviewCount,
       burnedCount: account.burnedCount,
       reviewsUpdatedAt: account.reviewsUpdatedAt,

@@ -43,7 +43,7 @@ export default async function UserHistoryPage({ params }: PageProps) {
   const canViewThisPage = canViewUserPage({
     viewerEmail,
     viewerMenuInfo,
-    targetWkUsername: account.wkUsername,
+    targetWkUsername: userKey,
   });
   if (!canViewThisPage) {
     redirect("/join?access=denied");
@@ -53,7 +53,7 @@ export default async function UserHistoryPage({ params }: PageProps) {
     <div className="px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
-        primaryWkUsername={account.wkUsername}
+        primaryWkUsername={userKey}
         accountId={account.id}
         showAdminActions={isAdminEmail(viewerEmail)}
         lastSyncedAt={account.lastSyncedAt.toISOString()}

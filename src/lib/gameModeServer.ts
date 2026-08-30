@@ -120,7 +120,7 @@ export async function loadGamePool(
   const catalogRows = await prisma.wkSubjectCatalog.findMany({
     where: {
       wkSubjectId: { in: assignments.map((item) => item.subjectId) },
-      level: { lte: account.wkLevel },
+      level: { lte: account.wkLevel ?? 0 },
       hiddenAt: null,
       characters: { not: null },
     },
@@ -145,7 +145,10 @@ export async function loadGamePool(
     return item ? [item] : [];
   });
 
-  return { account: { nickname: account.nickname, wkUsername: account.wkUsername, wkLevel: account.wkLevel }, items };
+  return {
+    account: { nickname: account.nickname, wkUsername: account.wkUsername ?? "", wkLevel: account.wkLevel ?? 0 },
+    items,
+  };
 }
 
 export function toGameRunSummary(run: {

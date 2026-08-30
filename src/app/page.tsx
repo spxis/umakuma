@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { onlyConnected } from "@/lib/wanikaniConnection";
 import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
 import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
 import { getServerSession } from "next-auth";
@@ -113,7 +114,8 @@ export default async function Home() {
       return { refreshed: 0, skipped: 0 };
     });
 
-    leaderboard = await prisma.account.findMany({
+    // A WaniKani board ranks WaniKani accounts; see onlyConnected.
+    leaderboard = onlyConnected(await prisma.account.findMany({
       orderBy: [{ score: "desc" }, { wkLevel: "desc" }, { reviewCount: "desc" }],
       select: {
         id: true,
@@ -145,7 +147,7 @@ export default async function Home() {
         score: true,
         lastSyncedAt: true,
       },
-    });
+    }));
 
     if (leaderboard.length > 0) {
       const accountIds = leaderboard.map((row) => row.id);

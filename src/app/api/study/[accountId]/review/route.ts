@@ -3,7 +3,11 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { decryptToken } from "@/lib/crypto";
+import {
+  WANIKANI_REQUIRED_MESSAGE,
+  WANIKANI_REQUIRED_STATUS,
+  wanikaniConnection,
+} from "@/lib/wanikaniConnection";
 import { prisma } from "@/lib/prisma";
 import { recordStudyReviewAttempt, recordSubmissionSnapshot } from "@/lib/studyHistory";
 import { clearReviewPerformanceCache } from "@/lib/reviewSuccessRates";
@@ -141,11 +145,14 @@ export async function POST(request: Request, context: RouteContext) {
       return NextResponse.json({ error: "Account not found." }, { status: 404 });
     }
 
-    const token = decryptToken({
-      encrypted: account.tokenEncrypted,
-      iv: account.tokenIv,
-      tag: account.tokenTag,
-    });
+    const connection = wanikaniConnection(account);
+                if (!connection) {
+                  return NextResponse.json(
+                    { error: WANIKANI_REQUIRED_MESSAGE },
+                    { status: WANIKANI_REQUIRED_STATUS },
+                  );
+                }
+                const token = connection.token;
 
     const incorrect = parsed.data.result === REVIEW_RESULTS.wrong ? 1 : 0;
     const incorrectMeaningAnswers = parsed.data.answerType === "reading" ? 0 : incorrect;

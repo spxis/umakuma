@@ -40,7 +40,7 @@ export default async function UserLibrariesPage({ params }: PageProps) {
   const canViewThisPage = canViewUserPage({
     viewerEmail,
     viewerMenuInfo,
-    targetWkUsername: account.wkUsername,
+    targetWkUsername: userKey,
   });
   if (!canViewThisPage) {
     redirect("/join?access=denied");
@@ -50,7 +50,7 @@ export default async function UserLibrariesPage({ params }: PageProps) {
     <div className="px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
-        primaryWkUsername={account.wkUsername}
+        primaryWkUsername={userKey}
         accountId={account.id}
         showAdminActions={isAdminEmail(viewerEmail)}
         lastSyncedAt={account.lastSyncedAt.toISOString()}
@@ -58,7 +58,7 @@ export default async function UserLibrariesPage({ params }: PageProps) {
         className="mb-2"
       />
       <main className="space-y-3">
-        <StudySourceLibraryManagerPanel accountId={account.id} wkUsername={account.wkUsername} />
+        <StudySourceLibraryManagerPanel accountId={account.id} wkUsername={userKey} />
       </main>
     </div>
   );

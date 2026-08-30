@@ -45,7 +45,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
     notFound();
   }
 
-  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: account.wkUsername })) {
+  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: userKey })) {
     redirect("/join?access=denied");
   }
 
@@ -71,7 +71,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
     <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
-        primaryWkUsername={account.wkUsername}
+        primaryWkUsername={userKey}
         accountId={account.id}
         showAdminActions={isAdminEmail(viewerEmail)}
         lastSyncedAt={account.lastSyncedAt?.toISOString() ?? null}
@@ -101,7 +101,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
               return (
                 <Link
                   key={option}
-                  href={gradeHref(account.wkUsername, option, 1, search)}
+                  href={gradeHref(userKey, option, 1, search)}
                   className={`inline-flex h-8 items-center gap-1 rounded-full border px-3 text-xs font-bold transition ${
                     active
                       ? "border-kanji bg-kanji text-white"
@@ -118,13 +118,13 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
           </div>
 
           <Link
-            href={`/users/${encodeURIComponent(account.wkUsername)}/grades/practice?grade=${grade}`}
+            href={`/users/${encodeURIComponent(userKey)}/grades/practice?grade=${grade}`}
             className="mt-3 inline-flex h-8 items-center rounded-full border border-kanji/40 bg-kanji/10 px-4 text-xs font-black uppercase tracking-[0.08em] text-kanji transition hover:bg-kanji/20"
           >
             {GRADE_EXPLORER_COPY.practiceSheet}
           </Link>
 
-          <form className="mt-3 flex flex-wrap items-center gap-2" action={`/users/${encodeURIComponent(account.wkUsername)}/grades`}>
+          <form className="mt-3 flex flex-wrap items-center gap-2" action={`/users/${encodeURIComponent(userKey)}/grades`}>
             <input type="hidden" name="grade" value={grade} />
             <input
               type="search"
@@ -137,7 +137,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
               {GRADE_EXPLORER_COPY.search}
             </button>
             {search ? (
-              <Link href={gradeHref(account.wkUsername, grade)} className="inline-flex h-9 shrink-0 items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted">
+              <Link href={gradeHref(userKey, grade)} className="inline-flex h-9 shrink-0 items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted">
                 {GRADE_EXPLORER_COPY.clear}
               </Link>
             ) : null}
@@ -156,7 +156,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
           {catalog.pagination.totalPages > 1 ? (
             <nav className="mt-4 flex items-center justify-between gap-3">
               {catalog.pagination.hasPrevPage ? (
-                <Link href={gradeHref(account.wkUsername, grade, page - 1, search)} className="inline-flex h-9 items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted">
+                <Link href={gradeHref(userKey, grade, page - 1, search)} className="inline-flex h-9 items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted">
                   {GRADE_EXPLORER_COPY.previous}
                 </Link>
               ) : <span />}
@@ -164,7 +164,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
                 {GRADE_EXPLORER_COPY.page} {page} {GRADE_EXPLORER_COPY.of} {catalog.pagination.totalPages}
               </span>
               {catalog.pagination.hasNextPage ? (
-                <Link href={gradeHref(account.wkUsername, grade, page + 1, search)} className="inline-flex h-9 items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted">
+                <Link href={gradeHref(userKey, grade, page + 1, search)} className="inline-flex h-9 items-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted">
                   {GRADE_EXPLORER_COPY.next}
                 </Link>
               ) : <span />}

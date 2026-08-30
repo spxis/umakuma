@@ -132,7 +132,7 @@ export async function resolveDailyLevelCap(): Promise<number> {
     select: { wkLevel: true },
   });
   if (rows.length === 0) return 1;
-  return Math.max(1, Math.min(...rows.map((row) => row.wkLevel)));
+  return Math.max(1, Math.min(...rows.map((row) => row.wkLevel ?? 0)));
 }
 
 /**

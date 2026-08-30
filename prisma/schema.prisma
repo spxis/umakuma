@@ -16,12 +16,21 @@ model Account {
   joinedByName   String?
   inviteCodeHash String?
   inviteCodeUpdatedAt DateTime?
-  tokenEncrypted String
-  tokenIv        String
-  tokenTag       String
-  wkUserId       String   @unique
-  wkUsername     String
-  wkLevel        Int
+  /*
+   * The WaniKani connection, which an account may not have.
+   *
+   * Identity is the account; this is a link on it. All six move together -
+   * a half-connected account is not a state worth modelling, so code should
+   * test one of them (the token) and treat the rest as present or absent with
+   * it. Nullable `wkUserId` keeps its unique index: Postgres does not compare
+   * nulls, so any number of unconnected accounts coexist.
+   */
+  tokenEncrypted String?
+  tokenIv        String?
+  tokenTag       String?
+  wkUserId       String?  @unique
+  wkUsername     String?
+  wkLevel        Int?
   reviewCount    Int      @default(0)
   burnedCount    Int      @default(0)
   pendingReviews Int      @default(0)

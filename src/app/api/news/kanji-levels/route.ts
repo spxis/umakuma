@@ -3,7 +3,11 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
-import { decryptToken } from "@/lib/crypto";
+import {
+  WANIKANI_REQUIRED_MESSAGE,
+  WANIKANI_REQUIRED_STATUS,
+  wanikaniConnection,
+} from "@/lib/wanikaniConnection";
 import { logNewsApiPerf } from "@/lib/news/newsApiPerf";
 import { lookupKanjiLevelsByChars } from "@/lib/news/newsKanjiLookup";
 import { prisma } from "@/lib/prisma";
@@ -65,11 +69,14 @@ const startedAtMs = Date.now();
                   return respond({ error: "No linked WaniKani account." }, 404);
                 }
 
-                const token = decryptToken({
-                  encrypted: account.tokenEncrypted,
-                  iv: account.tokenIv,
-                  tag: account.tokenTag,
-                });
+                const connection = wanikaniConnection(account);
+                if (!connection) {
+                  return NextResponse.json(
+                    { error: WANIKANI_REQUIRED_MESSAGE },
+                    { status: WANIKANI_REQUIRED_STATUS },
+                  );
+                }
+                const token = connection.token;
 
                 const levels = await lookupKanjiLevelsByChars(chars, token);
 

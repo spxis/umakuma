@@ -3,7 +3,8 @@ export type InviteSessionStatus = {
   account?: {
     id: string;
     nickname: string;
-    wkUsername: string;
+    /** Absent when the account has no WaniKani link. */
+    wkUsername: string | null;
   };
   error?: string;
 };

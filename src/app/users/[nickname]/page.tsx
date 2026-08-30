@@ -4,6 +4,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { decryptToken } from "@/lib/crypto";
 import { EMPTY_ITEM_SPREAD, isItemSpread } from "@/lib/itemSpread";
 import { prisma } from "@/lib/prisma";
+import { wanikaniConnection } from "@/lib/wanikaniConnection";
 import { getUserKanjiIndex } from "@/lib/wanikani";
 import ExplorerTabs from "./ExplorerTabs";
 import UserReadPanel from "./UserReadPanel";
@@ -64,6 +65,11 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   });
   const { nickname } = await params;
   const userKey = decodeURIComponent(nickname);
+  /*
+   * The page is reached by WaniKani username, so a connection is present in
+   * practice. Zero is the honest reading of a level that is absent, and it
+   * keeps every calculation below working on a number.
+   */
   const query = await searchParams;
   const initialTab = query.tab === "jlpt" ? "jlpt" : query.tab === "level" ? "level" : "study";
   const shouldLoadJlptData = initialTab === "jlpt";
@@ -115,10 +121,12 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     notFound();
   }
 
+  const wkLevel = account.wkLevel ?? 0;
+
   const canViewThisPage = canViewUserPage({
     viewerEmail,
     viewerMenuInfo,
-    targetWkUsername: account.wkUsername,
+    targetWkUsername: userKey,
   });
   if (!canViewThisPage) {
     redirect("/join?access=denied");
@@ -133,11 +141,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     ? await withReviewSuccessRates(
         account.id,
         await getUserKanjiIndex(
-          decryptToken({
-            encrypted: account.tokenEncrypted,
-            iv: account.tokenIv,
-            tag: account.tokenTag,
-          }),
+          wanikaniConnection(account)?.token ?? "",
         ),
       )
     : [];
@@ -187,11 +191,11 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     progressItemsByLevel.set(row.level, items);
   }
 
-  if (!progressItemsByLevel.has(account.wkLevel)) {
+  if (!progressItemsByLevel.has(wkLevel)) {
     const fallbackItems = levelKanjiItems.filter(
       (item) => isSubjectType(item.subjectType),
     );
-    progressItemsByLevel.set(account.wkLevel, fallbackItems);
+    progressItemsByLevel.set(wkLevel, fallbackItems);
   }
 
   function computeTypeProgress(itemsForLevel: LevelKanjiItem[], type: SubjectType): TypeProgress {
@@ -235,12 +239,12 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   }
 
   const higherStartedLevels = Array.from(progressItemsByLevel.entries())
-    .filter(([level, items]) => level > account.wkLevel && items.some((item) => item.srsStage > 0))
+    .filter(([level, items]) => level > wkLevel && items.some((item) => item.srsStage > 0))
     .map(([level]) => level)
     .sort((a, b) => a - b);
 
   const availableProgressLevels = [
-    ...Array.from({ length: Math.max(1, account.wkLevel) }, (_, index) => index + 1),
+    ...Array.from({ length: Math.max(1, wkLevel) }, (_, index) => index + 1),
     ...higherStartedLevels,
   ];
 
@@ -346,7 +350,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     itemSpreadDetails[groupKey].stages.sort((a, b) => a.label.localeCompare(b.label));
   });
 
-  const currentLevelProgress = levelProgressByLevel[account.wkLevel] ?? computeLevelSnapshot(account.wkLevel);
+  const currentLevelProgress = levelProgressByLevel[wkLevel] ?? computeLevelSnapshot(wkLevel);
   const levelRadicalProgress = currentLevelProgress.radical;
   const levelKanjiProgress = currentLevelProgress.kanji;
   const levelVocabularyProgress = currentLevelProgress.vocabulary;
@@ -366,7 +370,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     <div className="px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
-        primaryWkUsername={account.wkUsername}
+        primaryWkUsername={userKey}
         accountId={account.id}
         showAdminActions={isAdminEmail(viewerEmail)}
         lastSyncedAt={account.lastSyncedAt.toISOString()}
@@ -382,10 +386,10 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
       <UserDashboardTabs
         accountId={account.id}
         nickname={account.nickname}
-        wkUsername={account.wkUsername}
+        wkUsername={userKey}
         linkedEmail={account.joinedByEmail}
         viewerMatchesAccount={viewerMatchesAccount}
-        wkLevel={account.wkLevel}
+        wkLevel={wkLevel}
         levelKanjiLearned={account.levelKanjiLearned}
         levelKanjiTotal={account.levelKanjiTotal}
         levelKanjiLocked={account.levelKanjiLocked}
@@ -412,8 +416,8 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         learnContent={(
           <ExplorerTabs
             accountId={account.id}
-            viewedWkUsername={account.wkUsername}
-            maxLevel={account.wkLevel}
+            viewedWkUsername={userKey}
+            maxLevel={wkLevel}
             accountPendingReviews={account.pendingReviews}
             levelItemCountsByLevel={levelItemCountsByLevel}
             initialTab={initialTab}
@@ -428,7 +432,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
               showLocked: initialStudyFilters.showLocked,
             }}
             initialSnapshot={{
-              level: account.wkLevel,
+              level: wkLevel,
               kanjiTotal: account.levelKanjiTotal,
               kanjiLearned: account.levelKanjiLearned,
               kanjiGuruPlus: account.levelKanjiGuruPlus,
@@ -460,7 +464,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         )}
         newsContent={(
           <UserReadPanel
-            userWkLevel={account.wkLevel}
+            userWkLevel={wkLevel}
             devSampleUrls={getNewsDevSampleUrls()}
             initialTab={initialReadTab}
           />

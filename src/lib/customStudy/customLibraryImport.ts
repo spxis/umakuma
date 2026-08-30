@@ -1,7 +1,7 @@
 import { ZodError } from "zod";
 import { Prisma } from "@prisma/client";
 
-import { decryptToken } from "@/lib/crypto";
+import { wanikaniConnection } from "@/lib/wanikaniConnection";
 import { prisma } from "@/lib/prisma";
 
 import { customLibraryPayloadSchema } from "./customLibrarySchema";
@@ -87,12 +87,9 @@ export async function importCustomLibraryPayload(input: {
       },
     });
 
-    if (account) {
-      const token = decryptToken({
-        encrypted: account.tokenEncrypted,
-        iv: account.tokenIv,
-        tag: account.tokenTag,
-      });
+    const connection = account ? wanikaniConnection(account) : null;
+    if (connection) {
+      const token = connection.token;
 
       enrichedItems = await enrichCustomLibraryItemsWithWaniKani({
         token,

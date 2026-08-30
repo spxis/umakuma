@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { decryptToken } from "@/lib/crypto";
+import {
+  WANIKANI_REQUIRED_MESSAGE,
+  WANIKANI_REQUIRED_STATUS,
+  wanikaniConnection,
+} from "@/lib/wanikaniConnection";
 import { prisma } from "@/lib/prisma";
 import { preferOfficialReadings } from "@/lib/joyoReadings";
 import { getUserKanjiIndex } from "@/lib/wanikani";
@@ -71,11 +75,14 @@ export async function GET(_: Request, context: RouteContext) {
           return NextResponse.json({ error: "Account not found." }, { status: 404 });
         }
 
-        const token = decryptToken({
-          encrypted: account.tokenEncrypted,
-          iv: account.tokenIv,
-          tag: account.tokenTag,
-        });
+        const connection = wanikaniConnection(account);
+                if (!connection) {
+                  return NextResponse.json(
+                    { error: WANIKANI_REQUIRED_MESSAGE },
+                    { status: WANIKANI_REQUIRED_STATUS },
+                  );
+                }
+                const token = connection.token;
 
         const [rawUserKanjiItems, jlptItems, jlptTotal, jlptSummaryRows] = await Promise.all([
           includeUserIndex ? getUserKanjiIndex(token) : Promise.resolve([]),
