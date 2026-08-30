@@ -8,7 +8,6 @@ import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
 import ReleaseMotto from "./ReleaseMotto";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
-import { DASHBOARD_TAB_LABELS } from "../users/[nickname]/userReadConfig";
 
 type AppTopMenuRowProps = {
   viewerMenuInfo: ViewerMenuInfo | null;

@@ -1,4 +1,5 @@
-import mapData from "@/data/japanPrefectures.json";
+import mapData from "@/data/maps/jp-map.json";
+import metaData from "@/data/maps/jp-meta.json";
 
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import type { GameOption } from "@/lib/gameMode";
@@ -12,6 +13,88 @@ export type JapanRegion =
   | "Chugoku"
   | "Shikoku"
   | "Kyushu";
+
+export type JapanPrefectureCapital = {
+  kanji: string;
+  romaji: string;
+  reading: string;
+};
+
+export type JapanPrefectureFamousFor = {
+  foods: string[];
+  foodsJa: string[];
+  landmarks: string[];
+  landmarksJa: string[];
+  specialties: string[];
+  specialtiesJa: string[];
+};
+
+export type JapanPrefectureSymbols = {
+  flower?: string;
+  tree?: string;
+  bird?: string;
+};
+
+export type JapanPrefectureHistoricIcon = {
+  name: string;
+  role: string;
+};
+
+export type JapanPrefectureKanjiTagging = {
+  prefectureKanji: string[];
+  mextGrade4PrefectureKanji: string[];
+  kanjiGrades?: number[];
+};
+
+export type JapanPrefectureEmblem = {
+  description: string;
+  symbolChar?: string;
+};
+
+export type JapanPrefectureMetadata = {
+  code: number;
+  kanji: string;
+  kanjiFull: string;
+  romaji: string;
+  reading: string;
+  region: JapanRegion;
+  capital: JapanPrefectureCapital;
+  largestCity: JapanPrefectureCapital;
+  population: number;
+  areaKm2: number;
+  historicalProvinces: string[];
+  nicknames: string[];
+  kanjiTagging: JapanPrefectureKanjiTagging;
+  no1Rankings: string[];
+  no1RankingsJa: string[];
+  historicIcons: JapanPrefectureHistoricIcon[];
+  emblem: JapanPrefectureEmblem;
+  famousFor: JapanPrefectureFamousFor;
+  symbols?: JapanPrefectureSymbols;
+};
+
+export type JapanPrefectureMetadataDataset = {
+  updatedAt: string;
+  standard: string;
+  country?: string;
+  countryName?: string;
+  divisionTypeName?: string;
+  totalRegions?: number;
+  totalPrefectures?: number;
+  regions?: JapanPrefectureMetadata[];
+  prefectures: JapanPrefectureMetadata[];
+};
+
+export const JAPAN_PREFECTURE_METADATA_DATASET = metaData as unknown as JapanPrefectureMetadataDataset;
+export const JAPAN_PREFECTURE_METADATA_LIST = JAPAN_PREFECTURE_METADATA_DATASET.regions || JAPAN_PREFECTURE_METADATA_DATASET.prefectures || [];
+
+const METADATA_BY_CODE = new Map<number, JapanPrefectureMetadata>(
+  JAPAN_PREFECTURE_METADATA_LIST.map((meta) => [meta.code, meta])
+);
+
+export function getPrefectureMetadataByCode(code: number): JapanPrefectureMetadata | undefined {
+  return METADATA_BY_CODE.get(code);
+}
 
 export type JapanPrefecture = {
   /** The official prefecture code, 1 (Hokkaido) to 47 (Okinawa). */
@@ -35,14 +118,16 @@ export type JapanPrefecture = {
 
 export type JapanMap = {
   source: string;
+  country: string;
   viewBox: string;
   width: number;
   height: number;
   inset: { code: number; x: number; y: number; width: number; height: number };
+  totalPrefectures: number;
   prefectures: JapanPrefecture[];
 };
 
-export const JAPAN_MAP = mapData as JapanMap;
+export const JAPAN_MAP = mapData as unknown as JapanMap;
 
 export const JAPAN_PREFECTURES = JAPAN_MAP.prefectures;
 

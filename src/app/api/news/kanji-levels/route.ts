@@ -73,17 +73,17 @@ const startedAtMs = Date.now();
 
                 const levels = await lookupKanjiLevelsByChars(chars, token);
 
-                const jlptRows = await prisma.jlptKanji.findMany({
+                const schoolGradeRows = await prisma.schoolGradeKanji.findMany({
                   where: { kanji: { in: chars } },
-                  select: { kanji: true, schoolGrade: true },
+                  select: { kanji: true, grade: true },
                 });
 
                 const grades: Record<string, number | null> = {};
                 for (const char of chars) {
                   grades[char] = null;
                 }
-                for (const row of jlptRows) {
-                  grades[row.kanji] = typeof row.schoolGrade === "number" ? row.schoolGrade : null;
+                for (const row of schoolGradeRows) {
+                  grades[row.kanji] = typeof row.grade === "number" ? row.grade : null;
                 }
 
                 return respond({ levels, grades }, 200, { chars: chars.length });

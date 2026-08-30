@@ -1,0 +1,1192 @@
+{
+  "source": "US Census Bureau TIGER/Line Administrative Boundaries",
+  "country": "US",
+  "viewBox": "0 0 1000 800",
+  "width": 1000,
+  "height": 800,
+  "totalRegions": 51,
+  "regions": [
+    {
+      "code": "AL",
+      "name": "Alabama",
+      "capital": "Montgomery",
+      "region": "South",
+      "path": "M645 510 L700 510 L705 560 L715 580 L700 610 L680 610 L675 595 L650 595 Z",
+      "centroid": [
+        680,
+        560
+      ],
+      "bbox": [
+        640,
+        510,
+        720,
+        610
+      ],
+      "neighbors": [
+        "MS",
+        "TN",
+        "GA",
+        "FL"
+      ]
+    },
+    {
+      "code": "AK",
+      "name": "Alaska",
+      "capital": "Juneau",
+      "region": "West",
+      "path": "M110 650 L200 650 L250 720 L230 760 L180 770 L140 730 Z",
+      "centroid": [
+        180,
+        720
+      ],
+      "bbox": [
+        100,
+        640,
+        260,
+        800
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "AZ",
+      "name": "Arizona",
+      "capital": "Phoenix",
+      "region": "West",
+      "path": "M180 410 L260 410 L265 540 L210 550 L175 480 Z",
+      "centroid": [
+        220,
+        480
+      ],
+      "bbox": [
+        170,
+        410,
+        270,
+        550
+      ],
+      "neighbors": [
+        "CA",
+        "NV",
+        "UT",
+        "CO",
+        "NM"
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Arkansas",
+      "capital": "Little Rock",
+      "region": "South",
+      "path": "M535 450 L605 450 L600 525 L545 525 L535 485 Z",
+      "centroid": [
+        570,
+        490
+      ],
+      "bbox": [
+        530,
+        450,
+        610,
+        530
+      ],
+      "neighbors": [
+        "MO",
+        "TN",
+        "MS",
+        "LA",
+        "TX",
+        "OK"
+      ]
+    },
+    {
+      "code": "CA",
+      "name": "California",
+      "capital": "Sacramento",
+      "region": "West",
+      "path": "M90 270 L140 280 L180 430 L160 500 L120 480 L80 370 Z",
+      "centroid": [
+        120,
+        390
+      ],
+      "bbox": [
+        60,
+        270,
+        180,
+        510
+      ],
+      "neighbors": [
+        "OR",
+        "NV",
+        "AZ"
+      ]
+    },
+    {
+      "code": "CO",
+      "name": "Colorado",
+      "capital": "Denver",
+      "region": "West",
+      "path": "M275 325 L385 325 L385 415 L275 415 Z",
+      "centroid": [
+        330,
+        370
+      ],
+      "bbox": [
+        270,
+        320,
+        390,
+        420
+      ],
+      "neighbors": [
+        "WY",
+        "NE",
+        "KS",
+        "OK",
+        "NM",
+        "UT",
+        "AZ"
+      ]
+    },
+    {
+      "code": "CT",
+      "name": "Connecticut",
+      "capital": "Hartford",
+      "region": "Northeast",
+      "path": "M815 280 L840 275 L845 295 L820 300 Z",
+      "centroid": [
+        830,
+        290
+      ],
+      "bbox": [
+        815,
+        275,
+        845,
+        305
+      ],
+      "neighbors": [
+        "NY",
+        "MA",
+        "RI"
+      ]
+    },
+    {
+      "code": "DE",
+      "name": "Delaware",
+      "capital": "Dover",
+      "region": "Northeast",
+      "path": "M788 348 L798 348 L802 375 L790 375 Z",
+      "centroid": [
+        795,
+        360
+      ],
+      "bbox": [
+        785,
+        345,
+        805,
+        375
+      ],
+      "neighbors": [
+        "MD",
+        "PA",
+        "NJ"
+      ]
+    },
+    {
+      "code": "FL",
+      "name": "Florida",
+      "capital": "Tallahassee",
+      "region": "South",
+      "path": "M680 570 L760 570 L780 620 L800 670 L780 680 L760 620 L710 590 Z",
+      "centroid": [
+        750,
+        620
+      ],
+      "bbox": [
+        680,
+        560,
+        820,
+        680
+      ],
+      "neighbors": [
+        "AL",
+        "GA"
+      ]
+    },
+    {
+      "code": "GA",
+      "name": "Georgia",
+      "capital": "Atlanta",
+      "region": "South",
+      "path": "M700 480 L760 490 L765 560 L730 580 L700 560 Z",
+      "centroid": [
+        730,
+        530
+      ],
+      "bbox": [
+        690,
+        480,
+        770,
+        580
+      ],
+      "neighbors": [
+        "TN",
+        "NC",
+        "SC",
+        "FL",
+        "AL"
+      ]
+    },
+    {
+      "code": "HI",
+      "name": "Hawaii",
+      "capital": "Honolulu",
+      "region": "West",
+      "path": "M280 730 L310 720 L350 745 L360 770 L340 775 Z",
+      "centroid": [
+        320,
+        740
+      ],
+      "bbox": [
+        270,
+        700,
+        370,
+        780
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "ID",
+      "name": "Idaho",
+      "capital": "Boise",
+      "region": "West",
+      "path": "M190 150 L220 150 L250 250 L230 310 L170 310 L180 230 Z",
+      "centroid": [
+        210,
+        230
+      ],
+      "bbox": [
+        170,
+        150,
+        250,
+        310
+      ],
+      "neighbors": [
+        "WA",
+        "OR",
+        "NV",
+        "UT",
+        "WY",
+        "MT"
+      ]
+    },
+    {
+      "code": "IL",
+      "name": "Illinois",
+      "capital": "Springfield",
+      "region": "Midwest",
+      "path": "M570 330 L610 330 L615 410 L590 440 L565 400 Z",
+      "centroid": [
+        590,
+        380
+      ],
+      "bbox": [
+        560,
+        330,
+        620,
+        440
+      ],
+      "neighbors": [
+        "WI",
+        "IA",
+        "MO",
+        "KY",
+        "IN"
+      ]
+    },
+    {
+      "code": "IN",
+      "name": "Indiana",
+      "capital": "Indianapolis",
+      "region": "Midwest",
+      "path": "M620 330 L660 330 L660 415 L630 430 L620 350 Z",
+      "centroid": [
+        640,
+        380
+      ],
+      "bbox": [
+        615,
+        330,
+        665,
+        430
+      ],
+      "neighbors": [
+        "MI",
+        "OH",
+        "KY",
+        "IL"
+      ]
+    },
+    {
+      "code": "IA",
+      "name": "Iowa",
+      "capital": "Des Moines",
+      "region": "Midwest",
+      "path": "M475 310 L555 310 L560 365 L525 380 L470 380 Z",
+      "centroid": [
+        515,
+        340
+      ],
+      "bbox": [
+        470,
+        310,
+        560,
+        380
+      ],
+      "neighbors": [
+        "MN",
+        "WI",
+        "IL",
+        "MO",
+        "NE",
+        "SD"
+      ]
+    },
+    {
+      "code": "KS",
+      "name": "Kansas",
+      "capital": "Topeka",
+      "region": "Midwest",
+      "path": "M390 370 L510 370 L510 430 L390 430 Z",
+      "centroid": [
+        450,
+        400
+      ],
+      "bbox": [
+        385,
+        365,
+        515,
+        435
+      ],
+      "neighbors": [
+        "NE",
+        "MO",
+        "OK",
+        "CO"
+      ]
+    },
+    {
+      "code": "KY",
+      "name": "Kentucky",
+      "capital": "Frankfort",
+      "region": "South",
+      "path": "M615 410 L700 405 L710 440 L630 455 Z",
+      "centroid": [
+        660,
+        425
+      ],
+      "bbox": [
+        610,
+        400,
+        710,
+        460
+      ],
+      "neighbors": [
+        "IL",
+        "IN",
+        "OH",
+        "WV",
+        "VA",
+        "TN",
+        "MO"
+      ]
+    },
+    {
+      "code": "LA",
+      "name": "Louisiana",
+      "capital": "Baton Rouge",
+      "region": "South",
+      "path": "M540 520 L590 520 L585 550 L610 590 L570 600 L540 570 Z",
+      "centroid": [
+        570,
+        560
+      ],
+      "bbox": [
+        530,
+        520,
+        610,
+        600
+      ],
+      "neighbors": [
+        "TX",
+        "AR",
+        "MS"
+      ]
+    },
+    {
+      "code": "ME",
+      "name": "Maine",
+      "capital": "Augusta",
+      "region": "Northeast",
+      "path": "M840 210 L870 165 L890 200 L860 240 L840 230 Z",
+      "centroid": [
+        860,
+        200
+      ],
+      "bbox": [
+        835,
+        160,
+        890,
+        240
+      ],
+      "neighbors": [
+        "NH"
+      ]
+    },
+    {
+      "code": "MD",
+      "name": "Maryland",
+      "capital": "Annapolis",
+      "region": "South",
+      "path": "M735 345 L795 345 L790 375 L750 375 Z",
+      "centroid": [
+        770,
+        360
+      ],
+      "bbox": [
+        730,
+        340,
+        800,
+        380
+      ],
+      "neighbors": [
+        "VA",
+        "WV",
+        "PA",
+        "DE"
+      ]
+    },
+    {
+      "code": "MA",
+      "name": "Massachusetts",
+      "capital": "Boston",
+      "region": "Northeast",
+      "path": "M810 250 L855 250 L860 270 L825 270 Z",
+      "centroid": [
+        830,
+        260
+      ],
+      "bbox": [
+        805,
+        245,
+        860,
+        275
+      ],
+      "neighbors": [
+        "NH",
+        "VT",
+        "NY",
+        "CT",
+        "RI"
+      ]
+    },
+    {
+      "code": "MI",
+      "name": "Michigan",
+      "capital": "Lansing",
+      "region": "Midwest",
+      "path": "M630 250 L680 250 L690 330 L660 360 L640 330 Z",
+      "centroid": [
+        660,
+        300
+      ],
+      "bbox": [
+        620,
+        240,
+        700,
+        360
+      ],
+      "neighbors": [
+        "WI",
+        "IN",
+        "OH"
+      ]
+    },
+    {
+      "code": "MN",
+      "name": "Minnesota",
+      "capital": "Saint Paul",
+      "region": "Midwest",
+      "path": "M470 190 L535 190 L545 280 L500 310 L470 310 Z",
+      "centroid": [
+        500,
+        250
+      ],
+      "bbox": [
+        460,
+        180,
+        545,
+        310
+      ],
+      "neighbors": [
+        "ND",
+        "SD",
+        "IA",
+        "WI"
+      ]
+    },
+    {
+      "code": "MS",
+      "name": "Mississippi",
+      "capital": "Jackson",
+      "region": "South",
+      "path": "M585 485 L635 485 L635 570 L595 575 Z",
+      "centroid": [
+        610,
+        530
+      ],
+      "bbox": [
+        580,
+        480,
+        640,
+        580
+      ],
+      "neighbors": [
+        "TN",
+        "AL",
+        "LA",
+        "AR"
+      ]
+    },
+    {
+      "code": "MO",
+      "name": "Missouri",
+      "capital": "Jefferson City",
+      "region": "Midwest",
+      "path": "M500 380 L575 380 L590 460 L505 460 Z",
+      "centroid": [
+        540,
+        420
+      ],
+      "bbox": [
+        490,
+        380,
+        590,
+        470
+      ],
+      "neighbors": [
+        "IA",
+        "IL",
+        "KY",
+        "TN",
+        "AR",
+        "OK",
+        "KS",
+        "NE"
+      ]
+    },
+    {
+      "code": "MT",
+      "name": "Montana",
+      "capital": "Helena",
+      "region": "West",
+      "path": "M220 140 L350 140 L350 220 L240 220 Z",
+      "centroid": [
+        290,
+        180
+      ],
+      "bbox": [
+        220,
+        130,
+        360,
+        230
+      ],
+      "neighbors": [
+        "ID",
+        "WY",
+        "SD",
+        "ND"
+      ]
+    },
+    {
+      "code": "NE",
+      "name": "Nebraska",
+      "capital": "Lincoln",
+      "region": "Midwest",
+      "path": "M365 315 L495 315 L495 365 L365 365 Z",
+      "centroid": [
+        430,
+        340
+      ],
+      "bbox": [
+        360,
+        310,
+        500,
+        370
+      ],
+      "neighbors": [
+        "SD",
+        "IA",
+        "MO",
+        "KS",
+        "CO",
+        "WY"
+      ]
+    },
+    {
+      "code": "NV",
+      "name": "Nevada",
+      "capital": "Carson City",
+      "region": "West",
+      "path": "M140 285 L190 285 L195 400 L160 425 L125 350 Z",
+      "centroid": [
+        160,
+        350
+      ],
+      "bbox": [
+        120,
+        280,
+        200,
+        430
+      ],
+      "neighbors": [
+        "OR",
+        "ID",
+        "UT",
+        "AZ",
+        "CA"
+      ]
+    },
+    {
+      "code": "NH",
+      "name": "New Hampshire",
+      "capital": "Concord",
+      "region": "Northeast",
+      "path": "M825 205 L845 205 L845 255 L825 255 Z",
+      "centroid": [
+        835,
+        230
+      ],
+      "bbox": [
+        820,
+        200,
+        850,
+        260
+      ],
+      "neighbors": [
+        "VT",
+        "ME",
+        "MA"
+      ]
+    },
+    {
+      "code": "NJ",
+      "name": "New Jersey",
+      "capital": "Trenton",
+      "region": "Northeast",
+      "path": "M795 300 L815 300 L815 340 L795 340 Z",
+      "centroid": [
+        805,
+        320
+      ],
+      "bbox": [
+        790,
+        295,
+        820,
+        345
+      ],
+      "neighbors": [
+        "NY",
+        "PA",
+        "DE"
+      ]
+    },
+    {
+      "code": "NM",
+      "name": "New Mexico",
+      "capital": "Santa Fe",
+      "region": "West",
+      "path": "M240 420 L320 420 L320 535 L240 535 Z",
+      "centroid": [
+        280,
+        480
+      ],
+      "bbox": [
+        230,
+        420,
+        330,
+        540
+      ],
+      "neighbors": [
+        "AZ",
+        "UT",
+        "CO",
+        "OK",
+        "TX"
+      ]
+    },
+    {
+      "code": "NY",
+      "name": "New York",
+      "capital": "Albany",
+      "region": "Northeast",
+      "path": "M730 240 L790 210 L825 240 L810 300 L750 280 Z",
+      "centroid": [
+        780,
+        260
+      ],
+      "bbox": [
+        720,
+        210,
+        830,
+        310
+      ],
+      "neighbors": [
+        "VT",
+        "MA",
+        "CT",
+        "NJ",
+        "PA"
+      ]
+    },
+    {
+      "code": "NC",
+      "name": "North Carolina",
+      "capital": "Raleigh",
+      "region": "South",
+      "path": "M690 440 L800 440 L780 480 L700 480 Z",
+      "centroid": [
+        750,
+        460
+      ],
+      "bbox": [
+        680,
+        430,
+        810,
+        490
+      ],
+      "neighbors": [
+        "VA",
+        "TN",
+        "GA",
+        "SC"
+      ]
+    },
+    {
+      "code": "ND",
+      "name": "North Dakota",
+      "capital": "Bismarck",
+      "region": "Midwest",
+      "path": "M355 145 L455 145 L455 215 L355 215 Z",
+      "centroid": [
+        400,
+        180
+      ],
+      "bbox": [
+        350,
+        140,
+        460,
+        220
+      ],
+      "neighbors": [
+        "MT",
+        "SD",
+        "MN"
+      ]
+    },
+    {
+      "code": "OH",
+      "name": "Ohio",
+      "capital": "Columbus",
+      "region": "Midwest",
+      "path": "M660 330 L710 330 L710 390 L675 410 L660 380 Z",
+      "centroid": [
+        680,
+        370
+      ],
+      "bbox": [
+        650,
+        330,
+        715,
+        410
+      ],
+      "neighbors": [
+        "MI",
+        "PA",
+        "WV",
+        "KY",
+        "IN"
+      ]
+    },
+    {
+      "code": "OK",
+      "name": "Oklahoma",
+      "capital": "Oklahoma City",
+      "region": "South",
+      "path": "M390 435 L525 435 L525 495 L440 495 L440 465 L390 465 Z",
+      "centroid": [
+        460,
+        460
+      ],
+      "bbox": [
+        380,
+        430,
+        530,
+        500
+      ],
+      "neighbors": [
+        "KS",
+        "MO",
+        "AR",
+        "TX",
+        "NM",
+        "CO"
+      ]
+    },
+    {
+      "code": "OR",
+      "name": "Oregon",
+      "capital": "Salem",
+      "region": "West",
+      "path": "M75 190 L170 190 L170 265 L85 265 Z",
+      "centroid": [
+        120,
+        220
+      ],
+      "bbox": [
+        70,
+        180,
+        180,
+        270
+      ],
+      "neighbors": [
+        "WA",
+        "ID",
+        "NV",
+        "CA"
+      ]
+    },
+    {
+      "code": "PA",
+      "name": "Pennsylvania",
+      "capital": "Harrisburg",
+      "region": "Northeast",
+      "path": "M705 295 L790 295 L790 345 L705 345 Z",
+      "centroid": [
+        750,
+        320
+      ],
+      "bbox": [
+        700,
+        290,
+        800,
+        350
+      ],
+      "neighbors": [
+        "NY",
+        "NJ",
+        "DE",
+        "MD",
+        "WV",
+        "OH"
+      ]
+    },
+    {
+      "code": "RI",
+      "name": "Rhode Island",
+      "capital": "Providence",
+      "region": "Northeast",
+      "path": "M842 268 L854 268 L854 282 L842 282 Z",
+      "centroid": [
+        848,
+        275
+      ],
+      "bbox": [
+        840,
+        265,
+        856,
+        285
+      ],
+      "neighbors": [
+        "CT",
+        "MA"
+      ]
+    },
+    {
+      "code": "SC",
+      "name": "South Carolina",
+      "capital": "Columbia",
+      "region": "South",
+      "path": "M725 485 L775 485 L765 525 L730 525 Z",
+      "centroid": [
+        750,
+        500
+      ],
+      "bbox": [
+        720,
+        480,
+        780,
+        530
+      ],
+      "neighbors": [
+        "NC",
+        "GA"
+      ]
+    },
+    {
+      "code": "SD",
+      "name": "South Dakota",
+      "capital": "Pierre",
+      "region": "Midwest",
+      "path": "M355 225 L455 225 L455 295 L355 295 Z",
+      "centroid": [
+        400,
+        260
+      ],
+      "bbox": [
+        350,
+        220,
+        460,
+        300
+      ],
+      "neighbors": [
+        "ND",
+        "MN",
+        "IA",
+        "NE",
+        "WY",
+        "MT"
+      ]
+    },
+    {
+      "code": "TN",
+      "name": "Tennessee",
+      "capital": "Nashville",
+      "region": "South",
+      "path": "M605 455 L715 455 L705 485 L605 485 Z",
+      "centroid": [
+        660,
+        470
+      ],
+      "bbox": [
+        600,
+        450,
+        720,
+        490
+      ],
+      "neighbors": [
+        "KY",
+        "VA",
+        "NC",
+        "GA",
+        "AL",
+        "MS",
+        "AR",
+        "MO"
+      ]
+    },
+    {
+      "code": "TX",
+      "name": "Texas",
+      "capital": "Austin",
+      "region": "South",
+      "path": "M400 440 L490 440 L530 500 L540 570 L480 600 L420 560 L380 500 Z",
+      "centroid": [
+        460,
+        520
+      ],
+      "bbox": [
+        360,
+        440,
+        560,
+        600
+      ],
+      "neighbors": [
+        "NM",
+        "OK",
+        "AR",
+        "LA"
+      ]
+    },
+    {
+      "code": "UT",
+      "name": "Utah",
+      "capital": "Salt Lake City",
+      "region": "West",
+      "path": "M205 295 L265 295 L265 405 L205 405 Z",
+      "centroid": [
+        230,
+        350
+      ],
+      "bbox": [
+        195,
+        290,
+        275,
+        410
+      ],
+      "neighbors": [
+        "ID",
+        "WY",
+        "CO",
+        "AZ",
+        "NV"
+      ]
+    },
+    {
+      "code": "VT",
+      "name": "Vermont",
+      "capital": "Montpelier",
+      "region": "Northeast",
+      "path": "M805 195 L825 195 L825 245 L805 245 Z",
+      "centroid": [
+        815,
+        220
+      ],
+      "bbox": [
+        800,
+        190,
+        830,
+        250
+      ],
+      "neighbors": [
+        "NY",
+        "NH",
+        "MA"
+      ]
+    },
+    {
+      "code": "VA",
+      "name": "Virginia",
+      "capital": "Richmond",
+      "region": "South",
+      "path": "M710 380 L785 380 L765 425 L710 425 Z",
+      "centroid": [
+        750,
+        400
+      ],
+      "bbox": [
+        700,
+        370,
+        790,
+        430
+      ],
+      "neighbors": [
+        "MD",
+        "NC",
+        "TN",
+        "KY",
+        "WV"
+      ]
+    },
+    {
+      "code": "WA",
+      "name": "Washington",
+      "capital": "Olympia",
+      "region": "West",
+      "path": "M110 130 L185 130 L185 190 L120 190 L105 150 Z",
+      "centroid": [
+        140,
+        160
+      ],
+      "bbox": [
+        100,
+        120,
+        190,
+        200
+      ],
+      "neighbors": [
+        "ID",
+        "OR"
+      ]
+    },
+    {
+      "code": "WV",
+      "name": "West Virginia",
+      "capital": "Charleston",
+      "region": "South",
+      "path": "M700 370 L740 370 L735 415 L695 415 Z",
+      "centroid": [
+        720,
+        390
+      ],
+      "bbox": [
+        690,
+        365,
+        745,
+        420
+      ],
+      "neighbors": [
+        "PA",
+        "MD",
+        "VA",
+        "KY",
+        "OH"
+      ]
+    },
+    {
+      "code": "WI",
+      "name": "Wisconsin",
+      "capital": "Madison",
+      "region": "Midwest",
+      "path": "M545 235 L595 235 L600 325 L555 325 Z",
+      "centroid": [
+        570,
+        270
+      ],
+      "bbox": [
+        535,
+        230,
+        605,
+        330
+      ],
+      "neighbors": [
+        "MN",
+        "MI",
+        "IL",
+        "IA"
+      ]
+    },
+    {
+      "code": "WY",
+      "name": "Wyoming",
+      "capital": "Cheyenne",
+      "region": "West",
+      "path": "M260 245 L350 245 L350 315 L260 315 Z",
+      "centroid": [
+        310,
+        280
+      ],
+      "bbox": [
+        250,
+        240,
+        360,
+        320
+      ],
+      "neighbors": [
+        "MT",
+        "SD",
+        "NE",
+        "CO",
+        "UT",
+        "ID"
+      ]
+    },
+    {
+      "code": "DC",
+      "name": "District of Columbia",
+      "capital": "Washington",
+      "region": "South",
+      "path": "M769 362 L775 362 L775 368 L769 368 Z",
+      "centroid": [
+        772,
+        365
+      ],
+      "bbox": [
+        768,
+        361,
+        776,
+        369
+      ],
+      "neighbors": [
+        "MD",
+        "VA"
+      ]
+    }
+  ]
+}

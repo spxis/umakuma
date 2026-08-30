@@ -1,0 +1,7304 @@
+{
+  "grade": 2,
+  "slug": "grade-02",
+  "name": "Second Grade",
+  "nameJa": "小学2年生",
+  "category": "elementary",
+  "categoryName": "Elementary School (Kyōiku)",
+  "categoryNameJa": "教育漢字（小学校）",
+  "categoryAbbr": "ELEM",
+  "totalCount": 160,
+  "curriculum": {
+    "standard": "文部科学省 小学校学習指導要領（平成29年告示）別表「学年別漢字配当表」",
+    "enforcementYear": 2020,
+    "objective": "身近な事物の名や様子を表す漢字を読み、文や文章の中で適切に使う。"
+  },
+  "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+  "updatedAt": "2026-08-30T12:33:09.007Z",
+  "kanji": [
+    {
+      "kanji": "引",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5f15",
+      "primaryMeaning": "Pull",
+      "meanings": [
+        "Pull",
+        "admit",
+        "install",
+        "jerk"
+      ],
+      "readings": {
+        "on": [
+          "いん"
+        ],
+        "kun": [
+          "ひ",
+          "ひ.く",
+          "ひ.ける"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "いん"
+        ],
+        "kun": [
+          "ひ",
+          "ひ.く",
+          "ひ.ける"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "羽",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7fbd",
+      "primaryMeaning": "Feather",
+      "meanings": [
+        "Feather",
+        "Feathers",
+        "Wing",
+        "Wings",
+        "counter for birds, rabbits",
+        "feathers"
+      ],
+      "readings": {
+        "on": [
+          "う"
+        ],
+        "kun": [
+          "はね",
+          "は",
+          "わ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "う"
+        ],
+        "kun": [
+          "はね",
+          "は",
+          "わ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "雲",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "96f2",
+      "primaryMeaning": "Cloud",
+      "meanings": [
+        "Cloud",
+        "cloud"
+      ],
+      "readings": {
+        "on": [
+          "うん"
+        ],
+        "kun": [
+          "くも",
+          "-ぐも"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "うん"
+        ],
+        "kun": [
+          "くも",
+          "-ぐも"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "園",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5712",
+      "primaryMeaning": "Garden",
+      "meanings": [
+        "Garden",
+        "Park",
+        "farm",
+        "garden",
+        "park"
+      ],
+      "readings": {
+        "on": [
+          "えん"
+        ],
+        "kun": [
+          "その"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "えん"
+        ],
+        "kun": [
+          "その"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 16
+      }
+    },
+    {
+      "kanji": "遠",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9060",
+      "primaryMeaning": "Far",
+      "meanings": [
+        "Far",
+        "distant",
+        "far"
+      ],
+      "readings": {
+        "on": [
+          "えん"
+        ],
+        "kun": [
+          "とお",
+          "とお.い",
+          "おん"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "えん"
+        ],
+        "kun": [
+          "とお",
+          "とお.い",
+          "おん"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 16
+      }
+    },
+    {
+      "kanji": "何",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4f55",
+      "primaryMeaning": "What",
+      "meanings": [
+        "What",
+        "what"
+      ],
+      "readings": {
+        "on": [
+          "か"
+        ],
+        "kun": [
+          "なに",
+          "なん",
+          "なに-",
+          "なん-"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "か"
+        ],
+        "kun": [
+          "なに",
+          "なん",
+          "なに-",
+          "なん-"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "科",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "79d1",
+      "primaryMeaning": "Science",
+      "meanings": [
+        "Science",
+        "Course",
+        "Department",
+        "course",
+        "department",
+        "section"
+      ],
+      "readings": {
+        "on": [
+          "か"
+        ],
+        "kun": []
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "か"
+        ],
+        "kun": []
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "夏",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "590f",
+      "primaryMeaning": "Summer",
+      "meanings": [
+        "Summer",
+        "summer"
+      ],
+      "readings": {
+        "on": [
+          "げ",
+          "か",
+          "が"
+        ],
+        "kun": [
+          "なつ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "げ",
+          "か",
+          "が"
+        ],
+        "kun": [
+          "なつ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "家",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5bb6",
+      "primaryMeaning": "House",
+      "meanings": [
+        "House",
+        "Home",
+        "expert",
+        "family",
+        "home"
+      ],
+      "readings": {
+        "on": [
+          "か",
+          "け"
+        ],
+        "kun": [
+          "いえ",
+          "や",
+          "うち"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "か",
+          "け"
+        ],
+        "kun": [
+          "いえ",
+          "や",
+          "うち"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "歌",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6b4c",
+      "primaryMeaning": "Song",
+      "meanings": [
+        "Song",
+        "Sing",
+        "sing",
+        "song"
+      ],
+      "readings": {
+        "on": [
+          "か"
+        ],
+        "kun": [
+          "うた",
+          "うた.う"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "か"
+        ],
+        "kun": [
+          "うた",
+          "うた.う"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "画",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "753b",
+      "primaryMeaning": "Image",
+      "meanings": [
+        "Image",
+        "Drawing",
+        "Painting",
+        "brush-stroke",
+        "picture"
+      ],
+      "readings": {
+        "on": [
+          "が",
+          "かく"
+        ],
+        "kun": [
+          "えが.く",
+          "かぎ.る",
+          "かく.する",
+          "はか.る",
+          "はかりごと",
+          "え",
+          "かい"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "が",
+          "かく"
+        ],
+        "kun": [
+          "えが.く",
+          "かぎ.る",
+          "かく.する",
+          "はか.る",
+          "はかりごと",
+          "え",
+          "かい"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "回",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "56de",
+      "primaryMeaning": "Times",
+      "meanings": [
+        "Times",
+        "Revolve",
+        "-times",
+        "counter for occurrences",
+        "game"
+      ],
+      "readings": {
+        "on": [
+          "かい"
+        ],
+        "kun": [
+          "まわ",
+          "-まわ.し",
+          "-まわ.す",
+          "-まわ.り",
+          "-まわ.る",
+          "か.える",
+          "まわ.し-",
+          "まわ.す",
+          "まわ.る",
+          "もとお.る",
+          "え"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "かい"
+        ],
+        "kun": [
+          "まわ",
+          "-まわ.し",
+          "-まわ.す",
+          "-まわ.り",
+          "-まわ.る",
+          "か.える",
+          "まわ.し-",
+          "まわ.す",
+          "まわ.る",
+          "もとお.る",
+          "え"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "会",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4f1a",
+      "primaryMeaning": "Meet",
+      "meanings": [
+        "Meet",
+        "Meeting",
+        "association",
+        "interview",
+        "join"
+      ],
+      "readings": {
+        "on": [
+          "かい"
+        ],
+        "kun": [
+          "あ",
+          "あ.う",
+          "あ.わせる",
+          "あつ.まる",
+          "え"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "かい"
+        ],
+        "kun": [
+          "あ",
+          "あ.う",
+          "あ.わせる",
+          "あつ.まる",
+          "え"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "海",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6d77",
+      "primaryMeaning": "Sea",
+      "meanings": [
+        "Sea",
+        "Ocean",
+        "ocean",
+        "sea"
+      ],
+      "readings": {
+        "on": [
+          "かい"
+        ],
+        "kun": [
+          "うみ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "かい"
+        ],
+        "kun": [
+          "うみ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "絵",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7d75",
+      "primaryMeaning": "Picture",
+      "meanings": [
+        "Picture",
+        "Painting",
+        "drawing",
+        "painting",
+        "picture"
+      ],
+      "readings": {
+        "on": [
+          "え"
+        ],
+        "kun": [
+          "かい"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "え"
+        ],
+        "kun": [
+          "かい"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "外",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5916",
+      "primaryMeaning": "Outside",
+      "meanings": [
+        "Outside",
+        "outside"
+      ],
+      "readings": {
+        "on": [
+          "がい",
+          "げ"
+        ],
+        "kun": [
+          "そと",
+          "はず",
+          "ほか",
+          "と",
+          "と-",
+          "はず.す",
+          "はず.れる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "がい",
+          "げ"
+        ],
+        "kun": [
+          "そと",
+          "はず",
+          "ほか",
+          "と",
+          "と-",
+          "はず.す",
+          "はず.れる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "角",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "89d2",
+      "primaryMeaning": "Angle",
+      "meanings": [
+        "Angle",
+        "Corner",
+        "Antler",
+        "angle",
+        "antlers",
+        "corner"
+      ],
+      "readings": {
+        "on": [
+          "かく"
+        ],
+        "kun": [
+          "かど",
+          "つの"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "かく"
+        ],
+        "kun": [
+          "かど",
+          "つの"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "楽",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "697d",
+      "primaryMeaning": "Comfort",
+      "meanings": [
+        "Comfort",
+        "Ease",
+        "Pleasure",
+        "Music",
+        "comfort",
+        "ease",
+        "music"
+      ],
+      "readings": {
+        "on": [
+          "らく",
+          "がく"
+        ],
+        "kun": [
+          "たの",
+          "この.む",
+          "たの.しい",
+          "たの.しむ",
+          "ごう"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "らく",
+          "がく"
+        ],
+        "kun": [
+          "たの",
+          "この.む",
+          "たの.しい",
+          "たの.しむ",
+          "ごう"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "活",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6d3b",
+      "primaryMeaning": "Lively",
+      "meanings": [
+        "Lively",
+        "being helped",
+        "lively",
+        "living"
+      ],
+      "readings": {
+        "on": [
+          "かつ"
+        ],
+        "kun": [
+          "い",
+          "い.かす",
+          "い.きる",
+          "い.ける"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "かつ"
+        ],
+        "kun": [
+          "い",
+          "い.かす",
+          "い.きる",
+          "い.ける"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "間",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9593",
+      "primaryMeaning": "Interval",
+      "meanings": [
+        "Interval",
+        "Interval of Time",
+        "Interval of Space",
+        "interval",
+        "space"
+      ],
+      "readings": {
+        "on": [
+          "かん",
+          "けん"
+        ],
+        "kun": [
+          "あいだ",
+          "ま",
+          "あい"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "かん",
+          "けん"
+        ],
+        "kun": [
+          "あいだ",
+          "ま",
+          "あい"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "丸",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4e38",
+      "primaryMeaning": "Circle",
+      "meanings": [
+        "Circle",
+        "Circular",
+        "Round",
+        "-ship",
+        "curl up",
+        "explain away"
+      ],
+      "readings": {
+        "on": [
+          "がん"
+        ],
+        "kun": [
+          "まる",
+          "まる.い",
+          "まる.める"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "がん"
+        ],
+        "kun": [
+          "まる",
+          "まる.い",
+          "まる.める"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 2
+      }
+    },
+    {
+      "kanji": "岩",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5ca9",
+      "primaryMeaning": "Boulder",
+      "meanings": [
+        "Boulder",
+        "boulder",
+        "cliff",
+        "rock"
+      ],
+      "readings": {
+        "on": [
+          "がん"
+        ],
+        "kun": [
+          "いわ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "がん"
+        ],
+        "kun": [
+          "いわ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 15
+      }
+    },
+    {
+      "kanji": "顔",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9854",
+      "primaryMeaning": "Face",
+      "meanings": [
+        "Face",
+        "expression",
+        "face"
+      ],
+      "readings": {
+        "on": [
+          "がん"
+        ],
+        "kun": [
+          "かお"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "がん"
+        ],
+        "kun": [
+          "かお"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "汽",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6c7d",
+      "primaryMeaning": "Steam",
+      "meanings": [
+        "Steam",
+        "steam",
+        "vapor"
+      ],
+      "readings": {
+        "on": [
+          "き"
+        ],
+        "kun": []
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "き"
+        ],
+        "kun": []
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 1,
+        "wanikaniLevel": 18
+      }
+    },
+    {
+      "kanji": "記",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8a18",
+      "primaryMeaning": "Write Down",
+      "meanings": [
+        "Write Down",
+        "Record",
+        "account",
+        "narrative",
+        "scribe"
+      ],
+      "readings": {
+        "on": [
+          "き"
+        ],
+        "kun": [
+          "しる",
+          "しる.す"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "き"
+        ],
+        "kun": [
+          "しる",
+          "しる.す"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "帰",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5e30",
+      "primaryMeaning": "Return",
+      "meanings": [
+        "Return",
+        "Return Home",
+        "arrive at",
+        "homecoming",
+        "lead to"
+      ],
+      "readings": {
+        "on": [
+          "き"
+        ],
+        "kun": [
+          "かえ",
+          "おく.る",
+          "かえ.す",
+          "かえ.る",
+          "とつ.ぐ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "き"
+        ],
+        "kun": [
+          "かえ",
+          "おく.る",
+          "かえ.す",
+          "かえ.る",
+          "とつ.ぐ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 15
+      }
+    },
+    {
+      "kanji": "弓",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5f13",
+      "primaryMeaning": "Bow",
+      "meanings": [
+        "Bow",
+        "bow",
+        "bow (archery, violin)"
+      ],
+      "readings": {
+        "on": [
+          "きゅう"
+        ],
+        "kun": [
+          "ゆみ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "きゅう"
+        ],
+        "kun": [
+          "ゆみ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 1,
+        "wanikaniLevel": 18
+      }
+    },
+    {
+      "kanji": "牛",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "725b",
+      "primaryMeaning": "Cow",
+      "meanings": [
+        "Cow",
+        "cow"
+      ],
+      "readings": {
+        "on": [
+          "ぎゅう"
+        ],
+        "kun": [
+          "うし"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ぎゅう"
+        ],
+        "kun": [
+          "うし"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "魚",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9b5a",
+      "primaryMeaning": "Fish",
+      "meanings": [
+        "Fish",
+        "fish"
+      ],
+      "readings": {
+        "on": [
+          "ぎょ"
+        ],
+        "kun": [
+          "さかな",
+          "うお",
+          "-ざかな"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ぎょ"
+        ],
+        "kun": [
+          "さかな",
+          "うお",
+          "-ざかな"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "京",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4eac",
+      "primaryMeaning": "Capital",
+      "meanings": [
+        "Capital",
+        "10**16",
+        "capital"
+      ],
+      "readings": {
+        "on": [
+          "きょう"
+        ],
+        "kun": [
+          "みやこ",
+          "きん",
+          "けい"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "きょう"
+        ],
+        "kun": [
+          "みやこ",
+          "きん",
+          "けい"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "強",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5f37",
+      "primaryMeaning": "Strong",
+      "meanings": [
+        "Strong",
+        "Strength",
+        "strong"
+      ],
+      "readings": {
+        "on": [
+          "きょう",
+          "ごう"
+        ],
+        "kun": [
+          "つよ",
+          "こわ.い",
+          "し.いる",
+          "つよ.い",
+          "つよ.まる",
+          "つよ.める"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "きょう",
+          "ごう"
+        ],
+        "kun": [
+          "つよ",
+          "こわ.い",
+          "し.いる",
+          "つよ.い",
+          "つよ.まる",
+          "つよ.める"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "教",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6559",
+      "primaryMeaning": "Teach",
+      "meanings": [
+        "Teach",
+        "doctrine",
+        "faith",
+        "teach"
+      ],
+      "readings": {
+        "on": [
+          "きょう"
+        ],
+        "kun": [
+          "おし",
+          "おそ",
+          "おし.える",
+          "おそ.わる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "きょう"
+        ],
+        "kun": [
+          "おし",
+          "おそ",
+          "おし.える",
+          "おそ.わる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "近",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8fd1",
+      "primaryMeaning": "Near",
+      "meanings": [
+        "Near",
+        "Close",
+        "akin",
+        "early",
+        "near"
+      ],
+      "readings": {
+        "on": [
+          "きん",
+          "こん"
+        ],
+        "kun": [
+          "ちか",
+          "ちか.い"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "きん",
+          "こん"
+        ],
+        "kun": [
+          "ちか",
+          "ちか.い"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "兄",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5144",
+      "primaryMeaning": "Older Brother",
+      "meanings": [
+        "Older Brother",
+        "Big Brother",
+        "Elder Brother",
+        "big brother",
+        "elder brother"
+      ],
+      "readings": {
+        "on": [
+          "きょう",
+          "けい"
+        ],
+        "kun": [
+          "あに",
+          "にい"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "きょう",
+          "けい"
+        ],
+        "kun": [
+          "あに",
+          "にい"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "形",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5f62",
+      "primaryMeaning": "Shape",
+      "meanings": [
+        "Shape",
+        "Form",
+        "Appearance",
+        "form",
+        "shape",
+        "style"
+      ],
+      "readings": {
+        "on": [
+          "けい",
+          "ぎょう"
+        ],
+        "kun": [
+          "かた",
+          "かたち",
+          "-がた",
+          "なり"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "けい",
+          "ぎょう"
+        ],
+        "kun": [
+          "かた",
+          "かたち",
+          "-がた",
+          "なり"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "計",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8a08",
+      "primaryMeaning": "Measure",
+      "meanings": [
+        "Measure",
+        "Measurement",
+        "measure",
+        "plan",
+        "plot"
+      ],
+      "readings": {
+        "on": [
+          "けい"
+        ],
+        "kun": [
+          "はか",
+          "はか.らう",
+          "はか.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "けい"
+        ],
+        "kun": [
+          "はか",
+          "はか.らう",
+          "はか.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 15
+      }
+    },
+    {
+      "kanji": "元",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5143",
+      "primaryMeaning": "Origin",
+      "meanings": [
+        "Origin",
+        "beginning",
+        "former time",
+        "origin"
+      ],
+      "readings": {
+        "on": [
+          "げん",
+          "がん"
+        ],
+        "kun": [
+          "もと"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "げん",
+          "がん"
+        ],
+        "kun": [
+          "もと"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 4
+      }
+    },
+    {
+      "kanji": "言",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8a00",
+      "primaryMeaning": "Say",
+      "meanings": [
+        "Say",
+        "say",
+        "word"
+      ],
+      "readings": {
+        "on": [
+          "げん",
+          "ごん"
+        ],
+        "kun": [
+          "い",
+          "こと",
+          "い.う"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "げん",
+          "ごん"
+        ],
+        "kun": [
+          "い",
+          "こと",
+          "い.う"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "原",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "539f",
+      "primaryMeaning": "Original",
+      "meanings": [
+        "Original",
+        "Fundamental",
+        "Field",
+        "field",
+        "meadow",
+        "original"
+      ],
+      "readings": {
+        "on": [
+          "げん"
+        ],
+        "kun": [
+          "はら"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "げん"
+        ],
+        "kun": [
+          "はら"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 17
+      }
+    },
+    {
+      "kanji": "戸",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6238",
+      "primaryMeaning": "Door",
+      "meanings": [
+        "Door",
+        "counter for houses",
+        "door",
+        "door radical (no. 63)"
+      ],
+      "readings": {
+        "on": [
+          "こ"
+        ],
+        "kun": [
+          "と"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こ"
+        ],
+        "kun": [
+          "と"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "古",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "53e4",
+      "primaryMeaning": "Old",
+      "meanings": [
+        "Old",
+        "old"
+      ],
+      "readings": {
+        "on": [
+          "こ"
+        ],
+        "kun": [
+          "ふる",
+          "-ふる.す",
+          "ふる-",
+          "ふる.い"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こ"
+        ],
+        "kun": [
+          "ふる",
+          "-ふる.す",
+          "ふる-",
+          "ふる.い"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "午",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5348",
+      "primaryMeaning": "Noon",
+      "meanings": [
+        "Noon",
+        "11AM-1PM",
+        "noon",
+        "seventh sign of Chinese zodiac"
+      ],
+      "readings": {
+        "on": [
+          "ご"
+        ],
+        "kun": [
+          "うま"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ご"
+        ],
+        "kun": [
+          "うま"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "後",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5f8c",
+      "primaryMeaning": "Behind",
+      "meanings": [
+        "Behind",
+        "After",
+        "Back",
+        "Later",
+        "back",
+        "behind",
+        "later"
+      ],
+      "readings": {
+        "on": [
+          "ご",
+          "こう"
+        ],
+        "kun": [
+          "うし",
+          "あと",
+          "のち",
+          "うし.ろ",
+          "うしろ",
+          "おく.れる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ご",
+          "こう"
+        ],
+        "kun": [
+          "うし",
+          "あと",
+          "のち",
+          "うし.ろ",
+          "うしろ",
+          "おく.れる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "語",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8a9e",
+      "primaryMeaning": "Language",
+      "meanings": [
+        "Language",
+        "language",
+        "speech",
+        "word"
+      ],
+      "readings": {
+        "on": [
+          "ご"
+        ],
+        "kun": [
+          "かた",
+          "かた.らう",
+          "かた.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ご"
+        ],
+        "kun": [
+          "かた",
+          "かた.らう",
+          "かた.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "工",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5de5",
+      "primaryMeaning": "Construction",
+      "meanings": [
+        "Construction",
+        "Industry",
+        "construction",
+        "craft",
+        "katakana e radical (no. 48)"
+      ],
+      "readings": {
+        "on": [
+          "こう",
+          "く"
+        ],
+        "kun": [
+          "ぐ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こう",
+          "く"
+        ],
+        "kun": [
+          "ぐ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 1
+      }
+    },
+    {
+      "kanji": "公",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "516c",
+      "primaryMeaning": "Public",
+      "meanings": [
+        "Public",
+        "governmental",
+        "official",
+        "prince"
+      ],
+      "readings": {
+        "on": [
+          "こう",
+          "く"
+        ],
+        "kun": [
+          "おおやけ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こう",
+          "く"
+        ],
+        "kun": [
+          "おおやけ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "広",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5e83",
+      "primaryMeaning": "Wide",
+      "meanings": [
+        "Wide",
+        "broad",
+        "spacious",
+        "wide"
+      ],
+      "readings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "ひろ",
+          "ひろ.い",
+          "ひろ.がる",
+          "ひろ.げる",
+          "ひろ.まる",
+          "ひろ.める"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "ひろ",
+          "ひろ.い",
+          "ひろ.がる",
+          "ひろ.げる",
+          "ひろ.まる",
+          "ひろ.める"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "交",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4ea4",
+      "primaryMeaning": "Mix",
+      "meanings": [
+        "Mix",
+        "Mingle",
+        "association",
+        "coming & going",
+        "mingle"
+      ],
+      "readings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "まじ",
+          "ま",
+          "か",
+          "-か.う",
+          "か.わす",
+          "かわ.す",
+          "こもごも",
+          "ま.ざる",
+          "ま.じる",
+          "ま.ぜる",
+          "まじ.える",
+          "まじ.る",
+          "まじ.わる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "まじ",
+          "ま",
+          "か",
+          "-か.う",
+          "か.わす",
+          "かわ.す",
+          "こもごも",
+          "ま.ざる",
+          "ま.じる",
+          "ま.ぜる",
+          "まじ.える",
+          "まじ.る",
+          "まじ.わる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "光",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5149",
+      "primaryMeaning": "Light",
+      "meanings": [
+        "Light",
+        "Shine",
+        "light",
+        "ray"
+      ],
+      "readings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "ひかり",
+          "ひか",
+          "ひか.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "ひかり",
+          "ひか",
+          "ひか.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "考",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8003",
+      "primaryMeaning": "Think",
+      "meanings": [
+        "Think",
+        "Consider",
+        "consider",
+        "think over"
+      ],
+      "readings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "かんが",
+          "かんが.え",
+          "かんが.える"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "かんが",
+          "かんが.え",
+          "かんが.える"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "行",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "884c",
+      "primaryMeaning": "Go",
+      "meanings": [
+        "Go",
+        "act",
+        "bank",
+        "carry out"
+      ],
+      "readings": {
+        "on": [
+          "こう",
+          "ぎょう"
+        ],
+        "kun": [
+          "い",
+          "おこな",
+          "ゆ",
+          "-い.き",
+          "-いき",
+          "-ゆ.き",
+          "-ゆき",
+          "い.く",
+          "おこ.なう",
+          "おこな.う",
+          "ゆ.く",
+          "あん"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こう",
+          "ぎょう"
+        ],
+        "kun": [
+          "い",
+          "おこな",
+          "ゆ",
+          "-い.き",
+          "-いき",
+          "-ゆ.き",
+          "-ゆき",
+          "い.く",
+          "おこ.なう",
+          "おこな.う",
+          "ゆ.く",
+          "あん"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "高",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9ad8",
+      "primaryMeaning": "Tall",
+      "meanings": [
+        "Tall",
+        "Expensive",
+        "High",
+        "expensive",
+        "high",
+        "tall"
+      ],
+      "readings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "たか",
+          "-だか",
+          "たか.い",
+          "たか.まる",
+          "たか.める"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こう"
+        ],
+        "kun": [
+          "たか",
+          "-だか",
+          "たか.い",
+          "たか.まる",
+          "たか.める"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "黄",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9ec4",
+      "primaryMeaning": "Yellow",
+      "meanings": [
+        "Yellow",
+        "yellow"
+      ],
+      "readings": {
+        "on": [
+          "おう"
+        ],
+        "kun": [
+          "き",
+          "こ-",
+          "こう"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "おう"
+        ],
+        "kun": [
+          "き",
+          "こ-",
+          "こう"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "合",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5408",
+      "primaryMeaning": "Suit",
+      "meanings": [
+        "Suit",
+        "Fit",
+        "Join",
+        "0.1",
+        "fit",
+        "join"
+      ],
+      "readings": {
+        "on": [
+          "ごう",
+          "がっ"
+        ],
+        "kun": [
+          "あ",
+          "あい",
+          "-あ.い",
+          "-あ.う",
+          "-あ.わせる",
+          "-あい",
+          "あ.い",
+          "あ.う",
+          "あ.わす",
+          "あ.わせる",
+          "あい-",
+          "かっ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ごう",
+          "がっ"
+        ],
+        "kun": [
+          "あ",
+          "あい",
+          "-あ.い",
+          "-あ.う",
+          "-あ.わせる",
+          "-あい",
+          "あ.い",
+          "あ.う",
+          "あ.わす",
+          "あ.わせる",
+          "あい-",
+          "かっ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 12
+      }
+    },
+    {
+      "kanji": "谷",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8c37",
+      "primaryMeaning": "Valley",
+      "meanings": [
+        "Valley",
+        "valley"
+      ],
+      "readings": {
+        "on": [
+          "こく"
+        ],
+        "kun": [
+          "たに",
+          "や",
+          "きわ.まる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こく"
+        ],
+        "kun": [
+          "たに",
+          "や",
+          "きわ.まる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "国",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "56fd",
+      "primaryMeaning": "Country",
+      "meanings": [
+        "Country",
+        "country"
+      ],
+      "readings": {
+        "on": [
+          "こく"
+        ],
+        "kun": [
+          "くに"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こく"
+        ],
+        "kun": [
+          "くに"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "黒",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9ed2",
+      "primaryMeaning": "Black",
+      "meanings": [
+        "Black",
+        "black"
+      ],
+      "readings": {
+        "on": [
+          "こく"
+        ],
+        "kun": [
+          "くろ",
+          "くろ.い",
+          "くろ.ずむ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こく"
+        ],
+        "kun": [
+          "くろ",
+          "くろ.い",
+          "くろ.ずむ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "今",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4eca",
+      "primaryMeaning": "Now",
+      "meanings": [
+        "Now",
+        "now"
+      ],
+      "readings": {
+        "on": [
+          "こん"
+        ],
+        "kun": [
+          "いま",
+          "きん"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "こん"
+        ],
+        "kun": [
+          "いま",
+          "きん"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "才",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "624d",
+      "primaryMeaning": "Talent",
+      "meanings": [
+        "Talent",
+        "cubic shaku",
+        "genius",
+        "years old"
+      ],
+      "readings": {
+        "on": [
+          "さい"
+        ],
+        "kun": []
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "さい"
+        ],
+        "kun": []
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 2
+      }
+    },
+    {
+      "kanji": "細",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7d30",
+      "primaryMeaning": "Thin",
+      "meanings": [
+        "Thin",
+        "Detailed",
+        "dainty",
+        "detailed",
+        "get thin"
+      ],
+      "readings": {
+        "on": [
+          "さい"
+        ],
+        "kun": [
+          "ほそ",
+          "こま",
+          "こま.か",
+          "こま.かい",
+          "ほそ.い",
+          "ほそ.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "さい"
+        ],
+        "kun": [
+          "ほそ",
+          "こま",
+          "こま.か",
+          "こま.かい",
+          "ほそ.い",
+          "ほそ.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 17
+      }
+    },
+    {
+      "kanji": "作",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4f5c",
+      "primaryMeaning": "Make",
+      "meanings": [
+        "Make",
+        "build",
+        "make",
+        "prepare"
+      ],
+      "readings": {
+        "on": [
+          "さく",
+          "さ"
+        ],
+        "kun": [
+          "つく",
+          "-づく.り",
+          "つく.り",
+          "つく.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "さく",
+          "さ"
+        ],
+        "kun": [
+          "つく",
+          "-づく.り",
+          "つく.り",
+          "つく.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "算",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7b97",
+      "primaryMeaning": "Calculate",
+      "meanings": [
+        "Calculate",
+        "Calculation",
+        "abacus",
+        "calculate",
+        "divining"
+      ],
+      "readings": {
+        "on": [
+          "さん"
+        ],
+        "kun": [
+          "そろ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "さん"
+        ],
+        "kun": [
+          "そろ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "止",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6b62",
+      "primaryMeaning": "Stop",
+      "meanings": [
+        "Stop",
+        "halt",
+        "stop"
+      ],
+      "readings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "と",
+          "や",
+          "-さ.し",
+          "-さ.す",
+          "-と.める",
+          "-ど.まり",
+          "-ど.め",
+          "-や.む",
+          "と.まる",
+          "と.める",
+          "とど.まる",
+          "とど.め",
+          "とど.める",
+          "や.む",
+          "や.める",
+          "よ.す"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "と",
+          "や",
+          "-さ.し",
+          "-さ.す",
+          "-と.める",
+          "-ど.まり",
+          "-ど.め",
+          "-や.む",
+          "と.まる",
+          "と.める",
+          "とど.まる",
+          "とど.め",
+          "とど.める",
+          "や.む",
+          "や.める",
+          "よ.す"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "市",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5e02",
+      "primaryMeaning": "City",
+      "meanings": [
+        "City",
+        "city",
+        "market",
+        "town"
+      ],
+      "readings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "いち"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "いち"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "矢",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "77e2",
+      "primaryMeaning": "Arrow",
+      "meanings": [
+        "Arrow",
+        "arrow",
+        "dart"
+      ],
+      "readings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "や"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "や"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 1,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "姉",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "59c9",
+      "primaryMeaning": "Older Sister",
+      "meanings": [
+        "Older Sister",
+        "Big Sister",
+        "Elder Sister",
+        "elder sister"
+      ],
+      "readings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "お",
+          "あね",
+          "ねえ",
+          "はは"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "お",
+          "あね",
+          "ねえ",
+          "はは"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "思",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "601d",
+      "primaryMeaning": "Think",
+      "meanings": [
+        "Think",
+        "Thought",
+        "think"
+      ],
+      "readings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "おも",
+          "おぼ.す",
+          "おも.う",
+          "おもえら.く"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "おも",
+          "おぼ.す",
+          "おも.う",
+          "おもえら.く"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "紙",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7d19",
+      "primaryMeaning": "Paper",
+      "meanings": [
+        "Paper",
+        "paper"
+      ],
+      "readings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "かみ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "し"
+        ],
+        "kun": [
+          "かみ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "寺",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5bfa",
+      "primaryMeaning": "Temple",
+      "meanings": [
+        "Temple",
+        "Buddhist temple"
+      ],
+      "readings": {
+        "on": [
+          "じ"
+        ],
+        "kun": [
+          "てら"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "じ"
+        ],
+        "kun": [
+          "てら"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 15
+      }
+    },
+    {
+      "kanji": "自",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "81ea",
+      "primaryMeaning": "Self",
+      "meanings": [
+        "Self",
+        "Oneself",
+        "oneself"
+      ],
+      "readings": {
+        "on": [
+          "じ",
+          "し"
+        ],
+        "kun": [
+          "みずか",
+          "おの.ずから",
+          "おの.ずと",
+          "みずか.ら"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "じ",
+          "し"
+        ],
+        "kun": [
+          "みずか",
+          "おの.ずから",
+          "おの.ずと",
+          "みずか.ら"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "時",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6642",
+      "primaryMeaning": "Time",
+      "meanings": [
+        "Time",
+        "O'clock",
+        "Hour",
+        "hour",
+        "time"
+      ],
+      "readings": {
+        "on": [
+          "じ"
+        ],
+        "kun": [
+          "とき",
+          "-どき"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "じ"
+        ],
+        "kun": [
+          "とき",
+          "-どき"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "室",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5ba4",
+      "primaryMeaning": "Room",
+      "meanings": [
+        "Room",
+        "apartment",
+        "cellar",
+        "chamber"
+      ],
+      "readings": {
+        "on": [
+          "しつ"
+        ],
+        "kun": [
+          "むろ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しつ"
+        ],
+        "kun": [
+          "むろ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "社",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "793e",
+      "primaryMeaning": "Company",
+      "meanings": [
+        "Company",
+        "association",
+        "company",
+        "firm"
+      ],
+      "readings": {
+        "on": [
+          "しゃ"
+        ],
+        "kun": [
+          "やしろ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しゃ"
+        ],
+        "kun": [
+          "やしろ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "弱",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5f31",
+      "primaryMeaning": "Weak",
+      "meanings": [
+        "Weak",
+        "frail",
+        "weak"
+      ],
+      "readings": {
+        "on": [
+          "じゃく"
+        ],
+        "kun": [
+          "よわ",
+          "よわ.い",
+          "よわ.まる",
+          "よわ.める",
+          "よわ.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "じゃく"
+        ],
+        "kun": [
+          "よわ",
+          "よわ.い",
+          "よわ.まる",
+          "よわ.める",
+          "よわ.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "首",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9996",
+      "primaryMeaning": "Neck",
+      "meanings": [
+        "Neck",
+        "counter for songs and poems",
+        "neck"
+      ],
+      "readings": {
+        "on": [
+          "しゅ"
+        ],
+        "kun": [
+          "くび"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しゅ"
+        ],
+        "kun": [
+          "くび"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "秋",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "79cb",
+      "primaryMeaning": "Autumn",
+      "meanings": [
+        "Autumn",
+        "Fall",
+        "autumn"
+      ],
+      "readings": {
+        "on": [
+          "しゅう"
+        ],
+        "kun": [
+          "あき",
+          "とき"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しゅう"
+        ],
+        "kun": [
+          "あき",
+          "とき"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 15
+      }
+    },
+    {
+      "kanji": "週",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9031",
+      "primaryMeaning": "Week",
+      "meanings": [
+        "Week",
+        "week"
+      ],
+      "readings": {
+        "on": [
+          "しゅう"
+        ],
+        "kun": []
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しゅう"
+        ],
+        "kun": []
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "春",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6625",
+      "primaryMeaning": "Spring",
+      "meanings": [
+        "Spring",
+        "spring (season)",
+        "springtime"
+      ],
+      "readings": {
+        "on": [
+          "しゅん"
+        ],
+        "kun": [
+          "はる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しゅん"
+        ],
+        "kun": [
+          "はる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 15
+      }
+    },
+    {
+      "kanji": "書",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "66f8",
+      "primaryMeaning": "Write",
+      "meanings": [
+        "Write",
+        "Writing",
+        "write"
+      ],
+      "readings": {
+        "on": [
+          "しょ"
+        ],
+        "kun": [
+          "か",
+          "-が.き",
+          "-がき",
+          "か.く"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しょ"
+        ],
+        "kun": [
+          "か",
+          "-が.き",
+          "-がき",
+          "か.く"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 16
+      }
+    },
+    {
+      "kanji": "少",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5c11",
+      "primaryMeaning": "Few",
+      "meanings": [
+        "Few",
+        "A Little",
+        "few",
+        "little"
+      ],
+      "readings": {
+        "on": [
+          "しょう"
+        ],
+        "kun": [
+          "すこ",
+          "すく",
+          "すく.ない",
+          "すこ.し"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しょう"
+        ],
+        "kun": [
+          "すこ",
+          "すく",
+          "すく.ない",
+          "すこ.し"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "場",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5834",
+      "primaryMeaning": "Location",
+      "meanings": [
+        "Location",
+        "Place",
+        "location",
+        "place"
+      ],
+      "readings": {
+        "on": [
+          "じょう"
+        ],
+        "kun": [
+          "ば",
+          "ちょう"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "じょう"
+        ],
+        "kun": [
+          "ば",
+          "ちょう"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "色",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8272",
+      "primaryMeaning": "Color",
+      "meanings": [
+        "Color",
+        "color"
+      ],
+      "readings": {
+        "on": [
+          "しき",
+          "しょく"
+        ],
+        "kun": [
+          "いろ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しき",
+          "しょく"
+        ],
+        "kun": [
+          "いろ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "食",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "98df",
+      "primaryMeaning": "Eat",
+      "meanings": [
+        "Eat",
+        "Meal",
+        "eat",
+        "food"
+      ],
+      "readings": {
+        "on": [
+          "しょく"
+        ],
+        "kun": [
+          "た",
+          "く",
+          "く.う",
+          "く.らう",
+          "た.べる",
+          "は.む",
+          "じき"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しょく"
+        ],
+        "kun": [
+          "た",
+          "く",
+          "く.う",
+          "く.らう",
+          "た.べる",
+          "は.む",
+          "じき"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "心",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5fc3",
+      "primaryMeaning": "Heart",
+      "meanings": [
+        "Heart",
+        "heart",
+        "heart radical (no. 61)",
+        "mind"
+      ],
+      "readings": {
+        "on": [
+          "しん"
+        ],
+        "kun": [
+          "こころ",
+          "-ごころ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しん"
+        ],
+        "kun": [
+          "こころ",
+          "-ごころ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "新",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "65b0",
+      "primaryMeaning": "New",
+      "meanings": [
+        "New",
+        "new"
+      ],
+      "readings": {
+        "on": [
+          "しん"
+        ],
+        "kun": [
+          "あたら",
+          "あら",
+          "にい",
+          "あたら.しい",
+          "あら-",
+          "あら.た",
+          "にい-"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しん"
+        ],
+        "kun": [
+          "あたら",
+          "あら",
+          "にい",
+          "あたら.しい",
+          "あら-",
+          "あら.た",
+          "にい-"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 9
+      }
+    },
+    {
+      "kanji": "親",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "89aa",
+      "primaryMeaning": "Parent",
+      "meanings": [
+        "Parent",
+        "Intimacy",
+        "dealer (cards)",
+        "familiarity",
+        "intimacy"
+      ],
+      "readings": {
+        "on": [
+          "しん"
+        ],
+        "kun": [
+          "おや",
+          "した",
+          "おや-",
+          "した.しい",
+          "した.しむ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "しん"
+        ],
+        "kun": [
+          "おや",
+          "した",
+          "おや-",
+          "した.しい",
+          "した.しむ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "図",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "56f3",
+      "primaryMeaning": "Diagram",
+      "meanings": [
+        "Diagram",
+        "audacious",
+        "drawing",
+        "extraordinary"
+      ],
+      "readings": {
+        "on": [
+          "ず",
+          "と"
+        ],
+        "kun": [
+          "え",
+          "はか",
+          "はか.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ず",
+          "と"
+        ],
+        "kun": [
+          "え",
+          "はか",
+          "はか.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "数",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6570",
+      "primaryMeaning": "Count",
+      "meanings": [
+        "Count",
+        "Amount",
+        "Number",
+        "fate",
+        "figures",
+        "law"
+      ],
+      "readings": {
+        "on": [
+          "すう"
+        ],
+        "kun": [
+          "かぞ",
+          "かず",
+          "かぞ.える",
+          "しばしば",
+          "せ.める",
+          "わずらわ.しい",
+          "さく",
+          "しゅ",
+          "す",
+          "そく"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "すう"
+        ],
+        "kun": [
+          "かぞ",
+          "かず",
+          "かぞ.える",
+          "しばしば",
+          "せ.める",
+          "わずらわ.しい",
+          "さく",
+          "しゅ",
+          "す",
+          "そく"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "西",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "897f",
+      "primaryMeaning": "West",
+      "meanings": [
+        "West",
+        "Spain",
+        "west"
+      ],
+      "readings": {
+        "on": [
+          "せい",
+          "さい"
+        ],
+        "kun": [
+          "にし",
+          "す"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "せい",
+          "さい"
+        ],
+        "kun": [
+          "にし",
+          "す"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "声",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "58f0",
+      "primaryMeaning": "Voice",
+      "meanings": [
+        "Voice",
+        "voice"
+      ],
+      "readings": {
+        "on": [
+          "せい"
+        ],
+        "kun": [
+          "こえ",
+          "こわ-",
+          "しょう"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "せい"
+        ],
+        "kun": [
+          "こえ",
+          "こわ-",
+          "しょう"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "星",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "661f",
+      "primaryMeaning": "Star",
+      "meanings": [
+        "Star",
+        "dot",
+        "mark",
+        "spot"
+      ],
+      "readings": {
+        "on": [
+          "せい"
+        ],
+        "kun": [
+          "ほし",
+          "-ぼし",
+          "しょう"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "せい"
+        ],
+        "kun": [
+          "ほし",
+          "-ぼし",
+          "しょう"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "晴",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6674",
+      "primaryMeaning": "Clear Up",
+      "meanings": [
+        "Clear Up",
+        "clear up"
+      ],
+      "readings": {
+        "on": [
+          "せい"
+        ],
+        "kun": [
+          "は",
+          "-ば.れ",
+          "は.らす",
+          "は.れ",
+          "は.れ-",
+          "は.れる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "せい"
+        ],
+        "kun": [
+          "は",
+          "-ば.れ",
+          "は.らす",
+          "は.れ",
+          "は.れ-",
+          "は.れる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 15
+      }
+    },
+    {
+      "kanji": "切",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5207",
+      "primaryMeaning": "Cut",
+      "meanings": [
+        "Cut",
+        "be sharp",
+        "cut",
+        "cutoff"
+      ],
+      "readings": {
+        "on": [
+          "せつ"
+        ],
+        "kun": [
+          "き",
+          "-き.り",
+          "-き.る",
+          "-き.れ",
+          "-き.れる",
+          "-ぎ.り",
+          "-ぎ.れ",
+          "き.り",
+          "き.る",
+          "き.れ",
+          "き.れる",
+          "さい"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "せつ"
+        ],
+        "kun": [
+          "き",
+          "-き.り",
+          "-き.る",
+          "-き.れ",
+          "-き.れる",
+          "-ぎ.り",
+          "-ぎ.れ",
+          "き.り",
+          "き.る",
+          "き.れ",
+          "き.れる",
+          "さい"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "雪",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "96ea",
+      "primaryMeaning": "Snow",
+      "meanings": [
+        "Snow",
+        "snow"
+      ],
+      "readings": {
+        "on": [
+          "せつ"
+        ],
+        "kun": [
+          "ゆき"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "せつ"
+        ],
+        "kun": [
+          "ゆき"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "船",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8239",
+      "primaryMeaning": "Boat",
+      "meanings": [
+        "Boat",
+        "Ship",
+        "Vessel",
+        "boat",
+        "ship"
+      ],
+      "readings": {
+        "on": [
+          "せん"
+        ],
+        "kun": [
+          "ふね",
+          "ふな-"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "せん"
+        ],
+        "kun": [
+          "ふね",
+          "ふな-"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "線",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7dda",
+      "primaryMeaning": "Line",
+      "meanings": [
+        "Line",
+        "line",
+        "track"
+      ],
+      "readings": {
+        "on": [
+          "せん"
+        ],
+        "kun": [
+          "すじ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "せん"
+        ],
+        "kun": [
+          "すじ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "前",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "524d",
+      "primaryMeaning": "Front",
+      "meanings": [
+        "Front",
+        "Before",
+        "before",
+        "in front"
+      ],
+      "readings": {
+        "on": [
+          "ぜん"
+        ],
+        "kun": [
+          "まえ",
+          "-まえ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ぜん"
+        ],
+        "kun": [
+          "まえ",
+          "-まえ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "組",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7d44",
+      "primaryMeaning": "Group",
+      "meanings": [
+        "Group",
+        "Association",
+        "Team",
+        "assemble",
+        "association",
+        "braid"
+      ],
+      "readings": {
+        "on": [
+          "そ"
+        ],
+        "kun": [
+          "くみ",
+          "-ぐみ",
+          "く.む"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "そ"
+        ],
+        "kun": [
+          "くみ",
+          "-ぐみ",
+          "く.む"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "走",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8d70",
+      "primaryMeaning": "Run",
+      "meanings": [
+        "Run",
+        "run"
+      ],
+      "readings": {
+        "on": [
+          "そう"
+        ],
+        "kun": [
+          "はし",
+          "はし.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "そう"
+        ],
+        "kun": [
+          "はし",
+          "はし.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "多",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "591a",
+      "primaryMeaning": "Many",
+      "meanings": [
+        "Many",
+        "Much",
+        "Lots Of",
+        "frequent",
+        "many",
+        "much"
+      ],
+      "readings": {
+        "on": [
+          "た"
+        ],
+        "kun": [
+          "おお",
+          "おお.い",
+          "まさ.に",
+          "まさ.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "た"
+        ],
+        "kun": [
+          "おお",
+          "おお.い",
+          "まさ.に",
+          "まさ.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "太",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "592a",
+      "primaryMeaning": "Fat",
+      "meanings": [
+        "Fat",
+        "big around",
+        "plump",
+        "thick"
+      ],
+      "readings": {
+        "on": [
+          "たい",
+          "た"
+        ],
+        "kun": [
+          "ふと",
+          "ふと.い",
+          "ふと.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "たい",
+          "た"
+        ],
+        "kun": [
+          "ふと",
+          "ふと.い",
+          "ふと.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "体",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4f53",
+      "primaryMeaning": "Body",
+      "meanings": [
+        "Body",
+        "body",
+        "counter for images",
+        "object"
+      ],
+      "readings": {
+        "on": [
+          "たい",
+          "てい"
+        ],
+        "kun": [
+          "からだ",
+          "かたち"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "たい",
+          "てい"
+        ],
+        "kun": [
+          "からだ",
+          "かたち"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "台",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "53f0",
+      "primaryMeaning": "Machine",
+      "meanings": [
+        "Machine",
+        "a stand",
+        "counter for machines and vehicles",
+        "pedestal"
+      ],
+      "readings": {
+        "on": [
+          "だい",
+          "たい"
+        ],
+        "kun": [
+          "うてな",
+          "つかさ",
+          "われ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "だい",
+          "たい"
+        ],
+        "kun": [
+          "うてな",
+          "つかさ",
+          "われ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "地",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5730",
+      "primaryMeaning": "Earth",
+      "meanings": [
+        "Earth",
+        "Ground",
+        "Land",
+        "earth",
+        "ground"
+      ],
+      "readings": {
+        "on": [
+          "ち",
+          "じ"
+        ],
+        "kun": []
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ち",
+          "じ"
+        ],
+        "kun": []
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "池",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6c60",
+      "primaryMeaning": "Pond",
+      "meanings": [
+        "Pond",
+        "cistern",
+        "pond",
+        "pool"
+      ],
+      "readings": {
+        "on": [
+          "ち"
+        ],
+        "kun": [
+          "いけ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ち"
+        ],
+        "kun": [
+          "いけ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "知",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "77e5",
+      "primaryMeaning": "Know",
+      "meanings": [
+        "Know",
+        "know",
+        "wisdom"
+      ],
+      "readings": {
+        "on": [
+          "ち"
+        ],
+        "kun": [
+          "し",
+          "し.らせる",
+          "し.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ち"
+        ],
+        "kun": [
+          "し",
+          "し.らせる",
+          "し.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "茶",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8336",
+      "primaryMeaning": "Tea",
+      "meanings": [
+        "Tea",
+        "tea"
+      ],
+      "readings": {
+        "on": [
+          "ちゃ",
+          "さ"
+        ],
+        "kun": []
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ちゃ",
+          "さ"
+        ],
+        "kun": []
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "昼",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "663c",
+      "primaryMeaning": "Noon",
+      "meanings": [
+        "Noon",
+        "daytime",
+        "noon"
+      ],
+      "readings": {
+        "on": [
+          "ちゅう"
+        ],
+        "kun": [
+          "ひる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ちゅう"
+        ],
+        "kun": [
+          "ひる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 15
+      }
+    },
+    {
+      "kanji": "長",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9577",
+      "primaryMeaning": "Long",
+      "meanings": [
+        "Long",
+        "Leader",
+        "leader",
+        "long",
+        "senior"
+      ],
+      "readings": {
+        "on": [
+          "ちょう"
+        ],
+        "kun": [
+          "なが",
+          "おさ",
+          "なが.い"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ちょう"
+        ],
+        "kun": [
+          "なが",
+          "おさ",
+          "なが.い"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "鳥",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9ce5",
+      "primaryMeaning": "Bird",
+      "meanings": [
+        "Bird",
+        "bird",
+        "chicken"
+      ],
+      "readings": {
+        "on": [
+          "ちょう"
+        ],
+        "kun": [
+          "とり"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ちょう"
+        ],
+        "kun": [
+          "とり"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "朝",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "671d",
+      "primaryMeaning": "Morning",
+      "meanings": [
+        "Morning",
+        "(North) Korea",
+        "dynasty",
+        "epoch"
+      ],
+      "readings": {
+        "on": [
+          "ちょう"
+        ],
+        "kun": [
+          "あさ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ちょう"
+        ],
+        "kun": [
+          "あさ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "直",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "76f4",
+      "primaryMeaning": "Straight",
+      "meanings": [
+        "Straight",
+        "Direct",
+        "Fix",
+        "fix",
+        "frankness",
+        "honesty"
+      ],
+      "readings": {
+        "on": [
+          "ちょく",
+          "じき"
+        ],
+        "kun": [
+          "なお",
+          "-なお.す",
+          "す.ぐ",
+          "ただ.ちに",
+          "なお.き",
+          "なお.す",
+          "なお.る",
+          "じか"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ちょく",
+          "じき"
+        ],
+        "kun": [
+          "なお",
+          "-なお.す",
+          "す.ぐ",
+          "ただ.ちに",
+          "なお.き",
+          "なお.す",
+          "なお.る",
+          "じか"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "通",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "901a",
+      "primaryMeaning": "Pass Through",
+      "meanings": [
+        "Pass Through",
+        "avenue",
+        "commute",
+        "counter for letters, notes, documents, etc."
+      ],
+      "readings": {
+        "on": [
+          "つう"
+        ],
+        "kun": [
+          "とお",
+          "かよ",
+          "-とお.り",
+          "-どお.し",
+          "-どお.り",
+          "かよ.う",
+          "とお.し",
+          "とお.す",
+          "とお.り",
+          "とお.る",
+          "つ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "つう"
+        ],
+        "kun": [
+          "とお",
+          "かよ",
+          "-とお.り",
+          "-どお.し",
+          "-どお.り",
+          "かよ.う",
+          "とお.し",
+          "とお.す",
+          "とお.り",
+          "とお.る",
+          "つ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "弟",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5f1f",
+      "primaryMeaning": "Younger Brother",
+      "meanings": [
+        "Younger Brother",
+        "Little Brother",
+        "faithful service to elders",
+        "younger brother"
+      ],
+      "readings": {
+        "on": [
+          "だい",
+          "で",
+          "てい"
+        ],
+        "kun": [
+          "おとうと"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "だい",
+          "で",
+          "てい"
+        ],
+        "kun": [
+          "おとうと"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "店",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5e97",
+      "primaryMeaning": "Shop",
+      "meanings": [
+        "Shop",
+        "Store",
+        "shop",
+        "store"
+      ],
+      "readings": {
+        "on": [
+          "てん"
+        ],
+        "kun": [
+          "みせ",
+          "たな"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "てん"
+        ],
+        "kun": [
+          "みせ",
+          "たな"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "点",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "70b9",
+      "primaryMeaning": "Point",
+      "meanings": [
+        "Point",
+        "decimal point",
+        "mark",
+        "point"
+      ],
+      "readings": {
+        "on": [
+          "てん"
+        ],
+        "kun": [
+          "つ",
+          "さ.す",
+          "た.てる",
+          "つ.く",
+          "つ.ける",
+          "とぼ.す",
+          "とも.す",
+          "ぼち"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "てん"
+        ],
+        "kun": [
+          "つ",
+          "さ.す",
+          "た.てる",
+          "つ.く",
+          "つ.ける",
+          "とぼ.す",
+          "とも.す",
+          "ぼち"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "電",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "96fb",
+      "primaryMeaning": "Electricity",
+      "meanings": [
+        "Electricity",
+        "electricity"
+      ],
+      "readings": {
+        "on": [
+          "でん"
+        ],
+        "kun": []
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "でん"
+        ],
+        "kun": []
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "刀",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5200",
+      "primaryMeaning": "Sword",
+      "meanings": [
+        "Sword",
+        "Katana",
+        "knife",
+        "saber",
+        "sword"
+      ],
+      "readings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "かたな",
+          "そり"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "かたな",
+          "そり"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 1,
+        "wanikaniLevel": 2
+      }
+    },
+    {
+      "kanji": "冬",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "51ac",
+      "primaryMeaning": "Winter",
+      "meanings": [
+        "Winter",
+        "winter"
+      ],
+      "readings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "ふゆ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "ふゆ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "当",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5f53",
+      "primaryMeaning": "Correct",
+      "meanings": [
+        "Correct",
+        "Right",
+        "Success",
+        "appropriate",
+        "himself",
+        "hit"
+      ],
+      "readings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "あ",
+          "あ.たり",
+          "あ.たる",
+          "あ.て",
+          "あ.てる",
+          "まさ.に",
+          "まさ.にべし"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "あ",
+          "あ.たり",
+          "あ.たる",
+          "あ.て",
+          "あ.てる",
+          "まさ.に",
+          "まさ.にべし"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "東",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6771",
+      "primaryMeaning": "East",
+      "meanings": [
+        "East",
+        "east"
+      ],
+      "readings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "ひがし"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "ひがし"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "答",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7b54",
+      "primaryMeaning": "Answer",
+      "meanings": [
+        "Answer",
+        "Response",
+        "Reply",
+        "answer",
+        "solution"
+      ],
+      "readings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "こた",
+          "こた.え",
+          "こた.える"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "とう"
+        ],
+        "kun": [
+          "こた",
+          "こた.え",
+          "こた.える"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "頭",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "982d",
+      "primaryMeaning": "Head",
+      "meanings": [
+        "Head",
+        "counter for large animals",
+        "head"
+      ],
+      "readings": {
+        "on": [
+          "ず",
+          "とう"
+        ],
+        "kun": [
+          "あたま",
+          "かしら",
+          "こうべ",
+          "-がしら",
+          "かぶり",
+          "と"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ず",
+          "とう"
+        ],
+        "kun": [
+          "あたま",
+          "かしら",
+          "こうべ",
+          "-がしら",
+          "かぶり",
+          "と"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "同",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "540c",
+      "primaryMeaning": "Same",
+      "meanings": [
+        "Same",
+        "agree",
+        "equal",
+        "same"
+      ],
+      "readings": {
+        "on": [
+          "どう"
+        ],
+        "kun": [
+          "おな",
+          "おな.じ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "どう"
+        ],
+        "kun": [
+          "おな",
+          "おな.じ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "道",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9053",
+      "primaryMeaning": "Road",
+      "meanings": [
+        "Road",
+        "Street",
+        "Path",
+        "Way",
+        "course",
+        "district",
+        "journey"
+      ],
+      "readings": {
+        "on": [
+          "どう"
+        ],
+        "kun": [
+          "みち",
+          "いう",
+          "とう"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "どう"
+        ],
+        "kun": [
+          "みち",
+          "いう",
+          "とう"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "読",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8aad",
+      "primaryMeaning": "Read",
+      "meanings": [
+        "Read",
+        "read"
+      ],
+      "readings": {
+        "on": [
+          "とう",
+          "どく",
+          "とく"
+        ],
+        "kun": [
+          "よ",
+          "-よ.み",
+          "よ.む"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "とう",
+          "どく",
+          "とく"
+        ],
+        "kun": [
+          "よ",
+          "-よ.み",
+          "よ.む"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "内",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5185",
+      "primaryMeaning": "Inside",
+      "meanings": [
+        "Inside",
+        "Within",
+        "among",
+        "between",
+        "home"
+      ],
+      "readings": {
+        "on": [
+          "ない"
+        ],
+        "kun": [
+          "うち",
+          "だい"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ない"
+        ],
+        "kun": [
+          "うち",
+          "だい"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "南",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5357",
+      "primaryMeaning": "South",
+      "meanings": [
+        "South",
+        "south"
+      ],
+      "readings": {
+        "on": [
+          "なん"
+        ],
+        "kun": [
+          "みなみ",
+          "な"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "なん"
+        ],
+        "kun": [
+          "みなみ",
+          "な"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "肉",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8089",
+      "primaryMeaning": "Meat",
+      "meanings": [
+        "Meat",
+        "meat"
+      ],
+      "readings": {
+        "on": [
+          "にく"
+        ],
+        "kun": [
+          "しし"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "にく"
+        ],
+        "kun": [
+          "しし"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "馬",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "99ac",
+      "primaryMeaning": "Horse",
+      "meanings": [
+        "Horse",
+        "horse"
+      ],
+      "readings": {
+        "on": [
+          "ば",
+          "め"
+        ],
+        "kun": [
+          "うま",
+          "ま",
+          "うま-"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ば",
+          "め"
+        ],
+        "kun": [
+          "うま",
+          "ま",
+          "うま-"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "売",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "58f2",
+      "primaryMeaning": "Sell",
+      "meanings": [
+        "Sell",
+        "sell"
+      ],
+      "readings": {
+        "on": [
+          "ばい"
+        ],
+        "kun": [
+          "う",
+          "う.る",
+          "う.れる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ばい"
+        ],
+        "kun": [
+          "う",
+          "う.る",
+          "う.れる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 9
+      }
+    },
+    {
+      "kanji": "買",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8cb7",
+      "primaryMeaning": "Buy",
+      "meanings": [
+        "Buy",
+        "buy"
+      ],
+      "readings": {
+        "on": [
+          "ばい"
+        ],
+        "kun": [
+          "か",
+          "か.う"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ばい"
+        ],
+        "kun": [
+          "か",
+          "か.う"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "麦",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9ea6",
+      "primaryMeaning": "Wheat",
+      "meanings": [
+        "Wheat",
+        "Barley",
+        "barley",
+        "wheat"
+      ],
+      "readings": {
+        "on": [
+          "ばく"
+        ],
+        "kun": [
+          "むぎ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ばく"
+        ],
+        "kun": [
+          "むぎ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "半",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "534a",
+      "primaryMeaning": "Half",
+      "meanings": [
+        "Half",
+        "half",
+        "middle",
+        "odd number"
+      ],
+      "readings": {
+        "on": [
+          "はん"
+        ],
+        "kun": [
+          "なか",
+          "なか.ば"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "はん"
+        ],
+        "kun": [
+          "なか",
+          "なか.ば"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "番",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "756a",
+      "primaryMeaning": "Number In A Series",
+      "meanings": [
+        "Number In A Series",
+        "Turn",
+        "number in a series",
+        "turn"
+      ],
+      "readings": {
+        "on": [
+          "ばん"
+        ],
+        "kun": [
+          "つが",
+          "つがい",
+          "つが.い"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ばん"
+        ],
+        "kun": [
+          "つが",
+          "つがい",
+          "つが.い"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 8
+      }
+    },
+    {
+      "kanji": "父",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7236",
+      "primaryMeaning": "Father",
+      "meanings": [
+        "Father",
+        "Dad",
+        "father"
+      ],
+      "readings": {
+        "on": [
+          "ふ"
+        ],
+        "kun": [
+          "ちち",
+          "とう"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ふ"
+        ],
+        "kun": [
+          "ちち",
+          "とう"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "風",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "98a8",
+      "primaryMeaning": "Wind",
+      "meanings": [
+        "Wind",
+        "Style",
+        "air",
+        "manner",
+        "style"
+      ],
+      "readings": {
+        "on": [
+          "ふう",
+          "ふ"
+        ],
+        "kun": [
+          "かぜ",
+          "かざ-"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ふう",
+          "ふ"
+        ],
+        "kun": [
+          "かぜ",
+          "かざ-"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "分",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5206",
+      "primaryMeaning": "Part",
+      "meanings": [
+        "Part",
+        "Minute",
+        "Divide"
+      ],
+      "readings": {
+        "on": [
+          "ぶん",
+          "ふん",
+          "ぶ"
+        ],
+        "kun": [
+          "わ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ぶん",
+          "ふん",
+          "ぶ"
+        ],
+        "kun": [
+          "わ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": null,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "聞",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "805e",
+      "primaryMeaning": "Hear",
+      "meanings": [
+        "Hear",
+        "ask",
+        "hear",
+        "listen"
+      ],
+      "readings": {
+        "on": [
+          "ぶん",
+          "もん"
+        ],
+        "kun": [
+          "き",
+          "き.く",
+          "き.こえる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ぶん",
+          "もん"
+        ],
+        "kun": [
+          "き",
+          "き.く",
+          "き.こえる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "米",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7c73",
+      "primaryMeaning": "Rice",
+      "meanings": [
+        "Rice",
+        "America",
+        "USA",
+        "metre",
+        "rice"
+      ],
+      "readings": {
+        "on": [
+          "べい",
+          "まい"
+        ],
+        "kun": [
+          "こめ",
+          "よね",
+          "めえとる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "べい",
+          "まい"
+        ],
+        "kun": [
+          "こめ",
+          "よね",
+          "めえとる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "歩",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6b69",
+      "primaryMeaning": "Walk",
+      "meanings": [
+        "Walk",
+        "counter for steps",
+        "walk"
+      ],
+      "readings": {
+        "on": [
+          "ほ"
+        ],
+        "kun": [
+          "ある",
+          "あゆ",
+          "あゆ.む",
+          "ある.く",
+          "ふ",
+          "ぶ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ほ"
+        ],
+        "kun": [
+          "ある",
+          "あゆ",
+          "あゆ.む",
+          "ある.く",
+          "ふ",
+          "ぶ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "母",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6bcd",
+      "primaryMeaning": "Mother",
+      "meanings": [
+        "Mother",
+        "Mom",
+        "mother"
+      ],
+      "readings": {
+        "on": [
+          "ぼ"
+        ],
+        "kun": [
+          "はは",
+          "かあ",
+          "も"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ぼ"
+        ],
+        "kun": [
+          "はは",
+          "かあ",
+          "も"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "方",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "65b9",
+      "primaryMeaning": "Direction",
+      "meanings": [
+        "Direction",
+        "Way",
+        "alternative",
+        "direction",
+        "person"
+      ],
+      "readings": {
+        "on": [
+          "ほう"
+        ],
+        "kun": [
+          "かた",
+          "-かた",
+          "-がた"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ほう"
+        ],
+        "kun": [
+          "かた",
+          "-かた",
+          "-がた"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "北",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "5317",
+      "primaryMeaning": "North",
+      "meanings": [
+        "North",
+        "north"
+      ],
+      "readings": {
+        "on": [
+          "ほく"
+        ],
+        "kun": [
+          "きた"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ほく"
+        ],
+        "kun": [
+          "きた"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "毎",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6bce",
+      "primaryMeaning": "Every",
+      "meanings": [
+        "Every",
+        "Each",
+        "every"
+      ],
+      "readings": {
+        "on": [
+          "まい"
+        ],
+        "kun": [
+          "ごと",
+          "-ごと.に"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "まい"
+        ],
+        "kun": [
+          "ごと",
+          "-ごと.に"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "妹",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "59b9",
+      "primaryMeaning": "Younger Sister",
+      "meanings": [
+        "Younger Sister",
+        "Little Sister",
+        "younger sister"
+      ],
+      "readings": {
+        "on": [
+          "まい"
+        ],
+        "kun": [
+          "いもうと"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "まい"
+        ],
+        "kun": [
+          "いもうと"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 6
+      }
+    },
+    {
+      "kanji": "万",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "4e07",
+      "primaryMeaning": "Ten Thousand",
+      "meanings": [
+        "Ten Thousand",
+        "10,000",
+        "ten thousand"
+      ],
+      "readings": {
+        "on": [
+          "まん",
+          "ばん"
+        ],
+        "kun": [
+          "よろず"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "まん",
+          "ばん"
+        ],
+        "kun": [
+          "よろず"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "明",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "660e",
+      "primaryMeaning": "Bright",
+      "meanings": [
+        "Bright",
+        "bright",
+        "light"
+      ],
+      "readings": {
+        "on": [
+          "めい",
+          "みょう"
+        ],
+        "kun": [
+          "あ",
+          "あか",
+          "あき",
+          "-あ.け",
+          "あ.かす",
+          "あ.かり",
+          "あ.く",
+          "あ.くる",
+          "あ.ける",
+          "あか.らむ",
+          "あか.るい",
+          "あか.るむ",
+          "あき.らか",
+          "みん"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "めい",
+          "みょう"
+        ],
+        "kun": [
+          "あ",
+          "あか",
+          "あき",
+          "-あ.け",
+          "あ.かす",
+          "あ.かり",
+          "あ.く",
+          "あ.くる",
+          "あ.ける",
+          "あか.らむ",
+          "あか.るい",
+          "あか.るむ",
+          "あき.らか",
+          "みん"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "鳴",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9cf4",
+      "primaryMeaning": "Chirp",
+      "meanings": [
+        "Chirp",
+        "bark",
+        "chirp",
+        "cry"
+      ],
+      "readings": {
+        "on": [
+          "めい"
+        ],
+        "kun": [
+          "な",
+          "な.く",
+          "な.らす",
+          "な.る"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "めい"
+        ],
+        "kun": [
+          "な",
+          "な.く",
+          "な.らす",
+          "な.る"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 3,
+        "wanikaniLevel": 10
+      }
+    },
+    {
+      "kanji": "毛",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6bdb",
+      "primaryMeaning": "Fur",
+      "meanings": [
+        "Fur",
+        "Hair",
+        "down",
+        "feather",
+        "fur"
+      ],
+      "readings": {
+        "on": [
+          "もう"
+        ],
+        "kun": [
+          "け"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "もう"
+        ],
+        "kun": [
+          "け"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "門",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "9580",
+      "primaryMeaning": "Gates",
+      "meanings": [
+        "Gates",
+        "Gate",
+        "counter for cannons",
+        "gate"
+      ],
+      "readings": {
+        "on": [
+          "もん"
+        ],
+        "kun": [
+          "と",
+          "かど"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "もん"
+        ],
+        "kun": [
+          "と",
+          "かど"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 2,
+        "wanikaniLevel": 16
+      }
+    },
+    {
+      "kanji": "夜",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "591c",
+      "primaryMeaning": "Night",
+      "meanings": [
+        "Night",
+        "Evening",
+        "evening",
+        "night"
+      ],
+      "readings": {
+        "on": [
+          "や"
+        ],
+        "kun": [
+          "よる",
+          "よ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "や"
+        ],
+        "kun": [
+          "よる",
+          "よ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "野",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "91ce",
+      "primaryMeaning": "Field",
+      "meanings": [
+        "Field",
+        "civilian life",
+        "field",
+        "plains"
+      ],
+      "readings": {
+        "on": [
+          "や"
+        ],
+        "kun": [
+          "の",
+          "の-",
+          "しょ"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "や"
+        ],
+        "kun": [
+          "の",
+          "の-",
+          "しょ"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 12
+      }
+    },
+    {
+      "kanji": "友",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "53cb",
+      "primaryMeaning": "Friend",
+      "meanings": [
+        "Friend",
+        "friend"
+      ],
+      "readings": {
+        "on": [
+          "ゆう"
+        ],
+        "kun": [
+          "とも"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "ゆう"
+        ],
+        "kun": [
+          "とも"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "用",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7528",
+      "primaryMeaning": "Task",
+      "meanings": [
+        "Task",
+        "Use",
+        "business",
+        "employ",
+        "service"
+      ],
+      "readings": {
+        "on": [
+          "よう"
+        ],
+        "kun": [
+          "もち",
+          "もち.いる"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "よう"
+        ],
+        "kun": [
+          "もち",
+          "もち.いる"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 3
+      }
+    },
+    {
+      "kanji": "曜",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "66dc",
+      "primaryMeaning": "Weekday",
+      "meanings": [
+        "Weekday",
+        "Day Of The Week",
+        "weekday"
+      ],
+      "readings": {
+        "on": [
+          "よう"
+        ],
+        "kun": []
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "よう"
+        ],
+        "kun": []
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 16
+      }
+    },
+    {
+      "kanji": "来",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "6765",
+      "primaryMeaning": "Come",
+      "meanings": [
+        "Come",
+        "Next",
+        "become",
+        "cause",
+        "come"
+      ],
+      "readings": {
+        "on": [
+          "らい"
+        ],
+        "kun": [
+          "く",
+          "き",
+          "き.たす",
+          "き.たる",
+          "きた.す",
+          "きた.る",
+          "く.る",
+          "こ",
+          "たい"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "らい"
+        ],
+        "kun": [
+          "く",
+          "き",
+          "き.たす",
+          "き.たる",
+          "きた.す",
+          "きた.る",
+          "く.る",
+          "こ",
+          "たい"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "里",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "91cc",
+      "primaryMeaning": "Hometown",
+      "meanings": [
+        "Hometown",
+        "Village"
+      ],
+      "readings": {
+        "on": [
+          "り"
+        ],
+        "kun": [
+          "さと"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "り"
+        ],
+        "kun": [
+          "さと"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": null,
+        "wanikaniLevel": 5
+      }
+    },
+    {
+      "kanji": "理",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "7406",
+      "primaryMeaning": "Reason",
+      "meanings": [
+        "Reason",
+        "arrangement",
+        "justice",
+        "logic"
+      ],
+      "readings": {
+        "on": [
+          "り"
+        ],
+        "kun": [
+          "ことわり"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "り"
+        ],
+        "kun": [
+          "ことわり"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 4,
+        "wanikaniLevel": 7
+      }
+    },
+    {
+      "kanji": "話",
+      "grade": 2,
+      "category": {
+        "code": "elementary",
+        "name": "Elementary School (Kyōiku)",
+        "nameJa": "教育漢字（小学校）",
+        "abbr": "ELEM"
+      },
+      "strokeCount": null,
+      "frequencyRank": null,
+      "unicodeHex": "8a71",
+      "primaryMeaning": "Talk",
+      "meanings": [
+        "Talk",
+        "Speak",
+        "tale",
+        "talk"
+      ],
+      "readings": {
+        "on": [
+          "わ"
+        ],
+        "kun": [
+          "はな",
+          "はなし",
+          "はな.す"
+        ]
+      },
+      "gradeApprovedReadings": {
+        "on": [
+          "わ"
+        ],
+        "kun": [
+          "はな",
+          "はなし",
+          "はな.す"
+        ]
+      },
+      "heisigKeyword": null,
+      "crossRef": {
+        "jlptLevel": 5,
+        "wanikaniLevel": 8
+      }
+    }
+  ]
+}

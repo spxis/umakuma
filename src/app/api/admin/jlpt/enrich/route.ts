@@ -6,6 +6,7 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { clearJlptCatalogCache } from "@/lib/jlptCatalogCache";
 import { addWaniKaniKanjiToWordExamples } from "@/lib/jlptWordExampleCatalog";
 import type { JlptWordExample } from "@/lib/jlptTypes";
+import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
 import { prisma } from "@/lib/prisma";
 
 type KanjiApiPayload = {
@@ -116,7 +117,7 @@ async function fetchKanjiDetails(kanji: string) {
   return {
     strokeCount: typeof payload.stroke_count === "number" ? payload.stroke_count : null,
     frequencyRank: typeof payload.freq_mainichi_shinbun === "number" ? payload.freq_mainichi_shinbun : null,
-    schoolGrade: typeof payload.grade === "number" ? payload.grade : null,
+    schoolGrade: getSchoolGradeKanjiByCharacter(kanji)?.grade ?? (typeof payload.grade === "number" ? payload.grade : null),
     heisigKeyword: typeof payload.heisig_en === "string" ? payload.heisig_en.trim() || null : null,
     unicodeHex: typeof payload.unicode === "string" ? payload.unicode.trim() || null : null,
     sourceJlpt: typeof payload.jlpt === "number" ? payload.jlpt : null,

@@ -1,0 +1,313 @@
+{
+  "source": "Statistics Canada Open Data Administrative Boundaries",
+  "country": "CA",
+  "viewBox": "0 0 1000 800",
+  "width": 1000,
+  "height": 800,
+  "totalRegions": 13,
+  "regions": [
+    {
+      "code": "ON",
+      "name": "Ontario",
+      "nameFr": "Ontario",
+      "type": "province",
+      "capital": "Toronto",
+      "region": "Central Canada",
+      "path": "M500 480 L620 440 L670 520 L620 600 L540 560 Z",
+      "centroid": [
+        580,
+        520
+      ],
+      "bbox": [
+        480,
+        420,
+        680,
+        620
+      ],
+      "neighbors": [
+        "MB",
+        "QC"
+      ]
+    },
+    {
+      "code": "QC",
+      "name": "Quebec",
+      "nameFr": "Québec",
+      "type": "province",
+      "capital": "Quebec City",
+      "region": "Central Canada",
+      "path": "M630 450 L700 340 L800 400 L810 500 L710 540 Z",
+      "centroid": [
+        720,
+        440
+      ],
+      "bbox": [
+        620,
+        320,
+        820,
+        560
+      ],
+      "neighbors": [
+        "ON",
+        "NL",
+        "NB"
+      ]
+    },
+    {
+      "code": "BC",
+      "name": "British Columbia",
+      "nameFr": "Colombie-Britannique",
+      "type": "province",
+      "capital": "Victoria",
+      "region": "West Coast",
+      "path": "M110 330 L220 330 L250 480 L180 510 L130 470 Z",
+      "centroid": [
+        180,
+        420
+      ],
+      "bbox": [
+        100,
+        320,
+        260,
+        520
+      ],
+      "neighbors": [
+        "YT",
+        "NT",
+        "AB"
+      ]
+    },
+    {
+      "code": "AB",
+      "name": "Alberta",
+      "nameFr": "Alberta",
+      "type": "province",
+      "capital": "Edmonton",
+      "region": "Prairies",
+      "path": "M230 330 L310 330 L310 500 L230 500 Z",
+      "centroid": [
+        270,
+        420
+      ],
+      "bbox": [
+        220,
+        330,
+        320,
+        510
+      ],
+      "neighbors": [
+        "NT",
+        "SK",
+        "BC"
+      ]
+    },
+    {
+      "code": "MB",
+      "name": "Manitoba",
+      "nameFr": "Manitoba",
+      "type": "province",
+      "capital": "Winnipeg",
+      "region": "Prairies",
+      "path": "M390 340 L470 340 L470 510 L390 510 Z",
+      "centroid": [
+        430,
+        440
+      ],
+      "bbox": [
+        380,
+        340,
+        480,
+        540
+      ],
+      "neighbors": [
+        "NU",
+        "NT",
+        "SK",
+        "ON"
+      ]
+    },
+    {
+      "code": "SK",
+      "name": "Saskatchewan",
+      "nameFr": "Saskatchewan",
+      "type": "province",
+      "capital": "Regina",
+      "region": "Prairies",
+      "path": "M315 330 L385 330 L385 500 L315 500 Z",
+      "centroid": [
+        350,
+        430
+      ],
+      "bbox": [
+        310,
+        330,
+        390,
+        510
+      ],
+      "neighbors": [
+        "NT",
+        "MB",
+        "AB"
+      ]
+    },
+    {
+      "code": "NS",
+      "name": "Nova Scotia",
+      "nameFr": "Nouvelle-Écosse",
+      "type": "province",
+      "capital": "Halifax",
+      "region": "Atlantic Canada",
+      "path": "M830 520 L890 510 L880 560 L830 550 Z",
+      "centroid": [
+        860,
+        540
+      ],
+      "bbox": [
+        820,
+        510,
+        900,
+        580
+      ],
+      "neighbors": [
+        "NB"
+      ]
+    },
+    {
+      "code": "NB",
+      "name": "New Brunswick",
+      "nameFr": "Nouveau-Brunswick",
+      "type": "province",
+      "capital": "Fredericton",
+      "region": "Atlantic Canada",
+      "path": "M780 490 L830 490 L825 540 L780 530 Z",
+      "centroid": [
+        800,
+        510
+      ],
+      "bbox": [
+        770,
+        480,
+        830,
+        550
+      ],
+      "neighbors": [
+        "QC",
+        "NS"
+      ]
+    },
+    {
+      "code": "NL",
+      "name": "Newfoundland and Labrador",
+      "nameFr": "Terre-Neuve-et-Labrador",
+      "type": "province",
+      "capital": "St. John's",
+      "region": "Atlantic Canada",
+      "path": "M820 330 L880 340 L930 440 L880 480 L840 430 Z",
+      "centroid": [
+        880,
+        400
+      ],
+      "bbox": [
+        800,
+        320,
+        960,
+        480
+      ],
+      "neighbors": [
+        "QC"
+      ]
+    },
+    {
+      "code": "PE",
+      "name": "Prince Edward Island",
+      "nameFr": "Île-du-Prince-Édouard",
+      "type": "province",
+      "capital": "Charlottetown",
+      "region": "Atlantic Canada",
+      "path": "M825 500 L845 498 L848 510 L828 512 Z",
+      "centroid": [
+        835,
+        505
+      ],
+      "bbox": [
+        820,
+        495,
+        850,
+        515
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "NT",
+      "name": "Northwest Territories",
+      "nameFr": "Territoires du Nord-Ouest",
+      "type": "territory",
+      "capital": "Yellowknife",
+      "region": "Northern Canada",
+      "path": "M190 180 L350 180 L350 330 L220 330 Z",
+      "centroid": [
+        270,
+        240
+      ],
+      "bbox": [
+        180,
+        140,
+        360,
+        330
+      ],
+      "neighbors": [
+        "YT",
+        "NU",
+        "BC",
+        "AB",
+        "SK"
+      ]
+    },
+    {
+      "code": "NU",
+      "name": "Nunavut",
+      "nameFr": "Nunavut",
+      "type": "territory",
+      "capital": "Iqaluit",
+      "region": "Northern Canada",
+      "path": "M370 120 L660 100 L640 330 L450 330 Z",
+      "centroid": [
+        520,
+        210
+      ],
+      "bbox": [
+        360,
+        80,
+        680,
+        340
+      ],
+      "neighbors": [
+        "NT",
+        "MB"
+      ]
+    },
+    {
+      "code": "YT",
+      "name": "Yukon",
+      "nameFr": "Yukon",
+      "type": "territory",
+      "capital": "Whitehorse",
+      "region": "Northern Canada",
+      "path": "M90 150 L160 170 L170 320 L100 320 Z",
+      "centroid": [
+        120,
+        220
+      ],
+      "bbox": [
+        80,
+        140,
+        180,
+        320
+      ],
+      "neighbors": [
+        "NT",
+        "BC"
+      ]
+    }
+  ]
+}

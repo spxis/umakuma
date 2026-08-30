@@ -143,6 +143,29 @@ model JlptKanji {
   @@index([nLevel])
 }
 
+model SchoolGradeKanji {
+  id             String   @id @default(cuid())
+  kanji          String   @unique
+  grade          Int
+  category       String   @default("elementary")
+  categoryName   String?
+  categoryAbbr   String?
+  strokeCount    Int?
+  frequencyRank  Int?
+  unicodeHex     String?
+  primaryMeaning String?
+  meanings       String[] @default([])
+  onReadings     String[] @default([])
+  kunReadings    String[] @default([])
+  nanoriReadings String[] @default([])
+  heisigKeyword  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([grade])
+  @@index([category])
+}
+
 model WkSubjectCatalog {
   wkSubjectId               Int      @id
   object                    String   @default("subject")

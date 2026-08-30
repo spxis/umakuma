@@ -1,0 +1,176 @@
+{
+  "exportedAt": "2026-08-30T12:33:09.007Z",
+  "updatedAt": "2026-08-30T12:33:09.007Z",
+  "standard": "文部科学省 学習指導要領、文化庁 常用漢字表 及び 法務省 人名用漢字別表",
+  "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表",
+  "levels": 8,
+  "totalKanjiCount": 2899,
+  "elementaryKanjiCount": 1026,
+  "secondaryKanjiCount": 1110,
+  "nameKanjiCount": 763,
+  "outputDir": "/Users/john/Projects/umakuma/src/data/school-grades",
+  "files": [
+    "grade-01.json",
+    "grade-02.json",
+    "grade-03.json",
+    "grade-04.json",
+    "grade-05.json",
+    "grade-06.json",
+    "grade-08.json",
+    "grade-09.json"
+  ],
+  "grades": [
+    {
+      "grade": 1,
+      "slug": "grade-01",
+      "name": "First Grade",
+      "nameJa": "小学1年生",
+      "category": "elementary",
+      "categoryName": "Elementary School (Kyōiku)",
+      "categoryNameJa": "教育漢字（小学校）",
+      "categoryAbbr": "ELEM",
+      "totalCount": 80,
+      "curriculum": {
+        "standard": "文部科学省 小学校学習指導要領（平成29年告示）別表「学年別漢字配当表」",
+        "enforcementYear": 2020,
+        "objective": "日常使われる基本的な漢字を正しく読み、書くことができるようにする。"
+      },
+      "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+      "updatedAt": "2026-08-30T12:33:09.007Z",
+      "filePath": "grade-01.json"
+    },
+    {
+      "grade": 2,
+      "slug": "grade-02",
+      "name": "Second Grade",
+      "nameJa": "小学2年生",
+      "category": "elementary",
+      "categoryName": "Elementary School (Kyōiku)",
+      "categoryNameJa": "教育漢字（小学校）",
+      "categoryAbbr": "ELEM",
+      "totalCount": 160,
+      "curriculum": {
+        "standard": "文部科学省 小学校学習指導要領（平成29年告示）別表「学年別漢字配当表」",
+        "enforcementYear": 2020,
+        "objective": "身近な事物の名や様子を表す漢字を読み、文や文章の中で適切に使う。"
+      },
+      "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+      "updatedAt": "2026-08-30T12:33:09.007Z",
+      "filePath": "grade-02.json"
+    },
+    {
+      "grade": 3,
+      "slug": "grade-03",
+      "name": "Third Grade",
+      "nameJa": "小学3年生",
+      "category": "elementary",
+      "categoryName": "Elementary School (Kyōiku)",
+      "categoryNameJa": "教育漢字（小学校）",
+      "categoryAbbr": "ELEM",
+      "totalCount": 200,
+      "curriculum": {
+        "standard": "文部科学省 小学校学習指導要領（平成29年告示）別表「学年別漢字配当表」",
+        "enforcementYear": 2020,
+        "objective": "日常の生活や学習に必要な漢字の読み書きを深め、筆順や字形に留意する。"
+      },
+      "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+      "updatedAt": "2026-08-30T12:33:09.007Z",
+      "filePath": "grade-03.json"
+    },
+    {
+      "grade": 4,
+      "slug": "grade-04",
+      "name": "Fourth Grade",
+      "nameJa": "小学4年生",
+      "category": "elementary",
+      "categoryName": "Elementary School (Kyōiku)",
+      "categoryNameJa": "教育漢字（小学校）",
+      "categoryAbbr": "ELEM",
+      "totalCount": 202,
+      "curriculum": {
+        "standard": "文部科学省 小学校学習指導要領（平成29年告示）別表「学年別漢字配当表」",
+        "enforcementYear": 2020,
+        "objective": "都道府県名に用いる漢字を含む社会生活に必要な漢字を正しく理解し使う。"
+      },
+      "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+      "updatedAt": "2026-08-30T12:33:09.007Z",
+      "filePath": "grade-04.json"
+    },
+    {
+      "grade": 5,
+      "slug": "grade-05",
+      "name": "Fifth Grade",
+      "nameJa": "小学5年生",
+      "category": "elementary",
+      "categoryName": "Elementary School (Kyōiku)",
+      "categoryNameJa": "教育漢字（小学校）",
+      "categoryAbbr": "ELEM",
+      "totalCount": 193,
+      "curriculum": {
+        "standard": "文部科学省 小学校学習指導要領（平成29年告示）別表「学年別漢字配当表」",
+        "enforcementYear": 2020,
+        "objective": "抽象的な概念や様々な教科の学習に必要な漢字の読み書きを習得する。"
+      },
+      "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+      "updatedAt": "2026-08-30T12:33:09.007Z",
+      "filePath": "grade-05.json"
+    },
+    {
+      "grade": 6,
+      "slug": "grade-06",
+      "name": "Sixth Grade",
+      "nameJa": "小学6年生",
+      "category": "elementary",
+      "categoryName": "Elementary School (Kyōiku)",
+      "categoryNameJa": "教育漢字（小学校）",
+      "categoryAbbr": "ELEM",
+      "totalCount": 191,
+      "curriculum": {
+        "standard": "文部科学省 小学校学習指導要領（平成29年告示）別表「学年別漢字配当表」",
+        "enforcementYear": 2020,
+        "objective": "小学校段階の漢字を確実に定着させ、中学校での漢字学習への基礎を固める。"
+      },
+      "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+      "updatedAt": "2026-08-30T12:33:09.007Z",
+      "filePath": "grade-06.json"
+    },
+    {
+      "grade": 8,
+      "slug": "grade-08",
+      "name": "Secondary School (Junior High)",
+      "nameJa": "中学校",
+      "category": "secondary",
+      "categoryName": "Secondary School (Jōyō)",
+      "categoryNameJa": "常用漢字（中学校）",
+      "categoryAbbr": "SEC",
+      "totalCount": 1110,
+      "curriculum": {
+        "standard": "文化庁 常用漢字表（平成22年内閣告示第2号）中学校段階配当漢字",
+        "enforcementYear": 2012,
+        "objective": "小学校で学習した漢字に加え、常用漢字表の残りの漢字を習得し、文章や社会生活で適切に使えるようにする。"
+      },
+      "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+      "updatedAt": "2026-08-30T12:33:09.007Z",
+      "filePath": "grade-08.json"
+    },
+    {
+      "grade": 9,
+      "slug": "grade-09",
+      "name": "Personal Name Kanji (Jinmeiyō)",
+      "nameJa": "人名用漢字",
+      "category": "name_kanji",
+      "categoryName": "Personal Name (Jinmeiyō)",
+      "categoryNameJa": "人名用漢字",
+      "categoryAbbr": "NAME",
+      "totalCount": 763,
+      "curriculum": {
+        "standard": "法務省 戸籍法施行規則別表第二「人名用漢字」",
+        "enforcementYear": 2017,
+        "objective": "戸籍法に基づき、人の名に使える漢字として法務省が定めた人名用漢字。"
+      },
+      "readingsStandard": "文化庁 常用漢字表 音訓の小・中・高等学校段階別割り振り表 及び 戸籍法規則",
+      "updatedAt": "2026-08-30T12:33:09.007Z",
+      "filePath": "grade-09.json"
+    }
+  ]
+}
