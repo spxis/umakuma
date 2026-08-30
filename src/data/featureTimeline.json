@@ -608,11 +608,10 @@
     "id": "quality-gate-typecheck",
     "name": "Typecheck in the quality gate",
     "area": "platform",
-    "status": "planned",
-    "date": "2026-09-04",
-    "dateIsEstimate": true,
-    "release": 19,
-    "summary": "quality:check does not run tsc; a test with an invalid GameKind literal passed green and only the typecheck caught it."
+    "status": "shipped",
+    "date": "2026-08-30",
+    "dateIsEstimate": false,
+    "summary": "quality:check now runs tsc; it caught a fresh test bug on its first local run."
   },
   {
     "id": "reinvite-family",

@@ -63,7 +63,7 @@ describe("resolveFlagStates", () => {
     const states = resolveFlagStates([{ key: "retired_flag", enabled: true, updatedAt: null }]);
 
     expect(states.map((state) => state.key)).toEqual([...FEATURE_FLAG_VALUES]);
-    expect(states.some((state) => state.key === "retired_flag")).toBe(false);
+    expect(states.map((state) => state.key as string)).not.toContain("retired_flag");
   });
 
   it("returns every declared flag exactly once", () => {

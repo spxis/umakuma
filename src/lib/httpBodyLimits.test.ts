@@ -38,6 +38,7 @@ describe("HTTP body limits", () => {
     const response = new Response("12345");
     const body = await readResponseBytesWithLimit(response, 5);
 
-    expect(new TextDecoder().decode(body)).toBe("12345");
+    expect(body).not.toBeNull();
+    expect(new TextDecoder().decode(body!)).toBe("12345");
   });
 });
