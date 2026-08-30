@@ -996,5 +996,15 @@
     "version": "0.87.0",
     "releasedAt": "2026-08-30T14:37:37Z",
     "summary": "Stroke order moves into a shared button any surface can drop in, and the glyph viewer gains it for kanji. The data now covers every WaniKani kanji as well as the school grades - the characters WaniKani teaches past the joyo list were silently missing, and those are the ones a learner is least sure how to write."
+  },
+  {
+    "id": "wk-catalog-export-fix",
+    "area": "platform",
+    "name": "Refresh the catalogue export",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.88.0",
+    "releasedAt": "2026-08-30T14:43:23Z",
+    "summary": "The script that exports the WaniKani catalogue could not run at all - it imported a server-only module - so its committed snapshot had drifted to 3,930 of 9,324 subjects. Fixed and regenerated, and dropping the raw payload makes the complete export smaller than the stale one was."
   }
 ]

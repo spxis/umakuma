@@ -55,18 +55,6 @@ async function wantedKanji() {
 }
 
 /**
- * Characters the live catalogue teaches that the committed level export does
- * not yet list.
- *
- * `src/data/wk-catalog-levels` is a snapshot, and WaniKani has added kanji
- * since it was taken, so these thirteen were silently missing stroke order
- * while KanjiVG had every one of them. Regenerating that export with
- * `export-wk-catalog-level-json` should make this list redundant; until then
- * it is better to name them than to quietly ship gaps.
- */
-const CATALOG_BEYOND_EXPORT = ["嘘", "叩", "飴", "鮭", "噛", "咳", "屁", "痒", "繋", "炒", "舐", "騙", "壺"];
-
-/**
  * The kanji WaniKani teaches that no school grade covers.
  *
  * WaniKani goes beyond the joyo and jinmeiyo lists - 醤, 鰐, 嘘 and about
@@ -91,12 +79,6 @@ async function wanikaniExtras(alreadyCovered) {
       if (type === "kanji" && typeof characters === "string" && [...characters].length === 1 && !alreadyCovered.has(characters)) {
         extras.add(characters);
       }
-    }
-  }
-
-  for (const kanji of CATALOG_BEYOND_EXPORT) {
-    if (!alreadyCovered.has(kanji)) {
-      extras.add(kanji);
     }
   }
 

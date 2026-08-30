@@ -1,7 +1,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { PrismaClient } from "@prisma/client";
 
-import { prisma } from "../src/lib/prisma";
+/*
+ * Its own client, not the app's singleton. `src/lib/prisma` is marked
+ * `server-only`, which throws the moment a plain script imports it - so this
+ * export could not run at all, which is why the committed snapshot fell behind
+ * the live catalogue and thirteen kanji quietly lost their stroke data.
+ */
+const prisma = new PrismaClient();
 
 type Args = {
   outputDir: string;
