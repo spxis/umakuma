@@ -936,5 +936,15 @@
     "version": "0.81.0",
     "releasedAt": "2026-08-30T14:01:54Z",
     "summary": "The grade grid hides its readings on request so the same page becomes a self-test: see the kanji, say the on and kun readings, select the card to check. Nothing is recorded, which is the point - it is the rehearsal, not the exam."
+  },
+  {
+    "id": "mobile-search-icon",
+    "area": "platform",
+    "name": "Search keeps its place on a phone",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.82.0",
+    "releasedAt": "2026-08-30T14:05:31Z",
+    "summary": "The header search field cost about 150px on a phone and the mobile nav clips rather than wraps, so it had silently pushed the Admin link off the end of the row. On a phone it is now the icon alone, linking to the search page."
   }
 ]
