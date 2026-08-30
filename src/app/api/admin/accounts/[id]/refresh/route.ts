@@ -11,7 +11,7 @@ type RouteContext = {
 
 export async function POST(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
-    route: "/api/accounts/[id]/refresh",
+    route: "/api/admin/accounts/[id]/refresh",
     method: "POST",
     request: request,
     execute: async () => {

@@ -15,7 +15,7 @@ const createAccountSchema = z.object({
 
 export async function POST(request: Request) {
   return withApiRouteTelemetry({
-    route: "/api/accounts",
+    route: "/api/admin/accounts",
     method: "POST",
     request: request,
     execute: async () => {
@@ -52,7 +52,7 @@ try {
 
 export async function GET(request: Request) {
   return withApiRouteTelemetry({
-    route: "/api/accounts",
+    route: "/api/admin/accounts",
     method: "GET",
     request: request,
     execute: async () => {

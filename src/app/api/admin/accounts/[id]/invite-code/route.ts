@@ -46,7 +46,7 @@ function inviteCodeFailureMessage(error: unknown, action: "assign" | "reset"): s
 
 export async function POST(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
-    route: "/api/accounts/[id]/invite-code",
+    route: "/api/admin/accounts/[id]/invite-code",
     method: "POST",
     request: request,
     execute: async () => {
@@ -127,7 +127,7 @@ try {
 
 export async function DELETE(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
-    route: "/api/accounts/[id]/invite-code",
+    route: "/api/admin/accounts/[id]/invite-code",
     method: "DELETE",
     request: request,
     execute: async () => {

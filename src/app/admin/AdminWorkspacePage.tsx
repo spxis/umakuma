@@ -196,7 +196,7 @@ function AdminWorkspacePageContent({
     setLoading(true);
 
     try {
-      const response = await fetch("/api/accounts", {
+      const response = await fetch("/api/admin/accounts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -236,7 +236,7 @@ function AdminWorkspacePageContent({
     setLoading(true);
 
     try {
-      const response = await fetch("/api/leaderboard/refresh", {
+      const response = await fetch("/api/admin/leaderboard/refresh", {
         method: "POST",
       });
 
@@ -270,7 +270,7 @@ function AdminWorkspacePageContent({
     setJlptRefreshing(true);
 
     try {
-      const response = await fetch("/api/jlpt/refresh", {
+      const response = await fetch("/api/admin/jlpt/refresh", {
         method: "POST",
       });
 
@@ -304,7 +304,7 @@ function AdminWorkspacePageContent({
     setJlptEnriching(true);
 
     try {
-      const response = await fetch("/api/jlpt/enrich", {
+      const response = await fetch("/api/admin/jlpt/enrich", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

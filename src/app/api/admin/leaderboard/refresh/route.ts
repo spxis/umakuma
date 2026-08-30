@@ -6,7 +6,7 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 
 export async function POST(request: Request) {
   return withApiRouteTelemetry({
-    route: "/api/leaderboard/refresh",
+    route: "/api/admin/leaderboard/refresh",
     method: "POST",
     request: request,
     execute: async () => {

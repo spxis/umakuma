@@ -50,7 +50,7 @@ export default function UserAdminRefreshButton({
     setMessage("");
 
     try {
-      const response = await fetch(`/api/accounts/${accountId}/refresh`, {
+      const response = await fetch(`/api/admin/accounts/${accountId}/refresh`, {
         method: "POST",
       });
 

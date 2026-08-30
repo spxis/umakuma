@@ -34,7 +34,7 @@ async function fetchJlptList(nLevel: number): Promise<string[]> {
 
 export async function POST(request: Request) {
   return withApiRouteTelemetry({
-    route: "/api/jlpt/refresh",
+    route: "/api/admin/jlpt/refresh",
     method: "POST",
     request: request,
     execute: async () => {

@@ -37,7 +37,7 @@ export default function AdminUsersPanel({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   async function loadAccounts() {
-    const response = await fetch("/api/accounts", {
+    const response = await fetch("/api/admin/accounts", {
       cache: "no-store",
     });
     const data = (await response.json()) as { accounts?: AdminAccount[]; error?: string };
@@ -79,7 +79,7 @@ export default function AdminUsersPanel({
     setBusy(true);
 
     try {
-      const response = await fetch(`/api/accounts/${accountId}/refresh`, {
+      const response = await fetch(`/api/admin/accounts/${accountId}/refresh`, {
         method: "POST",
       });
 
@@ -120,7 +120,7 @@ export default function AdminUsersPanel({
     setBusy(true);
 
     try {
-      const response = await fetch(`/api/accounts/${accountId}/invite-code`, {
+      const response = await fetch(`/api/admin/accounts/${accountId}/invite-code`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export default function AdminUsersPanel({
     setBusy(true);
 
     try {
-      const response = await fetch(`/api/accounts/${accountId}/invite-code`, {
+      const response = await fetch(`/api/admin/accounts/${accountId}/invite-code`, {
         method: "DELETE",
       });
 

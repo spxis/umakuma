@@ -133,7 +133,7 @@ async function fetchKanjiDetails(kanji: string) {
 
 export async function POST(request: Request) {
   return withApiRouteTelemetry({
-    route: "/api/jlpt/enrich",
+    route: "/api/admin/jlpt/enrich",
     method: "POST",
     request,
     execute: async () => {

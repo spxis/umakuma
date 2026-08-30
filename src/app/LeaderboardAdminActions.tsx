@@ -32,7 +32,7 @@ export default function LeaderboardAdminActions() {
     setRefreshing(true);
 
     try {
-      const response = await fetch("/api/leaderboard/refresh", { method: "POST" });
+      const response = await fetch("/api/admin/leaderboard/refresh", { method: "POST" });
       if (!response.ok) {
         throw new Error("Refresh failed.");
       }

@@ -703,5 +703,14 @@
     "date": "2026-08-30",
     "version": "0.59.0",
     "summary": "Every release walks the gojuon: a two-word Japanese name per version, worn in the header like a saying."
+  },
+  {
+    "id": "admin-api-namespace",
+    "name": "Admin API namespace",
+    "area": "admin",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.60.0",
+    "summary": "Every admin-gated endpoint now lives under /api/admin/; the six that were scattered across the public tree moved in."
   }
 ]

@@ -325,7 +325,7 @@ export default function LeaderboardTable({
   const refreshUser = async (id: string) => {
     setRefreshingRowIds((prev) => new Set(prev).add(id));
     try {
-      const response = await fetch(`/api/accounts/${id}/refresh`, { method: "POST" });
+      const response = await fetch(`/api/admin/accounts/${id}/refresh`, { method: "POST" });
       if (!response.ok) {
         throw new Error("Refresh failed");
       }
