@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Parallel-session git worktrees; their files are their branch's problem.
+    ".claude/**",
   ]),
 ]);
 
