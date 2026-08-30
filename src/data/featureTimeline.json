@@ -694,5 +694,14 @@
     "date": "2026-08-30",
     "version": "0.56.0",
     "summary": "Every release bumps the version; the footer shows it and the timeline lists each release's number."
+  },
+  {
+    "id": "release-codenames",
+    "name": "Release codenames",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.59.0",
+    "summary": "Every release walks the gojuon: a two-word Japanese name per version, worn in the header like a saying."
   }
 ]

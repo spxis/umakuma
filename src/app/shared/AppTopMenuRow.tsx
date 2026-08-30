@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { MouseEvent as ReactMouseEvent } from "react";
 
+import ReleaseMotto from "./ReleaseMotto";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import { DASHBOARD_TAB_LABELS } from "../users/[nickname]/userReadConfig";
@@ -179,6 +180,8 @@ export default function AppTopMenuRow({
           </span>
         ))}
       </nav>
+
+      <ReleaseMotto />
 
       <div className="shrink-0">
         <UserHeaderMenu
