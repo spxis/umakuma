@@ -200,7 +200,8 @@ export default function StudySourceControls({
           layer={MODAL_LAYERS.library}
           labelledBy="custom-study-library-loader-title"
           gutter="md"
-          panelClassName="flex max-h-[75vh] min-h-90 w-[min(92vw,42rem)] min-w-[320px] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_20px_55px_rgba(8,16,36,0.28)] sm:min-h-100"
+          height="list"
+      panelClassName="flex w-[min(92vw,42rem)] min-w-[320px] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_20px_55px_rgba(8,16,36,0.28)] sm:min-h-100"
         >
             <div className="border-b border-line px-5 py-4">
               <h3 id="custom-study-library-loader-title" className="text-lg font-black text-foreground">Change study library</h3>

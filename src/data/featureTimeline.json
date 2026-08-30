@@ -906,5 +906,15 @@
     "version": "0.78.0",
     "releasedAt": "2026-08-30T13:49:43Z",
     "summary": "Reported by John: the level read as a pill in the lists and as faint borderless text on the study card and in the view modal. The in-glyph level and success rate are pills everywhere now."
+  },
+  {
+    "id": "modal-height-parity",
+    "area": "platform",
+    "name": "Modals hold one height",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.79.0",
+    "releasedAt": "2026-08-30T13:52:37Z",
+    "summary": "Reported by John: modals grew and shrank with their contents. ModalShell now owns two heights, a content one for forms and a fixed one for lists, and a test fails if a modal hand-rolls its own again."
   }
 ]

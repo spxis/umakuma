@@ -19,6 +19,16 @@ type Props = {
   gutter?: "sm" | "md";
   /** Classes for the panel itself — its width, height and surface. */
   panelClassName?: string;
+  /**
+   * How tall the panel stands.
+   *
+   * `content` sizes to what is inside, which is right for a confirmation. Every
+   * modal used to do that with its own `max-h`, and six different ones had
+   * drifted in, so a list modal grew and shrank as results came and went and
+   * the close button moved under the cursor. `list` holds one height whatever
+   * it holds, so only the content inside it scrolls.
+   */
+  height?: "content" | "list";
   /** For a panel sized at runtime, such as one fitted to the viewport. */
   panelStyle?: CSSProperties;
   /** Extra attributes for the panel, such as the data hooks other code reads. */
@@ -53,6 +63,11 @@ const GUTTERS = { sm: "p-2 sm:p-4", md: "p-4 sm:p-6" } as const;
  * Panels keep their own sizing through `panelClassName`; this owns only what
  * every modal shares.
  */
+const PANEL_HEIGHTS = {
+  content: "max-h-[min(92dvh,52rem)]",
+  list: "h-[min(85dvh,46rem)]",
+} as const;
+
 export default function ModalShell({
   children,
   onClose,
@@ -62,6 +77,7 @@ export default function ModalShell({
   scrim = "medium",
   gutter = "sm",
   panelClassName = "",
+  height = "content",
   panelStyle,
   panelProps,
   closeOnBackdrop = false,
@@ -114,7 +130,7 @@ export default function ModalShell({
         aria-label={labelledBy ? undefined : label}
         aria-labelledby={labelledBy}
         style={panelStyle}
-        className={panelClassName}
+        className={`${PANEL_HEIGHTS[height]} ${panelClassName}`.trim()}
       >
         {children}
       </div>

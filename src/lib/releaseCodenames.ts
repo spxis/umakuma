@@ -129,6 +129,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Michishio Miyako", ja: "満ち潮都", reading: "みちしおみやこ", gloss: "high-tide capital" },
   { romaji: "Mukashi Musubi", ja: "昔結び", reading: "むかしむすび", gloss: "old-times knot" },
   { romaji: "Megumi Meguri", ja: "恵み巡り", reading: "めぐみめぐり", gloss: "blessing pilgrimage" },
+  { romaji: "Momotarou Monaka", ja: "桃太郎最中", reading: "ももたろうもなか", gloss: "Momotaro wafer cake" },
 ];
 
 /**

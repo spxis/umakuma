@@ -213,7 +213,8 @@ export default function UserReadingMemberHistoryModal({
       scrim="heavy"
       closeOnBackdrop
       gutter="md"
-      panelClassName="relative flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl border border-line bg-surface text-left shadow-2xl"
+      height="list"
+      panelClassName="relative flex w-full max-w-2xl flex-col rounded-2xl border border-line bg-surface text-left shadow-2xl"
     >
         <div className="flex items-start justify-between gap-3 border-b border-line px-5 pb-3 pt-5">
           <div>

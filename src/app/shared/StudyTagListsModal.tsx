@@ -137,7 +137,8 @@ export default function StudyTagListsModal() {
       layer={MODAL_LAYERS.lists}
       label={STUDY_TAG_LIST_COPY.title}
       closeOnBackdrop
-      panelClassName="flex max-h-[calc(100dvh-16px)] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
+      height="list"
+      panelClassName="flex w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
     >
       <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-muted px-3 py-2.5 sm:px-4">
         <h2 className="truncate text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">

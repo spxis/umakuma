@@ -281,7 +281,7 @@ export default function UserReadingBooksEditor({
           closeOnBackdrop
           scrim="heavy"
           gutter="md"
-          panelClassName="max-h-[90vh] w-full max-w-xl"
+          panelClassName="w-full max-w-xl"
         >
             <button
               type="button"
