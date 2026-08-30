@@ -595,5 +595,33 @@
     "dateIsEstimate": true,
     "release": 18,
     "summary": "A WaniKani-parallel progression over roughly 100 levels, covering the kanji WaniKani leaves out."
+  },
+  {
+    "id": "game-setup-compact",
+    "name": "Compact game setup",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "summary": "One settings row and a smaller corners picker; the duplicate exit button is gone."
+  },
+  {
+    "id": "quality-gate-typecheck",
+    "name": "Typecheck in the quality gate",
+    "area": "platform",
+    "status": "planned",
+    "date": "2026-09-04",
+    "dateIsEstimate": true,
+    "release": 19,
+    "summary": "quality:check does not run tsc; a test with an invalid GameKind literal passed green and only the typecheck caught it."
+  },
+  {
+    "id": "reinvite-family",
+    "name": "Reinvite the four family members",
+    "area": "account",
+    "status": "planned",
+    "date": "2026-08-31",
+    "dateIsEstimate": true,
+    "release": 0,
+    "summary": "Issue invite codes for Emi, Aria, Mika and Jay - additive, their tokens are intact - once John gives the go."
   }
 ]

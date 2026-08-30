@@ -326,18 +326,26 @@ response. Public surfaces show the display name from release 4 and nothing else.
 
 ## Open decisions
 
-**Removing the viewer identity fallback may lock out 4 family members.** Of 8
-accounts, 1 has a linked email and 3 have invite codes. The other 4 — Emi, Aria,
-Mika and Jay — have **neither**. Their only route in may be the display-name
-fallback that release 1 removes. Nothing in the stored data can tell me whether
-they actually sign in that way, because a live Google session's name is not
-persisted for an account that never completed a join.
-
-Recommended: issue invite codes for those 4 first — additive, reversible, no
-data loss, and `/api/accounts/[id]/invite-code` already does it — then remove the
-fallback in the same release.
-
 **Preferences and the WaniKani link.** Release 5 puts preferences on the account
 so they survive connecting and disconnecting. Worth confirming that is the
 intent, since "tied to the WaniKani account" could instead mean they should
 follow the connection and be discarded with it.
+
+## Decided or resolved
+
+**The viewer-fallback lockout risk is settled (2026-08-30).** The worry was that
+removing the display-name fallback would lock out Emi, Aria, Mika and Jay, the
+four accounts with neither a linked email nor an invite code. A read-only audit
+of every user-generated table answered it: none of the four has ever used
+UmaKuma — zero games, reviews, tags, libraries and signoffs since their accounts
+were created on 2026-04-05. There is no access to lose, so release 1 is
+unblocked on its own.
+
+They are active WaniKani learners (three studied within the past week of the
+audit) with intact encrypted tokens, so reinviting drops them into populated
+accounts. Issuing their invite codes is queued as release 0 in the timeline —
+a production write, additive since `inviteCodeHash` is null for all four —
+awaiting John's go.
+
+**Tests, commit, release per feature (2026-08-29).** Standing rule, recorded in
+`AGENTS.md`; every feature ships with its own tests, commit and deploy.
