@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
 import { authOptions, isAdminEmail } from "@/lib/auth";
+import AdminPageNav from "../AdminPageNav";
 import {
   FEATURE_STATUSES,
   featuresByStatus,
@@ -41,6 +42,8 @@ export default async function AdminReleasesPage() {
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10">
+      <AdminPageNav activeTab="releases" />
+
       <h1 className="text-2xl font-black text-foreground sm:text-3xl">
         {RELEASE_TIMELINE_COPY.title}
       </h1>

@@ -20,6 +20,8 @@ import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types"
 import AdminReadingEntriesClient from "./reading-entries/AdminReadingEntriesClient";
 import {
   ADMIN_WORKSPACE_COOKIE_KEY,
+  ADMIN_WORKSPACE_TABS,
+  ADMIN_WORKSPACE_TAB_LABELS,
   ADMIN_WORKSPACE_COOKIE_MAX_AGE_SECONDS,
   type AdminWorkspaceTab,
   routeForAdminWorkspaceTab,
@@ -379,13 +381,10 @@ function AdminWorkspacePageContent({
             onChange={(nextTab) => {
               router.push(routeForAdminWorkspaceTab(nextTab));
             }}
-            options={[
-              { value: "data", label: "Data" },
-              { value: "campaigns", label: "Campaigns" },
-              { value: "history", label: "History" },
-              { value: "users", label: "Users" },
-              { value: "readingEntries", label: "Check-ins" },
-            ]}
+            options={ADMIN_WORKSPACE_TABS.map((tab) => ({
+              value: tab,
+              label: ADMIN_WORKSPACE_TAB_LABELS[tab],
+            }))}
           />
         </section>
 

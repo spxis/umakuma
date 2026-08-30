@@ -20,12 +20,12 @@ export const RELEASE_TIMELINE_COPY = {
  * Tailwind needs the full class name in the source, so these are written out.
  */
 export const RELEASE_AREA_CLASSES: Record<FeatureArea, string> = {
-  [FEATURE_AREAS.study]: "border-sky-400/40 bg-sky-400/10 text-sky-200",
-  [FEATURE_AREAS.games]: "border-violet-400/40 bg-violet-400/10 text-violet-200",
-  [FEATURE_AREAS.jlpt]: "border-emerald-400/40 bg-emerald-400/10 text-emerald-200",
-  [FEATURE_AREAS.news]: "border-amber-400/40 bg-amber-400/10 text-amber-200",
-  [FEATURE_AREAS.reading]: "border-rose-400/40 bg-rose-400/10 text-rose-200",
-  [FEATURE_AREAS.account]: "border-cyan-400/40 bg-cyan-400/10 text-cyan-200",
-  [FEATURE_AREAS.admin]: "border-orange-400/40 bg-orange-400/10 text-orange-200",
-  [FEATURE_AREAS.platform]: "border-slate-400/40 bg-slate-400/10 text-slate-200",
+  [FEATURE_AREAS.study]: "border-sky-500/40 bg-sky-500/10 text-sky-600",
+  [FEATURE_AREAS.games]: "border-violet-500/40 bg-violet-500/10 text-violet-600",
+  [FEATURE_AREAS.jlpt]: "border-emerald-500/40 bg-emerald-500/10 text-emerald-600",
+  [FEATURE_AREAS.news]: "border-amber-500/40 bg-amber-500/10 text-amber-600",
+  [FEATURE_AREAS.reading]: "border-rose-500/40 bg-rose-500/10 text-rose-600",
+  [FEATURE_AREAS.account]: "border-cyan-500/40 bg-cyan-500/10 text-cyan-700",
+  [FEATURE_AREAS.admin]: "border-orange-500/40 bg-orange-500/10 text-orange-600",
+  [FEATURE_AREAS.platform]: "border-slate-500/40 bg-slate-500/10 text-slate-600",
 };

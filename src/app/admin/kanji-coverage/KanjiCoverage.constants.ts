@@ -20,8 +20,8 @@ export const KANJI_COVERAGE_COPY = {
 } as const;
 
 export const KANJI_BAND_CLASSES: Record<KanjiGradeBand, string> = {
-  [KANJI_GRADE_BANDS.gradeSchool]: "border-emerald-400/40 bg-emerald-400/10 text-emerald-200",
-  [KANJI_GRADE_BANDS.secondary]: "border-sky-400/40 bg-sky-400/10 text-sky-200",
-  [KANJI_GRADE_BANDS.nameKanji]: "border-amber-400/40 bg-amber-400/10 text-amber-200",
-  [KANJI_GRADE_BANDS.unclassified]: "border-slate-400/40 bg-slate-400/10 text-slate-200",
+  [KANJI_GRADE_BANDS.gradeSchool]: "border-emerald-500/40 bg-emerald-500/10 text-emerald-600",
+  [KANJI_GRADE_BANDS.secondary]: "border-sky-500/40 bg-sky-500/10 text-sky-600",
+  [KANJI_GRADE_BANDS.nameKanji]: "border-amber-500/40 bg-amber-500/10 text-amber-600",
+  [KANJI_GRADE_BANDS.unclassified]: "border-slate-500/40 bg-slate-500/10 text-slate-600",
 };

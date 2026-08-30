@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
 import { authOptions, isAdminEmail } from "@/lib/auth";
+import AdminPageNav from "../AdminPageNav";
 import {
   KANJI_GRADE_BAND_LABELS,
   KANJI_GRADE_BAND_VALUES,
@@ -43,6 +44,8 @@ export default async function AdminKanjiCoveragePage() {
 
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-10">
+      <AdminPageNav activeTab="kanjiCoverage" />
+
       <h1 className="text-2xl font-black text-foreground sm:text-3xl">
         {KANJI_COVERAGE_COPY.title}
       </h1>
