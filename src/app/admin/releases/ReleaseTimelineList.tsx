@@ -1,3 +1,4 @@
+import CodenameText from "@/app/shared/CodenameText";
 import { codenameForVersion } from "@/lib/releaseCodenames";
 
 import {
@@ -39,13 +40,10 @@ function FeatureRow({
           {(() => {
             const codename = entry.version ? codenameForVersion(entry.version) : null;
             return codename ? (
-              <span
-                lang="ja"
-                title={`${codename.romaji} — ${codename.gloss}`}
+              <CodenameText
+                codename={codename}
                 className="text-xs font-semibold text-foreground/40"
-              >
-                「{codename.ja}」
-              </span>
+              />
             ) : null;
           })()}
 

@@ -2,6 +2,7 @@
 
 import { APP_VERSION, APP_VERSION_DATE } from "@/lib/appVersion";
 import { codenameForVersion } from "@/lib/releaseCodenames";
+import CodenameText from "./shared/CodenameText";
 
 // Formatted locally rather than with the timeline's helper: importing
 // featureTimeline here would ship the whole timeline JSON - the unreleased
@@ -39,9 +40,7 @@ export default function AppFooter({ modeChips = [] }: Props) {
           {CODENAME ? (
             <>
               {" · "}
-              <span lang="ja">{CODENAME.ja}</span>
-              {" · "}
-              {CODENAME.gloss}
+              <CodenameText codename={CODENAME} />
             </>
           ) : null}
           {" · "}
