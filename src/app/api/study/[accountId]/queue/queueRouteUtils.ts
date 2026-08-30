@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma";
 import { fetchAllCollectionPages, fetchWaniKani } from "@/lib/wanikani/http";
 import type { WaniKaniCollectionResponse } from "@/lib/wanikani/types";
 import { QUEUE_TYPES, SUBJECT_TYPES, type QueueType, type SubjectType } from "@/lib/domainConstants";
@@ -65,12 +66,84 @@ export function modePathParam(mode: QueueMode, includeReviewed: boolean = false)
     : "srs_stages=0";
 }
 
+/**
+ * The subjects the local catalog already holds, in the WaniKani row shape.
+ *
+ * These are the same subjects the API would return, synced into
+ * `WkSubjectCatalog` precisely so they do not have to be fetched per request.
+ * Both queue paths ask for them in bulk, so this is the shared lookup rather
+ * than two copies of the mapping.
+ */
+export async function fetchCatalogSubjects(
+  subjectIds: number[],
+): Promise<Map<number, { object: string; data: SubjectData }>> {
+  const found = new Map<number, { object: string; data: SubjectData }>();
+  if (subjectIds.length === 0) {
+    return found;
+  }
+
+  const rows = await prisma.wkSubjectCatalog.findMany({
+    where: { wkSubjectId: { in: subjectIds } },
+    select: {
+      wkSubjectId: true,
+      object: true,
+      subjectType: true,
+      level: true,
+      slug: true,
+      characters: true,
+      meanings: true,
+      readings: true,
+      componentSubjectIds: true,
+      amalgamationSubjectIds: true,
+      visuallySimilarSubjectIds: true,
+      meaningMnemonic: true,
+      readingMnemonic: true,
+    },
+  });
+
+  for (const row of rows) {
+    found.set(row.wkSubjectId, {
+      // `object` carries the WaniKani subject type; rows written before that was
+      // stored only have `subjectType`, so fall back rather than losing it.
+      object: row.object && row.object !== "subject" ? row.object : row.subjectType,
+      data: {
+        level: row.level,
+        characters: row.characters,
+        slug: row.slug,
+        component_subject_ids: row.componentSubjectIds,
+        amalgamation_subject_ids: row.amalgamationSubjectIds,
+        visually_similar_subject_ids: row.visuallySimilarSubjectIds,
+        meanings: (row.meanings as SubjectData["meanings"]) ?? undefined,
+        readings: (row.readings as SubjectData["readings"]) ?? undefined,
+        meaning_mnemonic: row.meaningMnemonic ?? undefined,
+        reading_mnemonic: row.readingMnemonic ?? undefined,
+      },
+    });
+  }
+
+  return found;
+}
+
 export async function hydrateMissingSubjects(
   token: string,
   subjectById: Map<number, { object: string; data: SubjectData }>,
   subjectIds: number[],
 ): Promise<void> {
-  const missingIds = subjectIds.filter((subjectId) => !subjectById.has(subjectId));
+  const requested = subjectIds.filter((subjectId) => !subjectById.has(subjectId));
+
+  /*
+   * Catalog first. Opening the study queue asks for every subject related to
+   * the visible page — components, amalgamations and visual look-alikes — which
+   * runs to a couple of thousand ids. Fetching those from the API meant a chain
+   * of sequential round trips that took 9-12 seconds of a 15 second request,
+   * for subjects already sitting in the local catalog.
+   */
+  const fromCatalog = await fetchCatalogSubjects(requested);
+  for (const [subjectId, row] of fromCatalog) {
+    subjectById.set(subjectId, row);
+  }
+
+  const missingIds = requested.filter((subjectId) => !subjectById.has(subjectId));
 
   for (let i = 0; i < missingIds.length; i += ASSIGNMENT_CHUNK_SIZE) {
     const chunkIds = missingIds.slice(i, i + ASSIGNMENT_CHUNK_SIZE);

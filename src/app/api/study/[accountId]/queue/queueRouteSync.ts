@@ -9,6 +9,7 @@ import {
   ASSIGNMENT_FULL_RESYNC_MS,
   SUBJECT_CACHE_TTL_MS,
   buildImmediateAssignmentsPath,
+  fetchCatalogSubjects,
   modePathParam,
   toAssignmentRows,
   trimSubjectCache,
@@ -137,8 +138,21 @@ export async function hydrateQueueSyncState(
     return nowMs - existing.fetchedAtMs > SUBJECT_CACHE_TTL_MS;
   });
 
-  for (let i = 0; i < staleOrMissingSubjectIds.length; i += ASSIGNMENT_CHUNK_SIZE) {
-    const chunk = staleOrMissingSubjectIds.slice(i, i + ASSIGNMENT_CHUNK_SIZE).join(",");
+  /*
+   * Catalog first, for the same reason the related-subject hydration does it:
+   * a full queue is well over a thousand subjects, and fetching them from the
+   * API in sequence dominated the request. Assignments still come from the API
+   * below — those are the player's own SRS state and cannot be served locally.
+   */
+  const catalogSubjects = await fetchCatalogSubjects(staleOrMissingSubjectIds);
+  for (const [subjectId, row] of catalogSubjects) {
+    subjectById.set(subjectId, { object: row.object, data: row.data, fetchedAtMs: nowMs });
+  }
+
+  const uncachedSubjectIds = staleOrMissingSubjectIds.filter((subjectId) => !catalogSubjects.has(subjectId));
+
+  for (let i = 0; i < uncachedSubjectIds.length; i += ASSIGNMENT_CHUNK_SIZE) {
+    const chunk = uncachedSubjectIds.slice(i, i + ASSIGNMENT_CHUNK_SIZE).join(",");
     if (!chunk) {
       continue;
     }
