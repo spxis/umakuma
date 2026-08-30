@@ -1,0 +1,536 @@
+[
+  {
+    "id": "family-leaderboard",
+    "name": "Family leaderboard",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-04-03",
+    "summary": "The original surface: ranked family standings behind an admin token."
+  },
+  {
+    "id": "wk-explorer",
+    "name": "WaniKani explorer",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-04",
+    "summary": "Browse subjects with linked kanji relations, readings and radical meanings."
+  },
+  {
+    "id": "leaderboard-deltas",
+    "name": "Leaderboard deltas and mobile cards",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-04-04",
+    "summary": "24-hour movement per member and a card layout that survives a phone."
+  },
+  {
+    "id": "jp-font-toggle",
+    "name": "Japanese font toggle",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-04-04",
+    "summary": "Global glyph font switch so kanji render the way the reader expects."
+  },
+  {
+    "id": "wk-incremental-cache",
+    "name": "Incremental WaniKani caching",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-04-08",
+    "summary": "Conditional requests and a 5-minute refresh window instead of full refetches."
+  },
+  {
+    "id": "study-item-modal",
+    "name": "Full-screen study modal",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-10",
+    "summary": "One item at a time with WASD and arrow navigation."
+  },
+  {
+    "id": "study-lesson-split",
+    "name": "Review and lesson modes",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-10",
+    "summary": "Two distinct flows rather than one queue doing both jobs."
+  },
+  {
+    "id": "study-filters",
+    "name": "Persistent study filters",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-11",
+    "summary": "Level, type and locked filters that survive a reload."
+  },
+  {
+    "id": "study-history-tables",
+    "name": "Local study history",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-12",
+    "summary": "Self-graded attempts recorded locally, independent of WaniKani."
+  },
+  {
+    "id": "google-signin",
+    "name": "Google sign-in",
+    "area": "account",
+    "status": "shipped",
+    "date": "2026-04-12",
+    "summary": "Direct Google OAuth flow for admin and linked members."
+  },
+  {
+    "id": "blind-review",
+    "name": "Blind review mode",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-13",
+    "summary": "Hide metadata until reveal, then grade yourself."
+  },
+  {
+    "id": "invite-login",
+    "name": "Invite-code sign-in",
+    "area": "account",
+    "status": "shipped",
+    "date": "2026-04-17",
+    "summary": "Six-character codes for members who never use Google."
+  },
+  {
+    "id": "admin-allowlist",
+    "name": "Admin email allowlist",
+    "area": "admin",
+    "status": "shipped",
+    "date": "2026-04-17",
+    "summary": "Admin access restricted to an explicit Google address list."
+  },
+  {
+    "id": "bulk-reset",
+    "name": "Bulk SRS reset",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-17",
+    "summary": "Multi-select reset with staged confirmations."
+  },
+  {
+    "id": "jlpt-grade-filters",
+    "name": "JLPT grade filters",
+    "area": "jlpt",
+    "status": "shipped",
+    "date": "2026-04-18",
+    "summary": "School-grade pills across JLPT and WaniKani explorer cards."
+  },
+  {
+    "id": "level-progress-modes",
+    "name": "Level progress modes",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-18",
+    "summary": "Item-spread drilldowns across the last five levels."
+  },
+  {
+    "id": "history-filters",
+    "name": "Study history filters",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-20",
+    "summary": "SRS bucket filters and an in-modal item view."
+  },
+  {
+    "id": "news-reader",
+    "name": "News reader",
+    "area": "news",
+    "status": "shipped",
+    "date": "2026-04-25",
+    "summary": "Paste a Japanese article URL and read it with lookup aids."
+  },
+  {
+    "id": "news-kanji-analysis",
+    "name": "News kanji analysis",
+    "area": "news",
+    "status": "shipped",
+    "date": "2026-04-26",
+    "summary": "Per-article kanji overview with WaniKani, JLPT and grade caps."
+  },
+  {
+    "id": "srs-transition-feedback",
+    "name": "SRS transition feedback",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-04-26",
+    "summary": "Show the stage an answer moved an item to."
+  },
+  {
+    "id": "global-user-card",
+    "name": "Global user menu",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-05-02",
+    "summary": "Signed-in identity card available from every page."
+  },
+  {
+    "id": "telemetry-ingest",
+    "name": "Telemetry ingest",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-05-03",
+    "summary": "Route and client timing events collected for diagnosis."
+  },
+  {
+    "id": "study-filter-counts",
+    "name": "Filter counts and wait sorting",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-05-19",
+    "summary": "Every filter chip carries its own count; sort by time waiting."
+  },
+  {
+    "id": "reading-checkins",
+    "name": "Reading check-ins",
+    "area": "reading",
+    "status": "shipped",
+    "date": "2026-05-24",
+    "summary": "A reading calendar with ISBN book covers and incremental check-ins."
+  },
+  {
+    "id": "reading-campaigns",
+    "name": "Reading campaigns",
+    "area": "reading",
+    "status": "shipped",
+    "date": "2026-05-25",
+    "summary": "Campaign manager, payout tuning and admin entry CRUD."
+  },
+  {
+    "id": "reading-engine",
+    "name": "Reading challenge engine",
+    "area": "reading",
+    "status": "shipped",
+    "date": "2026-05-27",
+    "summary": "Challenge-scoped rewards with capped weekly bonuses."
+  },
+  {
+    "id": "quick-review",
+    "name": "Quick review mode",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-06-12",
+    "summary": "A faster grading loop for large queues."
+  },
+  {
+    "id": "review-difficulty",
+    "name": "Difficulty ranking",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-06-12",
+    "summary": "Rank reviews by measured ease so hard items surface first."
+  },
+  {
+    "id": "jlpt-word-examples",
+    "name": "JLPT word examples",
+    "area": "jlpt",
+    "status": "shipped",
+    "date": "2026-06-13",
+    "summary": "Example vocabulary attached to each JLPT kanji."
+  },
+  {
+    "id": "peek-meaning",
+    "name": "Peekable meaning card",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-06-27",
+    "summary": "Reveal a meaning without leaving the review."
+  },
+  {
+    "id": "modal-framing",
+    "name": "Modal framing pass",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-07-05",
+    "summary": "Consistent panels, background scroll locking and mobile spacing."
+  },
+  {
+    "id": "glyph-stats",
+    "name": "Unified glyph stats",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-07-26",
+    "summary": "One status chip row shared by review and detail modals."
+  },
+  {
+    "id": "server-boundaries",
+    "name": "Server boundary hardening",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-07-31",
+    "summary": "server-only guards so secrets cannot reach a client bundle."
+  },
+  {
+    "id": "review-write-perf",
+    "name": "Deferred review writes",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-08-12",
+    "summary": "Advance the queue immediately and persist history behind it."
+  },
+  {
+    "id": "side-by-side-review",
+    "name": "Side-by-side reviews",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-08-24",
+    "summary": "Compare two items during a review session."
+  },
+  {
+    "id": "game-family-challenge",
+    "name": "Family challenge mode",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-24",
+    "summary": "The first game: a shared round the family competes on."
+  },
+  {
+    "id": "game-leaderboards",
+    "name": "Game leaderboards",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-24",
+    "summary": "Competitive scoreboards with level-aware scoring."
+  },
+  {
+    "id": "study-mobile-drilldown",
+    "name": "Mobile status drilldown",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-08-25",
+    "summary": "Tap a status to see its stages; filtered totals stay honest."
+  },
+  {
+    "id": "game-hard-ultra",
+    "name": "Hard mode and Ultra",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-26",
+    "summary": "Harder distractors, all-item rounds and an endless Ultra run."
+  },
+  {
+    "id": "games-hub",
+    "name": "Games hub",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-28",
+    "summary": "Four games behind one hub: Daily, Time Attack, Shiritori and Practice."
+  },
+  {
+    "id": "local-dev-db",
+    "name": "Local database and WaniKani mock",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-08-28",
+    "summary": "Develop offline against a seeded database and a stand-in API."
+  },
+  {
+    "id": "game-quad",
+    "name": "Quad and timed scoring",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "Four-choice rounds with per-item timing and a larger clock."
+  },
+  {
+    "id": "game-read-direction",
+    "name": "Read direction",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "Answer from the reading, with named difficulty tiers."
+  },
+  {
+    "id": "game-map",
+    "name": "Map mode",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "The 47 prefectures, the first game that needs no WaniKani data at all."
+  },
+  {
+    "id": "game-corners",
+    "name": "Corners board and Practice lists",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "One fixed board for every tile game; Practice drills your tagged lists."
+  },
+  {
+    "id": "shared-ui-primitives",
+    "name": "Shared UI primitives",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "ModalShell, SubjectRows and SubjectCards replace hand-rolled copies."
+  },
+  {
+    "id": "catalog-first-queue",
+    "name": "Catalog-first study queue",
+    "area": "study",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "Read subject content locally: the study page went from 15.2s to under a second warm."
+  },
+  {
+    "id": "ci-schema-drift",
+    "name": "Schema drift gate",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "Deploys stop when the production database is behind the Prisma schema."
+  },
+  {
+    "id": "viewer-identity-fix",
+    "name": "Viewer identity fix",
+    "area": "account",
+    "status": "planned",
+    "date": "2026-08-29",
+    "dateIsEstimate": true,
+    "release": 1,
+    "summary": "Stop resolving a signed-in viewer to an account by matching their Google display name against a nickname."
+  },
+  {
+    "id": "release-timeline",
+    "name": "Release timeline",
+    "area": "admin",
+    "status": "planned",
+    "date": "2026-08-29",
+    "dateIsEstimate": true,
+    "release": 2,
+    "summary": "This page: every shipped and planned feature with its date, admin only."
+  },
+  {
+    "id": "jlpt-standalone",
+    "name": "Standalone JLPT study",
+    "area": "jlpt",
+    "status": "planned",
+    "date": "2026-08-30",
+    "dateIsEstimate": true,
+    "release": 3,
+    "summary": "Split JLPT content from the WaniKani progress overlay so the kanji data stands on its own."
+  },
+  {
+    "id": "display-name-visibility",
+    "name": "Display names and visibility",
+    "area": "account",
+    "status": "planned",
+    "date": "2026-08-30",
+    "dateIsEstimate": true,
+    "release": 4,
+    "summary": "A public Global Display Name for every member plus an opt-in visibility flag, private by default."
+  },
+  {
+    "id": "optional-wk-identity",
+    "name": "Optional WaniKani connection",
+    "area": "account",
+    "status": "planned",
+    "date": "2026-08-30",
+    "dateIsEstimate": true,
+    "release": 5,
+    "summary": "Split identity from the WaniKani link so an account can exist with no token."
+  },
+  {
+    "id": "capability-gating",
+    "name": "Capability gating",
+    "area": "platform",
+    "status": "planned",
+    "date": "2026-08-31",
+    "dateIsEstimate": true,
+    "release": 6,
+    "summary": "One capability map decides what a member without WaniKani sees, hides or finds disabled."
+  },
+  {
+    "id": "catalog-game-pool",
+    "name": "WaniKani-free game pool",
+    "area": "games",
+    "status": "planned",
+    "date": "2026-08-31",
+    "dateIsEstimate": true,
+    "release": 7,
+    "summary": "Draw game rounds from the local catalogue when there is no assignment cache to draw from."
+  },
+  {
+    "id": "connect-wanikani-page",
+    "name": "Connect your WaniKani account",
+    "area": "account",
+    "status": "planned",
+    "date": "2026-08-31",
+    "dateIsEstimate": true,
+    "release": 8,
+    "summary": "A page that explains what connecting unlocks and walks through adding the token."
+  },
+  {
+    "id": "open-google-signup",
+    "name": "Open Google sign-up",
+    "area": "account",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 9,
+    "summary": "Anyone can sign in with Google and get an account, with or without WaniKani."
+  },
+  {
+    "id": "clans",
+    "name": "Clans and families",
+    "area": "platform",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 10,
+    "summary": "Members form their own group and compare inside it."
+  },
+  {
+    "id": "global-family-optin",
+    "name": "Global ranking opt-in",
+    "area": "platform",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 11,
+    "summary": "A public global board that every member joins deliberately, never by default."
+  },
+  {
+    "id": "catalog-sync-change-detection",
+    "name": "Content-based catalogue sync",
+    "area": "platform",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 12,
+    "summary": "Compare content instead of timestamps so a sync stops rewriting rows that did not change."
+  },
+  {
+    "id": "catalog-missing-subjects",
+    "name": "Backfill missing catalogue subjects",
+    "area": "platform",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 13,
+    "summary": "64 subjects in the study queue are absent from the local catalogue and still fall through to the API."
+  },
+  {
+    "id": "ultra-game-kind",
+    "name": "Ultra as its own game kind",
+    "area": "games",
+    "status": "planned",
+    "date": "2026-09-04",
+    "dateIsEstimate": true,
+    "release": 14,
+    "summary": "Retire the batchSize = -1 sentinel in favour of a real enum value."
+  },
+  {
+    "id": "dry-adoption",
+    "name": "Shared surface primitives",
+    "area": "platform",
+    "status": "planned",
+    "date": "2026-09-04",
+    "dateIsEstimate": true,
+    "release": 15,
+    "summary": "Move the remaining hand-rolled cards, loading states and pills onto the shared components."
+  }
+]
