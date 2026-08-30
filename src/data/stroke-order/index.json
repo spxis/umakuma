@@ -1,0 +1,52 @@
+{
+  "viewBox": "0 0 109 109",
+  "attribution": {
+    "source": "KanjiVG",
+    "url": "https://kanjivg.tagaini.net",
+    "licence": "CC BY-SA 3.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "commit": "61e39cfc29724132a6f8823b166296932985a0ff"
+  },
+  "grades": [
+    {
+      "grade": 1,
+      "file": "grade-01.json",
+      "count": 80
+    },
+    {
+      "grade": 2,
+      "file": "grade-02.json",
+      "count": 160
+    },
+    {
+      "grade": 3,
+      "file": "grade-03.json",
+      "count": 200
+    },
+    {
+      "grade": 4,
+      "file": "grade-04.json",
+      "count": 202
+    },
+    {
+      "grade": 5,
+      "file": "grade-05.json",
+      "count": 193
+    },
+    {
+      "grade": 6,
+      "file": "grade-06.json",
+      "count": 191
+    },
+    {
+      "grade": 8,
+      "file": "grade-08.json",
+      "count": 1110
+    },
+    {
+      "grade": 9,
+      "file": "grade-09.json",
+      "count": 763
+    }
+  ]
+}

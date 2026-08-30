@@ -956,5 +956,15 @@
     "version": "0.83.0",
     "releasedAt": "2026-08-30T14:08:53Z",
     "summary": "Reported by John: the grade cards listed readings a character never has on its own. KANJIDIC hyphenates compound-only forms, and 31 of the 80 first-grade entries carried one, so the King card claimed a kun reading of -nou that only exists inside a compound. Those are filtered out of the display."
+  },
+  {
+    "id": "kanji-stroke-order",
+    "area": "jlpt",
+    "name": "Animated stroke order",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.84.0",
+    "releasedAt": "2026-08-30T14:18:34Z",
+    "summary": "Every kanji can be watched being written, one stroke at a time, with optional stroke numbers. Stroke data comes from KanjiVG under CC BY-SA, credited on every animation, and is rebuilt reproducibly from a pinned commit with pnpm strokes:build. Covers all 2,899 school-grade characters."
   }
 ]

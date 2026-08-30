@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "0.83.0",
+  "version": "0.84.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -69,7 +69,8 @@
     "staging:link": "node scripts/local-db.mjs link",
     "staging:pull": "node scripts/local-db.mjs pull",
     "staging:psql": "node scripts/local-db.mjs psql --staging",
-    "staging:status": "./deploy/staging/deploy-staging-ds1.sh --status"
+    "staging:status": "./deploy/staging/deploy-staging-ds1.sh --status",
+    "strokes:build": "node scripts/build-kanjivg.mjs"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",

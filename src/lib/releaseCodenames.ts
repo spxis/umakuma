@@ -134,6 +134,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yuuyake Yukata", ja: "夕焼け浴衣", reading: "ゆうやけゆかた", gloss: "sunset yukata" },
   { romaji: "Yozakura Yokochou", ja: "夜桜横丁", reading: "よざくらよこちょう", gloss: "night-blossom alley" },
   { romaji: "Rakugaki Ranpu", ja: "落書きランプ", reading: "らくがきらんぷ", gloss: "doodle lamp" },
+  { romaji: "Rinrin Ringo", ja: "りんりん林檎", reading: "りんりんりんご", gloss: "chiming apple" },
 ];
 
 /**
