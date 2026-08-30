@@ -1,4 +1,5 @@
 import { candidateAnswerTypes, labelsAreDistinct } from "@/lib/gameAnswerText";
+import { geoDistractorScore, type GeoScorable } from "@/lib/geoDistractors";
 import {
   GAME_DIRECTIONS,
   type GameAnswerMode,
@@ -24,9 +25,6 @@ import {
  * its region, then whatever is nearest. It also keeps the Find board tight, because
  * the tiles are places on one map and clustered candidates stay legible.
  */
-const NEIGHBOR_SCORE = 100;
-const REGION_SCORE = 60;
-const PROXIMITY_SCORE = 40;
 /** How many of the top-scoring candidates to choose between, for variety. */
 const DISTRACTOR_TOP_SAMPLE = 6;
 
@@ -35,16 +33,17 @@ const MAP_DIAGONAL = Math.hypot(JAPAN_MAP.width, JAPAN_MAP.height);
 /** A prefecture answers by English name or by kana; see `GAME_MAP_ANSWER_MODES`. */
 const MAP_ANSWER_TYPES: GameAnswerType[] = ["meaning", "reading"];
 
-function centroidDistance(left: JapanPrefecture, right: JapanPrefecture): number {
-  return Math.hypot(left.centroid[0] - right.centroid[0], left.centroid[1] - right.centroid[1]);
+function prefectureScorable(prefecture: JapanPrefecture): GeoScorable {
+  return {
+    code: prefecture.code,
+    region: prefecture.region,
+    centroid: prefecture.centroid,
+    neighbors: prefecture.neighbors,
+  };
 }
 
 export function mapDistractorScore(target: JapanPrefecture, candidate: JapanPrefecture): number {
-  let score = 0;
-  if (target.neighbors.includes(candidate.code)) score += NEIGHBOR_SCORE;
-  if (target.region === candidate.region) score += REGION_SCORE;
-  const closeness = Math.max(0, 1 - centroidDistance(target, candidate) / MAP_DIAGONAL);
-  return score + Math.round(PROXIMITY_SCORE * closeness);
+  return geoDistractorScore(prefectureScorable(target), prefectureScorable(candidate), MAP_DIAGONAL);
 }
 
 function chooseDistractor(

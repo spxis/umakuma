@@ -123,6 +123,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Harukaze Hanami", ja: "春風花見", reading: "はるかぜはなみ", gloss: "spring-breeze blossom viewing" },
   { romaji: "Hinode Himawari", ja: "日の出向日葵", reading: "ひのでひまわり", gloss: "sunrise sunflower" },
   { romaji: "Fuurin Fukurou", ja: "風鈴梟", reading: "ふうりんふくろう", gloss: "wind-chime owl" },
+  { romaji: "Henro Heiya", ja: "遍路平野", reading: "へんろへいや", gloss: "pilgrim plain" },
 ];
 
 /**

@@ -852,5 +852,15 @@
     "version": "0.72.0",
     "releasedAt": "2026-08-30T13:22:11Z",
     "summary": "US states and Canadian provinces get their own reserved subject-id bands beside the prefectures, so map rounds for any country can ride the existing run tables. Japan keeps the exact ids recorded runs already hold."
+  },
+  {
+    "id": "geo-distractor-scoring",
+    "area": "games",
+    "name": "One distractor rule for every map",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.73.0",
+    "releasedAt": "2026-08-30T13:26:41Z",
+    "summary": "What makes a convincing wrong answer on a map - neighbours first, then region, then proximity - moves out of the Japan question builder so states and provinces use the same rule. Japan scores exactly as before."
   }
 ]
