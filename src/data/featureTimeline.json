@@ -821,5 +821,15 @@
     "version": "0.68.0",
     "releasedAt": "2026-08-30T13:06:58Z",
     "summary": "Map data now covers 47 Japanese prefectures, 51 US states and 13 Canadian provinces and territories, each with capital, largest city, population, area and regional metadata, rebuilt reproducibly by the map:build scripts."
+  },
+  {
+    "id": "study-list-view",
+    "area": "study",
+    "name": "Study queue as a list",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.69.0",
+    "releasedAt": "2026-08-30T13:07:34Z",
+    "summary": "The Study queue offers the same grid/list toggle the tagged lists and history already use, so a long queue can be scanned one line at a time. The choice is remembered per surface."
   }
 ]

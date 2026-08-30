@@ -119,6 +119,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nikoniko Nikujaga", ja: "にこにこ肉じゃが", reading: "にこにこにくじゃが", gloss: "smiling potato stew" },
   { romaji: "Nukazuke Nuigurumi", ja: "糠漬けぬいぐるみ", reading: "ぬかづけぬいぐるみ", gloss: "bran-pickle plushie" },
   { romaji: "Nebuta Nerikiri", ja: "ねぶた練り切り", reading: "ねぶたねりきり", gloss: "festival sweets" },
+  { romaji: "Nodoka Noren", ja: "長閑暖簾", reading: "のどかのれん", gloss: "tranquil shop curtain" },
 ];
 
 /**

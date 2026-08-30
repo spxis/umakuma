@@ -15,6 +15,7 @@ import {
   STUDY_QUEUE_TYPES,
   STUDY_GROUPING_FILTERS,
   STUDY_TYPE_FILTERS,
+  STUDY_VIEW_MODE_STORAGE_KEY,
   studyGroupingToneClass,
 } from "./StudyExplorer.constants";
 import {
@@ -43,6 +44,10 @@ import StudyCardTagOverlay from "./StudyCardTagOverlay";
 import StudyTagFilterNotice from "./StudyTagFilterNotice";
 import StudyTagListsButton from "../../../../shared/StudyTagListsButton";
 import StudySortButtons from "./StudySortButtons";
+import StudyExplorerRows from "./StudyExplorerRows";
+import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import FieldLabel from "../../../../shared/FieldLabel";
 export default function StudyExplorerPanel({
@@ -121,6 +126,9 @@ export default function StudyExplorerPanel({
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
   const hideControlsDuringInitialLoad = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
   const { toggle: toggleGlyphFont } = useGlyphFontPreference();
+  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
+    getStoredEnum(STUDY_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+  const changeViewMode = (next: SubjectViewMode) => { setViewMode(next); setStoredEnum(STUDY_VIEW_MODE_STORAGE_KEY, next); };
   const showLoadingOverlay = hideControlsDuringInitialLoad;
   const loadingSkeletonCardCount = Math.max(4, gridColumns * 2);
   const loadingFillCount = shouldShowLoadMoreUi && isLoadingMore && gridColumns > 1
@@ -334,6 +342,7 @@ export default function StudyExplorerPanel({
                     <text x="17.0" y="17.7" fontSize="13.4" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
                   </svg>
                 </button>
+                <SubjectViewModeToggle value={viewMode} onChange={changeViewMode} />
               </div>
           </div>
         </div>
@@ -360,6 +369,9 @@ export default function StudyExplorerPanel({
         <div className={`relative ${showLoadingOverlay ? "min-h-[14rem]" : ""}`}>
           {filteredItems.length > 0 ? (
             <>
+            {viewMode === SUBJECT_VIEW_MODES.list ? (
+              <StudyExplorerRows items={filteredItems} isUnauthorized={isUnauthorized} onSelectSubject={onSelectSubject} onToggleStudyTag={onToggleStudyTag} />
+            ) : (
             <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))] lg:grid-cols-4">
               {filteredItems.map((item, index) => {
                 const reviewBadge = isReviewQueueItem(item) ? formatNextReviewBadge(item.availableAt) : null;
@@ -451,6 +463,7 @@ export default function StudyExplorerPanel({
                   ))
                 : null}
             </div>
+            )}
             {hasMoreMatchingItems ? (
               <div ref={sentinelRef} className={shouldShowLoadMoreUi ? "mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60" : "h-px w-full opacity-0 pointer-events-none"} aria-hidden={!shouldShowLoadMoreUi}>
                 {shouldShowLoadMoreUi ? (isLoadingMore ? STUDY_PANEL_TEXT.loadingMore : loadMoreError ? `${STUDY_PANEL_TEXT.genericLoadErrorPrefix} ${loadMoreError}` : queueMode === STUDY_QUEUE_TYPES.lesson ? STUDY_PANEL_TEXT.loadingRemainingLessons : STUDY_PANEL_TEXT.scrollToLoadMore) : null}

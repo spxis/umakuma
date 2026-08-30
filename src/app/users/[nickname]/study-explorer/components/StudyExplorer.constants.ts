@@ -31,6 +31,9 @@ export {
 export { STUDY_SRS_FILTERS };
 export type { StudyTerminalReviewOutcome } from "../lib/studyExplorerDomain";
 
+/** Per-surface, so Study's density is remembered apart from the other lists. */
+export const STUDY_VIEW_MODE_STORAGE_KEY = "wr:study:view-mode";
+
 export const STUDY_EXPLORER_REVIEW_API_PAGE_SIZE = 120;
 export const STUDY_EXPLORER_LESSON_API_PAGE_SIZE = 200;
 

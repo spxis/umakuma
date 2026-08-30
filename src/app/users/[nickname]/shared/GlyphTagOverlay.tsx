@@ -1,5 +1,7 @@
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
+import { FavouriteStarIcon, TroubleFaceIcon } from "./studyTagIcons";
+
 type Props = {
   subjectType: SubjectType | undefined;
   studyTags: { favorite: boolean; trouble: boolean };
@@ -33,12 +35,7 @@ export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyT
         title="Toggle trouble"
         className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-1.5 text-xs font-black leading-none ${studyTags.trouble ? activeToneClass : "text-foreground/20 hover:text-foreground/45"}`}
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="8" />
-          <path d="M9.2 15.4c.8-.9 1.8-1.4 2.8-1.4s2 .5 2.8 1.4" />
-          <circle cx="9.1" cy="10.1" r="0.9" fill="currentColor" stroke="none" />
-          <circle cx="14.9" cy="10.1" r="0.9" fill="currentColor" stroke="none" />
-        </svg>
+        <TroubleFaceIcon />
       </button>
       <button
         type="button"
@@ -51,7 +48,7 @@ export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyT
         title="Toggle favourite"
         className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-0 text-base font-black leading-none ${studyTags.favorite ? activeToneClass : "text-foreground/20 hover:text-foreground/45"}`}
       >
-        ★
+        <FavouriteStarIcon />
       </button>
     </div>
   );

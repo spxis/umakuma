@@ -88,7 +88,13 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                   {renderLeading ? renderLeading(row) : null}
 
                   <span
-                    className={`w-10 shrink-0 truncate text-center text-2xl font-black leading-none [font-family:var(--font-jp-current)] ${subjectGlyphTone(row.subjectType)}`}
+                    /*
+                     * Wide enough for a four-character word. A single-kanji
+                     * lane clipped every vocabulary item to its first character
+                     * plus an ellipsis, which is the one thing a reader is
+                     * scanning for.
+                     */
+                    className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 [font-family:var(--font-jp-current)] ${subjectGlyphTone(row.subjectType)}`}
                   >
                     {row.glyph}
                   </span>
