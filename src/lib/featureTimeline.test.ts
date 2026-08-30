@@ -191,3 +191,56 @@ describe("formatFeatureDate", () => {
     }
   });
 });
+
+describe("versions", () => {
+  const VERSION_PATTERN = /^0\.\d+\.0$/;
+
+  it("stamps every shipped entry with a version and no planned entry", () => {
+    for (const item of loadFeatureTimeline()) {
+      if (item.status === FEATURE_STATUSES.shipped) {
+        expect(item.version, item.id).toMatch(VERSION_PATTERN);
+      } else {
+        expect(item.version, item.id).toBeUndefined();
+      }
+    }
+  });
+
+  it("gives every release a distinct version", () => {
+    const versions = featuresByStatus(loadFeatureTimeline(), FEATURE_STATUSES.shipped).map(
+      (item) => item.version,
+    );
+    expect(new Set(versions).size).toBe(versions.length);
+  });
+
+  it("numbers versions 1..N with no gaps, in date order", () => {
+    const shipped = featuresByStatus(loadFeatureTimeline(), FEATURE_STATUSES.shipped);
+    const minors = shipped
+      .map((item) => Number(item.version!.split(".")[1]))
+      .sort((left, right) => left - right);
+    expect(minors).toEqual(minors.map((_, index) => index + 1));
+
+    const byMinor = [...shipped].sort(
+      (left, right) => Number(left.version!.split(".")[1]) - Number(right.version!.split(".")[1]),
+    );
+    for (let index = 1; index < byMinor.length; index += 1) {
+      expect(
+        byMinor[index].date >= byMinor[index - 1].date,
+        `${byMinor[index].id} (${byMinor[index].version}) dated before ${byMinor[index - 1].id}`,
+      ).toBe(true);
+    }
+  });
+
+  it("keeps the footer constant and package.json on the latest release", async () => {
+    const shipped = featuresByStatus(loadFeatureTimeline(), FEATURE_STATUSES.shipped);
+    const latest = shipped
+      .map((item) => item.version!)
+      .sort((left, right) => Number(left.split(".")[1]) - Number(right.split(".")[1]))
+      .at(-1);
+
+    const { APP_VERSION } = await import("./appVersion");
+    expect(APP_VERSION).toBe(latest);
+
+    const pkg = (await import("../../package.json")) as { version: string };
+    expect(pkg.version).toBe(latest);
+  });
+});

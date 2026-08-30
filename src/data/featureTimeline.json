@@ -5,7 +5,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-04-03",
-    "summary": "The original surface: ranked family standings behind an admin token."
+    "summary": "The original surface: ranked family standings behind an admin token.",
+    "version": "0.1.0"
   },
   {
     "id": "wk-explorer",
@@ -13,7 +14,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-04",
-    "summary": "Browse subjects with linked kanji relations, readings and radical meanings."
+    "summary": "Browse subjects with linked kanji relations, readings and radical meanings.",
+    "version": "0.2.0"
   },
   {
     "id": "leaderboard-deltas",
@@ -21,7 +23,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-04-04",
-    "summary": "24-hour movement per member and a card layout that survives a phone."
+    "summary": "24-hour movement per member and a card layout that survives a phone.",
+    "version": "0.3.0"
   },
   {
     "id": "jp-font-toggle",
@@ -29,7 +32,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-04-04",
-    "summary": "Global glyph font switch so kanji render the way the reader expects."
+    "summary": "Global glyph font switch so kanji render the way the reader expects.",
+    "version": "0.4.0"
   },
   {
     "id": "wk-incremental-cache",
@@ -37,7 +41,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-04-08",
-    "summary": "Conditional requests and a 5-minute refresh window instead of full refetches."
+    "summary": "Conditional requests and a 5-minute refresh window instead of full refetches.",
+    "version": "0.5.0"
   },
   {
     "id": "study-item-modal",
@@ -45,7 +50,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-10",
-    "summary": "One item at a time with WASD and arrow navigation."
+    "summary": "One item at a time with WASD and arrow navigation.",
+    "version": "0.6.0"
   },
   {
     "id": "study-lesson-split",
@@ -53,7 +59,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-10",
-    "summary": "Two distinct flows rather than one queue doing both jobs."
+    "summary": "Two distinct flows rather than one queue doing both jobs.",
+    "version": "0.7.0"
   },
   {
     "id": "study-filters",
@@ -61,7 +68,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-11",
-    "summary": "Level, type and locked filters that survive a reload."
+    "summary": "Level, type and locked filters that survive a reload.",
+    "version": "0.8.0"
   },
   {
     "id": "study-history-tables",
@@ -69,7 +77,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-12",
-    "summary": "Self-graded attempts recorded locally, independent of WaniKani."
+    "summary": "Self-graded attempts recorded locally, independent of WaniKani.",
+    "version": "0.9.0"
   },
   {
     "id": "google-signin",
@@ -77,7 +86,8 @@
     "area": "account",
     "status": "shipped",
     "date": "2026-04-12",
-    "summary": "Direct Google OAuth flow for admin and linked members."
+    "summary": "Direct Google OAuth flow for admin and linked members.",
+    "version": "0.10.0"
   },
   {
     "id": "blind-review",
@@ -85,7 +95,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-13",
-    "summary": "Hide metadata until reveal, then grade yourself."
+    "summary": "Hide metadata until reveal, then grade yourself.",
+    "version": "0.11.0"
   },
   {
     "id": "invite-login",
@@ -93,7 +104,8 @@
     "area": "account",
     "status": "shipped",
     "date": "2026-04-17",
-    "summary": "Six-character codes for members who never use Google."
+    "summary": "Six-character codes for members who never use Google.",
+    "version": "0.12.0"
   },
   {
     "id": "admin-allowlist",
@@ -101,7 +113,8 @@
     "area": "admin",
     "status": "shipped",
     "date": "2026-04-17",
-    "summary": "Admin access restricted to an explicit Google address list."
+    "summary": "Admin access restricted to an explicit Google address list.",
+    "version": "0.13.0"
   },
   {
     "id": "bulk-reset",
@@ -109,7 +122,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-17",
-    "summary": "Multi-select reset with staged confirmations."
+    "summary": "Multi-select reset with staged confirmations.",
+    "version": "0.14.0"
   },
   {
     "id": "jlpt-grade-filters",
@@ -117,7 +131,8 @@
     "area": "jlpt",
     "status": "shipped",
     "date": "2026-04-18",
-    "summary": "School-grade pills across JLPT and WaniKani explorer cards."
+    "summary": "School-grade pills across JLPT and WaniKani explorer cards.",
+    "version": "0.15.0"
   },
   {
     "id": "level-progress-modes",
@@ -125,7 +140,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-18",
-    "summary": "Item-spread drilldowns across the last five levels."
+    "summary": "Item-spread drilldowns across the last five levels.",
+    "version": "0.16.0"
   },
   {
     "id": "history-filters",
@@ -133,7 +149,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-20",
-    "summary": "SRS bucket filters and an in-modal item view."
+    "summary": "SRS bucket filters and an in-modal item view.",
+    "version": "0.17.0"
   },
   {
     "id": "news-reader",
@@ -141,7 +158,8 @@
     "area": "news",
     "status": "shipped",
     "date": "2026-04-25",
-    "summary": "Paste a Japanese article URL and read it with lookup aids."
+    "summary": "Paste a Japanese article URL and read it with lookup aids.",
+    "version": "0.18.0"
   },
   {
     "id": "news-kanji-analysis",
@@ -149,7 +167,8 @@
     "area": "news",
     "status": "shipped",
     "date": "2026-04-26",
-    "summary": "Per-article kanji overview with WaniKani, JLPT and grade caps."
+    "summary": "Per-article kanji overview with WaniKani, JLPT and grade caps.",
+    "version": "0.19.0"
   },
   {
     "id": "srs-transition-feedback",
@@ -157,7 +176,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-04-26",
-    "summary": "Show the stage an answer moved an item to."
+    "summary": "Show the stage an answer moved an item to.",
+    "version": "0.20.0"
   },
   {
     "id": "global-user-card",
@@ -165,7 +185,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-05-02",
-    "summary": "Signed-in identity card available from every page."
+    "summary": "Signed-in identity card available from every page.",
+    "version": "0.21.0"
   },
   {
     "id": "telemetry-ingest",
@@ -173,7 +194,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-05-03",
-    "summary": "Route and client timing events collected for diagnosis."
+    "summary": "Route and client timing events collected for diagnosis.",
+    "version": "0.22.0"
   },
   {
     "id": "study-filter-counts",
@@ -181,7 +203,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-05-19",
-    "summary": "Every filter chip carries its own count; sort by time waiting."
+    "summary": "Every filter chip carries its own count; sort by time waiting.",
+    "version": "0.23.0"
   },
   {
     "id": "reading-checkins",
@@ -189,7 +212,8 @@
     "area": "reading",
     "status": "shipped",
     "date": "2026-05-24",
-    "summary": "A reading calendar with ISBN book covers and incremental check-ins."
+    "summary": "A reading calendar with ISBN book covers and incremental check-ins.",
+    "version": "0.24.0"
   },
   {
     "id": "reading-campaigns",
@@ -197,7 +221,8 @@
     "area": "reading",
     "status": "shipped",
     "date": "2026-05-25",
-    "summary": "Campaign manager, payout tuning and admin entry CRUD."
+    "summary": "Campaign manager, payout tuning and admin entry CRUD.",
+    "version": "0.25.0"
   },
   {
     "id": "reading-engine",
@@ -205,7 +230,8 @@
     "area": "reading",
     "status": "shipped",
     "date": "2026-05-27",
-    "summary": "Challenge-scoped rewards with capped weekly bonuses."
+    "summary": "Challenge-scoped rewards with capped weekly bonuses.",
+    "version": "0.26.0"
   },
   {
     "id": "quick-review",
@@ -213,7 +239,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-06-12",
-    "summary": "A faster grading loop for large queues."
+    "summary": "A faster grading loop for large queues.",
+    "version": "0.27.0"
   },
   {
     "id": "review-difficulty",
@@ -221,7 +248,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-06-12",
-    "summary": "Rank reviews by measured ease so hard items surface first."
+    "summary": "Rank reviews by measured ease so hard items surface first.",
+    "version": "0.28.0"
   },
   {
     "id": "jlpt-word-examples",
@@ -229,7 +257,8 @@
     "area": "jlpt",
     "status": "shipped",
     "date": "2026-06-13",
-    "summary": "Example vocabulary attached to each JLPT kanji."
+    "summary": "Example vocabulary attached to each JLPT kanji.",
+    "version": "0.29.0"
   },
   {
     "id": "peek-meaning",
@@ -237,7 +266,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-06-27",
-    "summary": "Reveal a meaning without leaving the review."
+    "summary": "Reveal a meaning without leaving the review.",
+    "version": "0.30.0"
   },
   {
     "id": "modal-framing",
@@ -245,7 +275,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-07-05",
-    "summary": "Consistent panels, background scroll locking and mobile spacing."
+    "summary": "Consistent panels, background scroll locking and mobile spacing.",
+    "version": "0.31.0"
   },
   {
     "id": "glyph-stats",
@@ -253,7 +284,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-07-26",
-    "summary": "One status chip row shared by review and detail modals."
+    "summary": "One status chip row shared by review and detail modals.",
+    "version": "0.32.0"
   },
   {
     "id": "server-boundaries",
@@ -261,7 +293,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-07-31",
-    "summary": "server-only guards so secrets cannot reach a client bundle."
+    "summary": "server-only guards so secrets cannot reach a client bundle.",
+    "version": "0.33.0"
   },
   {
     "id": "review-write-perf",
@@ -269,7 +302,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-08-12",
-    "summary": "Advance the queue immediately and persist history behind it."
+    "summary": "Advance the queue immediately and persist history behind it.",
+    "version": "0.34.0"
   },
   {
     "id": "side-by-side-review",
@@ -277,7 +311,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-08-24",
-    "summary": "Compare two items during a review session."
+    "summary": "Compare two items during a review session.",
+    "version": "0.35.0"
   },
   {
     "id": "game-family-challenge",
@@ -285,7 +320,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-24",
-    "summary": "The first game: a shared round the family competes on."
+    "summary": "The first game: a shared round the family competes on.",
+    "version": "0.36.0"
   },
   {
     "id": "game-leaderboards",
@@ -293,7 +329,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-24",
-    "summary": "Competitive scoreboards with level-aware scoring."
+    "summary": "Competitive scoreboards with level-aware scoring.",
+    "version": "0.37.0"
   },
   {
     "id": "study-mobile-drilldown",
@@ -301,7 +338,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-08-25",
-    "summary": "Tap a status to see its stages; filtered totals stay honest."
+    "summary": "Tap a status to see its stages; filtered totals stay honest.",
+    "version": "0.38.0"
   },
   {
     "id": "game-hard-ultra",
@@ -309,7 +347,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-26",
-    "summary": "Harder distractors, all-item rounds and an endless Ultra run."
+    "summary": "Harder distractors, all-item rounds and an endless Ultra run.",
+    "version": "0.39.0"
   },
   {
     "id": "games-hub",
@@ -317,7 +356,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-28",
-    "summary": "Four games behind one hub: Daily, Time Attack, Shiritori and Practice."
+    "summary": "Four games behind one hub: Daily, Time Attack, Shiritori and Practice.",
+    "version": "0.40.0"
   },
   {
     "id": "local-dev-db",
@@ -325,7 +365,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-08-28",
-    "summary": "Develop offline against a seeded database and a stand-in API."
+    "summary": "Develop offline against a seeded database and a stand-in API.",
+    "version": "0.41.0"
   },
   {
     "id": "game-quad",
@@ -333,7 +374,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "Four-choice rounds with per-item timing and a larger clock."
+    "summary": "Four-choice rounds with per-item timing and a larger clock.",
+    "version": "0.42.0"
   },
   {
     "id": "game-read-direction",
@@ -341,7 +383,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "Answer from the reading, with named difficulty tiers."
+    "summary": "Answer from the reading, with named difficulty tiers.",
+    "version": "0.43.0"
   },
   {
     "id": "game-map",
@@ -349,7 +392,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "The 47 prefectures, the first game that needs no WaniKani data at all."
+    "summary": "The 47 prefectures, the first game that needs no WaniKani data at all.",
+    "version": "0.44.0"
   },
   {
     "id": "game-corners",
@@ -357,7 +401,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "One fixed board for every tile game; Practice drills your tagged lists."
+    "summary": "One fixed board for every tile game; Practice drills your tagged lists.",
+    "version": "0.45.0"
   },
   {
     "id": "shared-ui-primitives",
@@ -365,7 +410,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "ModalShell, SubjectRows and SubjectCards replace hand-rolled copies."
+    "summary": "ModalShell, SubjectRows and SubjectCards replace hand-rolled copies.",
+    "version": "0.46.0"
   },
   {
     "id": "catalog-first-queue",
@@ -373,7 +419,8 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "Read subject content locally: the study page went from 15.2s to under a second warm."
+    "summary": "Read subject content locally: the study page went from 15.2s to under a second warm.",
+    "version": "0.47.0"
   },
   {
     "id": "ci-schema-drift",
@@ -381,7 +428,8 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "Deploys stop when the production database is behind the Prisma schema."
+    "summary": "Deploys stop when the production database is behind the Prisma schema.",
+    "version": "0.48.0"
   },
   {
     "id": "viewer-identity-fix",
@@ -400,7 +448,8 @@
     "status": "shipped",
     "date": "2026-08-29",
     "dateIsEstimate": false,
-    "summary": "This page: every shipped and planned feature with its date, admin only."
+    "summary": "This page: every shipped and planned feature with its date, admin only.",
+    "version": "0.49.0"
   },
   {
     "id": "jlpt-standalone",
@@ -538,7 +587,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "Each hub card shows who is playing now, who played it last, and how you did."
+    "summary": "Each hub card shows who is playing now, who played it last, and how you did.",
+    "version": "0.50.0"
   },
   {
     "id": "jlpt-level-mapping",
@@ -546,7 +596,8 @@
     "area": "jlpt",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "Places a pre-2010 Level 1-4 certificate on the N1-N5 scale, inferring the system from the year."
+    "summary": "Places a pre-2010 Level 1-4 certificate on the N1-N5 scale, inferring the system from the year.",
+    "version": "0.51.0"
   },
   {
     "id": "game-presence",
@@ -584,7 +635,8 @@
     "area": "jlpt",
     "status": "shipped",
     "date": "2026-08-30",
-    "summary": "Tracks which kanji WaniKani teaches, which it does not, and which it teaches that the JLPT table lacks."
+    "summary": "Tracks which kanji WaniKani teaches, which it does not, and which it teaches that the JLPT table lacks.",
+    "version": "0.52.0"
   },
   {
     "id": "parallel-level-ladder",
@@ -602,7 +654,8 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-30",
-    "summary": "One settings row and a smaller corners picker; the duplicate exit button is gone."
+    "summary": "One settings row and a smaller corners picker; the duplicate exit button is gone.",
+    "version": "0.53.0"
   },
   {
     "id": "quality-gate-typecheck",
@@ -611,7 +664,8 @@
     "status": "shipped",
     "date": "2026-08-30",
     "dateIsEstimate": false,
-    "summary": "quality:check now runs tsc; it caught a fresh test bug on its first local run."
+    "summary": "quality:check now runs tsc; it caught a fresh test bug on its first local run.",
+    "version": "0.54.0"
   },
   {
     "id": "reinvite-family",
@@ -629,6 +683,16 @@
     "area": "admin",
     "status": "shipped",
     "date": "2026-08-30",
-    "summary": "Global switches toggled from an admin page, backed by a FeatureFlag table. First flag: the open-signup door, off."
+    "summary": "Global switches toggled from an admin page, backed by a FeatureFlag table. First flag: the open-signup door, off.",
+    "version": "0.55.0"
+  },
+  {
+    "id": "site-version",
+    "name": "Site version in the footer",
+    "area": "platform",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.56.0",
+    "summary": "Every release bumps the version; the footer shows it and the timeline lists each release's number."
   }
 ]

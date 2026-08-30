@@ -21,12 +21,14 @@ function FeatureRow({
 }) {
   return (
     <li className="flex flex-col gap-1 border-b border-line/60 py-3 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-4">
-      <time
-        dateTime={entry.date}
-        className="shrink-0 font-mono text-xs text-foreground/60 sm:w-28 sm:text-right"
-      >
-        {formatFeatureDate(entry.date)}
-      </time>
+      <span className="flex shrink-0 items-baseline gap-2 sm:w-40 sm:justify-end">
+        {entry.version ? (
+          <code className="text-[11px] font-semibold text-foreground/45">v{entry.version}</code>
+        ) : null}
+        <time dateTime={entry.date} className="font-mono text-xs text-foreground/60">
+          {formatFeatureDate(entry.date)}
+        </time>
+      </span>
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">

@@ -60,6 +60,8 @@ export type FeatureTimelineEntry = {
   dateIsEstimate?: boolean;
   /** Ordering hint for planned work; absent once the entry has shipped. */
   release?: number;
+  /** The site version this feature shipped as, `0.N.0`; absent while planned. */
+  version?: string;
 };
 
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -243,6 +245,7 @@ function parseEntries(raw: unknown): FeatureTimelineEntry[] {
       summary: entry.summary,
       dateIsEstimate: entry.dateIsEstimate === true,
       release: typeof entry.release === "number" ? entry.release : undefined,
+      version: typeof entry.version === "string" ? entry.version : undefined,
     };
   });
 }
