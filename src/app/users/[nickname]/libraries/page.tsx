@@ -42,6 +42,7 @@ export default async function UserLibrariesPage({ params }: PageProps) {
     viewerEmail,
     viewerMenuInfo,
     targetWkUsername: userKey,
+    targetSlug: userKey,
   });
   if (!canViewThisPage) {
     redirect("/join?access=denied");

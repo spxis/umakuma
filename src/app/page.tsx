@@ -18,6 +18,7 @@ import AppTopMenuRow from "./shared/AppTopMenuRow";
 import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
 import UmaKumaPageBanner from "./shared/UmaKumaPageBanner";
+import { viewerAddress } from "@/app/shared/viewerAddress";
 export const dynamic = "force-dynamic";
 function getReadingChallengeMemberDelegate(): typeof prisma.readingChallengeMember | null {
   return prisma.readingChallengeMember;
@@ -72,8 +73,8 @@ export default async function Home() {
     sessionName: session?.user?.name?.trim() ?? null,
   });
   const canViewAllUserPages = isAdminEmail(viewerEmail);
-  if (viewerEmail && !canViewAllUserPages && !viewerMenuInfo?.wkUsername) redirect("/join");
-  const viewerWkUsername = viewerMenuInfo?.wkUsername ?? null;
+  if (viewerEmail && !canViewAllUserPages && !viewerAddress(viewerMenuInfo)) redirect("/join");
+  const viewerWkUsername = viewerAddress(viewerMenuInfo);
   const readingChallengeHref = viewerWkUsername ? `/users/${encodeURIComponent(viewerWkUsername)}/read` : "/join";
   const challengeToday = getTodayDateInputValue();
 

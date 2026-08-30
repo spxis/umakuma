@@ -41,7 +41,12 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   if (!account) {
     notFound();
   }
-  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: decodeURIComponent(nickname) })) {
+  if (!canViewUserPage({
+    viewerEmail,
+    viewerMenuInfo,
+    targetWkUsername: decodeURIComponent(nickname),
+    targetSlug: decodeURIComponent(nickname),
+  })) {
     redirect("/join?access=denied");
   }
 

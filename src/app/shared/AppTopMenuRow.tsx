@@ -10,6 +10,7 @@ import ReleaseMotto from "./ReleaseMotto";
 import GlobalSearchBox from "./GlobalSearchBox";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
+import { viewerAddress } from "@/app/shared/viewerAddress";
 
 type AppTopMenuRowProps = {
   viewerMenuInfo: ViewerMenuInfo | null;
@@ -41,7 +42,7 @@ export default function AppTopMenuRow({
   className,
 }: AppTopMenuRowProps) {
   const pathname = usePathname();
-  const resolvedWkUsername = primaryWkUsername ?? viewerMenuInfo?.wkUsername ?? null;
+  const resolvedWkUsername = primaryWkUsername ?? viewerAddress(viewerMenuInfo);
   const canSeeAdminTopLink = showAdminActions;
   const flatLinks: MainLink[] = buildMainLinks(resolvedWkUsername, canSeeAdminTopLink);
   const activeSection = sectionForPath(pathname, resolvedWkUsername);

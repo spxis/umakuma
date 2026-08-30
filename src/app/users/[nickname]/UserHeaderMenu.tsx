@@ -8,6 +8,7 @@ import { formatRelativeFromNow } from "@/lib/timeFormat";
 import InviteSessionActions from "./InviteSessionActions";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import type { UserHeaderMenuProps } from "./UserHeaderMenu.types";
+import { viewerAddress } from "@/app/shared/viewerAddress";
 const MENU_BUTTON_CLASS =
   "inline-flex h-8 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface";
 const MENU_LIST_GROUP_CLASS = "mt-2 overflow-hidden rounded-xl border border-line bg-surface";
@@ -161,7 +162,7 @@ export default function UserHeaderMenu({
     return null;
   }
 
-  const resolvedUserPageUsername = viewerMenuInfo?.wkUsername ?? viewedWkUsername ?? null;
+  const resolvedUserPageUsername = viewerAddress(viewerMenuInfo) ?? viewedWkUsername ?? null;
   const encodedResolvedUserPageUsername = resolvedUserPageUsername
     ? encodeURIComponent(resolvedUserPageUsername)
     : null;

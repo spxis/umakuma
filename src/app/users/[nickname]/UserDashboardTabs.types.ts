@@ -62,6 +62,12 @@ export type ViewerMenuInfo = {
   name: string;
   email: string | null;
   wkUsername: string | null;
+  /**
+   * The viewer's permanent address, which an account has even with no
+   * WaniKani connection. Page access matches on this first; `wkUsername` is
+   * kept because links shared before slugs existed still carry it.
+   */
+  slug: string | null;
   isAdmin: boolean;
 };
 

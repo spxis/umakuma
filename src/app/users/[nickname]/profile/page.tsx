@@ -47,7 +47,12 @@ export default async function UserProfilePage({ params }: PageProps) {
   if (!account) {
     notFound();
   }
-  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: account.wkUsername ?? account.slug ?? "" })) {
+  if (!canViewUserPage({
+      viewerEmail,
+      viewerMenuInfo,
+      targetWkUsername: account.wkUsername ?? "",
+      targetSlug: account.slug,
+    })) {
     redirect("/join?access=denied");
   }
 

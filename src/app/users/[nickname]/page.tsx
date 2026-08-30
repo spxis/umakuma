@@ -128,6 +128,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
     viewerEmail,
     viewerMenuInfo,
     targetWkUsername: userKey,
+    targetSlug: userKey,
   });
   if (!canViewThisPage) {
     redirect("/join?access=denied");

@@ -1106,5 +1106,15 @@
     "version": "0.99.0",
     "releasedAt": "2026-08-30T17:15:00Z",
     "summary": "Settings now opens on a profile: change the name other members see, record a JLPT certificate, and read a table of every game you have finished. WaniKani level stays read-only because WaniKani sets it, and an account with no WaniKani connection reads Not connected instead of showing a blank."
+  },
+  {
+    "id": "wanikani-free-page-access",
+    "area": "account",
+    "name": "Members without WaniKani can reach their own pages",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.100.0",
+    "releasedAt": "2026-08-30T17:50:00Z",
+    "summary": "Page access matched on a WaniKani username, so an account that signed in with Google and never connected WaniKani was turned away from every page it owns - its own profile included - while its API calls kept working. Access now matches the permanent slug first and falls back to the username, so links shared earlier still resolve."
   }
 ]

@@ -45,6 +45,7 @@ export default async function UserHistoryPage({ params }: PageProps) {
     viewerEmail,
     viewerMenuInfo,
     targetWkUsername: userKey,
+    targetSlug: userKey,
   });
   if (!canViewThisPage) {
     redirect("/join?access=denied");

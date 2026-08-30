@@ -10,14 +10,30 @@ function normalizeUsername(value: string | null | undefined): string | null {
   return normalized.length > 0 ? normalized : null;
 }
 
+/**
+ * Whether this viewer may see this account's pages.
+ *
+ * Matches on either address the account answers to. It used to compare
+ * WaniKani usernames alone, which locked every account without a WaniKani
+ * connection out of its own pages: the caller passes the slug when there is no
+ * username, and the viewer's side could only ever produce null. A member who
+ * signs in with Google and plays the map game has no WaniKani anything.
+ */
 export function canViewUserPage(input: {
   viewerEmail: string | null;
   viewerMenuInfo: ViewerMenuInfo | null;
   targetWkUsername: string;
+  targetSlug?: string | null;
 }): boolean {
-  const { viewerEmail, viewerMenuInfo, targetWkUsername } = input;
+  const { viewerEmail, viewerMenuInfo, targetWkUsername, targetSlug } = input;
 
   if (isAdminEmail(viewerEmail)) {
+    return true;
+  }
+
+  const viewerSlug = normalizeUsername(viewerMenuInfo?.slug);
+  const wantedSlug = normalizeUsername(targetSlug ?? null);
+  if (viewerSlug && wantedSlug && viewerSlug === wantedSlug) {
     return true;
   }
 
@@ -44,6 +60,7 @@ export async function resolveViewerMenuInfo(input: {
       select: {
         nickname: true,
         wkUsername: true,
+        slug: true,
       },
     });
 
@@ -52,6 +69,7 @@ export async function resolveViewerMenuInfo(input: {
       name: viewerAccount?.nickname ?? sessionName ?? viewerEmail.split("@")[0] ?? "Google user",
       email: viewerEmail,
       wkUsername: viewerAccount?.wkUsername ?? null,
+      slug: viewerAccount?.slug ?? null,
       isAdmin: viewerIsAdmin,
     };
   }
@@ -68,12 +86,15 @@ export async function resolveViewerMenuInfo(input: {
     select: {
       nickname: true,
       wkUsername: true,
+      slug: true,
       joinedByEmail: true,
       inviteCodeHash: true,
     },
   });
 
-  if (!inviteAccount?.wkUsername || !inviteAccount.inviteCodeHash) {
+  // An invite account needs a code and one address; the address may be a slug,
+  // since an invited member need not have connected WaniKani either.
+  if (!inviteAccount?.inviteCodeHash || !(inviteAccount.wkUsername || inviteAccount.slug)) {
     return null;
   }
 
@@ -82,6 +103,7 @@ export async function resolveViewerMenuInfo(input: {
     name: inviteAccount.nickname,
     email: inviteAccount.joinedByEmail,
     wkUsername: inviteAccount.wkUsername,
+    slug: inviteAccount.slug,
     isAdmin: false,
   };
 }

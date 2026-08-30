@@ -46,7 +46,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
     notFound();
   }
 
-  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: userKey })) {
+  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: userKey, targetSlug: userKey })) {
     redirect("/join?access=denied");
   }
 

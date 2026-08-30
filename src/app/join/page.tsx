@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import AuthAccessScreen from "../AuthAccessScreen";
+import { viewerAddress } from "@/app/shared/viewerAddress";
 
 type PageProps = {
   searchParams: Promise<{
@@ -33,8 +34,9 @@ export default async function JoinPage({ searchParams }: PageProps) {
     viewerEmail: session?.user?.email?.trim().toLowerCase() ?? null,
     sessionName: session?.user?.name?.trim() ?? null,
   });
-  if (viewerMenuInfo?.wkUsername) {
-    redirect(`/users/${encodeURIComponent(viewerMenuInfo.wkUsername)}`);
+  const address = viewerAddress(viewerMenuInfo);
+  if (address) {
+    redirect(`/users/${encodeURIComponent(address)}`);
   }
 
   return <AuthAccessScreen activeTab="invite" accessDenied={isAccessDenied(query.access)} />;

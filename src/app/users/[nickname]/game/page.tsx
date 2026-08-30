@@ -8,6 +8,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import { viewerAddress } from "@/app/shared/viewerAddress";
 
 type Props = {
   params: Promise<{ nickname: string }>;
@@ -20,7 +21,7 @@ export default async function GamePage({ params }: Props) {
     viewerEmail,
     sessionName: session?.user?.name?.trim() ?? null,
   });
-  if (!viewerMenuInfo?.wkUsername) redirect("/join");
+  if (!viewerAddress(viewerMenuInfo)) redirect("/join");
 
   const { nickname } = await params;
   const account = await prisma.account.findFirst({
@@ -28,7 +29,12 @@ export default async function GamePage({ params }: Props) {
     select: { id: true, nickname: true, wkUsername: true, lastSyncedAt: true, lastActivityAt: true },
   });
   if (!account) notFound();
-  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: decodeURIComponent(nickname) })) {
+  if (!canViewUserPage({
+    viewerEmail,
+    viewerMenuInfo,
+    targetWkUsername: decodeURIComponent(nickname),
+    targetSlug: decodeURIComponent(nickname),
+  })) {
     redirect("/join?access=denied");
   }
 

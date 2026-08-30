@@ -150,6 +150,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Keiko Biyori", ja: "稽古日和", reading: "けいこびより", gloss: "a fine day to practise" },
   { romaji: "Komorebi Komichi", ja: "木漏れ日小径", reading: "こもれびこみち", gloss: "a lane of dappled sunlight" },
   { romaji: "Satoyama Sanpo", ja: "里山散歩", reading: "さとやまさんぽ", gloss: "a walk through the foothills" },
+  { romaji: "Shizukesa Shigure", ja: "静けさ時雨", reading: "しずけさしぐれ", gloss: "the quiet of a passing shower" },
 ];
 
 /**

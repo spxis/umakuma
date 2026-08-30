@@ -88,6 +88,9 @@ function AdminWorkspacePageContent({
         name: userName?.trim() || userEmail?.split("@")[0] || "Google user",
         email: userEmail,
         wkUsername: userWkUsername,
+        // The admin workspace identifies its viewer by WaniKani username; an
+        // admin passes the page gate on their email regardless.
+        slug: null,
         isAdmin: emailAllowed,
       }
     : null;
