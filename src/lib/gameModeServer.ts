@@ -10,7 +10,6 @@ import {
   gameChoiceCountFrom,
   gamePoolItemMatches,
   isUltraGameBatchSize,
-  resolveGameScore,
   type GameCategory,
   type GameKind as GameKindValue,
   type GameDirection,
@@ -19,8 +18,10 @@ import {
   type GameQuestionPayload,
   type GameRunSummary,
 } from "@/lib/gameMode";
+import { resolveGameScore } from "@/lib/gameScoring";
 import { optionLabel, promptText } from "@/lib/gameAnswerText";
 import { parseMeanings, parseReadings, type GameCatalogItem } from "@/lib/gameQuestionBuilder";
+import { isMapSubjectId, prefectureBySubjectId, prefectureOption } from "@/lib/japanPrefectures";
 import { prisma } from "@/lib/prisma";
 import { parseAssignmentCacheRows } from "@/lib/wanikani/helpers";
 
@@ -217,11 +218,17 @@ export async function hydrateGameQuestions(
       ? row.optionSubjectIds
       : [row.leftSubjectId, row.middleSubjectId, row.rightSubjectId].filter((id): id is number => id !== null);
   const subjectIds = Array.from(new Set(questions.flatMap(optionIdsFor)));
+  // Map mode's prefectures are not WaniKani subjects and live in a reserved id
+  // range, so they resolve from the static map rather than the catalog.
   const rows = await prisma.wkSubjectCatalog.findMany({
-    where: { wkSubjectId: { in: subjectIds } },
+    where: { wkSubjectId: { in: subjectIds.filter((id) => !isMapSubjectId(id)) } },
     select: { wkSubjectId: true, subjectType: true, level: true, characters: true, slug: true, meanings: true, readings: true },
   });
-  const optionById = new Map(rows.flatMap((row) => {
+  const optionById = new Map(subjectIds.flatMap((id) => {
+    const prefecture = prefectureBySubjectId(id);
+    return prefecture ? [[id, prefectureOption(prefecture)] as const] : [];
+  }));
+  for (const [id, option] of rows.flatMap((row) => {
     if (!isSubjectType(row.subjectType)) return [];
     const meanings = parseMeanings(row.meanings);
     const readings = parseReadings(row.readings);
@@ -233,7 +240,9 @@ export async function hydrateGameQuestions(
       primaryMeaning: meanings[0] ?? null,
       primaryReading: readings[0] ?? null,
     } satisfies GameOption] as const];
-  }));
+  })) {
+    optionById.set(id, option);
+  }
 
   return questions.map((question) => {
     const target = optionById.get(question.targetSubjectId);
@@ -241,11 +250,15 @@ export async function hydrateGameQuestions(
     if (!target || options.some((option) => !option)) throw new Error("Game question subjects are unavailable.");
     const prompt = question.promptOverride ?? promptText(target, direction, question.answerType);
     if (!prompt) throw new Error("Game question prompt is unavailable.");
+    // Read draws the target itself as the prompt; Find puts it among the tiles,
+    // where naming it would give the answer away.
+    const promptIsShape = direction === GAME_DIRECTIONS.read && isMapSubjectId(target.subjectId);
     return {
       id: question.id,
       position: question.position,
       answerType: question.answerType,
       prompt,
+      promptSubjectId: promptIsShape ? target.subjectId : null,
       options: (options as GameOption[]).map((option) => ({
         ...option,
         label: optionLabel(option, direction, question.answerType),

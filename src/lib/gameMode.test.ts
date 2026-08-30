@@ -4,12 +4,8 @@ import {
   GAME_BATCH_SIZES,
   GAME_KINDS,
   GAME_ULTRA_BATCH_SIZE,
-  calculateGameScore,
-  accumulateItemScore,
-  calculateItemScore,
   gameChoiceCountFrom,
   formatGameDuration,
-  formatGameScore,
   gameAnswerProgress,
   gameDateKeys,
   gameEndlessCycleLimitReached,
@@ -19,8 +15,8 @@ import {
   gameRunIsExpired,
   isUltraGameBatchSize,
   gamePoolItemMatches,
-  resolveGameScore,
 } from "@/lib/gameMode";
+import { calculateGameScore, accumulateItemScore, calculateItemScore, formatGameScore, resolveGameScore } from "@/lib/gameScoring";
 
 describe("Game Mode", () => {
   it("supports every agreed batch size", () => {

@@ -1,13 +1,12 @@
-import { GAME_KINDS, formatGameDuration, formatGameScore, type GameRunSummary } from "@/lib/gameMode";
-import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
+import { GAME_KINDS, formatGameDuration, type GameRunSummary } from "@/lib/gameMode";
+import { formatGameScore } from "@/lib/gameScoring";
+import GameCategoryPill from "./GameCategoryPill";
 import {
-  GAME_CATEGORY_LABELS,
   GAME_COPY,
   GAME_KIND_ACCENT,
   GAME_KIND_EMOJI,
   GAME_KIND_LABELS,
   GAME_LEVEL_PILL_CLASS,
-  GAME_MIXED_PILL_CLASS,
   gameDifficultyLabel,
   gameTimeLimitLabel,
 } from "./GameMode.constants";
@@ -41,11 +40,7 @@ export default function GameResultsPanel({
         {run.kind === GAME_KINDS.match || run.kind === GAME_KINDS.timeAttack ? (
           <span className={GAME_LEVEL_PILL_CLASS}>{run.level === null ? "All levels" : `L${run.level}`}</span>
         ) : null}
-        {run.category === "mixed" ? (
-          <span className={GAME_MIXED_PILL_CLASS}>Mixed</span>
-        ) : (
-          <SubjectTypePill type={run.category}>{GAME_CATEGORY_LABELS[run.category]}</SubjectTypePill>
-        )}
+        <GameCategoryPill kind={run.kind} category={run.category} />
         <span>{run.questionCount} questions</span>
         {run.timeLimitMs !== null ? <span>{gameTimeLimitLabel(run.timeLimitMs)}</span> : null}
         <span>{gameDifficultyLabel(run.choiceCount, run.ultraMode, run.direction)}</span>

@@ -1,13 +1,12 @@
-import { formatGameDuration, formatGameScore, gameKindRules, type GameMetric } from "@/lib/gameMode";
-import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
+import { formatGameDuration, gameKindRules, type GameMetric } from "@/lib/gameMode";
+import { formatGameScore } from "@/lib/gameScoring";
+import GameCategoryPill from "./GameCategoryPill";
 import {
-  GAME_CATEGORY_LABELS,
   GAME_KIND_ACCENT,
   GAME_KIND_EMOJI,
   GAME_KIND_LABELS,
   GAME_LEVEL_PILL_CLASS,
   GAME_METRIC_LABELS,
-  GAME_MIXED_PILL_CLASS,
   gameDifficultyLabel,
 } from "./GameMode.constants";
 import type { GameLeaderboardDay } from "./GameMode.types";
@@ -71,11 +70,7 @@ export default function GameLeaderboardMobile({ days, members, metric }: Props) 
                   {gameKindRules(entry.kind).usesLevel ? (
                     <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
                   ) : null}
-                  {entry.category === "mixed" ? (
-                    <span className={GAME_MIXED_PILL_CLASS}>Mixed</span>
-                  ) : (
-                    <SubjectTypePill type={entry.category}>{GAME_CATEGORY_LABELS[entry.category]}</SubjectTypePill>
-                  )}
+                  <GameCategoryPill kind={entry.kind} category={entry.category} />
                   <span className={entry.ultraMode ? "text-fuchsia-700" : entry.choiceCount >= 3 ? "text-red-600" : undefined}>
                     {gameDifficultyLabel(entry.choiceCount, entry.ultraMode, entry.direction)}
                   </span>

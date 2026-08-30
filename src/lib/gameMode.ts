@@ -11,6 +11,7 @@ export const GAME_KINDS = {
   revenge: "revenge",
   timeAttack: "time_attack",
   shiritori: "shiritori",
+  map: "map",
 } as const;
 export const GAME_KIND_VALUES = [
   GAME_KINDS.match,
@@ -18,6 +19,7 @@ export const GAME_KIND_VALUES = [
   GAME_KINDS.revenge,
   GAME_KINDS.timeAttack,
   GAME_KINDS.shiritori,
+  GAME_KINDS.map,
 ] as const;
 export const GAME_TIME_LIMITS_MS = [30_000, 60_000, 120_000] as const;
 export const GAME_DAILY_QUESTION_COUNT = 10;
@@ -48,22 +50,15 @@ export const GAME_DIRECTION_VALUES = [GAME_DIRECTIONS.find, GAME_DIRECTIONS.read
 /** What the text side of a question is. `auto` varies it per question. */
 export const GAME_ANSWER_MODES = ["auto", "meaning", "reading", "romaji"] as const;
 
+/**
+ * Map mode asks for a place name, whose meaning is already its romaji, so
+ * offering both would put the same answer up twice in two spellings.
+ */
+export const GAME_MAP_ANSWER_MODES = ["auto", "meaning", "reading"] as const;
+
 /** Double, Triple and Quad: how many tiles a question offers. */
 export const GAME_CHOICE_COUNTS = [2, 3, 4] as const;
 
-/**
- * Per-item scoring for timed games, in tenths of a point.
- *
- * A flat score per answer ignored how fast the answer came, which made a
- * one-minute game feel arbitrary. Each correct answer is now worth up to 100
- * points: half guaranteed, half earned by answering quickly, decaying to zero
- * across the speed window. A wrong answer costs half of one item, so tapping at
- * random cannot out-earn deliberate play.
- */
-export const GAME_ITEM_BASE_UNITS = 500;
-export const GAME_ITEM_SPEED_UNITS = 500;
-export const GAME_ITEM_SPEED_WINDOW_MS = 4_000;
-export const GAME_ITEM_WRONG_UNITS = 500;
 export const GAME_TIME_ATTACK_GRACE_MS = 1_500;
 export const GAME_REVENGE_TARGET_POOL_MULTIPLIER = 3;
 export const GAME_REVENGE_MINIMUM_TARGET_POOL = 30;
@@ -88,6 +83,9 @@ export type GameKindRules = {
   usesHardMode: boolean;
   usesUltraMode: boolean;
   usesTimeLimit: boolean;
+  /** Whether the player chooses Find/Read and what the text side shows. */
+  usesDirection: boolean;
+  usesAnswerMode: boolean;
   fixedQuestionCount: number | null;
   fixedCategory: GameCategory | null;
   oncePerDay: boolean;
@@ -103,6 +101,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesHardMode: true,
     usesUltraMode: true,
     usesTimeLimit: false,
+    usesDirection: true,
+    usesAnswerMode: true,
     fixedQuestionCount: null,
     fixedCategory: null,
     oncePerDay: false,
@@ -116,6 +116,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesHardMode: false,
     usesUltraMode: false,
     usesTimeLimit: false,
+    usesDirection: false,
+    usesAnswerMode: false,
     fixedQuestionCount: GAME_DAILY_QUESTION_COUNT,
     fixedCategory: "mixed",
     oncePerDay: true,
@@ -129,6 +131,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesHardMode: true,
     usesUltraMode: false,
     usesTimeLimit: false,
+    usesDirection: true,
+    usesAnswerMode: true,
     fixedQuestionCount: null,
     fixedCategory: null,
     oncePerDay: false,
@@ -142,6 +146,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesHardMode: true,
     usesUltraMode: false,
     usesTimeLimit: true,
+    usesDirection: true,
+    usesAnswerMode: true,
     fixedQuestionCount: null,
     fixedCategory: null,
     oncePerDay: false,
@@ -155,10 +161,28 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesHardMode: true,
     usesUltraMode: false,
     usesTimeLimit: false,
+    usesDirection: false,
+    usesAnswerMode: false,
     fixedQuestionCount: null,
     fixedCategory: "vocabulary",
     oncePerDay: false,
     sharedPool: false,
+  },
+  [GAME_KINDS.map]: {
+    usesBatchSize: true,
+    usesLevel: false,
+    requiresLevel: false,
+    usesCategory: false,
+    usesHardMode: true,
+    usesUltraMode: false,
+    usesTimeLimit: false,
+    usesDirection: true,
+    usesAnswerMode: true,
+    fixedQuestionCount: null,
+    // Prefectures are place names, so they ride the vocabulary accent.
+    fixedCategory: "vocabulary",
+    oncePerDay: false,
+    sharedPool: true,
   },
 };
 
@@ -188,6 +212,12 @@ export type GameQuestionPayload = {
   position: number;
   answerType: GameAnswerType;
   prompt: string;
+  /**
+   * Set when the prompt is a shape rather than text, so the client knows what to
+   * draw. Only Map mode's Read direction uses it, where the prompt is the
+   * highlighted prefecture and the tiles carry the names.
+   */
+  promptSubjectId: number | null;
   /** Two, three or four tiles, in display order. */
   options: GameOptionTile[];
 };
@@ -363,56 +393,21 @@ export function gameLeaderboardMemberIsEligible(
   return typeof reportLevel !== "number" || wkLevel >= reportLevel;
 }
 
-export function calculateGameScore(correctCount: number, questionCount: number, durationMs: number, level: number | null): number {
-  if (
-    !Number.isFinite(correctCount) ||
-    !Number.isFinite(questionCount) ||
-    !Number.isFinite(durationMs) ||
-    questionCount <= 0
-  ) {
-    return 0;
-  }
-
-  const boundedQuestionCount = Math.trunc(questionCount);
-  if (boundedQuestionCount <= 0) {
-    return 0;
-  }
-  const boundedCorrect = Math.max(0, Math.min(Math.trunc(correctCount), boundedQuestionCount));
-  const accuracy = boundedCorrect / boundedQuestionCount;
-  const accuracyScoreUnits = Math.round(10_000 * accuracy);
-  const boundedLevel = level === null || !Number.isFinite(level) ? 0 : Math.max(1, Math.min(60, Math.trunc(level)));
-  const maximumModifierUnits = Math.max(0, Math.floor(10_000 / boundedQuestionCount) - 1);
-  const maximumLevelBonusUnits = Math.round(maximumModifierUnits * 0.3);
-  const maximumSpeedBonusUnits = maximumModifierUnits - maximumLevelBonusUnits;
-  const levelBonusUnits = Math.round(maximumLevelBonusUnits * (boundedLevel / 60));
-  const elapsedTenths = Math.floor(Math.max(0, durationMs) / 100);
-  const speedBonusUnits = Math.max(0, maximumSpeedBonusUnits - elapsedTenths);
-  const modifierUnits = Math.round((levelBonusUnits + speedBonusUnits) * accuracy);
-  return accuracyScoreUnits + modifierUnits;
-}
-
-/**
- * Points for one answer in a timed game. `responseMs` is the time since the
- * previous answer, so a fast run of answers is worth more than a slow one.
- */
-export function calculateItemScore(correct: boolean, responseMs: number): number {
-  if (!correct) return -GAME_ITEM_WRONG_UNITS;
-  const elapsed = Number.isFinite(responseMs) ? Math.max(0, responseMs) : GAME_ITEM_SPEED_WINDOW_MS;
-  const remaining = Math.max(0, GAME_ITEM_SPEED_WINDOW_MS - elapsed) / GAME_ITEM_SPEED_WINDOW_MS;
-  return GAME_ITEM_BASE_UNITS + Math.round(GAME_ITEM_SPEED_UNITS * remaining);
-}
-
-/** Running total for a timed game, never negative. */
-export function accumulateItemScore(current: number, correct: boolean, responseMs: number): number {
-  return Math.max(0, current + calculateItemScore(correct, responseMs));
-}
-
 export function isGameDirection(value: string): value is GameDirection {
   return GAME_DIRECTION_VALUES.includes(value as GameDirection);
 }
 
 export function isGameAnswerMode(value: string): value is GameAnswerMode {
   return GAME_ANSWER_MODES.includes(value as GameAnswerMode);
+}
+
+export function gameAnswerModesFor(kind: GameKind): readonly GameAnswerMode[] {
+  return kind === GAME_KINDS.map ? GAME_MAP_ANSWER_MODES : GAME_ANSWER_MODES;
+}
+
+/** Falls back to `auto` when a stored choice is not offered by this game. */
+export function resolveGameAnswerMode(kind: GameKind, mode: GameAnswerMode): GameAnswerMode {
+  return gameAnswerModesFor(kind).includes(mode) ? mode : "auto";
 }
 
 export function isGameChoiceCount(value: number): value is GameChoiceCount {
@@ -423,36 +418,6 @@ export function isGameChoiceCount(value: number): value is GameChoiceCount {
 export function gameChoiceCountFrom(choiceCount: number | null | undefined, hardMode: boolean): GameChoiceCount {
   if (choiceCount && isGameChoiceCount(choiceCount)) return choiceCount;
   return hardMode ? 3 : 2;
-}
-
-export function resolveGameScore({
-  kind,
-  correctCount,
-  questionCount,
-  durationMs,
-  level,
-  accumulatedScore,
-}: {
-  kind: GameKind;
-  correctCount: number;
-  questionCount: number;
-  durationMs: number;
-  level: number | null;
-  /** Timed games score per answer as they go, so the run already has its total. */
-  accumulatedScore?: number;
-}): number {
-  if (kind === GAME_KINDS.timeAttack) {
-    return Math.max(0, accumulatedScore ?? 0);
-  }
-  return calculateGameScore(correctCount, questionCount, durationMs, level);
-}
-
-export function formatGameScore(score: number): string {
-  if (!Number.isFinite(score)) return "0.0";
-  return (score / 10).toLocaleString("en-US", {
-    minimumFractionDigits: 1,
-    maximumFractionDigits: 1,
-  });
 }
 
 export function gamePoolItemMatches(

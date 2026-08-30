@@ -1,8 +1,9 @@
 import { GAME_KINDS, gameKindRules } from "@/lib/gameMode";
-import { GAME_ANSWER_MODES, GAME_CHOICE_COUNTS, GAME_DIRECTION_VALUES, type GameAnswerMode, type GameChoiceCount, type GameDirection } from "@/lib/gameMode";
+import { GAME_CHOICE_COUNTS, GAME_DIRECTION_VALUES, gameAnswerModesFor, type GameAnswerMode, type GameChoiceCount, type GameDirection } from "@/lib/gameMode";
 import {
   GAME_CATEGORY_LABELS,
   GAME_ANSWER_MODE_LABELS,
+  GAME_MAP_DIRECTION_HINTS,
   GAME_CHOICE_COUNT_LABELS,
   GAME_DIRECTION_HINTS,
   GAME_DIRECTION_LABELS,
@@ -36,7 +37,9 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
   const playable = gameSelectionIsPlayable(setup, selection);
   const dailyPlayed = selection.kind === GAME_KINDS.daily && setup.availability.daily.playedToday;
   // Daily is fixed for everyone and Shiritori always chains words.
-  const supportsDirection = !rules.oncePerDay && rules.fixedCategory !== "vocabulary";
+  const supportsDirection = rules.usesDirection;
+  // Map mode's directions act on a prefecture rather than a glyph.
+  const directionHints = selection.kind === GAME_KINDS.map ? GAME_MAP_DIRECTION_HINTS : GAME_DIRECTION_HINTS;
 
   return (
     <section aria-label="Game setup" className="border-y border-line bg-surface/70 px-3 py-5 sm:px-5">
@@ -47,7 +50,7 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
             <h2 className={`text-xl font-black sm:text-2xl ${accent.text}`}>{GAME_KIND_LABELS[selection.kind]}</h2>
             <p className="text-xs font-semibold text-foreground/60">
               {GAME_KIND_RULE_COPY[selection.kind]}
-              {supportsDirection ? ` ${GAME_DIRECTION_HINTS[selection.direction]}` : ""}
+              {supportsDirection ? ` ${directionHints[selection.direction]}` : ""}
             </p>
           </div>
         </div>
@@ -117,14 +120,14 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
           </label>
         ) : null}
 
-        {supportsDirection ? (
+        {rules.usesAnswerMode ? (
           <label className={LABEL_CLASS}>{GAME_COPY.answerWith}
             <select
               value={selection.answerMode}
               onChange={(event) => onChange((value) => ({ ...value, answerMode: event.target.value as GameAnswerMode }))}
               className={FIELD_CLASS}
             >
-              {GAME_ANSWER_MODES.map((value) => (
+              {gameAnswerModesFor(selection.kind).map((value) => (
                 <option key={value} value={value}>{GAME_ANSWER_MODE_LABELS[value]}</option>
               ))}
             </select>

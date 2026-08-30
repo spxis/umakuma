@@ -4,7 +4,6 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import {
-  accumulateItemScore,
   gameAnswerProgress,
   gameChoiceCountFrom,
   gameProgressFlags,
@@ -15,6 +14,7 @@ import {
   type GameDirection,
   type GameKind,
 } from "@/lib/gameMode";
+import { accumulateItemScore } from "@/lib/gameScoring";
 import { completedRunValues, hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
 import { buildAppendedQuestions } from "@/lib/gameRunAppend";
 import { prisma } from "@/lib/prisma";

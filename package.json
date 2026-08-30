@@ -43,6 +43,7 @@
     "db:seed:jlpt": "node scripts/seed-jlpt.mjs",
     "db:seed:jlpt:readings": "node scripts/build-jlpt-readings.mjs",
     "db:seed:kanji-levels": "node scripts/build-kanji-levels.mjs",
+    "map:build": "node scripts/build-japan-map.mjs",
     "db:enrich:jlpt": "pnpm dlx tsx scripts/enrich-jlpt-kanji.ts",
     "db:backfill:jlpt-word-kanji": "pnpm dlx tsx scripts/backfill-jlpt-word-example-kanji.ts",
     "db:backfill:jlpt-word-kanji:dry": "pnpm db:backfill:jlpt-word-kanji --dry-run",

@@ -13,6 +13,7 @@ import {
   isGameChoiceCount,
   isGameDirection,
   isGameKind,
+  resolveGameAnswerMode,
   type GameDirection,
   isGameTimeLimitMs,
 } from "@/lib/gameMode";
@@ -75,8 +76,10 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
             ? gameChoiceCountFrom(parsed.data.choiceCount, parsed.data.hardMode)
             : 2,
           // Daily and Shiritori define their own presentation.
-          direction: rules.fixedCategory === "vocabulary" || rules.oncePerDay ? "find" : parsed.data.direction,
-          answerMode: rules.oncePerDay ? "auto" : parsed.data.answerMode,
+          direction: rules.usesDirection ? parsed.data.direction : "find",
+          answerMode: rules.usesAnswerMode
+            ? resolveGameAnswerMode(parsed.data.kind, parsed.data.answerMode)
+            : "auto",
           ultraMode: rules.usesUltraMode ? parsed.data.ultraMode : false,
           timeLimitMs: rules.usesTimeLimit ? parsed.data.timeLimitMs : null,
         };

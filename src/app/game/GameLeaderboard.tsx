@@ -1,6 +1,7 @@
-import { formatGameDuration, formatGameScore, gameKindRules, type GameMetric } from "@/lib/gameMode";
-import { SubjectTypePill } from "@/app/users/[nickname]/shared/ExplorerPill";
-import { GAME_CATEGORY_LABELS, GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, GAME_MIXED_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
+import { formatGameDuration, gameKindRules, type GameMetric } from "@/lib/gameMode";
+import { formatGameScore } from "@/lib/gameScoring";
+import GameCategoryPill from "./GameCategoryPill";
+import { GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, gameDifficultyLabel } from "./GameMode.constants";
 import GameLeaderboardMobile from "./GameLeaderboardMobile";
 import type { GameLeaderboardDay } from "./GameMode.types";
 import LoadingState from "../shared/LoadingState";
@@ -67,11 +68,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                       {gameKindRules(entry.kind).usesLevel ? (
                         <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
                       ) : null}
-                    {entry.category === "mixed" ? (
-                      <span className={GAME_MIXED_PILL_CLASS}>Mixed</span>
-                    ) : (
-                      <SubjectTypePill type={entry.category}>{GAME_CATEGORY_LABELS[entry.category]}</SubjectTypePill>
-                    )}
+                    <GameCategoryPill kind={entry.kind} category={entry.category} />
                     </div>
                   </td>
                   <td className="px-4 py-3 text-sm font-black text-foreground/65">

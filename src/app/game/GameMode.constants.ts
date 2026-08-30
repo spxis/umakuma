@@ -11,7 +11,7 @@ export const GAME_COPY = {
   title: "Game Mode",
   subtitle: "Fast rounds. Family bragging rights.",
   hubTitle: "Games",
-  hubSubtitle: "Five ways to play with the items you already know.",
+  hubSubtitle: "Six ways to play, from your review pile to the map of Japan.",
   loading: "Loading Game Mode...",
   loadError: "Could not load Game Mode.",
   start: "Start game",
@@ -33,6 +33,10 @@ export const GAME_COPY = {
   direction: "Direction",
   answerWith: "Answer with",
   chooseChain: "Choose the word that starts with this kana",
+  choosePrefecture: "Choose the prefecture",
+  choosePrefectureName: "Name the highlighted prefecture",
+  mapCloseUp: "Close up",
+  prefectures: "Prefectures",
   score: "Score",
   time: "Time",
   streak: "Best streak",
@@ -75,6 +79,7 @@ export const GAME_KIND_LABELS: Record<GameKind, string> = {
   [GAME_KINDS.revenge]: "Revenge",
   [GAME_KINDS.timeAttack]: "Time Attack",
   [GAME_KINDS.shiritori]: "Shiritori",
+  [GAME_KINDS.map]: "Map",
 };
 
 export const GAME_KIND_TAGLINES: Record<GameKind, string> = {
@@ -83,6 +88,7 @@ export const GAME_KIND_TAGLINES: Record<GameKind, string> = {
   [GAME_KINDS.revenge]: "A boss fight against your worst items.",
   [GAME_KINDS.timeAttack]: "Beat the clock, not the question count.",
   [GAME_KINDS.shiritori]: "Chain words by their last kana.",
+  [GAME_KINDS.map]: "Forty-seven prefectures. Know them all?",
 };
 
 export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
@@ -91,6 +97,7 @@ export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
   [GAME_KINDS.revenge]: "Targets the items you tagged as trouble first, then the ones your review history says you struggle with most.",
   [GAME_KINDS.timeAttack]: "Answer as many as you can before the clock runs out. Wrong answers cost you, but they do not end the run.",
   [GAME_KINDS.shiritori]: "Each word has to start with the kana the last one ended on. One wrong link ends the chain.",
+  [GAME_KINDS.map]: "Name the prefecture lit up on the map, or take a name and pick it out yourself. The wrong answers are its neighbours, so a rough idea will not save you.",
 };
 
 export const GAME_KIND_EMOJI: Record<GameKind, string> = {
@@ -99,6 +106,7 @@ export const GAME_KIND_EMOJI: Record<GameKind, string> = {
   [GAME_KINDS.revenge]: "🔥",
   [GAME_KINDS.timeAttack]: "⏱️",
   [GAME_KINDS.shiritori]: "🔗",
+  [GAME_KINDS.map]: "🗾",
 };
 
 /** Per-game accents so each game reads as its own thing on the hub and scoreboard. */
@@ -108,6 +116,7 @@ export const GAME_KIND_ACCENT: Record<GameKind, { border: string; text: string; 
   [GAME_KINDS.revenge]: { border: "border-red-500/50", text: "text-red-600", solid: "border-red-600 bg-red-600 text-white" },
   [GAME_KINDS.timeAttack]: { border: "border-sky-500/50", text: "text-sky-600", solid: "border-sky-600 bg-sky-600 text-white" },
   [GAME_KINDS.shiritori]: { border: "border-emerald-500/50", text: "text-emerald-600", solid: "border-emerald-600 bg-emerald-600 text-white" },
+  [GAME_KINDS.map]: { border: "border-indigo-500/50", text: "text-indigo-600", solid: "border-indigo-600 bg-indigo-600 text-white" },
 };
 
 export const GAME_LEADERBOARD_MODE_LABELS: Record<GameLeaderboardMode, string> = {
@@ -138,6 +147,12 @@ export const GAME_DIRECTION_HINTS: Record<string, string> = {
   find: "See the meaning or reading, choose the character.",
 };
 
+/** Map mode swaps the glyph for a prefecture, so its directions need their own words. */
+export const GAME_MAP_DIRECTION_HINTS: Record<string, string> = {
+  read: "See the prefecture on the map, choose its name.",
+  find: "See the name, pick the prefecture out on the map.",
+};
+
 export const GAME_ANSWER_MODE_LABELS: Record<string, string> = {
   auto: "Mixed",
   meaning: "Meaning",
@@ -149,6 +164,30 @@ export const GAME_CHOICE_COUNT_LABELS: Record<number, string> = {
   2: "Double",
   3: "Triple",
   4: "Quad",
+};
+
+/**
+ * How a prefecture is painted in Map mode.
+ *
+ * `target` is the one the question is about, `candidate` is a tile the player can
+ * pick, and the rest of the country sits back as `idle` so the choices carry the
+ * eye. `line` matches the shape's stroke for the handle's leader line, and
+ * `handle` is solid so its number stays readable over any terrain.
+ */
+export const MAP_TONES = {
+  idle: "idle",
+  candidate: "candidate",
+  target: "target",
+  correct: "correct",
+  wrong: "wrong",
+} as const;
+
+export const MAP_TONE_CLASS: Record<string, { shape: string; line: string; handle: string }> = {
+  [MAP_TONES.idle]: { shape: "fill-foreground/10 stroke-line", line: "stroke-line", handle: "fill-foreground/60 stroke-white" },
+  [MAP_TONES.candidate]: { shape: "fill-indigo-500/30 stroke-indigo-600", line: "stroke-indigo-600", handle: "fill-indigo-600 stroke-white" },
+  [MAP_TONES.target]: { shape: "fill-indigo-600 stroke-indigo-800", line: "stroke-indigo-800", handle: "fill-indigo-700 stroke-white" },
+  [MAP_TONES.correct]: { shape: "fill-emerald-500 stroke-emerald-700", line: "stroke-emerald-700", handle: "fill-emerald-600 stroke-white" },
+  [MAP_TONES.wrong]: { shape: "fill-red-500 stroke-red-700", line: "stroke-red-700", handle: "fill-red-600 stroke-white" },
 };
 
 export const GAME_MIXED_PILL_CLASS = "subject-pill border-line bg-surface-muted text-foreground";

@@ -4,6 +4,7 @@ import {
   type GameCategory,
   type GameKind,
 } from "@/lib/gameMode";
+import { JAPAN_PREFECTURE_COUNT } from "@/lib/japanPrefectures";
 import { GAME_COPY } from "./GameMode.constants";
 import type { GameBlockedReason, GameHubCard, GameSelection, GameSetupResponse } from "./GameMode.types";
 
@@ -16,6 +17,8 @@ export function gameAvailableCount(
 ): number {
   if (kind === GAME_KINDS.shiritori) return setup.availability.shiritori.available;
   if (kind === GAME_KINDS.daily) return setup.availability.daily.playedToday ? 0 : 1;
+  // The prefectures are a fixed pool, the same for every account.
+  if (kind === GAME_KINDS.map) return JAPAN_PREFECTURE_COUNT;
 
   // Revenge ignores the level filter but still honors the category.
   const resolvedCategory = gameKindRules(kind).fixedCategory ?? category;
@@ -48,6 +51,7 @@ function statusLabel(setup: GameSetupResponse, kind: GameKind, available: number
     return troubleCount > 0 ? `${troubleCount} tagged trouble` : `${available} items ranked`;
   }
   if (kind === GAME_KINDS.shiritori) return `${available} chainable words`;
+  if (kind === GAME_KINDS.map) return `${available} prefectures`;
   return `${available} items`;
 }
 

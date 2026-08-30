@@ -271,6 +271,7 @@ enum GameKind {
   revenge
   time_attack
   shiritori
+  map
 }
 
 enum ReadingChallengeStatus {

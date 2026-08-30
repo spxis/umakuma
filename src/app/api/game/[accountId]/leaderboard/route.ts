@@ -15,12 +15,12 @@ import {
   isGameBatchSize,
   isGameKind,
   gameChoiceCountFrom,
-  resolveGameScore,
   type GameDirection,
   type GameKind,
   type GameLeaderboardEntry,
   type GameMetric,
 } from "@/lib/gameMode";
+import { resolveGameScore } from "@/lib/gameScoring";
 import { prisma } from "@/lib/prisma";
 
 const querySchema = z.object({

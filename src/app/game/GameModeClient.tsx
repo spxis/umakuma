@@ -11,6 +11,7 @@ import {
   type GameLeaderboardEntry,
 } from "@/lib/gameMode";
 import GameLeaderboard from "./GameLeaderboard";
+import GameMapRunner from "./GameMapRunner";
 import GameLeaderboardFilters from "./GameLeaderboardFilters";
 import GameRecentGames from "./GameRecentGames";
 import GameResultsPanel from "./GameResultsPanel";
@@ -150,8 +151,10 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   const currentQuestion = session.currentQuestion;
   if (phase === "playing" && currentQuestion && activeGame) {
     const flags = gameProgressFlags(activeGame.run.kind, activeGame.run.ultraMode);
+    // Map mode answers on a map instead of tiles; every other prop is the same.
+    const Runner = activeGame.run.kind === GAME_KINDS.map ? GameMapRunner : GameRunner;
     return (
-      <GameRunner
+      <Runner
         question={currentQuestion}
         questionIndex={session.questionIndex}
         questionTotal={activeGame.questions.length}

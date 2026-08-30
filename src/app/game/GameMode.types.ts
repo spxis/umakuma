@@ -14,6 +14,11 @@ import type {
   GameTimeLimitMs,
 } from "@/lib/gameMode";
 
+import type { MAP_TONES } from "./GameMode.constants";
+
+/** How one prefecture is painted on the Map mode board. */
+export type MapTone = (typeof MAP_TONES)[keyof typeof MAP_TONES];
+
 export type GameKindAvailability = {
   daily: { dateKey: string; playedToday: boolean; levelCap: number };
   revenge: { available: number; troubleCount: number };

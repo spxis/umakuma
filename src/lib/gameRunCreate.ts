@@ -15,6 +15,7 @@ import {
   type GameDirection,
   type GameKind,
 } from "@/lib/gameMode";
+import { buildMapQuestions } from "@/lib/gameMapQuestions";
 import { loadDailyPool, loadRevengePool, loadShiritoriPool } from "@/lib/gameModePools";
 import { loadGamePool } from "@/lib/gameModeServer";
 import { seededRandom, shuffleWith } from "@/lib/gameRandom";
@@ -26,6 +27,7 @@ import {
   shiritoriPlayableTargets,
   type GameQuestionInput,
 } from "@/lib/gameQuestionBuilder";
+import { JAPAN_PREFECTURE_COUNT } from "@/lib/japanPrefectures";
 import { prisma } from "@/lib/prisma";
 
 export const DAILY_ALREADY_PLAYED = "You already played today's Daily Challenge.";
@@ -228,11 +230,40 @@ async function planShiritoriRun(accountId: string, request: GameRunRequest): Pro
   throw new Error("No eligible items are available.");
 }
 
+/**
+ * The 47 prefectures are a fixed, shared pool: no assignments, no levels, and
+ * the same board for every player.
+ */
+function planMapRun(request: GameRunRequest): GameRunPlan {
+  const requested = request.batchSize === "all" ? JAPAN_PREFECTURE_COUNT : request.batchSize;
+  const questionCount = Math.min(requested, JAPAN_PREFECTURE_COUNT);
+  return {
+    questions: buildMapQuestions(
+      questionCount,
+      request.choiceCount,
+      Math.random,
+      request.direction,
+      request.answerMode,
+    ),
+    questionCount,
+    batchSize: questionCount,
+    level: null,
+    category: request.category,
+    choiceCount: request.choiceCount,
+    direction: request.direction,
+    answerMode: request.answerMode,
+    dailyKey: null,
+    seed: null,
+    timeLimitMs: null,
+  };
+}
+
 export async function planGameRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
   if (request.kind === GAME_KINDS.daily) return planDailyRun(request);
   if (request.kind === GAME_KINDS.revenge) return planRevengeRun(accountId, request);
   if (request.kind === GAME_KINDS.timeAttack) return planTimeAttackRun(accountId, request);
   if (request.kind === GAME_KINDS.shiritori) return planShiritoriRun(accountId, request);
+  if (request.kind === GAME_KINDS.map) return planMapRun(request);
   return planMatchRun(accountId, request);
 }
 
