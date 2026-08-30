@@ -279,6 +279,48 @@ overflow, not the top right.
 Grouped with 17: both are "one component, many hand-rolled copies", and the
 lists should land on the shared card in the same pass.
 
+### 20 — Navigation regroup and a Settings page (design open)
+
+John, 30 Aug. The header carries ten items for a member (eleven for an admin)
+and already wraps to two rows at 1440px: Leaderboard, Study, Game, Library
+Explorer, JLPT Explorer, History, Stats, News, Read, Libraries.
+
+**Settled by John.** Lists becomes a top-level item rather than a modal reached
+from a button on three pages. Libraries moves into a new Settings page, which is
+configuration and belongs there. The groupings below are approved, including
+History and Stats going to Progress rather than Settings.
+
+**Agreed shape**, 10 items down to 8:
+
+| Item | Holds |
+|---|---|
+| Leaderboard | as today |
+| Study | as today |
+| Game | as today |
+| Lists | Trouble and Favourites, promoted out of `StudyTagListsModal` |
+| Explore | Library Explorer + JLPT Explorer |
+| Progress | History + Stats |
+| Read | Read + News |
+| Settings | Libraries, preferences, display name, WaniKani connection |
+
+**Why History and Stats are not Settings.** John asked whether they join
+Settings; agreed 30 Aug that they do not. Settings is what you configure, while
+History and Stats are what you read about yourself, so filing them there makes
+them harder to find and turns Settings into a junk drawer. They are still two
+nav items answering one question, so they merge into a Progress page with two
+tabs. That solves the crowding without the category error.
+
+**Depends on the identity arc.** Settings is where the WaniKani connection
+toggle and the display name live once accounts can exist without a token, so
+this wants to land with or just after 3 and 4 rather than before them. Building
+Settings first as an empty shell for Libraries is fine and gives 3 and 4 a home
+to land in.
+
+Note that promoting Lists to a page does not retire `StudyTagListsModal`: the
+in-place modal is still right when picking an item mid-session from Study or the
+game lobby. The page and the modal should render the same list component, which
+is 19's shared-card work.
+
 ---
 
 ### 18 — Parallel level ladder (design open)
