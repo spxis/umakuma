@@ -832,5 +832,15 @@
     "version": "0.69.0",
     "releasedAt": "2026-08-30T13:07:34Z",
     "summary": "The Study queue offers the same grid/list toggle the tagged lists and history already use, so a long queue can be scanned one line at a time. The choice is remembered per surface."
+  },
+  {
+    "id": "geo-dataset-tests",
+    "area": "games",
+    "name": "Geo dataset under test",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.71.0",
+    "releasedAt": "2026-08-30T13:19:43Z",
+    "summary": "The map data the capital, country and size games will read is now pinned by tests: region counts, unique ids, a capital and a positive population and area for all 111 divisions, and the comparison helpers."
   }
 ]
