@@ -4,35 +4,60 @@ import ModalShell from "@/app/shared/ModalShell";
 import KanjiStrokeAnimation from "@/app/shared/KanjiStrokeAnimation";
 import { STROKE_ANIMATION_COPY } from "@/app/shared/strokeAnimationCopy";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
+import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
+
+import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
+import { GRADE_SHORT_LABELS, displayReading, isGradeOption, readingsForGrade } from "./gradeExplorerView";
 
 type Props = {
-  kanji: string;
-  meaning: string | null;
-  grade: number;
+  entry: SchoolGradeKanjiEntry;
   onClose: () => void;
 };
+
+function ReadingLine({ label, readings }: { label: string; readings: string[] }) {
+  if (readings.length === 0) {
+    return null;
+  }
+
+  return (
+    <p className="flex items-baseline gap-1.5 text-xs">
+      <span className="shrink-0 font-black uppercase tracking-[0.08em] text-foreground/45">{label}</span>
+      <span className="font-bold text-foreground/80 [font-family:var(--font-jp-current)]">
+        {readings.map(displayReading).join("、")}
+      </span>
+    </p>
+  );
+}
 
 /**
  * The stroke-order view for one character.
  *
- * Informational, so it dismisses on a click beside it: nothing here is typed or
- * decided, and an undismissable panel would be the worse failure.
+ * The printed character sits beside the animation deliberately: a child copying
+ * strokes needs something to compare their result against, and the animated
+ * version ends up as a skeleton of lines rather than the shape the font draws.
+ *
+ * Informational, so it dismisses on a click beside it — nothing here is typed
+ * or decided, and an undismissable panel would be the worse failure.
  */
-export default function GradeStrokeModal({ kanji, meaning, grade, onClose }: Props) {
+export default function GradeStrokeModal({ entry, onClose }: Props) {
+  const readings = readingsForGrade(entry);
+
   return (
     <ModalShell
       onClose={onClose}
       closeOnBackdrop
       layer={MODAL_LAYERS.page}
-      label={`${STROKE_ANIMATION_COPY.title} — ${kanji}`}
-      panelClassName="flex w-full max-w-md flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
+      label={`${STROKE_ANIMATION_COPY.title} — ${entry.kanji}`}
+      panelClassName="flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
     >
       <header className="flex items-center justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
         <div className="min-w-0">
           <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
             {STROKE_ANIMATION_COPY.title}
           </p>
-          {meaning ? <p className="truncate text-sm font-bold text-foreground">{meaning}</p> : null}
+          {entry.primaryMeaning ? (
+            <p className="truncate text-sm font-bold text-foreground">{entry.primaryMeaning}</p>
+          ) : null}
         </div>
         <button
           type="button"
@@ -44,8 +69,48 @@ export default function GradeStrokeModal({ kanji, meaning, grade, onClose }: Pro
         </button>
       </header>
 
-      <div className="flex items-center justify-center px-5 py-6">
-        <KanjiStrokeAnimation key={kanji} kanji={kanji} grade={grade} size={220} />
+      <div className="flex flex-col items-center gap-4 px-5 py-5 sm:flex-row sm:items-start sm:justify-center">
+        <div className="flex flex-col items-center gap-1">
+          <span
+            className="flex h-[104px] w-[104px] items-center justify-center rounded-2xl border border-kanji/40 bg-kanji/5 text-6xl font-black leading-none text-kanji [font-family:var(--font-jp-current)]"
+            aria-hidden="true"
+          >
+            {entry.kanji}
+          </span>
+          <span className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/40">
+            {STROKE_ANIMATION_COPY.printed}
+          </span>
+        </div>
+
+        <KanjiStrokeAnimation key={entry.kanji} kanji={entry.kanji} grade={entry.grade} size={200} />
+      </div>
+
+      <div className="border-t border-line px-5 py-3">
+        <div className="mb-2 flex flex-wrap items-center gap-1.5">
+          {isGradeOption(entry.grade) ? (
+            <span className="subject-pill border-kanji/40 bg-kanji/10 text-kanji">
+              {GRADE_SHORT_LABELS[entry.grade]}
+            </span>
+          ) : null}
+          {typeof entry.crossRef?.jlptLevel === "number" ? (
+            <span className="subject-pill border-emerald-300 bg-emerald-50 text-emerald-700">
+              {GRADE_EXPLORER_COPY.jlptCrossRef} N{entry.crossRef.jlptLevel}
+            </span>
+          ) : null}
+          {typeof entry.crossRef?.wanikaniLevel === "number" ? (
+            <span className="subject-pill border-line bg-surface text-foreground">
+              {GRADE_EXPLORER_COPY.wanikaniCrossRef} L{entry.crossRef.wanikaniLevel}
+            </span>
+          ) : null}
+          {typeof entry.frequencyRank === "number" ? (
+            <span className="subject-pill border-line bg-surface text-foreground">
+              #{entry.frequencyRank}
+            </span>
+          ) : null}
+        </div>
+
+        <ReadingLine label={GRADE_EXPLORER_COPY.onReadings} readings={readings.on} />
+        <ReadingLine label={GRADE_EXPLORER_COPY.kunReadings} readings={readings.kun} />
       </div>
     </ModalShell>
   );

@@ -966,5 +966,15 @@
     "version": "0.84.0",
     "releasedAt": "2026-08-30T14:18:34Z",
     "summary": "Every kanji can be watched being written, one stroke at a time, with optional stroke numbers. Stroke data comes from KanjiVG under CC BY-SA, credited on every animation, and is rebuilt reproducibly from a pinned commit with pnpm strokes:build. Covers all 2,899 school-grade characters."
+  },
+  {
+    "id": "stroke-modal-compare",
+    "area": "jlpt",
+    "name": "Compare the printed kanji with the strokes",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.85.0",
+    "releasedAt": "2026-08-30T14:24:05Z",
+    "summary": "The stroke-order view shows the printed character beside the animation, so a child copying strokes has the real shape to compare against, with the grade, JLPT and WaniKani levels, frequency rank and readings underneath."
   }
 ]

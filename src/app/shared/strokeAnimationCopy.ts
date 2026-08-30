@@ -9,6 +9,8 @@ export const STROKE_ANIMATION_COPY = {
   loading: "Loading stroke order",
   unavailable: "No stroke order for this character.",
   creditPrefix: "Stroke data from",
+  printed: "Printed",
+  animated: "Stroke order",
   close: "Close",
 } as const;
 

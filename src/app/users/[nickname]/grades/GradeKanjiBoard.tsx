@@ -93,12 +93,7 @@ export default function GradeKanjiBoard({ items }: Props) {
       />
 
       {strokesFor ? (
-        <GradeStrokeModal
-          kanji={strokesFor.kanji}
-          meaning={strokesFor.primaryMeaning ?? null}
-          grade={strokesFor.grade}
-          onClose={() => setStrokesFor(null)}
-        />
+        <GradeStrokeModal entry={strokesFor} onClose={() => setStrokesFor(null)} />
       ) : null}
     </>
   );
