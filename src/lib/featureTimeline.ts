@@ -82,14 +82,30 @@ export function isIsoDate(value: string): boolean {
   return !Number.isNaN(new Date(`${value}T00:00:00Z`).getTime());
 }
 
+function versionMinor(entry: FeatureTimelineEntry): number | null {
+  if (!entry.version) {
+    return null;
+  }
+  const minor = Number(entry.version.split(".")[1]);
+  return Number.isFinite(minor) ? minor : null;
+}
+
 /**
- * Newest first, so the most recent release is the first thing read. Ties break
- * on name to keep a same-day batch in a stable order across renders.
+ * Newest first. The version number is the true release order — several
+ * releases share a calendar day, and sorting those by name shuffled v0.53
+ * between v0.57 and v0.55. Entries without a version fall back to date, with
+ * name as the last stable tiebreak.
  */
 export function sortFeaturesNewestFirst(
   entries: readonly FeatureTimelineEntry[],
 ): FeatureTimelineEntry[] {
   return [...entries].sort((left, right) => {
+    const leftMinor = versionMinor(left);
+    const rightMinor = versionMinor(right);
+    if (leftMinor !== null && rightMinor !== null && leftMinor !== rightMinor) {
+      return rightMinor - leftMinor;
+    }
+
     if (left.date !== right.date) {
       return left.date < right.date ? 1 : -1;
     }

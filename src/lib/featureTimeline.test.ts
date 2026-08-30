@@ -91,7 +91,17 @@ describe("sortFeaturesNewestFirst", () => {
     expect(sorted.map((item) => item.id)).toEqual(["new", "mid", "old"]);
   });
 
-  it("breaks a same-day tie on name so the order is stable", () => {
+  it("orders a same-day batch by version, newest release first", () => {
+    const sorted = sortFeaturesNewestFirst([
+      entry({ id: "older", name: "Alpha", version: "0.53.0" }),
+      entry({ id: "newer", name: "Zeta", version: "0.57.0" }),
+      entry({ id: "middle", name: "Beta", version: "0.55.0" }),
+    ]);
+
+    expect(sorted.map((item) => item.id)).toEqual(["newer", "middle", "older"]);
+  });
+
+  it("breaks a same-day tie on name when versions are absent", () => {
     const sorted = sortFeaturesNewestFirst([
       entry({ id: "b", name: "Beta" }),
       entry({ id: "a", name: "Alpha" }),
@@ -237,8 +247,11 @@ describe("versions", () => {
       .sort((left, right) => Number(left.split(".")[1]) - Number(right.split(".")[1]))
       .at(-1);
 
-    const { APP_VERSION } = await import("./appVersion");
+    const { APP_VERSION, APP_VERSION_DATE } = await import("./appVersion");
     expect(APP_VERSION).toBe(latest);
+
+    const latestEntry = shipped.find((item) => item.version === latest)!;
+    expect(APP_VERSION_DATE).toBe(latestEntry.date);
 
     const pkg = (await import("../../package.json")) as { version: string };
     expect(pkg.version).toBe(latest);
