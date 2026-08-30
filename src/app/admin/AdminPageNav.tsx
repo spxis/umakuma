@@ -1,10 +1,13 @@
-import Link from "next/link";
+"use client";
 
+import { useRouter } from "next/navigation";
+
+import SegmentedControl from "../shared/SegmentedControl";
 import {
-  ADMIN_WORKSPACE_ROUTES,
   ADMIN_WORKSPACE_TABS,
   ADMIN_WORKSPACE_TAB_LABELS,
   type AdminWorkspaceTab,
+  routeForAdminWorkspaceTab,
 } from "./AdminWorkspaceTabs";
 
 type Props = {
@@ -12,30 +15,29 @@ type Props = {
 };
 
 /**
- * The admin tab row for pages that render on their own instead of inside
- * `AdminWorkspacePage`. Without it those pages are reachable from the workspace
- * but have no way back, which is how both of them shipped unlinked.
+ * The admin tab row, shared by `AdminWorkspacePage` and the standalone admin
+ * pages (releases, kanji coverage) so every admin route shows the same
+ * navigation in the same slot. The standalone pages once rendered their own
+ * pill nav, which is how they shipped looking like a different app.
  */
 export default function AdminPageNav({ activeTab }: Props) {
+  const router = useRouter();
+
   return (
-    <nav aria-label="Admin sections" className="mb-6 flex flex-wrap gap-1.5">
-      {ADMIN_WORKSPACE_TABS.map((tab) => {
-        const isActive = tab === activeTab;
-        return (
-          <Link
-            key={tab}
-            href={ADMIN_WORKSPACE_ROUTES[tab]}
-            aria-current={isActive ? "page" : undefined}
-            className={`rounded-full border px-3 py-1 text-xs font-black uppercase tracking-wide transition ${
-              isActive
-                ? "border-accent bg-accent text-white"
-                : "border-line bg-surface text-foreground/60 hover:bg-surface-muted"
-            }`}
-          >
-            {ADMIN_WORKSPACE_TAB_LABELS[tab]}
-          </Link>
-        );
-      })}
-    </nav>
+    <section className="w-full overflow-x-auto lg:flex lg:justify-end">
+      <SegmentedControl<AdminWorkspaceTab>
+        ariaLabel="Admin workspace tabs"
+        asTabs
+        size="sm"
+        value={activeTab}
+        onChange={(nextTab) => {
+          router.push(routeForAdminWorkspaceTab(nextTab));
+        }}
+        options={ADMIN_WORKSPACE_TABS.map((tab) => ({
+          value: tab,
+          label: ADMIN_WORKSPACE_TAB_LABELS[tab],
+        }))}
+      />
+    </section>
   );
 }

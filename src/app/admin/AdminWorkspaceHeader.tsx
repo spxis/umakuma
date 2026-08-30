@@ -10,6 +10,8 @@ type AdminWorkspaceHeaderProps = {
   emailAllowed: boolean;
   userEmail: string | null;
   userName: string | null;
+  title?: string;
+  description?: string;
 };
 
 export default function AdminWorkspaceHeader({
@@ -19,6 +21,8 @@ export default function AdminWorkspaceHeader({
   emailAllowed,
   userEmail,
   userName,
+  title = "Manage accounts, data, campaigns, and logs",
+  description = "Switch tabs to focus on one admin job at a time.",
 }: AdminWorkspaceHeaderProps) {
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm sm:p-6">
@@ -36,8 +40,8 @@ export default function AdminWorkspaceHeader({
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Admin workspace</p>
-            <h1 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">Manage accounts, data, campaigns, and logs</h1>
-            <p className="mt-1 text-sm text-foreground/70">Switch tabs to focus on one admin job at a time.</p>
+            <h1 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">{title}</h1>
+            <p className="mt-1 text-sm text-foreground/70">{description}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 rounded-full border border-line bg-surface-muted px-3 py-2">

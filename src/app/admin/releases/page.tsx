@@ -1,8 +1,11 @@
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
+import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
+import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import AdminPageNav from "../AdminPageNav";
+import AdminWorkspaceHeader from "../AdminWorkspaceHeader";
 import {
   FEATURE_STATUSES,
   featuresByStatus,
@@ -35,28 +38,50 @@ export default async function AdminReleasesPage() {
     notFound();
   }
 
+  const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
+  const viewerMenuInfo = await resolveViewerMenuInfo({
+    viewerEmail,
+    sessionName: session?.user?.name?.trim() ?? null,
+  });
+
   const entries = loadFeatureTimeline();
   const totals = summarizeFeatureTimeline(entries);
   const shipped = sortFeaturesNewestFirst(featuresByStatus(entries, FEATURE_STATUSES.shipped));
   const planned = sortFeaturesByRelease(featuresByStatus(entries, FEATURE_STATUSES.planned));
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-10">
-      <AdminPageNav activeTab="releases" />
+    <div className="relative overflow-hidden px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
+      <div className="noise-overlay pointer-events-none absolute inset-0" />
+      <main className="relative w-full space-y-3">
+        <AppTopMenuRow
+          viewerMenuInfo={viewerMenuInfo}
+          showAdminActions={true}
+          className="mb-2"
+        />
 
-      <h1 className="text-2xl font-black text-foreground sm:text-3xl">
-        {RELEASE_TIMELINE_COPY.title}
-      </h1>
-      <p className="mt-2 text-sm text-foreground/70">{RELEASE_TIMELINE_COPY.subtitle}</p>
+        <AdminPageNav activeTab="releases" />
 
-      <div className="mt-6 grid grid-cols-3 gap-3">
-        <Stat value={totals.total} label={RELEASE_TIMELINE_COPY.totalsLabel} />
-        <Stat value={totals.shipped} label={RELEASE_TIMELINE_COPY.shippedLabel} />
-        <Stat value={totals.planned} label={RELEASE_TIMELINE_COPY.plannedLabel} />
-      </div>
+        <AdminWorkspaceHeader
+          checkingSession={false}
+          sessionAuthorized={true}
+          signedIn={true}
+          emailAllowed={true}
+          userEmail={session?.user?.email ?? null}
+          userName={session?.user?.name ?? null}
+          title={RELEASE_TIMELINE_COPY.title}
+          description={RELEASE_TIMELINE_COPY.subtitle}
+        />
 
-      <ReleaseTimelineTabs planned={planned} shipped={shipped} />
+        <section>
+          <div className="grid grid-cols-3 gap-3">
+            <Stat value={totals.total} label={RELEASE_TIMELINE_COPY.totalsLabel} />
+            <Stat value={totals.shipped} label={RELEASE_TIMELINE_COPY.shippedLabel} />
+            <Stat value={totals.planned} label={RELEASE_TIMELINE_COPY.plannedLabel} />
+          </div>
 
-    </main>
+          <ReleaseTimelineTabs planned={planned} shipped={shipped} />
+        </section>
+      </main>
+    </div>
   );
 }

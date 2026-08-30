@@ -1,13 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 import AppTopMenuRow from "../shared/AppTopMenuRow";
-import SegmentedControl from "../shared/SegmentedControl";
 import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 import { usePersistedTab } from "@/lib/usePersistedTab";
 import AdminCampaignManager from "./AdminCampaignManager";
+import AdminPageNav from "./AdminPageNav";
 import AdminDataWorkspaceSection from "./AdminDataWorkspaceSection";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import type { CampaignRecord } from "./AdminCampaignManager.types";
@@ -20,11 +19,8 @@ import type { AdminOperationsScopeResponse } from "./AdminOperationsScope.types"
 import AdminReadingEntriesClient from "./reading-entries/AdminReadingEntriesClient";
 import {
   ADMIN_WORKSPACE_COOKIE_KEY,
-  ADMIN_WORKSPACE_TABS,
-  ADMIN_WORKSPACE_TAB_LABELS,
   ADMIN_WORKSPACE_COOKIE_MAX_AGE_SECONDS,
   type AdminWorkspaceTab,
-  routeForAdminWorkspaceTab,
 } from "./AdminWorkspaceTabs";
 
 type AdminWorkspacePageProps = {
@@ -33,6 +29,15 @@ type AdminWorkspacePageProps = {
   initialSession?: AdminSessionStatus;
   initialCampaigns?: CampaignRecord[];
 };
+
+function TabIntro({ label, description }: { label: string; description: string }) {
+  return (
+    <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">{label}</p>
+      <p className="mt-1 text-sm text-foreground/70">{description}</p>
+    </div>
+  );
+}
 
 export default function AdminWorkspacePage({
   activeTab,
@@ -58,7 +63,6 @@ function AdminWorkspacePageContent({
   initialSession,
   initialCampaigns = [],
 }: AdminWorkspacePageProps) {
-  const router = useRouter();
   const { showToast, confirmAction } = useAdminFeedback();
   const [nickname, setNickname] = useState("");
   const [token, setToken] = useState("");
@@ -372,21 +376,7 @@ function AdminWorkspacePageContent({
           className="mb-2"
         />
 
-        <section className="w-full overflow-x-auto lg:flex lg:justify-end">
-          <SegmentedControl<AdminWorkspaceTab>
-            ariaLabel="Admin workspace tabs"
-            asTabs
-            size="sm"
-            value={activeTab}
-            onChange={(nextTab) => {
-              router.push(routeForAdminWorkspaceTab(nextTab));
-            }}
-            options={ADMIN_WORKSPACE_TABS.map((tab) => ({
-              value: tab,
-              label: ADMIN_WORKSPACE_TAB_LABELS[tab],
-            }))}
-          />
-        </section>
+        <AdminPageNav activeTab={activeTab} />
 
         <AdminWorkspaceHeader
           checkingSession={checkingSession}
@@ -423,10 +413,7 @@ function AdminWorkspacePageContent({
 
         {activeTab === "campaigns" ? (
           <section className="space-y-3">
-            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Campaigns</p>
-              <p className="mt-1 text-sm text-foreground/70">Edit campaign rules and run payout simulations.</p>
-            </div>
+            <TabIntro label="Campaigns" description="Edit campaign rules and run payout simulations." />
 
             <AdminCampaignManager
               sessionAuthorized={sessionAuthorized}
@@ -438,20 +425,14 @@ function AdminWorkspacePageContent({
 
         {activeTab === "history" ? (
           <section id="admin-history" className="space-y-3">
-            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">History</p>
-              <p className="mt-1 text-sm text-foreground/70">Review, edit, or remove study submissions in one place.</p>
-            </div>
+            <TabIntro label="History" description="Review, edit, or remove study submissions in one place." />
             <AdminStudyHistory sessionAuthorized={sessionAuthorized} />
           </section>
         ) : null}
 
         {activeTab === "users" ? (
           <section id="admin-users" className="space-y-3">
-            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Users</p>
-              <p className="mt-1 text-sm text-foreground/70">Manage accounts, refreshes, invite codes, and user history.</p>
-            </div>
+            <TabIntro label="Users" description="Manage accounts, refreshes, invite codes, and user history." />
             <AdminUsersPanel
               sessionAuthorized={sessionAuthorized}
               checkingSession={checkingSession}
@@ -470,10 +451,7 @@ function AdminWorkspacePageContent({
 
         {activeTab === "readingEntries" ? (
           <section id="admin-reading-entries" className="space-y-3">
-            <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Check-ins</p>
-              <p className="mt-1 text-sm text-foreground/70">Browse and edit reading submissions across all members.</p>
-            </div>
+            <TabIntro label="Check-ins" description="Browse and edit reading submissions across all members." />
             <AdminReadingEntriesClient
               embedded
               sessionAuthorized={sessionAuthorized}

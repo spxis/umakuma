@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { getServerSession } from "next-auth";
 
 import StudyHistoryTable from "@/app/shared/StudyHistoryTable";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
+import AdminPageNav from "@/app/admin/AdminPageNav";
 import { authOptions } from "@/lib/auth";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
@@ -21,6 +21,7 @@ export default async function AdminUserHistoryPage({ params }: PageProps) {
 
   return (
     <div className="relative overflow-hidden px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
+      <div className="noise-overlay pointer-events-none absolute inset-0" />
       <main className="relative w-full space-y-3">
         <AppTopMenuRow
           viewerMenuInfo={viewerMenuInfo}
@@ -28,11 +29,7 @@ export default async function AdminUserHistoryPage({ params }: PageProps) {
           className="mb-2"
         />
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Link href="/admin" className="inline-flex h-10 items-center justify-center rounded-full border border-line bg-surface px-4 text-xs font-bold uppercase tracking-[0.12em] text-foreground">
-            Back to admin
-          </Link>
-        </div>
+        <AdminPageNav activeTab="users" />
 
         <StudyHistoryTable
           endpoint={`/api/admin/study-history?accountId=${encodeURIComponent(accountId)}`}

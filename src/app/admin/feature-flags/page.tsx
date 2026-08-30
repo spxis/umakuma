@@ -1,8 +1,11 @@
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
+import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
+import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import AdminPageNav from "../AdminPageNav";
+import AdminWorkspaceHeader from "../AdminWorkspaceHeader";
 
 import { FEATURE_FLAGS_COPY } from "./FeatureFlags.constants";
 import FeatureFlagsPanel from "./FeatureFlagsPanel";
@@ -16,18 +19,37 @@ export default async function AdminFeatureFlagsPage() {
     notFound();
   }
 
+  const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
+  const viewerMenuInfo = await resolveViewerMenuInfo({
+    viewerEmail,
+    sessionName: session?.user?.name?.trim() ?? null,
+  });
+
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-10">
-      <AdminPageNav activeTab="featureFlags" />
+    <div className="relative overflow-hidden px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
+      <div className="noise-overlay pointer-events-none absolute inset-0" />
+      <main className="relative w-full space-y-3">
+        <AppTopMenuRow
+          viewerMenuInfo={viewerMenuInfo}
+          showAdminActions={true}
+          className="mb-2"
+        />
 
-      <h1 className="text-2xl font-black text-foreground sm:text-3xl">
-        {FEATURE_FLAGS_COPY.title}
-      </h1>
-      <p className="mt-2 text-sm text-foreground/70">{FEATURE_FLAGS_COPY.subtitle}</p>
+        <AdminPageNav activeTab="featureFlags" />
 
-      <div className="mt-8">
+        <AdminWorkspaceHeader
+          checkingSession={false}
+          sessionAuthorized={true}
+          signedIn={true}
+          emailAllowed={true}
+          userEmail={session?.user?.email ?? null}
+          userName={session?.user?.name ?? null}
+          title={FEATURE_FLAGS_COPY.title}
+          description={FEATURE_FLAGS_COPY.subtitle}
+        />
+
         <FeatureFlagsPanel />
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

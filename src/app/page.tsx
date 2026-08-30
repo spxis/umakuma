@@ -320,9 +320,9 @@ export default async function Home() {
     : leaderRemainingToGoal;
 
   return (
-    <div className="relative min-h-screen overflow-hidden pb-12">
+    <div className="relative overflow-hidden">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
-      <main className="relative w-full px-4 pt-4 sm:px-6 lg:px-8">
+      <main className="relative w-full px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
         <AppTopMenuRow
           viewerMenuInfo={viewerMenuInfo}
           primaryWkUsername={viewerWkUsername}
