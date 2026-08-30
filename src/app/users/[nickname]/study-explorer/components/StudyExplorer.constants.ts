@@ -91,7 +91,7 @@ export const STUDY_PANEL_TEXT = {
   bulkOperations: "Bulk Operations",
   bulkOpsActive: "Bulk Ops Active",
   toggleTrouble: "Toggle trouble",
-  toggleFavorite: "Toggle favorite",
+  toggleFavorite: "Toggle favourite",
   loadingMore: "Loading more...",
   loadingRemainingLessons: "Loading remaining lessons...",
   scrollToLoadMore: "Scroll to load more...",

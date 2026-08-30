@@ -197,8 +197,8 @@ export default function ExplorerTabsStudyQueueMenu({
               }}
               className={overlayOptionClass(queueTagFilter === "favorite")}
             >
-              <p className="text-xs font-black uppercase tracking-[0.08em]">Favorites</p>
-              <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Review items marked as favorites</p>
+              <p className="text-xs font-black uppercase tracking-[0.08em]">Favourites</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">Review items marked as favourites</p>
             </button>
           </div>
           <div className="mt-1 space-y-1 border-t border-line pt-1" role="tablist" aria-label="Review queue mix">

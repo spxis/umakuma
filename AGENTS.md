@@ -71,7 +71,7 @@ This file is the single source of truth for agent behavior in this repo.
 - Prisma 6 + Neon Postgres (`prisma/schema.prisma`).
 - next-auth + invite codes; admin endpoints gated by `x-admin-key` header.
 - Zod for API validation. SWR for client fetching. Tailwind v4.
-- Playwright smoke tests only — no unit framework.
+- Vitest for unit tests (`pnpm test:unit`, part of `pnpm quality:check`), Playwright for smoke tests.
 
 ## Scripts
 
@@ -84,10 +84,12 @@ This file is the single source of truth for agent behavior in this repo.
 | LOC gate | `pnpm loc:check` |
 | Quality check (lint + LOC) | `pnpm quality:check` |
 | Quality fix then check | `pnpm quality:fix` |
+| Unit tests | `pnpm test:unit` |
 | Smoke (dev server) | `pnpm test:smoke:local` |
 | Smoke (prod build) | `pnpm test:smoke:build` |
 | Prisma push / studio | `pnpm db:push` / `pnpm db:studio` |
 | Seed JLPT | `pnpm db:seed:jlpt` |
+| Local DB + seeded test user | `pnpm dev:local`, `pnpm local:seed` (invite code `TEST01`) |
 
 Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto-fixable, run `pnpm quality:fix` first.
 
@@ -118,12 +120,20 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Never log, echo, or return WaniKani tokens — they are encrypted at rest.
 - Return typed JSON; surface errors with appropriate status codes.
 
+## Audience And Copy
+
+- UmaKuma is built for Canadians and Americans learning Japanese. Write for both.
+- **User-facing copy uses Canadian spelling.** Favourite, colour, behaviour, centre, catalogue, grey, travelled/cancelled, licence (noun) / license (verb), practice (noun) / practise (verb). Canadian English keeps `-ize` endings, so organize and recognize are correct as written.
+- **Code keeps its existing spelling.** Identifiers, type and prop names, database columns, API request/response values, storage keys, CSS classes, and WaniKani API fields are not copy. `StudySubjectTag.favorite`, `STUDY_TAGS.favorite` and `tag=favorite` stay exactly as they are; only the words a member reads change. Never rename a persisted value for spelling.
+- American spelling for members whose region is set to the US is a **future nice-to-have**, not something to hand-fork in components. It belongs to the locale layer below, as an `en-US` variant of the `en-CA` copy.
+- Localization readiness: every user-facing string lives in its feature's shared copy module (`GAME_COPY`, `STUDY_TAG_LIST_COPY`, `<Feature>.constants.ts`), never inline in a component. This is the precondition for i18n — those maps become the `en-CA` dictionary, and a locale layer swaps them without touching a single component. Keep new copy going into those modules even before an i18n library exists.
+
 ## UI conventions
 
 - Distinguish loading from empty (see `docs/DRY_LEARNINGS.md` #2).
-- User-facing copy must follow `BRAND_CORE.md` / `BRAND.md` voice.
+- User-facing copy must follow `BRAND_CORE.md` / `BRAND.md` voice and the Canadian spelling rule above.
 - Keep primary glyph sizing identical across explorer lists, Review modals, and View Kanji/Radical/Vocabulary details by using the shared `glyphTextSizeClass` helper; do not add branch-specific responsive clamp sizes.
-- Place trouble at the glyph's bottom-left and favorite at its bottom-right in explorer cards, Review modals, and View Kanji/Radical/Vocabulary details; do not put these controls in modal navigation or title chip rows.
+- Place trouble at the glyph's bottom-left and favourite at its bottom-right in explorer cards, Review modals, and View Kanji/Radical/Vocabulary details; do not put these controls in modal navigation or title chip rows.
 - Keep submitted review items in the active modal session until the modal closes. Revisiting a submitted item must show its selected correct/wrong outcome read-only, including when it was the final item.
 - Review and View Glyph modals must use the same shared in-glyph status-chip row. Dual-script readings show hiragana and katakana with one shared pronunciation, never duplicate English for each script.
 - Review and View Glyph modal glyph containers must use the same full-height presentation so in-glyph chips never compress the glyph content.
@@ -136,13 +146,15 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - Game scoring must reward 0.1-second differences while the speed bonus remains and include a bounded Level 1–60 bonus. Keep combined level and speed modifiers below one correct answer for every batch size so accuracy always outranks both.
 - Game rounds must use disjoint targets and distractors with unique distractors when the pool permits, then balance and shuffle correct-answer sides. Constrained pools may reuse non-target choices as a fallback.
 - Game Questions must offer `All` in both controls: setup `All` starts a round with every eligible item for the selected level/category, while scoreboard `All` includes every question-count size.
-- Game Hard Mode uses three distinct left/middle/right choices. Keyboard controls map Left/Up-or-Down/Right, `1`/`2`/`3`, and `4`/`5`/`6`; runs default to regular mode for backward compatibility, and scoreboards must expose hard-mode filtering plus a Difficulty column.
+- Every tile game is played on the Corners board: four quadrants around the prompt, with the word always in the middle. The layout never changes with the choice count — corners the round does not use stay visible as greyed placeholders, and the player adds the bottom two from the lobby with the `+` sitting over them. Keys are the numpad corners (`7`/`9`/`1`/`3`); `8`/`2`/`4`/`6` and the arrows flash the row or column they name and `5` flashes the prompt, because none of them can answer. Map mode is the exception (`usesCornersBoard: false`): its tiles sit in a row and are numbered `1`-`4`. Runs still record `choiceCount` and default to two for backward compatibility, and scoreboards must expose hard-mode filtering plus a Difficulty column.
 - Game Ultra Mode uses `GameRun.batchSize = -1` as its persisted sentinel. It requires one level/category, hides Questions, may combine with Hard Mode, repeats shuffled full-pool cycles indefinitely, and completes on the first wrong answer with elapsed time and streak preserved.
 - Level-specific game leaderboards may list only accounts whose WaniKani level is at least the selected report level. Any/All-level reports may include every account.
 - Games live behind a hub at `/users/[nickname]/game`. Each game is a `GameRun.kind` enum value, and every per-kind behavior (which controls show, whether it is endless, whether a wrong answer ends it, fixed category/question count) comes from `GAME_KIND_RULES` in `src/lib/gameMode.ts`. Do not add new games with `batchSize` sentinels; Ultra keeps `-1` only for backward compatibility as a `match` variant.
 - Daily Challenge is one attempt per account per Vancouver day, enforced by the `(accountId, kind, dailyKey)` unique index. The first run of a day defines the question set and every later run copies those questions, so a mid-day level-up cannot change the day's questions. An unfinished attempt resumes rather than being replaced.
 - Time Attack is scored by `calculateTimeAttackScore`, not the match formula: the clock is fixed and the volume varies. Keep the level bonus below one correct answer so volume always outranks it. Timed runs close through the `runs/[runId]/complete` route; fixed-length runs must not, or a partial round could bank a perfect score.
-- Revenge draws targets from trouble-tagged items first, then lowest `reviewEaseScore`, while distractors still come from the full pool so choices stay confusable.
+- Practice drills one list per run, chosen with `practiceList`: `trouble` and `favorite` take only the items the player tagged, and `toughest` ranks the whole pool by `reviewEaseScore` for players with no tags. Distractors still come from the full pool so choices stay confusable. The kind is still persisted as `revenge`, since renaming a Prisma enum value would rewrite every historical run.
+- The Trouble and Favorites lists are readable anywhere through `StudyTagListsModal`, mounted once in the root layout and opened by event from `StudyTagListsButton` (the game lobby, History and the JLPT explorer). Picking an item hands the visible list to the glyph viewer, which stacks above it.
+- Validation that only applies to some games must be gated on `GAME_KIND_RULES`. A blanket rule (Ultra requires a level, say) rejects a Map or Practice start whenever a stale setting rides along in the persisted selection, and the player only sees "Could not start the game".
 - Shiritori chains on `primaryReading` only, so the next link is derivable from the answered word alone. Words whose reading ends in ん are never targets; a chain ends when the pool has no remaining continuation.
 - `toGameRunSummary` must build its result field by field. Callers pass runs with `questions` included, and spreading the row would ship every `targetSubjectId` to the client.
 - Map mode plays on the 47 prefectures, which are not WaniKani subjects. They reuse the run/question/answer tables through reserved ids (`MAP_SUBJECT_ID_BASE` in `src/lib/japanPrefectures.ts`) that sit far above any real subject id, so scoring, streaks and the scoreboard need no map-specific paths. `hydrateGameQuestions` resolves those ids from the static map instead of `wkSubjectCatalog`; keep that split rather than adding prefecture rows to the catalog.

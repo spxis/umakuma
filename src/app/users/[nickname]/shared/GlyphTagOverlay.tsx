@@ -47,8 +47,8 @@ export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyT
           event.stopPropagation();
           onToggleStudyTag("favorite");
         }}
-        aria-label="Toggle favorite"
-        title="Toggle favorite"
+        aria-label="Toggle favourite"
+        title="Toggle favourite"
         className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-0 text-base font-black leading-none ${studyTags.favorite ? activeToneClass : "text-foreground/20 hover:text-foreground/45"}`}
       >
         ★
