@@ -30,6 +30,7 @@ export const GRADE_EXPLORER_COPY = {
    * split by school year, and the line used to claim it was.
    */
   curriculumNote: "Readings are the official ones from the jōyō table, not a per-grade subset.",
+  practiceSheet: "Writing practice sheet",
   quizOff: "Quiz me",
   quizOn: "Quiz on",
   quizHint: "Say the readings, then select a card to check.",

@@ -1036,5 +1036,15 @@
     "version": "0.91.0",
     "releasedAt": "2026-08-30T14:56:00Z",
     "summary": "A kanji in the search results opens its stroke order without leaving the page. Radicals and vocabulary do not offer it, since neither is a single character with a stroke sequence."
+  },
+  {
+    "id": "writing-practice-sheet",
+    "area": "jlpt",
+    "name": "Printable writing practice",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.92.0",
+    "releasedAt": "2026-08-30T15:06:00Z",
+    "summary": "A printable tracing sheet for any school grade: each character once at full weight to copy, faint repeats to trace, then empty squares to write unaided, with the guide lines a Japanese workbook uses. Drawn from the real stroke paths rather than a greyed-out font."
   }
 ]

@@ -117,6 +117,13 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
             })}
           </div>
 
+          <Link
+            href={`/users/${encodeURIComponent(account.wkUsername)}/grades/practice?grade=${grade}`}
+            className="mt-3 inline-flex h-8 items-center rounded-full border border-kanji/40 bg-kanji/10 px-4 text-xs font-black uppercase tracking-[0.08em] text-kanji transition hover:bg-kanji/20"
+          >
+            {GRADE_EXPLORER_COPY.practiceSheet}
+          </Link>
+
           <form className="mt-3 flex flex-wrap items-center gap-2" action={`/users/${encodeURIComponent(account.wkUsername)}/grades`}>
             <input type="hidden" name="grade" value={grade} />
             <input
