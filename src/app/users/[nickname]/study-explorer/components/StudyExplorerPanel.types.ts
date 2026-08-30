@@ -5,11 +5,13 @@ import type {
   StudyQueueMode,
   StudySrsFilter,
   StudySrsStageFilter,
+  StudyTagFilter,
   StudyTypeFilter,
   StudyWaitSortOrder,
 } from "../lib/studyExplorerTypes";
 
 type StudyExplorerPanelProps = {
+  accountId: string;
   canToggleEnglish: boolean;
   showEnglish: boolean;
   studyMode: boolean;
@@ -24,6 +26,7 @@ type StudyExplorerPanelProps = {
   srsFilter: StudySrsFilter;
   srsStageFilter: StudySrsStageFilter | null;
   queueMode: StudyQueueMode;
+  queueTagFilter: StudyTagFilter;
   lessonLevelCounts: Record<number, number>;
   typeCounts: { all: number; radical: number; kanji: number; vocabulary: number };
   srsCounts: { all: number; locked: number; apprentice: number; guru: number; master: number; enlightened: number; burned: number };
@@ -59,6 +62,7 @@ type StudyExplorerPanelProps = {
   onSelectSubject: (subjectId: number) => void;
   onToggleStudyTag: (subjectId: number, tag: "favorite" | "trouble", enabled: boolean) => void;
   onClearAllFilters: () => void;
+  onClearQueueTagFilter: () => void;
 };
 
 export type { StudyExplorerPanelProps };

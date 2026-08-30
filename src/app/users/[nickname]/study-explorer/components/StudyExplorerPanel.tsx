@@ -40,6 +40,8 @@ import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/Statu
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import StudyCardTagOverlay from "./StudyCardTagOverlay";
+import StudyTagFilterNotice from "./StudyTagFilterNotice";
+import StudyTagListsButton from "../../../../shared/StudyTagListsButton";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import FieldLabel from "../../../../shared/FieldLabel";
 export default function StudyExplorerPanel({
@@ -92,6 +94,9 @@ export default function StudyExplorerPanel({
   onSelectSubject,
   onToggleStudyTag,
   onClearAllFilters,
+  onClearQueueTagFilter,
+  queueTagFilter,
+  accountId,
 }: StudyExplorerPanelProps) {
   const { bulkModeEnabled, selectedSubjectIds, selectedItems, selectedPreview, applyBulkSelection, toggleBulkMode, setSelectedSubjectIds } = useStudyBulkReset({ filteredItems });
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
@@ -128,7 +133,7 @@ export default function StudyExplorerPanel({
       ? "block"
       : "hidden";
   const openAllMobileFilterSections = () => { setMobileFilterSectionOpen("level", true); setMobileFilterSectionOpen("grouping", true); setMobileFilterSectionOpen("status", true); };
-  const handleResetFilters = () => { onClearAllFilters(); setFiltersOpen(true); openAllMobileFilterSections(); };
+  const handleResetFilters = () => { onClearAllFilters(); onClearQueueTagFilter(); setFiltersOpen(true); openAllMobileFilterSections(); };
   return (
     <>
       <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
@@ -148,6 +153,8 @@ export default function StudyExplorerPanel({
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
           <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
+            <StudyTagFilterNotice queueTagFilter={queueTagFilter} onClear={onClearQueueTagFilter} />
+            <StudyTagListsButton accountId={accountId} size="sm" />
             <ExplorerFilterToggleButton
               expanded={filtersOpen}
               onToggle={() => setFiltersOpen((open) => !open)}

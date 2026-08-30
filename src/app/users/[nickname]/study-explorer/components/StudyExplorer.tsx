@@ -66,6 +66,7 @@ export default function StudyExplorer({
   queueMode,
   includeTrouble,
   queueTagFilter = "all",
+  onClearQueueTagFilter,
   onReviewedVisibilityChange,
 }: StudyExplorerProps) {
   const queueStorageScopeKey = buildStudyQueueStorageScopeKey(studySource, customLibraryId, queueTagFilter);
@@ -466,6 +467,8 @@ export default function StudyExplorer({
             onOpenStudySourceManager={onOpenStudySourceManager}
             onSetWaitSortOrder={setWaitSortOrder} onSelectSubject={setSelectedId}
             onToggleStudyTag={handleToggleStudyTag} onClearAllFilters={clearAllFilters}
+            queueTagFilter={queueTagFilter} onClearQueueTagFilter={() => onClearQueueTagFilter?.()}
+            accountId={accountId}
           />
           <StudyExplorerModal
             accountId={accountId} currentLevel={studySourceLevel} showEnglish={showEnglish} canToggleEnglish={canToggleEnglish}

@@ -434,6 +434,7 @@ export default function ExplorerTabs({
           queueMode={queueMode}
           includeTrouble={includeTrouble}
           queueTagFilter={queueTagFilter}
+          onClearQueueTagFilter={() => setQueueTagFilter("all")}
           onReviewedVisibilityChange={(visible) => setReviewedVisible(visible)}
         />
       </div>

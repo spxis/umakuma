@@ -762,5 +762,15 @@
     "version": "0.64.0",
     "releasedAt": "2026-08-30T09:07:09Z",
     "summary": "Each account row keeps one visible Open-as-user action and folds the rest into a compact overflow menu."
+  },
+  {
+    "id": "study-tag-filter-visible",
+    "area": "study",
+    "name": "Trouble and Favourites, visible from Study",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.65.0",
+    "releasedAt": "2026-08-30T09:52:35Z",
+    "summary": "The queue tag filter now shows as a chip you can clear, so a sticky Trouble filter no longer hides most of the due reviews without saying so, and the Trouble & favourites lists open from the Study page rather than only the game lobby, History and the JLPT explorer."
   }
 ]

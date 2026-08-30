@@ -115,6 +115,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tsurutsuru Tsukimi", ja: "つるつる月見", reading: "つるつるつきみ", gloss: "silky moon-viewing" },
   { romaji: "Teppan Tebasaki", ja: "鉄板手羽先", reading: "てっぱんてばさき", gloss: "iron-plate chicken wings" },
   { romaji: "Tokimeki Torii", ja: "ときめき鳥居", reading: "ときめきとりい", gloss: "heart-flutter shrine gate" },
+  { romaji: "Natsumatsuri Naruto", ja: "夏祭り鳴門", reading: "なつまつりなると", gloss: "summer-festival whirlpools" },
 ];
 
 export function codenameForMinor(minor: number): ReleaseCodename | null {
