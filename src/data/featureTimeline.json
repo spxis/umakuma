@@ -862,5 +862,15 @@
     "version": "0.73.0",
     "releasedAt": "2026-08-30T13:26:41Z",
     "summary": "What makes a convincing wrong answer on a map - neighbours first, then region, then proximity - moves out of the Japan question builder so states and provinces use the same rule. Japan scores exactly as before."
+  },
+  {
+    "id": "grade-explorer",
+    "area": "jlpt",
+    "name": "School Grade explorer",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.74.0",
+    "releasedAt": "2026-08-30T13:31:36Z",
+    "summary": "Kanji by Japanese school year, with the on and kun readings approved for that grade rather than every reading the character has. Covers grades 1 to 6, secondary joyo and jinmeiyo, searchable and paged."
   }
 ]

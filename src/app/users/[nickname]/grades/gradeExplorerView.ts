@@ -1,0 +1,71 @@
+import type { SchoolGradeKanjiEntry, SchoolGradeReadings } from "@/lib/schoolGrades.types";
+
+import { DEFAULT_GRADE, GRADE_PAGE_SIZE } from "./GradeExplorer.constants";
+
+/** The grades the explorer offers, in the order a school year runs. */
+export const GRADE_OPTIONS = [1, 2, 3, 4, 5, 6, 8, 9] as const;
+
+export type GradeOption = (typeof GRADE_OPTIONS)[number];
+
+/**
+ * Chip labels. Grades 1-6 are school years; 8 and 9 are the KANJIDIC
+ * convention for secondary joyo and jinmeiyo, which are not year numbers and
+ * would read as "Grade 8" if labelled like one.
+ */
+export const GRADE_SHORT_LABELS: Record<GradeOption, string> = {
+  1: "G1", 2: "G2", 3: "G3", 4: "G4", 5: "G5", 6: "G6",
+  8: "Jr High", 9: "Name",
+};
+
+export function isGradeOption(value: number): value is GradeOption {
+  return (GRADE_OPTIONS as readonly number[]).includes(value);
+}
+
+/** The grade named by a query string, falling back to the opening grade. */
+export function parseGradeParam(raw: string | undefined): GradeOption {
+  const parsed = Number.parseInt(String(raw ?? ""), 10);
+  return Number.isFinite(parsed) && isGradeOption(parsed) ? parsed : DEFAULT_GRADE;
+}
+
+export function parsePageParam(raw: string | undefined): number {
+  const parsed = Number.parseInt(String(raw ?? ""), 10);
+  return Number.isFinite(parsed) && parsed >= 1 ? parsed : 1;
+}
+
+/**
+ * The readings a grade actually examines.
+ *
+ * A kanji carries every reading it has, but a school year only teaches some of
+ * them, and that narrower set is what a Grade 2 test asks for. Prefer the
+ * grade-approved list and fall back to the full one only when the dataset has
+ * no grade-specific entry, so a card never comes up empty.
+ */
+export function readingsForGrade(entry: SchoolGradeKanjiEntry): SchoolGradeReadings {
+  const approved = entry.gradeApprovedReadings;
+  const hasApproved = Boolean(approved && ((approved.on?.length ?? 0) > 0 || (approved.kun?.length ?? 0) > 0));
+  const chosen = hasApproved && approved ? approved : entry.readings;
+  return { on: chosen?.on ?? [], kun: chosen?.kun ?? [] };
+}
+
+/**
+ * Kun readings are written with a dot marking where the kanji stops and the
+ * okurigana begins (`ひ.く`). The dot is a dictionary convention, not part of
+ * the reading, so it is dropped for display.
+ */
+export function displayReading(reading: string): string {
+  return reading.replace(/\./g, "");
+}
+
+export function gradeHref(nickname: string, grade: number, page = 1, search = ""): string {
+  const params = new URLSearchParams({ grade: String(grade) });
+  if (page > 1) params.set("page", String(page));
+  if (search.trim()) params.set("q", search.trim());
+  return `/users/${encodeURIComponent(nickname)}/grades?${params.toString()}`;
+}
+
+/** One-based range of the items on this page, for the "showing X-Y of Z" line. */
+export function pageRange(page: number, total: number): { first: number; last: number } {
+  if (total === 0) return { first: 0, last: 0 };
+  const first = (page - 1) * GRADE_PAGE_SIZE + 1;
+  return { first, last: Math.min(page * GRADE_PAGE_SIZE, total) };
+}

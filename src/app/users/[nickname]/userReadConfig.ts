@@ -13,7 +13,7 @@ import {
  */
 export const DASHBOARD_TAB_LABELS: Record<TabId, string> = {
   learn: "Study",
-  wk: "Library Explorer",
+  wk: "WaniKani",
   jlpt: "JLPT Explorer",
   stats: "Stats",
   news: "News",
