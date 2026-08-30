@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { MouseEvent as ReactMouseEvent } from "react";
 
+import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
 import ReleaseMotto from "./ReleaseMotto";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
@@ -19,12 +20,6 @@ type AppTopMenuRowProps = {
   className?: string;
 };
 
-type MainLink = {
-  label: string;
-  href: string;
-  dashboard: TabId | null;
-};
-
 const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "library-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
 
 function isDashboardTabId(value: string | null): value is TabId {
@@ -33,39 +28,6 @@ function isDashboardTabId(value: string | null): value is TabId {
 
 function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
   return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
-}
-
-function userTabHref(username: string | null, tab: "learn" | "wk" | "jlpt" | "stats" | "news" | "read"): string {
-  if (!username) {
-    return "/join";
-  }
-
-  const segment = tab === "learn" ? "study" : tab === "wk" ? "library-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab;
-  return `/users/${encodeURIComponent(username)}/${segment}`;
-}
-
-function userHistoryHref(username: string | null): string {
-  if (!username) {
-    return "/join";
-  }
-
-  return `/users/${encodeURIComponent(username)}/history`;
-}
-
-function userGameHref(username: string | null): string {
-  if (!username) {
-    return "/join";
-  }
-
-  return `/users/${encodeURIComponent(username)}/game`;
-}
-
-function userLibrariesHref(username: string | null): string {
-  if (!username) {
-    return "/join";
-  }
-
-  return `/users/${encodeURIComponent(username)}/libraries`;
 }
 
 export default function AppTopMenuRow({
@@ -80,21 +42,7 @@ export default function AppTopMenuRow({
   const pathname = usePathname();
   const resolvedWkUsername = primaryWkUsername ?? viewerMenuInfo?.wkUsername ?? null;
   const canSeeAdminTopLink = showAdminActions;
-  const links: MainLink[] = [
-    { label: "Leaderboard", href: "/", dashboard: null },
-    { label: DASHBOARD_TAB_LABELS.learn, href: userTabHref(resolvedWkUsername, "learn"), dashboard: "learn" },
-    { label: "Game", href: userGameHref(resolvedWkUsername), dashboard: null },
-    { label: DASHBOARD_TAB_LABELS.wk, href: userTabHref(resolvedWkUsername, "wk"), dashboard: "wk" },
-    { label: DASHBOARD_TAB_LABELS.jlpt, href: userTabHref(resolvedWkUsername, "jlpt"), dashboard: "jlpt" },
-    { label: "History", href: userHistoryHref(resolvedWkUsername), dashboard: null },
-    { label: DASHBOARD_TAB_LABELS.stats, href: userTabHref(resolvedWkUsername, "stats"), dashboard: "stats" },
-    { label: DASHBOARD_TAB_LABELS.news, href: userTabHref(resolvedWkUsername, "news"), dashboard: "news" },
-    { label: DASHBOARD_TAB_LABELS.read, href: userTabHref(resolvedWkUsername, "read"), dashboard: "read" },
-    { label: "Libraries", href: userLibrariesHref(resolvedWkUsername), dashboard: null },
-  ];
-  if (canSeeAdminTopLink) {
-    links.push({ label: "Admin", href: "/admin", dashboard: null });
-  }
+  const links: MainLink[] = buildMainLinks(resolvedWkUsername, canSeeAdminTopLink);
   const mobileLinks = links.filter((link) =>
     link.label === "Leaderboard" || link.label === "Study" || link.label === "Game" || link.label === "Admin"
   );

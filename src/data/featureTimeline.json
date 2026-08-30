@@ -712,5 +712,14 @@
     "date": "2026-08-30",
     "version": "0.60.0",
     "summary": "Every admin-gated endpoint now lives under /api/admin/; the six that were scattered across the public tree moved in."
+  },
+  {
+    "id": "signed-in-navigation",
+    "name": "Honest signed-out navigation",
+    "area": "account",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.61.0",
+    "summary": "The join page sends resolved members to their own page, and the header only offers links the viewer can actually open."
   }
 ]

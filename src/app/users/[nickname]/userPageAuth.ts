@@ -40,7 +40,7 @@ export async function resolveViewerMenuInfo(input: {
     // account nicknamed Jay - a page-level grant to a stranger. Accounts with
     // no linked email sign in with their invite code instead.
     const viewerAccount = await prisma.account.findFirst({
-      where: { joinedByEmail: viewerEmail },
+      where: { joinedByEmail: { equals: viewerEmail, mode: "insensitive" } },
       select: {
         nickname: true,
         wkUsername: true,
