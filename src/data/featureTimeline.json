@@ -801,5 +801,15 @@
     "version": "0.66.0",
     "releasedAt": "2026-08-30T10:25:50Z",
     "summary": "The release name prints its kana reading beside the kanji instead of hiding the kanji in a tooltip, so both scripts are readable at a glance."
+  },
+  {
+    "id": "version-links-to-releases",
+    "area": "admin",
+    "name": "Version number opens the release timeline",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.67.0",
+    "releasedAt": "2026-08-30T11:01:04Z",
+    "summary": "For an admin the footer version number and the header motto link straight to the release timeline. Everyone else still sees them as plain text, since the page is admin-only."
   }
 ]

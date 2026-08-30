@@ -129,7 +129,7 @@ export default function AppTopMenuRow({
         ))}
       </nav>
 
-      <ReleaseMotto />
+      <ReleaseMotto isAdmin={canSeeAdminTopLink} />
 
       <div className="shrink-0">
         <UserHeaderMenu

@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
+
 import { APP_VERSION, APP_VERSION_DATE } from "@/lib/appVersion";
 import { codenameForVersion } from "@/lib/releaseCodenames";
+import { releasesHrefForViewer } from "@/lib/releaseLink";
 import CodenameText from "./shared/CodenameText";
 
 // Formatted locally rather than with the timeline's helper: importing
@@ -19,9 +22,13 @@ const CODENAME = codenameForVersion(APP_VERSION);
 type Props = {
   /** Concise mode chips (DEV, ADV) for globally enabled flags; empty when none. */
   modeChips?: string[];
+  /** Admins get the version number as a link to the release timeline. */
+  isAdmin?: boolean;
 };
 
-export default function AppFooter({ modeChips = [] }: Props) {
+export default function AppFooter({ modeChips = [], isAdmin = false }: Props) {
+  const releasesHref = releasesHrefForViewer(isAdmin);
+
   return (
     <footer className="relative z-20 mt-8 border-t border-line/70 bg-surface/70 backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
@@ -36,7 +43,13 @@ export default function AppFooter({ modeChips = [] }: Props) {
             </span>
           ))}
           <span>
-          v{APP_VERSION}
+          {releasesHref ? (
+            <Link href={releasesHref} className="underline decoration-dotted underline-offset-2 transition hover:text-foreground/70">
+              v{APP_VERSION}
+            </Link>
+          ) : (
+            <>v{APP_VERSION}</>
+          )}
           {CODENAME ? (
             <>
               {" · "}

@@ -117,6 +117,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tokimeki Torii", ja: "ときめき鳥居", reading: "ときめきとりい", gloss: "heart-flutter shrine gate" },
   { romaji: "Natsumatsuri Naruto", ja: "夏祭り鳴門", reading: "なつまつりなると", gloss: "summer-festival whirlpools" },
   { romaji: "Nikoniko Nikujaga", ja: "にこにこ肉じゃが", reading: "にこにこにくじゃが", gloss: "smiling potato stew" },
+  { romaji: "Nukazuke Nuigurumi", ja: "糠漬けぬいぐるみ", reading: "ぬかづけぬいぐるみ", gloss: "bran-pickle plushie" },
 ];
 
 /**
