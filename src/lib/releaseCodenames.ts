@@ -116,7 +116,16 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Teppan Tebasaki", ja: "鉄板手羽先", reading: "てっぱんてばさき", gloss: "iron-plate chicken wings" },
   { romaji: "Tokimeki Torii", ja: "ときめき鳥居", reading: "ときめきとりい", gloss: "heart-flutter shrine gate" },
   { romaji: "Natsumatsuri Naruto", ja: "夏祭り鳴門", reading: "なつまつりなると", gloss: "summer-festival whirlpools" },
+  { romaji: "Nikoniko Nikujaga", ja: "にこにこ肉じゃが", reading: "にこにこにくじゃが", gloss: "smiling potato stew" },
 ];
+
+/**
+ * The kanji form worth printing beside the reading, or `null` when the name is
+ * already written in kana and showing both would just repeat it.
+ */
+export function codenameKanji(codename: ReleaseCodename): string | null {
+  return codename.ja === codename.reading ? null : codename.ja;
+}
 
 export function codenameForMinor(minor: number): ReleaseCodename | null {
   return CODENAMES[minor - 1] ?? null;

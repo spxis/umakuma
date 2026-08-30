@@ -7,6 +7,7 @@ import {
   codenameForMinor,
   codenameForVersion,
   codenameKanaForMinor,
+  codenameKanji,
   toHiragana,
 } from "./releaseCodenames";
 
@@ -85,6 +86,25 @@ describe("the codename list", () => {
         seen.set(word, codename.romaji);
       }
     }
+  });
+});
+
+describe("codenameKanji", () => {
+  it("gives the kanji form to print beside the reading", () => {
+    expect(codenameKanji({ romaji: "Natsumatsuri Naruto", ja: "夏祭り鳴門", reading: "なつまつりなると", gloss: "x" })).toBe("夏祭り鳴門");
+  });
+
+  /*
+   * Tobikiri Tonkatsu is written in kana, so `ja` and `reading` are the same
+   * string. Printing both would repeat the name rather than teach anything.
+   */
+  it("returns nothing for a name already written in kana", () => {
+    expect(codenameKanji({ romaji: "Tobikiri Tonkatsu", ja: "とびきりとんかつ", reading: "とびきりとんかつ", gloss: "x" })).toBeNull();
+  });
+
+  it("leaves no shipped codename repeating itself", () => {
+    const repeated = CODENAMES.filter((entry) => entry.ja === entry.reading).map((entry) => entry.romaji);
+    expect(repeated).toEqual(["Tobikiri Tonkatsu"]);
   });
 });
 
