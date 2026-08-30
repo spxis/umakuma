@@ -435,11 +435,11 @@
     "id": "viewer-identity-fix",
     "name": "Viewer identity fix",
     "area": "account",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-08-30",
-    "dateIsEstimate": true,
-    "release": 1,
-    "summary": "Stop resolving a signed-in viewer to an account by matching their Google display name against a nickname."
+    "dateIsEstimate": false,
+    "summary": "A Google viewer now resolves to an account by linked email only; the display-name fallback that granted strangers a family member's pages is gone.",
+    "version": "0.58.0"
   },
   {
     "id": "release-timeline",

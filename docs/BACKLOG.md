@@ -35,7 +35,7 @@ through it meets a finished flow.
 
 | # | Release | Blocked by |
 |---|---|---|
-| 1 | Viewer identity fix | the lockout decision below |
+| 1 | ~~Viewer identity fix~~ ✅ v0.58.0 | — |
 | 2 | Viewing presence | needs a schema push |
 | 3 | Optional WaniKani connection | — |
 | 4 | Display names and visibility | 3 |
@@ -145,7 +145,7 @@ no official kanji or vocabulary counts.
 
 Detail the table has no room for.
 
-### 1 — Viewer identity fix
+### 1 — Viewer identity fix ✅ shipped (v0.58.0)
 
 `resolveViewerMenuInfo` in `src/app/users/[nickname]/userPageAuth.ts` falls back
 to matching a signed-in viewer's **Google display name** against an account

@@ -34,39 +34,18 @@ export async function resolveViewerMenuInfo(input: {
   const viewerIsAdmin = isAdminEmail(viewerEmail);
 
   if (viewerEmail) {
-    let viewerAccount = await prisma.account.findFirst({
+    // The linked email is the only thing that may resolve a Google viewer to
+    // an account. Matching the session's display name against nicknames used
+    // to be the fallback, which handed anyone whose Google name was "Jay" the
+    // account nicknamed Jay - a page-level grant to a stranger. Accounts with
+    // no linked email sign in with their invite code instead.
+    const viewerAccount = await prisma.account.findFirst({
       where: { joinedByEmail: viewerEmail },
       select: {
         nickname: true,
         wkUsername: true,
       },
     });
-
-    const fallbackNameCandidates = Array.from(
-      new Set(
-        [
-          sessionName?.trim() ?? "",
-          sessionName?.trim().split(/\s+/)[0] ?? "",
-        ].filter((value) => value.length > 0),
-      ),
-    );
-
-    if (!viewerAccount && fallbackNameCandidates.length > 0) {
-      viewerAccount = await prisma.account.findFirst({
-        where: {
-          OR: fallbackNameCandidates.map((candidate) => ({
-            nickname: {
-              equals: candidate,
-              mode: "insensitive",
-            },
-          })),
-        },
-        select: {
-          nickname: true,
-          wkUsername: true,
-        },
-      });
-    }
 
     return {
       provider: "google",
