@@ -10,6 +10,8 @@ export const STROKE_ANIMATION_COPY = {
   unavailable: "No stroke order for this character.",
   creditPrefix: "Stroke data from",
   printed: "Printed",
+  gothic: "Gothic",
+  mincho: "Mincho",
   animated: "Stroke order",
   close: "Close",
 } as const;

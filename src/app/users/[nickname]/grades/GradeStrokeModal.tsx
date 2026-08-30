@@ -14,6 +14,29 @@ type Props = {
   onClose: () => void;
 };
 
+/**
+ * The character as a font draws it.
+ *
+ * Both faces are shown because they differ where it matters for handwriting:
+ * Mincho keeps the tapered strokes and the little triangular stops a textbook
+ * shows, while Gothic renders every stroke at one weight. A child copying
+ * strokes is really copying the Mincho shape.
+ */
+function PrintedGlyph({ kanji, label, fontFamily }: { kanji: string; label: string; fontFamily: string }) {
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <span
+        style={{ fontFamily }}
+        className="flex h-20 w-20 items-center justify-center rounded-2xl border border-kanji/40 bg-kanji/5 text-5xl font-black leading-none text-kanji"
+        aria-hidden="true"
+      >
+        {kanji}
+      </span>
+      <span className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/40">{label}</span>
+    </div>
+  );
+}
+
 function ReadingLine({ label, readings }: { label: string; readings: string[] }) {
   if (readings.length === 0) {
     return null;
@@ -70,16 +93,17 @@ export default function GradeStrokeModal({ entry, onClose }: Props) {
       </header>
 
       <div className="flex flex-col items-center gap-4 px-5 py-5 sm:flex-row sm:items-start sm:justify-center">
-        <div className="flex flex-col items-center gap-1">
-          <span
-            className="flex h-[104px] w-[104px] items-center justify-center rounded-2xl border border-kanji/40 bg-kanji/5 text-6xl font-black leading-none text-kanji [font-family:var(--font-jp-current)]"
-            aria-hidden="true"
-          >
-            {entry.kanji}
-          </span>
-          <span className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/40">
-            {STROKE_ANIMATION_COPY.printed}
-          </span>
+        <div className="flex flex-row gap-3 sm:flex-col">
+          <PrintedGlyph
+            kanji={entry.kanji}
+            label={STROKE_ANIMATION_COPY.gothic}
+            fontFamily="var(--font-jp-sans), sans-serif"
+          />
+          <PrintedGlyph
+            kanji={entry.kanji}
+            label={STROKE_ANIMATION_COPY.mincho}
+            fontFamily="var(--font-jp-serif), serif"
+          />
         </div>
 
         <KanjiStrokeAnimation key={entry.kanji} kanji={entry.kanji} grade={entry.grade} size={200} />

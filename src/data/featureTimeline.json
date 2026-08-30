@@ -976,5 +976,15 @@
     "version": "0.85.0",
     "releasedAt": "2026-08-30T14:24:05Z",
     "summary": "The stroke-order view shows the printed character beside the animation, so a child copying strokes has the real shape to compare against, with the grade, JLPT and WaniKani levels, frequency rank and readings underneath."
+  },
+  {
+    "id": "joyo-official-readings",
+    "area": "jlpt",
+    "name": "Official readings from the joyo table",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.86.0",
+    "releasedAt": "2026-08-30T14:29:04Z",
+    "summary": "Reported by John: the grade cards listed every reading a character has ever taken. They now use the readings from the joyo table, which is the cabinet-notified list for general use - so King correctly shows no kun reading, Sound files its in reading as on, and Life drops from twenty-one readings to ten. Both fonts are shown in the stroke view for comparison."
   }
 ]

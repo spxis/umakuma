@@ -8,6 +8,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import userBanner from "@/images/umakuma-banner1-transparent.png";
 import { prisma } from "@/lib/prisma";
 import { getSchoolGradeIndex, querySchoolGradeCatalog } from "@/lib/schoolGrades";
+import { withOfficialReadings } from "@/lib/gradeReadings";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import { GRADE_EXPLORER_COPY, GRADE_PAGE_SIZE } from "./GradeExplorer.constants";
@@ -143,7 +144,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
         </header>
 
         <div className="p-4">
-          <GradeKanjiBoard key={`${grade}:${page}:${search}`} items={catalog.items} />
+          <GradeKanjiBoard key={`${grade}:${page}:${search}`} items={withOfficialReadings(catalog.items)} />
 
           {catalog.pagination.totalPages > 1 ? (
             <nav className="mt-4 flex items-center justify-between gap-3">
