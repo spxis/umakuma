@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
+
 import { SEARCH_SOURCE_LABELS, searchHitHref, type SearchHit, type SearchSource } from "@/lib/globalSearch";
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 
@@ -81,12 +83,27 @@ function HitRow({ hit, href }: { hit: SearchHit; href: string | null }) {
     </>
   );
 
-  const shell = "flex w-full items-center gap-3 px-3 py-2.5 text-left transition hover:bg-surface-muted/50";
-  return href ? (
-    <Link href={href} className={shell}>
-      {body}
-    </Link>
-  ) : (
-    <div className={shell}>{body}</div>
+  const shell = "flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 text-left transition hover:bg-surface-muted/50";
+
+  /*
+   * The strokes button sits outside the row link. Nesting a button inside an
+   * anchor is invalid, and the click would be swallowed by the navigation.
+   */
+  return (
+    <div className="flex items-center gap-1 pr-2">
+      {href ? (
+        <Link href={href} className={shell}>
+          {body}
+        </Link>
+      ) : (
+        <div className={shell}>{body}</div>
+      )}
+      {isSingleKanji(hit) ? <StrokeOrderButton kanji={hit.glyph} meaning={hit.meaning} /> : null}
+    </div>
   );
+}
+
+/** Stroke order exists for single kanji, not radicals drawn as images or words. */
+function isSingleKanji(hit: SearchHit): boolean {
+  return hit.subjectType === "kanji" && [...hit.glyph].length === 1;
 }

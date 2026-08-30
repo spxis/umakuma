@@ -1026,5 +1026,15 @@
     "version": "0.90.0",
     "releasedAt": "2026-08-30T14:49:00Z",
     "summary": "The grade page claimed its readings were the ones approved for that school year. They are the joyo table's, which is the official list for general use and is not split by year, so the copy now says so."
+  },
+  {
+    "id": "search-stroke-order",
+    "area": "platform",
+    "name": "Stroke order from search",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.91.0",
+    "releasedAt": "2026-08-30T14:56:00Z",
+    "summary": "A kanji in the search results opens its stroke order without leaving the page. Radicals and vocabulary do not offer it, since neither is a single character with a stroke sequence."
   }
 ]
