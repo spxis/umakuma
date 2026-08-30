@@ -4,6 +4,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
+import { preferOfficialReadings } from "@/lib/joyoReadings";
 import { applyReviewSuccessRates, withReviewSuccessRates } from "@/lib/reviewSuccessRates";
 import { getCachedStudyQueue, setCachedStudyQueue } from "@/lib/studyQueueCache";
 import { cachedStudyQueueResponse } from "./queueRouteCachedResponse";
@@ -367,12 +368,14 @@ export async function GET(request: Request, context: RouteContext) {
           : [];
 
       const jlpt = subjectType === SUBJECT_TYPES.kanji ? jlptByKanji.get(subjectData?.characters ?? "") : null;
+      // KANJIDIC lists forms a character never takes alone; the joyo table does not.
+      const officialReadings = jlpt ? preferOfficialReadings(jlpt.kanji, jlpt.onReadings, jlpt.kunReadings) : null;
       const jlptMeta = jlpt
         ? {
             primaryMeaning: jlpt.primaryMeaning,
             meanings: jlpt.meanings,
-            onReadings: jlpt.onReadings,
-            kunReadings: jlpt.kunReadings,
+            onReadings: officialReadings?.on ?? jlpt.onReadings,
+            kunReadings: officialReadings?.kun ?? jlpt.kunReadings,
             nanoriReadings: jlpt.nanoriReadings,
             wordExamples: jlpt.wordExamples,
             strokeCount: jlpt.strokeCount,

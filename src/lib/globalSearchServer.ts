@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES, isSubjectType } from "./domainConstants";
 import { prisma } from "./prisma";
+import { preferOfficialReadings } from "./joyoReadings";
 import { querySchoolGradeCatalog } from "./schoolGrades";
 import {
   SEARCH_PER_SOURCE_LIMIT,
@@ -138,7 +139,8 @@ async function searchJlpt(query: string): Promise<SearchHit[]> {
 
   return rows.map((row) => {
     const meaning = row.primaryMeaning ?? row.meanings[0] ?? "";
-    const reading = joined([...row.onReadings, ...row.kunReadings]);
+    const official = preferOfficialReadings(row.kanji, row.onReadings, row.kunReadings);
+    const reading = joined([...official.on, ...official.kun]);
     return {
       source: SEARCH_SOURCES.jlpt,
       key: `jlpt:${row.kanji}`,
@@ -166,7 +168,8 @@ function searchGrades(query: string): SearchHit[] {
 
   return catalog.items.map((entry) => {
     const meaning = entry.primaryMeaning ?? entry.meanings?.[0] ?? "";
-    const reading = joined([...(entry.readings?.on ?? []), ...(entry.readings?.kun ?? [])]);
+    const gradeReadings = preferOfficialReadings(entry.kanji, entry.readings?.on, entry.readings?.kun);
+    const reading = joined([...gradeReadings.on, ...gradeReadings.kun]);
     return {
       source: SEARCH_SOURCES.grades,
       key: `grades:${entry.kanji}`,

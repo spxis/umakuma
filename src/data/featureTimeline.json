@@ -1006,5 +1006,15 @@
     "version": "0.88.0",
     "releasedAt": "2026-08-30T14:43:23Z",
     "summary": "The script that exports the WaniKani catalogue could not run at all - it imported a server-only module - so its committed snapshot had drifted to 3,930 of 9,324 subjects. Fixed and regenerated, and dropping the raw payload makes the complete export smaller than the stale one was."
+  },
+  {
+    "id": "official-readings-everywhere",
+    "area": "jlpt",
+    "name": "Official readings on every surface",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.89.0",
+    "releasedAt": "2026-08-30T14:46:34Z",
+    "summary": "The grade explorer was not the only place showing readings a character never takes on its own: 245 of the 2,211 JLPT kanji carried them too, so the JLPT explorer, the glyph viewer and search all did. One shared helper now prefers the joyo table wherever readings leave the database."
   }
 ]

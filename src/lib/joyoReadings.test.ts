@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { withOfficialReadings } from "./gradeReadings";
-import { getJoyoReadings, joyoAttribution, joyoReadingCount } from "./joyoReadings";
+import { dropCompoundOnly, getJoyoReadings, joyoAttribution, joyoReadingCount, preferOfficialReadings } from "./joyoReadings";
 import type { SchoolGradeKanjiEntry } from "./schoolGrades.types";
 
 function entry(kanji: string, kun: string[], on: string[] = []): SchoolGradeKanjiEntry {
@@ -81,5 +81,44 @@ describe("withOfficialReadings", () => {
 
   it("handles an empty page without complaint", () => {
     expect(withOfficialReadings([])).toEqual([]);
+  });
+});
+
+describe("preferOfficialReadings", () => {
+  it("replaces a joyo character's readings wholesale", () => {
+    const king = preferOfficialReadings("王", ["-ノウ", "オウ"], []);
+    expect(king).toEqual({ on: ["オウ"], kun: [] });
+  });
+
+  it("moves a reading to the side of the split it belongs on", () => {
+    // KANJIDIC filed イン under on for 音 but also carried -ノン beside it.
+    const sound = preferOfficialReadings("音", ["-ノン", "イン", "オン"], ["おと", "ね"]);
+    expect(sound.on).toEqual(["オン", "イン"]);
+    expect(sound.kun).toEqual(["おと", "ね"]);
+  });
+
+  /*
+   * Name kanji are outside the joyo table, so they keep their own readings.
+   * Stripping the compound-only forms is still right - those are wrong
+   * everywhere, not just where an official list exists.
+   */
+  it("keeps a name kanji's readings but drops its compound-only forms", () => {
+    const result = preferOfficialReadings("逢", ["ホウ"], ["あ.う", "-むか.える"]);
+    expect(result.on).toEqual(["ホウ"]);
+    expect(result.kun).toEqual(["あ.う"]);
+  });
+
+  it("survives a character with no readings at all", () => {
+    expect(preferOfficialReadings("逢", undefined, undefined)).toEqual({ on: [], kun: [] });
+  });
+});
+
+describe("dropCompoundOnly", () => {
+  it("removes prefix and suffix forms, keeping the rest", () => {
+    expect(dropCompoundOnly(["ひ", "ほ", "-び", "ほ-"])).toEqual(["ひ", "ほ"]);
+  });
+
+  it("handles nothing at all", () => {
+    expect(dropCompoundOnly(undefined)).toEqual([]);
   });
 });

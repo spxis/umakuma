@@ -71,3 +71,38 @@ export function joyoAttribution(): JoyoAttribution | null {
 export function joyoReadingCount(): number {
   return load().size;
 }
+
+/**
+ * Drops readings a character never takes on its own.
+ *
+ * KANJIDIC hyphenates a form that only exists attached to something else:
+ * `-ノウ` appears solely inside a word like 親王, `ほ-` only as a prefix.
+ * Printed as a reading, they teach the opposite of the truth.
+ */
+export function dropCompoundOnly(readings: string[] | undefined): string[] {
+  return (readings ?? []).filter((reading) => !reading.includes("-"));
+}
+
+/**
+ * The readings to show for a character, preferring the official ones.
+ *
+ * The stored readings come from KANJIDIC, which lists every reading a
+ * character has ever taken - a dictionary's job, not a curriculum's. The joyo
+ * table is the cabinet-notified list for general use, so it is both shorter and
+ * right about which readings are on and which are kun.
+ *
+ * Jinmeiyo name kanji are outside that table by definition, so they keep their
+ * own readings minus the compound-only forms. Better a long list than none.
+ */
+export function preferOfficialReadings(
+  kanji: string,
+  on: string[] | undefined,
+  kun: string[] | undefined,
+): { on: string[]; kun: string[] } {
+  const official = getJoyoReadings(kanji);
+  if (official) {
+    return { on: official.on, kun: official.kun };
+  }
+
+  return { on: dropCompoundOnly(on), kun: dropCompoundOnly(kun) };
+}

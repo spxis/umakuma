@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
+import { preferOfficialReadings } from "@/lib/joyoReadings";
 import { getUserKanjiIndex } from "@/lib/wanikani";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { withReviewSuccessRates } from "@/lib/reviewSuccessRates";
@@ -116,6 +117,16 @@ export async function GET(_: Request, context: RouteContext) {
           ? await withReviewSuccessRates(id, rawUserKanjiItems)
           : [];
 
+        /*
+         * The stored readings are KANJIDIC's, which include forms a character
+         * never takes alone - 王 listed -ノウ, which exists only inside 親王.
+         * The joyo table settles both the list and the on/kun split.
+         */
+        const officialJlptItems = jlptItems.map((row) => {
+          const readings = preferOfficialReadings(row.kanji, row.onReadings, row.kunReadings);
+          return { ...row, onReadings: readings.on, kunReadings: readings.kun };
+        });
+
         const nLevelCounts = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
         const wkLevelCounts: Record<string, number> = {};
         const gradeCounts: Record<string, number> = {};
@@ -139,7 +150,7 @@ export async function GET(_: Request, context: RouteContext) {
         }
 
         return NextResponse.json({
-          jlptItems,
+          jlptItems: officialJlptItems,
           userKanjiItems,
           summary: includeSummary
             ? {
