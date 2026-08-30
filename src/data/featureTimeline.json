@@ -1096,5 +1096,15 @@
     "version": "0.98.0",
     "releasedAt": "2026-08-30T16:45:00Z",
     "summary": "Every page is now loaded at three widths and checked for anything hanging outside the screen, with the study menus opened and checked the same way. Its first run found the library upload card running off the side of a phone, which is now fixed."
+  },
+  {
+    "id": "member-profile-page",
+    "area": "account",
+    "name": "A profile page for every member",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.99.0",
+    "releasedAt": "2026-08-30T17:15:00Z",
+    "summary": "Settings now opens on a profile: change the name other members see, record a JLPT certificate, and read a table of every game you have finished. WaniKani level stays read-only because WaniKani sets it, and an account with no WaniKani connection reads Not connected instead of showing a blank."
   }
 ]

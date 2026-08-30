@@ -1,0 +1,42 @@
+/** Copy for the profile page, in one map for the locale layer. */
+export const PROFILE_COPY = {
+  heading: "Profile",
+  displayName: "Display name",
+  displayNameHint: "What other members see. Change it whenever you like — your links keep working.",
+  displayNamePlaceholder: "Pick a name",
+  address: "Your address",
+  addressHint: "Permanent, so anything you have shared keeps pointing here.",
+  wanikani: "WaniKani",
+  wanikaniLevel: "Level",
+  wanikaniNone: "Not connected",
+  wanikaniHint: "Set by WaniKani, not editable here.",
+  jlpt: "JLPT",
+  jlptHint: "As you report it. The year decides which version of the test applies.",
+  jlptStatus: "Status",
+  jlptYear: "Year",
+  jlptLevel: "Level",
+  jlptNone: "Not set",
+  save: "Save",
+  saving: "Saving…",
+  saved: "Saved",
+  saveFailed: "Could not save that.",
+  games: "Games",
+  gamesKind: "Game",
+  gamesEmpty: "No finished games yet.",
+  gamesRuns: "Runs",
+  gamesBest: "Best score",
+  gamesStreak: "Best streak",
+  gamesAccuracy: "Accuracy",
+  gamesLast: "Last played",
+  gamesTotals: "Across every game",
+  notPlayed: "—",
+} as const;
+
+/** How the stored status values read to a member. */
+export const JLPT_STATUS_LABELS: Record<string, string> = {
+  passed: "Passed a level",
+  studying: "Studying for one",
+  planned: "Plan to sit one",
+  none: "No certificate",
+  undisclosed: "Rather not say",
+};

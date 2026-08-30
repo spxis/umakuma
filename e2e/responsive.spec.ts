@@ -21,6 +21,7 @@ const PAGES = [
   { name: "history", path: "/users/johnmorrisdotca/history" },
   { name: "grades", path: "/users/johnmorrisdotca/grades" },
   { name: "libraries", path: "/users/johnmorrisdotca/libraries" },
+  { name: "profile", path: "/users/johnmorrisdotca/profile" },
   { name: "releases", path: "/releases" },
   { name: "search", path: "/search" },
   { name: "news", path: "/news" },

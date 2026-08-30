@@ -62,7 +62,10 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     id: "settings",
     label: "Settings",
-    children: [{ label: "Libraries", path: "libraries" }],
+    children: [
+      { label: "Profile", path: "profile" },
+      { label: "Libraries", path: "libraries" },
+    ],
   },
 ];
 
