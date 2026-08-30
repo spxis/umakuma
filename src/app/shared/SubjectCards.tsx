@@ -15,7 +15,7 @@ import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 type Props<TRow extends SubjectListRow> = {
   rows: TRow[];
   onSelect: (row: TRow, index: number) => void;
-  /** Floats over the card's top-right. The lists put their remove button here. */
+  /** Floats over the card's bottom-right. The lists put their remove button here. */
   renderCorner?: (row: TRow) => ReactNode;
   /** Floats over the card's top-left. History puts the result mark here. */
   renderBadge?: (row: TRow) => ReactNode;
@@ -58,14 +58,22 @@ export default function SubjectCards<TRow extends SubjectListRow>({
                 <span className={subjectTypePillClass(subjectType)}>
                   {SUBJECT_TYPE_DISPLAY[subjectType].short}
                 </span>
-                {row.wkLevel !== null ? (
-                  <span className="subject-pill border-line bg-surface text-foreground">L{row.wkLevel}</span>
-                ) : null}
               </span>
             </button>
 
+            {/*
+             * Level top right, as every other subject surface writes it. It
+             * used to sit in the pill row under the glyph while a remove button
+             * took this corner, so the same card read differently here than in
+             * the explorers.
+             */}
+            {row.wkLevel !== null ? (
+              <span className="subject-pill pointer-events-none absolute right-1.5 top-1.5 border-line bg-surface text-foreground">
+                L{row.wkLevel}
+              </span>
+            ) : null}
             {renderBadge ? <div className="absolute left-1.5 top-1.5">{renderBadge(row)}</div> : null}
-            {renderCorner ? <div className="absolute right-1.5 top-1.5">{renderCorner(row)}</div> : null}
+            {renderCorner ? <div className="absolute bottom-1.5 right-1.5">{renderCorner(row)}</div> : null}
           </li>
         );
       })}

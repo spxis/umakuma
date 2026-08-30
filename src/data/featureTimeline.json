@@ -777,10 +777,11 @@
     "id": "tag-lists-card-parity",
     "area": "study",
     "name": "Your Lists cards match the shared card",
-    "status": "backlogged",
+    "status": "shipped",
     "date": "2026-08-30",
-    "dateIsEstimate": true,
-    "summary": "Reported by John: the Trouble/Favourites cards put the level at the bottom and a remove X in the top-right corner every other page gives the level. Render them through the shared explorer card and rehome the remove action."
+    "summary": "Subject cards put the level in the top-right corner the way every other surface does, and the remove button moves to the bottom-right instead of squatting where the level belongs.",
+    "version": "0.70.0",
+    "releasedAt": "2026-08-30T13:12:54Z"
   },
   {
     "id": "nav-regroup-settings",
