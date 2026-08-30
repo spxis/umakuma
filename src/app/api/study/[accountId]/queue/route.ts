@@ -6,6 +6,7 @@ import { decryptToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { applyReviewSuccessRates, withReviewSuccessRates } from "@/lib/reviewSuccessRates";
 import { getCachedStudyQueue, setCachedStudyQueue } from "@/lib/studyQueueCache";
+import { cachedStudyQueueResponse } from "./queueRouteCachedResponse";
 import { QUEUE_TYPES, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { srsLabel } from "@/lib/wanikani/helpers";
 import { hydrateMissingSubjects, normalizeSubjectType, queueRowsFromState, type SubjectData } from "./queueRouteUtils";
@@ -49,7 +50,16 @@ export async function GET(request: Request, context: RouteContext) {
             : "all";
         const limit = Number.isInteger(limitParam) && limitParam > 0 ? Math.min(limitParam, 200) : null;
         const offset = Number.isInteger(offsetParam) && offsetParam >= 0 ? offsetParam : 0;
-        const canUseServerCache = limit === null;
+        /*
+         * The cache always holds the whole sorted queue, because only an
+         * unlimited request may write it. That makes it readable by a paged
+         * request too — slicing the full list gives exactly the page asked
+         * for — and paged requests are what the page actually opens with, so
+         * gating reads on `limit === null` meant the common path never hit it.
+         * Staleness is covered: every mutation clears the cache, and it also
+         * expires on its own after a minute.
+         */
+        const canWriteServerCache = limit === null;
 
     const { accountId } = await context.params;
     if (!(await canAccessAccount(request, accountId))) {
@@ -76,45 +86,9 @@ export async function GET(request: Request, context: RouteContext) {
     });
 
     const cacheVariant = mode === QUEUE_TYPES.review ? `trouble:${includeTrouble ? "1" : "0"}:reviewed:${includeReviewed ? "1" : "0"}:sort:${difficultySort ?? "default"}` : "default";
-    const cached = canUseServerCache ? getCachedStudyQueue(accountId, mode, cacheVariant) : null;
-    if (canUseServerCache && cached) {
-      const cachedItems = cached.items as Array<{
-        queueType: typeof QUEUE_TYPES.review | typeof QUEUE_TYPES.lesson;
-        subjectId?: number;
-      }>;
-      const pagedItems = limit === null ? cachedItems : cachedItems.slice(offset, offset + limit);
-      return NextResponse.json(
-        {
-          items: pagedItems,
-          counts: cached.counts,
-          tagCounts: cached.tagCounts ?? { favorite: 0, trouble: 0 },
-          levelCounts: cached.levelCounts ?? {},
-          typeCounts: cached.typeCounts ?? { all: 0, radical: 0, kanji: 0, vocabulary: 0 },
-          typeCountsByLevel: cached.typeCountsByLevel ?? {},
-          srsCounts: cached.srsCounts ?? {
-            all: 0,
-            locked: 0,
-            apprentice: 0,
-            guru: 0,
-            master: 0,
-            enlightened: 0,
-            burned: 0,
-          },
-          srsStageCounts: cached.srsStageCounts ?? {},
-          pagination: {
-            offset,
-            limit: limit ?? cachedItems.length,
-            total: cachedItems.length,
-            hasMore: limit === null ? false : offset + limit < cachedItems.length,
-          },
-          cached: true,
-        },
-        {
-          headers: {
-            "Cache-Control": "private, max-age=20, stale-while-revalidate=40",
-          },
-        },
-      );
+    const cached = getCachedStudyQueue(accountId, mode, cacheVariant);
+    if (cached) {
+      return cachedStudyQueueResponse(cached, offset, limit);
     }
 
     const reviewState = mode === QUEUE_TYPES.lesson ? null : await hydrateQueueSyncState(accountId, QUEUE_TYPES.review, token);
@@ -447,7 +421,7 @@ export async function GET(request: Request, context: RouteContext) {
       ? applyReviewSuccessRates(rawItems, performanceBySubjectId)
       : await withReviewSuccessRates(accountId, rawItems);
 
-    if (canUseServerCache) {
+    if (canWriteServerCache) {
       setCachedStudyQueue(
         accountId,
         mode,
