@@ -623,5 +623,13 @@
     "dateIsEstimate": true,
     "release": 0,
     "summary": "Issue invite codes for Emi, Aria, Mika and Jay - additive, their tokens are intact - once John gives the go."
+  },
+  {
+    "id": "feature-flags",
+    "name": "Feature flags",
+    "area": "admin",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "summary": "Global switches toggled from an admin page, backed by a FeatureFlag table. First flag: the open-signup door, off."
   }
 ]

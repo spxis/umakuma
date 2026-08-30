@@ -352,5 +352,12 @@ accounts. Issuing their invite codes is queued as release 0 in the timeline —
 a production write, additive since `inviteCodeHash` is null for all four —
 awaiting John's go.
 
+**Feature flags exist (2026-08-30).** `FeatureFlag` table plus a registry in
+`src/lib/featureFlags.ts`; toggled globally from `/admin/feature-flags`. What
+flags exist is defined in code — the database stores only which are on, so a
+flag ships dark with its feature and flipping it is not a deploy. First flag:
+`open_signup`, off. Release 6 now means building the door behind that flag and
+flipping it when 7-9 have shipped, which frees the door code to merge early.
+
 **Tests, commit, release per feature (2026-08-29).** Standing rule, recorded in
 `AGENTS.md`; every feature ships with its own tests, commit and deploy.
