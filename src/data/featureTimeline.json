@@ -811,5 +811,15 @@
     "version": "0.67.0",
     "releasedAt": "2026-08-30T11:01:04Z",
     "summary": "For an admin the footer version number and the header motto link straight to the release timeline. Everyone else still sees them as plain text, since the page is admin-only."
+  },
+  {
+    "id": "multi-country-geo-maps",
+    "area": "games",
+    "name": "Maps for Japan, the US and Canada",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.68.0",
+    "releasedAt": "2026-08-30T13:06:58Z",
+    "summary": "Map data now covers 47 Japanese prefectures, 51 US states and 13 Canadian provinces and territories, each with capital, largest city, population, area and regional metadata, rebuilt reproducibly by the map:build scripts."
   }
 ]
