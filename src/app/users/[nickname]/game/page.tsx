@@ -6,6 +6,7 @@ import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 
 type Props = {
@@ -23,7 +24,7 @@ export default async function GamePage({ params }: Props) {
 
   const { nickname } = await params;
   const account = await prisma.account.findFirst({
-    where: { wkUsername: decodeURIComponent(nickname) },
+    where: accountUrlKeyWhere(decodeURIComponent(nickname)),
     select: { id: true, nickname: true, wkUsername: true, lastSyncedAt: true, lastActivityAt: true },
   });
   if (!account) notFound();

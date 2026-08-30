@@ -5,6 +5,7 @@ import Link from "next/link";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { PRACTICE_SOURCES, isPracticeSource, practiceEntriesFor } from "@/lib/practiceSource";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
@@ -34,7 +35,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   const query = await searchParams;
 
   const account = await prisma.account.findFirst({
-    where: { wkUsername: decodeURIComponent(nickname) },
+    where: accountUrlKeyWhere(decodeURIComponent(nickname)),
     select: { id: true, wkUsername: true, wkLevel: true, lastSyncedAt: true, lastActivityAt: true },
   });
   if (!account) {

@@ -7,6 +7,7 @@ import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import userBanner from "@/images/umakuma-banner1-transparent.png";
 import { prisma } from "@/lib/prisma";
+import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { getSchoolGradeIndex, querySchoolGradeCatalog } from "@/lib/schoolGrades";
 import { withOfficialReadings } from "@/lib/gradeReadings";
 
@@ -37,7 +38,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
   const query = await searchParams;
 
   const account = await prisma.account.findFirst({
-    where: { wkUsername: userKey },
+    where: accountUrlKeyWhere(userKey),
     select: { id: true, nickname: true, wkUsername: true, lastSyncedAt: true, lastActivityAt: true },
   });
 

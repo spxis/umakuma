@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import StudySourceLibraryManagerPanel from "../StudySourceLibraryManagerPanel";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 
@@ -23,7 +24,7 @@ export default async function UserLibrariesPage({ params }: PageProps) {
   const userKey = decodeURIComponent(nickname);
 
   const account = await prisma.account.findFirst({
-    where: { wkUsername: userKey },
+    where: accountUrlKeyWhere(userKey),
     select: {
       id: true,
       nickname: true,

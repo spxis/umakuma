@@ -4,6 +4,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { decryptToken } from "@/lib/crypto";
 import { EMPTY_ITEM_SPREAD, isItemSpread } from "@/lib/itemSpread";
 import { prisma } from "@/lib/prisma";
+import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { wanikaniConnection } from "@/lib/wanikaniConnection";
 import { getUserKanjiIndex } from "@/lib/wanikani";
 import ExplorerTabs from "./ExplorerTabs";
@@ -86,7 +87,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   const initialStudyFilters = resolveInitialStudyFilters(query);
 
   const account = await prisma.account.findFirst({
-    where: { wkUsername: userKey },
+    where: accountUrlKeyWhere(userKey),
     select: {
       id: true,
       tokenEncrypted: true,

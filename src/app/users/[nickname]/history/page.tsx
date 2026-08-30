@@ -7,6 +7,7 @@ import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import userBanner from "@/images/umakuma-banner1-transparent.png";
 import { prisma } from "@/lib/prisma";
+import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import HistoryScopedStudyHistoryTable from "./HistoryScopedStudyHistoryTable";
 
@@ -26,7 +27,7 @@ export default async function UserHistoryPage({ params }: PageProps) {
   const userKey = decodeURIComponent(nickname);
 
   const account = await prisma.account.findFirst({
-    where: { wkUsername: userKey },
+    where: accountUrlKeyWhere(userKey),
     select: {
       id: true,
       nickname: true,

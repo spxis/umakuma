@@ -12,6 +12,28 @@ datasource db {
 model Account {
   id             String   @id @default(cuid())
   nickname       String
+  /*
+   * The address, and the name, which are not the same thing.
+   *
+   * `slug` is unique and permanent: it is in every link anyone has shared, so
+   * renaming must not touch it. `displayName` is what people read, anyone can
+   * change it, and two members may share one. Both are nullable while existing
+   * accounts are still routed by wkUsername.
+   */
+  slug           String?  @unique
+  displayName    String?
+  /*
+   * JLPT certification, as the member reports it.
+   *
+   * Self-declared, unlike wkLevel which WaniKani decides. The system matters
+   * as much as the level: the test was restructured in 2010 and both schemes
+   * count down, so an old Level 4 is the beginner certificate and maps to N5,
+   * not N4. Stored as given and converted for display.
+   */
+  jlptStatus     String?
+  jlptSystem     String?
+  jlptLevel      Int?
+  jlptYear       Int?
   joinedByEmail  String?
   joinedByName   String?
   inviteCodeHash String?

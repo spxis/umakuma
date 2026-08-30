@@ -1066,5 +1066,15 @@
     "version": "0.94.0",
     "releasedAt": "2026-08-30T15:34:00Z",
     "summary": "Writing practice joins the Explore group instead of hiding behind the grades page, and the sheet keeps the site header on screen while dropping it for print. A nested page no longer lights up its parent's tab as well as its own."
+  },
+  {
+    "id": "account-slug-identity",
+    "area": "account",
+    "name": "An account has its own address",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.96.0",
+    "releasedAt": "2026-08-30T16:05:00Z",
+    "summary": "Every account gets a permanent slug and a display name it can change. Pages resolve by either the slug or the old WaniKani username, so links already shared keep working, and an account with no WaniKani connection is now reachable at all."
   }
 ]
