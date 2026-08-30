@@ -1086,5 +1086,15 @@
     "version": "0.97.0",
     "releasedAt": "2026-08-30T16:20:00Z",
     "summary": "The Reviews menu was anchored to its right edge to keep it on screen on a desktop, which pushed it off the left edge on a phone, where the panel is nearly as wide as the display. It now anchors left on small screens and flips right only where there is room."
+  },
+  {
+    "id": "responsive-layout-tests",
+    "area": "platform",
+    "name": "Layout checks at phone, tablet and desktop",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.98.0",
+    "releasedAt": "2026-08-30T16:45:00Z",
+    "summary": "Every page is now loaded at three widths and checked for anything hanging outside the screen, with the study menus opened and checked the same way. Its first run found the library upload card running off the side of a phone, which is now fixed."
   }
 ]

@@ -290,7 +290,15 @@ export default function StudySourceLibraryManagerPanel({ accountId, wkUsername }
           <p className="mt-1 text-sm text-foreground/70">Keep the sample JSON on the left and upload actions on the right.</p>
 
           <div className="mt-3 grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem]">
-            <div className="space-y-3">
+            {/*
+              * `min-w-0` because a grid item defaults to `min-width: auto`, so
+              * the sample JSON's longest line sizes this column rather than
+              * scrolling inside its own `pre`. The `lg` template says
+              * `minmax(0,1fr)` for the same reason, but the single column
+              * below that breakpoint is implicit and gets no such guard - so
+              * the card ran 40px past the right edge of a phone.
+              */}
+            <div className="min-w-0 space-y-3">
               <div className="rounded-xl border border-line bg-black/[0.04] p-3">
                 <FieldLabel>Sample custom library JSON</FieldLabel>
                 <pre className="mt-2 overflow-auto rounded-lg border border-line/70 bg-surface p-2 text-[11px] leading-relaxed text-foreground/85" style={{ maxHeight: "20lh" }}>
