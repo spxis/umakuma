@@ -3,30 +3,14 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
+import { STUDY_TAGS, STUDY_TAG_VALUES } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import { clearStudyQueueCache } from "@/lib/studyQueueCache";
+import { isMissingStudyTagTableError } from "@/lib/studySubjectTags";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
 };
-
-function isMissingStudyTagTableError(error: unknown): boolean {
-  if (!error || typeof error !== "object") {
-    return false;
-  }
-
-  const candidate = error as { code?: string; message?: string; meta?: { table?: string } };
-  if (candidate.code !== "P2021") {
-    return false;
-  }
-
-  const table = candidate.meta?.table ?? "";
-  if (table.includes("StudySubjectTag")) {
-    return true;
-  }
-
-  return (candidate.message ?? "").includes("StudySubjectTag");
-}
 
 const querySchema = z.object({
   subjectIds: z
@@ -50,7 +34,7 @@ const querySchema = z.object({
 
 const bodySchema = z.object({
   subjectId: z.number().int().positive(),
-  tag: z.enum(["favorite", "trouble"]),
+  tag: z.enum(STUDY_TAG_VALUES),
   enabled: z.boolean(),
 });
 
@@ -154,10 +138,10 @@ export async function POST(request: Request, context: RouteContext) {
           throw error;
         }
 
-        const nextFavorite = parsedBody.data.tag === "favorite"
+        const nextFavorite = parsedBody.data.tag === STUDY_TAGS.favorite
           ? parsedBody.data.enabled
           : (current?.favorite ?? false);
-        const nextTrouble = parsedBody.data.tag === "trouble"
+        const nextTrouble = parsedBody.data.tag === STUDY_TAGS.trouble
           ? parsedBody.data.enabled
           : (current?.trouble ?? false);
 

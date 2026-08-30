@@ -196,3 +196,18 @@ export function srsBucketFromStage(stage: number | null): SrsBucket {
 
   return SRS_BUCKETS.unknown;
 }
+
+/**
+ * The two lists a player curates by hand.
+ *
+ * Trouble marks an item to drill; favorite marks one worth coming back to. They
+ * live here rather than beside the database helpers so client components can
+ * name them without pulling the server in.
+ */
+export const STUDY_TAGS = { favorite: "favorite", trouble: "trouble" } as const;
+export const STUDY_TAG_VALUES = [STUDY_TAGS.trouble, STUDY_TAGS.favorite] as const;
+export type StudyTag = (typeof STUDY_TAGS)[keyof typeof STUDY_TAGS];
+
+export function isStudyTag(value: string): value is StudyTag {
+  return STUDY_TAG_VALUES.includes(value as StudyTag);
+}

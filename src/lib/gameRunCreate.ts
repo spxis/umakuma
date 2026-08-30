@@ -7,6 +7,7 @@ import {
   GAME_DIRECTIONS,
   GAME_ENDLESS_CYCLE_SIZE,
   GAME_KINDS,
+  GAME_PRACTICE_LISTS,
   GAME_ULTRA_BATCH_SIZE,
   gameKindRules,
   type GameCategory,
@@ -14,9 +15,10 @@ import {
   type GameChoiceCount,
   type GameDirection,
   type GameKind,
+  type GamePracticeList,
 } from "@/lib/gameMode";
 import { buildMapQuestions } from "@/lib/gameMapQuestions";
-import { loadDailyPool, loadRevengePool, loadShiritoriPool } from "@/lib/gameModePools";
+import { loadDailyPool, loadPracticePool, loadShiritoriPool } from "@/lib/gameModePools";
 import { loadGamePool } from "@/lib/gameModeServer";
 import { seededRandom, shuffleWith } from "@/lib/gameRandom";
 import {
@@ -42,6 +44,7 @@ export type GameRunRequest = {
   choiceCount: GameChoiceCount;
   direction: GameDirection;
   answerMode: GameAnswerMode;
+  practiceList: GamePracticeList;
   ultraMode: boolean;
   timeLimitMs: number | null;
 };
@@ -85,19 +88,26 @@ async function planMatchRun(accountId: string, request: GameRunRequest): Promise
   };
 }
 
-async function planRevengeRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+const PRACTICE_LIST_EMPTY: Record<GamePracticeList, string> = {
+  [GAME_PRACTICE_LISTS.trouble]: "No trouble-tagged items are available for this category.",
+  [GAME_PRACTICE_LISTS.favorite]: "No favorite-tagged items are available for this category.",
+  [GAME_PRACTICE_LISTS.toughest]: "No eligible items are available.",
+};
+
+async function planPracticeRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
   const requestedSize = request.batchSize === "all" ? Number.MAX_SAFE_INTEGER : request.batchSize;
-  const { items, targets } = await loadRevengePool(
+  const { items, targets } = await loadPracticePool(
     accountId,
     request.category,
     request.batchSize === "all" ? GAME_ENDLESS_CYCLE_SIZE : request.batchSize,
+    request.practiceList,
   );
   const minimumItems = request.choiceCount;
   if (items.length < minimumItems) {
     throw new Error(`At least ${minimumItems} eligible items are required.`);
   }
   const chosen = shuffleWith(targets).slice(0, Math.min(requestedSize, targets.length));
-  if (chosen.length === 0) throw new Error("No eligible items are available.");
+  if (chosen.length === 0) throw new Error(PRACTICE_LIST_EMPTY[request.practiceList]);
 
   return {
     questions: buildGameQuestionsFromTargets(chosen, items, request.choiceCount, Math.random, request.direction, request.answerMode),
@@ -260,7 +270,7 @@ function planMapRun(request: GameRunRequest): GameRunPlan {
 
 export async function planGameRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
   if (request.kind === GAME_KINDS.daily) return planDailyRun(request);
-  if (request.kind === GAME_KINDS.revenge) return planRevengeRun(accountId, request);
+  if (request.kind === GAME_KINDS.revenge) return planPracticeRun(accountId, request);
   if (request.kind === GAME_KINDS.timeAttack) return planTimeAttackRun(accountId, request);
   if (request.kind === GAME_KINDS.shiritori) return planShiritoriRun(accountId, request);
   if (request.kind === GAME_KINDS.map) return planMapRun(request);

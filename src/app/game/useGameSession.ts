@@ -79,7 +79,10 @@ export function useGameSession({
           choiceCount: selection.choiceCount,
           direction: selection.direction,
           answerMode: selection.answerMode,
-          ultraMode: selection.ultraMode,
+          practiceList: selection.practiceList,
+          // Every game keeps its own settings; a leftover Ultra or time limit
+          // from another game must not travel with this one.
+          ultraMode: rules.usesUltraMode && selection.ultraMode,
           timeLimitMs: rules.usesTimeLimit ? selection.timeLimitMs : null,
         }),
       });

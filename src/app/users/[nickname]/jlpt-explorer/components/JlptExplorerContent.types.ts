@@ -27,6 +27,7 @@ export type KanjiStats = {
 };
 
 export type JlptExplorerContentProps = {
+  accountId: string;
   items: JlptItem[];
   showEnglish: boolean;
   canToggleEnglish?: boolean;

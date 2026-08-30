@@ -11,7 +11,7 @@ import { srsLabel } from "@/lib/wanikani/helpers";
 import { hydrateMissingSubjects, normalizeSubjectType, queueRowsFromState, type SubjectData } from "./queueRouteUtils";
 import { hydrateQueueSyncState } from "./queueRouteSync";
 import { mergeTroubleRows, troubleInjectionCount, type StudySubjectTagMap } from "./queueRouteTags";
-import { fetchStudyTagRows } from "./queueRouteTagRows";
+import { fetchStudyTagRows } from "@/lib/studySubjectTags";
 import { parseReviewDifficultySort, sortQueueRows } from "./queueRouteDifficulty";
 
 type RouteContext = {

@@ -12,6 +12,7 @@
  * Usage:
  *   pnpm local:seed                      # create/refresh the test user
  *   pnpm local:seed -- --level 20        # different WaniKani level
+ *   pnpm local:seed -- --favorite 30     # size of the favorites list
  *   pnpm local:seed -- --remove          # delete the test user
  */
 import process from "node:process";
@@ -34,6 +35,7 @@ type Options = {
   code: string;
   remove: boolean;
   troubleCount: number;
+  favoriteCount: number;
 };
 
 function parseArgs(argv: string[]): Options {
@@ -51,6 +53,7 @@ function parseArgs(argv: string[]): Options {
     code: read("--code", "TEST01").toUpperCase(),
     remove: argv.includes("--remove"),
     troubleCount: Number(read("--trouble", "25")),
+    favoriteCount: Number(read("--favorite", "15")),
   };
 }
 
@@ -237,7 +240,8 @@ async function main() {
     },
   });
 
-  // Give Revenge real signal: trouble tags plus a wrong-heavy review history.
+  // Give Practice real signal: both tagged lists, plus a wrong-heavy review
+  // history so the Toughest list has something to rank.
   // Only started items qualify, because that is all the game pool draws from.
   await prisma.studySubjectTag.deleteMany({ where: { accountId: account.id } });
   await prisma.studyReviewAttempt.deleteMany({ where: { accountId: account.id } });
@@ -269,11 +273,24 @@ async function main() {
     });
   }
 
+  // The favorites list is the other half of Practice, so it needs its own items.
+  const favoriteSubjects = subjects
+    .filter((subject) => startedSubjectIds.has(subject.wkSubjectId))
+    .slice(options.troubleCount, options.troubleCount + options.favoriteCount);
+  if (favoriteSubjects.length > 0) {
+    await prisma.studySubjectTag.createMany({
+      data: favoriteSubjects.map((subject) => ({
+        accountId: account.id, subjectId: subject.wkSubjectId, trouble: false, favorite: true,
+      })),
+    });
+  }
+
   console.log("");
   console.log(`Test user ready: ${account.nickname} (@${account.wkUsername}) at level ${account.wkLevel}`);
   console.log(`  accountId     ${account.id}`);
   console.log(`  items         ${subjects.length} subjects, ${started.length} started`);
   console.log(`  trouble tags  ${troubleSubjects.length}`);
+  console.log(`  favorite tags ${favoriteSubjects.length}`);
   console.log("");
   console.log(`  Sign in at    http://127.0.0.1:6400/invite`);
   console.log(`  Invite code   ${options.code}`);

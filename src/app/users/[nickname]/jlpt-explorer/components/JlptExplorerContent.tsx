@@ -20,12 +20,14 @@ import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import FieldLabel from "../../../../shared/FieldLabel";
+import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
 import type {
   KanjiStats,
   JlptExplorerContentProps as Props,
   JlptReadingsRecord,
 } from "./JlptExplorerContent.types";
 export default function JlptExplorerContent({
+  accountId,
   items,
   showEnglish,
   studyMode,
@@ -160,6 +162,7 @@ export default function JlptExplorerContent({
             </p>
           </div>
           <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
+            <StudyTagListsButton accountId={accountId} size="sm" />
             <ExplorerFilterToggleButton
               expanded={effectiveMobileFiltersOpen}
               onToggle={() => setMobileFiltersOpen((open) => !open)}

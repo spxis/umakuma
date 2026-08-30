@@ -36,7 +36,7 @@ export default function GameRecentGames({ entries, loading, onChallenge }: Props
                     <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
                   ) : null}
                   <GameCategoryPill kind={entry.kind} category={entry.category} />
-                  <span>{gameDifficultyLabel(entry.choiceCount, entry.ultraMode, entry.direction)}</span>
+                  <span>{gameDifficultyLabel(entry.kind, entry.choiceCount, entry.ultraMode, entry.direction)}</span>
                 </span>
                 <span className="mt-1 block text-[10px] font-bold uppercase text-foreground/45">{formatRelativeFromNow(entry.completedAt, { style: "short" })}</span>
               </span>

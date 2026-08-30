@@ -13,6 +13,8 @@ import {
   isGameChoiceCount,
   isGameDirection,
   isGameKind,
+  isGamePracticeList,
+  GAME_PRACTICE_LISTS,
   resolveGameAnswerMode,
   type GameDirection,
   isGameTimeLimitMs,
@@ -35,10 +37,14 @@ const bodySchema = z.object({
   choiceCount: z.number().int().refine(isGameChoiceCount).optional(),
   direction: z.string().refine(isGameDirection).default("find"),
   answerMode: z.string().refine(isGameAnswerMode).default("auto"),
+  practiceList: z.string().refine(isGamePracticeList).default(GAME_PRACTICE_LISTS.trouble),
   ultraMode: z.boolean().default(false),
   timeLimitMs: z.number().int().refine(isGameTimeLimitMs).nullable().default(null),
 })
-  .refine((body) => !body.ultraMode || body.level !== null, {
+  // Only the games that offer Ultra have to satisfy it. A stale `ultraMode` from
+  // a previous Match round would otherwise reject a Map or Practice start
+  // outright, which the player sees as "Could not start the game".
+  .refine((body) => !gameKindRules(body.kind).usesUltraMode || !body.ultraMode || body.level !== null, {
     message: "Ultra Mode requires a level.",
     path: ["level"],
   })
@@ -80,6 +86,9 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           answerMode: rules.usesAnswerMode
             ? resolveGameAnswerMode(parsed.data.kind, parsed.data.answerMode)
             : "auto",
+          // Only Practice drills one of the player's lists; every other game
+          // takes its targets from the pool the setup already narrowed.
+          practiceList: rules.usesPracticeList ? parsed.data.practiceList : GAME_PRACTICE_LISTS.toughest,
           ultraMode: rules.usesUltraMode ? parsed.data.ultraMode : false,
           timeLimitMs: rules.usesTimeLimit ? parsed.data.timeLimitMs : null,
         };

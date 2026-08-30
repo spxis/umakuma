@@ -1,4 +1,9 @@
 import type { SubjectType } from "@/lib/domainConstants";
+import type { GameChoiceCount } from "@/lib/gameBoard";
+
+// The board's own vocabulary lives in `gameBoard`; it is re-exported here so
+// every caller keeps one import for the game domain.
+export * from "@/lib/gameBoard";
 
 export const GAME_BATCH_SIZES = [5, 10, 15, 20, 25, 50] as const;
 export const GAME_ULTRA_BATCH_SIZE = -1;
@@ -56,12 +61,29 @@ export const GAME_ANSWER_MODES = ["auto", "meaning", "reading", "romaji"] as con
  */
 export const GAME_MAP_ANSWER_MODES = ["auto", "meaning", "reading"] as const;
 
-/** Double, Triple and Quad: how many tiles a question offers. */
-export const GAME_CHOICE_COUNTS = [2, 3, 4] as const;
-
 export const GAME_TIME_ATTACK_GRACE_MS = 1_500;
-export const GAME_REVENGE_TARGET_POOL_MULTIPLIER = 3;
-export const GAME_REVENGE_MINIMUM_TARGET_POOL = 30;
+export const GAME_PRACTICE_TARGET_POOL_MULTIPLIER = 3;
+export const GAME_PRACTICE_MINIMUM_TARGET_POOL = 30;
+
+/**
+ * Which items Practice drills.
+ *
+ * `trouble` and `favorite` are the two lists the player curates themselves.
+ * `toughest` needs no tagging at all: it ranks the whole pool by the shared
+ * review-difficulty score, which is what Revenge did before Practice let the
+ * player choose. The kind is still persisted as `revenge` so existing runs and
+ * scoreboards keep their meaning.
+ */
+export const GAME_PRACTICE_LISTS = {
+  trouble: "trouble",
+  favorite: "favorite",
+  toughest: "toughest",
+} as const;
+export const GAME_PRACTICE_LIST_VALUES = [
+  GAME_PRACTICE_LISTS.trouble,
+  GAME_PRACTICE_LISTS.favorite,
+  GAME_PRACTICE_LISTS.toughest,
+] as const;
 
 export type GameBatchSize = (typeof GAME_BATCH_SIZES)[number];
 export type GameCategory = (typeof GAME_CATEGORIES)[number];
@@ -73,7 +95,9 @@ export type GameDirection = (typeof GAME_DIRECTIONS)[keyof typeof GAME_DIRECTION
 export type GameAnswerMode = (typeof GAME_ANSWER_MODES)[number];
 export type GameKind = (typeof GAME_KINDS)[keyof typeof GAME_KINDS];
 export type GameTimeLimitMs = (typeof GAME_TIME_LIMITS_MS)[number];
-export type GameChoiceCount = (typeof GAME_CHOICE_COUNTS)[number];
+export type GamePracticeList = (typeof GAME_PRACTICE_LISTS)[keyof typeof GAME_PRACTICE_LISTS];
+/** The lists built from tags, which are the only ones with something to count. */
+export type GameTaggedPracticeList = Exclude<GamePracticeList, typeof GAME_PRACTICE_LISTS.toughest>;
 
 export type GameKindRules = {
   usesBatchSize: boolean;
@@ -86,6 +110,13 @@ export type GameKindRules = {
   /** Whether the player chooses Find/Read and what the text side shows. */
   usesDirection: boolean;
   usesAnswerMode: boolean;
+  /** Whether the player picks which of their lists the round drills. */
+  usesPracticeList: boolean;
+  /**
+   * Whether the round is played on the four-corner board. Map mode answers on
+   * the country instead, so its choice count is a count and not a corner.
+   */
+  usesCornersBoard: boolean;
   fixedQuestionCount: number | null;
   fixedCategory: GameCategory | null;
   oncePerDay: boolean;
@@ -103,6 +134,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesTimeLimit: false,
     usesDirection: true,
     usesAnswerMode: true,
+    usesPracticeList: false,
+    usesCornersBoard: true,
     fixedQuestionCount: null,
     fixedCategory: null,
     oncePerDay: false,
@@ -118,6 +151,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesTimeLimit: false,
     usesDirection: false,
     usesAnswerMode: false,
+    usesPracticeList: false,
+    usesCornersBoard: true,
     fixedQuestionCount: GAME_DAILY_QUESTION_COUNT,
     fixedCategory: "mixed",
     oncePerDay: true,
@@ -133,6 +168,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesTimeLimit: false,
     usesDirection: true,
     usesAnswerMode: true,
+    usesPracticeList: true,
+    usesCornersBoard: true,
     fixedQuestionCount: null,
     fixedCategory: null,
     oncePerDay: false,
@@ -148,6 +185,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesTimeLimit: true,
     usesDirection: true,
     usesAnswerMode: true,
+    usesPracticeList: false,
+    usesCornersBoard: true,
     fixedQuestionCount: null,
     fixedCategory: null,
     oncePerDay: false,
@@ -163,6 +202,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesTimeLimit: false,
     usesDirection: false,
     usesAnswerMode: false,
+    usesPracticeList: false,
+    usesCornersBoard: true,
     fixedQuestionCount: null,
     fixedCategory: "vocabulary",
     oncePerDay: false,
@@ -178,6 +219,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesTimeLimit: false,
     usesDirection: true,
     usesAnswerMode: true,
+    usesPracticeList: false,
+    usesCornersBoard: false,
     fixedQuestionCount: null,
     // Prefectures are place names, so they ride the vocabulary accent.
     fixedCategory: "vocabulary",
@@ -327,30 +370,6 @@ export function gameRunIsExpired(
   return elapsedMs > timeLimitMs + GAME_TIME_ATTACK_GRACE_MS;
 }
 
-/**
- * Keyboard mapping for the answer tiles.
- *
- * Two and three tiles sit in a row, so the arrow keys read naturally and the
- * number keys mirror them on both the top row and the numpad. Four tiles sit in
- * a 2x2 grid, where no arrow key names a single corner, so Quad is driven by the
- * number keys 1-4 in reading order.
- */
-export function gameOptionIndexForKey(key: string, optionCount: number): number | null {
-  if (optionCount >= 4) {
-    const index = "1234".indexOf(key);
-    return index >= 0 && index < optionCount ? index : null;
-  }
-
-  if (key === "1" || key === "4") return 0;
-  if (optionCount === 3 && (key === "2" || key === "5")) return 1;
-  if (key === "3" || key === "6") return optionCount - 1;
-
-  if (key === "ArrowLeft") return 0;
-  if (optionCount === 3 && (key === "ArrowUp" || key === "ArrowDown")) return 1;
-  if (key === "ArrowRight") return optionCount - 1;
-  return null;
-}
-
 export function gameAnswerProgress({
   endless,
   endsOnWrong,
@@ -410,14 +429,8 @@ export function resolveGameAnswerMode(kind: GameKind, mode: GameAnswerMode): Gam
   return gameAnswerModesFor(kind).includes(mode) ? mode : "auto";
 }
 
-export function isGameChoiceCount(value: number): value is GameChoiceCount {
-  return GAME_CHOICE_COUNTS.includes(value as GameChoiceCount);
-}
-
-/** Historical runs stored only `hardMode`; three choices was what it meant. */
-export function gameChoiceCountFrom(choiceCount: number | null | undefined, hardMode: boolean): GameChoiceCount {
-  if (choiceCount && isGameChoiceCount(choiceCount)) return choiceCount;
-  return hardMode ? 3 : 2;
+export function isGamePracticeList(value: string): value is GamePracticeList {
+  return GAME_PRACTICE_LIST_VALUES.includes(value as GamePracticeList);
 }
 
 export function gamePoolItemMatches(

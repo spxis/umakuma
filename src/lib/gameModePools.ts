@@ -2,9 +2,11 @@ import "server-only";
 
 import {
   GAME_DAILY_LEVEL_COHORT,
-  GAME_REVENGE_MINIMUM_TARGET_POOL,
-  GAME_REVENGE_TARGET_POOL_MULTIPLIER,
+  GAME_PRACTICE_LISTS,
+  GAME_PRACTICE_MINIMUM_TARGET_POOL,
+  GAME_PRACTICE_TARGET_POOL_MULTIPLIER,
   type GameCategory,
+  type GamePracticeList,
 } from "@/lib/gameMode";
 import { CATALOG_SELECT, loadGamePool, toCatalogItem } from "@/lib/gameModeServer";
 import type { GameCatalogItem } from "@/lib/gameQuestionBuilder";
@@ -45,10 +47,13 @@ async function loadReviewPerformance(accountId: string): Promise<Map<number, Rev
   return performance;
 }
 
-async function loadTroubleSubjectIds(accountId: string): Promise<Set<number>> {
+async function loadTaggedSubjectIds(accountId: string, list: GamePracticeList): Promise<Set<number> | null> {
+  if (list === GAME_PRACTICE_LISTS.toughest) return null;
   try {
     const rows = await prisma.studySubjectTag.findMany({
-      where: { accountId, trouble: true },
+      where: list === GAME_PRACTICE_LISTS.trouble
+        ? { accountId, trouble: true }
+        : { accountId, favorite: true },
       select: { subjectId: true },
     });
     return new Set(rows.map((row) => row.subjectId));
@@ -59,32 +64,34 @@ async function loadTroubleSubjectIds(accountId: string): Promise<Set<number>> {
 }
 
 /**
- * Revenge targets the items this account actually struggles with: anything they
- * tagged as trouble first, then the lowest-ease items from the shared review
- * difficulty formula. Distractors still come from the full pool so the choices
- * stay confusable rather than merely hard.
+ * Practice drills one list at a time.
+ *
+ * `trouble` and `favorite` take only what the player tagged, so a practice run
+ * is exactly the list they curated. `toughest` needs no tags at all and ranks
+ * the whole pool by the shared review-difficulty score. Distractors always come
+ * from the full pool, so the choices stay confusable rather than merely hard.
  */
-export async function loadRevengePool(
+export async function loadPracticePool(
   accountId: string,
   category: GameCategory,
   batchSize: number,
+  list: GamePracticeList,
 ): Promise<{
   account: { nickname: string; wkUsername: string; wkLevel: number };
   items: GameCatalogItem[];
   targets: GameCatalogItem[];
-  troubleCount: number;
 }> {
   const { account, items } = await loadGamePool(accountId, null, category);
-  const [troubleIds, performance] = await Promise.all([
-    loadTroubleSubjectIds(accountId),
+  const [taggedIds, performance] = await Promise.all([
+    loadTaggedSubjectIds(accountId, list),
     loadReviewPerformance(accountId),
   ]);
 
   const nowMs = Date.now();
-  const ranked = [...items]
+  const ranked = items
+    .filter((item) => taggedIds === null || taggedIds.has(item.subjectId))
     .map((item) => ({
       item,
-      trouble: troubleIds.has(item.subjectId),
       ease: reviewEaseScore(
         {
           subjectId: item.subjectId,
@@ -96,22 +103,20 @@ export async function loadRevengePool(
       ),
     }))
     .sort((left, right) => {
-      if (left.trouble !== right.trouble) return left.trouble ? -1 : 1;
       const easeDiff = left.ease - right.ease;
       if (easeDiff !== 0) return easeDiff;
       return left.item.subjectId - right.item.subjectId;
     });
 
   const targetPoolSize = Math.max(
-    GAME_REVENGE_MINIMUM_TARGET_POOL,
-    batchSize * GAME_REVENGE_TARGET_POOL_MULTIPLIER,
+    GAME_PRACTICE_MINIMUM_TARGET_POOL,
+    batchSize * GAME_PRACTICE_TARGET_POOL_MULTIPLIER,
   );
 
   return {
     account,
     items,
     targets: ranked.slice(0, targetPoolSize).map((entry) => entry.item),
-    troubleCount: ranked.filter((entry) => entry.trouble).length,
   };
 }
 

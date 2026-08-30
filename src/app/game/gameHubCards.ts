@@ -1,8 +1,10 @@
 import {
   GAME_KINDS,
+  GAME_PRACTICE_LISTS,
   gameKindRules,
   type GameCategory,
   type GameKind,
+  type GamePracticeList,
 } from "@/lib/gameMode";
 import { JAPAN_PREFECTURE_COUNT } from "@/lib/japanPrefectures";
 import { GAME_COPY } from "./GameMode.constants";
@@ -14,15 +16,21 @@ export function gameAvailableCount(
   kind: GameKind,
   level: number | null,
   category: GameCategory,
+  practiceList: GamePracticeList = GAME_PRACTICE_LISTS.toughest,
 ): number {
   if (kind === GAME_KINDS.shiritori) return setup.availability.shiritori.available;
   if (kind === GAME_KINDS.daily) return setup.availability.daily.playedToday ? 0 : 1;
   // The prefectures are a fixed pool, the same for every account.
   if (kind === GAME_KINDS.map) return JAPAN_PREFECTURE_COUNT;
 
-  // Revenge ignores the level filter but still honors the category.
+  // Practice ignores the level filter but still honors the category, and a
+  // tagged list counts only what the player put in it.
   const resolvedCategory = gameKindRules(kind).fixedCategory ?? category;
-  if (kind === GAME_KINDS.revenge) return setup.totalCounts[resolvedCategory] ?? 0;
+  if (kind === GAME_KINDS.revenge) {
+    return practiceList === GAME_PRACTICE_LISTS.toughest
+      ? setup.totalCounts[resolvedCategory] ?? 0
+      : setup.availability.practice[practiceList]?.[resolvedCategory] ?? 0;
+  }
   if (level === null) return setup.totalCounts[resolvedCategory] ?? 0;
   return setup.countsByLevel[level]?.[resolvedCategory] ?? 0;
 }
@@ -38,18 +46,26 @@ export function gameRequiredCount(selection: GameSelection): number {
 
 export function gameSelectionIsPlayable(setup: GameSetupResponse, selection: GameSelection): boolean {
   if (selection.kind === GAME_KINDS.daily && setup.availability.daily.playedToday) return false;
-  return gameAvailableCount(setup, selection.kind, selection.level, selection.category)
-    >= gameRequiredCount(selection);
+  return gameSelectionAvailableCount(setup, selection) >= gameRequiredCount(selection);
+}
+
+/** What the current selection would actually play, list and all. */
+export function gameSelectionAvailableCount(setup: GameSetupResponse, selection: GameSelection): number {
+  const rules = gameKindRules(selection.kind);
+  return gameAvailableCount(
+    setup,
+    selection.kind,
+    rules.usesLevel ? selection.level : null,
+    selection.category,
+    selection.practiceList,
+  );
 }
 
 function statusLabel(setup: GameSetupResponse, kind: GameKind, available: number): string | null {
   if (kind === GAME_KINDS.daily) {
     return setup.availability.daily.playedToday ? GAME_COPY.dailyPlayed : GAME_COPY.dailyReady;
   }
-  if (kind === GAME_KINDS.revenge) {
-    const { troubleCount } = setup.availability.revenge;
-    return troubleCount > 0 ? `${troubleCount} tagged trouble` : `${available} items ranked`;
-  }
+  if (kind === GAME_KINDS.revenge) return `${available} to drill`;
   if (kind === GAME_KINDS.shiritori) return `${available} chainable words`;
   if (kind === GAME_KINDS.map) return `${available} prefectures`;
   return `${available} items`;
@@ -63,7 +79,7 @@ export function buildGameHubCards(setup: GameSetupResponse, selection: GameSelec
   return setup.kinds.map((kind) => {
     const rules = gameKindRules(kind);
     const level = rules.usesLevel ? selection.level : null;
-    const available = gameAvailableCount(setup, kind, level, selection.category);
+    const available = gameAvailableCount(setup, kind, level, selection.category, selection.practiceList);
     const minimumItems = rules.usesHardMode ? selection.choiceCount : 2;
     const required = kind === GAME_KINDS.daily ? 1 : minimumItems;
     const playedToday = kind === GAME_KINDS.daily && setup.availability.daily.playedToday;

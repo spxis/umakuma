@@ -3,11 +3,14 @@ import type { GameOptionTile } from "@/lib/gameMode";
 
 type Props = {
   option: GameOptionTile;
-  /** The arrow or number that answers with this tile. */
+  /** The key that answers with this tile. */
   keyHint: string;
-  optionCount: number;
+  /** Set on tiles that share their row, so the label is scaled to fit. */
+  dense: boolean;
   /** Text answers wrap; glyph answers are set large in the Japanese face. */
   isTextAnswer: boolean;
+  /** Lit for a moment when a key points at this tile without choosing it. */
+  flash?: boolean;
   /** Hidden for items outside the WaniKani level ladder, such as prefectures. */
   showLevel?: boolean;
   disabled: boolean;
@@ -24,8 +27,9 @@ function choiceTone(subjectType: string): string {
 export default function GameChoiceTile({
   option,
   keyHint,
-  optionCount,
+  dense,
   isTextAnswer,
+  flash = false,
   showLevel = true,
   disabled,
   feedback,
@@ -36,7 +40,7 @@ export default function GameChoiceTile({
       type="button"
       disabled={disabled}
       onClick={onSelect}
-      className={`relative flex min-w-0 items-center justify-center overflow-hidden rounded-2xl border p-2 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:cursor-wait sm:p-5 ${choiceTone(option.subjectType)} ${feedback ? (feedback.correct ? "ring-8 ring-emerald-500 bg-emerald-100" : "ring-8 ring-red-500 bg-red-100") : "hover:brightness-95"}`}
+      className={`relative flex min-w-0 items-center justify-center overflow-hidden rounded-2xl border p-2 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:cursor-wait sm:p-5 ${choiceTone(option.subjectType)} ${feedback ? (feedback.correct ? "ring-8 ring-emerald-500 bg-emerald-100" : "ring-8 ring-red-500 bg-red-100") : flash ? "ring-4 ring-foreground/40" : "hover:brightness-95"}`}
     >
       <span aria-hidden="true" className="absolute left-2 top-2 text-lg font-black text-foreground/50 sm:left-4 sm:top-4">{keyHint}</span>
       {showLevel ? (
@@ -44,8 +48,8 @@ export default function GameChoiceTile({
       ) : null}
       <span className={`text-center font-black leading-tight ${
         isTextAnswer
-          ? `break-words ${optionCount >= 3 ? "text-xl sm:text-3xl" : "text-2xl sm:text-5xl"}`
-          : `break-all [font-family:var(--font-jp-current)] leading-none ${optionCount >= 3 ? "text-4xl sm:text-6xl" : "text-5xl sm:text-9xl"}`
+          ? `break-words ${dense ? "text-xl sm:text-3xl" : "text-2xl sm:text-5xl"}`
+          : `break-all [font-family:var(--font-jp-current)] leading-none ${dense ? "text-4xl sm:text-6xl" : "text-5xl sm:text-9xl"}`
       }`}>
         {option.label}
       </span>

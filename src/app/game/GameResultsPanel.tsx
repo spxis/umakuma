@@ -43,7 +43,7 @@ export default function GameResultsPanel({
         <GameCategoryPill kind={run.kind} category={run.category} />
         <span>{run.questionCount} questions</span>
         {run.timeLimitMs !== null ? <span>{gameTimeLimitLabel(run.timeLimitMs)}</span> : null}
-        <span>{gameDifficultyLabel(run.choiceCount, run.ultraMode, run.direction)}</span>
+        <span>{gameDifficultyLabel(run.kind, run.choiceCount, run.ultraMode, run.direction)}</span>
       </div>
       <p className={`mt-3 text-7xl font-black leading-none sm:text-9xl ${accent.text}`}>{formatGameScore(run.score)}</p>
       <div className="mx-auto mt-6 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">

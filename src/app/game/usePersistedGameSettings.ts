@@ -14,7 +14,9 @@ import {
   isGameChoiceCount,
   isGameDirection,
   isGameKind,
+  isGamePracticeList,
   isGameTimeLimitMs,
+  GAME_PRACTICE_LISTS,
 } from "@/lib/gameMode";
 import { GAME_STORAGE_KEYS } from "./GameMode.constants";
 import type { GameLeaderboardFilters, GameSelection } from "./GameMode.types";
@@ -27,6 +29,7 @@ const DEFAULT_SELECTION: GameSelection = {
   choiceCount: 2,
   direction: "find",
   answerMode: "auto",
+  practiceList: GAME_PRACTICE_LISTS.trouble,
   ultraMode: false,
   timeLimitMs: 60_000,
 };
@@ -61,6 +64,7 @@ function readSelection(): GameSelection {
       : DEFAULT_SELECTION.choiceCount,
     direction: typeof stored.direction === "string" && isGameDirection(stored.direction) ? stored.direction : DEFAULT_SELECTION.direction,
     answerMode: typeof stored.answerMode === "string" && isGameAnswerMode(stored.answerMode) ? stored.answerMode : DEFAULT_SELECTION.answerMode,
+    practiceList: typeof stored.practiceList === "string" && isGamePracticeList(stored.practiceList) ? stored.practiceList : DEFAULT_SELECTION.practiceList,
     ultraMode: stored.ultraMode === true,
   };
 }

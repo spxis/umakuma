@@ -1,12 +1,14 @@
+import "server-only";
+
 import { prisma } from "@/lib/prisma";
 
-type StudyTagRow = {
+export type StudyTagRow = {
   subjectId: number;
   favorite: boolean;
   trouble: boolean;
 };
 
-function isMissingStudyTagTableError(error: unknown): boolean {
+export function isMissingStudyTagTableError(error: unknown): boolean {
   if (!error || typeof error !== "object") {
     return false;
   }
@@ -24,6 +26,7 @@ function isMissingStudyTagTableError(error: unknown): boolean {
   return (candidate.message ?? "").includes("StudySubjectTag");
 }
 
+/** Every item this account has tagged either way. Empty until the table exists. */
 export async function fetchStudyTagRows(accountId: string): Promise<StudyTagRow[]> {
   try {
     return await prisma.studySubjectTag.findMany({
@@ -36,6 +39,7 @@ export async function fetchStudyTagRows(accountId: string): Promise<StudyTagRow[
         favorite: true,
         trouble: true,
       },
+      orderBy: { updatedAt: "desc" },
     });
   } catch (error) {
     if (isMissingStudyTagTableError(error)) {

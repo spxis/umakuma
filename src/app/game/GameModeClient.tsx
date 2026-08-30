@@ -151,8 +151,8 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
   const currentQuestion = session.currentQuestion;
   if (phase === "playing" && currentQuestion && activeGame) {
     const flags = gameProgressFlags(activeGame.run.kind, activeGame.run.ultraMode);
-    // Map mode answers on a map instead of tiles; every other prop is the same.
-    const Runner = activeGame.run.kind === GAME_KINDS.map ? GameMapRunner : GameRunner;
+    // Map mode answers on the country instead of the corner board; every other prop is the same.
+    const Runner = gameKindRules(activeGame.run.kind).usesCornersBoard ? GameRunner : GameMapRunner;
     return (
       <Runner
         question={currentQuestion}
@@ -217,6 +217,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
             />
           ) : phase === "lobby" ? (
             <GameSetupPanel
+              accountId={accountId}
               setup={setup}
               selection={selection}
               starting={session.starting}

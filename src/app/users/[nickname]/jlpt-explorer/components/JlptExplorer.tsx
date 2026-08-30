@@ -444,6 +444,7 @@ export default function JlptExplorer({
 
   return (
     <JlptExplorerContent
+      accountId={accountId}
       items={effectiveItems}
       showEnglish={showEnglish}
       canToggleEnglish={canToggleEnglish}

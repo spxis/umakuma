@@ -1,6 +1,9 @@
 import {
   GAME_KINDS,
+  GAME_PRACTICE_LISTS,
+  gameKindRules,
   type GameCategory,
+  type GamePracticeList,
   type GameDateRange,
   type GameKind,
   type GameLeaderboardMode,
@@ -44,6 +47,13 @@ export const GAME_COPY = {
   complete: "Round complete",
   hardMode: "Hard mode",
   choices: "Choices",
+  corners: "Corners",
+  cornersHint: "Two corners always play. Add the bottom two before you start.",
+  addCorner: "Add this corner",
+  removeCorner: "Remove this corner",
+  practiceList: "Practice from",
+  practiceEmpty: "Nothing tagged for this list yet. Tag items from Study or the explorers first.",
+  viewLists: "Trouble & favourites",
   ultraMode: "Ultra mode",
   regularMode: "Regular",
   playAgain: "Play again",
@@ -76,7 +86,7 @@ export const GAME_CATEGORY_LABELS: Record<GameCategory, string> = {
 export const GAME_KIND_LABELS: Record<GameKind, string> = {
   [GAME_KINDS.match]: "Match",
   [GAME_KINDS.daily]: "Daily Challenge",
-  [GAME_KINDS.revenge]: "Revenge",
+  [GAME_KINDS.revenge]: "Practice",
   [GAME_KINDS.timeAttack]: "Time Attack",
   [GAME_KINDS.shiritori]: "Shiritori",
   [GAME_KINDS.map]: "Map",
@@ -85,7 +95,7 @@ export const GAME_KIND_LABELS: Record<GameKind, string> = {
 export const GAME_KIND_TAGLINES: Record<GameKind, string> = {
   [GAME_KINDS.match]: "Fast rounds. Family bragging rights.",
   [GAME_KINDS.daily]: "Same questions for everyone. One shot.",
-  [GAME_KINDS.revenge]: "A boss fight against your worst items.",
+  [GAME_KINDS.revenge]: "Drill the lists you built yourself.",
   [GAME_KINDS.timeAttack]: "Beat the clock, not the question count.",
   [GAME_KINDS.shiritori]: "Chain words by their last kana.",
   [GAME_KINDS.map]: "Forty-seven prefectures. Know them all?",
@@ -94,7 +104,7 @@ export const GAME_KIND_TAGLINES: Record<GameKind, string> = {
 export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
   [GAME_KINDS.match]: "Pick the item that matches the meaning or reading. Choose your level, category and round length.",
   [GAME_KINDS.daily]: "Ten questions pitched at the level the regular players share. One attempt per day, same set for everyone.",
-  [GAME_KINDS.revenge]: "Targets the items you tagged as trouble first, then the ones your review history says you struggle with most.",
+  [GAME_KINDS.revenge]: "Drills one list at a time: the items you tagged as trouble, the ones you tagged as favourites, or the ones your review history says are toughest.",
   [GAME_KINDS.timeAttack]: "Answer as many as you can before the clock runs out. Wrong answers cost you, but they do not end the run.",
   [GAME_KINDS.shiritori]: "Each word has to start with the kana the last one ended on. One wrong link ends the chain.",
   [GAME_KINDS.map]: "Name the prefecture lit up on the map, or take a name and pick it out yourself. The wrong answers are its neighbours, so a rough idea will not save you.",
@@ -103,7 +113,7 @@ export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
 export const GAME_KIND_EMOJI: Record<GameKind, string> = {
   [GAME_KINDS.match]: "⚡",
   [GAME_KINDS.daily]: "📅",
-  [GAME_KINDS.revenge]: "🔥",
+  [GAME_KINDS.revenge]: "🎯",
   [GAME_KINDS.timeAttack]: "⏱️",
   [GAME_KINDS.shiritori]: "🔗",
   [GAME_KINDS.map]: "🗾",
@@ -153,6 +163,18 @@ export const GAME_MAP_DIRECTION_HINTS: Record<string, string> = {
   find: "See the name, pick the prefecture out on the map.",
 };
 
+export const GAME_PRACTICE_LIST_LABELS: Record<GamePracticeList, string> = {
+  [GAME_PRACTICE_LISTS.trouble]: "Trouble",
+  [GAME_PRACTICE_LISTS.favorite]: "Favourites",
+  [GAME_PRACTICE_LISTS.toughest]: "Toughest",
+};
+
+export const GAME_PRACTICE_LIST_HINTS: Record<GamePracticeList, string> = {
+  [GAME_PRACTICE_LISTS.trouble]: "The items you flagged as trouble.",
+  [GAME_PRACTICE_LISTS.favorite]: "The items you tagged as favourites.",
+  [GAME_PRACTICE_LISTS.toughest]: "No tagging needed: whatever your review history says you are weakest on.",
+};
+
 export const GAME_ANSWER_MODE_LABELS: Record<string, string> = {
   auto: "Mixed",
   meaning: "Meaning",
@@ -160,11 +182,22 @@ export const GAME_ANSWER_MODE_LABELS: Record<string, string> = {
   romaji: "Romaji",
 };
 
-export const GAME_CHOICE_COUNT_LABELS: Record<number, string> = {
-  2: "Double",
-  3: "Triple",
-  4: "Quad",
-};
+/**
+ * How long a corner or the word stays lit for a key that cannot answer.
+ * Long enough to register, short enough not to sit in the way of the next press.
+ */
+export const GAME_BOARD_FLASH_MS = 280;
+
+export const GAME_CORNER_PLACEHOLDER_CLASS = "flex min-w-0 items-center justify-center rounded-2xl border border-dashed border-line bg-surface-muted/50";
+
+/**
+ * Every tile round is played on the same four corners; only how many are live
+ * changes. Map mode has no corners, so there the number is just a choice count.
+ */
+export function gameCornersLabel(kind: GameKind, choiceCount: number): string {
+  const noun = gameKindRules(kind).usesCornersBoard ? GAME_COPY.corners : GAME_COPY.choices;
+  return `${noun} ${choiceCount}`;
+}
 
 /**
  * How a prefecture is painted in Map mode.
@@ -193,8 +226,8 @@ export const MAP_TONE_CLASS: Record<string, { shape: string; line: string; handl
 export const GAME_MIXED_PILL_CLASS = "subject-pill border-line bg-surface-muted text-foreground";
 export const GAME_LEVEL_PILL_CLASS = "subject-pill border-accent/30 bg-accent/10 text-accent";
 
-export function gameDifficultyLabel(choiceCount: number, ultraMode: boolean, direction?: string): string {
-  const choices = GAME_CHOICE_COUNT_LABELS[choiceCount] ?? GAME_CHOICE_COUNT_LABELS[2]!;
+export function gameDifficultyLabel(kind: GameKind, choiceCount: number, ultraMode: boolean, direction?: string): string {
+  const choices = gameCornersLabel(kind, choiceCount);
   const pair = direction ? `${GAME_DIRECTION_LABELS[direction] ?? ""} · ${choices}`.trim() : choices;
   return ultraMode ? `Ultra · ${pair}` : pair;
 }

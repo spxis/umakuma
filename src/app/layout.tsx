@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import AppFooter from "./AppFooter";
 import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
+import StudyTagListsModal from "./shared/StudyTagListsModal";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
 
@@ -28,6 +29,7 @@ export default function RootLayout({
         <ClientApiActivityHint />
         <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
         <AppFooter />
+        <StudyTagListsModal />
         <ViewGlyphModalHost />
       </body>
     </html>

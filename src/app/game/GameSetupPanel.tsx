@@ -1,10 +1,11 @@
-import { GAME_KINDS, gameKindRules } from "@/lib/gameMode";
-import { GAME_CHOICE_COUNTS, GAME_DIRECTION_VALUES, gameAnswerModesFor, type GameAnswerMode, type GameChoiceCount, type GameDirection } from "@/lib/gameMode";
+import { GAME_CHOICE_COUNTS, GAME_KINDS, GAME_PRACTICE_LIST_VALUES, gameKindRules } from "@/lib/gameMode";
+import { GAME_DIRECTION_VALUES, gameAnswerModesFor, type GameAnswerMode, type GameChoiceCount, type GameDirection, type GamePracticeList } from "@/lib/gameMode";
+import SegmentedControl from "@/app/shared/SegmentedControl";
+import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
 import {
   GAME_CATEGORY_LABELS,
   GAME_ANSWER_MODE_LABELS,
   GAME_MAP_DIRECTION_HINTS,
-  GAME_CHOICE_COUNT_LABELS,
   GAME_DIRECTION_HINTS,
   GAME_DIRECTION_LABELS,
   GAME_COPY,
@@ -12,13 +13,17 @@ import {
   GAME_KIND_EMOJI,
   GAME_KIND_LABELS,
   GAME_KIND_RULE_COPY,
+  GAME_PRACTICE_LIST_HINTS,
+  GAME_PRACTICE_LIST_LABELS,
   gameTimeLimitLabel,
 } from "./GameMode.constants";
+import GameCornersPicker from "./GameCornersPicker";
 import GameModeToggle from "./GameModeToggle";
-import { gameAvailableCount, gameRequiredCount, gameSelectionIsPlayable } from "./gameHubCards";
+import { gameAvailableCount, gameRequiredCount, gameSelectionAvailableCount, gameSelectionIsPlayable } from "./gameHubCards";
 import type { GameSelection, GameSetupResponse } from "./GameMode.types";
 
 type Props = {
+  accountId: string;
   setup: GameSetupResponse;
   selection: GameSelection;
   starting: boolean;
@@ -30,10 +35,10 @@ type Props = {
 const FIELD_CLASS = "mt-2 h-11 w-full rounded-full border border-line bg-surface px-4 text-sm font-black text-foreground";
 const LABEL_CLASS = "text-xs font-bold uppercase text-foreground/60";
 
-export default function GameSetupPanel({ setup, selection, starting, onChange, onStart, onBack }: Props) {
+export default function GameSetupPanel({ accountId, setup, selection, starting, onChange, onStart, onBack }: Props) {
   const rules = gameKindRules(selection.kind);
   const accent = GAME_KIND_ACCENT[selection.kind];
-  const available = gameAvailableCount(setup, selection.kind, rules.usesLevel ? selection.level : null, selection.category);
+  const available = gameSelectionAvailableCount(setup, selection);
   const playable = gameSelectionIsPlayable(setup, selection);
   const dailyPlayed = selection.kind === GAME_KINDS.daily && setup.availability.daily.playedToday;
   // Daily is fixed for everyone and Shiritori always chains words.
@@ -99,7 +104,7 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
             >
               {setup.categories.map((category) => (
                 <option key={category} value={category}>
-                  {GAME_CATEGORY_LABELS[category]} ({gameAvailableCount(setup, selection.kind, rules.usesLevel ? selection.level : null, category)})
+                  {GAME_CATEGORY_LABELS[category]} ({gameAvailableCount(setup, selection.kind, rules.usesLevel ? selection.level : null, category, selection.practiceList)})
                 </option>
               ))}
             </select>
@@ -134,16 +139,14 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
           </label>
         ) : null}
 
-        {rules.usesHardMode ? (
+        {rules.usesHardMode && !rules.usesCornersBoard ? (
           <label className={LABEL_CLASS}>{GAME_COPY.choices}
             <select
               value={selection.choiceCount}
               onChange={(event) => onChange((value) => ({ ...value, choiceCount: Number(event.target.value) as GameChoiceCount }))}
               className={FIELD_CLASS}
             >
-              {GAME_CHOICE_COUNTS.map((count) => (
-                <option key={count} value={count}>{GAME_CHOICE_COUNT_LABELS[count]} ({count})</option>
-              ))}
+              {GAME_CHOICE_COUNTS.map((count) => <option key={count} value={count}>{count}</option>)}
             </select>
           </label>
         ) : null}
@@ -160,6 +163,38 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
           </label>
         ) : null}
       </div>
+
+      {(rules.usesHardMode && rules.usesCornersBoard) || rules.usesPracticeList ? (
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {rules.usesHardMode && rules.usesCornersBoard ? (
+            <GameCornersPicker
+              choiceCount={selection.choiceCount}
+              accentClass={accent.solid}
+              onChange={(choiceCount) => onChange((value) => ({ ...value, choiceCount }))}
+            />
+          ) : null}
+
+          {rules.usesPracticeList ? (
+            <div>
+              <p className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.practiceList}</p>
+              <SegmentedControl
+                ariaLabel={GAME_COPY.practiceList}
+                size="md"
+                className="mt-2 inline-flex flex-wrap items-center gap-1 rounded-full border border-line bg-surface p-1"
+                value={selection.practiceList}
+                onChange={(practiceList: GamePracticeList) => onChange((value) => ({ ...value, practiceList }))}
+                options={GAME_PRACTICE_LIST_VALUES.map((list) => ({
+                  value: list,
+                  label: `${GAME_PRACTICE_LIST_LABELS[list]} · ${gameAvailableCount(setup, selection.kind, null, selection.category, list)}`,
+                  title: GAME_PRACTICE_LIST_HINTS[list],
+                  activeClassName: `border ${accent.solid}`,
+                }))}
+              />
+              <p className="mt-1 text-[11px] font-semibold text-foreground/55">{GAME_PRACTICE_LIST_HINTS[selection.practiceList]}</p>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {rules.usesUltraMode ? (
@@ -183,6 +218,7 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
         >
           {starting ? GAME_COPY.starting : GAME_COPY.start}
         </button>
+        <StudyTagListsButton accountId={accountId} />
         {!rules.oncePerDay ? (
           <span className="text-xs font-bold text-foreground/50">{available} items</span>
         ) : null}
@@ -192,7 +228,9 @@ export default function GameSetupPanel({ setup, selection, starting, onChange, o
         {dailyPlayed
           ? `${GAME_COPY.dailyPlayed}. ${GAME_COPY.dailyOneAttempt}`
           : !playable
-            ? GAME_COPY.notEnoughItems
+            ? rules.usesPracticeList && available === 0
+              ? GAME_COPY.practiceEmpty
+              : GAME_COPY.notEnoughItems
             : selection.kind === GAME_KINDS.daily
               ? GAME_COPY.dailyOneAttempt
               : selection.ultraMode

@@ -10,8 +10,12 @@ import {
   gameDateKeys,
   gameEndlessCycleLimitReached,
   gameLeaderboardMemberIsEligible,
+  gameBoardRegionForKey,
   gameOptionIndexForKey,
   gameProgressFlags,
+  gameRegionCoversCorner,
+  GAME_BOARD_REGIONS,
+  GAME_KEY_LAYOUTS,
   gameRunIsExpired,
   isUltraGameBatchSize,
   gamePoolItemMatches,
@@ -25,35 +29,50 @@ describe("Game Mode", () => {
     expect(isUltraGameBatchSize(50)).toBe(false);
   });
 
-  it("maps arrows and number keys to regular and hard-mode choices", () => {
-    expect(gameOptionIndexForKey("ArrowLeft", 3)).toBe(0);
-    expect(gameOptionIndexForKey("ArrowUp", 3)).toBe(1);
-    expect(gameOptionIndexForKey("ArrowDown", 3)).toBe(1);
-    expect(gameOptionIndexForKey("ArrowRight", 3)).toBe(2);
-    expect(gameOptionIndexForKey("1", 3)).toBe(0);
-    expect(gameOptionIndexForKey("2", 3)).toBe(1);
-    expect(gameOptionIndexForKey("3", 3)).toBe(2);
-    expect(gameOptionIndexForKey("4", 3)).toBe(0);
-    expect(gameOptionIndexForKey("5", 3)).toBe(1);
-    expect(gameOptionIndexForKey("6", 3)).toBe(2);
-    expect(gameOptionIndexForKey("2", 2)).toBeNull();
-    expect(gameOptionIndexForKey("ArrowUp", 2)).toBeNull();
-    expect(gameOptionIndexForKey("ArrowDown", 2)).toBeNull();
-    expect(gameOptionIndexForKey("5", 2)).toBeNull();
-    expect(gameOptionIndexForKey("3", 2)).toBe(1);
-    expect(gameOptionIndexForKey("6", 2)).toBe(1);
+  it("answers the Corners board with the numpad corners it is laid out as", () => {
+    // Top-left, top-right, bottom-left, bottom-right, in that slot order.
+    expect(gameOptionIndexForKey("7", 4)).toBe(0);
+    expect(gameOptionIndexForKey("9", 4)).toBe(1);
+    expect(gameOptionIndexForKey("1", 4)).toBe(2);
+    expect(gameOptionIndexForKey("3", 4)).toBe(3);
+    // The bottom corners are dark until the round adds them.
+    expect(gameOptionIndexForKey("1", 2)).toBeNull();
+    expect(gameOptionIndexForKey("3", 2)).toBeNull();
+    expect(gameOptionIndexForKey("1", 3)).toBe(2);
+    expect(gameOptionIndexForKey("3", 3)).toBeNull();
+    // Nothing else answers, whatever the count.
+    expect(gameOptionIndexForKey("2", 4)).toBeNull();
+    expect(gameOptionIndexForKey("5", 4)).toBeNull();
+    expect(gameOptionIndexForKey("ArrowLeft", 2)).toBeNull();
   });
 
-  it("drives four tiles by number key, since no arrow names a corner", () => {
-    expect(gameOptionIndexForKey("1", 4)).toBe(0);
-    expect(gameOptionIndexForKey("2", 4)).toBe(1);
-    expect(gameOptionIndexForKey("3", 4)).toBe(2);
-    expect(gameOptionIndexForKey("4", 4)).toBe(3);
-    expect(gameOptionIndexForKey("5", 4)).toBeNull();
-    expect(gameOptionIndexForKey("ArrowLeft", 4)).toBeNull();
-    // Two and three tiles keep their arrow keys.
-    expect(gameOptionIndexForKey("ArrowLeft", 2)).toBe(0);
-    expect(gameOptionIndexForKey("ArrowRight", 3)).toBe(2);
+  it("numbers a row of tiles in order, which is what Map mode plays on", () => {
+    const sequence = GAME_KEY_LAYOUTS.sequence;
+    expect(gameOptionIndexForKey("1", 4, sequence)).toBe(0);
+    expect(gameOptionIndexForKey("2", 4, sequence)).toBe(1);
+    expect(gameOptionIndexForKey("3", 4, sequence)).toBe(2);
+    expect(gameOptionIndexForKey("4", 4, sequence)).toBe(3);
+    expect(gameOptionIndexForKey("3", 2, sequence)).toBeNull();
+    expect(gameOptionIndexForKey("7", 4, sequence)).toBeNull();
+  });
+
+  it("names the half of the board a key points at without answering", () => {
+    expect(gameBoardRegionForKey("8")).toBe(GAME_BOARD_REGIONS.top);
+    expect(gameBoardRegionForKey("2")).toBe(GAME_BOARD_REGIONS.bottom);
+    expect(gameBoardRegionForKey("4")).toBe(GAME_BOARD_REGIONS.left);
+    expect(gameBoardRegionForKey("6")).toBe(GAME_BOARD_REGIONS.right);
+    expect(gameBoardRegionForKey("5")).toBe(GAME_BOARD_REGIONS.center);
+    expect(gameBoardRegionForKey("ArrowUp")).toBe(GAME_BOARD_REGIONS.top);
+    expect(gameBoardRegionForKey("ArrowRight")).toBe(GAME_BOARD_REGIONS.right);
+    expect(gameBoardRegionForKey("7")).toBeNull();
+
+    expect([0, 1, 2, 3].map((index) => gameRegionCoversCorner(GAME_BOARD_REGIONS.top, index)))
+      .toEqual([true, true, false, false]);
+    expect([0, 1, 2, 3].map((index) => gameRegionCoversCorner(GAME_BOARD_REGIONS.left, index)))
+      .toEqual([true, false, true, false]);
+    // The word in the middle is not a corner, so nothing else lights up with it.
+    expect([0, 1, 2, 3].map((index) => gameRegionCoversCorner(GAME_BOARD_REGIONS.center, index)))
+      .toEqual([false, false, false, false]);
   });
 
   it("keeps Ultra running through perfect cycles and stops on a miss", () => {

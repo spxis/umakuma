@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import type { GameKind, GameOptionTile, GameQuestionPayload } from "@/lib/gameMode";
+import { GAME_KEY_LAYOUTS, type GameKind, type GameOptionTile, type GameQuestionPayload } from "@/lib/gameMode";
 import { mapBoxIsZoomed, prefectureCodeFromSubjectId, prefectureFocusBox } from "@/lib/japanPrefectures";
 import GameChoiceTile from "./GameChoiceTile";
 import GameRunnerFrame from "./GameRunnerFrame";
@@ -97,6 +97,9 @@ function MapBoard({
 }) {
   useGameAnswerKeys({
     options: question.options,
+    // Prefecture names sit in one row and the map handles are numbered, so the
+    // corner keys of the tile board would name nothing here.
+    layout: GAME_KEY_LAYOUTS.sequence,
     disabled: answering || Boolean(feedback) || inputBlocked,
     onAnswer,
   });
@@ -136,7 +139,7 @@ function MapBoard({
               key={option.subjectId}
               option={option}
               keyHint={String(index + 1)}
-              optionCount={optionCount}
+              dense={optionCount >= 3}
               isTextAnswer
               showLevel={false}
               disabled={answering}

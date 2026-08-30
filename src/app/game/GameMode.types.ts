@@ -9,7 +9,9 @@ import type {
   GameLeaderboardEntry,
   GameLeaderboardMode,
   GameMetric,
+  GamePracticeList,
   GameQuestionPayload,
+  GameTaggedPracticeList,
   GameRunSummary,
   GameTimeLimitMs,
 } from "@/lib/gameMode";
@@ -21,7 +23,11 @@ export type MapTone = (typeof MAP_TONES)[keyof typeof MAP_TONES];
 
 export type GameKindAvailability = {
   daily: { dateKey: string; playedToday: boolean; levelCap: number };
-  revenge: { available: number; troubleCount: number };
+  /**
+   * What each Practice list holds, by category. Only tagged items the player has
+   * actually started are counted, because that is all Practice can draw from.
+   */
+  practice: Record<GameTaggedPracticeList, Record<GameCategory, number>>;
   shiritori: { available: number };
 };
 
@@ -73,6 +79,7 @@ export type GameSelection = {
   choiceCount: GameChoiceCount;
   direction: GameDirection;
   answerMode: GameAnswerMode;
+  practiceList: GamePracticeList;
   ultraMode: boolean;
   timeLimitMs: GameTimeLimitMs;
 };
