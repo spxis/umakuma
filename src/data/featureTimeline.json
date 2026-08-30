@@ -388,7 +388,7 @@
     "name": "Viewer identity fix",
     "area": "account",
     "status": "planned",
-    "date": "2026-08-29",
+    "date": "2026-08-30",
     "dateIsEstimate": true,
     "release": 1,
     "summary": "Stop resolving a signed-in viewer to an account by matching their Google display name against a nickname."
@@ -397,10 +397,9 @@
     "id": "release-timeline",
     "name": "Release timeline",
     "area": "admin",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-08-29",
-    "dateIsEstimate": true,
-    "release": 2,
+    "dateIsEstimate": false,
     "summary": "This page: every shipped and planned feature with its date, admin only."
   },
   {
@@ -408,9 +407,9 @@
     "name": "Standalone JLPT study",
     "area": "jlpt",
     "status": "planned",
-    "date": "2026-08-30",
+    "date": "2026-08-31",
     "dateIsEstimate": true,
-    "release": 3,
+    "release": 7,
     "summary": "Split JLPT content from the WaniKani progress overlay so the kanji data stands on its own."
   },
   {
@@ -430,7 +429,7 @@
     "status": "planned",
     "date": "2026-08-30",
     "dateIsEstimate": true,
-    "release": 5,
+    "release": 3,
     "summary": "Split identity from the WaniKani link so an account can exist with no token."
   },
   {
@@ -438,9 +437,9 @@
     "name": "Capability gating",
     "area": "platform",
     "status": "planned",
-    "date": "2026-08-31",
+    "date": "2026-09-01",
     "dateIsEstimate": true,
-    "release": 6,
+    "release": 8,
     "summary": "One capability map decides what a member without WaniKani sees, hides or finds disabled."
   },
   {
@@ -448,9 +447,9 @@
     "name": "WaniKani-free game pool",
     "area": "games",
     "status": "planned",
-    "date": "2026-08-31",
+    "date": "2026-09-01",
     "dateIsEstimate": true,
-    "release": 7,
+    "release": 9,
     "summary": "Draw game rounds from the local catalogue when there is no assignment cache to draw from."
   },
   {
@@ -458,9 +457,9 @@
     "name": "Connect your WaniKani account",
     "area": "account",
     "status": "planned",
-    "date": "2026-08-31",
+    "date": "2026-09-01",
     "dateIsEstimate": true,
-    "release": 8,
+    "release": 10,
     "summary": "A page that explains what connecting unlocks and walks through adding the token."
   },
   {
@@ -468,9 +467,9 @@
     "name": "Open Google sign-up",
     "area": "account",
     "status": "planned",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "dateIsEstimate": true,
-    "release": 9,
+    "release": 6,
     "summary": "Anyone can sign in with Google and get an account, with or without WaniKani."
   },
   {
@@ -480,7 +479,7 @@
     "status": "planned",
     "date": "2026-09-02",
     "dateIsEstimate": true,
-    "release": 10,
+    "release": 11,
     "summary": "Members form their own group and compare inside it."
   },
   {
@@ -490,7 +489,7 @@
     "status": "planned",
     "date": "2026-09-02",
     "dateIsEstimate": true,
-    "release": 11,
+    "release": 12,
     "summary": "A public global board that every member joins deliberately, never by default."
   },
   {
@@ -500,7 +499,7 @@
     "status": "planned",
     "date": "2026-09-03",
     "dateIsEstimate": true,
-    "release": 12,
+    "release": 14,
     "summary": "Compare content instead of timestamps so a sync stops rewriting rows that did not change."
   },
   {
@@ -510,7 +509,7 @@
     "status": "planned",
     "date": "2026-09-03",
     "dateIsEstimate": true,
-    "release": 13,
+    "release": 15,
     "summary": "64 subjects in the study queue are absent from the local catalogue and still fall through to the API."
   },
   {
@@ -520,7 +519,7 @@
     "status": "planned",
     "date": "2026-09-04",
     "dateIsEstimate": true,
-    "release": 14,
+    "release": 16,
     "summary": "Retire the batchSize = -1 sentinel in favour of a real enum value."
   },
   {
@@ -530,7 +529,53 @@
     "status": "planned",
     "date": "2026-09-04",
     "dateIsEstimate": true,
-    "release": 15,
+    "release": 17,
     "summary": "Move the remaining hand-rolled cards, loading states and pills onto the shared components."
+  },
+  {
+    "id": "game-activity",
+    "name": "Last play and live rounds",
+    "area": "games",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "Each hub card shows who played it last and what they scored, and marks a round somebody is in right now."
+  },
+  {
+    "id": "jlpt-level-mapping",
+    "name": "JLPT old-to-N level mapping",
+    "area": "jlpt",
+    "status": "shipped",
+    "date": "2026-08-29",
+    "summary": "Places a pre-2010 Level 1-4 certificate on the N1-N5 scale, inferring the system from the year."
+  },
+  {
+    "id": "game-presence",
+    "name": "Viewing presence",
+    "area": "games",
+    "status": "planned",
+    "date": "2026-08-30",
+    "dateIsEstimate": true,
+    "release": 2,
+    "summary": "Show who is looking at a game right now, not only who is answering. Needs a heartbeat and its own table."
+  },
+  {
+    "id": "registration-onboarding",
+    "name": "Registration and onboarding",
+    "area": "account",
+    "status": "planned",
+    "date": "2026-08-31",
+    "dateIsEstimate": true,
+    "release": 5,
+    "summary": "The wizard after Google sign-in: display name, optional WaniKani token, JLPT certification, and the public-board choice."
+  },
+  {
+    "id": "jlpt-level-reviews",
+    "name": "JLPT level reviews",
+    "area": "jlpt",
+    "status": "planned",
+    "date": "2026-09-05",
+    "dateIsEstimate": true,
+    "release": 13,
+    "summary": "Reviews that progress through an N level the way WaniKani progresses through 60. Design open."
   }
 ]
