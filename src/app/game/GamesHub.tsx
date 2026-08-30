@@ -7,6 +7,7 @@ import {
   GAME_KIND_RULE_COPY,
   GAME_KIND_TAGLINES,
 } from "./GameMode.constants";
+import GameCardActivity from "./GameCardActivity";
 import type { GameHubCard } from "./GameMode.types";
 
 type Props = {
@@ -52,6 +53,7 @@ export default function GamesHub({ cards, selectedKind, onSelect }: Props) {
                 <span className="mt-3 block flex-1 text-sm font-semibold leading-snug text-foreground/70">
                   {GAME_KIND_RULE_COPY[card.kind]}
                 </span>
+                <GameCardActivity activity={card.activity} accentText={accent.text} />
                 <span className={`mt-4 inline-flex h-10 min-w-0 items-center justify-center rounded-full border px-5 text-center text-sm font-black ${card.playable ? accent.solid : "border-line bg-surface-muted text-foreground/50"}`}>
                   {card.playable
                     ? GAME_COPY.play

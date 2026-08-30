@@ -2,6 +2,7 @@ import { GameKind as PrismaGameKind } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import { canAccessAccount } from "@/lib/accountAccess";
+import { loadGameActivity } from "@/lib/gameActivityServer";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
@@ -57,13 +58,14 @@ export async function GET(request: Request, context: { params: Promise<{ account
         ).length;
 
         const dailyKey = getVancouverDateKey(new Date());
-        const [tagRows, dailyRun, dailyLevelCap] = await Promise.all([
+        const [tagRows, dailyRun, dailyLevelCap, activity] = await Promise.all([
           fetchStudyTagRows(accountId),
           prisma.gameRun.findUnique({
             where: { accountId_kind_dailyKey: { accountId, kind: PrismaGameKind.daily, dailyKey } },
             select: { status: true },
           }),
           resolveDailyLevelCap(),
+          loadGameActivity(),
         ]);
 
         // Practice draws from the started pool, so a tag on an item the player
@@ -101,6 +103,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             practice: practiceCounts,
             shiritori: { available: shiritoriAvailable },
           },
+          activity,
         }, { status: 200 });
       } catch (error) {
         console.error("Failed to load game setup", error);

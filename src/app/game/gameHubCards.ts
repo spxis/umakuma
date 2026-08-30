@@ -97,6 +97,7 @@ export function buildGameHubCards(setup: GameSetupResponse, selection: GameSelec
       playable,
       blockedReason,
       statusLabel: statusLabel(setup, kind, available),
+      activity: setup.activity?.[kind] ?? null,
     };
   });
 }

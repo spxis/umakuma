@@ -1,3 +1,5 @@
+import type { GameActivityByKind, GameKindActivity } from "@/lib/gameActivity";
+
 import type {
   GameBatchSize,
   GameCategory,
@@ -41,6 +43,7 @@ export type GameSetupResponse = {
   countsByLevel: Record<number, Record<GameCategory, number>>;
   totalCounts: Record<GameCategory, number>;
   availability: GameKindAvailability;
+  activity: GameActivityByKind;
 };
 
 export type GameLeaderboardDay = {
@@ -106,4 +109,6 @@ export type GameHubCard = {
   playable: boolean;
   blockedReason: GameBlockedReason | null;
   statusLabel: string | null;
+  /** Who played this last, and who is in a round right now. */
+  activity: GameKindActivity | null;
 };
