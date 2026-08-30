@@ -6,7 +6,7 @@
  */
 export const GRADE_EXPLORER_COPY = {
   heading: "School Grades",
-  subtitle: "Kanji by Japanese school year, with the readings taught at each grade",
+  subtitle: "Kanji by Japanese school year, with their official readings",
   gradeLabel: "Grade",
   searchPlaceholder: "Search kanji, meaning, or reading",
   search: "Search",
@@ -24,7 +24,12 @@ export const GRADE_EXPLORER_COPY = {
   strokes: "strokes",
   jlptCrossRef: "JLPT",
   wanikaniCrossRef: "WK",
-  curriculumNote: "Readings shown are the ones approved for this grade.",
+  /*
+   * Says what the data is rather than what we wish it were. The readings are
+   * the joyo table's, which is the official list for general use - it is not
+   * split by school year, and the line used to claim it was.
+   */
+  curriculumNote: "Readings are the official ones from the jōyō table, not a per-grade subset.",
   quizOff: "Quiz me",
   quizOn: "Quiz on",
   quizHint: "Say the readings, then select a card to check.",

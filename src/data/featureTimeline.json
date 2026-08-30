@@ -1016,5 +1016,15 @@
     "version": "0.89.0",
     "releasedAt": "2026-08-30T14:46:34Z",
     "summary": "The grade explorer was not the only place showing readings a character never takes on its own: 245 of the 2,211 JLPT kanji carried them too, so the JLPT explorer, the glyph viewer and search all did. One shared helper now prefers the joyo table wherever readings leave the database."
+  },
+  {
+    "id": "grade-copy-accuracy",
+    "area": "jlpt",
+    "name": "Say what the readings actually are",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.90.0",
+    "releasedAt": "2026-08-30T14:49:00Z",
+    "summary": "The grade page claimed its readings were the ones approved for that school year. They are the joyo table's, which is the official list for general use and is not split by year, so the copy now says so."
   }
 ]
