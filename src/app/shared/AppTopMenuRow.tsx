@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { MouseEvent as ReactMouseEvent } from "react";
 
 import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
+import { NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav } from "./navSections";
 import ReleaseMotto from "./ReleaseMotto";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
@@ -41,7 +42,18 @@ export default function AppTopMenuRow({
   const pathname = usePathname();
   const resolvedWkUsername = primaryWkUsername ?? viewerMenuInfo?.wkUsername ?? null;
   const canSeeAdminTopLink = showAdminActions;
-  const links: MainLink[] = buildMainLinks(resolvedWkUsername, canSeeAdminTopLink);
+  const flatLinks: MainLink[] = buildMainLinks(resolvedWkUsername, canSeeAdminTopLink);
+  const activeSection = sectionForPath(pathname, resolvedWkUsername);
+  const links: MainLink[] = resolvedWkUsername
+    ? [
+        ...NAV_SECTIONS.map((section) => ({
+          label: section.label,
+          href: navChildHref(section.children[0]!, resolvedWkUsername),
+          dashboard: null,
+        })),
+        ...(canSeeAdminTopLink ? [{ label: "Admin", href: "/admin", dashboard: null as null }] : []),
+      ]
+    : flatLinks;
   const mobileLinks = links.filter((link) =>
     link.label === "Leaderboard" || link.label === "Study" || link.label === "Game" || link.label === "Admin"
   );
@@ -76,6 +88,10 @@ export default function AppTopMenuRow({
       return currentDashboardTab === link.dashboard;
     }
 
+    if (activeSection && link.label === activeSection.label) {
+      return true;
+    }
+
     if (link.href === "/") {
       return pathname === "/";
     }
@@ -84,7 +100,8 @@ export default function AppTopMenuRow({
   }
 
   return (
-    <section className={`flex items-center justify-between gap-3 ${className ?? ""}`}>
+    <div className={className ?? ""}>
+    <section className="flex items-center justify-between gap-3">
       <nav className="flex min-w-0 items-center gap-x-1.5 overflow-hidden whitespace-nowrap text-[9px] font-semibold uppercase tracking-widest text-foreground/50 sm:hidden">
         {mobileLinks.map((link, index) => (
           <span key={`mobile-${link.label}-${link.href}`} className="inline-flex items-center gap-x-1.5">
@@ -141,5 +158,29 @@ export default function AppTopMenuRow({
         />
       </div>
     </section>
+
+      {sectionHasSubNav(activeSection) && activeSection ? (
+        <nav
+          aria-label={`${activeSection.label} pages`}
+          className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-line/60 pt-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/45 sm:text-[11px]"
+        >
+          {activeSection.children.map((child) => {
+            const href = navChildHref(child, resolvedWkUsername);
+            const active = pathname === href || pathname?.startsWith(`${href}/`);
+            return (
+              <Link
+                key={child.path}
+                href={href}
+                className={`rounded-full px-2 py-0.5 transition ${
+                  active ? "bg-surface-muted font-black text-foreground" : "hover:text-foreground/75"
+                }`}
+              >
+                {child.label}
+              </Link>
+            );
+          })}
+        </nav>
+      ) : null}
+    </div>
   );
 }

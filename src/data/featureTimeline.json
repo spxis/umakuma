@@ -786,12 +786,12 @@
   {
     "id": "nav-regroup-settings",
     "area": "platform",
-    "name": "Navigation regroup and a Settings page",
-    "status": "planned",
-    "date": "2026-09-13",
-    "dateIsEstimate": true,
-    "summary": "Lists becomes top level and Libraries moves into a new Settings page, which also gives the display name and WaniKani connection a home. Explore, Progress and Read absorb the paired items, taking the header from ten items to eight.",
-    "release": 20
+    "name": "Grouped header navigation",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "summary": "The header drops from eleven flat items wrapping onto two rows to eight groups on one. Explore holds the three explorers, Progress holds History and Stats, Read holds Read and News, and Settings holds Libraries.",
+    "version": "0.75.0",
+    "releasedAt": "2026-08-30T13:35:09Z"
   },
   {
     "id": "codename-kana-and-kanji",
