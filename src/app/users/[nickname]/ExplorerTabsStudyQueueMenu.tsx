@@ -153,7 +153,7 @@ export default function ExplorerTabsStudyQueueMenu({
 
       {isMenuOpen ? (
         <div
-          className="absolute left-0 top-full z-80 mt-2 w-[min(100vw-2rem,26rem)] rounded-xl border border-line bg-surface p-2 shadow-[0_18px_42px_rgba(8,16,36,0.16)]"
+          className="absolute right-0 top-full z-80 mt-2 w-[min(100vw-2rem,26rem)] rounded-xl border border-line bg-surface p-2 shadow-[0_18px_42px_rgba(8,16,36,0.16)]"
           onMouseEnter={openHoverMenu}
           onMouseLeave={closeHoverMenuSoon}
         >
