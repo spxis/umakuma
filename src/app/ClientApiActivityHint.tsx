@@ -75,15 +75,18 @@ export default function ClientApiActivityHint() {
     return null;
   }
 
+  // Bottom-left, away from the header: pinned top-right it sat on top of the
+  // menu and the user button, on phones especially. A slim pill low in the
+  // corner stays visible without covering anything interactive.
   return (
-    <div className="pointer-events-none fixed right-3 top-3 z-120">
+    <div className="pointer-events-none fixed bottom-3 left-3 z-120">
       <div
         role="status"
         aria-live="polite"
-        className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/95 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground shadow-[0_8px_18px_rgba(8,16,36,0.12)]"
+        className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/95 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/80 shadow-[0_8px_18px_rgba(8,16,36,0.12)]"
       >
-        <span className="h-2 w-2 animate-pulse rounded-full bg-accent" aria-hidden="true" />
-        <span>Loading data...</span>
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" aria-hidden="true" />
+        <span>Loading</span>
       </div>
     </div>
   );
