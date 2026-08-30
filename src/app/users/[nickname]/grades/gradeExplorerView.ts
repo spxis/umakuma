@@ -52,7 +52,22 @@ export function readingsForGrade(entry: SchoolGradeKanjiEntry): SchoolGradeReadi
   const approved = entry.gradeApprovedReadings;
   const hasApproved = Boolean(approved && ((approved.on?.length ?? 0) > 0 || (approved.kun?.length ?? 0) > 0));
   const chosen = hasApproved && approved ? approved : entry.readings;
-  return { on: chosen?.on ?? [], kun: chosen?.kun ?? [] };
+  return {
+    on: standaloneReadings(chosen?.on),
+    kun: standaloneReadings(chosen?.kun),
+  };
+}
+
+/**
+ * Drops the readings a character never has on its own.
+ *
+ * KANJIDIC marks compound-only forms with a hyphen on the side that must attach
+ * to something else: `-のう` only exists inside a word like 親王, and `ほ-` only
+ * as a prefix. Printing them as readings taught something false — 王 was shown
+ * with a kun reading of のう when 王 has no kun reading at all.
+ */
+export function standaloneReadings(readings: string[] | undefined): string[] {
+  return (readings ?? []).filter((reading) => !reading.includes("-"));
 }
 
 /**

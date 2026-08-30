@@ -14,6 +14,7 @@ import {
   parseGradeParam,
   parsePageParam,
   readingsForGrade,
+  standaloneReadings,
 } from "./gradeExplorerView";
 
 function entry(overrides: Partial<SchoolGradeKanjiEntry> = {}): SchoolGradeKanjiEntry {
@@ -138,5 +139,35 @@ describe("quiz mode", () => {
    */
   it("stores the choice under its own key", () => {
     expect(GRADE_REVEAL_STORAGE_KEY).toBe("wr:grades:reveal-mode");
+  });
+});
+
+describe("standaloneReadings", () => {
+  /*
+   * KANJIDIC hyphenates a form that only exists attached to something else.
+   * 王 has no kun reading; its only listed one is `-のう`, which exists solely
+   * inside a compound like 親王, and printing it taught the opposite.
+   */
+  it("drops a compound-only suffix", () => {
+    expect(standaloneReadings(["-のう"])).toEqual([]);
+  });
+
+  it("drops a compound-only prefix", () => {
+    expect(standaloneReadings(["ひ", "ほ", "-び", "ほ-"])).toEqual(["ひ", "ほ"]);
+  });
+
+  it("keeps an ordinary reading and an okurigana one", () => {
+    expect(standaloneReadings(["おと", "ね", "い.きる"])).toEqual(["おと", "ね", "い.きる"]);
+  });
+
+  it("survives a missing list", () => {
+    expect(standaloneReadings(undefined)).toEqual([]);
+  });
+});
+
+describe("readingsForGrade filters compound-only forms", () => {
+  it("leaves a kanji with no standalone kun reading showing none", () => {
+    const king = entry({ readings: { on: ["おう"], kun: ["-のう"] }, gradeApprovedReadings: { on: ["おう"], kun: ["-のう"] } });
+    expect(readingsForGrade(king)).toEqual({ on: ["おう"], kun: [] });
   });
 });

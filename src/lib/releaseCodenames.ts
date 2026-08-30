@@ -133,6 +133,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yasuragi Yakimochi", ja: "安らぎ焼き餅", reading: "やすらぎやきもち", gloss: "restful grilled rice cake" },
   { romaji: "Yuuyake Yukata", ja: "夕焼け浴衣", reading: "ゆうやけゆかた", gloss: "sunset yukata" },
   { romaji: "Yozakura Yokochou", ja: "夜桜横丁", reading: "よざくらよこちょう", gloss: "night-blossom alley" },
+  { romaji: "Rakugaki Ranpu", ja: "落書きランプ", reading: "らくがきらんぷ", gloss: "doodle lamp" },
 ];
 
 /**

@@ -946,5 +946,15 @@
     "version": "0.82.0",
     "releasedAt": "2026-08-30T14:05:31Z",
     "summary": "The header search field cost about 150px on a phone and the mobile nav clips rather than wraps, so it had silently pushed the Admin link off the end of the row. On a phone it is now the icon alone, linking to the search page."
+  },
+  {
+    "id": "grade-compound-only-readings",
+    "area": "jlpt",
+    "name": "Stop showing compound-only readings",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.83.0",
+    "releasedAt": "2026-08-30T14:08:53Z",
+    "summary": "Reported by John: the grade cards listed readings a character never has on its own. KANJIDIC hyphenates compound-only forms, and 31 of the 80 first-grade entries carried one, so the King card claimed a kun reading of -nou that only exists inside a compound. Those are filtered out of the display."
   }
 ]
