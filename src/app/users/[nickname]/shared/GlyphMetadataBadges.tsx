@@ -4,13 +4,21 @@ type Props = {
   hoverGroup?: "glyph-tile" | "explorer-card";
 };
 
+/**
+ * The level and success rate in the glyph box's top corners.
+ *
+ * These used to be transparent, borderless labels at half opacity that only
+ * grew a border on hover, so the same level read as a pill in the lists and as
+ * faint text on a card. They are pills everywhere now; hover still deepens them
+ * rather than being what makes them legible.
+ */
 const baseClass =
-  "pointer-events-none absolute top-1 z-10 inline-flex h-4 min-w-4 items-center justify-center rounded-full border border-transparent bg-transparent px-1.5 text-[9px] font-black leading-none tracking-[0.04em] text-foreground/65 opacity-50 transition-all duration-150";
+  "subject-pill pointer-events-none absolute top-1.5 z-10 border-line bg-surface/85 text-foreground/70 transition-all duration-150";
 
 function hoverClass(group: NonNullable<Props["hoverGroup"]>): string {
   return group === "glyph-tile"
-    ? "group-hover/glyph-tile:border-line/70 group-hover/glyph-tile:opacity-100 group-focus-within/glyph-tile:border-line/70 group-focus-within/glyph-tile:opacity-100 group-focus-visible/glyph-tile:border-line/70 group-focus-visible/glyph-tile:opacity-100"
-    : "group-hover/explorer-card:border-line/70 group-hover/explorer-card:opacity-100 group-focus-within/explorer-card:border-line/70 group-focus-within/explorer-card:opacity-100 group-focus-visible/explorer-card:border-line/70 group-focus-visible/explorer-card:opacity-100";
+    ? "group-hover/glyph-tile:text-foreground group-focus-within/glyph-tile:text-foreground"
+    : "group-hover/explorer-card:text-foreground group-focus-within/explorer-card:text-foreground";
 }
 
 export default function GlyphMetadataBadges({

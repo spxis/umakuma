@@ -896,5 +896,15 @@
     "version": "0.77.0",
     "releasedAt": "2026-08-30T13:46:23Z",
     "summary": "A search box in the header and a results page that asks WaniKani, JLPT and School Grades at once, ranked into one list with exact characters and meanings first. Filter to a single catalogue with the source pills."
+  },
+  {
+    "id": "glyph-level-pill-parity",
+    "area": "study",
+    "name": "One level pill everywhere",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.78.0",
+    "releasedAt": "2026-08-30T13:49:43Z",
+    "summary": "Reported by John: the level read as a pill in the lists and as faint borderless text on the study card and in the view modal. The in-glyph level and success rate are pills everywhere now."
   }
 ]
