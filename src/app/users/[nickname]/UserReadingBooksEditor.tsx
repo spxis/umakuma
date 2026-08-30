@@ -278,6 +278,7 @@ export default function UserReadingBooksEditor({
           onClose={() => setPreviewBook(null)}
           layer={MODAL_LAYERS.menu}
           label="Book cover preview"
+          closeOnBackdrop
           scrim="heavy"
           gutter="md"
           panelClassName="max-h-[90vh] w-full max-w-xl"

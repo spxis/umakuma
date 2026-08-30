@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { ReviewPerformance } from "@/lib/reviewDifficulty";
+import { REVIEW_RESULTS } from "@/lib/domainConstants";
 
 type SubjectWithId = {
   subjectId?: unknown;
@@ -63,7 +64,7 @@ export function calculateReviewPerformance(
   for (const attempt of attempts) {
     const totals = totalsBySubjectId.get(attempt.subjectId) ?? { correct: 0, total: 0 };
     totals.total += 1;
-    if (attempt.result === "correct") {
+    if (attempt.result === REVIEW_RESULTS.correct) {
       totals.correct += 1;
     }
     totalsBySubjectId.set(attempt.subjectId, totals);
@@ -104,7 +105,7 @@ export async function fetchReviewPerformance(
   for (const row of groupedAttempts) {
     const totals = performance.get(row.subjectId) ?? { correct: 0, total: 0 };
     totals.total += row._count._all;
-    if (row.result === "correct") {
+    if (row.result === REVIEW_RESULTS.correct) {
       totals.correct += row._count._all;
     }
     performance.set(row.subjectId, totals);

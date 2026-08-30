@@ -9,7 +9,7 @@ import { recordStudyReviewAttempt, recordSubmissionSnapshot } from "@/lib/studyH
 import { clearReviewPerformanceCache } from "@/lib/reviewSuccessRates";
 import { clearStudyQueueCache } from "@/lib/studyQueueCache";
 import { emitSumilabuTelemetry } from "@/lib/sumilabuTelemetry";
-import { WK_STATUSES, type WkStatus } from "@/lib/domainConstants";
+import { WK_STATUSES, type WkStatus, REVIEW_RESULTS } from "@/lib/domainConstants";
 import { srsLabel } from "@/lib/wanikani/helpers";
 import { postWaniKani } from "@/lib/wanikani/http";
 
@@ -147,7 +147,7 @@ export async function POST(request: Request, context: RouteContext) {
       tag: account.tokenTag,
     });
 
-    const incorrect = parsed.data.result === "wrong" ? 1 : 0;
+    const incorrect = parsed.data.result === REVIEW_RESULTS.wrong ? 1 : 0;
     const incorrectMeaningAnswers = parsed.data.answerType === "reading" ? 0 : incorrect;
     const incorrectReadingAnswers = parsed.data.answerType === "meaning" ? 0 : incorrect;
 

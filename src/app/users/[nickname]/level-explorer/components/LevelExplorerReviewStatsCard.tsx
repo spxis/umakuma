@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import FieldLabel from "../../../../shared/FieldLabel";
+import type { ReviewResult } from "@/lib/domainConstants";
 import {
   buildReviewOutcomeSeries,
   summarizeReviewOutcomes,
@@ -21,7 +22,7 @@ import type {
 } from "./LevelExplorerReviewStatsCharts.types";
 
 type ReviewAttempt = {
-  result: "correct" | "wrong" | "skipped";
+  result: ReviewResult;
   submittedAt: string;
 };
 

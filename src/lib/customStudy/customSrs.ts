@@ -1,4 +1,4 @@
-import { WK_STATUSES, srsBucketFromStage, type WkStatus } from "@/lib/domainConstants";
+import { WK_STATUSES, srsBucketFromStage, type WkStatus, REVIEW_RESULTS } from "@/lib/domainConstants";
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
@@ -62,7 +62,7 @@ export function nextCustomSrsStage(params: {
   result: "correct" | "wrong";
 }): number {
   const stage = clampStage(params.currentStage);
-  if (params.result === "correct") {
+  if (params.result === REVIEW_RESULTS.correct) {
     return Math.min(9, stage + 1);
   }
 

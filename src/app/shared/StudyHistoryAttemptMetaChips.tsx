@@ -1,4 +1,4 @@
-import { isSubjectType } from "@/lib/domainConstants";
+import { isSubjectType, SRS_BUCKETS } from "@/lib/domainConstants";
 import {
   shortSubjectTypeLabel,
   subjectTypePillClass,
@@ -6,7 +6,6 @@ import {
 import { PillChip } from "@/app/users/[nickname]/shared/StatusSrsChip";
 import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
 
-import { SRS_BUCKETS } from "@/lib/domainConstants";
 import { srsBucketBadgeClass, srsBucketLabel } from "./studyHistoryUi";
 
 type Props = {

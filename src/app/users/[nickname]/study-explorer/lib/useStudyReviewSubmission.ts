@@ -14,6 +14,7 @@ import type {
 import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 import { studyItemEnglishTitle } from "./studyExplorerUtils";
 import { nextReviewSessionItem } from "./reviewSessionNavigation";
+import { REVIEW_RESULTS } from "@/lib/domainConstants";
 
 const REVIEW_SUBMIT_TIMEOUT_MS = 10000;
 const LESSON_AUTO_ADVANCE_DELAY_MS = 1000;
@@ -107,7 +108,7 @@ export function useStudyReviewSubmission({
         onSetModalSessionItemByAssignmentId((prev) => ({ ...prev, [assignmentId]: itemForSubmit }));
       }
 
-      if (itemForSubmit?.isInjectedTrouble && result === "wrong") {
+      if (itemForSubmit?.isInjectedTrouble && result === REVIEW_RESULTS.wrong) {
         onSetRevealedAssignmentIds((prev) => {
           const next = new Set(prev);
           next.delete(assignmentId);

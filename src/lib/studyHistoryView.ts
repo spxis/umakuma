@@ -10,6 +10,7 @@ import {
   type SubjectType,
 } from "@/lib/domainConstants";
 import type { JlptMeta } from "@/lib/jlptTypes";
+import { isReviewResult, type ReviewResult } from "@/lib/domainConstants";
 export type StudyHistorySortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 export type StudyHistorySortDir = "asc" | "desc";
 export type StudyHistorySource = "wanikani" | "custom";
@@ -34,7 +35,7 @@ export type StudyHistoryRow = {
 export type StudyHistoryPage = {
   attempts: StudyHistoryRow[];
   totals: Record<string, number>;
-  resultCounts: Record<"all" | "correct" | "wrong" | "skipped", number>;
+  resultCounts: Record<"all" | ReviewResult, number>;
   levelAllCount: number;
   levelCounts: Record<number, number>;
   srsBucketAllCount: number;
@@ -58,7 +59,7 @@ type QueryArgs = {
   accountId?: string;
   source: StudyHistorySource;
   libraryId?: string;
-  result?: "correct" | "wrong" | "skipped";
+  result?: ReviewResult;
   level?: number;
   srs?: number;
   srsBucket?: WkStatus;
@@ -125,7 +126,7 @@ function normalizePageSize(raw: string | null): number {
   return Math.min(100, Math.trunc(parsed));
 }
 function normalizeResult(raw: string | null): QueryArgs["result"] {
-  if (raw === "correct" || raw === "wrong" || raw === "skipped") {
+  if (isReviewResult(raw)) {
     return raw;
   }
   return undefined;
@@ -389,14 +390,14 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
   for (const row of rows) {
     totalsByResult[row.result] = (totalsByResult[row.result] ?? 0) + 1;
   }
-  const resultCounts: Record<"all" | "correct" | "wrong" | "skipped", number> = {
+  const resultCounts: Record<"all" | ReviewResult, number> = {
     all: rowsForResultCounts.length,
     correct: 0,
     wrong: 0,
     skipped: 0,
   };
   for (const row of rowsForResultCounts) {
-    if (row.result === "correct" || row.result === "wrong" || row.result === "skipped") {
+    if (isReviewResult(row.result)) {
       resultCounts[row.result] += 1;
     }
   }

@@ -211,6 +211,7 @@ export default function UserReadingMemberHistoryModal({
       layer={MODAL_LAYERS.page}
       label={`${member.nickname} check-in history`}
       scrim="heavy"
+      closeOnBackdrop
       gutter="md"
       panelClassName="relative flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl border border-line bg-surface text-left shadow-2xl"
     >

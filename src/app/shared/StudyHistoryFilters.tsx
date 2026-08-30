@@ -5,8 +5,9 @@ import FilterChipButton from "@/app/users/[nickname]/shared/FilterChipButton";
 
 import { srsBucketBadgeClass, srsBucketLabel, titleCaseSrsBucket } from "./studyHistoryUi";
 import FieldLabel from "../shared/FieldLabel";
+import { REVIEW_RESULTS, type ReviewResult } from "@/lib/domainConstants";
 
-type ResultFilter = "all" | "correct" | "wrong" | "skipped";
+type ResultFilter = "all" | ReviewResult;
 
 type Props = {
   resultFilter: ResultFilter;
@@ -30,17 +31,17 @@ function studyChipClass(active: boolean): string {
     : "border-line bg-surface text-foreground hover:bg-surface-muted";
 }
 
-function resultChipClass(result: "all" | "correct" | "wrong" | "skipped", active: boolean): string {
+function resultChipClass(result: "all" | ReviewResult, active: boolean): string {
   if (!active) {
     return studyChipClass(false);
   }
-  if (result === "correct") {
+  if (result === REVIEW_RESULTS.correct) {
     return "border-emerald-600 bg-emerald-600 text-white";
   }
-  if (result === "wrong") {
+  if (result === REVIEW_RESULTS.wrong) {
     return "border-red-600 bg-red-600 text-white";
   }
-  if (result === "skipped") {
+  if (result === REVIEW_RESULTS.skipped) {
     return "border-amber-500 bg-amber-500 text-white";
   }
   return studyChipClass(true);

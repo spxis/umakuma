@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { isReviewResult, type ReviewResult } from "@/lib/domainConstants";
 
 type AdminStudyHistoryQuery = {
   accountId?: string;
-  result?: "correct" | "wrong" | "skipped";
+  result?: ReviewResult;
   page: number;
   pageSize: number;
 };
@@ -50,7 +51,7 @@ function normalizePageSize(raw: string | null): number {
 }
 
 function normalizeResult(raw: string | null): AdminStudyHistoryQuery["result"] {
-  if (raw === "correct" || raw === "wrong" || raw === "skipped") {
+  if (isReviewResult(raw)) {
     return raw;
   }
 

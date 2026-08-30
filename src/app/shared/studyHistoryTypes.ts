@@ -1,4 +1,4 @@
-import type { SrsBucket, WkStatus, SubjectType } from "@/lib/domainConstants";
+import { type SrsBucket, type WkStatus, type SubjectType, type ReviewResult } from "@/lib/domainConstants";
 import type { JlptMeta } from "@/lib/jlptTypes";
 
 export type HistorySrsBucket = SrsBucket;
@@ -48,7 +48,7 @@ export type StudyHistoryAttempt = {
 export type StudyHistoryPayload = {
   attempts: StudyHistoryAttempt[];
   totals: Record<string, number>;
-  resultCounts: Record<"all" | "correct" | "wrong" | "skipped", number>;
+  resultCounts: Record<"all" | ReviewResult, number>;
   levelAllCount: number;
   levelCounts: Record<number, number>;
   srsBucketAllCount: number;

@@ -1,5 +1,5 @@
 import type { SrsFilter } from "../../explorerTypes";
-import type { SubjectType, WkStatus } from "@/lib/domainConstants";
+import { type SubjectType, type WkStatus, type ReviewResult } from "@/lib/domainConstants";
 import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 
 export type { StudyQueueItem } from "@/lib/studyQueueTypes";
@@ -118,7 +118,7 @@ export type SubmitInFlight = {
   itemLabel: string;
 };
 
-export type ReviewOutcome = "correct" | "wrong" | "skipped" | "lesson-started" | "reset-to-lessons";
+export type ReviewOutcome = ReviewResult | "lesson-started" | "reset-to-lessons";
 export type StudyReviewSubmitResult = Extract<ReviewOutcome, "correct" | "wrong">;
 
 export type StudyExplorerProps = {

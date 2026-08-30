@@ -139,7 +139,6 @@ export default function UserReadingCheckinModal({
       layer={MODAL_LAYERS.page}
       label="Nightly check-in"
       gutter="md"
-      closeOnBackdrop={false}
       panelClassName="flex max-h-[95dvh] w-full max-w-2xl flex-col overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-2xl sm:p-5"
     >
         <div className="flex items-start justify-between gap-3">

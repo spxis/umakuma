@@ -15,6 +15,7 @@ import {
   toCustomSrsGrouping,
 } from "@/lib/customStudy/customSrs";
 import { prisma } from "@/lib/prisma";
+import { REVIEW_RESULTS } from "@/lib/domainConstants";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -136,8 +137,8 @@ export async function POST(request: Request, context: RouteContext) {
               passedAt: state.passedAt ?? (newSrsStage >= 5 ? now : null),
               burnedAt: newSrsStage >= 9 ? now : null,
               reviewCount: { increment: 1 },
-              correctCount: parsed.data.result === "correct" ? { increment: 1 } : undefined,
-              wrongCount: parsed.data.result === "wrong" ? { increment: 1 } : undefined,
+              correctCount: parsed.data.result === REVIEW_RESULTS.correct ? { increment: 1 } : undefined,
+              wrongCount: parsed.data.result === REVIEW_RESULTS.wrong ? { increment: 1 } : undefined,
             },
           }),
           prisma.customStudyReviewAttempt.create({

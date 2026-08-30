@@ -23,6 +23,11 @@ type Props = {
   panelStyle?: CSSProperties;
   /** Extra attributes for the panel, such as the data hooks other code reads. */
   panelProps?: HTMLAttributes<HTMLDivElement>;
+  /**
+   * Dismiss on a click beside the panel. Opt in for informational modals — a
+   * list, a detail view, a preview. Leave it off for anything holding typed
+   * input or a decision, where a stray click would discard work.
+   */
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   lockScroll?: boolean;
@@ -59,7 +64,7 @@ export default function ModalShell({
   panelClassName = "",
   panelStyle,
   panelProps,
-  closeOnBackdrop = true,
+  closeOnBackdrop = false,
   closeOnEscape = true,
   lockScroll = true,
 }: Props) {

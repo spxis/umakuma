@@ -158,6 +158,7 @@ export default function UserReadingDashboardBooksSection({
           onClose={() => setEditorOpen(false)}
           layer={MODAL_LAYERS.page}
           label="Edit challenge books"
+          closeOnBackdrop
           gutter="md"
           panelClassName="flex max-h-[95dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-2xl sm:p-5"
         >

@@ -71,7 +71,6 @@ export default function ExplorerConfirmDialog({
       gutter="md"
       /* A confirmation must not be dismissible by a stray click beside it, and
        * not at all while the action it guards is already running. */
-      closeOnBackdrop={false}
       closeOnEscape={!busy}
       panelClassName="w-full max-w-lg rounded-2xl border border-line bg-surface p-5 shadow-[0_20px_55px_rgba(8,16,36,0.25)]"
     >

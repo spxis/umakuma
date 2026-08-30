@@ -43,6 +43,7 @@ This file is the single source of truth for agent behavior in this repo.
 ### Shared UI Primitives
 
 - Every modal uses `ModalShell` (`src/app/shared/ModalShell.tsx`) for its scrim, centring and dialog semantics. Do not hand-roll a `fixed inset-0` overlay: the fourteen that existed had drifted so that only four locked background scrolling, three never closed on Escape, and eight never set `aria-modal`.
+- Backdrop dismissal is opt-in: pass `closeOnBackdrop` on informational modals (a list, a detail view, a preview) and leave it off everywhere else. The default is off because the risk is asymmetric — a stray click beside a form or a confirmation discards typed input or a decision, while an undismissable info panel merely needs its close button.
 - Stacking order lives only in `MODAL_LAYERS` (`src/app/shared/modalLayers.ts`). Never invent a z-index in a component; add a named layer instead. The old per-component numbers escalated into nineteen distinct values including `z-10020` and `z-[9990]`.
 - Lists of subjects render through the shared pair: `SubjectRows` (condensed, one line each) and `SubjectCards` (browsing grid), both taking `SubjectListRow` and per-surface slots. Study history and the Trouble/Favourites lists are the same code over different sources; a new list surface adapts into `SubjectListRow` rather than writing its own markup.
 - Offer both densities wherever subjects are listed, through `SubjectViewModeToggle`, and persist the choice per surface with `getStoredEnum`/`setStoredEnum`.

@@ -319,17 +319,17 @@ export default function ViewGlyphModalHost() {
 
   return (
     <ModalShell
+      onClose={closeModal}
       layer={MODAL_LAYERS.viewer}
       label={customTitle ?? viewerTitle(item)}
       gutter="sm"
       /*
-       * The viewer keeps its own capture-phase Escape handler: it has to win
-       * over the lists panel it can be opened from, or one press would close
-       * both. It also has no backdrop dismissal, so a stray click beside a
-       * glyph mid-review does not throw the reader out.
+       * Reading a glyph is informational, so a click beside it closes it. Escape
+       * stays with the viewer's own capture-phase handler: it has to win over
+       * the lists panel it can be opened from, or one press would close both.
        */
+      closeOnBackdrop
       closeOnEscape={false}
-      closeOnBackdrop={false}
       lockScroll={false}
       panelStyle={modalFrameStyle}
       panelClassName="mx-auto flex max-h-[calc(100dvh-8px)] w-full max-w-[calc(100vw-8px)] flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"

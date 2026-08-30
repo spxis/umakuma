@@ -117,7 +117,7 @@ export default function StudySideBySideModal({
       layer={MODAL_LAYERS.page}
       label="Side by side"
       scrim="heavy"
-      closeOnBackdrop={false}
+      closeOnBackdrop
       panelClassName="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)] sm:rounded-[1.8rem]"
     >
         <header className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-line bg-surface-muted px-3 py-2 sm:px-6 sm:py-3">

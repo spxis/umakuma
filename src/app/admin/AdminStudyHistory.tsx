@@ -8,6 +8,7 @@ import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
 import { useAdminFeedback } from "./AdminFeedbackProvider";
 import AdminPanelHeader from "./AdminPanelHeader";
 import AdminPaginationControls from "./AdminPaginationControls";
+import type { ReviewResult } from "@/lib/domainConstants";
 
 type Attempt = {
   id: string;
@@ -17,7 +18,7 @@ type Attempt = {
   assignmentId: number;
   subjectId: number;
   subjectType: string;
-  result: "correct" | "wrong" | "skipped";
+  result: ReviewResult;
   submittedAt: string;
 };
 
@@ -72,7 +73,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
   const [paginationReady, setPaginationReady] = useState(false);
 
   const [editingAttemptId, setEditingAttemptId] = useState<string | null>(null);
-  const [editResult, setEditResult] = useState<"correct" | "wrong" | "skipped">("correct");
+  const [editResult, setEditResult] = useState<ReviewResult>("correct");
   const [editSubmittedAt, setEditSubmittedAt] = useState("");
 
   const load = useCallback(async () => {
@@ -385,7 +386,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
                       <select
                         className="h-9 rounded border border-line bg-white px-2 text-xs"
                         value={editResult}
-                        onChange={(event) => setEditResult(event.target.value as "correct" | "wrong" | "skipped")}
+                        onChange={(event) => setEditResult(event.target.value as ReviewResult)}
                       >
                         <option value="correct">correct</option>
                         <option value="wrong">wrong</option>

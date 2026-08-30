@@ -1,13 +1,14 @@
+import { REVIEW_RESULTS, type ReviewResult } from "@/lib/domainConstants";
 export type ReviewOutcomeInput = {
-  result: "correct" | "wrong" | "skipped";
+  result: ReviewResult;
 };
 
 export function summarizeReviewOutcomes(rows: ReviewOutcomeInput[]) {
   return rows.reduce(
     (totals, row) => {
-      if (row.result === "wrong") {
+      if (row.result === REVIEW_RESULTS.wrong) {
         totals.failure += 1;
-      } else if (row.result === "correct") {
+      } else if (row.result === REVIEW_RESULTS.correct) {
         totals.success += 1;
       }
 
@@ -22,11 +23,11 @@ export function buildReviewOutcomeSeries<T extends ReviewOutcomeInput>(rows: T[]
   let failure = 0;
 
   return rows.flatMap((row) => {
-    if (row.result === "skipped") {
+    if (row.result === REVIEW_RESULTS.skipped) {
       return [];
     }
 
-    if (row.result === "correct") success += 1;
+    if (row.result === REVIEW_RESULTS.correct) success += 1;
     else failure += 1;
 
     return [{ ...row, success, failure, total: success + failure }];

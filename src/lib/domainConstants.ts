@@ -226,6 +226,6 @@ export const REVIEW_RESULT_VALUES = [
 ] as const;
 export type ReviewResult = (typeof REVIEW_RESULTS)[keyof typeof REVIEW_RESULTS];
 
-export function isReviewResult(value: string): value is ReviewResult {
+export function isReviewResult(value: string | null | undefined): value is ReviewResult {
   return REVIEW_RESULT_VALUES.includes(value as ReviewResult);
 }

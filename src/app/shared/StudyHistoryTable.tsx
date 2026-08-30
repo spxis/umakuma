@@ -15,6 +15,7 @@ import {
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import type { ReviewResult } from "@/lib/domainConstants";
 
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 type SortDir = "asc" | "desc";
@@ -64,7 +65,7 @@ export default function StudyHistoryTable({
   const [pageSize, setPageSize] = useState(25);
   const [sortBy, setSortBy] = useState<SortBy>("submittedAt");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
-  const [resultFilter, setResultFilter] = useState<"all" | "correct" | "wrong" | "skipped">("all");
+  const [resultFilter, setResultFilter] = useState<"all" | ReviewResult>("all");
   const [levelFilter, setLevelFilter] = useState<number | "all">("all");
   const [srsBucketFilter, setSrsBucketFilter] = useState<HistorySrsBucket | "all">("all");
   const [selectedAttemptId, setSelectedAttemptId] = useState<string | null>(null);
@@ -137,7 +138,7 @@ export default function StudyHistoryTable({
     setSortDir((prev) => (prev === "desc" ? "asc" : "desc"));
   }
 
-  function handleSetResultFilter(value: "all" | "correct" | "wrong" | "skipped") {
+  function handleSetResultFilter(value: "all" | ReviewResult) {
     setPage(1);
     setResultFilter(value);
   }

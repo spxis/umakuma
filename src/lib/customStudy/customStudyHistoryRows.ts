@@ -1,4 +1,4 @@
-import { SRS_BUCKETS, type SrsBucket } from "@/lib/domainConstants";
+import { SRS_BUCKETS, type SrsBucket, type ReviewResult } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import type { StudyHistoryRow } from "@/lib/studyHistoryView";
 
@@ -9,7 +9,7 @@ import { customItemTypeToSubjectType } from "./customStudyQueue";
 type Args = {
   accountId: string;
   libraryId?: string;
-  result?: "correct" | "wrong" | "skipped";
+  result?: ReviewResult;
 };
 
 async function resolveScopedLibraryId(params: { accountId: string; libraryId?: string }): Promise<string | null> {

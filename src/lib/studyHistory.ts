@@ -3,9 +3,9 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { fetchAllCollectionPages } from "@/lib/wanikani/http";
 import type { WaniKaniCollectionResponse } from "@/lib/wanikani/types";
+import { REVIEW_RESULTS, type ReviewResult } from "@/lib/domainConstants";
 
 type SnapshotSource = "sync" | "ondemand" | "submit";
-type ReviewResult = "correct" | "wrong" | "skipped";
 
 type ParsedReviewStatistic = {
   subjectId: number;
@@ -231,9 +231,9 @@ export async function getSubjectHistory(accountId: string, subjectId: number) {
   const attemptTotals = attempts.reduce(
     (acc, row) => {
       acc.total += 1;
-      if (row.result === "correct") acc.correct += 1;
-      if (row.result === "wrong") acc.wrong += 1;
-      if (row.result === "skipped") acc.skipped += 1;
+      if (row.result === REVIEW_RESULTS.correct) acc.correct += 1;
+      if (row.result === REVIEW_RESULTS.wrong) acc.wrong += 1;
+      if (row.result === REVIEW_RESULTS.skipped) acc.skipped += 1;
       return acc;
     },
     { total: 0, correct: 0, wrong: 0, skipped: 0 },

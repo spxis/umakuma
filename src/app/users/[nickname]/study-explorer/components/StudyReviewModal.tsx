@@ -359,7 +359,6 @@ export default function StudyReviewModal({
        * mid-answer work.
        */
       closeOnEscape={false}
-      closeOnBackdrop={false}
       panelProps={{ "data-view-glyph-parent-frame": "true" } as Record<string, string>}
       panelClassName="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)]"
     >
