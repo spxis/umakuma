@@ -47,7 +47,24 @@ export async function setFeatureFlag(key: FeatureFlagKey, enabled: boolean): Pro
   cachedStates = null;
 }
 
-/** The concise mode chips the footer wears, for whichever flags are on. */
+/**
+ * The concise mode chips the footer wears, for whichever flags are on.
+ *
+ * Never throws: the root layout calls this, and Next prerenders the static
+ * pages at build time where no DATABASE_URL exists — the CI build broke the
+ * first time the layout touched Prisma. A build-time or outage failure means
+ * no chips, which is the right face for a page that cannot know better.
+ */
 export async function loadFooterModeChips(): Promise<string[]> {
-  return footerChipsFor(await loadFeatureFlagStates());
+  // No database configured means a build-time prerender: do not even wake
+  // Prisma, whose own error logging would still spray the build output.
+  if (!process.env.DATABASE_URL) {
+    return [];
+  }
+
+  try {
+    return footerChipsFor(await loadFeatureFlagStates());
+  } catch {
+    return [];
+  }
 }

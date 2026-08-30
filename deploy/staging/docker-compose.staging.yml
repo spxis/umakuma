@@ -1,0 +1,62 @@
+# UmaKuma staging database — DS1.
+#
+# A nightly-refreshed snapshot of the Neon production database, reachable from
+# both Macs over Tailscale. Sibling of ../../docker-compose.local.yml: same
+# postgres:17-alpine (matching Neon's major version), same named-volume and
+# healthcheck shape, same 55432 port convention.
+#
+# Always invoked with `--env-file .env.staging` (see deploy-staging-ds1.sh), so
+# every ${VAR} below resolves from that 600-perm file on DS1.
+name: umakuma-staging
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: umakuma-staging-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: umakuma
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.staging}
+      POSTGRES_DB: umakuma
+      TZ: ${TZ:-America/Los_Angeles}
+    ports:
+      # Published on the LAN/Tailscale interface so both Macs can reach it.
+      - "${STAGING_DB_PORT:-55432}:5432"
+    volumes:
+      - umakuma-stagingdb:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umakuma -d umakuma"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  refresh:
+    # Same image as db purely so pg_dump/pg_restore/psql match the server
+    # version exactly; this service never stores data of its own.
+    image: postgres:17-alpine
+    container_name: umakuma-staging-refresh
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NEON_DIRECT_URL: ${NEON_DIRECT_URL:?set NEON_DIRECT_URL in .env.staging}
+      STAGING_DATABASE_URL: postgresql://umakuma:${POSTGRES_PASSWORD}@db:5432/umakuma
+      DUMP_KEEP: ${DUMP_KEEP:-14}
+      REFRESH_CRON: ${REFRESH_CRON:-30 3 * * *}
+      TZ: ${TZ:-America/Los_Angeles}
+    volumes:
+      - ./dumps:/dumps
+      - ./refresh.sh:/usr/local/bin/refresh.sh:ro
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -eu
+        printf '%s /usr/local/bin/refresh.sh >> /dumps/refresh.log 2>&1\n' "$$REFRESH_CRON" > /etc/crontabs/root
+        echo "[refresh] scheduled '$$REFRESH_CRON' (TZ=$$TZ); run now with:"
+        echo "[refresh]   docker exec umakuma-staging-refresh /usr/local/bin/refresh.sh"
+        exec crond -f -l 8
+
+volumes:
+  umakuma-stagingdb:
