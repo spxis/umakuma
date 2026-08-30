@@ -32,8 +32,16 @@ type Props = {
   onBack: () => void;
 };
 
-const FIELD_CLASS = "mt-2 h-11 w-full rounded-full border border-line bg-surface px-4 text-sm font-black text-foreground";
-const LABEL_CLASS = "text-xs font-bold uppercase text-foreground/60";
+/**
+ * Setup is a dense field row, not a stack of full-width bands.
+ *
+ * Every control is one of at most seven, and which ones appear depends on the
+ * game, so they share a grid that reflows rather than each owning a row. The
+ * labels sit tight above compact fields; the rules line and the item count are
+ * folded into one footer instead of three separate paragraphs.
+ */
+const LABEL_CLASS = "mb-1 block truncate text-[10px] font-black uppercase tracking-wide text-foreground/50";
+const FIELD_CLASS = "h-9 w-full rounded-lg border border-line bg-surface px-2.5 text-sm font-bold text-foreground";
 
 export default function GameSetupPanel({ accountId, setup, selection, starting, onChange, onStart, onBack }: Props) {
   const rules = gameKindRules(selection.kind);
@@ -46,14 +54,28 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
   // Map mode's directions act on a prefecture rather than a glyph.
   const directionHints = selection.kind === GAME_KINDS.map ? GAME_MAP_DIRECTION_HINTS : GAME_DIRECTION_HINTS;
 
+  const footer = dailyPlayed
+    ? `${GAME_COPY.dailyPlayed}. ${GAME_COPY.dailyOneAttempt}`
+    : !playable
+      ? rules.usesPracticeList && available === 0
+        ? GAME_COPY.practiceEmpty
+        : GAME_COPY.notEnoughItems
+      : selection.kind === GAME_KINDS.daily
+        ? GAME_COPY.dailyOneAttempt
+        : selection.ultraMode
+          ? GAME_COPY.ultraRule
+          : available < gameRequiredCount(selection)
+            ? GAME_COPY.notEnoughItems
+            : GAME_COPY.scoreRule;
+
   return (
-    <section aria-label="Game setup" className="border-y border-line bg-surface/70 px-3 py-5 sm:px-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-3">
-          <span aria-hidden="true" className="text-3xl leading-none">{GAME_KIND_EMOJI[selection.kind]}</span>
+    <section aria-label="Game setup" className="border-y border-line bg-surface/70 px-3 py-4 sm:px-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-1 items-start gap-2.5">
+          <span aria-hidden="true" className="mt-0.5 shrink-0 text-2xl leading-none">{GAME_KIND_EMOJI[selection.kind]}</span>
           <div className="min-w-0">
-            <h2 className={`text-xl font-black sm:text-2xl ${accent.text}`}>{GAME_KIND_LABELS[selection.kind]}</h2>
-            <p className="text-xs font-semibold text-foreground/60">
+            <h2 className={`text-lg font-black leading-tight sm:text-xl ${accent.text}`}>{GAME_KIND_LABELS[selection.kind]}</h2>
+            <p className="text-[11px] font-semibold leading-snug text-foreground/55">
               {GAME_KIND_RULE_COPY[selection.kind]}
               {supportsDirection ? ` ${directionHints[selection.direction]}` : ""}
             </p>
@@ -62,15 +84,16 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         <button
           type="button"
           onClick={onBack}
-          className="h-9 shrink-0 rounded-full border border-line bg-surface px-4 text-sm font-black text-foreground hover:bg-surface-muted"
+          className="h-8 shrink-0 rounded-full border border-line bg-surface px-3.5 text-xs font-black text-foreground hover:bg-surface-muted"
         >
           {GAME_COPY.changeGame}
         </button>
       </div>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-3 grid grid-cols-2 items-start gap-x-2.5 gap-y-2.5 sm:grid-cols-3 lg:grid-cols-6">
         {rules.usesBatchSize && !selection.ultraMode ? (
-          <label className={LABEL_CLASS}>{GAME_COPY.questions}
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.questions}</span>
             <select
               value={selection.batchSize}
               onChange={(event) => onChange((value) => ({ ...value, batchSize: event.target.value === "all" ? "all" : Number(event.target.value) as GameSelection["batchSize"] }))}
@@ -83,7 +106,8 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         ) : null}
 
         {rules.usesLevel ? (
-          <label className={LABEL_CLASS}>{GAME_COPY.level}
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.level}</span>
             <select
               value={selection.level ?? "all"}
               onChange={(event) => onChange((value) => ({ ...value, level: event.target.value === "all" ? null : Number(event.target.value) }))}
@@ -96,7 +120,8 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         ) : null}
 
         {rules.usesCategory ? (
-          <label className={LABEL_CLASS}>{GAME_COPY.category}
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.category}</span>
             <select
               value={selection.category}
               onChange={(event) => onChange((value) => ({ ...value, category: event.target.value as GameSelection["category"] }))}
@@ -112,7 +137,8 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         ) : null}
 
         {supportsDirection ? (
-          <label className={LABEL_CLASS}>{GAME_COPY.direction}
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.direction}</span>
             <select
               value={selection.direction}
               onChange={(event) => onChange((value) => ({ ...value, direction: event.target.value as GameDirection }))}
@@ -126,7 +152,8 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         ) : null}
 
         {rules.usesAnswerMode ? (
-          <label className={LABEL_CLASS}>{GAME_COPY.answerWith}
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.answerWith}</span>
             <select
               value={selection.answerMode}
               onChange={(event) => onChange((value) => ({ ...value, answerMode: event.target.value as GameAnswerMode }))}
@@ -140,7 +167,8 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         ) : null}
 
         {rules.usesHardMode && !rules.usesCornersBoard ? (
-          <label className={LABEL_CLASS}>{GAME_COPY.choices}
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.choices}</span>
             <select
               value={selection.choiceCount}
               onChange={(event) => onChange((value) => ({ ...value, choiceCount: Number(event.target.value) as GameChoiceCount }))}
@@ -152,7 +180,8 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         ) : null}
 
         {rules.usesTimeLimit ? (
-          <label className={LABEL_CLASS}>{GAME_COPY.timeLimit}
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.timeLimit}</span>
             <select
               value={selection.timeLimitMs}
               onChange={(event) => onChange((value) => ({ ...value, timeLimitMs: Number(event.target.value) as GameSelection["timeLimitMs"] }))}
@@ -162,41 +191,46 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
             </select>
           </label>
         ) : null}
+
+        {rules.usesHardMode && rules.usesCornersBoard ? (
+          <GameCornersPicker
+            choiceCount={selection.choiceCount}
+            accentClass={accent.solid}
+            labelClass={LABEL_CLASS}
+            onChange={(choiceCount) => onChange((value) => ({ ...value, choiceCount }))}
+          />
+        ) : null}
+
+        {rules.usesPracticeList ? (
+          <div className="col-span-2 sm:col-span-3">
+            <span className={LABEL_CLASS}>{GAME_COPY.practiceList}</span>
+            <SegmentedControl
+              ariaLabel={GAME_COPY.practiceList}
+              size="sm"
+              className="inline-flex flex-wrap items-center gap-1 rounded-lg border border-line bg-surface p-1"
+              value={selection.practiceList}
+              onChange={(practiceList: GamePracticeList) => onChange((value) => ({ ...value, practiceList }))}
+              options={GAME_PRACTICE_LIST_VALUES.map((list) => ({
+                value: list,
+                label: `${GAME_PRACTICE_LIST_LABELS[list]} · ${gameAvailableCount(setup, selection.kind, null, selection.category, list)}`,
+                title: GAME_PRACTICE_LIST_HINTS[list],
+                activeClassName: `border ${accent.solid}`,
+              }))}
+            />
+          </div>
+        ) : null}
       </div>
 
-      {(rules.usesHardMode && rules.usesCornersBoard) || rules.usesPracticeList ? (
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {rules.usesHardMode && rules.usesCornersBoard ? (
-            <GameCornersPicker
-              choiceCount={selection.choiceCount}
-              accentClass={accent.solid}
-              onChange={(choiceCount) => onChange((value) => ({ ...value, choiceCount }))}
-            />
-          ) : null}
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          disabled={!playable || starting}
+          onClick={onStart}
+          className={`h-10 rounded-full border px-6 text-sm font-black transition disabled:cursor-not-allowed disabled:opacity-45 ${accent.solid} hover:brightness-95`}
+        >
+          {starting ? GAME_COPY.starting : GAME_COPY.start}
+        </button>
 
-          {rules.usesPracticeList ? (
-            <div>
-              <p className="text-xs font-bold uppercase text-foreground/60">{GAME_COPY.practiceList}</p>
-              <SegmentedControl
-                ariaLabel={GAME_COPY.practiceList}
-                size="md"
-                className="mt-2 inline-flex flex-wrap items-center gap-1 rounded-full border border-line bg-surface p-1"
-                value={selection.practiceList}
-                onChange={(practiceList: GamePracticeList) => onChange((value) => ({ ...value, practiceList }))}
-                options={GAME_PRACTICE_LIST_VALUES.map((list) => ({
-                  value: list,
-                  label: `${GAME_PRACTICE_LIST_LABELS[list]} · ${gameAvailableCount(setup, selection.kind, null, selection.category, list)}`,
-                  title: GAME_PRACTICE_LIST_HINTS[list],
-                  activeClassName: `border ${accent.solid}`,
-                }))}
-              />
-              <p className="mt-1 text-[11px] font-semibold text-foreground/55">{GAME_PRACTICE_LIST_HINTS[selection.practiceList]}</p>
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-
-      <div className="mt-4 flex flex-wrap items-center gap-2">
         {rules.usesUltraMode ? (
           <GameModeToggle
             label={GAME_COPY.ultraMode}
@@ -210,35 +244,16 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
           />
         ) : null}
 
-        <button
-          type="button"
-          disabled={!playable || starting}
-          onClick={onStart}
-          className={`h-11 rounded-full border px-7 text-sm font-black transition disabled:cursor-not-allowed disabled:opacity-45 ${accent.solid} hover:brightness-95`}
-        >
-          {starting ? GAME_COPY.starting : GAME_COPY.start}
-        </button>
         <StudyTagListsButton accountId={accountId} />
+
         {!rules.oncePerDay ? (
           <span className="text-xs font-bold text-foreground/50">{available} items</span>
         ) : null}
-      </div>
 
-      <p className="mt-3 text-xs font-semibold text-foreground/60">
-        {dailyPlayed
-          ? `${GAME_COPY.dailyPlayed}. ${GAME_COPY.dailyOneAttempt}`
-          : !playable
-            ? rules.usesPracticeList && available === 0
-              ? GAME_COPY.practiceEmpty
-              : GAME_COPY.notEnoughItems
-            : selection.kind === GAME_KINDS.daily
-              ? GAME_COPY.dailyOneAttempt
-              : selection.ultraMode
-                ? GAME_COPY.ultraRule
-                : available < gameRequiredCount(selection)
-                  ? GAME_COPY.notEnoughItems
-                  : GAME_COPY.scoreRule}
-      </p>
+        <p className="w-full text-[11px] font-semibold text-foreground/55 sm:ml-auto sm:w-auto sm:flex-1 sm:text-right">
+          {footer}
+        </p>
+      </div>
     </section>
   );
 }

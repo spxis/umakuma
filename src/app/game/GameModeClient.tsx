@@ -182,15 +182,6 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
           <h1 className="mt-1 text-4xl font-black text-foreground sm:text-6xl">{GAME_COPY.title}</h1>
           <p className="mt-2 text-sm font-semibold text-foreground/65">{GAME_COPY.subtitle}</p>
         </div>
-        {phase !== "hub" ? (
-          <button
-            type="button"
-            onClick={backToHub}
-            className="h-10 rounded-full border border-line bg-surface px-5 text-sm font-black text-foreground hover:bg-surface-muted"
-          >
-            {GAME_COPY.backToGames}
-          </button>
-        ) : null}
       </header>
 
       <main className="space-y-5 py-5 sm:py-7">
