@@ -152,7 +152,7 @@ export default function StudyExplorerPanel({
             <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? STUDY_PANEL_TEXT.tapTitleToChangeLibrary : STUDY_PANEL_TEXT.tapTitleToChooseLibrary}</p>
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
-          <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
+          <div className="order-1 flex flex-wrap items-center justify-end gap-2 sm:order-2 sm:flex-nowrap sm:justify-start">
             <StudyTagFilterNotice queueTagFilter={queueTagFilter} onClear={onClearQueueTagFilter} />
             <StudyTagListsButton accountId={accountId} size="sm" />
             <ExplorerFilterToggleButton
