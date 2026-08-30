@@ -1,8 +1,11 @@
 import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
 import {
+  REVIEW_RESULTS,
   SRS_BUCKETS,
   SRS_BUCKET_SHORT_LABELS,
   SRS_BUCKET_TITLE_LABELS,
+  isReviewResult,
+  type ReviewResult,
 } from "@/lib/domainConstants";
 import { studySrsToneClass } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
 
@@ -50,4 +53,34 @@ export function srsBucketBadgeClass(value: HistorySrsBucket, active = true): str
 
 export function titleCaseSrsBucket(value: HistorySrsBucket): string {
   return SRS_BUCKET_TITLE_LABELS[value];
+}
+
+type ReviewResultUiMeta = {
+  mark: string;
+  label: string;
+  tone: string;
+};
+
+/** How each outcome reads in a row: a mark, its accessible name, and its tone. */
+export const STUDY_HISTORY_RESULTS: Record<ReviewResult, ReviewResultUiMeta> = {
+  [REVIEW_RESULTS.correct]: {
+    mark: "✓",
+    label: "Correct",
+    tone: "border-emerald-500/40 bg-emerald-50 text-emerald-700",
+  },
+  [REVIEW_RESULTS.wrong]: {
+    mark: "✕",
+    label: "Wrong",
+    tone: "border-red-500/40 bg-red-50 text-red-700",
+  },
+  [REVIEW_RESULTS.skipped]: {
+    mark: "–",
+    label: "Skipped",
+    tone: "border-amber-500/40 bg-amber-50 text-amber-700",
+  },
+};
+
+/** Anything unrecognized reads as skipped, which is what it was before. */
+export function resultMeta(result: string): ReviewResultUiMeta {
+  return STUDY_HISTORY_RESULTS[isReviewResult(result) ? result : REVIEW_RESULTS.skipped];
 }

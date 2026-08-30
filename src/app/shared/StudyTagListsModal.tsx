@@ -2,15 +2,19 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import ModalShell from "@/app/shared/ModalShell";
 import SegmentedControl from "@/app/shared/SegmentedControl";
+import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
+import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import {
-  glyphTextSizeClass,
-  subjectTypePillClass,
-  typeGlyphBoxClass,
-} from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
+  SUBJECT_VIEW_MODES,
+  SUBJECT_VIEW_MODE_VALUES,
+  type SubjectViewMode,
+} from "@/app/shared/subjectListView";
 import { updateStudyTag } from "@/app/users/[nickname]/study-explorer/lib/studyTagApi";
-import { lockBodyScroll } from "@/lib/bodyScrollLock";
-import { STUDY_TAGS, STUDY_TAG_VALUES, SUBJECT_TYPE_DISPLAY, type StudyTag } from "@/lib/domainConstants";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { STUDY_TAGS, STUDY_TAG_VALUES, type StudyTag } from "@/lib/domainConstants";
 import {
   STUDY_TAG_LIST_EVENT,
   type StudyTagListItem,
@@ -21,6 +25,9 @@ import { STUDY_TAG_LIST_COPY, STUDY_TAG_LIST_LABELS } from "./studyTagListsUi";
 
 /** Toggling a tag anywhere in the app announces itself, so the panel can refresh. */
 const STUDY_TAGS_UPDATED_EVENT = "wr:study-tags-updated";
+
+/** The chosen density outlives the panel, which opens and closes constantly. */
+const VIEW_MODE_STORAGE_KEY = "wr:study-tag-lists:view-mode";
 
 /**
  * The Trouble and Favorites lists, floating over whatever the player is doing.
@@ -37,8 +44,20 @@ export default function StudyTagListsModal() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+  /**
+   * Read straight from storage: the panel renders nothing until an event opens
+   * it, which is always well after hydration, so there is no server render of
+   * the toggle for this to disagree with.
+   */
+  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
+    getStoredEnum(VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
 
   const accountId = payload?.accountId ?? "";
+
+  const changeViewMode = useCallback((next: SubjectViewMode) => {
+    setViewMode(next);
+    setStoredEnum(VIEW_MODE_STORAGE_KEY, next);
+  }, []);
 
   useEffect(() => {
     const onOpen = (event: Event) => {
@@ -86,21 +105,6 @@ export default function StudyTagListsModal() {
     return () => window.removeEventListener(STUDY_TAGS_UPDATED_EVENT, onTagsUpdated);
   }, [accountId]);
 
-  useEffect(() => {
-    if (!accountId) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      event.preventDefault();
-      closePanel();
-    };
-    const unlockBodyScroll = lockBodyScroll();
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      unlockBodyScroll();
-    };
-  }, [accountId, closePanel]);
-
   const counts = useMemo(() => ({
     [STUDY_TAGS.trouble]: (items ?? []).filter((item) => item.studyTags.trouble).length,
     [STUDY_TAGS.favorite]: (items ?? []).filter((item) => item.studyTags.favorite).length,
@@ -128,92 +132,71 @@ export default function StudyTagListsModal() {
   if (!accountId) return null;
 
   return (
-    <div className="fixed inset-0 z-80 flex items-center justify-center bg-[rgba(6,12,26,0.5)] p-2 backdrop-blur-[1px] sm:p-4">
-      <div className="flex max-h-[calc(100dvh-16px)] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]">
-        <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-muted px-3 py-2.5 sm:px-4">
-          <h2 className="truncate text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
-            {STUDY_TAG_LIST_COPY.title}
-          </h2>
-          <button
-            type="button"
-            onClick={closePanel}
-            aria-label={STUDY_TAG_LIST_COPY.close}
-            className="h-8 shrink-0 cursor-pointer rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted sm:h-9 sm:text-sm"
-          >
-            X
-          </button>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2.5 sm:px-4">
-          <SegmentedControl
-            ariaLabel={STUDY_TAG_LIST_COPY.title}
-            size="md"
-            value={tag}
-            onChange={setTag}
-            options={STUDY_TAG_VALUES.map((value) => ({
-              value,
-              label: `${STUDY_TAG_LIST_LABELS[value]} · ${counts[value]}`,
-            }))}
-          />
-          <input
-            type="search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder={STUDY_TAG_LIST_COPY.searchPlaceholder}
-            aria-label={STUDY_TAG_LIST_COPY.searchPlaceholder}
-            className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-bold text-foreground"
-          />
-        </div>
-
-        <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
-          {error ? (
-            <p className="py-10 text-center text-sm font-bold text-red-700">{error}</p>
-          ) : items === null ? (
-            <p className="py-10 text-center text-sm font-bold text-foreground/60">{STUDY_TAG_LIST_COPY.loading}</p>
-          ) : visible.length === 0 ? (
-            <p className="py-10 text-center text-sm font-bold text-foreground/60">
-              {counts[tag] === 0 ? STUDY_TAG_LIST_COPY.empty[tag] : STUDY_TAG_LIST_COPY.noMatches}
-            </p>
-          ) : (
-            <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
-              {visible.map((item, index) => (
-                <li key={item.subjectId} className="relative min-w-0">
-                  <button
-                    type="button"
-                    onClick={() => openViewGlyphViewer({
-                      items: visible,
-                      startIndex: index,
-                      accountId,
-                      title: STUDY_TAG_LIST_LABELS[tag],
-                    })}
-                    className={`flex h-full w-full min-w-0 cursor-pointer flex-col items-center gap-1 rounded-2xl border p-3 text-center transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${typeGlyphBoxClass(item.subjectType)}`}
-                  >
-                    <span className={`font-black leading-none [font-family:var(--font-jp-current)] ${glyphTextSizeClass(item.characters)}`}>
-                      {item.characters}
-                    </span>
-                    <span className="line-clamp-2 text-xs font-bold text-foreground/75">{item.meanings[0] ?? "-"}</span>
-                    <span className="mt-auto flex flex-wrap items-center justify-center gap-1 pt-1">
-                      <span className={subjectTypePillClass(item.subjectType)}>
-                        {SUBJECT_TYPE_DISPLAY[item.subjectType ?? "vocabulary"].short}
-                      </span>
-                      <span className="subject-pill border-line bg-surface text-foreground">L{item.wkLevel}</span>
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void removeTag(item)}
-                    aria-label={`${STUDY_TAG_LIST_COPY.remove} ${item.characters}`}
-                    title={STUDY_TAG_LIST_COPY.remove}
-                    className="absolute right-1.5 top-1.5 h-7 w-7 cursor-pointer rounded-full border border-line bg-surface/90 text-xs font-black text-foreground hover:bg-surface-muted"
-                  >
-                    ×
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+    <ModalShell
+      onClose={closePanel}
+      layer={MODAL_LAYERS.lists}
+      label={STUDY_TAG_LIST_COPY.title}
+      panelClassName="flex max-h-[calc(100dvh-16px)] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
+    >
+      <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-muted px-3 py-2.5 sm:px-4">
+        <h2 className="truncate text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
+          {STUDY_TAG_LIST_COPY.title}
+        </h2>
+        <button
+          type="button"
+          onClick={closePanel}
+          aria-label={STUDY_TAG_LIST_COPY.close}
+          className="h-8 shrink-0 cursor-pointer rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted sm:h-9 sm:text-sm"
+        >
+          X
+        </button>
       </div>
-    </div>
+
+      <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2.5 sm:px-4">
+        <SegmentedControl
+          ariaLabel={STUDY_TAG_LIST_COPY.title}
+          size="md"
+          value={tag}
+          onChange={setTag}
+          options={STUDY_TAG_VALUES.map((value) => ({
+            value,
+            label: `${STUDY_TAG_LIST_LABELS[value]} · ${counts[value]}`,
+          }))}
+        />
+        <input
+          type="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder={STUDY_TAG_LIST_COPY.searchPlaceholder}
+          aria-label={STUDY_TAG_LIST_COPY.searchPlaceholder}
+          className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-bold text-foreground"
+        />
+        <SubjectViewModeToggle value={viewMode} onChange={changeViewMode} />
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
+        {error ? (
+          <p className="py-10 text-center text-sm font-bold text-red-700">{error}</p>
+        ) : items === null ? (
+          <p className="py-10 text-center text-sm font-bold text-foreground/60">{STUDY_TAG_LIST_COPY.loading}</p>
+        ) : visible.length === 0 ? (
+          <p className="py-10 text-center text-sm font-bold text-foreground/60">
+            {counts[tag] === 0 ? STUDY_TAG_LIST_COPY.empty[tag] : STUDY_TAG_LIST_COPY.noMatches}
+          </p>
+        ) : (
+          <StudyTagListsBody
+            items={visible}
+            viewMode={viewMode}
+            onOpen={(index) => openViewGlyphViewer({
+              items: visible,
+              startIndex: index,
+              accountId,
+              title: STUDY_TAG_LIST_LABELS[tag],
+            })}
+            onRemove={(item) => void removeTag(item)}
+          />
+        )}
+      </div>
+    </ModalShell>
   );
 }

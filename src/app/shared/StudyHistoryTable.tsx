@@ -8,9 +8,24 @@ import type { HistorySrsBucket, StudyHistoryPayload } from "@/app/shared/studyHi
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import StudyHistoryHeader from "@/app/shared/StudyHistoryHeader";
 import StudyHistoryRows from "@/app/shared/StudyHistoryRows";
+import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import {
+  SUBJECT_VIEW_MODES,
+  SUBJECT_VIEW_MODE_VALUES,
+  type SubjectViewMode,
+} from "@/app/shared/subjectListView";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 type SortDir = "asc" | "desc";
+
+/**
+ * History keeps its own density preference, separate from the tagged lists.
+ * The two surfaces want different defaults — history is for scanning what
+ * happened, the lists are for browsing what is in them — and a shared key
+ * could only honour one of them.
+ */
+const HISTORY_VIEW_MODE_STORAGE_KEY = "wr:study-history:view-mode";
 type Props = {
   endpoint: string;
   showUserColumn?: boolean;
@@ -53,6 +68,8 @@ export default function StudyHistoryTable({
   const [levelFilter, setLevelFilter] = useState<number | "all">("all");
   const [srsBucketFilter, setSrsBucketFilter] = useState<HistorySrsBucket | "all">("all");
   const [selectedAttemptId, setSelectedAttemptId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
+    getStoredEnum(HISTORY_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.list));
   const [filtersOpen, setFiltersOpen] = usePersistedBoolean(`wr:study-history:filters-open:${endpoint}`, { defaultValue: true });
 
   const query = useMemo(() => {
@@ -198,6 +215,15 @@ export default function StudyHistoryTable({
                 {label} {sortIcon(sortBy, key, sortDir)}
               </button>
             ))}
+
+            <SubjectViewModeToggle
+              value={viewMode}
+              onChange={(next) => {
+                setViewMode(next);
+                setStoredEnum(HISTORY_VIEW_MODE_STORAGE_KEY, next);
+              }}
+              className="ml-auto inline-flex items-center rounded-full border border-line bg-surface p-1"
+            />
           </div>
 
           <div className="max-h-168 overflow-auto">
@@ -205,6 +231,7 @@ export default function StudyHistoryTable({
               attempts={data.attempts}
               showUser={showUserColumn}
               onSelect={setSelectedAttemptId}
+              viewMode={viewMode}
             />
           </div>
         </div>

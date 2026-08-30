@@ -6,6 +6,8 @@ import type { AdminUsersPanelProps } from "./AdminUsersPanel.types";
 import { useAdminFeedback } from "./AdminFeedbackProvider";
 import AdminAccountsSection from "./AdminAccountsSection";
 import type { AdminAccount } from "./AdminAccountsSection.types";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 
 function actionButtonClassName(isPrimary: boolean): string {
   return `inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition disabled:cursor-not-allowed disabled:opacity-60 ${
@@ -261,13 +263,14 @@ export default function AdminUsersPanel({
       />
 
       {isAddModalOpen ? (
-        <div className="fixed inset-0 z-60 flex items-center justify-center bg-foreground/35 p-4 backdrop-blur-[2px]">
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="Add user"
-            className="w-full max-w-lg rounded-2xl border border-line bg-surface p-5 shadow-[0_20px_55px_rgba(8,16,36,0.25)]"
-          >
+        <ModalShell
+          onClose={() => setIsAddModalOpen(false)}
+          layer={MODAL_LAYERS.menu}
+          label="Add user"
+          scrim="light"
+          gutter="md"
+          panelClassName="w-full max-w-lg rounded-2xl border border-line bg-surface p-5 shadow-[0_20px_55px_rgba(8,16,36,0.25)]"
+        >
             <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/60">Users</p>
             <h3 className="mt-1 text-xl font-bold text-foreground">Add user</h3>
             <p className="mt-2 text-sm text-foreground/80">Add a family account with nickname and WaniKani API token.</p>
@@ -325,8 +328,7 @@ export default function AdminUsersPanel({
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </ModalShell>
       ) : null}
     </>
   );

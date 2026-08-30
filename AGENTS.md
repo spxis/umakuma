@@ -40,6 +40,13 @@ This file is the single source of truth for agent behavior in this repo.
 - Inline string unions are only allowed when adding non-domain values (example: `"all" | SubjectType`).
 - Normalizer/helpers that return canonical domain values must return shared domain aliases (for example `SubjectType | null`) instead of duplicating literal unions.
 
+### Shared UI Primitives
+
+- Every modal uses `ModalShell` (`src/app/shared/ModalShell.tsx`) for its scrim, centring and dialog semantics. Do not hand-roll a `fixed inset-0` overlay: the fourteen that existed had drifted so that only four locked background scrolling, three never closed on Escape, and eight never set `aria-modal`.
+- Stacking order lives only in `MODAL_LAYERS` (`src/app/shared/modalLayers.ts`). Never invent a z-index in a component; add a named layer instead. The old per-component numbers escalated into nineteen distinct values including `z-10020` and `z-[9990]`.
+- Lists of subjects render through the shared pair: `SubjectRows` (condensed, one line each) and `SubjectCards` (browsing grid), both taking `SubjectListRow` and per-surface slots. Study history and the Trouble/Favourites lists are the same code over different sources; a new list surface adapts into `SubjectListRow` rather than writing its own markup.
+- Offer both densities wherever subjects are listed, through `SubjectViewModeToggle`, and persist the choice per surface with `getStoredEnum`/`setStoredEnum`.
+
 ### Domain Display Label Pattern
 
 - For canonical domain display text (for example subject names/plurals/short labels), use a single shared source (for example `SUBJECT_TYPE_DISPLAY` in `src/lib/domainConstants.ts`) instead of duplicating strings like `"Radicals"`, `"Kanji"`, or `"Vocabulary"` across feature files.

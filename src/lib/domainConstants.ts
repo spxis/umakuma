@@ -211,3 +211,21 @@ export type StudyTag = (typeof STUDY_TAGS)[keyof typeof STUDY_TAGS];
 export function isStudyTag(value: string): value is StudyTag {
   return STUDY_TAG_VALUES.includes(value as StudyTag);
 }
+
+/**
+ * How a review attempt turned out.
+ *
+ * These are canonical domain values, so they belong here rather than as an
+ * inline `"correct" | "wrong" | "skipped"` union repeated per feature.
+ */
+export const REVIEW_RESULTS = { correct: "correct", wrong: "wrong", skipped: "skipped" } as const;
+export const REVIEW_RESULT_VALUES = [
+  REVIEW_RESULTS.correct,
+  REVIEW_RESULTS.wrong,
+  REVIEW_RESULTS.skipped,
+] as const;
+export type ReviewResult = (typeof REVIEW_RESULTS)[keyof typeof REVIEW_RESULTS];
+
+export function isReviewResult(value: string): value is ReviewResult {
+  return REVIEW_RESULT_VALUES.includes(value as ReviewResult);
+}

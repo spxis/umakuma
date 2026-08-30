@@ -13,6 +13,8 @@ import { typeGlyphBoxClass } from "../../level-explorer/lib/levelExplorerDisplay
 import StudyModalCloseButton from "./StudyModalCloseButton";
 import { STUDY_REVIEW_MODAL_SECTION_TEXT } from "./StudyExplorer.constants";
 import FieldLabel from "../../../../shared/FieldLabel";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 
 type Props = {
   accountId: string;
@@ -110,8 +112,14 @@ export default function StudySideBySideModal({
     : [];
 
   return (
-    <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-2 backdrop-blur-[2px] sm:p-6">
-      <div className="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)] sm:rounded-[1.8rem]">
+    <ModalShell
+      onClose={onClose}
+      layer={MODAL_LAYERS.page}
+      label="Side by side"
+      scrim="heavy"
+      closeOnBackdrop={false}
+      panelClassName="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)] sm:rounded-[1.8rem]"
+    >
         <header className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-line bg-surface-muted px-3 py-2 sm:px-6 sm:py-3">
           <StudyModalCloseButton onClick={onClose} />
           <FieldLabel>#{selectedIndex + 1} of {total}</FieldLabel>
@@ -192,7 +200,6 @@ export default function StudySideBySideModal({
             )}
           </div>
         </main>
-      </div>
-    </div>
+    </ModalShell>
   );
 }

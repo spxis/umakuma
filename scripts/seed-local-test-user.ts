@@ -292,9 +292,9 @@ async function main() {
   console.log(`  trouble tags  ${troubleSubjects.length}`);
   console.log(`  favorite tags ${favoriteSubjects.length}`);
   console.log("");
-  console.log(`  Sign in at    http://127.0.0.1:6400/invite`);
+  console.log(`  Sign in at    http://localhost:6400/invite`);
   console.log(`  Invite code   ${options.code}`);
-  console.log(`  Then visit    http://127.0.0.1:6400/users/${account.wkUsername}/game`);
+  console.log(`  Then visit    http://localhost:6400/users/${account.wkUsername}/game`);
   console.log("");
   await prisma.$disconnect();
 }

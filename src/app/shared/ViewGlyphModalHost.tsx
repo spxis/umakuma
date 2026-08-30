@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { newsGlyphButtonClass } from "@/app/news/newsGlyphBoxStyle";
+import ModalShell from "@/app/shared/ModalShell";
+import { useViewGlyphWindowBindings } from "@/app/shared/useViewGlyphWindowBindings";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import type { RelatedReference } from "@/lib/glyphTypes";
 import {
   buildStudyReviewAllMeanings,
@@ -32,7 +35,6 @@ import {
   isSubjectType,
   type SubjectType,
 } from "@/lib/domainConstants";
-import { lockBodyScroll } from "@/lib/bodyScrollLock";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import {
   VIEW_GLYPH_EVENT,
@@ -258,50 +260,13 @@ export default function ViewGlyphModalHost() {
     [accountId, item],
   );
 
-  useEffect(() => {
-    if (!item) {
-      return;
-    }
-
-    const onResize = () => {
-      setFrameSize(resolveViewGlyphFrameSize(resolveParentFrameRect()));
-    };
-
-    const onKeyDownCapture = (event: KeyboardEvent) => {
-      event.stopPropagation();
-      if (typeof event.stopImmediatePropagation === "function") {
-        event.stopImmediatePropagation();
-      }
-
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeModal();
-        return;
-      }
-
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        goPrevious();
-        return;
-      }
-
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-        goNext();
-      }
-    };
-
-    const unlockBodyScroll = lockBodyScroll();
-
-    window.addEventListener("keydown", onKeyDownCapture, true);
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDownCapture, true);
-      window.removeEventListener("resize", onResize);
-      unlockBodyScroll();
-    };
-  }, [closeModal, goNext, goPrevious, item]);
+  useViewGlyphWindowBindings({
+    active: Boolean(item),
+    onClose: closeModal,
+    onPrevious: goPrevious,
+    onNext: goNext,
+    onFrameSize: setFrameSize,
+  });
 
   useEffect(() => {
     if (!item || !accountId || !shouldHydrateViewGlyphItem(item)) {
@@ -353,145 +318,158 @@ export default function ViewGlyphModalHost() {
     : { width: "calc(100vw - 25px)", height: "calc(100dvh - 25px)" };
 
   return (
-    <div className="fixed inset-0 z-90 flex items-center justify-center bg-[rgba(6,12,26,0.56)] p-1 backdrop-blur-[1px] sm:p-3">
-      <div style={modalFrameStyle} className="mx-auto flex max-h-[calc(100dvh-8px)] w-full max-w-[calc(100vw-8px)] flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-line bg-surface-muted px-2.5 py-2 sm:px-3.5">
-          <div className="flex min-w-0 items-center justify-start">
-            <button
-              type="button"
-              onClick={closeModal}
-              aria-label="Close"
-              className="h-8 cursor-pointer rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted sm:h-9 sm:px-3.5 sm:text-sm"
-            >
-              X
-            </button>
-          </div>
-          <p className="truncate text-center text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
-            {customTitle ?? viewerTitle(item)}
-          </p>
-          <div className="inline-flex min-w-0 items-center justify-end gap-1">
-            <button
-              type="button"
-              onClick={goPrevious}
-              disabled={!hasPreviousItem}
-              aria-label="Previous"
-              className="h-8 w-12 rounded-full border border-line bg-surface text-xs font-bold text-foreground sm:h-9 sm:w-14 sm:text-sm disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
-            >
-              {"<"}
-            </button>
-            <button
-              type="button"
-              onClick={goNext}
-              disabled={!hasNextItem}
-              aria-label="Next"
-              className="h-8 w-12 rounded-full border border-line bg-surface text-xs font-bold text-foreground sm:h-9 sm:w-14 sm:text-sm disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
-            >
-              {">"}
-            </button>
-          </div>
+    <ModalShell
+      layer={MODAL_LAYERS.viewer}
+      label={customTitle ?? viewerTitle(item)}
+      gutter="sm"
+      /*
+       * The viewer keeps its own capture-phase Escape handler: it has to win
+       * over the lists panel it can be opened from, or one press would close
+       * both. It also has no backdrop dismissal, so a stray click beside a
+       * glyph mid-review does not throw the reader out.
+       */
+      closeOnEscape={false}
+      closeOnBackdrop={false}
+      lockScroll={false}
+      panelStyle={modalFrameStyle}
+      panelClassName="mx-auto flex max-h-[calc(100dvh-8px)] w-full max-w-[calc(100vw-8px)] flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
+    >
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-line bg-surface-muted px-2.5 py-2 sm:px-3.5">
+        <div className="flex min-w-0 items-center justify-start">
+          <button
+            type="button"
+            onClick={closeModal}
+            aria-label="Close"
+            className="h-8 cursor-pointer rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted sm:h-9 sm:px-3.5 sm:text-sm"
+          >
+            X
+          </button>
         </div>
-
-        {selector.length > 0 ? (
-          <div className="flex flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
-            {selector.map((entry, entryIndex) => {
-              const selected = entry.itemIndex === currentIndex;
-              const unavailable = !entry.exists || entry.itemIndex === null;
-              const isSessionEntry = entry.origin === VIEW_GLYPH_SELECTOR_ORIGINS.session;
-              const glyphType = entry.kind === VIEW_GLYPH_SELECTOR_KINDS.vocabulary
-                ? VIEW_GLYPH_SELECTOR_KINDS.vocabulary
-                : VIEW_GLYPH_SELECTOR_KINDS.kanji;
-              const sessionClass = isSessionEntry && !selected ? "ring-1 ring-current/35" : "";
-
-              return (
-                <button
-                  key={`${entry.label}-${entry.kind}-${entryIndex}`}
-                  type="button"
-                  onClick={() => {
-                    if (entry.itemIndex === null) {
-                      return;
-                    }
-                    openIndexInPlace(entry.itemIndex);
-                  }}
-                  disabled={entry.itemIndex === null}
-                  className={
-                    unavailable
-                      ? `inline-flex min-h-14 min-w-14 items-center rounded-xl border border-line/70 bg-surface-muted px-3 text-4xl font-black leading-none text-foreground/70 ${entry.itemIndex === null ? "cursor-not-allowed opacity-80" : "cursor-pointer"}`
-                      : `${newsGlyphButtonClass({
-                          type: glyphType,
-                          selected,
-                          clickable: entry.itemIndex !== null,
-                        })} gap-1 ${sessionClass}`
-                  }
-                  title={
-                    unavailable
-                      ? `${entry.label} not found in WaniKani`
-                      : `${SUBJECT_TYPE_DISPLAY[entry.kind].singular}: ${entry.label}`
-                  }
-                >
-                  <span>{entry.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        ) : null}
-
-        <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
-          <StudyReviewModalSection
-            accountId={accountId}
-            studyMode={false}
-            showEnglish={showEnglish}
-            canToggleEnglish
-            viewerMode={STUDY_VIEWER_MODES.detail}
-            selectedItem={item}
-            selectedTags={item.studyTags ?? { favorite: false, trouble: false }}
-            isPracticeItem={false}
-            selectedOutcome={undefined}
-            isSubmittingSelected={false}
-            submitFeedback={null}
-            requiresReveal={false}
-            isAnswerRevealed
-            isOutcomeFinal
-            detailsRevealed
-            useStudyFlashLayout={false}
-            flashCycleDone={false}
-            flashRevealed={false}
-            currentFlashKey={`view-glyph:${item.subjectId}`}
-            allMeanings={allMeanings}
-            primaryReadingHiragana={primaryReadingHiragana}
-            primaryReadingKatakana={primaryReadingKatakana}
-            secondaryReadingValue={secondaryReadingValue}
-            hasRadicals={hasRadicals}
-            hasVisuallySimilar={hasVisuallySimilar}
-            hasUsedInVocabulary={hasUsedInVocabulary}
-            hasComponentKanji={hasComponentKanji}
-            usedKanjiItems={usedKanjiItems}
-            usedInVocabularyCollapsed={usedInVocabularyCollapsed}
-            usedKanjiCollapsed={usedKanjiCollapsed}
-            usedInWordsCollapsed={usedInWordsCollapsed}
-            jlptGradeLabel={jlptGradeLabel}
-            wrong={0}
-            skipped={0}
-            correct={0}
-            glyphViewerItems={items}
-            glyphViewerIndex={currentIndex}
-            onReveal={() => {}}
-            onSubmit={() => {}}
-            onSkipCurrent={() => {}}
-            onStartLesson={() => {}}
-            onAdvanceFlashOrNext={() => {}}
-            onFlashTouchStart={() => {}}
-            onFlashTouchEnd={() => {}}
-            onSetFlashRevealKey={() => {}}
-            onToggleUsedInVocabularyCollapsed={() => setUsedInVocabularyCollapsed((value) => !value)}
-            onToggleUsedKanjiCollapsed={() => setUsedKanjiCollapsed((value) => !value)}
-            onToggleUsedInWordsCollapsed={() => setUsedInWordsCollapsed((value) => !value)}
-            onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
-            onToggleStudyTag={accountId ? (tag) => void toggleStudyTag(tag) : undefined}
-            onOpenRelatedSubject={openBySubject}
-            showSectionBorder={false}
-          />
+        <p className="truncate text-center text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
+          {customTitle ?? viewerTitle(item)}
+        </p>
+        <div className="inline-flex min-w-0 items-center justify-end gap-1">
+          <button
+            type="button"
+            onClick={goPrevious}
+            disabled={!hasPreviousItem}
+            aria-label="Previous"
+            className="h-8 w-12 rounded-full border border-line bg-surface text-xs font-bold text-foreground sm:h-9 sm:w-14 sm:text-sm disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
+          >
+            {"<"}
+          </button>
+          <button
+            type="button"
+            onClick={goNext}
+            disabled={!hasNextItem}
+            aria-label="Next"
+            className="h-8 w-12 rounded-full border border-line bg-surface text-xs font-bold text-foreground sm:h-9 sm:w-14 sm:text-sm disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-surface enabled:cursor-pointer enabled:hover:bg-surface-muted"
+          >
+            {">"}
+          </button>
         </div>
       </div>
-    </div>
+
+      {selector.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
+          {selector.map((entry, entryIndex) => {
+            const selected = entry.itemIndex === currentIndex;
+            const unavailable = !entry.exists || entry.itemIndex === null;
+            const isSessionEntry = entry.origin === VIEW_GLYPH_SELECTOR_ORIGINS.session;
+            const glyphType = entry.kind === VIEW_GLYPH_SELECTOR_KINDS.vocabulary
+              ? VIEW_GLYPH_SELECTOR_KINDS.vocabulary
+              : VIEW_GLYPH_SELECTOR_KINDS.kanji;
+            const sessionClass = isSessionEntry && !selected ? "ring-1 ring-current/35" : "";
+
+            return (
+              <button
+                key={`${entry.label}-${entry.kind}-${entryIndex}`}
+                type="button"
+                onClick={() => {
+                  if (entry.itemIndex === null) {
+                    return;
+                  }
+                  openIndexInPlace(entry.itemIndex);
+                }}
+                disabled={entry.itemIndex === null}
+                className={
+                  unavailable
+                    ? `inline-flex min-h-14 min-w-14 items-center rounded-xl border border-line/70 bg-surface-muted px-3 text-4xl font-black leading-none text-foreground/70 ${entry.itemIndex === null ? "cursor-not-allowed opacity-80" : "cursor-pointer"}`
+                    : `${newsGlyphButtonClass({
+                        type: glyphType,
+                        selected,
+                        clickable: entry.itemIndex !== null,
+                      })} gap-1 ${sessionClass}`
+                }
+                title={
+                  unavailable
+                    ? `${entry.label} not found in WaniKani`
+                    : `${SUBJECT_TYPE_DISPLAY[entry.kind].singular}: ${entry.label}`
+                }
+              >
+                <span>{entry.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+
+      <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
+        <StudyReviewModalSection
+          accountId={accountId}
+          studyMode={false}
+          showEnglish={showEnglish}
+          canToggleEnglish
+          viewerMode={STUDY_VIEWER_MODES.detail}
+          selectedItem={item}
+          selectedTags={item.studyTags ?? { favorite: false, trouble: false }}
+          isPracticeItem={false}
+          selectedOutcome={undefined}
+          isSubmittingSelected={false}
+          submitFeedback={null}
+          requiresReveal={false}
+          isAnswerRevealed
+          isOutcomeFinal
+          detailsRevealed
+          useStudyFlashLayout={false}
+          flashCycleDone={false}
+          flashRevealed={false}
+          currentFlashKey={`view-glyph:${item.subjectId}`}
+          allMeanings={allMeanings}
+          primaryReadingHiragana={primaryReadingHiragana}
+          primaryReadingKatakana={primaryReadingKatakana}
+          secondaryReadingValue={secondaryReadingValue}
+          hasRadicals={hasRadicals}
+          hasVisuallySimilar={hasVisuallySimilar}
+          hasUsedInVocabulary={hasUsedInVocabulary}
+          hasComponentKanji={hasComponentKanji}
+          usedKanjiItems={usedKanjiItems}
+          usedInVocabularyCollapsed={usedInVocabularyCollapsed}
+          usedKanjiCollapsed={usedKanjiCollapsed}
+          usedInWordsCollapsed={usedInWordsCollapsed}
+          jlptGradeLabel={jlptGradeLabel}
+          wrong={0}
+          skipped={0}
+          correct={0}
+          glyphViewerItems={items}
+          glyphViewerIndex={currentIndex}
+          onReveal={() => {}}
+          onSubmit={() => {}}
+          onSkipCurrent={() => {}}
+          onStartLesson={() => {}}
+          onAdvanceFlashOrNext={() => {}}
+          onFlashTouchStart={() => {}}
+          onFlashTouchEnd={() => {}}
+          onSetFlashRevealKey={() => {}}
+          onToggleUsedInVocabularyCollapsed={() => setUsedInVocabularyCollapsed((value) => !value)}
+          onToggleUsedKanjiCollapsed={() => setUsedKanjiCollapsed((value) => !value)}
+          onToggleUsedInWordsCollapsed={() => setUsedInWordsCollapsed((value) => !value)}
+          onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
+          onToggleStudyTag={accountId ? (tag) => void toggleStudyTag(tag) : undefined}
+          onOpenRelatedSubject={openBySubject}
+          showSectionBorder={false}
+        />
+      </div>
+    </ModalShell>
   );
 }
