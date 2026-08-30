@@ -3,35 +3,34 @@
 import { useState } from "react";
 
 import SegmentedControl from "@/app/shared/SegmentedControl";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import type { FeatureTimelineEntry } from "@/lib/featureTimeline";
 
 import {
-  RELEASE_TAB_STORAGE_KEY,
-  RELEASE_TAB_VALUES,
+  RELEASE_TAB_COOKIE_KEY,
   RELEASE_TABS,
   RELEASE_TIMELINE_COPY,
   type ReleaseTab,
 } from "./ReleaseTimeline.constants";
 import ReleaseTimelineList from "./ReleaseTimelineList";
+import type { FeatureTimelineEntry } from "@/lib/featureTimeline";
 
 type Props = {
   planned: FeatureTimelineEntry[];
   shipped: FeatureTimelineEntry[];
+  /** Read from the cookie by the server, so the first paint is already right. */
+  initialTab: ReleaseTab;
 };
 
 /**
- * One list at a time. Planned is the default tab because the page's job is
- * deciding what happens next; the shipped history is the reference half.
- * The choice sticks per browser, like every other view-mode toggle.
+ * One list at a time. The choice is kept in a cookie rather than localStorage
+ * so the server renders the remembered tab directly - reading storage after
+ * hydration flashed the default tab on every reload.
  */
-export default function ReleaseTimelineTabs({ planned, shipped }: Props) {
-  const [tab, setTab] = useState<ReleaseTab>(() =>
-    getStoredEnum(RELEASE_TAB_STORAGE_KEY, RELEASE_TAB_VALUES, RELEASE_TABS.planned));
+export default function ReleaseTimelineTabs({ planned, shipped, initialTab }: Props) {
+  const [tab, setTab] = useState<ReleaseTab>(initialTab);
 
   const changeTab = (next: ReleaseTab) => {
     setTab(next);
-    setStoredEnum(RELEASE_TAB_STORAGE_KEY, next);
+    document.cookie = `${RELEASE_TAB_COOKIE_KEY}=${next}; path=/; max-age=${60 * 60 * 24 * 180}`;
   };
 
   const showPlanned = tab === RELEASE_TABS.planned;

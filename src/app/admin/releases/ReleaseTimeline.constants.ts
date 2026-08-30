@@ -24,7 +24,7 @@ export type ReleaseTab = (typeof RELEASE_TABS)[keyof typeof RELEASE_TABS];
 
 export const RELEASE_TAB_VALUES = Object.values(RELEASE_TABS);
 
-export const RELEASE_TAB_STORAGE_KEY = "admin-releases-tab";
+export const RELEASE_TAB_COOKIE_KEY = "admin-releases-tab";
 
 /**
  * One accent per area so a month's worth of entries can be scanned by colour.

@@ -1,3 +1,5 @@
+import { codenameForVersion } from "@/lib/releaseCodenames";
+
 import {
   FEATURE_AREA_LABELS,
   formatFeatureDate,
@@ -34,6 +36,19 @@ function FeatureRow({
         <div className="flex flex-wrap items-center gap-2">
           <span className="font-semibold text-foreground">{entry.name}</span>
 
+          {(() => {
+            const codename = entry.version ? codenameForVersion(entry.version) : null;
+            return codename ? (
+              <span
+                lang="ja"
+                title={`${codename.romaji} — ${codename.gloss}`}
+                className="text-xs font-semibold text-foreground/40"
+              >
+                「{codename.ja}」
+              </span>
+            ) : null;
+          })()}
+
           <span
             className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${RELEASE_AREA_CLASSES[entry.area]}`}
           >
@@ -69,6 +84,9 @@ export default function ReleaseTimelineList({
         <section key={group.monthKey}>
           <h3 className="mb-1 text-xs font-bold uppercase tracking-wide text-foreground/50">
             {group.label}
+            <span className="ml-2 font-semibold text-foreground/35">
+              {group.entries.length} {showEstimateFlag ? "planned" : "released"}
+            </span>
           </h3>
 
           <ul className="flex flex-col">

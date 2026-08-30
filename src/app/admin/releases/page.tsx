@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
@@ -15,7 +16,13 @@ import {
   summarizeFeatureTimeline,
 } from "@/lib/featureTimeline";
 
-import { RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
+import {
+  RELEASE_TAB_COOKIE_KEY,
+  RELEASE_TAB_VALUES,
+  RELEASE_TABS,
+  RELEASE_TIMELINE_COPY,
+  type ReleaseTab,
+} from "./ReleaseTimeline.constants";
 import ReleaseTimelineTabs from "./ReleaseTimelineTabs";
 
 export const dynamic = "force-dynamic";
@@ -43,6 +50,12 @@ export default async function AdminReleasesPage() {
     viewerEmail,
     sessionName: session?.user?.name?.trim() ?? null,
   });
+
+  const cookieStore = await cookies();
+  const storedTab = cookieStore.get(RELEASE_TAB_COOKIE_KEY)?.value;
+  const initialTab: ReleaseTab = RELEASE_TAB_VALUES.includes(storedTab as ReleaseTab)
+    ? (storedTab as ReleaseTab)
+    : RELEASE_TABS.planned;
 
   const entries = loadFeatureTimeline();
   const totals = summarizeFeatureTimeline(entries);
@@ -79,7 +92,7 @@ export default async function AdminReleasesPage() {
             <Stat value={totals.planned} label={RELEASE_TIMELINE_COPY.plannedLabel} />
           </div>
 
-          <ReleaseTimelineTabs planned={planned} shipped={shipped} />
+          <ReleaseTimelineTabs planned={planned} shipped={shipped} initialTab={initialTab} />
         </section>
       </main>
     </div>
