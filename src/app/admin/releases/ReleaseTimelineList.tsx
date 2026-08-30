@@ -3,6 +3,7 @@ import { codenameForVersion } from "@/lib/releaseCodenames";
 
 import {
   FEATURE_AREA_LABELS,
+  FEATURE_STATUS_LABELS,
   formatFeatureDate,
   groupFeaturesByMonth,
   type FeatureTimelineEntry,
@@ -13,14 +14,18 @@ import { RELEASE_AREA_CLASSES, RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.c
 type ReleaseTimelineListProps = {
   entries: FeatureTimelineEntry[];
   showEstimateFlag?: boolean;
+  /** Shelved tab: label each row backlogged or killed. */
+  showStatusFlag?: boolean;
 };
 
 function FeatureRow({
   entry,
   showEstimateFlag,
+  showStatusFlag,
 }: {
   entry: FeatureTimelineEntry;
   showEstimateFlag: boolean;
+  showStatusFlag: boolean;
 }) {
   return (
     <li className="flex flex-col gap-1 border-b border-line/60 py-3 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-4">
@@ -53,6 +58,12 @@ function FeatureRow({
             {FEATURE_AREA_LABELS[entry.area]}
           </span>
 
+          {showStatusFlag ? (
+            <span className="inline-flex items-center rounded-full border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 text-[11px] font-semibold text-rose-600">
+              {FEATURE_STATUS_LABELS[entry.status]}
+            </span>
+          ) : null}
+
           {showEstimateFlag && entry.dateIsEstimate ? (
             <span className="inline-flex items-center rounded-full border border-line bg-surface-muted px-2 py-0.5 text-[11px] font-semibold text-foreground/60">
               {RELEASE_TIMELINE_COPY.estimateNote}
@@ -69,6 +80,7 @@ function FeatureRow({
 export default function ReleaseTimelineList({
   entries,
   showEstimateFlag = false,
+  showStatusFlag = false,
 }: ReleaseTimelineListProps) {
   const groups = groupFeaturesByMonth(entries);
 
@@ -89,7 +101,7 @@ export default function ReleaseTimelineList({
 
           <ul className="flex flex-col">
             {group.entries.map((entry) => (
-              <FeatureRow key={entry.id} entry={entry} showEstimateFlag={showEstimateFlag} />
+              <FeatureRow key={entry.id} entry={entry} showEstimateFlag={showEstimateFlag} showStatusFlag={showStatusFlag} />
             ))}
           </ul>
         </section>

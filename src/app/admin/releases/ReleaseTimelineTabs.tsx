@@ -16,6 +16,7 @@ import type { FeatureTimelineEntry } from "@/lib/featureTimeline";
 type Props = {
   planned: FeatureTimelineEntry[];
   shipped: FeatureTimelineEntry[];
+  shelved: FeatureTimelineEntry[];
   /** Read from the cookie by the server, so the first paint is already right. */
   initialTab: ReleaseTab;
 };
@@ -25,15 +26,13 @@ type Props = {
  * so the server renders the remembered tab directly - reading storage after
  * hydration flashed the default tab on every reload.
  */
-export default function ReleaseTimelineTabs({ planned, shipped, initialTab }: Props) {
+export default function ReleaseTimelineTabs({ planned, shipped, shelved, initialTab }: Props) {
   const [tab, setTab] = useState<ReleaseTab>(initialTab);
 
   const changeTab = (next: ReleaseTab) => {
     setTab(next);
     document.cookie = `${RELEASE_TAB_COOKIE_KEY}=${next}; path=/; max-age=${60 * 60 * 24 * 180}`;
   };
-
-  const showPlanned = tab === RELEASE_TABS.planned;
 
   return (
     <section className="mt-8">
@@ -52,15 +51,25 @@ export default function ReleaseTimelineTabs({ planned, shipped, initialTab }: Pr
             value: RELEASE_TABS.released,
             label: `${RELEASE_TIMELINE_COPY.shippedHeading} · ${shipped.length}`,
           },
+          {
+            value: RELEASE_TABS.shelved,
+            label: `${RELEASE_TIMELINE_COPY.shelvedHeading} · ${shelved.length}`,
+          },
         ]}
       />
 
       <p className="mb-4 mt-3 text-xs text-foreground/60">
-        {showPlanned ? RELEASE_TIMELINE_COPY.estimateLegend : RELEASE_TIMELINE_COPY.historyNote}
+        {tab === RELEASE_TABS.planned
+          ? RELEASE_TIMELINE_COPY.estimateLegend
+          : tab === RELEASE_TABS.shelved
+            ? RELEASE_TIMELINE_COPY.shelvedLegend
+            : RELEASE_TIMELINE_COPY.historyNote}
       </p>
 
-      {showPlanned ? (
+      {tab === RELEASE_TABS.planned ? (
         <ReleaseTimelineList entries={planned} showEstimateFlag />
+      ) : tab === RELEASE_TABS.shelved ? (
+        <ReleaseTimelineList entries={shelved} showStatusFlag />
       ) : (
         <ReleaseTimelineList entries={shipped} />
       )}

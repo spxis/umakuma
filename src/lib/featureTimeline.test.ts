@@ -45,9 +45,27 @@ describe("loadFeatureTimeline", () => {
     }
   });
 
-  it("marks planned entries as estimates and shipped entries as actual", () => {
+  it("marks unshipped entries as estimates and shipped entries as actual", () => {
     for (const item of loadFeatureTimeline()) {
-      expect(item.dateIsEstimate, item.id).toBe(item.status === FEATURE_STATUSES.planned);
+      expect(item.dateIsEstimate, item.id).toBe(item.status !== FEATURE_STATUSES.shipped);
+    }
+  });
+
+  it("stamps releasedAt only on shipped entries, matching their version order", () => {
+    const stamped = loadFeatureTimeline().filter((item) => item.releasedAt);
+    for (const item of stamped) {
+      expect(item.status, item.id).toBe(FEATURE_STATUSES.shipped);
+      expect(Number.isNaN(Date.parse(item.releasedAt!)), item.id).toBe(false);
+    }
+
+    const ordered = [...stamped].sort(
+      (left, right) => Number(left.version!.split(".")[1]) - Number(right.version!.split(".")[1]),
+    );
+    for (let index = 1; index < ordered.length; index += 1) {
+      expect(
+        ordered[index].releasedAt! >= ordered[index - 1].releasedAt!,
+        `${ordered[index].id} released before ${ordered[index - 1].id}`,
+      ).toBe(true);
     }
   });
 

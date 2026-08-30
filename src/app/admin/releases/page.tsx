@@ -61,6 +61,10 @@ export default async function AdminReleasesPage() {
   const totals = summarizeFeatureTimeline(entries);
   const shipped = sortFeaturesNewestFirst(featuresByStatus(entries, FEATURE_STATUSES.shipped));
   const planned = sortFeaturesByRelease(featuresByStatus(entries, FEATURE_STATUSES.planned));
+  const shelved = [
+    ...featuresByStatus(entries, FEATURE_STATUSES.backlogged),
+    ...featuresByStatus(entries, FEATURE_STATUSES.killed),
+  ];
 
   return (
     <div className="relative overflow-hidden px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
@@ -92,7 +96,7 @@ export default async function AdminReleasesPage() {
             <Stat value={totals.planned} label={RELEASE_TIMELINE_COPY.plannedLabel} />
           </div>
 
-          <ReleaseTimelineTabs planned={planned} shipped={shipped} initialTab={initialTab} />
+          <ReleaseTimelineTabs planned={planned} shipped={shipped} shelved={shelved} initialTab={initialTab} />
         </section>
       </main>
     </div>

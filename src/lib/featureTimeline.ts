@@ -11,6 +11,10 @@ import timelineData from "@/data/featureTimeline.json";
 export const FEATURE_STATUSES = {
   shipped: "shipped",
   planned: "planned",
+  /** Deliberately parked: still wanted someday, not in the release order. */
+  backlogged: "backlogged",
+  /** Decided against: kept on the record rather than silently deleted. */
+  killed: "killed",
 } as const;
 
 export type FeatureStatus = (typeof FEATURE_STATUSES)[keyof typeof FEATURE_STATUSES];
@@ -46,6 +50,8 @@ export const FEATURE_AREA_LABELS: Record<FeatureArea, string> = {
 export const FEATURE_STATUS_LABELS: Record<FeatureStatus, string> = {
   [FEATURE_STATUSES.shipped]: "Released",
   [FEATURE_STATUSES.planned]: "Planned",
+  [FEATURE_STATUSES.backlogged]: "Backlogged",
+  [FEATURE_STATUSES.killed]: "Killed",
 };
 
 export type FeatureTimelineEntry = {
@@ -62,6 +68,8 @@ export type FeatureTimelineEntry = {
   release?: number;
   /** The site version this feature shipped as, `0.N.0`; absent while planned. */
   version?: string;
+  /** The release instant, ISO 8601 UTC, from the shipping commit where known. */
+  releasedAt?: string;
 };
 
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -91,15 +99,18 @@ function versionMinor(entry: FeatureTimelineEntry): number | null {
 }
 
 /**
- * Newest first. The version number is the true release order — several
- * releases share a calendar day, and sorting those by name shuffled v0.53
- * between v0.57 and v0.55. Entries without a version fall back to date, with
- * name as the last stable tiebreak.
+ * Newest first. A real release timestamp wins outright — John's point: with
+ * one recorded, ordering needs no cleverness. Entries without one fall back
+ * to version order, then date, then name.
  */
 export function sortFeaturesNewestFirst(
   entries: readonly FeatureTimelineEntry[],
 ): FeatureTimelineEntry[] {
   return [...entries].sort((left, right) => {
+    if (left.releasedAt && right.releasedAt && left.releasedAt !== right.releasedAt) {
+      return left.releasedAt < right.releasedAt ? 1 : -1;
+    }
+
     const leftMinor = versionMinor(left);
     const rightMinor = versionMinor(right);
     if (leftMinor !== null && rightMinor !== null && leftMinor !== rightMinor) {
@@ -262,6 +273,7 @@ function parseEntries(raw: unknown): FeatureTimelineEntry[] {
       dateIsEstimate: entry.dateIsEstimate === true,
       release: typeof entry.release === "number" ? entry.release : undefined,
       version: typeof entry.version === "string" ? entry.version : undefined,
+      releasedAt: typeof entry.releasedAt === "string" ? entry.releasedAt : undefined,
     };
   });
 }

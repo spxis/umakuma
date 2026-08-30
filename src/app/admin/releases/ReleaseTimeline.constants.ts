@@ -13,11 +13,15 @@ export const RELEASE_TIMELINE_COPY = {
   shippedLabel: "released",
   plannedLabel: "planned",
   emptyPlanned: "Nothing queued.",
+  shelvedHeading: "Shelved",
+  shelvedLegend:
+    "Backlogged means parked but still wanted; killed means decided against. Both stay on the record rather than vanishing.",
 } as const;
 
 export const RELEASE_TABS = {
   planned: "planned",
   released: "released",
+  shelved: "shelved",
 } as const;
 
 export type ReleaseTab = (typeof RELEASE_TABS)[keyof typeof RELEASE_TABS];
