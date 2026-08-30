@@ -842,5 +842,15 @@
     "version": "0.71.0",
     "releasedAt": "2026-08-30T13:19:43Z",
     "summary": "The map data the capital, country and size games will read is now pinned by tests: region counts, unique ids, a capital and a positive population and area for all 111 divisions, and the comparison helpers."
+  },
+  {
+    "id": "geo-subject-id-bands",
+    "area": "games",
+    "name": "Reserved map ids for all three countries",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.72.0",
+    "releasedAt": "2026-08-30T13:22:11Z",
+    "summary": "US states and Canadian provinces get their own reserved subject-id bands beside the prefectures, so map rounds for any country can ride the existing run tables. Japan keeps the exact ids recorded runs already hold."
   }
 ]
