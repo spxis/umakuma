@@ -17,6 +17,14 @@ export const GRADE_SHORT_LABELS: Record<GradeOption, string> = {
   8: "Jr High", 9: "Name",
 };
 
+/** Whether the grid is showing readings or hiding them for self-testing. */
+export const GRADE_REVEAL_MODES = { shown: "shown", hidden: "hidden" } as const;
+
+export type GradeRevealMode = (typeof GRADE_REVEAL_MODES)[keyof typeof GRADE_REVEAL_MODES];
+
+/** Remembered per surface, so quiz mode survives paging through a grade. */
+export const GRADE_REVEAL_STORAGE_KEY = "wr:grades:reveal-mode";
+
 export function isGradeOption(value: number): value is GradeOption {
   return (GRADE_OPTIONS as readonly number[]).includes(value);
 }

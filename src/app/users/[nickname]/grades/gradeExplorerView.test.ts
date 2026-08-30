@@ -4,6 +4,8 @@ import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import {
   GRADE_OPTIONS,
+  GRADE_REVEAL_MODES,
+  GRADE_REVEAL_STORAGE_KEY,
   GRADE_SHORT_LABELS,
   displayReading,
   gradeHref,
@@ -122,5 +124,19 @@ describe("pageRange", () => {
 
   it("shows nothing for an empty result", () => {
     expect(pageRange(1, 0)).toEqual({ first: 0, last: 0 });
+  });
+});
+
+describe("quiz mode", () => {
+  it("offers exactly the two states the board toggles between", () => {
+    expect(Object.values(GRADE_REVEAL_MODES)).toEqual(["shown", "hidden"]);
+  });
+
+  /*
+   * Scoped to this surface so quiz mode survives paging through a grade without
+   * leaking into the other list surfaces that share the storage helpers.
+   */
+  it("stores the choice under its own key", () => {
+    expect(GRADE_REVEAL_STORAGE_KEY).toBe("wr:grades:reveal-mode");
   });
 });

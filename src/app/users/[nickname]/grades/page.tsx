@@ -11,7 +11,7 @@ import { getSchoolGradeIndex, querySchoolGradeCatalog } from "@/lib/schoolGrades
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import { GRADE_EXPLORER_COPY, GRADE_PAGE_SIZE } from "./GradeExplorer.constants";
-import GradeKanjiGrid from "./GradeKanjiGrid";
+import GradeKanjiBoard from "./GradeKanjiBoard";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, pageRange, parseGradeParam, parsePageParam } from "./gradeExplorerView";
 
 type PageProps = {
@@ -143,7 +143,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
         </header>
 
         <div className="p-4">
-          <GradeKanjiGrid items={catalog.items} />
+          <GradeKanjiBoard key={`${grade}:${page}:${search}`} items={catalog.items} />
 
           {catalog.pagination.totalPages > 1 ? (
             <nav className="mt-4 flex items-center justify-between gap-3">

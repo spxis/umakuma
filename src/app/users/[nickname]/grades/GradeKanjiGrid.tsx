@@ -9,6 +9,10 @@ type Props = {
   items: SchoolGradeKanjiEntry[];
   /** Where a card links, so the grid does not need to know the route. */
   hrefFor?: (entry: SchoolGradeKanjiEntry) => string | null;
+  /** Quiz mode: readings stay hidden until a card is selected. */
+  hideReadings?: boolean;
+  revealedKanji?: Set<string>;
+  onReveal?: (kanji: string) => void;
 };
 
 function ReadingRow({ label, readings }: { label: string; readings: string[] }) {
@@ -31,7 +35,7 @@ function ReadingRow({ label, readings }: { label: string; readings: string[] }) 
  * WaniKani level, neither of which a school grade has, and it shows no readings
  * at all. A grade test asks for the on and kun readings, so those get the room.
  */
-export default function GradeKanjiGrid({ items, hrefFor }: Props) {
+export default function GradeKanjiGrid({ items, hrefFor, hideReadings = false, revealedKanji, onReveal }: Props) {
   if (items.length === 0) {
     return (
       <p className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
@@ -45,6 +49,7 @@ export default function GradeKanjiGrid({ items, hrefFor }: Props) {
       {items.map((entry) => {
         const readings = readingsForGrade(entry);
         const href = hrefFor?.(entry) ?? null;
+        const hidden = hideReadings && !revealedKanji?.has(entry.kanji);
         const body = (
           <>
             <div className="flex items-start justify-between gap-2">
@@ -70,8 +75,16 @@ export default function GradeKanjiGrid({ items, hrefFor }: Props) {
             </p>
 
             <div className="mt-2 space-y-0.5">
-              <ReadingRow label={GRADE_EXPLORER_COPY.onReadings} readings={readings.on} />
-              <ReadingRow label={GRADE_EXPLORER_COPY.kunReadings} readings={readings.kun} />
+              {hidden ? (
+                <p className="py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/35">
+                  {GRADE_EXPLORER_COPY.quizTapToReveal}
+                </p>
+              ) : (
+                <>
+                  <ReadingRow label={GRADE_EXPLORER_COPY.onReadings} readings={readings.on} />
+                  <ReadingRow label={GRADE_EXPLORER_COPY.kunReadings} readings={readings.kun} />
+                </>
+              )}
             </div>
           </>
         );
@@ -79,7 +92,15 @@ export default function GradeKanjiGrid({ items, hrefFor }: Props) {
         const shell = "rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition";
         return (
           <li key={entry.kanji} className="min-w-0">
-            {href ? (
+            {onReveal ? (
+              <button
+                type="button"
+                onClick={() => onReveal(entry.kanji)}
+                className={`block h-full w-full cursor-pointer text-left ${shell} hover:brightness-95`}
+              >
+                {body}
+              </button>
+            ) : href ? (
               <Link href={href} className={`block h-full ${shell} hover:brightness-95`}>
                 {body}
               </Link>

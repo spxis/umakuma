@@ -25,6 +25,11 @@ export const GRADE_EXPLORER_COPY = {
   jlptCrossRef: "JLPT",
   wanikaniCrossRef: "WK",
   curriculumNote: "Readings shown are the ones approved for this grade.",
+  quizOff: "Quiz me",
+  quizOn: "Quiz on",
+  quizHint: "Say the readings, then select a card to check.",
+  quizReset: "Hide again",
+  quizTapToReveal: "Tap to reveal",
 } as const;
 
 /** Page size for the grade grid; grade 8 alone runs to 1,110 entries. */

@@ -926,5 +926,15 @@
     "version": "0.80.0",
     "releasedAt": "2026-08-30T13:59:06Z",
     "summary": "A search result now opens the explorer that holds it with the search already applied. Signed-out visitors keep the results as a lookup rather than being offered links that would bounce off the sign-in wall."
+  },
+  {
+    "id": "grade-quiz-mode",
+    "area": "jlpt",
+    "name": "Quiz yourself on grade readings",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.81.0",
+    "releasedAt": "2026-08-30T14:01:54Z",
+    "summary": "The grade grid hides its readings on request so the same page becomes a self-test: see the kanji, say the on and kun readings, select the card to check. Nothing is recorded, which is the point - it is the rehearsal, not the exam."
   }
 ]
