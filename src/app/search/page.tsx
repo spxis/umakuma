@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
+
+import { authOptions } from "@/lib/auth";
+import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
 import umakumaLogo from "@/images/umakuma-banner1-transparent.png";
 import {
@@ -41,6 +45,17 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
   const activeSource = firstValue(params.in);
   const sources = parseSources(activeSource ?? null);
   const results = isSearchable(query) ? await runGlobalSearch(query, sources) : null;
+
+  /*
+   * Results link into the viewer's own explorers, so an anonymous search stays
+   * a lookup instead of offering links that bounce off the sign-in wall.
+   */
+  const session = await getServerSession(authOptions);
+  const viewer = await resolveViewerMenuInfo({
+    viewerEmail: session?.user?.email?.trim().toLowerCase() ?? null,
+    sessionName: session?.user?.name?.trim() ?? null,
+  });
+  const viewerUsername = viewer?.wkUsername ?? null;
 
   return (
     <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6">
@@ -99,7 +114,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
           </p>
 
           <div className="mt-3">
-            <SearchHitList hits={results.hits} />
+            <SearchHitList hits={results.hits} viewerUsername={viewerUsername} />
           </div>
         </>
       ) : (

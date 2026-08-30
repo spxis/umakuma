@@ -916,5 +916,15 @@
     "version": "0.79.0",
     "releasedAt": "2026-08-30T13:52:37Z",
     "summary": "Reported by John: modals grew and shrank with their contents. ModalShell now owns two heights, a content one for forms and a fixed one for lists, and a test fails if a modal hand-rolls its own again."
+  },
+  {
+    "id": "search-result-links",
+    "area": "platform",
+    "name": "Search results open where they live",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.80.0",
+    "releasedAt": "2026-08-30T13:59:06Z",
+    "summary": "A search result now opens the explorer that holds it with the search already applied. Signed-out visitors keep the results as a lookup rather than being offered links that would bounce off the sign-in wall."
   }
 ]

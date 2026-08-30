@@ -44,7 +44,9 @@ export type SearchHit = {
   reading: string | null;
   /** Short pills: the subject type, a level, an N number, a grade. */
   badges: string[];
-  /** Where selecting the hit goes, or null when the source has no page yet. */
+  /** School grade, so a grade hit can link to the right grade page. */
+  grade?: number;
+  /** Where selecting the hit goes, filled in once the viewer is known. */
   href: string | null;
   /** Higher sorts first; see `rankHit`. */
   score: number;
@@ -121,4 +123,32 @@ export function sortHits(hits: SearchHit[]): SearchHit[] {
     if (left.glyph.length !== right.glyph.length) return left.glyph.length - right.glyph.length;
     return left.key.localeCompare(right.key);
   });
+}
+
+/**
+ * Where a hit leads, or null when nobody is signed in.
+ *
+ * Every destination is one of the viewer's own explorer pages, so an anonymous
+ * search stays a lookup rather than offering links that would bounce off the
+ * sign-in wall. Each explorer already accepts a find parameter, so the hit
+ * arrives with its search already applied.
+ */
+export function searchHitHref(hit: SearchHit, username: string | null): string | null {
+  if (!username) {
+    return null;
+  }
+
+  const base = `/users/${encodeURIComponent(username)}`;
+  const glyph = encodeURIComponent(hit.glyph);
+
+  if (hit.source === SEARCH_SOURCES.jlpt) {
+    return `${base}/jlpt-explorer?findJlpt=${glyph}`;
+  }
+
+  if (hit.source === SEARCH_SOURCES.grades) {
+    const grade = typeof hit.grade === "number" ? hit.grade : 1;
+    return `${base}/grades?grade=${grade}&q=${glyph}`;
+  }
+
+  return `${base}/library-explorer?findLevel=${glyph}`;
 }

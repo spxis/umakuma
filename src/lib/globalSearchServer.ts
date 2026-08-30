@@ -175,6 +175,7 @@ function searchGrades(query: string): SearchHit[] {
       meaning,
       reading,
       badges: [entry.grade >= 8 ? (entry.grade === 8 ? "Jr High" : "Name") : `G${entry.grade}`],
+      grade: entry.grade,
       href: null,
       score: rankHit(query, entry.kanji, meaning, reading),
     } satisfies SearchHit;

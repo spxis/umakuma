@@ -9,6 +9,7 @@ import {
   normalizeQuery,
   parseSources,
   rankHit,
+  searchHitHref,
   sortHits,
   type SearchHit,
 } from "./globalSearch";
@@ -137,5 +138,43 @@ describe("sortHits", () => {
     const input = [hit({ key: "a", score: 1 }), hit({ key: "b", score: 2 })];
     sortHits(input);
     expect(input.map((item) => item.key)).toEqual(["a", "b"]);
+  });
+});
+
+describe("searchHitHref", () => {
+  const user = "johnmorrisdotca";
+
+  /*
+   * Every destination is one of the viewer's own explorer pages, so with nobody
+   * signed in a link would only bounce off the sign-in wall.
+   */
+  it("offers no link to an anonymous searcher", () => {
+    expect(searchHitHref(hit(), null)).toBeNull();
+  });
+
+  it("sends a WaniKani hit to the WaniKani explorer, already searched", () => {
+    expect(searchHitHref(hit({ glyph: "鉛筆" }), user)).toBe(
+      `/users/${user}/library-explorer?findLevel=${encodeURIComponent("鉛筆")}`,
+    );
+  });
+
+  it("sends a JLPT hit to the JLPT explorer", () => {
+    expect(searchHitHref(hit({ source: SEARCH_SOURCES.jlpt, glyph: "水" }), user)).toBe(
+      `/users/${user}/jlpt-explorer?findJlpt=${encodeURIComponent("水")}`,
+    );
+  });
+
+  it("sends a grade hit to that grade's page", () => {
+    expect(searchHitHref(hit({ source: SEARCH_SOURCES.grades, glyph: "水", grade: 1 }), user)).toBe(
+      `/users/${user}/grades?grade=1&q=${encodeURIComponent("水")}`,
+    );
+  });
+
+  it("falls back to the first grade rather than building a broken link", () => {
+    expect(searchHitHref(hit({ source: SEARCH_SOURCES.grades, glyph: "水" }), user)).toContain("grade=1");
+  });
+
+  it("escapes a name that needs it", () => {
+    expect(searchHitHref(hit({ glyph: "日" }), "a b")).toContain("/users/a%20b/");
   });
 });

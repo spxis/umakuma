@@ -1,10 +1,14 @@
-import { SEARCH_SOURCE_LABELS, type SearchHit, type SearchSource } from "@/lib/globalSearch";
+import Link from "next/link";
+
+import { SEARCH_SOURCE_LABELS, searchHitHref, type SearchHit, type SearchSource } from "@/lib/globalSearch";
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 
 import { SEARCH_PAGE_COPY } from "./searchCopy";
 
 type Props = {
   hits: SearchHit[];
+  /** Whose explorers a hit opens; null when nobody is signed in. */
+  viewerUsername: string | null;
 };
 
 /** Source accents, so a row's origin reads before the label does. */
@@ -21,7 +25,7 @@ const SOURCE_TONES: Record<SearchSource, string> = {
  * whichever catalogue holds it; grouping by source would make them read three
  * lists and compare. The source rides along as a pill instead.
  */
-export default function SearchHitList({ hits }: Props) {
+export default function SearchHitList({ hits, viewerUsername }: Props) {
   if (hits.length === 0) {
     return (
       <div className="rounded-2xl border border-line bg-surface-muted p-5">
@@ -34,7 +38,17 @@ export default function SearchHitList({ hits }: Props) {
   return (
     <ul className="overflow-hidden rounded-2xl border border-line bg-surface divide-y divide-line/60">
       {hits.map((hit) => (
-        <li key={hit.key} className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-surface-muted/50">
+        <li key={hit.key}>
+          <HitRow hit={hit} href={searchHitHref(hit, viewerUsername)} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function HitRow({ hit, href }: { hit: SearchHit; href: string | null }) {
+  const body = (
+    <>
           <span
             className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 [font-family:var(--font-jp-current)] ${subjectGlyphTone(
               hit.subjectType,
@@ -64,8 +78,15 @@ export default function SearchHitList({ hits }: Props) {
               {SEARCH_SOURCE_LABELS[hit.source]}
             </span>
           </span>
-        </li>
-      ))}
-    </ul>
+    </>
+  );
+
+  const shell = "flex w-full items-center gap-3 px-3 py-2.5 text-left transition hover:bg-surface-muted/50";
+  return href ? (
+    <Link href={href} className={shell}>
+      {body}
+    </Link>
+  ) : (
+    <div className={shell}>{body}</div>
   );
 }
