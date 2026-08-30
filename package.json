@@ -34,6 +34,7 @@
     "deploy:prod": "pnpm preflight:prod && npx --yes vercel@57.0.0 --prod --yes",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
+    "db:drift:check": "prisma migrate diff --from-url \"$DATABASE_URL\" --to-schema-datamodel prisma/schema.prisma --exit-code --script",
     "db:studio": "prisma studio",
     "db:backfill:reading-challenge": "node scripts/backfill-reading-challenge-ids.mjs",
     "db:backfill:custom-study": "pnpm dlx tsx scripts/backfill-custom-study-enrichment.ts",

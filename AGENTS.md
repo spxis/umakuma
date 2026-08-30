@@ -171,6 +171,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 ## Workflow
 
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
+- This repo has no migrations: the schema is applied by hand with `pnpm db:push`, and nothing in the deploy pipeline applies it for you. **Any change to `prisma/schema.prisma` must be pushed to the production database as its own step, or the deploy ships code the database cannot serve.** An added enum value is the easy one to miss: `map` was added to `GameKind`, deployed green, and every Map run failed in production while passing locally, because `db push` had only ever reached the local database. Verify with `pnpm db:drift:check` (read-only; exit 0 clean, exit 2 with the missing SQL). The deploy workflow now runs the same check after `vercel pull` and stops the deploy on drift.
 - A push to `main` only triggers the production workflow; it is not itself a deployment. Run `pnpm preflight:prod` before pushing, then verify GitHub `CI` succeeds, the `Deploy to Vercel` workflow's `deploy` job completes `vercel deploy --prod`, and the canonical production alias returns HTTP 200. Investigate and fix failed workflow steps before reporting deployment success.
 - When work is paused or reprioritized but may resume later, preserve useful uncommitted changes on a named WIP branch or stash before returning to the priority task. Do not discard that work merely to clean the current branch.
 - Do not create markdown docs to describe changes unless asked.
