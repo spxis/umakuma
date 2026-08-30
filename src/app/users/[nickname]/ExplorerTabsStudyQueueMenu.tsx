@@ -153,7 +153,16 @@ export default function ExplorerTabsStudyQueueMenu({
 
       {isMenuOpen ? (
         <div
-          className="absolute right-0 top-full z-80 mt-2 w-[min(100vw-2rem,26rem)] rounded-xl border border-line bg-surface p-2 shadow-[0_18px_42px_rgba(8,16,36,0.16)]"
+          /*
+           * Anchored left on a phone and right from `md` up, matching the
+           * breakpoint where the container itself stops stretching.
+           * This panel is nearly viewport-wide, so right-anchoring it on a
+           * narrow screen pushes its left edge off the display - which is
+           * what happened when it was given the Mode menu's `right-0`
+           * without accounting for the width difference: that one is 16rem
+           * and fits, this one is not.
+           */
+          className="absolute left-0 top-full z-80 mt-2 w-[min(100vw-2rem,26rem)] rounded-xl border border-line bg-surface p-2 shadow-[0_18px_42px_rgba(8,16,36,0.16)] md:left-auto md:right-0"
           onMouseEnter={openHoverMenu}
           onMouseLeave={closeHoverMenuSoon}
         >

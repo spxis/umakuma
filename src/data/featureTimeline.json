@@ -1076,5 +1076,15 @@
     "version": "0.96.0",
     "releasedAt": "2026-08-30T16:05:00Z",
     "summary": "Every account gets a permanent slug and a display name it can change. Pages resolve by either the slug or the old WaniKani username, so links already shared keep working, and an account with no WaniKani connection is now reachable at all."
+  },
+  {
+    "id": "study-menu-mobile-anchor",
+    "area": "study",
+    "name": "The study queue menu fits on a phone again",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.97.0",
+    "releasedAt": "2026-08-30T16:20:00Z",
+    "summary": "The Reviews menu was anchored to its right edge to keep it on screen on a desktop, which pushed it off the left edge on a phone, where the panel is nearly as wide as the display. It now anchors left on small screens and flips right only where there is room."
   }
 ]
