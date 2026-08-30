@@ -22,15 +22,46 @@ import { prisma } from "@/lib/prisma";
  * read the public display name instead — the hub is the wrong place to reveal
  * an account's internal nickname to members outside its group.
  */
-export async function loadGameActivity(nowMs: number = Date.now()): Promise<GameActivityByKind> {
+const LATEST_RUN_SELECT = {
+  kind: true,
+  accountId: true,
+  score: true,
+  correctCount: true,
+  questionCount: true,
+  completedAt: true,
+  account: { select: { nickname: true } },
+} as const;
+
+/** The most recently completed run per kind, optionally scoped to one account. */
+async function latestCompletedPerKind(accountId: string | null) {
+  const scope = accountId === null ? {} : { accountId };
+
+  const maxima = await prisma.gameRun.groupBy({
+    by: ["kind"],
+    where: { ...scope, status: GameRunStatus.completed, completedAt: { not: null } },
+    _max: { completedAt: true },
+  });
+
+  const filters = maxima.flatMap((row) =>
+    row._max.completedAt ? [{ ...scope, kind: row.kind, completedAt: row._max.completedAt }] : [],
+  );
+
+  if (filters.length === 0) {
+    return [];
+  }
+
+  return prisma.gameRun.findMany({ where: { OR: filters }, select: LATEST_RUN_SELECT });
+}
+
+export async function loadGameActivity(
+  viewerAccountId: string | null = null,
+  nowMs: number = Date.now(),
+): Promise<GameActivityByKind> {
   const liveCutoff = new Date(nowMs - GAME_LIVE_WINDOW_MS);
 
-  const [maxima, liveRuns] = await Promise.all([
-    prisma.gameRun.groupBy({
-      by: ["kind"],
-      where: { status: GameRunStatus.completed, completedAt: { not: null } },
-      _max: { completedAt: true },
-    }),
+  const [latestRuns, viewerRuns, liveRuns] = await Promise.all([
+    latestCompletedPerKind(null),
+    viewerAccountId === null ? Promise.resolve([]) : latestCompletedPerKind(viewerAccountId),
     prisma.gameRun.findMany({
       where: { status: GameRunStatus.active, updatedAt: { gte: liveCutoff } },
       select: {
@@ -42,34 +73,20 @@ export async function loadGameActivity(nowMs: number = Date.now()): Promise<Game
     }),
   ]);
 
-  const latestFilters = maxima.flatMap((row) =>
-    row._max.completedAt ? [{ kind: row.kind, completedAt: row._max.completedAt }] : [],
-  );
-
-  const latestRuns =
-    latestFilters.length === 0
-      ? []
-      : await prisma.gameRun.findMany({
-          where: { OR: latestFilters },
-          select: {
-            kind: true,
-            score: true,
-            correctCount: true,
-            questionCount: true,
-            completedAt: true,
-            account: { select: { nickname: true } },
-          },
-        });
+  // The viewer's own latest run is usually not the global latest, so both sets
+  // are needed; buildGameActivity takes the maximum per kind across them.
+  const completedRows = [...latestRuns, ...viewerRuns].map((run) => ({
+    kind: run.kind,
+    accountId: run.accountId,
+    playerName: run.account.nickname,
+    score: run.score,
+    correctCount: run.correctCount,
+    questionCount: run.questionCount,
+    completedAt: run.completedAt,
+  }));
 
   return buildGameActivity(
-    latestRuns.map((run) => ({
-      kind: run.kind,
-      playerName: run.account.nickname,
-      score: run.score,
-      correctCount: run.correctCount,
-      questionCount: run.questionCount,
-      completedAt: run.completedAt,
-    })),
+    completedRows,
     liveRuns.map((run) => ({
       kind: run.kind,
       playerName: run.account.nickname,
@@ -77,5 +94,6 @@ export async function loadGameActivity(nowMs: number = Date.now()): Promise<Game
       updatedAt: run.updatedAt,
     })),
     nowMs,
+    viewerAccountId,
   );
 }

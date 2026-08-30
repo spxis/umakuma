@@ -65,7 +65,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             select: { status: true },
           }),
           resolveDailyLevelCap(),
-          loadGameActivity(),
+          loadGameActivity(accountId),
         ]);
 
         // Practice draws from the started pool, so a tag on an item the player

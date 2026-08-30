@@ -25,6 +25,7 @@ export const GAME_LIVE_WINDOW_MS = 90_000;
 
 export type GameRunActivityRow = {
   kind: GameKind;
+  accountId: string;
   playerName: string;
   score: number;
   correctCount: number;
@@ -40,6 +41,7 @@ export type GameLiveRunRow = {
 };
 
 export type GameLastPlay = {
+  accountId: string;
   playerName: string;
   score: number;
   correctCount: number;
@@ -54,8 +56,16 @@ export type GameLivePlay = {
 };
 
 export type GameKindActivity = {
+  /** The most recent completed run by anyone. */
   last: GameLastPlay | null;
+  /** Runs being answered right now. */
   live: GameLivePlay[];
+  /**
+   * The viewer's own most recent completed run, or null if they have never
+   * finished this game. Held separately from `last` because the two answer
+   * different questions: who holds the floor, and how you did.
+   */
+  viewerLast: GameLastPlay | null;
 };
 
 export type GameActivityByKind = Partial<Record<GameKind, GameKindActivity>>;
@@ -113,6 +123,7 @@ export function selectLatestPerKind(
 
     latestMs[row.kind] = ms;
     latest[row.kind] = {
+      accountId: row.accountId,
       playerName: row.playerName,
       score: row.score,
       correctCount: row.correctCount,
@@ -148,24 +159,39 @@ export function selectLiveByKind(
   return live;
 }
 
-/** Combines both halves into the shape the hub cards read. */
+/**
+ * Combines the halves into the shape the hub cards read.
+ *
+ * `viewerAccountId` picks the viewer's own latest run out of the same rows, so
+ * a card can show both who played last and how the person reading it did.
+ */
 export function buildGameActivity(
   completedRows: readonly GameRunActivityRow[],
   liveRows: readonly GameLiveRunRow[],
   nowMs: number,
+  viewerAccountId: string | null = null,
   windowMs: number = GAME_LIVE_WINDOW_MS,
 ): GameActivityByKind {
   const latest = selectLatestPerKind(completedRows);
+  const viewerLatest =
+    viewerAccountId === null
+      ? {}
+      : selectLatestPerKind(completedRows.filter((row) => row.accountId === viewerAccountId));
   const live = selectLiveByKind(liveRows, nowMs, windowMs);
 
   const activity: GameActivityByKind = {};
   const kinds = new Set<GameKind>([
     ...(Object.keys(latest) as GameKind[]),
+    ...(Object.keys(viewerLatest) as GameKind[]),
     ...(Object.keys(live) as GameKind[]),
   ]);
 
   for (const kind of kinds) {
-    activity[kind] = { last: latest[kind] ?? null, live: live[kind] ?? [] };
+    activity[kind] = {
+      last: latest[kind] ?? null,
+      live: live[kind] ?? [],
+      viewerLast: viewerLatest[kind] ?? null,
+    };
   }
 
   return activity;

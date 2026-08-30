@@ -16,6 +16,7 @@ const NOW = Date.parse("2026-08-30T12:00:00.000Z");
 function completed(overrides: Partial<GameRunActivityRow> = {}): GameRunActivityRow {
   return {
     kind: "match",
+    accountId: "acct-emi",
     playerName: "Emi",
     score: 100,
     correctCount: 8,
@@ -154,6 +155,73 @@ describe("buildGameActivity", () => {
 
   it("returns nothing when there is no history at all", () => {
     expect(buildGameActivity([], [], NOW)).toEqual({});
+  });
+
+  it("shows the live round and the last result together, not one instead of the other", () => {
+    const activity = buildGameActivity(
+      [completed({ kind: "match", playerName: "Emi" })],
+      [live({ kind: "match", playerName: "Jay" })],
+      NOW,
+    );
+
+    expect(activity.match?.live).toHaveLength(1);
+    expect(activity.match?.last?.playerName).toBe("Emi");
+  });
+
+  it("reports the viewer's own latest run alongside the overall latest", () => {
+    const activity = buildGameActivity(
+      [
+        completed({ accountId: "acct-emi", playerName: "Emi", completedAt: new Date(NOW - 60_000) }),
+        completed({ accountId: "acct-jay", playerName: "Jay", score: 42, completedAt: new Date(NOW - 900_000) }),
+      ],
+      [],
+      NOW,
+      "acct-jay",
+    );
+
+    expect(activity.match?.last?.playerName).toBe("Emi");
+    expect(activity.match?.viewerLast?.playerName).toBe("Jay");
+    expect(activity.match?.viewerLast?.score).toBe(42);
+  });
+
+  it("leaves viewerLast null when the viewer has never finished the game", () => {
+    const activity = buildGameActivity(
+      [completed({ accountId: "acct-emi" })],
+      [],
+      NOW,
+      "acct-nobody",
+    );
+
+    expect(activity.match?.last).not.toBeNull();
+    expect(activity.match?.viewerLast).toBeNull();
+  });
+
+  it("leaves viewerLast null when no viewer was given", () => {
+    const activity = buildGameActivity([completed()], [], NOW);
+    expect(activity.match?.viewerLast).toBeNull();
+  });
+
+  it("sets last and viewerLast to the same run when the viewer is the last player", () => {
+    const activity = buildGameActivity(
+      [completed({ accountId: "acct-emi", playerName: "Emi" })],
+      [],
+      NOW,
+      "acct-emi",
+    );
+
+    expect(activity.match?.last?.accountId).toBe("acct-emi");
+    expect(activity.match?.viewerLast?.accountId).toBe("acct-emi");
+  });
+
+  it("includes a kind only the viewer has played", () => {
+    const activity = buildGameActivity(
+      [completed({ kind: "shiritori", accountId: "acct-jay" })],
+      [],
+      NOW,
+      "acct-jay",
+    );
+
+    expect(activity.shiritori?.viewerLast?.accountId).toBe("acct-jay");
   });
 });
 
