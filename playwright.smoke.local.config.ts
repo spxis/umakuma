@@ -4,7 +4,7 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:6400";
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: ["**/smoke-pages.spec.ts"],
+  testMatch: ["**/auth.setup.ts", "**/smoke-pages.spec.ts"],
   timeout: 45_000,
   expect: { timeout: 8_000 },
   fullyParallel: false,
@@ -16,9 +16,11 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   projects: [
+    { name: "setup", testMatch: /auth\.setup\.ts/ },
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      dependencies: ["setup"],
+      use: { ...devices["Desktop Chrome"], storageState: "e2e/.auth/session.json" },
     },
   ],
 });

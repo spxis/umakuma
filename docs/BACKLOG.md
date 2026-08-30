@@ -319,6 +319,36 @@ shows. No new table needed at first: it is static reference data like the maps
 and the school grades, and it can move into Postgres later if it ever needs
 querying rather than reading.
 
+### 22 — The smoke suite tests almost nothing
+
+Found 30 Aug while checking that a night of releases had not broken anything.
+
+**23 of the 28 smoke tests were skipping**, every run, silently. Each one is
+gated on `accessibleStudyUser`, which the suite finds by probing user pages
+**unauthenticated** — and every user page is behind the access wall, so the
+probe never succeeds and the study, explorer, history and check-in tests all
+skip. The suite reported green while exercising the home page, the news page
+and little else.
+
+`e2e/auth.setup.ts` now mints a session cookie and hands it to the run through
+`storageState`, so those tests execute. It skips cleanly when there is no
+`AUTH_SECRET` or admin address, so a contributor without production credentials
+still gets the public checks rather than a wall of errors.
+
+**With them running, they fail — and not because anything is broken.** They are
+stale, written against an older UI. The first one asserts a button named
+`All Levels (143)`; the chip has read `ALL (143)` for some time. The page itself
+renders correctly, filters and all — verified by screenshot.
+
+**This is deliberately left red rather than half-fixed.** Each assertion was
+protecting some behaviour, and guessing at 23 of them would produce tests that
+pass without meaning, which is how the suite got here. Working through them
+wants someone who knows what each was for.
+
+Note that CI does not run this suite — it runs `quality:check`, `security:check`
+and `build` — so nothing in the pipeline changes. `pnpm test:smoke:local` now
+tells the truth, and the truth is that it needs work.
+
 ### 20 — Navigation regroup and a Settings page (design open)
 
 John, 30 Aug. The header carries ten items for a member (eleven for an admin)

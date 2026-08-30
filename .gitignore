@@ -50,3 +50,6 @@ backups/
 # Local WaniKani test-account credentials
 /test-accounts/*.local.json
 .claude/worktrees/
+
+# Smoke-run session state, minted per run.
+e2e/.auth/
