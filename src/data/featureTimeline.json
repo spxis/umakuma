@@ -538,7 +538,7 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-29",
-    "summary": "Each hub card shows who played it last and what they scored, and marks a round somebody is in right now."
+    "summary": "Each hub card shows who is playing now, who played it last, and how you did."
   },
   {
     "id": "jlpt-level-mapping",
@@ -577,5 +577,23 @@
     "dateIsEstimate": true,
     "release": 13,
     "summary": "Reviews that progress through an N level the way WaniKani progresses through 60. Design open."
+  },
+  {
+    "id": "kanji-coverage",
+    "name": "Kanji coverage map",
+    "area": "jlpt",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "summary": "Tracks which kanji WaniKani teaches, which it does not, and which it teaches that the JLPT table lacks."
+  },
+  {
+    "id": "parallel-level-ladder",
+    "name": "Parallel level ladder",
+    "area": "jlpt",
+    "status": "planned",
+    "date": "2026-09-06",
+    "dateIsEstimate": true,
+    "release": 18,
+    "summary": "A WaniKani-parallel progression over roughly 100 levels, covering the kanji WaniKani leaves out."
   }
 ]

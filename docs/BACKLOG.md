@@ -257,6 +257,33 @@ the same panel; `LoadingState` and `PillChip` have 2 each.
 
 ---
 
+### 18 — Parallel level ladder (design open)
+
+WaniKani teaches 2,098 kanji. Our JLPT table holds 2,211. They are not nested:
+
+| | Count |
+|---|---|
+| In both | 1,955 |
+| JLPT only, **missing from WaniKani** | 256 |
+| WaniKani only, missing from the JLPT table | 143 |
+
+**No grade-school kanji are missing from WaniKani.** All 998 across grades 1 to
+6 are covered. The 256-kanji gap is entirely N1 and splits as 53 at grade 8
+(jouyou taught in secondary school) and 203 at grade 9 (jinmeiyou, approved for
+names but outside jouyou). The reverse gap of 143 sits mostly in WaniKani levels
+31 to 50.
+
+The JLPT table has holes of its own: 鬱 and 苺 are absent entirely, so it is not
+a complete jouyou set either — roughly 172 jouyou kanji short.
+
+`/admin/kanji-coverage` reports all of this live off the two tables. It is the
+measurement surface the ladder should be designed against, and deliberately
+stores nothing: both catalogues change on their own schedule, so a persisted
+copy would be a third thing to keep true. The ladder itself, when its shape is
+decided, is what earns a table.
+
+---
+
 ## What works without a WaniKani connection
 
 The gating design in release 6 comes from this. It is drawn from what each
