@@ -772,5 +772,14 @@
     "version": "0.65.0",
     "releasedAt": "2026-08-30T09:52:35Z",
     "summary": "The queue tag filter now shows as a chip you can clear, so a sticky Trouble filter no longer hides most of the due reviews without saying so, and the Trouble & favourites lists open from the Study page rather than only the game lobby, History and the JLPT explorer."
+  },
+  {
+    "id": "tag-lists-card-parity",
+    "area": "study",
+    "name": "Your Lists cards match the shared card",
+    "status": "backlogged",
+    "date": "2026-08-30",
+    "dateIsEstimate": true,
+    "summary": "Reported by John: the Trouble/Favourites cards put the level at the bottom and a remove X in the top-right corner every other page gives the level. Render them through the shared explorer card and rehome the remove action."
   }
 ]

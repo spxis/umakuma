@@ -260,6 +260,25 @@ every other game, with the sentinel kept readable for historical runs.
 Finish the 29 Aug sweep: `SurfaceCard` has 4 adopters while ~19 files hand-roll
 the same panel; `LoadingState` and `PillChip` have 2 each.
 
+### 19 — Your Lists cards drifted from the shared card
+
+Reported by John, 30 Aug. The cards in `StudyTagListsModal` are not the shared
+explorer card: the level sits at the bottom next to the type pill instead of the
+top right, and a remove `×` occupies the top-right corner the level should own.
+Every other surface — the Study explorer, the JLPT explorer, History — puts the
+level top right, so the lists read as a different component for the same thing.
+
+Fix by rendering the lists through the shared card (`SubjectCards` /
+`UnifiedExplorerCard`) rather than restyling a copy, which means finding a home
+for the remove action that does not take the level's corner. The tag controls
+already have a convention to follow: trouble bottom-left, favourite
+bottom-right, per the glyph-control rule in `AGENTS.md`. Removal is a third
+control, so it likely belongs in the same bottom row or behind the card's
+overflow, not the top right.
+
+Grouped with 17: both are "one component, many hand-rolled copies", and the
+lists should land on the shared card in the same pass.
+
 ---
 
 ### 18 — Parallel level ladder (design open)
