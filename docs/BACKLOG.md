@@ -326,12 +326,17 @@ response. Public surfaces show the display name from release 4 and nothing else.
 
 ## Open decisions
 
-**Preferences and the WaniKani link.** Release 5 puts preferences on the account
-so they survive connecting and disconnecting. Worth confirming that is the
-intent, since "tied to the WaniKani account" could instead mean they should
-follow the connection and be discarded with it.
+None. Everything raised so far is either decided below, shipped, or queued in
+the release order.
 
 ## Decided or resolved
+
+**Preferences live on the account, not the WaniKani link (2026-08-30).** John
+confirmed it: preferences exist outside WaniKani, because a member can arrive
+with no WaniKani at all — via Google sign-up for the JLPT side of the product —
+and must still have somewhere for their settings to live. Connecting or
+disconnecting WaniKani never touches them. Release 5's wizard writes to the
+account for the same reason.
 
 **The viewer-fallback lockout risk is settled (2026-08-30).** The worry was that
 removing the display-name fallback would lock out Emi, Aria, Mika and Jay, the
