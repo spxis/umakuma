@@ -47,3 +47,4 @@ backups/
 
 # Local WaniKani test-account credentials
 /test-accounts/*.local.json
+.claude/worktrees/
