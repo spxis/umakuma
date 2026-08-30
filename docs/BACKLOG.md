@@ -232,12 +232,17 @@ subdivision gives N5 about two sub-levels and N1 about thirty-three.
 `schoolGrade` is present on 100% of rows and `frequencyRank` on 95%, so either
 can order kanji within a level.
 
-### 14 — Content-based catalogue sync
+### 14 — Content-based catalogue sync ✅ shipped (v0.57.0)
 
-The incremental sync compares WaniKani's `updated_at` against the stored value
-as **text**, so microsecond and millisecond precision never match and roughly
-5,000 rows are rewritten per run with identical content. Do this before 15, or
-the backfill rewrites the table.
+The original diagnosis here was wrong and is corrected for the record: the
+sync's timestamp comparison was numeric and sound all along. The real cause,
+read from the interrupted run's own counters, is that **WaniKani bumps
+`data_updated_at` for edits to fields we never extract** — 3,786 of 4,000
+fetched rows had moved timestamps over byte-identical extracted content. The
+sync now compares the served fields (`catalogContentEquals`) and skips those
+rows entirely; a skipped row keeps its old timestamp, which nothing keys on,
+and the fetch cursor lives on the state row. Run stats record the
+content-identical count separately.
 
 ### 15 — Backfill missing catalogue subjects
 

@@ -545,11 +545,11 @@
     "id": "catalog-sync-change-detection",
     "name": "Content-based catalogue sync",
     "area": "platform",
-    "status": "planned",
-    "date": "2026-09-03",
-    "dateIsEstimate": true,
-    "release": 14,
-    "summary": "Compare content instead of timestamps so a sync stops rewriting rows that did not change."
+    "status": "shipped",
+    "date": "2026-08-30",
+    "dateIsEstimate": false,
+    "summary": "The sync now skips rows whose extracted content is identical, even when WaniKani bumped the timestamp for fields we never store.",
+    "version": "0.57.0"
   },
   {
     "id": "catalog-missing-subjects",
