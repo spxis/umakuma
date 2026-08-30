@@ -886,5 +886,15 @@
     "version": "0.76.0",
     "releasedAt": "2026-08-30T13:39:54Z",
     "summary": "Shipped releases are public at /releases, grouped by month and expandable for the detail. Four entries that described a fixed security weakness precisely carry a cleansed public wording; the admin timeline keeps the honest text and the planned work."
+  },
+  {
+    "id": "global-search",
+    "area": "platform",
+    "name": "Search across every catalogue",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.77.0",
+    "releasedAt": "2026-08-30T13:46:23Z",
+    "summary": "A search box in the header and a results page that asks WaniKani, JLPT and School Grades at once, ranked into one list with exact characters and meanings first. Filter to a single catalogue with the source pills."
   }
 ]

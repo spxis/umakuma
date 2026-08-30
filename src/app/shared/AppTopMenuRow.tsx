@@ -7,6 +7,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
 import { NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav } from "./navSections";
 import ReleaseMotto from "./ReleaseMotto";
+import GlobalSearchBox from "./GlobalSearchBox";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
 
@@ -144,6 +145,8 @@ export default function AppTopMenuRow({
           </span>
         ))}
       </nav>
+
+      <GlobalSearchBox className="ml-auto shrink-0" />
 
       <ReleaseMotto isAdmin={canSeeAdminTopLink} />
 
