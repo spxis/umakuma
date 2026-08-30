@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type HTMLAttributes, type ReactNode } from "react";
 
 import { MODAL_LAYERS, type ModalLayer } from "@/app/shared/modalLayers";
 import { lockBodyScroll } from "@/lib/bodyScrollLock";
@@ -21,6 +21,8 @@ type Props = {
   panelClassName?: string;
   /** For a panel sized at runtime, such as one fitted to the viewport. */
   panelStyle?: CSSProperties;
+  /** Extra attributes for the panel, such as the data hooks other code reads. */
+  panelProps?: HTMLAttributes<HTMLDivElement>;
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   lockScroll?: boolean;
@@ -56,6 +58,7 @@ export default function ModalShell({
   gutter = "sm",
   panelClassName = "",
   panelStyle,
+  panelProps,
   closeOnBackdrop = true,
   closeOnEscape = true,
   lockScroll = true,
@@ -100,6 +103,7 @@ export default function ModalShell({
       }}
     >
       <div
+        {...panelProps}
         role="dialog"
         aria-modal="true"
         aria-label={labelledBy ? undefined : label}

@@ -6,6 +6,8 @@ import useSWR from "swr";
 
 import type { StudySource } from "./study-explorer/lib/studyExplorerTypes";
 import FieldLabel from "../../shared/FieldLabel";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 
 type CustomLibraryRow = {
   id: string;
@@ -193,13 +195,13 @@ export default function StudySourceControls({
   return (
     <>
       {isModalOpen ? (
-        <div className="fixed inset-0 z-10020 flex items-center justify-center bg-black/45 p-4" role="presentation">
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="custom-study-library-loader-title"
-            className="flex max-h-[75vh] min-h-90 w-[min(92vw,42rem)] min-w-[320px] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_20px_55px_rgba(8,16,36,0.28)] sm:min-h-100"
-          >
+        <ModalShell
+          onClose={() => setIsModalOpen(false)}
+          layer={MODAL_LAYERS.library}
+          labelledBy="custom-study-library-loader-title"
+          gutter="md"
+          panelClassName="flex max-h-[75vh] min-h-90 w-[min(92vw,42rem)] min-w-[320px] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_20px_55px_rgba(8,16,36,0.28)] sm:min-h-100"
+        >
             <div className="border-b border-line px-5 py-4">
               <h3 id="custom-study-library-loader-title" className="text-lg font-black text-foreground">Change study library</h3>
               <p className="text-sm text-foreground/70">Select the source used by your study queue.</p>
@@ -266,8 +268,7 @@ export default function StudySourceControls({
                 Use library
               </button>
             </div>
-          </div>
-        </div>
+        </ModalShell>
       ) : null}
     </>
   );

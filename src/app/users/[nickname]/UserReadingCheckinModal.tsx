@@ -5,6 +5,8 @@ import UserReadingBooksEditor from "./UserReadingBooksEditor";
 import UserReadingCheckinModalAdminDateField from "./UserReadingCheckinModalAdminDateField";
 import UserReadingCheckinModalReviewQueue from "./UserReadingCheckinModalReviewQueue";
 import FieldLabel from "../../shared/FieldLabel";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 
 type Member = {
   id: string;
@@ -132,8 +134,14 @@ export default function UserReadingCheckinModal({
   const showWaniKani = checkinMode === "wanikani" || checkinMode === "both";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-2 sm:p-6">
-      <div className="flex max-h-[95dvh] w-full max-w-2xl flex-col overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-2xl sm:p-5">
+    <ModalShell
+      onClose={onRequestClose}
+      layer={MODAL_LAYERS.page}
+      label="Nightly check-in"
+      gutter="md"
+      closeOnBackdrop={false}
+      panelClassName="flex max-h-[95dvh] w-full max-w-2xl flex-col overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-2xl sm:p-5"
+    >
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">Nightly check-in</p>
@@ -315,7 +323,6 @@ export default function UserReadingCheckinModal({
             onRequestClose();
           }}
         />
-      </div>
-    </div>
+    </ModalShell>
   );
 }

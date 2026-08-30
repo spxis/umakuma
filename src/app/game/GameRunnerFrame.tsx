@@ -4,6 +4,7 @@ import { lockBodyScroll } from "@/lib/bodyScrollLock";
 import { GAME_KINDS, formatGameDuration, type GameKind } from "@/lib/gameMode";
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
 import { GAME_COPY, GAME_KIND_LABELS } from "./GameMode.constants";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 
 type Props = {
   questionIndex: number;
@@ -101,7 +102,7 @@ export default function GameRunnerFrame({
         title="Leave this round?"
         description="Your answers and time for this round will be lost."
         confirmLabel="Leave round"
-        overlayZIndexClass="z-110"
+        layer={MODAL_LAYERS.gameAlert}
         onConfirm={onExit}
         onCancel={() => setExitConfirmOpen(false)}
       />

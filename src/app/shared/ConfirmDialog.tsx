@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS, type ModalLayer } from "@/app/shared/modalLayers";
 
 type ConfirmDialogProps = {
   open: boolean;
@@ -9,7 +10,7 @@ type ConfirmDialogProps = {
   confirmLabel: string;
   cancelLabel?: string;
   tone?: "danger" | "neutral";
-  overlayZIndexClass?: string;
+  layer?: ModalLayer;
   busy?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -22,28 +23,11 @@ export default function ConfirmDialog({
   confirmLabel,
   cancelLabel = "Cancel",
   tone = "danger",
-  overlayZIndexClass = "z-60",
+  layer = MODAL_LAYERS.menu,
   busy = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape" && !busy) {
-        event.preventDefault();
-        onCancel();
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [busy, onCancel, open]);
 
   if (!open) {
     return null;
@@ -55,13 +39,18 @@ export default function ConfirmDialog({
       : "border-accent bg-accent text-white hover:bg-accent-2";
 
   return (
-    <div className={`fixed inset-0 ${overlayZIndexClass} flex items-center justify-center bg-foreground/35 p-4 backdrop-blur-[2px]`}>
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        className="w-full max-w-lg rounded-2xl border border-line bg-surface p-5 shadow-[0_20px_55px_rgba(8,16,36,0.25)]"
-      >
+    <ModalShell
+      onClose={onCancel}
+      layer={layer}
+      label={title}
+      scrim="light"
+      gutter="md"
+      /* A confirmation must not be dismissible by a stray click beside it, and
+       * not at all while the action it guards is already running. */
+      closeOnBackdrop={false}
+      closeOnEscape={!busy}
+      panelClassName="w-full max-w-lg rounded-2xl border border-line bg-surface p-5 shadow-[0_20px_55px_rgba(8,16,36,0.25)]"
+    >
         <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/60">Confirm action</p>
         <h3 className="mt-1 text-xl font-bold text-foreground">{title}</h3>
         <p className="mt-2 whitespace-pre-line text-sm text-foreground/80">{description}</p>
@@ -84,7 +73,6 @@ export default function ConfirmDialog({
             {busy ? "Working..." : confirmLabel}
           </button>
         </div>
-      </div>
-    </div>
+    </ModalShell>
   );
 }

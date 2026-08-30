@@ -4,6 +4,8 @@ import type { ReadingChallengeBookRecord } from "@/lib/readingSignoff";
 
 import { useBookStripAutoScroll } from "./UserReadingCheckinModal.bookStrip";
 import UserReadingBookCoverImage from "./UserReadingBookCoverImage";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 
 type UserReadingBooksEditorProps = {
   memberBooks: ReadingChallengeBookRecord[];
@@ -272,13 +274,14 @@ export default function UserReadingBooksEditor({
       ) : null}
 
       {previewBook ? (
-        <div
-          className="fixed inset-0 z-60 flex items-center justify-center bg-black/70 p-4"
-          onClick={() => setPreviewBook(null)}
-          role="dialog"
-          aria-label="Book cover preview"
+        <ModalShell
+          onClose={() => setPreviewBook(null)}
+          layer={MODAL_LAYERS.menu}
+          label="Book cover preview"
+          scrim="heavy"
+          gutter="md"
+          panelClassName="max-h-[90vh] w-full max-w-xl"
         >
-          <div className="max-h-[90vh] w-full max-w-xl" onClick={(event) => event.stopPropagation()}>
             <button
               type="button"
               onClick={() => setPreviewBook(null)}
@@ -300,8 +303,7 @@ export default function UserReadingBooksEditor({
                 />
               </div>
             </button>
-          </div>
-        </div>
+        </ModalShell>
       ) : null}
     </section>
   );

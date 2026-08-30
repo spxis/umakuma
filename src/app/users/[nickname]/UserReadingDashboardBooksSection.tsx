@@ -13,6 +13,8 @@ import {
 } from "./UserReadingSignoffPanel.books";
 import type { Member } from "./UserReadingSignoffPanel.types";
 import FieldLabel from "../../shared/FieldLabel";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 
 type UserReadingDashboardBooksSectionProps = {
   viewerCanChooseMember: boolean;
@@ -152,16 +154,13 @@ export default function UserReadingDashboardBooksSection({
       <p className="mt-2 text-xs text-foreground/70">Open the editor to add by ISBN or pick from existing titles.</p>
 
       {editorOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-2 sm:p-6"
-          role="dialog"
-          aria-label="Edit challenge books"
-          onClick={() => setEditorOpen(false)}
+        <ModalShell
+          onClose={() => setEditorOpen(false)}
+          layer={MODAL_LAYERS.page}
+          label="Edit challenge books"
+          gutter="md"
+          panelClassName="flex max-h-[95dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-2xl sm:p-5"
         >
-          <div
-            className="flex max-h-[95dvh] w-full max-w-5xl flex-col overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-2xl sm:p-5"
-            onClick={(event) => event.stopPropagation()}
-          >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">Books editor</p>
@@ -301,8 +300,7 @@ export default function UserReadingDashboardBooksSection({
                 onDeleteBook={onDeleteBook}
               />
             </div>
-          </div>
-        </div>
+        </ModalShell>
       ) : null}
     </section>
   );

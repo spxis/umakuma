@@ -10,6 +10,7 @@ import {
   setLocalStorageItem,
   setStoredEnum,
 } from "@/lib/clientStorage";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import {
   buildDeleteItemDetails,
   buildPreferenceStorageKeys,
@@ -466,7 +467,7 @@ export default function StudySourceLibraryItemsManager({
         cancelLabel="Cancel"
         details={deleteItemDetails}
         detailsTitle="Items to delete"
-        overlayZIndexClass="z-10030"
+        layer={MODAL_LAYERS.libraryAlert}
         busy={isDeletingItems}
         onCancel={() => setDeleteItemsConfirmOpen(false)}
         onConfirm={() => {
@@ -480,7 +481,7 @@ export default function StudySourceLibraryItemsManager({
         description={`This permanently removes ${libraryName ?? "this library"} and all of its items.`}
         confirmLabel="Delete library"
         cancelLabel="Keep library"
-        overlayZIndexClass="z-10030"
+        layer={MODAL_LAYERS.libraryAlert}
         busy={isDeletingLibrary}
         onCancel={() => setDeleteLibraryConfirmOpen(false)}
         onConfirm={() => {

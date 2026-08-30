@@ -8,6 +8,8 @@ import type {
 import UserReadingBookCoverImage from "./UserReadingBookCoverImage";
 import UserReadingBookTitleSelect from "./UserReadingBookTitleSelect";
 import type { Member } from "./UserReadingSignoffPanel.types";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 
 type UserReadingMemberHistoryModalProps = {
   open: boolean;
@@ -204,18 +206,14 @@ export default function UserReadingMemberHistoryModal({
   }
 
   return (
-    <div
-      role="presentation"
-      className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 p-4 sm:p-8"
-      onClick={onClose}
+    <ModalShell
+      onClose={onClose}
+      layer={MODAL_LAYERS.page}
+      label={`${member.nickname} check-in history`}
+      scrim="heavy"
+      gutter="md"
+      panelClassName="relative flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl border border-line bg-surface text-left shadow-2xl"
     >
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={`${member.nickname} check-in history`}
-        className="relative flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl border border-line bg-surface text-left shadow-2xl"
-        onClick={(event) => event.stopPropagation()}
-      >
         <div className="flex items-start justify-between gap-3 border-b border-line px-5 pb-3 pt-5">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.12em] text-foreground/55">Check-in history</p>
@@ -304,8 +302,7 @@ export default function UserReadingMemberHistoryModal({
             </section>
           ))}
         </div>
-      </div>
-    </div>
+    </ModalShell>
   );
 }
 

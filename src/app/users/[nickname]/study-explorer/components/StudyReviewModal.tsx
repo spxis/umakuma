@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { lockBodyScroll } from "@/lib/bodyScrollLock";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import type { RelatedReference, StudyReviewModalProps as Props } from "./StudyReviewModal.types";
@@ -21,6 +20,8 @@ import { filterStudyModeRelatedItems, hasRenderableRelatedItems } from "./StudyR
 import StudyReviewModalStatusStrip from "./StudyReviewModalStatusStrip";
 import StudyReviewModalHeader from "./StudyReviewModalHeader";
 import { useStudyReviewModalKeyboard } from "../lib/useStudyReviewModalKeyboard";
+import ModalShell from "@/app/shared/ModalShell";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import {
   buildStudyReviewAllMeanings,
   collectUsedKanjiItems,
@@ -249,14 +250,6 @@ export default function StudyReviewModal({
   }, [advanceFlashOrNext, currentFlashKey, flashCycleDone, flashRevealed, goPrev]);
 
   useEffect(() => {
-    if (!selectedItem) return;
-    const unlockBodyScroll = lockBodyScroll();
-    return () => {
-      unlockBodyScroll();
-    };
-  }, [selectedItem]);
-
-  useEffect(() => {
     if (!latestReviewTransition) {
       return;
     }
@@ -354,8 +347,22 @@ export default function StudyReviewModal({
   const jlptGradeLabel = deriveJlptGradeLabel(selectedItem);
 
   return (
-    <div className="fixed inset-0 z-50 bg-[rgba(8,16,36,0.72)] p-4 backdrop-blur-[2px] sm:p-6">
-      <div data-view-glyph-parent-frame="true" className="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)]">
+    <ModalShell
+      layer={MODAL_LAYERS.page}
+      label="Review"
+      scrim="heavy"
+      gutter="md"
+      /*
+       * Dismissal stays with `useStudyReviewModalKeyboard`, because closing has
+       * to run `closeModal`, which marks an unresolved item skipped first. A
+       * shell-owned Escape would skip that, and a backdrop click would discard
+       * mid-answer work.
+       */
+      closeOnEscape={false}
+      closeOnBackdrop={false}
+      panelProps={{ "data-view-glyph-parent-frame": "true" } as Record<string, string>}
+      panelClassName="mx-auto flex h-full w-full max-w-6xl flex-col overflow-hidden rounded-[1.8rem] border border-line bg-surface shadow-[0_26px_75px_rgba(0,0,0,0.35)]"
+    >
         <StudyReviewModalHeader
           displayIndex={displayIndex}
           displayTotal={displayTotal}
@@ -480,7 +487,6 @@ export default function StudyReviewModal({
                 : "Keys: Esc close • A/W/↑ prev • D/S/↓ next • Enter next • Shift+Enter prev • Space next • Shift+Space prev"}
           </p>
         </div>
-      </div>
-    </div>
+    </ModalShell>
   );
 }
