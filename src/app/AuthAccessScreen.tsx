@@ -7,6 +7,7 @@ import GoogleSignInButton from "./GoogleSignInButton";
 import InviteCodeAccessPanel from "./InviteCodeAccessPanel";
 import type { AuthAccessScreenProps } from "./AuthAccessScreen.types";
 import type { InviteSessionStatus } from "./InviteCodeAccessPanel.types";
+import { canReachLeaderboard } from "./authAccess";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
 import { prisma } from "@/lib/prisma";
@@ -34,6 +35,7 @@ export default async function AuthAccessScreen({
     ? await prisma.account.findFirst({
         where: { joinedByEmail: googleEmail },
         select: {
+          slug: true,
           wkUsername: true,
         },
       })
@@ -45,7 +47,7 @@ export default async function AuthAccessScreen({
   const inviteLinkedAccount = invitePayload?.accountId
     ? await prisma.account.findUnique({
         where: { id: invitePayload.accountId },
-        select: { id: true, nickname: true, wkUsername: true, inviteCodeHash: true },
+        select: { id: true, nickname: true, slug: true, wkUsername: true, inviteCodeHash: true },
       })
     : null;
 
@@ -62,17 +64,42 @@ export default async function AuthAccessScreen({
       : { signedIn: false };
 
   if (activeTab === "google" && allowGoogleRouteRedirects) {
-    const redirectUsername =
+    /*
+     * Either address will do. Reading wkUsername alone sent a member who has
+     * an account but no WaniKani connection to /join instead of their own
+     * page, and then on to /join's own redirect - an extra bounce for the
+     * members this screen exists to let in.
+     */
+    const redirectAddress =
+      googleLinkedAccount?.slug ??
       googleLinkedAccount?.wkUsername ??
-      (inviteLinkedAccount?.inviteCodeHash ? inviteLinkedAccount.wkUsername : null);
-    if (redirectUsername) {
-      redirect(`/users/${encodeURIComponent(redirectUsername)}?tab=study`);
+      (inviteLinkedAccount?.inviteCodeHash
+        ? inviteLinkedAccount.slug ?? inviteLinkedAccount.wkUsername
+        : null);
+    if (redirectAddress) {
+      redirect(`/users/${encodeURIComponent(redirectAddress)}?tab=study`);
     }
 
-    if (isGoogleSignedIn && !googleLinkedAccount?.wkUsername && !viewerIsAdmin) {
+    // No linked account at all is what sends someone to the invite form.
+    if (isGoogleSignedIn && !googleLinkedAccount && !viewerIsAdmin) {
       redirect("/join");
     }
   }
+
+  /*
+   * Whether "Back to leaderboard" goes anywhere.
+   *
+   * The home page redirects a signed-in viewer with no linked account to
+   * /join, which is the page they are already reading - so the link returned
+   * them to where they stood and looked broken. It matches the home page's own
+   * condition: signed out, an admin, or holding an account to go back to.
+   */
+  const showBackToLeaderboard = canReachLeaderboard({
+    isSignedIn: isGoogleSignedIn,
+    isAdmin: viewerIsAdmin,
+    hasLinkedAccount: Boolean(googleLinkedAccount),
+    hasInviteSession: Boolean(inviteLinkedAccount?.inviteCodeHash),
+  });
 
   const showTabs = true;
   const signedInGoogleName = session?.user?.name?.trim() ?? "";
@@ -86,12 +113,14 @@ export default async function AuthAccessScreen({
     <div className="relative min-h-screen overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
       <main className="relative mx-auto w-full max-w-2xl space-y-5">
-        <Link
-          href="/"
-          className="inline-flex items-center rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
-        >
-          Back to leaderboard
-        </Link>
+        {showBackToLeaderboard ? (
+          <Link
+            href="/"
+            className="inline-flex items-center rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-slate-700 transition hover:bg-surface-muted"
+          >
+            Back to leaderboard
+          </Link>
+        ) : null}
 
         <section className="animate-enter rounded-2xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
           {accessDenied ? (

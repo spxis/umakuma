@@ -1116,5 +1116,15 @@
     "version": "0.100.0",
     "releasedAt": "2026-08-30T17:50:00Z",
     "summary": "Page access matched on a WaniKani username, so an account that signed in with Google and never connected WaniKani was turned away from every page it owns - its own profile included - while its API calls kept working. Access now matches the permanent slug first and falls back to the username, so links shared earlier still resolve."
+  },
+  {
+    "id": "auth-screen-way-out",
+    "area": "account",
+    "name": "The sign-in screen stops offering a door that goes nowhere",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.101.0",
+    "releasedAt": "2026-08-30T18:30:00Z",
+    "summary": "Back to leaderboard is hidden for viewers the home page would send straight back, so the button no longer returns you to the page you are already reading. The screen also sends a member who has an account but no WaniKani connection to their own page instead of bouncing them through the invite form."
   }
 ]
