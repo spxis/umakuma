@@ -15,6 +15,17 @@ export const RELEASE_TIMELINE_COPY = {
   emptyPlanned: "Nothing queued.",
 } as const;
 
+export const RELEASE_TABS = {
+  planned: "planned",
+  released: "released",
+} as const;
+
+export type ReleaseTab = (typeof RELEASE_TABS)[keyof typeof RELEASE_TABS];
+
+export const RELEASE_TAB_VALUES = Object.values(RELEASE_TABS);
+
+export const RELEASE_TAB_STORAGE_KEY = "admin-releases-tab";
+
 /**
  * One accent per area so a month's worth of entries can be scanned by colour.
  * Tailwind needs the full class name in the source, so these are written out.

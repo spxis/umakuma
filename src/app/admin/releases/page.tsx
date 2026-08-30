@@ -13,7 +13,7 @@ import {
 } from "@/lib/featureTimeline";
 
 import { RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
-import ReleaseTimelineList from "./ReleaseTimelineList";
+import ReleaseTimelineTabs from "./ReleaseTimelineTabs";
 
 export const dynamic = "force-dynamic";
 
@@ -55,25 +55,8 @@ export default async function AdminReleasesPage() {
         <Stat value={totals.planned} label={RELEASE_TIMELINE_COPY.plannedLabel} />
       </div>
 
-      <section className="mt-10">
-        <h2 className="text-lg font-black text-foreground">
-          {RELEASE_TIMELINE_COPY.plannedHeading}
-        </h2>
-        <p className="mb-4 mt-1 text-xs text-foreground/60">
-          {RELEASE_TIMELINE_COPY.estimateLegend}
-        </p>
-        <ReleaseTimelineList entries={planned} showEstimateFlag />
-      </section>
+      <ReleaseTimelineTabs planned={planned} shipped={shipped} />
 
-      <section className="mt-10">
-        <h2 className="text-lg font-black text-foreground">
-          {RELEASE_TIMELINE_COPY.shippedHeading}
-        </h2>
-        <p className="mb-4 mt-1 text-xs text-foreground/60">
-          {RELEASE_TIMELINE_COPY.historyNote}
-        </p>
-        <ReleaseTimelineList entries={shipped} />
-      </section>
     </main>
   );
 }
