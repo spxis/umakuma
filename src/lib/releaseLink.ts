@@ -1,14 +1,14 @@
-/** The admin page that lists every release and its date. */
-export const RELEASES_HREF = "/admin/releases";
+/** The public updates page, listing every shipped release. */
+export const RELEASES_HREF = "/releases";
 
 /**
- * Where the version number should link for this viewer, or `null` when it
- * should stay plain text.
+ * Where the version number links.
  *
- * The release timeline is admin-only, so only an admin gets a link. Showing it
- * to everyone would hand members a link that bounces them off an authorization
- * wall, which is the same complaint as a header full of links to /join.
+ * It used to be admin-only, because the only release list was the admin
+ * timeline and pointing a member at it would have bounced them off an
+ * authorization wall. The updates page is public, so everyone gets the link;
+ * the admin timeline still holds the planned and shelved work.
  */
-export function releasesHrefForViewer(isAdmin: boolean): string | null {
-  return isAdmin ? RELEASES_HREF : null;
+export function releasesHrefForViewer(_isAdmin: boolean): string {
+  return RELEASES_HREF;
 }

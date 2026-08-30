@@ -70,6 +70,17 @@ export type FeatureTimelineEntry = {
   version?: string;
   /** The release instant, ISO 8601 UTC, from the shipping commit where known. */
   releasedAt?: string;
+  /**
+   * What the public release page says instead of `summary`.
+   *
+   * A few entries describe a fixed security weakness precisely enough to point
+   * someone at its relatives - which flaw, which endpoints were exposed, how
+   * long an invite code is. The honest text stays for the admin page; this is
+   * the version strangers read.
+   */
+  publicSummary?: string;
+  /** Longer prose for the drill-down, when a line is not enough. */
+  details?: string;
 };
 
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -274,10 +285,27 @@ function parseEntries(raw: unknown): FeatureTimelineEntry[] {
       release: typeof entry.release === "number" ? entry.release : undefined,
       version: typeof entry.version === "string" ? entry.version : undefined,
       releasedAt: typeof entry.releasedAt === "string" ? entry.releasedAt : undefined,
+      publicSummary: typeof entry.publicSummary === "string" ? entry.publicSummary : undefined,
+      details: typeof entry.details === "string" ? entry.details : undefined,
     };
   });
 }
 
 export function loadFeatureTimeline(): FeatureTimelineEntry[] {
   return parseEntries(timelineData);
+}
+
+/** The summary a stranger should see: the cleansed one when an entry has it. */
+export function publicSummaryFor(entry: FeatureTimelineEntry): string {
+  return entry.publicSummary ?? entry.summary;
+}
+
+/**
+ * The entries the public page shows: shipped work only.
+ *
+ * Planned and shelved items are a roadmap, and a roadmap read by strangers
+ * becomes a promise. The admin page keeps showing everything.
+ */
+export function publicReleaseEntries(entries: FeatureTimelineEntry[]): FeatureTimelineEntry[] {
+  return sortFeaturesNewestFirst(entries.filter((entry) => entry.status === FEATURE_STATUSES.shipped));
 }

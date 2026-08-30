@@ -126,6 +126,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Henro Heiya", ja: "遍路平野", reading: "へんろへいや", gloss: "pilgrim plain" },
   { romaji: "Hoshizora Houseki", ja: "星空宝石", reading: "ほしぞらほうせき", gloss: "starry-sky jewel" },
   { romaji: "Maneki Matsuri", ja: "招き祭り", reading: "まねきまつり", gloss: "beckoning festival" },
+  { romaji: "Michishio Miyako", ja: "満ち潮都", reading: "みちしおみやこ", gloss: "high-tide capital" },
 ];
 
 /**

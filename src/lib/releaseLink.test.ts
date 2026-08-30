@@ -3,20 +3,17 @@ import { describe, expect, it } from "vitest";
 import { RELEASES_HREF, releasesHrefForViewer } from "./releaseLink";
 
 describe("releasesHrefForViewer", () => {
-  it("sends an admin to the release timeline", () => {
-    expect(releasesHrefForViewer(true)).toBe(RELEASES_HREF);
-  });
-
   /*
-   * The timeline is admin-only, so a member offered the link would just be
-   * bounced off the authorization wall - the same complaint as a header full of
-   * links to /join.
+   * The link was admin-only while the only release list was the admin
+   * timeline. The updates page is public, so the version number is a live link
+   * for everyone rather than plain text for most people.
    */
-  it("leaves the version as plain text for everyone else", () => {
-    expect(releasesHrefForViewer(false)).toBeNull();
+  it("sends everyone to the public updates page", () => {
+    expect(releasesHrefForViewer(true)).toBe(RELEASES_HREF);
+    expect(releasesHrefForViewer(false)).toBe(RELEASES_HREF);
   });
 
-  it("points at the admin releases page", () => {
-    expect(RELEASES_HREF).toBe("/admin/releases");
+  it("points at the public updates page", () => {
+    expect(RELEASES_HREF).toBe("/releases");
   });
 });

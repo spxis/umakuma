@@ -105,7 +105,8 @@
     "status": "shipped",
     "date": "2026-04-17",
     "summary": "Six-character codes for members who never use Google.",
-    "version": "0.12.0"
+    "version": "0.12.0",
+    "publicSummary": "Invite codes for members who do not sign in with Google."
   },
   {
     "id": "admin-allowlist",
@@ -294,7 +295,8 @@
     "status": "shipped",
     "date": "2026-07-31",
     "summary": "server-only guards so secrets cannot reach a client bundle.",
-    "version": "0.33.0"
+    "version": "0.33.0",
+    "publicSummary": "Hardened the boundary between server and client code."
   },
   {
     "id": "review-write-perf",
@@ -449,7 +451,8 @@
     "dateIsEstimate": false,
     "summary": "A Google viewer now resolves to an account by linked email only; the display-name fallback that granted strangers a family member's pages is gone.",
     "version": "0.58.0",
-    "releasedAt": "2026-08-30T08:17:15Z"
+    "releasedAt": "2026-08-30T08:17:15Z",
+    "publicSummary": "Sign-in now matches you to your account by your linked email address."
   },
   {
     "id": "release-timeline",
@@ -721,7 +724,8 @@
     "date": "2026-08-30",
     "version": "0.60.0",
     "summary": "Every admin-gated endpoint now lives under /api/admin/; the six that were scattered across the public tree moved in.",
-    "releasedAt": "2026-08-30T08:43:44Z"
+    "releasedAt": "2026-08-30T08:43:44Z",
+    "publicSummary": "Administrative endpoints were consolidated under a single namespace."
   },
   {
     "id": "signed-in-navigation",
@@ -872,5 +876,15 @@
     "version": "0.74.0",
     "releasedAt": "2026-08-30T13:31:36Z",
     "summary": "Kanji by Japanese school year, with the on and kun readings approved for that grade rather than every reading the character has. Covers grades 1 to 6, secondary joyo and jinmeiyo, searchable and paged."
+  },
+  {
+    "id": "public-updates-page",
+    "area": "platform",
+    "name": "Public updates page",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.76.0",
+    "releasedAt": "2026-08-30T13:39:54Z",
+    "summary": "Shipped releases are public at /releases, grouped by month and expandable for the detail. Four entries that described a fixed security weakness precisely carry a cleansed public wording; the admin timeline keeps the honest text and the planned work."
   }
 ]
