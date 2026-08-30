@@ -73,11 +73,11 @@ echo "==> ensuring layout"
 echo "==> syncing stack files"
 # No --delete of any kind: dumps/ and .env.staging live in this directory on DS1
 # and must survive every redeploy. Only the three managed files are pushed.
-for f in docker-compose.staging.yml refresh.sh README.md; do
+for f in docker-compose.staging.yml refresh.sh replicate.sh README.md; do
   rsync -az -e "ssh -i ${SSH_KEY} -o BatchMode=yes" \
     "${STACK_DIR}/${f}" "${DS1_USER}@${DS1_HOST}:${TENANT_DIR}/${f}"
 done
-"${SSH[@]}" "chmod +x '${TENANT_DIR}/refresh.sh'; mkdir -p '${TENANT_DIR}/dumps'"
+"${SSH[@]}" "chmod +x '${TENANT_DIR}/refresh.sh' '${TENANT_DIR}/replicate.sh'; mkdir -p '${TENANT_DIR}/dumps'"
 
 rsync -az -e "ssh -i ${SSH_KEY} -o BatchMode=yes" \
   "${STACK_DIR}/staging-root-README.md" \
@@ -104,6 +104,16 @@ if [ ! -f .env.staging ]; then
 else
   echo "    exists, password preserved"
 fi
+# Backfill keys added after this file was first written. Existing values,
+# especially POSTGRES_PASSWORD, are never rewritten: the db volume was
+# initialised with it and a new password would lock the stack out.
+add_default() {
+  grep -q "^\$1=" .env.staging || printf '%s=%s\n' "\$1" "\$2" >> .env.staging
+}
+add_default DS15_HOST 10.0.0.115
+add_default DS15_USER spxis
+add_default DS15_PATH /volume1/docker/staging/umakuma/dumps
+add_default REPLICATE_CRON '15 4 * * *'
 chmod 600 .env.staging
 REMOTE
 

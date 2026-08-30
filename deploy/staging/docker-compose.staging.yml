@@ -58,5 +58,38 @@ services:
         echo "[refresh]   docker exec umakuma-staging-refresh /usr/local/bin/refresh.sh"
         exec crond -f -l 8
 
+  replicate:
+    # Mirrors dumps to DS15. Alpine + rsync/openssh because the postgres image
+    # ships neither; it touches nothing but /dumps (read-only) and the key.
+    image: alpine:3.20
+    container_name: umakuma-staging-replicate
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DS15_HOST: ${DS15_HOST:-10.0.0.115}
+      DS15_USER: ${DS15_USER:-spxis}
+      DS15_PATH: ${DS15_PATH:-/volume1/docker/staging/umakuma/dumps}
+      REPLICATE_CRON: ${REPLICATE_CRON:-15 4 * * *}
+      TZ: ${TZ:-America/Los_Angeles}
+    volumes:
+      - ./dumps:/dumps:ro
+      - ./.ssh:/ssh:ro
+      - ./replicate.sh:/usr/local/bin/replicate.sh:ro
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -eu
+        # tzdata is required or alpine ignores TZ and crond runs on UTC,
+        # which would fire replication BEFORE the nightly refresh.
+        apk add --no-cache rsync openssh-client tzdata >/dev/null
+        # busybox reads /etc/localtime, not TZ, so the symlink is what
+        # actually puts crond on DS1-local time.
+        cp "/usr/share/zoneinfo/$$TZ" /etc/localtime
+        printf '%s /usr/local/bin/replicate.sh >> /proc/1/fd/1 2>&1\n' "$$REPLICATE_CRON" > /etc/crontabs/root
+        echo "[replicate] scheduled '$$REPLICATE_CRON' (TZ=$$TZ)"
+        exec crond -f -l 8
+
 volumes:
   umakuma-stagingdb:
