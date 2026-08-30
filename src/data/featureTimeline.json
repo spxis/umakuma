@@ -752,5 +752,15 @@
     "version": "0.63.0",
     "releasedAt": "2026-08-30T09:05:34Z",
     "summary": "Releases carry their real commit instant - John's point: a timestamp beats sort cleverness - and backlogged or killed work stays visible on its own tab."
+  },
+  {
+    "id": "admin-users-redesign",
+    "name": "Manage accounts redesign",
+    "area": "admin",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.64.0",
+    "releasedAt": "2026-08-30T09:07:09Z",
+    "summary": "Each account row keeps one visible Open-as-user action and folds the rest into a compact overflow menu."
   }
 ]
