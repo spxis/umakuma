@@ -1126,5 +1126,15 @@
     "version": "0.101.0",
     "releasedAt": "2026-08-30T18:30:00Z",
     "summary": "Back to leaderboard is hidden for viewers the home page would send straight back, so the button no longer returns you to the page you are already reading. The screen also sends a member who has an account but no WaniKani connection to their own page instead of bouncing them through the invite form."
+  },
+  {
+    "id": "login-logout-flow",
+    "area": "account",
+    "name": "Signing in and out follows one path",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.102.0",
+    "releasedAt": "2026-08-30T19:05:00Z",
+    "summary": "Asking for the login page while already signed in answered with a sign-out screen. It now takes you where you were headed, or to your own page. The sign-out tab links straight to the one screen that signs you out instead of bouncing through a redirect with no page of its own, and calls it Sign out, the wording used everywhere else."
   }
 ]

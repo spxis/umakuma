@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { canReachLeaderboard } from "./authAccess";
+import { canReachLeaderboard, signedInLoginTarget } from "./authAccess";
 
 const viewer = (overrides: Partial<Parameters<typeof canReachLeaderboard>[0]> = {}) => ({
   isSignedIn: false,
@@ -34,5 +34,20 @@ describe("canReachLeaderboard", () => {
   // An admin is never redirected off home, so the link always works for them.
   it("keeps it for an admin even with no account of their own", () => {
     expect(canReachLeaderboard(viewer({ isSignedIn: true, isAdmin: true }))).toBe(true);
+  });
+});
+
+describe("signedInLoginTarget", () => {
+  it("never answers a request to sign in with a sign-out screen", () => {
+    expect(signedInLoginTarget("/")).not.toContain("logout");
+    expect(signedInLoginTarget("/")).not.toContain("signout");
+  });
+
+  it("hands over to /join, which routes members and newcomers differently", () => {
+    expect(signedInLoginTarget("/")).toBe("/join");
+  });
+
+  it("keeps the page they were trying to reach", () => {
+    expect(signedInLoginTarget("/users/gwen-chen/game")).toBe("/users/gwen-chen/game");
   });
 });

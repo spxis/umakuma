@@ -19,3 +19,15 @@ export function canReachLeaderboard(viewer: {
   const { isSignedIn, isAdmin, hasLinkedAccount, hasInviteSession } = viewer;
   return !isSignedIn || isAdmin || hasLinkedAccount || hasInviteSession;
 }
+
+/**
+ * Where /login sends someone who is already signed in.
+ *
+ * Asking for the login page means "let me in", so it honours where they were
+ * headed and otherwise hands over to /join, which routes a member to their own
+ * page and someone with no account to the invite form. It used to redirect to
+ * /logout, answering a request to sign in with an offer to sign out.
+ */
+export function signedInLoginTarget(callbackUrl: string): string {
+  return callbackUrl === "/" ? "/join" : callbackUrl;
+}

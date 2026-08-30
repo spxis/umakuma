@@ -132,11 +132,11 @@ export default async function AuthAccessScreen({
           {showTabs ? (
             <div className="mb-5 inline-flex rounded-full border border-line bg-surface-muted p-1">
               <Link
-                href={isGoogleSignedIn ? "/logout" : "/login"}
+                href={isGoogleSignedIn ? signOutHref : "/login"}
                 aria-current={activeTab === "google" ? "page" : undefined}
                 className={`${TAB_BASE_CLASS} ${activeTab === "google" ? TAB_ACTIVE_CLASS : TAB_INACTIVE_CLASS}`}
               >
-                {isGoogleSignedIn ? "Logout" : "Login"}
+                {isGoogleSignedIn ? "Sign out" : "Login"}
               </Link>
               <Link
                 href="/join"

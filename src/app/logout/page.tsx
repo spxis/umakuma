@@ -18,6 +18,14 @@ function normalizeCallbackUrl(value: string | string[] | undefined): string {
   return raw;
 }
 
+/**
+ * An alias for /signout, kept because it is a URL people type and bookmark.
+ *
+ * It renders nothing of its own: signed in it hands over to /signout, which is
+ * the one screen that actually signs you out, and signed out it goes to
+ * /login, since there is nothing to leave. Link to /signout directly rather
+ * than routing new links through here.
+ */
 export default async function LogoutPage({ searchParams }: PageProps) {
   const query = await searchParams;
   const callbackUrl = normalizeCallbackUrl(query.callbackUrl);
