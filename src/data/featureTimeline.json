@@ -1046,5 +1046,15 @@
     "version": "0.92.0",
     "releasedAt": "2026-08-30T15:06:00Z",
     "summary": "A printable tracing sheet for any school grade: each character once at full weight to copy, faint repeats to trace, then empty squares to write unaided, with the guide lines a Japanese workbook uses. Drawn from the real stroke paths rather than a greyed-out font."
+  },
+  {
+    "id": "practice-any-list",
+    "area": "study",
+    "name": "Practice sheets for any list",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.93.0",
+    "releasedAt": "2026-08-30T15:20:00Z",
+    "summary": "Writing practice is no longer only for school grades: the same sheet prints a WaniKani level or a JLPT level, so the ladder you are actually climbing is the one you can practise writing."
   }
 ]

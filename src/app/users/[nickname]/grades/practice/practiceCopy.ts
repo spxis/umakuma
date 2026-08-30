@@ -10,6 +10,10 @@ export const PRACTICE_SHEET_COPY = {
   empty: "No kanji for that grade.",
   credit: "Stroke shapes from KanjiVG (CC BY-SA 3.0)",
   perPage: "Characters",
+  sourceLabel: "Practise",
+  fromGrades: "School grade",
+  fromWanikani: "WaniKani level",
+  fromJlpt: "JLPT level",
 } as const;
 
 /**

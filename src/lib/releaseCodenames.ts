@@ -143,6 +143,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Ichigo Izumi", ja: "苺泉", reading: "いちごいずみ", gloss: "strawberry spring" },
   { romaji: "Ukiyo Uguisu", ja: "浮世鶯", reading: "うきようぐいす", gloss: "floating-world nightingale" },
   { romaji: "Ehon Enpitsu", ja: "絵本鉛筆", reading: "えほんえんぴつ", gloss: "picture-book pencil" },
+  { romaji: "Origami Ohagi", ja: "折り紙おはぎ", reading: "おりがみおはぎ", gloss: "origami rice cake" },
 ];
 
 /**
