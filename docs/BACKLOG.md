@@ -279,6 +279,46 @@ overflow, not the top right.
 Grouped with 17: both are "one component, many hand-rolled copies", and the
 lists should land on the shared card in the same pass.
 
+### 21 — Stroke order from KanjiVG (researched, needs a licence call)
+
+John, 30 Aug: can kids see how to draw the kanji correctly.
+
+**The source exists and it is good.** KanjiVG (kanjivg.tagaini.net, GitHub
+KanjiVG/kanjivg, last pushed July 2026) ships one SVG per character holding the
+stroke paths **in drawing order**, plus stroke-order numbers and radical and
+component tagging. Verified against 日: four `<path>` elements, one per stroke,
+in order, with the element tagged 日.
+
+**Coverage measured against our own data, not estimated:**
+
+| Our data | Covered by KanjiVG |
+|---|---|
+| School grade kanji | 2,899 / 2,899 (100%) |
+| Grade 2 alone | 160 / 160 |
+| JLPT kanji | 2,211 / 2,211 (100%) |
+
+6,703 base characters in total, so there is headroom well past joyo.
+
+**Why it beats an animated GIF.** The paths are vectors, so an animation is a
+CSS `stroke-dasharray` reveal over the real path: crisp at any size, one small
+file per kanji, no image pipeline, and the same data can drive a "trace it
+yourself" mode later. A GIF can only be watched.
+
+**The open decision, and it is John's.** KanjiVG is **CC BY-SA 3.0**. That means
+attribution (state the use of KanjiVG and link to the project) and *share-alike*:
+converting the SVGs into our own JSON makes a derivative, so that derived data
+has to carry the same licence. It does not reach UmaKuma's application code, only
+the stroke data we would ship. Fine for most sites, but it is a deliberate choice
+to make rather than discover, especially if the site ever takes money.
+
+**Shape if approved.** A `scripts/build-kanjivg.mjs` in the same spirit as
+`map:build`: pull the repo at a pinned commit, keep only the characters our
+catalogues use, strip each SVG to `{ kanji, strokes: string[], strokeCount }`,
+and write `src/data/stroke-order/` chunked by grade so a page loads only what it
+shows. No new table needed at first: it is static reference data like the maps
+and the school grades, and it can move into Postgres later if it ever needs
+querying rather than reading.
+
 ### 20 — Navigation regroup and a Settings page (design open)
 
 John, 30 Aug. The header carries ten items for a member (eleven for an admin)
