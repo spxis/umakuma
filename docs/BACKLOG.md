@@ -353,9 +353,8 @@ unblocked on its own.
 
 They are active WaniKani learners (three studied within the past week of the
 audit) with intact encrypted tokens, so reinviting drops them into populated
-accounts. Issuing their invite codes is queued as release 0 in the timeline —
-a production write, additive since `inviteCodeHash` is null for all four —
-awaiting John's go.
+accounts. John issues their invite
+codes himself from the admin users page (2026-08-30), so no release carries it.
 
 **Feature flags exist (2026-08-30).** `FeatureFlag` table plus a registry in
 `src/lib/featureFlags.ts`; toggled globally from `/admin/feature-flags`. What

@@ -668,16 +668,6 @@
     "version": "0.54.0"
   },
   {
-    "id": "reinvite-family",
-    "name": "Reinvite the four family members",
-    "area": "account",
-    "status": "planned",
-    "date": "2026-08-31",
-    "dateIsEstimate": true,
-    "release": 0,
-    "summary": "Issue invite codes for Emi, Aria, Mika and Jay - additive, their tokens are intact - once John gives the go."
-  },
-  {
     "id": "feature-flags",
     "name": "Feature flags",
     "area": "admin",
