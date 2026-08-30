@@ -72,6 +72,12 @@ member, and a **progress overlay** that is requested separately and only when a
 WaniKani connection exists. Give it a route that does not sit under
 `/users/[nickname]`.
 
+Most of the content layer is already written. `src/app/api/admin/jlpt/catalog/route.ts`
+is 320 lines of filtering, grouping and counting straight off `prisma.jlptKanji`
+with **zero** WaniKani references — it is only locked behind `isAuthorizedAdmin`.
+Lift that query into a shared lib, serve it to any signed-in member, and this
+release is mostly routing and a page rather than new logic.
+
 ### 4 — Display names and visibility
 
 Schema: a `displayName` shown publicly, and a visibility flag defaulting to
