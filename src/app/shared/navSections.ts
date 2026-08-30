@@ -40,6 +40,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: DASHBOARD_TAB_LABELS.wk, path: "library-explorer" },
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
       { label: "Grades", path: "grades" },
+      { label: "Practice", path: "grades/practice" },
     ],
   },
   {
@@ -93,7 +94,13 @@ export function sectionForPath(pathname: string | null, username: string | null)
   // `wk-explorer` is the old path for the WaniKani explorer; links in the wild
   // still point at it, so it resolves to the same section.
   const normalized = segment === "wk-explorer" ? "library-explorer" : segment;
-  return NAV_SECTIONS.find((section) => section.children.some((child) => child.path === normalized)) ?? null;
+  return (
+    NAV_SECTIONS.find((section) =>
+      // A child may be nested (`grades/practice`); its first segment is what a
+      // pathname surfaces here.
+      section.children.some((child) => child.path.split("/")[0] === normalized),
+    ) ?? null
+  );
 }
 
 /** Whether a section should show a second row: only when it holds more than one page. */

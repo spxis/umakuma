@@ -167,9 +167,19 @@ export default function AppTopMenuRow({
           aria-label={`${activeSection.label} pages`}
           className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-line/60 pt-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/45 sm:text-[11px]"
         >
-          {activeSection.children.map((child) => {
-            const href = navChildHref(child, resolvedWkUsername);
-            const active = pathname === href || pathname?.startsWith(`${href}/`);
+          {(() => {
+            /*
+             * A nested page matches its parent's prefix too - `grades/practice`
+             * starts with `grades` - so the longest match wins rather than
+             * lighting up both.
+             */
+            const hrefs = activeSection.children.map((child) => navChildHref(child, resolvedWkUsername));
+            const best = hrefs
+              .filter((href) => pathname === href || pathname?.startsWith(`${href}/`))
+              .sort((left, right) => right.length - left.length)[0];
+            return activeSection.children.map((child, index) => {
+            const href = hrefs[index]!;
+            const active = href === best;
             return (
               <Link
                 key={child.path}
@@ -181,7 +191,8 @@ export default function AppTopMenuRow({
                 {child.label}
               </Link>
             );
-          })}
+            });
+          })()}
         </nav>
       ) : null}
     </div>

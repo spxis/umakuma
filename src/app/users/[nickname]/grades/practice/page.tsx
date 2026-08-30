@@ -2,7 +2,8 @@ import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
-import { authOptions } from "@/lib/auth";
+import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
+import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { PRACTICE_SOURCES, isPracticeSource, practiceEntriesFor } from "@/lib/practiceSource";
 
@@ -34,7 +35,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
 
   const account = await prisma.account.findFirst({
     where: { wkUsername: decodeURIComponent(nickname) },
-    select: { wkUsername: true, wkLevel: true },
+    select: { id: true, wkUsername: true, wkLevel: true, lastSyncedAt: true, lastActivityAt: true },
   });
   if (!account) {
     notFound();
@@ -67,6 +68,17 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
 
   return (
     <div className="mx-auto w-full max-w-4xl bg-white px-5 py-6 text-neutral-900 print:max-w-none print:px-0 print:py-0">
+      {/* Site chrome on screen, gone on paper - a printed sheet is not a web page. */}
+      <AppTopMenuRow
+        viewerMenuInfo={viewerMenuInfo}
+        primaryWkUsername={account.wkUsername}
+        accountId={account.id}
+        showAdminActions={isAdminEmail(viewerEmail)}
+        lastSyncedAt={account.lastSyncedAt?.toISOString() ?? null}
+        lastActivityAt={account.lastActivityAt?.toISOString() ?? null}
+        className="mb-4 print:hidden"
+      />
+
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3 print:mb-2">
         <div className="min-w-0">
           <h1 className="text-xl font-black">

@@ -1056,5 +1056,15 @@
     "version": "0.93.0",
     "releasedAt": "2026-08-30T15:20:00Z",
     "summary": "Writing practice is no longer only for school grades: the same sheet prints a WaniKani level or a JLPT level, so the ladder you are actually climbing is the one you can practise writing."
+  },
+  {
+    "id": "practice-in-nav",
+    "area": "platform",
+    "name": "Practice reachable from the nav",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.94.0",
+    "releasedAt": "2026-08-30T15:34:00Z",
+    "summary": "Writing practice joins the Explore group instead of hiding behind the grades page, and the sheet keeps the site header on screen while dropping it for print. A nested page no longer lights up its parent's tab as well as its own."
   }
 ]
