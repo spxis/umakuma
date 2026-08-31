@@ -62,7 +62,7 @@ through it meets a finished flow.
 | 28 | Pagination placement option | — |
 | 30 | ~~Desktop page width and header crowding~~ ✅ v0.125.0 | — |
 | 31 | ~~Consolidate preferences into Settings~~ ✅ v0.124.0 | — |
-| 32 | Capital cities in Map mode | — |
+| 32 | ~~Capital cities in Map mode~~ ✅ v0.126.0 | — |
 | 29 | ~~Real US and Canada map geometry~~ ✅ v0.123.0 | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
@@ -717,6 +717,9 @@ Japan, the United States and Canada alike - so the question is a relabelling of
 the one Map already asks, not a new game.
 
 That much is a direction alongside Read and Find rather than a new kind.
+
+**Shipped as an answer mode**, since the prompt is the only thing that changes:
+the tiles still read region names and scoring is untouched.
 
 **The larger version needs data we do not have.** Finding a city *within* a
 region means a point per city, and none of the three map files carry

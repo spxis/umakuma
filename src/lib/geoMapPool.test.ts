@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { buildMapQuestions } from "./gameMapQuestions";
+import { seededRandom } from "./gameRandom";
 import { geoMapDiagonal, geoMapEntries, geoMapOption } from "./geoMapPool";
 import { GEO_REGION_COUNTS, geoRegionIdFromSubjectId } from "./geoSubjectIds";
 
@@ -66,6 +67,37 @@ describe("buildMapQuestions over another country", () => {
     const questions = buildMapQuestions(5, 2, () => 0.3);
     for (const question of questions) {
       expect(geoRegionIdFromSubjectId(question.targetSubjectId)?.startsWith("JP-")).toBe(true);
+    }
+  });
+});
+
+
+describe("the capitals round", () => {
+  /*
+   * The same question with a different label: the prompt names a city, the
+   * tiles are still the regions. Nothing about scoring or ids changes.
+   */
+  it("asks with the capital instead of the region name", () => {
+    const questions = buildMapQuestions(5, 2, seededRandom("capitals"), "find", "capital", geoMapEntries("CA"));
+    const capitals = new Set(geoMapEntries("CA").map((entry) => entry.capital));
+
+    for (const question of questions) {
+      expect(question.promptOverride, "the capitals round must override the prompt").toBeTruthy();
+      expect(capitals.has(question.promptOverride!), question.promptOverride ?? "").toBe(true);
+    }
+  });
+
+  it("leaves the prompt alone in every other mode", () => {
+    for (const mode of ["auto", "meaning", "reading"] as const) {
+      const [question] = buildMapQuestions(4, 2, seededRandom(mode), "find", mode, geoMapEntries("US"));
+      expect(question?.promptOverride, mode).toBeNull();
+    }
+  });
+
+  it("knows a capital for every region of every country", () => {
+    for (const country of ["JP", "US", "CA"] as const) {
+      const missing = geoMapEntries(country).filter((entry) => !entry.capital).map((e) => String(e.code));
+      expect(missing, `${country} regions with no capital`).toEqual([]);
     }
   });
 });

@@ -1366,5 +1366,15 @@
     "version": "0.125.0",
     "releasedAt": "2026-08-31T11:00:00Z",
     "summary": "Two small regions close together put their handles in the same few pixels, so a choice could be hidden behind another and never clicked - Prince Edward Island behind Nova Scotia. A handle now hangs below its region when the space above is taken. Scoreboards say which country a map run was played on, and member pages follow one width rule instead of three."
+  },
+  {
+    "id": "map-capital-cities",
+    "area": "games",
+    "name": "Name the capital, find the region",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.126.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Map mode can ask by capital city: the prompt names the seat of government and the answer is the region that governs from it. Bismarck is North Dakota, Victoria is British Columbia. It works on all three countries, because every dataset already recorded a capital for every region."
   }
 ]

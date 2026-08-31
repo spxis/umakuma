@@ -176,6 +176,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Mokuren Monogatari", ja: "木蓮物語", reading: "もくれんものがたり", gloss: "a tale told under magnolias" },
   { romaji: "Yanagi no Yuube", ja: "柳の夕べ", reading: "やなぎのゆうべ", gloss: "an evening among willows" },
   { romaji: "Yukidoke Yorimichi", ja: "雪解け寄り道", reading: "ゆきどけよりみち", gloss: "a detour through the thaw" },
+  { romaji: "Yonaga no Yoi", ja: "夜長の宵", reading: "よながのよい", gloss: "an evening in the long night" },
 ];
 
 /**

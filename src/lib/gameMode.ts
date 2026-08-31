@@ -55,11 +55,20 @@ export const GAME_DIRECTION_VALUES = [GAME_DIRECTIONS.find, GAME_DIRECTIONS.read
 /** What the text side of a question is. `auto` varies it per question. */
 export const GAME_ANSWER_MODES = ["auto", "meaning", "reading", "romaji"] as const;
 
+/** Every mode any game offers, including the ones only Map uses. */
+export const GAME_ALL_ANSWER_MODES = [...GAME_ANSWER_MODES, "capital"] as const;
+
 /**
  * Map mode asks for a place name, whose meaning is already its romaji, so
  * offering both would put the same answer up twice in two spellings.
  */
-export const GAME_MAP_ANSWER_MODES = ["auto", "meaning", "reading"] as const;
+/*
+ * Map can also ask by capital: the prompt names a city and the answer is the
+ * region that governs from it. Every dataset already carries a capital per
+ * region, so this is a relabelling of the question Map already asks rather
+ * than a second game.
+ */
+export const GAME_MAP_ANSWER_MODES = ["auto", "meaning", "reading", "capital"] as const;
 
 export const GAME_TIME_ATTACK_GRACE_MS = 1_500;
 export const GAME_PRACTICE_TARGET_POOL_MULTIPLIER = 3;
@@ -92,7 +101,7 @@ export type GameMetric = (typeof GAME_METRICS)[number];
 export type GameLeaderboardMode = "all" | GameCategory;
 export type GameAnswerType = "reading" | "meaning" | "chain" | "romaji";
 export type GameDirection = (typeof GAME_DIRECTIONS)[keyof typeof GAME_DIRECTIONS];
-export type GameAnswerMode = (typeof GAME_ANSWER_MODES)[number];
+export type GameAnswerMode = (typeof GAME_ALL_ANSWER_MODES)[number];
 export type GameKind = (typeof GAME_KINDS)[keyof typeof GAME_KINDS];
 export type GameTimeLimitMs = (typeof GAME_TIME_LIMITS_MS)[number];
 export type GamePracticeList = (typeof GAME_PRACTICE_LISTS)[keyof typeof GAME_PRACTICE_LISTS];
@@ -423,7 +432,9 @@ export function isGameDirection(value: string): value is GameDirection {
 }
 
 export function isGameAnswerMode(value: string): value is GameAnswerMode {
-  return GAME_ANSWER_MODES.includes(value as GameAnswerMode);
+  // Accepts every mode any game offers; `resolveGameAnswerMode` then narrows
+  // it to the ones this game actually has, so Match cannot inherit `capital`.
+  return (GAME_ALL_ANSWER_MODES as readonly string[]).includes(value);
 }
 
 export function gameAnswerModesFor(kind: GameKind): readonly GameAnswerMode[] {

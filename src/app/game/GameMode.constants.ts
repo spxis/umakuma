@@ -191,6 +191,7 @@ export const GAME_ANSWER_MODE_LABELS: Record<string, string> = {
   meaning: "Meaning",
   reading: "Reading",
   romaji: "Romaji",
+  capital: "Capital city",
 };
 
 /**

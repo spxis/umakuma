@@ -124,7 +124,14 @@ export function buildMapQuestionsFromTargets(
     let answerType: GameAnswerType | null = null;
     let distractors: MapEntry[] = [];
 
-    const usableAnswerTypes = candidateAnswerTypes(targetOption, answerMode)
+    /*
+     * The capitals round changes the prompt, not the tiles: they still read
+     * region names, so the answer type is chosen as if the mode were `auto`.
+     * Passing `capital` through would find no matching answer type and leave
+     * the question unbuildable.
+     */
+    const typeMode = answerMode === "capital" ? "auto" : answerMode;
+    const usableAnswerTypes = candidateAnswerTypes(targetOption, typeMode)
       .filter((type) => MAP_ANSWER_TYPES.includes(type));
     for (const candidate of shuffleWith(usableAnswerTypes, random)) {
       const excluded = new Set([target.code]);
@@ -151,7 +158,7 @@ export function buildMapQuestionsFromTargets(
     }
 
     if (!answerType || distractors.length !== choiceCount - 1) {
-      throw new Error("Not enough distinct prefectures are available.");
+      throw new Error("Not enough distinct regions are available.");
     }
     for (const distractor of distractors) unusedDistractors.delete(distractor.code);
 
@@ -159,7 +166,13 @@ export function buildMapQuestionsFromTargets(
       position,
       targetSubjectId: geoMapOption(target).subjectId,
       answerType,
-      promptOverride: null,
+      /*
+       * The capitals round asks the same question with a different label: the
+       * prompt is the city, the tiles are still the regions. A region with no
+       * capital recorded falls back to its own name rather than an empty
+       * prompt, so a gap in the data cannot produce an unanswerable question.
+       */
+      promptOverride: answerMode === "capital" ? target.capital || target.romaji : null,
       ...toOptionIds(target, distractors, targetSlots[position]!),
     };
   });

@@ -25,6 +25,8 @@ export type GeoMapEntry = {
   kanji: string;
   romaji: string;
   reading: string;
+  /** The seat of government, for the capitals round. */
+  capital: string;
 };
 
 export function geoMapEntries(country: CountryCode): GeoMapEntry[] {
@@ -51,6 +53,7 @@ function toEntry(region: GeoRegion): GeoMapEntry {
     kanji: region.country === "JP" ? region.nameNative ?? region.name : region.name,
     romaji: region.name,
     reading: region.reading ?? region.name,
+    capital: region.capital?.name ?? "",
   };
 }
 
