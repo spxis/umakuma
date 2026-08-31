@@ -77,7 +77,10 @@ function statusLabel(setup: GameSetupResponse, kind: GameKind, available: number
   }
   if (kind === GAME_KINDS.revenge) return `${available} to drill`;
   if (kind === GAME_KINDS.shiritori) return `${available} chainable words`;
-  if (kind === GAME_KINDS.map) return `${available} prefectures`;
+  if (kind === GAME_KINDS.map) return `${available} places`;
+  if (setup.hasWanikani === false && !gameKindRules(kind).sharedPool) {
+    return GAME_COPY.needsWanikani;
+  }
   return `${available} items`;
 }
 
@@ -94,11 +97,21 @@ export function buildGameHubCards(setup: GameSetupResponse, selection: GameSelec
     const required = kind === GAME_KINDS.daily ? 1 : minimumItems;
     const playedToday = kind === GAME_KINDS.daily && setup.availability.daily.playedToday;
     const playable = !playedToday && available >= required;
+    /*
+     * A game that draws on WaniKani, for a member who has none, is not short of
+     * items - it is short of a connection, and saying so is the difference
+     * between a dead end and a next step. Map and Daily need nothing, so they
+     * are never blocked this way.
+     */
+    const needsWanikani =
+      setup.hasWanikani === false && !rules.sharedPool && available === 0;
     const blockedReason: GameBlockedReason | null = playable
       ? null
       : playedToday
         ? "played-today"
-        : "not-enough-items";
+        : needsWanikani
+          ? "needs-wanikani"
+          : "not-enough-items";
 
     return {
       kind,

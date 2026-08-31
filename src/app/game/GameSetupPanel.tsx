@@ -1,5 +1,6 @@
 import { GAME_CHOICE_COUNTS, GAME_KINDS, GAME_PRACTICE_LIST_VALUES, gameKindRules } from "@/lib/gameMode";
-import { GAME_DIRECTION_VALUES, MAP_COUNTRIES, gameAnswerModesFor, type MapCountryCode, type GameAnswerMode, type GameChoiceCount, type GameDirection, type GamePracticeList } from "@/lib/gameMode";
+import { MAP_COUNTRIES, type MapCountryCode } from "@/lib/mapCountries";
+import { GAME_DIRECTION_VALUES, gameAnswerModesFor, type GameAnswerMode, type GameChoiceCount, type GameDirection, type GamePracticeList } from "@/lib/gameMode";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
 import {
@@ -137,7 +138,7 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         ) : null}
 
         {/* Where you are playing comes before how, so it leads the row. */}
-        {rules.usesMapCountry ? (
+        {rules.usesMapCountry && MAP_COUNTRIES.length > 1 ? (
           <label>
             <span className={LABEL_CLASS}>{GAME_COPY.mapCountry}</span>
             <select

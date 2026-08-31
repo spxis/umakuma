@@ -94,6 +94,16 @@ export async function GET(request: Request, context: { params: Promise<{ account
           levels: Object.keys(countsByLevel).map(Number).sort((left, right) => left - right),
           countsByLevel,
           totalCounts,
+          /*
+           * Whether this member has a WaniKani connection at all.
+           *
+           * Without it the counts are legitimately zero, and a lobby that only
+           * says "not enough items" reads as a fault rather than as a game
+           * that needs something this account has not got. The distinction
+           * cannot be inferred from the counts: a connected beginner can also
+           * have nothing to drill.
+           */
+          hasWanikani: Boolean(account.wkUsername),
           availability: {
             daily: {
               dateKey: dailyKey,

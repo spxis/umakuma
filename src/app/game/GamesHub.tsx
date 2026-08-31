@@ -59,7 +59,9 @@ export default function GamesHub({ cards, selectedKind, onSelect }: Props) {
                     ? GAME_COPY.play
                     : card.blockedReason === "played-today"
                       ? GAME_COPY.dailyComeBack
-                      : GAME_COPY.notEnough}
+                      : card.blockedReason === "needs-wanikani"
+                        ? GAME_COPY.needsWanikani
+                        : GAME_COPY.notEnough}
                 </span>
               </button>
             </li>

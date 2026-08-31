@@ -37,6 +37,8 @@ export const GAME_COPY = {
   scoreRule: "Accuracy earns up to 1,000 points. Level and every 0.1 second add bounded bonuses, but accuracy always wins.",
   notEnoughItems: "This combination does not have enough started items.",
   notEnough: "Not enough items",
+  needsWanikani: "Needs WaniKani",
+  needsWanikaniHint: "This game draws on your WaniKani reviews. Connect it from your profile, or try Map and the Daily Challenge, which need nothing.",
   chooseMatch: "Choose the matching item",
   chooseAnswer: "Choose the answer",
   mapCountry: "Country",

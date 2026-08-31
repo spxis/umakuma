@@ -57,7 +57,10 @@ through it meets a finished flow.
 | 23 | Selection as a shared surface control | — |
 | 24 | Print mode | — |
 | 25 | Practice sheet controls | — |
-| 26 | JLPT old numbering | — |
+| 26 | ~~JLPT old numbering~~ ✅ v0.119.0 | — |
+| 27 | Counts on second-level filters | — |
+| 28 | Pagination placement option | — |
+| 29 | **Real US and Canada map geometry** | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
 Release 6 should not ship before 7 to 9, or a member without WaniKani arrives to
@@ -628,3 +631,38 @@ Offer the pre-2010 four-level scheme alongside N5-N1 in the JLPT explorer, as a
 way of welcoming people who sat the old test. `jlptCertification.ts` already
 holds both systems and the mapping between them; this is a view over data that
 exists.
+
+### 27 — Counts on second-level filters
+
+The first-level chips carry counts (`G1 (80)`), the second-level chooser does
+not: `G1 G2 G3` with no idea how many are in each. Applies wherever a second
+level exists - school grade, JLPT level, WaniKani level.
+
+### 28 — Pagination placement option
+
+Pagination sits only at the foot. It should be a component option - top,
+bottom, both, or none - so a long sheet can be paged without scrolling to the
+end first.
+
+### 29 — Real US and Canada map geometry
+
+Map mode supports all three countries end to end - questions, ids, distractors,
+board, scoring - and only Japan is offered, because `us-map.json` and
+`ca-map.json` hold hand-written placeholder polygons. Ontario is five points.
+Japan averages 1,622 characters of path per prefecture; the other two average
+about 40.
+
+`geoMapGeometry.test.ts` pins this both ways: an offered country must draw real
+boundaries, and a held-back country must still be a blob - so when real data
+lands the test says so rather than sitting quiet.
+
+The build scripts cannot produce this. `build-geo-ca.mjs` has the polygons
+typed into it as literals, and `build-geo-jp-map.mjs` does not fetch anything
+either - it reads `jp-map.json` back and rewrites the wrapper, so Japan's real
+geometry is vendored rather than generated.
+
+Doing it properly needs a source and tooling neither of which is here:
+TopoJSON from us-atlas and Natural Earth or StatCan for Canada, projected and
+simplified into the same coordinate space. That means new dependencies
+(d3-geo, topojson-client) and a real build step. Worth deciding deliberately
+rather than bolting on.

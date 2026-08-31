@@ -1,4 +1,4 @@
-import type { MapCountryCode } from "@/lib/gameMode";
+import type { MapCountryCode } from "@/lib/mapCountries";
 import type { GameActivityByKind, GameKindActivity } from "@/lib/gameActivity";
 
 import type {
@@ -45,6 +45,8 @@ export type GameSetupResponse = {
   totalCounts: Record<GameCategory, number>;
   availability: GameKindAvailability;
   activity: GameActivityByKind;
+  /** False for a member who has never connected WaniKani. */
+  hasWanikani?: boolean;
 };
 
 export type GameLeaderboardDay = {
@@ -102,7 +104,15 @@ export type GameLeaderboardFilters = {
 };
 
 /** Why a game cannot be started right now, so the card can say the real reason. */
-export type GameBlockedReason = "played-today" | "not-enough-items";
+/**
+ * Why a game cannot be started.
+ *
+ * `needs-wanikani` is separate from `not-enough-items` because they call for
+ * different things: one is answered by connecting an account, the other by
+ * studying more. Collapsing them told a member with no connection that they had
+ * "not enough items", which reads as a fault in the site.
+ */
+export type GameBlockedReason = "played-today" | "not-enough-items" | "needs-wanikani";
 
 /** Everything a hub card needs to describe and gate one game. */
 export type GameHubCard = {

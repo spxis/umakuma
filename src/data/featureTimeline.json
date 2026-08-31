@@ -1326,5 +1326,15 @@
     "version": "0.121.0",
     "releasedAt": "2026-08-31T07:00:00Z",
     "summary": "Map mode's setup now offers Japan, the United States or Canada, and the item count follows the choice - forty-seven, fifty-one or thirteen. Only Map shows the control, because only Map plays somewhere. Adding Europe or Asia later is a dataset and a line in one list, not a new game."
+  },
+  {
+    "id": "map-board-country-and-guard",
+    "area": "games",
+    "name": "The map board follows the question",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.122.0",
+    "releasedAt": "2026-08-31T08:00:00Z",
+    "summary": "A Canadian round drew the Japanese coastline: the question knew its country and the board did not. The board now reads the country off the question, and the lobby offers only countries whose maps are real - the American and Canadian outlines are placeholder shapes, so they wait until that is fixed rather than being offered unplayable."
   }
 ]

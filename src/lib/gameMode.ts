@@ -472,24 +472,3 @@ export function formatGameDuration(durationMs: number | null): string {
   const seconds = String(totalSeconds % 60).padStart(2, "0");
   return `${minutes}:${seconds}.${totalTenths % 10}`;
 }
-
-
-/**
- * Countries Map mode can play on, in the order the lobby offers them.
- *
- * Japan first and by default: it is what UmaKuma is for, and the other two are
- * a bonus. Adding Europe or Asia later means adding a dataset and a line here,
- * not a code path - which is why the country rides in the request rather than
- * being a separate game.
- */
-export const MAP_COUNTRIES = [
-  { code: "JP", label: "Japan" },
-  { code: "US", label: "United States" },
-  { code: "CA", label: "Canada" },
-] as const;
-
-export type MapCountryCode = (typeof MAP_COUNTRIES)[number]["code"];
-
-export function isMapCountry(value: string): value is MapCountryCode {
-  return MAP_COUNTRIES.some((country) => country.code === value);
-}

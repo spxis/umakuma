@@ -1,7 +1,25 @@
 import type { ReactNode } from "react";
 
 import { GAME_KEY_LAYOUTS, type GameKind, type GameOptionTile, type GameQuestionPayload } from "@/lib/gameMode";
-import { mapBoxIsZoomed, prefectureCodeFromSubjectId, prefectureFocusBox } from "@/lib/japanPrefectures";
+import { mapBoxIsZoomed } from "@/lib/japanPrefectures";
+import { geoFocusBox } from "@/lib/geoMapFraming";
+import { geoRegionIdFromSubjectId } from "@/lib/geoSubjectIds";
+import type { CountryCode } from "@/lib/geoRegion";
+
+/**
+ * The country and region a place id belongs to.
+ *
+ * The id carries both, which is what lets a run be replayed without the
+ * country having been stored beside it - and what this component needs, since
+ * it was reading every id as a Japanese prefecture code and drawing Japan
+ * underneath a question about Nova Scotia.
+ */
+function placeFromSubjectId(subjectId: number): { country: CountryCode; code: string } | null {
+  const regionId = geoRegionIdFromSubjectId(subjectId);
+  if (!regionId) return null;
+  const [country, ...rest] = regionId.split("-");
+  return { country: country as CountryCode, code: rest.join("-") };
+}
 import GameChoiceTile from "./GameChoiceTile";
 import GameRunnerFrame from "./GameRunnerFrame";
 import { GAME_COPY, MAP_TONES } from "./GameMode.constants";
@@ -108,7 +126,17 @@ function MapBoard({
   const tileGridClass = optionCount === 4
     ? "grid-cols-2 sm:grid-cols-4"
     : optionCount === 3 ? "grid-cols-3" : "grid-cols-2";
-  const promptCode = question.promptSubjectId === null ? null : prefectureCodeFromSubjectId(question.promptSubjectId);
+  const promptPlace = question.promptSubjectId === null ? null : placeFromSubjectId(question.promptSubjectId);
+  const promptCode = promptPlace?.code ?? null;
+  /*
+   * Read the country off the question rather than a prop: the tiles and the
+   * prompt are all one country by construction, so the first id that resolves
+   * settles it.
+   */
+  const country: CountryCode =
+    promptPlace?.country
+    ?? question.options.map((option) => placeFromSubjectId(option.subjectId)?.country).find(Boolean)
+    ?? "JP";
 
   const toneFor = (option: GameOptionTile, fallback: MapTone): MapTone => {
     if (feedback?.subjectId !== option.subjectId) return fallback;
@@ -120,16 +148,16 @@ function MapBoard({
     const marks: MapMark[] = [{ code: promptCode, tone: MAP_TONES.target, keyHint: "?" }];
     // The biggest prefectures read fine at national scale; a close-up of one of
     // those would just be the same picture twice.
-    const showCloseUp = mapBoxIsZoomed(prefectureFocusBox([promptCode]));
+    const showCloseUp = mapBoxIsZoomed(geoFocusBox(country, [promptCode]));
     return (
       <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2 sm:mt-4 sm:gap-4">
         <div className={`grid min-h-0 flex-1 gap-2 sm:gap-4 ${showCloseUp ? "grid-cols-2" : "grid-cols-1"}`}>
           <MapCard caption={GAME_COPY.choosePrefectureName}>
-            <JapanMap marks={marks} showHandles />
+            <JapanMap marks={marks} country={country} showHandles />
           </MapCard>
           {showCloseUp ? (
             <MapCard caption={GAME_COPY.mapCloseUp}>
-              <JapanMap marks={marks} focusCodes={[promptCode]} />
+              <JapanMap marks={marks} country={country} focusCodes={[promptCode]} />
             </MapCard>
           ) : null}
         </div>
@@ -154,8 +182,9 @@ function MapBoard({
 
   // Find: the name is the question, the map carries the choices.
   const marks: MapMark[] = question.options.flatMap((option, index) => {
-    const code = prefectureCodeFromSubjectId(option.subjectId);
-    if (code === null) return [];
+    const place = placeFromSubjectId(option.subjectId);
+    if (!place) return [];
+    const code = place.code;
     return [{
       code,
       tone: toneFor(option, MAP_TONES.candidate),
@@ -177,6 +206,7 @@ function MapBoard({
       <div className="min-h-0 flex-1 rounded-xl border border-line bg-surface-muted p-1.5 sm:p-2">
         <JapanMap
           marks={marks}
+          country={country}
           focusCodes={marks.map((mark) => mark.code)}
           showHandles
           disabled={answering || Boolean(feedback)}
