@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
+import { SUBJECT_VIEW_MODES, type SubjectViewMode } from "@/app/shared/subjectListView";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import { displayReading, readingsForGrade } from "./gradeExplorerView";
@@ -13,6 +14,8 @@ type Props = {
   hrefFor?: (entry: SchoolGradeKanjiEntry) => string | null;
   /** Quiz mode: readings stay hidden until a card is selected. */
   hideReadings?: boolean;
+  /** Cards for browsing, rows for scanning a long grade at a glance. */
+  viewMode?: SubjectViewMode;
   revealedKanji?: Set<string>;
   onReveal?: (kanji: string) => void;
 };
@@ -37,7 +40,15 @@ function ReadingRow({ label, readings }: { label: string; readings: string[] }) 
  * WaniKani level, neither of which a school grade has, and it shows no readings
  * at all. A grade test asks for the on and kun readings, so those get the room.
  */
-export default function GradeKanjiGrid({ items, hrefFor, hideReadings = false, revealedKanji, onReveal }: Props) {
+export default function GradeKanjiGrid({
+  items,
+  hrefFor,
+  hideReadings = false,
+  viewMode = SUBJECT_VIEW_MODES.grid,
+  revealedKanji,
+  onReveal,
+}: Props) {
+  const rows = viewMode === SUBJECT_VIEW_MODES.list;
   if (items.length === 0) {
     return (
       <p className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
@@ -47,12 +58,60 @@ export default function GradeKanjiGrid({ items, hrefFor, hideReadings = false, r
   }
 
   return (
-    <ul className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(210px,1fr))]">
+    <ul
+      className={
+        rows
+          ? "space-y-1.5"
+          : "grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(210px,1fr))]"
+      }
+    >
       {items.map((entry) => {
         const readings = readingsForGrade(entry);
         const href = hrefFor?.(entry) ?? null;
         const hidden = hideReadings && !revealedKanji?.has(entry.kanji);
-        const body = (
+        const pills = (
+          <>
+            {typeof entry.strokeCount === "number" ? (
+              <span className="subject-pill border-line bg-surface text-foreground">
+                {entry.strokeCount} {GRADE_EXPLORER_COPY.strokes}
+              </span>
+            ) : null}
+            {typeof entry.crossRef?.jlptLevel === "number" ? (
+              <span className="subject-pill border-emerald-300 bg-emerald-50 text-emerald-700">
+                {GRADE_EXPLORER_COPY.jlptCrossRef} N{entry.crossRef.jlptLevel}
+              </span>
+            ) : null}
+          </>
+        );
+
+        /*
+         * One line per kanji, for scanning a whole grade. The readings sit
+         * beside the meaning rather than under it, and the row keeps its
+         * right padding clear so the stroke control never lands on the text.
+         */
+        const rowBody = (
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="w-9 shrink-0 text-2xl font-black leading-none text-kanji [font-family:var(--font-jp-current)]">
+              {entry.kanji}
+            </span>
+            <span className="w-28 shrink-0 truncate text-sm font-black text-foreground" title={entry.primaryMeaning ?? ""}>
+              {entry.primaryMeaning ?? GRADE_EXPLORER_COPY.noReadings}
+            </span>
+            {hidden ? (
+              <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/35">
+                {GRADE_EXPLORER_COPY.quizTapToReveal}
+              </span>
+            ) : (
+              <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                <ReadingRow label={GRADE_EXPLORER_COPY.onReadings} readings={readings.on} />
+                <ReadingRow label={GRADE_EXPLORER_COPY.kunReadings} readings={readings.kun} />
+              </span>
+            )}
+            <span className="ml-auto flex shrink-0 items-center gap-1 pr-9">{pills}</span>
+          </div>
+        );
+
+        const cardBody = (
           <>
             <div className="flex items-start justify-between gap-2">
               <span className="text-4xl font-black leading-none text-kanji [font-family:var(--font-jp-current)]">
@@ -91,14 +150,24 @@ export default function GradeKanjiGrid({ items, hrefFor, hideReadings = false, r
           </>
         );
 
-        const shell = "rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition";
+        const body = rows ? rowBody : cardBody;
+        const shell = rows
+          ? "rounded-xl border border-kanji/40 bg-kanji/5 px-3 py-2 transition"
+          : "rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition";
         return (
-          <li key={entry.kanji} className="relative min-w-0">
+          <li key={entry.kanji} className="group relative min-w-0">
+            {/*
+              * Hidden until the card is hovered or focused, and always shown
+              * where there is no hover to give. One control per card is noise
+              * at a screenful of cards, and while it sat there permanently it
+              * covered the end of a long kun reading - 外 read
+              * `そと、ほか、はずす、ほ` with the rest behind the button.
+              */}
             <StrokeOrderButton
               kanji={entry.kanji}
               grade={entry.grade}
               meaning={entry.primaryMeaning ?? null}
-              className="absolute bottom-2 right-2 z-10"
+              className={`absolute z-10 opacity-0 ${rows ? "right-2 top-1/2 -translate-y-1/2" : "bottom-2 right-2"} transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100`}
             />
             {onReveal ? (
               <button

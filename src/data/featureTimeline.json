@@ -1156,5 +1156,15 @@
     "version": "0.104.0",
     "releasedAt": "2026-08-30T21:30:00Z",
     "summary": "The account menu kept its own copy of the navigation beside the header's, and the two had drifted apart. It now reads the same sections the header does, so nothing can go missing again. On a desktop it drops the navigation entirely, since the header already shows it, and keeps only your account, settings, admin and preferences. Settings moves out of the header into the menu, and Updates is reachable without hunting for the version number in the footer."
+  },
+  {
+    "id": "grade-card-density",
+    "area": "study",
+    "name": "Rows for the grade explorer, and quieter cards",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.105.0",
+    "releasedAt": "2026-08-30T22:10:00Z",
+    "summary": "The grade explorer can be read as rows as well as cards, which is how you scan a whole school year and the only way to see a kanji with ten kun readings in full. The stroke control no longer sits on every card: it appears when you hover, or always where there is no hover to give, which also fixes it covering the end of a long reading."
   }
 ]

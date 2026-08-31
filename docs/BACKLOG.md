@@ -49,6 +49,10 @@ through it meets a finished flow.
 | 12 | Global ranking opt-in | 4, 11 |
 | 13 | JLPT level reviews | design open |
 | 14-17 | Sync, backfill, Ultra enum, DRY sweep | — |
+| 18 | Kanji card density and controls | — |
+| 19 | Stroke order as a shareable component | 18 |
+| 20 | Updates page: months, names, reachability | — |
+| 21 | Map regions beyond Japan | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
 Release 6 should not ship before 7 to 9, or a member without WaniKani arrives to
@@ -496,3 +500,44 @@ flipping it when 7-9 have shipped, which frees the door code to merge early.
 
 **Tests, commit, release per feature (2026-08-29).** Standing rule, recorded in
 `AGENTS.md`; every feature ships with its own tests, commit and deploy.
+
+---
+
+### 18 — Kanji card density and controls
+
+Reported from the grades grid, but the rules are repo-wide.
+
+- **Bug.** `StrokeOrderButton` is absolutely positioned over the card, so a long
+  kun reading runs underneath it — 外 shows `そと、ほか、はずす、ほ` with the rest
+  behind the button.
+- **Button density.** A control per card is noise. Show it on hover, and on
+  touch where there is no hover.
+- **Grid and list everywhere.** `SubjectViewModeToggle` is on three surfaces and
+  missing from the grade and JLPT grids. AGENTS.md already requires both
+  densities wherever subjects are listed; this is a violation, not a new idea.
+- **Open the item.** Every other grid opens a modal for the item. The grades
+  grid does not.
+- Both of the last two want a guard test that walks the surfaces, in the style
+  of `modalHeight.test.ts`, rather than a fix applied surface by surface.
+
+### 19 — Stroke order as a shareable component
+
+- Lift the modal so any surface can open it for any kanji.
+- Layout: glyph left, controls stacked on the right at desktop width, stroke
+  count in the header, credit centred beneath.
+- The subject line should carry reading and meaning together, not the English
+  gloss alone, while staying legible.
+- A URL that opens one kanji, so it can be sent to someone.
+
+### 20 — Updates page
+
+- Collapse and expand by month.
+- Admins reach the release admin page from it.
+- Show the release codename, which is generated and currently never displayed —
+  the page shows a bare version number and date.
+
+### 21 — Map regions beyond Japan
+
+Canada and the United States next, so the region must be a value the run
+carries rather than the hardcoded assumption Japan is today. Europe and Asia are
+expected to follow, so adding one should be data, not a code path.

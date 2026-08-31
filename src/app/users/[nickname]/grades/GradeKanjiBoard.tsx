@@ -2,12 +2,18 @@
 
 import { useState } from "react";
 
+import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import {
+  SUBJECT_VIEW_MODES,
+  SUBJECT_VIEW_MODE_VALUES,
+  type SubjectViewMode,
+} from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import GradeKanjiGrid from "./GradeKanjiGrid";
-import { GRADE_REVEAL_MODES, GRADE_REVEAL_STORAGE_KEY, type GradeRevealMode } from "./gradeExplorerView";
+import { GRADE_REVEAL_MODES, GRADE_REVEAL_STORAGE_KEY, GRADE_VIEW_MODE_STORAGE_KEY, type GradeRevealMode } from "./gradeExplorerView";
 
 type Props = {
   items: SchoolGradeKanjiEntry[];
@@ -30,6 +36,8 @@ export default function GradeKanjiBoard({ items }: Props) {
   const [mode, setMode] = useState<GradeRevealMode>(() =>
     getStoredEnum(GRADE_REVEAL_STORAGE_KEY, Object.values(GRADE_REVEAL_MODES), GRADE_REVEAL_MODES.shown));
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
+  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
+    getStoredEnum(GRADE_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
 
   function changeMode(next: GradeRevealMode) {
     setMode(next);
@@ -70,10 +78,20 @@ export default function GradeKanjiBoard({ items }: Props) {
             ) : null}
           </>
         ) : null}
+
+        <SubjectViewModeToggle
+          className="ml-auto"
+          value={viewMode}
+          onChange={(next) => {
+            setViewMode(next);
+            setStoredEnum(GRADE_VIEW_MODE_STORAGE_KEY, next);
+          }}
+        />
       </div>
 
       <GradeKanjiGrid
         items={items}
+        viewMode={viewMode}
         hideReadings={quizzing}
         revealedKanji={revealed}
         onReveal={

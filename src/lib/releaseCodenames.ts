@@ -155,6 +155,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Seseragi Semi", ja: "せせらぎ蝉", reading: "せせらぎせみ", gloss: "cicadas over a babbling brook" },
   { romaji: "Soshun Sogen", ja: "早春草原", reading: "そうしゅんそうげん", gloss: "grassland in early spring" },
   { romaji: "Tabi Takibi", ja: "旅焚火", reading: "たびたきび", gloss: "a campfire on the road" },
+  { romaji: "Chidori Chaya", ja: "千鳥茶屋", reading: "ちどりちゃや", gloss: "a teahouse where the plovers gather" },
 ];
 
 /**
