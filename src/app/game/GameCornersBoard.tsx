@@ -14,6 +14,7 @@ import GameChoiceTile from "./GameChoiceTile";
 import { GAME_BOARD_FLASH_MS, GAME_COPY, GAME_CORNER_PLACEHOLDER_CLASS } from "./GameMode.constants";
 import { useGameAnswerKeys } from "./useGameAnswerKeys";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type Props = {
   question: GameQuestionPayload;
@@ -113,10 +114,10 @@ export default function GameCornersBoard({
             ? GAME_COPY.chooseChain
             : `${isTextAnswer ? GAME_COPY.chooseAnswer : GAME_COPY.chooseMatch} · ${question.answerType}`}
         </p>
-        <p className={`mt-1 font-black text-foreground ${
+        <p translate="no" className={`mt-1 font-black text-foreground ${
           isChain || isTextAnswer
             ? `text-4xl ${JP_TEXT_CLASS} sm:text-6xl`
-            : "text-2xl sm:text-4xl"
+            : `text-2xl ${NO_TRANSLATE_CLASS} sm:text-4xl`
         }`}>
           {question.prompt}
         </p>

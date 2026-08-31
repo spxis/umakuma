@@ -19,6 +19,7 @@ import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT,
 import SheetOptionsRow from "./SheetOptionsRow";
 import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "./sheetLink";
 import TracingSheet, { type SheetMode } from "./TracingSheet";
+import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;
@@ -256,7 +257,8 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
                   : "border-neutral-300 text-neutral-600 hover:bg-neutral-100"
               }`}
             >
-              {label} {target}
+              {/* One node: as two, the space between them was the translator's. */}
+              <span translate="no" className={NO_TRANSLATE_CLASS}>{`${label} ${target}`}</span>
               {active ? (
                 <span aria-hidden="true" className={`ml-2 text-base leading-none transition ${choosing ? "rotate-90" : ""}`}>›</span>
               ) : null}

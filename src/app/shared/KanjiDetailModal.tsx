@@ -6,6 +6,8 @@ import KanjiStrokeAnimation, { type StrokeMeta } from "./KanjiStrokeAnimation";
 import ModalShell from "./ModalShell";
 import { MODAL_LAYERS } from "./modalLayers";
 import { STROKE_ANIMATION_COPY } from "./strokeAnimationCopy";
+import { noTranslateClass } from "./japaneseText";
+import JapaneseInProse from "./JapaneseInProse";
 
 export type KanjiDetailSummary = {
   /** The English meaning, if the surface knows one. */
@@ -42,8 +44,11 @@ function PrintedGlyph({ kanji, label, fontFamily }: { kanji: string; label: stri
   return (
     <div className="flex flex-col items-center gap-1">
       <span
+        translate="no"
         style={{ fontFamily }}
-        className="flex h-16 w-16 items-center justify-center rounded-2xl border border-kanji/40 bg-kanji/5 text-4xl font-black leading-none text-kanji"
+        className={noTranslateClass(
+          "flex h-16 w-16 items-center justify-center rounded-2xl border border-kanji/40 bg-kanji/5 text-4xl font-black leading-none text-kanji",
+        )}
         aria-hidden="true"
       >
         {kanji}
@@ -133,7 +138,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
           </p>
           {line ? (
             <p className="truncate text-sm font-bold text-foreground" title={line}>
-              {line}
+              <JapaneseInProse text={line} />
             </p>
           ) : null}
         </div>

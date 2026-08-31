@@ -52,4 +52,69 @@ describe("the Japanese text marker", () => {
       `use JP_TEXT_CLASS from @/app/shared/japaneseText instead of the raw font class:\n  ${offenders.join("\n  ")}`,
     ).toEqual([]);
   });
+
+  /*
+   * The gap this closes was found in a screenshot rather than by a test, which
+   * is the wrong way round. The stroke-order modal draws the character twice
+   * for its Gothic and Mincho previews, styled with the glyph font but no
+   * marker, so both previews said "circle" where 円 belonged. Two more like it
+   * were sitting in the shared explorer card's rows layout and the game's
+   * match prompt.
+   *
+   * They share a shape: an element that reaches for a Japanese typeface and
+   * does not refuse translation. Anything setting one of these fonts is
+   * displaying Japanese, so the marker has to be within reach of it.
+   */
+  it("never sets a Japanese typeface without refusing translation", () => {
+    /*
+     * `glyphTextSizeClass` counts as a marker because it returns one - the
+     * test above this pins that - so a glyph sized through it is already
+     * covered and does not need a second one.
+     */
+    const MARKERS = [
+      NO_TRANSLATE_CLASS,
+      'translate="no"',
+      "noTranslateClass",
+      "JP_TEXT_CLASS",
+      "glyphTextSizeClass",
+    ];
+
+    /** Puts the font on an element that shows text: the marker goes here. */
+    const RENDERS = ["style={{ fontFamily }}", "style={{ fontFamily:"];
+    /*
+     * Hands the font somewhere else - a style helper's return, or a prop
+     * passed to a component that does the rendering. The marker belongs
+     * wherever it lands, so the file only has to protect it somewhere.
+     */
+    const CARRIES = ["var(--font-jp-sans)", "var(--font-jp-serif)", "glyphFontFamily("];
+
+    const offenders: string[] = [];
+    for (const path of sourceFiles(SRC)) {
+      if (path.includes("japaneseText") || path.includes("glyphFontPreference")) continue;
+      const source = readFileSync(path, "utf8");
+      const lines = source.split("\n");
+      const fileProtected = MARKERS.some((marker) => source.includes(marker));
+
+      lines.forEach((line, index) => {
+        const renders = RENDERS.some((signal) => line.includes(signal));
+        const carries = CARRIES.some((signal) => line.includes(signal));
+        if (!renders && !carries) return;
+
+        if (renders) {
+          // One element's attributes, which may run over several lines.
+          const near = lines.slice(Math.max(0, index - 6), index + 7).join("\n");
+          if (MARKERS.some((marker) => near.includes(marker))) return;
+        } else if (fileProtected) {
+          return;
+        }
+
+        offenders.push(`${path.slice(SRC.length + 1)}:${index + 1}  ${line.trim().slice(0, 70)}`);
+      });
+    }
+
+    expect(
+      offenders,
+      `these render in a Japanese face with nothing stopping a translator:\n  ${offenders.join("\n  ")}`,
+    ).toEqual([]);
+  });
 });

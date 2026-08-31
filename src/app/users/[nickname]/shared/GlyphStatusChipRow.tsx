@@ -6,6 +6,7 @@ import {
   subjectTypePillClass,
 } from "../level-explorer/lib/levelExplorerDisplay";
 import StatusSrsChip from "./StatusSrsChip";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   item: Pick<LevelItem, "subjectType" | "jlptLevel" | "jlptMeta" | "status" | "srsStage">;
@@ -32,7 +33,7 @@ export default function GlyphStatusChipRow({
           G{item.jlptMeta.schoolGrade}
         </span>
       ) : null}
-      {item.jlptLevel ? <span className={jlptLevelPillClass()}>N{item.jlptLevel}</span> : null}
+      {item.jlptLevel ? <span translate="no" className={noTranslateClass(jlptLevelPillClass())}>{`N${item.jlptLevel}`}</span> : null}
       {showStatus ? <StatusSrsChip status={item.status} srsStage={item.srsStage} /> : null}
       {children}
     </div>

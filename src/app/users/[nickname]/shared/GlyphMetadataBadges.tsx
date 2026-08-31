@@ -1,3 +1,4 @@
+import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 type Props = {
   level?: number | null;
   successRate?: number | null;
@@ -35,10 +36,10 @@ export default function GlyphMetadataBadges({
   return (
     <>
       {validRate !== null ? (
-        <span className={`${baseClass} left-1.5 ${interactionClass}`}>{validRate}%</span>
+        <span translate="no" className={`${NO_TRANSLATE_CLASS} ${baseClass} left-1.5 ${interactionClass}`}>{`${validRate}%`}</span>
       ) : null}
       {typeof level === "number" ? (
-        <span className={`${baseClass} right-1.5 ${interactionClass}`}>L{level}</span>
+        <span translate="no" className={`${NO_TRANSLATE_CLASS} ${baseClass} right-1.5 ${interactionClass}`}>{`L${level}`}</span>
       ) : null}
     </>
   );

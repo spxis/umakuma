@@ -23,6 +23,7 @@ import {
   learnedRadicalsFromRow,
   learnedVocabularyFromRow,
 } from "../lib/leaderboardUtils";
+import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type Props = {
   activeTab: LeaderboardTab;
@@ -131,7 +132,7 @@ export default function LeaderboardDesktop({
                     className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-sm font-black text-foreground"
                   >
                     <span>{filteredExpanded.has(row.id) ? "▾" : "▸"}</span>
-                    <span>#{rankById.get(row.id) ?? "-"}</span>
+                    <span translate="no" className={NO_TRANSLATE_CLASS}>{`#${rankById.get(row.id) ?? "-"}`}</span>
                   </button>
                 </td>
                 <td className="px-4 py-3 text-lg font-black text-foreground">

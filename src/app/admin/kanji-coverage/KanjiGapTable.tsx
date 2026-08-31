@@ -4,6 +4,7 @@ import {
 } from "@/lib/kanjiCoverage";
 
 import { KANJI_BAND_CLASSES, KANJI_COVERAGE_COPY } from "./KanjiCoverage.constants";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   entries: KanjiCoverageEntry[];
@@ -32,7 +33,7 @@ export default function KanjiGapTable({ entries, showBand = true }: Props) {
         <tbody>
           {entries.map((entry) => (
             <tr key={entry.kanji} className="border-b border-line/50 last:border-b-0">
-              <td className="py-2 pr-3 text-2xl leading-none">{entry.kanji}</td>
+              <td translate="no" className={noTranslateClass("py-2 pr-3 text-2xl leading-none")}>{entry.kanji}</td>
               <td className="py-2 pr-3 text-foreground/70">
                 {entry.primaryMeaning ?? KANJI_COVERAGE_COPY.noMeaning}
               </td>

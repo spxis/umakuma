@@ -2,6 +2,7 @@ import type { LevelItem } from "../explorerTypes";
 import type { ReactNode } from "react";
 import { statusClass, statusShortLabel } from "../level-explorer/lib/levelExplorerDisplay";
 import { ExplorerPill } from "./ExplorerPill";
+import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type PillChipProps = {
   className?: string;
@@ -23,7 +24,12 @@ export default function StatusSrsChip({
 }: StatusSrsChipProps) {
   return (
     <PillChip className={statusClass(status)}>
-      {statusShortLabel(status)} - SRS {srsStage}
+      {/*
+        * One string, and translation refused. Built from three children it was
+        * three text nodes with the spacing between them up for grabs, and it
+        * came back as "APPR- SRS4".
+        */}
+      <span translate="no" className={NO_TRANSLATE_CLASS}>{`${statusShortLabel(status)} - SRS ${srsStage}`}</span>
     </PillChip>
   );
 }
@@ -33,7 +39,11 @@ type SrsOnlyChipProps = {
 };
 
 export function SrsOnlyChip({ srsStage }: SrsOnlyChipProps) {
-  return <PillChip className="border-line bg-surface text-foreground">SRS {srsStage}</PillChip>;
+  return (
+    <PillChip className="border-line bg-surface text-foreground">
+      <span translate="no" className={NO_TRANSLATE_CLASS}>{`SRS ${srsStage}`}</span>
+    </PillChip>
+  );
 }
 
 type ReviewTimingChipProps = {

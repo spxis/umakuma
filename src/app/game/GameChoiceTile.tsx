@@ -1,6 +1,6 @@
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import type { GameOptionTile } from "@/lib/gameMode";
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import { JP_TEXT_CLASS, NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type Props = {
   option: GameOptionTile;
@@ -45,7 +45,7 @@ export default function GameChoiceTile({
     >
       <span aria-hidden="true" className="absolute left-2 top-2 text-lg font-black text-foreground/50 sm:left-4 sm:top-4">{keyHint}</span>
       {showLevel ? (
-        <span className="absolute right-2 top-2 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.level}</span>
+        <span translate="no" className={`${NO_TRANSLATE_CLASS} absolute right-2 top-2 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs`}>{`L${option.level}`}</span>
       ) : null}
       <span className={`text-center font-black leading-tight ${
         isTextAnswer

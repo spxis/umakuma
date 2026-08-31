@@ -376,7 +376,7 @@ export default function JlptExplorerContent({
                       {typeof item.schoolGrade === "number" ? (
                         <NeutralPill>G{item.schoolGrade}</NeutralPill>
                       ) : null}
-                      <ExplorerPill className={jlptLevelPillClass()}>N{item.nLevel}</ExplorerPill>
+                      <ExplorerPill className={jlptLevelPillClass()}>{`N${item.nLevel}`}</ExplorerPill>
                     </>
                   }
                   glyphClassName={`border-kanji/50 bg-kanji/10 ${userMatch ? "text-kanji" : "text-foreground"}`}

@@ -24,6 +24,7 @@ import {
   type LibraryItemTypeFilter,
   type LibrarySortOrder,
 } from "./StudySourceLibraryItemsManager.lib";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   accountId: string;
@@ -442,8 +443,8 @@ export default function StudySourceLibraryItemsManager({
                         aria-label={`Select ${item.characters}`}
                       />
                     </td>
-                    <td className="border-b border-line px-2 py-2 align-top text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/70">L{item.level}</td>
-                    <td className="max-w-42 border-b border-line px-2 py-2 align-top font-semibold text-foreground" title={item.characters}>{item.characters}</td>
+                    <td translate="no" className={noTranslateClass("border-b border-line px-2 py-2 align-top text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/70")}>{`L${item.level}`}</td>
+                    <td translate="no" className={noTranslateClass("max-w-42 border-b border-line px-2 py-2 align-top font-semibold text-foreground")} title={item.characters}>{item.characters}</td>
                     <td className="max-w-56 border-b border-line px-2 py-2 align-top text-foreground/80" title={displayMeaning}>{displayMeaning}</td>
                     <td className="max-w-44 border-b border-line px-2 py-2 align-top text-foreground/75" title={displayReading}>{displayReading}</td>
                     <td className="border-b border-line px-2 py-2 align-top">

@@ -5,6 +5,7 @@ import { GAME_KINDS, formatGameDuration, type GameKind } from "@/lib/gameMode";
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
 import { GAME_COPY, GAME_KIND_LABELS } from "./GameMode.constants";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   questionIndex: number;
@@ -73,7 +74,7 @@ export default function GameRunnerFrame({
             <span className="truncate">{questionIndex + 1}/{endless ? "∞" : questionTotal}</span>
             <span className="hidden truncate text-foreground/45 lg:inline">{GAME_KIND_LABELS[kind]}</span>
           </div>
-          <span className="hidden whitespace-nowrap sm:inline">{correctCount} {countLabel}</span>
+          <span translate="no" className={noTranslateClass("hidden whitespace-nowrap sm:inline")}>{`${correctCount} ${countLabel}`}</span>
           {/* A run against the clock leads with the clock. */}
           {isTimed ? (
             <span className={`justify-self-end text-3xl font-black leading-none tabular-nums sm:text-5xl ${clockUrgent ? "text-red-600" : "text-foreground"}`}>
@@ -87,7 +88,7 @@ export default function GameRunnerFrame({
           ) : null}
           {detailsOpen ? (
             <div className="absolute right-0 top-full z-40 mt-2 flex rounded-xl border border-line bg-surface p-2 shadow-[0_14px_30px_rgba(8,16,36,0.18)] sm:hidden">
-              <span className="whitespace-nowrap px-3 py-1">{correctCount} {countLabel}</span>
+              <span translate="no" className={noTranslateClass("whitespace-nowrap px-3 py-1")}>{`${correctCount} ${countLabel}`}</span>
               <span className="whitespace-nowrap border-l border-line px-3 py-1">{clockValue}</span>
             </div>
           ) : null}

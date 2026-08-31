@@ -15,7 +15,7 @@ import { STUDY_REVIEW_MODAL_SECTION_TEXT } from "./StudyExplorer.constants";
 import FieldLabel from "../../../../shared/FieldLabel";
 import ModalShell from "@/app/shared/ModalShell";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
-import { noTranslateClass } from "@/app/shared/japaneseText";
+import { NO_TRANSLATE_CLASS, noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   accountId: string;
@@ -123,7 +123,7 @@ export default function StudySideBySideModal({
     >
         <header className="grid grid-cols-[1fr_auto_1fr] items-center border-b border-line bg-surface-muted px-3 py-2 sm:px-6 sm:py-3">
           <StudyModalCloseButton onClick={onClose} />
-          <FieldLabel>#{selectedIndex + 1} of {total}</FieldLabel>
+          <FieldLabel><span translate="no" className={NO_TRANSLATE_CLASS}>{`#${selectedIndex + 1} of ${total}`}</span></FieldLabel>
           <span />
         </header>
 
@@ -160,7 +160,7 @@ export default function StudySideBySideModal({
                       {isCorrectOption ? STUDY_REVIEW_MODAL_SECTION_TEXT.correct : STUDY_REVIEW_MODAL_SECTION_TEXT.notQuite}
                     </span>
                   ) : null}
-                  <span className="absolute right-2 top-2 z-30 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.wkLevel}</span>
+                  <span translate="no" className={`${NO_TRANSLATE_CLASS} absolute right-2 top-2 z-30 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs`}>{`L${option.wkLevel}`}</span>
                   <span
                     translate="no"
                     style={{ fontFamily }}

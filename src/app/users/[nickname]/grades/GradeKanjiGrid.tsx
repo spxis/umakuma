@@ -12,6 +12,7 @@ import { useState } from "react";
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import { displayReading, readingsForGrade } from "./gradeExplorerView";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   items: SchoolGradeKanjiEntry[];
@@ -98,8 +99,8 @@ export default function GradeKanjiGrid({
               </span>
             ) : null}
             {typeof entry.crossRef?.jlptLevel === "number" ? (
-              <span className="subject-pill border-emerald-300 bg-emerald-50 text-emerald-700">
-                {GRADE_EXPLORER_COPY.jlptCrossRef} N{entry.crossRef.jlptLevel}
+              <span translate="no" className={noTranslateClass("subject-pill border-emerald-300 bg-emerald-50 text-emerald-700")}>
+                {`${GRADE_EXPLORER_COPY.jlptCrossRef} N${entry.crossRef.jlptLevel}`}
               </span>
             ) : null}
           </>
@@ -145,8 +146,8 @@ export default function GradeKanjiGrid({
                   </span>
                 ) : null}
                 {typeof entry.crossRef?.jlptLevel === "number" ? (
-                  <span className="subject-pill border-emerald-300 bg-emerald-50 text-emerald-700">
-                    {GRADE_EXPLORER_COPY.jlptCrossRef} N{entry.crossRef.jlptLevel}
+                  <span translate="no" className={noTranslateClass("subject-pill border-emerald-300 bg-emerald-50 text-emerald-700")}>
+                    {`${GRADE_EXPLORER_COPY.jlptCrossRef} N${entry.crossRef.jlptLevel}`}
                   </span>
                 ) : null}
               </span>

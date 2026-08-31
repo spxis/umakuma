@@ -19,6 +19,7 @@ import { runGlobalSearch } from "@/lib/globalSearchServer";
 
 import { SEARCH_EXAMPLES, SEARCH_PAGE_COPY } from "./searchCopy";
 import SearchHitList from "./SearchHitList";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 export const metadata: Metadata = {
   title: "Search — UmaKuma",
@@ -101,7 +102,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
                   }`}
                 >
                   {source ? SEARCH_SOURCE_LABELS[source] : SEARCH_PAGE_COPY.allSources}
-                  <span className={active ? "text-white/70" : "text-foreground/45"}>({count})</span>
+                  <span translate="no" className={noTranslateClass(active ? "text-white/70" : "text-foreground/45")}>({count})</span>
                 </Link>
               );
             })}

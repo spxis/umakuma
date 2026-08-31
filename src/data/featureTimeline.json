@@ -1516,5 +1516,15 @@
     "version": "0.140.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Chrome's translate offer used to eat the site. On the grades explorer it replaced every kanji with its English meaning - 一 became \"one\", 右 became \"right\" - beside a card already printing that same meaning underneath, and it romanised the readings, so a page teaching kanji showed no kanji at all. Every Japanese element now carries both refusals, the HTML5 translate attribute and Google's notranslate class, while the English chrome around it stays translatable for anyone who needs it. The font class and the glyph sizing helper each carry the marker with them, since anything drawn in the Japanese face is Japanese, and a unit test keeps the raw font class out of the rest of the tree so the next glyph surface cannot take the styling and forget the protection. Release notes that quote Japanese inside an English sentence mark only the quote. Audited across sixteen pages: no unprotected Japanese left."
+  },
+  {
+    "id": "translation-ward-completed",
+    "area": "study",
+    "name": "The rest of the translation ward",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.141.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "The previous release protected what a page draws on arrival and nothing else, so the stroke-order modal still showed \"circle\" where 円 belonged in both its Gothic and Mincho previews, and the shared explorer card lost its protection the moment a list switched to rows. Those and the game's match prompt are covered now, along with the admin kanji tables. A second half to it: translation was also respacing compact chips, because a label built from several JSX children is several text nodes with the gaps between them up for grabs - \"JLPT N5\" came back as \"JLPTN5\", \"APPR - SRS 4\" as \"APPR- SRS4\", and every count as \"( 157 )\". Codes and counts are now single strings that refuse translation, while prose like \"Showing 1-60 of 80 kanji\" still reads in whatever language the reader wants. A source guard fails the build on any element that reaches for a Japanese typeface without refusing translation, which is what would have caught the modal."
   }
 ]

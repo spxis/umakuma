@@ -15,6 +15,7 @@ import {
 
 import { useAdminFeedback } from "./AdminFeedbackProvider";
 import AdminPaginationControls from "./AdminPaginationControls";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type AdminJlptCatalogPanelProps = {
   sessionAuthorized: boolean;
@@ -353,7 +354,7 @@ export default function AdminJlptCatalogPanel({ sessionAuthorized, checkingSessi
                         N{item.nLevel}
                       </span>
                     </td>
-                    <td className="px-2 py-2 text-xl font-black text-foreground">{item.kanji}</td>
+                    <td translate="no" className={noTranslateClass("px-2 py-2 text-xl font-black text-foreground")}>{item.kanji}</td>
                     <td className="px-2 py-2">{item.primaryMeaning ?? "-"}</td>
                     <td className="px-2 py-2">
                       <span className="text-[11px] text-foreground/65">

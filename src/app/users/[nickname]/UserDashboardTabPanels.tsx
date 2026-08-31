@@ -24,6 +24,7 @@ import type {
   SrsGroupKey,
   TypeProgress,
 } from "./UserDashboardTabs.types";
+import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type MainTabPanelProps = {
   wkLevel: number;
@@ -195,7 +196,7 @@ export function ItemSpreadTabPanel({ itemSpread, itemSpreadDetails }: ItemSpread
                         key={`${groupKey}-level-${levelRow.level}`}
                         className="grid grid-cols-[auto_1fr_1fr_1fr_auto] items-center gap-2 rounded-lg border border-line bg-surface-muted px-2 py-1.5"
                       >
-                        <FieldLabel as="span">L{levelRow.level}</FieldLabel>
+                        <FieldLabel as="span"><span translate="no" className={NO_TRANSLATE_CLASS}>{`L${levelRow.level}`}</span></FieldLabel>
                         <span className="subject-pill subject-pill--radical justify-center">{formatNumber(levelRow.radical)}</span>
                         <span className="subject-pill subject-pill--kanji justify-center">{formatNumber(levelRow.kanji)}</span>
                         <span className="subject-pill subject-pill--vocabulary justify-center">{formatNumber(levelRow.vocabulary)}</span>

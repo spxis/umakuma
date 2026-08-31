@@ -22,6 +22,7 @@ import LevelCardTagOverlay from "./LevelCardTagOverlay";
 import LevelExplorerGridToolbar from "./LevelExplorerGridToolbar";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import type { LevelExplorerItemsGridProps as Props } from "./LevelExplorerItemsGrid.types";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 export default function LevelExplorerItemsGrid({
   accountId,
@@ -222,7 +223,7 @@ export default function LevelExplorerItemsGrid({
                     <span className="subject-pill border-line bg-surface text-foreground">G{item.jlptMeta.schoolGrade}</span>
                   ) : null}
                   {item.jlptLevel ? (
-                    <span className={jlptLevelPillClass()}>N{item.jlptLevel}</span>
+                    <span translate="no" className={noTranslateClass(jlptLevelPillClass())}>{`N${item.jlptLevel}`}</span>
                   ) : null}
                   {isNewGlyphWithinHours(item) ? (
                     <span className="subject-pill border-emerald-300 bg-emerald-100 text-emerald-800">NEW</span>

@@ -36,7 +36,7 @@ import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import FilterChipButton from "../../shared/FilterChipButton";
-import { NeutralPill } from "../../shared/ExplorerPill";
+import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
@@ -283,7 +283,7 @@ export default function StudyExplorerPanel({
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">{STUDY_PANEL_TEXT.loadingQueueAndFilters}</p>
           ) : (
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-              Showing {formatNumber(filteredItems.length)}/{formatNumber(allTypeCount)} items
+              {`Showing ${formatNumber(filteredItems.length)}/${formatNumber(allTypeCount)} items`}
             </p>
           )}
           <div className={`flex w-full flex-wrap items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
@@ -410,7 +410,7 @@ export default function StudyExplorerPanel({
                             className="h-4 w-4 rounded-sm border border-line bg-surface accent-accent"
                             aria-label={`Select ${item.characters}`}
                           />
-                          #{index + 1}
+                          {`#${index + 1}`}
                         </span>
                       ) : (
                         `#${index + 1}`
@@ -420,7 +420,7 @@ export default function StudyExplorerPanel({
                       <>
                         <span className={subjectTypePillClass(item.subjectType)}>{shortSubjectTypeLabel(item.subjectType)}</span>
                           {typeof item.jlptMeta?.schoolGrade === "number" ? <NeutralPill>G{item.jlptMeta.schoolGrade}</NeutralPill> : null}
-                        {item.jlptLevel ? <span className={jlptLevelPillClass()}>N{item.jlptLevel}</span> : null}
+                        {item.jlptLevel ? <ExplorerPill className={jlptLevelPillClass()}>{`N${item.jlptLevel}`}</ExplorerPill> : null}
                       </>
                     }
                     glyphClassName={typeGlyphBoxClass(item.subjectType)}

@@ -1,5 +1,6 @@
 import type { StudyViewerMode } from "../lib/studyExplorerTypes";
 import { STUDY_REVIEW_MODAL_VIEWER_MODES, STUDY_VIEWER_MODES } from "./StudyExplorer.constants";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   displayIndex: number;
@@ -43,7 +44,7 @@ export default function StudyReviewModalHeader({
           <button type="button" onClick={onClose} aria-label="Close" className="h-8 cursor-pointer rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted sm:h-9 sm:px-3.5 sm:text-sm">X</button>
         </div>
         <div className="flex min-w-0 flex-nowrap items-center justify-center gap-1 sm:gap-2">
-          <p className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm sm:tracking-[0.1em]">#{displayIndex} of {displayTotal}</p>
+          <p translate="no" className={noTranslateClass("whitespace-nowrap text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 sm:text-sm sm:tracking-[0.1em]")}>{`#${displayIndex} of ${displayTotal}`}</p>
           {!studyMode ? (
             <div className="inline-flex items-center rounded-full border border-line bg-surface p-1">
               {STUDY_REVIEW_MODAL_VIEWER_MODES.map((mode) => (

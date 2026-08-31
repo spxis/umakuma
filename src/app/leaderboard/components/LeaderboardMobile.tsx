@@ -8,6 +8,7 @@ import {
   formatNumber,
   formatSince,
 } from "../lib/leaderboardUtils";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   activeTab: LeaderboardTab;
@@ -88,7 +89,7 @@ export default function LeaderboardMobile({
             <div className="mt-3 grid grid-cols-3 gap-2 text-sm font-semibold text-foreground/80">
               <div className="rounded-xl bg-surface-muted px-3 py-2">
                 <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">Level</p>
-                <p className="mt-1 text-xl font-black text-accent">Lv {row.wkLevel}</p>
+                <p translate="no" className={noTranslateClass("mt-1 text-xl font-black text-accent")}>{`Lv ${row.wkLevel}`}</p>
                 <p className={`mt-0.5 text-[10px] font-semibold ${deltaClass(row.dailyDelta?.wkLevel)}`}>{formatDelta(row.dailyDelta?.wkLevel)}</p>
               </div>
               <div className="rounded-xl bg-surface-muted px-3 py-2">

@@ -75,7 +75,7 @@ export default function JlptExplorerDetailSection({
             <ExplorerPill className={jlptStatusClass(selectedUserMatch?.status)}>
               {selectedUserMatch?.status ?? "untracked"}
             </ExplorerPill>
-            <ExplorerPill className={jlptLevelPillClass()}>N{selectedItem.nLevel}</ExplorerPill>
+            <ExplorerPill className={jlptLevelPillClass()}>{`N${selectedItem.nLevel}`}</ExplorerPill>
             {selectedUserMatch ? (
               <NeutralPill>SRS {selectedUserMatch.srsStage ?? 0}</NeutralPill>
             ) : null}

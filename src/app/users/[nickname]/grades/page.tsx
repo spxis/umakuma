@@ -17,6 +17,7 @@ import { viewsOwnPage } from "@/app/shared/viewerAddress";
 import { GRADE_EXPLORER_COPY, GRADE_PAGE_SIZE } from "./GradeExplorer.constants";
 import GradeKanjiBoard from "./GradeKanjiBoard";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, pageRange, parseGradeParam, parsePageParam } from "./gradeExplorerView";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;
@@ -112,8 +113,8 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
                   }`}
                 >
                   {GRADE_SHORT_LABELS[option]}
-                  <span className={active ? "text-white/70" : "text-foreground/45"}>
-                    ({meta?.totalCount ?? 0})
+                  <span translate="no" className={noTranslateClass(active ? "text-white/70" : "text-foreground/45")}>
+                    {`(${meta?.totalCount ?? 0})`}
                   </span>
                 </Link>
               );
