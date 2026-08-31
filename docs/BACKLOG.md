@@ -538,6 +538,28 @@ Reported from the grades grid, but the rules are repo-wide.
 
 ### 21 — Map regions beyond Japan
 
-Canada and the United States next, so the region must be a value the run
-carries rather than the hardcoded assumption Japan is today. Europe and Asia are
-expected to follow, so adding one should be data, not a code path.
+**The library layer already exists and is unwired.** Found 2026-08-30 while
+starting this: `geoRegion.ts` holds JP/US/CA datasets (47 prefectures, 51
+states, 13 provinces and territories), with `geoSubjectIds.ts`,
+`geoDistractors.ts` and `geoComparisons.ts` beside it, all tested. Nothing under
+`src/app/` imports any of them. The game still runs on the Japan-only path:
+`gameModeServer.ts` and `gameMapQuestions.ts` import `japanPrefectures`, and
+`gameRunCreate.ts` counts `JAPAN_PREFECTURE_COUNT`.
+
+So this release is wiring, not building. Do not rewrite the datasets.
+
+**No schema change is needed for map regions.** `geoSubjectIds.ts` gives each
+country its own id range and keeps Japan on the range it already has, so the
+country is derivable from a question's `targetSubjectId` through
+`geoRegionIdFromSubjectId`. Existing runs keep working and nothing new has to be
+persisted; the lobby's country choice is a setup input, not run state.
+
+Remaining work: carry a country through the setup request, make
+`buildMapQuestions` read `GEO_DATASETS` instead of `japanPrefectures`, resolve
+ids through `geoSubjectIds` in `hydrateGameQuestions`, and add the country
+control to the lobby.
+
+**The size-comparison game is separate and does need a schema change.**
+`geoComparisons.ts` has the primitives (area, population, both comparators) and
+no consumers. As its own game it needs a new `GameKind` enum value, which means
+a hand-applied `db push` to production before it can deploy.
