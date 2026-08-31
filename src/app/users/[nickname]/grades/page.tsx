@@ -145,14 +145,22 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
             ) : null}
           </form>
 
-          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+        </header>
+      </section>
+
+      {/*
+        * Results in a card of their own, with a gap, matching both explorers.
+        * Filters and results shared one card here, divided by a hairline, so
+        * the three sibling pages read as two different layouts.
+        */}
+      <section className="mt-4 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+        <div className="p-4">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
             {GRADE_EXPLORER_COPY.showing} {first}-{last} {GRADE_EXPLORER_COPY.of} {total} {GRADE_EXPLORER_COPY.kanjiWord}
             {" · "}
             {GRADE_EXPLORER_COPY.curriculumNote}
           </p>
-        </header>
 
-        <div className="p-4">
           <GradeKanjiBoard key={`${grade}:${page}:${search}`} items={withOfficialReadings(catalog.items)} />
 
           {catalog.pagination.totalPages > 1 ? (

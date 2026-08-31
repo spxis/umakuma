@@ -7,7 +7,7 @@
  * all of them agree, so a forgotten bump fails `quality:check` rather than
  * shipping a stale number.
  */
-export const APP_VERSION = "0.116.0";
+export const APP_VERSION = "0.117.0";
 
 /** The calendar day APP_VERSION shipped, `YYYY-MM-DD`. */
 export const APP_VERSION_DATE = "2026-08-30";

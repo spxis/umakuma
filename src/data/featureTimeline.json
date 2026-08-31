@@ -1276,5 +1276,15 @@
     "version": "0.116.0",
     "releasedAt": "2026-08-31T04:10:00Z",
     "summary": "Trouble and Favourites are now sources for a writing sheet, offered from the practice page itself rather than only where the tags were made. They stay quiet until the control row is hovered, and appear always on a touch screen where there is no hover to give."
+  },
+  {
+    "id": "grades-card-split",
+    "area": "study",
+    "name": "Grades reads like its sibling explorers",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.117.0",
+    "releasedAt": "2026-08-31T04:40:00Z",
+    "summary": "Filters and results shared one card on the grade explorer, divided by a hairline, while both other explorers keep them in separate cards. They are separate here too now, and the result count sits with the results rather than with the filters."
   }
 ]
