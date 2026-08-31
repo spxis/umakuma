@@ -1,0 +1,122 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
+import { SOURCE_TONES } from "@/app/search/SearchHitList";
+import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
+import { SEARCH_SOURCE_LABELS, type SearchHit } from "@/lib/globalSearch";
+import { JP_TEXT_CLASS } from "./japaneseText";
+import { subjectGlyphTone } from "./subjectListView";
+
+type Props = {
+  /** Prefix for option ids, unique per rendered instance. */
+  listboxId: string;
+  hits: SearchHit[];
+  /** What the full results page would show, for the footer count. */
+  totalHits: number;
+  /** True only before the first answer for this query. */
+  searching: boolean;
+  /** Highlighted option: an index into hits, hits.length for the footer, -1 for none. */
+  activeIndex: number;
+  onPick: (index: number) => void;
+  onHover: (index: number) => void;
+};
+
+export function suggestOptionId(listboxId: string, index: number): string {
+  return `${listboxId}-option-${index}`;
+}
+
+/**
+ * The dropdown under the header search: the ten best hits, one per glyph.
+ *
+ * Rows are options rather than links because focus never leaves the input -
+ * the arrow keys move `activeIndex` and Enter picks, the combobox pattern.
+ * Mousedown is swallowed so a click cannot blur the input before it lands.
+ */
+export default function GlobalSearchSuggestList({
+  listboxId,
+  hits,
+  totalHits,
+  searching,
+  activeIndex,
+  onPick,
+  onHover,
+}: Props) {
+  const activeRow = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    activeRow.current?.scrollIntoView({ block: "nearest" });
+  }, [activeIndex]);
+
+  if (hits.length === 0) {
+    return (
+      <p className="px-4 py-3 text-xs font-semibold text-foreground/55">
+        {searching ? SEARCH_PAGE_COPY.suggestSearching : SEARCH_PAGE_COPY.noResults}
+      </p>
+    );
+  }
+
+  return (
+    <ul
+      id={listboxId}
+      role="listbox"
+      aria-label={SEARCH_PAGE_COPY.heading}
+      className="max-h-[60vh] overflow-y-auto overscroll-contain"
+      onMouseDown={(event) => event.preventDefault()}
+    >
+      {hits.map((hit, index) => (
+        <li
+          key={hit.key}
+          ref={index === activeIndex ? activeRow : undefined}
+          id={suggestOptionId(listboxId, index)}
+          role="option"
+          aria-selected={index === activeIndex}
+          onClick={() => onPick(index)}
+          onMouseMove={() => onHover(index)}
+          className={`flex cursor-pointer items-center gap-3 border-b border-line/60 px-3 py-2 ${
+            index === activeIndex ? "bg-surface-muted" : ""
+          }`}
+        >
+          <span
+            /*
+             * Wide enough for a four-character word at the desktop size; the
+             * lane SubjectRows uses, because clipping a vocabulary item to its
+             * first character hides the one thing the reader is scanning for.
+             */
+            className={`w-20 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-30 sm:text-3xl ${JP_TEXT_CLASS} ${subjectGlyphTone(
+              hit.subjectType,
+            )}`}
+          >
+            {hit.glyph}
+          </span>
+          <span className="flex min-w-0 flex-1 flex-col">
+            <span className="truncate text-sm font-bold text-foreground">{hit.meaning || "—"}</span>
+            {hit.reading ? (
+              <span lang="ja" translate="no" className={`truncate text-xs font-semibold text-foreground/55 ${JP_TEXT_CLASS}`}>
+                {hit.reading}
+              </span>
+            ) : null}
+          </span>
+          <span className={`subject-pill shrink-0 border ${SOURCE_TONES[hit.source]}`}>
+            {SEARCH_SOURCE_LABELS[hit.source]}
+          </span>
+        </li>
+      ))}
+
+      <li
+        ref={activeIndex === hits.length ? activeRow : undefined}
+        id={suggestOptionId(listboxId, hits.length)}
+        role="option"
+        aria-selected={activeIndex === hits.length}
+        onClick={() => onPick(hits.length)}
+        onMouseMove={() => onHover(hits.length)}
+        className={`cursor-pointer px-4 py-2.5 text-xs font-bold text-accent ${
+          activeIndex === hits.length ? "bg-surface-muted" : ""
+        }`}
+      >
+        {SEARCH_PAGE_COPY.suggestSeeAll} {totalHits}{" "}
+        {totalHits === 1 ? SEARCH_PAGE_COPY.hit : SEARCH_PAGE_COPY.hits} →
+      </li>
+    </ul>
+  );
+}

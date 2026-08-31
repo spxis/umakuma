@@ -52,6 +52,14 @@ export type SearchHit = {
   score: number;
 };
 
+/** What `/api/search` returns; shared so client callers can type the payload. */
+export type SearchResults = {
+  query: string;
+  totalHits: number;
+  countsBySource: Record<SearchSource, number>;
+  hits: SearchHit[];
+};
+
 export const SEARCH_MIN_QUERY_LENGTH = 1;
 export const SEARCH_PER_SOURCE_LIMIT = 24;
 

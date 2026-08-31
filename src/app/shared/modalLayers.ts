@@ -12,6 +12,10 @@
  * than inventing a new number.
  */
 export const MODAL_LAYERS = {
+  /** The phone search sheet, dropped under the header. */
+  searchSheet: "z-30",
+  /** The search suggestion dropdown, above content but below any modal. */
+  searchSuggest: "z-40",
   /** Ordinary page modals: reading check-ins, review, side-by-side. */
   page: "z-50",
   /** Menus and admin overlays that sit over a page modal. */

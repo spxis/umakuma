@@ -12,6 +12,8 @@ export const SEARCH_PAGE_COPY = {
   hits: "results",
   backHome: "Back to UmaKuma",
   examples: "Try",
+  suggestSearching: "Searching…",
+  suggestSeeAll: "See all",
 } as const;
 
 /** Seeded examples on the empty state; one per source, to show the range. */

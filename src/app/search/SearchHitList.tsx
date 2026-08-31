@@ -15,7 +15,7 @@ type Props = {
 };
 
 /** Source accents, so a row's origin reads before the label does. */
-const SOURCE_TONES: Record<SearchSource, string> = {
+export const SOURCE_TONES: Record<SearchSource, string> = {
   wanikani: "border-sky-300 bg-sky-50 text-sky-700",
   jlpt: "border-emerald-300 bg-emerald-50 text-emerald-700",
   grades: "border-kanji/40 bg-kanji/10 text-kanji",

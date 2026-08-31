@@ -1576,5 +1576,15 @@
     "version": "0.146.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "/api/join created accounts and never asked whether signing up was allowed. It took a Google session and a WaniKani token and upserted an account straight into the database - no invite code, no signup mode, no approval - so the whole invite-only model could be walked around by anyone who could sign in with Google and hold any working WaniKani token. It had no caller anywhere in the app, having been replaced by the invite panel, and it is deleted rather than gated: a gate would have reopened it the moment open signup was switched on, and it would then have created accounts that skipped the onboarding wizard and the approval queue as well."
+  },
+  {
+    "id": "search-autocomplete",
+    "area": "platform",
+    "name": "Search that answers while you type",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.147.0",
+    "releasedAt": "2026-08-31T13:00:00Z",
+    "summary": "The header search box waited for Enter and a full page load before showing anything, which is a long way round for a learner who just wants to know where a kanji lives. Now the ten best hits appear under the field as you type, one row per glyph with its meaning, reading and source, ranked by the same scoring the results page uses. The dropdown reuses the existing search endpoint, whose per-query CDN caching means most keystrokes are answered at the edge without touching the database - prefixes are shared by everyone typing them. Arrow keys walk the rows and Enter opens the highlighted hit straight in your own explorer, falls through to the see-all footer, or submits the full search as before; a signed-out visitor gets the results page instead of links that would bounce off the sign-in wall. Japanese suggests from the first character, since one kanji is a real question, while Latin waits for two, since one letter matches half the catalogue."
   }
 ]

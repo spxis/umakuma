@@ -12,15 +12,11 @@ import {
   rankHit,
   sortHits,
   type SearchHit,
+  type SearchResults,
   type SearchSource,
 } from "./globalSearch";
 
-export type SearchResults = {
-  query: string;
-  totalHits: number;
-  countsBySource: Record<SearchSource, number>;
-  hits: SearchHit[];
-};
+export type { SearchResults } from "./globalSearch";
 
 function joined(values: Array<string | null | undefined>): string | null {
   const kept = values.filter((value): value is string => Boolean(value && value.trim()));

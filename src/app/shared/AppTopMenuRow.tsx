@@ -153,7 +153,7 @@ export default function AppTopMenuRow({
         * separate from now, and pairing them puts every control in one place.
         */}
       <div className="ml-auto flex shrink-0 items-center gap-2">
-        <GlobalSearchBox />
+        <GlobalSearchBox viewerUsername={resolvedWkUsername} />
         <UserHeaderMenu
           accountId={accountId}
           viewedWkUsername={resolvedWkUsername ?? undefined}
