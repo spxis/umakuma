@@ -25,6 +25,8 @@ const PAGES = [
   { name: "releases", path: "/releases" },
   { name: "search", path: "/search" },
   { name: "news", path: "/news" },
+  // Public, and the page a shared kanji link opens.
+  { name: "shared kanji", path: "/kanji/%E4%BD%95" },
 ];
 
 type Overflow = { tag: string; classes: string; left: number; right: number };

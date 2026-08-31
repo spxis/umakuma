@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
 
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
+import KanjiDetailModal from "@/app/shared/KanjiDetailModal";
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 import { SUBJECT_VIEW_MODES, type SubjectViewMode } from "@/app/shared/subjectListView";
+import { useState } from "react";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import { displayReading, readingsForGrade } from "./gradeExplorerView";
@@ -49,6 +53,12 @@ export default function GradeKanjiGrid({
   onReveal,
 }: Props) {
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
+  /*
+   * Selecting a kanji opens its detail, the way every other subject grid
+   * behaves. This one only ever navigated or revealed a quiz answer, so a
+   * character here was the one you could not look at closely.
+   */
+  const [openKanji, setOpenKanji] = useState<SchoolGradeKanjiEntry | null>(null);
   if (items.length === 0) {
     return (
       <p className="rounded-2xl border border-line bg-surface-muted p-4 text-sm font-semibold text-foreground/70">
@@ -58,7 +68,8 @@ export default function GradeKanjiGrid({
   }
 
   return (
-    <ul
+    <>
+      <ul
       className={
         rows
           ? "space-y-1.5"
@@ -167,6 +178,12 @@ export default function GradeKanjiGrid({
               kanji={entry.kanji}
               grade={entry.grade}
               meaning={entry.primaryMeaning ?? null}
+              summary={{
+                meaning: entry.primaryMeaning ?? null,
+                on: readings.on.map(displayReading),
+                kun: readings.kun.map(displayReading),
+              }}
+              shareHref={`/kanji/${encodeURIComponent(entry.kanji)}`}
               className={`absolute z-10 opacity-0 ${rows ? "right-2 top-1/2 -translate-y-1/2" : "bottom-2 right-2"} transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100`}
             />
             {onReveal ? (
@@ -182,11 +199,32 @@ export default function GradeKanjiGrid({
                 {body}
               </Link>
             ) : (
-              <div className={`h-full ${shell}`}>{body}</div>
+              <button
+                type="button"
+                onClick={() => setOpenKanji(entry)}
+                className={`block h-full w-full cursor-pointer text-left ${shell} hover:brightness-95`}
+              >
+                {body}
+              </button>
             )}
           </li>
         );
       })}
-    </ul>
+      </ul>
+
+      {openKanji ? (
+        <KanjiDetailModal
+          kanji={openKanji.kanji}
+          grade={openKanji.grade}
+          shareHref={`/kanji/${encodeURIComponent(openKanji.kanji)}`}
+          summary={{
+            meaning: openKanji.primaryMeaning ?? null,
+            on: readingsForGrade(openKanji).on.map(displayReading),
+            kun: readingsForGrade(openKanji).kun.map(displayReading),
+          }}
+          onClose={() => setOpenKanji(null)}
+        />
+      ) : null}
+    </>
   );
 }

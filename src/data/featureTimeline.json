@@ -1186,5 +1186,15 @@
     "version": "0.107.0",
     "releasedAt": "2026-08-30T23:05:00Z",
     "summary": "An invited member may have no Google account at all, and the welcome page assumed one - sending them to the sign-in screen from a page they were entitled to open. It now accepts either kind of session and routes them to their own page."
+  },
+  {
+    "id": "kanji-detail-anywhere",
+    "area": "study",
+    "name": "Any kanji, in detail, at its own address",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.108.0",
+    "releasedAt": "2026-08-30T23:55:00Z",
+    "summary": "The stroke-order panel is now a shared component any surface can open, and every kanji has a public page you can send to someone. Selecting a card in the grade explorer opens it, which is how every other subject grid already behaved. The header carries the readings as well as the meaning, since a reader knows 何 by なに before they know it by what, with the stroke count beside it and the credit centred at the foot."
   }
 ]

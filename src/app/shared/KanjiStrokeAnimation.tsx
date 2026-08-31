@@ -12,10 +12,28 @@ type StrokePayload = {
   attribution: { source: string; url: string; licence: string; licenceUrl: string };
 };
 
+export type StrokeMeta = {
+  strokeCount: number;
+  attribution: StrokePayload["attribution"];
+};
+
 type Props = {
   kanji: string;
   grade?: number;
   size?: number;
+  /**
+   * Controls beside the drawing rather than beneath it.
+   *
+   * At desktop width the glyph is on the left and there is room to stack the
+   * controls down the right, which keeps the drawing the tallest thing in the
+   * modal instead of a wide block of buttons under it.
+   */
+  controlsLayout?: "row" | "column";
+  /** The modal shows the count in its header and the credit at its foot. */
+  showStrokeCount?: boolean;
+  showCredit?: boolean;
+  /** Hands the count and attribution up, so a caller can place them itself. */
+  onLoaded?: (meta: StrokeMeta) => void;
 };
 
 /**
@@ -27,12 +45,28 @@ type Props = {
  * That is also why it stays sharp at any size and why a child can follow the
  * order rather than only the result.
  */
-export default function KanjiStrokeAnimation({ kanji, grade, size = 180 }: Props) {
+export default function KanjiStrokeAnimation({
+  kanji,
+  grade,
+  size = 180,
+  controlsLayout = "row",
+  showStrokeCount = true,
+  showCredit = true,
+  onLoaded,
+}: Props) {
   const [data, setData] = useState<StrokePayload | null>(null);
   const [error, setError] = useState(false);
   const [playToken, setPlayToken] = useState(0);
   const [showNumbers, setShowNumbers] = useState(false);
   const pathRefs = useRef<Array<SVGPathElement | null>>([]);
+  /*
+   * Held in a ref so a caller passing an inline callback does not re-run the
+   * fetch on every render of its parent.
+   */
+  const onLoadedRef = useRef(onLoaded);
+  useEffect(() => {
+    onLoadedRef.current = onLoaded;
+  }, [onLoaded]);
 
   /*
    * No reset here: callers mount this per character through a `key`, so a new
@@ -46,7 +80,10 @@ export default function KanjiStrokeAnimation({ kanji, grade, size = 180 }: Props
     fetch(`/api/stroke-order/${encodeURIComponent(kanji)}${query}`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error("no strokes"))))
       .then((payload: StrokePayload) => {
-        if (!cancelled) setData(payload);
+        if (cancelled) return;
+        setData(payload);
+        // The caller may want the count in a header and the credit at a foot.
+        onLoadedRef.current?.({ strokeCount: payload.strokeCount, attribution: payload.attribution });
       })
       .catch(() => {
         if (!cancelled) setError(true);
@@ -93,8 +130,10 @@ export default function KanjiStrokeAnimation({ kanji, grade, size = 180 }: Props
     );
   }
 
+  const stacked = controlsLayout === "column";
+
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className={stacked ? "flex flex-col items-center gap-3 sm:flex-row sm:items-center" : "flex flex-col items-center gap-2"}>
       <svg
         viewBox={data.viewBox}
         width={size}
@@ -131,7 +170,7 @@ export default function KanjiStrokeAnimation({ kanji, grade, size = 180 }: Props
         ) : null}
       </svg>
 
-      <div className="flex items-center gap-1.5">
+      <div className={stacked ? "flex flex-row items-center gap-1.5 sm:flex-col sm:items-stretch" : "flex items-center gap-1.5"}>
         <button
           type="button"
           onClick={() => setPlayToken((token) => token + 1)}
@@ -150,11 +189,14 @@ export default function KanjiStrokeAnimation({ kanji, grade, size = 180 }: Props
         >
           {STROKE_ANIMATION_COPY.numbers}
         </button>
-        <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/45">
-          {data.strokeCount} {strokeWord(data.strokeCount)}
-        </span>
+        {showStrokeCount ? (
+          <span className="text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/45">
+            {data.strokeCount} {strokeWord(data.strokeCount)}
+          </span>
+        ) : null}
       </div>
 
+      {showCredit ? (
       <p className="text-[10px] font-semibold text-foreground/40">
         {STROKE_ANIMATION_COPY.creditPrefix}{" "}
         <a href={data.attribution.url} target="_blank" rel="noreferrer noopener" className="underline decoration-dotted underline-offset-2 hover:text-foreground/60">
@@ -164,6 +206,7 @@ export default function KanjiStrokeAnimation({ kanji, grade, size = 180 }: Props
           ({data.attribution.licence})
         </a>
       </p>
+      ) : null}
     </div>
   );
 }

@@ -4,6 +4,8 @@ export const STROKE_ANIMATION_COPY = {
   open: "Strokes",
   replay: "Replay",
   numbers: "Numbers",
+  copyLink: "Copy link",
+  linkCopied: "Copied",
   stroke: "stroke",
   strokes: "strokes",
   loading: "Loading stroke order",
