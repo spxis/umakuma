@@ -1590,5 +1590,15 @@
     "version": "0.152.0",
     "releasedAt": "2026-08-31T14:00:00Z",
     "summary": "The search placeholder promised \"or romaji\" and the code never kept the promise: readings are stored in kana, so typing watashi found nothing while わたし found plenty. A query is now folded into every spelling it could mean - the raw text, its hiragana, and its katakana, since JLPT stores on'yomi in katakana - and all three catalogues match and rank against the full set, scoring each hit by its best variant so folding can never demote a result the raw text already earned. The fold is a plain syllable table that accepts Hepburn and common kunrei spellings, doubled consonants, and the n-before-consonant rule, and it refuses to convert anything that is not entirely romaji, so English words never gain a phantom kana reading that outranks their real meaning match."
+  },
+  {
+    "id": "search-one-box-everywhere",
+    "area": "platform",
+    "name": "One search box, everywhere",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.153.0",
+    "releasedAt": "2026-08-31T15:00:00Z",
+    "summary": "The header box and the search page's box were two different controls, and the page you were sent to was the one without autocomplete. Both now run the same combobox: suggestions while you type, the rest of the best match drawn in faint grey after the caret with Enter locking it in as if typed, a clear button once there is something to clear, and the magnifier itself as the submit. Arrowing through the suggestions rewrites the box without spending a single extra search, because what was typed and what is displayed are kept apart - the request still keys on the typed text while the box shows the highlighted row. At rest the header field is half its working width and grows when it is wanted, the results page keeps the site navigation instead of dropping it, and the arrow keys carry on past the last suggestion into the results themselves and back up into the box."
   }
 ]

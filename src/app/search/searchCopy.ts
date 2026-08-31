@@ -3,6 +3,7 @@ export const SEARCH_PAGE_COPY = {
   heading: "Search",
   placeholder: "Search kanji, meaning, reading, or romaji",
   submit: "Search",
+  clear: "Clear the search",
   allSources: "All",
   emptyPrompt: "Search every catalogue at once — WaniKani, JLPT and School Grades.",
   noResults: "Nothing matched that search.",

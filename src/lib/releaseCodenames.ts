@@ -203,6 +203,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tsukanda Tsuki", ja: "掴んだ月", reading: "つかんだつき", gloss: "the moon, grasped" },
   { romaji: "Tegaru na Tebiki", ja: "手軽な手引き", reading: "てがるなてびき", gloss: "a handbook made simple" },
   { romaji: "Todoku Toudai", ja: "届く灯台", reading: "とどくとうだい", gloss: "the lighthouse whose light reaches" },
+  { romaji: "Nameraka na Nagare", ja: "滑らかな流れ", reading: "なめらかなながれ", gloss: "a smooth flow" },
 ];
 
 /**

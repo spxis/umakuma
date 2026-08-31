@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import type { KeyboardEvent } from "react";
 
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 
@@ -6,6 +9,7 @@ import { SEARCH_SOURCE_LABELS, searchHitHref, type SearchHit, type SearchSource 
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 
 import { SEARCH_PAGE_COPY } from "./searchCopy";
+import { SEARCH_RESULT_ROW_ATTR, focusSearchInput, focusSearchResultRow } from "./searchFocus";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 type Props = {
@@ -38,22 +42,47 @@ export default function SearchHitList({ hits, viewerUsername }: Props) {
     );
   }
 
+  /*
+   * The arrows walk the rows, and off the top they hand focus back to the
+   * search box - the same movement that was already walking the suggestions,
+   * continued into the results, so the whole search is reachable without ever
+   * reaching for the mouse.
+   */
+  function onKeyDown(event: KeyboardEvent<HTMLUListElement>) {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+
+    const row = (event.target as HTMLElement).closest<HTMLElement>(`[${SEARCH_RESULT_ROW_ATTR}]`);
+    const index = Number(row?.getAttribute(SEARCH_RESULT_ROW_ATTR) ?? -1);
+    if (index < 0) return;
+
+    event.preventDefault();
+    if (event.key === "ArrowUp" && index === 0) {
+      focusSearchInput();
+      return;
+    }
+    focusSearchResultRow(event.key === "ArrowDown" ? index + 1 : index - 1);
+  }
+
   return (
-    <ul className="overflow-hidden rounded-2xl border border-line bg-surface divide-y divide-line/60">
-      {hits.map((hit) => (
+    <ul
+      className="overflow-hidden rounded-2xl border border-line bg-surface divide-y divide-line/60"
+      onKeyDown={onKeyDown}
+    >
+      {hits.map((hit, index) => (
         <li key={hit.key}>
-          <HitRow hit={hit} href={searchHitHref(hit, viewerUsername)} />
+          <HitRow hit={hit} index={index} href={searchHitHref(hit, viewerUsername)} />
         </li>
       ))}
     </ul>
   );
 }
 
-function HitRow({ hit, href }: { hit: SearchHit; href: string | null }) {
+function HitRow({ hit, index, href }: { hit: SearchHit; index: number; href: string | null }) {
   const body = (
     <>
           <span
-            className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 ${JP_TEXT_CLASS} ${subjectGlyphTone(
+            /* Three characters fit at every width; 私自身 clipped to 私 at the old w-16. */
+            className={`w-20 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 ${JP_TEXT_CLASS} ${subjectGlyphTone(
               hit.subjectType,
             )}`}
           >
@@ -84,7 +113,9 @@ function HitRow({ hit, href }: { hit: SearchHit; href: string | null }) {
     </>
   );
 
-  const shell = "flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 text-left transition hover:bg-surface-muted/50";
+  const shell =
+    "flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 text-left outline-none transition hover:bg-surface-muted/50 focus-visible:bg-surface-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent/40";
+  const rowProps = { [SEARCH_RESULT_ROW_ATTR]: index };
 
   /*
    * The strokes button sits outside the row link. Nesting a button inside an
@@ -93,11 +124,14 @@ function HitRow({ hit, href }: { hit: SearchHit; href: string | null }) {
   return (
     <div className="flex items-center gap-1 pr-2">
       {href ? (
-        <Link href={href} className={shell}>
+        <Link href={href} className={shell} {...rowProps}>
           {body}
         </Link>
       ) : (
-        <div className={shell}>{body}</div>
+        /* Not a link for a signed-out reader, but still a stop for the arrows. */
+        <div className={shell} tabIndex={-1} {...rowProps}>
+          {body}
+        </div>
       )}
       {isSingleKanji(hit) ? <StrokeOrderButton kanji={hit.glyph} meaning={hit.meaning} /> : null}
     </div>

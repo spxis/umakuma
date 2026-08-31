@@ -63,3 +63,34 @@ export function dedupeByGlyph(hits: SearchHit[], limit: number = SUGGEST_LIMIT):
 export function suggestionHref(hit: SearchHit, viewerUsername: string | null): string {
   return searchHitHref(hit, viewerUsername) ?? `/search?query=${encodeURIComponent(hit.glyph)}`;
 }
+
+/** How far down the ranking a completion may come from. */
+export const GHOST_SCAN_DEPTH = 5;
+
+/**
+ * The rest of a top hit's field that extends what was typed, or null.
+ *
+ * This is the faint-grey completion after the caret. It only ever extends a
+ * prefix - "ani" ghosts "mal" from Animal, にほ ghosts ん from にほん - and
+ * offers nothing when a hit merely relates, because completing "animal" with
+ * 獣 would replace the member's words rather than finish them.
+ *
+ * It reads a few rows rather than only the first, because the best answer and
+ * the best completion are different questions: "ani" ranks 兄 first on its あに
+ * reading, and stopping there would offer no completion at all while "animal"
+ * sat one row below. The first row that can finish the word wins.
+ */
+export function ghostFor(typed: string, hits: SearchHit[]): string | null {
+  if (typed.length === 0) return null;
+  const needle = typed.toLowerCase();
+  for (const hit of hits.slice(0, GHOST_SCAN_DEPTH)) {
+    const fields = [hit.meaning, ...(hit.reading ?? "").split("、"), hit.glyph];
+    for (const field of fields) {
+      const candidate = field.trim();
+      if (candidate.length > typed.length && candidate.toLowerCase().startsWith(needle)) {
+        return candidate.slice(typed.length);
+      }
+    }
+  }
+  return null;
+}

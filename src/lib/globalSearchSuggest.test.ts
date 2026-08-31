@@ -4,6 +4,7 @@ import { SEARCH_SOURCES, type SearchHit } from "./globalSearch";
 import {
   SUGGEST_LIMIT,
   dedupeByGlyph,
+  ghostFor,
   isSuggestable,
   suggestMinLength,
   suggestUrl,
@@ -89,6 +90,45 @@ describe("dedupeByGlyph", () => {
       hit({ key: "b", glyph: "宅" }),
     ]);
     expect(deduped.map((item) => item.key)).toEqual(["a", "b"]);
+  });
+});
+
+describe("ghostFor", () => {
+  it("completes the meaning the member started typing", () => {
+    expect(ghostFor("ani", [hit({ meaning: "Animal", reading: null })])).toBe("mal");
+  });
+
+  it("ignores the case of what was typed", () => {
+    expect(ghostFor("AN", [hit({ meaning: "Animal", reading: null })])).toBe("imal");
+  });
+
+  it("completes a kana reading, one reading at a time", () => {
+    expect(ghostFor("にほ", [hit({ glyph: "日本", meaning: "Japan", reading: "にっぽん、にほん" })])).toBe("ん");
+  });
+
+  it("completes a multi-character glyph", () => {
+    expect(ghostFor("家政", [hit({ glyph: "家政婦", meaning: "Housekeeper", reading: null })])).toBe("婦");
+  });
+
+  it("takes the completion from a later row when the top hit cannot finish the word", () => {
+    const hits = [
+      hit({ key: "grades:兄", glyph: "兄", meaning: "Older Brother", reading: "ケイ、あに" }),
+      hit({ key: "jlpt:獣", glyph: "獣", meaning: "animal", reading: "ジュウ" }),
+    ];
+    expect(ghostFor("ani", hits)).toBe("mal");
+  });
+
+  it("offers nothing when no hit extends what was typed", () => {
+    expect(ghostFor("animal", [hit({ glyph: "獣", meaning: "Beast", reading: "じゅう" })])).toBeNull();
+  });
+
+  it("offers nothing for an exact match, which has nothing left to complete", () => {
+    expect(ghostFor("Animal", [hit({ meaning: "Animal", reading: null })])).toBeNull();
+  });
+
+  it("offers nothing without hits or without typing", () => {
+    expect(ghostFor("ani", [])).toBeNull();
+    expect(ghostFor("", [hit()])).toBeNull();
   });
 });
 
