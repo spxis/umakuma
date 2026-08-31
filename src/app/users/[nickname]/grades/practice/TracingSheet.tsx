@@ -175,9 +175,13 @@ export default function TracingSheet({ entries, mode = "trace", showModel = true
             </div>
           ) : (
             <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${SHEET_COLUMNS}, minmax(0, 1fr))` }}>
-              <Cell>
-                <TraceGlyph entry={entry} tone="solid" />
-              </Cell>
+              {/*
+                * The solid model only when it is asked for. With the option
+                * off this square was still filled in dark, which is the one
+                * thing the option exists to remove - it becomes an empty
+                * square to write in, like the rest of the row.
+                */}
+              <Cell>{showModel ? <TraceGlyph entry={entry} tone="solid" /> : null}</Cell>
               {Array.from({ length: TRACE_CELLS_PER_ROW }, (_, index) => (
                 <Cell key={`ghost-${index}`}>
                   <TraceGlyph entry={entry} tone="ghost" />

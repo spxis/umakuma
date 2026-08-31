@@ -56,3 +56,17 @@ export const WANIKANI_MAX_LEVEL = 60;
 
 /** N5 down to N1, in the order a learner climbs them. */
 export const JLPT_LEVELS = [5, 4, 3, 2, 1] as const;
+
+/**
+ * The four levels the test ran until 2009, and the modern level each matches.
+ *
+ * Both schemes count down, so old Level 4 is the beginner paper and maps to N5
+ * rather than N4. N3 is absent because it did not exist: it was added in 2010
+ * to bridge old Levels 3 and 2.
+ */
+export const JLPT_CLASSIC_LEVELS = [
+  { classic: 4, modern: 5 },
+  { classic: 3, modern: 4 },
+  { classic: 2, modern: 2 },
+  { classic: 1, modern: 1 },
+] as const;

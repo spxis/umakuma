@@ -1286,5 +1286,15 @@
     "version": "0.117.0",
     "releasedAt": "2026-08-31T04:40:00Z",
     "summary": "Filters and results shared one card on the grade explorer, divided by a hairline, while both other explorers keep them in separate cards. They are separate here too now, and the result count sits with the results rather than with the filters."
+  },
+  {
+    "id": "practice-model-off-clears",
+    "area": "study",
+    "name": "Turning off the finished character clears its square",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.118.0",
+    "releasedAt": "2026-08-31T05:00:00Z",
+    "summary": "The option reached the stroke-order sheet but not the tracing sheet, which kept printing the character solid in the first square - the one thing the option exists to remove. It is now an empty square to write in, like the rest of the row."
   }
 ]

@@ -8,6 +8,22 @@ import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 
 /** Grid or list on the JLPT explorer, remembered per surface. */
 const JLPT_VIEW_MODE_STORAGE_KEY = "wr:jlpt-explorer:view-mode";
+
+/**
+ * The test before 2010, for people who sat it.
+ *
+ * Four levels counting down, and both schemes number downward, so an old
+ * Level 4 is the beginner paper and maps to N5 - not to N4, which is the trap.
+ * N3 has no old equivalent at all: it was added to bridge old Levels 3 and 2,
+ * which is why these chips do not cover the whole catalogue and the note below
+ * them says so rather than quietly mapping N3 somewhere it never sat.
+ */
+const CLASSIC_LEVEL_CHIPS = [
+  { classic: 4, modern: 5 },
+  { classic: 3, modern: 4 },
+  { classic: 2, modern: 2 },
+  { classic: 1, modern: 1 },
+] as const;
 import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import jlptReadings from "@/data/jlptReadings.json";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
@@ -69,6 +85,7 @@ export default function JlptExplorerContent({
   /* Remembered per surface, like the other listing pages. */
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(JLPT_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+  const [showClassic, setShowClassic] = useState(false);
 
   const PAGE_SIZE = 40;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -234,31 +251,66 @@ export default function JlptExplorerContent({
               </div>
             </div>
           ) : null}
+        {showClassic ? (
+          <p className="mb-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-900">
+            The test ran four levels until 2009, counting down like today, so Level 4 is the
+            beginner paper and matches N5. N3 has no equivalent - it was added in 2010 to bridge
+            old Levels 3 and 2 - so these four do not reach every kanji.
+          </p>
+        ) : null}
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="JLPT level filters">
             <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">JLPT</span>
             <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
             <FilterChipButton type="button" onClick={() => onSetSelectedLevels(new Set([1, 2, 3, 4, 5]))} toneClassName={badgeClass(selectedLevels.size === 5)} label="All" count={formatNumber(counts.all)} />
-            {([
-              [5, counts.n5],
-              [4, counts.n4],
-              [3, counts.n3],
-              [2, counts.n2],
-              [1, counts.n1],
-            ] as const).map(([level, count]) => (
-              <FilterChipButton
-                key={level}
-                type="button"
-                onClick={() => onToggleNLevel(level)}
-                toneClassName={
-                  selectedLevels.has(level)
-                    ? "border-teal-500 bg-teal-500 text-white"
-                    : "border-teal-300 bg-teal-100 text-teal-800 hover:bg-teal-200"
-                }
-                label={`N${level}`}
-                count={formatNumber(count)}
-              />
-            ))}
+            {showClassic
+              ? CLASSIC_LEVEL_CHIPS.map(({ classic, modern }) => (
+                  <FilterChipButton
+                    key={classic}
+                    type="button"
+                    onClick={() => onToggleNLevel(modern)}
+                    toneClassName={
+                      selectedLevels.has(modern)
+                        ? "border-amber-500 bg-amber-500 text-white"
+                        : "border-amber-300 bg-amber-100 text-amber-900 hover:bg-amber-200"
+                    }
+                    label={`Level ${classic}`}
+                    count={`N${modern}`}
+                  />
+                ))
+              : ([
+                  [5, counts.n5],
+                  [4, counts.n4],
+                  [3, counts.n3],
+                  [2, counts.n2],
+                  [1, counts.n1],
+                ] as const).map(([level, count]) => (
+                  <FilterChipButton
+                    key={level}
+                    type="button"
+                    onClick={() => onToggleNLevel(level)}
+                    toneClassName={
+                      selectedLevels.has(level)
+                        ? "border-teal-500 bg-teal-500 text-white"
+                        : "border-teal-300 bg-teal-100 text-teal-800 hover:bg-teal-200"
+                    }
+                    label={`N${level}`}
+                    count={formatNumber(count)}
+                  />
+                ))}
+
+            <button
+              type="button"
+              onClick={() => setShowClassic((on) => !on)}
+              title={
+                showClassic
+                  ? "Show the levels used since 2010"
+                  : "Show the four levels used until 2009"
+              }
+              className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-2.5 text-[11px] font-bold text-foreground/70 transition hover:bg-surface-muted"
+            >
+              {showClassic ? "N5-N1" : "Pre-2010"}
+            </button>
             </div>
           </div>
           <div className="ml-auto flex items-center gap-2">

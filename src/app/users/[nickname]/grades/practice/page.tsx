@@ -12,7 +12,7 @@ import { PRACTICE_SOURCES, isPracticeSource, isTaggedPracticeSource, practiceEnt
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
 import PrintButton from "./PrintButton";
-import { JLPT_LEVELS, PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, WANIKANI_MAX_LEVEL } from "./practiceCopy";
+import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, WANIKANI_MAX_LEVEL } from "./practiceCopy";
 import TracingSheet, { type SheetMode, type TraceEntry } from "./TracingSheet";
 
 type PageProps = {
@@ -226,7 +226,13 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           {(source === PRACTICE_SOURCES.grade
             ? GRADE_OPTIONS.map((value) => ({ value, label: GRADE_SHORT_LABELS[value] }))
             : source === PRACTICE_SOURCES.jlpt
-              ? JLPT_LEVELS.map((value) => ({ value, label: `N${value}` }))
+              ? [
+                  ...JLPT_LEVELS.map((value) => ({ value, label: `N${value}` })),
+                  ...JLPT_CLASSIC_LEVELS.map(({ classic, modern }) => ({
+                    value: modern,
+                    label: `Level ${classic}`,
+                  })),
+                ]
               : Array.from({ length: WANIKANI_MAX_LEVEL }, (_, index) => ({
                   value: index + 1,
                   label: String(index + 1),
@@ -238,7 +244,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
             const stayOpen = value === current ? "" : "&pick=1";
             return (
               <Link
-                key={value}
+                key={label}
                 href={`?source=${source}&grade=${gradeParam}&level=${value}${carry}${stayOpen}`}
                 className={`inline-flex h-7 min-w-7 items-center justify-center rounded-full border px-2 text-[11px] font-bold transition ${
                   value === current
