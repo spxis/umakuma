@@ -197,6 +197,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Shimaru Shikiri", ja: "締まる仕切り", reading: "しまるしきり", gloss: "the partition that shuts" },
   { romaji: "Sueru Sugata", ja: "据える姿", reading: "すえるすがた", gloss: "the form set in place" },
   { romaji: "Sekimon Seiri", ja: "関門整理", reading: "せきもんせいり", gloss: "tidying the gateways" },
+  { romaji: "Soroeru Sotogawa", ja: "揃える外側", reading: "そろえるそとがわ", gloss: "aligning the outside" },
 ];
 
 /**

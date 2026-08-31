@@ -1,9 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useCallback } from "react";
 
-import SegmentedControl from "../shared/SegmentedControl";
 import {
   ADMIN_WORKSPACE_TABS,
   ADMIN_WORKSPACE_TAB_LABELS,
@@ -21,6 +20,14 @@ type Props = {
  * navigation in the same slot. The standalone pages once rendered their own
  * pill nav, which is how they shipped looking like a different app.
  *
+ * It sits inside the header's second row now, in the slot every other section
+ * uses for its pages, and reads the same way they do - small caps on the left
+ * rather than a centred segmented control floating in a third row of its own.
+ * Admin was the last place still drawing its own navigation strip.
+ *
+ * They are links rather than buttons because they are routes; that restores
+ * middle-click and open-in-new-tab, which the router.push control ate.
+ *
  * Nine tabs do not fit a phone. Wrapping them costs three rows of height on
  * every admin screen, so the row scrolls instead - but it gave no sign of
  * that: the pill at the edge was sliced flat and read as a rendering fault
@@ -28,8 +35,6 @@ type Props = {
  * lifts once there is nothing further to scroll to.
  */
 export default function AdminPageNav({ activeTab }: Props) {
-  const router = useRouter();
-
   const markScrollEnd = useCallback((element: HTMLElement | null) => {
     if (!element) return;
     // A pixel of slack: fractional scroll positions never land exactly.
@@ -38,24 +43,24 @@ export default function AdminPageNav({ activeTab }: Props) {
   }, []);
 
   return (
-    <section
+    <nav
+      aria-label="Admin workspace tabs"
       ref={markScrollEnd}
       onScroll={(event) => markScrollEnd(event.currentTarget)}
-      className="admin-tab-scroll w-full overflow-x-auto lg:flex lg:justify-end"
+      className="admin-tab-scroll flex min-w-0 items-center gap-x-2 gap-y-1 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/45 sm:text-[11px]"
     >
-      <SegmentedControl<AdminWorkspaceTab>
-        ariaLabel="Admin workspace tabs"
-        asTabs
-        size="sm"
-        value={activeTab}
-        onChange={(nextTab) => {
-          router.push(routeForAdminWorkspaceTab(nextTab));
-        }}
-        options={ADMIN_WORKSPACE_TABS.map((tab) => ({
-          value: tab,
-          label: ADMIN_WORKSPACE_TAB_LABELS[tab],
-        }))}
-      />
-    </section>
+      {ADMIN_WORKSPACE_TABS.map((tab) => (
+        <Link
+          key={tab}
+          href={routeForAdminWorkspaceTab(tab)}
+          aria-current={tab === activeTab ? "page" : undefined}
+          className={`shrink-0 rounded-full px-2 py-0.5 transition ${
+            tab === activeTab ? "bg-surface-muted font-black text-foreground" : "hover:text-foreground/75"
+          }`}
+        >
+          {ADMIN_WORKSPACE_TAB_LABELS[tab]}
+        </Link>
+      ))}
+    </nav>
   );
 }

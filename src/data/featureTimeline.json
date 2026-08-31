@@ -476,16 +476,6 @@
     "summary": "Split JLPT content from the WaniKani progress overlay so the kanji data stands on its own."
   },
   {
-    "id": "display-name-visibility",
-    "name": "Display names and visibility",
-    "area": "account",
-    "status": "planned",
-    "date": "2026-08-30",
-    "dateIsEstimate": true,
-    "release": 4,
-    "summary": "A public Global Display Name for every member plus an opt-in visibility flag, private by default."
-  },
-  {
     "id": "optional-wk-identity",
     "name": "Optional WaniKani connection",
     "area": "account",
@@ -587,16 +577,6 @@
     "summary": "Retire the batchSize = -1 sentinel in favour of a real enum value."
   },
   {
-    "id": "dry-adoption",
-    "name": "Shared surface primitives",
-    "area": "platform",
-    "status": "planned",
-    "date": "2026-09-04",
-    "dateIsEstimate": true,
-    "release": 17,
-    "summary": "Move the remaining hand-rolled cards, loading states and pills onto the shared components."
-  },
-  {
     "id": "game-activity",
     "name": "Last play and live rounds",
     "area": "games",
@@ -624,16 +604,6 @@
     "date": "2026-08-30",
     "dateIsEstimate": true,
     "summary": "Who is looking at a game right now. Backlogged by John: not worth any performance or cost risk ahead of open signup."
-  },
-  {
-    "id": "registration-onboarding",
-    "name": "Registration and onboarding",
-    "area": "account",
-    "status": "planned",
-    "date": "2026-08-31",
-    "dateIsEstimate": true,
-    "release": 5,
-    "summary": "The wizard after Google sign-in: display name, optional WaniKani token, JLPT certification, and the public-board choice."
   },
   {
     "id": "jlpt-level-reviews",
@@ -1576,5 +1546,15 @@
     "version": "0.146.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "/api/join created accounts and never asked whether signing up was allowed. It took a Google session and a WaniKani token and upserted an account straight into the database - no invite code, no signup mode, no approval - so the whole invite-only model could be walked around by anyone who could sign in with Google and hold any working WaniKani token. It had no caller anywhere in the app, having been replaced by the invite panel, and it is deleted rather than gated: a gate would have reopened it the moment open signup was switched on, and it would then have created accounts that skipped the onboarding wizard and the approval queue as well."
+  },
+  {
+    "id": "admin-joins-the-header",
+    "area": "admin",
+    "name": "Admin joins the header",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.147.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Admin was the last place still drawing its own navigation strip - a centred segmented control in a third row below the header, while every other section put its pages on the left of the header's second row. Its tabs move into that same slot and read the same way, so an admin page and a study page are recognisably the same site. The header's second row now accepts a section that supplies its own pages, which admin needs since its tabs come from their own registry rather than from navSections. They are links rather than buttons as well, restoring middle-click and open-in-new-tab that the router.push control had eaten. Three roadmap entries were also removed from the planned list: they described work already shipped under other names, so the page was advertising as planned things that were live."
   }
 ]

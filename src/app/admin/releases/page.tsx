@@ -74,9 +74,8 @@ export default async function AdminReleasesPage() {
           viewerMenuInfo={viewerMenuInfo}
           showAdminActions={true}
           className="mb-2"
+          subNav={<AdminPageNav activeTab="releases" />}
         />
-
-        <AdminPageNav activeTab="releases" />
 
         <AdminWorkspaceHeader
           checkingSession={false}
