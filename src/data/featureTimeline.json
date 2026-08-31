@@ -469,11 +469,13 @@
     "id": "jlpt-standalone",
     "name": "Standalone JLPT study",
     "area": "jlpt",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-08-31",
-    "dateIsEstimate": true,
+    "dateIsEstimate": false,
     "release": 7,
-    "summary": "The JLPT route refused the whole request without a WaniKani token, although the token was only ever used for the progress overlay - the kanji themselves come from a table WaniKani has no part in. So a member who had not connected could not read the JLPT data at all, only the part of it that was about them. The token is required where it is used and nowhere else now: the kanji stand on their own and the overlay is simply empty without one."
+    "summary": "The JLPT route refused the whole request without a WaniKani token, although the token was only ever used for the progress overlay - the kanji themselves come from a table WaniKani has no part in. So a member who had not connected could not read the JLPT data at all, only the part of it that was about them. The token is required where it is used and nowhere else now: the kanji stand on their own, and the overlay is simply empty without one.",
+    "version": "0.149.0",
+    "releasedAt": "2026-08-31T12:00:00Z"
   },
   {
     "id": "optional-wk-identity",
