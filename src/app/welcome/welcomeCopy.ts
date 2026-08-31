@@ -49,6 +49,27 @@ export const WELCOME_COPY = {
 
   visibilityHeading: "Who can see you?",
 
+  stepOf: "Step",
+  skip: "Skip",
+  back: "Back",
+
+  wanikaniHeading: "Do you use WaniKani?",
+  wanikaniBody:
+    "If you do, connecting it brings your reviews and your level across. If you do not, skip this - most of UmaKuma works without it, and you can connect later from your profile.",
+  wanikaniTokenLabel: "WaniKani API token",
+  wanikaniTokenHint:
+    "Find it in WaniKani under Settings, API Tokens. We check it, encrypt it, and never show it again.",
+  wanikaniConnect: "Connect",
+  wanikaniConnecting: "Checking with WaniKani...",
+  wanikaniConnected: "Connected as",
+  wanikaniSkip: "I do not use WaniKani",
+
+  jlptHeading: "Have you taken the JLPT?",
+  jlptBody: "Only if you want it on your profile. It changes nothing about how you study here.",
+
+  finish: "Finish",
+  finishing: "Almost there...",
+
   submit: "Create my account",
   submitting: "Setting things up...",
   failed: "Could not create your account. Please try again.",

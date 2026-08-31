@@ -45,6 +45,8 @@ describe("listableTo", () => {
   it("keeps every account that predates these columns on the board", () => {
     const rows = [account(null, null, "john"), account(null, null, "emi")];
     expect(listableTo(rows, "member")).toHaveLength(2);
+    // Including for signed-out visitors, who could already see them.
+    expect(listableTo(rows, "anonymous")).toHaveLength(2);
   });
 
   it("shows an admin everyone, including those still waiting", () => {

@@ -7,9 +7,10 @@
  * without the second.
  *
  * A new account starts at `private` and is asked to choose during signup.
- * Accounts that predate this field read as `family`: they were already on the
- * leaderboard, and a column added underneath them must not quietly remove
- * anyone. That is why `null` is not simply treated as the strictest value.
+ * Accounts that predate this field read as `public`, because that is what they
+ * already were: the leaderboard had no visibility filter at all. A column
+ * added underneath existing rows must not quietly remove anyone, from any
+ * audience - which is why `null` is not treated as the strictest value.
  */
 
 export const ACCOUNT_VISIBILITY = {
@@ -28,11 +29,17 @@ export const DEFAULT_NEW_ACCOUNT_VISIBILITY: AccountVisibility = ACCOUNT_VISIBIL
 /**
  * What an account with no stored value means.
  *
- * Every account that existed before this column was added was listed on the
- * leaderboard, so reading `null` as `private` would have removed the whole
- * family from it on deploy.
+ * `public`, because that is exactly what these accounts already were. The
+ * leaderboard had no visibility filter before this column existed, so every
+ * account on it was visible to anyone, signed in or not.
+ *
+ * This was first written as `family`, which reads as the cautious choice and
+ * is not: it silently took the whole family off the public board the moment it
+ * deployed. Preserving what was already true is the non-destructive default,
+ * and each member can lower it on their profile. Only new accounts start
+ * private, where nothing is being taken away from anybody.
  */
-export const LEGACY_VISIBILITY: AccountVisibility = ACCOUNT_VISIBILITY.family;
+export const LEGACY_VISIBILITY: AccountVisibility = ACCOUNT_VISIBILITY.public;
 
 export function isAccountVisibility(value: string): value is AccountVisibility {
   return (ACCOUNT_VISIBILITY_VALUES as string[]).includes(value);

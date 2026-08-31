@@ -9,6 +9,8 @@ import {
   type AccountVisibility,
 } from "@/lib/accountVisibility";
 
+import WelcomeJlptStep from "./WelcomeJlptStep";
+import WelcomeWanikaniStep from "./WelcomeWanikaniStep";
 import { WELCOME_COPY } from "./welcomeCopy";
 
 type Props = {
@@ -33,6 +35,13 @@ export default function WelcomeForm({ suggestedName, defaultVisibility, askDispl
   const [seenBy, setSeenBy] = useState<AccountVisibility>(defaultVisibility);
   const [state, setState] = useState<"idle" | "saving">("idle");
   const [error, setError] = useState<string | null>(null);
+  /*
+   * The account is created by the first step; the rest attach to it. Each step
+   * writes as it completes, so leaving halfway keeps whatever was answered
+   * rather than losing the account entirely.
+   */
+  const [accountId, setAccountId] = useState<string | null>(null);
+  const [step, setStep] = useState<"identity" | "wanikani" | "jlpt">("identity");
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,9 +64,31 @@ export default function WelcomeForm({ suggestedName, defaultVisibility, askDispl
       return;
     }
 
-    // The welcome page decides where they land, so re-enter it rather than
-    // guessing here whether they are approved.
+    const payload = await response.json().catch(() => null);
+    const id = payload?.account?.id ?? null;
+    if (!id) {
+      // Nothing to attach the optional steps to; the page will route them.
+      finish();
+      return;
+    }
+
+    setAccountId(id);
+    setStep("wanikani");
+    setState("idle");
+  }
+
+  /* The welcome page decides where they land, so re-enter it rather than
+   * guessing here whether they are waiting for approval. */
+  function finish() {
     window.location.href = "/welcome";
+  }
+
+  if (step === "wanikani" && accountId) {
+    return <WelcomeWanikaniStep accountId={accountId} onDone={() => setStep("jlpt")} />;
+  }
+
+  if (step === "jlpt" && accountId) {
+    return <WelcomeJlptStep accountId={accountId} onDone={finish} />;
   }
 
   return (

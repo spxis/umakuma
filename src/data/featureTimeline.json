@@ -1166,5 +1166,15 @@
     "version": "0.105.0",
     "releasedAt": "2026-08-30T22:10:00Z",
     "summary": "The grade explorer can be read as rows as well as cards, which is how you scan a whole school year and the only way to see a kanji with ten kun readings in full. The stroke control no longer sits on every card: it appears when you hover, or always where there is no hover to give, which also fixes it covering the end of a long reading."
+  },
+  {
+    "id": "leaderboard-legacy-visibility",
+    "area": "account",
+    "name": "Existing members stay on the public leaderboard",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.106.0",
+    "releasedAt": "2026-08-30T22:45:00Z",
+    "summary": "Accounts that predate the visibility setting now read as public, which is what they already were. Reading them as members-only had emptied the leaderboard for anyone who was not signed in. New accounts still start private, where no audience is being taken away."
   }
 ]

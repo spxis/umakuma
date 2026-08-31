@@ -17,17 +17,19 @@ describe("resolveVisibility", () => {
   });
 
   /*
-   * The trap this column could have set. Every account that existed before it
-   * was on the leaderboard; reading null as private would have removed the
-   * whole family the moment it deployed.
+   * The trap this column set, and did catch us once. Every account that existed
+   * before it was on a leaderboard with no visibility filter, so it was visible
+   * to anyone at all. Reading null as anything stricter removes an audience
+   * that already had access - `family` shipped for ten minutes and emptied the
+   * public board.
    */
-  it("treats an account from before the column as visible to members", () => {
-    expect(resolveVisibility(null)).toBe(ACCOUNT_VISIBILITY.family);
-    expect(resolveVisibility(undefined)).toBe(ACCOUNT_VISIBILITY.family);
+  it("treats an account from before the column as public, which is what it was", () => {
+    expect(resolveVisibility(null)).toBe(ACCOUNT_VISIBILITY.public);
+    expect(resolveVisibility(undefined)).toBe(ACCOUNT_VISIBILITY.public);
   });
 
   it("falls back rather than trusting a value it does not know", () => {
-    expect(resolveVisibility("everyone")).toBe(ACCOUNT_VISIBILITY.family);
+    expect(resolveVisibility("everyone")).toBe(ACCOUNT_VISIBILITY.public);
   });
 });
 
@@ -55,9 +57,10 @@ describe("isVisibleTo", () => {
     expect(isVisibleTo("public", "member")).toBe(true);
   });
 
-  it("keeps existing accounts on the leaderboard for members", () => {
+  // The regression, pinned: a signed-out visitor could see these accounts.
+  it("keeps existing accounts on the leaderboard for everyone, signed out included", () => {
     expect(isVisibleTo(null, "member")).toBe(true);
-    expect(isVisibleTo(null, "anonymous")).toBe(false);
+    expect(isVisibleTo(null, "anonymous")).toBe(true);
   });
 });
 
