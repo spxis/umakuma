@@ -1196,5 +1196,15 @@
     "version": "0.108.0",
     "releasedAt": "2026-08-30T23:55:00Z",
     "summary": "The stroke-order panel is now a shared component any surface can open, and every kanji has a public page you can send to someone. Selecting a card in the grade explorer opens it, which is how every other subject grid already behaved. The header carries the readings as well as the meaning, since a reader knows 何 by なに before they know it by what, with the stroke count beside it and the credit centred at the foot."
+  },
+  {
+    "id": "updates-page-names-and-months",
+    "area": "platform",
+    "name": "Updates leads with the release name",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.109.0",
+    "releasedAt": "2026-08-31T00:20:00Z",
+    "summary": "Each release now shows its codename on the row rather than only inside it, since that is the part anyone remembers. Months collapse, and an admin reaches the release admin page from here instead of finding their own way."
   }
 ]

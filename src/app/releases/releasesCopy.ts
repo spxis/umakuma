@@ -8,5 +8,7 @@ export const RELEASES_PAGE_COPY = {
   releases: "releases",
   area: "Area",
   codename: "Name",
+  adminLink: "Release admin",
+  collapseMonth: "Collapse",
   backHome: "Back to UmaKuma",
 } as const;

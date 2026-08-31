@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 
 import CodenameText from "@/app/shared/CodenameText";
 import umakumaLogo from "@/images/umakuma-banner1-transparent.png";
 import { loadFeatureTimeline, publicReleaseEntries, publicSummaryFor } from "@/lib/featureTimeline";
+import { authOptions, isAdminEmail } from "@/lib/auth";
 import { codenameForVersion } from "@/lib/releaseCodenames";
 
 import { RELEASES_PAGE_COPY } from "./releasesCopy";
@@ -15,7 +17,14 @@ export const metadata: Metadata = {
   description: "What shipped in UmaKuma, newest first.",
 };
 
-export default function PublicReleasesPage() {
+export default async function PublicReleasesPage() {
+  /*
+   * The page is public, so the admin route is offered only to an admin - a
+   * link everybody can see to a page only one person can open is noise.
+   */
+  const session = await getServerSession(authOptions);
+  const viewerIsAdmin = isAdminEmail(session?.user?.email ?? null);
+
   const releases = publicReleaseEntries(loadFeatureTimeline());
   const months = groupReleasesByMonth(releases);
 
@@ -25,10 +34,19 @@ export default function PublicReleasesPage() {
         <Link href="/" className="shrink-0">
           <Image src={umakumaLogo} alt="UmaKuma" width={56} height={56} className="h-14 w-14 object-contain" priority />
         </Link>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-black text-foreground">{RELEASES_PAGE_COPY.heading}</h1>
           <p className="text-xs uppercase tracking-[0.08em] text-foreground/60">{RELEASES_PAGE_COPY.subtitle}</p>
         </div>
+
+        {viewerIsAdmin ? (
+          <Link
+            href="/admin/releases"
+            className="inline-flex h-8 shrink-0 items-center rounded-full border border-line bg-surface px-3 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
+          >
+            {RELEASES_PAGE_COPY.adminLink}
+          </Link>
+        ) : null}
       </header>
 
       <p className="mb-6 rounded-2xl border border-line bg-surface-muted px-4 py-3 text-sm font-semibold text-foreground/70">
@@ -36,13 +54,16 @@ export default function PublicReleasesPage() {
       </p>
 
       {months.map((month) => (
-        <section key={month.key} className="mb-6">
-          <h2 className="mb-2 flex items-baseline justify-between gap-3 border-b border-line pb-1 text-[11px] font-black uppercase tracking-[0.14em] text-foreground/55">
-            <span>{month.label}</span>
+        <details key={month.key} open className="group/month mb-6">
+          <summary className="mb-2 flex cursor-pointer list-none items-baseline justify-between gap-3 border-b border-line pb-1 text-[11px] font-black uppercase tracking-[0.14em] text-foreground/55">
+            <span className="flex items-center gap-2">
+              <span aria-hidden="true" className="text-foreground/35 transition group-open/month:rotate-90">›</span>
+              {month.label}
+            </span>
             <span className="font-bold tracking-normal text-foreground/40">
               {month.entries.length} {month.entries.length === 1 ? RELEASES_PAGE_COPY.release : RELEASES_PAGE_COPY.releases}
             </span>
-          </h2>
+          </summary>
 
           <ul className="space-y-2">
             {month.entries.map((entry) => {
@@ -56,7 +77,20 @@ export default function PublicReleasesPage() {
                           v{entry.version}
                         </span>
                       ) : null}
-                      <span className="min-w-0 flex-1 truncate text-sm font-black text-foreground">{entry.name}</span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-black text-foreground">{entry.name}</span>
+                        {/*
+                          * The codename on the row rather than only inside it.
+                          * It is the release's identity - a reader remembers
+                          * 「とうげのともしび」long after they forget v0.108.0 -
+                          * and it was invisible until you expanded the entry.
+                          */}
+                        {codename ? (
+                          <span lang="ja" className="block truncate text-[11px] font-semibold text-foreground/45">
+                            「{codename.reading}」 {codename.romaji}
+                          </span>
+                        ) : null}
+                      </span>
                       <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/45">
                         {entry.date}
                       </span>
@@ -95,7 +129,7 @@ export default function PublicReleasesPage() {
               );
             })}
           </ul>
-        </section>
+        </details>
       ))}
 
       <p className="mt-8 text-center text-xs font-semibold text-foreground/40">
