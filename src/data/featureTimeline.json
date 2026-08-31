@@ -1226,5 +1226,15 @@
     "version": "0.111.0",
     "releasedAt": "2026-08-31T01:30:00Z",
     "summary": "Changing grade or turning the page dropped you back to the tracing sheet, because only the sheet toggle carried the choice. Every link on the page keeps it now."
+  },
+  {
+    "id": "practice-sheet-rows",
+    "area": "study",
+    "name": "The stroke sheet reads like a practice book",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.112.0",
+    "releasedAt": "2026-08-31T02:00:00Z",
+    "summary": "Every row is a full eight squares now: the finished character faintly at the start to work from, the strokes after it, and empty squares filling out the rest of the line. Each row is also titled with the character itself before its meaning."
   }
 ]

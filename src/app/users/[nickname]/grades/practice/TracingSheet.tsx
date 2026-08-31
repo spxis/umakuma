@@ -1,4 +1,14 @@
+import { Fragment } from "react";
+
 import { PRACTICE_SHEET_COPY, SHEET_COLUMNS, TRACE_CELLS_PER_ROW } from "./practiceCopy";
+
+/** Squares left for strokes once the model has taken the first column. */
+const STROKES_PER_SHEET_ROW = SHEET_COLUMNS - 1;
+
+/** Rows a character needs, so the last one can be padded to a full width. */
+function strokeSheetRows(strokeCount: number): number {
+  return Math.max(1, Math.ceil(strokeCount / STROKES_PER_SHEET_ROW));
+}
 
 export type TraceEntry = {
   kanji: string;
@@ -93,6 +103,9 @@ export default function TracingSheet({ entries, mode = "trace" }: Props) {
       {entries.map((entry) => (
         <section key={entry.kanji} className="break-inside-avoid">
           <div className="mb-1 flex items-baseline gap-2 text-[11px] text-neutral-500">
+            {/* The character first: it is what the row is about, and a reader
+              * scanning a printed page finds it faster than the English. */}
+            <span className="text-base font-black leading-none text-neutral-900">{entry.kanji}</span>
             <span className="font-black text-neutral-700">{entry.meaning ?? ""}</span>
             <span>
               {entry.strokeCount} {entry.strokeCount === 1 ? PRACTICE_SHEET_COPY.stroke : PRACTICE_SHEET_COPY.strokes}
@@ -101,19 +114,42 @@ export default function TracingSheet({ entries, mode = "trace" }: Props) {
 
           {mode === "strokes" ? (
             /*
-             * One square per stroke, wrapping onto another row past eight
-             * rather than shrinking the squares. A twelve-stroke character
-             * gets two rows; nothing is made smaller to fit.
+             * A practice-book page rather than a bare chart: every row is a
+             * full eight squares, starting with the finished character to work
+             * from and padded with empty squares at the end. A character past
+             * seven strokes takes another row instead of shrinking the squares
+             * to fit, because a square too small to write in is not one.
+             *
+             * The model is faint, not solid, so it reads as something to aim
+             * at rather than the answer already filled in.
              */
             <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${SHEET_COLUMNS}, minmax(0, 1fr))` }}>
-              {Array.from({ length: entry.strokeCount }, (_, index) => (
-                <Cell key={`step-${index}`}>
-                  <span className="absolute left-0.5 top-0 z-10 text-[9px] font-black leading-none text-neutral-400">
-                    {index + 1}
-                  </span>
-                  <StrokeStepGlyph entry={entry} upTo={index + 1} />
-                </Cell>
-              ))}
+              {Array.from({ length: strokeSheetRows(entry.strokeCount) }, (_, row) => {
+                const firstStroke = row * STROKES_PER_SHEET_ROW;
+                const strokesHere = Math.min(STROKES_PER_SHEET_ROW, entry.strokeCount - firstStroke);
+
+                return (
+                  <Fragment key={`row-${row}`}>
+                    <Cell>
+                      <TraceGlyph entry={entry} tone="ghost" />
+                    </Cell>
+                    {Array.from({ length: strokesHere }, (_, offset) => {
+                      const strokeNumber = firstStroke + offset + 1;
+                      return (
+                        <Cell key={`step-${strokeNumber}`}>
+                          <span className="absolute left-0.5 top-0 z-10 text-[9px] font-black leading-none text-neutral-400">
+                            {strokeNumber}
+                          </span>
+                          <StrokeStepGlyph entry={entry} upTo={strokeNumber} />
+                        </Cell>
+                      );
+                    })}
+                    {Array.from({ length: STROKES_PER_SHEET_ROW - strokesHere }, (_, blank) => (
+                      <Cell key={`blank-${row}-${blank}`} />
+                    ))}
+                  </Fragment>
+                );
+              })}
             </div>
           ) : (
             <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${SHEET_COLUMNS}, minmax(0, 1fr))` }}>

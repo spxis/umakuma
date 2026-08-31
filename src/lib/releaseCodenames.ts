@@ -162,6 +162,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nanohana Nagisa", ja: "菜の花渚", reading: "なのはななぎさ", gloss: "rape blossoms along the shore" },
   { romaji: "Niji no Niwa", ja: "虹の庭", reading: "にじのにわ", gloss: "a garden under a rainbow" },
   { romaji: "Nukemichi Numa", ja: "抜け道沼", reading: "ぬけみちぬま", gloss: "a shortcut past the marsh" },
+  { romaji: "Negai no Neiro", ja: "願いの音色", reading: "ねがいのねいろ", gloss: "the tone of a wish" },
 ];
 
 /**
