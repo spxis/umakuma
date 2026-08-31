@@ -1566,5 +1566,15 @@
     "version": "0.145.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Search was a 96px box that grew to 160px on focus, because three things were competing for the right-hand end of one row: the field, the release codename, and a menu button floating past both. The codename moves to the second row, which every section already drew, and search takes the space it left - 224px rising to 320px on a wide screen - sitting directly beside the menu rather than across the row from it. The second row is now always present, so the header is the same height on every page and the content below stops jumping as you navigate. On a phone search collapses to its icon and opens a full-width field under the header, the way WaniKani and most narrow headers do it; an always-present field there cost about 150px and silently pushed Admin off the end of a row that clips rather than wraps."
+  },
+  {
+    "id": "join-endpoint-removed",
+    "area": "account",
+    "name": "The third door, closed",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.146.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "/api/join created accounts and never asked whether signing up was allowed. It took a Google session and a WaniKani token and upserted an account straight into the database - no invite code, no signup mode, no approval - so the whole invite-only model could be walked around by anyone who could sign in with Google and hold any working WaniKani token. It had no caller anywhere in the app, having been replaced by the invite panel, and it is deleted rather than gated: a gate would have reopened it the moment open signup was switched on, and it would then have created accounts that skipped the onboarding wizard and the approval queue as well."
   }
 ]
