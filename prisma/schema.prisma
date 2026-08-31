@@ -4,112 +4,108 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model Account {
-  id             String   @id @default(cuid())
-  nickname       String
-  /*
+  id                       String    @id @default(cuid())
+  nickname                 String
+  /**
    * The address, and the name, which are not the same thing.
-   *
    * `slug` is unique and permanent: it is in every link anyone has shared, so
    * renaming must not touch it. `displayName` is what people read, anyone can
    * change it, and two members may share one. Both are nullable while existing
    * accounts are still routed by wkUsername.
    */
-  slug           String?  @unique
-  displayName    String?
-  /*
+  slug                     String?   @unique
+  displayName              String?
+  /**
    * JLPT certification, as the member reports it.
-   *
    * Self-declared, unlike wkLevel which WaniKani decides. The system matters
    * as much as the level: the test was restructured in 2010 and both schemes
    * count down, so an old Level 4 is the beginner certificate and maps to N5,
    * not N4. Stored as given and converted for display.
    */
-  jlptStatus     String?
-  jlptSystem     String?
-  jlptLevel      Int?
-  jlptYear       Int?
-  /*
+  jlptStatus               String?
+  jlptSystem               String?
+  jlptLevel                Int?
+  jlptYear                 Int?
+  /**
    * Who may see this member, and whether they are let in at all.
-   *
    * `visibility` is the member's own choice, asked during signup and editable
    * on their profile: private, family (other members) or public. Null means an
    * account that predates the column, which was already on the leaderboard and
    * must stay there, so it reads as family rather than private.
-   *
    * `approvalStatus` is John's decision, not theirs. Open Google signup lets
    * anyone create an account, but it stays pending until approved, so a
    * stranger can look around without appearing anywhere.
    */
-  visibility     String?
-  approvalStatus String?
-  approvedAt     DateTime?
-  joinedByEmail  String?
-  joinedByName   String?
-  inviteCodeHash String?
-  inviteCodeUpdatedAt DateTime?
-  /*
+  visibility               String?
+  approvalStatus           String?
+  approvedAt               DateTime?
+  joinedByEmail            String?
+  joinedByName             String?
+  inviteCodeHash           String?
+  inviteCodeUpdatedAt      DateTime?
+  /**
    * The WaniKani connection, which an account may not have.
-   *
    * Identity is the account; this is a link on it. All six move together -
    * a half-connected account is not a state worth modelling, so code should
    * test one of them (the token) and treat the rest as present or absent with
    * it. Nullable `wkUserId` keeps its unique index: Postgres does not compare
    * nulls, so any number of unconnected accounts coexist.
    */
-  tokenEncrypted String?
-  tokenIv        String?
-  tokenTag       String?
-  wkUserId       String?  @unique
-  wkUsername     String?
-  wkLevel        Int?
-  reviewCount    Int      @default(0)
-  burnedCount    Int      @default(0)
-  pendingReviews Int      @default(0)
-  radicalCount   Int      @default(0)
-  vocabularyCount Int     @default(0)
-  apprenticeCount Int     @default(0)
-  guruCount       Int     @default(0)
-  masterCount     Int     @default(0)
-  enlightenedCount Int    @default(0)
-  levelKanjiTotal Int     @default(0)
-  levelKanjiLearned Int   @default(0)
-  levelKanjiGuruPlus Int  @default(0)
-  levelKanjiLocked Int    @default(0)
-  estimatedHoursRemaining Int?
-  levelKanjiItems Json?
-  itemSpread      Json?
-  jlptCounts      Json?
-  assignmentCache Json?
+  tokenEncrypted           String?
+  tokenIv                  String?
+  tokenTag                 String?
+  wkUserId                 String?   @unique
+  wkUsername               String?
+  wkLevel                  Int?
+  reviewCount              Int       @default(0)
+  burnedCount              Int       @default(0)
+  pendingReviews           Int       @default(0)
+  radicalCount             Int       @default(0)
+  vocabularyCount          Int       @default(0)
+  apprenticeCount          Int       @default(0)
+  guruCount                Int       @default(0)
+  masterCount              Int       @default(0)
+  enlightenedCount         Int       @default(0)
+  levelKanjiTotal          Int       @default(0)
+  levelKanjiLearned        Int       @default(0)
+  levelKanjiGuruPlus       Int       @default(0)
+  levelKanjiLocked         Int       @default(0)
+  estimatedHoursRemaining  Int?
+  levelKanjiItems          Json?
+  itemSpread               Json?
+  jlptCounts               Json?
+  assignmentCache          Json?
   assignmentCacheUpdatedAt DateTime?
-  reviewsUpdatedAt DateTime?
-  lastRadicalGuruedAt DateTime?
-  lastKanjiGuruedAt DateTime?
-  lastVocabularyGuruedAt DateTime?
-  lastRadicalGuruedItem Json?
-  lastKanjiGuruedItem Json?
+  reviewsUpdatedAt         DateTime?
+  lastRadicalGuruedAt      DateTime?
+  lastKanjiGuruedAt        DateTime?
+  lastVocabularyGuruedAt   DateTime?
+  lastRadicalGuruedItem    Json?
+  lastKanjiGuruedItem      Json?
   lastVocabularyGuruedItem Json?
-  wkHttpCache     Json?
-  lastActivityAt  DateTime?
-  isSyncing       Boolean  @default(false)
-  syncLockUntil   DateTime?
-  nextSyncAllowedAt DateTime @default(now())
-  lastSyncStatus  String   @default("idle")
-  lastSyncError   String?
-  score          Int      @default(0)
-  lastSyncedAt   DateTime @default(now())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  wkHttpCache              Json?
+  lastActivityAt           DateTime?
+  isSyncing                Boolean   @default(false)
+  syncLockUntil            DateTime?
+  nextSyncAllowedAt        DateTime  @default(now())
+  lastSyncStatus           String    @default("idle")
+  lastSyncError            String?
+  score                    Int       @default(0)
+  lastSyncedAt             DateTime  @default(now())
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
 
   customStudyLibraries      CustomStudyLibrary[]
   customStudyStates         CustomStudyState[]
   customStudyReviewAttempts CustomStudyReviewAttempt[]
   studySubjectTags          StudySubjectTag[]
+  studyLists                StudyList[]
   gameRuns                  GameRun[]
 }
 
@@ -123,68 +119,68 @@ model InviteRateLimit {
 }
 
 model LevelSnapshot {
-  id                String   @id @default(cuid())
-  accountId         String
-  level             Int
-  kanjiTotal        Int      @default(0)
-  kanjiLearned      Int      @default(0)
-  kanjiGuruPlus     Int      @default(0)
-  kanjiLocked       Int      @default(0)
+  id                      String   @id @default(cuid())
+  accountId               String
+  level                   Int
+  kanjiTotal              Int      @default(0)
+  kanjiLearned            Int      @default(0)
+  kanjiGuruPlus           Int      @default(0)
+  kanjiLocked             Int      @default(0)
   estimatedHoursRemaining Int?
-  items             Json?
-  syncedAt          DateTime @default(now())
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  items                   Json?
+  syncedAt                DateTime @default(now())
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   @@unique([accountId, level])
   @@index([accountId])
 }
 
 model DailyAccountSnapshot {
-  id                 String   @id @default(cuid())
-  accountId          String
-  snapshotDatePst    String
-  snapshotAt         DateTime @default(now())
-  wkLevel            Int
-  reviewCount        Int
-  burnedCount        Int
-  pendingReviews     Int
-  radicalCount       Int
-  vocabularyCount    Int
-  apprenticeCount    Int
-  guruCount          Int
-  masterCount        Int
-  enlightenedCount   Int
-  levelKanjiLearned  Int
-  levelKanjiTotal    Int
-  score              Int
-  lastActivityAt     DateTime?
-  lastSyncedAt       DateTime
+  id                String    @id @default(cuid())
+  accountId         String
+  snapshotDatePst   String
+  snapshotAt        DateTime  @default(now())
+  wkLevel           Int
+  reviewCount       Int
+  burnedCount       Int
+  pendingReviews    Int
+  radicalCount      Int
+  vocabularyCount   Int
+  apprenticeCount   Int
+  guruCount         Int
+  masterCount       Int
+  enlightenedCount  Int
+  levelKanjiLearned Int
+  levelKanjiTotal   Int
+  score             Int
+  lastActivityAt    DateTime?
+  lastSyncedAt      DateTime
 
   @@unique([accountId, snapshotDatePst])
   @@index([accountId])
 }
 
 model JlptKanji {
-  id        String   @id @default(cuid())
-  kanji     String   @unique
-  nLevel    Int
-  strokeCount Int?
-  frequencyRank Int?
-  schoolGrade Int?
-  heisigKeyword String?
-  unicodeHex String?
-  sourceJlpt Int?
+  id             String    @id @default(cuid())
+  kanji          String    @unique
+  nLevel         Int
+  strokeCount    Int?
+  frequencyRank  Int?
+  schoolGrade    Int?
+  heisigKeyword  String?
+  unicodeHex     String?
+  sourceJlpt     Int?
   primaryMeaning String?
-  meanings   String[] @default([])
-  onReadings String[] @default([])
-  kunReadings String[] @default([])
-  nanoriReadings String[] @default([])
-  notes String[] @default([])
-  wordExamples Json?
-  enrichedAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  meanings       String[]  @default([])
+  onReadings     String[]  @default([])
+  kunReadings    String[]  @default([])
+  nanoriReadings String[]  @default([])
+  notes          String[]  @default([])
+  wordExamples   Json?
+  enrichedAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   @@index([nLevel])
 }
@@ -213,8 +209,8 @@ model SchoolGradeKanji {
 }
 
 model WkSubjectCatalog {
-  wkSubjectId               Int      @id
-  object                    String   @default("subject")
+  wkSubjectId               Int       @id
+  object                    String    @default("subject")
   subjectType               String
   level                     Int
   slug                      String?
@@ -224,17 +220,17 @@ model WkSubjectCatalog {
   hiddenAt                  DateTime?
   meanings                  Json?
   readings                  Json?
-  componentSubjectIds       Int[]    @default([])
-  amalgamationSubjectIds    Int[]    @default([])
-  visuallySimilarSubjectIds Int[]    @default([])
+  componentSubjectIds       Int[]     @default([])
+  amalgamationSubjectIds    Int[]     @default([])
+  visuallySimilarSubjectIds Int[]     @default([])
   meaningMnemonic           String?
   meaningHint               String?
   readingMnemonic           String?
   readingHint               String?
   rawData                   Json
-  documentVersion           Int      @default(1)
-  createdAt                 DateTime @default(now())
-  updatedAt                 DateTime @updatedAt
+  documentVersion           Int       @default(1)
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
 
   @@index([subjectType, level])
   @@index([level])
@@ -242,9 +238,8 @@ model WkSubjectCatalog {
   @@index([hiddenAt])
 }
 
-/*
+/**
  * Admin-editable settings that are not simply on or off.
- *
  * FeatureFlag holds booleans; this holds the rest, as strings parsed by the
  * definition in code. Same split as the flags: what settings exist and what
  * they accept lives in `src/lib/signupSettings.ts`, and the database stores
@@ -266,21 +261,21 @@ model FeatureFlag {
 }
 
 model WkCatalogSyncState {
-  id                           String              @id @default("global")
-  isSyncing                    Boolean             @default(false)
-  syncLockUntil                DateTime?
-  nextSyncAllowedAt            DateTime            @default(now())
-  lastStatus                   WkCatalogSyncStatus @default(idle)
-  lastError                    String?
-  lastFullSyncStartedAt        DateTime?
-  lastFullSyncCompletedAt      DateTime?
-  lastIncrementalSyncStartedAt DateTime?
+  id                             String              @id @default("global")
+  isSyncing                      Boolean             @default(false)
+  syncLockUntil                  DateTime?
+  nextSyncAllowedAt              DateTime            @default(now())
+  lastStatus                     WkCatalogSyncStatus @default(idle)
+  lastError                      String?
+  lastFullSyncStartedAt          DateTime?
+  lastFullSyncCompletedAt        DateTime?
+  lastIncrementalSyncStartedAt   DateTime?
   lastIncrementalSyncCompletedAt DateTime?
-  lastCursorDataUpdatedAt      DateTime?
-  lastCursorSubjectId          Int?
-  lastRunStats                 Json?
-  createdAt                    DateTime            @default(now())
-  updatedAt                    DateTime            @updatedAt
+  lastCursorDataUpdatedAt        DateTime?
+  lastCursorSubjectId            Int?
+  lastRunStats                   Json?
+  createdAt                      DateTime            @default(now())
+  updatedAt                      DateTime            @updatedAt
 }
 
 model WkCatalogSyncRun {
@@ -384,24 +379,24 @@ enum CustomStudyItemType {
 }
 
 model ReadingChallenge {
-  id            String                @id @default(cuid())
-  slug          String                @unique
+  id            String                 @id @default(cuid())
+  slug          String                 @unique
   name          String
   description   String
   status        ReadingChallengeStatus @default(draft)
-  currencyCode  String                @default("JPY")
+  currencyCode  String                 @default("JPY")
   startDatePst  String
   goalDatePst   String
   tripDatePst   String
   targetBaseYen Int
   scoringRules  Json
-  createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @updatedAt
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
 
-  signoffs      ReadingSignoff[]
+  signoffs       ReadingSignoff[]
   signoffEntries ReadingSignoffEntry[]
-  books         ReadingChallengeBook[]
-  members       ReadingChallengeMember[]
+  books          ReadingChallengeBook[]
+  members        ReadingChallengeMember[]
 
   @@index([status])
   @@index([startDatePst, goalDatePst])
@@ -421,32 +416,32 @@ model StudyReviewAttempt {
 }
 
 model GameRun {
-  id            String              @id @default(cuid())
-  accountId     String
-  kind          GameKind            @default(match)
-  batchSize     Int
-  level         Int?
-  category      GameSubjectCategory
-  hardMode      Boolean             @default(false)
-  choiceCount   Int                 @default(2)
-  direction     GameDirection       @default(find)
-  answerMode    String              @default("auto")
-  dailyKey      String?
-  seed          String?
-  timeLimitMs   Int?
-  questionCount Int
-  answeredCount Int                 @default(0)
-  correctCount  Int                 @default(0)
-  currentStreak Int                 @default(0)
-  bestStreak    Int                 @default(0)
-  score         Int                 @default(0)
-  durationMs    Int?
-  status        GameRunStatus       @default(active)
-  startedAt     DateTime            @default(now())
-  completedAt   DateTime?
+  id               String              @id @default(cuid())
+  accountId        String
+  kind             GameKind            @default(match)
+  batchSize        Int
+  level            Int?
+  category         GameSubjectCategory
+  hardMode         Boolean             @default(false)
+  choiceCount      Int                 @default(2)
+  direction        GameDirection       @default(find)
+  answerMode       String              @default("auto")
+  dailyKey         String?
+  seed             String?
+  timeLimitMs      Int?
+  questionCount    Int
+  answeredCount    Int                 @default(0)
+  correctCount     Int                 @default(0)
+  currentStreak    Int                 @default(0)
+  bestStreak       Int                 @default(0)
+  score            Int                 @default(0)
+  durationMs       Int?
+  status           GameRunStatus       @default(active)
+  startedAt        DateTime            @default(now())
+  completedAt      DateTime?
   completedDatePst String?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
 
   account   Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
   questions GameQuestion[]
@@ -494,22 +489,46 @@ model StudySubjectTag {
   @@index([accountId, trouble])
 }
 
+/// A named set of characters a member built by hand: "Week 1", "Week 2".
+///
+/// Characters rather than WaniKani subject ids, which is the one place this
+/// differs from StudySubjectTag. A list is built on whatever surface the member
+/// was looking at, and the school-grade catalogue holds kanji WaniKani does not
+/// teach - keying on subject id would silently drop those from a list that
+/// visibly contained them. A character resolves to a subject when something
+/// needs one; a missing subject does not resolve back to a character.
+model StudyList {
+  id         String   @id @default(cuid())
+  accountId  String
+  name       String
+  /// In the order chosen. A sheet re-sorted is a different sheet.
+  characters String[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  /// One name per member, so saving "Week 1" twice updates rather than forks.
+  @@unique([accountId, name])
+  @@index([accountId, updatedAt])
+}
+
 model SubjectReviewStatsSnapshot {
-  id                    String                      @id @default(cuid())
-  accountId             String
-  subjectId             Int
-  subjectType           String
-  meaningCorrect        Int
-  meaningIncorrect      Int
-  meaningCurrentStreak  Int
-  meaningMaxStreak      Int
-  readingCorrect        Int
-  readingIncorrect      Int
-  readingCurrentStreak  Int
-  readingMaxStreak      Int
-  percentageCorrect     Int
-  capturedAt            DateTime                    @default(now())
-  source                SubjectReviewSnapshotSource @default(ondemand)
+  id                   String                      @id @default(cuid())
+  accountId            String
+  subjectId            Int
+  subjectType          String
+  meaningCorrect       Int
+  meaningIncorrect     Int
+  meaningCurrentStreak Int
+  meaningMaxStreak     Int
+  readingCorrect       Int
+  readingIncorrect     Int
+  readingCurrentStreak Int
+  readingMaxStreak     Int
+  percentageCorrect    Int
+  capturedAt           DateTime                    @default(now())
+  source               SubjectReviewSnapshotSource @default(ondemand)
 
   @@index([accountId, subjectId, capturedAt])
   @@index([accountId, capturedAt])
@@ -530,7 +549,7 @@ model ReadingSignoff {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  challenge          ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+  challenge ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
 
   @@unique([accountId, signoffDatePst])
   @@index([challengeId, accountId])
@@ -553,7 +572,7 @@ model ReadingSignoffEntry {
   reviewSuccessPercent Int?
   createdAt            DateTime @default(now())
 
-  challenge            ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+  challenge ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
 
   @@index([challengeId, accountId, signoffDatePst])
   @@index([accountId, signoffDatePst])
@@ -562,18 +581,18 @@ model ReadingSignoffEntry {
 }
 
 model ReadingChallengeBook {
-  id              String   @id @default(cuid())
-  challengeId     String?
-  accountId       String
-  isbn            String
-  title           String
-  thumbnailUrl    String?
-  manualCoverUrl  String?
-  infoUrl         String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String   @id @default(cuid())
+  challengeId    String?
+  accountId      String
+  isbn           String
+  title          String
+  thumbnailUrl   String?
+  manualCoverUrl String?
+  infoUrl        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  challenge    ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+  challenge ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
 
   @@unique([accountId, isbn, challengeId])
   @@index([challengeId, accountId])
@@ -581,12 +600,12 @@ model ReadingChallengeBook {
 }
 
 model ReadingChallengeMember {
-  id        String   @id @default(cuid())
+  id          String   @id @default(cuid())
   challengeId String?
-  accountId String
-  tracked   Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  accountId   String
+  tracked     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   challenge ReadingChallenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
 
@@ -596,21 +615,21 @@ model ReadingChallengeMember {
 }
 
 model CustomStudyLibrary {
-  id            String                @id @default(cuid())
-  accountId     String
-  externalKey   String
-  name          String
-  description   String?
-  schemaVersion Int                   @default(1)
-  sourceType    CustomStudySourceType @default(json_upload)
-  itemCount     Int                   @default(0)
-  isActive      Boolean               @default(false)
-  lastImportedAt DateTime             @default(now())
-  metadata      Json?
-  createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @updatedAt
+  id             String                @id @default(cuid())
+  accountId      String
+  externalKey    String
+  name           String
+  description    String?
+  schemaVersion  Int                   @default(1)
+  sourceType     CustomStudySourceType @default(json_upload)
+  itemCount      Int                   @default(0)
+  isActive       Boolean               @default(false)
+  lastImportedAt DateTime              @default(now())
+  metadata       Json?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
 
-  account        Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  account        Account                    @relation(fields: [accountId], references: [id], onDelete: Cascade)
   items          CustomStudyItem[]
   states         CustomStudyState[]
   reviewAttempts CustomStudyReviewAttempt[]
@@ -637,7 +656,7 @@ model CustomStudyItem {
   createdAt       DateTime            @default(now())
   updatedAt       DateTime            @updatedAt
 
-  library        CustomStudyLibrary       @relation(fields: [libraryId], references: [id], onDelete: Cascade)
+  library        CustomStudyLibrary         @relation(fields: [libraryId], references: [id], onDelete: Cascade)
   states         CustomStudyState[]
   reviewAttempts CustomStudyReviewAttempt[]
 
@@ -647,26 +666,26 @@ model CustomStudyItem {
 }
 
 model CustomStudyState {
-  id            Int      @id @default(autoincrement())
-  accountId     String
-  libraryId     String
-  itemId        Int
-  srsStage      Int      @default(0)
-  availableAt   DateTime?
-  unlockedAt    DateTime?
-  startedAt     DateTime?
-  passedAt      DateTime?
-  burnedAt      DateTime?
+  id             Int       @id @default(autoincrement())
+  accountId      String
+  libraryId      String
+  itemId         Int
+  srsStage       Int       @default(0)
+  availableAt    DateTime?
+  unlockedAt     DateTime?
+  startedAt      DateTime?
+  passedAt       DateTime?
+  burnedAt       DateTime?
   lastReviewedAt DateTime?
-  reviewCount   Int      @default(0)
-  correctCount  Int      @default(0)
-  wrongCount    Int      @default(0)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  reviewCount    Int       @default(0)
+  correctCount   Int       @default(0)
+  wrongCount     Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  account        Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  library        CustomStudyLibrary       @relation(fields: [libraryId], references: [id], onDelete: Cascade)
-  item           CustomStudyItem          @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  account        Account                    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  library        CustomStudyLibrary         @relation(fields: [libraryId], references: [id], onDelete: Cascade)
+  item           CustomStudyItem            @relation(fields: [itemId], references: [id], onDelete: Cascade)
   reviewAttempts CustomStudyReviewAttempt[]
 
   @@unique([accountId, itemId])

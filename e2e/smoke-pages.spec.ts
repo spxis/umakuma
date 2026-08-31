@@ -803,3 +803,38 @@ test("study mobile trouble/favorite clicks do not open modal and card tap still 
   expect(badResponses, "mobile study click flow 500+ responses").toEqual([]);
   await context.close();
 });
+
+
+/**
+ * Saved lists is a route, so it gets a route check.
+ *
+ * Deliberately does not save anything: a smoke run against production must not
+ * write to a member's account. It checks the page renders, is reachable from
+ * the Explore nav, and distinguishes "no lists yet" from "failed to load" -
+ * which is the failure mode that would otherwise look like an empty page.
+ */
+test("saved lists page renders and is reachable from the nav", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for the saved lists check.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/lists`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+    if ((await accessGate.count()) > 0) {
+      await expect(accessGate).toBeVisible();
+      return;
+    }
+
+    await expect(page.getByRole("heading", { name: "Saved lists" })).toBeVisible();
+
+    /*
+     * Either some cards or the empty state - never neither, which is exactly
+     * what a failed load looks like from outside.
+     */
+    if ((await page.locator("ul li h2").count()) === 0) {
+      await expect(page.getByText("No saved lists yet", { exact: false })).toBeVisible();
+    }
+
+    await expect(page.getByRole("link", { name: "Lists", exact: true }).first()).toBeVisible();
+  });
+});

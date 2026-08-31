@@ -14,3 +14,28 @@ import type { ViewerMenuInfo } from "@/app/users/[nickname]/UserDashboardTabs.ty
 export function viewerAddress(viewer: ViewerMenuInfo | null | undefined): string | null {
   return viewer?.slug?.trim() || viewer?.wkUsername?.trim() || null;
 }
+
+
+/**
+ * Whether the viewer is looking at their own pages.
+ *
+ * Compared on the address rather than the account id, because that is what a
+ * user page is keyed by, and against both of a viewer's addresses: a member who
+ * arrives on a link carrying their old WaniKani username is still themselves.
+ * Case-insensitive, since both forms appear in links people have shared.
+ *
+ * Saving belongs behind this. Reading a page is open to whoever may view it,
+ * but a chosen set is saved to somebody's account, and the wrong answer here
+ * offers a visitor a button that writes to the page owner's lists.
+ */
+export function viewsOwnPage(
+  viewer: ViewerMenuInfo | null | undefined,
+  pageKey: string | null | undefined,
+): boolean {
+  const key = pageKey?.trim().toLowerCase();
+  if (!key || !viewer) return false;
+
+  return [viewer.slug, viewer.wkUsername]
+    .map((value) => value?.trim().toLowerCase())
+    .some((value) => Boolean(value) && value === key);
+}

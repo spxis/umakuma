@@ -8,6 +8,7 @@ import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import { SubjectSelectionBar, SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import { encodeSelection, SUBJECT_SELECTION_COPY } from "@/app/shared/subjectSelection";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
+import SaveSelectionAsList from "@/app/shared/SaveSelectionAsList";
 import {
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
@@ -24,6 +25,8 @@ type Props = {
   items: SchoolGradeKanjiEntry[];
   /** The practice sheet's path. The board does not build sheet options. */
   practicePath: string;
+  /** Whose lists a chosen set is saved to. Absent for a visitor. */
+  accountId: string | null;
 };
 
 /**
@@ -34,7 +37,7 @@ type Props = {
  * grid into a self-test: see the kanji, say the readings, select the card to
  * check. Nothing is recorded — this is the rehearsal before the real thing.
  */
-export default function GradeKanjiBoard({ items, practicePath }: Props) {
+export default function GradeKanjiBoard({ items, practicePath, accountId }: Props) {
   /*
    * Read once at mount rather than in an effect. A new grade or page remounts
    * this component through its `key`, which is also what clears what was
@@ -107,6 +110,9 @@ export default function GradeKanjiBoard({ items, practicePath }: Props) {
       </div>
 
       <SubjectSelectionBar selection={selection} visibleKeys={items.map((entry) => entry.kanji)}>
+        {selection.count > 0 && accountId ? (
+          <SaveSelectionAsList selection={selection} accountId={accountId} onSaved={selection.cancel} />
+        ) : null}
         {selection.count > 0 ? (
           <Link
             href={`${practicePath}?source=picked&picked=${encodeURIComponent(encodeSelection(selection.chosen))}`}

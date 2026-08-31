@@ -13,6 +13,7 @@ import { getSchoolGradeIndex, querySchoolGradeCatalog } from "@/lib/schoolGrades
 import { withOfficialReadings } from "@/lib/gradeReadings";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import { viewsOwnPage } from "@/app/shared/viewerAddress";
 import { GRADE_EXPLORER_COPY, GRADE_PAGE_SIZE } from "./GradeExplorer.constants";
 import GradeKanjiBoard from "./GradeKanjiBoard";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, pageRange, parseGradeParam, parsePageParam } from "./gradeExplorerView";
@@ -165,6 +166,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
             key={`${grade}:${page}:${search}`}
             items={withOfficialReadings(catalog.items)}
             practicePath={`/users/${encodeURIComponent(nickname)}/grades/practice`}
+            accountId={viewsOwnPage(viewerMenuInfo, userKey) ? account.id : null}
           />
 
           {catalog.pagination.totalPages > 1 ? (
