@@ -15,9 +15,9 @@ import { decodeSelection, encodeSelection, SELECTION_PARAM } from "@/app/shared/
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
 import PrintButton from "./PrintButton";
-import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
+import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
 import SheetOptionsRow from "./SheetOptionsRow";
-import { PRACTICE_PAGINATION_DEFAULT, sheetHref, type SheetSettings } from "./sheetLink";
+import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "./sheetLink";
 import TracingSheet, { type SheetMode, type TraceEntry } from "./TracingSheet";
 
 type PageProps = {
@@ -61,6 +61,17 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
    */
   const placement = toPaginationPlacement(firstValue(query.pager), PRACTICE_PAGINATION_DEFAULT);
   const size = toSheetSize(firstValue(query.size));
+  /*
+   * Reading and printing want different page sizes, so they get different page
+   * sizes. Twenty characters is a comfortable amount to scroll through and
+   * about two sheets of paper - which is why printing the screen page gave a
+   * grade of eighty as four jobs, each ending in a mostly-empty sheet. The
+   * print layout drops the reading page and cuts the list into the largest
+   * runs that still render, so the characters flow and the paper fills.
+   */
+  const printAll = firstValue(query.print) === "all";
+  const printNow = firstValue(query[PRINT_NOW_PARAM]) === "1";
+  const pageSize = printAll ? PRINT_ALL_LIMIT : PRACTICE_PAGE_SIZE;
 
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
@@ -103,7 +114,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     source,
     Number.isFinite(level) ? level : 1,
     page,
-    PRACTICE_PAGE_SIZE,
+    pageSize,
     account.id,
     picked,
   );
@@ -120,10 +131,22 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     placement,
     size,
     choosing,
+    printAll,
   };
 
-  const pageCount = Math.max(1, Math.ceil(total / PRACTICE_PAGE_SIZE));
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const pageHref = (next: number) => sheetHref(settings, { page: next });
+  /* Switching layout restarts the count: page three of twenty is not page three of 250. */
+  const printAllHref = `${sheetHref(settings, { printAll: true, page: 1 })}&${PRINT_NOW_PARAM}=1`;
+  /*
+   * In the print layout the pager steps between print runs rather than between
+   * reading pages, so it says so - and it shows whatever the reader chose,
+   * because with the runs hidden there is no way to reach the second one.
+   */
+  const pagerPlacement = printAll ? "both" : placement;
+  const pagerSummary = printAll
+    ? `${PRACTICE_SHEET_COPY.printRunLabel} ${page} ${PRACTICE_SHEET_COPY.printRunOf} ${pageCount}`
+    : undefined;
 
   const sheetLabel =
     source === PRACTICE_SOURCES.picked
@@ -189,7 +212,14 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           >
             {PRACTICE_SHEET_COPY.back}
           </Link>
-          <PrintButton />
+          <PrintButton
+            pageCount={pageCount}
+            onThisPage={entries.length}
+            total={total}
+            allHref={printAllHref}
+            printAll={printAll}
+            autoPrint={printNow}
+          />
         </div>
       </header>
 
@@ -341,6 +371,27 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
       <SheetOptionsRow settings={settings} />
 
       {/*
+        * Why the sheet suddenly looks different. The reader asked to print
+        * everything and got a page with no pager and several hundred
+        * characters on it, which without a word of explanation reads as the
+        * pagination having broken.
+        */}
+      {printAll ? (
+        <p className="mb-4 rounded-xl border border-neutral-300 bg-neutral-50 p-3 text-xs text-neutral-600 print:hidden">
+          <span className="block font-black text-neutral-800">
+            {pageCount > 1 ? PRACTICE_SHEET_COPY.printingRunsHeading : PRACTICE_SHEET_COPY.printingAllHeading}
+          </span>
+          {pageCount > 1 ? PRACTICE_SHEET_COPY.printingRunsBody : PRACTICE_SHEET_COPY.printingAllBody}{" "}
+          <Link
+            href={sheetHref(settings, { printAll: false, page: 1 })}
+            className="font-black text-neutral-900 underline underline-offset-2"
+          >
+            {PRACTICE_SHEET_COPY.printAllBack}
+          </Link>
+        </p>
+      ) : null}
+
+      {/*
         * Said plainly rather than shrinking the squares to fit. A square small
         * enough for a phone is too small to write a kanji inside, so the sheet
         * would look right and be useless. Nothing is blocked - it is a notice,
@@ -353,10 +404,11 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
 
       <SurfacePagination
         slot="top"
-        placement={placement}
+        placement={pagerPlacement}
         page={page}
         pageCount={pageCount}
         hrefFor={pageHref}
+        summary={pagerSummary}
       />
 
       {entries.length === 0 ? (
@@ -370,17 +422,18 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
       <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-neutral-400">
         <span>{PRACTICE_SHEET_COPY.credit}</span>
         <span className="print:hidden">
-          {PRACTICE_SHEET_COPY.perPage} {(page - 1) * PRACTICE_PAGE_SIZE + 1}–
-          {(page - 1) * PRACTICE_PAGE_SIZE + entries.length} of {total}
+          {PRACTICE_SHEET_COPY.perPage} {(page - 1) * pageSize + 1}–
+          {(page - 1) * pageSize + entries.length} of {total}
         </span>
       </footer>
 
       <SurfacePagination
         slot="bottom"
-        placement={placement}
+        placement={pagerPlacement}
         page={page}
         pageCount={pageCount}
         hrefFor={pageHref}
+        summary={pagerSummary}
       />
       </div>
     </div>

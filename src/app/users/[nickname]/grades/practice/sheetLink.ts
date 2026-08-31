@@ -29,6 +29,16 @@ import type { SheetMode } from "./TracingSheet";
  */
 export const PRACTICE_PAGINATION_DEFAULT: PaginationPlacement = "both";
 
+/**
+ * The one-shot flag that opens the print dialog on arrival.
+ *
+ * Deliberately absent from `SheetSettings`, so `sheetHref` can never carry it.
+ * Choosing "Everything" is a request to print now; changing the square size
+ * afterwards is not, and a flag that rode along in every link would reopen the
+ * dialog on each option the reader touched.
+ */
+export const PRINT_NOW_PARAM = "go";
+
 export type SheetSettings = {
   source: string;
   grade: number;
@@ -41,6 +51,12 @@ export type SheetSettings = {
   size: SheetSize;
   /** Whether the level chooser is open. */
   choosing: boolean;
+  /**
+   * Whether the sheet is paged for reading or for printing. It persists like
+   * any other setting: a reader who chose the print view and then changed the
+   * square size meant a differently-sized print view, not a trip back.
+   */
+  printAll: boolean;
   /** The hand-picked characters, encoded, when the sheet is a picked one. */
   picked: string;
 };
@@ -65,6 +81,7 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
   if (next.placement !== PRACTICE_PAGINATION_DEFAULT) parts.push(`pager=${next.placement}`);
   if (next.size !== DEFAULT_SHEET_SIZE) parts.push(`size=${next.size}`);
   if (next.choosing) parts.push("pick=1");
+  if (next.printAll) parts.push("print=all");
   // Kept last: it is the longest parameter and the least worth reading.
   if (next.picked) parts.push(`picked=${encodeURIComponent(next.picked)}`);
 

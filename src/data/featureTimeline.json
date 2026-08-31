@@ -1476,5 +1476,15 @@
     "version": "0.136.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "The Data tab covers school grades and map regions, not just WaniKani and JLPT. Both ship as files in the repo and reach the app through scripts somebody has to remember to run, so the panels answer the question those scripts leave open: does what shipped match what is loaded. Grades compares every grade file against the database row count; Maps shows each country's region count, geometry detail, regions with no shared border, and where the data came from."
+  },
+  {
+    "id": "print-the-whole-sheet",
+    "area": "study",
+    "name": "Print the whole sheet",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.137.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Print asks how much: this page, or everything. It printed the twenty characters on screen and nothing else, so a grade of eighty was four separate print jobs - and because twenty characters is about two and a half sheets of paper, three of those four ended in a mostly-empty page. Everything drops the reading pages and lets the characters flow, which takes grade three from ten jobs and thirty sheets to one job and twenty-six. Lists too long for one document split into print runs rather than rendering 1,110 characters at once. Where the pager sits is no longer a question the sheet asks."
   }
 ]

@@ -10,13 +10,22 @@ export const PRACTICE_SHEET_COPY = {
   empty: "No kanji for that grade.",
   credit: "Stroke shapes from KanjiVG (CC BY-SA 3.0)",
   perPage: "Characters",
-  pagerLabel: "Pages",
   printName: "Name",
   printDate: "Date",
-  pagerTop: "Top",
-  pagerBottom: "Bottom",
-  pagerBoth: "Both",
-  pagerNone: "None",
+  printScopeHeading: "How much?",
+  printScopeThis: "This page",
+  printScopeAll: "Everything",
+  printScopeCharacters: "characters",
+  printScopeCancel: "Cancel",
+  printRunLabel: "Print run",
+  printRunOf: "of",
+  printingAllHeading: "Every character, on one sheet of paper after another",
+  printingAllBody:
+    "The screen pages are gone, so the characters flow onto the paper without leaving a half-empty page between each one.",
+  printingRunsHeading: "This list prints in runs",
+  printingRunsBody:
+    "Too long for one document, so it is split into the largest runs that still print cleanly. Print this one, then step to the next.",
+  printAllBack: "Back to pages",
   sourceLabel: "Practise",
   chooseLabel: "Choose",
   closeChooser: "Done",
@@ -56,6 +65,24 @@ export const TRACE_CELLS_PER_ROW = 3;
 
 /** Characters per printed sheet, so a grade splits into predictable pages. */
 export const PRACTICE_PAGE_SIZE = 20;
+
+/**
+ * How many characters one print run may hold.
+ *
+ * Printing walked the screen pages, which is the wrong unit: twenty characters
+ * is a comfortable amount to look at and roughly two sheets of paper, so a
+ * grade of eighty came out as four separate print jobs each ending in a
+ * half-empty page. Printing everything at once fixes both - the characters
+ * flow, and the paper fills - but it cannot be unbounded, because secondary
+ * school kanji is 1,110 characters and that is eighty sheets of paper and tens
+ * of thousands of SVG paths in a single document.
+ *
+ * So "everything" is really "the largest run that still prints cleanly". Two
+ * hundred and fifty takes every elementary grade whole (the largest is 202)
+ * and turns the dictionary-sized lists into a handful of runs rather than
+ * fifty-six.
+ */
+export const PRINT_ALL_LIMIT = 250;
 
 /**
  * Squares across a row, and so where a long character wraps.

@@ -187,6 +187,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Ichiban Inori", ja: "一番祈り", reading: "いちばんいのり", gloss: "the first wish of the day" },
   { romaji: "Uneri Utsuwa", ja: "うねり器", reading: "うねりうつわ", gloss: "a vessel with a swell to it" },
   { romaji: "Emaki Egaku", ja: "絵巻描く", reading: "えまきえがく", gloss: "painting the picture scroll" },
+  { romaji: "Ooban Otehon", ja: "大判お手本", reading: "おおばんおてほん", gloss: "large-format copybook" },
 ];
 
 /**

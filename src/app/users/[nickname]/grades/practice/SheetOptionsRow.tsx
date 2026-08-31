@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import { PAGINATION_PLACEMENTS } from "@/app/shared/paginationPlacement";
-
 import { PRACTICE_SHEET_COPY, SHEET_SIZE_ORDER, type SheetSize } from "./practiceCopy";
 import { sheetHref, type SheetSettings } from "./sheetLink";
 
@@ -10,9 +8,14 @@ import { sheetHref, type SheetSettings } from "./sheetLink";
  *
  * The source row above chooses which characters; everything here is about the
  * page they land on - whether the finished character occupies the first
- * column, whether readings print, how big the squares are, where the pager
- * sits. All of it rides in the URL, so a sheet set up a particular way is
- * still a link.
+ * column, whether readings print, how big the squares are. All of it rides in
+ * the URL, so a sheet set up a particular way is still a link.
+ *
+ * Where the pager sits was a control here too, and it is not any more. It asked
+ * the reader to make a layout decision about a component rather than about
+ * their sheet, and the answer was the same every time: both ends, because the
+ * foot of a tracing sheet is three thousand pixels down. It survives as a URL
+ * parameter for the print layout to set - see `pagerPlacement` on the page.
  */
 
 const CHIP = "inline-flex h-7 items-center rounded-full border text-[11px] font-bold transition";
@@ -41,13 +44,6 @@ const SIZE_TITLES: Record<SheetSize, string> = {
   large: PRACTICE_SHEET_COPY.sizeLargeTitle,
   medium: PRACTICE_SHEET_COPY.sizeMediumTitle,
   small: PRACTICE_SHEET_COPY.sizeSmallTitle,
-};
-
-const PAGER_LABELS: Record<(typeof PAGINATION_PLACEMENTS)[number], string> = {
-  top: PRACTICE_SHEET_COPY.pagerTop,
-  bottom: PRACTICE_SHEET_COPY.pagerBottom,
-  both: PRACTICE_SHEET_COPY.pagerBoth,
-  none: PRACTICE_SHEET_COPY.pagerNone,
 };
 
 function Checkbox({ label, on, href }: { label: string; on: boolean; href: string }) {
@@ -106,23 +102,6 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
         ))}
       </span>
 
-      {/*
-        * Where the pager sits. Someone printing a single sheet wants neither
-        * end; someone working through a grade on screen wants both, because
-        * the foot of a tracing sheet is three thousand pixels down.
-        */}
-      <span className={GROUP}>
-        <span className={`${GROUP_LABEL} mr-0.5`}>{PRACTICE_SHEET_COPY.pagerLabel}</span>
-        {PAGINATION_PLACEMENTS.map((placement) => (
-          <Link
-            key={placement}
-            href={sheetHref(settings, { placement })}
-            className={`${CHIP} px-3 ${placement === settings.placement ? CHIP_ON : CHIP_OFF}`}
-          >
-            {PAGER_LABELS[placement]}
-          </Link>
-        ))}
-      </span>
     </nav>
   );
 }
