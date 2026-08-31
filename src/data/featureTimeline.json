@@ -473,7 +473,7 @@
     "date": "2026-08-31",
     "dateIsEstimate": true,
     "release": 7,
-    "summary": "Split JLPT content from the WaniKani progress overlay so the kanji data stands on its own."
+    "summary": "The JLPT route refused the whole request without a WaniKani token, although the token was only ever used for the progress overlay - the kanji themselves come from a table WaniKani has no part in. So a member who had not connected could not read the JLPT data at all, only the part of it that was about them. The token is required where it is used and nowhere else now: the kanji stand on their own and the overlay is simply empty without one."
   },
   {
     "id": "optional-wk-identity",
@@ -499,11 +499,13 @@
     "id": "catalog-game-pool",
     "name": "WaniKani-free game pool",
     "area": "games",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
+    "status": "shipped",
+    "date": "2026-08-31",
+    "dateIsEstimate": false,
     "release": 9,
-    "summary": "Draw game rounds from the local catalogue when there is no assignment cache to draw from."
+    "summary": "The games drew only from an account's own WaniKani assignments, so a player who had never connected had a pool of nothing: Match and Shiritori answered \"Only 0 eligible items are available\" while the lobby offered them and the welcome copy promised them by name. The subjects were never personal - they are the shared catalogue, which Daily Challenge has always played straight off - so assignments are treated as a filter rather than the source, and a player without a connection draws the catalogue up to level ten. Not the whole of it: sixty levels of vocabulary is a dictionary rather than a game. A connected player is untouched, since every existing account has assignments and the fallback never fires for them.",
+    "version": "0.148.0",
+    "releasedAt": "2026-08-31T12:00:00Z"
   },
   {
     "id": "connect-wanikani-page",
