@@ -1,4 +1,4 @@
-import { PRACTICE_SHEET_COPY, TRACE_CELLS_PER_ROW } from "./practiceCopy";
+import { PRACTICE_SHEET_COPY, SHEET_COLUMNS, TRACE_CELLS_PER_ROW } from "./practiceCopy";
 
 export type TraceEntry = {
   kanji: string;
@@ -8,8 +8,11 @@ export type TraceEntry = {
   viewBox: string;
 };
 
+export type SheetMode = "trace" | "strokes";
+
 type Props = {
   entries: TraceEntry[];
+  mode?: SheetMode;
 };
 
 /**
@@ -39,6 +42,31 @@ function TraceGlyph({ entry, tone }: { entry: TraceEntry; tone: "solid" | "ghost
   );
 }
 
+/**
+ * The character as far as one stroke, with that stroke picked out.
+ *
+ * Cumulative rather than one stroke alone, because that is what a 筆順 chart
+ * shows and what the reader needs: a single detached stroke says what to draw
+ * but not where on the square to put it. Earlier strokes stay faint so the new
+ * one is unmistakable.
+ */
+function StrokeStepGlyph({ entry, upTo }: { entry: TraceEntry; upTo: number }) {
+  return (
+    <svg viewBox={entry.viewBox} className="h-full w-full" aria-hidden="true">
+      <g fill="none" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
+        {entry.strokes.slice(0, upTo).map((d, index) => (
+          <path
+            key={index}
+            d={d}
+            className={index === upTo - 1 ? "text-neutral-800" : "text-neutral-300"}
+            stroke="currentColor"
+          />
+        ))}
+      </g>
+    </svg>
+  );
+}
+
 /** A practice square, with the guide lines a Japanese workbook uses. */
 function Cell({ children }: { children?: React.ReactNode }) {
   return (
@@ -59,7 +87,7 @@ function Cell({ children }: { children?: React.ReactNode }) {
  * repeats to trace over, then empty squares to write unaided — which is the
  * progression a Japanese workbook uses.
  */
-export default function TracingSheet({ entries }: Props) {
+export default function TracingSheet({ entries, mode = "trace" }: Props) {
   return (
     <div className="space-y-3">
       {entries.map((entry) => (
@@ -71,19 +99,37 @@ export default function TracingSheet({ entries }: Props) {
             </span>
           </div>
 
-          <div className="grid grid-cols-8 gap-1">
-            <Cell>
-              <TraceGlyph entry={entry} tone="solid" />
-            </Cell>
-            {Array.from({ length: TRACE_CELLS_PER_ROW }, (_, index) => (
-              <Cell key={`ghost-${index}`}>
-                <TraceGlyph entry={entry} tone="ghost" />
+          {mode === "strokes" ? (
+            /*
+             * One square per stroke, wrapping onto another row past eight
+             * rather than shrinking the squares. A twelve-stroke character
+             * gets two rows; nothing is made smaller to fit.
+             */
+            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${SHEET_COLUMNS}, minmax(0, 1fr))` }}>
+              {Array.from({ length: entry.strokeCount }, (_, index) => (
+                <Cell key={`step-${index}`}>
+                  <span className="absolute left-0.5 top-0 z-10 text-[9px] font-black leading-none text-neutral-400">
+                    {index + 1}
+                  </span>
+                  <StrokeStepGlyph entry={entry} upTo={index + 1} />
+                </Cell>
+              ))}
+            </div>
+          ) : (
+            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${SHEET_COLUMNS}, minmax(0, 1fr))` }}>
+              <Cell>
+                <TraceGlyph entry={entry} tone="solid" />
               </Cell>
-            ))}
-            {Array.from({ length: 8 - 1 - TRACE_CELLS_PER_ROW }, (_, index) => (
-              <Cell key={`blank-${index}`} />
-            ))}
-          </div>
+              {Array.from({ length: TRACE_CELLS_PER_ROW }, (_, index) => (
+                <Cell key={`ghost-${index}`}>
+                  <TraceGlyph entry={entry} tone="ghost" />
+                </Cell>
+              ))}
+              {Array.from({ length: SHEET_COLUMNS - 1 - TRACE_CELLS_PER_ROW }, (_, index) => (
+                <Cell key={`blank-${index}`} />
+              ))}
+            </div>
+          )}
         </section>
       ))}
     </div>

@@ -12,7 +12,7 @@ import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
 import PrintButton from "./PrintButton";
 import { PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY } from "./practiceCopy";
-import TracingSheet, { type TraceEntry } from "./TracingSheet";
+import TracingSheet, { type SheetMode, type TraceEntry } from "./TracingSheet";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;
@@ -33,6 +33,8 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
 
   const { nickname } = await params;
   const query = await searchParams;
+  const modeParam = typeof query.mode === "string" ? query.mode : null;
+  const mode: SheetMode = modeParam === "strokes" ? "strokes" : "trace";
 
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
@@ -129,12 +131,42 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
             </Link>
           );
         })}
+        <span className="ml-2 mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
+          {PRACTICE_SHEET_COPY.modeLabel}
+        </span>
+        {([
+          ["trace", PRACTICE_SHEET_COPY.modeTrace],
+          ["strokes", PRACTICE_SHEET_COPY.modeStrokes],
+        ] as const).map(([id, label]) => (
+          <Link
+            key={id}
+            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${id}`}
+            className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
+              id === mode
+                ? "border-neutral-900 bg-neutral-900 text-white"
+                : "border-neutral-300 text-neutral-600 hover:bg-neutral-100"
+            }`}
+          >
+            {label}
+          </Link>
+        ))}
       </nav>
+
+      {/*
+        * Said plainly rather than shrinking the squares to fit. A square small
+        * enough for a phone is too small to write a kanji inside, so the sheet
+        * would look right and be useless. Nothing is blocked - it is a notice,
+        * not a wall - and it does not print.
+        */}
+      <p className="mb-4 rounded-xl border border-neutral-300 bg-neutral-50 p-3 text-xs text-neutral-600 sm:hidden print:hidden">
+        <span className="block font-black text-neutral-800">{PRACTICE_SHEET_COPY.phoneNoticeHeading}</span>
+        {PRACTICE_SHEET_COPY.phoneNoticeBody}
+      </p>
 
       {entries.length === 0 ? (
         <p className="rounded-xl border border-neutral-300 p-4 text-sm">{PRACTICE_SHEET_COPY.empty}</p>
       ) : (
-        <TracingSheet entries={entries} />
+        <TracingSheet entries={entries} mode={mode} />
       )}
 
       <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-neutral-400">

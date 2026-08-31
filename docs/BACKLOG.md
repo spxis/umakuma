@@ -53,6 +53,9 @@ through it meets a finished flow.
 | 19 | Stroke order as a shareable component | 18 |
 | 20 | Updates page: months, names, reachability | — |
 | 21 | Map regions beyond Japan | — |
+| 22 | Saved practice lists | 23 |
+| 23 | Selection as a shared surface control | — |
+| 24 | Print mode | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
 Release 6 should not ship before 7 to 9, or a member without WaniKani arrives to
@@ -563,3 +566,37 @@ control to the lobby.
 `geoComparisons.ts` has the primitives (area, population, both comparators) and
 no consumers. As its own game it needs a new `GameKind` enum value, which means
 a hand-applied `db push` to production before it can deploy.
+
+---
+
+### 22 — Saved practice lists
+
+Build a sheet from chosen items rather than a whole grade, and keep it: "Week
+1", "Week 2". A page lists every list a member has made, each with a small
+preview of the kanji it holds, so a parent can see at a glance what a week
+covers. John expects this to be popular.
+
+The tagged lists are the same shape — Trouble and Favourites are already
+member-curated sets of subjects — so a saved list should be the same thing
+under a different name, not a parallel implementation.
+
+Needs persistence: a list of chosen subjects per member, which is a schema
+change and a hand-applied `db push`.
+
+### 23 — Selection as a shared surface control
+
+The point John pressed hardest: this must not be a practice-page feature.
+Selecting items belongs beside the grid/list density control, on every surface
+that lists subjects, so anything can be built into a list — and then a list can
+be sent to a practice sheet, a quiz, or whatever comes next.
+
+So the shared control is not "make a practice sheet"; it is "choose these",
+with the destinations offered afterwards. `SubjectViewModeToggle` and the guard
+test in `subjectListDensity.test.ts` are the pattern to follow, and the same
+test should grow to require the selection control once it exists.
+
+### 24 — Print mode
+
+The tracing sheet is already built for paper; this is the rest of it — a real
+print stylesheet, page breaks that fall between characters, and no site
+furniture on the page.

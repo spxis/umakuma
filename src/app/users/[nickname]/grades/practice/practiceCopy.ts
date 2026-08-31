@@ -11,6 +11,12 @@ export const PRACTICE_SHEET_COPY = {
   credit: "Stroke shapes from KanjiVG (CC BY-SA 3.0)",
   perPage: "Characters",
   sourceLabel: "Practise",
+  modeLabel: "Sheet",
+  modeTrace: "Trace",
+  modeStrokes: "Stroke order",
+  phoneNoticeHeading: "This sheet wants a bigger screen",
+  phoneNoticeBody:
+    "The squares have to be large enough to write inside, which a phone cannot give. Open this on a tablet or print it. You can keep scrolling if you only want to look.",
   fromGrades: "School grade",
   fromWanikani: "WaniKani level",
   fromJlpt: "JLPT level",
@@ -27,3 +33,12 @@ export const TRACE_CELLS_PER_ROW = 3;
 
 /** Characters per printed sheet, so a grade splits into predictable pages. */
 export const PRACTICE_PAGE_SIZE = 20;
+
+/**
+ * Squares across a row, and so where a long character wraps.
+ *
+ * Eight is the practice-book row. A character of more than eight strokes runs
+ * onto a second row rather than shrinking every square to fit, because a
+ * square too small to write in is no longer a practice square.
+ */
+export const SHEET_COLUMNS = 8;

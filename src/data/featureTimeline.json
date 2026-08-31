@@ -1206,5 +1206,15 @@
     "version": "0.109.0",
     "releasedAt": "2026-08-31T00:20:00Z",
     "summary": "Each release now shows its codename on the row rather than only inside it, since that is the part anyone remembers. Months collapse, and an admin reaches the release admin page from here instead of finding their own way."
+  },
+  {
+    "id": "practice-stroke-order-sheet",
+    "area": "study",
+    "name": "A stroke-order sheet, and honesty about phones",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.110.0",
+    "releasedAt": "2026-08-31T01:00:00Z",
+    "summary": "Writing practice can now be printed as a stroke-order chart: one numbered square per stroke, the character built up to that point with the newest stroke picked out. A character of more than eight strokes runs onto a second row instead of shrinking the squares. On a phone the sheet now says plainly that it wants a bigger screen, rather than rendering squares too small to write inside."
   }
 ]
