@@ -88,3 +88,26 @@ describe("selectionRange", () => {
     expect(selectionRange("悪", "漢", row)).toEqual([]);
   });
 });
+
+/*
+ * The same sweep, over subject ids.
+ *
+ * The WaniKani explorer chooses ids rather than characters and had written its
+ * own copy of this - anchored on the item's index into the visible list, which
+ * only holds while that list does. Filtering or loading another page moved
+ * every index under the anchor, and the next shift-click swept the wrong
+ * stretch. Anchoring on the id and sharing the maths fixes both at once.
+ */
+describe("selectionRange over ids", () => {
+  const ids = [101, 102, 103, 104, 105];
+
+  it("sweeps a range of ids in either direction", () => {
+    expect(selectionRange(101, 104, ids)).toEqual([101, 102, 103, 104]);
+    expect(selectionRange(104, 101, ids)).toEqual([101, 102, 103, 104]);
+  });
+
+  it("gives nothing when the anchor has left the page", () => {
+    expect(selectionRange(999, 103, ids)).toEqual([]);
+    expect(selectionRange(null, 103, ids)).toEqual([]);
+  });
+});

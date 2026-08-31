@@ -42,12 +42,16 @@ export const SUBJECT_SELECTION_COPY = {
  * An anchor that is no longer on screen - a new grade, a new page of results -
  * gives an empty range rather than a wrong one, and the caller falls back to
  * treating the click as an ordinary one.
+ *
+ * Generic over the key, because the surfaces do not agree on one: the grade
+ * and JLPT explorers choose characters, the WaniKani explorer chooses subject
+ * ids. The maths is the same either way, and it was written twice before.
  */
-export function selectionRange(
-  anchor: string | null,
-  key: string,
-  order: readonly string[],
-): string[] {
+export function selectionRange<T>(
+  anchor: T | null,
+  key: T,
+  order: readonly T[],
+): T[] {
   const from = anchor === null ? -1 : order.indexOf(anchor);
   const to = order.indexOf(key);
   if (from < 0 || to < 0) {

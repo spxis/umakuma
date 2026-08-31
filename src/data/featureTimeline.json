@@ -1740,5 +1740,15 @@
     "version": "0.167.0",
     "releasedAt": "2026-09-01T05:00:00Z",
     "summary": "A phone header showed four sections - Leaderboard, Study, Game, Admin - chosen by a hardcoded list of labels. Explore, Progress and Read were not in the markup at all, so on a phone the explorers, the progress pages and the reading pages could only be reached by somebody who already knew the menu button held them. Seven labels will not fit 393 pixels, so the row scrolls sideways now, reusing the same treatment the admin tab row has had for a while: no visible scrollbar, and a fade at the right edge that says there is more, which lifts once you reach the end. Removing the allowlist also removes seven literal labels that would have quietly stopped matching the day a section was renamed."
+  },
+  {
+    "id": "choosing-across-explorers",
+    "area": "study",
+    "name": "Choose a range anywhere",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.168.0",
+    "releasedAt": "2026-09-01T06:00:00Z",
+    "summary": "Choosing a set of characters existed in the grade explorer and nowhere else, and the JLPT explorer had no way to select anything at all - so building a practice sheet or a saved list from a JLPT level meant picking the kanji out by hand somewhere else. The JLPT explorer now offers the same Choose mode, the same bar, and the same two destinations, and shift-click takes everything between the last card and this one. None of that is a second copy: the bar and its destinations moved into a shared component that the grade board now uses too, and the card draws the ring and the tick itself so a chosen card reads the same on every surface. The tick sits where the index number was, because every corner of the card is already spoken for by a pill, a level, a success rate or the trouble and favourite controls, and a tick laid over any of them hides something the member is using to choose. The WaniKani explorer keeps its own selection - it picks subject ids and carries bulk operations the others have no use for - but it no longer carries its own copy of the range maths, and that fixed a bug in passing: its anchor was the item position in the visible list, so changing a filter or loading another page moved every position underneath it and the next shift-click swept the wrong stretch. It anchors on the subject now, which survives both."
   }
 ]

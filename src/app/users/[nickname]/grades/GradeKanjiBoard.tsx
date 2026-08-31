@@ -2,13 +2,10 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
-
+import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
-import { SubjectSelectionBar, SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
-import { encodeSelection, SUBJECT_SELECTION_COPY } from "@/app/shared/subjectSelection";
+import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
-import SaveSelectionAsList from "@/app/shared/SaveSelectionAsList";
 import {
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
@@ -109,19 +106,12 @@ export default function GradeKanjiBoard({ items, practicePath, accountId }: Prop
         />
       </div>
 
-      <SubjectSelectionBar selection={selection} visibleKeys={items.map((entry) => entry.kanji)}>
-        {selection.count > 0 && accountId ? (
-          <SaveSelectionAsList selection={selection} accountId={accountId} onSaved={selection.cancel} />
-        ) : null}
-        {selection.count > 0 ? (
-          <Link
-            href={`${practicePath}?source=picked&picked=${encodeURIComponent(encodeSelection(selection.chosen))}`}
-            className="inline-flex h-8 items-center rounded-full bg-accent px-4 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
-          >
-            {SUBJECT_SELECTION_COPY.practise}
-          </Link>
-        ) : null}
-      </SubjectSelectionBar>
+      <KanjiSelectionBar
+        selection={selection}
+        visibleKeys={items.map((entry) => entry.kanji)}
+        accountId={accountId}
+        practicePath={practicePath}
+      />
 
       <GradeKanjiGrid
         items={items}

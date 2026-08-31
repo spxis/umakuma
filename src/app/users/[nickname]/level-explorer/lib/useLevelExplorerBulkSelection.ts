@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
+import { selectionRange } from "@/app/shared/subjectSelection";
+
 import type { LevelItem } from "../../explorerTypes";
 
 const BULK_MODE_STORAGE_KEY = "wr:level-bulk-mode";
@@ -32,7 +34,13 @@ export function useLevelExplorerBulkSelection({
       return false;
     }
   });
-  const [bulkAnchorIndex, setBulkAnchorIndex] = useState<number | null>(null);
+  /*
+   * The subject a range is measured from. It was the item's index into the
+   * visible list, which is only stable while that list is: filtering or
+   * loading another page moved every index under the anchor and a later
+   * shift-click swept the wrong stretch. The id survives both.
+   */
+  const [bulkAnchorId, setBulkAnchorId] = useState<number | null>(null);
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
   const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
 
@@ -81,26 +89,31 @@ export function useLevelExplorerBulkSelection({
   );
 
   const applyBulkSelection = useCallback(
-    ({ subjectId, shiftKey, sourceIndex }: { subjectId: number; shiftKey: boolean; sourceIndex: number }) => {
+    ({ subjectId, shiftKey }: { subjectId: number; shiftKey: boolean; sourceIndex?: number }) => {
       if (!bulkModeEnabled) {
         return false;
       }
 
-      if (shiftKey && bulkAnchorIndex !== null) {
-        const start = Math.min(bulkAnchorIndex, sourceIndex);
-        const end = Math.max(bulkAnchorIndex, sourceIndex);
-        const rangeIds = visibleItems.slice(start, end + 1).map((item) => item.subjectId);
+      if (shiftKey) {
+        const rangeIds = selectionRange(
+          bulkAnchorId,
+          subjectId,
+          visibleItems.map((item) => item.subjectId),
+        );
         if (rangeIds.length > 0) {
           onSelectSubjectIds(rangeIds);
+          /* The far end anchors the next sweep, so a range can be walked out. */
+          setBulkAnchorId(subjectId);
+          return true;
         }
-        return true;
+        /* Nothing anchored on this page: the click means what a plain one means. */
       }
 
       onToggleSubjectSelection(subjectId);
-      setBulkAnchorIndex(sourceIndex);
+      setBulkAnchorId(subjectId);
       return true;
     },
-    [bulkAnchorIndex, bulkModeEnabled, onSelectSubjectIds, onToggleSubjectSelection, visibleItems],
+    [bulkAnchorId, bulkModeEnabled, onSelectSubjectIds, onToggleSubjectSelection, visibleItems],
   );
 
   const toggleBulkMode = useCallback(() => {
@@ -108,7 +121,7 @@ export function useLevelExplorerBulkSelection({
       const next = !previous;
       if (!next) {
         onClearSelection();
-        setBulkAnchorIndex(null);
+        setBulkAnchorId(null);
         setShowAllSelectedInBar(false);
       }
       try {
@@ -123,7 +136,7 @@ export function useLevelExplorerBulkSelection({
   const exitBulkMode = useCallback(() => {
     setBulkModeEnabled(false);
     onClearSelection();
-    setBulkAnchorIndex(null);
+    setBulkAnchorId(null);
     setShowAllSelectedInBar(false);
     try {
       window.localStorage.setItem(BULK_MODE_STORAGE_KEY, "0");

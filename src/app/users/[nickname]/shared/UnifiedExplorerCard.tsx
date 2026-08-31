@@ -29,6 +29,14 @@ type Props = {
    * ended up with its own and the other two with none.
    */
   density?: "grid" | "list";
+  /**
+   * Picked, while the surface is in choosing mode.
+   *
+   * Drawn here rather than by each explorer so a chosen card reads the same
+   * everywhere: a ring, and a tick where the index sits. The ring alone is a
+   * fine signal on one card and a hard one to count across forty.
+   */
+  chosen?: boolean;
 };
 
 export default function UnifiedExplorerCard({
@@ -47,9 +55,26 @@ export default function UnifiedExplorerCard({
   middleChip,
   rightChip,
   density = "grid",
+  chosen = false,
 }: Props) {
   const rows = density === "list";
   const { fontFamily } = useGlyphFontPreference();
+  /*
+   * The tick takes the index's place rather than a corner of its own. Every
+   * corner is already spoken for - the JLPT and grade pills at the top right,
+   * the level and success rate inside the glyph box, trouble and favourite at
+   * its foot - and a tick laid over any of them covers something the member
+   * is using to choose. The index is the one thing on the card that says
+   * nothing about the character, and while choosing, which ones are chosen
+   * matters more than what number they were.
+   */
+  const indexOrTick = chosen ? (
+    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-black leading-none text-white">
+      ✓
+    </span>
+  ) : (
+    indexLabel
+  );
   const rootCursorClass = activateOn === "card" ? "cursor-pointer" : "cursor-default";
   const glyphCursorClass = activateOn === "glyph-box" ? "cursor-pointer" : "";
   const getInteractiveAncestor = (target: EventTarget | null): HTMLElement | null => {
@@ -94,12 +119,15 @@ export default function UnifiedExplorerCard({
         onClick({ shiftKey: event.shiftKey });
       }}
       data-explorer-card-subject-id={dataSubjectId} // Added data-explorer-card-subject-id attribute
-      className={`group/explorer-card focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${rootCursorClass} ${className}`}
+      aria-pressed={chosen || undefined}
+      className={`group/explorer-card relative focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${rootCursorClass} ${className} ${
+        chosen ? "ring-2 ring-accent ring-offset-1 ring-offset-surface" : ""
+      }`}
     >
       {rows ? (
         /* One line: index, glyph, what it means, then the chips at the end. */
         <div className="flex min-w-0 items-center gap-3">
-          <span translate="no" className={noTranslateClass("w-8 shrink-0 text-[10px] font-semibold text-foreground/45")}>{indexLabel}</span>
+          <span translate="no" className={noTranslateClass("w-8 shrink-0 text-[10px] font-semibold text-foreground/45")}>{indexOrTick}</span>
           <div
             data-explorer-glyph-hitbox="true"
             className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border ${glyphCursorClass} ${glyphClassName}`}
@@ -131,7 +159,7 @@ export default function UnifiedExplorerCard({
       ) : (
         <>
           <div className="flex min-h-[2.35rem] items-start justify-between gap-2">
-            <span translate="no" className={noTranslateClass("text-[10px] font-semibold text-foreground/45")}>{indexLabel}</span>
+            <span translate="no" className={noTranslateClass("text-[10px] font-semibold text-foreground/45")}>{indexOrTick}</span>
             <div className="flex min-h-[2.2rem] flex-wrap content-start items-start justify-end gap-1">{topRight}</div>
           </div>
 

@@ -47,6 +47,10 @@ import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import FieldLabel from "../../../../shared/FieldLabel";
 import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
+import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
+import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
+import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
+import { usePathname } from "next/navigation";
 import type {
   KanjiStats,
   JlptExplorerContentProps as Props,
@@ -86,6 +90,15 @@ export default function JlptExplorerContent({
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(JLPT_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
   const [showClassic, setShowClassic] = useState(false);
+
+  /*
+   * Choosing, the same way the grade explorer does it. The practice sheet
+   * lives under the member whose page this is, which the address already
+   * names - the explorer is not given a nickname of its own.
+   */
+  const selection = useSubjectSelection();
+  const pathname = usePathname();
+  const practicePath = `${(pathname ?? "").split("/").slice(0, 3).join("/")}/grades/practice`;
 
   const PAGE_SIZE = 40;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -343,12 +356,24 @@ export default function JlptExplorerContent({
               WaniKani-specific SRS stats are shown only where subject mappings exist.
             </p>
           </div>
-          <SubjectViewModeToggle
-            value={viewMode}
-            onChange={(next) => {
-              setViewMode(next);
-              setStoredEnum(JLPT_VIEW_MODE_STORAGE_KEY, next);
-            }}
+          <div className="flex items-center gap-2">
+            <SubjectSelectionToggle selection={selection} />
+            <SubjectViewModeToggle
+              value={viewMode}
+              onChange={(next) => {
+                setViewMode(next);
+                setStoredEnum(JLPT_VIEW_MODE_STORAGE_KEY, next);
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="mt-3">
+          <KanjiSelectionBar
+            selection={selection}
+            visibleKeys={visibleItems.map((entry) => entry.kanji)}
+            accountId={accountId}
+            practicePath={practicePath}
           />
         </div>
         <div className={viewMode === SUBJECT_VIEW_MODES.list ? "mt-3 space-y-1.5" : "mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"}>
@@ -366,7 +391,21 @@ export default function JlptExplorerContent({
               <Fragment key={`${item.nLevel}-${item.kanji}`}>
                 <UnifiedExplorerCard
                   density={viewMode}
-                  onClick={() => onSetSelectedKanji((prev) => (prev === item.kanji ? null : item.kanji))}
+                  chosen={selection.choosing && selection.chosen.has(item.kanji)}
+                  onClick={(meta) => {
+                    /*
+                     * Choosing borrows the card's click, the way the grade
+                     * grid does - the same click, a different verb - so the
+                     * grid needs no second target and no permanent checkbox.
+                     */
+                    if (selection.choosing) {
+                      const order = visibleItems.map((entry) => entry.kanji);
+                      if (meta?.shiftKey) selection.extendTo(item.kanji, order);
+                      else selection.toggle(item.kanji);
+                      return;
+                    }
+                    onSetSelectedKanji((prev) => (prev === item.kanji ? null : item.kanji));
+                  }}
                   className={`rounded-2xl border p-3 text-left transition hover:brightness-95 ${
                     userMatch ? "border-kanji/50 bg-surface text-foreground" : "border-line bg-surface text-foreground"
                   } ${selectedKanji === item.kanji ? "ring-2 ring-accent" : ""}`}
