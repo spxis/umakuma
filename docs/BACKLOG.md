@@ -37,29 +37,31 @@ through it meets a finished flow.
 |---|---|---|
 | 1 | ~~Viewer identity fix~~ ✅ v0.58.0 | — |
 | 2 | Viewing presence | needs a schema push |
-| 3 | Optional WaniKani connection | — |
-| 4 | Display names and visibility | 3 |
-| 5 | **Registration and onboarding** | 3, 4 |
-| 6 | Open Google sign-up | 1, 5 |
+| 3 | ~~Optional WaniKani connection~~ ✅ v0.95.0 | — |
+| 4 | ~~Display names and visibility~~ ✅ v0.96.0, v0.103.0 | 3 |
+| 5 | ~~Registration and onboarding~~ ✅ v0.103.0, v0.107.0 | 3, 4 |
+| 6 | Open Google sign-up — **built, door still shut** | John to open |
 | 7 | Standalone JLPT study | — |
 | 8 | Capability gating | 3 |
-| 9 | WaniKani-free game pool | — |
+| 9 | ~~WaniKani-free game pool~~ ✅ v0.122.0 | — |
 | 10 | Connect your WaniKani account | 8 |
 | 11 | Clans and families | 4 |
 | 12 | Global ranking opt-in | 4, 11 |
 | 13 | JLPT level reviews | design open |
 | 14-17 | Sync, backfill, Ultra enum, DRY sweep | — |
-| 18 | Kanji card density and controls | — |
-| 19 | Stroke order as a shareable component | 18 |
-| 20 | Updates page: months, names, reachability | — |
-| 21 | Map regions beyond Japan | — |
+| 18 | ~~Kanji card density and controls~~ ✅ v0.105.0 | — |
+| 19 | ~~Stroke order as a shareable component~~ ✅ v0.108.0 | — |
+| 20 | ~~Updates page: months, names, reachability~~ ✅ v0.109.0 | — |
+| 21 | ~~Map regions beyond Japan~~ ✅ v0.121.0-v0.123.0 | — |
 | 22 | Saved practice lists | 23 |
 | 23 | Selection as a shared surface control | — |
 | 24 | Print mode | — |
-| 25 | Practice sheet controls | — |
+| 25 | ~~Practice sheet controls~~ ✅ v0.115.0, v0.116.0, v0.118.0 | — |
 | 26 | ~~JLPT old numbering~~ ✅ v0.119.0 | — |
 | 27 | Counts on second-level filters | — |
 | 28 | Pagination placement option | — |
+| 30 | Desktop page width and header crowding | — |
+| 31 | Consolidate preferences into Settings | — |
 | 29 | ~~Real US and Canada map geometry~~ ✅ v0.123.0 | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
@@ -691,3 +693,17 @@ generated. There is no pipeline to copy; there is a pipeline to write.
 so adjacency falls out of the format rather than needing a distance heuristic.
 That is the reason to take TopoJSON rather than GeoJSON.
 
+
+### 30 — Desktop page width and header crowding
+
+Some pages run edge to edge on a desktop and others sit in a narrow column, and
+the header wraps to three lines on the constrained ones. John asked for a
+decision rather than a per-page patch: pick one width rule for member pages and
+apply it, and give the header room to sit on one line at desktop widths.
+
+### 31 — Consolidate preferences into Settings
+
+Theme and Japanese font live in the account menu; Profile and Libraries live in
+Settings. That is two homes for one idea, which is the thing the menu rebuild
+was supposed to end. Move the preferences onto the profile page and take them
+out of the menu.
