@@ -7,6 +7,7 @@ import {
   type SubjectListRow,
 } from "@/app/shared/subjectListView";
 import { JP_TEXT_CLASS } from "./japaneseText";
+import type { SubjectSelection } from "./useSubjectSelection";
 
 type Props<TRow extends SubjectListRow> = {
   rows: TRow[];
@@ -23,6 +24,16 @@ type Props<TRow extends SubjectListRow> = {
   renderSubMeta?: (row: TRow) => ReactNode;
   /** Returns the heading a row belongs under. Omit for a flat list. */
   groupBy?: (row: TRow) => string;
+  /**
+   * Choosing, when the surface offers it.
+   *
+   * Given one, a row's click picks instead of opening - the same click, a
+   * different verb, which is how every other list here behaves - and shift
+   * takes everything between the last pick and this one. Rows are keyed by
+   * their glyph, the same key the explorers choose by, so a set gathered from
+   * history can go straight to a practice sheet.
+   */
+  selection?: SubjectSelection;
 };
 
 type Group<TRow> = { heading: string; rows: Array<{ row: TRow; index: number }> };
@@ -64,8 +75,17 @@ export default function SubjectRows<TRow extends SubjectListRow>({
   renderTrailing,
   renderSubMeta,
   groupBy,
+  selection,
 }: Props<TRow>) {
   if (rows.length === 0) return null;
+
+  const choosing = Boolean(selection?.choosing);
+  const order = rows.map((row) => row.glyph);
+  const pick = (row: TRow, shiftKey: boolean) => {
+    if (!selection) return;
+    if (shiftKey) selection.extendTo(row.glyph, order);
+    else selection.toggle(row.glyph);
+  };
 
   return (
     <div className="overflow-hidden rounded-lg border border-line bg-surface">
@@ -79,13 +99,35 @@ export default function SubjectRows<TRow extends SubjectListRow>({
           ) : null}
 
           <ul className="divide-y divide-line/50">
-            {group.rows.map(({ row, index }) => (
-              <li key={row.key} className="flex items-center gap-2 pr-2 transition hover:bg-surface-muted/50">
+            {group.rows.map(({ row, index }) => {
+              const chosen = choosing && Boolean(selection?.chosen.has(row.glyph));
+              return (
+              <li
+                key={row.key}
+                className={`flex items-center gap-2 pr-2 transition hover:bg-surface-muted/50 ${
+                  chosen ? "bg-accent/10" : ""
+                }`}
+              >
                 <button
                   type="button"
-                  onClick={() => onSelect(row, index)}
+                  aria-pressed={choosing ? chosen : undefined}
+                  onClick={(event) => (choosing ? pick(row, event.shiftKey) : onSelect(row, index))}
                   className="flex min-w-0 flex-1 items-center gap-3 px-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent/40"
                 >
+                  {/* Before the leading slot rather than instead of it: in
+                    * history the mark says whether the answer was right, which
+                    * is exactly what a member is reading when they decide
+                    * whether to pick that one. */}
+                  {choosing ? (
+                    <span
+                      aria-hidden="true"
+                      className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-black leading-none ${
+                        chosen ? "border-accent bg-accent text-white" : "border-line text-transparent"
+                      }`}
+                    >
+                      ✓
+                    </span>
+                  ) : null}
                   {renderLeading ? renderLeading(row) : null}
 
                   <span
@@ -122,7 +164,8 @@ export default function SubjectRows<TRow extends SubjectListRow>({
 
                 {renderTrailing ? <div className="shrink-0">{renderTrailing(row)}</div> : null}
               </li>
-            ))}
+              );
+            })}
           </ul>
         </section>
       ))}

@@ -1750,5 +1750,15 @@
     "version": "0.168.0",
     "releasedAt": "2026-09-01T06:00:00Z",
     "summary": "Choosing a set of characters existed in the grade explorer and nowhere else, and the JLPT explorer had no way to select anything at all - so building a practice sheet or a saved list from a JLPT level meant picking the kanji out by hand somewhere else. The JLPT explorer now offers the same Choose mode, the same bar, and the same two destinations, and shift-click takes everything between the last card and this one. None of that is a second copy: the bar and its destinations moved into a shared component that the grade board now uses too, and the card draws the ring and the tick itself so a chosen card reads the same on every surface. The tick sits where the index number was, because every corner of the card is already spoken for by a pill, a level, a success rate or the trouble and favourite controls, and a tick laid over any of them hides something the member is using to choose. The WaniKani explorer keeps its own selection - it picks subject ids and carries bulk operations the others have no use for - but it no longer carries its own copy of the range maths, and that fixed a bug in passing: its anchor was the item position in the visible list, so changing a filter or loading another page moved every position underneath it and the next shift-click swept the wrong stretch. It anchors on the subject now, which survives both."
+  },
+  {
+    "id": "choosing-on-every-list",
+    "area": "study",
+    "name": "Choose a range on every list",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.169.0",
+    "releasedAt": "2026-09-01T07:00:00Z",
+    "summary": "Choosing reached the explorers in 0.168.0 and stopped there, which left the two surfaces where a member has already gathered something deliberately - their study history, and the Trouble and Favourites lists - with no way to act on a set. Scanning what you got wrong last week is exactly the position from which you want those characters on a practice sheet, and the only route was to write them down. Both now offer the same Choose mode, in both densities, with shift taking everything between the last pick and this one. The work went into the shared row and card pair rather than into either surface, so neither had to learn anything: they pass the selection through and get the tick, the highlight and the sweep for free, and the next list built on that pair inherits all of it. The tick sits before history is own correct or wrong mark rather than replacing it, because whether you got it right is exactly what you are reading when you decide whether to pick that one. Where a surface cannot know which member it belongs to - the tagged lists open from the game lobby, from history, from either explorer - the practice offer is withheld rather than pointed at a guess."
   }
 ]

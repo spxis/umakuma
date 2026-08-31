@@ -7,6 +7,10 @@ import SegmentedControl from "@/app/shared/SegmentedControl";
 import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
+import { usePathname } from "next/navigation";
+import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
+import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import {
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
@@ -53,6 +57,23 @@ export default function StudyTagListsModal() {
     getStoredEnum(VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
 
   const accountId = payload?.accountId ?? "";
+  /*
+   * Choosing, here too. These lists are the one place a member has already
+   * gathered a set deliberately, so being unable to send it to a practice
+   * sheet was the oddest gap of the lot.
+   */
+  const selection = useSubjectSelection();
+  /*
+   * The sheet lives under the member whose page this is. The panel opens from
+   * anywhere - the game lobby, history, either explorer - so it reads the
+   * address rather than being told, and offers nothing when there is no member
+   * in it to read.
+   */
+  const pathname = usePathname();
+  const userBase = (pathname ?? "").startsWith("/users/")
+    ? (pathname ?? "").split("/").slice(0, 3).join("/")
+    : "";
+  const practicePath = userBase ? `${userBase}/grades/practice` : "";
 
   const changeViewMode = useCallback((next: SubjectViewMode) => {
     setViewMode(next);
@@ -173,8 +194,20 @@ export default function StudyTagListsModal() {
           aria-label={STUDY_TAG_LIST_COPY.searchPlaceholder}
           className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-bold text-foreground"
         />
+        <SubjectSelectionToggle selection={selection} />
         <SubjectViewModeToggle value={viewMode} onChange={changeViewMode} />
       </div>
+
+      {selection.choosing ? (
+        <div className="border-b border-line px-3 pb-2 sm:px-4">
+          <KanjiSelectionBar
+            selection={selection}
+            visibleKeys={visible.map((item) => item.characters)}
+            accountId={accountId || null}
+            practicePath={practicePath}
+          />
+        </div>
+      ) : null}
 
       <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
         {error ? (
@@ -189,6 +222,7 @@ export default function StudyTagListsModal() {
           <StudyTagListsBody
             items={visible}
             viewMode={viewMode}
+            selection={selection}
             onOpen={(index) => openViewGlyphViewer({
               items: visible,
               startIndex: index,

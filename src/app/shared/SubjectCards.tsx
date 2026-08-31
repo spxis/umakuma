@@ -12,6 +12,7 @@ import {
 } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { JP_TEXT_CLASS } from "./japaneseText";
+import type { SubjectSelection } from "./useSubjectSelection";
 
 type Props<TRow extends SubjectListRow> = {
   rows: TRow[];
@@ -20,6 +21,11 @@ type Props<TRow extends SubjectListRow> = {
   renderCorner?: (row: TRow) => ReactNode;
   /** Floats over the card's top-left. History puts the result mark here. */
   renderBadge?: (row: TRow) => ReactNode;
+  /**
+   * Choosing, when the surface offers it. Shift takes everything between the
+   * last pick and this one, and the card's click picks rather than opens.
+   */
+  selection?: SubjectSelection;
 };
 
 /**
@@ -35,19 +41,32 @@ export default function SubjectCards<TRow extends SubjectListRow>({
   onSelect,
   renderCorner,
   renderBadge,
+  selection,
 }: Props<TRow>) {
   if (rows.length === 0) return null;
+
+  const choosing = Boolean(selection?.choosing);
+  const order = rows.map((row) => row.glyph);
+  const pick = (row: TRow, shiftKey: boolean) => {
+    if (!selection) return;
+    if (shiftKey) selection.extendTo(row.glyph, order);
+    else selection.toggle(row.glyph);
+  };
 
   return (
     <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
       {rows.map((row, index) => {
         const subjectType = subjectTypeOrVocabulary(row.subjectType);
+        const chosen = choosing && Boolean(selection?.chosen.has(row.glyph));
         return (
           <li key={row.key} className="relative min-w-0">
             <button
               type="button"
-              onClick={() => onSelect(row, index)}
-              className={`flex h-full w-full min-w-0 cursor-pointer flex-col items-center gap-1 rounded-2xl border p-3 text-center transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${typeGlyphBoxClass(subjectType)}`}
+              aria-pressed={choosing ? chosen : undefined}
+              onClick={(event) => (choosing ? pick(row, event.shiftKey) : onSelect(row, index))}
+              className={`flex h-full w-full min-w-0 cursor-pointer flex-col items-center gap-1 rounded-2xl border p-3 text-center transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${typeGlyphBoxClass(subjectType)} ${
+                chosen ? "ring-2 ring-accent ring-offset-1 ring-offset-surface" : ""
+              }`}
             >
               <span className={`font-black leading-none ${JP_TEXT_CLASS} ${glyphTextSizeClass(row.glyph)}`}>
                 {row.glyph}
@@ -73,7 +92,21 @@ export default function SubjectCards<TRow extends SubjectListRow>({
                 L{row.wkLevel}
               </span>
             ) : null}
-            {renderBadge ? <div className="absolute left-1.5 top-1.5">{renderBadge(row)}</div> : null}
+            {/* The tick takes the badge corner while choosing: the level pill
+              * owns the other one, and a tick laid over it hides the thing the
+              * member is scanning. */}
+            {choosing ? (
+              <span
+                aria-hidden="true"
+                className={`absolute left-1.5 top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full border text-[11px] font-black leading-none ${
+                  chosen ? "border-accent bg-accent text-white" : "border-line bg-surface/85 text-transparent"
+                }`}
+              >
+                ✓
+              </span>
+            ) : renderBadge ? (
+              <div className="absolute left-1.5 top-1.5">{renderBadge(row)}</div>
+            ) : null}
             {renderCorner ? <div className="absolute bottom-1.5 right-1.5">{renderCorner(row)}</div> : null}
           </li>
         );

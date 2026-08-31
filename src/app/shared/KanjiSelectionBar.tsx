@@ -31,6 +31,11 @@ export default function KanjiSelectionBar({
   visibleKeys: string[];
   /** Whose lists a set is saved to; null for a visitor, who cannot save. */
   accountId: string | null;
+  /**
+   * Where a practice sheet is built. Empty where the surface cannot know -
+   * the tagged lists open from anywhere, including pages that are not under a
+   * member - and the offer is simply withheld rather than pointing nowhere.
+   */
   practicePath: string;
 }) {
   return (
@@ -38,7 +43,7 @@ export default function KanjiSelectionBar({
       {selection.count > 0 && accountId ? (
         <SaveSelectionAsList selection={selection} accountId={accountId} onSaved={selection.cancel} />
       ) : null}
-      {selection.count > 0 ? (
+      {selection.count > 0 && practicePath ? (
         <Link
           href={`${practicePath}?source=picked&picked=${encodeURIComponent(encodeSelection(selection.chosen))}`}
           className="inline-flex h-8 items-center rounded-full bg-accent px-4 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"

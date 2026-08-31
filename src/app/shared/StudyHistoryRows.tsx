@@ -1,6 +1,7 @@
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 import SubjectCards from "@/app/shared/SubjectCards";
 import SubjectRows from "@/app/shared/SubjectRows";
+import type { SubjectSelection } from "@/app/shared/useSubjectSelection";
 import {
   SUBJECT_VIEW_MODES,
   type SubjectListRow,
@@ -10,6 +11,8 @@ import type { StudyHistoryAttempt } from "@/app/shared/studyHistoryTypes";
 import { resultMeta } from "@/app/shared/studyHistoryUi";
 
 type Props = {
+  /** Choosing, passed through to whichever density is showing. */
+  selection?: SubjectSelection;
   attempts: StudyHistoryAttempt[];
   showUser: boolean;
   onSelect: (attemptId: string) => void;
@@ -79,6 +82,7 @@ export default function StudyHistoryRows({
   showUser,
   onSelect,
   viewMode = SUBJECT_VIEW_MODES.list,
+  selection,
 }: Props) {
   const rows = attempts.map(toRow);
 
@@ -88,6 +92,7 @@ export default function StudyHistoryRows({
         rows={rows}
         onSelect={(row) => onSelect(row.attempt.id)}
         renderBadge={(row) => <ResultMark result={row.attempt.result} />}
+        selection={selection}
       />
     );
   }
@@ -96,6 +101,7 @@ export default function StudyHistoryRows({
     <SubjectRows<HistoryRow>
       rows={rows}
       onSelect={(row) => onSelect(row.attempt.id)}
+      selection={selection}
       groupBy={(row) => dayKey(row.attempt.submittedAt)}
       renderLeading={(row) => <ResultMark result={row.attempt.result} />}
       renderSubMeta={(row) => (

@@ -10,12 +10,15 @@ import {
 import { STUDY_TAG_LIST_COPY } from "@/app/shared/studyTagListsUi";
 import { srsBucketFromStage } from "@/lib/domainConstants";
 import type { StudyTagListItem } from "@/lib/studyTagLists";
+import type { SubjectSelection } from "@/app/shared/useSubjectSelection";
 
 type Props = {
   items: StudyTagListItem[];
   viewMode: SubjectViewMode;
   onOpen: (index: number) => void;
   onRemove: (item: StudyTagListItem) => void;
+  /** Passed straight through, so both densities choose the same way. */
+  selection?: SubjectSelection;
 };
 
 /** A list row is a subject plus the tagged item it came from. */
@@ -64,7 +67,7 @@ function RemoveButton({
  * viewer; they differ only in density. Both halves are the shared subject
  * renderers, so a tagged item and a history attempt read identically.
  */
-export default function StudyTagListsBody({ items, viewMode, onOpen, onRemove }: Props) {
+export default function StudyTagListsBody({ items, viewMode, onOpen, onRemove, selection }: Props) {
   const rows = items.map(toRow);
   const removeButton = (row: TagRow) => <RemoveButton item={row.item} onRemove={onRemove} />;
 
@@ -74,6 +77,7 @@ export default function StudyTagListsBody({ items, viewMode, onOpen, onRemove }:
         rows={rows}
         onSelect={(_row, index) => onOpen(index)}
         renderTrailing={removeButton}
+        selection={selection}
       />
     );
   }
@@ -83,6 +87,7 @@ export default function StudyTagListsBody({ items, viewMode, onOpen, onRemove }:
       rows={rows}
       onSelect={(_row, index) => onOpen(index)}
       renderCorner={removeButton}
+      selection={selection}
     />
   );
 }

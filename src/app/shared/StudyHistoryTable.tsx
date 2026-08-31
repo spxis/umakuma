@@ -9,6 +9,10 @@ import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import StudyHistoryHeader from "@/app/shared/StudyHistoryHeader";
 import StudyHistoryRows from "@/app/shared/StudyHistoryRows";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
+import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
+import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
+import { usePathname } from "next/navigation";
 import {
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
@@ -72,6 +76,20 @@ export default function StudyHistoryTable({
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(HISTORY_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.list));
   const [filtersOpen, setFiltersOpen] = usePersistedBoolean(`wr:study-history:filters-open:${endpoint}`, { defaultValue: true });
+
+  /*
+   * Choosing, from history too. A member scanning what they got wrong last
+   * week is exactly the person who wants those characters on a practice sheet,
+   * and until now the only way was to write them down.
+   */
+  const selection = useSubjectSelection();
+  const pathname = usePathname();
+  const userBase = (pathname ?? "").startsWith("/users/")
+    ? (pathname ?? "").split("/").slice(0, 3).join("/")
+    : "";
+  const practicePath = userBase ? `${userBase}/grades/practice` : "";
+  /* The endpoint carries the account whose history this is. */
+  const selectionAccountId = endpoint.match(/\/api\/study\/([^/]+)\//)?.[1] ?? null;
 
   const query = useMemo(() => {
     const params = new URLSearchParams({
@@ -217,15 +235,25 @@ export default function StudyHistoryTable({
               </button>
             ))}
 
+            <SubjectSelectionToggle selection={selection} className="ml-auto" />
             <SubjectViewModeToggle
               value={viewMode}
               onChange={(next) => {
                 setViewMode(next);
                 setStoredEnum(HISTORY_VIEW_MODE_STORAGE_KEY, next);
               }}
-              className="ml-auto inline-flex items-center rounded-full border border-line bg-surface p-1"
+              className="inline-flex items-center rounded-full border border-line bg-surface p-1"
             />
           </div>
+
+          {selection.choosing ? (
+            <KanjiSelectionBar
+              selection={selection}
+              visibleKeys={data.attempts.map((attempt) => attempt.subjectLabel)}
+              accountId={selectionAccountId}
+              practicePath={practicePath}
+            />
+          ) : null}
 
           <div className="max-h-168 overflow-auto">
             <StudyHistoryRows
@@ -233,6 +261,7 @@ export default function StudyHistoryTable({
               showUser={showUserColumn}
               onSelect={setSelectedAttemptId}
               viewMode={viewMode}
+              selection={selection}
             />
           </div>
         </div>
