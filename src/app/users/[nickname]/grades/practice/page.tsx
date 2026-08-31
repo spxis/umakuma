@@ -7,7 +7,7 @@ import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
-import { PRACTICE_SOURCES, isPracticeSource, practiceEntriesFor } from "@/lib/practiceSource";
+import { PRACTICE_SOURCES, isPracticeSource, isTaggedPracticeSource, practiceEntriesFor } from "@/lib/practiceSource";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
@@ -80,14 +80,19 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     Number.isFinite(level) ? level : 1,
     page,
     PRACTICE_PAGE_SIZE,
+    account.id,
   );
 
   const sheetLabel =
-    source === PRACTICE_SOURCES.wanikani
-      ? `WaniKani L${level}`
-      : source === PRACTICE_SOURCES.jlpt
-        ? `JLPT N${level}`
-        : GRADE_SHORT_LABELS[grade];
+    source === PRACTICE_SOURCES.trouble
+      ? PRACTICE_SHEET_COPY.fromTrouble
+      : source === PRACTICE_SOURCES.favorite
+        ? PRACTICE_SHEET_COPY.fromFavourite
+        : source === PRACTICE_SOURCES.wanikani
+          ? `WaniKani L${level}`
+          : source === PRACTICE_SOURCES.jlpt
+            ? `JLPT N${level}`
+            : GRADE_SHORT_LABELS[grade];
 
   return (
     <div className={`w-full bg-white text-neutral-900 ${PAGE_SHELL_PADDING} print:px-0 print:py-0`}>
@@ -157,6 +162,35 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
             </Link>
           );
         })}
+
+        {/*
+          * The member's own lists, offered here rather than only where they
+          * were tagged. They stay quiet until the row is hovered, since most
+          * visits are to a grade and a permanent pair of buttons would compete
+          * with the ladder they came for.
+          */}
+        <span className="group/tags ml-1 inline-flex items-center gap-1.5">
+          {([
+            [PRACTICE_SOURCES.trouble, PRACTICE_SHEET_COPY.fromTrouble],
+            [PRACTICE_SOURCES.favorite, PRACTICE_SHEET_COPY.fromFavourite],
+          ] as const).map(([id, label]) => {
+            const active = id === source;
+            return (
+              <Link
+                key={id}
+                href={`?source=${id}&grade=${grade}&level=${level}${carry}`}
+                className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
+                  active
+                    ? "border-neutral-900 bg-neutral-900 text-white opacity-100"
+                    : "border-neutral-300 text-neutral-600 opacity-0 hover:bg-neutral-100 focus-visible:opacity-100 group-hover/tags:opacity-100 [@media(hover:none)]:opacity-100"
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
+        </span>
+
         <span className="ml-2 mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
           {PRACTICE_SHEET_COPY.modeLabel}
         </span>
@@ -184,7 +218,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         * again. Which values appear follows the source, since a WaniKani level
         * and a school grade are not the same list.
         */}
-      {choosing ? (
+      {choosing && !isTaggedPracticeSource(source) ? (
         <nav className="mb-4 flex flex-wrap items-center gap-1.5 border-l-2 border-neutral-200 pl-3 print:hidden">
           <span className="mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
             {PRACTICE_SHEET_COPY.chooseLabel}
@@ -270,7 +304,9 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
       </p>
 
       {entries.length === 0 ? (
-        <p className="rounded-xl border border-neutral-300 p-4 text-sm">{PRACTICE_SHEET_COPY.empty}</p>
+        <p className="rounded-xl border border-neutral-300 p-4 text-sm">
+          {isTaggedPracticeSource(source) ? PRACTICE_SHEET_COPY.emptyTagged : PRACTICE_SHEET_COPY.empty}
+        </p>
       ) : (
         <TracingSheet entries={entries} mode={mode} showModel={showModel} showReadings={showReadings} />
       )}

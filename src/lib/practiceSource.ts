@@ -1,3 +1,4 @@
+import { fetchStudyTagRows } from "@/lib/studySubjectTags";
 import "server-only";
 
 import { prisma } from "./prisma";
@@ -5,7 +6,21 @@ import { querySchoolGradeCatalog } from "./schoolGrades";
 import { getStrokeOrder } from "./strokeOrder";
 import { withOfficialReadings } from "./gradeReadings";
 
-export const PRACTICE_SOURCES = { grade: "grade", wanikani: "wanikani", jlpt: "jlpt" } as const;
+export const PRACTICE_SOURCES = {
+  grade: "grade",
+  wanikani: "wanikani",
+  jlpt: "jlpt",
+  /* The member's own lists, which are the sheets most worth printing. */
+  trouble: "trouble",
+  favorite: "favorite",
+} as const;
+
+/** Sources that read a member's tagged list rather than a fixed ladder. */
+export const TAGGED_PRACTICE_SOURCES = [PRACTICE_SOURCES.trouble, PRACTICE_SOURCES.favorite] as const;
+
+export function isTaggedPracticeSource(value: string): boolean {
+  return (TAGGED_PRACTICE_SOURCES as readonly string[]).includes(value);
+}
 
 export type PracticeSource = (typeof PRACTICE_SOURCES)[keyof typeof PRACTICE_SOURCES];
 
@@ -57,6 +72,48 @@ function toEntries(candidates: Candidate[]): PracticeEntry[] {
     .filter((entry): entry is PracticeEntry => entry !== null);
 }
 
+/**
+ * A sheet built from the member's own list.
+ *
+ * Only kanji: a tagged list holds radicals and vocabulary too, and neither has
+ * a stroke chart worth printing. The catalogue supplies the readings, since a
+ * tag row is only an id and a flag.
+ */
+async function taggedEntries(
+  source: PracticeSource,
+  accountId: string | null,
+  page: number,
+  pageSize: number,
+): Promise<{ entries: PracticeEntry[]; total: number }> {
+  if (!accountId) {
+    return { entries: [], total: 0 };
+  }
+
+  const rows = await fetchStudyTagRows(accountId);
+  const wanted = rows.filter((row) => (source === PRACTICE_SOURCES.trouble ? row.trouble : row.favorite));
+  if (wanted.length === 0) {
+    return { entries: [], total: 0 };
+  }
+
+  const subjects = await prisma.wkSubjectCatalog.findMany({
+    where: { wkSubjectId: { in: wanted.map((row) => row.subjectId) }, subjectType: "kanji" },
+    select: { characters: true, meanings: true, readings: true },
+    orderBy: { wkSubjectId: "asc" },
+  });
+
+  const candidates = subjects
+    .filter((row): row is typeof row & { characters: string } => Boolean(row.characters))
+    .map((row) => ({
+      kanji: row.characters,
+      meaning: firstMeaning(row.meanings),
+      on: readingsOfType(row.readings, "onyomi"),
+      kun: readingsOfType(row.readings, "kunyomi"),
+    }));
+
+  const entries = toEntries(candidates);
+  return { entries: entries.slice((page - 1) * pageSize, page * pageSize), total: entries.length };
+}
+
 /** WaniKani stores readings as objects tagged with their type. */
 function readingsOfType(readings: unknown, type: "onyomi" | "kunyomi"): string[] {
   if (!Array.isArray(readings)) return [];
@@ -84,7 +141,13 @@ export async function practiceEntriesFor(
   level: number,
   page: number,
   pageSize: number,
+  /** Required by the tagged sources, which are one member's own lists. */
+  accountId?: string | null,
 ): Promise<{ entries: PracticeEntry[]; total: number }> {
+  if (isTaggedPracticeSource(source)) {
+    return taggedEntries(source, accountId ?? null, page, pageSize);
+  }
+
   if (source === PRACTICE_SOURCES.grade) {
     const catalog = querySchoolGradeCatalog({
       page,

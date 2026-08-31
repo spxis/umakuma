@@ -1266,5 +1266,15 @@
     "version": "0.115.0",
     "releasedAt": "2026-08-31T03:40:00Z",
     "summary": "Whether the finished character sits in the first column is now a checkbox rather than a decision made for you, and the readings can print beside each meaning. The chooser also closes when you pick what is already picked, or with a Done button at the end of the row."
+  },
+  {
+    "id": "practice-from-your-lists",
+    "area": "study",
+    "name": "Print a sheet from your own lists",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.116.0",
+    "releasedAt": "2026-08-31T04:10:00Z",
+    "summary": "Trouble and Favourites are now sources for a writing sheet, offered from the practice page itself rather than only where the tags were made. They stay quiet until the control row is hovered, and appear always on a touch screen where there is no hover to give."
   }
 ]

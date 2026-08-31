@@ -25,6 +25,9 @@ export const PRACTICE_SHEET_COPY = {
   fromGrades: "School grade",
   fromWanikani: "WaniKani level",
   fromJlpt: "JLPT level",
+  fromTrouble: "Trouble",
+  fromFavourite: "Favourites",
+  emptyTagged: "Nothing on that list yet. Tag a kanji as trouble or a favourite and it will appear here.",
 } as const;
 
 /**

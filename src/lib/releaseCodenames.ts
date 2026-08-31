@@ -166,6 +166,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nohara no Nozomi", ja: "野原の望み", reading: "のはらののぞみ", gloss: "a wish across the meadow" },
   { romaji: "Hatsuyuki Hiroba", ja: "初雪広場", reading: "はつゆきひろば", gloss: "first snow on the square" },
   { romaji: "Hitoyasumi Hidamari", ja: "一休み日だまり", reading: "ひとやすみひだまり", gloss: "a rest in a patch of sun" },
+  { romaji: "Fubuki no Futaba", ja: "吹雪の二葉", reading: "ふぶきのふたば", gloss: "two leaves in a snowstorm" },
 ];
 
 /**
