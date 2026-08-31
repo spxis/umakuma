@@ -20,6 +20,7 @@ import {
 import { runGlobalSearch } from "@/lib/globalSearchServer";
 
 import { SEARCH_EXAMPLES, SEARCH_PAGE_COPY } from "./searchCopy";
+import RecentSearches from "./RecentSearches";
 import SearchHitList from "./SearchHitList";
 import SearchPageForm from "./SearchPageForm";
 import { noTranslateClass } from "@/app/shared/japaneseText";
@@ -150,6 +151,8 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
               </p>
             </div>
           )}
+
+          <RecentSearches currentQuery={query} />
         </div>
       </main>
     </div>

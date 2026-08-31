@@ -1680,5 +1680,15 @@
     "version": "0.161.0",
     "releasedAt": "2026-09-01T00:00:00Z",
     "summary": "The see all results row sat at the bottom left of the suggestion list in the same small type as a result, so the one control that leaves the dropdown read as an eleventh, oddly worded result. It is now centred across the full width, set in the same uppercase weight the rest of the site gives an action, and separated from the rows above by its own rule, with the highlighted state tinted rather than greyed so arrowing onto it looks like landing on a button rather than on another row."
+  },
+  {
+    "id": "the-searches-you-already-ran",
+    "area": "platform",
+    "name": "The searches you already ran",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.162.0",
+    "releasedAt": "2026-09-01T01:00:00Z",
+    "summary": "Looking a kanji up is rarely a single act - you check 家, then 家事, then go back to 家 - and retyping it each time was the whole friction. The search page now keeps the searches this browser has run and lists five of them under the results, each one a link back to those results and each with its own way to forget it. Twenty are remembered while five are shown, so forgetting one reveals the sixth rather than leaving a gap, and a single control clears the lot. The history lives on the device rather than the account, which means an anonymous visitor gets the same convenience as a member, and it is read through a store subscription rather than into state after mount, so the panel never flashes empty before it fills."
   }
 ]
