@@ -1630,5 +1630,15 @@
     "version": "0.156.0",
     "releasedAt": "2026-08-31T19:00:00Z",
     "summary": "In the grade explorer's list view, a kanji with many kun readings ran its readings straight out through the right-hand edge of its row. 下 has eight of them and they crossed the card border, the JLPT pill and whatever sat beside it. The text had been asked to truncate, but a flex item's floor is the width of its own content, so the paragraph holding the readings simply sat as wide as they measured and the truncation inside it never had a narrower box to work against. Measured after the fix at 393, 650 and 1440 pixels: no row overflows its card by a single pixel, and the page has no horizontal scroll."
+  },
+  {
+    "id": "crawl-policy",
+    "area": "platform",
+    "name": "A door for crawlers",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.157.0",
+    "releasedAt": "2026-08-31T20:00:00Z",
+    "summary": "There was no robots.txt at all, so every crawler that found the site walked all of it - including each member's pages, which are built per request from that member's own data and render a refusal to anybody who is not them. The writing practice sheets made it acute: source, level, sheet size, mode and page all ride in the URL, which is what makes a sheet shareable and also means one school grade is thousands of distinct addresses to a bot following links. That one route took 3,200 serverless invocations in twelve hours, on a site with eight accounts, and the project's daily CPU went from about two minutes to nine and a half the week practice shipped. Member pages, admin, the API and the search results page are now closed; the home page, the release notes, the news pages and the per-character kanji pages stay open, because a family site nobody can find is not more private for it. The rules are tested against the route tree rather than a second copy of the list, so a member page added later is either covered or fails the build."
   }
 ]

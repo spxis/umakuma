@@ -1,0 +1,30 @@
+# UmaKuma is a family study site, not a search corpus.
+#
+# Every member page is built per request from that member's own data, so a
+# crawler walking them costs a serverless invocation each and indexes nothing
+# anyone searches for. The writing practice sheets are the worst of it: source,
+# level, sheet size, mode and page are all in the URL - which is what makes a
+# sheet shareable - so one grade is thousands of distinct addresses to a bot
+# following links. Practice shipped on the 29th of August 2026 and the project's
+# CPU went from about two minutes a day to nine and a half.
+#
+# The public front stays open: the home page, the release notes, the news pages
+# and the per-character kanji pages are what somebody searching for UmaKuma - or
+# for a kanji - should be able to find. /search is closed because a results page
+# takes its query from the URL, which is a bottomless surface to a crawler
+# rather than a page.
+
+User-agent: *
+Disallow: /users/
+Disallow: /admin
+Disallow: /api/
+Disallow: /search
+Disallow: /welcome
+Disallow: /invite
+Disallow: /join
+Disallow: /login
+Disallow: /logout
+Disallow: /signout
+
+# Honoured by Bing and Yandex, ignored by Google, which throttles on its own.
+Crawl-delay: 10
