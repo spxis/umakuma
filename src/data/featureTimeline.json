@@ -1610,5 +1610,15 @@
     "version": "0.154.0",
     "releasedAt": "2026-08-31T17:00:00Z",
     "summary": "Turning an account down used to do almost nothing. A rejected member kept their session, opened their own pages, and answered every study, tag and game route as before - the only thing rejection changed was that they stopped appearing on the leaderboard, which is to say the admin's one sanction was to make somebody invisible to everyone except themselves. It now closes four doors at once: the owner check every /api/study and /api/custom-study route runs through, the viewer resolution that the user pages and the header are built on, the invite cookie (cleared on the next request rather than at some later sign-in), and signup, which will not hand back an account it has turned away or let the same email make a second one. A rejected member lands on a plain notice instead, with no reason given and no appeal form - a reason tells somebody acting in bad faith what to change, and a form hands them a channel. Being turned away stays separate from being merely pending: somebody still waiting keeps the run of the site, which is what the signup copy promises them, so the lock is written as \"rejected\" rather than \"not approved\". Accounts predating the column read as approved, because a lock that defaulted the other way would shut out the whole family on deploy."
+  },
+  {
+    "id": "practice-sheet-in-colour",
+    "area": "study",
+    "name": "Colour on screen, ink on paper",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.155.0",
+    "releasedAt": "2026-08-31T18:00:00Z",
+    "summary": "The writing practice page was built as a print preview and painted like one: white background, neutral greys, black text, from the source chips at the top to the squares at the bottom. It was the one page in the app that looked like a photocopy of the rest of it. Everything on screen now uses the site's own palette - the chips take the accent, the sheet sits on a surface card the way every other list does, the guide squares are drawn in the line colour and the tracing strokes in a pale accent, which is what a Japanese workbook prints them in anyway. None of it reaches paper: every colour on a printed element states its printed grey beside itself, the sheet's card drops its border and padding so the squares start at the printer's margin, and a rule under the whole region strips any background a later panel might bring with it. A test reads the sheet's own source and fails on a colour that says nothing about how it prints."
   }
 ]

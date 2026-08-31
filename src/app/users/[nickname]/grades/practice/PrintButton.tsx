@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { PRACTICE_SHEET_COPY } from "./practiceCopy";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
+
+import { PRACTICE_SHEET_COPY, SHEET_CHIP } from "./practiceCopy";
 import { PRINT_NOW_PARAM } from "./sheetLink";
 
 /**
@@ -115,26 +117,26 @@ export default function PrintButton({
             tabIndex={-1}
             aria-hidden="true"
             onClick={() => setOpen(false)}
-            className="fixed inset-0 z-40 cursor-default"
+            className={`fixed inset-0 ${MODAL_LAYERS.sheetMenuScrim} cursor-default`}
           />
           <div
             role="menu"
-            className="absolute right-0 top-11 z-50 w-64 rounded-2xl border border-neutral-300 bg-white p-2 text-left shadow-xl"
+            className={`absolute right-0 top-11 ${MODAL_LAYERS.sheetMenu} w-64 rounded-2xl border border-line bg-surface p-2 text-left shadow-xl`}
           >
-            <p className="px-2 pb-1 pt-1 text-[10px] font-black uppercase tracking-[0.08em] text-neutral-400">
+            <p className={`px-2 pb-1 pt-1 text-[10px] ${SHEET_CHIP.label}`}>
               {PRACTICE_SHEET_COPY.printScopeHeading}
             </p>
 
             <button type="button" role="menuitem" onClick={printNow} className={ITEM}>
-              <span className="font-black text-neutral-900">{PRACTICE_SHEET_COPY.printScopeThis}</span>
-              <span className="text-[11px] text-neutral-500">
+              <span className="font-black text-foreground">{PRACTICE_SHEET_COPY.printScopeThis}</span>
+              <span className="text-[11px] text-foreground/60">
                 {onThisPage} {PRACTICE_SHEET_COPY.printScopeCharacters}
               </span>
             </button>
 
             <Link href={allHref} role="menuitem" onClick={() => setOpen(false)} className={ITEM}>
-              <span className="font-black text-neutral-900">{PRACTICE_SHEET_COPY.printScopeAll}</span>
-              <span className="text-[11px] text-neutral-500">
+              <span className="font-black text-foreground">{PRACTICE_SHEET_COPY.printScopeAll}</span>
+              <span className="text-[11px] text-foreground/60">
                 {total} {PRACTICE_SHEET_COPY.printScopeCharacters}
               </span>
             </Link>
@@ -146,7 +148,7 @@ export default function PrintButton({
 }
 
 const TRIGGER =
-  "inline-flex h-9 items-center rounded-full bg-neutral-900 px-5 text-xs font-black uppercase tracking-[0.08em] text-white transition hover:bg-neutral-700";
+  "inline-flex h-9 items-center rounded-full bg-accent px-5 text-xs font-black uppercase tracking-[0.08em] text-white transition hover:bg-accent-2";
 
 const ITEM =
-  "flex w-full items-baseline justify-between gap-3 rounded-xl px-2 py-2 text-xs transition hover:bg-neutral-100";
+  "flex w-full items-baseline justify-between gap-3 rounded-xl px-2 py-2 text-xs transition hover:bg-surface-muted";

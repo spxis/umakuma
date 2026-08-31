@@ -51,6 +51,18 @@ type Props = {
   startIndex?: number;
 };
 
+/*
+ * Screen first, paper second.
+ *
+ * The sheet used to be drawn in greys because it is made to be printed, which
+ * made the page itself look like a photocopy of the site rather than part of
+ * it. So every ink colour is stated twice: the theme colour a reader sees, and
+ * the grey that goes on paper. A workbook's faint guide strokes are printed in
+ * pale blue anyway, which is what the accent gives back here.
+ */
+const INK_SOLID = "text-foreground print:text-neutral-800";
+const INK_GHOST = "text-accent/25 print:text-neutral-300";
+
 /**
  * One character drawn from its stroke paths, at a chosen weight.
  *
@@ -68,7 +80,7 @@ function TraceGlyph({ entry, tone }: { entry: TraceEntry; tone: "solid" | "ghost
         strokeWidth="3.4"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={tone === "solid" ? "text-neutral-800" : "text-neutral-300"}
+        className={tone === "solid" ? INK_SOLID : INK_GHOST}
       >
         {entry.strokes.map((d, index) => (
           <path key={index} d={d} />
@@ -94,7 +106,7 @@ function StrokeStepGlyph({ entry, upTo }: { entry: TraceEntry; upTo: number }) {
           <path
             key={index}
             d={d}
-            className={index === upTo - 1 ? "text-neutral-800" : "text-neutral-300"}
+            className={index === upTo - 1 ? INK_SOLID : INK_GHOST}
             stroke="currentColor"
           />
         ))}
@@ -106,10 +118,10 @@ function StrokeStepGlyph({ entry, upTo }: { entry: TraceEntry; upTo: number }) {
 /** A practice square, with the guide lines a Japanese workbook uses. */
 function Cell({ children }: { children?: React.ReactNode }) {
   return (
-    <div className="relative aspect-square w-full border border-neutral-300">
+    <div className="relative aspect-square w-full border border-line print:border-neutral-300">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute left-1/2 top-0 h-full border-l border-dashed border-neutral-200" />
-        <div className="absolute left-0 top-1/2 w-full border-t border-dashed border-neutral-200" />
+        <div className="absolute left-1/2 top-0 h-full border-l border-dashed border-line/70 print:border-neutral-200" />
+        <div className="absolute left-0 top-1/2 w-full border-t border-dashed border-line/70 print:border-neutral-200" />
       </div>
       {children}
     </div>
@@ -138,7 +150,7 @@ export default function TracingSheet({
     <div className="space-y-3">
       {entries.map((entry, index) => (
         <section key={entry.kanji} className="break-inside-avoid">
-          <div className="mb-1 flex items-baseline gap-2 text-[11px] text-neutral-500">
+          <div className="mb-1 flex items-baseline gap-2 text-[11px] text-foreground/60 print:text-neutral-500">
             {/*
               * A fixed width and lining figures, so the numbers form a straight
               * column down the margin however many digits they run to. It sits
@@ -147,7 +159,7 @@ export default function TracingSheet({
               * there would come out of every square on the sheet.
               */}
             {showNumbers ? (
-              <span className="w-7 shrink-0 text-right font-bold tabular-nums text-neutral-400">
+              <span className="w-7 shrink-0 text-right font-bold tabular-nums text-accent print:text-neutral-400">
                 {startIndex + index}
               </span>
             ) : null}
@@ -156,13 +168,17 @@ export default function TracingSheet({
             <span
               lang="ja"
               translate="no"
-              className={noTranslateClass("text-base font-black leading-none text-neutral-900")}
+              className={noTranslateClass("text-base font-black leading-none text-foreground print:text-neutral-900")}
             >
               {entry.kanji}
             </span>
-            <span className="font-black text-neutral-700">{entry.meaning ?? ""}</span>
+            <span className="font-black text-foreground/85 print:text-neutral-700">{entry.meaning ?? ""}</span>
             {showReadings && (entry.on.length > 0 || entry.kun.length > 0) ? (
-              <span lang="ja" translate="no" className={noTranslateClass("min-w-0 truncate text-neutral-500")}>
+              <span
+                lang="ja"
+                translate="no"
+                className={noTranslateClass("min-w-0 truncate text-kanji print:text-neutral-500")}
+              >
                 {[entry.on.join("、"), entry.kun.join("、")].filter(Boolean).join(" · ")}
               </span>
             ) : null}
@@ -199,7 +215,7 @@ export default function TracingSheet({
                       const strokeNumber = firstStroke + offset + 1;
                       return (
                         <Cell key={`step-${strokeNumber}`}>
-                          <span className="absolute left-0.5 top-0 z-10 text-[9px] font-black leading-none text-neutral-400">
+                          <span className="absolute left-0.5 top-0 z-10 text-[9px] font-black leading-none text-accent/70 print:text-neutral-400">
                             {strokeNumber}
                           </span>
                           <StrokeStepGlyph entry={entry} upTo={strokeNumber} />

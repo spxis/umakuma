@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { PRACTICE_SHEET_COPY, SHEET_SIZE_ORDER, type SheetSize } from "./practiceCopy";
+import { PRACTICE_SHEET_COPY, SHEET_CHIP, SHEET_SIZE_ORDER, type SheetSize } from "./practiceCopy";
 import { sheetHref, type SheetSettings } from "./sheetLink";
 
 /**
@@ -18,10 +18,7 @@ import { sheetHref, type SheetSettings } from "./sheetLink";
  * parameter for the print layout to set - see `pagerPlacement` on the page.
  */
 
-const CHIP = "inline-flex h-7 items-center rounded-full border text-[11px] font-bold transition";
-const CHIP_ON = "border-neutral-900 bg-neutral-900 text-white";
-const CHIP_OFF = "border-neutral-300 text-neutral-600 hover:bg-neutral-100";
-const GROUP_LABEL = "text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400";
+const CHIP = `${SHEET_CHIP.base} h-7 text-[11px]`;
 /*
  * Label and chips wrap as one unit. They were siblings of the row, so at a
  * narrow width the row broke between "Pages" and its buttons and left the
@@ -50,12 +47,12 @@ function Checkbox({ label, on, href }: { label: string; on: boolean; href: strin
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-600 transition hover:text-neutral-900"
+      className="inline-flex items-center gap-2 text-xs font-semibold text-foreground/70 transition hover:text-foreground"
     >
       <span
         aria-hidden="true"
         className={`inline-flex h-4 w-4 items-center justify-center rounded border text-[10px] font-black ${
-          on ? "border-neutral-900 bg-neutral-900 text-white" : "border-neutral-400 text-transparent"
+          on ? SHEET_CHIP.on : "border-line text-transparent"
         }`}
       >
         ✓
@@ -68,9 +65,7 @@ function Checkbox({ label, on, href }: { label: string; on: boolean; href: strin
 export default function SheetOptionsRow({ settings }: { settings: SheetSettings }) {
   return (
     <nav className="mb-4 flex flex-wrap items-center gap-4 print:hidden">
-      <span className="text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
-        {PRACTICE_SHEET_COPY.optionsLabel}
-      </span>
+      <span className={SHEET_CHIP.label}>{PRACTICE_SHEET_COPY.optionsLabel}</span>
 
       <Checkbox
         label={PRACTICE_SHEET_COPY.optionShowModel}
@@ -94,7 +89,7 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
         * ones and many. The sheet only ever offered the child's.
         */}
       <span className={GROUP}>
-        <span className={`${GROUP_LABEL} mr-0.5`}>{PRACTICE_SHEET_COPY.sizeLabel}</span>
+        <span className={`${SHEET_CHIP.label} mr-0.5`}>{PRACTICE_SHEET_COPY.sizeLabel}</span>
         {/*
           * Back to page one. A page holds a different number of characters at
           * each size - it is three sheets of paper, not a fixed count - so
@@ -105,7 +100,7 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
             key={size}
             href={sheetHref(settings, { size, page: 1 })}
             title={SIZE_TITLES[size]}
-            className={`${CHIP} w-8 justify-center ${size === settings.size ? CHIP_ON : CHIP_OFF}`}
+            className={`${CHIP} w-8 justify-center ${size === settings.size ? SHEET_CHIP.on : SHEET_CHIP.off}`}
           >
             {SIZE_LABELS[size]}
           </Link>

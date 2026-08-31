@@ -16,6 +16,9 @@ export const MODAL_LAYERS = {
   searchSheet: "z-30",
   /** The search suggestion dropdown, above content but below any modal. */
   searchSuggest: "z-40",
+  /** The practice sheet's print-scope menu, and the click-away behind it. */
+  sheetMenuScrim: "z-40",
+  sheetMenu: "z-50",
   /** Ordinary page modals: reading check-ins, review, side-by-side. */
   page: "z-50",
   /** Menus and admin overlays that sit over a page modal. */

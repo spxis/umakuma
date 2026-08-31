@@ -15,7 +15,7 @@ import { decodeSelection, encodeSelection, SELECTION_PARAM } from "@/app/shared/
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
 import PrintButton from "./PrintButton";
-import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_SIZES, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
+import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_CHIP, SHEET_SIZES, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
 import SheetOptionsRow from "./SheetOptionsRow";
 import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "./sheetLink";
 import TracingSheet, { type SheetMode } from "./TracingSheet";
@@ -170,7 +170,16 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
             : GRADE_SHORT_LABELS[grade];
 
   return (
-    <div className={`w-full bg-white text-neutral-900 ${PAGE_SHELL_PADDING} print:px-0 print:py-0`}>
+    /*
+     * The page belongs to the site; only the sheet belongs to the printer. It
+     * was painted white and grey throughout because it is made to be printed,
+     * which left the one page in the app that looked like a photocopy of the
+     * others. `data-print="mono"` marks the region the print rules strip back.
+     */
+    <div
+      data-print="mono"
+      className={`w-full text-foreground ${PAGE_SHELL_PADDING} print:bg-white print:px-0 print:py-0 print:text-neutral-900`}
+    >
       {/* Site chrome on screen, gone on paper - a printed sheet is not a web page. */}
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
@@ -194,7 +203,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           <h1 className="text-xl font-black">
             {PRACTICE_SHEET_COPY.heading} · {sheetLabel}
           </h1>
-          <p className="text-xs text-neutral-500">{PRACTICE_SHEET_COPY.subtitle}</p>
+          <p className="text-xs text-foreground/60 print:text-neutral-500">{PRACTICE_SHEET_COPY.subtitle}</p>
         </div>
 
         {/*
@@ -216,7 +225,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         <div className="flex items-center gap-2 print:hidden">
           <Link
             href={gradeHref(decodeURIComponent(nickname), grade)}
-            className="inline-flex h-9 items-center rounded-full border border-neutral-300 px-4 text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 transition hover:bg-neutral-100"
+            className="inline-flex h-9 items-center rounded-full border border-line px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 transition hover:bg-surface-muted"
           >
             {PRACTICE_SHEET_COPY.back}
           </Link>
@@ -232,9 +241,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
       </header>
 
       <nav className="mb-4 flex flex-wrap items-center gap-1.5 print:hidden">
-        <span className="mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
-          {PRACTICE_SHEET_COPY.sourceLabel}
-        </span>
+        <span className={`mr-1 ${SHEET_CHIP.label}`}>{PRACTICE_SHEET_COPY.sourceLabel}</span>
         {([
           [PRACTICE_SOURCES.grade, PRACTICE_SHEET_COPY.fromGrades, grade],
           [PRACTICE_SOURCES.wanikani, PRACTICE_SHEET_COPY.fromWanikani, viewerWkLevel],
@@ -251,11 +258,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
                 page: 1,
                 choosing: active && !choosing,
               })}
-              className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
-                active
-                  ? "border-neutral-900 bg-neutral-900 text-white"
-                  : "border-neutral-300 text-neutral-600 hover:bg-neutral-100"
-              }`}
+              className={`${SHEET_CHIP.base} h-8 px-3 text-xs ${active ? SHEET_CHIP.on : SHEET_CHIP.off}`}
             >
               {/* One node: as two, the space between them was the translator's. */}
               <span translate="no" className={NO_TRANSLATE_CLASS}>{`${label} ${target}`}</span>
@@ -282,10 +285,10 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
               <Link
                 key={id}
                 href={sheetHref(settings, { source: id, page: 1, choosing: false })}
-                className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
+                className={`${SHEET_CHIP.base} h-8 px-3 text-xs ${
                   active
-                    ? "border-neutral-900 bg-neutral-900 text-white opacity-100"
-                    : "border-neutral-300 text-neutral-600 opacity-0 hover:bg-neutral-100 focus-visible:opacity-100 group-hover/tags:opacity-100 [@media(hover:none)]:opacity-100"
+                    ? `${SHEET_CHIP.on} opacity-100`
+                    : `${SHEET_CHIP.off} opacity-0 focus-visible:opacity-100 group-hover/tags:opacity-100 [@media(hover:none)]:opacity-100`
                 }`}
               >
                 {label}
@@ -294,9 +297,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           })}
         </span>
 
-        <span className="ml-2 mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
-          {PRACTICE_SHEET_COPY.modeLabel}
-        </span>
+        <span className={`ml-2 mr-1 ${SHEET_CHIP.label}`}>{PRACTICE_SHEET_COPY.modeLabel}</span>
         {([
           ["trace", PRACTICE_SHEET_COPY.modeTrace],
           ["strokes", PRACTICE_SHEET_COPY.modeStrokes],
@@ -304,11 +305,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           <Link
             key={id}
             href={sheetHref(settings, { mode: id })}
-            className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
-              id === mode
-                ? "border-neutral-900 bg-neutral-900 text-white"
-                : "border-neutral-300 text-neutral-600 hover:bg-neutral-100"
-            }`}
+            className={`${SHEET_CHIP.base} h-8 px-3 text-xs ${id === mode ? SHEET_CHIP.on : SHEET_CHIP.off}`}
           >
             {label}
           </Link>
@@ -323,10 +320,8 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         * and a school grade are not the same list.
         */}
       {choosing && !isTaggedPracticeSource(source) ? (
-        <nav className="mb-4 flex flex-wrap items-center gap-1.5 border-l-2 border-neutral-200 pl-3 print:hidden">
-          <span className="mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
-            {PRACTICE_SHEET_COPY.chooseLabel}
-          </span>
+        <nav className="mb-4 flex flex-wrap items-center gap-1.5 border-l-2 border-line pl-3 print:hidden">
+          <span className={`mr-1 ${SHEET_CHIP.label}`}>{PRACTICE_SHEET_COPY.chooseLabel}</span>
           {(source === PRACTICE_SOURCES.grade
             ? GRADE_OPTIONS.map((value) => ({ value, label: GRADE_SHORT_LABELS[value] }))
             : source === PRACTICE_SOURCES.jlpt
@@ -354,15 +349,13 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
                   // Choosing what is already chosen means you are finished choosing.
                   choosing: value !== current,
                 })}
-                className={`inline-flex h-7 min-w-7 items-center justify-center rounded-full border px-2 text-[11px] font-bold transition ${
-                  value === current
-                    ? "border-neutral-900 bg-neutral-900 text-white"
-                    : "border-neutral-300 text-neutral-600 hover:bg-neutral-100"
+                className={`${SHEET_CHIP.base} h-7 min-w-7 justify-center px-2 text-[11px] ${
+                  value === current ? SHEET_CHIP.on : SHEET_CHIP.off
                 }`}
               >
                 {label}
                 {typeof levelCounts[value] === "number" ? (
-                  <span className="ml-1 font-semibold text-neutral-400">({levelCounts[value]})</span>
+                  <span className="ml-1 font-semibold opacity-60">({levelCounts[value]})</span>
                 ) : null}
               </Link>
             );
@@ -370,7 +363,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
 
           <Link
             href={sheetHref(settings, { page: 1, choosing: false })}
-            className="ml-4 inline-flex h-7 items-center rounded-full border border-neutral-400 px-3 text-[11px] font-bold text-neutral-600 transition hover:bg-neutral-100"
+            className={`ml-4 ${SHEET_CHIP.base} h-7 px-3 text-[11px] ${SHEET_CHIP.off}`}
           >
             {PRACTICE_SHEET_COPY.closeChooser}
           </Link>
@@ -386,14 +379,14 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         * pagination having broken.
         */}
       {printAll ? (
-        <p className="mb-4 rounded-xl border border-neutral-300 bg-neutral-50 p-3 text-xs text-neutral-600 print:hidden">
-          <span className="block font-black text-neutral-800">
+        <p className="mb-4 rounded-xl border border-line bg-surface-muted/60 p-3 text-xs text-foreground/70 print:hidden">
+          <span className="block font-black text-foreground">
             {pageCount > 1 ? PRACTICE_SHEET_COPY.printingRunsHeading : PRACTICE_SHEET_COPY.printingAllHeading}
           </span>
           {pageCount > 1 ? PRACTICE_SHEET_COPY.printingRunsBody : PRACTICE_SHEET_COPY.printingAllBody}{" "}
           <Link
             href={sheetHref(settings, { printAll: false, page: 1 })}
-            className="font-black text-neutral-900 underline underline-offset-2"
+            className="font-black text-accent underline underline-offset-2"
           >
             {PRACTICE_SHEET_COPY.printAllBack}
           </Link>
@@ -406,8 +399,8 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         * would look right and be useless. Nothing is blocked - it is a notice,
         * not a wall - and it does not print.
         */}
-      <p className="mb-4 rounded-xl border border-neutral-300 bg-neutral-50 p-3 text-xs text-neutral-600 sm:hidden print:hidden">
-        <span className="block font-black text-neutral-800">{PRACTICE_SHEET_COPY.phoneNoticeHeading}</span>
+      <p className="mb-4 rounded-xl border border-line bg-surface-muted/60 p-3 text-xs text-foreground/70 sm:hidden print:hidden">
+        <span className="block font-black text-foreground">{PRACTICE_SHEET_COPY.phoneNoticeHeading}</span>
         {PRACTICE_SHEET_COPY.phoneNoticeBody}
       </p>
 
@@ -421,22 +414,30 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
       />
 
       {entries.length === 0 ? (
-        <p className="rounded-xl border border-neutral-300 p-4 text-sm">
+        <p className="rounded-xl border border-line p-4 text-sm">
           {isTaggedPracticeSource(source) ? PRACTICE_SHEET_COPY.emptyTagged : PRACTICE_SHEET_COPY.empty}
         </p>
       ) : (
-        <TracingSheet
-          entries={entries}
-          mode={mode}
-          showModel={showModel}
-          showReadings={showReadings}
-          size={size}
-          showNumbers={showNumbers}
-          startIndex={(page - 1) * pageSize + 1}
-        />
+        /*
+          * The sheet sits on its own surface, the way every other list on the
+          * site does. On paper the card is nothing: no border, no radius, no
+          * padding - the squares should start at the margin the printer gives
+          * them rather than inside a drawn box.
+          */
+        <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm print:rounded-none print:border-0 print:p-0 print:shadow-none">
+          <TracingSheet
+            entries={entries}
+            mode={mode}
+            showModel={showModel}
+            showReadings={showReadings}
+            size={size}
+            showNumbers={showNumbers}
+            startIndex={(page - 1) * pageSize + 1}
+          />
+        </div>
       )}
 
-      <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-neutral-400">
+      <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-foreground/50 print:text-neutral-400">
         <span>{PRACTICE_SHEET_COPY.credit}</span>
         <span className="print:hidden">
           {PRACTICE_SHEET_COPY.perPage} {(page - 1) * pageSize + 1}–

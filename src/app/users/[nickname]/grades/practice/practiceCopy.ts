@@ -149,6 +149,22 @@ export function toSheetSize(value: string | null | undefined): SheetSize {
   return value === "large" || value === "small" || value === "medium" ? value : DEFAULT_SHEET_SIZE;
 }
 
+/**
+ * The chips the sheet is configured with, in the site's colours.
+ *
+ * Source, level, mode and size were four copies of the same pair of class
+ * strings, written in neutral greys because the page was built as a print
+ * preview. None of these reach paper - the whole row is `print:hidden` - so
+ * there was never a reason for them to look like a photocopy.
+ */
+export const SHEET_CHIP = {
+  base: "inline-flex items-center rounded-full border font-bold transition",
+  on: "border-accent bg-accent text-white",
+  off: "border-line text-foreground/70 hover:bg-surface-muted",
+  /** The quiet uppercase word naming each group of chips. */
+  label: "text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60",
+} as const;
+
 /** WaniKani goes to 60, and every level is a legitimate sheet to print. */
 export const WANIKANI_MAX_LEVEL = 60;
 

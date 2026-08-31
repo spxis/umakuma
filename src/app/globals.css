@@ -335,6 +335,23 @@ button,
   section {
     break-inside: avoid;
   }
+
+  /*
+   * Colour is for the screen; paper gets ink where a stroke is and nowhere
+   * else. The practice sheet is drawn in the site's palette now - blue guide
+   * lines, an accent row number - and none of that belongs on a worksheet
+   * that gets photocopied and printed on whatever is in the tray.
+   *
+   * Each element states its own printed colour with a `print:` class, which is
+   * what makes the sheet readable in the print preview. This is the backstop
+   * underneath them: a panel or a pill added later cannot lay down a filled
+   * background across a page without someone choosing to.
+   */
+  [data-print="mono"],
+  [data-print="mono"] * {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
 }
 
 
