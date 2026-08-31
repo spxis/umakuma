@@ -55,7 +55,13 @@ export default function AdminPaginationControls({
       <p>
         Page {page} of {pageCount} · {total.toLocaleString("en-US")} total {itemLabel}
       </p>
-      <div className="flex items-center gap-2">
+      {/*
+        * Wraps rather than overflows. First/Previous/Next/Last plus the page
+        * jump is 449px of controls, which on a 393px phone pushed the whole
+        * admin page sideways - the row would not scroll, so it simply made
+        * every panel on the tab too wide.
+        */}
+      <div className="flex flex-wrap items-center justify-end gap-2">
         <button
           type="button"
           onClick={onFirst ?? onPrevious}

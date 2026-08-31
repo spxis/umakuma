@@ -4,7 +4,9 @@ import { useMemo, useState } from "react";
 
 import { formatDateShort, formatDateTimeShort } from "@/lib/timeFormat";
 
+import AdminAccountCards from "./AdminAccountCards";
 import AdminAccountRowActions from "./AdminAccountRowActions";
+import AdminInviteCodeChip from "./AdminInviteCodeChip";
 import AdminPanelHeader from "./AdminPanelHeader";
 import AdminPaginationControls from "./AdminPaginationControls";
 import { ADMIN_USERS_COPY } from "./AdminUsers.constants";
@@ -90,10 +92,26 @@ export default function AdminAccountsSection({
   return (
     <section className="rounded-2xl border border-line bg-surface/90 p-5 shadow-sm">
       <AdminPanelHeader label={copy.panel.label} title={copy.panel.title} description={copy.panel.description} />
-      <div className="mt-4 overflow-x-auto rounded-xl border border-line">
-        {accounts.length === 0 ? (
-          <p className="p-4 text-sm text-foreground/70">{copy.panel.empty}</p>
-        ) : (
+      {accounts.length === 0 ? (
+        <p className="mt-4 rounded-xl border border-line p-4 text-sm text-foreground/70">{copy.panel.empty}</p>
+      ) : (
+        <>
+          {/*
+            * One list, two shapes. Below md the seven columns become labelled
+            * fields in a card, because a 980px table on a 393px screen hides
+            * five of them behind a sideways scroll nobody finds.
+            */}
+          <div className="mt-4 rounded-xl border border-line md:hidden">
+            <AdminAccountCards
+              accounts={pagedAccounts}
+              loading={loading}
+              viewerEmail={viewerEmail}
+              generatedInviteCodesByAccountId={generatedInviteCodesByAccountId}
+              onSelectAction={selectRowAction}
+            />
+          </div>
+
+          <div className="mt-4 hidden overflow-x-auto rounded-xl border border-line md:block">
           <table className="min-w-245 w-full border-collapse text-sm">
             <thead className="bg-surface-muted text-[11px] uppercase tracking-[0.08em] text-foreground/70">
               <tr className="border-b border-line">
@@ -146,24 +164,7 @@ export default function AdminAccountsSection({
                           ? `${copy.table.inviteSetPrefix} ${formatDateTimeShort(account.inviteCodeUpdatedAt)}`
                           : copy.table.inviteNotSet}
                       </p>
-                      {generatedInviteCode ? (
-                        <div className="mt-1 flex items-center gap-2">
-                          <code className="rounded border border-line bg-white px-2 py-0.5 text-[11px] font-bold tracking-[0.12em] text-slate-800">
-                            {generatedInviteCode}
-                          </code>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              void navigator.clipboard.writeText(generatedInviteCode).catch(() => {
-                                // Ignore clipboard failures.
-                              });
-                            }}
-                            className="rounded-full border border-line bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-700 hover:bg-surface"
-                          >
-                            {copy.table.copyCode}
-                          </button>
-                        </div>
-                      ) : null}
+                      {generatedInviteCode ? <AdminInviteCodeChip code={generatedInviteCode} /> : null}
                     </td>
                     <td className="px-3 py-3">
                       <AdminAccountRowActions
@@ -177,8 +178,9 @@ export default function AdminAccountsSection({
               })}
             </tbody>
           </table>
-        )}
-      </div>
+          </div>
+        </>
+      )}
 
       {accounts.length > 0 ? (
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">

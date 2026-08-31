@@ -336,3 +336,33 @@ button,
     break-inside: avoid;
   }
 }
+
+
+/*
+ * The admin tab row scrolls sideways on a phone; this says so.
+ *
+ * Nine tabs cannot fit 393px and wrapping them costs three rows of height on
+ * every admin screen, so the row scrolls - but a pill sliced flat at the edge
+ * reads as a bug, not as an invitation. Fading the last few pixels is the
+ * difference between "broken" and "there is more this way".
+ *
+ * Dropped entirely once the row fits, because a fade over nothing is just a
+ * dimmed tab.
+ */
+@media (max-width: 1023px) {
+  .admin-tab-scroll {
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  }
+
+  .admin-tab-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Scrolled fully right, there is nothing more to hint at. */
+  .admin-tab-scroll[data-scroll-end="true"] {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

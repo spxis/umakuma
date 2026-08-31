@@ -16,13 +16,39 @@ type AdminDataWorkspaceSectionProps = {
   controlRoomProps: Omit<AdminControlRoomProps, "viewMode">;
 };
 
-function dataCatalogViewClassName(isActive: boolean): string {
-  return `inline-flex h-10 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${
+/**
+ * Which dataset, and whether you are reading it or changing it.
+ *
+ * These were four buttons - WK data, JLPT data, WK manage, JLPT manage - which
+ * is the cross-product written out. Two problems with that. It wrapped: four
+ * pills of that length do not fit a phone, so "JLPT manage" sat alone on a
+ * second row. And it does not scale: a third dataset makes six buttons, a
+ * fourth makes eight, and the row grows by two every time.
+ *
+ * Two controls instead, because it was always two questions. The dataset names
+ * stay short enough to sit in one row, and adding one costs a chip rather than
+ * a pair.
+ */
+
+const DATASETS = [
+  { id: "wk", label: "WaniKani" },
+  { id: "jlpt", label: "JLPT" },
+] as const;
+
+const MODES = [
+  { id: "catalog", label: "Browse" },
+  { id: "operations", label: "Manage" },
+] as const;
+
+function chipClassName(isActive: boolean): string {
+  return `inline-flex h-9 items-center justify-center rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${
     isActive
       ? "border-accent bg-accent text-white"
       : "border-line bg-surface text-slate-700 hover:bg-surface-muted"
   }`;
 }
+
+const GROUP_LABEL = "text-[10px] font-black uppercase tracking-[0.08em] text-foreground/45";
 
 export default function AdminDataWorkspaceSection({
   dataCatalogView,
@@ -38,59 +64,44 @@ export default function AdminDataWorkspaceSection({
     "catalog",
   );
 
-  const isWkData = dataCatalogView === "wk" && workspaceMode === "catalog";
-  const isJlptData = dataCatalogView === "jlpt" && workspaceMode === "catalog";
-  const isWkManage = dataCatalogView === "wk" && workspaceMode === "operations";
-  const isJlptManage = dataCatalogView === "jlpt" && workspaceMode === "operations";
-
   return (
     <section id="admin-data" className="space-y-3">
       <div className="rounded-xl border border-line bg-surface/70 px-4 py-3">
         <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/60">Data</p>
-        <p className="mt-1 text-sm text-foreground/70">Split catalog browsing from sync/update operations for cleaner workflows.</p>
+        <p className="mt-1 text-sm text-foreground/70">
+          Choose a dataset, then browse it or run its sync and update operations.
+        </p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => {
-            onChangeDataCatalogView("wk");
-            setWorkspaceMode("catalog");
-          }}
-          className={dataCatalogViewClassName(isWkData)}
-        >
-          WK data
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            onChangeDataCatalogView("jlpt");
-            setWorkspaceMode("catalog");
-          }}
-          className={dataCatalogViewClassName(isJlptData)}
-        >
-          JLPT data
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            onChangeDataCatalogView("wk");
-            setWorkspaceMode("operations");
-          }}
-          className={dataCatalogViewClassName(isWkManage)}
-        >
-          WK manage
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            onChangeDataCatalogView("jlpt");
-            setWorkspaceMode("operations");
-          }}
-          className={dataCatalogViewClassName(isJlptManage)}
-        >
-          JLPT manage
-        </button>
+      {/* Each label stays with its own chips when the row wraps. */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="flex items-center gap-2">
+          <span className={GROUP_LABEL}>Dataset</span>
+          {DATASETS.map((dataset) => (
+            <button
+              key={dataset.id}
+              type="button"
+              onClick={() => onChangeDataCatalogView(dataset.id)}
+              className={chipClassName(dataCatalogView === dataset.id)}
+            >
+              {dataset.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className={GROUP_LABEL}>View</span>
+          {MODES.map((mode) => (
+            <button
+              key={mode.id}
+              type="button"
+              onClick={() => setWorkspaceMode(mode.id)}
+              className={chipClassName(workspaceMode === mode.id)}
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {dataCatalogView === "wk" ? (
