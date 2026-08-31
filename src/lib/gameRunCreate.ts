@@ -1,4 +1,4 @@
-import { geoMapEntries } from "@/lib/geoMapPool";
+import { geoCapitalEntries, geoMapEntries } from "@/lib/geoMapPool";
 import type { CountryCode } from "@/lib/geoRegion";
 import "server-only";
 
@@ -257,7 +257,12 @@ async function planShiritoriRun(accountId: string, request: GameRunRequest): Pro
  */
 function planMapRun(request: GameRunRequest): GameRunPlan {
   const country = request.mapCountry ?? "JP";
-  const pool = geoMapEntries(country);
+  /*
+   * The capitals round draws from the regions whose capital is not simply
+   * their own name, so it asks something. Japan needs this most: twenty-nine
+   * of its forty-seven prefectures share the name.
+   */
+  const pool = request.answerMode === "capital" ? geoCapitalEntries(country) : geoMapEntries(country);
   const requested = request.batchSize === "all" ? pool.length : request.batchSize;
   const questionCount = Math.min(requested, pool.length);
   return {

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { buildMapQuestions } from "./gameMapQuestions";
 import { seededRandom } from "./gameRandom";
-import { geoMapDiagonal, geoMapEntries, geoMapOption } from "./geoMapPool";
+import { geoCapitalEntries, geoMapDiagonal, geoMapEntries, geoMapOption } from "./geoMapPool";
 import { GEO_REGION_COUNTS, geoRegionIdFromSubjectId } from "./geoSubjectIds";
 
 describe("geoMapEntries", () => {
@@ -99,5 +99,33 @@ describe("the capitals round", () => {
       const missing = geoMapEntries(country).filter((entry) => !entry.capital).map((e) => String(e.code));
       expect(missing, `${country} regions with no capital`).toEqual([]);
     }
+  });
+});
+
+
+describe("which regions the capitals round asks about", () => {
+  /*
+   * The reason this exists. Twenty-nine Japanese prefectures share their
+   * capital's name, so asking "which prefecture governs from Saitama" is not a
+   * question. The eighteen that differ are the ones a learner gains from.
+   */
+  it("drops Japanese prefectures that share their capital's name", () => {
+    const asked = geoCapitalEntries("JP").map((entry) => entry.romaji);
+
+    expect(asked).not.toContain("Saitama");
+    expect(asked).not.toContain("Kyoto");
+    expect(asked).toContain("Hokkaido");
+    expect(asked).toContain("Kanagawa");
+    expect(asked.length).toBeLessThan(geoMapEntries("JP").length);
+  });
+
+  it("keeps every American state and Canadian region, where none share", () => {
+    expect(geoCapitalEntries("US")).toHaveLength(geoMapEntries("US").length);
+    expect(geoCapitalEntries("CA")).toHaveLength(geoMapEntries("CA").length);
+  });
+
+  it("writes Japan's capitals in kanji, as its tiles are", () => {
+    const hokkaido = geoMapEntries("JP").find((entry) => entry.romaji === "Hokkaido");
+    expect(hokkaido?.capital).toMatch(/[\u4e00-\u9faf]/);
   });
 });

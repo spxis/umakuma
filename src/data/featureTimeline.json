@@ -1376,5 +1376,15 @@
     "version": "0.126.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Map mode can ask by capital city: the prompt names the seat of government and the answer is the region that governs from it. Bismarck is North Dakota, Victoria is British Columbia. It works on all three countries, because every dataset already recorded a capital for every region."
+  },
+  {
+    "id": "map-capitals-that-ask-something",
+    "area": "games",
+    "name": "Capitals that actually ask something",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.127.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "The capitals round now skips the twenty-nine Japanese prefectures that share their capital's name, so it asks the eighteen worth knowing: 札幌市 is Hokkaido, 横浜市 is Kanagawa, 名古屋市 is Aichi. Japanese capitals are written in kanji now too, matching the tiles rather than sitting in romaji in a Japanese round."
   }
 ]

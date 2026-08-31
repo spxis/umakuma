@@ -25,12 +25,33 @@ export type GeoMapEntry = {
   kanji: string;
   romaji: string;
   reading: string;
-  /** The seat of government, for the capitals round. */
+  /** The seat of government, written the way this country's tiles are. */
   capital: string;
+  /**
+   * Whether naming the capital actually asks anything.
+   *
+   * Twenty-nine of Japan's forty-seven prefectures share their capital's name
+   * - Saitama, Chiba, Kyoto, Osaka - so those questions answer themselves. The
+   * eighteen that differ are the ones worth learning: Hokkaido and Sapporo,
+   * Kanagawa and Yokohama, Aichi and Nagoya.
+   */
+  capitalDiffers: boolean;
 };
 
 export function geoMapEntries(country: CountryCode): GeoMapEntry[] {
   return GEO_DATASETS[country].regions.map((region) => toEntry(region));
+}
+
+/**
+ * The regions worth asking about by capital.
+ *
+ * Falls back to the whole country if too few differ, because a round of four
+ * questions repeated is worse than an easy one. In practice Japan has
+ * eighteen, the United States fifty-one and Canada thirteen.
+ */
+export function geoCapitalEntries(country: CountryCode): GeoMapEntry[] {
+  const differing = geoMapEntries(country).filter((entry) => entry.capitalDiffers);
+  return differing.length >= 8 ? differing : geoMapEntries(country);
 }
 
 function toEntry(region: GeoRegion): GeoMapEntry {
@@ -53,7 +74,19 @@ function toEntry(region: GeoRegion): GeoMapEntry {
     kanji: region.country === "JP" ? region.nameNative ?? region.name : region.name,
     romaji: region.name,
     reading: region.reading ?? region.name,
-    capital: region.capital?.name ?? "",
+    /*
+     * Japan's tiles are kanji, so its capital prompt is too - 札幌市 beside
+     * 北海道 rather than a romaji word in a Japanese round. Elsewhere the plain
+     * name is the only form there is.
+     */
+    capital:
+      region.country === "JP"
+        ? region.capital?.nameNative ?? region.capital?.name ?? ""
+        : region.capital?.name ?? "",
+    // Compared on the romanised names, whichever script is displayed.
+    capitalDiffers:
+      Boolean(region.capital?.name) &&
+      region.capital.name.trim().toLowerCase() !== region.name.trim().toLowerCase(),
   };
 }
 
