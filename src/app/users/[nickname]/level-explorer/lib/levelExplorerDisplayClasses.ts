@@ -9,6 +9,7 @@ import {
   isVocabularySubjectType,
   LEVEL_WK_STATUSES,
 } from "./levelExplorerDomain";
+import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 export function statusClass(status: LevelItem["status"]): string {
   switch (status) {
@@ -152,13 +153,19 @@ export function typeGlyphBoxClass(type: LevelItem["subjectType"]): string {
 
 export function glyphTextSizeClass(characters: string): string {
   const length = Array.from(characters).length;
+  /*
+   * The marker rides along with the size. Every caller is sizing a Japanese
+   * glyph - that is the only thing this measures - so the two were never
+   * separate decisions, and pairing them here is what stops the next glyph
+   * surface from taking the sizing and leaving the glyph translatable.
+   */
   if (length >= 5) {
-    return "text-4xl";
+    return `${NO_TRANSLATE_CLASS} text-4xl`;
   }
   if (length >= 3) {
-    return "text-5xl";
+    return `${NO_TRANSLATE_CLASS} text-5xl`;
   }
-  return "text-6xl";
+  return `${NO_TRANSLATE_CLASS} text-6xl`;
 }
 
 export function relatedReferenceCardClass(

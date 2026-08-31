@@ -23,6 +23,7 @@ import type {
   NewsArticleViewProps,
   RenderItem,
 } from "./NewsArticleView.types";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 const AD_INTERVAL = 4;
 const LARGE_ARTICLE_TEXT_LENGTH = 7000;
@@ -97,8 +98,12 @@ export default function NewsArticleView({
           <div
             className="relative mx-auto max-w-3xl rounded-2xl border border-line/70 bg-surface/80 px-4 py-4 sm:px-6 sm:py-6"
           >
+            {/* The article is the reading practice; translating it removes the point. */}
             <div
-              className={`space-y-5 text-foreground leading-relaxed ${textSizeClass(prefs.textSize)}`.trim()}
+              translate="no"
+              className={noTranslateClass(
+                `space-y-5 text-foreground leading-relaxed ${textSizeClass(prefs.textSize)}`.trim(),
+              )}
               style={articleTextStyle(prefs.articleFont)}
             >
               {items.map((item, index) => {

@@ -11,6 +11,7 @@ import { useState } from "react";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import { displayReading, readingsForGrade } from "./gradeExplorerView";
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 type Props = {
   items: SchoolGradeKanjiEntry[];
@@ -35,7 +36,7 @@ function ReadingRow({ label, readings }: { label: string; readings: string[] }) 
   return (
     <p className="flex items-baseline gap-1.5 text-xs">
       <span className="shrink-0 font-black uppercase tracking-[0.08em] text-foreground/45">{label}</span>
-      <span className="min-w-0 truncate font-bold text-foreground/80 [font-family:var(--font-jp-current)]">
+      <span translate="no" className={`min-w-0 truncate font-bold text-foreground/80 ${JP_TEXT_CLASS}`}>
         {readings.length > 0
           ? readings.map(displayReading).join("、")
           : GRADE_EXPLORER_COPY.noReadings}
@@ -111,7 +112,7 @@ export default function GradeKanjiGrid({
          */
         const rowBody = (
           <div className="flex min-w-0 items-center gap-3">
-            <span className="w-9 shrink-0 text-2xl font-black leading-none text-kanji [font-family:var(--font-jp-current)]">
+            <span translate="no" className={`w-9 shrink-0 text-2xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
               {entry.kanji}
             </span>
             <span className="w-28 shrink-0 truncate text-sm font-black text-foreground" title={entry.primaryMeaning ?? ""}>
@@ -134,7 +135,7 @@ export default function GradeKanjiGrid({
         const cardBody = (
           <>
             <div className="flex items-start justify-between gap-2">
-              <span className="text-4xl font-black leading-none text-kanji [font-family:var(--font-jp-current)]">
+              <span translate="no" className={`text-4xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
                 {entry.kanji}
               </span>
               <span className="flex shrink-0 flex-col items-end gap-1">

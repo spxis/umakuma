@@ -10,6 +10,7 @@ import {
 } from "@/lib/featureTimeline";
 
 import { RELEASE_AREA_CLASSES, RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
+import JapaneseInProse from "@/app/shared/JapaneseInProse";
 
 type ReleaseTimelineListProps = {
   entries: FeatureTimelineEntry[];
@@ -71,7 +72,9 @@ function FeatureRow({
           ) : null}
         </div>
 
-        <p className="mt-1 text-sm text-foreground/70">{entry.summary}</p>
+        <p className="mt-1 text-sm text-foreground/70">
+          <JapaneseInProse text={entry.summary} />
+        </p>
       </div>
     </li>
   );

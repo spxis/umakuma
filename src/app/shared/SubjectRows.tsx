@@ -6,6 +6,7 @@ import {
   subjectGlyphTone,
   type SubjectListRow,
 } from "@/app/shared/subjectListView";
+import { JP_TEXT_CLASS } from "./japaneseText";
 
 type Props<TRow extends SubjectListRow> = {
   rows: TRow[];
@@ -94,7 +95,7 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                      * plus an ellipsis, which is the one thing a reader is
                      * scanning for.
                      */
-                    className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 [font-family:var(--font-jp-current)] ${subjectGlyphTone(row.subjectType)}`}
+                    className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 ${JP_TEXT_CLASS} ${subjectGlyphTone(row.subjectType)}`}
                   >
                     {row.glyph}
                   </span>
@@ -104,7 +105,7 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                       {row.meaning || SUBJECT_VIEW_COPY.noMeaning}
                     </span>
                     <span className="flex items-center gap-1.5 truncate text-xs font-semibold text-foreground/55">
-                      {row.reading ? <span className="[font-family:var(--font-jp-current)]">{row.reading}</span> : null}
+                      {row.reading ? <span translate="no" className={JP_TEXT_CLASS}>{row.reading}</span> : null}
                       {renderSubMeta ? renderSubMeta(row) : null}
                     </span>
                   </span>

@@ -1,5 +1,7 @@
 import { Fragment } from "react";
 
+import { noTranslateClass } from "@/app/shared/japaneseText";
+
 import { DEFAULT_SHEET_SIZE, PRACTICE_SHEET_COPY, SHEET_SIZES, type SheetSize } from "./practiceCopy";
 
 /**
@@ -151,10 +153,15 @@ export default function TracingSheet({
             ) : null}
             {/* The character first: it is what the row is about, and a reader
               * scanning a printed page finds it faster than the English. */}
-            <span className="text-base font-black leading-none text-neutral-900">{entry.kanji}</span>
+            <span
+              translate="no"
+              className={noTranslateClass("text-base font-black leading-none text-neutral-900")}
+            >
+              {entry.kanji}
+            </span>
             <span className="font-black text-neutral-700">{entry.meaning ?? ""}</span>
             {showReadings && (entry.on.length > 0 || entry.kun.length > 0) ? (
-              <span className="min-w-0 truncate text-neutral-500">
+              <span translate="no" className={noTranslateClass("min-w-0 truncate text-neutral-500")}>
                 {[entry.on.join("、"), entry.kun.join("、")].filter(Boolean).join(" · ")}
               </span>
             ) : null}

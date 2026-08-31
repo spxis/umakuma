@@ -1506,5 +1506,15 @@
     "version": "0.139.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Map handles are numbered west to east, so a round reads 1 2 3 4 across the map instead of the 3 2 4 1 the shuffle happened to deal - and pressing 1 now means the leftmost handle. They also stop overlapping: the old rule called two handles clear at 1.9 radii when circles of radius r touch at 2, so every pair it passed was already into its neighbour, and it had only two positions to try, which left a third crowded region back on top of the first. Handles now try a column of positions and take the first that is clear, vertical before sideways so the numbering survives. Across 48,000 handles on all three maps: no overlaps and none cropped at the frame."
+  },
+  {
+    "id": "japanese-that-survives-translation",
+    "area": "study",
+    "name": "Japanese that survives translation",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.140.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Chrome's translate offer used to eat the site. On the grades explorer it replaced every kanji with its English meaning - 一 became \"one\", 右 became \"right\" - beside a card already printing that same meaning underneath, and it romanised the readings, so a page teaching kanji showed no kanji at all. Every Japanese element now carries both refusals, the HTML5 translate attribute and Google's notranslate class, while the English chrome around it stays translatable for anyone who needs it. The font class and the glyph sizing helper each carry the marker with them, since anything drawn in the Japanese face is Japanese, and a unit test keeps the raw font class out of the rest of the tree so the next glyph surface cannot take the styling and forget the protection. Release notes that quote Japanese inside an English sentence mark only the quote. Audited across sixteen pages: no unprotected Japanese left."
   }
 ]

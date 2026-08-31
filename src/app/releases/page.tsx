@@ -11,6 +11,8 @@ import { codenameForVersion } from "@/lib/releaseCodenames";
 
 import { RELEASES_PAGE_COPY } from "./releasesCopy";
 import { groupReleasesByMonth, releaseAnchor } from "./releasesView";
+import { noTranslateClass } from "@/app/shared/japaneseText";
+import JapaneseInProse from "@/app/shared/JapaneseInProse";
 
 export const metadata: Metadata = {
   title: "UmaKuma Updates",
@@ -86,7 +88,7 @@ export default async function PublicReleasesPage() {
                           * and it was invisible until you expanded the entry.
                           */}
                         {codename ? (
-                          <span lang="ja" className="block truncate text-[11px] font-semibold text-foreground/45">
+                          <span lang="ja" translate="no" className={noTranslateClass("block truncate text-[11px] font-semibold text-foreground/45")}>
                             「{codename.reading}」 {codename.romaji}
                           </span>
                         ) : null}
@@ -103,10 +105,14 @@ export default async function PublicReleasesPage() {
                     </summary>
 
                     <div className="mt-3 border-t border-line/70 pt-3">
-                      <p className="text-sm font-semibold text-foreground/80">{publicSummaryFor(entry)}</p>
+                      <p className="text-sm font-semibold text-foreground/80">
+                        <JapaneseInProse text={publicSummaryFor(entry)} />
+                      </p>
 
                       {entry.details ? (
-                        <p className="mt-2 text-sm text-foreground/70">{entry.details}</p>
+                        <p className="mt-2 text-sm text-foreground/70">
+                          <JapaneseInProse text={entry.details} />
+                        </p>
                       ) : null}
 
                       <dl className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/45">

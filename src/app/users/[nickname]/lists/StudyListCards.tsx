@@ -14,6 +14,7 @@ import {
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import type { StudyListSummary } from "@/lib/studyLists";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 /**
  * The saved lists, each showing what is in it.
@@ -121,7 +122,7 @@ export default function StudyListCards({
                 <h2 className="w-32 shrink-0 truncate text-sm font-black text-foreground" title={list.name}>
                   {list.name}
                 </h2>
-                <p className="min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji [font-family:var(--font-jp-current)]">
+                <p translate="no" className={`min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
                   {list.characters.join("")}
                 </p>
                 <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
@@ -159,7 +160,7 @@ export default function StudyListCards({
                   </span>
                 </div>
 
-                <p className="mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji [font-family:var(--font-jp-current)]">
+                <p translate="no" className={`mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji ${JP_TEXT_CLASS}`}>
                   {list.characters.join("")}
                 </p>
 

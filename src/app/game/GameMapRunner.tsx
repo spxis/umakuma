@@ -28,6 +28,7 @@ import { GAME_COPY, MAP_TONES } from "./GameMode.constants";
 import JapanMap, { type MapMark } from "./JapanMap";
 import type { MapTone } from "./GameMode.types";
 import { useGameAnswerKeys } from "./useGameAnswerKeys";
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 type Props = {
   question: GameQuestionPayload;
@@ -225,7 +226,7 @@ function MapBoard({
         <p className="text-[10px] font-bold uppercase text-foreground/60">
           {GAME_COPY.chooseRegion(divisionName)} · {question.answerType}
         </p>
-        <p className="mt-1 text-3xl font-black text-foreground [font-family:var(--font-jp-current)] sm:text-5xl">
+        <p translate="no" className={`mt-1 text-3xl font-black text-foreground ${JP_TEXT_CLASS} sm:text-5xl`}>
           {question.prompt}
         </p>
       </div>

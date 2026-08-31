@@ -11,6 +11,7 @@ import {
   typeGlyphBoxClass,
 } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
+import { JP_TEXT_CLASS } from "./japaneseText";
 
 type Props<TRow extends SubjectListRow> = {
   rows: TRow[];
@@ -48,7 +49,7 @@ export default function SubjectCards<TRow extends SubjectListRow>({
               onClick={() => onSelect(row, index)}
               className={`flex h-full w-full min-w-0 cursor-pointer flex-col items-center gap-1 rounded-2xl border p-3 text-center transition hover:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${typeGlyphBoxClass(subjectType)}`}
             >
-              <span className={`font-black leading-none [font-family:var(--font-jp-current)] ${glyphTextSizeClass(row.glyph)}`}>
+              <span className={`font-black leading-none ${JP_TEXT_CLASS} ${glyphTextSizeClass(row.glyph)}`}>
                 {row.glyph}
               </span>
               <span className="line-clamp-2 text-xs font-bold text-foreground/75">

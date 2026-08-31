@@ -6,6 +6,7 @@ import { SEARCH_SOURCE_LABELS, searchHitHref, type SearchHit, type SearchSource 
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 
 import { SEARCH_PAGE_COPY } from "./searchCopy";
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 type Props = {
   hits: SearchHit[];
@@ -52,7 +53,7 @@ function HitRow({ hit, href }: { hit: SearchHit; href: string | null }) {
   const body = (
     <>
           <span
-            className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 [font-family:var(--font-jp-current)] ${subjectGlyphTone(
+            className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 ${JP_TEXT_CLASS} ${subjectGlyphTone(
               hit.subjectType,
             )}`}
           >
@@ -64,7 +65,7 @@ function HitRow({ hit, href }: { hit: SearchHit; href: string | null }) {
               {hit.meaning || "—"}
             </span>
             {hit.reading ? (
-              <span className="truncate text-xs font-semibold text-foreground/55 [font-family:var(--font-jp-current)]">
+              <span translate="no" className={`truncate text-xs font-semibold text-foreground/55 ${JP_TEXT_CLASS}`}>
                 {hit.reading}
               </span>
             ) : null}

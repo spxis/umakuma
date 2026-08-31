@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   onClick: (meta?: { shiftKey: boolean }) => void;
@@ -124,8 +125,9 @@ export default function UnifiedExplorerCard({
           >
             {glyphOverlay}
             <p
+              translate="no"
               style={{ fontFamily }}
-              className={`${glyphTextClassName} text-center font-black leading-none`}
+              className={noTranslateClass(`${glyphTextClassName} text-center font-black leading-none`)}
             >
               {glyphText}
             </p>

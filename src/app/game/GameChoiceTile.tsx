@@ -1,5 +1,6 @@
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import type { GameOptionTile } from "@/lib/gameMode";
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 type Props = {
   option: GameOptionTile;
@@ -49,7 +50,7 @@ export default function GameChoiceTile({
       <span className={`text-center font-black leading-tight ${
         isTextAnswer
           ? `break-words ${dense ? "text-xl sm:text-3xl" : "text-2xl sm:text-5xl"}`
-          : `break-all [font-family:var(--font-jp-current)] leading-none ${dense ? "text-4xl sm:text-6xl" : "text-5xl sm:text-9xl"}`
+          : `break-all ${JP_TEXT_CLASS} leading-none ${dense ? "text-4xl sm:text-6xl" : "text-5xl sm:text-9xl"}`
       }`}>
         {option.label}
       </span>

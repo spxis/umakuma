@@ -1,4 +1,5 @@
 import { codenameKanji, type ReleaseCodename } from "@/lib/releaseCodenames";
+import { noTranslate, noTranslateClass } from "./japaneseText";
 
 type Props = {
   codename: ReleaseCodename;
@@ -23,7 +24,7 @@ export default function CodenameText({ codename, layout = "inline", className = 
   if (layout === "stacked") {
     return (
       <span title={kanjiTooltip} className={`flex select-none flex-col items-end ${className}`.trim()}>
-        <span lang="ja" className="text-xs font-semibold tracking-widest text-foreground/35">
+        <span lang="ja" translate="no" className={noTranslateClass("text-xs font-semibold tracking-widest text-foreground/35")}>
           「{codename.reading}」{kanji ? <> · {kanji}</> : null}
         </span>
         <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/25">
@@ -35,7 +36,7 @@ export default function CodenameText({ codename, layout = "inline", className = 
 
   return (
     <span title={kanjiTooltip} className={`min-w-0 ${className}`.trim()}>
-      <span lang="ja">「{codename.reading}」{kanji ? <> · {kanji}</> : null}</span> {codename.romaji} · {codename.gloss}
+      <span lang="ja" {...noTranslate}>「{codename.reading}」{kanji ? <> · {kanji}</> : null}</span> {codename.romaji} · {codename.gloss}
     </span>
   );
 }

@@ -3,6 +3,7 @@ import { toRomaji } from "wanakana";
 
 import type { LevelItem } from "../../explorerTypes";
 import { isRadicalSubjectType } from "./levelExplorerDomain";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 export function stripHtml(input: string | undefined): string {
   if (!input) {
@@ -123,14 +124,15 @@ export function ReadingWithPronunciation({
   const pronunciation = pronunciationForReading(reading);
   if (!pronunciation) {
     return (
-      <span className={className}>
+      <span translate="no" className={noTranslateClass(className)}>
         <SegmentedReading reading={reading} />
       </span>
     );
   }
   return (
     <span
-      className={className}
+      translate="no"
+      className={noTranslateClass(className)}
       title={`Pronunciation: ${pronunciation}`}
       aria-label={`${reading} pronunciation ${pronunciation}`}
     >

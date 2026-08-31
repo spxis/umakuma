@@ -15,6 +15,7 @@ import { STUDY_REVIEW_MODAL_SECTION_TEXT } from "./StudyExplorer.constants";
 import FieldLabel from "../../../../shared/FieldLabel";
 import ModalShell from "@/app/shared/ModalShell";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   accountId: string;
@@ -160,7 +161,11 @@ export default function StudySideBySideModal({
                     </span>
                   ) : null}
                   <span className="absolute right-2 top-2 z-30 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs">L{option.wkLevel}</span>
-                  <span style={{ fontFamily }} className={`max-w-full break-all text-center font-black leading-none ${activeSelection ? "text-[clamp(2.5rem,10vw,6rem)]" : "text-[clamp(3rem,15vw,10rem)]"}`}>{option.characters}</span>
+                  <span
+                    translate="no"
+                    style={{ fontFamily }}
+                    className={noTranslateClass(`max-w-full break-all text-center font-black leading-none ${activeSelection ? "text-[clamp(2.5rem,10vw,6rem)]" : "text-[clamp(3rem,15vw,10rem)]"}`)}
+                  >{option.characters}</span>
                   {activeSelection ? (
                     <span className="mt-4 w-full rounded-lg border border-line bg-surface/90 px-2 py-2 text-left">
                       <span className="block text-[9px] font-bold uppercase text-foreground/60">{revealedLabel}</span>
