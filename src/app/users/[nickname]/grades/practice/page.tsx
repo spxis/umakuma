@@ -4,6 +4,8 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
+import SurfacePagination from "@/app/shared/SurfacePagination";
+import { PAGINATION_PLACEMENTS, toPaginationPlacement, type PaginationPlacement } from "@/app/shared/paginationPlacement";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
@@ -18,6 +20,13 @@ import TracingSheet, { type SheetMode, type TraceEntry } from "./TracingSheet";
 type PageProps = {
   params: Promise<{ nickname: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+const PAGER_LABELS: Record<PaginationPlacement, string> = {
+  top: PRACTICE_SHEET_COPY.pagerTop,
+  bottom: PRACTICE_SHEET_COPY.pagerBottom,
+  both: PRACTICE_SHEET_COPY.pagerBoth,
+  none: PRACTICE_SHEET_COPY.pagerNone,
 };
 
 function firstValue(value: string | string[] | undefined): string | undefined {
@@ -49,7 +58,15 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
    */
   const showModel = firstValue(query.model) !== "0";
   const showReadings = firstValue(query.readings) === "1";
-  const carry = `&mode=${mode}${showModel ? "" : "&model=0"}${showReadings ? "&readings=1" : ""}`;
+  /*
+   * Both ends by default here, unlike the shared component's own default. A
+   * sheet is a page of tracing squares: reaching page four meant scrolling past
+   * three of them to find the only Next link on the page.
+   */
+  const placement = toPaginationPlacement(firstValue(query.pager), "both");
+  /* Kept out of the URL at its default, so a plain sheet link stays short. */
+  const pagerParam = placement === "both" ? "" : `&pager=${placement}`;
+  const carry = `&mode=${mode}${showModel ? "" : "&model=0"}${showReadings ? "&readings=1" : ""}${pagerParam}`;
 
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
@@ -87,6 +104,10 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     PRACTICE_PAGE_SIZE,
     account.id,
   );
+
+  const pageCount = Math.max(1, Math.ceil(total / PRACTICE_PAGE_SIZE));
+  const pageHref = (next: number) =>
+    `?source=${source}&grade=${grade}&level=${level}&page=${next}${carry}${choosing ? "&pick=1" : ""}`;
 
   const sheetLabel =
     source === PRACTICE_SOURCES.trouble
@@ -205,7 +226,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         ] as const).map(([id, label]) => (
           <Link
             key={id}
-            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${id}${showModel ? "" : "&model=0"}${showReadings ? "&readings=1" : ""}${choosing ? "&pick=1" : ""}`}
+            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${id}${showModel ? "" : "&model=0"}${showReadings ? "&readings=1" : ""}${pagerParam}${choosing ? "&pick=1" : ""}`}
             className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
               id === mode
                 ? "border-neutral-900 bg-neutral-900 text-white"
@@ -215,6 +236,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
             {label}
           </Link>
         ))}
+
       </nav>
 
       {/*
@@ -290,7 +312,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         ] as const).map(([label, on, toggle, keep]) => (
           <Link
             key={label}
-            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${mode}${toggle}${keep}${choosing ? "&pick=1" : ""}`}
+            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${mode}${toggle}${keep}${pagerParam}${choosing ? "&pick=1" : ""}`}
             className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-600 transition hover:text-neutral-900"
           >
             <span
@@ -304,6 +326,31 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
             {label}
           </Link>
         ))}
+
+        {/*
+          * Where the pager sits, offered rather than assumed. Someone printing
+          * a single sheet wants neither end; someone working through a grade on
+          * screen wants both, because the foot of a tracing sheet is three
+          * thousand pixels down.
+          */}
+        <span className="ml-2 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
+          {PRACTICE_SHEET_COPY.pagerLabel}
+        </span>
+        <span className="flex items-center gap-1.5">
+          {PAGINATION_PLACEMENTS.map((value) => (
+            <Link
+              key={value}
+              href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${mode}${showModel ? "" : "&model=0"}${showReadings ? "&readings=1" : ""}${value === "both" ? "" : `&pager=${value}`}${choosing ? "&pick=1" : ""}`}
+              className={`inline-flex h-7 items-center rounded-full border px-3 text-[11px] font-bold transition ${
+                value === placement
+                  ? "border-neutral-900 bg-neutral-900 text-white"
+                  : "border-neutral-300 text-neutral-600 hover:bg-neutral-100"
+              }`}
+            >
+              {PAGER_LABELS[value]}
+            </Link>
+          ))}
+        </span>
       </nav>
 
       {/*
@@ -316,6 +363,14 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         <span className="block font-black text-neutral-800">{PRACTICE_SHEET_COPY.phoneNoticeHeading}</span>
         {PRACTICE_SHEET_COPY.phoneNoticeBody}
       </p>
+
+      <SurfacePagination
+        slot="top"
+        placement={placement}
+        page={page}
+        pageCount={pageCount}
+        hrefFor={pageHref}
+      />
 
       {entries.length === 0 ? (
         <p className="rounded-xl border border-neutral-300 p-4 text-sm">
@@ -333,18 +388,13 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         </span>
       </footer>
 
-      <nav className="mt-3 flex items-center justify-between gap-3 print:hidden">
-        {page > 1 ? (
-          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page - 1}${carry}${choosing ? "&pick=1" : ""}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
-            Previous
-          </Link>
-        ) : <span />}
-        {page * PRACTICE_PAGE_SIZE < total ? (
-          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page + 1}${carry}${choosing ? "&pick=1" : ""}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
-            Next
-          </Link>
-        ) : <span />}
-      </nav>
+      <SurfacePagination
+        slot="bottom"
+        placement={placement}
+        page={page}
+        pageCount={pageCount}
+        hrefFor={pageHref}
+      />
       </div>
     </div>
   );

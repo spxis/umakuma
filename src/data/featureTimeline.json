@@ -1386,5 +1386,15 @@
     "version": "0.127.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "The capitals round now skips the twenty-nine Japanese prefectures that share their capital's name, so it asks the eighteen worth knowing: 札幌市 is Hokkaido, 横浜市 is Kanagawa, 名古屋市 is Aichi. Japanese capitals are written in kanji now too, matching the tiles rather than sitting in romaji in a Japanese round."
+  },
+  {
+    "id": "pagination-placement",
+    "area": "platform",
+    "name": "Pagers where the page needs them",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.128.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Paging is a shared component now, and where it sits is the surface's choice: top, bottom, both or none. The writing practice sheet takes both, because its only Next link used to be three thousand pixels below the fold, past three sheets of empty tracing squares."
   }
 ]

@@ -178,6 +178,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yukidoke Yorimichi", ja: "雪解け寄り道", reading: "ゆきどけよりみち", gloss: "a detour through the thaw" },
   { romaji: "Yonaga no Yoi", ja: "夜長の宵", reading: "よながのよい", gloss: "an evening in the long night" },
   { romaji: "Raimei Rasen", ja: "雷鳴螺旋", reading: "らいめいらせん", gloss: "thunderclap spiral" },
+  { romaji: "Rindou Ritsudou", ja: "竜胆律動", reading: "りんどうりつどう", gloss: "the gentian's rhythm" },
 ];
 
 /**

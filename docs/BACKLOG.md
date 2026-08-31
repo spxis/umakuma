@@ -641,11 +641,12 @@ The first-level chips carry counts (`G1 (80)`), the second-level chooser does
 not: `G1 G2 G3` with no idea how many are in each. Applies wherever a second
 level exists - school grade, JLPT level, WaniKani level.
 
-### 28 — Pagination placement option
+### 28 — Pagination placement option ✅ shipped (v0.128.0)
 
-Pagination sits only at the foot. It should be a component option - top,
-bottom, both, or none - so a long sheet can be paged without scrolling to the
-end first.
+`SurfacePagination` with a `placement` of top, bottom, both or none; the
+practice sheet takes both. `AdminPaginationControls` still has its own
+implementation, because it carries First/Last and a page-number jump the shared
+one does not - fold it in when a second surface needs those.
 
 ### 29 — Real US and Canada map geometry
 
