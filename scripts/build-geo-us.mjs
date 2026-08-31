@@ -1,358 +1,141 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { geoAlbersUsa, geoPath } from "d3-geo";
+import { feature, neighbors as topoNeighbors } from "topojson-client";
+
+/**
+ * Real state boundaries, from the Census Bureau by way of us-atlas.
+ *
+ * The previous version of this script had the shapes typed into it as literals
+ * - five-point blobs standing in for states - which rendered and could not be
+ * played. Everything else about Map mode was correct; the map was not a map.
+ *
+ * TopoJSON rather than GeoJSON because adjacency falls out of the format:
+ * neighbouring features share arcs, so `neighbors` comes from topology instead
+ * of a distance guess. Distractors are drawn from a state's own neighbours, so
+ * getting that wrong makes every wrong answer implausible.
+ *
+ * Albers USA rather than a raw plot, because it is the projection that puts
+ * Alaska and Hawaii in their conventional insets instead of stretching the
+ * canvas across the Pacific.
+ */
+
+const SOURCE = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 const OUTPUT_MAP_PATH = path.resolve("src/data/maps/us-map.json");
 const OUTPUT_META_PATH = path.resolve("src/data/maps/us-meta.json");
 
-// All 50 US States + District of Columbia (51 Total)
-const ALL_50_STATES_AND_DC = [
-  {
-    code: "AL", name: "Alabama", capital: "Montgomery", largestCity: "Huntsville", population: 5108468, areaKm2: 135767, areaSqMi: 52420, region: "South", nicknames: ["Yellowhammer State", "Heart of Dixie"], admittedYear: 1819, statehoodOrder: 22,
-    no1Rankings: ["No. 1 in US Rocket and Space Propulsion Development (NASA Marshall Space Flight Center, Huntsville)", "No. 1 in Freshwater Aquatic Biodiversity in the US"],
-    famousFor: { foods: ["Alabama White BBQ Sauce", "Fried Green Tomatoes", "Pecan Pie"], landmarks: ["U.S. Space & Rocket Center", "Civil Rights Memorial & Selma Bridge", "Gulf Shores"], specialties: ["Aerospace Engineering", "Automotive Manufacturing", "Forestry"] },
-    symbols: { flower: "Camellia", tree: "Longleaf Pine", bird: "Yellowhammer" }, centroid: [680, 560], bbox: [640, 510, 720, 610], neighbors: ["MS", "TN", "GA", "FL"], path: "M645 510 L700 510 L705 560 L715 580 L700 610 L680 610 L675 595 L650 595 Z",
-  },
-  {
-    code: "AK", name: "Alaska", capital: "Juneau", largestCity: "Anchorage", population: 733406, areaKm2: 1723337, areaSqMi: 665384, region: "West", nicknames: ["The Last Frontier", "Land of the Midnight Sun"], admittedYear: 1959, statehoodOrder: 49,
-    no1Rankings: ["No. 1 Largest State in the US by Land Area (1.72 Million km²)", "No. 1 Highest Peak in North America (Denali - 20,310 ft / 6,190 m)", "No. 1 in Wild Salmon & King Crab Catch in the US"],
-    famousFor: { foods: ["Wild Alaskan King Salmon", "Alaskan King Crab", "Halibut Fish & Chips"], landmarks: ["Denali National Park", "Glacier Bay National Park", "Kenai Fjords"], specialties: ["Seafood Export", "Crude Oil", "Ecotourism", "Iditarod Sled Dog Race"] },
-    symbols: { flower: "Forget-me-not", tree: "Sitka Spruce", bird: "Willow Ptarmigan" }, centroid: [180, 720], bbox: [100, 640, 260, 800], neighbors: [], path: "M110 650 L200 650 L250 720 L230 760 L180 770 L140 730 Z",
-  },
-  {
-    code: "AZ", name: "Arizona", capital: "Phoenix", largestCity: "Phoenix", population: 7431344, areaKm2: 295234, areaSqMi: 113990, region: "West", nicknames: ["The Grand Canyon State", "Copper State"], admittedYear: 1912, statehoodOrder: 48,
-    no1Rankings: ["No. 1 in Copper Production in the United States (over 65% of domestic copper)", "Home to the Grand Canyon (One of the Seven Natural Wonders of the World)"],
-    famousFor: { foods: ["Sonoran Hot Dogs", "Chimichangas", "Prickly Pear Cactus Candy"], landmarks: ["Grand Canyon National Park", "Sedona Red Rocks", "Antelope Canyon & Horseshoe Bend", "Monument Valley"], specialties: ["Copper Mining", "Semiconductors", "Tourism"] },
-    symbols: { flower: "Saguaro Cactus Blossom", tree: "Palo Verde", bird: "Cactus Wren" }, centroid: [220, 480], bbox: [170, 410, 270, 550], neighbors: ["CA", "NV", "UT", "CO", "NM"], path: "M180 410 L260 410 L265 540 L210 550 L175 480 Z",
-  },
-  {
-    code: "AR", name: "Arkansas", capital: "Little Rock", largestCity: "Little Rock", population: 3067732, areaKm2: 137732, areaSqMi: 53179, region: "South", nicknames: ["The Natural State"], admittedYear: 1836, statehoodOrder: 25,
-    no1Rankings: ["No. 1 in Rice Production in the United States (over 45% of total US crop)", "No. 1 in Poultry & Broiler Chicken Processing (Home of Tyson Foods)"],
-    famousFor: { foods: ["Fried Catfish", "Arkansas Cheese Dip", "Possum Pie"], landmarks: ["Hot Springs National Park", "Ozark Mountains", "Crater of Diamonds State Park"], specialties: ["Retail Logistics (Walmart Global HQ)", "Poultry Industry", "Rice Farming"] },
-    symbols: { flower: "Apple Blossom", tree: "Loblolly Pine", bird: "Mockingbird" }, centroid: [570, 490], bbox: [530, 450, 610, 530], neighbors: ["MO", "TN", "MS", "LA", "TX", "OK"], path: "M535 450 L605 450 L600 525 L545 525 L535 485 Z",
-  },
-  {
-    code: "CA", name: "California", capital: "Sacramento", largestCity: "Los Angeles", population: 38965193, areaKm2: 423970, areaSqMi: 163696, region: "West", nicknames: ["The Golden State"], admittedYear: 1850, statehoodOrder: 31,
-    no1Rankings: ["No. 1 Most Populous US State (38.9 Million people)", "No. 1 Largest US Economy ($3.8+ Trillion GDP - 5th largest economy globally)", "No. 1 in Agricultural Output in the US (Almonds, Avocados, Wine, Grapes)"],
-    famousFor: { foods: ["In-N-Out Burgers", "California Rolls", "Napa Valley Wine", "Mission Burritos", "Sourdough Bread"], landmarks: ["Golden Gate Bridge", "Hollywood Sign & Walk of Fame", "Yosemite National Park & El Capitan", "Disneyland Resort", "Big Sur"], specialties: ["Silicon Valley Tech", "Hollywood Entertainment", "Wine & Agriculture"] },
-    symbols: { flower: "California Poppy", tree: "California Redwood", bird: "California Quail" }, centroid: [120, 390], bbox: [60, 270, 180, 510], neighbors: ["OR", "NV", "AZ"], path: "M90 270 L140 280 L180 430 L160 500 L120 480 L80 370 Z",
-  },
-  {
-    code: "CO", name: "Colorado", capital: "Denver", largestCity: "Denver", population: 5877610, areaKm2: 269601, areaSqMi: 104094, region: "West", nicknames: ["The Centennial State", "Colorful Colorado"], admittedYear: 1876, statehoodOrder: 38,
-    no1Rankings: ["No. 1 Highest Mean Elevation of Any US State (6,800 ft / 2,073 m)", "No. 1 in Mountain Peaks over 14,000 Feet ('Fourteeners' - 58 peaks)", "No. 1 in Craft Breweries per Capita in the US"],
-    famousFor: { foods: ["Colorado Green Chile", "Rocky Mountain Oysters", "Bison Burgers", "Palisade Peaches"], landmarks: ["Rocky Mountain National Park", "Garden of the Gods", "Mesa Verde National Park", "Red Rocks Amphitheatre", "Aspen & Vail"], specialties: ["Skiing & Outdoor Sports", "Aerospace", "Craft Brewing"] },
-    symbols: { flower: "Rocky Mountain Columbine", tree: "Colorado Blue Spruce", bird: "Lark Bunting" }, centroid: [330, 370], bbox: [270, 320, 390, 420], neighbors: ["WY", "NE", "KS", "OK", "NM", "UT", "AZ"], path: "M275 325 L385 325 L385 415 L275 415 Z",
-  },
-  {
-    code: "CT", name: "Connecticut", capital: "Hartford", largestCity: "Bridgeport", population: 3617176, areaKm2: 14357, areaSqMi: 5543, region: "Northeast", nicknames: ["Constitution State", "Nutmeg State"], admittedYear: 1788, statehoodOrder: 5,
-    no1Rankings: ["No. 1 'Insurance Capital of the World' (Hartford Insurance Financial Hub)", "Home to the Oldest Continuously Published Newspaper in America (The Hartford Courant)"],
-    famousFor: { foods: ["New Haven Style Apizza (Frank Pepe)", "Connecticut Warm Butter Lobster Roll", "Steamed Cheeseburgers"], landmarks: ["Yale University (New Haven)", "Mystic Seaport", "Mark Twain House"], specialties: ["Insurance & Financial Services", "Precision Manufacturing", "Submarines (General Dynamics Electric Boat)"] },
-    symbols: { flower: "Mountain Laurel", tree: "Charter Oak", bird: "American Robin" }, centroid: [830, 290], bbox: [815, 275, 845, 305], neighbors: ["NY", "MA", "RI"], path: "M815 280 L840 275 L845 295 L820 300 Z",
-  },
-  {
-    code: "DE", name: "Delaware", capital: "Dover", largestCity: "Wilmington", population: 1031890, areaKm2: 6446, areaSqMi: 2489, region: "Northeast", nicknames: ["The First State"], admittedYear: 1787, statehoodOrder: 1,
-    no1Rankings: ["The First State to Ratify the United States Constitution (December 7, 1787)", "No. 1 Corporate Domicile in the US (Over 65% of Fortune 500 companies incorporated in Delaware)"],
-    famousFor: { foods: ["Scrapple", "Blue Crabs", "Grotto Pizza", "Salt Water Taffy"], landmarks: ["Rehoboth Beach", "Nemours Estate", "Winterthur Museum"], specialties: ["Corporate Law & Finance", "Chemical Engineering (DuPont)", "Poultry Farming"] },
-    symbols: { flower: "Peach Blossom", tree: "American Holly", bird: "Blue Hen Chicken" }, centroid: [795, 360], bbox: [785, 345, 805, 375], neighbors: ["MD", "PA", "NJ"], path: "M788 348 L798 348 L802 375 L790 375 Z",
-  },
-  {
-    code: "FL", name: "Florida", capital: "Tallahassee", largestCity: "Jacksonville", population: 22610726, areaKm2: 170312, areaSqMi: 65758, region: "South", nicknames: ["The Sunshine State"], admittedYear: 1845, statehoodOrder: 27,
-    no1Rankings: ["No. 1 in Citrus and Orange Juice Production in the US", "No. 1 in Commercial Space Launches in the World (Kennedy Space Center / Cape Canaveral)", "No. 1 Cruise Passenger Capital in the World (PortMiami)"],
-    famousFor: { foods: ["Key Lime Pie", "Cuban Sandwiches", "Florida Orange Juice", "Stone Crab Claws"], landmarks: ["Walt Disney World Resort & Universal Orlando", "Kennedy Space Center", "Everglades National Park", "South Beach (Miami)", "Key West"], specialties: ["Tourism & Hospitality", "Space Exploration", "Citrus & Agriculture", "Aviation & Logistics"] },
-    symbols: { flower: "Orange Blossom", tree: "Sabal Palm", bird: "Mockingbird" }, centroid: [750, 620], bbox: [680, 560, 820, 680], neighbors: ["AL", "GA"], path: "M680 570 L760 570 L780 620 L800 670 L780 680 L760 620 L710 590 Z",
-  },
-  {
-    code: "GA", name: "Georgia", capital: "Atlanta", largestCity: "Atlanta", population: 11029227, areaKm2: 153909, areaSqMi: 59425, region: "South", nicknames: ["The Peach State", "Empire State of the South"], admittedYear: 1788, statehoodOrder: 4,
-    no1Rankings: ["No. 1 in Peanut, Pecan, and Broiler Chicken Production in the US", "Home to World's Busiest Airport by Passenger Traffic (Hartsfield-Jackson Atlanta International)", "No. 1 in Film & Television Production in the Eastern US ('Hollywood of the South')"],
-    famousFor: { foods: ["Georgia Peaches", "Southern Fried Chicken", "Pecan Pralines", "Vidalia Onions", "Brunswick Stew"], landmarks: ["World of Coca-Cola & Georgia Aquarium", "Martin Luther King Jr. National Historical Park", "Savannah Historic District", "Stone Mountain"], specialties: ["Global Corporate HQs (Coca-Cola, Delta, Home Depot, UPS)", "Film Production", "Logistics"] },
-    symbols: { flower: "Cherokee Rose", tree: "Live Oak", bird: "Brown Thrasher" }, centroid: [730, 530], bbox: [690, 480, 770, 580], neighbors: ["TN", "NC", "SC", "FL", "AL"], path: "M700 480 L760 490 L765 560 L730 580 L700 560 Z",
-  },
-  {
-    code: "HI", name: "Hawaii", capital: "Honolulu", largestCity: "Honolulu", population: 1435138, areaKm2: 28311, areaSqMi: 10931, region: "West", nicknames: ["The Aloha State"], admittedYear: 1959, statehoodOrder: 50,
-    no1Rankings: ["Only Island State in the US (137 islands archipelago)", "No. 1 in Macadamia Nut and Kona Coffee Cultivation in the US", "Only US State with Royal Palaces (Iolani Palace) and Tropical Rainforests"],
-    famousFor: { foods: ["Ahi Poke Bowls", "Loco Moco", "Kalua Pork", "Spam Musubi", "Shave Ice", "Kona Coffee"], landmarks: ["Waikiki Beach & Diamond Head", "Pearl Harbor & USS Arizona", "Hawaii Volcanoes National Park (Kilauea)", "Haleakala National Park", "Na Pali Coast"], specialties: ["Tourism & Hospitality", "Ocean Sports & Surfing", "Astronomy (Mauna Kea)"] },
-    symbols: { flower: "Yellow Hibiscus", tree: "Kukui", bird: "Nene (Hawaiian Goose)" }, centroid: [320, 740], bbox: [270, 700, 370, 780], neighbors: [], path: "M280 730 L310 720 L350 745 L360 770 L340 775 Z",
-  },
-  {
-    code: "ID", name: "Idaho", capital: "Boise", largestCity: "Boise", population: 1964726, areaKm2: 216443, areaSqMi: 83569, region: "West", nicknames: ["The Gem State", "Potato State"], admittedYear: 1890, statehoodOrder: 43,
-    no1Rankings: ["No. 1 in Potato Production in the US (Produces approx. one-third of all US potatoes - 'Famous Idaho Potatoes')", "No. 1 in Commercial Trout Aquaculture in the US (over 70%)"],
-    famousFor: { foods: ["Idaho Russet Baked Potatoes", "Finger Steaks", "Huckleberry Pie", "Ice Cream Potato"], landmarks: ["Shoshone Falls ('Niagara of the West')", "Sun Valley Ski Resort", "Craters of the Moon National Monument", "Hell's Canyon"], specialties: ["Potato Farming & Food Processing", "Micron Technology (Memory Chips)", "Silver & Gem Mining"] },
-    symbols: { flower: "Syringa", tree: "Western White Pine", bird: "Mountain Bluebird" }, centroid: [210, 230], bbox: [170, 150, 250, 310], neighbors: ["WA", "OR", "NV", "UT", "WY", "MT"], path: "M190 150 L220 150 L250 250 L230 310 L170 310 L180 230 Z",
-  },
-  {
-    code: "IL", name: "Illinois", capital: "Springfield", largestCity: "Chicago", population: 12549689, areaKm2: 149997, areaSqMi: 57914, region: "Midwest", nicknames: ["The Prairie State", "Land of Lincoln"], admittedYear: 1818, statehoodOrder: 21,
-    no1Rankings: ["No. 1 in Soybean Production in the US (over 650 Million bushels annually)", "No. 1 in Pumpkin Production in the US (Morton, IL produces 85% of canned pumpkin in the world)", "No. 1 Freight Rail Hub in North America (Chicago Rail Exchange)"],
-    famousFor: { foods: ["Chicago Deep Dish Pizza", "Chicago Hot Dogs", "Italian Beef Sandwiches", "Garrett Popcorn"], landmarks: ["Willis Tower (Sears Tower)", "Millennium Park & Cloud Gate ('The Bean')", "Navy Pier", "Abraham Lincoln Presidential Library", "Wrigley Field"], specialties: ["Financial Commodities Trading (CME)", "Manufacturing & Machinery", "Agriculture"] },
-    symbols: { flower: "Violet", tree: "White Oak", bird: "Cardinal" }, centroid: [590, 380], bbox: [560, 330, 620, 440], neighbors: ["WI", "IA", "MO", "KY", "IN"], path: "M570 330 L610 330 L615 410 L590 440 L565 400 Z",
-  },
-  {
-    code: "IN", name: "Indiana", capital: "Indianapolis", largestCity: "Indianapolis", population: 6862199, areaKm2: 94326, areaSqMi: 36420, region: "Midwest", nicknames: ["The Hoosier State", "Crossroads of America"], admittedYear: 1816, statehoodOrder: 19,
-    no1Rankings: ["No. 1 Largest Single-Day Sporting Event in the World (Indianapolis 500 / IndyCar at IMS)", "No. 1 in Steel Production in the United States (Northwest Indiana steel mills)", "No. 1 in Commercial Duck Production in the US"],
-    famousFor: { foods: ["Pork Tenderloin Sandwich (Giant)", "Sugar Cream Pie (Hoosier Pie)", "Sweet Corn"], landmarks: ["Indianapolis Motor Speedway", "Indiana Dunes National Park (Lake Michigan)", "Notre Dame Campus (South Bend)"], specialties: ["Motorsports Racing", "Steel Manufacturing", "Pharmaceuticals (Eli Lilly)", "Agriculture"] },
-    symbols: { flower: "Peony", tree: "Tulip Tree", bird: "Cardinal" }, centroid: [640, 380], bbox: [615, 330, 665, 430], neighbors: ["MI", "OH", "KY", "IL"], path: "M620 330 L660 330 L660 415 L630 430 L620 350 Z",
-  },
-  {
-    code: "IA", name: "Iowa", capital: "Des Moines", largestCity: "Des Moines", population: 3207004, areaKm2: 145746, areaSqMi: 56273, region: "Midwest", nicknames: ["The Hawkeye State", "Corn State"], admittedYear: 1846, statehoodOrder: 29,
-    no1Rankings: ["No. 1 in Corn (Maize) Production in the US (Produces approx. one-fifth of all US corn)", "No. 1 in Pork / Swine Production in the US (outnumbering people 7-to-1)", "No. 1 in Chicken Egg and Ethanol Production in the US"],
-    famousFor: { foods: ["Pork Chops on a Stick", "Maid-Rite Loose Meat Sandwiches", "Iowa Sweet Corn", "Dutch Letters Confectionery"], landmarks: ["Field of Dreams Movie Site (Dyersville)", "Iowa State Fair & Butter Cow", "Bridges of Madison County"], specialties: ["Corn & Soybean Farming", "Ethanol Renewable Fuels", "Agricultural Machinery", "Insurance"] },
-    symbols: { flower: "Wild Prairie Rose", tree: "Bur Oak", bird: "Eastern Goldfinch" }, centroid: [515, 340], bbox: [470, 310, 560, 380], neighbors: ["MN", "WI", "IL", "MO", "NE", "SD"], path: "M475 310 L555 310 L560 365 L525 380 L470 380 Z",
-  },
-  {
-    code: "KS", name: "Kansas", capital: "Topeka", largestCity: "Wichita", population: 2937150, areaKm2: 213100, areaSqMi: 82278, region: "Midwest", nicknames: ["The Sunflower State", "Wheat State"], admittedYear: 1861, statehoodOrder: 34,
-    no1Rankings: ["No. 1 in Wheat Production in the US ('Wheat Capital of the World')", "No. 1 in Commercial Aviation Aircraft Manufacturing (Wichita - 'Air Capital of the World': Cessna, Beechcraft)"],
-    famousFor: { foods: ["Kansas City Style BBQ Burnt Ends", "Bierocks (Meat Pastries)", "Kansas Wheat Bread"], landmarks: ["Monument Rocks (Chalk Pyramids)", "Cosmosphere & Space Center", "Tallgrass Prairie National Preserve", "Dodge City Historic Old West"], specialties: ["General Aviation Aircraft", "Wheat & Sorghum Agriculture", "Meat Packing Logistics"] },
-    symbols: { flower: "Wild Native Sunflower", tree: "Cottonwood", bird: "Western Meadowlark" }, centroid: [450, 400], bbox: [385, 365, 515, 435], neighbors: ["NE", "MO", "OK", "CO"], path: "M390 370 L510 370 L510 430 L390 430 Z",
-  },
-  {
-    code: "KY", name: "Kentucky", capital: "Frankfort", largestCity: "Louisville", population: 4526154, areaKm2: 104656, areaSqMi: 40408, region: "South", nicknames: ["The Bluegrass State"], admittedYear: 1792, statehoodOrder: 15,
-    no1Rankings: ["No. 1 in Bourbon Whiskey Production in the World (Produces 95% of the global bourbon supply)", "Home of the Kentucky Derby ('The Most Exciting Two Minutes in Sports')", "Home to the Longest Cave System in the World (Mammoth Cave National Park - 426+ miles mapped)"],
-    famousFor: { foods: ["Kentucky Bourbon", "Hot Brown Open-Faced Turkey Sandwich", "Kentucky Fried Chicken (KFC)", "Burgoo Stew", "Derby Pie"], landmarks: ["Churchill Downs & Kentucky Derby", "Mammoth Cave National Park (UNESCO)", "Red River Gorge", "Keeneland Race Course"], specialties: ["Bourbon Distilling", "Thoroughbred Horse Breeding", "Automotive Assembly", "Logistics (UPS Worldport)"] },
-    symbols: { flower: "Goldenrod", tree: "Tulip Poplar", bird: "Cardinal" }, centroid: [660, 425], bbox: [610, 400, 710, 460], neighbors: ["IL", "IN", "OH", "WV", "VA", "TN", "MO"], path: "M615 410 L700 405 L710 440 L630 455 Z",
-  },
-  {
-    code: "LA", name: "Louisiana", capital: "Baton Rouge", largestCity: "New Orleans", population: 4573749, areaKm2: 135659, areaSqMi: 52378, region: "South", nicknames: ["The Pelican State", "Sportsman's Paradise", "Creole State"], admittedYear: 1812, statehoodOrder: 18,
-    no1Rankings: ["Birthplace of Jazz Music (New Orleans / Congo Square & French Quarter)", "No. 1 in Crawfish (Crayfish) Aquaculture in the US (Produces over 90% of US crawfish)", "No. 1 in Domestic Port Tonnage in the Western Hemisphere (Port of South Louisiana)"],
-    famousFor: { foods: ["Gumbo & Jambalaya", "Beignets & Café au Lait (Café du Monde)", "Boiled Crawfish", "Po' Boy Sandwiches", "Muffuletta"], landmarks: ["French Quarter & Bourbon Street (New Orleans)", "Mardi Gras Celebrations", "Atchafalaya Basin & Swamps", "St. Louis Cathedral"], specialties: ["Creole & Cajun Culture", "Jazz & Blues Music Heritage", "Petrochemicals & Natural Gas", "Maritime Shipping"] },
-    symbols: { flower: "Magnolia", tree: "Bald Cypress", bird: "Brown Pelican" }, centroid: [570, 560], bbox: [530, 520, 610, 600], neighbors: ["TX", "AR", "MS"], path: "M540 520 L590 520 L585 550 L610 590 L570 600 L540 570 Z",
-  },
-  {
-    code: "ME", name: "Maine", capital: "Augusta", largestCity: "Portland", population: 1395722, areaKm2: 91633, areaSqMi: 35380, region: "Northeast", nicknames: ["The Pine Tree State", "Vacationland"], admittedYear: 1820, statehoodOrder: 23,
-    no1Rankings: ["No. 1 in Lobster Catch in the United States (Produces over 80% of all US lobster)", "No. 1 in Wild Blueberry Harvest in the World", "Easternmost US State and first place in the US to see the sunrise (Cadillac Mountain)"],
-    famousFor: { foods: ["Maine Lobster Roll", "Wild Maine Blueberry Pie", "Clam Chowder", "Whoopie Pies", "Moxie Soda"], landmarks: ["Acadia National Park & Cadillac Mountain", "Portland Head Light", "Mount Katahdin (Appalachian Trail terminus)", "Kennebunkport"], specialties: ["Lobster Fishing", "Wood Pulp & Forestry", "Shipbuilding (Bath Iron Works)", "Outdoor Gear (L.L. Bean)"] },
-    symbols: { flower: "White Pine Cone and Tassel", tree: "Eastern White Pine", bird: "Black-capped Chickadee" }, centroid: [860, 200], bbox: [835, 160, 890, 240], neighbors: ["NH"], path: "M840 210 L870 165 L890 200 L860 240 L840 230 Z",
-  },
-  {
-    code: "MD", name: "Maryland", capital: "Annapolis", largestCity: "Baltimore", population: 6180253, areaKm2: 32131, areaSqMi: 12406, region: "South", nicknames: ["Old Line State", "Free State"], admittedYear: 1788, statehoodOrder: 7,
-    no1Rankings: ["No. 1 in Blue Crab Harvest & Old Bay Seasoning (Chesapeake Bay)", "Birthplace of the US National Anthem ('The Star-Spangled Banner' by Francis Scott Key at Fort McHenry)"],
-    famousFor: { foods: ["Maryland Blue Crab Cakes", "Steamed Hard Crabs with Old Bay", "Smith Island Cake", "Pit Beef"], landmarks: ["Fort McHenry National Monument", "Chesapeake Bay & Bay Bridge", "U.S. Naval Academy (Annapolis)", "National Aquarium (Baltimore)"], specialties: ["Biomedical Research (NIH, FDA, Johns Hopkins)", "Cybersecurity & Defense", "Maritime Commerce"] },
-    symbols: { flower: "Black-eyed Susan", tree: "White Oak", bird: "Baltimore Oriole" }, centroid: [770, 360], bbox: [730, 340, 800, 380], neighbors: ["VA", "WV", "PA", "DE"], path: "M735 345 L795 345 L790 375 L750 375 Z",
-  },
-  {
-    code: "MA", name: "Massachusetts", capital: "Boston", largestCity: "Boston", population: 7001399, areaKm2: 27336, areaSqMi: 10554, region: "Northeast", nicknames: ["The Bay State", "The Spirit of America"], admittedYear: 1788, statehoodOrder: 6,
-    no1Rankings: ["No. 1 in Cranberry Production in the Eastern US (Cape Cod Bogs)", "No. 1 in Biotech & Life Sciences Research Density in the World (Cambridge / Kendall Square)", "Home to the Oldest Higher Education Institution in the US (Harvard University, founded 1636)"],
-    famousFor: { foods: ["New England Clam Chowder", "Boston Baked Beans", "Boston Cream Pie", "Lobster Rolls", "Fried Clams"], landmarks: ["Freedom Trail & Boston Common", "Fenway Park", "Cape Cod & Martha's Vineyard", "Plymouth Rock & Plimoth Patuxet", "Harvard University & MIT"], specialties: ["Higher Education & Academia", "Biotech & Pharmaceuticals", "Venture Capital", "Historic Heritage"] },
-    symbols: { flower: "Mayflower", tree: "American Elm", bird: "Black-capped Chickadee" }, centroid: [830, 260], bbox: [805, 245, 860, 275], neighbors: ["NH", "VT", "NY", "CT", "RI"], path: "M810 250 L855 250 L860 270 L825 270 Z",
-  },
-  {
-    code: "MI", name: "Michigan", capital: "Lansing", largestCity: "Detroit", population: 10037261, areaKm2: 250487, areaSqMi: 96714, region: "Midwest", nicknames: ["The Great Lakes State", "The Mitten State", "Motor City State"], admittedYear: 1837, statehoodOrder: 26,
-    no1Rankings: ["Bordered by 4 of the 5 Great Lakes (Longest freshwater coastline in the US - 3,288 miles)", "No. 1 in Tart Cherry Production in the US (Traverse City - 'Cherry Capital of the World')", "No. 1 Automotive Capital in the US (Detroit - Ford, GM, Chrysler)"],
-    famousFor: { foods: ["Detroit Style Deep Dish Pizza", "Coney Island Hot Dogs", "Pasty (Upper Peninsula)", "Traverse City Cherries", "Mackinac Island Fudge"], landmarks: ["Mackinac Island & Grand Hotel", "Sleeping Bear Dunes National Lakeshore", "Henry Ford Museum", "Pictured Rocks National Lakeshore"], specialties: ["Automotive Manufacturing & Mobility Tech", "Motown Music Heritage", "Great Lakes Freshwater Tourism"] },
-    symbols: { flower: "Apple Blossom", tree: "Eastern White Pine", bird: "American Robin" }, centroid: [660, 300], bbox: [620, 240, 700, 360], neighbors: ["WI", "IN", "OH"], path: "M630 250 L680 250 L690 330 L660 360 L640 330 Z",
-  },
-  {
-    code: "MN", name: "Minnesota", capital: "Saint Paul", largestCity: "Minneapolis", population: 5737915, areaKm2: 225163, areaSqMi: 86936, region: "Midwest", nicknames: ["Land of 10,000 Lakes", "The North Star State"], admittedYear: 1858, statehoodOrder: 32,
-    no1Rankings: ["Contains 11,842 Natural Freshwater Lakes (over 10 acres each)", "No. 1 in Turkey Production in the US", "Home to the Headwaters of the Mississippi River (Lake Itasca)"],
-    famousFor: { foods: ["Juicy Lucy (Cheese-Filled Burger)", "Tater Tot Hotdish", "Walleye Fish Fry", "Wild Rice Soup", "Nut Goodie"], landmarks: ["Mall of America (Largest mall in the US)", "Boundary Waters Canoe Area Wilderness", "Split Rock Lighthouse (Lake Superior)", "Minnehaha Falls"], specialties: ["Medical Technology & Healthcare (Mayo Clinic, Medtronic)", "Target & Best Buy Global HQs", "Mining (Iron Ore / Mesabi Range)"] },
-    symbols: { flower: "Pink and White Lady's Slipper", tree: "Red Pine", bird: "Common Loon" }, centroid: [500, 250], bbox: [460, 180, 545, 310], neighbors: ["ND", "SD", "IA", "WI"], path: "M470 190 L535 190 L545 280 L500 310 L470 310 Z",
-  },
-  {
-    code: "MS", name: "Mississippi", capital: "Jackson", largestCity: "Jackson", population: 2939690, areaKm2: 125438, areaSqMi: 48432, region: "South", nicknames: ["The Magnolia State", "Birthplace of America's Music"], admittedYear: 1817, statehoodOrder: 20,
-    no1Rankings: ["Birthplace of the Blues & Delta Blues (Dockery Farms / B.B. King)", "No. 1 in Farm-Raised Catfish Production in the US (over 55% of domestic supply)"],
-    famousFor: { foods: ["Fried Delta Catfish", "Mississippi Mud Pie", "Tamales (Delta Style)", "Comeback Sauce", "Fried Dill Pickles"], landmarks: ["Mississippi Delta Blues Trail", "Vicksburg National Military Park", "Natchez Trace Parkway", "Elvis Presley Birthplace (Tupelo)"], specialties: ["Blues Music & Literary Heritage (William Faulkner)", "Catfish Farming", "Shipbuilding (Ingalls)"] },
-    symbols: { flower: "Magnolia", tree: "Magnolia", bird: "Mockingbird" }, centroid: [610, 530], bbox: [580, 480, 640, 580], neighbors: ["TN", "AL", "LA", "AR"], path: "M585 485 L635 485 L635 570 L595 575 Z",
-  },
-  {
-    code: "MO", name: "Missouri", capital: "Jefferson City", largestCity: "Kansas City", population: 6196156, areaKm2: 180540, areaSqMi: 69707, region: "Midwest", nicknames: ["The Show-Me State", "Gateway to the West"], admittedYear: 1821, statehoodOrder: 24,
-    no1Rankings: ["Home to the Tallest Monument in the US (Gateway Arch in St. Louis - 630 ft / 192 m)", "No. 1 in Lime and Lead Production in the US"],
-    famousFor: { foods: ["Kansas City BBQ Burnt Ends", "St. Louis Style Thin Crust Pizza", "Toasted Ravioli", "Gooey Butter Cake", "Ted Drewes Frozen Custard"], landmarks: ["Gateway Arch National Park (St. Louis)", "Branson Live Entertainment District", "Mark Twain Boyhood Home (Hannibal)", "Lake of the Ozarks"], specialties: ["Agriculture & Seed Genetics (Bayer / Monsanto)", "Brewing Heritage (Anheuser-Busch)", "Aerospace (Boeing Defense)"] },
-    symbols: { flower: "White Hawthorn Blossom", tree: "Flowering Dogwood", bird: "Eastern Bluebird" }, centroid: [540, 420], bbox: [490, 380, 590, 470], neighbors: ["IA", "IL", "KY", "TN", "AR", "OK", "KS", "NE"], path: "M500 380 L575 380 L590 460 L505 460 Z",
-  },
-  {
-    code: "MT", name: "Montana", capital: "Helena", largestCity: "Billings", population: 1132812, areaKm2: 380831, areaSqMi: 147040, region: "West", nicknames: ["The Treasure State", "Big Sky Country"], admittedYear: 1889, statehoodOrder: 41,
-    no1Rankings: ["No. 1 in Grizzly Bear Population in the Contiguous 48 States", "Home to Glacier National Park ('Crown of the Continent')", "No. 1 in Lentil and Pulse Production in the US"],
-    famousFor: { foods: ["Huckleberry Pie & Ice Cream", "Bison Burgers", "Flathead Lake Cherries", "Pasty"], landmarks: ["Glacier National Park & Going-to-the-Sun Road", "Yellowstone National Park (Northern Entrances)", "Little Bighorn Battlefield", "Big Sky Ski Resort"], specialties: ["Wheat & Cattle Ranching", "Eco-Tourism & Wilderness Recreation", "Gold & Copper Mining Heritage"] },
-    symbols: { flower: "Bitterroot", tree: "Ponderosa Pine", bird: "Western Meadowlark" }, centroid: [290, 180], bbox: [220, 130, 360, 230], neighbors: ["ID", "WY", "SD", "ND"], path: "M220 140 L350 140 L350 220 L240 220 Z",
-  },
-  {
-    code: "NE", name: "Nebraska", capital: "Lincoln", largestCity: "Omaha", population: 1978379, areaKm2: 200330, areaSqMi: 77347, region: "Midwest", nicknames: ["The Cornhusker State", "Beef State"], admittedYear: 1867, statehoodOrder: 37,
-    no1Rankings: ["Only State in the US with a Unicameral (One-House) Nonpartisan Legislature", "No. 1 in Commercial Cattle Slaughter and Beef Processing Capacity in the US", "Home to Berkshire Hathaway (Warren Buffett) in Omaha"],
-    famousFor: { foods: ["Runza Sandwiches", "Nebraska Corn-Fed Beef Steaks", "Sweet Corn", "Raisin Pie"], landmarks: ["Chimney Rock National Historic Site", "Omaha's Henry Doorly Zoo (World-class)", "Scotts Bluff National Monument", "Sandhills Region"], specialties: ["Beef Cattle Ranching & Meatpacking", "Agricultural Equipment (Lindsay / Reinke)", "Rail Logistics (Union Pacific HQ)"] },
-    symbols: { flower: "Goldenrod", tree: "Cottonwood", bird: "Western Meadowlark" }, centroid: [430, 340], bbox: [360, 310, 500, 370], neighbors: ["SD", "IA", "MO", "KS", "CO", "WY"], path: "M365 315 L495 315 L495 365 L365 365 Z",
-  },
-  {
-    code: "NV", name: "Nevada", capital: "Carson City", largestCity: "Las Vegas", population: 3194176, areaKm2: 286380, areaSqMi: 110572, region: "West", nicknames: ["The Silver State", "Battle Born State"], admittedYear: 1864, statehoodOrder: 36,
-    no1Rankings: ["No. 1 in Gold and Silver Mining in the United States (Produces over 70% of US gold - top 5 in the world)", "Entertainment Capital of the World (Las Vegas Strip)"],
-    famousFor: { foods: ["Buffets of Las Vegas", "Basque Family-Style Dinners", "Shrimp Cocktail", "Prime Rib"], landmarks: ["Las Vegas Strip & Fountains of Bellagio", "Hoover Dam", "Lake Tahoe (Nevada Side)", "Valley of Fire State Park", "Red Rock Canyon"], specialties: ["Casino Gaming & Hospitality", "Gold Mining", "Solar & Geothermal Energy", "Gigafactory EV Battery Tech"] },
-    symbols: { flower: "Sagebrush", tree: "Single-leaf Pinyon", bird: "Mountain Bluebird" }, centroid: [160, 350], bbox: [120, 280, 200, 430], neighbors: ["OR", "ID", "UT", "AZ", "CA"], path: "M140 285 L190 285 L195 400 L160 425 L125 350 Z",
-  },
-  {
-    code: "NH", name: "New Hampshire", capital: "Concord", largestCity: "Manchester", population: 1402054, areaKm2: 24214, areaSqMi: 9349, region: "Northeast", nicknames: ["The Granite State"], admittedYear: 1788, statehoodOrder: 9,
-    no1Rankings: ["First-in-the-Nation Presidential Primary Election held every 4 years", "Home to Mount Washington (Recorded highest wind speed in the Western Hemisphere - 231 mph / 372 km/h)"],
-    famousFor: { foods: ["Maple Syrup & Maple Sugar", "Apple Cider Donuts", "New England Boiled Dinner", "Pumpkin Pie"], landmarks: ["Mount Washington & Cog Railway", "White Mountain National Forest & Kancamagus Highway", "Lake Winnipesaukee", "Flume Gorge"], specialties: ["Granite Quarrying", "High-Tech Manufacturing", "Eco-Tourism & Fall Foliage", "Zero State Sales Tax"] },
-    symbols: { flower: "Purple Lilac", tree: "White Birch", bird: "Purple Finch" }, centroid: [835, 230], bbox: [820, 200, 850, 260], neighbors: ["VT", "ME", "MA"], path: "M825 205 L845 205 L845 255 L825 255 Z",
-  },
-  {
-    code: "NJ", name: "New Jersey", capital: "Trenton", largestCity: "Newark", population: 9290841, areaKm2: 22591, areaSqMi: 8722, region: "Northeast", nicknames: ["The Garden State"], admittedYear: 1787, statehoodOrder: 3,
-    no1Rankings: ["No. 1 Highest Population Density of Any US State (approx. 1,260 people per sq mile)", "No. 1 in Pharmaceutical Research & Biopharma Corporate Density ('Medicine Chest of the World')"],
-    famousFor: { foods: ["Pork Roll (Taylor Ham) Egg & Cheese", "New Jersey Style Pizza & Tomato Pies", "Salt Water Taffy (Atlantic City)", "Disco Fries", "Sub Sandwiches"], landmarks: ["Atlantic City Boardwalk & Casinos", "Cape May Historic Victorian District", "Liberty State Park (View of Lady Liberty)", "Pine Barrens"], specialties: ["Pharmaceuticals (J&J, Merck)", "Chemical & Financial Tech", "Telecommunications (Bell Labs Heritage)"] },
-    symbols: { flower: "Common Meadow Violet", tree: "Red Oak", bird: "Eastern Goldfinch" }, centroid: [805, 320], bbox: [790, 295, 820, 345], neighbors: ["NY", "PA", "DE"], path: "M795 300 L815 300 L815 340 L795 340 Z",
-  },
-  {
-    code: "NM", name: "New Mexico", capital: "Santa Fe", largestCity: "Albuquerque", population: 2114371, areaKm2: 314917, areaSqMi: 121590, region: "West", nicknames: ["Land of Enchantment"], admittedYear: 1912, statehoodOrder: 47,
-    no1Rankings: ["No. 1 in Hatch Green Chile and Red Chile Production in the US ('Red or Green?')", "Oldest State Capital in the United States (Santa Fe, founded 1610)", "No. 1 Largest Hot Air Balloon Festival in the World (Albuquerque International Balloon Fiesta)"],
-    famousFor: { foods: ["New Mexican Green Chile Cheeseburgers", "Enchiladas with Red and Green Chile (Christmas Style)", "Sopapillas with Honey", "Carne Adovada"], landmarks: ["Carlsbad Caverns National Park (UNESCO)", "White Sands National Park", "Santa Fe Plaza & Adobe Architecture", "Taos Pueblo (UNESCO)"], specialties: ["Nuclear & Space Physics (Los Alamos / Sandia National Labs)", "Native American Pottery & Silver Jewelry", "Astronomy & VLA Telescope"] },
-    symbols: { flower: "Yucca Flower", tree: "Pinyon Pine", bird: "Roadrunner" }, centroid: [280, 480], bbox: [230, 420, 330, 540], neighbors: ["AZ", "UT", "CO", "OK", "TX"], path: "M240 420 L320 420 L320 535 L240 535 Z",
-  },
-  {
-    code: "NY", name: "New York", capital: "Albany", largestCity: "New York City", population: 19571216, areaKm2: 141300, areaSqMi: 54556, region: "Northeast", nicknames: ["The Empire State"], admittedYear: 1788, statehoodOrder: 11,
-    no1Rankings: ["No. 1 Global Financial Capital (New York Stock Exchange / Wall Street)", "No. 1 Most Populous City in the United States (New York City - 8.3+ Million residents)", "No. 1 in Yogurt and Cottage Cheese Production in the US"],
-    famousFor: { foods: ["New York Style Pizza", "New York Bagels & Lox", "Pastrami on Rye", "Buffalo Wings", "New York Cheesecake"], landmarks: ["Statue of Liberty & Ellis Island", "Times Square & Central Park", "Empire State Building", "Niagara Falls", "Brooklyn Bridge", "Broadway"], specialties: ["Finance & Banking", "Media & Publishing", "Fashion & Arts", "Higher Education"] },
-    symbols: { flower: "Rose", tree: "Sugar Maple", bird: "Eastern Bluebird" }, centroid: [780, 260], bbox: [720, 210, 830, 310], neighbors: ["VT", "MA", "CT", "NJ", "PA"], path: "M730 240 L790 210 L825 240 L810 300 L750 280 Z",
-  },
-  {
-    code: "NC", name: "North Carolina", capital: "Raleigh", largestCity: "Charlotte", population: 10835491, areaKm2: 139391, areaSqMi: 53819, region: "South", nicknames: ["The Tar Heel State", "First in Flight"], admittedYear: 1789, statehoodOrder: 12,
-    no1Rankings: ["Site of the First Controlled Powered Airplane Flight in History (Wright Brothers at Kitty Hawk, 1903)", "No. 1 in Sweet Potato Production in the US (over 60% of domestic crop)", "No. 1 in Tobacco and Furniture Manufacturing in the US"],
-    famousFor: { foods: ["Carolina Pulled Pork BBQ (Vinegar / Lexington style)", "Krispy Kreme Doughnuts (Origin)", "Cheerwine Soda", "Calabash Seafood", "Moravian Cookies"], landmarks: ["Biltmore Estate (America's Largest Private Home)", "Blue Ridge Parkway & Great Smoky Mountains", "Cape Hatteras & Outer Banks", "Research Triangle Park"], specialties: ["Research Triangle Tech & Biotech", "Banking & Finance (Charlotte)", "Textiles & Furniture"] },
-    symbols: { flower: "Flowering Dogwood", tree: "Pine", bird: "Cardinal" }, centroid: [750, 460], bbox: [680, 430, 810, 490], neighbors: ["VA", "TN", "GA", "SC"], path: "M690 440 L800 440 L780 480 L700 480 Z",
-  },
-  {
-    code: "ND", name: "North Dakota", capital: "Bismarck", largestCity: "Fargo", population: 783926, areaKm2: 183108, areaSqMi: 70698, region: "Midwest", nicknames: ["Peace Garden State", "Roughrider State"], admittedYear: 1889, statehoodOrder: 39,
-    no1Rankings: ["No. 1 in Spring Wheat, Durum, Canola, Flaxseed, and Honey Production in the US", "No. 2 in Crude Oil Production in the US (Bakken Shale Formation)"],
-    famousFor: { foods: ["Knoephla Soup", "Lefse", "Chippers (Chocolate-covered potato chips)", "Kuchen (Official State Dessert)"], landmarks: ["Theodore Roosevelt National Park (Badlands)", "International Peace Garden", "Enchanted Highway (Giant Metal Sculptures)"], specialties: ["Bakken Shale Oil & Natural Gas", "Wheat & Canola Agriculture", "Heavy Equipment (Bobcat)"] },
-    symbols: { flower: "Wild Prairie Rose", tree: "American Elm", bird: "Western Meadowlark" }, centroid: [400, 180], bbox: [350, 140, 460, 220], neighbors: ["MT", "SD", "MN"], path: "M355 145 L455 145 L455 215 L355 215 Z",
-  },
-  {
-    code: "OH", name: "Ohio", capital: "Columbus", largestCity: "Columbus", population: 11785935, areaKm2: 116096, areaSqMi: 44825, region: "Midwest", nicknames: ["The Buckeye State", "Birthplace of Aviation"], admittedYear: 1803, statehoodOrder: 17,
-    no1Rankings: ["Birthplace of Aviation Pioneers (Orville & Wilbur Wright, John Glenn, Neil Armstrong)", "Home to the Rock and Roll Hall of Fame (Cleveland)", "No. 1 in Swiss Cheese and Tomato Processing in the US"],
-    famousFor: { foods: ["Cincinnati Chili (Skyline 3-Way on Spaghetti)", "Buckeye Candy (Peanut Butter in Chocolate)", "Kielbasa & Polish Boys", "Shaker Sugar Pie"], landmarks: ["Rock and Roll Hall of Fame (Cleveland)", "Pro Football Hall of Fame (Canton)", "Cedar Point ('Roller Coaster Capital of the World')", "National Museum of the U.S. Air Force"], specialties: ["Advanced Manufacturing & Robotics", "Polymer & Rubber Research (Akron)", "Healthcare (Cleveland Clinic)"] },
-    symbols: { flower: "Scarlet Carnation", tree: "Ohio Buckeye", bird: "Cardinal" }, centroid: [680, 370], bbox: [650, 330, 715, 410], neighbors: ["MI", "PA", "WV", "KY", "IN"], path: "M660 330 L710 330 L710 390 L675 410 L660 380 Z",
-  },
-  {
-    code: "OK", name: "Oklahoma", capital: "Oklahoma City", largestCity: "Oklahoma City", population: 4053824, areaKm2: 181037, areaSqMi: 69899, region: "South", nicknames: ["The Sooner State"], admittedYear: 1907, statehoodOrder: 46,
-    no1Rankings: ["No. 1 in Native American Tribal Sovereign Nations (Headquarters of 39 federally recognized tribes)", "Home to the National Cowboy & Western Heritage Museum"],
-    famousFor: { foods: ["Chicken Fried Steak", "Oklahoma Fried Onion Burgers", "Fried Okra", "Barbecue Ribs"], landmarks: ["Oklahoma City National Memorial", "Route 66 Historic Corridor", "Wichita Mountains Wildlife Refuge", "First Americans Museum"], specialties: ["Energy & Oil/Gas", "Aviation & Aerospace Maintenance", "Native American Cultural Tourism"] },
-    symbols: { flower: "Oklahoma Rose", tree: "Redbud", bird: "Scissor-tailed Flycatcher" }, centroid: [460, 460], bbox: [380, 430, 530, 500], neighbors: ["KS", "MO", "AR", "TX", "NM", "CO"], path: "M390 435 L525 435 L525 495 L440 495 L440 465 L390 465 Z",
-  },
-  {
-    code: "OR", name: "Oregon", capital: "Salem", largestCity: "Portland", population: 4233358, areaKm2: 254799, areaSqMi: 98379, region: "West", nicknames: ["The Beaver State"], admittedYear: 1859, statehoodOrder: 33,
-    no1Rankings: ["No. 1 in Hazelnut (Filbert) Production in the US (Produces 99% of the domestic hazelnut crop)", "No. 1 in Marionberry and Dungeness Crab Harvest", "Home to the Deepest Lake in the United States (Crater Lake - 1,943 ft / 592 m deep)"],
-    famousFor: { foods: ["Oregon Hazelnuts", "Marionberry Pie", "Tillamook Cheddar Cheese & Ice Cream", "Pinot Noir Wine (Willamette Valley)", "Dungeness Crab"], landmarks: ["Crater Lake National Park (Deepest US lake)", "Columbia River Gorge & Multnomah Falls", "Cannon Beach & Haystack Rock", "Mount Hood"], specialties: ["Footwear & Sportswear (Nike Global HQ, Columbia)", "Silicon Forest Semiconductors (Intel)", "Pinot Noir Wine & Craft Breweries"] },
-    symbols: { flower: "Oregon Grape", tree: "Douglas Fir", bird: "Western Meadowlark" }, centroid: [120, 220], bbox: [70, 180, 180, 270], neighbors: ["WA", "ID", "NV", "CA"], path: "M75 190 L170 190 L170 265 L85 265 Z",
-  },
-  {
-    code: "PA", name: "Pennsylvania", capital: "Harrisburg", largestCity: "Philadelphia", population: 12972008, areaKm2: 119280, areaSqMi: 46054, region: "Northeast", nicknames: ["The Keystone State", "Quaker State"], admittedYear: 1787, statehoodOrder: 2,
-    no1Rankings: ["Birthplace of the United States (Declaration of Independence & US Constitution signed at Independence Hall in 1776/1787)", "No. 1 in Mushroom Cultivation in the US (Kennett Square produces over 60% of US mushrooms - 'Mushroom Capital of the World')", "No. 1 in Potato Chip and Pretzel Manufacturing in the US"],
-    famousFor: { foods: ["Philly Cheesesteaks (Pat's / Geno's)", "Soft Pretzels with Mustard", "Hershey's Chocolate", "Shoofly Pie (Amish)", "Hoagies", "Scrapple"], landmarks: ["Independence Hall & Liberty Bell (Philadelphia)", "Gettysburg National Military Park", "Fallingwater (Frank Lloyd Wright UNESCO)", "Hersheypark"], specialties: ["Steel & Industrial Heritage", "Pharmaceuticals & Biotechnology", "Higher Education (Penn, Carnegie Mellon, Penn State)", "Confectionery"] },
-    symbols: { flower: "Mountain Laurel", tree: "Eastern Hemlock", bird: "Ruffed Grouse" }, centroid: [750, 320], bbox: [700, 290, 800, 350], neighbors: ["NY", "NJ", "DE", "MD", "WV", "OH"], path: "M705 295 L790 295 L790 345 L705 345 Z",
-  },
-  {
-    code: "RI", name: "Rhode Island", capital: "Providence", largestCity: "Providence", population: 1095962, areaKm2: 4001, areaSqMi: 1545, region: "Northeast", nicknames: ["The Ocean State", "Little Rhody"], admittedYear: 1790, statehoodOrder: 13,
-    no1Rankings: ["Smallest US State by Land Area (1,545 sq miles / 4,001 km² - 3% of which is Narragansett Bay)", "First US Colony to Declare Independence from Great Britain (May 4, 1776)"],
-    famousFor: { foods: ["Rhode Island Clam Chowder (Clear Broth)", "Stuffies (Stuffed Clams)", "Coffee Milk (Official State Drink)", "Doughboys", "Johnnycakes"], landmarks: ["Newport Gilded Age Mansions (The Breakers)", "Cliff Walk (Newport)", "WaterFire (Providence)", "Block Island Beaches"], specialties: ["Jewelry & Silverware Design (RISD)", "Marine & Yacht Building", "Oceanographic Research"] },
-    symbols: { flower: "Violet", tree: "Red Maple", bird: "Rhode Island Red" }, centroid: [848, 275], bbox: [840, 265, 856, 285], neighbors: ["CT", "MA"], path: "M842 268 L854 268 L854 282 L842 282 Z",
-  },
-  {
-    code: "SC", name: "South Carolina", capital: "Columbia", largestCity: "Charleston", population: 5373555, areaKm2: 82933, areaSqMi: 32020, region: "South", nicknames: ["The Palmetto State"], admittedYear: 1788, statehoodOrder: 8,
-    no1Rankings: ["Site of the First Battle of the American Civil War (Fort Sumter in Charleston Harbor, 1861)", "No. 2 in Peach Production in the US ('The Tastier Peach')", "Only Commercial Tea Garden in North America (Charleston Tea Garden)"],
-    famousFor: { foods: ["Shrimp and Grits", "Lowcountry Boil (Frogmore Stew)", "Carolina Gold Rice", "She-Crab Soup", "Mustard-Base BBQ Sauce"], landmarks: ["Historic Charleston Historic District & Rainbow Row", "Fort Sumter National Monument", "Myrtle Beach Grand Strand", "Hilton Head Island"], specialties: ["Automotive (BMW Spartanburg)", "Aerospace (Boeing 787 Dreamliner)", "Tourism & Golf (Hilton Head)"] },
-    symbols: { flower: "Yellow Jessamine", tree: "Sabal Palmetto", bird: "Carolina Wren" }, centroid: [750, 500], bbox: [720, 480, 780, 530], neighbors: ["NC", "GA"], path: "M725 485 L775 485 L765 525 L730 525 Z",
-  },
-  {
-    code: "SD", name: "South Dakota", capital: "Pierre", largestCity: "Sioux Falls", population: 919318, areaKm2: 199729, areaSqMi: 77116, region: "Midwest", nicknames: ["The Mount Rushmore State"], admittedYear: 1889, statehoodOrder: 40,
-    no1Rankings: ["Home to Mount Rushmore National Memorial (Carved granite faces of Washington, Jefferson, Roosevelt, Lincoln)", "No. 1 in Pheasant Population and Hunting in the US"],
-    famousFor: { foods: ["Chislic (Fried Cubed Red Meat on Skewers)", "Kuchen", "Fry Bread", "Bison Burgers"], landmarks: ["Mount Rushmore National Memorial", "Badlands National Park", "Crazy Horse Memorial", "Deadwood Historic Gold Town", "Custer State Park"], specialties: ["Agriculture & Cattle Ranching", "Credit Card Banking & Financial Services", "Tourism"] },
-    symbols: { flower: "American Pasque Flower", tree: "Black Hills Spruce", bird: "Ring-necked Pheasant" }, centroid: [400, 260], bbox: [350, 220, 460, 300], neighbors: ["ND", "MN", "IA", "NE", "WY", "MT"], path: "M355 225 L455 225 L455 295 L355 295 Z",
-  },
-  {
-    code: "TN", name: "Tennessee", capital: "Nashville", largestCity: "Nashville", population: 7126489, areaKm2: 109153, areaSqMi: 42144, region: "South", nicknames: ["The Volunteer State", "Music City State"], admittedYear: 1796, statehoodOrder: 16,
-    no1Rankings: ["Global Capital of Country & Western Music (Nashville - 'Music City' / Grand Ole Opry)", "Home to the Most Visited National Park in the US (Great Smoky Mountains National Park - 12+ Million annual visitors)", "No. 1 in Tennessee Whiskey Production (Jack Daniel's - World's Best Selling Whiskey)"],
-    famousFor: { foods: ["Nashville Hot Chicken", "Memphis Style Dry-Rub Ribs", "Tennessee Whiskey (Jack Daniel's)", "GooGoo Clusters", "Biscuits and Country Gravy"], landmarks: ["Grand Ole Opry & Ryman Auditorium", "Graceland (Home of Elvis Presley in Memphis)", "Great Smoky Mountains National Park", "Dollywood"], specialties: ["Music Publishing & Recording", "Automotive Assembly (Nissan, GM, Volkswagen)", "Logistics (FedEx Global SuperHub in Memphis)"] },
-    symbols: { flower: "Iris", tree: "Tulip Poplar", bird: "Mockingbird" }, centroid: [660, 470], bbox: [600, 450, 720, 490], neighbors: ["KY", "VA", "NC", "GA", "AL", "MS", "AR", "MO"], path: "M605 455 L715 455 L705 485 L605 485 Z",
-  },
-  {
-    code: "TX", name: "Texas", capital: "Austin", largestCity: "Houston", population: 30503301, areaKm2: 695662, areaSqMi: 268596, region: "South", nicknames: ["The Lone Star State"], admittedYear: 1845, statehoodOrder: 28,
-    no1Rankings: ["No. 1 in Crude Oil and Natural Gas Production in the US (Produces over 40% of national oil supply)", "No. 1 in Wind Power Energy Generation in the US", "No. 1 in Cattle and Beef Production in the US (12+ Million head)", "No. 1 in Cotton and Wool Production in the US"],
-    famousFor: { foods: ["Texas Smoked Brisket BBQ", "Tex-Mex Fajitas & Queso", "Chicken Fried Steak", "Texas Chili Con Carne", "Pecan Pie"], landmarks: ["The Alamo (San Antonio)", "NASA Johnson Space Center (Houston)", "San Antonio River Walk", "Big Bend National Park", "Texas State Capitol (Austin)"], specialties: ["Energy & Petrochemicals", "High-Tech 'Silicon Hills' (Tesla, Dell, AMD, Oracle)", "Aerospace & Defense", "Cattle Ranching"] },
-    symbols: { flower: "Bluebonnet", tree: "Pecan", bird: "Mockingbird" }, centroid: [460, 520], bbox: [360, 440, 560, 600], neighbors: ["NM", "OK", "AR", "LA"], path: "M400 440 L490 440 L530 500 L540 570 L480 600 L420 560 L380 500 Z",
-  },
-  {
-    code: "UT", name: "Utah", capital: "Salt Lake City", largestCity: "Salt Lake City", population: 3417734, areaKm2: 219882, areaSqMi: 84897, region: "West", nicknames: ["The Beehive State"], admittedYear: 1896, statehoodOrder: 45,
-    no1Rankings: ["Home to the 'Mighty 5' National Parks (Zion, Bryce Canyon, Arches, Canyonlands, Capitol Reef)", "No. 1 Greatest Snow on Earth for Skiing (Dry powder snow density)", "No. 1 Highest Birth Rate and Youngest Median Age in the US"],
-    famousFor: { foods: ["Funeral Potatoes", "Utah Fry Sauce", "Pastrami Burgers (Crown Burgers)", "Green Jell-O Dishes", "Honey Candies"], landmarks: ["Zion National Park & Angels Landing", "Arches National Park (Delicate Arch)", "Bryce Canyon Amphitheater (Hoodoos)", "Great Salt Lake & Bonneville Salt Flats", "Monument Valley"], specialties: ["Outdoor Tourism & Skiing (Park City)", "High-Tech 'Silicon Slopes'", "Life Sciences & Medical Devices"] },
-    symbols: { flower: "Sego Lily", tree: "Quaking Aspen", bird: "California Gull" }, centroid: [230, 350], bbox: [195, 290, 275, 410], neighbors: ["ID", "WY", "CO", "AZ", "NV"], path: "M205 295 L265 295 L265 405 L205 405 Z",
-  },
-  {
-    code: "VT", name: "Vermont", capital: "Montpelier", largestCity: "Burlington", population: 647464, areaKm2: 24906, areaSqMi: 9616, region: "Northeast", nicknames: ["The Green Mountain State"], admittedYear: 1791, statehoodOrder: 14,
-    no1Rankings: ["No. 1 Maple Syrup Producer in the US (Produces over 50% of the entire US maple syrup supply)", "Smallest State Capital by Population in the US (Montpelier - pop. approx. 8,000)"],
-    famousFor: { foods: ["Vermont Pure Maple Syrup", "Ben & Jerry's Ice Cream (Origin)", "Cabot Cheddar Cheese", "Maple Creemee (Soft Serve)", "Apple Pie with Cheddar"], landmarks: ["Green Mountain National Forest", "Stowe Mountain Ski Resort", "Lake Champlain", "Shelburne Museum", "Ben & Jerry's Waterbury Factory"], specialties: ["Maple Syrup Farming", "Artisanal Dairy & Cheesemaking", "Eco-Tourism & Skiing", "Craft Breweries (Heady Topper)"] },
-    symbols: { flower: "Red Clover", tree: "Sugar Maple", bird: "Hermit Thrush" }, centroid: [815, 220], bbox: [800, 190, 830, 250], neighbors: ["NY", "NH", "MA"], path: "M805 195 L825 195 L825 245 L805 245 Z",
-  },
-  {
-    code: "VA", name: "Virginia", capital: "Richmond", largestCity: "Virginia Beach", population: 8715698, areaKm2: 110787, areaSqMi: 42775, region: "South", nicknames: ["Old Dominion", "Mother of Presidents"], admittedYear: 1788, statehoodOrder: 10,
-    no1Rankings: ["Birthplace of 8 US Presidents (Most of any state - George Washington, Thomas Jefferson, James Madison, James Monroe, etc.)", "World's Largest Naval Base (Naval Station Norfolk)", "No. 1 Data Center Alley in the World (Northern Virginia carries 70% of global internet traffic)"],
-    famousFor: { foods: ["Virginia Country Cured Ham (Smithfield)", "Chesapeake Bay Oysters", "Brunswick Stew", "Peanut Soup", "Apple Butter"], landmarks: ["Colonial Williamsburg", "Monticello (Thomas Jefferson's Estate)", "Shenandoah National Park & Skyline Drive", "Mount Vernon", "Arlington National Cemetery"], specialties: ["Defense & Intelligence (The Pentagon)", "Cloud Computing & Data Centers (AWS / Ashburn)", "Naval Shipbuilding (Newport News)"] },
-    symbols: { flower: "American Dogwood", tree: "American Dogwood", bird: "Cardinal" }, centroid: [750, 400], bbox: [700, 370, 790, 430], neighbors: ["MD", "NC", "TN", "KY", "WV"], path: "M710 380 L785 380 L765 425 L710 425 Z",
-  },
-  {
-    code: "WA", name: "Washington", capital: "Olympia", largestCity: "Seattle", population: 7812880, areaKm2: 184661, areaSqMi: 71298, region: "West", nicknames: ["The Evergreen State"], admittedYear: 1889, statehoodOrder: 42,
-    no1Rankings: ["No. 1 in Apple Production in the US (Produces over 60% of all US apples in Yakima/Wenatchee)", "No. 1 in Sweet Cherry and Pear Production in the US", "No. 1 in Hops Production in the US (Yakima Valley supplies 75% of US hops)", "No. 1 in Hydroelectric Power Generation in the US (Grand Coulee Dam)"],
-    famousFor: { foods: ["Cedar Plank Wild Salmon", "Dungeness Crab", "Geoduck Clams", "Washington Apples & Rainier Cherries", "Specialty Espresso Coffee"], landmarks: ["Space Needle & Pike Place Market (Seattle)", "Mount Rainier National Park (14,411 ft)", "Olympic National Park & Hoh Rain Forest", "San Juan Islands"], specialties: ["Cloud Computing & High-Tech (Microsoft, Amazon)", "Commercial Aviation (Boeing)", "Coffee Culture (Starbucks)", "Wine & Hops"] },
-    symbols: { flower: "Coast Rhododendron", tree: "Western Hemlock", bird: "Willow Goldfinch" }, centroid: [140, 160], bbox: [100, 120, 190, 200], neighbors: ["ID", "OR"], path: "M110 130 L185 130 L185 190 L120 190 L105 150 Z",
-  },
-  {
-    code: "WV", name: "West Virginia", capital: "Charleston", largestCity: "Charleston", population: 1770071, areaKm2: 62756, areaSqMi: 24230, region: "South", nicknames: ["The Mountain State"], admittedYear: 1863, statehoodOrder: 35,
-    no1Rankings: ["Entire State Situated within the Appalachian Mountain Range (Average elevation 1,500 ft)", "Home to the New River Gorge (America's Newest National Park & Longest Steel Arch Bridge in the Western Hemisphere)"],
-    famousFor: { foods: ["Pepperoni Rolls (Official State Food)", "Buckwheat Cakes", "Ramps (Wild Mountain Leeks)", "Apple Butter"], landmarks: ["New River Gorge National Park & Bridge", "The Greenbrier Resort & Cold War Bunker", "Blackwater Falls State Park", "Harpers Ferry National Historical Park"], specialties: ["Whitewater Rafting & Mountain Sports", "Coal & Natural Gas Energy", "Glassmaking Heritage"] },
-    symbols: { flower: "Rhododendron", tree: "Sugar Maple", bird: "Cardinal" }, centroid: [720, 390], bbox: [690, 365, 745, 420], neighbors: ["PA", "MD", "VA", "KY", "OH"], path: "M700 370 L740 370 L735 415 L695 415 Z",
-  },
-  {
-    code: "WI", name: "Wisconsin", capital: "Madison", largestCity: "Milwaukee", population: 5910955, areaKm2: 169635, areaSqMi: 65496, region: "Midwest", nicknames: ["America's Dairyland", "The Badger State"], admittedYear: 1848, statehoodOrder: 30,
-    no1Rankings: ["No. 1 in Cheese Production in the US (Produces over 25% of all US cheese and holds more Master Cheesemakers than any other state)", "No. 1 in Cranberry Production in the World (over 60% of total world supply)", "No. 1 in Ginseng Cultivation in the US (Wausau - over 95%)"],
-    famousFor: { foods: ["Wisconsin Cheese Curds (Deep-Fried & Fresh Squeaky)", "Bratwurst simmered in Beer", "Frozen Custard", "Friday Night Fish Fry", "Kringle Pastry"], landmarks: ["Apostle Islands National Lakeshore & Sea Caves", "Lambeau Field (Green Bay Packers)", "Wisconsin Dells ('Waterpark Capital of the World')", "Taliesin (Frank Lloyd Wright UNESCO)"], specialties: ["Dairy Farming & Master Cheesemaking", "Paper Manufacturing", "Brewing Heritage (Miller/Schlitz)", "Harley-Davidson Motorcycles"] },
-    symbols: { flower: "Wood Violet", tree: "Sugar Maple", bird: "American Robin" }, centroid: [570, 270], bbox: [535, 230, 605, 330], neighbors: ["MN", "MI", "IL", "IA"], path: "M545 235 L595 235 L600 325 L555 325 Z",
-  },
-  {
-    code: "WY", name: "Wyoming", capital: "Cheyenne", largestCity: "Cheyenne", population: 584057, areaKm2: 253335, areaSqMi: 97813, region: "West", nicknames: ["The Equality State", "Cowboy State"], admittedYear: 1890, statehoodOrder: 44,
-    no1Rankings: ["Home to the World's First National Park (Yellowstone National Park, established 1872)", "Home to the First National Monument in the US (Devils Tower, 1906)", "First State in the US to Grant Women the Right to Vote and Hold Public Office (1869)", "Lowest Population of Any US State (approx. 584,000 residents)"],
-    famousFor: { foods: ["Bison & Elk Steaks", "Chokecherry Jelly", "Chicken Fried Steak", "Trout"], landmarks: ["Yellowstone National Park (Old Faithful & Grand Prismatic)", "Grand Teton National Park & Jackson Hole", "Devils Tower National Monument", "Flaming Gorge"], specialties: ["Coal & Trona Soda Ash Mining", "Cattle Ranching & Cowboy Culture", "Wilderness Tourism & Skiing"] },
-    symbols: { flower: "Indian Paintbrush", tree: "Plains Cottonwood", bird: "Western Meadowlark" }, centroid: [310, 280], bbox: [250, 240, 360, 320], neighbors: ["MT", "SD", "NE", "CO", "UT", "ID"], path: "M260 245 L350 245 L350 315 L260 315 Z",
-  },
-  {
-    code: "DC", name: "District of Columbia", capital: "Washington", largestCity: "Washington", population: 678972, areaKm2: 177, areaSqMi: 68, region: "South", nicknames: ["The Nation's Capital", "Federal City"], admittedYear: 1790, statehoodOrder: 0,
-    no1Rankings: ["Seat of the Federal Government of the United States", "Home to the Smithsonian Institution (World's Largest Museum, Education, and Research Complex - 21 museums with free admission)"],
-    famousFor: { foods: ["Half-Smoke Sausage with Chili (Ben's Chili Bowl)", "Mumbo Sauce", "Crab Cakes", "Pupusas"], landmarks: ["The White House", "United States Capitol", "Lincoln Memorial & Washington Monument", "National Mall", "Smithsonian Museums"], specialties: ["Federal Government & Governance", "International Diplomacy & Embassies", "Think Tanks & Global Policy"] },
-    symbols: { flower: "American Beauty Rose", tree: "Scarlet Oak", bird: "Wood Thrush" }, centroid: [772, 365], bbox: [768, 361, 776, 369], neighbors: ["MD", "VA"], path: "M769 362 L775 362 L775 368 L769 368 Z",
-  },
-];
+/** The canvas Japan uses, so every board shares one coordinate space. */
+const WIDTH = 1000;
+const HEIGHT = 620;
+
+/** Two decimals holds well under a pixel at this size and keeps the file small. */
+const PRECISION = 2;
+
+function round(value) {
+  const factor = 10 ** PRECISION;
+  return Math.round(value * factor) / factor;
+}
+
+/** Trim the coordinate noise d3 emits without changing what is drawn. */
+function tidyPath(d) {
+  return d.replace(/-?\d+\.?\d*/g, (match) => String(round(Number(match))));
+}
 
 async function main() {
-  const metaPayload = {
-    updatedAt: new Date().toISOString(),
-    standard: "United States Census Bureau & Official State Tourism Data",
+  const response = await fetch(SOURCE);
+  if (!response.ok) {
+    throw new Error(`Could not fetch us-atlas: ${response.status}`);
+  }
+  const topology = await response.json();
+  const states = feature(topology, topology.objects.states);
+
+  // Fit the projection to the canvas so the drawing fills it without distortion.
+  const projection = geoAlbersUsa().fitSize([WIDTH, HEIGHT], states);
+  const draw = geoPath(projection);
+
+  const adjacency = topoNeighbors(topology.objects.states.geometries);
+  const existingMeta = await readExistingMeta();
+
+  /*
+   * us-atlas ships the territories too - American Samoa, Guam, the Virgin
+   * Islands - and Albers USA deliberately projects none of them, returning no
+   * path at all. The game models the fifty states and the District of
+   * Columbia, which is what the meta file lists, so that is the filter.
+   */
+  const regions = states.features.flatMap((state, index) => {
+    const code = postalCodeFor(state, existingMeta);
+    if (!code) return [];
+
+    const d = draw(state);
+    if (!d) {
+      console.warn(`Skipping ${state.properties?.name}: outside the Albers USA projection.`);
+      return [];
+    }
+
+    const [[minX, minY], [maxX, maxY]] = draw.bounds(state);
+    const [cx, cy] = draw.centroid(state);
+
+    return [{
+      code,
+      name: state.properties?.name ?? code,
+      path: tidyPath(d),
+      bbox: [round(minX), round(minY), round(maxX), round(maxY)],
+      centroid: [round(cx), round(cy)],
+      neighbors: adjacency[index]
+        .map((neighborIndex) => postalCodeFor(states.features[neighborIndex], existingMeta))
+        .filter(Boolean)
+        .sort(),
+    }];
+  });
+
+  regions.sort((left, right) => left.code.localeCompare(right.code));
+
+  const payload = {
+    source: `${SOURCE} (US Census Bureau via us-atlas), Albers USA, fitted to ${WIDTH}x${HEIGHT}`,
     country: "US",
     countryName: "United States",
-    divisionTypeName: "State / District",
-    totalRegions: ALL_50_STATES_AND_DC.length,
-    regions: ALL_50_STATES_AND_DC,
-  };
-
-  const mapPayload = {
-    source: "US Census Bureau TIGER/Line Administrative Boundaries",
-    country: "US",
-    viewBox: "0 0 1000 800",
-    width: 1000,
-    height: 800,
-    totalRegions: ALL_50_STATES_AND_DC.length,
-    regions: ALL_50_STATES_AND_DC.map((s) => ({
-      code: s.code,
-      name: s.name,
-      capital: s.capital,
-      region: s.region,
-      path: s.path,
-      centroid: s.centroid,
-      bbox: s.bbox,
-      neighbors: s.neighbors,
-    })),
+    divisionTypeName: "State",
+    viewBox: `0 0 ${WIDTH} ${HEIGHT}`,
+    width: WIDTH,
+    height: HEIGHT,
+    totalRegions: regions.length,
+    regions,
   };
 
   await fs.mkdir(path.dirname(OUTPUT_MAP_PATH), { recursive: true });
-  await fs.writeFile(OUTPUT_META_PATH, JSON.stringify(metaPayload, null, 2) + "\n", "utf8");
-  await fs.writeFile(OUTPUT_MAP_PATH, JSON.stringify(mapPayload, null, 2) + "\n", "utf8");
+  await fs.writeFile(OUTPUT_MAP_PATH, JSON.stringify(payload, null, 2) + "\n", "utf8");
 
-  console.log(`Successfully compiled all ${ALL_50_STATES_AND_DC.length} US States + DC map and metadata datasets.`);
-  console.log(`Saved to ${OUTPUT_MAP_PATH} and ${OUTPUT_META_PATH}`);
+  const averagePoints = Math.round(
+    regions.reduce((total, region) => total + (region.path.match(/[MLHVCSQTAZ]/gi) ?? []).length, 0) /
+      regions.length,
+  );
+  console.log(`Wrote ${regions.length} states to ${OUTPUT_MAP_PATH}`);
+  console.log(`Average ${averagePoints} drawing commands per state.`);
+  console.log(`Left ${OUTPUT_META_PATH} untouched: it holds the written facts, not the shapes.`);
 }
 
-main().catch((err) => {
-  console.error(err);
+/**
+ * The two-letter code, which is what the game keys on.
+ *
+ * us-atlas carries FIPS ids and a name; the existing meta file already pairs
+ * every state with its postal code, so it is the reliable bridge rather than a
+ * table typed out again here.
+ */
+function postalCodeFor(state, meta) {
+  const name = state?.properties?.name;
+  if (!name) return "";
+  const match = meta.find((entry) => entry.name === name);
+  return match?.code ?? "";
+}
+
+async function readExistingMeta() {
+  const raw = await fs.readFile(OUTPUT_META_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+  return parsed.regions ?? parsed.states ?? [];
+}
+
+main().catch((error) => {
+  console.error(error);
   process.exitCode = 1;
 });

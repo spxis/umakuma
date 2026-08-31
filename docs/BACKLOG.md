@@ -60,7 +60,7 @@ through it meets a finished flow.
 | 26 | ~~JLPT old numbering~~ ✅ v0.119.0 | — |
 | 27 | Counts on second-level filters | — |
 | 28 | Pagination placement option | — |
-| 29 | **Real US and Canada map geometry** | — |
+| 29 | ~~Real US and Canada map geometry~~ ✅ v0.123.0 | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
 Release 6 should not ship before 7 to 9, or a member without WaniKani arrives to
@@ -646,23 +646,48 @@ end first.
 
 ### 29 — Real US and Canada map geometry
 
-Map mode supports all three countries end to end - questions, ids, distractors,
-board, scoring - and only Japan is offered, because `us-map.json` and
-`ca-map.json` hold hand-written placeholder polygons. Ontario is five points.
-Japan averages 1,622 characters of path per prefecture; the other two average
-about 40.
+**The ticket.** Map mode supports three countries end to end - questions, ids,
+distractors, board, scoring - and offers one, because the other two have no real
+outlines. Ontario is a five-point pentagon. Japan averages 1,622 characters of
+path per prefecture; the United States and Canada average about 40.
 
-`geoMapGeometry.test.ts` pins this both ways: an offered country must draw real
-boundaries, and a held-back country must still be a blob - so when real data
-lands the test says so rather than sitting quiet.
+This is a data and pipeline job, not a feature job. Nothing in the game needs
+changing.
 
-The build scripts cannot produce this. `build-geo-ca.mjs` has the polygons
-typed into it as literals, and `build-geo-jp-map.mjs` does not fetch anything
-either - it reads `jp-map.json` back and rewrites the wrapper, so Japan's real
-geometry is vendored rather than generated.
+**What has to be true when it is done**
 
-Doing it properly needs a source and tooling neither of which is here:
-TopoJSON from us-atlas and Natural Earth or StatCan for Canada, projected and
-simplified into the same coordinate space. That means new dependencies
-(d3-geo, topojson-client) and a real build step. Worth deciding deliberately
-rather than bolting on.
+1. `us-map.json` and `ca-map.json` hold genuine administrative boundaries,
+   projected into the same coordinate space Japan uses, simplified enough to
+   render at speed and detailed enough to recognise.
+2. Each region carries `path`, `bbox`, `centroid` and `neighbors`. Neighbours
+   matter as much as the outline: distractors are chosen from a region's own
+   corner of the map, and without them the wrong answers stop being plausible.
+3. A build script regenerates both from source, so a boundary change is a
+   re-run rather than a hand edit.
+4. `geoMapGeometry.test.ts` goes green with `playable: true` for both in
+   `mapCountries.ts`.
+
+**Sources**
+
+- United States: us-atlas (TopoJSON, derived from the Census Bureau).
+- Canada: Natural Earth admin-1, or Statistics Canada boundary files.
+- Both need an equal-area or otherwise sensible projection; a raw lat/long plot
+  puts Nunavut across half the canvas.
+
+**Tooling that is not here yet**
+
+`d3-geo` for projection, `topojson-client` for mesh and feature extraction, and
+`topojson-simplify` or equivalent for reducing point counts. Adding
+dependencies for a build script is cheap; they need not ship to the browser.
+
+**Why the existing scripts cannot do it**
+
+`build-geo-ca.mjs` has the polygons typed into it as literals.
+`build-geo-jp-map.mjs` does not fetch anything either - it reads `jp-map.json`
+back and rewrites the wrapper, so even Japan's geometry is vendored rather than
+generated. There is no pipeline to copy; there is a pipeline to write.
+
+**Neighbours from topology.** TopoJSON shares arcs between adjacent features,
+so adjacency falls out of the format rather than needing a distance heuristic.
+That is the reason to take TopoJSON rather than GeoJSON.
+

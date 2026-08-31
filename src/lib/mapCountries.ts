@@ -9,18 +9,13 @@
 const ALL_MAP_COUNTRIES = [
   { code: "JP", label: "Japan", playable: true },
   /*
-   * Not offered yet, and the reason is the map rather than the code.
-   *
-   * Everything around these works - the questions, the ids, the scoring, the
-   * board - but `us-map.json` and `ca-map.json` hold hand-written placeholder
-   * polygons: Ontario is five points. You cannot recognise Quebec from a
-   * pentagon, so offering it would be offering a game that cannot be played.
-   *
-   * `geoMapGeometry.test.ts` fails on exactly this. Flip these to true when
-   * real outlines land and the test goes green.
+   * Offered since their maps became real: built by `pnpm map:build:us` and
+   * `pnpm map:build:canada` from the Census Bureau and Natural Earth rather
+   * than the hand-written pentagons that stood in before.
+   * `geoMapGeometry.test.ts` holds them to it.
    */
-  { code: "US", label: "United States", playable: false },
-  { code: "CA", label: "Canada", playable: false },
+  { code: "US", label: "United States", playable: true },
+  { code: "CA", label: "Canada", playable: true },
 ] as const;
 
 /** Countries whose maps are real enough to play on. */

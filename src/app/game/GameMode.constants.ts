@@ -45,8 +45,9 @@ export const GAME_COPY = {
   direction: "Direction",
   answerWith: "Answer with",
   chooseChain: "Choose the word that starts with this kana",
-  choosePrefecture: "Choose the prefecture",
-  choosePrefectureName: "Name the highlighted prefecture",
+  /* "prefecture" is Japan's word for it; the board says which to use. */
+  chooseRegion: (division: string) => `Choose the ${division.toLowerCase()}`,
+  nameHighlightedRegion: (division: string) => `Name the highlighted ${division.toLowerCase()}`,
   mapCloseUp: "Close up",
   prefectures: "Prefectures",
   score: "Score",

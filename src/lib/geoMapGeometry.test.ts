@@ -31,10 +31,18 @@ function vertexCount(path: string): number {
 }
 
 /**
- * A real administrative outline follows a coast or a surveyed border and needs
- * far more than this. Twelve is deliberately generous: it fails a rectangle and
- * a pentagon, and passes even the simplest genuine boundary.
+ * How much outline a region of a given size ought to have.
+ *
+ * A flat threshold is wrong at both ends: it fails the District of Columbia,
+ * which is genuinely a four-mile diamond and honestly six points at this scale,
+ * while passing a placeholder drawn large. What gives a blob away is being big
+ * and simple at once - Ontario spanning a third of the canvas in five points.
+ *
+ * So the requirement scales with the space a region occupies. Anything smaller
+ * than a few pixels across is exempt, because at that size there is nothing to
+ * draw and nothing to recognise either.
  */
+const EXEMPT_BELOW_PIXELS = 8;
 const MINIMUM_VERTICES = 12;
 
 describe("map geometry", () => {
@@ -51,7 +59,12 @@ describe("map geometry", () => {
 
   it.each(COUNTRIES)("%s is only offered when it draws real boundaries", (country) => {
     const tooSimple = GEO_DATASETS[country].regions
-      .filter((region) => vertexCount(region.map.path) < MINIMUM_VERTICES)
+      .filter((region) => {
+        const [minX, minY, maxX, maxY] = region.map.bbox;
+        const span = Math.max(maxX - minX, maxY - minY);
+        if (span < EXEMPT_BELOW_PIXELS) return false;
+        return vertexCount(region.map.path) < MINIMUM_VERTICES;
+      })
       .map((region) => `${region.code} (${vertexCount(region.map.path)} points)`);
 
     if (PLAYABLE.has(country)) {

@@ -1,465 +1,171 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { geoConicConformal, geoPath } from "d3-geo";
+
+/**
+ * Real province and territory boundaries, from Natural Earth admin-1.
+ *
+ * This script used to carry the shapes as literals - Ontario was five points -
+ * which rendered and could not be played: you cannot recognise a province from
+ * a pentagon. Everything else about Map mode was already correct.
+ *
+ * Natural Earth rather than us-atlas's equivalent because Canada has no
+ * comparable single-purpose TopoJSON on a CDN, and admin-1 covers every country
+ * at once. It is GeoJSON, so adjacency does not come free the way it does from
+ * topology; neighbours are computed from shared boundary points instead, which
+ * is exact for surveyed borders that share vertices.
+ *
+ * Lambert conformal conic at Canada's standard parallels, because that is the
+ * projection Canadian maps use. A raw plot puts Nunavut across half the canvas
+ * and squashes the populated south into a strip.
+ */
+
+const SOURCE =
+  "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_50m_admin_1_states_provinces.geojson";
 const OUTPUT_MAP_PATH = path.resolve("src/data/maps/ca-map.json");
 const OUTPUT_META_PATH = path.resolve("src/data/maps/ca-meta.json");
 
-// 10 Canadian Provinces + 3 Territories
-const CANADA_DATA = [
-  {
-    code: "ON",
-    name: "Ontario",
-    nameFr: "Ontario",
-    type: "province",
-    capital: "Toronto",
-    largestCity: "Toronto",
-    population: 15801768,
-    areaKm2: 1076395,
-    areaSqMi: 415598,
-    region: "Central Canada",
-    officialLanguages: ["English"],
-    nicknames: ["The Heartland Province"],
-    enteredConfederationYear: 1867,
-    motto: "Ut Incepit Fidelis Sic Permanet",
-    no1Rankings: [
-      "No. 1 Most Populous Province in Canada (Over 15.8 Million residents - approx. 40% of Canada)",
-      "No. 1 Largest Financial & Economic Engine in Canada (Toronto / Bay Street)",
-      "Home to the National Capital of Canada (Ottawa)",
-      "No. 1 in Automotive Manufacturing in Canada",
-    ],
-    famousFor: {
-      foods: ["Butter Tarts", "Peameal Bacon Sandwich", "BeaverTails", "Niagara Icewine"],
-      landmarks: ["CN Tower & Toronto Skyline", "Niagara Falls (Horseshoe Falls)", "Parliament Hill (Ottawa)", "Algonquin Provincial Park"],
-      specialties: ["Financial Services", "Automotive & Advanced Tech", "Niagara Icewine", "Mining (Sudbury Nickel)"],
-    },
-    symbols: { flower: "White Trillium", tree: "Eastern White Pine", bird: "Common Loon" },
-    centroid: [580, 520],
-    bbox: [480, 420, 680, 620],
-    neighbors: ["MB", "QC"],
-    path: "M500 480 L620 440 L670 520 L620 600 L540 560 Z",
-  },
-  {
-    code: "QC",
-    name: "Quebec",
-    nameFr: "Québec",
-    type: "province",
-    capital: "Quebec City",
-    largestCity: "Montreal",
-    population: 8948940,
-    areaKm2: 1542056,
-    areaSqMi: 595391,
-    region: "Central Canada",
-    officialLanguages: ["French"],
-    nicknames: ["La Belle Province"],
-    enteredConfederationYear: 1867,
-    motto: "Je me souviens",
-    no1Rankings: [
-      "No. 1 Largest Province in Canada by Land Area (1.54 Million km²)",
-      "No. 1 Maple Syrup Producer in the World (over 70% of global supply)",
-      "No. 1 in Hydroelectric Power Generation in North America (Hydro-Québec)",
-      "Only Walled City North of Mexico (Old Quebec / Vieux-Québec UNESCO)",
-    ],
-    famousFor: {
-      foods: ["Poutine (Fries, Cheese Curds & Gravy)", "Montreal Smoked Meat", "Montreal Style Wood-Fired Bagels", "Tourtière", "Maple Taffy on Snow"],
-      landmarks: ["Château Frontenac & Old Quebec (UNESCO)", "Mount Royal & Saint Joseph's Oratory (Montreal)", "Mont-Tremblant", "Percé Rock"],
-      specialties: ["Maple Syrup (Global Strategic Reserve)", "Hydroelectric Energy", "Aerospace (Bombardier/Airbus A220)", "Cirque du Soleil & Cultural Arts"],
-    },
-    symbols: { flower: "Blue Flag Iris", tree: "Yellow Birch", bird: "Snowy Owl" },
-    centroid: [720, 440],
-    bbox: [620, 320, 820, 560],
-    neighbors: ["ON", "NL", "NB"],
-    path: "M630 450 L700 340 L800 400 L810 500 L710 540 Z",
-  },
-  {
-    code: "BC",
-    name: "British Columbia",
-    nameFr: "Colombie-Britannique",
-    type: "province",
-    capital: "Victoria",
-    largestCity: "Vancouver",
-    population: 5609870,
-    areaKm2: 944735,
-    areaSqMi: 364764,
-    region: "West Coast",
-    officialLanguages: ["English"],
-    nicknames: ["Beautiful British Columbia", "Pacific Province"],
-    enteredConfederationYear: 1871,
-    motto: "Splendor sine occasu",
-    no1Rankings: [
-      "No. 1 Port in Canada by Tonnage and Container Traffic (Port of Vancouver)",
-      "No. 1 Largest Ski Resort in North America (Whistler Blackcomb - 8,171 acres)",
-      "No. 1 in Softwood Lumber and Timber Production in Canada",
-      "No. 1 in Wild Pacific Salmon Harvest in Canada",
-    ],
-    famousFor: {
-      foods: ["Nanaimo Bars", "Wild Pacific Salmon & Candied Salmon", "Spot Prawns", "Okanagan Valley Wine & Cherries"],
-      landmarks: ["Stanley Park & Seawall (Vancouver)", "Whistler Blackcomb Mountain", "Butchart Gardens (Victoria)", "Pacific Rim National Park (Tofino)"],
-      specialties: ["Film & Digital VFX ('Hollywood North')", "Lumber & Forestry", "Wine Tourism (Okanagan)", "Pacific Ocean Shipping"],
-    },
-    symbols: { flower: "Pacific Dogwood", tree: "Western Redcedar", bird: "Steller's Jay" },
-    centroid: [180, 420],
-    bbox: [100, 320, 260, 520],
-    neighbors: ["YT", "NT", "AB"],
-    path: "M110 330 L220 330 L250 480 L180 510 L130 470 Z",
-  },
-  {
-    code: "AB",
-    name: "Alberta",
-    nameFr: "Alberta",
-    type: "province",
-    capital: "Edmonton",
-    largestCity: "Calgary",
-    population: 4800768,
-    areaKm2: 661848,
-    areaSqMi: 255541,
-    region: "Prairies",
-    officialLanguages: ["English"],
-    nicknames: ["Wild Rose Country", "Energy Province"],
-    enteredConfederationYear: 1905,
-    motto: "Fortis et liber",
-    no1Rankings: [
-      "No. 1 in Crude Oil and Natural Gas Production in Canada (Alberta Oil Sands - 3rd largest oil reserves globally)",
-      "No. 1 in Cattle Ranching and Canadian AAA Beef Production (over 40% of national herd)",
-      "Home to Banff National Park (Canada's First National Park, established 1885)",
-      "No. 1 in Dinosaur Fossil Beds in North America (Dinosaur Provincial Park / Royal Tyrrell Museum)",
-    ],
-    famousFor: {
-      foods: ["Alberta AAA Prime Rib & Beef Steaks", "Ginger Beef (Calgary Origin)", "The Caesar Cocktail (Calgary Origin)", "Bison Ribeye", "Taber Corn"],
-      landmarks: ["Banff National Park & Lake Louise", "Jasper National Park & Icefields Parkway", "Calgary Stampede", "West Edmonton Mall", "Royal Tyrrell Museum"],
-      specialties: ["Oil & Gas Energy Sector", "Cattle Ranching & Agriculture", "Rocky Mountain Eco-Tourism", "Rodeo Culture"],
-    },
-    symbols: { flower: "Wild Rose", tree: "Lodgepole Pine", bird: "Great Horned Owl" },
-    centroid: [270, 420],
-    bbox: [220, 330, 320, 510],
-    neighbors: ["NT", "SK", "BC"],
-    path: "M230 330 L310 330 L310 500 L230 500 Z",
-  },
-  {
-    code: "MB",
-    name: "Manitoba",
-    nameFr: "Manitoba",
-    type: "province",
-    capital: "Winnipeg",
-    largestCity: "Winnipeg",
-    population: 1474291,
-    areaKm2: 647797,
-    areaSqMi: 250116,
-    region: "Prairies",
-    officialLanguages: ["English"],
-    nicknames: ["Keystone Province", "Polar Bear Capital of the World"],
-    enteredConfederationYear: 1870,
-    motto: "Gloriosus et liber",
-    no1Rankings: [
-      "Known as the 'Polar Bear Capital of the World' (Churchill, Manitoba)",
-      "No. 1 Beluga Whale Migration Gathering in the World (Hudson Bay estuary)",
-      "No. 1 in Canola and Sunflower Seed Production in Canada",
-    ],
-    famousFor: {
-      foods: ["Winnipeg Rye Bread", "Smoked Goldeye Fish", "Schmoo Torte", "Pickerel Fillets"],
-      landmarks: ["Churchill Tundra (Polar Bears & Belugas)", "Canadian Museum for Human Rights", "The Forks Historic Port", "Riding Mountain National Park"],
-      specialties: ["Grain & Canola Farming", "Hydroelectricity", "Arctic Wildlife Tourism", "Transportation Logistics"],
-    },
-    symbols: { flower: "Prairie Crocus", tree: "White Spruce", bird: "Great Gray Owl" },
-    centroid: [430, 440],
-    bbox: [380, 340, 480, 540],
-    neighbors: ["NU", "NT", "SK", "ON"],
-    path: "M390 340 L470 340 L470 510 L390 510 Z",
-  },
-  {
-    code: "SK",
-    name: "Saskatchewan",
-    nameFr: "Saskatchewan",
-    type: "province",
-    capital: "Regina",
-    largestCity: "Saskatoon",
-    population: 1225493,
-    areaKm2: 651036,
-    areaSqMi: 251366,
-    region: "Prairies",
-    officialLanguages: ["English"],
-    nicknames: ["Land of Living Skies", "Canada's Breadbasket"],
-    enteredConfederationYear: 1905,
-    motto: "Multis e gentibus vires",
-    no1Rankings: [
-      "No. 1 in Wheat Production in Canada (over 50% of Canada's wheat)",
-      "No. 1 Potash Producer in the World (supplies over 30% of global potash)",
-      "No. 1 Uranium Producer in the Americas (Athabasca Basin)",
-      "No. 1 in Lentil and Chickpea Exports in the World",
-    ],
-    famousFor: {
-      foods: ["Saskatoon Berry Pie", "Perogies & Sausage", "Regina-style Thick Crust Pizza", "Bannock"],
-      landmarks: ["Wanuskewin Heritage Park", "Prince Albert National Park", "RCMP Academy Depot Division", "Moose Jaw Tunnels"],
-      specialties: ["Potash & Uranium Mining", "Wheat & Pulse Agriculture", "Agricultural Machinery"],
-    },
-    symbols: { flower: "Western Red Lily", tree: "White Birch", bird: "Sharp-tailed Grouse" },
-    centroid: [350, 430],
-    bbox: [310, 330, 390, 510],
-    neighbors: ["NT", "MB", "AB"],
-    path: "M315 330 L385 330 L385 500 L315 500 Z",
-  },
-  {
-    code: "NS",
-    name: "Nova Scotia",
-    nameFr: "Nouvelle-Écosse",
-    type: "province",
-    capital: "Halifax",
-    largestCity: "Halifax",
-    population: 1066416,
-    areaKm2: 55284,
-    areaSqMi: 21345,
-    region: "Atlantic Canada",
-    officialLanguages: ["English"],
-    nicknames: ["Canada's Ocean Playground", "Bluenose Province"],
-    enteredConfederationYear: 1867,
-    motto: "Munit haec et altera vincit",
-    no1Rankings: [
-      "No. 1 Highest Tides in the World (Bay of Fundy - vertical rise of up to 53 ft / 16 m)",
-      "No. 1 in Atlantic Lobster and Sea Scallop Exports in Canada",
-      "Home of the Famous Racing Schooner 'Bluenose' (featured on the Canadian dime)",
-    ],
-    famousFor: {
-      foods: ["Halifax Donair (Spiced Beef & Sweet Sauce)", "Fresh Atlantic Lobster", "Digby Scallops", "Blueberry Grunt"],
-      landmarks: ["Peggy's Cove Lighthouse", "Cabot Trail (Cape Breton)", "Halifax Citadel", "Lunenburg Historic Old Town (UNESCO)"],
-      specialties: ["Seafood Harvesting & Processing", "Shipbuilding & Marine Defense", "Celtic Music & Fiddling Traditions"],
-    },
-    symbols: { flower: "Mayflower", tree: "Red Spruce", bird: "Osprey" },
-    centroid: [860, 540],
-    bbox: [820, 510, 900, 580],
-    neighbors: ["NB"],
-    path: "M830 520 L890 510 L880 560 L830 550 Z",
-  },
-  {
-    code: "NB",
-    name: "New Brunswick",
-    nameFr: "Nouveau-Brunswick",
-    type: "province",
-    capital: "Fredericton",
-    largestCity: "Moncton",
-    population: 843109,
-    areaKm2: 72908,
-    areaSqMi: 28150,
-    region: "Atlantic Canada",
-    officialLanguages: ["English", "French"],
-    nicknames: ["Picture Province"],
-    enteredConfederationYear: 1867,
-    motto: "Spem reduxit",
-    no1Rankings: [
-      "Only Constitutionally Officially Bilingual Province in Canada (English & French)",
-      "Home to the World's Highest Tides at Hopewell Rocks (Bay of Fundy)",
-      "No. 1 in Frozen French Fry Processing in the World (McCain Foods Global HQ)",
-    ],
-    famousFor: {
-      foods: ["Fiddleheads", "Atlantic Salmon", "Dulse (Edible Red Seaweed)", "Poutine Râpée", "Lobster Rolls"],
-      landmarks: ["Hopewell Rocks (Flowerpot Rocks)", "Fundy National Park", "Hartland Covered Bridge (Longest in the world - 391m)"],
-      specialties: ["Forestry & Pulp/Paper", "Acadian Cultural Heritage", "Potato Processing", "Commercial Fisheries"],
-    },
-    symbols: { flower: "Purple Violet", tree: "Balsam Fir", bird: "Black-capped Chickadee" },
-    centroid: [800, 510],
-    bbox: [770, 480, 830, 550],
-    neighbors: ["QC", "NS"],
-    path: "M780 490 L830 490 L825 540 L780 530 Z",
-  },
-  {
-    code: "NL",
-    name: "Newfoundland and Labrador",
-    nameFr: "Terre-Neuve-et-Labrador",
-    type: "province",
-    capital: "St. John's",
-    largestCity: "St. John's",
-    population: 540552,
-    areaKm2: 405212,
-    areaSqMi: 156453,
-    region: "Atlantic Canada",
-    officialLanguages: ["English"],
-    nicknames: ["The Rock"],
-    enteredConfederationYear: 1949,
-    motto: "Quaerite primum regnum Dei",
-    no1Rankings: [
-      "Most Easterly Point in North America (Cape Spear - 52°37' W)",
-      "Oldest English-Founded City in North America (St. John's, incorporated 1497 by John Cabot)",
-      "Home to L'Anse aux Meadows (Only authenticated 11th-century Norse settlement in North America - UNESCO)",
-      "No. 1 Iceberg Viewing Destination ('Iceberg Alley')",
-    ],
-    famousFor: {
-      foods: ["Jiggs Dinner (Salt Beef & Cabbage)", "Fish and Brewis", "Toutons with Molasses", "Bakeapple (Cloudberry) Jam", "Cod Tongues"],
-      landmarks: ["Signal Hill", "Gros Morne National Park (UNESCO)", "Cape Spear Lighthouse", "L'Anse aux Meadows", "Iceberg Alley"],
-      specialties: ["Offshore Petroleum (Hibernia)", "Iron Ore Mining", "Fisheries", "Folk Music & Storytelling Traditions"],
-    },
-    symbols: { flower: "Pitcher Plant", tree: "Black Spruce", bird: "Atlantic Puffin" },
-    centroid: [880, 400],
-    bbox: [800, 320, 960, 480],
-    neighbors: ["QC"],
-    path: "M820 330 L880 340 L930 440 L880 480 L840 430 Z",
-  },
-  {
-    code: "PE",
-    name: "Prince Edward Island",
-    nameFr: "Île-du-Prince-Édouard",
-    type: "province",
-    capital: "Charlottetown",
-    largestCity: "Charlottetown",
-    population: 176188,
-    areaKm2: 5660,
-    areaSqMi: 2185,
-    region: "Atlantic Canada",
-    officialLanguages: ["English"],
-    nicknames: ["Birthplace of Confederation", "Garden of the Gulf"],
-    enteredConfederationYear: 1873,
-    motto: "Parva sub ingenti",
-    no1Rankings: [
-      "Smallest Province in Canada by Land Area (5,660 km²) and Population",
-      "Birthplace of Canadian Confederation (Charlottetown Conference of 1864)",
-      "No. 1 in Potato Production in Canada (Produces approx. 25% of all Canadian potatoes in red soil)",
-      "No. 1 in Cultured Blue Mussels in North America (Malpeque Oysters & PEI Mussels)",
-    ],
-    famousFor: {
-      foods: ["PEI Mussels & Malpeque Oysters", "PEI Red Soil Russet Potatoes", "COWS Ice Cream", "Lobster Suppers"],
-      landmarks: ["Green Gables Heritage Place (Anne of Green Gables)", "Confederation Bridge (12.9 km)", "Prince Edward Island National Park"],
-      specialties: ["Potato Farming", "Shellfish Aquaculture", "Anne of Green Gables Tourism", "Culinary Arts"],
-    },
-    symbols: { flower: "Lady's Slipper", tree: "Red Oak", bird: "Blue Jay" },
-    centroid: [835, 505],
-    bbox: [820, 495, 850, 515],
-    neighbors: [],
-    path: "M825 500 L845 498 L848 510 L828 512 Z",
-  },
-  {
-    code: "NT",
-    name: "Northwest Territories",
-    nameFr: "Territoires du Nord-Ouest",
-    type: "territory",
-    capital: "Yellowknife",
-    largestCity: "Yellowknife",
-    population: 44760,
-    areaKm2: 1346106,
-    areaSqMi: 519734,
-    region: "Northern Canada",
-    officialLanguages: ["English", "French", "Inuktitut", "Chipewyan", "Cree", "Tłı̨chǫ"],
-    nicknames: ["Land of the Midnight Sun", "Diamond Capital of North America"],
-    enteredConfederationYear: 1870,
-    motto: "None",
-    no1Rankings: [
-      "No. 1 Deepest Lake in North America (Great Slave Lake - 2,014 ft / 614 m deep)",
-      "No. 1 in Quality Diamond Mining in North America (Ekati & Diavik Diamond Mines)",
-      "No. 1 Aurora Borealis Viewing Destination in the World (Yellowknife - over 240 viewing nights/yr)",
-    ],
-    famousFor: {
-      foods: ["Arctic Char", "Bannock Bread", "Caribou Stew", "Morel Mushrooms", "Birch Syrup"],
-      landmarks: ["Nahanni National Park Reserve (First UNESCO World Heritage Site in 1978)", "Great Slave Lake", "Yellowknife Old Town & Houseboats"],
-      specialties: ["Diamond Mining", "Aboriginal Arts & Crafts", "Aurora Tourism"],
-    },
-    symbols: { flower: "Mountain Avens", tree: "Tamarack Larch", bird: "Gyrfalcon" },
-    centroid: [270, 240],
-    bbox: [180, 140, 360, 330],
-    neighbors: ["YT", "NU", "BC", "AB", "SK"],
-    path: "M190 180 L350 180 L350 330 L220 330 Z",
-  },
-  {
-    code: "NU",
-    name: "Nunavut",
-    nameFr: "Nunavut",
-    type: "territory",
-    capital: "Iqaluit",
-    largestCity: "Iqaluit",
-    population: 40523,
-    areaKm2: 2093190,
-    areaSqMi: 808185,
-    region: "Northern Canada",
-    officialLanguages: ["Inuktitut", "Inuinnaqtun", "English", "French"],
-    nicknames: ["Our Land (Nunavut in Inuktitut)", "Arctic Frontier"],
-    enteredConfederationYear: 1999,
-    motto: "Nunavut Sannginivut",
-    no1Rankings: [
-      "Largest Administrative Subdivision in Canada (2.09 Million km² - 20% of Canada's total land area)",
-      "Northernmost Inhabited Settlement in the World (Alert, Nunavut - 82°30' N)",
-      "Newest Territory in Canada (Established in 1999 as an Inuit homeland)",
-      "Longest Daylight in Summer in Canada (24 hours continuous sunlight)",
-    ],
-    famousFor: {
-      foods: ["Muktuk (Whale Skin & Blubber)", "Arctic Char Sashimi", "Seal Meat", "Caribou (Tuttu)"],
-      landmarks: ["Auyuittuq National Park & Mount Thor (World's greatest vertical drop - 1,250 m)", "Sirmilik National Park", "Quttinirpaaq National Park"],
-      specialties: ["Inuit Soapstone Carvings", "Inuit Tapestries & Printmaking (Kinngait Studios)", "Arctic Ecotourism"],
-    },
-    symbols: { flower: "Purple Saxifrage", tree: "None (Arctic Tundra)", bird: "Rock Ptarmigan" },
-    centroid: [520, 210],
-    bbox: [360, 80, 680, 340],
-    neighbors: ["NT", "MB"],
-    path: "M370 120 L660 100 L640 330 L450 330 Z",
-  },
-  {
-    code: "YT",
-    name: "Yukon",
-    nameFr: "Yukon",
-    type: "territory",
-    capital: "Whitehorse",
-    largestCity: "Whitehorse",
-    population: 45369,
-    areaKm2: 482443,
-    areaSqMi: 186272,
-    region: "Northern Canada",
-    officialLanguages: ["English", "French"],
-    nicknames: ["Land of the Midnight Sun", "Klondike Gold Country"],
-    enteredConfederationYear: 1898,
-    motto: "None",
-    no1Rankings: [
-      "No. 1 Highest Mountain in Canada (Mount Logan - 19,551 ft / 5,959 m in Kluane National Park)",
-      "Site of the World-Famous Klondike Gold Rush of 1896-1899 (Bonanza Creek / Dawson City)",
-      "No. 1 Largest Non-Polar Icefield in the World (Kluane National Park)",
-    ],
-    famousFor: {
-      foods: ["Sourdough Bread & Flapjacks", "Klondike Ribs & Salmon", "Moose Sausage", "Yukon Gold Potato Dishes"],
-      landmarks: ["Kluane National Park & Reserve (UNESCO)", "Dawson City Historic District", "Miles Canyon", "Sign Post Forest"],
-      specialties: ["Gold & Mineral Exploration", "Wilderness Dog Sledding (Yukon Quest)", "Yukon Gold Potatoes"],
-    },
-    symbols: { flower: "Fireweed", tree: "Subalpine Fir", bird: "Common Raven" },
-    centroid: [120, 220],
-    bbox: [80, 140, 180, 320],
-    neighbors: ["NT", "BC"],
-    path: "M90 150 L160 170 L170 320 L100 320 Z",
-  },
-];
+const WIDTH = 1000;
+const HEIGHT = 720;
+const PRECISION = 2;
+
+function round(value) {
+  const factor = 10 ** PRECISION;
+  return Math.round(value * factor) / factor;
+}
+
+function tidyPath(d) {
+  return d.replace(/-?\d+\.?\d*/g, (match) => String(round(Number(match))));
+}
+
+/** Every coordinate in a feature, however deeply the rings are nested. */
+function coordinatesOf(geometry) {
+  const out = [];
+  const walk = (node) => {
+    if (!Array.isArray(node)) return;
+    if (typeof node[0] === "number" && typeof node[1] === "number") {
+      out.push(node);
+      return;
+    }
+    for (const child of node) walk(child);
+  };
+  walk(geometry?.coordinates);
+  return out;
+}
+
+/**
+ * Neighbours by shared boundary points.
+ *
+ * Natural Earth draws adjacent provinces from the same vertices, so two that
+ * touch share coordinates exactly. Rounding to four decimals absorbs float
+ * noise while staying far finer than any real border gap.
+ */
+function neighboursBySharedPoints(features) {
+  const keysFor = features.map(
+    (f) => new Set(coordinatesOf(f.geometry).map(([x, y]) => `${x.toFixed(4)},${y.toFixed(4)}`)),
+  );
+
+  return features.map((_, index) =>
+    features
+      .map((other, otherIndex) => {
+        if (otherIndex === index) return null;
+        for (const key of keysFor[otherIndex]) {
+          if (keysFor[index].has(key)) return other.properties.__code;
+        }
+        return null;
+      })
+      .filter(Boolean)
+      .sort(),
+  );
+}
 
 async function main() {
-  const metaPayload = {
-    updatedAt: new Date().toISOString(),
-    standard: "Statistics Canada / Statistique Canada & Parks Canada",
+  const response = await fetch(SOURCE);
+  if (!response.ok) throw new Error(`Could not fetch Natural Earth admin-1: ${response.status}`);
+  const collection = await response.json();
+
+  const meta = await readExistingMeta();
+  const byName = new Map(meta.map((entry) => [entry.name.toLowerCase(), entry.code]));
+
+  const features = collection.features
+    .filter((f) => f.properties?.iso_a2 === "CA" || f.properties?.admin === "Canada")
+    .map((f) => {
+      /*
+       * Natural Earth carries the two-letter postal code, which is what the
+       * game keys on. Matching by name instead fails on Québec, where the
+       * source is accented and the meta file is not - the kind of near-miss
+       * that silently drops a province rather than erroring.
+       */
+      const name = f.properties?.name_en ?? f.properties?.name ?? "";
+      const code = f.properties?.postal ?? byName.get(name.toLowerCase()) ?? "";
+      return { ...f, properties: { ...f.properties, __code: code } };
+    })
+    .filter((f) => f.properties.__code);
+
+  if (features.length !== meta.length) {
+    const found = new Set(features.map((f) => f.properties.__code));
+    const missing = meta.filter((entry) => !found.has(entry.code)).map((entry) => entry.name);
+    throw new Error(`Matched ${features.length} of ${meta.length}. Missing: ${missing.join(", ")}`);
+  }
+
+  const projection = geoConicConformal()
+    .parallels([49, 77])
+    .rotate([96, 0])
+    .fitSize([WIDTH, HEIGHT], { type: "FeatureCollection", features });
+  const draw = geoPath(projection);
+
+  const adjacency = neighboursBySharedPoints(features);
+
+  const regions = features.map((f, index) => {
+    const d = draw(f);
+    if (!d) throw new Error(`No path produced for ${f.properties.name}`);
+    const [[minX, minY], [maxX, maxY]] = draw.bounds(f);
+    const [cx, cy] = draw.centroid(f);
+
+    return {
+      code: f.properties.__code,
+      name: f.properties.name_en ?? f.properties.name,
+      path: tidyPath(d),
+      bbox: [round(minX), round(minY), round(maxX), round(maxY)],
+      centroid: [round(cx), round(cy)],
+      neighbors: adjacency[index],
+    };
+  });
+
+  regions.sort((left, right) => left.code.localeCompare(right.code));
+
+  const payload = {
+    source: `${SOURCE} (Natural Earth admin-1), Lambert conformal conic, fitted to ${WIDTH}x${HEIGHT}`,
     country: "CA",
     countryName: "Canada",
-    divisionTypeName: "Province / Territory",
-    totalRegions: CANADA_DATA.length,
-    regions: CANADA_DATA,
-  };
-
-  const mapPayload = {
-    source: "Statistics Canada Open Data Administrative Boundaries",
-    country: "CA",
-    viewBox: "0 0 1000 800",
-    width: 1000,
-    height: 800,
-    totalRegions: CANADA_DATA.length,
-    regions: CANADA_DATA.map((p) => ({
-      code: p.code,
-      name: p.name,
-      nameFr: p.nameFr,
-      type: p.type,
-      capital: p.capital,
-      region: p.region,
-      path: p.path,
-      centroid: p.centroid,
-      bbox: p.bbox,
-      neighbors: p.neighbors,
-    })),
+    divisionTypeName: "Province / territory",
+    viewBox: `0 0 ${WIDTH} ${HEIGHT}`,
+    width: WIDTH,
+    height: HEIGHT,
+    totalRegions: regions.length,
+    regions,
   };
 
   await fs.mkdir(path.dirname(OUTPUT_MAP_PATH), { recursive: true });
-  await fs.writeFile(OUTPUT_META_PATH, JSON.stringify(metaPayload, null, 2) + "\n", "utf8");
-  await fs.writeFile(OUTPUT_MAP_PATH, JSON.stringify(mapPayload, null, 2) + "\n", "utf8");
+  await fs.writeFile(OUTPUT_MAP_PATH, JSON.stringify(payload, null, 2) + "\n", "utf8");
 
-  console.log(`Successfully compiled all ${CANADA_DATA.length} Canada Provinces & Territories map and metadata datasets.`);
-  console.log(`Saved to ${OUTPUT_MAP_PATH} and ${OUTPUT_META_PATH}`);
+  const averagePoints = Math.round(
+    regions.reduce((total, r) => total + (r.path.match(/[MLHVCSQTAZ]/gi) ?? []).length, 0) / regions.length,
+  );
+  const orphans = regions.filter((r) => r.neighbors.length === 0).map((r) => r.code);
+  console.log(`Wrote ${regions.length} provinces and territories to ${OUTPUT_MAP_PATH}`);
+  console.log(`Average ${averagePoints} drawing commands each.`);
+  console.log(`Without neighbours: ${orphans.length > 0 ? orphans.join(", ") : "none"}`);
 }
 
-main().catch((err) => {
-  console.error(err);
+async function readExistingMeta() {
+  const raw = await fs.readFile(OUTPUT_META_PATH, "utf8");
+  const parsed = JSON.parse(raw);
+  return parsed.regions ?? parsed.provinces ?? [];
+}
+
+main().catch((error) => {
+  console.error(error);
   process.exitCode = 1;
 });

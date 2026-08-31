@@ -1336,5 +1336,15 @@
     "version": "0.122.0",
     "releasedAt": "2026-08-31T08:00:00Z",
     "summary": "A Canadian round drew the Japanese coastline: the question knew its country and the board did not. The board now reads the country off the question, and the lobby offers only countries whose maps are real - the American and Canadian outlines are placeholder shapes, so they wait until that is fixed rather than being offered unplayable."
+  },
+  {
+    "id": "real-us-canada-maps",
+    "area": "games",
+    "name": "Real maps for the United States and Canada",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.123.0",
+    "releasedAt": "2026-08-31T09:00:00Z",
+    "summary": "Map mode plays on all three countries. The American and Canadian outlines were hand-drawn placeholders - Ontario was five points - and are now built from the Census Bureau and Natural Earth by scripts that can be re-run when a boundary changes. Neighbours come from the map itself, so the wrong answers are the places next door."
   }
 ]

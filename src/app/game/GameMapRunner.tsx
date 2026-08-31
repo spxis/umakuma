@@ -4,7 +4,7 @@ import { GAME_KEY_LAYOUTS, type GameKind, type GameOptionTile, type GameQuestion
 import { mapBoxIsZoomed } from "@/lib/japanPrefectures";
 import { geoFocusBox } from "@/lib/geoMapFraming";
 import { geoRegionIdFromSubjectId } from "@/lib/geoSubjectIds";
-import type { CountryCode } from "@/lib/geoRegion";
+import { GEO_DATASETS, type CountryCode } from "@/lib/geoRegion";
 
 /**
  * The country and region a place id belongs to.
@@ -137,6 +137,8 @@ function MapBoard({
     promptPlace?.country
     ?? question.options.map((option) => placeFromSubjectId(option.subjectId)?.country).find(Boolean)
     ?? "JP";
+  // Prefecture, state, or province and territory - the board knows which.
+  const divisionName = GEO_DATASETS[country].divisionTypeName;
 
   const toneFor = (option: GameOptionTile, fallback: MapTone): MapTone => {
     if (feedback?.subjectId !== option.subjectId) return fallback;
@@ -152,7 +154,7 @@ function MapBoard({
     return (
       <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2 sm:mt-4 sm:gap-4">
         <div className={`grid min-h-0 flex-1 gap-2 sm:gap-4 ${showCloseUp ? "grid-cols-2" : "grid-cols-1"}`}>
-          <MapCard caption={GAME_COPY.choosePrefectureName}>
+          <MapCard caption={GAME_COPY.nameHighlightedRegion(divisionName)}>
             <JapanMap marks={marks} country={country} showHandles />
           </MapCard>
           {showCloseUp ? (
@@ -197,7 +199,7 @@ function MapBoard({
     <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2 sm:mt-4 sm:gap-4">
       <div className="shrink-0 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center sm:py-3">
         <p className="text-[10px] font-bold uppercase text-foreground/60">
-          {GAME_COPY.choosePrefecture} · {question.answerType}
+          {GAME_COPY.chooseRegion(divisionName)} · {question.answerType}
         </p>
         <p className="mt-1 text-3xl font-black text-foreground [font-family:var(--font-jp-current)] sm:text-5xl">
           {question.prompt}
