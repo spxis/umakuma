@@ -215,6 +215,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Hokan no Hondana", ja: "保管の本棚", reading: "ほかんのほんだな", gloss: "the shelf that keeps things" },
   { romaji: "Massugu na Machi", ja: "真っ直ぐな街", reading: "まっすぐなまち", gloss: "a street set straight" },
   { romaji: "Mieru Michi", ja: "見える道", reading: "みえるみち", gloss: "a path you can see" },
+  { romaji: "Muri no nai Mugi", ja: "無理のない麦", reading: "むりのないむぎ", gloss: "barley that is not forced" },
 ];
 
 /**

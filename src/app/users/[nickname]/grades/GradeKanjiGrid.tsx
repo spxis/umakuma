@@ -119,6 +119,29 @@ export default function GradeKanjiGrid({
         );
 
         /*
+         * The stroke control, as the last thing in the row rather than floating
+         * over it. It used to be positioned absolutely at the row's right edge
+         * and revealed on hover, which put it on top of the JLPT pill it was
+         * meant to sit beside - the row reserved nine units of padding for it
+         * and the pills used that space anyway. Inline, it takes its own room
+         * and nothing has to be kept clear.
+         */
+        const strokeButton = onChoose ? null : (
+          <StrokeOrderButton
+            kanji={entry.kanji}
+            grade={entry.grade}
+            meaning={entry.primaryMeaning ?? null}
+            summary={{
+              meaning: entry.primaryMeaning ?? null,
+              on: readings.on.map(displayReading),
+              kun: readings.kun.map(displayReading),
+            }}
+            shareHref={`/kanji/${encodeURIComponent(entry.kanji)}`}
+            className="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
+          />
+        );
+
+        /*
          * One line per kanji, for scanning a whole grade. The readings sit
          * beside the meaning rather than under it, and the row keeps its
          * right padding clear so the stroke control never lands on the text.
@@ -141,7 +164,10 @@ export default function GradeKanjiGrid({
                 <ReadingRow label={GRADE_EXPLORER_COPY.kunReadings} readings={readings.kun} />
               </span>
             )}
-            <span className="ml-auto flex shrink-0 items-center gap-1 pr-9">{pills}</span>
+            <span className="ml-auto flex shrink-0 items-center gap-1">
+              {pills}
+              {strokeButton}
+            </span>
           </div>
         );
 
@@ -194,13 +220,12 @@ export default function GradeKanjiGrid({
         return (
           <li key={entry.kanji} className="group relative min-w-0">
             {/*
-              * Hidden until the card is hovered or focused, and always shown
-              * where there is no hover to give. One control per card is noise
-              * at a screenful of cards, and while it sat there permanently it
-              * covered the end of a long kun reading - 外 read
-              * `そと、ほか、はずす、ほ` with the rest behind the button.
+              * On a card it stays in the corner - there is room there, and a
+              * permanent control on every card of a screenful is noise. A row
+              * carries it inline instead, beside the pills, since the row had
+              * nowhere to float it that was not already occupied.
               */}
-            {onChoose ? null : (
+            {rows || onChoose ? null : (
             <StrokeOrderButton
               kanji={entry.kanji}
               grade={entry.grade}
@@ -211,7 +236,7 @@ export default function GradeKanjiGrid({
                 kun: readings.kun.map(displayReading),
               }}
               shareHref={`/kanji/${encodeURIComponent(entry.kanji)}`}
-              className={`absolute z-10 opacity-0 ${rows ? "right-2 top-1/2 -translate-y-1/2" : "bottom-2 right-2"} transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100`}
+              className="absolute bottom-2 right-2 z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
             />
             )}
             {/*
