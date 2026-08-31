@@ -1730,5 +1730,15 @@
     "version": "0.166.0",
     "releasedAt": "2026-09-01T04:00:00Z",
     "summary": "Tapping Study in the header sometimes did nothing - the address changed and whatever explorer was open stayed on screen. It was only sometimes because from the study page itself the link looked fine, and it was worst on a phone, where the header is the only navigation there is. The cause sat one level below the tab that was fixed in 0.164.0: /study rewrites to dashboard=learn and the bare user page carries no parameter at all, and both resolve to the same tab, so the page could not tell go to study from landed here. The bare page has to reopen whichever tab the member last had, and that restore was overwriting an explicit request to open Study. The two are now told apart at the point the address is read, so a named tab always wins and an unnamed one still restores. The /study rewrite also matched nothing in the resolver and only worked by falling through to the default; it is handled explicitly now."
+  },
+  {
+    "id": "mobile-nav-every-section",
+    "area": "platform",
+    "name": "Every section on a phone",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.167.0",
+    "releasedAt": "2026-09-01T05:00:00Z",
+    "summary": "A phone header showed four sections - Leaderboard, Study, Game, Admin - chosen by a hardcoded list of labels. Explore, Progress and Read were not in the markup at all, so on a phone the explorers, the progress pages and the reading pages could only be reached by somebody who already knew the menu button held them. Seven labels will not fit 393 pixels, so the row scrolls sideways now, reusing the same treatment the admin tab row has had for a while: no visible scrollbar, and a fade at the right edge that says there is more, which lifts once you reach the end. Removing the allowlist also removes seven literal labels that would have quietly stopped matching the day a section was renamed."
   }
 ]

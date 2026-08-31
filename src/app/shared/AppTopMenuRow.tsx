@@ -59,9 +59,18 @@ export default function AppTopMenuRow({
         ...(canSeeAdminTopLink ? [{ label: "Admin", href: "/admin", dashboard: null as null }] : []),
       ]
     : flatLinks;
-  const mobileLinks = links.filter((link) =>
-    link.label === "Leaderboard" || link.label === "Study" || link.label === "Game" || link.label === "Admin"
-  );
+  /*
+   * The phone gets every section, not four of them.
+   *
+   * This used to be an allowlist of four labels - Leaderboard, Study, Game,
+   * Admin - so Explore, Progress and Read simply did not exist in a phone's
+   * header, and the only way to any of them was to know the menu was there.
+   * Seven labels cannot fit 393 pixels, so the row scrolls sideways instead,
+   * the way the admin tab row already does, with the same fade at the edge to
+   * say there is more. Dropping the allowlist also removes a list of literal
+   * labels that would have quietly stopped matching if a section were renamed.
+   */
+  const mobileLinks = links;
 
   const userBasePath = resolvedWkUsername ? `/users/${encodeURIComponent(resolvedWkUsername)}` : null;
   const routeSegment =
@@ -107,9 +116,9 @@ export default function AppTopMenuRow({
   return (
     <div className={`relative ${className ?? ""}`.trim()}>
     <section className="flex items-center justify-between gap-3">
-      <nav className="flex min-w-0 items-center gap-x-1.5 overflow-hidden whitespace-nowrap text-[9px] font-semibold uppercase tracking-widest text-foreground/50 sm:hidden">
+      <nav className="admin-tab-scroll flex min-w-0 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[9px] font-semibold uppercase tracking-widest text-foreground/50 sm:hidden">
         {mobileLinks.map((link, index) => (
-          <span key={`mobile-${link.label}-${link.href}`} className="inline-flex items-center gap-x-1.5">
+          <span key={`mobile-${link.label}-${link.href}`} className="inline-flex shrink-0 items-center gap-x-1.5">
             <Link
               href={link.href}
               className={`transition ${linkIsActive(link) ? "font-black text-foreground" : "hover:text-foreground/80"}`}
