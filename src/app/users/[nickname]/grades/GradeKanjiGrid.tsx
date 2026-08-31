@@ -30,12 +30,24 @@ type Props = {
    * no second target and no permanent checkbox.
    */
   chosenKanji?: ReadonlySet<string>;
-  onChoose?: (kanji: string) => void;
+  /**
+   * `extend` is Shift being held: choose everything between the last card and
+   * this one, rather than this one alone.
+   */
+  onChoose?: (kanji: string, extend: boolean) => void;
 };
 
+/*
+ * `min-w-0` on the row itself, not only on the text inside it.
+ *
+ * A flex item's floor is the width of its content, so this paragraph sat at
+ * whatever the readings measured and the truncation inside it never had a
+ * narrower box to truncate to. 下 has eight kun readings and they ran straight
+ * out through the right-hand edge of the card.
+ */
 function ReadingRow({ label, readings }: { label: string; readings: string[] }) {
   return (
-    <p className="flex items-baseline gap-1.5 text-xs">
+    <p className="flex min-w-0 max-w-full items-baseline gap-1.5 text-xs">
       <span className="shrink-0 font-black uppercase tracking-[0.08em] text-foreground/45">{label}</span>
       <span lang="ja" translate="no" className={`min-w-0 truncate font-bold text-foreground/80 ${JP_TEXT_CLASS}`}>
         {readings.length > 0
@@ -221,7 +233,13 @@ export default function GradeKanjiGrid({
               <button
                 type="button"
                 aria-pressed={chosen}
-                onClick={() => onChoose(entry.kanji)}
+                /*
+                 * Shift extends. The same modifier reaches a keyboard user for
+                 * free: activating a button with Enter or Space reports the
+                 * modifiers held at the time, so Shift+Enter sweeps a range
+                 * without a second set of key handlers to keep in step.
+                 */
+                onClick={(event) => onChoose(entry.kanji, event.shiftKey)}
                 className={`block h-full w-full cursor-pointer text-left ${shell} hover:brightness-95`}
               >
                 {body}

@@ -1620,5 +1620,15 @@
     "version": "0.155.0",
     "releasedAt": "2026-08-31T18:00:00Z",
     "summary": "The writing practice page was built as a print preview and painted like one: white background, neutral greys, black text, from the source chips at the top to the squares at the bottom. It was the one page in the app that looked like a photocopy of the rest of it. Everything on screen now uses the site's own palette - the chips take the accent, the sheet sits on a surface card the way every other list does, the guide squares are drawn in the line colour and the tracing strokes in a pale accent, which is what a Japanese workbook prints them in anyway. None of it reaches paper: every colour on a printed element states its printed grey beside itself, the sheet's card drops its border and padding so the squares start at the printer's margin, and a rule under the whole region strips any background a later panel might bring with it. A test reads the sheet's own source and fails on a colour that says nothing about how it prints."
+  },
+  {
+    "id": "grade-row-overflow",
+    "area": "study",
+    "name": "Readings that stay in the box",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.156.0",
+    "releasedAt": "2026-08-31T19:00:00Z",
+    "summary": "In the grade explorer's list view, a kanji with many kun readings ran its readings straight out through the right-hand edge of its row. 下 has eight of them and they crossed the card border, the JLPT pill and whatever sat beside it. The text had been asked to truncate, but a flex item's floor is the width of its own content, so the paragraph holding the readings simply sat as wide as they measured and the truncation inside it never had a narrower box to work against. Measured after the fix at 393, 650 and 1440 pixels: no row overflows its card by a single pixel, and the page has no horizontal scroll."
   }
 ]
