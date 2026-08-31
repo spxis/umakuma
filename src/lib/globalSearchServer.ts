@@ -6,10 +6,11 @@ import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES, isSubjectType } from "./domainCons
 import { prisma } from "./prisma";
 import { preferOfficialReadings } from "./joyoReadings";
 import { querySchoolGradeCatalog } from "./schoolGrades";
+import { searchQueryVariants } from "./kana";
 import {
   SEARCH_PER_SOURCE_LIMIT,
   SEARCH_SOURCES,
-  rankHit,
+  rankHitForVariants,
   sortHits,
   type SearchHit,
   type SearchResults,
@@ -66,23 +67,38 @@ function readingList(readings: unknown): string | null {
  * row the searcher actually wanted can fall outside the limit and never reach
  * the ranking step at all.
  */
-async function searchWanikani(query: string): Promise<SearchHit[]> {
-  const like = `%${query}%`;
+async function searchWanikani(variants: string[]): Promise<SearchHit[]> {
+  const likes = variants.map((variant) => `%${variant}%`);
+  const contains = Prisma.join(
+    likes.map(
+      (like) =>
+        Prisma.sql`"characters" ILIKE ${like} OR "slug" ILIKE ${like} OR "meanings"::text ILIKE ${like} OR "readings"::text ILIKE ${like}`,
+    ),
+    " OR ",
+  );
+  const exactCharacters = Prisma.join(
+    variants.map((variant) => Prisma.sql`"characters" = ${variant}`),
+    " OR ",
+  );
+  const exactSlug = Prisma.join(
+    variants.map((variant) => Prisma.sql`"slug" = ${variant}`),
+    " OR ",
+  );
+  const characterContains = Prisma.join(
+    likes.map((like) => Prisma.sql`"characters" ILIKE ${like}`),
+    " OR ",
+  );
+
   const rows = await prisma.$queryRaw<CatalogRow[]>`
     SELECT "wkSubjectId", "subjectType", "level", "characters", "slug", "meanings", "readings"
     FROM "WkSubjectCatalog"
     WHERE "hiddenAt" IS NULL
-      AND (
-        "characters" ILIKE ${like}
-        OR "slug" ILIKE ${like}
-        OR "meanings"::text ILIKE ${like}
-        OR "readings"::text ILIKE ${like}
-      )
+      AND (${contains})
     ORDER BY
       CASE
-        WHEN "characters" = ${query} THEN 0
-        WHEN "slug" = ${query} THEN 1
-        WHEN "characters" ILIKE ${like} THEN 2
+        WHEN ${exactCharacters} THEN 0
+        WHEN ${exactSlug} THEN 1
+        WHEN ${characterContains} THEN 2
         ELSE 3
       END,
       "level" ASC
@@ -105,22 +121,22 @@ async function searchWanikani(query: string): Promise<SearchHit[]> {
         `L${row.level}`,
       ],
       href: null,
-      score: rankHit(query, glyph, meaning, reading),
+      score: rankHitForVariants(variants, glyph, meaning, reading),
     } satisfies SearchHit;
   });
 }
 
-async function searchJlpt(query: string): Promise<SearchHit[]> {
+async function searchJlpt(variants: string[]): Promise<SearchHit[]> {
   const rows = await prisma.jlptKanji.findMany({
     where: {
-      OR: [
-        { kanji: { contains: query } },
-        { primaryMeaning: { contains: query, mode: "insensitive" } },
-        { meanings: { has: query } },
-        { onReadings: { has: query } },
-        { kunReadings: { has: query } },
-        { heisigKeyword: { contains: query, mode: "insensitive" } },
-      ],
+      OR: variants.flatMap((variant) => [
+        { kanji: { contains: variant } },
+        { primaryMeaning: { contains: variant, mode: "insensitive" as const } },
+        { meanings: { has: variant } },
+        { onReadings: { has: variant } },
+        { kunReadings: { has: variant } },
+        { heisigKeyword: { contains: variant, mode: "insensitive" as const } },
+      ]),
     },
     select: {
       kanji: true,
@@ -146,23 +162,31 @@ async function searchJlpt(query: string): Promise<SearchHit[]> {
       reading,
       badges: [`N${row.nLevel}`],
       href: null,
-      score: rankHit(query, row.kanji, meaning, reading),
+      score: rankHitForVariants(variants, row.kanji, meaning, reading),
     } satisfies SearchHit;
   });
 }
 
 /** School grades live in local JSON, so this one never touches the database. */
-function searchGrades(query: string): SearchHit[] {
-  const catalog = querySchoolGradeCatalog({
-    page: 1,
-    pageSize: SEARCH_PER_SOURCE_LIMIT * 2,
-    grade: "all",
-    search: query,
-    sortBy: "grade",
-    sortDir: "asc",
-  });
+function searchGrades(variants: string[]): SearchHit[] {
+  const catalogs = variants.map((variant) =>
+    querySchoolGradeCatalog({
+      page: 1,
+      pageSize: SEARCH_PER_SOURCE_LIMIT * 2,
+      grade: "all",
+      search: variant,
+      sortBy: "grade",
+      sortDir: "asc",
+    }),
+  );
+  const seen = new Map<string, (typeof catalogs)[number]["items"][number]>();
+  for (const catalog of catalogs) {
+    for (const entry of catalog.items) {
+      if (!seen.has(entry.kanji)) seen.set(entry.kanji, entry);
+    }
+  }
 
-  return catalog.items.map((entry) => {
+  return Array.from(seen.values()).map((entry) => {
     const meaning = entry.primaryMeaning ?? entry.meanings?.[0] ?? "";
     const gradeReadings = preferOfficialReadings(entry.kanji, entry.readings?.on, entry.readings?.kun);
     const reading = joined([...gradeReadings.on, ...gradeReadings.kun]);
@@ -176,7 +200,7 @@ function searchGrades(query: string): SearchHit[] {
       badges: [entry.grade >= 8 ? (entry.grade === 8 ? "Jr High" : "Name") : `G${entry.grade}`],
       grade: entry.grade,
       href: null,
-      score: rankHit(query, entry.kanji, meaning, reading),
+      score: rankHitForVariants(variants, entry.kanji, meaning, reading),
     } satisfies SearchHit;
   });
 }
@@ -190,10 +214,11 @@ function searchGrades(query: string): SearchHit[] {
  */
 export async function runGlobalSearch(query: string, sources: SearchSource[]): Promise<SearchResults> {
   const wanted = new Set(sources);
+  const variants = searchQueryVariants(query);
   const [wanikani, jlpt, grades] = await Promise.all([
-    wanted.has(SEARCH_SOURCES.wanikani) ? searchWanikani(query).catch(() => []) : Promise.resolve([]),
-    wanted.has(SEARCH_SOURCES.jlpt) ? searchJlpt(query).catch(() => []) : Promise.resolve([]),
-    wanted.has(SEARCH_SOURCES.grades) ? Promise.resolve(searchGrades(query)).catch(() => []) : Promise.resolve([]),
+    wanted.has(SEARCH_SOURCES.wanikani) ? searchWanikani(variants).catch(() => []) : Promise.resolve([]),
+    wanted.has(SEARCH_SOURCES.jlpt) ? searchJlpt(variants).catch(() => []) : Promise.resolve([]),
+    wanted.has(SEARCH_SOURCES.grades) ? Promise.resolve(searchGrades(variants)).catch(() => []) : Promise.resolve([]),
   ]);
 
   const kept = sortHits([...wanikani, ...jlpt, ...grades].filter((hit) => hit.score > 0));

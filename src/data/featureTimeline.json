@@ -1580,5 +1580,15 @@
     "version": "0.151.0",
     "releasedAt": "2026-08-31T14:00:00Z",
     "summary": "The account menu offered two admin links, \"Admin\" and \"Manage users\", while admin had nine pages - so seven of them existed only for somebody who already knew the header was there. It reads the same registry the admin header reads now, so adding an admin page adds it to the menu. The menu also stops shouting: each cluster used to be a bordered card under an uppercase heading, ACCOUNT and GO TO and SETTINGS and ADMIN and ACTIONS, so a dozen links read as five boxed lists. It is one flat column with a hairline where the subject changes, and it hangs off the button it belongs to rather than being pinned to a corner of the window, which is what made it read as floating loose of the header. Game gets its second row as well: six games that were reachable only by scrolling to the hub cards now sit in the header beside every other section's pages."
+  },
+  {
+    "id": "search-romaji-folding",
+    "area": "platform",
+    "name": "Search understands romaji",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.152.0",
+    "releasedAt": "2026-08-31T14:00:00Z",
+    "summary": "The search placeholder promised \"or romaji\" and the code never kept the promise: readings are stored in kana, so typing watashi found nothing while わたし found plenty. A query is now folded into every spelling it could mean - the raw text, its hiragana, and its katakana, since JLPT stores on'yomi in katakana - and all three catalogues match and rank against the full set, scoring each hit by its best variant so folding can never demote a result the raw text already earned. The fold is a plain syllable table that accepts Hepburn and common kunrei spellings, doubled consonants, and the n-before-consonant rule, and it refuses to convert anything that is not entirely romaji, so English words never gain a phantom kana reading that outranks their real meaning match."
   }
 ]

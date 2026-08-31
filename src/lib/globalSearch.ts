@@ -124,6 +124,27 @@ export function rankHit(query: string, glyph: string, meaning: string, reading: 
   return score + Math.round(coverage * 50) - Math.min(glyph.length, 9);
 }
 
+/**
+ * The best score any spelling of the query earns.
+ *
+ * Romaji folding means one query arrives as several strings - "watashi",
+ * わたし, ワタシ - and a hit is as good as its best match. Taking the maximum
+ * keeps folding from ever demoting a result the raw text already earned.
+ */
+export function rankHitForVariants(
+  variants: string[],
+  glyph: string,
+  meaning: string,
+  reading: string | null,
+): number {
+  let best = 0;
+  for (const variant of variants) {
+    const score = rankHit(variant, glyph, meaning, reading);
+    if (score > best) best = score;
+  }
+  return best;
+}
+
 /** Ranked best first, with a stable order for equal scores. */
 export function sortHits(hits: SearchHit[]): SearchHit[] {
   return [...hits].sort((left, right) => {
