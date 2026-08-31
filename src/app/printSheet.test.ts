@@ -23,9 +23,21 @@ const globals = readFileSync(join(root, "src/app/globals.css"), "utf8");
 const footer = readFileSync(join(root, "src/app/AppFooter.tsx"), "utf8");
 
 describe("what the practice sheet does on paper", () => {
-  it("sets a page size and a margin", () => {
-    expect(globals).toMatch(/@page\s*\{[^}]*size:\s*letter/i);
+  it("sets a margin and an orientation", () => {
     expect(globals).toMatch(/@page\s*\{[^}]*margin:/i);
+    expect(globals).toMatch(/@page\s*\{[^}]*size:\s*portrait/i);
+  });
+
+  /*
+   * Naming the paper overrides the printer. The sheet pinned `letter portrait`
+   * on the reasoning that its readers are Canadian and American - true, and
+   * still the wrong place to decide it: asking Chrome for A4 produced a
+   * 612x792 Letter page, so an A4 sheet came out with Letter geometry scaled
+   * inside it. The squares are `fr` units and fit whatever paper arrives.
+   */
+  it("leaves the paper size to whatever is in the printer", () => {
+    const pageRule = globals.match(/@page\s*\{[^}]*\}/i)?.[0] ?? "";
+    expect(pageRule).not.toMatch(/\b(letter|a4|a3|legal)\b/i);
   });
 
   it("keeps grey grey, so the tracing characters print at all", () => {

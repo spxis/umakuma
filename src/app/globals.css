@@ -293,12 +293,19 @@ button,
  * prints a grade and a child writes on it. Everything here is about that page
  * being a worksheet rather than a screenshot of a web page.
  *
- * Letter rather than A4 because UmaKuma is for Canadians and Americans, and
- * both use Letter. The margin is the printer's own, so a sheet's squares are
- * not clipped by a driver's unprintable edge.
+ * The paper size is deliberately not set. UmaKuma's readers are in Canada and
+ * the United States, where Letter is the paper - but naming it here overrides
+ * whatever the printer is actually loaded with, so an A4 sheet came out with
+ * Letter geometry scaled down inside it. Orientation is worth pinning, since a
+ * grid of squares landscape is not the sheet anyone wants; the size is the
+ * printer's business.
+ *
+ * The squares divide the printable width in `fr` units, so they simply come
+ * out slightly narrower on A4 and slightly taller down the page. Nothing has
+ * to know which paper it landed on.
  */
 @page {
-  size: letter portrait;
+  size: portrait;
   margin: 12mm;
 }
 

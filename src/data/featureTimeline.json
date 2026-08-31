@@ -1416,5 +1416,15 @@
     "version": "0.130.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "The writing sheet offers three square sizes. Large gives a child six big boxes to form characters in; Small gives an adult ten smaller ones and an extra tracing repetition, which is what copying at volume actually wants. Medium is the practice-book square the sheet always had."
+  },
+  {
+    "id": "practice-paper-size",
+    "area": "study",
+    "name": "Prints on the paper you have",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.131.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "The sheet named Letter as its paper size, which overrode the printer: an A4 tray produced a Letter page scaled down inside it. It now pins only the orientation and lets the paper be whatever is loaded, so A4 and 8.5x11 both come out filling the page."
   }
 ]
