@@ -79,8 +79,41 @@ export function resolveInitialStudyFilters(query: QueryShape): {
   };
 }
 
+/**
+ * Whether the address named a tab, as opposed to landing on the page.
+ *
+ * `resolveInitialDashboardTab` cannot answer this: it returns "learn" both for
+ * `/study`, which asks for the study tab, and for the bare user page, which
+ * asks for nothing and should reopen whichever tab the member last had. Told
+ * apart, "go to study" works from anywhere; conflated, tapping Study while an
+ * explorer is open changes the URL and leaves the explorer on screen - which
+ * is a hard thing to report as a bug, because from the study page itself the
+ * link looks like it works.
+ */
+export function dashboardTabWasAddressed(query: QueryShape): boolean {
+  const named = [
+    "study",
+    "wk",
+    "wk-explorer",
+    "library-explorer",
+    "jlpt",
+    "jlpt-explorer",
+    "learn",
+    "news",
+    "stats",
+    "read",
+  ];
+  if (query.dashboard !== undefined && named.includes(query.dashboard)) {
+    return true;
+  }
+  /* The older `tab` parameter, still in links and bookmarks. */
+  return query.tab !== undefined && ["level", "jlpt", "read", "news", "stats"].includes(query.tab);
+}
+
 export function resolveInitialDashboardTab(query: QueryShape): TabId {
   if (query.dashboard === "study") return "learn";
+  /* What the `/study` rewrite actually sends; it fell through to the default. */
+  if (query.dashboard === "learn") return "learn";
   if (query.dashboard === "wk") return "wk";
   if (query.dashboard === "wk-explorer") return "wk";
   if (query.dashboard === "library-explorer") return "wk";

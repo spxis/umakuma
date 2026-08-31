@@ -101,6 +101,14 @@ export type UserDashboardTabsProps = {
   availableProgressLevels: number[];
   levelProgressByLevel: Record<number, LevelProgressSnapshot>;
   initialDashboardTab: TabId;
+  /**
+   * Whether the address named that tab, or merely resolved to it.
+   *
+   * `/study` and the bare user page both resolve to "learn"; only the first is
+   * a request to open the study tab. Without the distinction, tapping Study
+   * from an explorer changed the URL and left the explorer on screen.
+   */
+  dashboardTabAddressed?: boolean;
   learnContent: ReactNode;
   newsContent: ReactNode;
   readContent: ReactNode;

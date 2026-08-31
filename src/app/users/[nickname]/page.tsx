@@ -25,6 +25,7 @@ import {
 import {
   getNewsDevSampleUrls,
   DASHBOARD_TAB_LABELS,
+  dashboardTabWasAddressed,
   resolveInitialDashboardTab,
   resolveInitialReadTab,
   resolveInitialSrsFilter,
@@ -76,6 +77,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   const shouldLoadJlptData = initialTab === "jlpt";
   const initialSrsFilter = resolveInitialSrsFilter(query);
   const initialDashboardTab = resolveInitialDashboardTab(query);
+  const dashboardTabAddressed = dashboardTabWasAddressed(query);
   const initialReadTab = resolveInitialReadTab(query);
   const initialQueueMode =
     query.mode === QUEUE_TYPES.lesson
@@ -415,6 +417,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         availableProgressLevels={availableProgressLevels}
         levelProgressByLevel={levelProgressByLevel}
         initialDashboardTab={initialDashboardTab}
+        dashboardTabAddressed={dashboardTabAddressed}
         learnContent={(
           <ExplorerTabs
             accountId={account.id}

@@ -70,6 +70,7 @@ export default function UserDashboardTabs({
   availableProgressLevels = [],
   levelProgressByLevel = {},
   initialDashboardTab,
+  dashboardTabAddressed = false,
   learnContent,
   newsContent,
   readContent,
@@ -99,7 +100,7 @@ export default function UserDashboardTabs({
   });
 
   useEffect(() => {
-    if (initialDashboardTab !== "learn") {
+    if (dashboardTabAddressed) {
       return;
     }
 
@@ -118,7 +119,7 @@ export default function UserDashboardTabs({
         window.clearTimeout(restoreTimer);
       };
     }
-  }, [activeTab, initialDashboardTab, tabStorageKey]);
+  }, [activeTab, dashboardTabAddressed, tabStorageKey]);
 
   /*
    * Follow the address when it changes under us.
@@ -133,13 +134,17 @@ export default function UserDashboardTabs({
    * for when state has to follow a prop: an effect would paint the old tab
    * first and correct it afterwards, and that flash is the bug in miniature.
    *
-   * The bare user page is left out, because that address names no tab and the
-   * effect above restores whichever one the member last had open.
+   * Whether the address named a tab at all is the part that had to be passed
+   * in: `/study` and the bare user page both resolve to "learn", so without it
+   * "go to Study" could not be told from "landed on the page", and tapping
+   * Study while an explorer was open did nothing. The bare page still reopens
+   * whichever tab the member last had, through the effect above.
    */
-  const [addressedTab, setAddressedTab] = useState<TabId>(initialDashboardTab);
-  if (initialDashboardTab !== addressedTab) {
-    setAddressedTab(initialDashboardTab);
-    if (initialDashboardTab !== "learn") {
+  const address = `${initialDashboardTab}:${dashboardTabAddressed}`;
+  const [seenAddress, setSeenAddress] = useState(address);
+  if (address !== seenAddress) {
+    setSeenAddress(address);
+    if (dashboardTabAddressed) {
       setActiveTab(initialDashboardTab);
     }
   }

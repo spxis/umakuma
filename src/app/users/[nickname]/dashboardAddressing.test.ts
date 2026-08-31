@@ -43,17 +43,37 @@ describe("addressing a dashboard tab", () => {
    * and what avoids painting the old tab before correcting it.
    */
   it("follows the address rather than only its first value", () => {
-    expect(TABS).toContain("addressedTab");
-    const at = TABS.indexOf("if (initialDashboardTab !== addressedTab)");
+    const at = TABS.indexOf("if (address !== seenAddress)");
     expect(at, "the tab no longer tracks the address it was given").toBeGreaterThan(-1);
 
     const block = TABS.slice(at, at + 320);
     expect(block).toContain("setActiveTab(initialDashboardTab)");
     /*
-     * Except on the bare user page, whose address names no tab - there the
-     * member's last open tab is restored instead, and following the prop would
-     * overwrite it with "learn" on every visit.
+     * Only when the address named a tab. The bare user page names none, and
+     * following the prop there would overwrite the member's last open tab
+     * with "learn" on every visit.
      */
-    expect(block).toContain('initialDashboardTab !== "learn"');
+    expect(block).toContain("dashboardTabAddressed");
+  });
+
+  /*
+   * The distinction the study link depends on. `/study` rewrites to
+   * `dashboard=learn` and the bare page carries no parameter at all; both
+   * resolve to the same tab, so only this can tell "go to study" from
+   * "landed on the page".
+   */
+  it("tells a named tab from an unnamed one", async () => {
+    const { dashboardTabWasAddressed, resolveInitialDashboardTab } = await import("./userReadConfig");
+
+    expect(resolveInitialDashboardTab({ dashboard: "learn" })).toBe("learn");
+    expect(resolveInitialDashboardTab({})).toBe("learn");
+
+    expect(dashboardTabWasAddressed({ dashboard: "learn" })).toBe(true);
+    expect(dashboardTabWasAddressed({ dashboard: "jlpt" })).toBe(true);
+    expect(dashboardTabWasAddressed({ tab: "level" })).toBe(true);
+    expect(dashboardTabWasAddressed({})).toBe(false);
+    expect(dashboardTabWasAddressed({ dashboard: "nonsense" })).toBe(false);
+    // A parameter that belongs to something else is not an address for a tab.
+    expect(dashboardTabWasAddressed({ srs: "burned" })).toBe(false);
   });
 });

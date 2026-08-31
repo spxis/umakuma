@@ -1720,5 +1720,15 @@
     "version": "0.165.0",
     "releasedAt": "2026-09-01T03:00:00Z",
     "summary": "In the grade explorer s list view the stroke-order button was positioned absolutely at the right-hand edge of each row and revealed on hover, so it came down on top of the JLPT pill it was meant to sit beside. The row had reserved padding for it, but the pills spread into that space anyway and the two ended up in the same place - reserving room was never going to be the fix, because a row s controls have to take part in the layout. It sits in the line now, as the last thing in the row s chip cluster, taking its own room rather than floating over whatever is underneath. The card view is unchanged: there the button has a free corner to occupy, and one permanent control on every card of a screenful is noise rather than help, so it stays where it was and still waits for hover."
+  },
+  {
+    "id": "study-link-goes-to-study",
+    "area": "platform",
+    "name": "Study opens from anywhere",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.166.0",
+    "releasedAt": "2026-09-01T04:00:00Z",
+    "summary": "Tapping Study in the header sometimes did nothing - the address changed and whatever explorer was open stayed on screen. It was only sometimes because from the study page itself the link looked fine, and it was worst on a phone, where the header is the only navigation there is. The cause sat one level below the tab that was fixed in 0.164.0: /study rewrites to dashboard=learn and the bare user page carries no parameter at all, and both resolve to the same tab, so the page could not tell go to study from landed here. The bare page has to reopen whichever tab the member last had, and that restore was overwriting an explicit request to open Study. The two are now told apart at the point the address is read, so a named tab always wins and an unnamed one still restores. The /study rewrite also matched nothing in the resolver and only worked by falling through to the default; it is handled explicitly now."
   }
 ]
