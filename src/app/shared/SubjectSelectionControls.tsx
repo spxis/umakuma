@@ -68,6 +68,16 @@ export function SubjectSelectionBar({
         <span className="text-[11px] font-semibold text-foreground/55">
           {SUBJECT_SELECTION_COPY.limitReached}
         </span>
+      ) : selection.count > 0 ? (
+        /*
+         * Offered once something is picked, because that is the moment a range
+         * becomes possible - shift-clicking with nothing anchored does nothing
+         * to explain, and a hint shown before it can be used reads as noise.
+         * It stands down at the limit, where the more urgent thing is said.
+         */
+        <span className="hidden text-[11px] font-semibold text-foreground/55 sm:inline">
+          {SUBJECT_SELECTION_COPY.rangeHint}
+        </span>
       ) : null}
 
       <span className="ml-auto flex flex-wrap items-center gap-2">

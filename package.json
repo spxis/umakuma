@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "0.157.0",
+  "version": "0.158.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {

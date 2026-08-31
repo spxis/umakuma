@@ -1640,5 +1640,15 @@
     "version": "0.157.0",
     "releasedAt": "2026-08-31T20:00:00Z",
     "summary": "There was no robots.txt at all, so every crawler that found the site walked all of it - including each member's pages, which are built per request from that member's own data and render a refusal to anybody who is not them. The writing practice sheets made it acute: source, level, sheet size, mode and page all ride in the URL, which is what makes a sheet shareable and also means one school grade is thousands of distinct addresses to a bot following links. That one route took 3,200 serverless invocations in twelve hours, on a site with eight accounts, and the project's daily CPU went from about two minutes to nine and a half the week practice shipped. Member pages, admin, the API and the search results page are now closed; the home page, the release notes, the news pages and the per-character kanji pages stay open, because a family site nobody can find is not more private for it. The rules are tested against the route tree rather than a second copy of the list, so a member page added later is either covered or fails the build."
+  },
+  {
+    "id": "shift-click-range",
+    "area": "study",
+    "name": "Shift-click takes the row",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.158.0",
+    "releasedAt": "2026-08-31T21:00:00Z",
+    "summary": "Choosing characters was one click per character, so picking a row of five in the grade explorer took five clicks and picking forty took forty. Shift-click now takes everything between the last card and this one, the way it works in a file browser or a mail client, in either direction and from either end. The range only ever adds - a sweep that unpicked half of what it crossed would be impossible to predict from where it began - and the far end becomes the new anchor, so a selection can be walked outward a stretch at a time. A keyboard user gets it without a second set of handlers: activating a card with Enter or Space reports the modifiers held at the time, so Shift and Enter sweeps the same range. The logic sits in the shared selection hook rather than in the grade grid, so the next surface to offer choosing inherits it, and the hint appears in the selection bar only once something is picked, which is the first moment a range is possible."
   }
 ]

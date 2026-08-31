@@ -127,7 +127,15 @@ export default function GradeKanjiBoard({ items, practicePath, accountId }: Prop
         items={items}
         viewMode={viewMode}
         chosenKanji={selection.choosing ? selection.chosen : undefined}
-        onChoose={selection.choosing ? selection.toggle : undefined}
+        onChoose={
+          selection.choosing
+            ? (kanji, extend) => {
+                // The grid's own order, which is what a swept range follows.
+                if (extend) selection.extendTo(kanji, items.map((entry) => entry.kanji));
+                else selection.toggle(kanji);
+              }
+            : undefined
+        }
         hideReadings={quizzing}
         revealedKanji={revealed}
         onReveal={

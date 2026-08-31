@@ -27,8 +27,36 @@ export const SUBJECT_SELECTION_COPY = {
   /* A verb here, so Canadian spelling takes the s: you practise a sheet. */
   practise: "Practise these",
   emptyHint: "Pick the characters you want, then choose what to do with them.",
+  /* Said where it is useful, not in a help page nobody opens. */
+  rangeHint: "Shift-click a second one to take everything between.",
   limitReached: "That is as many as one selection holds.",
 } as const;
+
+/**
+ * The keys a shift-click sweeps up, in the order they are on screen.
+ *
+ * Both ends included, and either direction: sweeping right to left is the same
+ * range as left to right, which is what makes the gesture work without anyone
+ * thinking about which card they clicked first.
+ *
+ * An anchor that is no longer on screen - a new grade, a new page of results -
+ * gives an empty range rather than a wrong one, and the caller falls back to
+ * treating the click as an ordinary one.
+ */
+export function selectionRange(
+  anchor: string | null,
+  key: string,
+  order: readonly string[],
+): string[] {
+  const from = anchor === null ? -1 : order.indexOf(anchor);
+  const to = order.indexOf(key);
+  if (from < 0 || to < 0) {
+    return [];
+  }
+
+  const [start, end] = from <= to ? [from, to] : [to, from];
+  return order.slice(start, end + 1);
+}
 
 /**
  * A cap, because the selection travels in a URL.
