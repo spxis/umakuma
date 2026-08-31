@@ -1,4 +1,5 @@
 import { fetchStudyTagRows } from "@/lib/studySubjectTags";
+import { getSchoolGradeIndex } from "@/lib/schoolGrades";
 import "server-only";
 
 import { prisma } from "./prisma";
@@ -213,4 +214,37 @@ export async function practiceEntriesFor(
     kun: row.kunReadings ?? [],
   }));
   return { entries: toEntries(candidates), total };
+}
+
+
+/**
+ * How many characters each level of a source holds.
+ *
+ * The first row of chips has carried counts for a while and the chooser has
+ * not, so picking a grade meant choosing blind between eight numbers. One
+ * query per source rather than one per chip: a `groupBy` is a single round
+ * trip, where counting each level separately would be sixty for WaniKani.
+ */
+export async function practiceLevelCounts(source: PracticeSource): Promise<Record<number, number>> {
+  if (source === PRACTICE_SOURCES.grade) {
+    const index = getSchoolGradeIndex();
+    return Object.fromEntries((index?.grades ?? []).map((entry) => [entry.grade, entry.totalCount ?? 0]));
+  }
+
+  if (source === PRACTICE_SOURCES.wanikani) {
+    const rows = await prisma.wkSubjectCatalog.groupBy({
+      by: ["level"],
+      where: { subjectType: "kanji", hiddenAt: null },
+      _count: { _all: true },
+    });
+    return Object.fromEntries(rows.map((row) => [row.level, row._count._all]));
+  }
+
+  if (source === PRACTICE_SOURCES.jlpt) {
+    const rows = await prisma.jlptKanji.groupBy({ by: ["nLevel"], _count: { _all: true } });
+    return Object.fromEntries(rows.map((row) => [row.nLevel, row._count._all]));
+  }
+
+  // The tagged lists have no levels to count.
+  return {};
 }

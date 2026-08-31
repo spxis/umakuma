@@ -1,3 +1,5 @@
+import DisplayPreferences from "@/app/shared/DisplayPreferences";
+import { DISPLAY_PREFERENCES_COPY } from "@/app/shared/displayPreferencesCopy";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 
@@ -100,6 +102,14 @@ export default async function UserProfilePage({ params }: PageProps) {
           jlptYear={account.jlptYear}
           jlptLevel={account.jlptLevel}
         />
+      </section>
+
+      {/* Display sits with the rest of the account rather than in the menu. */}
+      <section className="mb-4 rounded-2xl border border-line bg-surface p-5">
+        <h2 className="mb-3 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+          {DISPLAY_PREFERENCES_COPY.heading}
+        </h2>
+        <DisplayPreferences />
       </section>
 
       <section className="rounded-2xl border border-line bg-surface p-5">

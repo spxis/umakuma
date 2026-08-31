@@ -174,6 +174,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Murasaki no Mukuge", ja: "紫の木槿", reading: "むらさきのむくげ", gloss: "a purple rose of Sharon" },
   { romaji: "Meiro no Mejirushi", ja: "迷路の目印", reading: "めいろのめじるし", gloss: "a landmark in the maze" },
   { romaji: "Mokuren Monogatari", ja: "木蓮物語", reading: "もくれんものがたり", gloss: "a tale told under magnolias" },
+  { romaji: "Yanagi no Yuube", ja: "柳の夕べ", reading: "やなぎのゆうべ", gloss: "an evening among willows" },
 ];
 
 /**

@@ -7,7 +7,7 @@ import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
-import { PRACTICE_SOURCES, isPracticeSource, isTaggedPracticeSource, practiceEntriesFor } from "@/lib/practiceSource";
+import { PRACTICE_SOURCES, isPracticeSource, isTaggedPracticeSource, practiceEntriesFor, practiceLevelCounts } from "@/lib/practiceSource";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
@@ -74,6 +74,11 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   const rawSource = firstValue(query.source) ?? PRACTICE_SOURCES.grade;
   const source = isPracticeSource(rawSource) ? rawSource : PRACTICE_SOURCES.grade;
   const level = source === PRACTICE_SOURCES.grade ? grade : Number(firstValue(query.level) ?? "1");
+
+  // Only fetched while the chooser is open, so a closed sheet pays nothing.
+  const levelCounts = choosing && !isTaggedPracticeSource(source)
+    ? await practiceLevelCounts(source)
+    : {};
 
   const { entries, total } = await practiceEntriesFor(
     source,
@@ -253,6 +258,9 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
                 }`}
               >
                 {label}
+                {typeof levelCounts[value] === "number" ? (
+                  <span className="ml-1 font-semibold text-neutral-400">({levelCounts[value]})</span>
+                ) : null}
               </Link>
             );
           })}

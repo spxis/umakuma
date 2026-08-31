@@ -46,26 +46,6 @@ export default function UserHeaderMenu({
   const [open, setOpen] = useState(false);
   const [refreshingLeaderboard, setRefreshingLeaderboard] = useState(false);
   const [nowMs, setNowMs] = useState(() => Date.now());
-  const [themeMode, setThemeMode] = useState<"light" | "dark">(() => {
-    if (typeof window === "undefined") {
-      return "light";
-    }
-    try {
-      return window.localStorage.getItem("wr:theme") === "dark" ? "dark" : "light";
-    } catch {
-      return "light";
-    }
-  });
-  const [jpFontMode, setJpFontMode] = useState<"sans" | "serif">(() => {
-    if (typeof window === "undefined") {
-      return "sans";
-    }
-    try {
-      return window.localStorage.getItem("wr:jp-font") === "serif" ? "serif" : "sans";
-    } catch {
-      return "sans";
-    }
-  });
   const menuRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
 
@@ -105,27 +85,7 @@ export default function UserHeaderMenu({
     };
   }, []);
 
-  function toggleTheme() {
-    const next = themeMode === "light" ? "dark" : "light";
-    setThemeMode(next);
-    try {
-      window.localStorage.setItem("wr:theme", next);
-    } catch {
-      // Ignore storage errors in restricted browsing modes.
-    }
-    document.documentElement.setAttribute("data-theme", next);
-  }
 
-  function toggleJpFont() {
-    const next = jpFontMode === "sans" ? "serif" : "sans";
-    setJpFontMode(next);
-    try {
-      window.localStorage.setItem("wr:jp-font", next);
-    } catch {
-      // Ignore storage errors in restricted browsing modes.
-    }
-    document.documentElement.setAttribute("data-jp-font", next);
-  }
 
   const hasSyncStatus = Boolean(lastSyncedAt);
   const hasActivityStatus = Boolean(lastActivityAt);
@@ -371,29 +331,6 @@ export default function UserHeaderMenu({
                     </button>
                   </div>
                 ) : null}
-              </section>
-            ) : null}
-
-            {viewerMenuInfo ? (
-              <section className="border-t border-line pt-3">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Preferences</p>
-                <div className="mt-2 space-y-1.5">
-                  <button
-                    type="button"
-                    onClick={toggleTheme}
-                    className={MENU_BUTTON_CLASS}
-                  >
-                    Theme: {themeMode === "light" ? "Light" : "Dark"}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={toggleJpFont}
-                    className={MENU_BUTTON_CLASS}
-                  >
-                    JP Font: {jpFontMode === "sans" ? "Sans" : "Serif"}
-                  </button>
-                </div>
               </section>
             ) : null}
 

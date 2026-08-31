@@ -58,10 +58,10 @@ through it meets a finished flow.
 | 24 | Print mode | — |
 | 25 | ~~Practice sheet controls~~ ✅ v0.115.0, v0.116.0, v0.118.0 | — |
 | 26 | ~~JLPT old numbering~~ ✅ v0.119.0 | — |
-| 27 | Counts on second-level filters | — |
+| 27 | ~~Counts on second-level filters~~ ✅ v0.124.0 | — |
 | 28 | Pagination placement option | — |
 | 30 | Desktop page width and header crowding | — |
-| 31 | Consolidate preferences into Settings | — |
+| 31 | ~~Consolidate preferences into Settings~~ ✅ v0.124.0 | — |
 | 29 | ~~Real US and Canada map geometry~~ ✅ v0.123.0 | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.

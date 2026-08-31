@@ -1346,5 +1346,15 @@
     "version": "0.123.0",
     "releasedAt": "2026-08-31T09:00:00Z",
     "summary": "Map mode plays on all three countries. The American and Canadian outlines were hand-drawn placeholders - Ontario was five points - and are now built from the Census Bureau and Natural Earth by scripts that can be re-run when a boundary changes. Neighbours come from the map itself, so the wrong answers are the places next door."
+  },
+  {
+    "id": "counts-and-preferences",
+    "area": "platform",
+    "name": "Counts where you choose, preferences where your account is",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.124.0",
+    "releasedAt": "2026-08-31T10:00:00Z",
+    "summary": "The writing sheet's second row of chips now carries counts, so picking a grade or level is no longer a choice between bare numbers. Theme and Japanese font move from the account menu onto the profile, which already held the name and the visibility - one home for how you want UmaKuma to be rather than two."
   }
 ]
