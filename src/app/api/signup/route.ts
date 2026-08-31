@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { generateFriendlyName, normalizeDisplayName, slugify, uniqueSlug } from "@/lib/accountIdentity";
-import { ACCOUNT_APPROVAL } from "@/lib/accountApproval";
+import { ACCOUNT_APPROVAL, isLockedOut } from "@/lib/accountApproval";
+import { WELCOME_COPY } from "@/app/welcome/welcomeCopy";
 import { isAccountVisibility } from "@/lib/accountVisibility";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { authOptions } from "@/lib/auth";
@@ -43,6 +44,14 @@ export async function POST(request: Request) {
         select: { id: true, slug: true, approvalStatus: true },
       });
       if (existing) {
+        /*
+         * Except a rejected one, which must not be handed back as though the
+         * signup worked. They cannot make a second account either - this email
+         * already has one - so the honest answer is that this is the end of it.
+         */
+        if (isLockedOut(existing.approvalStatus)) {
+          return NextResponse.json({ error: WELCOME_COPY.rejectedBody }, { status: 403 });
+        }
         return NextResponse.json({ account: existing, created: false });
       }
 

@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { isAwaitingApproval } from "@/lib/accountApproval";
+import { isAwaitingApproval, isLockedOut } from "@/lib/accountApproval";
 import { normalizeDisplayName } from "@/lib/accountIdentity";
 import { authOptions } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
@@ -17,13 +17,38 @@ import { WELCOME_COPY } from "./welcomeCopy";
 
 const CARD_CLASS = "rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8";
 
+/** One sentence and a way onwards: three of this page's states are that shape. */
+function NoticeCard({ heading, body, action, href }: {
+  heading: string;
+  body: string;
+  action: string;
+  href: string;
+}) {
+  return (
+    <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-10 sm:px-6">
+      <UmaKumaPageBanner variant="leaderboard" />
+      <section className={CARD_CLASS}>
+        <h1 className="text-2xl font-black text-foreground">{heading}</h1>
+        <p className="mt-2 text-sm text-foreground/70">{body}</p>
+        <Link
+          href={href}
+          className="mt-5 inline-flex h-11 items-center rounded-full bg-accent px-6 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2"
+        >
+          {action}
+        </Link>
+      </section>
+    </main>
+  );
+}
+
 /**
  * The first thing a newcomer sees, and the only page that creates an account.
  *
- * It handles four states rather than assuming one: not signed in, signed in
- * with signup closed, signed in and waiting for approval, and signed in with
- * an account already - which is the case a double submit or a stale tab lands
- * on, and it belongs on their own page rather than back at this form.
+ * It handles five states rather than assuming one: not signed in, signed in
+ * with signup closed, signed in and waiting for approval, signed in to an
+ * account that was turned away, and signed in with a working account - which
+ * is the case a double submit or a stale tab lands on, and it belongs on their
+ * own page rather than back at this form.
  */
 export default async function WelcomePage() {
   const session = await getServerSession(authOptions);
@@ -53,21 +78,30 @@ export default async function WelcomePage() {
       });
 
   if (account) {
+    /*
+     * Turned away, so this is where they stop. Sending them to their own page
+     * would land them on a refusal notice, and offering the signup form would
+     * invite them to make a second account.
+     */
+    if (isLockedOut(account.approvalStatus)) {
+      return (
+        <NoticeCard
+          heading={WELCOME_COPY.rejectedHeading}
+          body={WELCOME_COPY.rejectedBody}
+          action={WELCOME_COPY.rejectedAction}
+          href="/"
+        />
+      );
+    }
+
     if (isAwaitingApproval(account.approvalStatus)) {
       return (
-        <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-10 sm:px-6">
-          <UmaKumaPageBanner variant="leaderboard" />
-          <section className={CARD_CLASS}>
-            <h1 className="text-2xl font-black text-foreground">{WELCOME_COPY.pendingHeading}</h1>
-            <p className="mt-2 text-sm text-foreground/70">{WELCOME_COPY.pendingBody}</p>
-            <Link
-              href="/"
-              className="mt-5 inline-flex h-11 items-center rounded-full bg-accent px-6 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2"
-            >
-              {WELCOME_COPY.pendingAction}
-            </Link>
-          </section>
-        </main>
+        <NoticeCard
+          heading={WELCOME_COPY.pendingHeading}
+          body={WELCOME_COPY.pendingBody}
+          action={WELCOME_COPY.pendingAction}
+          href="/"
+        />
       );
     }
 
@@ -85,19 +119,12 @@ export default async function WelcomePage() {
 
   if (!allowsSelfSignup(settings)) {
     return (
-      <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-10 sm:px-6">
-        <UmaKumaPageBanner variant="leaderboard" />
-        <section className={CARD_CLASS}>
-          <h1 className="text-2xl font-black text-foreground">{WELCOME_COPY.closedHeading}</h1>
-          <p className="mt-2 text-sm text-foreground/70">{WELCOME_COPY.closedBody}</p>
-          <Link
-            href="/join"
-            className="mt-5 inline-flex h-11 items-center rounded-full bg-accent px-6 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-accent-2"
-          >
-            {WELCOME_COPY.closedAction}
-          </Link>
-        </section>
-      </main>
+      <NoticeCard
+        heading={WELCOME_COPY.closedHeading}
+        body={WELCOME_COPY.closedBody}
+        action={WELCOME_COPY.closedAction}
+        href="/join"
+      />
     );
   }
 

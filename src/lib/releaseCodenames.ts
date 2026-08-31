@@ -204,6 +204,8 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tegaru na Tebiki", ja: "手軽な手引き", reading: "てがるなてびき", gloss: "a handbook made simple" },
   { romaji: "Todoku Toudai", ja: "届く灯台", reading: "とどくとうだい", gloss: "the lighthouse whose light reaches" },
   { romaji: "Nameraka na Nagare", ja: "滑らかな流れ", reading: "なめらかなながれ", gloss: "a smooth flow" },
+  { romaji: "Niramu Niou", ja: "睨む仁王", reading: "にらむにおう", gloss: "the glaring temple guardian" },
+  { romaji: "Nurikaeta Nuno", ja: "塗り替えた布", reading: "ぬりかえたぬの", gloss: "the cloth, dyed again" },
 ];
 
 /**

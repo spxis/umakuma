@@ -41,6 +41,23 @@ export function isAwaitingApproval(stored: string | null | undefined): boolean {
   return resolveApproval(stored) === ACCOUNT_APPROVAL.pending;
 }
 
+/**
+ * Whether this account has been turned away, and may no longer be used.
+ *
+ * Rejection used to mean nothing but an absence from the leaderboard: the
+ * account still opened its own pages, still answered every `/api/study` route,
+ * and still held a session. Turning someone away has to end their access, or
+ * the admin's only defence against a bad actor is to make them invisible to
+ * everyone but themselves.
+ *
+ * Deliberately not the same as `!isApproved`. Someone waiting is not someone
+ * turned away - a pending member keeps the run of the site while they wait,
+ * which is what the signup copy promises them.
+ */
+export function isLockedOut(stored: string | null | undefined): boolean {
+  return resolveApproval(stored) === ACCOUNT_APPROVAL.rejected;
+}
+
 export const ACCOUNT_APPROVAL_DISPLAY: Record<AccountApproval, string> = {
   [ACCOUNT_APPROVAL.pending]: "Waiting for approval",
   [ACCOUNT_APPROVAL.approved]: "Approved",

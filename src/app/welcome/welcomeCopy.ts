@@ -80,6 +80,18 @@ export const WELCOME_COPY = {
     "Your account is waiting to be approved. You can look around in the meantime — you will not appear on any leaderboard until then.",
   pendingAction: "Have a look around",
 
+  /**
+   * Shown to an account the admin turned away.
+   *
+   * No reason given and no appeal form, because neither is safe to automate:
+   * a reason tells someone acting in bad faith what to change, and a form
+   * hands them a channel. Whoever belongs here knows who to ask in person.
+   */
+  rejectedHeading: "This account is closed",
+  rejectedBody:
+    "UmaKuma is a small family site, and this account is not active. If you think that is a mistake, ask whoever invited you.",
+  rejectedAction: "Back to the front page",
+
   /** Shown when someone lands here but signup is invite-only. */
   closedHeading: "UmaKuma is invite only right now",
   closedBody: "If someone gave you a code, you can use it to join. Otherwise, ask them for one.",

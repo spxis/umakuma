@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 
+import { isLockedOut } from "@/lib/accountApproval";
 import { isAdminEmail } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
 import { prisma } from "@/lib/prisma";
@@ -42,6 +43,16 @@ export function canViewUserPage(input: {
   return Boolean(viewerUsername && targetUsername && viewerUsername === targetUsername);
 }
 
+/**
+ * Which account, if any, this viewer is.
+ *
+ * A rejected account resolves to nothing, on both paths. That is the whole of
+ * the lock at page level: with no account to match against, `canViewUserPage`
+ * refuses their own pages, `viewerKind` reads them as a signed-in stranger,
+ * and the header offers them what it offers anyone who is not a member. The
+ * alternative - a check at each of the dozen pages - is the kind that gets
+ * forgotten on the thirteenth.
+ */
 export async function resolveViewerMenuInfo(input: {
   viewerEmail: string | null;
   sessionName: string | null;
@@ -61,15 +72,26 @@ export async function resolveViewerMenuInfo(input: {
         nickname: true,
         wkUsername: true,
         slug: true,
+        approvalStatus: true,
       },
     });
 
+    /*
+     * A rejected account is nobody here. Not null, though - the session is
+     * real, and the menu still has to offer them a way to sign out of it.
+     */
+    const viewerIsMember = viewerAccount !== null && !isLockedOut(viewerAccount.approvalStatus);
+
     return {
       provider: "google",
-      name: viewerAccount?.nickname ?? sessionName ?? viewerEmail.split("@")[0] ?? "Google user",
+      name:
+        (viewerIsMember ? viewerAccount.nickname : null) ??
+        sessionName ??
+        viewerEmail.split("@")[0] ??
+        "Google user",
       email: viewerEmail,
-      wkUsername: viewerAccount?.wkUsername ?? null,
-      slug: viewerAccount?.slug ?? null,
+      wkUsername: viewerIsMember ? viewerAccount.wkUsername : null,
+      slug: viewerIsMember ? viewerAccount.slug : null,
       isAdmin: viewerIsAdmin,
     };
   }
@@ -89,12 +111,18 @@ export async function resolveViewerMenuInfo(input: {
       slug: true,
       joinedByEmail: true,
       inviteCodeHash: true,
+      approvalStatus: true,
     },
   });
 
   // An invite account needs a code and one address; the address may be a slug,
-  // since an invited member need not have connected WaniKani either.
+  // since an invited member need not have connected WaniKani either. A rejected
+  // one is refused outright - unlike a Google session there is nothing else the
+  // cookie is good for, and `/api/invite/session` clears it on the next call.
   if (!inviteAccount?.inviteCodeHash || !(inviteAccount.wkUsername || inviteAccount.slug)) {
+    return null;
+  }
+  if (isLockedOut(inviteAccount.approvalStatus)) {
     return null;
   }
 
