@@ -1546,5 +1546,15 @@
     "version": "0.143.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "The previous release bet that declaring every Japanese run lang=\"ja\" would stop Chrome reading the page as Japanese and offering to translate it into English. It did not: \"always translate Japanese\" is a sticky preference, and once it is set the page's own declarations do not get a vote. So the page refuses translation at the root again. What Chrome was doing is running every string through a Japanese-to-English model, English included, which re-interprets rather than passes through - \"Writing practice\" came back \"First practice\". The lang=\"ja\" tagging stays because it is correct and because a screen reader needs it to pronounce a reading instead of spelling the kanji out as English. The cost is that Google Translate can no longer render the interface in another language; the answer to that is a locale layer serving translations we wrote, which the copy modules are already shaped for."
+  },
+  {
+    "id": "leaderboard-endpoint-closed",
+    "area": "account",
+    "name": "The board stops leaking",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.144.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "/api/leaderboard took no session and applied no filter: it selected from Account directly and handed every member's nickname and real WaniKani username to anyone who asked, children included, while the home page had long since moved to the filtered loader. The route was serving nobody in the app and leaking to everybody. It now requires a session and reuses loadLeaderboardAccounts, so one place decides who may be seen - each member's own visibility choice plus the admin's approval - and a signed-in stranger with no account here sees what a stranger sees. The background sync trigger moved behind the same check; it was reachable anonymously, which let anyone on the internet make the server start refreshing accounts against the WaniKani API."
   }
 ]
