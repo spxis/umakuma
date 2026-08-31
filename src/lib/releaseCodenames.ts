@@ -213,6 +213,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Fumidasu Fune", ja: "踏み出す舟", reading: "ふみだすふね", gloss: "the boat that sets out" },
   { romaji: "Heiki na Hesaki", ja: "平気な舳先", reading: "へいきなへさき", gloss: "the prow that holds steady" },
   { romaji: "Hokan no Hondana", ja: "保管の本棚", reading: "ほかんのほんだな", gloss: "the shelf that keeps things" },
+  { romaji: "Massugu na Machi", ja: "真っ直ぐな街", reading: "まっすぐなまち", gloss: "a street set straight" },
 ];
 
 /**

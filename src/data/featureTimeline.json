@@ -1690,5 +1690,15 @@
     "version": "0.162.0",
     "releasedAt": "2026-09-01T01:00:00Z",
     "summary": "Looking a kanji up is rarely a single act - you check 家, then 家事, then go back to 家 - and retyping it each time was the whole friction. The search page now keeps the searches this browser has run and lists five of them under the results, each one a link back to those results and each with its own way to forget it. Twenty are remembered while five are shown, so forgetting one reveals the sixth rather than leaving a gap, and a single control clears the lot. The history lives on the device rather than the account, which means an anonymous visitor gets the same convenience as a member, and it is read through a store subscription rather than into state after mount, so the panel never flashes empty before it fills."
+  },
+  {
+    "id": "explorer-row-density",
+    "area": "study",
+    "name": "Rows that show the character",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.163.0",
+    "releasedAt": "2026-09-01T01:00:00Z",
+    "summary": "The JLPT and WaniKani explorers share one card component, and its list view was unusable: where each row s character should have been there was a pile of chips instead - the level pill sitting on the success rate sitting on the glyph. Both explorers hand the card an overlay written for the card shape, which places the level, the success rate and the trouble and favourite controls in the corners of a glyph box 128 pixels tall. A row s glyph box is 44 pixels square and has no corners to spare, so everything landed on top of everything else. The card now tells its overlays which shape they are being drawn into: in a row they lay themselves out in the line as ordinary chips and buttons, while the card keeps the corners it was designed around. Neither explorer changed - they pass the same overlay as before - and the trouble and favourite controls now work from the list view as well as the grid, which is what a member scanning a long level actually wants. Measured on both explorers afterwards: forty row glyph boxes each, none holding anything but the character."
   }
 ]

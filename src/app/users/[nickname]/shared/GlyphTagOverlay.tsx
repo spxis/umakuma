@@ -1,5 +1,8 @@
+"use client";
+
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
+import { useIsRowDensity } from "./explorerCardDensity";
 import { FavouriteStarIcon, TroubleFaceIcon } from "./studyTagIcons";
 
 type Props = {
@@ -18,12 +21,22 @@ export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyT
           ? "text-vocabulary"
           : "text-foreground";
   const hasActiveTags = studyTags.favorite || studyTags.trouble;
+  const inRow = useIsRowDensity();
   const visibilityClass = hasActiveTags
     ? "opacity-100"
     : "pointer-events-none opacity-0 group-hover/explorer-card:pointer-events-auto group-hover/explorer-card:opacity-100 group-focus-within/explorer-card:pointer-events-auto group-focus-within/explorer-card:opacity-100 [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100";
 
+  /*
+   * A card places these in the two bottom corners of the glyph box - trouble
+   * left, favourite right, as the rest of the app does. A row has no box to
+   * put corners in, so they become two buttons in the line, in the same order.
+   */
+  const wrapperClass = inRow
+    ? `flex items-center gap-0.5 transition-opacity ${visibilityClass}`
+    : `absolute inset-x-1 bottom-1 z-10 flex items-end justify-between transition-opacity ${visibilityClass}`;
+
   return (
-    <div className={`absolute inset-x-1 bottom-1 z-10 flex items-end justify-between transition-opacity ${visibilityClass}`}>
+    <div className={wrapperClass}>
       <button
         type="button"
         onClick={(event) => {

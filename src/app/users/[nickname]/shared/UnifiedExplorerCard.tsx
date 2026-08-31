@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { noTranslateClass } from "@/app/shared/japaneseText";
 
+import { ExplorerCardDensityProvider } from "./explorerCardDensity";
+
 type Props = {
   onClick: (meta?: { shiftKey: boolean }) => void;
   activateOn?: "card" | "glyph-box";
@@ -61,6 +63,7 @@ export default function UnifiedExplorerCard({
   };
 
   return (
+    <ExplorerCardDensityProvider density={density}>
     <div
       role="button"
       tabIndex={0}
@@ -101,7 +104,6 @@ export default function UnifiedExplorerCard({
             data-explorer-glyph-hitbox="true"
             className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border ${glyphCursorClass} ${glyphClassName}`}
           >
-            {glyphOverlay}
             <p
               lang="ja"
               translate="no"
@@ -112,6 +114,13 @@ export default function UnifiedExplorerCard({
             </p>
           </div>
           <span className="min-w-0 flex-1 truncate text-sm font-semibold text-foreground/75">{glyphSubtitle ?? ""}</span>
+          {/*
+            * Beside the glyph, not inside it. The overlay is written for the
+            * card's tall box and lays its pieces out in that box's corners;
+            * a 44px square has no corners to spare, so in a row the same
+            * pieces sit in the line as ordinary chips and buttons.
+            */}
+          <div className="flex shrink-0 items-center gap-1">{glyphOverlay}</div>
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-1">{topRight}</div>
           <div className="flex shrink-0 items-center gap-2">
             {statusChip}
@@ -150,5 +159,6 @@ export default function UnifiedExplorerCard({
         </>
       )}
     </div>
+    </ExplorerCardDensityProvider>
   );
 }
