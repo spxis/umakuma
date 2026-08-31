@@ -445,6 +445,54 @@ stores nothing: both catalogues change on their own schedule, so a persisted
 copy would be a third thing to keep true. The ladder itself, when its shape is
 decided, is what earns a table.
 
+### 33 — Example sentences from Tatoeba (approved in principle, not started)
+
+John, 31 Aug: "Tatoeba integration sounds like an idea — where we ingest
+periodically and attribute site wide", and separately: this is what replaces
+leaning on WaniKani context sentences once members arrive who have no WaniKani
+account. Sized as its own task, after the search work.
+
+**Why it is not scraping.** Tatoeba publishes weekly exports (sentences,
+links between a sentence and its translations, and per-sentence licence and
+author rows) as downloadable files. Ingesting those is the supported path and
+the reason no crawler is needed. Licence is CC BY 2.0 FR on the corpus, with
+some individual sentences CC0 — attribution is site-wide, which is why John's
+"attribute site wide" is the right shape, but the per-sentence licence column
+has to be carried through the ingest rather than assumed uniform.
+
+**Why it matters beyond a nicer glyph page.** WaniKani context sentences are
+WaniKani's, shown to WaniKani members. Everything built for a member without a
+connection — standalone JLPT study, the grade explorer, Practice — currently
+has no sentence to show at all. This is the sentence source those surfaces can
+actually use.
+
+**Shape.** Four pieces, in this order, each its own release:
+
+1. `scripts/ingest-tatoeba.mjs` — pull the pinned weekly export, keep Japanese
+   sentences with an English translation, drop anything without a usable
+   licence row, and index by the characters each sentence contains so a kanji
+   or a vocabulary word can find its own examples. This is the `map:build`
+   pattern: regenerate, never hand-edit.
+2. A table rather than JSON. Unlike the prefectures and the grade catalogue,
+   this is too large to ship in the bundle and wants querying by character and
+   by level. That means a `prisma/schema.prisma` change, which means a manual
+   `pnpm db:push` to production as its own step — the failure mode that took
+   Map mode down.
+3. `/api/sentences` — the same shape as `/api/search`: Zod at the boundary,
+   windowed with `limit`/`offset`, cached per query string.
+4. The surfaces, once the data is real: the glyph viewer, the Review and View
+   Kanji/Radical/Vocabulary modals, the JLPT and grade explorers, and search
+   results, which is where a learner asking "how is this used" already is.
+   Attribution lands in the footer in the same pass as the first surface, not
+   after it.
+
+**Open, and John's:** whether a sentence with no English translation is worth
+storing (it is useful for reading practice and useless for a meaning check),
+and how a sentence gets chosen when a common character has thousands.
+
+Related decision already made: WaniKani audio stays gated to members with a
+WaniKani connection, and Tofugu is not being asked for anything yet.
+
 ---
 
 ## What works without a WaniKani connection
