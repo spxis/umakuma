@@ -20,6 +20,8 @@ export const PROFILE_COPY = {
   saving: "Saving…",
   saved: "Saved",
   saveFailed: "Could not save that.",
+  visibility: "Who can see you",
+  visibilityHint: "Your name and scores on leaderboards. Nothing here is shared outside UmaKuma unless you pick Public.",
   games: "Games",
   gamesKind: "Game",
   gamesEmpty: "No finished games yet.",

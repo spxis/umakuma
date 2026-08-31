@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { onlyConnected } from "@/lib/wanikaniConnection";
+import { viewerKind } from "@/lib/accountListing";
+import { loadLeaderboardAccounts } from "@/lib/leaderboardAccounts";
 import { ensureActiveReadingChallengeId } from "@/lib/readingChallengeStore";
 import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
 import { getServerSession } from "next-auth";
@@ -75,6 +76,14 @@ export default async function Home() {
   const canViewAllUserPages = isAdminEmail(viewerEmail);
   if (viewerEmail && !canViewAllUserPages && !viewerAddress(viewerMenuInfo)) redirect("/join");
   const viewerWkUsername = viewerAddress(viewerMenuInfo);
+  /*
+   * Signed in is not the same as being a member here: someone with a Google
+   * session but no account of their own sees what a stranger sees.
+   */
+  const boardViewer = viewerKind({
+    isAdmin: canViewAllUserPages,
+    hasAccount: Boolean(viewerWkUsername),
+  });
   const readingChallengeHref = viewerWkUsername ? `/users/${encodeURIComponent(viewerWkUsername)}/read` : "/join";
   const challengeToday = getTodayDateInputValue();
 
@@ -115,40 +124,7 @@ export default async function Home() {
       return { refreshed: 0, skipped: 0 };
     });
 
-    // A WaniKani board ranks WaniKani accounts; see onlyConnected.
-    leaderboard = onlyConnected(await prisma.account.findMany({
-      orderBy: [{ score: "desc" }, { wkLevel: "desc" }, { reviewCount: "desc" }],
-      select: {
-        id: true,
-        nickname: true,
-        wkUsername: true,
-        wkLevel: true,
-        reviewCount: true,
-        burnedCount: true,
-        pendingReviews: true,
-        radicalCount: true,
-        vocabularyCount: true,
-        apprenticeCount: true,
-        guruCount: true,
-        masterCount: true,
-        enlightenedCount: true,
-        levelKanjiTotal: true,
-        levelKanjiLearned: true,
-        levelKanjiGuruPlus: true,
-        levelKanjiLocked: true,
-        itemSpread: true,
-        jlptCounts: true,
-        lastActivityAt: true,
-        lastRadicalGuruedAt: true,
-        lastKanjiGuruedAt: true,
-        lastVocabularyGuruedAt: true,
-        lastRadicalGuruedItem: true,
-        lastKanjiGuruedItem: true,
-        lastVocabularyGuruedItem: true,
-        score: true,
-        lastSyncedAt: true,
-      },
-    }));
+    leaderboard = await loadLeaderboardAccounts(boardViewer);
 
     if (leaderboard.length > 0) {
       const accountIds = leaderboard.map((row) => row.id);

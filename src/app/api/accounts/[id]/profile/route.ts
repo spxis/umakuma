@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { normalizeDisplayName } from "@/lib/accountIdentity";
+import { ACCOUNT_VISIBILITY_VALUES, isAccountVisibility } from "@/lib/accountVisibility";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import {
   JLPT_CERTIFICATION_STATUS_VALUES,
@@ -13,6 +14,7 @@ import { prisma } from "@/lib/prisma";
 
 const bodySchema = z.object({
   displayName: z.string().max(200).nullable().optional(),
+  visibility: z.string().max(16).optional(),
   jlptStatus: z.string().max(32).nullable().optional(),
   jlptYear: z.coerce.number().int().min(1980).max(2100).nullable().optional(),
   jlptLevel: z.coerce.number().int().min(1).max(5).nullable().optional(),
@@ -36,11 +38,21 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
         return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
       }
 
-      const { displayName, jlptStatus, jlptYear, jlptLevel } = parsed.data;
+      const { displayName, visibility, jlptStatus, jlptYear, jlptLevel } = parsed.data;
       const data: Record<string, unknown> = {};
 
       if (displayName !== undefined) {
         data.displayName = normalizeDisplayName(displayName);
+      }
+
+      if (visibility !== undefined) {
+        if (!isAccountVisibility(visibility)) {
+          return NextResponse.json(
+            { error: `Visibility must be one of: ${ACCOUNT_VISIBILITY_VALUES.join(", ")}.` },
+            { status: 400 },
+          );
+        }
+        data.visibility = visibility;
       }
 
       if (jlptStatus !== undefined) {
@@ -78,7 +90,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
       const account = await prisma.account.update({
         where: { id },
         data,
-        select: { displayName: true, jlptStatus: true, jlptSystem: true, jlptYear: true, jlptLevel: true },
+        select: { displayName: true, visibility: true, jlptStatus: true, jlptSystem: true, jlptYear: true, jlptLevel: true },
       });
 
       return NextResponse.json(account);

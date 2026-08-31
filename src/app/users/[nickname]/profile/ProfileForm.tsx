@@ -3,6 +3,12 @@
 import { useState, type FormEvent } from "react";
 
 import {
+  ACCOUNT_VISIBILITY_DISPLAY,
+  ACCOUNT_VISIBILITY_VALUES,
+  VISIBILITY_REASSURANCE,
+  resolveVisibility,
+} from "@/lib/accountVisibility";
+import {
   JLPT_CERTIFICATION_STATUSES,
   JLPT_CERTIFICATION_STATUS_VALUES,
   JLPT_FIRST_YEAR,
@@ -15,6 +21,7 @@ import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
 type Props = {
   accountId: string;
   displayName: string | null;
+  visibility: string | null;
   jlptStatus: string | null;
   jlptYear: number | null;
   jlptLevel: number | null;
@@ -31,8 +38,9 @@ const FIELD_CLASS =
  * 2010 five counting down from N1. Offering N3 for a 2005 sitting would invite
  * an answer that never existed.
  */
-export default function ProfileForm({ accountId, displayName, jlptStatus, jlptYear, jlptLevel }: Props) {
+export default function ProfileForm({ accountId, displayName, visibility, jlptStatus, jlptYear, jlptLevel }: Props) {
   const [name, setName] = useState(displayName ?? "");
+  const [seenBy, setSeenBy] = useState(resolveVisibility(visibility));
   const [status, setStatus] = useState(jlptStatus ?? JLPT_CERTIFICATION_STATUSES.none);
   const [year, setYear] = useState(jlptYear ? String(jlptYear) : "");
   const [level, setLevel] = useState(jlptLevel ? String(jlptLevel) : "");
@@ -55,6 +63,7 @@ export default function ProfileForm({ accountId, displayName, jlptStatus, jlptYe
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         displayName: name,
+        visibility: seenBy,
         jlptStatus: status,
         jlptYear: asksForLevel && year ? parsedYear : null,
         jlptLevel: asksForLevel && level ? Number.parseInt(level, 10) : null,
@@ -86,6 +95,42 @@ export default function ProfileForm({ accountId, displayName, jlptStatus, jlptYe
         />
         <p className="mt-1 text-xs text-foreground/50">{PROFILE_COPY.displayNameHint}</p>
       </div>
+
+      <fieldset>
+        <legend className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/55">
+          {PROFILE_COPY.visibility}
+        </legend>
+        <p className="mb-2 text-xs text-foreground/50">{PROFILE_COPY.visibilityHint}</p>
+
+        <div className="space-y-2">
+          {ACCOUNT_VISIBILITY_VALUES.map((value) => (
+            <label
+              key={value}
+              className={`flex cursor-pointer gap-3 rounded-xl border p-3 transition ${
+                seenBy === value ? "border-accent bg-accent/5" : "border-line hover:bg-surface-muted"
+              }`}
+            >
+              <input
+                type="radio"
+                name="visibility"
+                value={value}
+                checked={seenBy === value}
+                onChange={() => { setSeenBy(value); setState("idle"); }}
+                className="mt-0.5"
+              />
+              <span>
+                <span className="block text-sm font-bold text-foreground">
+                  {ACCOUNT_VISIBILITY_DISPLAY[value].label}
+                </span>
+                <span className="block text-xs text-foreground/60">
+                  {ACCOUNT_VISIBILITY_DISPLAY[value].description}
+                </span>
+              </span>
+            </label>
+          ))}
+        </div>
+        <p className="mt-2 text-xs font-semibold text-foreground/55">{VISIBILITY_REASSURANCE}</p>
+      </fieldset>
 
       <div>
         <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/55">{PROFILE_COPY.jlpt}</p>

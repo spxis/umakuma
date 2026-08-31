@@ -38,7 +38,7 @@ export default async function UserProfilePage({ params }: PageProps) {
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
     select: {
-      id: true, nickname: true, slug: true, displayName: true, wkUsername: true, wkLevel: true,
+      id: true, nickname: true, slug: true, displayName: true, visibility: true, wkUsername: true, wkLevel: true,
       jlptStatus: true, jlptSystem: true, jlptYear: true, jlptLevel: true,
       lastSyncedAt: true, lastActivityAt: true,
     },
@@ -95,6 +95,7 @@ export default async function UserProfilePage({ params }: PageProps) {
         <ProfileForm
           accountId={account.id}
           displayName={account.displayName}
+          visibility={account.visibility}
           jlptStatus={account.jlptStatus}
           jlptYear={account.jlptYear}
           jlptLevel={account.jlptLevel}

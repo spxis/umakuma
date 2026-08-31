@@ -1136,5 +1136,15 @@
     "version": "0.102.0",
     "releasedAt": "2026-08-30T19:05:00Z",
     "summary": "Asking for the login page while already signed in answered with a sign-out screen. It now takes you where you were headed, or to your own page. The sign-out tab links straight to the one screen that signs you out instead of bouncing through a redirect with no page of its own, and calls it Sign out, the wording used everywhere else."
+  },
+  {
+    "id": "google-signup-and-visibility",
+    "area": "account",
+    "name": "Signing up, and choosing who can see you",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.103.0",
+    "releasedAt": "2026-08-30T20:15:00Z",
+    "summary": "A newcomer now gets a welcome instead of a locked door: what UmaKuma is, that WaniKani is not required, a name, and a choice of who can see them, which they can change on their profile whenever they like. Leaderboards respect that choice. Who may join, what they start on and which questions are asked are all set from a new admin page, and it ships closed."
   }
 ]

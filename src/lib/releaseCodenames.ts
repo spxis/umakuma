@@ -153,6 +153,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Shizukesa Shigure", ja: "静けさ時雨", reading: "しずけさしぐれ", gloss: "the quiet of a passing shower" },
   { romaji: "Suisai Sumire", ja: "水彩菫", reading: "すいさいすみれ", gloss: "a violet in watercolour" },
   { romaji: "Seseragi Semi", ja: "せせらぎ蝉", reading: "せせらぎせみ", gloss: "cicadas over a babbling brook" },
+  { romaji: "Soshun Sogen", ja: "早春草原", reading: "そうしゅんそうげん", gloss: "grassland in early spring" },
 ];
 
 /**

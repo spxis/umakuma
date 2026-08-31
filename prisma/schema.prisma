@@ -34,6 +34,21 @@ model Account {
   jlptSystem     String?
   jlptLevel      Int?
   jlptYear       Int?
+  /*
+   * Who may see this member, and whether they are let in at all.
+   *
+   * `visibility` is the member's own choice, asked during signup and editable
+   * on their profile: private, family (other members) or public. Null means an
+   * account that predates the column, which was already on the leaderboard and
+   * must stay there, so it reads as family rather than private.
+   *
+   * `approvalStatus` is John's decision, not theirs. Open Google signup lets
+   * anyone create an account, but it stays pending until approved, so a
+   * stranger can look around without appearing anywhere.
+   */
+  visibility     String?
+  approvalStatus String?
+  approvedAt     DateTime?
   joinedByEmail  String?
   joinedByName   String?
   inviteCodeHash String?
@@ -225,6 +240,22 @@ model WkSubjectCatalog {
   @@index([level])
   @@index([dataUpdatedAt])
   @@index([hiddenAt])
+}
+
+/*
+ * Admin-editable settings that are not simply on or off.
+ *
+ * FeatureFlag holds booleans; this holds the rest, as strings parsed by the
+ * definition in code. Same split as the flags: what settings exist and what
+ * they accept lives in `src/lib/signupSettings.ts`, and the database stores
+ * only the chosen values, so a setting works before any row exists and a stale
+ * row for a removed setting is inert.
+ */
+model SiteSetting {
+  key       String   @id
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model FeatureFlag {
