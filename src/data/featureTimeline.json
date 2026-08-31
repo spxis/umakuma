@@ -1296,5 +1296,15 @@
     "version": "0.118.0",
     "releasedAt": "2026-08-31T05:00:00Z",
     "summary": "The option reached the stroke-order sheet but not the tracing sheet, which kept printing the character solid in the first square - the one thing the option exists to remove. It is now an empty square to write in, like the rest of the row."
+  },
+  {
+    "id": "jlpt-old-numbering",
+    "area": "study",
+    "name": "The JLPT as it was before 2010",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.119.0",
+    "releasedAt": "2026-08-31T05:10:00Z",
+    "summary": "The explorer and the writing sheet both offer the four levels the test ran until 2009, for anyone who sat it then. Both schemes count down, so old Level 4 is the beginner paper and matches N5 rather than N4 - and N3 is absent, because it was added in 2010 to bridge old Levels 3 and 2. The explorer says so rather than inventing a mapping."
   }
 ]

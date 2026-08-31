@@ -169,6 +169,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Fubuki no Futaba", ja: "吹雪の二葉", reading: "ふぶきのふたば", gloss: "two leaves in a snowstorm" },
   { romaji: "Heya no Hekiga", ja: "部屋の壁画", reading: "へやのへきが", gloss: "a mural in the room" },
   { romaji: "Hoozuki Hosomichi", ja: "鬼灯細道", reading: "ほおずきほそみち", gloss: "a lane of lantern plants" },
+  { romaji: "Mado no Maboroshi", ja: "窓の幻", reading: "まどのまぼろし", gloss: "a mirage at the window" },
 ];
 
 /**
