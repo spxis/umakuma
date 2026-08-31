@@ -30,6 +30,7 @@ import type {
 } from "./GameMode.types";
 import { useGameSession } from "./useGameSession";
 import { usePersistedGameSettings } from "./usePersistedGameSettings";
+import { GAME_KIND_REQUEST_EVENT } from "./GameSubNav";
 
 function gameSelectionBatchSize(batchSize: number): GameSelection["batchSize"] {
   return isGameBatchSize(batchSize) ? batchSize : "all";
@@ -119,6 +120,20 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
     setPhase("lobby");
     window.requestAnimationFrame(() => setupRef.current?.scrollIntoView({ block: "start", behavior: "smooth" }));
   }
+
+  /*
+   * The header's second row asks for a kind rather than linking to one, since a
+   * game is a phase of this client rather than a route. Registered after
+   * `openLobby` is defined so it always opens the current one.
+   */
+  useEffect(() => {
+    const onRequest = (event: Event) => {
+      const kind = (event as CustomEvent<{ kind: GameKind }>).detail?.kind;
+      if (kind) openLobby(kind);
+    };
+    window.addEventListener(GAME_KIND_REQUEST_EVENT, onRequest as EventListener);
+    return () => window.removeEventListener(GAME_KIND_REQUEST_EVENT, onRequest as EventListener);
+  });
 
   function backToHub() {
     session.reset();

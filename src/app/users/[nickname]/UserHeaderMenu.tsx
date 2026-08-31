@@ -3,19 +3,27 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 import { buildHeaderMenu } from "@/app/shared/headerMenuModel";
 import InviteSessionActions from "./InviteSessionActions";
+import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import type { UserHeaderMenuProps } from "./UserHeaderMenu.types";
 import { viewerAddress } from "@/app/shared/viewerAddress";
-const MENU_BUTTON_CLASS =
-  "inline-flex h-8 w-full items-center justify-center rounded-full border border-line bg-surface-muted px-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface";
-const MENU_LIST_GROUP_CLASS = "mt-2 overflow-hidden rounded-xl border border-line bg-surface";
-const MENU_LIST_ITEM_CLASS = "flex h-10 w-full items-center px-3 text-sm font-semibold text-foreground transition hover:bg-surface-muted";
-const MENU_LIST_ITEM_DIVIDER_CLASS = "border-t border-line";
-const MENU_LIST_ITEM_ACTIVE_CLASS = "bg-surface-muted text-accent";
+/*
+ * One row style for everything in the menu.
+ *
+ * Each cluster used to be a bordered card with a shouty uppercase heading over
+ * it - ACCOUNT, GO TO, SETTINGS, ADMIN, ACTIONS - so a menu of a dozen links
+ * read as five boxed lists. GitHub, Claude and WaniKani all do the same simpler
+ * thing: one flat column of rows, with a hairline where the subject changes and
+ * no heading at all. The clusters still exist, they just stop announcing
+ * themselves.
+ */
+const MENU_ITEM_CLASS =
+  "flex h-9 w-full items-center rounded-lg px-2.5 text-sm font-medium text-foreground transition hover:bg-surface-muted";
+const MENU_ITEM_ACTIVE_CLASS = "bg-surface-muted font-black text-accent";
+const MENU_RULE_CLASS = "my-1.5 border-t border-line/70";
 function getInitials(name: string | null): string {
   if (!name) {
     return "??";
@@ -127,6 +135,25 @@ export default function UserHeaderMenu({
     showAdminActions,
   });
   const adminLinks = menu.admin;
+
+  /*
+   * The menu as one column, clustered rather than boxed.
+   *
+   * Navigation repeats the header, so it is for small screens only - the
+   * header already shows every section on a desktop, and listing them twice is
+   * what let the two copies drift apart in the first place.
+   */
+  const menuClusters: Array<{
+    id: string;
+    links: { label: string; href: string }[];
+    smallScreensOnly?: boolean;
+  }> = [
+    { id: "account", links: menu.account },
+    { id: "navigate", links: menu.navigate.flatMap((group) => group.links), smallScreensOnly: true },
+    { id: "settings", links: menu.settings },
+    { id: "admin", links: adminLinks },
+    { id: "site", links: menu.site },
+  ].filter((cluster) => cluster.links.length > 0);
   const canRefreshLeaderboard = adminSignedIn || showAdminActions;
   async function refreshLeaderboard() {
     setRefreshingLeaderboard(true);
@@ -169,217 +196,96 @@ export default function UserHeaderMenu({
         ≡
       </button>
 
-      {open && typeof document !== "undefined"
-        ? createPortal(
-          <>
-            <button
-              type="button"
-              aria-label="Close menu"
-              onClick={() => setOpen(false)}
-              className="fixed inset-0 z-[9990] bg-foreground/20 backdrop-blur-[1px]"
-            />
-            <aside ref={panelRef} className="fixed inset-x-[22px] bottom-[22px] top-[22px] z-[9991] overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-[0_18px_40px_rgba(8,16,36,0.22)] sm:inset-x-auto sm:bottom-auto sm:right-6 sm:top-24 sm:w-[min(88vw,320px)] sm:max-h-[calc(100dvh-7rem)]">
-            <div className="space-y-3">
-            <section>
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-accent">Account</p>
-              {viewerMenuInfo ? (
-                <>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.12em] text-foreground/60">
-                    {viewerMenuInfo.provider === "google" ? "Signed in with Google" : "Invite session"}
+      {open ? (
+        <>
+          {/* Tap-away close. The panel hangs off the button rather than being
+              pinned to a corner of the window, which is what made it read as
+              floating loose of the header. */}
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={() => setOpen(false)}
+            className={`fixed inset-0 ${MODAL_LAYERS.headerScrim} cursor-default sm:bg-transparent`}
+          />
+          <aside
+            ref={panelRef}
+            role="menu"
+            className={`fixed inset-x-3 top-16 max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-2xl border border-line bg-surface p-2 shadow-[0_18px_40px_rgba(8,16,36,0.22)] ${MODAL_LAYERS.headerPanel} sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-[17rem]`}
+          >
+            {/* Who you are, the way a user menu opens everywhere else: the name
+                and the address under it, with no heading over the top. */}
+            {viewerMenuInfo ? (
+              <div className="flex items-center gap-2.5 px-2.5 py-2">
+                <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-surface-muted text-[11px] font-black text-foreground">
+                  {getInitials(viewerMenuInfo.name)}
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-black leading-tight text-foreground">{viewerMenuInfo.name}</p>
+                  <p className="truncate text-xs leading-tight text-foreground/60">
+                    {viewerMenuInfo.wkUsername ? `@${viewerMenuInfo.wkUsername}` : viewerMenuInfo.email ?? ""}
                   </p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-line bg-surface-muted text-[11px] font-black text-foreground">
-                      {getInitials(viewerMenuInfo.name)}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-black text-foreground">{viewerMenuInfo.name}</p>
-                      {viewerMenuInfo.email ? (
-                        <p className="truncate text-xs text-foreground/70">{viewerMenuInfo.email}</p>
-                      ) : null}
-                      {hasSyncStatus ? (
-                        <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/55">
-                          Updated {updatedRelativeLabel}
-                          <span className="mx-2 text-foreground/35">|</span>
-                          Active {activeRelativeLabel}
-                        </p>
-                      ) : null}
-                    </div>
-                  </div>
-                  {viewerMenuInfo.wkUsername ? (
-                    <p className="mt-1 text-xs text-foreground/70">@{viewerMenuInfo.wkUsername}</p>
-                  ) : null}
-                </>
-              ) : (
-                <p className="mt-1 text-sm font-semibold text-foreground/80">Not signed in</p>
-              )}
-            </section>
-
-            {menu.account.length > 0 ? (
-              <section className="border-t border-line pt-3">
-                <div className={MENU_LIST_GROUP_CLASS}>
-                  {menu.account.map((link, index) => (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
                 </div>
-              </section>
-            ) : null}
-
-            {/*
-              * Navigation, on small screens only. The header shows every
-              * section on a desktop, so repeating them here was duplication -
-              * and the duplicate had drifted out of date.
-              */}
-            {menu.navigate.length > 0 ? (
-              <section className="border-t border-line pt-3 md:hidden">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Go to</p>
-                <div className="mt-2 space-y-3">
-                  {menu.navigate.map((group) => (
-                    <div key={group.label}>
-                      {group.links.length > 1 ? (
-                        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/40">
-                          {group.label}
-                        </p>
-                      ) : null}
-                      <div className={MENU_LIST_GROUP_CLASS}>
-                        {group.links.map((link, index) => (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            onClick={() => setOpen(false)}
-                            className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
-                          >
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
-            {menu.site.length > 0 ? (
-              <section className="border-t border-line pt-3">
-                <div className={MENU_LIST_GROUP_CLASS}>
-                  {menu.site.map((link, index) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
-            {menu.settings.length > 0 ? (
-              <section className="border-t border-line pt-3">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Settings</p>
-                <div className={MENU_LIST_GROUP_CLASS}>
-                  {menu.settings.map((link, index) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
-            {adminLinks.length > 0 ? (
-              <section className="border-t border-line pt-3">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Admin</p>
-                <div className={MENU_LIST_GROUP_CLASS}>
-                  {adminLinks.map((link, index) => (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-                {canRefreshLeaderboard ? (
-                  <div className="mt-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        refreshLeaderboard().catch(() => {
-                          // Handled in refreshLeaderboard.
-                        });
-                      }}
-                      disabled={refreshingLeaderboard}
-                      className={MENU_BUTTON_CLASS}
-                    >
-                      {refreshingLeaderboard ? "Refreshing leaderboard..." : "Refresh leaderboard"}
-                    </button>
-                  </div>
-                ) : null}
-              </section>
-            ) : null}
-
-            <section className="border-t border-line pt-3">
-              <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Actions</p>
-              <div className="mt-2 space-y-1.5">
-                {accountId ? (
-                  <UserAdminRefreshButton
-                    accountId={accountId}
-                    label="Refresh user"
-                    ariaLabel="Refresh user"
-                    showMessage={false}
-                    buttonClassName={MENU_BUTTON_CLASS}
-                  />
-                ) : null}
-
-                {viewerMenuInfo?.provider === "google" ? (
-                  <Link
-                    href="/signout?callbackUrl=/"
-                    className={MENU_BUTTON_CLASS}
-                  >
-                    Sign out
-                  </Link>
-                ) : viewerMenuInfo?.provider === "invite" ? (
-                  <InviteSessionActions buttonClassName={MENU_BUTTON_CLASS} />
-                ) : (
-                  <>
-                    <Link
-                      href="/login"
-                      className={MENU_BUTTON_CLASS}
-                    >
-                      Login with Google
-                    </Link>
-                    <Link
-                      href="/invite"
-                      className={MENU_BUTTON_CLASS}
-                    >
-                      Use invite code
-                    </Link>
-                  </>
-                )}
               </div>
-            </section>
-            </div>
-            </aside>
-          </>,
-          document.body,
-        )
-        : null}
+            ) : (
+              <p className="px-2.5 py-2 text-sm font-semibold text-foreground/80">Not signed in</p>
+            )}
+
+            {hasSyncStatus ? (
+              <p className="px-2.5 pb-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/45">
+                Updated {updatedRelativeLabel}
+                <span className="mx-1.5 text-foreground/30">|</span>
+                Active {activeRelativeLabel}
+              </p>
+            ) : null}
+
+            {menuClusters.map((cluster, clusterIndex) => (
+              <div key={cluster.id} className={cluster.smallScreensOnly ? "md:hidden" : undefined}>
+                <div className={clusterIndex === 0 ? "" : MENU_RULE_CLASS} />
+                {cluster.links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    role="menuitem"
+                    onClick={() => setOpen(false)}
+                    className={`${MENU_ITEM_CLASS} ${linkIsActive(link.href) ? MENU_ITEM_ACTIVE_CLASS : ""}`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            ))}
+
+            <div className={MENU_RULE_CLASS} />
+            {accountId ? (
+              <UserAdminRefreshButton
+                accountId={accountId}
+                label="Refresh user"
+                ariaLabel="Refresh user"
+                showMessage={false}
+                buttonClassName={MENU_ITEM_CLASS}
+              />
+            ) : null}
+            {canRefreshLeaderboard ? (
+              <button type="button" onClick={refreshLeaderboard} className={MENU_ITEM_CLASS}>
+                {refreshingLeaderboard ? "Refreshing leaderboard..." : "Refresh leaderboard"}
+              </button>
+            ) : null}
+
+            {viewerMenuInfo?.provider === "google" ? (
+              <Link href="/signout?callbackUrl=/" role="menuitem" className={MENU_ITEM_CLASS}>
+                Sign out
+              </Link>
+            ) : viewerMenuInfo?.provider === "invite" ? (
+              <InviteSessionActions buttonClassName={MENU_ITEM_CLASS} />
+            ) : (
+              <>
+                <Link href="/login" role="menuitem" className={MENU_ITEM_CLASS}>Login with Google</Link>
+                <Link href="/invite" role="menuitem" className={MENU_ITEM_CLASS}>Use invite code</Link>
+              </>
+            )}
+          </aside>
+        </>
+      ) : null}
     </div>
   );
 }

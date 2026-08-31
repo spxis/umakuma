@@ -1,4 +1,24 @@
+import {
+  ADMIN_WORKSPACE_TABS,
+  ADMIN_WORKSPACE_TAB_LABELS,
+  routeForAdminWorkspaceTab,
+} from "../admin/AdminWorkspaceTabs";
 import { MENU_NAV_SECTIONS, TOP_NAV_SECTIONS, navChildHref } from "./navSections";
+
+/**
+ * Every admin page, from the registry the admin header already reads.
+ *
+ * The menu used to carry two hand-written links, "Admin" and "Manage users",
+ * while admin had nine pages - so seven of them existed only if you already
+ * knew the header was there. Reading the registry means adding an admin page
+ * puts it in the menu, which is what a second list is for failing to do.
+ */
+function adminLinks(): MenuLink[] {
+  return ADMIN_WORKSPACE_TABS.map((tab) => ({
+    label: ADMIN_WORKSPACE_TAB_LABELS[tab],
+    href: routeForAdminWorkspaceTab(tab),
+  }));
+}
 
 export type MenuLink = { label: string; href: string };
 export type MenuNavSection = { label: string; links: MenuLink[] };
@@ -43,20 +63,14 @@ export function buildHeaderMenu(input: {
       account: [],
       settings: [],
       site: SITE_LINKS,
-      admin: isAdmin || showAdminActions ? [{ label: "Admin", href: "/admin" }] : [],
+      admin: isAdmin || showAdminActions ? adminLinks() : [],
       navigate: [],
     };
   }
 
   const base = `/users/${encodeURIComponent(username)}`;
 
-  const admin: MenuLink[] = [];
-  if (isAdmin || showAdminActions) {
-    admin.push({ label: "Admin", href: "/admin" });
-  }
-  if (showAdminActions) {
-    admin.push({ label: "Manage users", href: "/admin/users" });
-  }
+  const admin: MenuLink[] = isAdmin || showAdminActions ? adminLinks() : [];
 
   return {
     account: [{ label: "My page", href: base }],

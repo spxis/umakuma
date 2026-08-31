@@ -1570,5 +1570,15 @@
     "version": "0.150.0",
     "releasedAt": "2026-08-31T13:00:00Z",
     "summary": "The header search box waited for Enter and a full page load before showing anything, which is a long way round for a learner who just wants to know where a kanji lives. Now the ten best hits appear under the field as you type, one row per glyph with its meaning, reading and source, ranked by the same scoring the results page uses. The dropdown reuses the existing search endpoint, whose per-query CDN caching means most keystrokes are answered at the edge without touching the database - prefixes are shared by everyone typing them. Arrow keys walk the rows and Enter opens the highlighted hit straight in your own explorer, falls through to the see-all footer, or submits the full search as before; a signed-out visitor gets the results page instead of links that would bounce off the sign-in wall. Japanese suggests from the first character, since one kanji is a real question, while Latin waits for two, since one letter matches half the catalogue."
+  },
+  {
+    "id": "menu-and-game-row",
+    "area": "platform",
+    "name": "A menu that lists everything",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.151.0",
+    "releasedAt": "2026-08-31T14:00:00Z",
+    "summary": "The account menu offered two admin links, \"Admin\" and \"Manage users\", while admin had nine pages - so seven of them existed only for somebody who already knew the header was there. It reads the same registry the admin header reads now, so adding an admin page adds it to the menu. The menu also stops shouting: each cluster used to be a bordered card under an uppercase heading, ACCOUNT and GO TO and SETTINGS and ADMIN and ACTIONS, so a dozen links read as five boxed lists. It is one flat column with a hairline where the subject changes, and it hangs off the button it belongs to rather than being pinned to a corner of the window, which is what made it read as floating loose of the header. Game gets its second row as well: six games that were reachable only by scrolling to the hub cards now sit in the header beside every other section's pages."
   }
 ]

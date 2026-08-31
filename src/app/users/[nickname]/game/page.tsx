@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
 
 import GameModeClient from "@/app/game/GameModeClient";
+import GameSubNav from "@/app/game/GameSubNav";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { authOptions, isAdminEmail } from "@/lib/auth";
@@ -48,6 +49,7 @@ export default async function GamePage({ params }: Props) {
         lastSyncedAt={account.lastSyncedAt.toISOString()}
         lastActivityAt={account.lastActivityAt?.toISOString() ?? null}
         className="mb-2"
+        subNav={<GameSubNav />}
       />
       <UmaKumaPageBanner variant="user" className="mb-3" />
       <GameModeClient
