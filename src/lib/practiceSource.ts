@@ -16,12 +16,21 @@ export function isPracticeSource(value: string): value is PracticeSource {
 export type PracticeEntry = {
   kanji: string;
   meaning: string | null;
+  /** On and kun, for the sheets that choose to print them. */
+  on: string[];
+  kun: string[];
   strokes: string[];
   strokeCount: number;
   viewBox: string;
 };
 
-type Candidate = { kanji: string; meaning: string | null; grade?: number };
+type Candidate = {
+  kanji: string;
+  meaning: string | null;
+  grade?: number;
+  on?: string[];
+  kun?: string[];
+};
 
 /**
  * Only characters with stroke data can be traced.
@@ -37,6 +46,8 @@ function toEntries(candidates: Candidate[]): PracticeEntry[] {
         ? {
             kanji: candidate.kanji,
             meaning: candidate.meaning,
+            on: candidate.on ?? [],
+            kun: candidate.kun ?? [],
             strokes: strokes.strokes,
             strokeCount: strokes.strokeCount,
             viewBox: strokes.viewBox,
@@ -44,6 +55,15 @@ function toEntries(candidates: Candidate[]): PracticeEntry[] {
         : null;
     })
     .filter((entry): entry is PracticeEntry => entry !== null);
+}
+
+/** WaniKani stores readings as objects tagged with their type. */
+function readingsOfType(readings: unknown, type: "onyomi" | "kunyomi"): string[] {
+  if (!Array.isArray(readings)) return [];
+  return readings
+    .filter((r): r is { type?: string; reading?: string } => Boolean(r) && typeof r === "object")
+    .filter((r) => r.type === type && typeof r.reading === "string")
+    .map((r) => r.reading as string);
 }
 
 function firstMeaning(meanings: unknown): string | null {
@@ -74,11 +94,16 @@ export async function practiceEntriesFor(
       sortBy: "grade",
       sortDir: "asc",
     });
-    const candidates = withOfficialReadings(catalog.items).map((item) => ({
-      kanji: item.kanji,
-      meaning: item.primaryMeaning ?? null,
-      grade: item.grade,
-    }));
+    const candidates = withOfficialReadings(catalog.items).map((item) => {
+      const readings = item.gradeApprovedReadings ?? item.readings;
+      return {
+        kanji: item.kanji,
+        meaning: item.primaryMeaning ?? null,
+        grade: item.grade,
+        on: readings?.on ?? [],
+        kun: readings?.kun ?? [],
+      };
+    });
     return { entries: toEntries(candidates), total: catalog.pagination.totalItems };
   }
 
@@ -87,7 +112,7 @@ export async function practiceEntriesFor(
     const [rows, total] = await Promise.all([
       prisma.wkSubjectCatalog.findMany({
         where,
-        select: { characters: true, meanings: true },
+        select: { characters: true, meanings: true, readings: true },
         orderBy: { wkSubjectId: "asc" },
         skip: (page - 1) * pageSize,
         take: pageSize,
@@ -97,7 +122,12 @@ export async function practiceEntriesFor(
 
     const candidates = rows
       .filter((row): row is typeof row & { characters: string } => Boolean(row.characters))
-      .map((row) => ({ kanji: row.characters, meaning: firstMeaning(row.meanings) }));
+      .map((row) => ({
+        kanji: row.characters,
+        meaning: firstMeaning(row.meanings),
+        on: readingsOfType(row.readings, "onyomi"),
+        kun: readingsOfType(row.readings, "kunyomi"),
+      }));
     return { entries: toEntries(candidates), total };
   }
 
@@ -105,7 +135,7 @@ export async function practiceEntriesFor(
   const [rows, total] = await Promise.all([
     prisma.jlptKanji.findMany({
       where,
-      select: { kanji: true, primaryMeaning: true, meanings: true },
+      select: { kanji: true, primaryMeaning: true, meanings: true, onReadings: true, kunReadings: true },
       orderBy: { kanji: "asc" },
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -116,6 +146,8 @@ export async function practiceEntriesFor(
   const candidates = rows.map((row) => ({
     kanji: row.kanji,
     meaning: row.primaryMeaning ?? row.meanings[0] ?? null,
+    on: row.onReadings ?? [],
+    kun: row.kunReadings ?? [],
   }));
   return { entries: toEntries(candidates), total };
 }

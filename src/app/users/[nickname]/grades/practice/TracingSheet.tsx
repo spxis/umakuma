@@ -2,17 +2,27 @@ import { Fragment } from "react";
 
 import { PRACTICE_SHEET_COPY, SHEET_COLUMNS, TRACE_CELLS_PER_ROW } from "./practiceCopy";
 
-/** Squares left for strokes once the model has taken the first column. */
-const STROKES_PER_SHEET_ROW = SHEET_COLUMNS - 1;
+/**
+ * Squares left for strokes, once the model has taken the first column.
+ *
+ * The model is the reader's choice rather than a default we picked: whether
+ * seeing the finished character helps or gives the answer away depends on
+ * whether they are learning the character or testing themselves on it.
+ */
+function strokesPerRow(showModel: boolean): number {
+  return showModel ? SHEET_COLUMNS - 1 : SHEET_COLUMNS;
+}
 
 /** Rows a character needs, so the last one can be padded to a full width. */
-function strokeSheetRows(strokeCount: number): number {
-  return Math.max(1, Math.ceil(strokeCount / STROKES_PER_SHEET_ROW));
+function strokeSheetRows(strokeCount: number, showModel: boolean): number {
+  return Math.max(1, Math.ceil(strokeCount / strokesPerRow(showModel)));
 }
 
 export type TraceEntry = {
   kanji: string;
   meaning: string | null;
+  on: string[];
+  kun: string[];
   strokes: string[];
   strokeCount: number;
   viewBox: string;
@@ -23,6 +33,10 @@ export type SheetMode = "trace" | "strokes";
 type Props = {
   entries: TraceEntry[];
   mode?: SheetMode;
+  /** Whether the finished character takes the first column of each row. */
+  showModel?: boolean;
+  /** Whether on and kun print beside the meaning. */
+  showReadings?: boolean;
 };
 
 /**
@@ -97,7 +111,7 @@ function Cell({ children }: { children?: React.ReactNode }) {
  * repeats to trace over, then empty squares to write unaided — which is the
  * progression a Japanese workbook uses.
  */
-export default function TracingSheet({ entries, mode = "trace" }: Props) {
+export default function TracingSheet({ entries, mode = "trace", showModel = true, showReadings = false }: Props) {
   return (
     <div className="space-y-3">
       {entries.map((entry) => (
@@ -107,7 +121,12 @@ export default function TracingSheet({ entries, mode = "trace" }: Props) {
               * scanning a printed page finds it faster than the English. */}
             <span className="text-base font-black leading-none text-neutral-900">{entry.kanji}</span>
             <span className="font-black text-neutral-700">{entry.meaning ?? ""}</span>
-            <span>
+            {showReadings && (entry.on.length > 0 || entry.kun.length > 0) ? (
+              <span className="min-w-0 truncate text-neutral-500">
+                {[entry.on.join("、"), entry.kun.join("、")].filter(Boolean).join(" · ")}
+              </span>
+            ) : null}
+            <span className="shrink-0">
               {entry.strokeCount} {entry.strokeCount === 1 ? PRACTICE_SHEET_COPY.stroke : PRACTICE_SHEET_COPY.strokes}
             </span>
           </div>
@@ -124,15 +143,18 @@ export default function TracingSheet({ entries, mode = "trace" }: Props) {
              * at rather than the answer already filled in.
              */
             <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${SHEET_COLUMNS}, minmax(0, 1fr))` }}>
-              {Array.from({ length: strokeSheetRows(entry.strokeCount) }, (_, row) => {
-                const firstStroke = row * STROKES_PER_SHEET_ROW;
-                const strokesHere = Math.min(STROKES_PER_SHEET_ROW, entry.strokeCount - firstStroke);
+              {Array.from({ length: strokeSheetRows(entry.strokeCount, showModel) }, (_, row) => {
+                const perRow = strokesPerRow(showModel);
+                const firstStroke = row * perRow;
+                const strokesHere = Math.min(perRow, entry.strokeCount - firstStroke);
 
                 return (
                   <Fragment key={`row-${row}`}>
-                    <Cell>
-                      <TraceGlyph entry={entry} tone="ghost" />
-                    </Cell>
+                    {showModel ? (
+                      <Cell>
+                        <TraceGlyph entry={entry} tone="ghost" />
+                      </Cell>
+                    ) : null}
                     {Array.from({ length: strokesHere }, (_, offset) => {
                       const strokeNumber = firstStroke + offset + 1;
                       return (
@@ -144,7 +166,7 @@ export default function TracingSheet({ entries, mode = "trace" }: Props) {
                         </Cell>
                       );
                     })}
-                    {Array.from({ length: STROKES_PER_SHEET_ROW - strokesHere }, (_, blank) => (
+                    {Array.from({ length: perRow - strokesHere }, (_, blank) => (
                       <Cell key={`blank-${row}-${blank}`} />
                     ))}
                   </Fragment>

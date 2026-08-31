@@ -1256,5 +1256,15 @@
     "version": "0.114.0",
     "releasedAt": "2026-08-31T03:00:00Z",
     "summary": "The WaniKani and JLPT explorers can be read as rows as well as cards, which the grade explorer already offered and they did not. The four pages behind the Explore tabs also shared no wrapper, so the sub-nav sat at three different heights and moving between tabs nudged the whole header; they now agree exactly."
+  },
+  {
+    "id": "practice-sheet-options",
+    "area": "study",
+    "name": "The practice sheet asks instead of assuming",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.115.0",
+    "releasedAt": "2026-08-31T03:40:00Z",
+    "summary": "Whether the finished character sits in the first column is now a checkbox rather than a decision made for you, and the readings can print beside each meaning. The chooser also closes when you pick what is already picked, or with a Done button at the end of the row."
   }
 ]
