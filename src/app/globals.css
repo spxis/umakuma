@@ -285,3 +285,47 @@ button,
   color: var(--vocabulary);
   background: color-mix(in srgb, var(--vocabulary) 10%, white 90%);
 }
+
+/*
+ * Paper.
+ *
+ * The writing sheet is the one surface built to leave the screen: a parent
+ * prints a grade and a child writes on it. Everything here is about that page
+ * being a worksheet rather than a screenshot of a web page.
+ *
+ * Letter rather than A4 because UmaKuma is for Canadians and Americans, and
+ * both use Letter. The margin is the printer's own, so a sheet's squares are
+ * not clipped by a driver's unprintable edge.
+ */
+@page {
+  size: letter portrait;
+  margin: 12mm;
+}
+
+@media print {
+  /*
+   * Grey has to survive the trip. Browsers drop backgrounds and lighten
+   * colours by default to save ink, which is exactly wrong for a sheet whose
+   * point is faint characters to trace over - they come out blank.
+   */
+  html,
+  body {
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /*
+   * Site furniture off the page. The footer sat under twenty kanji with a
+   * version number and a release codename, which is a web page's business and
+   * not a worksheet's.
+   */
+  [data-print="hide"] {
+    display: none !important;
+  }
+
+  /* A row of squares splits across a page break badly; a character is a unit. */
+  section {
+    break-inside: avoid;
+  }
+}

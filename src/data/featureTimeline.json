@@ -1396,5 +1396,15 @@
     "version": "0.128.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Paging is a shared component now, and where it sits is the surface's choice: top, bottom, both or none. The writing practice sheet takes both, because its only Next link used to be three thousand pixels below the fold, past three sheets of empty tracing squares."
+  },
+  {
+    "id": "practice-print-mode",
+    "area": "study",
+    "name": "A sheet that prints like a worksheet",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.129.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Printing a writing sheet now gives you a worksheet: Letter with proper margins, a Name and Date rule at the top, characters that never split across a page break, and none of the site's footer or version banner. The faint tracing characters print faintly instead of vanishing into the browser's ink saving."
   }
 ]

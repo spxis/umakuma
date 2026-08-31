@@ -148,6 +148,22 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           <p className="text-xs text-neutral-500">{PRACTICE_SHEET_COPY.subtitle}</p>
         </div>
 
+        {/*
+          * Only on paper. A printed sheet goes into a folder with other
+          * printed sheets, so it needs somewhere to write whose it is and
+          * when - the two things a screen never has to ask.
+          */}
+        <div className="hidden items-end gap-6 text-[11px] uppercase tracking-[0.08em] text-neutral-500 print:flex">
+          <span className="flex items-end gap-2">
+            {PRACTICE_SHEET_COPY.printName}
+            <span className="inline-block w-44 border-b border-neutral-400" />
+          </span>
+          <span className="flex items-end gap-2">
+            {PRACTICE_SHEET_COPY.printDate}
+            <span className="inline-block w-28 border-b border-neutral-400" />
+          </span>
+        </div>
+
         <div className="flex items-center gap-2 print:hidden">
           <Link
             href={gradeHref(decodeURIComponent(nickname), grade)}

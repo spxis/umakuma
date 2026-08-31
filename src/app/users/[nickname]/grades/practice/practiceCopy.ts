@@ -11,6 +11,8 @@ export const PRACTICE_SHEET_COPY = {
   credit: "Stroke shapes from KanjiVG (CC BY-SA 3.0)",
   perPage: "Characters",
   pagerLabel: "Pages",
+  printName: "Name",
+  printDate: "Date",
   pagerTop: "Top",
   pagerBottom: "Bottom",
   pagerBoth: "Both",

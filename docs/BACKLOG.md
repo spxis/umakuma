@@ -603,11 +603,12 @@ with the destinations offered afterwards. `SubjectViewModeToggle` and the guard
 test in `subjectListDensity.test.ts` are the pattern to follow, and the same
 test should grow to require the selection control once it exists.
 
-### 24 — Print mode
+### 24 — Print mode ✅ shipped (v0.129.0)
 
-The tracing sheet is already built for paper; this is the rest of it — a real
-print stylesheet, page breaks that fall between characters, and no site
-furniture on the page.
+`@page` at Letter with a 12mm margin, `print-color-adjust: exact` so the faint
+tracing characters survive the printer's ink-saving, `[data-print="hide"]` on
+the site footer, and a Name/Date rule that appears only on paper. Guarded by
+`src/app/printSheet.test.ts`, because none of it is visible on screen.
 ### 25 — Practice sheet controls
 
 Asked for after the stroke sheet shipped.
