@@ -39,6 +39,14 @@ type Props = {
   showReadings?: boolean;
   /** How big each square is, expressed as how many fit across. */
   size?: SheetSize;
+  /** Whether each row is numbered with its place in the list. */
+  showNumbers?: boolean;
+  /**
+   * What the first row's number is. The count is the character's place in the
+   * whole list, not on this page: row 1 of page two is number 23, and being
+   * told it is number 1 for the second time is worse than no number at all.
+   */
+  startIndex?: number;
 };
 
 /**
@@ -119,14 +127,28 @@ export default function TracingSheet({
   showModel = true,
   showReadings = false,
   size = DEFAULT_SHEET_SIZE,
+  showNumbers = true,
+  startIndex = 1,
 }: Props) {
   const { columns, traceCells } = SHEET_SIZES[size];
 
   return (
     <div className="space-y-3">
-      {entries.map((entry) => (
+      {entries.map((entry, index) => (
         <section key={entry.kanji} className="break-inside-avoid">
           <div className="mb-1 flex items-baseline gap-2 text-[11px] text-neutral-500">
+            {/*
+              * A fixed width and lining figures, so the numbers form a straight
+              * column down the margin however many digits they run to. It sits
+              * beside the header rather than left of the grid because the grid
+              * divides the printable width between the squares - a gutter
+              * there would come out of every square on the sheet.
+              */}
+            {showNumbers ? (
+              <span className="w-7 shrink-0 text-right font-bold tabular-nums text-neutral-400">
+                {startIndex + index}
+              </span>
+            ) : null}
             {/* The character first: it is what the row is about, and a reader
               * scanning a printed page finds it faster than the English. */}
             <span className="text-base font-black leading-none text-neutral-900">{entry.kanji}</span>

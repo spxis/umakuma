@@ -21,6 +21,7 @@ const BASE: SheetSettings = {
   mode: "trace",
   showModel: true,
   showReadings: false,
+  showNumbers: true,
   placement: PRACTICE_PAGINATION_DEFAULT,
   size: DEFAULT_SHEET_SIZE,
   choosing: false,
@@ -35,6 +36,7 @@ function read(href: string) {
     size: toSheetSize(params.get("size")),
     showModel: params.get("model") !== "0",
     showReadings: params.get("readings") === "1",
+    showNumbers: params.get("numbers") !== "0",
     printAll: params.get("print") === "all",
   };
 }
@@ -75,6 +77,18 @@ describe("a sheet's link", () => {
     expect(href).not.toContain("size=");
     expect(href).not.toContain("model=");
     expect(href).not.toContain("readings=");
+    expect(href).not.toContain("numbers=");
+  });
+
+  /*
+   * Numbering defaults on, the opposite way round from readings, so its
+   * parameter has to appear when it is switched off rather than on. Reading it
+   * back against the wrong default silently renumbers a sheet somebody
+   * deliberately left plain.
+   */
+  it("survives a round trip when the rows are left unnumbered", () => {
+    expect(read(sheetHref(BASE, { showNumbers: false })).showNumbers).toBe(false);
+    expect(read(sheetHref({ ...BASE, showNumbers: false }, { size: "large" })).showNumbers).toBe(false);
   });
 });
 

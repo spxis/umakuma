@@ -1486,5 +1486,15 @@
     "version": "0.137.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Print asks how much: this page, or everything. It printed the twenty characters on screen and nothing else, so a grade of eighty was four separate print jobs - and because twenty characters is about two and a half sheets of paper, three of those four ended in a mostly-empty page. Everything drops the reading pages and lets the characters flow, which takes grade three from ten jobs and thirty sheets to one job and twenty-six. Lists too long for one document split into print runs rather than rendering 1,110 characters at once. Where the pager sits is no longer a question the sheet asks."
+  },
+  {
+    "id": "pages-that-are-sheets-of-paper",
+    "area": "study",
+    "name": "Pages that are sheets of paper",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.138.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "A screen page is three sheets of paper now, so printing one comes out whole. It was twenty characters at every square size - a number about the screen, not about paper - and twenty medium squares is two and a half sheets, so the third sheet of every page came out 40% blank. The counts were measured by adding characters one at a time and watching where the paper broke: seventeen large, twenty-two medium, twenty-six small, each landing on a US Letter sheet boundary and taking the same three sheets on A4. Rows are numbered as well, by their place in the whole list rather than the page, so page two runs 23 to 44 and a sheet can be set as numbers twelve to twenty."
   }
 ]

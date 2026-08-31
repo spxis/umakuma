@@ -15,7 +15,7 @@ import { decodeSelection, encodeSelection, SELECTION_PARAM } from "@/app/shared/
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
 import PrintButton from "./PrintButton";
-import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
+import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_SIZES, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
 import SheetOptionsRow from "./SheetOptionsRow";
 import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "./sheetLink";
 import TracingSheet, { type SheetMode, type TraceEntry } from "./TracingSheet";
@@ -55,6 +55,13 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   const showModel = firstValue(query.model) !== "0";
   const showReadings = firstValue(query.readings) === "1";
   /*
+   * Numbering is on unless it is turned off, unlike the two above. A sheet is
+   * something somebody is set to work through - "do twelve to twenty" needs
+   * the numbers to be there by default, and a small grey figure costs the
+   * page nothing when nobody is counting.
+   */
+  const showNumbers = firstValue(query.numbers) !== "0";
+  /*
    * Both ends by default here, unlike the shared component's own default. A
    * sheet is a page of tracing squares: reaching page four meant scrolling past
    * three of them to find the only Next link on the page.
@@ -63,15 +70,14 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   const size = toSheetSize(firstValue(query.size));
   /*
    * Reading and printing want different page sizes, so they get different page
-   * sizes. Twenty characters is a comfortable amount to scroll through and
-   * about two sheets of paper - which is why printing the screen page gave a
-   * grade of eighty as four jobs, each ending in a mostly-empty sheet. The
-   * print layout drops the reading page and cuts the list into the largest
-   * runs that still render, so the characters flow and the paper fills.
+   * sizes. A reading page is three sheets of paper at whatever size the
+   * squares are, so printing one comes out whole; the print layout drops the
+   * reading page entirely and cuts the list into the largest runs that still
+   * render, so the characters flow and every sheet but the last one fills.
    */
   const printAll = firstValue(query.print) === "all";
   const printNow = firstValue(query[PRINT_NOW_PARAM]) === "1";
-  const pageSize = printAll ? PRINT_ALL_LIMIT : PRACTICE_PAGE_SIZE;
+  const pageSize = printAll ? PRINT_ALL_LIMIT : SHEET_SIZES[size].perPage;
 
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
@@ -128,6 +134,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     mode,
     showModel,
     showReadings,
+    showNumbers,
     placement,
     size,
     choosing,
@@ -416,7 +423,15 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           {isTaggedPracticeSource(source) ? PRACTICE_SHEET_COPY.emptyTagged : PRACTICE_SHEET_COPY.empty}
         </p>
       ) : (
-        <TracingSheet entries={entries} mode={mode} showModel={showModel} showReadings={showReadings} size={size} />
+        <TracingSheet
+          entries={entries}
+          mode={mode}
+          showModel={showModel}
+          showReadings={showReadings}
+          size={size}
+          showNumbers={showNumbers}
+          startIndex={(page - 1) * pageSize + 1}
+        />
       )}
 
       <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-neutral-400">

@@ -47,6 +47,7 @@ export type SheetSettings = {
   mode: SheetMode;
   showModel: boolean;
   showReadings: boolean;
+  showNumbers: boolean;
   placement: PaginationPlacement;
   size: SheetSize;
   /** Whether the level chooser is open. */
@@ -78,6 +79,7 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
 
   if (!next.showModel) parts.push("model=0");
   if (next.showReadings) parts.push("readings=1");
+  if (!next.showNumbers) parts.push("numbers=0");
   if (next.placement !== PRACTICE_PAGINATION_DEFAULT) parts.push(`pager=${next.placement}`);
   if (next.size !== DEFAULT_SHEET_SIZE) parts.push(`size=${next.size}`);
   if (next.choosing) parts.push("pick=1");

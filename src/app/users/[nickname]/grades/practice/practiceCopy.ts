@@ -32,6 +32,7 @@ export const PRACTICE_SHEET_COPY = {
   optionsLabel: "Options",
   optionShowModel: "Show the finished character",
   optionShowReadings: "Show readings",
+  optionShowNumbers: "Number the rows",
   sizeLabel: "Squares",
   sizeLarge: "L",
   sizeMedium: "M",
@@ -63,8 +64,30 @@ export const PRACTICE_SHEET_COPY = {
  */
 export const TRACE_CELLS_PER_ROW = 3;
 
-/** Characters per printed sheet, so a grade splits into predictable pages. */
-export const PRACTICE_PAGE_SIZE = 20;
+/**
+ * A screen page is three sheets of paper.
+ *
+ * It used to be twenty characters at every square size, which is a number
+ * about the screen and nothing about paper - and paper is where this page ends
+ * up. Twenty medium squares is two and a half sheets, so printing one screen
+ * page left its third sheet 40% blank, every time, on every page.
+ *
+ * These counts were measured rather than reasoned: characters were added one
+ * at a time and the paper was watched for where it broke. On US Letter a sheet
+ * takes 5 then 6 large squares, 7 then 7-8 medium, 8 then 9 small - the first
+ * sheet of every page holds one fewer, because the title and the name and date
+ * lines are on it.
+ *
+ * Letter is the paper this is exact on, because UmaKuma is written for
+ * Canadians and Americans. Each of these lands on a sheet boundary there. A4
+ * is taller and takes the same three sheets with a row or so to spare at the
+ * foot, which is white paper rather than a fourth sheet.
+ *
+ * Stroke-order sheets cannot be aligned this way and are not: a character runs
+ * one row or three depending on how many strokes it has, so no character count
+ * lands anywhere in particular. They keep the same counts for consistency.
+ */
+export const SHEETS_PER_PAGE = 3;
 
 /**
  * How many characters one print run may hold.
@@ -105,11 +128,14 @@ export const SHEET_COLUMNS = 8;
  * printable width: fewer columns is a bigger square, at any paper size, on any
  * screen. Smaller squares also earn an extra tracing repetition, since there is
  * room for one and an adult sheet is about volume.
+ *
+ * `perPage` is how many characters fill `SHEETS_PER_PAGE` sheets at that size -
+ * see the note there for how the numbers were arrived at.
  */
 export const SHEET_SIZES = {
-  large: { columns: 6, traceCells: 3 },
-  medium: { columns: SHEET_COLUMNS, traceCells: TRACE_CELLS_PER_ROW },
-  small: { columns: 10, traceCells: 4 },
+  large: { columns: 6, traceCells: 3, perPage: 17 },
+  medium: { columns: SHEET_COLUMNS, traceCells: TRACE_CELLS_PER_ROW, perPage: 22 },
+  small: { columns: 10, traceCells: 4, perPage: 26 },
 } as const;
 
 export type SheetSize = keyof typeof SHEET_SIZES;

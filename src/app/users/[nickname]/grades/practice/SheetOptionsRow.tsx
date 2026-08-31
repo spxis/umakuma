@@ -82,6 +82,11 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
         on={settings.showReadings}
         href={sheetHref(settings, { showReadings: !settings.showReadings })}
       />
+      <Checkbox
+        label={PRACTICE_SHEET_COPY.optionShowNumbers}
+        on={settings.showNumbers}
+        href={sheetHref(settings, { showNumbers: !settings.showNumbers })}
+      />
 
       {/*
         * How big the squares are. A child needs a box big enough to form a
@@ -90,10 +95,15 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
         */}
       <span className={GROUP}>
         <span className={`${GROUP_LABEL} mr-0.5`}>{PRACTICE_SHEET_COPY.sizeLabel}</span>
+        {/*
+          * Back to page one. A page holds a different number of characters at
+          * each size - it is three sheets of paper, not a fixed count - so
+          * page four of the small sheet is not page four of the large one.
+          */}
         {SHEET_SIZE_ORDER.map((size) => (
           <Link
             key={size}
-            href={sheetHref(settings, { size })}
+            href={sheetHref(settings, { size, page: 1 })}
             title={SIZE_TITLES[size]}
             className={`${CHIP} w-8 justify-center ${size === settings.size ? CHIP_ON : CHIP_OFF}`}
           >

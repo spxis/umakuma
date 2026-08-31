@@ -4,9 +4,9 @@ import gradeIndex from "@/data/school-grades/index.json";
 
 import {
   DEFAULT_SHEET_SIZE,
-  PRACTICE_PAGE_SIZE,
   PRACTICE_SHEET_COPY,
   PRINT_ALL_LIMIT,
+  SHEETS_PER_PAGE,
   SHEET_SIZES,
   SHEET_SIZE_ORDER,
   toSheetSize,
@@ -33,9 +33,27 @@ describe("the tracing sheet's row", () => {
 });
 
 describe("the sheet's page", () => {
-  it("keeps a printed page to a size that fits paper", () => {
-    expect(PRACTICE_PAGE_SIZE).toBeGreaterThan(0);
-    expect(PRACTICE_PAGE_SIZE).toBeLessThanOrEqual(30);
+  /*
+   * These are measured numbers, not chosen ones - see the note on
+   * SHEETS_PER_PAGE. Each is how many characters land exactly on a US Letter
+   * sheet boundary at that square size, so printing one screen page comes out
+   * as whole sheets rather than two and a bit.
+   */
+  it("holds three sheets of paper at every square size", () => {
+    expect(SHEETS_PER_PAGE).toBe(3);
+    expect(SHEET_SIZES.large.perPage).toBe(17);
+    expect(SHEET_SIZES.medium.perPage).toBe(22);
+    expect(SHEET_SIZES.small.perPage).toBe(26);
+  });
+
+  /*
+   * Smaller squares fit more rows on a sheet, so a page of them has to hold
+   * more characters. If this ever inverted, the small sheet would be printing
+   * fewer characters on more paper than the large one.
+   */
+  it("fits more characters on a page as the squares shrink", () => {
+    const counts = SHEET_SIZE_ORDER.map((size) => SHEET_SIZES[size].perPage);
+    expect(counts).toEqual([...counts].sort((a, b) => a - b));
   });
 
   /*
@@ -51,14 +69,12 @@ describe("the sheet's page", () => {
 
 describe("printing everything", () => {
   /*
-   * Reading and printing want different page sizes. Twenty characters is a
-   * comfortable scroll and about two sheets of paper, which is why printing
-   * the screen page turned a grade of eighty into four jobs that each ended in
-   * a mostly-empty sheet. A print run has to be enough bigger than a reading
-   * page for the choice to mean anything.
+   * A print run has to be enough bigger than a reading page for the choice to
+   * mean anything: three sheets against a couple of dozen.
    */
   it("prints far more than one reading page", () => {
-    expect(PRINT_ALL_LIMIT).toBeGreaterThan(PRACTICE_PAGE_SIZE * 4);
+    const largestPage = Math.max(...SHEET_SIZE_ORDER.map((size) => SHEET_SIZES[size].perPage));
+    expect(PRINT_ALL_LIMIT).toBeGreaterThan(largestPage * 4);
   });
 
   /*
