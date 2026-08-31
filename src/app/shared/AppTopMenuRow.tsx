@@ -6,7 +6,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 
 import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
 import { TOP_NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav } from "./navSections";
-import ReleaseMotto from "./ReleaseMotto";
+import AppSubNavRow from "./AppSubNavRow";
 import GlobalSearchBox from "./GlobalSearchBox";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
@@ -102,7 +102,7 @@ export default function AppTopMenuRow({
   }
 
   return (
-    <div className={className ?? ""}>
+    <div className={`relative ${className ?? ""}`.trim()}>
     <section className="flex items-center justify-between gap-3">
       <nav className="flex min-w-0 items-center gap-x-1.5 overflow-hidden whitespace-nowrap text-[9px] font-semibold uppercase tracking-widest text-foreground/50 sm:hidden">
         {mobileLinks.map((link, index) => (
@@ -147,11 +147,13 @@ export default function AppTopMenuRow({
         ))}
       </nav>
 
-      <GlobalSearchBox className="ml-auto shrink-0" />
-
-      <ReleaseMotto />
-
-      <div className="shrink-0">
+      {/*
+        * Search and the menu, together, at the end of the row. The menu used to
+        * float on its own past the codename; there is nothing for it to be
+        * separate from now, and pairing them puts every control in one place.
+        */}
+      <div className="ml-auto flex shrink-0 items-center gap-2">
+        <GlobalSearchBox />
         <UserHeaderMenu
           accountId={accountId}
           viewedWkUsername={resolvedWkUsername ?? undefined}
@@ -163,39 +165,11 @@ export default function AppTopMenuRow({
       </div>
     </section>
 
-      {sectionHasSubNav(activeSection) && activeSection ? (
-        <nav
-          aria-label={`${activeSection.label} pages`}
-          className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-line/60 pt-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/45 sm:text-[11px]"
-        >
-          {(() => {
-            /*
-             * A nested page matches its parent's prefix too - `grades/practice`
-             * starts with `grades` - so the longest match wins rather than
-             * lighting up both.
-             */
-            const hrefs = activeSection.children.map((child) => navChildHref(child, resolvedWkUsername));
-            const best = hrefs
-              .filter((href) => pathname === href || pathname?.startsWith(`${href}/`))
-              .sort((left, right) => right.length - left.length)[0];
-            return activeSection.children.map((child, index) => {
-            const href = hrefs[index]!;
-            const active = href === best;
-            return (
-              <Link
-                key={child.path}
-                href={href}
-                className={`rounded-full px-2 py-0.5 transition ${
-                  active ? "bg-surface-muted font-black text-foreground" : "hover:text-foreground/75"
-                }`}
-              >
-                {child.label}
-              </Link>
-            );
-            });
-          })()}
-        </nav>
-      ) : null}
+      <AppSubNavRow
+        section={sectionHasSubNav(activeSection) ? activeSection : null}
+        pathname={pathname}
+        wkUsername={resolvedWkUsername}
+      />
     </div>
   );
 }

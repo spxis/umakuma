@@ -15,14 +15,17 @@ import CodenameText from "./CodenameText";
  * It doubles as the way into the release timeline: the motto names the running
  * release, so clicking it to see what shipped is the obvious move.
  */
-export default function ReleaseMotto() {
+export default function ReleaseMotto({ className = "" }: { className?: string }) {
   const codename = codenameForVersion(APP_VERSION);
   if (!codename) {
     return null;
   }
 
   return (
-    <Link href={RELEASES_HREF} className="hidden shrink-0 rounded-md transition hover:opacity-70 lg:block">
+    <Link
+      href={RELEASES_HREF}
+      className={`hidden shrink-0 rounded-md transition hover:opacity-70 lg:block ${className}`.trim()}
+    >
       <CodenameText codename={codename} layout="stacked" />
     </Link>
   );
