@@ -1316,5 +1316,15 @@
     "version": "0.120.0",
     "releasedAt": "2026-08-31T06:00:00Z",
     "summary": "Fifty-one states and thirteen provinces and territories join the forty-seven prefectures, as a bonus over the same board rather than a second game. Japan stays the default everywhere, and nothing new is stored: each question's target already carries its country in its id range, so runs recorded before this still read as Japan."
+  },
+  {
+    "id": "map-country-picker",
+    "area": "games",
+    "name": "Choose the country you play the map on",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.121.0",
+    "releasedAt": "2026-08-31T07:00:00Z",
+    "summary": "Map mode's setup now offers Japan, the United States or Canada, and the item count follows the choice - forty-seven, fifty-one or thirteen. Only Map shows the control, because only Map plays somewhere. Adding Europe or Asia later is a dataset and a line in one list, not a new game."
   }
 ]

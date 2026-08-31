@@ -1,3 +1,4 @@
+import { GEO_REGION_COUNTS } from "@/lib/geoSubjectIds";
 import {
   GAME_KINDS,
   GAME_PRACTICE_LISTS,
@@ -52,6 +53,15 @@ export function gameSelectionIsPlayable(setup: GameSetupResponse, selection: Gam
 /** What the current selection would actually play, list and all. */
 export function gameSelectionAvailableCount(setup: GameSetupResponse, selection: GameSelection): number {
   const rules = gameKindRules(selection.kind);
+  /*
+   * Map's pool is the chosen country's regions, not anything the setup call
+   * knows about - the setup response predates the country existing, and the
+   * count would otherwise read 47 while a round of 51 states was queued up.
+   */
+  if (rules.usesMapCountry) {
+    return GEO_REGION_COUNTS[selection.mapCountry ?? "JP"];
+  }
+
   return gameAvailableCount(
     setup,
     selection.kind,

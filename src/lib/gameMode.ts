@@ -117,6 +117,8 @@ export type GameKindRules = {
    * the country instead, so its choice count is a count and not a corner.
    */
   usesCornersBoard: boolean;
+  /** Whether the setup offers a country to play on. Map only. */
+  usesMapCountry?: boolean;
   fixedQuestionCount: number | null;
   fixedCategory: GameCategory | null;
   oncePerDay: boolean;
@@ -221,6 +223,8 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
     usesAnswerMode: true,
     usesPracticeList: false,
     usesCornersBoard: false,
+    /* Only Map plays somewhere, so only Map offers a country. */
+    usesMapCountry: true,
     fixedQuestionCount: null,
     // Prefectures are place names, so they ride the vocabulary accent.
     fixedCategory: "vocabulary",
@@ -467,4 +471,25 @@ export function formatGameDuration(durationMs: number | null): string {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = String(totalSeconds % 60).padStart(2, "0");
   return `${minutes}:${seconds}.${totalTenths % 10}`;
+}
+
+
+/**
+ * Countries Map mode can play on, in the order the lobby offers them.
+ *
+ * Japan first and by default: it is what UmaKuma is for, and the other two are
+ * a bonus. Adding Europe or Asia later means adding a dataset and a line here,
+ * not a code path - which is why the country rides in the request rather than
+ * being a separate game.
+ */
+export const MAP_COUNTRIES = [
+  { code: "JP", label: "Japan" },
+  { code: "US", label: "United States" },
+  { code: "CA", label: "Canada" },
+] as const;
+
+export type MapCountryCode = (typeof MAP_COUNTRIES)[number]["code"];
+
+export function isMapCountry(value: string): value is MapCountryCode {
+  return MAP_COUNTRIES.some((country) => country.code === value);
 }

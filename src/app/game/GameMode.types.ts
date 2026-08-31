@@ -1,3 +1,4 @@
+import type { MapCountryCode } from "@/lib/gameMode";
 import type { GameActivityByKind, GameKindActivity } from "@/lib/gameActivity";
 
 import type {
@@ -85,6 +86,8 @@ export type GameSelection = {
   practiceList: GamePracticeList;
   ultraMode: boolean;
   timeLimitMs: GameTimeLimitMs;
+  /** Map only. Japan when unset, which is every other game and every old client. */
+  mapCountry?: MapCountryCode;
 };
 
 export type GameLeaderboardFilters = {

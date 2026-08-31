@@ -171,6 +171,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Hoozuki Hosomichi", ja: "鬼灯細道", reading: "ほおずきほそみち", gloss: "a lane of lantern plants" },
   { romaji: "Mado no Maboroshi", ja: "窓の幻", reading: "まどのまぼろし", gloss: "a mirage at the window" },
   { romaji: "Mikazuki Misaki", ja: "三日月岬", reading: "みかづきみさき", gloss: "a crescent moon over the cape" },
+  { romaji: "Murasaki no Mukuge", ja: "紫の木槿", reading: "むらさきのむくげ", gloss: "a purple rose of Sharon" },
 ];
 
 /**

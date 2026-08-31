@@ -39,6 +39,7 @@ export const GAME_COPY = {
   notEnough: "Not enough items",
   chooseMatch: "Choose the matching item",
   chooseAnswer: "Choose the answer",
+  mapCountry: "Country",
   direction: "Direction",
   answerWith: "Answer with",
   chooseChain: "Choose the word that starts with this kana",

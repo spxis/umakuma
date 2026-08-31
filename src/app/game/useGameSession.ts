@@ -84,6 +84,8 @@ export function useGameSession({
           // from another game must not travel with this one.
           ultraMode: rules.usesUltraMode && selection.ultraMode,
           timeLimitMs: rules.usesTimeLimit ? selection.timeLimitMs : null,
+          // Same rule: a country chosen for Map must not ride along elsewhere.
+          mapCountry: rules.usesMapCountry ? selection.mapCountry ?? "JP" : undefined,
         }),
       });
       const payload = (await response.json()) as ActiveGame & { error?: string };

@@ -1,5 +1,5 @@
 import { GAME_CHOICE_COUNTS, GAME_KINDS, GAME_PRACTICE_LIST_VALUES, gameKindRules } from "@/lib/gameMode";
-import { GAME_DIRECTION_VALUES, gameAnswerModesFor, type GameAnswerMode, type GameChoiceCount, type GameDirection, type GamePracticeList } from "@/lib/gameMode";
+import { GAME_DIRECTION_VALUES, MAP_COUNTRIES, gameAnswerModesFor, type MapCountryCode, type GameAnswerMode, type GameChoiceCount, type GameDirection, type GamePracticeList } from "@/lib/gameMode";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
 import {
@@ -131,6 +131,24 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
                 <option key={category} value={category}>
                   {GAME_CATEGORY_LABELS[category]} ({gameAvailableCount(setup, selection.kind, rules.usesLevel ? selection.level : null, category, selection.practiceList)})
                 </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+
+        {/* Where you are playing comes before how, so it leads the row. */}
+        {rules.usesMapCountry ? (
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.mapCountry}</span>
+            <select
+              value={selection.mapCountry ?? "JP"}
+              onChange={(event) =>
+                onChange((value) => ({ ...value, mapCountry: event.target.value as MapCountryCode }))
+              }
+              className={FIELD_CLASS}
+            >
+              {MAP_COUNTRIES.map((country) => (
+                <option key={country.code} value={country.code}>{country.label}</option>
               ))}
             </select>
           </label>
