@@ -40,6 +40,8 @@ const bodySchema = z.object({
   practiceList: z.string().refine(isGamePracticeList).default(GAME_PRACTICE_LISTS.trouble),
   ultraMode: z.boolean().default(false),
   timeLimitMs: z.number().int().refine(isGameTimeLimitMs).nullable().default(null),
+  /* Map mode only; Japan when unspecified, which is every older client. */
+  mapCountry: z.enum(["JP", "US", "CA"]).optional(),
 })
   // Only the games that offer Ultra have to satisfy it. A stale `ultraMode` from
   // a previous Match round would otherwise reject a Map or Practice start
@@ -91,6 +93,8 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           practiceList: rules.usesPracticeList ? parsed.data.practiceList : GAME_PRACTICE_LISTS.toughest,
           ultraMode: rules.usesUltraMode ? parsed.data.ultraMode : false,
           timeLimitMs: rules.usesTimeLimit ? parsed.data.timeLimitMs : null,
+          // Ignored by every game but Map, where it chooses the country.
+          mapCountry: parsed.data.mapCountry,
         };
 
         if (rules.oncePerDay) {

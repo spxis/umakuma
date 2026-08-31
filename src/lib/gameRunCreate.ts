@@ -1,3 +1,5 @@
+import { geoMapEntries } from "@/lib/geoMapPool";
+import type { CountryCode } from "@/lib/geoRegion";
 import "server-only";
 
 import { GameKind as PrismaGameKind, GameSubjectCategory } from "@prisma/client";
@@ -47,6 +49,15 @@ export type GameRunRequest = {
   practiceList: GamePracticeList;
   ultraMode: boolean;
   timeLimitMs: number | null;
+  /**
+   * Which country Map mode plays on. Japan unless asked otherwise.
+   *
+   * Nothing persists it: each question's target id carries its own country in
+   * its range, so the country is read back from the run rather than stored
+   * beside it, and runs recorded before the other countries existed still
+   * resolve as Japan.
+   */
+  mapCountry?: CountryCode;
 };
 
 export type GameRunPlan = {
@@ -245,8 +256,10 @@ async function planShiritoriRun(accountId: string, request: GameRunRequest): Pro
  * the same board for every player.
  */
 function planMapRun(request: GameRunRequest): GameRunPlan {
-  const requested = request.batchSize === "all" ? JAPAN_PREFECTURE_COUNT : request.batchSize;
-  const questionCount = Math.min(requested, JAPAN_PREFECTURE_COUNT);
+  const country = request.mapCountry ?? "JP";
+  const pool = geoMapEntries(country);
+  const requested = request.batchSize === "all" ? pool.length : request.batchSize;
+  const questionCount = Math.min(requested, pool.length);
   return {
     questions: buildMapQuestions(
       questionCount,
@@ -254,6 +267,7 @@ function planMapRun(request: GameRunRequest): GameRunPlan {
       Math.random,
       request.direction,
       request.answerMode,
+      pool,
     ),
     questionCount,
     batchSize: questionCount,

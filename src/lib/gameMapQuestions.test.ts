@@ -1,3 +1,4 @@
+import { geoMapEntries } from "@/lib/geoMapPool";
 import { describe, expect, it } from "vitest";
 
 import { GAME_DIRECTIONS } from "@/lib/gameMode";
@@ -132,9 +133,12 @@ describe("Map mode questions", () => {
   });
 
   it("draws choices from near the target rather than across the country", () => {
-    const kyoto = prefectureByCode(KYOTO)!;
-    const neighbor = prefectureByCode(kyoto.neighbors[0]!)!;
-    const faraway = prefectureByCode(HOKKAIDO)!;
+    // Scoring now reads the shared geo shape, so entries come from that pool.
+    const entries = geoMapEntries("JP");
+    const byCode = (code: number) => entries.find((entry) => Number(entry.code) === code)!;
+    const kyoto = byCode(KYOTO);
+    const neighbor = byCode(Number(kyoto.neighbors[0]!));
+    const faraway = byCode(HOKKAIDO);
     expect(mapDistractorScore(kyoto, neighbor)).toBeGreaterThan(mapDistractorScore(kyoto, faraway));
   });
 });

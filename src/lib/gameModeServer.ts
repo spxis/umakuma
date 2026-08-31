@@ -21,7 +21,8 @@ import {
 import { resolveGameScore } from "@/lib/gameScoring";
 import { optionLabel, promptText } from "@/lib/gameAnswerText";
 import { parseMeanings, parseReadings, type GameCatalogItem } from "@/lib/gameQuestionBuilder";
-import { isMapSubjectId, prefectureBySubjectId, prefectureOption } from "@/lib/japanPrefectures";
+import { geoMapEntries, geoMapOption } from "@/lib/geoMapPool";
+import { geoRegionIdFromSubjectId, isGeoSubjectId } from "@/lib/geoSubjectIds";
 import { prisma } from "@/lib/prisma";
 import { parseAssignmentCacheRows } from "@/lib/wanikani/helpers";
 
@@ -224,12 +225,23 @@ export async function hydrateGameQuestions(
   // Map mode's prefectures are not WaniKani subjects and live in a reserved id
   // range, so they resolve from the static map rather than the catalog.
   const rows = await prisma.wkSubjectCatalog.findMany({
-    where: { wkSubjectId: { in: subjectIds.filter((id) => !isMapSubjectId(id)) } },
+    where: { wkSubjectId: { in: subjectIds.filter((id) => !isGeoSubjectId(id)) } },
     select: { wkSubjectId: true, subjectType: true, level: true, characters: true, slug: true, meanings: true, readings: true },
   });
   const optionById = new Map(subjectIds.flatMap((id) => {
-    const prefecture = prefectureBySubjectId(id);
-    return prefecture ? [[id, prefectureOption(prefecture)] as const] : [];
+    /*
+     * A place id carries its country in its range, so a run recorded before
+     * the other countries existed still resolves as Japan without anything
+     * being migrated.
+     */
+    const regionId = geoRegionIdFromSubjectId(id);
+    if (!regionId) return [];
+    const [country, ...codeParts] = regionId.split("-");
+    const code = codeParts.join("-");
+    const entry = geoMapEntries(country as "JP" | "US" | "CA").find(
+      (candidate) => String(candidate.code) === code,
+    );
+    return entry ? [[id, geoMapOption(entry)] as const] : [];
   }));
   for (const [id, option] of rows.flatMap((row) => {
     if (!isSubjectType(row.subjectType)) return [];
@@ -255,7 +267,7 @@ export async function hydrateGameQuestions(
     if (!prompt) throw new Error("Game question prompt is unavailable.");
     // Read draws the target itself as the prompt; Find puts it among the tiles,
     // where naming it would give the answer away.
-    const promptIsShape = direction === GAME_DIRECTIONS.read && isMapSubjectId(target.subjectId);
+    const promptIsShape = direction === GAME_DIRECTIONS.read && isGeoSubjectId(target.subjectId);
     return {
       id: question.id,
       position: question.position,

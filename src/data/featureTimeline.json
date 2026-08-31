@@ -1306,5 +1306,15 @@
     "version": "0.119.0",
     "releasedAt": "2026-08-31T05:10:00Z",
     "summary": "The explorer and the writing sheet both offer the four levels the test ran until 2009, for anyone who sat it then. Both schemes count down, so old Level 4 is the beginner paper and matches N5 rather than N4 - and N3 is absent, because it was added in 2010 to bridge old Levels 3 and 2. The explorer says so rather than inventing a mapping."
+  },
+  {
+    "id": "map-regions-us-canada",
+    "area": "game",
+    "name": "Map mode reaches the United States and Canada",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.120.0",
+    "releasedAt": "2026-08-31T06:00:00Z",
+    "summary": "Fifty-one states and thirteen provinces and territories join the forty-seven prefectures, as a bonus over the same board rather than a second game. Japan stays the default everywhere, and nothing new is stored: each question's target already carries its country in its id range, so runs recorded before this still read as Japan."
   }
 ]

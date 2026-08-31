@@ -9,13 +9,14 @@ import {
 } from "@/lib/gameMode";
 import type { GameQuestionInput } from "@/lib/gameQuestionBuilder";
 import { pickWith, shuffleWith, type RandomSource } from "@/lib/gameRandom";
-import {
-  JAPAN_MAP,
-  JAPAN_PREFECTURES,
-  mapSubjectId,
-  prefectureOption,
-  type JapanPrefecture,
-} from "@/lib/japanPrefectures";
+import type { CountryCode } from "@/lib/geoRegion";
+import { geoMapDiagonal, geoMapEntries, geoMapOption, type GeoMapEntry } from "@/lib/geoMapPool";
+
+/*
+ * The builder reads one country at a time. Japan stays the default, so every
+ * existing caller and every run already recorded keeps working untouched.
+ */
+type MapEntry = GeoMapEntry;
 
 /**
  * What makes a prefecture a convincing wrong answer.
@@ -28,12 +29,12 @@ import {
 /** How many of the top-scoring candidates to choose between, for variety. */
 const DISTRACTOR_TOP_SAMPLE = 6;
 
-const MAP_DIAGONAL = Math.hypot(JAPAN_MAP.width, JAPAN_MAP.height);
+
 
 /** A prefecture answers by English name or by kana; see `GAME_MAP_ANSWER_MODES`. */
 const MAP_ANSWER_TYPES: GameAnswerType[] = ["meaning", "reading"];
 
-function prefectureScorable(prefecture: JapanPrefecture): GeoScorable {
+function prefectureScorable(prefecture: MapEntry): GeoScorable {
   return {
     code: prefecture.code,
     region: prefecture.region,
@@ -42,15 +43,15 @@ function prefectureScorable(prefecture: JapanPrefecture): GeoScorable {
   };
 }
 
-export function mapDistractorScore(target: JapanPrefecture, candidate: JapanPrefecture): number {
-  return geoDistractorScore(prefectureScorable(target), prefectureScorable(candidate), MAP_DIAGONAL);
+export function mapDistractorScore(target: MapEntry, candidate: MapEntry): number {
+  return geoDistractorScore(prefectureScorable(target), prefectureScorable(candidate), geoMapDiagonal(target.country));
 }
 
 function chooseDistractor(
-  target: JapanPrefecture,
-  pool: JapanPrefecture[],
+  target: MapEntry,
+  pool: MapEntry[],
   random: RandomSource,
-): JapanPrefecture | null {
+): MapEntry | null {
   const ranked = pool
     .filter((candidate) => candidate.code !== target.code)
     .map((candidate) => ({ candidate, score: mapDistractorScore(target, candidate) }))
@@ -60,13 +61,13 @@ function chooseDistractor(
 }
 
 function toOptionIds(
-  target: JapanPrefecture,
-  distractors: JapanPrefecture[],
+  target: MapEntry,
+  distractors: MapEntry[],
   slot: number,
 ): Pick<GameQuestionInput, "optionSubjectIds" | "leftSubjectId" | "middleSubjectId" | "rightSubjectId"> {
   const options = [...distractors];
   options.splice(slot, 0, target);
-  const ids = options.map((option) => mapSubjectId(option.code));
+  const ids = options.map((option) => geoMapOption(option).subjectId);
   return {
     optionSubjectIds: ids,
     leftSubjectId: ids[0]!,
@@ -83,8 +84,8 @@ function toOptionIds(
  * a prefecture and asks the player to pick it out on the map.
  */
 export function buildMapQuestionsFromTargets(
-  targets: JapanPrefecture[],
-  pool: JapanPrefecture[],
+  targets: MapEntry[],
+  pool: MapEntry[],
   choiceCount: GameChoiceCount = 2,
   random: RandomSource = Math.random,
   direction: GameDirection = GAME_DIRECTIONS.read,
@@ -106,8 +107,8 @@ export function buildMapQuestionsFromTargets(
   );
 
   return targets.map((target, position) => {
-    const chooseNextDistractor = (excluded: Set<number>, accept: (entry: JapanPrefecture) => boolean) => {
-      const usable = (entry: JapanPrefecture) => !excluded.has(entry.code) && accept(entry);
+    const chooseNextDistractor = (excluded: Set<string | number>, accept: (entry: MapEntry) => boolean) => {
+      const usable = (entry: MapEntry) => !excluded.has(entry.code) && accept(entry);
       // Prefer prefectures not yet used, so a round covers more of the country,
       // then fall back so a small pool can still fill every tile.
       const unusedPool = pool.filter((entry) => unusedDistractors.has(entry.code) && usable(entry));
@@ -119,18 +120,18 @@ export function buildMapQuestionsFromTargets(
 
     // Settle the answer type first: it decides which text the tiles carry, and
     // two tiles must never read the same.
-    const targetOption = prefectureOption(target);
+    const targetOption = geoMapOption(target);
     let answerType: GameAnswerType | null = null;
-    let distractors: JapanPrefecture[] = [];
+    let distractors: MapEntry[] = [];
 
     const usableAnswerTypes = candidateAnswerTypes(targetOption, answerMode)
       .filter((type) => MAP_ANSWER_TYPES.includes(type));
     for (const candidate of shuffleWith(usableAnswerTypes, random)) {
       const excluded = new Set([target.code]);
-      const picked: JapanPrefecture[] = [];
-      const accept = (entry: JapanPrefecture) =>
+      const picked: MapEntry[] = [];
+      const accept = (entry: MapEntry) =>
         labelsAreDistinct(
-          [targetOption, ...picked.map(prefectureOption), prefectureOption(entry)],
+          [targetOption, ...picked.map(geoMapOption), geoMapOption(entry)],
           direction,
           candidate,
         );
@@ -156,7 +157,7 @@ export function buildMapQuestionsFromTargets(
 
     return {
       position,
-      targetSubjectId: mapSubjectId(target.code),
+      targetSubjectId: geoMapOption(target).subjectId,
       answerType,
       promptOverride: null,
       ...toOptionIds(target, distractors, targetSlots[position]!),
@@ -170,7 +171,7 @@ export function buildMapQuestions(
   random: RandomSource = Math.random,
   direction: GameDirection = GAME_DIRECTIONS.read,
   answerMode: GameAnswerMode = "auto",
-  pool: JapanPrefecture[] = JAPAN_PREFECTURES,
+  pool: MapEntry[] = geoMapEntries("JP"),
 ): GameQuestionInput[] {
   const targetCount = Math.min(Math.trunc(batchSize), pool.length);
   if (targetCount < 1) throw new Error("No eligible items are available.");
