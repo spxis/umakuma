@@ -59,9 +59,8 @@ export default async function AdminKanjiCoveragePage() {
           viewerMenuInfo={viewerMenuInfo}
           showAdminActions={true}
           className="mb-2"
+          subNav={<AdminPageNav activeTab="kanjiCoverage" />}
         />
-
-        <AdminPageNav activeTab="kanjiCoverage" />
 
         <AdminWorkspaceHeader
           checkingSession={false}

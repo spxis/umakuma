@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { navChildHref, type NavChild, type NavSection } from "./navSections";
 import ReleaseMotto from "./ReleaseMotto";
@@ -22,10 +23,17 @@ export default function AppSubNavRow({
   section,
   pathname,
   wkUsername,
+  subNav,
 }: {
   section: NavSection | null;
   pathname: string | null;
   wkUsername: string | null;
+  /**
+   * A section whose pages are not in `navSections` - admin, whose tabs come
+   * from its own registry. It renders in the same slot as the rest so admin
+   * stops drawing a third row of its own below the header.
+   */
+  subNav?: ReactNode;
 }) {
   const children: NavChild[] = section?.children ?? [];
   const hrefs = children.map((child: NavChild) => navChildHref(child, wkUsername));
@@ -40,7 +48,7 @@ export default function AppSubNavRow({
 
   return (
     <div className="mt-1.5 flex min-h-[1.75rem] items-center justify-between gap-3 border-t border-line/60 pt-1.5">
-      {children.length > 0 ? (
+      {subNav ?? (children.length > 0 ? (
         <nav
           aria-label={`${section?.label ?? ""} pages`.trim()}
           className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/45 sm:text-[11px]"
@@ -62,7 +70,7 @@ export default function AppSubNavRow({
         </nav>
       ) : (
         <span aria-hidden="true" />
-      )}
+      ))}
 
       <ReleaseMotto className="ml-auto shrink-0" />
     </div>

@@ -18,6 +18,7 @@ import {
   type GameQuestionPayload,
   type GameRunSummary,
 } from "@/lib/gameMode";
+import { unconnectedPoolLevelCap } from "@/lib/unconnectedGamePool";
 import { resolveGameScore } from "@/lib/gameScoring";
 import { optionLabel, promptText } from "@/lib/gameAnswerText";
 import { parseMeanings, parseReadings, type GameCatalogItem } from "@/lib/gameQuestionBuilder";
@@ -85,6 +86,51 @@ export function toCatalogItem(
   };
 }
 
+
+/** A stage for catalogue items nobody has an assignment for. */
+const UNCONNECTED_SYNTHETIC_ASSIGNMENT = {
+  assignmentId: 0,
+  srsStage: 1,
+  startedAt: "1970-01-01T00:00:00.000Z",
+} as const;
+
+/**
+ * The pool for an account with no WaniKani connection.
+ *
+ * Same shape as a connected pool so nothing downstream can tell the difference:
+ * the runner, the scoring and the scoreboard all take `GameCatalogItem`.
+ */
+export async function loadUnconnectedPool(
+  level: number | null,
+  category: GameCategory,
+  wkLevel: number | null,
+): Promise<GameCatalogItem[]> {
+  const cap = unconnectedPoolLevelCap(level, wkLevel);
+
+  const rows = await prisma.wkSubjectCatalog.findMany({
+    where: {
+      ...(level === null ? { level: { lte: cap } } : { level }),
+      hiddenAt: null,
+      characters: { not: null },
+    },
+    select: CATALOG_SELECT,
+    orderBy: { wkSubjectId: "asc" },
+  });
+
+  return rows.flatMap((row) => {
+    if (!isSubjectType(row.subjectType)) return [];
+    const poolItem = {
+      ...UNCONNECTED_SYNTHETIC_ASSIGNMENT,
+      subjectId: row.wkSubjectId,
+      subjectType: row.subjectType as SubjectType,
+      level: row.level,
+    };
+    if (!gamePoolItemMatches(poolItem, level, category)) return [];
+    const item = toCatalogItem(row, UNCONNECTED_SYNTHETIC_ASSIGNMENT);
+    return item ? [item] : [];
+  });
+}
+
 export async function loadGamePool(
   accountId: string,
   level: number | null,
@@ -117,6 +163,26 @@ export async function loadGamePool(
       startedAt: typeof startedAt === "string" ? startedAt : null,
     }];
   });
+
+  /*
+   * An account with no WaniKani has no assignments, and the games drew only
+   * from assignments - so Match and Shiritori answered "Only 0 eligible items
+   * are available" for anybody who had not connected. The subjects themselves
+   * are not personal: they are the shared catalogue, and Daily Challenge has
+   * always played straight off it.
+   *
+   * So the assignments are treated as what they are, a filter rather than the
+   * source. A connected player still plays their own ladder, capped at their
+   * level, with their real SRS stages. A player without one gets the catalogue
+   * up to `UNCONNECTED_GAME_LEVEL_CAP` and a synthetic stage, the same way the
+   * daily pool does.
+   */
+  if (assignments.length === 0) {
+    return {
+      account: { nickname: account.nickname, wkUsername: account.wkUsername ?? "", wkLevel: account.wkLevel ?? 0 },
+      items: await loadUnconnectedPool(level, category, account.wkLevel),
+    };
+  }
 
   const catalogRows = await prisma.wkSubjectCatalog.findMany({
     where: {

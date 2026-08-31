@@ -469,21 +469,13 @@
     "id": "jlpt-standalone",
     "name": "Standalone JLPT study",
     "area": "jlpt",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-08-31",
-    "dateIsEstimate": true,
+    "dateIsEstimate": false,
     "release": 7,
-    "summary": "Split JLPT content from the WaniKani progress overlay so the kanji data stands on its own."
-  },
-  {
-    "id": "display-name-visibility",
-    "name": "Display names and visibility",
-    "area": "account",
-    "status": "planned",
-    "date": "2026-08-30",
-    "dateIsEstimate": true,
-    "release": 4,
-    "summary": "A public Global Display Name for every member plus an opt-in visibility flag, private by default."
+    "summary": "The JLPT route refused the whole request without a WaniKani token, although the token was only ever used for the progress overlay - the kanji themselves come from a table WaniKani has no part in. So a member who had not connected could not read the JLPT data at all, only the part of it that was about them. The token is required where it is used and nowhere else now: the kanji stand on their own, and the overlay is simply empty without one.",
+    "version": "0.149.0",
+    "releasedAt": "2026-08-31T12:00:00Z"
   },
   {
     "id": "optional-wk-identity",
@@ -509,11 +501,13 @@
     "id": "catalog-game-pool",
     "name": "WaniKani-free game pool",
     "area": "games",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
+    "status": "shipped",
+    "date": "2026-08-31",
+    "dateIsEstimate": false,
     "release": 9,
-    "summary": "Draw game rounds from the local catalogue when there is no assignment cache to draw from."
+    "summary": "The games drew only from an account's own WaniKani assignments, so a player who had never connected had a pool of nothing: Match and Shiritori answered \"Only 0 eligible items are available\" while the lobby offered them and the welcome copy promised them by name. The subjects were never personal - they are the shared catalogue, which Daily Challenge has always played straight off - so assignments are treated as a filter rather than the source, and a player without a connection draws the catalogue up to level ten. Not the whole of it: sixty levels of vocabulary is a dictionary rather than a game. A connected player is untouched, since every existing account has assignments and the fallback never fires for them.",
+    "version": "0.148.0",
+    "releasedAt": "2026-08-31T12:00:00Z"
   },
   {
     "id": "connect-wanikani-page",
@@ -587,16 +581,6 @@
     "summary": "Retire the batchSize = -1 sentinel in favour of a real enum value."
   },
   {
-    "id": "dry-adoption",
-    "name": "Shared surface primitives",
-    "area": "platform",
-    "status": "planned",
-    "date": "2026-09-04",
-    "dateIsEstimate": true,
-    "release": 17,
-    "summary": "Move the remaining hand-rolled cards, loading states and pills onto the shared components."
-  },
-  {
     "id": "game-activity",
     "name": "Last play and live rounds",
     "area": "games",
@@ -624,16 +608,6 @@
     "date": "2026-08-30",
     "dateIsEstimate": true,
     "summary": "Who is looking at a game right now. Backlogged by John: not worth any performance or cost risk ahead of open signup."
-  },
-  {
-    "id": "registration-onboarding",
-    "name": "Registration and onboarding",
-    "area": "account",
-    "status": "planned",
-    "date": "2026-08-31",
-    "dateIsEstimate": true,
-    "release": 5,
-    "summary": "The wizard after Google sign-in: display name, optional WaniKani token, JLPT certification, and the public-board choice."
   },
   {
     "id": "jlpt-level-reviews",
@@ -1578,12 +1552,22 @@
     "summary": "/api/join created accounts and never asked whether signing up was allowed. It took a Google session and a WaniKani token and upserted an account straight into the database - no invite code, no signup mode, no approval - so the whole invite-only model could be walked around by anyone who could sign in with Google and hold any working WaniKani token. It had no caller anywhere in the app, having been replaced by the invite panel, and it is deleted rather than gated: a gate would have reopened it the moment open signup was switched on, and it would then have created accounts that skipped the onboarding wizard and the approval queue as well."
   },
   {
+    "id": "admin-joins-the-header",
+    "area": "admin",
+    "name": "Admin joins the header",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.147.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Admin was the last place still drawing its own navigation strip - a centred segmented control in a third row below the header, while every other section put its pages on the left of the header's second row. Its tabs move into that same slot and read the same way, so an admin page and a study page are recognisably the same site. The header's second row now accepts a section that supplies its own pages, which admin needs since its tabs come from their own registry rather than from navSections. They are links rather than buttons as well, restoring middle-click and open-in-new-tab that the router.push control had eaten. Three roadmap entries were also removed from the planned list: they described work already shipped under other names, so the page was advertising as planned things that were live."
+  },
+  {
     "id": "search-autocomplete",
     "area": "platform",
     "name": "Search that answers while you type",
     "status": "shipped",
     "date": "2026-08-31",
-    "version": "0.147.0",
+    "version": "0.150.0",
     "releasedAt": "2026-08-31T13:00:00Z",
     "summary": "The header search box waited for Enter and a full page load before showing anything, which is a long way round for a learner who just wants to know where a kanji lives. Now the ten best hits appear under the field as you type, one row per glyph with its meaning, reading and source, ranked by the same scoring the results page uses. The dropdown reuses the existing search endpoint, whose per-query CDN caching means most keystrokes are answered at the edge without touching the database - prefixes are shared by everyone typing them. Arrow keys walk the rows and Enter opens the highlighted hit straight in your own explorer, falls through to the see-all footer, or submits the full search as before; a signed-out visitor gets the results page instead of links that would bounce off the sign-in wall. Japanese suggests from the first character, since one kanji is a real question, while Latin waits for two, since one letter matches half the catalogue."
   }

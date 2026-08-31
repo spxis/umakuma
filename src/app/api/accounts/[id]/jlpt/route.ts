@@ -75,17 +75,26 @@ export async function GET(_: Request, context: RouteContext) {
           return NextResponse.json({ error: "Account not found." }, { status: 404 });
         }
 
+        /*
+         * WaniKani is needed for the progress overlay and nothing else.
+         *
+         * The JLPT kanji come from `JlptKanji`, a table WaniKani has no part
+         * in, but this route refused the whole request without a connection -
+         * so a member who had not connected could not read the JLPT data at
+         * all, only the part of it that was about them. The token is required
+         * where it is used and nowhere else; without one the overlay is simply
+         * empty, and the kanji stand on their own.
+         */
         const connection = wanikaniConnection(account);
-                if (!connection) {
-                  return NextResponse.json(
-                    { error: WANIKANI_REQUIRED_MESSAGE },
-                    { status: WANIKANI_REQUIRED_STATUS },
-                  );
-                }
-                const token = connection.token;
+        if (includeUserIndex && !connection) {
+          return NextResponse.json(
+            { error: WANIKANI_REQUIRED_MESSAGE },
+            { status: WANIKANI_REQUIRED_STATUS },
+          );
+        }
 
         const [rawUserKanjiItems, jlptItems, jlptTotal, jlptSummaryRows] = await Promise.all([
-          includeUserIndex ? getUserKanjiIndex(token) : Promise.resolve([]),
+          includeUserIndex && connection ? getUserKanjiIndex(connection.token) : Promise.resolve([]),
           includeItems
             ? prisma.jlptKanji.findMany({
                 orderBy: [{ nLevel: "asc" }, { kanji: "asc" }],

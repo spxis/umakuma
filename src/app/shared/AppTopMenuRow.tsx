@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { MouseEvent as ReactMouseEvent } from "react";
+import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 
 import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
 import { TOP_NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav } from "./navSections";
@@ -20,6 +20,8 @@ type AppTopMenuRowProps = {
   lastSyncedAt?: string | null;
   lastActivityAt?: string | null;
   className?: string;
+  /** Sub-navigation for a section that supplies its own, such as admin. */
+  subNav?: ReactNode;
 };
 
 const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "library-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
@@ -40,6 +42,7 @@ export default function AppTopMenuRow({
   lastSyncedAt = null,
   lastActivityAt = null,
   className,
+  subNav,
 }: AppTopMenuRowProps) {
   const pathname = usePathname();
   const resolvedWkUsername = primaryWkUsername ?? viewerAddress(viewerMenuInfo);
@@ -169,6 +172,7 @@ export default function AppTopMenuRow({
         section={sectionHasSubNav(activeSection) ? activeSection : null}
         pathname={pathname}
         wkUsername={resolvedWkUsername}
+        subNav={subNav}
       />
     </div>
   );
