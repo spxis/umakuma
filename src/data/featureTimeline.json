@@ -1436,5 +1436,15 @@
     "version": "0.132.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Choosing items is a surface control now, sitting beside the grid and list toggle rather than being a feature of the practice page. Pick characters on the grades explorer and send them to a sheet; the chosen set travels in the link, so a sheet built by hand is shareable and printable before anything is saved. Destinations are offered to a chosen set rather than built into the picking."
+  },
+  {
+    "id": "saved-study-lists",
+    "area": "study",
+    "name": "Saved lists",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.133.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Choose characters on the grades explorer, give the set a name, and it keeps: Week 1, Week 2. A Lists page shows every set you have built with the characters it holds rather than a count, and each one goes straight to a practice sheet. The same idea as Trouble and Favourites, with a name instead of a flag."
   }
 ]

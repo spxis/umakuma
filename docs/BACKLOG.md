@@ -577,7 +577,7 @@ a hand-applied `db push` to production before it can deploy.
 
 ---
 
-### 22 — Saved practice lists
+### 22 — Saved practice lists ✅ shipped (v0.133.0)
 
 Build a sheet from chosen items rather than a whole grade, and keep it: "Week
 1", "Week 2". A page lists every list a member has made, each with a small
