@@ -1176,5 +1176,15 @@
     "version": "0.106.0",
     "releasedAt": "2026-08-30T22:45:00Z",
     "summary": "Accounts that predate the visibility setting now read as public, which is what they already were. Reading them as members-only had emptied the leaderboard for anyone who was not signed in. New accounts still start private, where no audience is being taken away."
+  },
+  {
+    "id": "welcome-invite-session",
+    "area": "account",
+    "name": "The welcome page accepts an invite session",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.107.0",
+    "releasedAt": "2026-08-30T23:05:00Z",
+    "summary": "An invited member may have no Google account at all, and the welcome page assumed one - sending them to the sign-in screen from a page they were entitled to open. It now accepts either kind of session and routes them to their own page."
   }
 ]

@@ -1,10 +1,12 @@
 import { getServerSession } from "next-auth";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { isAwaitingApproval } from "@/lib/accountApproval";
 import { normalizeDisplayName } from "@/lib/accountIdentity";
 import { authOptions } from "@/lib/auth";
+import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { prisma } from "@/lib/prisma";
 import { allowsSelfSignup } from "@/lib/signupSettings";
@@ -27,15 +29,28 @@ export default async function WelcomePage() {
   const session = await getServerSession(authOptions);
   const email = session?.user?.email?.trim().toLowerCase() ?? null;
 
-  if (!email) {
+  /*
+   * Either kind of session, because an invited member may have no Google
+   * account at all. Assuming `getServerSession` sent them to the login screen
+   * from a page they were entitled to open.
+   */
+  const inviteToken = (await cookies()).get(INVITE_SESSION_COOKIE_NAME)?.value ?? null;
+  const inviteAccountId = inviteToken ? verifyInviteSessionToken(inviteToken)?.accountId ?? null : null;
+
+  if (!email && !inviteAccountId) {
     redirect("/login?callbackUrl=%2Fwelcome");
   }
 
   const settings = await loadSignupSettings();
-  const account = await prisma.account.findFirst({
-    where: { joinedByEmail: { equals: email, mode: "insensitive" } },
-    select: { slug: true, wkUsername: true, approvalStatus: true },
-  });
+  const account = email
+    ? await prisma.account.findFirst({
+        where: { joinedByEmail: { equals: email, mode: "insensitive" } },
+        select: { slug: true, wkUsername: true, approvalStatus: true },
+      })
+    : await prisma.account.findUnique({
+        where: { id: inviteAccountId as string },
+        select: { slug: true, wkUsername: true, approvalStatus: true },
+      });
 
   if (account) {
     if (isAwaitingApproval(account.approvalStatus)) {
@@ -57,6 +72,15 @@ export default async function WelcomePage() {
     }
 
     redirect(`/users/${encodeURIComponent(account.slug ?? account.wkUsername ?? "")}`);
+  }
+
+  /*
+   * Creating an account needs a Google identity to attach it to. An invite
+   * session whose account has gone would otherwise be shown a form that its
+   * own API refuses.
+   */
+  if (!email) {
+    redirect("/join");
   }
 
   if (!allowsSelfSignup(settings)) {
