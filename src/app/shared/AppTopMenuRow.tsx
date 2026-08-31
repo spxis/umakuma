@@ -149,7 +149,7 @@ export default function AppTopMenuRow({
 
       <GlobalSearchBox className="ml-auto shrink-0" />
 
-      <ReleaseMotto isAdmin={canSeeAdminTopLink} />
+      <ReleaseMotto />
 
       <div className="shrink-0">
         <UserHeaderMenu

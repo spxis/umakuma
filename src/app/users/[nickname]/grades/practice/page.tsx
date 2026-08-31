@@ -18,7 +18,7 @@ import PrintButton from "./PrintButton";
 import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_SIZES, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
 import SheetOptionsRow from "./SheetOptionsRow";
 import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "./sheetLink";
-import TracingSheet, { type SheetMode, type TraceEntry } from "./TracingSheet";
+import TracingSheet, { type SheetMode } from "./TracingSheet";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;

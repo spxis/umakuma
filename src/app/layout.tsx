@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import AppFooter from "./AppFooter";
 import { loadFooterModeChips } from "@/lib/featureFlagsServer";
-import { loadViewerIsAdmin } from "@/lib/viewerAdmin";
 import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
 import StudyTagListsModal from "./shared/StudyTagListsModal";
@@ -18,7 +17,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [modeChips, viewerIsAdmin] = await Promise.all([loadFooterModeChips(), loadViewerIsAdmin()]);
+  const modeChips = await loadFooterModeChips();
 
   return (
     <html
@@ -32,7 +31,7 @@ export default async function RootLayout({
         <ClientErrorReporter />
         <ClientApiActivityHint />
         <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
-        <AppFooter modeChips={modeChips} isAdmin={viewerIsAdmin} />
+        <AppFooter modeChips={modeChips} />
         <StudyTagListsModal />
         <ViewGlyphModalHost />
       </body>

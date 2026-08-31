@@ -4,7 +4,6 @@ import GameCategoryPill from "./GameCategoryPill";
 import {
   GAME_KIND_ACCENT,
   GAME_KIND_EMOJI,
-  GAME_KIND_LABELS,
   gameKindLabelWithCountry,
   GAME_LEVEL_PILL_CLASS,
   GAME_METRIC_LABELS,

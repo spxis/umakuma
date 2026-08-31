@@ -2,7 +2,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
 
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
@@ -12,9 +11,6 @@ import {
   setCachedJlptCatalog,
 } from "@/lib/jlptCatalogCache";
 import {
-  JLPT_CATALOG_ENRICHMENT_FILTERS,
-  JLPT_CATALOG_SORT_BY,
-  JLPT_CATALOG_SORT_DIR,
   type JlptCatalogJsonSourceMeta,
   type JlptCatalogQuery,
   type JlptCatalogResponse,

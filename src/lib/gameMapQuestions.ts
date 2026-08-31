@@ -9,7 +9,6 @@ import {
 } from "@/lib/gameMode";
 import type { GameQuestionInput } from "@/lib/gameQuestionBuilder";
 import { pickWith, shuffleWith, type RandomSource } from "@/lib/gameRandom";
-import type { CountryCode } from "@/lib/geoRegion";
 import { geoMapDiagonal, geoMapEntries, geoMapOption, type GeoMapEntry } from "@/lib/geoMapPool";
 
 /*

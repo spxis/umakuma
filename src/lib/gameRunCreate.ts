@@ -31,7 +31,6 @@ import {
   shiritoriPlayableTargets,
   type GameQuestionInput,
 } from "@/lib/gameQuestionBuilder";
-import { JAPAN_PREFECTURE_COUNT } from "@/lib/japanPrefectures";
 import { prisma } from "@/lib/prisma";
 
 export const DAILY_ALREADY_PLAYED = "You already played today's Daily Challenge.";

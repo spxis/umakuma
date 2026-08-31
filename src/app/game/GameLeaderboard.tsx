@@ -1,7 +1,7 @@
 import { formatGameDuration, gameKindRules, type GameMetric } from "@/lib/gameMode";
 import { formatGameScore } from "@/lib/gameScoring";
 import GameCategoryPill from "./GameCategoryPill";
-import { GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS,
+import { GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI,
   gameKindLabelWithCountry, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, gameDifficultyLabel } from "./GameMode.constants";
 import GameLeaderboardMobile from "./GameLeaderboardMobile";
 import type { GameLeaderboardDay } from "./GameMode.types";
