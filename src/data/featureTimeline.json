@@ -1236,5 +1236,15 @@
     "version": "0.112.0",
     "releasedAt": "2026-08-31T02:00:00Z",
     "summary": "Every row is a full eight squares now: the finished character faintly at the start to work from, the strokes after it, and empty squares filling out the rest of the line. Each row is also titled with the character itself before its meaning."
+  },
+  {
+    "id": "practice-source-chooser",
+    "area": "study",
+    "name": "Change the sheet without leaving it",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.113.0",
+    "releasedAt": "2026-08-31T02:30:00Z",
+    "summary": "Selecting the source you are already on opens a second row holding every value it offers: the eight school grades, sixty WaniKani levels or five JLPT levels. Changing sheet meant going back to the grade page and in again, which made a page you might print several of from harder to use than it needed to be."
   }
 ]

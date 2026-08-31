@@ -11,6 +11,7 @@ export const PRACTICE_SHEET_COPY = {
   credit: "Stroke shapes from KanjiVG (CC BY-SA 3.0)",
   perPage: "Characters",
   sourceLabel: "Practise",
+  chooseLabel: "Choose",
   modeLabel: "Sheet",
   modeTrace: "Trace",
   modeStrokes: "Stroke order",
@@ -42,3 +43,9 @@ export const PRACTICE_PAGE_SIZE = 20;
  * square too small to write in is no longer a practice square.
  */
 export const SHEET_COLUMNS = 8;
+
+/** WaniKani goes to 60, and every level is a legitimate sheet to print. */
+export const WANIKANI_MAX_LEVEL = 60;
+
+/** N5 down to N1, in the order a learner climbs them. */
+export const JLPT_LEVELS = [5, 4, 3, 2, 1] as const;

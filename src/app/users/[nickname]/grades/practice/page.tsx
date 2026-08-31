@@ -9,9 +9,9 @@ import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { PRACTICE_SOURCES, isPracticeSource, practiceEntriesFor } from "@/lib/practiceSource";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
-import { GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
+import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
 import PrintButton from "./PrintButton";
-import { PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY } from "./practiceCopy";
+import { JLPT_LEVELS, PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, WANIKANI_MAX_LEVEL } from "./practiceCopy";
 import TracingSheet, { type SheetMode, type TraceEntry } from "./TracingSheet";
 
 type PageProps = {
@@ -35,6 +35,12 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   const query = await searchParams;
   const modeParam = typeof query.mode === "string" ? query.mode : null;
   const mode: SheetMode = modeParam === "strokes" ? "strokes" : "trace";
+  /*
+   * The chooser is a URL state, not component state, so the page stays a
+   * server component and a chosen sheet is still a link somebody can send or
+   * print. Selecting the active source toggles it.
+   */
+  const choosing = firstValue(query.pick) === "1";
 
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
@@ -117,10 +123,11 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         ] as const).map(([id, label, defaultLevel]) => {
           const active = id === source;
           const target = id === source ? level : defaultLevel;
+          const pick = active && !choosing ? "&pick=1" : "";
           return (
             <Link
               key={id}
-              href={`?source=${id}&grade=${grade}&level=${target}&mode=${mode}`}
+              href={`?source=${id}&grade=${grade}&level=${target}&mode=${mode}${pick}`}
               className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
                 active
                   ? "border-neutral-900 bg-neutral-900 text-white"
@@ -128,6 +135,9 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
               }`}
             >
               {label} {target}
+              {active ? (
+                <span aria-hidden="true" className={`ml-1.5 transition ${choosing ? "rotate-90" : ""}`}>›</span>
+              ) : null}
             </Link>
           );
         })}
@@ -140,7 +150,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         ] as const).map(([id, label]) => (
           <Link
             key={id}
-            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${id}`}
+            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${id}${choosing ? "&pick=1" : ""}`}
             className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
               id === mode
                 ? "border-neutral-900 bg-neutral-900 text-white"
@@ -151,6 +161,45 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           </Link>
         ))}
       </nav>
+
+      {/*
+        * The second row: every value the active source offers, so a sheet can
+        * be changed here instead of going back to the grade page and in
+        * again. Which values appear follows the source, since a WaniKani level
+        * and a school grade are not the same list.
+        */}
+      {choosing ? (
+        <nav className="mb-4 flex flex-wrap items-center gap-1.5 border-l-2 border-neutral-200 pl-3 print:hidden">
+          <span className="mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
+            {PRACTICE_SHEET_COPY.chooseLabel}
+          </span>
+          {(source === PRACTICE_SOURCES.grade
+            ? GRADE_OPTIONS.map((value) => ({ value, label: GRADE_SHORT_LABELS[value] }))
+            : source === PRACTICE_SOURCES.jlpt
+              ? JLPT_LEVELS.map((value) => ({ value, label: `N${value}` }))
+              : Array.from({ length: WANIKANI_MAX_LEVEL }, (_, index) => ({
+                  value: index + 1,
+                  label: String(index + 1),
+                }))
+          ).map(({ value, label }) => {
+            const current = source === PRACTICE_SOURCES.grade ? grade : level;
+            const gradeParam = source === PRACTICE_SOURCES.grade ? value : grade;
+            return (
+              <Link
+                key={value}
+                href={`?source=${source}&grade=${gradeParam}&level=${value}&mode=${mode}&pick=1`}
+                className={`inline-flex h-7 min-w-7 items-center justify-center rounded-full border px-2 text-[11px] font-bold transition ${
+                  value === current
+                    ? "border-neutral-900 bg-neutral-900 text-white"
+                    : "border-neutral-300 text-neutral-600 hover:bg-neutral-100"
+                }`}
+              >
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
+      ) : null}
 
       {/*
         * Said plainly rather than shrinking the squares to fit. A square small
@@ -179,12 +228,12 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
 
       <nav className="mt-3 flex items-center justify-between gap-3 print:hidden">
         {page > 1 ? (
-          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page - 1}&mode=${mode}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
+          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page - 1}&mode=${mode}${choosing ? "&pick=1" : ""}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
             Previous
           </Link>
         ) : <span />}
         {page * PRACTICE_PAGE_SIZE < total ? (
-          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page + 1}&mode=${mode}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
+          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page + 1}&mode=${mode}${choosing ? "&pick=1" : ""}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
             Next
           </Link>
         ) : <span />}
