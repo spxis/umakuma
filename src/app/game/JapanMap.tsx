@@ -55,6 +55,33 @@ export default function JapanMap({
    */
   const inset = country === "JP" ? JAPAN_MAP.inset : null;
 
+  /*
+   * Where each handle sits, avoiding the ones already placed.
+   *
+   * Handles float above their region, which is fine until two regions are
+   * small and close: Prince Edward Island and Nova Scotia put their handles in
+   * the same few pixels and one hid the other completely, so a choice could
+   * not be seen or clicked. When the space above is taken, the handle hangs
+   * below its region instead - the stem still points at the right place.
+   */
+  const placedHandles = (() => {
+    const placed: Array<{ mark: MapMark; x: number; y: number; above: boolean }> = [];
+    const clearOf = (x: number, y: number) =>
+      placed.every((other) => {
+        const otherY = other.above ? other.y - radius * 2.1 : other.y + radius * 2.1;
+        return Math.hypot(other.x - x, otherY - y) > radius * 1.9;
+      });
+
+    for (const mark of marks) {
+      const region = regionByCode.get(String(mark.code));
+      if (!region) continue;
+      const [x, y] = region.map.centroid;
+      const above = clearOf(x, y - radius * 2.1) || !clearOf(x, y + radius * 2.1);
+      placed.push({ mark, x, y, above });
+    }
+    return placed;
+  })();
+
   return (
     <svg
       viewBox={mapBoxToViewBox(box)}
@@ -91,13 +118,10 @@ export default function JapanMap({
         );
       })}
 
-      {/* Tap targets sit above every path so a small prefecture is as easy to hit
-          as Hokkaido, which is what keeps the question about knowing Japan. */}
+      {/* Tap targets sit above every path so a small region is as easy to hit
+          as Hokkaido, which is what keeps the question about knowing the map. */}
       {showHandles
-        ? marks.map((mark) => {
-            const region = regionByCode.get(String(mark.code));
-            if (!region) return null;
-            const [x, y] = region.map.centroid;
+        ? placedHandles.map(({ mark, x, y, above }) => {
             // A handle with nothing to select is a pointer, not a control: Read
             // uses one to show which prefecture the question is about.
             const interactive = Boolean(mark.onSelect);
@@ -120,20 +144,20 @@ export default function JapanMap({
                   x1={x}
                   y1={y}
                   x2={x}
-                  y2={y - radius * 2.1}
+                  y2={above ? y - radius * 2.1 : y + radius * 2.1}
                   strokeWidth={stroke * 2}
                   className={MAP_TONE_CLASS[mark.tone]!.line}
                 />
                 <circle
                   cx={x}
-                  cy={y - radius * 2.1}
+                  cy={above ? y - radius * 2.1 : y + radius * 2.1}
                   r={radius}
                   strokeWidth={stroke * 2}
                   className={MAP_TONE_CLASS[mark.tone]!.handle}
                 />
                 <text
                   x={x}
-                  y={y - radius * 2.1}
+                  y={above ? y - radius * 2.1 : y + radius * 2.1}
                   textAnchor="middle"
                   dominantBaseline="central"
                   fontSize={fontSize}

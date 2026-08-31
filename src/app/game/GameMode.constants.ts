@@ -1,3 +1,4 @@
+import { MAP_COUNTRIES_ALL } from "@/lib/mapCountries";
 import {
   GAME_KINDS,
   GAME_PRACTICE_LISTS,
@@ -235,6 +236,14 @@ export const MAP_TONE_CLASS: Record<string, { shape: string; line: string; handl
 
 export const GAME_MIXED_PILL_CLASS = "subject-pill border-line bg-surface-muted text-foreground";
 export const GAME_LEVEL_PILL_CLASS = "subject-pill border-accent/30 bg-accent/10 text-accent";
+
+/** "Map · Canada", so a scoreboard row says which board it was won on. */
+export function gameKindLabelWithCountry(kind: GameKind, mapCountry?: string | null): string {
+  const base = GAME_KIND_LABELS[kind];
+  if (!mapCountry) return base;
+  const country = MAP_COUNTRIES_ALL.find((entry) => entry.code === mapCountry);
+  return country ? `${base} · ${country.label}` : base;
+}
 
 export function gameDifficultyLabel(kind: GameKind, choiceCount: number, ultraMode: boolean, direction?: string): string {
   const choices = gameCornersLabel(kind, choiceCount);

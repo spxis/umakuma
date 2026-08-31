@@ -5,6 +5,7 @@ import {
   GAME_KIND_ACCENT,
   GAME_KIND_EMOJI,
   GAME_KIND_LABELS,
+  gameKindLabelWithCountry,
   GAME_LEVEL_PILL_CLASS,
   GAME_METRIC_LABELS,
   gameDifficultyLabel,
@@ -65,7 +66,7 @@ export default function GameLeaderboardMobile({ days, members, metric }: Props) 
                 </div>
                 <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs font-semibold text-foreground/60">
                   <span className={`subject-pill border-line bg-surface-muted ${GAME_KIND_ACCENT[entry.kind].text}`}>
-                    <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {GAME_KIND_LABELS[entry.kind]}
+                    <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {gameKindLabelWithCountry(entry.kind, entry.mapCountry)}
                   </span>
                   {gameKindRules(entry.kind).usesLevel ? (
                     <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>

@@ -1,3 +1,4 @@
+import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import DisplayPreferences from "@/app/shared/DisplayPreferences";
 import { DISPLAY_PREFERENCES_COPY } from "@/app/shared/displayPreferencesCopy";
 import { notFound, redirect } from "next/navigation";
@@ -67,7 +68,7 @@ export default async function UserProfilePage({ params }: PageProps) {
       : JLPT_STATUS_LABELS[account.jlptStatus ?? ""] ?? PROFILE_COPY.jlptNone;
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-6 sm:px-6">
+    <div className={`${PAGE_WIDTH.wide} ${PAGE_SHELL_PADDING}`}>
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
         primaryWkUsername={account.wkUsername ?? account.slug}
@@ -77,6 +78,9 @@ export default async function UserProfilePage({ params }: PageProps) {
         lastActivityAt={account.lastActivityAt?.toISOString() ?? null}
         className="mb-4"
       />
+
+      {/* The form reads in a column; the navigation above it spans the page. */}
+      <div className={PAGE_WIDTH.reading}>
 
       <header className="mb-4">
         <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">{PROFILE_COPY.heading}</p>
@@ -158,6 +162,7 @@ export default async function UserProfilePage({ params }: PageProps) {
           </div>
         )}
       </section>
+      </div>
     </div>
   );
 }

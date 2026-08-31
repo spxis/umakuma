@@ -1,7 +1,8 @@
 import { formatGameDuration, gameKindRules, type GameMetric } from "@/lib/gameMode";
 import { formatGameScore } from "@/lib/gameScoring";
 import GameCategoryPill from "./GameCategoryPill";
-import { GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, gameDifficultyLabel } from "./GameMode.constants";
+import { GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS,
+  gameKindLabelWithCountry, GAME_LEVEL_PILL_CLASS, GAME_METRIC_LABELS, gameDifficultyLabel } from "./GameMode.constants";
 import GameLeaderboardMobile from "./GameLeaderboardMobile";
 import type { GameLeaderboardDay } from "./GameMode.types";
 import LoadingState from "../shared/LoadingState";
@@ -63,7 +64,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                   <td className="px-4 py-3">
                     <div className="flex flex-nowrap items-center gap-1.5 whitespace-nowrap text-sm font-bold text-foreground/65">
                       <span className={`subject-pill border-line bg-surface-muted ${GAME_KIND_ACCENT[entry.kind].text}`}>
-                        <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {GAME_KIND_LABELS[entry.kind]}
+                        <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {gameKindLabelWithCountry(entry.kind, entry.mapCountry)}
                       </span>
                       {gameKindRules(entry.kind).usesLevel ? (
                         <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>

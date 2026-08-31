@@ -1356,5 +1356,15 @@
     "version": "0.124.0",
     "releasedAt": "2026-08-31T10:00:00Z",
     "summary": "The writing sheet's second row of chips now carries counts, so picking a grade or level is no longer a choice between bare numbers. Theme and Japanese font move from the account menu onto the profile, which already held the name and the visibility - one home for how you want UmaKuma to be rather than two."
+  },
+  {
+    "id": "map-handles-and-widths",
+    "area": "games",
+    "name": "Every choice visible, and one rule for page width",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.125.0",
+    "releasedAt": "2026-08-31T11:00:00Z",
+    "summary": "Two small regions close together put their handles in the same few pixels, so a choice could be hidden behind another and never clicked - Prince Edward Island behind Nova Scotia. A handle now hangs below its region when the space above is taken. Scoreboards say which country a map run was played on, and member pages follow one width rule instead of three."
   }
 ]

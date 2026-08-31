@@ -60,8 +60,9 @@ through it meets a finished flow.
 | 26 | ~~JLPT old numbering~~ ✅ v0.119.0 | — |
 | 27 | ~~Counts on second-level filters~~ ✅ v0.124.0 | — |
 | 28 | Pagination placement option | — |
-| 30 | Desktop page width and header crowding | — |
+| 30 | ~~Desktop page width and header crowding~~ ✅ v0.125.0 | — |
 | 31 | ~~Consolidate preferences into Settings~~ ✅ v0.124.0 | — |
+| 32 | Capital cities in Map mode | — |
 | 29 | ~~Real US and Canada map geometry~~ ✅ v0.123.0 | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
@@ -707,3 +708,19 @@ Theme and Japanese font live in the account menu; Profile and Libraries live in
 Settings. That is two homes for one idea, which is the thing the menu rebuild
 was supposed to end. Move the preferences onto the profile page and take them
 out of the menu.
+
+### 32 — Capital cities in Map mode
+
+Asked for while the maps were fresh: a round that names a capital and asks for
+the region containing it. Every dataset already carries `capital` per region -
+Japan, the United States and Canada alike - so the question is a relabelling of
+the one Map already asks, not a new game.
+
+That much is a direction alongside Read and Find rather than a new kind.
+
+**The larger version needs data we do not have.** Finding a city *within* a
+region means a point per city, and none of the three map files carry
+coordinates for anything but region centroids. Natural Earth publishes
+`populated_places` with exact points, so it is gettable - it would be another
+source in the map pipeline, and worth doing only if the smaller version proves
+popular.

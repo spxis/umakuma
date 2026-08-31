@@ -294,6 +294,8 @@ export type GameRunSummary = {
 };
 
 export type GameLeaderboardEntry = {
+  /** Which country a Map run was played on; null for every other game. */
+  mapCountry?: string | null;
   runId: string;
   accountId: string;
   nickname: string;

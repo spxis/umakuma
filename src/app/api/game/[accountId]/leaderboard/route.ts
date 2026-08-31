@@ -1,3 +1,4 @@
+import { geoRegionIdFromSubjectId } from "@/lib/geoSubjectIds";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -42,6 +43,13 @@ function sortEntries(entries: GameLeaderboardEntry[], metric: GameMetric): GameL
   });
 }
 
+/** The country a Map run was played on, read from its first target's id. */
+function mapCountryOfRun(questions: Array<{ targetSubjectId: number }>): string | null {
+  const first = questions[0]?.targetSubjectId;
+  if (typeof first !== "number") return null;
+  return geoRegionIdFromSubjectId(first)?.split("-")[0] ?? null;
+}
+
 export async function GET(request: Request, context: { params: Promise<{ accountId: string }> }) {
   return withApiRouteTelemetry({
     route: "/api/game/[accountId]/leaderboard",
@@ -77,6 +85,13 @@ export async function GET(request: Request, context: { params: Promise<{ account
           questionCount: true,
           completedAt: true,
           completedDatePst: true,
+          /*
+           * One question, only to learn which country a Map run was played on.
+           * The country lives in the target's id range rather than a column, so
+           * this is the cheapest way to read it back - and it is the only way
+           * for runs recorded before the other countries existed.
+           */
+          questions: { take: 1, select: { targetSubjectId: true } },
           account: { select: { nickname: true, wkUsername: true } },
         } as const;
         const [runs, recentRuns, members] = await Promise.all([
@@ -123,6 +138,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
             nickname: run.account.nickname,
             wkUsername: run.account.wkUsername ?? "",
             kind: run.kind as GameKind,
+            mapCountry: mapCountryOfRun(run.questions),
             category: run.category,
             hardMode: run.hardMode,
             choiceCount: gameChoiceCountFrom(run.choiceCount, run.hardMode),

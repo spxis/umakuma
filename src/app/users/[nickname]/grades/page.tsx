@@ -1,4 +1,4 @@
-import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
+import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -70,7 +70,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
   const { first, last } = pageRange(page, total);
 
   return (
-    <div className={`mx-auto w-full max-w-6xl ${PAGE_SHELL_PADDING}`}>
+    <div className={`${PAGE_WIDTH.wide} ${PAGE_SHELL_PADDING}`}>
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
         primaryWkUsername={userKey}
