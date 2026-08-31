@@ -1309,7 +1309,7 @@
   },
   {
     "id": "map-regions-us-canada",
-    "area": "game",
+    "area": "games",
     "name": "Map mode reaches the United States and Canada",
     "status": "shipped",
     "date": "2026-08-30",
