@@ -14,6 +14,8 @@ export const PRACTICE_SOURCES = {
   /* The member's own lists, which are the sheets most worth printing. */
   trouble: "trouble",
   favorite: "favorite",
+  /* Characters chosen by hand on some other surface. */
+  picked: "picked",
 } as const;
 
 /** Sources that read a member's tagged list rather than a fixed ladder. */
@@ -133,9 +135,51 @@ function firstMeaning(meanings: unknown): string | null {
 }
 
 /**
+ * A sheet built from characters somebody picked by hand.
+ *
+ * The chosen order is kept rather than sorted: a member who picked this
+ * week's ten characters in a particular order meant that order, and a sheet
+ * that silently re-sorts them is a different sheet from the one they built.
+ * The catalogue supplies the readings, and anything without stroke data drops
+ * out the same way it does everywhere else.
+ */
+async function pickedEntries(
+  picked: string[],
+  page: number,
+  pageSize: number,
+): Promise<{ entries: PracticeEntry[]; total: number }> {
+  if (picked.length === 0) {
+    return { entries: [], total: 0 };
+  }
+
+  const rows = await prisma.wkSubjectCatalog.findMany({
+    where: { characters: { in: picked }, subjectType: "kanji" },
+    select: { characters: true, meanings: true, readings: true },
+  });
+
+  const byCharacter = new Map(rows.map((row) => [row.characters, row]));
+  const candidates = picked.flatMap((kanji) => {
+    const row = byCharacter.get(kanji);
+    return row
+      ? [{
+          kanji,
+          meaning: firstMeaning(row.meanings),
+          on: readingsOfType(row.readings, "onyomi"),
+          kun: readingsOfType(row.readings, "kunyomi"),
+        }]
+      : /* Not in the WaniKani catalogue - still traceable if KanjiVG has it. */
+        [{ kanji, meaning: null, on: [], kun: [] }];
+  });
+
+  const entries = toEntries(candidates);
+  return { entries: entries.slice((page - 1) * pageSize, page * pageSize), total: entries.length };
+}
+
+/**
  * The characters a practice sheet should hold, from whichever list was asked
- * for. Grades come from the local catalogue; the other two are the learner's
- * own ladders and live in the database.
+ * for. Grades come from the local catalogue; the tagged lists are the
+ * learner's own ladders and live in the database; a picked sheet is whatever
+ * they chose by hand.
  */
 export async function practiceEntriesFor(
   source: PracticeSource,
@@ -144,7 +188,13 @@ export async function practiceEntriesFor(
   pageSize: number,
   /** Required by the tagged sources, which are one member's own lists. */
   accountId?: string | null,
+  /** The characters, when the source is a hand-picked set. */
+  picked?: string[],
 ): Promise<{ entries: PracticeEntry[]; total: number }> {
+  if (source === PRACTICE_SOURCES.picked) {
+    return pickedEntries(picked ?? [], page, pageSize);
+  }
+
   if (isTaggedPracticeSource(source)) {
     return taggedEntries(source, accountId ?? null, page, pageSize);
   }

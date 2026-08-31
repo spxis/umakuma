@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 
+import Link from "next/link";
+
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import { SubjectSelectionBar, SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
+import { encodeSelection, SUBJECT_SELECTION_COPY } from "@/app/shared/subjectSelection";
+import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import {
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
@@ -17,6 +22,8 @@ import { GRADE_REVEAL_MODES, GRADE_REVEAL_STORAGE_KEY, GRADE_VIEW_MODE_STORAGE_K
 
 type Props = {
   items: SchoolGradeKanjiEntry[];
+  /** The practice sheet's path. The board does not build sheet options. */
+  practicePath: string;
 };
 
 /**
@@ -27,7 +34,7 @@ type Props = {
  * grid into a self-test: see the kanji, say the readings, select the card to
  * check. Nothing is recorded — this is the rehearsal before the real thing.
  */
-export default function GradeKanjiBoard({ items }: Props) {
+export default function GradeKanjiBoard({ items, practicePath }: Props) {
   /*
    * Read once at mount rather than in an effect. A new grade or page remounts
    * this component through its `key`, which is also what clears what was
@@ -45,6 +52,8 @@ export default function GradeKanjiBoard({ items }: Props) {
     setRevealed(new Set());
   }
 
+  const selection = useSubjectSelection();
+
   const quizzing = mode === GRADE_REVEAL_MODES.hidden;
 
   return (
@@ -52,7 +61,11 @@ export default function GradeKanjiBoard({ items }: Props) {
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={() => changeMode(quizzing ? GRADE_REVEAL_MODES.shown : GRADE_REVEAL_MODES.hidden)}
+          onClick={() => {
+            // Quizzing and choosing both claim the card's click; one at a time.
+            if (selection.choosing) selection.cancel();
+            changeMode(quizzing ? GRADE_REVEAL_MODES.shown : GRADE_REVEAL_MODES.hidden);
+          }}
           className={`inline-flex h-8 items-center rounded-full border px-4 text-xs font-black uppercase tracking-[0.08em] transition ${
             quizzing
               ? "border-kanji bg-kanji text-white"
@@ -79,8 +92,12 @@ export default function GradeKanjiBoard({ items }: Props) {
           </>
         ) : null}
 
-        <SubjectViewModeToggle
+        <SubjectSelectionToggle
           className="ml-auto"
+          selection={selection}
+        />
+
+        <SubjectViewModeToggle
           value={viewMode}
           onChange={(next) => {
             setViewMode(next);
@@ -89,13 +106,26 @@ export default function GradeKanjiBoard({ items }: Props) {
         />
       </div>
 
+      <SubjectSelectionBar selection={selection} visibleKeys={items.map((entry) => entry.kanji)}>
+        {selection.count > 0 ? (
+          <Link
+            href={`${practicePath}?source=picked&picked=${encodeURIComponent(encodeSelection(selection.chosen))}`}
+            className="inline-flex h-8 items-center rounded-full bg-accent px-4 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
+          >
+            {SUBJECT_SELECTION_COPY.practise}
+          </Link>
+        ) : null}
+      </SubjectSelectionBar>
+
       <GradeKanjiGrid
         items={items}
         viewMode={viewMode}
+        chosenKanji={selection.choosing ? selection.chosen : undefined}
+        onChoose={selection.choosing ? selection.toggle : undefined}
         hideReadings={quizzing}
         revealedKanji={revealed}
         onReveal={
-          quizzing
+          quizzing && !selection.choosing
             ? (kanji) =>
                 setRevealed((prev) => {
                   const next = new Set(prev);

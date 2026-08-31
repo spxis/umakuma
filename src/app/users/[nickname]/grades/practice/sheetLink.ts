@@ -41,6 +41,8 @@ export type SheetSettings = {
   size: SheetSize;
   /** Whether the level chooser is open. */
   choosing: boolean;
+  /** The hand-picked characters, encoded, when the sheet is a picked one. */
+  picked: string;
 };
 
 /**
@@ -63,6 +65,8 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
   if (next.placement !== PRACTICE_PAGINATION_DEFAULT) parts.push(`pager=${next.placement}`);
   if (next.size !== DEFAULT_SHEET_SIZE) parts.push(`size=${next.size}`);
   if (next.choosing) parts.push("pick=1");
+  // Kept last: it is the longest parameter and the least worth reading.
+  if (next.picked) parts.push(`picked=${encodeURIComponent(next.picked)}`);
 
   return `?${parts.join("&")}`;
 }

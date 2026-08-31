@@ -22,6 +22,13 @@ type Props = {
   viewMode?: SubjectViewMode;
   revealedKanji?: Set<string>;
   onReveal?: (kanji: string) => void;
+  /*
+   * Choosing mode. Given both, a card's click picks the character instead of
+   * opening its details - the same click, a different verb - so the grid needs
+   * no second target and no permanent checkbox.
+   */
+  chosenKanji?: ReadonlySet<string>;
+  onChoose?: (kanji: string) => void;
 };
 
 function ReadingRow({ label, readings }: { label: string; readings: string[] }) {
@@ -51,6 +58,8 @@ export default function GradeKanjiGrid({
   viewMode = SUBJECT_VIEW_MODES.grid,
   revealedKanji,
   onReveal,
+  chosenKanji,
+  onChoose,
 }: Props) {
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
   /*
@@ -162,9 +171,12 @@ export default function GradeKanjiGrid({
         );
 
         const body = rows ? rowBody : cardBody;
-        const shell = rows
-          ? "rounded-xl border border-kanji/40 bg-kanji/5 px-3 py-2 transition"
-          : "rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition";
+        const chosen = Boolean(chosenKanji?.has(entry.kanji));
+        const shell = `${
+          rows
+            ? "rounded-xl border border-kanji/40 bg-kanji/5 px-3 py-2 transition"
+            : "rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition"
+        }${chosen ? " ring-2 ring-accent ring-offset-1 ring-offset-surface" : ""}`;
         return (
           <li key={entry.kanji} className="group relative min-w-0">
             {/*
@@ -174,6 +186,7 @@ export default function GradeKanjiGrid({
               * covered the end of a long kun reading - 外 read
               * `そと、ほか、はずす、ほ` with the rest behind the button.
               */}
+            {onChoose ? null : (
             <StrokeOrderButton
               kanji={entry.kanji}
               grade={entry.grade}
@@ -186,7 +199,32 @@ export default function GradeKanjiGrid({
               shareHref={`/kanji/${encodeURIComponent(entry.kanji)}`}
               className={`absolute z-10 opacity-0 ${rows ? "right-2 top-1/2 -translate-y-1/2" : "bottom-2 right-2"} transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100`}
             />
-            {onReveal ? (
+            )}
+            {/*
+              * A tick in the corner while choosing, so a chosen card reads as
+              * chosen at a glance rather than only by its ring - which is a
+              * fine signal on one card and a hard one to count across forty.
+              */}
+            {onChoose && chosen ? (
+              <span
+                aria-hidden="true"
+                className={`absolute z-10 inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-black text-white ${
+                  rows ? "right-2 top-1/2 -translate-y-1/2" : "bottom-2 right-2"
+                }`}
+              >
+                ✓
+              </span>
+            ) : null}
+            {onChoose ? (
+              <button
+                type="button"
+                aria-pressed={chosen}
+                onClick={() => onChoose(entry.kanji)}
+                className={`block h-full w-full cursor-pointer text-left ${shell} hover:brightness-95`}
+              >
+                {body}
+              </button>
+            ) : onReveal ? (
               <button
                 type="button"
                 onClick={() => onReveal(entry.kanji)}

@@ -41,6 +41,7 @@ export const PRACTICE_SHEET_COPY = {
   fromJlpt: "JLPT level",
   fromTrouble: "Trouble",
   fromFavourite: "Favourites",
+  fromPicked: "Chosen characters",
   emptyTagged: "Nothing on that list yet. Tag a kanji as trouble or a favourite and it will appear here.",
 } as const;
 

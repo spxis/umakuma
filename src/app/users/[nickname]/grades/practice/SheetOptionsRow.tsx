@@ -18,7 +18,13 @@ import { sheetHref, type SheetSettings } from "./sheetLink";
 const CHIP = "inline-flex h-7 items-center rounded-full border text-[11px] font-bold transition";
 const CHIP_ON = "border-neutral-900 bg-neutral-900 text-white";
 const CHIP_OFF = "border-neutral-300 text-neutral-600 hover:bg-neutral-100";
-const GROUP_LABEL = "ml-2 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400";
+const GROUP_LABEL = "text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400";
+/*
+ * Label and chips wrap as one unit. They were siblings of the row, so at a
+ * narrow width the row broke between "Pages" and its buttons and left the
+ * heading stranded at the end of the line above.
+ */
+const GROUP = "flex items-center gap-1.5";
 
 const SIZE_LABELS: Record<SheetSize, string> = {
   large: PRACTICE_SHEET_COPY.sizeLarge,
@@ -86,8 +92,8 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
         * character inside; a university student copying vocabulary wants small
         * ones and many. The sheet only ever offered the child's.
         */}
-      <span className={GROUP_LABEL}>{PRACTICE_SHEET_COPY.sizeLabel}</span>
-      <span className="flex items-center gap-1.5">
+      <span className={GROUP}>
+        <span className={`${GROUP_LABEL} mr-0.5`}>{PRACTICE_SHEET_COPY.sizeLabel}</span>
         {SHEET_SIZE_ORDER.map((size) => (
           <Link
             key={size}
@@ -105,8 +111,8 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
         * end; someone working through a grade on screen wants both, because
         * the foot of a tracing sheet is three thousand pixels down.
         */}
-      <span className={GROUP_LABEL}>{PRACTICE_SHEET_COPY.pagerLabel}</span>
-      <span className="flex items-center gap-1.5">
+      <span className={GROUP}>
+        <span className={`${GROUP_LABEL} mr-0.5`}>{PRACTICE_SHEET_COPY.pagerLabel}</span>
         {PAGINATION_PLACEMENTS.map((placement) => (
           <Link
             key={placement}

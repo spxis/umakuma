@@ -24,6 +24,7 @@ const BASE: SheetSettings = {
   placement: PRACTICE_PAGINATION_DEFAULT,
   size: DEFAULT_SHEET_SIZE,
   choosing: false,
+  picked: "",
 };
 
 function read(href: string) {
@@ -72,5 +73,23 @@ describe("a sheet's link", () => {
     expect(href).not.toContain("size=");
     expect(href).not.toContain("model=");
     expect(href).not.toContain("readings=");
+  });
+});
+
+
+describe("a sheet built from chosen characters", () => {
+  /*
+   * The chosen set travels in the URL, so it has to survive every other
+   * control on the page. Changing the square size on a picked sheet must not
+   * quietly empty it back to a grade.
+   */
+  it("keeps the chosen characters when another control changes", () => {
+    const href = sheetHref({ ...BASE, source: "picked", picked: "一二三" }, { size: "large" });
+    const picked = new URLSearchParams(href.slice(1)).get("picked");
+    expect(picked).toBe("一二三");
+  });
+
+  it("stays out of the link for a sheet that has none", () => {
+    expect(sheetHref(BASE)).not.toContain("picked=");
   });
 });

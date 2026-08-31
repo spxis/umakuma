@@ -161,7 +161,11 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
             {GRADE_EXPLORER_COPY.curriculumNote}
           </p>
 
-          <GradeKanjiBoard key={`${grade}:${page}:${search}`} items={withOfficialReadings(catalog.items)} />
+          <GradeKanjiBoard
+            key={`${grade}:${page}:${search}`}
+            items={withOfficialReadings(catalog.items)}
+            practicePath={`/users/${encodeURIComponent(nickname)}/grades/practice`}
+          />
 
           {catalog.pagination.totalPages > 1 ? (
             <nav className="mt-4 flex items-center justify-between gap-3">

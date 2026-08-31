@@ -182,6 +182,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Rurou Ruiseki", ja: "流浪累積", reading: "るろうるいせき", gloss: "what wandering piles up" },
   { romaji: "Renzoku Rekishi", ja: "連続歴史", reading: "れんぞくれきし", gloss: "history, without a gap" },
   { romaji: "Rosen Rokuon", ja: "路線録音", reading: "ろせんろくおん", gloss: "a recording of the route" },
+  { romaji: "Wakaba Wadachi", ja: "若葉轍", reading: "わかばわだち", gloss: "new leaves in the wheel ruts" },
 ];
 
 /**

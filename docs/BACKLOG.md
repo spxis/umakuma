@@ -591,7 +591,26 @@ under a different name, not a parallel implementation.
 Needs persistence: a list of chosen subjects per member, which is a schema
 change and a hand-applied `db push`.
 
-### 23 — Selection as a shared surface control
+### 23 — Selection as a shared surface control ⏳ partly shipped (v0.132.0)
+
+Shipped: `useSubjectSelection`, `SubjectSelectionToggle` / `SubjectSelectionBar`
+and the `picked` practice source. Wired on the grades explorer, which is the
+surface that feeds practice sheets.
+
+**Still to wire**, and the reason each is not done yet:
+
+- JLPT explorer - `JlptExplorerContent.tsx` is 449 lines, so adding selection
+  breaches the 500 gate. Needs its own extraction first.
+- WaniKani level explorer and the study explorer - they list radicals and
+  vocabulary as well as kanji, so a practice destination has to filter to kanji
+  before it is offered.
+- The guard test in `subjectListDensity.test.ts` should require the selection
+  control the way it requires the density toggle - add it once the above are
+  wired, or it is either red or toothless.
+
+Original note:
+
+
 
 The point John pressed hardest: this must not be a practice-page feature.
 Selecting items belongs beside the grid/list density control, on every surface

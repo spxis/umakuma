@@ -10,6 +10,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { PRACTICE_SOURCES, isPracticeSource, isTaggedPracticeSource, practiceEntriesFor, practiceLevelCounts } from "@/lib/practiceSource";
+import { decodeSelection, encodeSelection, SELECTION_PARAM } from "@/app/shared/subjectSelection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
@@ -77,6 +78,14 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     redirect("/join?access=denied");
   }
 
+  /*
+   * A hand-picked sheet carries its characters in the URL rather than in the
+   * database. That keeps a chosen set shareable and printable before anything
+   * has been saved - which is the whole point of choosing being a surface
+   * control rather than a feature of one page.
+   */
+  const picked = decodeSelection(firstValue(query[SELECTION_PARAM]));
+
   const grade = parseGradeParam(firstValue(query.grade));
   const page = parsePageParam(firstValue(query.page));
 
@@ -96,9 +105,11 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     page,
     PRACTICE_PAGE_SIZE,
     account.id,
+    picked,
   );
 
   const settings: SheetSettings = {
+    picked: encodeSelection(picked),
     source,
     grade,
     level,
@@ -115,7 +126,9 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   const pageHref = (next: number) => sheetHref(settings, { page: next });
 
   const sheetLabel =
-    source === PRACTICE_SOURCES.trouble
+    source === PRACTICE_SOURCES.picked
+      ? PRACTICE_SHEET_COPY.fromPicked
+      : source === PRACTICE_SOURCES.trouble
       ? PRACTICE_SHEET_COPY.fromTrouble
       : source === PRACTICE_SOURCES.favorite
         ? PRACTICE_SHEET_COPY.fromFavourite

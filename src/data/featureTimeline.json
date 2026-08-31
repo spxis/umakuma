@@ -1426,5 +1426,15 @@
     "version": "0.131.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "The sheet named Letter as its paper size, which overrode the printer: an A4 tray produced a Letter page scaled down inside it. It now pins only the orientation and lets the paper be whatever is loaded, so A4 and 8.5x11 both come out filling the page."
+  },
+  {
+    "id": "subject-selection-control",
+    "area": "study",
+    "name": "Choose these",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.132.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Choosing items is a surface control now, sitting beside the grid and list toggle rather than being a feature of the practice page. Pick characters on the grades explorer and send them to a sheet; the chosen set travels in the link, so a sheet built by hand is shareable and printable before anything is saved. Destinations are offered to a chosen set rather than built into the picking."
   }
 ]
