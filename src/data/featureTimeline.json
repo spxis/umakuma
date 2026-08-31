@@ -1216,5 +1216,15 @@
     "version": "0.110.0",
     "releasedAt": "2026-08-31T01:00:00Z",
     "summary": "Writing practice can now be printed as a stroke-order chart: one numbered square per stroke, the character built up to that point with the newest stroke picked out. A character of more than eight strokes runs onto a second row instead of shrinking the squares. On a phone the sheet now says plainly that it wants a bigger screen, rather than rendering squares too small to write inside."
+  },
+  {
+    "id": "practice-mode-persists",
+    "area": "study",
+    "name": "The practice sheet keeps the sheet you chose",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.111.0",
+    "releasedAt": "2026-08-31T01:30:00Z",
+    "summary": "Changing grade or turning the page dropped you back to the tracing sheet, because only the sheet toggle carried the choice. Every link on the page keeps it now."
   }
 ]

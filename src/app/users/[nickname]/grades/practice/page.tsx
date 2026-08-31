@@ -120,7 +120,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           return (
             <Link
               key={id}
-              href={`?source=${id}&grade=${grade}&level=${target}`}
+              href={`?source=${id}&grade=${grade}&level=${target}&mode=${mode}`}
               className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
                 active
                   ? "border-neutral-900 bg-neutral-900 text-white"
@@ -179,12 +179,12 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
 
       <nav className="mt-3 flex items-center justify-between gap-3 print:hidden">
         {page > 1 ? (
-          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page - 1}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
+          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page - 1}&mode=${mode}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
             Previous
           </Link>
         ) : <span />}
         {page * PRACTICE_PAGE_SIZE < total ? (
-          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page + 1}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
+          <Link href={`?source=${source}&grade=${grade}&level=${level}&page=${page + 1}&mode=${mode}`} className="text-xs font-bold uppercase tracking-[0.08em] text-neutral-600 underline">
             Next
           </Link>
         ) : <span />}
