@@ -1,6 +1,7 @@
 "use client";
 
 import AdminCatalogPanel from "./AdminCatalogPanel";
+import AdminContentSourcesPanel from "./AdminContentSourcesPanel";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import AdminJlptCatalogPanel from "./AdminJlptCatalogPanel";
 import AdminJlptCatalogOperationsPanel from "./AdminJlptCatalogOperationsPanel";
@@ -9,8 +10,8 @@ import { usePersistedTab } from "@/lib/usePersistedTab";
 type DataWorkspaceMode = "catalog" | "operations";
 
 type AdminDataWorkspaceSectionProps = {
-  dataCatalogView: "wk" | "jlpt";
-  onChangeDataCatalogView: (nextView: "wk" | "jlpt") => void;
+  dataCatalogView: DataView;
+  onChangeDataCatalogView: (nextView: DataView) => void;
   sessionAuthorized: boolean;
   checkingSession: boolean;
   controlRoomProps: Omit<AdminControlRoomProps, "viewMode">;
@@ -30,10 +31,26 @@ type AdminDataWorkspaceSectionProps = {
  * a pair.
  */
 
+/**
+ * `hasModes` is whether browsing and managing are different screens.
+ *
+ * WaniKani and JLPT sync from somewhere, so browsing the catalogue and running
+ * its operations are genuinely two views. Grades and maps do not: both are
+ * files in the repo, and their panel is one report on whether what shipped is
+ * what is loaded. Showing a Browse/Manage toggle that changes nothing is worse
+ * than showing none - it invites a click and then ignores it.
+ */
 const DATASETS = [
-  { id: "wk", label: "WaniKani" },
-  { id: "jlpt", label: "JLPT" },
+  { id: "wk", label: "WaniKani", hasModes: true },
+  { id: "jlpt", label: "JLPT", hasModes: true },
+  { id: "grades", label: "Grades", hasModes: false },
+  { id: "maps", label: "Maps", hasModes: false },
 ] as const;
+
+export type DataView = (typeof DATASETS)[number]["id"];
+
+/** The ids, for the persisted-tab guard that has to validate a stored value. */
+export const DATA_VIEWS = DATASETS.map((dataset) => dataset.id) as readonly DataView[];
 
 const MODES = [
   { id: "catalog", label: "Browse" },
@@ -57,6 +74,8 @@ export default function AdminDataWorkspaceSection({
   checkingSession,
   controlRoomProps,
 }: AdminDataWorkspaceSectionProps) {
+  const showModes = DATASETS.find((dataset) => dataset.id === dataCatalogView)?.hasModes ?? true;
+
   const modeOptions = ["catalog", "operations"] as const;
   const [workspaceMode, setWorkspaceMode] = usePersistedTab<DataWorkspaceMode>(
     "wr:admin:data-workspace-mode",
@@ -89,7 +108,7 @@ export default function AdminDataWorkspaceSection({
           ))}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className={`items-center gap-2 ${showModes ? "flex" : "hidden"}`}>
           <span className={GROUP_LABEL}>View</span>
           {MODES.map((mode) => (
             <button
@@ -107,6 +126,14 @@ export default function AdminDataWorkspaceSection({
       {dataCatalogView === "wk" ? (
         <AdminCatalogPanel
           viewMode={workspaceMode}
+          sessionAuthorized={sessionAuthorized}
+          checkingSession={checkingSession}
+        />
+      ) : null}
+
+      {dataCatalogView === "grades" || dataCatalogView === "maps" ? (
+        <AdminContentSourcesPanel
+          dataset={dataCatalogView}
           sessionAuthorized={sessionAuthorized}
           checkingSession={checkingSession}
         />

@@ -1466,5 +1466,15 @@
     "version": "0.135.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "The accounts list becomes labelled cards below tablet width, so level, due count, sync state and invite code stop hiding behind a sideways scroll on a 980px table. The pagination row wraps instead of pushing every admin panel wider than the screen, the tab strip fades at its cut edge rather than slicing a pill mid-word, and the Data tab asks its two questions as two short rows instead of four wrapping pills."
+  },
+  {
+    "id": "admin-grades-and-maps-data",
+    "area": "admin",
+    "name": "Grades and Maps in Data",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.136.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "The Data tab covers school grades and map regions, not just WaniKani and JLPT. Both ship as files in the repo and reach the app through scripts somebody has to remember to run, so the panels answer the question those scripts leave open: does what shipped match what is loaded. Grades compares every grade file against the database row count; Maps shows each country's region count, geometry detail, regions with no shared border, and where the data came from."
   }
 ]

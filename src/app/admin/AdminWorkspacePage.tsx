@@ -7,7 +7,7 @@ import type { ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types
 import { usePersistedTab } from "@/lib/usePersistedTab";
 import AdminCampaignManager from "./AdminCampaignManager";
 import AdminPageNav from "./AdminPageNav";
-import AdminDataWorkspaceSection from "./AdminDataWorkspaceSection";
+import AdminDataWorkspaceSection, { DATA_VIEWS, type DataView } from "./AdminDataWorkspaceSection";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import type { CampaignRecord } from "./AdminCampaignManager.types";
 import AdminFeedbackProvider, { useAdminFeedback } from "./AdminFeedbackProvider";
@@ -76,8 +76,12 @@ function AdminWorkspacePageContent({
   const [userEmail, setUserEmail] = useState<string | null>(initialSession?.user?.email ?? null);
   const [userWkUsername, setUserWkUsername] = useState<string | null>(initialSession?.user?.wkUsername ?? null);
   const [loading, setLoading] = useState(false);
-  const dataCatalogOptions = ["wk", "jlpt"] as const;
-  const [dataCatalogView, setDataCatalogView] = usePersistedTab<"wk" | "jlpt">("wr:admin:data-catalog-view", dataCatalogOptions, initialDataCatalog ?? "wk");
+  /*
+   * The datasets the Data tab offers, kept in the section that draws them so
+   * adding one is a single edit rather than a chip here and a branch there.
+   */
+  const dataCatalogOptions = DATA_VIEWS;
+  const [dataCatalogView, setDataCatalogView] = usePersistedTab<DataView>("wr:admin:data-catalog-view", dataCatalogOptions, initialDataCatalog ?? "wk");
   const [jlptRefreshing, setJlptRefreshing] = useState(false);
   const [jlptEnriching, setJlptEnriching] = useState(false);
   const [operationScope, setOperationScope] = useState<AdminOperationsScopeResponse | null>(null);
