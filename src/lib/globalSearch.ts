@@ -63,6 +63,47 @@ export type SearchResults = {
 export const SEARCH_MIN_QUERY_LENGTH = 1;
 export const SEARCH_PER_SOURCE_LIMIT = 24;
 
+/** How many results the page shows before it fetches the next stretch. */
+export const SEARCH_PAGE_SIZE = 20;
+
+/**
+ * The widest window a single request may ask for.
+ *
+ * Ranking happens over what the three catalogues returned, so no window can
+ * reach past that anyway; the cap is here to keep a hand-written query string
+ * from asking for a megabyte of JSON.
+ */
+export const SEARCH_MAX_WINDOW = SEARCH_PER_SOURCE_LIMIT * 8;
+
+/**
+ * A request for one window of results.
+ *
+ * `limit` left out means "everything ranked", which is what the results page
+ * asked for before it paged and what any caller wanting counts still wants.
+ */
+export function searchRequestUrl(
+  query: string,
+  options: { limit?: number; offset?: number; sources?: SearchSource[] } = {},
+): string {
+  const parts = [`q=${encodeURIComponent(query)}`];
+  if (options.sources?.length) parts.push(`sources=${options.sources.join(",")}`);
+  if (options.limit !== undefined) parts.push(`limit=${options.limit}`);
+  if (options.offset) parts.push(`offset=${options.offset}`);
+  return `/api/search?${parts.join("&")}`;
+}
+
+/**
+ * The next stretch of results added to what is already on screen.
+ *
+ * A window is asked for by offset, and a slow answer can arrive after the
+ * reader has already loaded past it, so an incoming row that is already listed
+ * is dropped rather than rendered twice under the same key.
+ */
+export function appendHits(existing: SearchHit[], incoming: SearchHit[]): SearchHit[] {
+  const seen = new Set(existing.map((hit) => hit.key));
+  return [...existing, ...incoming.filter((hit) => !seen.has(hit.key))];
+}
+
 /** Trims and collapses whitespace; an empty result means "do not search". */
 export function normalizeQuery(raw: string | null | undefined): string {
   return String(raw ?? "").trim().replace(/\s+/g, " ").slice(0, 64);

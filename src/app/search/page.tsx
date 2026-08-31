@@ -8,6 +8,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
 import {
+  SEARCH_PAGE_SIZE,
   SEARCH_SOURCE_LABELS,
   SEARCH_SOURCE_VALUES,
   isSearchSource,
@@ -48,7 +49,15 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
   const requestedSource = firstValue(params.in);
   const activeSource = requestedSource && isSearchSource(requestedSource) ? requestedSource : null;
   const sources = parseSources(activeSource);
-  const results = isSearchable(query) ? await runGlobalSearch(query, sources) : null;
+  /*
+   * The first stretch only. A common character matches over a hundred rows
+   * across the three catalogues, and rendering all of them made the page a
+   * scroll marathon that nobody ever reached the end of; the rest arrives as
+   * the reader gets near it.
+   */
+  const results = isSearchable(query)
+    ? await runGlobalSearch(query, sources, { limit: SEARCH_PAGE_SIZE })
+    : null;
 
   /*
    * Results link into the viewer's own explorers, so an anonymous search stays
@@ -116,7 +125,13 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
                 {SEARCH_PAGE_COPY.resultsFor} “{query}”
               </p>
 
-              <SearchHitList hits={results.hits} viewerUsername={viewerUsername} />
+              <SearchHitList
+                hits={results.hits}
+                viewerUsername={viewerUsername}
+                query={query}
+                activeSource={activeSource}
+                totalHits={results.totalHits}
+              />
             </>
           ) : (
             <div className="rounded-2xl border border-line bg-surface-muted p-5">

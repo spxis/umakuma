@@ -8,12 +8,15 @@ import {
   createRateLimitResponse,
   getClientIp,
 } from "@/lib/apiRateLimit";
-import { isSearchable, normalizeQuery, parseSources } from "@/lib/globalSearch";
+import { SEARCH_MAX_WINDOW, isSearchable, normalizeQuery, parseSources } from "@/lib/globalSearch";
 import { runGlobalSearch } from "@/lib/globalSearchServer";
 
 const querySchema = z.object({
   q: z.string().max(64).optional(),
   sources: z.string().max(120).optional(),
+  /* One window of the ranked answer; absent means the whole of it. */
+  limit: z.coerce.number().int().min(1).max(SEARCH_MAX_WINDOW).optional(),
+  offset: z.coerce.number().int().min(0).max(SEARCH_MAX_WINDOW).optional(),
 });
 
 export async function GET(request: Request) {
@@ -35,6 +38,8 @@ export async function GET(request: Request) {
       const parsed = querySchema.safeParse({
         q: url.searchParams.get("q") ?? undefined,
         sources: url.searchParams.get("sources") ?? undefined,
+        limit: url.searchParams.get("limit") ?? undefined,
+        offset: url.searchParams.get("offset") ?? undefined,
       });
       if (!parsed.success) {
         return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
@@ -51,7 +56,10 @@ export async function GET(request: Request) {
       }
 
       try {
-        const results = await runGlobalSearch(query, parseSources(parsed.data.sources));
+        const results = await runGlobalSearch(query, parseSources(parsed.data.sources), {
+          limit: parsed.data.limit,
+          offset: parsed.data.offset,
+        });
         const response = NextResponse.json(results, {
           headers: { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" },
         });

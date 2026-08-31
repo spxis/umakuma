@@ -15,6 +15,10 @@ export const SEARCH_PAGE_COPY = {
   examples: "Try",
   suggestSearching: "Searching…",
   suggestSeeAll: "See all",
+  suggestMore: "Loading more…",
+  loadMore: "Show more results",
+  loadingMore: "Loading more results…",
+  endOfResults: "That is every match.",
 } as const;
 
 /** Seeded examples on the empty state; one per source, to show the range. */

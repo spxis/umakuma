@@ -73,6 +73,8 @@ export default function GlobalSearchBox({
         activeIndex={cbx.activeOption}
         onPick={cbx.pick}
         onHover={cbx.hover}
+        onNearEnd={cbx.loadMore}
+        loadingMore={cbx.loadingMore}
       />
     );
   }

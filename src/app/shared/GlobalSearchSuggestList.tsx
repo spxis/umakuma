@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type UIEvent } from "react";
 
 import { SOURCE_TONES } from "@/app/search/SearchHitList";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
@@ -20,7 +20,14 @@ type Props = {
   activeIndex: number;
   onPick: (index: number) => void;
   onHover: (index: number) => void;
+  /** Scrolled within reach of the end; the caller asks for the next stretch. */
+  onNearEnd?: () => void;
+  /** A wider window is on its way, with the rows already shown left in place. */
+  loadingMore?: boolean;
 };
+
+/** How close to the end counts as near it, in pixels. */
+const NEAR_END_PX = 120;
 
 export function suggestOptionId(listboxId: string, index: number): string {
   return `${listboxId}-option-${index}`;
@@ -41,6 +48,8 @@ export default function GlobalSearchSuggestList({
   activeIndex,
   onPick,
   onHover,
+  onNearEnd,
+  loadingMore = false,
 }: Props) {
   const activeRow = useRef<HTMLLIElement>(null);
 
@@ -56,13 +65,26 @@ export default function GlobalSearchSuggestList({
     );
   }
 
+  /*
+   * The mouse gets what the arrows get: scrolling within reach of the end asks
+   * for the next stretch, so the list grows under the pointer rather than
+   * stopping at ten with no sign there was more.
+   */
+  function onScroll(event: UIEvent<HTMLUListElement>) {
+    if (!onNearEnd) return;
+    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+    if (scrollHeight - scrollTop - clientHeight <= NEAR_END_PX) onNearEnd();
+  }
+
   return (
+    <>
     <ul
       id={listboxId}
       role="listbox"
       aria-label={SEARCH_PAGE_COPY.heading}
       className="max-h-[60vh] overflow-y-auto overscroll-contain"
       onMouseDown={(event) => event.preventDefault()}
+      onScroll={onScroll}
     >
       {hits.map((hit, index) => (
         <li
@@ -118,5 +140,14 @@ export default function GlobalSearchSuggestList({
         {totalHits === 1 ? SEARCH_PAGE_COPY.hit : SEARCH_PAGE_COPY.hits} →
       </li>
     </ul>
+    {loadingMore ? (
+      <p
+        aria-live="polite"
+        className="border-t border-line/60 px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45"
+      >
+        {SEARCH_PAGE_COPY.suggestMore}
+      </p>
+    ) : null}
+    </>
   );
 }

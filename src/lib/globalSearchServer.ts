@@ -212,7 +212,11 @@ function searchGrades(variants: string[]): SearchHit[] {
  * page: a search that returns two of three answers is far more useful than an
  * error, so a rejected source contributes nothing and the rest still render.
  */
-export async function runGlobalSearch(query: string, sources: SearchSource[]): Promise<SearchResults> {
+export async function runGlobalSearch(
+  query: string,
+  sources: SearchSource[],
+  window: { limit?: number; offset?: number } = {},
+): Promise<SearchResults> {
   const wanted = new Set(sources);
   const variants = searchQueryVariants(query);
   const [wanikani, jlpt, grades] = await Promise.all([
@@ -223,6 +227,15 @@ export async function runGlobalSearch(query: string, sources: SearchSource[]): P
 
   const kept = sortHits([...wanikani, ...jlpt, ...grades].filter((hit) => hit.score > 0));
 
+  /*
+   * Windowed after ranking, never during it. The counts and the total describe
+   * the whole answer - the source tabs would be wrong otherwise - while `hits`
+   * carries only the stretch that was asked for, which is ten rows for a
+   * dropdown and a screenful for the results page.
+   */
+  const offset = window.offset ?? 0;
+  const windowed = window.limit === undefined ? kept.slice(offset) : kept.slice(offset, offset + window.limit);
+
   return {
     query,
     totalHits: kept.length,
@@ -231,6 +244,6 @@ export async function runGlobalSearch(query: string, sources: SearchSource[]): P
       [SEARCH_SOURCES.jlpt]: kept.filter((hit) => hit.source === SEARCH_SOURCES.jlpt).length,
       [SEARCH_SOURCES.grades]: kept.filter((hit) => hit.source === SEARCH_SOURCES.grades).length,
     },
-    hits: kept,
+    hits: windowed,
   };
 }

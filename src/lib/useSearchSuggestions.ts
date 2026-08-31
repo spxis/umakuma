@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
 import type { SearchHit, SearchResults } from "./globalSearch";
-import { SUGGEST_DEBOUNCE_MS, dedupeByGlyph, suggestUrl } from "./globalSearchSuggest";
+import { SUGGEST_DEBOUNCE_MS, SUGGEST_LIMIT, dedupeByGlyph, suggestUrl } from "./globalSearchSuggest";
 
 export type SearchSuggestions = {
   /** One ranked row per glyph, capped for the dropdown. */
@@ -13,6 +13,10 @@ export type SearchSuggestions = {
   totalHits: number;
   /** True only before the first answer, so the old list never flashes away. */
   searching: boolean;
+  /** Whether growing the window would bring more rows. */
+  hasMore: boolean;
+  /** True while a wider window is on its way, with the old rows still shown. */
+  loadingMore: boolean;
 };
 
 /**
@@ -23,7 +27,7 @@ export type SearchSuggestions = {
  * kept while the next request runs - the list updates in place rather than
  * flickering empty between keystrokes.
  */
-export function useSearchSuggestions(value: string): SearchSuggestions {
+export function useSearchSuggestions(value: string, rows: number = SUGGEST_LIMIT): SearchSuggestions {
   const [debounced, setDebounced] = useState(value);
 
   useEffect(() => {
@@ -31,8 +35,13 @@ export function useSearchSuggestions(value: string): SearchSuggestions {
     return () => clearTimeout(timeout);
   }, [value]);
 
-  const url = suggestUrl(debounced);
-  const { data, isLoading } = useSWR<SearchResults>(
+  /*
+   * A wider window is a different key, so the rows already on screen stay put
+   * (keepPreviousData) while the longer list is fetched, and arrowing back to
+   * a narrower window replays from cache instead of asking again.
+   */
+  const url = suggestUrl(debounced, rows);
+  const { data, isLoading, isValidating } = useSWR<SearchResults>(
     url,
     async (requestUrl: string) => {
       const response = await fetch(requestUrl);
@@ -45,11 +54,18 @@ export function useSearchSuggestions(value: string): SearchSuggestions {
     { keepPreviousData: true, revalidateOnFocus: false },
   );
 
-  const hits = useMemo(() => dedupeByGlyph(data?.hits ?? []), [data]);
+  const hits = useMemo(() => dedupeByGlyph(data?.hits ?? [], rows), [data, rows]);
 
   return {
     hits,
     totalHits: data?.totalHits ?? 0,
     searching: Boolean(url) && isLoading && !data,
+    /*
+     * A full list with more behind it. Short of the window means the answer
+     * ran out, whatever the total says: the total counts every copy of a
+     * glyph, and these rows are one per glyph.
+     */
+    hasMore: hits.length >= rows && (data?.totalHits ?? 0) > hits.length,
+    loadingMore: Boolean(url) && isValidating && Boolean(data),
   };
 }

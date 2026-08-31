@@ -1,7 +1,9 @@
 import {
+  SEARCH_SOURCE_VALUES,
   isJapaneseQuery,
   normalizeQuery,
   searchHitHref,
+  searchRequestUrl,
   type SearchHit,
 } from "./globalSearch";
 
@@ -17,6 +19,34 @@ export const SUGGEST_LIMIT = 10;
 export const SUGGEST_DEBOUNCE_MS = 200;
 
 /**
+ * How far the dropdown may grow, and how early it asks for the next stretch.
+ *
+ * The list starts at ten because that is what fits without becoming a page of
+ * its own, and grows a page at a time as someone arrows or scrolls toward the
+ * end - the way a phone list loads the next screenful rather than making you
+ * ask. Past forty rows the answer is the results page, not more dropdown.
+ */
+export const SUGGEST_MAX_PAGES = 4;
+export const SUGGEST_LOAD_LEAD = 3;
+
+/** Rows on screen after `pages` of growth; page 2 is a superset of page 1. */
+export function suggestRows(pages: number): number {
+  return SUGGEST_LIMIT * Math.min(Math.max(pages, 1), SUGGEST_MAX_PAGES);
+}
+
+/**
+ * The raw hits to ask for to be sure of filling that many rows.
+ *
+ * The dropdown keeps one row per glyph while the catalogues each hold their
+ * own copy of it, so ten raw hits can collapse into four rows. A glyph cannot
+ * appear more than once per source, which makes three hits per row the exact
+ * worst case rather than a guess.
+ */
+export function suggestRawWindow(rows: number): number {
+  return rows * SEARCH_SOURCE_VALUES.length;
+}
+
+/**
  * One character of Japanese is a real query (日), but one Latin letter matches
  * half the catalogue's meanings, so Latin waits for a second keystroke.
  */
@@ -29,10 +59,18 @@ export function isSuggestable(raw: string): boolean {
   return query.length >= suggestMinLength(query);
 }
 
-/** The request a value warrants, or null when it is too short to ask about. */
-export function suggestUrl(raw: string): string | null {
+/**
+ * The request a value warrants, or null when it is too short to ask about.
+ *
+ * The window grows rather than stepping - ten rows, then twenty, from offset
+ * zero every time. Paging by offset would be fewer bytes, but the dropdown
+ * keeps one row per glyph and a duplicate can straddle any boundary, so a
+ * superset is the only window that cannot reorder rows under the highlight.
+ * The database does the same work either way; only the JSON is bigger.
+ */
+export function suggestUrl(raw: string, rows: number = SUGGEST_LIMIT): string | null {
   const query = normalizeQuery(raw);
-  return isSuggestable(query) ? `/api/search?q=${encodeURIComponent(query)}` : null;
+  return isSuggestable(query) ? searchRequestUrl(query, { limit: suggestRawWindow(rows) }) : null;
 }
 
 /**

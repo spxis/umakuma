@@ -3,10 +3,13 @@ import { describe, expect, it } from "vitest";
 import { SEARCH_SOURCES, type SearchHit } from "./globalSearch";
 import {
   SUGGEST_LIMIT,
+  SUGGEST_MAX_PAGES,
   dedupeByGlyph,
   ghostFor,
   isSuggestable,
   suggestMinLength,
+  suggestRawWindow,
+  suggestRows,
   suggestUrl,
   suggestionHref,
 } from "./globalSearchSuggest";
@@ -51,17 +54,39 @@ describe("isSuggestable", () => {
 });
 
 describe("suggestUrl", () => {
-  it("builds the search request for a suggestable value", () => {
-    expect(suggestUrl("house")).toBe("/api/search?q=house");
+  it("asks for enough raw hits to fill the rows it shows", () => {
+    expect(suggestUrl("house")).toBe(`/api/search?q=house&limit=${suggestRawWindow(SUGGEST_LIMIT)}`);
+  });
+
+  it("widens the window as the list grows", () => {
+    expect(suggestUrl("house", 20)).toBe(`/api/search?q=house&limit=${suggestRawWindow(20)}`);
   });
 
   it("encodes the query", () => {
-    expect(suggestUrl("日 sun")).toBe(`/api/search?q=${encodeURIComponent("日 sun")}`);
+    expect(suggestUrl("日 sun")).toContain(`q=${encodeURIComponent("日 sun")}`);
   });
 
   it("returns null below the threshold", () => {
     expect(suggestUrl("s")).toBeNull();
     expect(suggestUrl(" ")).toBeNull();
+  });
+});
+
+describe("suggestRows", () => {
+  it("grows a page at a time", () => {
+    expect(suggestRows(1)).toBe(SUGGEST_LIMIT);
+    expect(suggestRows(2)).toBe(SUGGEST_LIMIT * 2);
+  });
+
+  it("stops growing at the cap, where the results page takes over", () => {
+    expect(suggestRows(SUGGEST_MAX_PAGES + 9)).toBe(SUGGEST_LIMIT * SUGGEST_MAX_PAGES);
+    expect(suggestRows(0)).toBe(SUGGEST_LIMIT);
+  });
+});
+
+describe("suggestRawWindow", () => {
+  it("asks for three hits a row, the most copies one glyph can have", () => {
+    expect(suggestRawWindow(10)).toBe(30);
   });
 });
 

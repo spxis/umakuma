@@ -4,7 +4,14 @@ import { useRouter } from "next/navigation";
 import { useState, type FocusEvent, type FormEvent, type KeyboardEvent } from "react";
 
 import type { SearchHit } from "./globalSearch";
-import { ghostFor, isSuggestable, suggestionHref } from "./globalSearchSuggest";
+import {
+  SUGGEST_LOAD_LEAD,
+  SUGGEST_MAX_PAGES,
+  ghostFor,
+  isSuggestable,
+  suggestRows,
+  suggestionHref,
+} from "./globalSearchSuggest";
 import { useSearchSuggestions } from "./useSearchSuggestions";
 
 export type SearchComboboxOptions = {
@@ -57,8 +64,16 @@ export function useSearchCombobox({
    * shows. Nothing is fetched until the member types.
    */
   const [typing, setTyping] = useState(false);
+  /* How many stretches of the answer the dropdown is currently holding. */
+  const [pages, setPages] = useState(1);
 
-  const suggestions = useSearchSuggestions(typing ? typed : "");
+  const suggestions = useSearchSuggestions(typing ? typed : "", suggestRows(pages));
+  const canLoadMore = pages < SUGGEST_MAX_PAGES && suggestions.hasMore;
+
+  /** Asks for the next stretch; harmless to call again while one is in flight. */
+  function loadMore() {
+    if (canLoadMore) setPages((count) => count + 1);
+  }
   const panelVisible = suggestOpen && isSuggestable(typed);
   const optionCount = suggestions.hits.length > 0 ? suggestions.hits.length + 1 : 0;
   const activeOption = activeIndex >= optionCount ? -1 : activeIndex;
@@ -115,11 +130,17 @@ export function useSearchCombobox({
       }
       event.preventDefault();
       if (optionCount === 0) return;
-      setActiveIndex((index) => {
-        const current = index >= optionCount ? -1 : index;
-        if (event.key === "ArrowDown") return current >= optionCount - 1 ? 0 : current + 1;
-        return current <= 0 ? optionCount - 1 : current - 1;
-      });
+      const next =
+        event.key === "ArrowDown"
+          ? activeOption >= optionCount - 1
+            ? 0
+            : activeOption + 1
+          : activeOption <= 0
+            ? optionCount - 1
+            : activeOption - 1;
+      setActiveIndex(next);
+      /* Fetch the next stretch before the highlight reaches the end of this one. */
+      if (next >= suggestions.hits.length - SUGGEST_LOAD_LEAD) loadMore();
       return;
     }
 
@@ -169,6 +190,8 @@ export function useSearchCombobox({
         setTyping(true);
         setSuggestOpen(true);
         setActiveIndex(-1);
+        /* A new query is a new list; it starts at one stretch again. */
+        setPages(1);
       },
       onFocus: () => {
         if (openOnFocus) setSuggestOpen(true);
@@ -192,6 +215,8 @@ export function useSearchCombobox({
     pick,
     hover: setActiveIndex,
     clear,
+    loadMore,
+    loadingMore: suggestions.loadingMore,
   };
 }
 

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   SEARCH_SOURCES,
   SEARCH_SOURCE_VALUES,
+  appendHits,
   isJapaneseQuery,
   isSearchSource,
   isSearchable,
@@ -10,6 +11,7 @@ import {
   parseSources,
   rankHit,
   searchHitHref,
+  searchRequestUrl,
   sortHits,
   type SearchHit,
 } from "./globalSearch";
@@ -176,5 +178,43 @@ describe("searchHitHref", () => {
 
   it("escapes a name that needs it", () => {
     expect(searchHitHref(hit({ glyph: "日" }), "a b")).toContain("/users/a%20b/");
+  });
+});
+
+describe("searchRequestUrl", () => {
+  it("asks for the whole answer when no window is given", () => {
+    expect(searchRequestUrl("house")).toBe("/api/search?q=house");
+  });
+
+  it("carries the window and the source filter", () => {
+    expect(searchRequestUrl("house", { limit: 20, offset: 40, sources: [SEARCH_SOURCES.jlpt] })).toBe(
+      "/api/search?q=house&sources=jlpt&limit=20&offset=40",
+    );
+  });
+
+  it("leaves a zero offset out, so the first stretch keeps one cache key", () => {
+    expect(searchRequestUrl("house", { limit: 20, offset: 0 })).toBe("/api/search?q=house&limit=20");
+  });
+
+  it("encodes the query", () => {
+    expect(searchRequestUrl("日 sun")).toBe(`/api/search?q=${encodeURIComponent("日 sun")}`);
+  });
+});
+
+describe("appendHits", () => {
+  it("adds the next stretch after what is already listed", () => {
+    const listed = [hit({ key: "a" }), hit({ key: "b" })];
+    expect(appendHits(listed, [hit({ key: "c" })]).map((row) => row.key)).toEqual(["a", "b", "c"]);
+  });
+
+  it("drops a row already listed, so a late answer cannot double it", () => {
+    const listed = [hit({ key: "a" }), hit({ key: "b" })];
+    const next = [hit({ key: "b" }), hit({ key: "c" })];
+    expect(appendHits(listed, next).map((row) => row.key)).toEqual(["a", "b", "c"]);
+  });
+
+  it("leaves the list alone when the stretch is empty", () => {
+    const listed = [hit({ key: "a" })];
+    expect(appendHits(listed, [])).toEqual(listed);
   });
 });
