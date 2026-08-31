@@ -120,6 +120,30 @@ export default function UserDashboardTabs({
     }
   }, [activeTab, initialDashboardTab, tabStorageKey]);
 
+  /*
+   * Follow the address when it changes under us.
+   *
+   * `activeTab` is seeded from the prop by `useState`, which reads it once and
+   * then ignores it. Every explorer lives at its own path but they all rewrite
+   * to this one page, so moving from the JLPT explorer to WaniKani re-renders
+   * this component rather than remounting it - the URL changed, the prop
+   * changed, and the tab did not. The header link appeared to do nothing.
+   *
+   * Adjusted during render rather than in an effect, which is what React asks
+   * for when state has to follow a prop: an effect would paint the old tab
+   * first and correct it afterwards, and that flash is the bug in miniature.
+   *
+   * The bare user page is left out, because that address names no tab and the
+   * effect above restores whichever one the member last had open.
+   */
+  const [addressedTab, setAddressedTab] = useState<TabId>(initialDashboardTab);
+  if (initialDashboardTab !== addressedTab) {
+    setAddressedTab(initialDashboardTab);
+    if (initialDashboardTab !== "learn") {
+      setActiveTab(initialDashboardTab);
+    }
+  }
+
   useEffect(() => {
     if (typeof window === "undefined") {
       return;

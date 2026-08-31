@@ -1700,5 +1700,15 @@
     "version": "0.163.0",
     "releasedAt": "2026-09-01T01:00:00Z",
     "summary": "The JLPT and WaniKani explorers share one card component, and its list view was unusable: where each row s character should have been there was a pile of chips instead - the level pill sitting on the success rate sitting on the glyph. Both explorers hand the card an overlay written for the card shape, which places the level, the success rate and the trouble and favourite controls in the corners of a glyph box 128 pixels tall. A row s glyph box is 44 pixels square and has no corners to spare, so everything landed on top of everything else. The card now tells its overlays which shape they are being drawn into: in a row they lay themselves out in the line as ordinary chips and buttons, while the card keeps the corners it was designed around. Neither explorer changed - they pass the same overlay as before - and the trouble and favourite controls now work from the list view as well as the grid, which is what a member scanning a long level actually wants. Measured on both explorers afterwards: forty row glyph boxes each, none holding anything but the character."
+  },
+  {
+    "id": "dashboard-follows-the-link",
+    "area": "platform",
+    "name": "The link goes where it says",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.164.0",
+    "releasedAt": "2026-09-01T02:00:00Z",
+    "summary": "Clicking WaniKani in the header while on the JLPT explorer changed the address and nothing else - the JLPT explorer stayed on screen under a URL that said library-explorer. Each explorer has its own path but they all rewrite to the one user page with a dashboard parameter, so moving between them re-renders the tab component instead of remounting it, and the active tab was seeded from its prop by useState, which reads its argument once and ignores every later value. The tab now follows the address it is given, adjusted during render rather than in an effect so the old tab is never painted first and corrected a frame later. The bare user page is deliberately left out: that address names no tab, and following the prop there would overwrite the member s last open tab on every visit."
   }
 ]
