@@ -1,3 +1,4 @@
+import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions, isAdminEmail } from "@/lib/auth";
@@ -369,7 +370,7 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
   const showUserBanner = initialDashboardTab === "learn" || initialDashboardTab === "wk" || initialDashboardTab === "jlpt";
 
   return (
-    <div className="px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
+    <div className={PAGE_SHELL_PADDING}>
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
         primaryWkUsername={userKey}

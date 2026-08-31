@@ -1,3 +1,13 @@
+import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import {
+  SUBJECT_VIEW_MODES,
+  SUBJECT_VIEW_MODE_VALUES,
+  type SubjectViewMode,
+} from "@/app/shared/subjectListView";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+
+/** Grid or list on the JLPT explorer, remembered per surface. */
+const JLPT_VIEW_MODE_STORAGE_KEY = "wr:jlpt-explorer:view-mode";
 import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import jlptReadings from "@/data/jlptReadings.json";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
@@ -56,6 +66,10 @@ export default function JlptExplorerContent({
   onSetStickyLevels,
   onSetSelectedKanji,
 }: Props) {
+  /* Remembered per surface, like the other listing pages. */
+  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
+    getStoredEnum(JLPT_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+
   const PAGE_SIZE = 40;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -268,13 +282,24 @@ export default function JlptExplorerContent({
             <ExplorerSplitLoadingShimmer label="Loading JLPT explorer..." cardCount={8} />
           </div>
         ) : null}
-        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
-          Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} results
-        </p>
-        <p className="mt-1 text-xs text-foreground/60">
-          WaniKani-specific SRS stats are shown only where subject mappings exist.
-        </p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
+              Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} results
+            </p>
+            <p className="mt-1 text-xs text-foreground/60">
+              WaniKani-specific SRS stats are shown only where subject mappings exist.
+            </p>
+          </div>
+          <SubjectViewModeToggle
+            value={viewMode}
+            onChange={(next) => {
+              setViewMode(next);
+              setStoredEnum(JLPT_VIEW_MODE_STORAGE_KEY, next);
+            }}
+          />
+        </div>
+        <div className={viewMode === SUBJECT_VIEW_MODES.list ? "mt-3 space-y-1.5" : "mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"}>
           {visibleItems.map((item, index) => {
             const userMatch = userKanjiByChar.get(item.kanji);
             const preload = (jlptReadings as JlptReadingsRecord)[item.kanji];
@@ -288,6 +313,7 @@ export default function JlptExplorerContent({
             return (
               <Fragment key={`${item.nLevel}-${item.kanji}`}>
                 <UnifiedExplorerCard
+                  density={viewMode}
                   onClick={() => onSetSelectedKanji((prev) => (prev === item.kanji ? null : item.kanji))}
                   className={`rounded-2xl border p-3 text-left transition hover:brightness-95 ${
                     userMatch ? "border-kanji/50 bg-surface text-foreground" : "border-line bg-surface text-foreground"

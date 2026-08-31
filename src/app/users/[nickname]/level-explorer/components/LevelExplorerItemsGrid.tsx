@@ -1,4 +1,15 @@
-import { Fragment } from "react";
+import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import {
+  SUBJECT_VIEW_MODES,
+  SUBJECT_VIEW_MODE_VALUES,
+  type SubjectViewMode,
+} from "@/app/shared/subjectListView";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+
+/** Grid or list on the WaniKani explorer, remembered per surface. */
+const LEVEL_VIEW_MODE_STORAGE_KEY = "wr:level-explorer:view-mode";
+
+import { Fragment, useState } from "react";
 
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
 import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
@@ -50,6 +61,9 @@ export default function LevelExplorerItemsGrid({
   onJumpToRelatedSubject,
   onJumpToKanji,
 }: Props) {
+  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
+    getStoredEnum(LEVEL_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+
   const {
     bulkModeEnabled,
     showAllSelectedInBar,
@@ -128,13 +142,23 @@ export default function LevelExplorerItemsGrid({
         </div>
       ) : (
         <>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mb-3 flex justify-end">
+            <SubjectViewModeToggle
+              value={viewMode}
+              onChange={(next) => {
+                setViewMode(next);
+                setStoredEnum(LEVEL_VIEW_MODE_STORAGE_KEY, next);
+              }}
+            />
+          </div>
+          <div className={viewMode === SUBJECT_VIEW_MODES.list ? "space-y-1.5" : "grid gap-3 sm:grid-cols-2 lg:grid-cols-4"}>
             {visibleItems.map((item, index) => {
               const cardItem = { ...item, studyTags: resolveStudyTags(item) };
 
               return (
                 <Fragment key={`${item.subjectType}-${item.subjectId}`}>
             <UnifiedExplorerCard
+              density={viewMode}
               activateOn="glyph-box"
               onClick={(meta) => {
                 if (

@@ -143,3 +143,37 @@ for (const menu of MENUS) {
     ).toEqual([]);
   });
 }
+
+
+/**
+ * Every page that lists subjects offers both densities.
+ *
+ * This was a unit test that walked the source for `auto-fill` grids, and it was
+ * worthless: the JLPT and WaniKani explorers build fixed-column grids, so it
+ * never looked at them and passed while two of the three listing pages had no
+ * toggle at all. Asserting a rule by guessing at CSS does not assert the rule.
+ *
+ * Asking the rendered page is the only check that cannot be fooled by how a
+ * grid happens to be written.
+ */
+const SUBJECT_LISTING_PAGES = [
+  { name: "WaniKani explorer", path: "/users/johnmorrisdotca/library-explorer" },
+  { name: "JLPT explorer", path: "/users/johnmorrisdotca/jlpt-explorer" },
+  { name: "grade explorer", path: "/users/johnmorrisdotca/grades" },
+  { name: "study", path: "/users/johnmorrisdotca" },
+];
+
+for (const listing of SUBJECT_LISTING_PAGES) {
+  test(`${listing.name} offers grid and list`, async ({ page }) => {
+    await page.goto(listing.path, { waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("networkidle").catch(() => {});
+    await page.waitForTimeout(2500);
+
+    // The toggle labels its two buttons; the icons are decorative.
+    const grid = page.getByRole("button", { name: /grid/i });
+    const list = page.getByRole("button", { name: /list/i });
+
+    expect(await grid.count(), `${listing.name} has no grid control`).toBeGreaterThan(0);
+    expect(await list.count(), `${listing.name} has no list control`).toBeGreaterThan(0);
+  });
+}

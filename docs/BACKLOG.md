@@ -56,6 +56,8 @@ through it meets a finished flow.
 | 22 | Saved practice lists | 23 |
 | 23 | Selection as a shared surface control | — |
 | 24 | Print mode | — |
+| 25 | Practice sheet controls | — |
+| 26 | JLPT old numbering | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
 Release 6 should not ship before 7 to 9, or a member without WaniKani arrives to
@@ -600,3 +602,29 @@ test should grow to require the selection control once it exists.
 The tracing sheet is already built for paper; this is the rest of it — a real
 print stylesheet, page breaks that fall between characters, and no site
 furniture on the page.
+### 25 — Practice sheet controls
+
+Asked for after the stroke sheet shipped.
+
+- The chooser chevron is too small to read as an affordance; enlarge it.
+- Selecting the open level again should close the chooser, and there should be
+  a close button at the end of the row, spaced away from the values.
+- An **Options** row under the controls, with two checkboxes:
+  - **Show the finished character** — whether the model occupies the first
+    column. This settles the open question rather than picking a default: John
+    was unsure which reads better, so it becomes the reader's choice.
+  - **Show readings** — on and kun in each row's title.
+- Trouble and Favourites indicators in the top right of the sheet header,
+  revealed on hover, letting a member switch the sheet to either tagged list
+  without leaving the page. Same treatment the glyph cards already use, which
+  is the point: it is the existing control moved somewhere new, not a new one.
+
+That last item is the first real instance of item 23, so build it as the shared
+control rather than a practice-page one.
+
+### 26 — JLPT old numbering
+
+Offer the pre-2010 four-level scheme alongside N5-N1 in the JLPT explorer, as a
+way of welcoming people who sat the old test. `jlptCertification.ts` already
+holds both systems and the mapping between them; this is a view over data that
+exists.

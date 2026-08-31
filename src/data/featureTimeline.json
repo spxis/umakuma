@@ -1246,5 +1246,15 @@
     "version": "0.113.0",
     "releasedAt": "2026-08-31T02:30:00Z",
     "summary": "Selecting the source you are already on opens a second row holding every value it offers: the eight school grades, sixty WaniKani levels or five JLPT levels. Changing sheet meant going back to the grade page and in again, which made a page you might print several of from harder to use than it needed to be."
+  },
+  {
+    "id": "explorer-density-and-headers",
+    "area": "study",
+    "name": "Rows on every explorer, and headers that line up",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.114.0",
+    "releasedAt": "2026-08-31T03:00:00Z",
+    "summary": "The WaniKani and JLPT explorers can be read as rows as well as cards, which the grade explorer already offered and they did not. The four pages behind the Explore tabs also shared no wrapper, so the sub-nav sat at three different heights and moving between tabs nudged the whole header; they now agree exactly."
   }
 ]

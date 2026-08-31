@@ -1,3 +1,4 @@
+import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -81,7 +82,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         : GRADE_SHORT_LABELS[grade];
 
   return (
-    <div className="mx-auto w-full max-w-4xl bg-white px-5 py-6 text-neutral-900 print:max-w-none print:px-0 print:py-0">
+    <div className={`w-full bg-white text-neutral-900 ${PAGE_SHELL_PADDING} print:px-0 print:py-0`}>
       {/* Site chrome on screen, gone on paper - a printed sheet is not a web page. */}
       <AppTopMenuRow
         viewerMenuInfo={viewerMenuInfo}
@@ -92,6 +93,13 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         lastActivityAt={account.lastActivityAt?.toISOString() ?? null}
         className="mb-4 print:hidden"
       />
+
+      {/*
+        * The sheet keeps its A4 column; the navigation above it does not. They
+        * shared one wrapper, so the narrower width wrapped the header onto an
+        * extra line and pushed this page's sub-nav 21px below its siblings'.
+        */}
+      <div className="mx-auto w-full max-w-4xl print:max-w-none">
 
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3 print:mb-2">
         <div className="min-w-0">
@@ -238,6 +246,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           </Link>
         ) : <span />}
       </nav>
+      </div>
     </div>
   );
 }
