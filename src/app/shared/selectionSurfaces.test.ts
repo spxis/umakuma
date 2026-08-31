@@ -8,6 +8,7 @@ const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 const GRADES = "src/app/users/[nickname]/grades/GradeKanjiBoard.tsx";
 const JLPT = "src/app/users/[nickname]/jlpt-explorer/components/JlptExplorerContent.tsx";
 const WANIKANI = "src/app/users/[nickname]/level-explorer/lib/useLevelExplorerBulkSelection.ts";
+const STUDY = "src/app/users/[nickname]/study-explorer/lib/useStudyBulkReset.ts";
 
 /*
  * Choosing characters is one behaviour, wherever it is offered.
@@ -42,11 +43,28 @@ describe("choosing, across the surfaces that offer it", () => {
    * carries bulk operations the other two have no use for - but the maths of
    * "everything between these two" is not its to own.
    */
-  it("has the WaniKani explorer share the range maths", () => {
-    const source = read(WANIKANI);
+  it.each([
+    ["the WaniKani explorer", WANIKANI],
+    ["the study explorer", STUDY],
+  ])("has %s share the range maths", (_label, path) => {
+    const source = read(path);
     expect(source).toContain("selectionRange");
-    expect(source).not.toContain("Math.min(bulkAnchorIndex");
     // An id survives a filter change; an index into the visible list does not.
     expect(source).toContain("bulkAnchorId");
+    expect(source).not.toContain("bulkAnchorIndex");
+  });
+
+  /*
+   * Every surface that draws a grid or a list. The shared row and card pair
+   * covers study history and the tagged lists between them, so those two are
+   * checked through it rather than each having its own wiring.
+   */
+  it.each([
+    ["rows", "src/app/shared/SubjectRows.tsx"],
+    ["cards", "src/app/shared/SubjectCards.tsx"],
+  ])("lets the shared %s be chosen from", (_label, path) => {
+    const source = read(path);
+    expect(source).toContain("selection?: SubjectSelection");
+    expect(source).toContain("extendTo");
   });
 });

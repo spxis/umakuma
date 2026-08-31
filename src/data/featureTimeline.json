@@ -1760,5 +1760,15 @@
     "version": "0.169.0",
     "releasedAt": "2026-09-01T07:00:00Z",
     "summary": "Choosing reached the explorers in 0.168.0 and stopped there, which left the two surfaces where a member has already gathered something deliberately - their study history, and the Trouble and Favourites lists - with no way to act on a set. Scanning what you got wrong last week is exactly the position from which you want those characters on a practice sheet, and the only route was to write them down. Both now offer the same Choose mode, in both densities, with shift taking everything between the last pick and this one. The work went into the shared row and card pair rather than into either surface, so neither had to learn anything: they pass the selection through and get the tick, the highlight and the sweep for free, and the next list built on that pair inherits all of it. The tick sits before history is own correct or wrong mark rather than replacing it, because whether you got it right is exactly what you are reading when you decide whether to pick that one. Where a surface cannot know which member it belongs to - the tagged lists open from the game lobby, from history, from either explorer - the practice offer is withheld rather than pointed at a guess."
+  },
+  {
+    "id": "study-explorer-range-anchor",
+    "area": "study",
+    "name": "One sweep, one anchor",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.170.0",
+    "releasedAt": "2026-09-01T08:00:00Z",
+    "summary": "The study explorer had shift-click already, and had it wrong in the same way the WaniKani explorer did: the anchor a range was measured from was the item is position in the filtered list, which stops meaning anything the moment a filter changes or another page loads. Change a status chip after picking one item and the next shift-click swept a stretch the member never crossed. It anchors on the subject now, which survives both, and it uses the same range helper the other four surfaces use rather than a third copy of the arithmetic. That is all of them: the three explorers, study history and the tagged lists now sweep a range the same way, and a test names each surface so a sixth cannot quietly go without."
   }
 ]

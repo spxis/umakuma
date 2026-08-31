@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { selectionRange } from "@/app/shared/subjectSelection";
+
 import {
   shortSubjectTypeLabel,
 } from "../../level-explorer/lib/levelExplorerDisplay";
@@ -20,7 +22,13 @@ export function useStudyBulkReset({ filteredItems }: Args) {
     }
   });
   const [selectedSubjectIds, setSelectedSubjectIds] = useState<Set<number>>(new Set());
-  const [bulkAnchorIndex, setBulkAnchorIndex] = useState<number | null>(null);
+  /*
+   * The subject a range is measured from, not its position in the list. An
+   * index stops meaning anything the moment a filter changes or another page
+   * loads, and the next shift-click then sweeps a stretch the member never
+   * crossed. The same fault was in the WaniKani explorer's copy of this.
+   */
+  const [bulkAnchorId, setBulkAnchorId] = useState<number | null>(null);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -74,21 +82,23 @@ export function useStudyBulkReset({ filteredItems }: Args) {
 
   const applyBulkSelection = ({
     subjectId,
-    sourceIndex,
     shiftKey,
   }: {
     subjectId: number;
-    sourceIndex: number;
+    /** Kept for callers; the anchor is the subject now, not its position. */
+    sourceIndex?: number;
     shiftKey: boolean;
   }) => {
     if (!bulkModeEnabled) {
       return false;
     }
 
-    if (shiftKey && bulkAnchorIndex !== null) {
-      const start = Math.min(bulkAnchorIndex, sourceIndex);
-      const end = Math.max(bulkAnchorIndex, sourceIndex);
-      const rangeSubjectIds = filteredItems.slice(start, end + 1).map((item) => item.subjectId);
+    if (shiftKey) {
+      const rangeSubjectIds = selectionRange(
+        bulkAnchorId,
+        subjectId,
+        filteredItems.map((item) => item.subjectId),
+      );
       if (rangeSubjectIds.length > 0) {
         setSelectedSubjectIds((prev) => {
           const next = new Set(prev);
@@ -97,12 +107,15 @@ export function useStudyBulkReset({ filteredItems }: Args) {
           }
           return next;
         });
+        /* The far end anchors the next sweep, so a range can be walked out. */
+        setBulkAnchorId(subjectId);
+        return true;
       }
-      return true;
+      /* Nothing anchored here: the click means what an unmodified one means. */
     }
 
     toggleBulkSelection(subjectId);
-    setBulkAnchorIndex(sourceIndex);
+    setBulkAnchorId(subjectId);
     return true;
   };
 
@@ -111,7 +124,7 @@ export function useStudyBulkReset({ filteredItems }: Args) {
       const next = !prev;
       if (!next) {
         setSelectedSubjectIds(new Set());
-        setBulkAnchorIndex(null);
+        setBulkAnchorId(null);
       }
       try { window.localStorage.setItem(BULK_MODE_KEY, next ? "1" : "0"); } catch { /* ignore */ }
       return next;
