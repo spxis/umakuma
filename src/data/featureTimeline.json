@@ -1496,5 +1496,15 @@
     "version": "0.138.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "A screen page is three sheets of paper now, so printing one comes out whole. It was twenty characters at every square size - a number about the screen, not about paper - and twenty medium squares is two and a half sheets, so the third sheet of every page came out 40% blank. The counts were measured by adding characters one at a time and watching where the paper broke: seventeen large, twenty-two medium, twenty-six small, each landing on a US Letter sheet boundary and taking the same three sheets on A4. Rows are numbered as well, by their place in the whole list rather than the page, so page two runs 23 to 44 and a sheet can be set as numbers twelve to twenty."
+  },
+  {
+    "id": "map-handles-that-read-in-order",
+    "area": "games",
+    "name": "Map handles that read in order",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.139.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "Map handles are numbered west to east, so a round reads 1 2 3 4 across the map instead of the 3 2 4 1 the shuffle happened to deal - and pressing 1 now means the leftmost handle. They also stop overlapping: the old rule called two handles clear at 1.9 radii when circles of radius r touch at 2, so every pair it passed was already into its neighbour, and it had only two positions to try, which left a third crowded region back on top of the first. Handles now try a column of positions and take the first that is clear, vertical before sideways so the numbering survives. Across 48,000 handles on all three maps: no overlaps and none cropped at the frame."
   }
 ]

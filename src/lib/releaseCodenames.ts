@@ -189,6 +189,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Emaki Egaku", ja: "絵巻描く", reading: "えまきえがく", gloss: "painting the picture scroll" },
   { romaji: "Ooban Otehon", ja: "大判お手本", reading: "おおばんおてほん", gloss: "large-format copybook" },
   { romaji: "Kami no Kazu", ja: "紙の数", reading: "かみのかず", gloss: "the number of sheets" },
+  { romaji: "Kirei na Kyori", ja: "綺麗な距離", reading: "きれいなきょり", gloss: "a clean distance" },
 ];
 
 /**

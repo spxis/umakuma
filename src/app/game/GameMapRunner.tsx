@@ -1,4 +1,6 @@
-import type { ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
+
+import { orderGeoOptionsByPosition } from "@/lib/mapHandles";
 
 import { GAME_KEY_LAYOUTS, type GameKind, type GameOptionTile, type GameQuestionPayload } from "@/lib/gameMode";
 import { mapBoxIsZoomed } from "@/lib/japanPrefectures";
@@ -113,8 +115,32 @@ function MapBoard({
   inputBlocked: boolean;
   onAnswer: (subjectId: number) => void;
 }) {
+  const promptPlace = question.promptSubjectId === null ? null : placeFromSubjectId(question.promptSubjectId);
+  const promptCode = promptPlace?.code ?? null;
+  // No prompt place means Find: the name is the question and the map holds the choices.
+  const finding = promptCode === null;
+
+  /*
+   * In Find, numbered across the map rather than by the shuffle that dealt
+   * them. The handles carried each option's index in `question.options`, so a
+   * round read 3 2 4 1 from left to right and pressing 1 pointed at nothing
+   * you could pick out. Sorting by position makes them a row to read, and the
+   * same order drives the keys, so 1 really is the leftmost handle.
+   *
+   * Read keeps the shuffled order. Its choices are names in a row, not places,
+   * and sorting those by where each one sits would put a geographic hint into
+   * a list that is supposed to be just four words.
+   *
+   * Memoised because the key handler lists it as a dependency: a fresh array
+   * every render would tear down and re-bind the listener on every render.
+   */
+  const options = useMemo(
+    () => (finding ? orderGeoOptionsByPosition(question.options) : question.options),
+    [finding, question.options],
+  );
+
   useGameAnswerKeys({
-    options: question.options,
+    options,
     // Prefecture names sit in one row and the map handles are numbered, so the
     // corner keys of the tile board would name nothing here.
     layout: GAME_KEY_LAYOUTS.sequence,
@@ -122,12 +148,10 @@ function MapBoard({
     onAnswer,
   });
 
-  const optionCount = question.options.length;
+  const optionCount = options.length;
   const tileGridClass = optionCount === 4
     ? "grid-cols-2 sm:grid-cols-4"
     : optionCount === 3 ? "grid-cols-3" : "grid-cols-2";
-  const promptPlace = question.promptSubjectId === null ? null : placeFromSubjectId(question.promptSubjectId);
-  const promptCode = promptPlace?.code ?? null;
   /*
    * Read the country off the question rather than a prop: the tiles and the
    * prompt are all one country by construction, so the first id that resolves
@@ -135,7 +159,7 @@ function MapBoard({
    */
   const country: CountryCode =
     promptPlace?.country
-    ?? question.options.map((option) => placeFromSubjectId(option.subjectId)?.country).find(Boolean)
+    ?? options.map((option) => placeFromSubjectId(option.subjectId)?.country).find(Boolean)
     ?? "JP";
   // Prefecture, state, or province and territory - the board knows which.
   const divisionName = GEO_DATASETS[country].divisionTypeName;
@@ -146,7 +170,7 @@ function MapBoard({
   };
 
   // Read: the map is the question, the tiles are the names.
-  if (promptCode !== null) {
+  if (!finding && promptCode !== null) {
     const marks: MapMark[] = [{ code: promptCode, tone: MAP_TONES.target, keyHint: "?" }];
     // The biggest prefectures read fine at national scale; a close-up of one of
     // those would just be the same picture twice.
@@ -164,7 +188,7 @@ function MapBoard({
           ) : null}
         </div>
         <div className={`grid h-32 shrink-0 gap-2 sm:h-44 sm:gap-4 ${tileGridClass}`}>
-          {question.options.map((option, index) => (
+          {options.map((option, index) => (
             <GameChoiceTile
               key={option.subjectId}
               option={option}
@@ -183,7 +207,7 @@ function MapBoard({
   }
 
   // Find: the name is the question, the map carries the choices.
-  const marks: MapMark[] = question.options.flatMap((option, index) => {
+  const marks: MapMark[] = options.flatMap((option, index) => {
     const place = placeFromSubjectId(option.subjectId);
     if (!place) return [];
     const code = place.code;

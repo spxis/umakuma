@@ -1,6 +1,7 @@
 import { GEO_DATASETS, type CountryCode } from "@/lib/geoRegion";
 import { geoBoxIsWholeCountry, geoFocusBox } from "@/lib/geoMapFraming";
 import { JAPAN_MAP, mapBoxToViewBox, type MapBox } from "@/lib/japanPrefectures";
+import { placeMapHandles } from "@/lib/mapHandles";
 import { MAP_TONE_CLASS, MAP_TONES } from "./GameMode.constants";
 import type { MapTone } from "./GameMode.types";
 
@@ -56,31 +57,17 @@ export default function JapanMap({
   const inset = country === "JP" ? JAPAN_MAP.inset : null;
 
   /*
-   * Where each handle sits, avoiding the ones already placed.
-   *
-   * Handles float above their region, which is fine until two regions are
-   * small and close: Prince Edward Island and Nova Scotia put their handles in
-   * the same few pixels and one hid the other completely, so a choice could
-   * not be seen or clicked. When the space above is taken, the handle hangs
-   * below its region instead - the stem still points at the right place.
+   * Where each handle sits, clear of the ones already placed. The geometry is
+   * in `placeMapHandles`; all this does is find each mark's region first.
    */
-  const placedHandles = (() => {
-    const placed: Array<{ mark: MapMark; x: number; y: number; above: boolean }> = [];
-    const clearOf = (x: number, y: number) =>
-      placed.every((other) => {
-        const otherY = other.above ? other.y - radius * 2.1 : other.y + radius * 2.1;
-        return Math.hypot(other.x - x, otherY - y) > radius * 1.9;
-      });
-
-    for (const mark of marks) {
+  const placedHandles = placeMapHandles(
+    marks.flatMap((mark) => {
       const region = regionByCode.get(String(mark.code));
-      if (!region) continue;
-      const [x, y] = region.map.centroid;
-      const above = clearOf(x, y - radius * 2.1) || !clearOf(x, y + radius * 2.1);
-      placed.push({ mark, x, y, above });
-    }
-    return placed;
-  })();
+      return region ? [{ item: mark, centroid: region.map.centroid }] : [];
+    }),
+    radius,
+    box,
+  );
 
   return (
     <svg
@@ -121,7 +108,7 @@ export default function JapanMap({
       {/* Tap targets sit above every path so a small region is as easy to hit
           as Hokkaido, which is what keeps the question about knowing the map. */}
       {showHandles
-        ? placedHandles.map(({ mark, x, y, above }) => {
+        ? placedHandles.map(({ item: mark, x, y, hx, hy }) => {
             // A handle with nothing to select is a pointer, not a control: Read
             // uses one to show which prefecture the question is about.
             const interactive = Boolean(mark.onSelect);
@@ -140,24 +127,26 @@ export default function JapanMap({
                 }}
                 className={!interactive ? "" : disabled ? "cursor-wait" : "cursor-pointer focus-visible:outline-none"}
               >
+                {/* The stem follows the handle wherever it was pushed, so it
+                    still points at its own region. */}
                 <line
                   x1={x}
                   y1={y}
-                  x2={x}
-                  y2={above ? y - radius * 2.1 : y + radius * 2.1}
+                  x2={hx}
+                  y2={hy}
                   strokeWidth={stroke * 2}
                   className={MAP_TONE_CLASS[mark.tone]!.line}
                 />
                 <circle
-                  cx={x}
-                  cy={above ? y - radius * 2.1 : y + radius * 2.1}
+                  cx={hx}
+                  cy={hy}
                   r={radius}
                   strokeWidth={stroke * 2}
                   className={MAP_TONE_CLASS[mark.tone]!.handle}
                 />
                 <text
-                  x={x}
-                  y={above ? y - radius * 2.1 : y + radius * 2.1}
+                  x={hx}
+                  y={hy}
                   textAnchor="middle"
                   dominantBaseline="central"
                   fontSize={fontSize}
