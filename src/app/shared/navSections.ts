@@ -23,6 +23,15 @@ export type NavSection = {
   id: NavSectionId;
   label: string;
   children: NavChild[];
+  /**
+   * Where the section belongs.
+   *
+   * `nav` sections are destinations you visit while studying, and they sit in
+   * the header. `menu` sections are about your account rather than places to
+   * go, so they live in the account menu - which already holds the
+   * preferences, and having both meant two homes for one idea.
+   */
+  placement: "nav" | "menu";
 };
 
 /**
@@ -30,12 +39,13 @@ export type NavSection = {
  * shows no second row; the sub-nav would just repeat the header.
  */
 export const NAV_SECTIONS: NavSection[] = [
-  { id: "leaderboard", label: "Leaderboard", children: [{ label: "Leaderboard", path: "/" }] },
-  { id: "study", label: "Study", children: [{ label: "Study", path: "study" }] },
-  { id: "game", label: "Game", children: [{ label: "Game", path: "game" }] },
+  { id: "leaderboard", label: "Leaderboard", placement: "nav", children: [{ label: "Leaderboard", path: "/" }] },
+  { id: "study", label: "Study", placement: "nav", children: [{ label: "Study", path: "study" }] },
+  { id: "game", label: "Game", placement: "nav", children: [{ label: "Game", path: "game" }] },
   {
     id: "explore",
     label: "Explore",
+    placement: "nav",
     children: [
       { label: DASHBOARD_TAB_LABELS.wk, path: "library-explorer" },
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
@@ -46,6 +56,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     id: "progress",
     label: "Progress",
+    placement: "nav",
     children: [
       { label: "History", path: "history" },
       { label: DASHBOARD_TAB_LABELS.stats, path: "stats" },
@@ -54,6 +65,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     id: "read",
     label: "Read",
+    placement: "nav",
     children: [
       { label: DASHBOARD_TAB_LABELS.read, path: "read" },
       { label: DASHBOARD_TAB_LABELS.news, path: "news" },
@@ -62,6 +74,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     id: "settings",
     label: "Settings",
+    placement: "menu",
     children: [
       { label: "Profile", path: "profile" },
       { label: "Libraries", path: "libraries" },
@@ -110,3 +123,9 @@ export function sectionForPath(pathname: string | null, username: string | null)
 export function sectionHasSubNav(section: NavSection | null): boolean {
   return (section?.children.length ?? 0) > 1;
 }
+
+/** Sections shown in the header. */
+export const TOP_NAV_SECTIONS = NAV_SECTIONS.filter((section) => section.placement === "nav");
+
+/** Sections that live in the account menu instead of the header. */
+export const MENU_NAV_SECTIONS = NAV_SECTIONS.filter((section) => section.placement === "menu");

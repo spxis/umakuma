@@ -111,6 +111,12 @@ for (const { name, path } of PAGES) {
 const MENUS = [
   { name: "study queue menu", path: "/users/johnmorrisdotca", trigger: { role: "tab" as const, name: /Reviews/ } },
   { name: "study mode menu", path: "/users/johnmorrisdotca", trigger: { role: "button" as const, name: /^Mode$/i } },
+  /*
+   * The account menu carries the whole navigation on a phone and almost none
+   * of it on a desktop, so it is a different panel at each width and has to be
+   * measured at each.
+   */
+  { name: "account menu", path: "/users/johnmorrisdotca", trigger: { role: "button" as const, name: /Open user menu/i } },
 ];
 
 for (const menu of MENUS) {

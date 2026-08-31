@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import type { MouseEvent as ReactMouseEvent } from "react";
 
 import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
-import { NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav } from "./navSections";
+import { TOP_NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav } from "./navSections";
 import ReleaseMotto from "./ReleaseMotto";
 import GlobalSearchBox from "./GlobalSearchBox";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
@@ -48,7 +48,7 @@ export default function AppTopMenuRow({
   const activeSection = sectionForPath(pathname, resolvedWkUsername);
   const links: MainLink[] = resolvedWkUsername
     ? [
-        ...NAV_SECTIONS.map((section) => ({
+        ...TOP_NAV_SECTIONS.map((section) => ({
           label: section.label,
           href: navChildHref(section.children[0]!, resolvedWkUsername),
           dashboard: null,

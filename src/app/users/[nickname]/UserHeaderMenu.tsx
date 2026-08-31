@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
+import { buildHeaderMenu } from "@/app/shared/headerMenuModel";
 import InviteSessionActions from "./InviteSessionActions";
 import UserAdminRefreshButton from "./UserAdminRefreshButton";
 import type { UserHeaderMenuProps } from "./UserHeaderMenu.types";
@@ -15,7 +16,6 @@ const MENU_LIST_GROUP_CLASS = "mt-2 overflow-hidden rounded-xl border border-lin
 const MENU_LIST_ITEM_CLASS = "flex h-10 w-full items-center px-3 text-sm font-semibold text-foreground transition hover:bg-surface-muted";
 const MENU_LIST_ITEM_DIVIDER_CLASS = "border-t border-line";
 const MENU_LIST_ITEM_ACTIVE_CLASS = "bg-surface-muted text-accent";
-const DASHBOARD_ROUTE_SEGMENTS = new Set(["study", "learn", "wk", "wk-explorer", "library-explorer", "jlpt", "jlpt-explorer", "stats", "news", "read"]);
 function getInitials(name: string | null): string {
   if (!name) {
     return "??";
@@ -31,13 +31,6 @@ function getInitials(name: string | null): string {
   return `${parts[0]?.[0] ?? ""}${parts[1]?.[0] ?? ""}`.toUpperCase();
 }
 
-function isDashboardMenuTab(value: string | null): value is "learn" | "wk" | "jlpt" | "stats" | "news" | "read" {
-  return value === "learn" || value === "wk" || value === "jlpt" || value === "stats" || value === "news" || value === "read";
-}
-
-function isPlainLeftClick(event: ReactMouseEvent<HTMLAnchorElement>): boolean {
-  return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
-}
 
 export default function UserHeaderMenu({
   accountId,
@@ -50,7 +43,6 @@ export default function UserHeaderMenu({
 }: UserHeaderMenuProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
   const [refreshingLeaderboard, setRefreshingLeaderboard] = useState(false);
   const [nowMs, setNowMs] = useState(() => Date.now());
@@ -163,80 +155,18 @@ export default function UserHeaderMenu({
   }
 
   const resolvedUserPageUsername = viewerAddress(viewerMenuInfo) ?? viewedWkUsername ?? null;
-  const encodedResolvedUserPageUsername = resolvedUserPageUsername
-    ? encodeURIComponent(resolvedUserPageUsername)
-    : null;
-  const userBasePath = encodedResolvedUserPageUsername ? `/users/${encodedResolvedUserPageUsername}` : null;
-  const dashboardPathSegment = userBasePath && pathname?.startsWith(`${userBasePath}/`)
-    ? pathname.slice(userBasePath.length + 1).split("/")[0] ?? null
-    : null;
-  const normalizedDashboardPathSegment = dashboardPathSegment === "study"
-    ? "learn"
-    : dashboardPathSegment === "wk-explorer" || dashboardPathSegment === "library-explorer"
-      ? "wk"
-      : dashboardPathSegment === "jlpt-explorer"
-        ? "jlpt"
-        : dashboardPathSegment;
-  const dashboardFromQuery = searchParams?.get("dashboard") ?? null;
-  const normalizedDashboardQuery = dashboardFromQuery === "study"
-    ? "learn"
-    : dashboardFromQuery === "wk-explorer" || dashboardFromQuery === "library-explorer"
-      ? "wk"
-      : dashboardFromQuery === "jlpt-explorer"
-        ? "jlpt"
-        : dashboardFromQuery;
-  const currentDashboardTab = isDashboardMenuTab(normalizedDashboardPathSegment)
-    ? normalizedDashboardPathSegment
-    : isDashboardMenuTab(normalizedDashboardQuery)
-      ? normalizedDashboardQuery
-      : "learn";
-  const isOnResolvedUserDashboard = Boolean(
-    userBasePath &&
-    pathname &&
-    (pathname === userBasePath || (dashboardPathSegment && DASHBOARD_ROUTE_SEGMENTS.has(dashboardPathSegment))),
-  );
   const adminSignedIn = Boolean(viewerMenuInfo?.provider === "google" && viewerMenuInfo.isAdmin);
-  const dashboardPageLinks = resolvedUserPageUsername
-    ? [
-        { label: "Study", dashboard: "learn", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/study` },
-        { label: "Game", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/game` },
-        { label: "Library Explorer", dashboard: "wk", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/library-explorer` },
-        { label: "JLPT Explorer", dashboard: "jlpt", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/jlpt-explorer` },
-        { label: "History", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/history` },
-        { label: "Stats", dashboard: "stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/stats` },
-        { label: "News", dashboard: "news", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news` },
-        { label: "Read", dashboard: "read", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/read` },
-        { label: "Libraries", dashboard: null, href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/libraries` },
-      ]
-    : [];
-  const navigationLinks = [
-    viewerMenuInfo
-      ? { label: "Leaderboard", href: "/", dashboard: null }
-      : null,
-    ...dashboardPageLinks,
-  ].filter((link): link is { label: string; href: string; dashboard: "learn" | "wk" | "jlpt" | "stats" | "news" | "read" | null } => Boolean(link));
-  const pageLinks = [
-    viewerMenuInfo && resolvedUserPageUsername
-      ? { label: "News stats", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news?read=stats` }
-      : null,
-    viewerMenuInfo && resolvedUserPageUsername
-      ? { label: "News history", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}/news?read=history` }
-      : null,
-    viewerMenuInfo && resolvedUserPageUsername
-      ? { label: "My page", href: `/users/${encodeURIComponent(resolvedUserPageUsername)}` }
-      : null,
-  ].filter((link): link is { label: string; href: string } => Boolean(link));
-  const adminLinks = [
-    adminSignedIn && !showAdminActions
-      ? { label: "Admin", href: "/admin" }
-      : null,
-    showAdminActions
-      ? { label: "Admin", href: "/admin" }
-      : null,
-    showAdminActions
-      ? { label: "Manage users", href: "/admin/users" }
-      : null,
-  ].filter((link): link is { label: string; href: string } => Boolean(link));
+  /*
+   * Every link in this menu comes from the same sections the header uses.
+   * They used to be two hand-kept lists, and they had drifted: Practice and
+   * Profile were in the header and missing here.
+   */
+  const menu = buildHeaderMenu({
+    username: viewerMenuInfo ? resolvedUserPageUsername : null,
+    isAdmin: adminSignedIn,
+    showAdminActions,
+  });
+  const adminLinks = menu.admin;
   const canRefreshLeaderboard = adminSignedIn || showAdminActions;
   async function refreshLeaderboard() {
     setRefreshingLeaderboard(true);
@@ -324,51 +254,81 @@ export default function UserHeaderMenu({
               )}
             </section>
 
-            {navigationLinks.length > 0 ? (
+            {menu.account.length > 0 ? (
               <section className="border-t border-line pt-3">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Navigation</p>
                 <div className={MENU_LIST_GROUP_CLASS}>
-                  {navigationLinks.map((link, index) => {
-                    const active = link.dashboard
-                      ? isOnResolvedUserDashboard && currentDashboardTab === link.dashboard
-                      : linkIsActive(link.href);
-
-                    return (
-                      <Link
-                        key={link.label}
-                        href={link.href}
-                        onClick={(event) => {
-                          if (
-                            link.dashboard &&
-                            isOnResolvedUserDashboard &&
-                            isPlainLeftClick(event)
-                          ) {
-                            event.preventDefault();
-                            window.dispatchEvent(
-                              new CustomEvent("wr:dashboard-tab-request", {
-                                detail: { tab: link.dashboard },
-                              }),
-                            );
-                          }
-                          setOpen(false);
-                        }}
-                        className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${active ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
-                      >
-                        {link.label}
-                      </Link>
-                    );
-                  })}
+                  {menu.account.map((link, index) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                 </div>
               </section>
             ) : null}
 
-            {pageLinks.length > 0 ? (
+            {/*
+              * Navigation, on small screens only. The header shows every
+              * section on a desktop, so repeating them here was duplication -
+              * and the duplicate had drifted out of date.
+              */}
+            {menu.navigate.length > 0 ? (
+              <section className="border-t border-line pt-3 md:hidden">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Go to</p>
+                <div className="mt-2 space-y-3">
+                  {menu.navigate.map((group) => (
+                    <div key={group.label}>
+                      {group.links.length > 1 ? (
+                        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/40">
+                          {group.label}
+                        </p>
+                      ) : null}
+                      <div className={MENU_LIST_GROUP_CLASS}>
+                        {group.links.map((link, index) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={() => setOpen(false)}
+                            className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {menu.site.length > 0 ? (
               <section className="border-t border-line pt-3">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Pages</p>
                 <div className={MENU_LIST_GROUP_CLASS}>
-                  {pageLinks.map((link, index) => (
+                  {menu.site.map((link, index) => (
                     <Link
-                      key={link.label}
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
+            {menu.settings.length > 0 ? (
+              <section className="border-t border-line pt-3">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/60">Settings</p>
+                <div className={MENU_LIST_GROUP_CLASS}>
+                  {menu.settings.map((link, index) => (
+                    <Link
+                      key={link.href}
                       href={link.href}
                       onClick={() => setOpen(false)}
                       className={`${MENU_LIST_ITEM_CLASS} ${index > 0 ? MENU_LIST_ITEM_DIVIDER_CLASS : ""} ${linkIsActive(link.href) ? MENU_LIST_ITEM_ACTIVE_CLASS : ""}`}
