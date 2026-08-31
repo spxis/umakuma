@@ -184,6 +184,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Rosen Rokuon", ja: "路線録音", reading: "ろせんろくおん", gloss: "a recording of the route" },
   { romaji: "Wakaba Wadachi", ja: "若葉轍", reading: "わかばわだち", gloss: "new leaves in the wheel ruts" },
   { romaji: "Ashiato Ayatori", ja: "足跡あやとり", reading: "あしあとあやとり", gloss: "footprints in a cat's cradle" },
+  { romaji: "Ichiban Inori", ja: "一番祈り", reading: "いちばんいのり", gloss: "the first wish of the day" },
 ];
 
 /**

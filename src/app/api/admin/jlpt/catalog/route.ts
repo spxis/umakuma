@@ -3,7 +3,6 @@ import path from "node:path";
 
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
-import { z } from "zod";
 
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
@@ -20,104 +19,18 @@ import {
   type JlptCatalogQuery,
   type JlptCatalogResponse,
 } from "@/lib/jlptCatalogTypes";
+import {
+  buildCatalogOrderBy,
+  buildCatalogWhere,
+  isDownloadRequest,
+  MISSING_ENRICHMENT_WHERE,
+  toCatalogQuery,
+} from "@/lib/jlptCatalogQuery";
 import { prisma } from "@/lib/prisma";
-
-const querySchema = z.object({
-  page: z.coerce.number().int().min(1).max(100_000).default(1),
-  pageSize: z.coerce.number().int().min(10).max(5000).default(40),
-  nLevel: z.union([z.literal("all"), z.literal("1"), z.literal("2"), z.literal("3"), z.literal("4"), z.literal("5")]).default("all"),
-  enrichment: z.enum(JLPT_CATALOG_ENRICHMENT_FILTERS).default("all"),
-  search: z.union([z.literal(""), z.undefined(), z.string().trim().min(1).max(24)]).optional(),
-  sortBy: z.enum(JLPT_CATALOG_SORT_BY).default("nLevel"),
-  sortDir: z.enum(JLPT_CATALOG_SORT_DIR).default("asc"),
-  download: z.union([z.literal("0"), z.literal("1"), z.undefined()]).optional(),
-});
 
 const CACHE_HEADERS = {
   "Cache-Control": "private, max-age=10, stale-while-revalidate=20",
 };
-
-function toCatalogQuery(url: URL): JlptCatalogQuery | null {
-  const parsed = querySchema.safeParse({
-    page: url.searchParams.get("page") ?? undefined,
-    pageSize: url.searchParams.get("pageSize") ?? undefined,
-    nLevel: url.searchParams.get("nLevel") ?? undefined,
-    enrichment: url.searchParams.get("enrichment") ?? undefined,
-    search: url.searchParams.get("search") ?? undefined,
-    sortBy: url.searchParams.get("sortBy") ?? undefined,
-    sortDir: url.searchParams.get("sortDir") ?? undefined,
-    download: url.searchParams.get("download") ?? undefined,
-  });
-
-  if (!parsed.success) {
-    return null;
-  }
-
-  return {
-    page: parsed.data.page,
-    pageSize: parsed.data.pageSize,
-    nLevel: parsed.data.nLevel === "all" ? null : Number(parsed.data.nLevel),
-    enrichment: parsed.data.enrichment,
-    search: typeof parsed.data.search === "string" && parsed.data.search.trim().length > 0 ? parsed.data.search.trim() : null,
-    sortBy: parsed.data.sortBy,
-    sortDir: parsed.data.sortDir,
-  };
-}
-
-function isDownload(url: URL): boolean {
-  return url.searchParams.get("download") === "1";
-}
-
-function buildWhere(query: JlptCatalogQuery): Prisma.JlptKanjiWhereInput {
-  const conditions: Prisma.JlptKanjiWhereInput[] = [];
-
-  if (query.nLevel !== null) {
-    conditions.push({ nLevel: query.nLevel });
-  }
-
-  if (query.enrichment === "enriched") {
-    conditions.push({ enrichedAt: { not: null } });
-  } else if (query.enrichment === "missing") {
-    conditions.push({
-      OR: [
-        { enrichedAt: null },
-        { meanings: { isEmpty: true } },
-        { strokeCount: null },
-        { heisigKeyword: null },
-        { wordExamples: { equals: Prisma.DbNull } },
-        { wordExamples: { equals: Prisma.JsonNull } },
-      ],
-    });
-  }
-
-  if (query.search) {
-    conditions.push({
-      OR: [
-        { kanji: { contains: query.search, mode: "insensitive" } },
-        { primaryMeaning: { contains: query.search, mode: "insensitive" } },
-        { heisigKeyword: { contains: query.search, mode: "insensitive" } },
-      ],
-    });
-  }
-
-  if (conditions.length === 0) {
-    return {};
-  }
-
-  if (conditions.length === 1) {
-    return conditions[0];
-  }
-
-  return { AND: conditions };
-}
-
-function buildOrderBy(query: JlptCatalogQuery): Prisma.JlptKanjiOrderByWithRelationInput[] {
-  return [
-    { [query.sortBy]: query.sortDir },
-    { nLevel: "asc" },
-    { kanji: "asc" },
-  ];
-}
 
 async function getJsonSourceMeta(): Promise<JlptCatalogJsonSourceMeta> {
   const filePath = path.resolve(process.cwd(), "src/data/jlptReadings.json");
@@ -148,24 +61,13 @@ async function getJsonSourceMeta(): Promise<JlptCatalogJsonSourceMeta> {
 }
 
 async function buildCatalogResponse(query: JlptCatalogQuery): Promise<JlptCatalogResponse> {
-  const where = buildWhere(query);
-  const orderBy = buildOrderBy(query);
+  const where = buildCatalogWhere(query);
+  const orderBy = buildCatalogOrderBy(query);
 
   const [totalRows, filteredRows, missingEnrichmentRows, byLevelRows, jsonSource] = await Promise.all([
     prisma.jlptKanji.count(),
     prisma.jlptKanji.count({ where }),
-    prisma.jlptKanji.count({
-      where: {
-        OR: [
-          { enrichedAt: null },
-          { meanings: { isEmpty: true } },
-          { strokeCount: null },
-          { heisigKeyword: null },
-          { wordExamples: { equals: Prisma.DbNull } },
-          { wordExamples: { equals: Prisma.JsonNull } },
-        ],
-      },
-    }),
+    prisma.jlptKanji.count({ where: MISSING_ENRICHMENT_WHERE }),
     prisma.jlptKanji.groupBy({
       by: ["nLevel"],
       _count: { _all: true },
@@ -278,7 +180,7 @@ export async function GET(request: Request) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
-        const download = isDownload(url);
+        const download = isDownloadRequest(url);
         const cacheKey = JSON.stringify(query);
 
         let payload = getCachedJlptCatalog(cacheKey);

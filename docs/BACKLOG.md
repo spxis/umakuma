@@ -203,7 +203,19 @@ they opt in.
 
 `wkUsername` is a real WaniKani identity and must never reach a public response.
 
-### 7 — Standalone JLPT study
+### 7 — Standalone JLPT study ✅ API shipped (v0.134.0)
+
+`src/lib/jlptCatalogQuery.ts` holds the shared query; `/api/jlpt/catalog` serves
+study content (the readings, not the admin view's counts) to any signed-in
+member with no WaniKani token involved. The admin route uses the same query and
+dropped from 320 to 222 lines.
+
+**Still to do:** the explorer page itself still sits under `/users/[nickname]/`
+gated on `wkUsername`, and `/api/accounts/[id]/jlpt` still decrypts a token for
+the SRS overlay. The content is reachable; the surface is not yet.
+
+Original note:
+
 
 `JlptKanji` is already WaniKani-free — kanji, JLPT level, readings, meanings,
 stroke count, school grade, Heisig keyword, word examples. Nothing refers to

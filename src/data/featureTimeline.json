@@ -1446,5 +1446,15 @@
     "version": "0.133.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Choose characters on the grades explorer, give the set a name, and it keeps: Week 1, Week 2. A Lists page shows every set you have built with the characters it holds rather than a count, and each one goes straight to a practice sheet. The same idea as Trouble and Favourites, with a name instead of a flag."
+  },
+  {
+    "id": "standalone-jlpt-study",
+    "area": "jlpt",
+    "name": "JLPT kanji without WaniKani",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.134.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "JLPT kanji are readable by any signed-in member now, connected to WaniKani or not. The table never had a WaniKani column; the query just happened to live inside an admin route, and the member-facing path went through an endpoint that decrypts a WaniKani token. The query is shared now and serves the readings themselves rather than the admin view's counts of them."
   }
 ]
