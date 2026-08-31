@@ -1670,5 +1670,15 @@
     "version": "0.160.0",
     "releasedAt": "2026-08-31T23:00:00Z",
     "summary": "Clicking the magnifier with nothing typed did nothing at all: the submit refused an empty query, so the only way to reach the search page from the header was to type something and then delete it once you arrived. Enter on an empty box was the same dead end. Empty now means take me to search, which is what pressing a search button with nothing to search plainly asks for, and the rule lives in one shared helper so the header, the phone sheet and the search page's own box all answer the same way."
+  },
+  {
+    "id": "the-way-out-of-the-dropdown",
+    "area": "platform",
+    "name": "The way out of the dropdown",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.161.0",
+    "releasedAt": "2026-09-01T00:00:00Z",
+    "summary": "The see all results row sat at the bottom left of the suggestion list in the same small type as a result, so the one control that leaves the dropdown read as an eleventh, oddly worded result. It is now centred across the full width, set in the same uppercase weight the rest of the site gives an action, and separated from the rows above by its own rule, with the highlighted state tinted rather than greyed so arrowing onto it looks like landing on a button rather than on another row."
   }
 ]

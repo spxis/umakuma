@@ -132,12 +132,18 @@ export default function GlobalSearchSuggestList({
         aria-selected={activeIndex === hits.length}
         onClick={() => onPick(hits.length)}
         onMouseMove={() => onHover(hits.length)}
-        className={`cursor-pointer px-4 py-2.5 text-xs font-bold text-accent ${
-          activeIndex === hits.length ? "bg-surface-muted" : ""
+        /*
+         * The way out of the dropdown, so it reads as the action it is rather
+         * than as an eleventh result: centred, across the full width, set off
+         * from the rows above by its own rule.
+         */
+        className={`flex cursor-pointer items-center justify-center gap-1.5 border-t border-line px-4 py-3 text-xs font-black uppercase tracking-[0.08em] text-accent transition ${
+          activeIndex === hits.length ? "bg-accent/10" : "hover:bg-surface-muted"
         }`}
       >
         {SEARCH_PAGE_COPY.suggestSeeAll} {totalHits}{" "}
-        {totalHits === 1 ? SEARCH_PAGE_COPY.hit : SEARCH_PAGE_COPY.hits} →
+        {totalHits === 1 ? SEARCH_PAGE_COPY.hit : SEARCH_PAGE_COPY.hits}
+        <span aria-hidden="true">→</span>
       </li>
     </ul>
     {loadingMore ? (
