@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, type FocusEvent, type FormEvent, type KeyboardEvent } from "react";
 
-import type { SearchHit } from "./globalSearch";
+import { searchSubmitHref, type SearchHit } from "./globalSearch";
 import {
   SUGGEST_LOAD_LEAD,
   SUGGEST_MAX_PAGES,
@@ -101,9 +101,7 @@ export function useSearchCombobox({
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const query = typed.trim();
-    if (!query) return;
-    navigate(resultsHref(query));
+    navigate(searchSubmitHref(typed, resultsHref));
   }
 
   function acceptGhost(completion: string) {

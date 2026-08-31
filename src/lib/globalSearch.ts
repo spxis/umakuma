@@ -75,6 +75,22 @@ export const SEARCH_PAGE_SIZE = 20;
  */
 export const SEARCH_MAX_WINDOW = SEARCH_PER_SOURCE_LIMIT * 8;
 
+/** The search page itself, with nothing asked of it yet. */
+export const SEARCH_PAGE_HREF = "/search";
+
+/**
+ * Where the magnifier, or Enter, goes.
+ *
+ * An empty box used to do nothing at all: the member clicked search, search
+ * refused, and there was no way to reach the search page from the header
+ * without typing something first. Empty now means "take me to search", which
+ * is what pressing a search button with nothing to search plainly asks for.
+ */
+export function searchSubmitHref(query: string, resultsHref: (query: string) => string): string {
+  const trimmed = query.trim();
+  return trimmed ? resultsHref(trimmed) : SEARCH_PAGE_HREF;
+}
+
 /**
  * A request for one window of results.
  *

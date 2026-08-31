@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  SEARCH_PAGE_HREF,
   SEARCH_SOURCES,
   SEARCH_SOURCE_VALUES,
   appendHits,
@@ -12,6 +13,7 @@ import {
   rankHit,
   searchHitHref,
   searchRequestUrl,
+  searchSubmitHref,
   sortHits,
   type SearchHit,
 } from "./globalSearch";
@@ -198,6 +200,23 @@ describe("searchRequestUrl", () => {
 
   it("encodes the query", () => {
     expect(searchRequestUrl("日 sun")).toBe(`/api/search?q=${encodeURIComponent("日 sun")}`);
+  });
+});
+
+describe("searchSubmitHref", () => {
+  const results = (query: string) => `/search?query=${encodeURIComponent(query)}&in=jlpt`;
+
+  it("searches for what was typed", () => {
+    expect(searchSubmitHref("house", results)).toBe("/search?query=house&in=jlpt");
+  });
+
+  it("trims before searching", () => {
+    expect(searchSubmitHref("  house  ", results)).toBe("/search?query=house&in=jlpt");
+  });
+
+  it("opens the search page when there is nothing to search", () => {
+    expect(searchSubmitHref("", results)).toBe(SEARCH_PAGE_HREF);
+    expect(searchSubmitHref("   ", results)).toBe(SEARCH_PAGE_HREF);
   });
 });
 

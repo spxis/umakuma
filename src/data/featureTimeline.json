@@ -1660,5 +1660,15 @@
     "version": "0.159.0",
     "releasedAt": "2026-08-31T22:00:00Z",
     "summary": "Search asked for every match at once and rendered all of it: the query \"a\" is 122 rows across the three catalogues, and the dropdown threw away all but ten of them after the request had already been paid for. Both surfaces now take a window. The API accepts a limit and an offset, sliced after ranking so the totals and the per-source counts still describe the whole answer; the dropdown starts at ten rows and grows a stretch at a time as the highlight or the scroll comes within reach of the end, up to forty, past which the answer is the results page; and the results page renders its first twenty, appending the next twenty as the reader nears the bottom or presses the button under the list. The dropdown widens its window from zero rather than stepping by offset, because it keeps one row per glyph and a duplicate can straddle any boundary, so a superset is the only window that cannot reorder rows under the highlight."
+  },
+  {
+    "id": "an-empty-search-box-opens-search",
+    "area": "platform",
+    "name": "An empty search box opens search",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.160.0",
+    "releasedAt": "2026-08-31T23:00:00Z",
+    "summary": "Clicking the magnifier with nothing typed did nothing at all: the submit refused an empty query, so the only way to reach the search page from the header was to type something and then delete it once you arrived. Enter on an empty box was the same dead end. Empty now means take me to search, which is what pressing a search button with nothing to search plainly asks for, and the rule lives in one shared helper so the header, the phone sheet and the search page's own box all answer the same way."
   }
 ]
