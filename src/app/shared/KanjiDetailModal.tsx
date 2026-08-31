@@ -44,6 +44,7 @@ function PrintedGlyph({ kanji, label, fontFamily }: { kanji: string; label: stri
   return (
     <div className="flex flex-col items-center gap-1">
       <span
+        lang="ja"
         translate="no"
         style={{ fontFamily }}
         className={noTranslateClass(

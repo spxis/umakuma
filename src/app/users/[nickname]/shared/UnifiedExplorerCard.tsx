@@ -103,6 +103,7 @@ export default function UnifiedExplorerCard({
           >
             {glyphOverlay}
             <p
+              lang="ja"
               translate="no"
               style={{ fontFamily }}
               className={noTranslateClass("text-xl font-black leading-none")}
@@ -131,6 +132,7 @@ export default function UnifiedExplorerCard({
           >
             {glyphOverlay}
             <p
+              lang="ja"
               translate="no"
               style={{ fontFamily }}
               className={noTranslateClass(`${glyphTextClassName} text-center font-black leading-none`)}

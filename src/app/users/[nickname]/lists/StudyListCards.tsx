@@ -122,7 +122,7 @@ export default function StudyListCards({
                 <h2 className="w-32 shrink-0 truncate text-sm font-black text-foreground" title={list.name}>
                   {list.name}
                 </h2>
-                <p translate="no" className={`min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
+                <p lang="ja" translate="no" className={`min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
                   {list.characters.join("")}
                 </p>
                 <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
@@ -160,7 +160,7 @@ export default function StudyListCards({
                   </span>
                 </div>
 
-                <p translate="no" className={`mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji ${JP_TEXT_CLASS}`}>
+                <p lang="ja" translate="no" className={`mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji ${JP_TEXT_CLASS}`}>
                   {list.characters.join("")}
                 </p>
 

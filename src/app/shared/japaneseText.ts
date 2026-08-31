@@ -14,10 +14,26 @@
  * the Japanese itself, because that is not the language the page is written in,
  * it is the subject the page is teaching.
  *
- * Both spellings, because engines honour different ones: `translate="no"` is
- * the HTML5 attribute and `notranslate` is Google's older class. `lang="ja"` is
- * not one of them - it tells a translator what it is reading, which is an
- * invitation rather than a refusal.
+ * Three layers, which is what the spec actually asks for:
+ *
+ *   `<html lang="en">`   the document is English - true, and set in the layout
+ *   `lang="ja"`          this run is the exception, and is Japanese
+ *   `translate="no"`     and do not translate it
+ *
+ * The middle one is the layer that was missing, and it is the one that stops
+ * the mis-detection rather than papering over it. `lang="en"` on its own is
+ * necessary and not sufficient: a browser overrides a declared language it does
+ * not believe, and a page this full of kanji reads as Japanese, so Chrome
+ * offered to translate it *into English* and pushed the English through a
+ * Japanese-to-English model on the way. That is how "Writing practice" came
+ * back "First practice". Tagging the Japanese as Japanese leaves English prose
+ * surrounded by declared-Japanese islands, which is what it is.
+ *
+ * It earns its keep twice over: a screen reader reads a `lang="ja"` run with
+ * Japanese pronunciation instead of spelling kanji out as English.
+ *
+ * Both refusal spellings, because engines honour different ones: `translate="no"`
+ * is the HTML5 attribute and `notranslate` is Google's older class.
  */
 export const NO_TRANSLATE_CLASS = "notranslate";
 
@@ -38,3 +54,22 @@ export function noTranslateClass(className?: string): string {
 
 /** Spread onto an element whose text is Japanese and which has no class. */
 export const noTranslate = { translate: "no", className: NO_TRANSLATE_CLASS } as const;
+
+/**
+ * All three layers for an element whose text really is Japanese.
+ *
+ * Distinct from `noTranslate`, which is for the things that must not be
+ * translated but are not Japanese either - a count, an SRS stage, "L17".
+ * Declaring those `lang="ja"` would be a lie, and would tell a screen reader
+ * to read "L17" in Japanese.
+ */
+export const japaneseText = {
+  lang: "ja",
+  translate: "no",
+  className: NO_TRANSLATE_CLASS,
+} as const;
+
+/** The same, for an element that already has classes of its own. */
+export function japaneseTextProps(className?: string) {
+  return { lang: "ja", translate: "no" as const, className: noTranslateClass(className) };
+}

@@ -3,7 +3,7 @@ import { toRomaji } from "wanakana";
 
 import type { LevelItem } from "../../explorerTypes";
 import { isRadicalSubjectType } from "./levelExplorerDomain";
-import { noTranslateClass } from "@/app/shared/japaneseText";
+import { NO_TRANSLATE_CLASS, noTranslateClass } from "@/app/shared/japaneseText";
 
 export function stripHtml(input: string | undefined): string {
   if (!input) {
@@ -42,14 +42,22 @@ function splitReadingSegments(reading: string): string[] {
   return trimmed ? [trimmed] : [reading];
 }
 
+/*
+ * The leaf every reading passes through, and so where translation is refused.
+ *
+ * It was marked one level up, on `ReadingWithPronunciation`, which covered the
+ * explorer cards and missed the review modal entirely - that pane reaches the
+ * same text through `ReadingListWithPronunciation` in plain mode, so しゅしょう
+ * came out as "Shushou". Marking the leaf covers every route to it.
+ */
 function SegmentedReading({ reading }: { reading: string }) {
   const segments = splitReadingSegments(reading);
   if (segments.length <= 1) {
-    return <>{segments[0] ?? reading}</>;
+    return <span lang="ja" translate="no" className={NO_TRANSLATE_CLASS}>{segments[0] ?? reading}</span>;
   }
 
   return (
-    <span className="inline-flex flex-wrap items-center gap-1 align-middle">
+    <span lang="ja" translate="no" className={noTranslateClass("inline-flex flex-wrap items-center gap-1 align-middle")}>
       {segments.map((segment, index) => (
         <span
           key={`${segment}-${index}`}
@@ -124,7 +132,7 @@ export function ReadingWithPronunciation({
   const pronunciation = pronunciationForReading(reading);
   if (!pronunciation) {
     return (
-      <span translate="no" className={noTranslateClass(className)}>
+      <span lang="ja" translate="no" className={noTranslateClass(className)}>
         <SegmentedReading reading={reading} />
       </span>
     );

@@ -162,6 +162,7 @@ export default function StudySideBySideModal({
                   ) : null}
                   <span translate="no" className={`${NO_TRANSLATE_CLASS} absolute right-2 top-2 z-30 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs`}>{`L${option.wkLevel}`}</span>
                   <span
+                    lang="ja"
                     translate="no"
                     style={{ fontFamily }}
                     className={noTranslateClass(`max-w-full break-all text-center font-black leading-none ${activeSelection ? "text-[clamp(2.5rem,10vw,6rem)]" : "text-[clamp(3rem,15vw,10rem)]"}`)}

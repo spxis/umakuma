@@ -65,7 +65,7 @@ function HitRow({ hit, href }: { hit: SearchHit; href: string | null }) {
               {hit.meaning || "—"}
             </span>
             {hit.reading ? (
-              <span translate="no" className={`truncate text-xs font-semibold text-foreground/55 ${JP_TEXT_CLASS}`}>
+              <span lang="ja" translate="no" className={`truncate text-xs font-semibold text-foreground/55 ${JP_TEXT_CLASS}`}>
                 {hit.reading}
               </span>
             ) : null}

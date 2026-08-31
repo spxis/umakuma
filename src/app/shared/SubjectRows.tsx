@@ -105,7 +105,7 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                       {row.meaning || SUBJECT_VIEW_COPY.noMeaning}
                     </span>
                     <span className="flex items-center gap-1.5 truncate text-xs font-semibold text-foreground/55">
-                      {row.reading ? <span translate="no" className={JP_TEXT_CLASS}>{row.reading}</span> : null}
+                      {row.reading ? <span lang="ja" translate="no" className={JP_TEXT_CLASS}>{row.reading}</span> : null}
                       {renderSubMeta ? renderSubMeta(row) : null}
                     </span>
                   </span>

@@ -154,6 +154,7 @@ export default function TracingSheet({
             {/* The character first: it is what the row is about, and a reader
               * scanning a printed page finds it faster than the English. */}
             <span
+              lang="ja"
               translate="no"
               className={noTranslateClass("text-base font-black leading-none text-neutral-900")}
             >
@@ -161,7 +162,7 @@ export default function TracingSheet({
             </span>
             <span className="font-black text-neutral-700">{entry.meaning ?? ""}</span>
             {showReadings && (entry.on.length > 0 || entry.kun.length > 0) ? (
-              <span translate="no" className={noTranslateClass("min-w-0 truncate text-neutral-500")}>
+              <span lang="ja" translate="no" className={noTranslateClass("min-w-0 truncate text-neutral-500")}>
                 {[entry.on.join("、"), entry.kun.join("、")].filter(Boolean).join(" · ")}
               </span>
             ) : null}

@@ -226,7 +226,7 @@ function MapBoard({
         <p className="text-[10px] font-bold uppercase text-foreground/60">
           {GAME_COPY.chooseRegion(divisionName)} · {question.answerType}
         </p>
-        <p translate="no" className={`mt-1 text-3xl font-black text-foreground ${JP_TEXT_CLASS} sm:text-5xl`}>
+        <p lang="ja" translate="no" className={`mt-1 text-3xl font-black text-foreground ${JP_TEXT_CLASS} sm:text-5xl`}>
           {question.prompt}
         </p>
       </div>

@@ -2,6 +2,7 @@ import type { ReviewOutcome, StudyReviewSubmitResult } from "../lib/studyExplore
 import { STUDY_REVIEW_MODAL_SECTION_TEXT } from "./StudyExplorer.constants";
 import StudyReviewFlashActionRow from "./StudyReviewFlashActionRow";
 import FieldLabel from "../../../../shared/FieldLabel";
+import { noTranslateClass } from "@/app/shared/japaneseText";
 
 type Props = {
   allMeanings: string[];
@@ -57,7 +58,8 @@ export default function StudyReviewAnswerPane({
           <FieldLabel size="xs" tone="muted">
             {STUDY_REVIEW_MODAL_SECTION_TEXT.reading}
           </FieldLabel>
-          <div className="mt-1 flex min-w-0 items-end gap-2">
+          {/* Both scripts of the reading, which is the answer being revealed. */}
+          <div lang="ja" translate="no" className={noTranslateClass("mt-1 flex min-w-0 items-end gap-2")}>
             <p className="text-2xl font-black leading-tight text-foreground sm:text-4xl">{primaryReading}</p>
             {primaryReadingKatakana !== "-" ? (
               <p className="text-xs font-semibold leading-tight text-foreground/70 sm:text-sm">
