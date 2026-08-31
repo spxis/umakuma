@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-import { PRACTICE_SHEET_COPY, SHEET_COLUMNS, TRACE_CELLS_PER_ROW } from "./practiceCopy";
+import { DEFAULT_SHEET_SIZE, PRACTICE_SHEET_COPY, SHEET_SIZES, type SheetSize } from "./practiceCopy";
 
 /**
  * Squares left for strokes, once the model has taken the first column.
@@ -9,13 +9,13 @@ import { PRACTICE_SHEET_COPY, SHEET_COLUMNS, TRACE_CELLS_PER_ROW } from "./pract
  * seeing the finished character helps or gives the answer away depends on
  * whether they are learning the character or testing themselves on it.
  */
-function strokesPerRow(showModel: boolean): number {
-  return showModel ? SHEET_COLUMNS - 1 : SHEET_COLUMNS;
+function strokesPerRow(showModel: boolean, columns: number): number {
+  return showModel ? columns - 1 : columns;
 }
 
 /** Rows a character needs, so the last one can be padded to a full width. */
-function strokeSheetRows(strokeCount: number, showModel: boolean): number {
-  return Math.max(1, Math.ceil(strokeCount / strokesPerRow(showModel)));
+function strokeSheetRows(strokeCount: number, showModel: boolean, columns: number): number {
+  return Math.max(1, Math.ceil(strokeCount / strokesPerRow(showModel, columns)));
 }
 
 export type TraceEntry = {
@@ -37,6 +37,8 @@ type Props = {
   showModel?: boolean;
   /** Whether on and kun print beside the meaning. */
   showReadings?: boolean;
+  /** How big each square is, expressed as how many fit across. */
+  size?: SheetSize;
 };
 
 /**
@@ -111,7 +113,15 @@ function Cell({ children }: { children?: React.ReactNode }) {
  * repeats to trace over, then empty squares to write unaided — which is the
  * progression a Japanese workbook uses.
  */
-export default function TracingSheet({ entries, mode = "trace", showModel = true, showReadings = false }: Props) {
+export default function TracingSheet({
+  entries,
+  mode = "trace",
+  showModel = true,
+  showReadings = false,
+  size = DEFAULT_SHEET_SIZE,
+}: Props) {
+  const { columns, traceCells } = SHEET_SIZES[size];
+
   return (
     <div className="space-y-3">
       {entries.map((entry) => (
@@ -142,9 +152,9 @@ export default function TracingSheet({ entries, mode = "trace", showModel = true
              * The model is faint, not solid, so it reads as something to aim
              * at rather than the answer already filled in.
              */
-            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${SHEET_COLUMNS}, minmax(0, 1fr))` }}>
-              {Array.from({ length: strokeSheetRows(entry.strokeCount, showModel) }, (_, row) => {
-                const perRow = strokesPerRow(showModel);
+            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+              {Array.from({ length: strokeSheetRows(entry.strokeCount, showModel, columns) }, (_, row) => {
+                const perRow = strokesPerRow(showModel, columns);
                 const firstStroke = row * perRow;
                 const strokesHere = Math.min(perRow, entry.strokeCount - firstStroke);
 
@@ -174,7 +184,7 @@ export default function TracingSheet({ entries, mode = "trace", showModel = true
               })}
             </div>
           ) : (
-            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${SHEET_COLUMNS}, minmax(0, 1fr))` }}>
+            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
               {/*
                 * Solid or faint, never absent. The option is about whether the
                 * first square is a written example or another one to trace: a
@@ -185,12 +195,12 @@ export default function TracingSheet({ entries, mode = "trace", showModel = true
               <Cell>
                 <TraceGlyph entry={entry} tone={showModel ? "solid" : "ghost"} />
               </Cell>
-              {Array.from({ length: TRACE_CELLS_PER_ROW }, (_, index) => (
+              {Array.from({ length: traceCells }, (_, index) => (
                 <Cell key={`ghost-${index}`}>
                   <TraceGlyph entry={entry} tone="ghost" />
                 </Cell>
               ))}
-              {Array.from({ length: SHEET_COLUMNS - 1 - TRACE_CELLS_PER_ROW }, (_, index) => (
+              {Array.from({ length: columns - 1 - traceCells }, (_, index) => (
                 <Cell key={`blank-${index}`} />
               ))}
             </div>

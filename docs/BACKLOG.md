@@ -603,6 +603,14 @@ with the destinations offered afterwards. `SubjectViewModeToggle` and the guard
 test in `subjectListDensity.test.ts` are the pattern to follow, and the same
 test should grow to require the selection control once it exists.
 
+### 24b — Sheet square sizes ✅ shipped (v0.130.0)
+
+Asked for straight after print mode: the sheet only ever offered the child's
+square. Three sizes now, expressed as columns across (6 / 8 / 10) so the choice
+holds at any paper size. Every sheet control now builds its link through
+`sheetHref`, because each one used to concatenate its own query string and had
+to remember to carry every other control's setting.
+
 ### 24 — Print mode ✅ shipped (v0.129.0)
 
 `@page` at Letter with a 12mm margin, `print-color-adjust: exact` so the faint

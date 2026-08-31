@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import SurfacePagination from "@/app/shared/SurfacePagination";
-import { PAGINATION_PLACEMENTS, toPaginationPlacement, type PaginationPlacement } from "@/app/shared/paginationPlacement";
+import { toPaginationPlacement } from "@/app/shared/paginationPlacement";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
@@ -14,19 +14,14 @@ import { PRACTICE_SOURCES, isPracticeSource, isTaggedPracticeSource, practiceEnt
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
 import PrintButton from "./PrintButton";
-import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, WANIKANI_MAX_LEVEL } from "./practiceCopy";
+import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
+import SheetOptionsRow from "./SheetOptionsRow";
+import { PRACTICE_PAGINATION_DEFAULT, sheetHref, type SheetSettings } from "./sheetLink";
 import TracingSheet, { type SheetMode, type TraceEntry } from "./TracingSheet";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-const PAGER_LABELS: Record<PaginationPlacement, string> = {
-  top: PRACTICE_SHEET_COPY.pagerTop,
-  bottom: PRACTICE_SHEET_COPY.pagerBottom,
-  both: PRACTICE_SHEET_COPY.pagerBoth,
-  none: PRACTICE_SHEET_COPY.pagerNone,
 };
 
 function firstValue(value: string | string[] | undefined): string | undefined {
@@ -63,10 +58,8 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
    * sheet is a page of tracing squares: reaching page four meant scrolling past
    * three of them to find the only Next link on the page.
    */
-  const placement = toPaginationPlacement(firstValue(query.pager), "both");
-  /* Kept out of the URL at its default, so a plain sheet link stays short. */
-  const pagerParam = placement === "both" ? "" : `&pager=${placement}`;
-  const carry = `&mode=${mode}${showModel ? "" : "&model=0"}${showReadings ? "&readings=1" : ""}${pagerParam}`;
+  const placement = toPaginationPlacement(firstValue(query.pager), PRACTICE_PAGINATION_DEFAULT);
+  const size = toSheetSize(firstValue(query.size));
 
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
@@ -105,9 +98,21 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     account.id,
   );
 
+  const settings: SheetSettings = {
+    source,
+    grade,
+    level,
+    page,
+    mode,
+    showModel,
+    showReadings,
+    placement,
+    size,
+    choosing,
+  };
+
   const pageCount = Math.max(1, Math.ceil(total / PRACTICE_PAGE_SIZE));
-  const pageHref = (next: number) =>
-    `?source=${source}&grade=${grade}&level=${level}&page=${next}${carry}${choosing ? "&pick=1" : ""}`;
+  const pageHref = (next: number) => sheetHref(settings, { page: next });
 
   const sheetLabel =
     source === PRACTICE_SOURCES.trouble
@@ -186,11 +191,15 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         ] as const).map(([id, label, defaultLevel]) => {
           const active = id === source;
           const target = id === source ? level : defaultLevel;
-          const pick = active && !choosing ? "&pick=1" : "";
           return (
             <Link
               key={id}
-              href={`?source=${id}&grade=${grade}&level=${target}${carry}${pick}`}
+              href={sheetHref(settings, {
+                source: id,
+                level: target,
+                page: 1,
+                choosing: active && !choosing,
+              })}
               className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
                 active
                   ? "border-neutral-900 bg-neutral-900 text-white"
@@ -220,7 +229,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
             return (
               <Link
                 key={id}
-                href={`?source=${id}&grade=${grade}&level=${level}${carry}`}
+                href={sheetHref(settings, { source: id, page: 1, choosing: false })}
                 className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
                   active
                     ? "border-neutral-900 bg-neutral-900 text-white opacity-100"
@@ -242,7 +251,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         ] as const).map(([id, label]) => (
           <Link
             key={id}
-            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${id}${showModel ? "" : "&model=0"}${showReadings ? "&readings=1" : ""}${pagerParam}${choosing ? "&pick=1" : ""}`}
+            href={sheetHref(settings, { mode: id })}
             className={`inline-flex h-8 items-center rounded-full border px-3 text-xs font-bold transition ${
               id === mode
                 ? "border-neutral-900 bg-neutral-900 text-white"
@@ -283,12 +292,16 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           ).map(({ value, label }) => {
             const current = source === PRACTICE_SOURCES.grade ? grade : level;
             const gradeParam = source === PRACTICE_SOURCES.grade ? value : grade;
-            // Choosing what is already chosen means you are finished choosing.
-            const stayOpen = value === current ? "" : "&pick=1";
             return (
               <Link
                 key={label}
-                href={`?source=${source}&grade=${gradeParam}&level=${value}${carry}${stayOpen}`}
+                href={sheetHref(settings, {
+                  grade: gradeParam,
+                  level: value,
+                  page: 1,
+                  // Choosing what is already chosen means you are finished choosing.
+                  choosing: value !== current,
+                })}
                 className={`inline-flex h-7 min-w-7 items-center justify-center rounded-full border px-2 text-[11px] font-bold transition ${
                   value === current
                     ? "border-neutral-900 bg-neutral-900 text-white"
@@ -304,7 +317,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           })}
 
           <Link
-            href={`?source=${source}&grade=${grade}&level=${level}${carry}`}
+            href={sheetHref(settings, { page: 1, choosing: false })}
             className="ml-4 inline-flex h-7 items-center rounded-full border border-neutral-400 px-3 text-[11px] font-bold text-neutral-600 transition hover:bg-neutral-100"
           >
             {PRACTICE_SHEET_COPY.closeChooser}
@@ -312,62 +325,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         </nav>
       ) : null}
 
-      {/*
-        * Two things the reader decides rather than the sheet: whether the
-        * finished character sits in the first column, and whether the readings
-        * print beside the meaning. Both ride in the URL like everything else,
-        * so a sheet set up a particular way is still a link.
-        */}
-      <nav className="mb-4 flex flex-wrap items-center gap-4 print:hidden">
-        <span className="text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
-          {PRACTICE_SHEET_COPY.optionsLabel}
-        </span>
-        {([
-          [PRACTICE_SHEET_COPY.optionShowModel, showModel, `&model=${showModel ? "0" : "1"}`, showReadings ? "&readings=1" : ""],
-          [PRACTICE_SHEET_COPY.optionShowReadings, showReadings, `&readings=${showReadings ? "0" : "1"}`, showModel ? "" : "&model=0"],
-        ] as const).map(([label, on, toggle, keep]) => (
-          <Link
-            key={label}
-            href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${mode}${toggle}${keep}${pagerParam}${choosing ? "&pick=1" : ""}`}
-            className="inline-flex items-center gap-2 text-xs font-semibold text-neutral-600 transition hover:text-neutral-900"
-          >
-            <span
-              aria-hidden="true"
-              className={`inline-flex h-4 w-4 items-center justify-center rounded border text-[10px] font-black ${
-                on ? "border-neutral-900 bg-neutral-900 text-white" : "border-neutral-400 text-transparent"
-              }`}
-            >
-              ✓
-            </span>
-            {label}
-          </Link>
-        ))}
-
-        {/*
-          * Where the pager sits, offered rather than assumed. Someone printing
-          * a single sheet wants neither end; someone working through a grade on
-          * screen wants both, because the foot of a tracing sheet is three
-          * thousand pixels down.
-          */}
-        <span className="ml-2 text-[11px] font-black uppercase tracking-[0.08em] text-neutral-400">
-          {PRACTICE_SHEET_COPY.pagerLabel}
-        </span>
-        <span className="flex items-center gap-1.5">
-          {PAGINATION_PLACEMENTS.map((value) => (
-            <Link
-              key={value}
-              href={`?source=${source}&grade=${grade}&level=${level}&page=${page}&mode=${mode}${showModel ? "" : "&model=0"}${showReadings ? "&readings=1" : ""}${value === "both" ? "" : `&pager=${value}`}${choosing ? "&pick=1" : ""}`}
-              className={`inline-flex h-7 items-center rounded-full border px-3 text-[11px] font-bold transition ${
-                value === placement
-                  ? "border-neutral-900 bg-neutral-900 text-white"
-                  : "border-neutral-300 text-neutral-600 hover:bg-neutral-100"
-              }`}
-            >
-              {PAGER_LABELS[value]}
-            </Link>
-          ))}
-        </span>
-      </nav>
+      <SheetOptionsRow settings={settings} />
 
       {/*
         * Said plainly rather than shrinking the squares to fit. A square small
@@ -393,7 +351,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           {isTaggedPracticeSource(source) ? PRACTICE_SHEET_COPY.emptyTagged : PRACTICE_SHEET_COPY.empty}
         </p>
       ) : (
-        <TracingSheet entries={entries} mode={mode} showModel={showModel} showReadings={showReadings} />
+        <TracingSheet entries={entries} mode={mode} showModel={showModel} showReadings={showReadings} size={size} />
       )}
 
       <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-neutral-400">

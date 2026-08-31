@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { PRACTICE_PAGE_SIZE, PRACTICE_SHEET_COPY, TRACE_CELLS_PER_ROW } from "./practiceCopy";
+import {
+  DEFAULT_SHEET_SIZE,
+  PRACTICE_PAGE_SIZE,
+  PRACTICE_SHEET_COPY,
+  SHEET_SIZES,
+  SHEET_SIZE_ORDER,
+  toSheetSize,
+  TRACE_CELLS_PER_ROW,
+} from "./practiceCopy";
 
 const COLUMNS = 8;
 
@@ -35,5 +43,43 @@ describe("the sheet's page", () => {
   it("carries the stroke-data credit onto the paper", () => {
     expect(PRACTICE_SHEET_COPY.credit).toContain("KanjiVG");
     expect(PRACTICE_SHEET_COPY.credit).toContain("CC BY-SA");
+  });
+});
+
+
+describe("the three square sizes", () => {
+  /*
+   * The row arithmetic has to hold at every size, not just the default: one
+   * solid square, the tracings, then blanks, adding up to the row. Get it
+   * wrong at one size and that sheet's grid tears while the others look fine.
+   */
+  it.each(SHEET_SIZE_ORDER)("%s fills its row exactly", (size) => {
+    const { columns, traceCells } = SHEET_SIZES[size];
+    const blanks = columns - 1 - traceCells;
+    expect(1 + traceCells + blanks).toBe(columns);
+    expect(blanks, `${size} leaves nowhere to write unaided`).toBeGreaterThan(0);
+  });
+
+  it("goes from big squares to small as the name says", () => {
+    const widths = SHEET_SIZE_ORDER.map((size) => SHEET_SIZES[size].columns);
+    // More columns is a smaller square, so the counts must climb L to S.
+    expect(widths).toEqual([...widths].sort((a, b) => a - b));
+    expect(new Set(widths).size, "two sizes that print the same").toBe(widths.length);
+  });
+
+  it("leaves the default sheet exactly as it was", () => {
+    expect(SHEET_SIZES[DEFAULT_SHEET_SIZE].traceCells).toBe(TRACE_CELLS_PER_ROW);
+    expect(SHEET_SIZES[DEFAULT_SHEET_SIZE].columns).toBe(8);
+  });
+
+  it("falls back rather than throwing on an unknown size", () => {
+    expect(toSheetSize("enormous")).toBe(DEFAULT_SHEET_SIZE);
+    expect(toSheetSize(null)).toBe(DEFAULT_SHEET_SIZE);
+    for (const size of SHEET_SIZE_ORDER) expect(toSheetSize(size)).toBe(size);
+  });
+
+  it("says who each size is for, since S and M and L do not", () => {
+    expect(PRACTICE_SHEET_COPY.sizeLargeTitle.toLowerCase()).toContain("child");
+    expect(PRACTICE_SHEET_COPY.sizeSmallTitle.toLowerCase()).toContain("adult");
   });
 });

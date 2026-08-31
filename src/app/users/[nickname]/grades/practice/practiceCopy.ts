@@ -23,6 +23,13 @@ export const PRACTICE_SHEET_COPY = {
   optionsLabel: "Options",
   optionShowModel: "Show the finished character",
   optionShowReadings: "Show readings",
+  sizeLabel: "Squares",
+  sizeLarge: "L",
+  sizeMedium: "M",
+  sizeSmall: "S",
+  sizeLargeTitle: "Large squares, for a child learning to form the characters",
+  sizeMediumTitle: "The standard practice-book square",
+  sizeSmallTitle: "Small squares and more of them, for an adult copying at volume",
   modeLabel: "Sheet",
   modeTrace: "Trace",
   modeStrokes: "Stroke order",
@@ -38,11 +45,11 @@ export const PRACTICE_SHEET_COPY = {
 } as const;
 
 /**
- * How many faint squares follow the solid one.
+ * How many faint squares follow the solid one, at the default size.
  *
  * Three tracings then four blanks fills an eight-square row, which is the
- * shape of a Japanese practice book page and fits A4 without shrinking the
- * squares below something a child can write inside.
+ * shape of a Japanese practice book page. A size that fits more squares across
+ * offers more of them - see `SHEET_SIZES`.
  */
 export const TRACE_CELLS_PER_ROW = 3;
 
@@ -57,6 +64,36 @@ export const PRACTICE_PAGE_SIZE = 20;
  * square too small to write in is no longer a practice square.
  */
 export const SHEET_COLUMNS = 8;
+
+/**
+ * How big the squares are, which is really a question of who is writing.
+ *
+ * A child learning to form characters needs a big box and few of them; a
+ * university student copying vocabulary wants small boxes and many. The sheet
+ * had one size, and it was the child's - so the same page an adult printed
+ * gave them six enormous squares and a lot of white paper.
+ *
+ * Expressed as columns rather than millimetres because the squares divide the
+ * printable width: fewer columns is a bigger square, at any paper size, on any
+ * screen. Smaller squares also earn an extra tracing repetition, since there is
+ * room for one and an adult sheet is about volume.
+ */
+export const SHEET_SIZES = {
+  large: { columns: 6, traceCells: 3 },
+  medium: { columns: SHEET_COLUMNS, traceCells: TRACE_CELLS_PER_ROW },
+  small: { columns: 10, traceCells: 4 },
+} as const;
+
+export type SheetSize = keyof typeof SHEET_SIZES;
+
+/** Largest first, the way a size control reads left to right. */
+export const SHEET_SIZE_ORDER = ["large", "medium", "small"] as const;
+
+export const DEFAULT_SHEET_SIZE: SheetSize = "medium";
+
+export function toSheetSize(value: string | null | undefined): SheetSize {
+  return value === "large" || value === "small" || value === "medium" ? value : DEFAULT_SHEET_SIZE;
+}
 
 /** WaniKani goes to 60, and every level is a legitimate sheet to print. */
 export const WANIKANI_MAX_LEVEL = 60;

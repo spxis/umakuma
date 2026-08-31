@@ -1406,5 +1406,15 @@
     "version": "0.129.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Printing a writing sheet now gives you a worksheet: Letter with proper margins, a Name and Date rule at the top, characters that never split across a page break, and none of the site's footer or version banner. The faint tracing characters print faintly instead of vanishing into the browser's ink saving."
+  },
+  {
+    "id": "practice-sheet-sizes",
+    "area": "study",
+    "name": "Squares sized for who is writing",
+    "status": "shipped",
+    "date": "2026-08-30",
+    "version": "0.130.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "The writing sheet offers three square sizes. Large gives a child six big boxes to form characters in; Small gives an adult ten smaller ones and an extra tracing repetition, which is what copying at volume actually wants. Medium is the practice-book square the sheet always had."
   }
 ]
