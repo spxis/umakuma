@@ -1536,5 +1536,15 @@
     "version": "0.142.0",
     "releasedAt": "2026-08-31T12:00:00Z",
     "summary": "Two releases of marking Japanese element by element kept missing places, because the cause was never addressed: the kanji were not declared as Japanese, so a browser counted them, decided the whole page was Japanese, and offered to translate it into English - pushing the English through a Japanese-to-English model on the way, which is how \"Writing practice\" came back as \"First practice\" and \"Shellfish\" as \"shellfish\". Every Japanese run now carries lang=\"ja\" beside its refusal, which is what the spec asks for: an English document with declared exceptions. That leaves the interface translatable for somebody who needs it in another language, where a blanket refusal at the root would have taken that away, and it tells a screen reader to read a reading with Japanese pronunciation rather than spelling the kanji out as English."
+  },
+  {
+    "id": "translation-refused-at-the-root",
+    "area": "platform",
+    "name": "Translation refused at the root",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.143.0",
+    "releasedAt": "2026-08-31T12:00:00Z",
+    "summary": "The previous release bet that declaring every Japanese run lang=\"ja\" would stop Chrome reading the page as Japanese and offering to translate it into English. It did not: \"always translate Japanese\" is a sticky preference, and once it is set the page's own declarations do not get a vote. So the page refuses translation at the root again. What Chrome was doing is running every string through a Japanese-to-English model, English included, which re-interprets rather than passes through - \"Writing practice\" came back \"First practice\". The lang=\"ja\" tagging stays because it is correct and because a screen reader needs it to pronounce a reading instead of spelling the kanji out as English. The cost is that Google Translate can no longer render the interface in another language; the answer to that is a locale layer serving translations we wrote, which the copy modules are already shaped for."
   }
 ]

@@ -193,6 +193,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Kuzurenu Kura", ja: "崩れぬ蔵", reading: "くずれぬくら", gloss: "the storehouse that does not fall" },
   { romaji: "Kengo na Kekkai", ja: "堅固な結界", reading: "けんごなけっかい", gloss: "a solid warding barrier" },
   { romaji: "Kotowaru Kotoba", ja: "断る言葉", reading: "ことわることば", gloss: "words that decline" },
+  { romaji: "Saegiru Sakai", ja: "遮る境", reading: "さえぎるさかい", gloss: "the boundary that blocks" },
 ];
 
 /**
