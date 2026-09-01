@@ -251,6 +251,54 @@ test("a radical result opens that radical", async ({ browser, baseURL }) => {
   await finish(page);
 });
 
+/**
+ * Getting back out of the results.
+ *
+ * Arrowing down loads the next stretch as it nears the end, so the list grows
+ * under you. Forty rows into 中 the search box is far off the top of the
+ * screen and the only route back was ArrowUp forty times - and overshooting
+ * downward on the way loaded more rows to climb. It reads as the arrows having
+ * no way out, because that is what it was.
+ */
+test("one key comes back from anywhere in the results", async ({ browser, baseURL }) => {
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("中")}`);
+  await expect(page.locator(RESULT_ROW).first()).toBeVisible({ timeout: 15_000 });
+
+  await page.locator(PAGE_INPUT).click();
+  for (let step = 0; step < 12; step += 1) {
+    await page.keyboard.press("ArrowDown");
+  }
+
+  /* Deep enough that walking back would be the bug, not the fix. */
+  const deep = await page.evaluate((attr) => document.activeElement?.getAttribute(attr), "data-search-result-row");
+  expect(Number(deep)).toBeGreaterThan(5);
+
+  await page.keyboard.press("Escape");
+  await expect(page.locator(PAGE_INPUT)).toBeFocused();
+
+  await finish(page);
+});
+
+test("Home reaches the first result, then the box", async ({ browser, baseURL }) => {
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("中")}`);
+  await expect(page.locator(RESULT_ROW).first()).toBeVisible({ timeout: 15_000 });
+
+  await page.locator(PAGE_INPUT).click();
+  for (let step = 0; step < 8; step += 1) {
+    await page.keyboard.press("ArrowDown");
+  }
+
+  await page.keyboard.press("Home");
+  expect(
+    await page.evaluate((attr) => document.activeElement?.getAttribute(attr), "data-search-result-row"),
+  ).toBe("0");
+
+  await page.keyboard.press("Home");
+  await expect(page.locator(PAGE_INPUT)).toBeFocused();
+
+  await finish(page);
+});
+
 test("what you open is remembered, not only what you typed", async ({ browser, baseURL }) => {
   /*
    * The history kept the question and threw away the answer: searching for a

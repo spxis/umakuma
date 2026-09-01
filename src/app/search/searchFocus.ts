@@ -13,8 +13,19 @@ export const SEARCH_PAGE_INPUT_ID = "search-page-input";
 /** Marks a results row with its index, so the arrows can find its neighbour. */
 export const SEARCH_RESULT_ROW_ATTR = "data-search-result-row";
 
+/**
+ * Back to the box, and back on screen with it.
+ *
+ * The scroll is spelled out rather than left to focus. The results scroll
+ * inside their own card within a page that scrolls too, and coming back from
+ * a row forty down left the box focused above the fold with the results still
+ * filling the screen - typing went somewhere the reader could not see.
+ */
 export function focusSearchInput(): void {
-  document.getElementById(SEARCH_PAGE_INPUT_ID)?.focus();
+  const input = document.getElementById(SEARCH_PAGE_INPUT_ID);
+  if (!input) return;
+  input.focus();
+  input.scrollIntoView({ block: "center" });
 }
 
 /** Focuses that row, and reports whether there was one to focus. */

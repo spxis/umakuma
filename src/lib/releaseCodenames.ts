@@ -267,6 +267,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yokonarabi no Yomi", ja: "横並びの読み", reading: "よこならびのよみ", gloss: "readings set side by side" },
   { romaji: "Raichaku no Basho", ja: "来着の場所", reading: "らいちゃくのばしょ", gloss: "the place you arrive at" },
   { romaji: "Ryouhou Nokosu", ja: "両方残す", reading: "りょうほうのこす", gloss: "it keeps both" },
+  { romaji: "Ruuto no Modori", ja: "ルートの戻り", reading: "るーとのもどり", gloss: "the way back along the route" },
 ];
 
 /**

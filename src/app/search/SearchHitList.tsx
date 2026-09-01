@@ -154,15 +154,40 @@ export default function SearchHitList({
    * search box - the same movement that was already walking the suggestions,
    * continued into the results, so the whole search is reachable without ever
    * reaching for the mouse. Arrowing toward the end pages, like scrolling does.
+   *
+   * Escape and Home are the way out, and they are not a nicety.
+   *
+   * Arrowing down loads the next stretch as it approaches the end, so the list
+   * grows under you: forty rows into a common character, the box is far off
+   * the top of the screen and the only route back was ArrowUp forty times,
+   * each one loading more if you overshot downward first. That is a trap, and
+   * it reads as the arrows having no way out at all - which is what it is.
+   * Escape returns to the box from wherever you are, and Home goes to the
+   * first row, both in one press.
    */
   function onKeyDown(event: KeyboardEvent<HTMLUListElement>) {
-    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    const walking = event.key === "ArrowDown" || event.key === "ArrowUp";
+    const leaving = event.key === "Escape" || event.key === "Home";
+    if (!walking && !leaving) return;
 
     const row = (event.target as HTMLElement).closest<HTMLElement>(`[${SEARCH_RESULT_ROW_ATTR}]`);
     const index = Number(row?.getAttribute(SEARCH_RESULT_ROW_ATTR) ?? -1);
     if (index < 0) return;
 
     event.preventDefault();
+
+    if (event.key === "Escape") {
+      focusSearchInput();
+      return;
+    }
+
+    /* Home from the first row carries on out to the box, rather than doing nothing. */
+    if (event.key === "Home") {
+      if (index === 0) focusSearchInput();
+      else focusSearchResultRow(0);
+      return;
+    }
+
     if (event.key === "ArrowUp" && index === 0) {
       focusSearchInput();
       return;
