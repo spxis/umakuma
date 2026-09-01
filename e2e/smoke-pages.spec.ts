@@ -617,16 +617,8 @@ test("level explorer keeps total count while visible list is paged", async ({ br
 
     /*
      * The all-levels count is global; the list is scoped to whichever level is
-     * selected. The old assertion was that the two are equal, which held while
-     * the explorer opened unfiltered - it now opens on the member's own level,
-     * so equality is simply the wrong relationship.
-     *
-     * Nor can it be forced by choosing All: that tab is inert. Clicking it
-     * leaves `levels` untouched and the level stays selected, so there is no
-     * way to see every level from the UI at all. That is an explorer bug
-     * rather than a test one - backlog item 39 - so this asserts the
-     * containment that has to hold either way, and will still hold once the
-     * tab works.
+     * selected. The explorer opens on the member's own level, so on arrival
+     * the count only bounds the list.
      */
     const allLevelsButton = levelFilters(page).getByRole("tab", { name: filterTab("All") });
     await expect(allLevelsButton).toBeVisible();
@@ -640,6 +632,33 @@ test("level explorer keeps total count while visible list is paged", async ({ br
       .toBeGreaterThanOrEqual(filteredCount);
     expect(filteredCount, "the filtered total should be a real count").toBeGreaterThan(0);
     expect(visibleCount, "visible level items should never exceed filtered total").toBeLessThanOrEqual(filteredCount);
+
+    /*
+     * And choosing All has to actually reach every level.
+     *
+     * This is backlog item 39: the tab used to reselect the member's own level,
+     * so the address kept `levels=17`, the same list stayed on screen, and the
+     * count described a view nothing could open.
+     *
+     * Asserted on the address and on the list growing, not on the final total.
+     * Levels are fetched a few at a time and a cold one goes to WaniKani, so
+     * arriving at the full 2,922 takes longer than a smoke test should sit
+     * there - but the selection is written synchronously, which is the part
+     * that was broken.
+     */
+    await allLevelsButton.click();
+
+    await expect
+      .poll(() => new URL(page.url()).searchParams.get("levels")?.split(",").length ?? 0, {
+        message: "choosing All should put every level in the address",
+      })
+      .toBeGreaterThan(1);
+
+    await expect
+      .poll(async () => countIn(await readSummary(), VISIBLE_OF_TOTAL, 2), {
+        message: "choosing All should widen the list past the single opening level",
+      })
+      .toBeGreaterThan(filteredCount);
   });
 });
 

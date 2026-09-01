@@ -33,6 +33,13 @@ export const LEVEL_EXPLORER_REVIEW_TIMING_LABELS: Record<ReviewTimingFilter, str
 };
 
 export const LEVEL_EXPLORER_TEXT = {
+  /*
+   * It read "Select one level at a time", which described the explorer while
+   * All did nothing. All selects every level now, and Sticky has always let a
+   * member gather several, so the old line was the only thing still saying
+   * one.
+   */
+  levelSubtitle: "Choose a level, or All",
   showEnglish: "Show English",
   hideEnglish: "Hide English",
   hintsHidden: "Hints Hidden",

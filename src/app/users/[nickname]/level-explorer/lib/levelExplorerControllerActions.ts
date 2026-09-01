@@ -12,6 +12,14 @@ import {
 import { EXPLORER_SEARCH_SCOPES } from "../../explorerSearchDomain";
 import { itemMatchesLevelSearch } from "./levelExplorerSelectors";
 
+/**
+ * How many levels to fetch at once when All is chosen.
+ *
+ * Small on purpose. Each level is its own request and a cold one reaches
+ * WaniKani, so the ceiling here is their rate limit rather than the browser's.
+ */
+const LEVEL_LOAD_BATCH = 4;
+
 type BuildActionsArgs = {
   maxLevel: number;
   initialLevel: number;
@@ -72,11 +80,28 @@ export function buildLevelExplorerActions({
     await ensureLevelLoaded(level);
   };
 
+  /**
+   * Every level at once, which is what the All tab has always claimed.
+   *
+   * It used to put the member back on their own level - `new Set([initialLevel])`
+   * - so the tab read `All (2,922)` and then showed the 169 items of level 17.
+   * The count described a view nothing could reach, and clicking All looked
+   * like it did nothing because the level it reselected was already selected.
+   *
+   * Levels arrive one request each, so this loads only the ones not already
+   * held, and a few at a time: a level's snapshot is cached server-side, but on
+   * a cold cache it goes to WaniKani, and sixty of those at once is how an
+   * account gets rate limited. The list is windowed and the combined snapshot
+   * already unions whatever is selected, so results appear as each batch lands
+   * rather than after the last one.
+   */
   const selectAllLevelsAndClearSearch = async () => {
     markHistoryPush();
 
+    const allLevels = Array.from({ length: maxLevel }, (_, index) => index + 1);
+
     setSelectedSubjectId(null);
-    setSelectedLevels(new Set([initialLevel]));
+    setSelectedLevels(new Set(allLevels));
     setSearchMatchedSubjectIds(null);
     setSearchAvailableLevels(null);
     setRecentOnly(false);
@@ -91,7 +116,12 @@ export function buildLevelExplorerActions({
       );
     }
 
-    await ensureLevelLoaded(initialLevel);
+    const missing = allLevels.filter((level) => !snapshotsByLevel.has(level));
+    for (let index = 0; index < missing.length; index += LEVEL_LOAD_BATCH) {
+      await Promise.all(
+        missing.slice(index, index + LEVEL_LOAD_BATCH).map((level) => ensureLevelLoaded(level)),
+      );
+    }
   };
 
   const jumpToKanji = async (subjectId: number, wkLevel: number | null) => {

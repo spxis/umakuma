@@ -9,6 +9,7 @@ import ExplorerSplitLoadingShimmer from "../../shared/ExplorerSplitLoadingShimme
 import LevelExplorerItemsGrid from "./LevelExplorerItemsGrid";
 import LevelExplorerFilterPanel from "./LevelExplorerFilterPanel";
 import LevelExplorerJlptMixSummary from "./LevelExplorerJlptMixSummary";
+import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 import type { LevelExplorerContentProps as Props } from "./LevelExplorerContent.types";
 
 export default function LevelExplorerContent({
@@ -132,7 +133,7 @@ export default function LevelExplorerContent({
               <h2 className="truncate text-xl font-black text-foreground underline decoration-dotted decoration-[1px] decoration-foreground/25 underline-offset-[0.18em] transition-[text-decoration-color] duration-150 group-hover:decoration-foreground/45 group-focus-visible:decoration-foreground/55" title={explorerTitle}>{explorerTitle}</h2>
               <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">Change</span>
             </button>
-            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">Select one level at a time</p>
+            <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">{LEVEL_EXPLORER_TEXT.levelSubtitle}</p>
           </div>
           <div className="order-1 flex items-center justify-end gap-2 sm:order-2 sm:justify-start">
             <ExplorerFilterToggleButton

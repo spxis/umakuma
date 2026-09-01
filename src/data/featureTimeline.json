@@ -2030,5 +2030,15 @@
     "version": "0.196.0",
     "releasedAt": "2026-09-01T09:44:11Z",
     "summary": "Every subject on an explorer sat inside one big control. The card was a button, and it holds buttons of its own - trouble, favourite, and the tick that chooses it - which is a control inside a control on four hundred and twenty-eight of them, one for every card on every list. What that costs is not theoretical. A screen reader announces the whole card as a single button and never reaches the favourite inside it, so the only way to mark a character as trouble is to see it. A keyboard arrives at the card and finds no way in. The glyph is the button now and the card is a plain container around it, which is the shape the saved lists and the history rows already used, so this is the odd one out being brought into line rather than a new idea. The controls at the glyph's foot are its neighbours instead of its children - the same corners, the same placement, nothing moved on screen - and each is reached, announced and pressed on its own. A whole card still answers a mouse click where it did before, because that is worth keeping and costs nothing once it is no longer the only way in."
+  },
+  {
+    "id": "all-levels-means-all-levels",
+    "area": "study",
+    "name": "All levels means all levels",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.197.0",
+    "releasedAt": "2026-09-01T10:00:55Z",
+    "summary": "The WaniKani explorer offered a tab reading All with the total beside it - two thousand nine hundred and twenty-two - and pressing it did nothing you could see. It put the member back on their own level, which was the level already showing, so the list did not change, the address kept the same single level in it, and the number on the tab described a view nothing in the app could open. There was no way to look across every level at all. It selects every level now and fetches the ones it does not already hold, a few at a time rather than all at once, because a level that is not cached goes out to WaniKani and sixty of those together is how an account gets rate limited. Results widen as each batch lands instead of waiting for the last. The address carries the whole selection, so the long view is a link somebody can be sent. The subtitle went with it: it read Select one level at a time, which was true of nothing - Sticky has always let a member gather several - and it was the last thing still saying one."
   }
 ]

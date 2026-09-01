@@ -70,7 +70,7 @@ through it meets a finished flow.
 | 36 | ~~Controls nested inside controls (a11y)~~ ✅ v0.196.0 | — |
 | 37 | ~~Colour contrast below the floor~~ ✅ v0.187.0 | — |
 | 38 | Security leftovers before the door opens — slugs done v0.188.0 | 6 |
-| 39 | The library explorer's All-levels tab does nothing | — |
+| 39 | ~~The library explorer's All-levels tab does nothing~~ ✅ v0.197.0 | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
 Release 6 should not ship before 7 to 9, or a member without WaniKani arrives to
@@ -1082,7 +1082,7 @@ belong to release 6 rather than to a date.
 - **"How did you hear about us"** — asked for during onboarding design, not
   built.
 
-### 39 — The library explorer's All-levels tab does nothing
+### 39 — The library explorer's All-levels tab does nothing ✅ shipped (v0.197.0)
 
 Found while repairing the smoke suite (item 22), not by a report.
 
@@ -1101,6 +1101,24 @@ asserts the containment that holds either way - the global count bounds the
 filtered list - and says why in a comment. When this is fixed, that test can go
 back to asserting equality after clicking All.
 
-Not investigated further than reproducing it: the click updates the URL for a
-moment and something puts `levels` straight back, so the suspect is whatever
-reapplies the default level on state change rather than the tab itself.
+**It was the handler, not a race.** `selectAllLevelsAndClearSearch` did
+`setSelectedLevels(new Set([initialLevel]))` — it reselected the member's own
+level, which was the level already showing, so nothing appeared to happen and
+the address kept its single level. Nothing was putting `levels` back; it was
+never changed.
+
+Fixed by selecting every level and loading the ones not already held, in
+batches of four. Not all at once: a level's snapshot is cached server-side but
+a cold one goes to WaniKani, and sixty together is how an account gets rate
+limited. The combined snapshot already unioned whatever was selected and the
+list is windowed, so results widen as each batch lands. `buildLevelExplorerUrl`
+writes the whole selection, so the long view is a linkable address — which is a
+down payment on item 35.
+
+The subtitle went with it. "Select one level at a time" was true of nothing —
+Sticky has always let a member gather several — and it moved into
+`LEVEL_EXPLORER_TEXT` on the way, since it was inline copy.
+
+**The smoke test asserts the address and the widening, not the final total.**
+Seventeen cold levels take longer than a smoke test should sit there; the
+selection is written synchronously, and that is the part that was broken.
