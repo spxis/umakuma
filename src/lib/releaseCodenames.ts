@@ -230,7 +230,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Arawareru Akari", ja: "現れる灯り", reading: "あらわれるあかり", gloss: "the light that appears" },
   { romaji: "Itsumo no Irikuchi", ja: "いつもの入口", reading: "いつものいりくち", gloss: "the usual way in" },
   { romaji: "Ukeireru Uchi", ja: "受け入れる家", reading: "うけいれるうち", gloss: "the house that takes you in" },
-  { romaji: "Ugoku Uchiwa", ja: "動く団扇", reading: "うごくうちわ", gloss: "a fan that moves the air" },
+  { romaji: "Erabu Enogu", ja: "選ぶ絵の具", reading: "えらぶえのぐ", gloss: "choosing the right paint" },
 ];
 
 /**
