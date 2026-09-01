@@ -83,14 +83,14 @@ export default function FeatureFlagsPanel() {
                   {flag.key}
                 </code>
                 {!flag.stored ? (
-                  <span className="rounded-full border border-line bg-surface-muted px-2 py-0.5 text-[10px] font-black uppercase text-foreground/50">
+                  <span className="rounded-full border border-line bg-surface-muted px-2 py-0.5 text-[10px] font-black uppercase text-foreground/60">
                     {FEATURE_FLAGS_COPY.defaultNote}
                   </span>
                 ) : null}
               </div>
               <p className="mt-1 text-sm text-foreground/70">{flag.description}</p>
               {flag.updatedAt ? (
-                <p className="mt-1 text-xs text-foreground/50">
+                <p className="mt-1 text-xs text-foreground/60">
                   Changed {formatRelativeFromNow(flag.updatedAt, { style: "short" })}
                 </p>
               ) : null}

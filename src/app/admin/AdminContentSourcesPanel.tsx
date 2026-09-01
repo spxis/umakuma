@@ -75,7 +75,7 @@ function Shell({ dataset, children }: { dataset: "grades" | "maps"; children: Re
 function Stat({ label, value, tone }: { label: string; value: string; tone?: "warn" }) {
   return (
     <div className="rounded-xl border border-line bg-surface px-3 py-2">
-      <p className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/45">{label}</p>
+      <p className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</p>
       <p className={`text-lg font-black ${tone === "warn" ? "text-amber-600" : "text-foreground"}`}>{value}</p>
     </div>
   );
@@ -138,7 +138,7 @@ function MapsBody({ sources }: { sources: AdminContentSources }) {
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <p className="text-sm font-black text-foreground">
                 {map.countryName}{" "}
-                <span className="text-xs font-semibold text-foreground/50">{map.divisionTypeName}</span>
+                <span className="text-xs font-semibold text-foreground/60">{map.divisionTypeName}</span>
               </p>
               <p className={`text-xs font-bold ${countMismatch ? "text-amber-700" : "text-foreground/60"}`}>
                 {map.regions} / {map.expectedRegions} {copy.maps.regions}
@@ -155,12 +155,12 @@ function MapsBody({ sources }: { sources: AdminContentSources }) {
             </div>
 
             {map.orphans.length > 0 ? (
-              <p className="mt-2 text-[11px] text-foreground/55">
+              <p className="mt-2 text-[11px] text-foreground/60">
                 {copy.maps.orphansBody} {map.orphans.join(", ")}
               </p>
             ) : null}
 
-            <p className="mt-2 break-all text-[11px] text-foreground/45">
+            <p className="mt-2 break-all text-[11px] text-foreground/60">
               {copy.maps.sourcePrefix} {map.source}
             </p>
           </li>

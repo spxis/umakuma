@@ -167,7 +167,7 @@ export default function LevelExplorerFilterPanel({
             </div>
           </div>
           {reviewTimingFilter === LEVEL_REVIEW_TIMING_FILTERS.overdue && overdueOutsideSelectedLevels > 0 ? (
-            <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/55">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/60">
               Showing {formatNumber(reviewTimingCounts.overdue)} overdue in selected levels, with {formatNumber(overdueOutsideSelectedLevels)} more overdue in other levels
               <span className="ml-1 text-[11px] font-semibold text-current/80">({formatNumber(accountPendingReviews)} total pending reviews)</span>.
             </p>

@@ -59,7 +59,7 @@ export default function GlobalSearchSuggestList({
 
   if (hits.length === 0) {
     return (
-      <p className="px-4 py-3 text-xs font-semibold text-foreground/55">
+      <p className="px-4 py-3 text-xs font-semibold text-foreground/60">
         {searching ? SEARCH_PAGE_COPY.suggestSearching : SEARCH_PAGE_COPY.noResults}
       </p>
     );
@@ -114,7 +114,7 @@ export default function GlobalSearchSuggestList({
           <span className="flex min-w-0 flex-1 flex-col">
             <span className="truncate text-sm font-bold text-foreground">{hit.meaning || "—"}</span>
             {hit.reading ? (
-              <span lang="ja" translate="no" className={`truncate text-xs font-semibold text-foreground/55 ${JP_TEXT_CLASS}`}>
+              <span lang="ja" translate="no" className={`truncate text-xs font-semibold text-foreground/60 ${JP_TEXT_CLASS}`}>
                 {hit.reading}
               </span>
             ) : null}
@@ -149,7 +149,7 @@ export default function GlobalSearchSuggestList({
     {loadingMore ? (
       <p
         aria-live="polite"
-        className="border-t border-line/60 px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45"
+        className="border-t border-line/60 px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60"
       >
         {SEARCH_PAGE_COPY.suggestMore}
       </p>

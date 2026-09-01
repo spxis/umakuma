@@ -146,7 +146,7 @@ export default function SearchHitList({
     return (
       <div className="rounded-2xl border border-line bg-surface-muted p-5">
         <p className="text-sm font-bold text-foreground/75">{SEARCH_PAGE_COPY.noResults}</p>
-        <p className="mt-1 text-xs font-semibold text-foreground/55">{SEARCH_PAGE_COPY.noResultsHint}</p>
+        <p className="mt-1 text-xs font-semibold text-foreground/60">{SEARCH_PAGE_COPY.noResultsHint}</p>
       </div>
     );
   }
@@ -198,7 +198,7 @@ export default function SearchHitList({
               {loading ? SEARCH_PAGE_COPY.loadingMore : SEARCH_PAGE_COPY.loadMore}
             </button>
           ) : (
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/40">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
               {SEARCH_PAGE_COPY.endOfResults}
             </p>
           )}
@@ -232,7 +232,7 @@ function HitRow({ hit, index, href }: { hit: SearchHit; index: number; href: str
               {hit.meaning || "—"}
             </span>
             {hit.reading ? (
-              <span lang="ja" translate="no" className={`truncate text-xs font-semibold text-foreground/55 ${JP_TEXT_CLASS}`}>
+              <span lang="ja" translate="no" className={`truncate text-xs font-semibold text-foreground/60 ${JP_TEXT_CLASS}`}>
                 {hit.reading}
               </span>
             ) : null}

@@ -82,7 +82,7 @@ export default function WelcomeJlptStep({ accountId, onDone }: Props) {
 
       <div className="grid gap-2 sm:grid-cols-3">
         <label className="block">
-          <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/45">
+          <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">
             {PROFILE_COPY.jlptStatus}
           </span>
           <select value={status} onChange={(event) => setStatus(event.target.value)} className={FIELD_CLASS}>
@@ -95,7 +95,7 @@ export default function WelcomeJlptStep({ accountId, onDone }: Props) {
         {asksForLevel ? (
           <>
             <label className="block">
-              <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/45">
+              <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">
                 {PROFILE_COPY.jlptYear}
               </span>
               <input
@@ -110,7 +110,7 @@ export default function WelcomeJlptStep({ accountId, onDone }: Props) {
             </label>
 
             <label className="block">
-              <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/45">
+              <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">
                 {PROFILE_COPY.jlptLevel}
               </span>
               <select

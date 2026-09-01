@@ -48,15 +48,15 @@ export default function GameResultsPanel({
       <p className={`mt-3 text-7xl font-black leading-none sm:text-9xl ${accent.text}`}>{formatGameScore(run.score)}</p>
       <div className="mx-auto mt-6 grid max-w-3xl grid-cols-3 gap-2 sm:gap-4">
         <div>
-          <p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.correct}</p>
+          <p className="text-[10px] font-bold uppercase text-foreground/60">{GAME_COPY.correct}</p>
           <p className="mt-1 text-xl font-black sm:text-3xl">{run.correctCount}/{run.questionCount}</p>
         </div>
         <div>
-          <p className="text-[10px] font-bold uppercase text-foreground/55">{GAME_COPY.time}</p>
+          <p className="text-[10px] font-bold uppercase text-foreground/60">{GAME_COPY.time}</p>
           <p className="mt-1 text-xl font-black sm:text-3xl">{formatGameDuration(run.durationMs)}</p>
         </div>
         <div>
-          <p className="text-[10px] font-bold uppercase text-foreground/55">{streakLabel}</p>
+          <p className="text-[10px] font-bold uppercase text-foreground/60">{streakLabel}</p>
           <p className="mt-1 text-xl font-black sm:text-3xl">{run.bestStreak}</p>
         </div>
       </div>

@@ -114,13 +114,13 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
                       }`}
                     >
                       {source ? SEARCH_SOURCE_LABELS[source] : SEARCH_PAGE_COPY.allSources}
-                      <span translate="no" className={noTranslateClass(active ? "text-white/70" : "text-foreground/45")}>({count})</span>
+                      <span translate="no" className={noTranslateClass(active ? "text-white/70" : "text-foreground/60")}>({count})</span>
                     </Link>
                   );
                 })}
               </nav>
 
-              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
                 {results.totalHits} {results.totalHits === 1 ? SEARCH_PAGE_COPY.hit : SEARCH_PAGE_COPY.hits}
                 {" · "}
                 {SEARCH_PAGE_COPY.resultsFor} “{query}”
@@ -138,7 +138,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
           ) : (
             <div className="rounded-2xl border border-line bg-surface-muted p-5">
               <p className="text-sm font-semibold text-foreground/75">{SEARCH_PAGE_COPY.emptyPrompt}</p>
-              <p className="mt-3 flex flex-wrap items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-foreground/50">
+              <p className="mt-3 flex flex-wrap items-center gap-1.5 text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">
                 {SEARCH_PAGE_COPY.examples}
                 {SEARCH_EXAMPLES.map((example) => (
                   <Link

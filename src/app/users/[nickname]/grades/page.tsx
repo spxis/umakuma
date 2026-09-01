@@ -96,7 +96,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
       <section className="overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
         <header className="border-b border-line bg-surface/90 px-5 py-4">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/55">
+            <span className="mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
               {GRADE_EXPLORER_COPY.gradeLabel}
             </span>
             {GRADE_OPTIONS.map((option) => {
@@ -113,7 +113,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
                   }`}
                 >
                   {GRADE_SHORT_LABELS[option]}
-                  <span translate="no" className={noTranslateClass(active ? "text-white/70" : "text-foreground/45")}>
+                  <span translate="no" className={noTranslateClass(active ? "text-white/70" : "text-foreground/60")}>
                     {`(${meta?.totalCount ?? 0})`}
                   </span>
                 </Link>
@@ -135,7 +135,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
               name="q"
               defaultValue={search}
               placeholder={GRADE_EXPLORER_COPY.searchPlaceholder}
-              className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm text-foreground outline-none placeholder:text-foreground/40 focus-visible:ring-2 focus-visible:ring-accent/40"
+              className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm text-foreground outline-none placeholder:text-foreground/60 focus-visible:ring-2 focus-visible:ring-accent/40"
             />
             <button type="submit" className="inline-flex h-9 shrink-0 items-center rounded-full bg-accent px-4 text-xs font-black uppercase tracking-[0.08em] text-white transition hover:brightness-95">
               {GRADE_EXPLORER_COPY.search}
@@ -157,7 +157,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
         */}
       <section className="mt-4 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
         <div className="p-4">
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
             {GRADE_EXPLORER_COPY.showing} {first}-{last} {GRADE_EXPLORER_COPY.of} {total} {GRADE_EXPLORER_COPY.kanjiWord}
             {" · "}
             {GRADE_EXPLORER_COPY.curriculumNote}
@@ -177,7 +177,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
                   {GRADE_EXPLORER_COPY.previous}
                 </Link>
               ) : <span />}
-              <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
                 {GRADE_EXPLORER_COPY.page} {page} {GRADE_EXPLORER_COPY.of} {catalog.pagination.totalPages}
               </span>
               {catalog.pagination.hasNextPage ? (

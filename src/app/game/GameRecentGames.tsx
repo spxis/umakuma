@@ -16,7 +16,7 @@ export default function GameRecentGames({ entries, loading, onChallenge }: Props
     <section className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_18px_45px_rgba(8,16,36,0.1)]">
       <div className="border-b border-line bg-surface-muted px-4 py-3 xl:h-17">
         <h2 className="text-lg font-black text-foreground sm:text-xl">{GAME_COPY.recentGames}</h2>
-        <p className="text-xs font-semibold text-foreground/55">All modes. Select a run to challenge it.</p>
+        <p className="text-xs font-semibold text-foreground/60">All modes. Select a run to challenge it.</p>
       </div>
       {loading ? (
         <LoadingState label="recent games" />
@@ -38,11 +38,11 @@ export default function GameRecentGames({ entries, loading, onChallenge }: Props
                   <GameCategoryPill kind={entry.kind} category={entry.category} />
                   <span>{gameDifficultyLabel(entry.kind, entry.choiceCount, entry.ultraMode, entry.direction)}</span>
                 </span>
-                <span className="mt-1 block text-[10px] font-bold uppercase text-foreground/45">{formatRelativeFromNow(entry.completedAt, { style: "short" })}</span>
+                <span className="mt-1 block text-[10px] font-bold uppercase text-foreground/60">{formatRelativeFromNow(entry.completedAt, { style: "short" })}</span>
               </span>
               <span className="text-right">
                 <span className="block text-lg font-black text-accent">{formatGameScore(entry.score)}</span>
-                <span className="block text-xs font-bold text-foreground/55">{entry.correctCount}/{entry.questionCount} · {formatGameDuration(entry.durationMs)}</span>
+                <span className="block text-xs font-bold text-foreground/60">{entry.correctCount}/{entry.questionCount} · {formatGameDuration(entry.durationMs)}</span>
               </span>
             </button>
           ))}

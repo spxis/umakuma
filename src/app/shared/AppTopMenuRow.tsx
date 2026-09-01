@@ -116,7 +116,7 @@ export default function AppTopMenuRow({
   return (
     <div className={`relative ${className ?? ""}`.trim()}>
     <section className="flex items-center justify-between gap-3">
-      <nav className="admin-tab-scroll flex min-w-0 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[9px] font-semibold uppercase tracking-widest text-foreground/50 sm:hidden">
+      <nav className="admin-tab-scroll flex min-w-0 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[9px] font-semibold uppercase tracking-widest text-foreground/60 sm:hidden">
         {mobileLinks.map((link, index) => (
           <span key={`mobile-${link.label}-${link.href}`} className="inline-flex shrink-0 items-center gap-x-1.5">
             <Link
@@ -131,7 +131,7 @@ export default function AppTopMenuRow({
           </span>
         ))}
       </nav>
-      <nav className="hidden flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/50 sm:flex">
+      <nav className="hidden flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/60 sm:flex">
         {links.map((link, index) => (
           <span key={`${link.label}-${link.href}`} className="inline-flex items-center gap-x-3">
             <Link

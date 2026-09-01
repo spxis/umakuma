@@ -22,9 +22,9 @@ type PageProps = { params: Promise<{ nickname: string }> };
 function Fact({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="rounded-xl border border-line bg-surface-muted p-3">
-      <p className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/45">{label}</p>
+      <p className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</p>
       <p className="mt-0.5 text-sm font-bold text-foreground">{value}</p>
-      {hint ? <p className="mt-0.5 text-[11px] text-foreground/45">{hint}</p> : null}
+      {hint ? <p className="mt-0.5 text-[11px] text-foreground/60">{hint}</p> : null}
     </div>
   );
 }
@@ -83,7 +83,7 @@ export default async function UserProfilePage({ params }: PageProps) {
       <div className={PAGE_WIDTH.reading}>
 
       <header className="mb-4">
-        <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">{PROFILE_COPY.heading}</p>
+        <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">{PROFILE_COPY.heading}</p>
         <h1 className="text-2xl font-black text-foreground">{name}</h1>
       </header>
 
@@ -110,7 +110,7 @@ export default async function UserProfilePage({ params }: PageProps) {
 
       {/* Display sits with the rest of the account rather than in the menu. */}
       <section className="mb-4 rounded-2xl border border-line bg-surface p-5">
-        <h2 className="mb-3 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+        <h2 className="mb-3 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
           {DISPLAY_PREFERENCES_COPY.heading}
         </h2>
         <DisplayPreferences />
@@ -118,7 +118,7 @@ export default async function UserProfilePage({ params }: PageProps) {
 
       <section className="rounded-2xl border border-line bg-surface p-5">
         <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">{PROFILE_COPY.games}</h2>
+          <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">{PROFILE_COPY.games}</h2>
           {games.totalRuns > 0 ? (
             <p className="text-xs font-semibold text-foreground/60">
               {games.totalRuns} {PROFILE_COPY.gamesRuns.toLowerCase()} · {PROFILE_COPY.gamesTotals}{" "}
@@ -133,7 +133,7 @@ export default async function UserProfilePage({ params }: PageProps) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[34rem] text-sm">
               <thead>
-                <tr className="text-left text-[10px] font-black uppercase tracking-[0.08em] text-foreground/45">
+                <tr className="text-left text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">
                   <th className="pb-2">{PROFILE_COPY.gamesKind}</th>
                   <th className="pb-2 text-right">{PROFILE_COPY.gamesRuns}</th>
                   <th className="pb-2 text-right">{PROFILE_COPY.gamesBest}</th>
@@ -152,7 +152,7 @@ export default async function UserProfilePage({ params }: PageProps) {
                     <td className="py-2 text-right tabular-nums text-foreground/75">
                       {stat.accuracy !== null ? `${stat.accuracy}%` : PROFILE_COPY.notPlayed}
                     </td>
-                    <td className="py-2 text-right text-xs text-foreground/55">
+                    <td className="py-2 text-right text-xs text-foreground/60">
                       {stat.lastPlayedAt ? formatDateTimeShort(stat.lastPlayedAt, PROFILE_COPY.notPlayed) : PROFILE_COPY.notPlayed}
                     </td>
                   </tr>

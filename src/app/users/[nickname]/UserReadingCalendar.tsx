@@ -232,7 +232,7 @@ export default function UserReadingCalendar({
                     );
                   })}
                   {activeMembers.length === 0 && !isLoading ? (
-                    <div className="rounded border border-line bg-surface-muted px-1 py-0.5 text-[10px] font-semibold text-foreground/55">
+                    <div className="rounded border border-line bg-surface-muted px-1 py-0.5 text-[10px] font-semibold text-foreground/60">
                       No activity
                     </div>
                   ) : null}

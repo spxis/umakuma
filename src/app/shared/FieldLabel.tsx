@@ -16,7 +16,7 @@ const SIZES = {
 
 const TONES = {
   default: "text-foreground/70",
-  muted: "text-foreground/55",
+  muted: "text-foreground/60",
   strong: "text-foreground/85",
 } as const;
 

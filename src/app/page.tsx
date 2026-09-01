@@ -460,7 +460,7 @@ export default async function Home() {
             />
           )}
         </section>
-        <p className="mt-3 px-2 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/55">
+        <p className="mt-3 px-2 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/60">
           Score formula: level x 1000 + reviewed x 2 + burned x 4 + learned kanji x 3
         </p>
       </main>

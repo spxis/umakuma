@@ -60,7 +60,7 @@ export default function NewsReaderForm({
           placeholder="https://..."
           value={url}
           onChange={(event) => onChangeUrl(event.target.value)}
-          className="h-12 min-h-12 w-full appearance-none rounded-full border border-line bg-surface px-5 py-3 text-base leading-6 text-foreground placeholder:text-foreground/40 focus:border-accent focus:outline-none sm:flex-1 sm:text-sm"
+          className="h-12 min-h-12 w-full appearance-none rounded-full border border-line bg-surface px-5 py-3 text-base leading-6 text-foreground placeholder:text-foreground/60 focus:border-accent focus:outline-none sm:flex-1 sm:text-sm"
           required
         />
         <button
@@ -83,7 +83,7 @@ export default function NewsReaderForm({
       </p>
       {devSampleUrls.length > 0 ? (
         <div className="flex flex-wrap items-center gap-2 pt-1">
-          <span className="text-xs font-bold uppercase tracking-[0.14em] text-foreground/55">Dev samples</span>
+          <span className="text-xs font-bold uppercase tracking-[0.14em] text-foreground/60">Dev samples</span>
           {devSampleUrls.map((sample) => (
             <button
               key={sample}

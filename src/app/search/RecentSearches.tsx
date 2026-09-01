@@ -53,13 +53,13 @@ export default function RecentSearches({
   const rows = (
     <>
       <li className="flex items-center justify-between gap-3 bg-surface-muted px-4 py-2">
-        <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/50">
+        <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
           {SEARCH_PAGE_COPY.recentHeading}
         </h2>
         <button
           type="button"
           onClick={forgetAllSearches}
-          className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 underline decoration-dotted underline-offset-2 transition hover:text-foreground/75"
+          className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60 underline decoration-dotted underline-offset-2 transition hover:text-foreground/75"
         >
           {SEARCH_PAGE_COPY.recentClear}
         </button>

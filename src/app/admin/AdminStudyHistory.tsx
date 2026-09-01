@@ -364,7 +364,7 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
                     ) : (
                       <>
                         <p className="font-semibold text-foreground/85">{formatDateTimeShort(attempt.submittedAt)}</p>
-                        <p className="text-[10px] uppercase tracking-[0.08em] text-foreground/55">
+                        <p className="text-[10px] uppercase tracking-[0.08em] text-foreground/60">
                           {formatRelativeFromNow(attempt.submittedAt, {
                             style: "short",
                             allowFuture: false,

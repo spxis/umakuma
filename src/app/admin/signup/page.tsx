@@ -63,7 +63,7 @@ export default async function AdminSignupPage() {
         />
 
         <section className={CARD_CLASS}>
-          <h2 className="mb-3 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+          <h2 className="mb-3 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             {SIGNUP_ADMIN_COPY.pendingHeading}
             {pending.length > 0 ? ` (${pending.length})` : ""}
           </h2>
@@ -73,7 +73,7 @@ export default async function AdminSignupPage() {
         </section>
 
         <section className={CARD_CLASS}>
-          <h2 className="mb-3 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+          <h2 className="mb-3 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             {SIGNUP_ADMIN_COPY.settingsHeading}
           </h2>
           <SignupSettingsPanel />

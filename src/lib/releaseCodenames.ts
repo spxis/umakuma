@@ -237,6 +237,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Kugiru Kukan", ja: "区切る空間", reading: "くぎるくうかん", gloss: "the space that is bounded" },
   { romaji: "Kesshite Kehai", ja: "決して気配", reading: "けっしてけはい", gloss: "the sign that never fades" },
   { romaji: "Kotaeru Kokoro", ja: "答える心", reading: "こたえるこころ", gloss: "the heart that answers back" },
+  { romaji: "Sayaka na Iro", ja: "さやかな色", reading: "さやかないろ", gloss: "a colour you can make out clearly" },
 ];
 
 /**

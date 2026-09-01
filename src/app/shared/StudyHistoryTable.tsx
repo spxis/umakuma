@@ -212,7 +212,7 @@ export default function StudyHistoryTable({
         <div className="mt-3 space-y-3">
           {/* One sort bar for both sizes; the rows below replace the old
               wide table and the tall mobile cards. */}
-          <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/55">
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
             <span>Sort</span>
             {([
               ["submittedAt", "Time"],

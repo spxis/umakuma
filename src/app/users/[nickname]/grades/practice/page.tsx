@@ -437,7 +437,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         </div>
       )}
 
-      <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-foreground/50 print:text-neutral-400">
+      <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-foreground/60 print:text-neutral-400">
         <span>{PRACTICE_SHEET_COPY.credit}</span>
         <span className="print:hidden">
           {PRACTICE_SHEET_COPY.perPage} {(page - 1) * pageSize + 1}–

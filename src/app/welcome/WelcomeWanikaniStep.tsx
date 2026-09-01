@@ -68,7 +68,7 @@ export default function WelcomeWanikaniStep({ accountId, onDone }: Props) {
       ) : (
         <>
           <div>
-            <label htmlFor="wkToken" className="text-xs font-black uppercase tracking-[0.08em] text-foreground/55">
+            <label htmlFor="wkToken" className="text-xs font-black uppercase tracking-[0.08em] text-foreground/60">
               {WELCOME_COPY.wanikaniTokenLabel}
             </label>
             <input
@@ -79,7 +79,7 @@ export default function WelcomeWanikaniStep({ accountId, onDone }: Props) {
               spellCheck={false}
               className={`${FIELD_CLASS} mt-1`}
             />
-            <p className="mt-1 text-xs text-foreground/55">{WELCOME_COPY.wanikaniTokenHint}</p>
+            <p className="mt-1 text-xs text-foreground/60">{WELCOME_COPY.wanikaniTokenHint}</p>
           </div>
 
           {error ? <p className="text-sm font-bold text-red-700">{error}</p> : null}

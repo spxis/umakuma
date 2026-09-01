@@ -139,7 +139,7 @@ export default async function WelcomePage() {
       </header>
 
       <section className={CARD_CLASS}>
-        <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+        <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
           {WELCOME_COPY.whatHeading}
         </h2>
         <ul className="mt-3 grid gap-3 sm:grid-cols-2">

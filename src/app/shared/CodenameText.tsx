@@ -24,10 +24,10 @@ export default function CodenameText({ codename, layout = "inline", className = 
   if (layout === "stacked") {
     return (
       <span title={kanjiTooltip} className={`flex select-none flex-col items-end ${className}`.trim()}>
-        <span lang="ja" translate="no" className={noTranslateClass("text-xs font-semibold tracking-widest text-foreground/35")}>
+        <span lang="ja" translate="no" className={noTranslateClass("text-xs font-semibold tracking-widest text-foreground/60")}>
           「{codename.reading}」{kanji ? <> · {kanji}</> : null}
         </span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/25">
+        <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/60">
           {codename.romaji} · {codename.gloss}
         </span>
       </span>

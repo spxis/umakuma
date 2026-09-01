@@ -20,7 +20,7 @@ export default function KanjiGapTable({ entries, showBand = true }: Props) {
     <div className="overflow-x-auto">
       <table className="w-full min-w-[34rem] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-line text-left text-xs font-black uppercase tracking-wide text-foreground/50">
+          <tr className="border-b border-line text-left text-xs font-black uppercase tracking-wide text-foreground/60">
             <th scope="col" className="py-2 pr-3">Kanji</th>
             <th scope="col" className="py-2 pr-3">Meaning</th>
             <th scope="col" className="py-2 pr-3">JLPT</th>

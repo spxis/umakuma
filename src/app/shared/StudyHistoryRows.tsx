@@ -111,9 +111,9 @@ export default function StudyHistoryRows({
         </>
       )}
       renderTrailing={(row) => (
-        <span className="hidden w-24 shrink-0 pr-1 text-right text-xs font-semibold text-foreground/55 sm:block">
+        <span className="hidden w-24 shrink-0 pr-1 text-right text-xs font-semibold text-foreground/60 sm:block">
           <span className="block">{clockTime(row.attempt.submittedAt)}</span>
-          <span className="block text-[10px] uppercase tracking-[0.08em] text-foreground/40">
+          <span className="block text-[10px] uppercase tracking-[0.08em] text-foreground/60">
             {formatRelativeFromNow(row.attempt.submittedAt, {
               style: "short",
               allowFuture: false,

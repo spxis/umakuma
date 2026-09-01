@@ -43,7 +43,7 @@ export default function GameChoiceTile({
       onClick={onSelect}
       className={`relative flex min-w-0 items-center justify-center overflow-hidden rounded-2xl border p-2 transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 disabled:cursor-wait sm:p-5 ${choiceTone(option.subjectType)} ${feedback ? (feedback.correct ? "ring-8 ring-emerald-500 bg-emerald-100" : "ring-8 ring-red-500 bg-red-100") : flash ? "ring-4 ring-foreground/40" : "hover:brightness-95"}`}
     >
-      <span aria-hidden="true" className="absolute left-2 top-2 text-lg font-black text-foreground/50 sm:left-4 sm:top-4">{keyHint}</span>
+      <span aria-hidden="true" className="absolute left-2 top-2 text-lg font-black text-foreground/60 sm:left-4 sm:top-4">{keyHint}</span>
       {showLevel ? (
         <span translate="no" className={`${NO_TRANSLATE_CLASS} absolute right-2 top-2 rounded-full border border-line bg-surface/90 px-2 py-1 text-[10px] font-bold text-foreground sm:right-4 sm:top-4 sm:text-xs`}>{`L${option.level}`}</span>
       ) : null}

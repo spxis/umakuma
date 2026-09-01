@@ -30,7 +30,7 @@ import type { StudyListCardProps } from "./StudyList.types";
  * row wraps than that a control does.
  */
 const ACTION =
-  "whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition";
+  "whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60 transition";
 
 const PILL =
   "inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-full bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110";
@@ -200,7 +200,7 @@ export default function StudyListCard({
             >
               {card.characters.join("")}
             </p>
-            <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
+            <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
               {card.count}
             </span>
             <span className="ml-auto flex shrink-0 items-center gap-3">{actions}</span>
@@ -211,7 +211,7 @@ export default function StudyListCard({
         <>
           <div className="flex items-start justify-between gap-2">
             {nameNode}
-            <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
+            <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
               {card.count}{" "}
               {card.count === 1 ? STUDY_LIST_COPY.countSuffixOne : STUDY_LIST_COPY.countSuffix}
             </span>
@@ -225,7 +225,7 @@ export default function StudyListCard({
             {card.characters.join("")}
           </p>
 
-          <p className="mt-3 text-[11px] text-foreground/45">
+          <p className="mt-3 text-[11px] text-foreground/60">
             {card.updatedAt
               ? `${STUDY_LIST_COPY.updatedPrefix} ${formatRelativeFromNow(card.updatedAt)}`
               : STUDY_LIST_COPY.builtIn}

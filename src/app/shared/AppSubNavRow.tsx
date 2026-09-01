@@ -51,7 +51,7 @@ export default function AppSubNavRow({
       {subNav ?? (children.length > 0 ? (
         <nav
           aria-label={`${section?.label ?? ""} pages`.trim()}
-          className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/45 sm:text-[11px]"
+          className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60 sm:text-[11px]"
         >
           {children.map((child: NavChild, index: number) => {
             const href = hrefs[index]!;

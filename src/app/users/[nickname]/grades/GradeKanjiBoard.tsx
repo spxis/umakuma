@@ -77,7 +77,7 @@ export default function GradeKanjiBoard({ items, practicePath, accountId }: Prop
 
         {quizzing ? (
           <>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
               {GRADE_EXPLORER_COPY.quizHint}
             </span>
             {revealed.size > 0 ? (

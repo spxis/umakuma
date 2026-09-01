@@ -65,7 +65,7 @@ function chipClassName(isActive: boolean): string {
   }`;
 }
 
-const GROUP_LABEL = "text-[10px] font-black uppercase tracking-[0.08em] text-foreground/45";
+const GROUP_LABEL = "text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60";
 
 export default function AdminDataWorkspaceSection({
   dataCatalogView,

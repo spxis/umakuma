@@ -29,7 +29,7 @@ export default function NewsKanjiHistoryPanel({
 }: NewsKanjiHistoryPanelProps) {
   if (entries.length === 0) {
     return (
-      <section className="rounded-2xl border border-dashed border-line bg-surface-muted p-4 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55">
+      <section className="rounded-2xl border border-dashed border-line bg-surface-muted p-4 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60">
         No kanji click history yet.
       </section>
     );
@@ -44,7 +44,7 @@ export default function NewsKanjiHistoryPanel({
         <button
           type="button"
           onClick={onClear}
-          className="text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/55 transition hover:text-hot"
+          className="text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/60 transition hover:text-hot"
         >
           Clear all
         </button>
@@ -78,7 +78,7 @@ export default function NewsKanjiHistoryPanel({
                   </button>
                 ))}
               </div>
-              <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground/55">
+              <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground/60">
                 {entry.hasVocabulary ? "vocab" : "kanji only"} · {entry.knownCount}/{entry.totalCount} known · {entry.clickCount} clicks · {formatRelativeFromNow(entry.lastClickedAt)}
               </p>
             </div>
@@ -86,7 +86,7 @@ export default function NewsKanjiHistoryPanel({
               type="button"
               onClick={() => onRemove(entry.run)}
               aria-label={`Remove ${entry.run} from kanji history`}
-              className="rounded-full border border-transparent px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/45 transition hover:border-line hover:text-hot"
+              className="rounded-full border border-transparent px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/60 transition hover:border-line hover:text-hot"
             >
               Remove
             </button>

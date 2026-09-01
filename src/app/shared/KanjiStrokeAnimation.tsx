@@ -117,7 +117,7 @@ export default function KanjiStrokeAnimation({
   }, [data, playToken]);
 
   if (error) {
-    return <p className="text-xs font-semibold text-foreground/50">{STROKE_ANIMATION_COPY.unavailable}</p>;
+    return <p className="text-xs font-semibold text-foreground/60">{STROKE_ANIMATION_COPY.unavailable}</p>;
   }
 
   if (!data) {
@@ -190,14 +190,14 @@ export default function KanjiStrokeAnimation({
           {STROKE_ANIMATION_COPY.numbers}
         </button>
         {showStrokeCount ? (
-          <span className="text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/45">
+          <span className="text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
             {data.strokeCount} {strokeWord(data.strokeCount)}
           </span>
         ) : null}
       </div>
 
       {showCredit ? (
-      <p className="text-[10px] font-semibold text-foreground/40">
+      <p className="text-[10px] font-semibold text-foreground/60">
         {STROKE_ANIMATION_COPY.creditPrefix}{" "}
         <a href={data.attribution.url} target="_blank" rel="noreferrer noopener" className="underline decoration-dotted underline-offset-2 hover:text-foreground/60">
           {data.attribution.source}

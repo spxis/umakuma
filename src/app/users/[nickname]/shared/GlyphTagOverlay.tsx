@@ -46,7 +46,7 @@ export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyT
         }}
         aria-label="Toggle trouble"
         title="Toggle trouble"
-        className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-1.5 text-xs font-black leading-none ${studyTags.trouble ? activeToneClass : "text-foreground/20 hover:text-foreground/45"}`}
+        className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-1.5 text-xs font-black leading-none ${studyTags.trouble ? activeToneClass : "text-foreground/20 hover:text-foreground/60"}`}
       >
         <TroubleFaceIcon />
       </button>
@@ -59,7 +59,7 @@ export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyT
         }}
         aria-label="Toggle favourite"
         title="Toggle favourite"
-        className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-0 text-base font-black leading-none ${studyTags.favorite ? activeToneClass : "text-foreground/20 hover:text-foreground/45"}`}
+        className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-0 text-base font-black leading-none ${studyTags.favorite ? activeToneClass : "text-foreground/20 hover:text-foreground/60"}`}
       >
         <FavouriteStarIcon />
       </button>

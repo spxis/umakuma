@@ -158,7 +158,7 @@ export default function StudyExplorerPanel({
               <h2 className="truncate text-xl font-black text-foreground underline decoration-dotted decoration-[1px] decoration-foreground/25 underline-offset-[0.18em] transition-[text-decoration-color] duration-150 group-hover:decoration-foreground/45 group-focus-visible:decoration-foreground/55" title={studyHeaderLabel}>{studyHeaderLabel}</h2>
               <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">{STUDY_PANEL_TEXT.change}</span>
             </button>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/50 sm:hidden">{studySourceIsCustom ? STUDY_PANEL_TEXT.tapTitleToChangeLibrary : STUDY_PANEL_TEXT.tapTitleToChooseLibrary}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60 sm:hidden">{studySourceIsCustom ? STUDY_PANEL_TEXT.tapTitleToChangeLibrary : STUDY_PANEL_TEXT.tapTitleToChooseLibrary}</p>
             <p className="hidden text-xs uppercase tracking-[0.08em] text-foreground/70 sm:block">{STUDY_PANEL_TEXT.subtitle}</p>
           </div>
           <div className="order-1 flex flex-wrap items-center justify-end gap-2 sm:order-2 sm:flex-nowrap sm:justify-start">
@@ -434,7 +434,7 @@ export default function StudyExplorerPanel({
                     }
                     glyphSubtitle={
                       studyMode
-                        ? <span className="text-foreground/45">...</span>
+                        ? <span className="text-foreground/60">...</span>
                         : showEnglish
                           ? titleForDisplay(item, true)
                           : (glyphSubtitleForDisplay(item) ?? "")
@@ -491,7 +491,7 @@ export default function StudyExplorerPanel({
             filtersOpen={filtersOpen}
           />
         </div>
-        <p className="mt-2 text-right text-[11px] font-medium text-foreground/55" title={cacheFooterTitle}>{cacheFooterText}</p>
+        <p className="mt-2 text-right text-[11px] font-medium text-foreground/60" title={cacheFooterTitle}>{cacheFooterText}</p>
       </div>
       </section>
     </>

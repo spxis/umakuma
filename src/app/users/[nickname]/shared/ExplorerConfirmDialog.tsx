@@ -74,7 +74,7 @@ export default function ExplorerConfirmDialog({
       closeOnEscape={!busy}
       panelClassName="w-full max-w-lg rounded-2xl border border-line bg-surface p-5 shadow-[0_20px_55px_rgba(8,16,36,0.25)]"
     >
-        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-foreground/55">Confirm Action</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-foreground/60">Confirm Action</p>
         <h3 className="mt-1 text-xl font-black text-foreground">{title}</h3>
         <p className="mt-2 text-sm text-foreground/80">{description}</p>
 

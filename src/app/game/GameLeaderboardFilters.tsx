@@ -20,7 +20,7 @@ type Props = {
 };
 
 const SELECT_CLASS = "h-9 rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground";
-const GROUP_CLASS = "grid gap-1 text-[10px] font-bold uppercase text-foreground/55";
+const GROUP_CLASS = "grid gap-1 text-[10px] font-bold uppercase text-foreground/60";
 
 export default function GameLeaderboardFilters({ filters, setup, lockedKind, onChange }: Props) {
   const activeKind = lockedKind ?? (filters.kind === "any" ? null : filters.kind);

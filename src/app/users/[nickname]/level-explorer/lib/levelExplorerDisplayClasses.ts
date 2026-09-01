@@ -75,7 +75,7 @@ export function allBadgeClass(active: boolean): string {
 }
 
 export function disabledBadgeClass(): string {
-  return "cursor-not-allowed border-line bg-surface-muted text-foreground/45";
+  return "cursor-not-allowed border-line bg-surface-muted text-foreground/60";
 }
 
 export function typeBadgeClass(type: TypeFilter, active: boolean, disabled: boolean): string {

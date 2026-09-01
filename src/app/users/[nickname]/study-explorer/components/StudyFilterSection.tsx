@@ -42,7 +42,7 @@ export default function StudyFilterSection({
             type="button"
             onClick={onToggle}
             aria-label={`Expand ${title} filters`}
-            className="ml-auto inline-flex h-7 items-center px-1 text-[12px] font-semibold tracking-[0.2em] text-foreground/35 sm:hidden"
+            className="ml-auto inline-flex h-7 items-center px-1 text-[12px] font-semibold tracking-[0.2em] text-foreground/60 sm:hidden"
           >
             ...
           </button>

@@ -248,7 +248,7 @@ export default function LevelExplorerItemsGrid({
               }
               glyphSubtitle={
                 studyMode ? (
-                  <span className="text-foreground/45">...</span>
+                  <span className="text-foreground/60">...</span>
                 ) : showEnglish ? (
                   titleForDisplay(cardItem, true)
                 ) : (() => {

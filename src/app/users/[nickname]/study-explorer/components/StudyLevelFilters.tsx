@@ -229,7 +229,7 @@ export default function StudyLevelFilters({
             type="button"
             onClick={onToggleMobileShowAllOptions}
             aria-label={STUDY_PANEL_TEXT.expandLevelFilters}
-            className="ml-auto inline-flex h-7 items-center px-1 text-[12px] font-semibold tracking-[0.2em] text-foreground/35 sm:hidden"
+            className="ml-auto inline-flex h-7 items-center px-1 text-[12px] font-semibold tracking-[0.2em] text-foreground/60 sm:hidden"
           >
             ...
           </button>

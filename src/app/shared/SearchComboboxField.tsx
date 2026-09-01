@@ -78,7 +78,7 @@ export default function SearchComboboxField({
               aria-activedescendant={
                 cbx.activeOption >= 0 ? suggestOptionId(listboxId, cbx.activeOption) : undefined
               }
-              className={`relative h-full w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-foreground/40 [&::-webkit-search-cancel-button]:hidden ${sizing.text}`}
+              className={`relative h-full w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-foreground/60 [&::-webkit-search-cancel-button]:hidden ${sizing.text}`}
               {...cbx.inputProps(listboxId)}
             />
           </div>
@@ -89,7 +89,7 @@ export default function SearchComboboxField({
               aria-label={SEARCH_PAGE_COPY.clear}
               onMouseDown={(event) => event.preventDefault()}
               onClick={cbx.clear}
-              className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-foreground/45 transition hover:bg-surface-muted hover:text-foreground"
+              className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
             >
               <ClearIcon />
             </button>

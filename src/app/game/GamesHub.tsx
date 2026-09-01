@@ -54,7 +54,7 @@ export default function GamesHub({ cards, selectedKind, onSelect }: Props) {
                   {GAME_KIND_RULE_COPY[card.kind]}
                 </span>
                 <GameCardActivity activity={card.activity} accentText={accent.text} />
-                <span className={`mt-4 inline-flex h-10 min-w-0 items-center justify-center rounded-full border px-5 text-center text-sm font-black ${card.playable ? accent.solid : "border-line bg-surface-muted text-foreground/50"}`}>
+                <span className={`mt-4 inline-flex h-10 min-w-0 items-center justify-center rounded-full border px-5 text-center text-sm font-black ${card.playable ? accent.solid : "border-line bg-surface-muted text-foreground/60"}`}>
                   {card.playable
                     ? GAME_COPY.play
                     : card.blockedReason === "played-today"

@@ -25,7 +25,7 @@ export default function GameSubNav({ activeKind = null }: { activeKind?: GameKin
   return (
     <nav
       aria-label="Games"
-      className="flex min-w-0 items-center gap-x-2 gap-y-1 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/45 sm:text-[11px]"
+      className="flex min-w-0 items-center gap-x-2 gap-y-1 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60 sm:text-[11px]"
     >
       {GAME_KIND_VALUES.map((kind) => (
         <button

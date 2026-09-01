@@ -262,7 +262,7 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
           />
         </div>
       </main>
-      <p className="text-center text-xs font-semibold text-foreground/45">
+      <p className="text-center text-xs font-semibold text-foreground/60">
         Playing as {nickname}
         {selection.kind === GAME_KINDS.daily ? ` · ${setup.availability.daily.dateKey}` : ""}
       </p>

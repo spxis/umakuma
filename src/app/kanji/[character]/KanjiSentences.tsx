@@ -21,7 +21,7 @@ export default function KanjiSentences({ sentences }: { sentences: ExampleSenten
 
   return (
     <section className="space-y-3 rounded-3xl border border-line bg-surface p-5">
-      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/45">
+      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
         {KANJI_PAGE_COPY.examples}
       </h2>
 
@@ -43,7 +43,7 @@ export default function KanjiSentences({ sentences }: { sentences: ExampleSenten
       </ul>
 
       {/* Share-alike's cousin: CC BY asks for the credit, so it is not optional. */}
-      <p className="text-[11px] font-semibold text-foreground/45">
+      <p className="text-[11px] font-semibold text-foreground/60">
         {KANJI_PAGE_COPY.sentenceCredit}{" "}
         <a
           href={TATOEBA_ATTRIBUTION.url}

@@ -65,7 +65,7 @@ export function SubjectSelectionBar({
       </span>
 
       {selection.atLimit ? (
-        <span className="text-[11px] font-semibold text-foreground/55">
+        <span className="text-[11px] font-semibold text-foreground/60">
           {SUBJECT_SELECTION_COPY.limitReached}
         </span>
       ) : selection.count > 0 ? (
@@ -75,7 +75,7 @@ export function SubjectSelectionBar({
          * to explain, and a hint shown before it can be used reads as noise.
          * It stands down at the limit, where the more urgent thing is said.
          */
-        <span className="hidden text-[11px] font-semibold text-foreground/55 sm:inline">
+        <span className="hidden text-[11px] font-semibold text-foreground/60 sm:inline">
           {SUBJECT_SELECTION_COPY.rangeHint}
         </span>
       ) : null}

@@ -39,7 +39,7 @@ function FeatureRow({
       <summary className="flex cursor-pointer list-none flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
       <span className="flex shrink-0 items-baseline gap-2 sm:w-40 sm:justify-end">
         {entry.version ? (
-          <code className="text-[11px] font-semibold text-foreground/45">v{entry.version}</code>
+          <code className="text-[11px] font-semibold text-foreground/60">v{entry.version}</code>
         ) : null}
         <time dateTime={entry.date} className="font-mono text-xs text-foreground/60">
           {formatFeatureDate(entry.date)}
@@ -55,7 +55,7 @@ function FeatureRow({
             return codename ? (
               <CodenameText
                 codename={codename}
-                className="text-xs font-semibold text-foreground/40"
+                className="text-xs font-semibold text-foreground/60"
               />
             ) : null;
           })()}
@@ -111,10 +111,10 @@ export default function ReleaseTimelineList({
     <div className="flex flex-col gap-6">
       {groups.map((group) => (
         <details key={group.monthKey} open className="group/month">
-          <summary className="mb-1 flex cursor-pointer list-none items-baseline gap-2 text-xs font-bold uppercase tracking-wide text-foreground/50">
+          <summary className="mb-1 flex cursor-pointer list-none items-baseline gap-2 text-xs font-bold uppercase tracking-wide text-foreground/60">
             <span aria-hidden="true" className="text-foreground/35 transition group-open/month:rotate-90">›</span>
             {group.label}
-            <span className="font-semibold text-foreground/35">
+            <span className="font-semibold text-foreground/60">
               {group.entries.length} {showEstimateFlag ? "planned" : "released"}
             </span>
           </summary>

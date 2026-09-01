@@ -13,7 +13,7 @@ export default function NewsHistoryPanel({
 }: NewsHistoryPanelProps) {
   if (entries.length === 0) {
     return (
-      <section className="rounded-2xl border border-dashed border-line bg-surface-muted p-4 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/55">
+      <section className="rounded-2xl border border-dashed border-line bg-surface-muted p-4 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60">
         No history yet — articles you read will appear here.
       </section>
     );
@@ -28,7 +28,7 @@ export default function NewsHistoryPanel({
         <button
           type="button"
           onClick={onClear}
-          className="text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/55 transition hover:text-hot"
+          className="text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/60 transition hover:text-hot"
         >
           Clear all
         </button>
@@ -52,7 +52,7 @@ export default function NewsHistoryPanel({
                 <p className="line-clamp-1 text-sm font-semibold text-foreground">
                   {entry.title || entry.url}
                 </p>
-                <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground/55">
+                <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground/60">
                   {entry.siteName ?? hostnameOf(entry.url)} · {formatRelativeFromNow(entry.viewedAt)}
                 </p>
               </button>
@@ -60,7 +60,7 @@ export default function NewsHistoryPanel({
                 type="button"
                 onClick={() => onRemove(entry.url)}
                 aria-label={`Remove ${entry.title || entry.url} from history`}
-                className="rounded-full border border-transparent px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/45 transition hover:border-line hover:text-hot"
+                className="rounded-full border border-transparent px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/60 transition hover:border-line hover:text-hot"
               >
                 Remove
               </button>

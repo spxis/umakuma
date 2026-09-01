@@ -52,7 +52,7 @@ export default function GameCornersPicker({ choiceCount, accentClass, labelClass
         aria-pressed={live}
         aria-label={live ? GAME_COPY.removeCorner : GAME_COPY.addCorner}
         className={`flex items-center justify-center rounded border text-[11px] font-black leading-none transition hover:brightness-95 ${
-          live ? accentClass : `${GAME_CORNER_PLACEHOLDER_CLASS} text-foreground/45`
+          live ? accentClass : `${GAME_CORNER_PLACEHOLDER_CLASS} text-foreground/60`
         }`}
       >
         <span aria-hidden="true">{live ? `${keyHint} −` : "+"}</span>

@@ -12,8 +12,8 @@ function PlayLine({ prefix, play }: { prefix: string; play: GameLastPlay }) {
   const accuracy = playAccuracyPercent(play);
 
   return (
-    <span className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 text-xs font-bold text-foreground/55">
-      <span className="shrink-0 font-black uppercase tracking-wide text-foreground/40">{prefix}</span>
+    <span className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 text-xs font-bold text-foreground/60">
+      <span className="shrink-0 font-black uppercase tracking-wide text-foreground/60">{prefix}</span>
       <span className="truncate font-black text-foreground/75">{play.playerName}</span>
       <span aria-hidden="true">·</span>
       <span className="tabular-nums">{play.score.toLocaleString("en-CA")}</span>
@@ -72,7 +72,7 @@ export default function GameCardActivity({ activity, accentText }: Props) {
       {last ? (
         <PlayLine prefix={GAME_COPY.activityLastPrefix} play={last} />
       ) : (
-        <span className="block truncate text-xs font-bold text-foreground/40">
+        <span className="block truncate text-xs font-bold text-foreground/60">
           {GAME_COPY.activityNeverPlayed}
         </span>
       )}

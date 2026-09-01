@@ -87,7 +87,7 @@ export function formatDelta(value: number | null | undefined): string {
 
 export function deltaClass(value: number | null | undefined): string {
   if (value === null || value === undefined) {
-    return "text-foreground/50";
+    return "text-foreground/60";
   }
   if (value > 0) {
     return "text-emerald-700";

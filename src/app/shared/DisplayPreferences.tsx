@@ -73,7 +73,7 @@ function Choice<T extends string>({
 }) {
   return (
     <div>
-      <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/45">{label}</p>
+      <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">{label}</p>
       <div className="mt-1 flex flex-wrap gap-1.5">
         {options.map((option) => (
           <button
@@ -139,7 +139,7 @@ export default function DisplayPreferences({ className }: { className?: string }
         ]}
         onChange={chooseJpFont}
       />
-      <p className="text-xs text-foreground/50">{DISPLAY_PREFERENCES_COPY.hint}</p>
+      <p className="text-xs text-foreground/60">{DISPLAY_PREFERENCES_COPY.hint}</p>
     </div>
   );
 }

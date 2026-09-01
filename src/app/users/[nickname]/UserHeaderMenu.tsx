@@ -231,7 +231,7 @@ export default function UserHeaderMenu({
             )}
 
             {hasSyncStatus ? (
-              <p className="px-2.5 pb-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/45">
+              <p className="px-2.5 pb-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
                 Updated {updatedRelativeLabel}
                 <span className="mx-1.5 text-foreground/30">|</span>
                 Active {activeRelativeLabel}

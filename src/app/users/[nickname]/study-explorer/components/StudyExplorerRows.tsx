@@ -16,7 +16,7 @@ type Props = {
 
 function tagButtonClass(active: boolean): string {
   return `inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md px-1.5 text-xs font-black leading-none transition ${
-    active ? "text-foreground" : "text-foreground/20 hover:text-foreground/45"
+    active ? "text-foreground" : "text-foreground/20 hover:text-foreground/60"
   }`;
 }
 

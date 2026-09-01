@@ -128,7 +128,7 @@ export default function NewsHistoryViewerClient() {
             clearNewsKanjiHistory();
             setEntries([]);
           }}
-          className="text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/55 transition hover:text-hot"
+          className="text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/60 transition hover:text-hot"
         >
           Clear all
         </button>
@@ -166,7 +166,7 @@ export default function NewsHistoryViewerClient() {
                     </button>
                   ))}
                 </div>
-                <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground/55">
+                <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground/60">
                   {entry.hasVocabulary ? "vocab" : "kanji only"} · {entry.knownCount}/{entry.totalCount} known · {formatRelativeFromNow(entry.lastClickedAt)}
                 </p>
               </div>
@@ -178,7 +178,7 @@ export default function NewsHistoryViewerClient() {
                 <button
                   type="button"
                   onClick={() => setEntries(removeNewsKanjiHistory(entry.run))}
-                  className="rounded-full border border-transparent px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/45 transition hover:border-line hover:text-hot"
+                  className="rounded-full border border-transparent px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/60 transition hover:border-line hover:text-hot"
                 >
                   Remove
                 </button>

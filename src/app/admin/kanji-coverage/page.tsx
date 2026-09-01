@@ -26,7 +26,7 @@ function Stat({ value, label }: { value: number; label: string }) {
       <div className="text-2xl font-black text-foreground tabular-nums">
         {value.toLocaleString("en-CA")}
       </div>
-      <div className="text-xs font-semibold uppercase tracking-wide text-foreground/50">{label}</div>
+      <div className="text-xs font-semibold uppercase tracking-wide text-foreground/60">{label}</div>
     </div>
   );
 }

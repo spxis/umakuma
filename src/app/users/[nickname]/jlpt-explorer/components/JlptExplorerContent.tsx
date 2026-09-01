@@ -429,7 +429,7 @@ export default function JlptExplorerContent({
                   }
                   glyphSubtitle={
                     studyMode
-                      ? <span className="text-foreground/45">...</span>
+                      ? <span className="text-foreground/60">...</span>
                       : showEnglish
                         ? heading
                         : primaryReading

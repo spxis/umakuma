@@ -13,6 +13,23 @@
   --radical: #10b4e8;
   --kanji: #ff3b82;
   --vocabulary: #8b5cf6;
+
+  /*
+   * The same three colours, dark enough to read as text.
+   *
+   * The brand colours are chosen to sit on a glyph or a border, where nobody
+   * has to resolve letterforms out of them. Used as text on their own 10% tint
+   * they measured 2.21, 2.97 and 3.75 to one against a 4.5 floor - the radical
+   * pill worst of all, at half the contrast a small uppercase label needs.
+   *
+   * Darkened by the least that clears the floor (33%, 21%, 11%), so the hue is
+   * the brand's and only the lightness moves. The originals are untouched and
+   * still colour every glyph, border, fill and accent; these are for text on a
+   * tinted ground and nothing else.
+   */
+  --radical-text: #0b799b;
+  --kanji-text: #c92f67;
+  --vocabulary-text: #7c52db;
   --font-body-sans: "Segoe UI Variable", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-display-sans: "Arial Black", "Segoe UI", sans-serif;
   --font-jp-sans: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", "Meiryo", sans-serif;
@@ -53,6 +70,9 @@
   --color-radical: var(--radical);
   --color-kanji: var(--kanji);
   --color-vocabulary: var(--vocabulary);
+  --color-radical-text: var(--radical-text);
+  --color-kanji-text: var(--kanji-text);
+  --color-vocabulary-text: var(--vocabulary-text);
   --font-sans: var(--font-body-sans);
   --font-display: var(--font-display-sans);
 }
@@ -270,19 +290,19 @@ button,
 
 .subject-pill--radical {
   border-color: color-mix(in srgb, var(--radical) 45%, white 55%);
-  color: var(--radical);
+  color: var(--radical-text);
   background: color-mix(in srgb, var(--radical) 10%, white 90%);
 }
 
 .subject-pill--kanji {
   border-color: color-mix(in srgb, var(--kanji) 45%, white 55%);
-  color: var(--kanji);
+  color: var(--kanji-text);
   background: color-mix(in srgb, var(--kanji) 10%, white 90%);
 }
 
 .subject-pill--vocabulary {
   border-color: color-mix(in srgb, var(--vocabulary) 45%, white 55%);
-  color: var(--vocabulary);
+  color: var(--vocabulary-text);
   background: color-mix(in srgb, var(--vocabulary) 10%, white 90%);
 }
 

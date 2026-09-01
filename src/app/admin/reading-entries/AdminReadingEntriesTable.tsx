@@ -128,7 +128,7 @@ export default function AdminReadingEntriesTable({
               <tr key={entry.id} className="align-top hover:bg-surface-muted/40">
                 <td className="whitespace-nowrap px-3 py-2 text-foreground/70">
                   <p className="font-semibold text-foreground/85">{formatDateTimeShort(entry.createdAt)}</p>
-                  <p className="text-[10px] uppercase tracking-[0.08em] text-foreground/55">
+                  <p className="text-[10px] uppercase tracking-[0.08em] text-foreground/60">
                     {formatRelativeFromNow(entry.createdAt, {
                       style: "short",
                       allowFuture: false,
@@ -137,7 +137,7 @@ export default function AdminReadingEntriesTable({
                     })}
                   </p>
                   {entry.updatedAt ? (
-                    <p className="mt-1 text-[10px] uppercase tracking-[0.08em] text-foreground/55">
+                    <p className="mt-1 text-[10px] uppercase tracking-[0.08em] text-foreground/60">
                       Updated {formatDateTimeShort(entry.updatedAt)}
                     </p>
                   ) : null}

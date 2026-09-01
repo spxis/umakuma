@@ -158,19 +158,19 @@ export default function StudyListCards({
 
       {permanent.length > 0 ? (
         <section className="mb-6">
-          <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+          <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             {STUDY_LIST_COPY.permanentHeading}
           </h2>
-          <p className="mb-2 text-xs text-foreground/50">{STUDY_LIST_COPY.permanentBlurb}</p>
+          <p className="mb-2 text-xs text-foreground/60">{STUDY_LIST_COPY.permanentBlurb}</p>
           <ul className={gridClass}>{permanent.map(renderCard)}</ul>
         </section>
       ) : null}
 
       <section>
-        <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+        <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
           {STUDY_LIST_COPY.savedHeading}
         </h2>
-        <p className="mb-2 text-xs text-foreground/50">{STUDY_LIST_COPY.savedBlurb}</p>
+        <p className="mb-2 text-xs text-foreground/60">{STUDY_LIST_COPY.savedBlurb}</p>
         {saved.length === 0 ? (
           <p className="rounded-2xl border border-line bg-surface-muted p-4 text-xs text-foreground/60">
             {STUDY_LIST_COPY.emptyHint}

@@ -57,12 +57,12 @@ export default async function PublicReleasesPage() {
 
       {months.map((month) => (
         <details key={month.key} open className="group/month mb-6">
-          <summary className="mb-2 flex cursor-pointer list-none items-baseline justify-between gap-3 border-b border-line pb-1 text-[11px] font-black uppercase tracking-[0.14em] text-foreground/55">
+          <summary className="mb-2 flex cursor-pointer list-none items-baseline justify-between gap-3 border-b border-line pb-1 text-[11px] font-black uppercase tracking-[0.14em] text-foreground/60">
             <span className="flex items-center gap-2">
               <span aria-hidden="true" className="text-foreground/35 transition group-open/month:rotate-90">›</span>
               {month.label}
             </span>
-            <span className="font-bold tracking-normal text-foreground/40">
+            <span className="font-bold tracking-normal text-foreground/60">
               {month.entries.length} {month.entries.length === 1 ? RELEASES_PAGE_COPY.release : RELEASES_PAGE_COPY.releases}
             </span>
           </summary>
@@ -88,12 +88,12 @@ export default async function PublicReleasesPage() {
                           * and it was invisible until you expanded the entry.
                           */}
                         {codename ? (
-                          <span lang="ja" translate="no" className={noTranslateClass("block truncate text-[11px] font-semibold text-foreground/45")}>
+                          <span lang="ja" translate="no" className={noTranslateClass("block truncate text-[11px] font-semibold text-foreground/60")}>
                             「{codename.reading}」 {codename.romaji}
                           </span>
                         ) : null}
                       </span>
-                      <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/45">
+                      <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
                         {entry.date}
                       </span>
                       <span
@@ -115,7 +115,7 @@ export default async function PublicReleasesPage() {
                         </p>
                       ) : null}
 
-                      <dl className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/45">
+                      <dl className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
                         <div className="flex items-center gap-1.5">
                           <dt>{RELEASES_PAGE_COPY.area}</dt>
                           <dd className="text-foreground/70">{entry.area}</dd>
@@ -138,7 +138,7 @@ export default async function PublicReleasesPage() {
         </details>
       ))}
 
-      <p className="mt-8 text-center text-xs font-semibold text-foreground/40">
+      <p className="mt-8 text-center text-xs font-semibold text-foreground/60">
         <Link href="/" className="underline decoration-dotted underline-offset-2 hover:text-foreground/60">
           {RELEASES_PAGE_COPY.backHome}
         </Link>

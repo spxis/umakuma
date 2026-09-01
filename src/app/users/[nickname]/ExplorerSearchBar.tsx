@@ -161,7 +161,7 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
             }
           }}
           placeholder={scope === EXPLORER_SEARCH_SCOPES.jlpt ? "Search JLPT kanji" : "Search kanji, hiragana, or romaji"}
-          className="h-9 min-w-0 flex-1 rounded-full bg-transparent px-3 text-sm font-semibold text-foreground outline-none placeholder:text-foreground/50"
+          className="h-9 min-w-0 flex-1 rounded-full bg-transparent px-3 text-sm font-semibold text-foreground outline-none placeholder:text-foreground/60"
           aria-label={scope === EXPLORER_SEARCH_SCOPES.jlpt ? "Search JLPT explorer" : scope === EXPLORER_SEARCH_SCOPES.study ? "Search study explorer" : "Search level explorer"}
           disabled={isSearching}
         />

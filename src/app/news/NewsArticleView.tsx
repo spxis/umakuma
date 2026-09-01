@@ -90,7 +90,7 @@ export default function NewsArticleView({
             <span className="inline-flex items-center rounded-full border border-accent/35 bg-accent/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-accent">
               Reading View
             </span>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/55">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
               Article Body
             </span>
           </div>
@@ -133,7 +133,7 @@ export default function NewsArticleView({
       {activeTab === "history" ? historyPanel : null}
       {activeTab === "stats" ? statsPanel : null}
 
-      <footer className="border-t border-line pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/55">
+      <footer className="border-t border-line pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/60">
         Source:{" "}
         <a
           href={article.finalUrl}
@@ -222,7 +222,7 @@ function AdPlaceholder() {
     <div
       role="presentation"
       aria-label="Ad placeholder"
-      className="flex h-24 items-center justify-center rounded-2xl border border-dashed border-line bg-surface-muted text-xs font-bold uppercase tracking-[0.18em] text-foreground/45"
+      className="flex h-24 items-center justify-center rounded-2xl border border-dashed border-line bg-surface-muted text-xs font-bold uppercase tracking-[0.18em] text-foreground/60"
     >
       Ad placeholder
     </div>

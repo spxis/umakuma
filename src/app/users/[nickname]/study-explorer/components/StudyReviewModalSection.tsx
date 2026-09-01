@@ -151,7 +151,7 @@ export default function StudyReviewModalSection({
                     <p className="text-base font-black uppercase tracking-[0.12em] text-foreground/70">
                       {STUDY_REVIEW_MODAL_SECTION_TEXT.tapToReveal}
                     </p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">
                       {STUDY_REVIEW_MODAL_SECTION_TEXT.enterOrSpace}
                     </p>
                   </div>
@@ -268,7 +268,7 @@ export default function StudyReviewModalSection({
                     className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-2xl bg-surface-muted text-center transition-colors hover:bg-sky-100/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
                   >
                     <p className="text-sm font-black uppercase tracking-[0.12em] text-foreground/80 sm:text-base">{STUDY_REVIEW_MODAL_SECTION_TEXT.showAnswer}</p>
-                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">{STUDY_REVIEW_MODAL_SECTION_TEXT.spaceToReveal}</p>
+                    <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">{STUDY_REVIEW_MODAL_SECTION_TEXT.spaceToReveal}</p>
                   </button>
                 ) : (
                   <StudyReviewAnswerPane
@@ -307,7 +307,7 @@ export default function StudyReviewModalSection({
             <button type="button" onClick={() => onReveal(selectedItem.assignmentId)} className="flex min-h-[20rem] w-full flex-col justify-center rounded-2xl border border-line bg-surface px-6 py-6 text-left hover:bg-surface-muted lg:h-full lg:min-h-0">
               <div className="mx-auto text-center">
                 <p className="text-base font-black uppercase tracking-[0.12em] text-foreground/70">{STUDY_REVIEW_MODAL_SECTION_TEXT.showAnswer}</p>
-                <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/55">{STUDY_REVIEW_MODAL_SECTION_TEXT.spaceToReveal}</p>
+                <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">{STUDY_REVIEW_MODAL_SECTION_TEXT.spaceToReveal}</p>
               </div>
             </button>
           </div>

@@ -72,7 +72,7 @@ export default function GameRunnerFrame({
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <button type="button" onClick={() => setExitConfirmOpen(true)} className="h-9 rounded-full border border-line bg-surface px-3 text-xs font-black text-foreground hover:bg-surface-muted">Exit</button>
             <span className="truncate">{questionIndex + 1}/{endless ? "∞" : questionTotal}</span>
-            <span className="hidden truncate text-foreground/45 lg:inline">{GAME_KIND_LABELS[kind]}</span>
+            <span className="hidden truncate text-foreground/60 lg:inline">{GAME_KIND_LABELS[kind]}</span>
           </div>
           <span translate="no" className={noTranslateClass("hidden whitespace-nowrap sm:inline")}>{`${correctCount} ${countLabel}`}</span>
           {/* A run against the clock leads with the clock. */}

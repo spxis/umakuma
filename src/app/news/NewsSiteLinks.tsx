@@ -74,7 +74,7 @@ export default function NewsSiteLinks({
               <span className="block text-sm font-semibold text-foreground group-hover:text-accent">
                 {link.title}
               </span>
-              <span className="mt-0.5 block truncate text-[11px] text-foreground/55">
+              <span className="mt-0.5 block truncate text-[11px] text-foreground/60">
                 {link.url}
               </span>
             </button>

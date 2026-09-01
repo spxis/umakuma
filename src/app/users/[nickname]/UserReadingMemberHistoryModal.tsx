@@ -218,7 +218,7 @@ export default function UserReadingMemberHistoryModal({
     >
         <div className="flex items-start justify-between gap-3 border-b border-line px-5 pb-3 pt-5">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.12em] text-foreground/55">Check-in history</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60">Check-in history</p>
             <h2 className="text-lg font-black text-foreground">{member.nickname}</h2>
             <p className="text-xs text-foreground/65">{groupedByDay.length} day{groupedByDay.length === 1 ? "" : "s"} with activity{isAdmin ? " · admin edit mode" : ""}</p>
           </div>
@@ -249,7 +249,7 @@ export default function UserReadingMemberHistoryModal({
                 <h3 className="text-sm font-black text-foreground">{day.dateKey}</h3>
                 {day.signoff ? (
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/55">Day total: {day.signoff.pagesRead}p · {day.signoff.minutesRead}m</span>
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-foreground/60">Day total: {day.signoff.pagesRead}p · {day.signoff.minutesRead}m</span>
                     <WkStatusBadge didWanikaniReviews={day.signoff.didWanikaniReviews} />
                   </div>
                 ) : null}

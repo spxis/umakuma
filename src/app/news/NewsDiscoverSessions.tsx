@@ -55,7 +55,7 @@ export default function NewsDiscoverSessions({
                     className="shrink-0"
                   />
                 </div>
-                <p className="line-clamp-1 text-[11px] text-foreground/55" title={session.queryUrl}>
+                <p className="line-clamp-1 text-[11px] text-foreground/60" title={session.queryUrl}>
                   {session.queryUrl}
                 </p>
                 <p className="text-[11px] font-semibold text-foreground/70">{session.links.length} links</p>

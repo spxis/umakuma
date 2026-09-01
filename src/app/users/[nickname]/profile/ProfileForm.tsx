@@ -83,7 +83,7 @@ export default function ProfileForm({ accountId, displayName, visibility, jlptSt
   return (
     <form onSubmit={save} className="space-y-4">
       <div>
-        <label htmlFor="displayName" className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/55">
+        <label htmlFor="displayName" className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
           {PROFILE_COPY.displayName}
         </label>
         <input
@@ -93,14 +93,14 @@ export default function ProfileForm({ accountId, displayName, visibility, jlptSt
           placeholder={PROFILE_COPY.displayNamePlaceholder}
           className={`${FIELD_CLASS} mt-1`}
         />
-        <p className="mt-1 text-xs text-foreground/50">{PROFILE_COPY.displayNameHint}</p>
+        <p className="mt-1 text-xs text-foreground/60">{PROFILE_COPY.displayNameHint}</p>
       </div>
 
       <fieldset>
-        <legend className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/55">
+        <legend className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
           {PROFILE_COPY.visibility}
         </legend>
-        <p className="mb-2 text-xs text-foreground/50">{PROFILE_COPY.visibilityHint}</p>
+        <p className="mb-2 text-xs text-foreground/60">{PROFILE_COPY.visibilityHint}</p>
 
         <div className="space-y-2">
           {ACCOUNT_VISIBILITY_VALUES.map((value) => (
@@ -129,16 +129,16 @@ export default function ProfileForm({ accountId, displayName, visibility, jlptSt
             </label>
           ))}
         </div>
-        <p className="mt-2 text-xs font-semibold text-foreground/55">{VISIBILITY_REASSURANCE}</p>
+        <p className="mt-2 text-xs font-semibold text-foreground/60">{VISIBILITY_REASSURANCE}</p>
       </fieldset>
 
       <div>
-        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/55">{PROFILE_COPY.jlpt}</p>
-        <p className="mb-2 text-xs text-foreground/50">{PROFILE_COPY.jlptHint}</p>
+        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{PROFILE_COPY.jlpt}</p>
+        <p className="mb-2 text-xs text-foreground/60">{PROFILE_COPY.jlptHint}</p>
 
         <div className="grid gap-2 sm:grid-cols-3">
           <label className="block">
-            <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/45">{PROFILE_COPY.jlptStatus}</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">{PROFILE_COPY.jlptStatus}</span>
             <select
               value={status}
               onChange={(event) => { setStatus(event.target.value); setState("idle"); }}
@@ -153,7 +153,7 @@ export default function ProfileForm({ accountId, displayName, visibility, jlptSt
           {asksForLevel ? (
             <>
               <label className="block">
-                <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/45">{PROFILE_COPY.jlptYear}</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">{PROFILE_COPY.jlptYear}</span>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -166,7 +166,7 @@ export default function ProfileForm({ accountId, displayName, visibility, jlptSt
               </label>
 
               <label className="block">
-                <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/45">{PROFILE_COPY.jlptLevel}</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">{PROFILE_COPY.jlptLevel}</span>
                 <select
                   value={level}
                   onChange={(event) => { setLevel(event.target.value); setState("idle"); }}

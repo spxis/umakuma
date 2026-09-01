@@ -72,7 +72,7 @@ export default async function UserListsPage({ params }: PageProps) {
 
       <header className="mb-4">
         <h1 className="text-xl font-black">{STUDY_LIST_COPY.heading}</h1>
-        <p className="text-xs text-foreground/55">{STUDY_LIST_COPY.subtitle}</p>
+        <p className="text-xs text-foreground/60">{STUDY_LIST_COPY.subtitle}</p>
       </header>
 
       <StudyListCards

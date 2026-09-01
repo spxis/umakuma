@@ -41,7 +41,7 @@ type Props = {
  * labels sit tight above compact fields; the rules line and the item count are
  * folded into one footer instead of three separate paragraphs.
  */
-const LABEL_CLASS = "mb-1 block truncate text-[10px] font-black uppercase tracking-wide text-foreground/50";
+const LABEL_CLASS = "mb-1 block truncate text-[10px] font-black uppercase tracking-wide text-foreground/60";
 const FIELD_CLASS = "h-9 w-full rounded-lg border border-line bg-surface px-2.5 text-sm font-bold text-foreground";
 
 export default function GameSetupPanel({ accountId, setup, selection, starting, onChange, onStart, onBack }: Props) {
@@ -76,7 +76,7 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
           <span aria-hidden="true" className="mt-0.5 shrink-0 text-2xl leading-none">{GAME_KIND_EMOJI[selection.kind]}</span>
           <div className="min-w-0">
             <h2 className={`text-lg font-black leading-tight sm:text-xl ${accent.text}`}>{GAME_KIND_LABELS[selection.kind]}</h2>
-            <p className="text-[11px] font-semibold leading-snug text-foreground/55">
+            <p className="text-[11px] font-semibold leading-snug text-foreground/60">
               {GAME_KIND_RULE_COPY[selection.kind]}
               {supportsDirection ? ` ${directionHints[selection.direction]}` : ""}
             </p>
@@ -266,10 +266,10 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         <StudyTagListsButton accountId={accountId} />
 
         {!rules.oncePerDay ? (
-          <span className="text-xs font-bold text-foreground/50">{available} items</span>
+          <span className="text-xs font-bold text-foreground/60">{available} items</span>
         ) : null}
 
-        <p className="w-full text-[11px] font-semibold text-foreground/55 sm:ml-auto sm:w-auto sm:flex-1 sm:text-right">
+        <p className="w-full text-[11px] font-semibold text-foreground/60 sm:ml-auto sm:w-auto sm:flex-1 sm:text-right">
           {footer}
         </p>
       </div>

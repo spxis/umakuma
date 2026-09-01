@@ -54,7 +54,7 @@ function PrintedGlyph({ kanji, label, fontFamily }: { kanji: string; label: stri
       >
         {kanji}
       </span>
-      <span className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/40">{label}</span>
+      <span className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</span>
     </div>
   );
 }
@@ -128,7 +128,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
     <>
       <header className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
         <div className="min-w-0">
-          <p className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+          <p className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             {STROKE_ANIMATION_COPY.title}
             {meta ? (
               <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] text-foreground/60">
@@ -179,7 +179,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
       {detail ? <div className="border-t border-line px-5 py-3">{detail}</div> : null}
 
       {meta ? (
-        <p className="border-t border-line px-5 py-2 text-center text-[10px] font-semibold text-foreground/40">
+        <p className="border-t border-line px-5 py-2 text-center text-[10px] font-semibold text-foreground/60">
           {STROKE_ANIMATION_COPY.creditPrefix}{" "}
           <a
             href={meta.attribution.url}

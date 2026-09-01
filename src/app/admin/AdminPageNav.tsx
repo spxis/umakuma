@@ -47,7 +47,7 @@ export default function AdminPageNav({ activeTab }: Props) {
       aria-label="Admin workspace tabs"
       ref={markScrollEnd}
       onScroll={(event) => markScrollEnd(event.currentTarget)}
-      className="admin-tab-scroll flex min-w-0 items-center gap-x-2 gap-y-1 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/45 sm:text-[11px]"
+      className="admin-tab-scroll flex min-w-0 items-center gap-x-2 gap-y-1 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60 sm:text-[11px]"
     >
       {ADMIN_WORKSPACE_TABS.map((tab) => (
         <Link

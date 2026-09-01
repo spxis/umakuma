@@ -71,7 +71,7 @@ export default function PendingMembersPanel({ initial }: Props) {
             <p className="truncate text-xs text-foreground/60">
               {member.joinedByEmail} · /{member.slug} · {formatRelativeFromNow(member.createdAt)}
             </p>
-            <p className="text-xs text-foreground/50">
+            <p className="text-xs text-foreground/60">
               Chose: {ACCOUNT_VISIBILITY_DISPLAY[resolveVisibility(member.visibility)].label}
             </p>
           </div>

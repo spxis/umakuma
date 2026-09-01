@@ -78,7 +78,7 @@ export default function StudyReviewAnswerPane({
           </p>
           {hasAltMeanings ? (
             <div className="mt-3">
-              <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-foreground/55">
+              <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-foreground/60">
                 {STUDY_REVIEW_MODAL_SECTION_TEXT.altMeanings}
               </p>
               <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/80 sm:text-xs">
@@ -88,13 +88,13 @@ export default function StudyReviewAnswerPane({
           ) : null}
           {hasMeaningExplanation ? (
             <div className="mt-3 text-[11px] leading-relaxed text-foreground/75">
-              <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-foreground/55">Meaning note</p>
+              <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-foreground/60">Meaning note</p>
               <p className="mt-1">{selectedMeaningExplanation}</p>
             </div>
           ) : null}
           {hasReadingExplanation ? (
             <div className="mt-3 text-[11px] leading-relaxed text-foreground/75">
-              <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-foreground/55">Reading note</p>
+              <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-foreground/60">Reading note</p>
               <p className="mt-1">{selectedReadingExplanationRaw}</p>
             </div>
           ) : null}

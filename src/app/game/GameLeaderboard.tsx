@@ -39,7 +39,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
         <div className="hidden md:block xl:max-h-96 xl:overflow-y-auto">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-line text-[10px] font-bold uppercase text-foreground/55">
+              <tr className="border-b border-line text-[10px] font-bold uppercase text-foreground/60">
                 <th className="px-4 py-3 sm:px-6">Day</th>
                 <th className="px-4 py-3">Rank</th>
                 <th className="px-4 py-3">Player</th>
@@ -59,7 +59,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                   <td className="px-4 py-3 text-lg font-black text-hot">#{index + 1}</td>
                   <td className="px-4 py-3">
                     <p className="font-black text-foreground">{entry.nickname}</p>
-                    <p className="text-xs font-semibold text-foreground/55">@{entry.wkUsername}</p>
+                    <p className="text-xs font-semibold text-foreground/60">@{entry.wkUsername}</p>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex flex-nowrap items-center gap-1.5 whitespace-nowrap text-sm font-bold text-foreground/65">
@@ -85,7 +85,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                 </tr>
               )))}
               {membersWithoutRuns.map((member, index) => (
-                <tr key={`not-played:${member.accountId}`} className="border-b border-line/70 last:border-b-0 text-foreground/45">
+                <tr key={`not-played:${member.accountId}`} className="border-b border-line/70 last:border-b-0 text-foreground/60">
                   <td className="px-4 py-3 text-sm font-bold sm:px-6">-</td>
                   <td className="px-4 py-3 text-lg font-black">#{playedRunCount + index + 1}</td>
                   <td className="px-4 py-3">

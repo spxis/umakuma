@@ -48,7 +48,7 @@ type Props = {
 function ReadingRow({ label, readings }: { label: string; readings: string[] }) {
   return (
     <p className="flex min-w-0 max-w-full items-baseline gap-1.5 text-xs">
-      <span className="shrink-0 font-black uppercase tracking-[0.08em] text-foreground/45">{label}</span>
+      <span className="shrink-0 font-black uppercase tracking-[0.08em] text-foreground/60">{label}</span>
       <span lang="ja" translate="no" className={`min-w-0 truncate font-bold text-foreground/80 ${JP_TEXT_CLASS}`}>
         {readings.length > 0
           ? readings.map(displayReading).join("、")
@@ -155,7 +155,7 @@ export default function GradeKanjiGrid({
               {entry.primaryMeaning ?? GRADE_EXPLORER_COPY.noReadings}
             </span>
             {hidden ? (
-              <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/35">
+              <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">
                 {GRADE_EXPLORER_COPY.quizTapToReveal}
               </span>
             ) : (
@@ -197,7 +197,7 @@ export default function GradeKanjiGrid({
 
             <div className="mt-2 space-y-0.5">
               {hidden ? (
-                <p className="py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/35">
+                <p className="py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">
                   {GRADE_EXPLORER_COPY.quizTapToReveal}
                 </p>
               ) : (

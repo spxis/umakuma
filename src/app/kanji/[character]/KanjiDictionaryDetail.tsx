@@ -43,7 +43,7 @@ export default function KanjiDictionaryDetail({
 
       {/* Share-alike: the credit is a licence condition, not decoration. */}
       {attribution ? (
-        <p className="pt-1 text-[11px] font-semibold text-foreground/45">
+        <p className="pt-1 text-[11px] font-semibold text-foreground/60">
           {KANJI_PAGE_COPY.dictionaryCredit}{" "}
           <a
             href={attribution.url}
@@ -73,7 +73,7 @@ function Row({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
     <div>
-      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/45">{label}</h2>
+      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</h2>
       <p className="text-sm font-semibold text-foreground">{value}</p>
     </div>
   );
@@ -83,7 +83,7 @@ function Readings({ label, readings }: { label: string; readings: string[] }) {
   if (readings.length === 0) return null;
   return (
     <div>
-      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/45">{label}</h2>
+      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</h2>
       <p lang="ja" translate="no" className={`text-sm font-semibold text-foreground ${JP_TEXT_CLASS}`}>
         {readings.map((reading) => reading.replace(/\./g, "")).join("、")}
       </p>
@@ -94,12 +94,12 @@ function Readings({ label, readings }: { label: string; readings: string[] }) {
 function Fact({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="rounded-full border border-line bg-surface-muted px-3 py-1">
-      <dt className="inline text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45">
+      <dt className="inline text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
         {label}{" "}
       </dt>
       <dd className="inline text-xs font-bold text-foreground">
         {value}
-        {hint ? <span className="font-semibold text-foreground/45"> {hint}</span> : null}
+        {hint ? <span className="font-semibold text-foreground/60"> {hint}</span> : null}
       </dd>
     </div>
   );

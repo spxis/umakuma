@@ -113,7 +113,7 @@ export default function AdminAccountCards({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <dt className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/45">{label}</dt>
+      <dt className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">{label}</dt>
       <dd className="mt-0.5 font-semibold text-foreground/80">{children}</dd>
     </div>
   );

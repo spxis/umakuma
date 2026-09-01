@@ -31,7 +31,7 @@ function Stat({ value, label }: { value: number; label: string }) {
   return (
     <div className="rounded-2xl border border-line bg-surface px-4 py-3">
       <div className="text-2xl font-black text-foreground">{value}</div>
-      <div className="text-xs font-semibold uppercase tracking-wide text-foreground/50">{label}</div>
+      <div className="text-xs font-semibold uppercase tracking-wide text-foreground/60">{label}</div>
     </div>
   );
 }

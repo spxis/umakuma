@@ -124,7 +124,7 @@ export default function LevelExplorerDetailGlyphBox({
         </p>
         {(() => {
           if (studyMode && isStudyHidden) {
-            return <p className="mt-1 w-full text-center text-sm font-semibold text-foreground/55">...</p>;
+            return <p className="mt-1 w-full text-center text-sm font-semibold text-foreground/60">...</p>;
           }
 
           const subtitle = studyMode

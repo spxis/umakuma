@@ -103,7 +103,7 @@ export default function SurfacePagination({
       aria-label={PAGINATION_COPY.label}
       className={`${spacing} flex flex-wrap items-center justify-between gap-2 print:hidden ${className ?? ""}`.trim()}
     >
-      <p className="text-xs text-foreground/55">
+      <p className="text-xs text-foreground/60">
         {summary ?? `${PAGINATION_COPY.page} ${page} ${PAGINATION_COPY.of} ${pageCount}`}
       </p>
       <div className="flex items-center gap-2">

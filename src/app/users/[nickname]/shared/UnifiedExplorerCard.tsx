@@ -127,7 +127,7 @@ export default function UnifiedExplorerCard({
       {rows ? (
         /* One line: index, glyph, what it means, then the chips at the end. */
         <div className="flex min-w-0 items-center gap-3">
-          <span translate="no" className={noTranslateClass("w-8 shrink-0 text-[10px] font-semibold text-foreground/45")}>{indexOrTick}</span>
+          <span translate="no" className={noTranslateClass("w-8 shrink-0 text-[10px] font-semibold text-foreground/60")}>{indexOrTick}</span>
           <div
             data-explorer-glyph-hitbox="true"
             className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border ${glyphCursorClass} ${glyphClassName}`}
@@ -159,7 +159,7 @@ export default function UnifiedExplorerCard({
       ) : (
         <>
           <div className="flex min-h-[2.35rem] items-start justify-between gap-2">
-            <span translate="no" className={noTranslateClass("text-[10px] font-semibold text-foreground/45")}>{indexOrTick}</span>
+            <span translate="no" className={noTranslateClass("text-[10px] font-semibold text-foreground/60")}>{indexOrTick}</span>
             <div className="flex min-h-[2.2rem] flex-wrap content-start items-start justify-end gap-1">{topRight}</div>
           </div>
 

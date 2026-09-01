@@ -90,7 +90,7 @@ export default function NewsStatsClient() {
           <button
             type="button"
             onClick={() => clearNewsGlyphStats()}
-            className="text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/50 hover:text-hot"
+            className="text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/60 hover:text-hot"
           >
             Reset stats
           </button>
@@ -120,7 +120,7 @@ export default function NewsStatsClient() {
                     style={{ width: `${Math.max(5, (entry.viewCount / maxViews) * 100)}%` }}
                   />
                 </div>
-                <p className="mt-1 text-[11px] text-foreground/55">Last viewed {formatRelativeFromNow(entry.lastViewedAt)}</p>
+                <p className="mt-1 text-[11px] text-foreground/60">Last viewed {formatRelativeFromNow(entry.lastViewedAt)}</p>
               </li>
             ))}
           </ul>

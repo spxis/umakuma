@@ -53,12 +53,12 @@ export default function GameLeaderboardMobile({ days, members, metric }: Props) 
                     <span className="shrink-0 text-lg font-black text-hot">#{index + 1}</span>
                     <span className="min-w-0">
                       <span className="block truncate font-black text-foreground">{entry.nickname}</span>
-                      <span className="block truncate text-xs font-semibold text-foreground/55">@{entry.wkUsername}</span>
+                      <span className="block truncate text-xs font-semibold text-foreground/60">@{entry.wkUsername}</span>
                     </span>
                   </p>
                   <p className="shrink-0 text-right">
                     <span className="block text-2xl font-black leading-none text-accent">{metricValue(entry, metric)}</span>
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/45">
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.1em] text-foreground/60">
                       {GAME_METRIC_LABELS[metric]}
                     </span>
                   </p>
@@ -75,7 +75,7 @@ export default function GameLeaderboardMobile({ days, members, metric }: Props) 
                     {gameDifficultyLabel(entry.kind, entry.choiceCount, entry.ultraMode, entry.direction)}
                   </span>
                 </div>
-                <p className="mt-1 text-xs font-semibold text-foreground/55">
+                <p className="mt-1 text-xs font-semibold text-foreground/60">
                   {entry.correctCount}/{entry.questionCount} correct
                   {metric !== "time" ? ` · ${formatGameDuration(entry.durationMs)}` : ""}
                 </p>
@@ -87,12 +87,12 @@ export default function GameLeaderboardMobile({ days, members, metric }: Props) 
 
       {membersWithoutRuns.length > 0 ? (
         <section aria-label="Not played">
-          <h3 className="border-y border-line bg-surface-muted px-4 py-2 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/50">
+          <h3 className="border-y border-line bg-surface-muted px-4 py-2 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             Not played
           </h3>
           <ul className="divide-y divide-line/70">
             {membersWithoutRuns.map((member) => (
-              <li key={member.accountId} className="flex items-baseline justify-between gap-3 px-4 py-3 text-foreground/45">
+              <li key={member.accountId} className="flex items-baseline justify-between gap-3 px-4 py-3 text-foreground/60">
                 <span className="min-w-0">
                   <span className="block truncate font-black">{member.nickname}</span>
                   <span className="block truncate text-xs font-semibold">@{member.wkUsername}</span>

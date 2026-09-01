@@ -94,7 +94,7 @@ export default function SubjectRows<TRow extends SubjectListRow>({
           {groupBy ? (
             <h3 className="sticky top-0 z-10 flex items-baseline justify-between gap-3 border-b border-line bg-surface-muted px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
               <span>{group.heading}</span>
-              <span className="font-bold tracking-normal text-foreground/45">{group.rows.length}</span>
+              <span className="font-bold tracking-normal text-foreground/60">{group.rows.length}</span>
             </h3>
           ) : null}
 
@@ -146,7 +146,7 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                     <span className="truncate text-sm font-bold text-foreground sm:text-base">
                       {row.meaning || SUBJECT_VIEW_COPY.noMeaning}
                     </span>
-                    <span className="flex items-center gap-1.5 truncate text-xs font-semibold text-foreground/55">
+                    <span className="flex items-center gap-1.5 truncate text-xs font-semibold text-foreground/60">
                       {row.reading ? <span lang="ja" translate="no" className={JP_TEXT_CLASS}>{row.reading}</span> : null}
                       {renderSubMeta ? renderSubMeta(row) : null}
                     </span>

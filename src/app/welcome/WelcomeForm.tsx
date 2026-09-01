@@ -105,7 +105,7 @@ export default function WelcomeForm({ suggestedName, defaultVisibility, askDispl
             placeholder={WELCOME_COPY.namePlaceholder}
             className={`${FIELD_CLASS} mt-2`}
           />
-          <p className="mt-1 text-xs text-foreground/55">{WELCOME_COPY.nameHint}</p>
+          <p className="mt-1 text-xs text-foreground/60">{WELCOME_COPY.nameHint}</p>
         </div>
       ) : null}
 
@@ -139,7 +139,7 @@ export default function WelcomeForm({ suggestedName, defaultVisibility, askDispl
               </label>
             ))}
           </div>
-          <p className="mt-2 text-xs font-semibold text-foreground/55">{VISIBILITY_REASSURANCE}</p>
+          <p className="mt-2 text-xs font-semibold text-foreground/60">{VISIBILITY_REASSURANCE}</p>
         </fieldset>
       ) : null}
 
