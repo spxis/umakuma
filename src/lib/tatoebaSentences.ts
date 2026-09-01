@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "./prisma";
+import { SOURCE_CREDITS } from "./sourceCredits";
 
 /**
  * Example sentences, easiest first.
@@ -16,13 +17,15 @@ import { prisma } from "./prisma";
  * sentence built from the simplest characters comes back first.
  */
 
-/** Credit is a licence condition of CC BY, not decoration. */
-export const TATOEBA_ATTRIBUTION = {
-  source: "Tatoeba",
-  url: "https://tatoeba.org",
-  licence: "CC BY 2.0 FR",
-  licenceUrl: "https://creativecommons.org/licenses/by/2.0/fr/",
-} as const;
+/**
+ * Credit is a licence condition of CC BY, not decoration - and re-exported
+ * here rather than defined here.
+ *
+ * This module is `server-only` - it reaches for Prisma - so a client component
+ * that wanted the credit dragged the database client into the browser bundle.
+ * The credit itself lives in `sourceCredits`, which imports nothing.
+ */
+export const TATOEBA_ATTRIBUTION = SOURCE_CREDITS.tatoeba;
 
 /** How many examples a surface shows before it becomes a reading list. */
 export const SENTENCE_LIMIT = 3;

@@ -1,5 +1,7 @@
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import { TATOEBA_ATTRIBUTION, type ExampleSentence } from "@/lib/tatoebaSentences";
+import SourceCredit from "@/app/shared/SourceCredit";
+import { SOURCE_CREDITS } from "@/lib/sourceCredits";
+import type { ExampleSentence } from "@/lib/tatoebaSentences";
 
 /**
  * How something is actually used, in sentences somebody wrote.
@@ -48,21 +50,7 @@ export default function ExampleSentences({
         ))}
       </ul>
 
-      <p className="text-[11px] font-semibold text-foreground/60">
-        {credit}{" "}
-        <a
-          href={TATOEBA_ATTRIBUTION.url}
-          className="underline decoration-dotted underline-offset-2 hover:text-foreground/70"
-        >
-          {TATOEBA_ATTRIBUTION.source}
-        </a>{" "}
-        <a
-          href={TATOEBA_ATTRIBUTION.licenceUrl}
-          className="underline decoration-dotted underline-offset-2 hover:text-foreground/70"
-        >
-          ({TATOEBA_ATTRIBUTION.licence})
-        </a>
-      </p>
+      <SourceCredit credit={SOURCE_CREDITS.tatoeba} label={credit} />
     </section>
   );
 }

@@ -2290,5 +2290,15 @@
     "releasedAt": "2026-09-01T15:27:26Z",
     "version": "0.218.0",
     "summary": "Three things a member could not do, all of them about lists. A list you saved yourself offered rename, edit characters, delete and practise, so the one thing you could not do with it was read it - the card's wall of glyphs was the whole view, with no meanings, no readings and no way into the glyph viewer. It opens now, into the same panel the Trouble and Favourites lists have always used, and the characters on the card open it as well as the Open action beside them. Bulk selection was reachable in the grid, where every card carries a checkbox, and unreachable in the list, where a row had none and clicking one opened the review modal instead of picking it - so a set could be gathered in one density and not the other, and Save to list sat above a list it could not be fed from. Rows carry the same checkbox now, and the same shift-click range. And the explorers drew their lists as forty bordered boxes stacked with gaps, each one an edge for the eye to stop at, while Study and History drew one surface with hairlines between the rows. Grades, the WaniKani library and the JLPT explorer take that chrome from the same place now."
+  },
+  {
+    "id": "source-credits-one-component",
+    "area": "platform",
+    "name": "Say whose work it is",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "releasedAt": "2026-09-01T15:39:02Z",
+    "version": "0.219.0",
+    "summary": "Four sources are borrowed here and three of them were credited. Tatoeba's sentences named Tatoeba, the stroke drawings named KanjiVG, the dictionary facts named KANJIDIC2 - each drawing its own paragraph, in its own file, with its own idea of what an external link should do. The meanings, the readings and the mnemonics are WaniKani's, they are by far the largest borrowing of the four, and they named nobody. They do now, on the vocabulary and radical pages and in the explorer's detail panel, and the four paragraphs are one component - so the next surface that shows borrowed content credits it by using the thing that draws it rather than by somebody remembering to. A source under its own terms rather than a public licence names no licence, and is not made to look as though it granted one. The credit itself moved out of the sentence loader on the way, which is server-only: a client component that wanted the Tatoeba credit was dragging the database client into the browser bundle."
   }
 ]

@@ -2,7 +2,9 @@ import Link from "next/link";
 
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/SubjectPage.constants";
+import SourceCredit from "@/app/shared/SourceCredit";
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
+import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import { SUBJECT_TYPES, SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplayReadings";
 import type { CatalogRelatedReference } from "@/lib/subjectCatalogDetails";
@@ -134,6 +136,11 @@ export default function SubjectDetailPanel({
             </p>
           </div>
         ) : null}
+
+        {/* Whose meanings and readings these are. The sentences below have
+          * carried a credit since the day they arrived; this is the larger
+          * borrowing and had none. */}
+        <SourceCredit credit={SOURCE_CREDITS.wanikani} label={SOURCE_CREDIT_COPY.subjectData} />
       </section>
 
       {meaningNote || readingNote ? (
@@ -155,6 +162,9 @@ export default function SubjectDetailPanel({
               <p className="text-sm font-semibold leading-relaxed text-foreground/80">{readingNote}</p>
             </div>
           ) : null}
+
+          {/* A mnemonic is somebody's writing, not a fact about the character. */}
+          <SourceCredit credit={SOURCE_CREDITS.wanikani} label={SOURCE_CREDIT_COPY.mnemonics} />
         </section>
       ) : null}
 
