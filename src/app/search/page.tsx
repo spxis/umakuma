@@ -132,6 +132,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
                 query={query}
                 activeSource={activeSource}
                 totalHits={results.totalHits}
+                footer={results.hits.length > 0 ? <RecentSearches currentQuery={query} /> : null}
               />
             </>
           ) : (
@@ -152,7 +153,14 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
             </div>
           )}
 
-          <RecentSearches currentQuery={query} />
+          {/*
+            * With no results list to close out - no search yet, or a search
+            * that matched nothing - the remembered searches carry the same
+            * card on their own, which is the list the page would have had.
+            */}
+          {results && results.hits.length > 0 ? null : (
+            <RecentSearches currentQuery={query} variant="card" />
+          )}
         </div>
       </main>
     </div>

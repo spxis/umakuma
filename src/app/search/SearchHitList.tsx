@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 
@@ -32,10 +32,21 @@ type Props = {
   activeSource: SearchSource | null;
   /** Everything the search found, which is more than the first stretch. */
   totalHits: number;
+  /** Rows that close the list out, such as the searches run before this one. */
+  footer?: ReactNode;
 };
 
 /** How near the last row the reader gets before the next stretch is asked for. */
 const LOAD_LEAD_ROWS = 3;
+
+/**
+ * The one card the search page's rows live in.
+ *
+ * Shared, because what follows the results - the recent searches - belongs to
+ * the same list rather than to a card of its own floating below it.
+ */
+export const SEARCH_LIST_CARD =
+  "overflow-hidden rounded-2xl border border-line bg-surface divide-y divide-line/60";
 
 /** Source accents, so a row's origin reads before the label does. */
 export const SOURCE_TONES: Record<SearchSource, string> = {
@@ -51,7 +62,14 @@ export const SOURCE_TONES: Record<SearchSource, string> = {
  * whichever catalogue holds it; grouping by source would make them read three
  * lists and compare. The source rides along as a pill instead.
  */
-export default function SearchHitList({ hits, viewerUsername, query, activeSource, totalHits }: Props) {
+export default function SearchHitList({
+  hits,
+  viewerUsername,
+  query,
+  activeSource,
+  totalHits,
+  footer,
+}: Props) {
   /*
    * What the page arrived with, plus every stretch fetched since - kept under
    * the query it answers, so navigating to a new search drops the old tail
@@ -61,7 +79,7 @@ export default function SearchHitList({ hits, viewerUsername, query, activeSourc
   const [loaded, setLoaded] = useState<{ key: string; extra: SearchHit[] }>({ key: windowKey, extra: [] });
   const [loading, setLoading] = useState(false);
   const inFlight = useRef(false);
-  const sentinel = useRef<HTMLDivElement>(null);
+  const sentinel = useRef<HTMLLIElement>(null);
 
   const rows = appendHits(hits, loaded.key === windowKey ? loaded.extra : []);
   const hasMore = rows.length < totalHits;
@@ -107,6 +125,7 @@ export default function SearchHitList({ hits, viewerUsername, query, activeSourc
     return () => observer.disconnect();
   }, [hasMore, loadMore]);
 
+  /* Nothing to close out, so the footer's caller carries its own card instead. */
   if (rows.length === 0) {
     return (
       <div className="rounded-2xl border border-line bg-surface-muted p-5">
@@ -139,19 +158,15 @@ export default function SearchHitList({ hits, viewerUsername, query, activeSourc
   }
 
   return (
-    <>
-      <ul
-        className="overflow-hidden rounded-2xl border border-line bg-surface divide-y divide-line/60"
-        onKeyDown={onKeyDown}
-      >
-        {rows.map((hit, index) => (
-          <li key={hit.key}>
-            <HitRow hit={hit} index={index} href={searchHitHref(hit, viewerUsername)} />
-          </li>
-        ))}
-      </ul>
+    <ul className={SEARCH_LIST_CARD} onKeyDown={onKeyDown}>
+      {rows.map((hit, index) => (
+        <li key={hit.key}>
+          <HitRow hit={hit} index={index} href={searchHitHref(hit, viewerUsername)} />
+        </li>
+      ))}
 
-      <div ref={sentinel} className="mt-3 text-center">
+      {/* The end of the results, inside the list, because that is what it ends. */}
+      <li ref={sentinel} className="px-4 py-3 text-center">
         {hasMore ? (
           <button
             type="button"
@@ -166,8 +181,10 @@ export default function SearchHitList({ hits, viewerUsername, query, activeSourc
             {SEARCH_PAGE_COPY.endOfResults}
           </p>
         )}
-      </div>
-    </>
+      </li>
+
+      {footer}
+    </ul>
   );
 }
 

@@ -1780,5 +1780,15 @@
     "version": "0.171.0",
     "releasedAt": "2026-09-01T09:00:00Z",
     "summary": "Trouble and Favourites are lists in every sense a member cares about - they are named, they hold subjects, they are what you practise from - but they are tag rows rather than saved lists, so the page whose whole job is showing a member their lists was the one place they never appeared. They could be reached only through a panel opened by a button somewhere else, which meant the two lists a member had actually built were the two they could not find. Both now sit at the top of the lists page, in the same card as every saved list, with a count and a preview of what is in them. What differs is what they cannot do: there is nothing to delete, because untagging the last item empties a list rather than removing it, so the card offers Open instead and the panel is where tagging still happens. Their practice sheet is addressed by source rather than by the characters on the card, so printing one takes the whole list instead of the two dozen the card had room to preview. Both are always shown, empty ones included, because no favourites yet is an answer to the question somebody came to this page with and a missing card is not. The subtitle stopped claiming every list here was built by hand, which two of them now are not."
+  },
+  {
+    "id": "recent-searches-join-the-list",
+    "area": "platform",
+    "name": "Recent searches join the list",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.172.0",
+    "releasedAt": "2026-09-01T10:00:00Z",
+    "summary": "The remembered searches shipped as a card of their own below the results, which read as a separate widget parked under the page rather than as part of what the reader was already scanning. They are now the last rows of the results list itself: the same card, the same row rhythm, the same lane the glyphs occupy - a history icon standing where a glyph would - introduced by a tinted band carrying the heading and the control that clears them, because a search you already ran is a way back rather than an answer and has to be told apart from the results above it at a glance. The end of the results moved inside the list too, so what closes the results sits with them instead of floating below the card. With no list to close out - no query yet, or a query that matched nothing - the rows carry the same card on their own."
   }
 ]
