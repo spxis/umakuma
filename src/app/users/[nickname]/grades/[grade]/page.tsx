@@ -132,8 +132,20 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
             {GRADE_EXPLORER_COPY.practiceSheet}
           </Link>
 
-          <form className="mt-3 flex flex-wrap items-center gap-2" action={`/users/${encodeURIComponent(userKey)}/grades`}>
-            <input type="hidden" name="grade" value={grade} />
+          {/*
+            * Submits to this grade's own address.
+            *
+            * It used to post to the collection root with the grade as a hidden
+            * field, which is the shape from when a grade lived in the query.
+            * The root reads no grade any more - it only opens the first one -
+            * so searching from grade 3 landed on grade 1 with the search
+            * dropped as well. The grade is in the path, so the form posts
+            * there and `q` is the only thing it carries.
+            */}
+          <form
+            className="mt-3 flex flex-wrap items-center gap-2"
+            action={`/users/${encodeURIComponent(userKey)}/grades/${grade}`}
+          >
             <input
               type="search"
               name="q"

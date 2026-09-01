@@ -2090,5 +2090,15 @@
     "version": "0.202.0",
     "releasedAt": "2026-09-01T10:50:45Z",
     "summary": "Choosing items on an explorer kept its state in the component, and turning to page two is a navigation: the page remounted and took the selection with it - both the characters picked and the fact that picking was happening at all. Building a list of twenty across three pages is the ordinary way to do it, and it could not be done. The selection is now held for the sitting rather than for the component, under a key per surface so the grade explorer and the JLPT explorer do not overwrite each other. A session is the right span: a half-built selection is a task somebody is in the middle of, so it should survive a page turn and a stray reload without being handed back next week. Three links built from a selection still pointed at the practice sheet's old query-string address and did nothing when clicked - the same shape of break as the chooser chips, in the places that were not on screen when that was fixed."
+  },
+  {
+    "id": "searching-stays-on-the-grade",
+    "area": "study",
+    "name": "Searching stays on the grade",
+    "summary": "Searching from the grade explorer threw away both the grade you were on and the thing you searched for. Standing on grade three and looking for a character put you on grade one with an empty search box. The grade had recently moved out of the query string and into the path, which is the right shape - the path says which collection you are looking at, the query says how you are reading it - and the reader that used to take a grade out of the query was removed along with it. What was not looked at was the search form, which went on submitting to the collection root with the grade as a hidden field, the shape from before. The root reads no grade any more; it only opens the first one. The form posts to the grade own address now and carries nothing but the search. A guard test holds the shape, because this is the failure mode of changing an address: the thing itself gets changed and one caller does not.",
+    "version": "0.203.0",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "releasedAt": "2026-09-01T10:55:09Z"
   }
 ]

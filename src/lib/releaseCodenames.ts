@@ -253,6 +253,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nekko no Nedoko", ja: "根っこの寝床", reading: "ねっこのねどこ", gloss: "a bed for the roots, the first words included" },
   { romaji: "Nobasu Nokogiri", ja: "伸ばす鋸", reading: "のばすのこぎり", gloss: "the saw that reaches further" },
   { romaji: "Hazusanai Hasami", ja: "外さない鋏", reading: "はずさないはさみ", gloss: "the grip that does not slip" },
+  { romaji: "Hikikaesu Hyoushiki", ja: "引き返す標識", reading: "ひきかえすひょうしき", gloss: "the sign that sends you back where you were" },
 ];
 
 /**
