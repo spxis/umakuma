@@ -19,7 +19,7 @@ what has to be decided before it can start.
   Verify with `pnpm db:drift:check`.
 - Never take a destructive action against production. It is real, in daily use,
   and there is no backup routine — `pnpm db:backup` only covers the local
-  database. Owning that gap is item 33, deferred until the features are done.
+  database. Owning that gap is item 34, deferred until the features are done.
 
 ---
 
@@ -53,8 +53,8 @@ through it meets a finished flow.
 | 19 | ~~Stroke order as a shareable component~~ ✅ v0.108.0 | — |
 | 20 | ~~Updates page: months, names, reachability~~ ✅ v0.109.0 | — |
 | 21 | ~~Map regions beyond Japan~~ ✅ v0.121.0-v0.123.0 | — |
-| 22 | Saved practice lists | 23 |
-| 23 | Selection as a shared surface control | — |
+| 22 | ~~Saved practice lists~~ ✅ v0.133.0, v0.182.0 | 23 |
+| 23 | Selection as a shared surface control — study explorer left | — |
 | 24 | Print mode | — |
 | 25 | ~~Practice sheet controls~~ ✅ v0.115.0, v0.116.0, v0.118.0 | — |
 | 26 | ~~JLPT old numbering~~ ✅ v0.119.0 | — |
@@ -64,6 +64,12 @@ through it meets a finished flow.
 | 31 | ~~Consolidate preferences into Settings~~ ✅ v0.124.0 | — |
 | 32 | ~~Capital cities in Map mode~~ ✅ v0.126.0 | — |
 | 29 | ~~Real US and Canada map geometry~~ ✅ v0.123.0 | — |
+| 33 | Example sentences from Tatoeba | — |
+| 34 | Own the backups, on the Synology | features done |
+| 35 | RESTful explorer paths | John to decide |
+| 36 | Controls nested inside controls (a11y) | — |
+| 37 | Colour contrast below the floor | John to decide |
+| 38 | Security leftovers before the door opens | 6 |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
 Release 6 should not ship before 7 to 9, or a member without WaniKani arrives to
@@ -637,7 +643,7 @@ a hand-applied `db push` to production before it can deploy.
 
 ---
 
-### 22 — Saved practice lists ✅ shipped (v0.133.0)
+### 22 — Saved practice lists ✅ shipped (v0.133.0), renamable (v0.182.0)
 
 Build a sheet from chosen items rather than a whole grade, and keep it: "Week
 1", "Week 2". A page lists every list a member has made, each with a small
@@ -651,22 +657,38 @@ under a different name, not a parallel implementation.
 Needs persistence: a list of chosen subjects per member, which is a schema
 change and a hand-applied `db push`.
 
-### 23 — Selection as a shared surface control ⏳ partly shipped (v0.132.0)
+**Renaming shipped in v0.182.0.** A list could be created and deleted and
+nothing in between, so a typo in a name could only be fixed by deleting the
+list and picking every character again. It is a `PATCH` of its own rather than
+a save under a new name, because `POST` upserts on `(accountId, name)` — a
+rename expressed that way would replace the contents of whichever list already
+held the new name.
+
+**Still open on this item:**
+
+- Editing what is *in* a list. Today a list is fixed at the moment it is saved;
+  changing it means saving over it from a surface with the right selection.
+  Adding or removing a character from the lists page itself is the obvious next
+  ask and is not built.
+- Reordering. `characters` is stored "in the order chosen" and a sheet
+  re-sorted is a different sheet, so a reorder control has somewhere to write
+  to — there is just no way to do it.
+
+### 23 — Selection as a shared surface control ⏳ nearly done (v0.132.0–v0.169.0)
 
 Shipped: `useSubjectSelection`, `SubjectSelectionToggle` / `SubjectSelectionBar`
-and the `picked` practice source. Wired on the grades explorer, which is the
-surface that feeds practice sheets.
+and the `picked` practice source. Now wired on the grades explorer, the JLPT
+explorer, the WaniKani level explorer, study history and the tag lists — in
+both densities, with shift-click range selection (`selectionRange`) and the
+shared `KanjiSelectionBar` offering save-as-list and practise.
 
 **Still to wire**, and the reason each is not done yet:
 
-- JLPT explorer - `JlptExplorerContent.tsx` is 449 lines, so adding selection
-  breaches the 500 gate. Needs its own extraction first.
-- WaniKani level explorer and the study explorer - they list radicals and
-  vocabulary as well as kanji, so a practice destination has to filter to kanji
-  before it is offered.
+- The study explorer. It lists radicals and vocabulary as well as kanji, so a
+  practice destination has to filter to kanji before it is offered.
 - The guard test in `subjectListDensity.test.ts` should require the selection
-  control the way it requires the density toggle - add it once the above are
-  wired, or it is either red or toothless.
+  control the way it requires the density toggle — add it once the study
+  explorer is wired, or it is either red or toothless.
 
 Original note:
 
@@ -817,7 +839,7 @@ coordinates for anything but region centroids. Natural Earth publishes
 source in the map pipeline, and worth doing only if the smaller version proves
 popular.
 
-### 33 — Own the backups, on the Synology
+### 34 — Own the backups, on the Synology
 
 **Deferred until the feature work is done.** Nothing here is user-facing and
 nothing is on fire; it is insurance, and it should be bought once the building
@@ -857,3 +879,85 @@ an untested backup is a hope rather than a backup.
 
 Deliberately absent from `featureTimeline.json`: it ships nothing a member
 sees, and the releases page is for members.
+
+### 35 — RESTful explorer paths (asked for, decision open)
+
+John, 31 Aug: "JLPT explorer should have more restful endpoints/paths", then
+"Same with school grade browser explorer. The urls should make sense", then the
+reason: "if all our explorers (we have 3) are more restful and behave the same
+for search then our search engine and linking will be easy since restful means
+you can guess how to query via the path."
+
+**The three disagree today**, which is the whole problem:
+
+| Explorer | How it addresses a thing |
+|---|---|
+| Grades | `?grade=9&q=弘` |
+| JLPT | `?findJlpt=弘` |
+| WaniKani level | nine separate query params |
+
+The JLPT one has a bug that falls straight out of the shape: `findJlpt`
+searches only within the currently selected N-levels, so a link built from one
+member's selection can land on "0 results" for another.
+
+**Blocked on one decision, which is John's:** path segments carrying the
+identity (`/users/john/jlpt/n1/弘`) with query strings left for view state, or
+one consistent set of query params (`q`, `level`) across all three. Path
+segments read better and cache better; query params are a smaller change and
+survive a filter that has no natural place in a path.
+
+Not started. Admin kanji linking (below) wants this settled first, because the
+link it should build depends on the answer.
+
+### 36 — Controls nested inside controls (accessibility)
+
+428 nodes fail `nested-interactive`. `UnifiedExplorerCard` is a
+`role="button"` that contains buttons — trouble, favourite, strokes — and the
+selection work of the last few releases added more inside it, not fewer.
+
+A screen reader announces the card as one control and cannot reach what is
+inside it; a keyboard user tabs into a trap. This is the one to do before any
+further controls go into that card, because every addition makes the eventual
+fix bigger.
+
+**Shape:** the card stops being a button. The glyph becomes the link or button,
+the card becomes a plain container, and the overlay controls sit as siblings
+rather than children.
+
+### 37 — Colour contrast below the floor (John's call)
+
+Measured against the 4.5:1 WCAG AA floor for body text:
+
+| What | Ratio | Nodes |
+|---|---|---|
+| `text-foreground/45` | 3.07:1 | 751 |
+| Radical pill | 2.19:1 | — |
+| Kanji pill | 2.97:1 | — |
+| Vocabulary pill | 3.74:1 | — |
+
+The subject-type colours are the brand, and darkening them changes how the
+whole app looks — so this is a decision about the brand, not a bug to fix
+quietly. `text-foreground/45` is the easier half: it is muted secondary text
+and moving it to `/60` would clear the floor without touching the palette.
+
+Waiting on John.
+
+### 38 — Security leftovers before the door opens
+
+Found while closing the API routes (v0.178.0) and not yet done. None of these
+matter while the door is shut; all of them matter the moment it opens, so they
+belong to release 6 rather than to a date.
+
+- **`feat/open-signup-door`** is built and unpushed (commits `eb459ba`,
+  `8677af0`). It needs a `signup_lockdown` SiteSetting row seeded in production
+  **before** the deploy, or the deploy locks out the seven existing invite
+  accounts. That ordering is the whole risk in the branch.
+- **`visibility = null` should be impossible.** Today a row with no visibility
+  falls back to a default at read time, in more than one place. It wants a
+  schema change and therefore a hand-applied `db push`.
+- **A reserved slug list.** `admin`, `api`, `login`, `search` and the rest are
+  claimable as nicknames today, and a member who takes one shadows a route.
+- **`/api/signup` has no rate limit**, which is the one endpoint that will be
+  found within a day of the door opening.
+- **"How did you hear about us"** — asked for during onboarding design, not
+  built.
