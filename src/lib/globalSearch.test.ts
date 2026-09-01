@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import {
   SEARCH_PAGE_HREF,
+  SEARCH_SOURCE_LABELS,
+  SEARCH_SOURCE_ORDER,
   SEARCH_SOURCES,
   SEARCH_SOURCE_VALUES,
   appendHits,
@@ -159,6 +161,12 @@ describe("searchHitHref", () => {
     expect(searchHitHref(hit({ glyph: "日" }), null)).toBe("/kanji/%E6%97%A5");
   });
 
+  it("sends a dictionary hit to the public page even for a signed-in member", () => {
+    /* No explorer holds a character no catalogue teaches. */
+    const entry = hit({ source: SEARCH_SOURCES.dictionary, key: "dictionary:渕", glyph: "渕" });
+    expect(searchHitHref(entry, user)).toBe(`/kanji/${encodeURIComponent("渕")}`);
+  });
+
   it("offers an anonymous searcher no link where there is no public page", () => {
     expect(searchHitHref(hit({ glyph: "日曜日", subjectType: "vocabulary" }), null)).toBeNull();
     expect(searchHitHref(hit({ glyph: "亠", subjectType: "radical" }), null)).toBeNull();
@@ -208,6 +216,36 @@ describe("searchRequestUrl", () => {
 
   it("encodes the query", () => {
     expect(searchRequestUrl("日 sun")).toBe(`/api/search?q=${encodeURIComponent("日 sun")}`);
+  });
+});
+
+describe("source precedence", () => {
+  /*
+   * Keys sort alphabetically, so "dictionary:水" would come before every
+   * catalogue and push the row carrying someone's review state below a
+   * reference row that carries none.
+   */
+  it("puts a catalogue ahead of the dictionary at the same score", () => {
+    const sorted = sortHits([
+      hit({ key: "dictionary:水", source: SEARCH_SOURCES.dictionary, glyph: "水", score: 900 }),
+      hit({ key: "wanikani:1", source: SEARCH_SOURCES.wanikani, glyph: "水", score: 900 }),
+    ]);
+    expect(sorted[0].source).toBe(SEARCH_SOURCES.wanikani);
+  });
+
+  it("still ranks by score first, whatever the source", () => {
+    const sorted = sortHits([
+      hit({ key: "wanikani:1", source: SEARCH_SOURCES.wanikani, glyph: "水", score: 400 }),
+      hit({ key: "dictionary:水", source: SEARCH_SOURCES.dictionary, glyph: "水", score: 900 }),
+    ]);
+    expect(sorted[0].source).toBe(SEARCH_SOURCES.dictionary);
+  });
+
+  it("names every source it can sort", () => {
+    for (const source of SEARCH_SOURCE_VALUES) {
+      expect(SEARCH_SOURCE_ORDER[source]).toBeTypeOf("number");
+      expect(SEARCH_SOURCE_LABELS[source]).toBeTruthy();
+    }
   });
 });
 

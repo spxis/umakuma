@@ -13,6 +13,7 @@ export const SEARCH_SOURCES = {
   wanikani: "wanikani",
   jlpt: "jlpt",
   grades: "grades",
+  dictionary: "dictionary",
 } as const;
 
 export type SearchSource = (typeof SEARCH_SOURCES)[keyof typeof SEARCH_SOURCES];
@@ -28,6 +29,22 @@ export const SEARCH_SOURCE_LABELS: Record<SearchSource, string> = {
   [SEARCH_SOURCES.wanikani]: "WaniKani",
   [SEARCH_SOURCES.jlpt]: "JLPT",
   [SEARCH_SOURCES.grades]: "School Grades",
+  [SEARCH_SOURCES.dictionary]: "Dictionary",
+};
+
+/**
+ * Which source wins when two hold the same character at the same score.
+ *
+ * The catalogues carry a member's review state and link into their explorers;
+ * the dictionary is the reference behind them and links to a public page. So a
+ * tie goes to the catalogue, and the dictionary row never displaces a hit that
+ * could have opened someone's own study data.
+ */
+export const SEARCH_SOURCE_ORDER: Record<SearchSource, number> = {
+  [SEARCH_SOURCES.wanikani]: 0,
+  [SEARCH_SOURCES.jlpt]: 1,
+  [SEARCH_SOURCES.grades]: 2,
+  [SEARCH_SOURCES.dictionary]: 3,
 };
 
 export type SearchHit = {
@@ -248,6 +265,9 @@ export function sortHits(hits: SearchHit[]): SearchHit[] {
   return [...hits].sort((left, right) => {
     if (left.score !== right.score) return right.score - left.score;
     if (left.glyph.length !== right.glyph.length) return left.glyph.length - right.glyph.length;
+    /* Alphabetical keys would put "dictionary:..." ahead of every catalogue. */
+    const bySource = SEARCH_SOURCE_ORDER[left.source] - SEARCH_SOURCE_ORDER[right.source];
+    if (bySource !== 0) return bySource;
     return left.key.localeCompare(right.key);
   });
 }
@@ -278,7 +298,8 @@ export function publicKanjiHref(hit: SearchHit): string | null {
  * has a public page, so that is where they go instead.
  */
 export function searchHitHref(hit: SearchHit, username: string | null): string | null {
-  if (!username) {
+  /* Nobody's explorer holds a dictionary-only character; the public page does. */
+  if (!username || hit.source === SEARCH_SOURCES.dictionary) {
     return publicKanjiHref(hit);
   }
 

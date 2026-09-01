@@ -1890,5 +1890,15 @@
     "version": "0.182.0",
     "summary": "A saved list could be created and deleted and nothing in between, so a typo in \"Week 1\" could only be fixed by throwing the list away and picking every character again. Lists now rename in place: the name becomes a field on the card, Enter saves it, Escape abandons it, and the characters are never touched. Renaming is its own request rather than a save under a new name, which matters more than it sounds - saving under a name that already exists replaces that list's contents, so a rename expressed that way would quietly empty whichever list already held the name. Choosing a name another list has now says so and keeps what was typed, because colliding with \"Week 1\" is an ordinary thing to do rather than an error to swallow. Names are tidied the same way whether saved or renamed, so \"Week  1\" and \"Week 1\" stay one list instead of becoming two nobody can tell apart. The two built-in lists, Trouble and Favourites, offer neither rename nor delete: they fill themselves as you tag while you study, and untagging the last item empties one rather than removing it. Three controls no longer fit a card at the width the grid gives it, so the row wraps rather than breaking \"Practise these\" across two lines inside its own button, and the condensed view stopped running off the right edge of a phone.",
     "releasedAt": "2026-09-01T04:24:11Z"
+  },
+  {
+    "id": "search-reads-the-dictionary",
+    "area": "platform",
+    "name": "Search reads the dictionary",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.183.0",
+    "releasedAt": "2026-09-01T05:12:17Z",
+    "summary": "Shipping KANJIDIC2 gave the kanji page 10,384 characters but left search reading the same three catalogues, so 渕 and 煕 - both inside the 1,500 most frequent characters in Japanese - still returned nothing at all. The dictionary is now a fourth source, and it fills gaps rather than adding a fourth copy of every common character: a query for 水 already answers three times over, so the dictionary answers only where no catalogue does, and asking for the dictionary tab on its own is the exception that shows everything it holds. A tie between a catalogue and the dictionary goes to the catalogue, because alphabetical keys would otherwise push a reference row above the row carrying a member's own review state, and a dictionary hit links to the public kanji page since no explorer holds a character nobody teaches."
   }
 ]

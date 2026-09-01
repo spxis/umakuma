@@ -6,6 +6,7 @@ import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES, isSubjectType } from "./domainCons
 import { prisma } from "./prisma";
 import { preferOfficialReadings } from "./joyoReadings";
 import { querySchoolGradeCatalog } from "./schoolGrades";
+import { getAllKanjiDictionaryEntries } from "./kanjiDictionary";
 import { searchQueryVariants } from "./kana";
 import {
   SEARCH_PER_SOURCE_LIMIT,
@@ -232,6 +233,38 @@ function searchGrades(variants: string[]): SearchHit[] {
 }
 
 /**
+ * KANJIDIC2, which answers for the characters no catalogue teaches.
+ *
+ * 渕 and 煕 are both inside the 1,500 most frequent characters in Japanese and
+ * neither is in WaniKani, the JLPT table or the school grades, so searching
+ * for either returned nothing at all. This is a local read like the school
+ * grades - no database - over 10,384 entries the process keeps once loaded.
+ */
+function searchDictionary(variants: string[]): SearchHit[] {
+  const hits: SearchHit[] = [];
+
+  for (const entry of getAllKanjiDictionaryEntries()) {
+    const reading = joined([...entry.readings.on, ...entry.readings.kun]);
+    const ranked = rankMeanings(variants, entry.kanji, entry.meanings, reading);
+    if (ranked.score === 0) continue;
+
+    hits.push({
+      source: SEARCH_SOURCES.dictionary,
+      key: `dictionary:${entry.kanji}`,
+      glyph: entry.kanji,
+      subjectType: SUBJECT_TYPES.kanji,
+      meaning: displayMeaning(entry.primaryMeaning, ranked.meaning),
+      reading,
+      badges: entry.frequencyRank ? [`#${entry.frequencyRank}`] : [],
+      href: null,
+      score: ranked.score,
+    } satisfies SearchHit);
+  }
+
+  return sortHits(hits).slice(0, SEARCH_PER_SOURCE_LIMIT * 2);
+}
+
+/**
  * Ask every requested catalogue at once.
  *
  * The three run in parallel and a failure in one is not allowed to empty the
@@ -251,7 +284,23 @@ export async function runGlobalSearch(
     wanted.has(SEARCH_SOURCES.grades) ? Promise.resolve(searchGrades(variants)).catch(() => []) : Promise.resolve([]),
   ]);
 
-  const kept = sortHits([...wanikani, ...jlpt, ...grades].filter((hit) => hit.score > 0));
+  const taught = sortHits([...wanikani, ...jlpt, ...grades].filter((hit) => hit.score > 0));
+
+  /*
+   * The dictionary fills gaps rather than adding a fourth copy of every common
+   * character: a query for 水 already returns it three times, and a reference
+   * row that carries no review state would only be a fourth. Asking for the
+   * dictionary on its own is the exception - a tab that shows nothing but the
+   * gaps would be a strange thing to click - so a lone request skips the
+   * coverage filter and answers with everything it holds.
+   */
+  const dictionaryOnly = wanted.size === 1 && wanted.has(SEARCH_SOURCES.dictionary);
+  const covered = new Set(taught.map((hit) => hit.glyph));
+  const gapFillers = wanted.has(SEARCH_SOURCES.dictionary)
+    ? searchDictionary(variants).filter((hit) => dictionaryOnly || !covered.has(hit.glyph))
+    : [];
+
+  const kept = sortHits([...taught, ...gapFillers]);
 
   /*
    * Windowed after ranking, never during it. The counts and the total describe
@@ -268,7 +317,8 @@ export async function runGlobalSearch(
     countsBySource: {
       [SEARCH_SOURCES.wanikani]: kept.filter((hit) => hit.source === SEARCH_SOURCES.wanikani).length,
       [SEARCH_SOURCES.jlpt]: kept.filter((hit) => hit.source === SEARCH_SOURCES.jlpt).length,
-      [SEARCH_SOURCES.grades]: kept.filter((hit) => hit.source === SEARCH_SOURCES.grades).length,
+        [SEARCH_SOURCES.grades]: kept.filter((hit) => hit.source === SEARCH_SOURCES.grades).length,
+      [SEARCH_SOURCES.dictionary]: kept.filter((hit) => hit.source === SEARCH_SOURCES.dictionary).length,
     },
     hits: windowed,
   };

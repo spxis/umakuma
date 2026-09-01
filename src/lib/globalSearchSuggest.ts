@@ -35,15 +35,23 @@ export function suggestRows(pages: number): number {
 }
 
 /**
+ * The most rows one glyph can occupy before the dropdown collapses them.
+ *
+ * Three, not four: a glyph appears at most once per teaching catalogue, and
+ * the dictionary answers only where none of them do, so a character is either
+ * in the catalogues - up to three copies - or in the dictionary alone.
+ */
+const COPIES_PER_GLYPH = SEARCH_SOURCE_VALUES.length - 1;
+
+/**
  * The raw hits to ask for to be sure of filling that many rows.
  *
  * The dropdown keeps one row per glyph while the catalogues each hold their
- * own copy of it, so ten raw hits can collapse into four rows. A glyph cannot
- * appear more than once per source, which makes three hits per row the exact
- * worst case rather than a guess.
+ * own copy of it, so ten raw hits can collapse into four rows. Asking for
+ * three per row is the exact worst case rather than a guess.
  */
 export function suggestRawWindow(rows: number): number {
-  return rows * SEARCH_SOURCE_VALUES.length;
+  return rows * COPIES_PER_GLYPH;
 }
 
 /**
