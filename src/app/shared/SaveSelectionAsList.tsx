@@ -6,7 +6,6 @@ import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
 
 import { STUDY_LIST_COPY } from "./studyListCopy";
 import { encodeSelection } from "./subjectSelection";
-import type { SubjectSelection } from "./useSubjectSelection";
 
 /**
  * Keeping a chosen set, under a name.
@@ -18,17 +17,24 @@ import type { SubjectSelection } from "./useSubjectSelection";
  * Inline rather than a modal. Naming a list is one short field and the member
  * is looking straight at what they chose - a dialog would cover the very thing
  * they are naming.
+ *
+ * Takes the chosen characters rather than a selection object, because there are
+ * two ways to choose on this site - the shared `useSubjectSelection`, and the
+ * bulk mode the study and level explorers run - and saving a list is the same
+ * act either way. Coupling this to one of them is what kept the destination off
+ * the other.
  */
 
 const BUTTON =
   "inline-flex h-8 items-center rounded-full px-4 text-[11px] font-bold uppercase tracking-[0.08em] transition";
 
 export default function SaveSelectionAsList({
-  selection,
+  chosen,
   accountId,
   onSaved,
 }: {
-  selection: SubjectSelection;
+  /** The characters to save, in the order they were chosen. */
+  chosen: Iterable<string>;
   accountId: string;
   onSaved?: (name: string) => void;
 }) {
@@ -47,7 +53,7 @@ export default function SaveSelectionAsList({
       const response = await fetch(`/api/study/${accountId}/lists`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name: trimmed, characters: encodeSelection(selection.chosen) }),
+        body: JSON.stringify({ name: trimmed, characters: encodeSelection(chosen) }),
       });
 
       if (!response.ok) {

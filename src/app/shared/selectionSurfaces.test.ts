@@ -68,3 +68,77 @@ describe("choosing, across the surfaces that offer it", () => {
     expect(source).toContain("extendTo");
   });
 });
+
+const BULK_PANEL = "src/app/users/[nickname]/shared/ExplorerBulkSelectionPanel.tsx";
+const STUDY_PANEL = "src/app/users/[nickname]/study-explorer/components/StudyExplorerPanel.tsx";
+const LEVEL_GRID = "src/app/users/[nickname]/level-explorer/components/LevelExplorerItemsGrid.tsx";
+
+/*
+ * Somewhere for a bulk selection to go.
+ *
+ * There are two ways to choose on this site: the shared `useSubjectSelection`,
+ * and the bulk mode the study and level explorers run for their own reasons.
+ * The first had destinations from the day it was built - save it as a list,
+ * print it as a sheet - and the second had none, so a member could gather
+ * forty items on the study explorer and then only clear them again.
+ *
+ * The destinations belong to the act of choosing rather than to either
+ * mechanism, so they live on the shared panel and both explorers pass them.
+ */
+describe("what a bulk selection can become", () => {
+  it("offers both destinations from the shared panel", () => {
+    const source = read(BULK_PANEL);
+    expect(source).toContain("SaveSelectionAsList");
+    expect(source).toContain("SUBJECT_SELECTION_COPY.practise");
+  });
+
+  it.each([
+    ["the study explorer", STUDY_PANEL],
+    ["the level explorer", LEVEL_GRID],
+  ])("hands %s selection those destinations", (_label, path) => {
+    const source = read(path);
+    expect(source).toContain("destinations={{");
+    expect(source).toContain("practicePath");
+  });
+
+  /*
+   * A practice sheet is squares to write kanji in. A study queue is radicals
+   * and vocabulary as well, so the list keeps everything chosen and the sheet
+   * takes only the kanji - and is withheld entirely when there are none.
+   */
+  it.each([
+    ["the study explorer", STUDY_PANEL],
+    ["the level explorer", LEVEL_GRID],
+  ])("sends only kanji to the sheet from %s", (_label, path) => {
+    const source = read(path);
+    expect(source).toMatch(/practiceCharacters:[\s\S]{0,200}SUBJECT_TYPES\.kanji/);
+  });
+
+  it("withholds the sheet when nothing chosen can go on one", () => {
+    expect(read(BULK_PANEL)).toContain("destinations.practiceCharacters.length > 0");
+  });
+
+  /*
+   * Saving is the same act whichever way the choosing was done, so the save
+   * control takes characters rather than one mechanism's object. Coupling it to
+   * `SubjectSelection` is what kept it off the bulk panel for so long.
+   */
+  it("keeps saving usable by both ways of choosing", () => {
+    const source = read("src/app/shared/SaveSelectionAsList.tsx");
+    expect(source).toContain("chosen: Iterable<string>");
+    /* On the import, not the word - the comment above the props explains why. */
+    expect(source).not.toMatch(/import .*SubjectSelection.* from/);
+  });
+
+  /*
+   * Three surfaces derived "/users/<who>" from the pathname by hand. A fourth
+   * copy is how they drift apart.
+   */
+  it("derives the member's base path in one place", () => {
+    for (const path of [STUDY_PANEL, "src/app/shared/StudyHistoryTable.tsx", "src/app/shared/StudyTagListsModal.tsx"]) {
+      const source = read(path);
+      expect(source, `${path} should use the shared hook`).toContain("usePracticePath");
+      expect(source, `${path} should not rebuild the base path`).not.toContain('.split("/").slice(0, 3)');
+    }
+  });
+});

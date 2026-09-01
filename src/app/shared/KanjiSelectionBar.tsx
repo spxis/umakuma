@@ -41,7 +41,7 @@ export default function KanjiSelectionBar({
   return (
     <SubjectSelectionBar selection={selection} visibleKeys={visibleKeys}>
       {selection.count > 0 && accountId ? (
-        <SaveSelectionAsList selection={selection} accountId={accountId} onSaved={selection.cancel} />
+        <SaveSelectionAsList chosen={selection.chosen} accountId={accountId} onSaved={selection.cancel} />
       ) : null}
       {selection.count > 0 && practicePath ? (
         <Link

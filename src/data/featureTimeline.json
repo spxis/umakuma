@@ -1950,5 +1950,15 @@
     "version": "0.188.0",
     "summary": "A handful of words now cannot become a member's address. Signing up as Admin or Support would have produced /users/admin and /users/support, which read as the site speaking rather than as a member - and the first person to get one would have taken it by accident rather than by malice, since the address is built from whatever display name they arrived with. Reserved words are treated exactly like a name somebody already has: they take the numbered suffix, so nobody is refused an account and only the address moves. Their display name is untouched. Worth saying what this is not: it was written down as a route-shadowing risk and it never was one. Every member page lives under /users/ and there is no dynamic segment at the root, so /admin is the admin page whatever anyone calls themselves. The backlog note has been corrected rather than quietly deleted.",
     "releasedAt": "2026-09-01T06:56:29Z"
+  },
+  {
+    "id": "somewhere-for-a-selection-to-go",
+    "area": "study",
+    "name": "Somewhere for a selection to go",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.189.0",
+    "summary": "Choosing items on the study and WaniKani explorers could only ever be undone. Both run a bulk mode with shift-click ranges, and the panel counted what you had gathered and offered Select Visible, Clear and Done - nothing to actually do with the set. Meanwhile the grade and JLPT explorers, which choose through a different mechanism, had two destinations from the start: save it as a list, print it as a practice sheet. Those destinations belong to the act of choosing rather than to either mechanism, so they now live on the shared bulk panel and both explorers gain them at once. Practice takes only the kanji: a study queue is radicals and vocabulary too, and a practice sheet is squares to write kanji in - the list keeps everything chosen, and the sheet is withheld entirely when nothing chosen can go on one. Two smaller things had to move first. The save control took a selection object from one of the two mechanisms, which is what had kept it off the other; it takes characters now. And three surfaces worked out which member's page they were on by slicing the pathname by hand, which is one copy away from drifting - that is a shared hook.",
+    "releasedAt": "2026-09-01T07:07:26Z"
   }
 ]

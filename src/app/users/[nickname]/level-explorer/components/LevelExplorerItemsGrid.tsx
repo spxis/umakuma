@@ -11,6 +11,8 @@ const LEVEL_VIEW_MODE_STORAGE_KEY = "wr:level-explorer:view-mode";
 
 import { Fragment, useState } from "react";
 
+import { usePracticePath } from "@/app/shared/userBasePath";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
 import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
@@ -62,6 +64,7 @@ export default function LevelExplorerItemsGrid({
   onJumpToRelatedSubject,
   onJumpToKanji,
 }: Props) {
+  const practicePath = usePracticePath();
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(LEVEL_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
 
@@ -128,6 +131,16 @@ export default function LevelExplorerItemsGrid({
           onSelectVisible={onSelectVisibleSubjects}
           onClearSelection={onClearSelection}
           onDone={exitBulkMode}
+          /* The same two destinations the study explorer now offers; kanji only for the sheet. */
+          destinations={{
+            accountId,
+            characters: selectedItems.map((item) => item.characters),
+            practiceCharacters: selectedItems
+              .filter((item) => item.subjectType === SUBJECT_TYPES.kanji)
+              .map((item) => item.characters),
+            practicePath,
+            onSaved: exitBulkMode,
+          }}
         />
       ) : null}
       {filteredItems.length === 0 ? (

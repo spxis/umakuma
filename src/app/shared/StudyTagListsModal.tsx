@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { usePracticePath } from "@/app/shared/userBasePath";
 
 import ModalShell from "@/app/shared/ModalShell";
 import SegmentedControl from "@/app/shared/SegmentedControl";
@@ -8,7 +9,6 @@ import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
-import { usePathname } from "next/navigation";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import {
@@ -69,11 +69,7 @@ export default function StudyTagListsModal() {
    * address rather than being told, and offers nothing when there is no member
    * in it to read.
    */
-  const pathname = usePathname();
-  const userBase = (pathname ?? "").startsWith("/users/")
-    ? (pathname ?? "").split("/").slice(0, 3).join("/")
-    : "";
-  const practicePath = userBase ? `${userBase}/grades/practice` : "";
+  const practicePath = usePracticePath();
 
   const changeViewMode = useCallback((next: SubjectViewMode) => {
     setViewMode(next);

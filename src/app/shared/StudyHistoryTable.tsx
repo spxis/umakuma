@@ -12,7 +12,6 @@ import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
-import { usePathname } from "next/navigation";
 import {
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
@@ -20,6 +19,7 @@ import {
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import type { ReviewResult } from "@/lib/domainConstants";
+import { usePracticePath } from "@/app/shared/userBasePath";
 
 type SortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 type SortDir = "asc" | "desc";
@@ -83,11 +83,7 @@ export default function StudyHistoryTable({
    * and until now the only way was to write them down.
    */
   const selection = useSubjectSelection();
-  const pathname = usePathname();
-  const userBase = (pathname ?? "").startsWith("/users/")
-    ? (pathname ?? "").split("/").slice(0, 3).join("/")
-    : "";
-  const practicePath = userBase ? `${userBase}/grades/practice` : "";
+  const practicePath = usePracticePath();
   /* The endpoint carries the account whose history this is. */
   const selectionAccountId = endpoint.match(/\/api\/study\/([^/]+)\//)?.[1] ?? null;
 

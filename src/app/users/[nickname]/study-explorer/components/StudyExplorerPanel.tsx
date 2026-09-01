@@ -1,8 +1,10 @@
 import { useState } from "react";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
+import { usePracticePath } from "@/app/shared/userBasePath";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
-import StudyFilterSection from "./StudyFilterSection";
+import StudyGroupingFilters from "./StudyGroupingFilters";
 import StudyLevelFilters from "./StudyLevelFilters";
 import StudyStatusFilters from "./StudyStatusFilters";
 import StudyUpcomingReviewsSection from "./StudyUpcomingReviewsSection";
@@ -13,10 +15,7 @@ import {
   isReviewQueueItem,
   STUDY_PANEL_TEXT,
   STUDY_QUEUE_TYPES,
-  STUDY_GROUPING_FILTERS,
-  STUDY_TYPE_FILTERS,
   STUDY_VIEW_MODE_STORAGE_KEY,
-  studyGroupingToneClass,
 } from "./StudyExplorer.constants";
 import {
   formatNextReviewBadge,
@@ -35,7 +34,6 @@ import { useStudyMobileFilterSections } from "./useStudyMobileFilterSections";
 import { useStudyBulkReset } from "../lib/useStudyBulkReset";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
-import FilterChipButton from "../../shared/FilterChipButton";
 import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import StatusSrsChip, { ReviewTimingChip, SrsOnlyChip } from "../../shared/StatusSrsChip";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
@@ -105,6 +103,7 @@ export default function StudyExplorerPanel({
   accountId,
 }: StudyExplorerPanelProps) {
   const { bulkModeEnabled, selectedSubjectIds, selectedItems, selectedPreview, applyBulkSelection, toggleBulkMode, setSelectedSubjectIds } = useStudyBulkReset({ filteredItems });
+  const practicePath = usePracticePath();
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
   const [filtersOpen, setFiltersOpen] = usePersistedBoolean("wr:study:filters-open", { defaultValue: true });
   const { sectionsOpen: mobileFilterSectionsOpen, toggleSection: toggleMobileFilterSection, setSectionOpen: setMobileFilterSectionOpen } = useStudyMobileFilterSections();
@@ -198,58 +197,21 @@ export default function StudyExplorerPanel({
             onToggleMobileShowAllOptions={() => toggleMobileFilterSection("level")}
             onSetViewedLevel={(level) => { setMobileFilterSectionOpen("level", false); onSetViewedLevel(level); }}
           />
-          <StudyFilterSection
-            title={STUDY_PANEL_TEXT.grouping}
-            isOpen={mobileFilterSectionsOpen.grouping}
-            onToggle={() => toggleMobileFilterSection("grouping")}
-            ariaLabel={STUDY_PANEL_TEXT.groupingFilters}
-          >
-              <FilterChipButton
-                type="button"
-                onClick={() => {
-                  if (!mobileFilterSectionsOpen.grouping && allTypesSelected) {
-                    setMobileFilterSectionOpen("grouping", true);
-                    return;
-                  }
-                  setMobileFilterSectionOpen("grouping", false);
-                  onSetTypeFilter(STUDY_TYPE_FILTERS.all);
-                }}
-                disabled={filtersLoading}
-                role="tab"
-                aria-selected={allTypesSelected}
-                className={mobileFilterSectionsOpen.grouping || allTypesSelected ? "" : "hidden sm:inline-flex"}
-                toneClassName={filtersLoading && !allTypesSelected ? disabledBadgeClass() : badgeClass(allTypesSelected)}
-                label={STUDY_PANEL_TEXT.all}
-                count={groupingCountLabel(allTypeCount)}
-              />
-              {STUDY_GROUPING_FILTERS.map(([type, label]) => {
-                const count = typeCounts[type];
-                const isSelected = typeFilter === type || (allTypesSelected && count > 0);
-                const unavailable = hasData && !isSelected && count === 0;
-                const disabled = (filtersLoading && !isSelected) || unavailable;
-                return (
-                  <FilterChipButton
-                    key={type}
-                    type="button"
-                    onClick={() => {
-                      if (!mobileFilterSectionsOpen.grouping && isSelected) {
-                        setMobileFilterSectionOpen("grouping", true);
-                        return;
-                      }
-                      setMobileFilterSectionOpen("grouping", false);
-                      onSetTypeFilter(type);
-                    }}
-                    disabled={disabled}
-                    role="tab"
-                    aria-selected={isSelected}
-                    className={mobileFilterSectionsOpen.grouping || typeFilter === type ? "" : "hidden sm:inline-flex"}
-                    toneClassName={disabled && !isSelected ? disabledBadgeClass() : studyGroupingToneClass(type, isSelected)}
-                    label={label}
-                    count={groupingCountLabel(count)}
-                  />
-                );
-              })}
-          </StudyFilterSection>
+          <StudyGroupingFilters
+            typeFilter={typeFilter}
+            typeCounts={typeCounts}
+            allTypeCount={allTypeCount}
+            allTypesSelected={allTypesSelected}
+            filtersLoading={filtersLoading}
+            hasData={hasData}
+            sectionOpen={mobileFilterSectionsOpen.grouping}
+            onToggleSection={() => toggleMobileFilterSection("grouping")}
+            onSetSectionOpen={(open) => setMobileFilterSectionOpen("grouping", open)}
+            onSetTypeFilter={onSetTypeFilter}
+            badgeClass={badgeClass}
+            disabledBadgeClass={disabledBadgeClass}
+            groupingCountLabel={groupingCountLabel}
+          />
           {queueMode !== STUDY_QUEUE_TYPES.lesson ? (
             <StudyStatusFilters
               isOpen={mobileFilterSectionsOpen.status}
@@ -364,6 +326,25 @@ export default function StudyExplorerPanel({
             onSelectVisible={() => setSelectedSubjectIds(new Set(filteredItems.map((item) => item.subjectId)))}
             onClearSelection={() => setSelectedSubjectIds(new Set())}
             onDone={toggleBulkMode}
+            /*
+             * Somewhere for a bulk selection to go. Choosing items here could
+             * only ever be undone before this - the panel counted them and
+             * offered nothing to do with them, while the grade and JLPT
+             * explorers had saved lists and practice sheets all along.
+             *
+             * Practice takes only the kanji. A study queue is radicals and
+             * vocabulary as well, and a practice sheet is squares to write
+             * kanji in - the list keeps everything, the sheet cannot.
+             */
+            destinations={{
+              accountId,
+              characters: selectedItems.map((item) => item.characters),
+              practiceCharacters: selectedItems
+                .filter((item) => item.subjectType === SUBJECT_TYPES.kanji)
+                .map((item) => item.characters),
+              practicePath,
+              onSaved: toggleBulkMode,
+            }}
           />
         ) : null}
         <div className={`relative ${showLoadingOverlay ? "min-h-[14rem]" : ""}`}>

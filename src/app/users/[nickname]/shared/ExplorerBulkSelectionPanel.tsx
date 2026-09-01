@@ -1,3 +1,8 @@
+import Link from "next/link";
+
+import SaveSelectionAsList from "@/app/shared/SaveSelectionAsList";
+import { encodeSelection, SUBJECT_SELECTION_COPY } from "@/app/shared/subjectSelection";
+
 type BulkSelectionRow = {
   subjectId: number;
   characters: string;
@@ -6,6 +11,33 @@ type BulkSelectionRow = {
   srsStage: number;
   reading: string | null;
   meaning: string | null;
+};
+
+/**
+ * Where a bulk selection can go once it exists.
+ *
+ * Choosing things had two destinations on the explorers that use
+ * `useSubjectSelection` - save it as a list, print it as a practice sheet - and
+ * none at all on the two that use bulk mode, which meant the study and level
+ * explorers could gather a set and then do nothing with it. The same
+ * destinations belong on both, so they live on this panel rather than being
+ * built a third time.
+ *
+ * Practice is offered separately from saving because a practice sheet is
+ * squares to write kanji in: a selection holding radicals and vocabulary saves
+ * as a list perfectly well, and only its kanji can go on a sheet.
+ */
+type BulkDestinations = {
+  /** Whose lists this saves to. Null for a visitor, who cannot save. */
+  accountId: string | null;
+  /** Every chosen character, in the order chosen. */
+  characters: string[];
+  /** The kanji among them, which is all a practice sheet can hold. */
+  practiceCharacters: string[];
+  /** Where a sheet is built. Empty withholds the offer rather than pointing nowhere. */
+  practicePath: string;
+  /** Called after a list is saved, so the surface can leave bulk mode. */
+  onSaved?: () => void;
 };
 
 type Props = {
@@ -18,6 +50,7 @@ type Props = {
   onSelectVisible: () => void;
   onClearSelection: () => void;
   onDone: () => void;
+  destinations?: BulkDestinations;
 };
 
 export default function ExplorerBulkSelectionPanel({
@@ -30,6 +63,7 @@ export default function ExplorerBulkSelectionPanel({
   onSelectVisible,
   onClearSelection,
   onDone,
+  destinations,
 }: Props) {
   const hasSelection = selectedCount > 0;
 
@@ -58,6 +92,23 @@ export default function ExplorerBulkSelectionPanel({
         </div>
 
         <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+          {hasSelection && destinations?.accountId ? (
+            <SaveSelectionAsList
+              chosen={destinations.characters}
+              accountId={destinations.accountId}
+              onSaved={destinations.onSaved}
+            />
+          ) : null}
+          {hasSelection && destinations?.practicePath && destinations.practiceCharacters.length > 0 ? (
+            <Link
+              href={`${destinations.practicePath}?source=picked&picked=${encodeURIComponent(
+                encodeSelection(destinations.practiceCharacters),
+              )}`}
+              className="inline-flex h-8 items-center rounded-full bg-accent px-4 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
+            >
+              {SUBJECT_SELECTION_COPY.practise}
+            </Link>
+          ) : null}
           <button
             type="button"
             onClick={onSelectVisible}
