@@ -44,7 +44,12 @@ import StudyTagListsButton from "../../../../shared/StudyTagListsButton";
 import StudySortButtons from "./StudySortButtons";
 import StudyExplorerRows from "./StudyExplorerRows";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
-import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
+import {
+  SUBJECT_VIEW_MODES,
+  SUBJECT_VIEW_MODE_VALUES,
+  toSubjectListRow,
+  type SubjectViewMode,
+} from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import FieldLabel from "../../../../shared/FieldLabel";
@@ -313,19 +318,18 @@ export default function StudyExplorerPanel({
           <ExplorerBulkSelectionPanel
             selectedCount={selectedSubjectIds.size}
             preview={selectedPreview}
-            rows={selectedItems.map((item) => ({
-              subjectId: item.subjectId,
-              characters: item.characters,
-              subjectTypeLabel: shortSubjectTypeLabel(item.subjectType),
-              wkLevel: typeof item.wkLevel === "number" ? item.wkLevel : null,
-              srsStage: item.srsStage,
-              reading: (item.primaryReadings?.[0] ?? item.readings?.[0]) || null,
-              meaning: item.meanings?.[0] || null,
-            }))}
+            rows={selectedItems.map(toSubjectListRow)}
             showFullList={showAllSelectedInBar}
             onToggleFullList={() => setShowAllSelectedInBar((value) => !value)}
             onSelectVisible={() => setSelectedSubjectIds(new Set(filteredItems.map((item) => item.subjectId)))}
             onClearSelection={() => setSelectedSubjectIds(new Set())}
+            onRemoveSelected={(subjectId) =>
+              setSelectedSubjectIds((chosen) => {
+                const next = new Set(chosen);
+                next.delete(subjectId);
+                return next;
+              })
+            }
             onDone={toggleBulkMode}
             /*
              * Somewhere for a bulk selection to go. Choosing items here could

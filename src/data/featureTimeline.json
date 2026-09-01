@@ -2200,5 +2200,15 @@
     "version": "0.213.0",
     "releasedAt": "2026-09-01T14:30:41Z",
     "summary": "Searching the WaniKani explorer printed the answer twice. A line above the results said Showing 5 search results and the line on the toolbar said Showing 5 of 5 items - the same number, two sentences, neither of them wrong, and no way to tell whether they were counting the same thing or two different things that happened to agree. There is one count now, and a search changes what it says it is counting rather than adding a second opinion beside it: forty of sixty-nine items when you are browsing, five of five search results when you are searching."
+  },
+  {
+    "id": "one-list-layout",
+    "area": "study",
+    "name": "One list layout",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "releasedAt": "2026-09-01T14:55:24Z",
+    "version": "0.214.0",
+    "summary": "The best list of subjects on the site was the one nothing could reuse. Choosing items in bulk opened a six-column table - item, reading, meaning, type, level, SRS - and it read better than every other list here, because a column of subjects is scanned one field at a time and that table was the only place the fields lined up. Everywhere else the reading sat squeezed under the meaning in a row that flowed to fit, so no two rows put anything in the same place. The table is gone and its shape is the shared list: study history, the study queue, the Trouble and Favourites lists and the bulk panel itself now draw the same lanes under the same headings, from one set of widths that the headings and the rows both read, so neither can drift from the other. On a phone the narrow lanes fold away and the reading returns under the meaning, because six columns do not fit in 393 pixels and a truncated reading is worse than a stacked one. Two things came with it: a row in the bulk list now removes its own item, where before picking one thing by mistake meant clearing all of them and starting over, and Select Visible works before anything is selected - it had been disabled until you had already chosen something by hand, which is the moment you least need it."
   }
 ]

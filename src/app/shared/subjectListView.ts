@@ -1,4 +1,10 @@
-import { SUBJECT_TYPES, isSubjectType, type SrsBucket, type SubjectType } from "@/lib/domainConstants";
+import {
+  SUBJECT_TYPES,
+  isSubjectType,
+  srsBucketFromStage,
+  type SrsBucket,
+  type SubjectType,
+} from "@/lib/domainConstants";
 
 /**
  * The shared vocabulary for every list of subjects in the app.
@@ -22,6 +28,44 @@ export type SubjectListRow = {
   srsStage: number | null;
   srsBucket: SrsBucket;
 };
+
+/**
+ * What a surface holds before it is a row.
+ *
+ * The explorers, the study queue and the bulk panel all carry the same subject
+ * under slightly different names — `primaryReadings` before `readings`, a
+ * `status` that is already an SRS bucket, a level that may be missing. Each was
+ * flattening it by hand at the point of use, which is four copies of the same
+ * seven lines and four chances for one of them to pick the wrong reading.
+ */
+export type SubjectListSource = {
+  subjectId: number;
+  characters: string;
+  subjectType?: string | null;
+  meanings?: string[] | null;
+  readings?: string[] | null;
+  primaryReadings?: string[] | null;
+  wkLevel?: number | null;
+  srsStage?: number | null;
+  /** Already a bucket where the source has one; derived from the stage where not. */
+  status?: SrsBucket | null;
+};
+
+/** A subject as the shared list renderers want it. */
+export function toSubjectListRow(item: SubjectListSource): SubjectListRow {
+  const srsStage = typeof item.srsStage === "number" ? item.srsStage : null;
+  return {
+    key: String(item.subjectId),
+    subjectId: item.subjectId,
+    subjectType: item.subjectType ?? "",
+    glyph: item.characters,
+    meaning: item.meanings?.[0] ?? "",
+    reading: item.primaryReadings?.[0] ?? item.readings?.[0] ?? null,
+    wkLevel: typeof item.wkLevel === "number" ? item.wkLevel : null,
+    srsStage,
+    srsBucket: item.status ?? srsBucketFromStage(srsStage),
+  };
+}
 
 export const SUBJECT_VIEW_MODES = {
   grid: "grid",
@@ -48,6 +92,42 @@ export const SUBJECT_VIEW_COPY = {
   grid: "Grid",
   list: "List",
   noMeaning: "—",
+  /* The column headings. Shown from `md` up, where the lanes are separate. */
+  columnItem: "Item",
+  columnReading: "Reading",
+  columnMeaning: "Meaning",
+  columnType: "Type",
+  columnLevel: "Level",
+  columnSrs: "SRS",
+} as const;
+
+/**
+ * The lane widths every subject list shares.
+ *
+ * A list of subjects reads best as a table: the eye drops straight down one
+ * column instead of re-finding where the reading sits on each line. That only
+ * works if the heading row and every body row agree to the pixel, so the widths
+ * live here rather than being written twice — the bulk panel's own `<table>`
+ * proved the point by being the one surface that looked right and the one
+ * surface nothing else could reuse.
+ *
+ * Below `md` the narrow lanes collapse and the reading rejoins the meaning
+ * underneath it: six columns do not fit on a 393px phone, and a truncated
+ * reading is worse than a stacked one.
+ */
+export const SUBJECT_ROW_LANES = {
+  pick: "w-5 shrink-0",
+  leading: "w-7 shrink-0",
+  glyph: "w-16 shrink-0 sm:w-24",
+  reading: "hidden w-24 shrink-0 md:block lg:w-32",
+  meaning: "min-w-0 flex-1",
+  /* Wide enough for the RADICAL pill, which is the longest of the three. */
+  type: "hidden w-20 shrink-0 md:block",
+  level: "hidden w-10 shrink-0 md:block",
+  srs: "hidden w-24 shrink-0 lg:block",
+  /* Only wide enough to align from `md`, where the headings appear; below that
+   * a fixed lane would spend 96px of a 393px screen on a single × button. */
+  trailing: "shrink-0 md:w-24",
 } as const;
 
 /** Tailwind text colour for a subject's glyph, matching the explorer palette. */
