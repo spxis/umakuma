@@ -1,4 +1,4 @@
-export const ADMIN_WORKSPACE_TABS = ["data", "campaigns", "history", "users", "readingEntries", "releases", "kanjiCoverage", "featureFlags", "signup"] as const;
+export const ADMIN_WORKSPACE_TABS = ["data", "campaigns", "history", "users", "readingEntries", "releases", "kanjiCoverage", "featureFlags", "signup", "articles"] as const;
 
 export type AdminWorkspaceTab = (typeof ADMIN_WORKSPACE_TABS)[number];
 
@@ -15,10 +15,11 @@ export const ADMIN_WORKSPACE_ROUTES: Record<AdminWorkspaceTab, string> = {
   kanjiCoverage: "/admin/kanji-coverage",
   featureFlags: "/admin/feature-flags",
   signup: "/admin/signup",
+  articles: "/admin/articles",
 };
 
 /** Tabs that navigate to their own page instead of rendering inside the workspace. */
-export const ADMIN_STANDALONE_TABS = ["releases", "kanjiCoverage", "featureFlags", "signup"] as const;
+export const ADMIN_STANDALONE_TABS = ["releases", "kanjiCoverage", "featureFlags", "signup", "articles"] as const;
 
 export const ADMIN_WORKSPACE_TAB_LABELS: Record<AdminWorkspaceTab, string> = {
   data: "Data",
@@ -30,6 +31,7 @@ export const ADMIN_WORKSPACE_TAB_LABELS: Record<AdminWorkspaceTab, string> = {
   kanjiCoverage: "Kanji",
   featureFlags: "Flags",
   signup: "Signup",
+  articles: "Articles",
 };
 
 export function parseAdminWorkspaceTab(value: string | undefined, fallback: AdminWorkspaceTab = "users"): AdminWorkspaceTab {

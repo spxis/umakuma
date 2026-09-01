@@ -1980,5 +1980,15 @@
     "version": "0.191.0",
     "releasedAt": "2026-09-01T08:10:35Z",
     "summary": "Splitting the subject colours into a brand weight and a darker text weight fixed the pills, where a colour carries ten-pixel uppercase, and left the other half untouched: the character itself, drawn in the brand colour at twenty-four pixels and up. WCAG asks 3:1 there rather than 4.5, and radical cyan reached 2.41:1 on white - so the pill reading RADICAL was legible while the 水 beside it was not. Radical is the only hue that moved, darkened by the least that clears the floor, and the dark theme keeps the original because on that ground it is the readable one at 7.06:1. Kanji and vocabulary were already above the line and are untouched, so the site still looks like itself. The pill ink moved a shade with it, since the tint it sits on is mixed from the brand colour and had darkened underneath it."
+  },
+  {
+    "id": "articles,-kept-where-the-work-is",
+    "area": "platform",
+    "name": "Articles, kept where the work is",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.192.0",
+    "releasedAt": "2026-09-01T08:30:55Z",
+    "summary": "Written notes on what changed and why were being handed over as links to pages hosted elsewhere, which put them outside the repository, outside admin and outside version control - three places they belong. Admin now has an Articles tab: an index of pieces newest first with their length, and a reading page for each at a width prose is comfortable at. An article is a component in the same folder rather than a markdown file, because the site has no markdown renderer and adding a dependency to read four internal notes is a dependency for nothing, while a component inherits the site's own type, spacing and colour and cannot drift from them. The prose vocabulary is fixed - a lead, headings, points, figures, a release row and a note - so an article cannot quietly invent its own styling, and the list is a single registry, because an article that is not in it does not exist. The first piece is the write-up of the search rebuild and the two corpora that shipped alongside it."
   }
 ]
