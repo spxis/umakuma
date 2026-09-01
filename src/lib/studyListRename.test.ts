@@ -30,7 +30,23 @@ describe("renaming a list", () => {
     const route = read(ROUTE);
     const patch = route.slice(route.indexOf("export async function PATCH"));
     expect(patch).not.toContain("upsert");
-    expect(patch).not.toContain("characters");
+  });
+
+  /*
+   * PATCH carries the character editor too now, so "it never mentions
+   * characters" is no longer the way to say a rename leaves the contents
+   * alone. What says it instead is that the update is assembled field by
+   * field: a body with only a name puts only a name in `data`, so a rename
+   * cannot empty a list and an edit cannot rename one.
+   */
+  it("writes only the fields it was sent", () => {
+    const route = read(ROUTE);
+    const patch = route.slice(route.indexOf("export async function PATCH"));
+
+    expect(patch).toMatch(/if \(parsed\.data\.name !== undefined\)/);
+    expect(patch).toMatch(/if \(parsed\.data\.characters !== undefined\)/);
+    /* Whatever was gathered, and nothing assumed alongside it. */
+    expect(patch).toMatch(/updateMany\(\{[\s\S]*?data,\s*\}\)/);
   });
 
   /*
@@ -81,7 +97,7 @@ describe("renaming a list", () => {
     const branch = save.slice(refusal, accepted);
     expect(branch).toContain("setError(body?.error");
     expect(branch).toContain("return;");
-    expect(branch).not.toContain("setEditing(false)");
+    expect(branch, "the editor must not close on a refusal").not.toContain('setMode("none")');
   });
 
   /* Escape gets out of it, the way every other inline editor here does. */

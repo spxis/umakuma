@@ -2050,5 +2050,15 @@
     "version": "0.198.0",
     "releasedAt": "2026-09-01T10:05:28Z",
     "summary": "The route that creates an account had nothing bounding how often it could be called. It was never as bad as it sounds - a Google session is required before it does anything, and an address that already has an account gets that account back rather than a second one, so the ceiling was always one account per address rather than one per request. What was unbounded was the work behind it. Every call reads the signup settings, looks up the account, and scans every slug on the site to pick a free address, and a signed-in caller could repeat all of that as fast as they liked. Six attempts in ten minutes now, which leaves room for a form submitted twice, a retried request and a reload, and stops a loop. It is counted against the signed-in address rather than the caller's network address, because a household shares one of those - this one does - and a per-network budget would have the second person in a family turned away by the first. The check sits above all three reads rather than beside them, since a limit applied after the work bounds the answer and not the cost. None of this matters while the door is shut; all of it matters the moment it opens."
+  },
+  {
+    "id": "a-list-you-can-change-your-mind-about",
+    "area": "study",
+    "name": "A list you can change your mind about",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.199.0",
+    "releasedAt": "2026-09-01T10:21:47Z",
+    "summary": "A saved list was fixed the moment it was made. Renaming arrived a while back, so the label could be corrected, but what was actually in the list could not - taking one character out meant going back to an explorer, finding the other forty, choosing them all again and saving over the name. In practice nobody edited a list; they built a second one and left the first sitting there. Every list now has an Edit characters control beside Rename and Delete. The characters become the control rather than growing one beside them, because they are already the biggest thing on the card: tap one to take it out. Adding is a field you type into, since somebody who wants a particular kanji can type it faster than they can find it in a picker, and what is typed goes through the same tidying a saved selection does, so a pasted sentence and a chosen set reduce to the same thing. The whole edit is one save at the end rather than a request per character, which is one chance to go wrong instead of six. Emptying a list is refused: that is deleting it, and deleting has its own button and its own confirmation. While the panel is open the card's own preview and count stand aside, so there are never two different numbers on one card with nothing to say which is being changed."
   }
 ]

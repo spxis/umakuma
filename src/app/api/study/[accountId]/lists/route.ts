@@ -35,10 +35,23 @@ const saveSchema = z.object({
   characters: z.string().min(1),
 });
 
-const renameSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1).max(NAME_INPUT_MAX),
-});
+/*
+ * Both halves optional, and at least one required.
+ *
+ * A rename and an edit of the contents are the same shape of change - this
+ * list, these fields - and splitting them into two routes would mean two ways
+ * to say "and it must still be your list". Sending neither is a caller bug
+ * rather than a no-op, so it is refused.
+ */
+const changeSchema = z
+  .object({
+    id: z.string().min(1),
+    name: z.string().min(1).max(NAME_INPUT_MAX).optional(),
+    characters: z.string().optional(),
+  })
+  .refine((value) => value.name !== undefined || value.characters !== undefined, {
+    message: "Nothing to change.",
+  });
 
 const deleteSchema = z.object({
   id: z.string().min(1),
@@ -131,12 +144,14 @@ export async function POST(request: Request, context: RouteContext) {
 }
 
 /**
- * Renaming a list, which changes nothing about what is in it.
+ * Changing a list you already have: its name, what is in it, or both.
  *
  * Separate from POST on purpose. Saving under an existing name updates that
  * list's characters, so a rename expressed as a save would replace the target
  * list's contents with this one's - the exact accident a member would make by
- * renaming "Week 2" to "Week 1".
+ * renaming "Week 2" to "Week 1". Editing the contents has the same problem in
+ * reverse: POST needs a name to address a list, so it can only ever write to
+ * whichever list holds that name, while this addresses the list by id.
  */
 export async function PATCH(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
@@ -150,14 +165,35 @@ export async function PATCH(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
-        const parsed = renameSchema.safeParse(await request.json());
+        const parsed = changeSchema.safeParse(await request.json());
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
         }
 
-        const name = normalizeListName(parsed.data.name);
-        if (!name) {
-          return NextResponse.json({ error: "A list needs a name." }, { status: 400 });
+        const data: { name?: string; characters?: string[] } = {};
+
+        if (parsed.data.name !== undefined) {
+          const name = normalizeListName(parsed.data.name);
+          if (!name) {
+            return NextResponse.json({ error: "A list needs a name." }, { status: 400 });
+          }
+          data.name = name;
+        }
+
+        if (parsed.data.characters !== undefined) {
+          const characters = normalizeListCharacters([parsed.data.characters]);
+          /*
+           * Emptying a list is deleting it, and it has its own button. Writing
+           * the empty set instead would leave a named row that practises
+           * nothing and reads as a bug rather than a choice.
+           */
+          if (characters.length === 0) {
+            return NextResponse.json(
+              { error: "A list needs at least one character. Delete it instead." },
+              { status: 400 },
+            );
+          }
+          data.characters = characters;
         }
 
         /*
@@ -165,15 +201,15 @@ export async function PATCH(request: Request, context: RouteContext) {
          * from someone else's page matches nothing rather than being checked
          * and then trusted.
          */
-        const renamed = await prisma.studyList.updateMany({
+        const changed = await prisma.studyList.updateMany({
           where: { id: parsed.data.id, accountId },
-          data: { name },
+          data,
         });
-        if (renamed.count === 0) {
+        if (changed.count === 0) {
           return NextResponse.json({ error: "List not found." }, { status: 404 });
         }
 
-        return NextResponse.json({ list: { id: parsed.data.id, name } });
+        return NextResponse.json({ list: { id: parsed.data.id, ...data } });
       } catch (error) {
         if (isDuplicateListNameError(error)) {
           return NextResponse.json(
@@ -185,7 +221,7 @@ export async function PATCH(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Saved lists are not available yet." }, { status: 503 });
         }
         console.error(error);
-        return NextResponse.json({ error: "Could not rename the list." }, { status: 500 });
+        return NextResponse.json({ error: "Could not change the list." }, { status: 500 });
       }
     },
   });

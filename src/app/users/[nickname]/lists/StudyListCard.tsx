@@ -9,6 +9,7 @@ import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
 import { openStudyTagLists } from "@/lib/studyTagLists";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
+import StudyListCharacterEditor from "./StudyListCharacterEditor";
 import type { StudyListCardProps } from "./StudyList.types";
 
 /**
@@ -43,16 +44,62 @@ export default function StudyListCard({
   canEdit,
   onDelete,
   onRenamed,
+  onCharactersChanged,
 }: StudyListCardProps) {
-  const [editing, setEditing] = useState(false);
+  /*
+   * One mode rather than two booleans. The name editor replaces the heading
+   * and the character editor opens a panel below it; both open at once would
+   * put two Save buttons on one card, each meaning something different.
+   */
+  const [mode, setMode] = useState<"none" | "name" | "characters">("none");
   const [draft, setDraft] = useState(card.name);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const editing = mode === "name";
+  const editingCharacters = mode === "characters";
 
   function startEditing() {
     setDraft(card.name);
     setError(null);
-    setEditing(true);
+    setMode("name");
+  }
+
+  /**
+   * Not optimistic either, and for a stronger reason than the rename.
+   *
+   * A member has just taken characters out by hand. Showing the shortened list
+   * and then restoring the removed ones on failure would read as the page
+   * putting back something they deliberately removed, which is worse than
+   * waiting.
+   */
+  async function saveCharacters(characters: string[]) {
+    if (saving || characters.length === 0) return;
+
+    setSaving(true);
+    setError(null);
+    try {
+      const response = await fetch(`/api/study/${accountId}/lists`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id: card.id, characters: characters.join("") }),
+      });
+      const body = (await response.json().catch(() => null)) as
+        | { list?: { characters?: string[] }; error?: string }
+        | null;
+
+      if (!response.ok) {
+        setError(body?.error ?? STUDY_LIST_COPY.editFailed);
+        return;
+      }
+
+      // The server's set, not the draft: it dedupes and caps.
+      onCharactersChanged(body?.list?.characters ?? characters);
+      setMode("none");
+    } catch {
+      setError(STUDY_LIST_COPY.editFailed);
+    } finally {
+      setSaving(false);
+    }
   }
 
   /*
@@ -65,7 +112,7 @@ export default function StudyListCard({
     const next = draft.trim();
     if (!next || saving) return;
     if (next === card.name) {
-      setEditing(false);
+      setMode("none");
       return;
     }
 
@@ -88,7 +135,7 @@ export default function StudyListCard({
 
       // The server's name, not the draft: it collapses whitespace and caps length.
       onRenamed(body?.list?.name ?? next);
-      setEditing(false);
+      setMode("none");
     } catch {
       setError(STUDY_LIST_COPY.renameFailed);
     } finally {
@@ -103,7 +150,7 @@ export default function StudyListCard({
       onChange={(event) => setDraft(event.target.value)}
       onKeyDown={(event) => {
         if (event.key === "Enter") void save();
-        if (event.key === "Escape") setEditing(false);
+        if (event.key === "Escape") setMode("none");
       }}
       maxLength={STUDY_LIST_LIMITS.nameLength}
       aria-label={STUDY_LIST_COPY.nameLabel}
@@ -137,7 +184,7 @@ export default function StudyListCard({
       </button>
       <button
         type="button"
-        onClick={() => setEditing(false)}
+        onClick={() => setMode("none")}
         className={`${ACTION} hover:text-foreground`}
       >
         {STUDY_LIST_COPY.renameCancel}
@@ -158,6 +205,17 @@ export default function StudyListCard({
           <button type="button" onClick={startEditing} className={`${ACTION} hover:text-foreground`}>
             {STUDY_LIST_COPY.rename}
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setError(null);
+              setMode(editingCharacters ? "none" : "characters");
+            }}
+            aria-expanded={mode === "characters"}
+            className={`${ACTION} hover:text-foreground ${mode === "characters" ? "text-foreground" : ""}`}
+          >
+            {STUDY_LIST_COPY.editCharacters}
+          </button>
           <button type="button" onClick={onDelete} className={`${ACTION} hover:text-rose-600`}>
             {STUDY_LIST_COPY.remove}
           </button>
@@ -172,6 +230,25 @@ export default function StudyListCard({
   const errorNode = error ? (
     <p className="mt-1 text-[11px] font-semibold text-rose-600">{error}</p>
   ) : null;
+
+  /*
+   * Below the card's own content in both densities, and full width in each.
+   * The characters need room to be tapped, and a row has none to spare - the
+   * panel is the one place the two densities agree.
+   *
+   * Keyed on the characters so reopening the editor after a save starts from
+   * what was saved rather than a stale draft.
+   */
+  const characterEditor =
+    mode === "characters" ? (
+      <StudyListCharacterEditor
+        key={card.characters.join("")}
+        characters={card.characters}
+        saving={saving}
+        onSave={(next) => void saveCharacters(next)}
+        onCancel={() => setMode("none")}
+      />
+    ) : null;
 
   return (
     <li
@@ -193,37 +270,56 @@ export default function StudyListCard({
             */}
           <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
             {nameNode}
-            <p
-              lang="ja"
-              translate="no"
-              className={`min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}
-            >
-              {card.characters.join("")}
-            </p>
-            <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
-              {card.count}
-            </span>
+            {/*
+              * The preview and its count step aside while the editor is open.
+              * The panel below shows every character, larger and tappable, and
+              * carries a count of the draft - so leaving these would put two
+              * different numbers on one card with nothing saying which is the
+              * one being changed.
+              */}
+            {editingCharacters ? (
+              <span className="min-w-0 flex-1" />
+            ) : (
+              <>
+                <p
+                  lang="ja"
+                  translate="no"
+                  className={`min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}
+                >
+                  {card.characters.join("")}
+                </p>
+                <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
+                  {card.count}
+                </span>
+              </>
+            )}
             <span className="ml-auto flex shrink-0 items-center gap-3">{actions}</span>
           </div>
           {errorNode}
+          {characterEditor}
         </>
       ) : (
         <>
           <div className="flex items-start justify-between gap-2">
             {nameNode}
-            <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
-              {card.count}{" "}
-              {card.count === 1 ? STUDY_LIST_COPY.countSuffixOne : STUDY_LIST_COPY.countSuffix}
-            </span>
+            {/* Stands aside while the editor is open; see the row branch. */}
+            {editingCharacters ? null : (
+              <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
+                {card.count}{" "}
+                {card.count === 1 ? STUDY_LIST_COPY.countSuffixOne : STUDY_LIST_COPY.countSuffix}
+              </span>
+            )}
           </div>
 
-          <p
-            lang="ja"
-            translate="no"
-            className={`mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji ${JP_TEXT_CLASS}`}
-          >
-            {card.characters.join("")}
-          </p>
+          {editingCharacters ? null : (
+            <p
+              lang="ja"
+              translate="no"
+              className={`mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji ${JP_TEXT_CLASS}`}
+            >
+              {card.characters.join("")}
+            </p>
+          )}
 
           <p className="mt-3 text-[11px] text-foreground/60">
             {card.updatedAt
@@ -239,6 +335,7 @@ export default function StudyListCard({
             {actions}
           </div>
           {errorNode}
+          {characterEditor}
         </>
       )}
     </li>

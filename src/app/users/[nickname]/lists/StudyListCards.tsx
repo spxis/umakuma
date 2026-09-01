@@ -45,6 +45,8 @@ export default function StudyListCards({
   const [removed, setRemoved] = useState<Set<string>>(new Set());
   /* Renames the server has accepted, so the page shows them without a reload. */
   const [renamed, setRenamed] = useState<Record<string, string>>({});
+  /* The same for edited contents, which also change the count and the sheet. */
+  const [edited, setEdited] = useState<Record<string, string[]>>({});
   const [error, setError] = useState<string | null>(null);
   const [pendingRemoval, setPendingRemoval] = useState<string | null>(null);
   /*
@@ -76,14 +78,18 @@ export default function StudyListCards({
 
   const saved: ListCard[] = lists
     .filter((list) => !removed.has(list.id))
-    .map((list) => ({
-      id: list.id,
-      name: renamed[list.id] ?? list.name,
-      characters: list.characters,
-      count: list.characters.length,
-      updatedAt: list.updatedAt,
-      tag: null,
-    }));
+    .map((list) => {
+      /* An edit changes the count and the practice sheet, not only the preview. */
+      const characters = edited[list.id] ?? list.characters;
+      return {
+        id: list.id,
+        name: renamed[list.id] ?? list.name,
+        characters,
+        count: characters.length,
+        updatedAt: list.updatedAt,
+        tag: null,
+      };
+    });
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
 
   /* A tagged sheet is addressed by its source, so it takes the whole list. */
@@ -139,6 +145,9 @@ export default function StudyListCards({
       canEdit={canEdit}
       onDelete={() => setPendingRemoval(card.id)}
       onRenamed={(name) => setRenamed((prev) => ({ ...prev, [card.id]: name }))}
+      onCharactersChanged={(characters) =>
+        setEdited((prev) => ({ ...prev, [card.id]: characters }))
+      }
     />
   );
 

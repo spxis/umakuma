@@ -33,4 +33,14 @@ export type StudyListCardProps = {
   onDelete: () => void;
   /** Reported upward so the page keeps the new name without a round trip. */
   onRenamed: (name: string) => void;
+  /** The same, for what the list now holds after an edit. */
+  onCharactersChanged: (characters: string[]) => void;
+};
+
+export type StudyListCharacterEditorProps = {
+  /** What the list holds now; the editor works on its own copy. */
+  characters: string[];
+  saving: boolean;
+  onSave: (characters: string[]) => void;
+  onCancel: () => void;
 };

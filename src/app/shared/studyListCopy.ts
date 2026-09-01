@@ -41,6 +41,20 @@ export const STUDY_LIST_COPY = {
   renameCancel: "Cancel",
   renameFailed: "Could not rename that list.",
 
+  /*
+   * Editing what is in a list, which until now could only be done by saving
+   * over it from a surface that happened to have the right selection - so
+   * dropping one character meant picking the other forty again.
+   */
+  editCharacters: "Edit characters",
+  editHint: "Tap a character to take it out, or type more to add.",
+  add: "Add",
+  addPlaceholder: "Add characters",
+  addLabel: "Characters to add",
+  removeCharacterLabel: "Remove",
+  editEmpty: "A list needs at least one character. Delete it instead.",
+  editFailed: "Could not change that list.",
+
   remove: "Delete",
   removeConfirmTitle: "Delete this list?",
   removeConfirmBody: "The characters stay where they are. Only the saved list goes.",

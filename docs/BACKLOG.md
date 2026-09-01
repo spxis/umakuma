@@ -707,15 +707,30 @@ a save under a new name, because `POST` upserts on `(accountId, name)` — a
 rename expressed that way would replace the contents of whichever list already
 held the new name.
 
+**Editing the contents shipped in v0.199.0.** A list was fixed at the moment it
+was made, so dropping one character meant going back to an explorer, finding
+the other forty, choosing them again and saving over the name — in practice
+nobody edited a list, they built a second one. Every list now has an *Edit
+characters* control: the characters themselves are the control (tap one to
+remove it) because they are already the biggest thing on the card, and adding
+is a field, since typing 水 beats finding it in a picker. Both go through
+`normalizeListCharacters`, the same tidying the save path uses.
+
+`PATCH` grew a `characters` half rather than gaining a sibling route — a
+rename and a content edit are the same shape of change, addressed by id. It
+assembles the update field by field, so a rename cannot empty a list and an
+edit cannot rename one; the rename guard that used to assert "PATCH never
+mentions characters" now asserts that instead.
+
+Emptying a list is refused with a 400 pointing at delete: an empty named row
+practises nothing and reads as a bug rather than a choice.
+
 **Still open on this item:**
 
-- Editing what is *in* a list. Today a list is fixed at the moment it is saved;
-  changing it means saving over it from a surface with the right selection.
-  Adding or removing a character from the lists page itself is the obvious next
-  ask and is not built.
 - Reordering. `characters` is stored "in the order chosen" and a sheet
   re-sorted is a different sheet, so a reorder control has somewhere to write
-  to — there is just no way to do it.
+  to — there is just no way to do it. The editor is the obvious home for it now
+  that one exists.
 
 ### 23 — Selection as a shared surface control ⏳ nearly done (v0.132.0–v0.169.0)
 
