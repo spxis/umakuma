@@ -451,7 +451,7 @@
     "dateIsEstimate": false,
     "summary": "A Google viewer now resolves to an account by linked email only; the display-name fallback that granted strangers a family member's pages is gone.",
     "version": "0.58.0",
-    "releasedAt": "2026-08-30T08:17:15Z",
+    "releasedAt": "2026-08-30T15:12:26Z",
     "publicSummary": "Sign-in now matches you to your account by your linked email address."
   },
   {
@@ -485,7 +485,7 @@
     "date": "2026-08-30",
     "summary": "An account no longer requires WaniKani. The six connection fields are nullable, and every surface that used them now asks whether a connection exists instead of assuming one - WaniKani-derived boards leave unconnected accounts out rather than ranking them at level zero.",
     "version": "0.95.0",
-    "releasedAt": "2026-08-30T15:40:00Z"
+    "releasedAt": "2026-08-30T22:39:08Z"
   },
   {
     "id": "capability-gating",
@@ -558,7 +558,7 @@
     "dateIsEstimate": false,
     "summary": "The sync now skips rows whose extracted content is identical, even when WaniKani bumped the timestamp for fields we never store.",
     "version": "0.57.0",
-    "releasedAt": "2026-08-30T08:07:30Z"
+    "releasedAt": "2026-08-30T15:00:21Z"
   },
   {
     "id": "catalog-missing-subjects",
@@ -627,7 +627,7 @@
     "date": "2026-08-30",
     "summary": "Tracks which kanji WaniKani teaches, which it does not, and which it teaches that the JLPT table lacks.",
     "version": "0.52.0",
-    "releasedAt": "2026-08-30T07:04:59Z"
+    "releasedAt": "2026-08-30T14:00:00Z"
   },
   {
     "id": "parallel-level-ladder",
@@ -647,7 +647,7 @@
     "date": "2026-08-30",
     "summary": "One settings row and a smaller corners picker; the duplicate exit button is gone.",
     "version": "0.53.0",
-    "releasedAt": "2026-08-30T07:26:41Z"
+    "releasedAt": "2026-08-30T14:12:04Z"
   },
   {
     "id": "quality-gate-typecheck",
@@ -658,7 +658,7 @@
     "dateIsEstimate": false,
     "summary": "quality:check now runs tsc; it caught a fresh test bug on its first local run.",
     "version": "0.55.0",
-    "releasedAt": "2026-08-30T07:57:34Z"
+    "releasedAt": "2026-08-30T14:36:13Z"
   },
   {
     "id": "feature-flags",
@@ -668,7 +668,7 @@
     "date": "2026-08-30",
     "summary": "Global switches toggled from an admin page, backed by a FeatureFlag table. First flag: the open-signup door, off.",
     "version": "0.54.0",
-    "releasedAt": "2026-08-30T07:55:57Z"
+    "releasedAt": "2026-08-30T14:24:08Z"
   },
   {
     "id": "site-version",
@@ -678,7 +678,7 @@
     "date": "2026-08-30",
     "version": "0.56.0",
     "summary": "Every release bumps the version; the footer shows it and the timeline lists each release's number.",
-    "releasedAt": "2026-08-30T08:03:20Z"
+    "releasedAt": "2026-08-30T14:48:17Z"
   },
   {
     "id": "release-codenames",
@@ -688,7 +688,7 @@
     "date": "2026-08-30",
     "version": "0.59.0",
     "summary": "Every release walks the gojuon: a two-word Japanese name per version, worn in the header like a saying.",
-    "releasedAt": "2026-08-30T08:28:20Z"
+    "releasedAt": "2026-08-30T15:24:30Z"
   },
   {
     "id": "admin-api-namespace",
@@ -698,7 +698,7 @@
     "date": "2026-08-30",
     "version": "0.60.0",
     "summary": "Every admin-gated endpoint now lives under /api/admin/; the six that were scattered across the public tree moved in.",
-    "releasedAt": "2026-08-30T08:43:44Z",
+    "releasedAt": "2026-08-30T15:36:35Z",
     "publicSummary": "Administrative endpoints were consolidated under a single namespace."
   },
   {
@@ -709,7 +709,7 @@
     "date": "2026-08-30",
     "version": "0.61.0",
     "summary": "The join page sends resolved members to their own page, and the header only offers links the viewer can actually open.",
-    "releasedAt": "2026-08-30T08:47:25Z"
+    "releasedAt": "2026-08-30T15:48:39Z"
   },
   {
     "id": "site-modes",
@@ -719,7 +719,7 @@
     "date": "2026-08-30",
     "version": "0.62.0",
     "summary": "Two global mode flags, toggled from the flags page; the footer wears DEV and ADV chips while they are on.",
-    "releasedAt": "2026-08-30T08:53:46Z"
+    "releasedAt": "2026-08-30T16:00:43Z"
   },
   {
     "id": "timeline-timestamps",
@@ -728,7 +728,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.63.0",
-    "releasedAt": "2026-08-30T09:05:34Z",
+    "releasedAt": "2026-08-30T16:12:48Z",
     "summary": "Releases carry their real commit instant - John's point: a timestamp beats sort cleverness - and backlogged or killed work stays visible on its own tab."
   },
   {
@@ -738,7 +738,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.64.0",
-    "releasedAt": "2026-08-30T09:07:09Z",
+    "releasedAt": "2026-08-30T16:24:52Z",
     "summary": "Each account row keeps one visible Open-as-user action and folds the rest into a compact overflow menu."
   },
   {
@@ -748,7 +748,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.65.0",
-    "releasedAt": "2026-08-30T09:52:35Z",
+    "releasedAt": "2026-08-30T16:36:57Z",
     "summary": "The queue tag filter now shows as a chip you can clear, so a sticky Trouble filter no longer hides most of the due reviews without saying so, and the Trouble & favourites lists open from the Study page rather than only the game lobby, History and the JLPT explorer."
   },
   {
@@ -759,7 +759,7 @@
     "date": "2026-08-30",
     "summary": "Subject cards put the level in the top-right corner the way every other surface does, and the remove button moves to the bottom-right instead of squatting where the level belongs.",
     "version": "0.70.0",
-    "releasedAt": "2026-08-30T13:12:54Z"
+    "releasedAt": "2026-08-30T17:37:19Z"
   },
   {
     "id": "nav-regroup-settings",
@@ -769,7 +769,7 @@
     "date": "2026-08-30",
     "summary": "The header drops from eleven flat items wrapping onto two rows to eight groups on one. Explore holds the three explorers, Progress holds History and Stats, Read holds Read and News, and Settings holds Libraries.",
     "version": "0.75.0",
-    "releasedAt": "2026-08-30T13:35:09Z"
+    "releasedAt": "2026-08-30T18:37:40Z"
   },
   {
     "id": "codename-kana-and-kanji",
@@ -778,7 +778,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.66.0",
-    "releasedAt": "2026-08-30T10:25:50Z",
+    "releasedAt": "2026-08-30T16:49:01Z",
     "summary": "The release name prints its kana reading beside the kanji instead of hiding the kanji in a tooltip, so both scripts are readable at a glance."
   },
   {
@@ -788,7 +788,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.67.0",
-    "releasedAt": "2026-08-30T11:01:04Z",
+    "releasedAt": "2026-08-30T17:01:05Z",
     "summary": "For an admin the footer version number and the header motto link straight to the release timeline. Everyone else still sees them as plain text, since the page is admin-only."
   },
   {
@@ -798,7 +798,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.68.0",
-    "releasedAt": "2026-08-30T13:06:58Z",
+    "releasedAt": "2026-08-30T17:13:10Z",
     "summary": "Map data now covers 47 Japanese prefectures, 51 US states and 13 Canadian provinces and territories, each with capital, largest city, population, area and regional metadata, rebuilt reproducibly by the map:build scripts."
   },
   {
@@ -808,7 +808,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.69.0",
-    "releasedAt": "2026-08-30T13:07:34Z",
+    "releasedAt": "2026-08-30T17:25:14Z",
     "summary": "The Study queue offers the same grid/list toggle the tagged lists and history already use, so a long queue can be scanned one line at a time. The choice is remembered per surface."
   },
   {
@@ -818,7 +818,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.71.0",
-    "releasedAt": "2026-08-30T13:19:43Z",
+    "releasedAt": "2026-08-30T17:49:23Z",
     "summary": "The map data the capital, country and size games will read is now pinned by tests: region counts, unique ids, a capital and a positive population and area for all 111 divisions, and the comparison helpers."
   },
   {
@@ -828,7 +828,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.72.0",
-    "releasedAt": "2026-08-30T13:22:11Z",
+    "releasedAt": "2026-08-30T18:01:27Z",
     "summary": "US states and Canadian provinces get their own reserved subject-id bands beside the prefectures, so map rounds for any country can ride the existing run tables. Japan keeps the exact ids recorded runs already hold."
   },
   {
@@ -838,7 +838,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.73.0",
-    "releasedAt": "2026-08-30T13:26:41Z",
+    "releasedAt": "2026-08-30T18:13:32Z",
     "summary": "What makes a convincing wrong answer on a map - neighbours first, then region, then proximity - moves out of the Japan question builder so states and provinces use the same rule. Japan scores exactly as before."
   },
   {
@@ -848,7 +848,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.74.0",
-    "releasedAt": "2026-08-30T13:31:36Z",
+    "releasedAt": "2026-08-30T18:25:36Z",
     "summary": "Kanji by Japanese school year, with the on and kun readings approved for that grade rather than every reading the character has. Covers grades 1 to 6, secondary joyo and jinmeiyo, searchable and paged."
   },
   {
@@ -858,7 +858,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.76.0",
-    "releasedAt": "2026-08-30T13:39:54Z",
+    "releasedAt": "2026-08-30T18:49:45Z",
     "summary": "Shipped releases are public at /releases, grouped by month and expandable for the detail. Four entries that described a fixed security weakness precisely carry a cleansed public wording; the admin timeline keeps the honest text and the planned work."
   },
   {
@@ -868,7 +868,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.77.0",
-    "releasedAt": "2026-08-30T13:46:23Z",
+    "releasedAt": "2026-08-30T19:01:49Z",
     "summary": "A search box in the header and a results page that asks WaniKani, JLPT and School Grades at once, ranked into one list with exact characters and meanings first. Filter to a single catalogue with the source pills."
   },
   {
@@ -878,7 +878,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.78.0",
-    "releasedAt": "2026-08-30T13:49:43Z",
+    "releasedAt": "2026-08-30T19:13:54Z",
     "summary": "Reported by John: the level read as a pill in the lists and as faint borderless text on the study card and in the view modal. The in-glyph level and success rate are pills everywhere now."
   },
   {
@@ -888,7 +888,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.79.0",
-    "releasedAt": "2026-08-30T13:52:37Z",
+    "releasedAt": "2026-08-30T19:25:58Z",
     "summary": "Reported by John: modals grew and shrank with their contents. ModalShell now owns two heights, a content one for forms and a fixed one for lists, and a test fails if a modal hand-rolls its own again."
   },
   {
@@ -898,7 +898,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.80.0",
-    "releasedAt": "2026-08-30T13:59:06Z",
+    "releasedAt": "2026-08-30T19:38:02Z",
     "summary": "A search result now opens the explorer that holds it with the search already applied. Signed-out visitors keep the results as a lookup rather than being offered links that would bounce off the sign-in wall."
   },
   {
@@ -908,7 +908,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.81.0",
-    "releasedAt": "2026-08-30T14:01:54Z",
+    "releasedAt": "2026-08-30T19:50:07Z",
     "summary": "The grade grid hides its readings on request so the same page becomes a self-test: see the kanji, say the on and kun readings, select the card to check. Nothing is recorded, which is the point - it is the rehearsal, not the exam."
   },
   {
@@ -918,7 +918,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.82.0",
-    "releasedAt": "2026-08-30T14:05:31Z",
+    "releasedAt": "2026-08-30T20:02:11Z",
     "summary": "The header search field cost about 150px on a phone and the mobile nav clips rather than wraps, so it had silently pushed the Admin link off the end of the row. On a phone it is now the icon alone, linking to the search page."
   },
   {
@@ -928,7 +928,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.83.0",
-    "releasedAt": "2026-08-30T14:08:53Z",
+    "releasedAt": "2026-08-30T20:14:16Z",
     "summary": "Reported by John: the grade cards listed readings a character never has on its own. KANJIDIC hyphenates compound-only forms, and 31 of the 80 first-grade entries carried one, so the King card claimed a kun reading of -nou that only exists inside a compound. Those are filtered out of the display."
   },
   {
@@ -938,7 +938,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.84.0",
-    "releasedAt": "2026-08-30T14:18:34Z",
+    "releasedAt": "2026-08-30T20:26:20Z",
     "summary": "Every kanji can be watched being written, one stroke at a time, with optional stroke numbers. Stroke data comes from KanjiVG under CC BY-SA, credited on every animation, and is rebuilt reproducibly from a pinned commit with pnpm strokes:build. Covers all 2,899 school-grade characters."
   },
   {
@@ -948,7 +948,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.85.0",
-    "releasedAt": "2026-08-30T14:24:05Z",
+    "releasedAt": "2026-08-30T20:38:24Z",
     "summary": "The stroke-order view shows the printed character beside the animation, so a child copying strokes has the real shape to compare against, with the grade, JLPT and WaniKani levels, frequency rank and readings underneath."
   },
   {
@@ -958,7 +958,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.86.0",
-    "releasedAt": "2026-08-30T14:29:04Z",
+    "releasedAt": "2026-08-30T20:50:29Z",
     "summary": "Reported by John: the grade cards listed every reading a character has ever taken. They now use the readings from the joyo table, which is the cabinet-notified list for general use - so King correctly shows no kun reading, Sound files its in reading as on, and Life drops from twenty-one readings to ten. Both fonts are shown in the stroke view for comparison."
   },
   {
@@ -968,7 +968,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.87.0",
-    "releasedAt": "2026-08-30T14:37:37Z",
+    "releasedAt": "2026-08-30T21:02:33Z",
     "summary": "Stroke order moves into a shared button any surface can drop in, and the glyph viewer gains it for kanji. The data now covers every WaniKani kanji as well as the school grades - the characters WaniKani teaches past the joyo list were silently missing, and those are the ones a learner is least sure how to write."
   },
   {
@@ -978,7 +978,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.88.0",
-    "releasedAt": "2026-08-30T14:43:23Z",
+    "releasedAt": "2026-08-30T21:14:38Z",
     "summary": "The script that exports the WaniKani catalogue could not run at all - it imported a server-only module - so its committed snapshot had drifted to 3,930 of 9,324 subjects. Fixed and regenerated, and dropping the raw payload makes the complete export smaller than the stale one was."
   },
   {
@@ -988,7 +988,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.89.0",
-    "releasedAt": "2026-08-30T14:46:34Z",
+    "releasedAt": "2026-08-30T21:26:42Z",
     "summary": "The grade explorer was not the only place showing readings a character never takes on its own: 245 of the 2,211 JLPT kanji carried them too, so the JLPT explorer, the glyph viewer and search all did. One shared helper now prefers the joyo table wherever readings leave the database."
   },
   {
@@ -998,7 +998,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.90.0",
-    "releasedAt": "2026-08-30T14:49:00Z",
+    "releasedAt": "2026-08-30T21:38:46Z",
     "summary": "The grade page claimed its readings were the ones approved for that school year. They are the joyo table's, which is the official list for general use and is not split by year, so the copy now says so."
   },
   {
@@ -1008,7 +1008,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.91.0",
-    "releasedAt": "2026-08-30T14:56:00Z",
+    "releasedAt": "2026-08-30T21:50:51Z",
     "summary": "A kanji in the search results opens its stroke order without leaving the page. Radicals and vocabulary do not offer it, since neither is a single character with a stroke sequence."
   },
   {
@@ -1018,7 +1018,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.92.0",
-    "releasedAt": "2026-08-30T15:06:00Z",
+    "releasedAt": "2026-08-30T22:02:55Z",
     "summary": "A printable tracing sheet for any school grade: each character once at full weight to copy, faint repeats to trace, then empty squares to write unaided, with the guide lines a Japanese workbook uses. Drawn from the real stroke paths rather than a greyed-out font."
   },
   {
@@ -1028,7 +1028,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.93.0",
-    "releasedAt": "2026-08-30T15:20:00Z",
+    "releasedAt": "2026-08-30T22:15:00Z",
     "summary": "Writing practice is no longer only for school grades: the same sheet prints a WaniKani level or a JLPT level, so the ladder you are actually climbing is the one you can practise writing."
   },
   {
@@ -1038,7 +1038,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.94.0",
-    "releasedAt": "2026-08-30T15:34:00Z",
+    "releasedAt": "2026-08-30T22:27:04Z",
     "summary": "Writing practice joins the Explore group instead of hiding behind the grades page, and the sheet keeps the site header on screen while dropping it for print. A nested page no longer lights up its parent's tab as well as its own."
   },
   {
@@ -1048,7 +1048,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.96.0",
-    "releasedAt": "2026-08-30T16:05:00Z",
+    "releasedAt": "2026-08-30T22:51:13Z",
     "summary": "Every account gets a permanent slug and a display name it can change. Pages resolve by either the slug or the old WaniKani username, so links already shared keep working, and an account with no WaniKani connection is now reachable at all."
   },
   {
@@ -1058,7 +1058,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.97.0",
-    "releasedAt": "2026-08-30T16:20:00Z",
+    "releasedAt": "2026-08-30T23:03:17Z",
     "summary": "The Reviews menu was anchored to its right edge to keep it on screen on a desktop, which pushed it off the left edge on a phone, where the panel is nearly as wide as the display. It now anchors left on small screens and flips right only where there is room."
   },
   {
@@ -1068,7 +1068,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.98.0",
-    "releasedAt": "2026-08-30T16:45:00Z",
+    "releasedAt": "2026-08-30T23:15:21Z",
     "summary": "Every page is now loaded at three widths and checked for anything hanging outside the screen, with the study menus opened and checked the same way. Its first run found the library upload card running off the side of a phone, which is now fixed."
   },
   {
@@ -1078,7 +1078,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.99.0",
-    "releasedAt": "2026-08-30T17:15:00Z",
+    "releasedAt": "2026-08-30T23:27:26Z",
     "summary": "Settings now opens on a profile: change the name other members see, record a JLPT certificate, and read a table of every game you have finished. WaniKani level stays read-only because WaniKani sets it, and an account with no WaniKani connection reads Not connected instead of showing a blank."
   },
   {
@@ -1088,7 +1088,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.100.0",
-    "releasedAt": "2026-08-30T17:50:00Z",
+    "releasedAt": "2026-08-30T23:39:30Z",
     "summary": "Page access matched on a WaniKani username, so an account that signed in with Google and never connected WaniKani was turned away from every page it owns - its own profile included - while its API calls kept working. Access now matches the permanent slug first and falls back to the username, so links shared earlier still resolve."
   },
   {
@@ -1098,7 +1098,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.101.0",
-    "releasedAt": "2026-08-30T18:30:00Z",
+    "releasedAt": "2026-08-30T23:51:35Z",
     "summary": "Back to leaderboard is hidden for viewers the home page would send straight back, so the button no longer returns you to the page you are already reading. The screen also sends a member who has an account but no WaniKani connection to their own page instead of bouncing them through the invite form."
   },
   {
@@ -1108,7 +1108,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.102.0",
-    "releasedAt": "2026-08-30T19:05:00Z",
+    "releasedAt": "2026-08-31T00:03:39Z",
     "summary": "Asking for the login page while already signed in answered with a sign-out screen. It now takes you where you were headed, or to your own page. The sign-out tab links straight to the one screen that signs you out instead of bouncing through a redirect with no page of its own, and calls it Sign out, the wording used everywhere else."
   },
   {
@@ -1118,7 +1118,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.103.0",
-    "releasedAt": "2026-08-30T20:15:00Z",
+    "releasedAt": "2026-08-31T00:15:43Z",
     "summary": "A newcomer now gets a welcome instead of a locked door: what UmaKuma is, that WaniKani is not required, a name, and a choice of who can see them, which they can change on their profile whenever they like. Leaderboards respect that choice. Who may join, what they start on and which questions are asked are all set from a new admin page, and it ships closed."
   },
   {
@@ -1128,7 +1128,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.104.0",
-    "releasedAt": "2026-08-30T21:30:00Z",
+    "releasedAt": "2026-08-31T00:27:48Z",
     "summary": "The account menu kept its own copy of the navigation beside the header's, and the two had drifted apart. It now reads the same sections the header does, so nothing can go missing again. On a desktop it drops the navigation entirely, since the header already shows it, and keeps only your account, settings, admin and preferences. Settings moves out of the header into the menu, and Updates is reachable without hunting for the version number in the footer."
   },
   {
@@ -1138,7 +1138,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.105.0",
-    "releasedAt": "2026-08-30T22:10:00Z",
+    "releasedAt": "2026-08-31T00:39:52Z",
     "summary": "The grade explorer can be read as rows as well as cards, which is how you scan a whole school year and the only way to see a kanji with ten kun readings in full. The stroke control no longer sits on every card: it appears when you hover, or always where there is no hover to give, which also fixes it covering the end of a long reading."
   },
   {
@@ -1148,7 +1148,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.106.0",
-    "releasedAt": "2026-08-30T22:45:00Z",
+    "releasedAt": "2026-08-31T00:51:57Z",
     "summary": "Accounts that predate the visibility setting now read as public, which is what they already were. Reading them as members-only had emptied the leaderboard for anyone who was not signed in. New accounts still start private, where no audience is being taken away."
   },
   {
@@ -1158,7 +1158,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.107.0",
-    "releasedAt": "2026-08-30T23:05:00Z",
+    "releasedAt": "2026-08-31T01:04:01Z",
     "summary": "An invited member may have no Google account at all, and the welcome page assumed one - sending them to the sign-in screen from a page they were entitled to open. It now accepts either kind of session and routes them to their own page."
   },
   {
@@ -1168,7 +1168,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.108.0",
-    "releasedAt": "2026-08-30T23:55:00Z",
+    "releasedAt": "2026-08-31T01:16:05Z",
     "summary": "The stroke-order panel is now a shared component any surface can open, and every kanji has a public page you can send to someone. Selecting a card in the grade explorer opens it, which is how every other subject grid already behaved. The header carries the readings as well as the meaning, since a reader knows 何 by なに before they know it by what, with the stroke count beside it and the credit centred at the foot."
   },
   {
@@ -1178,7 +1178,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.109.0",
-    "releasedAt": "2026-08-31T00:20:00Z",
+    "releasedAt": "2026-08-31T01:28:10Z",
     "summary": "Each release now shows its codename on the row rather than only inside it, since that is the part anyone remembers. Months collapse, and an admin reaches the release admin page from here instead of finding their own way."
   },
   {
@@ -1188,7 +1188,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.110.0",
-    "releasedAt": "2026-08-31T01:00:00Z",
+    "releasedAt": "2026-08-31T01:40:14Z",
     "summary": "Writing practice can now be printed as a stroke-order chart: one numbered square per stroke, the character built up to that point with the newest stroke picked out. A character of more than eight strokes runs onto a second row instead of shrinking the squares. On a phone the sheet now says plainly that it wants a bigger screen, rather than rendering squares too small to write inside."
   },
   {
@@ -1198,7 +1198,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.111.0",
-    "releasedAt": "2026-08-31T01:30:00Z",
+    "releasedAt": "2026-08-31T01:52:19Z",
     "summary": "Changing grade or turning the page dropped you back to the tracing sheet, because only the sheet toggle carried the choice. Every link on the page keeps it now."
   },
   {
@@ -1208,7 +1208,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.112.0",
-    "releasedAt": "2026-08-31T02:00:00Z",
+    "releasedAt": "2026-08-31T02:04:23Z",
     "summary": "Every row is a full eight squares now: the finished character faintly at the start to work from, the strokes after it, and empty squares filling out the rest of the line. Each row is also titled with the character itself before its meaning."
   },
   {
@@ -1218,7 +1218,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.113.0",
-    "releasedAt": "2026-08-31T02:30:00Z",
+    "releasedAt": "2026-08-31T02:16:27Z",
     "summary": "Selecting the source you are already on opens a second row holding every value it offers: the eight school grades, sixty WaniKani levels or five JLPT levels. Changing sheet meant going back to the grade page and in again, which made a page you might print several of from harder to use than it needed to be."
   },
   {
@@ -1228,7 +1228,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.114.0",
-    "releasedAt": "2026-08-31T03:00:00Z",
+    "releasedAt": "2026-08-31T02:28:32Z",
     "summary": "The WaniKani and JLPT explorers can be read as rows as well as cards, which the grade explorer already offered and they did not. The four pages behind the Explore tabs also shared no wrapper, so the sub-nav sat at three different heights and moving between tabs nudged the whole header; they now agree exactly."
   },
   {
@@ -1238,7 +1238,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.115.0",
-    "releasedAt": "2026-08-31T03:40:00Z",
+    "releasedAt": "2026-08-31T02:40:36Z",
     "summary": "Whether the finished character sits in the first column is now a checkbox rather than a decision made for you, and the readings can print beside each meaning. The chooser also closes when you pick what is already picked, or with a Done button at the end of the row."
   },
   {
@@ -1248,7 +1248,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.116.0",
-    "releasedAt": "2026-08-31T04:10:00Z",
+    "releasedAt": "2026-08-31T02:52:40Z",
     "summary": "Trouble and Favourites are now sources for a writing sheet, offered from the practice page itself rather than only where the tags were made. They stay quiet until the control row is hovered, and appear always on a touch screen where there is no hover to give."
   },
   {
@@ -1258,7 +1258,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.117.0",
-    "releasedAt": "2026-08-31T04:40:00Z",
+    "releasedAt": "2026-08-31T03:04:45Z",
     "summary": "Filters and results shared one card on the grade explorer, divided by a hairline, while both other explorers keep them in separate cards. They are separate here too now, and the result count sits with the results rather than with the filters."
   },
   {
@@ -1268,7 +1268,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.118.0",
-    "releasedAt": "2026-08-31T05:00:00Z",
+    "releasedAt": "2026-08-31T03:16:49Z",
     "summary": "The option reached the stroke-order sheet but not the tracing sheet, which kept printing the character solid in the first square - the one thing the option exists to remove. It is now an empty square to write in, like the rest of the row."
   },
   {
@@ -1278,7 +1278,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.119.0",
-    "releasedAt": "2026-08-31T05:10:00Z",
+    "releasedAt": "2026-08-31T03:28:54Z",
     "summary": "The explorer and the writing sheet both offer the four levels the test ran until 2009, for anyone who sat it then. Both schemes count down, so old Level 4 is the beginner paper and matches N5 rather than N4 - and N3 is absent, because it was added in 2010 to bridge old Levels 3 and 2. The explorer says so rather than inventing a mapping."
   },
   {
@@ -1288,7 +1288,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.120.0",
-    "releasedAt": "2026-08-31T06:00:00Z",
+    "releasedAt": "2026-08-31T03:40:58Z",
     "summary": "Fifty-one states and thirteen provinces and territories join the forty-seven prefectures, as a bonus over the same board rather than a second game. Japan stays the default everywhere, and nothing new is stored: each question's target already carries its country in its id range, so runs recorded before this still read as Japan."
   },
   {
@@ -1298,7 +1298,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.121.0",
-    "releasedAt": "2026-08-31T07:00:00Z",
+    "releasedAt": "2026-08-31T03:53:02Z",
     "summary": "Map mode's setup now offers Japan, the United States or Canada, and the item count follows the choice - forty-seven, fifty-one or thirteen. Only Map shows the control, because only Map plays somewhere. Adding Europe or Asia later is a dataset and a line in one list, not a new game."
   },
   {
@@ -1308,7 +1308,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.122.0",
-    "releasedAt": "2026-08-31T08:00:00Z",
+    "releasedAt": "2026-08-31T04:05:07Z",
     "summary": "A Canadian round drew the Japanese coastline: the question knew its country and the board did not. The board now reads the country off the question, and the lobby offers only countries whose maps are real - the American and Canadian outlines are placeholder shapes, so they wait until that is fixed rather than being offered unplayable."
   },
   {
@@ -1318,7 +1318,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.123.0",
-    "releasedAt": "2026-08-31T09:00:00Z",
+    "releasedAt": "2026-08-31T04:17:11Z",
     "summary": "Map mode plays on all three countries. The American and Canadian outlines were hand-drawn placeholders - Ontario was five points - and are now built from the Census Bureau and Natural Earth by scripts that can be re-run when a boundary changes. Neighbours come from the map itself, so the wrong answers are the places next door."
   },
   {
@@ -1328,7 +1328,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.124.0",
-    "releasedAt": "2026-08-31T10:00:00Z",
+    "releasedAt": "2026-08-31T04:29:16Z",
     "summary": "The writing sheet's second row of chips now carries counts, so picking a grade or level is no longer a choice between bare numbers. Theme and Japanese font move from the account menu onto the profile, which already held the name and the visibility - one home for how you want UmaKuma to be rather than two."
   },
   {
@@ -1338,7 +1338,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.125.0",
-    "releasedAt": "2026-08-31T11:00:00Z",
+    "releasedAt": "2026-08-31T04:41:20Z",
     "summary": "Two small regions close together put their handles in the same few pixels, so a choice could be hidden behind another and never clicked - Prince Edward Island behind Nova Scotia. A handle now hangs below its region when the space above is taken. Scoreboards say which country a map run was played on, and member pages follow one width rule instead of three."
   },
   {
@@ -1348,7 +1348,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.126.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T04:53:24Z",
     "summary": "Map mode can ask by capital city: the prompt names the seat of government and the answer is the region that governs from it. Bismarck is North Dakota, Victoria is British Columbia. It works on all three countries, because every dataset already recorded a capital for every region."
   },
   {
@@ -1358,7 +1358,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.127.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T05:05:29Z",
     "summary": "The capitals round now skips the twenty-nine Japanese prefectures that share their capital's name, so it asks the eighteen worth knowing: 札幌市 is Hokkaido, 横浜市 is Kanagawa, 名古屋市 is Aichi. Japanese capitals are written in kanji now too, matching the tiles rather than sitting in romaji in a Japanese round."
   },
   {
@@ -1368,7 +1368,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.128.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T05:17:33Z",
     "summary": "Paging is a shared component now, and where it sits is the surface's choice: top, bottom, both or none. The writing practice sheet takes both, because its only Next link used to be three thousand pixels below the fold, past three sheets of empty tracing squares."
   },
   {
@@ -1378,7 +1378,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.129.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T05:29:38Z",
     "summary": "Printing a writing sheet now gives you a worksheet: Letter with proper margins, a Name and Date rule at the top, characters that never split across a page break, and none of the site's footer or version banner. The faint tracing characters print faintly instead of vanishing into the browser's ink saving."
   },
   {
@@ -1388,7 +1388,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.130.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T05:41:42Z",
     "summary": "The writing sheet offers three square sizes. Large gives a child six big boxes to form characters in; Small gives an adult ten smaller ones and an extra tracing repetition, which is what copying at volume actually wants. Medium is the practice-book square the sheet always had."
   },
   {
@@ -1398,7 +1398,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.131.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T05:53:46Z",
     "summary": "The sheet named Letter as its paper size, which overrode the printer: an A4 tray produced a Letter page scaled down inside it. It now pins only the orientation and lets the paper be whatever is loaded, so A4 and 8.5x11 both come out filling the page."
   },
   {
@@ -1408,7 +1408,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.132.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T06:05:51Z",
     "summary": "Choosing items is a surface control now, sitting beside the grid and list toggle rather than being a feature of the practice page. Pick characters on the grades explorer and send them to a sheet; the chosen set travels in the link, so a sheet built by hand is shareable and printable before anything is saved. Destinations are offered to a chosen set rather than built into the picking."
   },
   {
@@ -1418,7 +1418,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.133.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T06:17:55Z",
     "summary": "Choose characters on the grades explorer, give the set a name, and it keeps: Week 1, Week 2. A Lists page shows every set you have built with the characters it holds rather than a count, and each one goes straight to a practice sheet. The same idea as Trouble and Favourites, with a name instead of a flag."
   },
   {
@@ -1428,7 +1428,7 @@
     "status": "shipped",
     "date": "2026-08-30",
     "version": "0.134.0",
-    "releasedAt": "2026-08-31T12:00:00Z",
+    "releasedAt": "2026-08-31T06:30:00Z",
     "summary": "JLPT kanji are readable by any signed-in member now, connected to WaniKani or not. The table never had a WaniKani column; the query just happened to live inside an admin route, and the member-facing path went through an endpoint that decrypts a WaniKani token. The query is shared now and serves the readings themselves rather than the admin view's counts of them."
   },
   {
@@ -1676,9 +1676,9 @@
     "area": "platform",
     "name": "The way out of the dropdown",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.161.0",
-    "releasedAt": "2026-09-01T00:00:00Z",
+    "releasedAt": "2026-08-31T23:10:00Z",
     "summary": "The see all results row sat at the bottom left of the suggestion list in the same small type as a result, so the one control that leaves the dropdown read as an eleventh, oddly worded result. It is now centred across the full width, set in the same uppercase weight the rest of the site gives an action, and separated from the rows above by its own rule, with the highlighted state tinted rather than greyed so arrowing onto it looks like landing on a button rather than on another row."
   },
   {
@@ -1686,9 +1686,9 @@
     "area": "platform",
     "name": "The searches you already ran",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.162.0",
-    "releasedAt": "2026-09-01T01:00:00Z",
+    "releasedAt": "2026-08-31T23:23:00Z",
     "summary": "Looking a kanji up is rarely a single act - you check 家, then 家事, then go back to 家 - and retyping it each time was the whole friction. The search page now keeps the searches this browser has run and lists five of them under the results, each one a link back to those results and each with its own way to forget it. Twenty are remembered while five are shown, so forgetting one reveals the sixth rather than leaving a gap, and a single control clears the lot. The history lives on the device rather than the account, which means an anonymous visitor gets the same convenience as a member, and it is read through a store subscription rather than into state after mount, so the panel never flashes empty before it fills."
   },
   {
@@ -1696,9 +1696,9 @@
     "area": "study",
     "name": "Rows that show the character",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.163.0",
-    "releasedAt": "2026-09-01T01:00:00Z",
+    "releasedAt": "2026-08-31T23:36:00Z",
     "summary": "The JLPT and WaniKani explorers share one card component, and its list view was unusable: where each row s character should have been there was a pile of chips instead - the level pill sitting on the success rate sitting on the glyph. Both explorers hand the card an overlay written for the card shape, which places the level, the success rate and the trouble and favourite controls in the corners of a glyph box 128 pixels tall. A row s glyph box is 44 pixels square and has no corners to spare, so everything landed on top of everything else. The card now tells its overlays which shape they are being drawn into: in a row they lay themselves out in the line as ordinary chips and buttons, while the card keeps the corners it was designed around. Neither explorer changed - they pass the same overlay as before - and the trouble and favourite controls now work from the list view as well as the grid, which is what a member scanning a long level actually wants. Measured on both explorers afterwards: forty row glyph boxes each, none holding anything but the character."
   },
   {
@@ -1706,9 +1706,9 @@
     "area": "platform",
     "name": "The link goes where it says",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.164.0",
-    "releasedAt": "2026-09-01T02:00:00Z",
+    "releasedAt": "2026-08-31T23:49:00Z",
     "summary": "Clicking WaniKani in the header while on the JLPT explorer changed the address and nothing else - the JLPT explorer stayed on screen under a URL that said library-explorer. Each explorer has its own path but they all rewrite to the one user page with a dashboard parameter, so moving between them re-renders the tab component instead of remounting it, and the active tab was seeded from its prop by useState, which reads its argument once and ignores every later value. The tab now follows the address it is given, adjusted during render rather than in an effect so the old tab is never painted first and corrected a frame later. The bare user page is deliberately left out: that address names no tab, and following the prop there would overwrite the member s last open tab on every visit."
   },
   {
@@ -1716,9 +1716,9 @@
     "area": "study",
     "name": "The strokes button stops floating",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.165.0",
-    "releasedAt": "2026-09-01T03:00:00Z",
+    "releasedAt": "2026-09-01T00:02:00Z",
     "summary": "In the grade explorer s list view the stroke-order button was positioned absolutely at the right-hand edge of each row and revealed on hover, so it came down on top of the JLPT pill it was meant to sit beside. The row had reserved padding for it, but the pills spread into that space anyway and the two ended up in the same place - reserving room was never going to be the fix, because a row s controls have to take part in the layout. It sits in the line now, as the last thing in the row s chip cluster, taking its own room rather than floating over whatever is underneath. The card view is unchanged: there the button has a free corner to occupy, and one permanent control on every card of a screenful is noise rather than help, so it stays where it was and still waits for hover."
   },
   {
@@ -1726,9 +1726,9 @@
     "area": "platform",
     "name": "Study opens from anywhere",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.166.0",
-    "releasedAt": "2026-09-01T04:00:00Z",
+    "releasedAt": "2026-09-01T00:15:00Z",
     "summary": "Tapping Study in the header sometimes did nothing - the address changed and whatever explorer was open stayed on screen. It was only sometimes because from the study page itself the link looked fine, and it was worst on a phone, where the header is the only navigation there is. The cause sat one level below the tab that was fixed in 0.164.0: /study rewrites to dashboard=learn and the bare user page carries no parameter at all, and both resolve to the same tab, so the page could not tell go to study from landed here. The bare page has to reopen whichever tab the member last had, and that restore was overwriting an explicit request to open Study. The two are now told apart at the point the address is read, so a named tab always wins and an unnamed one still restores. The /study rewrite also matched nothing in the resolver and only worked by falling through to the default; it is handled explicitly now."
   },
   {
@@ -1736,9 +1736,9 @@
     "area": "platform",
     "name": "Every section on a phone",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.167.0",
-    "releasedAt": "2026-09-01T05:00:00Z",
+    "releasedAt": "2026-09-01T00:28:00Z",
     "summary": "A phone header showed four sections - Leaderboard, Study, Game, Admin - chosen by a hardcoded list of labels. Explore, Progress and Read were not in the markup at all, so on a phone the explorers, the progress pages and the reading pages could only be reached by somebody who already knew the menu button held them. Seven labels will not fit 393 pixels, so the row scrolls sideways now, reusing the same treatment the admin tab row has had for a while: no visible scrollbar, and a fade at the right edge that says there is more, which lifts once you reach the end. Removing the allowlist also removes seven literal labels that would have quietly stopped matching the day a section was renamed."
   },
   {
@@ -1746,9 +1746,9 @@
     "area": "study",
     "name": "Choose a range anywhere",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.168.0",
-    "releasedAt": "2026-09-01T06:00:00Z",
+    "releasedAt": "2026-09-01T00:41:00Z",
     "summary": "Choosing a set of characters existed in the grade explorer and nowhere else, and the JLPT explorer had no way to select anything at all - so building a practice sheet or a saved list from a JLPT level meant picking the kanji out by hand somewhere else. The JLPT explorer now offers the same Choose mode, the same bar, and the same two destinations, and shift-click takes everything between the last card and this one. None of that is a second copy: the bar and its destinations moved into a shared component that the grade board now uses too, and the card draws the ring and the tick itself so a chosen card reads the same on every surface. The tick sits where the index number was, because every corner of the card is already spoken for by a pill, a level, a success rate or the trouble and favourite controls, and a tick laid over any of them hides something the member is using to choose. The WaniKani explorer keeps its own selection - it picks subject ids and carries bulk operations the others have no use for - but it no longer carries its own copy of the range maths, and that fixed a bug in passing: its anchor was the item position in the visible list, so changing a filter or loading another page moved every position underneath it and the next shift-click swept the wrong stretch. It anchors on the subject now, which survives both."
   },
   {
@@ -1756,9 +1756,9 @@
     "area": "study",
     "name": "Choose a range on every list",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.169.0",
-    "releasedAt": "2026-09-01T07:00:00Z",
+    "releasedAt": "2026-09-01T00:54:00Z",
     "summary": "Choosing reached the explorers in 0.168.0 and stopped there, which left the two surfaces where a member has already gathered something deliberately - their study history, and the Trouble and Favourites lists - with no way to act on a set. Scanning what you got wrong last week is exactly the position from which you want those characters on a practice sheet, and the only route was to write them down. Both now offer the same Choose mode, in both densities, with shift taking everything between the last pick and this one. The work went into the shared row and card pair rather than into either surface, so neither had to learn anything: they pass the selection through and get the tick, the highlight and the sweep for free, and the next list built on that pair inherits all of it. The tick sits before history is own correct or wrong mark rather than replacing it, because whether you got it right is exactly what you are reading when you decide whether to pick that one. Where a surface cannot know which member it belongs to - the tagged lists open from the game lobby, from history, from either explorer - the practice offer is withheld rather than pointed at a guess."
   },
   {
@@ -1766,9 +1766,9 @@
     "area": "study",
     "name": "One sweep, one anchor",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.170.0",
-    "releasedAt": "2026-09-01T08:00:00Z",
+    "releasedAt": "2026-09-01T01:07:00Z",
     "summary": "The study explorer had shift-click already, and had it wrong in the same way the WaniKani explorer did: the anchor a range was measured from was the item is position in the filtered list, which stops meaning anything the moment a filter changes or another page loads. Change a status chip after picking one item and the next shift-click swept a stretch the member never crossed. It anchors on the subject now, which survives both, and it uses the same range helper the other four surfaces use rather than a third copy of the arithmetic. That is all of them: the three explorers, study history and the tagged lists now sweep a range the same way, and a test names each surface so a sixth cannot quietly go without."
   },
   {
@@ -1776,9 +1776,9 @@
     "area": "study",
     "name": "Your two lists, on your lists page",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.171.0",
-    "releasedAt": "2026-09-01T09:00:00Z",
+    "releasedAt": "2026-09-01T01:20:00Z",
     "summary": "Trouble and Favourites are lists in every sense a member cares about - they are named, they hold subjects, they are what you practise from - but they are tag rows rather than saved lists, so the page whose whole job is showing a member their lists was the one place they never appeared. They could be reached only through a panel opened by a button somewhere else, which meant the two lists a member had actually built were the two they could not find. Both now sit at the top of the lists page, in the same card as every saved list, with a count and a preview of what is in them. What differs is what they cannot do: there is nothing to delete, because untagging the last item empties a list rather than removing it, so the card offers Open instead and the panel is where tagging still happens. Their practice sheet is addressed by source rather than by the characters on the card, so printing one takes the whole list instead of the two dozen the card had room to preview. Both are always shown, empty ones included, because no favourites yet is an answer to the question somebody came to this page with and a missing card is not. The subtitle stopped claiming every list here was built by hand, which two of them now are not."
   },
   {
@@ -1786,9 +1786,9 @@
     "area": "platform",
     "name": "Recent searches join the list",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.172.0",
-    "releasedAt": "2026-09-01T10:00:00Z",
+    "releasedAt": "2026-09-01T01:33:00Z",
     "summary": "The remembered searches shipped as a card of their own below the results, which read as a separate widget parked under the page rather than as part of what the reader was already scanning. They are now the last rows of the results list itself: the same card, the same row rhythm, the same lane the glyphs occupy - a history icon standing where a glyph would - introduced by a tinted band carrying the heading and the control that clears them, because a search you already ran is a way back rather than an answer and has to be told apart from the results above it at a glance. The end of the results moved inside the list too, so what closes the results sits with them instead of floating below the card. With no list to close out - no query yet, or a query that matched nothing - the rows carry the same card on their own."
   },
   {
@@ -1796,9 +1796,9 @@
     "area": "study",
     "name": "Permanent lists, kept apart",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.173.0",
-    "releasedAt": "2026-09-01T11:00:00Z",
+    "releasedAt": "2026-09-01T01:46:00Z",
     "summary": "Trouble and Favourites arrived on the lists page in the last release and sat in the same grid as the saved lists, which quietly misrepresented both. They are permanent - they fill themselves as a member tags while studying, and there is nothing to delete because untagging the last item empties a list rather than removing it - while a saved list is made and thrown away at will. Run together, the grid invited a member to look for a delete on a card that does not have one. Each kind now has its own section under a heading that says what it is: Always here, which cannot be deleted, and Saved by you, which can. The card markup was extracted rather than duplicated per section, so both kinds still render through one component. The saved section says only what the page can actually do today - renaming a list is not built yet, and the copy does not pretend otherwise."
   },
   {
@@ -1806,9 +1806,9 @@
     "area": "platform",
     "name": "Let the database sleep",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.174.0",
-    "releasedAt": "2026-09-01T12:00:00Z",
+    "releasedAt": "2026-09-01T01:59:00Z",
     "summary": "The study counts and the study queue each re-asked the server every thirty seconds, which is far more often than either can change: review counts move on WaniKani SRS schedule, measured in hours, and the queue is mutated locally as a member answers rather than discovered by polling. The poll was never the mechanism, only a safety net for a session left open while something changed elsewhere - and it was an expensive one. A single open tab was 120 serverless invocations an hour and roughly 240 database queries, since every request checks access and then reads the account again; an evening across the family ran to thousands of both while discovering nothing. The part that actually shows up on the bill is Neon: its compute suspends after five minutes idle and is charged for the time it is awake, so a thirty-second poll meant the database never slept for as long as anybody had the study page open. Both surfaces now poll on one shared interval of five minutes, set just past that suspend threshold on purpose, so a closed laptop lets the database go to sleep. Revalidate-on-focus stays on, so returning to the tab still refreshes at once and the slower poll is never something a member waits on. A test pins the interval against the suspend window and fails if either surface goes back to a hand-typed number."
   },
   {
@@ -1816,9 +1816,9 @@
     "area": "platform",
     "name": "One read where there were two",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.175.0",
-    "releasedAt": "2026-09-01T13:00:00Z",
+    "releasedAt": "2026-09-01T02:12:00Z",
     "summary": "Every study route checked whether the request was allowed by reading the account, then read the same row again for the member WaniKani token. Counts and queue are what the study page asks for on a timer and review is asked once per answer, so that second read was the single most repeated query in the product - and on the busiest paths it doubled the database work for no information. The columns an access decision needs are three small ones, so they are now selected as part of the read the route was making anyway and the round trip disappears. Five routes moved across: counts, queue, review, upcoming and lesson start. The access check itself got cheaper too: it used to query once for the invite path and again for the Google path when the first did not match, and now resolves who is asking from the request before touching the database at all, so an admin is answered without a query and everybody else costs exactly one. Permission and existence stay separate answers, because a permitted request for an account that has since been deleted is a 404 rather than a 401."
   },
   {
@@ -1826,9 +1826,9 @@
     "area": "account",
     "name": "Two doors that were never locked",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.176.0",
-    "releasedAt": "2026-09-01T14:00:00Z",
+    "releasedAt": "2026-09-01T02:25:00Z",
     "summary": "Two per-account endpoints had no authentication of any kind. Both take an account id straight from the path, and both read that member encrypted WaniKani token: the JLPT route decrypts it and calls WaniKani with it, and the levels route reads a progress snapshot and writes a fresh one back. Verified against a running server with no cookies at all, a stranger holding an id received that member own kanji progress - subject ids, characters, meanings - and their level snapshot showing what they had learned. Both now answer 401 before touching the database. This was also an uncapped cost vector, which is how it was found: four database queries and an outbound WaniKani call per request, repeatable as fast as anyone cared to ask, on endpoints nothing was rate limiting. The explorers that call them only ever ask about the member whose page they are on, so requiring a session costs nothing that was working. Checked before the row is read rather than after, so a refused request costs one query rather than five."
   },
   {
@@ -1836,9 +1836,9 @@
     "area": "platform",
     "name": "Search reads every meaning",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.177.0",
-    "releasedAt": "2026-09-01T15:00:00Z",
+    "releasedAt": "2026-09-01T02:38:00Z",
     "summary": "All three catalogues searched every meaning a subject carries and then ranked the hit on its first one alone, so anything matched on another meaning scored zero and was removed by the filter that drops non-matches: the search found the row and then threw it away. Searching magnate returned nothing at all, though it is one of 王's meanings, and home returned twenty-one results while missing 家. Ranking now takes the best score across every meaning the subject holds - including the Heisig keyword, which was searched but never scored - and the row shows the meaning that earned the match behind the one the subject leads with, so a result for magnate no longer reads only King. Against the live catalogues magnate goes from zero hits to two and home from twenty-one to forty-five, while sun still puts 日 first."
   },
   {
@@ -1846,9 +1846,9 @@
     "area": "account",
     "name": "Closed unless it says otherwise",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.178.0",
-    "releasedAt": "2026-09-01T16:00:00Z",
+    "releasedAt": "2026-09-01T02:51:00Z",
     "summary": "An API route here was public unless somebody remembered to guard it, and two never did - which is how a stranger came to be able to read a member WaniKani progress by holding an account id. That is the wrong way round for a site whose whole content is members data, so being open is now a decision that has to be written down. A test walks every route file and requires each one to either check who is asking or appear in a list of public routes with the reason it is safe to leave open. A new route that forgets fails the build rather than production, and adding one to that list is a deliberate act a reviewer sees in the diff. The same test checks two other things the list can drift on: that a route listed as public still exists, and that any public route which touches the database or calls an external API is rate limited. It caught one straight away - the book cover proxy, which does two database reads and up to two lookups against openBD and Google Books per call, with nothing throttling it. Its responses cache hard, but a cache only helps a repeated ISBN and varying one walks straight past it, so it is now limited to 120 requests a minute per address. The cache posture everywhere else was already correct: the static catalogue routes cache publicly at the edge for a day or more, and no route behind a session declares a public cache, so nothing personal can be served from a shared one."
   },
   {
@@ -1856,9 +1856,19 @@
     "area": "platform",
     "name": "A way in without an account",
     "status": "shipped",
-    "date": "2026-09-01",
+    "date": "2026-08-31",
     "version": "0.179.0",
-    "releasedAt": "2026-09-01T17:00:00Z",
+    "releasedAt": "2026-09-01T03:17:19Z",
     "summary": "Every search result linked into one of the viewer's own explorer pages, which sit behind the sign-in wall, so a reader with no account got no link at all: rows of dead text on the page most likely to be reached by somebody who has never signed in. A single kanji already has a public page - it is the one a shared kanji link opens - so that is where an anonymous reader now goes, from both the results list and the suggestion dropdown. A word or a radical drawn as an image has no page of its own, so those still fall back to the results rather than to a link that would land nowhere, and a signed-in member is unaffected: their explorers carry their review state and remain the better destination."
+  },
+  {
+    "id": "releases-dated-by-vancouver",
+    "area": "platform",
+    "name": "The day a release actually shipped",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.180.0",
+    "releasedAt": "2026-09-01T03:20:00Z",
+    "summary": "An evening of releases claimed to have shipped on the 1st of September while it was still the 31st of August here. UTC rolls over seven hours before Vancouver does, and the release dates were written from UTC while every other date in this app - the Daily Challenge key, the study day - is the Vancouver day. The releases page grew a phantom September sitting above a still-running August, and thirty-two entries across two evenings were affected, some of them stamped hours into the future. All of them are corrected to the day they were really shipped on, respaced so each instant falls inside the day it claims. Two tests now hold the line: no release may claim to have shipped in the future, and each entry date must match the Vancouver day of its own timestamp. Nothing caught this before because a UTC date is a perfectly valid date - it was just the wrong one, and only a reader in the right timezone could see it. The admin releases list also collapses now, the way the public one already did: a hundred and seventy-seven entries each showing a full paragraph is a page nobody can scan, so the line identifies the release and the prose waits until it is asked for."
   }
 ]

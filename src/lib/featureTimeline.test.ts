@@ -275,3 +275,47 @@ describe("versions", () => {
     expect(pkg.version).toBe(latest);
   });
 });
+
+/*
+ * A release is dated by the Vancouver day, like every other date in this app.
+ *
+ * UTC rolls over seven hours before Vancouver does, so an evening's releases
+ * took tomorrow's date and the releases page grew a phantom September above a
+ * still-running August. Nothing caught it, because a UTC date is a perfectly
+ * valid date - it was just the wrong one, and only a reader in the right
+ * timezone could see that.
+ */
+describe("when a release says it shipped", () => {
+  const rows = loadFeatureTimeline().filter((entry) => entry.releasedAt);
+
+  it("never claims to have shipped in the future", () => {
+    const now = Date.now();
+    for (const entry of rows) {
+      expect(
+        Date.parse(entry.releasedAt!),
+        `${entry.version} says it shipped at ${entry.releasedAt}, which has not happened yet`,
+      ).toBeLessThanOrEqual(now);
+    }
+  });
+
+  /*
+   * The day and the instant have to agree once the instant is read in
+   * Vancouver. An entry dated the 31st whose instant lands on the 2nd is one
+   * or the other being guessed.
+   */
+  it("dates each release by the Vancouver day of its own timestamp", () => {
+    for (const entry of rows) {
+      const vancouverDay = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "America/Vancouver",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(new Date(entry.releasedAt!));
+
+      expect(
+        vancouverDay,
+        `${entry.version} is dated ${entry.date} but its timestamp is ${vancouverDay} in Vancouver`,
+      ).toBe(entry.date);
+    }
+  });
+});

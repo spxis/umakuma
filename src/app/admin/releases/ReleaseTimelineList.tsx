@@ -29,7 +29,14 @@ function FeatureRow({
   showStatusFlag: boolean;
 }) {
   return (
-    <li className="flex flex-col gap-1 border-b border-line/60 py-3 last:border-b-0 sm:flex-row sm:items-baseline sm:gap-4">
+    <li className="border-b border-line/60 last:border-b-0">
+      {/*
+        * Collapsed, like the public releases page. A hundred and seventy-seven
+        * releases each showing a full paragraph is a page nobody can scan; the
+        * line identifies the release and the prose waits until it is asked for.
+        */}
+      <details className="group py-3">
+      <summary className="flex cursor-pointer list-none flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
       <span className="flex shrink-0 items-baseline gap-2 sm:w-40 sm:justify-end">
         {entry.version ? (
           <code className="text-[11px] font-semibold text-foreground/45">v{entry.version}</code>
@@ -71,11 +78,20 @@ function FeatureRow({
             </span>
           ) : null}
         </div>
-
-        <p className="mt-1 text-sm text-foreground/70">
-          <JapaneseInProse text={entry.summary} />
-        </p>
       </div>
+
+      <span
+        aria-hidden="true"
+        className="shrink-0 self-center text-foreground/35 transition group-open:rotate-90"
+      >
+        ›
+      </span>
+      </summary>
+
+      <p className="mt-2 text-sm text-foreground/70 sm:ml-44">
+        <JapaneseInProse text={entry.summary} />
+      </p>
+      </details>
     </li>
   );
 }
@@ -94,20 +110,21 @@ export default function ReleaseTimelineList({
   return (
     <div className="flex flex-col gap-6">
       {groups.map((group) => (
-        <section key={group.monthKey}>
-          <h3 className="mb-1 text-xs font-bold uppercase tracking-wide text-foreground/50">
+        <details key={group.monthKey} open className="group/month">
+          <summary className="mb-1 flex cursor-pointer list-none items-baseline gap-2 text-xs font-bold uppercase tracking-wide text-foreground/50">
+            <span aria-hidden="true" className="text-foreground/35 transition group-open/month:rotate-90">›</span>
             {group.label}
-            <span className="ml-2 font-semibold text-foreground/35">
+            <span className="font-semibold text-foreground/35">
               {group.entries.length} {showEstimateFlag ? "planned" : "released"}
             </span>
-          </h3>
+          </summary>
 
           <ul className="flex flex-col">
             {group.entries.map((entry) => (
               <FeatureRow key={entry.id} entry={entry} showEstimateFlag={showEstimateFlag} showStatusFlag={showStatusFlag} />
             ))}
           </ul>
-        </section>
+        </details>
       ))}
     </div>
   );
