@@ -2120,5 +2120,15 @@
     "version": "0.205.0",
     "releasedAt": "2026-09-01T11:04:56Z",
     "summary": "Study, the two explorers, Stats, News and Read are one page under six addresses, and each had grown a different top. Study and the explorers opened with a decorative banner and then kept their real title inside a filter panel that can be collapsed. Stats and Read had each built a header card of their own, similar but not the same. Read went further and put its Challenge and Check-ins toggle on a row above that card, so its heading sat a row lower than on any sibling - which is what made the set look less like one product the more of it you visited. There is one header now: a picture, the page name, a line saying what the page is for, and room on the right for what the page lets you do. The picture is per page, deliberately, because a page should still read as itself at a glance; the arrangement is not. The banner is gone from these six, the two private header cards are gone, and the toggle that used to push a heading down now sits below it with the rest of the content. What is still uneven, and is the next piece rather than a thing anybody should have to notice twice, is that the three explorers name themselves a second time inside their own panels."
+  },
+  {
+    "id": "the-admin-round",
+    "area": "admin",
+    "name": "The admin round",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.206.0",
+    "releasedAt": "2026-09-01T11:39:06Z",
+    "summary": "Five things reported together, and one of them was hiding in every admin page rather than the one it showed up on. The release codename in the header refused to give up space, so on admin - ten tabs in the row beside it - it simply ran off the right edge and was cut in half; it shrinks and wraps to its own line now. Every admin page wrapped itself in a rule that clips anything reaching past its edge, which does nothing at all except cut off the user menu, and only looked like an Articles bug because Articles is short enough for the menu to reach past the bottom. The users table carried a filled button on every row labelled Open as user, which reads as impersonation: it is a plain link to the member's page, nothing is done as them, so it says View page and sits in the row menu with the other four actions instead of making the most ordinary thing look like the most consequential one. The signup settings laid three short choices out as three full-width bars on a screen over a thousand pixels wide, so the two questions could not be seen together; they are a grid. And the study history table listed twenty thousand answered reviews by subject id alone."
   }
 ]

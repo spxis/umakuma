@@ -200,7 +200,6 @@ export default function JlptExplorerContent({
       <header className="border-b border-line bg-surface/90 px-5 py-4">
         <div className="grid gap-2 sm:flex sm:items-start sm:justify-between sm:gap-3">
           <div className="order-2 min-w-0 sm:order-1">
-            <h2 className="text-xl font-black text-foreground">JLPT Explorer</h2>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">
               <FilterChipLabel label="Browse all N1-N5 kanji" count={`${formatNumber(items.length)} total`} />
             </p>

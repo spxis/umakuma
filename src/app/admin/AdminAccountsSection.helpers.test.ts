@@ -115,23 +115,32 @@ describe("sortAccounts", () => {
 describe("buildAccountRowActions", () => {
   const staleSyncedAt = new Date(NOW_MS - MANUAL_REFRESH_COOLDOWN_MS * 2).toISOString();
 
-  it("keeps open-as-user as the one visible action, with an encoded href", () => {
+  /*
+   * It was a filled button of its own beside the menu, labelled "Open as
+   * user", which read as impersonation. It is a link to the member's page -
+   * nothing is done as them - so it sits in the menu with everything else and
+   * says what it does.
+   */
+  it("opens the member's page from the menu, with an encoded href", () => {
     const actions = buildAccountRowActions(account({ wkUsername: "john smith" }), {
       busy: false,
       nowMs: NOW_MS,
     });
 
-    expect(actions.primary.label).toBe("Open as user");
-    expect(actions.primary.href).toBe("/users/john%20smith");
+    const viewPage = actions.menu.find((item) => item.id === ACCOUNT_ROW_ACTION_IDS.viewPage);
+    expect(viewPage?.label).toBe("View page");
+    expect(viewPage?.href).toBe("/users/john%20smith");
+    expect(viewPage?.destructive).toBe(false);
   });
 
-  it("puts the four remaining capabilities in the menu, in order", () => {
+  it("puts every capability in the menu, in order", () => {
     const actions = buildAccountRowActions(account({ lastSyncedAt: staleSyncedAt }), {
       busy: false,
       nowMs: NOW_MS,
     });
 
     expect(actions.menu.map((item) => item.id)).toEqual([
+      ACCOUNT_ROW_ACTION_IDS.viewPage,
       ACCOUNT_ROW_ACTION_IDS.refresh,
       ACCOUNT_ROW_ACTION_IDS.setInvite,
       ACCOUNT_ROW_ACTION_IDS.resetInvite,

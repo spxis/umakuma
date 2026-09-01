@@ -14,6 +14,11 @@ import CodenameText from "./CodenameText";
  *
  * It doubles as the way into the release timeline: the motto names the running
  * release, so clicking it to see what shipped is the obvious move.
+ *
+ * It shrinks. It used to be `shrink-0`, which on admin - ten tabs in the row
+ * beside it - meant the motto simply ran off the right edge and was cut in
+ * half. A motto that will not give up space guarantees an overflow on the one
+ * page with the most to fit.
  */
 export default function ReleaseMotto({ className = "" }: { className?: string }) {
   const codename = codenameForVersion(APP_VERSION);
@@ -24,7 +29,7 @@ export default function ReleaseMotto({ className = "" }: { className?: string })
   return (
     <Link
       href={RELEASES_HREF}
-      className={`hidden shrink-0 rounded-md transition hover:opacity-70 lg:block ${className}`.trim()}
+      className={`hidden min-w-0 rounded-md transition hover:opacity-70 lg:block ${className}`.trim()}
     >
       <CodenameText codename={codename} layout="stacked" />
     </Link>

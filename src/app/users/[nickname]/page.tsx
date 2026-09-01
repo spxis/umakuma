@@ -23,7 +23,6 @@ import {
 } from "@/lib/domainConstants";
 import {
   getNewsDevSampleUrls,
-  DASHBOARD_TAB_LABELS,
   dashboardTabWasAddressed,
   resolveInitialDashboardTab,
   resolveInitialReadTab,
@@ -380,9 +379,6 @@ export default async function UserDetailPage({ params, searchParams }: PageProps
         className="mb-2"
       />
 
-      <h1 className="sr-only">
-        {DASHBOARD_TAB_LABELS[initialDashboardTab]} &ndash; {account.nickname}
-      </h1>
 
       <UserDashboardTabs
         accountId={account.id}

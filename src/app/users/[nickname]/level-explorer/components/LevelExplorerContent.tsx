@@ -130,7 +130,7 @@ export default function LevelExplorerContent({
               className="group inline-flex max-w-full cursor-pointer items-center gap-2 rounded-md px-1 py-0.5 text-left"
               title="Change study library"
             >
-              <h2 className="truncate text-xl font-black text-foreground underline decoration-dotted decoration-[1px] decoration-foreground/25 underline-offset-[0.18em] transition-[text-decoration-color] duration-150 group-hover:decoration-foreground/45 group-focus-visible:decoration-foreground/55" title={explorerTitle}>{explorerTitle}</h2>
+              <h2 className="truncate text-[11px] font-black uppercase tracking-[0.12em] text-foreground/70 underline decoration-dotted decoration-[1px] decoration-foreground/25 underline-offset-[0.18em] transition-[text-decoration-color] duration-150 group-hover:decoration-foreground/45 group-focus-visible:decoration-foreground/55" title={explorerTitle}>{explorerTitle}</h2>
               <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">Change</span>
             </button>
             <p className="text-xs uppercase tracking-[0.08em] text-foreground/70">{LEVEL_EXPLORER_TEXT.levelSubtitle}</p>

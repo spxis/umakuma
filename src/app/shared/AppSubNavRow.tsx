@@ -47,11 +47,11 @@ export default function AppSubNavRow({
     .sort((left: string, right: string) => right.length - left.length)[0];
 
   return (
-    <div className="mt-1.5 flex min-h-[1.75rem] items-center justify-between gap-3 border-t border-line/60 pt-1.5">
+    <div className="mt-1.5 flex min-h-[1.75rem] flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-line/60 pt-1.5">
       {subNav ?? (children.length > 0 ? (
         <nav
           aria-label={`${section?.label ?? ""} pages`.trim()}
-          className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60 sm:text-[11px]"
+          className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60 sm:text-[11px]"
         >
           {children.map((child: NavChild, index: number) => {
             const href = hrefs[index]!;

@@ -52,7 +52,7 @@ export default async function AdminKanjiCoveragePage() {
     .sort((left, right) => (left.wkLevel ?? 0) - (right.wkLevel ?? 0));
 
   return (
-    <div className="relative overflow-hidden px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
+    <div className="relative px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
       <main className="relative w-full space-y-3">
         <AppTopMenuRow

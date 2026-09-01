@@ -30,6 +30,7 @@ export type SortDir = "asc" | "desc";
 
 /** The ids of the per-row menu actions, in their menu order. */
 export const ACCOUNT_ROW_ACTION_IDS = {
+  viewPage: "viewPage",
   refresh: "refresh",
   setInvite: "setInvite",
   resetInvite: "resetInvite",
@@ -52,7 +53,6 @@ export type AccountRowMenuAction = {
 
 /** The one always-visible action plus the row's overflow menu. */
 export type AccountRowActions = {
-  primary: { label: string; href: string };
   menu: AccountRowMenuAction[];
 };
 

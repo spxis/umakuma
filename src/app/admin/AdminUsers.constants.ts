@@ -8,7 +8,7 @@ export const ADMIN_USERS_COPY = {
     label: "Users",
     title: "Manage accounts",
     description:
-      "Open a member's page in one click; each row's menu covers refreshes, invite codes, and history.",
+      "Every row's menu opens the member's page and covers refreshes, invite codes, and history.",
     checkingSession: "Checking admin session...",
     signedOut: "Admin tools are hidden. Sign in with an allowlisted Google account.",
     empty: "No accounts yet.",
@@ -41,7 +41,12 @@ export const ADMIN_USERS_COPY = {
     remaining: (seconds: number) => `Locked ${seconds}s`,
   },
   rowActions: {
-    openAsUser: "Open as user",
+    /*
+     * Not "Open as user", which read as impersonation. It is a plain link to
+     * the member's own page - no session is switched and nothing is done as
+     * them - and a label that promises acting-as is worse than a dull one.
+     */
+    viewPage: "View page",
     menuButton: (nickname: string) => `More actions for ${nickname}`,
     refresh: "Refresh stats",
     refreshCooldown: "Synced under a minute ago",

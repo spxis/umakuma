@@ -13,7 +13,7 @@ const MENU_GAP_PX = 6;
 const MENU_EDGE_PX = 8;
 
 /**
- * One visible primary action plus a kebab menu for the rest. The menu panel is
+ * Every row action in one kebab menu. The menu panel is
  * position:fixed so the table's `overflow-x-auto` wrapper cannot clip it, and
  * it closes on outside press, Escape, scroll, resize, or selection.
  */
@@ -81,12 +81,6 @@ export default function AdminAccountRowActions({ nickname, actions, onSelect }: 
 
   return (
     <div className="flex items-center gap-1.5">
-      <Link
-        href={actions.primary.href}
-        className="inline-flex h-8 items-center justify-center whitespace-nowrap rounded-full border border-accent/30 bg-accent/10 px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-accent transition hover:bg-accent/20"
-      >
-        {actions.primary.label}
-      </Link>
 
       <button
         ref={buttonRef}

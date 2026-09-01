@@ -119,7 +119,8 @@ export default function StudyExplorerPanel({
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
   const studyLevelHeaderLabel = `L${Math.max(1, studySourceLevel ?? 1)}`;
-  const studyHeaderLabel = `Study - ${studySourceHeaderLabel} (${studyLevelHeaderLabel})`;
+  /* The library and level; the page header above already says Study. */
+  const studyHeaderLabel = `${studySourceHeaderLabel} (${studyLevelHeaderLabel})`;
   const hasMoreMatchingItems = hasMorePages && filteredItems.length < allTypeCount;
   const shouldShowLoadMoreUi = hasMoreMatchingItems && filteredItems.length > 1;
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
@@ -154,7 +155,7 @@ export default function StudyExplorerPanel({
                 className="group inline-flex max-w-full cursor-pointer items-center gap-2 rounded-md px-1 py-0.5 text-left"
               title={studySourceIsCustom ? STUDY_PANEL_TEXT.changeStudyLibrary : STUDY_PANEL_TEXT.chooseStudyLibrary}
             >
-              <h2 className="truncate text-xl font-black text-foreground underline decoration-dotted decoration-[1px] decoration-foreground/25 underline-offset-[0.18em] transition-[text-decoration-color] duration-150 group-hover:decoration-foreground/45 group-focus-visible:decoration-foreground/55" title={studyHeaderLabel}>{studyHeaderLabel}</h2>
+              <h2 className="truncate text-[11px] font-black uppercase tracking-[0.12em] text-foreground/70 underline decoration-dotted decoration-[1px] decoration-foreground/25 underline-offset-[0.18em] transition-[text-decoration-color] duration-150 group-hover:decoration-foreground/45 group-focus-visible:decoration-foreground/55" title={studyHeaderLabel}>{studyHeaderLabel}</h2>
               <span className="hidden rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/75 opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100 sm:inline-flex">{STUDY_PANEL_TEXT.change}</span>
             </button>
             <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60 sm:hidden">{studySourceIsCustom ? STUDY_PANEL_TEXT.tapTitleToChangeLibrary : STUDY_PANEL_TEXT.tapTitleToChooseLibrary}</p>

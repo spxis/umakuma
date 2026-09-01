@@ -328,9 +328,13 @@ export default function ExplorerTabs({
       typeof studySourceLevel === "number" ? studySourceLevel : 1,
     )
     : maxLevel;
-  const levelExplorerTitle = studySource === "custom"
-    ? `Library Explorer - ${studySourceHeaderLabel}`
-    : "Library Explorer - WaniKani";
+  /*
+   * The library, not the page. This read "Library Explorer - WaniKani" while
+   * the page header two rows above already said Library Explorer; what the
+   * control actually changes, and the only part that varies, is which library
+   * is open.
+   */
+  const levelExplorerTitle = studySource === "custom" ? studySourceHeaderLabel : "WaniKani";
   const levelExplorerPendingReviews = studySource === "custom"
     ? (typeof studyCounts?.reviews === "number" ? studyCounts.reviews : 0)
     : accountPendingReviews;

@@ -16,7 +16,8 @@ type TabDef = {
 
 const tabs: TabDef[] = [
   { key: "study", path: "study", heading: /Study/i },
-  { key: "level", path: "library-explorer", heading: /WaniKani/i },
+  /* The page names itself; the library it is showing is context below it. */
+  { key: "level", path: "library-explorer", heading: /Library Explorer/i },
   { key: "jlpt", path: "jlpt-explorer", heading: /JLPT Explorer/i },
 ];
 

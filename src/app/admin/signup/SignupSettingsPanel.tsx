@@ -107,7 +107,17 @@ export default function SignupSettingsPanel() {
                 {value === "true" ? "On" : "Off"}
               </button>
             ) : (
-              <div className="space-y-2">
+              /*
+               * A grid rather than a stack.
+               *
+               * Three choices, each a short label and a line of description,
+               * were laid out as three full-width bars on a page that is over
+               * a thousand pixels wide - so the whole panel read as a column
+               * of banners and the two questions could not be seen together.
+               * They sit side by side where there is room and stack where
+               * there is not.
+               */
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                 {definition.options?.map((option) => {
                   /*
                    * The visibility setting reuses the member-facing wording, so
@@ -123,7 +133,7 @@ export default function SignupSettingsPanel() {
                   return (
                     <label
                       key={option.value}
-                      className={`flex cursor-pointer gap-3 rounded-xl border p-3 transition ${
+                      className={`flex h-full cursor-pointer items-start gap-3 rounded-xl border p-3 transition ${
                         value === option.value ? "border-accent bg-accent/5" : "border-line hover:bg-surface-muted"
                       }`}
                     >

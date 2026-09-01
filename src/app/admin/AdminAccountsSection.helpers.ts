@@ -64,8 +64,12 @@ export function sortAccounts(accounts: AdminAccount[], sortBy: SortBy, sortDir: 
 }
 
 /**
- * The row's action set: one visible primary (open as the member) and an
- * overflow menu for the rest, so the table is not a wall of buttons.
+ * Everything a row can do, in one overflow menu.
+ *
+ * Opening the member's page used to be a filled button of its own beside the
+ * menu, which gave every row two controls and made the most ordinary action
+ * look like the most consequential one. It is a link to their page - it opens
+ * nothing "as" them - so it belongs with the rest.
  */
 export function buildAccountRowActions(
   account: AdminAccount,
@@ -75,11 +79,14 @@ export function buildAccountRowActions(
   const onCooldown = isManualRefreshOnCooldown(account.lastSyncedAt, nowMs);
 
   return {
-    primary: {
-      label: ADMIN_USERS_COPY.rowActions.openAsUser,
-      href: `/users/${encodeURIComponent(account.wkUsername)}`,
-    },
     menu: [
+      {
+        id: ACCOUNT_ROW_ACTION_IDS.viewPage,
+        label: ADMIN_USERS_COPY.rowActions.viewPage,
+        href: `/users/${encodeURIComponent(account.wkUsername)}`,
+        disabled: false,
+        destructive: false,
+      },
       {
         id: ACCOUNT_ROW_ACTION_IDS.refresh,
         label: ADMIN_USERS_COPY.rowActions.refresh,
