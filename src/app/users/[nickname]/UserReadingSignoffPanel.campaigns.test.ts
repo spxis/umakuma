@@ -15,7 +15,7 @@ describe("UserReadingSignoffPanel campaign helpers", () => {
     expect(campaigns[0]?.id).toBe("fallback-id");
   });
 
-  it("selects server campaign id when available", () => {
+  it("keeps the campaign the member chose, even while the server still names the old one", () => {
     const campaigns = [
       {
         id: "campaign-a",
@@ -33,13 +33,58 @@ describe("UserReadingSignoffPanel campaign helpers", () => {
       },
     ];
 
+    /*
+     * This asserted the opposite - that the server's id wins - and that was
+     * what made the Campaign selector inert. Choosing a campaign changes the
+     * SWR key, but SWR serves the previous response while the new one is in
+     * flight, and that stale response still names the campaign being left. The
+     * server winning meant the selection was put back before it took effect.
+     */
     const selected = resolveSelectedReadingCampaignId({
       currentCampaignId: "campaign-a",
       serverCampaignId: "campaign-b",
       campaigns,
     });
 
-    expect(selected).toBe("campaign-b");
+    expect(selected).toBe("campaign-a");
+  });
+
+  /* The server still decides when the member has no usable choice of their own. */
+  it("takes the server campaign when the current one is not a real campaign", () => {
+    const campaigns = [
+      {
+        id: "campaign-a",
+        name: "Campaign A",
+        status: "active",
+        startDatePst: "2026-06-01",
+        goalDatePst: "2026-07-01",
+      },
+    ];
+
+    expect(
+      resolveSelectedReadingCampaignId({
+        currentCampaignId: "campaign-that-was-deleted",
+        serverCampaignId: "campaign-a",
+        campaigns,
+      }),
+    ).toBe("campaign-a");
+  });
+
+  /* And falls back to the first campaign when there is no server answer either. */
+  it("falls back to the first campaign when nothing else names one", () => {
+    const campaigns = [
+      {
+        id: "campaign-a",
+        name: "Campaign A",
+        status: "active",
+        startDatePst: "2026-06-01",
+        goalDatePst: "2026-07-01",
+      },
+    ];
+
+    expect(
+      resolveSelectedReadingCampaignId({ currentCampaignId: "gone", campaigns }),
+    ).toBe("campaign-a");
   });
 
   it("resolves month bounds from selected campaign", () => {

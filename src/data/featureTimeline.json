@@ -1920,5 +1920,15 @@
     "version": "0.185.0",
     "releasedAt": "2026-09-01T06:21:48Z",
     "summary": "Readings and meanings say what a kanji is; a sentence says what it does, and the site's own examples come from WaniKani - shown to WaniKani members, absent everywhere else, including the public page a shared kanji link opens. Tatoeba publishes its corpus weekly as plain exports, which is the supported way to take it and the reason nothing here scrapes anything, and 232,731 Japanese sentences with an English translation are now ingested and indexed by the characters they contain. They arrive easiest first: each was scored at ingest by its length and the cost of its hardest character, so 水 opens with 水をくれ！ rather than with one of the other 1,644 sentences it appears in. Near-repeats that differ only in punctuation are folded together, since Tatoeba holds 水をくれ！ and 水をくれ。 separately and both would otherwise spend a slot saying the same thing. Kana-only sentences are kept though nothing can reach them yet, because they are the ones a kana vocabulary word would need later. The corpus is CC BY 2.0 FR, so the credit sits under every set of examples."
+  },
+  {
+    "id": "campaign-selector-that-switches",
+    "area": "reading",
+    "name": "The campaign selector that actually switches",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.186.0",
+    "summary": "Picking the other reading campaign on the Check-ins panel did nothing. The select snapped back to the first campaign before anyone could see it move, so a member with two campaigns could only ever look at one of them. Choosing a campaign did set it, and did start a fetch for the new one - but the panel keeps showing the previous response while the next is in flight, and that stale response still named the campaign being left. A rule that let the server's answer overrule the member's put the selection straight back. The member's choice now wins whenever it names a campaign that exists; the server's answer still seeds the choice on arrival and still rescues it if the campaign it named has been deleted. Found by repairing the smoke suite rather than by anyone reporting it, which is the first thing that suite has caught since it started telling the truth.",
+    "releasedAt": "2026-09-01T06:43:01Z"
   }
 ]

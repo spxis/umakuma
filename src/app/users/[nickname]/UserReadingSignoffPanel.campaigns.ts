@@ -37,12 +37,27 @@ export function resolveSelectedReadingCampaignId({
   serverCampaignId?: string;
   campaigns: ReadingCampaignOption[];
 }): string {
-  if (serverCampaignId) {
-    return serverCampaignId;
-  }
-
+  /*
+   * A choice the member has made, that names a campaign that exists, wins.
+   *
+   * The server's answer used to win unconditionally, which made the Campaign
+   * selector inert: picking the other campaign set the state, changed the SWR
+   * key and started a refetch - but SWR keeps the previous response while the
+   * new one is in flight, and that stale response still carried the old
+   * `selectedChallengeId`. This ran on the very next render, read the old id
+   * back off it, and put the selection where it had been. The select snapped
+   * back before anyone saw it move, so a member with two campaigns could only
+   * ever look at the first.
+   *
+   * The server value is still what seeds the choice and what rescues it when
+   * the campaign it names has gone - it just no longer overrules a live one.
+   */
   if (campaigns.some((campaign) => campaign.id === currentCampaignId)) {
     return currentCampaignId;
+  }
+
+  if (serverCampaignId) {
+    return serverCampaignId;
   }
 
   return campaigns[0]?.id ?? currentCampaignId;
