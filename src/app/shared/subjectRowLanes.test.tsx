@@ -81,8 +81,8 @@ describe("the shared subject list", () => {
     "gives the %s lane one width, shared by the heading and the rows",
     (lane, classes) => {
       const source = read("src/app/shared/SubjectRows.tsx");
-      const meta = read("src/app/shared/SubjectMetaLanes.tsx");
-      const uses = `${source}${meta}`.split(`SUBJECT_ROW_LANES.${lane}`).length - 1;
+      const columns = read("src/app/shared/subjectColumns.tsx");
+      const uses = `${source}${columns}`.split(`SUBJECT_ROW_LANES.${lane}`).length - 1;
       expect(uses, `${lane} should be referenced, not written out as ${classes}`).toBeGreaterThan(0);
 
       /*
@@ -95,14 +95,27 @@ describe("the shared subject list", () => {
     },
   );
 
+  /*
+   * The heading and the cell take their width from the same column object, so
+   * an unusual field list cannot put a heading over the wrong lane.
+   */
+  it("draws headings and cells from one column set", () => {
+    const source = read("src/app/shared/SubjectRows.tsx");
+    expect(source).toContain("columns.map((column)");
+    expect(source).toContain("className={`${column.lane}");
+  });
+
   /* The reading has a column of its own now; it must not also sit under the meaning. */
   it("shows the reading once at a width that has a column for it", () => {
     const doc = render(<SubjectRows rows={ROWS} onSelect={() => {}} />);
     const readings = [...doc.querySelectorAll('[lang="ja"]')].filter((el) => el.textContent === "すい");
     expect(readings).toHaveLength(2);
-    /* One in its own lane, one stacked - and exactly one of them is phone-only. */
+    /* One stacked under the meaning, phone-only... */
     expect(readings.filter((el) => el.className.includes("md:hidden"))).toHaveLength(1);
-    expect(readings.filter((el) => el.className.includes("hidden w-24"))).toHaveLength(1);
+    /* ...and one in the reading lane, which is the half that appears at `md`. */
+    expect(
+      readings.filter((el) => el.parentElement?.className.includes(SUBJECT_ROW_LANES.reading)),
+    ).toHaveLength(1);
   });
 
   /*
@@ -188,17 +201,49 @@ describe("what the bulk panel stopped owning", () => {
  * one surface with hairlines. Same idea, four sets of classes.
  */
 describe("the chrome a list wears", () => {
-  it.each([
-    ["the shared rows", "src/app/shared/SubjectRows.tsx"],
-    ["the grade explorer", "src/app/users/[nickname]/grades/GradeKanjiGrid.tsx"],
-    ["the WaniKani explorer", LEVEL_GRID],
-    ["the JLPT explorer", "src/app/users/[nickname]/jlpt-explorer/components/JlptExplorerContent.tsx"],
-  ])("draws %s from the shared surface", (_label, path) => {
-    const source = read(path);
+  it("defines the surface and its hairlines in one place", () => {
+    const source = read("src/app/shared/SubjectRows.tsx");
     expect(source).toContain("SUBJECT_LIST_SURFACE");
     expect(source).toContain("SUBJECT_LIST_DIVIDERS");
+  });
+
+  /*
+   * The explorers no longer name the surface at all - they render through the
+   * shared list, which draws it. That is the stronger version of the same
+   * guarantee: a surface that cannot name its own chrome cannot drift from it.
+   */
+  it.each([
+    ["the grade explorer", "src/app/users/[nickname]/grades/GradeKanjiGrid.tsx"],
+    ["the JLPT explorer", "src/app/users/[nickname]/jlpt-explorer/components/JlptExplorerContent.tsx"],
+  ])("draws %s list through the shared component", (_label, path) => {
+    const source = read(path);
+    expect(source).toMatch(/(GradeKanjiRows|JlptExplorerRows)/);
     /* And never the stack of boxes it replaced. */
     expect(source).not.toContain("space-y-1.5");
+  });
+
+  /* The WaniKani explorer still draws its own rows; it shares only the chrome. */
+  it("draws the WaniKani explorer from the shared surface", () => {
+    const source = read(LEVEL_GRID);
+    expect(source).toContain("SUBJECT_LIST_SURFACE");
+    expect(source).toContain("SUBJECT_LIST_DIVIDERS");
+    expect(source).not.toContain("space-y-1.5");
+  });
+
+  /*
+   * Each surface says which fields it shows. That difference was always real -
+   * grades have on and kun and no SRS - and letting it decide the layout is
+   * what produced five lists that looked like five products.
+   */
+  it.each([
+    ["the grade explorer", "src/app/users/[nickname]/grades/GradeKanjiRows.tsx"],
+    ["the JLPT explorer", "src/app/users/[nickname]/jlpt-explorer/components/JlptExplorerRows.tsx"],
+  ])("lets %s declare its own columns", (_label, path) => {
+    const source = read(path);
+    expect(source).toContain("SubjectColumn");
+    expect(source).toContain("columns={");
+    /* From the shared lane widths, so the headings still line up. */
+    expect(source).toContain("SUBJECT_ROW_LANES");
   });
 
   /* A row's own box is dropped in rows even when the caller still passes one. */

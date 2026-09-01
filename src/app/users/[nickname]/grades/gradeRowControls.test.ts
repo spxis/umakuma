@@ -18,13 +18,19 @@ const GRID = readFileSync(
  * fix. A row's controls have to take part in the layout.
  */
 describe("the grade row's controls", () => {
-  const rowBody = GRID.slice(GRID.indexOf("const rowBody = ("), GRID.indexOf("const cardBody = ("));
+  /*
+   * The row is the shared component now, so the button rides in its trailing
+   * slot - which sits outside the row button, takes part in the layout, and
+   * has nothing to be positioned over.
+   */
+  const rowBranch = GRID.slice(GRID.indexOf("if (rows) {"), GRID.indexOf("const cardBody = ("));
 
   it("puts the stroke button in the row rather than over it", () => {
-    expect(rowBody).toContain("{strokeButton}");
-    expect(rowBody).not.toContain("absolute");
+    expect(rowBranch).toContain("renderTrailing");
+    expect(rowBranch).toContain("StrokeOrderButton");
+    expect(rowBranch).not.toContain("absolute");
     // The reserved gutter goes with it; nothing is being kept clear any more.
-    expect(rowBody).not.toContain("pr-9");
+    expect(rowBranch).not.toContain("pr-9");
   });
 
   /*

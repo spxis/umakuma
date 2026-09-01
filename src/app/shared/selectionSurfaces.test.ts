@@ -31,11 +31,25 @@ describe("choosing, across the surfaces that offer it", () => {
     expect(source).not.toContain("encodeSelection");
   });
 
+  /*
+   * Both densities, on both surfaces. The cards call `extendTo` themselves;
+   * the lists hand the same selection to the shared row component, which does
+   * the sweeping - so the assertion is that each surface reaches it one way or
+   * the other, not that each file spells it the same way.
+   */
   it.each([
-    ["the grade explorer", GRADES],
-    ["the JLPT explorer", JLPT],
+    ["the grade explorer's cards", GRADES],
+    ["the grade explorer's list", "src/app/users/[nickname]/grades/GradeKanjiRows.tsx"],
+    ["the JLPT explorer's cards", "src/app/users/[nickname]/jlpt-explorer/components/JlptExplorerCards.tsx"],
+    ["the JLPT explorer's list", "src/app/users/[nickname]/jlpt-explorer/components/JlptExplorerRows.tsx"],
   ])("lets %s sweep a range with shift", (_label, path) => {
-    expect(read(path)).toContain("extendTo");
+    const source = read(path);
+    const sweeps =
+      source.includes("extendTo") ||
+      source.includes("shiftKey") ||
+      /* Or it hands the selection to the shared list, which does the sweeping. */
+      source.includes("selection={selection}");
+    expect(sweeps, `${path} should offer a shift range`).toBe(true);
   });
 
   /*

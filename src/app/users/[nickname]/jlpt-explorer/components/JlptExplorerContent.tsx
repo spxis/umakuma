@@ -1,7 +1,5 @@
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import {
-  SUBJECT_LIST_DIVIDERS,
-  SUBJECT_LIST_SURFACE,
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
   type SubjectViewMode,
@@ -28,24 +26,18 @@ const CLASSIC_LEVEL_CHIPS = [
 ] as const;
 import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import jlptReadings from "@/data/jlptReadings.json";
-import UnifiedExplorerCard from "../../shared/UnifiedExplorerCard";
-import { badgeClass, jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
-import {
-  formatNumber,
-  jlptHeading,
-  readingLabel,
-  readingLabelFromList,
-} from "../lib/jlptDisplay";
+import { badgeClass } from "../../level-explorer/lib/levelExplorerDisplay";
+import { formatNumber } from "../lib/jlptDisplay";
 import { JLPT_EXPLORER_TEXT } from "./JlptExplorer.constants";
-import { jlptStatusClass } from "../lib/jlptExplorerContentHelpers";
+import { toJlptRow, toJlptView } from "../lib/jlptRowAdapter";
+import JlptExplorerCards from "./JlptExplorerCards";
+import JlptExplorerRows from "./JlptExplorerRows";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import ExplorerSplitLoadingShimmer from "../../shared/ExplorerSplitLoadingShimmer";
 import FilterChipLabel from "../../shared/FilterChipLabel";
 import FilterChipButton from "../../shared/FilterChipButton";
-import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerDetailSection from "./JlptExplorerDetailSection";
-import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import FieldLabel from "../../../../shared/FieldLabel";
 import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
@@ -194,6 +186,27 @@ export default function JlptExplorerContent({
           Math.floor(selectedVisibleIndex / gridColumns) * gridColumns + (gridColumns - 1),
         )
       : -1;
+  /*
+   * One detail panel, opened by whichever density is showing.
+   *
+   * Both branches used to build their own copy of this eleven-prop element,
+   * which is two places for a prop to be forgotten when the panel grows one.
+   */
+  const renderDetail = () =>
+    selectedItem ? (
+      <JlptExplorerDetailSection
+        selectedItem={selectedItem}
+        showEnglish={showEnglish}
+        studyMode={studyMode}
+        userKanjiByChar={userKanjiByChar}
+        statsOpen={statsOpen}
+        kanjiStats={kanjiStats}
+        kanjiStatsLoading={kanjiStatsLoading}
+        kanjiStatsError={kanjiStatsError}
+        onToggleStatsOpen={() => setStatsOpen((value) => !value)}
+      />
+    ) : null;
+
   const effectiveMobileFiltersOpen = hasMounted ? mobileFiltersOpen : true;
   const mobileFilterSectionClass = effectiveMobileFiltersOpen ? "block" : "hidden";
   return (
@@ -377,101 +390,42 @@ export default function JlptExplorerContent({
             practicePath={practicePath}
           />
         </div>
-        {/* One surface with hairlines in rows; a shelf of boxes in the grid. */}
-        <div
-          className={
-            viewMode === SUBJECT_VIEW_MODES.list
-              ? `mt-3 ${SUBJECT_LIST_SURFACE} ${SUBJECT_LIST_DIVIDERS}`
-              : "mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
-          }
-        >
-          {visibleItems.map((item, index) => {
-            const userMatch = userKanjiByChar.get(item.kanji);
-            const preload = (jlptReadings as JlptReadingsRecord)[item.kanji];
-            const dbReadings = [...item.kunReadings, ...item.onReadings, ...item.nanoriReadings];
-            const primaryReading = userMatch
-              ? (userMatch.primaryReadings ?? [])[0] ?? (userMatch.readings ?? [])[0] ?? null
-              : dbReadings[0] ?? null;
-            const fallbackReadings = dbReadings.length > 0 ? dbReadings : (preload?.readings ?? []);
-            const fallbackMeanings = item.meanings.length > 0 ? item.meanings : (preload?.meanings ?? []);
-            const heading = jlptHeading(item.primaryMeaning, userMatch?.meanings, fallbackMeanings, item.kanji);
-            return (
-              <Fragment key={`${item.nLevel}-${item.kanji}`}>
-                <UnifiedExplorerCard
-                  density={viewMode}
-                  chosen={selection.choosing && selection.chosen.has(item.kanji)}
-                  onClick={(meta) => {
-                    /*
-                     * Choosing borrows the card's click, the way the grade
-                     * grid does - the same click, a different verb - so the
-                     * grid needs no second target and no permanent checkbox.
-                     */
-                    if (selection.choosing) {
-                      const order = visibleItems.map((entry) => entry.kanji);
-                      if (meta?.shiftKey) selection.extendTo(item.kanji, order);
-                      else selection.toggle(item.kanji);
-                      return;
-                    }
-                    onSetSelectedKanji((prev) => (prev === item.kanji ? null : item.kanji));
-                  }}
-                  className={`rounded-2xl border p-3 text-left transition hover:brightness-95 ${
-                    userMatch ? "border-kanji/50 bg-surface text-foreground" : "border-line bg-surface text-foreground"
-                  } ${selectedKanji === item.kanji ? "ring-2 ring-accent" : ""}`}
-                  indexLabel={`#${index + 1}`}
-                  topRight={
-                    <>
-                      {typeof item.schoolGrade === "number" ? (
-                        <NeutralPill>G{item.schoolGrade}</NeutralPill>
-                      ) : null}
-                      <ExplorerPill className={jlptLevelPillClass()}>{`N${item.nLevel}`}</ExplorerPill>
-                    </>
-                  }
-                  glyphClassName={`border-kanji/50 bg-kanji/10 ${userMatch ? "text-kanji" : "text-foreground"}`}
-                  glyphText={item.kanji}
-                  glyphTextClassName="text-6xl"
-                  glyphOverlay={
-                    <GlyphMetadataBadges
-                      level={userMatch?.wkLevel}
-                      successRate={userMatch?.successRate}
-                    />
-                  }
-                  glyphSubtitle={
-                    studyMode
-                      ? <span className="text-foreground/60">...</span>
-                      : showEnglish
-                        ? heading
-                        : primaryReading
-                          ? readingLabel(primaryReading, showEnglish)
-                          : readingLabelFromList(fallbackReadings, showEnglish)
-                  }
-                  statusChip={
-                    <ExplorerPill className={`px-3 py-1 text-xs font-bold ${jlptStatusClass(userMatch?.status)}`}>
-                      {userMatch?.status ?? "untracked"}
-                    </ExplorerPill>
-                  }
-                  rightChip={
-                    <NeutralPill className="px-2 py-1 text-xs font-bold">
-                      {userMatch ? `SRS ${userMatch.srsStage ?? 0}` : "-"}
-                    </NeutralPill>
-                  }
-                />
-                {selectedItem && index === visibleDetailInsertIndex ? (
-                  <JlptExplorerDetailSection
-                    selectedItem={selectedItem}
-                    showEnglish={showEnglish}
-                    studyMode={studyMode}
-                    userKanjiByChar={userKanjiByChar}
-                    statsOpen={statsOpen}
-                    kanjiStats={kanjiStats}
-                    kanjiStatsLoading={kanjiStatsLoading}
-                    kanjiStatsError={kanjiStatsError}
-                    onToggleStatsOpen={() => setStatsOpen((value) => !value)}
-                  />
-                ) : null}
-              </Fragment>
-            );
-          })}
-        </div>
+        {viewMode === SUBJECT_VIEW_MODES.list ? (
+          /*
+           * The shared row list, with this page's own columns.
+           *
+           * The list used to be the card component's row branch, so the JLPT
+           * list and the study queue looked like two different products over
+           * the same idea. What differs between them is seven column
+           * definitions now, not a second set of rows, headings and hairlines.
+           */
+          <div className="mt-3">
+            <JlptExplorerRows
+              rows={visibleItems.map((item) => toJlptRow(item, toJlptView(item, userKanjiByChar, jlptReadings as JlptReadingsRecord)))}
+              studyMode={studyMode}
+              showEnglish={showEnglish}
+              selection={selection}
+              selectedKanji={selectedKanji}
+              onSelectKanji={(kanji: string) => onSetSelectedKanji((prev) => (prev === kanji ? null : kanji))}
+              detailIndex={selectedItem ? visibleDetailInsertIndex : -1}
+              renderDetail={renderDetail}
+            />
+          </div>
+        ) : (
+        <JlptExplorerCards
+          visibleItems={visibleItems}
+          userKanjiByChar={userKanjiByChar}
+          jlptReadings={jlptReadings as JlptReadingsRecord}
+          studyMode={studyMode}
+          showEnglish={showEnglish}
+          selection={selection}
+          selectedKanji={selectedKanji}
+          selectedItem={selectedItem}
+          visibleDetailInsertIndex={visibleDetailInsertIndex}
+          onSetSelectedKanji={onSetSelectedKanji}
+          renderDetail={renderDetail}
+        />
+        )}
         {visibleItems.length < filteredItems.length ? (
           <div ref={sentinelRef} className="mt-3 rounded-xl border border-line bg-surface-muted px-3 py-2 text-center text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
             Loading more...

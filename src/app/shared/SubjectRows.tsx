@@ -1,12 +1,10 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 
-import SubjectMetaLanes from "@/app/shared/SubjectMetaLanes";
+import { defaultSubjectColumns, type SubjectColumn } from "@/app/shared/subjectColumns";
 import {
   SUBJECT_LIST_DIVIDERS,
   SUBJECT_LIST_SURFACE,
   SUBJECT_ROW_LANES,
-  SUBJECT_VIEW_COPY,
-  subjectGlyphTone,
   type SubjectListRow,
 } from "@/app/shared/subjectListView";
 import { JP_TEXT_CLASS } from "./japaneseText";
@@ -58,6 +56,26 @@ type Props<TRow extends SubjectListRow> = {
     isChosen: (row: TRow) => boolean;
     onPick: (row: TRow, shiftKey: boolean, index: number) => void;
   };
+  /**
+   * Which fields this surface shows.
+   *
+   * Every list here has a different set and always did - the study queue has an
+   * SRS stage, the grade explorer has on and kun readings and no SRS at all,
+   * the JLPT explorer has a school grade. What went wrong was letting that
+   * difference decide the layout too, so five lists grew five sets of row
+   * markup and stopped looking like one product. The surface declares its
+   * columns; everything around them belongs here.
+   *
+   * Defaults to the WaniKani subject set, which is what most callers want.
+   */
+  columns?: Array<SubjectColumn<TRow>>;
+  /**
+   * Something to open under one row.
+   *
+   * Both explorers insert a detail panel after the item just clicked. Return
+   * null for every row but that one.
+   */
+  renderAfterRow?: (row: TRow, index: number) => ReactNode;
 };
 
 type Group<TRow> = { heading: string; rows: Array<{ row: TRow; index: number }> };
@@ -89,7 +107,8 @@ function toGroups<TRow extends SubjectListRow>(
  * Hidden below `md`, where the narrow lanes collapse and a heading reading
  * "Item / Meaning" would name two columns nobody can miss.
  */
-function LaneHeadings({ choosing, hasLeading, hasTrailing }: {
+function LaneHeadings<TRow extends SubjectListRow>({ columns, choosing, hasLeading, hasTrailing }: {
+  columns: Array<SubjectColumn<TRow>>;
   choosing: boolean;
   hasLeading: boolean;
   hasTrailing: boolean;
@@ -99,12 +118,14 @@ function LaneHeadings({ choosing, hasLeading, hasTrailing }: {
       <div className="flex min-w-0 flex-1 items-center gap-3 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">
         {choosing ? <span className={SUBJECT_ROW_LANES.pick} /> : null}
         {hasLeading ? <span className={SUBJECT_ROW_LANES.leading} /> : null}
-        <span className={`${SUBJECT_ROW_LANES.glyph} text-center`}>{SUBJECT_VIEW_COPY.columnItem}</span>
-        <span className={SUBJECT_ROW_LANES.reading}>{SUBJECT_VIEW_COPY.columnReading}</span>
-        <span className={SUBJECT_ROW_LANES.meaning}>{SUBJECT_VIEW_COPY.columnMeaning}</span>
-        <span className={SUBJECT_ROW_LANES.type}>{SUBJECT_VIEW_COPY.columnType}</span>
-        <span className={SUBJECT_ROW_LANES.level}>{SUBJECT_VIEW_COPY.columnLevel}</span>
-        <span className={SUBJECT_ROW_LANES.srs}>{SUBJECT_VIEW_COPY.columnSrs}</span>
+        {/* The same lane classes the cells use, from the same column objects,
+          * so a heading cannot end up a different width from the column under
+          * it however unusual a surface's field list is. */}
+        {columns.map((column) => (
+          <span key={column.key} className={`${column.lane} ${column.headingClassName ?? ""}`}>
+            {column.heading}
+          </span>
+        ))}
       </div>
       {hasTrailing ? <span className={SUBJECT_ROW_LANES.trailing} /> : null}
     </div>
@@ -140,11 +161,15 @@ export default function SubjectRows<TRow extends SubjectListRow>({
   rowLabel,
   selection,
   picking,
+  columns = defaultSubjectColumns<TRow>(),
+  renderAfterRow,
 }: Props<TRow>) {
   if (rows.length === 0) return null;
 
   const hasLeading = Boolean(renderLeading);
   const hasTrailing = Boolean(renderTrailing);
+  /* The stacked reading is only a stand-in for a reading lane that exists. */
+  const hasReadingLane = columns.some((column) => column.key === "reading");
   const order = rows.map((row) => row.glyph);
 
   /*
@@ -168,7 +193,12 @@ export default function SubjectRows<TRow extends SubjectListRow>({
 
   return (
     <div className={SUBJECT_LIST_SURFACE}>
-      <LaneHeadings choosing={choosing} hasLeading={hasLeading} hasTrailing={hasTrailing} />
+      <LaneHeadings
+        columns={columns}
+        choosing={choosing}
+        hasLeading={hasLeading}
+        hasTrailing={hasTrailing}
+      />
 
       {toGroups(rows, groupBy).map((group) => (
         <section key={group.heading || "all"}>
@@ -183,9 +213,10 @@ export default function SubjectRows<TRow extends SubjectListRow>({
           <ul className={SUBJECT_LIST_DIVIDERS}>
             {group.rows.map(({ row, index }) => {
               const chosen = Boolean(chooser?.isChosen(row));
+              const opened = renderAfterRow?.(row, index) ?? null;
               return (
+              <Fragment key={row.key}>
               <li
-                key={row.key}
                 className={`flex items-center gap-2 pr-2 transition hover:bg-surface-muted/50 ${
                   chosen ? "bg-accent/10" : ""
                 }`}
@@ -222,45 +253,35 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                     </span>
                   ) : null}
 
-                  <span
-                    /*
-                     * Wide enough for a four-character word. A single-kanji
-                     * lane clipped every vocabulary item to its first character
-                     * plus an ellipsis, which is the one thing a reader is
-                     * scanning for.
-                     */
-                    className={`${SUBJECT_ROW_LANES.glyph} truncate text-center text-2xl font-black leading-none ${JP_TEXT_CLASS} ${subjectGlyphTone(row.subjectType)}`}
-                  >
-                    {row.glyph}
-                  </span>
-
-                  <span
-                    lang="ja"
-                    translate="no"
-                    className={`${SUBJECT_ROW_LANES.reading} truncate text-sm font-semibold text-foreground/70 ${JP_TEXT_CLASS}`}
-                  >
-                    {row.reading}
-                  </span>
-
-                  <span className={`${SUBJECT_ROW_LANES.meaning} flex flex-col`}>
-                    <span className="truncate text-sm font-bold text-foreground sm:text-base">
-                      {row.meaning || SUBJECT_VIEW_COPY.noMeaning}
-                    </span>
-                    <span className="flex items-center gap-1.5 truncate text-xs font-semibold text-foreground/60">
-                      {/* Only where the reading has no lane of its own. */}
-                      {row.reading ? (
-                        <span lang="ja" translate="no" className={`md:hidden ${JP_TEXT_CLASS}`}>{row.reading}</span>
-                      ) : null}
-                      {renderSubMeta ? renderSubMeta(row) : null}
-                    </span>
-                  </span>
-
-                  <SubjectMetaLanes
-                    subjectType={row.subjectType}
-                    wkLevel={row.wkLevel}
-                    srsStage={row.srsStage}
-                    srsBucket={row.srsBucket}
-                  />
+                  {/*
+                    * The surface's own fields, in the shared lanes.
+                    *
+                    * Which columns exist is the surface's business - grades
+                    * have on and kun and no SRS, the JLPT explorer has a school
+                    * grade - and where they sit is not. The meaning lane is the
+                    * one that grows, so it is also the one that carries the
+                    * phone-only reading and the surface's sub-line.
+                    */}
+                  {columns.map((column) =>
+                    column.key === "meaning" ? (
+                      <span key={column.key} className={`${column.lane} flex flex-col`}>
+                        {column.render(row)}
+                        <span className="flex items-center gap-1.5 truncate text-xs font-semibold text-foreground/60">
+                          {/* Only where the reading has no lane of its own. */}
+                          {row.reading && hasReadingLane ? (
+                            <span lang="ja" translate="no" className={`md:hidden ${JP_TEXT_CLASS}`}>
+                              {row.reading}
+                            </span>
+                          ) : null}
+                          {renderSubMeta ? renderSubMeta(row) : null}
+                        </span>
+                      </span>
+                    ) : (
+                      <span key={column.key} className={column.lane}>
+                        {column.render(row)}
+                      </span>
+                    ),
+                  )}
                 </button>
 
                 {hasTrailing ? (
@@ -269,6 +290,18 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                   </div>
                 ) : null}
               </li>
+
+              {/*
+                * Whatever the surface opens under the row that was clicked.
+                *
+                * Both explorers insert their detail panel after the item just
+                * chosen, and that is the one thing about their lists no column
+                * can express - the reason each kept private row markup long
+                * after the rest of it had been shared. It stays inside the
+                * list so the panel lands where the row is, not after the lot.
+                */}
+              {opened ? <li className="border-t border-line/50">{opened}</li> : null}
+              </Fragment>
               );
             })}
           </ul>

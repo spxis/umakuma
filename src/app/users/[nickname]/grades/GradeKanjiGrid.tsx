@@ -6,15 +6,10 @@ import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import KanjiDetailModal from "@/app/shared/KanjiDetailModal";
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
-import {
-  SUBJECT_LIST_DIVIDERS,
-  SUBJECT_LIST_ROW,
-  SUBJECT_LIST_SURFACE,
-  SUBJECT_VIEW_MODES,
-  type SubjectViewMode,
-} from "@/app/shared/subjectListView";
+import { SUBJECT_VIEW_MODES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { useState } from "react";
 
+import GradeKanjiRows from "./GradeKanjiRows";
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import { displayReading, readingsForGrade } from "./gradeExplorerView";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
@@ -96,92 +91,75 @@ export default function GradeKanjiGrid({
     );
   }
 
+  /*
+   * The list is the shared component, with this page's own columns.
+   *
+   * It used to be private row markup here, because the shared row list only
+   * knew how to draw WaniKani subjects and a grade entry is not one. The list
+   * takes its columns from the surface now, so what differs between this and
+   * the study queue is six column definitions rather than a second
+   * implementation of rows, hairlines, headings, checkboxes and the phone
+   * layout.
+   */
+  if (rows) {
+    return (
+      <>
+        <GradeKanjiRows
+          items={items}
+          hideReadings={hideReadings}
+          revealedKanji={revealedKanji}
+          chosenKanji={chosenKanji}
+          onChoose={onChoose}
+          onSelect={(entry) => {
+            if (onReveal) {
+              onReveal(entry.kanji);
+              return;
+            }
+            const href = hrefFor?.(entry) ?? null;
+            if (href) {
+              window.location.assign(href);
+              return;
+            }
+            setOpenKanji(entry);
+          }}
+          renderTrailing={(row) => (
+            <StrokeOrderButton
+              kanji={row.entry.kanji}
+              grade={row.entry.grade}
+              meaning={row.entry.primaryMeaning ?? null}
+              summary={{
+                meaning: row.entry.primaryMeaning ?? null,
+                on: readingsForGrade(row.entry).on.map(displayReading),
+                kun: readingsForGrade(row.entry).kun.map(displayReading),
+              }}
+              shareHref={`/kanji/${encodeURIComponent(row.entry.kanji)}`}
+            />
+          )}
+        />
+        {openKanji ? (
+          <KanjiDetailModal
+            kanji={openKanji.kanji}
+            grade={openKanji.grade}
+            shareHref={`/kanji/${encodeURIComponent(openKanji.kanji)}`}
+            summary={{
+              meaning: openKanji.primaryMeaning ?? null,
+              on: readingsForGrade(openKanji).on.map(displayReading),
+              kun: readingsForGrade(openKanji).kun.map(displayReading),
+            }}
+            onClose={() => setOpenKanji(null)}
+          />
+        ) : null}
+      </>
+    );
+  }
+
   return (
     <>
-      <ul
-      /*
-       * A list is one surface with hairlines, not forty boxes stacked with
-       * gaps. The chrome is the shared one, so this reads exactly like the
-       * study queue and history rather than like this page's own idea of a row.
-       */
-      className={
-        rows
-          ? `${SUBJECT_LIST_SURFACE} ${SUBJECT_LIST_DIVIDERS}`
-          : "grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(210px,1fr))]"
-      }
-    >
+      <ul className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(210px,1fr))]">
       {items.map((entry) => {
         const readings = readingsForGrade(entry);
         const href = hrefFor?.(entry) ?? null;
         const hidden = hideReadings && !revealedKanji?.has(entry.kanji);
-        const pills = (
-          <>
-            {typeof entry.strokeCount === "number" ? (
-              <span className="subject-pill border-line bg-surface text-foreground">
-                {entry.strokeCount} {GRADE_EXPLORER_COPY.strokes}
-              </span>
-            ) : null}
-            {typeof entry.crossRef?.jlptLevel === "number" ? (
-              <span translate="no" className={noTranslateClass("subject-pill border-emerald-300 bg-emerald-50 text-emerald-700")}>
-                {`${GRADE_EXPLORER_COPY.jlptCrossRef} N${entry.crossRef.jlptLevel}`}
-              </span>
-            ) : null}
-          </>
-        );
-
-        /*
-         * The stroke control, as the last thing in the row rather than floating
-         * over it. It used to be positioned absolutely at the row's right edge
-         * and revealed on hover, which put it on top of the JLPT pill it was
-         * meant to sit beside - the row reserved nine units of padding for it
-         * and the pills used that space anyway. Inline, it takes its own room
-         * and nothing has to be kept clear.
-         */
-        const strokeButton = onChoose ? null : (
-          <StrokeOrderButton
-            kanji={entry.kanji}
-            grade={entry.grade}
-            meaning={entry.primaryMeaning ?? null}
-            summary={{
-              meaning: entry.primaryMeaning ?? null,
-              on: readings.on.map(displayReading),
-              kun: readings.kun.map(displayReading),
-            }}
-            shareHref={`/kanji/${encodeURIComponent(entry.kanji)}`}
-            className="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
-          />
-        );
-
-        /*
-         * One line per kanji, for scanning a whole grade. The readings sit
-         * beside the meaning rather than under it, and the row keeps its
-         * right padding clear so the stroke control never lands on the text.
-         */
-        const rowBody = (
-          <div className="flex min-w-0 items-center gap-3">
-            <span lang="ja" translate="no" className={`w-9 shrink-0 text-2xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
-              {entry.kanji}
-            </span>
-            <span className="w-28 shrink-0 truncate text-sm font-black text-foreground" title={entry.primaryMeaning ?? ""}>
-              {entry.primaryMeaning ?? GRADE_EXPLORER_COPY.noReadings}
-            </span>
-            {hidden ? (
-              <span className="text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">
-                {GRADE_EXPLORER_COPY.quizTapToReveal}
-              </span>
-            ) : (
-              <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-3 gap-y-0.5">
-                <ReadingRow label={GRADE_EXPLORER_COPY.onReadings} readings={readings.on} />
-                <ReadingRow label={GRADE_EXPLORER_COPY.kunReadings} readings={readings.kun} />
-              </span>
-            )}
-            <span className="ml-auto flex shrink-0 items-center gap-1">
-              {pills}
-              {strokeButton}
-            </span>
-          </div>
-        );
-
         const cardBody = (
           <>
             <div className="flex items-start justify-between gap-2">
@@ -221,19 +199,11 @@ export default function GradeKanjiGrid({
           </>
         );
 
-        const body = rows ? rowBody : cardBody;
+        const body = cardBody;
         const chosen = Boolean(chosenKanji?.has(entry.kanji));
-        /*
-         * In rows the surface above draws the border and the dividers, so a row
-         * carries no box of its own - no radius, no border, no tint. The kanji
-         * colour stays on the glyph, where it identifies the subject rather
-         * than fencing off the line it sits on.
-         */
-        const shell = `${
-          rows
-            ? SUBJECT_LIST_ROW
-            : "rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition"
-        }${chosen ? " ring-2 ring-accent ring-offset-1 ring-offset-surface" : ""}`;
+        const shell = `rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition${
+          chosen ? " ring-2 ring-accent ring-offset-1 ring-offset-surface" : ""
+        }`;
         return (
           <li key={entry.kanji} className="group relative min-w-0">
             {/*
@@ -242,7 +212,7 @@ export default function GradeKanjiGrid({
               * carries it inline instead, beside the pills, since the row had
               * nowhere to float it that was not already occupied.
               */}
-            {rows || onChoose ? null : (
+            {onChoose ? null : (
             <StrokeOrderButton
               kanji={entry.kanji}
               grade={entry.grade}
@@ -264,9 +234,7 @@ export default function GradeKanjiGrid({
             {onChoose && chosen ? (
               <span
                 aria-hidden="true"
-                className={`absolute z-10 inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-black text-white ${
-                  rows ? "right-2 top-1/2 -translate-y-1/2" : "bottom-2 right-2"
-                }`}
+                className="absolute bottom-2 right-2 z-10 inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-black text-white"
               >
                 ✓
               </span>
