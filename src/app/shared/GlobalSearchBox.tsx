@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import { useSearchCombobox } from "@/lib/useSearchCombobox";
 import GlobalSearchSuggestList from "./GlobalSearchSuggestList";
-import RecentSearches from "./RecentSearches";
+import RecentItems from "./RecentItems";
 import SearchComboboxField, { SearchIcon } from "./SearchComboboxField";
 import { MODAL_LAYERS } from "./modalLayers";
 
@@ -109,7 +109,7 @@ export default function GlobalSearchBox({ className = "" }: { className?: string
                 {cbx.panelVisible ? (
                   suggestList(MOBILE_LISTBOX)
                 ) : (
-                  <RecentSearches currentQuery="" variant="panel" />
+                  <RecentItems currentQuery="" variant="panel" />
                 )}
               </div>
             ) : null}
@@ -142,7 +142,7 @@ export default function GlobalSearchBox({ className = "" }: { className?: string
                 {cbx.panelVisible ? (
                   suggestList(DESKTOP_LISTBOX)
                 ) : (
-                  <RecentSearches currentQuery="" variant="panel" />
+                  <RecentItems currentQuery="" variant="panel" />
                 )}
               </div>
             ) : null}

@@ -2210,5 +2210,15 @@
     "version": "0.214.0",
     "releasedAt": "2026-09-01T14:52:43Z",
     "summary": "Searching for 水泡 found it - Foam, vocabulary, level 46 - and selecting it opened the library explorer, which answered No item matched 水泡 about the word it had just been shown. The explorer was not being stubborn: it is built from the member's own levels and stops at theirs, so a member on level 17 has no level 46 for the word to appear in, and no filter would have helped. Results led to a list, and a list is free to answer with nothing. Words and radicals now have pages of their own, next to the kanji page that already existed, and every result leads to one: one subject, named in the path, showing its meanings, readings, the WaniKani explanation, the kanji it is built from or the kanji built from it, and example sentences that use it. They are public, because they describe a subject and not a member - which also ends the other half of this, where a signed-out reader got no link at all for a word or a radical and the row was dead text that looked like a link. Radicals are addressed by name rather than by glyph, since WaniKani draws a good number of them and those have no character to be addressed by. The address takes no viewer at all now, so a link copied out of a search works for whoever it is sent to."
+  },
+  {
+    "id": "recent-items-not-recent-searches",
+    "area": "platform",
+    "name": "Recent items, not recent searches",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "releasedAt": "2026-09-01T15:00:20Z",
+    "version": "0.215.0",
+    "summary": "The history remembered what you typed and forgot what you found. Search water, read down forty rows, open 水兵 - and what was kept was water. The question was recorded and the answer thrown away, which is backwards: the thing worth getting back to is the word, not the guess that led to it. Anything that opens a subject now adds to the list, from the results rows and from the suggestions under the box alike, so it grows as the browser is used rather than only when the search page is visited. A remembered subject reads like the row it came from - its glyph in its type's colour, its meaning beside it - and a remembered search keeps the clock icon, so the two kinds of row are told apart at a glance. Entries are kept by where they lead rather than by what they say, because 水 the kanji and 水 the word are one character and two pages, and keying on the character would have quietly dropped whichever was opened first. It is one store behind one key, so the header dropdown, the phone sheet and the results page are three views of the same history."
   }
 ]

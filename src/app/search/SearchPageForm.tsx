@@ -1,7 +1,7 @@
 "use client";
 
 import GlobalSearchSuggestList from "@/app/shared/GlobalSearchSuggestList";
-import RecentSearches from "@/app/shared/RecentSearches";
+import RecentItems from "@/app/shared/RecentItems";
 import SearchComboboxField from "@/app/shared/SearchComboboxField";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import type { SearchSource } from "@/lib/globalSearch";
@@ -55,7 +55,7 @@ export default function SearchPageForm({
         <div
           className={`absolute inset-x-0 top-[calc(100%+0.5rem)] ${MODAL_LAYERS.searchSuggest} overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
         >
-          <RecentSearches currentQuery="" variant="panel" />
+          <RecentItems currentQuery="" variant="panel" />
         </div>
       ) : null}
 

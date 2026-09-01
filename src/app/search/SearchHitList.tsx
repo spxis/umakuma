@@ -16,6 +16,7 @@ import {
   type SearchSource,
 } from "@/lib/globalSearch";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { rememberHit } from "@/lib/recentItems";
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 
 import { SEARCH_PAGE_COPY } from "./searchCopy";
@@ -179,7 +180,7 @@ export default function SearchHitList({
       >
         {rows.map((hit, index) => (
           <li key={hit.key}>
-            <HitRow hit={hit} index={index} href={searchHitHref(hit)} />
+            <HitRow hit={hit} index={index} href={searchHitHref(hit)} onOpen={rememberHit} />
           </li>
         ))}
 
@@ -212,7 +213,18 @@ export default function SearchHitList({
   );
 }
 
-function HitRow({ hit, index, href }: { hit: SearchHit; index: number; href: string | null }) {
+function HitRow({
+  hit,
+  index,
+  href,
+  onOpen,
+}: {
+  hit: SearchHit;
+  index: number;
+  href: string | null;
+  /** Recorded on the way out, so the history holds the answer and not only the question. */
+  onOpen: (hit: SearchHit) => void;
+}) {
   const body = (
     <>
           <span
@@ -259,7 +271,7 @@ function HitRow({ hit, index, href }: { hit: SearchHit; index: number; href: str
   return (
     <div className="flex items-center gap-1 pr-2">
       {href ? (
-        <Link href={href} className={shell} {...rowProps}>
+        <Link href={href} className={shell} onClick={() => onOpen(hit)} {...rowProps}>
           {body}
         </Link>
       ) : (

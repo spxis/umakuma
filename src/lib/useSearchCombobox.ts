@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, type FocusEvent, type FormEvent, type KeyboardEvent } from "react";
 
 import { searchSubmitHref, type SearchHit } from "./globalSearch";
+import { rememberHit } from "./recentItems";
 import {
   SUGGEST_LOAD_LEAD,
   SUGGEST_MAX_PAGES,
@@ -99,7 +100,14 @@ export function useSearchCombobox({
 
   function pick(index: number) {
     const hit = suggestions.hits[index];
-    navigate(hit === undefined ? resultsHref(typed.trim()) : suggestionHref(hit));
+    if (hit === undefined) {
+      navigate(resultsHref(typed.trim()));
+      return;
+    }
+
+    /* The dropdown opens subjects too, so it fills the same history the rows do. */
+    rememberHit(hit);
+    navigate(suggestionHref(hit));
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {

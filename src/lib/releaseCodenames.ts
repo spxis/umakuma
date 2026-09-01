@@ -265,6 +265,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yane no Aru Yado", ja: "屋根のある宿", reading: "やねのあるやど", gloss: "every lodging with a roof of its own" },
   { romaji: "Yuiitsu no Yubisashi", ja: "唯一の指差し", reading: "ゆいいつのゆびさし", gloss: "one finger pointing, not two" },
   { romaji: "Yobeba Yoru", ja: "呼べば寄る", reading: "よべばよる", gloss: "call it and it comes to you" },
+  { romaji: "Raireki no Ran", ja: "来歴の欄", reading: "らいれきのらん", gloss: "the column where what you looked at is kept" },
 ];
 
 /**

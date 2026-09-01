@@ -16,7 +16,7 @@ export const SEARCH_PAGE_COPY = {
   suggestSearching: "Searching…",
   suggestSeeAll: "See all",
   suggestMore: "Loading more…",
-  recentHeading: "Recent searches",
+  recentHeading: "Recent items",
   recentClear: "Clear",
   recentForget: "Forget",
   loadMore: "Show more results",

@@ -20,7 +20,7 @@ import {
 import { runGlobalSearch } from "@/lib/globalSearchServer";
 
 import { SEARCH_EXAMPLES, SEARCH_PAGE_COPY } from "./searchCopy";
-import RecentSearches from "@/app/shared/RecentSearches";
+import RecentItems from "@/app/shared/RecentItems";
 import SearchHitList from "./SearchHitList";
 import SearchPageForm from "./SearchPageForm";
 import { noTranslateClass } from "@/app/shared/japaneseText";
@@ -128,7 +128,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
                 query={query}
                 activeSource={activeSource}
                 totalHits={results.totalHits}
-                footer={results.hits.length > 0 ? <RecentSearches currentQuery={query} /> : null}
+                footer={results.hits.length > 0 ? <RecentItems currentQuery={query} /> : null}
               />
             </>
           ) : (
@@ -155,7 +155,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
             * card on their own, which is the list the page would have had.
             */}
           {results && results.hits.length > 0 ? null : (
-            <RecentSearches currentQuery={query} variant="card" />
+            <RecentItems currentQuery={query} variant="card" />
           )}
         </div>
       </main>

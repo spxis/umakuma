@@ -77,7 +77,7 @@ const FAINT_ON_PURPOSE: Record<string, string> = {
   "src/app/users/[nickname]/UserHeaderMenu.tsx": "The | between menu entries. A separator, not content.",
   "src/app/releases/page.tsx": "The disclosure chevron; the summary beside it carries the meaning.",
   "src/app/admin/releases/ReleaseTimelineList.tsx": "The disclosure chevron, as above.",
-  "src/app/shared/RecentSearches.tsx": "The history icon in the glyph lane, not text.",
+  "src/app/shared/RecentItems.tsx": "The history icon in the glyph lane, not text.",
   "src/app/shared/SurfacePagination.tsx": "The disabled first/prev/next buttons. Disabled controls are exempt.",
   "src/app/users/[nickname]/shared/GlyphTagOverlay.tsx":
     "An untagged trouble or favourite mark - the off state of a toggle, which has to look off.",

@@ -156,7 +156,7 @@ test("a search is remembered for next time", async ({ browser, baseURL }) => {
   /* Remembered per browser, so the second visit is what proves it was kept. */
   await page.goto(`${baseURL}/search`, { waitUntil: "domcontentloaded" });
 
-  await expect(page.getByRole("heading", { name: "Recent searches" })).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole("heading", { name: "Recent items" })).toBeVisible({ timeout: 10_000 });
   const remembered = page.getByRole("link", { name: COMMON_KANJI, exact: true });
   await expect(remembered.first()).toBeVisible();
 
@@ -247,6 +247,28 @@ test("a radical result opens that radical", async ({ browser, baseURL }) => {
 
   await expect(page.getByText(EMPTY_ANSWERS)).toHaveCount(0);
   await expect(page.getByText(/ground/i).first()).toBeVisible({ timeout: 10_000 });
+
+  await finish(page);
+});
+
+test("what you open is remembered, not only what you typed", async ({ browser, baseURL }) => {
+  /*
+   * The history kept the question and threw away the answer: searching for a
+   * word, reading down the rows and opening one left the typed words
+   * remembered and the word itself forgotten.
+   */
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("水兵")}`);
+
+  const row = page.locator(`a${RESULT_ROW}`).first();
+  await expect(row).toBeVisible({ timeout: 15_000 });
+  await row.click();
+  await page.waitForLoadState("domcontentloaded");
+
+  /* Remembered per browser, so the second visit is what proves it was kept. */
+  await page.goto(`${baseURL}/search`, { waitUntil: "domcontentloaded" });
+
+  await expect(page.getByRole("heading", { name: "Recent items" })).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole("link", { name: /水兵/ }).first()).toBeVisible();
 
   await finish(page);
 });
