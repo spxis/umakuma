@@ -543,7 +543,23 @@ response. Public surfaces show the display name from release 4 and nothing else.
 
 ## Open decisions
 
-None. Everything raised so far is either decided below, shipped, or queued in
+Two, both John's, both blocking work that is otherwise ready to start.
+
+**How the explorers address a thing (item 35).** Path segments carrying the
+identity (`/users/john/jlpt/n1/弘`) with query strings left for view state, or
+one consistent set of query params (`q`, `level`) across all three explorers.
+Path segments read and cache better; query params are the smaller change and
+survive a filter with no natural place in a path. Admin kanji linking waits on
+the answer, because the link it should build depends on it.
+
+**Whether the brand palette moves (item 37).** Four colours sit under the 4.5:1
+contrast floor, three of them the subject-type accents that are the brand.
+Darkening them changes how the whole app looks, so it is a decision about the
+brand rather than a defect to fix quietly. The muted-text half
+(`text-foreground/45`, 751 nodes) could move to `/60` on its own without
+touching the palette.
+
+Everything else raised so far is either decided below, shipped, or queued in
 the release order.
 
 ## Decided or resolved
