@@ -13,6 +13,9 @@ import {
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import type { StudyListSummary } from "@/lib/studyLists";
+import type { TaggedListSummary } from "@/lib/studySubjectTags";
+import { STUDY_TAG_LIST_LABELS } from "@/app/shared/studyTagListsUi";
+import { openStudyTagLists } from "@/lib/studyTagLists";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
@@ -26,13 +29,38 @@ import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 const LIST_VIEW_MODE_STORAGE_KEY = "wr:lists:view-mode";
 
+/**
+ * One card, whichever kind of list it is describing.
+ *
+ * Trouble and Favourites are lists in every sense a member cares about - named,
+ * full of subjects, the thing you practise from - but they are tag rows rather
+ * than saved lists, so this page did not know about them and somebody looking
+ * at their lists could not see the two they had actually built. They are folded
+ * into the same shape here: what differs is that they cannot be deleted, they
+ * open the panel instead, and their practice sheet is addressed by source
+ * rather than by the characters, so it takes the whole list and not the preview
+ * this card had room for.
+ */
+type ListCard = {
+  id: string;
+  name: string;
+  characters: string[];
+  /** The true size, which for a tagged list exceeds what the card previews. */
+  count: number;
+  updatedAt: string | null;
+  tag: TaggedListSummary["tag"] | null;
+};
+
 export default function StudyListCards({
   lists,
+  taggedLists = [],
   accountId,
   practicePath,
   canEdit,
 }: {
   lists: StudyListSummary[];
+  /** Trouble and Favourites, always both, empty ones included. */
+  taggedLists?: TaggedListSummary[];
   accountId: string;
   practicePath: string;
   canEdit: boolean;
@@ -47,8 +75,36 @@ export default function StudyListCards({
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(LIST_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
 
-  const visible = lists.filter((list) => !removed.has(list.id));
+  /*
+   * The two built-in lists lead, because they are the ones every member has
+   * and the ones the rest of the site keeps offering; the saved lists follow
+   * in their own order.
+   */
+  const visible: ListCard[] = [
+    ...taggedLists.map((tagged) => ({
+      id: `tag:${tagged.tag}`,
+      name: STUDY_TAG_LIST_LABELS[tagged.tag],
+      characters: tagged.characters,
+      count: tagged.count,
+      updatedAt: null,
+      tag: tagged.tag,
+    })),
+    ...lists
+      .filter((list) => !removed.has(list.id))
+      .map((list) => ({
+        id: list.id,
+        name: list.name,
+        characters: list.characters,
+        count: list.characters.length,
+        updatedAt: list.updatedAt,
+        tag: null,
+      })),
+  ];
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
+
+  /* A tagged sheet is addressed by its source, so it takes the whole list. */
+  const practiceHrefForCard = (card: ListCard) =>
+    card.tag ? `${practicePath}?source=${card.tag}` : practiceHrefFor(card.characters);
 
   const practiceHrefFor = (characters: string[]) =>
     `${practicePath}?source=picked&picked=${encodeURIComponent(characters.join(""))}`;
@@ -126,10 +182,18 @@ export default function StudyListCards({
                   {list.characters.join("")}
                 </p>
                 <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
-                  {list.characters.length}
+                  {list.count}
                 </span>
                 <span className="flex shrink-0 items-center gap-3">
-                  {canEdit ? (
+                  {list.tag ? (
+                    <button
+                      type="button"
+                      onClick={() => openStudyTagLists({ accountId, tag: list.tag ?? undefined })}
+                      className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-foreground"
+                    >
+                      {STUDY_LIST_COPY.open}
+                    </button>
+                  ) : canEdit ? (
                     <button
                       type="button"
                       onClick={() => setPendingRemoval(list.id)}
@@ -139,7 +203,7 @@ export default function StudyListCards({
                     </button>
                   ) : null}
                   <Link
-                    href={practiceHrefFor(list.characters)}
+                    href={practiceHrefForCard(list)}
                     className="inline-flex h-8 items-center rounded-full bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
                   >
                     {STUDY_LIST_COPY.practise}
@@ -153,8 +217,8 @@ export default function StudyListCards({
                     {list.name}
                   </h2>
                   <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
-                    {list.characters.length}{" "}
-                    {list.characters.length === 1
+                    {list.count}{" "}
+                    {list.count === 1
                       ? STUDY_LIST_COPY.countSuffixOne
                       : STUDY_LIST_COPY.countSuffix}
                   </span>
@@ -165,7 +229,9 @@ export default function StudyListCards({
                 </p>
 
                 <p className="mt-3 text-[11px] text-foreground/45">
-                  {STUDY_LIST_COPY.updatedPrefix} {formatRelativeFromNow(list.updatedAt)}
+                  {list.updatedAt
+                    ? `${STUDY_LIST_COPY.updatedPrefix} ${formatRelativeFromNow(list.updatedAt)}`
+                    : STUDY_LIST_COPY.builtIn}
                 </p>
 
                 {/*
@@ -173,7 +239,15 @@ export default function StudyListCards({
                   * squeezed "Practise these" until it wrapped inside its pill.
                   */}
                 <div className="mt-2 flex items-center justify-end gap-3">
-                  {canEdit ? (
+                  {list.tag ? (
+                    <button
+                      type="button"
+                      onClick={() => openStudyTagLists({ accountId, tag: list.tag ?? undefined })}
+                      className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-foreground"
+                    >
+                      {STUDY_LIST_COPY.open}
+                    </button>
+                  ) : canEdit ? (
                     <button
                       type="button"
                       onClick={() => setPendingRemoval(list.id)}
@@ -183,7 +257,7 @@ export default function StudyListCards({
                     </button>
                   ) : null}
                   <Link
-                    href={practiceHrefFor(list.characters)}
+                    href={practiceHrefForCard(list)}
                     className="inline-flex h-8 items-center rounded-full bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
                   >
                     {STUDY_LIST_COPY.practise}

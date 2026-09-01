@@ -1770,5 +1770,15 @@
     "version": "0.170.0",
     "releasedAt": "2026-09-01T08:00:00Z",
     "summary": "The study explorer had shift-click already, and had it wrong in the same way the WaniKani explorer did: the anchor a range was measured from was the item is position in the filtered list, which stops meaning anything the moment a filter changes or another page loads. Change a status chip after picking one item and the next shift-click swept a stretch the member never crossed. It anchors on the subject now, which survives both, and it uses the same range helper the other four surfaces use rather than a third copy of the arithmetic. That is all of them: the three explorers, study history and the tagged lists now sweep a range the same way, and a test names each surface so a sixth cannot quietly go without."
+  },
+  {
+    "id": "tagged-lists-on-the-lists-page",
+    "area": "study",
+    "name": "Your two lists, on your lists page",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.171.0",
+    "releasedAt": "2026-09-01T09:00:00Z",
+    "summary": "Trouble and Favourites are lists in every sense a member cares about - they are named, they hold subjects, they are what you practise from - but they are tag rows rather than saved lists, so the page whose whole job is showing a member their lists was the one place they never appeared. They could be reached only through a panel opened by a button somewhere else, which meant the two lists a member had actually built were the two they could not find. Both now sit at the top of the lists page, in the same card as every saved list, with a count and a preview of what is in them. What differs is what they cannot do: there is nothing to delete, because untagging the last item empties a list rather than removing it, so the card offers Open instead and the panel is where tagging still happens. Their practice sheet is addressed by source rather than by the characters on the card, so printing one takes the whole list instead of the two dozen the card had room to preview. Both are always shown, empty ones included, because no favourites yet is an answer to the question somebody came to this page with and a missing card is not. The subtitle stopped claiming every list here was built by hand, which two of them now are not."
   }
 ]

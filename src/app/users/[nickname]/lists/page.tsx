@@ -9,6 +9,7 @@ import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { fetchStudyLists } from "@/lib/studyLists";
+import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import StudyListCards from "./StudyListCards";
@@ -46,7 +47,15 @@ export default async function UserListsPage({ params }: PageProps) {
     redirect("/join?access=denied");
   }
 
-  const lists = await fetchStudyLists(account.id);
+  /*
+   * Both kinds, together. Trouble and Favourites are the two lists every
+   * member has, and the page that is meant to show a member their lists was
+   * the one place they did not appear.
+   */
+  const [lists, taggedLists] = await Promise.all([
+    fetchStudyLists(account.id),
+    fetchTaggedListSummaries(account.id),
+  ]);
   const canEdit = viewsOwnPage(viewerMenuInfo, userKey);
 
   return (
@@ -68,6 +77,7 @@ export default async function UserListsPage({ params }: PageProps) {
 
       <StudyListCards
         lists={lists}
+        taggedLists={taggedLists}
         accountId={account.id}
         practicePath={`/users/${encodeURIComponent(nickname)}/grades/practice`}
         canEdit={canEdit}

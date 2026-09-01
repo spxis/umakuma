@@ -221,6 +221,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yamamori no Yasai", ja: "山盛りの野菜", reading: "やまもりのやさい", gloss: "a heaped plate of vegetables" },
   { romaji: "Yutaka na Yubiwa", ja: "豊かな指輪", reading: "ゆたかなゆびわ", gloss: "a ring with plenty on it" },
   { romaji: "Yosoi no Yohaku", ja: "装いの余白", reading: "よそいのよはく", gloss: "room left in the arrangement" },
+  { romaji: "Rakuda no Rashinban", ja: "駱駝の羅針盤", reading: "らくだのらしんばん", gloss: "the camel's compass" },
 ];
 
 /**
