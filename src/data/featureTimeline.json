@@ -1830,5 +1830,15 @@
     "version": "0.176.0",
     "releasedAt": "2026-09-01T14:00:00Z",
     "summary": "Two per-account endpoints had no authentication of any kind. Both take an account id straight from the path, and both read that member encrypted WaniKani token: the JLPT route decrypts it and calls WaniKani with it, and the levels route reads a progress snapshot and writes a fresh one back. Verified against a running server with no cookies at all, a stranger holding an id received that member own kanji progress - subject ids, characters, meanings - and their level snapshot showing what they had learned. Both now answer 401 before touching the database. This was also an uncapped cost vector, which is how it was found: four database queries and an outbound WaniKani call per request, repeatable as fast as anyone cared to ask, on endpoints nothing was rate limiting. The explorers that call them only ever ask about the member whose page they are on, so requiring a session costs nothing that was working. Checked before the row is read rather than after, so a refused request costs one query rather than five."
+  },
+  {
+    "id": "search-reads-every-meaning",
+    "area": "platform",
+    "name": "Search reads every meaning",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.177.0",
+    "releasedAt": "2026-09-01T15:00:00Z",
+    "summary": "All three catalogues searched every meaning a subject carries and then ranked the hit on its first one alone, so anything matched on another meaning scored zero and was removed by the filter that drops non-matches: the search found the row and then threw it away. Searching magnate returned nothing at all, though it is one of 王's meanings, and home returned twenty-one results while missing 家. Ranking now takes the best score across every meaning the subject holds - including the Heisig keyword, which was searched but never scored - and the row shows the meaning that earned the match behind the one the subject leads with, so a result for magnate no longer reads only King. Against the live catalogues magnate goes from zero hits to two and home from twenty-one to forty-five, while sun still puts 日 first."
   }
 ]

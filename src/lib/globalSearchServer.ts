@@ -10,7 +10,8 @@ import { searchQueryVariants } from "./kana";
 import {
   SEARCH_PER_SOURCE_LIMIT,
   SEARCH_SOURCES,
-  rankHitForVariants,
+  displayMeaning,
+  rankMeanings,
   sortHits,
   type SearchHit,
   type SearchResults,
@@ -33,6 +34,16 @@ type CatalogRow = {
   meanings: unknown;
   readings: unknown;
 };
+
+/** Every meaning the subject carries, so ranking can see past the first. */
+function allMeanings(meanings: unknown): string[] {
+  if (!Array.isArray(meanings)) return [];
+  return meanings
+    .map((item) =>
+      item && typeof item === "object" ? (item as { meaning?: string }).meaning ?? "" : "",
+    )
+    .filter((meaning) => meaning.trim().length > 0);
+}
 
 function firstMeaning(meanings: unknown): string {
   if (!Array.isArray(meanings)) return "";
@@ -107,21 +118,22 @@ async function searchWanikani(variants: string[]): Promise<SearchHit[]> {
 
   return rows.map((row) => {
     const glyph = row.characters ?? row.slug ?? String(row.wkSubjectId);
-    const meaning = firstMeaning(row.meanings);
+    const primary = firstMeaning(row.meanings);
     const reading = readingList(row.readings);
+    const ranked = rankMeanings(variants, glyph, [primary, ...allMeanings(row.meanings)], reading);
     return {
       source: SEARCH_SOURCES.wanikani,
       key: `wanikani:${row.wkSubjectId}`,
       glyph,
       subjectType: row.subjectType,
-      meaning,
+      meaning: displayMeaning(primary, ranked.meaning),
       reading,
       badges: [
         isSubjectType(row.subjectType) ? SUBJECT_TYPE_DISPLAY[row.subjectType].short : row.subjectType,
         `L${row.level}`,
       ],
       href: null,
-      score: rankHitForVariants(variants, glyph, meaning, reading),
+      score: ranked.score,
     } satisfies SearchHit;
   });
 }
@@ -145,24 +157,32 @@ async function searchJlpt(variants: string[]): Promise<SearchHit[]> {
       meanings: true,
       onReadings: true,
       kunReadings: true,
+      heisigKeyword: true,
     },
     take: SEARCH_PER_SOURCE_LIMIT * 2,
   });
 
   return rows.map((row) => {
-    const meaning = row.primaryMeaning ?? row.meanings[0] ?? "";
+    const primary = row.primaryMeaning ?? row.meanings[0] ?? "";
     const official = preferOfficialReadings(row.kanji, row.onReadings, row.kunReadings);
     const reading = joined([...official.on, ...official.kun]);
+    /* The Heisig keyword is searched, so it has to be ranked, or it is dropped. */
+    const ranked = rankMeanings(
+      variants,
+      row.kanji,
+      [primary, ...row.meanings, row.heisigKeyword ?? ""],
+      reading,
+    );
     return {
       source: SEARCH_SOURCES.jlpt,
       key: `jlpt:${row.kanji}`,
       glyph: row.kanji,
       subjectType: SUBJECT_TYPES.kanji,
-      meaning,
+      meaning: displayMeaning(primary, ranked.meaning),
       reading,
       badges: [`N${row.nLevel}`],
       href: null,
-      score: rankHitForVariants(variants, row.kanji, meaning, reading),
+      score: ranked.score,
     } satisfies SearchHit;
   });
 }
@@ -187,20 +207,26 @@ function searchGrades(variants: string[]): SearchHit[] {
   }
 
   return Array.from(seen.values()).map((entry) => {
-    const meaning = entry.primaryMeaning ?? entry.meanings?.[0] ?? "";
+    const primary = entry.primaryMeaning ?? entry.meanings?.[0] ?? "";
     const gradeReadings = preferOfficialReadings(entry.kanji, entry.readings?.on, entry.readings?.kun);
     const reading = joined([...gradeReadings.on, ...gradeReadings.kun]);
+    const ranked = rankMeanings(
+      variants,
+      entry.kanji,
+      [primary, ...(entry.meanings ?? []), entry.heisigKeyword ?? ""],
+      reading,
+    );
     return {
       source: SEARCH_SOURCES.grades,
       key: `grades:${entry.kanji}`,
       glyph: entry.kanji,
       subjectType: SUBJECT_TYPES.kanji,
-      meaning,
+      meaning: displayMeaning(primary, ranked.meaning),
       reading,
       badges: [entry.grade >= 8 ? (entry.grade === 8 ? "Jr High" : "Name") : `G${entry.grade}`],
       grade: entry.grade,
       href: null,
-      score: rankHitForVariants(variants, entry.kanji, meaning, reading),
+      score: ranked.score,
     } satisfies SearchHit;
   });
 }

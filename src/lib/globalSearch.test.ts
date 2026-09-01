@@ -5,12 +5,14 @@ import {
   SEARCH_SOURCES,
   SEARCH_SOURCE_VALUES,
   appendHits,
+  displayMeaning,
   isJapaneseQuery,
   isSearchSource,
   isSearchable,
   normalizeQuery,
   parseSources,
   rankHit,
+  rankMeanings,
   searchHitHref,
   searchRequestUrl,
   searchSubmitHref,
@@ -200,6 +202,55 @@ describe("searchRequestUrl", () => {
 
   it("encodes the query", () => {
     expect(searchRequestUrl("日 sun")).toBe(`/api/search?q=${encodeURIComponent("日 sun")}`);
+  });
+});
+
+describe("rankMeanings", () => {
+  it("scores a subject on the meaning that matched, not on its first", () => {
+    const ranked = rankMeanings(["magnate"], "王", ["King", "king", "magnate", "rule"], "オウ");
+    expect(ranked.score).toBeGreaterThan(0);
+    expect(ranked.meaning).toBe("magnate");
+  });
+
+  it("keeps the primary when the primary is what matched", () => {
+    const ranked = rankMeanings(["king"], "王", ["King", "magnate"], "オウ");
+    expect(ranked.meaning).toBe("King");
+  });
+
+  it("takes the best meaning when several match", () => {
+    const ranked = rankMeanings(["circle"], "円", ["Yen", "Circle", "circle around"], "エン");
+    expect(ranked.meaning).toBe("Circle");
+  });
+
+  it("still scores zero when nothing matches, so non-matches stay dropped", () => {
+    expect(rankMeanings(["bicycle"], "王", ["King", "magnate"], "オウ").score).toBe(0);
+  });
+
+  it("reports the first meaning when there is no match to report", () => {
+    expect(rankMeanings(["bicycle"], "王", ["King"], null).meaning).toBe("King");
+  });
+
+  it("survives a subject with no meanings at all", () => {
+    expect(rankMeanings(["king"], "王", [], null)).toEqual({ score: 0, meaning: "" });
+  });
+});
+
+describe("displayMeaning", () => {
+  it("shows the matched meaning behind the primary one", () => {
+    expect(displayMeaning("King", "magnate")).toBe("King · magnate");
+  });
+
+  it("says it once when the match is the primary meaning", () => {
+    expect(displayMeaning("King", "King")).toBe("King");
+  });
+
+  it("treats a difference of case as the same meaning", () => {
+    expect(displayMeaning("Right", "right")).toBe("Right");
+  });
+
+  it("falls back to whichever one exists", () => {
+    expect(displayMeaning("", "magnate")).toBe("magnate");
+    expect(displayMeaning("King", "")).toBe("King");
   });
 });
 

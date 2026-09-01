@@ -202,6 +202,45 @@ export function rankHitForVariants(
   return best;
 }
 
+/** The best a hit scores, and which of its meanings earned that. */
+export type MeaningRank = { score: number; meaning: string };
+
+/**
+ * The best score across every meaning a subject carries, not just its first.
+ *
+ * All three catalogues search every meaning they hold and then used to rank
+ * the hit on its primary alone, so a subject matched on any other meaning
+ * scored zero and was dropped by the filter that removes non-matches: the
+ * search found it and then threw it away. "magnate" is one of 王's meanings
+ * and returned nothing at all, because 王 leads with "King".
+ */
+export function rankMeanings(
+  variants: string[],
+  glyph: string,
+  meanings: string[],
+  reading: string | null,
+): MeaningRank {
+  let best: MeaningRank = { score: 0, meaning: meanings[0] ?? "" };
+  for (const meaning of meanings) {
+    const score = rankHitForVariants(variants, glyph, meaning, reading);
+    if (score > best.score) best = { score, meaning };
+  }
+  return best;
+}
+
+/**
+ * What the row says, when the query matched something the row does not lead
+ * with. A result for "magnate" reading only "King" looks like a mistake, so
+ * the meaning that earned the match rides along behind the primary one.
+ */
+export function displayMeaning(primary: string, matched: string): string {
+  const lead = primary.trim();
+  const also = matched.trim();
+  if (!also || also.toLowerCase() === lead.toLowerCase()) return lead;
+  if (!lead) return also;
+  return `${lead} · ${also}`;
+}
+
 /** Ranked best first, with a stable order for equal scores. */
 export function sortHits(hits: SearchHit[]): SearchHit[] {
   return [...hits].sort((left, right) => {
