@@ -1820,5 +1820,15 @@
     "version": "0.175.0",
     "releasedAt": "2026-09-01T13:00:00Z",
     "summary": "Every study route checked whether the request was allowed by reading the account, then read the same row again for the member WaniKani token. Counts and queue are what the study page asks for on a timer and review is asked once per answer, so that second read was the single most repeated query in the product - and on the busiest paths it doubled the database work for no information. The columns an access decision needs are three small ones, so they are now selected as part of the read the route was making anyway and the round trip disappears. Five routes moved across: counts, queue, review, upcoming and lesson start. The access check itself got cheaper too: it used to query once for the invite path and again for the Google path when the first did not match, and now resolves who is asking from the request before touching the database at all, so an admin is answered without a query and everybody else costs exactly one. Permission and existence stay separate answers, because a permitted request for an account that has since been deleted is a 404 rather than a 401."
+  },
+  {
+    "id": "account-endpoints-need-a-session",
+    "area": "account",
+    "name": "Two doors that were never locked",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.176.0",
+    "releasedAt": "2026-09-01T14:00:00Z",
+    "summary": "Two per-account endpoints had no authentication of any kind. Both take an account id straight from the path, and both read that member encrypted WaniKani token: the JLPT route decrypts it and calls WaniKani with it, and the levels route reads a progress snapshot and writes a fresh one back. Verified against a running server with no cookies at all, a stranger holding an id received that member own kanji progress - subject ids, characters, meanings - and their level snapshot showing what they had learned. Both now answer 401 before touching the database. This was also an uncapped cost vector, which is how it was found: four database queries and an outbound WaniKani call per request, repeatable as fast as anyone cared to ask, on endpoints nothing was rate limiting. The explorers that call them only ever ask about the member whose page they are on, so requiring a session costs nothing that was working. Checked before the row is read rather than after, so a refused request costs one query rather than five."
   }
 ]

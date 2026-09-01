@@ -1,3 +1,4 @@
+import { canAccessAccount } from "@/lib/accountAccess";
 import { NextResponse } from "next/server";
 
 import {
@@ -190,6 +191,17 @@ try {
 
                 if (!Number.isInteger(level) || level < 1 || level > 60) {
                   return NextResponse.json({ error: "Invalid level." }, { status: 400 });
+                }
+
+                /*
+                 * Same hole as the JLPT route had: an account id from the path
+                 * and no check on who was asking, for an endpoint that reads
+                 * the member's WaniKani token and writes a level snapshot back.
+                 * Anyone holding an id could read one member's progress and
+                 * make the server do the work of refreshing it.
+                 */
+                if (!(await canAccessAccount(request, id))) {
+                  return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
                 }
 
                 const cached = await prisma.levelSnapshot.findUnique({

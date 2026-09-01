@@ -1,3 +1,4 @@
+import { canAccessAccount } from "@/lib/accountAccess";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -28,14 +29,14 @@ const routeQuerySchema = z.object({
   offset: z.string().optional(),
 });
 
-export async function GET(_: Request, context: RouteContext) {
+export async function GET(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
     route: "/api/accounts/[id]/jlpt",
     method: "GET",
-    request: _,
+    request,
     execute: async () => {
       try {
-        const requestUrl = new URL(_.url);
+        const requestUrl = new URL(request.url);
         const parsedParams = routeParamsSchema.safeParse(await context.params);
         if (!parsedParams.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
@@ -61,6 +62,21 @@ export async function GET(_: Request, context: RouteContext) {
         const offset = Number.isInteger(offsetParam) && offsetParam >= 0 ? offsetParam : 0;
 
         const { id } = parsedParams.data;
+
+        /*
+         * Whose data this is, asked before anything is read.
+         *
+         * This route had no check at all. It takes an account id from the
+         * path, decrypts that member's WaniKani token and calls WaniKani with
+         * it, so anyone holding an id could have the server hand back that
+         * member's own progress - and could do it as often as they liked, at
+         * four database queries and an outbound API call each time. The
+         * explorer that calls this only ever asks about the member whose page
+         * it is on, so requiring that costs nothing legitimate.
+         */
+        if (!(await canAccessAccount(request, id))) {
+          return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+        }
 
         const account = await prisma.account.findUnique({
           where: { id },
