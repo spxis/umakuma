@@ -2000,5 +2000,15 @@
     "version": "0.193.0",
     "releasedAt": "2026-09-01T09:14:25Z",
     "summary": "John asked for explorer addresses that make sense, and the search half of that shipped already: every explorer reads q. This is the other half, starting with the grades. The grade moved out of the query and into the path - /grades/3 rather than /grades?grade=3 - because it says which collection is being looked at, which is what a link means to whoever receives it, and it is what a cache can key on. Searching and paging stay in the query, since they describe how a collection is being read rather than which one it is. Links already sent still work: the old address redirects to the new one carrying the search and page with it, and results built before the change land where they should. A segment that names no grade now returns a 404 rather than quietly rendering grade one, so a wrong link stops looking like a working one, and the writing-practice route beneath the same folder is untouched. The other two explorers follow this shape next."
+  },
+  {
+    "id": "one-address,-no-shims",
+    "area": "platform",
+    "name": "One address, no shims",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.194.0",
+    "releasedAt": "2026-09-01T09:25:40Z",
+    "summary": "The grades explorer shipped its path move with a redirect from the old query-string address, on the assumption that links already sent had to keep working. They do not: the site has no users yet, and a compatibility layer for links nobody sent is a second code path to understand, test and eventually remove in exchange for nothing. The redirect is gone, the collection root simply opens on the first grade because that is where the navigation points, and there is exactly one address for a grade. The rule is now in AGENTS.md so it is not relearned: change the thing and update every caller, with two exceptions where data outlives code - persisted database values like the revenge enum member and the batchSize sentinel, and anything already written to production, which needs migrating rather than shimming."
   }
 ]

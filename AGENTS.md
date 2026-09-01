@@ -179,6 +179,14 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 
 ## Workflow
 
+- **No backward compatibility. The site has no users yet.** Do not add redirects
+  for old URLs, readers for old query parameters, fallbacks for old storage keys
+  or shims for renamed fields. Change the thing and update every caller. A
+  compatibility layer here buys nothing and costs a second code path that has to
+  be understood, tested and eventually removed. The exceptions are the two places
+  where the data outlives the code: persisted database values (a Prisma enum
+  member like `revenge`, a `batchSize` sentinel) and anything already written to
+  production.
 - **One feature, one commit, one release, with tests.** Every feature ships with
   its own unit tests (and a smoke spec when it adds a route), is committed on its
   own, and is released on its own. Do not batch unrelated features into a single
