@@ -15,8 +15,6 @@ import {
 import { useSearchSuggestions } from "./useSearchSuggestions";
 
 export type SearchComboboxOptions = {
-  /** Whose explorers a picked suggestion opens; null when nobody is signed in. */
-  viewerUsername: string | null;
   /** What the box starts with, for a results page that already ran a search. */
   initialValue?: string;
   /** Reopen the panel on focus and on arrow keys (the header box wants this). */
@@ -47,7 +45,6 @@ function defaultResultsHref(query: string): string {
  * submit, since the member has not asked for that word's results yet.
  */
 export function useSearchCombobox({
-  viewerUsername,
   initialValue = "",
   openOnFocus = true,
   resultsHref = defaultResultsHref,
@@ -102,7 +99,7 @@ export function useSearchCombobox({
 
   function pick(index: number) {
     const hit = suggestions.hits[index];
-    navigate(hit === undefined ? resultsHref(typed.trim()) : suggestionHref(hit, viewerUsername));
+    navigate(hit === undefined ? resultsHref(typed.trim()) : suggestionHref(hit));
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {

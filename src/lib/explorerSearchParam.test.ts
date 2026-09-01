@@ -115,9 +115,21 @@ describe("nothing writes the old names any more", () => {
     ).toEqual([]);
   });
 
-  /* The search results link into the explorers, so they have to agree too. */
-  it("builds explorer links with the shared name", () => {
+  /*
+   * The search results used to link into the explorers, carrying the query
+   * under this name, so this checked that they agreed on it. They no longer
+   * do: a result leads to the subject's own page, because an explorer is a
+   * list and a list may answer with nothing - which is exactly what the
+   * library explorer did with a word above the member's level.
+   *
+   * What still has to hold is that nothing there quietly reinvents the
+   * parameter, so this now checks the search never writes one at all.
+   */
+  it("keeps the search results out of the explorers' query names", () => {
     const source = readFileSync(join(process.cwd(), "src/lib/globalSearch.ts"), "utf8");
-    expect(source).toContain("EXPLORER_SEARCH_PARAM");
+    for (const legacy of LEGACY_EXPLORER_SEARCH_PARAMS) {
+      expect(source).not.toContain(legacy);
+    }
+    expect(source).not.toContain("explorer?");
   });
 });

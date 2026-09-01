@@ -25,8 +25,6 @@ import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 type Props = {
   /** The first stretch, rendered on the server with the page. */
   hits: SearchHit[];
-  /** Whose explorers a hit opens; null when nobody is signed in. */
-  viewerUsername: string | null;
   /** The query these answer, for asking for the stretch after this one. */
   query: string;
   /** The source filter in force, so later stretches stay inside it. */
@@ -78,7 +76,6 @@ export const SOURCE_TONES: Record<SearchSource, string> = {
  */
 export default function SearchHitList({
   hits,
-  viewerUsername,
   query,
   activeSource,
   totalHits,
@@ -182,7 +179,7 @@ export default function SearchHitList({
       >
         {rows.map((hit, index) => (
           <li key={hit.key}>
-            <HitRow hit={hit} index={index} href={searchHitHref(hit, viewerUsername)} />
+            <HitRow hit={hit} index={index} href={searchHitHref(hit)} />
           </li>
         ))}
 

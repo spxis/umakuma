@@ -127,6 +127,8 @@ async function searchWanikani(variants: string[]): Promise<SearchHit[]> {
       key: `wanikani:${row.wkSubjectId}`,
       glyph,
       subjectType: row.subjectType,
+      /* The subject's own page is addressed by this, so it rides along. */
+      slug: row.slug,
       meaning: displayMeaning(primary, ranked.meaning),
       reading,
       badges: [
@@ -179,6 +181,8 @@ async function searchJlpt(variants: string[]): Promise<SearchHit[]> {
       key: `jlpt:${row.kanji}`,
       glyph: row.kanji,
       subjectType: SUBJECT_TYPES.kanji,
+      /* Only WaniKani names its subjects; a kanji is addressed by itself. */
+      slug: null,
       meaning: displayMeaning(primary, ranked.meaning),
       reading,
       badges: [`N${row.nLevel}`],
@@ -222,6 +226,7 @@ function searchGrades(variants: string[]): SearchHit[] {
       key: `grades:${entry.kanji}`,
       glyph: entry.kanji,
       subjectType: SUBJECT_TYPES.kanji,
+      slug: null,
       meaning: displayMeaning(primary, ranked.meaning),
       reading,
       badges: [entry.grade >= 8 ? (entry.grade === 8 ? "Jr High" : "Name") : `G${entry.grade}`],
@@ -253,6 +258,7 @@ function searchDictionary(variants: string[]): SearchHit[] {
       key: `dictionary:${entry.kanji}`,
       glyph: entry.kanji,
       subjectType: SUBJECT_TYPES.kanji,
+      slug: null,
       meaning: displayMeaning(entry.primaryMeaning, ranked.meaning),
       reading,
       badges: entry.frequencyRank ? [`#${entry.frequencyRank}`] : [],

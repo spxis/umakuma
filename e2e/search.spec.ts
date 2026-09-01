@@ -176,3 +176,98 @@ test("a signed-out reader is offered the public kanji page", async ({ browser, b
 
   await context.close();
 });
+
+/**
+ * Selecting a result, which is the only reason to search.
+ *
+ * Everything above proves the results arrive. These prove they lead somewhere,
+ * because for a while they did not: 水泡 - a real word, shown with its meaning
+ * and its level - opened the library explorer, which answered "No item matched
+ * 水泡". The explorer stops at the member's own level and the word is at 46, so
+ * it had nowhere to put it. Nothing on the results page could have warned
+ * anyone; the row looked like every row that works.
+ *
+ * A word, a kanji and a radical, because those are the three things WaniKani
+ * teaches and each used to be addressed differently.
+ */
+
+/** What a page says when it was asked for something it cannot show. */
+const EMPTY_ANSWERS = /No item matched|No items match|not found/i;
+
+async function openFirstResult(page: Page): Promise<string> {
+  const row = page.locator(RESULT_ROW).first();
+  await expect(row).toBeVisible({ timeout: 15_000 });
+
+  /* The glyph is the row's own answer to what it is; the destination has to show it. */
+  const glyph = (await row.locator("span").first().innerText()).trim();
+  await row.click();
+  await page.waitForLoadState("domcontentloaded");
+  return glyph;
+}
+
+test("a word result opens that word, whatever level it is", async ({ browser, baseURL }) => {
+  /* Level 46, and the member the local suite runs as is nowhere near it. */
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("水泡")}`);
+
+  const glyph = await openFirstResult(page);
+  expect(glyph).toBe("水泡");
+
+  await expect(page.getByText(EMPTY_ANSWERS)).toHaveCount(0);
+  await expect(page.getByText("水泡").first()).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText(/foam/i).first()).toBeVisible();
+
+  await finish(page);
+});
+
+test("a kanji result opens that kanji", async ({ browser, baseURL }) => {
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent(COMMON_KANJI)}`);
+
+  await page.locator(`a[href^="/kanji/"]`).first().click();
+  await page.waitForLoadState("domcontentloaded");
+
+  await expect(page.getByText(EMPTY_ANSWERS)).toHaveCount(0);
+  await expect(page.getByText(COMMON_KANJI).first()).toBeVisible({ timeout: 10_000 });
+
+  await finish(page);
+});
+
+test("a radical result opens that radical", async ({ browser, baseURL }) => {
+  /*
+   * Radicals are the awkward third: many are drawn rather than written, so the
+   * row shows the radical's name where a kanji row shows a character. An
+   * address built from what the row displays would be a search for a character
+   * that does not exist.
+   */
+  const page = await openPage(browser, `${baseURL}/search?query=ground`);
+
+  const radical = page.locator(`a[href^="/radicals/"]`).first();
+  await expect(radical).toBeVisible({ timeout: 15_000 });
+  await radical.click();
+  await page.waitForLoadState("domcontentloaded");
+
+  await expect(page.getByText(EMPTY_ANSWERS)).toHaveCount(0);
+  await expect(page.getByText(/ground/i).first()).toBeVisible({ timeout: 10_000 });
+
+  await finish(page);
+});
+
+test("no result is dead text", async ({ browser, baseURL }) => {
+  /*
+   * A row with no address renders as a plain div: it looks like the rows
+   * around it, highlights on hover like them, and does nothing. Signed out,
+   * every word and every radical was one of these.
+   */
+  const context = await browser.newContext({ storageState: undefined });
+  const page = await context.newPage();
+  await page.goto(`${baseURL}/search?query=${encodeURIComponent(COMMON_KANJI)}`, {
+    waitUntil: "domcontentloaded",
+  });
+
+  const rows = page.locator(RESULT_ROW);
+  await expect(rows.first()).toBeVisible({ timeout: 15_000 });
+  const total = await rows.count();
+  const linked = await page.locator(`a${RESULT_ROW}`).count();
+  expect(linked, "every result row must be a link").toBe(total);
+
+  await context.close();
+});

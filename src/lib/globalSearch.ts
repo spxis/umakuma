@@ -8,7 +8,6 @@
  */
 
 import { SUBJECT_TYPES } from "./domainConstants";
-import { EXPLORER_SEARCH_PARAM } from "./explorerSearchParam";
 
 export const SEARCH_SOURCES = {
   wanikani: "wanikani",
@@ -58,6 +57,14 @@ export type SearchHit = {
    * are always single kanji; only WaniKani has radicals and vocabulary.
    */
   subjectType: string;
+  /**
+   * WaniKani's permanent name for the subject, and null for the other sources.
+   *
+   * Radicals are why this is here: WaniKani draws roughly a fifth of them
+   * rather than writing them, so those rows carry no character at all and the
+   * slug is the only name they have to be addressed by.
+   */
+  slug: string | null;
   /** The English meaning, the line a reader scans. */
   meaning: string;
   /** Readings, already joined for display, or null when the source has none. */
@@ -274,11 +281,11 @@ export function sortHits(hits: SearchHit[]): SearchHit[] {
 }
 
 /**
- * The public page for a hit, for a reader with no account.
+ * The public page for a single kanji.
  *
- * `/kanji/[character]` is deliberately public - it is the page a shared kanji
- * link opens - and it takes a single character, so a word or a radical drawn
- * as an image has nowhere of its own to go.
+ * `/kanji/[character]` takes one character and answers for any of them: the
+ * dictionary covers ten thousand, so this never depends on which catalogue
+ * the reader came from, or on their level, or on their being signed in.
  */
 export function publicKanjiHref(hit: SearchHit): string | null {
   const characters = [...hit.glyph];
@@ -288,35 +295,57 @@ export function publicKanjiHref(hit: SearchHit): string | null {
   return `/kanji/${encodeURIComponent(hit.glyph)}`;
 }
 
+/** The public page for one word. Addressed by the word, as Jisho does it. */
+export function vocabularyHref(word: string): string | null {
+  const trimmed = word.trim();
+  return trimmed ? `/vocabulary/${encodeURIComponent(trimmed)}` : null;
+}
+
 /**
- * Where a hit leads.
+ * The public page for one radical, addressed by its name.
  *
- * A signed-in member goes to their own explorer, which carries their SRS
- * state and already accepts a find parameter, so the hit arrives with its
- * search applied. Those pages are behind the sign-in wall, so a reader with no
- * account used to get no link at all - every row was dead text, on the page
- * most likely to be reached by someone who has never signed in. A single kanji
- * has a public page, so that is where they go instead.
+ * Not by its glyph: WaniKani draws a good number of radicals rather than
+ * writing them, and for those the search row shows the name where a kanji row
+ * shows a character. An address built from what the row displays would be a
+ * request for a character that does not exist.
  */
-export function searchHitHref(hit: SearchHit, username: string | null): string | null {
-  /* Nobody's explorer holds a dictionary-only character; the public page does. */
-  if (!username || hit.source === SEARCH_SOURCES.dictionary) {
-    return publicKanjiHref(hit);
+export function radicalHref(slug: string | null): string | null {
+  const trimmed = slug?.trim();
+  return trimmed ? `/radicals/${encodeURIComponent(trimmed)}` : null;
+}
+
+/**
+ * Where a hit leads: to the thing it found.
+ *
+ * It used to lead to the member's own explorer, carrying the search as a
+ * query, on the reasoning that the explorer holds their SRS state and can
+ * already find things. What that missed is that an explorer is a list, and a
+ * list is free to answer with nothing. The library explorer is built from the
+ * member's own levels and stops at theirs, so 水泡 - a real word, level 46,
+ * shown to a level 17 member with its meaning and its level right there in the
+ * row - opened a page that said "No item matched 水泡". There was no filter to
+ * clear and nothing on the results page that could have warned anyone.
+ *
+ * So every result now names its subject in a path: one kanji, one word or one
+ * radical, at an address that holds exactly that. They are public because they
+ * carry no member data, which also ends the other half of this bug - a
+ * signed-out reader used to get no link at all for a word or a radical, and a
+ * row that looks like a link and does nothing is worse than a row that does.
+ *
+ * It takes no viewer on purpose. Every reader gets the same address, so the
+ * signed-out half of the bug cannot come back by somebody forgetting to pass
+ * one, and a link copied out of a result is a link that works for whoever it
+ * is sent to.
+ */
+export function searchHitHref(hit: SearchHit): string | null {
+  if (hit.subjectType === SUBJECT_TYPES.radical) {
+    return radicalHref(hit.slug);
   }
 
-  const base = `/users/${encodeURIComponent(username)}`;
-  const glyph = encodeURIComponent(hit.glyph);
-
-  if (hit.source === SEARCH_SOURCES.jlpt) {
-    return `${base}/jlpt-explorer?${EXPLORER_SEARCH_PARAM}=${glyph}`;
+  if (hit.subjectType === SUBJECT_TYPES.vocabulary) {
+    /* The slug is the word for all but a handful WaniKani had to distinguish. */
+    return vocabularyHref(hit.slug ?? hit.glyph);
   }
 
-  if (hit.source === SEARCH_SOURCES.grades) {
-    const grade = typeof hit.grade === "number" ? hit.grade : 1;
-    /* The grade names the collection, so it rides in the path; the search
-     * that finds the character within it stays a query. */
-    return `${base}/grades/${grade}?q=${glyph}`;
-  }
-
-  return `${base}/library-explorer?${EXPLORER_SEARCH_PARAM}=${glyph}`;
+  return publicKanjiHref(hit);
 }

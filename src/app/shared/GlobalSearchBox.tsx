@@ -34,20 +34,12 @@ import { MODAL_LAYERS } from "./modalLayers";
 const DESKTOP_LISTBOX = "global-search-suggest-desktop";
 const MOBILE_LISTBOX = "global-search-suggest-mobile";
 
-export default function GlobalSearchBox({
-  className = "",
-  viewerUsername = null,
-}: {
-  className?: string;
-  /** Whose explorers a picked suggestion opens; null when nobody is signed in. */
-  viewerUsername?: string | null;
-}) {
+export default function GlobalSearchBox({ className = "" }: { className?: string }) {
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState(false);
   const mobileInput = useRef<HTMLInputElement>(null);
 
   const cbx = useSearchCombobox({
-    viewerUsername,
     onNavigate: () => setOpen(false),
   });
 

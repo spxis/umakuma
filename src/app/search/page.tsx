@@ -61,8 +61,10 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
     : null;
 
   /*
-   * Results link into the viewer's own explorers, so an anonymous search stays
-   * a lookup instead of offering links that bounce off the sign-in wall.
+   * Read for the header, not for the results. Every result leads to a public
+   * page for the subject itself, so who is asking no longer changes where a
+   * row goes - which is the point: the address a member copies out of a search
+   * is the address that works for whoever they send it to.
    */
   const session = await getServerSession(authOptions);
   const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
@@ -70,7 +72,6 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
     viewerEmail,
     sessionName: session?.user?.name?.trim() ?? null,
   });
-  const viewerUsername = viewerMenuInfo?.wkUsername ?? null;
 
   return (
     <div className={`relative overflow-hidden ${PAGE_SHELL_PADDING}`}>
@@ -91,11 +92,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
         <div className={`${PAGE_WIDTH.reading} space-y-4 pb-8`}>
           <h1 className="text-2xl font-black text-foreground">{SEARCH_PAGE_COPY.heading}</h1>
 
-          <SearchPageForm
-            initialQuery={query}
-            activeSource={activeSource}
-            viewerUsername={viewerUsername}
-          />
+          <SearchPageForm initialQuery={query} activeSource={activeSource} />
 
           {results ? (
             <>
@@ -128,7 +125,6 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
 
               <SearchHitList
                 hits={results.hits}
-                viewerUsername={viewerUsername}
                 query={query}
                 activeSource={activeSource}
                 totalHits={results.totalHits}

@@ -29,6 +29,7 @@ function hit(overrides: Partial<SearchHit> = {}): SearchHit {
     key: "k",
     glyph: "日",
     subjectType: "kanji",
+    slug: null,
     meaning: "Sun",
     reading: "にち",
     badges: [],
@@ -151,51 +152,49 @@ describe("sortHits", () => {
 });
 
 describe("searchHitHref", () => {
-  const user = "johnmorrisdotca";
+  /*
+   * Where a result leads is the subject of `searchDestinations.test.ts`, which
+   * walks every kind a member can click. These are the pieces of the address.
+   */
+  it("gives a single kanji its public page", () => {
+    expect(searchHitHref(hit({ glyph: "日" }))).toBe("/kanji/%E6%97%A5");
+  });
+
+  it("gives a dictionary-only character the same page", () => {
+    /* No catalogue teaches 渕; the dictionary is the only thing that has it. */
+    const entry = hit({ source: SEARCH_SOURCES.dictionary, key: "dictionary:渕", glyph: "渕" });
+    expect(searchHitHref(entry)).toBe(`/kanji/${encodeURIComponent("渕")}`);
+  });
+
+  it("gives a word the word page", () => {
+    expect(searchHitHref(hit({ glyph: "鉛筆", subjectType: "vocabulary", slug: "鉛筆" }))).toBe(
+      `/vocabulary/${encodeURIComponent("鉛筆")}`,
+    );
+  });
+
+  it("gives a radical the radical page, named by its slug", () => {
+    expect(searchHitHref(hit({ glyph: "亠", subjectType: "radical", slug: "lid" }))).toBe("/radicals/lid");
+  });
 
   /*
-   * The explorers are behind the sign-in wall, so a reader with no account is
-   * sent to the public kanji page rather than to a link that would bounce.
+   * A word WaniKani had to distinguish carries a slug that is not the word -
+   * the address follows the slug, since that is what the page looks up.
    */
-  it("sends an anonymous searcher to the public page for a single kanji", () => {
-    expect(searchHitHref(hit({ glyph: "日" }), null)).toBe("/kanji/%E6%97%A5");
-  });
-
-  it("sends a dictionary hit to the public page even for a signed-in member", () => {
-    /* No explorer holds a character no catalogue teaches. */
-    const entry = hit({ source: SEARCH_SOURCES.dictionary, key: "dictionary:渕", glyph: "渕" });
-    expect(searchHitHref(entry, user)).toBe(`/kanji/${encodeURIComponent("渕")}`);
-  });
-
-  it("offers an anonymous searcher no link where there is no public page", () => {
-    expect(searchHitHref(hit({ glyph: "日曜日", subjectType: "vocabulary" }), null)).toBeNull();
-    expect(searchHitHref(hit({ glyph: "亠", subjectType: "radical" }), null)).toBeNull();
-  });
-
-  it("sends a WaniKani hit to the WaniKani explorer, already searched", () => {
-    expect(searchHitHref(hit({ glyph: "鉛筆" }), user)).toBe(
-      `/users/${user}/library-explorer?q=${encodeURIComponent("鉛筆")}`,
+  it("prefers a word's slug over its characters", () => {
+    expect(searchHitHref(hit({ glyph: "何", subjectType: "vocabulary", slug: "何-2" }))).toBe(
+      "/vocabulary/%E4%BD%95-2",
     );
   });
 
-  it("sends a JLPT hit to the JLPT explorer", () => {
-    expect(searchHitHref(hit({ source: SEARCH_SOURCES.jlpt, glyph: "水" }), user)).toBe(
-      `/users/${user}/jlpt-explorer?q=${encodeURIComponent("水")}`,
+  it("falls back to the characters for a word with no slug", () => {
+    expect(searchHitHref(hit({ glyph: "鉛筆", subjectType: "vocabulary", slug: null }))).toBe(
+      `/vocabulary/${encodeURIComponent("鉛筆")}`,
     );
   });
 
-  it("sends a grade hit to that grade's page, with the grade in the path", () => {
-    expect(searchHitHref(hit({ source: SEARCH_SOURCES.grades, glyph: "水", grade: 3 }), user)).toBe(
-      `/users/${user}/grades/3?q=${encodeURIComponent("水")}`,
-    );
-  });
-
-  it("falls back to the first grade rather than building a broken link", () => {
-    expect(searchHitHref(hit({ source: SEARCH_SOURCES.grades, glyph: "水" }), user)).toContain("/grades/1");
-  });
-
-  it("escapes a name that needs it", () => {
-    expect(searchHitHref(hit({ glyph: "日" }), "a b")).toContain("/users/a%20b/");
+  /* A multi-character JLPT or grade row would be a catalogue error, not a page. */
+  it("offers nothing for a kanji row holding more than one character", () => {
+    expect(searchHitHref(hit({ glyph: "日曜日" }))).toBeNull();
   });
 });
 

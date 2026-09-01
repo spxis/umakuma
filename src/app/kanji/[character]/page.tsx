@@ -3,14 +3,17 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { KanjiDetailPanel } from "@/app/shared/KanjiDetailModal";
+import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { displayReading, readingsForGrade } from "@/app/users/[nickname]/grades/gradeExplorerView";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
 import { getKanjiDictionaryAttribution, getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { fetchSentencesForKanji } from "@/lib/tatoebaSentences";
 
+import ExampleSentences from "@/app/shared/ExampleSentences";
+
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
-import KanjiSentences from "./KanjiSentences";
+import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
 
 type Props = { params: Promise<{ character: string }> };
 
@@ -88,6 +91,7 @@ export default async function KanjiPage({ params }: Props) {
 
   return (
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">
+      <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
 
       <section className="overflow-hidden rounded-3xl border border-line bg-surface shadow-sm">
@@ -102,7 +106,11 @@ export default async function KanjiPage({ params }: Props) {
         <KanjiDictionaryDetail entry={dictionary} attribution={getKanjiDictionaryAttribution()} />
       ) : null}
 
-      <KanjiSentences sentences={sentences} />
+      <ExampleSentences
+        sentences={sentences}
+        heading={KANJI_PAGE_COPY.examples}
+        credit={KANJI_PAGE_COPY.sentenceCredit}
+      />
 
       <p className="text-center text-sm">
         <Link href="/" className="font-bold text-accent underline underline-offset-2">

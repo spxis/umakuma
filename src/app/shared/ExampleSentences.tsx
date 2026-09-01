@@ -1,29 +1,35 @@
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { TATOEBA_ATTRIBUTION, type ExampleSentence } from "@/lib/tatoebaSentences";
 
-import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
-
 /**
- * How the character is actually used, in sentences somebody wrote.
+ * How something is actually used, in sentences somebody wrote.
  *
- * Readings and meanings say what a kanji is; a sentence says what it does. The
- * site's own examples come from WaniKani and are shown to WaniKani members, so
- * this page - the one a shared link opens, for a reader who may have no account
- * at all - had none.
+ * Readings and meanings say what a subject is; a sentence says what it does.
+ * The site's own examples come from WaniKani and are shown to WaniKani members,
+ * so the public pages - the ones a shared link opens, for a reader who may have
+ * no account at all - had none.
  *
  * Easiest first, and only a few: three short sentences get read, twenty get
- * skipped. A character with none renders nothing rather than an empty shelf,
- * which is most of the dictionary - Tatoeba reaches 2,916 of its 10,384
- * characters.
+ * skipped. A subject with none renders nothing rather than an empty shelf.
+ *
+ * Shared by every public subject page. The credit is a licence condition of
+ * CC BY, so having one copy of it is not only tidiness - it is the thing that
+ * stops a new page shipping without it.
  */
-export default function KanjiSentences({ sentences }: { sentences: ExampleSentence[] }) {
+export default function ExampleSentences({
+  sentences,
+  heading,
+  credit,
+}: {
+  sentences: ExampleSentence[];
+  heading: string;
+  credit: string;
+}) {
   if (sentences.length === 0) return null;
 
   return (
     <section className="space-y-3 rounded-3xl border border-line bg-surface p-5">
-      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
-        {KANJI_PAGE_COPY.examples}
-      </h2>
+      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{heading}</h2>
 
       <ul className="space-y-3">
         {sentences.map((sentence) => (
@@ -42,9 +48,8 @@ export default function KanjiSentences({ sentences }: { sentences: ExampleSenten
         ))}
       </ul>
 
-      {/* Share-alike's cousin: CC BY asks for the credit, so it is not optional. */}
       <p className="text-[11px] font-semibold text-foreground/60">
-        {KANJI_PAGE_COPY.sentenceCredit}{" "}
+        {credit}{" "}
         <a
           href={TATOEBA_ATTRIBUTION.url}
           className="underline decoration-dotted underline-offset-2 hover:text-foreground/70"

@@ -101,13 +101,13 @@ export function dedupeByGlyph(hits: SearchHit[], limit: number = SUGGEST_LIMIT):
 }
 
 /**
- * Where picking a suggestion goes. A signed-in member lands in their own
- * explorer with the find already applied; an anonymous visitor gets the results
- * page for that exact glyph, since the explorer links would bounce off the
- * sign-in wall.
+ * Where picking a suggestion goes: the same page selecting the result would
+ * open, since the dropdown and the results list are two views of one answer.
+ * The full results stand in for the handful of rows that have no page of their
+ * own - a radical the catalogue could not name.
  */
-export function suggestionHref(hit: SearchHit, viewerUsername: string | null): string {
-  return searchHitHref(hit, viewerUsername) ?? `/search?query=${encodeURIComponent(hit.glyph)}`;
+export function suggestionHref(hit: SearchHit): string {
+  return searchHitHref(hit) ?? `/search?query=${encodeURIComponent(hit.glyph)}`;
 }
 
 /** How far down the ranking a completion may come from. */

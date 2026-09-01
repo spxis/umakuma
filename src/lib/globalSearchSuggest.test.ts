@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { SEARCH_SOURCES, type SearchHit } from "./globalSearch";
+import { SEARCH_SOURCES, searchHitHref, type SearchHit } from "./globalSearch";
 import {
   SUGGEST_LIMIT,
   SUGGEST_MAX_PAGES,
@@ -20,6 +20,7 @@ function hit(overrides: Partial<SearchHit> = {}): SearchHit {
     key: "wanikani:1",
     glyph: "日",
     subjectType: "kanji",
+    slug: null,
     meaning: "Sun",
     reading: "にち",
     badges: ["Kanji", "L2"],
@@ -158,21 +159,33 @@ describe("ghostFor", () => {
 });
 
 describe("suggestionHref", () => {
-  it("sends a signed-in member into their own explorer", () => {
-    expect(suggestionHref(hit(), "kuma")).toBe("/users/kuma/library-explorer?q=%E6%97%A5");
+  /*
+   * The dropdown and the results list are two views of one answer, so picking
+   * a suggestion has to land where selecting the result would. They used to
+   * differ - the dropdown sent a member into their explorer - and that is the
+   * bug this whole area came from: an explorer is a list, and a list may
+   * answer with nothing.
+   */
+  it("goes where selecting the result would go", () => {
+    expect(suggestionHref(hit())).toBe(searchHitHref(hit()));
   });
 
-  it("routes a JLPT hit to the JLPT explorer", () => {
-    const jlpt = hit({ source: SEARCH_SOURCES.jlpt, key: "jlpt:日" });
-    expect(suggestionHref(jlpt, "kuma")).toBe("/users/kuma/jlpt-explorer?q=%E6%97%A5");
+  it("opens the kanji page for a kanji, whoever is asking", () => {
+    expect(suggestionHref(hit())).toBe("/kanji/%E6%97%A5");
   });
 
-  it("opens the public kanji page for an anonymous visitor", () => {
-    expect(suggestionHref(hit(), null)).toBe("/kanji/%E6%97%A5");
+  it("opens the word page for a word", () => {
+    const word = hit({ glyph: "日曜日", subjectType: "vocabulary", slug: "日曜日" });
+    expect(suggestionHref(word)).toBe(`/vocabulary/${encodeURIComponent("日曜日")}`);
   });
 
-  it("falls back to the results page where there is no public page", () => {
-    const word = hit({ glyph: "日曜日", subjectType: "vocabulary" });
-    expect(suggestionHref(word, null)).toBe(`/search?query=${encodeURIComponent("日曜日")}`);
+  /*
+   * A radical the catalogue could not name has no page. The full results are
+   * the honest answer - they at least show the row again - and there is no
+   * address that would show the subject itself.
+   */
+  it("falls back to the results page where there is no page to open", () => {
+    const nameless = hit({ glyph: "?", subjectType: "radical", slug: null });
+    expect(suggestionHref(nameless)).toBe("/search?query=%3F");
   });
 });

@@ -27,15 +27,12 @@ const LISTBOX_ID = "search-page-suggest";
 export default function SearchPageForm({
   initialQuery,
   activeSource,
-  viewerUsername,
 }: {
   initialQuery: string;
   /** Kept across a new search, so the source filter survives the next query. */
   activeSource: SearchSource | null;
-  viewerUsername: string | null;
 }) {
   const cbx = useSearchCombobox({
-    viewerUsername,
     initialValue: initialQuery,
     openOnFocus: false,
     resultsHref: (query) => {

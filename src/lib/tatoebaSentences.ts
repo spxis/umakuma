@@ -99,3 +99,43 @@ export async function fetchSentencesForKanji(
     return [];
   }
 }
+
+/**
+ * The easiest examples containing that word.
+ *
+ * The index is on the characters a sentence holds, not on its text, so this
+ * asks the index for sentences carrying every kanji in the word and then keeps
+ * the ones where those characters actually sit together. Asking the database
+ * for a substring instead would scan a quarter of a million rows on a page a
+ * signed-out reader is waiting on.
+ *
+ * A word written only in kana has no characters to ask the index about, so it
+ * falls back to matching the text - rarer, and worth the one scan.
+ */
+export async function fetchSentencesForWord(
+  word: string,
+  limit: number = SENTENCE_LIMIT,
+): Promise<ExampleSentence[]> {
+  const wanted = Math.min(Math.max(limit, 1), SENTENCE_MAX_LIMIT);
+  const trimmed = word.trim();
+  if (!trimmed) return [];
+
+  const kanji = [...trimmed].filter((character) => /[㐀-䶿一-鿿]/.test(character));
+
+  try {
+    const rows = await prisma.tatoebaSentence.findMany({
+      where:
+        kanji.length > 0
+          ? { kanji: { hasEvery: kanji }, japanese: { contains: trimmed } }
+          : { japanese: { contains: trimmed } },
+      orderBy: [{ difficulty: "asc" }, { id: "asc" }],
+      take: wanted * 4,
+      select: { id: true, japanese: true, english: true, owner: true },
+    });
+
+    return dedupeSentences(rows, wanted).map((row) => ({ ...row, href: sentenceHref(row.id) }));
+  } catch (error) {
+    console.error("sentence lookup failed", error);
+    return [];
+  }
+}

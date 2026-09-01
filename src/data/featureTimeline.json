@@ -2200,5 +2200,15 @@
     "version": "0.213.0",
     "releasedAt": "2026-09-01T14:30:41Z",
     "summary": "Searching the WaniKani explorer printed the answer twice. A line above the results said Showing 5 search results and the line on the toolbar said Showing 5 of 5 items - the same number, two sentences, neither of them wrong, and no way to tell whether they were counting the same thing or two different things that happened to agree. There is one count now, and a search changes what it says it is counting rather than adding a second opinion beside it: forty of sixty-nine items when you are browsing, five of five search results when you are searching."
+  },
+  {
+    "id": "a-result-opens-the-thing-it-found",
+    "area": "platform",
+    "name": "A result opens the thing it found",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.214.0",
+    "releasedAt": "2026-09-01T14:52:43Z",
+    "summary": "Searching for 水泡 found it - Foam, vocabulary, level 46 - and selecting it opened the library explorer, which answered No item matched 水泡 about the word it had just been shown. The explorer was not being stubborn: it is built from the member's own levels and stops at theirs, so a member on level 17 has no level 46 for the word to appear in, and no filter would have helped. Results led to a list, and a list is free to answer with nothing. Words and radicals now have pages of their own, next to the kanji page that already existed, and every result leads to one: one subject, named in the path, showing its meanings, readings, the WaniKani explanation, the kanji it is built from or the kanji built from it, and example sentences that use it. They are public, because they describe a subject and not a member - which also ends the other half of this, where a signed-out reader got no link at all for a word or a radical and the row was dead text that looked like a link. Radicals are addressed by name rather than by glyph, since WaniKani draws a good number of them and those have no character to be addressed by. The address takes no viewer at all now, so a link copied out of a search works for whoever it is sent to."
   }
 ]
