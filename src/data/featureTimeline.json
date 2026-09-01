@@ -2310,5 +2310,15 @@
     "releasedAt": "2026-09-01T15:44:00Z",
     "version": "0.220.0",
     "summary": "Search answered with one ranked column and a pill on every row saying which catalogue it came from. That is right and it is not enough: four catalogues answer a common character at once and they answer different questions - WaniKani knows what you are learning it as, the school grades know when a child is taught it, the dictionary knows the characters nobody teaches - and interleaving them by score left the reader sorting that out row by row from a pill. They sit side by side now, one column each, so a catalogue's whole answer reads or is ignored in a glance, and a column that found more than it shows opens on its own. Above them is a filter row on both axes, because the results have two and neither answers the other's question: what kind of thing a row is decides whether it is worth reading, and which catalogue holds it decides which column it sits in. A chip that is off keeps its count, so a hidden kind reads as hidden rather than as absent, and turning the last one off turns everything back on rather than leaving a page with nothing on it. The filters ride in the address, so a narrowed search can be sent to somebody and the back button walks them. The arrows learned the shape: up and down walk a column, left and right cross between them, keeping the row where the next column is long enough and clamping to its last row where it is not - WaniKani answers 中 with forty-five rows and the school grades with one, so every sideways move is between lists of different sizes and a move that landed on nothing would read as the keyboard being broken."
+  },
+  {
+    "id": "a-digit-is-a-number",
+    "area": "platform",
+    "name": "A digit is a number",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "releasedAt": "2026-09-01T15:55:30Z",
+    "version": "0.221.0",
+    "summary": "Searching for 1 found nothing at all. Not a near miss - nothing: the catalogues hold 一 and the meaning One, and neither of them contains the character 1, so a search that matches substrings of characters, readings and meanings had nothing to match against. Typing a digit is a reasonable way to ask for a number and every dictionary a learner has used answers it. A digit now reaches the number it names: 1 finds 一 and One, 10 finds 十, 24 finds 二十四, and a digit inside a phrase is read too, so 2 people reaches 二. The round ones are offered both ways, spelled out and bare - ten thousand is written 一万 but the character somebody typing 10000 wants is 万. A full-width digit reads the same, since that is what a Japanese keyboard produces. Above eight figures it offers nothing rather than a long spelling that would match nothing, and a query with no digits in it is left exactly as it was."
   }
 ]

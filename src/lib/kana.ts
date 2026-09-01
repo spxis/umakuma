@@ -11,6 +11,8 @@
  * kunrei alternatives (si, ti, tu, hu, zi) accepted alongside them.
  */
 
+import { japaneseNumberVariants } from "./searchNumerals";
+
 /** Longest-match syllable table; ordered lookups happen by key length. */
 const ROMAJI_SYLLABLES: Record<string, string> = {
   a: "あ", i: "い", u: "う", e: "え", o: "お",
@@ -154,6 +156,9 @@ export function searchQueryVariants(query: string): string[] {
 
   if (/[ぁ-ゖ]/.test(query)) variants.add(hiraganaToKatakana(query));
   if (/[ァ-ヶ]/.test(query)) variants.add(katakanaToHiragana(query));
+
+  /* A digit is a way of asking for a number, and 1 held none of 一 or "One". */
+  for (const numeral of japaneseNumberVariants(query)) variants.add(numeral);
 
   return Array.from(variants);
 }
