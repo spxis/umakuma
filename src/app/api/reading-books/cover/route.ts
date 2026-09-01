@@ -1,3 +1,4 @@
+import { checkRateLimit, createRateLimitResponse, getClientIp } from "@/lib/apiRateLimit";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -230,6 +231,23 @@ export async function GET(request: Request) {
     request,
     execute: async () => {
       try {
+        /*
+         * Throttled, because this is the one open route that costs real money
+         * per call: two database reads and up to two outbound lookups against
+         * openBD and Google Books. The responses cache hard, but the cache only
+         * helps a repeated ISBN - varying it walks straight past the cache and
+         * turns our bill, and our standing with those two APIs, into somebody
+         * else's plaything. Generous enough for a reading page full of covers.
+         */
+        const clientIp = getClientIp(request);
+        const rateLimit = checkRateLimit(`public:book-cover:${clientIp}`, {
+          windowMs: 60 * 1000,
+          maxRequests: 120,
+        });
+        if (!rateLimit.allowed) {
+          return createRateLimitResponse(rateLimit);
+        }
+
         const params = Object.fromEntries(new URL(request.url).searchParams.entries());
         const parsed = querySchema.safeParse(params);
         if (!parsed.success) {
