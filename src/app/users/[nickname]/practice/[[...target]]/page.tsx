@@ -139,6 +139,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   );
 
   const settings: SheetSettings = {
+    nickname: decodeURIComponent(nickname),
     picked: encodeSelection(picked),
     source,
     grade,

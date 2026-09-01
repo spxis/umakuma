@@ -7,29 +7,18 @@ import { querySchoolGradeCatalog } from "./schoolGrades";
 import { getStrokeOrder } from "./strokeOrder";
 import { withOfficialReadings } from "./gradeReadings";
 
-export const PRACTICE_SOURCES = {
-  grade: "grade",
-  wanikani: "wanikani",
-  jlpt: "jlpt",
-  /* The member's own lists, which are the sheets most worth printing. */
-  trouble: "trouble",
-  favorite: "favorite",
-  /* Characters chosen by hand on some other surface. */
-  picked: "picked",
-} as const;
+/* The source names live in a client-safe module; a link is built in the browser. */
+export {
+  PRACTICE_SOURCES,
+  TAGGED_PRACTICE_SOURCES,
+  isPracticeSource,
+  isTaggedPracticeSource,
+  practiceSourceHasLevels,
+  type PracticeSource,
+} from "./practiceSourceKinds";
 
-/** Sources that read a member's tagged list rather than a fixed ladder. */
-export const TAGGED_PRACTICE_SOURCES = [PRACTICE_SOURCES.trouble, PRACTICE_SOURCES.favorite] as const;
-
-export function isTaggedPracticeSource(value: string): boolean {
-  return (TAGGED_PRACTICE_SOURCES as readonly string[]).includes(value);
-}
-
-export type PracticeSource = (typeof PRACTICE_SOURCES)[keyof typeof PRACTICE_SOURCES];
-
-export function isPracticeSource(value: string): value is PracticeSource {
-  return Object.values(PRACTICE_SOURCES).includes(value as PracticeSource);
-}
+import type { PracticeSource } from "./practiceSourceKinds";
+import { PRACTICE_SOURCES, isTaggedPracticeSource } from "./practiceSourceKinds";
 
 export type PracticeEntry = {
   kanji: string;

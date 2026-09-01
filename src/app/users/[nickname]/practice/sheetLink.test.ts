@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { toPaginationPlacement } from "@/app/shared/paginationPlacement";
 
 import { DEFAULT_SHEET_SIZE, toSheetSize } from "./practiceCopy";
+import { parsePracticeTarget } from "./practiceAddress";
 import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "./sheetLink";
 
 /**
@@ -14,6 +15,7 @@ import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSett
  */
 
 const BASE: SheetSettings = {
+  nickname: "john",
   source: "grade",
   grade: 1,
   level: 1,
@@ -30,7 +32,7 @@ const BASE: SheetSettings = {
 };
 
 function read(href: string) {
-  const params = new URLSearchParams(href.slice(1));
+  const params = new URLSearchParams(href.split("?")[1] ?? "");
   return {
     placement: toPaginationPlacement(params.get("pager"), PRACTICE_PAGINATION_DEFAULT),
     size: toSheetSize(params.get("size")),
@@ -151,5 +153,41 @@ describe("the print layout", () => {
       size: "large",
     };
     expect(sheetHref(everySetting)).not.toContain(`${PRINT_NOW_PARAM}=`);
+  });
+});
+
+/**
+ * The half that broke.
+ *
+ * The collection moved into the path and these links kept writing it into the
+ * query, so every chip changed the address without changing what the page
+ * read: clicking G2 or "WaniKani level 17" did nothing at all. A link is only
+ * correct if the parser the page uses agrees with it, so that is the assertion.
+ */
+describe("a sheet link addresses what the page reads", () => {
+  it("puts the collection in the path, not the query", () => {
+    const href = sheetHref(BASE, { source: "jlpt", level: 5 });
+    expect(href.split("?")[0]).toBe("/users/john/practice/jlpt/5");
+    expect(href).not.toContain("source=");
+    expect(href).not.toContain("level=");
+  });
+
+  it("addresses a list without a level", () => {
+    expect(sheetHref(BASE, { source: "trouble" }).split("?")[0]).toBe("/users/john/practice/trouble");
+  });
+
+  it("round-trips through the parser the page uses", () => {
+    for (const [source, level] of [["grade", 2], ["wanikani", 17], ["jlpt", 5]] as const) {
+      const path = sheetHref(BASE, { source, level }).split("?")[0]!;
+      const segments = path.split("/practice/")[1]!.split("/");
+      expect(parsePracticeTarget(segments)).toEqual({ source, level });
+    }
+  });
+
+  it("keeps how the sheet prints in the query, where it belongs", () => {
+    const href = sheetHref(BASE, { source: "grade", level: 2, size: "large", showReadings: true });
+    expect(href.split("?")[0]).toBe("/users/john/practice/grade/2");
+    expect(href).toContain("size=large");
+    expect(href).toContain("readings=1");
   });
 });

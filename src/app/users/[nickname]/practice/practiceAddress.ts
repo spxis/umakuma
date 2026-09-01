@@ -1,4 +1,4 @@
-import { PRACTICE_SOURCES, isPracticeSource, isTaggedPracticeSource, type PracticeSource } from "@/lib/practiceSource";
+import { isPracticeSource, practiceSourceHasLevels, type PracticeSource } from "@/lib/practiceSourceKinds";
 
 /**
  * Where a practice sheet lives.
@@ -39,7 +39,7 @@ export function parsePracticeTarget(segments: string[] | undefined): PracticeTar
   if (rest.length > 0 || !source || !isPracticeSource(source)) return "invalid";
 
   /* A list is the whole set; a level would mean nothing on one. */
-  if (isTaggedPracticeSource(source) || source === PRACTICE_SOURCES.picked) {
+  if (!practiceSourceHasLevels(source)) {
     return level === undefined ? { source, level: null } : "invalid";
   }
 

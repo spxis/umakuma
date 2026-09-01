@@ -1,4 +1,7 @@
 import type { PaginationPlacement } from "@/app/shared/paginationPlacement";
+import { practiceSourceHasLevels, type PracticeSource } from "@/lib/practiceSourceKinds";
+
+import { practiceHref } from "./practiceAddress";
 
 import { DEFAULT_SHEET_SIZE, type SheetSize } from "./practiceCopy";
 import type { SheetMode } from "./TracingSheet";
@@ -40,6 +43,8 @@ export const PRACTICE_PAGINATION_DEFAULT: PaginationPlacement = "both";
 export const PRINT_NOW_PARAM = "go";
 
 export type SheetSettings = {
+  /** Whose page the sheet is on, since the address is built from it. */
+  nickname: string;
   source: string;
   grade: number;
   level: number;
@@ -69,13 +74,19 @@ export type SheetSettings = {
 export function sheetHref(settings: SheetSettings, changes: Partial<SheetSettings> = {}): string {
   const next = { ...settings, ...changes };
 
-  const parts = [
-    `source=${next.source}`,
-    `grade=${next.grade}`,
-    `level=${next.level}`,
-    `page=${next.page}`,
-    `mode=${next.mode}`,
-  ];
+  /*
+   * The collection is the address, not a parameter. Every control here used to
+   * write `?source=…&level=…`, which the page stopped reading when practice
+   * moved to `/practice/jlpt/5` - so each chip changed the query and the page
+   * re-read the unchanged path and rendered exactly what it already showed.
+   */
+  const source = next.source as PracticeSource;
+  const carriesLevel = practiceSourceHasLevels(source);
+  const path = practiceHref(next.nickname, { source, level: carriesLevel ? next.level : null });
+
+  const parts: string[] = [];
+  if (next.page > 1) parts.push(`page=${next.page}`);
+  if (next.mode !== "trace") parts.push(`mode=${next.mode}`);
 
   if (!next.showModel) parts.push("model=0");
   if (next.showReadings) parts.push("readings=1");
@@ -87,5 +98,5 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
   // Kept last: it is the longest parameter and the least worth reading.
   if (next.picked) parts.push(`picked=${encodeURIComponent(next.picked)}`);
 
-  return `?${parts.join("&")}`;
+  return parts.length > 0 ? `${path}?${parts.join("&")}` : path;
 }
