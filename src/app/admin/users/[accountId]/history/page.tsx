@@ -27,9 +27,9 @@ export default async function AdminUserHistoryPage({ params }: PageProps) {
           viewerMenuInfo={viewerMenuInfo}
           showAdminActions={true}
           className="mb-2"
+          subNav={<AdminPageNav activeTab="users" />}
         />
 
-        <AdminPageNav activeTab="users" />
 
         <StudyHistoryTable
           endpoint={`/api/admin/study-history?accountId=${encodeURIComponent(accountId)}`}

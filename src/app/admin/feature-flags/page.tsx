@@ -33,9 +33,9 @@ export default async function AdminFeatureFlagsPage() {
           viewerMenuInfo={viewerMenuInfo}
           showAdminActions={true}
           className="mb-2"
+          subNav={<AdminPageNav activeTab="featureFlags" />}
         />
 
-        <AdminPageNav activeTab="featureFlags" />
 
         <AdminWorkspaceHeader
           checkingSession={false}
