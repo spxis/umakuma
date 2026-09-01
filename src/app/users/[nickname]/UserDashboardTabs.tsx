@@ -1,8 +1,6 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import umaKumaLeft from "@/images/umakuma-1.png";
 
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 
@@ -11,6 +9,9 @@ import {
   LevelProgressTabPanel,
   MainTabPanel,
 } from "./UserDashboardTabPanels";
+import MemberPageHeader from "@/app/shared/MemberPageHeader";
+
+import { DASHBOARD_PAGE_HEADERS } from "./dashboardPageHeaders";
 import type { TabId, UserDashboardTabsProps as Props } from "./UserDashboardTabs.types";
 
 function isDashboardTabId(value: string | null): value is TabId {
@@ -235,8 +236,24 @@ export default function UserDashboardTabs({
     passedLevelUpGate,
   };
 
+  const pageHeader = DASHBOARD_PAGE_HEADERS[activeTab];
+
   return (
     <>
+      {/*
+        * One header for every tab, above whichever panel is showing.
+        *
+        * Each tab used to answer this for itself - a banner here, a header
+        * card there, nothing on the third - so the six addresses of one page
+        * looked like six pages. Only the picture differs now.
+        */}
+      <MemberPageHeader
+        icon={pageHeader.icon}
+        title={pageHeader.title}
+        subtitle={pageHeader.subtitle}
+        className="mb-3"
+      />
+
       {activeTab === "learn" || activeTab === "wk" || activeTab === "jlpt" ? (
         <section role="tabpanel">
           {learnContent}
@@ -244,20 +261,7 @@ export default function UserDashboardTabs({
       ) : null}
 
       {activeTab === "stats" ? (
-        <section className="mt-4 space-y-4" role="tabpanel">
-          <section className="rounded-2xl border border-line bg-surface/90 px-5 py-4 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-              <div className="overflow-hidden rounded-xl border border-line/70 bg-surface">
-                <Image src={umaKumaLeft} alt="Uma and Kuma" width={96} height={60} className="h-13 w-24 object-contain p-1.5" />
-              </div>
-              <div>
-                <h2 className="text-xl font-black text-foreground">Stats</h2>
-                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-                  Progress snapshot and distribution at a glance.
-                </p>
-              </div>
-            </div>
-          </section>
+        <section className="space-y-4" role="tabpanel">
 
           <section className="rounded-2xl border border-line bg-surface/90 p-3 sm:p-4">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/65">Snapshot</p>
@@ -304,13 +308,13 @@ export default function UserDashboardTabs({
       ) : null}
 
       {activeTab === "news" ? (
-        <section className="mt-4" role="tabpanel">
+        <section role="tabpanel">
           {newsContent}
         </section>
       ) : null}
 
       {activeTab === "read" ? (
-        <section className="mt-4" role="tabpanel">
+        <section role="tabpanel">
           {readContent}
         </section>
       ) : null}

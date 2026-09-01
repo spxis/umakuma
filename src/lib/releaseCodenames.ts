@@ -255,6 +255,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Hazusanai Hasami", ja: "外さない鋏", reading: "はずさないはさみ", gloss: "the grip that does not slip" },
   { romaji: "Hikikaesu Hyoushiki", ja: "引き返す標識", reading: "ひきかえすひょうしき", gloss: "the sign that sends you back where you were" },
   { romaji: "Fuda ni Fude", ja: "札に筆", reading: "ふだにふで", gloss: "a brush on the label, not a serial number" },
+  { romaji: "Heikou na Hedate", ja: "平行な隔て", reading: "へいこうなへだて", gloss: "walls set parallel, every room the same shape" },
 ];
 
 /**

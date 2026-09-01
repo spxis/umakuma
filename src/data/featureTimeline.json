@@ -2110,5 +2110,15 @@
     "version": "0.204.0",
     "releasedAt": "2026-09-01T10:57:14Z",
     "summary": "The admin study history listed twenty thousand answered reviews with a Subject column holding nothing but a number. A page of it read as a column of five figures, and there was no telling which row was about which character without looking every id up by hand - on the one screen whose whole job is reviewing what somebody answered. The character sits there now, with its id underneath in small type, because the id is still what the edit and delete actions act on and what a bug report quotes; it is just not the thing being read. The characters come from the local catalogue in a single query for the twenty or fifty rows a page actually shows, the same shape the table already used to turn account ids into names. A row whose subject the catalogue does not hold shows the id alone rather than a blank, since a subject can be answered and later withdrawn by WaniKani and the number is then the honest answer."
+  },
+  {
+    "id": "one-top-for-every-member-page",
+    "area": "platform",
+    "name": "One top for every member page",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.205.0",
+    "releasedAt": "2026-09-01T11:04:56Z",
+    "summary": "Study, the two explorers, Stats, News and Read are one page under six addresses, and each had grown a different top. Study and the explorers opened with a decorative banner and then kept their real title inside a filter panel that can be collapsed. Stats and Read had each built a header card of their own, similar but not the same. Read went further and put its Challenge and Check-ins toggle on a row above that card, so its heading sat a row lower than on any sibling - which is what made the set look less like one product the more of it you visited. There is one header now: a picture, the page name, a line saying what the page is for, and room on the right for what the page lets you do. The picture is per page, deliberately, because a page should still read as itself at a glance; the arrangement is not. The banner is gone from these six, the two private header cards are gone, and the toggle that used to push a heading down now sits below it with the rest of the content. What is still uneven, and is the next piece rather than a thing anybody should have to notice twice, is that the three explorers name themselves a second time inside their own panels."
   }
 ]
