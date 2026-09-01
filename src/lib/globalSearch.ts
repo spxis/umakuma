@@ -313,7 +313,9 @@ export function searchHitHref(hit: SearchHit, username: string | null): string |
 
   if (hit.source === SEARCH_SOURCES.grades) {
     const grade = typeof hit.grade === "number" ? hit.grade : 1;
-    return `${base}/grades?grade=${grade}&q=${glyph}`;
+    /* The grade names the collection, so it rides in the path; the search
+     * that finds the character within it stays a query. */
+    return `${base}/grades/${grade}?q=${glyph}`;
   }
 
   return `${base}/library-explorer?${EXPLORER_SEARCH_PARAM}=${glyph}`;

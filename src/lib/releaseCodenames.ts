@@ -243,6 +243,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Seiton no Senro", ja: "整頓の線路", reading: "せいとんのせんろ", gloss: "tidied track, all one gauge" },
   { romaji: "Sokojikara no Sora", ja: "底力の空", reading: "そこぢからのそら", gloss: "the sky that holds its strength" },
   { romaji: "Tayori no Tana", ja: "便りの棚", reading: "たよりのたな", gloss: "the shelf where the letters are kept" },
+  { romaji: "Chizu no Chikamichi", ja: "地図の近道", reading: "ちずのちかみち", gloss: "the shortcut the map shows" },
 ];
 
 /**

@@ -184,14 +184,14 @@ describe("searchHitHref", () => {
     );
   });
 
-  it("sends a grade hit to that grade's page", () => {
-    expect(searchHitHref(hit({ source: SEARCH_SOURCES.grades, glyph: "水", grade: 1 }), user)).toBe(
-      `/users/${user}/grades?grade=1&q=${encodeURIComponent("水")}`,
+  it("sends a grade hit to that grade's page, with the grade in the path", () => {
+    expect(searchHitHref(hit({ source: SEARCH_SOURCES.grades, glyph: "水", grade: 3 }), user)).toBe(
+      `/users/${user}/grades/3?q=${encodeURIComponent("水")}`,
     );
   });
 
   it("falls back to the first grade rather than building a broken link", () => {
-    expect(searchHitHref(hit({ source: SEARCH_SOURCES.grades, glyph: "水" }), user)).toContain("grade=1");
+    expect(searchHitHref(hit({ source: SEARCH_SOURCES.grades, glyph: "水" }), user)).toContain("/grades/1");
   });
 
   it("escapes a name that needs it", () => {

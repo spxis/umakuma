@@ -12,6 +12,7 @@ import {
   isGradeOption,
   pageRange,
   parseGradeParam,
+  parseGradeSegment,
   parsePageParam,
   readingsForGrade,
   standaloneReadings,
@@ -109,11 +110,11 @@ describe("grade options", () => {
 
 describe("gradeHref", () => {
   it("keeps the url clean on the first page with no search", () => {
-    expect(gradeHref("john", 2)).toBe("/users/john/grades?grade=2");
+    expect(gradeHref("john", 2)).toBe("/users/john/grades/2");
   });
 
   it("carries the page and search when they matter", () => {
-    expect(gradeHref("john", 3, 2, "water")).toBe("/users/john/grades?grade=3&page=2&q=water");
+    expect(gradeHref("john", 3, 2, "water")).toBe("/users/john/grades/3?page=2&q=water");
   });
 });
 
@@ -169,5 +170,25 @@ describe("readingsForGrade filters compound-only forms", () => {
   it("leaves a kanji with no standalone kun reading showing none", () => {
     const king = entry({ readings: { on: ["おう"], kun: ["-のう"] }, gradeApprovedReadings: { on: ["おう"], kun: ["-のう"] } });
     expect(readingsForGrade(king)).toEqual({ on: ["おう"], kun: [] });
+  });
+});
+
+describe("parseGradeSegment", () => {
+  /*
+   * The query reader falls back to the opening grade, which is right for a
+   * missing param and wrong for a path: `/grades/nonsense` rendering grade one
+   * makes a broken link look like a working one, and `/grades/practice` is a
+   * different page entirely.
+   */
+  it("reads a grade the explorer offers", () => {
+    expect(parseGradeSegment("3")).toBe(3);
+    expect(parseGradeSegment("9")).toBe(9);
+  });
+
+  it("refuses a segment that names no grade", () => {
+    expect(parseGradeSegment("practice")).toBeNull();
+    expect(parseGradeSegment("7")).toBeNull();
+    expect(parseGradeSegment("0")).toBeNull();
+    expect(parseGradeSegment(undefined)).toBeNull();
   });
 });

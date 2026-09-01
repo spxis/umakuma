@@ -82,11 +82,33 @@ export function displayReading(reading: string): string {
   return reading.replace(/\./g, "");
 }
 
+/**
+ * Where a grade lives.
+ *
+ * The grade is in the path because it says which collection you are looking
+ * at - it is the thing being addressed, it is what somebody means when they
+ * send the link, and it is what a cache can key on. Searching and paging stay
+ * in the query, because they are how you are looking at that collection rather
+ * than which one it is.
+ */
 export function gradeHref(nickname: string, grade: number, page = 1, search = ""): string {
-  const params = new URLSearchParams({ grade: String(grade) });
+  const params = new URLSearchParams();
   if (page > 1) params.set("page", String(page));
   if (search.trim()) params.set("q", search.trim());
-  return `/users/${encodeURIComponent(nickname)}/grades?${params.toString()}`;
+  const query = params.toString();
+  return `/users/${encodeURIComponent(nickname)}/grades/${grade}${query ? `?${query}` : ""}`;
+}
+
+/**
+ * The grade named by a path segment, or null when the segment is not one.
+ *
+ * Unlike the query-string reader this refuses to guess: `/grades/practice` is
+ * a different page and `/grades/nonsense` is a mistake, and quietly rendering
+ * grade one for either would make a wrong link look like a working one.
+ */
+export function parseGradeSegment(raw: string | undefined): GradeOption | null {
+  const parsed = Number.parseInt(String(raw ?? ""), 10);
+  return Number.isFinite(parsed) && isGradeOption(parsed) ? parsed : null;
 }
 
 /** One-based range of the items on this page, for the "showing X-Y of Z" line. */

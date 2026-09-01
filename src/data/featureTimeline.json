@@ -1990,5 +1990,15 @@
     "version": "0.192.0",
     "releasedAt": "2026-09-01T08:30:55Z",
     "summary": "Written notes on what changed and why were being handed over as links to pages hosted elsewhere, which put them outside the repository, outside admin and outside version control - three places they belong. Admin now has an Articles tab: an index of pieces newest first with their length, and a reading page for each at a width prose is comfortable at. An article is a component in the same folder rather than a markdown file, because the site has no markdown renderer and adding a dependency to read four internal notes is a dependency for nothing, while a component inherits the site's own type, spacing and colour and cannot drift from them. The prose vocabulary is fixed - a lead, headings, points, figures, a release row and a note - so an article cannot quietly invent its own styling, and the list is a single registry, because an article that is not in it does not exist. The first piece is the write-up of the search rebuild and the two corpora that shipped alongside it."
+  },
+  {
+    "id": "the-grade-lives-in-the-path",
+    "area": "platform",
+    "name": "The grade lives in the path",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.193.0",
+    "releasedAt": "2026-09-01T09:14:25Z",
+    "summary": "John asked for explorer addresses that make sense, and the search half of that shipped already: every explorer reads q. This is the other half, starting with the grades. The grade moved out of the query and into the path - /grades/3 rather than /grades?grade=3 - because it says which collection is being looked at, which is what a link means to whoever receives it, and it is what a cache can key on. Searching and paging stay in the query, since they describe how a collection is being read rather than which one it is. Links already sent still work: the old address redirects to the new one carrying the search and page with it, and results built before the change land where they should. A segment that names no grade now returns a 404 rather than quietly rendering grade one, so a wrong link stops looking like a working one, and the writing-practice route beneath the same folder is untouched. The other two explorers follow this shape next."
   }
 ]
