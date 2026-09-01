@@ -1,0 +1,4722 @@
+{
+  "attribution": {
+    "source": "KANJIDIC2",
+    "publisher": "Electronic Dictionary Research and Development Group",
+    "url": "http://www.edrdg.org/wiki/index.php/KANJIDIC_Project",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+  },
+  "kanji": [
+    {
+      "kanji": "薗",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 140,
+      "primaryMeaning": "garden",
+      "meanings": [
+        "garden",
+        "yard",
+        "farm"
+      ],
+      "readings": {
+        "on": [
+          "エン",
+          "オン"
+        ],
+        "kun": [
+          "その"
+        ],
+        "nanori": [
+          "ぞの"
+        ]
+      }
+    },
+    {
+      "kanji": "駈",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 187,
+      "primaryMeaning": "run",
+      "meanings": [
+        "run",
+        "gallop",
+        "advance"
+      ],
+      "readings": {
+        "on": [
+          "ク"
+        ],
+        "kun": [
+          "か.ける",
+          "か.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "曾",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 73,
+      "primaryMeaning": "once",
+      "meanings": [
+        "once",
+        "before",
+        "formerly",
+        "ever",
+        "never",
+        "ex-"
+      ],
+      "readings": {
+        "on": [
+          "ソウ",
+          "ソ",
+          "ゾウ"
+        ],
+        "kun": [
+          "かつ.て",
+          "か.って",
+          "すなわち"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "瀧",
+      "grade": 10,
+      "strokeCount": 19,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "waterfall",
+      "meanings": [
+        "waterfall",
+        "rapids",
+        "cascade"
+      ],
+      "readings": {
+        "on": [
+          "ロウ",
+          "ソウ"
+        ],
+        "kun": [
+          "たき"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "嶋",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": 1633,
+      "jlptOld": null,
+      "radical": 46,
+      "primaryMeaning": "island",
+      "meanings": [
+        "island"
+      ],
+      "readings": {
+        "on": [
+          "トウ"
+        ],
+        "kun": [
+          "しま"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "燈",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": 2456,
+      "jlptOld": null,
+      "radical": 86,
+      "primaryMeaning": "lamp",
+      "meanings": [
+        "lamp",
+        "light",
+        "counter for lights"
+      ],
+      "readings": {
+        "on": [
+          "トウ"
+        ],
+        "kun": [
+          "ひ",
+          "ほ-",
+          "ともしび",
+          "とも.す",
+          "あかり"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "埜",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 32,
+      "primaryMeaning": "open country",
+      "meanings": [
+        "open country",
+        "field",
+        "wilderness"
+      ],
+      "readings": {
+        "on": [
+          "ヤ",
+          "ショ"
+        ],
+        "kun": [
+          "の"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "盃",
+      "grade": 10,
+      "strokeCount": 9,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 108,
+      "primaryMeaning": "glass",
+      "meanings": [
+        "glass",
+        "cup"
+      ],
+      "readings": {
+        "on": [
+          "ハイ"
+        ],
+        "kun": [
+          "さかずき"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "冨",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": 1906,
+      "jlptOld": null,
+      "radical": 14,
+      "primaryMeaning": "enrich",
+      "meanings": [
+        "enrich",
+        "wealthy",
+        "abundant"
+      ],
+      "readings": {
+        "on": [
+          "フ",
+          "フウ"
+        ],
+        "kun": [
+          "と.む",
+          "とみ"
+        ],
+        "nanori": [
+          "と"
+        ]
+      }
+    },
+    {
+      "kanji": "峯",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": 2079,
+      "jlptOld": null,
+      "radical": 46,
+      "primaryMeaning": "peak",
+      "meanings": [
+        "peak",
+        "summit"
+      ],
+      "readings": {
+        "on": [
+          "ホウ"
+        ],
+        "kun": [
+          "みね",
+          "ね"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "龍",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": 1734,
+      "jlptOld": null,
+      "radical": 212,
+      "primaryMeaning": "dragon",
+      "meanings": [
+        "dragon",
+        "imperial"
+      ],
+      "readings": {
+        "on": [
+          "リュウ",
+          "リョウ",
+          "ロウ"
+        ],
+        "kun": [
+          "たつ"
+        ],
+        "nanori": [
+          "りゅ"
+        ]
+      }
+    },
+    {
+      "kanji": "乘",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 4,
+      "primaryMeaning": "power",
+      "meanings": [
+        "power",
+        "multiplication",
+        "record",
+        "counter for vehicles"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ"
+        ],
+        "kun": [
+          "の.る",
+          "の.せる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "亞",
+      "grade": 10,
+      "strokeCount": 8,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 7,
+      "primaryMeaning": "rank",
+      "meanings": [
+        "rank",
+        "follow"
+      ],
+      "readings": {
+        "on": [
+          "ア"
+        ],
+        "kun": [
+          "つ.ぐ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "佛",
+      "grade": 10,
+      "strokeCount": 7,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 9,
+      "primaryMeaning": "France",
+      "meanings": [
+        "France"
+      ],
+      "readings": {
+        "on": [
+          "ブツ",
+          "フツ"
+        ],
+        "kun": [
+          "ほとけ"
+        ],
+        "nanori": [
+          "さらぎ"
+        ]
+      }
+    },
+    {
+      "kanji": "來",
+      "grade": 10,
+      "strokeCount": 8,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 9,
+      "primaryMeaning": "come",
+      "meanings": [
+        "come",
+        "due",
+        "next",
+        "cause",
+        "become"
+      ],
+      "readings": {
+        "on": [
+          "ライ",
+          "タイ"
+        ],
+        "kun": [
+          "く.る",
+          "きた.る",
+          "きた.す",
+          "き.たす",
+          "き.たる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "傳",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 9,
+      "primaryMeaning": "summon",
+      "meanings": [
+        "summon",
+        "propagate",
+        "transmit"
+      ],
+      "readings": {
+        "on": [
+          "テン",
+          "デン"
+        ],
+        "kun": [
+          "つた.わる",
+          "つた.える",
+          "つた.う",
+          "つて"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "僞",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 9,
+      "primaryMeaning": "lie",
+      "meanings": [
+        "lie",
+        "falsehood",
+        "deceive",
+        "pretend"
+      ],
+      "readings": {
+        "on": [
+          "ギ",
+          "カ"
+        ],
+        "kun": [
+          "いつわ.る",
+          "いつわ.り",
+          "にせ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "價",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 9,
+      "primaryMeaning": "price",
+      "meanings": [
+        "price",
+        "value"
+      ],
+      "readings": {
+        "on": [
+          "カ",
+          "ケ"
+        ],
+        "kun": [
+          "あたい"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "儉",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 9,
+      "primaryMeaning": "economy",
+      "meanings": [
+        "economy",
+        "thrifty"
+      ],
+      "readings": {
+        "on": [
+          "ケン"
+        ],
+        "kun": [
+          "つま.しい",
+          "つづまやか"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "兒",
+      "grade": 10,
+      "strokeCount": 8,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 10,
+      "primaryMeaning": "child",
+      "meanings": [
+        "child",
+        "young of animals"
+      ],
+      "readings": {
+        "on": [
+          "ジ",
+          "ニ",
+          "ゲイ"
+        ],
+        "kun": [
+          "こ"
+        ],
+        "nanori": [
+          "ちご"
+        ]
+      }
+    },
+    {
+      "kanji": "凉",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 15,
+      "primaryMeaning": "nice and cool",
+      "meanings": [
+        "nice and cool"
+      ],
+      "readings": {
+        "on": [
+          "リョウ"
+        ],
+        "kun": [
+          "すず.しい",
+          "すず.む",
+          "すず.やか",
+          "うす.い",
+          "ひや.す",
+          "まことに"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "剩",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 18,
+      "primaryMeaning": "leftovers",
+      "meanings": [
+        "leftovers",
+        "residue",
+        "remains"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ"
+        ],
+        "kun": [
+          "あまつさえ",
+          "あま.り",
+          "あま.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "劍",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 18,
+      "primaryMeaning": "sword",
+      "meanings": [
+        "sword"
+      ],
+      "readings": {
+        "on": [
+          "ケン"
+        ],
+        "kun": [
+          "つるぎ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "勳",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 19,
+      "primaryMeaning": "meritorious deed",
+      "meanings": [
+        "meritorious deed",
+        "merits",
+        "rank"
+      ],
+      "readings": {
+        "on": [
+          "クン"
+        ],
+        "kun": [
+          "いさお"
+        ],
+        "nanori": [
+          "いさ"
+        ]
+      }
+    },
+    {
+      "kanji": "卷",
+      "grade": 10,
+      "strokeCount": 8,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 26,
+      "primaryMeaning": "volume",
+      "meanings": [
+        "volume",
+        "book",
+        "part"
+      ],
+      "readings": {
+        "on": [
+          "カン",
+          "ケン"
+        ],
+        "kun": [
+          "ま.く",
+          "まき"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "單",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 30,
+      "primaryMeaning": "one",
+      "meanings": [
+        "one",
+        "single",
+        "simple"
+      ],
+      "readings": {
+        "on": [
+          "タン"
+        ],
+        "kun": [
+          "ひとえ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "嚴",
+      "grade": 10,
+      "strokeCount": 20,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 30,
+      "primaryMeaning": "strictness",
+      "meanings": [
+        "strictness",
+        "severity",
+        "rigidity"
+      ],
+      "readings": {
+        "on": [
+          "ゲン",
+          "ゴン"
+        ],
+        "kun": [
+          "おごそ.か",
+          "きび.しい",
+          "いか.めしい",
+          "いつくし"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "圈",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 31,
+      "primaryMeaning": "sphere",
+      "meanings": [
+        "sphere",
+        "circle",
+        "radius",
+        "range"
+      ],
+      "readings": {
+        "on": [
+          "ケン"
+        ],
+        "kun": [
+          "かこ.い"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "國",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 31,
+      "primaryMeaning": "country",
+      "meanings": [
+        "country"
+      ],
+      "readings": {
+        "on": [
+          "コク"
+        ],
+        "kun": [
+          "くに"
+        ],
+        "nanori": [
+          "こ"
+        ]
+      }
+    },
+    {
+      "kanji": "圓",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 31,
+      "primaryMeaning": "yen",
+      "meanings": [
+        "yen",
+        "circle",
+        "round"
+      ],
+      "readings": {
+        "on": [
+          "エン"
+        ],
+        "kun": [
+          "まる.い",
+          "まる",
+          "まど",
+          "まど.か",
+          "まろ.やか"
+        ],
+        "nanori": [
+          "つぶら"
+        ]
+      }
+    },
+    {
+      "kanji": "團",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 31,
+      "primaryMeaning": "association",
+      "meanings": [
+        "association"
+      ],
+      "readings": {
+        "on": [
+          "ダン",
+          "トン"
+        ],
+        "kun": [
+          "かたまり",
+          "まる.い"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "壞",
+      "grade": 10,
+      "strokeCount": 19,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 32,
+      "primaryMeaning": "demolition",
+      "meanings": [
+        "demolition",
+        "break",
+        "destroy"
+      ],
+      "readings": {
+        "on": [
+          "カイ",
+          "エ"
+        ],
+        "kun": [
+          "こわ.す",
+          "こわ.れる",
+          "やぶ.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "壘",
+      "grade": 10,
+      "strokeCount": 18,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 32,
+      "primaryMeaning": "fort",
+      "meanings": [
+        "fort",
+        "rampart",
+        "walls",
+        "base(ball)"
+      ],
+      "readings": {
+        "on": [
+          "ルイ",
+          "ライ",
+          "スイ"
+        ],
+        "kun": [
+          "とりで"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "壯",
+      "grade": 10,
+      "strokeCount": 7,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 33,
+      "primaryMeaning": "big",
+      "meanings": [
+        "big",
+        "large",
+        "robust",
+        "name of tribe"
+      ],
+      "readings": {
+        "on": [
+          "ソウ"
+        ],
+        "kun": [
+          "さかん"
+        ],
+        "nanori": [
+          "たけし"
+        ]
+      }
+    },
+    {
+      "kanji": "壽",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 33,
+      "primaryMeaning": "longevity",
+      "meanings": [
+        "longevity",
+        "congratulations"
+      ],
+      "readings": {
+        "on": [
+          "ジュ",
+          "ス",
+          "シュウ"
+        ],
+        "kun": [
+          "ことぶき",
+          "ことぶ.く",
+          "ことほ.ぐ"
+        ],
+        "nanori": [
+          "かず",
+          "じ",
+          "とし",
+          "ひさ",
+          "ひさし"
+        ]
+      }
+    },
+    {
+      "kanji": "奧",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 37,
+      "primaryMeaning": "heart",
+      "meanings": [
+        "heart",
+        "interior"
+      ],
+      "readings": {
+        "on": [
+          "オウ",
+          "オク"
+        ],
+        "kun": [
+          "おく.まる",
+          "くま"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "奬",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 37,
+      "primaryMeaning": "prize",
+      "meanings": [
+        "prize",
+        "reward",
+        "give award to"
+      ],
+      "readings": {
+        "on": [
+          "ショウ",
+          "ソウ"
+        ],
+        "kun": [
+          "すす.める"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "孃",
+      "grade": 10,
+      "strokeCount": 20,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 38,
+      "primaryMeaning": "girl",
+      "meanings": [
+        "girl",
+        "Miss",
+        "daughter"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ"
+        ],
+        "kun": [
+          "むすめ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "實",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 40,
+      "primaryMeaning": "truth",
+      "meanings": [
+        "truth",
+        "reality"
+      ],
+      "readings": {
+        "on": [
+          "ジツ",
+          "シツ"
+        ],
+        "kun": [
+          "み",
+          "みの.る",
+          "まこと.に",
+          "みの.り",
+          "みち.る"
+        ],
+        "nanori": [
+          "さな",
+          "さね",
+          "みつ"
+        ]
+      }
+    },
+    {
+      "kanji": "寢",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 40,
+      "primaryMeaning": "sleep",
+      "meanings": [
+        "sleep",
+        "rest",
+        "bed chamber"
+      ],
+      "readings": {
+        "on": [
+          "シン"
+        ],
+        "kun": [
+          "ね.る",
+          "ね.かす",
+          "い.ぬ",
+          "みたまや",
+          "や.める"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "將",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 41,
+      "primaryMeaning": "commander",
+      "meanings": [
+        "commander",
+        "general",
+        "admiral"
+      ],
+      "readings": {
+        "on": [
+          "ショウ",
+          "ソウ"
+        ],
+        "kun": [
+          "まさ.に",
+          "はた",
+          "ひきい.る",
+          "もって"
+        ],
+        "nanori": [
+          "まさる"
+        ]
+      }
+    },
+    {
+      "kanji": "專",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 41,
+      "primaryMeaning": "specialty",
+      "meanings": [
+        "specialty",
+        "exclusive",
+        "mainly",
+        "solely"
+      ],
+      "readings": {
+        "on": [
+          "セン"
+        ],
+        "kun": [
+          "もっぱ.ら"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "峽",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 46,
+      "primaryMeaning": "gorge",
+      "meanings": [
+        "gorge",
+        "strait",
+        "ravine",
+        "isthmus"
+      ],
+      "readings": {
+        "on": [
+          "キョウ",
+          "コウ"
+        ],
+        "kun": [
+          "はざま"
+        ],
+        "nanori": [
+          "かい"
+        ]
+      }
+    },
+    {
+      "kanji": "帶",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 50,
+      "primaryMeaning": "belt",
+      "meanings": [
+        "belt",
+        "girdle",
+        "band",
+        "strap",
+        "zone"
+      ],
+      "readings": {
+        "on": [
+          "タイ"
+        ],
+        "kun": [
+          "お.びる",
+          "おび"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "廣",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": 2487,
+      "jlptOld": null,
+      "radical": 53,
+      "primaryMeaning": "broad",
+      "meanings": [
+        "broad",
+        "wide",
+        "spacious"
+      ],
+      "readings": {
+        "on": [
+          "コウ"
+        ],
+        "kun": [
+          "ひろ.い",
+          "ひろ.まる",
+          "ひろ.める",
+          "ひろ.がる",
+          "ひろ.げる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "廳",
+      "grade": 10,
+      "strokeCount": 25,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 53,
+      "primaryMeaning": "hall",
+      "meanings": [
+        "hall",
+        "central room"
+      ],
+      "readings": {
+        "on": [
+          "チョウ",
+          "テイ"
+        ],
+        "kun": [
+          "やくしょ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "彈",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 57,
+      "primaryMeaning": "bullet",
+      "meanings": [
+        "bullet",
+        "twang",
+        "flip",
+        "snap"
+      ],
+      "readings": {
+        "on": [
+          "ダン",
+          "タン"
+        ],
+        "kun": [
+          "ひ.く",
+          "はず.む",
+          "たま",
+          "はじ.く",
+          "はじ.ける",
+          "ただ.す"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "彌",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 57,
+      "primaryMeaning": "extensive",
+      "meanings": [
+        "extensive",
+        "full",
+        "fill",
+        "complete"
+      ],
+      "readings": {
+        "on": [
+          "ミ",
+          "ビ"
+        ],
+        "kun": [
+          "いや",
+          "や",
+          "あまねし",
+          "いよいよ",
+          "とおい",
+          "ひさし",
+          "ひさ.しい",
+          "わた.る"
+        ],
+        "nanori": [
+          "ゆ"
+        ]
+      }
+    },
+    {
+      "kanji": "從",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 60,
+      "primaryMeaning": "from",
+      "meanings": [
+        "from",
+        "by",
+        "since",
+        "whence",
+        "through"
+      ],
+      "readings": {
+        "on": [
+          "ジュウ",
+          "ショウ",
+          "ジュ"
+        ],
+        "kun": [
+          "したが.う",
+          "したが.える",
+          "より"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "恆",
+      "grade": 10,
+      "strokeCount": 9,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 61,
+      "primaryMeaning": "constant",
+      "meanings": [
+        "constant",
+        "regular",
+        "persistent"
+      ],
+      "readings": {
+        "on": [
+          "コウ"
+        ],
+        "kun": [
+          "つね.に"
+        ],
+        "nanori": [
+          "わたる",
+          "ひさし"
+        ]
+      }
+    },
+    {
+      "kanji": "惡",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 61,
+      "primaryMeaning": "bad",
+      "meanings": [
+        "bad",
+        "evil"
+      ],
+      "readings": {
+        "on": [
+          "アク",
+          "オ"
+        ],
+        "kun": [
+          "わる.い",
+          "あ.し",
+          "にく.い",
+          "ああ",
+          "いずくに",
+          "いずくんぞ",
+          "にく.む"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "惠",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 61,
+      "primaryMeaning": "blessing",
+      "meanings": [
+        "blessing",
+        "grace",
+        "favor",
+        "kindness"
+      ],
+      "readings": {
+        "on": [
+          "ケイ",
+          "エ"
+        ],
+        "kun": [
+          "めぐ.む",
+          "めぐ.み"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "愼",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 61,
+      "primaryMeaning": "care",
+      "meanings": [
+        "care",
+        "chastity"
+      ],
+      "readings": {
+        "on": [
+          "シン"
+        ],
+        "kun": [
+          "つつし.む",
+          "つつし.み"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "應",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 61,
+      "primaryMeaning": "answer",
+      "meanings": [
+        "answer",
+        "yes",
+        "OK",
+        "reply",
+        "accept"
+      ],
+      "readings": {
+        "on": [
+          "オウ",
+          "ヨウ"
+        ],
+        "kun": [
+          "あた.る",
+          "まさに",
+          "こた.える"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "懷",
+      "grade": 10,
+      "strokeCount": 19,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 61,
+      "primaryMeaning": "pocket",
+      "meanings": [
+        "pocket",
+        "feelings",
+        "heart",
+        "yearn",
+        "miss someone",
+        "become attached to",
+        "bosom",
+        "breast"
+      ],
+      "readings": {
+        "on": [
+          "カイ",
+          "エ"
+        ],
+        "kun": [
+          "ふところ",
+          "なつ.かしい",
+          "なつ.かしむ",
+          "なつ.く",
+          "なつ.ける",
+          "いだ.く",
+          "おも.う"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "戰",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 62,
+      "primaryMeaning": "war",
+      "meanings": [
+        "war",
+        "fighting",
+        "battle"
+      ],
+      "readings": {
+        "on": [
+          "セン"
+        ],
+        "kun": [
+          "いくさ",
+          "たたか.う",
+          "おのの.く",
+          "そよぐ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "戲",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 62,
+      "primaryMeaning": "play",
+      "meanings": [
+        "play",
+        "frolic",
+        "sport"
+      ],
+      "readings": {
+        "on": [
+          "ギ",
+          "ゲ"
+        ],
+        "kun": [
+          "たわむ.れる",
+          "たわむ.れ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "拔",
+      "grade": 10,
+      "strokeCount": 8,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 64,
+      "primaryMeaning": "extract",
+      "meanings": [
+        "extract",
+        "pull out",
+        "pilfer",
+        "quote",
+        "remove",
+        "omit"
+      ],
+      "readings": {
+        "on": [
+          "バツ",
+          "ハイ"
+        ],
+        "kun": [
+          "ぬ.く",
+          "ぬ.ける",
+          "ぬ.かす",
+          "ぬ.かる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "拜",
+      "grade": 10,
+      "strokeCount": 9,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 64,
+      "primaryMeaning": "worship",
+      "meanings": [
+        "worship",
+        "adore",
+        "pray to"
+      ],
+      "readings": {
+        "on": [
+          "ハイ"
+        ],
+        "kun": [
+          "おが.む",
+          "おろが.む"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "拂",
+      "grade": 10,
+      "strokeCount": 8,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 64,
+      "primaryMeaning": "clear out",
+      "meanings": [
+        "clear out",
+        "sweep away"
+      ],
+      "readings": {
+        "on": [
+          "ヒツ",
+          "フツ",
+          "ホツ"
+        ],
+        "kun": [
+          "はら.う"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "搜",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": 2394,
+      "jlptOld": null,
+      "radical": 64,
+      "primaryMeaning": "search",
+      "meanings": [
+        "search",
+        "seek",
+        "investigate"
+      ],
+      "readings": {
+        "on": [
+          "ソウ",
+          "シュ",
+          "シュウ"
+        ],
+        "kun": [
+          "さが.す"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "搖",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 64,
+      "primaryMeaning": "wag",
+      "meanings": [
+        "wag",
+        "swing",
+        "wave",
+        "shake",
+        "scull"
+      ],
+      "readings": {
+        "on": [
+          "ヨウ"
+        ],
+        "kun": [
+          "ゆ.れる",
+          "ゆ.らぐ",
+          "ゆ.るぐ",
+          "ゆ.する",
+          "ゆ.さぶる",
+          "ゆ.すぶる",
+          "うご.く"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "攝",
+      "grade": 10,
+      "strokeCount": 21,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 64,
+      "primaryMeaning": "surrogate",
+      "meanings": [
+        "surrogate",
+        "act in addition to"
+      ],
+      "readings": {
+        "on": [
+          "セツ",
+          "ショウ"
+        ],
+        "kun": [
+          "おさ.める",
+          "かね.る",
+          "と.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "收",
+      "grade": 10,
+      "strokeCount": 6,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 66,
+      "primaryMeaning": "income",
+      "meanings": [
+        "income"
+      ],
+      "readings": {
+        "on": [
+          "シュウ"
+        ],
+        "kun": [
+          "おさ.める",
+          "おさ.まる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "敍",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 66,
+      "primaryMeaning": "express",
+      "meanings": [
+        "express",
+        "state",
+        "relate",
+        "narrate"
+      ],
+      "readings": {
+        "on": [
+          "ジョ"
+        ],
+        "kun": [
+          "つい.ず",
+          "ついで"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "晝",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 72,
+      "primaryMeaning": "daytime",
+      "meanings": [
+        "daytime",
+        "daylight"
+      ],
+      "readings": {
+        "on": [
+          "チュウ"
+        ],
+        "kun": [
+          "ひる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "曉",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 72,
+      "primaryMeaning": "dawn",
+      "meanings": [
+        "dawn",
+        "daybreak",
+        "clear",
+        "explicit"
+      ],
+      "readings": {
+        "on": [
+          "キョウ",
+          "ギョウ"
+        ],
+        "kun": [
+          "あかつき",
+          "さと.る"
+        ],
+        "nanori": [
+          "あき"
+        ]
+      }
+    },
+    {
+      "kanji": "條",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "article",
+      "meanings": [
+        "article",
+        "counter for articles, clauses, paragraphs, etc.",
+        "twig",
+        "ray of light"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ",
+          "チョウ",
+          "デキ"
+        ],
+        "kun": [
+          "えだ",
+          "すじ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "榮",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "flourish",
+      "meanings": [
+        "flourish",
+        "prosperity",
+        "honour",
+        "glory",
+        "splendour"
+      ],
+      "readings": {
+        "on": [
+          "エイ",
+          "ヨウ"
+        ],
+        "kun": [
+          "さか.える",
+          "は.える",
+          "え"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "樂",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "music",
+      "meanings": [
+        "music",
+        "comfort"
+      ],
+      "readings": {
+        "on": [
+          "ガク",
+          "ラク",
+          "ゴウ"
+        ],
+        "kun": [
+          "たの.しい",
+          "たの.しむ",
+          "この.む"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "樣",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "Esq.",
+      "meanings": [
+        "Esq.",
+        "way",
+        "manner",
+        "situation",
+        "polite suffix"
+      ],
+      "readings": {
+        "on": [
+          "ヨウ",
+          "ショウ"
+        ],
+        "kun": [
+          "さま"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "檢",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "check",
+      "meanings": [
+        "check",
+        "examine"
+      ],
+      "readings": {
+        "on": [
+          "ケン"
+        ],
+        "kun": [
+          "しら.べる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "櫻",
+      "grade": 10,
+      "strokeCount": 21,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "cherry",
+      "meanings": [
+        "cherry"
+      ],
+      "readings": {
+        "on": [
+          "オウ",
+          "ヨウ"
+        ],
+        "kun": [
+          "さくら"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "盜",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 108,
+      "primaryMeaning": "thief",
+      "meanings": [
+        "thief",
+        "to steal"
+      ],
+      "readings": {
+        "on": [
+          "トウ"
+        ],
+        "kun": [
+          "ぬす.む"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "氣",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 84,
+      "primaryMeaning": "spirit",
+      "meanings": [
+        "spirit",
+        "mind",
+        "air",
+        "atmosphere",
+        "mood"
+      ],
+      "readings": {
+        "on": [
+          "キ",
+          "ケ"
+        ],
+        "kun": [
+          "いき"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "淨",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "pure",
+      "meanings": [
+        "pure",
+        "clean",
+        "unspoiled"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ",
+          "セイ"
+        ],
+        "kun": [
+          "きよ.める",
+          "きよ.い"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "滯",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "block up",
+      "meanings": [
+        "block up",
+        "obstruct",
+        "stagnant"
+      ],
+      "readings": {
+        "on": [
+          "タイ",
+          "テイ"
+        ],
+        "kun": [
+          "とどこお.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "澁",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "astringent",
+      "meanings": [
+        "astringent",
+        "harsh",
+        "uneven",
+        "rough"
+      ],
+      "readings": {
+        "on": [
+          "ジュウ",
+          "シュウ"
+        ],
+        "kun": [
+          "しぶ",
+          "しぶ.い",
+          "しぶ.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "濕",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "wet",
+      "meanings": [
+        "wet",
+        "moist",
+        "humid",
+        "damp",
+        "an illness"
+      ],
+      "readings": {
+        "on": [
+          "シツ",
+          "シュウ"
+        ],
+        "kun": [
+          "しめ.る",
+          "しめ.す",
+          "うるお.う",
+          "うるお.す"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "燒",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 86,
+      "primaryMeaning": "burn",
+      "meanings": [
+        "burn",
+        "bake",
+        "heat",
+        "roast"
+      ],
+      "readings": {
+        "on": [
+          "ショウ"
+        ],
+        "kun": [
+          "や.く",
+          "や.ける"
+        ],
+        "nanori": [
+          "やき"
+        ]
+      }
+    },
+    {
+      "kanji": "爭",
+      "grade": 10,
+      "strokeCount": 8,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 87,
+      "primaryMeaning": "to dispute",
+      "meanings": [
+        "to dispute",
+        "fight",
+        "contend",
+        "strive"
+      ],
+      "readings": {
+        "on": [
+          "ソウ"
+        ],
+        "kun": [
+          "あらそ.う",
+          "いか.でか"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "爲",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 87,
+      "primaryMeaning": "change",
+      "meanings": [
+        "change",
+        "be of use",
+        "reach to",
+        "do",
+        "try",
+        "practice",
+        "cost",
+        "serve as"
+      ],
+      "readings": {
+        "on": [
+          "イ"
+        ],
+        "kun": [
+          "ため",
+          "な.る",
+          "な.す",
+          "す.る",
+          "たり",
+          "つく.る",
+          "なり"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "狹",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 94,
+      "primaryMeaning": "narrow",
+      "meanings": [
+        "narrow",
+        "contract",
+        "reduce",
+        "tight",
+        "limited"
+      ],
+      "readings": {
+        "on": [
+          "キョウ",
+          "コウ"
+        ],
+        "kun": [
+          "せま.い",
+          "せば.める",
+          "せば.まる",
+          "さ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "默",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 203,
+      "primaryMeaning": "silent",
+      "meanings": [
+        "silent",
+        "quiet",
+        "still",
+        "dark"
+      ],
+      "readings": {
+        "on": [
+          "ボク",
+          "モク"
+        ],
+        "kun": [
+          "だ.まる",
+          "もだ.す"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "獸",
+      "grade": 10,
+      "strokeCount": 19,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 94,
+      "primaryMeaning": "beast",
+      "meanings": [
+        "beast",
+        "animal",
+        "bestial"
+      ],
+      "readings": {
+        "on": [
+          "ジュウ"
+        ],
+        "kun": [
+          "けもの",
+          "けだもの"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "疊",
+      "grade": 10,
+      "strokeCount": 22,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 102,
+      "primaryMeaning": "tatami",
+      "meanings": [
+        "tatami",
+        "counter for tatami mats",
+        "fold",
+        "shut up",
+        "do away with"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ",
+          "チョウ"
+        ],
+        "kun": [
+          "たた.む",
+          "たたみ",
+          "かさ.なる",
+          "かさ.ねる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "盡",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 108,
+      "primaryMeaning": "exhaust",
+      "meanings": [
+        "exhaust",
+        "use up",
+        "run out of",
+        "deplete",
+        "befriend",
+        "serve"
+      ],
+      "readings": {
+        "on": [
+          "ジン",
+          "サン"
+        ],
+        "kun": [
+          "つ.くす",
+          "つ.きる",
+          "つ.かす",
+          "さかづき",
+          "ことごと.く"
+        ],
+        "nanori": [
+          "まま"
+        ]
+      }
+    },
+    {
+      "kanji": "眞",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": 2359,
+      "jlptOld": null,
+      "radical": 109,
+      "primaryMeaning": "truth",
+      "meanings": [
+        "truth",
+        "reality",
+        "Buddhist sect"
+      ],
+      "readings": {
+        "on": [
+          "シン"
+        ],
+        "kun": [
+          "ま",
+          "まこと"
+        ],
+        "nanori": [
+          "さな",
+          "ち",
+          "まこ",
+          "まさ",
+          "まつ"
+        ]
+      }
+    },
+    {
+      "kanji": "碎",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 112,
+      "primaryMeaning": "break",
+      "meanings": [
+        "break",
+        "smash",
+        "broken",
+        "busted"
+      ],
+      "readings": {
+        "on": [
+          "サイ"
+        ],
+        "kun": [
+          "くだ.く",
+          "くだ.ける"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "祕",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 113,
+      "primaryMeaning": "mysterious",
+      "meanings": [
+        "mysterious",
+        "secret",
+        "abstruse"
+      ],
+      "readings": {
+        "on": [
+          "ヒ"
+        ],
+        "kun": [
+          "ひ.める",
+          "かく.す"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "禪",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 113,
+      "primaryMeaning": "Zen Buddhism",
+      "meanings": [
+        "Zen Buddhism",
+        "silent meditation"
+      ],
+      "readings": {
+        "on": [
+          "ゼン",
+          "セン"
+        ],
+        "kun": [
+          "しずか",
+          "ゆず.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "禮",
+      "grade": 10,
+      "strokeCount": 18,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 113,
+      "primaryMeaning": "social custom",
+      "meanings": [
+        "social custom",
+        "manners",
+        "courtesy",
+        "rites"
+      ],
+      "readings": {
+        "on": [
+          "レイ",
+          "ライ"
+        ],
+        "kun": [],
+        "nanori": [
+          "ひろ",
+          "れ"
+        ]
+      }
+    },
+    {
+      "kanji": "稻",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 115,
+      "primaryMeaning": "rice plant",
+      "meanings": [
+        "rice plant"
+      ],
+      "readings": {
+        "on": [
+          "トウ",
+          "テ"
+        ],
+        "kun": [
+          "いね",
+          "いな-"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "穗",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 115,
+      "primaryMeaning": "ear (of grain)",
+      "meanings": [
+        "ear (of grain)",
+        "head",
+        "crest (of wave)"
+      ],
+      "readings": {
+        "on": [
+          "スイ"
+        ],
+        "kun": [
+          "ほ"
+        ],
+        "nanori": [
+          "お"
+        ]
+      }
+    },
+    {
+      "kanji": "粹",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 119,
+      "primaryMeaning": "pure",
+      "meanings": [
+        "pure",
+        "unadulterated",
+        "select"
+      ],
+      "readings": {
+        "on": [
+          "スイ"
+        ],
+        "kun": [
+          "いき"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "縣",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 120,
+      "primaryMeaning": "county",
+      "meanings": [
+        "county",
+        "district",
+        "subdivision"
+      ],
+      "readings": {
+        "on": [
+          "ケン"
+        ],
+        "kun": [
+          "か.ける"
+        ],
+        "nanori": [
+          "あがた",
+          "がた"
+        ]
+      }
+    },
+    {
+      "kanji": "縱",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 120,
+      "primaryMeaning": "indulge in",
+      "meanings": [
+        "indulge in",
+        "give free reign to"
+      ],
+      "readings": {
+        "on": [
+          "ジュウ"
+        ],
+        "kun": [
+          "たて"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "纖",
+      "grade": 10,
+      "strokeCount": 23,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 120,
+      "primaryMeaning": "fine",
+      "meanings": [
+        "fine",
+        "slender",
+        "thin kimono"
+      ],
+      "readings": {
+        "on": [
+          "セン"
+        ],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "飜",
+      "grade": 10,
+      "strokeCount": 21,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 183,
+      "primaryMeaning": "flip over",
+      "meanings": [
+        "flip over",
+        "upset",
+        "capsize"
+      ],
+      "readings": {
+        "on": [
+          "ハン",
+          "ホン"
+        ],
+        "kun": [
+          "ひるがえ.す",
+          "ひるがえ.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "聽",
+      "grade": 10,
+      "strokeCount": 22,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 128,
+      "primaryMeaning": "careful enquiry",
+      "meanings": [
+        "careful enquiry",
+        "headstrong"
+      ],
+      "readings": {
+        "on": [
+          "チョウ"
+        ],
+        "kun": [
+          "き.く",
+          "ゆる.す"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "臟",
+      "grade": 10,
+      "strokeCount": 22,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 130,
+      "primaryMeaning": "viscera",
+      "meanings": [
+        "viscera",
+        "bowels"
+      ],
+      "readings": {
+        "on": [
+          "ゾウ"
+        ],
+        "kun": [
+          "はらわた"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "與",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 134,
+      "primaryMeaning": "participate in",
+      "meanings": [
+        "participate in",
+        "give",
+        "award",
+        "impart",
+        "provide",
+        "cause"
+      ],
+      "readings": {
+        "on": [
+          "ヨ"
+        ],
+        "kun": [
+          "あた.える",
+          "あずか.る",
+          "くみ.する",
+          "ともに"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "莊",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 140,
+      "primaryMeaning": "broom",
+      "meanings": [
+        "broom"
+      ],
+      "readings": {
+        "on": [
+          "ソウ",
+          "ショウ",
+          "チャン"
+        ],
+        "kun": [
+          "ほうき",
+          "おごそ.か"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "萬",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": 2125,
+      "jlptOld": null,
+      "radical": 140,
+      "primaryMeaning": "ten thousand",
+      "meanings": [
+        "ten thousand",
+        "10,000"
+      ],
+      "readings": {
+        "on": [
+          "マン",
+          "バン"
+        ],
+        "kun": [
+          "よろず"
+        ],
+        "nanori": [
+          "かず",
+          "ま",
+          "ゆる",
+          "よし"
+        ]
+      }
+    },
+    {
+      "kanji": "藏",
+      "grade": 10,
+      "strokeCount": 18,
+      "frequencyRank": 2407,
+      "jlptOld": null,
+      "radical": 140,
+      "primaryMeaning": "hide",
+      "meanings": [
+        "hide",
+        "own",
+        "have",
+        "possess"
+      ],
+      "readings": {
+        "on": [
+          "ゾウ",
+          "ソウ"
+        ],
+        "kun": [
+          "くら",
+          "おさ.める",
+          "かく.れる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "藝",
+      "grade": 10,
+      "strokeCount": 18,
+      "frequencyRank": 2065,
+      "jlptOld": null,
+      "radical": 140,
+      "primaryMeaning": "art",
+      "meanings": [
+        "art",
+        "craft",
+        "performance",
+        "acting",
+        "trick",
+        "stunt"
+      ],
+      "readings": {
+        "on": [
+          "ゲイ",
+          "ウン"
+        ],
+        "kun": [
+          "う.える",
+          "のり",
+          "わざ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "藥",
+      "grade": 10,
+      "strokeCount": 18,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 140,
+      "primaryMeaning": "medicine",
+      "meanings": [
+        "medicine",
+        "chemical",
+        "enamel",
+        "gunpowder",
+        "benefit"
+      ],
+      "readings": {
+        "on": [
+          "ヤク"
+        ],
+        "kun": [
+          "くすり"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "衞",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 144,
+      "primaryMeaning": "defense",
+      "meanings": [
+        "defense"
+      ],
+      "readings": {
+        "on": [
+          "エイ",
+          "エ"
+        ],
+        "kun": [
+          "まも.る"
+        ],
+        "nanori": [
+          "まもり",
+          "まもる"
+        ]
+      }
+    },
+    {
+      "kanji": "裝",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 145,
+      "primaryMeaning": "dress",
+      "meanings": [
+        "dress",
+        "pretend",
+        "disguise",
+        "profess"
+      ],
+      "readings": {
+        "on": [
+          "ソウ",
+          "ショウ"
+        ],
+        "kun": [
+          "よそお.う",
+          "よそお.い"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "覽",
+      "grade": 10,
+      "strokeCount": 22,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 147,
+      "primaryMeaning": "look at",
+      "meanings": [
+        "look at",
+        "inspect",
+        "perceive"
+      ],
+      "readings": {
+        "on": [
+          "ラン"
+        ],
+        "kun": [
+          "み.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "謠",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 149,
+      "primaryMeaning": "chant (esp. Noh)",
+      "meanings": [
+        "chant (esp. Noh)",
+        "folksong",
+        "ballad"
+      ],
+      "readings": {
+        "on": [
+          "ヨウ"
+        ],
+        "kun": [
+          "うた.う",
+          "うた"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "讓",
+      "grade": 10,
+      "strokeCount": 24,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 149,
+      "primaryMeaning": "allow",
+      "meanings": [
+        "allow",
+        "permit",
+        "yield",
+        "concede"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ"
+        ],
+        "kun": [
+          "ゆず.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "賣",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 154,
+      "primaryMeaning": "sell",
+      "meanings": [
+        "sell",
+        "betray",
+        "show off"
+      ],
+      "readings": {
+        "on": [
+          "バイ"
+        ],
+        "kun": [
+          "う.る",
+          "う.れる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "轉",
+      "grade": 10,
+      "strokeCount": 18,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 159,
+      "primaryMeaning": "shift",
+      "meanings": [
+        "shift",
+        "move",
+        "turn"
+      ],
+      "readings": {
+        "on": [
+          "テン"
+        ],
+        "kun": [
+          "ころ.がる",
+          "ころ.げる",
+          "ころ.がす",
+          "ころ.ぶ",
+          "まろ.ぶ",
+          "うたた",
+          "うつ.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "醉",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 164,
+      "primaryMeaning": "get drunk",
+      "meanings": [
+        "get drunk",
+        "feel sick",
+        "poisoned",
+        "elated",
+        "spellbound"
+      ],
+      "readings": {
+        "on": [
+          "スイ"
+        ],
+        "kun": [
+          "よ.う",
+          "よ.い"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "釀",
+      "grade": 10,
+      "strokeCount": 24,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 164,
+      "primaryMeaning": "brew",
+      "meanings": [
+        "brew",
+        "cause"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ"
+        ],
+        "kun": [
+          "かも.す"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "鎭",
+      "grade": 10,
+      "strokeCount": 18,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 167,
+      "primaryMeaning": "ancient peace-preservation centers",
+      "meanings": [
+        "ancient peace-preservation centers"
+      ],
+      "readings": {
+        "on": [
+          "チン"
+        ],
+        "kun": [
+          "しず.める",
+          "しず.まる",
+          "おさえ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "鑄",
+      "grade": 10,
+      "strokeCount": 22,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 167,
+      "primaryMeaning": "cast",
+      "meanings": [
+        "cast",
+        "mint"
+      ],
+      "readings": {
+        "on": [
+          "チュウ",
+          "シュ",
+          "シュウ"
+        ],
+        "kun": [
+          "い.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "陷",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 170,
+      "primaryMeaning": "fall into",
+      "meanings": [
+        "fall into",
+        "cave in",
+        "fall (castle)",
+        "slide into"
+      ],
+      "readings": {
+        "on": [
+          "カン"
+        ],
+        "kun": [
+          "おちい.る",
+          "おとしい.れる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "險",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 170,
+      "primaryMeaning": "inaccessible place",
+      "meanings": [
+        "inaccessible place",
+        "impregnable position",
+        "steep place",
+        "sharp eyes"
+      ],
+      "readings": {
+        "on": [
+          "ケン"
+        ],
+        "kun": [
+          "けわ.しい"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "雜",
+      "grade": 10,
+      "strokeCount": 18,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 172,
+      "primaryMeaning": "mixed",
+      "meanings": [
+        "mixed",
+        "blended",
+        "mix",
+        "mingle"
+      ],
+      "readings": {
+        "on": [
+          "ザツ",
+          "ゾウ"
+        ],
+        "kun": [
+          "まじ.える",
+          "まじ.る"
+        ],
+        "nanori": [
+          "さい"
+        ]
+      }
+    },
+    {
+      "kanji": "靜",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 174,
+      "primaryMeaning": "quiet",
+      "meanings": [
+        "quiet"
+      ],
+      "readings": {
+        "on": [
+          "セイ",
+          "ジョウ"
+        ],
+        "kun": [
+          "しず-",
+          "しず.か",
+          "しず.まる",
+          "しず.める"
+        ],
+        "nanori": [
+          "しずか"
+        ]
+      }
+    },
+    {
+      "kanji": "顯",
+      "grade": 10,
+      "strokeCount": 23,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 181,
+      "primaryMeaning": "manifest",
+      "meanings": [
+        "manifest",
+        "display",
+        "evident",
+        "clear"
+      ],
+      "readings": {
+        "on": [
+          "ケン"
+        ],
+        "kun": [
+          "あきらか",
+          "あらわ.れる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "騷",
+      "grade": 10,
+      "strokeCount": 20,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 187,
+      "primaryMeaning": "harass",
+      "meanings": [
+        "harass",
+        "bother",
+        "annoy",
+        "disturb",
+        "agitate",
+        "sad",
+        "grieved"
+      ],
+      "readings": {
+        "on": [
+          "ソウ"
+        ],
+        "kun": [
+          "さわ.ぐ",
+          "うれい",
+          "さわが.しい"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "驗",
+      "grade": 10,
+      "strokeCount": 23,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 187,
+      "primaryMeaning": "verification",
+      "meanings": [
+        "verification",
+        "effect",
+        "testing"
+      ],
+      "readings": {
+        "on": [
+          "ケン",
+          "ゲン"
+        ],
+        "kun": [
+          "あかし",
+          "しるし",
+          "ため.す",
+          "ためし"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "髮",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 190,
+      "primaryMeaning": "hair",
+      "meanings": [
+        "hair"
+      ],
+      "readings": {
+        "on": [
+          "ハツ"
+        ],
+        "kun": [
+          "かみ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "鷄",
+      "grade": 10,
+      "strokeCount": 21,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 196,
+      "primaryMeaning": "chicken",
+      "meanings": [
+        "chicken"
+      ],
+      "readings": {
+        "on": [
+          "ケイ"
+        ],
+        "kun": [
+          "にわとり",
+          "とり"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "齊",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 210,
+      "primaryMeaning": "alike",
+      "meanings": [
+        "alike",
+        "equal",
+        "similar",
+        "Saito"
+      ],
+      "readings": {
+        "on": [
+          "セイ",
+          "サイ"
+        ],
+        "kun": [
+          "そろ.う",
+          "ひと.しい",
+          "ひと.しく",
+          "あたる",
+          "はやい"
+        ],
+        "nanori": [
+          "ひとし"
+        ]
+      }
+    },
+    {
+      "kanji": "擊",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 64,
+      "primaryMeaning": "strike",
+      "meanings": [
+        "strike",
+        "hit",
+        "beat",
+        "attack",
+        "fight"
+      ],
+      "readings": {
+        "on": [
+          "ゲキ"
+        ],
+        "kun": [
+          "う.つ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "瘦",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 104,
+      "primaryMeaning": "thin",
+      "meanings": [
+        "thin",
+        "emaciated",
+        "lean",
+        "meager"
+      ],
+      "readings": {
+        "on": [
+          "ソウ",
+          "チュウ",
+          "シュウ",
+          "チュ"
+        ],
+        "kun": [
+          "やせ.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "卽",
+      "grade": 10,
+      "strokeCount": 9,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 26,
+      "primaryMeaning": "promptly",
+      "meanings": [
+        "promptly",
+        "namely"
+      ],
+      "readings": {
+        "on": [
+          "ソク",
+          "ショク"
+        ],
+        "kun": [
+          "つ.く",
+          "すなわ.ち",
+          "もし"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "增",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 32,
+      "primaryMeaning": "increase",
+      "meanings": [
+        "increase",
+        "add to",
+        "augment"
+      ],
+      "readings": {
+        "on": [
+          "ゾウ",
+          "ソウ"
+        ],
+        "kun": [
+          "ます",
+          "ふえる",
+          "ふやす"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "寬",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 40,
+      "primaryMeaning": "broad",
+      "meanings": [
+        "broad",
+        "wide",
+        "spacious",
+        "vast"
+      ],
+      "readings": {
+        "on": [
+          "カン"
+        ],
+        "kun": [
+          "ひろい",
+          "ゆるやか",
+          "くつろぐ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "巢",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 47,
+      "primaryMeaning": "nest",
+      "meanings": [
+        "nest",
+        "living quarter in tree"
+      ],
+      "readings": {
+        "on": [
+          "ソウ"
+        ],
+        "kun": [
+          "す",
+          "す.くう"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "徵",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 60,
+      "primaryMeaning": "summon",
+      "meanings": [
+        "summon",
+        "recruit",
+        "musical note"
+      ],
+      "readings": {
+        "on": [
+          "チョウ",
+          "チ"
+        ],
+        "kun": [
+          "しるし",
+          "めす"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "德",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 60,
+      "primaryMeaning": "ethics",
+      "meanings": [
+        "ethics",
+        "morality",
+        "virtue"
+      ],
+      "readings": {
+        "on": [
+          "トク"
+        ],
+        "kun": [
+          "おしえ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "揭",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 64,
+      "primaryMeaning": "raise",
+      "meanings": [
+        "raise",
+        "lift up",
+        "surname"
+      ],
+      "readings": {
+        "on": [
+          "ケイ",
+          "ケツ"
+        ],
+        "kun": [
+          "かかげる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "晚",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 72,
+      "primaryMeaning": "night",
+      "meanings": [
+        "night",
+        "evening",
+        "late"
+      ],
+      "readings": {
+        "on": [
+          "バン"
+        ],
+        "kun": [
+          "くれ",
+          "おそい"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "曆",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 72,
+      "primaryMeaning": "calendar",
+      "meanings": [
+        "calendar",
+        "era"
+      ],
+      "readings": {
+        "on": [
+          "レキ",
+          "リャク"
+        ],
+        "kun": [
+          "こよみ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "橫",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "across",
+      "meanings": [
+        "across",
+        "horizontal",
+        "lateral"
+      ],
+      "readings": {
+        "on": [
+          "オウ",
+          "コウ"
+        ],
+        "kun": [
+          "よこ",
+          "よこたわる",
+          "よこたえる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "步",
+      "grade": 10,
+      "strokeCount": 7,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 77,
+      "primaryMeaning": "step",
+      "meanings": [
+        "step",
+        "pace",
+        "walk",
+        "stroll"
+      ],
+      "readings": {
+        "on": [
+          "ホ",
+          "ブ",
+          "フ"
+        ],
+        "kun": [
+          "あるく",
+          "あゆむ",
+          "あゆみ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "歷",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 77,
+      "primaryMeaning": "take place",
+      "meanings": [
+        "take place",
+        "past",
+        "history"
+      ],
+      "readings": {
+        "on": [],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "每",
+      "grade": 10,
+      "strokeCount": 7,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 80,
+      "primaryMeaning": "every",
+      "meanings": [
+        "every",
+        "each"
+      ],
+      "readings": {
+        "on": [
+          "マイ",
+          "バイ"
+        ],
+        "kun": [
+          "つね"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "涉",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "ford stream",
+      "meanings": [
+        "ford stream",
+        "wade across"
+      ],
+      "readings": {
+        "on": [
+          "ショウ"
+        ],
+        "kun": [
+          "わたる",
+          "かかわる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "淚",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "tears",
+      "meanings": [
+        "tears",
+        "weep",
+        "cry"
+      ],
+      "readings": {
+        "on": [
+          "ルイ",
+          "レイ"
+        ],
+        "kun": [
+          "なみだ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "渴",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "thirsty",
+      "meanings": [
+        "thirsty",
+        "parched",
+        "yearn",
+        "pine"
+      ],
+      "readings": {
+        "on": [
+          "カツ"
+        ],
+        "kun": [
+          "かわ.く",
+          "かわき"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "溫",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "lukewarm",
+      "meanings": [
+        "lukewarm",
+        "warm",
+        "tepid",
+        "mild"
+      ],
+      "readings": {
+        "on": [
+          "オン",
+          "ウン"
+        ],
+        "kun": [
+          "あたたか",
+          "あたためる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "瀨",
+      "grade": 10,
+      "strokeCount": 20,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 85,
+      "primaryMeaning": "swift current",
+      "meanings": [
+        "swift current",
+        "rapids"
+      ],
+      "readings": {
+        "on": [
+          "ライ"
+        ],
+        "kun": [
+          "せ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "狀",
+      "grade": 10,
+      "strokeCount": 9,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 94,
+      "primaryMeaning": "form",
+      "meanings": [
+        "form",
+        "appearance",
+        "shape",
+        "official"
+      ],
+      "readings": {
+        "on": [
+          "ジョウ"
+        ],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "綠",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 120,
+      "primaryMeaning": "green",
+      "meanings": [
+        "green",
+        "chlorine"
+      ],
+      "readings": {
+        "on": [
+          "リョク",
+          "ロク"
+        ],
+        "kun": [
+          "みどり"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "緖",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 120,
+      "primaryMeaning": "end of thread",
+      "meanings": [
+        "end of thread",
+        "thread",
+        "clue"
+      ],
+      "readings": {
+        "on": [
+          "ショ",
+          "チョ"
+        ],
+        "kun": [
+          "お",
+          "いとぐち"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "緣",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 120,
+      "primaryMeaning": "hem",
+      "meanings": [
+        "hem",
+        "margin",
+        "reason",
+        "cause",
+        "karma",
+        "fate"
+      ],
+      "readings": {
+        "on": [
+          "エン"
+        ],
+        "kun": [
+          "ふち",
+          "へり",
+          "よる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "薰",
+      "grade": 10,
+      "strokeCount": 20,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 140,
+      "primaryMeaning": "a medicinal herb",
+      "meanings": [
+        "a medicinal herb",
+        "to cauterize"
+      ],
+      "readings": {
+        "on": [
+          "クン"
+        ],
+        "kun": [
+          "かおる",
+          "かおりぐさ",
+          "かおり"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "虛",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 141,
+      "primaryMeaning": "false",
+      "meanings": [
+        "false",
+        "worthless",
+        "empty",
+        "hollow"
+      ],
+      "readings": {
+        "on": [
+          "キョ",
+          "コ"
+        ],
+        "kun": [
+          "むなしい"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "賴",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 154,
+      "primaryMeaning": "rely",
+      "meanings": [
+        "rely",
+        "depend on",
+        "accuse falsely"
+      ],
+      "readings": {
+        "on": [
+          "ライ"
+        ],
+        "kun": [
+          "たのむ",
+          "たよる",
+          "たより"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "郞",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 163,
+      "primaryMeaning": "gentleman",
+      "meanings": [
+        "gentleman"
+      ],
+      "readings": {
+        "on": [
+          "ロウ"
+        ],
+        "kun": [
+          "おとこ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "錄",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 167,
+      "primaryMeaning": "copy",
+      "meanings": [
+        "copy",
+        "write down",
+        "record"
+      ],
+      "readings": {
+        "on": [
+          "ロク",
+          "リョ"
+        ],
+        "kun": [
+          "しるす"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "鍊",
+      "grade": 10,
+      "strokeCount": 17,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 167,
+      "primaryMeaning": "smelt metals",
+      "meanings": [
+        "smelt metals",
+        "forge",
+        "refine"
+      ],
+      "readings": {
+        "on": [
+          "レン"
+        ],
+        "kun": [
+          "ねる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "黃",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 201,
+      "primaryMeaning": "yellow",
+      "meanings": [
+        "yellow",
+        "surname"
+      ],
+      "readings": {
+        "on": [
+          "コウ",
+          "オウ"
+        ],
+        "kun": [
+          "き"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "黑",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 203,
+      "primaryMeaning": "black",
+      "meanings": [
+        "black",
+        "dark",
+        "evil",
+        "sinister"
+      ],
+      "readings": {
+        "on": [
+          "コク"
+        ],
+        "kun": [
+          "くろい",
+          "くろ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "欄",
+      "grade": 10,
+      "strokeCount": 21,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "railing",
+      "meanings": [
+        "railing",
+        "balustrade",
+        "animal pan"
+      ],
+      "readings": {
+        "on": [],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "廊",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 53,
+      "primaryMeaning": "corridor",
+      "meanings": [
+        "corridor",
+        "porch",
+        "veranda"
+      ],
+      "readings": {
+        "on": [],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "朗",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 74,
+      "primaryMeaning": "clear",
+      "meanings": [
+        "clear",
+        "bright",
+        "distinct"
+      ],
+      "readings": {
+        "on": [
+          "ロウ"
+        ],
+        "kun": [
+          "ほが.らか"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "虜",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 141,
+      "primaryMeaning": "capture",
+      "meanings": [
+        "capture",
+        "imprison",
+        "seize",
+        "prison"
+      ],
+      "readings": {
+        "on": [
+          "リョ"
+        ],
+        "kun": [
+          "とりこ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "類",
+      "grade": 10,
+      "strokeCount": 19,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 181,
+      "primaryMeaning": "class",
+      "meanings": [
+        "class",
+        "group",
+        "kind",
+        "category"
+      ],
+      "readings": {
+        "on": [],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "神",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 113,
+      "primaryMeaning": "spirit",
+      "meanings": [
+        "spirit"
+      ],
+      "readings": {
+        "on": [
+          "シン",
+          "ジン"
+        ],
+        "kun": [
+          "かみ",
+          "こう",
+          "たましい"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "祥",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 113,
+      "primaryMeaning": "good luck",
+      "meanings": [
+        "good luck"
+      ],
+      "readings": {
+        "on": [
+          "ショウ"
+        ],
+        "kun": [
+          "さいわい"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "福",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 113,
+      "primaryMeaning": "happiness",
+      "meanings": [
+        "happiness"
+      ],
+      "readings": {
+        "on": [
+          "フク"
+        ],
+        "kun": [
+          "さいわい",
+          "ひもろぎ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "諸",
+      "grade": 10,
+      "strokeCount": 16,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 149,
+      "primaryMeaning": "several",
+      "meanings": [
+        "several",
+        "many",
+        "various"
+      ],
+      "readings": {
+        "on": [
+          "ショ"
+        ],
+        "kun": [
+          "もろ",
+          "これ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "都",
+      "grade": 10,
+      "strokeCount": 11,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 163,
+      "primaryMeaning": "capital",
+      "meanings": [
+        "capital",
+        "metropolis"
+      ],
+      "readings": {
+        "on": [
+          "ト",
+          "ツ"
+        ],
+        "kun": [
+          "みやこ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "侮",
+      "grade": 10,
+      "strokeCount": 9,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 9,
+      "primaryMeaning": "despise",
+      "meanings": [
+        "despise",
+        "contempt"
+      ],
+      "readings": {
+        "on": [
+          "ブ"
+        ],
+        "kun": [
+          "あなど.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "勤",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 19,
+      "primaryMeaning": "work",
+      "meanings": [
+        "work",
+        "serve"
+      ],
+      "readings": {
+        "on": [
+          "キン",
+          "ゴン"
+        ],
+        "kun": [
+          "つと.まる",
+          "つと.める"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "卑",
+      "grade": 10,
+      "strokeCount": 8,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 24,
+      "primaryMeaning": "despise",
+      "meanings": [
+        "despise",
+        "lowly",
+        "base",
+        "vulgar"
+      ],
+      "readings": {
+        "on": [
+          "ヒ"
+        ],
+        "kun": [
+          "いや.しむ",
+          "いや.しい",
+          "いや.しめる"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "墨",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 32,
+      "primaryMeaning": "India ink",
+      "meanings": [
+        "India ink",
+        "ink stick",
+        "Mexico"
+      ],
+      "readings": {
+        "on": [
+          "ボク"
+        ],
+        "kun": [
+          "すみ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "層",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 44,
+      "primaryMeaning": "stratum",
+      "meanings": [
+        "stratum",
+        "social class",
+        "layer"
+      ],
+      "readings": {
+        "on": [
+          "ソウ"
+        ],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "悔",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 61,
+      "primaryMeaning": "regret",
+      "meanings": [
+        "regret",
+        "vexing"
+      ],
+      "readings": {
+        "on": [
+          "カイ"
+        ],
+        "kun": [
+          "く.いる",
+          "くや.しい",
+          "く.やむ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "梅",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 75,
+      "primaryMeaning": "plum",
+      "meanings": [
+        "plum"
+      ],
+      "readings": {
+        "on": [
+          "バイ"
+        ],
+        "kun": [
+          "うめ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "煮",
+      "grade": 10,
+      "strokeCount": 12,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 86,
+      "primaryMeaning": "boil",
+      "meanings": [
+        "boil",
+        "cook"
+      ],
+      "readings": {
+        "on": [
+          "シャ"
+        ],
+        "kun": [
+          "に.る",
+          "に.える",
+          "に.やす"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "碑",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 112,
+      "primaryMeaning": "tombstone",
+      "meanings": [
+        "tombstone",
+        "monument"
+      ],
+      "readings": {
+        "on": [
+          "ヒ"
+        ],
+        "kun": [
+          "いしぶみ"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "祖",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 113,
+      "primaryMeaning": "ancestor",
+      "meanings": [
+        "ancestor"
+      ],
+      "readings": {
+        "on": [
+          "ソ"
+        ],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "禍",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 113,
+      "primaryMeaning": "calamity misfortune",
+      "meanings": [
+        "calamity misfortune"
+      ],
+      "readings": {
+        "on": [
+          "カ"
+        ],
+        "kun": [
+          "まが",
+          "わざわい"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "穀",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 115,
+      "primaryMeaning": "cereals",
+      "meanings": [
+        "cereals",
+        "grain"
+      ],
+      "readings": {
+        "on": [
+          "コク"
+        ],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "練",
+      "grade": 10,
+      "strokeCount": 15,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 120,
+      "primaryMeaning": "knead",
+      "meanings": [
+        "knead",
+        "train",
+        "polish"
+      ],
+      "readings": {
+        "on": [
+          "コウ",
+          "レン"
+        ],
+        "kun": [
+          "ね.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "署",
+      "grade": 10,
+      "strokeCount": 14,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 122,
+      "primaryMeaning": "signature",
+      "meanings": [
+        "signature",
+        "govt office",
+        "police station"
+      ],
+      "readings": {
+        "on": [
+          "ショ"
+        ],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "者",
+      "grade": 10,
+      "strokeCount": 9,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 125,
+      "primaryMeaning": "person",
+      "meanings": [
+        "person"
+      ],
+      "readings": {
+        "on": [
+          "シャ"
+        ],
+        "kun": [
+          "もの"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "臭",
+      "grade": 10,
+      "strokeCount": 10,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 132,
+      "primaryMeaning": "odor",
+      "meanings": [
+        "odor",
+        "ill-smelling"
+      ],
+      "readings": {
+        "on": [
+          "シュウ"
+        ],
+        "kun": [
+          "くさ.い",
+          "にお.い"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "賓",
+      "grade": 10,
+      "strokeCount": 13,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 154,
+      "primaryMeaning": "guest",
+      "meanings": [
+        "guest"
+      ],
+      "readings": {
+        "on": [
+          "ヒン"
+        ],
+        "kun": [],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "贈",
+      "grade": 10,
+      "strokeCount": 19,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 154,
+      "primaryMeaning": "presents",
+      "meanings": [
+        "presents",
+        "give to"
+      ],
+      "readings": {
+        "on": [
+          "ソウ",
+          "ゾウ"
+        ],
+        "kun": [
+          "おく.る"
+        ],
+        "nanori": []
+      }
+    },
+    {
+      "kanji": "響",
+      "grade": 10,
+      "strokeCount": 22,
+      "frequencyRank": null,
+      "jlptOld": null,
+      "radical": 180,
+      "primaryMeaning": "echo",
+      "meanings": [
+        "echo",
+        "sound",
+        "resound"
+      ],
+      "readings": {
+        "on": [
+          "キョウ"
+        ],
+        "kun": [
+          "ひび.く"
+        ],
+        "nanori": []
+      }
+    }
+  ]
+}

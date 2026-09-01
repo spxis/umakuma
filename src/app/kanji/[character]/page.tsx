@@ -6,6 +6,9 @@ import { KanjiDetailPanel } from "@/app/shared/KanjiDetailModal";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { displayReading, readingsForGrade } from "@/app/users/[nickname]/grades/gradeExplorerView";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
+import { getKanjiDictionaryAttribution, getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
+
+import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
 
 type Props = { params: Promise<{ character: string }> };
 
@@ -28,7 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!character) return { title: "Kanji" };
 
   const entry = getSchoolGradeKanjiByCharacter(character);
-  const meaning = entry?.primaryMeaning ?? null;
+  /* A shared link previews as its title, so the dictionary answers for the
+   * characters the school catalogue has never heard of. */
+  const meaning = entry?.primaryMeaning ?? getKanjiDictionaryEntry(character)?.primaryMeaning ?? null;
 
   /*
    * The character leads the title, because a link pasted into a chat is read
@@ -57,6 +62,27 @@ export default async function KanjiPage({ params }: Props) {
   const entry = getSchoolGradeKanjiByCharacter(character);
   const readings = entry ? readingsForGrade(entry) : null;
 
+  /*
+   * The school catalogue covers what schools teach; the dictionary covers the
+   * rest, which is most of what a shared link points at. Where both know the
+   * character the curated grade entry leads, because its meanings are written
+   * for a learner rather than transcribed from a reference.
+   */
+  const dictionary = getKanjiDictionaryEntry(character);
+  const summary = entry
+    ? {
+        meaning: entry.primaryMeaning ?? null,
+        on: (readings?.on ?? []).map(displayReading),
+        kun: (readings?.kun ?? []).map(displayReading),
+      }
+    : dictionary
+      ? {
+          meaning: dictionary.primaryMeaning,
+          on: dictionary.readings.on.map(displayReading),
+          kun: dictionary.readings.kun.map(displayReading),
+        }
+      : undefined;
+
   return (
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">
       <UmaKumaPageBanner variant="leaderboard" />
@@ -64,18 +90,14 @@ export default async function KanjiPage({ params }: Props) {
       <section className="overflow-hidden rounded-3xl border border-line bg-surface shadow-sm">
         <KanjiDetailPanel
           kanji={character}
-          grade={entry?.grade}
-          summary={
-            entry
-              ? {
-                  meaning: entry.primaryMeaning ?? null,
-                  on: (readings?.on ?? []).map(displayReading),
-                  kun: (readings?.kun ?? []).map(displayReading),
-                }
-              : undefined
-          }
+          grade={entry?.grade ?? dictionary?.grade ?? undefined}
+          summary={summary}
         />
       </section>
+
+      {dictionary ? (
+        <KanjiDictionaryDetail entry={dictionary} attribution={getKanjiDictionaryAttribution()} />
+      ) : null}
 
       <p className="text-center text-sm">
         <Link href="/" className="font-bold text-accent underline underline-offset-2">
