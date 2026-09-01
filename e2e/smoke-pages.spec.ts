@@ -190,7 +190,7 @@ test.beforeAll(async ({ request }) => {
   }
 
   for (const user of smokeUsers) {
-    const probe = await request.get(`/users/${encodeURIComponent(user)}?tab=study&mode=review`);
+    const probe = await request.get(`/users/${encodeURIComponent(user)}/study?mode=review`);
     if (!probe.ok()) {
       continue;
     }
@@ -234,7 +234,8 @@ test("user drilldown tabs load", async ({ browser, baseURL }) => {
 
   for (const user of smokeUsers) {
     for (const tab of tabs) {
-      const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=${tab.key}#explorer`;
+      /* Each explorer is its own route now; `tab.path` is that route. */
+      const url = `${baseURL}/users/${encodeURIComponent(user)}/${tab.path}#explorer`;
       await assertPageLoads(browser, url, async (page) => {
         if (page.url().includes("/join?access=denied")) {
           await expect(page.getByText(USER_ACCESS_GATE_TEXT)).toBeVisible();
@@ -286,7 +287,7 @@ test("user history page loads", async ({ browser, baseURL }) => {
 
 test("user read history tab loads", async ({ browser, baseURL }) => {
   const user = smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?dashboard=read&read=history`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/read?read=history`;
 
   await assertPageLoads(browser, url, async (page) => {
     if (page.url().includes("/join?access=denied")) {
@@ -308,7 +309,7 @@ test("user read history tab loads", async ({ browser, baseURL }) => {
 test("read check-ins campaign selector switches campaign fetch", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for read check-in campaign checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?dashboard=read`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/read`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -355,7 +356,7 @@ test("read check-ins campaign selector switches campaign fetch", async ({ browse
 test("study keeps all type filter on reload", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study filter checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&srs=all&jlpt=all&review=all&sticky=0&recent=0#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?srs=all&jlpt=all&review=all&sticky=0&recent=0#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const allLevels = levelFilters(page).getByRole("tab", { name: filterTab("All") });
@@ -378,7 +379,7 @@ test("study keeps all type filter on reload", async ({ browser, baseURL }) => {
 test("study keeps explicit level and vocab type on reload", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study filter checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study#explorer`;
 
   /*
    * Chosen by clicking, not by arriving with the filter in the address.
@@ -433,7 +434,7 @@ test("study keeps explicit level and vocab type on reload", async ({ browser, ba
 test("study keeps srs stage filter on reload", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study filter checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const guruTab = statusFilters(page).getByRole("tab", { name: filterTab("guru") });
@@ -480,7 +481,7 @@ test("study keeps srs stage filter on reload", async ({ browser, baseURL }) => {
 test("study keeps srsStage on fresh reload for full query shape", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study filter checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review`;
 
   /*
    * The point of this one is that a reload is not a reset - the explorer
@@ -508,7 +509,7 @@ test("study keeps srsStage on fresh reload for full query shape", async ({ brows
 test("study review all-level type count matches total queue", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study filter checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&srs=all&type=all&recent=0#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&srs=all&type=all&recent=0#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const summary = page.getByText(QUEUE_SUMMARY).first();
@@ -536,7 +537,7 @@ test("study review all-level type count matches total queue", async ({ browser, 
   test(`study ${label.toLowerCase()} chip count matches matching items when selected`, async ({ browser, baseURL }) => {
     test.skip(!accessibleStudyUser, `No accessible user page for study ${label.toLowerCase()} count checks in this environment.`);
     const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-    const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&srs=all&type=all&recent=0#explorer`;
+    const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&srs=all&type=all&recent=0#explorer`;
 
     await assertPageLoads(browser, url, async (page) => {
       const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -582,7 +583,7 @@ test("study review all-level type count matches total queue", async ({ browser, 
 test("study lesson mode hides review-only filters", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study filter checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&srs=all&type=all#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&srs=all&type=all#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const lessonModeButton = page.getByRole("tab", { name: /^Lessons\s+\((\d+|\.\.\.)\)$/i });
@@ -601,7 +602,7 @@ test("study lesson mode hides review-only filters", async ({ browser, baseURL })
 test("level explorer keeps total count while visible list is paged", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for level explorer checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=level#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/library-explorer#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -724,7 +725,7 @@ test("jlpt explorer keeps global counts with partial visible data", async ({ bro
 test("study keeps disabled level ranges grouped after toggling Kanji", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study regrouping checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&type=all&srs=all#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&type=all&srs=all#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -752,7 +753,7 @@ test("study keeps disabled level ranges grouped after toggling Kanji", async ({ 
 test("study pagination loads more on scroll reach", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study pagination checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&type=all&srs=all#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&type=all&srs=all#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -789,7 +790,7 @@ test("study pagination loads more on scroll reach", async ({ browser, baseURL })
 test("study does not keep zero-count status selected", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study zero-status checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&level=14&type=kanji&srs=master#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&level=14&type=kanji&srs=master#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -812,7 +813,7 @@ test("study does not keep zero-count status selected", async ({ browser, baseURL
 test("study does not keep zero-count level selected for active type", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study zero-level checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&level=9&type=kanji&srs=all#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&level=9&type=kanji&srs=all#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -833,7 +834,7 @@ test("study does not keep zero-count level selected for active type", async ({ b
 test("study selected level still groups unavailable ranges", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for selected-level grouping checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&level=10&type=all&srs=all#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&level=10&type=all&srs=all#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -862,7 +863,7 @@ test("study selected level still groups unavailable ranges", async ({ browser, b
 test("study clicking high level chip stays on that level", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for high-level click checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&type=all&srs=all#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&type=all&srs=all#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -891,7 +892,7 @@ test("study clicking high level chip stays on that level", async ({ browser, bas
 test("study first-load groups zero levels for narrowed review filters", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for first-load level grouping checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&type=all&srs=master&srsStage=8#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&type=all&srs=master&srsStage=8#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -917,7 +918,7 @@ test("study first-load groups zero levels for narrowed review filters", async ({
 test("study desktop card click opens modal and shows item data", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for desktop click/view checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&type=all&srs=all#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&type=all&srs=all#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
@@ -942,7 +943,7 @@ test("study desktop card click opens modal and shows item data", async ({ browse
 test("study mode menu exposes and persists all review modes", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for study mode checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&studyMode=session#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&studyMode=session#explorer`;
 
   await assertPageLoads(browser, url, async (page) => {
     const modeButton = page.getByRole("button", { name: "MODE", exact: true });
@@ -974,7 +975,7 @@ test("study mode menu exposes and persists all review modes", async ({ browser, 
 test("study mobile trouble/favorite clicks do not open modal and card tap still opens", async ({ browser, baseURL }) => {
   test.skip(!accessibleStudyUser, "No accessible user page for mobile click/view checks in this environment.");
   const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}?tab=study&mode=review&type=all&srs=all#explorer`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study?mode=review&type=all&srs=all#explorer`;
 
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },

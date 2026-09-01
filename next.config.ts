@@ -1,34 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-	rewrites: async () => [
-		{
-			source: "/users/:nickname/study",
-			destination: "/users/:nickname?dashboard=learn",
-		},
-		{
-			source: "/users/:nickname/library-explorer",
-			destination: "/users/:nickname?dashboard=wk",
-		},
-		{
-			source: "/users/:nickname/wk-explorer",
-			destination: "/users/:nickname?dashboard=wk",
-		},
-		{
-			source: "/users/:nickname/jlpt-explorer",
-			destination: "/users/:nickname?dashboard=jlpt",
-		},
-		{
-			source: "/users/:nickname/:dashboard(wk|jlpt)",
-			destination: "/users/:nickname?dashboard=:dashboard",
-		},
-		{
-			/* Study and Stats still share the dashboard page; Read and News are
-			   real routes of their own now and are not listed here. */
-			source: "/users/:nickname/:dashboard(learn|stats)",
-			destination: "/users/:nickname?dashboard=:dashboard",
-		},
-	],
 	images: {
 		dangerouslyAllowSVG: true,
 		contentDispositionType: "inline",

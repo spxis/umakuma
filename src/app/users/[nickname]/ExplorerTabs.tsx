@@ -27,7 +27,8 @@ type Props = {
   maxLevel: number;
   accountPendingReviews: number;
   levelItemCountsByLevel: Record<number, number>;
-  initialTab?: "study" | "level" | "jlpt";
+  /** Which explorer this route is. Required: the address decides it. */
+  initialTab: "study" | "level" | "jlpt";
   initialQueueMode?: QueueType | null;
   initialStudyMode?: boolean | null;
   initialSnapshot: Snapshot;
@@ -50,7 +51,7 @@ export default function ExplorerTabs({
   maxLevel,
   accountPendingReviews,
   levelItemCountsByLevel,
-  initialTab = "study",
+  initialTab,
   initialQueueMode = null,
   initialStudyMode = null,
   initialSnapshot,
@@ -67,9 +68,6 @@ export default function ExplorerTabs({
   const troubleMixStorageKey = `wr:study-trouble-mix-v3:${accountId}`;
   const queueTagFilterStorageKey = `wr:study-queue-tag-filter:${accountId}`;
   const isHydrated = typeof window !== "undefined";
-  const [dashboardTab, setDashboardTab] = useState<"learn" | "wk" | "jlpt">(
-    initialTab === "level" ? "wk" : initialTab === "jlpt" ? "jlpt" : "learn",
-  );
   const {
     studyMode,
     setStudyMode,
@@ -82,12 +80,15 @@ export default function ExplorerTabs({
     initialStudyMode,
     clientStateHydratedRef,
   });
-  const forcedTab = dashboardTab === "wk"
-    ? "level"
-    : dashboardTab === "jlpt"
-      ? "jlpt"
-      : "study";
-  const effectiveActiveTab = forcedTab;
+  /*
+   * Which explorer this is, decided by the route rather than by state here.
+   *
+   * These three were one component switching between them in the client, with
+   * all three mounted and two hidden by CSS, kept in step with the rest of the
+   * page by a `wr:dashboard-tab-change` event. They are three addresses now, so
+   * the address is the answer and only one explorer is built.
+   */
+  const effectiveActiveTab = initialTab;
   const [showEnglish, setShowEnglish] = useState(false);
   const [activeCustomLibraryName, setActiveCustomLibraryName] = useState<string | null>(null);
   const [studySourceModalRequestId, setStudySourceModalRequestId] = useState(0);
@@ -314,18 +315,6 @@ export default function ExplorerTabs({
     );
   }, [effectiveActiveTab, isHydrated]);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const onDashboardTabChange = (event: Event) => {
-      const custom = event as CustomEvent<{ tab?: string }>;
-      const next = custom.detail?.tab;
-      setDashboardTab(next === "wk" || next === "jlpt" ? next : "learn");
-    };
-    window.addEventListener("wr:dashboard-tab-change", onDashboardTabChange as EventListener);
-    return () => {
-      window.removeEventListener("wr:dashboard-tab-change", onDashboardTabChange as EventListener);
-    };
-  }, []);
 
   const studySourceHeaderLabel = studySource === "custom"
     ? (activeCustomLibraryName?.trim() || "Custom")
@@ -431,7 +420,7 @@ export default function ExplorerTabs({
         </div>
       </div>
 
-      <div className={effectiveActiveTab === "study" ? "block" : "hidden"}>
+      {effectiveActiveTab === "study" ? (
         <StudyExplorer
           accountId={accountId}
           studySource={studySource}
@@ -454,9 +443,9 @@ export default function ExplorerTabs({
           onClearQueueTagFilter={() => setQueueTagFilter("all")}
           onReviewedVisibilityChange={(visible) => setReviewedVisible(visible)}
         />
-      </div>
+      ) : null}
 
-      <div className={effectiveActiveTab === "level" ? "block" : "hidden"}>
+      {effectiveActiveTab === "level" ? (
         <LevelExplorer
           key={levelExplorerKey}
           accountId={accountId}
@@ -475,9 +464,9 @@ export default function ExplorerTabs({
           onToggleShowEnglish={() => setShowEnglish((prev) => !prev)}
           studyMode={studyMode}
         />
-      </div>
+      ) : null}
 
-      <div className={effectiveActiveTab === "jlpt" ? "block" : "hidden"}>
+      {effectiveActiveTab === "jlpt" ? (
         <JlptExplorer
           accountId={accountId}
           isActive={effectiveActiveTab === "jlpt"}
@@ -488,7 +477,7 @@ export default function ExplorerTabs({
           studyMode={studyMode}
           userKanjiItems={userKanjiItems}
         />
-      </div>
+      ) : null}
     </section>
   );
 }
