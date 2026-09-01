@@ -90,3 +90,52 @@ export function getStoredJson<T>(key: string, fallback: T): T {
 export function setStoredJson(key: string, value: unknown): void {
   setLocalStorageItem(key, JSON.stringify(value));
 }
+
+/**
+ * The same pair for `sessionStorage`, for state that belongs to a sitting.
+ *
+ * A half-built selection is not a preference: it is a task somebody is in the
+ * middle of, and it should survive turning to page two and not survive next
+ * week. `localStorage` would keep it for months and hand it back out of
+ * nowhere; a session ends when the tab does.
+ */
+export function getSessionItem(key: string): string | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    return window.sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+export function setSessionItem(key: string, value: string): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem(key, value);
+  } catch {
+    // Ignore storage errors in restricted browsing modes.
+  }
+}
+
+export function getSessionJson<T>(key: string, fallback: T): T {
+  const raw = getSessionItem(key);
+  if (!raw) {
+    return fallback;
+  }
+
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+export function setSessionJson(key: string, value: unknown): void {
+  setSessionItem(key, JSON.stringify(value));
+}

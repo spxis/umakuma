@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useState } from "react";
 
+import { getSessionJson, setSessionJson } from "@/lib/clientStorage";
+
 import { SUBJECT_SELECTION_LIMIT, selectionRange } from "./subjectSelection";
 
 /**
@@ -35,32 +37,74 @@ export type SubjectSelection = {
   clear: () => void;
 };
 
-export function useSubjectSelection(): SubjectSelection {
-  const [choosing, setChoosing] = useState(false);
-  const [chosen, setChosen] = useState<Set<string>>(() => new Set());
-  /*
+type SelectionState = {
+  choosing: boolean;
+  chosen: Set<string>;
+  /**
    * Where a range starts. Every plain click moves it, which is what makes
    * "click one, shift-click another" work the way it does in a file browser
    * or a mail client without anyone having to be told.
    */
-  const [anchor, setAnchor] = useState<string | null>(null);
+  anchor: string | null;
+};
 
-  const toggle = useCallback((key: string) => {
-    setAnchor(key);
-    setChosen((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) {
-        next.delete(key);
-      } else if (next.size < SUBJECT_SELECTION_LIMIT) {
-        next.add(key);
+/** What survives a page turn, and what it is stored under. */
+type StoredSelection = { choosing: boolean; chosen: string[] };
+
+const STORAGE_PREFIX = "wr:selection:";
+
+/**
+ * Choosing, kept for the sitting rather than for the component.
+ *
+ * Turning to page two is a navigation: the page remounts, and a selection held
+ * in React state went with it - both the characters picked and the fact that
+ * picking was happening at all. Choosing twenty characters across three pages
+ * is the ordinary way to build a list, and it could not be done.
+ *
+ * The session is the right span. A half-built selection is a task somebody is
+ * in the middle of, so it should survive a page turn and a stray reload, and
+ * it should not be handed back next week from a tab opened for something else.
+ *
+ * @param surface Which surface's selection this is - the grade explorer's is
+ * not the JLPT explorer's, and they must not overwrite one another.
+ */
+export function useSubjectSelection(surface: string): SubjectSelection {
+  const storageKey = `${STORAGE_PREFIX}${surface}`;
+
+  const [state, setState] = useState<SelectionState>(() => {
+    const stored = getSessionJson<StoredSelection>(storageKey, { choosing: false, chosen: [] });
+    return { choosing: stored.choosing, chosen: new Set(stored.chosen), anchor: null };
+  });
+
+  /*
+   * One writer, so no action can forget to remember, and the write happens
+   * here rather than inside a state updater - an updater may run twice, and it
+   * is not where a side effect belongs.
+   */
+  const apply = useCallback(
+    (next: SelectionState) => {
+      setState(next);
+      setSessionJson(storageKey, { choosing: next.choosing, chosen: [...next.chosen] });
+    },
+    [storageKey],
+  );
+
+  const toggle = useCallback(
+    (key: string) => {
+      const chosen = new Set(state.chosen);
+      if (chosen.has(key)) {
+        chosen.delete(key);
+      } else if (chosen.size < SUBJECT_SELECTION_LIMIT) {
+        chosen.add(key);
       }
-      return next;
-    });
-  }, []);
+      apply({ ...state, chosen, anchor: key });
+    },
+    [apply, state],
+  );
 
   const extendTo = useCallback(
     (key: string, order: readonly string[]) => {
-      const range = selectionRange(anchor, key, order);
+      const range = selectionRange(state.anchor, key, order);
 
       /*
        * Nothing anchored, or an anchor that has since scrolled off this page,
@@ -72,37 +116,34 @@ export function useSubjectSelection(): SubjectSelection {
         return;
       }
 
-      setChosen((prev) => {
-        const next = new Set(prev);
-        // Adds, never removes: a swept range that unpicked half of what it
-        // crossed would be impossible to predict from where the sweep began.
-        for (const item of range) {
-          if (next.size >= SUBJECT_SELECTION_LIMIT) break;
-          next.add(item);
-        }
-        return next;
-      });
+      const chosen = new Set(state.chosen);
+      // Adds, never removes: a swept range that unpicked half of what it
+      // crossed would be impossible to predict from where the sweep began.
+      for (const item of range) {
+        if (chosen.size >= SUBJECT_SELECTION_LIMIT) break;
+        chosen.add(item);
+      }
       /* The far end becomes the new anchor, so ranges can be walked outward. */
-      setAnchor(key);
+      apply({ ...state, chosen, anchor: key });
     },
-    [anchor, toggle],
+    [apply, state, toggle],
   );
 
-  const addAll = useCallback((keys: string[]) => {
-    setChosen((prev) => {
-      const next = new Set(prev);
+  const addAll = useCallback(
+    (keys: string[]) => {
+      const chosen = new Set(state.chosen);
       for (const key of keys) {
-        if (next.size >= SUBJECT_SELECTION_LIMIT) break;
-        next.add(key);
+        if (chosen.size >= SUBJECT_SELECTION_LIMIT) break;
+        chosen.add(key);
       }
-      return next;
-    });
-  }, []);
+      apply({ ...state, chosen });
+    },
+    [apply, state],
+  );
 
   const clear = useCallback(() => {
-    setChosen(new Set());
-    setAnchor(null);
-  }, []);
+    apply({ ...state, chosen: new Set(), anchor: null });
+  }, [apply, state]);
 
   /*
    * Leaving picking mode drops the selection. Keeping it would mean a set the
@@ -110,19 +151,19 @@ export function useSubjectSelection(): SubjectSelection {
    * characters they do not remember choosing.
    */
   const cancel = useCallback(() => {
-    setChoosing(false);
-    setChosen(new Set());
-    setAnchor(null);
-  }, []);
+    apply({ choosing: false, chosen: new Set(), anchor: null });
+  }, [apply]);
 
-  const start = useCallback(() => setChoosing(true), []);
+  const start = useCallback(() => {
+    apply({ ...state, choosing: true });
+  }, [apply, state]);
 
   return useMemo(
     () => ({
-      choosing,
-      chosen,
-      count: chosen.size,
-      atLimit: chosen.size >= SUBJECT_SELECTION_LIMIT,
+      choosing: state.choosing,
+      chosen: state.chosen,
+      count: state.chosen.size,
+      atLimit: state.chosen.size >= SUBJECT_SELECTION_LIMIT,
       start,
       cancel,
       toggle,
@@ -130,6 +171,6 @@ export function useSubjectSelection(): SubjectSelection {
       addAll,
       clear,
     }),
-    [choosing, chosen, start, cancel, toggle, extendTo, addAll, clear],
+    [addAll, cancel, clear, extendTo, start, state.choosing, state.chosen, toggle],
   );
 }

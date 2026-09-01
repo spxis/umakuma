@@ -62,7 +62,7 @@ export default function StudyTagListsModal() {
    * gathered a set deliberately, so being unable to send it to a practice
    * sheet was the oddest gap of the lot.
    */
-  const selection = useSubjectSelection();
+  const selection = useSubjectSelection("tag-lists");
   /*
    * The sheet lives under the member whose page this is. The panel opens from
    * anywhere - the game lobby, history, either explorer - so it reads the

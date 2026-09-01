@@ -52,7 +52,7 @@ export default function GradeKanjiBoard({ items, practicePath, accountId }: Prop
     setRevealed(new Set());
   }
 
-  const selection = useSubjectSelection();
+  const selection = useSubjectSelection("grades");
 
   const quizzing = mode === GRADE_REVEAL_MODES.hidden;
 

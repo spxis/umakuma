@@ -96,7 +96,7 @@ export default function JlptExplorerContent({
    * lives under the member whose page this is, which the address already
    * names - the explorer is not given a nickname of its own.
    */
-  const selection = useSubjectSelection();
+  const selection = useSubjectSelection("jlpt");
   const pathname = usePathname();
   const practicePath = `${(pathname ?? "").split("/").slice(0, 3).join("/")}/practice`;
 

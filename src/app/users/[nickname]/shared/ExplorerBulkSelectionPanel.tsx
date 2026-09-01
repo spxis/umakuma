@@ -101,7 +101,7 @@ export default function ExplorerBulkSelectionPanel({
           ) : null}
           {hasSelection && destinations?.practicePath && destinations.practiceCharacters.length > 0 ? (
             <Link
-              href={`${destinations.practicePath}?source=picked&picked=${encodeURIComponent(
+              href={`${destinations.practicePath}/picked?picked=${encodeURIComponent(
                 encodeSelection(destinations.practiceCharacters),
               )}`}
               className="inline-flex h-8 items-center rounded-full bg-accent px-4 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"

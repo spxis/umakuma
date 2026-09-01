@@ -36,8 +36,9 @@ describe("the built-in lists on the lists page", () => {
    * preview instead of the list would silently drop the rest.
    */
   it("sends a built-in list to the sheet by source, not by preview", () => {
+    /* The source is the address now: `/practice/trouble`, not `?source=trouble`. */
     const cards = read("src/app/users/[nickname]/lists/StudyListCards.tsx");
-    expect(cards).toContain("`${practicePath}?source=${card.tag}`");
+    expect(cards).toContain("`${practicePath}/${card.tag}`");
   });
 
   /*

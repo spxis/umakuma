@@ -82,7 +82,7 @@ export default function StudyHistoryTable({
    * week is exactly the person who wants those characters on a practice sheet,
    * and until now the only way was to write them down.
    */
-  const selection = useSubjectSelection();
+  const selection = useSubjectSelection("history");
   const practicePath = usePracticePath();
   /* The endpoint carries the account whose history this is. */
   const selectionAccountId = endpoint.match(/\/api\/study\/([^/]+)\//)?.[1] ?? null;

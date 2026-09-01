@@ -95,8 +95,8 @@ export default function StudyListCards({
   /* A tagged sheet is addressed by its source, so it takes the whole list. */
   const practiceHrefFor = (card: ListCard) =>
     card.tag
-      ? `${practicePath}?source=${card.tag}`
-      : `${practicePath}?source=picked&picked=${encodeURIComponent(card.characters.join(""))}`;
+      ? `${practicePath}/${card.tag}`
+      : `${practicePath}/picked?picked=${encodeURIComponent(card.characters.join(""))}`;
 
   async function remove(id: string) {
     setPendingRemoval(null);

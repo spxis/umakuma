@@ -2080,5 +2080,15 @@
     "version": "0.201.0",
     "releasedAt": "2026-09-01T10:41:15Z",
     "summary": "Moving practice to /practice/jlpt/5 changed where the page reads its collection from and left every control on it still writing that collection into the query. Clicking G2, or WaniKani level 17, changed the address and nothing else: the page re-read a path that had not moved and rendered exactly what it was already showing. The link builder now produces the address the page actually reads - the collection in the path, and only how the sheet prints in the query - and a test asserts that what it writes parses back to what was asked for, which is the check that was missing rather than another eye on a screenshot. Building those links also dragged the server-only practice reader into the browser bundle, taking the page down with a 500, so the source names now live in a small module of their own with no database behind them. Verified by clicking the chips rather than by typing addresses, which is how the bug was found in the first place."
+  },
+  {
+    "id": "a-selection-survives-the-page-turn",
+    "area": "platform",
+    "name": "A selection survives the page turn",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.202.0",
+    "releasedAt": "2026-09-01T10:50:45Z",
+    "summary": "Choosing items on an explorer kept its state in the component, and turning to page two is a navigation: the page remounted and took the selection with it - both the characters picked and the fact that picking was happening at all. Building a list of twenty across three pages is the ordinary way to do it, and it could not be done. The selection is now held for the sitting rather than for the component, under a key per surface so the grade explorer and the JLPT explorer do not overwrite each other. A session is the right span: a half-built selection is a task somebody is in the middle of, so it should survive a page turn and a stray reload without being handed back next week. Three links built from a selection still pointed at the practice sheet's old query-string address and did nothing when clicked - the same shape of break as the chooser chips, in the places that were not on screen when that was fixed."
   }
 ]

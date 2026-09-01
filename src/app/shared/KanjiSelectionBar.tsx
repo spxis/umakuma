@@ -45,7 +45,7 @@ export default function KanjiSelectionBar({
       ) : null}
       {selection.count > 0 && practicePath ? (
         <Link
-          href={`${practicePath}?source=picked&picked=${encodeURIComponent(encodeSelection(selection.chosen))}`}
+          href={`${practicePath}/picked?picked=${encodeURIComponent(encodeSelection(selection.chosen))}`}
           className="inline-flex h-8 items-center rounded-full bg-accent px-4 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
         >
           {SUBJECT_SELECTION_COPY.practise}
