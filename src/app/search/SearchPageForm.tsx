@@ -4,10 +4,10 @@ import GlobalSearchSuggestList from "@/app/shared/GlobalSearchSuggestList";
 import RecentItems from "@/app/shared/RecentItems";
 import SearchComboboxField from "@/app/shared/SearchComboboxField";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
-import type { SearchSource } from "@/lib/globalSearch";
+import { searchResultsHref, type SearchFilters } from "@/lib/searchFilters";
 import { useSearchCombobox } from "@/lib/useSearchCombobox";
 
-import { SEARCH_PAGE_INPUT_ID, focusSearchResultRow } from "./searchFocus";
+import { SEARCH_PAGE_INPUT_ID, focusFirstSearchResult } from "./searchFocus";
 
 const LISTBOX_ID = "search-page-suggest";
 
@@ -26,21 +26,17 @@ const LISTBOX_ID = "search-page-suggest";
  */
 export default function SearchPageForm({
   initialQuery,
-  activeSource,
+  filters,
 }: {
   initialQuery: string;
-  /** Kept across a new search, so the source filter survives the next query. */
-  activeSource: SearchSource | null;
+  /** Kept across a new search, so what you turned off survives the next query. */
+  filters: SearchFilters;
 }) {
   const cbx = useSearchCombobox({
     initialValue: initialQuery,
     openOnFocus: false,
-    resultsHref: (query) => {
-      const params = new URLSearchParams({ query });
-      if (activeSource) params.set("in", activeSource);
-      return `/search?${params.toString()}`;
-    },
-    onArrowOut: () => focusSearchResultRow(0),
+    resultsHref: (query) => searchResultsHref(query, filters),
+    onArrowOut: () => focusFirstSearchResult(),
   });
 
   return (

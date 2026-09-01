@@ -9,11 +9,14 @@ import {
   getClientIp,
 } from "@/lib/apiRateLimit";
 import { SEARCH_MAX_WINDOW, isSearchable, normalizeQuery, parseSources } from "@/lib/globalSearch";
+import { isSearchKind } from "@/lib/searchKinds";
 import { runGlobalSearch } from "@/lib/globalSearchServer";
 
 const querySchema = z.object({
   q: z.string().max(64).optional(),
   sources: z.string().max(120).optional(),
+  /* Words, kanji or radicals; absent means all three. */
+  kind: z.string().max(20).optional(),
   /* One window of the ranked answer; absent means the whole of it. */
   limit: z.coerce.number().int().min(1).max(SEARCH_MAX_WINDOW).optional(),
   offset: z.coerce.number().int().min(0).max(SEARCH_MAX_WINDOW).optional(),
@@ -38,6 +41,7 @@ export async function GET(request: Request) {
       const parsed = querySchema.safeParse({
         q: url.searchParams.get("q") ?? undefined,
         sources: url.searchParams.get("sources") ?? undefined,
+        kind: url.searchParams.get("kind") ?? undefined,
         limit: url.searchParams.get("limit") ?? undefined,
         offset: url.searchParams.get("offset") ?? undefined,
       });
@@ -50,15 +54,21 @@ export async function GET(request: Request) {
         return NextResponse.json({
           query,
           totalHits: 0,
-          countsBySource: { wanikani: 0, jlpt: 0, grades: 0 },
+          countsBySource: { wanikani: 0, jlpt: 0, grades: 0, dictionary: 0 },
+          countsByKind: { words: 0, kanji: 0, radicals: 0 },
           hits: [],
         });
       }
+
+      /* An unknown kind is not an error; it is a link somebody edited by hand. */
+      const kind =
+        parsed.data.kind && isSearchKind(parsed.data.kind) ? parsed.data.kind : null;
 
       try {
         const results = await runGlobalSearch(query, parseSources(parsed.data.sources), {
           limit: parsed.data.limit,
           offset: parsed.data.offset,
+          kind,
         });
         const response = NextResponse.json(results, {
           headers: { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" },

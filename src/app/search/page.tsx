@@ -7,23 +7,22 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
+import { isSearchable, normalizeQuery } from "@/lib/globalSearch";
+import { runSearchColumns } from "@/lib/globalSearchServer";
 import {
-  SEARCH_PAGE_SIZE,
-  SEARCH_SOURCE_LABELS,
-  SEARCH_SOURCE_VALUES,
-  isSearchSource,
-  isSearchable,
-  normalizeQuery,
-  parseSources,
-  type SearchSource,
-} from "@/lib/globalSearch";
-import { runGlobalSearch } from "@/lib/globalSearchServer";
+  NO_FILTERS,
+  hasAnyFilter,
+  onlySourceHref,
+  parseSearchFilters,
+  searchResultsHref,
+} from "@/lib/searchFilters";
 
 import { SEARCH_EXAMPLES, SEARCH_PAGE_COPY } from "./searchCopy";
 import RecentItems from "@/app/shared/RecentItems";
-import SearchHitList from "./SearchHitList";
+import SearchColumns from "./SearchColumns";
+import { COLUMN_FULL, COLUMN_PREVIEW, SEARCH_LIST_CARD } from "./Search.constants";
+import SearchFilterRow from "./SearchFilterRow";
 import SearchPageForm from "./SearchPageForm";
-import { noTranslateClass } from "@/app/shared/japaneseText";
 
 export const metadata: Metadata = {
   title: "Search — UmaKuma",
@@ -38,27 +37,35 @@ function firstValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-function sourceHref(query: string, source: SearchSource | null): string {
-  const params = new URLSearchParams({ query });
-  if (source) params.set("in", source);
-  return `/search?${params.toString()}`;
-}
-
 export default async function GlobalSearchPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const query = normalizeQuery(firstValue(params.query) ?? firstValue(params.q));
-  const requestedSource = firstValue(params.in);
-  const activeSource = requestedSource && isSearchSource(requestedSource) ? requestedSource : null;
-  const sources = parseSources(activeSource);
+
   /*
-   * The first stretch only. A common character matches over a hundred rows
-   * across the three catalogues, and rendering all of them made the page a
-   * scroll marathon that nobody ever reached the end of; the rest arrives as
-   * the reader gets near it.
+   * The filters live in the address, so a narrowed search can be sent to
+   * somebody and the back button walks them like any other navigation.
    */
-  const results = isSearchable(query)
-    ? await runGlobalSearch(query, sources, { limit: SEARCH_PAGE_SIZE })
-    : null;
+  const filters = parseSearchFilters(
+    new URLSearchParams(
+      Object.entries(params).flatMap(([key, value]) => {
+        const single = firstValue(value);
+        return single === undefined ? [] : [[key, single] as [string, string]];
+      }),
+    ),
+  );
+
+  /*
+   * A column at a time, not a window of the flat ranking. A common character
+   * matches over a hundred rows across the catalogues, and rendering all of
+   * them made the page a scroll marathon nobody reached the end of; each
+   * column shows its first stretch and links to that catalogue on its own.
+   *
+   * Following that link is what the second case is for: asking for one
+   * catalogue means asking for all of it, or the link would arrive at the same
+   * dozen rows it was offered to escape.
+   */
+  const perColumn = filters.sources.length === 1 ? COLUMN_FULL : COLUMN_PREVIEW;
+  const results = isSearchable(query) ? await runSearchColumns(query, filters, perColumn) : null;
 
   /*
    * Read for the header, not for the results. Every result leads to a public
@@ -89,33 +96,24 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
           className="mb-2"
         />
 
-        <div className={`${PAGE_WIDTH.reading} space-y-4 pb-8`}>
+        {/*
+          * Wide, because the results are columns now. A reading column fits one
+          * of them; four catalogues answering at once earn the room, the way
+          * the explorers and their filter rows do.
+          */}
+        <div className={`${PAGE_WIDTH.wide} mx-auto max-w-400 space-y-4 pb-8`}>
           <h1 className="text-2xl font-black text-foreground">{SEARCH_PAGE_COPY.heading}</h1>
 
-          <SearchPageForm initialQuery={query} activeSource={activeSource} />
+          <SearchPageForm initialQuery={query} filters={filters} />
 
           {results ? (
             <>
-              <nav className="flex flex-wrap items-center gap-1.5">
-                {[null, ...SEARCH_SOURCE_VALUES].map((source) => {
-                  const active = source === activeSource;
-                  const count = source ? results.countsBySource[source] : results.totalHits;
-                  return (
-                    <Link
-                      key={source ?? "all"}
-                      href={sourceHref(query, source)}
-                      className={`inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition ${
-                        active
-                          ? "border-accent bg-accent text-white"
-                          : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
-                      }`}
-                    >
-                      {source ? SEARCH_SOURCE_LABELS[source] : SEARCH_PAGE_COPY.allSources}
-                      <span translate="no" className={noTranslateClass(active ? "text-white/70" : "text-foreground/60")}>({count})</span>
-                    </Link>
-                  );
-                })}
-              </nav>
+              <SearchFilterRow
+                query={query}
+                filters={filters}
+                countsByKind={results.countsByKind}
+                countsBySource={results.countsBySource}
+              />
 
               <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
                 {results.totalHits} {results.totalHits === 1 ? SEARCH_PAGE_COPY.hit : SEARCH_PAGE_COPY.hits}
@@ -123,13 +121,34 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
                 {SEARCH_PAGE_COPY.resultsFor} “{query}”
               </p>
 
-              <SearchHitList
-                hits={results.hits}
-                query={query}
-                activeSource={activeSource}
-                totalHits={results.totalHits}
-                footer={results.hits.length > 0 ? <RecentItems currentQuery={query} /> : null}
-              />
+              {results.columns.length > 0 ? (
+                <>
+                  <SearchColumns
+                    columns={results.columns.map((column) => ({
+                      ...column,
+                      moreHref: onlySourceHref(query, filters, column.source),
+                    }))}
+                  />
+                  <div className={SEARCH_LIST_CARD}>
+                    <RecentItems currentQuery={query} />
+                  </div>
+                </>
+              ) : (
+                <div className="rounded-2xl border border-line bg-surface-muted p-5">
+                  <p className="text-sm font-bold text-foreground/75">{SEARCH_PAGE_COPY.noResults}</p>
+                  <p className="mt-1 text-xs font-semibold text-foreground/60">
+                    {hasAnyFilter(filters) ? SEARCH_PAGE_COPY.noResultsFiltered : SEARCH_PAGE_COPY.noResultsHint}
+                  </p>
+                  {hasAnyFilter(filters) ? (
+                    <Link
+                      href={searchResultsHref(query, NO_FILTERS)}
+                      className="mt-3 inline-flex text-xs font-bold uppercase tracking-[0.08em] text-accent underline decoration-dotted underline-offset-2"
+                    >
+                      {SEARCH_PAGE_COPY.clearFilters}
+                    </Link>
+                  ) : null}
+                </div>
+              )}
             </>
           ) : (
             <div className="rounded-2xl border border-line bg-surface-muted p-5">
@@ -154,7 +173,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
             * that matched nothing - the remembered searches carry the same
             * card on their own, which is the list the page would have had.
             */}
-          {results && results.hits.length > 0 ? null : (
+          {results && results.columns.length > 0 ? null : (
             <RecentItems currentQuery={query} variant="card" />
           )}
         </div>

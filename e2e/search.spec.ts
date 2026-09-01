@@ -118,24 +118,82 @@ test("an empty box opens the search page", async ({ browser, baseURL }) => {
   await finish(page);
 });
 
-test("the results list pages as the reader reaches the end", async ({ browser, baseURL }) => {
-  /* A single common character matches far more than one page across three catalogues. */
+test("a column opens that catalogue in full", async ({ browser, baseURL }) => {
+  /* A single common character matches far more than one column shows. */
   const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent(COMMON_KANJI)}`);
 
   const rows = page.locator(RESULT_ROW);
-  await expect(rows.first()).toBeVisible();
-  const firstPage = await rows.count();
+  await expect(rows.first()).toBeVisible({ timeout: 15_000 });
+  const preview = await rows.count();
 
   /*
-   * Asserted rather than skipped when the button is missing. A smoke test that
+   * Asserted rather than skipped when the link is missing. A smoke test that
    * quietly skips is how this suite once reported green while exercising
-   * almost nothing; 水 matches well past one page in all three catalogues, so
-   * its absence is a regression worth failing on.
+   * almost nothing; 水 matches well past one column in WaniKani alone, so its
+   * absence is a regression worth failing on.
    */
-  const more = page.getByRole("button", { name: "Show more results" });
+  const more = page.getByRole("link", { name: /\d+ more/ }).first();
   await expect(more).toBeVisible();
   await more.click();
-  await expect.poll(async () => rows.count(), { timeout: 10_000 }).toBeGreaterThan(firstPage);
+  await page.waitForLoadState("domcontentloaded");
+
+  await expect.poll(async () => rows.count(), { timeout: 15_000 }).toBeGreaterThan(preview);
+  expect(new URL(page.url()).searchParams.get("from")).toBeTruthy();
+
+  await finish(page);
+});
+
+/**
+ * The filter row.
+ *
+ * Two axes, two ways to get it wrong quietly: a chip that reads as on while
+ * its rows are hidden, and a click that empties the page with no way to tell
+ * that from a search that found nothing.
+ */
+test("turning a kind off removes those rows and says so", async ({ browser, baseURL }) => {
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("中")}`);
+  await expect(page.locator(RESULT_ROW).first()).toBeVisible({ timeout: 15_000 });
+
+  const words = page.getByRole("link", { name: /^Words/ });
+  await expect(words).toHaveAttribute("aria-pressed", "true");
+  await words.click();
+  await page.waitForLoadState("domcontentloaded");
+
+  await expect(page.getByRole("link", { name: /^Words/ })).toHaveAttribute("aria-pressed", "false");
+  expect(new URL(page.url()).searchParams.get("kinds")).toBe("kanji,radicals");
+
+  /* The count stays on the chip, so a hidden kind reads as hidden rather than absent. */
+  await expect(page.getByRole("link", { name: /^Words \d/ })).toBeVisible();
+
+  await finish(page);
+});
+
+test("the arrows cross between columns", async ({ browser, baseURL }) => {
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("中")}`);
+  await expect(page.locator(RESULT_ROW).first()).toBeVisible({ timeout: 15_000 });
+
+  const cell = () =>
+    page.evaluate(() => {
+      const el = document.activeElement;
+      return el ? `${el.getAttribute("data-search-col")}:${el.getAttribute("data-search-row")}` : "none";
+    });
+
+  await page.locator(PAGE_INPUT).click();
+  await page.keyboard.press("ArrowDown");
+  expect(await cell()).toBe("0:0");
+
+  await page.keyboard.press("ArrowDown");
+  expect(await cell()).toBe("0:1");
+
+  /* 中 answers from more than one catalogue, so there is a column to cross into. */
+  await page.keyboard.press("ArrowRight");
+  expect(await cell()).toBe("1:0");
+
+  await page.keyboard.press("ArrowLeft");
+  expect((await cell()).startsWith("0:")).toBe(true);
+
+  await page.keyboard.press("Escape");
+  await expect(page.locator(PAGE_INPUT)).toBeFocused();
 
   await finish(page);
 });
@@ -270,7 +328,7 @@ test("one key comes back from anywhere in the results", async ({ browser, baseUR
   }
 
   /* Deep enough that walking back would be the bug, not the fix. */
-  const deep = await page.evaluate((attr) => document.activeElement?.getAttribute(attr), "data-search-result-row");
+  const deep = await page.evaluate((attr) => document.activeElement?.getAttribute(attr), "data-search-row");
   expect(Number(deep)).toBeGreaterThan(5);
 
   await page.keyboard.press("Escape");
@@ -290,7 +348,7 @@ test("Home reaches the first result, then the box", async ({ browser, baseURL })
 
   await page.keyboard.press("Home");
   expect(
-    await page.evaluate((attr) => document.activeElement?.getAttribute(attr), "data-search-result-row"),
+    await page.evaluate((attr) => document.activeElement?.getAttribute(attr), "data-search-row"),
   ).toBe("0");
 
   await page.keyboard.press("Home");

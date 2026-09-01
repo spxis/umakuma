@@ -160,11 +160,13 @@ const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
 describe("everything that opens a subject records it", () => {
   it("records a result row when it is opened", () => {
-    const list = read("src/app/search/SearchHitList.tsx");
-    /* The row link fires it, and what it fires is the store, not a local stub. */
-    expect(list).toContain("onOpen={rememberHit}");
-    expect(list).toMatch(/onClick=\{\(\) => onOpen\(hit\)\}/);
-    expect(list).toContain('from "@/lib/recentItems"');
+    /*
+     * The row lives in one place now, shared by the overview and by a kind
+     * opened in full, so recording it once covers both.
+     */
+    const rows = read("src/app/search/SearchHitRows.tsx");
+    expect(rows).toMatch(/onClick=\{\(\) => rememberHit\(hit\)\}/);
+    expect(rows).toContain('from "@/lib/recentItems"');
   });
 
   it("records a suggestion when it is picked", () => {
@@ -182,10 +184,10 @@ describe("everything that opens a subject records it", () => {
    * second module appearing beside this one.
    */
   it("leaves no second history module behind", () => {
-    const list = read("src/app/search/SearchHitList.tsx");
+    const rows = read("src/app/search/SearchHitRows.tsx");
     const combobox = read("src/lib/useSearchCombobox.ts");
     const panel = read("src/app/shared/RecentItems.tsx");
-    for (const source of [list, combobox, panel]) {
+    for (const source of [rows, combobox, panel]) {
       expect(source).not.toContain("recentSearches");
     }
   });

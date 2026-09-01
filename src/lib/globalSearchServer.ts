@@ -8,9 +8,11 @@ import { preferOfficialReadings } from "./joyoReadings";
 import { querySchoolGradeCatalog } from "./schoolGrades";
 import { getAllKanjiDictionaryEntries } from "./kanjiDictionary";
 import { searchQueryVariants } from "./kana";
+import { countByKind, hitMatchesKind, kindForHit, type SearchKind } from "./searchKinds";
 import {
   SEARCH_PER_SOURCE_LIMIT,
   SEARCH_SOURCES,
+  SEARCH_SOURCE_VALUES,
   displayMeaning,
   rankMeanings,
   sortHits,
@@ -18,6 +20,7 @@ import {
   type SearchResults,
   type SearchSource,
 } from "./globalSearch";
+import { isKept, type SearchFilters } from "./searchFilters";
 
 export type { SearchResults } from "./globalSearch";
 
@@ -277,11 +280,7 @@ function searchDictionary(variants: string[]): SearchHit[] {
  * page: a search that returns two of three answers is far more useful than an
  * error, so a rejected source contributes nothing and the rest still render.
  */
-export async function runGlobalSearch(
-  query: string,
-  sources: SearchSource[],
-  window: { limit?: number; offset?: number } = {},
-): Promise<SearchResults> {
+async function collectRanked(query: string, sources: SearchSource[]): Promise<SearchHit[]> {
   const wanted = new Set(sources);
   const variants = searchQueryVariants(query);
   const [wanikani, jlpt, grades] = await Promise.all([
@@ -296,8 +295,8 @@ export async function runGlobalSearch(
    * The dictionary fills gaps rather than adding a fourth copy of every common
    * character: a query for 水 already returns it three times, and a reference
    * row that carries no review state would only be a fourth. Asking for the
-   * dictionary on its own is the exception - a tab that shows nothing but the
-   * gaps would be a strange thing to click - so a lone request skips the
+   * dictionary on its own is the exception - a column that shows nothing but
+   * the gaps would be a strange thing to open - so a lone request skips the
    * coverage filter and answers with everything it holds.
    */
   const dictionaryOnly = wanted.size === 1 && wanted.has(SEARCH_SOURCES.dictionary);
@@ -306,26 +305,105 @@ export async function runGlobalSearch(
     ? searchDictionary(variants).filter((hit) => dictionaryOnly || !covered.has(hit.glyph))
     : [];
 
-  const kept = sortHits([...taught, ...gapFillers]);
+  return sortHits([...taught, ...gapFillers]);
+}
+
+export async function runGlobalSearch(
+  query: string,
+  sources: SearchSource[],
+  window: { limit?: number; offset?: number; kind?: SearchKind | null } = {},
+): Promise<SearchResults> {
+  const kept = await collectRanked(query, sources);
+
+  /*
+   * The kind counts are taken before the kind filter and the source counts
+   * after it. A tab has to say how many results it would show while you are
+   * looking at a different one, so counting them after filtering would leave
+   * every tab but the open one reading zero.
+   */
+  const countsByKind = countByKind(kept);
+  const wantedKind = window.kind ?? null;
+  const inKind = wantedKind === null ? kept : kept.filter((hit) => hitMatchesKind(hit, wantedKind));
 
   /*
    * Windowed after ranking, never during it. The counts and the total describe
-   * the whole answer - the source tabs would be wrong otherwise - while `hits`
+   * the whole answer - the tabs would be wrong otherwise - while `hits`
    * carries only the stretch that was asked for, which is ten rows for a
    * dropdown and a screenful for the results page.
    */
   const offset = window.offset ?? 0;
-  const windowed = window.limit === undefined ? kept.slice(offset) : kept.slice(offset, offset + window.limit);
+  const windowed =
+    window.limit === undefined ? inKind.slice(offset) : inKind.slice(offset, offset + window.limit);
 
   return {
     query,
-    totalHits: kept.length,
+    totalHits: inKind.length,
     countsBySource: {
-      [SEARCH_SOURCES.wanikani]: kept.filter((hit) => hit.source === SEARCH_SOURCES.wanikani).length,
-      [SEARCH_SOURCES.jlpt]: kept.filter((hit) => hit.source === SEARCH_SOURCES.jlpt).length,
-        [SEARCH_SOURCES.grades]: kept.filter((hit) => hit.source === SEARCH_SOURCES.grades).length,
-      [SEARCH_SOURCES.dictionary]: kept.filter((hit) => hit.source === SEARCH_SOURCES.dictionary).length,
+      [SEARCH_SOURCES.wanikani]: inKind.filter((hit) => hit.source === SEARCH_SOURCES.wanikani).length,
+      [SEARCH_SOURCES.jlpt]: inKind.filter((hit) => hit.source === SEARCH_SOURCES.jlpt).length,
+      [SEARCH_SOURCES.grades]: inKind.filter((hit) => hit.source === SEARCH_SOURCES.grades).length,
+      [SEARCH_SOURCES.dictionary]: inKind.filter((hit) => hit.source === SEARCH_SOURCES.dictionary).length,
     },
+    countsByKind,
     hits: windowed,
+  };
+}
+
+/** One catalogue's answer, and how much of it is being shown. */
+export type SearchColumnResult = {
+  source: SearchSource;
+  hits: SearchHit[];
+  total: number;
+};
+
+export type SearchColumnsResult = {
+  query: string;
+  totalHits: number;
+  countsByKind: ReturnType<typeof countByKind>;
+  countsBySource: Record<SearchSource, number>;
+  columns: SearchColumnResult[];
+};
+
+/**
+ * The answer split into one column per catalogue.
+ *
+ * Not built from a window of the flat ranking, which is the tempting way and
+ * the wrong one: the school grades answer a common character with one row that
+ * ranks below forty WaniKani rows, so any window wide enough to reach it would
+ * be most of the answer. Each catalogue's rows are taken from its own list, so
+ * a short column is short because the catalogue is, not because the ranking
+ * buried it.
+ *
+ * Each axis is counted with the other's filter applied but not its own. "Kanji
+ * 12" then means twelve kanji among the catalogues you kept, and turning
+ * WaniKani off changes it - which is the only reading of the number that
+ * stays true as the chips are used.
+ */
+export async function runSearchColumns(
+  query: string,
+  filters: SearchFilters,
+  perColumn: number,
+): Promise<SearchColumnsResult> {
+  const ranked = await collectRanked(query, [...SEARCH_SOURCE_VALUES]);
+
+  const inKinds = ranked.filter((hit) => isKept(filters.kinds, kindForHit(hit)));
+  const inSources = ranked.filter((hit) => isKept(filters.sources, hit.source));
+  const shown = inKinds.filter((hit) => isKept(filters.sources, hit.source));
+
+  const countsBySource = Object.fromEntries(
+    SEARCH_SOURCE_VALUES.map((source) => [source, inKinds.filter((hit) => hit.source === source).length]),
+  ) as Record<SearchSource, number>;
+
+  const columns = SEARCH_SOURCE_VALUES.map((source) => {
+    const all = shown.filter((hit) => hit.source === source);
+    return { source, hits: all.slice(0, perColumn), total: all.length };
+  }).filter((column) => column.total > 0);
+
+  return {
+    query,
+    totalHits: shown.length,
+    countsByKind: countByKind(inSources),
+    countsBySource,
+    columns,
   };
 }

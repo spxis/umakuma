@@ -1,0 +1,149 @@
+"use client";
+
+import Link from "next/link";
+import { type ReactNode } from "react";
+
+import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import { subjectGlyphTone } from "@/app/shared/subjectListView";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { SEARCH_SOURCE_LABELS, searchHitHref, type SearchHit } from "@/lib/globalSearch";
+import { rememberHit } from "@/lib/recentItems";
+
+import { SEARCH_COL_ATTR, SEARCH_RESULT_ROW_ATTR, SEARCH_ROW_ATTR } from "./searchFocus";
+import { SOURCE_TONES } from "./Search.constants";
+
+/**
+ * The rows themselves, wherever results are shown.
+ *
+ * One place, because there are two views of the same answer - the columns
+ * side by side, and one catalogue opened on its own - and a row that looked or
+ * behaved differently between them would be the same bug twice. Opening a row
+ * records it in the history from here, for the same reason.
+ *
+ * A row carries where it sits rather than a number counted from the top of the
+ * page: the columns grow at different rates as they page, and a flat index
+ * would move every row below whichever column loaded.
+ */
+
+
+
+export default function SearchHitRows({
+  hits,
+  column = 0,
+  className = "divide-y divide-line/60",
+  listRef,
+  trailing,
+  showSource = true,
+}: {
+  hits: SearchHit[];
+  /** Which column these rows are, for the arrows that cross between them. */
+  column?: number;
+  className?: string;
+  listRef?: React.Ref<HTMLUListElement>;
+  /** A last row that is not a result: the paging sentinel, the end of the list. */
+  trailing?: ReactNode;
+  /** Off inside a column already headed by its catalogue's name. */
+  showSource?: boolean;
+}) {
+  return (
+    <ul ref={listRef} className={className}>
+      {hits.map((hit, row) => (
+        <li key={hit.key}>
+          <HitRow
+            hit={hit}
+            column={column}
+            row={row}
+            href={searchHitHref(hit)}
+            showSource={showSource}
+          />
+        </li>
+      ))}
+      {trailing}
+    </ul>
+  );
+}
+
+function HitRow({
+  hit,
+  column,
+  row,
+  href,
+  showSource,
+}: {
+  hit: SearchHit;
+  column: number;
+  row: number;
+  href: string | null;
+  showSource: boolean;
+}) {
+  const body = (
+    <>
+      <span
+        /* Three characters fit at every width; 私自身 clipped to 私 at the old w-16. */
+        className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-20 ${JP_TEXT_CLASS} ${subjectGlyphTone(
+          hit.subjectType,
+        )}`}
+      >
+        {hit.glyph}
+      </span>
+
+      <span className="flex min-w-0 flex-1 flex-col">
+        <span className="truncate text-sm font-bold text-foreground sm:text-base">
+          {hit.meaning || "—"}
+        </span>
+        {hit.reading ? (
+          <span lang="ja" translate="no" className={`truncate text-xs font-semibold text-foreground/60 ${JP_TEXT_CLASS}`}>
+            {hit.reading}
+          </span>
+        ) : null}
+      </span>
+
+      <span className="flex shrink-0 items-center gap-1">
+        {hit.badges.map((badge) => (
+          <span key={badge} className="subject-pill hidden border-line bg-surface text-foreground sm:inline-flex">
+            {badge}
+          </span>
+        ))}
+        {showSource ? (
+          <span className={`subject-pill border ${SOURCE_TONES[hit.source]}`}>
+            {SEARCH_SOURCE_LABELS[hit.source]}
+          </span>
+        ) : null}
+      </span>
+    </>
+  );
+
+  const shell =
+    "flex min-w-0 flex-1 items-center gap-2.5 px-3 py-2.5 text-left outline-none transition hover:bg-surface-muted/50 focus-visible:bg-surface-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent/40";
+  const cellProps = {
+    [SEARCH_RESULT_ROW_ATTR]: "",
+    [SEARCH_COL_ATTR]: column,
+    [SEARCH_ROW_ATTR]: row,
+  };
+
+  /*
+   * The strokes button sits outside the row link. Nesting a button inside an
+   * anchor is invalid, and the click would be swallowed by the navigation.
+   */
+  return (
+    <div className="flex items-center gap-1 pr-2">
+      {href ? (
+        <Link href={href} className={shell} onClick={() => rememberHit(hit)} {...cellProps}>
+          {body}
+        </Link>
+      ) : (
+        /* Not a link where the catalogue could not name the subject; still a stop for the arrows. */
+        <div className={shell} tabIndex={-1} {...cellProps}>
+          {body}
+        </div>
+      )}
+      {isSingleKanji(hit) ? <StrokeOrderButton kanji={hit.glyph} meaning={hit.meaning} /> : null}
+    </div>
+  );
+}
+
+/** Stroke order exists for single kanji, not radicals drawn as images or words. */
+function isSingleKanji(hit: SearchHit): boolean {
+  return hit.subjectType === SUBJECT_TYPES.kanji && [...hit.glyph].length === 1;
+}

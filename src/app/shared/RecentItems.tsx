@@ -18,7 +18,7 @@ import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
-import { SEARCH_LIST_CARD } from "@/app/search/SearchHitList";
+import { SEARCH_LIST_CARD } from "@/app/search/Search.constants";
 
 /**
  * What this browser has looked up, as the last rows of the results list.

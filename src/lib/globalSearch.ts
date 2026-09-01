@@ -8,6 +8,7 @@
  */
 
 import { SUBJECT_TYPES } from "./domainConstants";
+import type { KindCounts, SearchKind } from "./searchKinds";
 
 export const SEARCH_SOURCES = {
   wanikani: "wanikani",
@@ -82,8 +83,14 @@ export type SearchHit = {
 /** What `/api/search` returns; shared so client callers can type the payload. */
 export type SearchResults = {
   query: string;
+  /** How many the whole answer holds, after any kind filter. */
   totalHits: number;
   countsBySource: Record<SearchSource, number>;
+  /**
+   * How many words, kanji and radicals the search found, before any kind
+   * filter. The tabs need the count for the kinds you are not looking at.
+   */
+  countsByKind: KindCounts;
   hits: SearchHit[];
 };
 
@@ -126,10 +133,11 @@ export function searchSubmitHref(query: string, resultsHref: (query: string) => 
  */
 export function searchRequestUrl(
   query: string,
-  options: { limit?: number; offset?: number; sources?: SearchSource[] } = {},
+  options: { limit?: number; offset?: number; sources?: SearchSource[]; kind?: SearchKind | null } = {},
 ): string {
   const parts = [`q=${encodeURIComponent(query)}`];
   if (options.sources?.length) parts.push(`sources=${options.sources.join(",")}`);
+  if (options.kind) parts.push(`kind=${options.kind}`);
   if (options.limit !== undefined) parts.push(`limit=${options.limit}`);
   if (options.offset) parts.push(`offset=${options.offset}`);
   return `/api/search?${parts.join("&")}`;

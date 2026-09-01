@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type UIEvent } from "react";
 
-import { SOURCE_TONES } from "@/app/search/SearchHitList";
+import { SOURCE_TONES } from "@/app/search/Search.constants";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import { SEARCH_SOURCE_LABELS, type SearchHit } from "@/lib/globalSearch";
 import { JP_TEXT_CLASS } from "./japaneseText";
