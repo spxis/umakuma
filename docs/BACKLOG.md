@@ -1007,7 +1007,7 @@ fix bigger.
 the card becomes a plain container, and the overlay controls sit as siblings
 rather than children.
 
-### 37 — Colour contrast below the floor (John's call)
+### 37 — Colour contrast below the floor ✅ closed (v0.191.0)
 
 Measured against the 4.5:1 WCAG AA floor for body text:
 
@@ -1023,7 +1023,22 @@ whole app looks — so this is a decision about the brand, not a bug to fix
 quietly. `text-foreground/45` is the easier half: it is muted secondary text
 and moving it to `/60` would clear the floor without touching the palette.
 
-Waiting on John.
+**Answered 1 Sep — "update the brand palette as needed" — and done in two
+passes.** The muted text and the pill inks went first (`--*-text`, and every
+`text-foreground` weight below `/60` raised), leaving the brand values pinned by
+a test while the decision was still open.
+
+That left the other half. A glyph is text too: the character itself is drawn in
+the brand colour at 24px and up, where the floor is 3:1, and radical cyan
+reached 2.41:1 on white — so the pill reading "RADICAL" was legible while the
+水 beside it was not. **Radical is the only hue that moved** (`#10b4e8` →
+`#0e9fcd`, the least that clears 3:1), the dark theme keeps the original because
+on that ground it reads at 7.06:1, and kanji and vocabulary were already above
+the line and are untouched. The pill ink moved a shade with it, since the tint
+it sits on is mixed from the brand colour and had darkened underneath it.
+
+`textContrast.test.ts` now pins both floors — 4.5:1 for pills and muted text,
+3:1 for glyphs — in both themes.
 
 ### 38 — Security leftovers before the door opens
 

@@ -173,10 +173,49 @@ describe("subject pills are readable without repainting the brand", () => {
     );
   });
 
-  /* The point of the split: the brand values themselves must not have moved. */
-  it("leaves the brand palette exactly as it was", () => {
-    expect(cssVar("radical")).toBe("#10b4e8");
+  /*
+   * The split kept the brand still while whether it could move was John's to
+   * decide. He decided on 1 Sep - "update the brand palette as needed" - and
+   * exactly one hue moved: radical, the only one that failed the floor for the
+   * glyphs it draws. The other two never did, so they are still pinned here.
+   */
+  it("moves no brand colour that was already readable", () => {
     expect(cssVar("kanji")).toBe("#ff3b82");
     expect(cssVar("vocabulary")).toBe("#8b5cf6");
+  });
+});
+
+/**
+ * A glyph is text too.
+ *
+ * The text weights above fixed the pills, where a subject colour carries 10px
+ * uppercase. They left the other half: the character itself, drawn in the brand
+ * colour at 24px and up. WCAG's floor there is 3:1 rather than 4.5, and radical
+ * cyan reached 2.41:1 on white - so the pill reading "RADICAL" was legible
+ * while the 水 beside it was not.
+ */
+describe("subject glyphs stay above the large-text floor", () => {
+  const AA_LARGE = 3;
+  const WHITE = hexToRgb("#ffffff");
+
+  it.each(["radical", "kanji", "vocabulary"])("draws a %s glyph at 3:1 on white", (subject) => {
+    expect(contrastRatio(hexToRgb(cssVar(subject)), WHITE)).toBeGreaterThanOrEqual(AA_LARGE);
+  });
+
+  /*
+   * The cyan that is too light on white is the readable one on the dark ground,
+   * so the dark theme keeps the original rather than inheriting the darkened
+   * one. Without this, the fix for one theme is a regression in the other.
+   */
+  it("keeps the dark theme on its own cyan", () => {
+    const css = readFileSync(CSS, "utf8");
+    const darkBlock = css.slice(css.indexOf(':root[data-theme="dark"]'));
+    const darkRadical = darkBlock.match(/--radical:\s*(#[0-9a-f]{6})/i)?.[1];
+
+    expect(darkRadical, "the dark theme should set its own --radical").toBeTruthy();
+    const darkSurface = darkBlock.match(/--surface:\s*(#[0-9a-f]{6})/i)?.[1];
+    expect(
+      contrastRatio(hexToRgb(darkRadical!), hexToRgb(darkSurface!)),
+    ).toBeGreaterThanOrEqual(AA_LARGE);
   });
 });

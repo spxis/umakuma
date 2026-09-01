@@ -10,7 +10,14 @@
   --accent-2: #00a4ff;
   --hot: #ff5f3d;
   --highlight: #c4ff3d;
-  --radical: #10b4e8;
+  /*
+   * Radical was #10b4e8, which reaches 2.41:1 on white. The text weights below
+   * fixed the pills, but a glyph is text too - drawn at 24px and up, where the
+   * floor is 3:1 - so the cyan a radical is written in was still under it while
+   * its pill was fixed. Darkened by the least that clears 3:1; the dark theme
+   * keeps the original, which is the readable one on that ground at 7.06:1.
+   */
+  --radical: #0e9fcd;
   --kanji: #ff3b82;
   --vocabulary: #8b5cf6;
 
@@ -27,7 +34,7 @@
    * still colour every glyph, border, fill and accent; these are for text on a
    * tinted ground and nothing else.
    */
-  --radical-text: #0b799b;
+  --radical-text: #0a7290;
   --kanji-text: #c92f67;
   --vocabulary-text: #7c52db;
   --font-body-sans: "Segoe UI Variable", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
@@ -47,6 +54,7 @@
   --accent-2: #56d0ff;
   --hot: #ff8360;
   --highlight: #d7ff6c;
+  --radical: #10b4e8;
 }
 
 :root[data-jp-font="serif"] {

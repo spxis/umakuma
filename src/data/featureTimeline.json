@@ -1970,5 +1970,15 @@
     "version": "0.190.0",
     "summary": "Every explorer takes the same parameter for a search now. There were four names for the one idea - the grade explorer used q, and the WaniKani, JLPT and study explorers each had their own - and the shared search bar coped by writing all three legacy names on every submit and reading whichever one matched the surface it happened to be on. Nothing was broken by it. What it cost was guessability: the address for finding a character depended on which explorer you were standing in, so no link to a search could be worked out without reading the code first, and the search results had to hardcode a different query for each destination. It is q everywhere, which is what a reader expects and what one explorer already used. Links and bookmarks already sent to people keep working - the old three are still read - but nothing writes them any more, so they drain out of circulation instead of being carried forever. A test holds the line: no file may spell one of those parameters for itself again.",
     "releasedAt": "2026-09-01T07:15:35Z"
+  },
+  {
+    "id": "the-glyph-is-text-too",
+    "area": "platform",
+    "name": "The glyph is text too",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.191.0",
+    "releasedAt": "2026-09-01T08:10:35Z",
+    "summary": "Splitting the subject colours into a brand weight and a darker text weight fixed the pills, where a colour carries ten-pixel uppercase, and left the other half untouched: the character itself, drawn in the brand colour at twenty-four pixels and up. WCAG asks 3:1 there rather than 4.5, and radical cyan reached 2.41:1 on white - so the pill reading RADICAL was legible while the 水 beside it was not. Radical is the only hue that moved, darkened by the least that clears the floor, and the dark theme keeps the original because on that ground it is the readable one at 7.06:1. Kanji and vocabulary were already above the line and are untouched, so the site still looks like itself. The pill ink moved a shade with it, since the tint it sits on is mixed from the brand colour and had darkened underneath it."
   }
 ]
