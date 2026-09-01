@@ -15,6 +15,16 @@ export type AdminStudyHistoryRow = {
   wkUsername: string;
   assignmentId: number;
   subjectId: number;
+  /**
+   * The character itself, which is what the row is actually about.
+   *
+   * An attempt stores a subject id, and the table showed that id - so a page
+   * of study history read as a column of five-figure numbers with no way to
+   * tell 水 from 火. Null when the catalogue has no such subject, which is a
+   * real state rather than an error: a subject can be answered and later
+   * withdrawn by WaniKani, and the id is still the honest thing to show.
+   */
+  characters: string | null;
   subjectType: string;
   result: string;
   submittedAt: string;
@@ -124,6 +134,24 @@ export async function getAdminStudyHistoryPage(args: AdminStudyHistoryQuery): Pr
 
   const accountMap = new Map(accountRows.map((row) => [row.id, row]));
 
+  /*
+   * The characters for this page's subjects, in one query.
+   *
+   * Same shape as the account lookup above: collect the ids the page actually
+   * shows, ask once, map them in. A page is twenty to fifty rows, so this is a
+   * single indexed read on the primary key rather than anything that grows
+   * with the twenty thousand attempts behind it.
+   */
+  const subjectIds = Array.from(new Set(attemptRows.map((row) => row.subjectId)));
+  const subjectRows = subjectIds.length > 0
+    ? await prisma.wkSubjectCatalog.findMany({
+        where: { wkSubjectId: { in: subjectIds } },
+        select: { wkSubjectId: true, characters: true },
+      })
+    : [];
+
+  const charactersById = new Map(subjectRows.map((row) => [row.wkSubjectId, row.characters]));
+
   const attempts = attemptRows.map((row) => {
     const account = accountMap.get(row.accountId);
     const fallbackUser = row.accountId;
@@ -134,6 +162,7 @@ export async function getAdminStudyHistoryPage(args: AdminStudyHistoryQuery): Pr
       wkUsername: account?.wkUsername ?? fallbackUser,
       assignmentId: row.assignmentId,
       subjectId: row.subjectId,
+      characters: charactersById.get(row.subjectId) ?? null,
       subjectType: row.subjectType,
       result: row.result,
       submittedAt: row.submittedAt.toISOString(),

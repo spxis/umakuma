@@ -1169,7 +1169,7 @@
     "date": "2026-08-30",
     "version": "0.108.0",
     "releasedAt": "2026-08-31T01:16:05Z",
-    "summary": "The stroke-order panel is now a shared component any surface can open, and every kanji has a public page you can send to someone. Selecting a card in the grade explorer opens it, which is how every other subject grid already behaved. The header carries the readings as well as the meaning, since a reader knows 何 by なに before they know it by what, with the stroke count beside it and the credit centred at the foot."
+    "summary": "The stroke-order panel is now a shared component any surface can open, and every kanji has a public page you can send to someone. Selecting a card in the grade explorer opens it, which is how every other subject grid already behaved. The header carries the readings as well as the meaning, since a reader knows \u4f55 by \u306a\u306b before they know it by what, with the stroke count beside it and the credit centred at the foot."
   },
   {
     "id": "updates-page-names-and-months",
@@ -1359,7 +1359,7 @@
     "date": "2026-08-30",
     "version": "0.127.0",
     "releasedAt": "2026-08-31T05:05:29Z",
-    "summary": "The capitals round now skips the twenty-nine Japanese prefectures that share their capital's name, so it asks the eighteen worth knowing: 札幌市 is Hokkaido, 横浜市 is Kanagawa, 名古屋市 is Aichi. Japanese capitals are written in kanji now too, matching the tiles rather than sitting in romaji in a Japanese round."
+    "summary": "The capitals round now skips the twenty-nine Japanese prefectures that share their capital's name, so it asks the eighteen worth knowing: \u672d\u5e4c\u5e02 is Hokkaido, \u6a2a\u6d5c\u5e02 is Kanagawa, \u540d\u53e4\u5c4b\u5e02 is Aichi. Japanese capitals are written in kanji now too, matching the tiles rather than sitting in romaji in a Japanese round."
   },
   {
     "id": "pagination-placement",
@@ -1489,7 +1489,7 @@
     "date": "2026-08-31",
     "version": "0.140.0",
     "releasedAt": "2026-08-31T12:00:00Z",
-    "summary": "Chrome's translate offer used to eat the site. On the grades explorer it replaced every kanji with its English meaning - 一 became \"one\", 右 became \"right\" - beside a card already printing that same meaning underneath, and it romanised the readings, so a page teaching kanji showed no kanji at all. Every Japanese element now carries both refusals, the HTML5 translate attribute and Google's notranslate class, while the English chrome around it stays translatable for anyone who needs it. The font class and the glyph sizing helper each carry the marker with them, since anything drawn in the Japanese face is Japanese, and a unit test keeps the raw font class out of the rest of the tree so the next glyph surface cannot take the styling and forget the protection. Release notes that quote Japanese inside an English sentence mark only the quote. Audited across sixteen pages: no unprotected Japanese left."
+    "summary": "Chrome's translate offer used to eat the site. On the grades explorer it replaced every kanji with its English meaning - \u4e00 became \"one\", \u53f3 became \"right\" - beside a card already printing that same meaning underneath, and it romanised the readings, so a page teaching kanji showed no kanji at all. Every Japanese element now carries both refusals, the HTML5 translate attribute and Google's notranslate class, while the English chrome around it stays translatable for anyone who needs it. The font class and the glyph sizing helper each carry the marker with them, since anything drawn in the Japanese face is Japanese, and a unit test keeps the raw font class out of the rest of the tree so the next glyph surface cannot take the styling and forget the protection. Release notes that quote Japanese inside an English sentence mark only the quote. Audited across sixteen pages: no unprotected Japanese left."
   },
   {
     "id": "translation-ward-completed",
@@ -1499,7 +1499,7 @@
     "date": "2026-08-31",
     "version": "0.141.0",
     "releasedAt": "2026-08-31T12:00:00Z",
-    "summary": "The previous release protected what a page draws on arrival and nothing else, so the stroke-order modal still showed \"circle\" where 円 belonged in both its Gothic and Mincho previews, and the shared explorer card lost its protection the moment a list switched to rows. Those and the game's match prompt are covered now, along with the admin kanji tables. A second half to it: translation was also respacing compact chips, because a label built from several JSX children is several text nodes with the gaps between them up for grabs - \"JLPT N5\" came back as \"JLPTN5\", \"APPR - SRS 4\" as \"APPR- SRS4\", and every count as \"( 157 )\". Codes and counts are now single strings that refuse translation, while prose like \"Showing 1-60 of 80 kanji\" still reads in whatever language the reader wants. A source guard fails the build on any element that reaches for a Japanese typeface without refusing translation, which is what would have caught the modal."
+    "summary": "The previous release protected what a page draws on arrival and nothing else, so the stroke-order modal still showed \"circle\" where \u5186 belonged in both its Gothic and Mincho previews, and the shared explorer card lost its protection the moment a list switched to rows. Those and the game's match prompt are covered now, along with the admin kanji tables. A second half to it: translation was also respacing compact chips, because a label built from several JSX children is several text nodes with the gaps between them up for grabs - \"JLPT N5\" came back as \"JLPTN5\", \"APPR - SRS 4\" as \"APPR- SRS4\", and every count as \"( 157 )\". Codes and counts are now single strings that refuse translation, while prose like \"Showing 1-60 of 80 kanji\" still reads in whatever language the reader wants. A source guard fails the build on any element that reaches for a Japanese typeface without refusing translation, which is what would have caught the modal."
   },
   {
     "id": "japanese-declared-as-japanese",
@@ -1589,7 +1589,7 @@
     "date": "2026-08-31",
     "version": "0.152.0",
     "releasedAt": "2026-08-31T14:00:00Z",
-    "summary": "The search placeholder promised \"or romaji\" and the code never kept the promise: readings are stored in kana, so typing watashi found nothing while わたし found plenty. A query is now folded into every spelling it could mean - the raw text, its hiragana, and its katakana, since JLPT stores on'yomi in katakana - and all three catalogues match and rank against the full set, scoring each hit by its best variant so folding can never demote a result the raw text already earned. The fold is a plain syllable table that accepts Hepburn and common kunrei spellings, doubled consonants, and the n-before-consonant rule, and it refuses to convert anything that is not entirely romaji, so English words never gain a phantom kana reading that outranks their real meaning match."
+    "summary": "The search placeholder promised \"or romaji\" and the code never kept the promise: readings are stored in kana, so typing watashi found nothing while \u308f\u305f\u3057 found plenty. A query is now folded into every spelling it could mean - the raw text, its hiragana, and its katakana, since JLPT stores on'yomi in katakana - and all three catalogues match and rank against the full set, scoring each hit by its best variant so folding can never demote a result the raw text already earned. The fold is a plain syllable table that accepts Hepburn and common kunrei spellings, doubled consonants, and the n-before-consonant rule, and it refuses to convert anything that is not entirely romaji, so English words never gain a phantom kana reading that outranks their real meaning match."
   },
   {
     "id": "search-one-box-everywhere",
@@ -1629,7 +1629,7 @@
     "date": "2026-08-31",
     "version": "0.156.0",
     "releasedAt": "2026-08-31T19:00:00Z",
-    "summary": "In the grade explorer's list view, a kanji with many kun readings ran its readings straight out through the right-hand edge of its row. 下 has eight of them and they crossed the card border, the JLPT pill and whatever sat beside it. The text had been asked to truncate, but a flex item's floor is the width of its own content, so the paragraph holding the readings simply sat as wide as they measured and the truncation inside it never had a narrower box to work against. Measured after the fix at 393, 650 and 1440 pixels: no row overflows its card by a single pixel, and the page has no horizontal scroll."
+    "summary": "In the grade explorer's list view, a kanji with many kun readings ran its readings straight out through the right-hand edge of its row. \u4e0b has eight of them and they crossed the card border, the JLPT pill and whatever sat beside it. The text had been asked to truncate, but a flex item's floor is the width of its own content, so the paragraph holding the readings simply sat as wide as they measured and the truncation inside it never had a narrower box to work against. Measured after the fix at 393, 650 and 1440 pixels: no row overflows its card by a single pixel, and the page has no horizontal scroll."
   },
   {
     "id": "crawl-policy",
@@ -1689,7 +1689,7 @@
     "date": "2026-08-31",
     "version": "0.162.0",
     "releasedAt": "2026-08-31T23:23:00Z",
-    "summary": "Looking a kanji up is rarely a single act - you check 家, then 家事, then go back to 家 - and retyping it each time was the whole friction. The search page now keeps the searches this browser has run and lists five of them under the results, each one a link back to those results and each with its own way to forget it. Twenty are remembered while five are shown, so forgetting one reveals the sixth rather than leaving a gap, and a single control clears the lot. The history lives on the device rather than the account, which means an anonymous visitor gets the same convenience as a member, and it is read through a store subscription rather than into state after mount, so the panel never flashes empty before it fills."
+    "summary": "Looking a kanji up is rarely a single act - you check \u5bb6, then \u5bb6\u4e8b, then go back to \u5bb6 - and retyping it each time was the whole friction. The search page now keeps the searches this browser has run and lists five of them under the results, each one a link back to those results and each with its own way to forget it. Twenty are remembered while five are shown, so forgetting one reveals the sixth rather than leaving a gap, and a single control clears the lot. The history lives on the device rather than the account, which means an anonymous visitor gets the same convenience as a member, and it is read through a store subscription rather than into state after mount, so the panel never flashes empty before it fills."
   },
   {
     "id": "explorer-row-density",
@@ -1839,7 +1839,7 @@
     "date": "2026-08-31",
     "version": "0.177.0",
     "releasedAt": "2026-09-01T02:38:00Z",
-    "summary": "All three catalogues searched every meaning a subject carries and then ranked the hit on its first one alone, so anything matched on another meaning scored zero and was removed by the filter that drops non-matches: the search found the row and then threw it away. Searching magnate returned nothing at all, though it is one of 王's meanings, and home returned twenty-one results while missing 家. Ranking now takes the best score across every meaning the subject holds - including the Heisig keyword, which was searched but never scored - and the row shows the meaning that earned the match behind the one the subject leads with, so a result for magnate no longer reads only King. Against the live catalogues magnate goes from zero hits to two and home from twenty-one to forty-five, while sun still puts 日 first."
+    "summary": "All three catalogues searched every meaning a subject carries and then ranked the hit on its first one alone, so anything matched on another meaning scored zero and was removed by the filter that drops non-matches: the search found the row and then threw it away. Searching magnate returned nothing at all, though it is one of \u738b's meanings, and home returned twenty-one results while missing \u5bb6. Ranking now takes the best score across every meaning the subject holds - including the Heisig keyword, which was searched but never scored - and the row shows the meaning that earned the match behind the one the subject leads with, so a result for magnate no longer reads only King. Against the live catalogues magnate goes from zero hits to two and home from twenty-one to forty-five, while sun still puts \u65e5 first."
   },
   {
     "id": "closed-by-default",
@@ -1879,7 +1879,7 @@
     "date": "2026-08-31",
     "version": "0.181.0",
     "releasedAt": "2026-09-01T03:51:58Z",
-    "summary": "The site knew kanji through three partial catalogues - what WaniKani teaches, the JLPT table, and the school grades - each assembled for its own purpose, so a character arrived with one meaning and a handful of readings, and some never arrived at all: the JLPT table holds neither 鬱 nor 苺. KANJIDIC2 is the reference those are footnotes to, and it now ships with the site: 10,384 characters with every English meaning, every on and kun reading, the readings only names use, stroke counts, grades, frequency ranks and the old JLPT levels. It is generated by pnpm kanji:build in the same spirit as the map and stroke data - regenerate, never hand-edit - and read the way the stroke data is read, one file of a few hundred kilobytes at a time rather than all 3.7MB. The public kanji page is the first surface to use it, so the 7,400 characters outside the school curriculum now open with meanings, readings and stroke counts instead of a drawing and nothing to read, and a shared link previews as the character and its meaning. KANJIDIC2 is CC BY-SA 4.0, so the credit sits on every page that shows the data and the generated files carry the licence, which is what share-alike asks for."
+    "summary": "The site knew kanji through three partial catalogues - what WaniKani teaches, the JLPT table, and the school grades - each assembled for its own purpose, so a character arrived with one meaning and a handful of readings, and some never arrived at all: the JLPT table holds neither \u9b31 nor \u82fa. KANJIDIC2 is the reference those are footnotes to, and it now ships with the site: 10,384 characters with every English meaning, every on and kun reading, the readings only names use, stroke counts, grades, frequency ranks and the old JLPT levels. It is generated by pnpm kanji:build in the same spirit as the map and stroke data - regenerate, never hand-edit - and read the way the stroke data is read, one file of a few hundred kilobytes at a time rather than all 3.7MB. The public kanji page is the first surface to use it, so the 7,400 characters outside the school curriculum now open with meanings, readings and stroke counts instead of a drawing and nothing to read, and a shared link previews as the character and its meaning. KANJIDIC2 is CC BY-SA 4.0, so the credit sits on every page that shows the data and the generated files carry the licence, which is what share-alike asks for."
   },
   {
     "id": "rename-a-saved-list",
@@ -1899,7 +1899,7 @@
     "date": "2026-08-31",
     "version": "0.183.0",
     "releasedAt": "2026-09-01T05:12:17Z",
-    "summary": "Shipping KANJIDIC2 gave the kanji page 10,384 characters but left search reading the same three catalogues, so 渕 and 煕 - both inside the 1,500 most frequent characters in Japanese - still returned nothing at all. The dictionary is now a fourth source, and it fills gaps rather than adding a fourth copy of every common character: a query for 水 already answers three times over, so the dictionary answers only where no catalogue does, and asking for the dictionary tab on its own is the exception that shows everything it holds. A tie between a catalogue and the dictionary goes to the catalogue, because alphabetical keys would otherwise push a reference row above the row carrying a member's own review state, and a dictionary hit links to the public kanji page since no explorer holds a character nobody teaches."
+    "summary": "Shipping KANJIDIC2 gave the kanji page 10,384 characters but left search reading the same three catalogues, so \u6e15 and \u7155 - both inside the 1,500 most frequent characters in Japanese - still returned nothing at all. The dictionary is now a fourth source, and it fills gaps rather than adding a fourth copy of every common character: a query for \u6c34 already answers three times over, so the dictionary answers only where no catalogue does, and asking for the dictionary tab on its own is the exception that shows everything it holds. A tie between a catalogue and the dictionary goes to the catalogue, because alphabetical keys would otherwise push a reference row above the row carrying a member's own review state, and a dictionary hit links to the public kanji page since no explorer holds a character nobody teaches."
   },
   {
     "id": "results-that-stay-on-the-screen",
@@ -1919,7 +1919,7 @@
     "date": "2026-08-31",
     "version": "0.185.0",
     "releasedAt": "2026-09-01T06:21:48Z",
-    "summary": "Readings and meanings say what a kanji is; a sentence says what it does, and the site's own examples come from WaniKani - shown to WaniKani members, absent everywhere else, including the public page a shared kanji link opens. Tatoeba publishes its corpus weekly as plain exports, which is the supported way to take it and the reason nothing here scrapes anything, and 232,731 Japanese sentences with an English translation are now ingested and indexed by the characters they contain. They arrive easiest first: each was scored at ingest by its length and the cost of its hardest character, so 水 opens with 水をくれ！ rather than with one of the other 1,644 sentences it appears in. Near-repeats that differ only in punctuation are folded together, since Tatoeba holds 水をくれ！ and 水をくれ。 separately and both would otherwise spend a slot saying the same thing. Kana-only sentences are kept though nothing can reach them yet, because they are the ones a kana vocabulary word would need later. The corpus is CC BY 2.0 FR, so the credit sits under every set of examples."
+    "summary": "Readings and meanings say what a kanji is; a sentence says what it does, and the site's own examples come from WaniKani - shown to WaniKani members, absent everywhere else, including the public page a shared kanji link opens. Tatoeba publishes its corpus weekly as plain exports, which is the supported way to take it and the reason nothing here scrapes anything, and 232,731 Japanese sentences with an English translation are now ingested and indexed by the characters they contain. They arrive easiest first: each was scored at ingest by its length and the cost of its hardest character, so \u6c34 opens with \u6c34\u3092\u304f\u308c\uff01 rather than with one of the other 1,644 sentences it appears in. Near-repeats that differ only in punctuation are folded together, since Tatoeba holds \u6c34\u3092\u304f\u308c\uff01 and \u6c34\u3092\u304f\u308c\u3002 separately and both would otherwise spend a slot saying the same thing. Kana-only sentences are kept though nothing can reach them yet, because they are the ones a kana vocabulary word would need later. The corpus is CC BY 2.0 FR, so the credit sits under every set of examples."
   },
   {
     "id": "campaign-selector-that-switches",
@@ -1979,7 +1979,7 @@
     "date": "2026-09-01",
     "version": "0.191.0",
     "releasedAt": "2026-09-01T08:10:35Z",
-    "summary": "Splitting the subject colours into a brand weight and a darker text weight fixed the pills, where a colour carries ten-pixel uppercase, and left the other half untouched: the character itself, drawn in the brand colour at twenty-four pixels and up. WCAG asks 3:1 there rather than 4.5, and radical cyan reached 2.41:1 on white - so the pill reading RADICAL was legible while the 水 beside it was not. Radical is the only hue that moved, darkened by the least that clears the floor, and the dark theme keeps the original because on that ground it is the readable one at 7.06:1. Kanji and vocabulary were already above the line and are untouched, so the site still looks like itself. The pill ink moved a shade with it, since the tint it sits on is mixed from the brand colour and had darkened underneath it."
+    "summary": "Splitting the subject colours into a brand weight and a darker text weight fixed the pills, where a colour carries ten-pixel uppercase, and left the other half untouched: the character itself, drawn in the brand colour at twenty-four pixels and up. WCAG asks 3:1 there rather than 4.5, and radical cyan reached 2.41:1 on white - so the pill reading RADICAL was legible while the \u6c34 beside it was not. Radical is the only hue that moved, darkened by the least that clears the floor, and the dark theme keeps the original because on that ground it is the readable one at 7.06:1. Kanji and vocabulary were already above the line and are untouched, so the site still looks like itself. The pill ink moved a shade with it, since the tint it sits on is mixed from the brand colour and had darkened underneath it."
   },
   {
     "id": "articles,-kept-where-the-work-is",
@@ -2069,7 +2069,7 @@
     "date": "2026-09-01",
     "version": "0.200.0",
     "releasedAt": "2026-09-01T10:33:56Z",
-    "summary": "Subject content is meant to come from the local catalogue rather than from WaniKani on every request - that is what makes the study queue quick. Ninety-eight subjects were not in it, so each one went out to the API instead, every time anybody's queue happened to include it. Almost all of them were the kana-only vocabulary a beginner meets first: これ, ホテル, おはよう, コーヒー, ありがとう. The reason was an interrupted sync months ago. A sync that stops keeps a cursor and a resumed run carries on from it rather than going back for what it skipped, so the gap stayed open and quietly widened as related words pointed at each other. There is a backfill for it now, and it is deliberately narrow: it works out what the app can ask for, subtracts what the catalogue holds, fetches only the difference, and inserts. It never updates and never deletes, because every row it writes was established as absent moments before - correcting content that is merely stale is the sync's job, and a tool that could overwrite is a tool that could lose something. It reports and writes nothing unless asked twice."
+    "summary": "Subject content is meant to come from the local catalogue rather than from WaniKani on every request - that is what makes the study queue quick. Ninety-eight subjects were not in it, so each one went out to the API instead, every time anybody's queue happened to include it. Almost all of them were the kana-only vocabulary a beginner meets first: \u3053\u308c, \u30db\u30c6\u30eb, \u304a\u306f\u3088\u3046, \u30b3\u30fc\u30d2\u30fc, \u3042\u308a\u304c\u3068\u3046. The reason was an interrupted sync months ago. A sync that stops keeps a cursor and a resumed run carries on from it rather than going back for what it skipped, so the gap stayed open and quietly widened as related words pointed at each other. There is a backfill for it now, and it is deliberately narrow: it works out what the app can ask for, subtracts what the catalogue holds, fetches only the difference, and inserts. It never updates and never deletes, because every row it writes was established as absent moments before - correcting content that is merely stale is the sync's job, and a tool that could overwrite is a tool that could lose something. It reports and writes nothing unless asked twice."
   },
   {
     "id": "the-practice-chips-work-again",
@@ -2100,5 +2100,15 @@
     "status": "shipped",
     "date": "2026-09-01",
     "releasedAt": "2026-09-01T10:55:09Z"
+  },
+  {
+    "id": "the-history-table-shows-the-character",
+    "area": "admin",
+    "name": "The history table shows the character",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.204.0",
+    "releasedAt": "2026-09-01T10:57:14Z",
+    "summary": "The admin study history listed twenty thousand answered reviews with a Subject column holding nothing but a number. A page of it read as a column of five figures, and there was no telling which row was about which character without looking every id up by hand - on the one screen whose whole job is reviewing what somebody answered. The character sits there now, with its id underneath in small type, because the id is still what the edit and delete actions act on and what a bug report quotes; it is just not the thing being read. The characters come from the local catalogue in a single query for the twenty or fifty rows a page actually shows, the same shape the table already used to turn account ids into names. A row whose subject the catalogue does not hold shows the id alone rather than a blank, since a subject can be answered and later withdrawn by WaniKani and the number is then the honest answer."
   }
 ]

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { getStoredPositiveInt, setLocalStorageItem } from "@/lib/clientStorage";
 import { formatDateTimeShort, formatRelativeFromNow } from "@/lib/timeFormat";
 
@@ -10,56 +11,18 @@ import AdminPanelHeader from "./AdminPanelHeader";
 import AdminPaginationControls from "./AdminPaginationControls";
 import type { ReviewResult } from "@/lib/domainConstants";
 
-type Attempt = {
-  id: string;
-  accountId: string;
-  nickname: string;
-  wkUsername: string;
-  assignmentId: number;
-  subjectId: number;
-  subjectType: string;
-  result: ReviewResult;
-  submittedAt: string;
-};
-
-type HistoryData = {
-  attempts: Attempt[];
-  totals: Record<string, number>;
-  accountCount: number;
-  pagination: {
-    page: number;
-    pageSize: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrevious: boolean;
-  };
-};
+import {
+  sortIndicator,
+  toLocalDateTimeInput,
+  type Attempt,
+  type HistoryData,
+  type SortBy,
+  type SortDir,
+} from "./AdminStudyHistory.types";
 
 const HISTORY_PAGE_STORAGE_KEY = "admin-study-history:page";
 const HISTORY_PAGE_SIZE_STORAGE_KEY = "admin-study-history:page-size";
 const HISTORY_PAGE_SIZE_OPTIONS = [20, 30, 50] as const;
-
-type SortBy = "submittedAt" | "nickname" | "result" | "subjectType" | "subjectId" | "assignmentId";
-type SortDir = "asc" | "desc";
-
-function sortIndicator(activeSortBy: SortBy, sortBy: SortBy, sortDir: SortDir): string {
-  if (activeSortBy !== sortBy) {
-    return "<>";
-  }
-
-  return sortDir === "asc" ? "^" : "v";
-}
-
-function toLocalDateTimeInput(isoValue: string): string {
-  const date = new Date(isoValue);
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
-
-  const offsetMs = date.getTimezoneOffset() * 60_000;
-  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
-}
 
 export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthorized: boolean }) {
   const { confirmAction, showToast } = useAdminFeedback();
@@ -405,7 +368,26 @@ export default function AdminStudyHistory({ sessionAuthorized }: { sessionAuthor
                     </span>
                   </td>
 
-                  <td className="px-3 py-2 font-mono">{attempt.subjectId}</td>
+                  {/*
+                    * The character first, the id under it.
+                    *
+                    * This column showed the id alone, so a page of study
+                    * history read as a column of five-figure numbers and there
+                    * was no way to tell 水 from 火 without looking each one up.
+                    * The id stays because it is what the edit and delete
+                    * actions act on, and what a bug report quotes - it is just
+                    * not the thing being reviewed.
+                    */}
+                  <td className="px-3 py-2">
+                    {attempt.characters ? (
+                      <span lang="ja" translate="no" className={`block text-lg font-black leading-none text-foreground ${JP_TEXT_CLASS}`}>
+                        {attempt.characters}
+                      </span>
+                    ) : null}
+                    <span className={`font-mono text-[11px] ${attempt.characters ? "text-foreground/60" : "text-foreground"}`}>
+                      {attempt.subjectId}
+                    </span>
+                  </td>
                   <td className="px-3 py-2 font-mono text-foreground/65">{attempt.assignmentId}</td>
 
                   <td className="px-3 py-2">
