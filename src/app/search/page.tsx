@@ -20,7 +20,7 @@ import {
 import { runGlobalSearch } from "@/lib/globalSearchServer";
 
 import { SEARCH_EXAMPLES, SEARCH_PAGE_COPY } from "./searchCopy";
-import RecentSearches from "./RecentSearches";
+import RecentSearches from "@/app/shared/RecentSearches";
 import SearchHitList from "./SearchHitList";
 import SearchPageForm from "./SearchPageForm";
 import { noTranslateClass } from "@/app/shared/japaneseText";

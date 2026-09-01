@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { readExplorerSearch } from "@/lib/explorerSearchParam";
+
+import { arrivesWithSearch } from "./explorerArrivingSearch";
 import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
 import LevelExplorer from "./level-explorer/components/LevelExplorer";
 import StudyExplorer from "./study-explorer/components/StudyExplorer";
@@ -112,8 +114,14 @@ export default function ExplorerTabs({
     }
     const timer = window.setTimeout(() => {
       const params = new URLSearchParams(window.location.search);
+
+      /* See `arrivesWithSearch`: a search outranks the restored filters. */
+      const arrivingWithSearch = arrivesWithSearch(params);
+
       const urlMode = params.get("mode");
-      if (urlMode === QUEUE_TYPES.review || urlMode === QUEUE_TYPES.lesson) {
+      if (arrivingWithSearch) {
+        setQueueMode(QUEUE_TYPES.review);
+      } else if (urlMode === QUEUE_TYPES.review || urlMode === QUEUE_TYPES.lesson) {
         setQueueMode(urlMode);
       } else if (initialQueueMode !== QUEUE_TYPES.review && initialQueueMode !== QUEUE_TYPES.lesson) {
         setQueueMode(window.localStorage.getItem(`wr:study-queue-mode:${accountId}`) === QUEUE_TYPES.lesson
@@ -131,9 +139,13 @@ export default function ExplorerTabs({
 
       const viewer = params.get("viewer");
       setInitialViewerMode(viewer === "detail" || viewer === "flash" ? viewer : null);
-      setQueueTagFilter(resolveStudyTagFilter(params, window.localStorage.getItem(queueTagFilterStorageKey)));
+      setQueueTagFilter(
+        arrivingWithSearch
+          ? "all"
+          : resolveStudyTagFilter(params, window.localStorage.getItem(queueTagFilterStorageKey)),
+      );
       const urlHideLocked = params.get("hideLocked");
-      if (urlHideLocked === "0") {
+      if (arrivingWithSearch || urlHideLocked === "0") {
         setReviewedVisible(true);
       } else if (urlHideLocked === "1") {
         setReviewedVisible(false);

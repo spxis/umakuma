@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import { useSearchCombobox } from "@/lib/useSearchCombobox";
 import GlobalSearchSuggestList from "./GlobalSearchSuggestList";
+import RecentSearches from "./RecentSearches";
 import SearchComboboxField, { SearchIcon } from "./SearchComboboxField";
 import { MODAL_LAYERS } from "./modalLayers";
 
@@ -111,9 +112,13 @@ export default function GlobalSearchBox({
             placeholder={SEARCH_PAGE_COPY.heading}
             inputRef={mobileInput}
           >
-            {cbx.panelVisible ? (
-              <div className="mt-2 overflow-hidden rounded-2xl border border-line bg-surface">
-                {suggestList(MOBILE_LISTBOX)}
+            {cbx.panelVisible || cbx.showRecent ? (
+              <div className="mt-2 overflow-hidden rounded-2xl border border-line bg-surface empty:hidden">
+                {cbx.panelVisible ? (
+                  suggestList(MOBILE_LISTBOX)
+                ) : (
+                  <RecentSearches currentQuery="" variant="panel" />
+                )}
               </div>
             ) : null}
           </SearchComboboxField>
@@ -138,11 +143,15 @@ export default function GlobalSearchBox({
             listboxId={DESKTOP_LISTBOX}
             placeholder={SEARCH_PAGE_COPY.heading}
           >
-            {cbx.panelVisible ? (
+            {cbx.panelVisible || cbx.showRecent ? (
               <div
-                className={`absolute left-0 top-[calc(100%+0.5rem)] sm:left-auto sm:right-0 ${MODAL_LAYERS.searchSuggest} w-104 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-line bg-surface shadow-lg`}
+                className={`absolute left-0 top-[calc(100%+0.5rem)] sm:left-auto sm:right-0 ${MODAL_LAYERS.searchSuggest} w-104 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
               >
-                {suggestList(DESKTOP_LISTBOX)}
+                {cbx.panelVisible ? (
+                  suggestList(DESKTOP_LISTBOX)
+                ) : (
+                  <RecentSearches currentQuery="" variant="panel" />
+                )}
               </div>
             ) : null}
           </SearchComboboxField>

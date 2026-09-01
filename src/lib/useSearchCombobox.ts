@@ -75,6 +75,12 @@ export function useSearchCombobox({
     if (canLoadMore) setPages((count) => count + 1);
   }
   const panelVisible = suggestOpen && isSuggestable(typed);
+  /*
+   * Nothing typed, but the box is open: the panel has the searches you already
+   * ran to offer. They were on the search page and not in the header, which
+   * made the same box behave differently in two places.
+   */
+  const showRecent = suggestOpen && !isSuggestable(typed);
   const optionCount = suggestions.hits.length > 0 ? suggestions.hits.length + 1 : 0;
   const activeOption = activeIndex >= optionCount ? -1 : activeIndex;
 
@@ -203,6 +209,7 @@ export function useSearchCombobox({
     displayValue,
     ghost,
     panelVisible,
+    showRecent,
     activeOption,
     hits: suggestions.hits,
     totalHits: suggestions.totalHits,

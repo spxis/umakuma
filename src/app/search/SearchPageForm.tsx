@@ -1,6 +1,7 @@
 "use client";
 
 import GlobalSearchSuggestList from "@/app/shared/GlobalSearchSuggestList";
+import RecentSearches from "@/app/shared/RecentSearches";
 import SearchComboboxField from "@/app/shared/SearchComboboxField";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import type { SearchSource } from "@/lib/globalSearch";
@@ -53,6 +54,14 @@ export default function SearchPageForm({
       listboxId={LISTBOX_ID}
       autoFocus={initialQuery.length === 0}
     >
+      {cbx.showRecent ? (
+        <div
+          className={`absolute inset-x-0 top-[calc(100%+0.5rem)] ${MODAL_LAYERS.searchSuggest} overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
+        >
+          <RecentSearches currentQuery="" variant="panel" />
+        </div>
+      ) : null}
+
       {cbx.panelVisible ? (
         <div
           className={`absolute inset-x-0 top-[calc(100%+0.5rem)] ${MODAL_LAYERS.searchSuggest} overflow-hidden rounded-2xl border border-line bg-surface shadow-lg`}

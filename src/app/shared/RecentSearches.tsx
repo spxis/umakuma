@@ -13,8 +13,8 @@ import {
   subscribeRecentSearches,
 } from "@/lib/recentSearches";
 
-import { SEARCH_PAGE_COPY } from "./searchCopy";
-import { SEARCH_LIST_CARD } from "./SearchHitList";
+import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
+import { SEARCH_LIST_CARD } from "@/app/search/SearchHitList";
 
 /**
  * The searches this browser has run, as the last rows of the results list.
@@ -35,7 +35,7 @@ export default function RecentSearches({
 }: {
   currentQuery: string;
   /** "rows" closes out the results list; "card" stands alone when there is none. */
-  variant?: "rows" | "card";
+  variant?: "rows" | "card" | "panel";
 }) {
   const history = useSyncExternalStore(
     subscribeRecentSearches,
@@ -92,7 +92,10 @@ export default function RecentSearches({
     </>
   );
 
-  return variant === "card" ? <ul className={SEARCH_LIST_CARD}>{rows}</ul> : rows;
+  if (variant === "card") return <ul className={SEARCH_LIST_CARD}>{rows}</ul>;
+  /* Inside the suggestion dropdown, which draws its own border and rounding. */
+  if (variant === "panel") return <ul className="divide-y divide-line/60">{rows}</ul>;
+  return rows;
 }
 
 function HistoryIcon() {

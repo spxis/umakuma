@@ -261,6 +261,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Midashi no Mihon", ja: "見出しの見本", reading: "みだしのみほん", gloss: "one heading for every page to go by" },
   { romaji: "Mukaeru Mune", ja: "迎える棟", reading: "むかえるむね", gloss: "the roof that takes you in" },
   { romaji: "Mekutta Meyasu", ja: "めくった目安", reading: "めくっためやす", gloss: "the guide turned face up, no longer folded away" },
+  { romaji: "Motomeru Mokuhyou", ja: "求める目標", reading: "もとめるもくひょう", gloss: "the mark you are aiming for" },
 ];
 
 /**
