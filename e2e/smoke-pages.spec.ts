@@ -1,5 +1,7 @@
 import { expect, test, type Browser } from "@playwright/test";
 
+import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
+
 type TabDef = {
   key: "study" | "level" | "jlpt";
   label: string;
@@ -825,14 +827,23 @@ test("saved lists page renders and is reachable from the nav", async ({ browser,
       return;
     }
 
-    await expect(page.getByRole("heading", { name: "Saved lists" })).toBeVisible();
+    /*
+     * From the copy module, not typed out here. The heading was "Saved lists"
+     * when this was written and is "Your lists" now, because Trouble and
+     * Favourites joined the page - and nothing noticed, because a smoke run is
+     * not part of `quality:check`. A stale assertion in a suite nobody runs on
+     * every commit is worse than no assertion: it reports a real regression and
+     * a rewording identically.
+     */
+    await expect(page.getByRole("heading", { name: STUDY_LIST_COPY.heading })).toBeVisible();
 
     /*
      * Either some cards or the empty state - never neither, which is exactly
-     * what a failed load looks like from outside.
+     * what a failed load looks like from outside. Trouble and Favourites are
+     * always rendered, so in practice the cards branch is the live one.
      */
     if ((await page.locator("ul li h2").count()) === 0) {
-      await expect(page.getByText("No saved lists yet", { exact: false })).toBeVisible();
+      await expect(page.getByText(STUDY_LIST_COPY.empty, { exact: false })).toBeVisible();
     }
 
     await expect(page.getByRole("link", { name: "Lists", exact: true }).first()).toBeVisible();
