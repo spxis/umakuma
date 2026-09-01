@@ -19,7 +19,7 @@ what has to be decided before it can start.
   Verify with `pnpm db:drift:check`.
 - Never take a destructive action against production. It is real, in daily use,
   and there is no backup routine — `pnpm db:backup` only covers the local
-  database.
+  database. Owning that gap is item 33, deferred until the features are done.
 
 ---
 
@@ -816,3 +816,44 @@ coordinates for anything but region centroids. Natural Earth publishes
 `populated_places` with exact points, so it is gettable - it would be another
 source in the map pipeline, and worth doing only if the smaller version proves
 popular.
+
+### 33 — Own the backups, on the Synology
+
+**Deferred until the feature work is done.** Nothing here is user-facing and
+nothing is on fire; it is insurance, and it should be bought once the building
+stops changing shape.
+
+The family's data exists in exactly one place, on an account we do not own, for
+a project with **no migration history** — the schema lives in
+`prisma/schema.prisma` and whatever was pushed by hand, so a lost database
+loses the record of its own shape as well as its contents. The standing rule
+above says there is no backup routine and `pnpm db:backup` only covers the
+local database. This is the item that ends that.
+
+**It is not a cost saving, and should not be sold as one.** Neon's history
+retention is point-in-time restore, not backups: six hours of changes on a
+105 MB database, reported as 0 GB in the console. Copying it to a NAS saves
+nothing, because it costs nothing. The 667 MB on the sumilabu project is live
+table data, which a copy elsewhere does not shrink either. The reason to do
+this is ownership.
+
+**The two cover different failures and neither replaces the other.** A bad
+UPDATE at 3pm noticed at 4pm is what Neon's window is for; a nightly dump
+would lose the day. Neon being unreachable, or the account going wrong, is
+what the dump is for, and Neon's window cannot help at all. So do not lower
+retention below six hours on the strength of having a NAS copy.
+
+**Shape:** a cron **on the Synology** running `pg_dump` against Neon —
+pull, not push. It costs no Vercel invocations, the connection string never
+leaves the house, and it keeps running when the app does not. Timestamped and
+compressed, pruned after N days. At roughly 105 MB compressing to about 20 MB,
+nightly is around 600 MB a month of egress against the 500 GB the plan
+includes.
+
+**Two things to get right.** Keep the schema in the dump, since with no
+migrations it is the only full record of what production actually looks like.
+And **test a restore once**, into a scratch Neon branch or a local Postgres —
+an untested backup is a hope rather than a backup.
+
+Deliberately absent from `featureTimeline.json`: it ships nothing a member
+sees, and the releases page is for members.
