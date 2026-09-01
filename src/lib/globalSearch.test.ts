@@ -174,13 +174,13 @@ describe("searchHitHref", () => {
 
   it("sends a WaniKani hit to the WaniKani explorer, already searched", () => {
     expect(searchHitHref(hit({ glyph: "鉛筆" }), user)).toBe(
-      `/users/${user}/library-explorer?findLevel=${encodeURIComponent("鉛筆")}`,
+      `/users/${user}/library-explorer?q=${encodeURIComponent("鉛筆")}`,
     );
   });
 
   it("sends a JLPT hit to the JLPT explorer", () => {
     expect(searchHitHref(hit({ source: SEARCH_SOURCES.jlpt, glyph: "水" }), user)).toBe(
-      `/users/${user}/jlpt-explorer?findJlpt=${encodeURIComponent("水")}`,
+      `/users/${user}/jlpt-explorer?q=${encodeURIComponent("水")}`,
     );
   });
 

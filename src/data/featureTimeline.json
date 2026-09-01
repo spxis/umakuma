@@ -1960,5 +1960,15 @@
     "version": "0.189.0",
     "summary": "Choosing items on the study and WaniKani explorers could only ever be undone. Both run a bulk mode with shift-click ranges, and the panel counted what you had gathered and offered Select Visible, Clear and Done - nothing to actually do with the set. Meanwhile the grade and JLPT explorers, which choose through a different mechanism, had two destinations from the start: save it as a list, print it as a practice sheet. Those destinations belong to the act of choosing rather than to either mechanism, so they now live on the shared bulk panel and both explorers gain them at once. Practice takes only the kanji: a study queue is radicals and vocabulary too, and a practice sheet is squares to write kanji in - the list keeps everything chosen, and the sheet is withheld entirely when nothing chosen can go on one. Two smaller things had to move first. The save control took a selection object from one of the two mechanisms, which is what had kept it off the other; it takes characters now. And three surfaces worked out which member's page they were on by slicing the pathname by hand, which is one copy away from drifting - that is a shared hook.",
     "releasedAt": "2026-09-01T07:07:26Z"
+  },
+  {
+    "id": "one-name-for-a-search",
+    "area": "platform",
+    "name": "One name for a search",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.190.0",
+    "summary": "Every explorer takes the same parameter for a search now. There were four names for the one idea - the grade explorer used q, and the WaniKani, JLPT and study explorers each had their own - and the shared search bar coped by writing all three legacy names on every submit and reading whichever one matched the surface it happened to be on. Nothing was broken by it. What it cost was guessability: the address for finding a character depended on which explorer you were standing in, so no link to a search could be worked out without reading the code first, and the search results had to hardcode a different query for each destination. It is q everywhere, which is what a reader expects and what one explorer already used. Links and bookmarks already sent to people keep working - the old three are still read - but nothing writes them any more, so they drain out of circulation instead of being carried forever. A test holds the line: no file may spell one of those parameters for itself again.",
+    "releasedAt": "2026-09-01T07:15:35Z"
   }
 ]

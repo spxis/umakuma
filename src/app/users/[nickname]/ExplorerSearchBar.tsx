@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { clearExplorerSearch, readExplorerSearch, writeExplorerSearch } from "@/lib/explorerSearchParam";
 import {
   EXPLORER_SEARCH_SCOPES,
   type ExplorerSearchBarScope,
@@ -68,15 +69,11 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
     }
 
     const readQueryFromUrl = () => {
-      const params = new URLSearchParams(window.location.search);
-      const next = (
-        scope === EXPLORER_SEARCH_SCOPES.jlpt
-          ? params.get("findJlpt")
-          : scope === EXPLORER_SEARCH_SCOPES.study
-            ? params.get("findStudy")
-            : params.get("findLevel")
-      )?.trim() ?? "";
-      setQuery(next);
+      /*
+       * One name, whatever surface this is on. It used to pick a different
+       * parameter per scope, which is what made a search link unguessable.
+       */
+      setQuery(readExplorerSearch(new URLSearchParams(window.location.search)));
     };
 
     readQueryFromUrl();
@@ -114,9 +111,7 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
     setSrStatus("Searching...");
 
     const params = new URLSearchParams(window.location.search);
-    params.set("findLevel", trimmed);
-    params.set("findJlpt", trimmed);
-    params.set("findStudy", trimmed);
+    writeExplorerSearch(params, trimmed);
 
     const next = `${window.location.pathname}?${params.toString()}#explorer`;
     window.history.pushState(null, "", next);
@@ -134,9 +129,7 @@ export default function ExplorerSearchBar({ scope = EXPLORER_SEARCH_SCOPES.level
     }
 
     const params = new URLSearchParams(window.location.search);
-    params.delete("findLevel");
-    params.delete("findJlpt");
-    params.delete("findStudy");
+    clearExplorerSearch(params);
     const next = `${window.location.pathname}?${params.toString()}#explorer`;
     window.history.pushState(null, "", next);
 

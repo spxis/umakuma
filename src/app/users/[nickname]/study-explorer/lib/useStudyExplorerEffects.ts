@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import { clearExplorerSearch } from "@/lib/explorerSearchParam";
 import type { QueueResponse, StudyCounts, StudyQueueMode, StudyQueueItem, StudySrsFilter, StudySrsStageFilter, StudyTypeFilter } from "./studyExplorerTypes";
 import { STUDY_QUEUE_TYPES, STUDY_SRS_FILTERS, STUDY_TYPE_FILTERS } from "./studyExplorerDomain";
 import { sameAssignmentList, sameCounts, sameLevelCounts, sameTypeCounts, sameTypeCountsByLevel } from "./studyExplorerEffectsComparators";
@@ -302,9 +303,7 @@ export function useStudyExplorerEffects({
     }
 
     const params = new URLSearchParams(window.location.search);
-    params.delete("findStudy");
-    params.delete("findLevel");
-    params.delete("findJlpt");
+    clearExplorerSearch(params);
     params.delete("level");
     params.delete("type");
     params.delete("srs");

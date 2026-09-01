@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { readExplorerSearch } from "@/lib/explorerSearchParam";
 
 import type {
   StudyCounts,
@@ -280,7 +281,7 @@ export function useStudyExplorerHydrationEffects({
 
   useEffect(() => {
     const runFromUrl = () => {
-      const fromUrl = new URLSearchParams(window.location.search).get("findStudy")?.trim() ?? "";
+      const fromUrl = readExplorerSearch(new URLSearchParams(window.location.search));
       if (fromUrl === lastHandledStudyQueryRef.current) return;
       lastHandledStudyQueryRef.current = fromUrl;
       setSearchQuery(fromUrl);

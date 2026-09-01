@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { readExplorerSearch } from "@/lib/explorerSearchParam";
 import useSWR from "swr";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import jlptReadings from "@/data/jlptReadings.json";
@@ -338,8 +339,7 @@ export default function JlptExplorer({
     }
 
     const runFromUrl = () => {
-      const fromUrl = new URLSearchParams(window.location.search).get("findJlpt");
-      const trimmed = fromUrl?.trim() ?? "";
+      const trimmed = readExplorerSearch(new URLSearchParams(window.location.search));
 
       if (!trimmed) {
         setQuery("");

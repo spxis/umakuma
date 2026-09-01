@@ -1,4 +1,5 @@
 import { useEffect, useRef, type Dispatch, type MutableRefObject, type SetStateAction } from "react";
+import { readExplorerSearch } from "@/lib/explorerSearchParam";
 
 import type { LevelItem, SrsFilter } from "../../explorerTypes";
 import {
@@ -186,8 +187,7 @@ export function useLevelExplorerSearchEvents({
     }
 
     const runFromUrl = () => {
-      const fromUrl = new URLSearchParams(window.location.search).get("findLevel");
-      const trimmed = fromUrl?.trim() ?? "";
+      const trimmed = readExplorerSearch(new URLSearchParams(window.location.search));
       if (!trimmed) {
         setSearchMatchedSubjectIds(null);
         setSearchAvailableLevels(null);

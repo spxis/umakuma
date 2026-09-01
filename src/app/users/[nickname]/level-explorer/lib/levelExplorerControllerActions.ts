@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
+import { clearExplorerSearch } from "@/lib/explorerSearchParam";
 
 import type { LevelItem, Snapshot, SrsFilter } from "../../explorerTypes";
 import type { JlptFilter, ReviewTimingFilter, TypeFilter } from "./levelExplorerState";
@@ -82,8 +83,7 @@ export function buildLevelExplorerActions({
 
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      params.delete("findLevel");
-      params.delete("findJlpt");
+      clearExplorerSearch(params);
       const next = `${window.location.pathname}?${params.toString()}#explorer`;
       window.history.pushState(null, "", next);
       window.dispatchEvent(

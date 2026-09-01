@@ -8,6 +8,7 @@
  */
 
 import { SUBJECT_TYPES } from "./domainConstants";
+import { EXPLORER_SEARCH_PARAM } from "./explorerSearchParam";
 
 export const SEARCH_SOURCES = {
   wanikani: "wanikani",
@@ -307,7 +308,7 @@ export function searchHitHref(hit: SearchHit, username: string | null): string |
   const glyph = encodeURIComponent(hit.glyph);
 
   if (hit.source === SEARCH_SOURCES.jlpt) {
-    return `${base}/jlpt-explorer?findJlpt=${glyph}`;
+    return `${base}/jlpt-explorer?${EXPLORER_SEARCH_PARAM}=${glyph}`;
   }
 
   if (hit.source === SEARCH_SOURCES.grades) {
@@ -315,5 +316,5 @@ export function searchHitHref(hit: SearchHit, username: string | null): string |
     return `${base}/grades?grade=${grade}&q=${glyph}`;
   }
 
-  return `${base}/library-explorer?findLevel=${glyph}`;
+  return `${base}/library-explorer?${EXPLORER_SEARCH_PARAM}=${glyph}`;
 }

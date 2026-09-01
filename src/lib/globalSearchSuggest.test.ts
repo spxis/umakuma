@@ -159,12 +159,12 @@ describe("ghostFor", () => {
 
 describe("suggestionHref", () => {
   it("sends a signed-in member into their own explorer", () => {
-    expect(suggestionHref(hit(), "kuma")).toBe("/users/kuma/library-explorer?findLevel=%E6%97%A5");
+    expect(suggestionHref(hit(), "kuma")).toBe("/users/kuma/library-explorer?q=%E6%97%A5");
   });
 
   it("routes a JLPT hit to the JLPT explorer", () => {
     const jlpt = hit({ source: SEARCH_SOURCES.jlpt, key: "jlpt:日" });
-    expect(suggestionHref(jlpt, "kuma")).toBe("/users/kuma/jlpt-explorer?findJlpt=%E6%97%A5");
+    expect(suggestionHref(jlpt, "kuma")).toBe("/users/kuma/jlpt-explorer?q=%E6%97%A5");
   });
 
   it("opens the public kanji page for an anonymous visitor", () => {

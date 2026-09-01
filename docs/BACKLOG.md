@@ -54,7 +54,7 @@ through it meets a finished flow.
 | 20 | ~~Updates page: months, names, reachability~~ ✅ v0.109.0 | — |
 | 21 | ~~Map regions beyond Japan~~ ✅ v0.121.0-v0.123.0 | — |
 | 22 | ~~Saved practice lists~~ ✅ v0.133.0, v0.182.0 | 23 |
-| 23 | Selection as a shared surface control — study explorer left | — |
+| 23 | ~~Selection as a shared surface control~~ ✅ v0.132.0-v0.189.0 | — |
 | 24 | Print mode | — |
 | 25 | ~~Practice sheet controls~~ ✅ v0.115.0, v0.116.0, v0.118.0 | — |
 | 26 | ~~JLPT old numbering~~ ✅ v0.119.0 | — |
@@ -66,10 +66,11 @@ through it meets a finished flow.
 | 29 | ~~Real US and Canada map geometry~~ ✅ v0.123.0 | — |
 | 33 | Example sentences from Tatoeba | — |
 | 34 | Own the backups, on the Synology | features done |
-| 35 | RESTful explorer paths | John to decide |
+| 35 | RESTful explorer paths — search unified v0.190.0, filter state left | — |
 | 36 | Controls nested inside controls (a11y) | — |
-| 37 | Colour contrast below the floor | John to decide |
-| 38 | Security leftovers before the door opens | 6 |
+| 37 | ~~Colour contrast below the floor~~ ✅ v0.187.0 | — |
+| 38 | Security leftovers before the door opens — slugs done v0.188.0 | 6 |
+| 39 | The library explorer's All-levels tab does nothing | — |
 
 Releases 3, 4 and 5 are built while the door is still shut; release 6 opens it.
 Release 6 should not ship before 7 to 9, or a member without WaniKani arrives to
@@ -293,7 +294,7 @@ every other game, with the sentinel kept readable for historical runs.
 Finish the 29 Aug sweep: `SurfaceCard` has 4 adopters while ~19 files hand-roll
 the same panel; `LoadingState` and `PillChip` have 2 each.
 
-### 19 — Your Lists cards drifted from the shared card
+### 19 — Your Lists cards drifted from the shared card ✅ shipped
 
 Reported by John, 30 Aug. The cards in `StudyTagListsModal` are not the shared
 explorer card: the level sits at the bottom next to the type pill instead of the
@@ -311,6 +312,12 @@ overflow, not the top right.
 
 Grouped with 17: both are "one component, many hand-rolled copies", and the
 lists should land on the shared card in the same pass.
+
+**Done, and the note was left stale for a while.** `StudyTagListsBody` renders
+through `SubjectCards` / `SubjectRows` like every other list; the level sits
+top right where the explorers put it, and the remove control moved to the
+bottom-right corner rather than taking the level's. The reasoning is written
+into `SubjectCards.tsx` beside the layout.
 
 ### 21 — Stroke order from KanjiVG (researched, needs a licence call)
 
@@ -352,7 +359,7 @@ shows. No new table needed at first: it is static reference data like the maps
 and the school grades, and it can move into Postgres later if it ever needs
 querying rather than reading.
 
-### 22 — The smoke suite tests almost nothing
+### 22 — The smoke suite tests almost nothing ✅ shipped
 
 Found 30 Aug while checking that a night of releases had not broken anything.
 
@@ -381,6 +388,22 @@ wants someone who knows what each was for.
 Note that CI does not run this suite — it runs `quality:check`, `security:check`
 and `build` — so nothing in the pipeline changes. `pnpm test:smoke:local` now
 tells the truth, and the truth is that it needs work.
+
+**Fixed. 38 passing, 0 failing.** The diagnosis above was half right. The
+assertions were stale, but the reason nothing ran signed in was a bug rather
+than a gap: `assertPageLoads` and search's `openPage` both built their page
+with `browser.newPage()`, which makes its own context and ignores the
+project's `storageState` — so the cookie `auth.setup` mints was thrown away on
+every call. Anonymous lands on `/join?access=denied`; with the session, the
+real page.
+
+The rest was a UI that had moved: filter chips became tabs in named tablists,
+the queue summary changed shape, the three explorers became routes rather than
+tabs, `studyMode` split in two, and "Toggle favorite" became "Toggle favourite"
+with the spelling rule. One test was deleted rather than repaired — the Hide
+Locked and Recent Only toggles do not exist any more, so it had nothing left to
+protect. Two failures were real bugs, written up as item 39 and fixed in
+v0.186.0 respectively.
 
 ### 20 — Navigation regroup and a Settings page (design open)
 
@@ -709,13 +732,24 @@ explorer, the WaniKani level explorer, study history and the tag lists — in
 both densities, with shift-click range selection (`selectionRange`) and the
 shared `KanjiSelectionBar` offering save-as-list and practise.
 
-**Still to wire**, and the reason each is not done yet:
+**Done in v0.189.0**, and the shape turned out different from the plan. The
+study and WaniKani explorers were never going to take `useSubjectSelection`:
+they run their own bulk mode, with subject ids and operations the other two
+have no use for. What was actually missing was the *destinations* - the panel
+counted a selection and offered nothing to do with it. Those belong to the act
+of choosing rather than to either mechanism, so they moved onto the shared bulk
+panel and both explorers gained them at once.
 
-- The study explorer. It lists radicals and vocabulary as well as kanji, so a
-  practice destination has to filter to kanji before it is offered.
-- The guard test in `subjectListDensity.test.ts` should require the selection
-  control the way it requires the density toggle — add it once the study
-  explorer is wired, or it is either red or toothless.
+Practice takes only the kanji, which was the real content of the note below: a
+study queue holds radicals and vocabulary too, and a sheet is squares to write
+kanji in. The list keeps everything; the sheet is withheld when nothing chosen
+can go on one.
+
+`SaveSelectionAsList` had to stop taking a `SubjectSelection` first - that
+coupling is exactly what had kept it off the other mechanism. And
+`StudyExplorerPanel` was sitting on the 500-line gate with nowhere to put
+anything, which is why this stalled rather than any difficulty in the work; the
+grouping filters came out unchanged.
 
 Original note:
 
@@ -933,8 +967,30 @@ one consistent set of query params (`q`, `level`) across all three. Path
 segments read better and cache better; query params are a smaller change and
 survive a filter that has no natural place in a path.
 
-Not started. Admin kanji linking (below) wants this settled first, because the
-link it should build depends on the answer.
+**Half of it turned out to be done already, and half is now done.**
+
+The *paths* were never the problem: `?tab=study`, `?tab=level` and `?tab=jlpt`
+already redirect to `/study`, `/library-explorer` and `/jlpt-explorer`. Each
+explorer has had a route of its own for a while.
+
+The *search* was, and that is the half John actually asked about - "if all our
+explorers behave the same for search then our search engine and linking will be
+easy". There were four names for one idea: `q` on the grades explorer, and
+`findLevel`, `findJlpt`, `findStudy` on the other three. The shared search bar
+coped by writing all three on every submit and reading whichever matched the
+surface it was on. It is `q` everywhere as of v0.190.0; the old three are still
+read so existing links work, nothing writes them, and a test stops any file
+spelling them again.
+
+**Still open: filter state is not addressable.** Choosing N5 on the JLPT
+explorer narrows the list and leaves the address untouched, so there is no link
+that opens "N5" for somebody else. That is the remaining piece, and it is the
+one that decides the original question - whether a level belongs in the path
+(`/jlpt-explorer/n5`) or in the query (`?jlpt=n5`). Worth deciding when
+somebody wants to send that link, not before.
+
+Admin kanji linking wants this settled first, because the link it should build
+depends on the answer.
 
 ### 36 — Controls nested inside controls (accessibility)
 
@@ -997,3 +1053,26 @@ belong to release 6 rather than to a date.
   call.
 - **"How did you hear about us"** — asked for during onboarding design, not
   built.
+
+### 39 — The library explorer's All-levels tab does nothing
+
+Found while repairing the smoke suite (item 22), not by a report.
+
+On `/users/<who>/library-explorer` the level row offers `All (2,922)`.
+Clicking it does nothing that lasts: the address keeps `levels=17`, the tab for
+that level stays selected, and the list goes on showing the member's own level.
+There is no way to browse every level from the UI at all, and the count on the
+tab describes a view you cannot reach.
+
+The explorer opens on the member's level deliberately, which is right. What is
+wrong is offering a control that cannot override it.
+
+**Where it shows up in the tests.** The smoke check comparing the all-levels
+count against the filtered total could not be made to pass honestly, so it now
+asserts the containment that holds either way - the global count bounds the
+filtered list - and says why in a comment. When this is fixed, that test can go
+back to asserting equality after clicking All.
+
+Not investigated further than reproducing it: the click updates the URL for a
+moment and something puts `levels` straight back, so the suspect is whatever
+reapplies the default level on state change rather than the tab itself.

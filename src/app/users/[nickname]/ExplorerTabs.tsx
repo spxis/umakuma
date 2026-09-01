@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { readExplorerSearch } from "@/lib/explorerSearchParam";
 import JlptExplorer from "./jlpt-explorer/components/JlptExplorer";
 import LevelExplorer from "./level-explorer/components/LevelExplorer";
 import StudyExplorer from "./study-explorer/components/StudyExplorer";
@@ -289,7 +290,7 @@ export default function ExplorerTabs({
       return;
     }
     const params = new URLSearchParams(window.location.search);
-    const query = (params.get("findLevel") ?? params.get("findJlpt") ?? params.get("findStudy") ?? "").trim();
+    const query = readExplorerSearch(params);
     if (!query) {
       return;
     }
