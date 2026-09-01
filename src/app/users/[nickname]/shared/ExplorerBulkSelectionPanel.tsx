@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import SaveSelectionAsList from "@/app/shared/SaveSelectionAsList";
+import SaveSelectionToList from "@/app/shared/SaveSelectionToList";
 import { encodeSelection, SUBJECT_SELECTION_COPY } from "@/app/shared/subjectSelection";
 
 type BulkSelectionRow = {
@@ -93,7 +93,7 @@ export default function ExplorerBulkSelectionPanel({
 
         <div className="flex flex-wrap items-center gap-2 lg:justify-end">
           {hasSelection && destinations?.accountId ? (
-            <SaveSelectionAsList
+            <SaveSelectionToList
               chosen={destinations.characters}
               accountId={destinations.accountId}
               onSaved={destinations.onSaved}

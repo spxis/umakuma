@@ -257,6 +257,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Fuda ni Fude", ja: "札に筆", reading: "ふだにふで", gloss: "a brush on the label, not a serial number" },
   { romaji: "Heikou na Hedate", ja: "平行な隔て", reading: "へいこうなへだて", gloss: "walls set parallel, every room the same shape" },
   { romaji: "Hodoita Hokorobi", ja: "ほどいた綻び", reading: "ほどいたほころび", gloss: "the seams let out, so nothing is cut off" },
+  { romaji: "Matomeru Makura", ja: "まとめる枕", reading: "まとめるまくら", gloss: "the pillow that gathers it all up" },
 ];
 
 /**

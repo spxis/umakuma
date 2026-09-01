@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 
+import SelectedItemsPanel from "./SelectedItemsPanel";
 import { SUBJECT_SELECTION_COPY, SUBJECT_SELECTION_LIMIT } from "./subjectSelection";
 import type { SubjectSelection } from "./useSubjectSelection";
 
@@ -57,7 +58,7 @@ export function SubjectSelectionBar({
   if (!selection.choosing) return null;
 
   return (
-    <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border border-accent/40 bg-accent/5 px-3 py-2">
+    <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-2xl border border-accent/40 bg-accent/5 px-3 py-2">
       <span className="text-xs font-black text-foreground/80">
         {selection.count > 0
           ? `${selection.count} ${SUBJECT_SELECTION_COPY.chosenSuffix}`
@@ -79,6 +80,13 @@ export function SubjectSelectionBar({
           {SUBJECT_SELECTION_COPY.rangeHint}
         </span>
       ) : null}
+
+      {/*
+        * What was chosen, not just how many. A count alone cannot tell you
+        * whether the sweep took one too many, and clearing everything was the
+        * only way to correct it.
+        */}
+      <SelectedItemsPanel chosen={selection.chosen} onRemove={selection.toggle} />
 
       <span className="ml-auto flex flex-wrap items-center gap-2">
         <button

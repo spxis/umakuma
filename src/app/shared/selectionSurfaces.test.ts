@@ -27,7 +27,7 @@ describe("choosing, across the surfaces that offer it", () => {
     const source = read(path);
     expect(source).toContain("KanjiSelectionBar");
     // The destinations live in the bar now; neither surface rebuilds them.
-    expect(source).not.toContain("SaveSelectionAsList");
+    expect(source).not.toContain("SaveSelectionToList");
     expect(source).not.toContain("encodeSelection");
   });
 
@@ -88,7 +88,7 @@ const LEVEL_GRID = "src/app/users/[nickname]/level-explorer/components/LevelExpl
 describe("what a bulk selection can become", () => {
   it("offers both destinations from the shared panel", () => {
     const source = read(BULK_PANEL);
-    expect(source).toContain("SaveSelectionAsList");
+    expect(source).toContain("SaveSelectionToList");
     expect(source).toContain("SUBJECT_SELECTION_COPY.practise");
   });
 
@@ -124,7 +124,7 @@ describe("what a bulk selection can become", () => {
    * `SubjectSelection` is what kept it off the bulk panel for so long.
    */
   it("keeps saving usable by both ways of choosing", () => {
-    const source = read("src/app/shared/SaveSelectionAsList.tsx");
+    const source = read("src/app/shared/SaveSelectionToList.tsx");
     expect(source).toContain("chosen: Iterable<string>");
     /* On the import, not the word - the comment above the props explains why. */
     expect(source).not.toMatch(/import .*SubjectSelection.* from/);

@@ -30,6 +30,12 @@ export const SUBJECT_SELECTION_COPY = {
   /* Said where it is useful, not in a help page nobody opens. */
   rangeHint: "Shift-click a second one to take everything between.",
   limitReached: "That is as many as one selection holds.",
+  remove: "Remove",
+  showFewer: "Show fewer",
+  /* Saving: to a list that exists, or to one that does not yet. */
+  saveTo: "Save to list",
+  newList: "New list…",
+  addedTo: "Added to",
 } as const;
 
 /**

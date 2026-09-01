@@ -19,6 +19,8 @@ export const STUDY_LIST_COPY = {
   saving: "Saving",
   saved: "Saved",
   saveFailed: "Could not save that list.",
+  /* Said on a list that already holds everything chosen, rather than hiding it. */
+  alreadyThere: "Everything chosen is already in this list.",
   nameLabel: "List name",
   namePlaceholder: "Week 1",
 

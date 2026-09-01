@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import SaveSelectionAsList from "./SaveSelectionAsList";
+import SaveSelectionToList from "./SaveSelectionToList";
 import { SubjectSelectionBar } from "./SubjectSelectionControls";
 import { encodeSelection, SUBJECT_SELECTION_COPY } from "./subjectSelection";
 import type { SubjectSelection } from "./useSubjectSelection";
@@ -41,7 +41,7 @@ export default function KanjiSelectionBar({
   return (
     <SubjectSelectionBar selection={selection} visibleKeys={visibleKeys}>
       {selection.count > 0 && accountId ? (
-        <SaveSelectionAsList chosen={selection.chosen} accountId={accountId} onSaved={selection.cancel} />
+        <SaveSelectionToList chosen={selection.chosen} accountId={accountId} onSaved={selection.cancel} />
       ) : null}
       {selection.count > 0 && practicePath ? (
         <Link
