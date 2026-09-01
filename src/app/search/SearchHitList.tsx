@@ -49,6 +49,17 @@ const LOAD_LEAD_ROWS = 3;
 export const SEARCH_LIST_CARD =
   "overflow-hidden rounded-2xl border border-line bg-surface divide-y divide-line/60";
 
+/**
+ * How tall the results may grow before they scroll inside the card.
+ *
+ * A hundred rows made the page taller than the screen many times over: the
+ * navigation scrolled away, the footer and the remembered searches sat below a
+ * kilometre of results, and a short answer left a blank field where the list
+ * used to be. The rows scroll within the card instead, so everything around
+ * them - the box, the source tabs, the recent searches - stays where it was.
+ */
+const RESULTS_MAX_HEIGHT = "max-h-[52vh]";
+
 /** Source accents, so a row's origin reads before the label does. */
 export const SOURCE_TONES: Record<SearchSource, string> = {
   wanikani: "border-sky-300 bg-sky-50 text-sky-700",
@@ -83,6 +94,7 @@ export default function SearchHitList({
   const [loading, setLoading] = useState(false);
   const inFlight = useRef(false);
   const sentinel = useRef<HTMLLIElement>(null);
+  const scroller = useRef<HTMLUListElement>(null);
 
   const rows = appendHits(hits, loaded.key === windowKey ? loaded.extra : []);
   const hasMore = rows.length < totalHits;
@@ -118,11 +130,12 @@ export default function SearchHitList({
   useEffect(() => {
     const node = sentinel.current;
     if (!node || !hasMore) return;
+    /* The rows scroll inside the card, so the card is what the sentinel enters. */
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) void loadMore();
       },
-      { rootMargin: "300px" },
+      { root: scroller.current, rootMargin: "300px" },
     );
     observer.observe(node);
     return () => observer.disconnect();
@@ -161,33 +174,44 @@ export default function SearchHitList({
   }
 
   return (
-    <ul className={SEARCH_LIST_CARD} onKeyDown={onKeyDown}>
-      {rows.map((hit, index) => (
-        <li key={hit.key}>
-          <HitRow hit={hit} index={index} href={searchHitHref(hit, viewerUsername)} />
+    <div className="overflow-hidden rounded-2xl border border-line bg-surface">
+      <ul
+        ref={scroller}
+        className={`${RESULTS_MAX_HEIGHT} divide-y divide-line/60 overflow-y-auto overscroll-contain`}
+        onKeyDown={onKeyDown}
+      >
+        {rows.map((hit, index) => (
+          <li key={hit.key}>
+            <HitRow hit={hit} index={index} href={searchHitHref(hit, viewerUsername)} />
+          </li>
+        ))}
+
+        {/* The end of the results, inside the list, because that is what it ends. */}
+        <li ref={sentinel} className="px-4 py-3 text-center">
+          {hasMore ? (
+            <button
+              type="button"
+              onClick={() => void loadMore()}
+              disabled={loading}
+              className="inline-flex h-9 items-center rounded-full border border-line bg-surface px-4 text-xs font-bold text-foreground/75 transition hover:bg-surface-muted disabled:opacity-60"
+            >
+              {loading ? SEARCH_PAGE_COPY.loadingMore : SEARCH_PAGE_COPY.loadMore}
+            </button>
+          ) : (
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/40">
+              {SEARCH_PAGE_COPY.endOfResults}
+            </p>
+          )}
         </li>
-      ))}
+      </ul>
 
-      {/* The end of the results, inside the list, because that is what it ends. */}
-      <li ref={sentinel} className="px-4 py-3 text-center">
-        {hasMore ? (
-          <button
-            type="button"
-            onClick={() => void loadMore()}
-            disabled={loading}
-            className="inline-flex h-9 items-center rounded-full border border-line bg-surface px-4 text-xs font-bold text-foreground/75 transition hover:bg-surface-muted disabled:opacity-60"
-          >
-            {loading ? SEARCH_PAGE_COPY.loadingMore : SEARCH_PAGE_COPY.loadMore}
-          </button>
-        ) : (
-          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/40">
-            {SEARCH_PAGE_COPY.endOfResults}
-          </p>
-        )}
-      </li>
-
-      {footer}
-    </ul>
+      {/*
+        * Outside the scrolling rows on purpose: what you searched before is a
+        * way back, and a way back you have to scroll a hundred results to
+        * reach is not one.
+        */}
+      {footer ? <ul className="divide-y divide-line/60 border-t border-line">{footer}</ul> : null}
+    </div>
   );
 }
 

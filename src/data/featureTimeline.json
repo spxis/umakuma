@@ -1900,5 +1900,15 @@
     "version": "0.183.0",
     "releasedAt": "2026-09-01T05:12:17Z",
     "summary": "Shipping KANJIDIC2 gave the kanji page 10,384 characters but left search reading the same three catalogues, so 渕 and 煕 - both inside the 1,500 most frequent characters in Japanese - still returned nothing at all. The dictionary is now a fourth source, and it fills gaps rather than adding a fourth copy of every common character: a query for 水 already answers three times over, so the dictionary answers only where no catalogue does, and asking for the dictionary tab on its own is the exception that shows everything it holds. A tie between a catalogue and the dictionary goes to the catalogue, because alphabetical keys would otherwise push a reference row above the row carrying a member's own review state, and a dictionary hit links to the public kanji page since no explorer holds a character nobody teaches."
+  },
+  {
+    "id": "results-that-stay-on-the-screen",
+    "area": "platform",
+    "name": "Results that stay on the screen",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.184.0",
+    "releasedAt": "2026-09-01T05:36:12Z",
+    "summary": "A hundred results made the search page many screens tall, so scrolling through them carried the navigation, the search box and the source tabs off the top, left the remembered searches below a kilometre of rows, and ended a short answer in a blank field where the list used to be. The rows now scroll inside the card at a height the screen sets, so everything around them stays put: the box, the tabs and the counts hold their place while the results move under them. The recent searches sit outside that scroll rather than at the end of it - a way back you have to scroll a hundred results to reach is not a way back - and the paging observer watches the card instead of the window, so reaching the end of the rows still loads the next stretch."
   }
 ]
