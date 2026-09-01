@@ -1800,5 +1800,15 @@
     "version": "0.173.0",
     "releasedAt": "2026-09-01T11:00:00Z",
     "summary": "Trouble and Favourites arrived on the lists page in the last release and sat in the same grid as the saved lists, which quietly misrepresented both. They are permanent - they fill themselves as a member tags while studying, and there is nothing to delete because untagging the last item empties a list rather than removing it - while a saved list is made and thrown away at will. Run together, the grid invited a member to look for a delete on a card that does not have one. Each kind now has its own section under a heading that says what it is: Always here, which cannot be deleted, and Saved by you, which can. The card markup was extracted rather than duplicated per section, so both kinds still render through one component. The saved section says only what the page can actually do today - renaming a list is not built yet, and the copy does not pretend otherwise."
+  },
+  {
+    "id": "study-polling-slowed",
+    "area": "platform",
+    "name": "Let the database sleep",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.174.0",
+    "releasedAt": "2026-09-01T12:00:00Z",
+    "summary": "The study counts and the study queue each re-asked the server every thirty seconds, which is far more often than either can change: review counts move on WaniKani SRS schedule, measured in hours, and the queue is mutated locally as a member answers rather than discovered by polling. The poll was never the mechanism, only a safety net for a session left open while something changed elsewhere - and it was an expensive one. A single open tab was 120 serverless invocations an hour and roughly 240 database queries, since every request checks access and then reads the account again; an evening across the family ran to thousands of both while discovering nothing. The part that actually shows up on the bill is Neon: its compute suspends after five minutes idle and is charged for the time it is awake, so a thirty-second poll meant the database never slept for as long as anybody had the study page open. Both surfaces now poll on one shared interval of five minutes, set just past that suspend threshold on purpose, so a closed laptop lets the database go to sleep. Revalidate-on-focus stays on, so returning to the tab still refreshes at once and the slower poll is never something a member waits on. A test pins the interval against the suspend window and fails if either surface goes back to a hand-typed number."
   }
 ]

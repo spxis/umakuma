@@ -1,4 +1,5 @@
 "use client";
+import { STUDY_POLL_INTERVAL_MS } from "@/lib/pollIntervals";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import useSWR from "swr";
 import StudyExplorerModal from "./StudyExplorerModal";
@@ -169,7 +170,7 @@ export default function StudyExplorer({
     {
       fallbackData: cachedQueueData,
       keepPreviousData: true,
-      refreshInterval: isModalOpen ? 0 : 30_000,
+      refreshInterval: isModalOpen ? 0 : STUDY_POLL_INTERVAL_MS,
       revalidateOnFocus: !isModalOpen,
     },
   );

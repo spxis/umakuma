@@ -1,5 +1,6 @@
 "use client";
 
+import { STUDY_POLL_INTERVAL_MS } from "@/lib/pollIntervals";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
@@ -139,7 +140,7 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     },
     {
       revalidateOnFocus: true,
-      refreshInterval: 30_000,
+      refreshInterval: STUDY_POLL_INTERVAL_MS,
       onSuccess: (nextCounts) => {
         setScopedStudyCounts((prev) => {
           if (
