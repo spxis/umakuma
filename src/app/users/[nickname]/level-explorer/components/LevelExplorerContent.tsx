@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { formatNumber } from "../lib/levelExplorerDisplay";
 import { useLevelExplorerResetSelection } from "../lib/useLevelExplorerResetSelection";
 import { useLevelExplorerKeyboardNav } from "../lib/useLevelExplorerKeyboardNav";
 import { useLevelExplorerAutoLoadMore } from "../lib/useLevelExplorerAutoLoadMore";
@@ -182,15 +181,11 @@ export default function LevelExplorerContent({
           <ExplorerSplitLoadingShimmer label="Loading level data..." cardCount={8} />
         </div>
       ) : null}
-      {searchMatchedSubjectIds ? (
-        <p className="px-5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
-          Showing {formatNumber(searchMatchedSubjectIds.size)} search result{searchMatchedSubjectIds.size === 1 ? "" : "s"}
-        </p>
-      ) : null}
       {error ? <p className="px-5 py-4 text-sm text-red-700">{error}</p> : null}
       <div className="p-5">
         <LevelExplorerItemsGrid
           accountId={accountId}
+          searchMatchedSubjectIds={searchMatchedSubjectIds}
           filteredItems={filteredItems}
           visibleItems={visibleItems}
           selectedItem={selectedItem}

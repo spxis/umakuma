@@ -2190,5 +2190,15 @@
     "version": "0.212.0",
     "releasedAt": "2026-09-01T14:20:41Z",
     "summary": "Six member addresses were not pages. Study, the WaniKani and JLPT explorers, Read, Stats and News were rewrites onto one component - the address bar said one thing and the server was handed the same file with a dashboard parameter, so the query string had never gone away, it had only stopped being visible. That is why those six drifted into six different layouts without anybody editing six files, and it had a standing cost: the shared file loaded every level snapshot on the account for all of them, so opening Read to read a table of yen fetched seventeen levels of WaniKani subjects it would never show. The three explorers were a second layer of the same thing, all three built at once with two hidden by stylesheet. Each of the six is a real route now and loads only what it shows. Read wants an account id. News wants the member's level. Only the JLPT explorer pulls the JLPT table and the member's kanji index, which used to be decided by a query parameter and is now decided by which page you asked for. The shared work is two loaders rather than one long file, the tab-switching component is gone because routing does that, and there are no rewrites left at all. A test holds the line, because a rewrite is the easy way to add an address and it is the wrong one: it buys a URL and skips the page."
+  },
+  {
+    "id": "one-count-not-two",
+    "area": "study",
+    "name": "One count, not two",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.213.0",
+    "releasedAt": "2026-09-01T14:30:41Z",
+    "summary": "Searching the WaniKani explorer printed the answer twice. A line above the results said Showing 5 search results and the line on the toolbar said Showing 5 of 5 items - the same number, two sentences, neither of them wrong, and no way to tell whether they were counting the same thing or two different things that happened to agree. There is one count now, and a search changes what it says it is counting rather than adding a second opinion beside it: forty of sixty-nine items when you are browsing, five of five search results when you are searching."
   }
 ]

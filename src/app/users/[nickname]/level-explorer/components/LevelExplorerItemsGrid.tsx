@@ -28,6 +28,7 @@ import { noTranslateClass } from "@/app/shared/japaneseText";
 
 export default function LevelExplorerItemsGrid({
   accountId,
+  searchMatchedSubjectIds,
   filteredItems,
   visibleItems,
   selectedItem,
@@ -101,6 +102,7 @@ export default function LevelExplorerItemsGrid({
       <LevelExplorerGridToolbar
         visibleCount={visibleItems.length}
         totalCount={filteredItems.length}
+        searching={searchMatchedSubjectIds !== null}
         showEnglish={showEnglish}
         canToggleEnglish={canToggleEnglish}
         recentOnly={recentOnly}

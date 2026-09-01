@@ -3,6 +3,8 @@ import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
 
 export type LevelExplorerItemsGridProps = {
   accountId: string;
+  /** Non-null while a search is narrowing the list, so the count can say so. */
+  searchMatchedSubjectIds: Set<number> | null;
   filteredItems: LevelItem[];
   visibleItems: LevelItem[];
   selectedItem: LevelItem | null;
