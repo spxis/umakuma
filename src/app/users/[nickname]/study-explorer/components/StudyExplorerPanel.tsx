@@ -356,7 +356,15 @@ export default function StudyExplorerPanel({
           {filteredItems.length > 0 ? (
             <>
             {viewMode === SUBJECT_VIEW_MODES.list ? (
-              <StudyExplorerRows items={filteredItems} isUnauthorized={isUnauthorized} onSelectSubject={onSelectSubject} onToggleStudyTag={onToggleStudyTag} />
+              <StudyExplorerRows
+                items={filteredItems}
+                isUnauthorized={isUnauthorized}
+                onSelectSubject={onSelectSubject}
+                onToggleStudyTag={onToggleStudyTag}
+                bulkModeEnabled={bulkModeEnabled}
+                selectedSubjectIds={selectedSubjectIds}
+                onApplyBulkSelection={applyBulkSelection}
+              />
             ) : (
             <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))] lg:grid-cols-4">
               {filteredItems.map((item, index) => {

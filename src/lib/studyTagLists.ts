@@ -16,6 +16,15 @@ export type StudyTagListPayload = {
   accountId: string;
   /** Which list opens first. Both are always reachable from the panel. */
   tag?: StudyTag;
+  /**
+   * A saved list instead of the two tagged ones.
+   *
+   * A list card offered rename, edit, delete and practise, so the one thing a
+   * member could not do with a list they had built was read it. It is the same
+   * panel over a different set - a name instead of a flag - rather than a
+   * second viewer that would drift from this one.
+   */
+  list?: { id: string; name: string };
 };
 
 /** One tagged item, carrying enough to render a card and open the glyph viewer. */

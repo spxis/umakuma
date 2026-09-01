@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import SubjectMetaLanes from "@/app/shared/SubjectMetaLanes";
 import {
+  SUBJECT_LIST_DIVIDERS,
+  SUBJECT_LIST_SURFACE,
   SUBJECT_ROW_LANES,
   SUBJECT_VIEW_COPY,
   subjectGlyphTone,
@@ -41,6 +43,21 @@ type Props<TRow extends SubjectListRow> = {
    * history can go straight to a practice sheet.
    */
   selection?: SubjectSelection;
+  /**
+   * Choosing by the surface's own mechanism, for the explorers.
+   *
+   * The two explorers run bulk mode themselves, keyed by subject id with their
+   * own shift anchor, and cannot express that as a `SubjectSelection` keyed by
+   * glyph. Without a way in, their list density had no checkbox at all: bulk
+   * mode was on, every card in the grid carried a tick, and a row in the list
+   * still opened the review modal when clicked - so a set could be gathered in
+   * one density and not the other.
+   */
+  picking?: {
+    active: boolean;
+    isChosen: (row: TRow) => boolean;
+    onPick: (row: TRow, shiftKey: boolean, index: number) => void;
+  };
 };
 
 type Group<TRow> = { heading: string; rows: Array<{ row: TRow; index: number }> };
@@ -122,21 +139,35 @@ export default function SubjectRows<TRow extends SubjectListRow>({
   groupBy,
   rowLabel,
   selection,
+  picking,
 }: Props<TRow>) {
   if (rows.length === 0) return null;
 
-  const choosing = Boolean(selection?.choosing);
   const hasLeading = Boolean(renderLeading);
   const hasTrailing = Boolean(renderTrailing);
   const order = rows.map((row) => row.glyph);
-  const pick = (row: TRow, shiftKey: boolean) => {
-    if (!selection) return;
-    if (shiftKey) selection.extendTo(row.glyph, order);
-    else selection.toggle(row.glyph);
-  };
+
+  /*
+   * The two ways of choosing, reduced to one before the rows are drawn.
+   *
+   * `selection` is the shared glyph-keyed mechanism; `picking` is a surface
+   * that runs its own. Below this line the row does not know which it was
+   * given, so a checkbox and a picking click cannot appear for one and not the
+   * other - which is exactly how the study list ended up with neither.
+   */
+  const chooser = picking?.active
+    ? { isChosen: picking.isChosen, onPick: picking.onPick }
+    : selection?.choosing
+      ? {
+          isChosen: (row: TRow) => selection.chosen.has(row.glyph),
+          onPick: (row: TRow, shiftKey: boolean) =>
+            shiftKey ? selection.extendTo(row.glyph, order) : selection.toggle(row.glyph),
+        }
+      : null;
+  const choosing = chooser !== null;
 
   return (
-    <div className="overflow-hidden rounded-lg border border-line bg-surface">
+    <div className={SUBJECT_LIST_SURFACE}>
       <LaneHeadings choosing={choosing} hasLeading={hasLeading} hasTrailing={hasTrailing} />
 
       {toGroups(rows, groupBy).map((group) => (
@@ -149,9 +180,9 @@ export default function SubjectRows<TRow extends SubjectListRow>({
             </h3>
           ) : null}
 
-          <ul className="divide-y divide-line/50">
+          <ul className={SUBJECT_LIST_DIVIDERS}>
             {group.rows.map(({ row, index }) => {
-              const chosen = choosing && Boolean(selection?.chosen.has(row.glyph));
+              const chosen = Boolean(chooser?.isChosen(row));
               return (
               <li
                 key={row.key}
@@ -163,17 +194,22 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                   type="button"
                   aria-label={rowLabel ? rowLabel(row) : undefined}
                   aria-pressed={choosing ? chosen : undefined}
-                  onClick={(event) => (choosing ? pick(row, event.shiftKey) : onSelect(row, index))}
+                  onClick={(event) =>
+                    chooser ? chooser.onPick(row, event.shiftKey, index) : onSelect(row, index)
+                  }
                   className="flex min-w-0 flex-1 items-center gap-3 px-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent/40"
                 >
                   {/* Before the leading slot rather than instead of it: in
                     * history the mark says whether the answer was right, which
                     * is exactly what a member is reading when they decide
                     * whether to pick that one. */}
+                  {/* A checkbox, the same square the grid's cards carry, so the
+                    * two densities read as the same act rather than as a tick
+                    * in one and a box in the other. */}
                   {choosing ? (
                     <span
                       aria-hidden="true"
-                      className={`${SUBJECT_ROW_LANES.pick} inline-flex h-5 items-center justify-center rounded-full border text-[11px] font-black leading-none ${
+                      className={`${SUBJECT_ROW_LANES.pick} inline-flex h-5 items-center justify-center rounded border text-[11px] font-black leading-none ${
                         chosen ? "border-accent bg-accent text-white" : "border-line text-transparent"
                       }`}
                     >

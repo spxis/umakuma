@@ -102,6 +102,23 @@ export const SUBJECT_VIEW_COPY = {
 } as const;
 
 /**
+ * The shape of a list, as opposed to a shelf of cards.
+ *
+ * A list is one surface with hairlines between its rows. Every explorer had
+ * been drawing its rows as separate bordered boxes stacked with gaps, which
+ * reads as forty small cards in a column rather than as a list — each row
+ * carrying its own rounded border, its own padding and its own drop of colour,
+ * so nothing lines up down the page and the eye stops at every edge.
+ *
+ * `SubjectRows` and all three explorers take their chrome from here, so a list
+ * cannot go back to being boxes on one surface and not the others.
+ */
+export const SUBJECT_LIST_SURFACE = "overflow-hidden rounded-lg border border-line bg-surface";
+export const SUBJECT_LIST_DIVIDERS = "divide-y divide-line/50";
+/** One row: no border, no radius, no box — the surface above draws all of that. */
+export const SUBJECT_LIST_ROW = "px-3 py-2 transition hover:bg-surface-muted/50";
+
+/**
  * The lane widths every subject list shares.
  *
  * A list of subjects reads best as a table: the eye drops straight down one

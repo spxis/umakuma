@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import { noTranslateClass } from "@/app/shared/japaneseText";
 
+import { SUBJECT_LIST_ROW } from "@/app/shared/subjectListView";
+
 import { ExplorerCardDensityProvider } from "./explorerCardDensity";
 
 type Props = {
@@ -135,7 +137,17 @@ export default function UnifiedExplorerCard({
          */
         data-clickable={cardClick ? "true" : undefined}
         data-explorer-card-subject-id={dataSubjectId} // Added data-explorer-card-subject-id attribute
-        className={`group/explorer-card relative ${className} ${
+        /*
+         * In rows the caller's box is dropped for the shared row chrome.
+         *
+         * Every explorer passed a `rounded-2xl border ... p-3` card class and
+         * used it in both densities, so a list came out as forty bordered boxes
+         * stacked with gaps - each one its own edge to stop at, and no two rows
+         * lining up. A list is one surface with hairlines between its rows; the
+         * container draws it, and a row draws nothing. The card class still
+         * applies in the grid, which is where a box is the right answer.
+         */
+        className={`group/explorer-card relative ${rows ? SUBJECT_LIST_ROW : className} ${
           chosen ? "ring-2 ring-accent ring-offset-1 ring-offset-surface" : ""
         }`}
       >

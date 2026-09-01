@@ -2219,7 +2219,7 @@
     "date": "2026-09-01",
     "version": "0.215.0",
     "releasedAt": "2026-09-01T15:05:00Z",
-    "summary": "Searching for 水泡 found it - Foam, vocabulary, level 46 - and selecting it opened the library explorer, which answered No item matched 水泡 about the word it had just been shown. The explorer was not being stubborn: it is built from the member's own levels and stops at theirs, so a member on level 17 has no level 46 for the word to appear in, and no filter would have helped. Results led to a list, and a list is free to answer with nothing. Words and radicals now have pages of their own, next to the kanji page that already existed, and every result leads to one: one subject, named in the path, showing its meanings, readings, the WaniKani explanation, the kanji it is built from or the kanji built from it, and example sentences that use it. They are public, because they describe a subject and not a member - which also ends the other half of this, where a signed-out reader got no link at all for a word or a radical and the row was dead text that looked like a link. Radicals are addressed by name rather than by glyph, since WaniKani draws a good number of them and those have no character to be addressed by. The address takes no viewer at all now, so a link copied out of a search works for whoever it is sent to."
+    "summary": "Searching for \u6c34\u6ce1 found it - Foam, vocabulary, level 46 - and selecting it opened the library explorer, which answered No item matched \u6c34\u6ce1 about the word it had just been shown. The explorer was not being stubborn: it is built from the member's own levels and stops at theirs, so a member on level 17 has no level 46 for the word to appear in, and no filter would have helped. Results led to a list, and a list is free to answer with nothing. Words and radicals now have pages of their own, next to the kanji page that already existed, and every result leads to one: one subject, named in the path, showing its meanings, readings, the WaniKani explanation, the kanji it is built from or the kanji built from it, and example sentences that use it. They are public, because they describe a subject and not a member - which also ends the other half of this, where a signed-out reader got no link at all for a word or a radical and the row was dead text that looked like a link. Radicals are addressed by name rather than by glyph, since WaniKani draws a good number of them and those have no character to be addressed by. The address takes no viewer at all now, so a link copied out of a search works for whoever it is sent to."
   },
   {
     "id": "recent-items-not-recent-searches",
@@ -2229,7 +2229,7 @@
     "date": "2026-09-01",
     "releasedAt": "2026-09-01T15:05:30Z",
     "version": "0.216.0",
-    "summary": "The history remembered what you typed and forgot what you found. Search water, read down forty rows, open 水兵 - and what was kept was water. The question was recorded and the answer thrown away, which is backwards: the thing worth getting back to is the word, not the guess that led to it. Anything that opens a subject now adds to the list, from the results rows and from the suggestions under the box alike, so it grows as the browser is used rather than only when the search page is visited. A remembered subject reads like the row it came from - its glyph in its type's colour, its meaning beside it - and a remembered search keeps the clock icon, so the two kinds of row are told apart at a glance. Entries are kept by where they lead rather than by what they say, because 水 the kanji and 水 the word are one character and two pages, and keying on the character would have quietly dropped whichever was opened first. It is one store behind one key, so the header dropdown, the phone sheet and the results page are three views of the same history."
+    "summary": "The history remembered what you typed and forgot what you found. Search water, read down forty rows, open \u6c34\u5175 - and what was kept was water. The question was recorded and the answer thrown away, which is backwards: the thing worth getting back to is the word, not the guess that led to it. Anything that opens a subject now adds to the list, from the results rows and from the suggestions under the box alike, so it grows as the browser is used rather than only when the search page is visited. A remembered subject reads like the row it came from - its glyph in its type's colour, its meaning beside it - and a remembered search keeps the clock icon, so the two kinds of row are told apart at a glance. Entries are kept by where they lead rather than by what they say, because \u6c34 the kanji and \u6c34 the word are one character and two pages, and keying on the character would have quietly dropped whichever was opened first. It is one store behind one key, so the header dropdown, the phone sheet and the results page are three views of the same history."
   },
   {
     "id": "a-way-back-out-of-the-results",
@@ -2239,6 +2239,56 @@
     "date": "2026-09-01",
     "releasedAt": "2026-09-01T15:09:08Z",
     "version": "0.217.0",
-    "summary": "Arrowing down through the results was a one-way trip. The list loads the next stretch as you approach the end, so it grows under you: forty rows into 中 the search box was far off the top of the screen, and the only route back was pressing up forty times - and overshooting downward on the way loaded more rows to climb. Nothing was looping, but nothing was leading out either, which reads the same from the keyboard. Escape now returns to the box from any row, and Home goes to the first row and then out to the box, both in a single press. Coming back also scrolls the box into view, which it did not before: the results scroll inside their own card on a page that scrolls too, so focus could land on a box still hidden above the results and typing went somewhere nobody could see."
+    "summary": "Arrowing down through the results was a one-way trip. The list loads the next stretch as you approach the end, so it grows under you: forty rows into \u4e2d the search box was far off the top of the screen, and the only route back was pressing up forty times - and overshooting downward on the way loaded more rows to climb. Nothing was looping, but nothing was leading out either, which reads the same from the keyboard. Escape now returns to the box from any row, and Home goes to the first row and then out to the box, both in a single press. Coming back also scrolls the box into view, which it did not before: the results scroll inside their own card on a page that scrolls too, so focus could land on a box still hidden above the results and typing went somewhere nobody could see."
+  },
+  {
+    "id": "explorer-lists-one-component",
+    "area": "study",
+    "name": "One component behind every subject list",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 3,
+    "summary": "The lists on Study, History, Grades, the WaniKani Library Explorer and the JLPT Explorer are drawn by three different components, so they carry different columns: Study shows item, reading, meaning, type, level and SRS under headings, while the explorers show an index, a glyph and a row of chips with no headings and no reading or meaning column. They share their chrome now - one surface, hairlines between rows - but not their columns. They should be one component with the columns declared per surface."
+  },
+  {
+    "id": "signup-radio-layout",
+    "area": "account",
+    "name": "Lay out the signup choices properly",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 4,
+    "summary": "The signup page runs its radio choices full width, one per line, in a column of empty space. Reported 2026-09-01. Two or more columns, or a layout that uses the width for something."
+  },
+  {
+    "id": "articles-menu-clipping",
+    "area": "admin",
+    "name": "Stop the articles page clipping the open menu",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 5,
+    "summary": "On the admin articles page the user menu is cut off when opened - an overflow or stacking context on an ancestor clips it. Reported 2026-09-01."
+  },
+  {
+    "id": "explorer-filters-addressable",
+    "area": "study",
+    "name": "Put explorer filters in the address",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 7,
+    "summary": "Choosing N5 on an explorer changes nothing about the URL, so a filtered view cannot be linked, bookmarked or reloaded. The rest of the member pages became real routes; their filter state has not followed."
+  },
+  {
+    "id": "lists-are-one-surface",
+    "area": "study",
+    "name": "A list is one surface, not forty boxes",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "releasedAt": "2026-09-01T15:27:26Z",
+    "version": "0.218.0",
+    "summary": "Three things a member could not do, all of them about lists. A list you saved yourself offered rename, edit characters, delete and practise, so the one thing you could not do with it was read it - the card's wall of glyphs was the whole view, with no meanings, no readings and no way into the glyph viewer. It opens now, into the same panel the Trouble and Favourites lists have always used, and the characters on the card open it as well as the Open action beside them. Bulk selection was reachable in the grid, where every card carries a checkbox, and unreachable in the list, where a row had none and clicking one opened the review modal instead of picking it - so a set could be gathered in one density and not the other, and Save to list sat above a list it could not be fed from. Rows carry the same checkbox now, and the same shift-click range. And the explorers drew their lists as forty bordered boxes stacked with gaps, each one an edge for the eye to stop at, while Study and History drew one surface with hairlines between the rows. Grades, the WaniKani library and the JLPT explorer take that chrome from the same place now."
   }
 ]

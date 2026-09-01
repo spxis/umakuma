@@ -16,7 +16,8 @@ type Props = {
   items: StudyTagListItem[];
   viewMode: SubjectViewMode;
   onOpen: (index: number) => void;
-  onRemove: (item: StudyTagListItem) => void;
+  /** Omitted where the set is not the member's to change from here. */
+  onRemove?: (item: StudyTagListItem) => void;
   /** Passed straight through, so both densities choose the same way. */
   selection?: SubjectSelection;
 };
@@ -69,7 +70,9 @@ function RemoveButton({
  */
 export default function StudyTagListsBody({ items, viewMode, onOpen, onRemove, selection }: Props) {
   const rows = items.map(toRow);
-  const removeButton = (row: TagRow) => <RemoveButton item={row.item} onRemove={onRemove} />;
+  const removeButton = onRemove
+    ? (row: TagRow) => <RemoveButton item={row.item} onRemove={onRemove} />
+    : undefined;
 
   if (viewMode === SUBJECT_VIEW_MODES.list) {
     return (

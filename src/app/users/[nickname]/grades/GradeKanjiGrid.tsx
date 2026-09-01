@@ -6,7 +6,13 @@ import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import KanjiDetailModal from "@/app/shared/KanjiDetailModal";
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
-import { SUBJECT_VIEW_MODES, type SubjectViewMode } from "@/app/shared/subjectListView";
+import {
+  SUBJECT_LIST_DIVIDERS,
+  SUBJECT_LIST_ROW,
+  SUBJECT_LIST_SURFACE,
+  SUBJECT_VIEW_MODES,
+  type SubjectViewMode,
+} from "@/app/shared/subjectListView";
 import { useState } from "react";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
@@ -93,9 +99,14 @@ export default function GradeKanjiGrid({
   return (
     <>
       <ul
+      /*
+       * A list is one surface with hairlines, not forty boxes stacked with
+       * gaps. The chrome is the shared one, so this reads exactly like the
+       * study queue and history rather than like this page's own idea of a row.
+       */
       className={
         rows
-          ? "space-y-1.5"
+          ? `${SUBJECT_LIST_SURFACE} ${SUBJECT_LIST_DIVIDERS}`
           : "grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(210px,1fr))]"
       }
     >
@@ -212,9 +223,15 @@ export default function GradeKanjiGrid({
 
         const body = rows ? rowBody : cardBody;
         const chosen = Boolean(chosenKanji?.has(entry.kanji));
+        /*
+         * In rows the surface above draws the border and the dividers, so a row
+         * carries no box of its own - no radius, no border, no tint. The kanji
+         * colour stays on the glyph, where it identifies the subject rather
+         * than fencing off the line it sits on.
+         */
         const shell = `${
           rows
-            ? "rounded-xl border border-kanji/40 bg-kanji/5 px-3 py-2 transition"
+            ? SUBJECT_LIST_ROW
             : "rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition"
         }${chosen ? " ring-2 ring-accent ring-offset-1 ring-offset-surface" : ""}`;
         return (

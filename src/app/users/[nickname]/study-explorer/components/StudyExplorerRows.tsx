@@ -12,6 +12,17 @@ type Props = {
   isUnauthorized: boolean;
   onSelectSubject: (subjectId: number) => void;
   onToggleStudyTag: (subjectId: number, tag: StudyTag, enabled: boolean) => void;
+  /**
+   * Bulk mode, which the list had no way to join.
+   *
+   * Every card in the grid grows a checkbox when bulk mode is on; a row grew
+   * nothing, and clicking one opened the review modal - so a set could be
+   * gathered in the grid and not in the list, and the Save to list button on
+   * the panel above was unreachable from here.
+   */
+  bulkModeEnabled: boolean;
+  selectedSubjectIds: Set<number>;
+  onApplyBulkSelection: (args: { subjectId: number; shiftKey: boolean; sourceIndex?: number }) => boolean;
 };
 
 function tagButtonClass(active: boolean): string {
@@ -28,7 +39,15 @@ function tagButtonClass(active: boolean): string {
  * private list renderer. What Study has and the other list surfaces do not —
  * how late a review is, and the tag toggles — rides in the slots.
  */
-export default function StudyExplorerRows({ items, isUnauthorized, onSelectSubject, onToggleStudyTag }: Props) {
+export default function StudyExplorerRows({
+  items,
+  isUnauthorized,
+  onSelectSubject,
+  onToggleStudyTag,
+  bulkModeEnabled,
+  selectedSubjectIds,
+  onApplyBulkSelection,
+}: Props) {
   const rows = items.map(toStudyRow);
 
   return (
@@ -38,6 +57,17 @@ export default function StudyExplorerRows({ items, isUnauthorized, onSelectSubje
         if (!isUnauthorized) {
           onSelectSubject(row.subjectId);
         }
+      }}
+      /*
+       * Study's own bulk mechanism, keyed by subject id with its own shift
+       * anchor - the same call the grid's cards make, so a range swept in one
+       * density means the same thing in the other.
+       */
+      picking={{
+        active: bulkModeEnabled,
+        isChosen: (row) => selectedSubjectIds.has(row.subjectId),
+        onPick: (row, shiftKey, index) =>
+          void onApplyBulkSelection({ subjectId: row.subjectId, shiftKey, sourceIndex: index }),
       }}
       renderSubMeta={(row) => {
         const badge = isReviewQueueItem(row.item) ? formatNextReviewBadge(row.item.availableAt) : null;

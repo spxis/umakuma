@@ -1,5 +1,7 @@
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import {
+  SUBJECT_LIST_DIVIDERS,
+  SUBJECT_LIST_SURFACE,
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
   type SubjectViewMode,
@@ -375,7 +377,14 @@ export default function JlptExplorerContent({
             practicePath={practicePath}
           />
         </div>
-        <div className={viewMode === SUBJECT_VIEW_MODES.list ? "mt-3 space-y-1.5" : "mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"}>
+        {/* One surface with hairlines in rows; a shelf of boxes in the grid. */}
+        <div
+          className={
+            viewMode === SUBJECT_VIEW_MODES.list
+              ? `mt-3 ${SUBJECT_LIST_SURFACE} ${SUBJECT_LIST_DIVIDERS}`
+              : "mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+          }
+        >
           {visibleItems.map((item, index) => {
             const userMatch = userKanjiByChar.get(item.kanji);
             const preload = (jlptReadings as JlptReadingsRecord)[item.kanji];

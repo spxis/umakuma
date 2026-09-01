@@ -1,5 +1,7 @@
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import {
+  SUBJECT_LIST_DIVIDERS,
+  SUBJECT_LIST_SURFACE,
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
   toSubjectListRow,
@@ -161,7 +163,14 @@ export default function LevelExplorerItemsGrid({
               }}
             />
           </div>
-          <div className={viewMode === SUBJECT_VIEW_MODES.list ? "space-y-1.5" : "grid gap-3 sm:grid-cols-2 lg:grid-cols-4"}>
+          {/* One surface with hairlines in rows; a shelf of boxes in the grid. */}
+          <div
+            className={
+              viewMode === SUBJECT_VIEW_MODES.list
+                ? `${SUBJECT_LIST_SURFACE} ${SUBJECT_LIST_DIVIDERS}`
+                : "grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+            }
+          >
             {visibleItems.map((item, index) => {
               const cardItem = { ...item, studyTags: resolveStudyTags(item) };
 

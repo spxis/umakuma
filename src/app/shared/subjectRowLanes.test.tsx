@@ -172,6 +172,128 @@ describe("what the bulk panel stopped owning", () => {
   });
 });
 
+/**
+ * Choosing in a list, not only in a grid.
+ *
+ * Bulk mode put a checkbox on every card in the grid and nothing at all on a
+ * row, and a row's click still opened the review modal - so a set could be
+ * gathered in one density and not the other, and the panel's Save to list sat
+ * above a list it could not be fed from.
+ */
+/**
+ * A list is one surface, not a stack of boxes.
+ *
+ * Every explorer drew its rows as separate bordered cards with gaps between
+ * them - each row an edge for the eye to stop at - while Study and History drew
+ * one surface with hairlines. Same idea, four sets of classes.
+ */
+describe("the chrome a list wears", () => {
+  it.each([
+    ["the shared rows", "src/app/shared/SubjectRows.tsx"],
+    ["the grade explorer", "src/app/users/[nickname]/grades/GradeKanjiGrid.tsx"],
+    ["the WaniKani explorer", LEVEL_GRID],
+    ["the JLPT explorer", "src/app/users/[nickname]/jlpt-explorer/components/JlptExplorerContent.tsx"],
+  ])("draws %s from the shared surface", (_label, path) => {
+    const source = read(path);
+    expect(source).toContain("SUBJECT_LIST_SURFACE");
+    expect(source).toContain("SUBJECT_LIST_DIVIDERS");
+    /* And never the stack of boxes it replaced. */
+    expect(source).not.toContain("space-y-1.5");
+  });
+
+  /* A row's own box is dropped in rows even when the caller still passes one. */
+  it("gives a row no box of its own", () => {
+    const card = read("src/app/users/[nickname]/shared/UnifiedExplorerCard.tsx");
+    expect(card).toContain("rows ? SUBJECT_LIST_ROW : className");
+  });
+});
+
+describe("picking a row", () => {
+  const picked = new Set([2]);
+  const withPicking = (active: boolean) =>
+    render(
+      <SubjectRows
+        rows={ROWS}
+        onSelect={() => {}}
+        picking={{ active, isChosen: (row) => picked.has(row.subjectId), onPick: () => {} }}
+      />,
+    );
+
+  it("shows a checkbox on every row while choosing", () => {
+    const boxes = [...withPicking(true).querySelectorAll("span")].filter((el) =>
+      el.className.includes("rounded border"),
+    );
+    expect(boxes).toHaveLength(ROWS.length);
+  });
+
+  it("shows none when the surface is not choosing", () => {
+    const boxes = [...withPicking(false).querySelectorAll("span")].filter((el) =>
+      el.className.includes("rounded border"),
+    );
+    expect(boxes).toHaveLength(0);
+  });
+
+  it("says which rows are picked, for a reader who cannot see the tick", () => {
+    const pressed = [...withPicking(true).querySelectorAll("button[aria-pressed]")].map((el) =>
+      el.getAttribute("aria-pressed"),
+    );
+    expect(pressed).toEqual(["false", "true"]);
+  });
+
+  /* A surface with its own bulk mechanism must reach this, or it has none. */
+  it("is wired from the study list", () => {
+    const source = read("src/app/users/[nickname]/study-explorer/components/StudyExplorerRows.tsx");
+    expect(source).toContain("picking={{");
+    expect(source).toContain("onApplyBulkSelection");
+    expect(read(STUDY_PANEL)).toContain("onApplyBulkSelection={applyBulkSelection}");
+  });
+});
+
+/**
+ * A list you saved yourself, readable.
+ *
+ * The card offered rename, edit characters, delete and practise, so the one
+ * thing a member could not do with a list they had built was read it.
+ */
+describe("opening a saved list", () => {
+  const CARD = "src/app/users/[nickname]/lists/StudyListCard.tsx";
+  const MODAL = "src/app/shared/StudyTagListsModal.tsx";
+
+  it("offers a way in from the card, and from the characters themselves", () => {
+    const card = read(CARD);
+    expect(card).toContain("list: { id: card.id, name: card.name }");
+    /* Both densities put the preview on the handler, not only the action. */
+    expect(card.split("onClick={openList}").length - 1).toBeGreaterThanOrEqual(4);
+  });
+
+  it("reads the list through its own route rather than the tag route", () => {
+    expect(read(MODAL)).toContain("/lists/${savedList.id}/items");
+  });
+
+  /*
+   * The tagged lists filter by flag, which would empty a saved list, and offer
+   * a switch to the other tagged list, which would offer to leave the list just
+   * opened.
+   */
+  it("drops the tag filter and the tag switch for a saved list", () => {
+    const modal = read(MODAL);
+    expect(modal).toContain("savedList ? true : item.studyTags[tag]");
+    expect(modal).toContain("savedList ? (");
+  });
+
+  it("scopes the route to the account, not just to the list id", () => {
+    const route = read("src/app/api/study/[accountId]/lists/[listId]/items/route.ts");
+    expect(route).toContain("where: { id: listId, accountId }");
+    expect(route).toContain("canAccessAccount");
+  });
+
+  /* The member chose these in a sequence; re-sorting shows a different list. */
+  it("keeps the order the list is stored in", () => {
+    const lib = read("src/lib/studySubjectItems.ts");
+    expect(lib).toContain("characters\n    .map((character) => subjectIdByCharacter.get(character))");
+  });
+});
+
 describe("the shared adapter", () => {
   it("prefers the primary reading over the rest", () => {
     const row = toSubjectListRow({

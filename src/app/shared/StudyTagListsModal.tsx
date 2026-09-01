@@ -58,6 +58,14 @@ export default function StudyTagListsModal() {
 
   const accountId = payload?.accountId ?? "";
   /*
+   * A saved list borrows the whole panel: the same rows, the same densities,
+   * the same glyph viewer. What it does not borrow is the Trouble/Favourites
+   * switch, which would offer to leave the list the member just opened, and
+   * the remove button, since taking a character out of a saved list is what
+   * Edit characters on the card is for.
+   */
+  const savedList = payload?.list ?? null;
+  /*
    * Choosing, here too. These lists are the one place a member has already
    * gathered a set deliberately, so being unable to send it to a practice
    * sheet was the oddest gap of the lot.
@@ -101,7 +109,10 @@ export default function StudyTagListsModal() {
   useEffect(() => {
     if (!accountId) return;
     const controller = new AbortController();
-    void fetch(`/api/study/${accountId}/tags/items`, { signal: controller.signal, cache: "no-store" })
+    const source = savedList
+      ? `/api/study/${accountId}/lists/${savedList.id}/items`
+      : `/api/study/${accountId}/tags/items`;
+    void fetch(source, { signal: controller.signal, cache: "no-store" })
       .then(async (response) => {
         const body = (await response.json()) as { items?: StudyTagListItem[]; error?: string };
         if (!response.ok) throw new Error(body.error ?? STUDY_TAG_LIST_COPY.loadError);
@@ -113,7 +124,7 @@ export default function StudyTagListsModal() {
         setItems([]);
       });
     return () => controller.abort();
-  }, [accountId, refreshKey]);
+  }, [accountId, refreshKey, savedList]);
 
   useEffect(() => {
     if (!accountId) return;
@@ -130,11 +141,12 @@ export default function StudyTagListsModal() {
   const visible = useMemo(() => {
     const term = search.trim().toLowerCase();
     return (items ?? [])
-      .filter((item) => item.studyTags[tag])
+      /* A saved list is already the set; only the tagged lists filter by flag. */
+      .filter((item) => (savedList ? true : item.studyTags[tag]))
       .filter((item) => term.length === 0
         || item.characters.includes(term)
         || item.meanings.some((meaning) => meaning.toLowerCase().includes(term)));
-  }, [items, search, tag]);
+  }, [items, savedList, search, tag]);
 
   const removeTag = useCallback(async (item: StudyTagListItem) => {
     setItems((current) => (current ?? []).map((entry) => (
@@ -159,7 +171,7 @@ export default function StudyTagListsModal() {
     >
       <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-muted px-3 py-2.5 sm:px-4">
         <h2 className="truncate text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
-          {STUDY_TAG_LIST_COPY.title}
+          {savedList ? savedList.name : STUDY_TAG_LIST_COPY.title}
         </h2>
         <button
           type="button"
@@ -172,16 +184,27 @@ export default function StudyTagListsModal() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2.5 sm:px-4">
-        <SegmentedControl
-          ariaLabel={STUDY_TAG_LIST_COPY.title}
-          size="md"
-          value={tag}
-          onChange={setTag}
-          options={STUDY_TAG_VALUES.map((value) => ({
-            value,
-            label: `${STUDY_TAG_LIST_LABELS[value]} · ${counts[value]}`,
-          }))}
-        />
+        {savedList ? (
+          /* The list's own count, where the switch between the two tagged
+           * lists would otherwise sit - a switch that would only offer to
+           * leave the list just opened. */
+          <span className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">
+            {`${visible.length} ${
+              visible.length === 1 ? STUDY_TAG_LIST_COPY.countSuffixOne : STUDY_TAG_LIST_COPY.countSuffix
+            }`}
+          </span>
+        ) : (
+          <SegmentedControl
+            ariaLabel={STUDY_TAG_LIST_COPY.title}
+            size="md"
+            value={tag}
+            onChange={setTag}
+            options={STUDY_TAG_VALUES.map((value) => ({
+              value,
+              label: `${STUDY_TAG_LIST_LABELS[value]} · ${counts[value]}`,
+            }))}
+          />
+        )}
         <input
           type="search"
           value={search}
@@ -212,7 +235,13 @@ export default function StudyTagListsModal() {
           <p className="py-10 text-center text-sm font-bold text-foreground/60">{STUDY_TAG_LIST_COPY.loading}</p>
         ) : visible.length === 0 ? (
           <p className="py-10 text-center text-sm font-bold text-foreground/60">
-            {counts[tag] === 0 ? STUDY_TAG_LIST_COPY.empty[tag] : STUDY_TAG_LIST_COPY.noMatches}
+            {savedList
+              ? (items ?? []).length === 0
+                ? STUDY_TAG_LIST_COPY.emptyList
+                : STUDY_TAG_LIST_COPY.noMatches
+              : counts[tag] === 0
+                ? STUDY_TAG_LIST_COPY.empty[tag]
+                : STUDY_TAG_LIST_COPY.noMatches}
           </p>
         ) : (
           <StudyTagListsBody
@@ -223,9 +252,12 @@ export default function StudyTagListsModal() {
               items: visible,
               startIndex: index,
               accountId,
-              title: STUDY_TAG_LIST_LABELS[tag],
+              title: savedList ? savedList.name : STUDY_TAG_LIST_LABELS[tag],
             })}
-            onRemove={(item) => void removeTag(item)}
+            /* Taking a character out of a saved list is Edit characters on the
+             * card; a second way to do it here would be a second thing to keep
+             * in step with the stored order. */
+            onRemove={savedList ? undefined : (item) => void removeTag(item)}
           />
         )}
       </div>

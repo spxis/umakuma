@@ -143,6 +143,16 @@ export default function StudyListCard({
     }
   }
 
+  /*
+   * The characters are the biggest thing on the card and the thing a member
+   * points at when they want to see what is in the list, so they are the way
+   * in as well as the preview. The Open action stays: a control that is only
+   * discoverable by guessing that the text is clickable is not discoverable.
+   */
+  const openList = card.tag
+    ? () => openStudyTagLists({ accountId, tag: card.tag ?? undefined })
+    : () => openStudyTagLists({ accountId, list: { id: card.id, name: card.name } });
+
   const nameNode = editing ? (
     <input
       autoFocus
@@ -195,13 +205,30 @@ export default function StudyListCard({
       {card.tag ? (
         <button
           type="button"
-          onClick={() => openStudyTagLists({ accountId, tag: card.tag ?? undefined })}
+          onClick={openList}
           className={`${ACTION} hover:text-foreground`}
         >
           {STUDY_LIST_COPY.open}
         </button>
       ) : canEdit ? (
         <>
+          {/*
+            * First, and before the three that change the list.
+            *
+            * A saved list offered rename, edit, delete and practise, so the one
+            * thing a member could not do with a list they had built was read
+            * it - the card's wall of glyphs was the whole view, with no
+            * meanings, no readings and no way into the glyph viewer. The built
+            * in Trouble and Favourites lists had this from the start; a list
+            * with a name instead of a flag now opens the same panel.
+            */}
+          <button
+            type="button"
+            onClick={openList}
+            className={`${ACTION} hover:text-foreground`}
+          >
+            {STUDY_LIST_COPY.open}
+          </button>
           <button type="button" onClick={startEditing} className={`${ACTION} hover:text-foreground`}>
             {STUDY_LIST_COPY.rename}
           </button>
@@ -281,13 +308,16 @@ export default function StudyListCard({
               <span className="min-w-0 flex-1" />
             ) : (
               <>
-                <p
+                <button
+                  type="button"
+                  onClick={openList}
+                  title={STUDY_LIST_COPY.open}
                   lang="ja"
                   translate="no"
-                  className={`min-w-0 flex-1 truncate text-base font-semibold leading-none text-foreground/75 ${JP_TEXT_CLASS}`}
+                  className={`min-w-0 flex-1 cursor-pointer truncate text-left text-base font-semibold leading-none text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
                 >
                   {card.characters.join("")}
-                </p>
+                </button>
                 <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
                   {card.count}
                 </span>
@@ -317,13 +347,16 @@ export default function StudyListCard({
               {STUDY_LIST_COPY.noCharactersYet}
             </p>
           ) : (
-            <p
+            <button
+              type="button"
+              onClick={openList}
+              title={STUDY_LIST_COPY.open}
               lang="ja"
               translate="no"
-              className={`mt-2 line-clamp-3 break-all text-lg font-semibold leading-snug text-foreground/75 ${JP_TEXT_CLASS}`}
+              className={`mt-2 line-clamp-3 w-full cursor-pointer break-all text-left text-lg font-semibold leading-snug text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
             >
               {card.characters.join("")}
-            </p>
+            </button>
           )}
 
           <p className="mt-3 text-[11px] text-foreground/60">

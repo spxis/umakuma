@@ -18,4 +18,8 @@ export const STUDY_TAG_LIST_COPY = {
     [STUDY_TAGS.trouble]: "Nothing tagged as trouble yet. Flag an item from Study or an explorer to build this list.",
     [STUDY_TAGS.favorite]: "No favourites yet. Tag an item from Study or an explorer to build this list.",
   },
+  /* A saved list, opened from its card. */
+  countSuffix: "items",
+  countSuffixOne: "item",
+  emptyList: "This list has no characters in it yet. Use Edit characters on the card to add some.",
 } as const;
