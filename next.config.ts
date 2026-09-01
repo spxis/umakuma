@@ -23,7 +23,9 @@ const nextConfig: NextConfig = {
 			destination: "/users/:nickname?dashboard=:dashboard",
 		},
 		{
-			source: "/users/:nickname/:dashboard(learn|stats|news|read)",
+			/* Study and Stats still share the dashboard page; Read and News are
+			   real routes of their own now and are not listed here. */
+			source: "/users/:nickname/:dashboard(learn|stats)",
 			destination: "/users/:nickname?dashboard=:dashboard",
 		},
 	],
