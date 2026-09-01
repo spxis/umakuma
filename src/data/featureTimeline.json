@@ -1790,5 +1790,15 @@
     "version": "0.172.0",
     "releasedAt": "2026-09-01T10:00:00Z",
     "summary": "The remembered searches shipped as a card of their own below the results, which read as a separate widget parked under the page rather than as part of what the reader was already scanning. They are now the last rows of the results list itself: the same card, the same row rhythm, the same lane the glyphs occupy - a history icon standing where a glyph would - introduced by a tinted band carrying the heading and the control that clears them, because a search you already ran is a way back rather than an answer and has to be told apart from the results above it at a glance. The end of the results moved inside the list too, so what closes the results sits with them instead of floating below the card. With no list to close out - no query yet, or a query that matched nothing - the rows carry the same card on their own."
+  },
+  {
+    "id": "lists-grouped-by-kind",
+    "area": "study",
+    "name": "Permanent lists, kept apart",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.173.0",
+    "releasedAt": "2026-09-01T11:00:00Z",
+    "summary": "Trouble and Favourites arrived on the lists page in the last release and sat in the same grid as the saved lists, which quietly misrepresented both. They are permanent - they fill themselves as a member tags while studying, and there is nothing to delete because untagging the last item empties a list rather than removing it - while a saved list is made and thrown away at will. Run together, the grid invited a member to look for a delete on a card that does not have one. Each kind now has its own section under a heading that says what it is: Always here, which cannot be deleted, and Saved by you, which can. The card markup was extracted rather than duplicated per section, so both kinds still render through one component. The saved section says only what the page can actually do today - renaming a list is not built yet, and the copy does not pretend otherwise."
   }
 ]

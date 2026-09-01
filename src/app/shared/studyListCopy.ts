@@ -8,6 +8,13 @@ export const STUDY_LIST_COPY = {
   /* Said where a saved list would say when it changed. */
   builtIn: "Built in — tag anything to add to it",
   open: "Open",
+
+  /* The two sections, which differ in what a member may do to them. */
+  permanentHeading: "Always here",
+  permanentBlurb: "These two fill themselves as you tag while you study. They cannot be deleted.",
+  savedHeading: "Saved by you",
+  /* Says only what the page can do today; renaming is not built yet. */
+  savedBlurb: "Sets you put together yourself. Delete one whenever you like.",
   save: "Save as list",
   confirmSave: "Save",
   saving: "Saving",

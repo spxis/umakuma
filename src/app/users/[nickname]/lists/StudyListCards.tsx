@@ -76,30 +76,34 @@ export default function StudyListCards({
     getStoredEnum(LIST_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
 
   /*
-   * The two built-in lists lead, because they are the ones every member has
-   * and the ones the rest of the site keeps offering; the saved lists follow
-   * in their own order.
+   * Two kinds, kept apart.
+   *
+   * Trouble and Favourites are permanent: they fill themselves as a member
+   * tags while studying, and there is nothing to delete because untagging the
+   * last item empties a list rather than removing it. Saved lists are the
+   * opposite - made, renamed and thrown away at will. Run together in one grid
+   * they invited a member to look for a delete on a card that has none, so
+   * each kind gets its own section and says plainly what it is.
    */
-  const visible: ListCard[] = [
-    ...taggedLists.map((tagged) => ({
-      id: `tag:${tagged.tag}`,
-      name: STUDY_TAG_LIST_LABELS[tagged.tag],
-      characters: tagged.characters,
-      count: tagged.count,
-      updatedAt: null,
-      tag: tagged.tag,
-    })),
-    ...lists
-      .filter((list) => !removed.has(list.id))
-      .map((list) => ({
-        id: list.id,
-        name: list.name,
-        characters: list.characters,
-        count: list.characters.length,
-        updatedAt: list.updatedAt,
-        tag: null,
-      })),
-  ];
+  const permanent: ListCard[] = taggedLists.map((tagged) => ({
+    id: `tag:${tagged.tag}`,
+    name: STUDY_TAG_LIST_LABELS[tagged.tag],
+    characters: tagged.characters,
+    count: tagged.count,
+    updatedAt: null,
+    tag: tagged.tag,
+  }));
+
+  const saved: ListCard[] = lists
+    .filter((list) => !removed.has(list.id))
+    .map((list) => ({
+      id: list.id,
+      name: list.name,
+      characters: list.characters,
+      count: list.characters.length,
+      updatedAt: list.updatedAt,
+      tag: null,
+    }));
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
 
   /* A tagged sheet is addressed by its source, so it takes the whole list. */
@@ -133,7 +137,7 @@ export default function StudyListCards({
     }
   }
 
-  if (visible.length === 0) {
+  if (permanent.length === 0 && saved.length === 0) {
     return (
       <div className="rounded-2xl border border-line bg-surface-muted p-5">
         <p className="text-sm font-black text-foreground/80">{STUDY_LIST_COPY.empty}</p>
@@ -141,6 +145,120 @@ export default function StudyListCards({
       </div>
     );
   }
+
+  const gridClass = rows
+    ? "space-y-1.5"
+    : "grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]";
+
+  /*
+   * One card, whichever section it is in. Extracted so the permanent pair
+   * and the saved lists render through the same markup instead of the page
+   * growing a second copy of it per section.
+   */
+  const renderCard = (list: ListCard) => (
+    <li
+      key={list.id}
+      className={`min-w-0 rounded-2xl border border-line bg-surface ${rows ? "px-4 py-2.5" : "p-4"}`}
+    >
+      {rows ? (
+        /*
+         * One line each, for scanning a shelf of weeks. The characters
+         * still get the room, because they are what tells the lists
+         * apart - a column of names does not.
+         */
+        <div className="flex min-w-0 items-center gap-3">
+          <h2 className="w-32 shrink-0 truncate text-sm font-black text-foreground" title={list.name}>
+            {list.name}
+          </h2>
+          <p lang="ja" translate="no" className={`min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
+            {list.characters.join("")}
+          </p>
+          <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
+            {list.count}
+          </span>
+          <span className="flex shrink-0 items-center gap-3">
+            {list.tag ? (
+              <button
+                type="button"
+                onClick={() => openStudyTagLists({ accountId, tag: list.tag ?? undefined })}
+                className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-foreground"
+              >
+                {STUDY_LIST_COPY.open}
+              </button>
+            ) : canEdit ? (
+              <button
+                type="button"
+                onClick={() => setPendingRemoval(list.id)}
+                className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-rose-600"
+              >
+                {STUDY_LIST_COPY.remove}
+              </button>
+            ) : null}
+            <Link
+              href={practiceHrefForCard(list)}
+              className="inline-flex h-8 items-center rounded-full bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
+            >
+              {STUDY_LIST_COPY.practise}
+            </Link>
+          </span>
+        </div>
+      ) : (
+        <>
+          <div className="flex items-start justify-between gap-2">
+            <h2 className="min-w-0 truncate text-sm font-black text-foreground" title={list.name}>
+              {list.name}
+            </h2>
+            <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
+              {list.count}{" "}
+              {list.count === 1
+                ? STUDY_LIST_COPY.countSuffixOne
+                : STUDY_LIST_COPY.countSuffix}
+            </span>
+          </div>
+
+          <p lang="ja" translate="no" className={`mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji ${JP_TEXT_CLASS}`}>
+            {list.characters.join("")}
+          </p>
+
+          <p className="mt-3 text-[11px] text-foreground/45">
+            {list.updatedAt
+              ? `${STUDY_LIST_COPY.updatedPrefix} ${formatRelativeFromNow(list.updatedAt)}`
+              : STUDY_LIST_COPY.builtIn}
+          </p>
+
+          {/*
+            * Actions on their own line. Sharing one with the timestamp
+            * squeezed "Practise these" until it wrapped inside its pill.
+            */}
+          <div className="mt-2 flex items-center justify-end gap-3">
+            {list.tag ? (
+              <button
+                type="button"
+                onClick={() => openStudyTagLists({ accountId, tag: list.tag ?? undefined })}
+                className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-foreground"
+              >
+                {STUDY_LIST_COPY.open}
+              </button>
+            ) : canEdit ? (
+              <button
+                type="button"
+                onClick={() => setPendingRemoval(list.id)}
+                className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-rose-600"
+              >
+                {STUDY_LIST_COPY.remove}
+              </button>
+            ) : null}
+            <Link
+              href={practiceHrefForCard(list)}
+              className="inline-flex h-8 items-center rounded-full bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
+            >
+              {STUDY_LIST_COPY.practise}
+            </Link>
+          </div>
+        </>
+      )}
+    </li>
+  );
 
   return (
     <>
@@ -156,118 +274,29 @@ export default function StudyListCards({
 
       {error ? <p className="mb-3 text-xs font-semibold text-rose-600">{error}</p> : null}
 
-      <ul
-        className={
-          rows
-            ? "space-y-1.5"
-            : "grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]"
-        }
-      >
-        {visible.map((list) => (
-          <li
-            key={list.id}
-            className={`min-w-0 rounded-2xl border border-line bg-surface ${rows ? "px-4 py-2.5" : "p-4"}`}
-          >
-            {rows ? (
-              /*
-               * One line each, for scanning a shelf of weeks. The characters
-               * still get the room, because they are what tells the lists
-               * apart - a column of names does not.
-               */
-              <div className="flex min-w-0 items-center gap-3">
-                <h2 className="w-32 shrink-0 truncate text-sm font-black text-foreground" title={list.name}>
-                  {list.name}
-                </h2>
-                <p lang="ja" translate="no" className={`min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
-                  {list.characters.join("")}
-                </p>
-                <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
-                  {list.count}
-                </span>
-                <span className="flex shrink-0 items-center gap-3">
-                  {list.tag ? (
-                    <button
-                      type="button"
-                      onClick={() => openStudyTagLists({ accountId, tag: list.tag ?? undefined })}
-                      className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-foreground"
-                    >
-                      {STUDY_LIST_COPY.open}
-                    </button>
-                  ) : canEdit ? (
-                    <button
-                      type="button"
-                      onClick={() => setPendingRemoval(list.id)}
-                      className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-rose-600"
-                    >
-                      {STUDY_LIST_COPY.remove}
-                    </button>
-                  ) : null}
-                  <Link
-                    href={practiceHrefForCard(list)}
-                    className="inline-flex h-8 items-center rounded-full bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
-                  >
-                    {STUDY_LIST_COPY.practise}
-                  </Link>
-                </span>
-              </div>
-            ) : (
-              <>
-                <div className="flex items-start justify-between gap-2">
-                  <h2 className="min-w-0 truncate text-sm font-black text-foreground" title={list.name}>
-                    {list.name}
-                  </h2>
-                  <span className="shrink-0 text-[11px] font-semibold text-foreground/50">
-                    {list.count}{" "}
-                    {list.count === 1
-                      ? STUDY_LIST_COPY.countSuffixOne
-                      : STUDY_LIST_COPY.countSuffix}
-                  </span>
-                </div>
+      {permanent.length > 0 ? (
+        <section className="mb-6">
+          <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+            {STUDY_LIST_COPY.permanentHeading}
+          </h2>
+          <p className="mb-2 text-xs text-foreground/50">{STUDY_LIST_COPY.permanentBlurb}</p>
+          <ul className={gridClass}>{permanent.map(renderCard)}</ul>
+        </section>
+      ) : null}
 
-                <p lang="ja" translate="no" className={`mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji ${JP_TEXT_CLASS}`}>
-                  {list.characters.join("")}
-                </p>
-
-                <p className="mt-3 text-[11px] text-foreground/45">
-                  {list.updatedAt
-                    ? `${STUDY_LIST_COPY.updatedPrefix} ${formatRelativeFromNow(list.updatedAt)}`
-                    : STUDY_LIST_COPY.builtIn}
-                </p>
-
-                {/*
-                  * Actions on their own line. Sharing one with the timestamp
-                  * squeezed "Practise these" until it wrapped inside its pill.
-                  */}
-                <div className="mt-2 flex items-center justify-end gap-3">
-                  {list.tag ? (
-                    <button
-                      type="button"
-                      onClick={() => openStudyTagLists({ accountId, tag: list.tag ?? undefined })}
-                      className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-foreground"
-                    >
-                      {STUDY_LIST_COPY.open}
-                    </button>
-                  ) : canEdit ? (
-                    <button
-                      type="button"
-                      onClick={() => setPendingRemoval(list.id)}
-                      className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/45 transition hover:text-rose-600"
-                    >
-                      {STUDY_LIST_COPY.remove}
-                    </button>
-                  ) : null}
-                  <Link
-                    href={practiceHrefForCard(list)}
-                    className="inline-flex h-8 items-center rounded-full bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
-                  >
-                    {STUDY_LIST_COPY.practise}
-                  </Link>
-                </div>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+      <section>
+        <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/55">
+          {STUDY_LIST_COPY.savedHeading}
+        </h2>
+        <p className="mb-2 text-xs text-foreground/50">{STUDY_LIST_COPY.savedBlurb}</p>
+        {saved.length === 0 ? (
+          <p className="rounded-2xl border border-line bg-surface-muted p-4 text-xs text-foreground/60">
+            {STUDY_LIST_COPY.emptyHint}
+          </p>
+        ) : (
+          <ul className={gridClass}>{saved.map(renderCard)}</ul>
+        )}
+      </section>
 
       <ConfirmDialog
         open={pendingRemoval !== null}
