@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "0.199.0",
+  "version": "0.200.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -43,6 +43,7 @@
     "db:backfill:custom-study": "pnpm dlx tsx scripts/backfill-custom-study-enrichment.ts",
     "db:bootstrap:wk-catalog": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/bootstrap-wk-catalog.ts",
     "db:sync:wk-catalog": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/sync-wk-catalog-incremental.ts",
+    "db:backfill:wk-catalog": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/backfill-wk-catalog-missing.ts",
     "db:export:wk-catalog:levels": "pnpm dlx tsx scripts/export-wk-catalog-level-json.ts",
     "db:seed:jlpt": "node scripts/seed-jlpt.mjs",
     "db:seed:jlpt:readings": "node scripts/build-jlpt-readings.mjs",

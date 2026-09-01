@@ -2060,5 +2060,15 @@
     "version": "0.199.0",
     "releasedAt": "2026-09-01T10:21:47Z",
     "summary": "A saved list was fixed the moment it was made. Renaming arrived a while back, so the label could be corrected, but what was actually in the list could not - taking one character out meant going back to an explorer, finding the other forty, choosing them all again and saving over the name. In practice nobody edited a list; they built a second one and left the first sitting there. Every list now has an Edit characters control beside Rename and Delete. The characters become the control rather than growing one beside them, because they are already the biggest thing on the card: tap one to take it out. Adding is a field you type into, since somebody who wants a particular kanji can type it faster than they can find it in a picker, and what is typed goes through the same tidying a saved selection does, so a pasted sentence and a chosen set reduce to the same thing. The whole edit is one save at the end rather than a request per character, which is one chance to go wrong instead of six. Emptying a list is refused: that is deleting it, and deleting has its own button and its own confirmation. While the panel is open the card's own preview and count stand aside, so there are never two different numbers on one card with nothing to say which is being changed."
+  },
+  {
+    "id": "the-words-the-catalogue-had-missed",
+    "area": "platform",
+    "name": "The words the catalogue had missed",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.200.0",
+    "releasedAt": "2026-09-01T10:33:56Z",
+    "summary": "Subject content is meant to come from the local catalogue rather than from WaniKani on every request - that is what makes the study queue quick. Ninety-eight subjects were not in it, so each one went out to the API instead, every time anybody's queue happened to include it. Almost all of them were the kana-only vocabulary a beginner meets first: これ, ホテル, おはよう, コーヒー, ありがとう. The reason was an interrupted sync months ago. A sync that stops keeps a cursor and a resumed run carries on from it rather than going back for what it skipped, so the gap stayed open and quietly widened as related words pointed at each other. There is a backfill for it now, and it is deliberately narrow: it works out what the app can ask for, subtracts what the catalogue holds, fetches only the difference, and inserts. It never updates and never deletes, because every row it writes was established as absent moments before - correcting content that is merely stale is the sync's job, and a tool that could overwrite is a tool that could lose something. It reports and writes nothing unless asked twice."
   }
 ]

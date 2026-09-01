@@ -250,6 +250,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nagai Nagame", ja: "長い眺め", reading: "ながいながめ", gloss: "the long view, every level at once" },
   { romaji: "Nikka no Nimotsu", ja: "日課の荷物", reading: "にっかのにもつ", gloss: "the load one day is allowed to carry" },
   { romaji: "Nukisashi no Nuime", ja: "抜き差しの縫い目", reading: "ぬきさしのぬいめ", gloss: "the seam you can unpick and restitch" },
+  { romaji: "Nekko no Nedoko", ja: "根っこの寝床", reading: "ねっこのねどこ", gloss: "a bed for the roots, the first words included" },
 ];
 
 /**

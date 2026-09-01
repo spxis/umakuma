@@ -278,11 +278,47 @@ rows entirely; a skipped row keeps its old timestamp, which nothing keys on,
 and the fetch cursor lives on the state row. Run stats record the
 content-identical count separately.
 
-### 15 — Backfill missing catalogue subjects
+### 15 — Backfill missing catalogue subjects ✅ shipped (v0.200.0)
 
 64 subjects in the study queue are absent from `WkSubjectCatalog` and still fall
 through to the API on every request. Related-subject coverage is already
 complete at 6,950 of 6,950.
+
+**Both numbers were stale, and the second was wrong.** Measured on 1 Sep it was
+**98**, not 64, and related coverage was not complete — 31 of the 98 were
+reachable only as another subject's component, amalgamation or visually-similar
+id. The gap had widened because the newly-missing rows referenced each other.
+
+**Cause: the interrupted sync from item 14.** A sync that stops keeps a cursor,
+and a resumed run continues from it rather than going back for what it skipped,
+so a hole never closes on its own. The state row still carries that run's
+`incrementalResumePath`.
+
+**What they were:** almost all of WaniKani's kana-only vocabulary — これ, ホテル,
+おはよう, コーヒー, ありがとう — which is the vocabulary a beginner meets first,
+so the API round trip was happening on the most-used words rather than obscure
+ones.
+
+`pnpm db:backfill:wk-catalog` measures the gap and fetches only the difference.
+**It inserts and never updates**: every id it writes was established as absent
+moments before, and it uses `createMany({ skipDuplicates: true })`, so a row
+that already exists is left exactly as it is. Correcting merely stale content is
+the sync's job — it has content comparison for that — and a backfill that could
+overwrite is one that could lose something on a database in daily use. Dry run
+unless given `--apply`.
+
+**Applied to production 1 Sep: 9,324 → 9,422 rows, 98 added, 0 removed, 0
+updated**, verified against an id snapshot taken beforehand.
+
+**Four remain: 9477, 9486, 9490, 9492** (惹く, 賜る, 覗く, 惹かれる). They only
+became reachable once the 98 were in, since they are related subjects *of* those
+rows — the gap closes transitively, so it takes a second pass. One more
+`pnpm db:backfill:wk-catalog --apply` finishes it.
+
+Note it cannot be rehearsed under the offline mock: `WANIKANI_MOCK=1` answers
+`/subjects?ids=` out of `WkSubjectCatalog`, the very table with the hole in it,
+so every id comes back unserved. A local run still exercises the measurement and
+the insert; the fetch needs a dry run against the real API.
 
 ### 16 — Ultra as its own game kind
 
