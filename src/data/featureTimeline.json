@@ -2020,5 +2020,15 @@
     "version": "0.195.0",
     "releasedAt": "2026-09-01T09:35:56Z",
     "summary": "Writing practice lived at /grades/practice, which read as though the grades explorer owned it. It never did: it builds sheets from school grades, WaniKani levels, JLPT levels, either tagged list, or a set picked by hand on any surface. It is the thing you do to a collection rather than a page belonging to one of them, and filing it under one made the other four look like guests. It is a surface of its own now, at /practice, with the collection in the path - /practice/jlpt/5, /practice/grade/2, /practice/trouble - and how the sheet prints staying in the query, because that is how you are practising rather than what. A bare /practice opens the chooser, which is the point of it being top level: it is where you decide what to practise. A level on a list, or a source that does not exist, returns a 404 rather than a default sheet. The Back to grades button went with the move, since practice is no longer somewhere you arrive from grades, and the navigation now lists Practice beside the explorers rather than beneath one."
+  },
+  {
+    "id": "the-card-is-not-a-button",
+    "area": "platform",
+    "name": "The card is not a button",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.196.0",
+    "releasedAt": "2026-09-01T09:44:11Z",
+    "summary": "Every subject on an explorer sat inside one big control. The card was a button, and it holds buttons of its own - trouble, favourite, and the tick that chooses it - which is a control inside a control on four hundred and twenty-eight of them, one for every card on every list. What that costs is not theoretical. A screen reader announces the whole card as a single button and never reaches the favourite inside it, so the only way to mark a character as trouble is to see it. A keyboard arrives at the card and finds no way in. The glyph is the button now and the card is a plain container around it, which is the shape the saved lists and the history rows already used, so this is the odd one out being brought into line rather than a new idea. The controls at the glyph's foot are its neighbours instead of its children - the same corners, the same placement, nothing moved on screen - and each is reached, announced and pressed on its own. A whole card still answers a mouse click where it did before, because that is worth keeping and costs nothing once it is no longer the only way in."
   }
 ]

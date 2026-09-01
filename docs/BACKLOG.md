@@ -67,7 +67,7 @@ through it meets a finished flow.
 | 33 | Example sentences from Tatoeba | — |
 | 34 | Own the backups, on the Synology | features done |
 | 35 | RESTful explorer paths — search unified v0.190.0, filter state left | — |
-| 36 | Controls nested inside controls (a11y) | — |
+| 36 | ~~Controls nested inside controls (a11y)~~ ✅ v0.196.0 | — |
 | 37 | ~~Colour contrast below the floor~~ ✅ v0.187.0 | — |
 | 38 | Security leftovers before the door opens — slugs done v0.188.0 | 6 |
 | 39 | The library explorer's All-levels tab does nothing | — |
@@ -566,7 +566,7 @@ response. Public surfaces show the display name from release 4 and nothing else.
 
 ## Open decisions
 
-Three, all John's; two block work that is otherwise ready to start.
+Two, both John's; one blocks work that is otherwise ready to start.
 
 **How the explorers address a thing (item 35).** Path segments carrying the
 identity (`/users/john/jlpt/n1/弘`) with query strings left for view state, or
@@ -574,13 +574,6 @@ one consistent set of query params (`q`, `level`) across all three explorers.
 Path segments read and cache better; query params are the smaller change and
 survive a filter with no natural place in a path. Admin kanji linking waits on
 the answer, because the link it should build depends on it.
-
-**Whether the brand palette moves (item 37).** Four colours sit under the 4.5:1
-contrast floor, three of them the subject-type accents that are the brand.
-Darkening them changes how the whole app looks, so it is a decision about the
-brand rather than a defect to fix quietly. The muted-text half
-(`text-foreground/45`, 751 nodes) could move to `/60` on its own without
-touching the palette.
 
 **Whether the kana-only Tatoeba sentences stay (item 33).** 4,320 of the
 232,731 ingested sentences contain no kanji at all - 2% of the table - and
@@ -992,7 +985,7 @@ somebody wants to send that link, not before.
 Admin kanji linking wants this settled first, because the link it should build
 depends on the answer.
 
-### 36 — Controls nested inside controls (accessibility)
+### 36 — Controls nested inside controls ✅ shipped (v0.196.0)
 
 428 nodes fail `nested-interactive`. `UnifiedExplorerCard` is a
 `role="button"` that contains buttons — trouble, favourite, strokes — and the
@@ -1006,6 +999,26 @@ fix bigger.
 **Shape:** the card stops being a button. The glyph becomes the link or button,
 the card becomes a plain container, and the overlay controls sit as siblings
 rather than children.
+
+**Done, and it was one component.** A sweep for `role="button"` found exactly
+one outside `globals.css`, so all 428 nodes were this card drawn 428 times.
+`SubjectCards` and `SubjectRows` already had the right shape — a button beside
+its overlay controls inside a plain `li` — so the fix was bringing the odd one
+into line rather than inventing a pattern.
+
+The glyph is the button and carries the accessible name: the character and its
+meaning, not the pills stacked around it. `glyphOverlay` moved out of the
+button into a `relative` wrapper that is exactly the button's box, so the
+corners the level, success rate, trouble and favourite are placed in are
+unchanged and nothing moved on screen. With `activateOn="card"` the container
+still takes a mouse click, through the repo's own `data-clickable="true"` hook
+— an enhancement now rather than the only way in, which is why it needs no role.
+
+Guarded by `UnifiedExplorerCard.test.tsx`, which renders both densities and
+asserts no interactive element contains another. Written against the DOM rather
+than the source because the defect is a containment relationship and only the
+tree can be asked about it; it fails on 8 of its 10 assertions against the old
+component.
 
 ### 37 — Colour contrast below the floor ✅ closed (v0.191.0)
 
