@@ -3,6 +3,8 @@ import { encode } from "next-auth/jwt";
 import fs from "node:fs";
 import path from "node:path";
 
+import { STORAGE_STATE } from "./sessionState";
+
 /**
  * Signs the smoke run in, so the user-page checks actually run.
  *
@@ -16,8 +18,6 @@ import path from "node:path";
  * address: a contributor without production credentials should still get the
  * public checks rather than a wall of errors.
  */
-
-export const STORAGE_STATE = path.join(process.cwd(), "e2e", ".auth", "session.json");
 
 function readEnvFile(file: string): Record<string, string> {
   try {

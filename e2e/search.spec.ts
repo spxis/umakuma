@@ -1,4 +1,7 @@
 import { expect, test, type Browser, type Page } from "@playwright/test";
+import fs from "node:fs";
+
+import { STORAGE_STATE } from "./sessionState";
 
 /**
  * Search, exercised rather than merely loaded.
@@ -34,7 +37,16 @@ const COMMON_KANJI = "水";
 const pageErrors = new WeakMap<Page, string[]>();
 
 async function openPage(browser: Browser, url: string): Promise<Page> {
-  const page = await browser.newPage();
+  /*
+   * A context carrying whatever session the run has, because
+   * `browser.newPage()` builds a fresh one and ignores the project's
+   * `storageState` - so the local suite was browsing signed out while its own
+   * header comment said it ran signed in.
+   */
+  const context = await browser.newContext(
+    fs.existsSync(STORAGE_STATE) ? { storageState: STORAGE_STATE } : {},
+  );
+  const page = await context.newPage();
   const errors: string[] = [];
   pageErrors.set(page, errors);
   page.on("pageerror", (error) => errors.push(String(error)));
@@ -130,6 +142,16 @@ test("the results list pages as the reader reaches the end", async ({ browser, b
 
 test("a search is remembered for next time", async ({ browser, baseURL }) => {
   const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent(COMMON_KANJI)}`);
+
+  /*
+   * Wait for the results before leaving the page.
+   *
+   * A search is remembered by an effect that runs after hydration, and
+   * `openPage` returns at `domcontentloaded` - so navigating away immediately
+   * raced the write and usually won. The test then reported that the feature
+   * was broken when all it had done was leave too early.
+   */
+  await expect(page.locator(RESULT_ROW).first()).toBeVisible({ timeout: 15_000 });
 
   /* Remembered per browser, so the second visit is what proves it was kept. */
   await page.goto(`${baseURL}/search`, { waitUntil: "domcontentloaded" });
