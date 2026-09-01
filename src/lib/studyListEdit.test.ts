@@ -66,13 +66,15 @@ describe("the route that saves an edit", () => {
   });
 
   /*
-   * Emptying a list is deleting it, and deleting has its own button and its
-   * own confirmation. Writing the empty set would leave a named row that
-   * practises nothing, which reads as a bug rather than a choice.
+   * Emptying a list used to be refused on the reasoning that emptying is
+   * deleting. A list can now be named before it holds anything, so refusing to
+   * empty one while allowing an empty one to be created held in only one
+   * direction. Deleting is still its own button, for being rid of the list
+   * rather than of its contents.
    */
-  it("refuses to empty a list", () => {
-    expect(patch).toContain("characters.length === 0");
-    expect(patch).toContain("Delete it instead.");
+  it("allows a list to be emptied, since one can be created empty", () => {
+    expect(patch).not.toContain("A list needs at least one character");
+    expect(patch).toContain("normalizeListCharacters");
   });
 
   /* Sending neither field is a caller bug, not a no-op to absorb quietly. */
@@ -107,8 +109,9 @@ describe("the editor", () => {
     expect(editor).toContain("onSave(draft)");
   });
 
-  it("will not send an empty set", () => {
-    expect(editor).toContain("disabled={saving || draft.length === 0}");
+  it("lets an empty set be saved, and says what it will do", () => {
+    expect(editor).toContain("disabled={saving}");
+    expect(editor).toContain("STUDY_LIST_COPY.editEmpty");
   });
 
   /* Enter in the add field adds; it must not submit the whole edit. */

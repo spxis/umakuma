@@ -73,7 +73,7 @@ export default function StudyListCard({
    * waiting.
    */
   async function saveCharacters(characters: string[]) {
-    if (saving || characters.length === 0) return;
+    if (saving) return;
 
     setSaving(true);
     setError(null);
@@ -284,7 +284,7 @@ export default function StudyListCard({
                 <p
                   lang="ja"
                   translate="no"
-                  className={`min-w-0 flex-1 truncate text-xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}
+                  className={`min-w-0 flex-1 truncate text-base font-semibold leading-none text-foreground/75 ${JP_TEXT_CLASS}`}
                 >
                   {card.characters.join("")}
                 </p>
@@ -311,11 +311,16 @@ export default function StudyListCard({
             )}
           </div>
 
-          {editingCharacters ? null : (
+          {editingCharacters ? null : card.characters.length === 0 ? (
+            /* A list can be started before it holds anything, so say so. */
+            <p className="mt-2 text-xs font-semibold text-foreground/60">
+              {STUDY_LIST_COPY.noCharactersYet}
+            </p>
+          ) : (
             <p
               lang="ja"
               translate="no"
-              className={`mt-2 line-clamp-3 break-all text-2xl font-black leading-snug text-kanji ${JP_TEXT_CLASS}`}
+              className={`mt-2 line-clamp-3 break-all text-lg font-semibold leading-snug text-foreground/75 ${JP_TEXT_CLASS}`}
             >
               {card.characters.join("")}
             </p>

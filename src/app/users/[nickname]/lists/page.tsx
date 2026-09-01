@@ -12,6 +12,7 @@ import { fetchStudyLists } from "@/lib/studyLists";
 import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import NewListButton from "./NewListButton";
 import StudyListCards from "./StudyListCards";
 
 type PageProps = {
@@ -70,9 +71,13 @@ export default async function UserListsPage({ params }: PageProps) {
         className="mb-4"
       />
 
-      <header className="mb-4">
-        <h1 className="text-xl font-black">{STUDY_LIST_COPY.heading}</h1>
-        <p className="text-xs text-foreground/60">{STUDY_LIST_COPY.subtitle}</p>
+      <header className="mb-4 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-black">{STUDY_LIST_COPY.heading}</h1>
+          <p className="text-xs text-foreground/60">{STUDY_LIST_COPY.subtitle}</p>
+        </div>
+        {/* A page called Your lists needs a way to make one. */}
+        {canEdit ? <NewListButton accountId={account.id} /> : null}
       </header>
 
       <StudyListCards

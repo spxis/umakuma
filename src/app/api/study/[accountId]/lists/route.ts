@@ -31,8 +31,13 @@ const saveSchema = z.object({
    * Taken as a string rather than an array: this is what the selection encodes
    * and what a link carries, and splitting it here keeps one definition of what
    * counts as a character.
+   *
+   * Optional, because a list can be started before it holds anything. Making
+   * one on the lists page and filling it while browsing is the way somebody
+   * builds "kanji I keep losing"; requiring a character up front forced every
+   * list to begin on an explorer with a selection already made.
    */
-  characters: z.string().min(1),
+  characters: z.string().default(""),
 });
 
 /*
@@ -101,9 +106,6 @@ export async function POST(request: Request, context: RouteContext) {
         }
 
         const characters = normalizeListCharacters([parsed.data.characters]);
-        if (characters.length === 0) {
-          return NextResponse.json({ error: "A list needs at least one character." }, { status: 400 });
-        }
 
         /*
          * Saving a name that exists updates it. The alternative - refusing, or
@@ -181,19 +183,15 @@ export async function PATCH(request: Request, context: RouteContext) {
         }
 
         if (parsed.data.characters !== undefined) {
-          const characters = normalizeListCharacters([parsed.data.characters]);
           /*
-           * Emptying a list is deleting it, and it has its own button. Writing
-           * the empty set instead would leave a named row that practises
-           * nothing and reads as a bug rather than a choice.
+           * An empty list is allowed, here as on creation. It used to be
+           * refused on the reasoning that emptying a list is deleting it - but
+           * a list can now be named before it holds anything, and a rule that
+           * lets you create an empty list while refusing to empty one holds in
+           * only one direction. Deleting is still its own button, and still
+           * the way to be rid of a list rather than of its contents.
            */
-          if (characters.length === 0) {
-            return NextResponse.json(
-              { error: "A list needs at least one character. Delete it instead." },
-              { status: 400 },
-            );
-          }
-          data.characters = characters;
+          data.characters = normalizeListCharacters([parsed.data.characters]);
         }
 
         /*

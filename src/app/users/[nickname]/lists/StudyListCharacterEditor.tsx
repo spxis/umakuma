@@ -61,7 +61,8 @@ export default function StudyListCharacterEditor({ characters, saving, onSave, o
       </ul>
 
       {draft.length === 0 ? (
-        <p className="mt-2 text-[11px] font-semibold text-rose-600">{STUDY_LIST_COPY.editEmpty}</p>
+        /* Empty is allowed now, so this says what happens rather than refusing. */
+        <p className="mt-2 text-[11px] font-semibold text-foreground/60">{STUDY_LIST_COPY.editEmpty}</p>
       ) : null}
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -105,7 +106,7 @@ export default function StudyListCharacterEditor({ characters, saving, onSave, o
         <button
           type="button"
           onClick={() => onSave(draft)}
-          disabled={saving || draft.length === 0}
+          disabled={saving}
           className="inline-flex h-8 shrink-0 items-center whitespace-nowrap rounded-full bg-accent px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving ? STUDY_LIST_COPY.saving : STUDY_LIST_COPY.confirmSave}

@@ -32,6 +32,10 @@ export const STUDY_LIST_COPY = {
   subtitle: "Trouble and Favourites, and any set you have saved",
   empty: "No saved lists yet. Choose some characters on any explorer and save them here.",
   emptyHint: "A list is a set you picked yourself — this week's kanji, the ones that keep going wrong.",
+  newList: "New list",
+  cancel: "Cancel",
+  /* Shown on a list started here and not filled yet. */
+  noCharactersYet: "Nothing in it yet — add characters from any explorer.",
   practise: "Practise these",
 
   /*
@@ -54,7 +58,7 @@ export const STUDY_LIST_COPY = {
   addPlaceholder: "Add characters",
   addLabel: "Characters to add",
   removeCharacterLabel: "Remove",
-  editEmpty: "A list needs at least one character. Delete it instead.",
+  editEmpty: "Saving now leaves the list empty. Delete it if you want it gone.",
   editFailed: "Could not change that list.",
 
   remove: "Delete",
