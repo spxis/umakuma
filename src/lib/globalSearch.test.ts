@@ -11,6 +11,7 @@ import {
   isSearchable,
   normalizeQuery,
   parseSources,
+  publicKanjiHref,
   rankHit,
   rankMeanings,
   searchHitHref,
@@ -151,11 +152,16 @@ describe("searchHitHref", () => {
   const user = "johnmorrisdotca";
 
   /*
-   * Every destination is one of the viewer's own explorer pages, so with nobody
-   * signed in a link would only bounce off the sign-in wall.
+   * The explorers are behind the sign-in wall, so a reader with no account is
+   * sent to the public kanji page rather than to a link that would bounce.
    */
-  it("offers no link to an anonymous searcher", () => {
-    expect(searchHitHref(hit(), null)).toBeNull();
+  it("sends an anonymous searcher to the public page for a single kanji", () => {
+    expect(searchHitHref(hit({ glyph: "日" }), null)).toBe("/kanji/%E6%97%A5");
+  });
+
+  it("offers an anonymous searcher no link where there is no public page", () => {
+    expect(searchHitHref(hit({ glyph: "日曜日", subjectType: "vocabulary" }), null)).toBeNull();
+    expect(searchHitHref(hit({ glyph: "亠", subjectType: "radical" }), null)).toBeNull();
   });
 
   it("sends a WaniKani hit to the WaniKani explorer, already searched", () => {
@@ -202,6 +208,20 @@ describe("searchRequestUrl", () => {
 
   it("encodes the query", () => {
     expect(searchRequestUrl("日 sun")).toBe(`/api/search?q=${encodeURIComponent("日 sun")}`);
+  });
+});
+
+describe("publicKanjiHref", () => {
+  it("gives a single kanji its own public page", () => {
+    expect(publicKanjiHref(hit({ glyph: "水" }))).toBe("/kanji/%E6%B0%B4");
+  });
+
+  it("gives a word none, since that page holds one character", () => {
+    expect(publicKanjiHref(hit({ glyph: "日曜日", subjectType: "vocabulary" }))).toBeNull();
+  });
+
+  it("gives a radical none, since many are drawn rather than written", () => {
+    expect(publicKanjiHref(hit({ glyph: "亠", subjectType: "radical" }))).toBeNull();
   });
 });
 

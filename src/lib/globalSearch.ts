@@ -7,6 +7,8 @@
  * for asking all three at once and getting one ranked answer back.
  */
 
+import { SUBJECT_TYPES } from "./domainConstants";
+
 export const SEARCH_SOURCES = {
   wanikani: "wanikani",
   jlpt: "jlpt",
@@ -251,16 +253,33 @@ export function sortHits(hits: SearchHit[]): SearchHit[] {
 }
 
 /**
- * Where a hit leads, or null when nobody is signed in.
+ * The public page for a hit, for a reader with no account.
  *
- * Every destination is one of the viewer's own explorer pages, so an anonymous
- * search stays a lookup rather than offering links that would bounce off the
- * sign-in wall. Each explorer already accepts a find parameter, so the hit
- * arrives with its search already applied.
+ * `/kanji/[character]` is deliberately public - it is the page a shared kanji
+ * link opens - and it takes a single character, so a word or a radical drawn
+ * as an image has nowhere of its own to go.
+ */
+export function publicKanjiHref(hit: SearchHit): string | null {
+  const characters = [...hit.glyph];
+  if (characters.length !== 1 || hit.subjectType !== SUBJECT_TYPES.kanji) {
+    return null;
+  }
+  return `/kanji/${encodeURIComponent(hit.glyph)}`;
+}
+
+/**
+ * Where a hit leads.
+ *
+ * A signed-in member goes to their own explorer, which carries their SRS
+ * state and already accepts a find parameter, so the hit arrives with its
+ * search applied. Those pages are behind the sign-in wall, so a reader with no
+ * account used to get no link at all - every row was dead text, on the page
+ * most likely to be reached by someone who has never signed in. A single kanji
+ * has a public page, so that is where they go instead.
  */
 export function searchHitHref(hit: SearchHit, username: string | null): string | null {
   if (!username) {
-    return null;
+    return publicKanjiHref(hit);
   }
 
   const base = `/users/${encodeURIComponent(username)}`;

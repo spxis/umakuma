@@ -15,6 +15,7 @@ import {
   type SearchResults,
   type SearchSource,
 } from "@/lib/globalSearch";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 
 import { SEARCH_PAGE_COPY } from "./searchCopy";
@@ -251,5 +252,5 @@ function HitRow({ hit, index, href }: { hit: SearchHit; index: number; href: str
 
 /** Stroke order exists for single kanji, not radicals drawn as images or words. */
 function isSingleKanji(hit: SearchHit): boolean {
-  return hit.subjectType === "kanji" && [...hit.glyph].length === 1;
+  return hit.subjectType === SUBJECT_TYPES.kanji && [...hit.glyph].length === 1;
 }

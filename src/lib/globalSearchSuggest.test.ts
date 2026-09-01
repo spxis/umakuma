@@ -167,7 +167,12 @@ describe("suggestionHref", () => {
     expect(suggestionHref(jlpt, "kuma")).toBe("/users/kuma/jlpt-explorer?findJlpt=%E6%97%A5");
   });
 
-  it("falls back to the results page for anonymous visitors", () => {
-    expect(suggestionHref(hit(), null)).toBe("/search?query=%E6%97%A5");
+  it("opens the public kanji page for an anonymous visitor", () => {
+    expect(suggestionHref(hit(), null)).toBe("/kanji/%E6%97%A5");
+  });
+
+  it("falls back to the results page where there is no public page", () => {
+    const word = hit({ glyph: "日曜日", subjectType: "vocabulary" });
+    expect(suggestionHref(word, null)).toBe(`/search?query=${encodeURIComponent("日曜日")}`);
   });
 });

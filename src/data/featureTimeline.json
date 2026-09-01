@@ -1850,5 +1850,15 @@
     "version": "0.178.0",
     "releasedAt": "2026-09-01T16:00:00Z",
     "summary": "An API route here was public unless somebody remembered to guard it, and two never did - which is how a stranger came to be able to read a member WaniKani progress by holding an account id. That is the wrong way round for a site whose whole content is members data, so being open is now a decision that has to be written down. A test walks every route file and requires each one to either check who is asking or appear in a list of public routes with the reason it is safe to leave open. A new route that forgets fails the build rather than production, and adding one to that list is a deliberate act a reviewer sees in the diff. The same test checks two other things the list can drift on: that a route listed as public still exists, and that any public route which touches the database or calls an external API is rate limited. It caught one straight away - the book cover proxy, which does two database reads and up to two lookups against openBD and Google Books per call, with nothing throttling it. Its responses cache hard, but a cache only helps a repeated ISBN and varying one walks straight past it, so it is now limited to 120 requests a minute per address. The cache posture everywhere else was already correct: the static catalogue routes cache publicly at the edge for a day or more, and no route behind a session declares a public cache, so nothing personal can be served from a shared one."
+  },
+  {
+    "id": "a-way-in-without-an-account",
+    "area": "platform",
+    "name": "A way in without an account",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.179.0",
+    "releasedAt": "2026-09-01T17:00:00Z",
+    "summary": "Every search result linked into one of the viewer's own explorer pages, which sit behind the sign-in wall, so a reader with no account got no link at all: rows of dead text on the page most likely to be reached by somebody who has never signed in. A single kanji already has a public page - it is the one a shared kanji link opens - so that is where an anonymous reader now goes, from both the results list and the suggestion dropdown. A word or a radical drawn as an image has no page of its own, so those still fall back to the results rather than to a link that would land nowhere, and a signed-in member is unaffected: their explorers carry their review state and remain the better destination."
   }
 ]
