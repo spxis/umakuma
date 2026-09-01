@@ -45,14 +45,24 @@ describe("the built-in lists on the lists page", () => {
    * last item empties the list, it does not remove it. The card offers Open
    * instead, which is the panel the rest of the site already opens.
    */
-  it("offers Open rather than Remove on a built-in list", () => {
-    const cards = read("src/app/users/[nickname]/lists/StudyListCards.tsx");
-    const removeAt = cards.indexOf("setPendingRemoval(list.id)");
-    expect(removeAt).toBeGreaterThan(-1);
-    // Every remove button sits on the non-tagged branch of a tag check.
-    for (const marker of ["openStudyTagLists", "list.tag ?"]) {
-      expect(cards).toContain(marker);
+  it("offers Open rather than Rename or Delete on a built-in list", () => {
+    const card = read("src/app/users/[nickname]/lists/StudyListCard.tsx");
+
+    const tagCheck = card.indexOf("card.tag ? (");
+    const ownerCheck = card.indexOf("canEdit ? (");
+    expect(card).toContain("openStudyTagLists");
+    expect(tagCheck).toBeGreaterThan(-1);
+
+    /*
+     * Both editing actions sit on the non-tagged branch, so a permanent list
+     * cannot reach either of them however the card is rendered.
+     */
+    for (const marker of ["onClick={startEditing}", "onClick={onDelete}"]) {
+      const at = card.indexOf(marker);
+      expect(at, `${marker} is missing`).toBeGreaterThan(-1);
+      expect(at).toBeGreaterThan(ownerCheck);
     }
+    expect(ownerCheck).toBeGreaterThan(tagCheck);
   });
 
   /* The subtitle stopped being true the moment two unbuilt lists appeared. */

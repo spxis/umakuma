@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
+
 import { STUDY_LIST_COPY } from "./studyListCopy";
 import { encodeSelection } from "./subjectSelection";
 import type { SubjectSelection } from "./useSubjectSelection";
@@ -86,7 +88,7 @@ export default function SaveSelectionAsList({
           if (event.key === "Enter") void save();
           if (event.key === "Escape") setNaming(false);
         }}
-        maxLength={60}
+        maxLength={STUDY_LIST_LIMITS.nameLength}
         placeholder={STUDY_LIST_COPY.namePlaceholder}
         aria-label={STUDY_LIST_COPY.nameLabel}
         className="h-8 w-44 rounded-full border border-line bg-surface px-3 text-xs font-semibold text-foreground"

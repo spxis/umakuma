@@ -13,8 +13,7 @@ export const STUDY_LIST_COPY = {
   permanentHeading: "Always here",
   permanentBlurb: "These two fill themselves as you tag while you study. They cannot be deleted.",
   savedHeading: "Saved by you",
-  /* Says only what the page can do today; renaming is not built yet. */
-  savedBlurb: "Sets you put together yourself. Delete one whenever you like.",
+  savedBlurb: "Sets you put together yourself. Rename or delete one whenever you like.",
   save: "Save as list",
   confirmSave: "Save",
   saving: "Saving",
@@ -32,6 +31,16 @@ export const STUDY_LIST_COPY = {
   empty: "No saved lists yet. Choose some characters on any explorer and save them here.",
   emptyHint: "A list is a set you picked yourself — this week's kanji, the ones that keep going wrong.",
   practise: "Practise these",
+
+  /*
+   * Renaming happens in the card, not a dialog: the name is short, and what
+   * tells one list from another is the characters underneath it, which a modal
+   * would cover.
+   */
+  rename: "Rename",
+  renameCancel: "Cancel",
+  renameFailed: "Could not rename that list.",
+
   remove: "Delete",
   removeConfirmTitle: "Delete this list?",
   removeConfirmBody: "The characters stay where they are. Only the saved list goes.",
