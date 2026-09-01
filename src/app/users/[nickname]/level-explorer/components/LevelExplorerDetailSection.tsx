@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+import SourceCredit from "@/app/shared/SourceCredit";
+import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { titleForDisplay } from "../lib/levelExplorerDisplay";
 import LevelRelatedPanels from "./LevelRelatedPanels";
@@ -228,6 +231,10 @@ export default function LevelExplorerDetailSection({
           </div>
         </details>
       ) : null}
+
+      {/* The meanings, readings and mnemonics above are WaniKani's, the same as
+        * on the public subject pages, and are credited the same way. */}
+      <SourceCredit credit={SOURCE_CREDITS.wanikani} label={SOURCE_CREDIT_COPY.subjectData} />
     </section>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import SourceCredit from "./SourceCredit";
 import { STROKE_ANIMATION_COPY, STROKE_MS_PER_STROKE } from "./strokeAnimationCopy";
 
 type StrokePayload = {
@@ -197,15 +198,11 @@ export default function KanjiStrokeAnimation({
       </div>
 
       {showCredit ? (
-      <p className="text-[10px] font-semibold text-foreground/60">
-        {STROKE_ANIMATION_COPY.creditPrefix}{" "}
-        <a href={data.attribution.url} target="_blank" rel="noreferrer noopener" className="underline decoration-dotted underline-offset-2 hover:text-foreground/60">
-          {data.attribution.source}
-        </a>{" "}
-        <a href={data.attribution.licenceUrl} target="_blank" rel="noreferrer noopener" className="underline decoration-dotted underline-offset-2 hover:text-foreground/60">
-          ({data.attribution.licence})
-        </a>
-      </p>
+        <SourceCredit
+          credit={data.attribution}
+          label={STROKE_ANIMATION_COPY.creditPrefix}
+          className="text-[10px]!"
+        />
       ) : null}
     </div>
   );

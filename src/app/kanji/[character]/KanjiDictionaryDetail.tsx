@@ -1,5 +1,6 @@
 import type { KanjiDictionaryAttribution, KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import SourceCredit from "@/app/shared/SourceCredit";
 
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
 
@@ -43,21 +44,11 @@ export default function KanjiDictionaryDetail({
 
       {/* Share-alike: the credit is a licence condition, not decoration. */}
       {attribution ? (
-        <p className="pt-1 text-[11px] font-semibold text-foreground/60">
-          {KANJI_PAGE_COPY.dictionaryCredit}{" "}
-          <a
-            href={attribution.url}
-            className="underline decoration-dotted underline-offset-2 hover:text-foreground/70"
-          >
-            {attribution.source}
-          </a>{" "}
-          <a
-            href={attribution.licenceUrl}
-            className="underline decoration-dotted underline-offset-2 hover:text-foreground/70"
-          >
-            ({attribution.licence})
-          </a>
-        </p>
+        <SourceCredit
+          credit={attribution}
+          label={KANJI_PAGE_COPY.dictionaryCredit}
+          className="pt-1"
+        />
       ) : null}
     </section>
   );
