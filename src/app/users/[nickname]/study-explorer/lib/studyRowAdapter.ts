@@ -1,4 +1,8 @@
-import { subjectTypeOrVocabulary, type SubjectListRow } from "@/app/shared/subjectListView";
+import {
+  subjectTypeOrVocabulary,
+  toSubjectListRow,
+  type SubjectListRow,
+} from "@/app/shared/subjectListView";
 
 import type { StudyQueueItem } from "./studyExplorerTypes";
 
@@ -14,18 +18,13 @@ export type StudyRow = SubjectListRow & { item: StudyQueueItem };
  */
 export function toStudyRow(item: StudyQueueItem): StudyRow {
   return {
+    // WkStatus is what SRS_BUCKETS is built from, so it crosses over as-is.
+    ...toSubjectListRow({ ...item, status: item.status }),
     // Lessons and reviews can both hold the same subject, so the queue has to
     // be part of the key or React sees one row where there are two.
     key: `${item.queueType}-${item.subjectId}`,
-    subjectId: item.subjectId,
+    // A queue item without a type is drawn as vocabulary rather than untyped.
     subjectType: subjectTypeOrVocabulary(item.subjectType),
-    glyph: item.characters,
-    meaning: item.meanings[0] ?? "",
-    reading: item.primaryReadings?.[0] ?? item.readings?.[0] ?? null,
-    wkLevel: item.wkLevel ?? null,
-    srsStage: item.srsStage,
-    // WkStatus is what SRS_BUCKETS is built from, so it crosses over as-is.
-    srsBucket: item.status,
     item,
   };
 }

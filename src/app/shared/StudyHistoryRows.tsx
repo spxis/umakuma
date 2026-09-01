@@ -107,11 +107,12 @@ export default function StudyHistoryRows({
       renderSubMeta={(row) => (
         <>
           {showUser ? <span className="truncate">{row.attempt.nickname}</span> : null}
-          <span className="sm:hidden">{clockTime(row.attempt.submittedAt)}</span>
+          {/* Until the trailing lane appears at `md` and shows it there. */}
+          <span className="md:hidden">{clockTime(row.attempt.submittedAt)}</span>
         </>
       )}
       renderTrailing={(row) => (
-        <span className="hidden w-24 shrink-0 pr-1 text-right text-xs font-semibold text-foreground/60 sm:block">
+        <span className="hidden pr-1 text-right text-xs font-semibold text-foreground/60 md:block">
           <span className="block">{clockTime(row.attempt.submittedAt)}</span>
           <span className="block text-[10px] uppercase tracking-[0.08em] text-foreground/60">
             {formatRelativeFromNow(row.attempt.submittedAt, {

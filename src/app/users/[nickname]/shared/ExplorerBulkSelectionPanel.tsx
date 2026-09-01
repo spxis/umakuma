@@ -1,17 +1,11 @@
 import Link from "next/link";
 
 import SaveSelectionToList from "@/app/shared/SaveSelectionToList";
+import SubjectRows from "@/app/shared/SubjectRows";
 import { encodeSelection, SUBJECT_SELECTION_COPY } from "@/app/shared/subjectSelection";
+import type { SubjectListRow } from "@/app/shared/subjectListView";
 
-type BulkSelectionRow = {
-  subjectId: number;
-  characters: string;
-  subjectTypeLabel: string;
-  wkLevel: number | null;
-  srsStage: number;
-  reading: string | null;
-  meaning: string | null;
-};
+import { BULK_SELECTION_COPY } from "./bulkSelectionCopy";
 
 /**
  * Where a bulk selection can go once it exists.
@@ -43,13 +37,15 @@ type BulkDestinations = {
 type Props = {
   selectedCount: number;
   preview: string[];
-  rows: BulkSelectionRow[];
+  rows: SubjectListRow[];
   showFullList: boolean;
   isBusy?: boolean;
   onToggleFullList: () => void;
   onSelectVisible: () => void;
   onClearSelection: () => void;
   onDone: () => void;
+  /** Drops one item from the selection. A row in this list is what it removes. */
+  onRemoveSelected: (subjectId: number) => void;
   destinations?: BulkDestinations;
 };
 
@@ -63,6 +59,7 @@ export default function ExplorerBulkSelectionPanel({
   onSelectVisible,
   onClearSelection,
   onDone,
+  onRemoveSelected,
   destinations,
 }: Props) {
   const hasSelection = selectedCount > 0;
@@ -71,9 +68,13 @@ export default function ExplorerBulkSelectionPanel({
     <div className="sticky top-0 z-30 mb-3 rounded-2xl border border-line bg-surface p-3 shadow-[0_8px_22px_rgba(8,16,36,0.12)]">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">Bulk Selection Active</p>
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-foreground/70">
+            {BULK_SELECTION_COPY.title}
+          </p>
           <p className="mt-1 text-sm font-semibold text-foreground/85">
-            Selected {selectedCount} item{selectedCount === 1 ? "" : "s"}
+            {selectedCount === 1
+              ? BULK_SELECTION_COPY.selectedOne
+              : `${BULK_SELECTION_COPY.selectedPrefix} ${selectedCount} ${BULK_SELECTION_COPY.selectedManySuffix}`}
           </p>
           {hasSelection ? (
             <>
@@ -82,12 +83,15 @@ export default function ExplorerBulkSelectionPanel({
                 onClick={onToggleFullList}
                 className="mt-1 rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/80 hover:bg-surface-muted"
               >
-                {showFullList ? "Hide Full List" : "View Full List"}
+                {showFullList ? BULK_SELECTION_COPY.hideList : BULK_SELECTION_COPY.showList}
               </button>
-              <p className="mt-1 text-xs text-foreground/70">{preview.join("  •  ")}</p>
+              {/* The glyph strip repeats what the full list shows in columns. */}
+              {showFullList ? null : (
+                <p className="mt-1 text-xs text-foreground/70">{preview.join("  •  ")}</p>
+              )}
             </>
           ) : (
-            <p className="mt-1 text-xs text-foreground/70">Shift+click to select ranges.</p>
+            <p className="mt-1 text-xs text-foreground/70">{BULK_SELECTION_COPY.hint}</p>
           )}
         </div>
 
@@ -112,10 +116,16 @@ export default function ExplorerBulkSelectionPanel({
           <button
             type="button"
             onClick={onSelectVisible}
-            disabled={rows.length === 0 || isBusy}
+            /*
+             * Only while something is in flight. This was gated on `rows`,
+             * which holds what is already chosen - so the one control for
+             * choosing in bulk was disabled until you had chosen something by
+             * hand, which is the moment you least need it.
+             */
+            disabled={isBusy}
             className="rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Select Visible
+            {BULK_SELECTION_COPY.selectVisible}
           </button>
           <button
             type="button"
@@ -123,7 +133,7 @@ export default function ExplorerBulkSelectionPanel({
             disabled={!hasSelection || isBusy}
             className="rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Clear
+            {BULK_SELECTION_COPY.clear}
           </button>
           <button
             type="button"
@@ -131,41 +141,40 @@ export default function ExplorerBulkSelectionPanel({
             disabled={isBusy}
             className="rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Done
+            {BULK_SELECTION_COPY.done}
           </button>
         </div>
       </div>
 
       {showFullList && hasSelection ? (
-        <div className="mt-3 max-h-64 overflow-auto rounded-xl border border-line bg-surface-muted">
-          <table className="min-w-full border-collapse text-left text-xs">
-            <thead className="sticky top-0 bg-surface">
-              <tr className="border-b border-line text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/70">
-                <th className="px-3 py-2">Item</th>
-                <th className="px-3 py-2">Reading</th>
-                <th className="px-3 py-2">Meaning</th>
-                <th className="px-3 py-2">Type</th>
-                <th className="px-3 py-2">Level</th>
-                <th className="px-3 py-2">SRS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.subjectId} className="border-b border-line/60 last:border-b-0">
-                  <td className="px-3 py-2 text-sm font-black text-foreground">{row.characters}</td>
-                  <td className="px-3 py-2 text-foreground/80">{row.reading ?? "-"}</td>
-                  <td className="px-3 py-2 text-foreground/80">{row.meaning ?? "-"}</td>
-                  <td className="px-3 py-2 font-semibold uppercase tracking-[0.06em] text-foreground/80">
-                    {row.subjectTypeLabel}
-                  </td>
-                  <td className="px-3 py-2 font-semibold text-foreground/80">
-                    {typeof row.wkLevel === "number" ? `L${row.wkLevel}` : "L?"}
-                  </td>
-                  <td className="px-3 py-2 font-semibold text-foreground/80">{row.srsStage}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        /*
+         * The shared list, not a private table.
+         *
+         * This panel drew its own six-column table because nothing shared drew
+         * one - the row list stacked the reading under the meaning everywhere
+         * else. The columns won, so they moved into `SubjectRows` and this
+         * renders through it: the same lanes a member reads on history, the
+         * study queue and the tagged lists.
+         *
+         * A row removes its own item. It was a table cell before and could do
+         * nothing, so picking one thing by mistake meant clearing all of them
+         * and starting again.
+         */
+        <div className="mt-3 max-h-64 overflow-auto rounded-xl">
+          <SubjectRows
+            rows={rows}
+            onSelect={(row) => onRemoveSelected(row.subjectId)}
+            rowLabel={(row) => `${BULK_SELECTION_COPY.removeOne}: ${row.glyph}`}
+            renderTrailing={(row) => (
+              <span
+                aria-hidden="true"
+                title={`${BULK_SELECTION_COPY.removeOne} ${row.glyph}`}
+                className="text-xs font-black text-foreground/60"
+              >
+                ×
+              </span>
+            )}
+          />
         </div>
       ) : null}
     </div>
