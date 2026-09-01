@@ -6,6 +6,8 @@ import { generateFriendlyName, normalizeDisplayName, slugify, uniqueSlug } from 
 import { ACCOUNT_APPROVAL, isLockedOut } from "@/lib/accountApproval";
 import { WELCOME_COPY } from "@/app/welcome/welcomeCopy";
 import { isAccountVisibility } from "@/lib/accountVisibility";
+import { checkRateLimit, createRateLimitResponse } from "@/lib/apiRateLimit";
+import { SIGNUP_RATE_LIMIT } from "@/lib/signupSettings";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -27,6 +29,25 @@ export async function POST(request: Request) {
       const email = session?.user?.email?.trim().toLowerCase() ?? null;
       if (!email) {
         return NextResponse.json({ error: "Sign in first." }, { status: 401 });
+      }
+
+      /*
+       * Keyed on the signed-in address rather than the caller's IP, because a
+       * household shares one IP and everybody here is on the same one - an IP
+       * budget would have the second person in a family locked out by the
+       * first. The address is the right key anyway: it is what the ceiling is
+       * actually expressed in, since an email that already has an account gets
+       * that account back rather than a second one.
+       *
+       * Placed above the work rather than beside it. Nothing below is free -
+       * the settings read, the account lookup, and a scan of every existing
+       * slug to pick a free one - and a signed-in caller can repeat all of it
+       * at will. That scan is the reason a limit is worth having on a route
+       * that cannot mint a second account.
+       */
+      const rateLimit = checkRateLimit(`signup:${email}`, SIGNUP_RATE_LIMIT);
+      if (!rateLimit.allowed) {
+        return createRateLimitResponse(rateLimit);
       }
 
       const settings = await loadSignupSettings();

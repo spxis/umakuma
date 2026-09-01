@@ -1073,12 +1073,16 @@ belong to release 6 rather than to a date.
   whatever anyone is called. The real risk was impersonation - `/users/admin`
   or `/users/support` reading as the site speaking - and reserved words now
   take the numbered suffix like any collision, so nobody is turned away.
-- **`/api/signup` has no rate limit.** Lower than first written: it requires a
-  Google session before it does anything, and an email that already has an
-  account gets that account back rather than a second one - so the ceiling is
-  one account per Google address, not one per request. Worth a limit anyway
-  when the door opens, because the route reads every existing slug on each
-  call.
+- ~~**`/api/signup` has no rate limit.**~~ Shipped v0.198.0. The note below
+  was right that the ceiling was never the number of accounts - a Google
+  session is required, and an address that already has one gets it back rather
+  than a second. What was unbounded was the work: a settings read, an account
+  lookup and a scan of every existing slug, repeatable as fast as a signed-in
+  caller liked. Six per ten minutes now, keyed on the **signed-in address
+  rather than the caller's IP** - a household shares one IP, and an IP budget
+  would have the second person in a family locked out by the first. The check
+  sits above all three reads, which a test pins by position, because a limit
+  applied after them would bound the answer without bounding the work.
 - **"How did you hear about us"** — asked for during onboarding design, not
   built.
 

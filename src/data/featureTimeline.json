@@ -2040,5 +2040,15 @@
     "version": "0.197.0",
     "releasedAt": "2026-09-01T10:00:55Z",
     "summary": "The WaniKani explorer offered a tab reading All with the total beside it - two thousand nine hundred and twenty-two - and pressing it did nothing you could see. It put the member back on their own level, which was the level already showing, so the list did not change, the address kept the same single level in it, and the number on the tab described a view nothing in the app could open. There was no way to look across every level at all. It selects every level now and fetches the ones it does not already hold, a few at a time rather than all at once, because a level that is not cached goes out to WaniKani and sixty of those together is how an account gets rate limited. Results widen as each batch lands instead of waiting for the last. The address carries the whole selection, so the long view is a link somebody can be sent. The subtitle went with it: it read Select one level at a time, which was true of nothing - Sticky has always let a member gather several - and it was the last thing still saying one."
+  },
+  {
+    "id": "a-limit-on-signing-up",
+    "area": "account",
+    "name": "A limit on signing up",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.198.0",
+    "releasedAt": "2026-09-01T10:05:28Z",
+    "summary": "The route that creates an account had nothing bounding how often it could be called. It was never as bad as it sounds - a Google session is required before it does anything, and an address that already has an account gets that account back rather than a second one, so the ceiling was always one account per address rather than one per request. What was unbounded was the work behind it. Every call reads the signup settings, looks up the account, and scans every slug on the site to pick a free address, and a signed-in caller could repeat all of that as fast as they liked. Six attempts in ten minutes now, which leaves room for a form submitted twice, a retried request and a reload, and stops a loop. It is counted against the signed-in address rather than the caller's network address, because a household shares one of those - this one does - and a per-network budget would have the second person in a family turned away by the first. The check sits above all three reads rather than beside them, since a limit applied after the work bounds the answer and not the cost. None of this matters while the door is shut; all of it matters the moment it opens."
   }
 ]

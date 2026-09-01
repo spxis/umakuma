@@ -248,6 +248,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tenohira no Tejun", ja: "手のひらの手順", reading: "てのひらのてじゅん", gloss: "the steps that fit in a palm" },
   { romaji: "Tonari no Tobira", ja: "隣の扉", reading: "となりのとびら", gloss: "the door beside it, and it opens too" },
   { romaji: "Nagai Nagame", ja: "長い眺め", reading: "ながいながめ", gloss: "the long view, every level at once" },
+  { romaji: "Nikka no Nimotsu", ja: "日課の荷物", reading: "にっかのにもつ", gloss: "the load one day is allowed to carry" },
 ];
 
 /**

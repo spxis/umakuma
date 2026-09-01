@@ -18,6 +18,23 @@ import {
  * admin page when he is ready, which is the point of it being a setting.
  */
 
+/**
+ * How often one address may ask to sign up.
+ *
+ * Generous, because signing up is something a person does once and the route
+ * cannot mint a second account for an address that already has one - the
+ * ceiling was never the number of accounts. What it bounds is the work: a
+ * settings read, an account lookup and a scan of every existing slug, all of
+ * which a signed-in caller could otherwise repeat as fast as they liked.
+ *
+ * Six in ten minutes leaves room for a form submitted twice, a retried request
+ * and a reload, and still stops a loop.
+ */
+export const SIGNUP_RATE_LIMIT = {
+  windowMs: 10 * 60 * 1000,
+  maxRequests: 6,
+} as const;
+
 export const SIGNUP_MODES = {
   /** Only someone holding an invite code gets an account. */
   inviteOnly: "invite_only",
