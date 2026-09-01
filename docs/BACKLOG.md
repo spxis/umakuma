@@ -982,9 +982,18 @@ belong to release 6 rather than to a date.
 - **`visibility = null` should be impossible.** Today a row with no visibility
   falls back to a default at read time, in more than one place. It wants a
   schema change and therefore a hand-applied `db push`.
-- **A reserved slug list.** `admin`, `api`, `login`, `search` and the rest are
-  claimable as nicknames today, and a member who takes one shadows a route.
-- **`/api/signup` has no rate limit**, which is the one endpoint that will be
-  found within a day of the door opening.
+- ~~**A reserved slug list.**~~ Shipped v0.188.0. The claim here was wrong and
+  is worth correcting rather than deleting: a slug cannot shadow a route.
+  Every member page lives under `/users/`, and there is no dynamic segment at
+  the root, so `/users/admin` is a member page and `/admin` is the admin page
+  whatever anyone is called. The real risk was impersonation - `/users/admin`
+  or `/users/support` reading as the site speaking - and reserved words now
+  take the numbered suffix like any collision, so nobody is turned away.
+- **`/api/signup` has no rate limit.** Lower than first written: it requires a
+  Google session before it does anything, and an email that already has an
+  account gets that account back rather than a second one - so the ceiling is
+  one account per Google address, not one per request. Worth a limit anyway
+  when the door opens, because the route reads every existing slug on each
+  call.
 - **"How did you hear about us"** — asked for during onboarding design, not
   built.

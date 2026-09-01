@@ -7,6 +7,8 @@ import {
   normalizeDisplayName,
   resolveDisplayName,
   slugify,
+  isReservedSlug,
+  RESERVED_SLUGS,
   uniqueSlug,
 } from "./accountIdentity";
 
@@ -119,5 +121,52 @@ describe("resolveDisplayName", () => {
   it("never renders a blank where a name belongs", () => {
     expect(resolveDisplayName({})).toBe("Member");
     expect(resolveDisplayName({ displayName: "   " })).toBe("Member");
+  });
+});
+
+/*
+ * Words the site uses about itself.
+ *
+ * Not a routing problem - every member page is under `/users/`, so no slug can
+ * shadow `/admin` or `/api` however it is spelled. It is impersonation:
+ * `/users/admin` or `/users/support` reads as the site speaking rather than as
+ * a member, and the first person whose display name is "Admin" would take it
+ * without meaning anything by it.
+ */
+describe("reserved slugs", () => {
+  it("hands a reserved word the numbered suffix, like any collision", () => {
+    expect(uniqueSlug("admin", new Set())).toBe("admin-2");
+    expect(uniqueSlug("support", new Set())).toBe("support-2");
+  });
+
+  it("does not turn anyone away - only the address moves", () => {
+    /* "Admin" as a display name still gets an account, just not that slug. */
+    const slug = uniqueSlug("admin", new Set());
+    expect(slug).toMatch(/^admin-\d+$/);
+    expect(isReservedSlug(slug)).toBe(false);
+  });
+
+  it("skips a numbered candidate that is itself reserved", () => {
+    /* Nothing in the list ends in a suffix today; the guard is for when it does. */
+    expect(isReservedSlug(uniqueSlug("admin", new Set(["admin-2"])))).toBe(false);
+  });
+
+  it("leaves ordinary names alone", () => {
+    for (const name of ["jay", "emi", "kanjimaster", "administrators-club"]) {
+      expect(uniqueSlug(name, new Set())).toBe(name);
+    }
+  });
+
+  it("matches case-insensitively and ignores surrounding space", () => {
+    expect(isReservedSlug("ADMIN")).toBe(true);
+    expect(isReservedSlug("  Support ")).toBe(true);
+    expect(isReservedSlug("jay")).toBe(false);
+  });
+
+  /* A reserved word that cannot be produced by slugify would never be tested. */
+  it("only lists words a slug could actually be", () => {
+    for (const word of RESERVED_SLUGS) {
+      expect(word, `${word} is not a possible slug`).toMatch(/^[a-z0-9-]+$/);
+    }
   });
 });

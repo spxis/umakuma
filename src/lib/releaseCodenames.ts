@@ -238,6 +238,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Kesshite Kehai", ja: "決して気配", reading: "けっしてけはい", gloss: "the sign that never fades" },
   { romaji: "Kotaeru Kokoro", ja: "答える心", reading: "こたえるこころ", gloss: "the heart that answers back" },
   { romaji: "Sayaka na Iro", ja: "さやかな色", reading: "さやかないろ", gloss: "a colour you can make out clearly" },
+  { romaji: "Shirushi no Shikaku", ja: "印の資格", reading: "しるしのしかく", gloss: "the right to wear the badge" },
 ];
 
 /**

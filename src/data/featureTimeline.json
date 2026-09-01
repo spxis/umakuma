@@ -1940,5 +1940,15 @@
     "version": "0.187.0",
     "summary": "Muted grey text across the app sat at 3.07 to one against a 4.5 floor - readable if your eyes are good and the room is bright, and not otherwise. It was on 751 nodes, and nothing about it looked wrong to whoever chose it, which is how contrast problems survive: faint reads as tasteful to the person picking it and as missing to the person who cannot see it. Every muted step below the readable one is raised to the lowest that clears the floor against both the white surface and the page background. The three subject colours had the same problem as pill labels - the radical pill worst at 2.21, half what a small uppercase label needs - but those colours are the brand, so they are untouched. A second, darker token was added for text on a tinted ground, and only pill labels use it; every glyph, border, fill and accent still reads the original. Faintness is kept where it carries meaning: a disabled pagination button, the off state of a toggle, the greyed corner a round is not using, the ghost completion that must not look typed, and the glyph drawn behind stroke order to trace over. Those are listed one by one with the reason, and a test holds the floor everywhere else.",
     "releasedAt": "2026-09-01T06:52:16Z"
+  },
+  {
+    "id": "reserved-member-slugs",
+    "area": "account",
+    "name": "Names the site keeps for itself",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.188.0",
+    "summary": "A handful of words now cannot become a member's address. Signing up as Admin or Support would have produced /users/admin and /users/support, which read as the site speaking rather than as a member - and the first person to get one would have taken it by accident rather than by malice, since the address is built from whatever display name they arrived with. Reserved words are treated exactly like a name somebody already has: they take the numbered suffix, so nobody is refused an account and only the address moves. Their display name is untouched. Worth saying what this is not: it was written down as a route-shadowing risk and it never was one. Every member page lives under /users/ and there is no dynamic segment at the root, so /admin is the admin page whatever anyone calls themselves. The backlog note has been corrected rather than quietly deleted.",
+    "releasedAt": "2026-09-01T06:56:29Z"
   }
 ]
