@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 
-import { canAccessAccount } from "@/lib/accountAccess";
+import { loadStudyAccount } from "@/lib/accountAccess";
 import {
   WANIKANI_REQUIRED_MESSAGE,
   WANIKANI_REQUIRED_STATUS,
   wanikaniConnection,
 } from "@/lib/wanikaniConnection";
-import { prisma } from "@/lib/prisma";
 import { fetchAssignmentCount } from "../queue/queueRouteUtils";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 
@@ -23,19 +22,11 @@ export async function GET(request: Request, context: RouteContext) {
 
 try {
                 const { accountId } = await context.params;
-                if (!(await canAccessAccount(request, accountId))) {
+                /* One read: the access decision and the token come together. */
+                const { allowed, account } = await loadStudyAccount(request, accountId);
+                if (!allowed) {
                   return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
                 }
-
-                const account = await prisma.account.findUnique({
-                  where: { id: accountId },
-                  select: {
-                    tokenEncrypted: true,
-                    tokenIv: true,
-                    tokenTag: true,
-                    wkLevel: true,
-                  },
-                });
 
                 if (!account) {
                   return NextResponse.json({ error: "Account not found." }, { status: 404 });

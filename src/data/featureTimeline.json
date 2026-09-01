@@ -1810,5 +1810,15 @@
     "version": "0.174.0",
     "releasedAt": "2026-09-01T12:00:00Z",
     "summary": "The study counts and the study queue each re-asked the server every thirty seconds, which is far more often than either can change: review counts move on WaniKani SRS schedule, measured in hours, and the queue is mutated locally as a member answers rather than discovered by polling. The poll was never the mechanism, only a safety net for a session left open while something changed elsewhere - and it was an expensive one. A single open tab was 120 serverless invocations an hour and roughly 240 database queries, since every request checks access and then reads the account again; an evening across the family ran to thousands of both while discovering nothing. The part that actually shows up on the bill is Neon: its compute suspends after five minutes idle and is charged for the time it is awake, so a thirty-second poll meant the database never slept for as long as anybody had the study page open. Both surfaces now poll on one shared interval of five minutes, set just past that suspend threshold on purpose, so a closed laptop lets the database go to sleep. Revalidate-on-focus stays on, so returning to the tab still refreshes at once and the slower poll is never something a member waits on. A test pins the interval against the suspend window and fails if either surface goes back to a hand-typed number."
+  },
+  {
+    "id": "one-read-per-study-request",
+    "area": "platform",
+    "name": "One read where there were two",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.175.0",
+    "releasedAt": "2026-09-01T13:00:00Z",
+    "summary": "Every study route checked whether the request was allowed by reading the account, then read the same row again for the member WaniKani token. Counts and queue are what the study page asks for on a timer and review is asked once per answer, so that second read was the single most repeated query in the product - and on the busiest paths it doubled the database work for no information. The columns an access decision needs are three small ones, so they are now selected as part of the read the route was making anyway and the round trip disappears. Five routes moved across: counts, queue, review, upcoming and lesson start. The access check itself got cheaper too: it used to query once for the invite path and again for the Google path when the first did not match, and now resolves who is asking from the request before touching the database at all, so an admin is answered without a query and everybody else costs exactly one. Permission and existence stay separate answers, because a permitted request for an account that has since been deleted is a 404 rather than a 401."
   }
 ]

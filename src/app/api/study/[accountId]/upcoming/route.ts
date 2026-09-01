@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { canAccessAccount } from "@/lib/accountAccess";
+import { loadStudyAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import {
@@ -9,7 +9,6 @@ import {
   WANIKANI_REQUIRED_STATUS,
   wanikaniConnection,
 } from "@/lib/wanikaniConnection";
-import { prisma } from "@/lib/prisma";
 import { fetchAllCollectionPages, fetchWaniKani } from "@/lib/wanikani/http";
 import type { WaniKaniSummaryResponse } from "@/lib/wanikani/types";
 
@@ -52,7 +51,9 @@ export async function GET(request: Request, context: RouteContext) {
     execute: async () => {
       try {
         const { accountId } = await context.params;
-        if (!(await canAccessAccount(request, accountId))) {
+        /* One read: the access decision and the token come together. */
+        const { allowed, account } = await loadStudyAccount(request, accountId);
+        if (!allowed) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 
@@ -66,16 +67,7 @@ export async function GET(request: Request, context: RouteContext) {
 
         const limit = parsed.data.limit ?? 8;
 
-        const account = await prisma.account.findUnique({
-          where: { id: accountId },
-          select: {
-            tokenEncrypted: true,
-            tokenIv: true,
-            tokenTag: true,
-          },
-        });
-
-        if (!account) {
+                if (!account) {
           return NextResponse.json({ error: "Account not found." }, { status: 404 });
         }
 
