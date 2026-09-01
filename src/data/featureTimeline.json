@@ -1910,5 +1910,15 @@
     "version": "0.184.0",
     "releasedAt": "2026-09-01T05:36:12Z",
     "summary": "A hundred results made the search page many screens tall, so scrolling through them carried the navigation, the search box and the source tabs off the top, left the remembered searches below a kilometre of rows, and ended a short answer in a blank field where the list used to be. The rows now scroll inside the card at a height the screen sets, so everything around them stays put: the box, the tabs and the counts hold their place while the results move under them. The recent searches sit outside that scroll rather than at the end of it - a way back you have to scroll a hundred results to reach is not a way back - and the paging observer watches the card instead of the window, so reaching the end of the rows still loads the next stretch."
+  },
+  {
+    "id": "sentences-that-show-the-kanji-at-work",
+    "area": "platform",
+    "name": "Sentences that show the kanji at work",
+    "status": "shipped",
+    "date": "2026-08-31",
+    "version": "0.185.0",
+    "releasedAt": "2026-09-01T06:21:48Z",
+    "summary": "Readings and meanings say what a kanji is; a sentence says what it does, and the site's own examples come from WaniKani - shown to WaniKani members, absent everywhere else, including the public page a shared kanji link opens. Tatoeba publishes its corpus weekly as plain exports, which is the supported way to take it and the reason nothing here scrapes anything, and 232,731 Japanese sentences with an English translation are now ingested and indexed by the characters they contain. They arrive easiest first: each was scored at ingest by its length and the cost of its hardest character, so 水 opens with 水をくれ！ rather than with one of the other 1,644 sentences it appears in. Near-repeats that differ only in punctuation are folded together, since Tatoeba holds 水をくれ！ and 水をくれ。 separately and both would otherwise spend a slot saying the same thing. Kana-only sentences are kept though nothing can reach them yet, because they are the ones a kana vocabulary word would need later. The corpus is CC BY 2.0 FR, so the credit sits under every set of examples."
   }
 ]

@@ -543,7 +543,7 @@ response. Public surfaces show the display name from release 4 and nothing else.
 
 ## Open decisions
 
-Two, both John's, both blocking work that is otherwise ready to start.
+Three, all John's; two block work that is otherwise ready to start.
 
 **How the explorers address a thing (item 35).** Path segments carrying the
 identity (`/users/john/jlpt/n1/弘`) with query strings left for view state, or
@@ -558,6 +558,17 @@ Darkening them changes how the whole app looks, so it is a decision about the
 brand rather than a defect to fix quietly. The muted-text half
 (`text-foreground/45`, 751 nodes) could move to `/60` on its own without
 touching the palette.
+
+**Whether the kana-only Tatoeba sentences stay (item 33).** 4,320 of the
+232,731 ingested sentences contain no kanji at all - 2% of the table - and
+every lookup the site has finds a sentence by a kanji, so nothing can reach
+them today. They were nearly dropped on that basis. They are kept instead
+because they are exactly what a kana vocabulary word (これ, どこ, ありがとう)
+would need if example sentences ever reach vocabulary rather than only kanji,
+and because removing them later is one re-ingest while re-adding them means
+noticing they were missing. Revisit when vocabulary examples are designed, or
+if the table ever needs to be smaller: the answer is a one-line filter either
+way. Not blocking anything.
 
 Everything else raised so far is either decided below, shipped, or queued in
 the release order.

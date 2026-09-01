@@ -712,3 +712,30 @@ model CustomStudyReviewAttempt {
   @@index([accountId, libraryId, submittedAt])
   @@index([accountId, itemId, submittedAt])
 }
+
+/// Example sentences from Tatoeba, ingested from their weekly export.
+///
+/// The site's own sentences come from WaniKani, which means members without a
+/// WaniKani connection see none at all. This is the source that answers "how is
+/// this actually used" for everybody: 232,770 Japanese sentences that have an
+/// English translation, indexed by the characters they contain.
+///
+/// Kept in Postgres rather than shipped as JSON like the kanji dictionary,
+/// because a quarter of a million sentences is far past what belongs in a
+/// bundle, and because the lookup is a containment query rather than a read.
+model TatoebaSentence {
+  /// Tatoeba's own id, so a row can link back to the sentence it came from.
+  id         Int      @id
+  japanese   String
+  english    String
+  /// Distinct kanji in the sentence; the GIN index is what makes 水 find these.
+  kanji      String[] @default([])
+  /// Lowest first: sentence length plus the cost of its hardest character.
+  difficulty Int
+  /// The contributor, for the attribution CC BY asks for.
+  owner      String?
+  ingestedAt DateTime @default(now())
+
+  @@index([kanji], type: Gin)
+  @@index([difficulty])
+}

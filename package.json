@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "0.184.0",
+  "version": "0.185.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -74,6 +74,8 @@
     "staging:status": "./deploy/staging/deploy-staging-ds1.sh --status",
     "strokes:build": "node scripts/build-kanjivg.mjs",
     "kanji:build": "node scripts/build-kanjidic.mjs",
+    "sentences:ingest": "pnpm dlx tsx scripts/ingest-tatoeba.ts",
+    "sentences:ingest:dry": "pnpm sentences:ingest --dry-run",
     "readings:build": "node scripts/build-joyo-readings.mjs"
   },
   "dependencies": {

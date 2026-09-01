@@ -7,8 +7,10 @@ import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { displayReading, readingsForGrade } from "@/app/users/[nickname]/grades/gradeExplorerView";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
 import { getKanjiDictionaryAttribution, getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
+import { fetchSentencesForKanji } from "@/lib/tatoebaSentences";
 
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
+import KanjiSentences from "./KanjiSentences";
 
 type Props = { params: Promise<{ character: string }> };
 
@@ -69,6 +71,7 @@ export default async function KanjiPage({ params }: Props) {
    * for a learner rather than transcribed from a reference.
    */
   const dictionary = getKanjiDictionaryEntry(character);
+  const sentences = await fetchSentencesForKanji(character);
   const summary = entry
     ? {
         meaning: entry.primaryMeaning ?? null,
@@ -98,6 +101,8 @@ export default async function KanjiPage({ params }: Props) {
       {dictionary ? (
         <KanjiDictionaryDetail entry={dictionary} attribution={getKanjiDictionaryAttribution()} />
       ) : null}
+
+      <KanjiSentences sentences={sentences} />
 
       <p className="text-center text-sm">
         <Link href="/" className="font-bold text-accent underline underline-offset-2">

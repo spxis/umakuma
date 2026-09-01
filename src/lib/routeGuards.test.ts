@@ -26,6 +26,8 @@ const PUBLIC_ROUTES: Record<string, string> = {
     "Where an invite code is exchanged for a session. Rate limited, 12 attempts per 10 minutes per IP.",
   "search/route.ts":
     "The shared catalogue, no personal data, no database. Rate limited and cached at the edge.",
+  "sentences/route.ts":
+    "Tatoeba example sentences for one character. They belong to Tatoeba rather than to any member, and every surface showing a kanji can ask - but unlike the static catalogues this one does reach the database, so it is rate limited for that reason.",
   "school-grades/route.ts": "Static school-grade catalogue. No database, cached publicly.",
   "school-grades/[grade]/route.ts": "Static school-grade catalogue. No database, cached publicly.",
   "school-grades/kanji/[character]/route.ts":

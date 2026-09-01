@@ -13,5 +13,7 @@ export const KANJI_PAGE_COPY = {
   gradeElementary: (grade: number) => `Elementary, year ${grade}`,
   jlptOld: "JLPT (old)",
   dictionaryCredit: "Dictionary data from",
+  examples: "In use",
+  sentenceCredit: "Example sentences from",
   backHome: "UmaKuma",
 } as const;
