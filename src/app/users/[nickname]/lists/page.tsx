@@ -79,7 +79,7 @@ export default async function UserListsPage({ params }: PageProps) {
         lists={lists}
         taggedLists={taggedLists}
         accountId={account.id}
-        practicePath={`/users/${encodeURIComponent(nickname)}/grades/practice`}
+        practicePath={`/users/${encodeURIComponent(nickname)}/practice`}
         canEdit={canEdit}
       />
     </div>

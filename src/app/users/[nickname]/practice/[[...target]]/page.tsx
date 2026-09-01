@@ -9,20 +9,22 @@ import { toPaginationPlacement } from "@/app/shared/paginationPlacement";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
-import { PRACTICE_SOURCES, isPracticeSource, isTaggedPracticeSource, practiceEntriesFor, practiceLevelCounts } from "@/lib/practiceSource";
+import { PRACTICE_SOURCES, isTaggedPracticeSource, practiceEntriesFor, practiceLevelCounts } from "@/lib/practiceSource";
 import { decodeSelection, encodeSelection, SELECTION_PARAM } from "@/app/shared/subjectSelection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
-import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, parseGradeParam, parsePageParam } from "../gradeExplorerView";
-import PrintButton from "./PrintButton";
-import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_CHIP, SHEET_SIZES, toSheetSize, WANIKANI_MAX_LEVEL } from "./practiceCopy";
-import SheetOptionsRow from "./SheetOptionsRow";
-import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "./sheetLink";
-import TracingSheet, { type SheetMode } from "./TracingSheet";
+import { DEFAULT_GRADE } from "../../grades/GradeExplorer.constants";
+import { parsePracticeTarget } from "../practiceAddress";
+import { GRADE_OPTIONS, GRADE_SHORT_LABELS, isGradeOption, parsePageParam } from "../../grades/gradeExplorerView";
+import PrintButton from "../PrintButton";
+import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_CHIP, SHEET_SIZES, toSheetSize, WANIKANI_MAX_LEVEL } from "../practiceCopy";
+import SheetOptionsRow from "../SheetOptionsRow";
+import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "../sheetLink";
+import TracingSheet, { type SheetMode } from "../TracingSheet";
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type PageProps = {
-  params: Promise<{ nickname: string }>;
+  params: Promise<{ nickname: string; target?: string[] }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
@@ -38,7 +40,17 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     sessionName: session?.user?.name?.trim() ?? null,
   });
 
-  const { nickname } = await params;
+  const { nickname, target: rawTarget } = await params;
+
+  /*
+   * The collection is in the path now, so a wrong one is a 404 rather than a
+   * silent fall back to grade one, and `/practice` on its own opens the
+   * chooser - which is the point of it being a surface of its own.
+   */
+  const target = parsePracticeTarget(rawTarget);
+  if (target === "invalid") {
+    notFound();
+  }
   const query = await searchParams;
   const modeParam = typeof query.mode === "string" ? query.mode : null;
   const mode: SheetMode = modeParam === "strokes" ? "strokes" : "trace";
@@ -47,7 +59,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
    * server component and a chosen sheet is still a link somebody can send or
    * print. Selecting the active source toggles it.
    */
-  const choosing = firstValue(query.pick) === "1";
+  const choosing = target === null || firstValue(query.pick) === "1";
   /*
    * The model column defaults on and the readings default off, which is the
    * sheet as it printed before these became choices. Neither is a judgement
@@ -104,13 +116,13 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
    */
   const picked = decodeSelection(firstValue(query[SELECTION_PARAM]));
 
-  const grade = parseGradeParam(firstValue(query.grade));
   const page = parsePageParam(firstValue(query.page));
-
   const viewerWkLevel = account.wkLevel ?? 1;
-  const rawSource = firstValue(query.source) ?? PRACTICE_SOURCES.grade;
-  const source = isPracticeSource(rawSource) ? rawSource : PRACTICE_SOURCES.grade;
-  const level = source === PRACTICE_SOURCES.grade ? grade : Number(firstValue(query.level) ?? "1");
+
+  const source = target?.source ?? PRACTICE_SOURCES.grade;
+  const level = target?.level ?? DEFAULT_GRADE;
+  /* Only the grade ladder has a grade; the others carry a level of their own. */
+  const grade = isGradeOption(level) ? level : DEFAULT_GRADE;
 
   // Only fetched while the chooser is open, so a closed sheet pays nothing.
   const levelCounts = choosing && !isTaggedPracticeSource(source)
@@ -222,13 +234,13 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           </span>
         </div>
 
+        {/*
+          * No "back to grades": practice is not a page you arrive at from the
+          * grades explorer any more. It builds sheets from WaniKani levels,
+          * JLPT levels, school grades and either tagged list, and the
+          * navigation above holds all of them.
+          */}
         <div className="flex items-center gap-2 print:hidden">
-          <Link
-            href={gradeHref(decodeURIComponent(nickname), grade)}
-            className="inline-flex h-9 items-center rounded-full border border-line px-4 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 transition hover:bg-surface-muted"
-          >
-            {PRACTICE_SHEET_COPY.back}
-          </Link>
           <PrintButton
             pageCount={pageCount}
             onThisPage={entries.length}

@@ -50,7 +50,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: DASHBOARD_TAB_LABELS.wk, path: "library-explorer" },
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
       { label: "Grades", path: "grades" },
-      { label: "Practice", path: "grades/practice" },
+      { label: "Practice", path: "practice" },
       { label: "Lists", path: "lists" },
     ],
   },

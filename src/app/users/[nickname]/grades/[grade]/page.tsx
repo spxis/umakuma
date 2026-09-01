@@ -126,7 +126,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
           </div>
 
           <Link
-            href={`/users/${encodeURIComponent(userKey)}/grades/practice?grade=${grade}`}
+            href={`/users/${encodeURIComponent(userKey)}/practice/grade/${grade}`}
             className="mt-3 inline-flex h-8 items-center rounded-full border border-kanji/40 bg-kanji/10 px-4 text-xs font-black uppercase tracking-[0.08em] text-kanji transition hover:bg-kanji/20"
           >
             {GRADE_EXPLORER_COPY.practiceSheet}
@@ -170,7 +170,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
           <GradeKanjiBoard
             key={`${grade}:${page}:${search}`}
             items={withOfficialReadings(catalog.items)}
-            practicePath={`/users/${encodeURIComponent(nickname)}/grades/practice`}
+            practicePath={`/users/${encodeURIComponent(nickname)}/practice`}
             accountId={viewsOwnPage(viewerMenuInfo, userKey) ? account.id : null}
           />
 

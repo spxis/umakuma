@@ -98,7 +98,7 @@ export default function JlptExplorerContent({
    */
   const selection = useSubjectSelection();
   const pathname = usePathname();
-  const practicePath = `${(pathname ?? "").split("/").slice(0, 3).join("/")}/grades/practice`;
+  const practicePath = `${(pathname ?? "").split("/").slice(0, 3).join("/")}/practice`;
 
   const PAGE_SIZE = 40;
   const sentinelRef = useRef<HTMLDivElement | null>(null);

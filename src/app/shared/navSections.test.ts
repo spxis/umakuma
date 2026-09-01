@@ -23,7 +23,7 @@ describe("the grouped header", () => {
       "read",
       "news",
       "libraries",
-      "grades/practice",
+      "practice",
     ]) {
       expect(paths).toContain(expected);
     }
@@ -81,7 +81,7 @@ describe("sectionForPath", () => {
    * segment, so matching has to compare on that rather than the whole path.
    */
   it("puts a nested page in its group", () => {
-    expect(sectionForPath(`/users/${USER}/grades/practice`, USER)?.id).toBe("explore");
+    expect(sectionForPath(`/users/${USER}/practice`, USER)?.id).toBe("explore");
   });
 
   it("finds the leaderboard at the root", () => {

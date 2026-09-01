@@ -2010,5 +2010,15 @@
     "version": "0.194.0",
     "releasedAt": "2026-09-01T09:25:40Z",
     "summary": "The grades explorer shipped its path move with a redirect from the old query-string address, on the assumption that links already sent had to keep working. They do not: the site has no users yet, and a compatibility layer for links nobody sent is a second code path to understand, test and eventually remove in exchange for nothing. The redirect is gone, the collection root simply opens on the first grade because that is where the navigation points, and there is exactly one address for a grade. The rule is now in AGENTS.md so it is not relearned: change the thing and update every caller, with two exceptions where data outlives code - persisted database values like the revenge enum member and the batchSize sentinel, and anything already written to production, which needs migrating rather than shimming."
+  },
+  {
+    "id": "practice-is-not-a-page-under-grades",
+    "area": "platform",
+    "name": "Practice is not a page under grades",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "version": "0.195.0",
+    "releasedAt": "2026-09-01T09:35:56Z",
+    "summary": "Writing practice lived at /grades/practice, which read as though the grades explorer owned it. It never did: it builds sheets from school grades, WaniKani levels, JLPT levels, either tagged list, or a set picked by hand on any surface. It is the thing you do to a collection rather than a page belonging to one of them, and filing it under one made the other four look like guests. It is a surface of its own now, at /practice, with the collection in the path - /practice/jlpt/5, /practice/grade/2, /practice/trouble - and how the sheet prints staying in the query, because that is how you are practising rather than what. A bare /practice opens the chooser, which is the point of it being top level: it is where you decide what to practise. A level on a list, or a source that does not exist, returns a 404 rather than a default sheet. The Back to grades button went with the move, since practice is no longer somewhere you arrive from grades, and the navigation now lists Practice beside the explorers rather than beneath one."
   }
 ]

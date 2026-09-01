@@ -245,6 +245,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tayori no Tana", ja: "便りの棚", reading: "たよりのたな", gloss: "the shelf where the letters are kept" },
   { romaji: "Chizu no Chikamichi", ja: "地図の近道", reading: "ちずのちかみち", gloss: "the shortcut the map shows" },
   { romaji: "Tsutaeru Tsuchi", ja: "伝える土", reading: "つたえるつち", gloss: "the ground that carries word" },
+  { romaji: "Tenohira no Tejun", ja: "手のひらの手順", reading: "てのひらのてじゅん", gloss: "the steps that fit in a palm" },
 ];
 
 /**

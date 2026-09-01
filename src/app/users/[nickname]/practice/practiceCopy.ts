@@ -3,7 +3,6 @@ export const PRACTICE_SHEET_COPY = {
   heading: "Writing practice",
   subtitle: "Copy the first square, trace the faint ones, then write the rest yourself",
   print: "Print",
-  back: "Back to grades",
   gradeLabel: "Grade",
   stroke: "stroke",
   strokes: "strokes",

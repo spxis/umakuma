@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-const HERE = join(process.cwd(), "src/app/users/[nickname]/grades/practice");
+const HERE = join(process.cwd(), "src/app/users/[nickname]/practice");
 const read = (file: string) => readFileSync(join(HERE, file), "utf8");
 
 /*
@@ -42,7 +42,7 @@ describe("the practice sheet's two sets of colours", () => {
    * marker is decoration.
    */
   it("marks the region the print rules strip back", () => {
-    expect(read("page.tsx")).toContain('data-print="mono"');
+    expect(read("[[...target]]/page.tsx")).toContain('data-print="mono"');
 
     const globals = readFileSync(join(process.cwd(), "src/app/globals.css"), "utf8");
     const printBlock = globals.slice(globals.indexOf("@media print"));
@@ -63,7 +63,7 @@ describe("the practice sheet's two sets of colours", () => {
      * counterpart. Checking the group rather than the file is the difference
      * between knowing that and assuming it.
      */
-    const page = read("page.tsx");
+    const page = read("[[...target]]/page.tsx");
     const before = page.slice(Math.max(0, page.indexOf("<PrintButton") - 400), page.indexOf("<PrintButton"));
     expect(before, "the print button is not inside a print:hidden group").toContain("print:hidden");
   });

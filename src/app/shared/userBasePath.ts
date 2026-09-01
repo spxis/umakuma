@@ -22,5 +22,5 @@ export function useUserBasePath(): string {
 /** Where a practice sheet is built for the member whose page this is. */
 export function usePracticePath(): string {
   const base = useUserBasePath();
-  return base ? `${base}/grades/practice` : "";
+  return base ? `${base}/practice` : "";
 }
