@@ -5,7 +5,7 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${port}`;
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: ["**/smoke-pages.spec.ts"],
+  testMatch: ["**/smoke-pages.spec.ts", "**/search.spec.ts"],
   timeout: 45_000,
   expect: { timeout: 8_000 },
   fullyParallel: false,
