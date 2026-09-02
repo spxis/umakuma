@@ -161,12 +161,15 @@ export type MoneyAmount = {
 };
 
 /**
- * Above this an amount is a typo or a joke rather than a price.
+ * Above this an amount is a typo rather than a figure.
  *
- * A trillion of any currency converts fine; it just is not a question anybody
- * has, and the cap keeps a pasted phone number from being read as money.
+ * It was a trillion, which was fine until 兆 became readable: Japan's national
+ * debt is quoted as 1,300兆円 and the cap answered it with nothing. Ten
+ * quadrillion is past anything written as a price or a budget, and the guard
+ * still costs nothing, since a number with no currency beside it was never
+ * money in the first place.
  */
-const LARGEST_AMOUNT = 1_000_000_000_000;
+const LARGEST_AMOUNT = 1e16;
 
 /** Full-width digits are what a Japanese keyboard produces. */
 function toHalfWidthDigits(value: string): string {
@@ -218,7 +221,63 @@ function currencyGuess(token: string): CurrencyGuess | null {
  * currency twice; a query filling neither is a bare number and not money.
  */
 const MONEY_TOKEN = String.raw`(?:[A-Za-z]{1,3}\$|\$|[A-Za-z]{2,8}|[¥￥€£円])`;
-const MONEY_QUERY = new RegExp(String.raw`^(${MONEY_TOKEN})?\s*(\d+(?:\.\d+)?)\s*(${MONEY_TOKEN})?$`);
+
+/**
+ * How a number is made larger without writing the zeros.
+ *
+ * Japanese counts in ten-thousands rather than thousands, and every price a
+ * learner meets is written that way: rent is 8万円, a salary 400万円, a flat
+ * 3,000万円. Reading those as 8, 400 and 3,000 yen was not a small error - it
+ * was wrong by four decimal places on exactly the numbers somebody moving to
+ * Japan needs to understand. The Latin shorthand is the same idea in the
+ * reader's own writing, so 20k yen is read too.
+ */
+const JAPANESE_UNITS: Record<string, number> = { "千": 1e3, "万": 1e4, "億": 1e8, "兆": 1e12 };
+const LATIN_MAGNITUDES: Record<string, number> = { k: 1e3, m: 1e6, b: 1e9 };
+
+/*
+ * A magnitude letter must not be the start of a word: without the lookahead,
+ * the M of `20 MXN` reads as a million and leaves XN behind as the currency.
+ */
+const MONEY_AMOUNT = String.raw`[\d.]+(?:[kKmMbB](?![A-Za-z]))?(?:\s*[千万億兆]\s*[\d.]*)*`;
+const MONEY_QUERY = new RegExp(String.raw`^(${MONEY_TOKEN})?\s*(${MONEY_AMOUNT})\s*(${MONEY_TOKEN})?$`);
+
+/**
+ * The number an amount is written as, however it is written.
+ *
+ * Japanese units stack downward - 3億5000万 is three hundred and fifty
+ * million - so each unit must be smaller than the one before it. 万億 is not a
+ * number anybody wrote on purpose, and reading it as one would answer a typo
+ * with a confident wrong figure.
+ */
+function readAmount(text: string): number | null {
+  const compact = text.replace(/\s+/g, "");
+
+  const latin = /^(\d+(?:\.\d+)?)([kKmMbB])$/.exec(compact);
+  if (latin) return Number(latin[1]) * LATIN_MAGNITUDES[latin[2]!.toLowerCase()]!;
+
+  if (!/[千万億兆]/.test(compact)) {
+    return /^\d+(?:\.\d+)?$/.test(compact) ? Number(compact) : null;
+  }
+
+  let total = 0;
+  let rest = compact;
+  let previous = Infinity;
+
+  while (rest.length > 0) {
+    const part = /^(\d+(?:\.\d+)?)([千万億兆])?/.exec(rest);
+    if (!part) return null;
+
+    const unit = part[2] ? JAPANESE_UNITS[part[2]]! : 1;
+    if (unit >= previous) return null;
+    previous = unit;
+
+    total += Number(part[1]) * unit;
+    rest = rest.slice(part[0].length);
+  }
+
+  return total;
+}
 
 /**
  * The amounts a query names, which is usually none and sometimes two.
@@ -256,8 +315,8 @@ export function parseMoneyQuery(raw: string): MoneyAmount[] {
     .reduce((kept, next) => kept.filter((currency) => next.includes(currency)));
   if (currencies.length === 0) return [];
 
-  const amount = Number(digits);
-  if (!Number.isFinite(amount) || amount <= 0 || amount > LARGEST_AMOUNT) return [];
+  const amount = readAmount(digits);
+  if (amount === null || !Number.isFinite(amount) || amount <= 0 || amount > LARGEST_AMOUNT) return [];
 
   return currencies.map((currency) => ({ amount, currency }));
 }

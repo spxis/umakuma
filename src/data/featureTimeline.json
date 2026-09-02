@@ -2961,5 +2961,17 @@
     "summary": "The profile drew the form to change a JLPT certificate the moment it loaded - an editor, always open, for something that changes twice a decade - and it held one certificate, so reporting a new pass quietly erased the last one. A member holds as many as they have sat: the ladder is meant to be climbed. Certificates are rows now, listed hardest first with the year each was earned, and the card leads with the hardest and counts the rest - \"N3 + 2 more\". Adding one asks for the year first, because the year decides which test applies: a 2007 sitting offers Levels 1 to 4 and a 2022 one offers N1 to N5, and level 3 in 2007 is old Level 3 rather than N3, which did not exist until the 2010 restructure. The panel stays shut until it is asked for, taking one out is a control on the certificate itself, and the status - planning to sit, none, rather not say - is only asked of a member holding none, since holding one is the answer. The three answers already given were carried into rows. Who can see you was three bordered blocks for a question asked once; it is three lines. Reported 2026-09-02 by John.",
     "version": "0.275.0",
     "releasedAt": "2026-09-02T13:06:26Z"
+  },
+  {
+    "id": "search-money-magnitudes",
+    "name": "Prices the way Japan writes them",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 53,
+    "summary": "Japan counts in ten-thousands, and every price a learner meets is written that way: rent is 8万円, a salary 400万円, a flat 3,000万円. The search read the digits and dropped the unit, so 400万円 came back as four hundred yen - wrong by four decimal places on exactly the figures somebody moving to Japan needs to understand. 千, 万, 億 and 兆 are read now, and they stack the way they are written, so 3億5000万円 is three hundred and fifty million and 5万3千円 is fifty-three thousand. Units that climb rather than fall are a typo and answer with nothing, because a confident wrong figure is worse than none. The Latin shorthand is the same idea in the reader's own writing - 20k yen, 1.5m yen, $50k - and a magnitude letter is only one where a word does not follow, or the M of 20 MXN would read as a million and leave XN behind as the currency. The size cap moved with it: it was a trillion, which answered Japan's national debt of 1,300兆円 with nothing. A magnitude still needs a currency beside it, so 20k and 5万 on their own remain numbers rather than prices. Requested 2026-09-02 by John.",
+    "version": "0.276.0",
+    "releasedAt": "2026-09-02T13:09:20Z"
   }
 ]

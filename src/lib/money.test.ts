@@ -123,6 +123,53 @@ describe("parseMoneyQuery", () => {
     expect(parseMoneyQuery("Heisei 3")).toEqual([]);
   });
 
+  /*
+   * Japan counts in ten-thousands, and every price a learner meets is written
+   * that way. Reading 400万円 as four hundred yen was wrong by four decimal
+   * places on exactly the figures somebody moving there needs.
+   */
+  it("reads a price written the way Japan writes one", () => {
+    expect(parseMoneyQuery("8万円")).toEqual([{ amount: 80_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("400万円")).toEqual([{ amount: 4_000_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("3,000万円")).toEqual([{ amount: 30_000_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("1億円")).toEqual([{ amount: 100_000_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("3千円")).toEqual([{ amount: 3_000, currency: "JPY" }]);
+  });
+
+  it("adds the units up, largest first", () => {
+    expect(parseMoneyQuery("3億5000万円")).toEqual([{ amount: 350_000_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("5万3千円")).toEqual([{ amount: 53_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("1.5万円")).toEqual([{ amount: 15_000, currency: "JPY" }]);
+  });
+
+  /* 万億 is a typo, and a confident wrong figure is worse than no answer. */
+  it("refuses units that climb rather than fall", () => {
+    expect(parseMoneyQuery("5万億円")).toEqual([]);
+    expect(parseMoneyQuery("万円")).toEqual([]);
+  });
+
+  it("reads the Latin shorthand for the same idea", () => {
+    expect(parseMoneyQuery("20k yen")).toEqual([{ amount: 20_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("20K JPY")).toEqual([{ amount: 20_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("1.5m yen")).toEqual([{ amount: 1_500_000, currency: "JPY" }]);
+    expect(parseMoneyQuery("$50k")).toEqual([
+      { amount: 50_000, currency: "CAD" },
+      { amount: 50_000, currency: "USD" },
+    ]);
+  });
+
+  /* Without the lookahead the M of 20 MXN reads as a million. */
+  it("does not read a currency code as a magnitude", () => {
+    expect(parseMoneyQuery("20 MXN")).toEqual([{ amount: 20, currency: "MXN" }]);
+    expect(parseMoneyQuery("100 BRL")).toEqual([{ amount: 100, currency: "BRL" }]);
+  });
+
+  /* A magnitude is not money on its own; it still needs a currency beside it. */
+  it("still wants a currency named", () => {
+    expect(parseMoneyQuery("20k")).toEqual([]);
+    expect(parseMoneyQuery("5万")).toEqual([]);
+  });
+
   it("reads a price written with a thousands comma", () => {
     expect(parseMoneyQuery("1,500円")).toEqual([{ amount: 1500, currency: "JPY" }]);
     expect(parseMoneyQuery("1,234,567 JPY")).toEqual([{ amount: 1234567, currency: "JPY" }]);
@@ -143,7 +190,9 @@ describe("parseMoneyQuery", () => {
 
   it("refuses an amount that is not a price", () => {
     expect(parseMoneyQuery("0 JPY")).toEqual([]);
-    expect(parseMoneyQuery("99999999999999 JPY")).toEqual([]);
+    expect(parseMoneyQuery("99999999999999999 JPY")).toEqual([]);
+    /* A trillion yen is a budget line, not a typo. */
+    expect(parseMoneyQuery("2兆円")).toEqual([{ amount: 2e12, currency: "JPY" }]);
   });
 });
 
