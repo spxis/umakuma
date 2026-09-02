@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { carryOverPlan, rulesForWindow, targetForRules, weeksInWindow } from "./readingCampaignCarryover";
+import { carryOverPlan, rulesForTarget, rulesForWindow, targetForRules, weeksInWindow } from "./readingCampaignCarryover";
 import type { ReadingChallengeScoringRules } from "./readingChallengeRules";
 
 /**
@@ -71,6 +71,41 @@ describe("the rules, sized to the window", () => {
 
   it("refuses more weeks than the schema allows", () => {
     expect(() => rulesForWindow(JULY, 25)).toThrow(/between 1 and 24/);
+  });
+});
+
+describe("the rules, sized to a target someone decided", () => {
+  /* The Winter campaign: fourteen weeks, and John said ¥40,000, not the ¥96,000 the flat carry-over came to. */
+  const winter = rulesForTarget(JULY, 14, 40_000);
+
+  it("adds up to the target exactly, so a perfect reader reaches it on the goal date", () => {
+    expect(winter.weeklyCaps).toHaveLength(14);
+    expect(winter.weeklyCaps.reduce((sum, cap) => sum + cap, 0)).toBe(40_000);
+    expect(targetForRules(winter)).toBe(40_000);
+  });
+
+  it("spreads it flat in tens of yen, with the rounding paid in the final week", () => {
+    expect(winter.weeklyCaps.slice(0, 13)).toEqual(Array.from({ length: 13 }, () => 2850));
+    expect(winter.weeklyCaps[13]).toBe(2950);
+  });
+
+  it("keeps the bonus in the previous campaign's proportion to the base", () => {
+    /* July paid 1666 in bonus over a 6840 base, a little under a quarter. */
+    expect(winter.bonuses.weeklyCapYen).toHaveLength(14);
+    expect(winter.bonuses.weeklyCapYen[0]).toBe(690);
+    expect(winter.bonuses.weeklyCapYen[13]).toBe(720);
+    expect(winter.bonuses.pages).toEqual(JULY.bonuses.pages);
+    expect(winter.bonuses.minutes).toEqual(JULY.bonuses.minutes);
+  });
+
+  it("still leaves the bonuses earnable on top of the base", () => {
+    const bonusTotal = winter.bonuses.weeklyCapYen.reduce((sum, cap) => sum + cap, 0);
+    expect(bonusTotal).toBeGreaterThan(0);
+    expect(winter.bonuses.zeroReviews.enabled).toBe(true);
+  });
+
+  it("refuses a target too small to give every week a cap", () => {
+    expect(() => rulesForTarget(JULY, 14, 100)).toThrow(/cannot be spread/);
   });
 });
 

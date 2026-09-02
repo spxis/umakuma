@@ -282,6 +282,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Keizoku no Kekka", ja: "継続の結果", reading: "けいぞくのけっか", gloss: "what keeping at it adds up to" },
   { romaji: "Koko no Kotae", ja: "個々の答え", reading: "ここのこたえ", gloss: "each thing in its own place" },
   { romaji: "Sashikomu Sou", ja: "差し込む層", reading: "さしこむそう", gloss: "slid into the layer it belongs to" },
+  { romaji: "Shizumeta Shihyou", ja: "静めた指標", reading: "しずめたしひょう", gloss: "the target, brought down to size" },
 ];
 
 /**

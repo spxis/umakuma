@@ -60,6 +60,48 @@ export function rulesForWindow(
   };
 }
 
+/** Caps are written in tens of yen; a cap of 2,857.14 is not a number anyone can explain. */
+const CAP_STEP_YEN = 10;
+
+/**
+ * The previous campaign's rules, sized to a window *and* to a target someone
+ * has decided.
+ *
+ * The base caps are the target spread flat across the weeks, in tens of yen,
+ * with whatever the rounding leaves over paid in the final week, so the caps
+ * add up to the target exactly and a reader who is perfect every day reaches
+ * it on the goal date and not before. The bonus caps keep the previous
+ * campaign's proportion of bonus to base - what a great week was worth over
+ * a good one stays the same, only the scale changes. Everything else carries
+ * over unchanged.
+ */
+export function rulesForTarget(
+  previous: ReadingChallengeScoringRules,
+  weeks: number,
+  targetBaseYen: number,
+): ReadingChallengeScoringRules {
+  if (!Number.isInteger(targetBaseYen) || targetBaseYen < weeks * CAP_STEP_YEN) {
+    throw new Error(`A target of ¥${targetBaseYen} cannot be spread across ${weeks} weeks.`);
+  }
+  const flat = rulesForWindow(previous, weeks);
+  const previousCap = previous.weeklyCaps.at(-1)!;
+  const previousBonusCap = previous.bonuses.weeklyCapYen.at(-1)!;
+  const bonusRatio = previousCap > 0 ? previousBonusCap / previousCap : 0;
+
+  const weekCap = Math.floor(targetBaseYen / weeks / CAP_STEP_YEN) * CAP_STEP_YEN;
+  const weeklyCaps = Array.from({ length: weeks }, () => weekCap);
+  weeklyCaps[weeks - 1] = targetBaseYen - weekCap * (weeks - 1);
+
+  return {
+    ...flat,
+    weeklyCaps,
+    bonuses: {
+      ...flat.bonuses,
+      weeklyCapYen: weeklyCaps.map((cap) => Math.round((cap * bonusRatio) / CAP_STEP_YEN) * CAP_STEP_YEN),
+    },
+  };
+}
+
 /** The base target the caps add up to, rounded up to the nearest thousand yen. */
 export function targetForRules(rules: ReadingChallengeScoringRules): number {
   const total = rules.weeklyCaps.reduce((sum, cap) => sum + cap, 0);

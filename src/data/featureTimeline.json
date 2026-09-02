@@ -2460,5 +2460,16 @@
     "summary": "A person signed in with Google for the first time and was taken to Join with invite code, with no way into the site and no way out but Sign out. The site is meant to be wide open to a Google account: once Google has said who they are, the site must open for them, and the invite page must never be shown to anyone signed in - not on arrival, and not on a refresh. Reported 2026-09-01 by John, signed in as a second Google account.",
     "owner": "fable/subject-pages",
     "claimedAt": "2026-09-02T04:24:21.171Z"
+  },
+  {
+    "id": "winter-campaign-target-40k",
+    "name": "Winter campaign maxes at \u00a540,000",
+    "area": "reading",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "summary": "The Winter Reading Challenge was made by carrying the July campaign's final weekly cap across fourteen weeks, which came to a \u00a596,000 base - far more than the \u00a540,000 the family had in mind. The campaign is repriced: the \u00a540,000 is spread flat across its fourteen weeks in tens of yen, the rounding paid in the final week so a perfect reader reaches the target on the goal date exactly, and the bonus caps keep July's proportion of bonus to base so a great week is still worth more than a good one. The campaign scripts now size the caps to a decided target rather than only printing it, and a reprice script changes both for a campaign already running.",
+    "version": "0.232.0",
+    "releasedAt": "2026-09-02T04:37:00Z"
   }
 ]

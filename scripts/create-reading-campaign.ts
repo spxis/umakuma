@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { prisma } from "../src/lib/prisma";
-import { carryOverPlan, rulesForWindow, targetForRules, weeksInWindow } from "../src/lib/readingCampaignCarryover";
+import { carryOverPlan, rulesForTarget, rulesForWindow, targetForRules, weeksInWindow } from "../src/lib/readingCampaignCarryover";
 import { readingChallengeMutationSchema } from "../src/lib/readingChallengeValidation";
 import type { ReadingChallengeScoringRules } from "../src/lib/readingChallengeRules";
 
@@ -24,10 +24,10 @@ import type { ReadingChallengeScoringRules } from "../src/lib/readingChallengeRu
  *   pnpm campaign:create --definition=<file> --from=<previous campaign id> --apply
  *
  * The definition file holds the fields a person decides - id, slug, name,
- * description, the three dates - and nothing a machine can derive. The weekly
- * caps are sized to the window from the previous campaign's rules; the target
- * is their sum. Change either afterwards in the editor if the decision is
- * different.
+ * description, the three dates, and the target when one has been decided.
+ * With a target, the weekly caps are that target spread across the window;
+ * without one, the caps are held at the previous campaign's final week and
+ * the target is their sum. Either can be changed afterwards in the editor.
  */
 
 type Definition = {
@@ -38,7 +38,7 @@ type Definition = {
   startDatePst: string;
   goalDatePst: string;
   tripDatePst: string;
-  /** Overrides the derived target when a person has decided one. */
+  /** The base a perfect reader reaches on the goal date; the caps are sized to it. */
   targetBaseYen?: number;
 };
 
@@ -64,7 +64,10 @@ async function main(): Promise<void> {
   }
 
   const weeks = weeksInWindow(definition.startDatePst, definition.goalDatePst);
-  const scoringRules = rulesForWindow(previous.scoringRules as ReadingChallengeScoringRules, weeks);
+  const previousRules = previous.scoringRules as ReadingChallengeScoringRules;
+  const scoringRules = definition.targetBaseYen === undefined
+    ? rulesForWindow(previousRules, weeks)
+    : rulesForTarget(previousRules, weeks, definition.targetBaseYen);
   const targetBaseYen = definition.targetBaseYen ?? targetForRules(scoringRules);
 
   const campaign = readingChallengeMutationSchema.parse({
