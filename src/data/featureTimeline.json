@@ -2661,7 +2661,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 35,
-    "summary": "Every list card and list page has a Print action that opens the list as a sheet: the items with meanings and readings, or the tracing sheet the practice pages already print, chosen at the click. Requested 2026-09-01 by John."
+    "summary": "Every list card and list page has a Print action that opens the list as a sheet: the items with meanings and readings, or the tracing sheet the practice pages already print, chosen at the click. Requested 2026-09-01 by John.",
+    "owner": "Claude (session 53e531a7)",
+    "claimedAt": "2026-09-02T16:12:27.791Z"
   },
   {
     "id": "list-merge",
