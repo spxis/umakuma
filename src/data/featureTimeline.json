@@ -2528,14 +2528,14 @@
   },
   {
     "id": "list-starter-lists",
-    "name": "Starter lists to subscribe to",
+    "name": "Live system lists",
     "area": "study",
     "kind": "feature",
     "status": "planned",
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 25,
-    "summary": "Official lists nobody owns: JLPT N5 to N1 kanji, each school grade, each WaniKani level, the prefecture names. Subscribe to one and it sits among your lists; copy it and make it your own. The catalogue already holds the data, so these are lists that write themselves. Suggested 2026-09-01."
+    "summary": "Lists nobody owns that write themselves from the catalogue and change when it does: Grade 1 to 6, JLPT N5 to N1, each WaniKani level, the prefecture names. Public, subscribable and copyable like any shared list, and treated the same way everywhere a list is taken. A copy is yours to cut down - half of Grade 1, or only the items you do not know yet. Requested 2026-09-01 by John; grew out of the starter-lists suggestion."
   },
   {
     "id": "list-item-notes",
@@ -2580,5 +2580,16 @@
     "dateIsEstimate": true,
     "release": 29,
     "summary": "Every game and practice mode that takes a list takes a subscribed or shared one too, so a list a friend shares is something to play, not only to read. Suggested 2026-09-01."
+  },
+  {
+    "id": "list-burn-list",
+    "name": "A burn list that hides what you know",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 30,
+    "summary": "A third built-in list beside Trouble and Favourites: Burned, for the items you know so well you never need to read them again. Marked by hand like the other two, and offered from WaniKani's own burned items for members who have them. Applied, it removes those items from any list being viewed or practised, so a large list stops carrying what you have long since learned. Requested 2026-09-01 by John."
   }
 ]

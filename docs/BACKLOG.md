@@ -653,6 +653,28 @@ every game and practice mode accepting a list you only subscribe to
 of lists rewards the wrong thing), and real-time co-editing (proposals cover
 the case without the machinery).
 
+**Live lists (2026-09-01, John).** The starter lists are not snapshots but
+live: Grade 1 is whatever the grade table says today, N3 is whatever the JLPT
+table says, and they change when the data does. They are system lists - owned
+by nobody, public, subscribable, copyable, filterable by kind like any other -
+and the point of copying one is to cut it down: half of Grade 1 for this
+week, or Grade 1 minus what you already know. So a live list is a *query*
+stored as a list (kind, level, source) rather than rows, materialised when
+read; a copy of it is rows, taken at that moment. That is the one place the
+items model needs a second shape, and it is worth deciding in the items
+release rather than after it.
+
+**The burn list (2026-09-01, John).** A third built-in list beside Trouble and
+Favourites: Burned, for what you know so well you never need to read it. Two
+ways in - marked by hand, and offered from WaniKani's own burned items for
+members who have them - and one effect: applied, it removes those items from
+any list being viewed or practised. It is a *filter over every list*, not a
+list to read, which is why it sits with the tags (a third boolean on
+`StudySubjectTag`, a schema push) and why the toggle to apply it belongs on
+the list surfaces and the practice setup, remembered per member. The count of
+hidden items stays visible ("12 burned hidden") so a list never looks shorter
+than it is without saying why.
+
 **Decisions John should make before the sharing releases start.**
 1. Does *public* mean readable without signing in, or by any member? The
    subject pages are open to the world; a list carries a member's name and
