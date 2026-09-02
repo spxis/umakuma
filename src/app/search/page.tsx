@@ -96,8 +96,17 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
     sessionName: session?.user?.name?.trim() ?? null,
   });
 
+  /*
+   * The shell is clipped sideways only.
+   *
+   * `overflow-hidden` here cut every dropdown off at the shell's own height: a
+   * search for "water" has eleven suggestions and showed three, and the radical
+   * grid lost two thirds of itself. Clipping sideways is what this was for -
+   * the noise overlay behind the page - and `overflow-x-clip` is what `main`
+   * and `body` already use.
+   */
   return (
-    <div className={`relative overflow-hidden ${PAGE_SHELL_PADDING}`}>
+    <div className={`relative overflow-x-clip ${PAGE_SHELL_PADDING}`}>
       <div className="noise-overlay pointer-events-none absolute inset-0" />
       <main className="relative w-full space-y-3">
         {/*

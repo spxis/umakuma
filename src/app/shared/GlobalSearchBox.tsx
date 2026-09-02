@@ -5,10 +5,13 @@ import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import { useSearchCombobox } from "@/lib/useSearchCombobox";
 import GlobalSearchSuggestList from "./GlobalSearchSuggestList";
+import RadicalSearchPanel from "./RadicalSearchPanel";
+import SearchCommandHint from "./SearchCommandHint";
 import RecentItems from "./RecentItems";
 import SearchComboboxField, { SearchIcon } from "./SearchComboboxField";
 import { MODAL_LAYERS } from "./modalLayers";
 import { useFilerOpen } from "./useSubjectFiler";
+import { formatRadicalCommand, parseSearchCommand } from "@/lib/searchCommands";
 
 /**
  * The header's way into search.
@@ -46,7 +49,7 @@ export default function GlobalSearchBox({
   const [open, setOpen] = useState(false);
   const [filerOpen] = useFilerOpen();
   /* Room for the filing column: the dropdown grows, the field does not. */
-  const panelWidth = viewerAccountId && filerOpen ? "w-160" : "w-104";
+  const filing = Boolean(viewerAccountId) && filerOpen;
   const [focused, setFocused] = useState(false);
   const mobileInput = useRef<HTMLInputElement>(null);
 
@@ -67,9 +70,27 @@ export default function GlobalSearchBox({
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  /*
+   * The picker is part of the answer panel rather than a window over the page:
+   * it belongs under the box that holds the command it is editing, and the
+   * matches run underneath it like any other search.
+   */
+  const command = parseSearchCommand(cbx.typed);
+  const radicalPicker = command ? (
+    <RadicalSearchPanel
+      chosen={command.radicals}
+      onChange={(next) => cbx.setQuery(formatRadicalCommand(next))}
+    />
+  ) : null;
+
+  /* The grid needs the room the answer alone does not. */
+  const panelWidth = filing || command ? "w-160" : "w-104";
+
   function suggestList(listboxId: string) {
     return (
       <GlobalSearchSuggestList
+        header={radicalPicker}
+        suppressEmpty={Boolean(command) && command!.radicals.length === 0}
         listboxId={listboxId}
         hits={cbx.hits}
         answers={cbx.answers}
@@ -122,7 +143,10 @@ export default function GlobalSearchBox({
                 {cbx.panelVisible ? (
                   suggestList(MOBILE_LISTBOX)
                 ) : (
-                  <RecentItems currentQuery="" variant="panel" />
+                  <>
+                    <RecentItems currentQuery="" variant="panel" />
+                    <SearchCommandHint />
+                  </>
                 )}
               </div>
             ) : null}
@@ -138,7 +162,7 @@ export default function GlobalSearchBox({
       >
         <div
           className={`transition-[width] duration-200 ease-out ${
-            expanded ? "w-64 md:w-80 lg:w-104" : "w-32 md:w-40"
+            expanded ? (command ? "w-80 md:w-104 lg:w-128" : "w-64 md:w-80 lg:w-104") : "w-32 md:w-40"
           }`}
         >
           <SearchComboboxField

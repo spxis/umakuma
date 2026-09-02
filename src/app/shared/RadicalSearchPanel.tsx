@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { JP_TEXT_CLASS } from "./japaneseText";
@@ -12,9 +11,15 @@ import type { RadicalGroup } from "@/lib/radicalSearch";
  *
  * The lookup for a character you cannot read: you cannot type it and you do not
  * know its readings, but you can see 日 on the left and 月 on the right. Pick
- * both and there are thirty-one, commonest first.
+ * both and the answer is thirty-one characters.
  *
- * The radicals are the classical set from RADKFILE - the elements the paper
+ * It holds no selection of its own. The chosen radicals live in the search box
+ * as `:radicals 日 + 月`, this draws whatever the box says, and a pick rewrites
+ * the box - so there is one piece of state rather than two that can disagree,
+ * the query can be typed by hand, and the answer arrives through the ordinary
+ * suggestions underneath instead of inside the picker.
+ *
+ * The radicals are the classical set from RADKFILE - the elements paper
  * dictionaries index by - and not WaniKani's, which are teaching mnemonics for
  * the two thousand kanji it covers and are named for what they look like.
  *
@@ -26,20 +31,24 @@ type Result = {
   groups: RadicalGroup[];
   chosen: string[];
   usable: string[];
-  matches: { kanji: string; meaning: string; strokeCount: number | null }[];
-  totalMatches: number;
 };
 
-const EMPTY: Result = { groups: [], chosen: [], usable: [], matches: [], totalMatches: 0 };
+const EMPTY: Result = { groups: [], chosen: [], usable: [] };
 
-export default function RadicalSearchPanel({ onPick, onClose }: { onPick?: () => void; onClose?: () => void }) {
-  const [chosen, setChosen] = useState<string[]>([]);
+export default function RadicalSearchPanel({
+  chosen,
+  onChange,
+}: {
+  chosen: readonly string[];
+  onChange: (next: string[]) => void;
+}) {
   const [result, setResult] = useState<Result>(EMPTY);
   const [failed, setFailed] = useState(false);
+  const key = chosen.join(",");
 
   useEffect(() => {
     let live = true;
-    const query = chosen.length > 0 ? `?radicals=${encodeURIComponent(chosen.join(","))}` : "";
+    const query = key.length > 0 ? `?radicals=${encodeURIComponent(key)}` : "";
     fetch(`/api/radicals${query}`)
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error("failed"))))
       .then((data: Result) => {
@@ -53,93 +62,57 @@ export default function RadicalSearchPanel({ onPick, onClose }: { onPick?: () =>
     return () => {
       live = false;
     };
-  }, [chosen]);
+  }, [key]);
 
   const usable = new Set(result.usable);
-  /*
-   * The answer on screen is for the picks it came back with. When they differ,
-   * a request is in flight - which is what "loading" means here, without a
-   * second piece of state to keep in step with the first.
-   */
-  const settled = [...chosen].sort().join(",") === [...result.chosen].sort().join(",");
 
   function toggle(radical: string) {
-    setChosen((held) => (held.includes(radical) ? held.filter((one) => one !== radical) : [...held, radical]));
+    onChange(chosen.includes(radical) ? chosen.filter((one) => one !== radical) : [...chosen, radical]);
   }
 
   return (
-    <div data-panel="radicals" className="min-h-0 flex-1 overflow-y-auto p-4">
-      <div className="mb-2 flex flex-wrap items-baseline gap-2">
-        <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
+    <div data-panel="radicals" className="border-b border-line bg-surface-muted/40">
+      {/*
+        The command row: what has been picked, and the way out of it. It sits
+        under the input and above the results, which is where the reader's eye
+        already is - the picked radicals are also written in the box itself, so
+        this row is a reminder rather than the only record.
+      */}
+      <div className="flex flex-wrap items-center gap-2 px-3 py-2">
+        <span className="text-[10px] font-black uppercase tracking-[0.12em] text-accent">
           {RADICAL_SEARCH_COPY.heading}
-        </p>
+        </span>
         {chosen.length === 0 ? (
-          <p className="text-xs text-foreground/60">{RADICAL_SEARCH_COPY.hint}</p>
+          <span className="text-[11px] font-semibold text-foreground/60">{RADICAL_SEARCH_COPY.hint}</span>
         ) : (
-          <p className={`text-sm font-bold text-foreground ${JP_TEXT_CLASS}`}>{result.chosen.join(" ")}</p>
+          <span className={`text-sm font-bold text-foreground ${JP_TEXT_CLASS}`}>{chosen.join(" ")}</span>
         )}
-        {onClose ? (
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={RADICAL_SEARCH_COPY.close}
-            className="order-last ml-auto h-8 shrink-0 rounded-full border border-line bg-surface px-3 text-xs font-bold text-foreground hover:bg-surface-muted"
-          >
-            X
-          </button>
-        ) : null}
         {chosen.length > 0 ? (
           <button
             type="button"
-            onClick={() => setChosen([])}
-            className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-3 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted"
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => onChange([])}
+            className="ml-auto inline-flex h-6 items-center rounded-full border border-line bg-surface px-2.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted"
           >
             {RADICAL_SEARCH_COPY.clear}
           </button>
         ) : null}
       </div>
 
-      {failed ? <p className="py-4 text-sm font-semibold text-foreground/70">{RADICAL_SEARCH_COPY.failed}</p> : null}
+      {failed ? (
+        <p className="px-3 pb-2 text-[11px] font-semibold text-foreground/70">{RADICAL_SEARCH_COPY.failed}</p>
+      ) : null}
 
       {/*
-        The answer is pinned: the grid is fifteen rows tall, and a pick made at
-        the bottom of it would otherwise be answered somewhere off the top of
-        the panel. It scrolls within itself once there are more matches than
-        fit, so the grid underneath keeps the place you were reaching from.
+        Bounded and scrolling within itself. The grid is 253 buttons and the
+        results below it are the point: left to its full height it pushed every
+        answer off the bottom of the screen, which is what the dialog was
+        working around before.
       */}
-      <div className="sticky top-0 z-10 mb-3 max-h-[9.5rem] overflow-y-auto border-b border-line bg-surface pb-3">
-        {chosen.length === 0 ? (
-          <p className="text-sm font-semibold text-foreground/60">{RADICAL_SEARCH_COPY.pick}</p>
-        ) : result.totalMatches === 0 ? (
-          <p className="text-sm font-semibold text-foreground/60">
-            {settled ? RADICAL_SEARCH_COPY.empty : RADICAL_SEARCH_COPY.searching}
-          </p>
-        ) : (
-          <>
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
-              {RADICAL_SEARCH_COPY.matches(result.totalMatches, result.matches.length)}
-            </p>
-            <ul className="flex flex-wrap gap-1">
-              {result.matches.map((match) => (
-                <li key={match.kanji}>
-                  <Link
-                    href={`/kanji/${encodeURIComponent(match.kanji)}`}
-                    onClick={onPick}
-                    title={match.meaning}
-                    className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-lg text-foreground transition hover:border-accent hover:bg-surface-muted ${JP_TEXT_CLASS}`}
-                  >
-                    {match.kanji}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-      <div className="space-y-1.5">
+      <div className="max-h-[38vh] space-y-1 overflow-y-auto px-3 pb-3">
         {result.groups.map((group) => (
           <div key={group.strokes} className="flex flex-wrap items-center gap-1">
-            <span className="mr-1 w-5 shrink-0 text-right text-[10px] font-bold text-foreground/60">
+            <span className="mr-1 w-4 shrink-0 text-right text-[10px] font-bold text-foreground/60">
               {group.strokes}
             </span>
             {group.radicals.map((radical) => {
@@ -151,18 +124,17 @@ export default function RadicalSearchPanel({ onPick, onClose }: { onPick?: () =>
                   type="button"
                   /*
                    * A mouse pick takes no focus, so nothing scrolls it into
-                   * view. The page shell clips its overflow but still scrolls
-                   * programmatically, so focusing a radical near the bottom of
-                   * the grid dragged the whole panel up out of sight - 400px
-                   * of it, on a phone. The keyboard still focuses and still
-                   * scrolls, which is what a keyboard reader wants.
+                   * view: focusing a radical near the bottom of the grid used
+                   * to drag the whole panel up out of sight. The keyboard
+                   * still focuses and still scrolls, which is what a keyboard
+                   * reader wants.
                    */
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => toggle(radical)}
                   disabled={dead}
                   aria-pressed={picked}
                   title={RADICAL_SEARCH_COPY.radicalTitle(radical, group.strokes)}
-                  className={`inline-flex h-7 w-7 items-center justify-center rounded border text-sm transition ${JP_TEXT_CLASS} ${
+                  className={`inline-flex h-6 w-6 items-center justify-center rounded border text-[13px] leading-none transition ${JP_TEXT_CLASS} ${
                     picked
                       ? "border-accent bg-accent text-white"
                       : dead
@@ -177,7 +149,6 @@ export default function RadicalSearchPanel({ onPick, onClose }: { onPick?: () =>
           </div>
         ))}
       </div>
-
     </div>
   );
 }

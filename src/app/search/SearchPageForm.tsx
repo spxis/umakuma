@@ -1,10 +1,13 @@
 "use client";
 
 import GlobalSearchSuggestList from "@/app/shared/GlobalSearchSuggestList";
+import RadicalSearchPanel from "@/app/shared/RadicalSearchPanel";
+import SearchCommandHint from "@/app/shared/SearchCommandHint";
 import RecentItems from "@/app/shared/RecentItems";
 import SearchComboboxField from "@/app/shared/SearchComboboxField";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import { searchResultsHref, type SearchFilters } from "@/lib/searchFilters";
+import { formatRadicalCommand, parseSearchCommand } from "@/lib/searchCommands";
 import { useSearchCombobox } from "@/lib/useSearchCombobox";
 
 import { SEARCH_PAGE_INPUT_ID, focusFirstSearchResult } from "./searchFocus";
@@ -41,6 +44,11 @@ export default function SearchPageForm({
     onArrowOut: () => focusFirstSearchResult(),
   });
 
+  const command = parseSearchCommand(cbx.typed);
+  const radicalPicker = command ? (
+    <RadicalSearchPanel chosen={command.radicals} onChange={(next) => cbx.setQuery(formatRadicalCommand(next))} />
+  ) : null;
+
   return (
     <SearchComboboxField
       cbx={cbx}
@@ -54,6 +62,7 @@ export default function SearchPageForm({
           className={`absolute inset-x-0 top-[calc(100%+0.5rem)] ${MODAL_LAYERS.searchSuggest} overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
         >
           <RecentItems currentQuery="" variant="panel" />
+          <SearchCommandHint />
         </div>
       ) : null}
 
@@ -62,6 +71,8 @@ export default function SearchPageForm({
           className={`absolute inset-x-0 top-[calc(100%+0.5rem)] ${MODAL_LAYERS.searchSuggest} overflow-hidden rounded-2xl border border-line bg-surface shadow-lg`}
         >
           <GlobalSearchSuggestList
+            header={radicalPicker}
+            suppressEmpty={Boolean(command) && command!.radicals.length === 0}
             listboxId={LISTBOX_ID}
             hits={cbx.hits}
         answers={cbx.answers}

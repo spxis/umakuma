@@ -499,38 +499,44 @@ test("a bare dollar sign is not guessed at", async ({ browser, baseURL }) => {
 /*
  * The radical lookup, which is the way in for a character you cannot read: you
  * cannot type it and you do not know its readings, but you can see its parts.
- * Two picks and the answer is thirty-one characters - and the radicals that
- * lead nowhere from there are dimmed rather than left as dead ends.
+ *
+ * It is a command in the search box rather than a window over the page, so the
+ * query says what is being asked, the picker edits that query, and the answer
+ * arrives as ordinary search results underneath.
  */
-test("picking radicals narrows the kanji to the ones holding all of them", async ({ browser, baseURL }) => {
+test("typing the command opens the picker, and picking writes the query", async ({ browser, baseURL }) => {
   const page = await openPage(browser, `${baseURL}/search`);
 
-  await page.locator('button[aria-label="Find a kanji by its radicals"]').first().click();
+  const box = page.locator("#search-page-input, input[type='search']").first();
+  await box.click();
+  await box.fill(":rad");
+
   const panel = page.locator('[data-panel="radicals"]');
-  await expect(panel).toBeVisible();
+  await expect(panel).toBeVisible({ timeout: 15_000 });
   /* The whole classical set, not WaniKani's teaching radicals. */
   await expect(panel.locator("button[aria-pressed]")).toHaveCount(253);
 
   await panel.getByRole("button", { name: "日", exact: true }).click();
-  await panel.getByRole("button", { name: "月", exact: true }).click();
+  await expect(box).toHaveValue(":radicals 日");
 
-  await expect(panel.getByRole("link", { name: "明", exact: true })).toBeVisible({ timeout: 15_000 });
-  await expect(panel.getByRole("link", { name: "朝", exact: true })).toBeVisible();
+  await panel.getByRole("button", { name: "月", exact: true }).click();
+  await expect(box).toHaveValue(":radicals 日 + 月");
+
   /* A radical in none of the remaining kanji cannot be picked. */
   await expect(panel.locator("button[aria-pressed]:disabled").first()).toBeVisible();
 
   await finish(page);
 });
 
-test("the radical answer opens that kanji", async ({ browser, baseURL }) => {
+test("a radical command answers with the kanji holding all of them", async ({ browser, baseURL }) => {
   const page = await openPage(browser, `${baseURL}/search`);
 
-  await page.locator('button[aria-label="Find a kanji by its radicals"]').first().click();
-  const panel = page.locator('[data-panel="radicals"]');
-  await panel.getByRole("button", { name: "日", exact: true }).click();
-  await panel.getByRole("link", { name: "明", exact: true }).click();
+  const box = page.locator("#search-page-input, input[type='search']").first();
+  await box.click();
+  await box.fill(":radicals 日 + 月");
 
-  await expect(page).toHaveURL(/\/kanji\/(%E6%98%8E|\u660E)/);
+  /* The answer arrives where every other search answers: the suggestions. */
+  await expect(page.getByRole("option", { name: /明/ }).first()).toBeVisible({ timeout: 15_000 });
 
   await finish(page);
 });

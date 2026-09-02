@@ -6,6 +6,8 @@ export const RADICAL_SEARCH_COPY = {
   openGlyph: "部",
   openLabel: "Find a kanji by its radicals",
   heading: "By radical",
+  /* Typed, not clicked: the box is the way in now. */
+  commandHint: "Type :rad to find a kanji by the parts you can see.",
   hint: "Pick the parts you can see. Each one narrows the list.",
   clear: "Clear",
   close: "Close",

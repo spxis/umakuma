@@ -7,6 +7,8 @@ import { prisma } from "./prisma";
 import { preferOfficialReadings } from "./joyoReadings";
 import { querySchoolGradeCatalog } from "./schoolGrades";
 import { getAllKanjiDictionaryEntries } from "./kanjiDictionary";
+import { radicalCommandHits } from "./radicalCommandSearch";
+import { parseSearchCommand } from "./searchCommands";
 import { searchQueryVariants } from "./kana";
 import { countByKind, hitMatchesKind, kindForHit, type SearchKind } from "./searchKinds";
 import {
@@ -282,6 +284,14 @@ function searchDictionary(variants: string[]): SearchHit[] {
  * error, so a rejected source contributes nothing and the rest still render.
  */
 async function collectRanked(query: string, sources: SearchSource[]): Promise<SearchHit[]> {
+  /*
+   * A command is answered instead of the catalogues, not alongside them. It
+   * names no text to match, so every catalogue would answer it with nothing and
+   * the page would say the search failed.
+   */
+  const command = parseSearchCommand(query);
+  if (command) return radicalCommandHits(command.radicals);
+
   const wanted = new Set(sources);
   const variants = searchQueryVariants(query);
   const [wanikani, jlpt, grades] = await Promise.all([

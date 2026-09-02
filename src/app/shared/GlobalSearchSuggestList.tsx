@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type UIEvent } from "react";
+import { useEffect, useRef, type ReactNode, type UIEvent } from "react";
 
 import { SOURCE_TONES } from "@/app/search/Search.constants";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
@@ -33,6 +33,17 @@ type Props = {
   loadingMore?: boolean;
   /** The viewer's own account, which is what makes the filing column available. */
   accountId?: string | null;
+  /**
+   * Drawn above everything, including the empty state. The radical picker sits
+   * here: under the input, over the answer, which is where the reader is
+   * already looking.
+   */
+  header?: ReactNode;
+  /**
+   * No "nothing matched" line. A command that has not been given anything to
+   * match on yet has not failed to find anything.
+   */
+  suppressEmpty?: boolean;
 };
 
 /** How close to the end counts as near it, in pixels. */
@@ -61,6 +72,8 @@ export default function GlobalSearchSuggestList({
   onNearEnd,
   loadingMore = false,
   accountId = null,
+  header,
+  suppressEmpty = false,
 }: Props) {
   const activeRow = useRef<HTMLLIElement>(null);
   const [filerOpen, setFilerOpen] = useFilerOpen();
@@ -74,10 +87,13 @@ export default function GlobalSearchSuggestList({
   if (hits.length === 0) {
     return (
       <>
+        {header}
         <SearchAnswerBrief answers={answers} />
-        <p className="px-4 py-3 text-xs font-semibold text-foreground/60">
-          {searching ? SEARCH_PAGE_COPY.suggestSearching : SEARCH_PAGE_COPY.noResults}
-        </p>
+        {suppressEmpty ? null : (
+          <p className="px-4 py-3 text-xs font-semibold text-foreground/60">
+            {searching ? SEARCH_PAGE_COPY.suggestSearching : SEARCH_PAGE_COPY.noResults}
+          </p>
+        )}
       </>
     );
   }
@@ -95,6 +111,7 @@ export default function GlobalSearchSuggestList({
 
   return (
     <>
+    {header}
     <SearchAnswerBrief answers={answers} />
     {accountId ? (
       /*

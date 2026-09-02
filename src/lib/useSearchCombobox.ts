@@ -226,6 +226,19 @@ export function useSearchCombobox({
     pick,
     hover: setActiveIndex,
     clear,
+    /*
+     * Writing the query from outside the field. The radical picker edits the
+     * command in the box rather than holding a selection of its own, so the
+     * box is always what is being asked and the picker has no second state to
+     * fall out of step with it. `typing` goes on, or the seeded results page
+     * would leave the new command unfetched.
+     */
+    setQuery: (next: string) => {
+      setTyping(true);
+      setSuggestOpen(true);
+      setActiveIndex(-1);
+      setTyped(next);
+    },
     loadMore,
     loadingMore: suggestions.loadingMore,
   };
