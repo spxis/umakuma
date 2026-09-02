@@ -1,6 +1,6 @@
 import type { MemberAccess } from "@/lib/memberCapabilities";
 
-import { MENU_NAV_SECTIONS, TOP_NAV_SECTIONS, navChildHref, visibleNavSections } from "./navSections";
+import { MENU_NAV_SECTIONS, TOP_NAV_SECTIONS, navChildHref, visibleNavSections, type NavSection } from "./navSections";
 
 /**
  * The one way into admin, for an admin.
@@ -46,6 +46,21 @@ export type HeaderMenuModel = {
   navigate: MenuNavSection[];
 };
 
+/** The menu's sections, split by whether a link belongs to the member or the site. */
+function menuLinks(sections: NavSection[], username: string): { member: MenuLink[]; site: MenuLink[] } {
+  const member: MenuLink[] = [];
+  const site: MenuLink[] = [];
+
+  for (const section of sections) {
+    for (const child of section.children) {
+      const link = { label: child.label, href: navChildHref(child, username) };
+      (link.href.startsWith("/users/") ? member : site).push(link);
+    }
+  }
+
+  return { member, site };
+}
+
 export function buildHeaderMenu(input: {
   username: string | null;
   isAdmin: boolean;
@@ -70,16 +85,17 @@ export function buildHeaderMenu(input: {
   const base = `/users/${encodeURIComponent(username)}`;
 
   const admin: MenuLink[] = isAdmin || showAdminActions ? adminLinks() : [];
+  const menu = menuLinks(visibleNavSections(MENU_NAV_SECTIONS, access), username);
 
   return {
     account: [{ label: "My page", href: base }],
-    settings: visibleNavSections(MENU_NAV_SECTIONS, access).flatMap((section) =>
-      section.children.map((child) => ({
-        label: child.label,
-        href: navChildHref(child, username),
-      })),
-    ),
-    site: SITE_LINKS,
+    settings: menu.member,
+    /*
+     * A menu page rooted at the site rather than at the member goes with
+     * Updates rather than with Profile: the leaderboard is the front page, and
+     * listing it among "your pages" would be a link to somebody else's.
+     */
+    site: [...menu.site, ...SITE_LINKS],
     admin,
     navigate: visibleNavSections(TOP_NAV_SECTIONS, access).map((section) => ({
       label: section.label,

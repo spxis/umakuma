@@ -58,7 +58,17 @@ export type NavSection = {
  * shows no second row; the sub-nav would just repeat the header.
  */
 export const NAV_SECTIONS: NavSection[] = [
-  { id: "leaderboard", label: "Leaderboard", placement: "nav", children: [{ label: "Leaderboard", path: "/" }] },
+  /*
+   * Leaderboard and Progress moved out of the header on 2026-09-02.
+   *
+   * The row was seven sections wide and wrapped to two lines on a laptop, and
+   * two of them did not earn their place: the leaderboard is the site's front
+   * page and undeveloped besides, and Progress is history and statistics -
+   * things a member looks up occasionally rather than navigates by. Both are
+   * one click away in the account menu, beside Profile and WaniKani, which is
+   * where the rest of "about my account" already lives.
+   */
+  { id: "leaderboard", label: "Leaderboard", placement: "menu", children: [{ label: "Leaderboard", path: "/" }] },
   { id: "study", label: "Study", placement: "nav", children: [{ label: "Study", path: "study" }] },
   { id: "game", label: "Game", placement: "nav", children: [{ label: "Game", path: "game" }] },
   {
@@ -89,7 +99,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     id: "progress",
     label: "Progress",
-    placement: "nav",
+    placement: "menu",
     children: [
       { label: "History", path: "history" },
       { label: DASHBOARD_TAB_LABELS.stats, path: "stats", requires: MEMBER_CAPABILITIES.wanikaniProgress },

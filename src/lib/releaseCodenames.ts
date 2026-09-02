@@ -342,6 +342,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nozoku Botan", ja: "覗くボタン", reading: "のぞくぼたん", gloss: "the button that waits until you look" },
   { romaji: "Hanareru Aida", ja: "離れる間", reading: "はなれるあいだ", gloss: "the space that opens between the numbers" },
   { romaji: "Hitofude Hanshi", ja: "一筆半紙", reading: "ひとふではんし", gloss: "a single brushstroke on writing paper" },
+  { romaji: "Futatsu Hikaeru", ja: "二つ控える", reading: "ふたつひかえる", gloss: "the two sections that stand aside" },
 ];
 
 /**

@@ -3243,5 +3243,17 @@
     "summary": "A list could be turned into a writing sheet only from its card on the shelf, and only as a picked sheet carrying every one of its characters in the query string - which broke on a long list, went stale the moment the list changed, and could not be sent to anybody as a link to “my Week 1 sheet”. The page you actually read a list on offered nothing at all. A saved list is a practice source of its own now, addressed by name at /practice/list/week-1, and the sheet is titled with the list's name so a printout says which list it is. Both surfaces - the card and the list's own page - offer Worksheet and Print, the second opening the print dialog on arrival; Burned offers neither, since tracing what you already know is not practice. The list page's search box takes a line of its own on a phone, where five controls beside it had squeezed it down to four characters. Requested 2026-09-02 by John.",
     "version": "0.291.0",
     "releasedAt": "2026-09-02T16:05:03Z"
+  },
+  {
+    "id": "header-nav-trimmed",
+    "name": "Two sections stand aside",
+    "area": "platform",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 65,
+    "summary": "The header carried seven sections and wrapped to two lines on a laptop, which is what made every narrow page look broken. Two of them did not earn the room: the leaderboard is the site's own front page and undeveloped besides, and Progress is history and statistics - things a member looks up occasionally rather than navigates by. Both moved into the account menu, where History and Statistics now sit beside Profile and WaniKani, which is where the rest of \"about my account\" already lived. The row is Study, Game, Learn, Lists and Read, and it fits on one line. The menu learned a distinction while that was open: a page rooted at the site rather than at the member is listed with Updates rather than among your own pages, because the leaderboard is everybody's and listing it under Profile would be a link to somebody else's. Requested 2026-09-02 by John.",
+    "version": "0.292.0",
+    "releasedAt": "2026-09-02T16:09:02Z"
   }
 ]
