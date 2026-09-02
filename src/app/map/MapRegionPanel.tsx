@@ -1,0 +1,123 @@
+"use client";
+
+import Link from "next/link";
+
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import type { GeoRegion } from "@/lib/geoRegion";
+import { subjectHref } from "@/lib/globalSearch";
+import { regionFacts, regionKanji, type FactGroup } from "@/lib/mapStudy";
+
+import { MAP_STUDY_COPY } from "./MapStudy.constants";
+
+/**
+ * Everything known about one region, laid out to be read.
+ *
+ * The same facts the Map game asks about, in the order a person would want
+ * them: what it is called and where, then what it is known for, then the
+ * older things. A prefecture's kanji link to their own pages, because the
+ * name is the first place a learner meets those characters.
+ */
+const HEADING = "text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60";
+
+function Group({ group }: { group: FactGroup }) {
+  return (
+    <section className="space-y-1.5">
+      <h3 className={HEADING}>{group.heading}</h3>
+      {group.facts ? (
+        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+          {group.facts.map((row) => (
+            <div key={row.label} className="contents">
+              <dt className="font-semibold text-foreground/60">{row.label}</dt>
+              <dd className="font-bold text-foreground">
+                {row.value}
+                {row.native ? (
+                  <span lang="ja" translate="no" className={`ml-1.5 font-semibold text-foreground/70 ${JP_TEXT_CLASS}`}>
+                    {row.native}
+                  </span>
+                ) : null}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
+      {group.items ? (
+        <ul className="space-y-1 text-sm">
+          {group.items.map((item, index) => (
+            <li key={item} className="font-semibold text-foreground">
+              {item}
+              {group.itemsNative?.[index] ? (
+                <span lang="ja" translate="no" className={`ml-1.5 text-foreground/70 ${JP_TEXT_CLASS}`}>
+                  {group.itemsNative[index]}
+                </span>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </section>
+  );
+}
+
+export default function MapRegionPanel({ region, onClose }: { region: GeoRegion; onClose?: () => void }) {
+  const kanji = regionKanji(region);
+  const groups = regionFacts(region);
+
+  return (
+    <div className="flex h-full min-h-0 flex-col">
+      <header className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
+        <div className="min-w-0">
+          {region.nameNative && region.nameNative !== region.name ? (
+            <p lang="ja" translate="no" className={`text-2xl font-black text-foreground ${JP_TEXT_CLASS}`}>
+              {region.nameNative}
+              {region.reading ? (
+                <span className="ml-2 text-sm font-semibold text-foreground/60">{region.reading}</span>
+              ) : null}
+            </p>
+          ) : null}
+          <h2 className="text-lg font-black text-foreground">{region.name}</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
+            {region.divisionType} · {region.region}
+          </p>
+        </div>
+        {onClose ? (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={MAP_STUDY_COPY.close}
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-sm font-black text-foreground/70 transition hover:bg-surface-muted"
+          >
+            X
+          </button>
+        ) : null}
+      </header>
+
+      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-4">
+        {kanji.length > 0 ? (
+          <section className="space-y-1.5">
+            <h3 className={HEADING}>{MAP_STUDY_COPY.writtenWith}</h3>
+            <p className="flex flex-wrap gap-1.5">
+              {kanji.map((character) => {
+                const href = subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: character, slug: null });
+                const chip = `inline-flex h-10 w-10 items-center justify-center rounded-xl border border-kanji/40 bg-kanji/5 text-xl font-black text-kanji ${JP_TEXT_CLASS}`;
+                return href ? (
+                  <Link key={character} href={href} lang="ja" translate="no" className={`${chip} transition hover:bg-kanji/15`}>
+                    {character}
+                  </Link>
+                ) : (
+                  <span key={character} lang="ja" translate="no" className={chip}>
+                    {character}
+                  </span>
+                );
+              })}
+            </p>
+          </section>
+        ) : null}
+
+        {groups.map((group) => (
+          <Group key={group.id} group={group} />
+        ))}
+      </div>
+    </div>
+  );
+}

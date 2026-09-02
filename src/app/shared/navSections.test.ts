@@ -72,6 +72,12 @@ describe("sectionForPath", () => {
    * The WaniKani explorer moved from `wk-explorer` to `library-explorer` and
    * links in the wild still use the old path.
    */
+  /* The map has no user segment - one map serves everyone - and is still an Explore page. */
+  it("puts the public map page in Explore", () => {
+    expect(sectionForPath("/map", USER)?.id).toBe("explore");
+    expect(sectionForPath("/map", null)?.id).toBe("explore");
+  });
+
   it("still resolves the explorer's old path", () => {
     expect(sectionForPath(`/users/${USER}/wk-explorer`, USER)?.id).toBe("explore");
   });

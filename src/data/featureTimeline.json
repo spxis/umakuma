@@ -2295,11 +2295,11 @@
     "id": "map-study-viewer",
     "area": "games",
     "name": "Map viewer and study page",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 9,
-    "summary": "A large map to learn a country by, rather than only to be quizzed on. Every prefecture or state highlights under the pointer or a finger, and choosing one shows what is known about it - beside the map where there is room, in a modal where there is not. A country picker changes which map is being studied, so the same page serves Japan first and other countries after. Requested 2026-09-01. The Map game already holds the 47 Japanese prefectures as reserved subject ids, so the shapes and the naming are there to build on."
+    "summary": "The Map game held every prefecture's shape and a page of facts about it, and showed them one question at a time. The new Map page, under Explore, lays the same data out to be read. A large map fills the page; every region highlights under the pointer or a finger and says its name, and choosing one puts everything known about it beside the map - its name in its own script, its capital, size and population, what it is called, what it is number one for, its food, landmarks, symbols, emblem and history, and for a prefecture the kanji it is written with, each linking to its own page. On a phone the facts come up over the map instead. A country picker switches between Japan, the United States and Canada. The country and the chosen region ride in the address, so a page about Tokyo can be sent to somebody and opens on Tokyo, and the back button walks the choices. Requested 2026-09-01.",
+    "version": "0.238.0",
+    "releasedAt": "2026-09-02T05:36:40Z"
   },
   {
     "id": "word-page-neighbourhood",

@@ -23,6 +23,16 @@ type Props = {
   showHandles?: boolean;
   disabled?: boolean;
   className?: string;
+  /**
+   * Regions as things to choose, for a map that is read rather than played.
+   * With this set every region is a button under the pointer or a finger;
+   * the game leaves it unset and uses handles, which keep a small prefecture
+   * as easy to hit as Hokkaido.
+   */
+  onRegionSelect?: (code: string | number) => void;
+  onRegionHover?: (code: string | number | null) => void;
+  /** What a region is called, for the pointer and the screen reader. */
+  regionLabel?: (code: string | number) => string;
 };
 
 /** Handle size as a share of the framed width, so it holds up at any zoom. */
@@ -41,7 +51,11 @@ export default function JapanMap({
   showHandles = false,
   disabled = false,
   className,
+  onRegionSelect,
+  onRegionHover,
+  regionLabel,
 }: Props) {
+  const choosable = Boolean(onRegionSelect) && !disabled;
   const dataset = GEO_DATASETS[country];
   const box = geoFocusBox(country, focusCodes);
   const { radius, fontSize, stroke } = handleFor(box);
@@ -73,8 +87,9 @@ export default function JapanMap({
     <svg
       viewBox={mapBoxToViewBox(box)}
       preserveAspectRatio="xMidYMid meet"
-      role="img"
+      role={choosable ? "group" : "img"}
       aria-label={`Map of ${dataset.countryName} by ${dataset.divisionTypeName.toLowerCase()}`}
+      onMouseLeave={choosable ? () => onRegionHover?.(null) : undefined}
       className={`h-full w-full ${className ?? ""}`}
     >
       {/* Okinawa is drawn in a box rather than in place, the way Japanese maps
@@ -93,6 +108,7 @@ export default function JapanMap({
 
       {dataset.regions.map((region) => {
         const mark = marksByCode.get(String(region.code));
+        const label = regionLabel?.(region.code) ?? region.name;
         return (
           <path
             key={String(region.code)}
@@ -100,8 +116,27 @@ export default function JapanMap({
             fillRule="evenodd"
             strokeWidth={stroke}
             strokeLinejoin="round"
-            className={`transition-colors ${MAP_TONE_CLASS[mark?.tone ?? MAP_TONES.idle]!.shape}`}
-          />
+            role={choosable ? "button" : undefined}
+            tabIndex={choosable ? 0 : undefined}
+            aria-label={choosable ? label : undefined}
+            onClick={choosable ? () => onRegionSelect?.(region.code) : undefined}
+            onKeyDown={
+              choosable
+                ? (event) => {
+                    if (event.key !== "Enter" && event.key !== " ") return;
+                    event.preventDefault();
+                    onRegionSelect?.(region.code);
+                  }
+                : undefined
+            }
+            onMouseEnter={choosable ? () => onRegionHover?.(region.code) : undefined}
+            onFocus={choosable ? () => onRegionHover?.(region.code) : undefined}
+            className={`transition-colors ${MAP_TONE_CLASS[mark?.tone ?? MAP_TONES.idle]!.shape} ${
+              choosable ? "cursor-pointer outline-none focus-visible:stroke-accent" : ""
+            }`}
+          >
+            {choosable ? <title>{label}</title> : null}
+          </path>
         );
       })}
 

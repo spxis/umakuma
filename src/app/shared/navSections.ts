@@ -51,6 +51,8 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
       { label: "Grades", path: "grades" },
       { label: "Practice", path: "practice" },
+      /* Public, so it has no user segment: a map is the same for everyone. */
+      { label: "Map", path: "/map" },
     ],
   },
   /*
@@ -106,6 +108,12 @@ export function sectionForPath(pathname: string | null, username: string | null)
   if (pathname === "/") {
     return NAV_SECTIONS.find((section) => section.id === "leaderboard") ?? null;
   }
+
+  /* A page outside the user segment still belongs to a group, by its absolute path. */
+  const absolute = NAV_SECTIONS.find((section) =>
+    section.children.some((child) => child.path.startsWith("/") && child.path !== "/" && pathname === child.path),
+  );
+  if (absolute) return absolute;
 
   const base = username ? `/users/${encodeURIComponent(username)}/` : null;
   const segment = base && pathname.startsWith(base) ? pathname.slice(base.length).split("/")[0] : null;
