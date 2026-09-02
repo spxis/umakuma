@@ -35,6 +35,15 @@ export const MODAL_LAYERS = {
   gameAlert: "z-110",
   /** Transient corner toasts. */
   toast: "z-120",
+  /**
+   * The header menu's anchor: the wrapper the panel is positioned from.
+   *
+   * A wrapper with any z-index starts a stacking context, and the panel's own
+   * layer then only orders it against its siblings inside that context. With
+   * the anchor at z-10, a list's sticky column headings at z-20 drew straight
+   * across the open menu. Above page chrome, below the sheets and modals.
+   */
+  headerAnchor: "z-40",
   /** The header menu scrim and its panel. */
   headerScrim: "z-[9990]",
   headerPanel: "z-[9991]",

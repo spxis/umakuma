@@ -2431,13 +2431,11 @@
     "name": "The open user menu renders under the list's sticky heading",
     "area": "admin",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 21,
-    "summary": "With the user menu open on a page that shows a subject list, the list's sticky column-heading row draws across the menu - the heading carries z-20 and the menu sits below it. Stacking order belongs in MODAL_LAYERS; the menu should take a layer above page chrome and the heading should not claim one of its own. Regression from 0.214.0. Reported 2026-09-01.",
-    "owner": "fable/subject-pages",
-    "claimedAt": "2026-09-02T04:20:55.930Z"
+    "summary": "With the account menu open on a page showing a list, the list's sticky column headings drew straight across it. The panel itself sat at a layer nothing should beat, but its wrapper carried a small z-index of its own, and a wrapper with any z-index starts a stacking context - so the panel's layer only ordered it against its siblings, and against the page the whole menu was worth ten while a heading was worth twenty. The wrapper takes a named layer now, above page chrome and below the sheets and modals that must cover the header, and a test checks it against every sticky heading a list can draw.",
+    "version": "0.231.0",
+    "releasedAt": "2026-09-02T04:25:13Z"
   },
   {
     "id": "lists-top-level-admin-in-menu",

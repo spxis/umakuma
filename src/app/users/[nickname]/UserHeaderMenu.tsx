@@ -183,7 +183,7 @@ export default function UserHeaderMenu({
   }
 
   return (
-    <div ref={menuRef} className="relative z-10">
+    <div ref={menuRef} className={`relative ${MODAL_LAYERS.headerAnchor}`}>
       <button
         type="button"
         aria-expanded={open}
