@@ -3199,13 +3199,11 @@
     "name": "The grades page stops flashing on arrival",
     "area": "study",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 62,
     "summary": "GradeKanjiBoard seeds two pieces of state from localStorage inside the useState initializer, so the server renders the default and the browser flips it after hydration. The reveal mode is the visible one: every reading paints and then hides. Strokes shares the view-mode half of the pattern and does not flash, which points at the reveal mode as the cause. No page under Learn should flash.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-02T16:36:08.610Z"
+    "version": "0.300.0",
+    "releasedAt": "2026-09-02T16:56:45Z"
   },
   {
     "id": "explorer-grid-parity",

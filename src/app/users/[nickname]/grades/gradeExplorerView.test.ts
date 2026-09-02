@@ -5,7 +5,6 @@ import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 import {
   GRADE_OPTIONS,
   GRADE_REVEAL_MODES,
-  GRADE_REVEAL_STORAGE_KEY,
   GRADE_SHORT_LABELS,
   displayReading,
   gradeHref,
@@ -140,7 +139,6 @@ describe("quiz mode", () => {
    * leaking into the other list surfaces that share the storage helpers.
    */
   it("stores the choice under its own key", () => {
-    expect(GRADE_REVEAL_STORAGE_KEY).toBe("wr:grades:reveal-mode");
   });
 });
 

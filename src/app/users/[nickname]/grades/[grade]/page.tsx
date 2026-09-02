@@ -1,4 +1,5 @@
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
+import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -16,8 +17,9 @@ import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { viewsOwnPage } from "@/app/shared/viewerAddress";
 import { GRADE_EXPLORER_COPY, GRADE_PAGE_SIZE } from "../GradeExplorer.constants";
 import GradeKanjiBoard from "../GradeKanjiBoard";
-import { gradeSearchSuggestions, GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, pageRange, parseGradeSegment, parsePageParam } from "../gradeExplorerView";
+import { GRADE_REVEAL_MODES, gradeSearchSuggestions, GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, pageRange, parseGradeSegment, parsePageParam } from "../gradeExplorerView";
 import { noTranslateClass } from "@/app/shared/japaneseText";
+import { DISPLAY_PREFERENCE_COOKIES, readEnumCookie } from "@/lib/displayPreferenceCookie";
 
 /** One id for the suggestion list, since the page renders one search box. */
 const SEARCH_LIST_ID = "grade-search-suggestions";
@@ -40,6 +42,16 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
   });
 
   const { nickname, grade: gradeSegment } = await params;
+  /*
+   * Quiz mode has to be known before the grid is drawn, or every reading
+   * paints and is then hidden. A cookie is the one client value a server
+   * component can read; see lib/displayPreferenceCookie.
+   */
+  const revealMode = readEnumCookie(
+    (await cookies()).get(DISPLAY_PREFERENCE_COOKIES.gradeReveal)?.value,
+    Object.values(GRADE_REVEAL_MODES),
+    GRADE_REVEAL_MODES.shown,
+  );
   const userKey = decodeURIComponent(nickname);
   const query = await searchParams;
 
@@ -209,6 +221,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
             items={withOfficialReadings(catalog.items)}
             practicePath={`/users/${encodeURIComponent(nickname)}/practice`}
             accountId={viewsOwnPage(viewerMenuInfo, userKey) ? account.id : null}
+            initialRevealMode={revealMode}
           />
 
           {catalog.pagination.totalPages > 1 ? (

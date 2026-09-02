@@ -16,7 +16,8 @@ import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import GradeKanjiGrid from "./GradeKanjiGrid";
-import { GRADE_REVEAL_MODES, GRADE_REVEAL_STORAGE_KEY, GRADE_VIEW_MODE_STORAGE_KEY, type GradeRevealMode } from "./gradeExplorerView";
+import { GRADE_REVEAL_MODES, GRADE_VIEW_MODE_STORAGE_KEY, type GradeRevealMode } from "./gradeExplorerView";
+import { DISPLAY_PREFERENCE_COOKIES, writeDisplayPreferenceCookie } from "@/lib/displayPreferenceCookie";
 
 type Props = {
   items: SchoolGradeKanjiEntry[];
@@ -24,6 +25,14 @@ type Props = {
   practicePath: string;
   /** Whose lists a chosen set is saved to. Absent for a visitor. */
   accountId: string | null;
+  /**
+   * Quiz mode as the server already drew it.
+   *
+   * Read from a cookie by the page rather than from localStorage here: this
+   * decides what the first paint contains, and reading it after hydration
+   * meant every reading painted and was then hidden.
+   */
+  initialRevealMode: GradeRevealMode;
 };
 
 /**
@@ -34,21 +43,22 @@ type Props = {
  * grid into a self-test: see the kanji, say the readings, select the card to
  * check. Nothing is recorded — this is the rehearsal before the real thing.
  */
-export default function GradeKanjiBoard({ items, practicePath, accountId }: Props) {
+export default function GradeKanjiBoard({ items, practicePath, accountId, initialRevealMode }: Props) {
   /*
-   * Read once at mount rather than in an effect. A new grade or page remounts
-   * this component through its `key`, which is also what clears what was
-   * revealed - no effect has to watch for the change.
+   * Seeded from the server's own value, so the markup React hydrates matches
+   * the markup it was given. A new grade or page remounts this component
+   * through its `key`, which is also what clears what was revealed - no effect
+   * has to watch for the change.
    */
-  const [mode, setMode] = useState<GradeRevealMode>(() =>
-    getStoredEnum(GRADE_REVEAL_STORAGE_KEY, Object.values(GRADE_REVEAL_MODES), GRADE_REVEAL_MODES.shown));
+  const [mode, setMode] = useState<GradeRevealMode>(initialRevealMode);
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(GRADE_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
 
   function changeMode(next: GradeRevealMode) {
     setMode(next);
-    setStoredEnum(GRADE_REVEAL_STORAGE_KEY, next);
+    /* A cookie, so the next server render draws it right the first time. */
+    writeDisplayPreferenceCookie(DISPLAY_PREFERENCE_COOKIES.gradeReveal, next);
     setRevealed(new Set());
   }
 

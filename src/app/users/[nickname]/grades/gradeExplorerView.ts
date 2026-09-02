@@ -22,9 +22,6 @@ export const GRADE_REVEAL_MODES = { shown: "shown", hidden: "hidden" } as const;
 
 export type GradeRevealMode = (typeof GRADE_REVEAL_MODES)[keyof typeof GRADE_REVEAL_MODES];
 
-/** Remembered per surface, so quiz mode survives paging through a grade. */
-export const GRADE_REVEAL_STORAGE_KEY = "wr:grades:reveal-mode";
-
 /** Grid or list on the grade explorer, remembered per surface like the others. */
 export const GRADE_VIEW_MODE_STORAGE_KEY = "wr:grades:view-mode";
 
