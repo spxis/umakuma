@@ -2403,5 +2403,16 @@
     "dateIsEstimate": true,
     "release": 19,
     "summary": "The stroke-order block shows the character in two faces, Gothic and Mincho, each captioned in capitals under it. The captions distract from the shapes; drop them and say the face in a hover title instead. Two more faces matter to a learner and are missing: the textbook face (kyoukashotai), which is the handwriting standard every school uses, and a brush or kaisho face, which is what the printed forms descend from. With four, the faces sit in a two-by-two grid beside the drawing. The stroke count pill sits left in the header; right-align it. Requested 2026-09-01."
+  },
+  {
+    "id": "planned-tab-out-of-order",
+    "name": "The planned tab shows its queue out of order",
+    "area": "admin",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "summary": "The admin release page sorted planned work by its place in the queue and then grouped it by the month of its estimated date, so the headers read September, August, September and the list looked as though it had lost its order. The estimates are typed by hand and mean little - one sat on a day that had already passed. A queue is not a calendar. The planned tab is one list now, in queue order, with each item's position shown where a release shows its version; the month grouping stays for what has shipped, where the date is a fact.",
+    "version": "0.228.0",
+    "releasedAt": "2026-09-02T03:36:10Z"
   }
 ]

@@ -14,6 +14,8 @@ export const RELEASE_TIMELINE_COPY = {
   plannedLabel: "planned",
   emptyPlanned: "Nothing queued.",
   inProgress: "In progress",
+  queueHeading: "In queue order",
+  queuePosition: (position: number) => `#${position}`,
   bug: "Bug",
   shelvedHeading: "Shelved",
   shelvedLegend:

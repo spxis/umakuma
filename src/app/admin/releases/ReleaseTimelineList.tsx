@@ -41,6 +41,8 @@ function FeatureRow({
       <span className="flex shrink-0 items-baseline gap-2 sm:w-40 sm:justify-end">
         {entry.version ? (
           <code className="text-[11px] font-semibold text-foreground/60">v{entry.version}</code>
+        ) : typeof entry.release === "number" ? (
+          <code className="text-[11px] font-black text-foreground/70">{RELEASE_TIMELINE_COPY.queuePosition(entry.release)}</code>
         ) : null}
         <time dateTime={entry.date} className="font-mono text-xs text-foreground/60">
           {formatFeatureDate(entry.date)}
@@ -117,11 +119,38 @@ export default function ReleaseTimelineList({
   showEstimateFlag = false,
   showStatusFlag = false,
 }: ReleaseTimelineListProps) {
-  const groups = groupFeaturesByMonth(entries);
-
-  if (groups.length === 0) {
+  if (entries.length === 0) {
     return <p className="py-6 text-sm text-foreground/60">{RELEASE_TIMELINE_COPY.emptyPlanned}</p>;
   }
+
+  /*
+   * A queue is not a calendar.
+   *
+   * Planned work arrives sorted by its position in the queue, and grouping
+   * that by the month of an estimated date - a date typed by hand, and once
+   * already in the past - produced headers reading September, August,
+   * September, which looks like a list that has lost its order. The queue is
+   * one list, in queue order, with each item's position where a release
+   * would show its version. The month grouping stays for what has shipped,
+   * where the date is a fact.
+   */
+  if (showEstimateFlag) {
+    return (
+      <section>
+        <h3 className="mb-1 flex items-baseline gap-2 text-xs font-bold uppercase tracking-wide text-foreground/60">
+          {RELEASE_TIMELINE_COPY.queueHeading}
+          <span className="font-semibold text-foreground/60">{entries.length} planned</span>
+        </h3>
+        <ul>
+          {entries.map((entry) => (
+            <FeatureRow key={entry.id} entry={entry} showEstimateFlag showStatusFlag={showStatusFlag} />
+          ))}
+        </ul>
+      </section>
+    );
+  }
+
+  const groups = groupFeaturesByMonth(entries);
 
   return (
     <div className="flex flex-col gap-6">
