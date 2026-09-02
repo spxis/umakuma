@@ -38,6 +38,8 @@ export const MEMBER_PAGE_HEADERS = {
   lists: { icon: umaKumaRight },
   history: { icon: kumaClose },
   profile: { icon: umaClose },
+  /* The same picture the Library Explorer opens with: both are WaniKani's half. */
+  wanikani: { icon: umaKumaLeft },
 } as const;
 
 export const DASHBOARD_PAGE_HEADERS: Record<TabId, DashboardPageHeader> = {

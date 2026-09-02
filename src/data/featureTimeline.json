@@ -495,7 +495,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 8,
-    "summary": "One capability map decides what a member without a WaniKani connection sees, hides or finds disabled. Today they meet This account has no WaniKani connection on the Study page, an empty Library Explorer at a URL that should not exist for them, and WaniKani links in the header. Nothing WaniKani-shaped is offered to an account that has none. Requested 2026-09-02 by John with screenshots."
+    "summary": "One capability map decides what a member without a WaniKani connection sees, hides or finds disabled. Today they meet This account has no WaniKani connection on the Study page, an empty Library Explorer at a URL that should not exist for them, and WaniKani links in the header. Nothing WaniKani-shaped is offered to an account that has none. Requested 2026-09-02 by John with screenshots.",
+    "owner": "Claude (worktree wk-gating-connect)",
+    "claimedAt": "2026-09-02T11:07:35.354Z"
   },
   {
     "id": "catalog-game-pool",
@@ -513,11 +515,13 @@
     "id": "connect-wanikani-page",
     "name": "Connect your WaniKani account",
     "area": "account",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
+    "status": "shipped",
+    "date": "2026-09-02",
+    "dateIsEstimate": false,
     "release": 10,
-    "summary": "A page that explains what connecting unlocks and walks through adding the token."
+    "summary": "The welcome wizard asks for a WaniKani token once, in a step built to be skipped, and tells anyone who skips it that they can connect later from their profile. That sentence was a promise with nowhere to land: the profile said WaniKani, Not connected, and stopped there, so a member who said Later had no way back short of making a new account. There is a page now, at /users/<member>/wanikani, listed under Settings beside Profile and Libraries and linked from the fact on the profile that used to be a dead end. It leads with what connecting adds and with what a member keeps either way, because the question someone without WaniKani actually has is whether it is worth getting one, and the honest answer is that most of UmaKuma never asks. Then the walkthrough: where WaniKani keeps its tokens, which two permissions the token needs - assignments:start and reviews:create, without which lessons and reviews done here never reach WaniKani - and the field itself, checked against the API before it is stored so the member sees the account it resolved to. A connected member gets the same page as a statement of their connection, with the field closed behind Replace token, since nothing here can read the stored one back. The request the wizard and the page share now lives in one place rather than two.",
+    "version": "0.267.0",
+    "releasedAt": "2026-09-02T11:51:00Z"
   },
   {
     "id": "clans",

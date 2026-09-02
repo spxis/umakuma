@@ -2,6 +2,7 @@ import { expect, test, type Browser } from "@playwright/test";
 import fs from "node:fs";
 
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
+import { CONNECT_COPY } from "@/app/users/[nickname]/wanikani/connectCopy";
 import { STUDY_PANEL_TEXT } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
 
 import { STORAGE_STATE } from "./sessionState";
@@ -1100,5 +1101,36 @@ test("saved lists page renders and is reachable from the nav", async ({ browser,
     }
 
     await expect(page.getByRole("link", { name: "Lists", exact: true }).first()).toBeVisible();
+  });
+});
+
+test("wanikani connection page renders for a member", async ({ browser, baseURL }) => {
+  test.skip(!accessibleStudyUser, "No accessible user page for the connection check.");
+  const user = accessibleStudyUser ?? smokeUsers[0] ?? fallbackUsers[0];
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/wanikani`;
+
+  await assertPageLoads(browser, url, async (page) => {
+    const accessGate = page.getByText(USER_ACCESS_GATE_TEXT);
+    if ((await accessGate.count()) > 0) {
+      await expect(accessGate).toBeVisible();
+      return;
+    }
+
+    /*
+     * The page has two states, and which one the smoke user is in is not this
+     * suite's to decide: whoever tops the leaderboard is connected, a run
+     * against a fresh local database is not. Assert whichever branch rendered,
+     * and the section both states share.
+     */
+    const connected = await page.getByRole("heading", { name: CONNECT_COPY.connectedHeading }).count();
+    if (connected > 0) {
+      await expect(page.getByRole("button", { name: CONNECT_COPY.replace })).toBeVisible();
+    } else {
+      await expect(page.getByRole("heading", { name: CONNECT_COPY.heading })).toBeVisible();
+      await expect(page.getByLabel(CONNECT_COPY.tokenLabel)).toBeVisible();
+      await expect(page.getByRole("link", { name: CONNECT_COPY.stepsAction })).toBeVisible();
+    }
+
+    await expect(page.getByRole("heading", { name: CONNECT_COPY.keepsHeading })).toBeVisible();
   });
 });

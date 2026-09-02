@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import type { ViewerMenuInfo } from "../UserDashboardTabs.types";
@@ -36,6 +37,8 @@ export type UserPageShell = {
     nickname: string;
     wkUsername: string | null;
     wkLevel: number;
+    /** Whether a WaniKani token is stored, without the token itself leaving the query. */
+    hasWanikani: boolean;
     joinedByEmail: string | null;
     lastSyncedAt: Date;
     lastActivityAt: Date | null;
@@ -68,6 +71,9 @@ export async function loadUserPageShell(nickname: string): Promise<UserPageShell
       nickname: true,
       wkUsername: true,
       wkLevel: true,
+      tokenEncrypted: true,
+      tokenIv: true,
+      tokenTag: true,
       joinedByEmail: true,
       lastSyncedAt: true,
       lastActivityAt: true,
@@ -96,7 +102,22 @@ export async function loadUserPageShell(nickname: string): Promise<UserPageShell
     viewerMenuInfo,
     viewerIsAdmin: isAdminEmail(viewerEmail),
     userKey,
-    account: { ...account, wkLevel: account.wkLevel ?? 0 },
+    /*
+     * Built field by field rather than spread: the row carries the encrypted
+     * token, and a shell that spreads it hands every member page a secret it
+     * has no use for. The three columns become one boolean here and go no
+     * further.
+     */
+    account: {
+      id: account.id,
+      nickname: account.nickname,
+      wkUsername: account.wkUsername,
+      wkLevel: account.wkLevel ?? 0,
+      hasWanikani: hasWanikaniConnection(account),
+      joinedByEmail: account.joinedByEmail,
+      lastSyncedAt: account.lastSyncedAt,
+      lastActivityAt: account.lastActivityAt,
+    },
     viewerMatchesAccount: Boolean(viewerEmail && linkedEmail && viewerEmail === linkedEmail),
   };
 }

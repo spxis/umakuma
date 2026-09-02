@@ -93,6 +93,12 @@ export const NAV_SECTIONS: NavSection[] = [
     placement: "menu",
     children: [
       { label: "Profile", path: "profile" },
+      /*
+       * The connection is settings, not a place to study. It stays listed
+       * whether or not one exists: without it this is the only door, and with
+       * it, it is where a dead token gets replaced.
+       */
+      { label: "WaniKani", path: "wanikani" },
       { label: "Libraries", path: "libraries" },
     ],
   },

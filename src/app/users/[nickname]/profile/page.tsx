@@ -3,6 +3,7 @@ import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import DisplayPreferences from "@/app/shared/DisplayPreferences";
 import { DISPLAY_PREFERENCES_COPY } from "@/app/shared/displayPreferencesCopy";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 
@@ -16,17 +17,34 @@ import { loadProfileGameStats } from "@/lib/profileStats";
 import { formatDateTimeShort } from "@/lib/timeFormat";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import { CONNECT_COPY } from "../wanikani/connectCopy";
 import ProfileForm from "./ProfileForm";
 import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
 
 type PageProps = { params: Promise<{ nickname: string }> };
 
-function Fact({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Fact({
+  label,
+  value,
+  hint,
+  action,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+  /** A fact that is also a door: WaniKani says Not connected and offers the page that fixes it. */
+  action?: { label: string; href: string };
+}) {
   return (
     <div className="rounded-xl border border-line bg-surface-muted p-3">
       <p className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</p>
       <p className="mt-0.5 text-sm font-bold text-foreground">{value}</p>
       {hint ? <p className="mt-0.5 text-[11px] text-foreground/60">{hint}</p> : null}
+      {action ? (
+        <Link href={action.href} className="mt-1 inline-block text-[11px] font-black text-accent hover:underline">
+          {action.label}
+        </Link>
+      ) : null}
     </div>
   );
 }
@@ -97,6 +115,10 @@ export default async function UserProfilePage({ params }: PageProps) {
           label={PROFILE_COPY.wanikani}
           value={account.wkLevel !== null ? `${PROFILE_COPY.wanikaniLevel} ${account.wkLevel}` : PROFILE_COPY.wanikaniNone}
           hint={account.wkLevel !== null ? PROFILE_COPY.wanikaniHint : undefined}
+          action={{
+            label: account.wkLevel !== null ? CONNECT_COPY.replace : CONNECT_COPY.profileLink,
+            href: `/users/${encodeURIComponent(account.slug ?? account.wkUsername ?? "")}/wanikani`,
+          }}
         />
         <Fact label={PROFILE_COPY.jlpt} value={jlpt} />
       </section>

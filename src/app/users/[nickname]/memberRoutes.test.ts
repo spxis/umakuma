@@ -35,6 +35,7 @@ describe("member pages", () => {
     "lists",
     "libraries",
     "profile",
+    "wanikani",
   ];
 
   it.each(segments)("/%s is a route with a page of its own", (segment) => {

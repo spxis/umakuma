@@ -31,6 +31,15 @@ describe("buildHeaderMenu", () => {
     expect(menu().settings.map((link) => link.label)).toContain("Libraries");
   });
 
+  /*
+   * The welcome wizard tells anyone who skips WaniKani that they can connect
+   * later. This is the only standing route to that page, so it is the sentence
+   * that stops being true if the entry disappears.
+   */
+  it("offers the WaniKani connection under settings", () => {
+    expect(menu().settings).toContainEqual({ label: "WaniKani", href: "/users/jay/wanikani" });
+  });
+
   // Settings moved out of the header, so it must not come back as a nav group.
   it("does not list settings as somewhere to navigate", () => {
     expect(menu().navigate.map((section) => section.label)).not.toContain("Settings");

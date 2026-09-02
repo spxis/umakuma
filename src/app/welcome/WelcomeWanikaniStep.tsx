@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { connectWanikaniToken } from "@/app/shared/connectWanikani";
+
 import { WELCOME_COPY } from "./welcomeCopy";
 
 type Props = {
@@ -35,21 +37,20 @@ export default function WelcomeWanikaniStep({ accountId, onDone }: Props) {
     setState("checking");
     setError(null);
 
-    const response = await fetch(`/api/accounts/${accountId}/wanikani`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ token }),
-    }).catch(() => null);
+    const outcome = await connectWanikaniToken({
+      accountId,
+      token,
+      fallbackError: WELCOME_COPY.failed,
+    });
 
-    const payload = await response?.json().catch(() => null);
-    if (!response?.ok) {
-      setError(payload?.error ?? WELCOME_COPY.failed);
+    if (!outcome.ok) {
+      setError(outcome.error);
       setState("idle");
       return;
     }
 
     // Show what it resolved to, then move on by itself.
-    setConnected(payload?.wkUsername ?? null);
+    setConnected(outcome.wkUsername);
     setState("idle");
     window.setTimeout(onDone, 1200);
   }
