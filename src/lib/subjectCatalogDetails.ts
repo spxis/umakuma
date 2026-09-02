@@ -20,6 +20,14 @@ export type CatalogRelatedReference = {
   wkLevel: number | null;
   reading: string | null;
   meaning: string | null;
+  /*
+   * What the reference is and how it is addressed, so a page can link to it.
+   * A radical WaniKani draws has no characters, only a slug, and a chip built
+   * from the label alone would send it to a kanji page that does not exist.
+   */
+  subjectType: SubjectType;
+  characters: string | null;
+  slug: string | null;
 };
 
 export type CatalogSubjectDetail = {
@@ -221,6 +229,9 @@ function toRelatedReference(
     wkLevel: row?.level ?? null,
     reading,
     meaning,
+    subjectType: normalizeSubjectType(row?.subjectType ?? ""),
+    characters: row?.characters?.trim() || null,
+    slug: row?.slug?.trim() || null,
   };
 }
 

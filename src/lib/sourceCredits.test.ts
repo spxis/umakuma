@@ -19,7 +19,7 @@ const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
 describe("who gets credited", () => {
   it("names every borrowed source", () => {
-    expect(Object.keys(SOURCE_CREDITS).sort()).toEqual(["tatoeba", "wanikani"]);
+    expect(Object.keys(SOURCE_CREDITS).sort()).toEqual(["kanjiapi", "tatoeba", "wanikani"]);
     for (const credit of Object.values(SOURCE_CREDITS)) {
       expect(credit.source.length).toBeGreaterThan(1);
       expect(credit.url).toMatch(/^https:\/\//);
@@ -43,6 +43,15 @@ describe("who gets credited", () => {
     expect(SOURCE_CREDITS.wanikani).not.toHaveProperty("licence");
     expect(SOURCE_CREDITS.wanikani.url).toContain("wanikani.com");
   });
+
+  /*
+   * kanjiapi.dev serves EDRDG data whose share-alike terms already sit on the
+   * dictionary block. Naming a licence here would claim the same grant twice.
+   */
+  it("names the compounds API without restating the dictionary licence", () => {
+    expect(SOURCE_CREDITS.kanjiapi).not.toHaveProperty("licence");
+    expect(SOURCE_CREDITS.kanjiapi.url).toContain("kanjiapi.dev");
+  });
 });
 
 describe("where the credit is drawn", () => {
@@ -62,10 +71,11 @@ describe("where the credit is drawn", () => {
   });
 
   it("says what was taken, not only who it came from", () => {
-    const panel = read("src/app/shared/SubjectDetailPanel.tsx");
-    expect(panel).toContain("SOURCE_CREDIT_COPY.subjectData");
-    expect(panel).toContain("SOURCE_CREDIT_COPY.mnemonics");
-    expect(SOURCE_CREDIT_COPY.subjectData).toMatch(/from$/);
+    expect(read("src/app/shared/SubjectDetailPanel.tsx")).toContain("SOURCE_CREDIT_COPY.subjectData");
+    /* The mnemonic credit moved into the block that draws the mnemonics. */
+    expect(read("src/app/shared/subject-page/MnemonicsBlock.tsx")).toContain("SOURCE_CREDIT_COPY.mnemonics");
+    expect(read("src/app/shared/subject-page/UsedInWordsBlock.tsx")).toContain("SOURCE_CREDIT_COPY.words");
+    for (const label of Object.values(SOURCE_CREDIT_COPY)) expect(label).toMatch(/from$/);
   });
 
   /* Every credit link leaves the site, so every credit link says so. */

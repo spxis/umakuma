@@ -35,6 +35,16 @@ export const SOURCE_CREDITS = {
     licence: "CC BY 2.0 FR",
     licenceUrl: "https://creativecommons.org/licenses/by/2.0/fr/",
   },
+  /*
+   * The compounds under a kanji. kanjiapi.dev serves them from EDRDG's
+   * dictionaries, whose share-alike terms already sit on the dictionary block;
+   * the API is named as the thing actually read, and no second licence is
+   * claimed for the same data.
+   */
+  kanjiapi: {
+    source: "kanjiapi.dev",
+    url: "https://kanjiapi.dev",
+  },
 } as const satisfies Record<string, SourceCredit>;
 
 /** The words in front of the link, kept with the other copy for the locale layer. */
@@ -42,4 +52,6 @@ export const SOURCE_CREDIT_COPY = {
   subjectData: "Meanings and readings from",
   mnemonics: "Mnemonics from",
   sentences: "Example sentences from",
+  words: "Words from",
+  relations: "Radicals, look-alikes and vocabulary from",
 } as const;

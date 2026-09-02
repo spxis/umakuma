@@ -14,6 +14,7 @@ import {
   normalizeQuery,
   parseSources,
   publicKanjiHref,
+  subjectHref,
   rankHit,
   rankMeanings,
   searchHitHref,
@@ -343,5 +344,39 @@ describe("appendHits", () => {
   it("leaves the list alone when the stretch is empty", () => {
     const listed = [hit({ key: "a" })];
     expect(appendHits(listed, [])).toEqual(listed);
+  });
+});
+
+/*
+ * One address function for every subject, wherever it is named.
+ *
+ * Search results and the cross-references on a subject page - the radicals a
+ * kanji is built from, the words that use it - must agree on where a subject
+ * lives, or following a result and following a chip land differently.
+ */
+describe("subjectHref", () => {
+  it("sends a kanji to the kanji page", () => {
+    expect(subjectHref({ subjectType: "kanji", characters: "水", slug: "水" })).toBe("/kanji/%E6%B0%B4");
+  });
+
+  it("sends a word to the word page by its slug", () => {
+    expect(subjectHref({ subjectType: "vocabulary", characters: "水泡", slug: "水泡" })).toBe(
+      `/vocabulary/${encodeURIComponent("水泡")}`,
+    );
+  });
+
+  /* A drawn radical has no character at all; its name is its address. */
+  it("sends a drawn radical to the radical page by name", () => {
+    expect(subjectHref({ subjectType: "radical", characters: null, slug: "leaf" })).toBe("/radicals/leaf");
+  });
+
+  it("has nowhere to send a kanji that is not one character", () => {
+    expect(subjectHref({ subjectType: "kanji", characters: "日曜日", slug: null })).toBeNull();
+    expect(subjectHref({ subjectType: "kanji", characters: null, slug: null })).toBeNull();
+  });
+
+  it("is what every search result uses", () => {
+    const hit = { subjectType: "radical", slug: "leaf", glyph: "leaf" };
+    expect(searchHitHref(hit as never)).toBe(subjectHref({ subjectType: "radical", characters: "leaf", slug: "leaf" }));
   });
 });

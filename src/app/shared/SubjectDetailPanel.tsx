@@ -1,14 +1,15 @@
-import Link from "next/link";
-
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import { SUBJECT_PAGE_COPY } from "@/app/shared/SubjectPage.constants";
 import SourceCredit from "@/app/shared/SourceCredit";
+import MnemonicsBlock from "@/app/shared/subject-page/MnemonicsBlock";
+import RelatedGroupBlock from "@/app/shared/subject-page/RelatedGroupBlock";
+import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
+import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
-import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
-import { SUBJECT_TYPES, SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
-import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplayReadings";
-import type { CatalogRelatedReference } from "@/lib/subjectCatalogDetails";
+import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import type { PublicSubject } from "@/lib/publicSubject";
+import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+import { relatedGroupsForSubject } from "@/lib/subjectPageModel";
+import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplayReadings";
 
 /**
  * One subject, shown to whoever asked for it.
@@ -18,6 +19,10 @@ import type { PublicSubject } from "@/lib/publicSubject";
  * read, and what it connects to. Splitting them would be two places to forget
  * the level pill.
  *
+ * What it connects to and what WaniKani wrote about it are the shared blocks
+ * the kanji page uses, so a related chip or a mnemonic reads the same on all
+ * three pages and a change to one moves the others.
+ *
  * Everything here comes from the catalogue, so nothing on it depends on the
  * reader having an account, a WaniKani level, or a level high enough to have
  * unlocked the subject. That last one is the whole reason these pages exist.
@@ -26,46 +31,6 @@ import type { PublicSubject } from "@/lib/publicSubject";
 function Pill({ children }: { children: React.ReactNode }) {
   return (
     <span className="subject-pill border border-line bg-surface text-foreground">{children}</span>
-  );
-}
-
-/**
- * The kanji a word is built from, or the kanji a radical appears in.
- *
- * Linked by character, because a kanji is addressable by itself - every one of
- * them has a page, whether or not WaniKani teaches it.
- */
-function RelatedKanji({
-  heading,
-  items,
-}: {
-  heading: string;
-  items: CatalogRelatedReference[];
-}) {
-  const linkable = items.filter((item) => item.label.trim().length > 0);
-  if (linkable.length === 0) return null;
-
-  return (
-    <section className="space-y-2">
-      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{heading}</h2>
-      <ul className="flex flex-wrap gap-2">
-        {linkable.map((item) => (
-          <li key={item.subjectId}>
-            <Link
-              href={`/kanji/${encodeURIComponent([...item.label][0] ?? item.label)}`}
-              className="flex min-w-16 flex-col items-center gap-0.5 rounded-xl border border-line bg-surface px-3 py-2 transition hover:bg-surface-muted"
-            >
-              <span lang="ja" translate="no" className={`text-2xl font-black text-kanji ${JP_TEXT_CLASS}`}>
-                {item.label}
-              </span>
-              {item.meaning ? (
-                <span className="text-[11px] font-semibold text-foreground/65">{item.meaning}</span>
-              ) : null}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
 
@@ -80,16 +45,7 @@ export default function SubjectDetailPanel({
   const display = SUBJECT_TYPE_DISPLAY[subject.subjectType];
   const meaningNote = stripHtml(subject.meaningExplanation);
   const readingNote = stripHtml(subject.readingExplanation);
-
-  /*
-   * A radical's amalgamations are the kanji it appears in; a word's components
-   * are the kanji it is written with. Both read as "the kanji next door", so
-   * they take the same shelf under different headings.
-   */
-  const relatedKanji =
-    subject.subjectType === SUBJECT_TYPES.radical ? subject.usedInVocabulary : subject.componentKanji;
-  const relatedHeading =
-    subject.subjectType === SUBJECT_TYPES.radical ? SUBJECT_PAGE_COPY.usedIn : SUBJECT_PAGE_COPY.builtFrom;
+  const related = relatedGroupsForSubject(subject);
 
   return (
     <>
@@ -143,35 +99,16 @@ export default function SubjectDetailPanel({
         <SourceCredit credit={SOURCE_CREDITS.wanikani} label={SOURCE_CREDIT_COPY.subjectData} />
       </section>
 
-      {meaningNote || readingNote ? (
-        <section className="space-y-3 rounded-3xl border border-line bg-surface p-5">
-          {meaningNote ? (
-            <div className="space-y-1">
-              <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
-                {SUBJECT_PAGE_COPY.meaningNote}
-              </h2>
-              <p className="text-sm font-semibold leading-relaxed text-foreground/80">{meaningNote}</p>
-            </div>
-          ) : null}
+      <MnemonicsBlock
+        mnemonics={meaningNote || readingNote ? { meaning: meaningNote, reading: readingNote } : null}
+      />
 
-          {readingNote ? (
-            <div className="space-y-1">
-              <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
-                {SUBJECT_PAGE_COPY.readingNote}
-              </h2>
-              <p className="text-sm font-semibold leading-relaxed text-foreground/80">{readingNote}</p>
-            </div>
-          ) : null}
-
-          {/* A mnemonic is somebody's writing, not a fact about the character. */}
-          <SourceCredit credit={SOURCE_CREDITS.wanikani} label={SOURCE_CREDIT_COPY.mnemonics} />
-        </section>
-      ) : null}
-
-      {relatedKanji.length > 0 ? (
-        <section className="rounded-3xl border border-line bg-surface p-5">
-          <RelatedKanji heading={relatedHeading} items={relatedKanji} />
-        </section>
+      {related.length > 0 ? (
+        <SubjectBlock credit={{ source: SOURCE_CREDITS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
+          {related.map((group) => (
+            <RelatedGroupBlock key={group.id} group={group} />
+          ))}
+        </SubjectBlock>
       ) : null}
     </>
   );

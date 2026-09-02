@@ -210,6 +210,22 @@ test("home page loads", async ({ browser, baseURL }) => {
   });
 });
 
+test("a shared kanji page lists the words it appears in", async ({ browser, baseURL }) => {
+  /*
+   * The page every search result lands on. It used to know less about 水 than
+   * the study viewer behind the sign-in wall - no compounds, no radicals - so
+   * the check is for the depth, not only that it loads: the JLPT table holds
+   * twelve words for 水, and the first of them should be on the page.
+   */
+  const url = `${baseURL}/kanji/${encodeURIComponent("水")}`;
+  await assertPageLoads(browser, url, async (page) => {
+    await expect(page.getByRole("heading", { name: "Used in words", exact: true })).toBeVisible();
+    /* The kanji inside a compound link to their own pages; the word does not. */
+    const chip = page.locator('a[href^="/kanji/"]').first();
+    await expect(chip).toBeVisible();
+  });
+});
+
 test("news reader page loads", async ({ browser, baseURL }) => {
   const url = `${baseURL}/news`;
   await assertPageLoads(browser, url, async (page) => {

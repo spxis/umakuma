@@ -2242,16 +2242,6 @@
     "summary": "Arrowing down through the results was a one-way trip. The list loads the next stretch as you approach the end, so it grows under you: forty rows into \u4e2d the search box was far off the top of the screen, and the only route back was pressing up forty times - and overshooting downward on the way loaded more rows to climb. Nothing was looping, but nothing was leading out either, which reads the same from the keyboard. Escape now returns to the box from any row, and Home goes to the first row and then out to the box, both in a single press. Coming back also scrolls the box into view, which it did not before: the results scroll inside their own card on a page that scrolls too, so focus could land on a box still hidden above the results and typing went somewhere nobody could see."
   },
   {
-    "id": "explorer-lists-one-component",
-    "area": "study",
-    "name": "One component behind every subject list",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 3,
-    "summary": "The lists on Study, History, Grades, the WaniKani Library Explorer and the JLPT Explorer are drawn by three different components, so they carry different columns: Study shows item, reading, meaning, type, level and SRS under headings, while the explorers show an index, a glyph and a row of chips with no headings and no reading or meaning column. They share their chrome now - one surface, hairlines between rows - but not their columns. They should be one component with the columns declared per surface."
-  },
-  {
     "id": "signup-radio-layout",
     "area": "account",
     "name": "Lay out the signup choices properly",
@@ -2330,5 +2320,35 @@
     "releasedAt": "2026-09-02T01:28:09Z",
     "version": "0.222.0",
     "summary": "Every list of characters here shows a different set of fields, and always did: the study queue has an SRS stage, the grade explorer has on and kun readings and no SRS at all, the JLPT explorer has a school grade and an N level. What went wrong was letting that difference decide the layout too, so five surfaces grew five sets of row markup and five ideas of where a reading goes. A list declares its columns now - a heading, a lane width, and how to draw one cell - and the shared component owns everything else: the single surface with hairlines between rows, the aligned lanes, a heading row that cannot drift from the cells beneath it because both read the same widths, the checkbox, the row button, the leading and trailing slots, and what folds away on a phone. The grade explorer shows item, meaning, on, kun, strokes and JLPT; the JLPT explorer shows item, reading, meaning, grade, JLPT, status and SRS; the study queue and history keep the WaniKani six. Different fields, one shape. The explorers' detail panel opens under the row that was clicked through a slot of its own, which was the last thing about their lists that no column could express and the reason each had kept private row markup for so long."
+  },
+  {
+    "id": "map-study-viewer",
+    "area": "games",
+    "name": "Map viewer and study page",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 9,
+    "summary": "A large map to learn a country by, rather than only to be quizzed on. Every prefecture or state highlights under the pointer or a finger, and choosing one shows what is known about it - beside the map where there is room, in a modal where there is not. A country picker changes which map is being studied, so the same page serves Japan first and other countries after. Requested 2026-09-01. The Map game already holds the 47 Japanese prefectures as reserved subject ids, so the shapes and the naming are there to build on."
+  },
+  {
+    "id": "word-page-neighbourhood",
+    "area": "study",
+    "name": "The word page gets its neighbourhood",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 2,
+    "summary": "A word page lists the kanji it is written with and stops - a dead end with two chips on it. The neighbourhood is the other words built from those same kanji, so a page about one word is a way into its surroundings. Two routes to the same list: each component kanji's JLPT word examples, or its WaniKani amalgamations; the first covers more characters, the second gives cleaner rows with levels attached. Decide which and write it down. The grouping already has a slot for it."
+  },
+  {
+    "id": "kanji-page-depth",
+    "area": "study",
+    "name": "The kanji page knows what the study viewer knows",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "releasedAt": "2026-09-02T02:52:36Z",
+    "version": "0.223.0",
+    "summary": "Every search result lands on a kanji's own page, and that page knew less about the character than the study viewer behind the sign-in wall. It had the strokes, the dictionary facts and the sentences; it had no compounds, no radicals, no look-alikes, no vocabulary and no mnemonics - and the compounds are the reason anyone looks a kanji up. It has all of them now, and it is built as an ordered list of blocks, each fed by exactly one source and each drawing nothing when it has nothing. The layering is the decision that shaped it: the dictionary sources are the root and WaniKani is the bonus. KANJIDIC answers for all ten thousand characters, the JLPT table adds the words for the two thousand the exams cover, and WaniKani adds its radicals, look-alikes, vocabulary and mnemonics for the two thousand it teaches. A character WaniKani has never heard of gets a complete page; one it teaches gets a better one. The word inside a compound is not a link - most are not WaniKani vocabulary and would land on a page saying nothing is there - but every kanji inside it is, and every chip goes through the same address function the search results use, so following a result and following a chip land in the same place. The word and radical pages took the same blocks on the way, so a related chip or a mnemonic reads the same on all three. The page stays the same for every reader: a member's own study state is a block for a later release, not a reason to make a shareable address vary by who opens it."
   }
 ]

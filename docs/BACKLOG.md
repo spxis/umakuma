@@ -1177,3 +1177,46 @@ Sticky has always let a member gather several — and it moved into
 **The smoke test asserts the address and the widening, not the final total.**
 Seventeen cold levels take longer than a smoke test should sit there; the
 selection is written synchronously, and that is the part that was broken.
+
+### 40 — The kanji page knows what the study viewer knows ✅ shipped (v0.223.0)
+
+Every search result lands on `/kanji/[character]`, and that page knew less
+about a character than the glyph viewer behind the sign-in wall: strokes,
+dictionary facts and sentences, but no compounds, no radicals, no look-alikes,
+no vocabulary, no mnemonics. The compounds are the reason anyone looks a kanji
+up.
+
+**The principle, in John's words.** "The JLPT or other databases should be the
+root of knowledge, with WK providing other metadata or data related to the
+person if they use it to study. It's the relations bonus." KANJIDIC answers for
+10,384 characters, the JLPT table for 2,211 with their word examples, WaniKani
+for about 2,000. Build compounds on WaniKani alone and four fifths of the pages
+stay thin. The test of the layering: a page must be complete without WaniKani
+and better with it.
+
+**Blocks, not pages.** A subject page is an ordered list of blocks
+(`src/app/shared/subject-page/`), each fed by one source and each rendering
+nothing when it has nothing. The pure assembly is `assembleKanjiPage` in
+`src/lib/subjectPageModel.ts`, tested on rows; `src/lib/subjectPage.ts` only
+reads. The word and radical pages compose the same blocks. Adding a fifth
+source should mean one block and one line in a list.
+
+**Two traps, written down.** `amalgamationSubjectIds` holds kanji under a
+radical and words under a kanji; the grouping in `relatedSubjects.ts` owns that
+reading so no page can put a kanji behind a `/vocabulary/` address. And a
+compound's word is not a link — most are not WaniKani vocabulary — while every
+kanji inside it is, through `subjectHref`, the one function search results use
+too.
+
+**The member question, decided.** The page stays stateless: the same for a
+member, a visitor and a link pasted into a chat, and cacheable. A member's own
+SRS state and tags are a block for a later release, not a reason to make a
+shareable address vary by viewer.
+
+### 41 — The word page gets its neighbourhood
+
+A word page lists the kanji it is written with and stops. The neighbourhood is
+the other words built from those kanji. Two routes: each component kanji's JLPT
+word examples (more coverage) or its WaniKani amalgamations (cleaner rows, with
+levels). `relatedGroupsFor` already has the `sharesKanji` slot and its tests.
+Decide which source, and say why in the commit.

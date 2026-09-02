@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import SubjectDetailPanel from "@/app/shared/SubjectDetailPanel";
-import { SUBJECT_PAGE_COPY } from "@/app/shared/SubjectPage.constants";
+import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { getPublicSubject, publicSubjectLabel } from "@/lib/publicSubject";

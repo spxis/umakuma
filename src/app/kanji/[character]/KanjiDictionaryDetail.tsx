@@ -16,9 +16,18 @@ import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
 export default function KanjiDictionaryDetail({
   entry,
   attribution,
+  jlptLevel = null,
+  heisigKeyword = null,
 }: {
   entry: KanjiDictionaryEntry;
   attribution: KanjiDictionaryAttribution | null;
+  /**
+   * What the JLPT table adds that the dictionary does not. Only these two:
+   * its strokes, frequency and grade repeat KANJIDIC's, and a fact printed
+   * twice under two headings reads as two facts.
+   */
+  jlptLevel?: number | null;
+  heisigKeyword?: string | null;
 }) {
   return (
     <section className="space-y-3 rounded-3xl border border-line bg-surface p-5">
@@ -39,7 +48,10 @@ export default function KanjiDictionaryDetail({
             hint={KANJI_PAGE_COPY.frequencyHint}
           />
         ) : null}
-        {entry.jlptOld ? <Fact label={KANJI_PAGE_COPY.jlptOld} value={`N${entry.jlptOld}`} /> : null}
+        {jlptLevel ? <Fact label={KANJI_PAGE_COPY.jlpt} value={`N${jlptLevel}`} /> : null}
+        {/* The pre-2010 level, only where the current one is unknown. */}
+        {!jlptLevel && entry.jlptOld ? <Fact label={KANJI_PAGE_COPY.jlptOld} value={`N${entry.jlptOld}`} /> : null}
+        {heisigKeyword ? <Fact label={KANJI_PAGE_COPY.heisig} value={heisigKeyword} /> : null}
       </dl>
 
       {/* Share-alike: the credit is a licence condition, not decoration. */}

@@ -12,6 +12,8 @@ export const KANJI_PAGE_COPY = {
   gradeJinmeiyo: "Jinmeiyō (names)",
   gradeElementary: (grade: number) => `Elementary, year ${grade}`,
   jlptOld: "JLPT (old)",
+  jlpt: "JLPT",
+  heisig: "Heisig",
   dictionaryCredit: "Dictionary data from",
   examples: "In use",
   sentenceCredit: "Example sentences from",

@@ -273,6 +273,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Wakete Naraberu", ja: "分けて並べる", reading: "わけてならべる", gloss: "sorted apart and set out side by side" },
   { romaji: "Arabia no Suuji", ja: "アラビアの数字", reading: "あらびあのすうじ", gloss: "the digits everyone types" },
   { romaji: "Ichiran no Waku", ja: "一覧の枠", reading: "いちらんのわく", gloss: "one frame for every list" },
+  { romaji: "Ukabu Uchigawa", ja: "浮かぶ内側", reading: "うかぶうちがわ", gloss: "the inside of a character, surfacing" },
 ];
 
 /**

@@ -303,6 +303,34 @@ export function publicKanjiHref(hit: SearchHit): string | null {
   return `/kanji/${encodeURIComponent(hit.glyph)}`;
 }
 
+/**
+ * Where any subject lives, from the three things that identify one.
+ *
+ * The one place that decides. Search results ask it, and so does every
+ * cross-reference on a subject page - the radicals a kanji is built from, the
+ * words that use it - and those two must agree, or following a link from a
+ * result and following the same subject from a page would land differently.
+ */
+export function subjectHref(subject: {
+  subjectType: string;
+  /** What it is written with, absent for a radical WaniKani draws. */
+  characters: string | null;
+  /** WaniKani's permanent name for it. */
+  slug: string | null;
+}): string | null {
+  if (subject.subjectType === SUBJECT_TYPES.radical) {
+    return radicalHref(subject.slug);
+  }
+
+  if (subject.subjectType === SUBJECT_TYPES.vocabulary) {
+    /* The slug is the word for all but a handful WaniKani had to distinguish. */
+    return vocabularyHref(subject.slug ?? subject.characters ?? "");
+  }
+
+  const characters = [...(subject.characters ?? "")];
+  return characters.length === 1 ? `/kanji/${encodeURIComponent(characters[0]!)}` : null;
+}
+
 /** The public page for one word. Addressed by the word, as Jisho does it. */
 export function vocabularyHref(word: string): string | null {
   const trimmed = word.trim();
@@ -346,14 +374,5 @@ export function radicalHref(slug: string | null): string | null {
  * is sent to.
  */
 export function searchHitHref(hit: SearchHit): string | null {
-  if (hit.subjectType === SUBJECT_TYPES.radical) {
-    return radicalHref(hit.slug);
-  }
-
-  if (hit.subjectType === SUBJECT_TYPES.vocabulary) {
-    /* The slug is the word for all but a handful WaniKani had to distinguish. */
-    return vocabularyHref(hit.slug ?? hit.glyph);
-  }
-
-  return publicKanjiHref(hit);
+  return subjectHref({ subjectType: hit.subjectType, characters: hit.glyph, slug: hit.slug });
 }
