@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 
-import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
+import { STUDY_LIST_LIMITS, itemFromSelectionKey, type StudyListItemRef } from "@/lib/studyListRules";
 
-import { countNewCharacters, mergeListCharacters } from "./mergeListCharacters";
+import { countNewItems, mergeListItems } from "./mergeListItems";
 import { STUDY_LIST_COPY } from "./studyListCopy";
-import { SUBJECT_SELECTION_COPY, encodeSelection } from "./subjectSelection";
+import { SUBJECT_SELECTION_COPY } from "./subjectSelection";
 
 /**
  * Keeping a chosen set: in a list that exists, or in one that does not yet.
@@ -17,8 +17,8 @@ import { SUBJECT_SELECTION_COPY, encodeSelection } from "./subjectSelection";
  * built up over time, not chosen in one go - so the lists come first and
  * naming a new one sits under them.
  *
- * Adding is a union, computed in `mergeListCharacters`: sending only the newly
- * chosen characters would replace a list rather than extend it.
+ * Adding is a union, computed in `mergeListItems`: sending only the newly
+ * chosen items would replace a list rather than extend it.
  *
  * Takes the chosen characters rather than a selection object, because there
  * are two ways to choose on this site - the shared `useSubjectSelection` and
@@ -29,7 +29,7 @@ import { SUBJECT_SELECTION_COPY, encodeSelection } from "./subjectSelection";
 const BUTTON =
   "inline-flex h-8 items-center rounded-full px-4 text-[11px] font-bold uppercase tracking-[0.08em] transition";
 
-type StudyList = { id: string; name: string; characters: string };
+type StudyList = { id: string; name: string; items: StudyListItemRef[] };
 
 export default function SaveSelectionToList({
   chosen,
@@ -49,7 +49,8 @@ export default function SaveSelectionToList({
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
 
-  const characters = [...chosen];
+  /* A selection names subjects by their characters; each becomes an item of the right kind. */
+  const items = [...chosen].map(itemFromSelectionKey);
 
   /* Fetched when the menu opens, so browsing never pays for a list of lists. */
   async function openMenu() {
@@ -79,7 +80,7 @@ export default function SaveSelectionToList({
       const response = await fetch(`/api/study/${accountId}/lists`, {
         method: "PATCH",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id: list.id, characters: mergeListCharacters(list.characters, characters) }),
+        body: JSON.stringify({ id: list.id, items: mergeListItems(list.items, items) }),
       });
 
       if (!response.ok) {
@@ -108,7 +109,7 @@ export default function SaveSelectionToList({
       const response = await fetch(`/api/study/${accountId}/lists`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name: trimmed, characters: encodeSelection(characters) }),
+        body: JSON.stringify({ name: trimmed, items }),
       });
 
       if (!response.ok) {
@@ -155,7 +156,7 @@ export default function SaveSelectionToList({
         <span className="text-[11px] font-semibold text-foreground/60">{STUDY_LIST_COPY.saving}</span>
       ) : (
         lists.map((list) => {
-          const adding = countNewCharacters(list.characters, characters);
+          const adding = countNewItems(list.items, items);
           return (
             <button
               key={list.id}

@@ -5,12 +5,13 @@ import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 
 import { STUDY_TAGS, type StudyTag } from "@/lib/domainConstants";
 import {
   NO_TAGS,
-  charactersAfterToggle,
+  itemsAfterToggle,
   taggableIds,
   type FilerHit,
   type FilerList,
   type FilerTags,
 } from "@/lib/subjectFiler";
+import type { StudyListItemRef } from "@/lib/studyListRules";
 import { getStoredFlagOneIsTrue, setStoredBooleanFlag } from "@/lib/clientStorage";
 import { updateStudyTag } from "@/app/users/[nickname]/study-explorer/lib/studyTagApi";
 
@@ -144,21 +145,21 @@ export function useSubjectFiler(accountId: string | null, hits: FilerHit[], open
   const toggleList = useCallback(
     (hit: FilerHit, list: FilerList) => {
       if (!accountId) return;
-      const characters = charactersAfterToggle(list, hit);
-      const swap = (value: string) =>
-        setLists((previous) => previous?.map((row) => (row.id === list.id ? { ...row, characters: value } : row)) ?? previous);
-      swap(characters);
+      const items = itemsAfterToggle(list, hit);
+      const swap = (value: StudyListItemRef[]) =>
+        setLists((previous) => previous?.map((row) => (row.id === list.id ? { ...row, items: value } : row)) ?? previous);
+      swap(items);
       setError(null);
       void fetch(`/api/study/${accountId}/lists`, {
         method: "PATCH",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id: list.id, characters }),
+        body: JSON.stringify({ id: list.id, items }),
       })
         .then((response) => {
           if (!response.ok) throw new Error(String(response.status));
         })
         .catch(() => {
-          swap(list.characters);
+          swap(list.items);
           setError(SUBJECT_FILER_COPY.failed);
         });
     },

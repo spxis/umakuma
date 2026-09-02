@@ -4,14 +4,15 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
+import { LIST_ITEM_KIND_VALUES } from "@/lib/domainConstants";
 import {
   isDuplicateListNameError,
   isMissingStudyListTableError,
-  normalizeListCharacters,
+  normalizeListItems,
   normalizeListName,
   STUDY_LIST_LIMITS,
 } from "@/lib/studyListRules";
-import { fetchStudyLists } from "@/lib/studyLists";
+import { fetchStudyLists, replaceListItems } from "@/lib/studyLists";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -25,19 +26,22 @@ type RouteContext = {
  */
 const NAME_INPUT_MAX = STUDY_LIST_LIMITS.nameLength * 4;
 
+/** One item as the browser sends it: its kind and what names it. */
+const itemSchema = z.object({
+  kind: z.enum(LIST_ITEM_KIND_VALUES),
+  key: z.string().min(1).max(200),
+  subjectId: z.number().int().positive().nullable().optional(),
+});
+
 const saveSchema = z.object({
   name: z.string().min(1).max(NAME_INPUT_MAX),
   /*
-   * Taken as a string rather than an array: this is what the selection encodes
-   * and what a link carries, and splitting it here keeps one definition of what
-   * counts as a character.
-   *
    * Optional, because a list can be started before it holds anything. Making
    * one on the lists page and filling it while browsing is the way somebody
-   * builds "kanji I keep losing"; requiring a character up front forced every
+   * builds "kanji I keep losing"; requiring an item up front forced every
    * list to begin on an explorer with a selection already made.
    */
-  characters: z.string().default(""),
+  items: z.array(itemSchema).max(STUDY_LIST_LIMITS.items * 2).default([]),
 });
 
 /*
@@ -52,9 +56,9 @@ const changeSchema = z
   .object({
     id: z.string().min(1),
     name: z.string().min(1).max(NAME_INPUT_MAX).optional(),
-    characters: z.string().optional(),
+    items: z.array(itemSchema).max(STUDY_LIST_LIMITS.items * 2).optional(),
   })
-  .refine((value) => value.name !== undefined || value.characters !== undefined, {
+  .refine((value) => value.name !== undefined || value.items !== undefined, {
     message: "Nothing to change.",
   });
 
@@ -105,7 +109,7 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "A list needs a name." }, { status: 400 });
         }
 
-        const characters = normalizeListCharacters([parsed.data.characters]);
+        const items = normalizeListItems(parsed.data.items);
 
         /*
          * Saving a name that exists updates it. The alternative - refusing, or
@@ -126,13 +130,14 @@ export async function POST(request: Request, context: RouteContext) {
 
         const list = await prisma.studyList.upsert({
           where: { accountId_name: { accountId, name } },
-          create: { accountId, name, characters },
-          update: { characters },
-          select: { id: true, name: true, characters: true, updatedAt: true },
+          create: { accountId, name },
+          update: {},
+          select: { id: true, name: true, updatedAt: true },
         });
+        const saved = await replaceListItems(list.id, items, accountId);
 
         return NextResponse.json({
-          list: { ...list, updatedAt: list.updatedAt.toISOString() },
+          list: { id: list.id, name: list.name, items: saved, updatedAt: new Date().toISOString() },
         });
       } catch (error) {
         if (isMissingStudyListTableError(error)) {
@@ -172,7 +177,12 @@ export async function PATCH(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
         }
 
-        const data: { name?: string; characters?: string[] } = {};
+        /*
+         * Whatever was gathered, and the time - so an edit of the items alone
+         * still writes a row of the list, and the write below reports whether
+         * the list is this member's at all.
+         */
+        const data: { name?: string; updatedAt: Date } = { updatedAt: new Date() };
 
         if (parsed.data.name !== undefined) {
           const name = normalizeListName(parsed.data.name);
@@ -180,18 +190,6 @@ export async function PATCH(request: Request, context: RouteContext) {
             return NextResponse.json({ error: "A list needs a name." }, { status: 400 });
           }
           data.name = name;
-        }
-
-        if (parsed.data.characters !== undefined) {
-          /*
-           * An empty list is allowed, here as on creation. It used to be
-           * refused on the reasoning that emptying a list is deleting it - but
-           * a list can now be named before it holds anything, and a rule that
-           * lets you create an empty list while refusing to empty one holds in
-           * only one direction. Deleting is still its own button, and still
-           * the way to be rid of a list rather than of its contents.
-           */
-          data.characters = normalizeListCharacters([parsed.data.characters]);
         }
 
         /*
@@ -207,7 +205,20 @@ export async function PATCH(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "List not found." }, { status: 404 });
         }
 
-        return NextResponse.json({ list: { id: parsed.data.id, ...data } });
+        /*
+         * An empty list is allowed, here as on creation. A list can be named
+         * before it holds anything, and a rule that lets you create an empty
+         * list while refusing to empty one holds in only one direction.
+         * Deleting is still its own button.
+         */
+        const items =
+          parsed.data.items === undefined
+            ? undefined
+            : await replaceListItems(parsed.data.id, normalizeListItems(parsed.data.items), accountId);
+
+        return NextResponse.json({
+          list: { id: parsed.data.id, name: data.name, updatedAt: data.updatedAt.toISOString(), ...(items ? { items } : {}) },
+        });
       } catch (error) {
         if (isDuplicateListNameError(error)) {
           return NextResponse.json(

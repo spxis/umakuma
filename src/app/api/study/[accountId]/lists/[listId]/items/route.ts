@@ -37,7 +37,7 @@ export async function GET(request: Request, context: RouteContext) {
         const list = await prisma.studyList
           .findFirst({
             where: { id: listId, accountId },
-            select: { name: true, characters: true },
+            select: { name: true, items: { select: { kind: true, key: true, subjectId: true }, orderBy: { position: "asc" } } },
           })
           .catch((error: unknown) => {
             if (isMissingStudyListTableError(error)) return null;
@@ -49,7 +49,7 @@ export async function GET(request: Request, context: RouteContext) {
         }
 
         return NextResponse.json(
-          { name: list.name, items: await fetchStudyListItems(accountId, list.characters) },
+          { name: list.name, items: await fetchStudyListItems(accountId, list.items) },
           { status: 200 },
         );
       } catch (error) {

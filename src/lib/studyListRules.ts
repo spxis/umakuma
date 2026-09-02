@@ -1,3 +1,5 @@
+import { LIST_ITEM_KINDS, isListItemKind, type ListItemKind } from "./domainConstants";
+
 /**
  * What a saved list may be called and may contain.
  *
@@ -10,18 +12,98 @@
 export const STUDY_LIST_LIMITS = {
   /** Enough for "Week 37 - the ones he keeps missing" and not enough to hide a paragraph. */
   nameLength: 60,
-  /** The same cap the selection carries, since a list is a saved selection. */
-  characters: 200,
+  /** What one list holds. A grade is at most 200 kanji; a term's words run longer. */
+  items: 500,
+  /** Kept for the paste field, which still reads characters. */
+  characters: 500,
   /** Per member, so a runaway client cannot fill the table. */
   perAccount: 100,
+  noteLength: 200,
 } as const;
+
+/** One thing in a list, as the browser and the routes both speak of it. */
+export type StudyListItemRef = {
+  kind: ListItemKind;
+  /** The characters for a kanji or a word, the slug for a radical, the id for a sentence. */
+  key: string;
+  /** WaniKani's id, where the catalogue names it. */
+  subjectId?: number | null;
+};
 
 export type StudyListSummary = {
   id: string;
   name: string;
-  characters: string[];
+  items: StudyListItemRef[];
   updatedAt: string;
 };
+
+/** The same item, named the same way, however it arrived. */
+export function listItemId(item: Pick<StudyListItemRef, "kind" | "key">): string {
+  return `${item.kind}:${item.key}`;
+}
+
+/** CJK unified ideographs: what a lone character has to be to count as a kanji. */
+const HAN = /^\p{Script=Han}$/u;
+
+/**
+ * What typed or pasted text is, as an item: one kanji is a kanji, anything
+ * longer is a word. A paste of several kanji with nothing between them is
+ * read as kanji one by one, which is what a kanji sheet from a handout is.
+ */
+export function itemsFromText(raw: string): StudyListItemRef[] {
+  const tokens = raw.split(/[\s,、。・/|]+/).map((token) => token.trim()).filter(Boolean);
+  const items: StudyListItemRef[] = [];
+  for (const token of tokens) {
+    const characters = [...token];
+    if (characters.every((character) => HAN.test(character))) {
+      for (const character of characters) items.push({ kind: LIST_ITEM_KINDS.kanji, key: character });
+    } else {
+      items.push({ kind: LIST_ITEM_KINDS.vocabulary, key: token });
+    }
+  }
+  return normalizeListItems(items);
+}
+
+/**
+ * A chosen subject as an item. A selection names its subjects by their
+ * characters: one character is a kanji, more than one is a word. Unlike a
+ * paste, a chosen word is never split into its kanji - somebody chose the
+ * word.
+ */
+export function itemFromSelectionKey(key: string): StudyListItemRef {
+  const trimmed = key.trim();
+  return [...trimmed].length === 1 && HAN.test(trimmed)
+    ? { kind: LIST_ITEM_KINDS.kanji, key: trimmed }
+    : { kind: LIST_ITEM_KINDS.vocabulary, key: trimmed };
+}
+
+/** Deduplicated in order and capped - the shape the database should hold. */
+export function normalizeListItems(raw: StudyListItemRef[]): StudyListItemRef[] {
+  const seen = new Set<string>();
+  const kept: StudyListItemRef[] = [];
+  for (const item of raw) {
+    const key = item.key.trim();
+    if (!key || !isListItemKind(item.kind)) continue;
+    const id = listItemId({ kind: item.kind, key });
+    if (seen.has(id)) continue;
+    seen.add(id);
+    kept.push({ kind: item.kind, key, subjectId: item.subjectId ?? null });
+    if (kept.length >= STUDY_LIST_LIMITS.items) break;
+  }
+  return kept;
+}
+
+/** The kanji in a list, in order: what a practice sheet can trace. */
+export function listKanji(items: StudyListItemRef[]): string[] {
+  return items.filter((item) => item.kind === LIST_ITEM_KINDS.kanji).map((item) => item.key);
+}
+
+/** How many of each kind a list holds, for the chips. */
+export function countByKind(items: StudyListItemRef[]): Partial<Record<ListItemKind, number>> {
+  const counts: Partial<Record<ListItemKind, number>> = {};
+  for (const item of items) counts[item.kind] = (counts[item.kind] ?? 0) + 1;
+  return counts;
+}
 
 /** Trimmed, deduplicated and capped - the shape the database should hold. */
 export function normalizeListCharacters(raw: string[]): string[] {

@@ -335,7 +335,8 @@ describe("opening a saved list", () => {
   /* The member chose these in a sequence; re-sorting shows a different list. */
   it("keeps the order the list is stored in", () => {
     const lib = read("src/lib/studySubjectItems.ts");
-    expect(lib).toContain("characters\n    .map((character) => subjectIdByCharacter.get(character))");
+    expect(lib).toContain("[...new Set(items.flatMap((item) => (typeof item.subjectId");
+    expect(lib).toContain("return subjectIds.flatMap((subjectId) => {");
   });
 });
 

@@ -3,6 +3,7 @@ import "server-only";
 import { QUEUE_TYPES } from "./domainConstants";
 import { prisma } from "./prisma";
 import { getCatalogSubjectDetails, type CatalogSubjectDetail } from "./subjectCatalogDetails";
+import type { StudyListItemRef } from "./studyListRules";
 import { fetchStudyTagRows } from "./studySubjectTags";
 import type { StudyTagListItem } from "./studyTagLists";
 import { parseAssignmentCacheRows, srsLabel } from "./wanikani/helpers";
@@ -88,43 +89,20 @@ export function toStudyTagListItem(
 }
 
 /**
- * The subjects behind a saved list's characters, in the order the list holds
- * them.
+ * The subjects behind a saved list's items, in the order the list holds them.
  *
  * Order is the member's: they chose these in a sequence, and a viewer that
- * re-sorts them shows a different list from the one on the card. A character
- * the catalogue does not know drops out rather than rendering as a blank row -
- * the count on the card is of characters, and this is of subjects, so the two
- * can legitimately differ.
+ * re-sorts them shows a different list from the one on the card. An item the
+ * catalogue does not name - a kanji WaniKani never taught, a sentence - drops
+ * out here rather than rendering as a blank row; the count on the card is of
+ * items, and this is of subjects, so the two can legitimately differ.
  */
 export async function fetchStudyListItems(
   accountId: string,
-  characters: string[],
+  items: StudyListItemRef[],
 ): Promise<StudyTagListItem[]> {
-  if (characters.length === 0) return [];
-
-  const rows = await prisma.wkSubjectCatalog.findMany({
-    where: { characters: { in: characters } },
-    /* The catalogue's key is `wkSubjectId`; `subjectId` is what everything downstream calls it. */
-    select: { wkSubjectId: true, characters: true },
-  });
-
-  /*
-   * One character can be both a kanji and a vocabulary word - 上 is taught
-   * twice - so this keeps the first the catalogue returns rather than showing
-   * the same glyph twice in a list the member sees as holding it once.
-   */
-  const subjectIdByCharacter = new Map<string, number>();
-  for (const row of rows) {
-    /* Radicals can be image-only, with no characters to have been saved by. */
-    if (row.characters && !subjectIdByCharacter.has(row.characters)) {
-      subjectIdByCharacter.set(row.characters, row.wkSubjectId);
-    }
-  }
-
-  const subjectIds = characters
-    .map((character) => subjectIdByCharacter.get(character))
-    .filter((subjectId): subjectId is number => typeof subjectId === "number");
+  const subjectIds = [...new Set(items.flatMap((item) => (typeof item.subjectId === "number" ? [item.subjectId] : [])))];
+  if (subjectIds.length === 0) return [];
 
   const [details, assignments, tagRows] = await Promise.all([
     getCatalogSubjectDetails(subjectIds),

@@ -495,22 +495,62 @@ model StudySubjectTag {
 /// differs from StudySubjectTag. A list is built on whatever surface the member
 /// was looking at, and the school-grade catalogue holds kanji WaniKani does not
 /// teach - keying on subject id would silently drop those from a list that
-/// visibly contained them. A character resolves to a subject when something
-/// needs one; a missing subject does not resolve back to a character.
+/// visibly contained them. What a list holds is its `items`, each named the
+/// way its own catalogue names it, with the subject id beside it where
+/// WaniKani has one.
 model StudyList {
   id         String   @id @default(cuid())
   accountId  String
   name       String
-  /// In the order chosen. A sheet re-sorted is a different sheet.
+  /// The old shape: a string of characters. Nothing reads it since 0.240.0;
+  /// every list's characters were copied into `items` on 2026-09-02, with a
+  /// snapshot in backups/. Dropping the column is a separate, deliberate
+  /// `db:push` once John says so.
   characters String[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  account Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  items   StudyListItem[]
 
   /// One name per member, so saving "Week 1" twice updates rather than forks.
   @@unique([accountId, name])
   @@index([accountId, updatedAt])
+}
+
+enum StudyListItemKind {
+  radical
+  kanji
+  vocabulary
+  sentence
+}
+
+/// One thing in a saved list, with its kind.
+///
+/// A list was a string of characters, so it could only hold kanji and a word
+/// added to it became its kanji. An item carries what it is: the key names it
+/// the way its own catalogue does - the characters for a kanji or a word, the
+/// WaniKani slug for a radical, Tatoeba's id for a sentence - and the subject
+/// id rides along where WaniKani names it, so tags and SRS state can be found
+/// without a second lookup. A kanji WaniKani does not teach has no subject id
+/// and is still an item, which is what keying on characters was protecting.
+model StudyListItem {
+  id               String            @id @default(cuid())
+  listId           String
+  kind             StudyListItemKind
+  key              String
+  subjectId        Int?
+  /// The member's order, which is the list. Gaps are fine; only the ordering counts.
+  position         Int
+  /// Why it is here, in the words of whoever added it.
+  note             String?
+  addedByAccountId String?
+  createdAt        DateTime          @default(now())
+
+  list StudyList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, kind, key])
+  @@index([listId, position])
 }
 
 model SubjectReviewStatsSnapshot {

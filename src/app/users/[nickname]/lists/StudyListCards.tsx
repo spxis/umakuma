@@ -12,11 +12,13 @@ import {
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import type { StudyListSummary } from "@/lib/studyListRules";
+import { LIST_ITEM_KINDS } from "@/lib/domainConstants";
+import { listKanji, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
-import type { ListCard } from "./StudyList.types";
+import { LIST_SORTS, type ListCard, type ListSort } from "./StudyList.types";
 import StudyListCard from "./StudyListCard";
+import { sortListCards } from "./sortListCards";
 
 /**
  * The saved lists, each showing what is in it.
@@ -27,6 +29,12 @@ import StudyListCard from "./StudyListCard";
  */
 
 const LIST_VIEW_MODE_STORAGE_KEY = "wr:lists:view-mode";
+const LIST_SORT_STORAGE_KEY = "wr:lists:sort";
+const LIST_SORT_LABELS: Record<ListSort, string> = {
+  updated: STUDY_LIST_COPY.sortUpdated,
+  name: STUDY_LIST_COPY.sortName,
+  size: STUDY_LIST_COPY.sortSize,
+};
 
 export default function StudyListCards({
   lists,
@@ -46,7 +54,11 @@ export default function StudyListCards({
   /* Renames the server has accepted, so the page shows them without a reload. */
   const [renamed, setRenamed] = useState<Record<string, string>>({});
   /* The same for edited contents, which also change the count and the sheet. */
-  const [edited, setEdited] = useState<Record<string, string[]>>({});
+  const [edited, setEdited] = useState<Record<string, StudyListItemRef[]>>({});
+  /* Searchable and sortable, like every list of data here; remembered per browser. */
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<ListSort>(() => getStoredEnum(LIST_SORT_STORAGE_KEY, LIST_SORTS, "updated"));
+  const [reversed, setReversed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingRemoval, setPendingRemoval] = useState<string | null>(null);
   /*
@@ -70,7 +82,7 @@ export default function StudyListCards({
   const permanent: ListCard[] = taggedLists.map((tagged) => ({
     id: `tag:${tagged.tag}`,
     name: STUDY_TAG_LIST_LABELS[tagged.tag],
-    characters: tagged.characters,
+    items: tagged.characters.map((key) => ({ kind: LIST_ITEM_KINDS.kanji, key })),
     count: tagged.count,
     updatedAt: null,
     tag: tagged.tag,
@@ -80,23 +92,24 @@ export default function StudyListCards({
     .filter((list) => !removed.has(list.id))
     .map((list) => {
       /* An edit changes the count and the practice sheet, not only the preview. */
-      const characters = edited[list.id] ?? list.characters;
+      const items = edited[list.id] ?? list.items;
       return {
         id: list.id,
         name: renamed[list.id] ?? list.name,
-        characters,
-        count: characters.length,
+        items,
+        count: items.length,
         updatedAt: list.updatedAt,
         tag: null,
       };
     });
+  const shown = sortListCards(saved, sort, reversed, query);
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
 
-  /* A tagged sheet is addressed by its source, so it takes the whole list. */
+  /* A tagged sheet is addressed by its source, so it takes the whole list; a saved one traces its kanji. */
   const practiceHrefFor = (card: ListCard) =>
     card.tag
       ? `${practicePath}/${card.tag}`
-      : `${practicePath}/picked?picked=${encodeURIComponent(card.characters.join(""))}`;
+      : `${practicePath}/picked?picked=${encodeURIComponent(listKanji(card.items).join(""))}`;
 
   async function remove(id: string) {
     setPendingRemoval(null);
@@ -145,15 +158,50 @@ export default function StudyListCards({
       canEdit={canEdit}
       onDelete={() => setPendingRemoval(card.id)}
       onRenamed={(name) => setRenamed((prev) => ({ ...prev, [card.id]: name }))}
-      onCharactersChanged={(characters) =>
-        setEdited((prev) => ({ ...prev, [card.id]: characters }))
-      }
+      onItemsChanged={(items) => setEdited((prev) => ({ ...prev, [card.id]: items }))}
     />
   );
 
+  const CONTROL =
+    "h-8 rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/70";
+
   return (
     <>
-      <div className="mb-3 flex items-center justify-end">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={STUDY_LIST_COPY.searchLists}
+          aria-label={STUDY_LIST_COPY.searchLists}
+          className="h-8 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-semibold text-foreground"
+        />
+        <label className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
+          {STUDY_LIST_COPY.sortLabel}
+          <select
+            value={sort}
+            onChange={(event) => {
+              const next = event.target.value as ListSort;
+              setSort(next);
+              setStoredEnum(LIST_SORT_STORAGE_KEY, next);
+            }}
+            className={CONTROL}
+          >
+            {LIST_SORTS.map((option) => (
+              <option key={option} value={option}>
+                {LIST_SORT_LABELS[option]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button
+          type="button"
+          aria-pressed={reversed}
+          onClick={() => setReversed((was) => !was)}
+          className={`${CONTROL} ${reversed ? "border-accent text-accent" : ""}`}
+        >
+          {STUDY_LIST_COPY.reverse}
+        </button>
         <SubjectViewModeToggle
           value={viewMode}
           onChange={(next) => {
@@ -184,8 +232,13 @@ export default function StudyListCards({
           <p className="rounded-2xl border border-line bg-surface-muted p-4 text-xs text-foreground/60">
             {STUDY_LIST_COPY.emptyHint}
           </p>
+        ) : shown.length === 0 ? (
+          /* Different from empty: the lists are there and the search hid them. */
+          <p className="rounded-2xl border border-line bg-surface-muted p-4 text-xs text-foreground/60">
+            {STUDY_LIST_COPY.noListsMatch}
+          </p>
         ) : (
-          <ul className={gridClass}>{saved.map(renderCard)}</ul>
+          <ul className={gridClass}>{shown.map(renderCard)}</ul>
         )}
       </section>
 

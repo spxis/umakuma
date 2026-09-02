@@ -9,7 +9,10 @@ import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
 import { openStudyTagLists } from "@/lib/studyTagLists";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
-import StudyListCharacterEditor from "./StudyListCharacterEditor";
+import type { StudyListItemRef } from "@/lib/studyListRules";
+
+import { kindChips, previewText } from "./listItemDisplay";
+import StudyListItemEditor from "./StudyListItemEditor";
 import type { StudyListCardProps } from "./StudyList.types";
 
 /**
@@ -44,7 +47,7 @@ export default function StudyListCard({
   canEdit,
   onDelete,
   onRenamed,
-  onCharactersChanged,
+  onItemsChanged,
 }: StudyListCardProps) {
   /*
    * One mode rather than two booleans. The name editor replaces the heading
@@ -72,7 +75,7 @@ export default function StudyListCard({
    * putting back something they deliberately removed, which is worse than
    * waiting.
    */
-  async function saveCharacters(characters: string[]) {
+  async function saveItems(items: StudyListItemRef[]) {
     if (saving) return;
 
     setSaving(true);
@@ -81,10 +84,10 @@ export default function StudyListCard({
       const response = await fetch(`/api/study/${accountId}/lists`, {
         method: "PATCH",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id: card.id, characters: characters.join("") }),
+        body: JSON.stringify({ id: card.id, items }),
       });
       const body = (await response.json().catch(() => null)) as
-        | { list?: { characters?: string[] }; error?: string }
+        | { list?: { items?: StudyListItemRef[] }; error?: string }
         | null;
 
       if (!response.ok) {
@@ -92,8 +95,8 @@ export default function StudyListCard({
         return;
       }
 
-      // The server's set, not the draft: it dedupes and caps.
-      onCharactersChanged(body?.list?.characters ?? characters);
+      // The server's set, not the draft: it dedupes, caps and names subjects.
+      onItemsChanged(body?.list?.items ?? items);
       setMode("none");
     } catch {
       setError(STUDY_LIST_COPY.editFailed);
@@ -266,13 +269,27 @@ export default function StudyListCard({
    * Keyed on the characters so reopening the editor after a save starts from
    * what was saved rather than a stale draft.
    */
+  const preview = previewText(card.items);
+  /* What kinds the list holds, so a list of words reads as one before it is opened. */
+  const chips = kindChips(card.items);
+  const kindNode =
+    chips.length > 1 ? (
+      <span className="flex flex-wrap gap-1">
+        {chips.map((chip) => (
+          <span key={chip.kind} className="subject-pill border-line bg-surface-muted text-foreground/70">
+            {chip.label} {chip.count}
+          </span>
+        ))}
+      </span>
+    ) : null;
+
   const characterEditor =
     mode === "characters" ? (
-      <StudyListCharacterEditor
-        key={card.characters.join("")}
-        characters={card.characters}
+      <StudyListItemEditor
+        key={preview}
+        items={card.items}
         saving={saving}
-        onSave={(next) => void saveCharacters(next)}
+        onSave={(next) => void saveItems(next)}
         onCancel={() => setMode("none")}
       />
     ) : null;
@@ -316,8 +333,9 @@ export default function StudyListCard({
                   translate="no"
                   className={`min-w-0 flex-1 cursor-pointer truncate text-left text-base font-semibold leading-none text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
                 >
-                  {card.characters.join("")}
+                  {preview}
                 </button>
+                {kindNode}
                 <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
                   {card.count}
                 </span>
@@ -341,7 +359,7 @@ export default function StudyListCard({
             )}
           </div>
 
-          {editingCharacters ? null : card.characters.length === 0 ? (
+          {editingCharacters ? null : card.items.length === 0 ? (
             /* A list can be started before it holds anything, so say so. */
             <p className="mt-2 text-xs font-semibold text-foreground/60">
               {STUDY_LIST_COPY.noCharactersYet}
@@ -355,9 +373,11 @@ export default function StudyListCard({
               translate="no"
               className={`mt-2 line-clamp-3 w-full cursor-pointer break-all text-left text-lg font-semibold leading-snug text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
             >
-              {card.characters.join("")}
+              {preview}
             </button>
           )}
+
+          {editingCharacters || !kindNode ? null : <div className="mt-2">{kindNode}</div>}
 
           <p className="mt-3 text-[11px] text-foreground/60">
             {card.updatedAt

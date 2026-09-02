@@ -44,7 +44,7 @@ describe("renaming a list", () => {
     const patch = route.slice(route.indexOf("export async function PATCH"));
 
     expect(patch).toMatch(/if \(parsed\.data\.name !== undefined\)/);
-    expect(patch).toMatch(/if \(parsed\.data\.characters !== undefined\)/);
+    expect(patch).toMatch(/parsed\.data\.items === undefined/);
     /* Whatever was gathered, and nothing assumed alongside it. */
     expect(patch).toMatch(/updateMany\(\{[\s\S]*?data,\s*\}\)/);
   });

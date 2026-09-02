@@ -18,13 +18,14 @@ import {
 } from "@/app/shared/subjectListView";
 import { updateStudyTag } from "@/app/users/[nickname]/study-explorer/lib/studyTagApi";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { STUDY_TAGS, STUDY_TAG_VALUES, type StudyTag } from "@/lib/domainConstants";
+import { STUDY_TAGS, STUDY_TAG_VALUES, SUBJECT_TYPE_DISPLAY, SUBJECT_TYPE_VALUES, type StudyTag } from "@/lib/domainConstants";
 import {
   STUDY_TAG_LIST_EVENT,
   type StudyTagListItem,
   type StudyTagListPayload,
 } from "@/lib/studyTagLists";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
+import { STUDY_LIST_COPY } from "./studyListCopy";
 import { STUDY_TAG_LIST_COPY, STUDY_TAG_LIST_LABELS } from "./studyTagListsUi";
 
 /** Toggling a tag anywhere in the app announces itself, so the panel can refresh. */
@@ -41,12 +42,16 @@ const VIEW_MODE_STORAGE_KEY = "wr:study-tag-lists:view-mode";
  * hands the visible list to the glyph viewer, which stacks above this panel and
  * can walk the list from there.
  */
+const ALL_KINDS = "all";
+
 export default function StudyTagListsModal() {
   const [payload, setPayload] = useState<StudyTagListPayload | null>(null);
   const [tag, setTag] = useState<StudyTag>(STUDY_TAGS.trouble);
   const [items, setItems] = useState<StudyTagListItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  /* Which kind to show of a saved list, since one may hold kanji and words together. */
+  const [kind, setKind] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   /**
    * Read straight from storage: the panel renders nothing until an event opens
@@ -91,6 +96,7 @@ export default function StudyTagListsModal() {
       setPayload(detail);
       setTag(detail.tag ?? STUDY_TAGS.trouble);
       setSearch("");
+      setKind(null);
       setItems(null);
       setError(null);
       setRefreshKey((value) => value + 1);
@@ -143,10 +149,19 @@ export default function StudyTagListsModal() {
     return (items ?? [])
       /* A saved list is already the set; only the tagged lists filter by flag. */
       .filter((item) => (savedList ? true : item.studyTags[tag]))
+      .filter((item) => kind === null || item.subjectType === kind)
       .filter((item) => term.length === 0
         || item.characters.includes(term)
         || item.meanings.some((meaning) => meaning.toLowerCase().includes(term)));
-  }, [items, savedList, search, tag]);
+  }, [items, kind, savedList, search, tag]);
+
+  /* The kinds a saved list holds, with counts, for the chips. */
+  const kinds = useMemo(() => {
+    if (!savedList) return [];
+    const counts = new Map<string, number>();
+    for (const item of items ?? []) counts.set(item.subjectType ?? "", (counts.get(item.subjectType ?? "") ?? 0) + 1);
+    return SUBJECT_TYPE_VALUES.flatMap((value) => (counts.has(value) ? [{ value, count: counts.get(value)! }] : []));
+  }, [items, savedList]);
 
   const removeTag = useCallback(async (item: StudyTagListItem) => {
     setItems((current) => (current ?? []).map((entry) => (
@@ -184,6 +199,21 @@ export default function StudyTagListsModal() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2.5 sm:px-4">
+        {savedList && kinds.length > 1 ? (
+          <SegmentedControl
+            ariaLabel={STUDY_LIST_COPY.allKinds}
+            size="md"
+            value={kind ?? ALL_KINDS}
+            onChange={(next) => setKind(next === ALL_KINDS ? null : next)}
+            options={[
+              { value: ALL_KINDS, label: `${STUDY_LIST_COPY.allKinds} · ${(items ?? []).length}` },
+              ...kinds.map((entry) => ({
+                value: entry.value,
+                label: `${SUBJECT_TYPE_DISPLAY[entry.value].plural} · ${entry.count}`,
+              })),
+            ]}
+          />
+        ) : null}
         {savedList ? (
           /* The list's own count, where the switch between the two tagged
            * lists would otherwise sit - a switch that would only offer to

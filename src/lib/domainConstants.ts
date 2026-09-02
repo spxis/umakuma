@@ -4,6 +4,37 @@ export const SUBJECT_TYPES = {
   vocabulary: "vocabulary",
 } as const;
 
+/**
+ * What a saved list may hold: the three subject kinds and a sentence.
+ *
+ * A list was a string of characters, which is why it could only hold kanji
+ * and why a word added from search became its kanji. An item carries its
+ * kind now, so a list of words is a list of words and the kind chips can
+ * tell them apart.
+ */
+export const LIST_ITEM_KINDS = {
+  radical: SUBJECT_TYPES.radical,
+  kanji: SUBJECT_TYPES.kanji,
+  vocabulary: SUBJECT_TYPES.vocabulary,
+  sentence: "sentence",
+} as const;
+export type ListItemKind = (typeof LIST_ITEM_KINDS)[keyof typeof LIST_ITEM_KINDS];
+export const LIST_ITEM_KIND_VALUES = [
+  LIST_ITEM_KINDS.kanji,
+  LIST_ITEM_KINDS.vocabulary,
+  LIST_ITEM_KINDS.radical,
+  LIST_ITEM_KINDS.sentence,
+] as const;
+export function isListItemKind(value: string): value is ListItemKind {
+  return (LIST_ITEM_KIND_VALUES as readonly string[]).includes(value);
+}
+export const LIST_ITEM_KIND_DISPLAY: Record<ListItemKind, { singular: string; plural: string }> = {
+  [LIST_ITEM_KINDS.radical]: { singular: "Radical", plural: "Radicals" },
+  [LIST_ITEM_KINDS.kanji]: { singular: "Kanji", plural: "Kanji" },
+  [LIST_ITEM_KINDS.vocabulary]: { singular: "Word", plural: "Words" },
+  [LIST_ITEM_KINDS.sentence]: { singular: "Sentence", plural: "Sentences" },
+};
+
 export const QUEUE_TYPES = {
   review: "review",
   lesson: "lesson",

@@ -52,12 +52,21 @@ export const STUDY_LIST_COPY = {
    * over it from a surface that happened to have the right selection - so
    * dropping one character meant picking the other forty again.
    */
-  editCharacters: "Edit characters",
-  editHint: "Tap a character to take it out, or type more to add.",
+  editCharacters: "Edit items",
+  editHint: "Tap an item to take it out. Type kanji or words to add; a run of kanji is read one by one.",
   add: "Add",
-  addPlaceholder: "Add characters",
-  addLabel: "Characters to add",
+  addPlaceholder: "Add kanji or words",
+  addLabel: "Kanji or words to add",
   removeCharacterLabel: "Remove",
+  /* The kind chips, on a card and in the viewer. */
+  allKinds: "All",
+  searchLists: "Search your lists",
+  sortLabel: "Sort",
+  sortUpdated: "Last changed",
+  sortName: "Name",
+  sortSize: "Size",
+  reverse: "Reverse",
+  noListsMatch: "No list matches that search.",
   editEmpty: "Saving now leaves the list empty. Delete it if you want it gone.",
   editFailed: "Could not change that list.",
 
@@ -65,8 +74,8 @@ export const STUDY_LIST_COPY = {
   removeConfirmTitle: "Delete this list?",
   removeConfirmBody: "The characters stay where they are. Only the saved list goes.",
   removeFailed: "Could not delete that list.",
-  countSuffix: "characters",
-  countSuffixOne: "character",
+  countSuffix: "items",
+  countSuffixOne: "item",
   updatedPrefix: "Updated",
 } as const;
 

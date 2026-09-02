@@ -1,5 +1,6 @@
-import { SUBJECT_TYPES } from "./domainConstants";
-import { mergeListCharacters } from "@/app/shared/mergeListCharacters";
+import { LIST_ITEM_KINDS, SUBJECT_TYPES } from "./domainConstants";
+import { listItemId, type StudyListItemRef } from "./studyListRules";
+import { mergeListItems, withoutListItems } from "@/app/shared/mergeListItems";
 
 /**
  * Filing a search result into the member's lists as it is found.
@@ -12,9 +13,8 @@ import { mergeListCharacters } from "@/app/shared/mergeListCharacters";
  *
  * Two kinds of list, two rules. Trouble and Favourites are tags on a WaniKani
  * subject, so they need the subject's id, which only rows the catalogue names
- * have. A saved list is a sheet of characters, so it takes the kanji a row is
- * written with - a word contributes its kanji, not its kana, or a sheet of
- * "kanji I keep losing" would fill with つ and り.
+ * have. A saved list holds items of any kind, so a row goes in as what it is:
+ * a word as a word, never as its kanji.
  */
 
 export type FilerHit = {
@@ -25,7 +25,7 @@ export type FilerHit = {
   subjectId?: number;
 };
 
-export type FilerList = { id: string; name: string; characters: string };
+export type FilerList = { id: string; name: string; items: StudyListItemRef[] };
 export type FilerTags = { favorite: boolean; trouble: boolean };
 
 export const NO_TAGS: FilerTags = { favorite: false, trouble: false };
@@ -35,45 +35,34 @@ export function canTag(hit: FilerHit): boolean {
   return typeof hit.subjectId === "number";
 }
 
-/** CJK unified ideographs, which is what a saved list is a sheet of. */
-const KANJI = /\p{Script=Han}/u;
-
-/** The characters a saved list would take from this row: its kanji, in order. */
-export function listCharactersOf(hit: FilerHit): string[] {
-  if (hit.subjectType !== SUBJECT_TYPES.kanji && hit.subjectType !== SUBJECT_TYPES.vocabulary) return [];
-  const seen = new Set<string>();
-  return [...hit.glyph].filter((character) => {
-    if (!KANJI.test(character) || seen.has(character)) return false;
-    seen.add(character);
-    return true;
-  });
+/** The row as a list item, or null where it has nothing to be named by. */
+export function itemOf(hit: FilerHit): StudyListItemRef | null {
+  const subjectId = hit.subjectId ?? null;
+  if (hit.subjectType === SUBJECT_TYPES.kanji) return { kind: LIST_ITEM_KINDS.kanji, key: hit.glyph, subjectId };
+  if (hit.subjectType === SUBJECT_TYPES.vocabulary) return { kind: LIST_ITEM_KINDS.vocabulary, key: hit.glyph, subjectId };
+  /* A radical is named by its slug, since a drawn one has no characters. */
+  if (hit.subjectType === SUBJECT_TYPES.radical && hit.slug) return { kind: LIST_ITEM_KINDS.radical, key: hit.slug, subjectId };
+  return null;
 }
 
 /** Whether the row can go on a saved list at all. */
 export function canList(hit: FilerHit): boolean {
-  return listCharactersOf(hit).length > 0;
+  return itemOf(hit) !== null;
 }
 
-/** Whether every kanji of the row is already on the list. */
+/** Whether the row is already on the list. */
 export function listHolds(list: FilerList, hit: FilerHit): boolean {
-  const characters = listCharactersOf(hit);
-  if (characters.length === 0) return false;
-  const held = new Set([...list.characters]);
-  return characters.every((character) => held.has(character));
+  const item = itemOf(hit);
+  if (!item) return false;
+  const id = listItemId(item);
+  return list.items.some((held) => listItemId(held) === id);
 }
 
-/**
- * The list's characters after the row is toggled: added when any of its kanji
- * is missing, taken out when all of them are there. Order kept, nothing else
- * touched - the member's own sheet is theirs.
- */
-export function charactersAfterToggle(list: FilerList, hit: FilerHit): string {
-  const characters = listCharactersOf(hit);
-  if (listHolds(list, hit)) {
-    const drop = new Set(characters);
-    return [...list.characters].filter((character) => !drop.has(character)).join("");
-  }
-  return mergeListCharacters(list.characters, characters);
+/** The list's items after the row is toggled: added when absent, taken out when there. */
+export function itemsAfterToggle(list: FilerList, hit: FilerHit): StudyListItemRef[] {
+  const item = itemOf(hit);
+  if (!item) return list.items;
+  return listHolds(list, hit) ? withoutListItems(list.items, [item]) : mergeListItems(list.items, [item]);
 }
 
 /** The subject ids worth asking the tag store about, once each. */

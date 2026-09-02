@@ -2465,11 +2465,11 @@
     "name": "Lists hold every kind of item",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 19,
-    "summary": "A list holds characters today, so it can only hold kanji. It becomes a list of items - radicals, kanji, vocabulary, sentences - each with its kind, so a list can be filtered by kind with chips and a list of words is not split into its kanji. Existing lists carry over as kanji items. Needs a schema push. Requested 2026-09-01 by John; the base for every sharing feature."
+    "summary": "A list was a string of characters, which is why it could only hold kanji and why a word added from search became its kanji. A list holds items now, each with its kind - radical, kanji, word, sentence - named the way its own catalogue names it, with WaniKani's id beside it where there is one, so a kanji WaniKani does not teach is still an item. A card previews words whole and shows kind chips; the viewer filters by kind; the editor takes kanji and words typed or pasted, reading a run of kanji one by one and anything with kana as a word; the search filer files a word as a word. The Lists page searches, sorts by last change, name or size, and reverses. Production's two lists were copied into items with a snapshot first, item for item. The base for every sharing feature; the first of the lists programme.",
+    "version": "0.240.0",
+    "releasedAt": "2026-09-02T06:16:15Z"
   },
   {
     "id": "list-visibility-and-sharing",
@@ -2480,7 +2480,7 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 20,
-    "summary": "A list is private, unlisted (anyone with the link) or public. A share link opens the list read-only for a friend or a stranger, with the owner named. Public lists can be found from a member's page. Requested 2026-09-01 by John."
+    "summary": "A list is private, unlisted (anyone with the link) or public. A share link opens the list read-only for a friend or a stranger, with the owner named. Two views of one list: the signed-in view with every control, and a public view that is passed around - light, fast, the list and its facts and nothing else, with a quiet invitation to sign up and keep it. Public lists can be found from a member's page. Requested 2026-09-01 by John."
   },
   {
     "id": "list-copy-and-subscribe",
@@ -2591,5 +2591,27 @@
     "dateIsEstimate": true,
     "release": 30,
     "summary": "A third built-in list beside Trouble and Favourites: Burned, for the items you know so well you never need to read them again. It starts empty for everyone. A member with WaniKani connected gets a control on the list to apply their WaniKani burned items to it - once, or whenever they choose, with the count shown before it is applied - and can still add or remove by hand. Applied, the list removes those items from any list being viewed or practised, so a large list stops carrying what you have long since learned. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "list-surfaces-standard",
+    "name": "Every list surface: sortable, pageable, searchable, fast",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 31,
+    "summary": "Lists, like all data on the site, are sortable, reversible, pageable, scrollable, searchable, cached and fast. The Lists page and the list viewer get search, sort by name, size and last change, and paging once a list outgrows a screen; the same standard applies to every surface that lists data. Stated 2026-09-01 by John as a standing rule."
+  },
+  {
+    "id": "list-metadata",
+    "name": "What a list says about itself",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 32,
+    "summary": "Every list carries the facts a reader wants before opening it: when it was made, when it last changed, who made it, how many hold it, how many times it has been copied and shared. Shown on the card and on the public view. Requested 2026-09-01 by John."
   }
 ]

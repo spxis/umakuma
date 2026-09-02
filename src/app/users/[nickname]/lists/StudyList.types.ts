@@ -1,3 +1,4 @@
+import type { StudyListItemRef } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
 /**
@@ -9,13 +10,14 @@ import type { TaggedListSummary } from "@/lib/studySubjectTags";
  * at their lists could not see the two they had actually built. They are folded
  * into the same shape here: what differs is that they cannot be renamed or
  * deleted, they open the panel instead, and their practice sheet is addressed
- * by source rather than by the characters, so it takes the whole list and not
- * the preview this card had room for.
+ * by source rather than by the items, so it takes the whole list and not the
+ * preview this card had room for.
  */
 export type ListCard = {
   id: string;
   name: string;
-  characters: string[];
+  /** What the list holds, in order; a tagged list carries a preview of kanji items. */
+  items: StudyListItemRef[];
   /** The true size, which for a tagged list exceeds what the card previews. */
   count: number;
   updatedAt: string | null;
@@ -34,13 +36,16 @@ export type StudyListCardProps = {
   /** Reported upward so the page keeps the new name without a round trip. */
   onRenamed: (name: string) => void;
   /** The same, for what the list now holds after an edit. */
-  onCharactersChanged: (characters: string[]) => void;
+  onItemsChanged: (items: StudyListItemRef[]) => void;
 };
 
-export type StudyListCharacterEditorProps = {
+export type StudyListItemEditorProps = {
   /** What the list holds now; the editor works on its own copy. */
-  characters: string[];
+  items: StudyListItemRef[];
   saving: boolean;
-  onSave: (characters: string[]) => void;
+  onSave: (items: StudyListItemRef[]) => void;
   onCancel: () => void;
 };
+
+export type ListSort = "updated" | "name" | "size";
+export const LIST_SORTS: readonly ListSort[] = ["updated", "name", "size"];
