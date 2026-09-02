@@ -1,5 +1,5 @@
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import SourceCredit from "@/app/shared/SourceCredit";
+import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
 import { SOURCE_CREDITS } from "@/lib/sourceCredits";
 import type { ExampleSentence } from "@/lib/tatoebaSentences";
 
@@ -30,9 +30,7 @@ export default function ExampleSentences({
   if (sentences.length === 0) return null;
 
   return (
-    <section className="space-y-3 rounded-3xl border border-line bg-surface p-5">
-      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{heading}</h2>
-
+    <SubjectBlock heading={heading} credit={{ source: SOURCE_CREDITS.tatoeba, label: credit }}>
       <ul className="space-y-3">
         {sentences.map((sentence) => (
           <li key={sentence.id} className="border-b border-line/60 pb-3 last:border-0 last:pb-0">
@@ -49,8 +47,6 @@ export default function ExampleSentences({
           </li>
         ))}
       </ul>
-
-      <SourceCredit credit={SOURCE_CREDITS.tatoeba} label={credit} />
-    </section>
+    </SubjectBlock>
   );
 }

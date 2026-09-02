@@ -2350,5 +2350,25 @@
     "releasedAt": "2026-09-02T02:52:36Z",
     "version": "0.223.0",
     "summary": "Every search result lands on a kanji's own page, and that page knew less about the character than the study viewer behind the sign-in wall. It had the strokes, the dictionary facts and the sentences; it had no compounds, no radicals, no look-alikes, no vocabulary and no mnemonics - and the compounds are the reason anyone looks a kanji up. It has all of them now, and it is built as an ordered list of blocks, each fed by exactly one source and each drawing nothing when it has nothing. The layering is the decision that shaped it: the dictionary sources are the root and WaniKani is the bonus. KANJIDIC answers for all ten thousand characters, the JLPT table adds the words for the two thousand the exams cover, and WaniKani adds its radicals, look-alikes, vocabulary and mnemonics for the two thousand it teaches. A character WaniKani has never heard of gets a complete page; one it teaches gets a better one. The word inside a compound is not a link - most are not WaniKani vocabulary and would land on a page saying nothing is there - but every kanji inside it is, and every chip goes through the same address function the search results use, so following a result and following a chip land in the same place. The word and radical pages took the same blocks on the way, so a related chip or a mnemonic reads the same on all three. The page stays the same for every reader: a member's own study state is a block for a later release, not a reason to make a shareable address vary by who opens it."
+  },
+  {
+    "id": "one-foot-for-every-credit",
+    "area": "study",
+    "name": "One foot for every credit",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "releasedAt": "2026-09-02T03:07:12Z",
+    "version": "0.224.0",
+    "summary": "Every section of a subject page names where its content came from, and each named it a different way: the stroke-order panel with a rule across the full width and a small centred line beneath it, the dictionary facts with a left-aligned line at another size, the compounds and the relations and the mnemonics each at their own indent. Five cards down a page, five feet. The stroke-order foot was the right one and is now the only one. The credit component draws it, the block shell places it at the foot of the card with the rule running edge to edge, and every section that shows borrowed content sits on that shell - sentences, dictionary facts, the word and radical header, the stroke-order panel itself, which had been drawing its own copy of the style it inspired. The stroke animation alone keeps an inline line, because it draws inside another surface and has no edge of its own to put a rule on."
+  },
+  {
+    "id": "data-sources-page",
+    "area": "platform",
+    "name": "A page for every source, and what we hold from it",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 1,
+    "summary": "Every credit on the site links straight out to its vendor. It should link first to a page of our own: one tab per source - WaniKani, KANJIDIC2, KanjiVG, kanjiapi.dev, Tatoeba - showing when its data was last imported, a summary of what we hold from it (how many subjects, sentences, characters, which release), the licence and its terms, and only then the link out. A reader can browse the other sources from the same page. Requested 2026-09-01."
   }
 ]

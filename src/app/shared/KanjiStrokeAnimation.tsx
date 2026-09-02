@@ -201,6 +201,7 @@ export default function KanjiStrokeAnimation({
         <SourceCredit
           credit={data.attribution}
           label={STROKE_ANIMATION_COPY.creditPrefix}
+          variant="inline"
           className="text-[10px]!"
         />
       ) : null}

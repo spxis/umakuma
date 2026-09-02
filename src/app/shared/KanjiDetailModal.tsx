@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 
 import KanjiStrokeAnimation, { type StrokeMeta } from "./KanjiStrokeAnimation";
 import ModalShell from "./ModalShell";
+import SourceCredit from "./SourceCredit";
 import { MODAL_LAYERS } from "./modalLayers";
 import { STROKE_ANIMATION_COPY } from "./strokeAnimationCopy";
 import { noTranslateClass } from "./japaneseText";
@@ -179,25 +180,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
       {detail ? <div className="border-t border-line px-5 py-3">{detail}</div> : null}
 
       {meta ? (
-        <p className="border-t border-line px-5 py-2 text-center text-[10px] font-semibold text-foreground/60">
-          {STROKE_ANIMATION_COPY.creditPrefix}{" "}
-          <a
-            href={meta.attribution.url}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="underline decoration-dotted underline-offset-2 hover:text-foreground/60"
-          >
-            {meta.attribution.source}
-          </a>{" "}
-          <a
-            href={meta.attribution.licenceUrl}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="underline decoration-dotted underline-offset-2 hover:text-foreground/60"
-          >
-            ({meta.attribution.licence})
-          </a>
-        </p>
+        <SourceCredit credit={meta.attribution} label={STROKE_ANIMATION_COPY.creditPrefix} />
       ) : null}
     </>
   );

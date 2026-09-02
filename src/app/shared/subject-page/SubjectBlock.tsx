@@ -18,18 +18,24 @@ import type { SourceCredit as Credit } from "@/lib/sourceCredits";
 export default function SubjectBlock({
   heading,
   credit,
+  className = "",
   children,
 }: {
   heading?: string;
   credit?: { source: Credit; label: string };
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <section className="space-y-3 rounded-3xl border border-line bg-surface p-5">
-      {heading ? (
-        <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{heading}</h2>
-      ) : null}
-      {children}
+    <section className={`overflow-hidden rounded-3xl border border-line bg-surface ${className}`}>
+      {/* The padding is on the content, not the section, so the credit's rule
+        * runs the full width of the card the way the stroke-order foot does. */}
+      <div className="space-y-3 p-5">
+        {heading ? (
+          <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{heading}</h2>
+        ) : null}
+        {children}
+      </div>
       {credit ? <SourceCredit credit={credit.source} label={credit.label} /> : null}
     </section>
   );

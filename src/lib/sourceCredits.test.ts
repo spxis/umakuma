@@ -65,9 +65,25 @@ describe("where the credit is drawn", () => {
     ["the explorer detail panel", "src/app/users/[nickname]/level-explorer/components/LevelExplorerDetailSection.tsx"],
   ])("draws %s credit with the shared component", (_label, path) => {
     const source = read(path);
-    expect(source).toContain("SourceCredit");
+    /* Directly, or through the block shell that places it at the foot. */
+    expect(source).toMatch(/SourceCredit|SubjectBlock/);
     /* And never its own copy of the paragraph. */
     expect(source).not.toMatch(/href=\{[a-zA-Z.]*attribution\.licenceUrl\}/);
+  });
+
+  /*
+   * One style for a section's credit: the rule across the full width, centred,
+   * small. The stroke-order panel had it first; every other section drew its
+   * own left-aligned line at its own size, and the page read as five products.
+   * Only the stroke animation may draw inline - it has no edge of its own.
+   */
+  it("puts every section's credit at the foot, the same way", () => {
+    const inline = ["src/app/shared/ExampleSentences.tsx", "src/app/kanji/[character]/KanjiDictionaryDetail.tsx",
+      "src/app/shared/SubjectDetailPanel.tsx", "src/app/shared/KanjiDetailModal.tsx",
+      "src/app/shared/subject-page/SubjectBlock.tsx"].filter((path) => read(path).includes('variant="inline"'));
+    expect(inline).toEqual([]);
+    expect(read("src/app/shared/KanjiStrokeAnimation.tsx")).toContain('variant="inline"');
+    expect(read(CREDIT)).toContain("border-t border-line px-5 py-2 text-center");
   });
 
   it("says what was taken, not only who it came from", () => {

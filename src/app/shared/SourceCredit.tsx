@@ -18,15 +18,28 @@ const LINK = "underline decoration-dotted underline-offset-2 hover:text-foregrou
 export default function SourceCredit({
   credit,
   label,
+  variant = "foot",
   className = "",
 }: {
   credit: Credit;
   /** What was taken: "Meanings and readings from", "Stroke shapes from". */
   label: string;
+  /**
+   * `foot` is the one style a section's credit takes: a rule across the full
+   * width, centred, small - the stroke-order panel had it first and every
+   * other section had its own left-aligned line at its own size. `inline` is
+   * only for the stroke animation, which draws inside another surface and
+   * has no edge of its own to put a rule on.
+   */
+  variant?: "foot" | "inline";
   className?: string;
 }) {
+  const shape =
+    variant === "foot"
+      ? "border-t border-line px-5 py-2 text-center text-[10px]"
+      : "text-[11px]";
   return (
-    <p className={`text-[11px] font-semibold text-foreground/60 ${className}`}>
+    <p className={`${shape} font-semibold text-foreground/60 ${className}`}>
       {label}{" "}
       <a href={credit.url} target="_blank" rel="noreferrer noopener" className={LINK}>
         {credit.source}

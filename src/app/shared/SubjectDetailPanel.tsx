@@ -1,5 +1,4 @@
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import SourceCredit from "@/app/shared/SourceCredit";
 import MnemonicsBlock from "@/app/shared/subject-page/MnemonicsBlock";
 import RelatedGroupBlock from "@/app/shared/subject-page/RelatedGroupBlock";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
@@ -49,7 +48,10 @@ export default function SubjectDetailPanel({
 
   return (
     <>
-      <section className="space-y-4 rounded-3xl border border-line bg-surface p-5 shadow-sm">
+      <SubjectBlock
+        className="shadow-sm"
+        credit={{ source: SOURCE_CREDITS.wanikani, label: SOURCE_CREDIT_COPY.subjectData }}
+      >
         <div className="flex flex-wrap items-center gap-4">
           <p
             lang="ja"
@@ -93,11 +95,7 @@ export default function SubjectDetailPanel({
           </div>
         ) : null}
 
-        {/* Whose meanings and readings these are. The sentences below have
-          * carried a credit since the day they arrived; this is the larger
-          * borrowing and had none. */}
-        <SourceCredit credit={SOURCE_CREDITS.wanikani} label={SOURCE_CREDIT_COPY.subjectData} />
-      </section>
+      </SubjectBlock>
 
       <MnemonicsBlock
         mnemonics={meaningNote || readingNote ? { meaning: meaningNote, reading: readingNote } : null}

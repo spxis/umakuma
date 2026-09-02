@@ -1,6 +1,6 @@
 import type { KanjiDictionaryAttribution, KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import SourceCredit from "@/app/shared/SourceCredit";
+import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
 
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
 
@@ -30,7 +30,12 @@ export default function KanjiDictionaryDetail({
   heisigKeyword?: string | null;
 }) {
   return (
-    <section className="space-y-3 rounded-3xl border border-line bg-surface p-5">
+    <SubjectBlock
+      credit={
+        /* Share-alike: the credit is a licence condition, not decoration. */
+        attribution ? { source: attribution, label: KANJI_PAGE_COPY.dictionaryCredit } : undefined
+      }
+    >
       <Row label={KANJI_PAGE_COPY.meanings} value={entry.meanings.join(", ")} />
       <Readings label={KANJI_PAGE_COPY.onReadings} readings={entry.readings.on} />
       <Readings label={KANJI_PAGE_COPY.kunReadings} readings={entry.readings.kun} />
@@ -53,16 +58,7 @@ export default function KanjiDictionaryDetail({
         {!jlptLevel && entry.jlptOld ? <Fact label={KANJI_PAGE_COPY.jlptOld} value={`N${entry.jlptOld}`} /> : null}
         {heisigKeyword ? <Fact label={KANJI_PAGE_COPY.heisig} value={heisigKeyword} /> : null}
       </dl>
-
-      {/* Share-alike: the credit is a licence condition, not decoration. */}
-      {attribution ? (
-        <SourceCredit
-          credit={attribution}
-          label={KANJI_PAGE_COPY.dictionaryCredit}
-          className="pt-1"
-        />
-      ) : null}
-    </section>
+    </SubjectBlock>
   );
 }
 
