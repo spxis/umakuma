@@ -10,6 +10,10 @@
  * So an answer is a second kind of result, computed rather than found, shown
  * above the catalogues because it is what was asked for. The catalogue rows
  * still run underneath: 令和 is also a word somebody may want the reading of.
+ *
+ * Nothing here reaches the network. The rate table an amount needs is passed
+ * in, so every converter is a function of its query and this whole module
+ * tests without a server. `searchAnswersServer` is what fetches the rates.
  */
 
 import {
@@ -17,12 +21,30 @@ import {
   formatEraYearRomaji,
   parseEraYear,
 } from "./japaneseEras";
+import {
+  HOME_CURRENCIES,
+  JPY,
+  convertMoney,
+  formatMoney,
+  formatUnitRate,
+  formatYenJapanese,
+  parseMoneyQuery,
+  type RateTable,
+} from "./money";
 
 export const SEARCH_ANSWER_KINDS = {
   era: "era",
+  currency: "currency",
 } as const;
 
 export type SearchAnswerKind = (typeof SEARCH_ANSWER_KINDS)[keyof typeof SEARCH_ANSWER_KINDS];
+
+/** Who published the numbers an answer rests on, and when. */
+export type AnswerAttribution = {
+  source: string;
+  /** The publication day, `YYYY-MM-DD`. */
+  asOf: string;
+};
 
 export type SearchAnswer = {
   /** Which converter answered; the key a list renders by. */
@@ -39,6 +61,14 @@ export type SearchAnswer = {
   japanese: string | null;
   /** A quiet line under the answer: a reading, a rate, a caveat. */
   detail: string | null;
+  /**
+   * The source behind the answer, for the answers that have one.
+   *
+   * An era year is arithmetic and answers for itself; a converted price is
+   * somebody's published number on a particular day, and a page that showed it
+   * without saying so would be claiming a precision it does not have.
+   */
+  attribution: AnswerAttribution | null;
 };
 
 /** The era converter, or nothing when the query is not a date. */
@@ -52,17 +82,82 @@ function eraAnswer(query: string): SearchAnswer | null {
     value: String(found.westernYear),
     japanese: formatEraYearJapanese(found),
     detail: found.era.reading,
+    attribution: null,
   };
+}
+
+/**
+ * The money converter, or nothing when the query is not an amount.
+ *
+ * Two directions, because the question has two. An amount in any other
+ * currency is a price somebody read and wants to understand, so it answers in
+ * yen. A yen amount is the same question from the other side, and it names no
+ * second currency - so it answers in both of the site's, rather than picking
+ * one of the two countries it is written for.
+ */
+function currencyAnswer(query: string, rates: RateTable | null, source: string): SearchAnswer | null {
+  const money = parseMoneyQuery(query);
+  if (!money || !rates) return null;
+
+  const attribution = { source, asOf: rates.date };
+  const question = formatMoney(money.amount, money.currency);
+
+  if (money.currency !== JPY) {
+    const yen = convertMoney(money, JPY, rates);
+    if (yen === null) return null;
+
+    return {
+      kind: SEARCH_ANSWER_KINDS.currency,
+      question,
+      value: formatMoney(yen, JPY),
+      japanese: formatYenJapanese(yen),
+      detail: formatUnitRate(money.currency, JPY, rates),
+      attribution,
+    };
+  }
+
+  const home = HOME_CURRENCIES.map((currency) => {
+    const converted = convertMoney(money, currency, rates);
+    return converted === null ? null : formatMoney(converted, currency);
+  });
+  if (home.some((value) => value === null)) return null;
+
+  return {
+    kind: SEARCH_ANSWER_KINDS.currency,
+    question,
+    value: home.join(" · "),
+    japanese: null,
+    detail: HOME_CURRENCIES.map((currency) => formatUnitRate(currency, JPY, rates))
+      .filter((line): line is string => line !== null)
+      .join(" · "),
+    attribution,
+  };
+}
+
+/**
+ * Whether a query is worth fetching exchange rates for.
+ *
+ * Asked before the network is touched, because the rates are only needed by
+ * the one query in a thousand that names an amount, and a search for "water"
+ * has no business waiting on a currency API.
+ */
+export function needsRates(query: string): boolean {
+  return parseMoneyQuery(query) !== null;
 }
 
 /**
  * Every answer a query earns, best first.
  *
- * A list rather than one answer because the converters do not overlap today
- * and there is no reason they never will - a query could name both a date and
- * an amount - and because a page rendering a list needs no second shape when
- * the second converter arrives.
+ * A list rather than one answer because a query could name both a date and an
+ * amount, and because a page rendering a list needs no second shape as
+ * converters are added.
  */
-export function searchAnswers(query: string): SearchAnswer[] {
-  return [eraAnswer(query)].filter((answer): answer is SearchAnswer => answer !== null);
+export function searchAnswers(
+  query: string,
+  rates: RateTable | null = null,
+  rateSource: string = "",
+): SearchAnswer[] {
+  return [eraAnswer(query), currencyAnswer(query, rates, rateSource)].filter(
+    (answer): answer is SearchAnswer => answer !== null,
+  );
 }

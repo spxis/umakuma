@@ -1,7 +1,19 @@
 import { japaneseTextProps } from "@/app/shared/japaneseText";
 import type { SearchAnswer } from "@/lib/searchAnswers";
+import { formatDateShort } from "@/lib/timeFormat";
 
-import { SEARCH_ANSWER_COPY } from "./searchCopy";
+import { SEARCH_ANSWER_COPY, SEARCH_ANSWER_SOURCE_COPY } from "./searchCopy";
+
+/**
+ * The publication day, read as the day it says.
+ *
+ * A bare `YYYY-MM-DD` parses as midnight UTC, which is the evening before in
+ * every North American timezone - so a rate published on the 1st was printed
+ * as the 31st. Noon has no such edge anywhere the site is read.
+ */
+function publishedDay(isoDay: string): string {
+  return formatDateShort(`${isoDay}T12:00:00Z`, isoDay);
+}
 
 type Props = {
   answers: SearchAnswer[];
@@ -55,6 +67,15 @@ export default function SearchAnswers({ answers }: Props) {
               </>
             ) : null}
           </p>
+
+          {answer.attribution ? (
+            <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-foreground/60">
+              {SEARCH_ANSWER_SOURCE_COPY.ratesFrom(
+                answer.attribution.source,
+                publishedDay(answer.attribution.asOf),
+              )}
+            </p>
+          ) : null}
         </li>
       ))}
     </ul>

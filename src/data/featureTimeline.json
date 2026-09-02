@@ -2725,19 +2725,6 @@
     "summary": "The filing column exists only on the search surfaces. A member who searches a kanji, opens its page and wants it on a list has no way to do it. Every page and panel that shows a kanji, word or radical - the subject pages, the glyph viewer, the explorers - offers the same tag marks and list chips. Requested 2026-09-02 by John."
   },
   {
-    "id": "search-currency-conversion",
-    "name": "Convert money in search",
-    "area": "platform",
-    "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 43,
-    "summary": "Typing 14.40 CAD or 23 EUR answers with the amount in yen, and a yen amount answers in the other direction. Needs a rate source that will not throttle. Requested 2026-09-02 by John.",
-    "owner": "claude-parallel-build",
-    "claimedAt": "2026-09-02T10:58:28.716Z"
-  },
-  {
     "id": "search-japanese-numbers",
     "name": "Read large Japanese numbers in search",
     "area": "platform",
@@ -2912,5 +2899,16 @@
     "summary": "Typing Heisei 3 is a request to be told a number, and no catalogue holds one - the search read the digit instead and answered with thirty rows about three, so the only question on the page with a real answer got everything except it. An answer is a second kind of result now: worked out rather than looked up, and shown above the catalogues because it is what was typed. 1991 sits where a glyph would, with \u5e73\u62103\u5e74 beside it and the reading underneath. The five modern eras are covered, back to Meiji in 1868, written in kanji or in Latin letters, with or without the \u5e74, in whichever romanization of a long vowel somebody learned - Showa, Shouwa and Sh\u014dwa are the same era - and \u5143\u5e74 read as the first year it means. A year an era never reached answers with nothing rather than with arithmetic: \u662d\u548c stopped at 64 and \u5e73\u6210 at 31, so Showa 65 is not a late date, it is not a date. The answer sits outside the results deliberately, because Taisho 5 is a date the catalogues hold nothing for and an answer that vanished when the page said nothing matched would be missing exactly when it was wanted. The catalogue rows still run underneath, since \u4ee4\u548c is also a word somebody may want the reading of. Requested 2026-09-02 by John.",
     "version": "0.265.0",
     "releasedAt": "2026-09-02T11:44:40Z"
+  },
+  {
+    "id": "search-currency-conversion",
+    "name": "Convert money in search",
+    "area": "platform",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "A learner reading a Japanese page meets prices constantly - a 1,500\u5186 lunch, an 8,800\u5186 textbook - and has no sense of whether that is cheap. Typing the amount answers it now. Any currency the European Central Bank publishes goes into yen, and a yen amount comes back in Canadian and American dollars together, because a yen amount names no second currency and the site is written for both countries rather than one of them. The amount may be written either way round, with the code or with a symbol that means one thing and only one - \u20ac23, \u00a310.50, \u00a51500, 1500\u5186, 14.40 CAD, EUR 23 - with a thousands comma or without, and in full-width digits, which is what a Japanese keyboard produces. There is deliberately no bare dollar sign: it names the Canadian dollar and the American one, and guessing would be wrong for half the people who typed it. The rates come from Frankfurter, which republishes the ECB's daily reference rates with no key, no account and no request budget to run down - the thing that rules out most free rate APIs for a search box, where one member typing slowly is several requests. They are fetched at most once every six hours, shared by every reader, and only when a query actually names an amount, so a search for a word waits on nothing and nothing about a query leaves the site. The answer prints the day it is quoting rather than implying the rate is live, because the ECB publishes on working days and a weekend answers with Friday's numbers. If the rates cannot be reached there is no line at all: a stale number shown as today's would be worse than none, and the three catalogues still have something to say. Requested 2026-09-02 by John.",
+    "version": "0.266.0",
+    "releasedAt": "2026-09-02T11:45:06Z"
   }
 ]

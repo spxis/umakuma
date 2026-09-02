@@ -316,6 +316,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Rokusen Kazoe", ja: "六線数え", reading: "ろくせんかぞえ", gloss: "counted by the strokes it takes" },
   { romaji: "Wasurenai Katahou", ja: "忘れない片方", reading: "わすれないかたほう", gloss: "a word and its kanji, both kept" },
   { romaji: "Anzan Irazu", ja: "暗算いらず", reading: "あんざんいらず", gloss: "the era year, without the arithmetic" },
+  { romaji: "Ima no Souba", ja: "今の相場", reading: "いまのそうば", gloss: "today's rate, in the search box" },
 ];
 
 /**

@@ -17,7 +17,7 @@ import {
   searchResultsHref,
 } from "@/lib/searchFilters";
 
-import { searchAnswers } from "@/lib/searchAnswers";
+import { resolveSearchAnswers } from "@/lib/searchAnswersServer";
 
 import { SEARCH_EXAMPLES, SEARCH_PAGE_COPY } from "./searchCopy";
 import RecentItems from "@/app/shared/RecentItems";
@@ -68,14 +68,20 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
    * dozen rows it was offered to escape.
    */
   const perColumn = filters.sources.length === 1 ? COLUMN_FULL : COLUMN_PREVIEW;
-  const results = isSearchable(query) ? await runSearchColumns(query, filters, perColumn) : null;
 
   /*
    * Worked out rather than looked up, and so not filtered: the kind and source
    * chips narrow which catalogues answered, and an era year came from none of
    * them. Turning WaniKani off must not take the date away with it.
+   *
+   * Run alongside the catalogues rather than before them. Most queries need
+   * nothing fetched and resolve immediately; the one that names an amount waits
+   * on a rate, and there is no reason for the three catalogues to wait with it.
    */
-  const answers = searchAnswers(query);
+  const [results, answers] = await Promise.all([
+    isSearchable(query) ? runSearchColumns(query, filters, perColumn) : Promise.resolve(null),
+    resolveSearchAnswers(query),
+  ]);
 
   /*
    * Read for the header, not for the results. Every result leads to a public

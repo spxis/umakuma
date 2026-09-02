@@ -32,7 +32,7 @@ export const SEARCH_PAGE_COPY = {
 } as const;
 
 /** Seeded examples on the empty state; one per source, to show the range. */
-export const SEARCH_EXAMPLES = ["pencil", "日", "えんぴつ", "water", "Heisei 3"] as const;
+export const SEARCH_EXAMPLES = ["pencil", "日", "えんぴつ", "Heisei 3", "1500円"] as const;
 
 /**
  * What each computed answer calls itself.
@@ -42,4 +42,17 @@ export const SEARCH_EXAMPLES = ["pencil", "日", "えんぴつ", "water", "Heise
  */
 export const SEARCH_ANSWER_COPY: Record<SearchAnswerKind, string> = {
   [SEARCH_ANSWER_KINDS.era]: "Japanese era",
+  /* Not "In yen": the same row answers a yen amount in dollars. */
+  [SEARCH_ANSWER_KINDS.currency]: "Currency",
+} as const;
+
+/**
+ * What an answer says about where its numbers came from.
+ *
+ * Exchange rates are published once a working day, so the day is part of the
+ * answer rather than a footnote: a rate quoted with no date reads as live, and
+ * on a Sunday it would be two days old.
+ */
+export const SEARCH_ANSWER_SOURCE_COPY = {
+  ratesFrom: (source: string, day: string) => `${source} rates · ${day}`,
 } as const;

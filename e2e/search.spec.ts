@@ -25,6 +25,7 @@ const PAGE_SUBMIT = `form:has(${PAGE_INPUT}) button[type=submit]`;
 const HEADER_SUBMIT = "form:has(#global-search) button[type=submit]";
 const RESULT_ROW = "[data-search-result-row]";
 const ERA_ANSWER = '[data-search-answer="era"]';
+const MONEY_ANSWER = '[data-search-answer="currency"]';
 
 /** A character every catalogue holds, so the row count never depends on level. */
 const COMMON_KANJI = "水";
@@ -427,6 +428,51 @@ test("an era answer outlives a query the catalogues cannot match", async ({ brow
   await expect(answer).toBeVisible({ timeout: 15_000 });
   await expect(answer).toContainText("1916");
   await expect(answer).toContainText("大正5年");
+
+  await finish(page);
+});
+
+/*
+ * The two money tests reach a third-party rate source through the page, which
+ * is the point of them: the parsing and the arithmetic are covered by unit
+ * tests, and what is left to check is that a real request reaches a real rate
+ * and lands on the page. A failure here means the currency answer is not
+ * working right now, which is worth being told.
+ */
+test("an amount of money is answered in yen", async ({ browser, baseURL }) => {
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("14.40 CAD")}`);
+
+  const answer = page.locator(MONEY_ANSWER);
+  await expect(answer).toBeVisible({ timeout: 20_000 });
+  await expect(answer).toContainText("CA$14.40");
+  await expect(answer).toContainText("円");
+  /* The day the rates were published, so the number is never read as live. */
+  await expect(answer).toContainText(/rates/i);
+
+  await finish(page);
+});
+
+test("a yen amount is answered in both home currencies", async ({ browser, baseURL }) => {
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("1500円")}`);
+
+  const answer = page.locator(MONEY_ANSWER);
+  await expect(answer).toBeVisible({ timeout: 20_000 });
+  await expect(answer).toContainText("CA$");
+  await expect(answer).toContainText("¥1,500");
+
+  await finish(page);
+});
+
+test("a bare dollar sign is not guessed at", async ({ browser, baseURL }) => {
+  /*
+   * It names the Canadian dollar and the American one, and the site is written
+   * for both - so an answer here would be wrong for half the people who typed
+   * it. Nothing is the honest answer, and the catalogues still run.
+   */
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("$20")}`);
+
+  await expect(page.locator("h1")).toBeVisible();
+  await expect(page.locator(MONEY_ANSWER)).toHaveCount(0);
 
   await finish(page);
 });
