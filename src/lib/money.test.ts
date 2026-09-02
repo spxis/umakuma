@@ -77,6 +77,52 @@ describe("parseMoneyQuery", () => {
     expect(parseMoneyQuery("$1,500 JPY")).toEqual([]);
   });
 
+  /*
+   * The formats a reader actually types. 500 yen and C$100 both answered with
+   * nothing while 500¥ and 100 CAD converted, which is the wrong half.
+   */
+  it("reads the currency written as a word", () => {
+    expect(parseMoneyQuery("500 yen")).toEqual([{ amount: 500, currency: "JPY" }]);
+    expect(parseMoneyQuery("23 euros")).toEqual([{ amount: 23, currency: "EUR" }]);
+    expect(parseMoneyQuery("10 pounds")).toEqual([{ amount: 10, currency: "GBP" }]);
+    expect(parseMoneyQuery("5 quid")).toEqual([{ amount: 5, currency: "GBP" }]);
+    expect(parseMoneyQuery("500 won")).toEqual([{ amount: 500, currency: "KRW" }]);
+  });
+
+  it("takes a plural without an entry of its own", () => {
+    expect(parseMoneyQuery("23 euro")).toEqual(parseMoneyQuery("23 euros"));
+    expect(parseMoneyQuery("10 rupee")).toEqual(parseMoneyQuery("10 rupees"));
+  });
+
+  it("reads the letters in front of a dollar sign", () => {
+    expect(parseMoneyQuery("C$100")).toEqual([{ amount: 100, currency: "CAD" }]);
+    expect(parseMoneyQuery("CA$100")).toEqual([{ amount: 100, currency: "CAD" }]);
+    expect(parseMoneyQuery("US$20")).toEqual([{ amount: 20, currency: "USD" }]);
+    expect(parseMoneyQuery("HK$300")).toEqual([{ amount: 300, currency: "HKD" }]);
+    expect(parseMoneyQuery("R$50")).toEqual([{ amount: 50, currency: "BRL" }]);
+  });
+
+  /* A word can be two currencies just as a sign can. */
+  it("answers a bare dollar word in both dollars, and a peso in the likelier one", () => {
+    expect(parseMoneyQuery("100 dollars")).toEqual([
+      { amount: 100, currency: "CAD" },
+      { amount: 100, currency: "USD" },
+    ]);
+    expect(parseMoneyQuery("20 bucks")).toEqual([
+      { amount: 20, currency: "CAD" },
+      { amount: 20, currency: "USD" },
+    ]);
+    expect(parseMoneyQuery("100 pesos")).toEqual([{ amount: 100, currency: "MXN" }]);
+  });
+
+  /* A number beside an ordinary word is not a price. */
+  it("leaves a number beside a word that is not money alone", () => {
+    expect(parseMoneyQuery("chapter 3")).toEqual([]);
+    expect(parseMoneyQuery("level 5")).toEqual([]);
+    expect(parseMoneyQuery("grade 2")).toEqual([]);
+    expect(parseMoneyQuery("Heisei 3")).toEqual([]);
+  });
+
   it("reads a price written with a thousands comma", () => {
     expect(parseMoneyQuery("1,500円")).toEqual([{ amount: 1500, currency: "JPY" }]);
     expect(parseMoneyQuery("1,234,567 JPY")).toEqual([{ amount: 1234567, currency: "JPY" }]);

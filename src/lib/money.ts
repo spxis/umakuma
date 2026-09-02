@@ -54,7 +54,17 @@ const CURRENCY_SYMBOLS: Record<string, CurrencyCode> = {
 };
 
 /**
- * The symbols that name a family of currencies rather than one.
+ * What a token could mean: everything it may name, and what it means alone.
+ *
+ * Most tokens are one currency and the two lists are the same. The interesting
+ * ones are not: a dollar sign is seven currencies, and "peso" is two.
+ */
+type CurrencyGuess = { family: readonly CurrencyCode[]; unaided: readonly CurrencyCode[] };
+
+const one = (currency: CurrencyCode): CurrencyGuess => ({ family: [currency], unaided: [currency] });
+
+/**
+ * The signs and words that name a family rather than one currency.
  *
  * The dollar sign is seven of them, so it carries both the family and what it
  * means unaided. A code beside the sign picks from the family - `$14.40 CAD`
@@ -63,11 +73,85 @@ const CURRENCY_SYMBOLS: Record<string, CurrencyCode> = {
  * nothing. On its own the sign falls back to the two currencies this site is
  * written for and answers in both, which is the same choice the yen direction
  * already makes rather than picking a side for half the people who typed it.
+ *
+ * A peso is Mexican or Philippine and a krona is Swedish or Icelandic; each
+ * falls back to the one a North American reader is likelier to have met.
  */
 const DOLLAR_FAMILY: readonly CurrencyCode[] = ["AUD", "CAD", "HKD", "MXN", "NZD", "SGD", "USD"];
 
-const AMBIGUOUS_SYMBOLS: Record<string, { family: readonly CurrencyCode[]; unaided: readonly CurrencyCode[] }> = {
-  $: { family: DOLLAR_FAMILY, unaided: HOME_CURRENCIES },
+const DOLLARS: CurrencyGuess = { family: DOLLAR_FAMILY, unaided: HOME_CURRENCIES };
+
+const AMBIGUOUS: Record<string, CurrencyGuess> = {
+  $: DOLLARS,
+  dollar: DOLLARS,
+  buck: DOLLARS,
+  peso: { family: ["MXN", "PHP"], unaided: ["MXN"] },
+  krona: { family: ["ISK", "SEK"], unaided: ["SEK"] },
+  krone: { family: ["DKK", "NOK"], unaided: ["DKK", "NOK"] },
+  kroner: { family: ["DKK", "NOK"], unaided: ["DKK", "NOK"] },
+  kronor: { family: ["SEK"], unaided: ["SEK"] },
+};
+
+/**
+ * The currency a word names.
+ *
+ * Somebody reading a Japanese page and asking what 500 yen is worth types
+ * "500 yen", not "500 JPY" and not "500¥" - the code is what a bank uses and
+ * the sign is one keystroke most keyboards hide. A plural is the same word:
+ * the lookup retries without a trailing s, so euros, pounds and rupees need no
+ * entries of their own.
+ */
+const CURRENCY_WORDS: Record<string, CurrencyCode> = {
+  yen: JPY,
+  euro: "EUR",
+  pound: "GBP",
+  quid: "GBP",
+  sterling: "GBP",
+  franc: "CHF",
+  yuan: "CNY",
+  rmb: "CNY",
+  won: "KRW",
+  rupee: "INR",
+  rupiah: "IDR",
+  ringgit: "MYR",
+  baht: "THB",
+  zloty: "PLN",
+  koruna: "CZK",
+  forint: "HUF",
+  leu: "RON",
+  lira: "TRY",
+  shekel: "ILS",
+  rand: "ZAR",
+  real: "BRL",
+  reais: "BRL",
+};
+
+/**
+ * The letters in front of a dollar sign that say whose dollar it is.
+ *
+ * C$100 is how a Canadian price is written wherever both dollars are in the
+ * room, which is most places this site is read.
+ */
+const DOLLAR_PREFIXES: Record<string, CurrencyCode> = {
+  c: "CAD",
+  ca: "CAD",
+  cad: "CAD",
+  us: "USD",
+  usd: "USD",
+  a: "AUD",
+  au: "AUD",
+  aud: "AUD",
+  nz: "NZD",
+  nzd: "NZD",
+  s: "SGD",
+  sgd: "SGD",
+  hk: "HKD",
+  hkd: "HKD",
+  mx: "MXN",
+  mex: "MXN",
+  mxn: "MXN",
+  r: "BRL",
+  brl: "BRL",
 };
 
 /** An amount of one currency, as it was typed. */
@@ -91,22 +175,39 @@ function toHalfWidthDigits(value: string): string {
   );
 }
 
-/**
- * The currencies a token could name, whether it is a code or a symbol.
- *
- * A list rather than one currency because a symbol need not settle the
- * question. An empty list is a token that names nothing, which makes the
- * whole query not money: `23 XYZ` is a number beside a word.
- */
-function currenciesNamed(token: string): readonly CurrencyCode[] {
-  const ambiguous = AMBIGUOUS_SYMBOLS[token];
-  if (ambiguous) return ambiguous.family;
+/** A word, singular or plural, or nothing at all. */
+function wordGuess(word: string): CurrencyGuess | null {
+  const ambiguous = AMBIGUOUS[word];
+  if (ambiguous) return ambiguous;
 
+  const named = CURRENCY_WORDS[word];
+  return named ? one(named) : null;
+}
+
+/**
+ * What a token names, whether it is a sign, a code or a word.
+ *
+ * `null` is a token that names nothing, which makes the whole query not money:
+ * `23 XYZ` is a number beside a word, and so is `chapter 3`.
+ */
+function currencyGuess(token: string): CurrencyGuess | null {
   const symbol = CURRENCY_SYMBOLS[token];
-  if (symbol) return [symbol];
+  if (symbol) return one(symbol);
+
+  const word = token.toLowerCase();
+  const ambiguous = AMBIGUOUS[word];
+  if (ambiguous) return ambiguous;
+
+  /* C$, US$, R$: the letters say whose dollar, so the sign settles nothing. */
+  if (word.endsWith("$")) {
+    const prefixed = DOLLAR_PREFIXES[word.slice(0, -1)];
+    return prefixed ? one(prefixed) : null;
+  }
 
   const code = token.toUpperCase();
-  return isCurrencyCode(code) ? [code] : [];
+  if (isCurrencyCode(code)) return one(code);
+
+  return wordGuess(word) ?? wordGuess(word.replace(/s$/, ""));
 }
 
 /*
@@ -116,8 +217,8 @@ function currenciesNamed(token: string): readonly CurrencyCode[] {
  * are optional and both may be filled, because `$14.40 CAD` names its
  * currency twice; a query filling neither is a bare number and not money.
  */
-const MONEY_QUERY =
-  /^([A-Za-z]{3}|[$¥￥€£])?\s*(\d+(?:\.\d+)?)\s*([A-Za-z]{3}|[$¥￥€£円])?$/;
+const MONEY_TOKEN = String.raw`(?:[A-Za-z]{1,3}\$|\$|[A-Za-z]{2,8}|[¥￥€£円])`;
+const MONEY_QUERY = new RegExp(String.raw`^(${MONEY_TOKEN})?\s*(\d+(?:\.\d+)?)\s*(${MONEY_TOKEN})?$`);
 
 /**
  * The amounts a query names, which is usually none and sometimes two.
@@ -144,10 +245,14 @@ export function parseMoneyQuery(raw: string): MoneyAmount[] {
   const sides = [before, after].filter((token): token is string => Boolean(token));
   if (sides.length === 0) return [];
 
+  const guesses = sides.map(currencyGuess);
+  if (guesses.some((guess) => guess === null)) return [];
+  const named = guesses as CurrencyGuess[];
+
   /* Nothing narrowed the sign, so it means what it means on its own. */
-  const unaided = sides.every((token) => token in AMBIGUOUS_SYMBOLS);
-  const currencies = sides
-    .map((token) => (unaided ? AMBIGUOUS_SYMBOLS[token]!.unaided : currenciesNamed(token)))
+  const unaided = named.every((guess) => guess.family.length > 1);
+  const currencies = named
+    .map((guess) => (unaided ? guess.unaided : guess.family))
     .reduce((kept, next) => kept.filter((currency) => next.includes(currency)));
   if (currencies.length === 0) return [];
 

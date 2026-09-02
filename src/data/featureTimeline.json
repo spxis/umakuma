@@ -2951,5 +2951,17 @@
     "summary": "A member with no WaniKani had nothing on their profile to connect one with, and a member who had just connected was told they were Level 0. The connection page arrived with its own release and the profile now leads to it - Connect WaniKani when there is none, Replace token when there is - and the card no longer states a level nobody holds: a token whose first sync has not landed reads as Connected, with a line saying the level arrives with the sync. Zero is the number the leaderboard deliberately refuses to rank an account at, so printing it as a standing was the one number the page should never have shown. Reported 2026-09-02 by John.",
     "version": "0.273.0",
     "releasedAt": "2026-09-02T12:49:16Z"
+  },
+  {
+    "id": "search-money-formats",
+    "name": "Every way a price is written",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 51,
+    "summary": "500¥ and 100 CAD converted while 500 yen and C$100 answered with nothing, which is the wrong half: the code is what a bank uses and the sign is a keystroke most keyboards hide, so the words are what a reader actually types. A currency written as a word is read now - yen, euros, pounds, francs, won, rupees, pesos and the rest, singular or plural, since the lookup retries without a trailing s - and so are the letters in front of a dollar sign, which is how a Canadian price is written wherever both dollars are in the room: C$100, US$20, A$50, HK$300, R$50. A word can be two currencies exactly as a sign can, so 100 dollars and 20 bucks answer in Canadian and American together, while a peso falls back to the Mexican one and a krona to the Swedish, each being the one a North American reader is likelier to have met. A number beside an ordinary word is still not a price: chapter 3, level 5 and Heisei 3 name no currency and answer with nothing, which is what leaves the era converter its own query. Reported 2026-09-02 by John.",
+    "version": "0.274.0",
+    "releasedAt": "2026-09-02T12:55:23Z"
   }
 ]
