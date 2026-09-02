@@ -4,7 +4,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
 import { LIST_ITEM_KIND_VALUES } from "@/lib/domainConstants";
-import { isMissingStudyListTableError } from "@/lib/studyListRules";
+import { STUDY_LIST_LIMITS, isMissingStudyListTableError } from "@/lib/studyListRules";
 import { z } from "zod";
 
 import { replaceListItems } from "@/lib/studyLists";
@@ -41,7 +41,10 @@ export async function GET(request: Request, context: RouteContext) {
         const list = await prisma.studyList
           .findFirst({
             where: { id: listId, accountId },
-            select: { name: true, items: { select: { kind: true, key: true, subjectId: true }, orderBy: { position: "asc" } } },
+            select: {
+              name: true,
+              items: { select: { kind: true, key: true, subjectId: true, note: true }, orderBy: { position: "asc" } },
+            },
           })
           .catch((error: unknown) => {
             if (isMissingStudyListTableError(error)) return null;
@@ -90,7 +93,14 @@ export async function DELETE(request: Request, context: RouteContext) {
         }
         const list = await prisma.studyList.findFirst({
           where: { id: listId, accountId },
-          select: { archivedAt: true, items: { select: { kind: true, key: true, subjectId: true }, orderBy: { position: "asc" } } },
+          select: {
+            archivedAt: true,
+            /* Rewritten wholesale below, so every column it keeps is read here. */
+            items: {
+              select: { kind: true, key: true, subjectId: true, note: true, addedByAccountId: true },
+              orderBy: { position: "asc" },
+            },
+          },
         });
         if (!list) {
           return NextResponse.json({ error: "That list is gone." }, { status: 404 });
@@ -104,6 +114,72 @@ export async function DELETE(request: Request, context: RouteContext) {
       } catch (error) {
         console.error("Failed to take an item out of a list", error);
         return NextResponse.json({ error: "Could not change that list." }, { status: 500 });
+      }
+    },
+  });
+}
+
+const noteSchema = z.object({
+  kind: z.enum(LIST_ITEM_KIND_VALUES),
+  key: z.string().min(1).max(64),
+  /** Empty clears it; the column holds null rather than an empty string. */
+  note: z.string().max(STUDY_LIST_LIMITS.noteLength),
+});
+
+/**
+ * Why an item is on the list, in the words of whoever put it there.
+ *
+ * A list of glyphs says what to study and never says why: the mnemonic that
+ * finally made it stick, the sentence it was met in, the mistake it keeps
+ * causing. Those are the reason a member's own list beats a generated one, and
+ * they had nowhere to live.
+ *
+ * One item at a time rather than a list-wide save, because a note is written
+ * while reading the list and a whole-list write would race with any other
+ * change open in another tab.
+ */
+export async function PATCH(request: Request, context: RouteContext) {
+  return withApiRouteTelemetry({
+    route: "/api/study/[accountId]/lists/[listId]/items",
+    method: "PATCH",
+    request,
+    execute: async () => {
+      try {
+        const { accountId, listId } = await context.params;
+        if (!(await canAccessAccount(request, accountId))) {
+          return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+        }
+        const parsed = noteSchema.safeParse(await request.json());
+        if (!parsed.success) {
+          return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+
+        const list = await prisma.studyList.findFirst({
+          where: { id: listId, accountId },
+          select: { archivedAt: true },
+        });
+        if (!list) {
+          return NextResponse.json({ error: "That list is gone." }, { status: 404 });
+        }
+        if (list.archivedAt) {
+          return NextResponse.json({ error: "This list is archived. Restore it to change it." }, { status: 409 });
+        }
+
+        const note = parsed.data.note.trim();
+        const updated = await prisma.studyListItem.updateMany({
+          where: { listId, kind: parsed.data.kind, key: parsed.data.key },
+          data: { note: note.length > 0 ? note : null },
+        });
+        if (updated.count === 0) {
+          return NextResponse.json({ error: "That item is not on this list." }, { status: 404 });
+        }
+
+        /* The list changed, so it says so - a note is a change to the list. */
+        await prisma.studyList.update({ where: { id: listId }, data: { updatedAt: new Date() } });
+        return NextResponse.json({ note: note.length > 0 ? note : null });
+      } catch (error) {
+        console.error("Failed to write a note on a list item", error);
+        return NextResponse.json({ error: "Could not save that note." }, { status: 500 });
       }
     },
   });

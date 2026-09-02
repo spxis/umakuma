@@ -55,7 +55,13 @@ export async function POST(request: Request, context: RouteContext) {
         /* Scoped to the account in the read: an id from elsewhere merges nothing. */
         const sources = await prisma.studyList.findMany({
           where: { id: { in: parsed.data.listIds }, accountId },
-          select: { id: true, items: { select: { kind: true, key: true, subjectId: true }, orderBy: { position: "asc" } } },
+          select: {
+            id: true,
+            items: {
+              select: { kind: true, key: true, subjectId: true, note: true, addedByAccountId: true },
+              orderBy: { position: "asc" },
+            },
+          },
         });
         if (sources.length < 2) {
           return NextResponse.json({ error: "Choose two of your own lists to merge." }, { status: 404 });

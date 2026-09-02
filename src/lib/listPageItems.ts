@@ -21,6 +21,8 @@ export type ListPageItem = StudyTagListItem & {
   /** What the list holds it as, for taking it out again. */
   listKind: ListSubjectRow["kind"];
   listKey: string;
+  /** Why it is here, in the words of whoever added it. */
+  note: string | null;
 };
 
 export type MemberState = {
@@ -56,6 +58,7 @@ export function toListPageItems(
       studyTags: state?.studyTags ?? { favorite: false, trouble: false, burned: false },
       listKind: row.kind,
       listKey: row.key.includes(":") ? row.key.slice(row.key.indexOf(":") + 1) : row.key,
+      note: row.note ?? null,
     };
   });
 }

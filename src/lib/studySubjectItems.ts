@@ -113,6 +113,13 @@ export type ListSubjectRow = {
   reading: string | null;
   wkLevel: number | null;
   href: string | null;
+  /**
+   * Why it is on this list, in the words of whoever added it.
+   *
+   * Optional because this row shape is drawn by surfaces that are not lists -
+   * the stroke browser among them - and they have nobody to have written one.
+   */
+  note?: string | null;
 };
 
 /**
@@ -158,6 +165,7 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           reading: subject.primaryReadings[0] ?? subject.readings[0] ?? null,
           wkLevel: subject.wkLevel,
           href: subjectHref({ subjectType: subject.subjectType, characters: subject.characters, slug: null }),
+          note: item.note ?? null,
         },
       ];
     }
@@ -177,6 +185,7 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           reading: jlpt?.onReadings[0] ?? jlpt?.kunReadings[0] ?? null,
           wkLevel: null,
           href: subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: item.key, slug: null }),
+          note: item.note ?? null,
         },
       ];
     }

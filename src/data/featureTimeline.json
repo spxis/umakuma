@@ -2548,13 +2548,12 @@
     "name": "A note on an item in a list",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
+    "status": "shipped",
+    "date": "2026-09-02",
     "release": 26,
-    "summary": "Why this item is here: a short note per item, written by whoever added it - a mnemonic, the sentence it was met in, the mistake it keeps causing. Shown in the list and when practising from it. Suggested 2026-09-01.",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T13:24:16.403Z"
+    "summary": "A list of glyphs says what to study and never says why. The mnemonic that finally made one stick, the sentence it was met in, the mistake it keeps causing - those are the reason a member's own list beats a generated one, and they had nowhere to live. Every item on a saved list can now carry a short note, written from the list itself while looking at the thing it is about, and shown to every reader of the list in both densities. The invitation to write one appears only while editing, so a list nobody wants to annotate stays a list of glyphs. One item at a time rather than a save over the whole list, because a whole-list write would race with any other change the member has open. The correctness half is invisible and was the larger part: saving a list deletes every row and writes them again, so a caller that read only the columns it cared about would have wiped the notes on every other item the moment somebody removed one. Every caller that rewrites a list now reads the note first, and a test fails the build if a new one forgets - and while that was open, an item's authorship stopped being reassigned to whoever last touched the list. Suggested 2026-09-01.",
+    "version": "0.280.0",
+    "releasedAt": "2026-09-02T13:54:43Z"
   },
   {
     "id": "list-copy-sync",

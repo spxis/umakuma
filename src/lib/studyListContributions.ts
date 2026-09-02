@@ -146,7 +146,14 @@ export async function decideProposal(
       key: true,
       subjectId: true,
       listId: true,
-      list: { select: { items: { select: { kind: true, key: true, subjectId: true }, orderBy: { position: "asc" } } } },
+      list: {
+        select: {
+          items: {
+            select: { kind: true, key: true, subjectId: true, note: true, addedByAccountId: true },
+            orderBy: { position: "asc" },
+          },
+        },
+      },
     },
   });
   if (!proposal) return false;

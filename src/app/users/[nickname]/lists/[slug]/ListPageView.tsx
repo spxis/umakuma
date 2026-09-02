@@ -8,6 +8,7 @@ import HideBurnedToggle from "@/app/shared/HideBurnedToggle";
 import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
 import ListSearchField from "@/app/shared/ListSearchField";
 import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
+import type { ListPageItem } from "@/lib/listPageItems";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import ListMetaLine from "@/app/shared/ListMetaLine";
@@ -22,7 +23,9 @@ import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
 import ListContributeBox from "./ListContributeBox";
+import ListItemNoteEditor from "./ListItemNoteEditor";
 import type { ListPageViewProps } from "./ListPage.types";
+import { useListItemNote } from "./useListItemNote";
 import ListProposalsPanel from "./ListProposalsPanel";
 import ListShareControls from "./ListShareControls";
 import ListViewerActions from "./ListViewerActions";
@@ -65,6 +68,7 @@ export default function ListPageView({
   const archived = list.archivedAt !== null;
   const canContribute = Boolean(viewer.accountId) && !viewer.isOwner && !archived && !list.tag;
   const canEdit = viewer.isOwner && !archived;
+  const notes = useListItemNote(viewer.accountId, list.id);
 
   const live = useMemo(() => items.filter((item) => !removed.has(item.subjectId)), [items, removed]);
 
@@ -290,6 +294,13 @@ export default function ListPageView({
               items={visible}
               viewMode={viewMode}
               selection={viewer.accountId ? selection : undefined}
+              /*
+               * A written note is shown to every reader; the invitation to
+               * write one appears only while editing, or a list of glyphs
+               * grows a row of "Add a note" under items nobody meant to annotate.
+               */
+              noteFor={(item) => notes.noteFor(item as ListPageItem)}
+              onEditNote={editing && canEdit && !list.tag ? (item) => notes.edit(item as ListPageItem) : undefined}
               onOpen={(index) =>
                 openViewGlyphViewer({
                   items: visible,
@@ -313,6 +324,17 @@ export default function ListPageView({
 
       {viewer.isOwner && !list.tag && list.visibility === LIST_VISIBILITIES.private ? (
         <p className="text-center text-xs font-semibold text-foreground/60">{STUDY_LIST_COPY.privateNotice}</p>
+      ) : null}
+
+      {notes.open ? (
+        <ListItemNoteEditor
+          glyph={notes.open.characters}
+          note={notes.noteFor(notes.open)}
+          saving={notes.saving}
+          error={notes.error}
+          onSave={(note) => void notes.save(note)}
+          onClose={notes.close}
+        />
       ) : null}
     </div>
   );

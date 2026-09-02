@@ -32,6 +32,10 @@ export type StudyListItemRef = {
   key: string;
   /** WaniKani's id, where the catalogue names it. */
   subjectId?: number | null;
+  /** Why it is here, in the words of whoever added it. */
+  note?: string | null;
+  /** Who put it here, kept across a rewrite of the list's rows. */
+  addedByAccountId?: string | null;
 };
 
 export type StudyListSummary = {

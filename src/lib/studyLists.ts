@@ -24,7 +24,7 @@ import {
  * which the browser can import; this file is the reading and writing of them.
  */
 
-const ITEM_SELECT = { kind: true, key: true, subjectId: true } as const;
+const ITEM_SELECT = { kind: true, key: true, subjectId: true, note: true } as const;
 
 const LIST_SELECT = {
   id: true,
@@ -220,7 +220,14 @@ export async function replaceListItems(
         key: item.key,
         subjectId: item.subjectId ?? null,
         position,
-        addedByAccountId,
+        /*
+         * A note belongs to the item, not to the write that happened to touch
+         * the list. This rewrites every row, so an item arriving without its
+         * note - because a caller selected the columns it cared about and no
+         * more - would lose it the moment somebody removed a different item.
+         */
+        note: item.note ?? null,
+        addedByAccountId: item.addedByAccountId ?? addedByAccountId,
       })),
     }),
     prisma.studyList.update({ where: { id: listId }, data: { updatedAt: new Date() } }),

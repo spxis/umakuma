@@ -22,6 +22,14 @@ type Props<TRow extends SubjectListRow> = {
   /** Floats over the card's top-left. History puts the result mark here. */
   renderBadge?: (row: TRow) => ReactNode;
   /**
+   * Under the card rather than over it, and outside the button.
+   *
+   * A note is prose - it wraps, and it must not be laid over the glyph the
+   * card exists to show. Being a sibling of the button also keeps a control
+   * placed here from sitting inside another control.
+   */
+  renderUnder?: (row: TRow) => ReactNode;
+  /**
    * Choosing, when the surface offers it. Shift takes everything between the
    * last pick and this one, and the card's click picks rather than opens.
    */
@@ -41,6 +49,7 @@ export default function SubjectCards<TRow extends SubjectListRow>({
   onSelect,
   renderCorner,
   renderBadge,
+  renderUnder,
   selection,
 }: Props<TRow>) {
   if (rows.length === 0) return null;
@@ -108,6 +117,7 @@ export default function SubjectCards<TRow extends SubjectListRow>({
               <div className="absolute left-1.5 top-1.5">{renderBadge(row)}</div>
             ) : null}
             {renderCorner ? <div className="absolute bottom-1.5 right-1.5">{renderCorner(row)}</div> : null}
+            {renderUnder ? renderUnder(row) : null}
           </li>
         );
       })}
