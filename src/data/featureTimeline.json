@@ -2695,16 +2695,14 @@
   },
   {
     "id": "restful-urls",
-    "name": "RESTful URLs across the site",
+    "name": "The maps live at addresses that read",
     "area": "platform",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 38,
-    "summary": "Addresses should read as paths rather than query strings: the map is /map?region=21 for Gifu and should be /study/maps/japan/gifu or /japan/21. No compatibility redirects and no fake paths - breaking old URLs is fine. Applies site-wide, not only to the map. Requested 2026-09-02 by John.",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T11:10:12.799Z"
+    "summary": "A map was /map?region=21, which says nothing to a reader, a link in a chat or a search engine. A map is a place, so it is addressed as one: /maps, /maps/japan, /maps/japan/gifu, /maps/united-states/california, /maps/canada/ontario. Every part of it can be linked to on its own, choosing a region or a country writes the path, and the back button walks them. A path naming a country or a region that does not exist is a 404 rather than a quiet fall back to Japan. The old address is gone rather than redirected - a site with two addresses for one page has to explain which is the real one - which is the pattern the rest of the site's addresses will follow. Requested 2026-09-02 by John.",
+    "version": "0.262.0",
+    "releasedAt": "2026-09-02T11:25:28Z"
   },
   {
     "id": "lists-one-home",

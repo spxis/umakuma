@@ -81,10 +81,10 @@ describe("sectionForPath", () => {
     expect(sectionForPath("/lists", USER)?.id).toBe("lists");
   });
 
-  /* The map has no user segment - one map serves everyone - and is still an Explore page. */
-  it("puts the public map page in Explore", () => {
-    expect(sectionForPath("/map", USER)?.id).toBe("explore");
-    expect(sectionForPath("/map", null)?.id).toBe("explore");
+  /* The maps have no user segment - one map serves everyone - and are a Learn page. */
+  it("puts the public maps in the Learn group", () => {
+    expect(sectionForPath("/maps", USER)?.id).toBe("explore");
+    expect(sectionForPath("/maps", null)?.id).toBe("explore");
   });
 
   it("still resolves the explorer's old path", () => {

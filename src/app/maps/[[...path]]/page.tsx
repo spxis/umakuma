@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
 
+import { notFound } from "next/navigation";
+
 import mapIcon from "@/images/umakuma-2.png";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
-import { parseMapStudyAddress } from "@/lib/mapStudy";
+import { parseMapPath } from "@/lib/mapAddress";
 
-import MapStudy from "./MapStudy";
-import { MAP_STUDY_COPY } from "./MapStudy.constants";
+import MapStudy from "../MapStudy";
+import { MAP_STUDY_COPY } from "../MapStudy.constants";
 
 export const metadata: Metadata = {
   title: "Map — UmaKuma",
   description: "Learn Japan, the United States and Canada region by region: every prefecture, state and province and what it is known for.",
 };
 
-type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+type Props = { params: Promise<{ path?: string[] }> };
 
 /**
  * A large map to learn a country by, rather than only to be quizzed on.
@@ -24,8 +26,10 @@ type Props = { searchParams: Promise<Record<string, string | string[] | undefine
  * to. The country and the chosen region ride in the address for the same
  * reason.
  */
-export default async function MapStudyPage({ searchParams }: Props) {
-  const address = parseMapStudyAddress(await searchParams);
+export default async function MapStudyPage({ params }: Props) {
+  /* A path that names no country or no region is not a map; it is a 404. */
+  const address = parseMapPath((await params).path);
+  if (!address) notFound();
 
   return (
     <div className={PAGE_SHELL_PADDING}>

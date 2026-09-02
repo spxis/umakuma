@@ -1,6 +1,6 @@
 import { GEO_DATASETS, type GeoRegion } from "./geoRegion";
 import { getPrefectureMetadataByCode } from "./japanPrefectures";
-import { isMapCountry, type MapCountryCode } from "./mapCountries";
+import type { MapCountryCode } from "./mapCountries";
 
 /**
  * A map to learn a country by, rather than only to be quizzed on.
@@ -12,42 +12,13 @@ import { isMapCountry, type MapCountryCode } from "./mapCountries";
  * as maths so they can be tested without a browser.
  */
 
-export const MAP_STUDY_HREF = "/map";
-export const MAP_STUDY_PARAMS = { country: "country", region: "region" } as const;
 export const DEFAULT_MAP_COUNTRY: MapCountryCode = "JP";
-
-export type MapStudyAddress = { country: MapCountryCode; code: string | number | null };
-
-type ParamSource = URLSearchParams | Record<string, string | string[] | undefined>;
-
-function readParam(source: ParamSource, key: string): string | null {
-  if (source instanceof URLSearchParams) return source.get(key);
-  const value = source[key];
-  return (Array.isArray(value) ? value[0] : value) ?? null;
-}
 
 /** The region a code names, matched the way the address writes it. */
 export function regionByCode(country: MapCountryCode, raw: string | number | null): GeoRegion | null {
   if (raw === null || raw === "") return null;
   const wanted = String(raw).trim().toUpperCase();
   return GEO_DATASETS[country].regions.find((region) => String(region.code).toUpperCase() === wanted) ?? null;
-}
-
-/** What the address says, with Japan and nothing chosen when it says nothing. */
-export function parseMapStudyAddress(source: ParamSource): MapStudyAddress {
-  const rawCountry = readParam(source, MAP_STUDY_PARAMS.country)?.toUpperCase() ?? "";
-  const country: MapCountryCode = isMapCountry(rawCountry) ? rawCountry : DEFAULT_MAP_COUNTRY;
-  const region = regionByCode(country, readParam(source, MAP_STUDY_PARAMS.region));
-  return { country, code: region?.code ?? null };
-}
-
-/** The address for a view, saying only what is not the default. */
-export function mapStudyHref(country: MapCountryCode, code: string | number | null): string {
-  const params = new URLSearchParams();
-  if (country !== DEFAULT_MAP_COUNTRY) params.set(MAP_STUDY_PARAMS.country, country);
-  if (code !== null) params.set(MAP_STUDY_PARAMS.region, String(code));
-  const search = params.toString();
-  return search ? `${MAP_STUDY_HREF}?${search}` : MAP_STUDY_HREF;
 }
 
 /**

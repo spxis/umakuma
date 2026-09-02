@@ -9,7 +9,8 @@ import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import { GEO_DATASETS } from "@/lib/geoRegion";
 import { MAP_COUNTRIES, type MapCountryCode } from "@/lib/mapCountries";
-import { mapStudyHref, parseMapStudyAddress, regionByCode, regionsInOrder } from "@/lib/mapStudy";
+import { mapHref, parseMapPath } from "@/lib/mapAddress";
+import { regionByCode, regionsInOrder } from "@/lib/mapStudy";
 
 import MapRegionPanel from "./MapRegionPanel";
 import { MAP_STUDY_COPY, MAP_STUDY_HEIGHT } from "./MapStudy.constants";
@@ -53,14 +54,14 @@ export default function MapStudy({
 
   /* The address follows the choice, and the back button walks the choices. */
   useEffect(() => {
-    const next = mapStudyHref(country, code);
-    const current = `${window.location.pathname}${window.location.search}`;
-    if (next !== current) window.history.pushState(null, "", next);
+    const next = mapHref(country, code);
+    if (next !== window.location.pathname) window.history.pushState(null, "", next);
   }, [country, code]);
 
   useEffect(() => {
     const onPopState = () => {
-      const address = parseMapStudyAddress(new URLSearchParams(window.location.search));
+      const address = parseMapPath(window.location.pathname.replace(/^\/maps\/?/, "").split("/").filter(Boolean));
+      if (!address) return;
       setCountry(address.country);
       setCode(address.code);
     };
