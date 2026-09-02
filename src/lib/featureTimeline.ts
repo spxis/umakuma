@@ -54,11 +54,42 @@ export const FEATURE_STATUS_LABELS: Record<FeatureStatus, string> = {
   [FEATURE_STATUSES.killed]: "Killed",
 };
 
+/**
+ * What kind of work an entry is.
+ *
+ * A bug and a feature sit in the same queue and ship the same way, but a board
+ * that cannot tell them apart cannot say "three bugs are open" - which is the
+ * first thing anyone picking up work wants to know.
+ */
+export const FEATURE_KINDS = {
+  feature: "feature",
+  bug: "bug",
+} as const;
+
+export type FeatureKind = (typeof FEATURE_KINDS)[keyof typeof FEATURE_KINDS];
+
+export const FEATURE_KIND_VALUES = Object.values(FEATURE_KINDS);
+
+export function isFeatureKind(value: string): value is FeatureKind {
+  return (FEATURE_KIND_VALUES as string[]).includes(value);
+}
+
 export type FeatureTimelineEntry = {
   id: string;
   name: string;
   area: FeatureArea;
   status: FeatureStatus;
+  /** Feature unless said otherwise; older entries predate the field. */
+  kind?: FeatureKind;
+  /**
+   * Who is working on it right now, and since when.
+   *
+   * Several agents work this repository at once, and the queue is what they
+   * work from. An owner on a planned entry is the claim: it is in progress,
+   * and nobody else should start it. Cleared when it ships or is put down.
+   */
+  owner?: string;
+  claimedAt?: string;
   /** ISO calendar date, `YYYY-MM-DD`. */
   date: string;
   summary: string;
@@ -239,7 +270,7 @@ export function summarizeFeatureTimeline(
  * Validates the JSON at the boundary. A malformed entry is a build-time
  * mistake, so this throws rather than quietly dropping a feature from the page.
  */
-function parseEntries(raw: unknown): FeatureTimelineEntry[] {
+export function parseEntries(raw: unknown): FeatureTimelineEntry[] {
   if (!Array.isArray(raw)) {
     throw new Error("Feature timeline data must be an array.");
   }
@@ -274,11 +305,21 @@ function parseEntries(raw: unknown): FeatureTimelineEntry[] {
       throw new Error(`${where} ("${entry.id}") is missing a summary.`);
     }
 
+    if (entry.kind !== undefined && (typeof entry.kind !== "string" || !isFeatureKind(entry.kind))) {
+      throw new Error(`${where} ("${entry.id}") has an unknown kind.`);
+    }
+    if (entry.owner !== undefined && entry.status !== FEATURE_STATUSES.planned) {
+      throw new Error(`${where} ("${entry.id}") has an owner but is not planned; only planned work is claimed.`);
+    }
+
     return {
       id: entry.id,
       name: entry.name,
       area: entry.area,
       status: entry.status,
+      kind: typeof entry.kind === "string" && isFeatureKind(entry.kind) ? entry.kind : undefined,
+      owner: typeof entry.owner === "string" && entry.owner.trim() ? entry.owner.trim() : undefined,
+      claimedAt: typeof entry.claimedAt === "string" ? entry.claimedAt : undefined,
       date: entry.date,
       summary: entry.summary,
       dateIsEstimate: entry.dateIsEstimate === true,

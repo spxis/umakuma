@@ -193,10 +193,22 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   own, and is released on its own. Do not batch unrelated features into a single
   commit or a single deploy — a batched release cannot be reverted without taking
   working features down with the broken one.
-- `docs/BACKLOG.md` is the live plan: the release order, dependencies and open
-  decisions. Feature names and dates live in `src/data/featureTimeline.json`,
-  which also feeds the admin release page at `/admin/releases`. Record a new
-  feature in the JSON, not in two places.
+- **The timeline is the ticket board, and every agent works from it.** Several
+  sessions work this repository at once and cannot see each other; the JSON is
+  the one thing they all read. So: every request, bug or idea John sends becomes
+  a planned entry *before* the work starts (`pnpm backlog add <id> <area>
+  "<name>" "<summary>" [bug]`), an agent claims an entry *before* building it
+  (`pnpm backlog claim <id> "<who>"`) and puts it down if it stops
+  (`pnpm backlog release <id>`), and `pnpm backlog` shows what is open and who
+  holds it. A claim cannot be taken over; ask the holder to release it. Shipping
+  an entry clears the claim. Use the script rather than editing the JSON by
+  hand - it takes a free release number, today's Vancouver date and the file's
+  own escaping, which are the three things that went wrong by hand.
+- `docs/BACKLOG.md` carries the reasoning the JSON has no room for: why an item
+  exists, what it depends on, what has to be decided first. Feature names,
+  dates and status live in `src/data/featureTimeline.json`, which also feeds
+  the admin release page at `/admin/releases`. Record a new feature in the
+  JSON, not in two places.
 - **Every release bumps the site version.** A shipped feature's timeline entry
   gets the next `0.N.0`, and `package.json` plus `APP_VERSION` in
   `src/lib/appVersion.ts` move with it — the timeline unit test fails

@@ -2249,7 +2249,8 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 4,
-    "summary": "The signup page runs its radio choices full width, one per line, in a column of empty space. Reported 2026-09-01. Two or more columns, or a layout that uses the width for something."
+    "summary": "The signup page runs its radio choices full width, one per line, in a column of empty space. Reported 2026-09-01. Two or more columns, or a layout that uses the width for something.",
+    "kind": "bug"
   },
   {
     "id": "articles-menu-clipping",
@@ -2259,7 +2260,8 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 5,
-    "summary": "On the admin articles page the user menu is cut off when opened - an overflow or stacking context on an ancestor clips it. Reported 2026-09-01."
+    "summary": "On the admin articles page the user menu is cut off when opened - an overflow or stacking context on an ancestor clips it. Reported 2026-09-01.",
+    "kind": "bug"
   },
   {
     "id": "explorer-filters-addressable",
@@ -2369,6 +2371,28 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 1,
-    "summary": "Every credit on the site links straight out to its vendor. It should link first to a page of our own: one tab per source - WaniKani, KANJIDIC2, KanjiVG, kanjiapi.dev, Tatoeba - showing when its data was last imported, a summary of what we hold from it (how many subjects, sentences, characters, which release), the licence and its terms, and only then the link out. A reader can browse the other sources from the same page. Requested 2026-09-01."
+    "summary": "Every credit on the site links straight out to its vendor. It should link first to a page of our own: one tab per source - WaniKani, KANJIDIC2, KanjiVG, kanjiapi.dev, Tatoeba - showing when its data was last imported, a summary of what we hold from it (how many subjects, sentences, characters, which release), the licence and its terms, and only then the link out. A reader can browse the other sources from the same page. Requested 2026-09-01.",
+    "owner": "fable/subject-pages",
+    "claimedAt": "2026-09-02T03:15:48.949Z"
+  },
+  {
+    "id": "readings-labelled-in-japanese",
+    "area": "study",
+    "name": "On and kun, labelled in Japanese",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 14,
+    "summary": "The reading labels say On readings and Kun readings in English only. Show \u97f3\u8aad\u307f and \u8a13\u8aad\u307f (and \u540d\u4e57\u308a) beside them, so a student asked about on'yomi on a test has seen the word here. Site-wide, on readings are shown in katakana and kun in hiragana, the way the dictionary block already does; and where there is room, the romaji beside each, so someone still weak in kana can read the reading. Requested 2026-09-01."
+  },
+  {
+    "id": "ticket-board",
+    "area": "platform",
+    "name": "The timeline is the ticket board",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "releasedAt": "2026-09-02T03:16:20Z",
+    "version": "0.225.0",
+    "summary": "Several agents work this repository at once, in sessions that cannot see each other, and requests were being tracked in the chat that received them - which is how a fix could ship for something nobody had written down, and how two sessions could build the same thing. The timeline JSON was already the one file they all read, so it is now the board. Every request, bug or idea goes in before the work starts, through pnpm backlog add, which takes a free ordering number, today's Vancouver date and the file's own escaping - the three things that went wrong when the file was edited by hand. An agent claims an entry before building it and puts it down if it stops; a claim cannot be taken over, only released. pnpm backlog prints what is open, what is in progress and who holds it, and how many are bugs, because a bug and a feature now say which they are. The admin release page shows the same claim and the same bug flag on each planned row. The rule is written into the agent instructions, so it holds for the next session as well as this one."
   }
 ]

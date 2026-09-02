@@ -13,6 +13,8 @@ export const RELEASE_TIMELINE_COPY = {
   shippedLabel: "released",
   plannedLabel: "planned",
   emptyPlanned: "Nothing queued.",
+  inProgress: "In progress",
+  bug: "Bug",
   shelvedHeading: "Shelved",
   shelvedLegend:
     "Backlogged means parked but still wanted; killed means decided against. Both stay on the record rather than vanishing.",

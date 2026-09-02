@@ -7,6 +7,7 @@ import {
   formatFeatureDate,
   groupFeaturesByMonth,
   type FeatureTimelineEntry,
+  FEATURE_KINDS,
 } from "@/lib/featureTimeline";
 
 import { RELEASE_AREA_CLASSES, RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
@@ -75,6 +76,21 @@ function FeatureRow({
           {showEstimateFlag && entry.dateIsEstimate ? (
             <span className="inline-flex items-center rounded-full border border-line bg-surface-muted px-2 py-0.5 text-[11px] font-semibold text-foreground/60">
               {RELEASE_TIMELINE_COPY.estimateNote}
+            </span>
+          ) : null}
+
+          {/* The board fields: a bug reads as a bug, and a claim says who. */}
+          {entry.kind === FEATURE_KINDS.bug ? (
+            <span className="inline-flex items-center rounded-full border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 text-[11px] font-semibold text-rose-600">
+              {RELEASE_TIMELINE_COPY.bug}
+            </span>
+          ) : null}
+          {entry.owner ? (
+            <span
+              title={entry.claimedAt}
+              className="inline-flex items-center rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-700"
+            >
+              {RELEASE_TIMELINE_COPY.inProgress} · {entry.owner}
             </span>
           ) : null}
         </div>

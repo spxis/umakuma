@@ -9,6 +9,7 @@ import {
   groupFeaturesByMonth,
   isIsoDate,
   loadFeatureTimeline,
+  parseEntries,
   sortFeaturesByRelease,
   sortFeaturesNewestFirst,
   summarizeFeatureTimeline,
@@ -317,5 +318,26 @@ describe("when a release says it shipped", () => {
         `${entry.version} is dated ${entry.date} but its timestamp is ${vancouverDay} in Vancouver`,
       ).toBe(entry.date);
     }
+  });
+});
+
+/*
+ * The board fields. An owner is a claim - it is in progress, and nobody else
+ * starts it - so it is only meaningful on planned work.
+ */
+describe("claimed work", () => {
+  it("reads kind, owner and when it was claimed", () => {
+    const parsed = parseEntries([
+      { ...entry({ status: FEATURE_STATUSES.planned, release: 1 }), kind: "bug", owner: "opus/search", claimedAt: "2026-09-02T03:00:00Z" },
+    ]);
+    expect(parsed[0]).toMatchObject({ kind: "bug", owner: "opus/search", claimedAt: "2026-09-02T03:00:00Z" });
+  });
+
+  it("refuses a claim on anything but planned work", () => {
+    expect(() => parseEntries([{ ...entry(), owner: "anyone" }])).toThrow(/only planned work is claimed/);
+  });
+
+  it("refuses a kind it does not know", () => {
+    expect(() => parseEntries([{ ...entry(), kind: "chore" }])).toThrow(/unknown kind/);
   });
 });
