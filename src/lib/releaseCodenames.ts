@@ -310,6 +310,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yuruyaka na Soroi", ja: "緩やかな揃い", reading: "ゆるやかなそろい", gloss: "every page in the same clothes" },
   { romaji: "Yosooi wo Awaseru", ja: "装いを合わせる", reading: "よそおいをあわせる", gloss: "the same top on every page" },
   { romaji: "Rakuraku Modoreru", ja: "楽々戻れる", reading: "らくらくもどれる", gloss: "the address brings you back" },
+  { romaji: "Rikai shiyasui", ja: "理解しやすい", reading: "りかいしやすい", gloss: "a panel you can actually read" },
 ];
 
 /**

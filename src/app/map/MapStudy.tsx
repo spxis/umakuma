@@ -112,7 +112,15 @@ export default function MapStudy({
               {entry.label}
             </button>
           ))}
-          <span className="ml-auto min-h-5 text-xs font-semibold text-foreground/60" aria-live="polite">
+          {/*
+            * One line, always. Pointing at a long name used to wrap this and
+            * push the map down, so the whole board moved under the pointer.
+            */}
+          <span
+            className="ml-auto min-w-0 flex-1 truncate text-right text-xs font-semibold text-foreground/60"
+            title={hoveredRegion ? regionLabel(hoveredRegion.code) : undefined}
+            aria-live="polite"
+          >
             {hoveredRegion ? regionLabel(hoveredRegion.code) : wide ? MAP_STUDY_COPY.hint : MAP_STUDY_COPY.hintTouch}
           </span>
         </div>
@@ -160,7 +168,12 @@ export default function MapStudy({
       </section>
 
       {/* Wide: beside the map. Narrow: over it, and only while something is chosen. */}
-      <aside className="hidden overflow-hidden rounded-3xl border border-line bg-surface shadow-sm lg:block lg:max-h-[80vh]">
+      {/*
+        * A definite height, so the panel's own body can scroll. With only a
+        * max-height the body grew past it and the card clipped whatever came
+        * after - the emblem and everything under it could not be read at all.
+        */}
+      <aside className="hidden overflow-hidden rounded-3xl border border-line bg-surface shadow-sm lg:sticky lg:top-4 lg:flex lg:h-[calc(100vh-2rem)] lg:flex-col">
         {panel ?? (
           <div className="px-5 py-8 text-center">
             <p className="text-sm font-black text-foreground">{MAP_STUDY_COPY.nothingChosen}</p>

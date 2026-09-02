@@ -22,14 +22,14 @@ const HEADING = "text-[11px] font-black uppercase tracking-[0.12em] text-foregro
 
 function Group({ group }: { group: FactGroup }) {
   return (
-    <section className="space-y-1.5">
+    <section className="space-y-2">
       <h3 className={HEADING}>{group.heading}</h3>
       {group.facts ? (
-        <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
           {group.facts.map((row) => (
             <div key={row.label} className="contents">
-              <dt className="font-semibold text-foreground/60">{row.label}</dt>
-              <dd className="font-bold text-foreground">
+              <dt className="font-medium text-foreground/60">{row.label}</dt>
+              <dd className="font-semibold text-foreground/90">
                 {row.value}
                 {row.native ? (
                   <span lang="ja" translate="no" className={`ml-1.5 font-semibold text-foreground/70 ${JP_TEXT_CLASS}`}>
@@ -42,12 +42,13 @@ function Group({ group }: { group: FactGroup }) {
         </dl>
       ) : null}
       {group.items ? (
-        <ul className="space-y-1 text-sm">
+        <ul className="space-y-1.5 text-sm">
           {group.items.map((item, index) => (
-            <li key={item} className="font-semibold text-foreground">
+            <li key={item} className="font-medium leading-snug text-foreground/90">
               {item}
+              {/* The Japanese on its own line, quieter: a fact and its twin, not one long run. */}
               {group.itemsNative?.[index] ? (
-                <span lang="ja" translate="no" className={`ml-1.5 text-foreground/70 ${JP_TEXT_CLASS}`}>
+                <span lang="ja" translate="no" className={`mt-0.5 block text-xs text-foreground/60 ${JP_TEXT_CLASS}`}>
                   {group.itemsNative[index]}
                 </span>
               ) : null}
@@ -64,7 +65,7 @@ export default function MapRegionPanel({ region, onClose }: { region: GeoRegion;
   const groups = regionFacts(region);
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex min-h-0 flex-1 flex-col">
       <header className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
         <div className="min-w-0">
           {region.nameNative && region.nameNative !== region.name ? (
@@ -92,7 +93,7 @@ export default function MapRegionPanel({ region, onClose }: { region: GeoRegion;
         ) : null}
       </header>
 
-      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 py-4">
+      <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-4">
         {kanji.length > 0 ? (
           <section className="space-y-1.5">
             <h3 className={HEADING}>{MAP_STUDY_COPY.writtenWith}</h3>

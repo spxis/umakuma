@@ -2722,7 +2722,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 41,
-    "summary": "Searching Morning returns the word and the radical but never the kanji it names, so the one thing a learner asked for is the one thing missing. Reported 2026-09-02 by John."
+    "summary": "Searching Morning returns the word and the radical but never the kanji it names, so the one thing a learner asked for is the one thing missing. Reported 2026-09-02 by John.",
+    "owner": "Other agent (John's parallel session)",
+    "claimedAt": "2026-09-02T10:59:02.072Z"
   },
   {
     "id": "add-to-lists-everywhere",
@@ -2744,7 +2746,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 43,
-    "summary": "Typing 14.40 CAD or 23 EUR answers with the amount in yen, and a yen amount answers in the other direction. Needs a rate source that will not throttle. Requested 2026-09-02 by John."
+    "summary": "Typing 14.40 CAD or 23 EUR answers with the amount in yen, and a yen amount answers in the other direction. Needs a rate source that will not throttle. Requested 2026-09-02 by John.",
+    "owner": "Other agent (John's parallel session)",
+    "claimedAt": "2026-09-02T10:59:01.477Z"
   },
   {
     "id": "search-japanese-numbers",
@@ -2766,7 +2770,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 45,
-    "summary": "Typing Heisei 3, Showa 40 or \u4ee4\u548c6\u5e74 answers with the Western year and the era in kanji, as its own line of results. Requested 2026-09-02 by John."
+    "summary": "Typing Heisei 3, Showa 40 or \u4ee4\u548c6\u5e74 answers with the Western year and the era in kanji, as its own line of results. Requested 2026-09-02 by John.",
+    "owner": "Other agent (John's parallel session)",
+    "claimedAt": "2026-09-02T10:59:00.884Z"
   },
   {
     "id": "list-one-view",
@@ -2899,5 +2905,16 @@
     "summary": "Choosing a game kept it in the client, so the address never moved: a reload dropped a member back at the hub, the back button left the page entirely, and a game could not be linked to. The game is in the path now - /users/<member>/game/practice - written when a game opens and cleared when the hub returns, so a reload lands where you were, back walks from a game to the hub, and a link opens the game it names. The names in the address are the ones a member reads rather than the ones the database stores, which cannot be renamed; a name that is not a game is a 404 rather than a quiet fall back to the hub. Reported 2026-09-02 by John.",
     "version": "0.259.0",
     "releasedAt": "2026-09-02T10:56:40Z"
+  },
+  {
+    "id": "map-sidebar-ux",
+    "name": "The map's region panel cannot be scrolled",
+    "area": "platform",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Choosing a region filled a panel taller than the card that held it, and the card clipped the overflow rather than scrolling it, so the emblem and everything under it could not be read at all. The panel is given a real height beside the map and scrolls within itself, and it stays put while the region list scrolls past. Its text was set at one weight throughout, which made a page of facts read as a page of shouting: the labels are quiet, the values are not, each fact's Japanese sits on its own line under the English rather than running on, and the blocks have room between them. The hint above the map is one line now, whatever it says - pointing at a long name used to wrap it and push the map down, moving the whole board under the pointer. Reported 2026-09-02 by John with screenshots.",
+    "version": "0.260.0",
+    "releasedAt": "2026-09-02T11:01:52Z"
   }
 ]
