@@ -140,6 +140,8 @@ export const STUDY_LIST_COPY = {
   mergeRemoveSources: "Clear the sources away",
   mergeFailed: "Could not merge those lists.",
   reloadForApplied: "Reload to see them here.",
+  signOut: "Sign out",
+  signingOut: "Signing out...",
 
   /* Other members changing a list. */
   contributionsLabel: "Who can add",

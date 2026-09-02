@@ -2857,5 +2857,16 @@
     "summary": "The header group called Explore is where a member goes to learn - the two explorers, the school grades, the practice sheets, the maps - so it is called Learn. The maps entry is called Maps, since there are three countries behind it and more to come, and the page names itself the same way. Requested 2026-09-02 by John.",
     "version": "0.254.0",
     "releasedAt": "2026-09-02T10:13:08Z"
+  },
+  {
+    "id": "signout-immediate",
+    "name": "Logout does not log you out",
+    "area": "account",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Pressing Sign out in the account menu led to a page with Logout and Join as tabs above it and Cancel beside the button, so a member who had asked to leave was still signed in and had no way to tell from looking. The menu signs you out there and then and lands on the home page. It is a button rather than a link, because a link to a page that ends a session would be prefetched on hover and hovering a menu must not sign anybody out. The page itself is still there for anybody who arrives at it directly, without the two tabs, and it says plainly that you are still signed in until you press the button. Reported 2026-09-02 by John.",
+    "version": "0.255.0",
+    "releasedAt": "2026-09-02T10:19:51Z"
   }
 ]

@@ -1,5 +1,6 @@
 "use client";
 
+import SignOutMenuItem from "@/app/shared/SignOutMenuItem";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -272,9 +273,7 @@ export default function UserHeaderMenu({
             ) : null}
 
             {viewerMenuInfo?.provider === "google" ? (
-              <Link href="/signout?callbackUrl=/" role="menuitem" className={MENU_ITEM_CLASS}>
-                Sign out
-              </Link>
+              <SignOutMenuItem className={MENU_ITEM_CLASS} />
             ) : viewerMenuInfo?.provider === "invite" ? (
               <InviteSessionActions buttonClassName={MENU_ITEM_CLASS} />
             ) : (

@@ -4,11 +4,6 @@ import Link from "next/link";
 import { authOptions } from "@/lib/auth";
 import SignOutActionButton from "./SignOutActionButton";
 
-const TAB_BASE_CLASS =
-  "inline-flex h-9 items-center justify-center rounded-full px-4 text-xs font-black uppercase tracking-[0.12em] transition";
-const TAB_ACTIVE_CLASS = "border border-line bg-surface text-foreground";
-const TAB_INACTIVE_CLASS = "text-foreground/70 hover:bg-surface";
-
 type PageProps = {
   searchParams: Promise<{
     callbackUrl?: string | string[];
@@ -53,25 +48,15 @@ export default async function SignOutPage({ searchParams }: PageProps) {
         </Link>
 
         <section className="animate-enter rounded-2xl border border-line bg-surface/90 p-6 shadow-[0_24px_80px_rgba(15,111,255,0.15)] backdrop-blur sm:p-8">
-          <div className="mb-5 inline-flex rounded-full border border-line bg-surface-muted p-1">
-            <Link
-              href="/logout"
-              aria-current="page"
-              className={`${TAB_BASE_CLASS} ${TAB_ACTIVE_CLASS}`}
-            >
-              Logout
-            </Link>
-            <Link
-              href="/join"
-              className={`${TAB_BASE_CLASS} ${TAB_INACTIVE_CLASS}`}
-            >
-              Join
-            </Link>
-          </div>
-
           <h1 className="text-4xl leading-[0.95] text-foreground sm:text-5xl">Sign out</h1>
+          {/*
+            * Said plainly, because the page used to leave a member unsure
+            * whether pressing Logout in the menu had done anything: it had
+            * not, and the tabs above this offered Join beside it.
+            */}
           <p className="mt-3 text-sm text-slate-700 sm:text-base">
-            This will end your Google session for UmaKuma{clearAdmin ? " and clear remembered admin access on this device" : ""}.
+            You are still signed in. This ends your Google session for UmaKuma
+            {clearAdmin ? " and clears remembered admin access on this device" : ""}.
           </p>
 
           <div className="mt-2 w-full rounded-2xl border border-line bg-surface-muted p-4">
