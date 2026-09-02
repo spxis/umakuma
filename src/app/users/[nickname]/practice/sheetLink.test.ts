@@ -4,6 +4,8 @@ import { toPaginationPlacement } from "@/app/shared/paginationPlacement";
 
 import { DEFAULT_SHEET_SIZE, toSheetSize } from "./practiceCopy";
 import { parsePracticeTarget } from "./practiceAddress";
+import { PRACTICE_SOURCES } from "@/lib/practiceSourceKinds";
+
 import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "./sheetLink";
 
 /**
@@ -190,5 +192,75 @@ describe("a sheet link addresses what the page reads", () => {
     expect(href.split("?")[0]).toBe("/users/john/practice/grade/2");
     expect(href).toContain("size=large");
     expect(href).toContain("readings=1");
+  });
+});
+
+describe("the reference sheet's link", () => {
+  const base: SheetSettings = {
+    nickname: "john",
+    picked: "",
+    slug: null,
+    source: PRACTICE_SOURCES.grade,
+    grade: 1,
+    level: 1,
+    page: 1,
+    mode: "trace",
+    showModel: true,
+    showReadings: false,
+    showNumbers: true,
+    placement: PRACTICE_PAGINATION_DEFAULT,
+    size: DEFAULT_SHEET_SIZE,
+    choosing: false,
+    printAll: false,
+  };
+
+  /* The three sheets are one address with a mode, so a chosen one is a link. */
+  it("carries the mode, and leaves the default one out", () => {
+    expect(sheetHref(base, { mode: "reference" })).toContain("mode=reference");
+    expect(sheetHref(base, { mode: "strokes" })).toContain("mode=strokes");
+    expect(sheetHref(base, { mode: "trace" })).not.toContain("mode=");
+  });
+
+  it("keeps the rest of the sheet's setup when the mode changes", () => {
+    const set = { ...base, size: "small" as const, page: 3, showReadings: true };
+    const href = sheetHref(set, { mode: "reference" });
+    expect(href).toContain("mode=reference");
+    expect(href).toContain("size=small");
+    expect(href).toContain("readings=1");
+  });
+});
+
+describe("readings on the reference sheet", () => {
+  const reference: SheetSettings = {
+    nickname: "john",
+    picked: "",
+    slug: null,
+    source: PRACTICE_SOURCES.grade,
+    grade: 1,
+    level: 1,
+    page: 1,
+    mode: "reference",
+    showModel: true,
+    showReadings: true,
+    showNumbers: true,
+    placement: PRACTICE_PAGINATION_DEFAULT,
+    size: DEFAULT_SHEET_SIZE,
+    choosing: false,
+    printAll: false,
+  };
+
+  /*
+   * The two sheets disagree about the default, so the reference sheet has to
+   * write "off" down. Dropping it would let the default switch them back on
+   * and the checkbox would do nothing.
+   */
+  it("writes readings off, because off is not its default", () => {
+    expect(sheetHref(reference, { showReadings: false })).toContain("readings=0");
+    expect(sheetHref(reference, { showReadings: true })).toContain("readings=1");
+  });
+
+  it("still leaves the tracing sheet's default out", () => {
+    const trace = { ...reference, mode: "trace" as const, showReadings: false };
+    expect(sheetHref(trace, {})).not.toContain("readings=");
   });
 });

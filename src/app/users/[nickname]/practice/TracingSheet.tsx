@@ -30,7 +30,14 @@ export type TraceEntry = {
   viewBox: string;
 };
 
-export type SheetMode = "trace" | "strokes";
+/**
+ * What the sheet is for.
+ *
+ * `trace` and `strokes` are both sheets to write on; `reference` is the list
+ * printed to read, which is the other half of what somebody printing a list
+ * wants and the one the tracing sheet cannot be talked into being.
+ */
+export type SheetMode = "trace" | "strokes" | "reference";
 
 type Props = {
   entries: TraceEntry[];

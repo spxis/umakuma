@@ -96,7 +96,14 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
   if (next.mode !== "trace") parts.push(`mode=${next.mode}`);
 
   if (!next.showModel) parts.push("model=0");
+  /*
+   * Readings are off by default on a sheet to write on and on by default on
+   * the reference sheet, so "off" has to be written down there - otherwise
+   * turning them off drops the parameter, the default puts them back, and the
+   * checkbox reads as broken.
+   */
   if (next.showReadings) parts.push("readings=1");
+  else if (next.mode === "reference") parts.push("readings=0");
   if (!next.showNumbers) parts.push("numbers=0");
   if (next.placement !== PRACTICE_PAGINATION_DEFAULT) parts.push(`pager=${next.placement}`);
   if (next.size !== DEFAULT_SHEET_SIZE) parts.push(`size=${next.size}`);

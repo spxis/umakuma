@@ -347,6 +347,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Hoshii Meibo", ja: "欲しい名簿", reading: "ほしいめいぼ", gloss: "the list you wanted to see" },
   { romaji: "Mataseru Owari", ja: "待たせる終わり", reading: "またせるおわり", gloss: "the end of being kept waiting" },
   { romaji: "Mitorizu no Machikado", ja: "見取り図の街角", reading: "みとりずのまちかど", gloss: "a street corner with a map on it" },
+  { romaji: "Musubu Shiori", ja: "結ぶ栞", reading: "むすぶしおり", gloss: "the list, tied to what it means" },
 ];
 
 /**

@@ -2,12 +2,28 @@
 export const PRACTICE_SHEET_COPY = {
   heading: "Writing practice",
   subtitle: "Copy the first square, trace the faint ones, then write the rest yourself",
+  /*
+   * The reference sheet is not writing practice, so it does not say it is.
+   * The heading is the one thing on a printed page that says which sheet it
+   * is, and a member printing both wants to tell them apart in the folder.
+   */
+  referenceHeading: "Reference list",
+  referenceSubtitle: "The characters with their meanings and readings, to keep beside you",
   print: "Print",
   gradeLabel: "Grade",
   stroke: "stroke",
   strokes: "strokes",
   empty: "No kanji for that grade.",
   credit: "Stroke shapes from KanjiVG (CC BY-SA 3.0)",
+  /*
+   * The reference sheet draws no stroke shapes, so crediting KanjiVG on it
+   * would name a source it does not use. What it does show - the meanings and
+   * readings - is KANJIDIC2's, whose share-alike terms make the credit a
+   * condition rather than a courtesy.
+   */
+  referenceCredit: "Meanings and readings from KANJIDIC2 (CC BY-SA 4.0)",
+  /* The same control, named for what it does on a sheet that has no squares. */
+  columnsLabel: "Columns",
   perPage: "Characters",
   printName: "Name",
   printDate: "Date",
@@ -42,6 +58,7 @@ export const PRACTICE_SHEET_COPY = {
   modeLabel: "Sheet",
   modeTrace: "Trace",
   modeStrokes: "Stroke order",
+  modeReference: "Reference",
   phoneNoticeHeading: "This sheet wants a bigger screen",
   phoneNoticeBody:
     "The squares have to be large enough to write inside, which a phone cannot give. Open this on a tablet or print it. You can keep scrolling if you only want to look.",

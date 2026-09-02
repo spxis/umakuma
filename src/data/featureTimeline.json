@@ -2654,16 +2654,14 @@
   },
   {
     "id": "list-print",
-    "name": "Print a list from the lists page",
+    "name": "A reference sheet, to read rather than write on",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 35,
-    "summary": "Every list card and list page has a Print action that opens the list as a sheet: the items with meanings and readings, or the tracing sheet the practice pages already print, chosen at the click. Requested 2026-09-01 by John.",
-    "owner": "Claude (session 53e531a7)",
-    "claimedAt": "2026-09-02T16:12:27.791Z"
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Printing a list gave you squares to trace and nothing else. That is half of what somebody printing a list wants: the other half is the list itself - the characters with their meanings and readings - to keep beside the desk or hand to somebody. Reference is a third sheet beside Trace and Stroke order, at the same address with a mode, so a chosen sheet is still a link. It is a table rather than a grid, its readings are on by default because they are the point of it, it credits KANJIDIC2 rather than the stroke art it does not draw, and it does not tell a phone to find a bigger screen - reading is the one thing a phone does well. The columns collapse to one at 393px instead of setting each reading a character per line. The tracing half of this shipped as 0.291.0; this is the rest of it.",
+    "version": "0.297.0",
+    "releasedAt": "2026-09-02T16:32:06Z"
   },
   {
     "id": "list-merge",

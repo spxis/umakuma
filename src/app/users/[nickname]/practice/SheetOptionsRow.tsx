@@ -67,11 +67,18 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
     <nav className="mb-4 flex flex-wrap items-center gap-4 print:hidden">
       <span className={SHEET_CHIP.label}>{PRACTICE_SHEET_COPY.optionsLabel}</span>
 
-      <Checkbox
-        label={PRACTICE_SHEET_COPY.optionShowModel}
-        on={settings.showModel}
-        href={sheetHref(settings, { showModel: !settings.showModel })}
-      />
+      {/*
+        * The finished character in the first column is a tracing idea. A
+        * reference sheet is nothing but finished characters, so the control
+        * would toggle nothing and reads as broken.
+        */}
+      {settings.mode === "reference" ? null : (
+        <Checkbox
+          label={PRACTICE_SHEET_COPY.optionShowModel}
+          on={settings.showModel}
+          href={sheetHref(settings, { showModel: !settings.showModel })}
+        />
+      )}
       <Checkbox
         label={PRACTICE_SHEET_COPY.optionShowReadings}
         on={settings.showReadings}
@@ -89,7 +96,9 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
         * ones and many. The sheet only ever offered the child's.
         */}
       <span className={GROUP}>
-        <span className={`${SHEET_CHIP.label} mr-0.5`}>{PRACTICE_SHEET_COPY.sizeLabel}</span>
+        <span className={`${SHEET_CHIP.label} mr-0.5`}>
+          {settings.mode === "reference" ? PRACTICE_SHEET_COPY.columnsLabel : PRACTICE_SHEET_COPY.sizeLabel}
+        </span>
         {/*
           * Back to page one. A page holds a different number of characters at
           * each size - it is three sheets of paper, not a fixed count - so

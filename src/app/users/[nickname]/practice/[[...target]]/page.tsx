@@ -21,7 +21,8 @@ import PrintButton from "../PrintButton";
 import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_CHIP, SHEET_SIZES, toSheetSize, WANIKANI_MAX_LEVEL } from "../practiceCopy";
 import SheetOptionsRow from "../SheetOptionsRow";
 import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "../sheetLink";
-import TracingSheet, { type SheetMode } from "../TracingSheet";
+import SheetBody from "../SheetBody";
+import { type SheetMode } from "../TracingSheet";
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type PageProps = {
@@ -54,7 +55,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   }
   const query = await searchParams;
   const modeParam = typeof query.mode === "string" ? query.mode : null;
-  const mode: SheetMode = modeParam === "strokes" ? "strokes" : "trace";
+  const mode: SheetMode = modeParam === "strokes" || modeParam === "reference" ? modeParam : "trace";
   /*
    * The chooser is a URL state, not component state, so the page stays a
    * server component and a chosen sheet is still a link somebody can send or
@@ -67,7 +68,14 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
    * about which is better - that is what the checkboxes are for.
    */
   const showModel = firstValue(query.model) !== "0";
-  const showReadings = firstValue(query.readings) === "1";
+  /*
+   * Readings default off on a sheet to write on and on for the reference
+   * sheet, because the readings are most of what a reference sheet is for. A
+   * member who turns them off is still obeyed: the parameter is written
+   * either way once they touch the control.
+   */
+  const readingsParam = firstValue(query.readings);
+  const showReadings = readingsParam === null || readingsParam === undefined ? mode === "reference" : readingsParam === "1";
   /*
    * Numbering is on unless it is turned off, unlike the two above. A sheet is
    * something somebody is set to work through - "do twelve to twenty" needs
@@ -229,9 +237,11 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3 print:mb-2">
         <div className="min-w-0">
           <h1 className="text-xl font-black">
-            {PRACTICE_SHEET_COPY.heading} · {sheetLabel}
+            {mode === "reference" ? PRACTICE_SHEET_COPY.referenceHeading : PRACTICE_SHEET_COPY.heading} · {sheetLabel}
           </h1>
-          <p className="text-xs text-foreground/60 print:text-neutral-500">{PRACTICE_SHEET_COPY.subtitle}</p>
+          <p className="text-xs text-foreground/60 print:text-neutral-500">
+            {mode === "reference" ? PRACTICE_SHEET_COPY.referenceSubtitle : PRACTICE_SHEET_COPY.subtitle}
+          </p>
         </div>
 
         {/*
@@ -325,10 +335,12 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           })}
         </span>
 
-        <span className={`ml-2 mr-1 ${SHEET_CHIP.label}`}>{PRACTICE_SHEET_COPY.modeLabel}</span>
+        <span className="ml-2 flex items-center gap-1.5">
+        <span className={`mr-1 ${SHEET_CHIP.label}`}>{PRACTICE_SHEET_COPY.modeLabel}</span>
         {([
           ["trace", PRACTICE_SHEET_COPY.modeTrace],
           ["strokes", PRACTICE_SHEET_COPY.modeStrokes],
+          ["reference", PRACTICE_SHEET_COPY.modeReference],
         ] as const).map(([id, label]) => (
           <Link
             key={id}
@@ -338,6 +350,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
             {label}
           </Link>
         ))}
+        </span>
 
       </nav>
 
@@ -426,11 +439,16 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         * enough for a phone is too small to write a kanji inside, so the sheet
         * would look right and be useless. Nothing is blocked - it is a notice,
         * not a wall - and it does not print.
+        *
+        * The reference sheet has no squares and is meant to be read, which a
+        * phone does perfectly well, so it is not told to find a bigger screen.
         */}
-      <p className="mb-4 rounded-xl border border-line bg-surface-muted/60 p-3 text-xs text-foreground/70 sm:hidden print:hidden">
-        <span className="block font-black text-foreground">{PRACTICE_SHEET_COPY.phoneNoticeHeading}</span>
-        {PRACTICE_SHEET_COPY.phoneNoticeBody}
-      </p>
+      {mode === "reference" ? null : (
+        <p className="mb-4 rounded-xl border border-line bg-surface-muted/60 p-3 text-xs text-foreground/70 sm:hidden print:hidden">
+          <span className="block font-black text-foreground">{PRACTICE_SHEET_COPY.phoneNoticeHeading}</span>
+          {PRACTICE_SHEET_COPY.phoneNoticeBody}
+        </p>
+      )}
 
       <SurfacePagination
         slot="top"
@@ -441,32 +459,19 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         summary={pagerSummary}
       />
 
-      {entries.length === 0 ? (
-        <p className="rounded-xl border border-line p-4 text-sm">
-          {isTaggedPracticeSource(source) ? PRACTICE_SHEET_COPY.emptyTagged : PRACTICE_SHEET_COPY.empty}
-        </p>
-      ) : (
-        /*
-          * The sheet sits on its own surface, the way every other list on the
-          * site does. On paper the card is nothing: no border, no radius, no
-          * padding - the squares should start at the margin the printer gives
-          * them rather than inside a drawn box.
-          */
-        <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm print:rounded-none print:border-0 print:p-0 print:shadow-none">
-          <TracingSheet
-            entries={entries}
-            mode={mode}
-            showModel={showModel}
-            showReadings={showReadings}
-            size={size}
-            showNumbers={showNumbers}
-            startIndex={(page - 1) * pageSize + 1}
-          />
-        </div>
-      )}
+      <SheetBody
+        entries={entries}
+        source={source}
+        mode={mode}
+        showModel={showModel}
+        showReadings={showReadings}
+        showNumbers={showNumbers}
+        size={size}
+        startIndex={(page - 1) * pageSize + 1}
+      />
 
       <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-foreground/60 print:text-neutral-400">
-        <span>{PRACTICE_SHEET_COPY.credit}</span>
+        <span>{mode === "reference" ? PRACTICE_SHEET_COPY.referenceCredit : PRACTICE_SHEET_COPY.credit}</span>
         <span className="print:hidden">
           {PRACTICE_SHEET_COPY.perPage} {(page - 1) * pageSize + 1}–
           {(page - 1) * pageSize + entries.length} of {total}
