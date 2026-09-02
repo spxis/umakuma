@@ -3278,5 +3278,16 @@
     "summary": "The JLPT counts on the leaderboard need one static fact about each learned kanji - the character - and they were asking WaniKani for it in 200-id chunks. A member with fifteen hundred learned kanji cost eight sequential round trips on every stats computation, for data the local catalogue holds: production carries 2,102 kanji, which is every one WaniKani teaches. The catalogue answers now, in one query, and the API is kept only for ids it has never seen, so a subject added since the last sync is still counted rather than dropped. Assignments stay live, being the member's own state. The same shape the study queue and the kanji index already follow. Found 2026-09-02 while sweeping for per-render subject fetches.",
     "version": "0.298.0",
     "releasedAt": "2026-09-02T16:42:31Z"
+  },
+  {
+    "id": "jlpt-explorer-paint",
+    "name": "The JLPT explorer paints before it waits",
+    "area": "jlpt",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 66,
+    "summary": "What is left after 0.295.0 moved the subject lookups onto the catalogue. Two costs remain in the server render and both happen before anything is drawn: the whole JlptKanji table, 2,211 rows, is loaded on every request, and the member's WaniKani assignments are fetched and waited on. Assignments are live SRS state so they must come from the API, but they do not have to block the first paint - the grid can arrive with the catalogue's own data and take the member's stages when they land. The rows are the other half: the client already pages through them, so the server does not need to hand over all 2,211 to draw the first forty. Measured before this was split out: 5.6s for the JLPT explorer against 0.1s for the grade explorer."
   }
 ]
