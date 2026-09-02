@@ -39,7 +39,7 @@ export function suggestOptionId(listboxId: string, index: number): string {
 }
 
 /**
- * The dropdown under the header search: the ten best hits, one per glyph.
+ * The dropdown under the header search: the ten best hits, one per subject.
  *
  * Rows are options rather than links because focus never leaves the input -
  * the arrow keys move `activeIndex` and Enter picks, the combobox pattern.

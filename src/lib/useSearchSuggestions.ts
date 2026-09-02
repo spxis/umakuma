@@ -4,10 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
 import type { SearchHit, SearchResults } from "./globalSearch";
-import { SUGGEST_DEBOUNCE_MS, SUGGEST_LIMIT, dedupeByGlyph, suggestUrl } from "./globalSearchSuggest";
+import { SUGGEST_DEBOUNCE_MS, SUGGEST_LIMIT, dedupeByGlyphAndKind, suggestUrl } from "./globalSearchSuggest";
 
 export type SearchSuggestions = {
-  /** One ranked row per glyph, capped for the dropdown. */
+  /** One ranked row per subject, capped for the dropdown. */
   hits: SearchHit[];
   /** Every hit the full results page would show, for the footer count. */
   totalHits: number;
@@ -54,7 +54,7 @@ export function useSearchSuggestions(value: string, rows: number = SUGGEST_LIMIT
     { keepPreviousData: true, revalidateOnFocus: false },
   );
 
-  const hits = useMemo(() => dedupeByGlyph(data?.hits ?? [], rows), [data, rows]);
+  const hits = useMemo(() => dedupeByGlyphAndKind(data?.hits ?? [], rows), [data, rows]);
 
   return {
     hits,
@@ -63,7 +63,7 @@ export function useSearchSuggestions(value: string, rows: number = SUGGEST_LIMIT
     /*
      * A full list with more behind it. Short of the window means the answer
      * ran out, whatever the total says: the total counts every copy of a
-     * glyph, and these rows are one per glyph.
+     * subject, and these rows are one per subject.
      */
     hasMore: hits.length >= rows && (data?.totalHits ?? 0) > hits.length,
     loadingMore: Boolean(url) && isValidating && Boolean(data),

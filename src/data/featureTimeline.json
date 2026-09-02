@@ -2714,19 +2714,6 @@
     "releasedAt": "2026-09-02T09:48:41Z"
   },
   {
-    "id": "search-kanji-by-meaning",
-    "name": "Searching an English meaning misses the kanji",
-    "area": "study",
-    "kind": "bug",
-    "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 41,
-    "summary": "Searching Morning returns the word and the radical but never the kanji it names, so the one thing a learner asked for is the one thing missing. Reported 2026-09-02 by John.",
-    "owner": "Other agent (John's parallel session)",
-    "claimedAt": "2026-09-02T10:59:02.072Z"
-  },
-  {
     "id": "add-to-lists-everywhere",
     "name": "Add to lists wherever a kanji is shown",
     "area": "study",
@@ -2747,8 +2734,8 @@
     "dateIsEstimate": true,
     "release": 43,
     "summary": "Typing 14.40 CAD or 23 EUR answers with the amount in yen, and a yen amount answers in the other direction. Needs a rate source that will not throttle. Requested 2026-09-02 by John.",
-    "owner": "Other agent (John's parallel session)",
-    "claimedAt": "2026-09-02T10:59:01.477Z"
+    "owner": "claude-parallel-build",
+    "claimedAt": "2026-09-02T10:58:28.716Z"
   },
   {
     "id": "search-japanese-numbers",
@@ -2771,8 +2758,8 @@
     "dateIsEstimate": true,
     "release": 45,
     "summary": "Typing Heisei 3, Showa 40 or \u4ee4\u548c6\u5e74 answers with the Western year and the era in kanji, as its own line of results. Requested 2026-09-02 by John.",
-    "owner": "Other agent (John's parallel session)",
-    "claimedAt": "2026-09-02T10:59:00.884Z"
+    "owner": "claude-parallel-build",
+    "claimedAt": "2026-09-02T10:58:28.103Z"
   },
   {
     "id": "list-one-view",
@@ -2916,5 +2903,16 @@
     "summary": "Choosing a region filled a panel taller than the card that held it, and the card clipped the overflow rather than scrolling it, so the emblem and everything under it could not be read at all. The panel is given a real height beside the map and scrolls within itself, and it stays put while the region list scrolls past. Its text was set at one weight throughout, which made a page of facts read as a page of shouting: the labels are quiet, the values are not, each fact's Japanese sits on its own line under the English rather than running on, and the blocks have room between them. The hint above the map is one line now, whatever it says - pointing at a long name used to wrap it and push the map down, moving the whole board under the pointer. Reported 2026-09-02 by John with screenshots.",
     "version": "0.260.0",
     "releasedAt": "2026-09-02T11:01:52Z"
+  },
+  {
+    "id": "search-kanji-by-meaning",
+    "name": "Searching an English meaning misses the kanji",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Searching an English meaning offered the word and never the character it names. \"Morning\" answered with the word \u671d, the radical \ud842\udd9d and eight rows besides, but not the kanji \u671d - and not from any of the three catalogues that teach it. The suggestion list keeps one row per glyph, which is right when the same kanji arrives from WaniKani, the JLPT table and the school grades: a ten-row list cannot spend three rows on \u65e5. But a glyph is not a subject. \u671d is a kanji and a word written the same way, so the word claimed the glyph and all three kanji rows behind it were read as copies and dropped; which of the two led was settled by nothing more than 3044 sorting ahead of 695 as text. Every single-character word hid its kanji the same way - \u6c34, \u5c71, \u4eba, \u5ddd. The row is a subject now rather than a spelling: the same kanji from three catalogues is still one row, while a kanji and a word that share a spelling are two, because they are two things with two pages behind them. Reported 2026-09-02 by John.",
+    "version": "0.264.0",
+    "releasedAt": "2026-09-02T11:44:11Z"
   }
 ]

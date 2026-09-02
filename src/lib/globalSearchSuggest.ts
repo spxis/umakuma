@@ -6,6 +6,7 @@ import {
   searchRequestUrl,
   type SearchHit,
 } from "./globalSearch";
+import { kindForHit } from "./searchKinds";
 
 /**
  * The header search's suggestion logic, kept pure so it tests without a DOM.
@@ -35,23 +36,23 @@ export function suggestRows(pages: number): number {
 }
 
 /**
- * The most rows one glyph can occupy before the dropdown collapses them.
+ * The most hits one row can collapse before the dropdown shows it.
  *
- * Three, not four: a glyph appears at most once per teaching catalogue, and
- * the dictionary answers only where none of them do, so a character is either
- * in the catalogues - up to three copies - or in the dictionary alone.
+ * Three, not four: the same kanji appears at most once per teaching catalogue,
+ * and the dictionary answers only where none of them do, so a character is
+ * either in the catalogues - up to three copies - or in the dictionary alone.
  */
-const COPIES_PER_GLYPH = SEARCH_SOURCE_VALUES.length - 1;
+const COPIES_PER_ROW = SEARCH_SOURCE_VALUES.length - 1;
 
 /**
  * The raw hits to ask for to be sure of filling that many rows.
  *
- * The dropdown keeps one row per glyph while the catalogues each hold their
+ * The dropdown keeps one row per subject while the catalogues each hold their
  * own copy of it, so ten raw hits can collapse into four rows. Asking for
  * three per row is the exact worst case rather than a guess.
  */
 export function suggestRawWindow(rows: number): number {
-  return rows * COPIES_PER_GLYPH;
+  return rows * COPIES_PER_ROW;
 }
 
 /**
@@ -72,7 +73,7 @@ export function isSuggestable(raw: string): boolean {
  *
  * The window grows rather than stepping - ten rows, then twenty, from offset
  * zero every time. Paging by offset would be fewer bytes, but the dropdown
- * keeps one row per glyph and a duplicate can straddle any boundary, so a
+ * keeps one row per subject and a duplicate can straddle any boundary, so a
  * superset is the only window that cannot reorder rows under the highlight.
  * The database does the same work either way; only the JSON is bigger.
  */
@@ -82,18 +83,32 @@ export function suggestUrl(raw: string, rows: number = SUGGEST_LIMIT): string | 
 }
 
 /**
- * One row per glyph, best hit first.
+ * One row per subject, best hit first.
  *
  * A common character sits in all three catalogues, and the results page rightly
  * shows every copy - but a ten-row dropdown cannot spend three rows on 日. The
  * hits arrive ranked, so keeping the first appearance keeps the best one.
+ *
+ * Deduping on the glyph alone was wrong, and it hid the answer: 朝 is both a
+ * kanji and a word written the same way, so searching "Morning" collapsed all
+ * four rows - the word and the kanji from each of the three catalogues - into
+ * the word, and the dropdown offered the word and the radical 𠦝 but never the
+ * character the query names. Which of the two led was decided by nothing more
+ * than 3044 sorting before 695 as text. That is true of most single-character
+ * words: 水, 山, 人, 川 all lost their kanji the same way.
+ *
+ * So the row is a subject, not a spelling. The same kanji from three
+ * catalogues is still one row - that is the duplication the dropdown cannot
+ * afford - while a kanji and a word that share a spelling are two, because
+ * they are two different things with two different pages behind them.
  */
-export function dedupeByGlyph(hits: SearchHit[], limit: number = SUGGEST_LIMIT): SearchHit[] {
+export function dedupeByGlyphAndKind(hits: SearchHit[], limit: number = SUGGEST_LIMIT): SearchHit[] {
   const kept: SearchHit[] = [];
   const seen = new Set<string>();
   for (const hit of hits) {
-    if (seen.has(hit.glyph)) continue;
-    seen.add(hit.glyph);
+    const row = `${kindForHit(hit)}:${hit.glyph}`;
+    if (seen.has(row)) continue;
+    seen.add(row);
     kept.push(hit);
     if (kept.length >= limit) break;
   }

@@ -314,6 +314,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Ruupu de Kakomu", ja: "ループで囲む", reading: "るーぷでかこむ", gloss: "the far islands, framed apart" },
   { romaji: "Renraku Michishirube", ja: "連絡道標", reading: "れんらくみちしるべ", gloss: "an address you can hand to somebody" },
   { romaji: "Rokusen Kazoe", ja: "六線数え", reading: "ろくせんかぞえ", gloss: "counted by the strokes it takes" },
+  { romaji: "Wasurenai Katahou", ja: "忘れない片方", reading: "わすれないかたほう", gloss: "a word and its kanji, both kept" },
 ];
 
 /**

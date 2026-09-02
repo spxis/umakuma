@@ -4,7 +4,7 @@ import { SEARCH_SOURCES, searchHitHref, type SearchHit } from "./globalSearch";
 import {
   SUGGEST_LIMIT,
   SUGGEST_MAX_PAGES,
-  dedupeByGlyph,
+  dedupeByGlyphAndKind,
   ghostFor,
   isSuggestable,
   suggestMinLength,
@@ -86,14 +86,14 @@ describe("suggestRows", () => {
 });
 
 describe("suggestRawWindow", () => {
-  it("asks for three hits a row, the most copies one glyph can have", () => {
+  it("asks for three hits a row, the most copies one subject can have", () => {
     expect(suggestRawWindow(10)).toBe(30);
   });
 });
 
-describe("dedupeByGlyph", () => {
-  it("keeps the first appearance of a glyph and drops later copies", () => {
-    const deduped = dedupeByGlyph([
+describe("dedupeByGlyphAndKind", () => {
+  it("keeps the first appearance of a kanji and drops the other catalogues' copies", () => {
+    const deduped = dedupeByGlyphAndKind([
       hit({ key: "wanikani:1", glyph: "日", score: 1000 }),
       hit({ key: "jlpt:日", glyph: "日", source: SEARCH_SOURCES.jlpt, score: 900 }),
       hit({ key: "grades:日", glyph: "日", source: SEARCH_SOURCES.grades, score: 900 }),
@@ -103,15 +103,40 @@ describe("dedupeByGlyph", () => {
     expect(deduped.map((item) => item.key)).toEqual(["wanikani:1", "wanikani:2"]);
   });
 
+  /*
+   * The reported bug: "Morning" offered the word 朝 and the radical 𠦝 and
+   * never the kanji 朝, because the word claimed the glyph first and every
+   * kanji row behind it was read as a duplicate.
+   */
+  it("keeps a kanji that a word is written the same way as", () => {
+    const deduped = dedupeByGlyphAndKind([
+      hit({ key: "wanikani:3044", glyph: "朝", subjectType: "vocabulary", meaning: "Morning", score: 900 }),
+      hit({ key: "wanikani:695", glyph: "朝", subjectType: "kanji", meaning: "Morning", score: 900 }),
+      hit({ key: "jlpt:朝", glyph: "朝", subjectType: "kanji", source: SEARCH_SOURCES.jlpt, score: 900 }),
+      hit({ key: "grades:朝", glyph: "朝", subjectType: "kanji", source: SEARCH_SOURCES.grades, score: 900 }),
+    ]);
+
+    expect(deduped.map((item) => item.key)).toEqual(["wanikani:3044", "wanikani:695"]);
+  });
+
+  it("keeps a radical drawn as the character a kanji uses", () => {
+    const deduped = dedupeByGlyphAndKind([
+      hit({ key: "wanikani:1", glyph: "十", subjectType: "kanji", score: 900 }),
+      hit({ key: "wanikani:2", glyph: "十", subjectType: "radical", score: 900 }),
+    ]);
+
+    expect(deduped.map((item) => item.subjectType)).toEqual(["kanji", "radical"]);
+  });
+
   it("caps the list at the suggestion limit", () => {
     const many = Array.from({ length: SUGGEST_LIMIT + 5 }, (_, index) =>
       hit({ key: `wanikani:${index}`, glyph: `glyph-${index}` }),
     );
-    expect(dedupeByGlyph(many)).toHaveLength(SUGGEST_LIMIT);
+    expect(dedupeByGlyphAndKind(many)).toHaveLength(SUGGEST_LIMIT);
   });
 
   it("preserves the incoming ranked order", () => {
-    const deduped = dedupeByGlyph([
+    const deduped = dedupeByGlyphAndKind([
       hit({ key: "a", glyph: "家" }),
       hit({ key: "b", glyph: "宅" }),
     ]);
