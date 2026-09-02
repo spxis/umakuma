@@ -3023,5 +3023,17 @@
     "dateIsEstimate": true,
     "release": 51,
     "summary": "100 dollars CAD and 500 Japanese yen name one amount in three tokens, and the parser takes at most one token on each side of the number, so both answer with nothing. Low value on its own; worth doing when the parser is next open. Noted 2026-09-02."
+  },
+  {
+    "id": "list-meta-nesting",
+    "name": "The facts line up where they belong",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 54,
+    "summary": "The line of facts shipped an hour earlier was drawn as a list, and two of the three surfaces that show it put it inside a paragraph - the list page header and the followed-list card. No browser allows a list inside a paragraph, so the markup the server sent and the markup the browser built disagreed, React gave up matching them and rebuilt the whole tree on hydration. It reads identically and is now spans, which are legal wherever prose is. Found by reading the browser console rather than the page, which is the only place this kind of fault says anything at all.",
+    "version": "0.278.0",
+    "releasedAt": "2026-09-02T13:48:38Z"
   }
 ]

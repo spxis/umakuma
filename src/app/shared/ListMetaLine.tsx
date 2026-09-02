@@ -43,19 +43,27 @@ export default function ListMetaLine({ facts, className = "" }: { facts: ListMet
 
   if (parts.length === 0) return null;
 
+  /*
+   * Spans rather than a list, because the callers are prose.
+   *
+   * A <ul> is the truer shape for a run of facts and it cannot go where these
+   * facts go: the list page header and the followed-list card both put this
+   * inside a <p>, which no browser allows, and React regenerated the whole tree
+   * on hydration rather than matching it.
+   */
   return (
-    <ul className={`flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] font-semibold text-foreground/60 ${className}`}>
+    <span className={`flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] font-semibold text-foreground/60 ${className}`}>
       {/*
         * The separator trails its fact rather than leading the next one. Both
         * read the same on one line; on a wrapped line a leading dot starts the
         * second row with punctuation, which reads as a bullet nobody meant.
         */}
       {parts.map((part, index) => (
-        <li key={part} className="flex items-center gap-2">
+        <span key={part} className="flex items-center gap-2">
           {part}
           {index < parts.length - 1 ? <span aria-hidden="true">·</span> : null}
-        </li>
+        </span>
       ))}
-    </ul>
+    </span>
   );
 }
