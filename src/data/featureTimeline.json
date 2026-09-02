@@ -2535,7 +2535,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 25,
-    "summary": "Lists nobody owns that write themselves from the catalogue and change when it does: Grade 1 to 6, JLPT N5 to N1, each WaniKani level, the prefecture names. Public, subscribable and copyable like any shared list, and treated the same way everywhere a list is taken. A copy is yours to cut down - half of Grade 1, or only the items you do not know yet. Requested 2026-09-01 by John; grew out of the starter-lists suggestion."
+    "summary": "Lists nobody owns that write themselves from the catalogue and change when it does: Grade 1 to 6, JLPT N5 to N1, each WaniKani level, the prefecture names. Public, subscribable and copyable like any shared list, and treated the same way everywhere a list is taken. A copy is yours to cut down - half of Grade 1, or only the items you do not know yet. Requested 2026-09-01 by John; grew out of the starter-lists suggestion.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T07:27:24.821Z"
   },
   {
     "id": "list-item-notes",
@@ -2657,5 +2659,16 @@
     "dateIsEstimate": true,
     "release": 36,
     "summary": "Two or more of your lists become one: choose the lists, the order they combine in and the name, see the union before it is made - items once each, kind kept - and decide whether the sources stay or go. Advanced list management. Requested 2026-09-02 by John."
+  },
+  {
+    "id": "list-viewer-owner-edit",
+    "name": "The list viewer edits, resets and says what it is",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Three things John found opening his own lists. Opening a saved list offered Choose and no way to take an item out - the remove button the Trouble and Favourites lists always had now works on a saved list too, in place. Choosing was remembered across lists, so closing one list and opening another opened it still choosing, with the first list's picks counted; choosing resets when a different list opens. And the viewer's title was the bare name with a '10 items' pill in the toolbar, so nothing said this was a saved list: the title now says Saved list above the name and carries the count beside it, and the search box has a clear button and offers the list's own items as they are typed, like the other search boxes. Reported 2026-09-02 by John.",
+    "version": "0.246.0",
+    "releasedAt": "2026-09-02T07:31:34Z"
   }
 ]

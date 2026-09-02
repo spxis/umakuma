@@ -296,6 +296,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nushi ga Kimeru", ja: "主が決める", reading: "ぬしがきめる", gloss: "the owner decides" },
   { romaji: "Nekasete Mamoru", ja: "寝かせて守る", reading: "ねかせてまもる", gloss: "put to rest, and kept for those who hold it" },
   { romaji: "Nokeru Kioku", ja: "除ける記憶", reading: "のけるきおく", gloss: "what you already know, set aside" },
+  { romaji: "Hazushite Modoru", ja: "外して戻る", reading: "はずしてもどる", gloss: "taken out, and back where you started" },
 ];
 
 /**

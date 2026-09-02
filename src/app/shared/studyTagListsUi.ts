@@ -27,6 +27,11 @@ export const STUDY_TAG_LIST_COPY = {
   applyWanikaniNone: "Nothing burned on WaniKani yet",
   applyWanikaniDone: (count: number) => (count === 0 ? "Already applied." : `Applied ${count}.`),
   applying: "Applying",
+  /* The viewer's title: what kind of list this is, and how big. */
+  savedListKicker: "Saved list",
+  builtInKicker: "Built-in lists",
+  clearSearch: "Clear search",
+  removeFromList: "Take out of this list",
   /* A saved list, opened from its card. */
   countSuffix: "items",
   countSuffixOne: "item",

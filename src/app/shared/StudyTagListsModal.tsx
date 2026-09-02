@@ -46,6 +46,7 @@ const VIEW_MODE_STORAGE_KEY = "wr:study-tag-lists:view-mode";
  * can walk the list from there.
  */
 const ALL_KINDS = "all";
+const SEARCH_OPTIONS_ID = "study-tag-lists-search-options";
 
 export default function StudyTagListsModal() {
   const [payload, setPayload] = useState<StudyTagListPayload | null>(null);
@@ -108,6 +109,17 @@ export default function StudyTagListsModal() {
     window.addEventListener(STUDY_TAG_LIST_EVENT, onOpen);
     return () => window.removeEventListener(STUDY_TAG_LIST_EVENT, onOpen);
   }, []);
+
+  /*
+   * A different list is a different choice. Choosing is remembered per
+   * surface, so without this the second list opened still choosing, with the
+   * first list's picks counted against it.
+   */
+  const { clear: clearSelection } = selection;
+  const openedKey = payload ? `${payload.list?.id ?? ""}:${payload.tag ?? ""}:${refreshKey}` : null;
+  useEffect(() => {
+    if (openedKey !== null) clearSelection();
+  }, [clearSelection, openedKey]);
 
   const closePanel = useCallback(() => {
     setPayload(null);
@@ -186,6 +198,19 @@ export default function StudyTagListsModal() {
     if (!saved) setRefreshKey((value) => value + 1);
   }, [accountId, tag]);
 
+  /* Taking an item out of your own saved list, from the viewer rather than the card. */
+  const removeFromSavedList = useCallback(async (item: StudyTagListItem) => {
+    if (!savedList) return;
+    setItems((current) => (current ?? []).filter((entry) => entry.subjectId !== item.subjectId));
+    const response = await fetch(`/api/study/${accountId}/lists/${savedList.id}/items`, {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ subjectId: item.subjectId }),
+    }).catch(() => null);
+    if (!response?.ok) setRefreshKey((value) => value + 1);
+    else window.dispatchEvent(new CustomEvent("wr:study-lists-updated", { detail: { accountId, listId: savedList.id } }));
+  }, [accountId, savedList]);
+
   if (!accountId) return null;
 
   return (
@@ -198,9 +223,20 @@ export default function StudyTagListsModal() {
       panelClassName="flex w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
     >
       <div className="flex items-center justify-between gap-3 border-b border-line bg-surface-muted px-3 py-2.5 sm:px-4">
-        <h2 className="truncate text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
-          {savedList ? savedList.name : STUDY_TAG_LIST_COPY.title}
-        </h2>
+        <div className="min-w-0">
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-accent">
+            {savedList ? STUDY_TAG_LIST_COPY.savedListKicker : STUDY_TAG_LIST_COPY.builtInKicker}
+          </p>
+          <h2 className="flex min-w-0 items-baseline gap-2 truncate text-sm font-black uppercase tracking-widest text-foreground/80 sm:text-base">
+            <span className="truncate">{savedList ? savedList.name : STUDY_TAG_LIST_COPY.title}</span>
+            {items !== null ? (
+              <span className="shrink-0 text-[11px] font-bold normal-case tracking-normal text-foreground/60">
+                {savedList ? items.length : counts[tag]}{" "}
+                {(savedList ? items.length : counts[tag]) === 1 ? STUDY_TAG_LIST_COPY.countSuffixOne : STUDY_TAG_LIST_COPY.countSuffix}
+              </span>
+            ) : null}
+          </h2>
+        </div>
         <button
           type="button"
           onClick={closePanel}
@@ -227,16 +263,7 @@ export default function StudyTagListsModal() {
             ]}
           />
         ) : null}
-        {savedList ? (
-          /* The list's own count, where the switch between the two tagged
-           * lists would otherwise sit - a switch that would only offer to
-           * leave the list just opened. */
-          <span className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70">
-            {`${visible.length} ${
-              visible.length === 1 ? STUDY_TAG_LIST_COPY.countSuffixOne : STUDY_TAG_LIST_COPY.countSuffix
-            }`}
-          </span>
-        ) : (
+        {savedList ? null : (
           <SegmentedControl
             ariaLabel={STUDY_TAG_LIST_COPY.title}
             size="md"
@@ -248,14 +275,35 @@ export default function StudyTagListsModal() {
             }))}
           />
         )}
-        <input
-          type="search"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder={STUDY_TAG_LIST_COPY.searchPlaceholder}
-          aria-label={STUDY_TAG_LIST_COPY.searchPlaceholder}
-          className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-bold text-foreground"
-        />
+        <span className="relative min-w-0 flex-1">
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            list={SEARCH_OPTIONS_ID}
+            placeholder={STUDY_TAG_LIST_COPY.searchPlaceholder}
+            aria-label={STUDY_TAG_LIST_COPY.searchPlaceholder}
+            className="h-9 w-full rounded-full border border-line bg-surface pl-4 pr-9 text-sm font-bold text-foreground [&::-webkit-search-cancel-button]:hidden"
+          />
+          {search ? (
+            <button
+              type="button"
+              onClick={() => setSearch("")}
+              aria-label={STUDY_TAG_LIST_COPY.clearSearch}
+              className="absolute right-2 top-1/2 inline-flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-sm font-black text-foreground/60 hover:bg-surface-muted"
+            >
+              ×
+            </button>
+          ) : null}
+          {/* What the list holds, offered as the reader types. */}
+          <datalist id={SEARCH_OPTIONS_ID}>
+            {(items ?? []).slice(0, 300).map((item) => (
+              <option key={item.subjectId} value={item.characters}>
+                {item.meanings[0] ?? ""}
+              </option>
+            ))}
+          </datalist>
+        </span>
         {tag !== STUDY_TAGS.burned || savedList ? (
           <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} />
         ) : null}
@@ -304,10 +352,7 @@ export default function StudyTagListsModal() {
               accountId,
               title: savedList ? savedList.name : STUDY_TAG_LIST_LABELS[tag],
             })}
-            /* Taking a character out of a saved list is Edit characters on the
-             * card; a second way to do it here would be a second thing to keep
-             * in step with the stored order. */
-            onRemove={savedList ? undefined : (item) => void removeTag(item)}
+            onRemove={savedList ? (item) => void removeFromSavedList(item) : (item) => void removeTag(item)}
           />
         )}
       </div>
