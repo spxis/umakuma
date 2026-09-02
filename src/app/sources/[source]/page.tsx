@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
-import { isSourceKey, SOURCE_CREDITS, SOURCE_KEY_VALUES } from "@/lib/sourceCredits";
+import { isSourceKey, SOURCE_CREDITS } from "@/lib/sourceCredits";
 import { loadSourceReport } from "@/lib/sourcePage";
 
 import SourceReportPanel from "../SourceReportPanel";
@@ -12,10 +12,15 @@ import { SOURCES_COPY } from "../Sources.constants";
 
 type Props = { params: Promise<{ source: string }> };
 
-/** Every source has a page; anything else is a 404, not a blank tab. */
-export function generateStaticParams() {
-  return SOURCE_KEY_VALUES.map((source) => ({ source }));
-}
+/*
+ * Rendered on request, never at build time.
+ *
+ * Three of the six reports read the database. Listing the sources as static
+ * params asked the build to prerender every page, and the build runs where
+ * there is no database - so the release that added this page failed in CI
+ * after passing a local build that happened to have one.
+ */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { source } = await params;

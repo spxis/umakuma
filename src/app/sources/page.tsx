@@ -10,6 +10,9 @@ import { describeFreshness, formatCount } from "@/lib/sourceReport";
 import SourceTabs from "./SourceTabs";
 import { SOURCE_DESCRIPTIONS, SOURCES_COPY } from "./Sources.constants";
 
+/* Reads the database; see the source page for why this is never prerendered. */
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: SOURCES_COPY.title,
   description: SOURCES_COPY.subtitle,
