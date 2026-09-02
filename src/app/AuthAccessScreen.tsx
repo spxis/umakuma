@@ -7,10 +7,11 @@ import GoogleSignInButton from "./GoogleSignInButton";
 import InviteCodeAccessPanel from "./InviteCodeAccessPanel";
 import type { AuthAccessScreenProps } from "./AuthAccessScreen.types";
 import type { InviteSessionStatus } from "./InviteCodeAccessPanel.types";
-import { canReachLeaderboard } from "./authAccess";
+import { canReachLeaderboard, newcomerLanding } from "./authAccess";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
 import { prisma } from "@/lib/prisma";
+import { loadSignupSettings } from "@/lib/signupSettingsServer";
 
 const TAB_BASE_CLASS =
   "inline-flex h-9 items-center justify-center rounded-full px-4 text-xs font-black uppercase tracking-[0.12em] transition";
@@ -80,10 +81,12 @@ export default async function AuthAccessScreen({
       redirect(`/users/${encodeURIComponent(redirectAddress)}?tab=study`);
     }
 
-    // No linked account at all is what sends someone to the invite form.
-    if (isGoogleSignedIn && !googleLinkedAccount && !viewerIsAdmin) {
-      redirect("/join");
-    }
+    // No linked account at all is what makes someone a newcomer.
+    const landing = newcomerLanding(
+      { isSignedIn: isGoogleSignedIn, isAdmin: viewerIsAdmin, hasLinkedAccount: Boolean(googleLinkedAccount) },
+      await loadSignupSettings(),
+    );
+    if (landing) redirect(landing);
   }
 
   /*

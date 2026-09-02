@@ -2453,13 +2453,11 @@
     "name": "A new Google sign-in lands on the invite-code page",
     "area": "account",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 23,
-    "summary": "A person signed in with Google for the first time and was taken to Join with invite code, with no way into the site and no way out but Sign out. The site is meant to be wide open to a Google account: once Google has said who they are, the site must open for them, and the invite page must never be shown to anyone signed in - not on arrival, and not on a refresh. Reported 2026-09-01 by John, signed in as a second Google account.",
-    "owner": "fable/subject-pages",
-    "claimedAt": "2026-09-02T04:24:21.171Z"
+    "summary": "Signing in with Google for the first time, with the site open to anyone, landed on Join with invite code - with no code, no way in and no way out but Sign out, and a refresh brought it straight back. The home page, the sign-in screen and the invite form itself each sent a signed-in viewer with no account to the invite form, while the page that actually creates an account was reachable only by typing its address. One rule now decides where such a viewer goes: the account page while signup is open, the invite form only when it is invite only. The invite form applies the rule too, so a newcomer cannot be shown it while the door is open, on arrival or on a refresh. Reported 2026-09-01 by John, signed in as a second Google account.",
+    "version": "0.233.0",
+    "releasedAt": "2026-09-02T04:44:02Z"
   },
   {
     "id": "winter-campaign-target-40k",

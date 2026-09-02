@@ -1,9 +1,11 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import { authOptions } from "@/lib/auth";
+import { authOptions, isAdminEmail } from "@/lib/auth";
+import { loadSignupSettings } from "@/lib/signupSettingsServer";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import AuthAccessScreen from "../AuthAccessScreen";
+import { JOIN_HREF, newcomerLanding } from "../authAccess";
 import { viewerAddress } from "@/app/shared/viewerAddress";
 
 type PageProps = {
@@ -37,6 +39,21 @@ export default async function JoinPage({ searchParams }: PageProps) {
   const address = viewerAddress(viewerMenuInfo);
   if (address) {
     redirect(`/users/${encodeURIComponent(address)}`);
+  }
+
+  /*
+   * A signed-in newcomer belongs on the page that creates their account, not
+   * on a form asking for a code, whenever the door is open. This is the guard
+   * that holds on a refresh: wherever they came from, this page will not show
+   * them the invite form while signup is open.
+   */
+  const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
+  const landing = newcomerLanding(
+    { isSignedIn: Boolean(viewerEmail), isAdmin: isAdminEmail(viewerEmail), hasLinkedAccount: false },
+    await loadSignupSettings(),
+  );
+  if (landing && landing !== JOIN_HREF) {
+    redirect(landing);
   }
 
   return <AuthAccessScreen activeTab="invite" accessDenied={isAccessDenied(query.access)} />;

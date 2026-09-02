@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { canReachLeaderboard, signedInLoginTarget } from "./authAccess";
+import { canReachLeaderboard, newcomerLanding, signedInLoginTarget } from "./authAccess";
+import { SIGNUP_MODES, SIGNUP_SETTING_DEFAULTS, type SignupSettings } from "@/lib/signupSettings";
 
 const viewer = (overrides: Partial<Parameters<typeof canReachLeaderboard>[0]> = {}) => ({
   isSignedIn: false,
@@ -34,6 +35,37 @@ describe("canReachLeaderboard", () => {
   // An admin is never redirected off home, so the link always works for them.
   it("keeps it for an admin even with no account of their own", () => {
     expect(canReachLeaderboard(viewer({ isSignedIn: true, isAdmin: true }))).toBe(true);
+  });
+});
+
+describe("newcomerLanding", () => {
+  const open: SignupSettings = { ...SIGNUP_SETTING_DEFAULTS, mode: SIGNUP_MODES.openImmediate };
+  const pending: SignupSettings = { ...SIGNUP_SETTING_DEFAULTS, mode: SIGNUP_MODES.openPending };
+  const closed: SignupSettings = { ...SIGNUP_SETTING_DEFAULTS, mode: SIGNUP_MODES.inviteOnly };
+  const newcomer = { isSignedIn: true, isAdmin: false, hasLinkedAccount: false };
+
+  /*
+   * The bug: the site was open to anyone, a new Google user signed in, and
+   * every page sent them to the invite form - which asks for a code nobody
+   * had given them.
+   */
+  it("sends a new Google user to the page that creates their account when signup is open", () => {
+    expect(newcomerLanding(newcomer, open)).toBe("/welcome");
+    expect(newcomerLanding(newcomer, pending)).toBe("/welcome");
+  });
+
+  it("never lands them on the invite form while the door is open", () => {
+    expect(newcomerLanding(newcomer, open)).not.toBe("/join");
+  });
+
+  it("sends them to the invite form only when signup is invite only", () => {
+    expect(newcomerLanding(newcomer, closed)).toBe("/join");
+  });
+
+  it("has nothing to say about a member, an admin or a signed-out visitor", () => {
+    expect(newcomerLanding({ ...newcomer, hasLinkedAccount: true }, open)).toBeNull();
+    expect(newcomerLanding({ ...newcomer, isAdmin: true }, open)).toBeNull();
+    expect(newcomerLanding({ ...newcomer, isSignedIn: false }, open)).toBeNull();
   });
 });
 

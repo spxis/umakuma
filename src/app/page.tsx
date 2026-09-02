@@ -20,6 +20,8 @@ import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
 import UmaKumaPageBanner from "./shared/UmaKumaPageBanner";
 import { viewerAddress } from "@/app/shared/viewerAddress";
+import { newcomerLanding } from "./authAccess";
+import { loadSignupSettings } from "@/lib/signupSettingsServer";
 export const dynamic = "force-dynamic";
 function getReadingChallengeMemberDelegate(): typeof prisma.readingChallengeMember | null {
   return prisma.readingChallengeMember;
@@ -74,7 +76,11 @@ export default async function Home() {
     sessionName: session?.user?.name?.trim() ?? null,
   });
   const canViewAllUserPages = isAdminEmail(viewerEmail);
-  if (viewerEmail && !canViewAllUserPages && !viewerAddress(viewerMenuInfo)) redirect("/join");
+  const landing = newcomerLanding(
+    { isSignedIn: Boolean(viewerEmail), isAdmin: canViewAllUserPages, hasLinkedAccount: Boolean(viewerAddress(viewerMenuInfo)) },
+    await loadSignupSettings(),
+  );
+  if (landing) redirect(landing);
   const viewerWkUsername = viewerAddress(viewerMenuInfo);
   /*
    * Signed in is not the same as being a member here: someone with a Google
