@@ -37,6 +37,17 @@ export const STUDY_LIST_COPY = {
   /* Shown on a list started here and not filled yet. */
   noCharactersYet: "Nothing in it yet — add characters from any explorer.",
   practise: "Practise these",
+  /*
+   * The writing sheet, called what it is.
+   *
+   * "Practise these" was the only thing a list offered and it opened a sheet
+   * of tracing squares, which is a worksheet - so a member looking for one
+   * could not tell that they already had it, and a member wanting to drill
+   * the list on screen found a printout instead.
+   */
+  worksheet: "Worksheet",
+  worksheetHint: "A writing sheet you can trace and print",
+  print: "Print",
 
   /*
    * Renaming happens in the card, not a dialog: the name is short, and what

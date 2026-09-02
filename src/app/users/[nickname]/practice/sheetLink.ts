@@ -1,5 +1,5 @@
 import type { PaginationPlacement } from "@/app/shared/paginationPlacement";
-import { practiceSourceHasLevels, type PracticeSource } from "@/lib/practiceSourceKinds";
+import { practiceSourceHasLevels, practiceSourceHasSlug, type PracticeSource } from "@/lib/practiceSourceKinds";
 
 import { practiceHref } from "./practiceAddress";
 
@@ -65,6 +65,8 @@ export type SheetSettings = {
   printAll: boolean;
   /** The hand-picked characters, encoded, when the sheet is a picked one. */
   picked: string;
+  /** The saved list's slug, when the sheet is built from one. */
+  slug: string | null;
 };
 
 /**
@@ -82,7 +84,12 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
    */
   const source = next.source as PracticeSource;
   const carriesLevel = practiceSourceHasLevels(source);
-  const path = practiceHref(next.nickname, { source, level: carriesLevel ? next.level : null });
+  const path = practiceHref(next.nickname, {
+    source,
+    level: carriesLevel ? next.level : null,
+    /* A saved list is named in the path, so every option link has to carry it. */
+    slug: practiceSourceHasSlug(source) ? next.slug : null,
+  });
 
   const parts: string[] = [];
   if (next.page > 1) parts.push(`page=${next.page}`);

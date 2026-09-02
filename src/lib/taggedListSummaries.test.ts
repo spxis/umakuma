@@ -33,12 +33,14 @@ describe("the built-in lists on the lists page", () => {
   /*
    * A tagged sheet is addressed by its source rather than by the characters on
    * the card. The card previews a couple of dozen at most, and printing the
-   * preview instead of the list would silently drop the rest.
+   * preview instead of the list would silently drop the rest - which is also
+   * why a saved list is named in the address rather than spelled out in the
+   * query. Both go through the one helper, so neither can drift back.
    */
-  it("sends a built-in list to the sheet by source, not by preview", () => {
-    /* The source is the address now: `/practice/trouble`, not `?source=trouble`. */
+  it("sends a list to its sheet by address, not by preview", () => {
     const cards = read("src/app/users/[nickname]/lists/StudyListCards.tsx");
-    expect(cards).toContain("`${practicePath}/${card.tag}`");
+    expect(cards).toContain("listWorksheetHref(practicePath");
+    expect(cards).not.toContain("picked?picked=");
   });
 
   /*

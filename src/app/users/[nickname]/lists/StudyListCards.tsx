@@ -13,9 +13,11 @@ import {
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS } from "@/lib/domainConstants";
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES } from "@/lib/domainConstants";
 import { listHref, listKanji, tagListHref, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
+
+import { listWorksheetHref } from "../practice/practiceAddress";
 
 import { LIST_SORTS, type ListCard, type ListSort } from "./StudyList.types";
 import StudyListCard from "./StudyListCard";
@@ -128,13 +130,19 @@ export default function StudyListCards({
   );
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
 
-  /* A tagged sheet is addressed by its source, so it takes the whole list; a saved one traces its kanji. */
-  const practiceHrefFor = (card: ListCard) =>
-    card.tag === STUDY_TAGS.burned
-      ? null
-      : card.tag
-      ? `${practicePath}/${card.tag}`
-      : `${practicePath}/picked?picked=${encodeURIComponent(listKanji(card.items).join(""))}`;
+  /*
+   * One address for a list's worksheet, shared with the list's own page.
+   *
+   * A saved list used to be built as a picked sheet with every one of its
+   * characters in the query string: it broke on a long list, went stale the
+   * moment the list changed, and could not be sent to anybody as a link to
+   * "my Week 1 sheet". It is named now. A list with no kanji in it has no
+   * sheet to offer, since a worksheet is squares to write characters in.
+   */
+  const practiceHrefFor = (card: ListCard) => {
+    if (!card.tag && listKanji(card.items).length === 0) return null;
+    return listWorksheetHref(practicePath, { tag: card.tag, name: card.name });
+  };
 
   async function remove(id: string) {
     setPendingRemoval(null);

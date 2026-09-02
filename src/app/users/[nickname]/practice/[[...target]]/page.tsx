@@ -9,6 +9,7 @@ import { toPaginationPlacement } from "@/app/shared/paginationPlacement";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
+import { findListBySlug } from "@/lib/studyLists";
 import { PRACTICE_SOURCES, isTaggedPracticeSource, practiceEntriesFor, practiceLevelCounts } from "@/lib/practiceSource";
 import { decodeSelection, encodeSelection, SELECTION_PARAM } from "@/app/shared/subjectSelection";
 
@@ -136,11 +137,13 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     pageSize,
     account.id,
     picked,
+    target?.slug ?? null,
   );
 
   const settings: SheetSettings = {
     nickname: decodeURIComponent(nickname),
     picked: encodeSelection(picked),
+    slug: target?.slug ?? null,
     source,
     grade,
     level,
@@ -169,8 +172,20 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     ? `${PRACTICE_SHEET_COPY.printRunLabel} ${page} ${PRACTICE_SHEET_COPY.printRunOf} ${pageCount}`
     : undefined;
 
+  /*
+   * A sheet from a saved list is titled with the list's name, which is the
+   * only thing that says which sheet this is - "Writing practice · G1" on a
+   * sheet built from Week 2 is a different sheet's title.
+   */
+  const listName =
+    source === PRACTICE_SOURCES.list && target?.slug
+      ? (await findListBySlug(account.id, target.slug))?.name ?? null
+      : null;
+
   const sheetLabel =
-    source === PRACTICE_SOURCES.picked
+    source === PRACTICE_SOURCES.list
+      ? listName ?? PRACTICE_SHEET_COPY.fromList
+      : source === PRACTICE_SOURCES.picked
       ? PRACTICE_SHEET_COPY.fromPicked
       : source === PRACTICE_SOURCES.trouble
       ? PRACTICE_SHEET_COPY.fromTrouble

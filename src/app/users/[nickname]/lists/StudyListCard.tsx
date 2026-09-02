@@ -255,10 +255,21 @@ export default function StudyListCard({
           </button>
         </>
       ) : null}
+      {/*
+        * Two actions rather than one, because they are two things: opening
+        * the sheet, and printing it. The single "Practise these" pill opened
+        * a sheet of tracing squares, which nobody would have guessed was the
+        * worksheet they were looking for.
+        */}
       {practiceHref ? (
-        <Link href={practiceHref} className={PILL}>
-          {STUDY_LIST_COPY.practise}
-        </Link>
+        <>
+          <Link href={practiceHref} className={ACTION} title={STUDY_LIST_COPY.worksheetHint}>
+            {STUDY_LIST_COPY.print}
+          </Link>
+          <Link href={practiceHref.replace(/\?go=1$/, "")} className={PILL}>
+            {STUDY_LIST_COPY.worksheet}
+          </Link>
+        </>
       ) : null}
     </>
   );

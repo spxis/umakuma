@@ -14,6 +14,8 @@ export const PRACTICE_SOURCES = {
   /* The member's own lists, which are the sheets most worth printing. */
   trouble: "trouble",
   favorite: "favorite",
+  /* A list the member saved, named by its slug: /practice/list/week-1. */
+  list: "list",
   /* Characters chosen by hand on some other surface. */
   picked: "picked",
 } as const;
@@ -36,5 +38,21 @@ export function isPracticeSource(value: string): value is PracticeSource {
  * whole. It decides whether an address carries a level at all.
  */
 export function practiceSourceHasLevels(source: PracticeSource): boolean {
-  return !isTaggedPracticeSource(source) && source !== PRACTICE_SOURCES.picked;
+  return (
+    !isTaggedPracticeSource(source) &&
+    source !== PRACTICE_SOURCES.picked &&
+    source !== PRACTICE_SOURCES.list
+  );
+}
+
+/**
+ * Whether the source is named by a slug in the path.
+ *
+ * A saved list is the one that is. It was reachable only as a picked sheet -
+ * every character of the list in the query string - which broke on a long
+ * list, went stale the moment the list changed, and could not be sent to
+ * anybody as "my Week 1 sheet".
+ */
+export function practiceSourceHasSlug(source: PracticeSource): boolean {
+  return source === PRACTICE_SOURCES.list;
 }

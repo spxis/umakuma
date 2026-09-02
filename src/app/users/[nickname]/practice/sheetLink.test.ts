@@ -28,6 +28,7 @@ const BASE: SheetSettings = {
   size: DEFAULT_SHEET_SIZE,
   choosing: false,
   picked: "",
+  slug: null,
   printAll: false,
 };
 

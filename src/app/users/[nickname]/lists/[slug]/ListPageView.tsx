@@ -18,7 +18,15 @@ import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } fr
 import { useHideBurned } from "@/app/shared/useHideBurned";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { LIST_ITEM_KIND_DISPLAY, LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, STUDY_TAGS, type ListItemKind } from "@/lib/domainConstants";
+import {
+  LIST_ITEM_KINDS,
+  LIST_ITEM_KIND_DISPLAY,
+  LIST_VISIBILITIES,
+  LIST_VISIBILITY_DISPLAY,
+  STUDY_TAGS,
+  type ListItemKind,
+} from "@/lib/domainConstants";
+import { listWorksheetHref } from "../../practice/practiceAddress";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
@@ -42,6 +50,10 @@ import ListViewerActions from "./ListViewerActions";
  */
 const VIEW_MODE_KEY = "wr:list-page:view-mode";
 const ALL = "all";
+
+/** The same shape as the Edit toggle beside it, since they are the same kind of thing. */
+const ACTION_PILL =
+  "inline-flex h-9 shrink-0 items-center rounded-full border border-line bg-surface px-3 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 transition hover:bg-surface-muted";
 
 export default function ListPageView({
   list,
@@ -71,6 +83,20 @@ export default function ListPageView({
   const notes = useListItemNote(viewer.accountId, list.id);
 
   const live = useMemo(() => items.filter((item) => !removed.has(item.subjectId)), [items, removed]);
+
+  /*
+   * A worksheet is a sheet of kanji, so a list holding none is not offered
+   * one, and a visitor with no page of their own has nowhere to build it.
+   *
+   * The owner only, for now. The sheet is built at the reader's own address
+   * from their own lists and their own tags, so offering it on somebody
+   * else's list would quietly print a different list than the one on screen.
+   */
+  const worksheetHref = useMemo(() => {
+    if (!viewer.isOwner) return null;
+    if (!list.tag && !live.some((item) => item.listKind === LIST_ITEM_KINDS.kanji)) return null;
+    return listWorksheetHref(practicePath, { tag: list.tag, name: list.name });
+  }, [list.name, list.tag, live, practicePath, viewer.isOwner]);
 
   const kinds = useMemo(() => {
     const counts = new Map<ListItemKind, number>();
@@ -235,11 +261,17 @@ export default function ListPageView({
               ))}
             </>
           ) : null}
+          {/*
+            * A line of its own on a phone. Squeezed in beside the kind chips
+            * and five controls, the box was down to four characters of its own
+            * placeholder - "Sea" - which is not a search field.
+            */}
           <ListSearchField
             value={search}
             onChange={setSearch}
             label={STUDY_LIST_COPY.searchItems}
             options={live.map((item) => ({ value: item.characters, label: item.meanings[0] ?? "" }))}
+            className="w-full basis-full sm:w-auto sm:basis-48"
           />
           {viewer.accountId && list.tag !== STUDY_TAGS.burned ? (
             <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} />
@@ -255,6 +287,24 @@ export default function ListPageView({
             >
               {editing ? STUDY_TAG_LIST_COPY.editingDone : STUDY_TAG_LIST_COPY.edit}
             </button>
+          ) : null}
+          {/*
+            * The worksheet, from the page that shows the list.
+            *
+            * It was reachable only from the card on the shelf, and only as a
+            * sheet of hand-picked characters - so the page you read a list on
+            * could not print it, and the link the card built went stale as
+            * soon as the list changed.
+            */}
+          {worksheetHref ? (
+            <>
+              <Link href={worksheetHref} className={ACTION_PILL} title={STUDY_LIST_COPY.worksheetHint}>
+                {STUDY_LIST_COPY.worksheet}
+              </Link>
+              <Link href={`${worksheetHref}?go=1`} className={ACTION_PILL}>
+                {STUDY_LIST_COPY.print}
+              </Link>
+            </>
           ) : null}
           {viewer.accountId ? <SubjectSelectionToggle selection={selection} /> : null}
           <SubjectViewModeToggle

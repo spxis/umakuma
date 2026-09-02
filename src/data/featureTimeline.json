@@ -3232,5 +3232,16 @@
     "dateIsEstimate": true,
     "release": 64,
     "summary": "Lists is a top-level section with a single child, so the header suppresses its second row and everything the page holds is stacked into the body instead. It has the same shape as Learn - several distinct collections a member moves between - so it should name them in the second row. The names should follow from what the collections actually are rather than being invented; work them out from the list kinds the code already distinguishes."
+  },
+  {
+    "id": "list-worksheets",
+    "name": "Print a worksheet from a list, and from the list's page",
+    "area": "study",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "A list could be turned into a writing sheet only from its card on the shelf, and only as a picked sheet carrying every one of its characters in the query string - which broke on a long list, went stale the moment the list changed, and could not be sent to anybody as a link to “my Week 1 sheet”. The page you actually read a list on offered nothing at all. A saved list is a practice source of its own now, addressed by name at /practice/list/week-1, and the sheet is titled with the list's name so a printout says which list it is. Both surfaces - the card and the list's own page - offer Worksheet and Print, the second opening the print dialog on arrival; Burned offers neither, since tracing what you already know is not practice. The list page's search box takes a line of its own on a phone, where five controls beside it had squeezed it down to four characters. Requested 2026-09-02 by John.",
+    "version": "0.291.0",
+    "releasedAt": "2026-09-02T16:05:03Z"
   }
 ]

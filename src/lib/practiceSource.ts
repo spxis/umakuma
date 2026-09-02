@@ -2,7 +2,9 @@ import { fetchStudyTagRows } from "@/lib/studySubjectTags";
 import { getSchoolGradeIndex } from "@/lib/schoolGrades";
 import "server-only";
 
+import { LIST_ITEM_KINDS } from "./domainConstants";
 import { prisma } from "./prisma";
+import { findListBySlug } from "./studyLists";
 import { querySchoolGradeCatalog } from "./schoolGrades";
 import { getStrokeOrder } from "./strokeOrder";
 import { withOfficialReadings } from "./gradeReadings";
@@ -14,6 +16,7 @@ export {
   isPracticeSource,
   isTaggedPracticeSource,
   practiceSourceHasLevels,
+  practiceSourceHasSlug,
   type PracticeSource,
 } from "./practiceSourceKinds";
 
@@ -165,6 +168,31 @@ async function pickedEntries(
 }
 
 /**
+ * A sheet built from a list the member saved.
+ *
+ * Only the kanji, in the order the list keeps them, and only the member's own
+ * lists: the sheet lives under their own address. Reached by slug rather than
+ * by carrying every character in the query, so the link survives the list
+ * being edited and can be sent to somebody as what it is.
+ */
+async function savedListEntries(
+  accountId: string | null,
+  slug: string,
+  page: number,
+  pageSize: number,
+): Promise<{ entries: PracticeEntry[]; total: number }> {
+  if (!accountId) return { entries: [], total: 0 };
+
+  const list = await findListBySlug(accountId, slug);
+  if (!list) return { entries: [], total: 0 };
+
+  const kanji = list.items
+    .filter((item) => item.kind === LIST_ITEM_KINDS.kanji)
+    .map((item) => item.key);
+  return pickedEntries(kanji, page, pageSize);
+}
+
+/**
  * The characters a practice sheet should hold, from whichever list was asked
  * for. Grades come from the local catalogue; the tagged lists are the
  * learner's own ladders and live in the database; a picked sheet is whatever
@@ -179,9 +207,15 @@ export async function practiceEntriesFor(
   accountId?: string | null,
   /** The characters, when the source is a hand-picked set. */
   picked?: string[],
+  /** The list's slug, when the source is one the member saved. */
+  slug?: string | null,
 ): Promise<{ entries: PracticeEntry[]; total: number }> {
   if (source === PRACTICE_SOURCES.picked) {
     return pickedEntries(picked ?? [], page, pageSize);
+  }
+
+  if (source === PRACTICE_SOURCES.list) {
+    return savedListEntries(accountId ?? null, slug ?? "", page, pageSize);
   }
 
   if (isTaggedPracticeSource(source)) {
