@@ -2346,7 +2346,7 @@
     "area": "study",
     "name": "The kanji page knows what the study viewer knows",
     "status": "shipped",
-    "date": "2026-09-02",
+    "date": "2026-09-01",
     "releasedAt": "2026-09-02T02:52:36Z",
     "version": "0.223.0",
     "summary": "Every search result lands on a kanji's own page, and that page knew less about the character than the study viewer behind the sign-in wall. It had the strokes, the dictionary facts and the sentences; it had no compounds, no radicals, no look-alikes, no vocabulary and no mnemonics - and the compounds are the reason anyone looks a kanji up. It has all of them now, and it is built as an ordered list of blocks, each fed by exactly one source and each drawing nothing when it has nothing. The layering is the decision that shaped it: the dictionary sources are the root and WaniKani is the bonus. KANJIDIC answers for all ten thousand characters, the JLPT table adds the words for the two thousand the exams cover, and WaniKani adds its radicals, look-alikes, vocabulary and mnemonics for the two thousand it teaches. A character WaniKani has never heard of gets a complete page; one it teaches gets a better one. The word inside a compound is not a link - most are not WaniKani vocabulary and would land on a page saying nothing is there - but every kanji inside it is, and every chip goes through the same address function the search results use, so following a result and following a chip land in the same place. The word and radical pages took the same blocks on the way, so a related chip or a mnemonic reads the same on all three. The page stays the same for every reader: a member's own study state is a block for a later release, not a reason to make a shareable address vary by who opens it."
