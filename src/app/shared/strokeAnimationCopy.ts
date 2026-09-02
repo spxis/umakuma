@@ -34,7 +34,20 @@ export const STROKE_ANIMATION_COPY = {
  * them can be read, which makes the Numbers button useless exactly where it
  * matters most. Large is the size those numbers are legible at.
  */
-export const STROKE_SIZES = { small: 160, medium: 220, large: 320 } as const;
+export const STROKE_SIZES = { small: 160, medium: 220, large: 370 } as const;
+
+/**
+ * The stroke numbers, in pixels on screen rather than in the drawing.
+ *
+ * Measured in the viewBox they scaled with the character, so growing the
+ * drawing grew them by the same amount and they collided just as much. Held to
+ * one readable size, the extra room goes between them, which is what somebody
+ * enlarging a fifteen-stroke character is after.
+ */
+export const STROKE_NUMBER_PX = 13;
+
+/** KanjiVG draws on a 109-unit square; the numbers are sized against it. */
+export const STROKE_VIEWBOX_UNITS = 109;
 
 /**
  * How wide the blocks either side of the drawing are.

@@ -11,6 +11,7 @@ import { formatReading } from "@/lib/readingDisplay";
 import { MODAL_LAYERS } from "./modalLayers";
 import { STROKE_ANIMATION_COPY, STROKE_SIDE_WIDTH } from "./strokeAnimationCopy";
 import { KANJI_FACES, type KanjiFace } from "./kanjiFaces";
+import { useStrokeSize } from "./useStrokeSize";
 import { noTranslateClass } from "./japaneseText";
 import JapaneseInProse from "./JapaneseInProse";
 
@@ -134,6 +135,7 @@ function summaryLine(summary: KanjiDetailSummary | undefined): string | null {
  */
 export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, shareHref, compact }: PanelProps) {
   const [meta, setMeta] = useState<StrokeMeta | null>(null);
+  const size = useStrokeSize();
   const line = summaryLine(summary);
 
   return (
@@ -171,12 +173,19 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
       </header>
 
       <div className="flex flex-col items-center gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-center">
-        {/* Printed faces above, written faces beneath; the drawing keeps the height. */}
-        <div className={`grid grid-cols-2 justify-center gap-3 ${STROKE_SIDE_WIDTH}`}>
-          {KANJI_FACES.map((face) => (
-            <PrintedGlyph key={face.id} kanji={kanji} face={face} />
-          ))}
-        </div>
+        {/*
+          * Printed faces beside the drawing, and out of its way at the largest
+          * size: somebody who has asked for the character as big as it goes is
+          * looking at the strokes, and four printed copies of it are what the
+          * width was being spent on.
+          */}
+        {size === "large" ? null : (
+          <div className={`grid grid-cols-2 justify-center gap-3 ${STROKE_SIDE_WIDTH}`}>
+            {KANJI_FACES.map((face) => (
+              <PrintedGlyph key={face.id} kanji={kanji} face={face} />
+            ))}
+          </div>
+        )}
 
         <KanjiStrokeAnimation
           key={kanji}

@@ -3,16 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 
 import SourceCredit from "./SourceCredit";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
+import { setStrokeSize, useStrokeSize } from "./useStrokeSize";
 import {
   STROKE_ANIMATION_COPY,
   STROKE_MS_PER_STROKE,
   STROKE_SIDE_WIDTH,
+  STROKE_NUMBER_PX,
   STROKE_SIZES,
-  STROKE_SIZE_STORAGE_KEY,
   STROKE_SIZE_VALUES,
-  type StrokeSize,
+  STROKE_VIEWBOX_UNITS,
 } from "./strokeAnimationCopy";
 
 type StrokePayload = {
@@ -77,11 +77,11 @@ export default function KanjiStrokeAnimation({
   const [playToken, setPlayToken] = useState(0);
   const [showNumbers, setShowNumbers] = useState(false);
   /* The size this device last chose, read the way every other stored preference is. */
-  const [chosenSize, setChosenSize] = useState<StrokeSize>(() =>
-    getStoredEnum(STROKE_SIZE_STORAGE_KEY, STROKE_SIZE_VALUES, "medium"),
-  );
+  const chosenSize = useStrokeSize();
   const offersSize = size === undefined;
   const drawnSize = size ?? STROKE_SIZES[chosenSize];
+  /* The viewBox is 109 units square; this pins a number to STROKE_NUMBER_PX. */
+  const numberFontUnits = (STROKE_NUMBER_PX * STROKE_VIEWBOX_UNITS) / drawnSize;
   const pathRefs = useRef<Array<SVGPathElement | null>>([]);
   /*
    * Held in a ref so a caller passing an inline callback does not re-run the
@@ -187,7 +187,17 @@ export default function KanjiStrokeAnimation({
         </g>
 
         {showNumbers ? (
-          <g className="fill-foreground/70 text-[7px] font-black">
+          /*
+           * The numbers keep their size while the drawing grows.
+           *
+           * They are drawn in the viewBox, so a font measured there scaled with
+           * the character: Large made every number bigger and left them
+           * colliding exactly as before, which is the opposite of what growing
+           * the drawing was for. Sized against the drawn width instead, they
+           * come out the same height on screen at every setting and the extra
+           * room goes where it was wanted - between them.
+           */
+          <g className="fill-foreground/70 font-black" fontSize={numberFontUnits}>
             {data.strokes.map((d, index) => (
               <StrokeNumber key={`number-${index}`} d={d} index={index} />
             ))}
@@ -231,8 +241,7 @@ export default function KanjiStrokeAnimation({
                 key={value}
                 type="button"
                 onClick={() => {
-                  setChosenSize(value);
-                  setStoredEnum(STROKE_SIZE_STORAGE_KEY, value);
+                  setStrokeSize(value);
                 }}
                 aria-pressed={chosenSize === value}
                 title={STROKE_ANIMATION_COPY.sizeTitle[value]}

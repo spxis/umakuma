@@ -3163,5 +3163,17 @@
     "summary": "Every card in a list carried \"Add a note\" printed under it in plain text and an × sitting on it, so a grid of characters read as a grid of controls and the thing the page exists to show came third. Both wait for the pointer now: they appear on the card under the cursor and on whatever has keyboard focus, and a note that has been written stays visible always, because that is content rather than a control. The × was drawn with the letter x, which read as part of the card; it is a proper mark in a circle that turns red where it will act. Reported 2026-09-02 by John.",
     "version": "0.289.0",
     "releasedAt": "2026-09-02T15:38:22Z"
+  },
+  {
+    "id": "stroke-size-and-escape",
+    "name": "The numbers hold their size, and Escape closes",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 59,
+    "summary": "Two reported together. Escape emptied the search box and then did nothing: the panel left open after the clear is the recent items rather than the suggestions, and only the suggestions were in the condition, so the second press had nothing to act on. Both count now - clear, then close. And the stroke-order sizes were growing the wrong thing. The numbers are drawn inside the character's own coordinates, so asking for a bigger drawing made every number bigger by the same amount and they collided exactly as before, which is the opposite of what enlarging it was for. They are sized against the drawn width instead, so they come out the same height on screen at every setting and the extra room goes where it was wanted - between them. The largest size grew from 320 to 370 pixels and drops the four printed faces beside the drawing: somebody who has asked for the character as big as it goes is looking at the strokes, and four printed copies of it are what that width was being spent on. Reported 2026-09-02 by John.",
+    "version": "0.290.0",
+    "releasedAt": "2026-09-02T15:58:06Z"
   }
 ]

@@ -181,10 +181,14 @@ export function useSearchCombobox({
      * command, which is long and typed by a control rather than by hand, is
      * exactly what a member reaches for Escape to be rid of.
      *
+     * The panel that is open after the clear is the recent items rather than
+     * the suggestions, and leaving it out of this condition is what made the
+     * second press do nothing at all.
+     *
      * Stopped so a phone sheet's own Escape listener keeps the sheet open on
      * the press that clears.
      */
-    if (event.key === "Escape" && (panelVisible || typed.length > 0)) {
+    if (event.key === "Escape" && (panelVisible || showRecent || typed.length > 0)) {
       event.preventDefault();
       event.stopPropagation();
       if (typed.length > 0) clear();
