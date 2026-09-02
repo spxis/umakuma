@@ -2414,5 +2414,38 @@
     "summary": "The admin release page sorted planned work by its place in the queue and then grouped it by the month of its estimated date, so the headers read September, August, September and the list looked as though it had lost its order. The estimates are typed by hand and mean little - one sat on a day that had already passed. A queue is not a calendar. The planned tab is one list now, in queue order, with each item's position shown where a release shows its version; the month grouping stays for what has shipped, where the date is a fact.",
     "version": "0.228.0",
     "releasedAt": "2026-09-02T03:36:10Z"
+  },
+  {
+    "id": "reading-campaign-winter-2026",
+    "name": "Winter Reading Challenge",
+    "area": "reading",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "summary": "Hanako and Kamiko keep reading. The Winter Reading Challenge runs from 1 September to 6 December 2026, fourteen weeks, the Sunday of the week John named as the end. It was made from the July campaign the way the July one was made from the spring one, by hand at the time: the same thresholds, bonuses and streak, the weekly caps held flat at July's final week for every week of the window, the target their sum, the adults' opt-outs carried over so the leaderboard shows the same people, and the girls' books carried over so a book started in July can be checked in tomorrow. The July campaign is marked completed, which is what the site does itself when a new one activates. The making is a script now - pnpm campaign:create - that validates with the editor's own schema, snapshots every table it touches before writing, and does the whole change in one transaction, so the next campaign is made the same way rather than a slightly different way.",
+    "version": "0.229.0",
+    "releasedAt": "2026-09-02T04:18:59Z"
+  },
+  {
+    "id": "user-menu-under-sticky-header",
+    "name": "The open user menu renders under the list's sticky heading",
+    "area": "admin",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 21,
+    "summary": "With the user menu open on a page that shows a subject list, the list's sticky column-heading row draws across the menu - the heading carries z-20 and the menu sits below it. Stacking order belongs in MODAL_LAYERS; the menu should take a layer above page chrome and the heading should not claim one of its own. Regression from 0.214.0. Reported 2026-09-01."
+  },
+  {
+    "id": "lists-top-level-admin-in-menu",
+    "name": "Lists at the top level; Admin only in the menu",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 22,
+    "summary": "Lists is a top-level destination and belongs in the main navigation. Admin does not: it should leave the top row and appear only in the user menu, for admins, as one entry - the menu need not repeat every admin sub-page. Requested 2026-09-01."
   }
 ]

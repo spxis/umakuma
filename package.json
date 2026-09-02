@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "0.228.0",
+  "version": "0.229.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -78,7 +78,8 @@
     "sentences:ingest": "pnpm dlx tsx scripts/ingest-tatoeba.ts",
     "sentences:ingest:dry": "pnpm sentences:ingest --dry-run",
     "readings:build": "node scripts/build-joyo-readings.mjs",
-    "backlog": "pnpm dlx tsx scripts/backlog.ts"
+    "backlog": "pnpm dlx tsx scripts/backlog.ts",
+    "campaign:create": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/create-reading-campaign.ts"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
