@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
+import { useState, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 
 import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
+import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
+import { SEARCH_PAGE_HREF } from "@/lib/globalSearch";
 import { TOP_NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav, visibleNavSections } from "./navSections";
 import AppSubNavRow from "./AppSubNavRow";
 import GlobalSearchBox from "./GlobalSearchBox";
@@ -46,6 +48,13 @@ export default function AppTopMenuRow({
   subNav,
 }: AppTopMenuRowProps) {
   const pathname = usePathname();
+  const [searchExpanded, setSearchExpanded] = useState(false);
+  /*
+   * The search page carries its own box, so the header's is a second field
+   * asking the same question a hand's width above the first. It steps aside
+   * and leaves a link where a member expects the section to be named.
+   */
+  const onSearchPage = pathname === SEARCH_PAGE_HREF;
   const resolvedWkUsername = primaryWkUsername ?? viewerAddress(viewerMenuInfo);
   const flatLinks: MainLink[] = buildMainLinks(resolvedWkUsername);
   const activeSection = sectionForPath(pathname, resolvedWkUsername);
@@ -64,7 +73,7 @@ export default function AppTopMenuRow({
   };
   const sections = visibleNavSections(TOP_NAV_SECTIONS, access);
   const visibleActiveSection = sections.find((section) => section.id === activeSection?.id) ?? null;
-  const links: MainLink[] = resolvedWkUsername
+  const sectionLinks: MainLink[] = resolvedWkUsername
     ? [
         ...sections.map((section) => ({
           label: section.label,
@@ -73,6 +82,10 @@ export default function AppTopMenuRow({
         })),
       ]
     : flatLinks;
+  /* Named in the row only where the box has stepped aside for the page's own. */
+  const links: MainLink[] = onSearchPage
+    ? [...sectionLinks, { label: SEARCH_PAGE_COPY.heading, href: SEARCH_PAGE_HREF, dashboard: null }]
+    : sectionLinks;
   /*
    * The phone gets every section, not four of them.
    *
@@ -131,7 +144,7 @@ export default function AppTopMenuRow({
   return (
     <div className={`relative ${className ?? ""}`.trim()}>
     <section className="flex items-center justify-between gap-3">
-      <nav className="admin-tab-scroll flex min-w-0 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[9px] font-semibold uppercase tracking-widest text-foreground/60 sm:hidden">
+      <nav className="admin-tab-scroll flex min-w-0 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-widest text-foreground/60 sm:hidden">
         {mobileLinks.map((link, index) => (
           <span key={`mobile-${link.label}-${link.href}`} className="inline-flex shrink-0 items-center gap-x-1.5">
             <Link
@@ -146,7 +159,11 @@ export default function AppTopMenuRow({
           </span>
         ))}
       </nav>
-      <nav className="hidden flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground/60 sm:flex">
+      <nav
+        className={`hidden flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60 sm:flex ${
+          searchExpanded ? "max-lg:hidden" : ""
+        }`}
+      >
         {links.map((link, index) => (
           <span key={`${link.label}-${link.href}`} className="inline-flex items-center gap-x-3">
             <Link
@@ -180,7 +197,12 @@ export default function AppTopMenuRow({
         * separate from now, and pairing them puts every control in one place.
         */}
       <div className="ml-auto flex shrink-0 items-center gap-2">
-        <GlobalSearchBox viewerAccountId={viewerMenuInfo?.accountId ?? null} />
+        {onSearchPage ? null : (
+          <GlobalSearchBox
+            viewerAccountId={viewerMenuInfo?.accountId ?? null}
+            onExpandedChange={setSearchExpanded}
+          />
+        )}
         <UserHeaderMenu
           accountId={accountId}
           viewedWkUsername={resolvedWkUsername ?? undefined}

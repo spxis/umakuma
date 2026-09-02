@@ -41,10 +41,19 @@ const MOBILE_LISTBOX = "global-search-suggest-mobile";
 export default function GlobalSearchBox({
   className = "",
   viewerAccountId = null,
+  onExpandedChange,
 }: {
   className?: string;
   /** The viewer's own account, so results can be filed into their lists. */
   viewerAccountId?: string | null;
+  /**
+   * Whether the field is taking the room it needs.
+   *
+   * The header row has to answer for the whole width: an expanded box and a
+   * row of section links cannot both fit on a narrow desktop, and the links
+   * are what a member can do without, having typed into the box already.
+   */
+  onExpandedChange?: (expanded: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [filerOpen] = useFilerOpen();
@@ -111,6 +120,10 @@ export default function GlobalSearchBox({
   /** Wide while it is being used, and while it still holds a query to read. */
   const expanded = focused || cbx.displayValue.length > 0;
 
+  useEffect(() => {
+    onExpandedChange?.(expanded);
+  }, [expanded, onExpandedChange]);
+
   function trackFocus(event: FocusEvent<HTMLDivElement>) {
     setFocused(event.type === "focus" || event.currentTarget.contains(event.relatedTarget));
   }
@@ -164,7 +177,7 @@ export default function GlobalSearchBox({
       >
         <div
           className={`transition-[width] duration-200 ease-out ${
-            expanded ? (command ? "w-80 md:w-104 lg:w-128" : "w-64 md:w-80 lg:w-104") : "w-32 md:w-40"
+            expanded ? (command ? "w-96 md:w-128 lg:w-160" : "w-80 md:w-112 lg:w-144") : "w-28 md:w-32"
           }`}
         >
           <SearchComboboxField

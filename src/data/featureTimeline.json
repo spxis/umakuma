@@ -3093,5 +3093,17 @@
     "summary": "A member could file a kanji from a search row but not from the kanji's own page, which is where you decide a character is worth keeping. The public kanji, word and radical pages carry a strip under the card with the same marks the search column uses - trouble, favourite, and a chip for each saved list - and a visitor gets the offer to join instead. Part of add-to-lists-everywhere, which keeps the glyph viewer and the explorers. Reported 2026-09-02 by John with screenshots.",
     "version": "0.283.0",
     "releasedAt": "2026-09-02T15:06:15Z"
+  },
+  {
+    "id": "header-search-room",
+    "name": "One search box, and room to type in it",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 55,
+    "summary": "The header's search was three sizes smaller than the results page's, which made one control read as two different ones - and it had grown a command language that needs room. Both boxes are the same height and the same type now, the header's collapses narrower than before when nothing is in it, and it opens far wider when it is being used, wider again while a command is in it. On a narrow desktop the section links step aside while the box is open, since somebody who has started typing is not reaching for Learn. And on the search page the header's box is gone entirely - it was a second field asking the same question a hand's width above the first - with Search named in the row instead, where the section a member is looking at belongs. Reported 2026-09-02 by John.",
+    "version": "0.284.0",
+    "releasedAt": "2026-09-02T15:10:52Z"
   }
 ]

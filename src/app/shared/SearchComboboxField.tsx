@@ -13,9 +13,14 @@ import { suggestOptionId } from "./GlobalSearchSuggestList";
  * member of the audience already knows how to read.
  */
 const FIELD_SIZES = {
+  /*
+   * The header field is the page field. They ask the same question and take
+   * the same commands, so a box that was three sizes smaller in the header
+   * made the same control read as two different ones.
+   */
   header: {
-    shell: "flex h-9 items-center rounded-full border border-line bg-surface pl-3 pr-1 transition focus-within:ring-2 focus-within:ring-accent/30",
-    text: "px-2 text-sm font-semibold",
+    shell: "flex h-11 items-center rounded-full border border-line bg-surface pl-4 pr-1 transition focus-within:ring-2 focus-within:ring-accent/40",
+    text: "px-1 text-base font-semibold",
   },
   sheet: {
     shell: "flex h-10 items-center rounded-full border border-line bg-surface-muted px-2 focus-within:ring-2 focus-within:ring-accent/30",
