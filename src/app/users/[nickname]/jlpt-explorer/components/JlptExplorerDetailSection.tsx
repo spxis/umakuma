@@ -1,4 +1,3 @@
-import jlptReadings from "@/data/jlptReadings.json";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
@@ -7,7 +6,7 @@ import { formatDate, jlptHeading, readingLabel } from "../lib/jlptDisplay";
 import { jlptStatusClass, parseWordExamples } from "../lib/jlptExplorerContentHelpers";
 import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
-import type { JlptReadingsRecord, KanjiStats } from "./JlptExplorerContent.types";
+import type { KanjiStats } from "./JlptExplorerContent.types";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
 import FieldLabel from "../../../../shared/FieldLabel";
@@ -39,7 +38,6 @@ export default function JlptExplorerDetailSection({
   onToggleStatsOpen,
 }: Props) {
   const selectedUserMatch = userKanjiByChar.get(selectedItem.kanji);
-  const selectedPreload = (jlptReadings as JlptReadingsRecord)[selectedItem.kanji];
   const selectedDbReadings = [
     ...selectedItem.kunReadings,
     ...selectedItem.onReadings,
@@ -47,13 +45,15 @@ export default function JlptExplorerDetailSection({
   ];
   const primary = selectedUserMatch
     ? (selectedUserMatch.primaryReadings ?? [])[0] ?? (selectedUserMatch.readings ?? [])[0] ?? null
-    : selectedDbReadings[0] ?? selectedPreload?.readings?.[0] ?? null;
+    : selectedDbReadings[0] ?? null;
   const secondary = selectedUserMatch
     ? (selectedUserMatch.readings ?? []).filter((reading) => reading !== primary)
-    : (selectedDbReadings.length > 0 ? selectedDbReadings : (selectedPreload?.readings ?? [])).filter(
-        (reading) => reading !== primary,
-      );
-  const jsonMeanings = (selectedPreload?.meanings ?? []).filter((meaning) => meaning.trim().length > 0);
+    : selectedDbReadings.filter((reading) => reading !== primary);
+  /*
+   * The catalogue's own meanings, which hold every meaning the old static
+   * jlptReadings.json carried and more - checked across all 2,211 entries.
+   */
+  const jsonMeanings = selectedItem.meanings.filter((meaning) => meaning.trim().length > 0);
   const wordExamples = parseWordExamples(selectedItem.wordExamples);
 
   return (
@@ -89,7 +89,7 @@ export default function JlptExplorerDetailSection({
                 : jlptHeading(
                     selectedItem.primaryMeaning,
                     selectedUserMatch?.meanings,
-                    selectedItem.meanings.length > 0 ? selectedItem.meanings : (selectedPreload?.meanings ?? []),
+                    selectedItem.meanings,
                     selectedItem.kanji,
                   )}
             </p>

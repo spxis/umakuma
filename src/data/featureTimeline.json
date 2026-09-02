@@ -3191,13 +3191,11 @@
     "name": "The JLPT explorer opens when you click it",
     "area": "jlpt",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 61,
     "summary": "Clicking JLPT Explorer looks like nothing happened: it takes about six seconds to arrive where Grades and Strokes take a tenth of a second, measured from the same page on the same server. JlptExplorerContent is a client component that imports src/data/jlptReadings.json, so 397KB of readings is shipped to the browser and parsed before the page can appear. The readings belong on the server, or behind the same catalogue lookup every other surface uses.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-02T16:01:31.669Z"
+    "version": "0.295.0",
+    "releasedAt": "2026-09-02T16:27:30Z"
   },
   {
     "id": "grades-hydration-flash",

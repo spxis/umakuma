@@ -25,7 +25,6 @@ const CLASSIC_LEVEL_CHIPS = [
   { classic: 1, modern: 1 },
 ] as const;
 import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import jlptReadings from "@/data/jlptReadings.json";
 import { badgeClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import { formatNumber } from "../lib/jlptDisplay";
 import { JLPT_EXPLORER_TEXT } from "./JlptExplorer.constants";
@@ -48,7 +47,6 @@ import { usePathname } from "next/navigation";
 import type {
   KanjiStats,
   JlptExplorerContentProps as Props,
-  JlptReadingsRecord,
 } from "./JlptExplorerContent.types";
 export default function JlptExplorerContent({
   accountId,
@@ -401,7 +399,7 @@ export default function JlptExplorerContent({
            */
           <div className="mt-3">
             <JlptExplorerRows
-              rows={visibleItems.map((item) => toJlptRow(item, toJlptView(item, userKanjiByChar, jlptReadings as JlptReadingsRecord)))}
+              rows={visibleItems.map((item) => toJlptRow(item, toJlptView(item, userKanjiByChar)))}
               studyMode={studyMode}
               showEnglish={showEnglish}
               selection={selection}
@@ -415,7 +413,6 @@ export default function JlptExplorerContent({
         <JlptExplorerCards
           visibleItems={visibleItems}
           userKanjiByChar={userKanjiByChar}
-          jlptReadings={jlptReadings as JlptReadingsRecord}
           studyMode={studyMode}
           showEnglish={showEnglish}
           selection={selection}

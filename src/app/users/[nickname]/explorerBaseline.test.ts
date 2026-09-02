@@ -118,10 +118,19 @@ describe("jlpt explorer helpers", () => {
       meanings: ["learning"],
     };
 
-    expect(matchesJlptSearch(item, "gaku", "gaku", undefined)).toBe(true);
-    expect(matchesJlptSearch(item, "", "study", undefined)).toBe(true);
-    expect(matchesJlptSearch(item, "", "example", { readings: ["れい"], meanings: ["example"] })).toBe(true);
-    expect(matchesJlptSearch(item, "x", "nomatch", undefined)).toBe(false);
+    expect(matchesJlptSearch(item, "gaku", "gaku")).toBe(true);
+    expect(matchesJlptSearch(item, "", "study")).toBe(true);
+    expect(matchesJlptSearch(item, "x", "nomatch")).toBe(false);
+
+    /*
+     * KANJIDIC writes on readings in katakana, so a member typing がく found
+     * nothing until both sides were folded to one script. This used to work
+     * only by accident, because a 397KB static file happened to carry the
+     * hiragana form of every reading and was shipped to the browser for it.
+     */
+    expect(matchesJlptSearch(item, "がく", "がく")).toBe(true);
+    expect(matchesJlptSearch(item, "ガク", "ガク")).toBe(true);
+    expect(matchesJlptSearch(item, "まな", "まな")).toBe(true);
   });
 });
 

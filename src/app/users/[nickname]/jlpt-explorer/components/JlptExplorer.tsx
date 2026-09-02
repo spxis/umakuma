@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { readExplorerSearch } from "@/lib/explorerSearchParam";
 import useSWR from "swr";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
-import jlptReadings from "@/data/jlptReadings.json";
 import JlptExplorerContent from "./JlptExplorerContent";
 import { matchesJlptSearch, normalizeSearch } from "../lib/jlptDisplay";
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
@@ -22,7 +21,6 @@ type Props = {
   userKanjiItems?: UserKanjiItem[];
 };
 
-type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;
 
 type JlptRemoteResponse = {
   jlptItems: JlptItem[];
@@ -179,7 +177,6 @@ export default function JlptExplorer({
 
   const filteredItems = useMemo(() => {
     const normalizedQuery = normalizeSearch(query);
-    const records = jlptReadings as JlptReadingsRecord;
 
     return effectiveItems.filter((item) => {
       if (!selectedLevels.has(item.nLevel)) return false;
@@ -201,7 +198,7 @@ export default function JlptExplorer({
         } else if (item.schoolGrade !== gradeFilter) return false;
       }
 
-      return matchesJlptSearch(item, query, normalizedQuery, records[item.kanji]);
+      return matchesJlptSearch(item, query, normalizedQuery);
     });
   }, [effectiveItems, gradeFilter, query, selectedLevels, userKanjiByChar, wkFilter, wkLevelFilter]);
 
@@ -289,9 +286,8 @@ export default function JlptExplorer({
       setQuery(nextQuery);
 
       const normalizedQuery = normalizeSearch(nextQuery);
-      const records = jlptReadings as JlptReadingsRecord;
       const matchedCount = effectiveItems.filter((item) =>
-        selectedLevels.has(item.nLevel) && matchesJlptSearch(item, nextQuery, normalizedQuery, records[item.kanji]),
+        selectedLevels.has(item.nLevel) && matchesJlptSearch(item, nextQuery, normalizedQuery),
       ).length;
 
       if (requestId) {

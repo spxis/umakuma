@@ -12,7 +12,6 @@ import { toJlptView } from "../lib/jlptRowAdapter";
 import type { SubjectSelection } from "@/app/shared/useSubjectSelection";
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
 
-type JlptReadingsRecord = Record<string, { readings?: string[]; meanings?: string[] } | undefined>;
 
 /**
  * The JLPT catalogue as browsing cards.
@@ -25,7 +24,6 @@ type JlptReadingsRecord = Record<string, { readings?: string[]; meanings?: strin
 export default function JlptExplorerCards({
   visibleItems,
   userKanjiByChar,
-  jlptReadings,
   studyMode,
   showEnglish,
   selection,
@@ -37,7 +35,6 @@ export default function JlptExplorerCards({
 }: {
   visibleItems: JlptItem[];
   userKanjiByChar: Map<string, UserKanjiItem>;
-  jlptReadings: JlptReadingsRecord;
   studyMode: boolean;
   showEnglish: boolean;
   selection: SubjectSelection;
@@ -55,8 +52,7 @@ export default function JlptExplorerCards({
             const { userMatch, heading, primaryReading, fallbackReadings } = toJlptView(
               item,
               userKanjiByChar,
-              jlptReadings,
-            );
+                        );
             return (
               <Fragment key={`${item.nLevel}-${item.kanji}`}>
                 <UnifiedExplorerCard

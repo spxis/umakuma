@@ -12,14 +12,13 @@ export type JlptView = {
   fallbackReadings: string[];
 };
 
-type ReadingPreload = Record<string, { readings?: string[]; meanings?: string[] } | undefined>;
 
 /**
  * What a JLPT entry shows, from the three places it can come from.
  *
  * A JLPT kanji is not a WaniKani subject: the level, the meanings and the
  * readings come from the JLPT table, from the member's own WaniKani data where
- * the two overlap, and from a static preload where neither has them. Both the
+ * the two overlap. Both the
  * card and the row need the same answer, so they ask here rather than each
  * working it out - which is how the two used to disagree about which reading
  * was primary.
@@ -27,23 +26,21 @@ type ReadingPreload = Record<string, { readings?: string[]; meanings?: string[] 
 export function toJlptView(
   item: JlptItem,
   userKanjiByChar: Map<string, UserKanjiItem>,
-  preload: ReadingPreload,
 ): JlptView {
   const userMatch = userKanjiByChar.get(item.kanji);
   const dbReadings = [...item.kunReadings, ...item.onReadings, ...item.nanoriReadings];
-  const preloaded = preload[item.kanji];
   return {
     userMatch,
     heading: jlptHeading(
       item.primaryMeaning,
       userMatch?.meanings,
-      item.meanings.length > 0 ? item.meanings : (preloaded?.meanings ?? []),
+      item.meanings,
       item.kanji,
     ),
     primaryReading: userMatch
       ? (userMatch.primaryReadings ?? [])[0] ?? (userMatch.readings ?? [])[0] ?? null
       : dbReadings[0] ?? null,
-    fallbackReadings: dbReadings.length > 0 ? dbReadings : (preloaded?.readings ?? []),
+    fallbackReadings: dbReadings,
   };
 }
 

@@ -2,7 +2,22 @@ import { fetchAllCollectionPages } from "./http";
 import { srsLabel } from "./helpers";
 import type { UserKanjiIndexItem } from "./types";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
 
+/**
+ * The member's kanji, from their assignments and the local catalogue.
+ *
+ * The split is the one the rest of the site already keeps: assignments are the
+ * member's own SRS state and can only come from WaniKani, but the subjects
+ * behind them are static content that is already synced into
+ * `WkSubjectCatalog`. Asking the API for them meant up to two thousand ids
+ * fetched in sequential 200-id pages on every render - the JLPT explorer's
+ * server response measured 5.6 seconds against 0.1 for the grade explorer,
+ * which is why clicking JLPT Explorer looked like nothing had happened.
+ *
+ * The API is still the fallback for ids the catalogue has not seen, so a
+ * subject added to WaniKani since the last sync still resolves.
+ */
 export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexItem[]> {
   const assignmentsCollection = await fetchAllCollectionPages(
     `/assignments?subject_types=${SUBJECT_TYPES.kanji}`,
@@ -37,9 +52,26 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
     }
   >();
 
+  /* The catalogue answers for everything it holds, in one query. */
+  const catalog = await getCatalogSubjectDetails(ids);
+  for (const [subjectId, detail] of catalog) {
+    if (detail.subjectType !== SUBJECT_TYPES.kanji || !detail.characters) continue;
+    subjectById.set(subjectId, {
+      characters: detail.characters,
+      meanings: detail.meanings.slice(0, 3),
+      readings: detail.readings,
+      primaryReadings: detail.primaryReadings,
+      meaningExplanation: detail.meaningExplanation,
+      readingExplanation: detail.readingExplanation,
+      wkLevel: detail.wkLevel,
+    });
+  }
+
+  /* Only what the catalogue could not answer goes to the API. */
+  const missing = ids.filter((id) => !subjectById.has(id));
   const chunkSize = 200;
-  for (let i = 0; i < ids.length; i += chunkSize) {
-    const chunk = ids.slice(i, i + chunkSize).join(",");
+  for (let i = 0; i < missing.length; i += chunkSize) {
+    const chunk = missing.slice(i, i + chunkSize).join(",");
     if (!chunk) {
       continue;
     }
