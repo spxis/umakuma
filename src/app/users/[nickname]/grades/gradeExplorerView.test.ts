@@ -16,6 +16,7 @@ import {
   parsePageParam,
   readingsForGrade,
   standaloneReadings,
+  gradeSearchSuggestions,
 } from "./gradeExplorerView";
 
 function entry(overrides: Partial<SchoolGradeKanjiEntry> = {}): SchoolGradeKanjiEntry {
@@ -190,5 +191,42 @@ describe("parseGradeSegment", () => {
     expect(parseGradeSegment("7")).toBeNull();
     expect(parseGradeSegment("0")).toBeNull();
     expect(parseGradeSegment(undefined)).toBeNull();
+  });
+});
+
+/*
+ * The grades search offered nothing as you typed, which asked a learner to
+ * know the character they had come to look up. It suggests the grade's own
+ * kanji now - all of them, since the search reads the whole grade and a
+ * partial list would be a half-truth about what typing will find.
+ */
+describe("gradeSearchSuggestions", () => {
+  const entry = (kanji: string, primaryMeaning: string | null) =>
+    ({ kanji, primaryMeaning, frequencyRank: null }) as never;
+
+  it("offers every character the grade holds, with its meaning", () => {
+    expect(gradeSearchSuggestions([entry("日", "Sun"), entry("月", "Moon")])).toEqual([
+      { value: "日", label: "Sun" },
+      { value: "月", label: "Moon" },
+    ]);
+  });
+
+  it("keeps the order the grade teaches them in", () => {
+    const taught = ["一", "右", "雨", "円", "王"].map((kanji) => entry(kanji, kanji));
+    expect(gradeSearchSuggestions(taught).map((option) => option.value)).toEqual([
+      "一",
+      "右",
+      "雨",
+      "円",
+      "王",
+    ]);
+  });
+
+  it("gives a character with no meaning an empty label rather than nothing to render", () => {
+    expect(gradeSearchSuggestions([entry("々", null)])).toEqual([{ value: "々", label: "" }]);
+  });
+
+  it("draws nothing for a grade that could not be read", () => {
+    expect(gradeSearchSuggestions([])).toEqual([]);
   });
 });

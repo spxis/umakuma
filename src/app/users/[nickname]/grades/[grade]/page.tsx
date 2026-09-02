@@ -9,15 +9,18 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import userBanner from "@/images/umakuma-banner1-transparent.png";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
-import { getSchoolGradeIndex, querySchoolGradeCatalog } from "@/lib/schoolGrades";
+import { getSchoolGradeFile, getSchoolGradeIndex, querySchoolGradeCatalog } from "@/lib/schoolGrades";
 import { withOfficialReadings } from "@/lib/gradeReadings";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { viewsOwnPage } from "@/app/shared/viewerAddress";
 import { GRADE_EXPLORER_COPY, GRADE_PAGE_SIZE } from "../GradeExplorer.constants";
 import GradeKanjiBoard from "../GradeKanjiBoard";
-import { GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, pageRange, parseGradeSegment, parsePageParam } from "../gradeExplorerView";
+import { gradeSearchSuggestions, GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, pageRange, parseGradeSegment, parsePageParam } from "../gradeExplorerView";
 import { noTranslateClass } from "@/app/shared/japaneseText";
+
+/** One id for the suggestion list, since the page renders one search box. */
+const SEARCH_LIST_ID = "grade-search-suggestions";
 
 type PageProps = {
   params: Promise<{ nickname: string; grade: string }>;
@@ -69,6 +72,13 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
     sortBy: "grade",
     sortDir: "asc",
   });
+
+  /*
+   * The whole grade, not the page: the search reads the whole grade, so the
+   * suggestions have to as well. It is a local catalogue file that is already
+   * in memory, so this costs the page nothing but the options themselves.
+   */
+  const suggestions = gradeSearchSuggestions(getSchoolGradeFile(grade)?.kanji ?? []);
 
   const index = getSchoolGradeIndex();
   const countsByGrade = new Map((index?.grades ?? []).map((entry) => [entry.grade, entry]));
@@ -146,13 +156,28 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
             className="mt-3 flex flex-wrap items-center gap-2"
             action={`/users/${encodeURIComponent(userKey)}/grades/${grade}`}
           >
+            {/*
+              * Suggests the grade's own kanji as you type, the way every
+              * other search here does. Without it the box asked a learner to
+              * already know the character they came to look up.
+              */}
             <input
               type="search"
               name="q"
               defaultValue={search}
+              list={suggestions.length > 0 ? SEARCH_LIST_ID : undefined}
               placeholder={GRADE_EXPLORER_COPY.searchPlaceholder}
               className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm text-foreground outline-none placeholder:text-foreground/60 focus-visible:ring-2 focus-visible:ring-accent/40"
             />
+            {suggestions.length > 0 ? (
+              <datalist id={SEARCH_LIST_ID}>
+                {suggestions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </datalist>
+            ) : null}
             <button type="submit" className="inline-flex h-9 shrink-0 items-center rounded-full bg-accent px-4 text-xs font-black uppercase tracking-[0.08em] text-white transition hover:brightness-95">
               {GRADE_EXPLORER_COPY.search}
             </button>

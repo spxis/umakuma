@@ -117,3 +117,27 @@ export function pageRange(page: number, total: number): { first: number; last: n
   const first = (page - 1) * GRADE_PAGE_SIZE + 1;
   return { first, last: Math.min(page * GRADE_PAGE_SIZE, total) };
 }
+
+/**
+ * What the grade's search box offers as you type.
+ *
+ * Every other search here suggests what its surface holds; this one asked the
+ * member to know the character already, which is the opposite of what a
+ * learner opening grade four needs.
+ *
+ * All of them, in the order the grade teaches them, rather than a capped
+ * sample: the search itself reads the whole grade, so a suggestion list that
+ * held only part of it would be a half-truth about what typing will find.
+ * Junior high is the expensive one at 1,110 characters - about 36KB of
+ * options, a quarter of that over the wire - and it is the grade where
+ * knowing what is in there is worth the most.
+ *
+ * Deliberately not sorted by frequency: no entry in this catalogue carries a
+ * frequency rank, so ordering by one would only shuffle the list into
+ * dictionary order while claiming to rank it.
+ */
+export function gradeSearchSuggestions(
+  entries: readonly SchoolGradeKanjiEntry[],
+): { value: string; label: string }[] {
+  return entries.map((entry) => ({ value: entry.kanji, label: entry.primaryMeaning ?? "" }));
+}

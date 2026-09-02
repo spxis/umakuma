@@ -2782,13 +2782,11 @@
     "name": "The school grades search has no autocomplete",
     "area": "study",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 48,
-    "summary": "Every other search offers what it holds as you type; the grades page does not. Reported 2026-09-02 by John.",
-    "owner": "Claude (session cd35064c)",
-    "claimedAt": "2026-09-02T16:06:40.115Z"
+    "summary": "The grades search asked a learner to already know the character they came to look up: every other search here suggests what its surface holds, and this one suggested nothing. It offers the grade's own kanji with their meanings now, as a plain suggestion list on the box that was already there. All of them, in the order the grade teaches them - the search reads the whole grade, so a partial list would be a half-truth about what typing will find, and junior high's 1,110 characters are exactly the grade where knowing what is in there is worth the most. Reported 2026-09-02 by John.",
+    "version": "0.294.0",
+    "releasedAt": "2026-09-02T16:23:40Z"
   },
   {
     "id": "pill-text-toggle",
