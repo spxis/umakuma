@@ -1,3 +1,5 @@
+import { MEMBER_PAGE_HEADERS } from "../dashboardPageHeaders";
+import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import DisplayPreferences from "@/app/shared/DisplayPreferences";
 import { DISPLAY_PREFERENCES_COPY } from "@/app/shared/displayPreferencesCopy";
@@ -82,10 +84,12 @@ export default async function UserProfilePage({ params }: PageProps) {
       {/* The form reads in a column; the navigation above it spans the page. */}
       <div className={PAGE_WIDTH.reading}>
 
-      <header className="mb-4">
-        <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">{PROFILE_COPY.heading}</p>
-        <h1 className="text-2xl font-black text-foreground">{name}</h1>
-      </header>
+      <MemberPageHeader
+        icon={MEMBER_PAGE_HEADERS.profile.icon}
+        title={name}
+        subtitle={PROFILE_COPY.heading}
+        className="mb-4"
+      />
 
       <section className="mb-4 grid gap-2 sm:grid-cols-3">
         <Fact label={PROFILE_COPY.address} value={`/${account.slug ?? account.wkUsername ?? ""}`} hint={PROFILE_COPY.addressHint} />

@@ -2877,5 +2877,16 @@
     "summary": "The Game page looked like another product. Its header was a banner and a heading six times the size of every other page's, so the games themselves began below the fold; its sub-navigation read in title case while every other section's reads in capitals; and nothing in it lit up to say which game was open. It wears the same header card every member page wears, and the row of games is uppercase and lights the one you are in - the hub lights none, a lobby or a run lights its own. The title case was not a style choice but a browser's own stylesheet, which sets text-transform to none on form controls: the row was built from buttons where the others use links, so the rule on the row never reached them. Reported 2026-09-02 by John.",
     "version": "0.257.0",
     "releasedAt": "2026-09-02T10:39:44Z"
+  },
+  {
+    "id": "member-page-headers",
+    "name": "Three member pages drew their own headers",
+    "area": "platform",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Lists, History and Profile each drew a header of their own - History a hand-rolled copy of the shared one, Lists and Profile something else again - so a member moving between their own pages met three different tops. All three take the shared header now, with their pictures and their actions in the slots it provides, from the same place the six dashboard tabs take theirs. Reported 2026-09-02 by John as part of making every page consistent.",
+    "version": "0.258.0",
+    "releasedAt": "2026-09-02T10:48:06Z"
   }
 ]

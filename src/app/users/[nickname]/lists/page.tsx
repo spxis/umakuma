@@ -1,3 +1,5 @@
+import { MEMBER_PAGE_HEADERS } from "../dashboardPageHeaders";
+import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
 
@@ -81,20 +83,21 @@ export default async function UserListsPage({ params }: PageProps) {
         className="mb-4"
       />
 
-      <header className="mb-4 flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-black">{STUDY_LIST_COPY.heading}</h1>
-          <p className="text-xs text-foreground/60">{STUDY_LIST_COPY.subtitle}</p>
-        </div>
-        {/* A page called Your lists needs a way to make one. */}
-        {canEdit ? (
-          <span className="flex flex-wrap items-center gap-2">
-            <ImportFromTextButton accountId={account.id} />
-            <MergeListsButton accountId={account.id} lists={lists} />
-            <NewListButton accountId={account.id} />
-          </span>
-        ) : null}
-      </header>
+      <MemberPageHeader
+        icon={MEMBER_PAGE_HEADERS.lists.icon}
+        title={STUDY_LIST_COPY.heading}
+        subtitle={STUDY_LIST_COPY.subtitle}
+        className="mb-4"
+        actions={
+          canEdit ? (
+            <span className="flex flex-wrap items-center gap-2">
+              <ImportFromTextButton accountId={account.id} />
+              <MergeListsButton accountId={account.id} lists={lists} />
+              <NewListButton accountId={account.id} />
+            </span>
+          ) : null
+        }
+      />
 
       <StudyListCards
         lists={lists}

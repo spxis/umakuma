@@ -26,6 +26,20 @@ export type DashboardPageHeader = {
   subtitle: string;
 };
 
+/**
+ * The member pages that are not dashboard tabs.
+ *
+ * Lists, History and Profile drew their own headers - one a hand-rolled copy
+ * of this shape, two something else entirely - so a member moving between
+ * them met three different tops. They take the same header as the six tabs,
+ * from the same place, so the arrangement stays one decision.
+ */
+export const MEMBER_PAGE_HEADERS = {
+  lists: { icon: umaKumaRight },
+  history: { icon: kumaClose },
+  profile: { icon: umaClose },
+} as const;
+
 export const DASHBOARD_PAGE_HEADERS: Record<TabId, DashboardPageHeader> = {
   learn: {
     icon: userBanner,

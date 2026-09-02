@@ -1,11 +1,12 @@
+import { MEMBER_PAGE_HEADERS } from "../dashboardPageHeaders";
+import { HISTORY_PAGE_COPY } from "./historyCopy";
+import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
-import Image from "next/image";
 
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
 import { authOptions, isAdminEmail } from "@/lib/auth";
-import userBanner from "@/images/umakuma-banner1-transparent.png";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
@@ -63,29 +64,13 @@ export default async function UserHistoryPage({ params }: PageProps) {
         className="mb-2"
       />
       <main className="space-y-3">
-        <section className="rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-3">
-              <div className="relative h-12 w-20 shrink-0 overflow-hidden rounded-lg border border-line bg-white sm:h-14 sm:w-24">
-                <Image
-                  src={userBanner}
-                  alt=""
-                  fill
-                  className="h-full w-full"
-                  style={{ objectFit: "contain", objectPosition: "center" }}
-                  sizes="96px"
-                />
-              </div>
-              <div>
-                <h1 className="text-xl font-black text-foreground">History</h1>
-                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-                  Study attempt history for {account.nickname}.
-                </p>
-              </div>
-            </div>
-            <StudyTagListsButton accountId={account.id} size="sm" />
-          </div>
-        </section>
+        <MemberPageHeader
+          icon={MEMBER_PAGE_HEADERS.history.icon}
+          title={HISTORY_PAGE_COPY.title}
+          subtitle={HISTORY_PAGE_COPY.subtitle(account.nickname)}
+          actions={<StudyTagListsButton accountId={account.id} size="sm" />}
+          className="mb-4"
+        />
         <HistoryScopedStudyHistoryTable accountId={account.id} />
       </main>
     </div>
