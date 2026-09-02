@@ -21,9 +21,9 @@
  * have put serifs on three percent of the radicals and nothing else.
  *
  * The contour indices below are positional, so they are pinned to the version
- * of Noto Sans JP this script downloads. If the upstream font is redrawn the
- * carve has to be re-checked against `radical-font-proof.html`, which this
- * script writes beside the font for exactly that purpose.
+ * of Noto Sans JP this script downloads, which is pinned and checksummed
+ * below. The proof sheet it writes beside the font is git-ignored: it is a
+ * local check, not something to serve.
  *
  * Source: Noto Sans JP, Google, SIL Open Font License 1.1. The OFL permits
  * subsetting and modification; the licence and its reserved-name rule ride in
@@ -32,14 +32,25 @@
  * Usage: pnpm radicals:font
  */
 
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import * as fontkit from "fontkit";
 import opentype from "opentype.js";
 import wawoff2 from "wawoff2";
 
+/*
+ * Pinned to a commit rather than `main`, and checksummed.
+ *
+ * The carve below selects contours by index, so it is only correct for the
+ * exact outlines it was derived from. If Google redraws Noto Sans JP the
+ * indices may all still resolve and quietly select the wrong strokes - a
+ * failure that produces plausible but wrong radicals, which is worse than a
+ * crash. The hash turns that into a loud error.
+ */
 const SOURCE_URL =
-  "https://raw.githubusercontent.com/google/fonts/main/ofl/notosansjp/NotoSansJP%5Bwght%5D.ttf";
+  "https://raw.githubusercontent.com/google/fonts/295d98a7a0c17c68f1341eaeea354e7960ea70d3/ofl/notosansjp/NotoSansJP%5Bwght%5D.ttf";
+const SOURCE_SHA256 = "c2f3b4d463500a2ddcd3849cded1fceeb9fd6d1c32e6cbecd568453ba50fc68f";
 const OUT_DIR = path.join(process.cwd(), "public", "fonts");
 const CACHE = path.join(process.cwd(), "node_modules", ".cache", "notosansjp.ttf");
 
@@ -160,17 +171,27 @@ function normalize(commands, unitsPerEm) {
 }
 
 async function loadSource() {
+  let buffer;
   try {
-    return await fs.readFile(CACHE);
+    buffer = await fs.readFile(CACHE);
   } catch {
     console.log(`Fetching ${SOURCE_URL}`);
     const response = await fetch(SOURCE_URL);
     if (!response.ok) throw new Error(`Noto Sans JP fetch failed: ${response.status}`);
-    const buffer = Buffer.from(await response.arrayBuffer());
+    buffer = Buffer.from(await response.arrayBuffer());
     await fs.mkdir(path.dirname(CACHE), { recursive: true });
     await fs.writeFile(CACHE, buffer);
-    return buffer;
   }
+
+  const digest = createHash("sha256").update(buffer).digest("hex");
+  if (digest !== SOURCE_SHA256) {
+    throw new Error(
+      `Noto Sans JP checksum mismatch.\n  expected ${SOURCE_SHA256}\n  got      ${digest}\n` +
+        "The carve selects contours by index and is only valid for the pinned outlines. " +
+        "Re-check every glyph against the proof sheet before updating SOURCE_SHA256.",
+    );
+  }
+  return buffer;
 }
 
 async function main() {
@@ -287,7 +308,7 @@ figcaption{font-size:12px;color:#555;margin-top:8px}
   );
 
   console.log(`Wrote ${manifest.length} glyphs (${manifest.filter((m) => !m.encoded).length} private-use) to ${OUT_DIR}`);
-  console.log(`  ${sizes.join(", ")} — proof sheet: public/fonts/radical-font-proof.html`);
+  console.log(`  ${sizes.join(", ")} — proof sheet: public/fonts/radical-font-proof.html (git-ignored)`);
 }
 
 main().catch((error) => {
