@@ -4,12 +4,14 @@ import { notFound, redirect } from "next/navigation";
 import GameModeClient from "@/app/game/GameModeClient";
 import GameSubNav from "@/app/game/GameSubNav";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
-import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
+import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import { viewerAddress } from "@/app/shared/viewerAddress";
+import { DASHBOARD_PAGE_HEADERS } from "../dashboardPageHeaders";
+import { GAME_PAGE_HEADER } from "@/app/game/GameMode.constants";
 
 type Props = {
   params: Promise<{ nickname: string }>;
@@ -51,11 +53,15 @@ export default async function GamePage({ params }: Props) {
         className="mb-2"
         subNav={<GameSubNav />}
       />
-      <UmaKumaPageBanner variant="user" className="mb-3" />
+      <MemberPageHeader
+        icon={DASHBOARD_PAGE_HEADERS.learn.icon}
+        title={GAME_PAGE_HEADER.title}
+        subtitle={GAME_PAGE_HEADER.subtitle}
+        className="mb-3"
+      />
       <GameModeClient
         accountId={account.id}
         nickname={account.nickname}
-        wkUsername={decodeURIComponent(nickname)}
       />
     </div>
   );

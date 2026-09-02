@@ -30,13 +30,13 @@ import type {
 } from "./GameMode.types";
 import { useGameSession } from "./useGameSession";
 import { usePersistedGameSettings } from "./usePersistedGameSettings";
-import { GAME_KIND_REQUEST_EVENT } from "./GameSubNav";
+import { GAME_KIND_OPENED_EVENT, GAME_KIND_REQUEST_EVENT } from "./GameSubNav";
 
 function gameSelectionBatchSize(batchSize: number): GameSelection["batchSize"] {
   return isGameBatchSize(batchSize) ? batchSize : "all";
 }
 
-export default function GameModeClient({ accountId, nickname, wkUsername }: GameModeClientProps) {
+export default function GameModeClient({ accountId, nickname }: GameModeClientProps) {
   const [phase, setPhase] = useState<GamePhase>("hub");
   const [setup, setSetup] = useState<GameSetupResponse | null>(null);
   const [setupError, setSetupError] = useState<string | null>(null);
@@ -135,6 +135,16 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
     return () => window.removeEventListener(GAME_KIND_REQUEST_EVENT, onRequest as EventListener);
   });
 
+  /*
+   * The row in the header draws the games, so it has to be told which one is
+   * open - the hub lights none, a lobby or a run lights its own.
+   */
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent(GAME_KIND_OPENED_EVENT, { detail: { kind: phase === "hub" ? null : selection.kind } }),
+    );
+  }, [phase, selection.kind]);
+
   function backToHub() {
     session.reset();
     setPhase("hub");
@@ -191,15 +201,8 @@ export default function GameModeClient({ accountId, nickname, wkUsername }: Game
 
   return (
     <div className="w-full pb-10">
-      <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line py-5 sm:py-7">
-        <div>
-          <p className="text-xs font-black uppercase text-hot">@{wkUsername}</p>
-          <h1 className="mt-1 text-4xl font-black text-foreground sm:text-6xl">{GAME_COPY.title}</h1>
-          <p className="mt-2 text-sm font-semibold text-foreground/65">{GAME_COPY.subtitle}</p>
-        </div>
-      </header>
-
-      <main className="space-y-5 py-5 sm:py-7">
+      {/* The page's own header is drawn above this, the way every page's is. */}
+      <main className="space-y-5 pb-5 pt-1 sm:pb-7">
         <div ref={setupRef}>
           {finishedRun ? (
             <GameResultsPanel

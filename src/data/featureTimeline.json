@@ -2866,5 +2866,16 @@
     "summary": "Pressing Sign out in the account menu led to a page with Logout and Join as tabs above it and Cancel beside the button, so a member who had asked to leave was still signed in and had no way to tell from looking. The menu signs you out there and then and lands on the home page. It is a button rather than a link, because a link to a page that ends a session would be prefetched on hover and hovering a menu must not sign anybody out. The page itself is still there for anybody who arrives at it directly, without the two tabs, and it says plainly that you are still signed in until you press the button. Reported 2026-09-02 by John.",
     "version": "0.255.0",
     "releasedAt": "2026-09-02T10:19:51Z"
+  },
+  {
+    "id": "game-page-chrome",
+    "name": "The Game page wears a different header and sub-nav",
+    "area": "games",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "The Game page looked like another product. Its header was a banner and a heading six times the size of every other page's, so the games themselves began below the fold; its sub-navigation read in title case while every other section's reads in capitals; and nothing in it lit up to say which game was open. It wears the same header card every member page wears, and the row of games is uppercase and lights the one you are in - the hub lights none, a lobby or a run lights its own. The title case was not a style choice but a browser's own stylesheet, which sets text-transform to none on form controls: the row was built from buttons where the others use links, so the rule on the row never reached them. Reported 2026-09-02 by John.",
+    "version": "0.257.0",
+    "releasedAt": "2026-09-02T10:39:44Z"
   }
 ]

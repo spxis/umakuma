@@ -11,6 +11,17 @@ import {
   type GameMetric,
 } from "@/lib/gameMode";
 
+/**
+ * What the page calls itself, in the shape every other page's header takes.
+ *
+ * The page used to open with a banner and a six-times heading of its own,
+ * which made Game the one page in the site that looked like another product.
+ */
+export const GAME_PAGE_HEADER = {
+  title: "Game",
+  subtitle: "Fast rounds. Family bragging rights.",
+} as const;
+
 export const GAME_COPY = {
   title: "Game Mode",
   subtitle: "Fast rounds. Family bragging rights.",

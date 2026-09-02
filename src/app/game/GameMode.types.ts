@@ -67,7 +67,6 @@ export type GameLeaderboardResponse = {
 export type GameModeClientProps = {
   accountId: string;
   nickname: string;
-  wkUsername: string;
 };
 
 export type GamePhase = "hub" | "lobby" | "playing" | "results";
