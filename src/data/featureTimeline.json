@@ -3252,5 +3252,16 @@
     "summary": "The header carried seven sections and wrapped to two lines on a laptop, which is what made every narrow page look broken. Two of them did not earn the room: the leaderboard is the site's own front page and undeveloped besides, and Progress is history and statistics - things a member looks up occasionally rather than navigates by. Both moved into the account menu, where History and Statistics now sit beside Profile and WaniKani, which is where the rest of \"about my account\" already lived. The row is Study, Game, Learn, Lists and Read, and it fits on one line. The menu learned a distinction while that was open: a page rooted at the site rather than at the member is listed with Updates rather than among your own pages, because the leaderboard is everybody's and listing it under Profile would be a link to somebody else's. Requested 2026-09-02 by John.",
     "version": "0.292.0",
     "releasedAt": "2026-09-02T16:09:02Z"
+  },
+  {
+    "id": "timeline-status-wishlist",
+    "name": "The board says what is happening, and takes a wish",
+    "area": "admin",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 65,
+    "summary": "The release timeline carries four statuses - shipped, planned, backlogged and killed - and the admin page shows three tabs, because backlogged and killed are grouped under one heading called Shelved. Give killed its own tab as Cancelled, rename Shelved to Backlog now that it means only one thing, and add two states that do not exist: in progress, and a wish list. In progress overlaps with the claim the board already records (owner and claimedAt), so decide whether it is a real status or is derived from a claim rather than having two ways to say it. The wish list is the one with a constraint: featureTimeline.json is a file in the repository, so an admin typing a wish into the website cannot write to it the way an agent running pnpm backlog can. That needs a table the site can write and the timeline view can merge in, with a way to promote a wish into a real planned entry. Requested 2026-09-02 by John."
   }
 ]
