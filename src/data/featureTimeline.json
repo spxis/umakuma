@@ -2888,5 +2888,16 @@
     "summary": "Lists, History and Profile each drew a header of their own - History a hand-rolled copy of the shared one, Lists and Profile something else again - so a member moving between their own pages met three different tops. All three take the shared header now, with their pictures and their actions in the slots it provides, from the same place the six dashboard tabs take theirs. Reported 2026-09-02 by John as part of making every page consistent.",
     "version": "0.258.0",
     "releasedAt": "2026-09-02T10:48:06Z"
+  },
+  {
+    "id": "game-kind-in-url",
+    "name": "Choosing a game does not change the address",
+    "area": "games",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Choosing a game kept it in the client, so the address never moved: a reload dropped a member back at the hub, the back button left the page entirely, and a game could not be linked to. The game is in the path now - /users/<member>/game/practice - written when a game opens and cleared when the hub returns, so a reload lands where you were, back walks from a game to the hub, and a link opens the game it names. The names in the address are the ones a member reads rather than the ones the database stores, which cannot be renamed; a name that is not a game is a 404 rather than a quiet fall back to the hub. Reported 2026-09-02 by John.",
+    "version": "0.259.0",
+    "releasedAt": "2026-09-02T10:56:40Z"
   }
 ]

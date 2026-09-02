@@ -6,15 +6,17 @@ import GameSubNav from "@/app/game/GameSubNav";
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import { authOptions, isAdminEmail } from "@/lib/auth";
+import { gameKindForSlug } from "@/lib/gameKindAddress";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
-import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { viewerAddress } from "@/app/shared/viewerAddress";
-import { DASHBOARD_PAGE_HEADERS } from "../dashboardPageHeaders";
+import { DASHBOARD_PAGE_HEADERS } from "../../dashboardPageHeaders";
 import { GAME_PAGE_HEADER } from "@/app/game/GameMode.constants";
 
 type Props = {
-  params: Promise<{ nickname: string }>;
+  /** The game being played, when the address names one: `/game/practice`. */
+  params: Promise<{ nickname: string; kind?: string[] }>;
 };
 
 export default async function GamePage({ params }: Props) {
@@ -26,7 +28,10 @@ export default async function GamePage({ params }: Props) {
   });
   if (!viewerAddress(viewerMenuInfo)) redirect("/join");
 
-  const { nickname } = await params;
+  const { nickname, kind } = await params;
+  /* A name that is not a game is not a page; it must not open the hub quietly. */
+  const initialKind = kind?.length ? gameKindForSlug(kind[0]) : null;
+  if (kind?.length && (!initialKind || kind.length > 1)) notFound();
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
     select: { id: true, nickname: true, wkUsername: true, lastSyncedAt: true, lastActivityAt: true },
@@ -62,6 +67,8 @@ export default async function GamePage({ params }: Props) {
       <GameModeClient
         accountId={account.id}
         nickname={account.nickname}
+        member={decodeURIComponent(nickname)}
+        initialKind={initialKind}
       />
     </div>
   );

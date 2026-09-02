@@ -485,4 +485,3 @@ export function formatGameDuration(durationMs: number | null): string {
   const seconds = String(totalSeconds % 60).padStart(2, "0");
   return `${minutes}:${seconds}.${totalTenths % 10}`;
 }
-

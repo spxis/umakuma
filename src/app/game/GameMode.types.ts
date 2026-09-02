@@ -67,6 +67,10 @@ export type GameLeaderboardResponse = {
 export type GameModeClientProps = {
   accountId: string;
   nickname: string;
+  /** The member whose page this is, for the addresses the games live at. */
+  member: string;
+  /** The game the address names, or null for the hub. */
+  initialKind: GameKind | null;
 };
 
 export type GamePhase = "hub" | "lobby" | "playing" | "results";

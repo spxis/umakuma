@@ -35,11 +35,20 @@ describe("member pages", () => {
     "lists",
     "libraries",
     "profile",
-    "game",
   ];
 
   it.each(segments)("/%s is a route with a page of its own", (segment) => {
     expect(existsSync(join(process.cwd(), HERE, segment, "page.tsx"))).toBe(true);
+  });
+
+  /*
+   * Game names the game in the address - `/game/practice` - so its page sits
+   * under an optional catch-all rather than at the segment itself. Both
+   * addresses are the same page; only the hub has no game to name.
+   */
+  it("gives the game itself a place in the address", () => {
+    expect(existsSync(join(process.cwd(), HERE, "game", "[[...kind]]", "page.tsx"))).toBe(true);
+    expect(existsSync(join(process.cwd(), HERE, "game", "page.tsx"))).toBe(false);
   });
 
   /*

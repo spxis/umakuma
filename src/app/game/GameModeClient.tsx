@@ -10,6 +10,7 @@ import {
   type GameKind,
   type GameLeaderboardEntry,
 } from "@/lib/gameMode";
+import { gameKindHref } from "@/lib/gameKindAddress";
 import GameLeaderboard from "./GameLeaderboard";
 import GameMapRunner from "./GameMapRunner";
 import GameLeaderboardFilters from "./GameLeaderboardFilters";
@@ -36,8 +37,8 @@ function gameSelectionBatchSize(batchSize: number): GameSelection["batchSize"] {
   return isGameBatchSize(batchSize) ? batchSize : "all";
 }
 
-export default function GameModeClient({ accountId, nickname }: GameModeClientProps) {
-  const [phase, setPhase] = useState<GamePhase>("hub");
+export default function GameModeClient({ accountId, nickname, member, initialKind }: GameModeClientProps) {
+  const [phase, setPhase] = useState<GamePhase>(initialKind ? "lobby" : "hub");
   const [setup, setSetup] = useState<GameSetupResponse | null>(null);
   const [setupError, setSetupError] = useState<string | null>(null);
   const [setupRefresh, setSetupRefresh] = useState(0);
@@ -55,6 +56,17 @@ export default function GameModeClient({ accountId, nickname }: GameModeClientPr
 
   // On the hub the scoreboard follows the filter; inside a game it follows that game.
   const leaderboardKind: "any" | GameKind = phase === "hub" ? leaderboardFilters.kind : selection.kind;
+
+  /*
+   * The address names the game, so a reload lands where the member was and a
+   * link to Practice opens Practice. Applied once on arrival: after that the
+   * client owns the phase and writes the address rather than reading it.
+   */
+  useEffect(() => {
+    if (!initialKind) return;
+    setSelection((value) => ({ ...value, kind: initialKind }));
+    /* eslint-disable-next-line react-hooks/exhaustive-deps -- the address is read once, on arrival. */
+  }, []);
   // Shiritori and Daily always record one category, so a leftover category
   // filter would hide every run for them.
   const leaderboardCategory = leaderboardKind !== "any" && gameKindRules(leaderboardKind).fixedCategory !== null
@@ -110,6 +122,11 @@ export default function GameModeClient({ accountId, nickname }: GameModeClientPr
 
   function openLobby(kind: GameKind) {
     const rules = gameKindRules(kind);
+    /* The game is where you are, so it is in the address; back returns to the hub. */
+    if (typeof window !== "undefined") {
+      const next = gameKindHref(member, kind);
+      if (window.location.pathname !== next) window.history.pushState(null, "", next);
+    }
     setSelection((value) => ({
       ...value,
       kind,
@@ -146,6 +163,10 @@ export default function GameModeClient({ accountId, nickname }: GameModeClientPr
   }, [phase, selection.kind]);
 
   function backToHub() {
+    if (typeof window !== "undefined") {
+      const next = gameKindHref(member, null);
+      if (window.location.pathname !== next) window.history.pushState(null, "", next);
+    }
     session.reset();
     setPhase("hub");
   }
