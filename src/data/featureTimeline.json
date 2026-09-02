@@ -3267,5 +3267,16 @@
     "dateIsEstimate": true,
     "release": 65,
     "summary": "The release timeline carries four statuses - shipped, planned, backlogged and killed - and the admin page shows three tabs, because backlogged and killed are grouped under one heading called Shelved. Give killed its own tab as Cancelled, rename Shelved to Backlog now that it means only one thing, and add two states that do not exist: in progress, and a wish list. In progress overlaps with the claim the board already records (owner and claimedAt), so decide whether it is a real status or is derived from a claim rather than having two ways to say it. The wish list is the one with a constraint: featureTimeline.json is a file in the repository, so an admin typing a wish into the website cannot write to it the way an agent running pnpm backlog can. That needs a table the site can write and the timeline view can merge in, with a way to promote a wish into a real planned entry. Requested 2026-09-02 by John."
+  },
+  {
+    "id": "leaderboard-jlpt-catalog",
+    "name": "The JLPT counts ask WaniKani for characters it already holds",
+    "area": "platform",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "The JLPT counts on the leaderboard need one static fact about each learned kanji - the character - and they were asking WaniKani for it in 200-id chunks. A member with fifteen hundred learned kanji cost eight sequential round trips on every stats computation, for data the local catalogue holds: production carries 2,102 kanji, which is every one WaniKani teaches. The catalogue answers now, in one query, and the API is kept only for ids it has never seen, so a subject added since the last sync is still counted rather than dropped. Assignments stay live, being the member's own state. The same shape the study queue and the kanji index already follow. Found 2026-09-02 while sweeping for per-render subject fetches.",
+    "version": "0.298.0",
+    "releasedAt": "2026-09-02T16:42:31Z"
   }
 ]
