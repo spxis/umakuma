@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePracticePath } from "@/app/shared/userBasePath";
 
+import ListSearchField from "@/app/shared/ListSearchField";
 import ModalShell from "@/app/shared/ModalShell";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
@@ -47,7 +48,6 @@ const VIEW_MODE_STORAGE_KEY = "wr:study-tag-lists:view-mode";
  * can walk the list from there.
  */
 const ALL_KINDS = "all";
-const SEARCH_OPTIONS_ID = "study-tag-lists-search-options";
 
 export default function StudyTagListsModal() {
   const [payload, setPayload] = useState<StudyTagListPayload | null>(null);
@@ -285,35 +285,11 @@ export default function StudyTagListsModal() {
             }))}
           />
         )}
-        <span className="relative min-w-0 flex-1">
-          <input
-            type="search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            list={SEARCH_OPTIONS_ID}
-            placeholder={STUDY_TAG_LIST_COPY.searchPlaceholder}
-            aria-label={STUDY_TAG_LIST_COPY.searchPlaceholder}
-            className="h-9 w-full rounded-full border border-line bg-surface pl-4 pr-9 text-sm font-bold text-foreground [&::-webkit-search-cancel-button]:hidden"
-          />
-          {search ? (
-            <button
-              type="button"
-              onClick={() => setSearch("")}
-              aria-label={STUDY_TAG_LIST_COPY.clearSearch}
-              className="absolute right-2 top-1/2 inline-flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-sm font-black text-foreground/60 hover:bg-surface-muted"
-            >
-              ×
-            </button>
-          ) : null}
-          {/* What the list holds, offered as the reader types. */}
-          <datalist id={SEARCH_OPTIONS_ID}>
-            {(items ?? []).slice(0, 300).map((item) => (
-              <option key={item.subjectId} value={item.characters}>
-                {item.meanings[0] ?? ""}
-              </option>
-            ))}
-          </datalist>
-        </span>
+        <ListSearchField
+          value={search}
+          onChange={setSearch}
+          options={(items ?? []).map((item) => ({ value: item.characters, label: item.meanings[0] ?? "" }))}
+        />
         {tag !== STUDY_TAGS.burned || savedList ? (
           <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} />
         ) : null}

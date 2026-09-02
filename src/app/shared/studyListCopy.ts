@@ -105,12 +105,12 @@ export const STUDY_LIST_COPY = {
   copiedFrom: "Copied from",
 
   /* Lists nobody owns, that keep themselves. */
-  liveListsHeading: "Lists that keep themselves",
-  liveListsBlurb: "Kept by UmaKuma rather than by a person, and always what the data says today. Follow one to keep it, or copy it and make it yours to cut down.",
-  liveListPill: "Live list",
+  liveListsHeading: "Auto lists",
+  liveListsBlurb: "Kept by UmaKuma rather than by a person, and always what the data says today. Follow one to keep it, or copy it and make it yours to cut down. A star marks the ones you follow.",
+  liveListPill: "Auto list",
   liveListBlurb: "Kept by UmaKuma; it changes as the data does.",
   liveCopyHint: "A copy is yours to cut down. Following keeps it current.",
-  allLiveLists: "All lists",
+  allLiveLists: "All auto lists",
   liveJlptBlurb: "Every kanji the JLPT lists at each level, commonest first.",
   liveGradeBlurb: "What Japanese children are taught, year by year.",
   liveWkBlurb: "Every radical, kanji and word WaniKani teaches at each level.",

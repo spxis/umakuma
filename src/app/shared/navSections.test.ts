@@ -72,6 +72,15 @@ describe("sectionForPath", () => {
    * The WaniKani explorer moved from `wk-explorer` to `library-explorer` and
    * links in the wild still use the old path.
    */
+  /* Every list lives under Lists, including the auto lists a visitor sees. */
+  it("sends a visitor with no page of their own to the auto lists", () => {
+    const lists = NAV_SECTIONS.find((section) => section.id === "lists")!;
+    expect(navChildHref(lists.children[0]!, null)).toBe("/lists");
+    expect(navChildHref(lists.children[0]!, USER)).toBe(`/users/${USER}/lists`);
+    expect(sectionForPath("/lists", null)?.id).toBe("lists");
+    expect(sectionForPath("/lists", USER)?.id).toBe("lists");
+  });
+
   /* The map has no user segment - one map serves everyone - and is still an Explore page. */
   it("puts the public map page in Explore", () => {
     expect(sectionForPath("/map", USER)?.id).toBe("explore");

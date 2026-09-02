@@ -2704,25 +2704,14 @@
   },
   {
     "id": "lists-one-home",
-    "name": "Every list under Lists, and one way to read one",
+    "name": "Every list under Lists, and one search field",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 39,
-    "summary": "Auto-lists sit under Explore as Kanji lists while a member's lists sit under Lists; the two pages look nothing alike; a list opens as a modal from one control and as a page from another, so which view you get is a mystery; and Lists that keep themselves is a link at the bottom rather than part of the page. All lists belong under Lists, on one page organised into sections, and a list has one view - the full page. Nothing is lost in the move. Requested 2026-09-02 by John with screenshots."
-  },
-  {
-    "id": "list-page-search-clear",
-    "name": "The list page search has no clear button",
-    "area": "study",
-    "kind": "bug",
-    "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 40,
-    "summary": "The viewer's search box has an X and autocomplete; the list page's and the live list's do not. Reported 2026-09-02 by John."
+    "summary": "The auto lists sat under Explore as Kanji lists while a member's own lists sat under Lists, on a page that looked nothing like theirs. Every list lives under Lists now: the built-in two, the sets you saved, the lists you follow, the auto lists in full - all of them on one page, in sections, with a star on the auto lists you follow. Explore has lost its Kanji lists entry, and Lists leads a visitor with no page of their own to the auto lists, which are the part of Lists that belongs to everybody. The three list surfaces also shared out one search field, so the viewer, a list's page and an auto list's page all clear with an X and offer the list's own items as you type, rather than one having both and two having neither. They are called Auto lists now, which is what John called them. Requested 2026-09-02 by John with screenshots.",
+    "version": "0.251.0",
+    "releasedAt": "2026-09-02T09:48:41Z"
   },
   {
     "id": "search-kanji-by-meaning",

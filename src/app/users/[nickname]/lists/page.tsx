@@ -14,7 +14,7 @@ import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import ArchivedLists from "./ArchivedLists";
-import FollowedLiveLists from "./FollowedLiveLists";
+import AutoListSections from "@/app/shared/AutoListSections";
 import FollowedLists from "./FollowedLists";
 import ImportFromTextButton from "./ImportFromTextButton";
 import MergeListsButton from "./MergeListsButton";
@@ -105,7 +105,15 @@ export default async function UserListsPage({ params }: PageProps) {
         canEdit={canEdit}
       />
 
-      {canEdit ? <FollowedLiveLists followedKeys={followedLive} /> : null}
+      {canEdit ? (
+        <section className="mt-6">
+          <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
+            {STUDY_LIST_COPY.liveListsHeading}
+          </h2>
+          <p className="mb-3 text-xs text-foreground/60">{STUDY_LIST_COPY.liveListsBlurb}</p>
+          <AutoListSections followedKeys={followedLive} />
+        </section>
+      ) : null}
       {canEdit && followed.length > 0 ? <FollowedLists lists={followed} accountId={account.id} /> : null}
       {canEdit && archived.length > 0 ? <ArchivedLists lists={archived} accountId={account.id} owner={userKey} /> : null}
     </div>

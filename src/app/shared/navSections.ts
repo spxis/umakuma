@@ -17,6 +17,8 @@ export type NavChild = {
   label: string;
   /** Path after `/users/<name>`, or an absolute path when not user-scoped. */
   path: string;
+  /** Where it goes for somebody with no page of their own. */
+  fallback?: string;
 };
 
 export type NavSection = {
@@ -51,10 +53,8 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
       { label: "Grades", path: "grades" },
       { label: "Practice", path: "practice" },
-      /* Public, so they have no user segment: a map and the site's own lists
-         are the same for everyone. */
+      /* Public, so it has no user segment: a map is the same for everyone. */
       { label: "Map", path: "/map" },
-      { label: "Kanji lists", path: "/lists" },
     ],
   },
   /*
@@ -62,7 +62,12 @@ export const NAV_SECTIONS: NavSection[] = [
    * go to find things; a list is something you made and come back to, and it
    * was two clicks from everywhere.
    */
-  { id: "lists", label: "Lists", placement: "nav", children: [{ label: "Lists", path: "lists" }] },
+  /*
+   * Every list lives here: the member's own, the ones they follow and the
+   * auto lists. A visitor with no page of their own lands on the auto lists,
+   * which are the part of Lists that belongs to everybody.
+   */
+  { id: "lists", label: "Lists", placement: "nav", children: [{ label: "Lists", path: "lists", fallback: "/lists" }] },
   {
     id: "progress",
     label: "Progress",
@@ -98,7 +103,8 @@ export function navChildHref(child: NavChild, username: string | null): string {
     return child.path;
   }
 
-  return username ? `/users/${encodeURIComponent(username)}/${child.path}` : "/";
+  if (username) return `/users/${encodeURIComponent(username)}/${child.path}`;
+  return child.fallback ?? "/";
 }
 
 /** The section a pathname belongs to, or null when it is outside the grouped nav. */
@@ -111,9 +117,16 @@ export function sectionForPath(pathname: string | null, username: string | null)
     return NAV_SECTIONS.find((section) => section.id === "leaderboard") ?? null;
   }
 
-  /* A page outside the user segment still belongs to a group, by its absolute path. */
+  /*
+   * A page outside the user segment still belongs to a group, by its own
+   * absolute path or by the fallback a group offers a visitor.
+   */
   const absolute = NAV_SECTIONS.find((section) =>
-    section.children.some((child) => child.path.startsWith("/") && child.path !== "/" && pathname === child.path),
+    section.children.some(
+      (child) =>
+        (child.path.startsWith("/") && child.path !== "/" && pathname === child.path) ||
+        (child.fallback !== undefined && pathname === child.fallback),
+    ),
   );
   if (absolute) return absolute;
 
@@ -126,6 +139,7 @@ export function sectionForPath(pathname: string | null, username: string | null)
   // `wk-explorer` is the old path for the WaniKani explorer; links in the wild
   // still point at it, so it resolves to the same section.
   const normalized = segment === "wk-explorer" ? "library-explorer" : segment;
+  /* `/lists` with no member is the auto lists, which belong to the Lists group. */
   return (
     NAV_SECTIONS.find((section) =>
       // A child may be nested (`grades/practice`); its first segment is what a

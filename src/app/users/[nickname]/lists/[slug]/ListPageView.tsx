@@ -11,6 +11,7 @@ import { LIST_ITEM_KIND_DISPLAY, LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, typ
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
 import HideBurnedToggle from "@/app/shared/HideBurnedToggle";
+import ListSearchField from "@/app/shared/ListSearchField";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import { useHideBurned } from "@/app/shared/useHideBurned";
 import { withoutBurned } from "@/lib/burnList";
@@ -195,13 +196,11 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
               ))}
             </>
           ) : null}
-          <input
-            type="search"
+          <ListSearchField
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder={STUDY_LIST_COPY.searchItems}
-            aria-label={STUDY_LIST_COPY.searchItems}
-            className="h-8 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-semibold text-foreground"
+            onChange={setSearch}
+            label={STUDY_LIST_COPY.searchItems}
+            options={rows.map((row) => ({ value: row.glyph, label: row.meaning }))}
           />
           {viewer.accountId ? <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} /> : null}
           {viewer.accountId ? (
