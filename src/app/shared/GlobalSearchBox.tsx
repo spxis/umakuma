@@ -5,8 +5,10 @@ import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import { useSearchCombobox } from "@/lib/useSearchCombobox";
 import GlobalSearchSuggestList from "./GlobalSearchSuggestList";
-import RadicalSearchPanel from "./RadicalSearchPanel";
+import RadicalPickerControls from "./RadicalPickerControls";
+import RadicalPickerGrid from "./RadicalPickerGrid";
 import SearchCommandBar from "./SearchCommandBar";
+import { useRadicalPicker } from "./useRadicalPicker";
 import RecentItems from "./RecentItems";
 import SearchComboboxField, { SearchIcon } from "./SearchComboboxField";
 import { MODAL_LAYERS } from "./modalLayers";
@@ -85,22 +87,24 @@ export default function GlobalSearchBox({
    * matches run underneath it like any other search.
    */
   const command = parseSearchCommand(cbx.typed);
-  const radicalPicker = command ? (
-    <RadicalSearchPanel
-      chosen={command.radicals}
-      onChange={(next) => cbx.setQuery(formatRadicalCommand(next))}
-    />
-  ) : (
-    <SearchCommandBar onCommand={cbx.setQuery} />
+  const picker = useRadicalPicker(
+    command?.radicals ?? [],
+    (next) => cbx.setQuery(formatRadicalCommand(next)),
+    Boolean(command),
   );
+  /* One row of options; the picker takes it over while it is running. */
+  const options = command ? <RadicalPickerControls picker={picker} /> : <SearchCommandBar onCommand={cbx.setQuery} />;
+  const grid = command ? <RadicalPickerGrid picker={picker} /> : null;
 
   /* The grid needs the room the answer alone does not. */
-  const panelWidth = filing || command ? "w-160" : "w-104";
+  /* Only a floor: the panel takes the field's width, which is the row. */
+  const panelWidth = filing || command ? "min-w-160" : "min-w-104";
 
   function suggestList(listboxId: string) {
     return (
       <GlobalSearchSuggestList
-        header={radicalPicker}
+        options={options}
+        grid={grid}
         suppressEmpty={Boolean(command) && command!.radicals.length === 0}
         listboxId={listboxId}
         hits={cbx.hits}
@@ -171,14 +175,12 @@ export default function GlobalSearchBox({
 
       {/* Desktop: half a field until it is wanted. */}
       <div
-        className={`hidden sm:block ${className}`.trim()}
+        className={`hidden min-w-0 sm:block ${expanded ? "flex-1" : ""} ${className}`.trim()}
         onFocus={trackFocus}
         onBlur={trackFocus}
       >
         <div
-          className={`transition-[width] duration-200 ease-out ${
-            expanded ? (command ? "w-96 md:w-128 lg:w-160" : "w-80 md:w-112 lg:w-144") : "w-28 md:w-32"
-          }`}
+          className={`transition-[width] duration-200 ease-out ${expanded ? "w-full" : "w-28 md:w-32"}`}
         >
           <SearchComboboxField
             cbx={cbx}
@@ -189,7 +191,14 @@ export default function GlobalSearchBox({
           >
             {cbx.panelVisible || cbx.showRecent ? (
               <div
-                className={`absolute left-0 top-[calc(100%+0.5rem)] sm:left-auto sm:right-0 ${MODAL_LAYERS.searchSuggest} ${panelWidth} max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
+                /*
+                 * As wide as the field it hangs from. A fixed width left the
+                 * panel narrower than the open box, which looked like a second
+                 * control and wrapped the options row onto two lines. It only
+                 * ever shows while the box is open, so there is no narrow case
+                 * to keep a minimum for.
+                 */
+                className={`absolute inset-x-0 top-[calc(100%+0.5rem)] ${MODAL_LAYERS.searchSuggest} ${panelWidth} max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
               >
                 {cbx.panelVisible ? (
                   suggestList(DESKTOP_LISTBOX)

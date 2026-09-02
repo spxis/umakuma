@@ -34,11 +34,16 @@ type Props = {
   /** The viewer's own account, which is what makes the filing column available. */
   accountId?: string | null;
   /**
-   * Drawn above everything, including the empty state. The radical picker sits
-   * here: under the input, over the answer, which is where the reader is
-   * already looking.
+   * The left of the options row, under the input and over the answer.
+   *
+   * Everything that changes how the search behaves shares one row - filing
+   * into lists, finding by parts, how big the radicals are drawn - because a
+   * second row of options above the first is where a panel starts becoming a
+   * page.
    */
-  header?: ReactNode;
+  options?: ReactNode;
+  /** Under that row: the radical grid, when one is being picked from. */
+  grid?: ReactNode;
   /**
    * No "nothing matched" line. A command that has not been given anything to
    * match on yet has not failed to find anything.
@@ -72,7 +77,8 @@ export default function GlobalSearchSuggestList({
   onNearEnd,
   loadingMore = false,
   accountId = null,
-  header,
+  options,
+  grid,
   suppressEmpty = false,
 }: Props) {
   const activeRow = useRef<HTMLLIElement>(null);
@@ -84,10 +90,32 @@ export default function GlobalSearchSuggestList({
     activeRow.current?.scrollIntoView({ block: "nearest" });
   }, [activeIndex]);
 
+  const optionsRow =
+    options || accountId ? (
+      <div className="flex flex-nowrap items-center gap-2 overflow-x-auto border-b border-line/60 px-3 py-1.5">
+        {options}
+        {accountId ? (
+          /*
+           * Filing, at the end of the row. A signed-in member sees one quiet
+           * phrase; opened, every row grows a column of their own tags and
+           * lists, so ten kanji can be searched and kept without leaving the box.
+           */
+          <span className="ml-auto">
+            <SubjectFilerToggle
+              open={filerOpen}
+              onToggle={() => setFilerOpen((was) => !was)}
+              error={filing ? filer.error : null}
+            />
+          </span>
+        ) : null}
+      </div>
+    ) : null;
+
   if (hits.length === 0) {
     return (
       <>
-        {header}
+        {optionsRow}
+        {grid}
         <SearchAnswerBrief answers={answers} />
         {suppressEmpty ? null : (
           <p className="px-4 py-3 text-xs font-semibold text-foreground/60">
@@ -111,18 +139,9 @@ export default function GlobalSearchSuggestList({
 
   return (
     <>
-    {header}
+    {optionsRow}
+    {grid}
     <SearchAnswerBrief answers={answers} />
-    {accountId ? (
-      /*
-       * The way into filing, above the rows. A signed-in member sees one quiet
-       * phrase; opened, every row grows a column of the member's own tags and
-       * lists, so ten kanji can be searched and kept without leaving the box.
-       */
-      <div className="flex items-center justify-end border-b border-line/60 px-3 py-1.5">
-        <SubjectFilerToggle open={filerOpen} onToggle={() => setFilerOpen((was) => !was)} error={filing ? filer.error : null} />
-      </div>
-    ) : null}
     <ul
       id={listboxId}
       role="listbox"

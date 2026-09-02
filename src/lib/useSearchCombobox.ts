@@ -172,11 +172,23 @@ export function useSearchCombobox({
       return;
     }
 
-    /* Stopped so a phone sheet's own Escape listener keeps the sheet open. */
-    if (event.key === "Escape" && panelVisible) {
+    /*
+     * Escape empties the box before it closes it.
+     *
+     * One key, two things to undo: the query that is in the way and the panel
+     * over the page. Closing first leaves the box still full, so the next
+     * focus reopens the same search somebody was trying to leave - and a
+     * command, which is long and typed by a control rather than by hand, is
+     * exactly what a member reaches for Escape to be rid of.
+     *
+     * Stopped so a phone sheet's own Escape listener keeps the sheet open on
+     * the press that clears.
+     */
+    if (event.key === "Escape" && (panelVisible || typed.length > 0)) {
       event.preventDefault();
       event.stopPropagation();
-      closePanel();
+      if (typed.length > 0) clear();
+      else closePanel();
     }
   }
 

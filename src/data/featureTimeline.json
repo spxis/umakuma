@@ -3115,5 +3115,17 @@
     "summary": "The radical command could only be written in Japanese, which left the typed half of the feature useless to exactly the reader it was built for: somebody looking up a character they cannot read is usually in the same position with its parts - they can see the shape and have no way to type it. :radicals sun + moon now answers with the same thirty-one characters as 日 + 月. Names come from two sources, best first, because neither covers the set alone: the kanji dictionary for the 247 of 253 radicals that are also kanji, which is the accurate answer and costs nothing since the file is already shipped; and WaniKani's own radical names for the 199 whose character is in this set, because a member taught \"fins\" for ハ will type what they were taught. WaniKani's are teaching mnemonics rather than classical names - it calls 久 a raptor cage - so they answer second and never over the dictionary. A name that reaches neither answers with nothing rather than a neighbour: WaniKani draws some of its radicals instead of writing them, so \"beggar\" names a picture and no character here. The command's own reading changed with it. A space is inside \"long time\" and between 日 and 月, so it is no longer a separator: parts split on a plus or a comma, and then a part of Japanese script becomes one radical per character while a part of Latin letters stays one name however many words it holds. Requested 2026-09-02 by John.",
     "version": "0.286.0",
     "releasedAt": "2026-09-02T15:17:25Z"
+  },
+  {
+    "id": "search-options-row",
+    "name": "One row of options, and the row to itself",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 57,
+    "summary": "Four things about the search row, reported together. Find by radicals and Add to lists were two rows of options stacked above the results; they are one row now, and the radical picker takes that row over while it is running rather than opening a second one - everything that changes how the search behaves is in the same place. The dropdown is as wide as the field it hangs from, since a fixed width left it narrower than the open box, which looked like a second control and wrapped the options onto two lines. Opening the header's box made the section links wrap to a second line while squeezing the field; the links now step aside entirely and the box takes the whole row, because somebody who has started typing is not reaching for Learn and the links are one Escape away. Escape empties the box before it closes it - one key, two things to undo, and closing first left the box still full so the next focus reopened the search somebody was trying to leave. And the radical grid can be resized: smaller, larger and reset, remembered per browser, starting larger than it shipped at. A grid of 253 characters is read by shape - 冫 and 氵 differ by one stroke - so how big it is drawn decides whether it can be read at all, and that answer is different on a phone, at a desk and for older eyes. Reported 2026-09-02 by John.",
+    "version": "0.287.0",
+    "releasedAt": "2026-09-02T15:29:01Z"
   }
 ]

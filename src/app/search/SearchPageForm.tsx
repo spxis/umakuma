@@ -1,8 +1,10 @@
 "use client";
 
 import GlobalSearchSuggestList from "@/app/shared/GlobalSearchSuggestList";
-import RadicalSearchPanel from "@/app/shared/RadicalSearchPanel";
+import RadicalPickerControls from "@/app/shared/RadicalPickerControls";
+import RadicalPickerGrid from "@/app/shared/RadicalPickerGrid";
 import SearchCommandBar from "@/app/shared/SearchCommandBar";
+import { useRadicalPicker } from "@/app/shared/useRadicalPicker";
 import RecentItems from "@/app/shared/RecentItems";
 import SearchComboboxField from "@/app/shared/SearchComboboxField";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
@@ -45,9 +47,14 @@ export default function SearchPageForm({
   });
 
   const command = parseSearchCommand(cbx.typed);
-  const radicalPicker = command ? (
-    <RadicalSearchPanel chosen={command.radicals} onChange={(next) => cbx.setQuery(formatRadicalCommand(next))} />
-  ) : null;
+  const picker = useRadicalPicker(
+    command?.radicals ?? [],
+    (next) => cbx.setQuery(formatRadicalCommand(next)),
+    Boolean(command),
+  );
+  /* One row of options; the picker takes it over while it is running. */
+  const options = command ? <RadicalPickerControls picker={picker} /> : <SearchCommandBar onCommand={cbx.setQuery} />;
+  const grid = command ? <RadicalPickerGrid picker={picker} /> : null;
 
   return (
     <SearchComboboxField
@@ -56,7 +63,7 @@ export default function SearchPageForm({
       inputId={SEARCH_PAGE_INPUT_ID}
       listboxId={LISTBOX_ID}
       autoFocus={initialQuery.length === 0}
-      belowField={command ? null : <SearchCommandBar onCommand={cbx.setQuery} />}
+      belowField={cbx.panelVisible ? null : <div className="flex flex-wrap items-center gap-2 px-3 py-1">{options}</div>}
     >
       {cbx.showRecent ? (
         <div
@@ -71,7 +78,8 @@ export default function SearchPageForm({
           className={`absolute inset-x-0 top-[calc(100%+0.5rem)] ${MODAL_LAYERS.searchSuggest} overflow-hidden rounded-2xl border border-line bg-surface shadow-lg`}
         >
           <GlobalSearchSuggestList
-            header={radicalPicker}
+            options={options}
+        grid={grid}
             suppressEmpty={Boolean(command) && command!.radicals.length === 0}
             listboxId={LISTBOX_ID}
             hits={cbx.hits}

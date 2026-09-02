@@ -12,6 +12,13 @@ export const RADICAL_SEARCH_COPY = {
   commandBarHint: "or type :rad sun + moon",
   hint: "Pick the parts you can see, or type their names. Each one narrows the list.",
   clear: "Clear",
+  smaller: "Smaller radicals",
+  larger: "Larger radicals",
+  resetSize: "Reset the size",
+  /* Marks rather than words: three of them sit in a row a phone shares. */
+  smallerMark: "A-",
+  largerMark: "A+",
+  resetSizeMark: "\u21BA",
   close: "Close",
   pick: "Pick a radical to see the kanji built from it.",
   searching: "Looking…",

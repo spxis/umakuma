@@ -144,7 +144,18 @@ export default function AppTopMenuRow({
   return (
     <div className={`relative ${className ?? ""}`.trim()}>
     <section className="flex items-center justify-between gap-3">
-      <nav className="admin-tab-scroll flex min-w-0 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-widest text-foreground/60 sm:hidden">
+      {/*
+        * The links give the box the row while it is open.
+        *
+        * Sharing the width made them wrap to a second line and squeezed the
+        * field at the same time; a member who has started typing is not
+        * reaching for Learn, and the links are one Escape away.
+        */}
+      <nav
+        className={`admin-tab-scroll min-w-0 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-widest text-foreground/60 sm:hidden ${
+          searchExpanded ? "hidden" : "flex"
+        }`}
+      >
         {mobileLinks.map((link, index) => (
           <span key={`mobile-${link.label}-${link.href}`} className="inline-flex shrink-0 items-center gap-x-1.5">
             <Link
@@ -160,8 +171,8 @@ export default function AppTopMenuRow({
         ))}
       </nav>
       <nav
-        className={`hidden flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60 sm:flex ${
-          searchExpanded ? "max-lg:hidden" : ""
+        className={`hidden flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60 ${
+          searchExpanded ? "" : "sm:flex"
         }`}
       >
         {links.map((link, index) => (
@@ -196,7 +207,7 @@ export default function AppTopMenuRow({
         * float on its own past the codename; there is nothing for it to be
         * separate from now, and pairing them puts every control in one place.
         */}
-      <div className="ml-auto flex shrink-0 items-center gap-2">
+      <div className={`ml-auto flex items-center gap-2 ${searchExpanded ? "min-w-0 flex-1" : "shrink-0"}`}>
         {onSearchPage ? null : (
           <GlobalSearchBox
             viewerAccountId={viewerMenuInfo?.accountId ?? null}
