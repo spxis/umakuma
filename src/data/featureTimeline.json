@@ -2560,13 +2560,12 @@
     "name": "Pull updates into a copied list",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
+    "status": "shipped",
+    "date": "2026-09-02",
     "release": 27,
-    "summary": "A copied list remembers its source and can pull what has been added there since, item by item, so a copy taken from a friend's growing list does not fall behind without becoming a subscription. Suggested 2026-09-01.",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T13:24:17.021Z"
+    "summary": "A copy is a snapshot, and the person it was taken from keeps adding to theirs. The two ways forward were both wrong: follow the original and you no longer own what you are looking at, copy it again and you lose everything you changed. A copy remembers its source, so it can simply ask - and the answer sits at the top of the copy's own page: what has been added since, as characters rather than a count. Item by item, which is the point: somebody who copied a class list and dropped half of it does not want the half back, so every item is a button that takes only itself, with Take all there for the common case of agreeing with everything. Taken items are appended in the copy's own order rather than merged into the source's, because the member arranged their list; anything already held is left exactly as it is, notes included. Removals are never carried across - a friend tidying their list is not grounds for deleting from somebody else's. A source that has gone private since answers as unreachable rather than as empty, because \"nothing new\" and \"you can no longer see this\" are different things to a member deciding whether to keep a copy. The panel draws nothing at all when there is nothing new, which is almost always: a list that says \"0 new\" every time it is opened is a list that has learned to be ignored. Suggested 2026-09-01.",
+    "version": "0.299.0",
+    "releasedAt": "2026-09-02T16:44:13Z"
   },
   {
     "id": "list-paste-import",

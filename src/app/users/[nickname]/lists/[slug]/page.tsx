@@ -130,6 +130,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
             copyCount: 0,
             shareCount: 0,
             subscriberCount: 0,
+            hasSource: false,
             itemCount: rows.length,
           }}
           items={toListPageItems(rows, memberState)}
@@ -177,6 +178,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
           copyCount: list.copyCount,
           shareCount: list.shareCount,
           subscriberCount: list.subscriberCount,
+          hasSource: list.hasSource,
           itemCount: list.items.length,
         }}
         items={toListPageItems(rows, memberState)}

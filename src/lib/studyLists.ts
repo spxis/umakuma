@@ -37,6 +37,7 @@ const LIST_SELECT = {
   updatedAt: true,
   copyCount: true,
   shareCount: true,
+  sourceListId: true,
   items: { select: ITEM_SELECT, orderBy: { position: "asc" as const } },
   _count: { select: { subscriptions: true } },
 } as const;
@@ -52,6 +53,7 @@ type ListRow = {
   updatedAt: Date;
   copyCount: number;
   shareCount: number;
+  sourceListId: string | null;
   items: StudyListItemRef[];
   _count: { subscriptions: number };
 };
@@ -71,6 +73,7 @@ function toSummary(row: ListRow): StudyListSummary {
     copyCount: row.copyCount,
     shareCount: row.shareCount,
     subscriberCount: row._count.subscriptions,
+    hasSource: row.sourceListId !== null,
   };
 }
 

@@ -54,6 +54,8 @@ export type StudyListSummary = {
   shareCount: number;
   /** How many people keep this list without owning it. */
   subscriberCount: number;
+  /** Copied from another list, so it has somewhere to ask what is new. */
+  hasSource: boolean;
 };
 
 /** The same item, named the same way, however it arrived. */

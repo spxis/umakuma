@@ -198,6 +198,11 @@ export const STUDY_LIST_COPY = {
   countSuffix: "items",
   countSuffixOne: "item",
   updatedPrefix: "Updated",
+  sourceHeading: "New in the original",
+  sourceAdded: (count: number, name: string) =>
+    `${count} ${count === 1 ? "item has" : "items have"} been added to ${name || "the list you copied"} since.`,
+  sourceTakeAll: "Take all",
+  sourceTakeOne: "Take",
   metaFollowers: (count: number) => `${count} following`,
 } as const;
 

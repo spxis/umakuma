@@ -20,6 +20,8 @@ export type ListPageList = {
   shareCount: number;
   /** How many people keep this list without owning it. */
   subscriberCount: number;
+  /** Copied from another list, so it has somewhere to ask what is new. */
+  hasSource: boolean;
   itemCount: number;
 };
 

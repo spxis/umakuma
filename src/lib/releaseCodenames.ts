@@ -349,6 +349,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Mitorizu no Machikado", ja: "見取り図の街角", reading: "みとりずのまちかど", gloss: "a street corner with a map on it" },
   { romaji: "Musubu Shiori", ja: "結ぶ栞", reading: "むすぶしおり", gloss: "the list, tied to what it means" },
   { romaji: "Mekuranai Mekata", ja: "めくらない目方", reading: "めくらないめかた", gloss: "weighed without turning a page" },
+  { romaji: "Mochikaeru Tsuika", ja: "\u6301\u3061\u5e30\u308b\u8ffd\u52a0", reading: "\u3082\u3061\u304b\u3048\u308b\u3064\u3044\u304b", gloss: "the additions you take home from the original" },
 ];
 
 /**

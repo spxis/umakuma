@@ -35,6 +35,7 @@ import ListItemNoteEditor from "./ListItemNoteEditor";
 import type { ListPageViewProps } from "./ListPage.types";
 import { useListItemNote } from "./useListItemNote";
 import ListProposalsPanel from "./ListProposalsPanel";
+import ListSourceUpdates from "./ListSourceUpdates";
 import ListShareControls from "./ListShareControls";
 import ListViewerActions from "./ListViewerActions";
 
@@ -226,6 +227,15 @@ export default function ListPageView({
 
       {viewer.isOwner && viewer.accountId && !archived && !list.tag ? (
         <ListProposalsPanel proposals={proposals} ownerAccountId={viewer.accountId} />
+      ) : null}
+
+      {/*
+        * A copy asks the list it came from what is new. It draws nothing at all
+        * unless there is something, so a list with no source - almost all of
+        * them - is unchanged by this being here.
+        */}
+      {viewer.isOwner && viewer.accountId && !archived && !list.tag && list.hasSource ? (
+        <ListSourceUpdates accountId={viewer.accountId} listId={list.id} />
       ) : null}
 
       {canContribute && viewer.accountId ? (
