@@ -2,10 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { buildHeaderMenu } from "./headerMenuModel";
 import { TOP_NAV_SECTIONS } from "./navSections";
-import {
-  ADMIN_WORKSPACE_TABS,
-  ADMIN_WORKSPACE_TAB_LABELS,
-} from "@/app/admin/AdminWorkspaceTabs";
 
 const menu = (overrides = {}) =>
   buildHeaderMenu({ username: "jay", isAdmin: false, showAdminActions: false, ...overrides });
@@ -55,17 +51,15 @@ describe("buildHeaderMenu", () => {
     });
 
     /*
-     * The menu carried two hand-written links, "Admin" and "Manage users",
-     * while admin had nine pages - so seven of them existed only for somebody
-     * who already knew the header was there. It reads the same registry the
-     * admin header reads, which is what stops the two drifting apart again.
+     * One entry. The menu listed every admin page - eleven of them - which was
+     * a second copy of the admin workspace's own tab row, in a menu whose job
+     * is the account. The workspace is one click away and its tab row is the
+     * registry.
      */
-    it("offers every admin page, from the registry the admin header uses", () => {
-      const labels = menu({ isAdmin: true }).admin.map((link) => link.label);
-      expect(labels).toEqual(ADMIN_WORKSPACE_TABS.map((tab) => ADMIN_WORKSPACE_TAB_LABELS[tab]));
-      expect(labels.length).toBeGreaterThan(2);
+    it("offers admin once, as a way into the workspace", () => {
+      expect(menu({ isAdmin: true }).admin).toEqual([{ label: "Admin", href: "/admin" }]);
       // Reached either way in: being an admin, or being handed admin actions.
-      expect(menu({ showAdminActions: true }).admin.map((link) => link.label)).toEqual(labels);
+      expect(menu({ showAdminActions: true }).admin).toEqual(menu({ isAdmin: true }).admin);
     });
 
     it("points every admin link at a real route", () => {
@@ -89,9 +83,7 @@ describe("buildHeaderMenu", () => {
     });
 
     it("still reaches admin when they are one", () => {
-      expect(menu({ username: null, isAdmin: true }).admin.map((link) => link.label)).toEqual(
-        ADMIN_WORKSPACE_TABS.map((tab) => ADMIN_WORKSPACE_TAB_LABELS[tab]),
-      );
+      expect(menu({ username: null, isAdmin: true }).admin.map((link) => link.label)).toEqual(["Admin"]);
     });
   });
 });

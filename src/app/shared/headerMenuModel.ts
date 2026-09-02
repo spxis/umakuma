@@ -1,23 +1,17 @@
-import {
-  ADMIN_WORKSPACE_TABS,
-  ADMIN_WORKSPACE_TAB_LABELS,
-  routeForAdminWorkspaceTab,
-} from "../admin/AdminWorkspaceTabs";
 import { MENU_NAV_SECTIONS, TOP_NAV_SECTIONS, navChildHref } from "./navSections";
 
 /**
- * Every admin page, from the registry the admin header already reads.
+ * The one way into admin, for an admin.
  *
- * The menu used to carry two hand-written links, "Admin" and "Manage users",
- * while admin had nine pages - so seven of them existed only if you already
- * knew the header was there. Reading the registry means adding an admin page
- * puts it in the menu, which is what a second list is for failing to do.
+ * The menu listed every admin page - eleven entries - which is a second copy
+ * of the admin workspace's own tab row, in a menu whose job is the account.
+ * One entry, to the workspace; the tab row there is the page registry, and it
+ * is one click further.
  */
+const ADMIN_LINK = { label: "Admin", href: "/admin" };
+
 function adminLinks(): MenuLink[] {
-  return ADMIN_WORKSPACE_TABS.map((tab) => ({
-    label: ADMIN_WORKSPACE_TAB_LABELS[tab],
-    href: routeForAdminWorkspaceTab(tab),
-  }));
+  return [ADMIN_LINK];
 }
 
 export type MenuLink = { label: string; href: string };

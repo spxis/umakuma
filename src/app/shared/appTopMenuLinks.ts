@@ -18,9 +18,13 @@ function userTabHref(username: string, tab: "learn" | "wk" | "jlpt" | "stats" | 
  * A viewer with no resolved account used to see every member link anyway, each
  * quietly pointing at /join — an admin with a stale link was told to "join
  * with invite code" by their own header. No account, no member links: the
- * leaderboard is public, and Admin appears only for admins.
+ * leaderboard is public.
+ *
+ * Admin is not here. It is a workspace rather than a place a member studies,
+ * so it lives in the account menu, for admins, and the header row is the same
+ * for everyone.
  */
-export function buildMainLinks(resolvedWkUsername: string | null, showAdminLink: boolean): MainLink[] {
+export function buildMainLinks(resolvedWkUsername: string | null): MainLink[] {
   const links: MainLink[] = [{ label: "Leaderboard", href: "/", dashboard: null }];
 
   if (resolvedWkUsername) {
@@ -35,13 +39,11 @@ export function buildMainLinks(resolvedWkUsername: string | null, showAdminLink:
       { label: DASHBOARD_TAB_LABELS.stats, href: userTabHref(username, "stats"), dashboard: "stats" },
       { label: DASHBOARD_TAB_LABELS.news, href: userTabHref(username, "news"), dashboard: "news" },
       { label: DASHBOARD_TAB_LABELS.read, href: userTabHref(username, "read"), dashboard: "read" },
+      { label: "Lists", href: `/users/${encodeURIComponent(username)}/lists`, dashboard: null },
       { label: "Libraries", href: `/users/${encodeURIComponent(username)}/libraries`, dashboard: null },
     );
   }
 
-  if (showAdminLink) {
-    links.push({ label: "Admin", href: "/admin", dashboard: null });
-  }
 
   return links;
 }

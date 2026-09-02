@@ -46,8 +46,7 @@ export default function AppTopMenuRow({
 }: AppTopMenuRowProps) {
   const pathname = usePathname();
   const resolvedWkUsername = primaryWkUsername ?? viewerAddress(viewerMenuInfo);
-  const canSeeAdminTopLink = showAdminActions;
-  const flatLinks: MainLink[] = buildMainLinks(resolvedWkUsername, canSeeAdminTopLink);
+  const flatLinks: MainLink[] = buildMainLinks(resolvedWkUsername);
   const activeSection = sectionForPath(pathname, resolvedWkUsername);
   const links: MainLink[] = resolvedWkUsername
     ? [
@@ -56,7 +55,6 @@ export default function AppTopMenuRow({
           href: navChildHref(section.children[0]!, resolvedWkUsername),
           dashboard: null,
         })),
-        ...(canSeeAdminTopLink ? [{ label: "Admin", href: "/admin", dashboard: null as null }] : []),
       ]
     : flatLinks;
   /*

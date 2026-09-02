@@ -11,7 +11,7 @@ import { DASHBOARD_TAB_LABELS } from "../users/[nickname]/userReadConfig";
  * Grouping rather than hiding: everything reachable before is still one click
  * away, and the second row tells you where you are.
  */
-export type NavSectionId = "leaderboard" | "study" | "game" | "explore" | "progress" | "read" | "settings";
+export type NavSectionId = "leaderboard" | "study" | "game" | "explore" | "lists" | "progress" | "read" | "settings";
 
 export type NavChild = {
   label: string;
@@ -51,9 +51,14 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
       { label: "Grades", path: "grades" },
       { label: "Practice", path: "practice" },
-      { label: "Lists", path: "lists" },
     ],
   },
+  /*
+   * A destination of its own. Lists lived under Explore, which is where you
+   * go to find things; a list is something you made and come back to, and it
+   * was two clicks from everywhere.
+   */
+  { id: "lists", label: "Lists", placement: "nav", children: [{ label: "Lists", path: "lists" }] },
   {
     id: "progress",
     label: "Progress",

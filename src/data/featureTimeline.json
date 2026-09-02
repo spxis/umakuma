@@ -2435,17 +2435,32 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 21,
-    "summary": "With the user menu open on a page that shows a subject list, the list's sticky column-heading row draws across the menu - the heading carries z-20 and the menu sits below it. Stacking order belongs in MODAL_LAYERS; the menu should take a layer above page chrome and the heading should not claim one of its own. Regression from 0.214.0. Reported 2026-09-01."
+    "summary": "With the user menu open on a page that shows a subject list, the list's sticky column-heading row draws across the menu - the heading carries z-20 and the menu sits below it. Stacking order belongs in MODAL_LAYERS; the menu should take a layer above page chrome and the heading should not claim one of its own. Regression from 0.214.0. Reported 2026-09-01.",
+    "owner": "fable/subject-pages",
+    "claimedAt": "2026-09-02T04:20:55.930Z"
   },
   {
     "id": "lists-top-level-admin-in-menu",
     "name": "Lists at the top level; Admin only in the menu",
     "area": "platform",
     "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "summary": "Lists lived under Explore, which is where you go to find things; a list is something you made and come back to, and it was two clicks from everywhere. It is a destination of its own in the header now. Admin went the other way: it is a workspace rather than a place a member studies, so it has left the header row - which is now the same for everyone - and appears once in the account menu, for admins. The menu used to repeat every admin page, eleven entries, which was a second copy of the admin workspace's own tab row; the workspace is one click away and its tab row is the registry.",
+    "version": "0.230.0",
+    "releasedAt": "2026-09-02T04:24:51Z"
+  },
+  {
+    "id": "google-signin-lands-on-invite-page",
+    "name": "A new Google sign-in lands on the invite-code page",
+    "area": "account",
+    "kind": "bug",
     "status": "planned",
     "date": "2026-09-01",
     "dateIsEstimate": true,
-    "release": 22,
-    "summary": "Lists is a top-level destination and belongs in the main navigation. Admin does not: it should leave the top row and appear only in the user menu, for admins, as one entry - the menu need not repeat every admin sub-page. Requested 2026-09-01."
+    "release": 23,
+    "summary": "A person signed in with Google for the first time and was taken to Join with invite code, with no way into the site and no way out but Sign out. The site is meant to be wide open to a Google account: once Google has said who they are, the site must open for them, and the invite page must never be shown to anyone signed in - not on arrival, and not on a refresh. Reported 2026-09-01 by John, signed in as a second Google account.",
+    "owner": "fable/subject-pages",
+    "claimedAt": "2026-09-02T04:24:21.171Z"
   }
 ]

@@ -113,3 +113,15 @@ describe("sectionHasSubNav", () => {
     expect(sectionHasSubNav(null)).toBe(false);
   });
 });
+
+/*
+ * Lists lived under Explore, which is where you go to find things; a list is
+ * something you made and come back to, and it was two clicks from everywhere.
+ */
+describe("lists", () => {
+  it("is a section of its own, not a page under Explore", () => {
+    expect(sectionForPath(`/users/${USER}/lists`, USER)?.id).toBe("lists");
+    const explore = NAV_SECTIONS.find((section) => section.id === "explore");
+    expect(explore?.children.map((child) => child.path)).not.toContain("lists");
+  });
+});
