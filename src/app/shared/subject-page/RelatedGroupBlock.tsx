@@ -1,7 +1,5 @@
-import Link from "next/link";
-
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import { subjectGlyphTone } from "@/app/shared/subjectListView";
+import PillTextToggle from "@/app/shared/PillTextToggle";
+import SubjectPill from "@/app/shared/SubjectPill";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { RELATED_GROUPS, type RelatedGroup, type RelatedGroupId } from "@/lib/relatedSubjects";
 
@@ -27,36 +25,32 @@ const GROUP_HEADINGS: Record<RelatedGroupId, string> = {
  * A drawn radical has no character; its chip shows its name, which is also
  * its address, rather than a blank square.
  */
-export default function RelatedGroupBlock({ group }: { group: RelatedGroup }) {
+export default function RelatedGroupBlock({ group, showToggle = false }: { group: RelatedGroup; showToggle?: boolean }) {
   if (group.items.length === 0) return null;
 
   return (
     <div className="space-y-2">
-      <h3 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
-        {GROUP_HEADINGS[group.id]}
-      </h3>
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
+          {GROUP_HEADINGS[group.id]}
+        </h3>
+        {/* One control for every pill on the page, on the first group only. */}
+        {showToggle ? <PillTextToggle /> : null}
+      </div>
       <ul className="flex flex-wrap gap-2">
         {group.items.map((item) => {
+          /* A radical WaniKani draws has a name where a character would be. */
           const drawn = item.subjectType === SUBJECT_TYPES.radical && [...item.label].length > 2;
           return (
             <li key={item.subjectId}>
-              <Link
+              <SubjectPill
+                glyph={item.label}
+                subjectType={item.subjectType}
+                reading={item.reading}
+                meaning={item.meaning}
                 href={item.href}
-                className="flex min-w-16 flex-col items-center gap-0.5 rounded-xl border border-line bg-surface px-3 py-2 transition hover:bg-surface-muted"
-              >
-                <span
-                  lang={drawn ? undefined : "ja"}
-                  translate="no"
-                  className={`${drawn ? "text-sm" : "text-2xl"} font-black ${JP_TEXT_CLASS} ${subjectGlyphTone(item.subjectType)}`}
-                >
-                  {item.label}
-                </span>
-                {item.reading || item.meaning ? (
-                  <span className="max-w-32 truncate text-[11px] font-semibold text-foreground/65">
-                    {item.reading ?? item.meaning}
-                  </span>
-                ) : null}
-              </Link>
+                size={drawn ? "sm" : "md"}
+              />
             </li>
           );
         })}

@@ -2839,13 +2839,11 @@
     "name": "One control for the text inside item pills",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 51,
-    "summary": "The pills that show a kanji or a word appear in several places - Used in words, the related groups on a subject page, the From text preview, the list item editor - and some carry the reading and meaning while others carry only the glyph. One shared pill with the text on it, and one toggle that shows or hides that text, remembered per browser, wherever those pills appear. Requested 2026-09-02 by John.",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T10:10:44.650Z"
+    "summary": "The pills that stand for a kanji or a word turn up in several places - the words a kanji is used in, the related groups on a subject page, a paste being turned into a list, a list being edited - and they had drifted: some carried the reading and the meaning, some carried the glyph alone. They are one component now, and every one of them can say what it is: the reading and the meaning under the glyph, with one control that shows or hides that text everywhere at once, remembered per browser and on by default. The paste preview gained the words it was missing, so a chapter comes back as items a member can read rather than a wall of characters to guess at. The pill also decides for itself what is Japanese, so a radical WaniKani draws by name is no longer set in a Japanese face. Requested 2026-09-02 by John.",
+    "version": "0.256.0",
+    "releasedAt": "2026-09-02T10:27:30Z"
   },
   {
     "id": "nav-rename-learn",

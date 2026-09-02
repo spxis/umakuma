@@ -128,8 +128,8 @@ export default async function KanjiPage({ params }: Props) {
 
       {page.related.length > 0 ? (
         <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
-          {page.related.map((group) => (
-            <RelatedGroupBlock key={group.id} group={group} />
+          {page.related.map((group, index) => (
+            <RelatedGroupBlock key={group.id} group={group} showToggle={index === 0} />
           ))}
         </SubjectBlock>
       ) : null}

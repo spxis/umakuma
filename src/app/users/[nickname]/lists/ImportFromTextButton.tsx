@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import ModalShell from "@/app/shared/ModalShell";
+import PillTextToggle from "@/app/shared/PillTextToggle";
+import SubjectPill from "@/app/shared/SubjectPill";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
@@ -171,6 +173,7 @@ export default function ImportFromTextButton({ accountId }: { accountId: string 
               <span className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
                 {STUDY_LIST_COPY.importKeepHint}
               </span>
+              <PillTextToggle />
               {LIST_ITEM_KIND_VALUES.filter((kind) => (counts[kind] ?? 0) > 0).map((kind) => (
                 <button
                   key={kind}
@@ -188,17 +191,16 @@ export default function ImportFromTextButton({ accountId }: { accountId: string 
                 const id = listItemId(item);
                 return (
                   <li key={id}>
-                    <button
-                      type="button"
+                    <SubjectPill
+                      glyph={item.key}
+                      subjectType={item.kind}
+                      reading={item.reading ?? null}
+                      meaning={item.meaning ?? null}
+                      tone={itemToneClass(item.kind)}
+                      size="sm"
+                      label={`${STUDY_LIST_COPY.removeCharacterLabel} ${item.key}`}
                       onClick={() => setItems((current) => (current ?? []).filter((held) => listItemId(held) !== id))}
-                      aria-label={`${STUDY_LIST_COPY.removeCharacterLabel} ${item.key}`}
-                      title={`${STUDY_LIST_COPY.removeCharacterLabel} ${item.key}`}
-                      lang="ja"
-                      translate="no"
-                      className={`inline-flex h-9 items-center justify-center rounded-lg border border-line bg-surface px-2 text-lg font-black leading-none transition hover:border-rose-400 hover:bg-rose-50 hover:text-rose-600 ${itemToneClass(item.kind)} ${JP_TEXT_CLASS}`}
-                    >
-                      {item.key}
-                    </button>
+                    />
                   </li>
                 );
               })}

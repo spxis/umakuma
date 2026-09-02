@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import PillTextToggle from "@/app/shared/PillTextToggle";
+import SubjectPill from "@/app/shared/SubjectPill";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { mergeListItems } from "@/app/shared/mergeListItems";
 import { STUDY_LIST_LIMITS, itemsFromText, listItemId } from "@/lib/studyListRules";
@@ -40,24 +41,26 @@ export default function StudyListItemEditor({ items, saving, onSave, onCancel }:
 
   return (
     <div className="mt-3 rounded-xl border border-line bg-surface-muted p-3">
-      <p className="text-[11px] font-semibold text-foreground/60">{STUDY_LIST_COPY.editHint}</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-[11px] font-semibold text-foreground/60">{STUDY_LIST_COPY.editHint}</p>
+        <PillTextToggle />
+      </div>
 
       <ul className="mt-2 flex flex-wrap gap-1.5">
         {draft.map((item) => {
           const id = listItemId(item);
           return (
             <li key={id}>
-              <button
-                type="button"
+              <SubjectPill
+                glyph={item.key}
+                subjectType={item.kind}
+                reading={item.reading ?? null}
+                meaning={item.meaning ?? null}
+                tone={itemToneClass(item.kind)}
+                size="sm"
+                label={`${STUDY_LIST_COPY.removeCharacterLabel} ${item.key}`}
                 onClick={() => setDraft(draft.filter((held) => listItemId(held) !== id))}
-                aria-label={`${STUDY_LIST_COPY.removeCharacterLabel} ${item.key}`}
-                title={`${STUDY_LIST_COPY.removeCharacterLabel} ${item.key}`}
-                lang="ja"
-                translate="no"
-                className={`inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-line bg-surface px-2 text-lg font-black leading-none transition hover:border-rose-400 hover:bg-rose-50 hover:text-rose-600 ${itemToneClass(item.kind)} ${JP_TEXT_CLASS}`}
-              >
-                {item.key}
-              </button>
+              />
             </li>
           );
         })}

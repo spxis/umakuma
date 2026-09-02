@@ -18,11 +18,14 @@ import type { SourceKey } from "@/lib/sourceCredits";
 export default function SubjectBlock({
   heading,
   credit,
+  action,
   className = "",
   children,
 }: {
   heading?: string;
   credit?: { source: SourceKey; label: string };
+  /** A control that belongs to this block, beside its heading. */
+  action?: ReactNode;
   className?: string;
   children: ReactNode;
 }) {
@@ -31,8 +34,15 @@ export default function SubjectBlock({
       {/* The padding is on the content, not the section, so the credit's rule
         * runs the full width of the card the way the stroke-order foot does. */}
       <div className="space-y-3 p-5">
-        {heading ? (
-          <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{heading}</h2>
+        {heading || action ? (
+          <div className="flex items-center justify-between gap-2">
+            {heading ? (
+              <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{heading}</h2>
+            ) : (
+              <span />
+            )}
+            {action}
+          </div>
         ) : null}
         {children}
       </div>

@@ -6,6 +6,7 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import { attachSubjectIds } from "@/lib/studyLists";
+import { fetchListSubjectRows } from "@/lib/studySubjectItems";
 import { TEXT_IMPORT_LIMITS, extractListItems, sanitizePastedText, wordCandidates } from "@/lib/textExtract";
 
 type RouteContext = {
@@ -56,7 +57,20 @@ export async function POST(request: Request, context: RouteContext) {
         const known = new Set(rows.flatMap((row) => (row.characters ? [row.characters] : [])));
 
         const extracted = extractListItems({ text, known });
-        return NextResponse.json({ items: await attachSubjectIds(extracted.items), stats: extracted.stats });
+        const items = await attachSubjectIds(extracted.items);
+        /*
+         * With the words they are known by, so the preview can say what each
+         * one is rather than showing a wall of characters to guess at.
+         */
+        /* A row's key already names its kind, so it is the map key as it stands. */
+        const described = new Map((await fetchListSubjectRows(items)).map((row) => [row.key, row]));
+        return NextResponse.json({
+          items: items.map((item) => {
+            const row = described.get(`${item.kind}:${item.key}`);
+            return { ...item, meaning: row?.meaning ?? null, reading: row?.reading ?? null };
+          }),
+          stats: extracted.stats,
+        });
       } catch (error) {
         console.error("Failed to read a paste into a list", error);
         return NextResponse.json({ error: "Could not read that text." }, { status: 500 });

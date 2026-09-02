@@ -1,6 +1,7 @@
-import Link from "next/link";
-
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import PillTextToggle from "@/app/shared/PillTextToggle";
+import SubjectPill from "@/app/shared/SubjectPill";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import type { WordExample } from "@/lib/subjectPageModel";
 
@@ -25,6 +26,7 @@ export default function UsedInWordsBlock({ words }: { words: WordExample[] }) {
     <SubjectBlock
       heading={SUBJECT_PAGE_COPY.usedInWords}
       credit={{ source: SOURCE_KEYS.kanjiapi, label: SOURCE_CREDIT_COPY.words }}
+      action={<PillTextToggle />}
     >
       <ul className="divide-y divide-line/60">
         {words.map((word) => (
@@ -44,16 +46,14 @@ export default function UsedInWordsBlock({ words }: { words: WordExample[] }) {
               <ul className="mt-2 flex flex-wrap gap-1.5">
                 {word.kanji.map((item) => (
                   <li key={item.label}>
-                    <Link
+                    <SubjectPill
+                      glyph={item.label}
+                      subjectType={SUBJECT_TYPES.kanji}
+                      reading={item.reading}
+                      meaning={item.meaning}
                       href={item.href}
-                      title={[item.reading, item.meaning].filter(Boolean).join(" · ")}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-muted px-2.5 py-1 text-xs font-bold text-foreground transition hover:bg-surface"
-                    >
-                      <span lang="ja" translate="no" className={`text-base leading-none text-kanji ${JP_TEXT_CLASS}`}>
-                        {item.label}
-                      </span>
-                      {item.meaning ? <span className="text-foreground/70">{item.meaning}</span> : null}
-                    </Link>
+                      size="sm"
+                    />
                   </li>
                 ))}
               </ul>

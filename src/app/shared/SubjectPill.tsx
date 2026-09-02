@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { JP_TEXT_CLASS } from "./japaneseText";
+
 import { subjectGlyphTone } from "./subjectListView";
 import { usePillText } from "./usePillText";
 
@@ -17,7 +18,12 @@ import { usePillText } from "./usePillText";
  *
  * The text is always in the title, whether it is drawn or not, so hiding it
  * costs a reader nothing but a hover.
+ *
+ * Only Japanese is marked as Japanese: a radical WaniKani draws has an
+ * English name where a character would be, and telling a browser that "leaf"
+ * is Japanese asks it to render an English word in a Japanese face.
  */
+const JAPANESE = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
 export default function SubjectPill({
   glyph,
   subjectType,
@@ -46,14 +52,17 @@ export default function SubjectPill({
 }) {
   const [showText] = usePillText();
   const words = [reading, meaning].filter(Boolean).join(" · ");
-  const glyphClass = `${size === "sm" ? "text-base" : "text-2xl"} font-black leading-none ${tone ?? subjectGlyphTone(subjectType ?? "")} ${JP_TEXT_CLASS}`;
+  const japanese = JAPANESE.test(glyph);
+  const glyphClass = `${japanese ? (size === "sm" ? "text-base" : "text-2xl") : "text-sm"} font-black leading-none ${
+    tone ?? subjectGlyphTone(subjectType ?? "")
+  } ${japanese ? JP_TEXT_CLASS : ""}`;
   const shell = `flex min-w-14 flex-col items-center gap-0.5 rounded-xl border border-line bg-surface px-2.5 py-1.5 text-center transition hover:bg-surface-muted ${
     size === "sm" ? "min-w-11" : ""
   }`;
 
   const body = (
     <>
-      <span lang="ja" translate="no" className={glyphClass}>
+      <span lang={japanese ? "ja" : undefined} translate="no" className={glyphClass}>
         {glyph}
       </span>
       {showText && words ? (

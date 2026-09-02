@@ -25,6 +25,9 @@ export const STUDY_LIST_LIMITS = {
 /** One thing in a list, as the browser and the routes both speak of it. */
 export type StudyListItemRef = {
   kind: ListItemKind;
+  /** What it means and how it reads, when whoever built the list knew. */
+  meaning?: string | null;
+  reading?: string | null;
   /** The characters for a kanji or a word, the slug for a radical, the id for a sentence. */
   key: string;
   /** WaniKani's id, where the catalogue names it. */

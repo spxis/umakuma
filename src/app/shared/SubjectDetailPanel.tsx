@@ -107,8 +107,8 @@ export default function SubjectDetailPanel({
 
       {related.length > 0 ? (
         <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
-          {related.map((group) => (
-            <RelatedGroupBlock key={group.id} group={group} />
+          {related.map((group, index) => (
+            <RelatedGroupBlock key={group.id} group={group} showToggle={index === 0} />
           ))}
         </SubjectBlock>
       ) : null}

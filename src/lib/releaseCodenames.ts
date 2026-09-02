@@ -306,6 +306,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Mukau Saki", ja: "向かう先", reading: "むかうさき", gloss: "somewhere to go, with or without a connection" },
   { romaji: "Medatsu Yobikata", ja: "目立つ呼び方", reading: "めだつよびかた", gloss: "called what it is for" },
   { romaji: "Mou Deta", ja: "もう出た", reading: "もうでた", gloss: "already out, not asked twice" },
+  { romaji: "Yasashiku Yomeru", ja: "優しく読める", reading: "やさしくよめる", gloss: "every pill says what it is" },
 ];
 
 /**
