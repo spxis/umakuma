@@ -2590,6 +2590,6 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 30,
-    "summary": "A third built-in list beside Trouble and Favourites: Burned, for the items you know so well you never need to read them again. Marked by hand like the other two, and offered from WaniKani's own burned items for members who have them. Applied, it removes those items from any list being viewed or practised, so a large list stops carrying what you have long since learned. Requested 2026-09-01 by John."
+    "summary": "A third built-in list beside Trouble and Favourites: Burned, for the items you know so well you never need to read them again. It starts empty for everyone. A member with WaniKani connected gets a control on the list to apply their WaniKani burned items to it - once, or whenever they choose, with the count shown before it is applied - and can still add or remove by hand. Applied, the list removes those items from any list being viewed or practised, so a large list stops carrying what you have long since learned. Requested 2026-09-01 by John."
   }
 ]

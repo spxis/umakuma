@@ -665,10 +665,13 @@ items model needs a second shape, and it is worth deciding in the items
 release rather than after it.
 
 **The burn list (2026-09-01, John).** A third built-in list beside Trouble and
-Favourites: Burned, for what you know so well you never need to read it. Two
-ways in - marked by hand, and offered from WaniKani's own burned items for
-members who have them - and one effect: applied, it removes those items from
-any list being viewed or practised. It is a *filter over every list*, not a
+Favourites: Burned, for what you know so well you never need to read it. It
+starts empty for everyone, WaniKani or not. Two ways in: marked by hand, and
+for a member with WaniKani connected, a control on the list itself that
+applies their WaniKani burned items - shown as a count first ("Apply 412
+burned items"), run when they choose and again whenever they like, never
+silently on sync, so the list stays theirs. One effect: applied, it removes
+those items from any list being viewed or practised. It is a *filter over every list*, not a
 list to read, which is why it sits with the tags (a third boolean on
 `StudySubjectTag`, a schema push) and why the toggle to apply it belongs on
 the list surfaces and the practice setup, remembered per member. The count of
