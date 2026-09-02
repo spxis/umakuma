@@ -8,10 +8,12 @@ import { viewsOwnPage } from "@/app/shared/viewerAddress";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { fetchFollowedLists } from "@/lib/studyListShares";
 import { fetchStudyLists } from "@/lib/studyLists";
 import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import FollowedLists from "./FollowedLists";
 import NewListButton from "./NewListButton";
 import StudyListCards from "./StudyListCards";
 
@@ -53,11 +55,13 @@ export default async function UserListsPage({ params }: PageProps) {
    * member has, and the page that is meant to show a member their lists was
    * the one place they did not appear.
    */
-  const [lists, taggedLists] = await Promise.all([
+  const canEdit = viewsOwnPage(viewerMenuInfo, userKey);
+  const [lists, taggedLists, followed] = await Promise.all([
     fetchStudyLists(account.id),
     fetchTaggedListSummaries(account.id),
+    /* What a member follows is theirs to see, not the page's visitors'. */
+    canEdit ? fetchFollowedLists(account.id) : Promise.resolve([]),
   ]);
-  const canEdit = viewsOwnPage(viewerMenuInfo, userKey);
 
   return (
     <div className={`${PAGE_WIDTH.wide} ${PAGE_SHELL_PADDING}`}>
@@ -88,6 +92,8 @@ export default async function UserListsPage({ params }: PageProps) {
         practicePath={`/users/${encodeURIComponent(nickname)}/practice`}
         canEdit={canEdit}
       />
+
+      {canEdit && followed.length > 0 ? <FollowedLists lists={followed} accountId={account.id} /> : null}
     </div>
   );
 }

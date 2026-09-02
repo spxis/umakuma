@@ -4,11 +4,12 @@ import { notFound } from "next/navigation";
 
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
-import { viewsOwnPage } from "@/app/shared/viewerAddress";
+import { viewerAddress, viewsOwnPage } from "@/app/shared/viewerAddress";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { LIST_KEY_PARAM, canViewList, listShareHref } from "@/lib/studyListRules";
+import { isSubscribed } from "@/lib/studyListShares";
 import { findListBySlug } from "@/lib/studyLists";
 import { fetchListSubjectRows } from "@/lib/studySubjectItems";
 
@@ -76,7 +77,11 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
     notFound();
   }
 
-  const rows = await fetchListSubjectRows(list.items);
+  const viewerAccountId = viewerMenuInfo?.accountId ?? null;
+  const [rows, subscribed] = await Promise.all([
+    fetchListSubjectRows(list.items),
+    viewerAccountId && !isOwner ? isSubscribed(list.id, viewerAccountId) : Promise.resolve(false),
+  ]);
   const ownerName = account.nickname ?? account.slug ?? account.wkUsername ?? userKey;
   const shareHref = listShareHref(userKey, list.name, list.visibility, list.shareToken);
 
@@ -107,11 +112,14 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
         owner={{ key: userKey, name: ownerName }}
         viewer={{
           isOwner,
-          accountId: isOwner ? account.id : null,
+          accountId: viewerAccountId,
+          key: viewerAddress(viewerMenuInfo),
           signedIn: Boolean(viewerEmail) || Boolean(viewerMenuInfo),
+          subscribed,
         }}
         shareHref={isOwner ? shareHref : null}
         currentHref={listShareHref(userKey, list.name, list.visibility, key)}
+        listKey={key}
       />
     </div>
   );

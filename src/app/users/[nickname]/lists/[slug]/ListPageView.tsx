@@ -16,9 +16,14 @@ import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { LIST_ITEM_KIND_DISPLAY, LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, type ListItemKind } from "@/lib/domainConstants";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
+import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
+import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
+import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
+
 import { itemToneClass } from "../listItemDisplay";
 import type { ListPageViewProps } from "./ListPage.types";
 import ListShareControls from "./ListShareControls";
+import ListViewerActions from "./ListViewerActions";
 
 /**
  * A list, laid out to be read by whoever may open it.
@@ -37,8 +42,17 @@ function timesText(count: number, noun: string): string {
   return `${noun} ${count === 1 ? STUDY_LIST_COPY.onceSuffix : `${count} ${STUDY_LIST_COPY.timesSuffix}`}`;
 }
 
-export default function ListPageView({ list, rows, owner, viewer, shareHref, currentHref }: ListPageViewProps) {
+export default function ListPageView({ list, rows, owner, viewer, shareHref, currentHref, listKey }: ListPageViewProps) {
   const [kind, setKind] = useState<string>(ALL);
+  /*
+   * Filing, here too: a member reading somebody's list can tag a row or put
+   * it on a list of their own, one at a time, with the same column search
+   * has. The hits are the rows; a row WaniKani does not name still files
+   * into a saved list, and only the tags need the id.
+   */
+  const [filerOpen, setFilerOpen] = useFilerOpen();
+  const filing = Boolean(viewer.accountId) && filerOpen;
+  const filer = useSubjectFiler(viewer.accountId, rows, filing);
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(VIEW_MODE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid),
@@ -114,6 +128,14 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
               visibility={list.visibility}
               shareHref={shareHref}
             />
+          ) : !viewer.isOwner && viewer.accountId && viewer.key ? (
+            <ListViewerActions
+              listId={list.id}
+              viewerAccountId={viewer.accountId}
+              viewerKey={viewer.key}
+              listKey={listKey}
+              subscribed={viewer.subscribed}
+            />
           ) : null}
         </div>
       </header>
@@ -155,6 +177,9 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
             aria-label={STUDY_LIST_COPY.searchItems}
             className="h-8 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-semibold text-foreground"
           />
+          {viewer.accountId ? (
+            <SubjectFilerToggle open={filerOpen} onToggle={() => setFilerOpen((was) => !was)} error={filing ? filer.error : null} />
+          ) : null}
           <SubjectViewModeToggle
             value={viewMode}
             onChange={(next) => {
@@ -171,8 +196,9 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
         ) : viewMode === SUBJECT_VIEW_MODES.list ? (
           <ul className="mt-3 divide-y divide-line/60">
             {visible.map((row) => (
-              <li key={row.key}>
+              <li key={row.key} className="flex flex-wrap items-center gap-1">
                 <RowLink row={row} />
+                {filing ? <SubjectFilerCell hit={row} filer={filer} className="basis-full pb-2 pl-3 md:basis-auto md:pb-0" /> : null}
               </li>
             ))}
           </ul>
@@ -181,6 +207,7 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
             {visible.map((row) => (
               <li key={row.key}>
                 <CardLink row={row} />
+                {filing ? <SubjectFilerCell hit={row} filer={filer} className="mt-1 justify-center" /> : null}
               </li>
             ))}
           </ul>
@@ -217,7 +244,7 @@ function RowLink({ row }: { row: Row }) {
       </span>
     </>
   );
-  const shell = "flex items-center gap-3 px-2 py-2 transition hover:bg-surface-muted/50";
+  const shell = "flex min-w-0 flex-1 items-center gap-3 px-2 py-2 transition hover:bg-surface-muted/50";
   return row.href ? (
     <Link href={row.href} className={shell}>
       {body}

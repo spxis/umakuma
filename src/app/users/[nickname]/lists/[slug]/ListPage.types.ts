@@ -18,11 +18,29 @@ export type ListPageViewProps = {
   list: ListPageList;
   rows: ListSubjectRow[];
   owner: { key: string; name: string };
-  viewer: { isOwner: boolean; accountId: string | null; signedIn: boolean };
+  viewer: {
+    isOwner: boolean;
+    /** The viewer's own account, owner or not; null when not a member. */
+    accountId: string | null;
+    /** The viewer's own address segment, for the copy that lands on their shelf. */
+    key: string | null;
+    signedIn: boolean;
+    subscribed: boolean;
+  };
   /** The link to hand out, given only to the owner. */
   shareHref: string | null;
   /** This page's own address, for the sign-in that should come back here. */
   currentHref: string;
+  /** The key the page was opened with, passed on to the copy and follow calls. */
+  listKey: string | null;
+};
+
+export type ListViewerActionsProps = {
+  listId: string;
+  viewerAccountId: string;
+  viewerKey: string;
+  listKey: string | null;
+  subscribed: boolean;
 };
 
 export type ListShareControlsProps = {

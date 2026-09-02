@@ -88,6 +88,21 @@ export const STUDY_LIST_COPY = {
   openItem: "Open",
   emptyPublic: "Nothing in this list yet.",
   privateNotice: "Only you can see this list. Choose Link only or Public to share it.",
+
+  /* Keeping somebody else's list. */
+  copyToMine: "Copy to my lists",
+  copying: "Copying",
+  copyHint: "A copy is yours to change. Following keeps the owner's list, as they change it.",
+  copyFailed: "Could not copy that list.",
+  follow: "Follow",
+  following: "Following",
+  followFailed: "Could not change that.",
+  followedHeading: "Following",
+  followedBlurb: "Lists other members keep, and you read. They change as the owner changes them.",
+  followedGone: "Now private",
+  unfollow: "Unfollow",
+  addToLists: "Add to my lists",
+  copiedFrom: "Copied from",
   editEmpty: "Saving now leaves the list empty. Delete it if you want it gone.",
   editFailed: "Could not change that list.",
 

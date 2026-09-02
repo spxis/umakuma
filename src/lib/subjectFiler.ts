@@ -22,7 +22,7 @@ export type FilerHit = {
   glyph: string;
   slug: string | null;
   /** WaniKani's id for the subject, when the catalogue names it. */
-  subjectId?: number;
+  subjectId?: number | null;
 };
 
 export type FilerList = { id: string; name: string; items: StudyListItemRef[] };

@@ -2487,11 +2487,11 @@
     "name": "Copy or subscribe to a list you are viewing",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 21,
-    "summary": "Viewing somebody's list offers two ways to keep it: copy it, so it becomes your own to change, or subscribe, so it stays theirs and appears among your lists read-only and up to date. Add a single item from a list you are viewing to one of your own. A copy remembers where it came from. Requested 2026-09-01 by John."
+    "summary": "Reading somebody's list now offers two ways to keep it, for two different promises. Copy makes a list of your own from its items - named so it fits on your shelf, Week 1 (copy) if you have a Week 1 - and remembers where it came from, while the source counts one more copy. Follow keeps the owner's list as theirs: read-only, always current, listed under Following on your Lists page with the owner's name, and dropped from there. A list made private since you followed it says so. The add-to-lists column from search sits on the list page as well, so one row of a friend's list can be tagged or filed into a list of your own. Both need exactly the permission that opening the list needs. Requested 2026-09-01 by John.",
+    "version": "0.242.0",
+    "releasedAt": "2026-09-02T06:47:48Z"
   },
   {
     "id": "list-open-contributions",

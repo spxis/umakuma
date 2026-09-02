@@ -95,6 +95,8 @@ export type ListSubjectRow = {
   kind: StudyListItemRef["kind"];
   subjectId: number | null;
   subjectType: string;
+  /** WaniKani's name for a radical; what the filer keys a radical by. */
+  slug: string | null;
   glyph: string;
   meaning: string;
   reading: string | null;
@@ -135,6 +137,7 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           kind: item.kind,
           subjectId: subject.subjectId,
           subjectType: subject.subjectType,
+          slug: item.kind === LIST_ITEM_KINDS.radical ? item.key : null,
           glyph: subject.characters,
           meaning: subject.meanings[0] ?? "",
           reading: subject.primaryReadings[0] ?? subject.readings[0] ?? null,
@@ -151,6 +154,7 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           kind: item.kind,
           subjectId: null,
           subjectType: SUBJECT_TYPES.kanji,
+          slug: null,
           glyph: item.key,
           meaning: jlpt?.primaryMeaning ?? jlpt?.meanings[0] ?? "",
           reading: jlpt?.onReadings[0] ?? jlpt?.kunReadings[0] ?? null,
