@@ -149,9 +149,9 @@ describe("what a bulk selection can become", () => {
    * copy is how they drift apart.
    */
   it("derives the member's base path in one place", () => {
-    for (const path of [STUDY_PANEL, "src/app/shared/StudyHistoryTable.tsx", "src/app/shared/StudyTagListsModal.tsx"]) {
+    for (const path of [STUDY_PANEL, "src/app/shared/StudyHistoryTable.tsx", "src/app/shared/StudyTagListsButton.tsx"]) {
       const source = read(path);
-      expect(source, `${path} should use the shared hook`).toContain("usePracticePath");
+      expect(source, `${path} should use the shared hook`).toMatch(/usePracticePath|useUserBasePath/);
       expect(source, `${path} should not rebuild the base path`).not.toContain('.split("/").slice(0, 3)');
     }
   });

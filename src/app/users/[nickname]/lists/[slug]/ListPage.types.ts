@@ -1,7 +1,8 @@
 import type { ListVisibility } from "@/lib/domainConstants";
 import type { ListContributions } from "@/lib/listContributions";
 import type { PendingProposal } from "@/lib/studyListContributions";
-import type { ListSubjectRow } from "@/lib/studySubjectItems";
+import type { StudyTag } from "@/lib/domainConstants";
+import type { ListPageItem } from "@/lib/listPageItems";
 
 /** What the list's page knows about the list, apart from its rows. */
 export type ListPageList = {
@@ -11,6 +12,8 @@ export type ListPageList = {
   visibility: ListVisibility;
   contributions: ListContributions;
   archivedAt: string | null;
+  /** Set for a built-in list, which is a tag rather than rows. */
+  tag: StudyTag | null;
   createdAt: string;
   updatedAt: string;
   copyCount: number;
@@ -20,7 +23,7 @@ export type ListPageList = {
 
 export type ListPageViewProps = {
   list: ListPageList;
-  rows: ListSubjectRow[];
+  items: ListPageItem[];
   owner: { key: string; name: string };
   viewer: {
     isOwner: boolean;
@@ -39,8 +42,8 @@ export type ListPageViewProps = {
   listKey: string | null;
   /** What others have suggested, for the owner; empty for everyone else. */
   proposals: PendingProposal[];
-  /** The viewer's own burned subjects, so the list can hide what they know. */
-  burnedIds: number[];
+  /** Where a practice sheet is built for the viewer, or empty for a visitor. */
+  practicePath: string;
 };
 
 export type ListViewerActionsProps = {

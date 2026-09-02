@@ -139,6 +139,7 @@ export const STUDY_LIST_COPY = {
       : `The merged list holds ${total} items; ${shared} were in more than one list.`,
   mergeRemoveSources: "Clear the sources away",
   mergeFailed: "Could not merge those lists.",
+  reloadForApplied: "Reload to see them here.",
 
   /* Other members changing a list. */
   contributionsLabel: "Who can add",

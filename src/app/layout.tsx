@@ -3,7 +3,6 @@ import AppFooter from "./AppFooter";
 import { loadFooterModeChips } from "@/lib/featureFlagsServer";
 import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
-import StudyTagListsModal from "./shared/StudyTagListsModal";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
 
@@ -78,7 +77,6 @@ export default async function RootLayout({
         <ClientApiActivityHint />
         <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
         <AppFooter modeChips={modeChips} />
-        <StudyTagListsModal />
         <ViewGlyphModalHost />
       </body>
     </html>

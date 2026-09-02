@@ -302,6 +302,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Herashite Tsukuru", ja: "減らして作る", reading: "へらしてつくる", gloss: "cut down first, then made" },
   { romaji: "Honno Issatsu", ja: "ほんの一冊", reading: "ほんのいっさつ", gloss: "several lists, just the one volume" },
   { romaji: "Manabu Atsumari", ja: "学ぶ集まり", reading: "まなぶあつまり", gloss: "everything to learn from, gathered in one place" },
+  { romaji: "Mittsu Hitotsu", ja: "三つ一つ", reading: "みっつひとつ", gloss: "three ways in, one view" },
 ];
 
 /**

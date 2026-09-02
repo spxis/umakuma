@@ -1,30 +1,37 @@
 "use client";
 
-import { openStudyTagLists, type StudyTagListPayload } from "@/lib/studyTagLists";
+import Link from "next/link";
+
+import { useUserBasePath } from "./userBasePath";
 import { STUDY_TAG_LIST_COPY } from "./studyTagListsUi";
+import { STUDY_TAGS, type StudyTag } from "@/lib/domainConstants";
+import { slugForListTag } from "@/lib/studyListRules";
 
 type Props = {
   accountId: string;
-  /** Which list opens first; the panel always offers both. */
-  tag?: StudyTagListPayload["tag"];
+  /** Which list to open; the page offers the way to the others. */
+  tag?: StudyTag;
   size?: "md" | "sm";
 };
 
 /**
- * Opens the Trouble and Favorites panel from wherever the lists are worth a
- * look: the game lobby before a Practice round, the History page, the explorers.
+ * The way to the Trouble and Favourites lists from wherever they are worth a
+ * look: the game lobby before a Practice round, History, the explorers.
+ *
+ * A link to the list's page rather than a panel that opens over whatever you
+ * were reading. There is one view of a list, and this is how you reach it.
  */
-export default function StudyTagListsButton({ accountId, tag, size = "md" }: Props) {
-  if (!accountId) return null;
+export default function StudyTagListsButton({ accountId, tag = STUDY_TAGS.trouble, size = "md" }: Props) {
+  const base = useUserBasePath();
+  if (!accountId || !base) return null;
 
   const shell = size === "md" ? "h-11 px-5 text-sm" : "h-9 px-4 text-xs";
   return (
-    <button
-      type="button"
-      onClick={() => openStudyTagLists({ accountId, tag })}
+    <Link
+      href={`${base}/lists/${slugForListTag(tag)}`}
       className={`inline-flex shrink-0 cursor-pointer items-center rounded-full border border-line bg-surface font-black text-foreground transition hover:bg-surface-muted ${shell}`}
     >
       {STUDY_TAG_LIST_COPY.button}
-    </button>
+    </Link>
   );
 }

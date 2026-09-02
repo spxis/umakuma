@@ -89,11 +89,22 @@ export function toStudyTagListItem(
   };
 }
 
+/** What the catalogue says an item is, whatever the list called it. */
+function catalogueKind(subjectType: string, fallback: StudyListItemRef["kind"]): StudyListItemRef["kind"] {
+  if (subjectType === SUBJECT_TYPES.radical) return LIST_ITEM_KINDS.radical;
+  if (subjectType === SUBJECT_TYPES.vocabulary) return LIST_ITEM_KINDS.vocabulary;
+  if (subjectType === SUBJECT_TYPES.kanji) return LIST_ITEM_KINDS.kanji;
+  return fallback;
+}
+
 /** A list item as a page anybody can read shows it: no member state at all. */
 export type ListSubjectRow = {
   key: string;
   kind: StudyListItemRef["kind"];
   subjectId: number | null;
+  /** Every reading the catalogue holds, for the viewer that walks the list. */
+  readings: string[];
+  meanings: string[];
   subjectType: string;
   /** WaniKani's name for a radical; what the filer keys a radical by. */
   slug: string | null;
@@ -134,11 +145,15 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
       return [
         {
           key: `${item.kind}:${item.key}`,
-          kind: item.kind,
+          /* The catalogue is the authority on what a named subject is: a
+             tagged radical must not be counted among the kanji. */
+          kind: catalogueKind(subject.subjectType, item.kind),
           subjectId: subject.subjectId,
           subjectType: subject.subjectType,
           slug: item.kind === LIST_ITEM_KINDS.radical ? item.key : null,
           glyph: subject.characters,
+          meanings: subject.meanings,
+          readings: subject.readings,
           meaning: subject.meanings[0] ?? "",
           reading: subject.primaryReadings[0] ?? subject.readings[0] ?? null,
           wkLevel: subject.wkLevel,
@@ -156,6 +171,8 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           subjectType: SUBJECT_TYPES.kanji,
           slug: null,
           glyph: item.key,
+          meanings: jlpt?.meanings ?? [],
+          readings: [...(jlpt?.onReadings ?? []), ...(jlpt?.kunReadings ?? [])],
           meaning: jlpt?.primaryMeaning ?? jlpt?.meanings[0] ?? "",
           reading: jlpt?.onReadings[0] ?? jlpt?.kunReadings[0] ?? null,
           wkLevel: null,

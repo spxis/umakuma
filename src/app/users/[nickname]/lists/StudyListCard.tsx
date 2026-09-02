@@ -6,7 +6,6 @@ import { useState } from "react";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
-import { openStudyTagLists } from "@/lib/studyTagLists";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
 import { LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY } from "@/lib/domainConstants";
@@ -150,12 +149,11 @@ export default function StudyListCard({
   /*
    * The characters are the biggest thing on the card and the thing a member
    * points at when they want to see what is in the list, so they are the way
-   * in as well as the preview. The Open action stays: a control that is only
-   * discoverable by guessing that the text is clickable is not discoverable.
+   * in as well as the preview. The Open action stays beside them: a control
+   * that is only discoverable by guessing the text is clickable is not
+   * discoverable. Both lead to the list's page - there is one view of a list.
    */
-  const openList = card.tag
-    ? () => openStudyTagLists({ accountId, tag: card.tag ?? undefined })
-    : () => openStudyTagLists({ accountId, list: { id: card.id, name: card.name } });
+  const listHrefForCard = card.href ?? "";
 
   const nameNode = editing ? (
     <input
@@ -219,13 +217,9 @@ export default function StudyListCard({
   ) : (
     <>
       {card.tag ? (
-        <button
-          type="button"
-          onClick={openList}
-          className={`${ACTION} hover:text-foreground`}
-        >
+        <Link href={listHrefForCard} className={`${ACTION} hover:text-foreground`}>
           {STUDY_LIST_COPY.open}
-        </button>
+        </Link>
       ) : canEdit ? (
         <>
           {/*
@@ -238,13 +232,9 @@ export default function StudyListCard({
             * in Trouble and Favourites lists had this from the start; a list
             * with a name instead of a flag now opens the same panel.
             */}
-          <button
-            type="button"
-            onClick={openList}
-            className={`${ACTION} hover:text-foreground`}
-          >
+          <Link href={listHrefForCard} className={`${ACTION} hover:text-foreground`}>
             {STUDY_LIST_COPY.open}
-          </button>
+          </Link>
           <button type="button" onClick={startEditing} className={`${ACTION} hover:text-foreground`}>
             {STUDY_LIST_COPY.rename}
           </button>
@@ -340,16 +330,15 @@ export default function StudyListCard({
               <span className="min-w-0 flex-1" />
             ) : (
               <>
-                <button
-                  type="button"
-                  onClick={openList}
+                <Link
+                  href={listHrefForCard}
                   title={STUDY_LIST_COPY.open}
                   lang="ja"
                   translate="no"
                   className={`min-w-0 flex-1 cursor-pointer truncate text-left text-base font-semibold leading-none text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
                 >
                   {preview}
-                </button>
+                </Link>
                 {kindNode}
                 <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
                   {card.count}
@@ -380,16 +369,15 @@ export default function StudyListCard({
               {STUDY_LIST_COPY.noCharactersYet}
             </p>
           ) : (
-            <button
-              type="button"
-              onClick={openList}
+            <Link
+              href={listHrefForCard}
               title={STUDY_LIST_COPY.open}
               lang="ja"
               translate="no"
-              className={`mt-2 line-clamp-3 w-full cursor-pointer break-all text-left text-lg font-semibold leading-snug text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
+              className={`mt-2 line-clamp-3 block w-full cursor-pointer break-all text-left text-lg font-semibold leading-snug text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
             >
               {preview}
-            </button>
+            </Link>
           )}
 
           {editingCharacters || !kindNode ? null : <div className="mt-2">{kindNode}</div>}

@@ -51,7 +51,8 @@ describe("the built-in lists on the lists page", () => {
 
     const tagCheck = card.indexOf("card.tag ? (");
     const ownerCheck = card.indexOf("canEdit ? (");
-    expect(card).toContain("openStudyTagLists");
+    /* Every card leads to the list's page - there is one view of a list. */
+    expect(card).toContain("listHrefForCard");
     expect(tagCheck).toBeGreaterThan(-1);
 
     /*

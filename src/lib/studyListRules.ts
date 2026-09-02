@@ -170,6 +170,37 @@ export function listSlug(name: string): string {
     .replace(/^-|-$/g, "");
 }
 
+/**
+ * The built-in lists' own addresses.
+ *
+ * Trouble, Favourites and Burned are lists in every sense a member cares
+ * about, so they are read at an address like any other rather than in a panel
+ * that opens from a button. The slug is the Canadian spelling a member reads;
+ * the tag behind it keeps the stored spelling, which is not copy.
+ */
+export const TAG_LIST_SLUGS = {
+  trouble: "trouble",
+  favourites: "favorite",
+  burned: "burned",
+} as const;
+
+export type TagListSlug = keyof typeof TAG_LIST_SLUGS;
+
+export function tagForListSlug(slug: string): (typeof TAG_LIST_SLUGS)[TagListSlug] | null {
+  const wanted = slug.trim().toLowerCase() as TagListSlug;
+  return wanted in TAG_LIST_SLUGS ? TAG_LIST_SLUGS[wanted] : null;
+}
+
+export function slugForListTag(tag: (typeof TAG_LIST_SLUGS)[TagListSlug]): TagListSlug {
+  const found = (Object.keys(TAG_LIST_SLUGS) as TagListSlug[]).find((slug) => TAG_LIST_SLUGS[slug] === tag);
+  return found ?? "trouble";
+}
+
+/** A built-in list's page. */
+export function tagListHref(owner: string, tag: (typeof TAG_LIST_SLUGS)[TagListSlug]): string {
+  return `/users/${encodeURIComponent(owner)}/lists/${slugForListTag(tag)}`;
+}
+
 /** The list's own page. */
 export function listHref(owner: string, name: string): string {
   return `/users/${encodeURIComponent(owner)}/lists/${encodeURIComponent(listSlug(name))}`;

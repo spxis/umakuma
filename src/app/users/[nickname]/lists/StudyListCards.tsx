@@ -14,7 +14,7 @@ import {
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS } from "@/lib/domainConstants";
-import { listHref, listKanji, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
+import { listHref, listKanji, tagListHref, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
 import { LIST_SORTS, type ListCard, type ListSort } from "./StudyList.types";
@@ -91,7 +91,7 @@ export default function StudyListCards({
     count: tagged.count,
     updatedAt: null,
     tag: tagged.tag,
-    href: null,
+    href: tagListHref(owner, tagged.tag),
     visibility: null,
   }));
 

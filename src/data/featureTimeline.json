@@ -2767,5 +2767,16 @@
     "dateIsEstimate": true,
     "release": 45,
     "summary": "Typing Heisei 3, Showa 40 or \u4ee4\u548c6\u5e74 answers with the Western year and the era in kanji, as its own line of results. Requested 2026-09-02 by John."
+  },
+  {
+    "id": "list-one-view",
+    "name": "One view of a list, not a modal and a page",
+    "area": "study",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "A list opened as a panel from one control and as a page from another, so which view a member got was a mystery, and the two had drifted apart. There is one view now, and it is the page. Trouble, Favourites and Burned have addresses of their own - /users/<member>/lists/trouble and its two siblings - and every card, name and button leads to a page. The panel is gone, and nothing went with it: the page draws the same subject cards and rows every other surface uses, with the member's own SRS state and tags on them, and it carries choosing and the practice sheet, the glyph viewer, an Edit toggle that takes an item out - untagging a built-in list, dropping a row from a saved one - and the WaniKani offer on Burned. Opening somebody else's list shows how far you have got with what is on it, since the state read is the reader's own. Reported 2026-09-02 by John.",
+    "version": "0.252.0",
+    "releasedAt": "2026-09-02T09:59:01Z"
   }
 ]

@@ -1,27 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
-import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
-import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
-import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { LIST_ITEM_KIND_DISPLAY, LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, type ListItemKind } from "@/lib/domainConstants";
-import { formatRelativeFromNow } from "@/lib/timeFormat";
-
+import ApplyWanikaniBurned from "@/app/shared/ApplyWanikaniBurned";
 import HideBurnedToggle from "@/app/shared/HideBurnedToggle";
+import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
 import ListSearchField from "@/app/shared/ListSearchField";
-import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
+import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
+import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
+import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
+import { STUDY_TAG_LIST_COPY } from "@/app/shared/studyTagListsUi";
+import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { useHideBurned } from "@/app/shared/useHideBurned";
-import { withoutBurned } from "@/lib/burnList";
+import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { LIST_ITEM_KIND_DISPLAY, LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, STUDY_TAGS, type ListItemKind } from "@/lib/domainConstants";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
-import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
-import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
+import { formatRelativeFromNow } from "@/lib/timeFormat";
+import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
-import type { ListPageViewProps } from "./ListPage.types";
 import ListContributeBox from "./ListContributeBox";
-import { ListCard, ListRow, ProposeRemovalButton } from "@/app/shared/ListSubjectRows";
+import type { ListPageViewProps } from "./ListPage.types";
 import ListProposalsPanel from "./ListProposalsPanel";
 import ListShareControls from "./ListShareControls";
 import ListViewerActions from "./ListViewerActions";
@@ -29,11 +30,12 @@ import ListViewerActions from "./ListViewerActions";
 /**
  * A list, laid out to be read by whoever may open it.
  *
- * The facts a reader wants come first - who made it, when, how big, who can
- * see it - then the items in either density, filtered by kind and searched.
- * The owner gets the share controls in the same place a reader gets the
- * owner's name; somebody not signed in gets one card inviting them to keep
- * the list, and nothing else that would make the page heavy to pass around.
+ * The one view of a list. There used to be two - a panel that opened from a
+ * button and a page that opened from the name - so a member could not tell
+ * what pressing a thing would give them, and the two drifted apart. This is
+ * the page, and it holds what the panel had: the shared subject cards and
+ * rows, choosing and the practice sheet, the glyph viewer, taking an item
+ * out behind an Edit toggle, and the WaniKani offer on the Burned list.
  */
 const VIEW_MODE_KEY = "wr:list-page:view-mode";
 const ALL = "all";
@@ -43,53 +45,79 @@ function timesText(count: number, noun: string): string {
   return `${noun} ${count === 1 ? STUDY_LIST_COPY.onceSuffix : `${count} ${STUDY_LIST_COPY.timesSuffix}`}`;
 }
 
-export default function ListPageView({ list, rows, owner, viewer, shareHref, currentHref, listKey, proposals, burnedIds }: ListPageViewProps) {
-  /* The viewer's Burned list, applied to this one when they say so. */
-  const [hideBurned] = useHideBurned();
-  const burned = useMemo(() => new Set(burnedIds), [burnedIds]);
-  const burnedInView = useMemo(() => withoutBurned(rows, burned).hidden, [burned, rows]);
+export default function ListPageView({
+  list,
+  items,
+  owner,
+  viewer,
+  shareHref,
+  currentHref,
+  listKey,
+  proposals,
+  practicePath,
+}: ListPageViewProps) {
   const [kind, setKind] = useState<string>(ALL);
-  /* Removals a member has suggested from this page, so the button says so. */
-  const [suggested, setSuggested] = useState<Set<string>>(new Set());
-  const archived = list.archivedAt !== null;
-  const canContribute = Boolean(viewer.accountId) && !viewer.isOwner && !archived;
-
-  async function proposeRemoval(row: (typeof rows)[number]) {
-    if (!viewer.accountId) return;
-    setSuggested((prev) => new Set(prev).add(row.key));
-    await fetch(`/api/study/${viewer.accountId}/lists/contributions`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ listId: list.id, key: listKey, removal: { kind: row.kind, key: row.glyph, subjectId: row.subjectId } }),
-    }).catch(() => undefined);
-  }
-  /*
-   * Filing, here too: a member reading somebody's list can tag a row or put
-   * it on a list of their own, one at a time, with the same column search
-   * has. The hits are the rows; a row WaniKani does not name still files
-   * into a saved list, and only the tags need the id.
-   */
-  const [filerOpen, setFilerOpen] = useFilerOpen();
-  const filing = Boolean(viewer.accountId) && filerOpen;
-  const filer = useSubjectFiler(viewer.accountId, rows, filing);
   const [search, setSearch] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [removed, setRemoved] = useState<Set<number>>(new Set());
+  const [applied, setApplied] = useState(0);
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(VIEW_MODE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid),
   );
+  const [hideBurned] = useHideBurned();
+  const selection = useSubjectSelection(`list:${list.id}`);
+
+  const archived = list.archivedAt !== null;
+  const canContribute = Boolean(viewer.accountId) && !viewer.isOwner && !archived && !list.tag;
+  const canEdit = viewer.isOwner && !archived;
+
+  const live = useMemo(() => items.filter((item) => !removed.has(item.subjectId)), [items, removed]);
 
   const kinds = useMemo(() => {
     const counts = new Map<ListItemKind, number>();
-    for (const row of rows) counts.set(row.kind, (counts.get(row.kind) ?? 0) + 1);
+    for (const item of live) counts.set(item.listKind, (counts.get(item.listKind) ?? 0) + 1);
     return [...counts.entries()];
-  }, [rows]);
+  }, [live]);
+
+  const burnedInView = useMemo(() => live.filter((item) => item.studyTags?.burned).length, [live]);
 
   const visible = useMemo(
     () =>
-      (hideBurned ? withoutBurned(rows, burned).kept : rows)
-        .filter((row) => kind === ALL || row.kind === kind)
-        /* The same reading of a query the main search uses: romaji included. */
-        .filter((row) => subjectMatchesQuery(search, { glyph: row.glyph, meanings: [row.meaning], readings: [row.reading] })),
-    [burned, hideBurned, kind, rows, search],
+      live
+        .filter((item) => kind === ALL || item.listKind === kind)
+        .filter((item) => list.tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags?.burned)
+        .filter((item) =>
+          subjectMatchesQuery(search, { glyph: item.characters, meanings: item.meanings, readings: item.readings ?? [] }),
+        ),
+    [hideBurned, kind, list.tag, live, search],
+  );
+
+  /* Taking an item out: untagging a built-in list, or dropping it from a saved one. */
+  const remove = useCallback(
+    async (subjectId: number, listKind: string, key: string) => {
+      if (!viewer.accountId) return;
+      setRemoved((current) => new Set(current).add(subjectId));
+      const response = await (list.tag
+        ? fetch(`/api/study/${viewer.accountId}/tags`, {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ subjectId, tag: list.tag, enabled: false }),
+          })
+        : fetch(`/api/study/${viewer.accountId}/lists/${list.id}/items`, {
+            method: "DELETE",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ kind: listKind, key }),
+          })
+      ).catch(() => null);
+      if (!response?.ok) {
+        setRemoved((current) => {
+          const next = new Set(current);
+          next.delete(subjectId);
+          return next;
+        });
+      }
+    },
+    [list.id, list.tag, viewer.accountId],
   );
 
   const facts = [
@@ -124,18 +152,26 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
                 </Link>
               </span>
               <span>
-                {list.itemCount} {list.itemCount === 1 ? STUDY_LIST_COPY.countSuffixOne : STUDY_LIST_COPY.countSuffix}
+                {live.length} {live.length === 1 ? STUDY_LIST_COPY.countSuffixOne : STUDY_LIST_COPY.countSuffix}
               </span>
-              {facts.map((fact) => (
-                <span key={fact}>{fact}</span>
-              ))}
-              <span className="subject-pill border-line bg-surface-muted text-foreground/70">
-                {LIST_VISIBILITY_DISPLAY[list.visibility].label}
-              </span>
-              {archived ? <span className="subject-pill border-amber-300 bg-amber-50 text-amber-900">{STUDY_LIST_COPY.archivedPill}</span> : null}
+              {list.tag ? (
+                <span>{STUDY_LIST_COPY.builtIn}</span>
+              ) : (
+                <>
+                  {facts.map((fact) => (
+                    <span key={fact}>{fact}</span>
+                  ))}
+                  <span className="subject-pill border-line bg-surface-muted text-foreground/70">
+                    {LIST_VISIBILITY_DISPLAY[list.visibility].label}
+                  </span>
+                </>
+              )}
+              {archived ? (
+                <span className="subject-pill border-amber-300 bg-amber-50 text-amber-900">{STUDY_LIST_COPY.archivedPill}</span>
+              ) : null}
             </p>
           </div>
-          {archived ? null : viewer.isOwner && viewer.accountId && shareHref ? (
+          {archived || list.tag ? null : viewer.isOwner && viewer.accountId && shareHref ? (
             <ListShareControls
               listId={list.id}
               accountId={viewer.accountId}
@@ -158,10 +194,14 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
       </header>
 
       {archived ? (
-        <p className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-900">{STUDY_LIST_COPY.archivedNotice}</p>
+        <p className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-900">
+          {STUDY_LIST_COPY.archivedNotice}
+        </p>
       ) : null}
 
-      {viewer.isOwner && viewer.accountId && !archived ? <ListProposalsPanel proposals={proposals} ownerAccountId={viewer.accountId} /> : null}
+      {viewer.isOwner && viewer.accountId && !archived && !list.tag ? (
+        <ListProposalsPanel proposals={proposals} ownerAccountId={viewer.accountId} />
+      ) : null}
 
       {canContribute && viewer.accountId ? (
         <ListContributeBox listId={list.id} viewerAccountId={viewer.accountId} listKey={listKey} contributions={list.contributions} />
@@ -187,7 +227,7 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
           {kinds.length > 1 ? (
             <>
               <button type="button" aria-pressed={kind === ALL} onClick={() => setKind(ALL)} className={chipClass(kind === ALL)}>
-                {STUDY_LIST_COPY.allKinds} · {rows.length}
+                {STUDY_LIST_COPY.allKinds} · {live.length}
               </button>
               {kinds.map(([value, count]) => (
                 <button key={value} type="button" aria-pressed={kind === value} onClick={() => setKind(value)} className={chipClass(kind === value)}>
@@ -200,12 +240,24 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
             value={search}
             onChange={setSearch}
             label={STUDY_LIST_COPY.searchItems}
-            options={rows.map((row) => ({ value: row.glyph, label: row.meaning }))}
+            options={live.map((item) => ({ value: item.characters, label: item.meanings[0] ?? "" }))}
           />
-          {viewer.accountId ? <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} /> : null}
-          {viewer.accountId ? (
-            <SubjectFilerToggle open={filerOpen} onToggle={() => setFilerOpen((was) => !was)} error={filing ? filer.error : null} />
+          {viewer.accountId && list.tag !== STUDY_TAGS.burned ? (
+            <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} />
           ) : null}
+          {canEdit ? (
+            <button
+              type="button"
+              aria-pressed={editing}
+              onClick={() => setEditing((was) => !was)}
+              className={`inline-flex h-9 shrink-0 items-center rounded-full border px-3 text-xs font-bold uppercase tracking-[0.08em] transition ${
+                editing ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/70 hover:bg-surface-muted"
+              }`}
+            >
+              {editing ? STUDY_TAG_LIST_COPY.editingDone : STUDY_TAG_LIST_COPY.edit}
+            </button>
+          ) : null}
+          {viewer.accountId ? <SubjectSelectionToggle selection={selection} /> : null}
           <SubjectViewModeToggle
             value={viewMode}
             onChange={(next) => {
@@ -215,50 +267,56 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
           />
         </div>
 
-        {rows.length === 0 ? (
-          <p className="py-8 text-center text-sm font-semibold text-foreground/60">{STUDY_LIST_COPY.emptyPublic}</p>
-        ) : visible.length === 0 ? (
-          <p className="py-8 text-center text-sm font-semibold text-foreground/60">{STUDY_LIST_COPY.noListsMatch}</p>
-        ) : viewMode === SUBJECT_VIEW_MODES.list ? (
-          <ul className="mt-3 divide-y divide-line/60">
-            {visible.map((row) => (
-              <li key={row.key}>
-                <ListRow
-                  row={row}
-                  after={
-                    <>
-                      {canContribute ? (
-                        <ProposeRemovalButton onPropose={() => void proposeRemoval(row)} pending={suggested.has(row.key)} />
-                      ) : null}
-                      {filing ? <SubjectFilerCell hit={row} filer={filer} className="basis-full pb-2 pl-3 md:basis-auto md:pb-0" /> : null}
-                    </>
-                  }
-                />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <ul className="mt-3 grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))]">
-            {visible.map((row) => (
-              <li key={row.key}>
-                <ListCard
-                  row={row}
-                  after={
-                    <span className="mt-1 flex flex-wrap items-center justify-center gap-1">
-                      {canContribute ? (
-                        <ProposeRemovalButton onPropose={() => void proposeRemoval(row)} pending={suggested.has(row.key)} />
-                      ) : null}
-                      {filing ? <SubjectFilerCell hit={row} filer={filer} /> : null}
-                    </span>
-                  }
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        {viewer.isOwner && viewer.accountId && list.tag === STUDY_TAGS.burned ? (
+          <div className="mt-2 overflow-hidden rounded-xl border border-line">
+            <ApplyWanikaniBurned accountId={viewer.accountId} onApplied={() => setApplied((value) => value + 1)} />
+          </div>
+        ) : null}
+        {applied > 0 ? <p className="mt-2 text-[11px] font-semibold text-foreground/60">{STUDY_LIST_COPY.reloadForApplied}</p> : null}
+
+        {selection.choosing ? (
+          <div className="mt-2">
+            <KanjiSelectionBar
+              selection={selection}
+              visibleKeys={visible.map((item) => item.characters)}
+              accountId={viewer.accountId}
+              practicePath={practicePath}
+            />
+          </div>
+        ) : null}
+
+        <div className="mt-3">
+          {visible.length === 0 ? (
+            <p className="py-8 text-center text-sm font-semibold text-foreground/60">
+              {live.length === 0 ? STUDY_LIST_COPY.emptyPublic : STUDY_LIST_COPY.noListsMatch}
+            </p>
+          ) : (
+            <StudyTagListsBody
+              items={visible}
+              viewMode={viewMode}
+              selection={viewer.accountId ? selection : undefined}
+              onOpen={(index) =>
+                openViewGlyphViewer({
+                  items: visible,
+                  startIndex: index,
+                  accountId: viewer.accountId ?? undefined,
+                  title: list.name,
+                })
+              }
+              onRemove={
+                editing && canEdit
+                  ? (item) => {
+                      const held = visible.find((candidate) => candidate.subjectId === item.subjectId);
+                      if (held) void remove(held.subjectId, held.listKind, held.listKey);
+                    }
+                  : undefined
+              }
+            />
+          )}
+        </div>
       </section>
 
-      {viewer.isOwner && list.visibility === LIST_VISIBILITIES.private ? (
+      {viewer.isOwner && !list.tag && list.visibility === LIST_VISIBILITIES.private ? (
         <p className="text-center text-xs font-semibold text-foreground/60">{STUDY_LIST_COPY.privateNotice}</p>
       ) : null}
     </div>

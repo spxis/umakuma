@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
+import { LIST_ITEM_KIND_VALUES } from "@/lib/domainConstants";
 import { isMissingStudyListTableError } from "@/lib/studyListRules";
 import { z } from "zod";
 
@@ -63,15 +64,14 @@ export async function GET(request: Request, context: RouteContext) {
   });
 }
 
-const removeSchema = z.object({ subjectId: z.number().int().positive() });
+const removeSchema = z.object({ kind: z.enum(LIST_ITEM_KIND_VALUES), key: z.string().min(1).max(200) });
 
 /**
  * Take one item out, from the viewer.
  *
- * The viewer shows the list's subjects, so it names the item by subject id;
- * every item of the list with that id goes, and the rest keep their order.
- * Scoped to the account in the read, so somebody else's list id removes
- * nothing.
+ * Named the way the list holds it - a kind and a key - so an item WaniKani
+ * never named can be taken out as easily as one it did. Scoped to the account
+ * in the read, so somebody else's list id removes nothing.
  */
 export async function DELETE(request: Request, context: RouteContext) {
   return withApiRouteTelemetry({
@@ -98,7 +98,7 @@ export async function DELETE(request: Request, context: RouteContext) {
         if (list.archivedAt) {
           return NextResponse.json({ error: "This list is archived. Restore it to change it." }, { status: 409 });
         }
-        const kept = list.items.filter((item) => item.subjectId !== parsed.data.subjectId);
+        const kept = list.items.filter((item) => !(item.kind === parsed.data.kind && item.key === parsed.data.key));
         if (kept.length !== list.items.length) await replaceListItems(listId, kept, accountId);
         return NextResponse.json({ removed: list.items.length - kept.length });
       } catch (error) {

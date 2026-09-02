@@ -302,28 +302,28 @@ describe("picking a row", () => {
  */
 describe("opening a saved list", () => {
   const CARD = "src/app/users/[nickname]/lists/StudyListCard.tsx";
-  const MODAL = "src/app/shared/StudyTagListsModal.tsx";
-
-  it("offers a way in from the card, and from the characters themselves", () => {
-    const card = read(CARD);
-    expect(card).toContain("list: { id: card.id, name: card.name }");
-    /* Both densities put the preview on the handler, not only the action. */
-    expect(card.split("onClick={openList}").length - 1).toBeGreaterThanOrEqual(4);
-  });
-
-  it("reads the list through its own route rather than the tag route", () => {
-    expect(read(MODAL)).toContain("/lists/${savedList.id}/items");
-  });
+  const PAGE = "src/app/users/[nickname]/lists/[slug]/ListPageView.tsx";
 
   /*
-   * The tagged lists filter by flag, which would empty a saved list, and offer
-   * a switch to the other tagged list, which would offer to leave the list just
-   * opened.
+   * One view of a list. A card used to open a panel from one control and a
+   * page from another, so a member could not tell what a press would give
+   * them; every way in now leads to the same page.
    */
-  it("drops the tag filter and the tag switch for a saved list", () => {
-    const modal = read(MODAL);
-    expect(modal).toContain("savedList ? true : item.studyTags[tag]");
-    expect(modal).toContain("savedList ? (");
+  it("offers a way in from the card, and from the characters themselves", () => {
+    const card = read(CARD);
+    expect(card.split("listHrefForCard").length - 1).toBeGreaterThanOrEqual(4);
+    expect(card).not.toContain("openStudyTagLists");
+  });
+
+  it("reads a saved list through its own route rather than the tag route", () => {
+    expect(read(PAGE)).toContain("/lists/${list.id}/items");
+  });
+
+  /* A built-in list untags; a saved one drops a row. The page knows which. */
+  it("takes an item out the way the list holds it", () => {
+    const page = read(PAGE);
+    expect(page).toContain("list.tag");
+    expect(page).toContain("enabled: false");
   });
 
   it("scopes the route to the account, not just to the list id", () => {
