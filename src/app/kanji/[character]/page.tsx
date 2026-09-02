@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -8,13 +9,18 @@ import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import MnemonicsBlock from "@/app/shared/subject-page/MnemonicsBlock";
 import RelatedGroupBlock from "@/app/shared/subject-page/RelatedGroupBlock";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
+import SubjectFilingBar from "@/app/shared/subject-page/SubjectFilingBar";
 import UsedInWordsBlock from "@/app/shared/subject-page/UsedInWordsBlock";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { displayReading, readingsForGrade } from "@/app/users/[nickname]/grades/gradeExplorerView";
+import { authOptions } from "@/lib/auth";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { getKanjiDictionaryAttribution, getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+import { subjectPageHit } from "@/lib/subjectFiler";
 import { loadKanjiPage } from "@/lib/subjectPage";
+import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
@@ -81,6 +87,11 @@ export default async function KanjiPage({ params }: Props) {
   const readings = entry ? readingsForGrade(entry) : null;
   const dictionary = getKanjiDictionaryEntry(character);
   const page = await loadKanjiPage(character);
+  const session = await getServerSession(authOptions);
+  const viewerMenuInfo = await resolveViewerMenuInfo({
+    viewerEmail: session?.user?.email?.trim().toLowerCase() ?? null,
+    sessionName: session?.user?.name?.trim() ?? null,
+  });
 
   /*
    * The school catalogue covers what schools teach; the dictionary covers the
@@ -114,6 +125,17 @@ export default async function KanjiPage({ params }: Props) {
           summary={summary}
         />
       </section>
+
+      <SubjectFilingBar
+        hit={subjectPageHit({
+          subjectType: SUBJECT_TYPES.kanji,
+          characters: character,
+          slug: character,
+          subjectId: page.wkSubjectId,
+        })}
+        accountId={viewerMenuInfo?.accountId ?? null}
+        label={character}
+      />
 
       {dictionary ? (
         <KanjiDictionaryDetail

@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 import ExampleSentences from "@/app/shared/ExampleSentences";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
+import SubjectFilingBar from "@/app/shared/subject-page/SubjectFilingBar";
 import SubjectDetailPanel from "@/app/shared/SubjectDetailPanel";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { KANJI_PAGE_COPY } from "@/app/kanji/[character]/KanjiPage.constants";
+import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
+import { authOptions } from "@/lib/auth";
 import { getPublicSubject, getWordNeighbours, publicSubjectLabel } from "@/lib/publicSubject";
+import { subjectPageHit } from "@/lib/subjectFiler";
 import { fetchSentencesForWord } from "@/lib/tatoebaSentences";
 
 type Props = { params: Promise<{ word: string }> };
@@ -60,12 +65,24 @@ export default async function VocabularyPage({ params }: Props) {
   const label = publicSubjectLabel(subject);
   const [sentences, neighbours] = await Promise.all([fetchSentencesForWord(label), getWordNeighbours(subject)]);
 
+  const session = await getServerSession(authOptions);
+  const viewerMenuInfo = await resolveViewerMenuInfo({
+    viewerEmail: session?.user?.email?.trim().toLowerCase() ?? null,
+    sessionName: session?.user?.name?.trim() ?? null,
+  });
+
   return (
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
 
       <SubjectDetailPanel subject={subject} label={label} neighbours={neighbours} />
+
+      <SubjectFilingBar
+        hit={subjectPageHit(subject)}
+        accountId={viewerMenuInfo?.accountId ?? null}
+        label={label}
+      />
 
       <ExampleSentences
         sentences={sentences}

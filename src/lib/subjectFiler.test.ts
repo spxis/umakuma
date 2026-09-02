@@ -1,7 +1,17 @@
 import { describe, expect, it } from "vitest";
 
 import { LIST_ITEM_KINDS, SUBJECT_TYPES } from "./domainConstants";
-import { canList, canTag, itemOf, itemsAfterToggle, listHolds, taggableIds, type FilerHit, type FilerList } from "./subjectFiler";
+import {
+  canList,
+  canTag,
+  itemOf,
+  itemsAfterToggle,
+  listHolds,
+  subjectPageHit,
+  taggableIds,
+  type FilerHit,
+  type FilerList,
+} from "./subjectFiler";
 
 const water: FilerHit = { subjectType: SUBJECT_TYPES.kanji, glyph: "水", slug: "水", subjectId: 479 };
 const jlptWater: FilerHit = { subjectType: SUBJECT_TYPES.kanji, glyph: "水", slug: null };
@@ -56,5 +66,35 @@ describe("toggling a row on a saved list", () => {
 describe("what the tag store is asked about", () => {
   it("is each named subject, once, and no unnamed row", () => {
     expect(taggableIds([water, jlptWater, water, wednesday])).toEqual([479, 2600]);
+  });
+});
+
+/*
+ * The public subject pages file the same thing a search row does. A drawn
+ * radical is the one that needs care: it has no characters at all, so it can
+ * only be filed by name.
+ */
+describe("subjectPageHit", () => {
+  it("files a kanji by its character", () => {
+    const hit = subjectPageHit({ subjectType: SUBJECT_TYPES.kanji, characters: "億", slug: "億", subjectId: 695 });
+    expect(itemOf(hit)).toEqual({ kind: LIST_ITEM_KINDS.kanji, key: "億", subjectId: 695 });
+    expect(canTag(hit)).toBe(true);
+  });
+
+  it("files a word as a word, not as its kanji", () => {
+    const hit = subjectPageHit({ subjectType: SUBJECT_TYPES.vocabulary, characters: "一億", slug: "一億", subjectId: 3044 });
+    expect(itemOf(hit)).toEqual({ kind: LIST_ITEM_KINDS.vocabulary, key: "一億", subjectId: 3044 });
+  });
+
+  it("files a drawn radical by its name", () => {
+    const hit = subjectPageHit({ subjectType: SUBJECT_TYPES.radical, characters: "", slug: "leaf", subjectId: 12 });
+    expect(itemOf(hit)).toEqual({ kind: LIST_ITEM_KINDS.radical, key: "leaf", subjectId: 12 });
+    expect(canList(hit)).toBe(true);
+  });
+
+  it("still files a subject the catalogue does not name, without the tags", () => {
+    const hit = subjectPageHit({ subjectType: SUBJECT_TYPES.kanji, characters: "兀" });
+    expect(canTag(hit)).toBe(false);
+    expect(canList(hit)).toBe(true);
   });
 });

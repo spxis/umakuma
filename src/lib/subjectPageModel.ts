@@ -69,6 +69,8 @@ export type KanjiPageModel = {
   mnemonics: { meaning: string; reading: string } | null;
   /** WaniKani's level, for the header pill. */
   wkLevel: number | null;
+  /** WaniKani's id, where it teaches the character: what the tag marks need. */
+  wkSubjectId: number | null;
 };
 
 /**
@@ -190,5 +192,6 @@ export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {
     mnemonics:
       meaningMnemonic || readingMnemonic ? { meaning: meaningMnemonic, reading: readingMnemonic } : null,
     wkLevel: wanikani?.wkLevel ?? null,
+    wkSubjectId: wanikani?.subjectId ?? null,
   };
 }

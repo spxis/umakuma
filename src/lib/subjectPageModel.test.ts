@@ -88,6 +88,8 @@ describe("a kanji WaniKani has never taught", () => {
     expect(page.related).toEqual([]);
     expect(page.mnemonics).toBeNull();
     expect(page.wkLevel).toBeNull();
+    /* No catalogue row, so nothing to tag it as trouble or a favourite with. */
+    expect(page.wkSubjectId).toBeNull();
   });
 });
 
@@ -136,6 +138,7 @@ describe("a kanji WaniKani teaches", () => {
   it("strips the markup from the mnemonics and drops an empty one", () => {
     expect(page.mnemonics).toEqual({ meaning: "Looks like water.", reading: "" });
     expect(page.wkLevel).toBe(2);
+    expect(page.wkSubjectId).toBe(479);
   });
 });
 

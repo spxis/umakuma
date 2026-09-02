@@ -23,6 +23,9 @@ export const SUBJECT_PAGE_COPY = {
   /* The one control for the words on every item pill. */
   pillTextOn: "Text on",
   pillTextOff: "Text off",
+  /* The strip under the card, for a reader with no account to file into. */
+  filingSignedOut: (label: string) => `Keep ${label} on a list of your own`,
+  filingJoin: "Join UmaKuma",
   notFoundTitle: "Nothing here by that name",
   notFoundWord: "No word is catalogued under that spelling.",
   notFoundRadical: "No radical is catalogued under that name.",

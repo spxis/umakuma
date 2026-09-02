@@ -3082,5 +3082,16 @@
     "summary": "Three things reported on the radical command. The grid gave every stroke count a row of its own, which wasted almost all of the width on the counts that hold three radicals - fourteen strokes is 鼻 and 齊 - and made the picker twice as tall as it needed to be, which is the space the answers wanted. The radicals now flow left to right in one run with the stroke count as a marker between groups, the way paper dictionaries print it, and the grid is ten rows rather than fourteen. The command was also the only way in, and nobody guesses :rad, so there is a row under the search box now - Find by Radicals, or type :rad - and the button writes the command rather than opening a panel of its own, so pressing it and typing the words land in the same place. It sits in the layout under the input rather than inside the dropdown, because the results page keeps its dropdown shut on focus so a seeded query cannot cover the results it just produced, which would have left the row permanently invisible there. And a bug: after a radical search, focusing the box again showed nothing until a key was pressed. A command in the box is the picker's own state, so focus now brings both the picker and its answer back. Reported 2026-09-02 by John.",
     "version": "0.282.0",
     "releasedAt": "2026-09-02T14:57:50Z"
+  },
+  {
+    "id": "subject-page-filing",
+    "name": "Add to lists from a subject page",
+    "area": "study",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "A member could file a kanji from a search row but not from the kanji's own page, which is where you decide a character is worth keeping. The public kanji, word and radical pages carry a strip under the card with the same marks the search column uses - trouble, favourite, and a chip for each saved list - and a visitor gets the offer to join instead. Part of add-to-lists-everywhere, which keeps the glyph viewer and the explorers. Reported 2026-09-02 by John with screenshots.",
+    "version": "0.283.0",
+    "releasedAt": "2026-09-02T15:06:15Z"
   }
 ]

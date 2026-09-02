@@ -22,7 +22,20 @@ import type { SubjectFiler } from "./useSubjectFiler";
 const MARK =
   "inline-flex h-7 min-w-7 shrink-0 cursor-pointer items-center justify-center rounded-md px-1 text-xs font-black leading-none transition";
 const CHIP =
-  "inline-flex h-6 max-w-24 shrink-0 cursor-pointer items-center truncate rounded-full border px-2 text-[10px] font-bold uppercase tracking-[0.06em] transition";
+  "inline-flex h-6 shrink-0 cursor-pointer items-center truncate rounded-full border px-2 text-[10px] font-bold uppercase tracking-[0.06em] transition";
+/*
+ * Where the marks are standing.
+ *
+ * As a column beside a result row they hold their width and keep to the right,
+ * and a long list name is cut short rather than pushing the row it belongs to
+ * off the screen. As a strip under a subject they have the width of the page
+ * and no row to protect: names are shown in full, and the chips wrap within
+ * the strip instead of running off the side of a phone.
+ */
+const VARIANTS = {
+  row: { wrapper: "shrink-0 justify-end", chip: "max-w-24" },
+  strip: { wrapper: "min-w-0 justify-start", chip: "max-w-64" },
+} as const;
 
 function halt(event: MouseEvent) {
   event.preventDefault();
@@ -33,9 +46,12 @@ export default function SubjectFilerCell({
   hit,
   filer,
   className = "",
+  variant = "row",
 }: {
   hit: FilerHit;
   filer: SubjectFiler;
+  /** Beside a row, or as a strip under a subject. */
+  variant?: keyof typeof VARIANTS;
   /**
    * Where the cell sits: inline at the end of a wide row, or on a line of its
    * own under a narrow one. A row of chips squeezed beside a glyph in a
@@ -49,8 +65,10 @@ export default function SubjectFilerCell({
   const listable = canList(hit);
   if (!taggable && !listable) return null;
 
+  const layout = VARIANTS[variant];
+
   return (
-    <span className={`flex shrink-0 flex-wrap items-center justify-end gap-1 ${className}`.trim()} onMouseDown={halt}>
+    <span className={`flex flex-wrap items-center gap-1 ${layout.wrapper} ${className}`.trim()} onMouseDown={halt}>
       {taggable ? (
         <>
           <button
@@ -97,7 +115,7 @@ export default function SubjectFilerCell({
                 aria-pressed={on}
                 aria-label={label}
                 title={label}
-                className={`${CHIP} ${
+                className={`${CHIP} ${layout.chip} ${
                   on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/60 hover:bg-surface-muted"
                 }`}
               >

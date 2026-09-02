@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import SubjectDetailPanel from "@/app/shared/SubjectDetailPanel";
+import SubjectFilingBar from "@/app/shared/subject-page/SubjectFilingBar";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
+import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
+import { authOptions } from "@/lib/auth";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { getPublicSubject, publicSubjectLabel } from "@/lib/publicSubject";
+import { subjectPageHit } from "@/lib/subjectFiler";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -52,12 +57,25 @@ export default async function RadicalPage({ params }: Props) {
     return <NotFound slug={slug} />;
   }
 
+  const session = await getServerSession(authOptions);
+  const viewerMenuInfo = await resolveViewerMenuInfo({
+    viewerEmail: session?.user?.email?.trim().toLowerCase() ?? null,
+    sessionName: session?.user?.name?.trim() ?? null,
+  });
+  const label = publicSubjectLabel(subject);
+
   return (
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
 
-      <SubjectDetailPanel subject={subject} label={publicSubjectLabel(subject)} />
+      <SubjectDetailPanel subject={subject} label={label} />
+
+      <SubjectFilingBar
+        hit={subjectPageHit(subject)}
+        accountId={viewerMenuInfo?.accountId ?? null}
+        label={label}
+      />
 
       <p className="text-center text-sm">
         <Link href="/" className="font-bold text-accent underline underline-offset-2">

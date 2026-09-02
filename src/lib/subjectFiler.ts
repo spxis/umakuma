@@ -69,3 +69,27 @@ export function itemsAfterToggle(list: FilerList, hit: FilerHit): StudyListItemR
 export function taggableIds(hits: FilerHit[]): number[] {
   return [...new Set(hits.flatMap((hit) => (typeof hit.subjectId === "number" ? [hit.subjectId] : [])))];
 }
+
+/**
+ * The filing hit for a subject page.
+ *
+ * The public pages hold one subject rather than a list of results, and they
+ * hold it in the catalogue's own shape. Reading the hit out of that shape in
+ * one place keeps the three pages - kanji, word, radical - filing the same
+ * thing the search rows file: a word as a word, a radical by its name, and a
+ * kanji by its character, each carrying the catalogue's id where there is one
+ * so the trouble and favourite marks work too.
+ */
+export function subjectPageHit(subject: {
+  subjectType: string;
+  characters?: string | null;
+  slug?: string | null;
+  subjectId?: number | null;
+}): FilerHit {
+  return {
+    subjectType: subject.subjectType,
+    glyph: subject.characters?.trim() ?? "",
+    slug: subject.slug?.trim() || null,
+    subjectId: typeof subject.subjectId === "number" ? subject.subjectId : null,
+  };
+}
