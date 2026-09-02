@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { SUBJECT_TYPES, SRS_BUCKETS } from "./domainConstants";
 import { RELATED_GROUPS } from "./relatedSubjects";
 import type { CatalogRelatedReference, CatalogSubjectDetail } from "./subjectCatalogDetails";
-import { assembleKanjiPage, relatedGroupsForSubject, toWordExamples, type KanjiPageSources } from "./subjectPageModel";
+import { assembleKanjiPage, neighbourReferences, relatedGroupsForSubject, toWordExamples, type KanjiPageSources } from "./subjectPageModel";
 import { WORD_EXAMPLE_LIMIT } from "@/app/shared/subject-page/SubjectPage.constants";
 
 /**
@@ -207,6 +207,47 @@ describe("a subject's relations on the other two pages", () => {
     );
     expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.usedIn]);
     expect(groups[0]!.items[0]!.href).toBe(`/kanji/${encodeURIComponent("水")}`);
+  });
+});
+
+describe("a word's neighbourhood", () => {
+  const water = reference({ subjectId: 479 });
+  const bubbles = reference({ subjectId: 900, characters: "泡", slug: "泡", label: "泡", meaning: "Bubbles" });
+  const word = (subjectId: number, characters: string, wkLevel: number) =>
+    reference({ subjectId, characters, slug: characters, label: characters, wkLevel, subjectType: SUBJECT_TYPES.vocabulary });
+  const foam = word(2551, "水泡", 46);
+  const wednesday = word(2600, "水曜日", 2);
+  const swimming = word(2700, "水泳", 12);
+  const soapBubble = word(2800, "泡", 30);
+
+  /* 水's words and 泡's words, with 水泡 in both lists, gathered once each. */
+  it("gathers each kanji's words once, in the order the kanji are written", () => {
+    const gathered = neighbourReferences([
+      wanikani({ subjectId: 479, usedInVocabulary: [wednesday, foam, swimming] }),
+      wanikani({ subjectId: 900, characters: "泡", usedInVocabulary: [foam, soapBubble] }),
+    ]);
+    expect(gathered.map((item) => item.subjectId)).toEqual([2600, 2551, 2700, 2800]);
+  });
+
+  /* The bug: a word page listed its kanji and stopped. */
+  it("gives a word page the other words built from its kanji, easiest first", () => {
+    const groups = relatedGroupsForSubject(
+      wanikani({ subjectId: 2551, subjectType: SUBJECT_TYPES.vocabulary, characters: "水泡", componentKanji: [water, bubbles] }),
+      [wednesday, foam, swimming, soapBubble],
+    );
+    expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.builtFrom, RELATED_GROUPS.sharesKanji]);
+    const shares = groups[1]!;
+    /* Itself is not one of its own neighbours. */
+    expect(shares.items.map((item) => item.label)).toEqual(["水曜日", "水泳", "泡"]);
+    expect(shares.items[0]!.href).toBe(`/vocabulary/${encodeURIComponent("水曜日")}`);
+  });
+
+  it("shows nothing for a word with no kanji, rather than an empty heading", () => {
+    const groups = relatedGroupsForSubject(
+      wanikani({ subjectId: 3000, subjectType: SUBJECT_TYPES.vocabulary, characters: "ありがとう", componentKanji: [] }),
+      [],
+    );
+    expect(groups).toEqual([]);
   });
 });
 

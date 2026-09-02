@@ -132,7 +132,10 @@ function stripHtml(value: string): string {
  * grouping owns the reading of those lists so no page can get it backwards
  * and put a kanji behind a /vocabulary address.
  */
-export function relatedGroupsForSubject(detail: CatalogSubjectDetail): RelatedGroup[] {
+export function relatedGroupsForSubject(
+  detail: CatalogSubjectDetail,
+  neighbours: CatalogRelatedReference[] = [],
+): RelatedGroup[] {
   const components = detail.subjectType === SUBJECT_TYPES.vocabulary ? detail.componentKanji : detail.radicals;
   return relatedGroupsFor({
     subjectId: detail.subjectId,
@@ -140,7 +143,35 @@ export function relatedGroupsForSubject(detail: CatalogSubjectDetail): RelatedGr
     components: components.map(toRelatedRow),
     amalgamations: detail.usedInVocabulary.map(toRelatedRow),
     visuallySimilar: detail.visuallySimilar.map(toRelatedRow),
+    neighbours: neighbours.map(toRelatedRow),
   });
+}
+
+/**
+ * A word's neighbourhood: the other words built from its kanji.
+ *
+ * Two sources could supply it. Each kanji's JLPT word examples cover more
+ * characters, but an example is only a string - no level, and no page unless
+ * the catalogue happens to hold it, so a chip made from one might lead
+ * nowhere. Each kanji's WaniKani amalgamations are catalogue rows with a
+ * level and an address, and every one of them has a page. The neighbourhood
+ * is drawn from the amalgamations: a list of places to go beats a longer
+ * list of names.
+ *
+ * The kanji details arrive already loaded; this only gathers their words,
+ * once each. Dropping the word itself and its kanji is the grouping's job.
+ */
+export function neighbourReferences(kanji: CatalogSubjectDetail[]): CatalogRelatedReference[] {
+  const seen = new Set<number>();
+  const gathered: CatalogRelatedReference[] = [];
+  for (const detail of kanji) {
+    for (const word of detail.usedInVocabulary) {
+      if (seen.has(word.subjectId)) continue;
+      seen.add(word.subjectId);
+      gathered.push(word);
+    }
+  }
+  return gathered;
 }
 
 export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {

@@ -8,6 +8,7 @@ import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import type { PublicSubject } from "@/lib/publicSubject";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import { relatedGroupsForSubject } from "@/lib/subjectPageModel";
+import type { CatalogRelatedReference } from "@/lib/subjectCatalogDetails";
 import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplayReadings";
 
 /**
@@ -36,15 +37,18 @@ function Pill({ children }: { children: React.ReactNode }) {
 export default function SubjectDetailPanel({
   subject,
   label,
+  neighbours = [],
 }: {
   subject: PublicSubject;
   /** What to draw: the characters, or a radical's name where it has none. */
   label: string;
+  /** For a word: the other words built from its kanji. */
+  neighbours?: CatalogRelatedReference[];
 }) {
   const display = SUBJECT_TYPE_DISPLAY[subject.subjectType];
   const meaningNote = stripHtml(subject.meaningExplanation);
   const readingNote = stripHtml(subject.readingExplanation);
-  const related = relatedGroupsForSubject(subject);
+  const related = relatedGroupsForSubject(subject, neighbours);
 
   return (
     <>

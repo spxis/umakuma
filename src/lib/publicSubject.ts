@@ -2,7 +2,12 @@ import "server-only";
 
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
-import { getCatalogSubjectDetails, type CatalogSubjectDetail } from "@/lib/subjectCatalogDetails";
+import {
+  type CatalogRelatedReference,
+  type CatalogSubjectDetail,
+  getCatalogSubjectDetails,
+} from "@/lib/subjectCatalogDetails";
+import { neighbourReferences } from "@/lib/subjectPageModel";
 
 /**
  * One subject, found by the name in its address.
@@ -67,6 +72,21 @@ export async function getPublicSubject(
   });
 
   return { ...detail, slug: row?.slug ?? null };
+}
+
+/**
+ * The words built from this word's kanji, for its page to lead on to.
+ *
+ * One catalogue read for the kanji it is written with; each of those details
+ * already carries the words it appears in, so the neighbourhood is those
+ * lists put together. Empty for a word written without kanji, which has no
+ * neighbourhood to speak of.
+ */
+export async function getWordNeighbours(subject: PublicSubject): Promise<CatalogRelatedReference[]> {
+  const kanjiIds = subject.componentKanji.map((kanji) => kanji.subjectId);
+  if (kanjiIds.length === 0) return [];
+  const details = await getCatalogSubjectDetails(kanjiIds);
+  return neighbourReferences(kanjiIds.flatMap((id) => details.get(id) ?? []));
 }
 
 /**

@@ -2315,11 +2315,11 @@
     "id": "word-page-neighbourhood",
     "area": "study",
     "name": "The word page gets its neighbourhood",
-    "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 2,
-    "summary": "A word page lists the kanji it is written with and stops - a dead end with two chips on it. The neighbourhood is the other words built from those same kanji, so a page about one word is a way into its surroundings. Two routes to the same list: each component kanji's JLPT word examples, or its WaniKani amalgamations; the first covers more characters, the second gives cleaner rows with levels attached. Decide which and write it down. The grouping already has a slot for it."
+    "status": "shipped",
+    "date": "2026-09-01",
+    "summary": "A word page listed the kanji it was written with and stopped - a dead end with two chips on it. It now goes on to the other words built from those same kanji, easiest first, so a page about one word is a way into its surroundings. Two sources could have supplied the list: each kanji's JLPT word examples cover more characters, but an example is only a string, with no level and no page unless the catalogue happens to hold it; each kanji's WaniKani words are catalogue rows with a level and an address, and every one of them has a page. The neighbourhood is drawn from the WaniKani words, because a list of places to go beats a longer list of names.",
+    "version": "0.234.0",
+    "releasedAt": "2026-09-02T04:59:06Z"
   },
   {
     "id": "kanji-page-depth",

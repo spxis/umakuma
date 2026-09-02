@@ -8,7 +8,7 @@ import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constan
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { KANJI_PAGE_COPY } from "@/app/kanji/[character]/KanjiPage.constants";
-import { getPublicSubject, publicSubjectLabel } from "@/lib/publicSubject";
+import { getPublicSubject, getWordNeighbours, publicSubjectLabel } from "@/lib/publicSubject";
 import { fetchSentencesForWord } from "@/lib/tatoebaSentences";
 
 type Props = { params: Promise<{ word: string }> };
@@ -58,14 +58,14 @@ export default async function VocabularyPage({ params }: Props) {
   }
 
   const label = publicSubjectLabel(subject);
-  const sentences = await fetchSentencesForWord(label);
+  const [sentences, neighbours] = await Promise.all([fetchSentencesForWord(label), getWordNeighbours(subject)]);
 
   return (
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
 
-      <SubjectDetailPanel subject={subject} label={label} />
+      <SubjectDetailPanel subject={subject} label={label} neighbours={neighbours} />
 
       <ExampleSentences
         sentences={sentences}
