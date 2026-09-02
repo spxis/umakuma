@@ -2509,11 +2509,11 @@
     "name": "Archive a list instead of deleting it",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 23,
-    "summary": "A shared list that others subscribe to or contributed to is archived rather than deleted: closed to change, still readable by everyone who had it, and restorable by the owner. Delete stays for a private list nobody else has seen. Requested 2026-09-01 by John."
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "A private list nobody else has seen is deleted, as it always was. A list that others hold - shared by link or public, followed, copied, or with suggestions waiting - is archived instead: closed to change for everyone, the owner included, still readable, copyable and followable by everyone who had it, and listed under Archived on the owner's Lists page with Restore and Delete for good. The confirmation says which of the two will happen before the click, and deleting for good says who loses the link. A follower whose list has gone private or away sees so on their own page. Requested 2026-09-01 by John.",
+    "version": "0.244.0",
+    "releasedAt": "2026-09-02T07:08:50Z"
   },
   {
     "id": "list-progress-overlay",
@@ -2568,7 +2568,7 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 28,
-    "summary": "Paste a passage, a vocabulary sheet or a line of kanji and the list is built from what the catalogue recognises in it, each item with its kind, the rest shown as not found. The fastest way to turn a lesson handout into a list. Suggested 2026-09-01."
+    "summary": "Paste anything - a passage, a handout, a page of a book - and every kanji and every word the catalogue recognises is pulled out, in reading order, with the rest shown as not found. The extraction is a preview to massage first: take items out, add, reorder, then save to a new list or add to one that exists. Pasted text is treated as hostile: capped in length, read as plain text only, never rendered, never stored - only the items the catalogue names survive it. Requested 2026-09-01 by John; restated 2026-09-02 with the safety and massage requirements."
   },
   {
     "id": "list-practice-from-shared",
@@ -2646,5 +2646,16 @@
     "dateIsEstimate": true,
     "release": 35,
     "summary": "Every list card and list page has a Print action that opens the list as a sheet: the items with meanings and readings, or the tracing sheet the practice pages already print, chosen at the click. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "list-merge",
+    "name": "Merge lists",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 36,
+    "summary": "Two or more of your lists become one: choose the lists, the order they combine in and the name, see the union before it is made - items once each, kind kept - and decide whether the sources stay or go. Advanced list management. Requested 2026-09-02 by John."
   }
 ]

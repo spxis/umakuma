@@ -39,6 +39,7 @@ export type StudyListSummary = {
   description: string | null;
   visibility: ListVisibility;
   contributions: ListContributions;
+  archivedAt: string | null;
   items: StudyListItemRef[];
   createdAt: string;
   updatedAt: string;

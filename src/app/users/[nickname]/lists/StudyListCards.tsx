@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
@@ -12,7 +13,7 @@ import {
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { LIST_ITEM_KINDS } from "@/lib/domainConstants";
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES } from "@/lib/domainConstants";
 import { listHref, listKanji, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
@@ -54,6 +55,7 @@ export default function StudyListCards({
   canEdit: boolean;
 }) {
   const [removed, setRemoved] = useState<Set<string>>(new Set());
+  const router = useRouter();
   /* Renames the server has accepted, so the page shows them without a reload. */
   const [renamed, setRenamed] = useState<Record<string, string>>({});
   /* The same for edited contents, which also change the count and the sheet. */
@@ -110,6 +112,10 @@ export default function StudyListCards({
       };
     });
   const shown = sortListCards(saved, sort, reversed, query);
+  /* The confirmation says what will happen: a shared list is archived, not deleted. */
+  const pendingIsShared = Boolean(
+    pendingRemoval && lists.find((list) => list.id === pendingRemoval && list.visibility !== LIST_VISIBILITIES.private),
+  );
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
 
   /* A tagged sheet is addressed by its source, so it takes the whole list; a saved one traces its kanji. */
@@ -132,6 +138,9 @@ export default function StudyListCards({
         body: JSON.stringify({ id }),
       });
       if (!response.ok) throw new Error("delete failed");
+      /* Archived rather than deleted: the page shows it in its new section. */
+      const body = (await response.json().catch(() => null)) as { archived?: boolean } | null;
+      if (body?.archived) router.refresh();
     } catch {
       setRemoved((prev) => {
         const next = new Set(prev);
@@ -251,8 +260,8 @@ export default function StudyListCards({
 
       <ConfirmDialog
         open={pendingRemoval !== null}
-        title={STUDY_LIST_COPY.removeConfirmTitle}
-        description={STUDY_LIST_COPY.removeConfirmBody}
+        title={pendingIsShared ? STUDY_LIST_COPY.archiveConfirmTitle : STUDY_LIST_COPY.removeConfirmTitle}
+        description={pendingIsShared ? STUDY_LIST_COPY.archiveConfirmBody : STUDY_LIST_COPY.removeConfirmBody}
         confirmLabel={STUDY_LIST_COPY.remove}
         onConfirm={() => {
           if (pendingRemoval) void remove(pendingRemoval);

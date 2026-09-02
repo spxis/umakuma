@@ -105,6 +105,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
           description: list.description,
           visibility: list.visibility,
           contributions: list.contributions,
+          archivedAt: list.archivedAt,
           createdAt: list.createdAt,
           updatedAt: list.updatedAt,
           copyCount: list.copyCount,

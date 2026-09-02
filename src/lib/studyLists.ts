@@ -32,6 +32,7 @@ const LIST_SELECT = {
   description: true,
   visibility: true,
   contributions: true,
+  archivedAt: true,
   createdAt: true,
   updatedAt: true,
   copyCount: true,
@@ -45,6 +46,7 @@ type ListRow = {
   description: string | null;
   visibility: StudyListSummary["visibility"];
   contributions: StudyListSummary["contributions"];
+  archivedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
   copyCount: number;
@@ -60,6 +62,7 @@ function toSummary(row: ListRow): StudyListSummary {
     description: row.description,
     visibility: row.visibility,
     contributions: row.contributions,
+    archivedAt: row.archivedAt?.toISOString() ?? null,
     items: row.items,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -68,10 +71,10 @@ function toSummary(row: ListRow): StudyListSummary {
   };
 }
 
-export async function fetchStudyLists(accountId: string): Promise<StudyListSummary[]> {
+export async function fetchStudyLists(accountId: string, archived = false): Promise<StudyListSummary[]> {
   try {
     const rows = await prisma.studyList.findMany({
-      where: { accountId },
+      where: { accountId, archivedAt: archived ? { not: null } : null },
       select: LIST_SELECT,
       orderBy: { updatedAt: "desc" },
       take: STUDY_LIST_LIMITS.perAccount,
@@ -129,6 +132,26 @@ export async function ensureShareToken(listId: string): Promise<string> {
   const token = randomBytes(12).toString("base64url");
   await prisma.studyList.update({ where: { id: listId }, data: { shareToken: token } });
   return token;
+}
+
+/** Who else has the list: followers, copies, suggestions waiting. */
+export async function attachments(listId: string): Promise<{ subscribers: number; copies: number; pendingProposals: number; visibility: StudyListSummary["visibility"] } | null> {
+  const row = await prisma.studyList.findUnique({
+    where: { id: listId },
+    select: { visibility: true, copyCount: true, _count: { select: { subscriptions: true, proposals: { where: { status: "pending" } } } } },
+  });
+  return row
+    ? { visibility: row.visibility, copies: row.copyCount, subscribers: row._count.subscriptions, pendingProposals: row._count.proposals }
+    : null;
+}
+
+/** Archive or restore; scoped to the owner in the write. */
+export async function setArchived(accountId: string, listId: string, archived: boolean): Promise<boolean> {
+  const changed = await prisma.studyList.updateMany({
+    where: { id: listId, accountId },
+    data: { archivedAt: archived ? new Date() : null },
+  });
+  return changed.count > 0;
 }
 
 /** The share link was copied: count it, for the list's own facts. */

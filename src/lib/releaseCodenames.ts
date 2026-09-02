@@ -294,6 +294,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nazuketa Juusho", ja: "名付けた住所", reading: "なづけたじゅうしょ", gloss: "an address with a name on it" },
   { romaji: "Nita Mono", ja: "似た物", reading: "にたもの", gloss: "a copy that is yours, or theirs to keep" },
   { romaji: "Nushi ga Kimeru", ja: "主が決める", reading: "ぬしがきめる", gloss: "the owner decides" },
+  { romaji: "Nekasete Mamoru", ja: "寝かせて守る", reading: "ねかせてまもる", gloss: "put to rest, and kept for those who hold it" },
 ];
 
 /**

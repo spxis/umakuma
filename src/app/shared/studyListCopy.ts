@@ -124,6 +124,20 @@ export const STUDY_LIST_COPY = {
   approve: "Approve",
   decline: "Decline",
   decideFailed: "Could not settle that.",
+
+  /* Finishing with a list others hold. */
+  archivedHeading: "Archived",
+  archivedBlurb: "Finished lists other people still hold. Readable by them, closed to change, yours to bring back.",
+  archivedPrefix: "Archived",
+  archivedPill: "Archived",
+  archivedNotice: "This list is archived: it can be read, copied and followed, but not changed.",
+  archive: "Archive",
+  restore: "Restore",
+  deleteForGood: "Delete for good",
+  deleteForGoodTitle: "Delete this list for good?",
+  deleteForGoodBody: "Everyone who follows it or holds its link loses it. Copies they made stay theirs.",
+  archiveConfirmTitle: "Archive this list?",
+  archiveConfirmBody: "Other people hold it, so it is kept for them: readable, closed to change, and yours to restore. Delete it for good from the Archived section.",
   editEmpty: "Saving now leaves the list empty. Delete it if you want it gone.",
   editFailed: "Could not change that list.",
 

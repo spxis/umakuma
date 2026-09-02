@@ -13,6 +13,7 @@ import { fetchStudyLists } from "@/lib/studyLists";
 import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import ArchivedLists from "./ArchivedLists";
 import FollowedLists from "./FollowedLists";
 import NewListButton from "./NewListButton";
 import StudyListCards from "./StudyListCards";
@@ -56,11 +57,12 @@ export default async function UserListsPage({ params }: PageProps) {
    * the one place they did not appear.
    */
   const canEdit = viewsOwnPage(viewerMenuInfo, userKey);
-  const [lists, taggedLists, followed] = await Promise.all([
+  const [lists, taggedLists, followed, archived] = await Promise.all([
     fetchStudyLists(account.id),
     fetchTaggedListSummaries(account.id),
-    /* What a member follows is theirs to see, not the page's visitors'. */
+    /* What a member follows, and has put away, is theirs to see, not the page's visitors'. */
     canEdit ? fetchFollowedLists(account.id) : Promise.resolve([]),
+    canEdit ? fetchStudyLists(account.id, true) : Promise.resolve([]),
   ]);
 
   return (
@@ -94,6 +96,7 @@ export default async function UserListsPage({ params }: PageProps) {
       />
 
       {canEdit && followed.length > 0 ? <FollowedLists lists={followed} accountId={account.id} /> : null}
+      {canEdit && archived.length > 0 ? <ArchivedLists lists={archived} accountId={account.id} owner={userKey} /> : null}
     </div>
   );
 }

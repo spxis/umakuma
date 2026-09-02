@@ -42,7 +42,8 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
   const [kind, setKind] = useState<string>(ALL);
   /* Removals a member has suggested from this page, so the button says so. */
   const [suggested, setSuggested] = useState<Set<string>>(new Set());
-  const canContribute = Boolean(viewer.accountId) && !viewer.isOwner;
+  const archived = list.archivedAt !== null;
+  const canContribute = Boolean(viewer.accountId) && !viewer.isOwner && !archived;
 
   async function proposeRemoval(row: (typeof rows)[number]) {
     if (!viewer.accountId) return;
@@ -126,9 +127,10 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
               <span className="subject-pill border-line bg-surface-muted text-foreground/70">
                 {LIST_VISIBILITY_DISPLAY[list.visibility].label}
               </span>
+              {archived ? <span className="subject-pill border-amber-300 bg-amber-50 text-amber-900">{STUDY_LIST_COPY.archivedPill}</span> : null}
             </p>
           </div>
-          {viewer.isOwner && viewer.accountId && shareHref ? (
+          {archived ? null : viewer.isOwner && viewer.accountId && shareHref ? (
             <ListShareControls
               listId={list.id}
               accountId={viewer.accountId}
@@ -150,7 +152,11 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
         </div>
       </header>
 
-      {viewer.isOwner && viewer.accountId ? <ListProposalsPanel proposals={proposals} ownerAccountId={viewer.accountId} /> : null}
+      {archived ? (
+        <p className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-900">{STUDY_LIST_COPY.archivedNotice}</p>
+      ) : null}
+
+      {viewer.isOwner && viewer.accountId && !archived ? <ListProposalsPanel proposals={proposals} ownerAccountId={viewer.accountId} /> : null}
 
       {canContribute && viewer.accountId ? (
         <ListContributeBox listId={list.id} viewerAccountId={viewer.accountId} listKey={listKey} contributions={list.contributions} />

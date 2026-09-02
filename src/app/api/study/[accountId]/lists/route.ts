@@ -12,7 +12,8 @@ import {
   normalizeListName,
   STUDY_LIST_LIMITS,
 } from "@/lib/studyListRules";
-import { countShare, ensureShareToken, fetchStudyLists, replaceListItems, slugTaken } from "@/lib/studyLists";
+import { endOfListOutcome } from "@/lib/listArchive";
+import { attachments, countShare, ensureShareToken, fetchStudyLists, replaceListItems, setArchived, slugTaken } from "@/lib/studyLists";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -61,6 +62,8 @@ const changeSchema = z
     visibility: z.enum(LIST_VISIBILITY_VALUES).optional(),
     /** The share link was copied; nothing changes but the count. */
     shared: z.literal(true).optional(),
+    /** Put away, or brought back. */
+    archived: z.boolean().optional(),
   })
   .refine(
     (value) =>
@@ -68,12 +71,15 @@ const changeSchema = z
       value.items !== undefined ||
       value.description !== undefined ||
       value.visibility !== undefined ||
-      value.shared === true,
+      value.shared === true ||
+      value.archived !== undefined,
     { message: "Nothing to change." },
   );
 
 const deleteSchema = z.object({
   id: z.string().min(1),
+  /** Past the archive: gone for everyone, on the owner's say-so. */
+  forGood: z.boolean().optional(),
 });
 
 export async function GET(request: Request, context: RouteContext) {
@@ -196,6 +202,20 @@ export async function PATCH(request: Request, context: RouteContext) {
          * still writes a row of the list, and the write below reports whether
          * the list is this member's at all.
          */
+        /* Archiving and restoring stand alone: the one change an archived list takes. */
+        if (parsed.data.archived !== undefined) {
+          const done = await setArchived(accountId, parsed.data.id, parsed.data.archived);
+          if (!done) return NextResponse.json({ error: "List not found." }, { status: 404 });
+          return NextResponse.json({ list: { id: parsed.data.id, archived: parsed.data.archived } });
+        }
+        const current = await prisma.studyList.findFirst({
+          where: { id: parsed.data.id, accountId },
+          select: { archivedAt: true },
+        });
+        if (current?.archivedAt) {
+          return NextResponse.json({ error: "This list is archived. Restore it to change it." }, { status: 409 });
+        }
+
         const data: {
           name?: string;
           description?: string | null;
@@ -291,6 +311,18 @@ export async function DELETE(request: Request, context: RouteContext) {
         const parsed = deleteSchema.safeParse(await request.json());
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+
+        /*
+         * A list others hold is archived rather than deleted, unless the
+         * owner has said for good. The decision is the rule in `listArchive`;
+         * the route only asks who is attached.
+         */
+        const held = await attachments(parsed.data.id);
+        if (held && !parsed.data.forGood && endOfListOutcome(held) === "archive") {
+          const done = await setArchived(accountId, parsed.data.id, true);
+          if (!done) return NextResponse.json({ error: "List not found." }, { status: 404 });
+          return NextResponse.json({ archived: true });
         }
 
         // Scoped to the account, so an id from elsewhere deletes nothing.

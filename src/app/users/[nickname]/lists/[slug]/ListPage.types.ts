@@ -10,6 +10,7 @@ export type ListPageList = {
   description: string | null;
   visibility: ListVisibility;
   contributions: ListContributions;
+  archivedAt: string | null;
   createdAt: string;
   updatedAt: string;
   copyCount: number;

@@ -42,7 +42,8 @@ export async function contribute(input: {
 }): Promise<{ applied: number; proposed: number } | null> {
   const list = await viewableList(input.listId, input.viewerAccountId, input.key, input.isAdmin);
   if (!list) return null;
-  const meta = await prisma.studyList.findUnique({ where: { id: list.id }, select: { contributions: true } });
+  const meta = await prisma.studyList.findUnique({ where: { id: list.id }, select: { contributions: true, archivedAt: true } });
+  if (meta?.archivedAt) return { applied: 0, proposed: 0 };
   const contributions = (meta?.contributions ?? "closed") as ListContributions;
   const isOwner = list.accountId === input.viewerAccountId;
 
