@@ -520,16 +520,6 @@
     "summary": "A page that explains what connecting unlocks and walks through adding the token."
   },
   {
-    "id": "open-google-signup",
-    "name": "Open Google sign-up",
-    "area": "account",
-    "status": "planned",
-    "date": "2026-08-31",
-    "dateIsEstimate": true,
-    "release": 6,
-    "summary": "Anyone can sign in with Google and get an account, with or without WaniKani."
-  },
-  {
     "id": "clans",
     "name": "Clans and families",
     "area": "platform",
