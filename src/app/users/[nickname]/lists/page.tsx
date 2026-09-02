@@ -84,6 +84,7 @@ export default async function UserListsPage({ params }: PageProps) {
         lists={lists}
         taggedLists={taggedLists}
         accountId={account.id}
+        owner={userKey}
         practicePath={`/users/${encodeURIComponent(nickname)}/practice`}
         canEdit={canEdit}
       />

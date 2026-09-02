@@ -9,6 +9,7 @@ import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
 import { openStudyTagLists } from "@/lib/studyTagLists";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
+import { LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY } from "@/lib/domainConstants";
 import type { StudyListItemRef } from "@/lib/studyListRules";
 
 import { kindChips, previewText } from "./listItemDisplay";
@@ -178,10 +179,22 @@ export default function StudyListCard({
     />
   ) : (
     <h2
-      className={`truncate text-sm font-black text-foreground ${rows ? "w-32 shrink-0" : "min-w-0"}`}
+      className={`flex min-w-0 items-center gap-1.5 truncate text-sm font-black text-foreground ${rows ? "w-40 shrink-0" : ""}`}
       title={card.name}
     >
-      {card.name}
+      {card.href ? (
+        /* The name is the way to the list's own page; a tagged list has none. */
+        <Link href={card.href} className="truncate hover:text-accent hover:underline">
+          {card.name}
+        </Link>
+      ) : (
+        <span className="truncate">{card.name}</span>
+      )}
+      {card.visibility && card.visibility !== LIST_VISIBILITIES.private ? (
+        <span className="subject-pill shrink-0 border-accent/30 bg-accent/10 text-accent">
+          {LIST_VISIBILITY_DISPLAY[card.visibility].label}
+        </span>
+      ) : null}
     </h2>
   );
 

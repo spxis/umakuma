@@ -4,7 +4,7 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:6400";
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: ["**/auth.setup.ts", "**/smoke-pages.spec.ts", "**/search.spec.ts"],
+  testMatch: ["**/auth.setup.ts", "**/smoke-pages.spec.ts", "**/search.spec.ts", "**/list-page.spec.ts"],
   timeout: 45_000,
   expect: { timeout: 8_000 },
   fullyParallel: false,

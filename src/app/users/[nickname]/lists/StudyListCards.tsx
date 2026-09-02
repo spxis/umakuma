@@ -13,7 +13,7 @@ import {
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { LIST_ITEM_KINDS } from "@/lib/domainConstants";
-import { listKanji, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
+import { listHref, listKanji, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
 import { LIST_SORTS, type ListCard, type ListSort } from "./StudyList.types";
@@ -40,6 +40,7 @@ export default function StudyListCards({
   lists,
   taggedLists = [],
   accountId,
+  owner,
   practicePath,
   canEdit,
 }: {
@@ -47,6 +48,8 @@ export default function StudyListCards({
   /** Trouble and Favourites, always both, empty ones included. */
   taggedLists?: TaggedListSummary[];
   accountId: string;
+  /** The owner's address segment, for each list's own page. */
+  owner: string;
   practicePath: string;
   canEdit: boolean;
 }) {
@@ -86,6 +89,8 @@ export default function StudyListCards({
     count: tagged.count,
     updatedAt: null,
     tag: tagged.tag,
+    href: null,
+    visibility: null,
   }));
 
   const saved: ListCard[] = lists
@@ -100,6 +105,8 @@ export default function StudyListCards({
         count: items.length,
         updatedAt: list.updatedAt,
         tag: null,
+        href: listHref(owner, renamed[list.id] ?? list.name),
+        visibility: list.visibility,
       };
     });
   const shown = sortListCards(saved, sort, reversed, query);

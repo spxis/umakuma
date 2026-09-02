@@ -291,6 +291,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tsunagatta Tochi", ja: "繋がった土地", reading: "つながったとち", gloss: "the land, joined up and read" },
   { romaji: "Tezawari no Haba", ja: "手触りの幅", reading: "てざわりのはば", gloss: "wide enough to reach the column" },
   { romaji: "Toriyoseta Shina", ja: "取り寄せた品", reading: "とりよせたしな", gloss: "the items, gathered as what they are" },
+  { romaji: "Nazuketa Juusho", ja: "名付けた住所", reading: "なづけたじゅうしょ", gloss: "an address with a name on it" },
 ];
 
 /**

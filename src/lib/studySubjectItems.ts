@@ -1,6 +1,7 @@
 import "server-only";
 
-import { QUEUE_TYPES } from "./domainConstants";
+import { LIST_ITEM_KINDS, QUEUE_TYPES, SUBJECT_TYPES } from "./domainConstants";
+import { subjectHref } from "./globalSearch";
 import { prisma } from "./prisma";
 import { getCatalogSubjectDetails, type CatalogSubjectDetail } from "./subjectCatalogDetails";
 import type { StudyListItemRef } from "./studyListRules";
@@ -86,6 +87,80 @@ export function toStudyTagListItem(
     availableAt: assignment?.availableAt ?? null,
     studyTags,
   };
+}
+
+/** A list item as a page anybody can read shows it: no member state at all. */
+export type ListSubjectRow = {
+  key: string;
+  kind: StudyListItemRef["kind"];
+  subjectId: number | null;
+  subjectType: string;
+  glyph: string;
+  meaning: string;
+  reading: string | null;
+  wkLevel: number | null;
+  href: string | null;
+};
+
+/**
+ * A list's items for a reader who is not the owner - or is not signed in.
+ *
+ * Nothing of anyone's account rides along: no SRS state, no tags. WaniKani
+ * subjects come from the catalogue; a kanji WaniKani never taught takes its
+ * meaning and readings from the JLPT table, so a list of N1 kanji reads as
+ * kanji rather than as a row of blanks. Order is the list's own.
+ */
+export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<ListSubjectRow[]> {
+  const subjectIds = [...new Set(items.flatMap((item) => (typeof item.subjectId === "number" ? [item.subjectId] : [])))];
+  const unnamedKanji = items.filter((item) => item.subjectId == null && item.kind === LIST_ITEM_KINDS.kanji).map((item) => item.key);
+
+  const [details, jlptRows] = await Promise.all([
+    subjectIds.length > 0 ? getCatalogSubjectDetails(subjectIds) : Promise.resolve(new Map<number, CatalogSubjectDetail>()),
+    unnamedKanji.length > 0
+      ? prisma.jlptKanji.findMany({
+          where: { kanji: { in: unnamedKanji } },
+          select: { kanji: true, primaryMeaning: true, meanings: true, onReadings: true, kunReadings: true },
+        })
+      : Promise.resolve([]),
+  ]);
+  const jlptByKanji = new Map(jlptRows.map((row) => [row.kanji, row]));
+
+  return items.flatMap((item): ListSubjectRow[] => {
+    if (typeof item.subjectId === "number") {
+      const subject = details.get(item.subjectId);
+      if (!subject) return [];
+      return [
+        {
+          key: `${item.kind}:${item.key}`,
+          kind: item.kind,
+          subjectId: subject.subjectId,
+          subjectType: subject.subjectType,
+          glyph: subject.characters,
+          meaning: subject.meanings[0] ?? "",
+          reading: subject.primaryReadings[0] ?? subject.readings[0] ?? null,
+          wkLevel: subject.wkLevel,
+          href: subjectHref({ subjectType: subject.subjectType, characters: subject.characters, slug: null }),
+        },
+      ];
+    }
+    if (item.kind === LIST_ITEM_KINDS.kanji) {
+      const jlpt = jlptByKanji.get(item.key);
+      return [
+        {
+          key: `${item.kind}:${item.key}`,
+          kind: item.kind,
+          subjectId: null,
+          subjectType: SUBJECT_TYPES.kanji,
+          glyph: item.key,
+          meaning: jlpt?.primaryMeaning ?? jlpt?.meanings[0] ?? "",
+          reading: jlpt?.onReadings[0] ?? jlpt?.kunReadings[0] ?? null,
+          wkLevel: null,
+          href: subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: item.key, slug: null }),
+        },
+      ];
+    }
+    return [];
+  });
 }
 
 /**

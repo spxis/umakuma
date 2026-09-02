@@ -12,6 +12,8 @@ const card = (name: string, keys: string[], updatedAt: string): ListCard => ({
   count: keys.length,
   updatedAt,
   tag: null,
+  href: null,
+  visibility: null,
 });
 
 const cards = [

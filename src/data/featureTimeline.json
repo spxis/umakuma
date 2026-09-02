@@ -2476,11 +2476,11 @@
     "name": "Public and private lists, with a link to share",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 20,
-    "summary": "A list is private, unlisted (anyone with the link) or public. A share link opens the list read-only for a friend or a stranger, with the owner named. Two views of one list: the signed-in view with every control, and a public view that is passed around - light, fast, the list and its facts and nothing else, with a quiet invitation to sign up and keep it. Public lists can be found from a member's page. Requested 2026-09-01 by John."
+    "summary": "A list is a first-class thing, so it has an address of its own: /users/<member>/lists/<name>, the name in kebab case, a Japanese name kept as itself. The owner chooses Private, Link only or Public from the page. Link only makes an unguessable key the moment it is chosen, and the copy button hands out the link; Public needs no key. Whoever may open the list gets the same page - the name, who made it, when it was made and last changed, how often it has been shared, kind chips, a search, cards or rows - and somebody not signed in gets one quiet card inviting them to sign in and keep it. A private list reads as absent to everyone else. Names are displayable - letters in any script, digits and a title's punctuation, stray marks dropped - and two names that would share an address are refused. Requested 2026-09-01 by John.",
+    "version": "0.241.0",
+    "releasedAt": "2026-09-02T06:37:27Z"
   },
   {
     "id": "list-copy-and-subscribe",
@@ -2613,5 +2613,16 @@
     "dateIsEstimate": true,
     "release": 32,
     "summary": "Every list carries the facts a reader wants before opening it: when it was made, when it last changed, who made it, how many hold it, how many times it has been copied and shared. Shown on the card and on the public view. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "stroke-count-browser",
+    "name": "Browse kanji by stroke count",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 33,
+    "summary": "A stroke browser beside the WaniKani levels and the school grades: the counts 1 to N as chips, and choosing one shows every kanji with that many strokes, with the same cards, rows, tags, selection and add-to-lists as the other explorers. The dictionary already knows each kanji's stroke count. Requested 2026-09-01 by John."
   }
 ]

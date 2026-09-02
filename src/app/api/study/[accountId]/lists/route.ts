@@ -4,7 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
-import { LIST_ITEM_KIND_VALUES } from "@/lib/domainConstants";
+import { LIST_ITEM_KIND_VALUES, LIST_VISIBILITIES, LIST_VISIBILITY_VALUES } from "@/lib/domainConstants";
 import {
   isDuplicateListNameError,
   isMissingStudyListTableError,
@@ -12,7 +12,7 @@ import {
   normalizeListName,
   STUDY_LIST_LIMITS,
 } from "@/lib/studyListRules";
-import { fetchStudyLists, replaceListItems } from "@/lib/studyLists";
+import { countShare, ensureShareToken, fetchStudyLists, replaceListItems, slugTaken } from "@/lib/studyLists";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -57,10 +57,20 @@ const changeSchema = z
     id: z.string().min(1),
     name: z.string().min(1).max(NAME_INPUT_MAX).optional(),
     items: z.array(itemSchema).max(STUDY_LIST_LIMITS.items * 2).optional(),
+    description: z.string().max(STUDY_LIST_LIMITS.noteLength * 2).nullable().optional(),
+    visibility: z.enum(LIST_VISIBILITY_VALUES).optional(),
+    /** The share link was copied; nothing changes but the count. */
+    shared: z.literal(true).optional(),
   })
-  .refine((value) => value.name !== undefined || value.items !== undefined, {
-    message: "Nothing to change.",
-  });
+  .refine(
+    (value) =>
+      value.name !== undefined ||
+      value.items !== undefined ||
+      value.description !== undefined ||
+      value.visibility !== undefined ||
+      value.shared === true,
+    { message: "Nothing to change." },
+  );
 
 const deleteSchema = z.object({
   id: z.string().min(1),
@@ -127,6 +137,10 @@ export async function POST(request: Request, context: RouteContext) {
             { status: 409 },
           );
         }
+        /* "Week 1" and "week-1" would share an address; one of them has to give. */
+        if (!known && (await slugTaken(accountId, name))) {
+          return NextResponse.json({ error: "You already have a list at that address." }, { status: 409 });
+        }
 
         const list = await prisma.studyList.upsert({
           where: { accountId_name: { accountId, name } },
@@ -182,15 +196,28 @@ export async function PATCH(request: Request, context: RouteContext) {
          * still writes a row of the list, and the write below reports whether
          * the list is this member's at all.
          */
-        const data: { name?: string; updatedAt: Date } = { updatedAt: new Date() };
+        const data: {
+          name?: string;
+          description?: string | null;
+          visibility?: (typeof LIST_VISIBILITY_VALUES)[number];
+          updatedAt: Date;
+        } = { updatedAt: new Date() };
 
         if (parsed.data.name !== undefined) {
           const name = normalizeListName(parsed.data.name);
           if (!name) {
             return NextResponse.json({ error: "A list needs a name." }, { status: 400 });
           }
+          if (await slugTaken(accountId, name, parsed.data.id)) {
+            return NextResponse.json({ error: "You already have a list at that address." }, { status: 409 });
+          }
           data.name = name;
         }
+        if (parsed.data.description !== undefined) {
+          const description = parsed.data.description?.replace(/\s+/g, " ").trim() ?? "";
+          data.description = description ? Array.from(description).slice(0, STUDY_LIST_LIMITS.noteLength).join("") : null;
+        }
+        if (parsed.data.visibility !== undefined) data.visibility = parsed.data.visibility;
 
         /*
          * Scoped to the account in the same statement that writes, so an id
@@ -216,8 +243,21 @@ export async function PATCH(request: Request, context: RouteContext) {
             ? undefined
             : await replaceListItems(parsed.data.id, normalizeListItems(parsed.data.items), accountId);
 
+        /* An unlisted list needs its key the moment it becomes one, so the link can be copied at once. */
+        const shareToken =
+          data.visibility === LIST_VISIBILITIES.unlisted ? await ensureShareToken(parsed.data.id) : undefined;
+        if (parsed.data.shared) await countShare(parsed.data.id);
+
         return NextResponse.json({
-          list: { id: parsed.data.id, name: data.name, updatedAt: data.updatedAt.toISOString(), ...(items ? { items } : {}) },
+          list: {
+            id: parsed.data.id,
+            name: data.name,
+            description: data.description,
+            visibility: data.visibility,
+            shareToken,
+            updatedAt: data.updatedAt.toISOString(),
+            ...(items ? { items } : {}),
+          },
         });
       } catch (error) {
         if (isDuplicateListNameError(error)) {

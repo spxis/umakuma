@@ -35,6 +35,19 @@ export const LIST_ITEM_KIND_DISPLAY: Record<ListItemKind, { singular: string; pl
   [LIST_ITEM_KINDS.sentence]: { singular: "Sentence", plural: "Sentences" },
 };
 
+/** Who may open a saved list. */
+export const LIST_VISIBILITIES = { private: "private", unlisted: "unlisted", public: "public" } as const;
+export type ListVisibility = (typeof LIST_VISIBILITIES)[keyof typeof LIST_VISIBILITIES];
+export const LIST_VISIBILITY_VALUES = [LIST_VISIBILITIES.private, LIST_VISIBILITIES.unlisted, LIST_VISIBILITIES.public] as const;
+export function isListVisibility(value: string): value is ListVisibility {
+  return (LIST_VISIBILITY_VALUES as readonly string[]).includes(value);
+}
+export const LIST_VISIBILITY_DISPLAY: Record<ListVisibility, { label: string; description: string }> = {
+  [LIST_VISIBILITIES.private]: { label: "Private", description: "Only you." },
+  [LIST_VISIBILITIES.unlisted]: { label: "Link only", description: "Anyone with the link, signed in or not." },
+  [LIST_VISIBILITIES.public]: { label: "Public", description: "Anyone, and it shows on your page." },
+};
+
 export const QUEUE_TYPES = {
   review: "review",
   lesson: "lesson",

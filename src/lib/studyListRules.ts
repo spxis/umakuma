@@ -1,4 +1,4 @@
-import { LIST_ITEM_KINDS, isListItemKind, type ListItemKind } from "./domainConstants";
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES, isListItemKind, type ListItemKind, type ListVisibility } from "./domainConstants";
 
 /**
  * What a saved list may be called and may contain.
@@ -33,8 +33,15 @@ export type StudyListItemRef = {
 export type StudyListSummary = {
   id: string;
   name: string;
+  /** The name as the address says it; see `listSlug`. */
+  slug: string;
+  description: string | null;
+  visibility: ListVisibility;
   items: StudyListItemRef[];
+  createdAt: string;
   updatedAt: string;
+  copyCount: number;
+  shareCount: number;
 };
 
 /** The same item, named the same way, however it arrived. */
@@ -120,29 +127,81 @@ export function normalizeListCharacters(raw: string[]): string[] {
 /**
  * A name as it will be stored, or null if there is nothing left of it.
  *
- * Inner whitespace is collapsed as well as trimmed, so "Week  1" and "Week 1"
- * are the same list rather than two. That matters more than it looks: the
- * unique key is the name, so a stray double space is how a member ends up with
- * two lists they cannot tell apart on the page.
+ * Displayable, because a list's name is its address and its heading: letters
+ * in any script, digits, spaces and the punctuation a title uses. Control
+ * characters, emoji and symbols are dropped rather than refused, so a name
+ * pasted with a stray mark still saves as the words it meant.
  *
- * Capped by code point rather than by slicing the string, because a name may
- * hold kanji outside the Basic Multilingual Plane and cutting at 60 UTF-16
- * units can land in the middle of one.
+ * Inner whitespace is collapsed as well as trimmed, so "Week  1" and "Week 1"
+ * are the same list rather than two. Capped by code point rather than by
+ * slicing the string, because a name may hold kanji outside the Basic
+ * Multilingual Plane and cutting at 60 UTF-16 units can land in the middle
+ * of one.
  */
+const NAME_CHARACTER = /^[\p{L}\p{N}\p{M} \-–—・·&'().,!?:+/#]$/u;
+
 export function normalizeListName(raw: string): string | null {
-  const collapsed = raw.replace(/\s+/g, " ").trim();
+  const kept = Array.from(raw)
+    .map((character) => (/\s/u.test(character) ? " " : character))
+    .filter((character) => NAME_CHARACTER.test(character))
+    .join("");
+  const collapsed = kept.replace(/ +/g, " ").trim();
   if (!collapsed) return null;
-  return Array.from(collapsed).slice(0, STUDY_LIST_LIMITS.nameLength).join("");
+  return Array.from(collapsed).slice(0, STUDY_LIST_LIMITS.nameLength).join("").trim() || null;
 }
 
 /**
- * A missing table is survivable.
+ * The name as an address: `Week 1` is `week-1`, a Japanese name stays itself.
  *
- * This repo applies schema by hand, so code can reach production a moment
- * before the table does. Everywhere a list is only decoration - a count, a
- * menu of saved sheets - an empty answer is far better than a 500 that takes
- * the whole page down with it.
+ * Lowercased, spaces and punctuation to hyphens, letters in any script kept -
+ * a Japanese name reads better in the address than a string of hex would. The
+ * slug is derived, never stored: two names that make one slug are refused at
+ * save time, so a list is always found by comparing slugs over the member's
+ * own names.
  */
+export function listSlug(name: string): string {
+  return Array.from(name.toLowerCase())
+    .map((character) => (/[\p{L}\p{N}]/u.test(character) ? character : "-"))
+    .join("")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/** The list's own page. */
+export function listHref(owner: string, name: string): string {
+  return `/users/${encodeURIComponent(owner)}/lists/${encodeURIComponent(listSlug(name))}`;
+}
+
+/** The query parameter an unlisted link carries. */
+export const LIST_KEY_PARAM = "key";
+
+/** The link to hand to somebody: the page, with the key when the list needs one. */
+export function listShareHref(owner: string, name: string, visibility: ListVisibility, shareToken: string | null): string {
+  const base = listHref(owner, name);
+  return visibility === LIST_VISIBILITIES.unlisted && shareToken ? `${base}?${LIST_KEY_PARAM}=${shareToken}` : base;
+}
+
+/**
+ * Who may open a list.
+ *
+ * The owner and an admin always. A public list, anyone. An unlisted list,
+ * anyone holding the key from its link. A private list, nobody else - and a
+ * member who may see the owner's other pages is not an exception, since
+ * private is what the owner chose over the two ways of sharing.
+ */
+export function canViewList(input: {
+  visibility: ListVisibility;
+  isOwner: boolean;
+  isAdmin: boolean;
+  shareToken: string | null;
+  key: string | null;
+}): boolean {
+  if (input.isOwner || input.isAdmin) return true;
+  if (input.visibility === LIST_VISIBILITIES.public) return true;
+  if (input.visibility === LIST_VISIBILITIES.unlisted) return Boolean(input.shareToken) && input.key === input.shareToken;
+  return false;
+}
+
 export function isMissingStudyListTableError(error: unknown): boolean {
   const code = (error as { code?: string } | null)?.code;
   return code === "P2021" || code === "P2022";

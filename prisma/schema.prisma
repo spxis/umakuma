@@ -106,6 +106,8 @@ model Account {
   customStudyReviewAttempts CustomStudyReviewAttempt[]
   studySubjectTags          StudySubjectTag[]
   studyLists                StudyList[]
+  studyListSubscriptions    StudyListSubscription[]
+  studyListProposals        StudyListProposal[]
   gameRuns                  GameRun[]
 }
 
@@ -479,6 +481,8 @@ model StudySubjectTag {
   subjectId Int
   favorite  Boolean  @default(false)
   trouble   Boolean  @default(false)
+  /// Known so well it need never be read again; hidden from every list when the member says so.
+  burned    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -487,6 +491,7 @@ model StudySubjectTag {
   @@unique([accountId, subjectId])
   @@index([accountId, favorite])
   @@index([accountId, trouble])
+  @@index([accountId, burned])
 }
 
 /// A named set of characters a member built by hand: "Week 1", "Week 2".
@@ -507,15 +512,93 @@ model StudyList {
   /// snapshot in backups/. Dropping the column is a separate, deliberate
   /// `db:push` once John says so.
   characters String[]
+  /// A line under the name, for a list that is shared.
+  description   String?
+  visibility    StudyListVisibility    @default(private)
+  /// Unguessable, for an unlisted list: the link carries it as `?key=`.
+  shareToken    String?
+  /// Whether anyone may add to it, or only the owner.
+  contributions StudyListContributions @default(closed)
+  archivedAt    DateTime?
+  /// Where a copy came from, so it can say so and pull what was added since.
+  sourceListId  String?
+  /// A live list this was copied from - "jlpt:n5" - when the source was a system list.
+  sourceLiveKey String?
+  copyCount     Int                    @default(0)
+  shareCount    Int                    @default(0)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  account Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  items   StudyListItem[]
+  account       Account                 @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  items         StudyListItem[]
+  subscriptions StudyListSubscription[]
+  proposals     StudyListProposal[]
 
   /// One name per member, so saving "Week 1" twice updates rather than forks.
   @@unique([accountId, name])
   @@index([accountId, updatedAt])
+  @@index([visibility, updatedAt])
+  @@index([shareToken])
+}
+
+enum StudyListVisibility {
+  private
+  unlisted
+  public
+}
+
+enum StudyListContributions {
+  closed
+  open
+}
+
+/// A member keeping somebody else's list, or a live one, read-only and current.
+model StudyListSubscription {
+  id        String   @id @default(cuid())
+  accountId String
+  listId    String?
+  /// A live system list - "jlpt:n5", "grade:1", "wk:12" - when there is no row to point at.
+  liveKey   String?
+  createdAt DateTime @default(now())
+
+  account Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  list    StudyList? @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, listId])
+  @@unique([accountId, liveKey])
+  @@index([listId])
+}
+
+enum StudyListProposalAction {
+  add
+  remove
+}
+
+enum StudyListProposalStatus {
+  pending
+  approved
+  declined
+}
+
+/// A change somebody who is not the owner would like made to a locked list.
+model StudyListProposal {
+  id        String                  @id @default(cuid())
+  listId    String
+  accountId String
+  action    StudyListProposalAction
+  kind      StudyListItemKind
+  key       String
+  subjectId Int?
+  note      String?
+  status    StudyListProposalStatus @default(pending)
+  createdAt DateTime                @default(now())
+  decidedAt DateTime?
+
+  list    StudyList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  account Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([listId, status])
+  @@index([accountId])
 }
 
 enum StudyListItemKind {

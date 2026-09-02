@@ -1,9 +1,12 @@
 import "server-only";
 
-import { LIST_ITEM_KINDS, SUBJECT_TYPES } from "./domainConstants";
+import { randomBytes } from "node:crypto";
+
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES, SUBJECT_TYPES } from "./domainConstants";
 import { prisma } from "./prisma";
 import {
   isMissingStudyListTableError,
+  listSlug,
   STUDY_LIST_LIMITS,
   type StudyListItemRef,
   type StudyListSummary,
@@ -23,31 +26,114 @@ import {
 
 const ITEM_SELECT = { kind: true, key: true, subjectId: true } as const;
 
+const LIST_SELECT = {
+  id: true,
+  name: true,
+  description: true,
+  visibility: true,
+  createdAt: true,
+  updatedAt: true,
+  copyCount: true,
+  shareCount: true,
+  items: { select: ITEM_SELECT, orderBy: { position: "asc" as const } },
+} as const;
+
+type ListRow = {
+  id: string;
+  name: string;
+  description: string | null;
+  visibility: StudyListSummary["visibility"];
+  createdAt: Date;
+  updatedAt: Date;
+  copyCount: number;
+  shareCount: number;
+  items: StudyListItemRef[];
+};
+
+function toSummary(row: ListRow): StudyListSummary {
+  return {
+    id: row.id,
+    name: row.name,
+    slug: listSlug(row.name),
+    description: row.description,
+    visibility: row.visibility,
+    items: row.items,
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
+    copyCount: row.copyCount,
+    shareCount: row.shareCount,
+  };
+}
+
 export async function fetchStudyLists(accountId: string): Promise<StudyListSummary[]> {
   try {
     const rows = await prisma.studyList.findMany({
       where: { accountId },
-      select: {
-        id: true,
-        name: true,
-        updatedAt: true,
-        items: { select: ITEM_SELECT, orderBy: { position: "asc" } },
-      },
+      select: LIST_SELECT,
       orderBy: { updatedAt: "desc" },
       take: STUDY_LIST_LIMITS.perAccount,
     });
-
-    return rows.map((row) => ({
-      id: row.id,
-      name: row.name,
-      items: row.items,
-      updatedAt: row.updatedAt.toISOString(),
-    }));
+    return rows.map(toSummary);
   } catch (error) {
     if (isMissingStudyListTableError(error)) return [];
     throw error;
   }
 }
+
+/**
+ * The list at an address, with what a page needs to decide who may open it.
+ *
+ * The slug is derived from the name, never stored, so this reads the member's
+ * names and compares slugs - a hundred names at most, which is cheaper than a
+ * column that has to be kept in step with every rename.
+ */
+export async function findListBySlug(
+  accountId: string,
+  slug: string,
+): Promise<(StudyListSummary & { shareToken: string | null }) | null> {
+  const wanted = slug.toLowerCase();
+  const rows = await prisma.studyList.findMany({
+    where: { accountId },
+    select: { ...LIST_SELECT, shareToken: true },
+    take: STUDY_LIST_LIMITS.perAccount,
+  });
+  const row = rows.find((candidate) => listSlug(candidate.name) === wanted);
+  return row ? { ...toSummary(row), shareToken: row.shareToken } : null;
+}
+
+/** Whether another of the member's lists already answers to this name's address. */
+export async function slugTaken(accountId: string, name: string, exceptListId?: string): Promise<boolean> {
+  const slug = listSlug(name);
+  const rows = await prisma.studyList.findMany({
+    where: { accountId, ...(exceptListId ? { id: { not: exceptListId } } : {}) },
+    select: { name: true },
+    take: STUDY_LIST_LIMITS.perAccount,
+  });
+  return rows.some((row) => listSlug(row.name) === slug);
+}
+
+/**
+ * The key an unlisted link carries, made once and kept.
+ *
+ * Long enough that nobody guesses it, short enough to paste: twelve bytes as
+ * base64url is sixteen characters. Once made it stays through every change of
+ * visibility, so a link sent while the list was unlisted works again when it
+ * is unlisted again.
+ */
+export async function ensureShareToken(listId: string): Promise<string> {
+  const current = await prisma.studyList.findUnique({ where: { id: listId }, select: { shareToken: true } });
+  if (current?.shareToken) return current.shareToken;
+  const token = randomBytes(12).toString("base64url");
+  await prisma.studyList.update({ where: { id: listId }, data: { shareToken: token } });
+  return token;
+}
+
+/** The share link was copied: count it, for the list's own facts. */
+export async function countShare(listId: string): Promise<void> {
+  await prisma.studyList.update({ where: { id: listId }, data: { shareCount: { increment: 1 } } });
+}
+
+export { LIST_VISIBILITIES };
 
 /**
  * The subject ids the catalogue has for these items, filled in where absent.
@@ -66,7 +152,9 @@ export async function attachSubjectIds(items: StudyListItemRef[]): Promise<Study
     where: {
       hiddenAt: null,
       OR: [
-        ...(characters.length > 0 ? [{ characters: { in: characters }, subjectType: { in: [SUBJECT_TYPES.kanji, SUBJECT_TYPES.vocabulary] } }] : []),
+        ...(characters.length > 0
+          ? [{ characters: { in: characters }, subjectType: { in: [SUBJECT_TYPES.kanji, SUBJECT_TYPES.vocabulary] } }]
+          : []),
         ...(slugs.length > 0 ? [{ slug: { in: slugs }, subjectType: SUBJECT_TYPES.radical }] : []),
       ],
     },

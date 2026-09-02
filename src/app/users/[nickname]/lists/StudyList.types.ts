@@ -1,3 +1,4 @@
+import type { ListVisibility } from "@/lib/domainConstants";
 import type { StudyListItemRef } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
@@ -22,6 +23,9 @@ export type ListCard = {
   count: number;
   updatedAt: string | null;
   tag: TaggedListSummary["tag"] | null;
+  /** The list's own page; a tagged list opens the panel instead. */
+  href: string | null;
+  visibility: ListVisibility | null;
 };
 
 export type StudyListCardProps = {
