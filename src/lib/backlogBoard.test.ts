@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -128,5 +131,25 @@ describe("saving the file", () => {
     expect(text).toContain('"name": "\\u6c34"');
     expect(text).not.toContain("水");
     expect(text.endsWith("\n")).toBe(true);
+  });
+
+  /*
+   * And the shipped file itself, which is the half that was going wrong.
+   *
+   * Several sessions write this board at once. A session that wrote it with a
+   * plain JSON writer stored 186 Japanese characters raw, and the next
+   * legitimate `pnpm backlog` run re-escaped all of them - so a two-field
+   * claim came out as a forty-line diff scattered through the file, two
+   * sessions doing it overlapped everywhere instead of in one place, and an
+   * entry was lost in a merge that never reported a conflict. The helper was
+   * always right; nothing checked that the file had gone through it.
+   */
+  it("keeps the committed board escaped, whoever wrote it last", () => {
+    const raw = readFileSync(join(process.cwd(), "src", "data", "featureTimeline.json"), "utf8");
+    const offenders = [...new Set([...raw].filter((character) => character.charCodeAt(0) > 127))];
+    expect(
+      offenders,
+      "featureTimeline.json holds raw non-ASCII: write it with stringifyTimeline (pnpm backlog), never a plain JSON writer",
+    ).toEqual([]);
   });
 });

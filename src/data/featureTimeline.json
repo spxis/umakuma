@@ -2786,7 +2786,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 48,
-    "summary": "Every other search offers what it holds as you type; the grades page does not. Reported 2026-09-02 by John."
+    "summary": "Every other search offers what it holds as you type; the grades page does not. Reported 2026-09-02 by John.",
+    "owner": "Claude (session cd35064c)",
+    "claimedAt": "2026-09-02T16:06:40.115Z"
   },
   {
     "id": "pill-text-toggle",
@@ -3150,9 +3152,7 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 53,
-    "summary": "A kanji page shows how the character is written and what it means, but not what it is made of - and the RADKFILE index that powers the radical search knows the parts of 6,355 characters. The page carries them in a container of its own, under the stroke box, each part a link into the radical search for the characters that share it. Its own container because it is EDRDG's data rather than WaniKani's and every box here credits one source. Requested 2026-09-02 by John.",
-    "owner": "Claude (session cd35064c)",
-    "claimedAt": "2026-09-02T15:18:03.966Z"
+    "summary": "A kanji page shows how the character is written and what it means, but not what it is made of - and the RADKFILE index that powers the radical search knows the parts of 6,355 characters. The page carries them in a container of its own, under the stroke box, each part a link into the radical search for the characters that share it. Its own container because it is EDRDG's data rather than WaniKani's and every box here credits one source. Requested 2026-09-02 by John."
   },
   {
     "id": "list-controls-on-hover",
