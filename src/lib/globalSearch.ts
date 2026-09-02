@@ -9,6 +9,7 @@
 
 import { SUBJECT_TYPES } from "./domainConstants";
 import type { KindCounts, SearchKind } from "./searchKinds";
+import type { SearchAnswer } from "./searchAnswers";
 
 export const SEARCH_SOURCES = {
   wanikani: "wanikani",
@@ -98,6 +99,18 @@ export type SearchResults = {
    */
   countsByKind: KindCounts;
   hits: SearchHit[];
+};
+
+/**
+ * What `/api/search` sends back: the rows, and what it worked out.
+ *
+ * The answers ride with the rows rather than taking a request of their own,
+ * because they answer the same query - a reader typing "Heisei 3" wants the
+ * year, and a dropdown that asked twice would show thirty rows about three
+ * and the year they meant a moment later.
+ */
+export type SearchApiResponse = SearchResults & {
+  answers: SearchAnswer[];
 };
 
 export const SEARCH_MIN_QUERY_LENGTH = 1;

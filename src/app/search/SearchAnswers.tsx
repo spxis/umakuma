@@ -40,7 +40,8 @@ export default function SearchAnswers({ answers }: Props) {
     <ul className="space-y-2">
       {answers.map((answer) => (
         <li
-          key={answer.kind}
+          /* A dollar sign earns two currency answers, so the kind is not a key. */
+          key={`${answer.kind}:${answer.question}`}
           data-search-answer={answer.kind}
           className="rounded-2xl border border-accent/40 bg-accent/5 px-5 py-4"
         >

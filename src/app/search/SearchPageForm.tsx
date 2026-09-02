@@ -64,6 +64,7 @@ export default function SearchPageForm({
           <GlobalSearchSuggestList
             listboxId={LISTBOX_ID}
             hits={cbx.hits}
+        answers={cbx.answers}
             totalHits={cbx.totalHits}
             searching={cbx.searching}
             activeIndex={cbx.activeOption}

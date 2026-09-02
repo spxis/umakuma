@@ -2943,12 +2943,11 @@
     "name": "Converted answers in the search dropdown",
     "area": "study",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
     "release": 52,
-    "summary": "The era and money answers only appear on the full Search page. The header dropdown calls /api/search, which never asks for them, so Heisei 3 shows only the kanji for three. Reported 2026-09-02 by John.",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T12:27:52.848Z"
+    "summary": "Typing \"Heisei 3\" into the header box answered with ten rows about the number three and nothing else. The era and money answers had been built and shown only on the full results page, while the dropdown under the box - which is where a query is actually typed - called an endpoint that never asked for them. The answer now rides back with the rows rather than taking a request of its own, since it answers the same query, and sits at the top of the dropdown on the desktop and in the phone sheet alike: the value, the Japanese form, and the question it answers. It shows even when no catalogue matched, because \"Taisho 5\" is 1916 and no row exists for it - a dropdown that said no results to a question it had just answered would be hiding the answer behind its own emptiness. No rate history there and no attribution line: those are a table and a sentence, and the dropdown is ten rows under a search box, so it asks for today's rate only and one cached request does not become six on a keystroke. Reported 2026-09-02 by John.",
+    "version": "0.272.0",
+    "releasedAt": "2026-09-02T12:40:39Z"
   }
 ]

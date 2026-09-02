@@ -72,6 +72,7 @@ export default function GlobalSearchBox({
       <GlobalSearchSuggestList
         listboxId={listboxId}
         hits={cbx.hits}
+        answers={cbx.answers}
         totalHits={cbx.totalHits}
         searching={cbx.searching}
         activeIndex={cbx.activeOption}

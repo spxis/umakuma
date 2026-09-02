@@ -5,8 +5,10 @@ import { useEffect, useRef, type UIEvent } from "react";
 import { SOURCE_TONES } from "@/app/search/Search.constants";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import { SEARCH_SOURCE_LABELS, type SearchHit } from "@/lib/globalSearch";
+import type { SearchAnswer } from "@/lib/searchAnswers";
 import { JP_TEXT_CLASS } from "./japaneseText";
 import SubjectFilerCell from "./SubjectFilerCell";
+import SearchAnswerBrief from "./SearchAnswerBrief";
 import SubjectFilerToggle from "./SubjectFilerToggle";
 import { subjectGlyphTone } from "./subjectListView";
 import { useFilerOpen, useSubjectFiler } from "./useSubjectFiler";
@@ -15,6 +17,8 @@ type Props = {
   /** Prefix for option ids, unique per rendered instance. */
   listboxId: string;
   hits: SearchHit[];
+  /** What the query worked out rather than found; shown above the rows. */
+  answers: SearchAnswer[];
   /** What the full results page would show, for the footer count. */
   totalHits: number;
   /** True only before the first answer for this query. */
@@ -48,6 +52,7 @@ export function suggestOptionId(listboxId: string, index: number): string {
 export default function GlobalSearchSuggestList({
   listboxId,
   hits,
+  answers,
   totalHits,
   searching,
   activeIndex,
@@ -68,9 +73,12 @@ export default function GlobalSearchSuggestList({
 
   if (hits.length === 0) {
     return (
-      <p className="px-4 py-3 text-xs font-semibold text-foreground/60">
-        {searching ? SEARCH_PAGE_COPY.suggestSearching : SEARCH_PAGE_COPY.noResults}
-      </p>
+      <>
+        <SearchAnswerBrief answers={answers} />
+        <p className="px-4 py-3 text-xs font-semibold text-foreground/60">
+          {searching ? SEARCH_PAGE_COPY.suggestSearching : SEARCH_PAGE_COPY.noResults}
+        </p>
+      </>
     );
   }
 
@@ -87,6 +95,7 @@ export default function GlobalSearchSuggestList({
 
   return (
     <>
+    <SearchAnswerBrief answers={answers} />
     {accountId ? (
       /*
        * The way into filing, above the rows. A signed-in member sees one quiet

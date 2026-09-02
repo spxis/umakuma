@@ -217,6 +217,7 @@ export function useSearchCombobox({
     showRecent,
     activeOption,
     hits: suggestions.hits,
+    answers: suggestions.answers,
     totalHits: suggestions.totalHits,
     searching: suggestions.searching,
     inputProps,

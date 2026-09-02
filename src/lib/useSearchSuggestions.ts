@@ -3,12 +3,15 @@
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
-import type { SearchHit, SearchResults } from "./globalSearch";
+import type { SearchApiResponse, SearchHit } from "./globalSearch";
+import type { SearchAnswer } from "./searchAnswers";
 import { SUGGEST_DEBOUNCE_MS, SUGGEST_LIMIT, dedupeByGlyphAndKind, suggestUrl } from "./globalSearchSuggest";
 
 export type SearchSuggestions = {
   /** One ranked row per subject, capped for the dropdown. */
   hits: SearchHit[];
+  /** What the query worked out rather than found: a year, an amount. */
+  answers: SearchAnswer[];
   /** Every hit the full results page would show, for the footer count. */
   totalHits: number;
   /** True only before the first answer, so the old list never flashes away. */
@@ -41,11 +44,11 @@ export function useSearchSuggestions(value: string, rows: number = SUGGEST_LIMIT
    * a narrower window replays from cache instead of asking again.
    */
   const url = suggestUrl(debounced, rows);
-  const { data, isLoading, isValidating } = useSWR<SearchResults>(
+  const { data, isLoading, isValidating } = useSWR<SearchApiResponse>(
     url,
     async (requestUrl: string) => {
       const response = await fetch(requestUrl);
-      const payload = (await response.json()) as SearchResults & { error?: string };
+      const payload = (await response.json()) as SearchApiResponse & { error?: string };
       if (!response.ok) {
         throw new Error(payload.error ?? "Could not search.");
       }
@@ -58,6 +61,7 @@ export function useSearchSuggestions(value: string, rows: number = SUGGEST_LIMIT
 
   return {
     hits,
+    answers: data?.answers ?? [],
     totalHits: data?.totalHits ?? 0,
     searching: Boolean(url) && isLoading && !data,
     /*

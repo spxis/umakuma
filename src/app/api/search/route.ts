@@ -11,6 +11,7 @@ import {
 import { SEARCH_MAX_WINDOW, isSearchable, normalizeQuery, parseSources } from "@/lib/globalSearch";
 import { isSearchKind } from "@/lib/searchKinds";
 import { runGlobalSearch } from "@/lib/globalSearchServer";
+import { resolveSearchAnswers } from "@/lib/searchAnswersServer";
 
 const querySchema = z.object({
   q: z.string().max(64).optional(),
@@ -57,6 +58,7 @@ export async function GET(request: Request) {
           countsBySource: { wanikani: 0, jlpt: 0, grades: 0, dictionary: 0 },
           countsByKind: { words: 0, kanji: 0, radicals: 0 },
           hits: [],
+          answers: [],
         });
       }
 
@@ -65,12 +67,21 @@ export async function GET(request: Request) {
         parsed.data.kind && isSearchKind(parsed.data.kind) ? parsed.data.kind : null;
 
       try {
-        const results = await runGlobalSearch(query, parseSources(parsed.data.sources), {
-          limit: parsed.data.limit,
-          offset: parsed.data.offset,
-          kind,
-        });
-        const response = NextResponse.json(results, {
+        /*
+         * Together, because neither waits on the other: the catalogues are a
+         * database read and an answer is arithmetic over a cached rate table.
+         * No history here - the dropdown has no room for the table, and asking
+         * for it would turn one cached request into six on every keystroke.
+         */
+        const [results, answers] = await Promise.all([
+          runGlobalSearch(query, parseSources(parsed.data.sources), {
+            limit: parsed.data.limit,
+            offset: parsed.data.offset,
+            kind,
+          }),
+          resolveSearchAnswers(query, { history: false }),
+        ]);
+        const response = NextResponse.json({ ...results, answers }, {
           headers: { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" },
         });
         applyRateLimitHeaders(response, rateLimit);
