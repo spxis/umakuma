@@ -65,9 +65,16 @@ export default function RadicalSearchPanel({
   }, [key]);
 
   const usable = new Set(result.usable);
+  /*
+   * What the server made of what was typed. A command may name a radical in
+   * English - `:radicals sun + moon` - so the characters to highlight, and to
+   * write back when one is clicked, are the resolved ones rather than the
+   * words the box happens to hold.
+   */
+  const picked = result.chosen;
 
   function toggle(radical: string) {
-    onChange(chosen.includes(radical) ? chosen.filter((one) => one !== radical) : [...chosen, radical]);
+    onChange(picked.includes(radical) ? picked.filter((one) => one !== radical) : [...picked, radical]);
   }
 
   return (
@@ -82,12 +89,12 @@ export default function RadicalSearchPanel({
         <span className="text-[10px] font-black uppercase tracking-[0.12em] text-accent">
           {RADICAL_SEARCH_COPY.heading}
         </span>
-        {chosen.length === 0 ? (
+        {picked.length === 0 ? (
           <span className="text-[11px] font-semibold text-foreground/60">{RADICAL_SEARCH_COPY.hint}</span>
         ) : (
-          <span className={`text-sm font-bold text-foreground ${JP_TEXT_CLASS}`}>{chosen.join(" ")}</span>
+          <span className={`text-sm font-bold text-foreground ${JP_TEXT_CLASS}`}>{picked.join(" ")}</span>
         )}
-        {chosen.length > 0 ? (
+        {picked.length > 0 ? (
           <button
             type="button"
             onMouseDown={(event) => event.preventDefault()}
@@ -129,8 +136,8 @@ export default function RadicalSearchPanel({
                 {group.strokes}
               </span>
               {group.radicals.map((radical) => {
-                const picked = chosen.includes(radical);
-                const dead = !picked && !usable.has(radical);
+                const isPicked = picked.includes(radical);
+                const dead = !isPicked && !usable.has(radical);
                 return (
                   <button
                     key={radical}
@@ -145,10 +152,10 @@ export default function RadicalSearchPanel({
                     onMouseDown={(event) => event.preventDefault()}
                     onClick={() => toggle(radical)}
                     disabled={dead}
-                    aria-pressed={picked}
+                    aria-pressed={isPicked}
                     title={RADICAL_SEARCH_COPY.radicalTitle(radical, group.strokes)}
                     className={`inline-flex h-6 w-6 items-center justify-center rounded border text-[13px] leading-none transition ${JP_TEXT_CLASS} ${
-                      picked
+                      isPicked
                         ? "border-accent bg-accent text-white"
                         : dead
                           ? "cursor-not-allowed border-line/60 bg-surface-muted text-foreground/60 opacity-40"

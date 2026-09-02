@@ -290,7 +290,7 @@ async function collectRanked(query: string, sources: SearchSource[]): Promise<Se
    * the page would say the search failed.
    */
   const command = parseSearchCommand(query);
-  if (command) return radicalCommandHits(command.radicals);
+  if (command) return await radicalCommandHits(command.radicals);
 
   const wanted = new Set(sources);
   const variants = searchQueryVariants(query);

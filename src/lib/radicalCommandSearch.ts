@@ -19,10 +19,10 @@ import { runRadicalSearch } from "./radicalSearchServer";
  * question an intersection asks: a kanji either holds every chosen radical or
  * it is not here at all.
  */
-export function radicalCommandHits(radicals: readonly string[]): SearchHit[] {
+export async function radicalCommandHits(radicals: readonly string[]): Promise<SearchHit[]> {
   if (radicals.length === 0) return [];
 
-  const { matches } = runRadicalSearch(radicals);
+  const { matches } = await runRadicalSearch(radicals);
 
   return matches.map((match, index) => {
     const entry = getKanjiDictionaryEntry(match.kanji);

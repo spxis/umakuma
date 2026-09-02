@@ -43,7 +43,7 @@ export async function GET(request: Request) {
         .map((value) => value.trim())
         .filter((value) => value.length > 0);
 
-      const response = NextResponse.json(runRadicalSearch(chosen));
+      const response = NextResponse.json(await runRadicalSearch(chosen));
       applyRateLimitHeaders(response, rateLimit);
       return response;
     },

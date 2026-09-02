@@ -3103,5 +3103,17 @@
     "summary": "The header's search was three sizes smaller than the results page's, which made one control read as two different ones - and it had grown a command language that needs room. Both boxes are the same height and the same type now, the header's collapses narrower than before when nothing is in it, and it opens far wider when it is being used, wider again while a command is in it. On a narrow desktop the section links step aside while the box is open, since somebody who has started typing is not reaching for Learn. And on the search page the header's box is gone entirely - it was a second field asking the same question a hand's width above the first - with Search named in the row instead, where the section a member is looking at belongs. Reported 2026-09-02 by John.",
     "version": "0.284.0",
     "releasedAt": "2026-09-02T15:10:52Z"
+  },
+  {
+    "id": "radical-english-names",
+    "name": "Name a radical in English",
+    "area": "study",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 56,
+    "summary": "The radical command could only be written in Japanese, which left the typed half of the feature useless to exactly the reader it was built for: somebody looking up a character they cannot read is usually in the same position with its parts - they can see the shape and have no way to type it. :radicals sun + moon now answers with the same thirty-one characters as 日 + 月. Names come from two sources, best first, because neither covers the set alone: the kanji dictionary for the 247 of 253 radicals that are also kanji, which is the accurate answer and costs nothing since the file is already shipped; and WaniKani's own radical names for the 199 whose character is in this set, because a member taught \"fins\" for ハ will type what they were taught. WaniKani's are teaching mnemonics rather than classical names - it calls 久 a raptor cage - so they answer second and never over the dictionary. A name that reaches neither answers with nothing rather than a neighbour: WaniKani draws some of its radicals instead of writing them, so \"beggar\" names a picture and no character here. The command's own reading changed with it. A space is inside \"long time\" and between 日 and 月, so it is no longer a separator: parts split on a plus or a comma, and then a part of Japanese script becomes one radical per character while a part of Latin letters stays one name however many words it holds. Requested 2026-09-02 by John.",
+    "version": "0.286.0",
+    "releasedAt": "2026-09-02T15:17:25Z"
   }
 ]

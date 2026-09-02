@@ -59,18 +59,33 @@ export function parseSearchCommand(query: string): RadicalCommand | null {
 }
 
 /**
- * The radicals in the tail of the command.
+ * The radicals named in the tail of the command.
  *
- * Split on the separators somebody might reach for and then on the characters
- * themselves, because a radical is one character and `日月` is two of them
- * however it was typed. Duplicates are dropped: picking 日 twice is picking it
- * once, and an intersection with itself narrows nothing.
+ * A radical can be named by its character or by its English name, so the split
+ * happens on the separators only - a plus, a comma - and never on a space: a
+ * space is inside "long time" and between 日 and 月, and treating it as a
+ * separator would break the first to keep the second. Instead each part is
+ * split by what it is made of. A part holding Japanese script is a run of
+ * characters and becomes one radical each, so `日月` and `日 月` are the same
+ * two; a part of Latin letters is one name, however many words it has.
+ *
+ * Duplicates are dropped: naming the same radical twice narrows nothing.
  */
+const JAPANESE = /[぀-ヿ㐀-䶿一-鿿⺀-⿟]/;
+
 function splitRadicals(tail: string): string[] {
   const kept: string[] = [];
-  for (const char of tail.replace(/[+,、。\s]+/g, "")) {
-    if (!kept.includes(char)) kept.push(char);
+
+  for (const part of tail.split(/[+,、。]+/)) {
+    const trimmed = part.trim();
+    if (trimmed.length === 0) continue;
+
+    const named = JAPANESE.test(trimmed) ? [...trimmed.replace(/\s+/g, "")] : [trimmed.toLowerCase()];
+    for (const name of named) {
+      if (!kept.includes(name)) kept.push(name);
+    }
   }
+
   return kept;
 }
 

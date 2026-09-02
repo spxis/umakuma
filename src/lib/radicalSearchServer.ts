@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { getKanjiDictionaryEntry } from "./kanjiDictionary";
+import { resolveRadicalTokens } from "./radicalNames";
 import {
   RADICAL_MATCH_LIMIT,
   kanjiForRadicals,
@@ -75,9 +76,11 @@ function byUsefulness(left: RadicalMatch, right: RadicalMatch): number {
   return (left.strokeCount ?? 99) - (right.strokeCount ?? 99) || left.kanji.localeCompare(right.kanji, "ja");
 }
 
-export function runRadicalSearch(requested: readonly string[]): RadicalSearchResult {
+export async function runRadicalSearch(requested: readonly string[]): Promise<RadicalSearchResult> {
   const file = load();
-  const chosen = orderChosen(file.radicals, requested);
+  /* A name is resolved to its character before anything is intersected. */
+  const named = await resolveRadicalTokens(requested, file.radicals.map((entry) => entry.radical));
+  const chosen = orderChosen(file.radicals, named);
   const matched = kanjiForRadicals(file.radicals, chosen);
 
   /*

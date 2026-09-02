@@ -336,6 +336,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Temoto Techou", ja: "手元手帳", reading: "てもとてちょう", gloss: "the notebook kept at hand" },
   { romaji: "Touitsu no Ookisa", ja: "統一の大きさ", reading: "とういつのおおきさ", gloss: "one size for both search boxes" },
   { romaji: "Nazoru Katachi", ja: "なぞる形", reading: "なぞるかたち", gloss: "a shape traced for every radical" },
+  { romaji: "Nihongo Igai", ja: "日本語以外", reading: "にほんごいがい", gloss: "a radical named in English too" },
 ];
 
 /**

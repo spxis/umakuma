@@ -9,8 +9,8 @@ export const RADICAL_SEARCH_COPY = {
   /* Typed, not clicked: the box is the way in now. */
   commandBarLabel: "Find by",
   /* Said once, beside the button, so the typed form is discoverable too. */
-  commandBarHint: "or type :rad",
-  hint: "Pick the parts you can see. Each one narrows the list.",
+  commandBarHint: "or type :rad sun + moon",
+  hint: "Pick the parts you can see, or type their names. Each one narrows the list.",
   clear: "Clear",
   close: "Close",
   pick: "Pick a radical to see the kanji built from it.",
