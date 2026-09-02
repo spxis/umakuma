@@ -2459,5 +2459,126 @@
     "summary": "Pressing Add to lists opened the filing column in the rows, but the dropdown kept its width, so on a desktop the chips were crushed against the meaning instead of sitting in a column on the right. The box that widens and the list that shows the column each kept their own copy of the open flag, and nothing told the box. One flag now, held once, with everything that shows it subscribed - flip it anywhere and the box and the rows change together. The cell sits inline only from the width where the box is truly wide; below that it drops to a line under the row, as on a phone. Reported 2026-09-01 by John.",
     "version": "0.239.0",
     "releasedAt": "2026-09-02T05:43:52Z"
+  },
+  {
+    "id": "list-items-of-every-kind",
+    "name": "Lists hold every kind of item",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 19,
+    "summary": "A list holds characters today, so it can only hold kanji. It becomes a list of items - radicals, kanji, vocabulary, sentences - each with its kind, so a list can be filtered by kind with chips and a list of words is not split into its kanji. Existing lists carry over as kanji items. Needs a schema push. Requested 2026-09-01 by John; the base for every sharing feature."
+  },
+  {
+    "id": "list-visibility-and-sharing",
+    "name": "Public and private lists, with a link to share",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 20,
+    "summary": "A list is private, unlisted (anyone with the link) or public. A share link opens the list read-only for a friend or a stranger, with the owner named. Public lists can be found from a member's page. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "list-copy-and-subscribe",
+    "name": "Copy or subscribe to a list you are viewing",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 21,
+    "summary": "Viewing somebody's list offers two ways to keep it: copy it, so it becomes your own to change, or subscribe, so it stays theirs and appears among your lists read-only and up to date. Add a single item from a list you are viewing to one of your own. A copy remembers where it came from. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "list-open-contributions",
+    "name": "Open lists, locks and proposals",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 22,
+    "summary": "An owner can open a list so anyone may add to it, and lock it again. On a locked shared list a viewer proposes an addition or a removal instead, and the owner approves or declines from the list. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "list-archive",
+    "name": "Archive a list instead of deleting it",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 23,
+    "summary": "A shared list that others subscribe to or contributed to is archived rather than deleted: closed to change, still readable by everyone who had it, and restorable by the owner. Delete stays for a private list nobody else has seen. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "list-progress-overlay",
+    "name": "See who knows what across a shared list",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 24,
+    "summary": "On a shared list, each member's standing on every item - not started, learning, known - as a small overlay, so a family can see who has the week's kanji down and who needs a hand. Uses each member's existing visibility setting. Suggested 2026-09-01."
+  },
+  {
+    "id": "list-starter-lists",
+    "name": "Starter lists to subscribe to",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 25,
+    "summary": "Official lists nobody owns: JLPT N5 to N1 kanji, each school grade, each WaniKani level, the prefecture names. Subscribe to one and it sits among your lists; copy it and make it your own. The catalogue already holds the data, so these are lists that write themselves. Suggested 2026-09-01."
+  },
+  {
+    "id": "list-item-notes",
+    "name": "A note on an item in a list",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 26,
+    "summary": "Why this item is here: a short note per item, written by whoever added it - a mnemonic, the sentence it was met in, the mistake it keeps causing. Shown in the list and when practising from it. Suggested 2026-09-01."
+  },
+  {
+    "id": "list-copy-sync",
+    "name": "Pull updates into a copied list",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 27,
+    "summary": "A copied list remembers its source and can pull what has been added there since, item by item, so a copy taken from a friend's growing list does not fall behind without becoming a subscription. Suggested 2026-09-01."
+  },
+  {
+    "id": "list-paste-import",
+    "name": "Build a list from pasted text",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 28,
+    "summary": "Paste a passage, a vocabulary sheet or a line of kanji and the list is built from what the catalogue recognises in it, each item with its kind, the rest shown as not found. The fastest way to turn a lesson handout into a list. Suggested 2026-09-01."
+  },
+  {
+    "id": "list-practice-from-shared",
+    "name": "Practise and review from any list you can see",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 29,
+    "summary": "Every game and practice mode that takes a list takes a subscribed or shared one too, so a list a friend shares is something to play, not only to read. Suggested 2026-09-01."
   }
 ]

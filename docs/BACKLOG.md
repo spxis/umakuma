@@ -605,6 +605,69 @@ response. Public surfaces show the display name from release 4 and nothing else.
 
 ---
 
+## Lists: sharing them (2026-09-01)
+
+John's list, in his words: public and private lists; share a list to friends;
+add a list you are viewing to your own; a shared list anyone can add to; lock
+and unlock a list for public change; propose additions and deletions to a
+locked list for the owner to approve; archive rather than delete; duplicate a
+list you are viewing so you own the copy; subscribe to a list to view it
+without changing it; and filter a list by what it holds - radicals, kanji,
+vocabulary, sentences - with chips.
+
+Each is an entry on the board (`list-*`). What the board has no room for:
+
+**The base comes first, and it is a schema change.** A list is a `String[]` of
+characters, which is why it can only hold kanji and why a word added from
+search becomes its kanji. Every sharing feature wants to know *what* an item
+is, so the first release turns a list into rows of items with a kind
+(`list-items-of-every-kind`): the kind chips fall out of that for free, and
+nothing later has to be reworked. Existing lists carry over as kanji items in
+their order. This is a `db:push` to production and needs a snapshot first.
+
+**Order.** Items → visibility and share links → copy and subscribe → open lists
+with locks and proposals → archive. Visibility before copying, because copying
+a list you cannot see is not a thing; open contributions after subscribe,
+because a proposal is a subscriber's act. Archive last, since it only matters
+once lists have other people attached.
+
+**Archive, not lock, for the end of a shared list.** John's own instinct, and
+right: a lock says "no more changes for now", an archive says "this is
+finished, keep it readable". A shared list that others subscribed to must not
+vanish under them, so delete stays only for a private list nobody has seen.
+
+**Subscribe and copy are different promises.** Subscribing keeps the owner's
+list current and read-only; copying makes it yours and lets it drift. A copy
+remembers its source so `list-copy-sync` can offer "pull what was added since"
+without turning the copy back into a subscription.
+
+**Additions from an AI pass, filed as their own entries.** Who knows what
+across a shared list (`list-progress-overlay`: the family use, and a reason
+for sharing at all); starter lists nobody owns, built from the catalogue
+(`list-starter-lists`: JLPT N5, Grade 1, WaniKani level 12, the prefectures);
+a note per item (`list-item-notes`); pull updates into a copy
+(`list-copy-sync`); build a list from pasted text (`list-paste-import`); and
+every game and practice mode accepting a list you only subscribe to
+(`list-practice-from-shared`). Considered and not filed: comments on lists
+(a family talks in the room, not in the app), likes and counts (a leaderboard
+of lists rewards the wrong thing), and real-time co-editing (proposals cover
+the case without the machinery).
+
+**Decisions John should make before the sharing releases start.**
+1. Does *public* mean readable without signing in, or by any member? The
+   subject pages are open to the world; a list carries a member's name and
+   choices, so the default proposal is: public means any signed-in member,
+   and *unlisted* (anyone with the link) is the way to show a list to someone
+   outside.
+2. Where do proposals wait: a badge on the list, a row in the account menu,
+   or both? Proposal is: on the list itself, with a count in the Lists page.
+3. Can a subscriber see the owner's progress overlay, or only the owner see
+   subscribers'? Proposal: everyone on a shared list sees everyone's, subject
+   to each member's existing visibility setting.
+4. Do starter lists show up for everyone by default, or only once subscribed?
+   Proposal: a "Starter lists" section on the Lists page, subscribed on
+   demand, so a new member's page is not forty lists long.
+
 ## Open decisions
 
 Two, both John's; one blocks work that is otherwise ready to start.
