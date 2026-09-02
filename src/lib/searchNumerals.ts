@@ -51,6 +51,22 @@ function toHalfWidthDigits(value: string): string {
 }
 
 /**
+ * A thousands comma is punctuation inside a number, not a break between two.
+ *
+ * Reading runs of digits, `5,000` came apart into 5 and 000 and offered the
+ * kanji for five and for zero - which is why a search for a price found 零
+ * first. The money parser has always dropped the comma before reading an
+ * amount; the same rule belongs here, and the two now agree about what a
+ * number is.
+ *
+ * Only where it separates thousands: a comma between other digits is somebody
+ * listing two numbers, and joining those would invent a third.
+ */
+function withoutThousandsCommas(value: string): string {
+  return value.replace(/(\d),(?=\d{3}\b)/g, "$1");
+}
+
+/**
  * The number written the way Japanese writes it.
  *
  * The leading one is dropped where the language drops it - 十 rather than 一十
@@ -87,7 +103,7 @@ export function toJapaneseNumber(value: number): string | null {
  * does not, since "twenty-four" is not what any of them hold.
  */
 export function japaneseNumberVariants(query: string): string[] {
-  const text = toHalfWidthDigits(query);
+  const text = withoutThousandsCommas(toHalfWidthDigits(query));
   const runs = text.match(/\d+/g);
   if (!runs) return [];
 
@@ -97,7 +113,19 @@ export function japaneseNumberVariants(query: string): string[] {
     if (!Number.isFinite(value)) continue;
 
     const kanji = toJapaneseNumber(value);
-    if (kanji) variants.add(kanji);
+    if (kanji) {
+      variants.add(kanji);
+      /*
+       * And the characters it is written with.
+       *
+       * 五千 is the right answer to "5000" and no catalogue holds it: the
+       * spelling of a compound number is not a subject anywhere, so searching
+       * it exactly found nothing at all and the query looked broken. The
+       * characters are held - 五 and 千 are both taught - and they are what
+       * somebody asking how to write five thousand needs to see.
+       */
+      if (kanji.length > 1) for (const char of kanji) variants.add(char);
+    }
 
     /*
      * A round number is offered bare as well as spelled out. Ten thousand is

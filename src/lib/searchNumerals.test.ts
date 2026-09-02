@@ -70,6 +70,39 @@ describe("what a digit is asking for", () => {
     expect(japaneseNumberVariants("2026")).toContain("二千二十六");
   });
 
+  /*
+   * The spelling of a compound number is not a subject anywhere - no catalogue
+   * holds 五千 - so searching it exactly found nothing and the query looked
+   * broken. The characters it is written with are all taught.
+   */
+  it("offers the characters a compound number is written with", () => {
+    const variants = japaneseNumberVariants("5000");
+
+    expect(variants).toContain("五千");
+    expect(variants).toContain("五");
+    expect(variants).toContain("千");
+  });
+
+  it("does not split a number written with one character", () => {
+    expect(japaneseNumberVariants("1000")).toEqual(["千"]);
+  });
+
+  /*
+   * A thousands comma is punctuation inside a number. Reading runs of digits,
+   * 5,000 came apart into 5 and 000 and offered the kanji for five and for
+   * zero, which is why searching a price found 零 first.
+   */
+  it("reads a number written with a thousands comma", () => {
+    expect(japaneseNumberVariants("5,000")).toEqual(japaneseNumberVariants("5000"));
+    expect(japaneseNumberVariants("5,000")).toContain("五千");
+    expect(japaneseNumberVariants("1,234,567")).toEqual(japaneseNumberVariants("1234567"));
+  });
+
+  /* A comma between other digits lists two numbers; joining them invents a third. */
+  it("leaves a comma that is not separating thousands", () => {
+    expect(japaneseNumberVariants("1,2")).toEqual(japaneseNumberVariants("1 2"));
+  });
+
   it("reads a full-width digit the same way", () => {
     expect(japaneseNumberVariants("１")).toContain("一");
   });
