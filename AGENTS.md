@@ -214,9 +214,23 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   `src/lib/appVersion.ts` move with it — the timeline unit test fails
   `quality:check` if the three disagree. The footer shows the version;
   `/admin/releases` shows each release's number.
+- **Take the version immediately before pushing, never when the work starts.**
+  It is a single global counter and several sessions draw from it at once, so a
+  number claimed at the beginning of a feature is very likely gone by the time
+  the feature is ready. Three search releases were renumbered four times on
+  2026-09-02 while another session shipped 0.260 through 0.267 underneath them.
+  Renumbering is never only the number: `releaseCodenames.ts` walks the 44-kana
+  gojūon by version minor, so moving a release from 0.263 to 0.264 changes the
+  kana its codename must begin with — ろ to わ — and forces a fresh name that
+  still describes the release and reuses no word already in the list. So build
+  and test with the entry left `planned`, and do the release in one pass at the
+  end: `git fetch`, rebase, ship the entry, pick the codename, run
+  `pnpm preflight:prod`, push. Anything that is not a release — a docs change,
+  a rule added to this file — takes no version at all and stays out of the race.
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
 - This repo has no migrations: the schema is applied by hand with `pnpm db:push`, and nothing in the deploy pipeline applies it for you. **Any change to `prisma/schema.prisma` must be pushed to the production database as its own step, or the deploy ships code the database cannot serve.** An added enum value is the easy one to miss: `map` was added to `GameKind`, deployed green, and every Map run failed in production while passing locally, because `db push` had only ever reached the local database. Verify with `pnpm db:drift:check` (read-only; exit 0 clean, exit 2 with the missing SQL). The deploy workflow now runs the same check after `vercel pull` and stops the deploy on drift.
 - A push to `main` only triggers the production workflow; it is not itself a deployment. Run `pnpm preflight:prod` before pushing, then verify GitHub `CI` succeeds, the `Deploy to Vercel` workflow's `deploy` job completes `vercel deploy --prod`, and the canonical production alias returns HTTP 200. Investigate and fix failed workflow steps before reporting deployment success.
+- A `cancelled` deploy is not a failed one. The workflow holds `concurrency: vercel-production` with `cancel-in-progress`, so a push landing on top of yours kills your run and deploys from the newer commit instead — which carries your commit with it. This happens routinely while several sessions are shipping. Confirm it rather than assume it: `git merge-base --is-ancestor <your sha> origin/main`, then follow the newer SHA's deploy and check production for your own change. Report a cancellation as a failure only when your commit is genuinely not on `main`.
 - When work is paused or reprioritized but may resume later, preserve useful uncommitted changes on a named WIP branch or stash before returning to the priority task. Do not discard that work merely to clean the current branch.
 - Do not create markdown docs to describe changes unless asked.
 - Prefer editing existing files over creating new ones.
