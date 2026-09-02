@@ -129,6 +129,17 @@ export const STUDY_LIST_COPY = {
   importKeepHint: "Drop a whole kind:",
   importDropKind: (plural: string) => `Drop ${plural.toLowerCase()}`,
 
+  /* Two lists made into one. */
+  merge: "Merge",
+  mergeHint: "Pick two or more, in the order they should combine.",
+  mergePickTwo: "Pick two lists or more.",
+  mergeResult: (total: number, shared: number) =>
+    shared === 0
+      ? `The merged list holds ${total} items.`
+      : `The merged list holds ${total} items; ${shared} were in more than one list.`,
+  mergeRemoveSources: "Clear the sources away",
+  mergeFailed: "Could not merge those lists.",
+
   /* Other members changing a list. */
   contributionsLabel: "Who can add",
   contributeOpenHeading: "Add to this list",

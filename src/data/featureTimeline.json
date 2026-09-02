@@ -2652,11 +2652,11 @@
     "name": "Merge lists",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 36,
-    "summary": "Two or more of your lists become one: choose the lists, the order they combine in and the name, see the union before it is made - items once each, kind kept - and decide whether the sources stay or go. Advanced list management. Requested 2026-09-02 by John."
+    "summary": "Two or more of your lists made into one, from the Lists page. They are numbered as they are picked, because the order is the answer - merging Week 1 and Week 2 should read as Week 1 then Week 2 - and the panel says how big the result will be and how many items the lists shared before anything is written. Clearing the sources away afterwards is a choice rather than the default, and goes through the same rule the delete button uses, so a source somebody else follows is archived rather than deleted out from under them. Requested 2026-09-02 by John.",
+    "version": "0.250.0",
+    "releasedAt": "2026-09-02T09:42:36Z"
   },
   {
     "id": "list-viewer-owner-edit",
@@ -2679,5 +2679,104 @@
     "summary": "Three things reported together. The search page had become unreadable: every row carried a kind pill, a level pill, a Strokes chip and - because the filing column had been opened once and was remembered for ever - two tag marks and a chip per list. Filing is now held for the sitting rather than the browser, so it is off unless it was opened in this tab, and the Strokes chip is gone, since the kanji page a row already leads to opens the same animation in the same number of clicks. The Burned list's offer to apply WaniKani's burned items counted every burned item rather than the ones not applied yet, so it still said Apply 1,728 after applying them; it counts what is left and disappears at zero. Removing an item from a list showed a mark on every card with no mode to explain it, and is now behind an Edit toggle in the viewer. And searching inside a list read the raw string, so water found \u6c34 and mizu found nothing while the search box on the same page found both: both list surfaces now read a query the way search does, romaji turned to kana and tried against the readings. Reported 2026-09-02 by John with screenshots.",
     "version": "0.247.0",
     "releasedAt": "2026-09-02T07:43:04Z"
+  },
+  {
+    "id": "map-inset-collisions",
+    "name": "Map insets collide with the mainland",
+    "area": "platform",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 37,
+    "summary": "On Japan, Okinawa's inset box overlaps Kagoshima, so the two are read as one place; move the inset clear of the mainland, to the right or into empty space. On the United States, Alaska sits too near the left edge and Hawaii needs a home of its own: Alaska above, Hawaii below. Reported 2026-09-02 by John with screenshots."
+  },
+  {
+    "id": "restful-urls",
+    "name": "RESTful URLs across the site",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 38,
+    "summary": "Addresses should read as paths rather than query strings: the map is /map?region=21 for Gifu and should be /study/maps/japan/gifu or /japan/21. No compatibility redirects and no fake paths - breaking old URLs is fine. Applies site-wide, not only to the map. Requested 2026-09-02 by John."
+  },
+  {
+    "id": "lists-one-home",
+    "name": "Every list under Lists, and one way to read one",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 39,
+    "summary": "Auto-lists sit under Explore as Kanji lists while a member's lists sit under Lists; the two pages look nothing alike; a list opens as a modal from one control and as a page from another, so which view you get is a mystery; and Lists that keep themselves is a link at the bottom rather than part of the page. All lists belong under Lists, on one page organised into sections, and a list has one view - the full page. Nothing is lost in the move. Requested 2026-09-02 by John with screenshots."
+  },
+  {
+    "id": "list-page-search-clear",
+    "name": "The list page search has no clear button",
+    "area": "study",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 40,
+    "summary": "The viewer's search box has an X and autocomplete; the list page's and the live list's do not. Reported 2026-09-02 by John."
+  },
+  {
+    "id": "search-kanji-by-meaning",
+    "name": "Searching an English meaning misses the kanji",
+    "area": "study",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 41,
+    "summary": "Searching Morning returns the word and the radical but never the kanji it names, so the one thing a learner asked for is the one thing missing. Reported 2026-09-02 by John."
+  },
+  {
+    "id": "add-to-lists-everywhere",
+    "name": "Add to lists wherever a kanji is shown",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 42,
+    "summary": "The filing column exists only on the search surfaces. A member who searches a kanji, opens its page and wants it on a list has no way to do it. Every page and panel that shows a kanji, word or radical - the subject pages, the glyph viewer, the explorers - offers the same tag marks and list chips. Requested 2026-09-02 by John."
+  },
+  {
+    "id": "search-currency-conversion",
+    "name": "Convert money in search",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 43,
+    "summary": "Typing 14.40 CAD or 23 EUR answers with the amount in yen, and a yen amount answers in the other direction. Needs a rate source that will not throttle. Requested 2026-09-02 by John."
+  },
+  {
+    "id": "search-japanese-numbers",
+    "name": "Read large Japanese numbers in search",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 44,
+    "summary": "A number written the Japanese way - \u4e00\u5104\u4e8c\u5343\u4e07 - answers with the English number, and the reverse. Requested 2026-09-02 by John."
+  },
+  {
+    "id": "search-era-converter",
+    "name": "Convert Japanese era years in search",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 45,
+    "summary": "Typing Heisei 3, Showa 40 or \u4ee4\u548c6\u5e74 answers with the Western year and the era in kanji, as its own line of results. Requested 2026-09-02 by John."
   }
 ]

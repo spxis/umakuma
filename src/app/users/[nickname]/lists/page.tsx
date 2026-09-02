@@ -17,6 +17,7 @@ import ArchivedLists from "./ArchivedLists";
 import FollowedLiveLists from "./FollowedLiveLists";
 import FollowedLists from "./FollowedLists";
 import ImportFromTextButton from "./ImportFromTextButton";
+import MergeListsButton from "./MergeListsButton";
 import NewListButton from "./NewListButton";
 import StudyListCards from "./StudyListCards";
 
@@ -89,6 +90,7 @@ export default async function UserListsPage({ params }: PageProps) {
         {canEdit ? (
           <span className="flex flex-wrap items-center gap-2">
             <ImportFromTextButton accountId={account.id} />
+            <MergeListsButton accountId={account.id} lists={lists} />
             <NewListButton accountId={account.id} />
           </span>
         ) : null}
