@@ -17,8 +17,11 @@ import {
   searchResultsHref,
 } from "@/lib/searchFilters";
 
+import { searchAnswers } from "@/lib/searchAnswers";
+
 import { SEARCH_EXAMPLES, SEARCH_PAGE_COPY } from "./searchCopy";
 import RecentItems from "@/app/shared/RecentItems";
+import SearchAnswers from "./SearchAnswers";
 import SearchColumns from "./SearchColumns";
 import { COLUMN_FULL, COLUMN_PREVIEW, SEARCH_LIST_CARD } from "./Search.constants";
 import SearchFilterRow from "./SearchFilterRow";
@@ -68,6 +71,13 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
   const results = isSearchable(query) ? await runSearchColumns(query, filters, perColumn) : null;
 
   /*
+   * Worked out rather than looked up, and so not filtered: the kind and source
+   * chips narrow which catalogues answered, and an era year came from none of
+   * them. Turning WaniKani off must not take the date away with it.
+   */
+  const answers = searchAnswers(query);
+
+  /*
    * Read for the header, not for the results. Every result leads to a public
    * page for the subject itself, so who is asking no longer changes where a
    * row goes - which is the point: the address a member copies out of a search
@@ -105,6 +115,14 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
           <h1 className="text-2xl font-black text-foreground">{SEARCH_PAGE_COPY.heading}</h1>
 
           <SearchPageForm initialQuery={query} filters={filters} viewerAccountId={viewerMenuInfo?.accountId ?? null} />
+
+          {/*
+            * Above the filters and above the count, because it answers the
+            * question that was typed. It sits outside the results branch on
+            * purpose: "Reiwa 6" is a date the catalogues hold nothing for, and
+            * the answer has to survive the page saying nothing matched.
+            */}
+          <SearchAnswers answers={answers} />
 
           {results ? (
             <>

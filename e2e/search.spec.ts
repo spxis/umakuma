@@ -24,6 +24,7 @@ const PAGE_SUGGEST = "#search-page-suggest";
 const PAGE_SUBMIT = `form:has(${PAGE_INPUT}) button[type=submit]`;
 const HEADER_SUBMIT = "form:has(#global-search) button[type=submit]";
 const RESULT_ROW = "[data-search-result-row]";
+const ERA_ANSWER = '[data-search-answer="era"]';
 
 /** A character every catalogue holds, so the row count never depends on level. */
 const COMMON_KANJI = "水";
@@ -398,4 +399,34 @@ test("no result is dead text", async ({ browser, baseURL }) => {
   expect(linked, "every result row must be a link").toBe(total);
 
   await context.close();
+});
+
+test("an era year is answered, not just searched for", async ({ browser, baseURL }) => {
+  /*
+   * "Heisei 3" is a request to be told a number, and no catalogue holds one.
+   * The search answered with rows about the digit three and never with 1991.
+   */
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("Heisei 3")}`);
+
+  const answer = page.locator(ERA_ANSWER);
+  await expect(answer).toBeVisible({ timeout: 15_000 });
+  await expect(answer).toContainText("1991");
+  await expect(answer).toContainText("平成3年");
+
+  await finish(page);
+});
+
+test("an era answer outlives a query the catalogues cannot match", async ({ browser, baseURL }) => {
+  /*
+   * The answer is worked out rather than looked up, so it has to survive the
+   * page saying nothing matched - which is the case it exists for.
+   */
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("Taisho 5")}`);
+
+  const answer = page.locator(ERA_ANSWER);
+  await expect(answer).toBeVisible({ timeout: 15_000 });
+  await expect(answer).toContainText("1916");
+  await expect(answer).toContainText("大正5年");
+
+  await finish(page);
 });

@@ -2749,19 +2749,6 @@
     "summary": "A number written the Japanese way - \u4e00\u5104\u4e8c\u5343\u4e07 - answers with the English number, and the reverse. Requested 2026-09-02 by John."
   },
   {
-    "id": "search-era-converter",
-    "name": "Convert Japanese era years in search",
-    "area": "platform",
-    "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 45,
-    "summary": "Typing Heisei 3, Showa 40 or \u4ee4\u548c6\u5e74 answers with the Western year and the era in kanji, as its own line of results. Requested 2026-09-02 by John.",
-    "owner": "claude-parallel-build",
-    "claimedAt": "2026-09-02T10:58:28.103Z"
-  },
-  {
     "id": "list-one-view",
     "name": "One view of a list, not a modal and a page",
     "area": "study",
@@ -2914,5 +2901,16 @@
     "summary": "Searching an English meaning offered the word and never the character it names. \"Morning\" answered with the word \u671d, the radical \ud842\udd9d and eight rows besides, but not the kanji \u671d - and not from any of the three catalogues that teach it. The suggestion list keeps one row per glyph, which is right when the same kanji arrives from WaniKani, the JLPT table and the school grades: a ten-row list cannot spend three rows on \u65e5. But a glyph is not a subject. \u671d is a kanji and a word written the same way, so the word claimed the glyph and all three kanji rows behind it were read as copies and dropped; which of the two led was settled by nothing more than 3044 sorting ahead of 695 as text. Every single-character word hid its kanji the same way - \u6c34, \u5c71, \u4eba, \u5ddd. The row is a subject now rather than a spelling: the same kanji from three catalogues is still one row, while a kanji and a word that share a spelling are two, because they are two things with two pages behind them. Reported 2026-09-02 by John.",
     "version": "0.264.0",
     "releasedAt": "2026-09-02T11:44:11Z"
+  },
+  {
+    "id": "search-era-converter",
+    "name": "Convert Japanese era years in search",
+    "area": "platform",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Typing Heisei 3 is a request to be told a number, and no catalogue holds one - the search read the digit instead and answered with thirty rows about three, so the only question on the page with a real answer got everything except it. An answer is a second kind of result now: worked out rather than looked up, and shown above the catalogues because it is what was typed. 1991 sits where a glyph would, with \u5e73\u62103\u5e74 beside it and the reading underneath. The five modern eras are covered, back to Meiji in 1868, written in kanji or in Latin letters, with or without the \u5e74, in whichever romanization of a long vowel somebody learned - Showa, Shouwa and Sh\u014dwa are the same era - and \u5143\u5e74 read as the first year it means. A year an era never reached answers with nothing rather than with arithmetic: \u662d\u548c stopped at 64 and \u5e73\u6210 at 31, so Showa 65 is not a late date, it is not a date. The answer sits outside the results deliberately, because Taisho 5 is a date the catalogues hold nothing for and an answer that vanished when the page said nothing matched would be missing exactly when it was wanted. The catalogue rows still run underneath, since \u4ee4\u548c is also a word somebody may want the reading of. Requested 2026-09-02 by John.",
+    "version": "0.265.0",
+    "releasedAt": "2026-09-02T11:44:40Z"
   }
 ]

@@ -1,3 +1,5 @@
+import { SEARCH_ANSWER_KINDS, type SearchAnswerKind } from "@/lib/searchAnswers";
+
 /** Copy for the global search page, in one map for the locale layer. */
 export const SEARCH_PAGE_COPY = {
   heading: "Search",
@@ -30,4 +32,14 @@ export const SEARCH_PAGE_COPY = {
 } as const;
 
 /** Seeded examples on the empty state; one per source, to show the range. */
-export const SEARCH_EXAMPLES = ["pencil", "日", "えんぴつ", "water"] as const;
+export const SEARCH_EXAMPLES = ["pencil", "日", "えんぴつ", "water", "Heisei 3"] as const;
+
+/**
+ * What each computed answer calls itself.
+ *
+ * A number on its own would be a riddle - the label is what says the 1991 is a
+ * year rather than a result count, and which question it answers.
+ */
+export const SEARCH_ANSWER_COPY: Record<SearchAnswerKind, string> = {
+  [SEARCH_ANSWER_KINDS.era]: "Japanese era",
+} as const;
