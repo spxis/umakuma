@@ -4,16 +4,17 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { subscribe, unsubscribe, viewableList } from "@/lib/studyListShares";
+import { liveListByKey } from "@/lib/liveLists";
+import { subscribe, subscribeLive, unsubscribe, unsubscribeLive, viewableList } from "@/lib/studyListShares";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
 };
 
-const bodySchema = z.object({
-  listId: z.string().min(1),
-  key: z.string().max(64).nullable().optional(),
-});
+const bodySchema = z.union([
+  z.object({ listId: z.string().min(1), key: z.string().max(64).nullable().optional() }),
+  z.object({ liveKey: z.string().min(1).max(64) }),
+]);
 
 /**
  * Follow a list you are viewing, or stop.
@@ -36,6 +37,12 @@ export async function POST(request: Request, context: RouteContext) {
         const parsed = bodySchema.safeParse(await request.json());
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+        if ("liveKey" in parsed.data) {
+          const live = liveListByKey(parsed.data.liveKey);
+          if (!live) return NextResponse.json({ error: "That list is gone." }, { status: 404 });
+          await subscribeLive(live.key, accountId);
+          return NextResponse.json({ subscribed: true });
         }
         const list = await viewableList(parsed.data.listId, accountId, parsed.data.key ?? null, await isAuthorizedAdmin(request));
         if (!list) {
@@ -69,7 +76,8 @@ export async function DELETE(request: Request, context: RouteContext) {
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
         }
-        await unsubscribe(parsed.data.listId, accountId);
+        if ("liveKey" in parsed.data) await unsubscribeLive(parsed.data.liveKey, accountId);
+        else await unsubscribe(parsed.data.listId, accountId);
         return NextResponse.json({ subscribed: false });
       } catch (error) {
         console.error("Failed to unfollow a list", error);

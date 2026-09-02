@@ -104,6 +104,18 @@ export const STUDY_LIST_COPY = {
   addToLists: "Add to my lists",
   copiedFrom: "Copied from",
 
+  /* Lists nobody owns, that keep themselves. */
+  liveListsHeading: "Lists that keep themselves",
+  liveListsBlurb: "Kept by UmaKuma rather than by a person, and always what the data says today. Follow one to keep it, or copy it and make it yours to cut down.",
+  liveListPill: "Live list",
+  liveListBlurb: "Kept by UmaKuma; it changes as the data does.",
+  liveCopyHint: "A copy is yours to cut down. Following keeps it current.",
+  allLiveLists: "All lists",
+  liveJlptBlurb: "Every kanji the JLPT lists at each level, commonest first.",
+  liveGradeBlurb: "What Japanese children are taught, year by year.",
+  liveWkBlurb: "Every radical, kanji and word WaniKani teaches at each level.",
+  liveSeeAll: "See all",
+
   /* Other members changing a list. */
   contributionsLabel: "Who can add",
   contributeOpenHeading: "Add to this list",

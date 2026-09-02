@@ -51,8 +51,10 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
       { label: "Grades", path: "grades" },
       { label: "Practice", path: "practice" },
-      /* Public, so it has no user segment: a map is the same for everyone. */
+      /* Public, so they have no user segment: a map and the site's own lists
+         are the same for everyone. */
       { label: "Map", path: "/map" },
+      { label: "Kanji lists", path: "/lists" },
     ],
   },
   /*

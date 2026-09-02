@@ -4,17 +4,23 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { copyList, viewableList } from "@/lib/studyListShares";
+import { liveListByKey } from "@/lib/liveLists";
+import { fetchLiveListItems } from "@/lib/liveListsServer";
+import { copyList, copyLiveList, viewableList } from "@/lib/studyListShares";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
 };
 
-const copySchema = z.object({
-  listId: z.string().min(1),
-  /** The key from an unlisted link, when that is how the list was reached. */
-  key: z.string().max(64).nullable().optional(),
-});
+const copySchema = z.union([
+  z.object({
+    listId: z.string().min(1),
+    /** The key from an unlisted link, when that is how the list was reached. */
+    key: z.string().max(64).nullable().optional(),
+  }),
+  /** A list nobody owns, named by its own key. */
+  z.object({ liveKey: z.string().min(1).max(64) }),
+]);
 
 /**
  * Copy a list you are viewing onto your own shelf.
@@ -38,6 +44,14 @@ export async function POST(request: Request, context: RouteContext) {
         const parsed = copySchema.safeParse(await request.json());
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+
+        if ("liveKey" in parsed.data) {
+          const live = liveListByKey(parsed.data.liveKey);
+          if (!live) {
+            return NextResponse.json({ error: "That list is gone." }, { status: 404 });
+          }
+          return NextResponse.json({ list: await copyLiveList(live, await fetchLiveListItems(live), accountId) });
         }
 
         const source = await viewableList(parsed.data.listId, accountId, parsed.data.key ?? null, await isAuthorizedAdmin(request));

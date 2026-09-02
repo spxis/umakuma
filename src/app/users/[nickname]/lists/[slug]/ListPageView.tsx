@@ -20,7 +20,7 @@ import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 
 import type { ListPageViewProps } from "./ListPage.types";
 import ListContributeBox from "./ListContributeBox";
-import { ListCard, ListRow, ProposeRemovalButton } from "./ListPageRows";
+import { ListCard, ListRow, ProposeRemovalButton } from "@/app/shared/ListSubjectRows";
 import ListProposalsPanel from "./ListProposalsPanel";
 import ListShareControls from "./ListShareControls";
 import ListViewerActions from "./ListViewerActions";

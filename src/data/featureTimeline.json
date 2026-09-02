@@ -2531,13 +2531,11 @@
     "name": "Live system lists",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 25,
-    "summary": "Lists nobody owns that write themselves from the catalogue and change when it does: Grade 1 to 6, JLPT N5 to N1, each WaniKani level, the prefecture names. Public, subscribable and copyable like any shared list, and treated the same way everywhere a list is taken. A copy is yours to cut down - half of Grade 1, or only the items you do not know yet. Requested 2026-09-01 by John; grew out of the starter-lists suggestion.",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T07:27:24.821Z"
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Seventy-two lists nobody owns, gathered at /lists: every JLPT level N5 to N1, every Japanese school grade and the junior-high set, and every one of WaniKani's sixty levels. They are not snapshots but live - a question stored as a list rather than rows, asked again each time one is opened - so Grade 1 is whatever the grade table says today and a WaniKani level is what it teaches now, radicals then kanji then the words that use them. Each has a public page of its own with the same rows, kind chips, search and burned filter a member's list gets, and the two ways to keep it: follow it and it stays current under Lists that keep themselves on your own page, or copy it and it becomes rows of your own, to cut down to half of Grade 1 or to Grade 1 without what you already know. The index sits under Explore as Kanji lists. Requested 2026-09-01 by John.",
+    "version": "0.248.0",
+    "releasedAt": "2026-09-02T07:55:20Z"
   },
   {
     "id": "list-item-notes",

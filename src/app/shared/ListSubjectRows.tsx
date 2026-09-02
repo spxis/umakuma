@@ -3,13 +3,13 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
-import { subjectGlyphTone } from "@/app/shared/subjectListView";
+import { JP_TEXT_CLASS } from "./japaneseText";
+import { STUDY_LIST_COPY } from "./studyListCopy";
+import { subjectGlyphTone } from "./subjectListView";
 import { LIST_ITEM_KIND_DISPLAY } from "@/lib/domainConstants";
 import type { ListSubjectRow } from "@/lib/studySubjectItems";
 
-import { itemToneClass } from "../listItemDisplay";
+import { itemToneClass } from "@/app/users/[nickname]/lists/listItemDisplay";
 
 /**
  * One item of a list as a page anybody can read draws it: a row for

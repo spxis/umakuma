@@ -8,12 +8,13 @@ import { viewsOwnPage } from "@/app/shared/viewerAddress";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { fetchFollowedLists } from "@/lib/studyListShares";
+import { fetchFollowedLists, fetchFollowedLiveKeys } from "@/lib/studyListShares";
 import { fetchStudyLists } from "@/lib/studyLists";
 import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import ArchivedLists from "./ArchivedLists";
+import FollowedLiveLists from "./FollowedLiveLists";
 import FollowedLists from "./FollowedLists";
 import NewListButton from "./NewListButton";
 import StudyListCards from "./StudyListCards";
@@ -57,12 +58,13 @@ export default async function UserListsPage({ params }: PageProps) {
    * the one place they did not appear.
    */
   const canEdit = viewsOwnPage(viewerMenuInfo, userKey);
-  const [lists, taggedLists, followed, archived] = await Promise.all([
+  const [lists, taggedLists, followed, archived, followedLive] = await Promise.all([
     fetchStudyLists(account.id),
     fetchTaggedListSummaries(account.id),
     /* What a member follows, and has put away, is theirs to see, not the page's visitors'. */
     canEdit ? fetchFollowedLists(account.id) : Promise.resolve([]),
     canEdit ? fetchStudyLists(account.id, true) : Promise.resolve([]),
+    canEdit ? fetchFollowedLiveKeys(account.id) : Promise.resolve([]),
   ]);
 
   return (
@@ -95,6 +97,7 @@ export default async function UserListsPage({ params }: PageProps) {
         canEdit={canEdit}
       />
 
+      {canEdit ? <FollowedLiveLists followedKeys={followedLive} /> : null}
       {canEdit && followed.length > 0 ? <FollowedLists lists={followed} accountId={account.id} /> : null}
       {canEdit && archived.length > 0 ? <ArchivedLists lists={archived} accountId={account.id} owner={userKey} /> : null}
     </div>
