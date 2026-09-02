@@ -141,7 +141,7 @@ export default function GlobalSearchSuggestList({
           <span className={`subject-pill shrink-0 border ${SOURCE_TONES[hit.source]}`}>
             {SEARCH_SOURCE_LABELS[hit.source]}
           </span>
-          {filing ? <SubjectFilerCell hit={hit} filer={filer} className="basis-full sm:basis-auto" /> : null}
+          {filing ? <SubjectFilerCell hit={hit} filer={filer} className="basis-full md:max-w-[55%] md:basis-auto" /> : null}
         </li>
       ))}
 

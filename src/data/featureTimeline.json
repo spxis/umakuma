@@ -2448,5 +2448,16 @@
     "summary": "Searching ten kanji and keeping each one meant, for every kanji: open it, find the tag on its page, go back, search the next. The results dropdown and the search page now carry an Add to lists control at the edge of the list. Opened, every row grows a quiet column: the trouble and favourite marks the explorers use, then one small chip per saved list, lit when the row is already on it and toggled with a tap. The dropdown widens to make room; in the narrower search columns and on a phone the column drops to a line under the row. Kanji the JLPT and school-grade catalogues answer with borrow their WaniKani twin's id so they can be tagged too, and a word contributes its kanji to a list rather than its kana. Whether the column is open is remembered per browser. Requested 2026-09-01 by John.",
     "version": "0.236.0",
     "releasedAt": "2026-09-02T05:16:20Z"
+  },
+  {
+    "id": "search-filer-width",
+    "name": "Add to lists does not widen the dropdown",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-01",
+    "summary": "Pressing Add to lists opened the filing column in the rows, but the dropdown kept its width, so on a desktop the chips were crushed against the meaning instead of sitting in a column on the right. The box that widens and the list that shows the column each kept their own copy of the open flag, and nothing told the box. One flag now, held once, with everything that shows it subscribed - flip it anywhere and the box and the rows change together. The cell sits inline only from the width where the box is truly wide; below that it drops to a line under the row, as on a phone. Reported 2026-09-01 by John.",
+    "version": "0.239.0",
+    "releasedAt": "2026-09-02T05:43:52Z"
   }
 ]

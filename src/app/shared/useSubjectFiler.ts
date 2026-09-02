@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import { STUDY_TAGS, type StudyTag } from "@/lib/domainConstants";
 import {
@@ -11,7 +11,7 @@ import {
   type FilerList,
   type FilerTags,
 } from "@/lib/subjectFiler";
-import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+import { getStoredFlagOneIsTrue, setStoredBooleanFlag } from "@/lib/clientStorage";
 import { updateStudyTag } from "@/app/users/[nickname]/study-explorer/lib/studyTagApi";
 
 import { SUBJECT_FILER_COPY } from "./studyListCopy";
@@ -19,9 +19,36 @@ import { SUBJECT_FILER_COPY } from "./studyListCopy";
 /** Remembered per browser, so a member filing ten kanji is not asked ten times. */
 const FILER_OPEN_KEY = "umakuma:search-filer-open";
 
+/*
+ * One flag, held once. The box that widens and the list that shows the column
+ * each read it, and each used to keep a copy: pressing the button opened the
+ * column in the rows while the box stayed narrow, since nothing told it.
+ * A store every reader subscribes to is the fix - flip it anywhere, and
+ * everything showing it changes together.
+ */
+let filerOpen: boolean | null = null;
+const listeners = new Set<() => void>();
+
+function readFilerOpen(): boolean {
+  if (filerOpen === null) filerOpen = getStoredFlagOneIsTrue(FILER_OPEN_KEY, false);
+  return filerOpen;
+}
+
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
 /** Whether the filing column is open, shared by the box that widens and the list that shows it. */
 export function useFilerOpen(): [boolean, (value: boolean | ((prev: boolean) => boolean)) => void] {
-  return usePersistedBoolean(FILER_OPEN_KEY, { defaultValue: false });
+  const open = useSyncExternalStore(subscribe, readFilerOpen, () => false);
+  const setOpen = useCallback((value: boolean | ((prev: boolean) => boolean)) => {
+    const next = typeof value === "function" ? value(readFilerOpen()) : value;
+    filerOpen = next;
+    setStoredBooleanFlag(FILER_OPEN_KEY, next);
+    for (const listener of listeners) listener();
+  }, []);
+  return [open, setOpen];
 }
 
 export type SubjectFiler = {
