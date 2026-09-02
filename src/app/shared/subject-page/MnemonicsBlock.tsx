@@ -1,4 +1,4 @@
-import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 
 import SubjectBlock from "./SubjectBlock";
 import { SUBJECT_PAGE_COPY } from "./SubjectPage.constants";
@@ -18,7 +18,7 @@ export default function MnemonicsBlock({
   if (!mnemonics || (!mnemonics.meaning && !mnemonics.reading)) return null;
 
   return (
-    <SubjectBlock credit={{ source: SOURCE_CREDITS.wanikani, label: SOURCE_CREDIT_COPY.mnemonics }}>
+    <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.mnemonics }}>
       {mnemonics.meaning ? (
         <div className="space-y-1">
           <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">

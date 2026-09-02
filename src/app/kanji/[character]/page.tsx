@@ -13,7 +13,7 @@ import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { displayReading, readingsForGrade } from "@/app/users/[nickname]/grades/gradeExplorerView";
 import { getKanjiDictionaryAttribution, getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
-import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import { loadKanjiPage } from "@/lib/subjectPage";
 
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
@@ -127,7 +127,7 @@ export default async function KanjiPage({ params }: Props) {
       <UsedInWordsBlock words={page.words} />
 
       {page.related.length > 0 ? (
-        <SubjectBlock credit={{ source: SOURCE_CREDITS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
+        <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
           {page.related.map((group) => (
             <RelatedGroupBlock key={group.id} group={group} />
           ))}

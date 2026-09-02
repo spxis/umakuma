@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import SourceCredit from "@/app/shared/SourceCredit";
-import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { titleForDisplay } from "../lib/levelExplorerDisplay";
@@ -234,7 +234,7 @@ export default function LevelExplorerDetailSection({
 
       {/* The meanings, readings and mnemonics above are WaniKani's, the same as
         * on the public subject pages, and are credited the same way. */}
-      <SourceCredit credit={SOURCE_CREDITS.wanikani} label={SOURCE_CREDIT_COPY.subjectData} />
+      <SourceCredit source={SOURCE_KEYS.wanikani} label={SOURCE_CREDIT_COPY.subjectData} />
     </section>
   );
 }

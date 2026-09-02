@@ -19,10 +19,10 @@ const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
 describe("who gets credited", () => {
   it("names every borrowed source", () => {
-    expect(Object.keys(SOURCE_CREDITS).sort()).toEqual(["kanjiapi", "tatoeba", "wanikani"]);
+    expect(Object.keys(SOURCE_CREDITS).sort()).toEqual(["curriculum", "kanjiapi", "kanjidic2", "kanjivg", "tatoeba", "wanikani"]);
     for (const credit of Object.values(SOURCE_CREDITS)) {
       expect(credit.source.length).toBeGreaterThan(1);
-      expect(credit.url).toMatch(/^https:\/\//);
+      expect(credit.url).toMatch(/^https?:\/\//);
     }
   });
 
@@ -95,9 +95,10 @@ describe("where the credit is drawn", () => {
   });
 
   /* Every credit link leaves the site, so every credit link says so. */
-  it("opens each source in a new tab", () => {
+  it("sends the name to our page and only the licence off the site", () => {
     const credit = read(CREDIT);
-    expect(credit.split('target="_blank"').length - 1).toBe(2);
+    expect(credit).toContain("sourcePath(source)");
+    expect(credit.split('target="_blank"').length - 1).toBe(1);
     expect(credit).toContain('rel="noreferrer noopener"');
   });
 

@@ -2367,13 +2367,11 @@
     "id": "data-sources-page",
     "area": "platform",
     "name": "A page for every source, and what we hold from it",
-    "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 1,
-    "summary": "Every credit on the site links straight out to its vendor. It should link first to a page of our own: one tab per source - WaniKani, KANJIDIC2, KanjiVG, kanjiapi.dev, Tatoeba - showing when its data was last imported, a summary of what we hold from it (how many subjects, sentences, characters, which release), the licence and its terms, and only then the link out. A reader can browse the other sources from the same page. Requested 2026-09-01.",
-    "owner": "fable/subject-pages",
-    "claimedAt": "2026-09-02T03:15:48.949Z"
+    "status": "shipped",
+    "date": "2026-09-01",
+    "summary": "Every credit on the site linked straight out to its vendor, which answered who and nothing else. Each one now leads first to a page of ours about that source: what we hold from it in numbers, when it was last brought in and how long ago that is in words, which release of theirs it came from where they publish one, what we take and under what terms, and only then the way out. Six sources have a page - WaniKani, KANJIDIC2, KanjiVG, kanjiapi.dev, Tatoeba and the school curriculum tables - each a tab away from the others, with an overview reachable from the footer. The three that live in the database stamp their own imports; the three built into the site as files say which upstream version they were built from. A credit is addressed by a key now rather than by an object, so a new source is one registry entry, one description and one page that already exists.",
+    "version": "0.226.0",
+    "releasedAt": "2026-09-02T03:24:35Z"
   },
   {
     "id": "readings-labelled-in-japanese",
@@ -2394,5 +2392,16 @@
     "releasedAt": "2026-09-02T03:16:20Z",
     "version": "0.225.0",
     "summary": "Several agents work this repository at once, in sessions that cannot see each other, and requests were being tracked in the chat that received them - which is how a fix could ship for something nobody had written down, and how two sessions could build the same thing. The timeline JSON was already the one file they all read, so it is now the board. Every request, bug or idea goes in before the work starts, through pnpm backlog add, which takes a free ordering number, today's Vancouver date and the file's own escaping - the three things that went wrong when the file was edited by hand. An agent claims an entry before building it and puts it down if it stops; a claim cannot be taken over, only released. pnpm backlog prints what is open, what is in progress and who holds it, and how many are bugs, because a bug and a feature now say which they are. The admin release page shows the same claim and the same bug flag on each planned row. The rule is written into the agent instructions, so it holds for the next session as well as this one."
+  },
+  {
+    "id": "stroke-order-fonts",
+    "name": "Stroke order in the faces a learner meets",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 19,
+    "summary": "The stroke-order block shows the character in two faces, Gothic and Mincho, each captioned in capitals under it. The captions distract from the shapes; drop them and say the face in a hover title instead. Two more faces matter to a learner and are missing: the textbook face (kyoukashotai), which is the handwriting standard every school uses, and a brush or kaisho face, which is what the printed forms descend from. With four, the faces sit in a two-by-two grid beside the drawing. The stroke count pill sits left in the header; right-align it. Requested 2026-09-01."
   }
 ]

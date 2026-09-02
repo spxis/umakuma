@@ -1,27 +1,31 @@
-import { SOURCE_CREDITS, type SourceCredit as Credit } from "@/lib/sourceCredits";
+import Link from "next/link";
+
+import { SOURCE_CREDITS, sourcePath, type SourceKey } from "@/lib/sourceCredits";
 
 const LINK = "underline decoration-dotted underline-offset-2 hover:text-foreground/70";
 
 /**
  * Who a page's content came from.
  *
- * Four sources are borrowed here and each drew its own credit: Tatoeba under
- * the sentences, KanjiVG under the strokes, KANJIDIC2 under the dictionary
- * facts, and WaniKani under nothing at all - the largest borrowing of the four
- * and the only one that went uncredited. Four copies of the same paragraph is
- * also four chances for one of them to drift out of a licence condition.
+ * Six sources are borrowed here and each used to draw its own credit: Tatoeba
+ * under the sentences, KanjiVG under the strokes, KANJIDIC2 under the
+ * dictionary facts, and WaniKani under nothing at all - the largest borrowing
+ * of the six and the only one that went uncredited. One component draws all of
+ * them now, so a new surface that shows borrowed content credits it by using
+ * the thing that renders it rather than by somebody remembering to.
  *
- * One component draws all four now, so a new surface that shows borrowed
- * content credits it by using the thing that renders it rather than by
- * somebody remembering to. Every link leaves the site, so every link says so.
+ * The name links to our own page about the source - what we hold from it and
+ * when it was last brought in - and that page links out. The licence, where
+ * there is one, links straight to its text, because a licence is a condition
+ * and not ours to paraphrase.
  */
 export default function SourceCredit({
-  credit,
+  source,
   label,
   variant = "foot",
   className = "",
 }: {
-  credit: Credit;
+  source: SourceKey;
   /** What was taken: "Meanings and readings from", "Stroke shapes from". */
   label: string;
   /**
@@ -34,6 +38,7 @@ export default function SourceCredit({
   variant?: "foot" | "inline";
   className?: string;
 }) {
+  const credit = SOURCE_CREDITS[source];
   const shape =
     variant === "foot"
       ? "border-t border-line px-5 py-2 text-center text-[10px]"
@@ -41,9 +46,9 @@ export default function SourceCredit({
   return (
     <p className={`${shape} font-semibold text-foreground/60 ${className}`}>
       {label}{" "}
-      <a href={credit.url} target="_blank" rel="noreferrer noopener" className={LINK}>
+      <Link href={sourcePath(source)} className={LINK}>
         {credit.source}
-      </a>
+      </Link>
       {/* A source under its own terms rather than a public licence names no
         * licence, and must not be made to look as though it granted one. */}
       {credit.licence ? (
@@ -57,5 +62,3 @@ export default function SourceCredit({
     </p>
   );
 }
-
-export { SOURCE_CREDITS };

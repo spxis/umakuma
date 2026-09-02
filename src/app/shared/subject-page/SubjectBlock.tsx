@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import SourceCredit from "@/app/shared/SourceCredit";
-import type { SourceCredit as Credit } from "@/lib/sourceCredits";
+import type { SourceKey } from "@/lib/sourceCredits";
 
 /**
  * One block of a subject page.
@@ -22,7 +22,7 @@ export default function SubjectBlock({
   children,
 }: {
   heading?: string;
-  credit?: { source: Credit; label: string };
+  credit?: { source: SourceKey; label: string };
   className?: string;
   children: ReactNode;
 }) {
@@ -36,7 +36,7 @@ export default function SubjectBlock({
         ) : null}
         {children}
       </div>
-      {credit ? <SourceCredit credit={credit.source} label={credit.label} /> : null}
+      {credit ? <SourceCredit source={credit.source} label={credit.label} /> : null}
     </section>
   );
 }

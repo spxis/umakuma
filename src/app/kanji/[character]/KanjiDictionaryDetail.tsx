@@ -1,6 +1,7 @@
 import type { KanjiDictionaryAttribution, KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
+import { SOURCE_KEYS } from "@/lib/sourceCredits";
 
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
 
@@ -33,7 +34,7 @@ export default function KanjiDictionaryDetail({
     <SubjectBlock
       credit={
         /* Share-alike: the credit is a licence condition, not decoration. */
-        attribution ? { source: attribution, label: KANJI_PAGE_COPY.dictionaryCredit } : undefined
+        attribution ? { source: SOURCE_KEYS.kanjidic2, label: KANJI_PAGE_COPY.dictionaryCredit } : undefined
       }
     >
       <Row label={KANJI_PAGE_COPY.meanings} value={entry.meanings.join(", ")} />

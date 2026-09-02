@@ -6,7 +6,7 @@ import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constan
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import type { PublicSubject } from "@/lib/publicSubject";
-import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import { relatedGroupsForSubject } from "@/lib/subjectPageModel";
 import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplayReadings";
 
@@ -50,7 +50,7 @@ export default function SubjectDetailPanel({
     <>
       <SubjectBlock
         className="shadow-sm"
-        credit={{ source: SOURCE_CREDITS.wanikani, label: SOURCE_CREDIT_COPY.subjectData }}
+        credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.subjectData }}
       >
         <div className="flex flex-wrap items-center gap-4">
           <p
@@ -102,7 +102,7 @@ export default function SubjectDetailPanel({
       />
 
       {related.length > 0 ? (
-        <SubjectBlock credit={{ source: SOURCE_CREDITS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
+        <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
           {related.map((group) => (
             <RelatedGroupBlock key={group.id} group={group} />
           ))}

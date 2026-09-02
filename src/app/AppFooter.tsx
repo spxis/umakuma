@@ -5,6 +5,7 @@ import Link from "next/link";
 import { APP_VERSION, APP_VERSION_DATE } from "@/lib/appVersion";
 import { codenameForVersion } from "@/lib/releaseCodenames";
 import { RELEASES_HREF } from "@/lib/releaseLink";
+import { SOURCES_HREF } from "@/lib/sourceCredits";
 import CodenameText from "./shared/CodenameText";
 
 // Formatted locally rather than with the timeline's helper: importing
@@ -40,6 +41,9 @@ export default function AppFooter({ modeChips = [] }: Props) {
               {chip}
             </span>
           ))}
+          <Link href={SOURCES_HREF} className="underline decoration-dotted underline-offset-2 transition hover:text-foreground/70">
+            Sources
+          </Link>
           <span>
           {releasesHref ? (
             <Link href={releasesHref} className="underline decoration-dotted underline-offset-2 transition hover:text-foreground/70">

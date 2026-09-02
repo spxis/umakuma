@@ -93,6 +93,24 @@ export function getStrokeOrder(kanji: string, grade?: number): StrokeOrderPayloa
   return null;
 }
 
+type StrokeIndex = {
+  attribution: StrokeOrderAttribution;
+  grades: Array<{ grade: number; count: number }>;
+};
+
+/** How many characters have strokes, and which KanjiVG commit drew them. */
+export function strokeOrderSummary(): { characterCount: number; commit: string } | null {
+  try {
+    const index = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "index.json"), "utf8")) as StrokeIndex;
+    return {
+      characterCount: index.grades.reduce((total, grade) => total + grade.count, 0),
+      commit: index.attribution.commit,
+    };
+  } catch {
+    return null;
+  }
+}
+
 /** The credit KanjiVG's licence requires, for the surfaces that show strokes. */
 export function strokeOrderAttribution(): StrokeOrderAttribution | null {
   if (!cachedAttribution) {

@@ -226,6 +226,16 @@ test("a shared kanji page lists the words it appears in", async ({ browser, base
   });
 });
 
+test("the sources page lists every source and opens one", async ({ browser, baseURL }) => {
+  /* Every credit on the site leads here first; the page must answer for all of them. */
+  await assertPageLoads(browser, `${baseURL}/sources`, async (page) => {
+    await expect(page.getByRole("navigation", { name: "Sources" })).toBeVisible();
+    await page.getByRole("link", { name: "KanjiVG", exact: true }).first().click();
+    await expect(page).toHaveURL(/\/sources\/kanjivg$/);
+    await expect(page.getByRole("heading", { level: 1, name: "KanjiVG" })).toBeVisible();
+  });
+});
+
 test("news reader page loads", async ({ browser, baseURL }) => {
   const url = `${baseURL}/news`;
   await assertPageLoads(browser, url, async (page) => {

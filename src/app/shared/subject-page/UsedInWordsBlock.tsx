@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import { SOURCE_CREDITS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import type { WordExample } from "@/lib/subjectPageModel";
 
 import SubjectBlock from "./SubjectBlock";
@@ -24,7 +24,7 @@ export default function UsedInWordsBlock({ words }: { words: WordExample[] }) {
   return (
     <SubjectBlock
       heading={SUBJECT_PAGE_COPY.usedInWords}
-      credit={{ source: SOURCE_CREDITS.kanjiapi, label: SOURCE_CREDIT_COPY.words }}
+      credit={{ source: SOURCE_KEYS.kanjiapi, label: SOURCE_CREDIT_COPY.words }}
     >
       <ul className="divide-y divide-line/60">
         {words.map((word) => (

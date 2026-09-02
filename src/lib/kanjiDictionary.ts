@@ -54,6 +54,12 @@ function loadFile(file: string): Map<string, KanjiDictionaryEntry> {
   return byKanji;
 }
 
+/** How much the dictionary holds, and which release it was built from. */
+export function getKanjiDictionarySummary(): { totalCount: number; attribution: KanjiDictionaryAttribution } | null {
+  const index = loadIndex();
+  return index ? { totalCount: index.totalCount, attribution: index.attribution } : null;
+}
+
 /** Who the data belongs to and under what licence, for the credit it requires. */
 export function getKanjiDictionaryAttribution(): KanjiDictionaryAttribution | null {
   return loadIndex()?.attribution ?? null;

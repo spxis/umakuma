@@ -66,8 +66,8 @@ describe("the words a kanji appears in", () => {
 
   /* The word is not a link; most are not WaniKani vocabulary and have no page. */
   it("links the kanji inside the word and nothing else", () => {
-    /* Internal links only; the credit at the foot leaves the site. */
-    const hrefs = [...doc.querySelectorAll('a[href^="/"]')].map((a) => a.getAttribute("href"));
+    /* Subject links only; the credit at the foot leads to our sources page. */
+    const hrefs = [...doc.querySelectorAll('a[href^="/"]:not([href^="/sources/"])')].map((a) => a.getAttribute("href"));
     expect(hrefs).toEqual(["/kanji/%E6%9B%9C"]);
   });
 

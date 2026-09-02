@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import SourceCredit from "./SourceCredit";
+import { SOURCE_KEYS } from "@/lib/sourceCredits";
 import { STROKE_ANIMATION_COPY, STROKE_MS_PER_STROKE } from "./strokeAnimationCopy";
 
 type StrokePayload = {
@@ -199,7 +200,7 @@ export default function KanjiStrokeAnimation({
 
       {showCredit ? (
         <SourceCredit
-          credit={data.attribution}
+          source={SOURCE_KEYS.kanjivg}
           label={STROKE_ANIMATION_COPY.creditPrefix}
           variant="inline"
           className="text-[10px]!"
