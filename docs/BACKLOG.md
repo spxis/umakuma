@@ -699,6 +699,64 @@ than it is without saying why.
    Proposal: a "Starter lists" section on the Lists page, subscribed on
    demand, so a new member's page is not forty lists long.
 
+## Search: numbers and money (2026-09-02)
+
+Four releases went out today on the search box - a dollar sign, the answers in
+the dropdown, currency words, and Japanese magnitudes - and what is left is
+recorded here rather than rediscovered.
+
+### 44 — Read large Japanese numbers in search, and the library under it
+
+Two defects proved this is a library rather than a spelling fix.
+
+`5000` produces 五千 correctly and finds **nothing**, because 五千 is not a
+subject: the catalogues hold 五 and 千 separately, and no dictionary entry
+spells out the compound. `24` is the same - 二十四 exists nowhere - and the
+single result it returns is an unrelated substring match. Offering more
+spellings cannot fix this. A number is something the search *works out*, so it
+belongs in the answer row that `Heisei 3` and `500 yen` already use, with the
+component characters offered as rows underneath.
+
+That answer needs three things `searchNumerals.ts` does not have:
+
+- **A reading.** 五千 is ごせん, and the sound changes are irregular: 300 is
+  さんびゃく, 600 ろっぴゃく, 800 はっぴゃく, 3000 さんぜん, 8000 はっせん.
+  4, 7 and 9 each have two readings and the number decides which.
+- **The reverse direction.** 一億二千万 must answer with 120,000,000. The money
+  parser's `readAmount` already walks Arabic digits against 千万億兆 and
+  rejects units that climb; the kanji-digit version is the same shape.
+- **A cap that reflects what a reader meets.** `LARGEST_USEFUL` is 99,999,999,
+  which is below the 一億 that appears in every house listing.
+
+Do this before 51 and 52 below; both need the same word-to-value reader.
+
+### 49 — A thousands comma is not a full stop
+
+`japaneseNumberVariants` matches `\d+`, so `5,000` reads as 5 and 000 and
+offers 五, five, 零 and zero. `parseMoneyQuery` already strips a thousands
+comma before reading; the two should use one rule.
+
+### 51, 52 — Amounts in words, and a word too many
+
+`five hundred yen` and `5 man yen` need 44's word reader. `100 dollars CAD`
+needs the parser to take more than one token per side - it currently allows one
+before the number and one after, which is what makes the intersection rule
+simple. Both are small once 44 exists; neither is worth its own parser rewrite
+before then.
+
+### Settled today, so nobody reopens it
+
+- **A bare dollar sign answers in both dollars** rather than guessing or
+  refusing. The same choice a yen amount already made coming the other way.
+- **A magnitude needs a currency beside it.** `20k` and `5万` on their own stay
+  numbers, which is what leaves 44 its own query to answer.
+- **Two tokens that disagree name nothing.** `€23 USD` and `$1,500 JPY` answer
+  with silence rather than picking a side of the contradiction.
+- **No rate history in the dropdown.** One cached request must not become six
+  on a keystroke; the table stays on the results page.
+
+---
+
 ## Open decisions
 
 Two, both John's; one blocks work that is otherwise ready to start.
