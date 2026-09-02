@@ -3175,5 +3175,62 @@
     "summary": "Two reported together. Escape emptied the search box and then did nothing: the panel left open after the clear is the recent items rather than the suggestions, and only the suggestions were in the condition, so the second press had nothing to act on. Both count now - clear, then close. And the stroke-order sizes were growing the wrong thing. The numbers are drawn inside the character's own coordinates, so asking for a bigger drawing made every number bigger by the same amount and they collided exactly as before, which is the opposite of what enlarging it was for. They are sized against the drawn width instead, so they come out the same height on screen at every setting and the extra room goes where it was wanted - between them. The largest size grew from 320 to 370 pixels and drops the four printed faces beside the drawing: somebody who has asked for the character as big as it goes is looking at the strokes, and four printed copies of it are what that width was being spent on. Reported 2026-09-02 by John.",
     "version": "0.290.0",
     "releasedAt": "2026-09-02T15:58:06Z"
+  },
+  {
+    "id": "nav-subpath-section",
+    "name": "The second row survives a click into a page",
+    "area": "platform",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 60,
+    "summary": "Absolute nav entries match the address by exact equality, so /maps and /strokes light up their group but /maps/japan and /strokes/5 resolve to no section at all and the whole second row vanishes. Member-scoped pages do not have the bug because they match on the first path segment, which is why /grades/1 keeps its row. Match an absolute entry by prefix the same way, so the row is there for every page in the group."
+  },
+  {
+    "id": "jlpt-explorer-weight",
+    "name": "The JLPT explorer opens when you click it",
+    "area": "jlpt",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 61,
+    "summary": "Clicking JLPT Explorer looks like nothing happened: it takes about six seconds to arrive where Grades and Strokes take a tenth of a second, measured from the same page on the same server. JlptExplorerContent is a client component that imports src/data/jlptReadings.json, so 397KB of readings is shipped to the browser and parsed before the page can appear. The readings belong on the server, or behind the same catalogue lookup every other surface uses.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-02T16:01:31.669Z"
+  },
+  {
+    "id": "grades-hydration-flash",
+    "name": "The grades page stops flashing on arrival",
+    "area": "study",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 62,
+    "summary": "GradeKanjiBoard seeds two pieces of state from localStorage inside the useState initializer, so the server renders the default and the browser flips it after hydration. The reveal mode is the visible one: every reading paints and then hides. Strokes shares the view-mode half of the pattern and does not flash, which points at the reveal mode as the cause. No page under Learn should flash."
+  },
+  {
+    "id": "explorer-grid-parity",
+    "name": "One grid, three pages, one look",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 63,
+    "summary": "Strokes, Grades and the WaniKani library each draw their own card grid, and side by side they read as three different products: different card shape, different chrome, different placement of level and status. There is already a shared pair for lists of subjects (SubjectCards and SubjectRows) and a UnifiedExplorerCard, but these three do not all go through them. Put the general look in one component and let each page pass what is genuinely its own - a stroke count, a JLPT pill, an SRS stage - rather than restating the whole card."
+  },
+  {
+    "id": "lists-section-nav",
+    "name": "Lists gets a second row of its own",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 64,
+    "summary": "Lists is a top-level section with a single child, so the header suppresses its second row and everything the page holds is stacked into the body instead. It has the same shape as Learn - several distinct collections a member moves between - so it should name them in the second row. The names should follow from what the collections actually are rather than being invented; work them out from the list kinds the code already distinguishes."
   }
 ]
