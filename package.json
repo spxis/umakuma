@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "0.278.0",
+  "version": "0.279.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -82,7 +82,8 @@
     "campaign:create": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/create-reading-campaign.ts",
     "campaign:reprice": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/reprice-reading-campaign.ts",
     "internal:backfill": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/backfill-internal-members.ts",
-    "jlpt:migrate": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/migrate-jlpt-certificates.ts"
+    "jlpt:migrate": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/migrate-jlpt-certificates.ts",
+    "radicals:build": "node scripts/build-radicals.mjs"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",

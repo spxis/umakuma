@@ -3035,5 +3035,16 @@
     "summary": "The line of facts shipped an hour earlier was drawn as a list, and two of the three surfaces that show it put it inside a paragraph - the list page header and the followed-list card. No browser allows a list inside a paragraph, so the markup the server sent and the markup the browser built disagreed, React gave up matching them and rebuilt the whole tree on hydration. It reads identically and is now spans, which are legal wherever prose is. Found by reading the browser console rather than the page, which is the only place this kind of fault says anything at all.",
     "version": "0.278.0",
     "releasedAt": "2026-09-02T13:48:38Z"
+  },
+  {
+    "id": "radical-search",
+    "name": "Search kanji by radical",
+    "area": "study",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "The way to look up a character you cannot read: you cannot type it and you do not know its readings, but you can see 日 on the left and 月 on the right. Every search box now carries a Radicals button - the header, the phone sheet and the results page, since they are one field - and it opens the classical grid: 253 radicals in stroke-count order, the ones paper dictionaries index by. Picking narrows on all of them rather than any, so 日 with 月 is the thirty-one characters holding both, commonest first, each one a link to its page. Radicals that appear in none of what is left are dimmed rather than left as routes to an empty list, which is the whole ergonomics of the thing. The answer is pinned above the grid so a pick made at the bottom of it is still answered where you can see it. The radicals are RADKFILE's - Michael Raine's analysis of the JIS kanji, kept by the EDRDG under the same share-alike terms as the dictionary - covering 6,355 characters, rather than WaniKani's teaching radicals, which are named for what they look like and only reach the two thousand kanji it teaches. It is a dialog rather than a dropdown because 253 buttons and their answer do not fit under a field: hung from the header on a phone it ran six hundred pixels past the bottom of a screen that clips. Requested 2026-09-02 by John.",
+    "version": "0.279.0",
+    "releasedAt": "2026-09-02T13:52:28Z"
   }
 ]

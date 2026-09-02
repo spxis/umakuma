@@ -1,10 +1,15 @@
 "use client";
 
-import type { ReactNode, RefObject } from "react";
+import { useState, type ReactNode, type RefObject } from "react";
 
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import type { SearchCombobox } from "@/lib/useSearchCombobox";
 import { suggestOptionId } from "./GlobalSearchSuggestList";
+import { JP_TEXT_CLASS } from "./japaneseText";
+import ModalShell from "./ModalShell";
+import { MODAL_LAYERS } from "./modalLayers";
+import RadicalSearchPanel from "./RadicalSearchPanel";
+import { RADICAL_SEARCH_COPY } from "./radicalSearchCopy";
 
 /**
  * Every size a search box comes in shares one anatomy: ghost text behind a
@@ -40,6 +45,13 @@ type Props = {
   children?: ReactNode;
 };
 
+/*
+ * Every search box gets the radical lookup, because every search box is the
+ * same question asked from a different page. It lives in the field rather than
+ * in each caller so the header, the phone sheet and the results page cannot
+ * drift apart the way the header and the account menu once did.
+ */
+
 export default function SearchComboboxField({
   cbx,
   inputId,
@@ -51,6 +63,7 @@ export default function SearchComboboxField({
   children,
 }: Props) {
   const sizing = FIELD_SIZES[size];
+  const [radicalsOpen, setRadicalsOpen] = useState(false);
 
   return (
     <div className="relative" onBlur={cbx.onBlur}>
@@ -96,6 +109,23 @@ export default function SearchComboboxField({
           ) : null}
 
           <button
+            type="button"
+            aria-label={RADICAL_SEARCH_COPY.openLabel}
+            aria-expanded={radicalsOpen}
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => setRadicalsOpen((was) => !was)}
+            title={RADICAL_SEARCH_COPY.openLabel}
+            className={`mr-1 inline-flex h-7 shrink-0 items-center rounded-full px-2 text-[10px] font-black uppercase tracking-[0.08em] transition ${
+              radicalsOpen ? "bg-accent text-white" : "text-foreground/60 hover:bg-surface-muted hover:text-foreground"
+            }`}
+          >
+            <span className="hidden sm:inline">{RADICAL_SEARCH_COPY.open}</span>
+            <span aria-hidden="true" className={`text-sm sm:hidden ${JP_TEXT_CLASS}`}>
+              {RADICAL_SEARCH_COPY.openGlyph}
+            </span>
+          </button>
+
+          <button
             type="submit"
             aria-label={SEARCH_PAGE_COPY.submit}
             className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
@@ -104,6 +134,24 @@ export default function SearchComboboxField({
           </button>
         </div>
       </form>
+      {/*
+        A dialog rather than a dropdown, because 253 radicals and their answer
+        do not fit under a field: hung from the header on a phone the panel ran
+        600px past the bottom of the screen, inside a page shell that clips its
+        overflow, so half of it could not be reached at all.
+      */}
+      {radicalsOpen ? (
+        <ModalShell
+          onClose={() => setRadicalsOpen(false)}
+          layer={MODAL_LAYERS.page}
+          label={RADICAL_SEARCH_COPY.openLabel}
+          closeOnBackdrop
+          height="list"
+          panelClassName="flex w-full max-w-2xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
+        >
+          <RadicalSearchPanel onPick={() => setRadicalsOpen(false)} onClose={() => setRadicalsOpen(false)} />
+        </ModalShell>
+      ) : null}
       {children}
     </div>
   );

@@ -48,6 +48,15 @@ export const SOURCE_DESCRIPTIONS: Record<
     ],
     terms: "Creative Commons Attribution-ShareAlike 4.0. The credit is a condition of use, and so is sharing any derived data under the same terms.",
   },
+  [SOURCE_KEYS.radkfile]: {
+    tab: "RADKFILE",
+    lede: "Michael Raine's analysis of which elements every JIS kanji is built from, maintained by the EDRDG. It is what the radical lookup in the search box asks: pick the parts you can see, get the characters that hold all of them.",
+    takes: [
+      "The 253 classical radicals, with the stroke count of each",
+      "Which of them every one of 6,355 kanji is written from",
+    ],
+    terms: "Creative Commons Attribution-ShareAlike 4.0, the same terms as KANJIDIC2. The credit is a condition of use, and so is sharing any derived data under them.",
+  },
   [SOURCE_KEYS.kanjivg]: {
     tab: "KanjiVG",
     lede: "Ulrich Apel's stroke-order project: each character as the strokes a hand makes, in order, which is what the stroke animations draw.",

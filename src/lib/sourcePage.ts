@@ -2,6 +2,7 @@ import "server-only";
 
 import { getKanjiDictionarySummary } from "@/lib/kanjiDictionary";
 import { prisma } from "@/lib/prisma";
+import { radicalIndexSummary } from "@/lib/radicalSearchServer";
 import { getSchoolGradeIndex } from "@/lib/schoolGrades";
 import { SOURCE_KEYS, type SourceKey } from "@/lib/sourceCredits";
 import type { SourceReport } from "@/lib/sourceReport";
@@ -30,6 +31,8 @@ const REPORT_COPY = {
   charactersWithWords: "Characters with example words",
   sentences: "Sentences",
   charactersWithStrokes: "Characters with stroke order",
+  classicalRadicals: "Classical radicals",
+  charactersBrokenDown: "Characters broken into radicals",
   elementary: "Elementary school kanji",
   secondary: "Secondary school kanji",
   names: "Name kanji",
@@ -122,6 +125,20 @@ function kanjivg(): SourceReport {
   };
 }
 
+function radkfile(): SourceReport {
+  const summary = radicalIndexSummary();
+  return {
+    key: SOURCE_KEYS.radkfile,
+    counts: [
+      { label: REPORT_COPY.classicalRadicals, value: summary.radicalCount },
+      { label: REPORT_COPY.charactersBrokenDown, value: summary.kanjiCount },
+    ],
+    lastImportedAt: null,
+    version: null,
+    generatedAtMs: Date.now(),
+  };
+}
+
 function curriculum(): SourceReport {
   const index = getSchoolGradeIndex();
   return {
@@ -149,6 +166,8 @@ export async function loadSourceReport(key: SourceKey): Promise<SourceReport> {
       return kanjidic2();
     case SOURCE_KEYS.kanjivg:
       return kanjivg();
+    case SOURCE_KEYS.radkfile:
+      return radkfile();
     case SOURCE_KEYS.curriculum:
       return curriculum();
   }

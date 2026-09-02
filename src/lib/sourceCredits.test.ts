@@ -19,7 +19,15 @@ const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
 describe("who gets credited", () => {
   it("names every borrowed source", () => {
-    expect(Object.keys(SOURCE_CREDITS).sort()).toEqual(["curriculum", "kanjiapi", "kanjidic2", "kanjivg", "tatoeba", "wanikani"]);
+    expect(Object.keys(SOURCE_CREDITS).sort()).toEqual([
+      "curriculum",
+      "kanjiapi",
+      "kanjidic2",
+      "kanjivg",
+      "radkfile",
+      "tatoeba",
+      "wanikani",
+    ]);
     for (const credit of Object.values(SOURCE_CREDITS)) {
       expect(credit.source.length).toBeGreaterThan(1);
       expect(credit.url).toMatch(/^https?:\/\//);

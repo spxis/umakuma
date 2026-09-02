@@ -329,6 +329,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Shikikin no Keta", ja: "敷金の桁", reading: "しききんのけた", gloss: "the deposit read at the right number of zeros" },
   { romaji: "Sugu Wakaru Yurai", ja: "すぐ分かる由来", reading: "すぐわかるゆらい", gloss: "where a list came from, at a glance" },
   { romaji: "Seiretsu Naoshi", ja: "整列直し", reading: "せいれつなおし", gloss: "the facts line up where they belong" },
+  { romaji: "Sonaeru Bushu", ja: "備える部首", reading: "そなえるぶしゅ", gloss: "the radicals a character is made ready from" },
 ];
 
 /**

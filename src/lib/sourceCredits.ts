@@ -31,6 +31,7 @@ export type SourceCredit = {
 export const SOURCE_KEYS = {
   wanikani: "wanikani",
   kanjidic2: "kanjidic2",
+  radkfile: "radkfile",
   kanjivg: "kanjivg",
   kanjiapi: "kanjiapi",
   tatoeba: "tatoeba",
@@ -53,6 +54,12 @@ export const SOURCE_CREDITS: Record<SourceKey, SourceCredit> = {
   [SOURCE_KEYS.kanjidic2]: {
     source: "KANJIDIC2",
     url: "http://www.edrdg.org/wiki/index.php/KANJIDIC_Project",
+    licence: "CC BY-SA 4.0",
+    licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+  },
+  [SOURCE_KEYS.radkfile]: {
+    source: "RADKFILE",
+    url: "http://www.edrdg.org/krad/kradinf.html",
     licence: "CC BY-SA 4.0",
     licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
   },
@@ -93,5 +100,6 @@ export const SOURCE_CREDIT_COPY = {
   words: "Words from",
   relations: "Radicals, look-alikes and vocabulary from",
   strokes: "Stroke data from",
+  radicals: "Radical breakdowns from",
   dictionary: "Dictionary data from",
 } as const;
