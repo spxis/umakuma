@@ -90,6 +90,8 @@ export default function StudyListCards({
     items: tagged.characters.map((key) => ({ kind: LIST_ITEM_KINDS.kanji, key })),
     count: tagged.count,
     updatedAt: null,
+    /* A tag row has no history: it was never made and is never shared. */
+    meta: null,
     tag: tagged.tag,
     href: tagListHref(owner, tagged.tag),
     visibility: null,
@@ -106,6 +108,14 @@ export default function StudyListCards({
         items,
         count: items.length,
         updatedAt: list.updatedAt,
+        meta: {
+          /* The card prints the count beside the name already. */
+          createdAt: list.createdAt,
+          updatedAt: list.updatedAt,
+          subscriberCount: list.subscriberCount,
+          copyCount: list.copyCount,
+          shareCount: list.shareCount,
+        },
         tag: null,
         href: listHref(owner, renamed[list.id] ?? list.name),
         visibility: list.visibility,

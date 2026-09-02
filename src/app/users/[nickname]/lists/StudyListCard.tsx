@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import ListMetaLine from "@/app/shared/ListMetaLine";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
@@ -382,11 +383,15 @@ export default function StudyListCard({
 
           {editingCharacters || !kindNode ? null : <div className="mt-2">{kindNode}</div>}
 
-          <p className="mt-3 text-[11px] text-foreground/60">
-            {card.updatedAt
-              ? `${STUDY_LIST_COPY.updatedPrefix} ${formatRelativeFromNow(card.updatedAt)}`
-              : STUDY_LIST_COPY.builtIn}
-          </p>
+          {card.meta ? (
+            <ListMetaLine facts={card.meta} className="mt-3" />
+          ) : (
+            <p className="mt-3 text-[11px] text-foreground/60">
+              {card.updatedAt
+                ? `${STUDY_LIST_COPY.updatedPrefix} ${formatRelativeFromNow(card.updatedAt)}`
+                : STUDY_LIST_COPY.builtIn}
+            </p>
+          )}
 
           {/*
             * Actions on their own line. Sharing one with the timestamp

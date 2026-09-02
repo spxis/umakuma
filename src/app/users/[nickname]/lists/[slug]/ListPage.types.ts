@@ -18,6 +18,8 @@ export type ListPageList = {
   updatedAt: string;
   copyCount: number;
   shareCount: number;
+  /** How many people keep this list without owning it. */
+  subscriberCount: number;
   itemCount: number;
 };
 

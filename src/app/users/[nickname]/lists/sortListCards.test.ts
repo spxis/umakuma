@@ -11,6 +11,7 @@ const card = (name: string, keys: string[], updatedAt: string): ListCard => ({
   items: keys.map((key) => ({ kind: LIST_ITEM_KINDS.kanji, key })),
   count: keys.length,
   updatedAt,
+  meta: null,
   tag: null,
   href: null,
   visibility: null,

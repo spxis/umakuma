@@ -5,9 +5,9 @@ import { useState } from "react";
 
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { listShareHref } from "@/lib/studyListRules";
+import ListMetaLine from "@/app/shared/ListMetaLine";
 import type { FollowedList } from "@/lib/studyListShares";
 import { LIST_VISIBILITIES } from "@/lib/domainConstants";
-import { formatRelativeFromNow } from "@/lib/timeFormat";
 
 /**
  * The lists this member follows: somebody else's, read-only, kept current.
@@ -75,10 +75,8 @@ export default function FollowedLists({ lists, accountId }: { lists: FollowedLis
                   <span className="ml-2 subject-pill border-line bg-surface-muted text-foreground/60">{STUDY_LIST_COPY.followedGone}</span>
                 ) : null}
               </p>
-              <p className="mt-3 flex items-center justify-between text-[11px] text-foreground/60">
-                <span>
-                  {STUDY_LIST_COPY.updatedPrefix} {formatRelativeFromNow(list.updatedAt)}
-                </span>
+              <p className="mt-3 flex items-center justify-between gap-2 text-[11px] text-foreground/60">
+                <ListMetaLine facts={{ updatedAt: list.updatedAt }} />
                 <button
                   type="button"
                   onClick={() => void unfollow(list.id)}

@@ -1,3 +1,4 @@
+import type { ListMetaFacts } from "@/app/shared/listMeta.types";
 import type { ListVisibility } from "@/lib/domainConstants";
 import type { StudyListItemRef } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
@@ -22,6 +23,8 @@ export type ListCard = {
   /** The true size, which for a tagged list exceeds what the card previews. */
   count: number;
   updatedAt: string | null;
+  /** The rest of what a list says about itself; a tagged list has none of it. */
+  meta: ListMetaFacts | null;
   tag: TaggedListSummary["tag"] | null;
   /** The list's own page; a tagged list opens the panel instead. */
   href: string | null;

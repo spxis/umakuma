@@ -38,6 +38,7 @@ const LIST_SELECT = {
   copyCount: true,
   shareCount: true,
   items: { select: ITEM_SELECT, orderBy: { position: "asc" as const } },
+  _count: { select: { subscriptions: true } },
 } as const;
 
 type ListRow = {
@@ -52,6 +53,7 @@ type ListRow = {
   copyCount: number;
   shareCount: number;
   items: StudyListItemRef[];
+  _count: { subscriptions: number };
 };
 
 function toSummary(row: ListRow): StudyListSummary {
@@ -68,6 +70,7 @@ function toSummary(row: ListRow): StudyListSummary {
     updatedAt: row.updatedAt.toISOString(),
     copyCount: row.copyCount,
     shareCount: row.shareCount,
+    subscriberCount: row._count.subscriptions,
   };
 }
 

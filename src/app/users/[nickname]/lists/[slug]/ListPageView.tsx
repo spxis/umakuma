@@ -10,6 +10,7 @@ import ListSearchField from "@/app/shared/ListSearchField";
 import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import ListMetaLine from "@/app/shared/ListMetaLine";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { STUDY_TAG_LIST_COPY } from "@/app/shared/studyTagListsUi";
 import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
@@ -18,7 +19,6 @@ import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { LIST_ITEM_KIND_DISPLAY, LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, STUDY_TAGS, type ListItemKind } from "@/lib/domainConstants";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
-import { formatRelativeFromNow } from "@/lib/timeFormat";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
 import ListContributeBox from "./ListContributeBox";
@@ -39,11 +39,6 @@ import ListViewerActions from "./ListViewerActions";
  */
 const VIEW_MODE_KEY = "wr:list-page:view-mode";
 const ALL = "all";
-
-function timesText(count: number, noun: string): string {
-  if (count === 0) return "";
-  return `${noun} ${count === 1 ? STUDY_LIST_COPY.onceSuffix : `${count} ${STUDY_LIST_COPY.timesSuffix}`}`;
-}
 
 export default function ListPageView({
   list,
@@ -120,13 +115,6 @@ export default function ListPageView({
     [list.id, list.tag, viewer.accountId],
   );
 
-  const facts = [
-    `${STUDY_LIST_COPY.created} ${formatRelativeFromNow(list.createdAt)}`,
-    `${STUDY_LIST_COPY.changed} ${formatRelativeFromNow(list.updatedAt)}`,
-    timesText(list.copyCount, STUDY_LIST_COPY.copied),
-    timesText(list.shareCount, STUDY_LIST_COPY.shared),
-  ].filter(Boolean);
-
   const CHIP =
     "inline-flex h-7 items-center rounded-full border px-2.5 text-[11px] font-black uppercase tracking-[0.08em] transition";
   const chipClass = (on: boolean) =>
@@ -158,9 +146,16 @@ export default function ListPageView({
                 <span>{STUDY_LIST_COPY.builtIn}</span>
               ) : (
                 <>
-                  {facts.map((fact) => (
-                    <span key={fact}>{fact}</span>
-                  ))}
+                  <ListMetaLine
+                    facts={{
+                      createdAt: list.createdAt,
+                      updatedAt: list.updatedAt,
+                      subscriberCount: list.subscriberCount,
+                      copyCount: list.copyCount,
+                      shareCount: list.shareCount,
+                    }}
+                    className="text-xs"
+                  />
                   <span className="subject-pill border-line bg-surface-muted text-foreground/70">
                     {LIST_VISIBILITY_DISPLAY[list.visibility].label}
                   </span>

@@ -129,6 +129,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
             updatedAt: new Date().toISOString(),
             copyCount: 0,
             shareCount: 0,
+            subscriberCount: 0,
             itemCount: rows.length,
           }}
           items={toListPageItems(rows, memberState)}
@@ -175,6 +176,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
           updatedAt: list.updatedAt,
           copyCount: list.copyCount,
           shareCount: list.shareCount,
+          subscriberCount: list.subscriberCount,
           itemCount: list.items.length,
         }}
         items={toListPageItems(rows, memberState)}

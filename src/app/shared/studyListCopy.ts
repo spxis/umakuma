@@ -187,6 +187,7 @@ export const STUDY_LIST_COPY = {
   countSuffix: "items",
   countSuffixOne: "item",
   updatedPrefix: "Updated",
+  metaFollowers: (count: number) => `${count} following`,
 } as const;
 
 /**
