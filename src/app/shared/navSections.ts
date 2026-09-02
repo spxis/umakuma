@@ -46,7 +46,7 @@ export const NAV_SECTIONS: NavSection[] = [
   { id: "game", label: "Game", placement: "nav", children: [{ label: "Game", path: "game" }] },
   {
     id: "explore",
-    label: "Explore",
+    label: "Learn",
     placement: "nav",
     children: [
       { label: DASHBOARD_TAB_LABELS.wk, path: "library-explorer" },
@@ -54,7 +54,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "Grades", path: "grades" },
       { label: "Practice", path: "practice" },
       /* Public, so it has no user segment: a map is the same for everyone. */
-      { label: "Map", path: "/map" },
+      { label: "Maps", path: "/map" },
     ],
   },
   /*

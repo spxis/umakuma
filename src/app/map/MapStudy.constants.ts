@@ -1,6 +1,6 @@
 /** Copy for the map study page, in one map for the locale layer. */
 export const MAP_STUDY_COPY = {
-  title: "Map",
+  title: "Maps",
   subtitle: "Learn a country region by region.",
   countryLabel: "Country",
   regionsLabel: "Regions",

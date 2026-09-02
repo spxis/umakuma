@@ -20,6 +20,9 @@ export const SUBJECT_PAGE_COPY = {
   foundIn: "Found in",
   examples: "In use",
   heisig: "Heisig",
+  /* The one control for the words on every item pill. */
+  pillTextOn: "Text on",
+  pillTextOff: "Text off",
   notFoundTitle: "Nothing here by that name",
   notFoundWord: "No word is catalogued under that spelling.",
   notFoundRadical: "No radical is catalogued under that name.",

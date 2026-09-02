@@ -105,6 +105,9 @@ model Account {
   customStudyStates         CustomStudyState[]
   customStudyReviewAttempts CustomStudyReviewAttempt[]
   studySubjectTags          StudySubjectTag[]
+  /// One of us: the family and anybody let in deliberately. Decides who is
+  /// offered the reading challenge and its check-ins, which are not public.
+  internal                  Boolean   @default(false)
   studyLists                StudyList[]
   studyListSubscriptions    StudyListSubscription[]
   studyListProposals        StudyListProposal[]

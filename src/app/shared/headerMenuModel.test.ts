@@ -22,8 +22,8 @@ describe("buildHeaderMenu", () => {
   });
 
   it("keeps the header's grouping instead of flattening it", () => {
-    const explore = menu().navigate.find((section) => section.label === "Explore");
-    expect(explore?.links.length).toBeGreaterThan(1);
+    const learn = menu().navigate.find((section) => section.label === "Learn");
+    expect(learn?.links.length).toBeGreaterThan(1);
   });
 
   it("puts Profile under settings, where the account lives", () => {

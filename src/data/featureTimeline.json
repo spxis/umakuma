@@ -2833,5 +2833,29 @@
     "dateIsEstimate": true,
     "release": 50,
     "summary": "The profile shows the member's JLPT level and then the form to change it, always open. A member may hold several certificates, so the profile lists what they have reported and offers Add another or Change; the form appears when it is asked for. The Display section could be condensed while we are there. Reported 2026-09-02 by John."
+  },
+  {
+    "id": "pill-text-toggle",
+    "name": "One control for the text inside item pills",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 51,
+    "summary": "The pills that show a kanji or a word appear in several places - Used in words, the related groups on a subject page, the From text preview, the list item editor - and some carry the reading and meaning while others carry only the glyph. One shared pill with the text on it, and one toggle that shows or hides that text, remembered per browser, wherever those pills appear. Requested 2026-09-02 by John.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T10:10:44.650Z"
+  },
+  {
+    "id": "nav-rename-learn",
+    "name": "Explore becomes Learn, Map becomes Maps",
+    "area": "platform",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "The header group called Explore is where a member goes to learn - the two explorers, the school grades, the practice sheets, the maps - so it is called Learn. The maps entry is called Maps, since there are three countries behind it and more to come, and the page names itself the same way. Requested 2026-09-02 by John.",
+    "version": "0.254.0",
+    "releasedAt": "2026-09-02T10:13:08Z"
   }
 ]
