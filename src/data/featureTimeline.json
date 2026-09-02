@@ -3206,7 +3206,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 62,
-    "summary": "GradeKanjiBoard seeds two pieces of state from localStorage inside the useState initializer, so the server renders the default and the browser flips it after hydration. The reveal mode is the visible one: every reading paints and then hides. Strokes shares the view-mode half of the pattern and does not flash, which points at the reveal mode as the cause. No page under Learn should flash."
+    "summary": "GradeKanjiBoard seeds two pieces of state from localStorage inside the useState initializer, so the server renders the default and the browser flips it after hydration. The reveal mode is the visible one: every reading paints and then hides. Strokes shares the view-mode half of the pattern and does not flash, which points at the reveal mode as the cause. No page under Learn should flash.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-02T16:36:08.610Z"
   },
   {
     "id": "explorer-grid-parity",
@@ -3217,7 +3219,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 63,
-    "summary": "Strokes, Grades and the WaniKani library each draw their own card grid, and side by side they read as three different products: different card shape, different chrome, different placement of level and status. There is already a shared pair for lists of subjects (SubjectCards and SubjectRows) and a UnifiedExplorerCard, but these three do not all go through them. Put the general look in one component and let each page pass what is genuinely its own - a stroke count, a JLPT pill, an SRS stage - rather than restating the whole card."
+    "summary": "Strokes, Grades and the WaniKani library each draw their own card grid, and side by side they read as three different products: different card shape, different chrome, different placement of level and status. There is already a shared pair for lists of subjects (SubjectCards and SubjectRows) and a UnifiedExplorerCard, but these three do not all go through them. Put the general look in one component and let each page pass what is genuinely its own - a stroke count, a JLPT pill, an SRS stage - rather than restating the whole card.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-02T16:36:09.174Z"
   },
   {
     "id": "lists-section-nav",
@@ -3228,7 +3232,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 64,
-    "summary": "Lists is a top-level section with a single child, so the header suppresses its second row and everything the page holds is stacked into the body instead. It has the same shape as Learn - several distinct collections a member moves between - so it should name them in the second row. The names should follow from what the collections actually are rather than being invented; work them out from the list kinds the code already distinguishes."
+    "summary": "Lists is a top-level section with a single child, so the header suppresses its second row and everything the page holds is stacked into the body instead. It has the same shape as Learn - several distinct collections a member moves between - so it should name them in the second row. The names should follow from what the collections actually are rather than being invented; work them out from the list kinds the code already distinguishes.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-02T16:36:09.743Z"
   },
   {
     "id": "list-worksheets",
