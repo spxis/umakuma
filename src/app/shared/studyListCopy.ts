@@ -116,6 +116,19 @@ export const STUDY_LIST_COPY = {
   liveWkBlurb: "Every radical, kanji and word WaniKani teaches at each level.",
   liveSeeAll: "See all",
 
+  /* A list out of pasted text. */
+  importFromText: "From text",
+  importHint: "Paste anything Japanese. Nothing is kept but the items you save.",
+  importPlaceholder: "Paste a passage, a handout, a page of a book...",
+  importRead: "Find items",
+  importReading: "Reading",
+  importSave: "Save as list",
+  importFailed: "Could not read that text.",
+  importFound: (kanji: number, words: number) => `Found ${kanji} kanji and ${words} words. Tap one to take it out.`,
+  importTruncated: "Only the first part of that text was read.",
+  importKeepHint: "Drop a whole kind:",
+  importDropKind: (plural: string) => `Drop ${plural.toLowerCase()}`,
+
   /* Other members changing a list. */
   contributionsLabel: "Who can add",
   contributeOpenHeading: "Add to this list",

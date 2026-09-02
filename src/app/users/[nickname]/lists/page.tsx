@@ -16,6 +16,7 @@ import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import ArchivedLists from "./ArchivedLists";
 import FollowedLiveLists from "./FollowedLiveLists";
 import FollowedLists from "./FollowedLists";
+import ImportFromTextButton from "./ImportFromTextButton";
 import NewListButton from "./NewListButton";
 import StudyListCards from "./StudyListCards";
 
@@ -85,7 +86,12 @@ export default async function UserListsPage({ params }: PageProps) {
           <p className="text-xs text-foreground/60">{STUDY_LIST_COPY.subtitle}</p>
         </div>
         {/* A page called Your lists needs a way to make one. */}
-        {canEdit ? <NewListButton accountId={account.id} /> : null}
+        {canEdit ? (
+          <span className="flex flex-wrap items-center gap-2">
+            <ImportFromTextButton accountId={account.id} />
+            <NewListButton accountId={account.id} />
+          </span>
+        ) : null}
       </header>
 
       <StudyListCards

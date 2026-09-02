@@ -2564,11 +2564,11 @@
     "name": "Build a list from pasted text",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 28,
-    "summary": "Paste anything - a passage, a handout, a page of a book - and every kanji and every word the catalogue recognises is pulled out, in reading order, with the rest shown as not found. The extraction is a preview to massage first: take items out, add, reorder, then save to a new list or add to one that exists. Pasted text is treated as hostile: capped in length, read as plain text only, never rendered, never stored - only the items the catalogue names survive it. Requested 2026-09-01 by John; restated 2026-09-02 with the safety and massage requirements."
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Paste a passage, a handout or a page of a book into the Lists page and every word the catalogue knows and every kanji in the text comes out, words matched longest-first so a run reads as the words it holds rather than a string of characters. What comes out is a preview to massage before anything is written: each item is a button that takes itself out, a whole kind can be dropped at once, and the list is saved only when it is named. Pasted text is treated as hostile - cut to a cap of twenty thousand characters, stripped of control characters, never stored, never rendered as anything but the words in the box, and answered only with items the catalogue already knew, so markup or SQL in a paste comes back as nothing at all. Requested 2026-09-01 by John, restated 2026-09-02 with the safety and massage requirements.",
+    "version": "0.249.0",
+    "releasedAt": "2026-09-02T09:27:59Z"
   },
   {
     "id": "list-practice-from-shared",
