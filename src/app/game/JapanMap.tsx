@@ -1,6 +1,7 @@
 import { GEO_DATASETS, type CountryCode } from "@/lib/geoRegion";
+import { GEO_INSETS, applyInsetTransform, insetTransform, insetTransformAttribute } from "@/lib/geoMapInsets";
 import { geoBoxIsWholeCountry, geoFocusBox } from "@/lib/geoMapFraming";
-import { JAPAN_MAP, mapBoxToViewBox, type MapBox } from "@/lib/japanPrefectures";
+import { mapBoxToViewBox, type MapBox } from "@/lib/japanPrefectures";
 import { placeMapHandles } from "@/lib/mapHandles";
 import { MAP_TONE_CLASS, MAP_TONES } from "./GameMode.constants";
 import type { MapTone } from "./GameMode.types";
@@ -64,11 +65,20 @@ export default function JapanMap({
   const wholeCountry = geoBoxIsWholeCountry(country, box);
   const regionByCode = new Map(dataset.regions.map((region) => [String(region.code), region]));
   /*
-   * Only Japan draws part of itself in a box. Okinawa in place stretches the
-   * frame until the mainland is unreadable; no other country here has an
-   * outlying region far enough away to need the same treatment.
+   * The regions drawn beside the mainland rather than where they really are.
+   * Okinawa in place stretches the frame until the mainland is unreadable;
+   * Alaska in place is wider than Texas and hard against the left edge. Each
+   * is moved into a box of its own, and only when the whole country is in
+   * view - zoomed to one region, it is drawn where it belongs.
    */
-  const inset = country === "JP" ? JAPAN_MAP.inset : null;
+  const insets = wholeCountry ? GEO_INSETS[country] ?? [] : [];
+  const insetByCode = new Map(
+    insets.flatMap((entry) => {
+      const region = regionByCode.get(String(entry.code));
+      if (!region) return [];
+      return [[String(entry.code), { box: entry.box, transform: insetTransform(region.map.bbox, entry.box) }] as const];
+    }),
+  );
 
   /*
    * Where each handle sits, clear of the ones already placed. The geometry is
@@ -77,7 +87,11 @@ export default function JapanMap({
   const placedHandles = placeMapHandles(
     marks.flatMap((mark) => {
       const region = regionByCode.get(String(mark.code));
-      return region ? [{ item: mark, centroid: region.map.centroid }] : [];
+      if (!region) return [];
+      /* A handle follows its region into the box, or it points at open sea. */
+      const seated = insetByCode.get(String(mark.code));
+      const centroid = seated ? applyInsetTransform(region.map.centroid, seated.transform) : region.map.centroid;
+      return [{ item: mark, centroid }];
     }),
     radius,
     box,
@@ -94,24 +108,27 @@ export default function JapanMap({
     >
       {/* Okinawa is drawn in a box rather than in place, the way Japanese maps
           do. Only Japan has an inset; the others draw everything where it is. */}
-      {wholeCountry && inset ? (
+      {[...insetByCode.values()].map(({ box }) => (
         <rect
-          x={inset.x}
-          y={inset.y}
-          width={inset.width}
-          height={inset.height}
+          key={`${box.x}-${box.y}`}
+          x={box.x}
+          y={box.y}
+          width={box.width}
+          height={box.height}
           className="fill-none stroke-line"
           strokeWidth={stroke * 1.5}
           strokeDasharray={`${stroke * 6} ${stroke * 4}`}
         />
-      ) : null}
+      ))}
 
       {dataset.regions.map((region) => {
         const mark = marksByCode.get(String(region.code));
         const label = regionLabel?.(region.code) ?? region.name;
+        const seated = insetByCode.get(String(region.code));
         return (
           <path
             key={String(region.code)}
+            transform={seated ? insetTransformAttribute(seated.transform) : undefined}
             d={region.map.path}
             fillRule="evenodd"
             strokeWidth={stroke}

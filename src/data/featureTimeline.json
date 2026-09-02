@@ -2623,7 +2623,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 33,
-    "summary": "A stroke browser beside the WaniKani levels and the school grades: the counts 1 to N as chips, and choosing one shows every kanji with that many strokes, with the same cards, rows, tags, selection and add-to-lists as the other explorers. The dictionary already knows each kanji's stroke count. Requested 2026-09-01 by John."
+    "summary": "A stroke browser beside the WaniKani levels and the school grades: the counts 1 to N as chips, and choosing one shows every kanji with that many strokes, with the same cards, rows, tags, selection and add-to-lists as the other explorers. The dictionary already knows each kanji's stroke count. Requested 2026-09-01 by John.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T11:10:13.440Z"
   },
   {
     "id": "list-study-status",
@@ -2685,11 +2687,11 @@
     "name": "Map insets collide with the mainland",
     "area": "platform",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 37,
-    "summary": "On Japan, Okinawa's inset box overlaps Kagoshima, so the two are read as one place; move the inset clear of the mainland, to the right or into empty space. On the United States, Alaska sits too near the left edge and Hawaii needs a home of its own: Alaska above, Hawaii below. Reported 2026-09-02 by John with screenshots."
+    "summary": "A projection puts Okinawa where it really is, which on a map framed to the mainland is on top of Kagoshima, so the two read as one place; and it puts Alaska and Hawaii in the Pacific off California, Alaska hard against the left edge and drawn wider than Texas. Each is now seated in a box of its own, the way every published map of those countries does it: Okinawa in open sea to the south-east, Alaska and Hawaii stacked clear of the left edge in the order a wall map has them. The boxes are chosen against the data rather than by eye, and a test holds them to it - no other region's bounds may reach into one - so a box cannot quietly come to rest on a prefecture again. Zoomed to a single region the map still draws it where it belongs. Reported 2026-09-02 by John with screenshots.",
+    "version": "0.261.0",
+    "releasedAt": "2026-09-02T11:14:33Z"
   },
   {
     "id": "restful-urls",
@@ -2700,7 +2702,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 38,
-    "summary": "Addresses should read as paths rather than query strings: the map is /map?region=21 for Gifu and should be /study/maps/japan/gifu or /japan/21. No compatibility redirects and no fake paths - breaking old URLs is fine. Applies site-wide, not only to the map. Requested 2026-09-02 by John."
+    "summary": "Addresses should read as paths rather than query strings: the map is /map?region=21 for Gifu and should be /study/maps/japan/gifu or /japan/21. No compatibility redirects and no fake paths - breaking old URLs is fine. Applies site-wide, not only to the map. Requested 2026-09-02 by John.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T11:10:12.799Z"
   },
   {
     "id": "lists-one-home",
