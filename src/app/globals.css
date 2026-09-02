@@ -41,6 +41,13 @@
   --font-display-sans: "Arial Black", "Segoe UI", sans-serif;
   --font-jp-sans: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", "Meiryo", sans-serif;
   --font-jp-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Georgia", serif;
+  /*
+   * The two faces a learner meets that no system ships: the textbook face
+   * every Japanese school teaches from, and a brush face the printed forms
+   * descend from. Both come from Google Fonts at runtime (see the layout).
+   */
+  --font-jp-textbook: "Klee One", "UD Digi Kyokasho NK-R", "UD Digi Kyokasho N-R", cursive;
+  --font-jp-brush: "Yuji Syuku", "HGSoeiKakugothicUB", serif;
   --font-jp-current: var(--font-jp-sans);
 }
 

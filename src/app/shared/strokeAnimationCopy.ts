@@ -14,6 +14,10 @@ export const STROKE_ANIMATION_COPY = {
   printed: "Printed",
   gothic: "Gothic",
   mincho: "Mincho",
+  textbook: "Textbook",
+  brush: "Brush",
+  /** Hover title on a face: "Textbook face". */
+  face: (label: string) => `${label} face`,
   animated: "Stroke order",
   close: "Close",
 } as const;

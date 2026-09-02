@@ -10,6 +10,7 @@ import { READING_KINDS } from "@/lib/domainConstants";
 import { formatReading } from "@/lib/readingDisplay";
 import { MODAL_LAYERS } from "./modalLayers";
 import { STROKE_ANIMATION_COPY } from "./strokeAnimationCopy";
+import { KANJI_FACES, type KanjiFace } from "./kanjiFaces";
 import { noTranslateClass } from "./japaneseText";
 import JapaneseInProse from "./JapaneseInProse";
 
@@ -37,29 +38,27 @@ type PanelProps = {
 type Props = PanelProps & { onClose: () => void };
 
 /**
- * The character as a font draws it.
+ * The character as one face draws it.
  *
- * Both faces, because they differ where it matters for handwriting: Mincho
- * keeps the tapered strokes and triangular stops a textbook shows, while Gothic
- * renders every stroke at one weight. A child copying strokes is copying the
- * Mincho shape.
+ * No caption: the name of the face in capitals under each cell drew the eye
+ * from the shapes, which are the point. The name is there on hover, and for a
+ * screen reader, which has the character itself in the heading.
  */
-function PrintedGlyph({ kanji, label, fontFamily }: { kanji: string; label: string; fontFamily: string }) {
+function PrintedGlyph({ kanji, face }: { kanji: string; face: KanjiFace }) {
+  const title = STROKE_ANIMATION_COPY.face(face.label);
   return (
-    <div className="flex flex-col items-center gap-1">
-      <span
-        lang="ja"
-        translate="no"
-        style={{ fontFamily }}
-        className={noTranslateClass(
-          "flex h-16 w-16 items-center justify-center rounded-2xl border border-kanji/40 bg-kanji/5 text-4xl font-black leading-none text-kanji",
-        )}
-        aria-hidden="true"
-      >
-        {kanji}
-      </span>
-      <span className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</span>
-    </div>
+    <span
+      lang="ja"
+      translate="no"
+      title={title}
+      aria-label={title}
+      style={{ fontFamily: face.fontFamily }}
+      className={noTranslateClass(
+        "flex h-16 w-16 items-center justify-center rounded-2xl border border-kanji/40 bg-kanji/5 text-4xl font-black leading-none text-kanji",
+      )}
+    >
+      {kanji}
+    </span>
   );
 }
 
@@ -136,14 +135,8 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
     <>
       <header className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
         <div className="min-w-0">
-          <p className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
+          <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             {STROKE_ANIMATION_COPY.title}
-            {meta ? (
-              <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] text-foreground/60">
-                {meta.strokeCount}{" "}
-                {meta.strokeCount === 1 ? STROKE_ANIMATION_COPY.stroke : STROKE_ANIMATION_COPY.strokes}
-              </span>
-            ) : null}
           </p>
           {line ? (
             <p className="truncate text-sm font-bold text-foreground" title={line}>
@@ -152,6 +145,12 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
           ) : null}
         </div>
         <div className="flex shrink-0 items-center gap-2">
+          {meta ? (
+            <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60">
+              {meta.strokeCount}{" "}
+              {meta.strokeCount === 1 ? STROKE_ANIMATION_COPY.stroke : STROKE_ANIMATION_COPY.strokes}
+            </span>
+          ) : null}
           {shareHref ? <ShareLink href={shareHref} /> : null}
           {onClose ? (
             <button
@@ -167,9 +166,11 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
       </header>
 
       <div className="flex flex-col items-center gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-center">
-        <div className="flex flex-row gap-3 sm:flex-col">
-          <PrintedGlyph kanji={kanji} label={STROKE_ANIMATION_COPY.gothic} fontFamily="var(--font-jp-sans), sans-serif" />
-          <PrintedGlyph kanji={kanji} label={STROKE_ANIMATION_COPY.mincho} fontFamily="var(--font-jp-serif), serif" />
+        {/* Printed faces above, written faces beneath; the drawing keeps the height. */}
+        <div className="grid grid-cols-2 gap-3">
+          {KANJI_FACES.map((face) => (
+            <PrintedGlyph key={face.id} kanji={kanji} face={face} />
+          ))}
         </div>
 
         <KanjiStrokeAnimation

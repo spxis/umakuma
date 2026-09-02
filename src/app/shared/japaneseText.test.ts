@@ -86,7 +86,13 @@ describe("the Japanese text marker", () => {
      * passed to a component that does the rendering. The marker belongs
      * wherever it lands, so the file only has to protect it somewhere.
      */
-    const CARRIES = ["var(--font-jp-sans)", "var(--font-jp-serif)", "glyphFontFamily("];
+    const CARRIES = [
+      "var(--font-jp-sans)",
+      "var(--font-jp-serif)",
+      "var(--font-jp-textbook)",
+      "var(--font-jp-brush)",
+      "glyphFontFamily(",
+    ];
 
     const offenders: string[] = [];
     for (const path of sourceFiles(SRC)) {

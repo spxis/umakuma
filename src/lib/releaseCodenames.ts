@@ -285,6 +285,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Shizumeta Shihyou", ja: "静めた指標", reading: "しずめたしひょう", gloss: "the target, brought down to size" },
   { romaji: "Sunao na Iriguchi", ja: "素直な入口", reading: "すなおないりぐち", gloss: "an entrance that does what it says" },
   { romaji: "Setsuzoku no Kinjo", ja: "接続の近所", reading: "せつぞくのきんじょ", gloss: "the neighbourhood, joined up" },
+  { romaji: "Sonaeta Shotai", ja: "備えた書体", reading: "そなえたしょたい", gloss: "the faces a learner meets, provided" },
 ];
 
 /**

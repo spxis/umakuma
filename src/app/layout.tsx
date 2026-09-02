@@ -58,6 +58,20 @@ export default async function RootLayout({
       <head>
         {/* Google honours its own tag as well as the attribute. */}
         <meta name="google" content="notranslate" />
+        {/*
+         * The textbook and brush faces the stroke-order panel draws a kanji
+         * in. Fetched at runtime rather than bundled: the font files are
+         * several megabytes each, and Google serves only the slices a page
+         * uses. Swapped in when they arrive, so nothing waits on them.
+         */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* The rule wants _document; this is the App Router root layout, which is every page. */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&family=Yuji+Syuku&display=swap"
+        />
       </head>
       <body className="min-h-full overflow-x-clip flex flex-col">
         <ClientErrorReporter />

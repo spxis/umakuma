@@ -2376,11 +2376,11 @@
     "name": "Stroke order in the faces a learner meets",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 19,
-    "summary": "The stroke-order block shows the character in two faces, Gothic and Mincho, each captioned in capitals under it. The captions distract from the shapes; drop them and say the face in a hover title instead. Two more faces matter to a learner and are missing: the textbook face (kyoukashotai), which is the handwriting standard every school uses, and a brush or kaisho face, which is what the printed forms descend from. With four, the faces sit in a two-by-two grid beside the drawing. The stroke count pill sits left in the header; right-align it. Requested 2026-09-01."
+    "summary": "The stroke-order panel showed the character in two faces, Gothic and Mincho, each captioned in capitals underneath, and the captions drew the eye from the shapes. They are gone; the face's name is a hover title now. Two more faces join them, the two a learner actually meets: the textbook face (kyoukashotai), the handwriting standard every Japanese school teaches from and the one to copy where a printed form and the written form part ways, and a brush face the printed forms descend from. Neither ships with any system, so both come from Google Fonts at runtime, swapped in when they arrive. The four sit in a two-by-two grid beside the drawing, printed faces above and written faces beneath, and the stroke count pill has moved to the right of the header. Requested 2026-09-01.",
+    "version": "0.235.0",
+    "releasedAt": "2026-09-02T05:04:13Z"
   },
   {
     "id": "planned-tab-out-of-order",
@@ -2447,5 +2447,16 @@
     "summary": "The Winter Reading Challenge was made by carrying the July campaign's final weekly cap across fourteen weeks, which came to a \u00a596,000 base - far more than the \u00a540,000 the family had in mind. The campaign is repriced: the \u00a540,000 is spread flat across its fourteen weeks in tens of yen, the rounding paid in the final week so a perfect reader reaches the target on the goal date exactly, and the bonus caps keep July's proportion of bonus to base so a great week is still worth more than a good one. The campaign scripts now size the caps to a decided target rather than only printing it, and a reprice script changes both for a campaign already running.",
     "version": "0.232.0",
     "releasedAt": "2026-09-02T04:37:00Z"
+  },
+  {
+    "id": "search-add-to-lists",
+    "name": "Add to lists from search",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 20,
+    "summary": "While searching, a control on the results dropdown opens a side column beside the list where each result has buttons to add it to the member's lists: favourite (heart), trouble (sad face) and every list they have made. The same column on the Search page's result list. Quiet by default so the dropdown stays clean; opened, it lets a member search ten kanji and file each one as it is found. Requested 2026-09-01 by John, top priority after the stroke-order faces."
   }
 ]
