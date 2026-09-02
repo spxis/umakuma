@@ -19,6 +19,7 @@ import { hydrateQueueSyncState } from "./queueRouteSync";
 import { mergeTroubleRows, troubleInjectionCount, type StudySubjectTagMap } from "./queueRouteTags";
 import { fetchStudyTagRows } from "@/lib/studySubjectTags";
 import { parseReviewDifficultySort, sortQueueRows } from "./queueRouteDifficulty";
+import { resolveSubjectGlyph } from "@/lib/radicalGlyphs";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -321,7 +322,15 @@ export async function GET(request: Request, context: RouteContext) {
       const subject = pageSubjectById.get(row.data.subject_id);
       const subjectData = subject?.data;
       const subjectType = normalizeSubjectType(row.data.subject_type);
-      const label = subjectData?.characters ?? subjectData?.slug ?? `#${row.data.subject_id}`;
+      /*
+       * The fifteen characterless radicals resolve to a glyph here rather than
+       * falling through to the slug, which is what put the English word "tofu"
+       * in front of a member reviewing 旅.
+       */
+      const label =
+        resolveSubjectGlyph({ subjectType, characters: subjectData?.characters, slug: subjectData?.slug }) ??
+        subjectData?.slug ??
+        `#${row.data.subject_id}`;
       const primaryMeanings = (subjectData?.meanings ?? []).map((item) => item.meaning);
       const auxiliaryMeanings = (subjectData?.auxiliary_meanings ?? []).map((item) => item.meaning);
       const meanings = Array.from(new Set([...primaryMeanings, ...auxiliaryMeanings]));

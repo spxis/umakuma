@@ -1,0 +1,72 @@
+{
+  "attribution": {
+    "source": "Noto Sans JP",
+    "licence": "SIL Open Font License 1.1"
+  },
+  "privateUseRange": [
+    "U+E000",
+    "U+E005"
+  ],
+  "glyphs": {
+    "beggar": {
+      "glyph": "丂",
+      "encoded": true
+    },
+    "satellite": {
+      "glyph": "䍃",
+      "encoded": true
+    },
+    "rib-cage": {
+      "glyph": "龶",
+      "encoded": true
+    },
+    "death-star": {
+      "glyph": "俞",
+      "encoded": true
+    },
+    "cactus": {
+      "glyph": "业",
+      "encoded": true
+    },
+    "kick": {
+      "glyph": "𧘇",
+      "encoded": true
+    },
+    "pope": {
+      "glyph": "𥃭",
+      "encoded": true
+    },
+    "creeper": {
+      "glyph": "𠮛",
+      "encoded": true
+    },
+    "elf": {
+      "glyph": "𤮺",
+      "encoded": true
+    },
+    "yurt": {
+      "glyph": "",
+      "encoded": false
+    },
+    "tofu": {
+      "glyph": "",
+      "encoded": false
+    },
+    "explosion": {
+      "glyph": "",
+      "encoded": false
+    },
+    "comb": {
+      "glyph": "",
+      "encoded": false
+    },
+    "hills": {
+      "glyph": "",
+      "encoded": false
+    },
+    "psychopath": {
+      "glyph": "",
+      "encoded": false
+    }
+  }
+}

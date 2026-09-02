@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "0.284.0",
+  "version": "0.285.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -83,7 +83,8 @@
     "campaign:reprice": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/reprice-reading-campaign.ts",
     "internal:backfill": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/backfill-internal-members.ts",
     "jlpt:migrate": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/migrate-jlpt-certificates.ts",
-    "radicals:build": "node scripts/build-radicals.mjs"
+    "radicals:build": "node scripts/build-radicals.mjs",
+    "radicals:font": "node scripts/build-radical-font.mjs"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
@@ -110,11 +111,14 @@
     "d3-geo": "^3.1.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
+    "fontkit": "^2.0.4",
+    "opentype.js": "^2.0.0",
     "prisma": "^6.19.3",
     "tailwindcss": "^4",
     "topojson-client": "^3.1.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.5",
+    "wawoff2": "^2.0.1"
   },
   "pnpm": {
     "overrides": {

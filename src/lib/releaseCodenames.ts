@@ -335,6 +335,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tsumete Narabu", ja: "詰めて並ぶ", reading: "つめてならぶ", gloss: "the grid packed into fewer rows" },
   { romaji: "Temoto Techou", ja: "手元手帳", reading: "てもとてちょう", gloss: "the notebook kept at hand" },
   { romaji: "Touitsu no Ookisa", ja: "統一の大きさ", reading: "とういつのおおきさ", gloss: "one size for both search boxes" },
+  { romaji: "Nazoru Katachi", ja: "なぞる形", reading: "なぞるかたち", gloss: "a shape traced for every radical" },
 ];
 
 /**

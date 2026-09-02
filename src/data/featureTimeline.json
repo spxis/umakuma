@@ -3051,13 +3051,11 @@
     "name": "A glyph for every WaniKani radical",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 52,
-    "summary": "Fifteen of WaniKani's 504 radicals have no Unicode character, so a review shows the English word 'tofu' where the glyph belongs. WaniKani draws them as images, but those are its own artwork and cannot be reused here. Instead each one is mapped to its real Unicode codepoint in code - the catalogue sync overwrites the characters column on every update, so the map cannot live in the database - and a subset webfont carrying just those glyphs ships with a unicode-range, so they render identically on every machine without touching normal Japanese text. Real text, so it is selectable, styleable and sized by glyphTextSizeClass like any other glyph. Four further characterless radicals build no kanji at all and need nothing. Requested 2026-09-02 by John.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-02T14:12:31.617Z"
+    "summary": "Fifteen of WaniKani's 504 radicals arrive with no character, so every surface fell through to the slug and a review of 旅 asked the member to recognise the English word \"tofu\". WaniKani draws those as artwork on a gated CDN that is its copyright either way. Nine turn out to be ordinary Unicode characters WaniKani never filled in, found by subtracting a kanji's known components from WaniKani's own decomposition and checking the remainder against two independent databases; the other six are shapes Unicode does not encode at all and take private-use codepoints. All fifteen are carved out of Noto Sans JP rather than drawn - Hills is 之 without its top stroke, Cactus the bottom of 虚 - so they match the site's own Japanese face because they are that face. The font ships at two weights and is scoped by unicode-range, so it is consulted for those fifteen codepoints and never disturbs the gothic, mincho, textbook or brush switch.",
+    "version": "0.285.0",
+    "releasedAt": "2026-09-02T15:14:29Z"
   },
   {
     "id": "search-radical-command",

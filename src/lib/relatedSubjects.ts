@@ -1,5 +1,6 @@
 import { SUBJECT_TYPES, isSubjectType, type SubjectType } from "./domainConstants";
 import { subjectHref } from "./globalSearch";
+import { resolveSubjectGlyph } from "./radicalGlyphs";
 
 /**
  * What a subject connects to, on the pages anybody can read.
@@ -76,7 +77,15 @@ export function toRelatedSubject(row: RelatedRow): RelatedSubject | null {
   });
   if (!href) return null;
 
-  const label = row.characters?.trim() || row.slug?.trim() || "";
+  /*
+   * A characterless radical resolves to its glyph before the slug is
+   * considered: falling straight through printed the English word, so a kanji
+   * page listed "tofu" among the parts of 脈.
+   */
+  const label =
+    resolveSubjectGlyph({ subjectType: row.subjectType, characters: row.characters, slug: row.slug }) ||
+    row.slug?.trim() ||
+    "";
   if (!label) return null;
 
   return {

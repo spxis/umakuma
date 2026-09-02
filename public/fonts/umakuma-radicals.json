@@ -1,0 +1,101 @@
+{
+  "source": "Noto Sans JP",
+  "licence": "SIL Open Font License 1.1",
+  "licenceUrl": "https://openfontlicense.org",
+  "weights": [
+    400,
+    900
+  ],
+  "glyphs": [
+    {
+      "slug": "beggar",
+      "codepoint": 19970,
+      "encoded": true,
+      "from": "丂"
+    },
+    {
+      "slug": "satellite",
+      "codepoint": 17219,
+      "encoded": true,
+      "from": "䍃"
+    },
+    {
+      "slug": "rib-cage",
+      "codepoint": 40886,
+      "encoded": true,
+      "from": "表"
+    },
+    {
+      "slug": "death-star",
+      "codepoint": 20446,
+      "encoded": true,
+      "from": "輸"
+    },
+    {
+      "slug": "cactus",
+      "codepoint": 19994,
+      "encoded": true,
+      "from": "虚"
+    },
+    {
+      "slug": "kick",
+      "codepoint": 161287,
+      "encoded": true,
+      "from": "衣"
+    },
+    {
+      "slug": "pope",
+      "codepoint": 151789,
+      "encoded": true,
+      "from": "盾"
+    },
+    {
+      "slug": "creeper",
+      "codepoint": 134043,
+      "encoded": true,
+      "from": "司"
+    },
+    {
+      "slug": "elf",
+      "codepoint": 150458,
+      "encoded": true,
+      "from": "敢"
+    },
+    {
+      "slug": "yurt",
+      "codepoint": 57344,
+      "encoded": false,
+      "from": "度"
+    },
+    {
+      "slug": "tofu",
+      "codepoint": 57345,
+      "encoded": false,
+      "from": "派"
+    },
+    {
+      "slug": "explosion",
+      "codepoint": 57346,
+      "encoded": false,
+      "from": "渋"
+    },
+    {
+      "slug": "comb",
+      "codepoint": 57347,
+      "encoded": false,
+      "from": "印"
+    },
+    {
+      "slug": "hills",
+      "codepoint": 57348,
+      "encoded": false,
+      "from": "之"
+    },
+    {
+      "slug": "psychopath",
+      "codepoint": 57349,
+      "encoded": false,
+      "from": "鬱"
+    }
+  ]
+}

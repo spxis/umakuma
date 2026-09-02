@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { SUBJECT_TYPES, isSubjectType, type SubjectType } from "@/lib/domainConstants";
 import type { JlptMeta } from "@/lib/jlptTypes";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
+import { resolveSubjectGlyph } from "./radicalGlyphs";
 
 const SUBJECT_DETAIL_CACHE_TTL_MS = 15 * 60 * 1000;
 const SUBJECT_DETAIL_CACHE_MAX_ENTRIES = 4000;
@@ -207,7 +208,9 @@ function subjectLabel(row: CatalogRow | undefined): string {
     return "-";
   }
 
-  return row.characters?.trim() || row.slug?.trim() || String(row.wkSubjectId);
+  /* Characterless radicals resolve to a glyph; the slug printed "tofu". */
+  const glyph = resolveSubjectGlyph(row);
+  return glyph || row.slug?.trim() || String(row.wkSubjectId);
 }
 
 function toRelatedReference(

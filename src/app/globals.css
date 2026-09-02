@@ -1,5 +1,39 @@
 @import "tailwindcss";
 
+/*
+ * The fifteen WaniKani radicals the API never gave a character to.
+ *
+ * Nine are ordinary Unicode characters in CJK Ext A and B, which macOS and iOS
+ * mostly have and Windows and Android mostly do not; the other six are shapes
+ * Unicode does not encode at all and live in the private-use area, so nothing
+ * on any device can draw them. Both are supplied here.
+ *
+ * `unicode-range` is what makes this safe to put in front of the Japanese
+ * stack: the browser only downloads and only consults this face for the
+ * codepoints listed, so every other kanji still renders in the member's chosen
+ * face (gothic, mincho, textbook or brush) exactly as before.
+ *
+ * Built by `pnpm radicals:font` from Noto Sans JP under the SIL Open Font
+ * License 1.1 - see public/fonts/umakuma-radicals.json.
+ */
+@font-face {
+  font-family: "UmaKuma Radicals";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/umakuma-radicals-regular.woff2") format("woff2");
+  unicode-range: U+4E02, U+4E1A, U+4343, U+4FDE, U+9FB6, U+250ED, U+20B9B, U+24BBA, U+27607, U+E000-E005;
+}
+
+@font-face {
+  font-family: "UmaKuma Radicals";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/fonts/umakuma-radicals-black.woff2") format("woff2");
+  unicode-range: U+4E02, U+4E1A, U+4343, U+4FDE, U+9FB6, U+250ED, U+20B9B, U+24BBA, U+27607, U+E000-E005;
+}
+
 :root {
   --background: #f4f8ff;
   --foreground: #081024;
@@ -39,15 +73,15 @@
   --vocabulary-text: #7c52db;
   --font-body-sans: "Segoe UI Variable", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-display-sans: "Arial Black", "Segoe UI", sans-serif;
-  --font-jp-sans: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", "Meiryo", sans-serif;
-  --font-jp-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Georgia", serif;
+  --font-jp-sans: "UmaKuma Radicals", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", "Meiryo", sans-serif;
+  --font-jp-serif: "UmaKuma Radicals", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Georgia", serif;
   /*
    * The two faces a learner meets that no system ships: the textbook face
    * every Japanese school teaches from, and a brush face the printed forms
    * descend from. Both come from Google Fonts at runtime (see the layout).
    */
-  --font-jp-textbook: "Klee One", "UD Digi Kyokasho NK-R", "UD Digi Kyokasho N-R", cursive;
-  --font-jp-brush: "Yuji Syuku", "HGSoeiKakugothicUB", serif;
+  --font-jp-textbook: "UmaKuma Radicals", "Klee One", "UD Digi Kyokasho NK-R", "UD Digi Kyokasho N-R", cursive;
+  --font-jp-brush: "UmaKuma Radicals", "Yuji Syuku", "HGSoeiKakugothicUB", serif;
   --font-jp-current: var(--font-jp-sans);
 }
 
