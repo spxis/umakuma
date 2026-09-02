@@ -2242,28 +2242,6 @@
     "summary": "Arrowing down through the results was a one-way trip. The list loads the next stretch as you approach the end, so it grows under you: forty rows into \u4e2d the search box was far off the top of the screen, and the only route back was pressing up forty times - and overshooting downward on the way loaded more rows to climb. Nothing was looping, but nothing was leading out either, which reads the same from the keyboard. Escape now returns to the box from any row, and Home goes to the first row and then out to the box, both in a single press. Coming back also scrolls the box into view, which it did not before: the results scroll inside their own card on a page that scrolls too, so focus could land on a box still hidden above the results and typing went somewhere nobody could see."
   },
   {
-    "id": "signup-radio-layout",
-    "area": "account",
-    "name": "Lay out the signup choices properly",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 4,
-    "summary": "The signup page runs its radio choices full width, one per line, in a column of empty space. Reported 2026-09-01. Two or more columns, or a layout that uses the width for something.",
-    "kind": "bug"
-  },
-  {
-    "id": "articles-menu-clipping",
-    "area": "admin",
-    "name": "Stop the articles page clipping the open menu",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 5,
-    "summary": "On the admin articles page the user menu is cut off when opened - an overflow or stacking context on an ancestor clips it. Reported 2026-09-01.",
-    "kind": "bug"
-  },
-  {
     "id": "explorer-filters-addressable",
     "area": "study",
     "name": "Put explorer filters in the address",
