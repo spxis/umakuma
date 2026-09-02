@@ -69,3 +69,18 @@ export const STUDY_LIST_COPY = {
   countSuffixOne: "character",
   updatedPrefix: "Updated",
 } as const;
+
+/**
+ * Filing a search result as it is found: the column of tags and saved lists
+ * that opens beside the results.
+ */
+export const SUBJECT_FILER_COPY = {
+  open: "Add to lists",
+  close: "Done",
+  toggleTrouble: "Toggle trouble",
+  toggleFavourite: "Toggle favourite",
+  addTo: (name: string) => `Add to ${name}`,
+  removeFrom: (name: string) => `Remove from ${name}`,
+  noLists: "No saved lists yet",
+  failed: "Could not save that.",
+} as const;

@@ -104,7 +104,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
         <div className={`${PAGE_WIDTH.wide} mx-auto max-w-400 space-y-4 pb-8`}>
           <h1 className="text-2xl font-black text-foreground">{SEARCH_PAGE_COPY.heading}</h1>
 
-          <SearchPageForm initialQuery={query} filters={filters} />
+          <SearchPageForm initialQuery={query} filters={filters} viewerAccountId={viewerMenuInfo?.accountId ?? null} />
 
           {results ? (
             <>
@@ -124,6 +124,7 @@ export default async function GlobalSearchPage({ searchParams }: PageProps) {
               {results.columns.length > 0 ? (
                 <>
                   <SearchColumns
+                    viewerAccountId={viewerMenuInfo?.accountId ?? null}
                     columns={results.columns.map((column) => ({
                       ...column,
                       moreHref: onlySourceHref(query, filters, column.source),

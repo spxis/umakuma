@@ -4,6 +4,8 @@ import Link from "next/link";
 import { type ReactNode } from "react";
 
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
+import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
+import type { SubjectFiler } from "@/app/shared/useSubjectFiler";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
@@ -35,8 +37,11 @@ export default function SearchHitRows({
   listRef,
   trailing,
   showSource = true,
+  filer = null,
 }: {
   hits: SearchHit[];
+  /** The open filing column, when the member has opened it. */
+  filer?: SubjectFiler | null;
   /** Which column these rows are, for the arrows that cross between them. */
   column?: number;
   className?: string;
@@ -56,6 +61,7 @@ export default function SearchHitRows({
             row={row}
             href={searchHitHref(hit)}
             showSource={showSource}
+            filer={filer}
           />
         </li>
       ))}
@@ -70,12 +76,14 @@ function HitRow({
   row,
   href,
   showSource,
+  filer,
 }: {
   hit: SearchHit;
   column: number;
   row: number;
   href: string | null;
   showSource: boolean;
+  filer: SubjectFiler | null;
 }) {
   const body = (
     <>
@@ -127,7 +135,7 @@ function HitRow({
    * anchor is invalid, and the click would be swallowed by the navigation.
    */
   return (
-    <div className="flex items-center gap-1 pr-2">
+    <div className="flex flex-wrap items-center gap-1 pr-2">
       {href ? (
         <Link href={href} className={shell} onClick={() => rememberHit(hit)} {...cellProps}>
           {body}
@@ -139,6 +147,7 @@ function HitRow({
         </div>
       )}
       {isSingleKanji(hit) ? <StrokeOrderButton kanji={hit.glyph} meaning={hit.meaning} /> : null}
+      {filer ? <SubjectFilerCell hit={hit} filer={filer} className="basis-full pb-2 pl-3" /> : null}
     </div>
   );
 }

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
+import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 import { SEARCH_SOURCE_LABELS, type SearchHit, type SearchSource } from "@/lib/globalSearch";
 
 import SearchHitRows from "./SearchHitRows";
@@ -36,14 +38,31 @@ export type ResultColumn = {
   moreHref: string;
 };
 
-export default function SearchColumns({ columns }: { columns: ResultColumn[] }) {
+export default function SearchColumns({
+  columns,
+  viewerAccountId = null,
+}: {
+  columns: ResultColumn[];
+  /** The viewer's own account, so rows can be filed into their lists. */
+  viewerAccountId?: string | null;
+}) {
   const onKeyDown = useSearchGridKeys({
     lengths: columns.map((column) => column.hits.length),
   });
+  const [filerOpen, setFilerOpen] = useFilerOpen();
+  const filing = Boolean(viewerAccountId) && filerOpen;
+  /* One filer over every column: the lists are fetched once, not once per catalogue. */
+  const filer = useSubjectFiler(viewerAccountId, columns.flatMap((column) => column.hits), filing);
 
   if (columns.length === 0) return null;
 
   return (
+    <>
+    {viewerAccountId ? (
+      <div className="flex justify-end">
+        <SubjectFilerToggle open={filerOpen} onToggle={() => setFilerOpen((was) => !was)} error={filing ? filer.error : null} />
+      </div>
+    ) : null}
     <div
       onKeyDown={onKeyDown}
       /*
@@ -93,11 +112,13 @@ export default function SearchColumns({ columns }: { columns: ResultColumn[] }) 
               hits={column.hits}
               column={index}
               showSource={false}
+              filer={filing ? filer : null}
               className={`${COLUMN_MAX_HEIGHT} divide-y divide-line/60 overflow-y-auto overscroll-contain`}
             />
           </section>
         );
       })}
     </div>
+    </>
   );
 }

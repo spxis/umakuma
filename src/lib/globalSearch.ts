@@ -74,6 +74,12 @@ export type SearchHit = {
   badges: string[];
   /** School grade, so a grade hit can link to the right grade page. */
   grade?: number;
+  /**
+   * WaniKani's id for the subject, where the catalogue names it. The tags a
+   * member keeps - trouble, favourite - hang off this id, so a row without
+   * one can go on a saved list but cannot be tagged.
+   */
+  subjectId?: number;
   /** Where selecting the hit goes, filled in once the viewer is known. */
   href: string | null;
   /** Higher sorts first; see `rankHit`. */

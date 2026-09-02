@@ -6,7 +6,10 @@ import { SOURCE_TONES } from "@/app/search/Search.constants";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import { SEARCH_SOURCE_LABELS, type SearchHit } from "@/lib/globalSearch";
 import { JP_TEXT_CLASS } from "./japaneseText";
+import SubjectFilerCell from "./SubjectFilerCell";
+import SubjectFilerToggle from "./SubjectFilerToggle";
 import { subjectGlyphTone } from "./subjectListView";
+import { useFilerOpen, useSubjectFiler } from "./useSubjectFiler";
 
 type Props = {
   /** Prefix for option ids, unique per rendered instance. */
@@ -24,6 +27,8 @@ type Props = {
   onNearEnd?: () => void;
   /** A wider window is on its way, with the rows already shown left in place. */
   loadingMore?: boolean;
+  /** The viewer's own account, which is what makes the filing column available. */
+  accountId?: string | null;
 };
 
 /** How close to the end counts as near it, in pixels. */
@@ -50,8 +55,12 @@ export default function GlobalSearchSuggestList({
   onHover,
   onNearEnd,
   loadingMore = false,
+  accountId = null,
 }: Props) {
   const activeRow = useRef<HTMLLIElement>(null);
+  const [filerOpen, setFilerOpen] = useFilerOpen();
+  const filing = Boolean(accountId) && filerOpen;
+  const filer = useSubjectFiler(accountId, hits, filing);
 
   useEffect(() => {
     activeRow.current?.scrollIntoView({ block: "nearest" });
@@ -78,6 +87,16 @@ export default function GlobalSearchSuggestList({
 
   return (
     <>
+    {accountId ? (
+      /*
+       * The way into filing, above the rows. A signed-in member sees one quiet
+       * phrase; opened, every row grows a column of the member's own tags and
+       * lists, so ten kanji can be searched and kept without leaving the box.
+       */
+      <div className="flex items-center justify-end border-b border-line/60 px-3 py-1.5">
+        <SubjectFilerToggle open={filerOpen} onToggle={() => setFilerOpen((was) => !was)} error={filing ? filer.error : null} />
+      </div>
+    ) : null}
     <ul
       id={listboxId}
       role="listbox"
@@ -95,7 +114,7 @@ export default function GlobalSearchSuggestList({
           aria-selected={index === activeIndex}
           onClick={() => onPick(index)}
           onMouseMove={() => onHover(index)}
-          className={`flex cursor-pointer items-center gap-3 border-b border-line/60 px-3 py-2 ${
+          className={`flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-line/60 px-3 py-2 ${
             index === activeIndex ? "bg-surface-muted" : ""
           }`}
         >
@@ -122,6 +141,7 @@ export default function GlobalSearchSuggestList({
           <span className={`subject-pill shrink-0 border ${SOURCE_TONES[hit.source]}`}>
             {SEARCH_SOURCE_LABELS[hit.source]}
           </span>
+          {filing ? <SubjectFilerCell hit={hit} filer={filer} className="basis-full sm:basis-auto" /> : null}
         </li>
       ))}
 

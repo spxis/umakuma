@@ -95,6 +95,7 @@ function AdminWorkspacePageContent({
         // The admin workspace identifies its viewer by WaniKani username; an
         // admin passes the page gate on their email regardless.
         slug: null,
+        accountId: null,
         isAdmin: emailAllowed,
       }
     : null;

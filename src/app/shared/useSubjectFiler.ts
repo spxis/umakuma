@@ -1,0 +1,144 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+import { STUDY_TAGS, type StudyTag } from "@/lib/domainConstants";
+import {
+  NO_TAGS,
+  charactersAfterToggle,
+  taggableIds,
+  type FilerHit,
+  type FilerList,
+  type FilerTags,
+} from "@/lib/subjectFiler";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+import { updateStudyTag } from "@/app/users/[nickname]/study-explorer/lib/studyTagApi";
+
+import { SUBJECT_FILER_COPY } from "./studyListCopy";
+
+/** Remembered per browser, so a member filing ten kanji is not asked ten times. */
+const FILER_OPEN_KEY = "umakuma:search-filer-open";
+
+/** Whether the filing column is open, shared by the box that widens and the list that shows it. */
+export function useFilerOpen(): [boolean, (value: boolean | ((prev: boolean) => boolean)) => void] {
+  return usePersistedBoolean(FILER_OPEN_KEY, { defaultValue: false });
+}
+
+export type SubjectFiler = {
+  lists: FilerList[] | null;
+  tagsFor: (hit: FilerHit) => FilerTags;
+  toggleTag: (hit: FilerHit, tag: StudyTag) => void;
+  toggleList: (hit: FilerHit, list: FilerList) => void;
+  error: string | null;
+};
+
+/**
+ * The member's lists and tags, brought to a set of result rows.
+ *
+ * Fetched only while the column is open and only for the rows on screen: a
+ * dropdown that asked the tag store about every keystroke would be paying for
+ * a column nobody had opened. Changes are written straight through and shown
+ * at once; a failure puts the old state back and says so.
+ */
+export function useSubjectFiler(accountId: string | null, hits: FilerHit[], open: boolean): SubjectFiler {
+  const [lists, setLists] = useState<FilerList[] | null>(null);
+  const [tags, setTags] = useState<Map<number, FilerTags>>(() => new Map());
+  const [error, setError] = useState<string | null>(null);
+  const active = open && Boolean(accountId);
+
+  useEffect(() => {
+    if (!active || lists !== null) return;
+    let cancelled = false;
+    void fetch(`/api/study/${accountId}/lists`)
+      .then(async (response) => {
+        if (!response.ok) throw new Error(String(response.status));
+        const body = (await response.json()) as { lists?: FilerList[] };
+        if (!cancelled) setLists(body.lists ?? []);
+      })
+      .catch(() => {
+        if (!cancelled) setError(SUBJECT_FILER_COPY.failed);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [accountId, active, lists]);
+
+  /* One string, so the effect runs when the rows change and not when the array is rebuilt. */
+  const wantedIds = useMemo(() => taggableIds(hits).join(","), [hits]);
+  useEffect(() => {
+    if (!active || !wantedIds) return;
+    let cancelled = false;
+    void fetch(`/api/study/${accountId}/tags?subjectIds=${wantedIds}`)
+      .then(async (response) => {
+        if (!response.ok) throw new Error(String(response.status));
+        const body = (await response.json()) as { tags?: Array<{ subjectId: number; favorite: boolean; trouble: boolean }> };
+        if (cancelled) return;
+        setTags((previous) => {
+          const next = new Map(previous);
+          for (const id of wantedIds.split(",").map(Number)) next.set(id, NO_TAGS);
+          for (const row of body.tags ?? []) next.set(row.subjectId, { favorite: row.favorite, trouble: row.trouble });
+          return next;
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setError(SUBJECT_FILER_COPY.failed);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [accountId, active, wantedIds]);
+
+  const tagsFor = useCallback(
+    (hit: FilerHit) => (typeof hit.subjectId === "number" ? tags.get(hit.subjectId) ?? NO_TAGS : NO_TAGS),
+    [tags],
+  );
+
+  const toggleTag = useCallback(
+    (hit: FilerHit, tag: StudyTag) => {
+      if (!accountId || typeof hit.subjectId !== "number") return;
+      const subjectId = hit.subjectId;
+      const before = tags.get(subjectId) ?? NO_TAGS;
+      const enabled = !before[tag];
+      const after = { ...before, [tag]: enabled };
+      setTags((previous) => new Map(previous).set(subjectId, after));
+      setError(null);
+      void updateStudyTag(accountId, subjectId, tag, enabled).then((saved) => {
+        if (!saved) {
+          setTags((previous) => new Map(previous).set(subjectId, before));
+          setError(SUBJECT_FILER_COPY.failed);
+          return;
+        }
+        window.dispatchEvent(new CustomEvent("wr:study-tags-updated", { detail: { accountId, subjectId } }));
+      });
+    },
+    [accountId, tags],
+  );
+
+  const toggleList = useCallback(
+    (hit: FilerHit, list: FilerList) => {
+      if (!accountId) return;
+      const characters = charactersAfterToggle(list, hit);
+      const swap = (value: string) =>
+        setLists((previous) => previous?.map((row) => (row.id === list.id ? { ...row, characters: value } : row)) ?? previous);
+      swap(characters);
+      setError(null);
+      void fetch(`/api/study/${accountId}/lists`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id: list.id, characters }),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error(String(response.status));
+        })
+        .catch(() => {
+          swap(list.characters);
+          setError(SUBJECT_FILER_COPY.failed);
+        });
+    },
+    [accountId],
+  );
+
+  return { lists, tagsFor, toggleTag, toggleList, error };
+}
+
+export { STUDY_TAGS };

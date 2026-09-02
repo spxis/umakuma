@@ -10,6 +10,7 @@ function viewer(overrides: Partial<ViewerMenuInfo> = {}): ViewerMenuInfo {
     email: "someone@example.com",
     wkUsername: null,
     slug: null,
+    accountId: null,
     isAdmin: false,
     ...overrides,
   };

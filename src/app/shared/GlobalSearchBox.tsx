@@ -8,6 +8,7 @@ import GlobalSearchSuggestList from "./GlobalSearchSuggestList";
 import RecentItems from "./RecentItems";
 import SearchComboboxField, { SearchIcon } from "./SearchComboboxField";
 import { MODAL_LAYERS } from "./modalLayers";
+import { useFilerOpen } from "./useSubjectFiler";
 
 /**
  * The header's way into search.
@@ -34,8 +35,18 @@ import { MODAL_LAYERS } from "./modalLayers";
 const DESKTOP_LISTBOX = "global-search-suggest-desktop";
 const MOBILE_LISTBOX = "global-search-suggest-mobile";
 
-export default function GlobalSearchBox({ className = "" }: { className?: string }) {
+export default function GlobalSearchBox({
+  className = "",
+  viewerAccountId = null,
+}: {
+  className?: string;
+  /** The viewer's own account, so results can be filed into their lists. */
+  viewerAccountId?: string | null;
+}) {
   const [open, setOpen] = useState(false);
+  const [filerOpen] = useFilerOpen();
+  /* Room for the filing column: the dropdown grows, the field does not. */
+  const panelWidth = viewerAccountId && filerOpen ? "w-160" : "w-104";
   const [focused, setFocused] = useState(false);
   const mobileInput = useRef<HTMLInputElement>(null);
 
@@ -68,6 +79,7 @@ export default function GlobalSearchBox({ className = "" }: { className?: string
         onHover={cbx.hover}
         onNearEnd={cbx.loadMore}
         loadingMore={cbx.loadingMore}
+        accountId={viewerAccountId}
       />
     );
   }
@@ -137,7 +149,7 @@ export default function GlobalSearchBox({ className = "" }: { className?: string
           >
             {cbx.panelVisible || cbx.showRecent ? (
               <div
-                className={`absolute left-0 top-[calc(100%+0.5rem)] sm:left-auto sm:right-0 ${MODAL_LAYERS.searchSuggest} w-104 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
+                className={`absolute left-0 top-[calc(100%+0.5rem)] sm:left-auto sm:right-0 ${MODAL_LAYERS.searchSuggest} ${panelWidth} max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
               >
                 {cbx.panelVisible ? (
                   suggestList(DESKTOP_LISTBOX)

@@ -69,6 +69,7 @@ export async function resolveViewerMenuInfo(input: {
     const viewerAccount = await prisma.account.findFirst({
       where: { joinedByEmail: { equals: viewerEmail, mode: "insensitive" } },
       select: {
+        id: true,
         nickname: true,
         wkUsername: true,
         slug: true,
@@ -92,6 +93,7 @@ export async function resolveViewerMenuInfo(input: {
       email: viewerEmail,
       wkUsername: viewerIsMember ? viewerAccount.wkUsername : null,
       slug: viewerIsMember ? viewerAccount.slug : null,
+      accountId: viewerIsMember ? viewerAccount.id : null,
       isAdmin: viewerIsAdmin,
     };
   }
@@ -132,6 +134,7 @@ export async function resolveViewerMenuInfo(input: {
     email: inviteAccount.joinedByEmail,
     wkUsername: inviteAccount.wkUsername,
     slug: inviteAccount.slug,
+    accountId: invitePayload.accountId,
     isAdmin: false,
   };
 }

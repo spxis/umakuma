@@ -2453,10 +2453,10 @@
     "name": "Add to lists from search",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 20,
-    "summary": "While searching, a control on the results dropdown opens a side column beside the list where each result has buttons to add it to the member's lists: favourite (heart), trouble (sad face) and every list they have made. The same column on the Search page's result list. Quiet by default so the dropdown stays clean; opened, it lets a member search ten kanji and file each one as it is found. Requested 2026-09-01 by John, top priority after the stroke-order faces."
+    "summary": "Searching ten kanji and keeping each one meant, for every kanji: open it, find the tag on its page, go back, search the next. The results dropdown and the search page now carry an Add to lists control at the edge of the list. Opened, every row grows a quiet column: the trouble and favourite marks the explorers use, then one small chip per saved list, lit when the row is already on it and toggled with a tap. The dropdown widens to make room; in the narrower search columns and on a phone the column drops to a line under the row. Kanji the JLPT and school-grade catalogues answer with borrow their WaniKani twin's id so they can be tagged too, and a word contributes its kanji to a list rather than its kana. Whether the column is open is remembered per browser. Requested 2026-09-01 by John.",
+    "version": "0.236.0",
+    "releasedAt": "2026-09-02T05:16:20Z"
   }
 ]

@@ -81,6 +81,8 @@ const FAINT_ON_PURPOSE: Record<string, string> = {
   "src/app/shared/SurfacePagination.tsx": "The disabled first/prev/next buttons. Disabled controls are exempt.",
   "src/app/users/[nickname]/shared/GlyphTagOverlay.tsx":
     "An untagged trouble or favourite mark - the off state of a toggle, which has to look off.",
+  "src/app/shared/SubjectFilerCell.tsx":
+    "The same untagged marks, in the filing column beside search results; the off state has to look off.",
   "src/app/users/[nickname]/study-explorer/components/StudyExplorerRows.tsx":
     "The inactive sort arrow, which rises to /60 on hover.",
 };

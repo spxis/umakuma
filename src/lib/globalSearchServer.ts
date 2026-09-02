@@ -128,6 +128,7 @@ async function searchWanikani(variants: string[]): Promise<SearchHit[]> {
     return {
       source: SEARCH_SOURCES.wanikani,
       key: `wanikani:${row.wkSubjectId}`,
+      subjectId: row.wkSubjectId,
       glyph,
       subjectType: row.subjectType,
       /* The subject's own page is addressed by this, so it rides along. */
@@ -305,7 +306,39 @@ async function collectRanked(query: string, sources: SearchSource[]): Promise<Se
     ? searchDictionary(variants).filter((hit) => dictionaryOnly || !covered.has(hit.glyph))
     : [];
 
-  return sortHits([...taught, ...gapFillers]);
+  return attachKanjiSubjectIds(sortHits([...taught, ...gapFillers]));
+}
+
+/**
+ * The same kanji, whichever catalogue answered with it.
+ *
+ * A JLPT or school-grade row is a kanji WaniKani very likely teaches too, and
+ * the member tagging it as trouble means the kanji, not the catalogue it was
+ * found in. One read for every unnamed kanji in the answer gives those rows
+ * the id their WaniKani twin has; a kanji WaniKani has never taught stays
+ * without one, and can still go on a saved list.
+ */
+async function attachKanjiSubjectIds(hits: SearchHit[]): Promise<SearchHit[]> {
+  const unnamed = [...new Set(
+    hits
+      .filter((hit) => hit.subjectId === undefined && hit.subjectType === SUBJECT_TYPES.kanji)
+      .map((hit) => hit.glyph),
+  )];
+  if (unnamed.length === 0) return hits;
+
+  const rows = await prisma.wkSubjectCatalog
+    .findMany({
+      where: { subjectType: SUBJECT_TYPES.kanji, hiddenAt: null, characters: { in: unnamed } },
+      select: { wkSubjectId: true, characters: true },
+    })
+    .catch(() => []);
+  const byCharacters = new Map(rows.map((row) => [row.characters ?? "", row.wkSubjectId]));
+
+  return hits.map((hit) => {
+    if (hit.subjectId !== undefined || hit.subjectType !== SUBJECT_TYPES.kanji) return hit;
+    const subjectId = byCharacters.get(hit.glyph);
+    return subjectId === undefined ? hit : { ...hit, subjectId };
+  });
 }
 
 export async function runGlobalSearch(

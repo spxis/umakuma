@@ -68,6 +68,8 @@ export type ViewerMenuInfo = {
    * kept because links shared before slugs existed still carry it.
    */
   slug: string | null;
+  /** The viewer's own account, for surfaces that write as them; null for a session with no account. */
+  accountId: string | null;
   isAdmin: boolean;
 };
 

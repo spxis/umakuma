@@ -27,10 +27,12 @@ const LISTBOX_ID = "search-page-suggest";
 export default function SearchPageForm({
   initialQuery,
   filters,
+  viewerAccountId = null,
 }: {
   initialQuery: string;
   /** Kept across a new search, so what you turned off survives the next query. */
   filters: SearchFilters;
+  viewerAccountId?: string | null;
 }) {
   const cbx = useSearchCombobox({
     initialValue: initialQuery,
@@ -69,6 +71,7 @@ export default function SearchPageForm({
             onHover={cbx.hover}
             onNearEnd={cbx.loadMore}
             loadingMore={cbx.loadingMore}
+            accountId={viewerAccountId}
           />
         </div>
       ) : null}
