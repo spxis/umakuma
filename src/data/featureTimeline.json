@@ -2528,7 +2528,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 24,
-    "summary": "On a shared list, each member's standing on every item - not started, learning, known - as a small overlay, so a family can see who has the week's kanji down and who needs a hand. Uses each member's existing visibility setting. Suggested 2026-09-01."
+    "summary": "On a shared list, each member's standing on every item - not started, learning, known - as a small overlay, so a family can see who has the week's kanji down and who needs a hand. Uses each member's existing visibility setting. Suggested 2026-09-01.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:18.235Z"
   },
   {
     "id": "list-starter-lists",
@@ -2550,7 +2552,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 26,
-    "summary": "Why this item is here: a short note per item, written by whoever added it - a mnemonic, the sentence it was met in, the mistake it keeps causing. Shown in the list and when practising from it. Suggested 2026-09-01."
+    "summary": "Why this item is here: a short note per item, written by whoever added it - a mnemonic, the sentence it was met in, the mistake it keeps causing. Shown in the list and when practising from it. Suggested 2026-09-01.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:16.403Z"
   },
   {
     "id": "list-copy-sync",
@@ -2561,7 +2565,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 27,
-    "summary": "A copied list remembers its source and can pull what has been added there since, item by item, so a copy taken from a friend's growing list does not fall behind without becoming a subscription. Suggested 2026-09-01."
+    "summary": "A copied list remembers its source and can pull what has been added there since, item by item, so a copy taken from a friend's growing list does not fall behind without becoming a subscription. Suggested 2026-09-01.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:17.021Z"
   },
   {
     "id": "list-paste-import",
@@ -2583,7 +2589,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 29,
-    "summary": "Every game and practice mode that takes a list takes a subscribed or shared one too, so a list a friend shares is something to play, not only to read. Suggested 2026-09-01."
+    "summary": "Every game and practice mode that takes a list takes a subscribed or shared one too, so a list a friend shares is something to play, not only to read. Suggested 2026-09-01.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:17.640Z"
   },
   {
     "id": "list-burn-list",
@@ -2605,7 +2613,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 31,
-    "summary": "Lists, like all data on the site, are sortable, reversible, pageable, scrollable, searchable, cached and fast. The Lists page and the list viewer get search, sort by name, size and last change, and paging once a list outgrows a screen; the same standard applies to every surface that lists data. Stated 2026-09-01 by John as a standing rule."
+    "summary": "Lists, like all data on the site, are sortable, reversible, pageable, scrollable, searchable, cached and fast. The Lists page and the list viewer get search, sort by name, size and last change, and paging once a list outgrows a screen; the same standard applies to every surface that lists data. Stated 2026-09-01 by John as a standing rule.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:15.165Z"
   },
   {
     "id": "list-metadata",
@@ -2616,7 +2626,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 32,
-    "summary": "Every list carries the facts a reader wants before opening it: when it was made, when it last changed, who made it, how many hold it, how many times it has been copied and shared. Shown on the card and on the public view. Requested 2026-09-01 by John."
+    "summary": "Every list carries the facts a reader wants before opening it: when it was made, when it last changed, who made it, how many hold it, how many times it has been copied and shared. Shown on the card and on the public view. Requested 2026-09-01 by John.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:14.555Z"
   },
   {
     "id": "stroke-count-browser",
@@ -2638,7 +2650,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 34,
-    "summary": "A list can be marked complete or studied by its owner, and carries a grade the system assigns after a study or review pass over it - how much of the list is known, and how well it went. Shown on the card and the list's page. Ties to practising from a list and the who-knows-what overlay. Requested 2026-09-01 by John."
+    "summary": "A list can be marked complete or studied by its owner, and carries a grade the system assigns after a study or review pass over it - how much of the list is known, and how well it went. Shown on the card and the list's page. Ties to practising from a list and the who-knows-what overlay. Requested 2026-09-01 by John.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:15.784Z"
   },
   {
     "id": "list-print",
@@ -2649,7 +2663,9 @@
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 35,
-    "summary": "Every list card and list page has a Print action that opens the list as a sheet: the items with meanings and readings, or the tracing sheet the practice pages already print, chosen at the click. Requested 2026-09-01 by John."
+    "summary": "Every list card and list page has a Print action that opens the list as a sheet: the items with meanings and readings, or the tracing sheet the practice pages already print, chosen at the click. Requested 2026-09-01 by John.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:18.858Z"
   },
   {
     "id": "list-merge",
@@ -2726,7 +2742,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 42,
-    "summary": "The filing column exists only on the search surfaces. A member who searches a kanji, opens its page and wants it on a list has no way to do it. Every page and panel that shows a kanji, word or radical - the subject pages, the glyph viewer, the explorers - offers the same tag marks and list chips. Requested 2026-09-02 by John."
+    "summary": "The filing column exists only on the search surfaces. A member who searches a kanji, opens its page and wants it on a list has no way to do it. Every page and panel that shows a kanji, word or radical - the subject pages, the glyph viewer, the explorers - offers the same tag marks and list chips. Requested 2026-09-02 by John.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T13:24:19.462Z"
   },
   {
     "id": "search-japanese-numbers",
