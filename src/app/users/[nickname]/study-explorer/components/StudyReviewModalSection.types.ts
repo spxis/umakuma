@@ -1,3 +1,4 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import type { TouchEvent } from "react";
 import type {
   ReviewOutcome,
@@ -15,7 +16,7 @@ export type StudyReviewModalSectionProps = {
   canToggleEnglish: boolean;
   viewerMode: StudyViewerMode;
   selectedItem: StudyQueueItem;
-  selectedTags?: { favorite: boolean; trouble: boolean };
+  selectedTags?: { favorite: boolean; trouble: boolean; burned?: boolean };
   isPracticeItem: boolean;
   selectedOutcome: ReviewOutcome | undefined;
   isSubmittingSelected: boolean;
@@ -58,7 +59,7 @@ export type StudyReviewModalSectionProps = {
   onToggleUsedKanjiCollapsed: () => void;
   onToggleUsedInWordsCollapsed: () => void;
   onToggleShowEnglish: () => void;
-  onToggleStudyTag?: (tag: "favorite" | "trouble") => void;
+  onToggleStudyTag?: (tag: StudyTag) => void;
   onOpenRelatedSubject?: (subjectId: number, fallbackType: SubjectType) => void | Promise<void>;
   showSectionBorder?: boolean;
 };

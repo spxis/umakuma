@@ -66,7 +66,7 @@ export async function loadAssignmentFacts(accountId: string): Promise<Map<number
 export function toStudyTagListItem(
   subject: CatalogSubjectDetail,
   assignment: AssignmentFacts | undefined,
-  studyTags: { favorite: boolean; trouble: boolean },
+  studyTags: { favorite: boolean; trouble: boolean; burned?: boolean },
 ): StudyTagListItem {
   const srsStage = assignment?.srsStage ?? 0;
   return {
@@ -199,6 +199,7 @@ export async function fetchStudyListItems(
       toStudyTagListItem(subject, assignments.get(subjectId), {
         favorite: tags?.favorite ?? false,
         trouble: tags?.trouble ?? false,
+        burned: tags?.burned ?? false,
       }),
     ];
   });

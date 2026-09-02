@@ -1,9 +1,10 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import { updateStudyTag } from "./studyTagApi";
 
 type ToggleParams = {
   accountId: string;
   subjectId: number;
-  tag: "favorite" | "trouble";
+  tag: StudyTag;
   enabled: boolean;
   mutateQueue: () => Promise<unknown>;
   onSaved?: () => void;

@@ -8,6 +8,7 @@ export type StudyTagRow = {
   subjectId: number;
   favorite: boolean;
   trouble: boolean;
+  burned: boolean;
 };
 
 export function isMissingStudyTagTableError(error: unknown): boolean {
@@ -34,12 +35,13 @@ export async function fetchStudyTagRows(accountId: string): Promise<StudyTagRow[
     return await prisma.studySubjectTag.findMany({
       where: {
         accountId,
-        OR: [{ favorite: true }, { trouble: true }],
+        OR: [{ favorite: true }, { trouble: true }, { burned: true }],
       },
       select: {
         subjectId: true,
         favorite: true,
         trouble: true,
+        burned: true,
       },
       orderBy: { updatedAt: "desc" },
     });

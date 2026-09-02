@@ -1,7 +1,7 @@
 import type { QueueType } from "@/lib/domainConstants";
 import type { AssignmentData } from "./queueRouteUtils";
 
-export type StudySubjectTagMap = Map<number, { favorite: boolean; trouble: boolean }>;
+export type StudySubjectTagMap = Map<number, { favorite: boolean; trouble: boolean; burned?: boolean }>;
 
 export function troubleInjectionCount(reviewCount: number, availableTroubleCount: number): number {
   if (availableTroubleCount <= 0) {

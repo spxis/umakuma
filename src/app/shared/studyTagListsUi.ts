@@ -3,6 +3,7 @@ import { STUDY_TAGS, type StudyTag } from "@/lib/domainConstants";
 export const STUDY_TAG_LIST_LABELS: Record<StudyTag, string> = {
   [STUDY_TAGS.trouble]: "Trouble",
   [STUDY_TAGS.favorite]: "Favourites",
+  [STUDY_TAGS.burned]: "Burned",
 };
 
 export const STUDY_TAG_LIST_COPY = {
@@ -17,7 +18,15 @@ export const STUDY_TAG_LIST_COPY = {
   empty: {
     [STUDY_TAGS.trouble]: "Nothing tagged as trouble yet. Flag an item from Study or an explorer to build this list.",
     [STUDY_TAGS.favorite]: "No favourites yet. Tag an item from Study or an explorer to build this list.",
+    [STUDY_TAGS.burned]: "Nothing burned yet. Mark what you know so well you never need to read it, and it stays out of every list you open.",
   },
+  /* Applying the Burned list to what is being read. */
+  hideBurned: (count: number) => `Hide ${count} burned`,
+  burnedHidden: (count: number) => `${count} burned hidden`,
+  applyWanikani: (count: number) => `Apply ${count} burned from WaniKani`,
+  applyWanikaniNone: "Nothing burned on WaniKani yet",
+  applyWanikaniDone: (count: number) => (count === 0 ? "Already applied." : `Applied ${count}.`),
+  applying: "Applying",
   /* A saved list, opened from its card. */
   countSuffix: "items",
   countSuffixOne: "item",

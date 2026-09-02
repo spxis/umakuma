@@ -29,7 +29,7 @@ export type StudyTagListPayload = {
 
 /** One tagged item, carrying enough to render a card and open the glyph viewer. */
 export type StudyTagListItem = StudyQueueItem & {
-  studyTags: { favorite: boolean; trouble: boolean };
+  studyTags: { favorite: boolean; trouble: boolean; burned?: boolean };
 };
 
 export function openStudyTagLists(payload: StudyTagListPayload): void {

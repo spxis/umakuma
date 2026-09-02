@@ -39,6 +39,8 @@ export type ListPageViewProps = {
   listKey: string | null;
   /** What others have suggested, for the owner; empty for everyone else. */
   proposals: PendingProposal[];
+  /** The viewer's own burned subjects, so the list can hide what they know. */
+  burnedIds: number[];
 };
 
 export type ListViewerActionsProps = {

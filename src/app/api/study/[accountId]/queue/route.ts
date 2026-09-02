@@ -385,7 +385,7 @@ export async function GET(request: Request, context: RouteContext) {
           }
         : null;
 
-      const tags = tagBySubjectId.get(row.data.subject_id) ?? { favorite: false, trouble: false };
+      const tags = tagBySubjectId.get(row.data.subject_id) ?? { favorite: false, trouble: false, burned: false };
       if (tags.favorite) {
         tagCounts.favorite += 1;
       }

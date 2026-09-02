@@ -264,9 +264,11 @@ export default function StudyListCard({
           </button>
         </>
       ) : null}
-      <Link href={practiceHref} className={PILL}>
-        {STUDY_LIST_COPY.practise}
-      </Link>
+      {practiceHref ? (
+        <Link href={practiceHref} className={PILL}>
+          {STUDY_LIST_COPY.practise}
+        </Link>
+      ) : null}
     </>
   );
 

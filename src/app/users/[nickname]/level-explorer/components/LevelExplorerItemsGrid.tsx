@@ -302,10 +302,10 @@ export default function LevelExplorerItemsGrid({
               <LevelExplorerDetailSection
                 accountId={accountId}
                 selectedItem={selectedItemWithTags ?? selectedItem}
-                studyTags={(selectedItemWithTags ?? selectedItem).studyTags ?? { favorite: false, trouble: false }}
+                studyTags={(selectedItemWithTags ?? selectedItem).studyTags ?? { favorite: false, trouble: false, burned: false }}
                 onToggleStudyTag={(tag) => {
                   const effectiveSelected = selectedItemWithTags ?? selectedItem;
-                  const current = effectiveSelected.studyTags ?? { favorite: false, trouble: false };
+                  const current = effectiveSelected.studyTags ?? { favorite: false, trouble: false, burned: false };
                   void onToggleStudyTag(effectiveSelected.subjectId, tag, !current[tag]);
                 }}
                 showEnglish={showEnglish}

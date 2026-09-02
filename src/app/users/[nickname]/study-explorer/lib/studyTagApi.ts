@@ -1,7 +1,8 @@
+import type { StudyTag } from "@/lib/domainConstants";
 export async function updateStudyTag(
   accountId: string,
   subjectId: number,
-  tag: "favorite" | "trouble",
+  tag: StudyTag,
   enabled: boolean,
 ): Promise<boolean> {
   try {

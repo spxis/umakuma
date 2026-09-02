@@ -248,8 +248,8 @@ export function srsBucketFromStage(stage: number | null): SrsBucket {
  * live here rather than beside the database helpers so client components can
  * name them without pulling the server in.
  */
-export const STUDY_TAGS = { favorite: "favorite", trouble: "trouble" } as const;
-export const STUDY_TAG_VALUES = [STUDY_TAGS.trouble, STUDY_TAGS.favorite] as const;
+export const STUDY_TAGS = { favorite: "favorite", trouble: "trouble", burned: "burned" } as const;
+export const STUDY_TAG_VALUES = [STUDY_TAGS.trouble, STUDY_TAGS.favorite, STUDY_TAGS.burned] as const;
 export type StudyTag = (typeof STUDY_TAGS)[keyof typeof STUDY_TAGS];
 
 export function isStudyTag(value: string): value is StudyTag {

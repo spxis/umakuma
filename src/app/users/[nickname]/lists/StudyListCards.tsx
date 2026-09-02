@@ -13,7 +13,7 @@ import {
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { LIST_ITEM_KINDS, LIST_VISIBILITIES } from "@/lib/domainConstants";
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS } from "@/lib/domainConstants";
 import { listHref, listKanji, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
@@ -120,7 +120,9 @@ export default function StudyListCards({
 
   /* A tagged sheet is addressed by its source, so it takes the whole list; a saved one traces its kanji. */
   const practiceHrefFor = (card: ListCard) =>
-    card.tag
+    card.tag === STUDY_TAGS.burned
+      ? null
+      : card.tag
       ? `${practicePath}/${card.tag}`
       : `${practicePath}/picked?picked=${encodeURIComponent(listKanji(card.items).join(""))}`;
 

@@ -1,10 +1,11 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
 import GlyphTagOverlay from "../../shared/GlyphTagOverlay";
 
 type Props = {
   item: StudyQueueItem;
   bulkModeEnabled: boolean;
-  onToggleStudyTag: (subjectId: number, tag: "favorite" | "trouble", enabled: boolean) => void;
+  onToggleStudyTag: (subjectId: number, tag: StudyTag, enabled: boolean) => void;
 };
 
 export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStudyTag }: Props) {
@@ -15,7 +16,7 @@ export default function StudyCardTagOverlay({ item, bulkModeEnabled, onToggleStu
   return (
     <GlyphTagOverlay
       subjectType={item.subjectType}
-      studyTags={item.studyTags ?? { favorite: false, trouble: false }}
+      studyTags={item.studyTags ?? { favorite: false, trouble: false, burned: false }}
       onToggleStudyTag={(tag) => {
         onToggleStudyTag(item.subjectId, tag, !(item.studyTags?.[tag] ?? false));
       }}

@@ -20,3 +20,12 @@ export function TroubleFaceIcon() {
 export function FavouriteStarIcon() {
   return <span aria-hidden="true">★</span>;
 }
+
+/** Burned: known so well it need never be read again. A small flame. */
+export function BurnedIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="currentColor">
+      <path d="M12 2c1 4 4 5.5 4 10a4 4 0 0 1-8 0c0-1.6.6-2.8 1.5-3.8.2 1.4.8 2.3 1.7 2.8C11.5 8.5 10 6 12 2z" />
+    </svg>
+  );
+}

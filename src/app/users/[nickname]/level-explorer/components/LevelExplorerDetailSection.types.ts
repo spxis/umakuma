@@ -1,3 +1,4 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import type { LevelItem } from "../../explorerTypes";
 import type { VocabularyKanjiLink } from "../lib/levelExplorerItemDetails";
 
@@ -28,6 +29,6 @@ export type LevelExplorerDetailSectionProps = {
   onResetToLessons?: (() => void) | null;
   resetDisabled?: boolean;
   resetBusy?: boolean;
-  studyTags?: { favorite: boolean; trouble: boolean };
-  onToggleStudyTag?: ((tag: "favorite" | "trouble") => void) | null;
+  studyTags?: { favorite: boolean; trouble: boolean; burned?: boolean };
+  onToggleStudyTag?: ((tag: StudyTag) => void) | null;
 };

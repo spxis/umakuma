@@ -1,14 +1,14 @@
 "use client";
 
-import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
+import { SUBJECT_TYPES, type SubjectType, type StudyTag } from "@/lib/domainConstants";
 
 import { useIsRowDensity } from "./explorerCardDensity";
-import { FavouriteStarIcon, TroubleFaceIcon } from "./studyTagIcons";
+import { BurnedIcon, FavouriteStarIcon, TroubleFaceIcon } from "./studyTagIcons";
 
 type Props = {
   subjectType: SubjectType | undefined;
-  studyTags: { favorite: boolean; trouble: boolean };
-  onToggleStudyTag: (tag: "favorite" | "trouble") => void;
+  studyTags: { favorite: boolean; trouble: boolean; burned?: boolean };
+  onToggleStudyTag: (tag: StudyTag) => void;
 };
 
 export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyTag }: Props) {
@@ -20,7 +20,7 @@ export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyT
         : subjectType === SUBJECT_TYPES.vocabulary
           ? "text-vocabulary"
           : "text-foreground";
-  const hasActiveTags = studyTags.favorite || studyTags.trouble;
+  const hasActiveTags = studyTags.favorite || studyTags.trouble || Boolean(studyTags.burned);
   const inRow = useIsRowDensity();
   const visibilityClass = hasActiveTags
     ? "opacity-100"
@@ -49,6 +49,19 @@ export default function GlyphTagOverlay({ subjectType, studyTags, onToggleStudyT
         className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-1.5 text-xs font-black leading-none ${studyTags.trouble ? activeToneClass : "text-foreground/20 hover:text-foreground/60"}`}
       >
         <TroubleFaceIcon />
+      </button>
+      <button
+        type="button"
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          onToggleStudyTag("burned");
+        }}
+        aria-label="Toggle burned"
+        title="Toggle burned"
+        className={`inline-flex h-7 min-w-7 cursor-pointer items-center justify-center rounded-md border border-transparent bg-transparent px-1 text-xs font-black leading-none ${studyTags.burned ? "text-amber-600" : "text-foreground/20 hover:text-foreground/60"}`}
+      >
+        <BurnedIcon />
       </button>
       <button
         type="button"

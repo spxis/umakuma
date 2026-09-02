@@ -26,9 +26,9 @@ export type FilerHit = {
 };
 
 export type FilerList = { id: string; name: string; items: StudyListItemRef[] };
-export type FilerTags = { favorite: boolean; trouble: boolean };
+export type FilerTags = { favorite: boolean; trouble: boolean; burned: boolean };
 
-export const NO_TAGS: FilerTags = { favorite: false, trouble: false };
+export const NO_TAGS: FilerTags = { favorite: false, trouble: false, burned: false };
 
 /** Whether the row can be tagged as trouble or a favourite. */
 export function canTag(hit: FilerHit): boolean {

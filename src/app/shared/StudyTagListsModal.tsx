@@ -19,6 +19,9 @@ import {
 import { updateStudyTag } from "@/app/users/[nickname]/study-explorer/lib/studyTagApi";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { STUDY_TAGS, STUDY_TAG_VALUES, SUBJECT_TYPE_DISPLAY, SUBJECT_TYPE_VALUES, type StudyTag } from "@/lib/domainConstants";
+import ApplyWanikaniBurned from "./ApplyWanikaniBurned";
+import HideBurnedToggle from "./HideBurnedToggle";
+import { useHideBurned } from "./useHideBurned";
 import {
   STUDY_TAG_LIST_EVENT,
   type StudyTagListItem,
@@ -139,21 +142,31 @@ export default function StudyTagListsModal() {
     return () => window.removeEventListener(STUDY_TAGS_UPDATED_EVENT, onTagsUpdated);
   }, [accountId]);
 
-  const counts = useMemo(() => ({
-    [STUDY_TAGS.trouble]: (items ?? []).filter((item) => item.studyTags.trouble).length,
-    [STUDY_TAGS.favorite]: (items ?? []).filter((item) => item.studyTags.favorite).length,
-  }), [items]);
+  const counts = useMemo(
+    () =>
+      Object.fromEntries(
+        STUDY_TAG_VALUES.map((value) => [value, (items ?? []).filter((item) => item.studyTags[value]).length]),
+      ) as Record<StudyTag, number>,
+    [items],
+  );
+  /* The Burned list, applied: gone from a saved list or the other two, never from itself. */
+  const [hideBurned] = useHideBurned();
+  const burnedInView = useMemo(
+    () => (items ?? []).filter((item) => (savedList ? true : item.studyTags[tag]) && item.studyTags.burned).length,
+    [items, savedList, tag],
+  );
 
   const visible = useMemo(() => {
     const term = search.trim().toLowerCase();
     return (items ?? [])
       /* A saved list is already the set; only the tagged lists filter by flag. */
       .filter((item) => (savedList ? true : item.studyTags[tag]))
+      .filter((item) => tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags.burned)
       .filter((item) => kind === null || item.subjectType === kind)
       .filter((item) => term.length === 0
         || item.characters.includes(term)
         || item.meanings.some((meaning) => meaning.toLowerCase().includes(term)));
-  }, [items, kind, savedList, search, tag]);
+  }, [hideBurned, items, kind, savedList, search, tag]);
 
   /* The kinds a saved list holds, with counts, for the chips. */
   const kinds = useMemo(() => {
@@ -243,9 +256,16 @@ export default function StudyTagListsModal() {
           aria-label={STUDY_TAG_LIST_COPY.searchPlaceholder}
           className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-bold text-foreground"
         />
+        {tag !== STUDY_TAGS.burned || savedList ? (
+          <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} />
+        ) : null}
         <SubjectSelectionToggle selection={selection} />
         <SubjectViewModeToggle value={viewMode} onChange={changeViewMode} />
       </div>
+
+      {!savedList && tag === STUDY_TAGS.burned ? (
+        <ApplyWanikaniBurned accountId={accountId} onApplied={() => setRefreshKey((value) => value + 1)} />
+      ) : null}
 
       {selection.choosing ? (
         <div className="border-b border-line px-3 pb-2 sm:px-4">

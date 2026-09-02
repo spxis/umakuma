@@ -1,3 +1,4 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import type { RefObject } from "react";
 import type {
   UpcomingReviewItem,
@@ -60,7 +61,7 @@ type StudyExplorerPanelProps = {
   onOpenStudySourceManager: () => void;
   onSetWaitSortOrder: (sortOrder: StudyWaitSortOrder) => void;
   onSelectSubject: (subjectId: number) => void;
-  onToggleStudyTag: (subjectId: number, tag: "favorite" | "trouble", enabled: boolean) => void;
+  onToggleStudyTag: (subjectId: number, tag: StudyTag, enabled: boolean) => void;
   onClearAllFilters: () => void;
   onClearQueueTagFilter: () => void;
 };

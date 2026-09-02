@@ -36,5 +36,6 @@ export type LevelItem = {
   studyTags?: {
     favorite: boolean;
     trouble: boolean;
+    burned?: boolean;
   };
 };

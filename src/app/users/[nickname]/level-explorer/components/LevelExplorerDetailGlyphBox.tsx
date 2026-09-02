@@ -1,3 +1,4 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import type { LevelItem } from "../../explorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
 import {
@@ -25,8 +26,8 @@ type Props = {
   showEnglish: boolean;
   onToggleShowEnglish: (() => void) | null;
   onTogglePeek: (() => void) | null;
-  studyTags?: { favorite: boolean; trouble: boolean };
-  onToggleStudyTag?: ((tag: "favorite" | "trouble") => void) | null;
+  studyTags?: { favorite: boolean; trouble: boolean; burned?: boolean };
+  onToggleStudyTag?: ((tag: StudyTag) => void) | null;
 };
 
 export default function LevelExplorerDetailGlyphBox({
@@ -113,7 +114,7 @@ export default function LevelExplorerDetailGlyphBox({
       {onToggleStudyTag ? (
         <GlyphTagOverlay
           subjectType={selectedItem.subjectType}
-          studyTags={studyTags ?? { favorite: false, trouble: false }}
+          studyTags={studyTags ?? { favorite: false, trouble: false, burned: false }}
           onToggleStudyTag={onToggleStudyTag}
         />
       ) : null}

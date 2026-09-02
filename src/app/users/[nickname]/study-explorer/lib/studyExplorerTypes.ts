@@ -1,5 +1,5 @@
 import type { SrsFilter } from "../../explorerTypes";
-import { type SubjectType, type WkStatus, type ReviewResult } from "@/lib/domainConstants";
+import { type SubjectType, type WkStatus, type ReviewResult, type StudyTag } from "@/lib/domainConstants";
 import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 
 export type { StudyQueueItem } from "@/lib/studyQueueTypes";
@@ -71,7 +71,7 @@ export type QueueResponse = {
   };
 };
 
-export type StudyTagFilter = "all" | "favorite" | "trouble";
+export type StudyTagFilter = "all" | StudyTag;
 
 export type UpcomingReviewItem = {
   subjectId: number;

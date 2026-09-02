@@ -99,12 +99,12 @@ export function useSubjectFiler(accountId: string | null, hits: FilerHit[], open
     void fetch(`/api/study/${accountId}/tags?subjectIds=${wantedIds}`)
       .then(async (response) => {
         if (!response.ok) throw new Error(String(response.status));
-        const body = (await response.json()) as { tags?: Array<{ subjectId: number; favorite: boolean; trouble: boolean }> };
+        const body = (await response.json()) as { tags?: Array<{ subjectId: number; favorite: boolean; trouble: boolean; burned?: boolean }> };
         if (cancelled) return;
         setTags((previous) => {
           const next = new Map(previous);
           for (const id of wantedIds.split(",").map(Number)) next.set(id, NO_TAGS);
-          for (const row of body.tags ?? []) next.set(row.subjectId, { favorite: row.favorite, trouble: row.trouble });
+          for (const row of body.tags ?? []) next.set(row.subjectId, { favorite: row.favorite, trouble: row.trouble, burned: row.burned ?? false });
           return next;
         });
       })

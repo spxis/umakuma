@@ -13,6 +13,7 @@ import { fetchPendingProposals } from "@/lib/studyListContributions";
 import { isSubscribed } from "@/lib/studyListShares";
 import { findListBySlug } from "@/lib/studyLists";
 import { fetchListSubjectRows } from "@/lib/studySubjectItems";
+import { fetchStudyTagRows } from "@/lib/studySubjectTags";
 
 import { resolveViewerMenuInfo } from "../../userPageAuth";
 import ListPageView from "./ListPageView";
@@ -79,11 +80,13 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
   }
 
   const viewerAccountId = viewerMenuInfo?.accountId ?? null;
-  const [rows, subscribed, proposals] = await Promise.all([
+  const [rows, subscribed, proposals, tagRows] = await Promise.all([
     fetchListSubjectRows(list.items),
     viewerAccountId && !isOwner ? isSubscribed(list.id, viewerAccountId) : Promise.resolve(false),
     isOwner ? fetchPendingProposals(list.id) : Promise.resolve([]),
+    viewerAccountId ? fetchStudyTagRows(viewerAccountId) : Promise.resolve([]),
   ]);
+  const burnedIds = tagRows.filter((row) => row.burned).map((row) => row.subjectId);
   const ownerName = account.nickname ?? account.slug ?? account.wkUsername ?? userKey;
   const shareHref = listShareHref(userKey, list.name, list.visibility, list.shareToken);
 
@@ -125,6 +128,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
         currentHref={listShareHref(userKey, list.name, list.visibility, key)}
         listKey={key}
         proposals={proposals}
+        burnedIds={burnedIds}
       />
     </div>
   );

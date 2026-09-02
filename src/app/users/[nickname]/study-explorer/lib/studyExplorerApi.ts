@@ -1,3 +1,4 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import type { StudyQueueMode, StudySource, StudyTagFilter, StudyWaitSortOrder } from "./studyExplorerTypes";
 import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 
@@ -24,7 +25,7 @@ export function buildStudyQueueRequestUrl(params: {
   includeTrouble: boolean;
   includeReviewed: boolean;
   waitSortOrder: StudyWaitSortOrder;
-  queueTagFilter?: "all" | "favorite" | "trouble";
+  queueTagFilter?: "all" | StudyTag;
 }): string | null {
   if (params.studySource === "custom" && !params.customLibraryId) {
     return null;

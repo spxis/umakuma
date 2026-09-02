@@ -34,8 +34,7 @@ import {
   SUBJECT_TYPE_DISPLAY,
   SUBJECT_TYPES,
   isSubjectType,
-  type SubjectType,
-} from "@/lib/domainConstants";
+  type SubjectType, type StudyTag } from "@/lib/domainConstants";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import {
   VIEW_GLYPH_EVENT,
@@ -228,12 +227,12 @@ export default function ViewGlyphModalHost() {
   );
 
   const toggleStudyTag = useCallback(
-    async (tag: "favorite" | "trouble") => {
+    async (tag: StudyTag) => {
       if (!item || !accountId) {
         return;
       }
 
-      const currentTags = item.studyTags ?? { favorite: false, trouble: false };
+      const currentTags = item.studyTags ?? { favorite: false, trouble: false, burned: false };
       const enabled = !currentTags[tag];
       const nextTags = { ...currentTags, [tag]: enabled };
       setItems((prev) =>
@@ -427,7 +426,7 @@ export default function ViewGlyphModalHost() {
           canToggleEnglish
           viewerMode={STUDY_VIEWER_MODES.detail}
           selectedItem={item}
-          selectedTags={item.studyTags ?? { favorite: false, trouble: false }}
+          selectedTags={item.studyTags ?? { favorite: false, trouble: false, burned: false }}
           isPracticeItem={false}
           selectedOutcome={undefined}
           isSubmittingSelected={false}

@@ -10,7 +10,10 @@ import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { LIST_ITEM_KIND_DISPLAY, LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, type ListItemKind } from "@/lib/domainConstants";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
+import HideBurnedToggle from "@/app/shared/HideBurnedToggle";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
+import { useHideBurned } from "@/app/shared/useHideBurned";
+import { withoutBurned } from "@/lib/burnList";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 
@@ -38,7 +41,11 @@ function timesText(count: number, noun: string): string {
   return `${noun} ${count === 1 ? STUDY_LIST_COPY.onceSuffix : `${count} ${STUDY_LIST_COPY.timesSuffix}`}`;
 }
 
-export default function ListPageView({ list, rows, owner, viewer, shareHref, currentHref, listKey, proposals }: ListPageViewProps) {
+export default function ListPageView({ list, rows, owner, viewer, shareHref, currentHref, listKey, proposals, burnedIds }: ListPageViewProps) {
+  /* The viewer's Burned list, applied to this one when they say so. */
+  const [hideBurned] = useHideBurned();
+  const burned = useMemo(() => new Set(burnedIds), [burnedIds]);
+  const burnedInView = useMemo(() => withoutBurned(rows, burned).hidden, [burned, rows]);
   const [kind, setKind] = useState<string>(ALL);
   /* Removals a member has suggested from this page, so the button says so. */
   const [suggested, setSuggested] = useState<Set<string>>(new Set());
@@ -76,7 +83,7 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
 
   const visible = useMemo(() => {
     const term = search.trim().toLowerCase();
-    return rows
+    return (hideBurned ? withoutBurned(rows, burned).kept : rows)
       .filter((row) => kind === ALL || row.kind === kind)
       .filter(
         (row) =>
@@ -85,7 +92,7 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
           row.meaning.toLowerCase().includes(term) ||
           (row.reading ?? "").includes(term),
       );
-  }, [kind, rows, search]);
+  }, [burned, hideBurned, kind, rows, search]);
 
   const facts = [
     `${STUDY_LIST_COPY.created} ${formatRelativeFromNow(list.createdAt)}`,
@@ -199,6 +206,7 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
             aria-label={STUDY_LIST_COPY.searchItems}
             className="h-8 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-semibold text-foreground"
           />
+          {viewer.accountId ? <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} /> : null}
           {viewer.accountId ? (
             <SubjectFilerToggle open={filerOpen} onToggle={() => setFilerOpen((was) => !was)} error={filing ? filer.error : null} />
           ) : null}

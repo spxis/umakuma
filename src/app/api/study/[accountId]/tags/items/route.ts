@@ -98,7 +98,7 @@ export async function GET(request: Request, context: RouteContext) {
             startedAt: assignment?.startedAt ?? null,
             passedAt: assignment?.passedAt ?? null,
             availableAt: assignment?.availableAt ?? null,
-            studyTags: { favorite: row.favorite, trouble: row.trouble },
+            studyTags: { favorite: row.favorite, trouble: row.trouble, burned: row.burned },
           }];
         });
 

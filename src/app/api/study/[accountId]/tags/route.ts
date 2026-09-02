@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { STUDY_TAGS, STUDY_TAG_VALUES } from "@/lib/domainConstants";
+import { STUDY_TAG_VALUES } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import { clearStudyQueueCache } from "@/lib/studyQueueCache";
 import { isMissingStudyTagTableError } from "@/lib/studySubjectTags";
@@ -64,7 +64,7 @@ export async function GET(request: Request, context: RouteContext) {
             }
           : { accountId };
 
-        let rows: Array<{ subjectId: number; favorite: boolean; trouble: boolean }> = [];
+        let rows: Array<{ subjectId: number; favorite: boolean; trouble: boolean; burned: boolean }> = [];
         try {
           rows = await prisma.studySubjectTag.findMany({
             where,
@@ -72,6 +72,7 @@ export async function GET(request: Request, context: RouteContext) {
               subjectId: true,
               favorite: true,
               trouble: true,
+              burned: true,
             },
           });
         } catch (error) {
@@ -117,7 +118,7 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Subject not found." }, { status: 404 });
         }
 
-        let current: { favorite: boolean; trouble: boolean } | null = null;
+        let current: { favorite: boolean; trouble: boolean; burned: boolean } | null = null;
         try {
           current = await prisma.studySubjectTag.findUnique({
             where: {
@@ -129,6 +130,7 @@ export async function POST(request: Request, context: RouteContext) {
             select: {
               favorite: true,
               trouble: true,
+              burned: true,
             },
           });
         } catch (error) {
@@ -138,14 +140,15 @@ export async function POST(request: Request, context: RouteContext) {
           throw error;
         }
 
-        const nextFavorite = parsedBody.data.tag === STUDY_TAGS.favorite
-          ? parsedBody.data.enabled
-          : (current?.favorite ?? false);
-        const nextTrouble = parsedBody.data.tag === STUDY_TAGS.trouble
-          ? parsedBody.data.enabled
-          : (current?.trouble ?? false);
+        /* The one tag asked about changes; the other two keep what they had. */
+        const next = {
+          favorite: current?.favorite ?? false,
+          trouble: current?.trouble ?? false,
+          burned: current?.burned ?? false,
+          [parsedBody.data.tag]: parsedBody.data.enabled,
+        };
 
-        if (!nextFavorite && !nextTrouble) {
+        if (!next.favorite && !next.trouble && !next.burned) {
           try {
             await prisma.studySubjectTag.deleteMany({
               where: {
@@ -165,11 +168,12 @@ export async function POST(request: Request, context: RouteContext) {
               subjectId: parsedBody.data.subjectId,
               favorite: false,
               trouble: false,
+              burned: false,
             },
           });
         }
 
-        let saved: { subjectId: number; favorite: boolean; trouble: boolean };
+        let saved: { subjectId: number; favorite: boolean; trouble: boolean; burned: boolean };
         try {
           saved = await prisma.studySubjectTag.upsert({
             where: {
@@ -181,17 +185,14 @@ export async function POST(request: Request, context: RouteContext) {
             create: {
               accountId,
               subjectId: parsedBody.data.subjectId,
-              favorite: nextFavorite,
-              trouble: nextTrouble,
+              ...next,
             },
-            update: {
-              favorite: nextFavorite,
-              trouble: nextTrouble,
-            },
+            update: next,
             select: {
               subjectId: true,
               favorite: true,
               trouble: true,
+              burned: true,
             },
           });
         } catch (error) {

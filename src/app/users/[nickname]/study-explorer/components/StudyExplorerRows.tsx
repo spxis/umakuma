@@ -82,7 +82,7 @@ export default function StudyExplorerRows({
         );
       }}
       renderTrailing={(row) => {
-        const tags = row.item.studyTags ?? { favorite: false, trouble: false };
+        const tags = row.item.studyTags ?? { favorite: false, trouble: false, burned: false };
         return (
           <div className="flex items-center gap-0.5">
             <button

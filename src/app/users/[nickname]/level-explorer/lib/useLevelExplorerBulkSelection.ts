@@ -1,3 +1,4 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import { useCallback, useMemo, useState } from "react";
 
 import { selectionRange } from "@/app/shared/subjectSelection";
@@ -42,10 +43,10 @@ export function useLevelExplorerBulkSelection({
    */
   const [bulkAnchorId, setBulkAnchorId] = useState<number | null>(null);
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
-  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
+  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean; burned?: boolean }>>({});
 
   const resolveStudyTags = useCallback(
-    (item: LevelItem) => tagOverrides[item.subjectId] ?? item.studyTags ?? { favorite: false, trouble: false },
+    (item: LevelItem) => tagOverrides[item.subjectId] ?? item.studyTags ?? { favorite: false, trouble: false, burned: false },
     [tagOverrides],
   );
 
@@ -57,9 +58,9 @@ export function useLevelExplorerBulkSelection({
   const selectedPreview = useMemo(() => selectedItems.map((item) => item.characters), [selectedItems]);
 
   const onToggleStudyTag = useCallback(
-    async (subjectId: number, tag: "favorite" | "trouble", enabled: boolean) => {
+    async (subjectId: number, tag: StudyTag, enabled: boolean) => {
       const fallbackFromItems = filteredItems.find((entry) => entry.subjectId === subjectId)?.studyTags;
-      const fallback = fallbackFromItems ?? { favorite: false, trouble: false };
+      const fallback = fallbackFromItems ?? { favorite: false, trouble: false, burned: false };
       const current = tagOverrides[subjectId] ?? fallback;
       const next = { ...current, [tag]: enabled };
 

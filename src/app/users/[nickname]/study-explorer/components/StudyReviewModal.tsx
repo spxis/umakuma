@@ -1,3 +1,4 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
@@ -109,7 +110,7 @@ export default function StudyReviewModal({
 
   const [flashRevealKey, setFlashRevealKey] = useState<string | null>(null);
   const [flashCycleDoneKey, setFlashCycleDoneKey] = useState<string | null>(null);
-  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean }>>({});
+  const [tagOverrides, setTagOverrides] = useState<Record<number, { favorite: boolean; trouble: boolean; burned?: boolean }>>({});
   const [visibleTransitionCue, setVisibleTransitionCue] = useState<{
     assignmentId: number;
     tone: "positive" | "negative";
@@ -123,11 +124,11 @@ export default function StudyReviewModal({
   const canUseFlashCycleNext = !studyMode && viewerMode === STUDY_VIEWER_MODES.flash && filteredTotal > 0;
   const displayIndex = filteredTotal > 0 ? Math.min(selectedIndex + 1, filteredTotal) : 0;
   const displayTotal = filteredTotal;
-  const selectedTags = selectedItem ? (tagOverrides[selectedItem.subjectId] ?? selectedItem.studyTags ?? { favorite: false, trouble: false }) : { favorite: false, trouble: false };
+  const selectedTags = selectedItem ? (tagOverrides[selectedItem.subjectId] ?? selectedItem.studyTags ?? { favorite: false, trouble: false, burned: false }) : { favorite: false, trouble: false, burned: false };
 
-  const toggleStudyTag = useCallback(async (tag: "favorite" | "trouble") => {
+  const toggleStudyTag = useCallback(async (tag: StudyTag) => {
     if (!selectedItem) return;
-    const current = tagOverrides[selectedItem.subjectId] ?? selectedItem.studyTags ?? { favorite: false, trouble: false };
+    const current = tagOverrides[selectedItem.subjectId] ?? selectedItem.studyTags ?? { favorite: false, trouble: false, burned: false };
     const enabled = !current[tag];
     setTagOverrides((prev) => ({ ...prev, [selectedItem.subjectId]: { ...current, [tag]: enabled } }));
     try {

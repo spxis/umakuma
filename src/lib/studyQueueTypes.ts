@@ -8,5 +8,6 @@ export type StudyQueueItem = LevelItem & {
   studyTags?: {
     favorite: boolean;
     trouble: boolean;
+    burned?: boolean;
   };
 };

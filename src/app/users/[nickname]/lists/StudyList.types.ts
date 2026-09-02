@@ -33,7 +33,8 @@ export type StudyListCardProps = {
   /** Condensed one-line form rather than the browsing card. */
   rows: boolean;
   accountId: string;
-  practiceHref: string;
+  /** Null for the Burned list: there is nothing to practise in what you know. */
+  practiceHref: string | null;
   /** Only the member whose lists these are may rename or delete one. */
   canEdit: boolean;
   onDelete: () => void;

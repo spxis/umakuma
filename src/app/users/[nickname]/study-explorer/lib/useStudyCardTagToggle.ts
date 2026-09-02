@@ -1,3 +1,4 @@
+import type { StudyTag } from "@/lib/domainConstants";
 import { useCallback } from "react";
 import { toggleStudyTagAndRefresh } from "./studyTagToggle";
 import type { StudyQueueItem } from "./studyExplorerTypes";
@@ -11,7 +12,7 @@ export function useStudyCardTagToggle(
   setLoadedItems: SetLoadedItems,
 ) {
   return useCallback(
-    (subjectId: number, tag: "favorite" | "trouble", enabled: boolean) => {
+    (subjectId: number, tag: StudyTag, enabled: boolean) => {
       void toggleStudyTagAndRefresh({
         accountId,
         subjectId,
@@ -25,8 +26,10 @@ export function useStudyCardTagToggle(
                 ? {
                     ...item,
                     studyTags: {
-                      favorite: tag === "favorite" ? enabled : (item.studyTags?.favorite ?? false),
-                      trouble: tag === "trouble" ? enabled : (item.studyTags?.trouble ?? false),
+                      favorite: item.studyTags?.favorite ?? false,
+                      trouble: item.studyTags?.trouble ?? false,
+                      burned: item.studyTags?.burned ?? false,
+                      [tag]: enabled,
                     },
                   }
                 : item,
