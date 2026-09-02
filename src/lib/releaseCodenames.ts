@@ -280,6 +280,8 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Kikoeru Kigou", ja: "聞こえる記号", reading: "きこえるきごう", gloss: "a reading you can hear as well as see" },
   { romaji: "Kunda Junban", ja: "組んだ順番", reading: "くんだじゅんばん", gloss: "the order it was queued in" },
   { romaji: "Keizoku no Kekka", ja: "継続の結果", reading: "けいぞくのけっか", gloss: "what keeping at it adds up to" },
+  { romaji: "Koko no Kotae", ja: "個々の答え", reading: "ここのこたえ", gloss: "each thing in its own place" },
+  { romaji: "Sashikomu Sou", ja: "差し込む層", reading: "さしこむそう", gloss: "slid into the layer it belongs to" },
 ];
 
 /**
