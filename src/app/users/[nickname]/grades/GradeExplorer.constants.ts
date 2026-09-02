@@ -11,8 +11,6 @@ export const GRADE_EXPLORER_COPY = {
   searchPlaceholder: "Search kanji, meaning, or reading",
   search: "Search",
   clear: "Clear",
-  onReadings: "On",
-  kunReadings: "Kun",
   noReadings: "—",
   noMatches: "No kanji match that search.",
   showing: "Showing",

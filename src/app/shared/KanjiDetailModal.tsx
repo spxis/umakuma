@@ -6,6 +6,8 @@ import KanjiStrokeAnimation, { type StrokeMeta } from "./KanjiStrokeAnimation";
 import ModalShell from "./ModalShell";
 import SourceCredit from "./SourceCredit";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
+import { READING_KINDS } from "@/lib/domainConstants";
+import { formatReading } from "@/lib/readingDisplay";
 import { MODAL_LAYERS } from "./modalLayers";
 import { STROKE_ANIMATION_COPY } from "./strokeAnimationCopy";
 import { noTranslateClass } from "./japaneseText";
@@ -95,7 +97,11 @@ function ShareLink({ href }: { href: string }) {
 function summaryLine(summary: KanjiDetailSummary | undefined): string | null {
   if (!summary) return null;
 
-  const readings = [...(summary.on ?? []), ...(summary.kun ?? [])].filter(Boolean);
+  /* On in katakana and kun in hiragana, so the line reads as two kinds, not one list. */
+  const readings = [
+    ...(summary.on ?? []).map((reading) => formatReading(READING_KINDS.on, reading)),
+    ...(summary.kun ?? []).map((reading) => formatReading(READING_KINDS.kun, reading)),
+  ].filter(Boolean);
   const parts = [readings.join("、"), summary.meaning?.trim()].filter(
     (part): part is string => Boolean(part && part.length > 0),
   );

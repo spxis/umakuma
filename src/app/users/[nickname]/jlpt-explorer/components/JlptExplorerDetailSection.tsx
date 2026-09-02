@@ -3,7 +3,7 @@ import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
 import { jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
-import { formatDate, jlptHeading, readingLabel, stripReadingSeparators } from "../lib/jlptDisplay";
+import { formatDate, jlptHeading, readingLabel } from "../lib/jlptDisplay";
 import { jlptStatusClass, parseWordExamples } from "../lib/jlptExplorerContentHelpers";
 import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
@@ -11,6 +11,8 @@ import type { JlptReadingsRecord, KanjiStats } from "./JlptExplorerContent.types
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
 import FieldLabel from "../../../../shared/FieldLabel";
+import ReadingsLine from "@/app/shared/ReadingsLine";
+import { READING_KIND_DISPLAY, READING_KINDS } from "@/lib/domainConstants";
 import SurfaceCard from "../../../../shared/SurfaceCard";
 
 type Props = {
@@ -118,20 +120,24 @@ export default function JlptExplorerDetailSection({
               </p>
             </SurfaceCard>
             <SurfaceCard className="text-sm">
-              <FieldLabel>Kunyomi</FieldLabel>
-              <p className="mt-1 font-semibold text-foreground/90">
-                {selectedItem.kunReadings.length > 0
-                  ? selectedItem.kunReadings.map((reading) => stripReadingSeparators(reading)).join(", ")
-                  : "-"}
-              </p>
+              {selectedItem.kunReadings.length > 0 ? (
+                <ReadingsLine kind={READING_KINDS.kun} readings={selectedItem.kunReadings} showRomaji={showEnglish} />
+              ) : (
+                <>
+                  <FieldLabel>{READING_KIND_DISPLAY[READING_KINDS.kun].label}</FieldLabel>
+                  <p className="mt-1 font-semibold text-foreground/90">-</p>
+                </>
+              )}
             </SurfaceCard>
             <SurfaceCard className="text-sm">
-              <FieldLabel>Onyomi</FieldLabel>
-              <p className="mt-1 font-semibold text-foreground/90">
-                {selectedItem.onReadings.length > 0
-                  ? selectedItem.onReadings.map((reading) => stripReadingSeparators(reading)).join(", ")
-                  : "-"}
-              </p>
+              {selectedItem.onReadings.length > 0 ? (
+                <ReadingsLine kind={READING_KINDS.on} readings={selectedItem.onReadings} showRomaji={showEnglish} />
+              ) : (
+                <>
+                  <FieldLabel>{READING_KIND_DISPLAY[READING_KINDS.on].label}</FieldLabel>
+                  <p className="mt-1 font-semibold text-foreground/90">-</p>
+                </>
+              )}
             </SurfaceCard>
             <SurfaceCard className="text-sm">
               <FieldLabel>Stroke count</FieldLabel>

@@ -4,11 +4,12 @@ import SubjectRows from "@/app/shared/SubjectRows";
 import { itemColumn, meaningColumn, type SubjectColumn } from "@/app/shared/subjectColumns";
 import { JP_TEXT_CLASS, noTranslateClass } from "@/app/shared/japaneseText";
 import { SUBJECT_ROW_LANES, type SubjectListRow } from "@/app/shared/subjectListView";
-import { SUBJECT_TYPES, SRS_BUCKETS } from "@/lib/domainConstants";
+import { READING_KIND_DISPLAY, READING_KINDS, SRS_BUCKETS, SUBJECT_TYPES, type ReadingKind } from "@/lib/domainConstants";
+import { formatReading } from "@/lib/readingDisplay";
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
-import { displayReading, readingsForGrade } from "./gradeExplorerView";
+import { readingsForGrade } from "./gradeExplorerView";
 
 /** A grade row is a kanji plus the catalogue entry it came from. */
 export type GradeRow = SubjectListRow & { entry: SchoolGradeKanjiEntry };
@@ -35,17 +36,26 @@ export function toGradeRow(entry: SchoolGradeKanjiEntry): GradeRow {
   };
 }
 
-/** On or kun, in the lane the shared reading column would otherwise occupy. */
-function readingLane(readings: string[], hidden: boolean) {
+/**
+ * On or kun, in the lane the shared reading column would otherwise occupy.
+ * On in katakana, kun in hiragana: the script says which lane it is before
+ * the heading does.
+ */
+function readingLane(kind: ReadingKind, readings: string[], hidden: boolean) {
   return (
     <span
       lang="ja"
       translate="no"
       className={`block truncate text-sm font-bold text-foreground/80 ${JP_TEXT_CLASS}`}
     >
-      {hidden ? "" : readings.length > 0 ? readings.map(displayReading).join("、") : GRADE_EXPLORER_COPY.noReadings}
+      {hidden ? "" : readings.length > 0 ? readings.map((reading) => formatReading(kind, reading)).join("、") : GRADE_EXPLORER_COPY.noReadings}
     </span>
   );
+}
+
+/** "On 音読み", so the heading teaches the word the reading is named by. */
+function readingHeading(kind: ReadingKind): string {
+  return `${READING_KIND_DISPLAY[kind].short} ${READING_KIND_DISPLAY[kind].ja}`;
 }
 
 /**
@@ -65,15 +75,15 @@ export function gradeColumns(hideReadings: boolean, revealed?: Set<string>): Arr
     meaningColumn<GradeRow>((row) => row.meaning || GRADE_EXPLORER_COPY.noReadings),
     {
       key: "on",
-      heading: GRADE_EXPLORER_COPY.onReadings,
+      heading: readingHeading(READING_KINDS.on),
       lane: SUBJECT_ROW_LANES.reading,
-      render: (row) => readingLane(readingsForGrade(row.entry).on, hiddenFor(row)),
+      render: (row) => readingLane(READING_KINDS.on, readingsForGrade(row.entry).on, hiddenFor(row)),
     },
     {
       key: "kun",
-      heading: GRADE_EXPLORER_COPY.kunReadings,
+      heading: readingHeading(READING_KINDS.kun),
       lane: SUBJECT_ROW_LANES.reading,
-      render: (row) => readingLane(readingsForGrade(row.entry).kun, hiddenFor(row)),
+      render: (row) => readingLane(READING_KINDS.kun, readingsForGrade(row.entry).kun, hiddenFor(row)),
     },
     {
       /* The `type` lane, not the `level` one: "Strokes" does not fit in 40px,
@@ -151,7 +161,10 @@ export default function GradeKanjiRows({
           return <span className="md:hidden">{GRADE_EXPLORER_COPY.quizTapToReveal}</span>;
         }
         const readings = readingsForGrade(row.entry);
-        const both = [...readings.on, ...readings.kun].map(displayReading);
+        const both = [
+          ...readings.on.map((reading) => formatReading(READING_KINDS.on, reading)),
+          ...readings.kun.map((reading) => formatReading(READING_KINDS.kun, reading)),
+        ];
         if (both.length === 0) return null;
         return (
           <span lang="ja" translate="no" className={`truncate md:hidden ${JP_TEXT_CLASS}`}>

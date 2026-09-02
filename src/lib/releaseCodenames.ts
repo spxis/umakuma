@@ -277,6 +277,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Eranda Ashimoto", ja: "選んだ足元", reading: "えらんだあしもと", gloss: "one footing, chosen for every card" },
   { romaji: "Onaji Choumen", ja: "同じ帳面", reading: "おなじちょうめん", gloss: "one ledger, kept by everyone" },
   { romaji: "Kazoete Kakunin", ja: "数えて確認", reading: "かぞえてかくにん", gloss: "counted, and checked against its source" },
+  { romaji: "Kikoeru Kigou", ja: "聞こえる記号", reading: "きこえるきごう", gloss: "a reading you can hear as well as see" },
 ];
 
 /**

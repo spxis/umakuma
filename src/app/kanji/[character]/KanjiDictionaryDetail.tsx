@@ -1,5 +1,6 @@
 import type { KanjiDictionaryAttribution, KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import ReadingsLine from "@/app/shared/ReadingsLine";
+import { READING_KINDS } from "@/lib/domainConstants";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
 
@@ -38,9 +39,9 @@ export default function KanjiDictionaryDetail({
       }
     >
       <Row label={KANJI_PAGE_COPY.meanings} value={entry.meanings.join(", ")} />
-      <Readings label={KANJI_PAGE_COPY.onReadings} readings={entry.readings.on} />
-      <Readings label={KANJI_PAGE_COPY.kunReadings} readings={entry.readings.kun} />
-      <Readings label={KANJI_PAGE_COPY.nameReadings} readings={entry.readings.nanori} />
+      <ReadingsLine kind={READING_KINDS.on} readings={entry.readings.on} />
+      <ReadingsLine kind={READING_KINDS.kun} readings={entry.readings.kun} />
+      <ReadingsLine kind={READING_KINDS.nanori} readings={entry.readings.nanori} />
 
       <dl className="flex flex-wrap gap-2 pt-1">
         {entry.strokeCount ? (
@@ -75,18 +76,6 @@ function Row({ label, value }: { label: string; value: string }) {
     <div>
       <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</h2>
       <p className="text-sm font-semibold text-foreground">{value}</p>
-    </div>
-  );
-}
-
-function Readings({ label, readings }: { label: string; readings: string[] }) {
-  if (readings.length === 0) return null;
-  return (
-    <div>
-      <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{label}</h2>
-      <p lang="ja" translate="no" className={`text-sm font-semibold text-foreground ${JP_TEXT_CLASS}`}>
-        {readings.map((reading) => reading.replace(/\./g, "")).join("、")}
-      </p>
     </div>
   );
 }

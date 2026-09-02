@@ -6,7 +6,9 @@ import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import KanjiDetailModal from "@/app/shared/KanjiDetailModal";
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
+import ReadingsLine from "@/app/shared/ReadingsLine";
 import { SUBJECT_VIEW_MODES, type SubjectViewMode } from "@/app/shared/subjectListView";
+import { READING_KIND_DISPLAY, READING_KINDS, type ReadingKind } from "@/lib/domainConstants";
 import { useState } from "react";
 
 import GradeKanjiRows from "./GradeKanjiRows";
@@ -46,17 +48,16 @@ type Props = {
  * narrower box to truncate to. 下 has eight kun readings and they ran straight
  * out through the right-hand edge of the card.
  */
-function ReadingRow({ label, readings }: { label: string; readings: string[] }) {
-  return (
-    <p className="flex min-w-0 max-w-full items-baseline gap-1.5 text-xs">
-      <span className="shrink-0 font-black uppercase tracking-[0.08em] text-foreground/60">{label}</span>
-      <span lang="ja" translate="no" className={`min-w-0 truncate font-bold text-foreground/80 ${JP_TEXT_CLASS}`}>
-        {readings.length > 0
-          ? readings.map(displayReading).join("、")
-          : GRADE_EXPLORER_COPY.noReadings}
-      </span>
-    </p>
-  );
+function ReadingRow({ kind, readings }: { kind: ReadingKind; readings: string[] }) {
+  if (readings.length === 0) {
+    return (
+      <p className="flex items-baseline gap-1.5 text-xs">
+        <span className="font-black uppercase tracking-[0.08em] text-foreground/60">{READING_KIND_DISPLAY[kind].label}</span>
+        <span className="font-bold text-foreground/60">{GRADE_EXPLORER_COPY.noReadings}</span>
+      </p>
+    );
+  }
+  return <ReadingsLine kind={kind} readings={readings} layout="inline" showRomaji={false} />;
 }
 
 /**
@@ -191,8 +192,8 @@ export default function GradeKanjiGrid({
                 </p>
               ) : (
                 <>
-                  <ReadingRow label={GRADE_EXPLORER_COPY.onReadings} readings={readings.on} />
-                  <ReadingRow label={GRADE_EXPLORER_COPY.kunReadings} readings={readings.kun} />
+                  <ReadingRow kind={READING_KINDS.on} readings={readings.on} />
+                  <ReadingRow kind={READING_KINDS.kun} readings={readings.kun} />
                 </>
               )}
             </div>

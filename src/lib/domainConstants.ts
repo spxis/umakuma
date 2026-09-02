@@ -229,3 +229,23 @@ export type ReviewResult = (typeof REVIEW_RESULTS)[keyof typeof REVIEW_RESULTS];
 export function isReviewResult(value: string | null | undefined): value is ReviewResult {
   return REVIEW_RESULT_VALUES.includes(value as ReviewResult);
 }
+
+/**
+ * The three kinds of reading a kanji has, and what each is called.
+ *
+ * A student asked about on'yomi on a test has to have seen the word, so the
+ * Japanese name sits beside the English one everywhere a reading is labelled.
+ * Canonical display text, so it lives here and not in each surface's copy.
+ */
+export const READING_KINDS = { on: "on", kun: "kun", nanori: "nanori" } as const;
+export const READING_KIND_VALUES = [READING_KINDS.on, READING_KINDS.kun, READING_KINDS.nanori] as const;
+export type ReadingKind = (typeof READING_KINDS)[keyof typeof READING_KINDS];
+
+export const READING_KIND_DISPLAY: Record<
+  ReadingKind,
+  { label: string; short: string; ja: string; romaji: string }
+> = {
+  [READING_KINDS.on]: { label: "On readings", short: "On", ja: "音読み", romaji: "on'yomi" },
+  [READING_KINDS.kun]: { label: "Kun readings", short: "Kun", ja: "訓読み", romaji: "kun'yomi" },
+  [READING_KINDS.nanori]: { label: "Name readings", short: "Name", ja: "名乗り", romaji: "nanori" },
+};
