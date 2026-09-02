@@ -70,6 +70,14 @@ export type ViewerMenuInfo = {
   slug: string | null;
   /** The viewer's own account, for surfaces that write as them; null for a session with no account. */
   accountId: string | null;
+  /**
+   * Whether a WaniKani token is stored against this viewer's account.
+   *
+   * Separate from `wkUsername` on purpose: the username is an address links
+   * still carry, and what decides whether a WaniKani-shaped surface is offered
+   * is whether there is a token behind it.
+   */
+  hasWanikani: boolean;
   isAdmin: boolean;
 };
 

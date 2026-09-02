@@ -41,7 +41,12 @@ export default async function UserExplorerPage({
         subtitle={header.subtitle}
         className="mb-3"
       />
-      <ExplorerTabs {...explorer} initialTab="jlpt" viewedWkUsername={shell.userKey} />
+      <ExplorerTabs
+        {...explorer}
+        initialTab="jlpt"
+        viewedWkUsername={shell.userKey}
+        hasWanikani={shell.account.hasWanikani}
+      />
     </div>
   );
 }

@@ -11,6 +11,7 @@ function viewer(overrides: Partial<ViewerMenuInfo> = {}): ViewerMenuInfo {
     wkUsername: null,
     slug: null,
     accountId: null,
+    hasWanikani: false,
     isAdmin: false,
     ...overrides,
   };

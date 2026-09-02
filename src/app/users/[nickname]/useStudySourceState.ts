@@ -18,6 +18,8 @@ type Args = {
   accountId: string;
   countsStorageKey: string;
   isHydrated: boolean;
+  /** Without a connection there is no WaniKani source to choose, or fall back to. */
+  hasWanikani: boolean;
 };
 
 type Result = {
@@ -40,23 +42,38 @@ function readLibraryIdFromParams(params: URLSearchParams): string | null {
   return trimmed ? trimmed : null;
 }
 
-export function useStudySourceState({ accountId, countsStorageKey, isHydrated }: Args): Result {
+export function useStudySourceState({ accountId, countsStorageKey, isHydrated, hasWanikani }: Args): Result {
   const studySourceStorageKey = `wr:study-source:${accountId}`;
   const customLibraryStorageKey = `wr:study-custom-library:${accountId}`;
 
+  /**
+   * The source a member falls back to, which is not always WaniKani.
+   *
+   * An account with no connection has one kind of queue - its own libraries -
+   * so starting on WaniKani meant every such member opened Study on a source
+   * that could only answer 409, whatever they had uploaded. A stored or
+   * addressed `source=wanikani` is ignored for the same reason: it names
+   * something this account does not have.
+   */
+  const defaultSource: StudySource = hasWanikani ? "wanikani" : "custom";
+
   const [studySource, setStudySource] = useState<StudySource>(() => {
     if (typeof window === "undefined") {
-      return "wanikani";
+      return defaultSource;
     }
 
     const params = new URLSearchParams(window.location.search);
     const sourceFromUrl = params.get("source");
-    if (sourceFromUrl === "custom" || sourceFromUrl === "wanikani") {
+    if (sourceFromUrl === "custom" || (sourceFromUrl === "wanikani" && hasWanikani)) {
       return sourceFromUrl;
     }
 
     const storedSource = window.localStorage.getItem(studySourceStorageKey);
-    return storedSource === "custom" || storedSource === "wanikani" ? storedSource : "wanikani";
+    if (storedSource === "custom" || (storedSource === "wanikani" && hasWanikani)) {
+      return storedSource;
+    }
+
+    return defaultSource;
   });
   const [customLibraryId, setCustomLibraryId] = useState<string | null>(() => {
     if (typeof window === "undefined") {
@@ -84,13 +101,13 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
 
   const applySourceFromSearchParams = useCallback((params: URLSearchParams) => {
     const sourceFromUrl = params.get("source");
-    if (sourceFromUrl === "custom" || sourceFromUrl === "wanikani") {
+    if (sourceFromUrl === "custom" || (sourceFromUrl === "wanikani" && hasWanikani)) {
       setStudySource(sourceFromUrl);
     } else if (typeof window !== "undefined") {
       const storedSource = window.localStorage.getItem(studySourceStorageKey);
-      setStudySource(storedSource === "custom" ? "custom" : "wanikani");
+      setStudySource(storedSource === "custom" ? "custom" : defaultSource);
     } else {
-      setStudySource("wanikani");
+      setStudySource(defaultSource);
     }
 
     const libraryFromUrl = readLibraryIdFromParams(params);
@@ -102,7 +119,7 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated }:
     } else {
       setCustomLibraryId(null);
     }
-  }, [customLibraryStorageKey, studySourceStorageKey]);
+  }, [customLibraryStorageKey, defaultSource, hasWanikani, studySourceStorageKey]);
 
   const countsApiPath = useMemo(
     () =>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav } from "./navSections";
+import { NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav, visibleNavSections } from "./navSections";
 
 const USER = "johnmorrisdotca";
 
@@ -126,6 +126,52 @@ describe("sectionHasSubNav", () => {
 
   it("is quiet when there is no section at all", () => {
     expect(sectionHasSubNav(null)).toBe(false);
+  });
+});
+
+/*
+ * A member without WaniKani used to be offered the Library Explorer and Stats
+ * by their own header, and both were empty when they arrived: sixty levels of
+ * nothing, and a wall of zeros. The header answers for the account it belongs
+ * to now.
+ */
+describe("visibleNavSections", () => {
+  const CONNECTED = { hasWanikani: true };
+  const UNCONNECTED = { hasWanikani: false };
+
+  function paths(sections: ReturnType<typeof visibleNavSections>): string[] {
+    return sections.flatMap((section) => section.children.map((child) => child.path));
+  }
+
+  it("changes nothing for a connected member", () => {
+    expect(visibleNavSections(NAV_SECTIONS, CONNECTED)).toEqual(NAV_SECTIONS);
+  });
+
+  it("drops the WaniKani-only pages for a member with no connection", () => {
+    const visible = paths(visibleNavSections(NAV_SECTIONS, UNCONNECTED));
+    expect(visible).not.toContain("library-explorer");
+    expect(visible).not.toContain("stats");
+  });
+
+  it("keeps everything the app can answer for itself", () => {
+    const visible = paths(visibleNavSections(NAV_SECTIONS, UNCONNECTED));
+    for (const open of ["study", "game", "jlpt-explorer", "grades", "practice", "/maps", "lists", "history", "read", "news", "libraries", "wanikani"]) {
+      expect(visible, open).toContain(open);
+    }
+  });
+
+  it("keeps the groups that still hold a page, and their order", () => {
+    const groups = visibleNavSections(NAV_SECTIONS, UNCONNECTED).map((section) => section.id);
+    expect(groups).toEqual(NAV_SECTIONS.map((section) => section.id));
+  });
+
+  /*
+   * Resolution is deliberately not gated: a member who follows an old link to
+   * a gated page still gets a header that knows where they are.
+   */
+  it("still resolves a gated address to its group", () => {
+    expect(sectionForPath(`/users/${USER}/library-explorer`, USER)?.id).toBe("explore");
+    expect(sectionForPath(`/users/${USER}/stats`, USER)?.id).toBe("progress");
   });
 });
 

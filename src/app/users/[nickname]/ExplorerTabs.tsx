@@ -29,6 +29,13 @@ type Props = {
   levelItemCountsByLevel: Record<number, number>;
   /** Which explorer this route is. Required: the address decides it. */
   initialTab: "study" | "level" | "jlpt";
+  /**
+   * Whether the member has a WaniKani connection.
+   *
+   * Decides which study sources exist for them at all. Defaults to true, which
+   * is what every explorer meant before an account could exist without one.
+   */
+  hasWanikani?: boolean;
   initialQueueMode?: QueueType | null;
   initialStudyMode?: boolean | null;
   initialSnapshot: Snapshot;
@@ -52,6 +59,7 @@ export default function ExplorerTabs({
   accountPendingReviews,
   levelItemCountsByLevel,
   initialTab,
+  hasWanikani = true,
   initialQueueMode = null,
   initialStudyMode = null,
   initialSnapshot,
@@ -108,7 +116,7 @@ export default function ExplorerTabs({
     setCustomLibraryId,
     studyCounts,
     applySourceFromSearchParams,
-  } = useStudySourceState({ accountId, countsStorageKey, isHydrated });
+  } = useStudySourceState({ accountId, countsStorageKey, isHydrated, hasWanikani });
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -380,6 +388,7 @@ export default function ExplorerTabs({
       <StudySourceControls
         accountId={accountId}
         viewedWkUsername={viewedWkUsername}
+        hasWanikani={hasWanikani}
         studySource={studySource}
         onSetStudySource={setStudySource}
         customLibraryId={customLibraryId}

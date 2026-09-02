@@ -1,10 +1,13 @@
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
+import WanikaniRequiredNotice from "@/app/shared/WanikaniRequiredNotice";
 import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
+import { MEMBER_CAPABILITIES } from "@/lib/memberCapabilities";
 
 import { DASHBOARD_PAGE_HEADERS } from "../dashboardPageHeaders";
 import { loadLevelProgress } from "../lib/levelProgress";
 import { loadUserPageShell } from "../lib/userPageShell";
+import { CONNECT_COPY } from "../wanikani/connectCopy";
 import UserStatsPanels from "./UserStatsPanels";
 
 /**
@@ -21,8 +24,14 @@ export default async function UserStatsPage({
 }) {
   const { nickname } = await params;
   const shell = await loadUserPageShell(nickname);
-  const progress = await loadLevelProgress(shell.userKey);
   const header = DASHBOARD_PAGE_HEADERS.stats;
+  /*
+   * Every figure on this page mirrors a WaniKani one, so without a connection
+   * it is a wall of zeros - and the level progress panel read that as a
+   * finished level, telling a member who had never started that they had
+   * passed the gate. The whole level computation is skipped with it.
+   */
+  const progress = shell.account.hasWanikani ? await loadLevelProgress(shell.userKey) : null;
 
   return (
     <div className={PAGE_SHELL_PADDING}>
@@ -41,7 +50,18 @@ export default async function UserStatsPage({
         subtitle={header.subtitle}
         className="mb-3"
       />
-      <UserStatsPanels accountId={shell.account.id} progress={progress} />
+      {progress ? (
+        <UserStatsPanels accountId={shell.account.id} progress={progress} />
+      ) : (
+        <WanikaniRequiredNotice
+          capability={MEMBER_CAPABILITIES.wanikaniProgress}
+          userKey={shell.userKey}
+          secondaryAction={{
+            label: CONNECT_COPY.gateHistory,
+            href: `/users/${encodeURIComponent(shell.userKey)}/history`,
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { isLockedOut } from "@/lib/accountApproval";
 import { isAdminEmail } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
 import { prisma } from "@/lib/prisma";
+import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
 
 function normalizeUsername(value: string | null | undefined): string | null {
@@ -74,6 +75,9 @@ export async function resolveViewerMenuInfo(input: {
         wkUsername: true,
         slug: true,
         approvalStatus: true,
+        tokenEncrypted: true,
+        tokenIv: true,
+        tokenTag: true,
       },
     });
 
@@ -94,6 +98,7 @@ export async function resolveViewerMenuInfo(input: {
       wkUsername: viewerIsMember ? viewerAccount.wkUsername : null,
       slug: viewerIsMember ? viewerAccount.slug : null,
       accountId: viewerIsMember ? viewerAccount.id : null,
+      hasWanikani: viewerIsMember && hasWanikaniConnection(viewerAccount),
       isAdmin: viewerIsAdmin,
     };
   }
@@ -114,6 +119,9 @@ export async function resolveViewerMenuInfo(input: {
       joinedByEmail: true,
       inviteCodeHash: true,
       approvalStatus: true,
+      tokenEncrypted: true,
+      tokenIv: true,
+      tokenTag: true,
     },
   });
 
@@ -135,6 +143,7 @@ export async function resolveViewerMenuInfo(input: {
     wkUsername: inviteAccount.wkUsername,
     slug: inviteAccount.slug,
     accountId: invitePayload.accountId,
+    hasWanikani: hasWanikaniConnection(inviteAccount),
     isAdmin: false,
   };
 }

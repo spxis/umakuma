@@ -19,6 +19,8 @@ type CustomLibraryRow = {
 type Props = {
   accountId: string;
   viewedWkUsername: string;
+  /** Whether WaniKani is a source this account can pick, or fall back to. */
+  hasWanikani: boolean;
   studySource: StudySource;
   onSetStudySource: (next: StudySource) => void;
   customLibraryId: string | null;
@@ -32,6 +34,7 @@ const DROPDOWN_WANIKANI_VALUE = "";
 export default function StudySourceControls({
   accountId,
   viewedWkUsername,
+  hasWanikani,
   studySource,
   onSetStudySource,
   customLibraryId,
@@ -69,9 +72,15 @@ export default function StudySourceControls({
       return;
     }
 
+    /*
+     * Every fall back to WaniKani is conditional on there being one. An
+     * account with no connection has custom libraries or nothing, so sending
+     * it back to a source it does not have turns a missing library into a red
+     * 409 rather than an empty list.
+     */
     if (libraries.length === 0) {
       onSetCustomLibraryId(null);
-      if (studySource === "custom") {
+      if (studySource === "custom" && hasWanikani) {
         onSetStudySource("wanikani");
       }
       return;
@@ -81,7 +90,9 @@ export default function StudySourceControls({
       return;
     }
 
-    if (customLibraryId && studySource === "custom") {
+    /* A stale library id sends a connected member back to WaniKani; without
+     * one, the right answer is the library they do have. */
+    if (customLibraryId && studySource === "custom" && hasWanikani) {
       onSetCustomLibraryId(null);
       onSetStudySource("wanikani");
       return;
@@ -89,7 +100,7 @@ export default function StudySourceControls({
 
     const activeLibrary = libraries.find((library) => library.isActive) ?? libraries[0];
     onSetCustomLibraryId(activeLibrary?.id ?? null);
-  }, [customLibraryId, hasLoadedLibraries, libraries, onSetCustomLibraryId, onSetStudySource, studySource]);
+  }, [customLibraryId, hasLoadedLibraries, hasWanikani, libraries, onSetCustomLibraryId, onSetStudySource, studySource]);
 
   useEffect(() => {
     if (!hasLoadedLibraries) {
@@ -176,7 +187,9 @@ export default function StudySourceControls({
     setSelectionMessage(null);
 
     if (!draftLibraryId || draftLibraryId === DROPDOWN_WANIKANI_VALUE) {
-      onSetStudySource("wanikani");
+      if (hasWanikani) {
+        onSetStudySource("wanikani");
+      }
       setIsModalOpen(false);
       return;
     }
@@ -221,8 +234,9 @@ export default function StudySourceControls({
                   className="h-10 w-full rounded-xl border border-line bg-surface px-3 text-sm font-semibold text-foreground"
                   disabled={isLoading}
                 >
-                  <option value={DROPDOWN_WANIKANI_VALUE}>WaniKani (default)</option>
-                  <option disabled>──────────</option>
+                  {/* Not offered to an account that has no WaniKani to go back to. */}
+                  {hasWanikani ? <option value={DROPDOWN_WANIKANI_VALUE}>WaniKani (default)</option> : null}
+                  {hasWanikani ? <option disabled>──────────</option> : null}
                   {libraries.map((library) => (
                     <option key={library.id} value={library.id}>
                       {library.name} ({library.itemCount})

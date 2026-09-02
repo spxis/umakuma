@@ -491,13 +491,13 @@
     "id": "capability-gating",
     "name": "A member without WaniKani never meets it",
     "area": "platform",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
+    "status": "shipped",
+    "date": "2026-09-02",
+    "dateIsEstimate": false,
     "release": 8,
-    "summary": "One capability map decides what a member without a WaniKani connection sees, hides or finds disabled. Today they meet This account has no WaniKani connection on the Study page, an empty Library Explorer at a URL that should not exist for them, and WaniKani links in the header. Nothing WaniKani-shaped is offered to an account that has none. Requested 2026-09-02 by John with screenshots.",
-    "owner": "Claude (worktree wk-gating-connect)",
-    "claimedAt": "2026-09-02T11:07:35.354Z"
+    "summary": "An account has not needed WaniKani since 0.95.0, but the site was built when it did, and the assumption survived in the places nobody thought of as WaniKani features. A member without a connection was offered the Library Explorer and Stats by their own header and met sixty empty levels and a wall of zeros that congratulated them on passing a level gate they had reached by never starting; Study answered This account has no WaniKani connection in red above a full filter panel over an empty list. One list in src/lib/memberCapabilities.ts now says what the site can do and which four things read WaniKani's own data - the queue, the Library Explorer, the progress figures and a leaderboard standing - and the navigation, the pages and the connection page all ask it rather than each deciding for themselves. The two WaniKani-only pages say what they would have been, why they cannot be it yet and where to connect, instead of rendering nothing convincingly. Study is the one that is not only WaniKani's: an uploaded library has its own items and its own schedule in this app's tables, so a member with one opens on that source rather than on a WaniKani queue that can only answer 409, and a member with neither is told what they need rather than what failed. Requested 2026-09-02 by John with screenshots.",
+    "version": "0.269.0",
+    "releasedAt": "2026-09-02T12:02:00Z"
   },
   {
     "id": "catalog-game-pool",

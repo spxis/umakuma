@@ -76,4 +76,18 @@ export const CONNECT_COPY = {
 
   notConnected: "Not connected",
   profileLink: "Connect WaniKani",
+
+  /*
+   * What a member reads when they reach a page that reads WaniKani's data and
+   * they have no connection. It replaces the surface rather than sitting above
+   * it: the Study page used to answer in red and then draw its full filter
+   * panel over nothing, which reads as breakage rather than as a page that
+   * needs something.
+   */
+  gateHeading: "This needs a WaniKani connection",
+  gateAction: "Connect WaniKani",
+  gateKeepsHeading: "Open to you either way",
+  /** The other way on, per page: something the member can do right now. */
+  gateAddLibrary: "Add a library",
+  gateHistory: "History",
 } as const;

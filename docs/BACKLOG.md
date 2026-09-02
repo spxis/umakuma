@@ -47,9 +47,9 @@ through it meets a finished flow.
 | 5 | ~~Registration and onboarding~~ ✅ v0.103.0, v0.107.0 | 3, 4 |
 | 6 | Open Google sign-up — **built, door still shut** | John to open |
 | 7 | Standalone JLPT study | — |
-| 8 | Capability gating | 3 |
+| 8 | ~~Capability gating~~ ✅ v0.269.0 | — |
 | 9 | ~~WaniKani-free game pool~~ ✅ v0.122.0 | — |
-| 10 | Connect your WaniKani account | 8 |
+| 10 | ~~Connect your WaniKani account~~ ✅ v0.267.0 | — |
 | 11 | Clans and families | 4 |
 | 12 | Global ranking opt-in | 4, 11 |
 | 13 | JLPT level reviews | design open |
@@ -569,6 +569,12 @@ WaniKani connection, and Tofugu is not being asked for anything yet.
 
 The gating design in release 6 comes from this. It is drawn from what each
 feature actually reads, not from where it appears in the UI.
+
+**This table now lives in code**, as `MEMBER_CAPABILITIES` in
+`src/lib/memberCapabilities.ts` (v0.269.0). The navigation, the gated pages and
+the connection page all read it, so a new WaniKani-only surface is a line there
+rather than a check in three files. Keep the two in step; the code is the one
+that decides.
 
 | Surface | Without WaniKani | Why |
 |---|---|---|

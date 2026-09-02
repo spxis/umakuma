@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { DASHBOARD_TAB_LABELS } from "@/app/users/[nickname]/userReadConfig";
+
 import { buildHeaderMenu } from "./headerMenuModel";
 import { TOP_NAV_SECTIONS } from "./navSections";
 
@@ -38,6 +40,20 @@ describe("buildHeaderMenu", () => {
    */
   it("offers the WaniKani connection under settings", () => {
     expect(menu().settings).toContainEqual({ label: "WaniKani", href: "/users/jay/wanikani" });
+  });
+
+  /*
+   * The menu is a second copy of the header's sections, so it has to gate on
+   * the same answer: offering the Library Explorer here to a member with no
+   * WaniKani would put back exactly what the header stopped offering.
+   */
+  it("hides the WaniKani-only pages from a member with no connection", () => {
+    const gated = menu({ access: { hasWanikani: false } });
+    const links = gated.navigate.flatMap((section) => section.links.map((link) => link.label));
+    expect(links).not.toContain(DASHBOARD_TAB_LABELS.wk);
+    expect(links).not.toContain(DASHBOARD_TAB_LABELS.stats);
+    expect(links).toContain(DASHBOARD_TAB_LABELS.jlpt);
+    expect(gated.settings.map((link) => link.label)).toContain("WaniKani");
   });
 
   // Settings moved out of the header, so it must not come back as a nav group.

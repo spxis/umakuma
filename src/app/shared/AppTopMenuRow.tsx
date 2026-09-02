@@ -5,12 +5,13 @@ import { usePathname } from "next/navigation";
 import type { MouseEvent as ReactMouseEvent, ReactNode } from "react";
 
 import { buildMainLinks, type MainLink } from "./appTopMenuLinks";
-import { TOP_NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav } from "./navSections";
+import { TOP_NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav, visibleNavSections } from "./navSections";
 import AppSubNavRow from "./AppSubNavRow";
 import GlobalSearchBox from "./GlobalSearchBox";
 import UserHeaderMenu from "../users/[nickname]/UserHeaderMenu";
 import type { TabId, ViewerMenuInfo } from "../users/[nickname]/UserDashboardTabs.types";
-import { viewerAddress } from "@/app/shared/viewerAddress";
+import { viewerAddress, viewsOwnPage } from "@/app/shared/viewerAddress";
+import type { MemberAccess } from "@/lib/memberCapabilities";
 
 type AppTopMenuRowProps = {
   viewerMenuInfo: ViewerMenuInfo | null;
@@ -48,9 +49,22 @@ export default function AppTopMenuRow({
   const resolvedWkUsername = primaryWkUsername ?? viewerAddress(viewerMenuInfo);
   const flatLinks: MainLink[] = buildMainLinks(resolvedWkUsername);
   const activeSection = sectionForPath(pathname, resolvedWkUsername);
+  /*
+   * Your own header answers for your own account. When the row is pointed at
+   * somebody else's pages - which only happens for an admin, since that is who
+   * else may open them - nothing is hidden: an admin looking at a member's
+   * page is not the member, and a header that quietly dropped entries there
+   * would be reporting the wrong account's state.
+   */
+  const isOwnNav = viewsOwnPage(viewerMenuInfo, resolvedWkUsername);
+  const access: MemberAccess = {
+    hasWanikani: isOwnNav ? Boolean(viewerMenuInfo?.hasWanikani) : true,
+  };
+  const sections = visibleNavSections(TOP_NAV_SECTIONS, access);
+  const visibleActiveSection = sections.find((section) => section.id === activeSection?.id) ?? null;
   const links: MainLink[] = resolvedWkUsername
     ? [
-        ...TOP_NAV_SECTIONS.map((section) => ({
+        ...sections.map((section) => ({
           label: section.label,
           href: navChildHref(section.children[0]!, resolvedWkUsername),
           dashboard: null,
@@ -176,7 +190,7 @@ export default function AppTopMenuRow({
     </section>
 
       <AppSubNavRow
-        section={sectionHasSubNav(activeSection) ? activeSection : null}
+        section={sectionHasSubNav(visibleActiveSection) ? visibleActiveSection : null}
         pathname={pathname}
         wkUsername={resolvedWkUsername}
         subNav={subNav}

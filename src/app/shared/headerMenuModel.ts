@@ -1,4 +1,6 @@
-import { MENU_NAV_SECTIONS, TOP_NAV_SECTIONS, navChildHref } from "./navSections";
+import type { MemberAccess } from "@/lib/memberCapabilities";
+
+import { MENU_NAV_SECTIONS, TOP_NAV_SECTIONS, navChildHref, visibleNavSections } from "./navSections";
 
 /**
  * The one way into admin, for an admin.
@@ -48,8 +50,11 @@ export function buildHeaderMenu(input: {
   username: string | null;
   isAdmin: boolean;
   showAdminActions: boolean;
+  /** What this member can reach. Defaults to a connected account. */
+  access?: MemberAccess;
 }): HeaderMenuModel {
   const { username, isAdmin, showAdminActions } = input;
+  const access = input.access ?? { hasWanikani: true };
 
   if (!username) {
     // No account: nothing here is reachable, so offer nothing but admin.
@@ -68,7 +73,7 @@ export function buildHeaderMenu(input: {
 
   return {
     account: [{ label: "My page", href: base }],
-    settings: MENU_NAV_SECTIONS.flatMap((section) =>
+    settings: visibleNavSections(MENU_NAV_SECTIONS, access).flatMap((section) =>
       section.children.map((child) => ({
         label: child.label,
         href: navChildHref(child, username),
@@ -76,7 +81,7 @@ export function buildHeaderMenu(input: {
     ),
     site: SITE_LINKS,
     admin,
-    navigate: TOP_NAV_SECTIONS.map((section) => ({
+    navigate: visibleNavSections(TOP_NAV_SECTIONS, access).map((section) => ({
       label: section.label,
       links: section.children.map((child) => ({
         label: child.label,

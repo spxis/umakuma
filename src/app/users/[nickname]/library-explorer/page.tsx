@@ -1,6 +1,8 @@
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
+import WanikaniRequiredNotice from "@/app/shared/WanikaniRequiredNotice";
 import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
+import { MEMBER_CAPABILITIES } from "@/lib/memberCapabilities";
 
 import { DASHBOARD_PAGE_HEADERS } from "../dashboardPageHeaders";
 import ExplorerTabs from "../ExplorerTabs";
@@ -21,8 +23,16 @@ export default async function UserExplorerPage({
 }) {
   const { nickname } = await params;
   const shell = await loadUserPageShell(nickname);
-  const explorer = await loadExplorerPage(shell.userKey, await searchParams, "level");
   const header = DASHBOARD_PAGE_HEADERS.wk;
+  /*
+   * Asked before the explorer is loaded, not after. Without a connection there
+   * is nothing for `loadExplorerPage` to find - it drew sixty empty levels and
+   * a JLPT mix of five zeros - and the work it does to find that out is the
+   * whole level computation.
+   */
+  const explorer = shell.account.hasWanikani
+    ? await loadExplorerPage(shell.userKey, await searchParams, "level")
+    : null;
 
   return (
     <div className={PAGE_SHELL_PADDING}>
@@ -41,7 +51,18 @@ export default async function UserExplorerPage({
         subtitle={header.subtitle}
         className="mb-3"
       />
-      <ExplorerTabs {...explorer} initialTab="level" viewedWkUsername={shell.userKey} />
+      {explorer ? (
+        <ExplorerTabs {...explorer} initialTab="level" viewedWkUsername={shell.userKey} />
+      ) : (
+        <WanikaniRequiredNotice
+          capability={MEMBER_CAPABILITIES.wanikaniLibrary}
+          userKey={shell.userKey}
+          secondaryAction={{
+            label: DASHBOARD_PAGE_HEADERS.jlpt.title,
+            href: `/users/${encodeURIComponent(shell.userKey)}/jlpt-explorer`,
+          }}
+        />
+      )}
     </div>
   );
 }

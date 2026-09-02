@@ -15,6 +15,7 @@ import { formatJlptLevel, isJlptSystem } from "@/lib/jlptCertification";
 import { prisma } from "@/lib/prisma";
 import { loadProfileGameStats } from "@/lib/profileStats";
 import { formatDateTimeShort } from "@/lib/timeFormat";
+import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import { CONNECT_COPY } from "../wanikani/connectCopy";
@@ -64,6 +65,7 @@ export default async function UserProfilePage({ params }: PageProps) {
       id: true, nickname: true, slug: true, displayName: true, visibility: true, wkUsername: true, wkLevel: true,
       jlptStatus: true, jlptSystem: true, jlptYear: true, jlptLevel: true,
       lastSyncedAt: true, lastActivityAt: true,
+      tokenEncrypted: true, tokenIv: true, tokenTag: true,
     },
   });
 
@@ -81,6 +83,7 @@ export default async function UserProfilePage({ params }: PageProps) {
 
   const games = await loadProfileGameStats(account.id);
   const name = resolveDisplayName(account);
+  const connected = hasWanikaniConnection(account);
 
   const jlpt =
     account.jlptStatus === "passed" && account.jlptSystem && isJlptSystem(account.jlptSystem) && account.jlptLevel
@@ -111,12 +114,14 @@ export default async function UserProfilePage({ params }: PageProps) {
 
       <section className="mb-4 grid gap-2 sm:grid-cols-3">
         <Fact label={PROFILE_COPY.address} value={`/${account.slug ?? account.wkUsername ?? ""}`} hint={PROFILE_COPY.addressHint} />
+        {/* Connected is a question about the token, not about a level: a
+            level can be left behind by a connection that was removed. */}
         <Fact
           label={PROFILE_COPY.wanikani}
-          value={account.wkLevel !== null ? `${PROFILE_COPY.wanikaniLevel} ${account.wkLevel}` : PROFILE_COPY.wanikaniNone}
-          hint={account.wkLevel !== null ? PROFILE_COPY.wanikaniHint : undefined}
+          value={connected ? `${PROFILE_COPY.wanikaniLevel} ${account.wkLevel ?? 0}` : PROFILE_COPY.wanikaniNone}
+          hint={connected ? PROFILE_COPY.wanikaniHint : undefined}
           action={{
-            label: account.wkLevel !== null ? CONNECT_COPY.replace : CONNECT_COPY.profileLink,
+            label: connected ? CONNECT_COPY.replace : CONNECT_COPY.profileLink,
             href: `/users/${encodeURIComponent(account.slug ?? account.wkUsername ?? "")}/wanikani`,
           }}
         />

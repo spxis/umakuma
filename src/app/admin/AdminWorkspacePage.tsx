@@ -96,6 +96,10 @@ function AdminWorkspacePageContent({
         // admin passes the page gate on their email regardless.
         slug: null,
         accountId: null,
+        // An admin's own connection, as far as this page knows it: the
+        // workspace identifies its viewer by WaniKani username and never
+        // loads their token.
+        hasWanikani: Boolean(userWkUsername),
         isAdmin: emailAllowed,
       }
     : null;

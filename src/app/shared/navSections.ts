@@ -1,3 +1,10 @@
+import {
+  MEMBER_CAPABILITIES,
+  canUseCapability,
+  type MemberAccess,
+  type MemberCapabilityId,
+} from "@/lib/memberCapabilities";
+
 import { DASHBOARD_TAB_LABELS } from "../users/[nickname]/userReadConfig";
 
 /**
@@ -19,6 +26,14 @@ export type NavChild = {
   path: string;
   /** Where it goes for somebody with no page of their own. */
   fallback?: string;
+  /**
+   * The capability this page needs, when it needs one.
+   *
+   * Set it and the entry disappears for a member who cannot use the page,
+   * rather than leading them to an empty one. Left unset, the page is open to
+   * every member, which is true of most of them.
+   */
+  requires?: MemberCapabilityId;
 };
 
 export type NavSection = {
@@ -49,7 +64,7 @@ export const NAV_SECTIONS: NavSection[] = [
     label: "Learn",
     placement: "nav",
     children: [
-      { label: DASHBOARD_TAB_LABELS.wk, path: "library-explorer" },
+      { label: DASHBOARD_TAB_LABELS.wk, path: "library-explorer", requires: MEMBER_CAPABILITIES.wanikaniLibrary },
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
       { label: "Grades", path: "grades" },
       { label: "Practice", path: "practice" },
@@ -75,7 +90,7 @@ export const NAV_SECTIONS: NavSection[] = [
     placement: "nav",
     children: [
       { label: "History", path: "history" },
-      { label: DASHBOARD_TAB_LABELS.stats, path: "stats" },
+      { label: DASHBOARD_TAB_LABELS.stats, path: "stats", requires: MEMBER_CAPABILITIES.wanikaniProgress },
     ],
   },
   {
@@ -159,6 +174,30 @@ export function sectionForPath(pathname: string | null, username: string | null)
 /** Whether a section should show a second row: only when it holds more than one page. */
 export function sectionHasSubNav(section: NavSection | null): boolean {
   return (section?.children.length ?? 0) > 1;
+}
+
+/**
+ * The same sections, with the pages this member cannot use taken out.
+ *
+ * A section whose children all go loses the section: Learn without the Library
+ * Explorer still has JLPT, grades and the maps, but a group with nothing left
+ * in it is a header entry that leads nowhere. Path resolution is deliberately
+ * not filtered - `sectionForPath` still knows where a gated address belongs,
+ * so a member who follows an old link gets a coherent header rather than a
+ * page with no group at all.
+ */
+export function visibleNavSections(
+  sections: readonly NavSection[],
+  access: MemberAccess,
+): NavSection[] {
+  return sections
+    .map((section) => ({
+      ...section,
+      children: section.children.filter(
+        (child) => child.requires === undefined || canUseCapability(child.requires, access),
+      ),
+    }))
+    .filter((section) => section.children.length > 0);
 }
 
 /** Sections shown in the header. */
