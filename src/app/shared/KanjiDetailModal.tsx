@@ -9,7 +9,7 @@ import { SOURCE_KEYS } from "@/lib/sourceCredits";
 import { READING_KINDS } from "@/lib/domainConstants";
 import { formatReading } from "@/lib/readingDisplay";
 import { MODAL_LAYERS } from "./modalLayers";
-import { STROKE_ANIMATION_COPY } from "./strokeAnimationCopy";
+import { STROKE_ANIMATION_COPY, STROKE_SIDE_WIDTH } from "./strokeAnimationCopy";
 import { KANJI_FACES, type KanjiFace } from "./kanjiFaces";
 import { noTranslateClass } from "./japaneseText";
 import JapaneseInProse from "./JapaneseInProse";
@@ -33,6 +33,11 @@ type PanelProps = {
   onClose?: () => void;
   /** The address this character can be shared at. */
   shareHref?: string;
+  /**
+   * A dialog has less room than a page, so it fixes the drawing size and
+   * offers no size control. The page leaves both to the reader.
+   */
+  compact?: boolean;
 };
 
 type Props = PanelProps & { onClose: () => void };
@@ -127,7 +132,7 @@ function summaryLine(summary: KanjiDetailSummary | undefined): string | null {
  * Shared by the modal and by the page a link opens, so a character looks the
  * same however you arrive at it.
  */
-export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, shareHref }: PanelProps) {
+export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, shareHref, compact }: PanelProps) {
   const [meta, setMeta] = useState<StrokeMeta | null>(null);
   const line = summaryLine(summary);
 
@@ -167,7 +172,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
 
       <div className="flex flex-col items-center gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-center">
         {/* Printed faces above, written faces beneath; the drawing keeps the height. */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className={`grid grid-cols-2 justify-center gap-3 ${STROKE_SIDE_WIDTH}`}>
           {KANJI_FACES.map((face) => (
             <PrintedGlyph key={face.id} kanji={kanji} face={face} />
           ))}
@@ -177,7 +182,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
           key={kanji}
           kanji={kanji}
           grade={grade}
-          size={200}
+          size={compact ? 200 : undefined}
           controlsLayout="column"
           showStrokeCount={false}
           showCredit={false}
@@ -204,7 +209,7 @@ export default function KanjiDetailModal(props: Props) {
       label={`${STROKE_ANIMATION_COPY.title} — ${props.kanji}`}
       panelClassName="flex w-full max-w-xl flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
     >
-      <KanjiDetailPanel {...props} />
+      <KanjiDetailPanel {...props} compact />
     </ModalShell>
   );
 }

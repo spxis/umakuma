@@ -3127,5 +3127,29 @@
     "summary": "Four things about the search row, reported together. Find by radicals and Add to lists were two rows of options stacked above the results; they are one row now, and the radical picker takes that row over while it is running rather than opening a second one - everything that changes how the search behaves is in the same place. The dropdown is as wide as the field it hangs from, since a fixed width left it narrower than the open box, which looked like a second control and wrapped the options onto two lines. Opening the header's box made the section links wrap to a second line while squeezing the field; the links now step aside entirely and the box takes the whole row, because somebody who has started typing is not reaching for Learn and the links are one Escape away. Escape empties the box before it closes it - one key, two things to undo, and closing first left the box still full so the next focus reopened the search somebody was trying to leave. And the radical grid can be resized: smaller, larger and reset, remembered per browser, starting larger than it shipped at. A grid of 253 characters is read by shape - 冫 and 氵 differ by one stroke - so how big it is drawn decides whether it can be read at all, and that answer is different on a phone, at a desk and for older eyes. Reported 2026-09-02 by John.",
     "version": "0.287.0",
     "releasedAt": "2026-09-02T15:29:01Z"
+  },
+  {
+    "id": "stroke-box-controls",
+    "name": "Size, centring and the buttons in the stroke box",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "The stroke animation is drawn at one fixed size, and at that size the stroke numbers are too small to read - the whole point of turning them on. It takes a small S/M/L control, remembered per device. Three things beside it are out of true: the drawing is not centred in its row because the printed faces on one side and the buttons on the other are different widths, the Replay and Numbers labels sit left in buttons stretched to a common width, and the dictionary fact pills do not centre their text. Reported 2026-09-02 by John with screenshots.",
+    "version": "0.288.0",
+    "releasedAt": "2026-09-02T15:31:57Z"
+  },
+  {
+    "id": "kanji-radical-parts",
+    "name": "The radicals a kanji is built from",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 53,
+    "summary": "A kanji page shows how the character is written and what it means, but not what it is made of - and the RADKFILE index that powers the radical search knows the parts of 6,355 characters. The page carries them in a container of its own, under the stroke box, each part a link into the radical search for the characters that share it. Its own container because it is EDRDG's data rather than WaniKani's and every box here credits one source. Requested 2026-09-02 by John.",
+    "owner": "Claude (session cd35064c)",
+    "claimedAt": "2026-09-02T15:18:03.966Z"
   }
 ]

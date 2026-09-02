@@ -3,8 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 
 import SourceCredit from "./SourceCredit";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
-import { STROKE_ANIMATION_COPY, STROKE_MS_PER_STROKE } from "./strokeAnimationCopy";
+import {
+  STROKE_ANIMATION_COPY,
+  STROKE_MS_PER_STROKE,
+  STROKE_SIDE_WIDTH,
+  STROKE_SIZES,
+  STROKE_SIZE_STORAGE_KEY,
+  STROKE_SIZE_VALUES,
+  type StrokeSize,
+} from "./strokeAnimationCopy";
 
 type StrokePayload = {
   kanji: string;
@@ -22,6 +31,13 @@ export type StrokeMeta = {
 type Props = {
   kanji: string;
   grade?: number;
+  /**
+   * The drawing size, when the caller wants to fix it.
+   *
+   * Left off, the reader chooses from S/M/L and the choice is remembered on
+   * that device. A caller that passes one is saying the surface has no room to
+   * offer the choice.
+   */
   size?: number;
   /**
    * Controls beside the drawing rather than beneath it.
@@ -50,7 +66,7 @@ type Props = {
 export default function KanjiStrokeAnimation({
   kanji,
   grade,
-  size = 180,
+  size,
   controlsLayout = "row",
   showStrokeCount = true,
   showCredit = true,
@@ -60,6 +76,12 @@ export default function KanjiStrokeAnimation({
   const [error, setError] = useState(false);
   const [playToken, setPlayToken] = useState(0);
   const [showNumbers, setShowNumbers] = useState(false);
+  /* The size this device last chose, read the way every other stored preference is. */
+  const [chosenSize, setChosenSize] = useState<StrokeSize>(() =>
+    getStoredEnum(STROKE_SIZE_STORAGE_KEY, STROKE_SIZE_VALUES, "medium"),
+  );
+  const offersSize = size === undefined;
+  const drawnSize = size ?? STROKE_SIZES[chosenSize];
   const pathRefs = useRef<Array<SVGPathElement | null>>([]);
   /*
    * Held in a ref so a caller passing an inline callback does not re-run the
@@ -126,7 +148,7 @@ export default function KanjiStrokeAnimation({
     return (
       <div
         className="animate-pulse rounded-2xl border border-line bg-surface-muted"
-        style={{ width: size, height: size }}
+        style={{ width: drawnSize, height: drawnSize }}
         aria-label={STROKE_ANIMATION_COPY.loading}
       />
     );
@@ -135,14 +157,15 @@ export default function KanjiStrokeAnimation({
   const stacked = controlsLayout === "column";
 
   return (
-    <div className={stacked ? "flex flex-col items-center gap-3 sm:flex-row sm:items-center" : "flex flex-col items-center gap-2"}>
+    <div className={stacked ? "flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4" : "flex flex-col items-center gap-2"}>
       <svg
         viewBox={data.viewBox}
-        width={size}
-        height={size}
+        width={drawnSize}
+        height={drawnSize}
         role="img"
         aria-label={`${data.kanji} — ${data.strokeCount} ${strokeWord(data.strokeCount)}`}
-        className="rounded-2xl border border-line bg-surface"
+        /* Large is wider than the narrowest phone, so it shrinks to fit rather than overflowing. */
+        className="h-auto max-w-full rounded-2xl border border-line bg-surface"
       >
         {/* The finished character, faint, so a stroke is drawn onto its outline. */}
         <g fill="none" stroke="currentColor" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/10">
@@ -172,18 +195,24 @@ export default function KanjiStrokeAnimation({
         ) : null}
       </svg>
 
-      <div className={stacked ? "flex flex-row items-center gap-1.5 sm:flex-col sm:items-stretch" : "flex items-center gap-1.5"}>
+      <div
+        className={
+          stacked
+            ? `flex flex-row flex-wrap items-center justify-center gap-1.5 sm:flex-col sm:items-center ${STROKE_SIDE_WIDTH}`
+            : "flex items-center gap-1.5"
+        }
+      >
         <button
           type="button"
           onClick={() => setPlayToken((token) => token + 1)}
-          className="inline-flex h-8 items-center rounded-full border border-line bg-surface px-3 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted"
+          className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted"
         >
           {STROKE_ANIMATION_COPY.replay}
         </button>
         <button
           type="button"
           onClick={() => setShowNumbers((shown) => !shown)}
-          className={`inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+          className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
             showNumbers
               ? "border-kanji bg-kanji text-white"
               : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
@@ -191,6 +220,31 @@ export default function KanjiStrokeAnimation({
         >
           {STROKE_ANIMATION_COPY.numbers}
         </button>
+        {offersSize ? (
+          <div
+            role="group"
+            aria-label={STROKE_ANIMATION_COPY.sizeLabel}
+            className="flex items-center justify-center gap-1 rounded-full border border-line bg-surface p-0.5"
+          >
+            {STROKE_SIZE_VALUES.map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => {
+                  setChosenSize(value);
+                  setStoredEnum(STROKE_SIZE_STORAGE_KEY, value);
+                }}
+                aria-pressed={chosenSize === value}
+                title={STROKE_ANIMATION_COPY.sizeTitle[value]}
+                className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-black uppercase transition ${
+                  chosenSize === value ? "bg-kanji text-white" : "text-foreground/60 hover:bg-surface-muted"
+                }`}
+              >
+                {STROKE_ANIMATION_COPY.sizes[value]}
+              </button>
+            ))}
+          </div>
+        ) : null}
         {showStrokeCount ? (
           <span className="text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
             {data.strokeCount} {strokeWord(data.strokeCount)}

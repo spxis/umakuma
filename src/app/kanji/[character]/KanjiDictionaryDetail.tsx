@@ -80,13 +80,19 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
+/*
+ * One fact, in a pill.
+ *
+ * The label and the value are two font sizes on one line, and left as inline
+ * text in a line box taller than either they sat three pixels low in the pill.
+ * Laid out as a row with the line height taken off, each is centred on the
+ * pill's own midline, which is where the eye expects them.
+ */
 function Fact({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-full border border-line bg-surface-muted px-3 py-1">
-      <dt className="inline text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
-        {label}{" "}
-      </dt>
-      <dd className="inline text-xs font-bold text-foreground">
+    <div className="inline-flex items-center gap-1 rounded-full border border-line bg-surface-muted px-3 py-2 leading-none">
+      <dt className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">{label}</dt>
+      <dd className="text-xs font-bold text-foreground">
         {value}
         {hint ? <span className="font-semibold text-foreground/60"> {hint}</span> : null}
       </dd>
