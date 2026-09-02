@@ -135,7 +135,10 @@ export default function UserHeaderMenu({
     isAdmin: adminSignedIn,
     showAdminActions,
     /* The menu is the viewer's own, so it answers for the viewer's own account. */
-    access: { hasWanikani: Boolean(viewerMenuInfo?.hasWanikani) },
+    access: {
+      hasWanikani: Boolean(viewerMenuInfo?.hasWanikani),
+      internal: viewerMenuInfo?.internal === true || viewerMenuInfo?.isAdmin === true,
+    },
   });
   const adminLinks = menu.admin;
 

@@ -320,6 +320,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Umaku Tsunagaru", ja: "うまく繋がる", reading: "うまくつながる", gloss: "your own reviews, brought across" },
   { romaji: "En no Nijuunen", ja: "円の二十年", reading: "えんのにじゅうねん", gloss: "twenty years of the yen, on one line" },
   { romaji: "Oshitsukenai Annai", ja: "押し付けない案内", reading: "おしつけないあんない", gloss: "nothing offered that you cannot open" },
+  { romaji: "Kazoku no Kakoi", ja: "家族の囲い", reading: "かぞくのかこい", gloss: "the family's own circle" },
 ];
 
 /**

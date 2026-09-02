@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth";
+import { canAccessAccount } from "@/lib/accountAccess";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { authOptions } from "@/lib/auth";
 import {
@@ -385,4 +386,25 @@ export async function backfillStaleCoverUrls(
       }),
     ),
   );
+}
+
+/*
+ * The reading challenge is one family's arrangement about pocket money, so
+ * the route agrees with the page about who it is for. Access to an account is
+ * not enough: the account has to be an internal one. Admins are always let
+ * through, since they settle the challenge.
+ */
+export async function viewerMayReadChallenge(request: Request, accounts: ViewerAccountSummary[]): Promise<boolean> {
+  if (await isAuthorizedAdmin(request)) return true;
+  const internal = await prisma.account.count({
+    where: { id: { in: accounts.map((account) => account.id) }, internal: true },
+  });
+  return internal > 0;
+}
+
+/** May this request write a check-in for that account? It must own it, and it must be internal. */
+export async function canPostReadingSignoff(request: Request, accountId: string): Promise<boolean> {
+  if (!(await canAccessAccount(request, accountId))) return false;
+  const row = await prisma.account.findUnique({ where: { id: accountId }, select: { internal: true } });
+  return row?.internal === true;
 }

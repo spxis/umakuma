@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { DASHBOARD_TAB_LABELS } from "@/app/users/[nickname]/userReadConfig";
 
 import { buildHeaderMenu } from "./headerMenuModel";
-import { TOP_NAV_SECTIONS } from "./navSections";
+import { TOP_NAV_SECTIONS, visibleNavSections } from "./navSections";
 
 const menu = (overrides = {}) =>
   buildHeaderMenu({ username: "jay", isAdmin: false, showAdminActions: false, ...overrides });
@@ -16,11 +16,31 @@ describe("buildHeaderMenu", () => {
    * one from the other makes that impossible rather than merely fixed.
    */
   it("offers every page the header does, with nothing missing", () => {
-    const navigable = menu().navigate.flatMap((section) => section.links.map((link) => link.label));
-    const expected = TOP_NAV_SECTIONS.flatMap((section) => section.children.map((child) => child.label));
+    for (const internal of [false, true]) {
+      const access = { hasWanikani: true, internal };
+      const navigable = menu({ access }).navigate.flatMap((section) => section.links.map((link) => link.label));
+      const expected = visibleNavSections(TOP_NAV_SECTIONS, access).flatMap((section) =>
+        section.children.map((child) => child.label),
+      );
 
-    expect(navigable).toEqual(expected);
-    expect(navigable).toContain("Practice");
+      expect(navigable).toEqual(expected);
+      expect(navigable).toContain("Practice");
+    }
+  });
+
+  /* The reading challenge is the family's, and the menu is the other way in. */
+  it("hides the reading challenge from a member who is not internal", () => {
+    const labels = (internal: boolean) =>
+      menu({ access: { hasWanikani: true, internal } }).navigate.flatMap((section) =>
+        section.links.map((link) => link.label),
+      );
+    expect(labels(false)).not.toContain("Read");
+    expect(labels(true)).toContain("Read");
+  });
+
+  it("lets an admin read it without being marked internal", () => {
+    const labels = menu({ isAdmin: true }).navigate.flatMap((section) => section.links.map((link) => link.label));
+    expect(labels).toContain("Read");
   });
 
   it("keeps the header's grouping instead of flattening it", () => {

@@ -59,6 +59,8 @@ export default function AppTopMenuRow({
   const isOwnNav = viewsOwnPage(viewerMenuInfo, resolvedWkUsername);
   const access: MemberAccess = {
     hasWanikani: isOwnNav ? Boolean(viewerMenuInfo?.hasWanikani) : true,
+    /* The reading challenge is the family's; an admin settles it, so they are offered it too. */
+    internal: isOwnNav ? viewerMenuInfo?.internal === true || viewerMenuInfo?.isAdmin === true : true,
   };
   const sections = visibleNavSections(TOP_NAV_SECTIONS, access);
   const visibleActiveSection = sections.find((section) => section.id === activeSection?.id) ?? null;
@@ -114,7 +116,8 @@ export default function AppTopMenuRow({
       return currentDashboardTab === link.dashboard;
     }
 
-    if (activeSection && link.label === activeSection.label) {
+    /* The visible section, since a group can be drawn under its public name. */
+    if (visibleActiveSection && link.label === visibleActiveSection.label) {
       return true;
     }
 

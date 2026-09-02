@@ -97,6 +97,7 @@ try {
                       joinedByName: true,
                       joinedByEmail: true,
                       inviteCodeUpdatedAt: true,
+                      internal: true,
                       createdAt: true,
                     },
                   } as unknown) as Prisma.AccountFindManyArgs);
@@ -135,6 +136,7 @@ try {
 
                   accounts = fallbackAccounts.map((row) => ({
                     ...row,
+                    internal: false,
                     joinedByName: null,
                     joinedByEmail: null,
                     inviteCodeUpdatedAt: null,

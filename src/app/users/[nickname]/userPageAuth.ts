@@ -74,6 +74,7 @@ export async function resolveViewerMenuInfo(input: {
         nickname: true,
         wkUsername: true,
         slug: true,
+        internal: true,
         approvalStatus: true,
         tokenEncrypted: true,
         tokenIv: true,
@@ -99,6 +100,7 @@ export async function resolveViewerMenuInfo(input: {
       slug: viewerIsMember ? viewerAccount.slug : null,
       accountId: viewerIsMember ? viewerAccount.id : null,
       hasWanikani: viewerIsMember && hasWanikaniConnection(viewerAccount),
+      internal: viewerIsMember ? viewerAccount.internal : false,
       isAdmin: viewerIsAdmin,
     };
   }
@@ -116,6 +118,7 @@ export async function resolveViewerMenuInfo(input: {
       nickname: true,
       wkUsername: true,
       slug: true,
+      internal: true,
       joinedByEmail: true,
       inviteCodeHash: true,
       approvalStatus: true,
@@ -144,6 +147,7 @@ export async function resolveViewerMenuInfo(input: {
     slug: inviteAccount.slug,
     accountId: invitePayload.accountId,
     hasWanikani: hasWanikaniConnection(inviteAccount),
+    internal: inviteAccount.internal,
     isAdmin: false,
   };
 }

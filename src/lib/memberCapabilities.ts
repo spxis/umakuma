@@ -45,6 +45,8 @@ export const MEMBER_CAPABILITIES = {
   newsReader: "newsReader",
   /** Study history: what the member answered here, recorded here. */
   studyHistory: "studyHistory",
+  /** The reading challenge and its check-ins, which are one family's arrangement. */
+  readingChallenge: "readingChallenge",
 } as const;
 
 export type MemberCapabilityId = (typeof MEMBER_CAPABILITIES)[keyof typeof MEMBER_CAPABILITIES];
@@ -56,6 +58,14 @@ export type MemberCapability = {
   /** One line on what it is, or on why it cannot work without a connection. */
   detail: string;
   requiresWanikani: boolean;
+  /**
+   * Whether this is for internal members only.
+   *
+   * One thing is, and it is not a study feature at all: the reading challenge
+   * is a household's arrangement about pocket money, kept here because the
+   * household is here. It is offered to them and to nobody else.
+   */
+  requiresInternal?: boolean;
 };
 
 export const MEMBER_CAPABILITY_DEFINITIONS: Record<MemberCapabilityId, MemberCapability> = {
@@ -131,16 +141,27 @@ export const MEMBER_CAPABILITY_DEFINITIONS: Record<MemberCapabilityId, MemberCap
     detail: "What you answered here, recorded here.",
     requiresWanikani: false,
   },
+  [MEMBER_CAPABILITIES.readingChallenge]: {
+    id: MEMBER_CAPABILITIES.readingChallenge,
+    label: "The reading challenge",
+    detail: "Daily reading check-ins and the yen behind them, for the household that runs it.",
+    requiresWanikani: false,
+    requiresInternal: true,
+  },
 };
 
 /** What a surface needs to know about the member it is rendering for. */
 export type MemberAccess = {
   hasWanikani: boolean;
+  /** One of us: the family, and the admins. Left off, a member is an ordinary one. */
+  internal?: boolean;
 };
 
 /** Whether this member may use this capability at all. */
 export function canUseCapability(id: MemberCapabilityId, access: MemberAccess): boolean {
-  return !MEMBER_CAPABILITY_DEFINITIONS[id].requiresWanikani || access.hasWanikani;
+  const capability = MEMBER_CAPABILITY_DEFINITIONS[id];
+  if (capability.requiresWanikani && !access.hasWanikani) return false;
+  return !capability.requiresInternal || access.internal === true;
 }
 
 const ALL_CAPABILITIES: MemberCapability[] = Object.values(MEMBER_CAPABILITIES).map(
@@ -152,7 +173,13 @@ export function capabilitiesNeedingWanikani(): MemberCapability[] {
   return ALL_CAPABILITIES.filter((capability) => capability.requiresWanikani);
 }
 
-/** What a member has either way, in registry order. */
+/*
+ * What a member has either way, in registry order.
+ *
+ * Internal-only entries are left out of both lists: the connection page is
+ * about what WaniKani adds, and naming a page most members will never be
+ * offered answers a question nobody asked.
+ */
 export function capabilitiesWithoutWanikani(): MemberCapability[] {
-  return ALL_CAPABILITIES.filter((capability) => !capability.requiresWanikani);
+  return ALL_CAPABILITIES.filter((capability) => !capability.requiresWanikani && !capability.requiresInternal);
 }

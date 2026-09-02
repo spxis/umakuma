@@ -54,7 +54,7 @@ export function buildHeaderMenu(input: {
   access?: MemberAccess;
 }): HeaderMenuModel {
   const { username, isAdmin, showAdminActions } = input;
-  const access = input.access ?? { hasWanikani: true };
+  const access = input.access ?? { hasWanikani: true, internal: isAdmin };
 
   if (!username) {
     // No account: nothing here is reachable, so offer nothing but admin.

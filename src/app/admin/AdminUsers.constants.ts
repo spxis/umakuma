@@ -27,6 +27,7 @@ export const ADMIN_USERS_COPY = {
     inviteCode: "Invite Code",
     actions: "Actions",
     meBadge: "Me",
+    internalBadge: "Internal",
     levelPrefix: "Lv",
     joinedByPrefix: "by",
     inviteNotSet: "Not set",
@@ -52,6 +53,8 @@ export const ADMIN_USERS_COPY = {
     refreshCooldown: "Synced under a minute ago",
     setInvite: "Set invite code",
     resetInvite: "Reset invite code",
+    makeInternal: "Make internal",
+    makeOrdinary: "Make ordinary",
     history: "View history",
   },
   confirm: {
@@ -84,6 +87,9 @@ export const ADMIN_USERS_COPY = {
     inviteAssignFailed: "Could not assign invite code.",
     inviteReset: "Invite code reset.",
     inviteResetFailed: "Could not reset invite code.",
+    internalOn: "Marked internal.",
+    internalOff: "Marked ordinary.",
+    internalFailed: "Could not change that member's kind.",
   },
   addModal: {
     label: "Users",

@@ -136,8 +136,9 @@ describe("sectionHasSubNav", () => {
  * to now.
  */
 describe("visibleNavSections", () => {
-  const CONNECTED = { hasWanikani: true };
-  const UNCONNECTED = { hasWanikani: false };
+  /* Internal as well as connected, so nothing at all is gated for this one. */
+  const CONNECTED = { hasWanikani: true, internal: true };
+  const UNCONNECTED = { hasWanikani: false, internal: true };
 
   function paths(sections: ReturnType<typeof visibleNavSections>): string[] {
     return sections.flatMap((section) => section.children.map((child) => child.path));
@@ -155,7 +156,8 @@ describe("visibleNavSections", () => {
 
   it("keeps everything the app can answer for itself", () => {
     const visible = paths(visibleNavSections(NAV_SECTIONS, UNCONNECTED));
-    for (const open of ["study", "game", "jlpt-explorer", "grades", "practice", "/maps", "lists", "history", "read", "news", "libraries", "wanikani"]) {
+    /* Read is absent on purpose: it is gated on being internal, not on a connection. */
+    for (const open of ["study", "game", "jlpt-explorer", "grades", "practice", "/maps", "lists", "history", "news", "libraries", "wanikani"]) {
       expect(visible, open).toContain(open);
     }
   });
@@ -184,5 +186,47 @@ describe("lists", () => {
     expect(sectionForPath(`/users/${USER}/lists`, USER)?.id).toBe("lists");
     const explore = NAV_SECTIONS.find((section) => section.id === "explore");
     expect(explore?.children.map((child) => child.path)).not.toContain("lists");
+  });
+});
+
+/*
+ * The reading challenge is one family's arrangement about pocket money, not a
+ * feature of a Japanese study site, so it is offered to them and to nobody
+ * else. Everybody keeps the news reader, which is what the group is called
+ * once the challenge is taken out of it.
+ */
+describe("who is offered Read", () => {
+  const readFor = (internal: boolean) =>
+    visibleNavSections(NAV_SECTIONS, { hasWanikani: true, internal }).find((section) => section.id === "read");
+
+  it("offers the challenge and the news to the family", () => {
+    expect(readFor(true)?.label).toBe("Read");
+    expect(readFor(true)?.children.map((child) => child.path)).toEqual(["read", "news"]);
+  });
+
+  it("offers everybody else the news alone, under its own name", () => {
+    expect(readFor(false)?.label).toBe("News");
+    expect(readFor(false)?.children.map((child) => child.path)).toEqual(["news"]);
+  });
+
+  it("leaves every other group untouched", () => {
+    const ids = (internal: boolean) =>
+      visibleNavSections(NAV_SECTIONS, { hasWanikani: true, internal }).map((section) => section.id);
+    expect(ids(false)).toEqual(ids(true));
+    expect(ids(true)).toEqual(NAV_SECTIONS.map((section) => section.id));
+  });
+
+  it("drops the second row for a group left with one page", () => {
+    expect(sectionHasSubNav(readFor(false) ?? null)).toBe(false);
+    expect(sectionHasSubNav(readFor(true) ?? null)).toBe(true);
+  });
+
+  /* An ordinary member is not offered the address, whatever else they can reach. */
+  it("hides the challenge from a connected member who is not internal", () => {
+    const paths = visibleNavSections(NAV_SECTIONS, { hasWanikani: true, internal: false }).flatMap((section) =>
+      section.children.map((child) => child.path),
+    );
+    expect(paths).not.toContain("read");
+    expect(paths).toContain("news");
   });
 });

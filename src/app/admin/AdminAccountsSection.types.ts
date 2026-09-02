@@ -12,6 +12,8 @@ export type AdminAccount = {
   joinedByEmail: string | null;
   inviteCodeUpdatedAt: string | null;
   createdAt: string;
+  /** The family and the helpers: the members the reading challenge is for. */
+  internal: boolean;
 };
 
 export type AdminAccountsSectionProps = {
@@ -23,6 +25,7 @@ export type AdminAccountsSectionProps = {
   onRefreshOne: (accountId: string) => void;
   onAssignInviteCode: (accountId: string) => Promise<string | null>;
   onResetInviteCode: (accountId: string) => Promise<void>;
+  onSetInternal: (accountId: string, internal: boolean) => Promise<void>;
 };
 
 export type SortBy = "nickname" | "wkLevel" | "pendingReviews" | "lastSyncedAt" | "createdAt";
@@ -34,6 +37,7 @@ export const ACCOUNT_ROW_ACTION_IDS = {
   refresh: "refresh",
   setInvite: "setInvite",
   resetInvite: "resetInvite",
+  toggleInternal: "toggleInternal",
   history: "history",
 } as const;
 

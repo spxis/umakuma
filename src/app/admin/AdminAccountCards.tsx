@@ -54,6 +54,11 @@ export default function AdminAccountCards({
                       {copy.table.meBadge}
                     </span>
                   ) : null}
+                  {account.internal ? (
+                    <span className="shrink-0 rounded-full border border-line bg-surface-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70">
+                      {copy.table.internalBadge}
+                    </span>
+                  ) : null}
                 </p>
                 <p className="truncate text-xs text-foreground/65">@{account.wkUsername}</p>
               </div>

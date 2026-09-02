@@ -78,6 +78,8 @@ export type ViewerMenuInfo = {
    * is whether there is a token behind it.
    */
   hasWanikani: boolean;
+  /** One of us: the family and anybody let in deliberately. Decides who is offered the reading challenge. */
+  internal: boolean;
   isAdmin: boolean;
 };
 

@@ -7,6 +7,8 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { authOptions, isAdminEmail } from "@/lib/auth";
+import { MEMBER_CAPABILITIES, canUseCapability } from "@/lib/memberCapabilities";
+import { isInternalKind, memberKindFor } from "@/lib/memberKind";
 import { refreshDueAccounts } from "@/lib/sync";
 import {
   READING_CAMPAIGN,
@@ -91,6 +93,10 @@ export default async function Home() {
     hasAccount: Boolean(viewerWkUsername),
   });
   const readingChallengeHref = viewerWkUsername ? `/users/${encodeURIComponent(viewerWkUsername)}/read` : "/join";
+  const viewerCanSeeReading = canUseCapability(MEMBER_CAPABILITIES.readingChallenge, {
+    hasWanikani: true,
+    internal: isInternalKind(memberKindFor({ isAdmin: canViewAllUserPages, internal: viewerMenuInfo?.internal === true })),
+  });
   const challengeToday = getTodayDateInputValue();
 
   let challengeGoalDatePst = READING_CAMPAIGN.goalDatePst;
@@ -370,63 +376,71 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="animate-enter animate-enter-delay-1 mt-6 overflow-hidden rounded-2xl border border-line bg-linear-to-br from-amber-100/90 via-orange-100/80 to-rose-100/80 shadow-[0_24px_70px_rgba(237,137,54,0.2)]">
-          <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-[1.3fr,0.9fr] lg:items-end">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-800/90">
-                Reading Challenge
-              </p>
-              <h2 className="mt-2 text-3xl font-black leading-[0.95] text-amber-950 sm:text-4xl lg:text-5xl">
-                {challengeDaysLeft} days left to hit JPY {formatNumber(challengeTargetBaseYen)}.
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm font-semibold text-amber-900/80 sm:text-base">
-                Top earner: {challengeLeaderName} with JPY {formatNumber(challengeLeaderYen)}. Team pot: JPY {formatNumber(challengeTeamYen)}.
-              </p>
+        {/*
+          The reading challenge is one family's arrangement about pocket
+          money, so the banner - and the check-in it invites - is drawn for
+          them and for nobody else. Everyone else gets a leaderboard that
+          does not advertise a page they cannot open.
+        */}
+        {viewerCanSeeReading ? (
+          <section className="animate-enter animate-enter-delay-1 mt-6 overflow-hidden rounded-2xl border border-line bg-linear-to-br from-amber-100/90 via-orange-100/80 to-rose-100/80 shadow-[0_24px_70px_rgba(237,137,54,0.2)]">
+            <div className="grid gap-4 p-5 sm:p-7 lg:grid-cols-[1.3fr,0.9fr] lg:items-end">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-800/90">
+                  Reading Challenge
+                </p>
+                <h2 className="mt-2 text-3xl font-black leading-[0.95] text-amber-950 sm:text-4xl lg:text-5xl">
+                  {challengeDaysLeft} days left to hit JPY {formatNumber(challengeTargetBaseYen)}.
+                </h2>
+                <p className="mt-3 max-w-2xl text-sm font-semibold text-amber-900/80 sm:text-base">
+                  Top earner: {challengeLeaderName} with JPY {formatNumber(challengeLeaderYen)}. Team pot: JPY {formatNumber(challengeTeamYen)}.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 lg:justify-end">
+                <Link
+                  href={readingChallengeHref}
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-amber-300/70 bg-amber-900 px-5 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:bg-amber-800"
+                >
+                  Open Read Challenge
+                </Link>
+                <Link
+                  href={readingChallengeHref}
+                  className="inline-flex h-11 items-center justify-center rounded-full border border-amber-300/80 bg-white px-5 text-xs font-bold uppercase tracking-[0.14em] text-amber-900 transition hover:bg-amber-50"
+                >
+                  Log Today&apos;s Check-in
+                </Link>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2 lg:justify-end">
-              <Link
-                href={readingChallengeHref}
-                className="inline-flex h-11 items-center justify-center rounded-full border border-amber-300/70 bg-amber-900 px-5 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:bg-amber-800"
-              >
-                Open Read Challenge
-              </Link>
-              <Link
-                href={readingChallengeHref}
-                className="inline-flex h-11 items-center justify-center rounded-full border border-amber-300/80 bg-white px-5 text-xs font-bold uppercase tracking-[0.14em] text-amber-900 transition hover:bg-amber-50"
-              >
-                Log Today&apos;s Check-in
-              </Link>
+            <div className="grid gap-2 border-t border-amber-200/70 bg-white/55 px-5 py-4 sm:grid-cols-2 lg:grid-cols-4 sm:px-7">
+              <div className="rounded-xl border border-amber-200/80 bg-white/80 px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-900/70">Days remaining</p>
+                <p className="mt-1 text-xl font-black text-amber-950">{challengeDaysLeft}</p>
+              </div>
+              <div className="rounded-xl border border-amber-200/80 bg-white/80 px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-900/70">Tracked players</p>
+                <p className="mt-1 text-xl font-black text-amber-950">{formatNumber(challengeTrackedPlayers)}</p>
+              </div>
+              <div className="rounded-xl border border-amber-200/80 bg-white/80 px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-900/70">Leader + runner-up</p>
+                <p className="mt-1 text-sm font-black text-amber-950">
+                  {challengeLeaderName} JPY {formatNumber(challengeLeaderYen)}
+                </p>
+                <p className="text-xs font-semibold text-amber-900/75">
+                  {challengeSecondName !== "-" ? `${challengeSecondName} JPY ${formatNumber(challengeSecondYen)}` : "Waiting for challenger"}
+                </p>
+              </div>
+              <div className="rounded-xl border border-amber-200/80 bg-white/80 px-3 py-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-900/70">Leader pace to goal</p>
+                <p className="mt-1 text-sm font-black text-amber-950">
+                  JPY {formatNumber(leaderDailyPaceNeeded)} / day
+                </p>
+                <p className="text-xs font-semibold text-amber-900/75">
+                  Remaining: JPY {formatNumber(leaderRemainingToGoal)}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="grid gap-2 border-t border-amber-200/70 bg-white/55 px-5 py-4 sm:grid-cols-2 lg:grid-cols-4 sm:px-7">
-            <div className="rounded-xl border border-amber-200/80 bg-white/80 px-3 py-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-900/70">Days remaining</p>
-              <p className="mt-1 text-xl font-black text-amber-950">{challengeDaysLeft}</p>
-            </div>
-            <div className="rounded-xl border border-amber-200/80 bg-white/80 px-3 py-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-900/70">Tracked players</p>
-              <p className="mt-1 text-xl font-black text-amber-950">{formatNumber(challengeTrackedPlayers)}</p>
-            </div>
-            <div className="rounded-xl border border-amber-200/80 bg-white/80 px-3 py-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-900/70">Leader + runner-up</p>
-              <p className="mt-1 text-sm font-black text-amber-950">
-                {challengeLeaderName} JPY {formatNumber(challengeLeaderYen)}
-              </p>
-              <p className="text-xs font-semibold text-amber-900/75">
-                {challengeSecondName !== "-" ? `${challengeSecondName} JPY ${formatNumber(challengeSecondYen)}` : "Waiting for challenger"}
-              </p>
-            </div>
-            <div className="rounded-xl border border-amber-200/80 bg-white/80 px-3 py-2">
-              <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-amber-900/70">Leader pace to goal</p>
-              <p className="mt-1 text-sm font-black text-amber-950">
-                JPY {formatNumber(leaderDailyPaceNeeded)} / day
-              </p>
-              <p className="text-xs font-semibold text-amber-900/75">
-                Remaining: JPY {formatNumber(leaderRemainingToGoal)}
-              </p>
-            </div>
-          </div>
-        </section>
+          </section>
+        ) : null}
 
         <section className="animate-enter animate-enter-delay-2 mt-6 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
           {runtimeError ? (

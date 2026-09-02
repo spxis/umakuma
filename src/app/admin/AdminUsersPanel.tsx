@@ -155,6 +155,32 @@ export default function AdminUsersPanel({
     }
   }
 
+  /*
+   * Internal is the family and the helpers, and it decides one thing: who is
+   * offered the reading challenge. No confirmation - it is a flag that toggles
+   * straight back, and neither direction loses anything.
+   */
+  async function setInternal(accountId: string, internal: boolean) {
+    setBusy(true);
+    try {
+      const response = await fetch(`/api/admin/accounts/${accountId}/internal`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ internal }),
+      });
+      const data = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(data.error ?? COPY.toasts.internalFailed);
+      }
+      await loadAccounts();
+      showToast({ tone: "success", message: internal ? COPY.toasts.internalOn : COPY.toasts.internalOff });
+    } catch (error) {
+      showToast({ tone: "error", message: error instanceof Error ? error.message : COPY.toasts.internalFailed });
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function resetInviteCode(accountId: string) {
     const target = accounts.find((account) => account.id === accountId);
     const accepted = await confirmAction({
@@ -263,6 +289,7 @@ export default function AdminUsersPanel({
         onRefreshOne={refreshOne}
         onAssignInviteCode={assignInviteCode}
         onResetInviteCode={resetInviteCode}
+        onSetInternal={setInternal}
       />
 
       {isAddModalOpen ? (

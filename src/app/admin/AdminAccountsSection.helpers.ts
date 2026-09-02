@@ -107,6 +107,14 @@ export function buildAccountRowActions(
         destructive: true,
       },
       {
+        id: ACCOUNT_ROW_ACTION_IDS.toggleInternal,
+        label: account.internal
+          ? ADMIN_USERS_COPY.rowActions.makeOrdinary
+          : ADMIN_USERS_COPY.rowActions.makeInternal,
+        disabled: busy,
+        destructive: false,
+      },
+      {
         id: ACCOUNT_ROW_ACTION_IDS.history,
         label: ADMIN_USERS_COPY.rowActions.history,
         href: `/admin/users/${encodeURIComponent(account.id)}/history`,

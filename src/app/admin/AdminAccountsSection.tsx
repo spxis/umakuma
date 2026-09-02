@@ -36,6 +36,7 @@ export default function AdminAccountsSection({
   onRefreshOne,
   onAssignInviteCode,
   onResetInviteCode,
+  onSetInternal,
 }: AdminAccountsSectionProps) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
@@ -82,6 +83,12 @@ export default function AdminAccountsSection({
 
     if (actionId === ACCOUNT_ROW_ACTION_IDS.resetInvite) {
       void onResetInviteCode(accountId);
+      return;
+    }
+
+    if (actionId === ACCOUNT_ROW_ACTION_IDS.toggleInternal) {
+      const account = accounts.find((row) => row.id === accountId);
+      void onSetInternal(accountId, !account?.internal);
     }
   }
 
@@ -139,6 +146,11 @@ export default function AdminAccountsSection({
                         {isMe ? (
                           <span className="rounded-full border border-accent/30 bg-accent/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent">
                             {copy.table.meBadge}
+                          </span>
+                        ) : null}
+                        {account.internal ? (
+                          <span className="rounded-full border border-line bg-surface-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70">
+                            {copy.table.internalBadge}
                           </span>
                         ) : null}
                       </div>

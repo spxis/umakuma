@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { prisma } from "@/lib/prisma";
@@ -7,20 +6,17 @@ import { resolveReadingCampaignSelection } from "@/lib/readingChallengeStore";
 import { currentReviewQueueFromAssignmentCache } from "@/lib/readingSignoff";
 import { emitSumilabuTelemetry } from "@/lib/sumilabuTelemetry";
 import { challengeReadScope, getReadingSignoffEntryDelegate } from "./readingSignoffsRoute.types";
-import {
-  getQuerySchema,
-  patchBodySchema,
-  postBodySchema,
-  prismaErrorCode,
-} from "./readingSignoffsRoute.validation";
+import { getQuerySchema, patchBodySchema, postBodySchema, prismaErrorCode } from "./readingSignoffsRoute.validation";
 import {
   backfillStaleCoverUrls,
   ensureSeedBooks,
   getReadingChallengeBookDelegate,
   getReadingChallengeMemberDelegate,
   getReadingSignoffDelegate,
+  canPostReadingSignoff,
   resolveViewerAccounts,
   toChallengeBookRecord,
+  viewerMayReadChallenge,
   toReadingSignoffEntryRecord,
   toReadingSignoffRecord,
   type LatestSignoffSummary,
@@ -46,7 +42,7 @@ export async function GET(request: Request) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
         }
         const viewerAccounts = await resolveViewerAccounts(request);
-        if (viewerAccounts.length === 0) {
+        if (viewerAccounts.length === 0 || !(await viewerMayReadChallenge(request, viewerAccounts))) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
         const campaignSelection = await resolveReadingCampaignSelection(parsed.data.challengeId);
@@ -239,7 +235,7 @@ export async function POST(request: Request) {
         }
 
         const viewerIsAdmin = await isAuthorizedAdmin(request);
-        if (!viewerIsAdmin && !(await canAccessAccount(request, parsed.data.accountId))) {
+        if (!viewerIsAdmin && !(await canPostReadingSignoff(request, parsed.data.accountId))) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
 

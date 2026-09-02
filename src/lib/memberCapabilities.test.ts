@@ -8,8 +8,9 @@ import {
   capabilitiesWithoutWanikani,
 } from "./memberCapabilities";
 
-const CONNECTED = { hasWanikani: true };
-const UNCONNECTED = { hasWanikani: false };
+const CONNECTED = { hasWanikani: true, internal: true };
+const UNCONNECTED = { hasWanikani: false, internal: true };
+const OUTSIDER = { hasWanikani: true, internal: false };
 
 describe("the capability registry", () => {
   it("defines every capability it names", () => {
@@ -48,18 +49,41 @@ describe("the capability registry", () => {
     expect(open).toContain(MEMBER_CAPABILITIES.lists);
   });
 
-  it("splits the whole registry between the two lists", () => {
-    expect(capabilitiesNeedingWanikani().length + capabilitiesWithoutWanikani().length).toBe(
+  /*
+   * Every capability is on one list or the other, except the internal-only
+   * ones: the connection page is about what WaniKani adds, and naming a page
+   * most members will never be offered answers a question nobody asked.
+   */
+  it("splits the whole registry between the two lists, bar the internal ones", () => {
+    const internalOnly = Object.values(MEMBER_CAPABILITY_DEFINITIONS).filter(
+      (capability) => capability.requiresInternal,
+    ).length;
+    expect(capabilitiesNeedingWanikani().length + capabilitiesWithoutWanikani().length + internalOnly).toBe(
       Object.values(MEMBER_CAPABILITIES).length,
     );
+    expect(internalOnly).toBe(1);
   });
 });
 
 describe("canUseCapability", () => {
-  it("opens everything to a connected member", () => {
+  it("opens everything to a connected member who is one of us", () => {
     for (const id of Object.values(MEMBER_CAPABILITIES)) {
       expect(canUseCapability(id, CONNECTED), id).toBe(true);
     }
+  });
+
+  /*
+   * The reading challenge is a household's arrangement about pocket money.
+   * A member with every WaniKani surface open to them is still not offered it.
+   */
+  it("keeps the reading challenge from a member who is not internal", () => {
+    expect(canUseCapability(MEMBER_CAPABILITIES.readingChallenge, OUTSIDER)).toBe(false);
+    expect(canUseCapability(MEMBER_CAPABILITIES.readingChallenge, CONNECTED)).toBe(true);
+    expect(canUseCapability(MEMBER_CAPABILITIES.newsReader, OUTSIDER)).toBe(true);
+  });
+
+  it("treats a member with nothing said about them as an ordinary one", () => {
+    expect(canUseCapability(MEMBER_CAPABILITIES.readingChallenge, { hasWanikani: true })).toBe(false);
   });
 
   it("keeps the WaniKani-shaped surfaces from a member with no connection", () => {

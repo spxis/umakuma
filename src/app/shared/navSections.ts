@@ -39,6 +39,8 @@ export type NavChild = {
 export type NavSection = {
   id: NavSectionId;
   label: string;
+  /** What the group is called when its internal-only pages are not offered. */
+  publicLabel?: string;
   children: NavChild[];
   /**
    * Where the section belongs.
@@ -94,11 +96,18 @@ export const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
+    /*
+     * The reading challenge is one family's arrangement about pocket money,
+     * not a feature of a Japanese study site, so it is offered to them and to
+     * nobody else. The news reader is for everybody, and it is what the group
+     * is called for a member who is not one of us.
+     */
     id: "read",
     label: "Read",
+    publicLabel: "News",
     placement: "nav",
     children: [
-      { label: DASHBOARD_TAB_LABELS.read, path: "read" },
+      { label: DASHBOARD_TAB_LABELS.read, path: "read", requires: MEMBER_CAPABILITIES.readingChallenge },
       { label: DASHBOARD_TAB_LABELS.news, path: "news" },
     ],
   },
@@ -177,31 +186,36 @@ export function sectionHasSubNav(section: NavSection | null): boolean {
 }
 
 /**
+/**
  * The same sections, with the pages this member cannot use taken out.
  *
  * A section whose children all go loses the section: Learn without the Library
  * Explorer still has JLPT, grades and the maps, but a group with nothing left
- * in it is a header entry that leads nowhere. Path resolution is deliberately
- * not filtered - `sectionForPath` still knows where a gated address belongs,
- * so a member who follows an old link gets a coherent header rather than a
- * page with no group at all.
+ * in it is a header entry that leads nowhere. A section that loses only some
+ * of its children takes its public name - Read without the reading challenge
+ * is simply News - so the header never promises a page it is not offering.
+ * Path resolution is deliberately not filtered - `sectionForPath` still knows
+ * where a gated address belongs, so a member who follows an old link gets a
+ * coherent header rather than a page with no group at all.
  */
 export function visibleNavSections(
   sections: readonly NavSection[],
   access: MemberAccess,
 ): NavSection[] {
   return sections
-    .map((section) => ({
-      ...section,
-      children: section.children.filter(
+    .map((section) => {
+      const children = section.children.filter(
         (child) => child.requires === undefined || canUseCapability(child.requires, access),
-      ),
-    }))
+      );
+      const dropped = children.length !== section.children.length;
+      return { ...section, children, label: dropped ? section.publicLabel ?? section.label : section.label };
+    })
     .filter((section) => section.children.length > 0);
 }
 
 /** Sections shown in the header. */
 export const TOP_NAV_SECTIONS = NAV_SECTIONS.filter((section) => section.placement === "nav");
+
 
 /** Sections that live in the account menu instead of the header. */
 export const MENU_NAV_SECTIONS = NAV_SECTIONS.filter((section) => section.placement === "menu");

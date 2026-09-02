@@ -27,6 +27,7 @@ function account(overrides: Partial<AdminAccount> = {}): AdminAccount {
     joinedByEmail: null,
     inviteCodeUpdatedAt: null,
     createdAt: "2026-04-01T00:00:00.000Z",
+    internal: false,
     ...overrides,
   };
 }
@@ -144,6 +145,7 @@ describe("buildAccountRowActions", () => {
       ACCOUNT_ROW_ACTION_IDS.refresh,
       ACCOUNT_ROW_ACTION_IDS.setInvite,
       ACCOUNT_ROW_ACTION_IDS.resetInvite,
+      ACCOUNT_ROW_ACTION_IDS.toggleInternal,
       ACCOUNT_ROW_ACTION_IDS.history,
     ]);
     expect(actions.menu.every((item) => !item.disabled)).toBe(true);
@@ -187,5 +189,28 @@ describe("buildAccountRowActions", () => {
     const actions = buildAccountRowActions(account(), { busy: false, nowMs: NOW_MS });
     const destructive = actions.menu.filter((item) => item.destructive).map((item) => item.id);
     expect(destructive).toEqual([ACCOUNT_ROW_ACTION_IDS.resetInvite]);
+  });
+});
+
+/* Internal is the family and the helpers; an admin flips it from the row menu. */
+describe("the internal entry", () => {
+  const labelFor = (internal: boolean) =>
+    buildAccountRowActions(account({ internal }), { busy: false, nowMs: NOW_MS }).menu.find(
+      (item) => item.id === ACCOUNT_ROW_ACTION_IDS.toggleInternal,
+    )?.label;
+
+  it("offers to promote an ordinary member", () => {
+    expect(labelFor(false)).toBe("Make internal");
+  });
+
+  it("offers to demote an internal one", () => {
+    expect(labelFor(true)).toBe("Make ordinary");
+  });
+
+  it("is never the destructive entry", () => {
+    const entry = buildAccountRowActions(account(), { busy: false, nowMs: NOW_MS }).menu.find(
+      (item) => item.id === ACCOUNT_ROW_ACTION_IDS.toggleInternal,
+    );
+    expect(entry?.destructive).toBe(false);
   });
 });
