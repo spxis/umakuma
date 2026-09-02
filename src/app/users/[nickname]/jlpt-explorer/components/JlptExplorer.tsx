@@ -9,6 +9,7 @@ import JlptExplorerContent from "./JlptExplorerContent";
 import { matchesJlptSearch, normalizeSearch } from "../lib/jlptDisplay";
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
 import { buildJlptDerivedData, type JlptSummary } from "./JlptExplorer.derived";
+import { useJlptFilterState } from "../lib/useJlptFilterState";
 
 type Props = {
   accountId: string;
@@ -23,8 +24,6 @@ type Props = {
 
 type JlptReadingsRecord = Record<string, { nLevel: number; readings: string[]; meanings?: string[] }>;
 
-type JlptFilter = "all" | "kanji" | "none";
-
 type JlptRemoteResponse = {
   jlptItems: JlptItem[];
   summary?: JlptSummary | null;
@@ -32,10 +31,6 @@ type JlptRemoteResponse = {
 };
 
 const JLPT_REMOTE_PAGE_SIZE = 240;
-
-function buildDefaultSelectedLevels(): Set<number> {
-  return new Set([1, 2, 3, 4, 5]);
-}
 
 export default function JlptExplorer({
   accountId,
@@ -130,97 +125,23 @@ export default function JlptExplorer({
     }
   }, [accountId, effectiveItems.length, hasMoreRemote, isLoadingMore]);
 
-  const [selectedLevels, setSelectedLevels] = useState<Set<number>>(() => buildDefaultSelectedLevels());
-  const [stickyLevels, setStickyLevels] = useState(false);
-  const [wkFilter, setWkFilter] = useState<JlptFilter>("all");
-  const [wkLevelFilter, setWkLevelFilter] = useState<number | "none" | null>(null);
-  const [gradeFilter, setGradeFilter] = useState<number | "none" | null>(null);
-  const [hasHydratedStoredFilters, setHasHydratedStoredFilters] = useState(false);
+  /* The filters, remembered per browser and said in the address. */
+  const filters = useJlptFilterState(accountId);
+  const {
+    levels: selectedLevels,
+    stickyLevels,
+    wkFilter,
+    wkLevelFilter,
+    gradeFilter,
+    setLevels: setSelectedLevels,
+    setStickyLevels,
+    setWkFilter,
+    setWkLevelFilter,
+    setGradeFilter,
+  } = filters;
   const [query, setQuery] = useState("");
   const [selectedKanji, setSelectedKanji] = useState<string | null>(null);
   const [gridColumns, setGridColumns] = useState(1);
-
-  useEffect(() => {
-    setHasHydratedStoredFilters(false);
-
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    let nextSelectedLevels = buildDefaultSelectedLevels();
-    let nextStickyLevels = false;
-    let nextWkLevelFilter: number | "none" | null = null;
-    let nextGradeFilter: number | "none" | null = null;
-
-    try {
-      const rawSelectedLevels = window.localStorage.getItem(`wr:jlpt-selected-levels:${accountId}`);
-      if (rawSelectedLevels) {
-        const parsedSelectedLevels = rawSelectedLevels
-          .split(",")
-          .map(Number)
-          .filter((level) => level >= 1 && level <= 5);
-        if (parsedSelectedLevels.length > 0) {
-          nextSelectedLevels = new Set(parsedSelectedLevels);
-        }
-      }
-
-      nextStickyLevels = window.localStorage.getItem(`wr:jlpt-sticky:${accountId}`) === "1";
-
-      const rawWkLevel = window.localStorage.getItem(`wr:jlpt-wk-level:${accountId}`);
-      if (rawWkLevel === "none") {
-        nextWkLevelFilter = "none";
-      } else if (rawWkLevel) {
-        const parsedWkLevel = Number(rawWkLevel);
-        if (Number.isFinite(parsedWkLevel)) {
-          nextWkLevelFilter = parsedWkLevel;
-        }
-      }
-
-      const rawGrade = window.localStorage.getItem(`wr:jlpt-grade:${accountId}`);
-      if (rawGrade === "none") {
-        nextGradeFilter = "none";
-      } else if (rawGrade) {
-        const parsedGrade = Number(rawGrade);
-        if (Number.isFinite(parsedGrade)) {
-          nextGradeFilter = parsedGrade;
-        }
-      }
-    } catch {
-      // Ignore storage errors and keep safe defaults.
-    }
-
-    setSelectedLevels(nextSelectedLevels);
-    setStickyLevels(nextStickyLevels);
-    setWkLevelFilter(nextWkLevelFilter);
-    setGradeFilter(nextGradeFilter);
-    setHasHydratedStoredFilters(true);
-  }, [accountId]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !hasHydratedStoredFilters) return;
-    try { window.localStorage.setItem(`wr:jlpt-selected-levels:${accountId}`, Array.from(selectedLevels).join(",")); } catch { /* ignore */ }
-  }, [accountId, hasHydratedStoredFilters, selectedLevels]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !hasHydratedStoredFilters) return;
-    try { window.localStorage.setItem(`wr:jlpt-sticky:${accountId}`, stickyLevels ? "1" : "0"); } catch { /* ignore */ }
-  }, [accountId, hasHydratedStoredFilters, stickyLevels]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !hasHydratedStoredFilters) return;
-    try {
-      if (wkLevelFilter === null) window.localStorage.removeItem(`wr:jlpt-wk-level:${accountId}`);
-      else window.localStorage.setItem(`wr:jlpt-wk-level:${accountId}`, String(wkLevelFilter));
-    } catch { /* ignore */ }
-  }, [accountId, hasHydratedStoredFilters, wkLevelFilter]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !hasHydratedStoredFilters) return;
-    try {
-      if (gradeFilter === null) window.localStorage.removeItem(`wr:jlpt-grade:${accountId}`);
-      else window.localStorage.setItem(`wr:jlpt-grade:${accountId}`, String(gradeFilter));
-    } catch { /* ignore */ }
-  }, [accountId, gradeFilter, hasHydratedStoredFilters]);
 
   useEffect(() => {
     if (typeof window === "undefined") {

@@ -2235,11 +2235,11 @@
     "id": "explorer-filters-addressable",
     "area": "study",
     "name": "Put explorer filters in the address",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 7,
-    "summary": "Choosing N5 on an explorer changes nothing about the URL, so a filtered view cannot be linked, bookmarked or reloaded. The rest of the member pages became real routes; their filter state has not followed."
+    "summary": "Choosing N5 on the JLPT explorer changed nothing about the URL, so a filtered view could not be linked, bookmarked or reloaded. The level and study explorers had already put their filters in the address when they became real routes; this one had not followed. Its levels, WaniKani filter, level and grade filters and the sticky toggle are now written to the address as they change and read back on arrival, where the address wins over what the browser remembers - so a link to N5 opens on N5 whatever the last visit chose. A filter at its default says nothing, so a plain link stays plain.",
+    "version": "0.237.0",
+    "releasedAt": "2026-09-02T05:24:16Z"
   },
   {
     "id": "lists-are-one-surface",
