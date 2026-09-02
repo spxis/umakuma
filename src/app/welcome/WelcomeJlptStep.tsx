@@ -49,6 +49,12 @@ export default function WelcomeJlptStep({ accountId, onDone }: Props) {
   const levels = system ? levelsForSystem(system) : [];
   const asksForLevel = status === JLPT_CERTIFICATION_STATUSES.passed;
 
+  /*
+   * Two writes, because they are two things: the status is the member's
+   * relationship with the test, and a pass is a certificate they hold. A
+   * member may hold several, so the certificate is a row of its own rather
+   * than three columns that the next one would overwrite.
+   */
   async function save() {
     setSaving(true);
     setError(null);
@@ -56,11 +62,7 @@ export default function WelcomeJlptStep({ accountId, onDone }: Props) {
     const response = await fetch(`/api/accounts/${accountId}/profile`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        jlptStatus: status,
-        jlptYear: asksForLevel && year ? parsedYear : null,
-        jlptLevel: asksForLevel && level ? Number.parseInt(level, 10) : null,
-      }),
+      body: JSON.stringify({ jlptStatus: status }),
     }).catch(() => null);
 
     if (!response?.ok) {
@@ -68,6 +70,21 @@ export default function WelcomeJlptStep({ accountId, onDone }: Props) {
       setError(payload?.error ?? WELCOME_COPY.failed);
       setSaving(false);
       return;
+    }
+
+    if (asksForLevel && year && level) {
+      const added = await fetch(`/api/accounts/${accountId}/jlpt`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ year: parsedYear, level: Number.parseInt(level, 10) }),
+      }).catch(() => null);
+
+      if (!added?.ok) {
+        const payload = await added?.json().catch(() => null);
+        setError(payload?.error ?? WELCOME_COPY.failed);
+        setSaving(false);
+        return;
+      }
     }
 
     onDone();

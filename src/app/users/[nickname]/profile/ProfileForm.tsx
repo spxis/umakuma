@@ -8,50 +8,35 @@ import {
   VISIBILITY_REASSURANCE,
   resolveVisibility,
 } from "@/lib/accountVisibility";
-import {
-  JLPT_CERTIFICATION_STATUSES,
-  JLPT_CERTIFICATION_STATUS_VALUES,
-  JLPT_FIRST_YEAR,
-  jlptSystemForYear,
-  levelsForSystem,
-} from "@/lib/jlptCertification";
 
-import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
+import { PROFILE_COPY } from "./profileCopy";
 
 type Props = {
   accountId: string;
   displayName: string | null;
   visibility: string | null;
-  jlptStatus: string | null;
-  jlptYear: number | null;
-  jlptLevel: number | null;
 };
 
 const FIELD_CLASS =
   "h-10 w-full rounded-xl border border-line bg-surface px-3 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-accent/40";
 
 /**
- * The bits of a profile its owner controls.
+ * The bits of a profile its owner controls: what they are called, and who can
+ * see them.
  *
- * The year is asked before the level because the year decides which test
- * applies: sittings up to 2009 ran four levels counting down from 1, and from
- * 2010 five counting down from N1. Offering N3 for a 2005 sitting would invite
- * an answer that never existed.
+ * The JLPT certificates used to live here as a third field. They are not one
+ * answer - a member may hold several - and they save on their own rather than
+ * behind this form's Save, so they have a section of their own.
+ *
+ * Each choice of audience is one line. Three bordered blocks with the
+ * description stacked under the label took a third of the page for a question
+ * asked once, and pushed everything else below the fold.
  */
-export default function ProfileForm({ accountId, displayName, visibility, jlptStatus, jlptYear, jlptLevel }: Props) {
+export default function ProfileForm({ accountId, displayName, visibility }: Props) {
   const [name, setName] = useState(displayName ?? "");
   const [seenBy, setSeenBy] = useState(resolveVisibility(visibility));
-  const [status, setStatus] = useState(jlptStatus ?? JLPT_CERTIFICATION_STATUSES.none);
-  const [year, setYear] = useState(jlptYear ? String(jlptYear) : "");
-  const [level, setLevel] = useState(jlptLevel ? String(jlptLevel) : "");
   const [state, setState] = useState<"idle" | "saving" | "saved">("idle");
   const [error, setError] = useState<string | null>(null);
-
-  const parsedYear = Number.parseInt(year, 10);
-  const system = Number.isFinite(parsedYear) ? jlptSystemForYear(parsedYear) : null;
-  const levels = system ? levelsForSystem(system) : [];
-  const asksForLevel = status === JLPT_CERTIFICATION_STATUSES.passed;
-  const thisYear = new Date().getUTCFullYear();
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,13 +46,7 @@ export default function ProfileForm({ accountId, displayName, visibility, jlptSt
     const response = await fetch(`/api/accounts/${accountId}/profile`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        displayName: name,
-        visibility: seenBy,
-        jlptStatus: status,
-        jlptYear: asksForLevel && year ? parsedYear : null,
-        jlptLevel: asksForLevel && level ? Number.parseInt(level, 10) : null,
-      }),
+      body: JSON.stringify({ displayName: name, visibility: seenBy }),
     }).catch(() => null);
 
     if (!response?.ok) {
@@ -102,12 +81,12 @@ export default function ProfileForm({ accountId, displayName, visibility, jlptSt
         </legend>
         <p className="mb-2 text-xs text-foreground/60">{PROFILE_COPY.visibilityHint}</p>
 
-        <div className="space-y-2">
+        <div className="divide-y divide-line/60 overflow-hidden rounded-xl border border-line">
           {ACCOUNT_VISIBILITY_VALUES.map((value) => (
             <label
               key={value}
-              className={`flex cursor-pointer gap-3 rounded-xl border p-3 transition ${
-                seenBy === value ? "border-accent bg-accent/5" : "border-line hover:bg-surface-muted"
+              className={`flex cursor-pointer flex-wrap items-baseline gap-x-2 gap-y-0.5 px-3 py-2 transition ${
+                seenBy === value ? "bg-accent/5" : "hover:bg-surface-muted"
               }`}
             >
               <input
@@ -116,75 +95,15 @@ export default function ProfileForm({ accountId, displayName, visibility, jlptSt
                 value={value}
                 checked={seenBy === value}
                 onChange={() => { setSeenBy(value); setState("idle"); }}
-                className="mt-0.5"
+                className="self-center"
               />
-              <span>
-                <span className="block text-sm font-bold text-foreground">
-                  {ACCOUNT_VISIBILITY_DISPLAY[value].label}
-                </span>
-                <span className="block text-xs text-foreground/60">
-                  {ACCOUNT_VISIBILITY_DISPLAY[value].description}
-                </span>
-              </span>
+              <span className="text-sm font-bold text-foreground">{ACCOUNT_VISIBILITY_DISPLAY[value].label}</span>
+              <span className="text-xs text-foreground/60">{ACCOUNT_VISIBILITY_DISPLAY[value].description}</span>
             </label>
           ))}
         </div>
         <p className="mt-2 text-xs font-semibold text-foreground/60">{VISIBILITY_REASSURANCE}</p>
       </fieldset>
-
-      <div>
-        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{PROFILE_COPY.jlpt}</p>
-        <p className="mb-2 text-xs text-foreground/60">{PROFILE_COPY.jlptHint}</p>
-
-        <div className="grid gap-2 sm:grid-cols-3">
-          <label className="block">
-            <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">{PROFILE_COPY.jlptStatus}</span>
-            <select
-              value={status}
-              onChange={(event) => { setStatus(event.target.value); setState("idle"); }}
-              className={FIELD_CLASS}
-            >
-              {JLPT_CERTIFICATION_STATUS_VALUES.map((value) => (
-                <option key={value} value={value}>{JLPT_STATUS_LABELS[value] ?? value}</option>
-              ))}
-            </select>
-          </label>
-
-          {asksForLevel ? (
-            <>
-              <label className="block">
-                <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">{PROFILE_COPY.jlptYear}</span>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min={JLPT_FIRST_YEAR}
-                  max={thisYear}
-                  value={year}
-                  onChange={(event) => { setYear(event.target.value); setLevel(""); setState("idle"); }}
-                  className={FIELD_CLASS}
-                />
-              </label>
-
-              <label className="block">
-                <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-foreground/60">{PROFILE_COPY.jlptLevel}</span>
-                <select
-                  value={level}
-                  onChange={(event) => { setLevel(event.target.value); setState("idle"); }}
-                  disabled={!system}
-                  className={`${FIELD_CLASS} disabled:opacity-50`}
-                >
-                  <option value="">{PROFILE_COPY.jlptNone}</option>
-                  {levels.map((value) => (
-                    <option key={value} value={value}>
-                      {system === "modern" ? `N${value}` : `Level ${value}`}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </>
-          ) : null}
-        </div>
-      </div>
 
       {error ? <p className="text-xs font-bold text-red-700">{error}</p> : null}
 

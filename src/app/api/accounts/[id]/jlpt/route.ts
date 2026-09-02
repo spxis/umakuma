@@ -1,208 +1,82 @@
-import { canAccessAccount } from "@/lib/accountAccess";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import {
-  WANIKANI_REQUIRED_MESSAGE,
-  WANIKANI_REQUIRED_STATUS,
-  wanikaniConnection,
-} from "@/lib/wanikaniConnection";
-import { prisma } from "@/lib/prisma";
-import { preferOfficialReadings } from "@/lib/joyoReadings";
-import { getUserKanjiIndex } from "@/lib/wanikani";
+import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { withReviewSuccessRates } from "@/lib/reviewSuccessRates";
+import { toCertificates, validateCertificate } from "@/lib/jlptCertificates";
+import { JLPT_CERTIFICATION_STATUSES, JLPT_FIRST_YEAR } from "@/lib/jlptCertification";
+import { prisma } from "@/lib/prisma";
 
-type RouteContext = {
-  params: Promise<{ id: string }>;
-};
-
-const routeParamsSchema = z.object({
-  id: z.string().min(1),
+const bodySchema = z.object({
+  year: z.coerce.number().int().nullable(),
+  level: z.coerce.number().int().nullable(),
 });
 
-const routeQuerySchema = z.object({
-  includeItems: z.enum(["0", "1"]).optional(),
-  includeUserIndex: z.enum(["0", "1"]).optional(),
-  includeSummary: z.enum(["0", "1"]).optional(),
-  limit: z.string().optional(),
-  offset: z.string().optional(),
-});
+async function certificatesFor(accountId: string) {
+  const rows = await prisma.jlptCertificate.findMany({
+    where: { accountId },
+    select: { id: true, system: true, level: true, year: true },
+  });
+  return toCertificates(rows);
+}
 
-export async function GET(request: Request, context: RouteContext) {
+/** Every certificate this member reports holding, hardest first. */
+export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
   return withApiRouteTelemetry({
     route: "/api/accounts/[id]/jlpt",
     method: "GET",
     request,
     execute: async () => {
-      try {
-        const requestUrl = new URL(request.url);
-        const parsedParams = routeParamsSchema.safeParse(await context.params);
-        if (!parsedParams.success) {
-          return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
-        }
-
-        const parsedQuery = routeQuerySchema.safeParse({
-          includeItems: requestUrl.searchParams.get("includeItems") ?? undefined,
-          includeUserIndex: requestUrl.searchParams.get("includeUserIndex") ?? undefined,
-          includeSummary: requestUrl.searchParams.get("includeSummary") ?? undefined,
-          limit: requestUrl.searchParams.get("limit") ?? undefined,
-          offset: requestUrl.searchParams.get("offset") ?? undefined,
-        });
-        if (!parsedQuery.success) {
-          return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
-        }
-
-        const includeItems = parsedQuery.data.includeItems !== "0";
-        const includeUserIndex = parsedQuery.data.includeUserIndex !== "0";
-        const includeSummary = parsedQuery.data.includeSummary !== "0";
-        const limitParam = Number(parsedQuery.data.limit ?? "");
-        const offsetParam = Number(parsedQuery.data.offset ?? "");
-        const limit = Number.isInteger(limitParam) && limitParam >= 0 ? Math.min(limitParam, 500) : null;
-        const offset = Number.isInteger(offsetParam) && offsetParam >= 0 ? offsetParam : 0;
-
-        const { id } = parsedParams.data;
-
-        /*
-         * Whose data this is, asked before anything is read.
-         *
-         * This route had no check at all. It takes an account id from the
-         * path, decrypts that member's WaniKani token and calls WaniKani with
-         * it, so anyone holding an id could have the server hand back that
-         * member's own progress - and could do it as often as they liked, at
-         * four database queries and an outbound API call each time. The
-         * explorer that calls this only ever asks about the member whose page
-         * it is on, so requiring that costs nothing legitimate.
-         */
-        if (!(await canAccessAccount(request, id))) {
-          return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-        }
-
-        const account = await prisma.account.findUnique({
-          where: { id },
-          select: {
-            tokenEncrypted: true,
-            tokenIv: true,
-            tokenTag: true,
-          },
-        });
-
-        if (!account) {
-          return NextResponse.json({ error: "Account not found." }, { status: 404 });
-        }
-
-        /*
-         * WaniKani is needed for the progress overlay and nothing else.
-         *
-         * The JLPT kanji come from `JlptKanji`, a table WaniKani has no part
-         * in, but this route refused the whole request without a connection -
-         * so a member who had not connected could not read the JLPT data at
-         * all, only the part of it that was about them. The token is required
-         * where it is used and nowhere else; without one the overlay is simply
-         * empty, and the kanji stand on their own.
-         */
-        const connection = wanikaniConnection(account);
-        if (includeUserIndex && !connection) {
-          return NextResponse.json(
-            { error: WANIKANI_REQUIRED_MESSAGE },
-            { status: WANIKANI_REQUIRED_STATUS },
-          );
-        }
-
-        const [rawUserKanjiItems, jlptItems, jlptTotal, jlptSummaryRows] = await Promise.all([
-          includeUserIndex && connection ? getUserKanjiIndex(connection.token) : Promise.resolve([]),
-          includeItems
-            ? prisma.jlptKanji.findMany({
-                orderBy: [{ nLevel: "asc" }, { kanji: "asc" }],
-                ...(limit === null ? {} : { skip: offset, take: limit }),
-                select: {
-                  kanji: true,
-                  nLevel: true,
-                  strokeCount: true,
-                  frequencyRank: true,
-                  schoolGrade: true,
-                  heisigKeyword: true,
-                  unicodeHex: true,
-                  sourceJlpt: true,
-                  primaryMeaning: true,
-                  meanings: true,
-                  onReadings: true,
-                  kunReadings: true,
-                  nanoriReadings: true,
-                  notes: true,
-                  wordExamples: true,
-                },
-              })
-            : Promise.resolve([]),
-          includeItems || includeSummary ? prisma.jlptKanji.count() : Promise.resolve(0),
-          includeSummary
-            ? prisma.jlptKanji.findMany({
-                select: {
-                  kanji: true,
-                  nLevel: true,
-                  schoolGrade: true,
-                },
-              })
-            : Promise.resolve([]),
-        ]);
-        const userKanjiItems = includeUserIndex
-          ? await withReviewSuccessRates(id, rawUserKanjiItems)
-          : [];
-
-        /*
-         * The stored readings are KANJIDIC's, which include forms a character
-         * never takes alone - 王 listed -ノウ, which exists only inside 親王.
-         * The joyo table settles both the list and the on/kun split.
-         */
-        const officialJlptItems = jlptItems.map((row) => {
-          const readings = preferOfficialReadings(row.kanji, row.onReadings, row.kunReadings);
-          return { ...row, onReadings: readings.on, kunReadings: readings.kun };
-        });
-
-        const nLevelCounts = { n1: 0, n2: 0, n3: 0, n4: 0, n5: 0 };
-        const wkLevelCounts: Record<string, number> = {};
-        const gradeCounts: Record<string, number> = {};
-        if (includeSummary) {
-          const userByCharacter = new Map(userKanjiItems.map((item) => [item.characters, item] as const));
-
-          for (const row of jlptSummaryRows) {
-            if (row.nLevel === 1) nLevelCounts.n1 += 1;
-            if (row.nLevel === 2) nLevelCounts.n2 += 1;
-            if (row.nLevel === 3) nLevelCounts.n3 += 1;
-            if (row.nLevel === 4) nLevelCounts.n4 += 1;
-            if (row.nLevel === 5) nLevelCounts.n5 += 1;
-
-            const gradeKey = row.schoolGrade === null ? "none" : String(row.schoolGrade);
-            gradeCounts[gradeKey] = (gradeCounts[gradeKey] ?? 0) + 1;
-
-            const wkLevel = userByCharacter.get(row.kanji)?.wkLevel;
-            const wkLevelKey = typeof wkLevel === "number" ? String(wkLevel) : "none";
-            wkLevelCounts[wkLevelKey] = (wkLevelCounts[wkLevelKey] ?? 0) + 1;
-          }
-        }
-
-        return NextResponse.json({
-          jlptItems: officialJlptItems,
-          userKanjiItems,
-          summary: includeSummary
-            ? {
-                total: jlptTotal,
-                nLevelCounts,
-                wkLevelCounts,
-                gradeCounts,
-              }
-            : null,
-          pagination: {
-            offset,
-            limit: limit ?? jlptItems.length,
-            total: jlptTotal,
-            hasMore: includeItems && limit !== null ? offset + limit < jlptTotal : false,
-          },
-        });
-      } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: "Could not load JLPT explorer data." }, { status: 500 });
+      const { id } = await context.params;
+      if (!(await canAccessAccount(request, id))) {
+        return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
       }
+      return NextResponse.json({ certificates: await certificatesFor(id) });
+    },
+  });
+}
+
+/**
+ * Add one certificate.
+ *
+ * The same level in the same year is the same certificate, so a second attempt
+ * at it is quietly the first one rather than a duplicate or an error - the
+ * member asked for a state, not for an insert. Holding any certificate also
+ * settles the status: somebody who has passed is not still planning to.
+ */
+export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+  return withApiRouteTelemetry({
+    route: "/api/accounts/[id]/jlpt",
+    method: "POST",
+    request,
+    execute: async () => {
+      const { id } = await context.params;
+      if (!(await canAccessAccount(request, id))) {
+        return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+      }
+
+      const parsed = bodySchema.safeParse(await request.json().catch(() => null));
+      if (!parsed.success) {
+        return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+      }
+
+      const checked = validateCertificate(parsed.data, new Date().getUTCFullYear(), JLPT_FIRST_YEAR);
+      if (!checked.ok) {
+        return NextResponse.json({ error: checked.error }, { status: 400 });
+      }
+
+      const { system, level, year } = checked.certificate;
+      await prisma.jlptCertificate.upsert({
+        where: { accountId_system_level_year: { accountId: id, system, level, year } },
+        create: { accountId: id, system, level, year },
+        update: {},
+      });
+      await prisma.account.update({
+        where: { id },
+        data: { jlptStatus: JLPT_CERTIFICATION_STATUSES.passed },
+      });
+
+      return NextResponse.json({ certificates: await certificatesFor(id) });
     },
   });
 }

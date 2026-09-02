@@ -11,13 +11,14 @@ import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import { resolveDisplayName } from "@/lib/accountIdentity";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { authOptions, isAdminEmail } from "@/lib/auth";
-import { formatJlptLevel, isJlptSystem } from "@/lib/jlptCertification";
+import { certificateSummary, toCertificates } from "@/lib/jlptCertificates";
 import { prisma } from "@/lib/prisma";
 import { loadProfileGameStats } from "@/lib/profileStats";
 import { formatDateTimeShort } from "@/lib/timeFormat";
 import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import JlptCertificates from "./JlptCertificates";
 import { wanikaniFact } from "./profileFacts";
 import ProfileForm from "./ProfileForm";
 import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
@@ -63,7 +64,8 @@ export default async function UserProfilePage({ params }: PageProps) {
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
     select: {
       id: true, nickname: true, slug: true, displayName: true, visibility: true, wkUsername: true, wkLevel: true,
-      jlptStatus: true, jlptSystem: true, jlptYear: true, jlptLevel: true,
+      jlptStatus: true,
+      jlptCertificates: { select: { id: true, system: true, level: true, year: true } },
       lastSyncedAt: true, lastActivityAt: true,
       tokenEncrypted: true, tokenIv: true, tokenTag: true,
     },
@@ -89,10 +91,13 @@ export default async function UserProfilePage({ params }: PageProps) {
     address: account.slug ?? account.wkUsername ?? "",
   });
 
+  /*
+   * The card leads with the hardest certificate held and says how many others
+   * there are. A member with none falls back to what they said about the test.
+   */
+  const certificates = toCertificates(account.jlptCertificates);
   const jlpt =
-    account.jlptStatus === "passed" && account.jlptSystem && isJlptSystem(account.jlptSystem) && account.jlptLevel
-      ? formatJlptLevel(account.jlptSystem, account.jlptLevel)
-      : JLPT_STATUS_LABELS[account.jlptStatus ?? ""] ?? PROFILE_COPY.jlptNone;
+    certificateSummary(certificates) ?? JLPT_STATUS_LABELS[account.jlptStatus ?? ""] ?? PROFILE_COPY.jlptNone;
 
   return (
     <div className={`${PAGE_WIDTH.wide} ${PAGE_SHELL_PADDING}`}>
@@ -126,14 +131,12 @@ export default async function UserProfilePage({ params }: PageProps) {
       </section>
 
       <section className="mb-4 rounded-2xl border border-line bg-surface p-5">
-        <ProfileForm
-          accountId={account.id}
-          displayName={account.displayName}
-          visibility={account.visibility}
-          jlptStatus={account.jlptStatus}
-          jlptYear={account.jlptYear}
-          jlptLevel={account.jlptLevel}
-        />
+        <ProfileForm accountId={account.id} displayName={account.displayName} visibility={account.visibility} />
+      </section>
+
+      {/* Certificates save on their own, so they sit outside the form's Save. */}
+      <section className="mb-4 rounded-2xl border border-line bg-surface p-5">
+        <JlptCertificates accountId={account.id} certificates={certificates} status={account.jlptStatus} />
       </section>
 
       {/* Display sits with the rest of the account rather than in the menu. */}

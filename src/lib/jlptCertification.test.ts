@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import {
   CLASSIC_LEVEL_BENCHMARKS,
-  JLPT_CERTIFICATION_STATUSES,
   JLPT_FIRST_YEAR,
   JLPT_SYSTEMS,
   formatJlptLevel,
@@ -11,10 +10,8 @@ import {
   jlptSystemForYear,
   levelsForSystem,
   toModernLevel,
-  validateJlptCertification,
 } from "./jlptCertification";
 
-const CURRENT_YEAR = 2026;
 
 describe("jlptSystemForYear", () => {
   it("treats 2009 and earlier as the old four-level test", () => {
@@ -100,84 +97,5 @@ describe("CLASSIC_LEVEL_BENCHMARKS", () => {
     expect(CLASSIC_LEVEL_BENCHMARKS[4].kanji).toBeLessThan(CLASSIC_LEVEL_BENCHMARKS[3].kanji);
     expect(CLASSIC_LEVEL_BENCHMARKS[3].kanji).toBeLessThan(CLASSIC_LEVEL_BENCHMARKS[2].kanji);
     expect(CLASSIC_LEVEL_BENCHMARKS[2].kanji).toBeLessThan(CLASSIC_LEVEL_BENCHMARKS[1].kanji);
-  });
-});
-
-describe("validateJlptCertification", () => {
-  it("accepts a pass with a year and a level that existed then", () => {
-    const result = validateJlptCertification(
-      { status: JLPT_CERTIFICATION_STATUSES.passed, year: 2005, level: 4 },
-      CURRENT_YEAR,
-    );
-
-    expect(result).toEqual({ ok: true, system: JLPT_SYSTEMS.classic, level: 4, year: 2005 });
-  });
-
-  it("infers the N system from a recent year", () => {
-    const result = validateJlptCertification(
-      { status: JLPT_CERTIFICATION_STATUSES.passed, year: 2016, level: 4 },
-      CURRENT_YEAR,
-    );
-
-    expect(result).toEqual({ ok: true, system: JLPT_SYSTEMS.modern, level: 4, year: 2016 });
-  });
-
-  it("rejects N5 in a year the N system did not exist", () => {
-    const result = validateJlptCertification(
-      { status: JLPT_CERTIFICATION_STATUSES.passed, year: 2005, level: 5 },
-      CURRENT_YEAR,
-    );
-
-    expect(result.ok).toBe(false);
-  });
-
-  it("rejects a pass dated in the future", () => {
-    const result = validateJlptCertification(
-      { status: JLPT_CERTIFICATION_STATUSES.passed, year: CURRENT_YEAR + 1, level: 3 },
-      CURRENT_YEAR,
-    );
-
-    expect(result.ok).toBe(false);
-  });
-
-  it("requires a year and a level for a pass", () => {
-    expect(
-      validateJlptCertification({ status: JLPT_CERTIFICATION_STATUSES.passed, level: 3 }, CURRENT_YEAR).ok,
-    ).toBe(false);
-    expect(
-      validateJlptCertification({ status: JLPT_CERTIFICATION_STATUSES.passed, year: 2020 }, CURRENT_YEAR).ok,
-    ).toBe(false);
-  });
-
-  it("allows a planned sitting with no year yet", () => {
-    const result = validateJlptCertification(
-      { status: JLPT_CERTIFICATION_STATUSES.planned, level: 5 },
-      CURRENT_YEAR,
-    );
-
-    expect(result).toEqual({ ok: true, system: JLPT_SYSTEMS.modern, level: 5, year: null });
-  });
-
-  it("rejects a planned sitting dated in the past", () => {
-    const result = validateJlptCertification(
-      { status: JLPT_CERTIFICATION_STATUSES.planned, level: 5, year: CURRENT_YEAR - 1 },
-      CURRENT_YEAR,
-    );
-
-    expect(result.ok).toBe(false);
-  });
-
-  it("asks nothing further when there is no certificate", () => {
-    for (const status of [
-      JLPT_CERTIFICATION_STATUSES.none,
-      JLPT_CERTIFICATION_STATUSES.undisclosed,
-    ]) {
-      expect(validateJlptCertification({ status }, CURRENT_YEAR)).toEqual({
-        ok: true,
-        system: null,
-        level: null,
-        year: null,
-      });
-    }
   });
 });

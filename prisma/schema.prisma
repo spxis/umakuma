@@ -29,6 +29,17 @@ model Account {
    * not N4. Stored as given and converted for display.
    */
   jlptStatus               String?
+  /**
+   * The single certificate a member used to be allowed.
+   *
+   * A member may hold several - somebody who sat N5, then N4, then N3 holds
+   * three - so what they have passed lives in `JlptCertificate` rows now, and
+   * these three columns are the answer given before that table existed. They
+   * were migrated into rows and nothing reads them; they are kept because the
+   * data outlives the code, not because anything still asks. `jlptStatus`
+   * above is still live: it carries the states that are not a certificate at
+   * all - studying, planning to sit, none, rather not say.
+   */
   jlptSystem               String?
   jlptLevel                Int?
   jlptYear                 Int?
@@ -108,10 +119,33 @@ model Account {
   /// One of us: the family and anybody let in deliberately. Decides who is
   /// offered the reading challenge and its check-ins, which are not public.
   internal                  Boolean   @default(false)
+  jlptCertificates          JlptCertificate[]
   studyLists                StudyList[]
   studyListSubscriptions    StudyListSubscription[]
   studyListProposals        StudyListProposal[]
   gameRuns                  GameRun[]
+}
+
+/// One JLPT certificate a member reports holding.
+///
+/// A row rather than three columns on the account, because a member may hold
+/// several: the ladder is meant to be climbed, and somebody who sat N5, N4 and
+/// N3 has three certificates rather than a current one. The year decides the
+/// system - the test was restructured in 2010 - and it is stored beside the
+/// level so a row reads on its own without consulting the year twice.
+model JlptCertificate {
+  id        String   @id @default(cuid())
+  accountId String
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  /// "classic" (1984-2009, levels 4-1) or "modern" (2010 on, N5-N1).
+  system    String
+  level     Int
+  year      Int
+  createdAt DateTime @default(now())
+
+  /// The same level in the same year is the same certificate, not a second one.
+  @@unique([accountId, system, level, year])
+  @@index([accountId])
 }
 
 model InviteRateLimit {

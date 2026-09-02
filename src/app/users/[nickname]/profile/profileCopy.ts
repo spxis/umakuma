@@ -14,6 +14,11 @@ export const PROFILE_COPY = {
   wanikaniHint: "Set by WaniKani, not editable here.",
   jlpt: "JLPT",
   jlptHint: "As you report it. The year decides which version of the test applies.",
+  jlptAddFirst: "Add a certificate",
+  jlptAddAnother: "Add another",
+  jlptAdd: "Add",
+  jlptDone: "Done",
+  jlptRemoveLabel: (label: string, year: number) => `Remove ${label} from ${year}`,
   jlptStatus: "Status",
   jlptYear: "Year",
   jlptLevel: "Level",
@@ -39,7 +44,6 @@ export const PROFILE_COPY = {
 /** How the stored status values read to a member. */
 export const JLPT_STATUS_LABELS: Record<string, string> = {
   passed: "Passed a level",
-  studying: "Studying for one",
   planned: "Plan to sit one",
   none: "No certificate",
   undisclosed: "Rather not say",

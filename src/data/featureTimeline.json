@@ -2773,19 +2773,6 @@
     "summary": "Every other search offers what it holds as you type; the grades page does not. Reported 2026-09-02 by John."
   },
   {
-    "id": "profile-jlpt-certificates",
-    "name": "The JLPT form is open before anybody asks for it",
-    "area": "account",
-    "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 50,
-    "summary": "The profile shows the member's JLPT level and then the form to change it, always open. A member may hold several certificates, so the profile lists what they have reported and offers Add another or Change; the form appears when it is asked for. The Display section could be condensed while we are there. Reported 2026-09-02 by John.",
-    "owner": "Claude (session 53e531a7)",
-    "claimedAt": "2026-09-02T12:19:32.287Z"
-  },
-  {
     "id": "pill-text-toggle",
     "name": "One control for the text inside item pills",
     "area": "study",
@@ -2963,5 +2950,16 @@
     "summary": "500¥ and 100 CAD converted while 500 yen and C$100 answered with nothing, which is the wrong half: the code is what a bank uses and the sign is a keystroke most keyboards hide, so the words are what a reader actually types. A currency written as a word is read now - yen, euros, pounds, francs, won, rupees, pesos and the rest, singular or plural, since the lookup retries without a trailing s - and so are the letters in front of a dollar sign, which is how a Canadian price is written wherever both dollars are in the room: C$100, US$20, A$50, HK$300, R$50. A word can be two currencies exactly as a sign can, so 100 dollars and 20 bucks answer in Canadian and American together, while a peso falls back to the Mexican one and a krona to the Swedish, each being the one a North American reader is likelier to have met. A number beside an ordinary word is still not a price: chapter 3, level 5 and Heisei 3 name no currency and answer with nothing, which is what leaves the era converter its own query. Reported 2026-09-02 by John.",
     "version": "0.274.0",
     "releasedAt": "2026-09-02T12:55:23Z"
+  },
+  {
+    "id": "profile-jlpt-certificates",
+    "name": "The JLPT form is open before anybody asks for it",
+    "area": "account",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "The profile drew the form to change a JLPT certificate the moment it loaded - an editor, always open, for something that changes twice a decade - and it held one certificate, so reporting a new pass quietly erased the last one. A member holds as many as they have sat: the ladder is meant to be climbed. Certificates are rows now, listed hardest first with the year each was earned, and the card leads with the hardest and counts the rest - \"N3 + 2 more\". Adding one asks for the year first, because the year decides which test applies: a 2007 sitting offers Levels 1 to 4 and a 2022 one offers N1 to N5, and level 3 in 2007 is old Level 3 rather than N3, which did not exist until the 2010 restructure. The panel stays shut until it is asked for, taking one out is a control on the certificate itself, and the status - planning to sit, none, rather not say - is only asked of a member holding none, since holding one is the answer. The three answers already given were carried into rows. Who can see you was three bordered blocks for a question asked once; it is three lines. Reported 2026-09-02 by John.",
+    "version": "0.275.0",
+    "releasedAt": "2026-09-02T13:06:26Z"
   }
 ]
