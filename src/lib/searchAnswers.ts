@@ -29,8 +29,11 @@ import {
   formatUnitRate,
   formatYenJapanese,
   parseMoneyQuery,
+  type CurrencyCode,
+  type MoneyAmount,
   type RateTable,
 } from "./money";
+import { formatChange, type LookbackId } from "./moneyHistory";
 
 export const SEARCH_ANSWER_KINDS = {
   era: "era",
@@ -44,6 +47,35 @@ export type AnswerAttribution = {
   source: string;
   /** The publication day, `YYYY-MM-DD`. */
   asOf: string;
+};
+
+/** Today's rates and the averaged past ones, as far back as they were had. */
+export type MoneyRates = {
+  today: RateTable;
+  past: Array<{ lookback: LookbackId; table: RateTable }>;
+};
+
+/** What the amount was worth then, and how far it has moved since. */
+export type AnswerHistoryCell = {
+  value: string;
+  /** Measured from then to now, so it reads as what has happened since. */
+  change: string | null;
+};
+
+export type AnswerHistoryRow = {
+  lookback: LookbackId;
+  cells: AnswerHistoryCell[];
+};
+
+/**
+ * The same amount at earlier points, which is where the interest is.
+ *
+ * One column per currency the answer is given in, so the yen direction - which
+ * answers in two - carries two columns rather than needing a second shape.
+ */
+export type AnswerHistory = {
+  columns: CurrencyCode[];
+  rows: AnswerHistoryRow[];
 };
 
 export type SearchAnswer = {
@@ -69,6 +101,8 @@ export type SearchAnswer = {
    * without saying so would be claiming a precision it does not have.
    */
   attribution: AnswerAttribution | null;
+  /** What the same amount was worth before, for the answers that have a past. */
+  history: AnswerHistory | null;
 };
 
 /** The era converter, or nothing when the query is not a date. */
@@ -83,6 +117,7 @@ function eraAnswer(query: string): SearchAnswer | null {
     japanese: formatEraYearJapanese(found),
     detail: found.era.reading,
     attribution: null,
+    history: null,
   };
 }
 
@@ -95,43 +130,62 @@ function eraAnswer(query: string): SearchAnswer | null {
  * second currency - so it answers in both of the site's, rather than picking
  * one of the two countries it is written for.
  */
-function currencyAnswer(query: string, rates: RateTable | null, source: string): SearchAnswer | null {
+function currencyAnswer(query: string, rates: MoneyRates | null, source: string): SearchAnswer | null {
   const money = parseMoneyQuery(query);
   if (!money || !rates) return null;
 
-  const attribution = { source, asOf: rates.date };
-  const question = formatMoney(money.amount, money.currency);
+  const today = rates.today;
+  /* One column into yen, or both home currencies coming out of it. */
+  const columns: CurrencyCode[] =
+    money.currency === JPY ? [...HOME_CURRENCIES] : [JPY];
 
-  if (money.currency !== JPY) {
-    const yen = convertMoney(money, JPY, rates);
-    if (yen === null) return null;
+  const now = columns.map((currency) => convertMoney(money, currency, today));
+  if (now.some((value) => value === null)) return null;
+  const amounts = now as number[];
 
-    return {
-      kind: SEARCH_ANSWER_KINDS.currency,
-      question,
-      value: formatMoney(yen, JPY),
-      japanese: formatYenJapanese(yen),
-      detail: formatUnitRate(money.currency, JPY, rates),
-      attribution,
-    };
-  }
-
-  const home = HOME_CURRENCIES.map((currency) => {
-    const converted = convertMoney(money, currency, rates);
-    return converted === null ? null : formatMoney(converted, currency);
-  });
-  if (home.some((value) => value === null)) return null;
+  const detail =
+    money.currency === JPY
+      ? columns.map((currency) => formatUnitRate(currency, JPY, today))
+      : [formatUnitRate(money.currency, JPY, today)];
 
   return {
     kind: SEARCH_ANSWER_KINDS.currency,
-    question,
-    value: home.join(" · "),
-    japanese: null,
-    detail: HOME_CURRENCIES.map((currency) => formatUnitRate(currency, JPY, rates))
-      .filter((line): line is string => line !== null)
-      .join(" · "),
-    attribution,
+    question: formatMoney(money.amount, money.currency),
+    value: columns.map((currency, index) => formatMoney(amounts[index]!, currency)).join(" · "),
+    /* Already yen coming out; repeating it under itself would say nothing. */
+    japanese: money.currency === JPY ? null : formatYenJapanese(amounts[0]!),
+    detail: detail.filter((line): line is string => line !== null).join(" · ") || null,
+    attribution: { source, asOf: today.date },
+    history: moneyHistory(money, columns, amounts, rates),
   };
+}
+
+/**
+ * The same amount at each point back, and how far it has moved since.
+ *
+ * A point whose rates never arrived is left out rather than rendered blank:
+ * the five lookbacks are five independent requests, and four rows of history
+ * is four rows of history. Nothing at all means no table, not an empty one.
+ */
+function moneyHistory(
+  money: MoneyAmount,
+  columns: CurrencyCode[],
+  amounts: number[],
+  rates: MoneyRates,
+): AnswerHistory | null {
+  const rows: AnswerHistoryRow[] = [];
+
+  for (const { lookback, table } of rates.past) {
+    const cells: AnswerHistoryCell[] = [];
+    for (const [index, currency] of columns.entries()) {
+      const then = convertMoney(money, currency, table);
+      if (then === null) break;
+      cells.push({ value: formatMoney(then, currency), change: formatChange(amounts[index]!, then) });
+    }
+    if (cells.length === columns.length) rows.push({ lookback, cells });
+  }
+
+  return rows.length > 0 ? { columns, rows } : null;
 }
 
 /**
@@ -154,7 +208,7 @@ export function needsRates(query: string): boolean {
  */
 export function searchAnswers(
   query: string,
-  rates: RateTable | null = null,
+  rates: MoneyRates | null = null,
   rateSource: string = "",
 ): SearchAnswer[] {
   return [eraAnswer(query), currencyAnswer(query, rates, rateSource)].filter(

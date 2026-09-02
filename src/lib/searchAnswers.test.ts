@@ -1,13 +1,24 @@
 import { describe, expect, it } from "vitest";
 
-import type { RateTable } from "./money";
-import { SEARCH_ANSWER_KINDS, needsRates, searchAnswers } from "./searchAnswers";
+import { SEARCH_ANSWER_KINDS, needsRates, searchAnswers, type MoneyRates } from "./searchAnswers";
 
 /** A day's rates against the euro, shaped like the ones the source publishes. */
-const RATES: RateTable = {
-  base: "EUR",
-  date: "2026-09-01",
-  rates: { CAD: 1.6096, GBP: 0.8629, JPY: 185.63, USD: 1.159 },
+const RATES: MoneyRates = {
+  today: {
+    base: "EUR",
+    date: "2026-09-01",
+    rates: { CAD: 1.6096, GBP: 0.8629, JPY: 185.63, USD: 1.159 },
+  },
+  past: [],
+};
+
+/** The same, with two of the five past points averaged and back. */
+const RATES_WITH_PAST: MoneyRates = {
+  today: RATES.today,
+  past: [
+    { lookback: "y1", table: { base: "EUR", date: "2025-09-02", rates: { CAD: 1.55, JPY: 170, USD: 1.1 } } },
+    { lookback: "y20", table: { base: "EUR", date: "2006-09-02", rates: { CAD: 1.43, JPY: 148, USD: 1.28 } } },
+  ],
 };
 
 const SOURCE = "European Central Bank";
@@ -22,6 +33,7 @@ describe("searchAnswers, on an era year", () => {
       japanese: "平成3年",
       detail: "へいせい",
       attribution: null,
+      history: null,
     });
   });
 
@@ -77,6 +89,52 @@ describe("searchAnswers, on an amount of money", () => {
 
   it("answers nothing for a currency the day's rates do not carry", () => {
     expect(searchAnswers("500 SEK", RATES, SOURCE)).toEqual([]);
+  });
+});
+
+describe("searchAnswers, on what the money used to be worth", () => {
+  it("shows the same amount at each point that came back", () => {
+    const [answer] = searchAnswers("23 EUR", RATES_WITH_PAST, SOURCE);
+    expect(answer?.history?.columns).toEqual(["JPY"]);
+    expect(answer?.history?.rows.map((row) => row.lookback)).toEqual(["y1", "y20"]);
+    /* 23 EUR at ¥170 to the euro, a year ago. */
+    expect(answer?.history?.rows[0]?.cells[0]?.value).toBe("¥3,910");
+  });
+
+  /* From then to now: ¥4,269 today against ¥3,910 a year ago. */
+  it("measures the change from then to now", () => {
+    const [answer] = searchAnswers("23 EUR", RATES_WITH_PAST, SOURCE);
+    expect(answer?.history?.rows[0]?.cells[0]?.change).toBe("+9.2%");
+  });
+
+  it("gives a yen amount a column for each currency it is answered in", () => {
+    const [answer] = searchAnswers("1500円", RATES_WITH_PAST, SOURCE);
+    expect(answer?.history?.columns).toEqual(["CAD", "USD"]);
+    expect(answer?.history?.rows[0]?.cells).toHaveLength(2);
+    expect(answer?.history?.rows[0]?.cells[0]?.value).toMatch(/^CA\$/);
+    expect(answer?.history?.rows[0]?.cells[1]?.value).toMatch(/^\$/);
+  });
+
+  /*
+   * Five independent requests, so four rows of history is four rows of
+   * history - but none at all is no table rather than an empty one.
+   */
+  it("shows no table when no past point came back", () => {
+    const [answer] = searchAnswers("23 EUR", RATES, SOURCE);
+    expect(answer?.value).toBe("¥4,269");
+    expect(answer?.history).toBeNull();
+  });
+
+  it("drops a point whose averages do not carry the currency", () => {
+    const rates: MoneyRates = {
+      today: RATES.today,
+      past: [
+        { lookback: "y1", table: { base: "EUR", date: "2025-09-02", rates: { CAD: 1.55 } } },
+        { lookback: "y5", table: { base: "EUR", date: "2021-09-02", rates: { JPY: 130 } } },
+      ],
+    };
+    const [answer] = searchAnswers("23 EUR", rates, SOURCE);
+    expect(answer?.history?.rows.map((row) => row.lookback)).toEqual(["y5"]);
   });
 });
 

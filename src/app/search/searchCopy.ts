@@ -1,3 +1,4 @@
+import type { LookbackId } from "@/lib/moneyHistory";
 import { SEARCH_ANSWER_KINDS, type SearchAnswerKind } from "@/lib/searchAnswers";
 
 /** Copy for the global search page, in one map for the locale layer. */
@@ -55,4 +56,33 @@ export const SEARCH_ANSWER_COPY: Record<SearchAnswerKind, string> = {
  */
 export const SEARCH_ANSWER_SOURCE_COPY = {
   ratesFrom: (source: string, day: string) => `${source} rates · ${day}`,
+} as const;
+
+/**
+ * How far back each row of the money history reaches.
+ *
+ * Written out rather than computed from the number of days, because "180 days"
+ * and "a year" are how somebody says them, and "365 days ago" is not.
+ */
+export const SEARCH_ANSWER_HISTORY_COPY: Record<LookbackId, string> = {
+  d180: "180 days ago",
+  y1: "1 year ago",
+  y5: "5 years ago",
+  y10: "10 years ago",
+  y20: "20 years ago",
+} as const;
+
+/**
+ * The heading over the history, and the note that says what it is.
+ *
+ * The note earns its line twice over: an average and a single day's rate are
+ * different claims, and a percentage with no direction stated is a coin toss
+ * for the reader.
+ */
+export const SEARCH_ANSWER_HISTORY_LABELS = {
+  heading: "What the same amount was worth",
+  /* Names the unheaded first column for a screen reader reading across a row. */
+  whenColumn: "How far back",
+  note: (days: number) =>
+    `Each point averages the ${days} days of published rates before it. The percentage is the change from then to now.`,
 } as const;

@@ -26,6 +26,7 @@ const HEADER_SUBMIT = "form:has(#global-search) button[type=submit]";
 const RESULT_ROW = "[data-search-result-row]";
 const ERA_ANSWER = '[data-search-answer="era"]';
 const MONEY_ANSWER = '[data-search-answer="currency"]';
+const MONEY_HISTORY = "[data-search-answer-history]";
 
 /** A character every catalogue holds, so the row count never depends on level. */
 const COMMON_KANJI = "水";
@@ -459,6 +460,24 @@ test("a yen amount is answered in both home currencies", async ({ browser, baseU
   await expect(answer).toBeVisible({ timeout: 20_000 });
   await expect(answer).toContainText("CA$");
   await expect(answer).toContainText("¥1,500");
+
+  await finish(page);
+});
+
+test("a converted amount carries its own history", async ({ browser, baseURL }) => {
+  /*
+   * Five independent lookbacks, each averaged over a month of published rates.
+   * Twenty years back is the one that reaches furthest and fails first, so it
+   * is the one worth naming.
+   */
+  const page = await openPage(browser, `${baseURL}/search?query=${encodeURIComponent("23 EUR")}`);
+
+  const history = page.locator(MONEY_HISTORY);
+  await expect(history).toBeVisible({ timeout: 25_000 });
+  await expect(history).toContainText("180 days ago");
+  await expect(history).toContainText("20 years ago");
+  /* The note is what separates an average from a spot rate for the reader. */
+  await expect(history).toContainText(/averages the \d+ days/);
 
   await finish(page);
 });

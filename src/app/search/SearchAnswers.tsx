@@ -2,6 +2,7 @@ import { japaneseTextProps } from "@/app/shared/japaneseText";
 import type { SearchAnswer } from "@/lib/searchAnswers";
 import { formatDateShort } from "@/lib/timeFormat";
 
+import SearchAnswerHistory from "./SearchAnswerHistory";
 import { SEARCH_ANSWER_COPY, SEARCH_ANSWER_SOURCE_COPY } from "./searchCopy";
 
 /**
@@ -76,6 +77,8 @@ export default function SearchAnswers({ answers }: Props) {
               )}
             </p>
           ) : null}
+
+          {answer.history ? <SearchAnswerHistory history={answer.history} /> : null}
         </li>
       ))}
     </ul>

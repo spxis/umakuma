@@ -1,6 +1,7 @@
 import "server-only";
 
 import { CURRENCY_CODES, isCurrencyCode, type CurrencyCode, type RateTable } from "./money";
+import { averageRates } from "./moneyHistory";
 
 /**
  * Where the exchange rates come from.
@@ -22,7 +23,9 @@ import { CURRENCY_CODES, isCurrencyCode, type CurrencyCode, type RateTable } fro
  * rather than implying the rate is live.
  */
 
-const RATES_URL = "https://api.frankfurter.dev/v1/latest?base=EUR";
+const RATES_ORIGIN = "https://api.frankfurter.dev/v1";
+
+const RATES_URL = `${RATES_ORIGIN}/latest?base=EUR`;
 
 /** The base every rate is quoted against, which is what the source publishes. */
 const RATE_BASE: CurrencyCode = "EUR";
@@ -79,6 +82,56 @@ export async function fetchRateTable(): Promise<RateTable | null> {
     if (Object.keys(rates).length < CURRENCY_CODES.length / 2) return null;
 
     return { base: RATE_BASE, date: payload.date, rates };
+  } catch {
+    return null;
+  }
+}
+
+type FrankfurterSeriesResponse = {
+  base?: string;
+  start_date?: string;
+  end_date?: string;
+  rates?: Record<string, unknown>;
+};
+
+/**
+ * A past window's rates, averaged into one table.
+ *
+ * Held far longer than today's, because a window that has already closed will
+ * never say anything different. Only its ends move, once a day, as the day the
+ * search happens moves - so a day is the natural life of the answer, and every
+ * reader asking about the past on the same day shares one request.
+ */
+const PAST_TTL_SECONDS = 60 * 60 * 24;
+
+/**
+ * The average rate over one past window, or null when it could not be had.
+ *
+ * A missing window is a missing row rather than a missing answer. The five
+ * lookbacks are independent requests and any of them may fail on its own; what
+ * comes back is however many of them arrived.
+ */
+export async function fetchAverageRateTable(
+  start: string,
+  end: string,
+): Promise<RateTable | null> {
+  try {
+    const response = await fetch(`${RATES_ORIGIN}/${start}..${end}?base=${RATE_BASE}`, {
+      next: { revalidate: PAST_TTL_SECONDS },
+      signal: AbortSignal.timeout(RATE_TIMEOUT_MS),
+    });
+    if (!response.ok) return null;
+
+    const payload = (await response.json()) as FrankfurterSeriesResponse;
+    if (payload.base !== RATE_BASE) return null;
+
+    const series: Record<string, Record<string, number>> = {};
+    for (const [day, quotes] of Object.entries(payload.rates ?? {})) {
+      if (!quotes || typeof quotes !== "object") continue;
+      series[day] = readRates({ rates: quotes as Record<string, unknown> });
+    }
+
+    return averageRates(RATE_BASE, payload.end_date ?? end, series);
   } catch {
     return null;
   }

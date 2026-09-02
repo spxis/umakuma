@@ -318,6 +318,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Anzan Irazu", ja: "暗算いらず", reading: "あんざんいらず", gloss: "the era year, without the arithmetic" },
   { romaji: "Ima no Souba", ja: "今の相場", reading: "いまのそうば", gloss: "today's rate, in the search box" },
   { romaji: "Umaku Tsunagaru", ja: "うまく繋がる", reading: "うまくつながる", gloss: "your own reviews, brought across" },
+  { romaji: "En no Nijuunen", ja: "円の二十年", reading: "えんのにじゅうねん", gloss: "twenty years of the yen, on one line" },
 ];
 
 /**
