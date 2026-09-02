@@ -12,12 +12,20 @@ import {
   type FilerTags,
 } from "@/lib/subjectFiler";
 import type { StudyListItemRef } from "@/lib/studyListRules";
-import { getStoredFlagOneIsTrue, setStoredBooleanFlag } from "@/lib/clientStorage";
+import { getSessionItem, setSessionItem } from "@/lib/clientStorage";
 import { updateStudyTag } from "@/app/users/[nickname]/study-explorer/lib/studyTagApi";
 
 import { SUBJECT_FILER_COPY } from "./studyListCopy";
 
-/** Remembered per browser, so a member filing ten kanji is not asked ten times. */
+/*
+ * Held for the sitting, not for ever.
+ *
+ * Filing is a task somebody is in the middle of - search ten kanji, keep each
+ * one - so it should survive the next search and not the next week. Kept in
+ * `localStorage` it stayed on for every later visit, and the search page came
+ * up with a column of tag marks and a chip per list on every row, which was
+ * unreadable for the many searches that are only looking something up.
+ */
 const FILER_OPEN_KEY = "umakuma:search-filer-open";
 
 /*
@@ -31,7 +39,7 @@ let filerOpen: boolean | null = null;
 const listeners = new Set<() => void>();
 
 function readFilerOpen(): boolean {
-  if (filerOpen === null) filerOpen = getStoredFlagOneIsTrue(FILER_OPEN_KEY, false);
+  if (filerOpen === null) filerOpen = getSessionItem(FILER_OPEN_KEY) === "1";
   return filerOpen;
 }
 
@@ -46,7 +54,7 @@ export function useFilerOpen(): [boolean, (value: boolean | ((prev: boolean) => 
   const setOpen = useCallback((value: boolean | ((prev: boolean) => boolean)) => {
     const next = typeof value === "function" ? value(readFilerOpen()) : value;
     filerOpen = next;
-    setStoredBooleanFlag(FILER_OPEN_KEY, next);
+    setSessionItem(FILER_OPEN_KEY, next ? "1" : "0");
     for (const listener of listeners) listener();
   }, []);
   return [open, setOpen];

@@ -3,12 +3,10 @@
 import Link from "next/link";
 import { type ReactNode } from "react";
 
-import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import type { SubjectFiler } from "@/app/shared/useSubjectFiler";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { SEARCH_SOURCE_LABELS, searchHitHref, type SearchHit } from "@/lib/globalSearch";
 import { rememberHit } from "@/lib/recentItems";
 
@@ -131,8 +129,10 @@ function HitRow({
   };
 
   /*
-   * The strokes button sits outside the row link. Nesting a button inside an
-   * anchor is invalid, and the click would be swallowed by the navigation.
+   * Nothing but the row and, when filing is open, its column. The Strokes chip
+   * that used to sit here bought nothing: the kanji page a row already leads
+   * to opens the same animation in the same number of clicks, and four chips
+   * on a row in a twenty-rem column left nothing of the row to read.
    */
   return (
     <div className="flex flex-wrap items-center gap-1 pr-2">
@@ -146,13 +146,7 @@ function HitRow({
           {body}
         </div>
       )}
-      {isSingleKanji(hit) ? <StrokeOrderButton kanji={hit.glyph} meaning={hit.meaning} /> : null}
       {filer ? <SubjectFilerCell hit={hit} filer={filer} className="basis-full pb-2 pl-3" /> : null}
     </div>
   );
-}
-
-/** Stroke order exists for single kanji, not radicals drawn as images or words. */
-function isSingleKanji(hit: SearchHit): boolean {
-  return hit.subjectType === SUBJECT_TYPES.kanji && [...hit.glyph].length === 1;
 }

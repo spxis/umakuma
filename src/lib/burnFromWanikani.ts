@@ -17,6 +17,21 @@ export async function wanikaniBurnedCandidates(accountId: string): Promise<numbe
   return burnedCandidates([...facts.entries()].map(([subjectId, fact]) => ({ subjectId, srsStage: fact.srsStage })));
 }
 
+/**
+ * The ones not on the list yet - what the offer should count.
+ *
+ * Counting every burned item meant the button still said "Apply 1,728" after
+ * applying 1,728, which reads as the click having done nothing.
+ */
+export async function wanikaniBurnedRemaining(accountId: string): Promise<number> {
+  const ids = await wanikaniBurnedCandidates(accountId);
+  if (ids.length === 0) return 0;
+  const already = await prisma.studySubjectTag.count({
+    where: { accountId, subjectId: { in: ids }, burned: true },
+  });
+  return ids.length - already;
+}
+
 export async function applyWanikaniBurned(accountId: string): Promise<{ applied: number; total: number }> {
   const ids = await wanikaniBurnedCandidates(accountId);
   if (ids.length === 0) return { applied: 0, total: 0 };

@@ -27,6 +27,7 @@ import {
   type StudyTagListItem,
   type StudyTagListPayload,
 } from "@/lib/studyTagLists";
+import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 import { STUDY_LIST_COPY } from "./studyListCopy";
 import { STUDY_TAG_LIST_COPY, STUDY_TAG_LIST_LABELS } from "./studyTagListsUi";
@@ -56,6 +57,12 @@ export default function StudyTagListsModal() {
   const [search, setSearch] = useState("");
   /* Which kind to show of a saved list, since one may hold kanji and words together. */
   const [kind, setKind] = useState<string | null>(null);
+  /*
+   * Editing, off until asked for. A remove mark on every card said the list
+   * was one slip from losing an item, on a panel whose ordinary use is
+   * reading. It is the same shape as choosing: a mode you turn on.
+   */
+  const [editing, setEditing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   /**
    * Read straight from storage: the panel renders nothing until an event opens
@@ -101,6 +108,7 @@ export default function StudyTagListsModal() {
       setTag(detail.tag ?? STUDY_TAGS.trouble);
       setSearch("");
       setKind(null);
+      setEditing(false);
       setItems(null);
       setError(null);
       setRefreshKey((value) => value + 1);
@@ -168,17 +176,19 @@ export default function StudyTagListsModal() {
     [items, savedList, tag],
   );
 
-  const visible = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    return (items ?? [])
-      /* A saved list is already the set; only the tagged lists filter by flag. */
-      .filter((item) => (savedList ? true : item.studyTags[tag]))
-      .filter((item) => tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags.burned)
-      .filter((item) => kind === null || item.subjectType === kind)
-      .filter((item) => term.length === 0
-        || item.characters.includes(term)
-        || item.meanings.some((meaning) => meaning.toLowerCase().includes(term)));
-  }, [hideBurned, items, kind, savedList, search, tag]);
+  const visible = useMemo(
+    () =>
+      (items ?? [])
+        /* A saved list is already the set; only the tagged lists filter by flag. */
+        .filter((item) => (savedList ? true : item.studyTags[tag]))
+        .filter((item) => tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags.burned)
+        .filter((item) => kind === null || item.subjectType === kind)
+        /* Read the way the search box reads it, so "mizu" finds 水 here too. */
+        .filter((item) =>
+          subjectMatchesQuery(search, { glyph: item.characters, meanings: item.meanings, readings: item.readings ?? [] }),
+        ),
+    [hideBurned, items, kind, savedList, search, tag],
+  );
 
   /* The kinds a saved list holds, with counts, for the chips. */
   const kinds = useMemo(() => {
@@ -307,6 +317,16 @@ export default function StudyTagListsModal() {
         {tag !== STUDY_TAGS.burned || savedList ? (
           <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} />
         ) : null}
+        <button
+          type="button"
+          aria-pressed={editing}
+          onClick={() => setEditing((was) => !was)}
+          className={`inline-flex h-9 shrink-0 items-center rounded-full border px-3 text-xs font-bold uppercase tracking-[0.08em] transition ${
+            editing ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/70 hover:bg-surface-muted"
+          }`}
+        >
+          {editing ? STUDY_TAG_LIST_COPY.editingDone : STUDY_TAG_LIST_COPY.edit}
+        </button>
         <SubjectSelectionToggle selection={selection} />
         <SubjectViewModeToggle value={viewMode} onChange={changeViewMode} />
       </div>
@@ -352,7 +372,7 @@ export default function StudyTagListsModal() {
               accountId,
               title: savedList ? savedList.name : STUDY_TAG_LIST_LABELS[tag],
             })}
-            onRemove={savedList ? (item) => void removeFromSavedList(item) : (item) => void removeTag(item)}
+            onRemove={!editing ? undefined : savedList ? (item) => void removeFromSavedList(item) : (item) => void removeTag(item)}
           />
         )}
       </div>

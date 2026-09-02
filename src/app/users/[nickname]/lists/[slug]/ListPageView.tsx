@@ -14,6 +14,7 @@ import HideBurnedToggle from "@/app/shared/HideBurnedToggle";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import { useHideBurned } from "@/app/shared/useHideBurned";
 import { withoutBurned } from "@/lib/burnList";
+import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 
@@ -81,18 +82,14 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
     return [...counts.entries()];
   }, [rows]);
 
-  const visible = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    return (hideBurned ? withoutBurned(rows, burned).kept : rows)
-      .filter((row) => kind === ALL || row.kind === kind)
-      .filter(
-        (row) =>
-          term.length === 0 ||
-          row.glyph.includes(term) ||
-          row.meaning.toLowerCase().includes(term) ||
-          (row.reading ?? "").includes(term),
-      );
-  }, [burned, hideBurned, kind, rows, search]);
+  const visible = useMemo(
+    () =>
+      (hideBurned ? withoutBurned(rows, burned).kept : rows)
+        .filter((row) => kind === ALL || row.kind === kind)
+        /* The same reading of a query the main search uses: romaji included. */
+        .filter((row) => subjectMatchesQuery(search, { glyph: row.glyph, meanings: [row.meaning], readings: [row.reading] })),
+    [burned, hideBurned, kind, rows, search],
+  );
 
   const facts = [
     `${STUDY_LIST_COPY.created} ${formatRelativeFromNow(list.createdAt)}`,

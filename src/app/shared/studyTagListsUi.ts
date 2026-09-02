@@ -32,6 +32,8 @@ export const STUDY_TAG_LIST_COPY = {
   builtInKicker: "Built-in lists",
   clearSearch: "Clear search",
   removeFromList: "Take out of this list",
+  edit: "Edit",
+  editingDone: "Done",
   /* A saved list, opened from its card. */
   countSuffix: "items",
   countSuffixOne: "item",

@@ -2670,5 +2670,16 @@
     "summary": "Three things John found opening his own lists. Opening a saved list offered Choose and no way to take an item out - the remove button the Trouble and Favourites lists always had now works on a saved list too, in place. Choosing was remembered across lists, so closing one list and opening another opened it still choosing, with the first list's picks counted; choosing resets when a different list opens. And the viewer's title was the bare name with a '10 items' pill in the toolbar, so nothing said this was a saved list: the title now says Saved list above the name and carries the count beside it, and the search box has a clear button and offers the list's own items as they are typed, like the other search boxes. Reported 2026-09-02 by John.",
     "version": "0.246.0",
     "releasedAt": "2026-09-02T07:31:34Z"
+  },
+  {
+    "id": "search-page-noise",
+    "name": "Quiet rows, an edit mode, and romaji in lists",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Three things reported together. The search page had become unreadable: every row carried a kind pill, a level pill, a Strokes chip and - because the filing column had been opened once and was remembered for ever - two tag marks and a chip per list. Filing is now held for the sitting rather than the browser, so it is off unless it was opened in this tab, and the Strokes chip is gone, since the kanji page a row already leads to opens the same animation in the same number of clicks. The Burned list's offer to apply WaniKani's burned items counted every burned item rather than the ones not applied yet, so it still said Apply 1,728 after applying them; it counts what is left and disappears at zero. Removing an item from a list showed a mark on every card with no mode to explain it, and is now behind an Edit toggle in the viewer. And searching inside a list read the raw string, so water found \u6c34 and mizu found nothing while the search box on the same page found both: both list surfaces now read a query the way search does, romaji turned to kana and tried against the readings. Reported 2026-09-02 by John with screenshots.",
+    "version": "0.247.0",
+    "releasedAt": "2026-09-02T07:43:04Z"
   }
 ]

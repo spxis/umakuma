@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { applyWanikaniBurned, wanikaniBurnedCandidates } from "@/lib/burnFromWanikani";
+import { applyWanikaniBurned, wanikaniBurnedRemaining } from "@/lib/burnFromWanikani";
 import { clearStudyQueueCache } from "@/lib/studyQueueCache";
 
 type RouteContext = {
@@ -20,8 +20,7 @@ export async function GET(request: Request, context: RouteContext) {
       if (!(await canAccessAccount(request, accountId))) {
         return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
       }
-      const candidates = await wanikaniBurnedCandidates(accountId);
-      return NextResponse.json({ candidates: candidates.length });
+      return NextResponse.json({ candidates: await wanikaniBurnedRemaining(accountId) });
     },
   });
 }

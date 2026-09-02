@@ -15,6 +15,8 @@ export default function ApplyWanikaniBurned({ accountId, onApplied }: { accountI
   const [candidates, setCandidates] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<string | null>(null);
+  /* Counted again after applying, so the offer goes when there is nothing left. */
+  const [round, setRound] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -29,7 +31,7 @@ export default function ApplyWanikaniBurned({ accountId, onApplied }: { accountI
     return () => {
       cancelled = true;
     };
-  }, [accountId]);
+  }, [accountId, round]);
 
   if (candidates === null || candidates === 0) return null;
 
@@ -42,6 +44,7 @@ export default function ApplyWanikaniBurned({ accountId, onApplied }: { accountI
       const body = (await response.json().catch(() => null)) as { applied?: number } | null;
       if (response.ok) {
         setDone(STUDY_TAG_LIST_COPY.applyWanikaniDone(body?.applied ?? 0));
+        setRound((value) => value + 1);
         onApplied();
       }
     } finally {
