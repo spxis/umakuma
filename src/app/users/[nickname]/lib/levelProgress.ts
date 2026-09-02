@@ -54,6 +54,17 @@ type LevelSnapshotRow = {
  * `JlptKanji` table and the member's kanji index from WaniKani, which the other
  * two explorers have no use for.
  */
+async function safeKanjiIndex(account: { tokenEncrypted: string | null; tokenIv: string | null; tokenTag: string | null }) {
+  const connection = wanikaniConnection(account);
+  if (!connection?.token) return [];
+  try {
+    return await getUserKanjiIndex(connection.token);
+  } catch (error) {
+    console.error("Could not read the member's kanji from WaniKani", error);
+    return [];
+  }
+}
+
 export async function loadLevelProgress(userKey: string, options: { withJlpt?: boolean } = {}) {
   const shouldLoadJlptData = options.withJlpt === true;
 
@@ -96,13 +107,17 @@ export async function loadLevelProgress(userKey: string, options: { withJlpt?: b
     (account.levelKanjiItems ?? []) as LevelKanjiItem[],
   );
   const itemSpread = isItemSpread(account.itemSpread) ? account.itemSpread : EMPTY_ITEM_SPREAD;
+  /*
+   * The member's own kanji, when they have a WaniKani connection to read them
+   * from. A member without one is not an error: the JLPT explorer is a table
+   * of every JLPT kanji, and their own progress is the part they do not have.
+   * It used to call WaniKani with an empty token, take a 401 and throw, so a
+   * new account met "We could not load this user drilldown" instead of the
+   * explorer. A token that has since been revoked lands in the same place and
+   * is treated the same way.
+   */
   const userKanjiIndex = shouldLoadJlptData
-    ? await withReviewSuccessRates(
-        account.id,
-        await getUserKanjiIndex(
-          wanikaniConnection(account)?.token ?? "",
-        ),
-      )
+    ? await withReviewSuccessRates(account.id, await safeKanjiIndex(account))
     : [];
   const jlptKanjiRows = shouldLoadJlptData
     ? ((await prisma.jlptKanji.findMany({

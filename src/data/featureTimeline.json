@@ -489,13 +489,13 @@
   },
   {
     "id": "capability-gating",
-    "name": "Capability gating",
+    "name": "A member without WaniKani never meets it",
     "area": "platform",
     "status": "planned",
     "date": "2026-09-01",
     "dateIsEstimate": true,
     "release": 8,
-    "summary": "One capability map decides what a member without WaniKani sees, hides or finds disabled."
+    "summary": "One capability map decides what a member without a WaniKani connection sees, hides or finds disabled. Today they meet This account has no WaniKani connection on the Study page, an empty Library Explorer at a URL that should not exist for them, and WaniKani links in the header. Nothing WaniKani-shaped is offered to an account that has none. Requested 2026-09-02 by John with screenshots."
   },
   {
     "id": "catalog-game-pool",
@@ -2778,5 +2778,60 @@
     "summary": "A list opened as a panel from one control and as a page from another, so which view a member got was a mystery, and the two had drifted apart. There is one view now, and it is the page. Trouble, Favourites and Burned have addresses of their own - /users/<member>/lists/trouble and its two siblings - and every card, name and button leads to a page. The panel is gone, and nothing went with it: the page draws the same subject cards and rows every other surface uses, with the member's own SRS state and tags on them, and it carries choosing and the practice sheet, the glyph viewer, an Edit toggle that takes an item out - untagging a built-in list, dropping a row from a saved one - and the WaniKani offer on Burned. Opening somebody else's list shows how far you have got with what is on it, since the state read is the reader's own. Reported 2026-09-02 by John.",
     "version": "0.252.0",
     "releasedAt": "2026-09-02T09:59:01Z"
+  },
+  {
+    "id": "jlpt-explorer-new-user",
+    "name": "The JLPT explorer errors for a member with no WaniKani",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "Opening the JLPT explorer as an account with no WaniKani connection answered We could not load this user drilldown. The page asked WaniKani for the member's own kanji with an empty token, took a 401 and threw, so the one page that is a table of every JLPT kanji - the part of the site that needs WaniKani least - was the one page a member without WaniKani could not open. It asks only when there is a connection to ask with, and a token that has since been revoked is treated the same way: the explorer opens, and the member's own progress is simply the part that is not there. Reported 2026-09-02 by John.",
+    "version": "0.253.0",
+    "releasedAt": "2026-09-02T10:07:41Z"
+  },
+  {
+    "id": "internal-members",
+    "name": "An Internal kind of member, for Read",
+    "area": "account",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 47,
+    "summary": "The Read tab and the reading check-ins are the family's, not the public's. A member is one of three kinds - admin, internal, everyone else - and Read is offered only to the first two. The members who have been here a month with WaniKani count as internal. Requested 2026-09-02 by John."
+  },
+  {
+    "id": "grades-search-autocomplete",
+    "name": "The school grades search has no autocomplete",
+    "area": "study",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 48,
+    "summary": "Every other search offers what it holds as you type; the grades page does not. Reported 2026-09-02 by John."
+  },
+  {
+    "id": "profile-connect-wanikani",
+    "name": "The profile says Not connected and offers no way to connect",
+    "area": "account",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 49,
+    "summary": "A new member's profile shows WaniKani Not connected with no link to connect one or to edit the token. Reported 2026-09-02 by John."
+  },
+  {
+    "id": "profile-jlpt-certificates",
+    "name": "The JLPT form is open before anybody asks for it",
+    "area": "account",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 50,
+    "summary": "The profile shows the member's JLPT level and then the form to change it, always open. A member may hold several certificates, so the profile lists what they have reported and offers Add another or Change; the form appears when it is asked for. The Display section could be condensed while we are there. Reported 2026-09-02 by John."
   }
 ]
