@@ -230,3 +230,36 @@ describe("who is offered Read", () => {
     expect(paths).toContain("news");
   });
 });
+
+/*
+ * A group's second row is how a member knows where they are, and it was
+ * disappearing one click in. `/maps` matched its entry exactly and found the
+ * Learn group; `/maps/japan/gifu` matched nothing at all, so opening a
+ * prefecture took the row off the page. Every stroke count did the same.
+ * Member-scoped pages never had it, because they match on their first segment.
+ */
+describe("a page inside an absolute section", () => {
+  it("keeps its group on the pages under it", () => {
+    expect(sectionForPath("/maps", USER)?.id).toBe("explore");
+    expect(sectionForPath("/maps/japan", USER)?.id).toBe("explore");
+    expect(sectionForPath("/maps/japan/gifu", USER)?.id).toBe("explore");
+    expect(sectionForPath("/strokes", USER)?.id).toBe("explore");
+    expect(sectionForPath("/strokes/12", USER)?.id).toBe("explore");
+  });
+
+  it("keeps the visitor's fallback group the same way", () => {
+    expect(sectionForPath("/lists", null)?.id).toBe("lists");
+    expect(sectionForPath("/lists/jlpt-n5", null)?.id).toBe("lists");
+  });
+
+  /* The boundary is a path segment, not the letters: /mapsomething is not Maps. */
+  it("does not claim an address that merely starts with the same letters", () => {
+    expect(sectionForPath("/mapsomething", USER)).toBeNull();
+    expect(sectionForPath("/strokesomething", USER)).toBeNull();
+  });
+
+  it("still answers for the member's own pages, one level in", () => {
+    expect(sectionForPath(`/users/${USER}/grades/1`, USER)?.id).toBe("explore");
+    expect(sectionForPath(`/users/${USER}/practice/list/week-1`, USER)?.id).toBe("explore");
+  });
+});

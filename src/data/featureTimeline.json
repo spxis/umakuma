@@ -3180,11 +3180,11 @@
     "name": "The second row survives a click into a page",
     "area": "platform",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 60,
-    "summary": "Absolute nav entries match the address by exact equality, so /maps and /strokes light up their group but /maps/japan and /strokes/5 resolve to no section at all and the whole second row vanishes. Member-scoped pages do not have the bug because they match on the first path segment, which is why /grades/1 keeps its row. Match an absolute entry by prefix the same way, so the row is there for every page in the group."
+    "summary": "A group's second row is how a member knows where they are, and it disappeared one click in. Absolute nav entries matched the address by exact equality, so /maps and /strokes found the Learn group and /maps/japan/gifu found nothing at all - opening a prefecture, or any stroke count, took the whole row off the page. Member-scoped pages never had it, because they match on their first path segment, which is why /grades/1 keeps its row. An absolute entry matches by prefix now, on a path boundary rather than on letters, so /mapsomething is still not a page in Maps.",
+    "version": "0.296.0",
+    "releasedAt": "2026-09-02T16:30:39Z"
   },
   {
     "id": "jlpt-explorer-weight",

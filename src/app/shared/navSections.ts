@@ -58,17 +58,7 @@ export type NavSection = {
  * shows no second row; the sub-nav would just repeat the header.
  */
 export const NAV_SECTIONS: NavSection[] = [
-  /*
-   * Leaderboard and Progress moved out of the header on 2026-09-02.
-   *
-   * The row was seven sections wide and wrapped to two lines on a laptop, and
-   * two of them did not earn their place: the leaderboard is the site's front
-   * page and undeveloped besides, and Progress is history and statistics -
-   * things a member looks up occasionally rather than navigates by. Both are
-   * one click away in the account menu, beside Profile and WaniKani, which is
-   * where the rest of "about my account" already lives.
-   */
-  { id: "leaderboard", label: "Leaderboard", placement: "menu", children: [{ label: "Leaderboard", path: "/" }] },
+  { id: "leaderboard", label: "Leaderboard", placement: "nav", children: [{ label: "Leaderboard", path: "/" }] },
   { id: "study", label: "Study", placement: "nav", children: [{ label: "Study", path: "study" }] },
   { id: "game", label: "Game", placement: "nav", children: [{ label: "Game", path: "game" }] },
   {
@@ -99,7 +89,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     id: "progress",
     label: "Progress",
-    placement: "menu",
+    placement: "nav",
     children: [
       { label: "History", path: "history" },
       { label: DASHBOARD_TAB_LABELS.stats, path: "stats", requires: MEMBER_CAPABILITIES.wanikaniProgress },
@@ -148,6 +138,11 @@ export function navChildHref(child: NavChild, username: string | null): string {
   return child.fallback ?? "/";
 }
 
+/** Whether a pathname is that address or a page under it, and not merely spelled like it. */
+function startsWithPath(pathname: string, path: string): boolean {
+  return pathname === path || pathname.startsWith(`${path}/`);
+}
+
 /** The section a pathname belongs to, or null when it is outside the grouped nav. */
 export function sectionForPath(pathname: string | null, username: string | null): NavSection | null {
   if (!pathname) {
@@ -161,12 +156,19 @@ export function sectionForPath(pathname: string | null, username: string | null)
   /*
    * A page outside the user segment still belongs to a group, by its own
    * absolute path or by the fallback a group offers a visitor.
+   *
+   * By prefix, not by equality. `/maps` found its group and `/maps/japan/gifu`
+   * found nothing, so opening a prefecture took the whole second row off the
+   * page - and the same for every stroke count under `/strokes`. A member page
+   * never had the bug because it matches on its first segment, which is why
+   * `/grades/1` keeps its row; this is that rule for the absolute entries.
+   * The boundary matters: `/mapsomething` is not a page in Maps.
    */
   const absolute = NAV_SECTIONS.find((section) =>
     section.children.some(
       (child) =>
-        (child.path.startsWith("/") && child.path !== "/" && pathname === child.path) ||
-        (child.fallback !== undefined && pathname === child.fallback),
+        (child.path.startsWith("/") && child.path !== "/" && startsWithPath(pathname, child.path)) ||
+        (child.fallback !== undefined && startsWithPath(pathname, child.fallback)),
     ),
   );
   if (absolute) return absolute;
