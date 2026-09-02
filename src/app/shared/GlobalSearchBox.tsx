@@ -6,7 +6,7 @@ import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import { useSearchCombobox } from "@/lib/useSearchCombobox";
 import GlobalSearchSuggestList from "./GlobalSearchSuggestList";
 import RadicalSearchPanel from "./RadicalSearchPanel";
-import SearchCommandHint from "./SearchCommandHint";
+import SearchCommandBar from "./SearchCommandBar";
 import RecentItems from "./RecentItems";
 import SearchComboboxField, { SearchIcon } from "./SearchComboboxField";
 import { MODAL_LAYERS } from "./modalLayers";
@@ -81,7 +81,9 @@ export default function GlobalSearchBox({
       chosen={command.radicals}
       onChange={(next) => cbx.setQuery(formatRadicalCommand(next))}
     />
-  ) : null;
+  ) : (
+    <SearchCommandBar onCommand={cbx.setQuery} />
+  );
 
   /* The grid needs the room the answer alone does not. */
   const panelWidth = filing || command ? "w-160" : "w-104";
@@ -145,7 +147,7 @@ export default function GlobalSearchBox({
                 ) : (
                   <>
                     <RecentItems currentQuery="" variant="panel" />
-                    <SearchCommandHint />
+                    <SearchCommandBar onCommand={cbx.setQuery} />
                   </>
                 )}
               </div>

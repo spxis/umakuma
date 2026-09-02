@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import { JP_TEXT_CLASS } from "./japaneseText";
 import { RADICAL_SEARCH_COPY } from "./radicalSearchCopy";
@@ -109,45 +109,59 @@ export default function RadicalSearchPanel({
         answer off the bottom of the screen, which is what the dialog was
         working around before.
       */}
-      <div className="max-h-[38vh] space-y-1 overflow-y-auto px-3 pb-3">
-        {result.groups.map((group) => (
-          <div key={group.strokes} className="flex flex-wrap items-center gap-1">
-            <span className="mr-1 w-4 shrink-0 text-right text-[10px] font-bold text-foreground/60">
-              {group.strokes}
-            </span>
-            {group.radicals.map((radical) => {
-              const picked = chosen.includes(radical);
-              const dead = !picked && !usable.has(radical);
-              return (
-                <button
-                  key={radical}
-                  type="button"
-                  /*
-                   * A mouse pick takes no focus, so nothing scrolls it into
-                   * view: focusing a radical near the bottom of the grid used
-                   * to drag the whole panel up out of sight. The keyboard
-                   * still focuses and still scrolls, which is what a keyboard
-                   * reader wants.
-                   */
-                  onMouseDown={(event) => event.preventDefault()}
-                  onClick={() => toggle(radical)}
-                  disabled={dead}
-                  aria-pressed={picked}
-                  title={RADICAL_SEARCH_COPY.radicalTitle(radical, group.strokes)}
-                  className={`inline-flex h-6 w-6 items-center justify-center rounded border text-[13px] leading-none transition ${JP_TEXT_CLASS} ${
-                    picked
-                      ? "border-accent bg-accent text-white"
-                      : dead
-                        ? "cursor-not-allowed border-line/60 bg-surface-muted text-foreground/60 opacity-40"
-                        : "border-line bg-surface text-foreground hover:bg-surface-muted"
-                  }`}
-                >
-                  {radical}
-                </button>
-              );
-            })}
-          </div>
-        ))}
+      <div className="max-h-[38vh] overflow-y-auto px-3 pb-3">
+        {/*
+          One run rather than a row per stroke count.
+          *
+          * A row each wasted most of its width on the counts holding three
+          * radicals - fourteen strokes is 鼻 and 齊 - and made the grid twice
+          * as tall as it needed to be, which is the space the answers want.
+          * Flowing them left to right with the count as a marker is how the
+          * paper dictionaries print it and how Jisho draws it.
+        */}
+        <div className="flex flex-wrap items-center gap-1">
+          {result.groups.map((group) => (
+            <Fragment key={group.strokes}>
+              <span
+                title={RADICAL_SEARCH_COPY.strokeTitle(group.strokes)}
+                className="inline-flex h-6 min-w-6 items-center justify-center rounded bg-foreground/70 px-1 text-[10px] font-black leading-none text-surface"
+              >
+                {group.strokes}
+              </span>
+              {group.radicals.map((radical) => {
+                const picked = chosen.includes(radical);
+                const dead = !picked && !usable.has(radical);
+                return (
+                  <button
+                    key={radical}
+                    type="button"
+                    /*
+                     * A mouse pick takes no focus, so nothing scrolls it into
+                     * view: focusing a radical near the bottom of the grid used
+                     * to drag the whole panel up out of sight. The keyboard
+                     * still focuses and still scrolls, which is what a keyboard
+                     * reader wants.
+                     */
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => toggle(radical)}
+                    disabled={dead}
+                    aria-pressed={picked}
+                    title={RADICAL_SEARCH_COPY.radicalTitle(radical, group.strokes)}
+                    className={`inline-flex h-6 w-6 items-center justify-center rounded border text-[13px] leading-none transition ${JP_TEXT_CLASS} ${
+                      picked
+                        ? "border-accent bg-accent text-white"
+                        : dead
+                          ? "cursor-not-allowed border-line/60 bg-surface-muted text-foreground/60 opacity-40"
+                          : "border-line bg-surface text-foreground hover:bg-surface-muted"
+                    }`}
+                  >
+                    {radical}
+                  </button>
+                );
+              })}
+            </Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );

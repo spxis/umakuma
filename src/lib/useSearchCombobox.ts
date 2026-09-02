@@ -5,6 +5,7 @@ import { useState, type FocusEvent, type FormEvent, type KeyboardEvent } from "r
 
 import { searchSubmitHref, type SearchHit } from "./globalSearch";
 import { rememberHit } from "./recentItems";
+import { isSearchCommand } from "./searchCommands";
 import {
   SUGGEST_LOAD_LEAD,
   SUGGEST_MAX_PAGES,
@@ -203,7 +204,17 @@ export function useSearchCombobox({
         setPages(1);
       },
       onFocus: () => {
-        if (openOnFocus) setSuggestOpen(true);
+        /*
+         * A command in the box is the picker's own state, so focusing the box
+         * has to bring the picker back - the results page keeps the panel shut
+         * on focus, which is right for a seeded query and wrong for a command,
+         * where the box and the panel are two halves of one control. `typing`
+         * goes on with it, or the picker would come back over an empty answer
+         * until a key was pressed.
+         */
+        const command = isSearchCommand(typed);
+        if (openOnFocus || command) setSuggestOpen(true);
+        if (command) setTyping(true);
       },
       onKeyDown,
     };

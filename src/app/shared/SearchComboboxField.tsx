@@ -38,6 +38,15 @@ type Props = {
   autoFocus?: boolean;
   /** The suggestion panel, positioned by the caller, kept inside the blur boundary. */
   children?: ReactNode;
+  /**
+   * A row directly under the input, in the layout rather than in the panel.
+   *
+   * The commands live here on a surface whose panel does not open on focus:
+   * the results page keeps its dropdown shut so a seeded query cannot cover
+   * the results it just produced, which would leave a row inside that panel
+   * permanently invisible.
+   */
+  belowField?: ReactNode;
 };
 
 export default function SearchComboboxField({
@@ -49,6 +58,7 @@ export default function SearchComboboxField({
   inputRef,
   autoFocus = false,
   children,
+  belowField,
 }: Props) {
   const sizing = FIELD_SIZES[size];
 
@@ -104,6 +114,7 @@ export default function SearchComboboxField({
           </button>
         </div>
       </form>
+      {belowField}
       {children}
     </div>
   );

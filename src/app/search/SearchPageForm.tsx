@@ -2,7 +2,7 @@
 
 import GlobalSearchSuggestList from "@/app/shared/GlobalSearchSuggestList";
 import RadicalSearchPanel from "@/app/shared/RadicalSearchPanel";
-import SearchCommandHint from "@/app/shared/SearchCommandHint";
+import SearchCommandBar from "@/app/shared/SearchCommandBar";
 import RecentItems from "@/app/shared/RecentItems";
 import SearchComboboxField from "@/app/shared/SearchComboboxField";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
@@ -56,13 +56,13 @@ export default function SearchPageForm({
       inputId={SEARCH_PAGE_INPUT_ID}
       listboxId={LISTBOX_ID}
       autoFocus={initialQuery.length === 0}
+      belowField={command ? null : <SearchCommandBar onCommand={cbx.setQuery} />}
     >
       {cbx.showRecent ? (
         <div
           className={`absolute inset-x-0 top-[calc(100%+0.5rem)] ${MODAL_LAYERS.searchSuggest} overflow-hidden rounded-2xl border border-line bg-surface shadow-lg empty:hidden`}
         >
           <RecentItems currentQuery="" variant="panel" />
-          <SearchCommandHint />
         </div>
       ) : null}
 

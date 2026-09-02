@@ -3070,5 +3070,17 @@
     "summary": "The radical lookup shipped as a pill inside the search field that opened a dialog over the page, and the two halves never agreed: the query was in one place and the answer in another, a picked radical left no trace in the box, and nothing about it could be typed, copied or linked. It is a command now. Typing :rad, :radical or :radicals opens the grid under the search bar rather than over the page, picking writes :radicals 日 + 月 into the box, and the matching kanji come back as ordinary search results underneath - with the kind tabs, the keyboard and the filing column every other search already has. The query is the whole state, so it can be typed by hand, pasted to somebody and walked with the back button. The pill is gone from the field and the search bar grows while a command is in it. The reason a dialog had been chosen in the first place turned out to be a bug of its own, and a much older one: the search page's shell was clipped with overflow-hidden, so every dropdown was cut off at the shell's height. A search for \"water\" found ninety-one results, showed eleven and drew three. Clipping sideways is what that was for, and it now clips sideways only. Reported 2026-09-02 by John with screenshots.",
     "version": "0.281.0",
     "releasedAt": "2026-09-02T14:39:48Z"
+  },
+  {
+    "id": "radical-grid-flow",
+    "name": "The radical picker: a way in, and fewer rows",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 53,
+    "summary": "Three things reported on the radical command. The grid gave every stroke count a row of its own, which wasted almost all of the width on the counts that hold three radicals - fourteen strokes is 鼻 and 齊 - and made the picker twice as tall as it needed to be, which is the space the answers wanted. The radicals now flow left to right in one run with the stroke count as a marker between groups, the way paper dictionaries print it, and the grid is ten rows rather than fourteen. The command was also the only way in, and nobody guesses :rad, so there is a row under the search box now - Find by Radicals, or type :rad - and the button writes the command rather than opening a panel of its own, so pressing it and typing the words land in the same place. It sits in the layout under the input rather than inside the dropdown, because the results page keeps its dropdown shut on focus so a seeded query cannot cover the results it just produced, which would have left the row permanently invisible there. And a bug: after a radical search, focusing the box again showed nothing until a key was pressed. A command in the box is the picker's own state, so focus now brings both the picker and its answer back. Reported 2026-09-02 by John.",
+    "version": "0.282.0",
+    "releasedAt": "2026-09-02T14:57:50Z"
   }
 ]

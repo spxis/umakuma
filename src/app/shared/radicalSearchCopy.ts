@@ -7,7 +7,9 @@ export const RADICAL_SEARCH_COPY = {
   openLabel: "Find a kanji by its radicals",
   heading: "By radical",
   /* Typed, not clicked: the box is the way in now. */
-  commandHint: "Type :rad to find a kanji by the parts you can see.",
+  commandBarLabel: "Find by",
+  /* Said once, beside the button, so the typed form is discoverable too. */
+  commandBarHint: "or type :rad",
   hint: "Pick the parts you can see. Each one narrows the list.",
   clear: "Clear",
   close: "Close",
@@ -18,4 +20,5 @@ export const RADICAL_SEARCH_COPY = {
   matches: (total: number, shown: number) =>
     total === shown ? `${total} kanji` : `${shown} of ${total} kanji`,
   radicalTitle: (radical: string, strokes: number) => `${radical} · ${strokes} strokes`,
+  strokeTitle: (strokes: number) => `${strokes} strokes`,
 } as const;
