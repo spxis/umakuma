@@ -55,6 +55,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "Practice", path: "practice" },
       /* Public, so it has no user segment: a map is the same for everyone. */
       { label: "Maps", path: "/maps" },
+      { label: "Strokes", path: "/strokes" },
     ],
   },
   /*

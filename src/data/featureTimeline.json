@@ -2619,13 +2619,11 @@
     "name": "Browse kanji by stroke count",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
-    "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 33,
-    "summary": "A stroke browser beside the WaniKani levels and the school grades: the counts 1 to N as chips, and choosing one shows every kanji with that many strokes, with the same cards, rows, tags, selection and add-to-lists as the other explorers. The dictionary already knows each kanji's stroke count. Requested 2026-09-01 by John.",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T11:10:13.440Z"
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "The site groups kanji by what a learner is doing - the WaniKani level they are on, the year a Japanese child is taught them, the JLPT that will test them - and none of those answer the question somebody has with a pen in their hand: what else is written in this many strokes? The dictionary has known every character's stroke count since the day it was ingested, so /strokes lists all thirty-three counts with how many kanji each holds, and /strokes/12 is those nine hundred and twenty-five characters, commonest first. A Common only filter keeps the two hundred and fifty-seven a newspaper actually uses, which is the difference between a page to study and a page to scroll, and long counts page. The count is a path so it can be linked and reloaded; what is on the page - the filter, the page number - stays in the query. A signed-in member gets the same add-to-lists column search has, so a character met here goes straight onto one of their lists. It sits under Learn beside the maps. Requested 2026-09-01 by John.",
+    "version": "0.263.0",
+    "releasedAt": "2026-09-02T11:35:48Z"
   },
   {
     "id": "list-study-status",
