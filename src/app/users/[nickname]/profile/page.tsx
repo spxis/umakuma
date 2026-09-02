@@ -18,7 +18,7 @@ import { formatDateTimeShort } from "@/lib/timeFormat";
 import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
-import { CONNECT_COPY } from "../wanikani/connectCopy";
+import { wanikaniFact } from "./profileFacts";
 import ProfileForm from "./ProfileForm";
 import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
 
@@ -83,7 +83,11 @@ export default async function UserProfilePage({ params }: PageProps) {
 
   const games = await loadProfileGameStats(account.id);
   const name = resolveDisplayName(account);
-  const connected = hasWanikaniConnection(account);
+  const wanikani = wanikaniFact({
+    connected: hasWanikaniConnection(account),
+    wkLevel: account.wkLevel,
+    address: account.slug ?? account.wkUsername ?? "",
+  });
 
   const jlpt =
     account.jlptStatus === "passed" && account.jlptSystem && isJlptSystem(account.jlptSystem) && account.jlptLevel
@@ -115,16 +119,9 @@ export default async function UserProfilePage({ params }: PageProps) {
       <section className="mb-4 grid gap-2 sm:grid-cols-3">
         <Fact label={PROFILE_COPY.address} value={`/${account.slug ?? account.wkUsername ?? ""}`} hint={PROFILE_COPY.addressHint} />
         {/* Connected is a question about the token, not about a level: a
-            level can be left behind by a connection that was removed. */}
-        <Fact
-          label={PROFILE_COPY.wanikani}
-          value={connected ? `${PROFILE_COPY.wanikaniLevel} ${account.wkLevel ?? 0}` : PROFILE_COPY.wanikaniNone}
-          hint={connected ? PROFILE_COPY.wanikaniHint : undefined}
-          action={{
-            label: connected ? CONNECT_COPY.replace : CONNECT_COPY.profileLink,
-            href: `/users/${encodeURIComponent(account.slug ?? account.wkUsername ?? "")}/wanikani`,
-          }}
-        />
+            level can be left behind by a connection that was removed, and a
+            new connection has none until its first sync lands. */}
+        <Fact label={wanikani.label} value={wanikani.value} hint={wanikani.hint} action={wanikani.action} />
         <Fact label={PROFILE_COPY.jlpt} value={jlpt} />
       </section>
 

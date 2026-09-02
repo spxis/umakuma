@@ -2773,17 +2773,6 @@
     "summary": "Every other search offers what it holds as you type; the grades page does not. Reported 2026-09-02 by John."
   },
   {
-    "id": "profile-connect-wanikani",
-    "name": "The profile says Not connected and offers no way to connect",
-    "area": "account",
-    "kind": "bug",
-    "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 49,
-    "summary": "A new member's profile shows WaniKani Not connected with no link to connect one or to edit the token. Reported 2026-09-02 by John."
-  },
-  {
     "id": "profile-jlpt-certificates",
     "name": "The JLPT form is open before anybody asks for it",
     "area": "account",
@@ -2792,7 +2781,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 50,
-    "summary": "The profile shows the member's JLPT level and then the form to change it, always open. A member may hold several certificates, so the profile lists what they have reported and offers Add another or Change; the form appears when it is asked for. The Display section could be condensed while we are there. Reported 2026-09-02 by John."
+    "summary": "The profile shows the member's JLPT level and then the form to change it, always open. A member may hold several certificates, so the profile lists what they have reported and offers Add another or Change; the form appears when it is asked for. The Display section could be condensed while we are there. Reported 2026-09-02 by John.",
+    "owner": "Claude (session 53e531a7)",
+    "claimedAt": "2026-09-02T12:19:32.287Z"
   },
   {
     "id": "pill-text-toggle",
@@ -2949,5 +2940,16 @@
     "summary": "Typing \"Heisei 3\" into the header box answered with ten rows about the number three and nothing else. The era and money answers had been built and shown only on the full results page, while the dropdown under the box - which is where a query is actually typed - called an endpoint that never asked for them. The answer now rides back with the rows rather than taking a request of its own, since it answers the same query, and sits at the top of the dropdown on the desktop and in the phone sheet alike: the value, the Japanese form, and the question it answers. It shows even when no catalogue matched, because \"Taisho 5\" is 1916 and no row exists for it - a dropdown that said no results to a question it had just answered would be hiding the answer behind its own emptiness. No rate history there and no attribution line: those are a table and a sentence, and the dropdown is ten rows under a search box, so it asks for today's rate only and one cached request does not become six on a keystroke. Reported 2026-09-02 by John.",
     "version": "0.272.0",
     "releasedAt": "2026-09-02T12:40:39Z"
+  },
+  {
+    "id": "profile-connect-wanikani",
+    "name": "The profile says Not connected and offers no way to connect",
+    "area": "account",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "summary": "A member with no WaniKani had nothing on their profile to connect one with, and a member who had just connected was told they were Level 0. The connection page arrived with its own release and the profile now leads to it - Connect WaniKani when there is none, Replace token when there is - and the card no longer states a level nobody holds: a token whose first sync has not landed reads as Connected, with a line saying the level arrives with the sync. Zero is the number the leaderboard deliberately refuses to rank an account at, so printing it as a standing was the one number the page should never have shown. Reported 2026-09-02 by John.",
+    "version": "0.273.0",
+    "releasedAt": "2026-09-02T12:49:16Z"
   }
 ]

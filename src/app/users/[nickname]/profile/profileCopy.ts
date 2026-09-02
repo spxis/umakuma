@@ -9,6 +9,8 @@ export const PROFILE_COPY = {
   wanikani: "WaniKani",
   wanikaniLevel: "Level",
   wanikaniNone: "Not connected",
+  wanikaniPending: "Connected",
+  wanikaniPendingHint: "Your level arrives with the first sync.",
   wanikaniHint: "Set by WaniKani, not editable here.",
   jlpt: "JLPT",
   jlptHint: "As you report it. The year decides which version of the test applies.",
