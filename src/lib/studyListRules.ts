@@ -1,4 +1,5 @@
 import { LIST_ITEM_KINDS, LIST_VISIBILITIES, isListItemKind, type ListItemKind, type ListVisibility } from "./domainConstants";
+import type { ListContributions } from "./listContributions";
 
 /**
  * What a saved list may be called and may contain.
@@ -37,6 +38,7 @@ export type StudyListSummary = {
   slug: string;
   description: string | null;
   visibility: ListVisibility;
+  contributions: ListContributions;
   items: StudyListItemRef[];
   createdAt: string;
   updatedAt: string;

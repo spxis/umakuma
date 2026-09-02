@@ -31,6 +31,7 @@ const LIST_SELECT = {
   name: true,
   description: true,
   visibility: true,
+  contributions: true,
   createdAt: true,
   updatedAt: true,
   copyCount: true,
@@ -43,6 +44,7 @@ type ListRow = {
   name: string;
   description: string | null;
   visibility: StudyListSummary["visibility"];
+  contributions: StudyListSummary["contributions"];
   createdAt: Date;
   updatedAt: Date;
   copyCount: number;
@@ -57,6 +59,7 @@ function toSummary(row: ListRow): StudyListSummary {
     slug: listSlug(row.name),
     description: row.description,
     visibility: row.visibility,
+    contributions: row.contributions,
     items: row.items,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

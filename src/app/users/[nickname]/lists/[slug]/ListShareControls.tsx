@@ -6,6 +6,7 @@ import { useState } from "react";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, LIST_VISIBILITY_VALUES, type ListVisibility } from "@/lib/domainConstants";
+import { LIST_CONTRIBUTION_DISPLAY, LIST_CONTRIBUTION_VALUES, type ListContributions } from "@/lib/listContributions";
 import { listShareHref } from "@/lib/studyListRules";
 
 import type { ListShareControlsProps } from "./ListPage.types";
@@ -18,9 +19,18 @@ import type { ListShareControlsProps } from "./ListPage.types";
  * makes the key on the spot, so the link can be copied in the same breath.
  * Copying is counted, so the list can say how often it has been passed on.
  */
-export default function ListShareControls({ listId, accountId, name, ownerKey, visibility, shareHref }: ListShareControlsProps) {
+export default function ListShareControls({
+  listId,
+  accountId,
+  name,
+  ownerKey,
+  visibility,
+  contributions,
+  shareHref,
+}: ListShareControlsProps) {
   const router = useRouter();
   const [current, setCurrent] = useState<ListVisibility>(visibility);
+  const [lock, setLock] = useState<ListContributions>(contributions);
   const [href, setHref] = useState(shareHref);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -43,6 +53,30 @@ export default function ListShareControls({ listId, accountId, name, ownerKey, v
       }
       setCurrent(next);
       setHref(listShareHref(ownerKey, name, next, body?.list?.shareToken ?? null));
+      router.refresh();
+    } catch {
+      setError(STUDY_LIST_COPY.editFailed);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  /* Open or lock the list to other members' additions. */
+  async function changeLock(next: ListContributions) {
+    if (busy || next === lock) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const response = await fetch(`/api/study/${accountId}/lists/proposals`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ listId, contributions: next }),
+      });
+      if (!response.ok) {
+        setError(STUDY_LIST_COPY.editFailed);
+        return;
+      }
+      setLock(next);
       router.refresh();
     } catch {
       setError(STUDY_LIST_COPY.editFailed);
@@ -76,6 +110,15 @@ export default function ListShareControls({ listId, accountId, name, ownerKey, v
         onChange={(next) => void change(next)}
         options={LIST_VISIBILITY_VALUES.map((value) => ({ value, label: LIST_VISIBILITY_DISPLAY[value].label }))}
       />
+      {current !== LIST_VISIBILITIES.private ? (
+        <SegmentedControl
+          ariaLabel={STUDY_LIST_COPY.contributionsLabel}
+          size="sm"
+          value={lock}
+          onChange={(next) => void changeLock(next)}
+          options={LIST_CONTRIBUTION_VALUES.map((value) => ({ value, label: LIST_CONTRIBUTION_DISPLAY[value].label }))}
+        />
+      ) : null}
       {current !== LIST_VISIBILITIES.private ? (
         <div className="flex flex-wrap items-center justify-end gap-2">
           <span className="text-[11px] font-semibold text-foreground/60">{STUDY_LIST_COPY.shareHint}</span>

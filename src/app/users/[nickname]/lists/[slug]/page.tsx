@@ -9,6 +9,7 @@ import { accountUrlKeyWhere } from "@/lib/accountLookup";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { LIST_KEY_PARAM, canViewList, listShareHref } from "@/lib/studyListRules";
+import { fetchPendingProposals } from "@/lib/studyListContributions";
 import { isSubscribed } from "@/lib/studyListShares";
 import { findListBySlug } from "@/lib/studyLists";
 import { fetchListSubjectRows } from "@/lib/studySubjectItems";
@@ -78,9 +79,10 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
   }
 
   const viewerAccountId = viewerMenuInfo?.accountId ?? null;
-  const [rows, subscribed] = await Promise.all([
+  const [rows, subscribed, proposals] = await Promise.all([
     fetchListSubjectRows(list.items),
     viewerAccountId && !isOwner ? isSubscribed(list.id, viewerAccountId) : Promise.resolve(false),
+    isOwner ? fetchPendingProposals(list.id) : Promise.resolve([]),
   ]);
   const ownerName = account.nickname ?? account.slug ?? account.wkUsername ?? userKey;
   const shareHref = listShareHref(userKey, list.name, list.visibility, list.shareToken);
@@ -102,6 +104,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
           name: list.name,
           description: list.description,
           visibility: list.visibility,
+          contributions: list.contributions,
           createdAt: list.createdAt,
           updatedAt: list.updatedAt,
           copyCount: list.copyCount,
@@ -120,6 +123,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
         shareHref={isOwner ? shareHref : null}
         currentHref={listShareHref(userKey, list.name, list.visibility, key)}
         listKey={key}
+        proposals={proposals}
       />
     </div>
   );

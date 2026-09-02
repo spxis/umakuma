@@ -3,15 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
-import {
-  SUBJECT_VIEW_MODES,
-  SUBJECT_VIEW_MODE_VALUES,
-  subjectGlyphTone,
-  type SubjectViewMode,
-} from "@/app/shared/subjectListView";
+import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { LIST_ITEM_KIND_DISPLAY, LIST_VISIBILITIES, LIST_VISIBILITY_DISPLAY, type ListItemKind } from "@/lib/domainConstants";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
@@ -20,8 +14,10 @@ import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 
-import { itemToneClass } from "../listItemDisplay";
 import type { ListPageViewProps } from "./ListPage.types";
+import ListContributeBox from "./ListContributeBox";
+import { ListCard, ListRow, ProposeRemovalButton } from "./ListPageRows";
+import ListProposalsPanel from "./ListProposalsPanel";
 import ListShareControls from "./ListShareControls";
 import ListViewerActions from "./ListViewerActions";
 
@@ -42,8 +38,21 @@ function timesText(count: number, noun: string): string {
   return `${noun} ${count === 1 ? STUDY_LIST_COPY.onceSuffix : `${count} ${STUDY_LIST_COPY.timesSuffix}`}`;
 }
 
-export default function ListPageView({ list, rows, owner, viewer, shareHref, currentHref, listKey }: ListPageViewProps) {
+export default function ListPageView({ list, rows, owner, viewer, shareHref, currentHref, listKey, proposals }: ListPageViewProps) {
   const [kind, setKind] = useState<string>(ALL);
+  /* Removals a member has suggested from this page, so the button says so. */
+  const [suggested, setSuggested] = useState<Set<string>>(new Set());
+  const canContribute = Boolean(viewer.accountId) && !viewer.isOwner;
+
+  async function proposeRemoval(row: (typeof rows)[number]) {
+    if (!viewer.accountId) return;
+    setSuggested((prev) => new Set(prev).add(row.key));
+    await fetch(`/api/study/${viewer.accountId}/lists/contributions`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ listId: list.id, key: listKey, removal: { kind: row.kind, key: row.glyph, subjectId: row.subjectId } }),
+    }).catch(() => undefined);
+  }
   /*
    * Filing, here too: a member reading somebody's list can tag a row or put
    * it on a list of their own, one at a time, with the same column search
@@ -126,6 +135,7 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
               name={list.name}
               ownerKey={owner.key}
               visibility={list.visibility}
+              contributions={list.contributions}
               shareHref={shareHref}
             />
           ) : !viewer.isOwner && viewer.accountId && viewer.key ? (
@@ -139,6 +149,12 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
           ) : null}
         </div>
       </header>
+
+      {viewer.isOwner && viewer.accountId ? <ListProposalsPanel proposals={proposals} ownerAccountId={viewer.accountId} /> : null}
+
+      {canContribute && viewer.accountId ? (
+        <ListContributeBox listId={list.id} viewerAccountId={viewer.accountId} listKey={listKey} contributions={list.contributions} />
+      ) : null}
 
       {!viewer.signedIn ? (
         <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/30 bg-accent/5 p-4">
@@ -196,9 +212,18 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
         ) : viewMode === SUBJECT_VIEW_MODES.list ? (
           <ul className="mt-3 divide-y divide-line/60">
             {visible.map((row) => (
-              <li key={row.key} className="flex flex-wrap items-center gap-1">
-                <RowLink row={row} />
-                {filing ? <SubjectFilerCell hit={row} filer={filer} className="basis-full pb-2 pl-3 md:basis-auto md:pb-0" /> : null}
+              <li key={row.key}>
+                <ListRow
+                  row={row}
+                  after={
+                    <>
+                      {canContribute ? (
+                        <ProposeRemovalButton onPropose={() => void proposeRemoval(row)} pending={suggested.has(row.key)} />
+                      ) : null}
+                      {filing ? <SubjectFilerCell hit={row} filer={filer} className="basis-full pb-2 pl-3 md:basis-auto md:pb-0" /> : null}
+                    </>
+                  }
+                />
               </li>
             ))}
           </ul>
@@ -206,8 +231,17 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
           <ul className="mt-3 grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))]">
             {visible.map((row) => (
               <li key={row.key}>
-                <CardLink row={row} />
-                {filing ? <SubjectFilerCell hit={row} filer={filer} className="mt-1 justify-center" /> : null}
+                <ListCard
+                  row={row}
+                  after={
+                    <span className="mt-1 flex flex-wrap items-center justify-center gap-1">
+                      {canContribute ? (
+                        <ProposeRemovalButton onPropose={() => void proposeRemoval(row)} pending={suggested.has(row.key)} />
+                      ) : null}
+                      {filing ? <SubjectFilerCell hit={row} filer={filer} /> : null}
+                    </span>
+                  }
+                />
               </li>
             ))}
           </ul>
@@ -218,62 +252,5 @@ export default function ListPageView({ list, rows, owner, viewer, shareHref, cur
         <p className="text-center text-xs font-semibold text-foreground/60">{STUDY_LIST_COPY.privateNotice}</p>
       ) : null}
     </div>
-  );
-}
-
-type Row = ListPageViewProps["rows"][number];
-
-/** A row: glyph, meaning, reading, level - a link to the subject's page where it has one. */
-function RowLink({ row }: { row: Row }) {
-  const body = (
-    <>
-      <span lang="ja" translate="no" className={`w-20 shrink-0 truncate text-center text-2xl font-black leading-none ${subjectGlyphTone(row.subjectType)} ${JP_TEXT_CLASS}`}>
-        {row.glyph}
-      </span>
-      <span className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate text-sm font-bold text-foreground">{row.meaning || "—"}</span>
-        {row.reading ? (
-          <span lang="ja" translate="no" className={`truncate text-xs font-semibold text-foreground/60 ${JP_TEXT_CLASS}`}>
-            {row.reading}
-          </span>
-        ) : null}
-      </span>
-      <span className="flex shrink-0 items-center gap-1">
-        <span className={`subject-pill border-line bg-surface ${itemToneClass(row.kind)}`}>{LIST_ITEM_KIND_DISPLAY[row.kind].singular}</span>
-        {row.wkLevel !== null ? <span className="subject-pill border-line bg-surface text-foreground/70">L{row.wkLevel}</span> : null}
-      </span>
-    </>
-  );
-  const shell = "flex min-w-0 flex-1 items-center gap-3 px-2 py-2 transition hover:bg-surface-muted/50";
-  return row.href ? (
-    <Link href={row.href} className={shell}>
-      {body}
-    </Link>
-  ) : (
-    <div className={shell}>{body}</div>
-  );
-}
-
-function CardLink({ row }: { row: Row }) {
-  const body = (
-    <>
-      <span lang="ja" translate="no" className={`block truncate text-center text-3xl font-black leading-none ${subjectGlyphTone(row.subjectType)} ${JP_TEXT_CLASS}`}>
-        {row.glyph}
-      </span>
-      <span className="mt-2 block truncate text-center text-xs font-bold text-foreground">{row.meaning || "—"}</span>
-      {row.reading ? (
-        <span lang="ja" translate="no" className={`block truncate text-center text-[11px] font-semibold text-foreground/60 ${JP_TEXT_CLASS}`}>
-          {row.reading}
-        </span>
-      ) : null}
-    </>
-  );
-  const shell = "block rounded-2xl border border-line bg-surface p-3 transition hover:border-accent/40 hover:bg-surface-muted/40";
-  return row.href ? (
-    <Link href={row.href} className={shell}>
-      {body}
-    </Link>
-  ) : (
-    <div className={shell}>{body}</div>
   );
 }

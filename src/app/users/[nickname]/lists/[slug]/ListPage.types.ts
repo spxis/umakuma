@@ -1,4 +1,6 @@
 import type { ListVisibility } from "@/lib/domainConstants";
+import type { ListContributions } from "@/lib/listContributions";
+import type { PendingProposal } from "@/lib/studyListContributions";
 import type { ListSubjectRow } from "@/lib/studySubjectItems";
 
 /** What the list's page knows about the list, apart from its rows. */
@@ -7,6 +9,7 @@ export type ListPageList = {
   name: string;
   description: string | null;
   visibility: ListVisibility;
+  contributions: ListContributions;
   createdAt: string;
   updatedAt: string;
   copyCount: number;
@@ -33,6 +36,8 @@ export type ListPageViewProps = {
   currentHref: string;
   /** The key the page was opened with, passed on to the copy and follow calls. */
   listKey: string | null;
+  /** What others have suggested, for the owner; empty for everyone else. */
+  proposals: PendingProposal[];
 };
 
 export type ListViewerActionsProps = {
@@ -49,5 +54,6 @@ export type ListShareControlsProps = {
   name: string;
   ownerKey: string;
   visibility: ListVisibility;
+  contributions: ListContributions;
   shareHref: string;
 };

@@ -2498,11 +2498,11 @@
     "name": "Open lists, locks and proposals",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-01",
-    "dateIsEstimate": true,
-    "release": 22,
-    "summary": "An owner can open a list so anyone may add to it, and lock it again. On a locked shared list a viewer proposes an addition or a removal instead, and the owner approves or declines from the list. Requested 2026-09-01 by John."
+    "summary": "A shared list can be opened so anyone who can see it adds to it at once, or kept locked, from a control beside the visibility. On a locked list a member's addition becomes a suggestion, typed into a box on the list's page with a note on why; taking an item out is always a suggestion, whoever asks, since a list open to additions is not open to being emptied. The owner sees the suggestions on the list itself - the item, the verb, who asked, when and why - and approves or declines each one; approving changes the list on the spot, and a suggestion that would decide nothing is never made. Requested 2026-09-01 by John.",
+    "version": "0.243.0",
+    "releasedAt": "2026-09-02T06:59:28Z"
   },
   {
     "id": "list-archive",
@@ -2624,5 +2624,27 @@
     "dateIsEstimate": true,
     "release": 33,
     "summary": "A stroke browser beside the WaniKani levels and the school grades: the counts 1 to N as chips, and choosing one shows every kanji with that many strokes, with the same cards, rows, tags, selection and add-to-lists as the other explorers. The dictionary already knows each kanji's stroke count. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "list-study-status",
+    "name": "Mark a list studied, and grade it",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 34,
+    "summary": "A list can be marked complete or studied by its owner, and carries a grade the system assigns after a study or review pass over it - how much of the list is known, and how well it went. Shown on the card and the list's page. Ties to practising from a list and the who-knows-what overlay. Requested 2026-09-01 by John."
+  },
+  {
+    "id": "list-print",
+    "name": "Print a list from the lists page",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-01",
+    "dateIsEstimate": true,
+    "release": 35,
+    "summary": "Every list card and list page has a Print action that opens the list as a sheet: the items with meanings and readings, or the tracing sheet the practice pages already print, chosen at the click. Requested 2026-09-01 by John."
   }
 ]
