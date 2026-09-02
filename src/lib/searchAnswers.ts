@@ -130,9 +130,8 @@ function eraAnswer(query: string): SearchAnswer | null {
  * second currency - so it answers in both of the site's, rather than picking
  * one of the two countries it is written for.
  */
-function currencyAnswer(query: string, rates: MoneyRates | null, source: string): SearchAnswer | null {
-  const money = parseMoneyQuery(query);
-  if (!money || !rates) return null;
+function currencyAnswer(money: MoneyAmount, rates: MoneyRates | null, source: string): SearchAnswer | null {
+  if (!rates) return null;
 
   const today = rates.today;
   /* One column into yen, or both home currencies coming out of it. */
@@ -196,7 +195,7 @@ function moneyHistory(
  * has no business waiting on a currency API.
  */
 export function needsRates(query: string): boolean {
-  return parseMoneyQuery(query) !== null;
+  return parseMoneyQuery(query).length > 0;
 }
 
 /**
@@ -211,7 +210,7 @@ export function searchAnswers(
   rates: MoneyRates | null = null,
   rateSource: string = "",
 ): SearchAnswer[] {
-  return [eraAnswer(query), currencyAnswer(query, rates, rateSource)].filter(
-    (answer): answer is SearchAnswer => answer !== null,
-  );
+  const money = parseMoneyQuery(query).map((amount) => currencyAnswer(amount, rates, rateSource));
+
+  return [eraAnswer(query), ...money].filter((answer): answer is SearchAnswer => answer !== null);
 }

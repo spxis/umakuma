@@ -2925,5 +2925,30 @@
     "summary": "The reading challenge is one family's arrangement about pocket money, and it was on the public leaderboard with a button inviting anybody to log today's check-in. A member is one of three kinds now - admin, internal, everyone else - and the Read page, its nav tab, its banner on the leaderboard and the check-in route behind it are offered to the first two only. The Read group keeps its news reader for everybody, under the name News, so nobody loses a page. Admins grant the kind from the row menu in the users table; the members already here a month with WaniKani were marked internal in one pass. Requested 2026-09-02 by John.",
     "version": "0.270.0",
     "releasedAt": "2026-09-02T12:15:00Z"
+  },
+  {
+    "id": "search-money-dollar-sign",
+    "name": "A dollar sign is money too",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 51,
+    "summary": "23 EUR and 100 USD converted while $14.40 CAD and $20 matched nothing at all, so the one form the feature was asked for was the one it missed. The dollar sign now names the dollar family: a code beside it picks from that family, so $14.40 CAD is Canadian and $1,234 AUD is Australian; a code outside it contradicts the sign and names nothing, so $1,500 JPY answers with nothing rather than guessing past the contradiction; and on its own the sign falls back to the two currencies this site is written for and answers in both, which is the same choice a yen amount already makes coming the other way. Reported 2026-09-02 by John.",
+    "version": "0.271.0",
+    "releasedAt": "2026-09-02T12:28:11Z"
+  },
+  {
+    "id": "search-answers-in-dropdown",
+    "name": "Converted answers in the search dropdown",
+    "area": "study",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 52,
+    "summary": "The era and money answers only appear on the full Search page. The header dropdown calls /api/search, which never asks for them, so Heisei 3 shows only the kanji for three. Reported 2026-09-02 by John.",
+    "owner": "Claude (session 21d00c32)",
+    "claimedAt": "2026-09-02T12:27:52.848Z"
   }
 ]

@@ -21,59 +21,83 @@ const RATES: RateTable = {
 
 describe("parseMoneyQuery", () => {
   it("reads the two the ticket named", () => {
-    expect(parseMoneyQuery("14.40 CAD")).toEqual({ amount: 14.4, currency: "CAD" });
-    expect(parseMoneyQuery("23 EUR")).toEqual({ amount: 23, currency: "EUR" });
+    expect(parseMoneyQuery("14.40 CAD")).toEqual([{ amount: 14.4, currency: "CAD" }]);
+    expect(parseMoneyQuery("23 EUR")).toEqual([{ amount: 23, currency: "EUR" }]);
   });
 
   it("takes the currency on either side, spaced or not", () => {
-    expect(parseMoneyQuery("EUR 23")).toEqual({ amount: 23, currency: "EUR" });
-    expect(parseMoneyQuery("23EUR")).toEqual({ amount: 23, currency: "EUR" });
-    expect(parseMoneyQuery("eur 23")).toEqual({ amount: 23, currency: "EUR" });
+    expect(parseMoneyQuery("EUR 23")).toEqual([{ amount: 23, currency: "EUR" }]);
+    expect(parseMoneyQuery("23EUR")).toEqual([{ amount: 23, currency: "EUR" }]);
+    expect(parseMoneyQuery("eur 23")).toEqual([{ amount: 23, currency: "EUR" }]);
   });
 
   it("reads a yen amount however it is written", () => {
-    expect(parseMoneyQuery("1500 JPY")).toEqual({ amount: 1500, currency: "JPY" });
-    expect(parseMoneyQuery("¥1500")).toEqual({ amount: 1500, currency: "JPY" });
-    expect(parseMoneyQuery("￥1500")).toEqual({ amount: 1500, currency: "JPY" });
-    expect(parseMoneyQuery("1500円")).toEqual({ amount: 1500, currency: "JPY" });
+    expect(parseMoneyQuery("1500 JPY")).toEqual([{ amount: 1500, currency: "JPY" }]);
+    expect(parseMoneyQuery("¥1500")).toEqual([{ amount: 1500, currency: "JPY" }]);
+    expect(parseMoneyQuery("￥1500")).toEqual([{ amount: 1500, currency: "JPY" }]);
+    expect(parseMoneyQuery("1500円")).toEqual([{ amount: 1500, currency: "JPY" }]);
   });
 
   it("reads the symbols that name one currency and only one", () => {
-    expect(parseMoneyQuery("€23")).toEqual({ amount: 23, currency: "EUR" });
-    expect(parseMoneyQuery("£10.50")).toEqual({ amount: 10.5, currency: "GBP" });
+    expect(parseMoneyQuery("€23")).toEqual([{ amount: 23, currency: "EUR" }]);
+    expect(parseMoneyQuery("£10.50")).toEqual([{ amount: 10.5, currency: "GBP" }]);
   });
 
   /*
    * The dollar sign names the Canadian dollar and the American one, and this
-   * site is written for both - so guessing would be wrong for half its readers.
+   * site is written for both - so it answers in both rather than guessing.
    */
-  it("refuses a bare dollar sign rather than guessing whose it is", () => {
-    expect(parseMoneyQuery("$20")).toBeNull();
-    expect(parseMoneyQuery("20 CAD")).toEqual({ amount: 20, currency: "CAD" });
-    expect(parseMoneyQuery("20 USD")).toEqual({ amount: 20, currency: "USD" });
+  it("reads a bare dollar sign as both dollars this site is written for", () => {
+    expect(parseMoneyQuery("$20")).toEqual([
+      { amount: 20, currency: "CAD" },
+      { amount: 20, currency: "USD" },
+    ]);
+    expect(parseMoneyQuery("20$")).toEqual([
+      { amount: 20, currency: "CAD" },
+      { amount: 20, currency: "USD" },
+    ]);
+  });
+
+  /* The form John asked for: the sign is punctuation once the code is there. */
+  it("lets a code settle which dollar the sign meant", () => {
+    expect(parseMoneyQuery("$14.40 CAD")).toEqual([{ amount: 14.4, currency: "CAD" }]);
+    expect(parseMoneyQuery("$20 USD")).toEqual([{ amount: 20, currency: "USD" }]);
+    expect(parseMoneyQuery("$1,234.56 AUD")).toEqual([{ amount: 1234.56, currency: "AUD" }]);
+  });
+
+  it("reads a currency named twice and agreeing with itself", () => {
+    expect(parseMoneyQuery("¥1500 JPY")).toEqual([{ amount: 1500, currency: "JPY" }]);
+  });
+
+  /* Two names that disagree are a typo, and answering either would be a guess. */
+  it("answers nothing when the two sides name different currencies", () => {
+    expect(parseMoneyQuery("€23 USD")).toEqual([]);
+    expect(parseMoneyQuery("CAD 20 JPY")).toEqual([]);
+    /* A dollar sign is not a yen sign, however the code reads. */
+    expect(parseMoneyQuery("$1,500 JPY")).toEqual([]);
   });
 
   it("reads a price written with a thousands comma", () => {
-    expect(parseMoneyQuery("1,500円")).toEqual({ amount: 1500, currency: "JPY" });
-    expect(parseMoneyQuery("1,234,567 JPY")).toEqual({ amount: 1234567, currency: "JPY" });
+    expect(parseMoneyQuery("1,500円")).toEqual([{ amount: 1500, currency: "JPY" }]);
+    expect(parseMoneyQuery("1,234,567 JPY")).toEqual([{ amount: 1234567, currency: "JPY" }]);
   });
 
   it("reads full-width digits, which a Japanese keyboard produces", () => {
-    expect(parseMoneyQuery("１５００円")).toEqual({ amount: 1500, currency: "JPY" });
+    expect(parseMoneyQuery("１５００円")).toEqual([{ amount: 1500, currency: "JPY" }]);
   });
 
   it("answers nothing for a query that is not an amount", () => {
-    expect(parseMoneyQuery("morning")).toBeNull();
-    expect(parseMoneyQuery("水")).toBeNull();
-    expect(parseMoneyQuery("23")).toBeNull();
-    expect(parseMoneyQuery("EUR")).toBeNull();
-    expect(parseMoneyQuery("23 XYZ")).toBeNull();
-    expect(parseMoneyQuery("")).toBeNull();
+    expect(parseMoneyQuery("morning")).toEqual([]);
+    expect(parseMoneyQuery("水")).toEqual([]);
+    expect(parseMoneyQuery("23")).toEqual([]);
+    expect(parseMoneyQuery("EUR")).toEqual([]);
+    expect(parseMoneyQuery("23 XYZ")).toEqual([]);
+    expect(parseMoneyQuery("")).toEqual([]);
   });
 
   it("refuses an amount that is not a price", () => {
-    expect(parseMoneyQuery("0 JPY")).toBeNull();
-    expect(parseMoneyQuery("99999999999999 JPY")).toBeNull();
+    expect(parseMoneyQuery("0 JPY")).toEqual([]);
+    expect(parseMoneyQuery("99999999999999 JPY")).toEqual([]);
   });
 });
 

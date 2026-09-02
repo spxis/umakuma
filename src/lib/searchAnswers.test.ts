@@ -70,6 +70,25 @@ describe("searchAnswers, on an amount of money", () => {
   });
 
   /*
+   * A dollar sign is two questions here, so it gets two answers rather than
+   * none. Guessing one would be wrong for half the people who typed it.
+   */
+  it("answers a bare dollar sign in each dollar it could have meant", () => {
+    const answers = searchAnswers("$20", RATES, SOURCE);
+    expect(answers).toHaveLength(2);
+    expect(answers.map((answer) => answer.question)).toEqual(["CA$20.00", "$20.00"]);
+    expect(answers.every((answer) => answer.kind === SEARCH_ANSWER_KINDS.currency)).toBe(true);
+  });
+
+  /* The form John asked for, which used to answer with nothing at all. */
+  it("answers once when a code says which dollar was meant", () => {
+    const answers = searchAnswers("$14.40 CAD", RATES, SOURCE);
+    expect(answers).toHaveLength(1);
+    expect(answers[0]?.question).toBe("CA$14.40");
+    expect(answers[0]?.value).toBe("¥1,661");
+  });
+
+  /*
    * A rate is somebody's published number on a particular day, not arithmetic
    * the page can stand behind on its own, so it says whose and when.
    */
@@ -143,6 +162,8 @@ describe("needsRates", () => {
   it("is true only for a query that names an amount", () => {
     expect(needsRates("23 EUR")).toBe(true);
     expect(needsRates("1500円")).toBe(true);
+    expect(needsRates("$14.40 CAD")).toBe(true);
+    expect(needsRates("$20")).toBe(true);
     expect(needsRates("morning")).toBe(false);
     expect(needsRates("Heisei 3")).toBe(false);
     expect(needsRates("日")).toBe(false);

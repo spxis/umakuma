@@ -44,21 +44,30 @@ export const JPY: CurrencyCode = "JPY";
  */
 export const HOME_CURRENCIES: readonly CurrencyCode[] = ["CAD", "USD"];
 
-/**
- * The symbols that name one currency and only one.
- *
- * No dollar sign. It is the Canadian dollar, the American dollar, the
- * Australian, the Singaporean and the Hong Kong dollar, and the two at the
- * front of that list are the two this site is written for - so guessing which
- * one somebody meant would be wrong for half the people who typed it. A
- * dollar amount asks for its code, and every other query still works.
- */
+/** The symbols that name one currency and only one. */
 const CURRENCY_SYMBOLS: Record<string, CurrencyCode> = {
   "¥": JPY,
   "￥": JPY,
   "円": JPY,
   "€": "EUR",
   "£": "GBP",
+};
+
+/**
+ * The symbols that name a family of currencies rather than one.
+ *
+ * The dollar sign is seven of them, so it carries both the family and what it
+ * means unaided. A code beside the sign picks from the family - `$14.40 CAD`
+ * is Canadian and `$1,234 AUD` is Australian, because there the sign is only
+ * punctuation - while a code outside it contradicts the sign and names
+ * nothing. On its own the sign falls back to the two currencies this site is
+ * written for and answers in both, which is the same choice the yen direction
+ * already makes rather than picking a side for half the people who typed it.
+ */
+const DOLLAR_FAMILY: readonly CurrencyCode[] = ["AUD", "CAD", "HKD", "MXN", "NZD", "SGD", "USD"];
+
+const AMBIGUOUS_SYMBOLS: Record<string, { family: readonly CurrencyCode[]; unaided: readonly CurrencyCode[] }> = {
+  $: { family: DOLLAR_FAMILY, unaided: HOME_CURRENCIES },
 };
 
 /** An amount of one currency, as it was typed. */
@@ -82,50 +91,70 @@ function toHalfWidthDigits(value: string): string {
   );
 }
 
-/** The currency a token names, whether it is a code or a symbol. */
-function currencyNamed(token: string): CurrencyCode | null {
+/**
+ * The currencies a token could name, whether it is a code or a symbol.
+ *
+ * A list rather than one currency because a symbol need not settle the
+ * question. An empty list is a token that names nothing, which makes the
+ * whole query not money: `23 XYZ` is a number beside a word.
+ */
+function currenciesNamed(token: string): readonly CurrencyCode[] {
+  const ambiguous = AMBIGUOUS_SYMBOLS[token];
+  if (ambiguous) return ambiguous.family;
+
   const symbol = CURRENCY_SYMBOLS[token];
-  if (symbol) return symbol;
+  if (symbol) return [symbol];
 
   const code = token.toUpperCase();
-  return isCurrencyCode(code) ? code : null;
+  return isCurrencyCode(code) ? [code] : [];
 }
 
 /*
  * A currency may lead or follow, because both are how it is written: €23 and
  * 23 EUR are the same amount, and so are ¥1500 and 1500円. The separator is
- * optional for the same reason - nobody types a space before 円.
+ * optional for the same reason - nobody types a space before 円. Both sides
+ * are optional and both may be filled, because `$14.40 CAD` names its
+ * currency twice; a query filling neither is a bare number and not money.
  */
-const CURRENCY_FIRST = /^([A-Za-z]{3}|[¥￥€£])\s*(\d+(?:\.\d+)?)$/;
-const AMOUNT_FIRST = /^(\d+(?:\.\d+)?)\s*([A-Za-z]{3}|[¥￥€£円])$/;
+const MONEY_QUERY =
+  /^([A-Za-z]{3}|[$¥￥€£])?\s*(\d+(?:\.\d+)?)\s*([A-Za-z]{3}|[$¥￥€£円])?$/;
 
 /**
- * The amount a query names, or null when it does not name one.
+ * The amounts a query names, which is usually none and sometimes two.
+ *
+ * Two when the query names a currency that is more than one currency: `$20`
+ * is a Canadian and an American question at once, and both get answered.
+ * Naming it on both sides narrows rather than repeats - the sides are
+ * intersected, so `$14.40 CAD` is Canadian and `€23 USD` names nothing,
+ * because a query that contradicts itself is a typo rather than a conversion.
  *
  * Commas are dropped before anything else is read: a price is written 1,500
  * as often as 1500, and treating the comma as punctuation rather than as part
  * of the number is what lets both be the same query.
  */
-export function parseMoneyQuery(raw: string): MoneyAmount | null {
+export function parseMoneyQuery(raw: string): MoneyAmount[] {
   const query = toHalfWidthDigits(String(raw ?? "").trim())
     .replace(/(\d),(?=\d{3}\b)/g, "$1")
     .replace(/\s+/g, " ");
 
-  const match = CURRENCY_FIRST.exec(query) ?? AMOUNT_FIRST.exec(query);
-  if (!match) return null;
+  const match = MONEY_QUERY.exec(query);
+  if (!match) return [];
 
-  /* Whichever pattern matched, one group is the number and the other is not. */
-  const [token, digits] = CURRENCY_FIRST.test(query)
-    ? [match[1]!, match[2]!]
-    : [match[2]!, match[1]!];
+  const [, before, digits, after] = match;
+  const sides = [before, after].filter((token): token is string => Boolean(token));
+  if (sides.length === 0) return [];
 
-  const currency = currencyNamed(token);
-  if (!currency) return null;
+  /* Nothing narrowed the sign, so it means what it means on its own. */
+  const unaided = sides.every((token) => token in AMBIGUOUS_SYMBOLS);
+  const currencies = sides
+    .map((token) => (unaided ? AMBIGUOUS_SYMBOLS[token]!.unaided : currenciesNamed(token)))
+    .reduce((kept, next) => kept.filter((currency) => next.includes(currency)));
+  if (currencies.length === 0) return [];
 
   const amount = Number(digits);
-  if (!Number.isFinite(amount) || amount <= 0 || amount > LARGEST_AMOUNT) return null;
+  if (!Number.isFinite(amount) || amount <= 0 || amount > LARGEST_AMOUNT) return [];
 
-  return { amount, currency };
+  return currencies.map((currency) => ({ amount, currency }));
 }
 
 /** Rates against one base currency, and the day they were published. */
