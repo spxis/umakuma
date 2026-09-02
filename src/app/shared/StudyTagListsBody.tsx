@@ -58,9 +58,16 @@ function RemoveButton({
       onClick={() => onRemove(item)}
       aria-label={`${STUDY_TAG_LIST_COPY.remove} ${item.characters}`}
       title={STUDY_TAG_LIST_COPY.remove}
-      className="h-7 w-7 cursor-pointer rounded-full border border-line bg-surface/90 text-xs font-black text-foreground hover:bg-surface-muted"
+      /*
+       * Quiet until it is wanted. A permanent × on every card turned a grid of
+       * characters into a grid of controls, and the mark it was drawn with -
+       * the letter x - read as part of the card rather than as a button.
+       */
+      className="inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-line/70 bg-surface/95 text-foreground/70 opacity-0 shadow-sm transition group-hover:opacity-100 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600 focus-visible:opacity-100"
     >
-      ×
+      <svg viewBox="0 0 20 20" aria-hidden="true" className="h-3 w-3 fill-current">
+        <path d="M5.28 3.86 10 8.59l4.72-4.73a1 1 0 0 1 1.42 1.42L11.41 10l4.73 4.72a1 1 0 0 1-1.42 1.42L10 11.41l-4.72 4.73a1 1 0 0 1-1.42-1.42L8.59 10 3.86 5.28a1 1 0 0 1 1.42-1.42Z" />
+      </svg>
     </button>
   );
 }
@@ -89,13 +96,22 @@ function ItemNote({
     return <span className="block text-[11px] font-semibold italic text-foreground/70">{text}</span>;
   }
 
+  /*
+   * A written note is content and is always shown. The invitation to write one
+   * is a control, so it waits for the pointer: a grid of characters with "Add
+   * a note" printed under every one of them reads as a form, not as a list.
+   */
   return (
     <button
       type="button"
       onClick={() => onEdit(item)}
-      className="block w-full text-left text-[11px] font-semibold text-foreground/70 transition hover:text-accent"
+      className={`mt-1 block w-full rounded-md px-1.5 py-0.5 text-left text-[11px] font-semibold transition ${
+        text
+          ? "italic text-foreground/70 hover:bg-surface-muted hover:text-accent"
+          : "text-foreground/60 opacity-0 hover:bg-surface-muted hover:text-accent group-hover:opacity-100 focus-visible:opacity-100"
+      }`}
     >
-      {text ? <span className="italic">{text}</span> : <span>{STUDY_TAG_LIST_COPY.addNote}</span>}
+      {text ?? STUDY_TAG_LIST_COPY.addNote}
     </button>
   );
 }

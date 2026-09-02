@@ -3151,5 +3151,17 @@
     "summary": "A kanji page shows how the character is written and what it means, but not what it is made of - and the RADKFILE index that powers the radical search knows the parts of 6,355 characters. The page carries them in a container of its own, under the stroke box, each part a link into the radical search for the characters that share it. Its own container because it is EDRDG's data rather than WaniKani's and every box here credits one source. Requested 2026-09-02 by John.",
     "owner": "Claude (session cd35064c)",
     "claimedAt": "2026-09-02T15:18:03.966Z"
+  },
+  {
+    "id": "list-controls-on-hover",
+    "name": "The controls wait for the pointer",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "release": 58,
+    "summary": "Every card in a list carried \"Add a note\" printed under it in plain text and an × sitting on it, so a grid of characters read as a grid of controls and the thing the page exists to show came third. Both wait for the pointer now: they appear on the card under the cursor and on whatever has keyboard focus, and a note that has been written stays visible always, because that is content rather than a control. The × was drawn with the letter x, which read as part of the card; it is a proper mark in a circle that turns red where it will act. Reported 2026-09-02 by John.",
+    "version": "0.289.0",
+    "releasedAt": "2026-09-02T15:38:22Z"
   }
 ]

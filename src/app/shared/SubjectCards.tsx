@@ -68,7 +68,7 @@ export default function SubjectCards<TRow extends SubjectListRow>({
         const subjectType = subjectTypeOrVocabulary(row.subjectType);
         const chosen = choosing && Boolean(selection?.chosen.has(row.glyph));
         return (
-          <li key={row.key} className="relative min-w-0">
+          <li key={row.key} className="group relative min-w-0">
             <button
               type="button"
               aria-pressed={choosing ? chosen : undefined}

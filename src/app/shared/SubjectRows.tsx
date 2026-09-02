@@ -217,7 +217,7 @@ export default function SubjectRows<TRow extends SubjectListRow>({
               return (
               <Fragment key={row.key}>
               <li
-                className={`flex items-center gap-2 pr-2 transition hover:bg-surface-muted/50 ${
+                className={`group flex items-center gap-2 pr-2 transition hover:bg-surface-muted/50 ${
                   chosen ? "bg-accent/10" : ""
                 }`}
               >
