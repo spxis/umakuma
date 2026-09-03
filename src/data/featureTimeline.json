@@ -3934,5 +3934,18 @@
     "summary": "Kanto is eight prefectures inside a thumbnail: on a whole-country map Saitama and Gunma are a few pixels of the same grey. Three zoom steps rather than a free zoom, with drag, arrow keys and +/-/0 to move around, and the window clamped so a drag that runs off the edge stops rather than framing open sea. Requested 2026-09-03 by John.",
     "version": "0.339.0",
     "releasedAt": "2026-09-03T09:28:42Z"
+  },
+  {
+    "id": "sheet-branding",
+    "name": "A worksheet says it came from UmaKuma",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 72,
+    "summary": "The practice sheet carries no brand at all: on screen the page has the site's navigation and nothing that says UmaKuma, and on paper - where a sheet is photocopied, handed to a child and pinned to a fridge - there is nothing at all. Every other page wears the banner. The sheet wants the brand minimally on screen, the mark and the name above the title, and more minimally still on paper: one quiet line, the name and the address, in the grey the rest of the printed sheet uses, so whoever picks the page up knows where it came from and where to get another. Requested 2026-09-03 by John.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T09:34:31.292Z"
   }
 ]
