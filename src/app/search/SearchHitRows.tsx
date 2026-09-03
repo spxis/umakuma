@@ -1,12 +1,12 @@
 "use client";
 
+import SubjectGlyph from "@/app/shared/SubjectGlyph";
 import Link from "next/link";
 import { type ReactNode } from "react";
 
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import type { SubjectFiler } from "@/app/shared/useSubjectFiler";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { SEARCH_SOURCE_LABELS, searchHitHref, type SearchHit } from "@/lib/globalSearch";
 import { rememberHit } from "@/lib/recentItems";
 
@@ -85,14 +85,8 @@ function HitRow({
 }) {
   const body = (
     <>
-      <span
-        /* Three characters fit at every width; 私自身 clipped to 私 at the old w-16. */
-        className={`w-16 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-20 ${JP_TEXT_CLASS} ${subjectGlyphTone(
-          hit.subjectType,
-        )}`}
-      >
-        {hit.glyph}
-      </span>
+      {/* Three characters fit at every width; 私自身 clipped to 私 at the old w-16. */}
+      <SubjectGlyph glyph={hit.glyph} subjectType={hit.subjectType} laneClassName="w-16 shrink-0 sm:w-20" />
 
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="truncate text-sm font-bold text-foreground sm:text-base">

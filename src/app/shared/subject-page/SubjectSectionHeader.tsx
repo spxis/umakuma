@@ -1,3 +1,4 @@
+import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import Link from "next/link";
 
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
@@ -43,10 +44,11 @@ export default function SubjectSectionHeader({
   return (
     <section className="overflow-hidden rounded-3xl border border-line bg-surface/90 shadow-sm">
       <header className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-line bg-surface-muted/60 px-5 py-4">
+        {/* The subject of the section, sized like every other primary glyph. */}
         <h1
           lang="ja"
           translate="no"
-          className={`text-4xl font-black leading-none text-foreground sm:text-5xl ${JP_TEXT_CLASS}`}
+          className={`font-black leading-none text-foreground ${glyphTextSizeClass(label)} ${JP_TEXT_CLASS}`}
         >
           {label}
         </h1>

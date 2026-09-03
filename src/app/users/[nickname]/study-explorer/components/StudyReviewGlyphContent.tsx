@@ -1,6 +1,6 @@
 import type { StudyTag } from "@/lib/domainConstants";
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
-import { glyphTextSizeClass } from "../../level-explorer/lib/levelExplorerDisplay";
+import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import GlyphTagOverlay from "../../shared/GlyphTagOverlay";
 

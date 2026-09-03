@@ -1,8 +1,10 @@
 "use client";
 
+import SubjectGlyph from "@/app/shared/SubjectGlyph";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { GLYPH_CARD_SIZE_CLASS } from "./glyphSizes";
 import { JP_TEXT_CLASS } from "./japaneseText";
 import { STUDY_LIST_COPY } from "./studyListCopy";
 import { subjectGlyphTone } from "./subjectListView";
@@ -20,13 +22,8 @@ import { itemToneClass } from "@/app/users/[nickname]/lists/listItemDisplay";
 export function ListRow({ row, after }: { row: ListSubjectRow; after?: ReactNode }) {
   const body = (
     <>
-      <span
-        lang="ja"
-        translate="no"
-        className={`w-20 shrink-0 truncate text-center text-2xl font-black leading-none ${subjectGlyphTone(row.subjectType)} ${JP_TEXT_CLASS}`}
-      >
-        {row.glyph}
-      </span>
+      {/* Four characters at every width, so a vocabulary item is not clipped to its first. */}
+      <SubjectGlyph glyph={row.glyph} subjectType={row.subjectType} laneClassName="w-20 shrink-0" />
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="truncate text-sm font-bold text-foreground">{row.meaning || "—"}</span>
         {row.reading ? (
@@ -64,7 +61,7 @@ export function ListCard({ row, after }: { row: ListSubjectRow; after?: ReactNod
       <span
         lang="ja"
         translate="no"
-        className={`block truncate text-center text-3xl font-black leading-none ${subjectGlyphTone(row.subjectType)} ${JP_TEXT_CLASS}`}
+        className={`block truncate text-center ${GLYPH_CARD_SIZE_CLASS} font-black leading-none ${subjectGlyphTone(row.subjectType)} ${JP_TEXT_CLASS}`}
       >
         {row.glyph}
       </span>

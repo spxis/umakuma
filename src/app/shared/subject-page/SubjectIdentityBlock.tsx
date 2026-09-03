@@ -1,3 +1,4 @@
+import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
@@ -71,7 +72,7 @@ export default function SubjectIdentityBlock({ identity }: { identity: SubjectId
         <p
           lang="ja"
           translate="no"
-          className={`text-5xl font-black leading-none sm:text-6xl ${JP_TEXT_CLASS} ${subjectGlyphTone(
+          className={`font-black leading-none ${glyphTextSizeClass(label)} ${JP_TEXT_CLASS} ${subjectGlyphTone(
             subjectType,
           )}`}
         >

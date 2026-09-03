@@ -1,5 +1,6 @@
 "use client";
 
+import { GLYPH_CARD_SIZE_CLASS } from "@/app/shared/glyphSizes";
 import { useState } from "react";
 
 import ModalShell from "@/app/shared/ModalShell";
@@ -42,7 +43,14 @@ export default function ListItemNoteEditor({
       panelClassName="w-full max-w-md rounded-3xl border border-line bg-surface p-4 shadow-[0_20px_65px_rgba(0,0,0,0.42)]"
     >
       <div className="flex items-start gap-3">
-        <span className={`text-4xl font-black leading-none text-foreground ${JP_TEXT_CLASS}`} lang="ja">
+        {/* The card size, not the page size: this glyph labels a form about
+          * an item, it is not the subject of a surface the way a heading is.
+          * It was a text-4xl only this modal used. */}
+        <span
+          lang="ja"
+          translate="no"
+          className={`font-black leading-none text-foreground ${GLYPH_CARD_SIZE_CLASS} ${JP_TEXT_CLASS}`}
+        >
           {glyph}
         </span>
         <div className="min-w-0 flex-1">

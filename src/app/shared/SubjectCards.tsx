@@ -7,12 +7,12 @@ import {
   type SubjectListRow,
 } from "@/app/shared/subjectListView";
 import {
-  glyphTextSizeClass,
   subjectTypePillClass,
   typeGlyphBoxClass,
 } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
 import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { JP_TEXT_CLASS } from "./japaneseText";
+import { glyphTextSizeClass } from "./glyphSizes";
 import type { SubjectSelection } from "./useSubjectSelection";
 
 type Props<TRow extends SubjectListRow> = {

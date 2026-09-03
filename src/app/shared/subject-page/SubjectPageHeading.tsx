@@ -1,3 +1,4 @@
+import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 /**
@@ -23,10 +24,12 @@ export default function SubjectPageHeading({
 }) {
   return (
     <header className="flex flex-wrap items-center gap-x-4 gap-y-1">
+      {/* Measured by length, like every other primary glyph: a five-character
+        * word at a single character's size runs off a phone. */}
       <h1
         lang="ja"
         translate="no"
-        className={`text-5xl font-black leading-none text-foreground sm:text-6xl ${JP_TEXT_CLASS}`}
+        className={`font-black leading-none text-foreground ${glyphTextSizeClass(label)} ${JP_TEXT_CLASS}`}
       >
         {label}
       </h1>

@@ -425,6 +425,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Todokeru Made", ja: "届けるまで", reading: "とどけるまで", gloss: "it keeps trying until the code arrives" },
   { romaji: "Nanoru Kakera", ja: "名乗る欠片", reading: "なのるかけら", gloss: "every piece says what it is called" },
   { romaji: "Nishiki no Hyoushi", ja: "錦の表紙", reading: "にしきのひょうし", gloss: "a proper cover on the page" },
+  { romaji: "Nunoji no Monosashi", ja: "布地の物差し", reading: "ぬのじのものさし", gloss: "one ruler, and every piece cut to it" },
 ];
 
 /**

@@ -1,10 +1,10 @@
 "use client";
 
+import SubjectPill from "@/app/shared/SubjectPill";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { PROPOSAL_ACTIONS } from "@/lib/listContributions";
 import type { PendingProposal } from "@/lib/studyListContributions";
@@ -59,9 +59,9 @@ export default function ListProposalsPanel({ proposals, ownerAccountId }: { prop
             <span className="subject-pill border-line bg-surface-muted text-foreground/70">
               {proposal.action === PROPOSAL_ACTIONS.add ? STUDY_LIST_COPY.proposalAdd : STUDY_LIST_COPY.proposalRemove}
             </span>
-            <span lang="ja" translate="no" className={`text-xl font-black leading-none ${itemToneClass(proposal.item.kind)} ${JP_TEXT_CLASS}`}>
-              {proposal.item.key}
-            </span>
+            {/* The chip every other surface shows an item as; this row had a
+              * text-xl glyph nothing else on the site used. */}
+            <SubjectPill glyph={proposal.item.key} tone={itemToneClass(proposal.item.kind)} />
             <span className="min-w-0 flex-1 text-xs font-semibold text-foreground/70">
               <Link href={`/users/${encodeURIComponent(proposal.proposer.key)}`} className="font-black text-foreground hover:text-accent">
                 {proposal.proposer.name}

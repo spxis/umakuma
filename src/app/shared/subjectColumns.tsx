@@ -1,3 +1,4 @@
+import SubjectGlyph from "@/app/shared/SubjectGlyph";
 import type { ReactNode } from "react";
 
 import { PillChip } from "@/app/users/[nickname]/shared/StatusSrsChip";
@@ -12,7 +13,6 @@ import { srsBucketBadgeClass, srsBucketLabel } from "./studyHistoryUi";
 import {
   SUBJECT_ROW_LANES,
   SUBJECT_VIEW_COPY,
-  subjectGlyphTone,
   type SubjectListRow,
 } from "./subjectListView";
 
@@ -54,20 +54,12 @@ export function itemColumn<TRow extends SubjectListRow>(): SubjectColumn<TRow> {
     lane: SUBJECT_ROW_LANES.glyph,
     headingClassName: "text-center",
     render: (row) => (
-      <span
-        lang="ja"
-        translate="no"
-        /*
-         * Wide enough for a four-character word. A single-kanji lane clipped
-         * every vocabulary item to its first character plus an ellipsis, which
-         * is the one thing a reader is scanning for.
-         */
-        className={`block truncate text-center text-2xl font-black leading-none ${JP_TEXT_CLASS} ${subjectGlyphTone(
-          row.subjectType,
-        )}`}
-      >
-        {row.glyph}
-      </span>
+      /*
+       * Wide enough for a four-character word. A single-kanji lane clipped
+       * every vocabulary item to its first character plus an ellipsis, which
+       * is the one thing a reader is scanning for.
+       */
+      <SubjectGlyph glyph={row.glyph} subjectType={row.subjectType} laneClassName="block" />
     ),
   };
 }

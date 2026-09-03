@@ -1,5 +1,6 @@
 "use client";
 
+import SubjectGlyph from "@/app/shared/SubjectGlyph";
 import Link from "next/link";
 import { useEffect, useSyncExternalStore } from "react";
 
@@ -14,7 +15,6 @@ import {
   subscribeRecentItems,
   type RecentItem,
 } from "@/lib/recentItems";
-import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
@@ -133,17 +133,7 @@ function ItemGlyph({ item }: { item: RecentItem }) {
     );
   }
 
-  return (
-    <span
-      lang="ja"
-      translate="no"
-      className={`w-20 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-24 ${JP_TEXT_CLASS} ${subjectGlyphTone(
-        item.subjectType ?? "",
-      )}`}
-    >
-      {item.label}
-    </span>
-  );
+  return <SubjectGlyph glyph={item.label} subjectType={item.subjectType ?? ""} laneClassName="w-20 shrink-0 sm:w-24" />;
 }
 
 function HistoryIcon() {

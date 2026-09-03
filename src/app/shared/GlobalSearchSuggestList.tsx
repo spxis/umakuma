@@ -1,5 +1,6 @@
 "use client";
 
+import SubjectGlyph from "@/app/shared/SubjectGlyph";
 import { useEffect, useRef, type ReactNode, type UIEvent } from "react";
 
 import { SOURCE_TONES } from "@/app/search/Search.constants";
@@ -10,7 +11,6 @@ import { JP_TEXT_CLASS } from "./japaneseText";
 import SubjectFilerCell from "./SubjectFilerCell";
 import SearchAnswerBrief from "./SearchAnswerBrief";
 import SubjectFilerToggle from "./SubjectFilerToggle";
-import { subjectGlyphTone } from "./subjectListView";
 import { useFilerOpen, useSubjectFiler } from "./useSubjectFiler";
 
 type Props = {
@@ -163,18 +163,14 @@ export default function GlobalSearchSuggestList({
             index === activeIndex ? "bg-surface-muted" : ""
           }`}
         >
-          <span
-            /*
-             * Wide enough for a four-character word at the desktop size; the
-             * lane SubjectRows uses, because clipping a vocabulary item to its
-             * first character hides the one thing the reader is scanning for.
-             */
-            className={`w-20 shrink-0 truncate text-center text-2xl font-black leading-none sm:w-30 sm:text-3xl ${JP_TEXT_CLASS} ${subjectGlyphTone(
-              hit.subjectType,
-            )}`}
-          >
-            {hit.glyph}
-          </span>
+          {/*
+            * Wide enough for a four-character word at the desktop size; the
+            * lane SubjectRows uses, because clipping a vocabulary item to its
+            * first character hides the one thing the reader is scanning for.
+            * The glyph itself is the row size, not the `sm:text-3xl` this one
+            * had grown alone.
+            */}
+          <SubjectGlyph glyph={hit.glyph} subjectType={hit.subjectType} laneClassName="w-20 shrink-0 sm:w-30" />
           <span className="flex min-w-0 flex-1 flex-col">
             <span className="truncate text-sm font-bold text-foreground">{hit.meaning || "—"}</span>
             {hit.reading ? (

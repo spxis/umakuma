@@ -1,3 +1,4 @@
+import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import { useState } from "react";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
 import { usePracticePath } from "@/app/shared/userBasePath";
@@ -21,7 +22,6 @@ import {
   formatNextReviewBadge,
   formatNumber,
   glyphSubtitleForDisplay,
-  glyphTextSizeClass,
   jlptLevelPillClass,
   shortSubjectTypeLabel,
   subjectTypePillClass,

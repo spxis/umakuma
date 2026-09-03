@@ -1,3 +1,4 @@
+import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import type { StudyTag } from "@/lib/domainConstants";
 import type { LevelItem } from "../../explorerTypes";
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
@@ -7,7 +8,6 @@ import {
   formatNextReviewBadge,
   glyphHasReading,
   glyphSubtitleForDisplay,
-  glyphTextSizeClass,
   isNewGlyphWithinHours,
   typeGlyphBoxClass,
 } from "../lib/levelExplorerDisplay";
