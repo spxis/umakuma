@@ -1,33 +1,20 @@
-import type { ListCard, ListSort } from "./StudyList.types";
+import type { ShelfFacts } from "@/lib/listShelfOrder";
+
+import type { ListCard } from "./StudyList.types";
 
 /**
- * The saved lists, searched and sorted.
+ * What a saved list is, to a shelf that is sorting and searching.
  *
- * Lists, like all data here, are searchable, sortable and reversible. The
- * search reads the name and the items, so "水" finds every list holding it
- * and "week" finds the weeks. The default order is the one the page always
- * had - last changed first - and a reversed sort is the same sort backwards,
- * not a different one.
+ * The ordering itself is shared - three shelves hold lists and each carried a
+ * different row type - so each shelf supplies this reading instead. Searching
+ * reaches the items as well as the name, because a member who remembers the
+ * kanji but not what they called the list found nothing otherwise.
  */
-export function sortListCards(cards: ListCard[], sort: ListSort, reversed: boolean, query: string): ListCard[] {
-  const term = query.trim().toLowerCase();
-  const kept = term
-    ? cards.filter(
-        (card) =>
-          card.name.toLowerCase().includes(term) || card.items.some((item) => item.key.toLowerCase().includes(term)),
-      )
-    : [...cards];
-
-  kept.sort((left, right) => {
-    switch (sort) {
-      case "name":
-        return left.name.localeCompare(right.name, "en", { sensitivity: "base" });
-      case "size":
-        return right.count - left.count || left.name.localeCompare(right.name, "en");
-      default:
-        return (right.updatedAt ?? "").localeCompare(left.updatedAt ?? "") || left.name.localeCompare(right.name, "en");
-    }
-  });
-
-  return reversed ? kept.reverse() : kept;
+export function listCardFacts(card: ListCard): ShelfFacts {
+  return {
+    name: card.name,
+    count: card.count,
+    updatedAt: card.updatedAt,
+    searchable: card.items.map((item) => item.key),
+  };
 }

@@ -2848,14 +2848,12 @@
     "id": "list-surfaces-standard",
     "name": "Every list surface: sortable, pageable, searchable, fast",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T13:24:15.165Z",
-    "date": "2026-09-01",
+    "date": "2026-09-02",
     "summary": "Lists, like all data on the site, are sortable, reversible, pageable, scrollable, searchable, cached and fast. The Lists page and the list viewer get search, sort by name, size and last change, and paging once a list outgrows a screen; the same standard applies to every surface that lists data. Stated 2026-09-01 by John as a standing rule.",
-    "dateIsEstimate": true,
-    "release": 31
+    "version": "0.306.0",
+    "releasedAt": "2026-09-03T02:13:50Z"
   },
   {
     "id": "list-metadata",
@@ -3629,6 +3627,7 @@
     "kind": "bug",
     "date": "2026-09-02",
     "summary": "The list page appended the print flag to a worksheet address by hand, which broke the moment a shared list's address started carrying its key: the two queries ran together and Print 404ed on exactly the lists worth sharing. The card had the inverse hack - stripping a trailing flag to derive the worksheet link - so when the prop stopped carrying one, both its pills became the same link and Print silently stopped printing. listPrintHref and printNowHref are the only things that spell it now, with a test that fails if anything else does. Found 2026-09-02.",
+    "dateIsEstimate": false,
     "version": "0.305.0",
     "releasedAt": "2026-09-03T01:57:15Z"
   }

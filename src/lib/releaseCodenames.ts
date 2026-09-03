@@ -356,6 +356,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Raihou", ja: "来訪", reading: "らいほう", gloss: "a visit, calling on somebody else" },
   { romaji: "Rinsho no Ikkaku", ja: "臨書の一画", reading: "りんしょのいっかく", gloss: "one stroke of the model you are copying" },
   { romaji: "Ruiji no Ruisui", ja: "類似の類推", reading: "るいじのるいすい", gloss: "inferring one link from another because they look alike" },
+  { romaji: "Rekkyo", ja: "列挙", reading: "れっきょ", gloss: "listing things out, one page at a time" },
 ];
 
 /**

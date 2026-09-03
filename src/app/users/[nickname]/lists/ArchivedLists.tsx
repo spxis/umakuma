@@ -5,7 +5,16 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
+import ListShelfControls from "@/app/shared/ListShelfControls";
+import SurfacePagination from "@/app/shared/SurfacePagination";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
+import {
+  LIST_SHELF_SORTS,
+  orderShelf,
+  pageOfShelf,
+  type ListShelfSort,
+  type ShelfFacts,
+} from "@/lib/listShelfOrder";
 import { listHref, type StudyListSummary } from "@/lib/studyListRules";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
@@ -20,6 +29,10 @@ export default function ArchivedLists({ lists, accountId, owner }: { lists: Stud
   const router = useRouter();
   const [gone, setGone] = useState<Set<string>>(new Set());
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<ListShelfSort>(LIST_SHELF_SORTS.updated);
+  const [reversed, setReversed] = useState(false);
+  const [page, setPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
 
   async function restore(id: string) {
@@ -54,14 +67,49 @@ export default function ArchivedLists({ lists, accountId, owner }: { lists: Stud
     }
   }
 
-  const shown = lists.filter((list) => !gone.has(list.id));
-  if (shown.length === 0) return null;
+  const kept = lists.filter((list) => !gone.has(list.id));
+  if (kept.length === 0) return null;
+
+  const facts = (list: StudyListSummary): ShelfFacts => ({
+    name: list.name,
+    count: list.items.length,
+    updatedAt: list.updatedAt,
+    searchable: list.items.map((item) => item.key),
+  });
+
+  const matched = orderShelf(kept, facts, sort, reversed, query);
+  const shelf = pageOfShelf(matched, page);
 
   return (
     <section>
       {error ? <p className="mb-2 text-xs font-semibold text-rose-600">{error}</p> : null}
+      {/*
+        * No view toggle here. Archived is a name, a count and two actions -
+        * a grid of cards would be four boxes carrying nothing the row does
+        * not already say.
+        */}
+      <ListShelfControls
+        query={query}
+        onQuery={(next) => {
+          setQuery(next);
+          setPage(1);
+        }}
+        sort={sort}
+        onSort={(next) => {
+          setSort(next);
+          setPage(1);
+        }}
+        reversed={reversed}
+        onReversed={setReversed}
+        searchLabel={STUDY_LIST_COPY.searchArchived}
+      />
+      {shelf.rows.length === 0 ? (
+        <p className="rounded-2xl border border-line bg-surface-muted p-4 text-xs text-foreground/60">
+          {STUDY_LIST_COPY.noListsMatch}
+        </p>
+      ) : null}
       <ul className="space-y-1.5">
-        {shown.map((list) => (
+        {shelf.rows.map((list) => (
           <li key={list.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-2xl border border-line bg-surface-muted px-4 py-2.5">
             <Link href={listHref(owner, list.name)} className="min-w-0 truncate text-sm font-black text-foreground hover:text-accent">
               {list.name}
@@ -90,6 +138,14 @@ export default function ArchivedLists({ lists, accountId, owner }: { lists: Stud
           </li>
         ))}
       </ul>
+      <SurfacePagination
+        slot="bottom"
+        placement={shelf.pageCount > 1 ? "bottom" : "none"}
+        page={shelf.page}
+        pageCount={shelf.pageCount}
+        onPageChange={setPage}
+        className="mt-3"
+      />
       <ConfirmDialog
         open={pendingDelete !== null}
         title={STUDY_LIST_COPY.deleteForGoodTitle}

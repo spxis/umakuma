@@ -6,22 +6,30 @@ import { useState } from "react";
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { STUDY_TAG_LIST_LABELS } from "@/app/shared/studyTagListsUi";
-import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
+import ListShelfControls from "@/app/shared/ListShelfControls";
+import SurfacePagination from "@/app/shared/SurfacePagination";
 import {
   SUBJECT_VIEW_MODES,
   SUBJECT_VIEW_MODE_VALUES,
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import {
+  LIST_SHELF_SORTS,
+  LIST_SHELF_SORT_VALUES,
+  orderShelf,
+  pageOfShelf,
+  type ListShelfSort,
+} from "@/lib/listShelfOrder";
 import { LIST_ITEM_KINDS, LIST_VISIBILITIES } from "@/lib/domainConstants";
 import { listHref, listKanji, tagListHref, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
 import { listPrintHref, listWorksheetHref } from "../practice/practiceAddress";
 
-import { LIST_SORTS, type ListCard, type ListSort } from "./StudyList.types";
+import { type ListCard } from "./StudyList.types";
 import StudyListCard from "./StudyListCard";
-import { sortListCards } from "./sortListCards";
+import { listCardFacts } from "./sortListCards";
 
 /**
  * The saved lists, each showing what is in it.
@@ -33,12 +41,6 @@ import { sortListCards } from "./sortListCards";
 
 const LIST_VIEW_MODE_STORAGE_KEY = "wr:lists:view-mode";
 const LIST_SORT_STORAGE_KEY = "wr:lists:sort";
-const LIST_SORT_LABELS: Record<ListSort, string> = {
-  updated: STUDY_LIST_COPY.sortUpdated,
-  name: STUDY_LIST_COPY.sortName,
-  size: STUDY_LIST_COPY.sortSize,
-};
-
 export default function StudyListCards({
   lists,
   taggedLists = [],
@@ -64,8 +66,10 @@ export default function StudyListCards({
   const [edited, setEdited] = useState<Record<string, StudyListItemRef[]>>({});
   /* Searchable and sortable, like every list of data here; remembered per browser. */
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<ListSort>(() => getStoredEnum(LIST_SORT_STORAGE_KEY, LIST_SORTS, "updated"));
+  const [sort, setSort] = useState<ListShelfSort>(() =>
+    getStoredEnum(LIST_SORT_STORAGE_KEY, LIST_SHELF_SORT_VALUES, LIST_SHELF_SORTS.updated));
   const [reversed, setReversed] = useState(false);
+  const [page, setPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [pendingRemoval, setPendingRemoval] = useState<string | null>(null);
   /*
@@ -123,7 +127,14 @@ export default function StudyListCards({
         visibility: list.visibility,
       };
     });
-  const shown = sortListCards(saved, sort, reversed, query);
+  /*
+   * A hundred lists is the cap, and four to a row means the last twenty were
+   * a scroll nobody made. Searching from page four would leave a reader past
+   * the end of a shorter answer, so the page is clamped rather than trusted.
+   */
+  const matched = orderShelf(saved, listCardFacts, sort, reversed, query);
+  const shelf = pageOfShelf(matched, page);
+  const shown = shelf.rows;
   /* The confirmation says what will happen: a shared list is archived, not deleted. */
   const pendingIsShared = Boolean(
     pendingRemoval && lists.find((list) => list.id === pendingRemoval && list.visibility !== LIST_VISIBILITIES.private),
@@ -201,54 +212,29 @@ export default function StudyListCards({
     />
   );
 
-  const CONTROL =
-    "h-8 rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/70";
-
   return (
     <>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder={STUDY_LIST_COPY.searchLists}
-          aria-label={STUDY_LIST_COPY.searchLists}
-          className="h-8 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm font-semibold text-foreground"
-        />
-        <label className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/60">
-          {STUDY_LIST_COPY.sortLabel}
-          <select
-            value={sort}
-            onChange={(event) => {
-              const next = event.target.value as ListSort;
-              setSort(next);
-              setStoredEnum(LIST_SORT_STORAGE_KEY, next);
-            }}
-            className={CONTROL}
-          >
-            {LIST_SORTS.map((option) => (
-              <option key={option} value={option}>
-                {LIST_SORT_LABELS[option]}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button
-          type="button"
-          aria-pressed={reversed}
-          onClick={() => setReversed((was) => !was)}
-          className={`${CONTROL} ${reversed ? "border-accent text-accent" : ""}`}
-        >
-          {STUDY_LIST_COPY.reverse}
-        </button>
-        <SubjectViewModeToggle
-          value={viewMode}
-          onChange={(next) => {
-            setViewMode(next);
-            setStoredEnum(LIST_VIEW_MODE_STORAGE_KEY, next);
-          }}
-        />
-      </div>
+      <ListShelfControls
+        query={query}
+        onQuery={(next) => {
+          setQuery(next);
+          /* A new search is a new shelf; it starts at its first page again. */
+          setPage(1);
+        }}
+        sort={sort}
+        onSort={(next) => {
+          setSort(next);
+          setStoredEnum(LIST_SORT_STORAGE_KEY, next);
+          setPage(1);
+        }}
+        reversed={reversed}
+        onReversed={setReversed}
+        viewMode={viewMode}
+        onViewMode={(next) => {
+          setViewMode(next);
+          setStoredEnum(LIST_VIEW_MODE_STORAGE_KEY, next);
+        }}
+      />
 
       {error ? <p className="mb-3 text-xs font-semibold text-rose-600">{error}</p> : null}
 
@@ -277,7 +263,23 @@ export default function StudyListCards({
             {STUDY_LIST_COPY.noListsMatch}
           </p>
         ) : (
-          <ul className={gridClass}>{shown.map(renderCard)}</ul>
+          <>
+            <ul className={gridClass}>{shown.map(renderCard)}</ul>
+            {/*
+              * At the foot only. A shelf is a screen or two of cards, not the
+              * practice sheet's three thousand pixels of tracing squares, so
+              * a pager at both ends would be a control above the first card
+              * saying "page 1 of 1" to almost everybody.
+              */}
+            <SurfacePagination
+              slot="bottom"
+              placement={shelf.pageCount > 1 ? "bottom" : "none"}
+              page={shelf.page}
+              pageCount={shelf.pageCount}
+              onPageChange={setPage}
+              className="mt-3"
+            />
+          </>
         )}
       </section>
 

@@ -8,6 +8,7 @@ import HideBurnedToggle from "@/app/shared/HideBurnedToggle";
 import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
 import ListSearchField from "@/app/shared/ListSearchField";
 import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
+import SurfacePagination from "@/app/shared/SurfacePagination";
 import type { ListPageItem } from "@/lib/listPageItems";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
@@ -26,12 +27,14 @@ import {
   STUDY_TAGS,
   type ListItemKind,
 } from "@/lib/domainConstants";
+import { LIST_ITEM_PAGE_SIZE, LIST_ITEM_SORTS, orderListItems, type ListItemSort } from "@/lib/listItemOrder";
 import { listPrintHref, listWorksheetHref } from "../../practice/practiceAddress";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
 import ListContributeBox from "./ListContributeBox";
 import ListItemNoteEditor from "./ListItemNoteEditor";
+import ListItemSortControl from "./ListItemSortControl";
 import type { ListPageViewProps } from "./ListPage.types";
 import { useListItemNote } from "./useListItemNote";
 import ListProposalsPanel from "./ListProposalsPanel";
@@ -50,6 +53,7 @@ import ListViewerActions from "./ListViewerActions";
  * out behind an Edit toggle, and the WaniKani offer on the Burned list.
  */
 const VIEW_MODE_KEY = "wr:list-page:view-mode";
+
 const ALL = "all";
 
 /** The same shape as the Edit toggle beside it, since they are the same kind of thing. */
@@ -69,6 +73,13 @@ export default function ListPageView({
 }: ListPageViewProps) {
   const [kind, setKind] = useState<string>(ALL);
   const [search, setSearch] = useState("");
+  /*
+   * The list's own order by default, because somebody arranged it. Every
+   * other sort is something a reader asks for once, to find one item.
+   */
+  const [sort, setSort] = useState<ListItemSort>(LIST_ITEM_SORTS.order);
+  const [reversed, setReversed] = useState(false);
+  const [itemPage, setItemPage] = useState(1);
   const [editing, setEditing] = useState(false);
   const [removed, setRemoved] = useState<Set<number>>(new Set());
   const [applied, setApplied] = useState(0);
@@ -120,15 +131,33 @@ export default function ListPageView({
 
   const burnedInView = useMemo(() => live.filter((item) => item.studyTags?.burned).length, [live]);
 
-  const visible = useMemo(
+  const matched = useMemo(
     () =>
-      live
-        .filter((item) => kind === ALL || item.listKind === kind)
-        .filter((item) => list.tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags?.burned)
-        .filter((item) =>
-          subjectMatchesQuery(search, { glyph: item.characters, meanings: item.meanings, readings: item.readings ?? [] }),
-        ),
-    [hideBurned, kind, list.tag, live, search],
+      orderListItems(
+        live
+          .filter((item) => kind === ALL || item.listKind === kind)
+          .filter((item) => list.tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags?.burned)
+          .filter((item) =>
+            subjectMatchesQuery(search, { glyph: item.characters, meanings: item.meanings, readings: item.readings ?? [] }),
+          ),
+        (item) => ({ glyph: item.characters, meaning: item.meanings[0] ?? "", level: item.wkLevel ?? null }),
+        sort,
+        reversed,
+      ),
+    [hideBurned, kind, list.tag, live, reversed, search, sort],
+  );
+
+  /*
+   * A list holds up to five hundred items, and five hundred glyph cards is a
+   * page that takes a moment to lay out and a long scroll to leave. The page
+   * is clamped rather than trusted: narrowing by kind or by search from page
+   * four otherwise reads as "nothing matches" when four things do.
+   */
+  const pageCount = Math.max(1, Math.ceil(matched.length / LIST_ITEM_PAGE_SIZE));
+  const page = Math.min(Math.max(1, itemPage), pageCount);
+  const visible = useMemo(
+    () => matched.slice((page - 1) * LIST_ITEM_PAGE_SIZE, page * LIST_ITEM_PAGE_SIZE),
+    [matched, page],
   );
 
   /* Taking an item out: untagging a built-in list, or dropping it from a saved one. */
@@ -291,7 +320,11 @@ export default function ListPageView({
             */}
           <ListSearchField
             value={search}
-            onChange={setSearch}
+            onChange={(next) => {
+              setSearch(next);
+              /* A new search is a new list; it starts at its first page again. */
+              setItemPage(1);
+            }}
             label={STUDY_LIST_COPY.searchItems}
             options={live.map((item) => ({ value: item.characters, label: item.meanings[0] ?? "" }))}
             className="w-full basis-full sm:w-auto sm:basis-48"
@@ -328,6 +361,22 @@ export default function ListPageView({
                 {STUDY_LIST_COPY.print}
               </Link>
             </>
+          ) : null}
+          {/*
+            * Offered only where there is something to sort. On a list of four
+            * a sort control is a control that cannot change anything, and the
+            * row is already carrying five.
+            */}
+          {live.length > 1 ? (
+            <ListItemSortControl
+              sort={sort}
+              onSort={(next) => {
+                setSort(next);
+                setItemPage(1);
+              }}
+              reversed={reversed}
+              onReversed={setReversed}
+            />
           ) : null}
           {viewer.accountId ? <SubjectSelectionToggle selection={selection} /> : null}
           <SubjectViewModeToggle
@@ -392,6 +441,21 @@ export default function ListPageView({
               }
             />
           )}
+          {/*
+            * Beneath the items only. Unlike the practice sheet - whose foot is
+            * three thousand pixels of tracing squares down - a page of sixty
+            * glyphs is a screen or two, and a pager above them would sit
+            * between the controls and the list saying "1 of 1" to most lists.
+            */}
+          <SurfacePagination
+            slot="bottom"
+            placement={pageCount > 1 ? "bottom" : "none"}
+            page={page}
+            pageCount={pageCount}
+            onPageChange={setItemPage}
+            summary={pageCount > 1 ? `${STUDY_LIST_COPY.showing} ${visible.length} ${STUDY_LIST_COPY.of} ${matched.length}` : undefined}
+            className="mt-3"
+          />
         </div>
       </section>
 

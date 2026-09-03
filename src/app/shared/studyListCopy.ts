@@ -72,12 +72,23 @@ export const STUDY_LIST_COPY = {
   /* The kind chips, on a card and in the viewer. */
   allKinds: "All",
   searchLists: "Search your lists",
+  /* Each shelf names what it holds, so the box says which lists it searches. */
+  searchFollowed: "Search lists you follow",
+  searchArchived: "Search archived lists",
   sortLabel: "Sort",
+  /* Sorting what one list holds, which is a different question from sorting lists. */
+  sortItemOrder: "List order",
+  sortItemGlyph: "Character",
+  sortItemMeaning: "Meaning",
+  sortItemLevel: "Level",
   sortUpdated: "Last changed",
   sortName: "Name",
   sortSize: "Size",
   reverse: "Reverse",
   noListsMatch: "No list matches that search.",
+  /* "Showing 60 of 240" beside the pager, so the page says what it is a page of. */
+  showing: "Showing",
+  of: "of",
 
   /* The list's own page, and sharing it. */
   by: "by",

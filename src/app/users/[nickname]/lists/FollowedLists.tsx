@@ -3,7 +3,16 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import ListShelfControls from "@/app/shared/ListShelfControls";
+import SurfacePagination from "@/app/shared/SurfacePagination";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
+import {
+  LIST_SHELF_SORTS,
+  orderShelf,
+  pageOfShelf,
+  type ListShelfSort,
+  type ShelfFacts,
+} from "@/lib/listShelfOrder";
 import { listShareHref } from "@/lib/studyListRules";
 
 import { listWorksheetHref } from "../practice/practiceAddress";
@@ -30,6 +39,10 @@ export default function FollowedLists({
   practicePath: string;
 }) {
   const [dropped, setDropped] = useState<Set<string>>(new Set());
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<ListShelfSort>(LIST_SHELF_SORTS.updated);
+  const [reversed, setReversed] = useState(false);
+  const [page, setPage] = useState(1);
 
   async function unfollow(listId: string) {
     setDropped((prev) => new Set(prev).add(listId));
@@ -49,13 +62,51 @@ export default function FollowedLists({
     }
   }
 
-  const shown = lists.filter((list) => !dropped.has(list.id));
-  if (shown.length === 0) return null;
+  const kept = lists.filter((list) => !dropped.has(list.id));
+  if (kept.length === 0) return null;
+
+  /*
+   * Whose list it is, searched alongside its name. On this shelf that is the
+   * fact a reader is most likely to remember - "the one Mika shares" - and
+   * the shelf that had no search at all could answer neither question.
+   */
+  const facts = (list: FollowedList): ShelfFacts => ({
+    name: list.name,
+    count: list.itemCount,
+    updatedAt: list.updatedAt,
+    searchable: [list.ownerName, list.ownerKey],
+  });
+
+  const matched = orderShelf(kept, facts, sort, reversed, query);
+  const shelf = pageOfShelf(matched, page);
 
   return (
     <section>
+      <ListShelfControls
+        query={query}
+        onQuery={(next) => {
+          setQuery(next);
+          setPage(1);
+        }}
+        sort={sort}
+        onSort={(next) => {
+          setSort(next);
+          setPage(1);
+        }}
+        reversed={reversed}
+        onReversed={setReversed}
+        searchLabel={STUDY_LIST_COPY.searchFollowed}
+      />
+
+      {shelf.rows.length === 0 ? (
+        /* Different from empty: the lists are there and the search hid them. */
+        <p className="rounded-2xl border border-line bg-surface-muted p-4 text-xs text-foreground/60">
+          {STUDY_LIST_COPY.noListsMatch}
+        </p>
+      ) : null}
+
       <ul className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]">
-        {shown.map((list) => {
+        {shelf.rows.map((list) => {
           const href = list.reachable
             ? listShareHref(list.ownerKey, list.name, list.shareToken ? LIST_VISIBILITIES.unlisted : LIST_VISIBILITIES.public, list.shareToken)
             : null;
@@ -129,6 +180,14 @@ export default function FollowedLists({
           );
         })}
       </ul>
+      <SurfacePagination
+        slot="bottom"
+        placement={shelf.pageCount > 1 ? "bottom" : "none"}
+        page={shelf.page}
+        pageCount={shelf.pageCount}
+        onPageChange={setPage}
+        className="mt-3"
+      />
     </section>
   );
 }
