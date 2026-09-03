@@ -3812,5 +3812,18 @@
     "summary": "The radicals page copied the stroke browser too literally: stroke counts along the top as a filter, so choosing '3 strokes' hid the other 208 radicals. That is the right control for 900 kanji at one count and the wrong one for 253 radicals, which are a set you scan - the filter hid the thing somebody opened the page to look through. No filter and no first step now; the count leads each row, the way the picker in search has always shown them. Corrected 2026-09-03 by John.",
     "version": "0.329.0",
     "releasedAt": "2026-09-03T07:59:51Z"
+  },
+  {
+    "id": "stroke-solo-view",
+    "name": "See one stroke on its own",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 72,
+    "summary": "Holding a stroke still draws it in colour with every earlier stroke behind it in grey, which answers where in the character it falls but not what the stroke itself is - on a twenty-two stroke character the one you asked about is a red mark inside a nearly finished glyph. An Only switch hides what is already down and leaves the single stroke on the page, and with Outline on it sits over the faint whole character, which is the shape of the question: this stroke, there. Requested 2026-09-03 by John.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T08:03:19.139Z"
   }
 ]
