@@ -12,7 +12,6 @@ import SurfacePagination from "@/app/shared/SurfacePagination";
 import type { ListPageItem } from "@/lib/listPageItems";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
-import ListMetaLine from "@/app/shared/ListMetaLine";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { STUDY_TAG_LIST_COPY } from "@/app/shared/studyTagListsUi";
 import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
@@ -23,7 +22,6 @@ import {
   LIST_ITEM_KINDS,
   LIST_ITEM_KIND_DISPLAY,
   LIST_VISIBILITIES,
-  LIST_VISIBILITY_DISPLAY,
   STUDY_TAGS,
   type ListItemKind,
 } from "@/lib/domainConstants";
@@ -38,10 +36,10 @@ import ListItemSortControl from "./ListItemSortControl";
 import type { ListPageViewProps } from "./ListPage.types";
 import { useListItemNote } from "./useListItemNote";
 import ListProposalsPanel from "./ListProposalsPanel";
+import ListGradeBar from "./ListGradeBar";
+import ListPageHeader from "./ListPageHeader";
 import ListProgressPanel from "./ListProgressPanel";
 import ListSourceUpdates from "./ListSourceUpdates";
-import ListShareControls from "./ListShareControls";
-import ListViewerActions from "./ListViewerActions";
 
 /**
  * A list, laid out to be read by whoever may open it.
@@ -72,6 +70,7 @@ export default function ListPageView({
   proposals,
   practicePath,
   progress,
+  grade,
 }: ListPageViewProps) {
   const [kind, setKind] = useState<string>(ALL);
   const [search, setSearch] = useState("");
@@ -197,71 +196,15 @@ export default function ListPageView({
 
   return (
     <div className="space-y-4">
-      <header className="rounded-2xl border border-line bg-surface/90 p-4 sm:p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
-              <Link href={`/users/${encodeURIComponent(owner.key)}/lists`} className="hover:text-accent">
-                {STUDY_LIST_COPY.backToLists}
-              </Link>
-            </p>
-            <h1 className="mt-1 text-2xl font-black text-foreground sm:text-3xl">{list.name}</h1>
-            {list.description ? <p className="mt-1 text-sm font-semibold text-foreground/75">{list.description}</p> : null}
-            <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-foreground/60">
-              <span>
-                {STUDY_LIST_COPY.by}{" "}
-                <Link href={`/users/${encodeURIComponent(owner.key)}`} className="font-black text-foreground hover:text-accent">
-                  {owner.name}
-                </Link>
-              </span>
-              <span>
-                {live.length} {live.length === 1 ? STUDY_LIST_COPY.countSuffixOne : STUDY_LIST_COPY.countSuffix}
-              </span>
-              {list.tag ? (
-                <span>{STUDY_LIST_COPY.builtIn}</span>
-              ) : (
-                <>
-                  <ListMetaLine
-                    facts={{
-                      createdAt: list.createdAt,
-                      updatedAt: list.updatedAt,
-                      subscriberCount: list.subscriberCount,
-                      copyCount: list.copyCount,
-                      shareCount: list.shareCount,
-                    }}
-                    className="text-xs"
-                  />
-                  <span className="subject-pill border-line bg-surface-muted text-foreground/70">
-                    {LIST_VISIBILITY_DISPLAY[list.visibility].label}
-                  </span>
-                </>
-              )}
-              {archived ? (
-                <span className="subject-pill border-amber-300 bg-amber-50 text-amber-900">{STUDY_LIST_COPY.archivedPill}</span>
-              ) : null}
-            </p>
-          </div>
-          {archived || list.tag ? null : viewer.isOwner && viewer.accountId && shareHref ? (
-            <ListShareControls
-              listId={list.id}
-              accountId={viewer.accountId}
-              name={list.name}
-              ownerKey={owner.key}
-              visibility={list.visibility}
-              contributions={list.contributions}
-              shareHref={shareHref}
-            />
-          ) : !viewer.isOwner && viewer.accountId && viewer.key ? (
-            <ListViewerActions
-              listId={list.id}
-              viewerAccountId={viewer.accountId}
-              viewerKey={viewer.key}
-              listKey={listKey}
-              subscribed={viewer.subscribed}
-            />
-          ) : null}
-        </div>
-      </header>
+      <ListPageHeader
+        list={list}
+        owner={owner}
+        viewer={viewer}
+        shareHref={shareHref}
+        listKey={listKey}
+        archived={archived}
+        itemCount={live.length}
+      />
 
       {archived ? (
         <p className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-900">
@@ -283,6 +226,22 @@ export default function ListPageView({
         * one bar, which is the reader's own progress said twice - the item
         * cards already carry it.
         */}
+      {/*
+        * Not on a built-in list. Trouble and Favourites are filled by tagging
+        * while you study and emptied by untagging; there is no point at which
+        * somebody finishes them, so there is nothing to mark.
+        */}
+      {!list.tag ? (
+        <ListGradeBar
+          accountId={viewer.accountId}
+          listId={list.id}
+          canMark={viewer.isOwner && !archived}
+          studiedAt={list.studiedAt}
+          updatedAt={list.updatedAt}
+          grade={grade}
+        />
+      ) : null}
+
       {progress ? (
         <ListProgressPanel members={progress.members} trackable={progress.trackable} untracked={progress.untracked} />
       ) : null}

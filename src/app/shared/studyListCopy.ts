@@ -87,6 +87,23 @@ export const STUDY_LIST_COPY = {
   reverse: "Reverse",
   noListsMatch: "No list matches that search.",
   /* The overlay that answers "who has this week's kanji down". */
+  /* How a list is going, and whether its owner calls it finished. */
+  gradeLabels: {
+    untouched: "Not started",
+    starting: "Starting",
+    getting: "Getting there",
+    nearly: "Nearly there",
+    solid: "Solid",
+  } as const,
+  gradeKnown: (known: number, total: number) => `${known} of ${total} known`,
+  gradeAccuracy: (percent: number, attempts: number) =>
+    `${percent}% right over ${attempts} ${attempts === 1 ? "answer" : "answers"}`,
+  gradeNothingTracked: "Nothing here has a level yet, so there is nothing to grade.",
+  studiedMark: "Mark studied",
+  studiedSaving: "Saving…",
+  studiedUnmark: "Unmark",
+  studiedDone: "Studied",
+  studiedStale: "Studied, then changed",
   progressHeading: "Who knows what",
   progressShow: "Show",
   progressHide: "Hide",

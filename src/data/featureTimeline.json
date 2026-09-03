@@ -2765,6 +2765,7 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "On a shared list, each member's standing on every item - not started, learning, known - as a small overlay, so a family can see who has the week's kanji down and who needs a hand. Uses each member's existing visibility setting. Suggested 2026-09-01.",
+    "dateIsEstimate": false,
     "version": "0.313.0",
     "releasedAt": "2026-09-03T04:53:49Z"
   },
@@ -2883,14 +2884,12 @@
     "id": "list-study-status",
     "name": "Mark a list studied, and grade it",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T13:24:15.784Z",
-    "date": "2026-09-01",
+    "date": "2026-09-02",
     "summary": "A list can be marked complete or studied by its owner, and carries a grade the system assigns after a study or review pass over it - how much of the list is known, and how well it went. Shown on the card and the list's page. Ties to practising from a list and the who-knows-what overlay. Requested 2026-09-01 by John.",
-    "dateIsEstimate": true,
-    "release": 34
+    "version": "0.317.0",
+    "releasedAt": "2026-09-03T05:26:21Z"
   },
   {
     "id": "list-print",
@@ -3422,12 +3421,12 @@
     "area": "study",
     "status": "planned",
     "kind": "feature",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T05:24:58.369Z",
     "date": "2026-09-02",
     "summary": "A kanji page shows how the character is written and what it means, but not what it is made of - and the RADKFILE index that powers the radical search knows the parts of 6,355 characters. The page carries them in a container of its own, under the stroke box, each part a link into the radical search for the characters that share it. Its own container because it is EDRDG's data rather than WaniKani's and every box here credits one source. Requested 2026-09-02 by John.",
     "dateIsEstimate": true,
-    "release": 53,
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T05:24:58.369Z"
+    "release": 53
   },
   {
     "id": "list-controls-on-hover",

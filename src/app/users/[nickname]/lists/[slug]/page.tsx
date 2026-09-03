@@ -11,6 +11,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { LIST_VISIBILITIES, type StudyTag } from "@/lib/domainConstants";
 import { LIST_CONTRIBUTIONS } from "@/lib/listContributions";
 import { loadMemberState, tagListItems } from "@/lib/listMemberState";
+import { loadListGrade } from "@/lib/listGradeServer";
 import { worthShowing } from "@/lib/listProgress";
 import { loadListProgress } from "@/lib/listProgressServer";
 import { toListPageItems } from "@/lib/listPageItems";
@@ -133,6 +134,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
             shareCount: 0,
             subscriberCount: 0,
             hasSource: false,
+            studiedAt: null,
             itemCount: rows.length,
           }}
           items={toListPageItems(rows, memberState)}
@@ -145,6 +147,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
           practicePath={practicePath}
           /* A built-in list is one member's own marks; there is nobody to compare with. */
           progress={null}
+          grade={null}
         />
       </div>
     );
@@ -158,11 +161,13 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
     notFound();
   }
 
-  const [rows, memberState, subscribed, proposals, progress] = await Promise.all([
+  const [rows, memberState, subscribed, proposals, grade, progress] = await Promise.all([
     fetchListSubjectRows(list.items),
     loadMemberState(viewerAccountId),
     viewerAccountId && !isOwner ? isSubscribed(list.id, viewerAccountId) : Promise.resolve(false),
     isOwner ? fetchPendingProposals(list.id) : Promise.resolve([]),
+    /* The reader's own standing on what this list holds, owner or not. */
+    loadListGrade(viewerAccountId, list.items.map((item) => item.subjectId ?? null)),
     /*
      * Only worth asking for a list somebody else can see. A private list has
      * one member on it by definition, and the overlay would be the reader's
@@ -197,6 +202,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
           shareCount: list.shareCount,
           subscriberCount: list.subscriberCount,
           hasSource: list.hasSource,
+          studiedAt: list.studiedAt,
           itemCount: list.items.length,
         }}
         items={toListPageItems(rows, memberState)}
@@ -214,6 +220,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
         proposals={proposals}
         practicePath={practicePath}
         progress={progress && worthShowing(progress.members, progress.trackable) ? progress : null}
+        grade={grade}
       />
     </div>
   );

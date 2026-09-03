@@ -50,6 +50,8 @@ export type StudyListSummary = {
   items: StudyListItemRef[];
   createdAt: string;
   updatedAt: string;
+  /** When the owner marked it done, or null while it is still being worked. */
+  studiedAt: string | null;
   copyCount: number;
   shareCount: number;
   /** How many people keep this list without owning it. */

@@ -560,6 +560,11 @@ model StudyList {
   sourceListId  String?
   /// A live list this was copied from - "jlpt:n5" - when the source was a system list.
   sourceLiveKey String?
+  /// When the owner marked the list done. Null while it is still being worked
+  /// through. Kept rather than cleared when the list changes afterwards: that
+  /// somebody finished it once is a fact, and the page says the mark is stale
+  /// instead of quietly forgetting it.
+  studiedAt     DateTime?
   copyCount     Int                    @default(0)
   shareCount    Int                    @default(0)
   createdAt     DateTime               @default(now())

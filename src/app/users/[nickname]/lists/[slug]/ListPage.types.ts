@@ -3,6 +3,7 @@ import type { ListContributions } from "@/lib/listContributions";
 import type { PendingProposal } from "@/lib/studyListContributions";
 import type { StudyTag } from "@/lib/domainConstants";
 import type { ListPageItem } from "@/lib/listPageItems";
+import type { ListGradeFacts } from "@/lib/listGradeServer";
 import type { MemberStandings } from "@/lib/listProgress";
 
 /** What the list's page knows about the list, apart from its rows. */
@@ -23,6 +24,8 @@ export type ListPageList = {
   subscriberCount: number;
   /** Copied from another list, so it has somewhere to ask what is new. */
   hasSource: boolean;
+  /** When the owner marked it done, or null while it is still being worked. */
+  studiedAt: string | null;
   itemCount: number;
 };
 
@@ -51,6 +54,8 @@ export type ListPageViewProps = {
   practicePath: string;
   /** Who else is on this list and how far along, or null when nobody is. */
   progress: { members: MemberStandings[]; trackable: number; untracked: number } | null;
+  /** How far the reader has got with what is on it; null when nothing is tracked. */
+  grade: ListGradeFacts | null;
 };
 
 export type ListViewerActionsProps = {

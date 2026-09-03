@@ -35,6 +35,7 @@ const LIST_SELECT = {
   archivedAt: true,
   createdAt: true,
   updatedAt: true,
+  studiedAt: true,
   copyCount: true,
   shareCount: true,
   sourceListId: true,
@@ -51,6 +52,7 @@ type ListRow = {
   archivedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  studiedAt: Date | null;
   copyCount: number;
   shareCount: number;
   sourceListId: string | null;
@@ -70,6 +72,7 @@ function toSummary(row: ListRow): StudyListSummary {
     items: row.items,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
+    studiedAt: row.studiedAt?.toISOString() ?? null,
     copyCount: row.copyCount,
     shareCount: row.shareCount,
     subscriberCount: row._count.subscriptions,

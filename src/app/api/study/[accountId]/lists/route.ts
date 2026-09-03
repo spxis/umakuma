@@ -65,6 +65,8 @@ const changeSchema = z
     shared: z.literal(true).optional(),
     /** Put away, or brought back. */
     archived: z.boolean().optional(),
+    /** Marked done by its owner, or unmarked. */
+    studied: z.boolean().optional(),
   })
   .refine(
     (value) =>
@@ -73,7 +75,8 @@ const changeSchema = z
       value.description !== undefined ||
       value.visibility !== undefined ||
       value.shared === true ||
-      value.archived !== undefined,
+      value.archived !== undefined ||
+      value.studied !== undefined,
     { message: "Nothing to change." },
   );
 
@@ -225,8 +228,24 @@ export async function PATCH(request: Request, context: RouteContext) {
           name?: string;
           description?: string | null;
           visibility?: (typeof LIST_VISIBILITY_VALUES)[number];
+          studiedAt?: Date | null;
           updatedAt: Date;
         } = { updatedAt: new Date() };
+
+        /*
+         * Marked done at the same instant the row is touched, deliberately.
+         *
+         * `updatedAt` carries `@updatedAt`, so any write moves it - including
+         * this one. The mark is read as stale when the list changed *after*
+         * it, so a mark stamped a few microseconds behind its own write would
+         * read as stale the moment it was made. Prisma honours an explicit
+         * value for an `@updatedAt` field, so both are the same Date and the
+         * staleness test is a strict `>`. Do not drop the explicit
+         * `updatedAt` here on the grounds that Prisma sets it anyway.
+         */
+        if (parsed.data.studied !== undefined) {
+          data.studiedAt = parsed.data.studied ? data.updatedAt : null;
+        }
 
         if (parsed.data.name !== undefined) {
           const name = normalizeListName(parsed.data.name);
