@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 
 import ExampleSentences from "@/app/shared/ExampleSentences";
 import { KanjiDetailPanel, type KanjiDetailSummary } from "@/app/shared/KanjiDetailModal";
@@ -14,6 +15,8 @@ import type { KanjiPage } from "@/lib/subjectPage";
 
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
+import { KANJI_SHEET_COPY } from "./sheet/kanjiSheetCopy";
+import { kanjiSheetHref } from "./sheet/kanjiSheetAddress";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import {
   SUBJECT_SECTIONS,
@@ -66,6 +69,15 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
           grade={view.grade}
           summary={view.summary}
           showSummaryLine={view.alone}
+          detail={
+            /* The other thing to do with a stroke order: take it off the screen. */
+            <Link
+              href={kanjiSheetHref(view.character)}
+              className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted"
+            >
+              {KANJI_SHEET_COPY.print}
+            </Link>
+          }
         />
       </section>
     ),

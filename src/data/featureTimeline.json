@@ -3842,10 +3842,11 @@
     "name": "Print one kanji as a practice sheet",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-03",
-    "dateIsEstimate": true,
-    "release": 74,
-    "summary": "A sheet for one character: the kanji large, its stroke order laid out step by step the way the list worksheets already print, and then the rest of the page ruled into empty squares to copy it into. The list print pages give a grid across many characters; this is the other shape - one character, all of its steps, and room to practise it until the page runs out. Requested 2026-09-03 by John."
+    "dateIsEstimate": false,
+    "summary": "A sheet for one character, at /kanji/<character>/sheet and linked from the stroke panel. The character and its readings at the top, then every stroke as its own square the way a stroke-order chart shows it - all of them, so a twenty-two stroke character gets twenty-two squares rather than the first row - and then the rest of the page ruled into fifty-six empty squares to copy it into. The list sheets print a grid across many characters, a row each; this is the other shape, one character and room to work at it. The squares are the list sheets' own: Cell, TraceGlyph and StrokeStepGlyph came out of TracingSheet into sheetCells so both draw the same workbook square rather than drifting apart. Public like the character page it hangs off, because a parent printing a sheet for a child has no reason to sign in first, and a static segment so the stroke-order section keeps its address. Requested 2026-09-03 by John.",
+    "version": "0.332.0",
+    "releasedAt": "2026-09-03T08:23:50Z"
   }
 ]
