@@ -3667,6 +3667,7 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "The filing marks now reach search, the subject pages and the glyph viewer, but not the explorer grids themselves - JLPT, grades, level and study each draw their own cards and rows. SubjectCards has renderUnder and SubjectRows has renderAfterRow, so this is passing slots rather than changing the shared pair. Split out of add-to-lists-everywhere 2026-09-02.",
+    "dateIsEstimate": false,
     "version": "0.326.0",
     "releasedAt": "2026-09-03T06:39:40Z"
   },
@@ -3781,12 +3782,23 @@
     "id": "subject-block-headers",
     "name": "Every block on a subject page wears the same header",
     "area": "study",
-    "kind": "bug",
     "status": "shipped",
+    "kind": "bug",
     "date": "2026-09-02",
-    "dateIsEstimate": false,
     "summary": "Stroke order draws its title in a header bar across the top of its card - a rule under it, a muted ground, the stroke count on the right - and every other block put a small label inside its padded body instead, or had no title at all. Meanings, Mnemonics and Related carried no heading, so a reader scrolling a kanji page met cards that looked like different components. One header bar in SubjectBlock, the one stroke order already used, and a title on every block that is a section of the page - taken from the same sectionTitles the section pages are named by, so a card and its own address agree. The right-hand slot is that panel's too: where its stroke count sits, a block's own control sits. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.327.0",
     "releasedAt": "2026-09-03T06:43:01Z"
+  },
+  {
+    "id": "radicals-page",
+    "name": "The radicals, as a page",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-02",
+    "summary": "The radical picker asks 'which kanji has these parts' from inside a search dropdown, which is the right shape for somebody mid-search and the wrong one for somebody who wants to see the radicals. This is the stroke browser's layout over the same index: counts along the top, the 253 radicals grouped by stroke below them, and the kanji containing whatever is picked. Picking is a link, so the state is in the address. The parts on a kanji page lead here instead of priming a search box. Requested 2026-09-02 by John.",
+    "version": "0.328.0",
+    "releasedAt": "2026-09-03T06:50:26Z"
   }
 ]

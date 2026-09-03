@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { getKanjiDictionaryEntry } from "./kanjiDictionary";
+import { radicalsHref } from "./radicalBrowser";
 import { resolveRadicalTokens } from "./radicalNames";
 import {
   RADICAL_MATCH_LIMIT,
@@ -123,7 +124,7 @@ export type RadicalPart = {
   strokes: number;
   /** What it is called in English, where the dictionary names it. */
   name: string | null;
-  /** The search that finds every other kanji written with it. */
+  /** The radicals page, opened on this part. */
   href: string;
 };
 
@@ -131,10 +132,11 @@ export type RadicalPart = {
  * The parts a kanji is written with, for its own page.
  *
  * A kanji page says how the character is drawn and what it means but not what
- * it is made of, and RADKFILE knows that for 6,355 characters. Each part links
- * into the radical search rather than to a page of its own: the useful next
- * question is "what else is written with this", which is what the search
- * answers.
+ * it is made of, and RADKFILE knows that for 6,355 characters. Each part leads
+ * to the radicals page opened on it, which answers the question a reader has
+ * next - what else is written with this - and puts them somewhere they can
+ * carry on looking. It used to hand them a search box primed with `:rad 水`,
+ * which answers the same question and then leaves them inside a dropdown.
  *
  * Empty for a character RADKFILE does not cover, which the page reads as
  * nothing to show rather than as an error.
@@ -144,7 +146,7 @@ export function radicalPartsOf(kanji: string): RadicalPart[] {
     radical: entry.radical,
     strokes: entry.strokes,
     name: getKanjiDictionaryEntry(entry.radical)?.meanings?.[0] ?? null,
-    href: `/search?q=${encodeURIComponent(`:rad ${entry.radical}`)}`,
+    href: radicalsHref({ parts: [entry.radical] }),
   }));
 }
 

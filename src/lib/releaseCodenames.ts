@@ -378,6 +378,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Chotto Hitoiki", ja: "ちょっと一息", reading: "ちょっとひといき", gloss: "a short breath between runs" },
   { romaji: "Tsunde Oku", ja: "摘んでおく", reading: "つんでおく", gloss: "picked as you pass, and kept" },
   { romaji: "Teikei no Tehon", ja: "定型の手本", reading: "ていけいのてほん", gloss: "one header, and every card wears it" },
+  { romaji: "Toridasu Tsukuri", ja: "取り出すつくり", reading: "とりだすつくり", gloss: "the parts, taken out and laid down" },
 ];
 
 /**

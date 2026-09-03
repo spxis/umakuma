@@ -81,6 +81,8 @@ export const NAV_SECTIONS: NavSection[] = [
       /* Public, so it has no user segment: a map is the same for everyone. */
       { label: "Maps", path: "/maps" },
       { label: "Strokes", path: "/strokes" },
+      /* The parts, beside the counts: both are facts about the writing. */
+      { label: "Radicals", path: "/radicals" },
     ],
   },
   /*
