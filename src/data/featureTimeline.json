@@ -3606,6 +3606,7 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "The stroke order panel plays the whole character and nothing else: there is no way to hold a single stroke still and look at it, which is what somebody copying the character actually needs. A row of numbers opens under the header - closed by default, so the panel stays as quiet as it is now - and picking a number draws that stroke alone: the strokes before it in grey, the strokes after it blank, the chosen one in colour and animated so the pen direction is visible. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.304.0",
     "releasedAt": "2026-09-03T01:04:17Z"
   },
@@ -3619,5 +3620,16 @@
     "summary": "The kanji page shows everything about a character at one address, so there is no way to hand somebody the stroke order and nothing else. Each panel gets a path of its own under the character - /kanji/<character>/stroke shows the stroke order alone, and the other panels follow the same shape - built from one registry so a section is defined once and rendered identically whether it is on the whole page or on its own. An unknown segment is a 404 rather than a silent fall back to the whole page. The same shape then covers radicals and words, and the share control on each panel points at that panel's own address. Requested 2026-09-02 by John.",
     "dateIsEstimate": true,
     "release": 70
+  },
+  {
+    "id": "list-print-link-one-place",
+    "name": "The Print link is built in one place",
+    "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-02",
+    "summary": "The list page appended the print flag to a worksheet address by hand, which broke the moment a shared list's address started carrying its key: the two queries ran together and Print 404ed on exactly the lists worth sharing. The card had the inverse hack - stripping a trailing flag to derive the worksheet link - so when the prop stopped carrying one, both its pills became the same link and Print silently stopped printing. listPrintHref and printNowHref are the only things that spell it now, with a test that fails if anything else does. Found 2026-09-02.",
+    "version": "0.305.0",
+    "releasedAt": "2026-09-03T01:57:15Z"
   }
 ]

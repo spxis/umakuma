@@ -36,8 +36,15 @@ export type StudyListCardProps = {
   /** Condensed one-line form rather than the browsing card. */
   rows: boolean;
   accountId: string;
-  /** Null for the Burned list: there is nothing to practise in what you know. */
-  practiceHref: string | null;
+  /**
+   * Opening the sheet and printing it, which are two addresses.
+   *
+   * They used to be one, with the card deriving the other by stripping
+   * `?go=1` off the end - so when the prop stopped carrying that flag both
+   * pills quietly became the same link and the Print pill stopped printing.
+   * Null for the Burned list: there is nothing to practise in what you know.
+   */
+  sheetLinks: { worksheet: string; print: string } | null;
   /** Only the member whose lists these are may rename or delete one. */
   canEdit: boolean;
   onDelete: () => void;

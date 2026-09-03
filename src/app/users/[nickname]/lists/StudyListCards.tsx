@@ -17,7 +17,7 @@ import { LIST_ITEM_KINDS, LIST_VISIBILITIES } from "@/lib/domainConstants";
 import { listHref, listKanji, tagListHref, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
-import { listWorksheetHref } from "../practice/practiceAddress";
+import { listPrintHref, listWorksheetHref } from "../practice/practiceAddress";
 
 import { LIST_SORTS, type ListCard, type ListSort } from "./StudyList.types";
 import StudyListCard from "./StudyListCard";
@@ -139,9 +139,12 @@ export default function StudyListCards({
    * "my Week 1 sheet". It is named now. A list with no kanji in it has no
    * sheet to offer, since a worksheet is squares to write characters in.
    */
-  const practiceHrefFor = (card: ListCard) => {
+  const sheetLinksFor = (card: ListCard) => {
     if (!card.tag && listKanji(card.items).length === 0) return null;
-    return listWorksheetHref(practicePath, { tag: card.tag, name: card.name });
+    const target = { tag: card.tag, name: card.name };
+    const worksheet = listWorksheetHref(practicePath, target);
+    const print = listPrintHref(practicePath, target);
+    return worksheet && print ? { worksheet, print } : null;
   };
 
   async function remove(id: string) {
@@ -190,7 +193,7 @@ export default function StudyListCards({
       card={card}
       rows={rows}
       accountId={accountId}
-      practiceHref={practiceHrefFor(card)}
+      sheetLinks={sheetLinksFor(card)}
       canEdit={canEdit}
       onDelete={() => setPendingRemoval(card.id)}
       onRenamed={(name) => setRenamed((prev) => ({ ...prev, [card.id]: name }))}

@@ -18,7 +18,7 @@ import { GRADE_OPTIONS, GRADE_SHORT_LABELS } from "../../grades/gradeExplorerVie
 import PrintButton from "../PrintButton";
 import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, SHEET_CHIP, WANIKANI_MAX_LEVEL } from "../practiceCopy";
 import SheetOptionsRow from "../SheetOptionsRow";
-import { PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "../sheetLink";
+import { printNowHref, sheetHref, type SheetSettings } from "../sheetLink";
 import SheetBody from "../SheetBody";
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
@@ -144,7 +144,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const pageHref = (next: number) => sheetHref(settings, { page: next });
   /* Switching layout restarts the count: page three of twenty is not page three of 250. */
-  const printAllHref = `${sheetHref(settings, { printAll: true, page: 1 })}&${PRINT_NOW_PARAM}=1`;
+  const printAllHref = printNowHref(settings, { printAll: true, page: 1 });
   /*
    * In the print layout the pager steps between print runs rather than between
    * reading pages, so it says so - and it shows whatever the reader chose,

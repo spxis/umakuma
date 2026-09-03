@@ -26,7 +26,7 @@ import {
   STUDY_TAGS,
   type ListItemKind,
 } from "@/lib/domainConstants";
-import { listWorksheetHref } from "../../practice/practiceAddress";
+import { listPrintHref, listWorksheetHref } from "../../practice/practiceAddress";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
@@ -96,13 +96,20 @@ export default function ListPageView({
    * the safe thing was to offer nothing at all. Now the address says whose
    * list it is and the sheet is the list on screen.
    */
-  const worksheetHref = useMemo(() => {
+  const sheetLinks = useMemo(() => {
     if (!list.tag && !live.some((item) => item.listKind === LIST_ITEM_KINDS.kanji)) return null;
-    return listWorksheetHref(
-      practicePath,
-      { tag: list.tag, name: list.name },
-      viewer.isOwner ? undefined : { owner: owner.key, key: listKey },
-    );
+    /*
+     * Both built by the helper, never by appending to the other. An unlisted
+     * list's sheet already carries `?key=`, so a hand-written `?go=1` on the
+     * end made a second query string - the key swallowed the flag, the sheet
+     * could not open the list, and Print 404ed on exactly the lists that
+     * needed sharing most.
+     */
+    const target = { tag: list.tag, name: list.name };
+    const from = viewer.isOwner ? undefined : { owner: owner.key, key: listKey };
+    const worksheet = listWorksheetHref(practicePath, target, from);
+    const print = listPrintHref(practicePath, target, from);
+    return worksheet && print ? { worksheet, print } : null;
   }, [list.name, list.tag, listKey, live, owner.key, practicePath, viewer.isOwner]);
 
   const kinds = useMemo(() => {
@@ -312,12 +319,12 @@ export default function ListPageView({
             * could not print it, and the link the card built went stale as
             * soon as the list changed.
             */}
-          {worksheetHref ? (
+          {sheetLinks ? (
             <>
-              <Link href={worksheetHref} className={ACTION_PILL} title={STUDY_LIST_COPY.worksheetHint}>
+              <Link href={sheetLinks.worksheet} className={ACTION_PILL} title={STUDY_LIST_COPY.worksheetHint}>
                 {STUDY_LIST_COPY.worksheet}
               </Link>
-              <Link href={`${worksheetHref}?go=1`} className={ACTION_PILL}>
+              <Link href={sheetLinks.print} className={ACTION_PILL}>
                 {STUDY_LIST_COPY.print}
               </Link>
             </>

@@ -44,7 +44,7 @@ export default function StudyListCard({
   card,
   rows,
   accountId,
-  practiceHref,
+  sheetLinks,
   canEdit,
   onDelete,
   onRenamed,
@@ -261,12 +261,12 @@ export default function StudyListCard({
         * a sheet of tracing squares, which nobody would have guessed was the
         * worksheet they were looking for.
         */}
-      {practiceHref ? (
+      {sheetLinks ? (
         <>
-          <Link href={practiceHref} className={ACTION} title={STUDY_LIST_COPY.worksheetHint}>
+          <Link href={sheetLinks.print} className={ACTION} title={STUDY_LIST_COPY.worksheetHint}>
             {STUDY_LIST_COPY.print}
           </Link>
-          <Link href={practiceHref.replace(/\?go=1$/, "")} className={PILL}>
+          <Link href={sheetLinks.worksheet} className={PILL}>
             {STUDY_LIST_COPY.worksheet}
           </Link>
         </>

@@ -130,3 +130,17 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
 
   return parts.length > 0 ? `${path}?${parts.join("&")}` : path;
 }
+
+/**
+ * A sheet's link, asked to open the print dialog as it arrives.
+ *
+ * `sheetHref` deliberately cannot carry the flag - choosing a square size is
+ * not a request to print - so a caller that *does* mean print has to add it,
+ * and adding it by hand is how the list page broke a shared list's Print
+ * link. One function, which knows whether the address it was given has spent
+ * its `?` already.
+ */
+export function printNowHref(settings: SheetSettings, changes: Partial<SheetSettings> = {}): string {
+  const href = sheetHref(settings, changes);
+  return `${href}${href.includes("?") ? "&" : "?"}${PRINT_NOW_PARAM}=1`;
+}
