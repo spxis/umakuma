@@ -3818,12 +3818,33 @@
     "name": "See one stroke on its own",
     "area": "study",
     "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-03",
+    "dateIsEstimate": false,
+    "summary": "Holding a stroke still drew it in colour with every earlier stroke behind it in grey, which answers where in the character it falls but not what the stroke itself is - on a twenty-two stroke character the one you asked about is a coloured mark inside a nearly finished glyph. Only hides what is already down and leaves the single stroke on the page; with Outline on it sits over the faint whole character, which is the shape of the question: this stroke, there. A finished stroke becomes 'not yet reached' rather than a fourth state, because that is already what the animation knows how to leave wound back, and the numbers follow the same rule so nothing is numbered that is not drawn. Off by default - where a stroke falls is the usual thing to want - and remembered. Requested 2026-09-03 by John.",
+    "version": "0.330.0",
+    "releasedAt": "2026-09-03T08:07:42Z"
+  },
+  {
+    "id": "subject-page-subheader",
+    "name": "The page says what the character is, not the stroke card",
+    "area": "study",
+    "kind": "bug",
     "status": "planned",
     "date": "2026-09-03",
     "dateIsEstimate": true,
-    "release": 72,
-    "summary": "Holding a stroke still draws it in colour with every earlier stroke behind it in grey, which answers where in the character it falls but not what the stroke itself is - on a twenty-two stroke character the one you asked about is a red mark inside a nearly finished glyph. An Only switch hides what is already down and leaves the single stroke on the page, and with Outline on it sits over the faint whole character, which is the shape of the question: this stroke, there. Requested 2026-09-03 by John.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T08:03:19.139Z"
+    "release": 73,
+    "summary": "Stroke order's header carries the readings and the meaning under its title - the only block on the page whose header does two jobs, now that every other block wears the same plain bar. It is there because the kanji page has no header of its own: the card was the first thing on the page, so it took the job. Give the page a header - the character, its readings, its meaning - and let stroke order's bar say Stroke order and the stroke count, like every other card. The readings appear again under Meanings and readings, which is fine: a page header repeating what a section holds is what a page header is for. Requested 2026-09-03 by John."
+  },
+  {
+    "id": "kanji-practice-sheet",
+    "name": "Print one kanji as a practice sheet",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 74,
+    "summary": "A sheet for one character: the kanji large, its stroke order laid out step by step the way the list worksheets already print, and then the rest of the page ruled into empty squares to copy it into. The list print pages give a grid across many characters; this is the other shape - one character, all of its steps, and room to practise it until the page runs out. Requested 2026-09-03 by John."
   }
 ]

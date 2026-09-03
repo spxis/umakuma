@@ -15,6 +15,9 @@ export const STROKE_ANIMATION_COPY = {
    */
   outline: "Outline",
   outlineTitle: "Show the whole character faintly behind",
+  /* One stroke with the finished ones taken away. */
+  solo: "Only",
+  soloTitle: "Show just this stroke, without the ones before it",
   copyLink: "Copy link",
   linkCopied: "Copied",
   stroke: "stroke",
@@ -109,3 +112,6 @@ export const STROKE_LOOP_PAUSE_MS = 1000;
 
 /** Remembered like the outline: how somebody watches is how they watch. */
 export const STROKE_LOOP_STORAGE_KEY = "umakuma:stroke-loop";
+
+/** Remembered too, and off: the strokes before are the usual thing to want. */
+export const STROKE_SOLO_STORAGE_KEY = "umakuma:stroke-solo";

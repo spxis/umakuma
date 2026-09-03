@@ -6,7 +6,7 @@ import SourceCredit from "./SourceCredit";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { setStrokeSize, useStrokeSize } from "./useStrokeSize";
-import { STROKE_FOCUS_CLASS, STROKE_FOCUS_STATES, strokeFocusState } from "./strokeFocus";
+import { STROKE_FOCUS_CLASS, STROKE_FOCUS_STATES, strokeFocusStateFor } from "./strokeFocus";
 import {
   STROKE_ANIMATION_COPY,
   STROKE_MS_PER_STROKE,
@@ -17,6 +17,7 @@ import {
   STROKE_OUTLINE_STORAGE_KEY,
   STROKE_SIZES,
   STROKE_SIZE_VALUES,
+  STROKE_SOLO_STORAGE_KEY,
   STROKE_VIEWBOX_UNITS,
 } from "./strokeAnimationCopy";
 
@@ -117,6 +118,18 @@ export default function KanjiStrokeAnimation({
     defaultValue: true,
     mode: "zero-is-false",
   });
+
+  /*
+   * Whether the strokes already down are taken away.
+   *
+   * Off by default: where a stroke falls in the character is the usual thing
+   * to want, and the strokes before it are what say so. On, the one stroke is
+   * alone on the page - and with the outline behind it, that is the whole
+   * question: this stroke, there.
+   */
+  const [soloStroke, setSoloStroke] = usePersistedBoolean(STROKE_SOLO_STORAGE_KEY, {
+    defaultValue: false,
+  });
   /* The size this device last chose, read the way every other stored preference is. */
   const chosenSize = useStrokeSize();
   const offersSize = size === undefined;
@@ -185,7 +198,7 @@ export default function KanjiStrokeAnimation({
           return;
         }
 
-        const state = strokeFocusState(index, selectedStroke);
+        const state = strokeFocusStateFor(index, selectedStroke, soloStroke);
         /* Left wound back, so a stroke not yet reached is not on the page at all. */
         if (state === STROKE_FOCUS_STATES.ahead) return;
         path.style.transition =
@@ -195,7 +208,7 @@ export default function KanjiStrokeAnimation({
     });
 
     return () => cancelAnimationFrame(frame);
-  }, [data, playToken, selectedStroke]);
+  }, [data, playToken, selectedStroke, soloStroke]);
 
   /*
    * The repeat.
@@ -263,7 +276,9 @@ export default function KanjiStrokeAnimation({
               d={d}
               /* Nearer than the group's colour, so the three states win while one is picked. */
               className={
-                selectedStroke === null ? undefined : STROKE_FOCUS_CLASS[strokeFocusState(index, selectedStroke)]
+                selectedStroke === null
+                  ? undefined
+                  : STROKE_FOCUS_CLASS[strokeFocusStateFor(index, selectedStroke, soloStroke)]
               }
               ref={(element) => {
                 pathRefs.current[index] = element;
@@ -285,8 +300,13 @@ export default function KanjiStrokeAnimation({
            */
           <g className="fill-foreground/70 font-black" fontSize={numberFontUnits}>
             {data.strokes.map((d, index) =>
-              /* A number is ink too: numbering a stroke that is not drawn yet answers the wrong question. */
-              selectedStroke !== null && index + 1 > selectedStroke ? null : (
+              /*
+               * A number is ink too: numbering a stroke that is not on the
+               * page answers the wrong question - whether it is ahead of the
+               * one being studied or taken away behind it.
+               */
+              selectedStroke !== null &&
+              strokeFocusStateFor(index, selectedStroke, soloStroke) === STROKE_FOCUS_STATES.ahead ? null : (
                 <StrokeNumber key={`number-${index}`} d={d} index={index} />
               ),
             )}
@@ -331,6 +351,22 @@ export default function KanjiStrokeAnimation({
         >
           {STROKE_ANIMATION_COPY.outline}
         </button>
+        {/* Only where it means anything: the whole drawing has nothing to hide. */}
+        {selectedStroke !== null ? (
+          <button
+            type="button"
+            aria-pressed={soloStroke}
+            title={STROKE_ANIMATION_COPY.soloTitle}
+            onClick={() => setSoloStroke((only) => !only)}
+            className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+              soloStroke
+                ? "border-kanji bg-kanji text-white"
+                : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
+            }`}
+          >
+            {STROKE_ANIMATION_COPY.solo}
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={() => setShowNumbers((shown) => !shown)}

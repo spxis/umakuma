@@ -9,6 +9,7 @@ import {
   strokeFocusState,
   strokeIsInCharacter,
   strokeNumbers,
+  strokeFocusStateFor,
 } from "./strokeFocus";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
@@ -111,11 +112,50 @@ describe("the picker in the panel", () => {
     const source = animation();
     expect(source).toContain("{showOutline ? (");
     expect(source).not.toContain("selectedStroke === null || showOutline");
-    expect(source).not.toContain("{selectedStroke !== null ? (");
+    /* Only is the switch that is gated on a stroke being picked; Outline is not. */
+    expect(source).toContain("aria-pressed={soloStroke}");
   });
 
   /* Picking a stroke has to redraw, or the choice only changes the colours. */
   it("redraws when the choice changes", () => {
-    expect(animation()).toContain("}, [data, playToken, selectedStroke]);");
+    expect(animation()).toContain("}, [data, playToken, selectedStroke, soloStroke]);");
+  });
+});
+
+/*
+ * One stroke on its own.
+ *
+ * Holding a stroke still answers where in the character it falls; it does not
+ * answer what the stroke is, because on a twenty-two stroke character the one
+ * you asked about is a coloured mark inside a nearly finished glyph. Hiding
+ * what is already down leaves the answer alone on the page.
+ */
+describe("strokeFocusStateFor", () => {
+  it("is the ordinary three states when nothing is hidden", () => {
+    expect(strokeFocusStateFor(0, 3, false)).toBe(STROKE_FOCUS_STATES.done);
+    expect(strokeFocusStateFor(2, 3, false)).toBe(STROKE_FOCUS_STATES.current);
+    expect(strokeFocusStateFor(5, 3, false)).toBe(STROKE_FOCUS_STATES.ahead);
+  });
+
+  /* `done` becomes `ahead` rather than a fourth state: "not on the page" is
+   * what `ahead` already means, and the animation leaves it wound back. */
+  it("takes the finished strokes away by calling them not yet reached", () => {
+    expect(strokeFocusStateFor(0, 3, true)).toBe(STROKE_FOCUS_STATES.ahead);
+    expect(strokeFocusStateFor(1, 3, true)).toBe(STROKE_FOCUS_STATES.ahead);
+  });
+
+  it("keeps the stroke being studied whichever way it is asked", () => {
+    for (const solo of [true, false]) {
+      expect(strokeFocusStateFor(2, 3, solo), String(solo)).toBe(STROKE_FOCUS_STATES.current);
+    }
+  });
+
+  it("leaves what has not been reached alone", () => {
+    expect(strokeFocusStateFor(9, 3, true)).toBe(STROKE_FOCUS_STATES.ahead);
+  });
+
+  /* The first stroke has nothing behind it, so both views agree on it. */
+  it("shows the same thing for the first stroke either way", () => {
+    expect(strokeFocusStateFor(0, 1, true)).toBe(strokeFocusStateFor(0, 1, false));
   });
 });

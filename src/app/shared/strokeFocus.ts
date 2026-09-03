@@ -31,6 +31,26 @@ export function strokeFocusState(index: number, selected: number): StrokeFocusSt
 }
 
 /**
+ * The same three states, with what is already down taken away.
+ *
+ * Holding a stroke still answers where in the character it falls; it does not
+ * answer what the stroke is, because on a twenty-two stroke character the one
+ * you asked about is a coloured mark inside a nearly finished glyph. Hiding
+ * the finished strokes leaves the answer on its own - and `done` becomes
+ * `ahead` rather than a fourth state, because "not on the page" is already
+ * what `ahead` means and the animation already knows how to leave it wound
+ * back.
+ */
+export function strokeFocusStateFor(
+  index: number,
+  selected: number,
+  solo: boolean,
+): StrokeFocusState {
+  const state = strokeFocusState(index, selected);
+  return solo && state === STROKE_FOCUS_STATES.done ? STROKE_FOCUS_STATES.ahead : state;
+}
+
+/**
  * The colour each state is drawn in.
  *
  * Set on the path rather than the group, so it overrides the group's colour
