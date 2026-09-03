@@ -1,6 +1,6 @@
 "use client";
 
-import PillTextToggle from "@/app/shared/PillTextToggle";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
@@ -65,7 +65,7 @@ export default function MapRegionKanji({
           {MAP_STUDY_COPY.writtenWith}
         </h3>
         <span className="ml-auto flex items-center gap-2">
-          <PillTextToggle />
+          <PillWordsToggle />
           {accountId ? (
             <SubjectFilerToggle open={filerOpen} onToggle={() => setFilerOpen((was) => !was)} error={filing ? filer.error : null} />
           ) : null}

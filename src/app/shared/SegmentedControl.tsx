@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type SegmentSize = "sm" | "md";
+type SegmentSize = "xs" | "sm" | "md";
 
 type SegmentOption<TValue extends string> = {
   value: TValue;
@@ -22,6 +22,8 @@ type Props<TValue extends string> = {
 };
 
 const sizeClass: Record<SegmentSize, string> = {
+  /* For a section heading, where the control sits beside 11px uppercase type. */
+  xs: "h-6 px-2 text-[10px] sm:px-2.5",
   sm: "h-8 px-3 text-[11px] sm:px-3.5",
   md: "h-9 px-3.5 text-xs sm:px-4",
 };

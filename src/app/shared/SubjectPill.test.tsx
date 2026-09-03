@@ -30,10 +30,12 @@ describe("the pill, as an element", () => {
     expect(draw(<SubjectPill glyph="leaf" subjectType={SUBJECT_TYPES.radical} />).querySelector("span[lang]")).toBeNull();
   });
 
-  it("puts the words in the title, so hiding them costs a hover", () => {
+  it("puts both words in the title, so the other half costs a hover", () => {
     const link = draw(<SubjectPill glyph="山" reading="やま" meaning="mountain" href="/kanji/x" />).querySelector("a");
     expect(link?.getAttribute("title")).toBe("やま · mountain");
-    expect(link?.textContent).toContain("やま · mountain");
+    /* Drawn, it carries one of them - which one is the member's standing choice. */
+    expect(link?.textContent).toContain("mountain");
+    expect(link?.textContent).not.toContain("やま");
   });
 });
 

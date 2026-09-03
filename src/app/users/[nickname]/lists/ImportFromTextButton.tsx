@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import ModalShell from "@/app/shared/ModalShell";
-import PillTextToggle from "@/app/shared/PillTextToggle";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
@@ -173,7 +173,7 @@ export default function ImportFromTextButton({ accountId }: { accountId: string 
               <span className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
                 {STUDY_LIST_COPY.importKeepHint}
               </span>
-              <PillTextToggle />
+              <PillWordsToggle />
               {LIST_ITEM_KIND_VALUES.filter((kind) => (counts[kind] ?? 0) > 0).map((kind) => (
                 <button
                   key={kind}

@@ -30,7 +30,7 @@ describe("the parts of a character", () => {
   it("carries the one text control every row of pills has", () => {
     const doc = draw(<RadicalPartsBlock parts={parts} />);
     const labels = [...doc.querySelectorAll("button")].map((button) => button.textContent);
-    expect(labels).toContain(SUBJECT_PAGE_COPY.pillTextOn);
+    expect(labels).toContain(SUBJECT_PAGE_COPY.pillWordsEnglish);
   });
 
   it("draws nothing for a character with no parts", () => {

@@ -1,5 +1,5 @@
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import PillTextToggle from "@/app/shared/PillTextToggle";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
@@ -26,7 +26,7 @@ export default function UsedInWordsBlock({ words }: { words: WordExample[] }) {
     <SubjectBlock
       heading={SUBJECT_PAGE_COPY.usedInWords}
       credit={{ source: SOURCE_KEYS.kanjiapi, label: SOURCE_CREDIT_COPY.words }}
-      action={<PillTextToggle />}
+      action={<PillWordsToggle />}
     >
       <ul className="divide-y divide-line/60">
         {words.map((word) => (

@@ -1,4 +1,4 @@
-import PillTextToggle from "@/app/shared/PillTextToggle";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
 import { RELATED_GROUPS, type RelatedGroup, type RelatedGroupId } from "@/lib/relatedSubjects";
 
@@ -34,7 +34,7 @@ export default function RelatedGroupBlock({ group, showToggle = false }: { group
           {GROUP_HEADINGS[group.id]}
         </h3>
         {/* One control for every pill on the page, on the first group only. */}
-        {showToggle ? <PillTextToggle /> : null}
+        {showToggle ? <PillWordsToggle /> : null}
       </div>
       <ul className="flex flex-wrap gap-2">
         {group.items.map((item) => (

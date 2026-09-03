@@ -21,8 +21,13 @@ export const SUBJECT_PAGE_COPY = {
   examples: "In use",
   heisig: "Heisig",
   /* The one control for the words on every item pill. */
-  pillTextOn: "Text on",
-  pillTextOff: "Text off",
+  pillWordsLabel: "Words on item chips",
+  pillWordsOff: "Off",
+  pillWordsReading: "\u3042",
+  pillWordsEnglish: "EN",
+  pillWordsOffTitle: "Glyphs only",
+  pillWordsReadingTitle: "Readings",
+  pillWordsEnglishTitle: "English",
   /* The strip under the card, for a reader with no account to file into. */
   filingSignedOut: (label: string) => `Keep ${label} on a list of your own`,
   filingJoin: "Join UmaKuma",

@@ -5,8 +5,9 @@ import type { ReactNode } from "react";
 
 import { JP_TEXT_CLASS, NO_TRANSLATE_CLASS } from "./japaneseText";
 
+import { pillWords, pillWordsTitle } from "./pillWords";
 import { subjectGlyphTone } from "./subjectListView";
-import { usePillText } from "./usePillText";
+import { usePillWords } from "./usePillWords";
 
 /**
  * One item, as a pill: the glyph, and the words for it when they are wanted.
@@ -20,8 +21,10 @@ import { usePillText } from "./usePillText";
  * corner badges in the explorers, a bare box on the news pages, a token with
  * a cross on the selection bar. Same glyph in a border, four ways.
  *
- * The text is always in the title, whether it is drawn or not, so hiding it
- * costs a reader nothing but a hover.
+ * The reading and the meaning are two questions, not one label: the member
+ * picks which the chips answer, through the one control beside them, and the
+ * pair is always on the title, so the other half costs a hover rather than a
+ * trip back to the control.
  *
  * Only Japanese is marked as Japanese: a radical WaniKani draws has an
  * English name where a character would be, and telling a browser that "leaf"
@@ -94,8 +97,10 @@ export default function SubjectPill({
   selected?: boolean;
   trailing?: ReactNode;
 }) {
-  const [showText] = usePillText();
-  const words = [reading, meaning].filter(Boolean).join(" · ");
+  const [mode] = usePillWords();
+  /* One of the two, by the member's standing choice; both on the title. */
+  const words = pillWords(mode, reading, meaning);
+  const title = pillWordsTitle(reading, meaning);
   const japanese = JAPANESE.test(glyph);
   const glyphClass = `${japanese ? "text-2xl" : "text-sm"} font-black leading-none ${
     tone ?? subjectGlyphTone(subjectType ?? "")
@@ -109,7 +114,7 @@ export default function SubjectPill({
       <span lang={japanese ? "ja" : undefined} translate="no" className={glyphClass}>
         {glyph}
       </span>
-      {showText && words ? (
+      {words ? (
         <span className="max-w-28 truncate text-[11px] font-semibold text-foreground/65">{words}</span>
       ) : null}
       <Meta level={level} successRate={successRate} />
@@ -119,7 +124,7 @@ export default function SubjectPill({
 
   if (href) {
     return (
-      <Link href={href} title={words || undefined} aria-label={label} aria-current={selected ? "true" : undefined} className={shell}>
+      <Link href={href} title={title || undefined} aria-label={label} aria-current={selected ? "true" : undefined} className={shell}>
         {body}
       </Link>
     );
@@ -129,7 +134,7 @@ export default function SubjectPill({
       <button
         type="button"
         onClick={onClick}
-        title={words || undefined}
+        title={title || undefined}
         aria-label={label}
         aria-pressed={selected}
         className={`${shell} cursor-pointer`}
@@ -139,7 +144,7 @@ export default function SubjectPill({
     );
   }
   return (
-    <span title={words || undefined} aria-label={label} className={shell}>
+    <span title={title || undefined} aria-label={label} className={shell}>
       {body}
     </span>
   );

@@ -1,4 +1,4 @@
-import PillTextToggle from "@/app/shared/PillTextToggle";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
 import SubjectPill from "@/app/shared/SubjectPill";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
@@ -28,7 +28,7 @@ export default function RadicalPartsBlock({ parts }: { parts: RadicalPart[] }) {
     <SubjectBlock
       heading={RADICAL_PARTS_COPY.heading}
       credit={{ source: SOURCE_KEYS.radkfile, label: SOURCE_CREDIT_COPY.radicals }}
-      action={<PillTextToggle />}
+      action={<PillWordsToggle />}
     >
       <p className="text-xs text-foreground/60">{RADICAL_PARTS_COPY.hint}</p>
       <ul className="flex flex-wrap gap-2">

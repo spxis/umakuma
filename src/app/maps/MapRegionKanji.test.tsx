@@ -44,12 +44,14 @@ describe("the characters of a place name", () => {
     expect(links.map((link) => link.getAttribute("href"))).toEqual(["/kanji/%E9%AB%98", "/kanji/%E7%9F%A5"]);
     /* A row of pills that wraps, not the explorer's grid of cards. */
     expect(document.querySelector("ul")?.getAttribute("class")).not.toContain("grid");
-    expect(links[0]?.textContent).toContain("コウ · tall");
+    /* One of the two, by the standing choice; the pair stays on the title. */
+    expect(links[0]?.textContent).toContain("tall");
+    expect(links[0]?.getAttribute("title")).toBe("コウ · tall");
   });
 
-  it("carries the one Text on control every row of pills has", () => {
+  it("carries the one words control every row of pills has", () => {
     const document = render(<MapRegionKanji kanji={["高", "知"]} facts={facts} accountId={null} />);
-    expect(buttonLabels(document)).toContain(SUBJECT_PAGE_COPY.pillTextOn);
+    expect(buttonLabels(document)).toContain(SUBJECT_PAGE_COPY.pillWordsEnglish);
   });
 
   it("offers a member the lists under each pill, never inside its link", () => {

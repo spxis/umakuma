@@ -10,7 +10,7 @@ import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
 import type { KanjiStats } from "./JlptExplorerContent.types";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
-import PillTextToggle from "@/app/shared/PillTextToggle";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
 import FieldLabel from "../../../../shared/FieldLabel";
 import ReadingsLine from "@/app/shared/ReadingsLine";
@@ -254,7 +254,7 @@ export default function JlptExplorerDetailSection({
           <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
             <div className="flex items-center justify-between gap-2">
               <FieldLabel>{JLPT_EXPLORER_TEXT.wordsHeading}</FieldLabel>
-              <PillTextToggle />
+              <PillWordsToggle />
             </div>
             <ul className="mt-2 space-y-2 text-foreground/90">
               {wordExamples.map((example, index) => (

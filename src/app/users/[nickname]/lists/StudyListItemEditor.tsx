@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import PillTextToggle from "@/app/shared/PillTextToggle";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { mergeListItems } from "@/app/shared/mergeListItems";
@@ -43,7 +43,7 @@ export default function StudyListItemEditor({ items, saving, onSave, onCancel }:
     <div className="mt-3 rounded-xl border border-line bg-surface-muted p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-[11px] font-semibold text-foreground/60">{STUDY_LIST_COPY.editHint}</p>
-        <PillTextToggle />
+        <PillWordsToggle />
       </div>
 
       <ul className="mt-2 flex flex-wrap gap-1.5">
