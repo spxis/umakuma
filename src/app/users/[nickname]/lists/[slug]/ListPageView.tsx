@@ -26,7 +26,7 @@ import {
   type ListItemKind,
 } from "@/lib/domainConstants";
 import { LIST_ITEM_PAGE_SIZE, LIST_ITEM_SORTS, orderListItems, type ListItemSort } from "@/lib/listItemOrder";
-import { listPrintHref, listWorksheetHref } from "../../practice/practiceAddress";
+import { listWorksheetHref } from "../../practice/practiceAddress";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
@@ -111,17 +111,14 @@ export default function ListPageView({
   const sheetLinks = useMemo(() => {
     if (!list.tag && !live.some((item) => item.listKind === LIST_ITEM_KINDS.kanji)) return null;
     /*
-     * Both built by the helper, never by appending to the other. An unlisted
-     * list's sheet already carries `?key=`, so a hand-written `?go=1` on the
-     * end made a second query string - the key swallowed the flag, the sheet
-     * could not open the list, and Print 404ed on exactly the lists that
-     * needed sharing most.
+     * Built by the helper, never by hand. An unlisted list's sheet carries
+     * `?key=`, and a query appended to it by string surgery is how the page
+     * once 404ed on exactly the lists that needed sharing most.
      */
     const target = { tag: list.tag, name: list.name };
     const from = viewer.isOwner ? undefined : { owner: owner.key, key: listKey };
     const worksheet = listWorksheetHref(practicePath, target, from);
-    const print = listPrintHref(practicePath, target, from);
-    return worksheet && print ? { worksheet, print } : null;
+    return worksheet ? { worksheet } : null;
   }, [list.name, list.tag, listKey, live, owner.key, practicePath, viewer.isOwner]);
 
   const kinds = useMemo(() => {
@@ -322,15 +319,15 @@ export default function ListPageView({
             * could not print it, and the link the card built went stale as
             * soon as the list changed.
             */}
+          {/*
+            * Worksheet goes to the sheet; Print lives on the sheet and opens
+            * the dialog there. A Print here that changed the page was a
+            * button that did not do what it said.
+            */}
           {sheetLinks ? (
-            <>
-              <Link href={sheetLinks.worksheet} className={ACTION_PILL} title={STUDY_LIST_COPY.worksheetHint}>
-                {STUDY_LIST_COPY.worksheet}
-              </Link>
-              <Link href={sheetLinks.print} className={ACTION_PILL}>
-                {STUDY_LIST_COPY.print}
-              </Link>
-            </>
+            <Link href={sheetLinks.worksheet} className={ACTION_PILL} title={STUDY_LIST_COPY.worksheetHint}>
+              {STUDY_LIST_COPY.worksheet}
+            </Link>
           ) : null}
           {/*
             * Offered only where there is something to sort. On a list of four

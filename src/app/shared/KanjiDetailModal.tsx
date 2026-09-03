@@ -26,6 +26,14 @@ type PanelProps = {
   summary?: KanjiDetailSummary;
   /** Extra pills or rows a surface wants beneath the drawing. */
   detail?: ReactNode;
+  /**
+   * A control that belongs in the header's corner, beside the stroke count.
+   *
+   * The same slot every other block on a subject page keeps its own control
+   * in. A link placed under the drawing instead cost the card a whole row to
+   * hold one word.
+   */
+  actions?: ReactNode;
   /** Omitted on the standalone page, which has nothing to close. */
   onClose?: () => void;
   /** The address this character can be shared at. */
@@ -232,7 +240,17 @@ function StrokePicker({
  * Shared by the modal and by the page a link opens, so a character looks the
  * same however you arrive at it.
  */
-export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, shareHref, compact, showSummaryLine = true }: PanelProps) {
+export function KanjiDetailPanel({
+  kanji,
+  grade,
+  summary,
+  detail,
+  actions,
+  onClose,
+  shareHref,
+  compact,
+  showSummaryLine = true,
+}: PanelProps) {
   const [meta, setMeta] = useState<StrokeMeta | null>(null);
   const size = useStrokeSize();
   const line = summaryLine(summary);
@@ -266,6 +284,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
               {meta.strokeCount === 1 ? STROKE_ANIMATION_COPY.stroke : STROKE_ANIMATION_COPY.strokes}
             </span>
           ) : null}
+          {actions}
           {shareHref ? <ShareLink href={shareHref} /> : null}
           {onClose ? (
             <button

@@ -2,7 +2,8 @@
 export const KANJI_SHEET_COPY = {
   strokeHeading: "How it is written",
   practiceHeading: "Now you",
-  print: "Print",
+  /* Named for where it goes; Print is on the sheet itself. */
+  worksheet: "Worksheet",
   back: "Back to the character",
   /* Said on screen and hidden on paper: the sheet is the thing being printed. */
   hint: "Print this and copy the character into the empty squares.",

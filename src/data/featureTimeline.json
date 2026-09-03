@@ -3866,14 +3866,13 @@
     "id": "print-worksheet-consistency",
     "name": "Worksheet goes there, Print prints, everywhere",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "bug",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T08:50:11.925Z",
     "date": "2026-09-03",
     "summary": "Two words for two actions, and the site had them crossed. On the list cards and the list page, Print was a link that navigated to the worksheet and asked it to open the print dialog on arrival - a button called Print that changed the page - while the stroke panel's new Print went to the one-character sheet and then did nothing, sitting in a row of its own under the drawing. One rule: Worksheet is the button that goes to a sheet, and Print exists only on a sheet, where it opens the dialog - with the scope menu where there is more than one page, as the practice sheet already does. The cards and the list page lose their navigating Print; the stroke panel's button becomes Worksheet in the header slot beside the stroke count; the one-character sheet gets the same Print button the practice sheet has. The arrive-and-print flag stays, because the sheet's own Everything choice reloads into the print layout and needs it. Requested 2026-09-03 by John.",
-    "dateIsEstimate": true,
-    "release": 72
+    "dateIsEstimate": false,
+    "version": "0.335.0",
+    "releasedAt": "2026-09-03T08:59:34Z"
   },
   {
     "id": "radicals-one-run",

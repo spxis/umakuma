@@ -6,6 +6,8 @@ import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import SourceCredit from "@/app/shared/SourceCredit";
 import SubjectPageHeading from "@/app/shared/subject-page/SubjectPageHeading";
 import { displayReading, readingsForGrade } from "@/app/users/[nickname]/grades/gradeExplorerView";
+import { PRACTICE_SHEET_COPY } from "@/app/users/[nickname]/practice/practiceCopy";
+import PrintButton from "@/app/users/[nickname]/practice/PrintButton";
 import { getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { summaryLine } from "@/lib/kanjiSummaryLine";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
@@ -14,6 +16,7 @@ import { getStrokeOrder } from "@/lib/strokeOrder";
 
 import { KANJI_PAGE_COPY } from "../KanjiPage.constants";
 import KanjiPracticeSheet from "./KanjiPracticeSheet";
+import { kanjiSheetHref } from "./kanjiSheetAddress";
 import { KANJI_SHEET_COPY } from "./kanjiSheetCopy";
 
 /**
@@ -76,7 +79,31 @@ export default async function KanjiSheetPage({ params }: PageProps) {
         <PublicPageHeader />
       </div>
 
-      <SubjectPageHeading label={character} line={summaryLine(summary)} />
+      {/*
+        * The same header the practice sheet has: the character, then Print
+        * in the corner - the one place Print exists, since it is the one
+        * place there is a sheet to print. On paper the corner holds the name
+        * and date lines a printed sheet needs and a screen never asks for.
+        */}
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <SubjectPageHeading label={character} line={summaryLine(summary)} />
+
+        <div className="hidden items-end gap-6 text-[11px] uppercase tracking-[0.08em] text-neutral-500 print:flex">
+          <span className="flex items-end gap-2">
+            {PRACTICE_SHEET_COPY.printName}
+            <span className="inline-block w-44 border-b border-neutral-400" />
+          </span>
+          <span className="flex items-end gap-2">
+            {PRACTICE_SHEET_COPY.printDate}
+            <span className="inline-block w-28 border-b border-neutral-400" />
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 print:hidden">
+          {/* One page, so the plain button: nothing to choose a scope over. */}
+          <PrintButton pageCount={1} onThisPage={1} total={1} allHref={kanjiSheetHref(character)} />
+        </div>
+      </header>
 
       <p className="text-sm text-foreground/60 print:hidden">{KANJI_SHEET_COPY.hint}</p>
 

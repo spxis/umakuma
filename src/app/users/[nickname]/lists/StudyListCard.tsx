@@ -256,20 +256,17 @@ export default function StudyListCard({
         </>
       ) : null}
       {/*
-        * Two actions rather than one, because they are two things: opening
-        * the sheet, and printing it. The single "Practise these" pill opened
-        * a sheet of tracing squares, which nobody would have guessed was the
-        * worksheet they were looking for.
+        * Named for where it goes. The single "Practise these" pill opened a
+        * sheet of tracing squares, which nobody would have guessed was the
+        * worksheet they were looking for; the Print beside it was a link
+        * that changed the page and asked it to open the dialog on arrival,
+        * which is not what a button called Print does anywhere else. Print
+        * lives on the sheet now.
         */}
       {sheetLinks ? (
-        <>
-          <Link href={sheetLinks.print} className={ACTION} title={STUDY_LIST_COPY.worksheetHint}>
-            {STUDY_LIST_COPY.print}
-          </Link>
-          <Link href={sheetLinks.worksheet} className={PILL}>
-            {STUDY_LIST_COPY.worksheet}
-          </Link>
-        </>
+        <Link href={sheetLinks.worksheet} className={PILL} title={STUDY_LIST_COPY.worksheetHint}>
+          {STUDY_LIST_COPY.worksheet}
+        </Link>
       ) : null}
     </>
   );

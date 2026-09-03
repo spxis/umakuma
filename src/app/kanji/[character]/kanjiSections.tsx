@@ -69,13 +69,13 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
           grade={view.grade}
           summary={view.summary}
           showSummaryLine={view.alone}
-          detail={
-            /* The other thing to do with a stroke order: take it off the screen. */
+          actions={
+            /* Named for where it goes; Print is on the sheet, like everywhere else. */
             <Link
               href={kanjiSheetHref(view.character)}
-              className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted"
+              className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
             >
-              {KANJI_SHEET_COPY.print}
+              {KANJI_SHEET_COPY.worksheet}
             </Link>
           }
         />

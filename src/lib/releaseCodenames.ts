@@ -385,6 +385,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Neru Ichimai", ja: "練る一枚", reading: "ねるいちまい", gloss: "one sheet, to work the character into" },
   { romaji: "Nokoru Usuzumi", ja: "残る薄墨", reading: "のこるうすずみ", gloss: "the faint ink that stays on the page" },
   { romaji: "Hashiru Hitosuji", ja: "走る一筋", reading: "はしるひとすじ", gloss: "a single line, run right through" },
+  { romaji: "Hitoshii Yakume", ja: "等しい役目", reading: "ひとしいやくめ", gloss: "the same job everywhere" },
 ];
 
 /**

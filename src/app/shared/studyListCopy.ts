@@ -47,7 +47,6 @@ export const STUDY_LIST_COPY = {
    */
   worksheet: "Worksheet",
   worksheetHint: "A writing sheet you can trace and print",
-  print: "Print",
 
   /*
    * Renaming happens in the card, not a dialog: the name is short, and what

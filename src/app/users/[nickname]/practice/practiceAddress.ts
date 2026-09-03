@@ -8,7 +8,6 @@ import {
   type PracticeSource,
 } from "@/lib/practiceSourceKinds";
 
-import { PRINT_NOW_PARAM } from "./sheetLink";
 
 /**
  * Where a practice sheet lives.
@@ -134,15 +133,4 @@ export function listWorksheetHref(
   const owner = from?.owner ? `/${encodeURIComponent(from.owner)}` : "";
   const key = from?.key ? `?${LIST_KEY_PARAM}=${encodeURIComponent(from.key)}` : "";
   return `${practicePath}/${PRACTICE_SOURCES.list}${owner}/${encodeURIComponent(slug)}${key}`;
-}
-
-/** The same sheet, asked to open the print dialog as it arrives. */
-export function listPrintHref(
-  practicePath: string,
-  list: { tag: string | null; name: string },
-  from?: { owner?: string | null; key?: string | null },
-): string | null {
-  const href = listWorksheetHref(practicePath, list, from);
-  /* An unlisted list already spent the `?`, so the flag joins with an `&`. */
-  return href ? `${href}${href.includes("?") ? "&" : "?"}${PRINT_NOW_PARAM}=1` : null;
 }

@@ -44,7 +44,8 @@ export type StudyListCardProps = {
    * pills quietly became the same link and the Print pill stopped printing.
    * Null for the Burned list: there is nothing to practise in what you know.
    */
-  sheetLinks: { worksheet: string; print: string } | null;
+  /** Where the list's worksheet is; printing happens on the sheet itself. */
+  sheetLinks: { worksheet: string } | null;
   /** Only the member whose lists these are may rename or delete one. */
   canEdit: boolean;
   onDelete: () => void;

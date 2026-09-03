@@ -21,14 +21,16 @@ import { describe, expect, it } from "vitest";
  * silently stopped printing - no error, no 404, just a button that did what
  * the button beside it did.
  *
- * Neither is the kind of thing a type catches, so this does: `listPrintHref`
- * is the only thing allowed to spell the flag.
+ * Neither is the kind of thing a type catches, so this does: `printNowHref`
+ * is the only thing allowed to spell the flag. The cards no longer carry a
+ * Print link at all - Print lives on the sheet - so the sheet's own
+ * "Everything" choice is the one caller left.
  */
 
 const SOURCE_ROOT = join(process.cwd(), "src");
 
 /** Where the flag is defined, and the one helper that composes it. */
-const ALLOWED = ["practice/sheetLink.ts", "practice/practiceAddress.ts", "practice/sheetOptions.ts"];
+const ALLOWED = ["practice/sheetLink.ts", "practice/sheetOptions.ts"];
 
 /**
  * Comments are stripped first: the files that fixed this bug describe it, and
@@ -47,7 +49,7 @@ function sourceFiles(directory: string): string[] {
 }
 
 describe("the print flag", () => {
-  it("is composed by listPrintHref and nowhere else", () => {
+  it("is composed by printNowHref and nowhere else", () => {
     const offenders = sourceFiles(SOURCE_ROOT)
       .filter((path) => !ALLOWED.some((allowed) => path.endsWith(allowed)))
       .filter((path) => {

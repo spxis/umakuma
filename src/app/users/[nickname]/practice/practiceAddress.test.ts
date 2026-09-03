@@ -4,7 +4,7 @@ import { PRACTICE_SOURCES } from "@/lib/practiceSource";
 
 import { STUDY_TAGS } from "@/lib/domainConstants";
 
-import { listPrintHref, listWorksheetHref, parsePracticeTarget, practiceHref } from "./practiceAddress";
+import { listWorksheetHref, parsePracticeTarget, practiceHref } from "./practiceAddress";
 
 describe("parsePracticeTarget", () => {
   it("treats a bare /practice as choosing what to practise", () => {
@@ -203,29 +203,11 @@ describe("listWorksheetHref", () => {
     );
   });
 
-  it("joins the print flag to a key rather than starting a second query", () => {
-    expect(listPrintHref(BASE, { tag: null, name: "Week 1" }, { owner: "mika", key: "abc123" })).toBe(
-      "/users/john/practice/list/mika/week-1?key=abc123&go=1",
-    );
-  });
-
-  /*
-   * Trouble and Favourites are one member's own marks. There is no address at
-   * which somebody else's exist, so there is no sheet to offer.
-   */
   it("offers nothing for somebody else's tagged list", () => {
     expect(listWorksheetHref(BASE, { tag: STUDY_TAGS.trouble, name: "Trouble" }, { owner: "mika" })).toBeNull();
   });
 
   it("offers nothing for a name that makes no address", () => {
     expect(listWorksheetHref(BASE, { tag: null, name: "!!!" })).toBeNull();
-  });
-
-  it("asks the print dialog to open on arrival, and only there", () => {
-    expect(listPrintHref(BASE, { tag: null, name: "Week 1" })).toBe(
-      "/users/john/practice/list/week-1?go=1",
-    );
-    expect(listWorksheetHref(BASE, { tag: null, name: "Week 1" })).not.toContain("go=1");
-    expect(listPrintHref(BASE, { tag: STUDY_TAGS.burned, name: "Burned" })).toBeNull();
   });
 });

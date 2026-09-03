@@ -25,7 +25,7 @@ import { LIST_ITEM_KINDS, LIST_VISIBILITIES } from "@/lib/domainConstants";
 import { listHref, listKanji, tagListHref, type StudyListItemRef, type StudyListSummary } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
-import { listPrintHref, listWorksheetHref } from "../practice/practiceAddress";
+import { listWorksheetHref } from "../practice/practiceAddress";
 
 import { type ListCard } from "./StudyList.types";
 import StudyListCard from "./StudyListCard";
@@ -154,8 +154,7 @@ export default function StudyListCards({
     if (!card.tag && listKanji(card.items).length === 0) return null;
     const target = { tag: card.tag, name: card.name };
     const worksheet = listWorksheetHref(practicePath, target);
-    const print = listPrintHref(practicePath, target);
-    return worksheet && print ? { worksheet, print } : null;
+    return worksheet ? { worksheet } : null;
   };
 
   async function remove(id: string) {
