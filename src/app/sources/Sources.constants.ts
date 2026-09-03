@@ -81,4 +81,39 @@ export const SOURCE_DESCRIPTIONS: Record<
     takes: ["Which kanji are taught in which school year", "The readings approved for each grade", "The name kanji permitted in registered names"],
     terms: "Government publications, reproduced as reference data. The curated meanings written over them are our own.",
   },
+  /*
+   * Three map sources rather than one, because the licences are three and a
+   * credit that pooled them would name the wrong holder on two maps out of
+   * three. Each country's board credits its own.
+   */
+  [SOURCE_KEYS.jpmap]: {
+    tab: "Japan map",
+    lede: "The Geospatial Information Authority of Japan's Global Map, which is where the 47 prefecture outlines come from. The shapes on the board are theirs; the projection, the simplification and Okinawa's box are ours.",
+    takes: [
+      "The outline of every prefecture, and which prefectures border which",
+      "Nothing else: the capitals, populations and rankings beside a map are compiled from the Statistics Bureau, the Agency for Cultural Affairs, the Ministry of Justice and JNTO",
+    ],
+    terms:
+      "Geospatial Information Authority of Japan website terms, which ask for two things: that the source be named, and that a reader be told the data was edited. Ours are reprojected to the board's canvas, simplified, and Okinawa is moved out of the sea into an inset box, so both are said wherever a map is drawn.",
+  },
+  [SOURCE_KEYS.usmap]: {
+    tab: "US map",
+    lede: "The Census Bureau's cartographic state boundaries, reaching us as TopoJSON through Mike Bostock's us-atlas. Neighbouring states share arcs in that format, which is how the game knows whose border touches whose.",
+    takes: [
+      "The outline of every state and the District of Columbia, and which of them border which",
+      "Nothing else: the capitals, populations and nicknames are compiled from Census figures and state tourism material",
+    ],
+    terms:
+      "A work of the United States government, in the public domain, so no licence is named and none was granted — there was nothing to grant. The conversion to TopoJSON is us-atlas, under the ISC licence. Credited because a reader asking where a border came from deserves an answer, not because anyone can compel it.",
+  },
+  [SOURCE_KEYS.camap]: {
+    tab: "Canada map",
+    lede: "Natural Earth's admin-1 boundaries, which is where the ten provinces and three territories come from. Canada has no single-purpose TopoJSON on a CDN the way the States does, so neighbours are worked out from shared boundary points instead of from topology.",
+    takes: [
+      "The outline of every province and territory, and which of them border which",
+      "Nothing else: the capitals, populations and official languages are compiled from Statistics Canada and Parks Canada",
+    ],
+    terms:
+      "Public domain. Natural Earth's own terms say that no permission is needed and that crediting the authors is unnecessary; they are credited here anyway, for the same reason the American map is.",
+  },
 };

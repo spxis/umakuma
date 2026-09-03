@@ -5,8 +5,9 @@ import { JSDOM } from "jsdom";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
+import JapanMap from "@/app/game/JapanMap";
 import SourceCredit from "@/app/shared/SourceCredit";
-import { SOURCE_KEY_VALUES, SOURCE_KEYS, sourcePath } from "@/lib/sourceCredits";
+import { SOURCE_CREDITS, SOURCE_KEY_VALUES, SOURCE_KEYS, sourcePath } from "@/lib/sourceCredits";
 
 import SourceReportPanel from "./SourceReportPanel";
 import SourceTabs from "./SourceTabs";
@@ -90,5 +91,39 @@ describe("the sources page", () => {
 
   it("is reachable from the footer", () => {
     expect(read("src/app/AppFooter.tsx")).toContain("SOURCES_HREF");
+  });
+});
+
+/**
+ * The map shipped with no credit of any kind, on a board drawn in three places.
+ *
+ * So the credit belongs to the component that draws the outlines rather than to
+ * the surfaces around it: a fourth surface then arrives credited instead of
+ * arriving in breach. Japan's is the one that compels it - GSI ask to be named
+ * and ask that the edit be declared - but all three carry the same line.
+ */
+describe("the map credits its outlines", () => {
+  it.each([
+    ["JP", SOURCE_KEYS.jpmap],
+    ["US", SOURCE_KEYS.usmap],
+    ["CA", SOURCE_KEYS.camap],
+  ] as const)("names the holder of the %s outlines, and says they were edited", (country, key) => {
+    const text = render(<JapanMap marks={[]} country={country} />).body.textContent ?? "";
+    expect(text).toContain(SOURCE_CREDITS[key].source);
+    expect(text).toContain("edited");
+  });
+
+  /*
+   * A map being read leads to our page about the source, the way every other
+   * credit does. A board being played does not: a link in the corner of a
+   * running game is a way to lose the run to a stray tap.
+   */
+  it("leads to the source page when the map is read, and nowhere when it is played", () => {
+    const read = render(<JapanMap marks={[]} country="JP" onRegionSelect={() => {}} />);
+    expect([...read.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toContain(sourcePath(SOURCE_KEYS.jpmap));
+
+    const played = render(<JapanMap marks={[]} country="JP" showHandles />);
+    expect(played.querySelectorAll("a")).toHaveLength(0);
+    expect(played.body.textContent).toContain(SOURCE_CREDITS.jpmap.source);
   });
 });

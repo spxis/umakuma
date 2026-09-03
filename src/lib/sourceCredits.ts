@@ -1,7 +1,7 @@
 /**
  * Where borrowed content came from, in one registry.
  *
- * Six sources are borrowed here. Tatoeba's sentences are CC BY, so their
+ * Nine sources are borrowed here. Tatoeba's sentences are CC BY, so their
  * credit is a licence condition and was there from the first page that showed
  * one. WaniKani's meanings, readings and mnemonics are the larger borrowing by
  * far and had no credit anywhere - which is backwards, whether or not their
@@ -36,6 +36,9 @@ export const SOURCE_KEYS = {
   kanjiapi: "kanjiapi",
   tatoeba: "tatoeba",
   curriculum: "curriculum",
+  jpmap: "jpmap",
+  usmap: "usmap",
+  camap: "camap",
 } as const;
 
 export type SourceKey = (typeof SOURCE_KEYS)[keyof typeof SOURCE_KEYS];
@@ -83,6 +86,34 @@ export const SOURCE_CREDITS: Record<SourceKey, SourceCredit> = {
     source: "MEXT and the Agency for Cultural Affairs",
     url: "https://www.mext.go.jp/a_menu/shotou/new-cs/youryou/syo/koku/001.htm",
   },
+  /*
+   * The one borrowing on the site whose terms we were actually breaking. GSI
+   * ask for two things and we did neither: name them, and say the shapes were
+   * edited. Ours are reprojected, simplified and Okinawa is lifted out of the
+   * sea into a box, so the edit is not a technicality.
+   */
+  [SOURCE_KEYS.jpmap]: {
+    source: "Global Map Japan (GSI)",
+    url: "https://www.gsi.go.jp/kankyochiri/gm_japan_e.html",
+    licence: "PDL 1.0",
+    licenceUrl: "https://www.gsi.go.jp/ENGLISH/page_e30286.html",
+  },
+  /*
+   * Public domain rather than licensed, so no licence is named: a work of the
+   * United States government carries no copyright to grant. us-atlas, which
+   * did the TopoJSON conversion, is ISC and is named on the page instead.
+   */
+  [SOURCE_KEYS.usmap]: {
+    source: "U.S. Census Bureau",
+    url: "https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html",
+  },
+  /* "No permission is needed to use Natural Earth. Crediting the authors is
+   * unnecessary." Credited anyway, because a reader asking where a border came
+   * from deserves the answer whether or not somebody can compel it. */
+  [SOURCE_KEYS.camap]: {
+    source: "Natural Earth",
+    url: "https://www.naturalearthdata.com",
+  },
 };
 
 /** Our own page about a source: what we hold from it, and when it came in. */
@@ -102,4 +133,9 @@ export const SOURCE_CREDIT_COPY = {
   strokes: "Stroke data from",
   radicals: "Radical breakdowns from",
   dictionary: "Dictionary data from",
+  /*
+   * "edited" is not decoration. GSI's terms ask that a reader be told the
+   * shapes were changed, and every map here is reprojected and simplified.
+   */
+  mapOutlines: "Region outlines edited from",
 } as const;

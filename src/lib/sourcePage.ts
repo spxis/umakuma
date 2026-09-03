@@ -1,5 +1,9 @@
 import "server-only";
 
+import caMeta from "@/data/maps/ca-meta.json";
+import jpMeta from "@/data/maps/jp-meta.json";
+import usMeta from "@/data/maps/us-meta.json";
+import { GEO_DATASETS, type CountryCode } from "@/lib/geoRegion";
 import { getKanjiDictionarySummary } from "@/lib/kanjiDictionary";
 import { prisma } from "@/lib/prisma";
 import { radicalIndexSummary } from "@/lib/radicalSearchServer";
@@ -36,6 +40,8 @@ const REPORT_COPY = {
   elementary: "Elementary school kanji",
   secondary: "Secondary school kanji",
   names: "Name kanji",
+  regionsDrawn: "Regions drawn",
+  borders: "Bordering pairs",
 } as const;
 
 async function wanikani(): Promise<SourceReport> {
@@ -154,6 +160,46 @@ function curriculum(): SourceReport {
   };
 }
 
+/*
+ * A map's build date, off the meta file the generator stamps. The geometry
+ * files carry a source line and no date; the meta files carry the date. Both
+ * are written by the same `pnpm map:build:all` run, so either one dates it.
+ */
+const MAP_BUILD_DATES: Record<CountryCode, string> = {
+  JP: jpMeta.updatedAt,
+  US: usMeta.updatedAt,
+  CA: caMeta.updatedAt,
+};
+
+/**
+ * What a country's board holds: how many regions, and how many borders between
+ * them.
+ *
+ * The border count is the honest measure of the second thing we take. The
+ * outlines are the visible borrowing, but the adjacency - which state touches
+ * which - is what makes a wrong answer plausible, and it comes from the same
+ * file. A pair is counted once, not twice.
+ */
+function geoMap(key: SourceKey, country: CountryCode): SourceReport {
+  const dataset = GEO_DATASETS[country];
+  const pairs = new Set(
+    dataset.regions.flatMap((region) =>
+      region.map.neighbors.map((neighbor) => [String(region.code), String(neighbor)].sort().join("~")),
+    ),
+  );
+
+  return {
+    key,
+    counts: [
+      { label: REPORT_COPY.regionsDrawn, value: dataset.totalRegions },
+      { label: REPORT_COPY.borders, value: pairs.size },
+    ],
+    lastImportedAt: MAP_BUILD_DATES[country] ?? null,
+    version: null,
+    generatedAtMs: Date.now(),
+  };
+}
+
 export async function loadSourceReport(key: SourceKey): Promise<SourceReport> {
   switch (key) {
     case SOURCE_KEYS.wanikani:
@@ -170,5 +216,11 @@ export async function loadSourceReport(key: SourceKey): Promise<SourceReport> {
       return radkfile();
     case SOURCE_KEYS.curriculum:
       return curriculum();
+    case SOURCE_KEYS.jpmap:
+      return geoMap(key, "JP");
+    case SOURCE_KEYS.usmap:
+      return geoMap(key, "US");
+    case SOURCE_KEYS.camap:
+      return geoMap(key, "CA");
   }
 }

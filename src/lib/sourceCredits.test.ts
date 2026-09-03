@@ -20,12 +20,15 @@ const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 describe("who gets credited", () => {
   it("names every borrowed source", () => {
     expect(Object.keys(SOURCE_CREDITS).sort()).toEqual([
+      "camap",
       "curriculum",
+      "jpmap",
       "kanjiapi",
       "kanjidic2",
       "kanjivg",
       "radkfile",
       "tatoeba",
+      "usmap",
       "wanikani",
     ]);
     for (const credit of Object.values(SOURCE_CREDITS)) {
@@ -59,6 +62,31 @@ describe("who gets credited", () => {
   it("names the compounds API without restating the dictionary licence", () => {
     expect(SOURCE_CREDITS.kanjiapi).not.toHaveProperty("licence");
     expect(SOURCE_CREDITS.kanjiapi.url).toContain("kanjiapi.dev");
+  });
+
+  /*
+   * The map outlines went uncredited from the day Map mode shipped, and Japan's
+   * were the one borrowing on the site actually in breach: GSI ask to be named
+   * and ask that edits be declared, and the board did neither. The prefecture
+   * shapes are reprojected, simplified and Okinawa is lifted into a box, so
+   * "edited" is a statement of fact rather than a hedge.
+   */
+  it("names GSI for the prefecture outlines, under the terms that compel it", () => {
+    expect(SOURCE_CREDITS.jpmap.source).toContain("GSI");
+    expect(SOURCE_CREDITS.jpmap.licenceUrl).toContain("gsi.go.jp");
+    expect(SOURCE_CREDIT_COPY.mapOutlines).toContain("edited");
+  });
+
+  /*
+   * A work of the US government and a public-domain dataset granted nothing,
+   * so neither may be shown as having licensed anything - the same rule that
+   * keeps WaniKani from appearing to have granted a licence.
+   */
+  it("claims no licence for the two maps that are public domain", () => {
+    expect(SOURCE_CREDITS.usmap).not.toHaveProperty("licence");
+    expect(SOURCE_CREDITS.camap).not.toHaveProperty("licence");
+    expect(SOURCE_CREDITS.usmap.url).toContain("census.gov");
+    expect(SOURCE_CREDITS.camap.url).toContain("naturalearthdata.com");
   });
 });
 

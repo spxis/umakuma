@@ -4028,11 +4028,23 @@
     "id": "map-region-directory",
     "name": "The empty panel becomes the directory",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "With nothing chosen the map's side panel is an empty box with one line in it, on a page whose other half is a map. It should carry the whole country instead: every region as a row with its name, its kanji and its shape, in columns, at a size somebody can read. A row does what the map does - hovering it lights the region, choosing it opens the panel - so the list is a second way through the same door rather than a table of contents. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.357.0",
+    "releasedAt": "2026-09-03T12:37:07Z"
+  },
+  {
+    "id": "map-source-credits",
+    "name": "Credit the map data",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.357.0",
-    "releasedAt": "2026-09-03T12:37:07Z",
-    "summary": "With nothing chosen the map's side panel is an empty box with one line in it, on a page whose other half is a map. It should carry the whole country instead: every region as a row with its name, its kanji and its shape, in columns, at a size somebody can read. A row does what the map does - hovering it lights the region, choosing it opens the panel - so the list is a second way through the same door rather than a table of contents. Requested 2026-09-03 by John."
+    "version": "0.358.0",
+    "releasedAt": "2026-09-03T12:39:36Z",
+    "summary": "The three map datasets are shown with no attribution anywhere: Global Map Japan via GSI, US Census Bureau via us-atlas, and Natural Earth. GSI's terms require both a source citation and a statement that the data was edited, and ours are reprojected, simplified and move Okinawa into an inset. Requested 2026-09-03 by John."
   }
 ]
