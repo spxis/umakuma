@@ -15,8 +15,15 @@ export const STROKE_ANIMATION_COPY = {
    */
   outline: "Outline",
   outlineTitle: "Show the whole character faintly behind",
-  /* One stroke with the finished ones taken away. */
-  solo: "Only",
+  /*
+   * One stroke with the finished ones taken away.
+   *
+   * It read "Only", which is an adverb with nothing after it - and sat beside
+   * "Outline", so the pair parsed as "outline only" rather than as two
+   * separate switches. A toggle should name what you get when it is on, and
+   * what you get is this stroke by itself.
+   */
+  solo: "This stroke",
   soloTitle: "Show just this stroke, without the ones before it",
   copyLink: "Copy link",
   linkCopied: "Copied",
@@ -115,3 +122,16 @@ export const STROKE_LOOP_STORAGE_KEY = "umakuma:stroke-loop";
 
 /** Remembered too, and off: the strokes before are the usual thing to want. */
 export const STROKE_SOLO_STORAGE_KEY = "umakuma:stroke-solo";
+
+/**
+ * How long one run of the animation takes, so the repeat can wait for it.
+ *
+ * The whole character is every stroke end to end; one stroke is one stroke.
+ * The repeat used to assume the first and refuse to run at all for the
+ * second, on the grounds that a held stroke is not moving - which was wrong,
+ * because the stroke you are looking at draws itself exactly as the others do.
+ */
+export function strokeRunMs(strokeCount: number, selectedStroke: number | null): number {
+  const drawn = selectedStroke === null ? Math.max(1, strokeCount) : 1;
+  return drawn * STROKE_MS_PER_STROKE + STROKE_LOOP_PAUSE_MS;
+}

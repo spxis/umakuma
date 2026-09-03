@@ -11,7 +11,7 @@ import {
   STROKE_ANIMATION_COPY,
   STROKE_MS_PER_STROKE,
   STROKE_SIDE_WIDTH,
-  STROKE_LOOP_PAUSE_MS,
+  strokeRunMs,
   STROKE_LOOP_STORAGE_KEY,
   STROKE_NUMBER_PX,
   STROKE_OUTLINE_STORAGE_KEY,
@@ -211,18 +211,24 @@ export default function KanjiStrokeAnimation({
   }, [data, playToken, selectedStroke, soloStroke]);
 
   /*
-   * The repeat.
+   * The repeat, in either view.
    *
-   * Only while the whole character is drawing: holding one stroke still is the
-   * opposite of watching it run, and there is no animation there to repeat.
-   * The wait is the drawing's own length plus the rest, so the timer is set
-   * once per run rather than polled.
+   * It used to refuse to run whenever a single stroke was chosen, reasoning
+   * that holding one stroke still is the opposite of watching it run and that
+   * there was no animation to repeat. There is: the chosen stroke draws itself
+   * exactly as the others do, and watching one stroke over and over is the
+   * whole reason somebody picks a stroke and turns the repeat on.
+   *
+   * The wait is that run's own length - the character's, or one stroke's -
+   * plus the rest, so the timer is set once per run rather than polled.
    */
   useEffect(() => {
-    if (!data || !looping || selectedStroke !== null) return;
+    if (!data || !looping) return;
 
-    const runMs = data.strokeCount * STROKE_MS_PER_STROKE + STROKE_LOOP_PAUSE_MS;
-    const timer = window.setTimeout(() => setPlayToken((token) => token + 1), runMs);
+    const timer = window.setTimeout(
+      () => setPlayToken((token) => token + 1),
+      strokeRunMs(data.strokeCount, selectedStroke),
+    );
     return () => window.clearTimeout(timer);
   }, [data, looping, playToken, selectedStroke]);
 

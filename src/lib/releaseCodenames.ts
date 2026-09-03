@@ -413,6 +413,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Kuuhaku kara Hajimeru", ja: "空白から始める", reading: "くうはくからはじめる", gloss: "starting from a blank row" },
   { romaji: "Kenami Zoroi", ja: "毛並み揃い", reading: "けなみぞろい", gloss: "every chip in the same coat" },
   { romaji: "Kodaina Fuchi", ja: "誇大な縁", reading: "こだいなふち", gloss: "the border that grew with the place" },
+  { romaji: "Sarani Sasu", ja: "更に指す", reading: "さらにさす", gloss: "points again, and says what it points at" },
 ];
 
 /**

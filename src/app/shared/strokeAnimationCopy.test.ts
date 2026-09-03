@@ -5,6 +5,8 @@ import { describe, expect, it } from "vitest";
 
 import {
   STROKE_ANIMATION_COPY,
+  STROKE_MS_PER_STROKE,
+  strokeRunMs,
   STROKE_SIDE_WIDTH,
   STROKE_SIZES,
   STROKE_SIZE_VALUES,
@@ -90,5 +92,28 @@ describe("the repeat", () => {
   it("remembers itself apart from the outline and the size", () => {
     expect(STROKE_LOOP_STORAGE_KEY).toBe("umakuma:stroke-loop");
     expect(new Set([STROKE_LOOP_STORAGE_KEY, STROKE_OUTLINE_STORAGE_KEY, STROKE_SIZE_STORAGE_KEY]).size).toBe(3);
+  });
+});
+
+/*
+ * The repeat used to refuse to run whenever a single stroke was chosen, on
+ * the grounds that a held stroke is not moving. It is: the chosen stroke draws
+ * itself exactly as the others do, and watching one stroke over and over is
+ * the whole reason somebody picks a stroke and turns the repeat on.
+ */
+describe("how long one run lasts", () => {
+  it("is every stroke when the whole character is drawing", () => {
+    expect(strokeRunMs(12, null)).toBe(12 * STROKE_MS_PER_STROKE + STROKE_LOOP_PAUSE_MS);
+  });
+
+  it("is one stroke when one is chosen, whichever it is", () => {
+    const once = STROKE_MS_PER_STROKE + STROKE_LOOP_PAUSE_MS;
+    expect(strokeRunMs(12, 0)).toBe(once);
+    expect(strokeRunMs(12, 8)).toBe(once);
+  });
+
+  /* A character with no strokes would otherwise loop with no wait at all. */
+  it("never waits for nothing", () => {
+    expect(strokeRunMs(0, null)).toBeGreaterThan(STROKE_LOOP_PAUSE_MS);
   });
 });

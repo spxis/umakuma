@@ -4088,11 +4088,23 @@
     "id": "map-glyph-outline",
     "name": "Region thumbnails do not match the map",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "The little shape icons in the map directory panel carry a border that makes them look poor, and they do not render the region the way the big map does - Hokkaido is the clearest case. The thumbnail path and JapanMap should draw the same shape the same way. Reported 2026-09-03 by John with screenshots.",
+    "dateIsEstimate": false,
+    "version": "0.362.0",
+    "releasedAt": "2026-09-03T13:21:39Z"
+  },
+  {
+    "id": "stroke-controls-say-and-do",
+    "name": "Replay does nothing on a single stroke",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.362.0",
-    "releasedAt": "2026-09-03T13:21:39Z",
-    "summary": "The little shape icons in the map directory panel carry a border that makes them look poor, and they do not render the region the way the big map does - Hokkaido is the clearest case. The thumbnail path and JapanMap should draw the same shape the same way. Reported 2026-09-03 by John with screenshots."
+    "version": "0.363.0",
+    "releasedAt": "2026-09-03T13:24:14Z",
+    "summary": "In one-stroke mode, pressing Replay should re-draw the stroke you are looking at. Reported 2026-09-03 by John from the stroke order card on /kanji/\u7d71 at stroke 2."
   }
 ]
