@@ -3284,5 +3284,16 @@
     "dateIsEstimate": true,
     "release": 66,
     "summary": "What is left after 0.295.0 moved the subject lookups onto the catalogue. Two costs remain in the server render and both happen before anything is drawn: the whole JlptKanji table, 2,211 rows, is loaded on every request, and the member's WaniKani assignments are fetched and waited on. Assignments are live SRS state so they must come from the API, but they do not have to block the first paint - the grid can arrive with the catalogue's own data and take the member's stages when they land. The rows are the other half: the client already pages through them, so the server does not need to hand over all 2,211 to draw the first forty. Measured before this was split out: 5.6s for the JLPT explorer against 0.1s for the grade explorer."
+  },
+  {
+    "id": "theme-preference-cookie",
+    "name": "The look you chose follows you off the profile page",
+    "area": "platform",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 67,
+    "summary": "data-theme and data-jp-font are hardcoded in layout.tsx and only ever set by DisplayPreferences, which is mounted on the profile page alone. So a member who picks Dark gets dark on their profile and light on every other page: the preference does not survive a navigation, which is worse than the flash it looks like. Both attributes want the treatment the grade explorer got in 0.300.0 - a cookie the layout reads, so the server draws the chosen theme on the first paint of every page. src/lib/displayPreferenceCookie.ts already holds readEnumCookie and writeDisplayPreferenceCookie and was written to take more than one preference. Found while fixing the grades flash; confirmed by umakuma-c0."
   }
 ]
