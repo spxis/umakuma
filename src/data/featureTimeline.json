@@ -2995,6 +2995,8 @@
     "area": "platform",
     "status": "planned",
     "kind": "feature",
+    "owner": "Claude (session cd35064c)",
+    "claimedAt": "2026-09-03T09:05:00.346Z",
     "date": "2026-09-02",
     "summary": "A number written the Japanese way - \u4e00\u5104\u4e8c\u5343\u4e07 - answers with the English number, and the reverse. Requested 2026-09-02 by John.",
     "dateIsEstimate": true,
@@ -3882,7 +3884,19 @@
     "kind": "bug",
     "date": "2026-09-03",
     "summary": "A block per stroke count wasted most of its width on the counts holding three radicals and made the grid four screens tall, so the kanji a pick produced were never on screen with the radicals that produced them. It flows left to right with the count as an inline marker, in a bounded area that scrolls within itself - how the paper dictionaries print it and how the picker in search has always drawn it. Corrected 2026-09-03 by John.",
+    "dateIsEstimate": false,
     "version": "0.334.0",
     "releasedAt": "2026-09-03T08:57:19Z"
+  },
+  {
+    "id": "kanji-header-parity",
+    "name": "The kanji page introduces itself like the others",
+    "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "A radical and a word open with an identity card - the glyph, the English name, its type and level as pills, then meanings and readings under a credit. A kanji opens with a bare line of text above the stroke order box, so the one page most people arrive on is the one that looks unfinished beside its two siblings. Parity is structural: the same card in the same slot, fed by what the kanji page already knows. Reported 2026-09-03 by John.",
+    "version": "0.336.0",
+    "releasedAt": "2026-09-03T09:09:06Z"
   }
 ]

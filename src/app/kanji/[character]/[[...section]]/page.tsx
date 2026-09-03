@@ -21,8 +21,7 @@ import { kanjiPageHref, parseSubjectSection } from "@/app/shared/subject-page/su
 import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout";
 
 import { KANJI_PAGE_COPY } from "../KanjiPage.constants";
-import { summaryLine } from "@/lib/kanjiSummaryLine";
-import SubjectPageHeading from "@/app/shared/subject-page/SubjectPageHeading";
+import SubjectIdentityBlock from "@/app/shared/subject-page/SubjectIdentityBlock";
 import { radicalPartsOf } from "@/lib/radicalSearchServer";
 
 import { KANJI_SECTION_BLOCKS, kanjiSectionsFor, type KanjiSectionView } from "../kanjiSections";
@@ -193,9 +192,31 @@ export default async function KanjiPage({ params }: Props) {
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
 
-      {/* The whole page names its character; a single section keeps the
-        * section header instead, which already says which character it is. */}
-      {section ? null : <SubjectPageHeading label={character} line={summaryLine(summary)} />}
+      {/*
+        * The same card the word and radical pages open with, in the same slot.
+        * A single section keeps the section header instead, which already says
+        * which character it is.
+        */}
+      {section ? null : (
+        <SubjectIdentityBlock
+          identity={{
+            label: character,
+            subjectType: SUBJECT_TYPES.kanji,
+            name: summary?.meaning ?? character,
+            /*
+             * The heading is the meaning already, and every meaning is listed
+             * under its own heading on the block below - so the card names the
+             * character rather than repeating the dictionary.
+             */
+            meanings: [],
+            readings: [...(summary?.on ?? []), ...(summary?.kun ?? [])],
+            wkLevel: page.wkLevel,
+            jlptLevel: page.jlptLevel,
+            /* The words on this card are the dictionary's, credited below it. */
+            credited: false,
+          }}
+        />
+      )}
 
       {section ? (
         <SubjectSectionHeader

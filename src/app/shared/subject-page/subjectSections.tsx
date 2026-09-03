@@ -57,7 +57,21 @@ export const SUBJECT_SECTION_BLOCKS: readonly SubjectSectionBlock[] = [
     id: SUBJECT_SECTIONS.meanings,
     /* What the subject is; there is no subject without it. */
     has: () => true,
-    render: (view) => <SubjectIdentityBlock subject={view.subject} label={view.label} />,
+    render: (view) => (
+      <SubjectIdentityBlock
+        identity={{
+          label: view.label,
+          subjectType: view.subject.subjectType,
+          name: view.subject.meanings[0] ?? view.label,
+          meanings: view.subject.meanings,
+          readings: view.subject.readings,
+          wkLevel: view.subject.wkLevel,
+          jlptLevel: view.subject.jlptLevel ?? null,
+          /* Everything on the card is WaniKani's, for these two. */
+          credited: true,
+        }}
+      />
+    ),
   },
   {
     id: SUBJECT_SECTIONS.mnemonics,
