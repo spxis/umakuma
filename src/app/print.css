@@ -130,6 +130,33 @@
   }
 
   /*
+   * Every surface is paper, and every word is ink.
+   *
+   * The palette above covers the site's own tokens, which is most of the page
+   * and not all of it: a panel painted with a literal Tailwind colour
+   * (`bg-amber-50`, `text-amber-700`) never asks the tokens anything, so it
+   * printed a tinted block and coloured text regardless. Rather than chase
+   * each one, everything is white and black by default and the exceptions ask.
+   *
+   * The tracing sheet is the exception, and the only one: its faint grey
+   * characters are the thing being traced, so forcing them to black would
+   * hand a child a page of solid kanji to write on top of. It marks itself
+   * `data-print="mono"` and keeps the greys it chose.
+   */
+  *,
+  *::before,
+  *::after {
+    background-color: #fff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  *:not([data-print="mono"]):not([data-print="mono"] *) {
+    color: #000 !important;
+    border-color: #9a9a9a !important;
+  }
+
+  /*
    * Site furniture off the page. The footer sat under twenty kanji with a
    * version number and a release codename, which is a web page's business and
    * not a worksheet's.

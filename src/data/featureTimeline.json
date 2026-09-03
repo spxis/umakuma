@@ -3714,6 +3714,7 @@
     "kind": "bug",
     "date": "2026-09-02",
     "summary": "Dark mode followed the page onto paper: --foreground is near-white there, so a member reading in dark mode printed almost nothing onto white paper, having first spent the ink laying a navy wash across it. Two failures, and the second hid the first - the tokens are one override, the wash is four gradients on body that the dark theme replaces on its own selector, which a bare html,body cannot outrank. The print rules move to src/app/print.css and force a monochrome palette with !important, since an @import at the top of globals.css loses every tie on source order. Filled brand pills print as outlines rather than solid black rectangles. Found 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.321.0",
     "releasedAt": "2026-09-03T05:59:25Z"
   },
@@ -3721,12 +3722,23 @@
     "id": "stroke-outline-overlay",
     "name": "See the whole character behind one stroke",
     "area": "study",
-    "kind": "feature",
     "status": "shipped",
+    "kind": "feature",
     "date": "2026-09-02",
-    "dateIsEstimate": false,
     "summary": "Studying one stroke drew that stroke and the ones before it and nothing else, so a first stroke was a single mark in an empty box with no sense of where in the character it belonged. The animation already draws the finished character faintly underneath and deliberately drops it the moment a stroke is picked, because an outline of everything is also what makes not-drawn-yet look drawn - so this is a mode rather than a change of default. Outline sits beside Replay and Numbers, appears only while a stroke is picked since the full drawing already has its outline, is off unless asked for, and is remembered per device. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.322.0",
     "releasedAt": "2026-09-03T06:15:06Z"
+  },
+  {
+    "id": "print-white-only",
+    "name": "Print is white paper and black ink",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-02",
+    "summary": "The palette override covered the site's own tokens, which is most of a page and not all of it: a panel painted with a literal Tailwind colour never asks the tokens anything, so the amber suggestion box printed a tinted block and coloured text regardless. The default inverts - every surface white, every word black - so a colour has to be opted into rather than chased down after somebody notices it on paper. The tracing sheet keeps its greys, since its faint characters are the thing being traced. Requested 2026-09-02 by John.",
+    "version": "0.323.0",
+    "releasedAt": "2026-09-03T06:18:30Z"
   }
 ]

@@ -33,6 +33,28 @@ const printBlock = printCss.slice(printCss.indexOf("@media print"));
  * The computed styles said white while the PDF came out navy.
  */
 describe("printing is never themed", () => {
+  /*
+   * The tokens cover the site's own colours and not a panel painted with a
+   * literal Tailwind value, which asks them nothing. Everything is white and
+   * black by default instead, so a colour has to be opted into rather than
+   * chased down after somebody notices it on paper.
+   */
+  it("makes every surface white and every word black", () => {
+    expect(printBlock).toMatch(/\*,\s*\n\s*\*::before,\s*\n\s*\*::after\s*\{/);
+    const blanket = printBlock.slice(printBlock.indexOf("*::after"));
+    expect(blanket).toMatch(/background-color:\s*#fff\s*!important/);
+    expect(blanket).toMatch(/color:\s*#000\s*!important/);
+  });
+
+  /*
+   * The one exception, and it has to be one: the sheet's faint characters are
+   * the thing being traced, so black would hand a child a page of solid kanji
+   * to write on top of.
+   */
+  it("leaves the tracing sheet its own greys", () => {
+    expect(printBlock).toContain(':not([data-print="mono"])');
+  });
+
   it("redefines the palette for print, including the dark theme's", () => {
     /* Both selectors: the dark block outranks a bare `:root` on its own. */
     expect(printBlock).toMatch(/:root,\s*\n\s*:root\[data-theme="dark"\]\s*\{/);
