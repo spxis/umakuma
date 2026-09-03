@@ -231,5 +231,7 @@ export const SUBJECT_FILER_COPY = {
   addTo: (name: string) => `Add to ${name}`,
   removeFrom: (name: string) => `Remove from ${name}`,
   noLists: "No saved lists yet",
+  /* The viewer's strip, which offers the lists and nothing else. */
+  keepOn: "Keep on",
   failed: "Could not save that.",
 } as const;

@@ -30,14 +30,29 @@ export type FilerTags = { favorite: boolean; trouble: boolean; burned: boolean }
 
 export const NO_TAGS: FilerTags = { favorite: false, trouble: false, burned: false };
 
+/**
+ * WaniKani's id for the subject, or null where there is not really one.
+ *
+ * Several surfaces give an item WaniKani never taught a negative stand-in id,
+ * because React needs a stable key and a selection needs something to hold -
+ * `listPageItems` numbers them -1, -2, -3 down the page. Those are page
+ * bookkeeping, not subject ids, and sending one on means asking the API about
+ * subject -1: the tag route answers 400, and the list route rejects the whole
+ * PATCH, so a single home-made item on a list would stop *every* filing change
+ * to that list from saving.
+ */
+export function catalogId(hit: FilerHit): number | null {
+  return typeof hit.subjectId === "number" && hit.subjectId > 0 ? hit.subjectId : null;
+}
+
 /** Whether the row can be tagged as trouble or a favourite. */
 export function canTag(hit: FilerHit): boolean {
-  return typeof hit.subjectId === "number";
+  return catalogId(hit) !== null;
 }
 
 /** The row as a list item, or null where it has nothing to be named by. */
 export function itemOf(hit: FilerHit): StudyListItemRef | null {
-  const subjectId = hit.subjectId ?? null;
+  const subjectId = catalogId(hit);
   if (hit.subjectType === SUBJECT_TYPES.kanji) return { kind: LIST_ITEM_KINDS.kanji, key: hit.glyph, subjectId };
   if (hit.subjectType === SUBJECT_TYPES.vocabulary) return { kind: LIST_ITEM_KINDS.vocabulary, key: hit.glyph, subjectId };
   /* A radical is named by its slug, since a drawn one has no characters. */
@@ -67,7 +82,11 @@ export function itemsAfterToggle(list: FilerList, hit: FilerHit): StudyListItemR
 
 /** The subject ids worth asking the tag store about, once each. */
 export function taggableIds(hits: FilerHit[]): number[] {
-  return [...new Set(hits.flatMap((hit) => (typeof hit.subjectId === "number" ? [hit.subjectId] : [])))];
+  /* A stand-in id would make the tag route answer 400 for the whole batch. */
+  return [...new Set(hits.flatMap((hit) => {
+    const id = catalogId(hit);
+    return id === null ? [] : [id];
+  }))];
 }
 
 /**

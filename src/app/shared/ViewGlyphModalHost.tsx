@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { newsGlyphButtonClass } from "@/app/news/newsGlyphBoxStyle";
 import ModalShell from "@/app/shared/ModalShell";
+import ViewGlyphFilingRow from "@/app/shared/ViewGlyphFilingRow";
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 import { useViewGlyphWindowBindings } from "@/app/shared/useViewGlyphWindowBindings";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
@@ -373,6 +374,16 @@ export default function ViewGlyphModalHost() {
           </button>
         </div>
       </div>
+
+      {/*
+        * Under the title, above the character.
+        *
+        * Keyed by subject so the strip belongs to what is on screen: stepping
+        * to the next kanji with the arrows must not leave the previous one's
+        * chips lit, which is exactly the sort of thing a reader only notices
+        * after filing the wrong character.
+        */}
+      {accountId ? <ViewGlyphFilingRow key={item.subjectId} accountId={accountId} subject={item} /> : null}
 
       {selector.length > 0 ? (
         <div className="flex flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">

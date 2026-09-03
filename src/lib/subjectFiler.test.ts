@@ -18,6 +18,11 @@ const jlptWater: FilerHit = { subjectType: SUBJECT_TYPES.kanji, glyph: "水", sl
 const wednesday: FilerHit = { subjectType: SUBJECT_TYPES.vocabulary, glyph: "水曜日", slug: "水曜日", subjectId: 2600 };
 const leaf: FilerHit = { subjectType: SUBJECT_TYPES.radical, glyph: "leaf", slug: "leaf", subjectId: 8769 };
 const unnamed: FilerHit = { subjectType: "prefecture", glyph: "東京", slug: null };
+/*
+ * A list item WaniKani never taught. Several surfaces number these -1, -2, -3
+ * down the page so React has a key and a selection has something to hold.
+ */
+const homemade: FilerHit = { subjectType: SUBJECT_TYPES.kanji, glyph: "鬱", slug: null, subjectId: -1 };
 
 const week: FilerList = { id: "l1", name: "Week 1", items: [{ kind: LIST_ITEM_KINDS.kanji, key: "日" }, { kind: LIST_ITEM_KINDS.kanji, key: "月" }] };
 
@@ -41,6 +46,32 @@ describe("what a row may be filed as", () => {
     expect(canList(jlptWater)).toBe(true);
     expect(canList(leaf)).toBe(true);
     expect(canList(unnamed)).toBe(false);
+  });
+});
+
+/*
+ * The stand-in ids are page bookkeeping, not subject ids. Sent on, the tag
+ * route answers 400 for the whole batch and the list route rejects the entire
+ * PATCH - so one home-made item on a list would stop every filing change to
+ * that list from saving, on every surface, not just the one that added it.
+ */
+describe("a stand-in id is not a subject id", () => {
+  it("cannot be tagged", () => {
+    expect(canTag(homemade)).toBe(false);
+  });
+
+  it("is still filed on a list, named by its characters", () => {
+    expect(canList(homemade)).toBe(true);
+    expect(itemOf(homemade)).toEqual({ kind: LIST_ITEM_KINDS.kanji, key: "鬱", subjectId: null });
+  });
+
+  it("is never asked about in the tag store", () => {
+    expect(taggableIds([water, homemade])).toEqual([479]);
+  });
+
+  /* Zero is the other value that is not an id, and arrives the same way. */
+  it("treats zero the same as a negative", () => {
+    expect(canTag({ ...homemade, subjectId: 0 })).toBe(false);
   });
 });
 

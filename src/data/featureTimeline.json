@@ -2980,16 +2980,14 @@
   },
   {
     "id": "add-to-lists-everywhere",
-    "name": "Add to lists wherever a kanji is shown",
+    "name": "Add to lists from the glyph viewer",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T13:24:19.462Z",
     "date": "2026-09-02",
-    "summary": "The filing column exists only on the search surfaces. A member who searches a kanji, opens its page and wants it on a list has no way to do it. Every page and panel that shows a kanji, word or radical - the subject pages, the glyph viewer, the explorers - offers the same tag marks and list chips. Requested 2026-09-02 by John.",
-    "dateIsEstimate": true,
-    "release": 42
+    "summary": "The viewer is where a reader decides a character is worth keeping - they have opened it, read the meaning, seen the words it appears in - and it was the one surface that could not act on that. The saved lists now sit under its title as a rail that scrolls, with the lists the character is already on first, so the strip costs the same space whether somebody keeps two lists or forty. Trouble and favourite stay inside the glyph, where they already were. The explorer grids are add-to-lists-explorers.",
+    "version": "0.310.0",
+    "releasedAt": "2026-09-03T03:55:09Z"
   },
   {
     "id": "search-japanese-numbers",
@@ -3644,7 +3642,30 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "The kanji page gained an address for each of its parts; the radical and word pages, which are built from the same blocks, kept answering only as a whole. Both now take the same section segment - /radicals/leaf/related, /vocabulary/\u6c34\u6ce1/examples - from one shared registry and one shared address module, so the three public subject pages cannot drift into three different answers to the same question. A section a subject has nothing under is a 404, and every section page names the subject's own page as canonical. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.309.0",
     "releasedAt": "2026-09-03T03:51:00Z"
+  },
+  {
+    "id": "glyph-history-standin-id",
+    "name": "The viewer asks about subject -1",
+    "area": "study",
+    "status": "planned",
+    "kind": "bug",
+    "date": "2026-09-02",
+    "summary": "Surfaces that show items WaniKani never taught give them a negative stand-in id, so React has a key and a selection has something to hold - listPageItems numbers them -1, -2, -3 down the page. The glyph viewer passes that straight to /api/study/<id>/subjects/<subjectId>/history, which answers 400 twice per open. Harmless today (the panel shows nothing either way) but it is a failed request on every open of a home-made list item, and the same class of mistake that stopped filing from saving. subjectFiler.catalogId is the pattern: a stand-in is not a subject id. Found 2026-09-02.",
+    "dateIsEstimate": true,
+    "release": 69
+  },
+  {
+    "id": "add-to-lists-explorers",
+    "name": "Add to lists from the explorers",
+    "area": "study",
+    "status": "planned",
+    "kind": "feature",
+    "date": "2026-09-02",
+    "summary": "The filing marks now reach search, the subject pages and the glyph viewer, but not the explorer grids themselves - JLPT, grades, level and study each draw their own cards and rows. SubjectCards has renderUnder and SubjectRows has renderAfterRow, so this is passing slots rather than changing the shared pair. Split out of add-to-lists-everywhere 2026-09-02.",
+    "dateIsEstimate": true,
+    "release": 70
   }
 ]
