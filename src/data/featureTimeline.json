@@ -3596,5 +3596,29 @@
     "summary": "Practice, Match and the rest take a saved list as their pool, and only the player's own. A list a friend shares is something to read and now something to print, but not something to play. Needs a column on GameRun to remember which list a run drilled, so it is its own release rather than a rider on the worksheets. Split out of list-practice-from-shared 2026-09-02.",
     "dateIsEstimate": true,
     "release": 68
+  },
+  {
+    "id": "stroke-pick-by-number",
+    "name": "One stroke at a time",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 69,
+    "summary": "The stroke order panel plays the whole character and nothing else: there is no way to hold a single stroke still and look at it, which is what somebody copying the character actually needs. A row of numbers opens under the header - closed by default, so the panel stays as quiet as it is now - and picking a number draws that stroke alone: the strokes before it in grey, the strokes after it blank, the chosen one in colour and animated so the pen direction is visible. Requested 2026-09-02 by John.",
+    "owner": "Claude (session cd35064c)",
+    "claimedAt": "2026-09-03T01:03:43.459Z"
+  },
+  {
+    "id": "kanji-section-paths",
+    "name": "A page for each part of a character",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 70,
+    "summary": "The kanji page shows everything about a character at one address, so there is no way to hand somebody the stroke order and nothing else. Each panel gets a path of its own under the character - /kanji/<character>/stroke shows the stroke order alone, and the other panels follow the same shape - built from one registry so a section is defined once and rendered identically whether it is on the whole page or on its own. An unknown segment is a 404 rather than a silent fall back to the whole page. The same shape then covers radicals and words, and the share control on each panel points at that panel's own address. Requested 2026-09-02 by John."
   }
 ]
