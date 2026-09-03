@@ -152,7 +152,7 @@ export default function AppTopMenuRow({
         * reaching for Learn, and the links are one Escape away.
         */}
       <nav
-        className={`admin-tab-scroll min-w-0 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-widest text-foreground/60 sm:hidden ${
+        className={`admin-tab-scroll min-w-0 flex-1 items-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-[10px] font-semibold uppercase tracking-widest text-foreground/60 lg:hidden ${
           searchExpanded ? "hidden" : "flex"
         }`}
       >
@@ -171,12 +171,19 @@ export default function AppTopMenuRow({
         ))}
       </nav>
       <nav
-        className={`hidden flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60 ${
-          searchExpanded ? "" : "sm:flex"
+        /*
+         * One line, always. Wrapping put LEADERBOARD | STUDY on one row and
+         * PROGRESS | READ on the next the moment the codename appeared beside
+         * it at 1024px, and a header that changes height as you resize moves
+         * the page under the reader. It scrolls instead, the way the phone row
+         * beneath it already did.
+         */
+        className={`admin-tab-scroll hidden min-w-0 flex-1 flex-nowrap items-center gap-x-3 overflow-x-auto whitespace-nowrap text-xs font-semibold uppercase tracking-[0.14em] text-foreground/60 ${
+          searchExpanded ? "" : "lg:flex"
         }`}
       >
         {links.map((link, index) => (
-          <span key={`${link.label}-${link.href}`} className="inline-flex items-center gap-x-3">
+          <span key={`${link.label}-${link.href}`} className="inline-flex shrink-0 items-center gap-x-3">
             <Link
               href={link.href}
               onClick={(event) => {

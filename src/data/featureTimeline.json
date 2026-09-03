@@ -3896,6 +3896,7 @@
     "kind": "bug",
     "date": "2026-09-03",
     "summary": "A radical and a word open with an identity card - the glyph, the English name, its type and level as pills, then meanings and readings under a credit. A kanji opens with a bare line of text above the stroke order box, so the one page most people arrive on is the one that looks unfinished beside its two siblings. Parity is structural: the same card in the same slot, fed by what the kanji page already knows. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
     "version": "0.336.0",
     "releasedAt": "2026-09-03T09:09:06Z"
   },
@@ -3903,12 +3904,23 @@
     "id": "one-sheet-for-all",
     "name": "One sheet for a list and for a single character",
     "area": "study",
-    "kind": "bug",
     "status": "shipped",
+    "kind": "bug",
     "date": "2026-09-03",
-    "dateIsEstimate": false,
     "summary": "The one-character practice sheet was a second implementation beside the practice sheet the lists print - its own page, its own component, its own row grammar (faint model leading each row, no heading line) and none of the options, so the two looked like two products. There is one sheet now: TracingSheet takes the characters it is given and a Fill the page option shares the page's rows between them - one kanji takes the whole page, two take half each - on top of whatever rows each needs of its own, the stroke chart in Stroke order mode or the trace row in Trace mode. The character page's Worksheet links into the member's practice sheet with that character picked, Stroke order on and the page filled, so it has the same header, the same Practise, Sheet and Options rows, the same square sizes and the same Print. /kanji/X/sheet, KanjiPracticeSheet and its copy are deleted. The faint-first-row grammar of 0.333.0 goes with them: the shared row is the workbook's - the finished character to copy, faint repeats to trace, blanks to write - and a variant belongs as an option on this sheet, not a fork. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
     "version": "0.337.0",
     "releasedAt": "2026-09-03T09:22:55Z"
+  },
+  {
+    "id": "header-never-wraps",
+    "name": "The header holds one line, whatever the width",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "Between about 1000 and 1280 pixels the top row broke after LISTS and put PROGRESS and READ on a second line, and the section row stacked its pages into a column - so the header changed height as the window moved and the page below it jumped. Both rows now hold one line and scroll instead, the way the phone row already did, and the release codename waits for 1280 rather than taking the room STROKES needed. Reported 2026-09-03 by John, who had asked for this before.",
+    "version": "0.338.0",
+    "releasedAt": "2026-09-03T09:25:12Z"
   }
 ]

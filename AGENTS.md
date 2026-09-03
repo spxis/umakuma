@@ -140,6 +140,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 ## UI conventions
 
 - Distinguish loading from empty (see `docs/DRY_LEARNINGS.md` #2).
+- **The header's two rows never wrap.** The top row and the section row under it each hold one line at every width and scroll when they run out of room - `flex-nowrap overflow-x-auto whitespace-nowrap admin-tab-scroll`, with `shrink-0` on each item. A header that grows a second line as the window narrows moves the whole page under the reader, and it happens in a band of widths nobody has open while they are building. `appHeaderRows.test.ts` fails if `flex-wrap` returns to either row. Anything else competing for that row - the release codename, for one - gives way to the pages first.
 - User-facing copy must follow `BRAND_CORE.md` / `BRAND.md` voice and the Canadian spelling rule above.
 - Keep primary glyph sizing identical across explorer lists, Review modals, and View Kanji/Radical/Vocabulary details by using the shared `glyphTextSizeClass` helper; do not add branch-specific responsive clamp sizes.
 - Place trouble at the glyph's bottom-left and favourite at its bottom-right in explorer cards, Review modals, and View Kanji/Radical/Vocabulary details; do not put these controls in modal navigation or title chip rows.

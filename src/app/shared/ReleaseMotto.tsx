@@ -29,7 +29,13 @@ export default function ReleaseMotto({ className = "" }: { className?: string })
   return (
     <Link
       href={RELEASES_HREF}
-      className={`hidden min-w-0 rounded-md transition hover:opacity-70 lg:block ${className}`.trim()}
+      /*
+       * Held back until there is room for the section's pages first.
+       * Between 1024 and 1280 the codename took enough of the second row to
+       * push STROKES off the end of it, and a page you cannot reach costs
+       * more than a name you cannot read.
+       */
+      className={`hidden min-w-0 rounded-md transition hover:opacity-70 xl:block ${className}`.trim()}
     >
       <CodenameText codename={codename} layout="stacked" />
     </Link>
