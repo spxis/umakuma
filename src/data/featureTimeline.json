@@ -3584,7 +3584,9 @@
     "date": "2026-09-02",
     "summary": "data-theme and data-jp-font are hardcoded in layout.tsx and only ever set by DisplayPreferences, which is mounted on the profile page alone. So a member who picks Dark gets dark on their profile and light on every other page: the preference does not survive a navigation, which is worse than the flash it looks like. Both attributes want the treatment the grade explorer got in 0.300.0 - a cookie the layout reads, so the server draws the chosen theme on the first paint of every page. src/lib/displayPreferenceCookie.ts already holds readEnumCookie and writeDisplayPreferenceCookie and was written to take more than one preference. Found while fixing the grades flash; confirmed by umakuma-c0.",
     "dateIsEstimate": true,
-    "release": 67
+    "release": 67,
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T04:44:17.252Z"
   },
   {
     "id": "list-game-from-shared",
@@ -3654,7 +3656,9 @@
     "date": "2026-09-02",
     "summary": "Surfaces that show items WaniKani never taught give them a negative stand-in id, so React has a key and a selection has something to hold - listPageItems numbers them -1, -2, -3 down the page. The glyph viewer passes that straight to /api/study/<id>/subjects/<subjectId>/history, which answers 400 twice per open. Harmless today (the panel shows nothing either way) but it is a failed request on every open of a home-made list item, and the same class of mistake that stopped filing from saving. subjectFiler.catalogId is the pattern: a stand-in is not a subject id. Found 2026-09-02.",
     "dateIsEstimate": true,
-    "release": 69
+    "release": 69,
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T04:44:16.577Z"
   },
   {
     "id": "add-to-lists-explorers",
@@ -3676,7 +3680,9 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 71,
-    "summary": "useStudyModeState in src/app/users/[nickname]/useStudyModeState.ts is hardwired on and there is no way out of it. Its useState initialiser returns true and ignores the initialStudyMode the page computed from the query; syncFromUrlAndStorage answers studyMode=off and studyMode=0 with setStudyMode(true), so the off switch turns it on; a stored value of any kind, including the '0' the hook itself writes, also becomes setStudyMode(true); and writeToUrl hardcodes nextStudyMode = 'on', so the address is rewritten to studyMode=on whatever the member chose. The effect that persists the choice does write '1' or '0' correctly, which is what makes it look like a preference that is being ignored rather than one that was never read. The visible result is the JLPT explorer always hiding English: meanings and readings show as an ellipsis and the compounds panel never appears, because all of them are gated on !studyMode. Found on 2026-09-02 while checking the explorer's paint."
+    "summary": "useStudyModeState in src/app/users/[nickname]/useStudyModeState.ts is hardwired on and there is no way out of it. Its useState initialiser returns true and ignores the initialStudyMode the page computed from the query; syncFromUrlAndStorage answers studyMode=off and studyMode=0 with setStudyMode(true), so the off switch turns it on; a stored value of any kind, including the '0' the hook itself writes, also becomes setStudyMode(true); and writeToUrl hardcodes nextStudyMode = 'on', so the address is rewritten to studyMode=on whatever the member chose. The effect that persists the choice does write '1' or '0' correctly, which is what makes it look like a preference that is being ignored rather than one that was never read. The visible result is the JLPT explorer always hiding English: meanings and readings show as an ellipsis and the compounds panel never appears, because all of them are gated on !studyMode. Found on 2026-09-02 while checking the explorer's paint.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T04:44:15.892Z"
   },
   {
     "id": "jlpt-stats-account-id",
@@ -3687,6 +3693,8 @@
     "date": "2026-09-02",
     "dateIsEstimate": true,
     "release": 72,
-    "summary": "JlptExplorerContent reads the account id out of window.location with getAccountIdFromUrl, whose own comment calls it a fragile fallback. The first path segment after /users/ is the member's nickname or slug, not their account id, so every stats request goes to /api/study/johnmorrisdotca/subjects/464/history and comes back 404. Opening any kanji in the JLPT explorer logs a failed request, and Show review stats can never fill in. The account id is already on the page - JlptExplorer takes accountId as a prop and uses it for its own fetches - so this is a prop that was not threaded one level further rather than anything unknown. Found on 2026-09-02 while checking the explorer's paint."
+    "summary": "JlptExplorerContent reads the account id out of window.location with getAccountIdFromUrl, whose own comment calls it a fragile fallback. The first path segment after /users/ is the member's nickname or slug, not their account id, so every stats request goes to /api/study/johnmorrisdotca/subjects/464/history and comes back 404. Opening any kanji in the JLPT explorer logs a failed request, and Show review stats can never fill in. The account id is already on the page - JlptExplorer takes accountId as a prop and uses it for its own fetches - so this is a prop that was not threaded one level further rather than anything unknown. Found on 2026-09-02 while checking the explorer's paint.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T04:44:15.209Z"
   }
 ]
