@@ -2852,6 +2852,7 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "Lists, like all data on the site, are sortable, reversible, pageable, scrollable, searchable, cached and fast. The Lists page and the list viewer get search, sort by name, size and last change, and paging once a list outgrows a screen; the same standard applies to every surface that lists data. Stated 2026-09-01 by John as a standing rule.",
+    "dateIsEstimate": false,
     "version": "0.306.0",
     "releasedAt": "2026-09-03T02:13:50Z"
   },
@@ -3546,12 +3547,12 @@
     "area": "admin",
     "status": "planned",
     "kind": "feature",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T02:20:36.630Z",
     "date": "2026-09-02",
     "summary": "The release timeline carries four statuses - shipped, planned, backlogged and killed - and the admin page shows three tabs, because backlogged and killed are grouped under one heading called Shelved. Give killed its own tab as Cancelled, rename Shelved to Backlog now that it means only one thing, and add two states that do not exist: in progress, and a wish list. In progress overlaps with the claim the board already records (owner and claimedAt), so decide whether it is a real status or is derived from a claim rather than having two ways to say it. The wish list is the one with a constraint: featureTimeline.json is a file in the repository, so an admin typing a wish into the website cannot write to it the way an agent running pnpm backlog can. That needs a table the site can write and the timeline view can merge in, with a way to promote a wish into a real planned entry. Requested 2026-09-02 by John.",
     "dateIsEstimate": true,
-    "release": 65,
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T02:20:36.630Z"
+    "release": 65
   },
   {
     "id": "leaderboard-jlpt-catalog",
@@ -3614,12 +3615,12 @@
     "id": "kanji-section-paths",
     "name": "A page for each part of a character",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "The kanji page shows everything about a character at one address, so there is no way to hand somebody the stroke order and nothing else. Each panel gets a path of its own under the character - /kanji/<character>/stroke shows the stroke order alone, and the other panels follow the same shape - built from one registry so a section is defined once and rendered identically whether it is on the whole page or on its own. An unknown segment is a 404 rather than a silent fall back to the whole page. The same shape then covers radicals and words, and the share control on each panel points at that panel's own address. Requested 2026-09-02 by John.",
-    "dateIsEstimate": true,
-    "release": 70
+    "version": "0.307.0",
+    "releasedAt": "2026-09-03T02:28:55Z"
   },
   {
     "id": "list-print-link-one-place",

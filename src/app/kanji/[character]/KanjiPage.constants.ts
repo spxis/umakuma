@@ -13,6 +13,21 @@ export const KANJI_PAGE_COPY = {
   heisig: "Heisig",
   dictionaryCredit: "Dictionary data from",
   examples: "In use",
+  /*
+   * The parts of a character, each of which has an address of its own. The
+   * titles are what a section page is called and what a shared link previews
+   * as, so they name the part rather than the page.
+   */
+  sectionTitles: {
+    stroke: "Stroke order",
+    meanings: "Meanings and readings",
+    words: "Words",
+    related: "Related characters",
+    mnemonics: "Mnemonics",
+    examples: "In use",
+  },
+  sectionBack: (character: string) => `Everything about ${character}`,
+  otherSections: "Also on this character",
   sentenceCredit: "Example sentences from",
   backHome: "UmaKuma",
 } as const;

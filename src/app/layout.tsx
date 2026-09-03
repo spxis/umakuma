@@ -5,8 +5,11 @@ import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
+import { SITE_URL } from "@/lib/siteOrigin";
 
 export const metadata: Metadata = {
+  /* What a canonical link and a preview image are resolved against. */
+  metadataBase: SITE_URL,
   title: "UmaKuma",
   description: "Family WaniKani leaderboard",
 };

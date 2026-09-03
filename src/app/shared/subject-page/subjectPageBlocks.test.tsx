@@ -115,10 +115,19 @@ describe("a group of related subjects", () => {
  */
 describe("the pages that share the blocks", () => {
   it("composes the kanji page from the blocks", () => {
-    const page = read("src/app/kanji/[character]/page.tsx");
-    for (const block of ["UsedInWordsBlock", "RelatedGroupBlock", "MnemonicsBlock", "loadKanjiPage"]) {
-      expect(page).toContain(block);
+    /*
+     * The blocks are declared in one registry now, because each of them is
+     * also a page of its own - `/kanji/魔/words` - and the whole page and the
+     * part have to draw the same thing.
+     */
+    const sections = read("src/app/kanji/[character]/kanjiSections.tsx");
+    for (const block of ["UsedInWordsBlock", "RelatedGroupBlock", "MnemonicsBlock"]) {
+      expect(sections).toContain(block);
     }
+
+    const page = read("src/app/kanji/[character]/[[...section]]/page.tsx");
+    expect(page).toContain("loadKanjiPage");
+    expect(page).toContain("kanjiSectionsFor");
   });
 
   it("composes the word and radical panel from the same blocks", () => {

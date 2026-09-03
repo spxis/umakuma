@@ -227,6 +227,32 @@ test("a shared kanji page lists the words it appears in", async ({ browser, base
   });
 });
 
+test("one part of a kanji page opens at its own address", async ({ browser, baseURL }) => {
+  /*
+   * The reason the address exists: sending somebody the compounds of 水
+   * without the rest of the page. The section is there, the stroke order is
+   * not, and the other parts this character has are one link away.
+   */
+  const url = `${baseURL}/kanji/${encodeURIComponent("\u6c34")}/words`;
+  await assertPageLoads(browser, url, async (page) => {
+    await expect(page.getByRole("heading", { name: "Used in words", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Replay" })).toHaveCount(0);
+
+    await page.getByRole("link", { name: "Stroke order", exact: true }).click();
+    await expect(page).toHaveURL(/\/kanji\/.+\/stroke$/);
+    await expect(page.getByRole("button", { name: "Show one stroke" })).toBeVisible();
+  });
+});
+
+test("a segment that names no part of a character is not a page", async ({ browser, baseURL }) => {
+  /* A broken link that renders something looks like a working one. */
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const response = await page.goto(`${baseURL}/kanji/${encodeURIComponent("\u6c34")}/nonsense`);
+  expect(response?.status()).toBe(404);
+  await context.close();
+});
+
 test("the sources page lists every source and opens one", async ({ browser, baseURL }) => {
   /* Every credit on the site leads here first; the page must answer for all of them. */
   await assertPageLoads(browser, `${baseURL}/sources`, async (page) => {
