@@ -9,8 +9,13 @@
  * for: N5 is complete at level 10, N4 at 20, N3 at 35, N2 at 50, and the rest
  * of joyo by 100.
  *
- * Vocabulary rides along: a word is never unlocked before every kanji in it,
- * and is held back beyond that when a level is already carrying its share.
+ * Radicals come first: each is introduced at the level of the earliest kanji
+ * built from it, so no kanji ever arrives carrying a piece never seen. They are
+ * RADKFILE's 253, the set behind dictionary radical lookup — not WaniKani's 491
+ * invented ones.
+ *
+ * Vocabulary rides along behind: a word is never unlocked before every kanji in
+ * it, and is held back beyond that when a level is already carrying its share.
  *
  * Regenerate with `pnpm build:kanji-ladder` after a catalog export.
  */
@@ -60,6 +65,18 @@ export function kanjiLadderLevel(level: number): KanjiLadderLevel | null {
 /** Where a kanji sits on the ladder, or null when it is outside the joyo set. */
 export function kanjiPlacement(kanji: string): KanjiLadderPlacement | null {
   return ladder.kanjiLevel[kanji] ?? null;
+}
+
+/** The ladder level that introduces a RADKFILE radical. */
+export function radicalLevel(radical: string): number | null {
+  return ladder.radicalLevel[radical] ?? null;
+}
+
+/** Every radical introduced at `level`, for the kanji it teaches. */
+export function radicalsAtLevel(level: number): string[] {
+  return Object.entries(ladder.radicalLevel)
+    .filter(([, at]) => at === level)
+    .map(([radical]) => radical);
 }
 
 /** The ladder level that teaches a WaniKani vocabulary subject, if we teach it. */

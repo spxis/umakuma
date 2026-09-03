@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T17:07:47.281Z",
+  "generatedAt": "2026-09-03T17:22:08.466Z",
   "levels": 100,
   "totalKanji": 2235,
   "source": {
@@ -33,6 +33,249 @@
       "kanji": 1256
     }
   ],
+  "radicalLevel": {
+    "｜": 2,
+    "ノ": 1,
+    "一": 1,
+    "乙": 1,
+    "丶": 7,
+    "亅": 8,
+    "ハ": 2,
+    "マ": 16,
+    "ユ": 23,
+    "化": 7,
+    "刈": 9,
+    "九": 1,
+    "乞": 6,
+    "十": 2,
+    "人": 1,
+    "刀": 12,
+    "二": 1,
+    "入": 1,
+    "乃": 55,
+    "卜": 2,
+    "又": 6,
+    "力": 8,
+    "个": 6,
+    "亠": 4,
+    "儿": 5,
+    "冂": 4,
+    "冖": 8,
+    "冫": 17,
+    "几": 16,
+    "凵": 5,
+    "勹": 13,
+    "匕": 1,
+    "匚": 17,
+    "卩": 17,
+    "厂": 20,
+    "厶": 12,
+    "并": 6,
+    "ヨ": 17,
+    "干": 6,
+    "久": 45,
+    "及": 31,
+    "弓": 14,
+    "巾": 15,
+    "口": 4,
+    "工": 5,
+    "込": 15,
+    "山": 3,
+    "士": 10,
+    "子": 3,
+    "汁": 16,
+    "女": 3,
+    "小": 3,
+    "尚": 8,
+    "寸": 10,
+    "川": 3,
+    "大": 2,
+    "土": 3,
+    "犯": 27,
+    "邦": 23,
+    "亡": 22,
+    "忙": 26,
+    "也": 15,
+    "夕": 7,
+    "囗": 5,
+    "夂": 9,
+    "宀": 12,
+    "尢": 49,
+    "尸": 17,
+    "屮": 44,
+    "巛": 53,
+    "已": 18,
+    "幺": 9,
+    "广": 12,
+    "廴": 20,
+    "廾": 17,
+    "弋": 14,
+    "彑": 35,
+    "彡": 21,
+    "彳": 8,
+    "扎": 18,
+    "艾": 13,
+    "阡": 18,
+    "井": 26,
+    "王": 9,
+    "火": 5,
+    "牛": 12,
+    "斤": 15,
+    "欠": 19,
+    "月": 4,
+    "犬": 11,
+    "元": 13,
+    "戸": 23,
+    "五": 4,
+    "支": 22,
+    "止": 11,
+    "氏": 16,
+    "手": 11,
+    "心": 12,
+    "水": 5,
+    "爪": 23,
+    "斗": 14,
+    "屯": 46,
+    "日": 4,
+    "巴": 14,
+    "比": 26,
+    "父": 6,
+    "文": 11,
+    "片": 45,
+    "方": 12,
+    "毛": 36,
+    "木": 5,
+    "勿": 17,
+    "尤": 58,
+    "礼": 14,
+    "老": 14,
+    "戈": 24,
+    "攵": 12,
+    "杰": 16,
+    "歹": 15,
+    "殳": 23,
+    "毋": 7,
+    "气": 7,
+    "爻": 98,
+    "爿": 6,
+    "禾": 16,
+    "牙": 60,
+    "瓦": 50,
+    "甘": 26,
+    "巨": 44,
+    "穴": 15,
+    "玄": 50,
+    "冊": 30,
+    "皿": 34,
+    "示": 29,
+    "初": 25,
+    "世": 13,
+    "生": 7,
+    "石": 17,
+    "田": 8,
+    "買": 17,
+    "白": 6,
+    "皮": 26,
+    "疋": 20,
+    "母": 7,
+    "矛": 19,
+    "目": 8,
+    "矢": 15,
+    "用": 12,
+    "立": 11,
+    "疔": 19,
+    "癶": 18,
+    "禹": 35,
+    "衣": 23,
+    "羽": 18,
+    "臼": 61,
+    "瓜": 71,
+    "缶": 38,
+    "血": 36,
+    "行": 8,
+    "艮": 20,
+    "糸": 16,
+    "至": 15,
+    "而": 58,
+    "耳": 10,
+    "自": 14,
+    "舟": 22,
+    "色": 14,
+    "西": 8,
+    "舌": 10,
+    "竹": 17,
+    "虫": 16,
+    "肉": 14,
+    "米": 8,
+    "羊": 19,
+    "耒": 19,
+    "聿": 10,
+    "虍": 40,
+    "貝": 17,
+    "角": 24,
+    "見": 8,
+    "言": 10,
+    "車": 8,
+    "臣": 44,
+    "身": 51,
+    "辛": 18,
+    "赤": 13,
+    "舛": 35,
+    "走": 14,
+    "足": 13,
+    "辰": 37,
+    "谷": 29,
+    "豆": 24,
+    "酉": 24,
+    "麦": 36,
+    "釆": 23,
+    "里": 16,
+    "豕": 16,
+    "豸": 73,
+    "雨": 9,
+    "奄": 52,
+    "岡": 54,
+    "金": 9,
+    "青": 15,
+    "斉": 31,
+    "長": 9,
+    "非": 28,
+    "免": 19,
+    "門": 10,
+    "隶": 38,
+    "隹": 18,
+    "音": 15,
+    "革": 32,
+    "香": 48,
+    "首": 17,
+    "食": 9,
+    "飛": 30,
+    "品": 20,
+    "風": 16,
+    "頁": 20,
+    "面": 28,
+    "鬼": 55,
+    "高": 10,
+    "骨": 39,
+    "馬": 18,
+    "竜": 73,
+    "韋": 32,
+    "髟": 35,
+    "鬯": 81,
+    "鬲": 60,
+    "黄": 24,
+    "亀": 64,
+    "魚": 16,
+    "黒": 16,
+    "鹿": 58,
+    "鳥": 16,
+    "滴": 34,
+    "麻": 37,
+    "歯": 26,
+    "無": 35,
+    "鼓": 90,
+    "鼻": 39
+  },
   "vocabularyLevel": {
     "2467": 10,
     "2468": 1,
@@ -18021,7 +18264,8 @@
       ],
       "fromWaniKani": 6,
       "added": 0,
-      "vocabulary": 18
+      "vocabulary": 18,
+      "radicals": 8
     },
     {
       "level": 2,
@@ -18036,7 +18280,8 @@
       ],
       "fromWaniKani": 6,
       "added": 0,
-      "vocabulary": 22
+      "vocabulary": 22,
+      "radicals": 5
     },
     {
       "level": 3,
@@ -18052,7 +18297,8 @@
       ],
       "fromWaniKani": 7,
       "added": 0,
-      "vocabulary": 24
+      "vocabulary": 24,
+      "radicals": 6
     },
     {
       "level": 4,
@@ -18068,7 +18314,8 @@
       ],
       "fromWaniKani": 7,
       "added": 0,
-      "vocabulary": 27
+      "vocabulary": 27,
+      "radicals": 6
     },
     {
       "level": 5,
@@ -18085,7 +18332,8 @@
       ],
       "fromWaniKani": 8,
       "added": 0,
-      "vocabulary": 30
+      "vocabulary": 30,
+      "radicals": 7
     },
     {
       "level": 6,
@@ -18102,7 +18350,8 @@
       ],
       "fromWaniKani": 8,
       "added": 0,
-      "vocabulary": 33
+      "vocabulary": 33,
+      "radicals": 8
     },
     {
       "level": 7,
@@ -18120,7 +18369,8 @@
       ],
       "fromWaniKani": 9,
       "added": 0,
-      "vocabulary": 35
+      "vocabulary": 35,
+      "radicals": 7
     },
     {
       "level": 8,
@@ -18138,7 +18388,8 @@
       ],
       "fromWaniKani": 9,
       "added": 0,
-      "vocabulary": 39
+      "vocabulary": 39,
+      "radicals": 12
     },
     {
       "level": 9,
@@ -18156,7 +18407,8 @@
       ],
       "fromWaniKani": 9,
       "added": 0,
-      "vocabulary": 42
+      "vocabulary": 42,
+      "radicals": 8
     },
     {
       "level": 10,
@@ -18175,7 +18427,8 @@
       ],
       "fromWaniKani": 10,
       "added": 0,
-      "vocabulary": 44
+      "vocabulary": 44,
+      "radicals": 8
     },
     {
       "level": 11,
@@ -18195,7 +18448,8 @@
       ],
       "fromWaniKani": 11,
       "added": 0,
-      "vocabulary": 47
+      "vocabulary": 47,
+      "radicals": 5
     },
     {
       "level": 12,
@@ -18216,7 +18470,8 @@
       ],
       "fromWaniKani": 12,
       "added": 0,
-      "vocabulary": 51
+      "vocabulary": 51,
+      "radicals": 9
     },
     {
       "level": 13,
@@ -18239,7 +18494,8 @@
       ],
       "fromWaniKani": 14,
       "added": 0,
-      "vocabulary": 53
+      "vocabulary": 53,
+      "radicals": 6
     },
     {
       "level": 14,
@@ -18263,7 +18519,8 @@
       ],
       "fromWaniKani": 15,
       "added": 0,
-      "vocabulary": 56
+      "vocabulary": 56,
+      "radicals": 10
     },
     {
       "level": 15,
@@ -18288,7 +18545,8 @@
       ],
       "fromWaniKani": 16,
       "added": 0,
-      "vocabulary": 58
+      "vocabulary": 58,
+      "radicals": 10
     },
     {
       "level": 16,
@@ -18314,7 +18572,8 @@
       ],
       "fromWaniKani": 17,
       "added": 0,
-      "vocabulary": 54
+      "vocabulary": 54,
+      "radicals": 14
     },
     {
       "level": 17,
@@ -18341,7 +18600,8 @@
       ],
       "fromWaniKani": 18,
       "added": 0,
-      "vocabulary": 72
+      "vocabulary": 72,
+      "radicals": 12
     },
     {
       "level": 18,
@@ -18370,7 +18630,8 @@
       ],
       "fromWaniKani": 20,
       "added": 0,
-      "vocabulary": 69
+      "vocabulary": 69,
+      "radicals": 8
     },
     {
       "level": 19,
@@ -18400,7 +18661,8 @@
       ],
       "fromWaniKani": 21,
       "added": 0,
-      "vocabulary": 71
+      "vocabulary": 71,
+      "radicals": 6
     },
     {
       "level": 20,
@@ -18431,7 +18693,8 @@
       ],
       "fromWaniKani": 22,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 6
     },
     {
       "level": 21,
@@ -18465,7 +18728,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 1
     },
     {
       "level": 22,
@@ -18499,7 +18763,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 3
     },
     {
       "level": 23,
@@ -18533,7 +18798,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 7
     },
     {
       "level": 24,
@@ -18567,7 +18833,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 5
     },
     {
       "level": 25,
@@ -18601,7 +18868,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 1
     },
     {
       "level": 26,
@@ -18635,7 +18903,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 6
     },
     {
       "level": 27,
@@ -18669,7 +18938,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 28,
@@ -18702,7 +18972,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 2
     },
     {
       "level": 29,
@@ -18735,7 +19006,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 2
     },
     {
       "level": 30,
@@ -18768,7 +19040,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 2
     },
     {
       "level": 31,
@@ -18801,7 +19074,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 2
     },
     {
       "level": 32,
@@ -18834,7 +19108,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 2
     },
     {
       "level": 33,
@@ -18867,7 +19142,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 34,
@@ -18900,7 +19176,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 2
     },
     {
       "level": 35,
@@ -18933,7 +19210,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 5
     },
     {
       "level": 36,
@@ -18967,7 +19245,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 3
     },
     {
       "level": 37,
@@ -19001,7 +19280,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 2
     },
     {
       "level": 38,
@@ -19035,7 +19315,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 2
     },
     {
       "level": 39,
@@ -19069,7 +19350,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 2
     },
     {
       "level": 40,
@@ -19103,7 +19385,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 41,
@@ -19137,7 +19420,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 42,
@@ -19171,7 +19455,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 43,
@@ -19204,7 +19489,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 44,
@@ -19237,7 +19523,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 3
     },
     {
       "level": 45,
@@ -19270,7 +19557,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 2
     },
     {
       "level": 46,
@@ -19303,7 +19591,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 47,
@@ -19336,7 +19625,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 48,
@@ -19369,7 +19659,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 49,
@@ -19402,7 +19693,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 1
     },
     {
       "level": 50,
@@ -19435,7 +19727,8 @@
       ],
       "fromWaniKani": 24,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 2
     },
     {
       "level": 51,
@@ -19470,7 +19763,8 @@
       ],
       "fromWaniKani": 26,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 52,
@@ -19505,7 +19799,8 @@
       ],
       "fromWaniKani": 26,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 1
     },
     {
       "level": 53,
@@ -19540,7 +19835,8 @@
       ],
       "fromWaniKani": 26,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 54,
@@ -19575,7 +19871,8 @@
       ],
       "fromWaniKani": 26,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 1
     },
     {
       "level": 55,
@@ -19610,7 +19907,8 @@
       ],
       "fromWaniKani": 26,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 2
     },
     {
       "level": 56,
@@ -19645,7 +19943,8 @@
       ],
       "fromWaniKani": 26,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 57,
@@ -19679,7 +19978,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 58,
@@ -19713,7 +20013,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 3
     },
     {
       "level": 59,
@@ -19747,7 +20048,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 60,
@@ -19781,7 +20083,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 2
     },
     {
       "level": 61,
@@ -19815,7 +20118,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 62,
@@ -19849,7 +20153,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 63,
@@ -19883,7 +20188,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 64,
@@ -19917,7 +20223,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 65,
@@ -19951,7 +20258,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 66,
@@ -19985,7 +20293,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 67,
@@ -20019,7 +20328,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 68,
@@ -20053,7 +20363,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 69,
@@ -20087,7 +20398,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 70,
@@ -20121,7 +20433,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 71,
@@ -20155,7 +20468,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 1
     },
     {
       "level": 72,
@@ -20189,7 +20503,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 73,
@@ -20223,7 +20538,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 2
     },
     {
       "level": 74,
@@ -20257,7 +20573,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 75,
@@ -20291,7 +20608,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 76,
@@ -20325,7 +20643,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 77,
@@ -20359,7 +20678,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 78,
@@ -20393,7 +20713,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 79,
@@ -20427,7 +20748,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 80,
@@ -20461,7 +20783,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 81,
@@ -20495,7 +20818,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 82,
@@ -20529,7 +20853,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 83,
@@ -20563,7 +20888,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 84,
@@ -20597,7 +20923,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 85,
@@ -20631,7 +20958,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 86,
@@ -20665,7 +20993,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 87,
@@ -20699,7 +21028,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 88,
@@ -20733,7 +21063,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 89,
@@ -20767,7 +21098,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 90,
@@ -20801,7 +21133,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 91,
@@ -20835,7 +21168,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 92,
@@ -20869,7 +21203,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 93,
@@ -20903,7 +21238,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 94,
@@ -20937,7 +21273,8 @@
       ],
       "fromWaniKani": 25,
       "added": 0,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 95,
@@ -20971,7 +21308,8 @@
       ],
       "fromWaniKani": 16,
       "added": 9,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 96,
@@ -21005,7 +21343,8 @@
       ],
       "fromWaniKani": 0,
       "added": 25,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     },
     {
       "level": 97,
@@ -21039,7 +21378,8 @@
       ],
       "fromWaniKani": 0,
       "added": 25,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 98,
@@ -21073,7 +21413,8 @@
       ],
       "fromWaniKani": 0,
       "added": 25,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 1
     },
     {
       "level": 99,
@@ -21107,7 +21448,8 @@
       ],
       "fromWaniKani": 0,
       "added": 25,
-      "vocabulary": 74
+      "vocabulary": 74,
+      "radicals": 0
     },
     {
       "level": 100,
@@ -21141,7 +21483,8 @@
       ],
       "fromWaniKani": 0,
       "added": 25,
-      "vocabulary": 73
+      "vocabulary": 73,
+      "radicals": 0
     }
   ]
 }
