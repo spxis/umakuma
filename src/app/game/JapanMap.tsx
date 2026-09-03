@@ -85,11 +85,17 @@ export default function JapanMap({
   /*
    * The regions drawn beside the mainland rather than where they really are.
    * Okinawa in place stretches the frame until the mainland is unreadable;
-   * Alaska in place is wider than Texas and hard against the left edge. Each
-   * is moved into a box of its own, and only when the whole country is in
-   * view - zoomed to one region, it is drawn where it belongs.
+   * Alaska in place is wider than Texas and hard against the left edge.
+   *
+   * The game drops the inset when it frames one region, so a question about
+   * Okinawa shows Okinawa where it is. A caller that frames its own window
+   * keeps it at every zoom: the study map pans freely, and dropping the inset
+   * the moment it zoomed put Okinawa back into the sea off Kyushu, where it
+   * overlapped the mainland the reader was looking at. The inset box is a
+   * fixed part of the map's own coordinates, so it simply comes into view
+   * when somebody pans to it.
    */
-  const insets = wholeCountry ? GEO_INSETS[country] ?? [] : [];
+  const insets = framed || wholeCountry ? GEO_INSETS[country] ?? [] : [];
   const insetByCode = new Map(
     insets.flatMap((entry) => {
       const region = regionByCode.get(String(entry.code));

@@ -83,7 +83,24 @@ export default function MapStudy({
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  const view = useMapZoom(country);
+  const view = useMapZoom(country, initialCode);
+
+  /*
+   * Escape puts the region down. The panel has an X and, on a phone, a modal
+   * that already closes on Escape - but at desktop width the panel is a column
+   * beside the map with no modal behind it, so the key did nothing at all.
+   */
+  useEffect(() => {
+    if (code === null) return undefined;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setCode(null);
+      setHovered(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [code]);
 
   /*
    * Choosing while zoomed brings the region into view. Picking Saitama from

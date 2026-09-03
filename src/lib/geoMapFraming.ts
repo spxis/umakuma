@@ -1,3 +1,4 @@
+import { insetFor } from "./geoMapInsets";
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
 import type { MapBox } from "./japanPrefectures";
 
@@ -113,12 +114,22 @@ export function geoBoxCentre(box: MapBox): { x: number; y: number } {
   return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
 }
 
-/** The middle of a region, for zooming to whatever somebody just chose. */
+/**
+ * The middle of a region, for zooming to whatever somebody just chose.
+ *
+ * Where it is *drawn*, not where it is. Okinawa is drawn in a box off the
+ * south-west of the mainland and Alaska in one below the lower forty-eight,
+ * so centring on their true positions took the reader to open sea with the
+ * region they had just chosen nowhere on screen.
+ */
 export function geoRegionCentre(
   country: CountryCode,
   code: string | number | null,
 ): { x: number; y: number } | null {
   if (code === null) return null;
+  const seated = insetFor(country, code);
+  if (seated) return geoBoxCentre(seated.box);
+
   const region = GEO_DATASETS[country].regions.find((entry) => String(entry.code) === String(code));
   if (!region) return null;
   const [minX, minY, maxX, maxY] = region.map.bbox;

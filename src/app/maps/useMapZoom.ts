@@ -32,9 +32,17 @@ const PAN_STEP_RATIO = 0.15;
  * desktop. Converting through the rendered rectangle keeps the map moving
  * exactly with the finger.
  */
-export function useMapZoom(country: CountryCode) {
+export function useMapZoom(country: CountryCode, startOn: string | number | null = null) {
   const [zoom, setZoom] = useState<MapZoom>(MAP_ZOOM_LEVELS[0]);
-  const [centre, setCentre] = useState(() => geoBoxCentre(geoWholeCountryBox(country)));
+  /*
+   * Centred on whatever the address named, so zooming in on a page opened at
+   * `/maps/japan/kagoshima` goes closer at Kagoshima rather than at the middle
+   * of the country. Only the starting value: after that the centre is the
+   * reader's, and panning must not be overridden.
+   */
+  const [centre, setCentre] = useState(
+    () => geoRegionCentre(country, startOn) ?? geoBoxCentre(geoWholeCountryBox(country)),
+  );
   const dragging = useRef<{ pointerId: number; x: number; y: number; scale: number } | null>(null);
 
   const box: MapBox = geoZoomBox(country, zoom, centre);

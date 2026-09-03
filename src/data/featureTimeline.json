@@ -3968,7 +3968,19 @@
     "kind": "bug",
     "date": "2026-09-03",
     "summary": "Choosing a source on the practice sheet opened its levels below Trace / Stroke order / Reference, because the source chips and the sheet chips shared one wrapping nav - the list somebody had just asked for appeared under an unrelated row, two lines from the chip they pressed. Three rows now, in the order they are read. Found 2026-09-03 by John.",
+    "dateIsEstimate": false,
     "version": "0.342.0",
     "releasedAt": "2026-09-03T09:44:14Z"
+  },
+  {
+    "id": "maps-inset-and-escape",
+    "name": "Okinawa stays in its box, and Escape puts a region down",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "Zooming dropped the inset, so Okinawa left its box off the south-west of the mainland and was redrawn where it really is, on top of the coast the reader was looking at. The inset held only while the whole country was in view, which stopped being true the moment the study map could zoom. Centring had the same fault from the other side. Escape now clears the chosen region at desktop width, where there is no modal to close. Found 2026-09-03 by John.",
+    "version": "0.343.0",
+    "releasedAt": "2026-09-03T09:53:30Z"
   }
 ]

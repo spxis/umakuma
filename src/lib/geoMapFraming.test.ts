@@ -65,6 +65,16 @@ describe("the zoom steps", () => {
 });
 
 describe("zooming to a region", () => {
+  /*
+   * Where it is drawn, not where it is. Okinawa is drawn in a box off the
+   * south-west of the mainland, so centring on its true position took the
+   * reader to open sea with the region they had just chosen off screen.
+   */
+  it("centres on the inset box for a region drawn in one", () => {
+    const centre = geoRegionCentre(JAPAN, 47);
+    expect(centre).toEqual({ x: 720 + 240 / 2, y: 860 + 230 / 2 });
+  });
+
   it("finds the middle of one that exists", () => {
     const centre = geoRegionCentre(JAPAN, 3);
     expect(centre).not.toBeNull();

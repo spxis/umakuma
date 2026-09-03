@@ -393,6 +393,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Miseru Hyouji", ja: "見せる表示", reading: "みせるひょうじ", gloss: "the sheet shows whose it is" },
   { romaji: "Muda naku Mukeru", ja: "無駄なく向ける", reading: "むだなくむける", gloss: "pointed the same way, with nothing built twice" },
   { romaji: "Meguru Mejiri", ja: "巡る目尻", reading: "めぐるめじり", gloss: "the eye comes round to where it asked" },
+  { romaji: "Mochiba no Moyori", ja: "持ち場の最寄り", reading: "もちばのもより", gloss: "back to its own post, and near what you asked for" },
 ];
 
 /**
