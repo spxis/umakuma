@@ -3981,5 +3981,31 @@
     "dateIsEstimate": false,
     "version": "0.343.0",
     "releasedAt": "2026-09-03T09:53:30Z"
+  },
+  {
+    "id": "map-kanji-pills",
+    "name": "Map kanji as pills",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 72,
+    "summary": "The characters of a place name are the same small pills the kanji page uses, with the Text on toggle, not the large explorer cards.",
+    "owner": "fable",
+    "claimedAt": "2026-09-03T10:40:36.158Z"
+  },
+  {
+    "id": "subject-pill-sweep",
+    "name": "One chip for every inline kanji",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 73,
+    "summary": "Every inline kanji, radical or word across the site is drawn through the shared pill; hand-rolled chips and misplaced large cards are replaced.",
+    "owner": "fable",
+    "claimedAt": "2026-09-03T10:40:36.800Z"
   }
 ]
