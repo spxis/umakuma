@@ -9,9 +9,18 @@ import { loadFeatureTimeline, publicReleaseEntries, publicSummaryFor } from "@/l
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { codenameForVersion } from "@/lib/releaseCodenames";
 
+import { FEATURE_AREA_LABELS } from "@/lib/featureTimeline";
+
 import { RELEASES_PAGE_COPY } from "./releasesCopy";
 import MonthSection from "./MonthSection";
-import { currentMonthKeyIn, groupReleasesByMonth, releaseAnchor } from "./releasesView";
+import {
+  areaCounts,
+  currentMonthKeyIn,
+  filterByArea,
+  groupReleasesByMonth,
+  parseAreaParam,
+  releaseAnchor,
+} from "./releasesView";
 import { noTranslateClass } from "@/app/shared/japaneseText";
 import JapaneseInProse from "@/app/shared/JapaneseInProse";
 
@@ -20,7 +29,11 @@ export const metadata: Metadata = {
   description: "What shipped in UmaKuma, newest first.",
 };
 
-export default async function PublicReleasesPage() {
+export default async function PublicReleasesPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   /*
    * The page is public, so the admin route is offered only to an admin - a
    * link everybody can see to a page only one person can open is noise.
@@ -29,7 +42,10 @@ export default async function PublicReleasesPage() {
   const viewerIsAdmin = isAdminEmail(session?.user?.email ?? null);
 
   const releases = publicReleaseEntries(loadFeatureTimeline());
-  const months = groupReleasesByMonth(releases);
+  /* Counted before the filter, so a chip says how many it would show. */
+  const areas = areaCounts(releases);
+  const area = parseAreaParam((await searchParams).area);
+  const months = groupReleasesByMonth(filterByArea(releases, area));
   const monthKeys = months.map((month) => month.key);
   /*
    * Vancouver's month, not the server's: the site keeps one clock, and a page
@@ -63,6 +79,24 @@ export default async function PublicReleasesPage() {
         {RELEASES_PAGE_COPY.intro}
       </p>
 
+      {/*
+        * The tags were printed on every entry and usable from none of them.
+        * Links rather than buttons: a filtered list is a view worth having an
+        * address, and the page is already drawn on the server.
+        */}
+      <nav aria-label={RELEASES_PAGE_COPY.filterLabel} className="mb-6 flex flex-wrap items-center gap-1.5">
+        <AreaChip href="/releases" label={RELEASES_PAGE_COPY.allAreas} count={releases.length} on={area === null} />
+        {areas.map((entry) => (
+          <AreaChip
+            key={entry.area}
+            href={`/releases?area=${entry.area}`}
+            label={FEATURE_AREA_LABELS[entry.area]}
+            count={entry.count}
+            on={area === entry.area}
+          />
+        ))}
+      </nav>
+
       {months.map((month) => (
         <MonthSection
           key={month.key}
@@ -71,6 +105,8 @@ export default async function PublicReleasesPage() {
           count={month.entries.length}
           currentKey={currentMonthKey}
           everyKey={monthKeys}
+          /* A filtered list opens: its matches must not hide in a folded month. */
+          forceOpen={area !== null}
         >
           <ul className="space-y-2">
             {month.entries.map((entry) => {
@@ -149,5 +185,33 @@ export default async function PublicReleasesPage() {
         </Link>
       </p>
     </div>
+  );
+}
+
+/** One tag, with the number of releases behind it. */
+function AreaChip({
+  href,
+  label,
+  count,
+  on,
+}: {
+  href: string;
+  label: string;
+  count: number;
+  on: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={on ? "true" : undefined}
+      className={`inline-flex h-7 items-center gap-1.5 rounded-full border px-3 text-[11px] font-bold uppercase tracking-[0.08em] transition ${
+        on
+          ? "border-accent bg-accent text-white"
+          : "border-line bg-surface text-foreground/70 hover:bg-surface-muted"
+      }`}
+    >
+      {label}
+      <span className={`tabular-nums ${on ? "text-white/75" : "text-foreground/60"}`}>{count}</span>
+    </Link>
   );
 }

@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import type { FeatureTimelineEntry } from "@/lib/featureTimeline";
 
-import { currentMonthKeyIn,
+import { areaCounts,
+  currentMonthKeyIn,
+  filterByArea,
+  parseAreaParam,
   groupReleasesByMonth, releaseAnchor } from "./releasesView";
 import { monthIsOpen, monthsAfterToggle } from "./useOpenMonths";
 
@@ -119,5 +122,54 @@ describe("holding months open", () => {
 
   it("adds a month without disturbing the others", () => {
     expect(monthsAfterToggle("2026-07", ["2026-09"], "2026-09", every)).toEqual(["2026-09", "2026-07"]);
+  });
+});
+
+/*
+ * Every release was already tagged by area and the tags were usable from
+ * nowhere: no way to ask for the games work, or everything that touched search.
+ */
+describe("filtering the releases by area", () => {
+  const entry = (id: string, area: string, date: string) =>
+    ({ id, area, date, name: id, summary: id, status: "shipped", kind: "feature" }) as unknown as FeatureTimelineEntry;
+
+  const entries = [
+    entry("a", "study", "2026-09-01"),
+    entry("b", "games", "2026-08-01"),
+    entry("c", "study", "2026-07-01"),
+    entry("d", "admin", "2026-06-01"),
+  ];
+
+  it("counts every area it holds, commonest first", () => {
+    expect(areaCounts(entries)).toEqual([
+      { area: "study", count: 2 },
+      { area: "admin", count: 1 },
+      { area: "games", count: 1 },
+    ]);
+  });
+
+  /* An area nobody has shipped in is a chip that answers nothing. */
+  it("offers no chip for an area with no releases", () => {
+    expect(areaCounts(entries).map((entry) => entry.area)).not.toContain("news");
+  });
+
+  it("keeps only the area asked for", () => {
+    expect(filterByArea(entries, "study").map((entry) => entry.id)).toEqual(["a", "c"]);
+  });
+
+  it("keeps everything when nothing is asked for", () => {
+    expect(filterByArea(entries, null)).toHaveLength(4);
+  });
+
+  /*
+   * A hand-typed segment filters to nothing rather than quietly showing
+   * everything: a page that ignores the filter it is displaying is worse than
+   * an empty one that says so.
+   */
+  it("reads only an area the site actually has", () => {
+    expect(parseAreaParam("games")).toBe("games");
+    expect(parseAreaParam("nonsense")).toBeNull();
+    expect(parseAreaParam(undefined)).toBeNull();
+    expect(parseAreaParam(["study", "games"])).toBe("study");
   });
 });

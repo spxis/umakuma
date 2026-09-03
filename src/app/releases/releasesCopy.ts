@@ -11,4 +11,6 @@ export const RELEASES_PAGE_COPY = {
   adminLink: "Release admin",
   collapseMonth: "Collapse",
   backHome: "Back to UmaKuma",
+  filterLabel: "Filter by area",
+  allAreas: "All",
 } as const;

@@ -403,6 +403,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Reigi no Hikigiwa", ja: "礼儀の引き際", reading: "れいぎのひきぎわ", gloss: "knowing when to leave the screen" },
   { romaji: "Rokugatsu no Orime", ja: "六月の折り目", reading: "ろくがつのおりめ", gloss: "every month folded but the one you are in" },
   { romaji: "Wakuni Osamaru", ja: "枠に収まる", reading: "わくにおさまる", gloss: "it sits in the frame it was given" },
+  { romaji: "Aiiro no Fudawake", ja: "藍色の札分け", reading: "あいいろのふだわけ", gloss: "sorted by the label it already wore" },
 ];
 
 /**

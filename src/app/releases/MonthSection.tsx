@@ -24,6 +24,7 @@ export default function MonthSection({
   count,
   currentKey,
   everyKey,
+  forceOpen = false,
   children,
 }: {
   monthKey: string;
@@ -33,10 +34,15 @@ export default function MonthSection({
   currentKey: string;
   /** Every month on the page, so a toggle can write the whole list back. */
   everyKey: readonly string[];
+  /**
+   * Held open whatever the reader last chose - for a filtered list, whose
+   * matches would otherwise be hidden inside a month they folded weeks ago.
+   */
+  forceOpen?: boolean;
   children: ReactNode;
 }) {
   const open = useOpenMonths();
-  const isOpen = monthIsOpen(monthKey, open, currentKey);
+  const isOpen = forceOpen || monthIsOpen(monthKey, open, currentKey);
 
   return (
     <details open={isOpen} className="group/month mb-6">

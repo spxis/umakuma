@@ -1,5 +1,5 @@
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
-import type { FeatureTimelineEntry } from "@/lib/featureTimeline";
+import { isFeatureArea, type FeatureArea, type FeatureTimelineEntry } from "@/lib/featureTimeline";
 
 export type ReleaseMonth = {
   /** `YYYY-MM`, used as the React key and for ordering. */
@@ -60,4 +60,46 @@ export function groupReleasesByMonth(entries: FeatureTimelineEntry[]): ReleaseMo
 export function currentMonthKeyIn(months: readonly ReleaseMonth[], now = new Date()): string {
   const today = getVancouverDateKey(now).slice(0, 7);
   return months.some((month) => month.key === today) ? today : (months[0]?.key ?? today);
+}
+
+/** One area, with how many releases touched it. */
+export type AreaCount = { area: FeatureArea; count: number };
+
+/**
+ * Every area the list holds, commonest first.
+ *
+ * Built from the releases on the page rather than from the full set of areas,
+ * because an area nobody has shipped in yet is a chip that answers "none" - and
+ * the count is the reason to press one at all.
+ */
+export function areaCounts(entries: readonly FeatureTimelineEntry[]): AreaCount[] {
+  const counts = new Map<FeatureArea, number>();
+  for (const entry of entries) {
+    counts.set(entry.area, (counts.get(entry.area) ?? 0) + 1);
+  }
+
+  return [...counts.entries()]
+    .map(([area, count]) => ({ area, count }))
+    .sort((left, right) => right.count - left.count || left.area.localeCompare(right.area));
+}
+
+/**
+ * The releases for one area, or all of them.
+ *
+ * A segment nobody ships in - or a hand-typed one - filters to nothing rather
+ * than quietly showing everything: a page that ignores the filter it is
+ * displaying is worse than an empty one that says so.
+ */
+export function filterByArea(
+  entries: readonly FeatureTimelineEntry[],
+  area: string | null,
+): FeatureTimelineEntry[] {
+  return area ? entries.filter((entry) => entry.area === area) : [...entries];
+}
+
+/** The area named by the query, or null for all of them. */
+export function parseAreaParam(raw: string | string[] | undefined): string | null {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  const trimmed = value?.trim() ?? "";
+  return trimmed && isFeatureArea(trimmed) ? trimmed : null;
 }

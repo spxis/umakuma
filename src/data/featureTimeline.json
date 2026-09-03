@@ -4063,6 +4063,7 @@
     "kind": "feature",
     "date": "2026-09-03",
     "summary": "The releases page prints every month at full length, so the page opens on a wall of entries and the month somebody came for is a long scroll away. Each month becomes a section that folds: the current month open, the rest closed, any of them toggled by hand, and the choice remembered per device so a refresh does not undo it. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
     "version": "0.351.0",
     "releasedAt": "2026-09-03T11:25:55Z"
   },
@@ -4070,12 +4071,12 @@
     "id": "releases-tag-filter",
     "name": "Filter the releases by what they touched",
     "area": "platform",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
     "summary": "Every release is already tagged by area, and the tags are shown without being usable: there is no way to ask for the games work, or everything that touched search. The page lays out every area it holds with a count beside it, and choosing one filters the list. Areas only - a feature and a bug are not the same kind of tag. Requested 2026-09-03 by John.",
-    "dateIsEstimate": true,
-    "release": 74
+    "version": "0.353.0",
+    "releasedAt": "2026-09-03T11:30:27Z"
   },
   {
     "id": "print-as-modal",
