@@ -16,7 +16,7 @@ import {
   splitPlannedByProgress,
   summarizeFeatureTimeline,
 } from "@/lib/featureTimeline";
-import { listFeatureWishes } from "@/lib/featureWishesServer";
+import { listTickets } from "@/lib/ticketsServer";
 
 import {
   RELEASE_TAB_COOKIE_KEY,
@@ -70,8 +70,8 @@ export default async function AdminReleasesPage() {
    */
   const { inProgress, queued } = splitPlannedByProgress(sortFeaturesByRelease(entries));
 
-  /* Wishes are the only part of this page the database holds; see FeatureWish. */
-  const wishes = await listFeatureWishes();
+  /* Wishes are the only part of this page the database holds; see Ticket. */
+  const wishes = await listTickets();
 
   return (
     <div className="relative px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">

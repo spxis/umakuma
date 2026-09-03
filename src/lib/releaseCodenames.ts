@@ -409,6 +409,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Enchou no Meisai", ja: "延長の明細", reading: "えんちょうのめいさい", gloss: "the line item, spelled out at length" },
   { romaji: "Oshinagaki", ja: "お品書き", reading: "おしながき", gloss: "everything on offer, written out" },
   { romaji: "Karita Sakaime", ja: "借りた境目", reading: "かりたさかいめ", gloss: "the borders we borrowed" },
+  { romaji: "Kippu no Kihon", ja: "切符の基本", reading: "きっぷのきほん", gloss: "a ticket, and what a ticket is for" },
 ];
 
 /**

@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import { FEATURE_AREA_VALUES, isFeatureArea, isFeatureKind } from "../src/lib/featureTimeline";
-import { TASK_LEASE_MS, claimTask, isWaiting, taskLine } from "../src/lib/featureTasks";
+import { TASK_LEASE_MS, claimTask, isWaiting, taskLine } from "../src/lib/ticketClaims";
 
 /**
  * The shared task board, from a terminal.
@@ -67,7 +67,7 @@ async function main(): Promise<void> {
 
   switch (command) {
     case "list": {
-      const tasks = await client.featureWish.findMany({
+      const tasks = await client.ticket.findMany({
         where: { status: { notIn: ["declined", "shipped"] } },
         orderBy: [{ status: "asc" }, { createdAt: "asc" }],
       });
@@ -90,7 +90,7 @@ async function main(): Promise<void> {
       if (area !== undefined && !isFeatureArea(area)) usage();
       const kind = rest.includes("--bug") ? "bug" : "feature";
       if (!isFeatureKind(kind)) usage();
-      const created = await client.featureWish.create({
+      const created = await client.ticket.create({
         data: { title, detail: flag("detail", rest) ?? null, area: area ?? null, kind, requestedBy: flag("by", rest) ?? null },
       });
       console.log(`added ${created.id} on ${target()}`);
@@ -100,7 +100,7 @@ async function main(): Promise<void> {
     case "claim": {
       const [id, owner] = rest;
       if (!id || !owner) usage();
-      const task = await client.featureWish.findUnique({ where: { id } });
+      const task = await client.ticket.findUnique({ where: { id } });
       if (!task) {
         console.error(`No task ${id}.`);
         process.exit(1);
@@ -130,7 +130,7 @@ async function main(): Promise<void> {
        * crashed session takes a ticket out of circulation for good.
        */
       const staleBefore = new Date(Date.now() - TASK_LEASE_MS);
-      const taken = await client.featureWish.updateMany({
+      const taken = await client.ticket.updateMany({
         where: {
           id,
           status: { notIn: ["shipped", "declined"] },
@@ -140,7 +140,7 @@ async function main(): Promise<void> {
       });
 
       if (taken.count === 0) {
-        const now = await client.featureWish.findUnique({ where: { id }, select: { claimedBy: true } });
+        const now = await client.ticket.findUnique({ where: { id }, select: { claimedBy: true } });
         console.error(`${id} was taken by ${now?.claimedBy ?? "somebody"} a moment ago.`);
         process.exit(1);
       }
@@ -152,7 +152,7 @@ async function main(): Promise<void> {
       const [id] = rest;
       if (!id) usage();
       /* Back to the backlog, not to nothing: the work is still wanted. */
-      await client.featureWish.update({ where: { id }, data: { claimedBy: null, claimedAt: null, status: "open" } });
+      await client.ticket.update({ where: { id }, data: { claimedBy: null, claimedAt: null, status: "open" } });
       console.log(`${id} released on ${target()}`);
       break;
     }
@@ -161,7 +161,7 @@ async function main(): Promise<void> {
     case "ship": {
       const [id, filedAs] = rest;
       if (!id || !filedAs) usage();
-      await client.featureWish.update({
+      await client.ticket.update({
         where: { id },
         data: { status: "shipped", filedAs, claimedBy: null, claimedAt: null },
       });
@@ -172,7 +172,7 @@ async function main(): Promise<void> {
     case "drop": {
       const [id] = rest;
       if (!id) usage();
-      await client.featureWish.update({ where: { id }, data: { status: "declined", claimedBy: null, claimedAt: null } });
+      await client.ticket.update({ where: { id }, data: { status: "declined", claimedBy: null, claimedAt: null } });
       console.log(`${id} declined on ${target()}`);
       break;
     }
@@ -181,7 +181,7 @@ async function main(): Promise<void> {
     case "filed": {
       const [id, filedAs] = rest;
       if (!id || !filedAs) usage();
-      await client.featureWish.update({ where: { id }, data: { status: "filed", filedAs, claimedBy: null, claimedAt: null } });
+      await client.ticket.update({ where: { id }, data: { status: "filed", filedAs, claimedBy: null, claimedAt: null } });
       console.log(`${id} filed as ${filedAs} on ${target()}`);
       break;
     }

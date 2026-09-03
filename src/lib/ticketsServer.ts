@@ -3,11 +3,11 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 
 import {
-  FEATURE_WISH_STATUSES,
-  toFeatureWish,
-  type FeatureWish,
-  type FeatureWishStatus,
-} from "@/lib/featureWishes";
+  TICKET_STATUSES,
+  toTicket,
+  type Ticket,
+  type TicketStatus,
+} from "@/lib/tickets";
 import type { FeatureArea, FeatureKind } from "@/lib/featureTimeline";
 
 /**
@@ -27,19 +27,21 @@ const SELECT = {
   status: true,
   filedAs: true,
   requestedBy: true,
+  claimedBy: true,
+  claimedAt: true,
   createdAt: true,
 } as const;
 
-/** Newest first: a wish list is read to see what has just been asked for. */
-export async function listFeatureWishes(): Promise<FeatureWish[]> {
-  const rows = await prisma.featureWish.findMany({
+/** Newest first: a ticket list is read to see what has just been asked for. */
+export async function listTickets(): Promise<Ticket[]> {
+  const rows = await prisma.ticket.findMany({
     select: SELECT,
     orderBy: { createdAt: "desc" },
   });
-  return rows.map(toFeatureWish);
+  return rows.map(toTicket);
 }
 
-export type FeatureWishDraft = {
+export type TicketDraft = {
   title: string;
   detail: string | null;
   area: FeatureArea | null;
@@ -47,39 +49,39 @@ export type FeatureWishDraft = {
   requestedBy: string | null;
 };
 
-export async function createFeatureWish(draft: FeatureWishDraft): Promise<FeatureWish> {
-  const row = await prisma.featureWish.create({
+export async function createTicket(draft: TicketDraft): Promise<Ticket> {
+  const row = await prisma.ticket.create({
     data: {
       title: draft.title,
       detail: draft.detail,
       area: draft.area,
       kind: draft.kind,
       requestedBy: draft.requestedBy,
-      status: FEATURE_WISH_STATUSES.open,
+      status: TICKET_STATUSES.open,
     },
     select: SELECT,
   });
-  return toFeatureWish(row);
+  return toTicket(row);
 }
 
 /**
- * Moves a wish between states.
+ * Moves a ticket between states.
  *
- * `filedAs` is cleared on anything but `filed`, so a wish that was filed and
+ * `filedAs` is cleared on anything but `filed`, so a ticket that was filed and
  * then reopened does not keep pointing at an entry it is no longer connected
  * to.
  */
-export async function setFeatureWishStatus(
+export async function setTicketStatus(
   id: string,
-  status: FeatureWishStatus,
+  status: TicketStatus,
   filedAs: string | null = null,
-): Promise<FeatureWish | null> {
-  const row = await prisma.featureWish
+): Promise<Ticket | null> {
+  const row = await prisma.ticket
     .update({
       where: { id },
-      data: { status, filedAs: status === FEATURE_WISH_STATUSES.filed ? filedAs : null },
+      data: { status, filedAs: status === TICKET_STATUSES.filed ? filedAs : null },
       select: SELECT,
     })
     .catch(() => null);
-  return row ? toFeatureWish(row) : null;
+  return row ? toTicket(row) : null;
 }

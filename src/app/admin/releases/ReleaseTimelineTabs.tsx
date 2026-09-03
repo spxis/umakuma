@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import type { FeatureTimelineEntry } from "@/lib/featureTimeline";
-import type { FeatureWish } from "@/lib/featureWishes";
+import type { Ticket } from "@/lib/tickets";
 
 import {
   RELEASE_TAB_COOKIE_KEY,
@@ -13,7 +13,7 @@ import {
   type ReleaseTab,
 } from "./ReleaseTimeline.constants";
 import ReleaseTimelineList from "./ReleaseTimelineList";
-import WishListPanel from "./WishListPanel";
+import TicketBoard from "./TicketBoard";
 
 type Props = {
   inProgress: FeatureTimelineEntry[];
@@ -21,7 +21,7 @@ type Props = {
   shipped: FeatureTimelineEntry[];
   backlog: FeatureTimelineEntry[];
   cancelled: FeatureTimelineEntry[];
-  wishes: FeatureWish[];
+  wishes: Ticket[];
   /** Read from the cookie by the server, so the first paint is already right. */
   initialTab: ReleaseTab;
 };
@@ -98,7 +98,7 @@ export default function ReleaseTimelineTabs({
 
       <p className="mb-4 mt-3 text-xs text-foreground/60">{legend[tab]}</p>
 
-      {tab === RELEASE_TABS.wishes ? <WishListPanel initialWishes={wishes} /> : null}
+      {tab === RELEASE_TABS.wishes ? <TicketBoard initialWishes={wishes} /> : null}
 
       {tab === RELEASE_TABS.inProgress ? (
         <ReleaseTimelineList

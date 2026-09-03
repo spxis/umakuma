@@ -11,7 +11,7 @@ import {
   isFeatureKind,
   type FeatureTimelineEntry,
 } from "../src/lib/featureTimeline";
-import { FEATURE_WISH_STATUSES, suggestedEntryId } from "../src/lib/featureWishes";
+import { TICKET_STATUSES, suggestedEntryId } from "../src/lib/tickets";
 
 /**
  * The board, from a terminal.
@@ -21,7 +21,7 @@ import { FEATURE_WISH_STATUSES, suggestedEntryId } from "../src/lib/featureWishe
  *   pnpm backlog claim <id> "<owner>"                 pick it up
  *   pnpm backlog release <id>                         put it down unshipped
  *   pnpm backlog wishes                               what has been asked for
- *   pnpm backlog file <wishId> <area> [id]            a wish becomes planned work
+ *   pnpm backlog file <ticketId> <area> [id]            a wish becomes planned work
  *
  * Every request John makes goes in before the work starts; every agent claims
  * before it builds. The timeline JSON is the board; this only edits it safely -
@@ -77,7 +77,7 @@ function prisma(): PrismaClient {
 async function openWishCount(): Promise<number> {
   try {
     return await Promise.race([
-      prisma().featureWish.count({ where: { status: FEATURE_WISH_STATUSES.open } }),
+      prisma().ticket.count({ where: { status: TICKET_STATUSES.open } }),
       new Promise<number>((resolve) => setTimeout(() => resolve(0), 2000)),
     ]);
   } catch {
@@ -94,7 +94,7 @@ function usage(): never {
       '  pnpm backlog claim <id> "<owner>"',
       "  pnpm backlog release <id>",
       "  pnpm backlog wishes",
-      `  pnpm backlog file <wishId> <${FEATURE_AREA_VALUES.join("|")}> [entry-id]`,
+      `  pnpm backlog file <ticketId> <${FEATURE_AREA_VALUES.join("|")}> [entry-id]`,
     ].join("\n"),
   );
   process.exit(2);
@@ -159,8 +159,8 @@ async function main(): Promise<void> {
         break;
       }
       case "wishes": {
-        const wishes = await prisma().featureWish.findMany({
-          where: { status: FEATURE_WISH_STATUSES.open },
+        const wishes = await prisma().ticket.findMany({
+          where: { status: TICKET_STATUSES.open },
           orderBy: { createdAt: "asc" },
         });
         if (wishes.length === 0) {
@@ -184,16 +184,16 @@ async function main(): Promise<void> {
        * the two halves stay linked rather than the row being deleted.
        */
       case "file": {
-        const [wishId, areaArg, entryIdArg] = rest;
-        if (!wishId) usage();
+        const [ticketId, areaArg, entryIdArg] = rest;
+        if (!ticketId) usage();
 
-        const wish = await prisma().featureWish.findUnique({ where: { id: wishId } });
+        const wish = await prisma().ticket.findUnique({ where: { id: ticketId } });
         if (!wish) {
-          console.error(`No wish "${wishId}". Run: pnpm backlog wishes`);
+          console.error(`No wish "${ticketId}". Run: pnpm backlog wishes`);
           process.exit(1);
         }
-        if (wish.status !== FEATURE_WISH_STATUSES.open) {
-          console.error(`"${wishId}" is ${wish.status}, not open.`);
+        if (wish.status !== TICKET_STATUSES.open) {
+          console.error(`"${ticketId}" is ${wish.status}, not open.`);
           process.exit(1);
         }
 
@@ -217,11 +217,11 @@ async function main(): Promise<void> {
             todayInVancouver(),
           ),
         );
-        await prisma().featureWish.update({
-          where: { id: wishId },
-          data: { status: FEATURE_WISH_STATUSES.filed, filedAs: entryId },
+        await prisma().ticket.update({
+          where: { id: ticketId },
+          data: { status: TICKET_STATUSES.filed, filedAs: entryId },
         });
-        console.log(`filed ${wishId} as ${entryId} (${area})`);
+        console.log(`filed ${ticketId} as ${entryId} (${area})`);
         break;
       }
       default:

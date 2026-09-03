@@ -944,7 +944,7 @@ model TatoebaSentence {
 ///
 /// Filing records the timeline id rather than moving the row, so the wish and
 /// the entry it became stay linked and nothing is lost when the answer is no.
-model FeatureWish {
+model Ticket {
   id          String            @id @default(cuid())
   title       String
   detail      String?
@@ -953,7 +953,7 @@ model FeatureWish {
   /// are a TypeScript union that changes with the code.
   area        String?
   kind        String            @default("feature")
-  status      FeatureWishStatus @default(open)
+  status      TicketStatus @default(open)
   /// The `featureTimeline.json` id an agent filed this as.
   filedAs     String?
   /// Who asked, by the email they were signed in as.
@@ -970,6 +970,14 @@ model FeatureWish {
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 
+  /*
+   * The table keeps its old name on purpose. `prisma db push` does not rename
+   * a table - it drops the old one and creates the new - so a physical rename
+   * here would take every ticket with it. The model is what the code reads and
+   * that is what needed to say `Ticket`; the table can be renamed later by a
+   * deliberate SQL migration, or never, at no cost to anybody.
+   */
+  @@map("FeatureWish")
   @@index([status, createdAt])
   @@index([claimedBy])
 }
@@ -980,7 +988,7 @@ model FeatureWish {
 /// under rows that already use it, and `filed` is what the first version of
 /// this board wrote. It now means the same as `open` - work described and not
 /// started - and nothing new is written with it.
-enum FeatureWishStatus {
+enum TicketStatus {
   /// In the backlog. Nobody is on it.
   open
   /// An agent holds it. `claimedBy` says who and `claimedAt` when, which is
@@ -992,4 +1000,6 @@ enum FeatureWishStatus {
   filed
   /// Answered no, kept on the record rather than deleted.
   declined
+
+  @@map("FeatureWishStatus")
 }

@@ -2,31 +2,33 @@ import { JSDOM } from "jsdom";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { FEATURE_WISH_STATUSES, type FeatureWish } from "@/lib/featureWishes";
+import { TICKET_STATUSES, type Ticket } from "@/lib/tickets";
 
-import WishRow from "./WishRow";
+import TicketRow from "./TicketRow";
 
 function render(node: Parameters<typeof renderToStaticMarkup>[0]): Document {
   return new JSDOM(`<!doctype html><body>${renderToStaticMarkup(node)}</body>`).window.document;
 }
 
-function wish(overrides: Partial<FeatureWish> = {}): FeatureWish {
+function wish(overrides: Partial<Ticket> = {}): Ticket {
   return {
     id: "cuid123",
     title: "Dark mode should stick",
     detail: null,
     area: "platform",
     kind: "feature",
-    status: FEATURE_WISH_STATUSES.open,
+    status: TICKET_STATUSES.open,
     filedAs: null,
     requestedBy: "john@example.com",
     createdAt: "2026-09-02T10:00:00.000Z",
+    claimedBy: null,
+    claimedAt: null,
     ...overrides,
   };
 }
 
-function draw(value: FeatureWish): Document {
-  return render(<WishRow wish={value} endpoint="/api/admin/feature-wishes" onChanged={() => undefined} />);
+function draw(value: Ticket): Document {
+  return render(<TicketRow wish={value} endpoint="/api/admin/tickets" onChanged={() => undefined} />);
 }
 
 /*
@@ -44,6 +46,8 @@ describe("a waiting wish", () => {
   it("offers to decline rather than to delete", () => {
     const labels = [...doc.querySelectorAll("button")].map((el) => el.textContent);
     expect(labels).toContain("Decline");
+    /* And the move that starts it, which is what a board is for. */
+    expect(labels).toContain("Start");
     expect(labels).not.toContain("Delete");
   });
 
@@ -65,13 +69,13 @@ describe("a waiting wish", () => {
 
 describe("a wish that has been answered", () => {
   it("names the entry it became, and stops offering the command", () => {
-    const doc = draw(wish({ status: FEATURE_WISH_STATUSES.filed, filedAs: "theme-preference-cookie" }));
+    const doc = draw(wish({ status: TICKET_STATUSES.filed, filedAs: "theme-preference-cookie" }));
     expect(doc.body.textContent).toContain("theme-preference-cookie");
     expect(doc.querySelector("code")).toBeNull();
   });
 
   it("can be reopened, because declining is not deleting", () => {
-    const doc = draw(wish({ status: FEATURE_WISH_STATUSES.declined }));
+    const doc = draw(wish({ status: TICKET_STATUSES.declined }));
     expect([...doc.querySelectorAll("button")].map((el) => el.textContent)).toContain("Reopen");
   });
 });

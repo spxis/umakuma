@@ -5,17 +5,21 @@ import { useState } from "react";
 import { FEATURE_AREA_LABELS, FEATURE_KINDS } from "@/lib/featureTimeline";
 import { formatDateShort } from "@/lib/timeFormat";
 import {
-  FEATURE_WISH_STATUSES,
-  FEATURE_WISH_STATUS_LABELS,
-  type FeatureWish,
-} from "@/lib/featureWishes";
+  TICKET_STATUSES,
+  TICKET_MOVES,
+  TICKET_STATUS_LABELS,
+  ticketMoveLabel,
+  type Ticket,
+} from "@/lib/tickets";
 
 import { RELEASE_AREA_CLASSES, RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
 
 const STATUS_CLASSES: Record<string, string> = {
-  [FEATURE_WISH_STATUSES.open]: "border-emerald-500/40 bg-emerald-500/10 text-emerald-700",
-  [FEATURE_WISH_STATUSES.filed]: "border-sky-500/40 bg-sky-500/10 text-sky-600",
-  [FEATURE_WISH_STATUSES.declined]: "border-line bg-surface-muted text-foreground/60",
+  [TICKET_STATUSES.open]: "border-emerald-500/40 bg-emerald-500/10 text-emerald-700",
+  [TICKET_STATUSES.inProgress]: "border-amber-500/40 bg-amber-400/10 text-amber-800",
+  [TICKET_STATUSES.shipped]: "border-sky-500/40 bg-sky-500/10 text-sky-700",
+  [TICKET_STATUSES.filed]: "border-emerald-500/40 bg-emerald-500/10 text-emerald-700",
+  [TICKET_STATUSES.declined]: "border-line bg-surface-muted text-foreground/60",
 };
 
 /**
@@ -25,17 +29,17 @@ const STATUS_CLASSES: Record<string, string> = {
  * that step happens in a terminal and cannot happen here: the timeline is a
  * committed file, so only an agent can file one.
  */
-export default function WishRow({
+export default function TicketRow({
   wish,
   endpoint,
   onChanged,
 }: {
-  wish: FeatureWish;
+  wish: Ticket;
   endpoint: string;
-  onChanged: (wish: FeatureWish) => void;
+  onChanged: (wish: Ticket) => void;
 }) {
   const [busy, setBusy] = useState(false);
-  const open = wish.status === FEATURE_WISH_STATUSES.open;
+  const open = wish.status === TICKET_STATUSES.open;
 
   const setStatus = async (status: string) => {
     setBusy(true);
@@ -46,7 +50,7 @@ export default function WishRow({
         body: JSON.stringify({ status }),
       });
       if (response.ok) {
-        const { wish: updated } = (await response.json()) as { wish: FeatureWish };
+        const { wish: updated } = (await response.json()) as { wish: Ticket };
         onChanged(updated);
       }
     } finally {
@@ -90,7 +94,7 @@ export default function WishRow({
               <span
                 className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${STATUS_CLASSES[wish.status]}`}
               >
-                {FEATURE_WISH_STATUS_LABELS[wish.status]}
+                {TICKET_STATUS_LABELS[wish.status]}
               </span>
             </div>
           </div>
@@ -117,16 +121,29 @@ export default function WishRow({
             </code>
           ) : null}
 
-          <button
-            type="button"
-            disabled={busy}
-            onClick={() =>
-              setStatus(open ? FEATURE_WISH_STATUSES.declined : FEATURE_WISH_STATUSES.open)
-            }
-            className="rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted disabled:opacity-50"
-          >
-            {open ? RELEASE_TIMELINE_COPY.wishDecline : RELEASE_TIMELINE_COPY.wishReopen}
-          </button>
+          {/*
+            * Every move the ticket's state actually allows, rather than one
+            * hard-coded pair. A board you can only decline from is a list, and
+            * moving work along is the thing this page is for.
+            */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            {(TICKET_MOVES[wish.status] ?? []).map((next) => (
+              <button
+                key={next}
+                type="button"
+                disabled={busy}
+                onClick={() => setStatus(next)}
+                className="rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted disabled:opacity-50"
+              >
+                {ticketMoveLabel(wish.status, next)}
+              </button>
+            ))}
+            {wish.claimedBy ? (
+              <span className="text-[11px] font-semibold text-foreground/60">
+                {RELEASE_TIMELINE_COPY.ticketHeldBy} {wish.claimedBy}
+              </span>
+            ) : null}
+          </div>
         </div>
       </details>
     </li>

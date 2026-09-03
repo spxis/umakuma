@@ -3,12 +3,12 @@
 import { useState } from "react";
 
 import { FEATURE_AREA_LABELS, FEATURE_AREA_VALUES, FEATURE_KINDS, FEATURE_KIND_VALUES } from "@/lib/featureTimeline";
-import { FEATURE_WISH_LIMITS, type FeatureWish } from "@/lib/featureWishes";
+import { TICKET_LIMITS, type Ticket } from "@/lib/tickets";
 
 import { RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
-import WishRow from "./WishRow";
+import TicketRow from "./TicketRow";
 
-const ENDPOINT = "/api/admin/feature-wishes";
+const ENDPOINT = "/api/admin/tickets";
 
 const FIELD_CLASS =
   "w-full rounded-xl border border-line bg-surface px-3 py-2 text-sm text-foreground placeholder:text-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70";
@@ -21,7 +21,7 @@ const FIELD_CLASS =
  * the form here posts to the database instead and an agent moves a wish onto
  * the timeline with `pnpm backlog file`.
  */
-export default function WishListPanel({ initialWishes }: { initialWishes: FeatureWish[] }) {
+export default function TicketBoard({ initialWishes }: { initialWishes: Ticket[] }) {
   const [wishes, setWishes] = useState(initialWishes);
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
@@ -30,7 +30,7 @@ export default function WishListPanel({ initialWishes }: { initialWishes: Featur
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const replace = (wish: FeatureWish) =>
+  const replace = (wish: Ticket) =>
     setWishes((current) => current.map((item) => (item.id === wish.id ? wish : item)));
 
   const submit = async (event: React.FormEvent) => {
@@ -51,7 +51,7 @@ export default function WishListPanel({ initialWishes }: { initialWishes: Featur
         }),
       });
       if (!response.ok) throw new Error(String(response.status));
-      const { wish } = (await response.json()) as { wish: FeatureWish };
+      const { wish } = (await response.json()) as { wish: Ticket };
       setWishes((current) => [wish, ...current]);
       setTitle("");
       setDetail("");
@@ -78,7 +78,7 @@ export default function WishListPanel({ initialWishes }: { initialWishes: Featur
           id="wish-title"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
-          maxLength={FEATURE_WISH_LIMITS.title}
+          maxLength={TICKET_LIMITS.title}
           placeholder={RELEASE_TIMELINE_COPY.wishTitlePlaceholder}
           className={`mb-3 mt-1 ${FIELD_CLASS}`}
         />
@@ -90,7 +90,7 @@ export default function WishListPanel({ initialWishes }: { initialWishes: Featur
           id="wish-detail"
           value={detail}
           onChange={(event) => setDetail(event.target.value)}
-          maxLength={FEATURE_WISH_LIMITS.detail}
+          maxLength={TICKET_LIMITS.detail}
           rows={3}
           placeholder={RELEASE_TIMELINE_COPY.wishDetailPlaceholder}
           className={`mb-3 mt-1 ${FIELD_CLASS}`}
@@ -151,7 +151,7 @@ export default function WishListPanel({ initialWishes }: { initialWishes: Featur
       ) : (
         <ul>
           {wishes.map((wish) => (
-            <WishRow key={wish.id} wish={wish} endpoint={ENDPOINT} onChanged={replace} />
+            <TicketRow key={wish.id} wish={wish} endpoint={ENDPOINT} onChanged={replace} />
           ))}
         </ul>
       )}

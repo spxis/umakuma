@@ -6,8 +6,8 @@ import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { authOptions } from "@/lib/auth";
 import { FEATURE_AREA_VALUES, FEATURE_KINDS, FEATURE_KIND_VALUES } from "@/lib/featureTimeline";
-import { FEATURE_WISH_LIMITS } from "@/lib/featureWishes";
-import { createFeatureWish, listFeatureWishes } from "@/lib/featureWishesServer";
+import { TICKET_LIMITS } from "@/lib/tickets";
+import { createTicket, listTickets } from "@/lib/ticketsServer";
 
 /**
  * The one write path into the wish list.
@@ -17,15 +17,15 @@ import { createFeatureWish, listFeatureWishes } from "@/lib/featureWishesServer"
  * can be typed on the site, so this is where it lands.
  */
 const wishSchema = z.object({
-  title: z.string().trim().min(1).max(FEATURE_WISH_LIMITS.title),
-  detail: z.string().trim().max(FEATURE_WISH_LIMITS.detail).optional(),
+  title: z.string().trim().min(1).max(TICKET_LIMITS.title),
+  detail: z.string().trim().max(TICKET_LIMITS.detail).optional(),
   area: z.enum(FEATURE_AREA_VALUES as [string, ...string[]]).optional(),
   kind: z.enum(FEATURE_KIND_VALUES as [string, ...string[]]).optional(),
 });
 
 export async function GET(request: Request) {
   return withApiRouteTelemetry({
-    route: "/api/admin/feature-wishes",
+    route: "/api/admin/tickets",
     method: "GET",
     request,
     execute: async () => {
@@ -33,14 +33,14 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
       }
 
-      return NextResponse.json({ wishes: await listFeatureWishes() });
+      return NextResponse.json({ wishes: await listTickets() });
     },
   });
 }
 
 export async function POST(request: Request) {
   return withApiRouteTelemetry({
-    route: "/api/admin/feature-wishes",
+    route: "/api/admin/tickets",
     method: "POST",
     request,
     execute: async () => {
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       }
 
       const session = await getServerSession(authOptions);
-      const wish = await createFeatureWish({
+      const wish = await createTicket({
         title: parsed.data.title,
         detail: parsed.data.detail?.trim() || null,
         area: (parsed.data.area as never) ?? null,

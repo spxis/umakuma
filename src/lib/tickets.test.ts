@@ -2,15 +2,15 @@ import { describe, expect, it } from "vitest";
 
 import { FEATURE_KINDS } from "./featureTimeline";
 import {
-  FEATURE_WISH_STATUSES,
-  isFeatureWishStatus,
+  TICKET_STATUSES,
+  isTicketStatus,
   openWishes,
   suggestedEntryId,
-  toFeatureWish,
-  type FeatureWish,
-} from "./featureWishes";
+  toTicket,
+  type Ticket,
+} from "./tickets";
 
-function row(overrides: Partial<Parameters<typeof toFeatureWish>[0]> = {}) {
+function row(overrides: Partial<Parameters<typeof toTicket>[0]> = {}) {
   return {
     id: "wish1",
     title: "A thing",
@@ -21,6 +21,8 @@ function row(overrides: Partial<Parameters<typeof toFeatureWish>[0]> = {}) {
     filedAs: null,
     requestedBy: "john@example.com",
     createdAt: new Date("2026-09-02T10:00:00Z"),
+    claimedBy: null,
+    claimedAt: null,
     ...overrides,
   };
 }
@@ -31,46 +33,46 @@ function row(overrides: Partial<Parameters<typeof toFeatureWish>[0]> = {}) {
  * migration every time one did. The cost is that a row can hold a value this
  * build does not know, so the narrowing has to be real.
  */
-describe("toFeatureWish", () => {
+describe("toTicket", () => {
   it("keeps an area and kind the code still knows", () => {
-    const wish = toFeatureWish(row());
-    expect(wish.area).toBe("games");
-    expect(wish.kind).toBe(FEATURE_KINDS.feature);
+    const ticket = toTicket(row());
+    expect(ticket.area).toBe("games");
+    expect(ticket.kind).toBe(FEATURE_KINDS.feature);
   });
 
   it("drops an area this build no longer has", () => {
-    expect(toFeatureWish(row({ area: "gramophones" })).area).toBeNull();
+    expect(toTicket(row({ area: "gramophones" })).area).toBeNull();
   });
 
   it("falls back rather than handing a component an unknown kind or status", () => {
-    const wish = toFeatureWish(row({ kind: "chore", status: "archived" }));
-    expect(wish.kind).toBe(FEATURE_KINDS.feature);
-    expect(wish.status).toBe(FEATURE_WISH_STATUSES.open);
+    const ticket = toTicket(row({ kind: "chore", status: "archived" }));
+    expect(ticket.kind).toBe(FEATURE_KINDS.feature);
+    expect(ticket.status).toBe(TICKET_STATUSES.open);
   });
 
   it("carries no area when nobody chose one", () => {
-    expect(toFeatureWish(row({ area: null })).area).toBeNull();
+    expect(toTicket(row({ area: null })).area).toBeNull();
   });
 });
 
-describe("isFeatureWishStatus", () => {
+describe("isTicketStatus", () => {
   it("accepts the three states and nothing else", () => {
-    expect(isFeatureWishStatus("open")).toBe(true);
-    expect(isFeatureWishStatus("filed")).toBe(true);
-    expect(isFeatureWishStatus("declined")).toBe(true);
-    expect(isFeatureWishStatus("toString")).toBe(false);
-    expect(isFeatureWishStatus("deleted")).toBe(false);
+    expect(isTicketStatus("open")).toBe(true);
+    expect(isTicketStatus("filed")).toBe(true);
+    expect(isTicketStatus("declined")).toBe(true);
+    expect(isTicketStatus("toString")).toBe(false);
+    expect(isTicketStatus("deleted")).toBe(false);
   });
 });
 
 describe("openWishes", () => {
   it("is what an agent has left to file", () => {
-    const wishes = [
-      toFeatureWish(row({ id: "a", status: "open" })),
-      toFeatureWish(row({ id: "b", status: "filed", filedAs: "some-entry" })),
-      toFeatureWish(row({ id: "c", status: "declined" })),
-    ] satisfies FeatureWish[];
-    expect(openWishes(wishes).map((wish) => wish.id)).toEqual(["a"]);
+    const tickets = [
+      toTicket(row({ id: "a", status: "open" })),
+      toTicket(row({ id: "b", status: "filed", filedAs: "some-entry" })),
+      toTicket(row({ id: "c", status: "declined" })),
+    ] satisfies Ticket[];
+    expect(openWishes(tickets).map((ticket) => ticket.id)).toEqual(["a"]);
   });
 });
 
@@ -91,6 +93,6 @@ describe("suggestedEntryId", () => {
 
   it("survives punctuation and a title in another script", () => {
     expect(suggestedEntryId("Dark mode — it doesn't stick!")).toBe("dark-mode-doesn-t");
-    expect(suggestedEntryId("装う一組")).toBe("wish");
+    expect(suggestedEntryId("装う一組")).toBe("ticket");
   });
 });

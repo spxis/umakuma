@@ -32,11 +32,11 @@ export const RELEASE_TIMELINE_COPY = {
   cancelledHeading: "Cancelled",
   cancelledLegend: "Decided against, kept on the record rather than vanishing, so it is not proposed twice.",
   emptyCancelled: "Nothing cancelled.",
-  wishHeading: "Wish list",
+  wishHeading: "Tickets",
   wishLegend:
-    "Asked for, not yet agreed to. The timeline is a file in the repository and the site cannot write to it, so a wish waits here until an agent files it as planned work.",
-  wishEmpty: "No wishes yet.",
-  wishAdd: "Add a wish",
+    "Every piece of work, from asked-for to shipped. Agents read and move these too: a ticket is true for every session the moment it is written, which a file in the repository is not.",
+  wishEmpty: "No tickets yet.",
+  wishAdd: "Add a ticket",
   wishTitleLabel: "What do you want?",
   wishTitlePlaceholder: "One line, the way you would say it",
   wishDetailLabel: "Anything else (optional)",
@@ -44,7 +44,7 @@ export const RELEASE_TIMELINE_COPY = {
   wishAreaLabel: "Area",
   wishAreaAny: "Not sure",
   wishKindLabel: "Kind",
-  wishSubmit: "Add to the wish list",
+  wishSubmit: "Add ticket",
   wishSubmitting: "Adding\u2026",
   wishDecline: "Decline",
   wishReopen: "Reopen",
@@ -52,7 +52,8 @@ export const RELEASE_TIMELINE_COPY = {
   wishRequestedBy: "Asked by",
   wishError: "That did not save. Try again.",
   /* The loop the wish list closes, spelled out where the wishes are read. */
-  wishHowFiled: (wishId: string) => `pnpm backlog file ${wishId} <area>`,
+  wishHowFiled: (ticketId: string) => `pnpm backlog file ${ticketId} <area>`,
+  ticketHeldBy: "Held by",
 } as const;
 
 export const RELEASE_TABS = {

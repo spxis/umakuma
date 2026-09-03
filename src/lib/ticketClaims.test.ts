@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { TASK_LEASE_MS, claimTask, isClaimed, leaseExpired, taskLine } from "./featureTasks";
+import { TASK_LEASE_MS, claimTask, isClaimed, leaseExpired, taskLine } from "./ticketClaims";
 
 /** A hold made just now, which is the only kind that stops anybody else. */
 const fresh = () => new Date();

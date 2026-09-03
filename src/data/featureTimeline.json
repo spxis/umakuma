@@ -4040,11 +4040,23 @@
     "id": "map-source-credits",
     "name": "Credit the map data",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "The three map datasets are shown with no attribution anywhere: Global Map Japan via GSI, US Census Bureau via us-atlas, and Natural Earth. GSI's terms require both a source citation and a statement that the data was edited, and ours are reprojected, simplified and move Okinawa into an inset. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.358.0",
+    "releasedAt": "2026-09-03T12:39:36Z"
+  },
+  {
+    "id": "tickets-not-wishes",
+    "name": "Tickets, not wishes",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.358.0",
-    "releasedAt": "2026-09-03T12:39:36Z",
-    "summary": "The three map datasets are shown with no attribution anywhere: Global Map Japan via GSI, US Census Bureau via us-atlas, and Natural Earth. GSI's terms require both a source citation and a statement that the data was edited, and ours are reprojected, simplified and move Okinawa into an inset. Requested 2026-09-03 by John."
+    "version": "0.359.0",
+    "releasedAt": "2026-09-03T12:47:04Z",
+    "summary": "The board holds every piece of work, so the model, library, API and admin panel say Ticket rather than FeatureWish. The physical table keeps its name, because prisma db push drops and recreates rather than renaming. The board offers every move a ticket's state allows and says who holds it. Requested 2026-09-03 by John."
   }
 ]

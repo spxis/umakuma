@@ -145,11 +145,11 @@ async function main(): Promise<void> {
   if (ticketId) {
     const client = new PrismaClient({ log: ["error"] });
     try {
-      const ticket = await client.featureWish.findUnique({ where: { id: ticketId } });
+      const ticket = await client.ticket.findUnique({ where: { id: ticketId } });
       if (!ticket) throw new Error(`No ticket ${ticketId} on the board.`);
       shippedId = flag("as") ?? ticket.filedAs ?? slugFor(ticket.title);
       entries = [...loadFeatureTimeline(), entryFromTicket({ ...ticket, id: shippedId }, stamp)];
-      await client.featureWish.update({
+      await client.ticket.update({
         where: { id: ticketId },
         data: { status: "shipped", filedAs: shippedId, claimedBy: null, claimedAt: null },
       });

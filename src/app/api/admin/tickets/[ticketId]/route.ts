@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { FEATURE_WISH_STATUS_VALUES, type FeatureWishStatus } from "@/lib/featureWishes";
-import { setFeatureWishStatus } from "@/lib/featureWishesServer";
+import { TICKET_STATUS_VALUES, type TicketStatus } from "@/lib/tickets";
+import { setTicketStatus } from "@/lib/ticketsServer";
 
 /**
  * Declining a wish, and changing its mind again.
@@ -14,12 +14,12 @@ import { setFeatureWishStatus } from "@/lib/featureWishesServer";
  * work on the record rather than removing it.
  */
 const statusSchema = z.object({
-  status: z.enum(FEATURE_WISH_STATUS_VALUES as [string, ...string[]]),
+  status: z.enum(TICKET_STATUS_VALUES as [string, ...string[]]),
 });
 
-export async function PATCH(request: Request, context: { params: Promise<{ wishId: string }> }) {
+export async function PATCH(request: Request, context: { params: Promise<{ ticketId: string }> }) {
   return withApiRouteTelemetry({
-    route: "/api/admin/feature-wishes/[wishId]",
+    route: "/api/admin/tickets/[ticketId]",
     method: "PATCH",
     request,
     execute: async () => {
@@ -32,8 +32,8 @@ export async function PATCH(request: Request, context: { params: Promise<{ wishI
         return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
       }
 
-      const { wishId } = await context.params;
-      const wish = await setFeatureWishStatus(wishId, parsed.data.status as FeatureWishStatus);
+      const { ticketId } = await context.params;
+      const wish = await setTicketStatus(ticketId, parsed.data.status as TicketStatus);
       if (!wish) {
         return NextResponse.json({ error: "No such wish." }, { status: 404 });
       }

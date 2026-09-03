@@ -44,9 +44,9 @@ async function main(): Promise<void> {
      * make two of everything - the id is the one stable name each of these
      * has had since it was filed.
      */
-    const existing = await client.featureWish.findFirst({ where: { filedAs: entry.id } });
+    const existing = await client.ticket.findFirst({ where: { filedAs: entry.id } });
     if (existing) continue;
-    await client.featureWish.create({
+    await client.ticket.create({
       data: {
         title: entry.name,
         detail: entry.summary ?? null,
