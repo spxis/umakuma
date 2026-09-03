@@ -28,7 +28,7 @@ import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "rea
 import { badgeClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import { formatNumber } from "../lib/jlptDisplay";
 import { JLPT_EXPLORER_TEXT } from "./JlptExplorer.constants";
-import type { JlptWordExample } from "@/lib/jlptTypes";
+import { useSelectedKanjiDetails } from "../lib/useSelectedKanjiDetails";
 import { toJlptRow, toJlptView } from "../lib/jlptRowAdapter";
 import JlptExplorerCards from "./JlptExplorerCards";
 import JlptExplorerRows from "./JlptExplorerRows";
@@ -45,10 +45,7 @@ import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import { usePathname } from "next/navigation";
-import type {
-  KanjiStats,
-  JlptExplorerContentProps as Props,
-} from "./JlptExplorerContent.types";
+import type { JlptExplorerContentProps as Props } from "./JlptExplorerContent.types";
 export default function JlptExplorerContent({
   accountId,
   items,
@@ -105,89 +102,16 @@ export default function JlptExplorerContent({
   });
   const hasMounted = useSyncExternalStore(() => () => {}, () => true, () => false);
 
-  // --- Kanji stats/history state ---
   const [statsOpen, setStatsOpen] = useState(false);
-  const [kanjiStats, setKanjiStats] = useState<KanjiStats | null>(null);
-  const [kanjiStatsLoading, setKanjiStatsLoading] = useState(false);
-  const [kanjiStatsError, setKanjiStatsError] = useState<string | null>(null);
-  // Account ID is not in props, so try to extract from location (fragile fallback)
-  function getAccountIdFromUrl() {
-    if (typeof window === "undefined") return null;
-    const m = window.location.pathname.match(/\/users\/([^/]+)/);
-    return m ? m[1] : null;
-  }
-  useEffect(() => {
-    if (!selectedItem) return;
-    const selectedSubjectId = userKanjiByChar.get(selectedItem.kanji)?.subjectId;
-    if (!selectedSubjectId) return;
-    const accountId = getAccountIdFromUrl();
-    if (!accountId) return;
-    queueMicrotask(() => {
-      setKanjiStatsLoading(true);
-      setKanjiStatsError(null);
+
+  /* Everything the open kanji's panel needs and the list does not carry. */
+  const { wordExamples, wordExamplesError, kanjiStats, kanjiStatsLoading, kanjiStatsError } =
+    useSelectedKanjiDetails({
+      accountId,
+      kanji: selectedItem?.kanji ?? null,
+      subjectId: selectedItem ? (userKanjiByChar.get(selectedItem.kanji)?.subjectId ?? null) : null,
     });
-    fetch(`/api/study/${accountId}/subjects/${selectedSubjectId}/history?refresh=1`)
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Failed to load stats");
-        return res.json();
-      })
-      .then((data) => {
-        const payload = data as { history?: KanjiStats };
-        setKanjiStats(payload.history || null);
-        setKanjiStatsLoading(false);
-      })
-      .catch(() => {
-        setKanjiStatsError("Could not load kanji stats");
-        setKanjiStatsLoading(false);
-      });
-  }, [selectedItem, userKanjiByChar]);
 
-  /*
-   * This kanji's compounds, fetched when it is selected.
-   *
-   * They used to arrive with the page: every row carried its own, which was
-   * 9.8MB of a 10.5MB payload across 2,211 rows so that the one open panel
-   * could show them.
-   *
-   * The character they belong to is stored beside them rather than cleared on
-   * the way in, so selecting a different kanji reads as loading immediately -
-   * no reset, and nothing set synchronously inside the effect.
-   */
-  const [words, setWords] = useState<{
-    kanji: string;
-    examples: JlptWordExample[] | null;
-    failed: boolean;
-  }>({ kanji: "", examples: null, failed: false });
-
-  /* The item's own character, not the prop: a selection the list does not
-   * hold has no words to ask for. */
-  const wordsForKanji = selectedItem?.kanji ?? null;
-
-  useEffect(() => {
-    if (!wordsForKanji) return;
-
-    let current = true;
-    fetch(`/api/jlpt/${encodeURIComponent(wordsForKanji)}/words`)
-      .then(async (response) => {
-        if (!response.ok) throw new Error(String(response.status));
-        return (await response.json()) as { words: JlptWordExample[] };
-      })
-      .then((payload) => {
-        if (current) setWords({ kanji: wordsForKanji, examples: payload.words ?? [], failed: false });
-      })
-      .catch(() => {
-        if (current) setWords({ kanji: wordsForKanji, examples: null, failed: true });
-      });
-
-    /* A member arrowing down the list outruns the network; the last one wins. */
-    return () => {
-      current = false;
-    };
-  }, [wordsForKanji]);
-
-  const wordsAreThisKanji = words.kanji === wordsForKanji;
-  const wordExamples = wordsAreThisKanji ? words.examples : null;
-  const wordExamplesError = wordsAreThisKanji && words.failed;
   const effectiveVisibleCount = Math.min(
     filteredItems.length,
     Math.max(PAGE_SIZE, visibleCount, selectedIndex + 1),

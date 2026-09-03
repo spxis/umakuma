@@ -3689,12 +3689,11 @@
     "name": "Kanji review stats ask under the wrong id",
     "area": "study",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 72,
-    "summary": "JlptExplorerContent reads the account id out of window.location with getAccountIdFromUrl, whose own comment calls it a fragile fallback. The first path segment after /users/ is the member's nickname or slug, not their account id, so every stats request goes to /api/study/johnmorrisdotca/subjects/464/history and comes back 404. Opening any kanji in the JLPT explorer logs a failed request, and Show review stats can never fill in. The account id is already on the page - JlptExplorer takes accountId as a prop and uses it for its own fetches - so this is a prop that was not threaded one level further rather than anything unknown. Found on 2026-09-02 while checking the explorer's paint.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T04:44:15.209Z"
+    "dateIsEstimate": false,
+    "summary": "The JLPT explorer asked for a kanji's review history under whatever the address bar held: the first segment after /users/ is the member's nickname or slug, never their account id, so every request went to /api/study/<nickname>/... and answered 404. Show review stats could never fill in, and opening any kanji logged a failed request. The account id was already a prop the component used for its other fetches, one line away from the guess. The two per-kanji lookups - this history and the compounds - now live together in useSelectedKanjiDetails, each result stored beside the kanji it belongs to, so arrowing down the list cannot show the previous kanji's history under the new kanji's glyph.",
+    "version": "0.312.0",
+    "releasedAt": "2026-09-03T04:50:44Z"
   }
 ]

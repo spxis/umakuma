@@ -20,4 +20,5 @@ export const JLPT_EXPLORER_TEXT = {
   wordsHeading: "Used in words",
   wordsLoading: "Looking up the words\u2026",
   wordsError: "Could not load the words for this kanji.",
+  statsError: "Could not load the review history for this kanji.",
 } as const;
