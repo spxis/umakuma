@@ -21,6 +21,8 @@ import { kanjiPageHref, parseSubjectSection } from "@/app/shared/subject-page/su
 import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout";
 
 import { KANJI_PAGE_COPY } from "../KanjiPage.constants";
+import { summaryLine } from "@/lib/kanjiSummaryLine";
+import SubjectPageHeading from "@/app/shared/subject-page/SubjectPageHeading";
 import { radicalPartsOf } from "@/lib/radicalSearchServer";
 
 import { KANJI_SECTION_BLOCKS, kanjiSectionsFor, type KanjiSectionView } from "../kanjiSections";
@@ -152,6 +154,7 @@ export default async function KanjiPage({ params }: Props) {
     dictionary,
     dictionaryAttribution: getKanjiDictionaryAttribution(),
     parts: radicalPartsOf(character),
+    alone: section !== null,
     page,
   };
 
@@ -189,6 +192,10 @@ export default async function KanjiPage({ params }: Props) {
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
+
+      {/* The whole page names its character; a single section keeps the
+        * section header instead, which already says which character it is. */}
+      {section ? null : <SubjectPageHeading label={character} line={summaryLine(summary)} />}
 
       {section ? (
         <SubjectSectionHeader

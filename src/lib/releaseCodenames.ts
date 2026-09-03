@@ -381,6 +381,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Toridasu Tsukuri", ja: "取り出すつくり", reading: "とりだすつくり", gloss: "the parts, taken out and laid down" },
   { romaji: "Nagameru Narabi", ja: "眺める並び", reading: "ながめるならび", gloss: "a row you can look over, leaving none out" },
   { romaji: "Nigiru Ippon", ja: "握る一本", reading: "にぎるいっぽん", gloss: "the one stroke, held on its own" },
+  { romaji: "Nugu Kanban", ja: "脱ぐ看板", reading: "ぬぐかんばん", gloss: "the sign the card no longer has to wear" },
 ];
 
 /**

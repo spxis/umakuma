@@ -41,6 +41,8 @@ export type KanjiSectionView = {
   dictionaryAttribution: KanjiDictionaryAttribution | null;
   /** What RADKFILE says this character is written with; empty where it has no entry. */
   parts: RadicalPart[];
+  /** True when one section is drawn on its own, with no page header above it. */
+  alone: boolean;
   page: KanjiPage;
 };
 
@@ -57,7 +59,14 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
     has: () => true,
     render: (view) => (
       <section className="overflow-hidden rounded-3xl border border-line bg-surface shadow-sm">
-        <KanjiDetailPanel kanji={view.character} grade={view.grade} summary={view.summary} />
+        {/* The page above says what the character is; a section page has no
+          * such header, so the card keeps its own line there. */}
+        <KanjiDetailPanel
+          kanji={view.character}
+          grade={view.grade}
+          summary={view.summary}
+          showSummaryLine={view.alone}
+        />
       </section>
     ),
   },

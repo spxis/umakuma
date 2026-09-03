@@ -6,8 +6,7 @@ import KanjiStrokeAnimation, { type StrokeMeta } from "./KanjiStrokeAnimation";
 import ModalShell from "./ModalShell";
 import SourceCredit from "./SourceCredit";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
-import { READING_KINDS } from "@/lib/domainConstants";
-import { formatReading } from "@/lib/readingDisplay";
+import { summaryLine } from "@/lib/kanjiSummaryLine";
 import { MODAL_LAYERS } from "./modalLayers";
 import { stepStroke } from "@/lib/strokeSteps";
 import { STROKE_ANIMATION_COPY, STROKE_SIDE_WIDTH } from "./strokeAnimationCopy";
@@ -17,14 +16,9 @@ import { strokeIsInCharacter, strokeNumbers } from "./strokeFocus";
 import { noTranslateClass } from "./japaneseText";
 import JapaneseInProse from "./JapaneseInProse";
 
-export type KanjiDetailSummary = {
-  /** The English meaning, if the surface knows one. */
-  meaning?: string | null;
-  /** On readings, already display-formatted. */
-  on?: string[];
-  /** Kun readings, already display-formatted. */
-  kun?: string[];
-};
+import type { KanjiSummary as KanjiDetailSummary } from "@/lib/kanjiSummaryLine";
+
+export type { KanjiSummary as KanjiDetailSummary } from "@/lib/kanjiSummaryLine";
 
 type PanelProps = {
   kanji: string;
@@ -41,6 +35,16 @@ type PanelProps = {
    * offers no size control. The page leaves both to the reader.
    */
   compact?: boolean;
+  /**
+   * Whether the header carries the readings and meaning under its title.
+   *
+   * This was the only header on a subject page saying two things, and it said
+   * them because it used to be the first thing on the page - there was no page
+   * header, so the card became one. A page that names the character above the
+   * cards turns this off; a card standing on its own, in a modal or at
+   * `/kanji/X/stroke`, still needs to say what it is about.
+   */
+  showSummaryLine?: boolean;
 };
 
 type Props = PanelProps & { onClose: () => void };
@@ -208,21 +212,6 @@ function StrokePicker({
   );
 }
 
-/** One line carrying whatever the surface knows: readings first, then meaning. */
-function summaryLine(summary: KanjiDetailSummary | undefined): string | null {
-  if (!summary) return null;
-
-  /* On in katakana and kun in hiragana, so the line reads as two kinds, not one list. */
-  const readings = [
-    ...(summary.on ?? []).map((reading) => formatReading(READING_KINDS.on, reading)),
-    ...(summary.kun ?? []).map((reading) => formatReading(READING_KINDS.kun, reading)),
-  ].filter(Boolean);
-  const parts = [readings.join("、"), summary.meaning?.trim()].filter(
-    (part): part is string => Boolean(part && part.length > 0),
-  );
-
-  return parts.length > 0 ? parts.join(" · ") : null;
-}
 
 /**
  * One kanji, in detail, openable from any surface.
@@ -243,7 +232,7 @@ function summaryLine(summary: KanjiDetailSummary | undefined): string | null {
  * Shared by the modal and by the page a link opens, so a character looks the
  * same however you arrive at it.
  */
-export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, shareHref, compact }: PanelProps) {
+export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, shareHref, compact, showSummaryLine = true }: PanelProps) {
   const [meta, setMeta] = useState<StrokeMeta | null>(null);
   const size = useStrokeSize();
   const line = summaryLine(summary);
@@ -264,7 +253,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
           <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             {STROKE_ANIMATION_COPY.title}
           </p>
-          {line ? (
+          {showSummaryLine && line ? (
             <p className="truncate text-sm font-bold text-foreground" title={line}>
               <JapaneseInProse text={line} />
             </p>

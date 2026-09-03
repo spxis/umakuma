@@ -3830,11 +3830,12 @@
     "name": "The page says what the character is, not the stroke card",
     "area": "study",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-03",
-    "dateIsEstimate": true,
-    "release": 73,
-    "summary": "Stroke order's header carries the readings and the meaning under its title - the only block on the page whose header does two jobs, now that every other block wears the same plain bar. It is there because the kanji page has no header of its own: the card was the first thing on the page, so it took the job. Give the page a header - the character, its readings, its meaning - and let stroke order's bar say Stroke order and the stroke count, like every other card. The readings appear again under Meanings and readings, which is fine: a page header repeating what a section holds is what a page header is for. Requested 2026-09-03 by John."
+    "dateIsEstimate": false,
+    "summary": "Stroke order's header carried the readings and the meaning under its title - the only block on the page whose header did two jobs, now that every other card wears the same plain bar. It did that because the kanji page had no header of its own: the card was the first thing on the page, so it became one. The page names its character now, and stroke order's bar says Stroke order and the stroke count like every other card. A section drawn on its own - /kanji/X/stroke, or the panel in a modal - keeps the line, because there is no page header above it there. summaryLine moved out of the client module into lib on the way: a function exported from a 'use client' file cannot be called during a server render, which is how the page broke the first time it was wired up. Requested 2026-09-03 by John.",
+    "version": "0.331.0",
+    "releasedAt": "2026-09-03T08:14:50Z"
   },
   {
     "id": "kanji-practice-sheet",
