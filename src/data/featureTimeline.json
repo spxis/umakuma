@@ -4075,5 +4075,38 @@
     "summary": "Every release is already tagged by area, and the tags are shown without being usable: there is no way to ask for the games work, or everything that touched search. The page lays out every area it holds with a count beside it, and choosing one filters the list. Areas only - a feature and a bug are not the same kind of tag. Requested 2026-09-03 by John.",
     "dateIsEstimate": true,
     "release": 74
+  },
+  {
+    "id": "print-as-modal",
+    "name": "Print without leaving the page",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 75,
+    "summary": "Printing a list opens /users/<name>/practice/list/<slug>, which switches the header's section from Lists to Learn - you asked to print and the site took you somewhere else. A print modal would keep the reader where they are and be callable from anywhere a printable thing is shown. Requested 2026-09-02 by John, twice. Tabled in the backlog 2026-09-03 at his request."
+  },
+  {
+    "id": "maps-kanji-reveal-toggle",
+    "name": "A toggle for the reading and the English",
+    "area": "platform",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 76,
+    "summary": "The map panel's kanji cards show the meaning and the reading together. John asked for the shared component 'with a toggle, the english/reading'; showing both was a judgement call made without flagging it, and the grade explorer already has the reveal control this would reuse. Raised 2026-09-03 by John."
+  },
+  {
+    "id": "kanji-missing-english",
+    "name": "A kanji page with no English",
+    "area": "platform",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 77,
+    "summary": "/kanji/\u8e74 shows the character as its own name and carries no meaning and no readings, where /kanji/\u4fc3 shows Urge and \u305d\u304f\u3001\u3046\u306a\u304c\u3001\u3046\u306a\u304c\u3059. Both are WaniKani kanji (L49 and L29), so the page has something to draw from in each case and only one of them draws it. Found 2026-09-03 by John."
   }
 ]
