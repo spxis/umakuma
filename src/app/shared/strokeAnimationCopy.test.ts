@@ -102,18 +102,32 @@ describe("the repeat", () => {
  * the whole reason somebody picks a stroke and turns the repeat on.
  */
 describe("how long one run lasts", () => {
-  it("is every stroke when the whole character is drawing", () => {
+  it("is every stroke, plus a second to read it, for the whole character", () => {
     expect(strokeRunMs(12, null)).toBe(12 * STROKE_MS_PER_STROKE + STROKE_LOOP_PAUSE_MS);
   });
 
   it("is one stroke when one is chosen, whichever it is", () => {
-    const once = STROKE_MS_PER_STROKE + STROKE_LOOP_PAUSE_MS;
-    expect(strokeRunMs(12, 0)).toBe(once);
+    const once = strokeRunMs(12, 0);
     expect(strokeRunMs(12, 8)).toBe(once);
+    expect(once).toBeGreaterThan(STROKE_MS_PER_STROKE);
+  });
+
+  /*
+   * The rest is a share of the drawing, not a fixed second. A second after one
+   * 420ms stroke leaves it sitting finished for seventy per cent of every
+   * cycle: the loop runs and looks broken, which is the same thing to whoever
+   * is watching. Half the cycle spent still is the most it may be.
+   */
+  it("never rests longer than it draws", () => {
+    for (const selected of [0, 5, null]) {
+      const run = strokeRunMs(12, selected);
+      const drawMs = (selected === null ? 12 : 1) * STROKE_MS_PER_STROKE;
+      expect(run - drawMs, `${selected} rests longer than it draws`).toBeLessThanOrEqual(drawMs);
+    }
   });
 
   /* A character with no strokes would otherwise loop with no wait at all. */
   it("never waits for nothing", () => {
-    expect(strokeRunMs(0, null)).toBeGreaterThan(STROKE_LOOP_PAUSE_MS);
+    expect(strokeRunMs(0, null)).toBeGreaterThan(STROKE_MS_PER_STROKE);
   });
 });

@@ -4136,11 +4136,23 @@
     "id": "map-area-highlight",
     "name": "Select a whole region and highlight it",
     "area": "platform",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "The map directory groups regions under headings - Prairies, Northern Canada, Tohoku, Kansai. Those headings should be selectable, lighting up every member on the map at once, so a learner can see a region as a shape rather than picking its members off one at a time. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.366.0",
+    "releasedAt": "2026-09-03T15:16:03Z"
+  },
+  {
+    "id": "stroke-repeat-looks-alive",
+    "name": "A single stroke's repeat looks static",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.366.0",
-    "releasedAt": "2026-09-03T15:16:03Z",
-    "summary": "The map directory groups regions under headings - Prairies, Northern Canada, Tohoku, Kansai. Those headings should be selectable, lighting up every member on the map at once, so a learner can see a region as a shape rather than picking its members off one at a time. Requested 2026-09-03 by John."
+    "version": "0.367.0",
+    "releasedAt": "2026-09-03T15:17:59Z",
+    "summary": "The repeat runs for one stroke but rests a fixed second after a 420ms draw, so the stroke sits finished for 70 percent of every cycle - running, and indistinguishable from broken. The rest is a share of the drawing now, capped at the old second so the whole character is unchanged. Reported 2026-09-03 by John."
   }
 ]

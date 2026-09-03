@@ -126,12 +126,16 @@ export const STROKE_SOLO_STORAGE_KEY = "umakuma:stroke-solo";
 /**
  * How long one run of the animation takes, so the repeat can wait for it.
  *
- * The whole character is every stroke end to end; one stroke is one stroke.
- * The repeat used to assume the first and refuse to run at all for the
- * second, on the grounds that a held stroke is not moving - which was wrong,
- * because the stroke you are looking at draws itself exactly as the others do.
+ * The rest is a share of the drawing rather than a fixed second. A second is
+ * right after twelve strokes - five seconds of drawing, then a moment to read
+ * what was drawn - and wrong after one, where it leaves the stroke sitting
+ * finished for seventy per cent of every cycle. That loop is running and looks
+ * broken, which is the same thing to whoever is watching it.
+ *
+ * Capped at the old second, so the character's own rest is unchanged.
  */
 export function strokeRunMs(strokeCount: number, selectedStroke: number | null): number {
   const drawn = selectedStroke === null ? Math.max(1, strokeCount) : 1;
-  return drawn * STROKE_MS_PER_STROKE + STROKE_LOOP_PAUSE_MS;
+  const drawMs = drawn * STROKE_MS_PER_STROKE;
+  return drawMs + Math.min(STROKE_LOOP_PAUSE_MS, Math.round(drawMs * 0.6));
 }
