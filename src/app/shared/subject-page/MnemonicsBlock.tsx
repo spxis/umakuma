@@ -18,7 +18,10 @@ export default function MnemonicsBlock({
   if (!mnemonics || (!mnemonics.meaning && !mnemonics.reading)) return null;
 
   return (
-    <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.mnemonics }}>
+    <SubjectBlock
+      heading={SUBJECT_PAGE_COPY.sectionTitles.mnemonics}
+      credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.mnemonics }}
+    >
       {mnemonics.meaning ? (
         <div className="space-y-1">
           <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">

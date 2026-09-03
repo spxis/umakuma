@@ -14,6 +14,7 @@ import type { KanjiPage } from "@/lib/subjectPage";
 
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
+import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import {
   SUBJECT_SECTIONS,
   type SubjectSection,
@@ -88,7 +89,10 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
     id: SUBJECT_SECTIONS.related,
     has: (view) => view.page.related.length > 0,
     render: (view) => (
-      <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
+      <SubjectBlock
+        heading={SUBJECT_PAGE_COPY.sectionTitles.related}
+        credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}
+      >
         {view.page.related.map((group, index) => (
           <RelatedGroupBlock key={group.id} group={group} showToggle={index === 0} />
         ))}

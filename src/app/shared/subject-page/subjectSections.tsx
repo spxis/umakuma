@@ -68,7 +68,10 @@ export const SUBJECT_SECTION_BLOCKS: readonly SubjectSectionBlock[] = [
     id: SUBJECT_SECTIONS.related,
     has: (view) => relatedGroupsForSubject(view.subject, view.neighbours).length > 0,
     render: (view) => (
-      <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
+      <SubjectBlock
+        heading={SUBJECT_PAGE_COPY.sectionTitles.related}
+        credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}
+      >
         {relatedGroupsForSubject(view.subject, view.neighbours).map((group, index) => (
           <RelatedGroupBlock key={group.id} group={group} showToggle={index === 0} />
         ))}

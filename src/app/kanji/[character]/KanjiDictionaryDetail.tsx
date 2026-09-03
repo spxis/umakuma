@@ -2,6 +2,7 @@ import type { KanjiDictionaryAttribution, KanjiDictionaryEntry } from "@/lib/kan
 import ReadingsLine from "@/app/shared/ReadingsLine";
 import { READING_KINDS } from "@/lib/domainConstants";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
+import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
 
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
@@ -33,6 +34,7 @@ export default function KanjiDictionaryDetail({
 }) {
   return (
     <SubjectBlock
+      heading={SUBJECT_PAGE_COPY.sectionTitles.meanings}
       credit={
         /* Share-alike: the credit is a licence condition, not decoration. */
         attribution ? { source: SOURCE_KEYS.kanjidic2, label: KANJI_PAGE_COPY.dictionaryCredit } : undefined

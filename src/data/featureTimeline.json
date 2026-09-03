@@ -3776,5 +3776,17 @@
     "summary": "The catalogue gap reopens every time WaniKani adds subjects and nothing says so. The admin catalogue panel already reports drift - missing levels, duplicate rows - and the count belongs beside them, but findCatalogGap reads every account's assignment cache and all 9,400 rows' relation arrays, so it cannot ride the status endpoint the panel polls. A button that measures on demand and reports the ids, next to the sync controls. Raised 2026-09-02.",
     "dateIsEstimate": true,
     "release": 71
+  },
+  {
+    "id": "subject-block-headers",
+    "name": "Every block on a subject page wears the same header",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-02",
+    "dateIsEstimate": false,
+    "summary": "Stroke order draws its title in a header bar across the top of its card - a rule under it, a muted ground, the stroke count on the right - and every other block put a small label inside its padded body instead, or had no title at all. Meanings, Mnemonics and Related carried no heading, so a reader scrolling a kanji page met cards that looked like different components. One header bar in SubjectBlock, the one stroke order already used, and a title on every block that is a section of the page - taken from the same sectionTitles the section pages are named by, so a card and its own address agree. The right-hand slot is that panel's too: where its stroke count sits, a block's own control sits. Requested 2026-09-02 by John.",
+    "version": "0.327.0",
+    "releasedAt": "2026-09-03T06:43:01Z"
   }
 ]

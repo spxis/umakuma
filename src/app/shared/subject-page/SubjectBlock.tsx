@@ -31,21 +31,28 @@ export default function SubjectBlock({
 }) {
   return (
     <section className={`overflow-hidden rounded-3xl border border-line bg-surface ${className}`}>
+      {/*
+        * The title in a bar across the top, which is what the stroke-order
+        * panel has always done. It used to be a small label inside the padded
+        * body, so the one card with a header bar read as a different component
+        * from the four beneath it. The right-hand slot is that panel's too -
+        * where its stroke count sits, a block's own control sits.
+        */}
+      {heading || action ? (
+        <header className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
+          {heading ? (
+            <h2 className="min-w-0 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
+              {heading}
+            </h2>
+          ) : (
+            <span />
+          )}
+          {action ? <div className="flex shrink-0 items-center gap-2">{action}</div> : null}
+        </header>
+      ) : null}
       {/* The padding is on the content, not the section, so the credit's rule
         * runs the full width of the card the way the stroke-order foot does. */}
-      <div className="space-y-3 p-5">
-        {heading || action ? (
-          <div className="flex items-center justify-between gap-2">
-            {heading ? (
-              <h2 className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{heading}</h2>
-            ) : (
-              <span />
-            )}
-            {action}
-          </div>
-        ) : null}
-        {children}
-      </div>
+      <div className="space-y-3 p-5">{children}</div>
       {credit ? <SourceCredit source={credit.source} label={credit.label} /> : null}
     </section>
   );
