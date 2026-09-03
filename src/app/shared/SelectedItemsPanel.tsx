@@ -44,7 +44,6 @@ export default function SelectedItemsPanel({
         <SubjectPill
           key={key}
           glyph={key}
-          size="sm"
           label={`${SUBJECT_SELECTION_COPY.remove} ${key}`}
           onClick={() => onRemove(key)}
           trailing={

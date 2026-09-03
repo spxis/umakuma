@@ -26,6 +26,12 @@ import { usePillText } from "./usePillText";
  * Only Japanese is marked as Japanese: a radical WaniKani draws has an
  * English name where a character would be, and telling a browser that "leaf"
  * is Japanese asks it to render an English word in a Japanese face.
+ *
+ * There is one size. It took a size prop for as long as there were several
+ * chips, and folding the others into it carried the disagreement inside: a
+ * kanji page drew the chips under Used in words at two thirds of the ones
+ * under Built from a scroll below, the same component both times. A shape
+ * that means "one item, here" is that everywhere or it is not shared at all.
  */
 const JAPANESE = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
 
@@ -64,7 +70,6 @@ export default function SubjectPill({
   onClick,
   label,
   tone,
-  size = "md",
   level,
   successRate,
   selected,
@@ -81,7 +86,6 @@ export default function SubjectPill({
   label?: string;
   /** Overrides the colour a subject's kind would give it. */
   tone?: string;
-  size?: "sm" | "md";
   /** The WaniKani level, where the surface knows it. */
   level?: number | null;
   /** The member's own success rate, where the surface knows it. */
@@ -93,12 +97,12 @@ export default function SubjectPill({
   const [showText] = usePillText();
   const words = [reading, meaning].filter(Boolean).join(" · ");
   const japanese = JAPANESE.test(glyph);
-  const glyphClass = `${japanese ? (size === "sm" ? "text-base" : "text-2xl") : "text-sm"} font-black leading-none ${
+  const glyphClass = `${japanese ? "text-2xl" : "text-sm"} font-black leading-none ${
     tone ?? subjectGlyphTone(subjectType ?? "")
   } ${japanese ? JP_TEXT_CLASS : ""}`;
   const shell = `flex min-w-14 flex-col items-center gap-0.5 rounded-xl border border-line bg-surface px-2.5 py-1.5 text-center transition hover:bg-surface-muted ${
-    size === "sm" ? "min-w-11" : ""
-  } ${selected ? "ring-2 ring-accent/65" : ""}`;
+    selected ? "ring-2 ring-accent/65" : ""
+  }`;
 
   const body = (
     <>

@@ -1,6 +1,5 @@
 import PillTextToggle from "@/app/shared/PillTextToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { RELATED_GROUPS, type RelatedGroup, type RelatedGroupId } from "@/lib/relatedSubjects";
 
 import { SUBJECT_PAGE_COPY } from "./SubjectPage.constants";
@@ -38,22 +37,17 @@ export default function RelatedGroupBlock({ group, showToggle = false }: { group
         {showToggle ? <PillTextToggle /> : null}
       </div>
       <ul className="flex flex-wrap gap-2">
-        {group.items.map((item) => {
-          /* A radical WaniKani draws has a name where a character would be. */
-          const drawn = item.subjectType === SUBJECT_TYPES.radical && [...item.label].length > 2;
-          return (
-            <li key={item.subjectId}>
-              <SubjectPill
-                glyph={item.label}
-                subjectType={item.subjectType}
-                reading={item.reading}
-                meaning={item.meaning}
-                href={item.href}
-                size={drawn ? "sm" : "md"}
-              />
-            </li>
-          );
-        })}
+        {group.items.map((item) => (
+          <li key={item.subjectId}>
+            <SubjectPill
+              glyph={item.label}
+              subjectType={item.subjectType}
+              reading={item.reading}
+              meaning={item.meaning}
+              href={item.href}
+            />
+          </li>
+        ))}
       </ul>
     </div>
   );

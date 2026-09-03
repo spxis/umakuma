@@ -52,7 +52,6 @@ export default function UsedInWordsBlock({ words }: { words: WordExample[] }) {
                       reading={item.reading}
                       meaning={item.meaning}
                       href={item.href}
-                      size="sm"
                     />
                   </li>
                 ))}

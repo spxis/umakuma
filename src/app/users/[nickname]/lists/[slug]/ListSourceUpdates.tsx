@@ -97,7 +97,6 @@ export default function ListSourceUpdates({ accountId, listId }: { accountId: st
               meaning={item.meaning}
               reading={null}
               tone={itemToneClass(item.kind)}
-              size="sm"
               label={`${STUDY_LIST_COPY.sourceTakeOne} ${item.glyph}`}
               onClick={() => void take([item])}
             />

@@ -57,7 +57,6 @@ export default function StudyListItemEditor({ items, saving, onSave, onCancel }:
                 reading={item.reading ?? null}
                 meaning={item.meaning ?? null}
                 tone={itemToneClass(item.kind)}
-                size="sm"
                 label={`${STUDY_LIST_COPY.removeCharacterLabel} ${item.key}`}
                 onClick={() => setDraft(draft.filter((held) => listItemId(held) !== id))}
               />

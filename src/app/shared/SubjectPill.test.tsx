@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { JSDOM } from "jsdom";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
@@ -55,5 +58,40 @@ describe("what a surface may put on it", () => {
   it("takes a trailing mark inside the same control", () => {
     const doc = draw(<SubjectPill glyph="山" onClick={() => undefined} trailing={<span data-testid="x">×</span>} />);
     expect(doc.querySelector("button [data-testid='x']")).not.toBeNull();
+  });
+});
+
+/*
+ * One chip, one size.
+ *
+ * The prop outlived the several chips it was made for. A kanji page stacks the
+ * blocks: the kanji inside each compound under Used in words came out at
+ * text-base, the radicals under Built from a block below at text-2xl, and both
+ * are one item standing in a row of chips. Size was never a per-surface call,
+ * and the small variant's other half - a narrower minimum width - lost to the
+ * default in the stylesheet and had never once applied.
+ */
+describe("the size of it", () => {
+  const glyphClass = (element: Parameters<typeof renderToStaticMarkup>[0]) =>
+    draw(element).querySelector("span[lang='ja']")?.getAttribute("class") ?? "";
+
+  it("draws the glyph at one size, whatever the surface asks for", () => {
+    expect(glyphClass(<SubjectPill glyph="山" />)).toContain("text-2xl");
+    expect(glyphClass(<SubjectPill glyph="山" href="/kanji/x" />)).toBe(glyphClass(<SubjectPill glyph="山" />));
+  });
+
+  it("takes no size from a caller", () => {
+    const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
+    expect(read("src/app/shared/SubjectPill.tsx")).not.toContain("min-w-11");
+    for (const caller of [
+      "src/app/shared/SelectedItemsPanel.tsx",
+      "src/app/shared/subject-page/UsedInWordsBlock.tsx",
+      "src/app/shared/subject-page/RelatedGroupBlock.tsx",
+      "src/app/users/[nickname]/lists/ImportFromTextButton.tsx",
+      "src/app/users/[nickname]/lists/StudyListItemEditor.tsx",
+      "src/app/users/[nickname]/lists/[slug]/ListSourceUpdates.tsx",
+    ]) {
+      expect(read(caller)).not.toContain('size="sm"');
+    }
   });
 });

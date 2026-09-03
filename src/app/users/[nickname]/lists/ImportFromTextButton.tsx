@@ -197,7 +197,6 @@ export default function ImportFromTextButton({ accountId }: { accountId: string 
                       reading={item.reading ?? null}
                       meaning={item.meaning ?? null}
                       tone={itemToneClass(item.kind)}
-                      size="sm"
                       label={`${STUDY_LIST_COPY.removeCharacterLabel} ${item.key}`}
                       onClick={() => setItems((current) => (current ?? []).filter((held) => listItemId(held) !== id))}
                     />
