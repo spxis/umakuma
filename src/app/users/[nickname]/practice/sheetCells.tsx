@@ -58,7 +58,21 @@ export function TraceGlyph({ entry, tone }: { entry: TraceEntry; tone: "solid" |
  * but not where on the square to put it. Earlier strokes stay faint so the new
  * one is unmistakable.
  */
-export function StrokeStepGlyph({ entry, upTo }: { entry: TraceEntry; upTo: number }) {
+export function StrokeStepGlyph({
+  entry,
+  upTo,
+  tone = "step",
+}: {
+  entry: TraceEntry;
+  upTo: number;
+  /**
+   * `step` picks the newest stroke out in full ink, which is what says which
+   * one this square is about. `ghost` draws the whole thing faint - for the
+   * rows a child writes on, where every mark on the page is something to
+   * trace and a black stroke among them would be the one thing not to.
+   */
+  tone?: "step" | "ghost";
+}) {
   return (
     <svg viewBox={entry.viewBox} className="h-full w-full" aria-hidden="true">
       <g fill="none" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
@@ -66,7 +80,7 @@ export function StrokeStepGlyph({ entry, upTo }: { entry: TraceEntry; upTo: numb
           <path
             key={index}
             d={d}
-            className={index === upTo - 1 ? INK_SOLID : INK_GHOST}
+            className={tone === "step" && index === upTo - 1 ? INK_SOLID : INK_GHOST}
             stroke="currentColor"
           />
         ))}

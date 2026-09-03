@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { Cell, StrokeStepGlyph, TraceGlyph } from "@/app/users/[nickname]/practice/sheetCells";
 import type { TraceEntry } from "@/app/users/[nickname]/practice/TracingSheet";
 
@@ -16,7 +18,9 @@ import { KANJI_SHEET_COLUMNS, KANJI_SHEET_COPY, KANJI_SHEET_PRACTICE_ROWS } from
  */
 export default function KanjiPracticeSheet({ entry }: { entry: TraceEntry }) {
   const steps = Array.from({ length: entry.strokeCount }, (_, index) => index + 1);
-  const practiceCells = KANJI_SHEET_COLUMNS * KANJI_SHEET_PRACTICE_ROWS;
+  /* The traced build runs on to as many rows as it needs; the last is padded
+   * so the model rows below still start at the left edge. */
+  const guideRowFill = (KANJI_SHEET_COLUMNS - (entry.strokeCount % KANJI_SHEET_COLUMNS)) % KANJI_SHEET_COLUMNS;
   const grid = { gridTemplateColumns: `repeat(${KANJI_SHEET_COLUMNS}, minmax(0, 1fr))` };
 
   return (
@@ -46,13 +50,40 @@ export default function KanjiPracticeSheet({ entry }: { entry: TraceEntry }) {
         <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60 print:text-neutral-500">
           {KANJI_SHEET_COPY.practiceHeading}
         </h2>
-        {/* Empty, and as many of them as the page will take. */}
+        {/*
+          * A workbook leads the hand before it lets go.
+          *
+          * The first row is the character built stroke by stroke in faint, to
+          * trace over - all faint, unlike the chart above, because down here
+          * every mark is something to draw and one black stroke among them
+          * would be the only one that is not. Then each row opens with the
+          * finished character, also faint, so a child copying into the blanks
+          * has the shape at the start of the line rather than four inches up
+          * the page.
+          */}
         <div className="grid gap-1" style={grid}>
-          {Array.from({ length: practiceCells }, (_, index) => (
-            <Cell key={index} />
+          {steps.map((step) => (
+            <Cell key={`guide-${step}`}>
+              <StrokeStepGlyph entry={entry} upTo={step} tone="ghost" />
+            </Cell>
+          ))}
+          {Array.from({ length: guideRowFill }, (_, index) => (
+            <Cell key={`guide-blank-${index}`} />
+          ))}
+
+          {Array.from({ length: KANJI_SHEET_PRACTICE_ROWS }, (_, row) => (
+            <Fragment key={`row-${row}`}>
+              <Cell>
+                <TraceGlyph entry={entry} tone="ghost" />
+              </Cell>
+              {Array.from({ length: KANJI_SHEET_COLUMNS - 1 }, (_, index) => (
+                <Cell key={`blank-${row}-${index}`} />
+              ))}
+            </Fragment>
           ))}
         </div>
       </section>
+
     </div>
   );
 }

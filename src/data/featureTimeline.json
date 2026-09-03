@@ -3848,5 +3848,17 @@
     "summary": "A sheet for one character, at /kanji/<character>/sheet and linked from the stroke panel. The character and its readings at the top, then every stroke as its own square the way a stroke-order chart shows it - all of them, so a twenty-two stroke character gets twenty-two squares rather than the first row - and then the rest of the page ruled into fifty-six empty squares to copy it into. The list sheets print a grid across many characters, a row each; this is the other shape, one character and room to work at it. The squares are the list sheets' own: Cell, TraceGlyph and StrokeStepGlyph came out of TracingSheet into sheetCells so both draw the same workbook square rather than drifting apart. Public like the character page it hangs off, because a parent printing a sheet for a child has no reason to sign in first, and a static segment so the stroke-order section keeps its address. Requested 2026-09-03 by John.",
     "version": "0.332.0",
     "releasedAt": "2026-09-03T08:23:50Z"
+  },
+  {
+    "id": "sheet-faint-guides",
+    "name": "The practice rows lead with a faint character",
+    "area": "study",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-03",
+    "dateIsEstimate": false,
+    "summary": "The one-character sheet ruled the whole of Now You into empty squares, which asks a child to copy from a chart four inches up the page. A workbook leads the hand before it lets go: the first practice row is the character built stroke by stroke in faint, to trace over, and every row after it opens with the finished character in faint before the blanks. Nothing below the chart is highlighted - down there every mark is something to draw, and one black stroke among them would be the only one that is not. The chart at the top keeps its black stroke, since that is what says which one is new. StrokeStepGlyph grew a ghost tone for it rather than a second component. Requested 2026-09-03 by John.",
+    "version": "0.333.0",
+    "releasedAt": "2026-09-03T08:48:48Z"
   }
 ]
