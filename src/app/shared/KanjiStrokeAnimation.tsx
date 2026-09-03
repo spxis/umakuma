@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import SourceCredit from "./SourceCredit";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import { setStrokeSize, useStrokeSize } from "./useStrokeSize";
 import { STROKE_FOCUS_CLASS, STROKE_FOCUS_STATES, strokeFocusState } from "./strokeFocus";
 import {
@@ -11,6 +12,7 @@ import {
   STROKE_MS_PER_STROKE,
   STROKE_SIDE_WIDTH,
   STROKE_NUMBER_PX,
+  STROKE_OUTLINE_STORAGE_KEY,
   STROKE_SIZES,
   STROKE_SIZE_VALUES,
   STROKE_VIEWBOX_UNITS,
@@ -87,6 +89,16 @@ export default function KanjiStrokeAnimation({
   const [error, setError] = useState(false);
   const [playToken, setPlayToken] = useState(0);
   const [showNumbers, setShowNumbers] = useState(false);
+  /*
+   * Whether the whole character shows through while one stroke is studied.
+   *
+   * Off by default for the reason the outline is dropped in that mode at all,
+   * and remembered because somebody who traces this way traces this way every
+   * time.
+   */
+  const [showOutline, setShowOutline] = usePersistedBoolean(STROKE_OUTLINE_STORAGE_KEY, {
+    defaultValue: false,
+  });
   /* The size this device last chose, read the way every other stored preference is. */
   const chosenSize = useStrokeSize();
   const offersSize = size === undefined;
@@ -195,11 +207,14 @@ export default function KanjiStrokeAnimation({
         className="h-auto max-w-full rounded-2xl border border-line bg-surface"
       >
         {/*
-          * The finished character, faint, so a stroke is drawn onto its outline
-          * - but not while one stroke is being studied, where an outline of
-          * everything is what makes "not drawn yet" look drawn.
+          * The finished character, faint, so a stroke is drawn onto its outline.
+          *
+          * Dropped while one stroke is studied, where an outline of everything
+          * is what makes "not drawn yet" look drawn - unless it is asked for,
+          * because the other half of that trade is a first stroke floating in
+          * an empty box with nothing to place it against.
           */}
-        {selectedStroke === null ? (
+        {selectedStroke === null || showOutline ? (
           <g fill="none" stroke="currentColor" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/10">
             {data.strokes.map((d, index) => (
               <path key={`ghost-${index}`} d={d} />
@@ -259,6 +274,22 @@ export default function KanjiStrokeAnimation({
         >
           {STROKE_ANIMATION_COPY.replay}
         </button>
+        {/* Only where it does anything: the full drawing already has its outline. */}
+        {selectedStroke !== null ? (
+          <button
+            type="button"
+            onClick={() => setShowOutline((shown) => !shown)}
+            aria-pressed={showOutline}
+            title={STROKE_ANIMATION_COPY.outlineTitle}
+            className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+              showOutline
+                ? "border-kanji bg-kanji text-white"
+                : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
+            }`}
+          >
+            {STROKE_ANIMATION_COPY.outline}
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={() => setShowNumbers((shown) => !shown)}

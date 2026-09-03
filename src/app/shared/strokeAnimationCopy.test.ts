@@ -8,6 +8,8 @@ import {
   STROKE_SIDE_WIDTH,
   STROKE_SIZES,
   STROKE_SIZE_VALUES,
+  STROKE_OUTLINE_STORAGE_KEY,
+  STROKE_SIZE_STORAGE_KEY,
 } from "./strokeAnimationCopy";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
@@ -47,5 +49,26 @@ describe("the drawing sizes", () => {
       expect(read(path), path).toContain("STROKE_SIDE_WIDTH");
     }
     expect(STROKE_SIDE_WIDTH).toMatch(/^sm:w-/);
+  });
+});
+
+/*
+ * The whole character behind one stroke.
+ *
+ * The animation draws the finished character faintly underneath and drops it
+ * as soon as a single stroke is picked, because an outline of everything also
+ * makes "not drawn yet" look drawn. The other half of that trade is a first
+ * stroke floating in an empty box with nothing to place it against, so it is a
+ * mode: off unless asked for, and remembered.
+ */
+describe("the outline mode", () => {
+  it("is named for what it shows, not for the feature", () => {
+    expect(STROKE_ANIMATION_COPY.outline).toBe("Outline");
+    expect(STROKE_ANIMATION_COPY.outlineTitle).toBe("Show the whole character faintly behind");
+  });
+
+  it("remembers itself under its own key, apart from the size", () => {
+    expect(STROKE_OUTLINE_STORAGE_KEY).toBe("umakuma:stroke-outline");
+    expect(STROKE_OUTLINE_STORAGE_KEY).not.toBe(STROKE_SIZE_STORAGE_KEY);
   });
 });

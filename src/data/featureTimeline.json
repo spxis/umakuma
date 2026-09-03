@@ -3722,12 +3722,11 @@
     "name": "See the whole character behind one stroke",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 71,
-    "summary": "Studying a single stroke draws that stroke and the ones before it, and nothing else, so a first stroke is one mark floating in an empty box with no sense of where in the character it sits. The animation already draws the finished character faintly underneath and deliberately stops doing it while one stroke is picked - an outline of everything makes not-drawn-yet look drawn - so this is a mode rather than a change of default: an Outline toggle beside Replay and Numbers, off unless asked for and remembered per device. Requested 2026-09-02 by John.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T06:11:45.780Z"
+    "dateIsEstimate": false,
+    "summary": "Studying one stroke drew that stroke and the ones before it and nothing else, so a first stroke was a single mark in an empty box with no sense of where in the character it belonged. The animation already draws the finished character faintly underneath and deliberately drops it the moment a stroke is picked, because an outline of everything is also what makes not-drawn-yet look drawn - so this is a mode rather than a change of default. Outline sits beside Replay and Numbers, appears only while a stroke is picked since the full drawing already has its outline, is off unless asked for, and is remembered per device. Requested 2026-09-02 by John.",
+    "version": "0.322.0",
+    "releasedAt": "2026-09-03T06:15:06Z"
   }
 ]

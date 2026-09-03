@@ -4,6 +4,15 @@ export const STROKE_ANIMATION_COPY = {
   open: "Strokes",
   replay: "Replay",
   numbers: "Numbers",
+  /*
+   * The faint whole character behind one stroke.
+   *
+   * A mode rather than the default: an outline of everything is also what
+   * makes "not drawn yet" look drawn, which is why the animation drops it
+   * as soon as a single stroke is picked.
+   */
+  outline: "Outline",
+  outlineTitle: "Show the whole character faintly behind",
   copyLink: "Copy link",
   linkCopied: "Copied",
   stroke: "stroke",
@@ -80,6 +89,9 @@ export const STROKE_SIZE_VALUES = Object.keys(STROKE_SIZES) as StrokeSize[];
 
 /** Remembered per device: a phone and a desktop want different answers. */
 export const STROKE_SIZE_STORAGE_KEY = "umakuma:stroke-size";
+
+/** Remembered too: somebody who traces this way traces this way every time. */
+export const STROKE_OUTLINE_STORAGE_KEY = "umakuma:stroke-outline";
 
 /** How long one stroke takes to draw; strokes run one after another. */
 export const STROKE_MS_PER_STROKE = 420;
