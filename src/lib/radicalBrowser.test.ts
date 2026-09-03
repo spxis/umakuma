@@ -1,12 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  groupsForStrokes,
+  orderedGroups,
   radicalStrokeCounts,
   radicalsHref,
   radicalsShown,
   readParts,
-  readStrokes,
   togglePart,
 } from "./radicalBrowser";
 import type { RadicalGroup } from "./radicalSearch";
@@ -17,8 +16,27 @@ const GROUPS: RadicalGroup[] = [
   { strokes: 4, radicals: ["水"] },
 ];
 
-describe("the stroke counts along the top", () => {
-  it("counts the radicals at each, in order", () => {
+describe("what the page shows", () => {
+  /*
+   * All of them, always. A first version filtered by stroke count the way the
+   * stroke browser does, which is exactly wrong here: 900 kanji at one count
+   * have to be narrowed to be readable, while 253 radicals are a set you scan.
+   * Choosing "3 strokes" hid the 208 radicals somebody was looking through to
+   * find the one they wanted.
+   */
+  it("orders every group by stroke count and drops none", () => {
+    const ordered = orderedGroups(GROUPS);
+    expect(ordered.map((group) => group.strokes)).toEqual([1, 3, 4]);
+    expect(radicalsShown(ordered)).toBe(6);
+  });
+
+  it("does not disturb what it was given", () => {
+    orderedGroups(GROUPS);
+    expect(GROUPS.map((group) => group.strokes)).toEqual([3, 1, 4]);
+  });
+
+  /* The counts still label the rows, so they are still worth computing. */
+  it("counts the radicals at each stroke count", () => {
     expect(radicalStrokeCounts(GROUPS)).toEqual([
       { strokes: 1, count: 2 },
       { strokes: 3, count: 3 },
@@ -27,52 +45,15 @@ describe("the stroke counts along the top", () => {
   });
 });
 
-describe("which groups the page shows", () => {
-  /*
-   * All of them by default. There are 253 radicals in total, so the whole set
-   * fits on a screen and somebody arriving with no question in mind should
-   * see the radicals rather than a prompt asking them to choose first.
-   */
-  it("shows every group when no count is asked for, in stroke order", () => {
-    expect(groupsForStrokes(GROUPS, null).map((group) => group.strokes)).toEqual([1, 3, 4]);
-  });
-
-  it("shows one group when a count is asked for", () => {
-    expect(groupsForStrokes(GROUPS, 3)).toEqual([{ strokes: 3, radicals: ["女", "子", "小"] }]);
-  });
-
-  it("does not disturb what it was given", () => {
-    groupsForStrokes(GROUPS, null);
-    expect(GROUPS.map((group) => group.strokes)).toEqual([3, 1, 4]);
-  });
-
-  it("counts what is on the page", () => {
-    expect(radicalsShown(GROUPS)).toBe(6);
-  });
-});
-
 describe("the page's address", () => {
-  it("is plain when nothing is narrowed", () => {
+  it("is plain when nothing is picked", () => {
     expect(radicalsHref()).toBe("/radicals");
-    expect(radicalsHref({ strokes: null, parts: [] })).toBe("/radicals");
+    expect(radicalsHref({ parts: [] })).toBe("/radicals");
   });
 
-  it("carries the stroke filter and the picked radicals", () => {
-    expect(radicalsHref({ strokes: 3 })).toBe("/radicals?strokes=3");
+  it("carries the picked radicals, and reads them back", () => {
     expect(radicalsHref({ parts: ["水", "田"] })).toBe(`/radicals?parts=${encodeURIComponent("水田")}`);
-    expect(radicalsHref({ strokes: 3, parts: ["女"] })).toBe(`/radicals?strokes=3&parts=${encodeURIComponent("女")}`);
-  });
-
-  it("reads back what it wrote", () => {
-    expect(readStrokes("3", [1, 3, 4])).toBe(3);
     expect(readParts("水田")).toEqual(["水", "田"]);
-  });
-
-  /* A count nobody has radicals for is not a filter, it is an empty page. */
-  it("ignores a stroke count no radical has", () => {
-    expect(readStrokes("99", [1, 3, 4])).toBeNull();
-    expect(readStrokes("banana", [1, 3, 4])).toBeNull();
-    expect(readStrokes(undefined, [1, 3, 4])).toBeNull();
   });
 
   it("reads each radical once, however often the address repeats it", () => {

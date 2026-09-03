@@ -6,8 +6,13 @@ import type { RadicalGroup } from "./radicalSearch";
  *
  * The picker in search asks "which kanji has these parts" and lives inside a
  * dropdown; this asks "what are the parts" and is a page you can send someone.
- * They read the same index and answer different questions, which is why the
- * grouping and the address live here and not in the picker.
+ *
+ * Every radical is on the page, always. A first version put stroke counts
+ * along the top as a filter, the way the stroke browser does - and that is
+ * exactly wrong here: 900 kanji at one stroke count have to be narrowed to be
+ * readable, while 253 radicals are a set you scan. Choosing "3 strokes" hid
+ * the 208 radicals somebody was looking at to find the one they wanted. The
+ * count leads each row instead, which is how the picker has always shown them.
  */
 
 /** One stroke count and how many radicals are written in it. */
@@ -19,19 +24,9 @@ export function radicalStrokeCounts(groups: readonly RadicalGroup[]): RadicalStr
     .sort((left, right) => left.strokes - right.strokes);
 }
 
-/**
- * The groups a reader asked for.
- *
- * `null` is everything, which is the page's own default: there are 253
- * radicals in all, so the whole set fits on one screen and a reader arriving
- * with no question in mind should see them rather than a prompt.
- */
-export function groupsForStrokes(
-  groups: readonly RadicalGroup[],
-  strokes: number | null,
-): RadicalGroup[] {
-  const ordered = [...groups].sort((left, right) => left.strokes - right.strokes);
-  return strokes === null ? ordered : ordered.filter((group) => group.strokes === strokes);
+/** Every group, in stroke order, which is the whole page. */
+export function orderedGroups(groups: readonly RadicalGroup[]): RadicalGroup[] {
+  return [...groups].sort((left, right) => left.strokes - right.strokes);
 }
 
 /** How many radicals are on the page, for the line that says so. */
@@ -42,28 +37,14 @@ export function radicalsShown(groups: readonly RadicalGroup[]): number {
 /**
  * The page's own address.
  *
- * The stroke filter and the chosen parts are both in the query, so a reader
- * who has narrowed to "three strokes, and I have picked 水" can send exactly
- * that. Defaults are left out, so the plain page is `/radicals`.
+ * Only the picked parts, since nothing else narrows the page. A reader who
+ * has picked 水 can send exactly that; the plain page is `/radicals`.
  */
-export function radicalsHref(input: {
-  strokes?: number | null;
-  parts?: readonly string[];
-} = {}): string {
-  const parts: string[] = [];
-  if (typeof input.strokes === "number") parts.push(`${RADICAL_BROWSER_PARAMS.strokes}=${input.strokes}`);
-  if (input.parts && input.parts.length > 0) {
-    parts.push(`${RADICAL_BROWSER_PARAMS.parts}=${encodeURIComponent(input.parts.join(""))}`);
-  }
-  return parts.length > 0 ? `/radicals?${parts.join("&")}` : "/radicals";
-}
-
-/** The stroke count asked for, or null for all of them. */
-export function readStrokes(value: string | string[] | undefined, allowed: readonly number[]): number | null {
-  const first = Array.isArray(value) ? value[0] : value;
-  if (first === undefined) return null;
-  const parsed = Number.parseInt(first, 10);
-  return allowed.includes(parsed) ? parsed : null;
+export function radicalsHref(input: { parts?: readonly string[] } = {}): string {
+  const parts = input.parts ?? [];
+  return parts.length > 0
+    ? `/radicals?${RADICAL_BROWSER_PARAMS.parts}=${encodeURIComponent(parts.join(""))}`
+    : "/radicals";
 }
 
 /**

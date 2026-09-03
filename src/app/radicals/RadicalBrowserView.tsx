@@ -58,9 +58,7 @@ function toRow(match: RadicalMatch): SubjectListRow & FilerHit & { href: string;
 }
 
 export default function RadicalBrowserView({
-  counts,
   groups,
-  strokes,
   shown,
   chosen,
   usable,
@@ -69,9 +67,8 @@ export default function RadicalBrowserView({
   names,
   accountId,
 }: {
-  counts: { strokes: number; count: number }[];
   groups: RadicalGroup[];
-  strokes: number | null;
+  /** Every radical there is; the page never shows a subset. */
   shown: number;
   chosen: string[];
   /** Radicals that can still narrow; everything else is a dead end. */
@@ -91,59 +88,19 @@ export default function RadicalBrowserView({
   const filer = useSubjectFiler(accountId, rows, filing);
   const usableSet = useMemo(() => new Set(usable), [usable]);
 
-  const chip = (on: boolean) =>
-    `inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition ${
-      on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/80 hover:bg-surface-muted"
-    }`;
-
   return (
     <div className="space-y-4">
-      <section className="rounded-2xl border border-line bg-surface p-4">
-        <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
-          {RADICAL_BROWSER_COPY.heading}
-        </h2>
-        <p className="mb-2 text-xs text-foreground/60">{RADICAL_BROWSER_COPY.blurb}</p>
-        <ul className="flex flex-wrap gap-1.5">
-          <li>
-            <Link href={radicalsHref({ parts: chosen })} aria-current={strokes === null ? "page" : undefined} className={chip(strokes === null)}>
-              {RADICAL_BROWSER_COPY.all}
-            </Link>
-          </li>
-          {counts.map((entry) => {
-            const on = entry.strokes === strokes;
-            return (
-              <li key={entry.strokes}>
-                <Link
-                  href={radicalsHref({ strokes: entry.strokes, parts: chosen })}
-                  aria-current={on ? "page" : undefined}
-                  className={chip(on)}
-                >
-                  {entry.strokes}
-                  <span className={`text-[10px] font-semibold ${on ? "text-white/80" : "text-foreground/60"}`}>
-                    {entry.count}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-
       <section className="rounded-2xl border border-line bg-surface p-3 sm:p-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
-            {strokes === null
-              ? RADICAL_BROWSER_COPY.title
-              : strokes === 1
-                ? RADICAL_BROWSER_COPY.countLabelOne
-                : RADICAL_BROWSER_COPY.countLabel(strokes)}
+            {RADICAL_BROWSER_COPY.title}
           </span>
           <span className="text-[11px] font-semibold text-foreground/60">
             {shown === 1 ? RADICAL_BROWSER_COPY.showingOne : RADICAL_BROWSER_COPY.showing(shown)}
           </span>
           {chosen.length > 0 ? (
             <Link
-              href={radicalsHref({ strokes })}
+              href={radicalsHref()}
               className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-2.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60 transition hover:bg-surface-muted"
             >
               {RADICAL_BROWSER_COPY.clear}
@@ -188,7 +145,7 @@ export default function RadicalBrowserView({
                 ) : (
                   <Link
                     key={radical}
-                    href={radicalsHref({ strokes, parts: togglePart(chosen, radical) })}
+                    href={radicalsHref({ parts: togglePart(chosen, radical) })}
                     aria-pressed={on}
                     title={names[radical] ?? undefined}
                     className={`${box} ${

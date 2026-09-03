@@ -7,13 +7,7 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHeaders";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { authOptions } from "@/lib/auth";
-import {
-  groupsForStrokes,
-  radicalStrokeCounts,
-  radicalsShown,
-  readParts,
-  readStrokes,
-} from "@/lib/radicalBrowser";
+import { orderedGroups, radicalsShown, readParts } from "@/lib/radicalBrowser";
 import { radicalNameIndex } from "@/lib/radicalNames";
 import { runRadicalSearch } from "@/lib/radicalSearchServer";
 
@@ -52,11 +46,7 @@ export default async function RadicalsPage({ searchParams }: Props) {
   const chosen = readParts(query.parts);
   const result = await runRadicalSearch(chosen);
 
-  const counts = radicalStrokeCounts(result.groups);
-  const strokes = readStrokes(query.strokes, counts.map((entry) => entry.strokes));
-  const groups = groupsForStrokes(result.groups, strokes);
-
-  /* Only the radicals on screen need a name; the index is 253 either way. */
+  const groups = orderedGroups(result.groups);
   const names = await radicalNameIndex(groups.flatMap((group) => group.radicals));
 
   const session = await getServerSession(authOptions);
@@ -75,9 +65,7 @@ export default async function RadicalsPage({ searchParams }: Props) {
         className="mb-3"
       />
       <RadicalBrowserView
-        counts={counts}
         groups={groups}
-        strokes={strokes}
         shown={radicalsShown(groups)}
         chosen={result.chosen}
         usable={result.usable}

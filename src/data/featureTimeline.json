@@ -3798,7 +3798,19 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "The radical picker asks 'which kanji has these parts' from inside a search dropdown, which is the right shape for somebody mid-search and the wrong one for somebody who wants to see the radicals. This is the stroke browser's layout over the same index: counts along the top, the 253 radicals grouped by stroke below them, and the kanji containing whatever is picked. Picking is a link, so the state is in the address. The parts on a kanji page lead here instead of priming a search box. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.328.0",
     "releasedAt": "2026-09-03T06:50:26Z"
+  },
+  {
+    "id": "radicals-no-filter",
+    "name": "Every radical, all the time",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "The radicals page copied the stroke browser too literally: stroke counts along the top as a filter, so choosing '3 strokes' hid the other 208 radicals. That is the right control for 900 kanji at one count and the wrong one for 253 radicals, which are a set you scan - the filter hid the thing somebody opened the page to look through. No filter and no first step now; the count leads each row, the way the picker in search has always shown them. Corrected 2026-09-03 by John.",
+    "version": "0.329.0",
+    "releasedAt": "2026-09-03T07:59:51Z"
   }
 ]
