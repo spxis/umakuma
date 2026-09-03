@@ -4220,11 +4220,23 @@
     "id": "radical-names-complete",
     "name": "A radical drawn as a bar has no name",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "The vertical bar radical shows on a kanji page with an empty name, and /radicals?parts=<bar> is reached from /kanji/\u502b. Find out whether the dictionary has no name for it or we are failing to read one. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.373.0",
+    "releasedAt": "2026-09-03T16:02:47Z"
+  },
+  {
+    "id": "section-page-header",
+    "name": "A section page is not styled",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.373.0",
-    "releasedAt": "2026-09-03T16:02:47Z",
-    "summary": "The vertical bar radical shows on a kanji page with an empty name, and /radicals?parts=<bar> is reached from /kanji/\u502b. Find out whether the dictionary has no name for it or we are failing to read one. Reported 2026-09-03 by John."
+    "version": "0.374.0",
+    "releasedAt": "2026-09-03T16:09:59Z",
+    "summary": "The Everything about X link at the top of a single-section page such as /kanji/X/related has no styling at all - it is a bare underlined link on the page. Reported 2026-09-03 by John."
   }
 ]

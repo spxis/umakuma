@@ -17,6 +17,7 @@ import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import SubjectSectionHeader from "@/app/shared/subject-page/SubjectSectionHeader";
+import { summaryLine } from "@/lib/kanjiSummaryLine";
 import { kanjiPageHref, parseSubjectSection } from "@/app/shared/subject-page/subjectSectionAddress";
 import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout";
 
@@ -233,6 +234,7 @@ export default async function KanjiPage({ params }: Props) {
         <SubjectSectionHeader
           base={kanjiPageHref(character)}
           label={character}
+          line={summaryLine(summary)}
           section={section}
           available={available.map((block) => block.id)}
         />
