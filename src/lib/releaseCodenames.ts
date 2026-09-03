@@ -398,6 +398,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yukisaki no Yubisasu", ja: "行き先の指差す", reading: "ゆきさきのゆびさす", gloss: "pointing at where you have been" },
   { romaji: "Yomiageru Nedan", ja: "読み上げる値段", reading: "よみあげるねだん", gloss: "the price, read aloud" },
   { romaji: "Rashii Rinkaku", ja: "らしい輪郭", reading: "らしいりんかく", gloss: "an outline that looks like itself" },
+  { romaji: "Rittai yori Hiratai", ja: "立体より平たい", reading: "りったいよりひらたい", gloss: "the flat pill, not the raised card" },
 ];
 
 /**

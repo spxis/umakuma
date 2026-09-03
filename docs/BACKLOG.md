@@ -1377,3 +1377,30 @@ the other words built from those kanji. Two routes: each component kanji's JLPT
 word examples (more coverage) or its WaniKani amalgamations (cleaner rows, with
 levels). `relatedGroupsFor` already has the `sharesKanji` slot and its tests.
 Decide which source, and say why in the commit.
+
+### 52 — One chip for every inline kanji
+
+John, on the map's region panel: "Confused why you used the large Kanji
+blocks in the Map when I was talking about the Kanji blocks you use which
+have the Toggle, through the TEXT ON button. I think it looks nice but it's
+not consistent with a lot of the other new pages we created. We need to
+really stick to one reusable style."
+
+**The rule.** Two shared shapes, one question to pick between them: is the
+reader *browsing a set* or *looking at a few items inside something else*?
+Browsing — a level, a grade, a stroke count, a saved list — is `SubjectCards`
+with the density toggle. A few items in a section — the kanji of a word, the
+parts of a character, a related group, the characters of a place name — is a
+row of `SubjectPill`s under the one `PillTextToggle`. The map fix
+(`map-kanji-pills`) is the first instance; `subject-pill-sweep` is the pass
+through every surface that draws a glyph in a bordered box its own way, or
+uses the card where the pill belongs.
+
+**The follow-up John floated.** "Maybe make both of them use the same
+component, just a small version and a large version." Not now — "for now,
+use the small version" — but it is the right end state: one `Subject` tile
+with a `size`, so a surface cannot pick a third shape. What stands in the
+way is that the card takes the explorer's slots (level pill, badge corner,
+selection tick, a note under it) and the pill takes none, so a merged
+component would carry every slot everywhere. Do it when a third shape turns
+up despite the rule, not before.

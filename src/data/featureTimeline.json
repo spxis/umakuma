@@ -3987,14 +3987,13 @@
     "id": "map-kanji-pills",
     "name": "Map kanji as pills",
     "area": "platform",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
-    "owner": "fable",
-    "claimedAt": "2026-09-03T10:40:36.158Z",
     "date": "2026-09-03",
     "summary": "The characters of a place name are the same small pills the kanji page uses, with the Text on toggle, not the large explorer cards.",
-    "dateIsEstimate": true,
-    "release": 72
+    "dateIsEstimate": false,
+    "version": "0.348.0",
+    "releasedAt": "2026-09-03T10:52:24Z"
   },
   {
     "id": "subject-pill-sweep",
