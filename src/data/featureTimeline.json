@@ -3549,7 +3549,9 @@
     "date": "2026-09-02",
     "summary": "The release timeline carries four statuses - shipped, planned, backlogged and killed - and the admin page shows three tabs, because backlogged and killed are grouped under one heading called Shelved. Give killed its own tab as Cancelled, rename Shelved to Backlog now that it means only one thing, and add two states that do not exist: in progress, and a wish list. In progress overlaps with the claim the board already records (owner and claimedAt), so decide whether it is a real status or is derived from a claim rather than having two ways to say it. The wish list is the one with a constraint: featureTimeline.json is a file in the repository, so an admin typing a wish into the website cannot write to it the way an agent running pnpm backlog can. That needs a table the site can write and the timeline view can merge in, with a way to promote a wish into a real planned entry. Requested 2026-09-02 by John.",
     "dateIsEstimate": true,
-    "release": 65
+    "release": 65,
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T02:20:36.630Z"
   },
   {
     "id": "leaderboard-jlpt-catalog",
