@@ -89,7 +89,8 @@
     "radicals:font": "node scripts/build-radical-font.mjs",
     "task": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/tasks.ts",
     "task:local": "node scripts/local-db.mjs run -- pnpm task",
-    "task:import": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/tasks-import.ts"
+    "task:import": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/tasks-import.ts",
+    "build:kanji-ladder": "node scripts/build-kanji-ladder.mjs"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",

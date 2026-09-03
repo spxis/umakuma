@@ -1,9 +1,9 @@
 {
-  "exportedAt": "2026-08-30T14:42:11.522Z",
+  "exportedAt": "2026-09-03T16:33:02.854Z",
   "levels": 60,
-  "totalSubjects": 9324,
-  "outputDir": "/Users/john/Projects/umakuma/src/data/wk-catalog-levels",
-  "includeRawData": false,
+  "totalSubjects": 9429,
+  "outputDir": "/Users/john/Projects/umakuma-worktrees/list-epic/src/data/wk-catalog-levels",
+  "includeRawData": true,
   "files": [
     "level-01.json",
     "level-02.json",
