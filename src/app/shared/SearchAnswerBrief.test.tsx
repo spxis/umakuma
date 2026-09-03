@@ -15,6 +15,7 @@ const ERA: SearchAnswer = {
   question: "Heisei 3",
   value: "1991",
   japanese: "平成3年",
+  reading: "へいせい",
   detail: null,
   attribution: null,
   history: null,
@@ -24,7 +25,8 @@ const CAD: SearchAnswer = {
   kind: SEARCH_ANSWER_KINDS.currency,
   question: "CA$20.00",
   value: "¥2,306",
-  japanese: "2,306円",
+  japanese: "二千三百六円",
+  reading: "にせんさんびゃくろくえん",
   detail: "1 CAD = ¥115.33",
   attribution: { source: "Frankfurter", asOf: "2026-09-01" },
   history: null,
@@ -69,5 +71,23 @@ describe("SearchAnswerBrief", () => {
 
     expect(text).not.toContain("Frankfurter");
     expect(text).not.toContain("2026-09-01");
+  });
+});
+
+/*
+ * The dropdown draws the value and the Japanese and nothing else, so a reading
+ * kept on the quiet line below never reached the surface most searches use.
+ * 五百円 still has to be said ごひゃくえん, and that is the half a price tag
+ * does not teach.
+ */
+describe("the reading in the compact answer", () => {
+  it("says the amount aloud", () => {
+    const doc = render(<SearchAnswerBrief answers={[CAD]} />);
+    expect(doc.body.textContent).toContain("にせんさんびゃくろくえん");
+  });
+
+  it("says nothing where there is nothing to say", () => {
+    const doc = render(<SearchAnswerBrief answers={[{ ...CAD, reading: null }]} />);
+    expect(doc.body.textContent).not.toContain("にせん");
   });
 });

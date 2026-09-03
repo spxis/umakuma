@@ -31,7 +31,8 @@ describe("searchAnswers, on an era year", () => {
       question: "Heisei 3",
       value: "1991",
       japanese: "平成3年",
-      detail: "へいせい",
+      reading: "へいせい",
+      detail: null,
       attribution: null,
       history: null,
     });
@@ -65,7 +66,9 @@ describe("searchAnswers, on an amount of money", () => {
     expect(answer?.question).toBe("¥1,500");
     expect(answer?.value).toBe("CA$13.01 · $9.37");
     /* Already yen; repeating it under itself would say nothing. */
-    expect(answer?.japanese).toBeNull();
+    /* It used to answer with nothing in Japanese at all, because yen came out of it. */
+    expect(answer?.japanese).toBe("1,500円");
+    expect(answer?.reading).toBe("せんごひゃくえん");
     expect(answer?.detail).toBe("1 CAD = ¥115.33 · 1 USD = ¥160.16");
   });
 
@@ -193,7 +196,7 @@ describe("the number answer", () => {
     const answer = numberFor("一億二千万");
     expect(answer?.value).toBe("120,000,000");
     expect(answer?.japanese).toBe("一億二千万");
-    expect(answer?.detail).toBe("いちおくにせんまん");
+    expect(answer?.reading).toBe("いちおくにせんまん");
   });
 
   it("writes a number given in digits", () => {
@@ -210,8 +213,8 @@ describe("the number answer", () => {
 
   /* The half the digits do not give you: 三百 is さんびゃく, not さんひゃく. */
   it("says how it is read", () => {
-    expect(numberFor("300")?.detail).toBe("さんびゃく");
-    expect(numberFor("8000")?.detail).toBe("はっせん");
+    expect(numberFor("300")?.reading).toBe("さんびゃく");
+    expect(numberFor("8000")?.reading).toBe("はっせん");
   });
 
   /*

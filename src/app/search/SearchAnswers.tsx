@@ -60,6 +60,12 @@ export default function SearchAnswers({ answers }: Props) {
             ) : null}
           </p>
 
+          {answer.reading ? (
+            <p {...japaneseTextProps("mt-0.5 text-sm font-semibold text-foreground/70")}>
+              {answer.reading}
+            </p>
+          ) : null}
+
           <p className="mt-1 flex flex-wrap items-center gap-x-2 text-xs font-semibold text-foreground/60">
             <span>{answer.question}</span>
             {answer.detail ? (

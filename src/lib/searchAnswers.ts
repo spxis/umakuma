@@ -34,6 +34,7 @@ import {
   formatMoney,
   formatUnitRate,
   formatYenJapanese,
+  formatYenReading,
   parseMoneyQuery,
   type CurrencyCode,
   type MoneyAmount,
@@ -98,6 +99,16 @@ export type SearchAnswer = {
   value: string;
   /** The same thing written in Japanese, or null when there is no such form. */
   japanese: string | null;
+  /**
+   * How the Japanese is said, in kana.
+   *
+   * Its own field rather than part of the quiet line beneath, because it is
+   * the half of the answer a learner cannot work out from the rest: a price
+   * shown as 五百円 still has to be said ごひゃくえん, and the compact answer
+   * in the search dropdown draws the value and the Japanese and nothing else.
+   * A field of its own is what puts it on every surface at once.
+   */
+  reading: string | null;
   /** A quiet line under the answer: a reading, a rate, a caveat. */
   detail: string | null;
   /**
@@ -122,7 +133,8 @@ function eraAnswer(query: string): SearchAnswer | null {
     question: formatEraYearRomaji(found),
     value: String(found.westernYear),
     japanese: formatEraYearJapanese(found),
-    detail: found.era.reading,
+    reading: found.era.reading,
+    detail: null,
     attribution: null,
     history: null,
   };
@@ -164,7 +176,8 @@ function numberAnswer(query: string): SearchAnswer | null {
     question: trimmed,
     value: value.toLocaleString("en-CA"),
     japanese,
-    detail: reading,
+    reading,
+    detail: null,
     attribution: null,
     history: null,
   };
@@ -191,6 +204,9 @@ function currencyAnswer(money: MoneyAmount, rates: MoneyRates | null, source: st
   if (now.some((value) => value === null)) return null;
   const amounts = now as number[];
 
+  /* The yen half of the answer, whichever side of the conversion it is on. */
+  const yenSide = money.currency === JPY ? money.amount : amounts[0]!;
+
   const detail =
     money.currency === JPY
       ? columns.map((currency) => formatUnitRate(currency, JPY, today))
@@ -200,8 +216,17 @@ function currencyAnswer(money: MoneyAmount, rates: MoneyRates | null, source: st
     kind: SEARCH_ANSWER_KINDS.currency,
     question: formatMoney(money.amount, money.currency),
     value: columns.map((currency, index) => formatMoney(amounts[index]!, currency)).join(" · "),
-    /* Already yen coming out; repeating it under itself would say nothing. */
-    japanese: money.currency === JPY ? null : formatYenJapanese(amounts[0]!),
+    /*
+     * The amount as Japanese writes it, and how it is said.
+     *
+     * A yen query used to answer with nothing in Japanese at all, on the
+     * grounds that yen came out of it - true of the digits, and not of the
+     * thing a learner is standing in a shop trying to say. 500 yen is 五百円,
+     * and ごひゃくえん is the part no amount of staring at the price tag
+     * gives you.
+     */
+    japanese: yenSide === null ? null : formatYenJapanese(yenSide),
+    reading: yenSide === null ? null : formatYenReading(yenSide),
     detail: detail.filter((line): line is string => line !== null).join(" · ") || null,
     attribution: { source, asOf: today.date },
     history: moneyHistory(money, columns, amounts, rates),

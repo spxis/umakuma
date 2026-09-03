@@ -4017,7 +4017,19 @@
     "kind": "feature",
     "date": "2026-09-03",
     "summary": "A member marks each prefecture, state or province 'I know it' or 'Needs practice', and separately flags the ones they have been to - the map paints all three in soft greens, ambers and a blue outline. Two facts rather than one. One new table, MapRegionMark, unique per member per region. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
     "version": "0.345.0",
     "releasedAt": "2026-09-03T10:42:47Z"
+  },
+  {
+    "id": "search-answer-reading",
+    "name": "Say the answer, not just show it",
+    "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "A search for 500 yen answers with what it converts to and never with how to say it. The amount a learner most wants from a price is 500\u5186 and \u3054\u3072\u3083\u304f\u3048\u3093 - the currency answer had no Japanese form at all when the query was already in yen, and the reading the number answer works out sat on a line the search dropdown does not draw. An answer carries its reading as its own field now, so every surface that shows an answer can say it aloud. Reported 2026-09-03 by John.",
+    "version": "0.346.0",
+    "releasedAt": "2026-09-03T10:45:01Z"
   }
 ]

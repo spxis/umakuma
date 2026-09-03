@@ -11,6 +11,8 @@
  * without a network.
  */
 
+import { readJapaneseNumber } from "./japaneseNumbers";
+
 /**
  * The currencies a query may name.
  *
@@ -378,6 +380,19 @@ export function formatMoney(amount: number, currency: CurrencyCode): string {
 /** A yen amount as Japanese writes it: 4,269円. */
 export function formatYenJapanese(amount: number): string {
   return `${Math.round(amount).toLocaleString("en-US")}円`;
+}
+
+/**
+ * How the amount is said, in kana.
+ *
+ * The yen's own reading is えん, and the number in front of it changes sound
+ * the way every Japanese number does - 300 yen is さんびゃくえん. Null for an
+ * amount too large to say exactly, where a confident wrong reading would be
+ * worse than none.
+ */
+export function formatYenReading(amount: number): string | null {
+  const said = readJapaneseNumber(Math.round(amount));
+  return said ? `${said}えん` : null;
 }
 
 /**

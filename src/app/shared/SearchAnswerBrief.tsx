@@ -35,6 +35,12 @@ export default function SearchAnswerBrief({ answers }: { answers: SearchAnswer[]
           {answer.japanese ? (
             <span {...japaneseTextProps("text-sm font-bold text-foreground/75")}>{answer.japanese}</span>
           ) : null}
+          {/* Said aloud: the half of a price a learner cannot get from the digits. */}
+          {answer.reading ? (
+            <span {...japaneseTextProps("text-xs font-semibold text-foreground/60")}>
+              {answer.reading}
+            </span>
+          ) : null}
           <span className="ml-auto text-[11px] font-semibold text-foreground/60">{answer.question}</span>
         </li>
       ))}

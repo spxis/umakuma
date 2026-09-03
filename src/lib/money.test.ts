@@ -7,6 +7,7 @@ import {
   formatMoney,
   formatUnitRate,
   formatYenJapanese,
+  formatYenReading,
   isCurrencyCode,
   parseMoneyQuery,
   type RateTable,
@@ -262,5 +263,40 @@ describe("the currency table", () => {
     for (const code of HOME_CURRENCIES) {
       expect(CURRENCY_CODES).toContain(code);
     }
+  });
+});
+
+/*
+ * The half a price tag does not teach.
+ *
+ * A learner standing in a shop can read 500円 and still not be able to say it,
+ * because the number changes sound in front of the unit: 300 is さんびゃく,
+ * 600 ろっぴゃく, 8,000 はっせん. The written form keeps its digits - that is
+ * how a price is actually printed - and the reading is a separate answer.
+ */
+describe("saying an amount in yen", () => {
+  it.each([
+    [500, "ごひゃくえん"],
+    [300, "さんびゃくえん"],
+    [1_500, "せんごひゃくえん"],
+    [8_000, "はっせんえん"],
+    [10_000, "いちまんえん"],
+  ])("says ¥%i as %s", (amount, said) => {
+    expect(formatYenReading(amount)).toBe(said);
+  });
+
+  /* Rounded to the yen, because nobody says the sen. */
+  it("rounds to the yen before saying it", () => {
+    expect(formatYenReading(499.6)).toBe("ごひゃくえん");
+  });
+
+  /* A confident wrong reading is worse than none. */
+  it("says nothing it cannot say exactly", () => {
+    expect(formatYenReading(1e17)).toBeNull();
+  });
+
+  /* The written form is unchanged: a price is printed in digits. */
+  it("leaves the written price in digits", () => {
+    expect(formatYenJapanese(4_269)).toBe("4,269円");
   });
 });
