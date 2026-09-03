@@ -236,6 +236,18 @@ export const MAP_TONES = {
   target: "target",
   correct: "correct",
   wrong: "wrong",
+  /*
+   * The study map's own marks, which are a member's opinion rather than an
+   * answer. Softer than the game's on purpose: the game flashes one region
+   * green for a second, while these sit on the map for as long as somebody
+   * keeps them - a wall of saturated green is exhausting to read past, and
+   * the point is to see at a glance which few are not marked.
+   */
+  known: "known",
+  knownVisited: "knownVisited",
+  practice: "practice",
+  practiceVisited: "practiceVisited",
+  visited: "visited",
 } as const;
 
 export const MAP_TONE_CLASS: Record<string, { shape: string; line: string; handle: string }> = {
@@ -244,6 +256,16 @@ export const MAP_TONE_CLASS: Record<string, { shape: string; line: string; handl
   [MAP_TONES.target]: { shape: "fill-indigo-600 stroke-indigo-800", line: "stroke-indigo-800", handle: "fill-indigo-700 stroke-white" },
   [MAP_TONES.correct]: { shape: "fill-emerald-500 stroke-emerald-700", line: "stroke-emerald-700", handle: "fill-emerald-600 stroke-white" },
   [MAP_TONES.wrong]: { shape: "fill-red-500 stroke-red-700", line: "stroke-red-700", handle: "fill-red-600 stroke-white" },
+  /*
+   * Been there is the darker outline, how well it is known is the fill, so a
+   * prefecture somebody has visited and cannot name still reads as both at
+   * once - which is exactly the one worth seeing.
+   */
+  [MAP_TONES.known]: { shape: "fill-emerald-400/35 stroke-emerald-500/70", line: "stroke-emerald-500/70", handle: "fill-emerald-500 stroke-white" },
+  [MAP_TONES.knownVisited]: { shape: "fill-emerald-400/35 stroke-emerald-700", line: "stroke-emerald-700", handle: "fill-emerald-600 stroke-white" },
+  [MAP_TONES.practice]: { shape: "fill-amber-300/40 stroke-amber-500/70", line: "stroke-amber-500/70", handle: "fill-amber-500 stroke-white" },
+  [MAP_TONES.practiceVisited]: { shape: "fill-amber-300/40 stroke-amber-600", line: "stroke-amber-600", handle: "fill-amber-600 stroke-white" },
+  [MAP_TONES.visited]: { shape: "fill-foreground/10 stroke-sky-600/70", line: "stroke-sky-600/70", handle: "fill-sky-600 stroke-white" },
 };
 
 export const GAME_MIXED_PILL_CLASS = "subject-pill border-line bg-surface-muted text-foreground";

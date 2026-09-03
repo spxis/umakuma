@@ -120,6 +120,7 @@ model Account {
   internal                  Boolean                    @default(false)
   jlptCertificates          JlptCertificate[]
   studyLists                StudyList[]
+  mapRegionMarks            MapRegionMark[]
   studyListSubscriptions    StudyListSubscription[]
   studyListProposals        StudyListProposal[]
   gameRuns                  GameRun[]
@@ -539,6 +540,35 @@ model StudySubjectTag {
 /// visibly contained them. What a list holds is its `items`, each named the
 /// way its own catalogue names it, with the subject id beside it where
 /// WaniKani has one.
+/// What a member says about one region of one map.
+///
+/// Two facts, not one: whether they can name it, and whether they have been
+/// there. A child can name every prefecture and have set foot in three; a
+/// parent can have driven through Gifu twice and still not place it.
+///
+/// A row exists only while something has been said. Clearing both facts
+/// deletes the row rather than storing "no opinion", so a count of what
+/// somebody has marked is a count of rows.
+model MapRegionMark {
+  id        String   @id @default(cuid())
+  accountId String
+  /// The map: "JP", "US", "CA" - the dataset's own country code.
+  country   String
+  /// The region as its dataset names it: "3" for Iwate, "TX" for Texas.
+  region    String
+  /// "known" or "practice"; null when only the visit has been recorded.
+  status    String?
+  visited   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  /// One row per member per region, which is what makes a mark a toggle.
+  @@unique([accountId, country, region])
+  @@index([accountId, country])
+}
+
 model StudyList {
   id            String                 @id @default(cuid())
   accountId     String

@@ -7,8 +7,11 @@ import { regionFacts, regionKanji, type FactGroup } from "@/lib/mapStudy";
 
 import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 
+import type { MapMarkStatus } from "@/lib/mapMarks";
+
+import MapMarkButtons from "./MapMarkButtons";
 import MapRegionKanji from "./MapRegionKanji";
-import { MAP_STUDY_COPY } from "./MapStudy.constants";
+import { MAP_MARK_COPY, MAP_STUDY_COPY } from "./MapStudy.constants";
 
 /**
  * Everything known about one region, laid out to be read.
@@ -65,12 +68,21 @@ export default function MapRegionPanel({
   onClose,
   kanjiFacts,
   accountId,
+  mark,
 }: {
   region: GeoRegion;
   onClose?: () => void;
   /** What each character of the name means and how it reads. */
   kanjiFacts: MapKanjiFacts;
   accountId: string | null;
+  /** What the member has said about this region, and how to change it. */
+  mark?: {
+    status: MapMarkStatus | null;
+    visited: boolean;
+    saving: boolean;
+    error: string | null;
+    onChange: (next: { status: MapMarkStatus | null; visited: boolean }) => void;
+  } | null;
 }) {
   const kanji = regionKanji(region);
   const groups = regionFacts(region);
@@ -105,6 +117,22 @@ export default function MapRegionPanel({
       </header>
 
       <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-4">
+        {/*
+          * Above the facts, because it is the one thing on this panel the
+          * reader does rather than reads - and because a member who has just
+          * looked at Iwate and thought "yes, I know that one" should not have
+          * to scroll past its rice production to say so.
+          */}
+        {accountId && mark ? (
+          <section className="space-y-1.5">
+            <h3 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
+              {MAP_MARK_COPY.heading}
+            </h3>
+            <MapMarkButtons status={mark.status} visited={mark.visited} saving={mark.saving} onChange={mark.onChange} />
+            {mark.error ? <p className="text-[11px] font-bold text-rose-600">{MAP_MARK_COPY.failed}</p> : null}
+          </section>
+        ) : null}
+
         {kanji.length > 0 ? <MapRegionKanji kanji={kanji} facts={kanjiFacts} accountId={accountId} /> : null}
 
         {groups.map((group) => (

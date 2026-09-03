@@ -27,3 +27,15 @@ export const MAP_STUDY_HEIGHT = "h-[52vh] min-h-72 lg:h-[64vh]";
 export const MAP_ZOOM_COPY = {
   canvasLabel: "Map. Arrow keys move around, plus and minus zoom, zero fits the country.",
 } as const;
+
+/** Marking a region, in one map for the locale layer. */
+export const MAP_MARK_COPY = {
+  heading: "What do you make of it?",
+  status: { known: "I know it", practice: "Needs practice" },
+  visited: "I've been here",
+  signedOut: "Sign in to mark the places you know.",
+  failed: "Could not save that.",
+  /* The line above the map, once anything has been said about the country. */
+  tally: (known: number, practice: number, visited: number, total: number) =>
+    `${known} of ${total} known · ${practice} to practise · ${visited} visited`,
+} as const;

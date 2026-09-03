@@ -13,11 +13,13 @@ import { mapHref, parseMapPath } from "@/lib/mapAddress";
 import { regionByCode, regionsInOrder } from "@/lib/mapStudy";
 
 import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
+import { markFor, markTone, markTotals } from "@/lib/mapMarks";
 import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 
 import MapRegionPanel from "./MapRegionPanel";
+import { useMapMarks } from "./useMapMarks";
 import { useMapZoom } from "./useMapZoom";
-import { MAP_STUDY_COPY, MAP_STUDY_HEIGHT } from "./MapStudy.constants";
+import { MAP_MARK_COPY, MAP_STUDY_COPY, MAP_STUDY_HEIGHT } from "./MapStudy.constants";
 
 /**
  * The map, the country it shows, and the region being read about.
@@ -84,6 +86,7 @@ export default function MapStudy({
   }, []);
 
   const view = useMapZoom(country, initialCode);
+  const marking = useMapMarks(accountId, country);
 
   /*
    * Escape puts the region down. The panel has an X and, on a phone, a modal
@@ -120,10 +123,26 @@ export default function MapStudy({
     [view],
   );
 
+  /*
+   * What the member has said, under what they are doing.
+   *
+   * The marks paint the whole map and the hover and the selection paint one
+   * region each, so the two go on in that order: a prefecture you are pointing
+   * at should look pointed-at even if you have marked it known.
+   */
+  const painted: MapMark[] = regions.flatMap((region) => {
+    const tone = markTone(markFor(marking.marks, region.code));
+    return tone ? [{ code: region.code, tone: tone as MapMark["tone"] }] : [];
+  });
+
   const marks: MapMark[] = [
+    ...painted,
     ...(hovered !== null && String(hovered) !== String(code) ? [{ code: hovered, tone: MAP_TONES.candidate }] : []),
     ...(code !== null ? [{ code, tone: MAP_TONES.target }] : []),
   ];
+
+  const totals = markTotals(marking.marks);
+  const saidAnything = totals.known + totals.practice + totals.visited > 0;
 
   const regionLabel = useCallback(
     (regionCode: string | number) => {
@@ -135,7 +154,18 @@ export default function MapStudy({
   );
 
   const panel = selected ? (
-    <MapRegionPanel region={selected} onClose={() => setCode(null)} kanjiFacts={kanjiFacts} accountId={accountId} />
+    <MapRegionPanel
+      region={selected}
+      onClose={() => setCode(null)}
+      kanjiFacts={kanjiFacts}
+      accountId={accountId}
+      mark={{
+        ...markFor(marking.marks, selected.code),
+        saving: marking.saving,
+        error: marking.error,
+        onChange: (next) => marking.setMark(selected.code, next),
+      }}
+    />
   ) : null;
 
   return (
@@ -174,6 +204,12 @@ export default function MapStudy({
             {hoveredRegion ? regionLabel(hoveredRegion.code) : wide ? MAP_STUDY_COPY.hint : MAP_STUDY_COPY.hintTouch}
           </span>
         </div>
+
+        {saidAnything ? (
+          <p className="text-[11px] font-semibold text-foreground/60">
+            {MAP_MARK_COPY.tally(totals.known, totals.practice, totals.visited, dataset.totalRegions)}
+          </p>
+        ) : null}
 
         <div className={`relative ${MAP_STUDY_HEIGHT} rounded-2xl border border-line bg-surface-muted p-2`}>
           <JapanMap

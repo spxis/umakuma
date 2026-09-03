@@ -2997,6 +2997,7 @@
     "kind": "feature",
     "date": "2026-09-03",
     "summary": "A number written the Japanese way - \u4e00\u5104\u4e8c\u5343\u4e07 - answers with the English number, and the reverse. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.344.0",
     "releasedAt": "2026-09-03T10:30:39Z"
   },
@@ -3986,26 +3987,37 @@
     "id": "map-kanji-pills",
     "name": "Map kanji as pills",
     "area": "platform",
-    "kind": "feature",
     "status": "planned",
-    "date": "2026-09-03",
-    "dateIsEstimate": true,
-    "release": 72,
-    "summary": "The characters of a place name are the same small pills the kanji page uses, with the Text on toggle, not the large explorer cards.",
+    "kind": "feature",
     "owner": "fable",
-    "claimedAt": "2026-09-03T10:40:36.158Z"
+    "claimedAt": "2026-09-03T10:40:36.158Z",
+    "date": "2026-09-03",
+    "summary": "The characters of a place name are the same small pills the kanji page uses, with the Text on toggle, not the large explorer cards.",
+    "dateIsEstimate": true,
+    "release": 72
   },
   {
     "id": "subject-pill-sweep",
     "name": "One chip for every inline kanji",
     "area": "study",
-    "kind": "feature",
     "status": "planned",
-    "date": "2026-09-03",
-    "dateIsEstimate": true,
-    "release": 73,
-    "summary": "Every inline kanji, radical or word across the site is drawn through the shared pill; hand-rolled chips and misplaced large cards are replaced.",
+    "kind": "feature",
     "owner": "fable",
-    "claimedAt": "2026-09-03T10:40:36.800Z"
+    "claimedAt": "2026-09-03T10:40:36.800Z",
+    "date": "2026-09-03",
+    "summary": "Every inline kanji, radical or word across the site is drawn through the shared pill; hand-rolled chips and misplaced large cards are replaced.",
+    "dateIsEstimate": true,
+    "release": 73
+  },
+  {
+    "id": "maps-region-marks",
+    "name": "Mark what you know, and where you have been",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "A member marks each prefecture, state or province 'I know it' or 'Needs practice', and separately flags the ones they have been to - the map paints all three in soft greens, ambers and a blue outline. Two facts rather than one. One new table, MapRegionMark, unique per member per region. Requested 2026-09-03 by John.",
+    "version": "0.345.0",
+    "releasedAt": "2026-09-03T10:42:47Z"
   }
 ]
