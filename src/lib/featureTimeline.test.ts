@@ -4,14 +4,18 @@ import {
   FEATURE_AREA_LABELS,
   FEATURE_AREA_VALUES,
   FEATURE_STATUSES,
+  FEATURE_STATUS_LABELS,
+  FEATURE_STATUS_VALUES,
   featuresByStatus,
   formatFeatureDate,
   groupFeaturesByMonth,
+  isInProgress,
   isIsoDate,
   loadFeatureTimeline,
   parseEntries,
   sortFeaturesByRelease,
   sortFeaturesNewestFirst,
+  splitPlannedByProgress,
   summarizeFeatureTimeline,
   type FeatureTimelineEntry,
 } from "./featureTimeline";
@@ -193,6 +197,7 @@ describe("summarizeFeatureTimeline", () => {
       total: 3,
       shipped: 2,
       planned: 1,
+      inProgress: 0,
       firstShippedDate: "2026-04-03",
       lastShippedDate: "2026-08-29",
     });
@@ -339,5 +344,70 @@ describe("claimed work", () => {
 
   it("refuses a kind it does not know", () => {
     expect(() => parseEntries([{ ...entry(), kind: "chore" }])).toThrow(/unknown kind/);
+  });
+});
+
+/*
+ * In progress is derived from the claim, not stored.
+ *
+ * The board already records `owner` and `claimedAt`, written by
+ * `pnpm backlog claim`, and that is exactly what in progress means. A fifth
+ * status saying the same thing could disagree with the claim - an entry marked
+ * in-progress with nobody on it, or a claimed entry still reading planned -
+ * and then neither field can be trusted.
+ */
+describe("in progress, derived from the claim", () => {
+  it("is planned work somebody has picked up", () => {
+    expect(isInProgress(entry({ status: FEATURE_STATUSES.planned, owner: "Claude" }))).toBe(true);
+  });
+
+  it("is not an unclaimed queue item", () => {
+    expect(isInProgress(entry({ status: FEATURE_STATUSES.planned }))).toBe(false);
+  });
+
+  it("is never shipped or shelved work, whatever the owner field says", () => {
+    for (const status of [FEATURE_STATUSES.shipped, FEATURE_STATUSES.backlogged, FEATURE_STATUSES.cancelled]) {
+      expect(isInProgress(entry({ status, owner: "Claude" })), status).toBe(false);
+    }
+  });
+
+  it("has no fifth status to disagree with it", () => {
+    expect(FEATURE_STATUS_VALUES).not.toContain("in-progress");
+    expect(FEATURE_STATUS_VALUES).toHaveLength(4);
+  });
+
+  it("splits the queue into what is being built and what is waiting", () => {
+    const { inProgress, queued } = splitPlannedByProgress([
+      entry({ id: "held", status: FEATURE_STATUSES.planned, owner: "Claude" }),
+      entry({ id: "free", status: FEATURE_STATUSES.planned }),
+      entry({ id: "done", status: FEATURE_STATUSES.shipped }),
+    ]);
+    expect(inProgress.map((item) => item.id)).toEqual(["held"]);
+    expect(queued.map((item) => item.id)).toEqual(["free"]);
+  });
+
+  /* The tabs count from these, and a claimed item must appear in exactly one. */
+  it("counts the claimed subset without double-counting it as planned", () => {
+    const totals = summarizeFeatureTimeline([
+      entry({ id: "held", status: FEATURE_STATUSES.planned, owner: "Claude" }),
+      entry({ id: "free", status: FEATURE_STATUSES.planned }),
+    ]);
+    expect(totals.planned).toBe(2);
+    expect(totals.inProgress).toBe(1);
+  });
+});
+
+describe("cancelled work", () => {
+  it("is a status the file can hold and the parser accepts", () => {
+    const [parsed] = parseEntries([
+      { ...entry({ status: FEATURE_STATUSES.cancelled }), dateIsEstimate: true },
+    ]);
+    expect(parsed.status).toBe("cancelled");
+  });
+
+  /* John's words for the two shelves, so the tabs and the pills agree. */
+  it("reads as Cancelled, and parked work reads as Backlog", () => {
+    expect(FEATURE_STATUS_LABELS[FEATURE_STATUSES.cancelled]).toBe("Cancelled");
+    expect(FEATURE_STATUS_LABELS[FEATURE_STATUSES.backlogged]).toBe("Backlog");
   });
 });

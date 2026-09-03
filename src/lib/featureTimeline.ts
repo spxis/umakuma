@@ -14,7 +14,7 @@ export const FEATURE_STATUSES = {
   /** Deliberately parked: still wanted someday, not in the release order. */
   backlogged: "backlogged",
   /** Decided against: kept on the record rather than silently deleted. */
-  killed: "killed",
+  cancelled: "cancelled",
 } as const;
 
 export type FeatureStatus = (typeof FEATURE_STATUSES)[keyof typeof FEATURE_STATUSES];
@@ -50,9 +50,39 @@ export const FEATURE_AREA_LABELS: Record<FeatureArea, string> = {
 export const FEATURE_STATUS_LABELS: Record<FeatureStatus, string> = {
   [FEATURE_STATUSES.shipped]: "Released",
   [FEATURE_STATUSES.planned]: "Planned",
-  [FEATURE_STATUSES.backlogged]: "Backlogged",
-  [FEATURE_STATUSES.killed]: "Killed",
+  [FEATURE_STATUSES.backlogged]: "Backlog",
+  [FEATURE_STATUSES.cancelled]: "Cancelled",
 };
+
+/**
+ * Whether work is happening on this right now.
+ *
+ * Deliberately not a fifth status. The board already records a claim - `owner`
+ * and `claimedAt`, written by `pnpm backlog claim` - and "in progress" is
+ * exactly what a claim means. A status saying the same thing could disagree
+ * with it: an entry marked in-progress with nobody on it, or a claimed entry
+ * still reading planned, and then neither field can be trusted. One fact, one
+ * field, and the board reads it.
+ */
+export function isInProgress(entry: FeatureTimelineEntry): boolean {
+  return entry.status === FEATURE_STATUSES.planned && Boolean(entry.owner);
+}
+
+/**
+ * Planned work split into what is being built and what is waiting.
+ *
+ * Both halves keep the order they arrived in, so a caller sorts once.
+ */
+export function splitPlannedByProgress(entries: readonly FeatureTimelineEntry[]): {
+  inProgress: FeatureTimelineEntry[];
+  queued: FeatureTimelineEntry[];
+} {
+  const planned = entries.filter((entry) => entry.status === FEATURE_STATUSES.planned);
+  return {
+    inProgress: planned.filter(isInProgress),
+    queued: planned.filter((entry) => !isInProgress(entry)),
+  };
+}
 
 /**
  * What kind of work an entry is.
@@ -246,7 +276,10 @@ export function groupFeaturesByMonth(
 export type FeatureTimelineTotals = {
   total: number;
   shipped: number;
+  /** Everything not yet built, claimed or not. */
   planned: number;
+  /** The claimed subset of `planned`, so the two do not sum to the queue. */
+  inProgress: number;
   firstShippedDate: string | null;
   lastShippedDate: string | null;
 };
@@ -261,6 +294,7 @@ export function summarizeFeatureTimeline(
     total: entries.length,
     shipped: shipped.length,
     planned: featuresByStatus(entries, FEATURE_STATUSES.planned).length,
+    inProgress: entries.filter(isInProgress).length,
     firstShippedDate: shippedDates.at(0) ?? null,
     lastShippedDate: shippedDates.at(-1) ?? null,
   };
@@ -344,8 +378,9 @@ export function publicSummaryFor(entry: FeatureTimelineEntry): string {
 /**
  * The entries the public page shows: shipped work only.
  *
- * Planned and shelved items are a roadmap, and a roadmap read by strangers
- * becomes a promise. The admin page keeps showing everything.
+ * Planned, parked and cancelled work is a roadmap, and a roadmap read by
+ * strangers becomes a promise. Wishes are further out still - things asked for
+ * that nobody has agreed to. The admin page keeps showing everything.
  */
 export function publicReleaseEntries(entries: FeatureTimelineEntry[]): FeatureTimelineEntry[] {
   return sortFeaturesNewestFirst(entries.filter((entry) => entry.status === FEATURE_STATUSES.shipped));

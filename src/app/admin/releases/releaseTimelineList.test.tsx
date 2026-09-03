@@ -36,7 +36,9 @@ describe("the planned tab", () => {
     entry({ id: "second", release: 2, date: "2026-08-31" }),
     entry({ id: "third", release: 3, date: "2026-09-05" }),
   ];
-  const doc = render(<ReleaseTimelineList entries={queue} showEstimateFlag />);
+  const doc = render(
+    <ReleaseTimelineList entries={queue} showEstimateFlag queue={{ heading: "In queue order", noun: "planned" }} />,
+  );
 
   it("keeps the queue in queue order, whatever the estimated dates say", () => {
     const names = [...doc.querySelectorAll("li summary")].map((el) => el.textContent ?? "");
@@ -68,5 +70,58 @@ describe("the released tab", () => {
     );
     expect(doc.querySelectorAll("details.group\\/month")).toHaveLength(2);
     expect(doc.body.textContent).toContain("v0.2.0");
+  });
+});
+
+/*
+ * A shelf is not a calendar either.
+ *
+ * Backlogged and cancelled work carries the same hand-typed estimate the queue
+ * does, so grouping it by month would reproduce the out-of-order headers the
+ * planned tab was fixed for. Every tab but Released is one flat list.
+ */
+describe("the backlog and cancelled tabs", () => {
+  const shelf = [
+    entry({ id: "parked", status: FEATURE_STATUSES.backlogged, date: "2026-08-01" }),
+    entry({ id: "dropped", status: FEATURE_STATUSES.cancelled, date: "2026-09-01" }),
+  ];
+
+  it("names each row's status so the two shelves are told apart", () => {
+    const doc = render(
+      <ReleaseTimelineList entries={shelf} showStatusFlag queue={{ heading: "Backlog", noun: "parked" }} />,
+    );
+    expect(doc.body.textContent).toContain("Backlog");
+    expect(doc.body.textContent).toContain("Cancelled");
+  });
+
+  it("does not group a shelf by month", () => {
+    const doc = render(
+      <ReleaseTimelineList entries={shelf} showStatusFlag queue={{ heading: "Backlog", noun: "parked" }} />,
+    );
+    expect(doc.querySelectorAll("details.group\\/month")).toHaveLength(0);
+    expect(doc.body.textContent).not.toContain("August");
+  });
+
+  it("counts in the tab's own word, not always 'planned'", () => {
+    const doc = render(
+      <ReleaseTimelineList entries={shelf} queue={{ heading: "Cancelled", noun: "cancelled" }} />,
+    );
+    expect(doc.querySelector("h3")?.textContent).toContain("2 cancelled");
+  });
+});
+
+/*
+ * "Nothing queued" was the only empty message, and it is wrong on five of the
+ * six tabs - an empty Cancelled tab is good news, not an empty queue.
+ */
+describe("an empty tab", () => {
+  it("says what is empty", () => {
+    const doc = render(<ReleaseTimelineList entries={[]} emptyMessage="Nothing cancelled." />);
+    expect(doc.body.textContent).toContain("Nothing cancelled.");
+  });
+
+  it("still has a default for the queue it was written for", () => {
+    const doc = render(<ReleaseTimelineList entries={[]} />);
+    expect(doc.body.textContent).toContain("Nothing queued.");
   });
 });

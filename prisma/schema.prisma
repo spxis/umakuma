@@ -31,7 +31,6 @@ model Account {
   jlptStatus               String?
   /**
    * The single certificate a member used to be allowed.
-   *
    * A member may hold several - somebody who sat N5, then N4, then N3 holds
    * three - so what they have passed lives in `JlptCertificate` rows now, and
    * these three columns are the answer given before that table existed. They
@@ -118,7 +117,7 @@ model Account {
   studySubjectTags          StudySubjectTag[]
   /// One of us: the family and anybody let in deliberately. Decides who is
   /// offered the reading challenge and its check-ins, which are not public.
-  internal                  Boolean   @default(false)
+  internal                  Boolean                    @default(false)
   jlptCertificates          JlptCertificate[]
   studyLists                StudyList[]
   studyListSubscriptions    StudyListSubscription[]
@@ -541,14 +540,14 @@ model StudySubjectTag {
 /// way its own catalogue names it, with the subject id beside it where
 /// WaniKani has one.
 model StudyList {
-  id         String   @id @default(cuid())
-  accountId  String
-  name       String
+  id            String                 @id @default(cuid())
+  accountId     String
+  name          String
   /// The old shape: a string of characters. Nothing reads it since 0.240.0;
   /// every list's characters were copied into `items` on 2026-09-02, with a
   /// snapshot in backups/. Dropping the column is a separate, deliberate
   /// `db:push` once John says so.
-  characters String[]
+  characters    String[]
   /// A line under the name, for a list that is shared.
   description   String?
   visibility    StudyListVisibility    @default(private)
@@ -563,8 +562,8 @@ model StudyList {
   sourceLiveKey String?
   copyCount     Int                    @default(0)
   shareCount    Int                    @default(0)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
 
   account       Account                 @relation(fields: [accountId], references: [id], onDelete: Cascade)
   items         StudyListItem[]
@@ -898,4 +897,43 @@ model TatoebaSentence {
 
   @@index([kanji], type: Gin)
   @@index([difficulty])
+}
+
+/// A request typed into the site, before it is real work.
+///
+/// The release timeline is `src/data/featureTimeline.json`, a file in the
+/// repository. An agent can add to it with `pnpm backlog add` and commit the
+/// change; the running site cannot write to it at all, and would lose anything
+/// it did write on the next deploy. So a wish typed on the admin page lands
+/// here instead, and `pnpm backlog wishes` is where an agent reads it.
+///
+/// Filing records the timeline id rather than moving the row, so the wish and
+/// the entry it became stay linked and nothing is lost when the answer is no.
+model FeatureWish {
+  id          String            @id @default(cuid())
+  title       String
+  detail      String?
+  /// The area, when whoever asked already knows it. Validated against
+  /// FEATURE_AREA_VALUES at the boundary, not by the database, because areas
+  /// are a TypeScript union that changes with the code.
+  area        String?
+  kind        String            @default("feature")
+  status      FeatureWishStatus @default(open)
+  /// The `featureTimeline.json` id an agent filed this as.
+  filedAs     String?
+  /// Who asked, by the email they were signed in as.
+  requestedBy String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([status, createdAt])
+}
+
+enum FeatureWishStatus {
+  /// Waiting for an agent to pick it up.
+  open
+  /// An agent turned it into a planned timeline entry; `filedAs` says which.
+  filed
+  /// Answered no, kept on the record rather than deleted.
+  declined
 }

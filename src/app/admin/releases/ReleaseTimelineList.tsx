@@ -8,6 +8,7 @@ import {
   groupFeaturesByMonth,
   type FeatureTimelineEntry,
   FEATURE_KINDS,
+  FEATURE_STATUSES,
 } from "@/lib/featureTimeline";
 
 import { RELEASE_AREA_CLASSES, RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
@@ -15,9 +16,30 @@ import JapaneseInProse from "@/app/shared/JapaneseInProse";
 
 type ReleaseTimelineListProps = {
   entries: FeatureTimelineEntry[];
+  /** Adds the Estimated pill to rows whose date is a forecast, not a fact. */
   showEstimateFlag?: boolean;
-  /** Shelved tab: label each row backlogged or killed. */
+  /** Label each row with its status, where a tab mixes more than one. */
   showStatusFlag?: boolean;
+  /** What an empty tab says. "Nothing queued" is wrong on five of the six. */
+  emptyMessage?: string;
+  /**
+   * The heading a flat list sits under, and the word it counts in.
+   *
+   * A queue is not a calendar.
+   *
+   * Unshipped work arrives in queue order, and grouping it by the month of an
+   * estimated date - a date typed by hand, and once already in the past -
+   * produced headers reading September, August, September, which looks like a
+   * list that has lost its order. So every tab but Released is one flat list.
+   * The month grouping stays for what has shipped, where the date is a fact.
+   */
+  queue?: { heading: string; noun: string };
+};
+
+/* Cancelled is a refusal and reads as one; a backlog is only parked. */
+const STATUS_FLAG_CLASSES: Partial<Record<FeatureTimelineEntry["status"], string>> = {
+  [FEATURE_STATUSES.cancelled]: "border-rose-500/40 bg-rose-500/10 text-rose-600",
+  [FEATURE_STATUSES.backlogged]: "border-line bg-surface-muted text-foreground/60",
 };
 
 function FeatureRow({
@@ -70,7 +92,11 @@ function FeatureRow({
           </span>
 
           {showStatusFlag ? (
-            <span className="inline-flex items-center rounded-full border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 text-[11px] font-semibold text-rose-600">
+            <span
+              className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${
+                STATUS_FLAG_CLASSES[entry.status] ?? "border-line bg-surface-muted text-foreground/60"
+              }`}
+            >
               {FEATURE_STATUS_LABELS[entry.status]}
             </span>
           ) : null}
@@ -118,34 +144,32 @@ export default function ReleaseTimelineList({
   entries,
   showEstimateFlag = false,
   showStatusFlag = false,
+  emptyMessage = RELEASE_TIMELINE_COPY.emptyPlanned,
+  queue,
 }: ReleaseTimelineListProps) {
   if (entries.length === 0) {
-    return <p className="py-6 text-sm text-foreground/60">{RELEASE_TIMELINE_COPY.emptyPlanned}</p>;
+    return <p className="py-6 text-sm text-foreground/60">{emptyMessage}</p>;
   }
 
-  /*
-   * A queue is not a calendar.
-   *
-   * Planned work arrives sorted by its position in the queue, and grouping
-   * that by the month of an estimated date - a date typed by hand, and once
-   * already in the past - produced headers reading September, August,
-   * September, which looks like a list that has lost its order. The queue is
-   * one list, in queue order, with each item's position where a release
-   * would show its version. The month grouping stays for what has shipped,
-   * where the date is a fact.
-   */
-  if (showEstimateFlag) {
+  const rows = entries.map((entry) => (
+    <FeatureRow
+      key={entry.id}
+      entry={entry}
+      showEstimateFlag={showEstimateFlag}
+      showStatusFlag={showStatusFlag}
+    />
+  ));
+
+  if (queue) {
     return (
       <section>
         <h3 className="mb-1 flex items-baseline gap-2 text-xs font-bold uppercase tracking-wide text-foreground/60">
-          {RELEASE_TIMELINE_COPY.queueHeading}
-          <span className="font-semibold text-foreground/60">{entries.length} planned</span>
+          {queue.heading}
+          <span className="font-semibold text-foreground/60">
+            {entries.length} {queue.noun}
+          </span>
         </h3>
-        <ul>
-          {entries.map((entry) => (
-            <FeatureRow key={entry.id} entry={entry} showEstimateFlag showStatusFlag={showStatusFlag} />
-          ))}
-        </ul>
+        <ul>{rows}</ul>
       </section>
     );
   }
@@ -159,14 +183,17 @@ export default function ReleaseTimelineList({
           <summary className="mb-1 flex cursor-pointer list-none items-baseline gap-2 text-xs font-bold uppercase tracking-wide text-foreground/60">
             <span aria-hidden="true" className="text-foreground/35 transition group-open/month:rotate-90">›</span>
             {group.label}
-            <span className="font-semibold text-foreground/60">
-              {group.entries.length} {showEstimateFlag ? "planned" : "released"}
-            </span>
+            <span className="font-semibold text-foreground/60">{group.entries.length} released</span>
           </summary>
 
           <ul className="flex flex-col">
             {group.entries.map((entry) => (
-              <FeatureRow key={entry.id} entry={entry} showEstimateFlag={showEstimateFlag} showStatusFlag={showStatusFlag} />
+              <FeatureRow
+                key={entry.id}
+                entry={entry}
+                showEstimateFlag={showEstimateFlag}
+                showStatusFlag={showStatusFlag}
+              />
             ))}
           </ul>
         </details>

@@ -221,6 +221,22 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   an entry clears the claim. Use the script rather than editing the JSON by
   hand - it takes a free release number, today's Vancouver date and the file's
   own escaping, which are the three things that went wrong by hand.
+- **A wish is a request that has not been agreed to yet, and it lives in the
+  database, not the file.** The timeline is `src/data/featureTimeline.json`, a
+  committed file: an agent can add to it and commit, and the running site
+  cannot write to it at all - a deploy would overwrite anything it did. So the
+  admin page's wish list posts to the `FeatureWish` table instead. `pnpm
+  backlog` shows the waiting count on its summary line, `pnpm backlog wishes`
+  lists them with the command to file each one, and `pnpm backlog file <wishId>
+  <area> [entry-id]` writes the planned entry from the wish's own words and
+  marks the wish filed with the id it became. Do not hand-copy a wish into the
+  JSON: the two halves stay linked only if the script does it. A wish is not
+  work until it has been filed and claimed.
+- **In progress is not a status; it is a claim.** The board records `owner` and
+  `claimedAt`, and that is the only place work-in-progress is written. The
+  admin page's In progress tab is the claimed half of Planned, derived. Do not
+  add a fifth status for it - two fields saying the same thing can disagree,
+  and then neither can be trusted.
 - `docs/BACKLOG.md` carries the reasoning the JSON has no room for: why an item
   exists, what it depends on, what has to be decided first. Feature names,
   dates and status live in `src/data/featureTimeline.json`, which also feeds

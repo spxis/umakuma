@@ -13,8 +13,10 @@ import {
   loadFeatureTimeline,
   sortFeaturesByRelease,
   sortFeaturesNewestFirst,
+  splitPlannedByProgress,
   summarizeFeatureTimeline,
 } from "@/lib/featureTimeline";
+import { listFeatureWishes } from "@/lib/featureWishesServer";
 
 import {
   RELEASE_TAB_COOKIE_KEY,
@@ -60,11 +62,16 @@ export default async function AdminReleasesPage() {
   const entries = loadFeatureTimeline();
   const totals = summarizeFeatureTimeline(entries);
   const shipped = sortFeaturesNewestFirst(featuresByStatus(entries, FEATURE_STATUSES.shipped));
-  const planned = sortFeaturesByRelease(featuresByStatus(entries, FEATURE_STATUSES.planned));
-  const shelved = [
-    ...featuresByStatus(entries, FEATURE_STATUSES.backlogged),
-    ...featuresByStatus(entries, FEATURE_STATUSES.killed),
-  ];
+
+  /*
+   * In progress is the claimed half of planned, not a status of its own: the
+   * board already records who has what, and a second field saying the same
+   * thing is a field that can disagree. Sorted once, split after.
+   */
+  const { inProgress, queued } = splitPlannedByProgress(sortFeaturesByRelease(entries));
+
+  /* Wishes are the only part of this page the database holds; see FeatureWish. */
+  const wishes = await listFeatureWishes();
 
   return (
     <div className="relative px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
@@ -89,13 +96,22 @@ export default async function AdminReleasesPage() {
         />
 
         <section>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Stat value={totals.total} label={RELEASE_TIMELINE_COPY.totalsLabel} />
             <Stat value={totals.shipped} label={RELEASE_TIMELINE_COPY.shippedLabel} />
             <Stat value={totals.planned} label={RELEASE_TIMELINE_COPY.plannedLabel} />
+            <Stat value={totals.inProgress} label={RELEASE_TIMELINE_COPY.inProgressLabel} />
           </div>
 
-          <ReleaseTimelineTabs planned={planned} shipped={shipped} shelved={shelved} initialTab={initialTab} />
+          <ReleaseTimelineTabs
+            inProgress={inProgress}
+            planned={queued}
+            shipped={shipped}
+            backlog={featuresByStatus(entries, FEATURE_STATUSES.backlogged)}
+            cancelled={featuresByStatus(entries, FEATURE_STATUSES.cancelled)}
+            wishes={wishes}
+            initialTab={initialTab}
+          />
         </section>
       </main>
     </div>

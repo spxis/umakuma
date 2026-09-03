@@ -109,10 +109,18 @@ export function openWork(entries: FeatureTimelineEntry[]): FeatureTimelineEntry[
   return [...planned.filter((entry) => entry.owner), ...planned.filter((entry) => !entry.owner)];
 }
 
-/** The board as text, for a terminal. */
-export function formatBoard(entries: FeatureTimelineEntry[]): string {
+/**
+ * The board as text, for a terminal.
+ *
+ * `openWishes` is how many requests are waiting in the database - typed into
+ * the admin page, which cannot write to this file. The count is on the summary
+ * line so an agent reading the board sees them without knowing the command;
+ * they are not work until somebody files one.
+ */
+export function formatBoard(entries: FeatureTimelineEntry[], openWishes = 0): string {
   const work = openWork(entries);
-  if (work.length === 0) return "Nothing planned.";
+  const wishNote = openWishes > 0 ? ` · ${openWishes} wished (pnpm backlog wishes)` : "";
+  if (work.length === 0) return `Nothing planned.${wishNote}`;
 
   const lines = work.map((entry) => {
     const kind = entry.kind === FEATURE_KINDS.bug ? "BUG " : "    ";
@@ -122,7 +130,11 @@ export function formatBoard(entries: FeatureTimelineEntry[]): string {
 
   const inProgress = work.filter((entry) => entry.owner).length;
   const bugs = work.filter((entry) => entry.kind === FEATURE_KINDS.bug).length;
-  return [`${work.length} open · ${inProgress} in progress · ${bugs} bugs`, "", ...lines].join("\n");
+  return [
+    `${work.length} open · ${inProgress} in progress · ${bugs} bugs${wishNote}`,
+    "",
+    ...lines,
+  ].join("\n");
 }
 
 /*
