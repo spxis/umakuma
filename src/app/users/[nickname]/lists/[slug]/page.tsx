@@ -11,6 +11,8 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { LIST_VISIBILITIES, type StudyTag } from "@/lib/domainConstants";
 import { LIST_CONTRIBUTIONS } from "@/lib/listContributions";
 import { loadMemberState, tagListItems } from "@/lib/listMemberState";
+import { worthShowing } from "@/lib/listProgress";
+import { loadListProgress } from "@/lib/listProgressServer";
 import { toListPageItems } from "@/lib/listPageItems";
 import { prisma } from "@/lib/prisma";
 import { LIST_KEY_PARAM, canViewList, listShareHref, tagForListSlug } from "@/lib/studyListRules";
@@ -141,6 +143,8 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
           listKey={null}
           proposals={[]}
           practicePath={practicePath}
+          /* A built-in list is one member's own marks; there is nobody to compare with. */
+          progress={null}
         />
       </div>
     );
@@ -154,11 +158,25 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
     notFound();
   }
 
-  const [rows, memberState, subscribed, proposals] = await Promise.all([
+  const [rows, memberState, subscribed, proposals, progress] = await Promise.all([
     fetchListSubjectRows(list.items),
     loadMemberState(viewerAccountId),
     viewerAccountId && !isOwner ? isSubscribed(list.id, viewerAccountId) : Promise.resolve(false),
     isOwner ? fetchPendingProposals(list.id) : Promise.resolve([]),
+    /*
+     * Only worth asking for a list somebody else can see. A private list has
+     * one member on it by definition, and the overlay would be the reader's
+     * own progress drawn as a comparison with nobody.
+     */
+    list.visibility === LIST_VISIBILITIES.private
+      ? Promise.resolve(null)
+      : loadListProgress({
+          listId: list.id,
+          ownerAccountId: account.id,
+          subjectIds: list.items.map((item) => item.subjectId ?? null),
+          viewerAccountId,
+          viewer: isAdmin ? "admin" : viewerAccountId ? "member" : "anonymous",
+        }),
   ]);
 
   return (
@@ -195,6 +213,7 @@ export default async function StudyListPage({ params, searchParams }: PageProps)
         listKey={key}
         proposals={proposals}
         practicePath={practicePath}
+        progress={progress && worthShowing(progress.members, progress.trackable) ? progress : null}
       />
     </div>
   );

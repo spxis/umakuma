@@ -38,6 +38,7 @@ import ListItemSortControl from "./ListItemSortControl";
 import type { ListPageViewProps } from "./ListPage.types";
 import { useListItemNote } from "./useListItemNote";
 import ListProposalsPanel from "./ListProposalsPanel";
+import ListProgressPanel from "./ListProgressPanel";
 import ListSourceUpdates from "./ListSourceUpdates";
 import ListShareControls from "./ListShareControls";
 import ListViewerActions from "./ListViewerActions";
@@ -70,6 +71,7 @@ export default function ListPageView({
   listKey,
   proposals,
   practicePath,
+  progress,
 }: ListPageViewProps) {
   const [kind, setKind] = useState<string>(ALL);
   const [search, setSearch] = useState("");
@@ -276,6 +278,15 @@ export default function ListPageView({
         * unless there is something, so a list with no source - almost all of
         * them - is unchanged by this being here.
         */}
+      {/*
+        * Only on a list more than one person is on. A list nobody shares has
+        * one bar, which is the reader's own progress said twice - the item
+        * cards already carry it.
+        */}
+      {progress ? (
+        <ListProgressPanel members={progress.members} trackable={progress.trackable} untracked={progress.untracked} />
+      ) : null}
+
       {viewer.isOwner && viewer.accountId && !archived && !list.tag && list.hasSource ? (
         <ListSourceUpdates accountId={viewer.accountId} listId={list.id} />
       ) : null}

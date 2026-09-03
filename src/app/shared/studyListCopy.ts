@@ -86,6 +86,14 @@ export const STUDY_LIST_COPY = {
   sortSize: "Size",
   reverse: "Reverse",
   noListsMatch: "No list matches that search.",
+  /* The overlay that answers "who has this week's kanji down". */
+  progressHeading: "Who knows what",
+  progressShow: "Show",
+  progressHide: "Hide",
+  progressOf: "of",
+  progressLabels: { known: "Known", learning: "Learning", none: "Not started" } as const,
+  progressUntracked: (count: number) =>
+    `${count} ${count === 1 ? "item is" : "items are"} not in the catalogue, so nobody has a stage for ${count === 1 ? "it" : "them"}.`,
   /* "Showing 60 of 240" beside the pager, so the page says what it is a page of. */
   showing: "Showing",
   of: "of",

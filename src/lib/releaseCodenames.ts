@@ -363,6 +363,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Ireru Ibasho", ja: "入れる居場所", reading: "いれるいばしょ", gloss: "the place to put it, from where you found it" },
   { romaji: "Uketoru Bun Dake", ja: "受け取る分だけ", reading: "うけとるぶんだけ", gloss: "only the part you take" },
   { romaji: "Eru Atesaki", ja: "得る宛先", reading: "えるあてさき", gloss: "the address it actually reaches" },
+  { romaji: "Otagai no Oboe", ja: "お互いの覚え", reading: "おたがいのおぼえ", gloss: "what each other has learned" },
 ];
 
 /**

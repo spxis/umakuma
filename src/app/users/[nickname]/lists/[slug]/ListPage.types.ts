@@ -3,6 +3,7 @@ import type { ListContributions } from "@/lib/listContributions";
 import type { PendingProposal } from "@/lib/studyListContributions";
 import type { StudyTag } from "@/lib/domainConstants";
 import type { ListPageItem } from "@/lib/listPageItems";
+import type { MemberStandings } from "@/lib/listProgress";
 
 /** What the list's page knows about the list, apart from its rows. */
 export type ListPageList = {
@@ -48,6 +49,8 @@ export type ListPageViewProps = {
   proposals: PendingProposal[];
   /** Where a practice sheet is built for the viewer, or empty for a visitor. */
   practicePath: string;
+  /** Who else is on this list and how far along, or null when nobody is. */
+  progress: { members: MemberStandings[]; trackable: number; untracked: number } | null;
 };
 
 export type ListViewerActionsProps = {

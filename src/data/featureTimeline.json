@@ -2761,14 +2761,12 @@
     "id": "list-progress-overlay",
     "name": "See who knows what across a shared list",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
-    "owner": "Claude (session 21d00c32)",
-    "claimedAt": "2026-09-02T13:24:18.235Z",
-    "date": "2026-09-01",
+    "date": "2026-09-02",
     "summary": "On a shared list, each member's standing on every item - not started, learning, known - as a small overlay, so a family can see who has the week's kanji down and who needs a hand. Uses each member's existing visibility setting. Suggested 2026-09-01.",
-    "dateIsEstimate": true,
-    "release": 24
+    "version": "0.313.0",
+    "releasedAt": "2026-09-03T04:53:49Z"
   },
   {
     "id": "list-starter-lists",
@@ -2986,6 +2984,7 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "The viewer is where a reader decides a character is worth keeping - they have opened it, read the meaning, seen the words it appears in - and it was the one surface that could not act on that. The saved lists now sit under its title as a rail that scrolls, with the lists the character is already on first, so the strip costs the same space whether somebody keeps two lists or forty. Trouble and favourite stay inside the glyph, where they already were. The explorer grids are add-to-lists-explorers.",
+    "dateIsEstimate": false,
     "version": "0.310.0",
     "releasedAt": "2026-09-03T03:55:09Z"
   },
@@ -3581,12 +3580,12 @@
     "area": "platform",
     "status": "planned",
     "kind": "bug",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T04:44:17.252Z",
     "date": "2026-09-02",
     "summary": "data-theme and data-jp-font are hardcoded in layout.tsx and only ever set by DisplayPreferences, which is mounted on the profile page alone. So a member who picks Dark gets dark on their profile and light on every other page: the preference does not survive a navigation, which is worse than the flash it looks like. Both attributes want the treatment the grade explorer got in 0.300.0 - a cookie the layout reads, so the server draws the chosen theme on the first paint of every page. src/lib/displayPreferenceCookie.ts already holds readEnumCookie and writeDisplayPreferenceCookie and was written to take more than one preference. Found while fixing the grades flash; confirmed by umakuma-c0.",
     "dateIsEstimate": true,
-    "release": 67,
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T04:44:17.252Z"
+    "release": 67
   },
   {
     "id": "list-game-from-shared",
@@ -3653,12 +3652,12 @@
     "area": "study",
     "status": "planned",
     "kind": "bug",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T04:44:16.577Z",
     "date": "2026-09-02",
     "summary": "Surfaces that show items WaniKani never taught give them a negative stand-in id, so React has a key and a selection has something to hold - listPageItems numbers them -1, -2, -3 down the page. The glyph viewer passes that straight to /api/study/<id>/subjects/<subjectId>/history, which answers 400 twice per open. Harmless today (the panel shows nothing either way) but it is a failed request on every open of a home-made list item, and the same class of mistake that stopped filing from saving. subjectFiler.catalogId is the pattern: a stand-in is not a subject id. Found 2026-09-02.",
     "dateIsEstimate": true,
-    "release": 69,
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T04:44:16.577Z"
+    "release": 69
   },
   {
     "id": "add-to-lists-explorers",
@@ -3675,24 +3674,24 @@
     "id": "explorer-study-mode-stuck",
     "name": "Study mode cannot be turned off",
     "area": "study",
-    "kind": "bug",
     "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 71,
-    "summary": "useStudyModeState in src/app/users/[nickname]/useStudyModeState.ts is hardwired on and there is no way out of it. Its useState initialiser returns true and ignores the initialStudyMode the page computed from the query; syncFromUrlAndStorage answers studyMode=off and studyMode=0 with setStudyMode(true), so the off switch turns it on; a stored value of any kind, including the '0' the hook itself writes, also becomes setStudyMode(true); and writeToUrl hardcodes nextStudyMode = 'on', so the address is rewritten to studyMode=on whatever the member chose. The effect that persists the choice does write '1' or '0' correctly, which is what makes it look like a preference that is being ignored rather than one that was never read. The visible result is the JLPT explorer always hiding English: meanings and readings show as an ellipsis and the compounds panel never appears, because all of them are gated on !studyMode. Found on 2026-09-02 while checking the explorer's paint.",
+    "kind": "bug",
     "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T04:44:15.892Z"
+    "claimedAt": "2026-09-03T04:44:15.892Z",
+    "date": "2026-09-02",
+    "summary": "useStudyModeState in src/app/users/[nickname]/useStudyModeState.ts is hardwired on and there is no way out of it. Its useState initialiser returns true and ignores the initialStudyMode the page computed from the query; syncFromUrlAndStorage answers studyMode=off and studyMode=0 with setStudyMode(true), so the off switch turns it on; a stored value of any kind, including the '0' the hook itself writes, also becomes setStudyMode(true); and writeToUrl hardcodes nextStudyMode = 'on', so the address is rewritten to studyMode=on whatever the member chose. The effect that persists the choice does write '1' or '0' correctly, which is what makes it look like a preference that is being ignored rather than one that was never read. The visible result is the JLPT explorer always hiding English: meanings and readings show as an ellipsis and the compounds panel never appears, because all of them are gated on !studyMode. Found on 2026-09-02 while checking the explorer's paint.",
+    "dateIsEstimate": true,
+    "release": 71
   },
   {
     "id": "jlpt-stats-account-id",
     "name": "Kanji review stats ask under the wrong id",
     "area": "study",
-    "kind": "bug",
     "status": "shipped",
+    "kind": "bug",
     "date": "2026-09-02",
-    "dateIsEstimate": false,
     "summary": "The JLPT explorer asked for a kanji's review history under whatever the address bar held: the first segment after /users/ is the member's nickname or slug, never their account id, so every request went to /api/study/<nickname>/... and answered 404. Show review stats could never fill in, and opening any kanji logged a failed request. The account id was already a prop the component used for its other fetches, one line away from the guess. The two per-kanji lookups - this history and the compounds - now live together in useSelectedKanjiDetails, each result stored beside the kanji it belongs to, so arrowing down the list cannot show the previous kanji's history under the new kanji's glyph.",
+    "dateIsEstimate": false,
     "version": "0.312.0",
     "releasedAt": "2026-09-03T04:50:44Z"
   }
