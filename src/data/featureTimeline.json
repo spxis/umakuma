@@ -3571,12 +3571,12 @@
     "area": "jlpt",
     "status": "planned",
     "kind": "bug",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T03:42:43.189Z",
     "date": "2026-09-02",
     "summary": "What is left after 0.295.0 moved the subject lookups onto the catalogue. Two costs remain in the server render and both happen before anything is drawn: the whole JlptKanji table, 2,211 rows, is loaded on every request, and the member's WaniKani assignments are fetched and waited on. Assignments are live SRS state so they must come from the API, but they do not have to block the first paint - the grid can arrive with the catalogue's own data and take the member's stages when they land. The rows are the other half: the client already pages through them, so the server does not need to hand over all 2,211 to draw the first forty. Measured before this was split out: 5.6s for the JLPT explorer against 0.1s for the grade explorer.",
     "dateIsEstimate": true,
-    "release": 66,
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T03:42:43.189Z"
+    "release": 66
   },
   {
     "id": "theme-preference-cookie",
@@ -3620,6 +3620,7 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "The kanji page shows everything about a character at one address, so there is no way to hand somebody the stroke order and nothing else. Each panel gets a path of its own under the character - /kanji/<character>/stroke shows the stroke order alone, and the other panels follow the same shape - built from one registry so a section is defined once and rendered identically whether it is on the whole page or on its own. An unknown segment is a 404 rather than a silent fall back to the whole page. The same shape then covers radicals and words, and the share control on each panel points at that panel's own address. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.307.0",
     "releasedAt": "2026-09-03T02:28:55Z"
   },
@@ -3634,5 +3635,16 @@
     "dateIsEstimate": false,
     "version": "0.305.0",
     "releasedAt": "2026-09-03T01:57:15Z"
+  },
+  {
+    "id": "subject-section-paths",
+    "name": "The same doors on radicals and words",
+    "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-02",
+    "summary": "The kanji page gained an address for each of its parts; the radical and word pages, which are built from the same blocks, kept answering only as a whole. Both now take the same section segment - /radicals/leaf/related, /vocabulary/\u6c34\u6ce1/examples - from one shared registry and one shared address module, so the three public subject pages cannot drift into three different answers to the same question. A section a subject has nothing under is a 404, and every section page names the subject's own page as canonical. Requested 2026-09-02 by John.",
+    "version": "0.309.0",
+    "releasedAt": "2026-09-03T03:51:00Z"
   }
 ]

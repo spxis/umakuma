@@ -12,7 +12,10 @@ import type { KanjiPage } from "@/lib/subjectPage";
 
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
-import { KANJI_SECTIONS, type KanjiSection } from "./kanjiSectionAddress";
+import {
+  SUBJECT_SECTIONS,
+  type SubjectSection,
+} from "@/app/shared/subject-page/subjectSectionAddress";
 
 /**
  * The blocks of a kanji page, declared once.
@@ -37,14 +40,14 @@ export type KanjiSectionView = {
 };
 
 export type KanjiSectionBlock = {
-  id: KanjiSection;
+  id: SubjectSection;
   has: (view: KanjiSectionView) => boolean;
   render: (view: KanjiSectionView) => ReactNode;
 };
 
 export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
   {
-    id: KANJI_SECTIONS.stroke,
+    id: SUBJECT_SECTIONS.stroke,
     /* KanjiVG covers what the page can draw, and the panel says so itself when it does not. */
     has: () => true,
     render: (view) => (
@@ -54,7 +57,7 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
     ),
   },
   {
-    id: KANJI_SECTIONS.meanings,
+    id: SUBJECT_SECTIONS.meanings,
     has: (view) => view.dictionary !== null,
     render: (view) =>
       view.dictionary ? (
@@ -67,12 +70,12 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
       ) : null,
   },
   {
-    id: KANJI_SECTIONS.words,
+    id: SUBJECT_SECTIONS.words,
     has: (view) => view.page.words.length > 0,
     render: (view) => <UsedInWordsBlock words={view.page.words} />,
   },
   {
-    id: KANJI_SECTIONS.related,
+    id: SUBJECT_SECTIONS.related,
     has: (view) => view.page.related.length > 0,
     render: (view) => (
       <SubjectBlock credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}>
@@ -83,12 +86,12 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
     ),
   },
   {
-    id: KANJI_SECTIONS.mnemonics,
+    id: SUBJECT_SECTIONS.mnemonics,
     has: (view) => Boolean(view.page.mnemonics?.meaning || view.page.mnemonics?.reading),
     render: (view) => <MnemonicsBlock mnemonics={view.page.mnemonics} />,
   },
   {
-    id: KANJI_SECTIONS.examples,
+    id: SUBJECT_SECTIONS.examples,
     has: (view) => view.page.sentences.length > 0,
     render: (view) => (
       <ExampleSentences

@@ -30,6 +30,21 @@ export const SUBJECT_PAGE_COPY = {
   notFoundWord: "No word is catalogued under that spelling.",
   notFoundRadical: "No radical is catalogued under that name.",
   backToSearch: "Search again",
+  /*
+   * The parts of a subject, each of which has an address of its own. The
+   * titles are what a section page is called and what a shared link previews
+   * as, so they name the part rather than the page.
+   */
+  sectionTitles: {
+    stroke: "Stroke order",
+    meanings: "Meanings and readings",
+    words: "Words",
+    related: "Related",
+    mnemonics: "Mnemonics",
+    examples: "In use",
+  },
+  sectionBack: (label: string) => `Everything about ${label}`,
+  otherSections: "Other parts",
 } as const;
 
 /**

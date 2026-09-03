@@ -69,7 +69,7 @@ describe("where the credit is drawn", () => {
     ["the sentences", "src/app/shared/ExampleSentences.tsx"],
     ["the stroke drawings", "src/app/shared/KanjiStrokeAnimation.tsx"],
     ["the dictionary facts", "src/app/kanji/[character]/KanjiDictionaryDetail.tsx"],
-    ["the public subject panel", "src/app/shared/SubjectDetailPanel.tsx"],
+    ["the public subject card", "src/app/shared/subject-page/SubjectIdentityBlock.tsx"],
     ["the explorer detail panel", "src/app/users/[nickname]/level-explorer/components/LevelExplorerDetailSection.tsx"],
   ])("draws %s credit with the shared component", (_label, path) => {
     const source = read(path);
@@ -87,7 +87,7 @@ describe("where the credit is drawn", () => {
    */
   it("puts every section's credit at the foot, the same way", () => {
     const inline = ["src/app/shared/ExampleSentences.tsx", "src/app/kanji/[character]/KanjiDictionaryDetail.tsx",
-      "src/app/shared/SubjectDetailPanel.tsx", "src/app/shared/KanjiDetailModal.tsx",
+      "src/app/shared/subject-page/SubjectIdentityBlock.tsx", "src/app/shared/KanjiDetailModal.tsx",
       "src/app/shared/subject-page/SubjectBlock.tsx"].filter((path) => read(path).includes('variant="inline"'));
     expect(inline).toEqual([]);
     expect(read("src/app/shared/KanjiStrokeAnimation.tsx")).toContain('variant="inline"');
@@ -95,7 +95,7 @@ describe("where the credit is drawn", () => {
   });
 
   it("says what was taken, not only who it came from", () => {
-    expect(read("src/app/shared/SubjectDetailPanel.tsx")).toContain("SOURCE_CREDIT_COPY.subjectData");
+    expect(read("src/app/shared/subject-page/SubjectIdentityBlock.tsx")).toContain("SOURCE_CREDIT_COPY.subjectData");
     /* The mnemonic credit moved into the block that draws the mnemonics. */
     expect(read("src/app/shared/subject-page/MnemonicsBlock.tsx")).toContain("SOURCE_CREDIT_COPY.mnemonics");
     expect(read("src/app/shared/subject-page/UsedInWordsBlock.tsx")).toContain("SOURCE_CREDIT_COPY.words");

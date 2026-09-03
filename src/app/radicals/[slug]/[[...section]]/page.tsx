@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
-import SubjectDetailPanel from "@/app/shared/SubjectDetailPanel";
 import SubjectFilingBar from "@/app/shared/subject-page/SubjectFilingBar";
+import SubjectSectionHeader from "@/app/shared/subject-page/SubjectSectionHeader";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
+import { parseSubjectSection } from "@/app/shared/subject-page/subjectSectionAddress";
+import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout";
+import { SUBJECT_SECTION_BLOCKS, subjectSectionsFor } from "@/app/shared/subject-page/subjectSections";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { authOptions } from "@/lib/auth";
@@ -13,7 +17,7 @@ import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { getPublicSubject, publicSubjectLabel } from "@/lib/publicSubject";
 import { subjectPageHit } from "@/lib/subjectFiler";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ slug: string; section?: string[] }> };
 
 /**
  * One radical at its own address, addressed by its name.
@@ -23,6 +27,10 @@ type Props = { params: Promise<{ slug: string }> };
  * for one shows "leaf" where a kanji row shows a character. An address built
  * from what the row displays would have been a request for a kanji that does
  * not exist.
+ *
+ * Each block of the page is also a page - `/radicals/leaf/related` is the
+ * kanji built from it and nothing else - drawn from the same registry the
+ * whole page draws from, and from the same one the word page uses.
  *
  * Public for the same reason the word page is: it describes a radical, not a
  * member, so it can answer for one above the reader's level.
@@ -35,24 +43,47 @@ function decode(raw: string): string {
   }
 }
 
+/** The radical's own page, which every section of it points back at. */
+function radicalHref(slug: string): string {
+  return `/radicals/${encodeURIComponent(slug)}`;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const slug = decode((await params).slug);
+  const { slug: raw, section: segments } = await params;
+  const slug = decode(raw);
   const subject = await getPublicSubject(SUBJECT_TYPES.radical, slug);
   if (!subject) return { title: slug || "Radical" };
 
   const meaning = subject.meanings[0] ?? slug;
   const label = publicSubjectLabel(subject);
+  const section = parseSubjectSection(segments);
+
+  if (section && section !== "invalid") {
+    const title = SUBJECT_PAGE_COPY.sectionTitles[section];
+    return {
+      title: `${label} · ${title}`,
+      description: `${title} for the ${meaning} radical.`,
+      /* The radical's own page is the one of record; this is a part of it. */
+      alternates: { canonical: radicalHref(slug) },
+    };
+  }
 
   return {
     title: `${label} · ${meaning}`,
     description: `The ${meaning} radical, and the kanji built from it.`,
+    alternates: { canonical: radicalHref(slug) },
   };
 }
 
 export default async function RadicalPage({ params }: Props) {
-  const slug = decode((await params).slug);
-  const subject = await getPublicSubject(SUBJECT_TYPES.radical, slug);
+  const { slug: raw, section: segments } = await params;
+  const slug = decode(raw);
+  const section = parseSubjectSection(segments);
+  if (section === "invalid") {
+    notFound();
+  }
 
+  const subject = await getPublicSubject(SUBJECT_TYPES.radical, slug);
   if (!subject) {
     return <NotFound slug={slug} />;
   }
@@ -64,18 +95,46 @@ export default async function RadicalPage({ params }: Props) {
   });
   const label = publicSubjectLabel(subject);
 
+  /* A radical is never in an example sentence, and has no neighbouring words. */
+  const view = { subject, label, neighbours: [], sentences: [] };
+  const available = subjectSectionsFor(view);
+  const shown = section ? available.filter((block) => block.id === section) : available;
+  if (shown.length === 0) {
+    notFound();
+  }
+
+  const filingAt = filingStripIndex(
+    shown.map((block) => block.id),
+    SUBJECT_SECTION_BLOCKS.map((block) => block.id),
+    "related",
+  );
+
   return (
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
 
-      <SubjectDetailPanel subject={subject} label={label} />
+      {section ? (
+        <SubjectSectionHeader
+          base={radicalHref(slug)}
+          label={label}
+          section={section}
+          available={available.map((block) => block.id)}
+        />
+      ) : null}
 
-      <SubjectFilingBar
-        hit={subjectPageHit(subject)}
-        accountId={viewerMenuInfo?.accountId ?? null}
-        label={label}
-      />
+      {shown.map((block, index) => (
+        <div key={block.id} className="space-y-5">
+          {block.render(view)}
+          {index === filingAt ? (
+            <SubjectFilingBar
+              hit={subjectPageHit(subject)}
+              accountId={viewerMenuInfo?.accountId ?? null}
+              label={label}
+            />
+          ) : null}
+        </div>
+      ))}
 
       <p className="text-center text-sm">
         <Link href="/" className="font-bold text-accent underline underline-offset-2">

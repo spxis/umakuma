@@ -130,13 +130,13 @@ describe("the pages that share the blocks", () => {
     expect(page).toContain("kanjiSectionsFor");
   });
 
-  it("composes the word and radical panel from the same blocks", () => {
-    const panel = read("src/app/shared/SubjectDetailPanel.tsx");
-    expect(panel).toContain("RelatedGroupBlock");
-    expect(panel).toContain("MnemonicsBlock");
-    expect(panel).toContain("relatedGroupsForSubject");
-    /* And never its own chips again. */
-    expect(panel).not.toContain("function RelatedKanji");
+  it("composes the word and radical pages from the same blocks", () => {
+    const registry = read("src/app/shared/subject-page/subjectSections.tsx");
+    expect(registry).toContain("RelatedGroupBlock");
+    expect(registry).toContain("MnemonicsBlock");
+    expect(registry).toContain("relatedGroupsForSubject");
+    /* And the card itself never draws its own chips again. */
+    expect(read("src/app/shared/subject-page/SubjectIdentityBlock.tsx")).not.toContain("RelatedGroupBlock");
   });
 
   /* A fact printed twice under two headings reads as two facts. */

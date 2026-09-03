@@ -15,9 +15,13 @@ import { subjectPageHit } from "@/lib/subjectFiler";
 import { loadKanjiPage } from "@/lib/subjectPage";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
+import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
+import SubjectSectionHeader from "@/app/shared/subject-page/SubjectSectionHeader";
+import { kanjiPageHref, parseSubjectSection } from "@/app/shared/subject-page/subjectSectionAddress";
+import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout";
+
 import { KANJI_PAGE_COPY } from "../KanjiPage.constants";
-import { kanjiSectionHref, parseKanjiSection, type KanjiSection } from "../kanjiSectionAddress";
-import { kanjiSectionsFor, type KanjiSectionView } from "../kanjiSections";
+import { KANJI_SECTION_BLOCKS, kanjiSectionsFor, type KanjiSectionView } from "../kanjiSections";
 
 type Props = { params: Promise<{ character: string; section?: string[] }> };
 
@@ -40,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const character = firstCharacter(raw);
   if (!character) return { title: "Kanji" };
 
-  const section = parseKanjiSection(segments);
+  const section = parseSubjectSection(segments);
   const entry = getSchoolGradeKanjiByCharacter(character);
   /* A shared link previews as its title, so the dictionary answers for the
    * characters the school catalogue has never heard of. */
@@ -52,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
    * on a section page the part shared leads instead of the meaning.
    */
   if (section && section !== "invalid") {
-    const title = KANJI_PAGE_COPY.sectionTitles[section];
+    const title = SUBJECT_PAGE_COPY.sectionTitles[section];
     return {
       title: `${character} · ${title}`,
       description: `${title} for ${character}${meaning ? ` (${meaning})` : ""}.`,
@@ -64,7 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
        * shape a search engine treats as padding. These addresses exist to be
        * sent to somebody, not to compete with the page they are part of.
        */
-      alternates: { canonical: kanjiSectionHref(character) },
+      alternates: { canonical: kanjiPageHref(character) },
     };
   }
 
@@ -73,7 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: meaning
       ? `Readings, compounds and stroke order for ${character} (${meaning}).`
       : `Stroke order for ${character}.`,
-    alternates: { canonical: kanjiSectionHref(character) },
+    alternates: { canonical: kanjiPageHref(character) },
   };
 }
 
@@ -104,7 +108,7 @@ export default async function KanjiPage({ params }: Props) {
     notFound();
   }
 
-  const section = parseKanjiSection(segments);
+  const section = parseSubjectSection(segments);
   if (section === "invalid") {
     notFound();
   }
@@ -159,6 +163,12 @@ export default async function KanjiPage({ params }: Props) {
     notFound();
   }
 
+  const filingAt = filingStripIndex(
+    shown.map((block) => block.id),
+    KANJI_SECTION_BLOCKS.map((block) => block.id),
+    "stroke",
+  );
+
   const filing = (
     <SubjectFilingBar
       hit={subjectPageHit({
@@ -177,13 +187,19 @@ export default async function KanjiPage({ params }: Props) {
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
 
-      {section ? <SectionHeader character={character} section={section} available={available.map((block) => block.id)} /> : null}
+      {section ? (
+        <SubjectSectionHeader
+          base={kanjiPageHref(character)}
+          label={character}
+          section={section}
+          available={available.map((block) => block.id)}
+        />
+      ) : null}
 
       {shown.map((block, index) => (
         <div key={block.id} className="space-y-5">
           {block.render(view)}
-          {/* The filing strip belongs to the character, so it sits under whichever block leads. */}
-          {index === 0 ? filing : null}
+          {index === filingAt ? filing : null}
         </div>
       ))}
 
@@ -193,54 +209,5 @@ export default async function KanjiPage({ params }: Props) {
         </Link>
       </p>
     </main>
-  );
-}
-
-/**
- * What a section page says about where it is.
- *
- * A link somebody was sent opens on one block of a character they may not
- * know, so the strip names the character, offers the whole page, and lists the
- * other parts this character actually has - which is also the only way to walk
- * between them.
- */
-function SectionHeader({
-  character,
-  section,
-  available,
-}: {
-  character: string;
-  section: KanjiSection;
-  available: readonly KanjiSection[];
-}) {
-  const others = available.filter((id) => id !== section);
-
-  return (
-    <section className="rounded-3xl border border-line bg-surface/90 px-5 py-4 shadow-sm">
-      {/* No title: the block below carries its own, and two of them read as a mistake. */}
-      <Link
-        href={kanjiSectionHref(character)}
-        className="text-sm font-bold text-accent underline underline-offset-2"
-      >
-        {KANJI_PAGE_COPY.sectionBack(character)}
-      </Link>
-
-      {others.length > 0 ? (
-        <div className="mt-3 flex flex-wrap items-center gap-1.5">
-          <span className="mr-1 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
-            {KANJI_PAGE_COPY.otherSections}
-          </span>
-          {others.map((id) => (
-            <Link
-              key={id}
-              href={kanjiSectionHref(character, id)}
-              className="inline-flex h-7 items-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold text-foreground/75 transition hover:bg-surface-muted"
-            >
-              {KANJI_PAGE_COPY.sectionTitles[id]}
-            </Link>
-          ))}
-        </div>
-      ) : null}
-    </section>
   );
 }

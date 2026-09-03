@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-import ExampleSentences from "@/app/shared/ExampleSentences";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import SubjectFilingBar from "@/app/shared/subject-page/SubjectFilingBar";
-import SubjectDetailPanel from "@/app/shared/SubjectDetailPanel";
+import SubjectSectionHeader from "@/app/shared/subject-page/SubjectSectionHeader";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
+import { parseSubjectSection } from "@/app/shared/subject-page/subjectSectionAddress";
+import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout";
+import { SUBJECT_SECTION_BLOCKS, subjectSectionsFor } from "@/app/shared/subject-page/subjectSections";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
-import { KANJI_PAGE_COPY } from "@/app/kanji/[character]/KanjiPage.constants";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { authOptions } from "@/lib/auth";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { getPublicSubject, getWordNeighbours, publicSubjectLabel } from "@/lib/publicSubject";
 import { subjectPageHit } from "@/lib/subjectFiler";
 import { fetchSentencesForWord } from "@/lib/tatoebaSentences";
 
-type Props = { params: Promise<{ word: string }> };
+type Props = { params: Promise<{ word: string; section?: string[] }> };
 
 /**
  * One word at its own address.
@@ -26,6 +28,10 @@ type Props = { params: Promise<{ word: string }> };
  * member's own levels and stops at theirs, so for a member on level 17 there
  * was no level 46 for the word to appear in and no filter that would have
  * helped. A word needs a page of its own, and this is it.
+ *
+ * Each block of it is also a page - `/vocabulary/水泡/examples` is the
+ * sentences and nothing else - from the registry the radical page draws from
+ * too, so the two cannot answer differently.
  *
  * Public, like the kanji page: it holds the catalogue's description of a word
  * and nothing about anyone's account, so it answers the same for a member, a
@@ -39,31 +45,57 @@ function decode(raw: string): string {
   }
 }
 
+/** The word's own page, which every section of it points back at. */
+function wordHref(word: string): string {
+  return `/vocabulary/${encodeURIComponent(word)}`;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const word = decode((await params).word);
+  const { word: raw, section: segments } = await params;
+  const word = decode(raw);
   const subject = await getPublicSubject(SUBJECT_TYPES.vocabulary, word);
   if (!subject) return { title: word || "Vocabulary" };
 
   const label = publicSubjectLabel(subject);
   const meaning = subject.meanings[0] ?? null;
+  const section = parseSubjectSection(segments);
+
+  if (section && section !== "invalid") {
+    const title = SUBJECT_PAGE_COPY.sectionTitles[section];
+    return {
+      title: `${label} · ${title}`,
+      description: `${title} for ${label}${meaning ? ` (${meaning})` : ""}.`,
+      /* The word's own page is the one of record; this is a part of it. */
+      alternates: { canonical: wordHref(word) },
+    };
+  }
 
   /* The word leads, because a link pasted into a chat is read as its preview. */
   return {
     title: meaning ? `${label} · ${meaning}` : label,
     description: meaning ? `Readings and meaning for ${label} (${meaning}).` : `The word ${label}.`,
+    alternates: { canonical: wordHref(word) },
   };
 }
 
 export default async function VocabularyPage({ params }: Props) {
-  const word = decode((await params).word);
-  const subject = await getPublicSubject(SUBJECT_TYPES.vocabulary, word);
+  const { word: raw, section: segments } = await params;
+  const word = decode(raw);
+  const section = parseSubjectSection(segments);
+  if (section === "invalid") {
+    notFound();
+  }
 
+  const subject = await getPublicSubject(SUBJECT_TYPES.vocabulary, word);
   if (!subject) {
     return <NotFound word={word} />;
   }
 
   const label = publicSubjectLabel(subject);
-  const [sentences, neighbours] = await Promise.all([fetchSentencesForWord(label), getWordNeighbours(subject)]);
+  const [sentences, neighbours] = await Promise.all([
+    fetchSentencesForWord(label),
+    getWordNeighbours(subject),
+  ]);
 
   const session = await getServerSession(authOptions);
   const viewerMenuInfo = await resolveViewerMenuInfo({
@@ -71,24 +103,45 @@ export default async function VocabularyPage({ params }: Props) {
     sessionName: session?.user?.name?.trim() ?? null,
   });
 
+  const view = { subject, label, neighbours, sentences };
+  const available = subjectSectionsFor(view);
+  const shown = section ? available.filter((block) => block.id === section) : available;
+  if (shown.length === 0) {
+    notFound();
+  }
+
+  const filingAt = filingStripIndex(
+    shown.map((block) => block.id),
+    SUBJECT_SECTION_BLOCKS.map((block) => block.id),
+    "related",
+  );
+
   return (
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
 
-      <SubjectDetailPanel subject={subject} label={label} neighbours={neighbours} />
+      {section ? (
+        <SubjectSectionHeader
+          base={wordHref(word)}
+          label={label}
+          section={section}
+          available={available.map((block) => block.id)}
+        />
+      ) : null}
 
-      <SubjectFilingBar
-        hit={subjectPageHit(subject)}
-        accountId={viewerMenuInfo?.accountId ?? null}
-        label={label}
-      />
-
-      <ExampleSentences
-        sentences={sentences}
-        heading={SUBJECT_PAGE_COPY.examples}
-        credit={KANJI_PAGE_COPY.sentenceCredit}
-      />
+      {shown.map((block, index) => (
+        <div key={block.id} className="space-y-5">
+          {block.render(view)}
+          {index === filingAt ? (
+            <SubjectFilingBar
+              hit={subjectPageHit(subject)}
+              accountId={viewerMenuInfo?.accountId ?? null}
+              label={label}
+            />
+          ) : null}
+        </div>
+      ))}
 
       <p className="text-center text-sm">
         <Link href="/" className="font-bold text-accent underline underline-offset-2">
@@ -99,11 +152,6 @@ export default async function VocabularyPage({ params }: Props) {
   );
 }
 
-/*
- * Said plainly rather than as a 404. Somebody arrives here from a search
- * result or a shared link, and "Nothing here by that name" with a way back to
- * search is more use than the browser's own not-found page.
- */
 function NotFound({ word }: { word: string }) {
   return (
     <main className="mx-auto w-full max-w-2xl space-y-5 px-4 py-8 sm:px-6">

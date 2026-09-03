@@ -45,7 +45,7 @@ describe("where a credit leads", () => {
       "src/app/shared/ExampleSentences.tsx",
       "src/app/shared/KanjiDetailModal.tsx",
       "src/app/shared/KanjiStrokeAnimation.tsx",
-      "src/app/shared/SubjectDetailPanel.tsx",
+      "src/app/shared/subject-page/SubjectIdentityBlock.tsx",
       "src/app/shared/subject-page/UsedInWordsBlock.tsx",
       "src/app/shared/subject-page/MnemonicsBlock.tsx",
       "src/app/kanji/[character]/KanjiDictionaryDetail.tsx",
