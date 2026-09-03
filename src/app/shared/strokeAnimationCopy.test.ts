@@ -10,6 +10,8 @@ import {
   STROKE_SIZE_VALUES,
   STROKE_OUTLINE_STORAGE_KEY,
   STROKE_SIZE_STORAGE_KEY,
+  STROKE_LOOP_PAUSE_MS,
+  STROKE_LOOP_STORAGE_KEY,
 } from "./strokeAnimationCopy";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
@@ -53,13 +55,11 @@ describe("the drawing sizes", () => {
 });
 
 /*
- * The whole character behind one stroke.
+ * The whole character behind the ink, and the repeat.
  *
- * The animation draws the finished character faintly underneath and drops it
- * as soon as a single stroke is picked, because an outline of everything also
- * makes "not drawn yet" look drawn. The other half of that trade is a first
- * stroke floating in an empty box with nothing to place it against, so it is a
- * mode: off unless asked for, and remembered.
+ * Both are switches the panel remembers, and both start on: a first stroke
+ * alone in an empty box has nothing to place it against, and watching a stroke
+ * order twice used to mean finding Replay and pressing it again.
  */
 describe("the outline mode", () => {
   it("is named for what it shows, not for the feature", () => {
@@ -70,5 +70,25 @@ describe("the outline mode", () => {
   it("remembers itself under its own key, apart from the size", () => {
     expect(STROKE_OUTLINE_STORAGE_KEY).toBe("umakuma:stroke-outline");
     expect(STROKE_OUTLINE_STORAGE_KEY).not.toBe(STROKE_SIZE_STORAGE_KEY);
+  });
+});
+
+describe("the repeat", () => {
+  it("names Replay as the switch it now is", () => {
+    expect(STROKE_ANIMATION_COPY.replay).toBe("Replay");
+    expect(STROKE_ANIMATION_COPY.replayTitle).toBe("Draw it again and again");
+  });
+
+  /*
+   * A rest between runs. Without it the last stroke lands and the page blanks
+   * in the same instant, which reads as a glitch rather than a repeat.
+   */
+  it("rests a second between runs", () => {
+    expect(STROKE_LOOP_PAUSE_MS).toBe(1000);
+  });
+
+  it("remembers itself apart from the outline and the size", () => {
+    expect(STROKE_LOOP_STORAGE_KEY).toBe("umakuma:stroke-loop");
+    expect(new Set([STROKE_LOOP_STORAGE_KEY, STROKE_OUTLINE_STORAGE_KEY, STROKE_SIZE_STORAGE_KEY]).size).toBe(3);
   });
 });

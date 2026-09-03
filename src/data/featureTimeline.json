@@ -3744,16 +3744,15 @@
   },
   {
     "id": "outline-both-modes",
-    "name": "Outline works in both stroke views",
+    "name": "The panel keeps drawing, and keeps the outline",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "bug",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T06:27:49.681Z",
     "date": "2026-09-02",
-    "summary": "The Outline toggle shipped in 0.322.0 only appeared while a single stroke was picked, on the reasoning that the full animation already draws its faint character and the control would do nothing there. That reads as the button disappearing when you leave one-stroke view, and it takes the choice away in the mode where somebody might well want the drawing clean. One toggle, always in the row, governing the faint character in both views. Requested 2026-09-02 by John.",
-    "dateIsEstimate": true,
-    "release": 71
+    "summary": "Two switches on the stroke panel, both on and both remembered. Outline shipped a release earlier showing only while a single stroke was picked, on the reasoning that the full animation already draws its faint character - which read as the button disappearing when you left that view, and took the choice away where somebody might want the drawing clean. One switch now governs the faint character in both views. Replay was a one-shot button, so watching a stroke order twice meant finding it and pressing it again; it is a switch too, and the character draws itself over and over with a second's rest between runs - measured at 1,018ms in the browser. Without that rest the last stroke lands and the page blanks in the same instant, which reads as a glitch rather than a repeat. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
+    "version": "0.325.0",
+    "releasedAt": "2026-09-03T06:36:25Z"
   },
   {
     "id": "print-light-theme-only",

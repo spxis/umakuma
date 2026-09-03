@@ -101,25 +101,17 @@ describe("the picker in the panel", () => {
   });
 
   /*
-   * The faint outline of the finished character is what the animation draws
-   * onto. While one stroke is held still it is also the thing that makes an
-   * undrawn stroke look drawn, so it goes by default - and comes back only for
-   * a reader who asks, because the other half of that trade is a first stroke
-   * alone in an empty box with nothing to place it against.
+   * The faint outline of the finished character is one switch for both views.
+   *
+   * It governed only the single-stroke view at first and vanished from the row
+   * in the other, which reads as the control disappearing - and took the
+   * choice away in the view where somebody might want the drawing clean.
    */
-  it("takes the whole-character outline away while a stroke is held still", () => {
-    expect(animation()).toContain("{selectedStroke === null || showOutline ? (");
-  });
-
-  it("offers the outline back as a mode, off unless asked for", () => {
+  it("draws the whole-character outline on the switch alone, in either view", () => {
     const source = animation();
-    expect(source).toContain("STROKE_OUTLINE_STORAGE_KEY");
-    expect(source).toContain("defaultValue: false");
-  });
-
-  /* A dead control: the full drawing already carries its outline. */
-  it("offers it only where it does something", () => {
-    expect(animation()).toContain("{selectedStroke !== null ? (");
+    expect(source).toContain("{showOutline ? (");
+    expect(source).not.toContain("selectedStroke === null || showOutline");
+    expect(source).not.toContain("{selectedStroke !== null ? (");
   });
 
   /* Picking a stroke has to redraw, or the choice only changes the colours. */

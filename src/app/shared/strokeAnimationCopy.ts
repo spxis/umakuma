@@ -2,14 +2,16 @@
 export const STROKE_ANIMATION_COPY = {
   title: "Stroke order",
   open: "Strokes",
+  /* A switch, not a one-shot: it draws itself again until told to stop. */
   replay: "Replay",
+  replayTitle: "Draw it again and again",
   numbers: "Numbers",
   /*
-   * The faint whole character behind one stroke.
+   * The faint whole character behind the ink, in either view.
    *
-   * A mode rather than the default: an outline of everything is also what
-   * makes "not drawn yet" look drawn, which is why the animation drops it
-   * as soon as a single stroke is picked.
+   * A switch because an outline of everything is also what can make "not
+   * drawn yet" look drawn while a single stroke is studied - and on by
+   * default because the alternative is a first stroke alone in an empty box.
    */
   outline: "Outline",
   outlineTitle: "Show the whole character faintly behind",
@@ -95,3 +97,15 @@ export const STROKE_OUTLINE_STORAGE_KEY = "umakuma:stroke-outline";
 
 /** How long one stroke takes to draw; strokes run one after another. */
 export const STROKE_MS_PER_STROKE = 420;
+
+/**
+ * The rest between one run of the character and the next.
+ *
+ * Long enough to read the finished character before it is wiped and drawn
+ * again - without it the last stroke lands and the page blanks in the same
+ * moment, which reads as a glitch rather than a repeat.
+ */
+export const STROKE_LOOP_PAUSE_MS = 1000;
+
+/** Remembered like the outline: how somebody watches is how they watch. */
+export const STROKE_LOOP_STORAGE_KEY = "umakuma:stroke-loop";

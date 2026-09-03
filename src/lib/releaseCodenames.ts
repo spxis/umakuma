@@ -375,6 +375,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Seou Shitaji", ja: "背負う下地", reading: "せおうしたじ", gloss: "the faint ground a stroke is laid on" },
   { romaji: "Somenai Soboku", ja: "染めない素朴", reading: "そめないそぼく", gloss: "undyed and plain, which is what paper wants" },
   { romaji: "Tachimodoru Tanjun", ja: "立ち戻る単純", reading: "たちもどるたんじゅん", gloss: "back to the simple thing" },
+  { romaji: "Chotto Hitoiki", ja: "ちょっと一息", reading: "ちょっとひといき", gloss: "a short breath between runs" },
 ];
 
 /**

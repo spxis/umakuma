@@ -11,6 +11,8 @@ import {
   STROKE_ANIMATION_COPY,
   STROKE_MS_PER_STROKE,
   STROKE_SIDE_WIDTH,
+  STROKE_LOOP_PAUSE_MS,
+  STROKE_LOOP_STORAGE_KEY,
   STROKE_NUMBER_PX,
   STROKE_OUTLINE_STORAGE_KEY,
   STROKE_SIZES,
@@ -90,14 +92,30 @@ export default function KanjiStrokeAnimation({
   const [playToken, setPlayToken] = useState(0);
   const [showNumbers, setShowNumbers] = useState(false);
   /*
-   * Whether the whole character shows through while one stroke is studied.
+   * Whether the whole character shows through, in either view.
    *
-   * Off by default for the reason the outline is dropped in that mode at all,
-   * and remembered because somebody who traces this way traces this way every
-   * time.
+   * One switch for both, on by default and remembered. It governed only the
+   * single-stroke view at first and vanished from the row in the other, which
+   * reads as the control disappearing - and took the choice away in the view
+   * where somebody might want the drawing clean.
    */
   const [showOutline, setShowOutline] = usePersistedBoolean(STROKE_OUTLINE_STORAGE_KEY, {
-    defaultValue: false,
+    defaultValue: true,
+    /* Stored "0" is the off the member chose, not an absent preference. */
+    mode: "zero-is-false",
+  });
+
+  /*
+   * Whether the character keeps drawing itself.
+   *
+   * Replay was a one-shot button, so watching a stroke order twice meant
+   * finding it and pressing it again. It is a switch now, on by default and
+   * remembered, with a rest between runs - the last stroke landing and the
+   * page blanking in the same instant reads as a glitch, not a repeat.
+   */
+  const [looping, setLooping] = usePersistedBoolean(STROKE_LOOP_STORAGE_KEY, {
+    defaultValue: true,
+    mode: "zero-is-false",
   });
   /* The size this device last chose, read the way every other stored preference is. */
   const chosenSize = useStrokeSize();
@@ -179,6 +197,22 @@ export default function KanjiStrokeAnimation({
     return () => cancelAnimationFrame(frame);
   }, [data, playToken, selectedStroke]);
 
+  /*
+   * The repeat.
+   *
+   * Only while the whole character is drawing: holding one stroke still is the
+   * opposite of watching it run, and there is no animation there to repeat.
+   * The wait is the drawing's own length plus the rest, so the timer is set
+   * once per run rather than polled.
+   */
+  useEffect(() => {
+    if (!data || !looping || selectedStroke !== null) return;
+
+    const runMs = data.strokeCount * STROKE_MS_PER_STROKE + STROKE_LOOP_PAUSE_MS;
+    const timer = window.setTimeout(() => setPlayToken((token) => token + 1), runMs);
+    return () => window.clearTimeout(timer);
+  }, [data, looping, playToken, selectedStroke]);
+
   if (error) {
     return <p className="text-xs font-semibold text-foreground/60">{STROKE_ANIMATION_COPY.unavailable}</p>;
   }
@@ -209,12 +243,12 @@ export default function KanjiStrokeAnimation({
         {/*
           * The finished character, faint, so a stroke is drawn onto its outline.
           *
-          * Dropped while one stroke is studied, where an outline of everything
-          * is what makes "not drawn yet" look drawn - unless it is asked for,
-          * because the other half of that trade is a first stroke floating in
-          * an empty box with nothing to place it against.
+          * While one stroke is studied it is also what can make "not drawn yet"
+          * look drawn, which is why it is a switch - but the other half of that
+          * trade is a first stroke floating in an empty box with nothing to
+          * place it against, so it is on until somebody says otherwise.
           */}
-        {selectedStroke === null || showOutline ? (
+        {showOutline ? (
           <g fill="none" stroke="currentColor" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/10">
             {data.strokes.map((d, index) => (
               <path key={`ghost-${index}`} d={d} />
@@ -269,27 +303,34 @@ export default function KanjiStrokeAnimation({
       >
         <button
           type="button"
-          onClick={() => setPlayToken((token) => token + 1)}
-          className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/75 transition hover:bg-surface-muted"
+          aria-pressed={looping}
+          title={STROKE_ANIMATION_COPY.replayTitle}
+          onClick={() => {
+            /* Turning it on draws it now rather than after one more wait. */
+            setLooping((on) => !on);
+            setPlayToken((token) => token + 1);
+          }}
+          className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+            looping
+              ? "border-kanji bg-kanji text-white"
+              : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
+          }`}
         >
           {STROKE_ANIMATION_COPY.replay}
         </button>
-        {/* Only where it does anything: the full drawing already has its outline. */}
-        {selectedStroke !== null ? (
-          <button
-            type="button"
-            onClick={() => setShowOutline((shown) => !shown)}
-            aria-pressed={showOutline}
-            title={STROKE_ANIMATION_COPY.outlineTitle}
-            className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
-              showOutline
-                ? "border-kanji bg-kanji text-white"
-                : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
-            }`}
-          >
-            {STROKE_ANIMATION_COPY.outline}
-          </button>
-        ) : null}
+        <button
+          type="button"
+          onClick={() => setShowOutline((shown) => !shown)}
+          aria-pressed={showOutline}
+          title={STROKE_ANIMATION_COPY.outlineTitle}
+          className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+            showOutline
+              ? "border-kanji bg-kanji text-white"
+              : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
+          }`}
+        >
+          {STROKE_ANIMATION_COPY.outline}
+        </button>
         <button
           type="button"
           onClick={() => setShowNumbers((shown) => !shown)}
