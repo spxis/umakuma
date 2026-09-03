@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import { ListCard, ListRow } from "@/app/shared/ListSubjectRows";
+import { ListRow } from "@/app/shared/ListSubjectRows";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
@@ -17,6 +17,10 @@ import type { StrokeCount, StrokeEntry } from "@/lib/strokeBrowser";
 import type { ListSubjectRow } from "@/lib/studySubjectItems";
 
 import { STROKE_BROWSER_COPY } from "./StrokeBrowser.constants";
+import { srsBucketFromStage } from "@/lib/domainConstants";
+import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import type { SubjectListRow } from "@/app/shared/subjectListView";
+import SubjectCards from "@/app/shared/SubjectCards";
 
 /**
  * Kanji by the number of strokes they take.
@@ -27,11 +31,20 @@ import { STROKE_BROWSER_COPY } from "./StrokeBrowser.constants";
  */
 const VIEW_MODE_KEY = "wr:strokes:view-mode";
 
-function toRow(entry: StrokeEntry): ListSubjectRow {
+/**
+ * A stroke entry as both list shapes want it.
+ *
+ * The rows go to the shared list, the cards to the shared grid, and the two
+ * contracts differ only in the SRS fields - which a public page has none of,
+ * because nobody is signed in to have progress on them.
+ */
+function toRow(entry: StrokeEntry): ListSubjectRow & SubjectListRow {
   return {
     key: `kanji:${entry.kanji}`,
+    subjectId: 0,
+    srsStage: null,
+    srsBucket: srsBucketFromStage(null),
     kind: LIST_ITEM_KINDS.kanji,
-    subjectId: null,
     slug: null,
     glyph: entry.kanji,
     meanings: [entry.meaning],
@@ -150,13 +163,26 @@ export default function StrokeBrowserView({
               ))}
             </ul>
           ) : (
-            <ul className="mt-3 grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(8rem,1fr))]">
-              {rows.map((row) => (
-                <li key={row.key}>
-                  <ListCard row={row} after={filing ? <SubjectFilerCell hit={row} filer={filer} className="mt-1 justify-center" /> : null} />
-                </li>
-              ))}
-            </ul>
+            <div className="mt-3">
+              <SubjectCards
+                rows={rows}
+                onSelect={() => undefined}
+                gridClassName="gap-2 [grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))]"
+                hrefFor={(row) => row.href ?? null}
+                renderDetail={(row) =>
+                  row.reading ? (
+                    <span lang="ja" translate="no" className={`text-[11px] font-semibold text-foreground/60 ${JP_TEXT_CLASS}`}>
+                      {row.reading}
+                    </span>
+                  ) : null
+                }
+                renderUnder={
+                  filing
+                    ? (row) => <SubjectFilerCell hit={row} filer={filer} className="mt-1 justify-center" />
+                    : undefined
+                }
+              />
+            </div>
           )}
 
           <SurfacePagination

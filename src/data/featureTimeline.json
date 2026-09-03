@@ -3210,13 +3210,11 @@
     "name": "One grid, three pages, one look",
     "area": "study",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 63,
     "summary": "Strokes, Grades and the WaniKani library each draw their own card grid, and side by side they read as three different products: different card shape, different chrome, different placement of level and status. There is already a shared pair for lists of subjects (SubjectCards and SubjectRows) and a UnifiedExplorerCard, but these three do not all go through them. Put the general look in one component and let each page pass what is genuinely its own - a stroke count, a JLPT pill, an SRS stage - rather than restating the whole card.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-02T16:36:09.174Z"
+    "version": "0.302.0",
+    "releasedAt": "2026-09-03T00:53:08Z"
   },
   {
     "id": "lists-section-nav",

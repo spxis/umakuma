@@ -352,6 +352,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Mochikaeru Tsuika", ja: "\u6301\u3061\u5e30\u308b\u8ffd\u52a0", reading: "\u3082\u3061\u304b\u3048\u308b\u3064\u3044\u304b", gloss: "the additions you take home from the original" },
   { romaji: "Yamu Chiratsuki", ja: "止むちらつき", reading: "やむちらつき", gloss: "the flicker that stops" },
   { romaji: "Yuruganai Hyoumen", ja: "揺るがない表面", reading: "ゆるがないひょうめん", gloss: "a surface that does not shift" },
+  { romaji: "Yosoou Hitokumi", ja: "装う一組", reading: "よそおうひとくみ", gloss: "one set, dressed alike" },
 ];
 
 /**

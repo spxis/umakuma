@@ -23,7 +23,7 @@ describe("the grade row's controls", () => {
    * slot - which sits outside the row button, takes part in the layout, and
    * has nothing to be positioned over.
    */
-  const rowBranch = GRID.slice(GRID.indexOf("if (rows) {"), GRID.indexOf("const cardBody = ("));
+  const rowBranch = GRID.slice(GRID.indexOf("if (rows) {"), GRID.indexOf("<SubjectCards"));
 
   it("puts the stroke button in the row rather than over it", () => {
     expect(rowBranch).toContain("renderTrailing");
@@ -36,9 +36,25 @@ describe("the grade row's controls", () => {
   /*
    * The card keeps the floating button. It has a free corner, and one visible
    * control on every card of a screenful is noise rather than help.
+   *
+   * The card is the shared grid now, so the corner is that grid's slot rather
+   * than a position written here - which is the point of the consolidation:
+   * the card decides where its corner is, and every surface gets the same one.
    */
-  it("leaves the card's button where it was", () => {
-    const cardSide = GRID.slice(GRID.indexOf("const cardBody = ("));
-    expect(cardSide).toContain("absolute bottom-2 right-2");
+  it("keeps the card's button in the corner slot", () => {
+    const cardSide = GRID.slice(GRID.indexOf("<SubjectCards"));
+    expect(cardSide).toContain("renderCorner");
+    expect(cardSide).toContain("StrokeOrderButton");
+    /* Positioned by the shared card, so this file no longer places it. */
+    expect(cardSide).not.toContain("absolute bottom-2 right-2");
+  });
+
+  /*
+   * Choosing borrows the card's click, so the stroke button must not be there
+   * to take it - a second control inside a card that is currently a checkbox.
+   */
+  it("drops the card's button while choosing", () => {
+    const cardSide = GRID.slice(GRID.indexOf("<SubjectCards"));
+    expect(cardSide).toContain("selection?.choosing");
   });
 });

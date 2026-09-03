@@ -126,6 +126,7 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
       <GradeKanjiGrid
         items={items}
         viewMode={viewMode}
+        selection={selection}
         chosenKanji={selection.choosing ? selection.chosen : undefined}
         onChoose={
           selection.choosing

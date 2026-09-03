@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
@@ -14,8 +13,10 @@ import { useState } from "react";
 import GradeKanjiRows from "./GradeKanjiRows";
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import { displayReading, readingsForGrade } from "./gradeExplorerView";
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { noTranslateClass } from "@/app/shared/japaneseText";
+import type { SubjectSelection } from "@/app/shared/useSubjectSelection";
+import SubjectCards from "@/app/shared/SubjectCards";
+import { SUBJECT_TYPES, srsBucketFromStage } from "@/lib/domainConstants";
 
 type Props = {
   items: SchoolGradeKanjiEntry[];
@@ -26,6 +27,8 @@ type Props = {
   /** Cards for browsing, rows for scanning a long grade at a glance. */
   viewMode?: SubjectViewMode;
   revealedKanji?: Set<string>;
+  /** Choosing, handed straight to the shared grid. */
+  selection?: SubjectSelection;
   onReveal?: (kanji: string) => void;
   /*
    * Choosing mode. Given both, a card's click picks the character instead of
@@ -73,6 +76,7 @@ export default function GradeKanjiGrid({
   hideReadings = false,
   viewMode = SUBJECT_VIEW_MODES.grid,
   revealedKanji,
+  selection,
   onReveal,
   chosenKanji,
   onChoose,
@@ -156,130 +160,86 @@ export default function GradeKanjiGrid({
 
   return (
     <>
-      <ul className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(210px,1fr))]">
-      {items.map((entry) => {
-        const readings = readingsForGrade(entry);
-        const href = hrefFor?.(entry) ?? null;
-        const hidden = hideReadings && !revealedKanji?.has(entry.kanji);
-        const cardBody = (
+      <SubjectCards
+        rows={items.map((entry) => ({
+          key: entry.kanji,
+          subjectId: 0,
+          subjectType: SUBJECT_TYPES.kanji,
+          glyph: entry.kanji,
+          meaning: entry.primaryMeaning ?? GRADE_EXPLORER_COPY.noReadings,
+          reading: null,
+          wkLevel: null,
+          srsStage: null,
+          srsBucket: srsBucketFromStage(null),
+          entry,
+        }))}
+        gridClassName="gap-3 [grid-template-columns:repeat(auto-fill,minmax(210px,1fr))]"
+        selection={selection}
+        /*
+         * A hidden card has nowhere to go: the click reveals the answer
+         * instead, which is the whole of quiz mode. Once revealed - or when the
+         * quiz is off - it is a link to the character's page again.
+         */
+        hrefFor={(row) =>
+          hideReadings && !revealedKanji?.has(row.glyph) ? null : (hrefFor?.(row.entry) ?? null)
+        }
+        onSelect={(row) => {
+          if (hideReadings && !revealedKanji?.has(row.glyph)) {
+            onReveal?.(row.glyph);
+            return;
+          }
+          setOpenKanji(row.entry);
+        }}
+        renderDetail={(row) => {
+          const readings = readingsForGrade(row.entry);
+          if (hideReadings && !revealedKanji?.has(row.glyph)) {
+            return (
+              <span className="py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">
+                {GRADE_EXPLORER_COPY.quizTapToReveal}
+              </span>
+            );
+          }
+          return (
+            <span className="block space-y-0.5">
+              <ReadingRow kind={READING_KINDS.on} readings={readings.on} />
+              <ReadingRow kind={READING_KINDS.kun} readings={readings.kun} />
+            </span>
+          );
+        }}
+        renderPills={(row) => (
           <>
-            <div className="flex items-start justify-between gap-2">
-              <span lang="ja" translate="no" className={`text-4xl font-black leading-none text-kanji ${JP_TEXT_CLASS}`}>
-                {entry.kanji}
-              </span>
-              <span className="flex shrink-0 flex-col items-end gap-1">
-                {typeof entry.strokeCount === "number" ? (
-                  <span className="subject-pill border-line bg-surface text-foreground">
-                    {entry.strokeCount} {GRADE_EXPLORER_COPY.strokes}
-                  </span>
-                ) : null}
-                {typeof entry.crossRef?.jlptLevel === "number" ? (
-                  <span translate="no" className={noTranslateClass("subject-pill border-emerald-300 bg-emerald-50 text-emerald-700")}>
-                    {`${GRADE_EXPLORER_COPY.jlptCrossRef} N${entry.crossRef.jlptLevel}`}
-                  </span>
-                ) : null}
-              </span>
-            </div>
-
-            <p className="mt-2 truncate text-sm font-black text-foreground" title={entry.primaryMeaning ?? ""}>
-              {entry.primaryMeaning ?? GRADE_EXPLORER_COPY.noReadings}
-            </p>
-
-            <div className="mt-2 space-y-0.5">
-              {hidden ? (
-                <p className="py-1 text-xs font-bold uppercase tracking-[0.08em] text-foreground/60">
-                  {GRADE_EXPLORER_COPY.quizTapToReveal}
-                </p>
-              ) : (
-                <>
-                  <ReadingRow kind={READING_KINDS.on} readings={readings.on} />
-                  <ReadingRow kind={READING_KINDS.kun} readings={readings.kun} />
-                </>
-              )}
-            </div>
-          </>
-        );
-
-        const body = cardBody;
-        const chosen = Boolean(chosenKanji?.has(entry.kanji));
-        const shell = `rounded-2xl border border-kanji/40 bg-kanji/5 p-3 transition${
-          chosen ? " ring-2 ring-accent ring-offset-1 ring-offset-surface" : ""
-        }`;
-        return (
-          <li key={entry.kanji} className="group relative min-w-0">
-            {/*
-              * On a card it stays in the corner - there is room there, and a
-              * permanent control on every card of a screenful is noise. A row
-              * carries it inline instead, beside the pills, since the row had
-              * nowhere to float it that was not already occupied.
-              */}
-            {onChoose ? null : (
-            <StrokeOrderButton
-              kanji={entry.kanji}
-              grade={entry.grade}
-              meaning={entry.primaryMeaning ?? null}
-              summary={{
-                meaning: entry.primaryMeaning ?? null,
-                on: readings.on.map(displayReading),
-                kun: readings.kun.map(displayReading),
-              }}
-              shareHref={`/kanji/${encodeURIComponent(entry.kanji)}`}
-              className="absolute bottom-2 right-2 z-10 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
-            />
-            )}
-            {/*
-              * A tick in the corner while choosing, so a chosen card reads as
-              * chosen at a glance rather than only by its ring - which is a
-              * fine signal on one card and a hard one to count across forty.
-              */}
-            {onChoose && chosen ? (
-              <span
-                aria-hidden="true"
-                className="absolute bottom-2 right-2 z-10 inline-flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-black text-white"
-              >
-                ✓
+            {typeof row.entry.strokeCount === "number" ? (
+              <span className="subject-pill border-line bg-surface text-foreground">
+                {row.entry.strokeCount} {GRADE_EXPLORER_COPY.strokes}
               </span>
             ) : null}
-            {onChoose ? (
-              <button
-                type="button"
-                aria-pressed={chosen}
-                /*
-                 * Shift extends. The same modifier reaches a keyboard user for
-                 * free: activating a button with Enter or Space reports the
-                 * modifiers held at the time, so Shift+Enter sweeps a range
-                 * without a second set of key handlers to keep in step.
-                 */
-                onClick={(event) => onChoose(entry.kanji, event.shiftKey)}
-                className={`block h-full w-full cursor-pointer text-left ${shell} hover:brightness-95`}
-              >
-                {body}
-              </button>
-            ) : onReveal ? (
-              <button
-                type="button"
-                onClick={() => onReveal(entry.kanji)}
-                className={`block h-full w-full cursor-pointer text-left ${shell} hover:brightness-95`}
-              >
-                {body}
-              </button>
-            ) : href ? (
-              <Link href={href} className={`block h-full ${shell} hover:brightness-95`}>
-                {body}
-              </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setOpenKanji(entry)}
-                className={`block h-full w-full cursor-pointer text-left ${shell} hover:brightness-95`}
-              >
-                {body}
-              </button>
-            )}
-          </li>
-        );
-      })}
-      </ul>
+            {typeof row.entry.crossRef?.jlptLevel === "number" ? (
+              <span translate="no" className={noTranslateClass("subject-pill border-emerald-300 bg-emerald-50 text-emerald-700")}>
+                {`${GRADE_EXPLORER_COPY.jlptCrossRef} N${row.entry.crossRef.jlptLevel}`}
+              </span>
+            ) : null}
+          </>
+        )}
+        /* Corner on hover, as before: a control on every card of a screenful is noise. */
+        renderCorner={
+          selection?.choosing
+            ? undefined
+            : (row) => (
+                <StrokeOrderButton
+                  kanji={row.glyph}
+                  grade={row.entry.grade}
+                  meaning={row.entry.primaryMeaning ?? null}
+                  summary={{
+                    meaning: row.entry.primaryMeaning ?? null,
+                    on: readingsForGrade(row.entry).on.map(displayReading),
+                    kun: readingsForGrade(row.entry).kun.map(displayReading),
+                  }}
+                  shareHref={`/kanji/${encodeURIComponent(row.glyph)}`}
+                  className="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
+                />
+              )
+        }
+      />
 
       {openKanji ? (
         <KanjiDetailModal
