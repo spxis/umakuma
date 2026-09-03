@@ -11,6 +11,7 @@
  * without a network.
  */
 
+import { parseEnglishNumber } from "./englishNumbers";
 import { readJapaneseNumber } from "./japaneseNumbers";
 
 /**
@@ -294,12 +295,48 @@ function readAmount(text: string): number | null {
  * as often as 1500, and treating the comma as punctuation rather than as part
  * of the number is what lets both be the same query.
  */
+/**
+ * The same query with a spelled-out amount written as digits.
+ *
+ * "five hundred yen" names a price as clearly as "500 yen" and parsed as
+ * nothing, because the amount had to be digits. Rather than teach the money
+ * pattern to read English, the words are turned into the number they are and
+ * the pattern reads what it always did - so the currency rules, the limits and
+ * the two-sided form all keep working without knowing this happened.
+ *
+ * Only where the result is still an amount: the rebuilt query has to match the
+ * money pattern, so "five cats" stays "five cats" and answers nothing.
+ */
+function withSpelledAmountAsDigits(query: string): string {
+  const tokens = query.split(" ");
+  if (tokens.length < 2) return query;
+
+  /* A currency token can sit on either side, so the words are the middle. */
+  for (const start of [0, 1]) {
+    for (const end of [tokens.length, tokens.length - 1]) {
+      if (end - start < 1 || start >= end) continue;
+
+      const middle = tokens.slice(start, end).join(" ");
+      /* No letters means it is already digits, and nothing here to do. */
+      if (!/[A-Za-z]/.test(middle)) continue;
+
+      const value = parseEnglishNumber(middle);
+      if (value === null || value <= 0) continue;
+
+      const rebuilt = [...tokens.slice(0, start), String(value), ...tokens.slice(end)].join(" ");
+      if (MONEY_QUERY.test(rebuilt)) return rebuilt;
+    }
+  }
+
+  return query;
+}
+
 export function parseMoneyQuery(raw: string): MoneyAmount[] {
   const query = toHalfWidthDigits(String(raw ?? "").trim())
     .replace(/(\d),(?=\d{3}\b)/g, "$1")
     .replace(/\s+/g, " ");
 
-  const match = MONEY_QUERY.exec(query);
+  const match = MONEY_QUERY.exec(withSpelledAmountAsDigits(query));
   if (!match) return [];
 
   const [, before, digits, after] = match;

@@ -300,3 +300,48 @@ describe("saying an amount in yen", () => {
     expect(formatYenJapanese(4_269)).toBe("4,269円");
   });
 });
+
+/*
+ * A price is spoken and written in words constantly - a menu says two thousand
+ * yen, a listing says twenty thousand - and typing what you heard answered
+ * with nothing, because the amount had to be digits.
+ */
+describe("an amount written in words", () => {
+  const yen = (query: string) => parseMoneyQuery(query).find((money) => money.currency === "JPY") ?? null;
+
+  it.each([
+    ["five hundred yen", 500],
+    ["two thousand yen", 2_000],
+    ["twenty thousand yen", 20_000],
+    ["one hundred and fifty yen", 150],
+  ])("reads %s as %i yen", (query, amount) => {
+    expect(yen(query)?.amount).toBe(amount);
+  });
+
+  /* The magnitudes a learner types before they can type 万. */
+  it.each([
+    ["5 man yen", 50_000],
+    ["five man yen", 50_000],
+    ["3 oku yen", 300_000_000],
+  ])("reads %s as %i yen", (query, amount) => {
+    expect(yen(query)?.amount).toBe(amount);
+  });
+
+  /* The currency can lead, the way it does in digits. */
+  it("takes the currency on either side", () => {
+    expect(parseMoneyQuery("$ five hundred")[0]?.amount).toBe(500);
+  });
+
+  /* What was already understood stays understood. */
+  it.each(["500 yen", "20k yen", "8万円", "CA$20"])("still reads %s", (query) => {
+    expect(parseMoneyQuery(query).length).toBeGreaterThan(0);
+  });
+
+  /*
+   * Words that are not a number are not an amount. Answering "five cats" with
+   * five of anything would be a confident wrong answer.
+   */
+  it.each(["five cats", "hundreds of yen", "yen", "many yen"])("answers nothing for %s", (query) => {
+    expect(parseMoneyQuery(query)).toEqual([]);
+  });
+});

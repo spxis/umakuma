@@ -3992,11 +3992,23 @@
     "id": "board-in-the-database",
     "name": "A shared ticket board, in the database",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "Planned work moves out of featureTimeline.json into Postgres, with an atomic claim and a six-hour lease. The file keeps the shipped record, because a release entry has to land in the same commit as its code. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.354.0",
+    "releasedAt": "2026-09-03T12:25:07Z"
+  },
+  {
+    "id": "search-money-spelled-numbers",
+    "name": "An amount written in words",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.354.0",
-    "releasedAt": "2026-09-03T12:25:07Z",
-    "summary": "Planned work moves out of featureTimeline.json into Postgres, with an atomic claim and a six-hour lease. The file keeps the shipped record, because a release entry has to land in the same commit as its code. Requested 2026-09-03 by John."
+    "version": "0.355.0",
+    "releasedAt": "2026-09-03T12:28:54Z",
+    "summary": "five hundred yen and twenty thousand yen name a price as clearly as 500 yen does, and neither parses - the amount must be digits today. Depends on the number library item 44 builds, which has to read words into values anyway for the reverse direction. Romaji units belong here too: a learner types 5 man yen before they type 5\u4e07\u5186. Noted 2026-09-02."
   }
 ]
