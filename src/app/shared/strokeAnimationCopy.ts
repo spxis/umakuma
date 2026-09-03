@@ -28,6 +28,11 @@ export const STROKE_ANIMATION_COPY = {
   pickStroke: "Show one stroke",
   pickAll: "Show every stroke",
   chooseStroke: "Choose a stroke",
+  /* Stepping. Marks rather than words: they share a row with the numbers. */
+  previousStroke: "Previous stroke",
+  nextStroke: "Next stroke",
+  previousMark: "\u2039",
+  nextMark: "\u203A",
   /** The label a screen reader hears on a numbered button. */
   strokeNumber: (number: number) => `Stroke ${number}`,
   /* The three drawing sizes. Named by their initial, since the row is tiny. */

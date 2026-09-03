@@ -9,6 +9,7 @@ import { SOURCE_KEYS } from "@/lib/sourceCredits";
 import { READING_KINDS } from "@/lib/domainConstants";
 import { formatReading } from "@/lib/readingDisplay";
 import { MODAL_LAYERS } from "./modalLayers";
+import { stepStroke } from "@/lib/strokeSteps";
 import { STROKE_ANIMATION_COPY, STROKE_SIDE_WIDTH } from "./strokeAnimationCopy";
 import { KANJI_FACES, type KanjiFace } from "./kanjiFaces";
 import { useStrokeSize } from "./useStrokeSize";
@@ -108,7 +109,37 @@ function ShareLink({ href }: { href: string }) {
  * asking for. Numbers rather than a dropdown because the strokes are a short
  * list a reader moves along - 3, then 4, then 5 - and a dropdown makes each
  * step two clicks and hides where you are in it.
+ *
+ * Previous and next sit either side of them, because moving along that list
+ * was the one thing the numbers made hard: every step was a different target,
+ * and on a twenty-stroke character they wrap into a block to search. One
+ * repeated press walks the whole character now.
+ *
+ * All of it on one row. The opener and the numbers were stacked, which cost a
+ * line of the panel to say nothing.
  */
+function StepButton({
+  label,
+  mark,
+  onClick,
+}: {
+  label: string;
+  mark: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      onClick={onClick}
+      className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-line bg-surface text-sm font-black leading-none text-foreground/70 transition hover:bg-surface-muted hover:text-foreground"
+    >
+      <span aria-hidden="true">{mark}</span>
+    </button>
+  );
+}
+
 function StrokePicker({
   count,
   selected,
@@ -119,15 +150,16 @@ function StrokePicker({
   onSelect: (stroke: number | null) => void;
 }) {
   const open = selected !== null;
+  const step = (direction: 1 | -1) => onSelect(stepStroke(selected ?? 1, count, direction));
 
   return (
-    <div className="border-b border-line bg-surface-muted/40 px-5 py-2">
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-line bg-surface-muted/40 px-5 py-2">
       <button
         type="button"
         aria-expanded={open}
         /* Opening picks the first stroke, so it opens onto an answer rather than a question. */
         onClick={() => onSelect(open ? null : 1)}
-        className={`inline-flex h-7 items-center rounded-full border px-3 text-[10px] font-black uppercase tracking-[0.08em] transition ${
+        className={`inline-flex h-7 shrink-0 items-center rounded-full border px-3 text-[10px] font-black uppercase tracking-[0.08em] transition ${
           open
             ? "border-kanji bg-kanji text-white"
             : "border-line bg-surface text-foreground/60 hover:bg-surface-muted hover:text-foreground"
@@ -137,7 +169,23 @@ function StrokePicker({
       </button>
 
       {open ? (
-        <div role="group" aria-label={STROKE_ANIMATION_COPY.chooseStroke} className="mt-2 flex flex-wrap gap-1">
+        <div role="group" aria-label={STROKE_ANIMATION_COPY.chooseStroke} className="flex flex-wrap items-center gap-1">
+          {/*
+            * Both steps together, ahead of the numbers, rather than one at each
+            * end of them. A twenty-nine stroke character wraps its numbers over
+            * two rows and put the two controls half a panel apart; pressing
+            * next repeatedly wants one target that does not move.
+            */}
+          <StepButton
+            label={STROKE_ANIMATION_COPY.previousStroke}
+            mark={STROKE_ANIMATION_COPY.previousMark}
+            onClick={() => step(-1)}
+          />
+          <StepButton
+            label={STROKE_ANIMATION_COPY.nextStroke}
+            mark={STROKE_ANIMATION_COPY.nextMark}
+            onClick={() => step(1)}
+          />
           {strokeNumbers(count).map((stroke) => (
             <button
               key={stroke}

@@ -3698,12 +3698,11 @@
     "name": "Step through strokes with previous and next",
     "area": "study",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 71,
-    "summary": "The stroke picker offers the numbers and nothing else, so following a character stroke by stroke means finding and hitting a different target each time - and on a twenty-stroke character the numbers wrap into a block a reader has to search. Put previous and next either side of them so one repeated press walks the whole character. The toggle and the numbers also sit on two lines for no reason; they are one row. Requested 2026-09-02 by John.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T05:52:52.240Z"
+    "dateIsEstimate": false,
+    "summary": "The stroke picker offered the numbers and nothing else, so following a character stroke by stroke meant aiming at a different target for every step - and a twenty-nine stroke character wraps its numbers into a block to search through. Previous and next sit together in front of the numbers, so one repeated press walks the whole character from a control that does not move; they were tried at either end of the numbers first, which put them half a panel apart as soon as the row wrapped. The ends join up rather than going dead, because somebody who has just reached the last stroke wants to watch it built again and a stopped button sends them back to hunt for 1. The opener and the numbers also share one row now instead of stacking. Requested 2026-09-02 by John.",
+    "version": "0.320.0",
+    "releasedAt": "2026-09-03T05:57:01Z"
   }
 ]
