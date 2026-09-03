@@ -1,5 +1,6 @@
 import "server-only";
 
+import { LIST_ITEM_KINDS } from "./domainConstants";
 import { copyName } from "./listCopy";
 import type { LiveList } from "./liveLists";
 import { prisma } from "./prisma";
@@ -164,6 +165,8 @@ export type FollowedList = {
   ownerName: string;
   itemCount: number;
   updatedAt: string;
+  /** How many of the items are kanji, which is what a worksheet can trace. */
+  kanjiCount: number;
   /** Still openable by this member; a list made private since is kept but says so. */
   reachable: boolean;
   shareToken: string | null;
@@ -206,6 +209,22 @@ export async function fetchFollowedLists(accountId: string): Promise<FollowedLis
     orderBy: { createdAt: "desc" },
   });
 
+  /*
+   * One grouped count rather than every item of every followed list. It is
+   * what decides whether a list is offered a worksheet, and offering one for
+   * a list of vocabulary prints a page of nothing.
+   */
+  const kanjiCounts = new Map<string, number>();
+  const listIds = rows.flatMap((row) => (row.list ? [row.list.id] : []));
+  if (listIds.length > 0) {
+    const counts = await prisma.studyListItem.groupBy({
+      by: ["listId"],
+      where: { listId: { in: listIds }, kind: LIST_ITEM_KINDS.kanji },
+      _count: { _all: true },
+    });
+    for (const count of counts) kanjiCounts.set(count.listId, count._count._all);
+  }
+
   return rows.flatMap((row) => {
     const list = row.list;
     if (!list) return [];
@@ -218,6 +237,7 @@ export async function fetchFollowedLists(accountId: string): Promise<FollowedLis
         ownerKey,
         ownerName: list.account.nickname ?? ownerKey,
         itemCount: list._count.items,
+        kanjiCount: kanjiCounts.get(list.id) ?? 0,
         updatedAt: list.updatedAt.toISOString(),
         reachable: list.visibility !== "private",
         shareToken: list.visibility === "unlisted" ? list.shareToken : null,

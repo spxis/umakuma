@@ -21,7 +21,7 @@ export default async function FollowedListsPage({ params }: PageProps) {
   return (
     <ListsPageShell frame={page.frame} title={STUDY_LIST_COPY.followedHeading} subtitle={STUDY_LIST_COPY.followedBlurb}>
       {followed.length > 0 ? (
-        <FollowedLists lists={followed} accountId={page.accountId} />
+        <FollowedLists lists={followed} accountId={page.accountId} practicePath={page.practicePath} />
       ) : (
         <p className="rounded-2xl border border-line bg-surface p-6 text-sm text-foreground/70">
           {STUDY_LIST_COPY.followedEmpty}

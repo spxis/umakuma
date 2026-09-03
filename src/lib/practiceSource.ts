@@ -2,8 +2,9 @@ import { fetchStudyTagRows } from "@/lib/studySubjectTags";
 import { getSchoolGradeIndex } from "@/lib/schoolGrades";
 import "server-only";
 
-import { LIST_ITEM_KINDS } from "./domainConstants";
+import { accountUrlKeyWhere } from "./accountLookup";
 import { prisma } from "./prisma";
+import { canViewList, listKanji } from "./studyListRules";
 import { findListBySlug } from "./studyLists";
 import { querySchoolGradeCatalog } from "./schoolGrades";
 import { getStrokeOrder } from "./strokeOrder";
@@ -168,28 +169,87 @@ async function pickedEntries(
 }
 
 /**
- * A sheet built from a list the member saved.
+ * Who is asking for a sheet, and which one.
  *
- * Only the kanji, in the order the list keeps them, and only the member's own
- * lists: the sheet lives under their own address. Reached by slug rather than
- * by carrying every character in the query, so the link survives the list
- * being edited and can be sent to somebody as what it is.
+ * Grouped rather than added to the argument list because three of these only
+ * ever apply to one source apiece, and a call site passing four nulls to reach
+ * the fifth is a call site nobody can read.
+ */
+export type PracticeSheet = {
+  entries: PracticeEntry[];
+  total: number;
+  /** What to title the sheet, for the one source that has a name of its own. */
+  listName: string | null;
+  /** The named list is not there, or not this reader's to read. */
+  missing: boolean;
+};
+
+const MISSING_LIST: PracticeSheet = { entries: [], total: 0, listName: null, missing: true };
+
+export type PracticeRequest = {
+  /** Required by the tagged sources, which are one member's own lists. */
+  accountId?: string | null;
+  /** An admin reads a list the way they read every other private thing. */
+  isAdmin?: boolean;
+  /** The characters, when the source is a hand-picked set. */
+  picked?: string[];
+  /** The list's slug, when the source is a saved list. */
+  slug?: string | null;
+  /** Whose list it is, when it is not the reader's own. */
+  owner?: string | null;
+  /** The key an unlisted list's link carries. */
+  key?: string | null;
+};
+
+/**
+ * A sheet built from a saved list, whoever owns it.
+ *
+ * Only the kanji, in the order the list keeps them. The reader's own list
+ * needs no owner; somebody else's names them in the path, and then the rule
+ * the list's own page applies decides whether there is a sheet at all -
+ * public to anyone, unlisted to whoever holds the key, private to nobody.
+ *
+ * That check belongs here rather than at the page. The page guards its own
+ * address - only the member themselves or an admin opens somebody's practice
+ * page - and while the only list it could reach was the page owner's, that
+ * guard was the whole answer. An owner segment separates the two: the page is
+ * at the reader's address and the list belongs to a third person, about whom
+ * the guard on the address says nothing.
+ *
+ * A list that may not be read comes back `missing`, and the page turns that
+ * into the same 404 the list's own page gives. Absent rather than forbidden,
+ * for the reason it is there: a refusal confirms that the address names
+ * something. It is also what a nonsense address gets - `/practice/list/x/y`
+ * names a member nobody answers to - so a broken link does not render as a
+ * working sheet with nothing on it.
  */
 async function savedListEntries(
-  accountId: string | null,
+  request: PracticeRequest,
   slug: string,
   page: number,
   pageSize: number,
-): Promise<{ entries: PracticeEntry[]; total: number }> {
-  if (!accountId) return { entries: [], total: 0 };
+): Promise<PracticeSheet> {
+  const readerAccountId = request.accountId ?? null;
+  const ownerAccountId = request.owner
+    ? (await prisma.account.findFirst({ where: accountUrlKeyWhere(request.owner), select: { id: true } }))?.id ?? null
+    : readerAccountId;
+  if (!ownerAccountId) return MISSING_LIST;
 
-  const list = await findListBySlug(accountId, slug);
-  if (!list) return { entries: [], total: 0 };
+  const list = await findListBySlug(ownerAccountId, slug);
+  if (!list) return MISSING_LIST;
 
-  const kanji = list.items
-    .filter((item) => item.kind === LIST_ITEM_KINDS.kanji)
-    .map((item) => item.key);
-  return pickedEntries(kanji, page, pageSize);
+  const allowed = canViewList({
+    visibility: list.visibility,
+    isOwner: ownerAccountId === readerAccountId,
+    isAdmin: request.isAdmin ?? false,
+    shareToken: list.shareToken,
+    key: request.key ?? null,
+  });
+  if (!allowed) return MISSING_LIST;
+
+  const { entries, total } = await pickedEntries(listKanji(list.items), page, pageSize);
+  /* The name titles the sheet, and only a reader allowed the list gets it. */
+  return { entries, total, listName: list.name, missing: false };
 }
 
 /**
@@ -203,23 +263,21 @@ export async function practiceEntriesFor(
   level: number,
   page: number,
   pageSize: number,
-  /** Required by the tagged sources, which are one member's own lists. */
-  accountId?: string | null,
-  /** The characters, when the source is a hand-picked set. */
-  picked?: string[],
-  /** The list's slug, when the source is one the member saved. */
-  slug?: string | null,
-): Promise<{ entries: PracticeEntry[]; total: number }> {
+  /** Who is asking, and which list or characters they asked for. */
+  request: PracticeRequest = {},
+): Promise<PracticeSheet> {
+  const accountId = request.accountId ?? null;
+
   if (source === PRACTICE_SOURCES.picked) {
-    return pickedEntries(picked ?? [], page, pageSize);
+    return { ...(await pickedEntries(request.picked ?? [], page, pageSize)), listName: null, missing: false };
   }
 
   if (source === PRACTICE_SOURCES.list) {
-    return savedListEntries(accountId ?? null, slug ?? "", page, pageSize);
+    return savedListEntries(request, request.slug ?? "", page, pageSize);
   }
 
   if (isTaggedPracticeSource(source)) {
-    return taggedEntries(source, accountId ?? null, page, pageSize);
+    return { ...(await taggedEntries(source, accountId, page, pageSize)), listName: null, missing: false };
   }
 
   if (source === PRACTICE_SOURCES.grade) {
@@ -241,7 +299,7 @@ export async function practiceEntriesFor(
         kun: readings?.kun ?? [],
       };
     });
-    return { entries: toEntries(candidates), total: catalog.pagination.totalItems };
+    return { entries: toEntries(candidates), total: catalog.pagination.totalItems, listName: null, missing: false };
   }
 
   if (source === PRACTICE_SOURCES.wanikani) {
@@ -265,7 +323,7 @@ export async function practiceEntriesFor(
         on: readingsOfType(row.readings, "onyomi"),
         kun: readingsOfType(row.readings, "kunyomi"),
       }));
-    return { entries: toEntries(candidates), total };
+    return { entries: toEntries(candidates), total, listName: null, missing: false };
   }
 
   const where = { nLevel: level };
@@ -286,7 +344,7 @@ export async function practiceEntriesFor(
     on: row.onReadings ?? [],
     kun: row.kunReadings ?? [],
   }));
-  return { entries: toEntries(candidates), total };
+  return { entries: toEntries(candidates), total, listName: null, missing: false };
 }
 
 

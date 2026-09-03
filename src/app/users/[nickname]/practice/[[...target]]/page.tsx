@@ -5,34 +5,27 @@ import Link from "next/link";
 
 import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
 import SurfacePagination from "@/app/shared/SurfacePagination";
-import { toPaginationPlacement } from "@/app/shared/paginationPlacement";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
-import { findListBySlug } from "@/lib/studyLists";
 import { PRACTICE_SOURCES, isTaggedPracticeSource, practiceEntriesFor, practiceLevelCounts } from "@/lib/practiceSource";
-import { decodeSelection, encodeSelection, SELECTION_PARAM } from "@/app/shared/subjectSelection";
+import { encodeSelection } from "@/app/shared/subjectSelection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
-import { DEFAULT_GRADE } from "../../grades/GradeExplorer.constants";
 import { parsePracticeTarget } from "../practiceAddress";
-import { GRADE_OPTIONS, GRADE_SHORT_LABELS, isGradeOption, parsePageParam } from "../../grades/gradeExplorerView";
+import { readSheetOptions, sheetLabelFor } from "../sheetOptions";
+import { GRADE_OPTIONS, GRADE_SHORT_LABELS } from "../../grades/gradeExplorerView";
 import PrintButton from "../PrintButton";
-import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_CHIP, SHEET_SIZES, toSheetSize, WANIKANI_MAX_LEVEL } from "../practiceCopy";
+import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, SHEET_CHIP, WANIKANI_MAX_LEVEL } from "../practiceCopy";
 import SheetOptionsRow from "../SheetOptionsRow";
-import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "../sheetLink";
+import { PRINT_NOW_PARAM, sheetHref, type SheetSettings } from "../sheetLink";
 import SheetBody from "../SheetBody";
-import { type SheetMode } from "../TracingSheet";
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type PageProps = {
   params: Promise<{ nickname: string; target?: string[] }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
-
-function firstValue(value: string | string[] | undefined): string | undefined {
-  return Array.isArray(value) ? value[0] : value;
-}
 
 export default async function GradePracticePage({ params, searchParams }: PageProps) {
   const session = await getServerSession(authOptions);
@@ -54,52 +47,24 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     notFound();
   }
   const query = await searchParams;
-  const modeParam = typeof query.mode === "string" ? query.mode : null;
-  const mode: SheetMode = modeParam === "strokes" || modeParam === "reference" ? modeParam : "trace";
-  /*
-   * The chooser is a URL state, not component state, so the page stays a
-   * server component and a chosen sheet is still a link somebody can send or
-   * print. Selecting the active source toggles it.
-   */
-  const choosing = target === null || firstValue(query.pick) === "1";
-  /*
-   * The model column defaults on and the readings default off, which is the
-   * sheet as it printed before these became choices. Neither is a judgement
-   * about which is better - that is what the checkboxes are for.
-   */
-  const showModel = firstValue(query.model) !== "0";
-  /*
-   * Readings default off on a sheet to write on and on for the reference
-   * sheet, because the readings are most of what a reference sheet is for. A
-   * member who turns them off is still obeyed: the parameter is written
-   * either way once they touch the control.
-   */
-  const readingsParam = firstValue(query.readings);
-  const showReadings = readingsParam === null || readingsParam === undefined ? mode === "reference" : readingsParam === "1";
-  /*
-   * Numbering is on unless it is turned off, unlike the two above. A sheet is
-   * something somebody is set to work through - "do twelve to twenty" needs
-   * the numbers to be there by default, and a small grey figure costs the
-   * page nothing when nobody is counting.
-   */
-  const showNumbers = firstValue(query.numbers) !== "0";
-  /*
-   * Both ends by default here, unlike the shared component's own default. A
-   * sheet is a page of tracing squares: reaching page four meant scrolling past
-   * three of them to find the only Next link on the page.
-   */
-  const placement = toPaginationPlacement(firstValue(query.pager), PRACTICE_PAGINATION_DEFAULT);
-  const size = toSheetSize(firstValue(query.size));
-  /*
-   * Reading and printing want different page sizes, so they get different page
-   * sizes. A reading page is three sheets of paper at whatever size the
-   * squares are, so printing one comes out whole; the print layout drops the
-   * reading page entirely and cuts the list into the largest runs that still
-   * render, so the characters flow and every sheet but the last one fills.
-   */
-  const printAll = firstValue(query.print) === "all";
-  const printNow = firstValue(query[PRINT_NOW_PARAM]) === "1";
-  const pageSize = printAll ? PRINT_ALL_LIMIT : SHEET_SIZES[size].perPage;
+  const {
+    mode,
+    choosing,
+    showModel,
+    showReadings,
+    showNumbers,
+    placement,
+    size,
+    printAll,
+    printNow,
+    pageSize,
+    picked,
+    page,
+    listKey,
+    source,
+    level,
+    grade,
+  } = readSheetOptions(query, target);
 
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
@@ -108,6 +73,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
   if (!account) {
     notFound();
   }
+  const isAdmin = isAdminEmail(viewerEmail);
   if (!canViewUserPage({
     viewerEmail,
     viewerMenuInfo,
@@ -117,41 +83,50 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     redirect("/join?access=denied");
   }
 
-  /*
-   * A hand-picked sheet carries its characters in the URL rather than in the
-   * database. That keeps a chosen set shareable and printable before anything
-   * has been saved - which is the whole point of choosing being a surface
-   * control rather than a feature of one page.
-   */
-  const picked = decodeSelection(firstValue(query[SELECTION_PARAM]));
-
-  const page = parsePageParam(firstValue(query.page));
   const viewerWkLevel = account.wkLevel ?? 1;
-
-  const source = target?.source ?? PRACTICE_SOURCES.grade;
-  const level = target?.level ?? DEFAULT_GRADE;
-  /* Only the grade ladder has a grade; the others carry a level of their own. */
-  const grade = isGradeOption(level) ? level : DEFAULT_GRADE;
 
   // Only fetched while the chooser is open, so a closed sheet pays nothing.
   const levelCounts = choosing && !isTaggedPracticeSource(source)
     ? await practiceLevelCounts(source)
     : {};
 
-  const { entries, total } = await practiceEntriesFor(
+  /*
+   * `account` is whose practice page this is, and `canViewUserPage` above has
+   * already established that the reader is that member or an admin - so it is
+   * the reader, and the list's own visibility is what decides the rest.
+   */
+  const { entries, total, listName, missing } = await practiceEntriesFor(
     source,
     Number.isFinite(level) ? level : 1,
     page,
     pageSize,
-    account.id,
-    picked,
-    target?.slug ?? null,
+    {
+      accountId: account.id,
+      isAdmin,
+      picked,
+      slug: target?.slug ?? null,
+      owner: target?.owner ?? null,
+      key: listKey,
+    },
   );
+
+  /*
+   * A list nobody may read, and a list nobody has, are the same 404 the
+   * list's own page gives. Without this an address naming somebody else's
+   * private list renders as a working sheet that happens to be blank, which
+   * is exactly the "broken link that looks like a working one" the rest of
+   * this page's addressing was written to avoid.
+   */
+  if (missing) {
+    notFound();
+  }
 
   const settings: SheetSettings = {
     nickname: decodeURIComponent(nickname),
     picked: encodeSelection(picked),
     slug: target?.slug ?? null,
+    owner: target?.owner ?? null,
+    listKey,
     source,
     grade,
     level,
@@ -180,30 +155,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     ? `${PRACTICE_SHEET_COPY.printRunLabel} ${page} ${PRACTICE_SHEET_COPY.printRunOf} ${pageCount}`
     : undefined;
 
-  /*
-   * A sheet from a saved list is titled with the list's name, which is the
-   * only thing that says which sheet this is - "Writing practice · G1" on a
-   * sheet built from Week 2 is a different sheet's title.
-   */
-  const listName =
-    source === PRACTICE_SOURCES.list && target?.slug
-      ? (await findListBySlug(account.id, target.slug))?.name ?? null
-      : null;
-
-  const sheetLabel =
-    source === PRACTICE_SOURCES.list
-      ? listName ?? PRACTICE_SHEET_COPY.fromList
-      : source === PRACTICE_SOURCES.picked
-      ? PRACTICE_SHEET_COPY.fromPicked
-      : source === PRACTICE_SOURCES.trouble
-      ? PRACTICE_SHEET_COPY.fromTrouble
-      : source === PRACTICE_SOURCES.favorite
-        ? PRACTICE_SHEET_COPY.fromFavourite
-        : source === PRACTICE_SOURCES.wanikani
-          ? `WaniKani L${level}`
-          : source === PRACTICE_SOURCES.jlpt
-            ? `JLPT N${level}`
-            : GRADE_SHORT_LABELS[grade];
+  const sheetLabel = sheetLabelFor({ source, level, grade }, listName);
 
   return (
     /*
@@ -221,7 +173,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         viewerMenuInfo={viewerMenuInfo}
         primaryWkUsername={decodeURIComponent(nickname)}
         accountId={account.id}
-        showAdminActions={isAdminEmail(viewerEmail)}
+        showAdminActions={isAdmin}
         lastSyncedAt={account.lastSyncedAt?.toISOString() ?? null}
         lastActivityAt={account.lastActivityAt?.toISOString() ?? null}
         className="mb-4 print:hidden"

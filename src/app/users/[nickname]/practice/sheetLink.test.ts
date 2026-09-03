@@ -31,6 +31,8 @@ const BASE: SheetSettings = {
   choosing: false,
   picked: "",
   slug: null,
+  owner: null,
+  listKey: null,
   printAll: false,
 };
 
@@ -200,6 +202,8 @@ describe("the reference sheet's link", () => {
     nickname: "john",
     picked: "",
     slug: null,
+    owner: null,
+    listKey: null,
     source: PRACTICE_SOURCES.grade,
     grade: 1,
     level: 1,
@@ -235,6 +239,8 @@ describe("readings on the reference sheet", () => {
     nickname: "john",
     picked: "",
     slug: null,
+    owner: null,
+    listKey: null,
     source: PRACTICE_SOURCES.grade,
     grade: 1,
     level: 1,

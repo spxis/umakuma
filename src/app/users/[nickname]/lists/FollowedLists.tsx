@@ -5,6 +5,8 @@ import { useState } from "react";
 
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { listShareHref } from "@/lib/studyListRules";
+
+import { listWorksheetHref } from "../practice/practiceAddress";
 import ListMetaLine from "@/app/shared/ListMetaLine";
 import type { FollowedList } from "@/lib/studyListShares";
 import { LIST_VISIBILITIES } from "@/lib/domainConstants";
@@ -17,7 +19,16 @@ import { LIST_VISIBILITIES } from "@/lib/domainConstants";
  * says whose it is and leads to the list's page; a list made private since
  * says so, and can still be dropped.
  */
-export default function FollowedLists({ lists, accountId }: { lists: FollowedList[]; accountId: string }) {
+export default function FollowedLists({
+  lists,
+  accountId,
+  practicePath,
+}: {
+  lists: FollowedList[];
+  accountId: string;
+  /** Where this member's sheets are built, so a followed list can offer one. */
+  practicePath: string;
+}) {
   const [dropped, setDropped] = useState<Set<string>>(new Set());
 
   async function unfollow(listId: string) {
@@ -48,6 +59,19 @@ export default function FollowedLists({ lists, accountId }: { lists: FollowedLis
           const href = list.reachable
             ? listShareHref(list.ownerKey, list.name, list.shareToken ? LIST_VISIBILITIES.unlisted : LIST_VISIBILITIES.public, list.shareToken)
             : null;
+          /*
+           * A followed list is somebody else's, so the sheet names whose it is
+           * and carries the key an unlisted one needs. A list of vocabulary
+           * has no squares to trace and is offered nothing.
+           */
+          const worksheet =
+            list.reachable && list.kanjiCount > 0
+              ? listWorksheetHref(
+                  practicePath,
+                  { tag: null, name: list.name },
+                  { owner: list.ownerKey, key: list.shareToken },
+                )
+              : null;
           return (
             <li key={list.id} className="rounded-2xl border border-line bg-surface p-4">
               <div className="flex items-start justify-between gap-2">
@@ -73,8 +97,26 @@ export default function FollowedLists({ lists, accountId }: { lists: FollowedLis
                   <span className="ml-2 subject-pill border-line bg-surface-muted text-foreground/60">{STUDY_LIST_COPY.followedGone}</span>
                 ) : null}
               </p>
-              <p className="mt-3 flex items-center justify-between gap-2 text-[11px] text-foreground/60">
+              {/*
+                * Stacked rather than sharing a line with the date. A card is
+                * 260px at its narrowest and a second action does not fit
+                * beside "Changed 3 minutes ago"; squeezed onto one row the
+                * date either breaks across three lines or truncates to
+                * "Changed 3…", which says less than nothing.
+                */}
+              <p className="mt-3 text-[11px] text-foreground/60">
                 <ListMetaLine facts={{ updatedAt: list.updatedAt }} />
+              </p>
+              <p className="mt-2 flex items-center gap-3 text-[11px] text-foreground/60">
+                {worksheet ? (
+                  <Link
+                    href={worksheet}
+                    className="font-bold uppercase tracking-[0.08em] text-foreground/60 transition hover:text-accent"
+                    title={STUDY_LIST_COPY.worksheetHint}
+                  >
+                    {STUDY_LIST_COPY.worksheet}
+                  </Link>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => void unfollow(list.id)}

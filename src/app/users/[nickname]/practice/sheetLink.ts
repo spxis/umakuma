@@ -1,5 +1,6 @@
 import type { PaginationPlacement } from "@/app/shared/paginationPlacement";
 import { practiceSourceHasLevels, practiceSourceHasSlug, type PracticeSource } from "@/lib/practiceSourceKinds";
+import { LIST_KEY_PARAM } from "@/lib/studyListRules";
 
 import { practiceHref } from "./practiceAddress";
 
@@ -67,6 +68,17 @@ export type SheetSettings = {
   picked: string;
   /** The saved list's slug, when the sheet is built from one. */
   slug: string | null;
+  /** Whose list it is, when the sheet is built from somebody else's. */
+  owner: string | null;
+  /**
+   * The key an unlisted list's link carries.
+   *
+   * It rides in every option link for the same reason the slug does: without
+   * it, changing the square size on a sheet built from an unlisted list drops
+   * the key, the next page cannot open the list, and the sheet empties itself
+   * as though the reader had been signed out.
+   */
+  listKey: string | null;
 };
 
 /**
@@ -89,6 +101,7 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
     level: carriesLevel ? next.level : null,
     /* A saved list is named in the path, so every option link has to carry it. */
     slug: practiceSourceHasSlug(source) ? next.slug : null,
+    owner: practiceSourceHasSlug(source) ? next.owner : null,
   });
 
   const parts: string[] = [];
@@ -108,6 +121,9 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
   if (next.placement !== PRACTICE_PAGINATION_DEFAULT) parts.push(`pager=${next.placement}`);
   if (next.size !== DEFAULT_SHEET_SIZE) parts.push(`size=${next.size}`);
   if (next.choosing) parts.push("pick=1");
+  if (practiceSourceHasSlug(source) && next.listKey) {
+    parts.push(`${LIST_KEY_PARAM}=${encodeURIComponent(next.listKey)}`);
+  }
   if (next.printAll) parts.push("print=all");
   // Kept last: it is the longest parameter and the least worth reading.
   if (next.picked) parts.push(`picked=${encodeURIComponent(next.picked)}`);

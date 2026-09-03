@@ -89,15 +89,21 @@ export default function ListPageView({
    * A worksheet is a sheet of kanji, so a list holding none is not offered
    * one, and a visitor with no page of their own has nowhere to build it.
    *
-   * The owner only, for now. The sheet is built at the reader's own address
-   * from their own lists and their own tags, so offering it on somebody
-   * else's list would quietly print a different list than the one on screen.
+   * Somebody else's list is named in the address - `/practice/list/john/week-1`
+   * - rather than looked up on the reader's own shelf. That is what this was
+   * waiting for: the sheet is built at the reader's address, so "Week 1" used
+   * to mean the reader's own Week 1, a different list of the same name, and
+   * the safe thing was to offer nothing at all. Now the address says whose
+   * list it is and the sheet is the list on screen.
    */
   const worksheetHref = useMemo(() => {
-    if (!viewer.isOwner) return null;
     if (!list.tag && !live.some((item) => item.listKind === LIST_ITEM_KINDS.kanji)) return null;
-    return listWorksheetHref(practicePath, { tag: list.tag, name: list.name });
-  }, [list.name, list.tag, live, practicePath, viewer.isOwner]);
+    return listWorksheetHref(
+      practicePath,
+      { tag: list.tag, name: list.name },
+      viewer.isOwner ? undefined : { owner: owner.key, key: listKey },
+    );
+  }, [list.name, list.tag, listKey, live, owner.key, practicePath, viewer.isOwner]);
 
   const kinds = useMemo(() => {
     const counts = new Map<ListItemKind, number>();

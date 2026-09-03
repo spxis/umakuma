@@ -52,9 +52,23 @@ describe("parsePracticeTarget", () => {
     });
   });
 
-  it("refuses a list with no name, and a name with a level after it", () => {
+  it("refuses a list with no name", () => {
     expect(parsePracticeTarget(["list"])).toBe("invalid");
-    expect(parsePracticeTarget(["list", "week-1", "2"])).toBe("invalid");
+  });
+
+  /*
+   * A list has no level, so the second segment is whose list it is rather
+   * than a number - `/practice/list/week-1/2` reads as a member called
+   * "week-1". The address parses; the page is what turns an owner nobody
+   * answers to into a 404, since only the page can ask.
+   */
+  it("reads a second segment as an owner, not a level", () => {
+    expect(parsePracticeTarget(["list", "week-1", "2"])).toEqual({
+      source: PRACTICE_SOURCES.list,
+      level: null,
+      owner: "week-1",
+      slug: "2",
+    });
   });
 
   it("refuses a ladder with no level, rather than guessing one", () => {
@@ -105,6 +119,45 @@ describe("practiceHref", () => {
 });
 
 /*
+ * A list somebody else owns is named in the path, not looked up on the
+ * reader's own shelf: the sheet is built at the reader's address, so
+ * `/practice/list/week-1` has always meant *their* Week 1.
+ */
+describe("a list belonging to somebody else", () => {
+  it("names the owner ahead of the list", () => {
+    const target = { source: PRACTICE_SOURCES.list, level: null, owner: "mika", slug: "week-1" };
+    expect(practiceHref("john", target)).toBe("/users/john/practice/list/mika/week-1");
+  });
+
+  it("reads the owner back off the path", () => {
+    expect(parsePracticeTarget(["list", "mika", "week-1"])).toEqual({
+      source: PRACTICE_SOURCES.list,
+      level: null,
+      owner: "mika",
+      slug: "week-1",
+    });
+  });
+
+  it("still reads a bare slug as the reader's own list", () => {
+    expect(parsePracticeTarget(["list", "week-1"])).toEqual({
+      source: PRACTICE_SOURCES.list,
+      level: null,
+      slug: "week-1",
+    });
+  });
+
+  it("refuses a third segment rather than ignoring it", () => {
+    expect(parsePracticeTarget(["list", "mika", "week-1", "extra"])).toBe("invalid");
+  });
+
+  /* A ladder never grew an owner; two segments there is still nonsense. */
+  it("leaves the numbered sources alone", () => {
+    expect(parsePracticeTarget(["jlpt", "mika", "5"])).toBe("invalid");
+    expect(parsePracticeTarget(["trouble", "mika"])).toBe("invalid");
+  });
+});
+
+/*
  * One link for a list's worksheet, whichever surface asks. The card used to
  * build a picked sheet carrying every character of the list in the query - it
  * broke on a long list and went stale as soon as the list changed - and the
@@ -135,6 +188,33 @@ describe("listWorksheetHref", () => {
   /* Tracing what you have already burned is not practice. */
   it("offers nothing for Burned", () => {
     expect(listWorksheetHref(BASE, { tag: STUDY_TAGS.burned, name: "Burned" })).toBeNull();
+  });
+
+  it("names the owner when the list is not the reader's own", () => {
+    expect(listWorksheetHref(BASE, { tag: null, name: "Week 1" }, { owner: "mika" })).toBe(
+      "/users/john/practice/list/mika/week-1",
+    );
+  });
+
+  /* An unlisted list is readable only with its key, so the sheet carries it. */
+  it("carries the key an unlisted list needs", () => {
+    expect(listWorksheetHref(BASE, { tag: null, name: "Week 1" }, { owner: "mika", key: "abc123" })).toBe(
+      "/users/john/practice/list/mika/week-1?key=abc123",
+    );
+  });
+
+  it("joins the print flag to a key rather than starting a second query", () => {
+    expect(listPrintHref(BASE, { tag: null, name: "Week 1" }, { owner: "mika", key: "abc123" })).toBe(
+      "/users/john/practice/list/mika/week-1?key=abc123&go=1",
+    );
+  });
+
+  /*
+   * Trouble and Favourites are one member's own marks. There is no address at
+   * which somebody else's exist, so there is no sheet to offer.
+   */
+  it("offers nothing for somebody else's tagged list", () => {
+    expect(listWorksheetHref(BASE, { tag: STUDY_TAGS.trouble, name: "Trouble" }, { owner: "mika" })).toBeNull();
   });
 
   it("offers nothing for a name that makes no address", () => {
