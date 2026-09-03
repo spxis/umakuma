@@ -303,23 +303,6 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           })}
         </span>
 
-        <span className="ml-2 flex items-center gap-1.5">
-        <span className={`mr-1 ${SHEET_CHIP.label}`}>{PRACTICE_SHEET_COPY.modeLabel}</span>
-        {([
-          ["trace", PRACTICE_SHEET_COPY.modeTrace],
-          ["strokes", PRACTICE_SHEET_COPY.modeStrokes],
-          ["reference", PRACTICE_SHEET_COPY.modeReference],
-        ] as const).map(([id, label]) => (
-          <Link
-            key={id}
-            href={sheetHref(settings, { mode: id })}
-            className={`${SHEET_CHIP.base} h-8 px-3 text-xs ${id === mode ? SHEET_CHIP.on : SHEET_CHIP.off}`}
-          >
-            {label}
-          </Link>
-        ))}
-        </span>
-
       </nav>
 
       {/*
@@ -378,6 +361,33 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           </Link>
         </nav>
       ) : null}
+
+      {/*
+        * The sheet's own row, after the chooser rather than beside the
+        * source chips. The two shared one wrapping nav, so opening a source
+        * pushed its values below Trace/Stroke order/Reference: the list
+        * somebody had just asked for appeared under an unrelated row, two
+        * lines from the chip they clicked.
+        */}
+      <nav className="mb-4 flex flex-wrap items-center gap-1.5 print:hidden">
+        <span className="ml-2 flex items-center gap-1.5">
+        <span className={`mr-1 ${SHEET_CHIP.label}`}>{PRACTICE_SHEET_COPY.modeLabel}</span>
+        {([
+          ["trace", PRACTICE_SHEET_COPY.modeTrace],
+          ["strokes", PRACTICE_SHEET_COPY.modeStrokes],
+          ["reference", PRACTICE_SHEET_COPY.modeReference],
+        ] as const).map(([id, label]) => (
+          <Link
+            key={id}
+            href={sheetHref(settings, { mode: id })}
+            className={`${SHEET_CHIP.base} h-8 px-3 text-xs ${id === mode ? SHEET_CHIP.on : SHEET_CHIP.off}`}
+          >
+            {label}
+          </Link>
+        ))}
+        </span>
+
+      </nav>
 
       <SheetOptionsRow settings={settings} />
 

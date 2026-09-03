@@ -3958,5 +3958,16 @@
     "summary": "The map panel drew the characters of a place name as coloured boxes of its own making: no meaning, no reading, and no way to keep one, on a site where every other place a kanji appears carries all three. It uses the shared subject card now, which brings the reading, the meaning, the link to the character's page and the filing column with it. Double-clicking a region zooms one step in on it. Requested 2026-09-03 by John.",
     "version": "0.341.0",
     "releasedAt": "2026-09-03T09:42:38Z"
+  },
+  {
+    "id": "practice-chooser-order",
+    "name": "The values open under the chip you clicked",
+    "area": "platform",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 72,
+    "summary": "Choosing a source on the practice sheet opened its levels below Trace / Stroke order / Reference, because the source chips and the sheet chips shared one wrapping nav - the list somebody had just asked for appeared under an unrelated row, two lines from the chip they pressed. Three rows now, in the order they are read. Found 2026-09-03 by John."
   }
 ]
