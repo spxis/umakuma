@@ -271,6 +271,17 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   a rule added to this file — takes no version at all and stays out of the race.
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
 - This repo has no migrations: the schema is applied by hand with `pnpm db:push`, and nothing in the deploy pipeline applies it for you. **Any change to `prisma/schema.prisma` must be pushed to the production database as its own step, or the deploy ships code the database cannot serve.** An added enum value is the easy one to miss: `map` was added to `GameKind`, deployed green, and every Map run failed in production while passing locally, because `db push` had only ever reached the local database. Verify with `pnpm db:drift:check` (read-only; exit 0 clean, exit 2 with the missing SQL). The deploy workflow now runs the same check after `vercel pull` and stops the deploy on drift.
+- **Push the schema commit to `main` first, then `db:push` to production.** The
+  drift check fails in *both* directions, and the two are not equally costly. A
+  database missing a column the schema has fails only the deploy that adds it.
+  A database holding a column the committed schema lacks fails **every session's
+  deploys** for as long as the gap is open - the gate compares production
+  against `origin/main`, not against your working tree, so it cannot tell whose
+  change it is. On 2026-09-02 a `db:push` run before `quality:check` and
+  `preflight:prod` opened that window for five minutes and took another
+  session's deploy red; they went looking for an orphan column that was simply
+  a feature mid-flight. So: land the commit that carries the schema change,
+  then apply it to production, then confirm `pnpm db:drift:check` is exit 0.
 - A push to `main` only triggers the production workflow; it is not itself a deployment. Run `pnpm preflight:prod` before pushing, then verify GitHub `CI` succeeds, the `Deploy to Vercel` workflow's `deploy` job completes `vercel deploy --prod`, and the canonical production alias returns HTTP 200. Investigate and fix failed workflow steps before reporting deployment success.
 - A `cancelled` deploy is not a failed one. The workflow holds `concurrency: vercel-production` with `cancel-in-progress`, so a push landing on top of yours kills your run and deploys from the newer commit instead — which carries your commit with it. This happens routinely while several sessions are shipping. Confirm it rather than assume it: `git merge-base --is-ancestor <your sha> origin/main`, then follow the newer SHA's deploy and check production for your own change. Report a cancellation as a failure only when your commit is genuinely not on `main`.
 - When work is paused or reprioritized but may resume later, preserve useful uncommitted changes on a named WIP branch or stash before returning to the priority task. Do not discard that work merely to clean the current branch.
