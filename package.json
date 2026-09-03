@@ -91,7 +91,9 @@
     "task:local": "node scripts/local-db.mjs run -- pnpm task",
     "task:import": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/tasks-import.ts",
     "build:kanji-ladder": "node scripts/build-kanji-ladder.mjs",
-    "build:word-frequency": "node scripts/build-word-frequency.mjs"
+    "build:word-frequency": "node scripts/build-word-frequency.mjs",
+    "corpora:fetch": "node scripts/fetch-corpora.mjs",
+    "ladder:refresh": "pnpm db:export:wk-catalog:levels && pnpm corpora:fetch && pnpm build:word-frequency && pnpm build:kanji-ladder"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
