@@ -173,26 +173,41 @@ export function useSearchCombobox({
     }
 
     /*
-     * Escape empties the box before it closes it.
+     * Escape empties the box, and then puts it away.
      *
-     * One key, two things to undo: the query that is in the way and the panel
-     * over the page. Closing first leaves the box still full, so the next
-     * focus reopens the same search somebody was trying to leave - and a
-     * command, which is long and typed by a control rather than by hand, is
-     * exactly what a member reaches for Escape to be rid of.
+     * One key, three things to undo in order: the query that is in the way,
+     * the panel over the page, and the box itself. Clearing first is what
+     * stops the next focus reopening the same search somebody was trying to
+     * leave - a command especially, since it is long and typed by a control
+     * rather than by hand.
      *
-     * The panel that is open after the clear is the recent items rather than
-     * the suggestions, and leaving it out of this condition is what made the
-     * second press do nothing at all.
-     *
-     * Stopped so a phone sheet's own Escape listener keeps the sheet open on
-     * the press that clears.
+     * Stopped on that first press so a phone sheet's own Escape listener
+     * keeps the sheet open while the query is being cleared.
      */
-    if (event.key === "Escape" && (panelVisible || showRecent || typed.length > 0)) {
+    if (event.key === "Escape" && typed.length > 0) {
       event.preventDefault();
       event.stopPropagation();
-      if (typed.length > 0) clear();
-      else closePanel();
+      clear();
+      return;
+    }
+
+    /*
+     * An empty box goes away rather than sitting there open.
+     *
+     * It used to close the dropdown and stop, which left the field expanded
+     * with the cursor still in it - so the thing a member pressed Escape to be
+     * rid of was still on screen, and wider than before. Giving up focus is
+     * what collapses it, since the field is expanded exactly while it is
+     * focused or holding a query.
+     *
+     * Not stopped this time: the press should reach the phone sheet's own
+     * listener as well, so the sheet closes with the box rather than outliving
+     * it.
+     */
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closePanel();
+      if (event.currentTarget instanceof HTMLElement) event.currentTarget.blur();
     }
   }
 

@@ -540,3 +540,30 @@ test("a radical command answers with the kanji holding all of them", async ({ br
 
   await finish(page);
 });
+
+test("Escape empties the header box, then puts it away", async ({ browser, baseURL }) => {
+  const page = await openPage(browser, `${baseURL}/`);
+  const box = page.locator("#global-search");
+
+  await box.click();
+  await expect(box).toBeFocused();
+  await box.fill("mizu");
+
+  /*
+   * The first press empties it and leaves the cursor where it was, so a
+   * member who meant to retype does not have to click back in.
+   */
+  await page.keyboard.press("Escape");
+  await expect(box).toHaveValue("");
+  await expect(box).toBeFocused();
+
+  /*
+   * The second has nothing left to clear, so the box itself goes: it gives up
+   * focus, which is what collapses it back to its narrow width. It used to
+   * close the dropdown and sit there, expanded, with the cursor still in it.
+   */
+  await page.keyboard.press("Escape");
+  await expect(box).not.toBeFocused();
+
+  await finish(page);
+});
