@@ -1,7 +1,15 @@
+"use client";
+
 import Link from "next/link";
 
 import { PRACTICE_SHEET_COPY, SHEET_CHIP, SHEET_SIZE_ORDER, type SheetSize } from "./practiceCopy";
 import { sheetHref, type SheetSettings } from "./sheetLink";
+import {
+  currentSheetPreferenceCookie,
+  rememberSheetPreference,
+  writeSheetPreferences,
+  type SheetPreferences,
+} from "./sheetPreferences";
 
 /**
  * How the sheet is drawn, as opposed to what is on it.
@@ -43,10 +51,33 @@ const SIZE_TITLES: Record<SheetSize, string> = {
   small: PRACTICE_SHEET_COPY.sizeSmallTitle,
 };
 
-function Checkbox({ label, on, href }: { label: string; on: boolean; href: string }) {
+/**
+ * Chosen here, and remembered for the next sheet.
+ *
+ * The link is still the whole of the change - the page reads the address, not
+ * this - so the cookie is written beside it rather than instead of it. A
+ * reader who sends the link sends what they were looking at; a reader who
+ * comes back to a fresh worksheet gets what they chose.
+ */
+function remember(change: SheetPreferences): void {
+  writeSheetPreferences(rememberSheetPreference(currentSheetPreferenceCookie(), change));
+}
+
+function Checkbox({
+  label,
+  on,
+  href,
+  onChoose,
+}: {
+  label: string;
+  on: boolean;
+  href: string;
+  onChoose: () => void;
+}) {
   return (
     <Link
       href={href}
+      onClick={onChoose}
       className="inline-flex items-center gap-2 text-xs font-semibold text-foreground/70 transition hover:text-foreground"
     >
       <span
@@ -77,17 +108,20 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
           label={PRACTICE_SHEET_COPY.optionShowModel}
           on={settings.showModel}
           href={sheetHref(settings, { showModel: !settings.showModel })}
+          onChoose={() => remember({ model: settings.showModel ? "0" : "1" })}
         />
       )}
       <Checkbox
         label={PRACTICE_SHEET_COPY.optionShowReadings}
         on={settings.showReadings}
         href={sheetHref(settings, { showReadings: !settings.showReadings })}
+        onChoose={() => remember({ readings: settings.showReadings ? "0" : "1" })}
       />
       <Checkbox
         label={PRACTICE_SHEET_COPY.optionShowNumbers}
         on={settings.showNumbers}
         href={sheetHref(settings, { showNumbers: !settings.showNumbers })}
+        onChoose={() => remember({ numbers: settings.showNumbers ? "0" : "1" })}
       />
       {/*
         * The page shared between its characters rather than a row each: one
@@ -99,6 +133,7 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
           label={PRACTICE_SHEET_COPY.optionFill}
           on={settings.fill}
           href={sheetHref(settings, { fill: !settings.fill })}
+          onChoose={() => remember({ fill: settings.fill ? "0" : "1" })}
         />
       )}
 
@@ -120,6 +155,7 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
           <Link
             key={size}
             href={sheetHref(settings, { size, page: 1 })}
+            onClick={() => remember({ size })}
             title={SIZE_TITLES[size]}
             className={`${CHIP} w-8 justify-center ${size === settings.size ? SHEET_CHIP.on : SHEET_CHIP.off}`}
           >

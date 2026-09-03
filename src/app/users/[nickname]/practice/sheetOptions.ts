@@ -9,6 +9,7 @@ import { GRADE_SHORT_LABELS, isGradeOption, parsePageParam } from "../grades/gra
 import type { PracticeTarget } from "./practiceAddress";
 import { PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_SIZES, toSheetSize } from "./practiceCopy";
 import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM } from "./sheetLink";
+import type { SheetPreferences } from "./sheetPreferences";
 import type { SheetMode } from "./TracingSheet";
 
 /**
@@ -31,7 +32,20 @@ function firstValue(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-export function readSheetOptions(query: Query, target: PracticeTarget | null) {
+/**
+ * What the address says, or failing that what the reader chose last time.
+ *
+ * Ranked rather than merged: a link renders the same for whoever opens it,
+ * and the memory only answers where the link is silent. See
+ * `sheetPreferences.ts` for why the memory exists at all.
+ */
+export function readSheetOptions(
+  query: Query,
+  target: PracticeTarget | null,
+  remembered: SheetPreferences = {},
+) {
+  const setting = (value: string | string[] | undefined, key: keyof SheetPreferences) =>
+    firstValue(value) ?? remembered[key];
   const modeParam = typeof query.mode === "string" ? query.mode : null;
   const mode: SheetMode = modeParam === "strokes" || modeParam === "reference" ? modeParam : "trace";
   /*
@@ -45,14 +59,14 @@ export function readSheetOptions(query: Query, target: PracticeTarget | null) {
    * sheet as it printed before these became choices. Neither is a judgement
    * about which is better - that is what the checkboxes are for.
    */
-  const showModel = firstValue(query.model) !== "0";
+  const showModel = setting(query.model, "model") !== "0";
   /*
    * Readings default off on a sheet to write on and on for the reference
    * sheet, because the readings are most of what a reference sheet is for. A
    * member who turns them off is still obeyed: the parameter is written
    * either way once they touch the control.
    */
-  const readingsParam = firstValue(query.readings);
+  const readingsParam = setting(query.readings, "readings");
   const showReadings = readingsParam === null || readingsParam === undefined ? mode === "reference" : readingsParam === "1";
   /*
    * Numbering is on unless it is turned off, unlike the two above. A sheet is
@@ -60,14 +74,14 @@ export function readSheetOptions(query: Query, target: PracticeTarget | null) {
    * the numbers to be there by default, and a small grey figure costs the
    * page nothing when nobody is counting.
    */
-  const showNumbers = firstValue(query.numbers) !== "0";
+  const showNumbers = setting(query.numbers, "numbers") !== "0";
   /*
    * Both ends by default here, unlike the shared component's own default. A
    * sheet is a page of tracing squares: reaching page four meant scrolling past
    * three of them to find the only Next link on the page.
    */
   const placement = toPaginationPlacement(firstValue(query.pager), PRACTICE_PAGINATION_DEFAULT);
-  const size = toSheetSize(firstValue(query.size));
+  const size = toSheetSize(setting(query.size, "size"));
   /*
    * Reading and printing want different page sizes, so they get different page
    * sizes. A reading page is three sheets of paper at whatever size the
@@ -93,7 +107,7 @@ export function readSheetOptions(query: Query, target: PracticeTarget | null) {
      * rather than one row each. Off for a list; on for the sheet a single
      * character links to, which is that character and the page to work at it.
      */
-    fill: firstValue(query.fill) === "1",
+    fill: setting(query.fill, "fill") === "1",
     printNow: firstValue(query[PRINT_NOW_PARAM]) === "1",
     pageSize: printAll ? PRINT_ALL_LIMIT : SHEET_SIZES[size].perPage,
     /*

@@ -4184,11 +4184,23 @@
     "id": "strokes-index-opens-on-one",
     "name": "Stroke order opens on stroke one",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "The stroke picker starts with nothing picked, so the panel opens showing no stroke at all. Default to the first one: there is no point in having nothing show. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.370.0",
+    "releasedAt": "2026-09-03T15:49:44Z"
+  },
+  {
+    "id": "sheet-options-remembered",
+    "name": "Show readings forgets what you chose",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.370.0",
-    "releasedAt": "2026-09-03T15:49:44Z",
-    "summary": "The stroke picker starts with nothing picked, so the panel opens showing no stroke at all. Default to the first one: there is no point in having nothing show. Reported 2026-09-03 by John."
+    "version": "0.371.0",
+    "releasedAt": "2026-09-03T15:56:29Z",
+    "summary": "On the practice sheet the Show readings option is always unchecked when the page opens. The other options are remembered; this one is not. Reported 2026-09-03 by John."
   }
 ]

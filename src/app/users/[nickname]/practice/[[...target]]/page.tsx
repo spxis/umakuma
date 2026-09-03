@@ -1,4 +1,5 @@
 import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
+import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
@@ -14,6 +15,7 @@ import { encodeSelection } from "@/app/shared/subjectSelection";
 import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import { parsePracticeTarget } from "../practiceAddress";
 import { readSheetOptions, sheetLabelFor } from "../sheetOptions";
+import { SHEET_PREFERENCE_COOKIE, readSheetPreferences } from "../sheetPreferences";
 import { GRADE_OPTIONS, GRADE_SHORT_LABELS } from "../../grades/gradeExplorerView";
 import PrintButton from "../PrintButton";
 import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, SHEET_CHIP, WANIKANI_MAX_LEVEL } from "../practiceCopy";
@@ -68,7 +70,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     source,
     level,
     grade,
-  } = readSheetOptions(query, target);
+  } = readSheetOptions(query, target, readSheetPreferences((await cookies()).get(SHEET_PREFERENCE_COOKIE)?.value));
 
   const account = await prisma.account.findFirst({
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
