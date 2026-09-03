@@ -4051,6 +4051,7 @@
     "kind": "bug",
     "date": "2026-09-03",
     "summary": "Escape on a focused search box empties it, and on an empty box it closed the dropdown and left the field open and focused - so the box a member wanted rid of stayed on screen, widened, with the cursor still in it. An empty box now goes away on Escape: the panel closes, the field gives up focus and shrinks back, and the phone sheet closes with it. Reported 2026-09-03 by John, who had asked before.",
+    "dateIsEstimate": false,
     "version": "0.350.0",
     "releasedAt": "2026-09-03T11:15:14Z"
   },
@@ -4058,12 +4059,12 @@
     "id": "releases-month-sections",
     "name": "Releases open at the month you are in",
     "area": "platform",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
     "summary": "The releases page prints every month at full length, so the page opens on a wall of entries and the month somebody came for is a long scroll away. Each month becomes a section that folds: the current month open, the rest closed, any of them toggled by hand, and the choice remembered per device so a refresh does not undo it. Requested 2026-09-03 by John.",
-    "dateIsEstimate": true,
-    "release": 73
+    "version": "0.351.0",
+    "releasedAt": "2026-09-03T11:25:55Z"
   },
   {
     "id": "releases-tag-filter",
@@ -4080,35 +4081,35 @@
     "id": "print-as-modal",
     "name": "Print without leaving the page",
     "area": "platform",
-    "kind": "feature",
     "status": "planned",
+    "kind": "feature",
     "date": "2026-09-03",
+    "summary": "Printing a list opens /users/<name>/practice/list/<slug>, which switches the header's section from Lists to Learn - you asked to print and the site took you somewhere else. A print modal would keep the reader where they are and be callable from anywhere a printable thing is shown. Requested 2026-09-02 by John, twice. Tabled in the backlog 2026-09-03 at his request.",
     "dateIsEstimate": true,
-    "release": 75,
-    "summary": "Printing a list opens /users/<name>/practice/list/<slug>, which switches the header's section from Lists to Learn - you asked to print and the site took you somewhere else. A print modal would keep the reader where they are and be callable from anywhere a printable thing is shown. Requested 2026-09-02 by John, twice. Tabled in the backlog 2026-09-03 at his request."
+    "release": 75
   },
   {
     "id": "maps-kanji-reveal-toggle",
     "name": "A toggle for the reading and the English",
     "area": "platform",
-    "kind": "feature",
     "status": "planned",
+    "kind": "feature",
     "date": "2026-09-03",
+    "summary": "The map panel's kanji cards show the meaning and the reading together. John asked for the shared component 'with a toggle, the english/reading'; showing both was a judgement call made without flagging it, and the grade explorer already has the reveal control this would reuse. Raised 2026-09-03 by John.",
     "dateIsEstimate": true,
-    "release": 76,
-    "summary": "The map panel's kanji cards show the meaning and the reading together. John asked for the shared component 'with a toggle, the english/reading'; showing both was a judgement call made without flagging it, and the grade explorer already has the reveal control this would reuse. Raised 2026-09-03 by John."
+    "release": 76
   },
   {
     "id": "map-shape-fills-frame",
     "name": "The region shape is drawn tiny",
     "area": "platform",
-    "kind": "bug",
     "status": "planned",
-    "date": "2026-09-03",
-    "dateIsEstimate": true,
-    "release": 77,
-    "summary": "The side panel draws the chosen region on its own so the shape can be seen, and the shape is a few millimetres in the middle of the whole country. The window is padded by nine tenths of the region's longest side and is nearly square, while the frame is two and a half times as wide as it is tall, so the map scales to the height and shows two or three times more country than the window asked for: Hokkaido's window comes out larger than Japan. The shape should fill the frame it is given, with only enough room around it to place the region among its neighbours. Reported 2026-09-03 by John.",
+    "kind": "bug",
     "owner": "opus",
-    "claimedAt": "2026-09-03T11:23:42.275Z"
+    "claimedAt": "2026-09-03T11:23:42.275Z",
+    "date": "2026-09-03",
+    "summary": "The side panel draws the chosen region on its own so the shape can be seen, and the shape is a few millimetres in the middle of the whole country. The window is padded by nine tenths of the region's longest side and is nearly square, while the frame is two and a half times as wide as it is tall, so the map scales to the height and shows two or three times more country than the window asked for: Hokkaido's window comes out larger than Japan. The shape should fill the frame it is given, with only enough room around it to place the region among its neighbours. Reported 2026-09-03 by John.",
+    "dateIsEstimate": true,
+    "release": 77
   }
 ]

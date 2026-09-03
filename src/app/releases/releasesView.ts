@@ -1,3 +1,4 @@
+import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import type { FeatureTimelineEntry } from "@/lib/featureTimeline";
 
 export type ReleaseMonth = {
@@ -44,4 +45,19 @@ export function groupReleasesByMonth(entries: FeatureTimelineEntry[]): ReleaseMo
   }
 
   return months;
+}
+
+/**
+ * The month the site is in, as one of the months on the page.
+ *
+ * Vancouver's month rather than the server's, because the site keeps one
+ * clock: a page that opened January on the first of February for a reader in
+ * one timezone and not another is a bug nobody can reproduce.
+ *
+ * Falls back to the newest month on the page when today's has nothing in it
+ * yet - the first day of a month should still open on something.
+ */
+export function currentMonthKeyIn(months: readonly ReleaseMonth[], now = new Date()): string {
+  const today = getVancouverDateKey(now).slice(0, 7);
+  return months.some((month) => month.key === today) ? today : (months[0]?.key ?? today);
 }

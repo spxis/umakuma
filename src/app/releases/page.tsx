@@ -10,7 +10,8 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { codenameForVersion } from "@/lib/releaseCodenames";
 
 import { RELEASES_PAGE_COPY } from "./releasesCopy";
-import { groupReleasesByMonth, releaseAnchor } from "./releasesView";
+import MonthSection from "./MonthSection";
+import { currentMonthKeyIn, groupReleasesByMonth, releaseAnchor } from "./releasesView";
 import { noTranslateClass } from "@/app/shared/japaneseText";
 import JapaneseInProse from "@/app/shared/JapaneseInProse";
 
@@ -29,6 +30,13 @@ export default async function PublicReleasesPage() {
 
   const releases = publicReleaseEntries(loadFeatureTimeline());
   const months = groupReleasesByMonth(releases);
+  const monthKeys = months.map((month) => month.key);
+  /*
+   * Vancouver's month, not the server's: the site keeps one clock, and a page
+   * that opened January on the 1st of February for readers in one timezone and
+   * not another would be the sort of bug nobody can reproduce.
+   */
+  const currentMonthKey = currentMonthKeyIn(months);
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6">
@@ -56,17 +64,14 @@ export default async function PublicReleasesPage() {
       </p>
 
       {months.map((month) => (
-        <details key={month.key} open className="group/month mb-6">
-          <summary className="mb-2 flex cursor-pointer list-none items-baseline justify-between gap-3 border-b border-line pb-1 text-[11px] font-black uppercase tracking-[0.14em] text-foreground/60">
-            <span className="flex items-center gap-2">
-              <span aria-hidden="true" className="text-foreground/35 transition group-open/month:rotate-90">›</span>
-              {month.label}
-            </span>
-            <span className="font-bold tracking-normal text-foreground/60">
-              {month.entries.length} {month.entries.length === 1 ? RELEASES_PAGE_COPY.release : RELEASES_PAGE_COPY.releases}
-            </span>
-          </summary>
-
+        <MonthSection
+          key={month.key}
+          monthKey={month.key}
+          label={month.label}
+          count={month.entries.length}
+          currentKey={currentMonthKey}
+          everyKey={monthKeys}
+        >
           <ul className="space-y-2">
             {month.entries.map((entry) => {
               const codename = entry.version ? codenameForVersion(entry.version) : null;
@@ -135,7 +140,7 @@ export default async function PublicReleasesPage() {
               );
             })}
           </ul>
-        </details>
+        </MonthSection>
       ))}
 
       <p className="mt-8 text-center text-xs font-semibold text-foreground/60">

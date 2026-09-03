@@ -76,6 +76,7 @@ const FAINT_ON_PURPOSE: Record<string, string> = {
   "src/app/shared/AppTopMenuRow.tsx": "The | between nav links. A separator, not content.",
   "src/app/users/[nickname]/UserHeaderMenu.tsx": "The | between menu entries. A separator, not content.",
   "src/app/releases/page.tsx": "The disclosure chevron; the summary beside it carries the meaning.",
+  "src/app/releases/MonthSection.tsx": "The month's own disclosure chevron, as above.",
   "src/app/admin/releases/ReleaseTimelineList.tsx": "The disclosure chevron, as above.",
   "src/app/admin/releases/WishRow.tsx": "The disclosure chevron, as above.",
   "src/app/shared/RecentItems.tsx": "The history icon in the glyph lane, not text.",
