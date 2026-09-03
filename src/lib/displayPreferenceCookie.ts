@@ -22,6 +22,33 @@ const MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 export const DISPLAY_PREFERENCE_COOKIES = {
   /** Whether the grade explorer hides readings so the grid can be self-tested. */
   gradeReveal: "wr-grades-reveal",
+  /**
+   * The theme and the face Japanese is set in.
+   *
+   * Both are the first thing a page paints, so neither can be read a frame
+   * late. They were kept in `localStorage` and applied by the profile page,
+   * which is the only place that mounted the control - so a member who chose
+   * Dark got dark on their profile and light on every other page. Nothing read
+   * the stored value back on load, because the theme script the code referred
+   * to did not exist.
+   */
+  theme: "wr-theme",
+  jpFont: "wr-jp-font",
+} as const;
+
+/** The whole document is drawn in one of these; the root attribute says which. */
+export const THEME_MODES = ["light", "dark"] as const;
+export type ThemeMode = (typeof THEME_MODES)[number];
+export const DEFAULT_THEME: ThemeMode = "light";
+
+export const JP_FONT_MODES = ["sans", "serif"] as const;
+export type JpFontMode = (typeof JP_FONT_MODES)[number];
+export const DEFAULT_JP_FONT: JpFontMode = "sans";
+
+/** The root attributes the layout stamps, and the control keeps in step. */
+export const DISPLAY_PREFERENCE_ATTRIBUTES = {
+  theme: "data-theme",
+  jpFont: "data-jp-font",
 } as const;
 
 /**

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import AppFooter from "./AppFooter";
 import { loadFooterModeChips } from "@/lib/featureFlagsServer";
 import ClientApiActivityHint from "./ClientApiActivityHint";
@@ -6,6 +7,14 @@ import ClientErrorReporter from "./ClientErrorReporter";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
 import "./globals.css";
 import { SITE_URL } from "@/lib/siteOrigin";
+import {
+  DEFAULT_JP_FONT,
+  DEFAULT_THEME,
+  DISPLAY_PREFERENCE_COOKIES,
+  JP_FONT_MODES,
+  readEnumCookie,
+  THEME_MODES,
+} from "@/lib/displayPreferenceCookie";
 
 export const metadata: Metadata = {
   /* What a canonical link and a preview image are resolved against. */
@@ -20,6 +29,24 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const modeChips = await loadFooterModeChips();
+
+  /*
+   * The look, drawn on the server so it is right on the first paint of every
+   * page. These were hardcoded to light here and changed only in the browser,
+   * by a control mounted on the profile page alone - so choosing Dark applied
+   * to that page and no other, and did not survive a navigation.
+   */
+  const cookieStore = await cookies();
+  const theme = readEnumCookie(
+    cookieStore.get(DISPLAY_PREFERENCE_COOKIES.theme)?.value,
+    THEME_MODES,
+    DEFAULT_THEME,
+  );
+  const jpFont = readEnumCookie(
+    cookieStore.get(DISPLAY_PREFERENCE_COOKIES.jpFont)?.value,
+    JP_FONT_MODES,
+    DEFAULT_JP_FONT,
+  );
 
   return (
     /*
@@ -54,8 +81,8 @@ export default async function RootLayout({
       translate="no"
       suppressHydrationWarning
       className="notranslate h-full overflow-x-clip antialiased"
-      data-theme="light"
-      data-jp-font="sans"
+      data-theme={theme}
+      data-jp-font={jpFont}
     >
       <head>
         {/* Google honours its own tag as well as the attribute. */}

@@ -2,6 +2,18 @@
 
 import { useState } from "react";
 
+import {
+  DEFAULT_JP_FONT,
+  DEFAULT_THEME,
+  DISPLAY_PREFERENCE_ATTRIBUTES,
+  DISPLAY_PREFERENCE_COOKIES,
+  JP_FONT_MODES,
+  THEME_MODES,
+  writeDisplayPreferenceCookie,
+  type JpFontMode,
+  type ThemeMode,
+} from "@/lib/displayPreferenceCookie";
+
 import { DISPLAY_PREFERENCES_COPY } from "./displayPreferencesCopy";
 
 /**
@@ -12,49 +24,27 @@ import { DISPLAY_PREFERENCES_COPY } from "./displayPreferencesCopy";
  * meant to end. They belong with the name and the visibility, because they are
  * the same kind of decision: how you want UmaKuma to be for you.
  *
- * Both are per-browser rather than per-account, stored locally and applied to
- * the document root. A member on a phone and a laptop can reasonably want
- * different answers, and neither needs a round trip to change.
+ * Both are per-browser rather than per-account. A member on a phone and a
+ * laptop can reasonably want different answers, and neither needs a round trip
+ * to change.
+ *
+ * Kept in a cookie rather than `localStorage`, because they decide the first
+ * paint of every page and only the server can act on them that early. They
+ * were stored locally and applied here, on the one page that mounts this, so
+ * choosing Dark applied to the profile and nowhere else.
  */
-
-type ThemeMode = "light" | "dark";
-type JpFontMode = "sans" | "serif";
-
-const THEME_KEY = "wr:theme";
-const JP_FONT_KEY = "wr:jp-font";
 
 /**
- * What is actually in force: the root attribute first, then storage.
+ * What is actually in force: the attribute the server stamped on the root.
  *
- * The attribute is what the page is rendering with, so it is the honest
- * answer. Storage is the fallback for the moment before the theme script has
- * run, and private browsing may refuse it entirely.
+ * That is what the page is drawing with, so it is the honest answer and it is
+ * already correct on arrival - the cookie decided it before the HTML was
+ * written.
  */
-function readApplied<T extends string>(
-  key: string,
-  allowed: readonly T[],
-  fallback: T,
-  attribute: string,
-): T {
+function readApplied<T extends string>(allowed: readonly T[], fallback: T, attribute: string): T {
   if (typeof document === "undefined") return fallback;
-
   const applied = document.documentElement.getAttribute(attribute);
-  if (allowed.includes(applied as T)) return applied as T;
-
-  try {
-    const raw = window.localStorage.getItem(key);
-    return allowed.includes(raw as T) ? (raw as T) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function store(key: string, value: string) {
-  try {
-    window.localStorage.setItem(key, value);
-  } catch {
-    // Ignore storage errors in restricted browsing modes.
-  }
+  return allowed.includes(applied as T) ? (applied as T) : fallback;
 }
 
 const OPTION_CLASS =
@@ -96,27 +86,27 @@ function Choice<T extends string>({
 
 export default function DisplayPreferences({ className }: { className?: string }) {
   /*
-   * Initialised from the document rather than from storage.
-   *
-   * The theme script sets these attributes on the root before paint, so the
-   * document already holds the answer by the time this mounts - no effect, no
-   * second render, and no flash of the wrong choice. Reading storage in an
-   * initialiser would be wrong on the server; reading it in an effect would
-   * set state synchronously and cascade.
+   * Initialised from the document, which the server already drew correctly
+   * from the cookie - no effect, no second render, no flash of the default.
    */
-  const [theme, setTheme] = useState<ThemeMode>(() => readApplied(THEME_KEY, ["light", "dark"] as const, "light", "data-theme"));
-  const [jpFont, setJpFont] = useState<JpFontMode>(() => readApplied(JP_FONT_KEY, ["sans", "serif"] as const, "sans", "data-jp-font"));
+  const [theme, setTheme] = useState<ThemeMode>(() =>
+    readApplied(THEME_MODES, DEFAULT_THEME, DISPLAY_PREFERENCE_ATTRIBUTES.theme),
+  );
+  const [jpFont, setJpFont] = useState<JpFontMode>(() =>
+    readApplied(JP_FONT_MODES, DEFAULT_JP_FONT, DISPLAY_PREFERENCE_ATTRIBUTES.jpFont),
+  );
 
+  /* The attribute changes this page now; the cookie changes every page next. */
   function chooseTheme(next: ThemeMode) {
     setTheme(next);
-    store(THEME_KEY, next);
-    document.documentElement.setAttribute("data-theme", next);
+    writeDisplayPreferenceCookie(DISPLAY_PREFERENCE_COOKIES.theme, next);
+    document.documentElement.setAttribute(DISPLAY_PREFERENCE_ATTRIBUTES.theme, next);
   }
 
   function chooseJpFont(next: JpFontMode) {
     setJpFont(next);
-    store(JP_FONT_KEY, next);
-    document.documentElement.setAttribute("data-jp-font", next);
+    writeDisplayPreferenceCookie(DISPLAY_PREFERENCE_COOKIES.jpFont, next);
+    document.documentElement.setAttribute(DISPLAY_PREFERENCE_ATTRIBUTES.jpFont, next);
   }
 
   return (

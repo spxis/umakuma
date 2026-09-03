@@ -366,6 +366,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Otagai no Oboe", ja: "お互いの覚え", reading: "おたがいのおぼえ", gloss: "what each other has learned" },
   { romaji: "Kaeseru Kirikae", ja: "返せる切り替え", reading: "かえせるきりかえ", gloss: "a switch that goes back" },
   { romaji: "Kikanai Kariban", ja: "聞かない仮番", reading: "きかないかりばん", gloss: "the stand-in it stops asking about" },
+  { romaji: "Kurai Mama", ja: "暗いまま", reading: "くらいまま", gloss: "dark stays dark, page after page" },
 ];
 
 /**

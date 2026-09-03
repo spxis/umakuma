@@ -3578,14 +3578,13 @@
     "id": "theme-preference-cookie",
     "name": "The look you chose follows you off the profile page",
     "area": "platform",
-    "status": "planned",
+    "status": "shipped",
     "kind": "bug",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T04:44:17.252Z",
     "date": "2026-09-02",
-    "summary": "data-theme and data-jp-font are hardcoded in layout.tsx and only ever set by DisplayPreferences, which is mounted on the profile page alone. So a member who picks Dark gets dark on their profile and light on every other page: the preference does not survive a navigation, which is worse than the flash it looks like. Both attributes want the treatment the grade explorer got in 0.300.0 - a cookie the layout reads, so the server draws the chosen theme on the first paint of every page. src/lib/displayPreferenceCookie.ts already holds readEnumCookie and writeDisplayPreferenceCookie and was written to take more than one preference. Found while fixing the grades flash; confirmed by umakuma-c0.",
-    "dateIsEstimate": true,
-    "release": 67
+    "summary": "data-theme and data-jp-font were hardcoded to light and sans on the root element and changed only in the browser, by a control mounted on the profile page alone. So a member who chose Dark got dark on their profile and light on every other page: the choice did not survive a navigation. The stored value was never read back either - the comment in the control referred to a theme script that sets the attributes before paint, and no such script existed. Both preferences now live in the cookie the layout reads, so the server draws the chosen look in the first paint of every page, the same treatment the grade explorer got in 0.300.0. localStorage is gone from the control rather than kept beside the cookie: two stores that can disagree is how study mode ended up unable to turn itself off.",
+    "dateIsEstimate": false,
+    "version": "0.316.0",
+    "releasedAt": "2026-09-03T05:12:04Z"
   },
   {
     "id": "list-game-from-shared",
