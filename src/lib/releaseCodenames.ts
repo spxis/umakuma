@@ -368,6 +368,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Kikanai Kariban", ja: "聞かない仮番", reading: "きかないかりばん", gloss: "the stand-in it stops asking about" },
   { romaji: "Kurai Mama", ja: "暗いまま", reading: "くらいまま", gloss: "dark stays dark, page after page" },
   { romaji: "Keika no Kejime", ja: "経過のけじめ", reading: "けいかのけじめ", gloss: "how it is going, and the line drawn under it" },
+  { romaji: "Komakai Buhin", ja: "細かい部品", reading: "こまかいぶひん", gloss: "the small parts a character is made of" },
 ];
 
 /**

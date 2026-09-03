@@ -10,6 +10,7 @@ import {
   kanjiForRadicals,
   orderChosen,
   radicalGroups,
+  radicalsInKanji,
   usableRadicals,
   type RadicalEntry,
   type RadicalGroup,
@@ -115,4 +116,39 @@ export function radicalIndexSummary(): { radicalCount: number; kanjiCount: numbe
   const file = load();
   const kanji = new Set(file.radicals.flatMap((entry) => [...entry.kanji]));
   return { radicalCount: file.radicals.length, kanjiCount: kanji.size };
+}
+
+export type RadicalPart = {
+  radical: string;
+  strokes: number;
+  /** What it is called in English, where the dictionary names it. */
+  name: string | null;
+  /** The search that finds every other kanji written with it. */
+  href: string;
+};
+
+/**
+ * The parts a kanji is written with, for its own page.
+ *
+ * A kanji page says how the character is drawn and what it means but not what
+ * it is made of, and RADKFILE knows that for 6,355 characters. Each part links
+ * into the radical search rather than to a page of its own: the useful next
+ * question is "what else is written with this", which is what the search
+ * answers.
+ *
+ * Empty for a character RADKFILE does not cover, which the page reads as
+ * nothing to show rather than as an error.
+ */
+export function radicalPartsOf(kanji: string): RadicalPart[] {
+  return radicalsInKanji(load().radicals, kanji).map((entry) => ({
+    radical: entry.radical,
+    strokes: entry.strokes,
+    name: getKanjiDictionaryEntry(entry.radical)?.meanings?.[0] ?? null,
+    href: `/search?q=${encodeURIComponent(`:rad ${entry.radical}`)}`,
+  }));
+}
+
+/** The credit the parts block carries, since the data is EDRDG's not WaniKani's. */
+export function radicalAttribution(): RadicalFile["attribution"] {
+  return load().attribution;
 }

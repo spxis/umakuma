@@ -17,6 +17,8 @@
 
 export const SUBJECT_SECTIONS = {
   stroke: "stroke",
+  /** The radicals a character is written with, from RADKFILE. */
+  parts: "parts",
   meanings: "meanings",
   words: "words",
   related: "related",

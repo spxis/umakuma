@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { kanjiForRadicals, orderChosen, radicalGroups, usableRadicals, type RadicalEntry } from "./radicalSearch";
+import { kanjiForRadicals, orderChosen, radicalGroups, usableRadicals, type RadicalEntry, radicalsInKanji } from "./radicalSearch";
 
 /*
  * A small grid standing in for the 253, and true to the characters: 日 is in
@@ -82,5 +82,41 @@ describe("orderChosen", () => {
 
   it("drops a radical the grid does not have", () => {
     expect(orderChosen(ENTRIES, ["日", "x"])).toEqual(["日"]);
+  });
+});
+
+/*
+ * RADKFILE is stored radical-first, because that is the direction a search
+ * runs: pick two parts, intersect their kanji. A kanji page asks the opposite
+ * question - what is this character made of - and 253 membership tests answer
+ * it without keeping a second copy of the index the other way round.
+ */
+describe("radicalsInKanji", () => {
+  const entries: RadicalEntry[] = [
+    { radical: "日", strokes: 4, kanji: "明時晴" },
+    { radical: "月", strokes: 4, kanji: "明朝" },
+    { radical: "一", strokes: 1, kanji: "明三" },
+    { radical: "水", strokes: 4, kanji: "海泳" },
+  ];
+
+  it("finds every radical the character contains", () => {
+    expect(radicalsInKanji(entries, "明").map((entry) => entry.radical)).toEqual(["一", "日", "月"]);
+  });
+
+  /* Simplest first, so the list reads the way the character is built up. */
+  it("puts the fewest strokes first", () => {
+    expect(radicalsInKanji(entries, "明").map((entry) => entry.strokes)).toEqual([1, 4, 4]);
+  });
+
+  it("is empty for a character RADKFILE does not cover", () => {
+    expect(radicalsInKanji(entries, "鬱")).toEqual([]);
+  });
+
+  it("is empty for no character at all, rather than matching everything", () => {
+    expect(radicalsInKanji(entries, "")).toEqual([]);
+  });
+
+  it("does not confuse one character's radicals with another's", () => {
+    expect(radicalsInKanji(entries, "海").map((entry) => entry.radical)).toEqual(["水"]);
   });
 });

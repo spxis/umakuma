@@ -37,6 +37,7 @@ export const SUBJECT_PAGE_COPY = {
    */
   sectionTitles: {
     stroke: "Stroke order",
+    parts: "Written with",
     meanings: "Meanings and readings",
     words: "Words",
     related: "Related",

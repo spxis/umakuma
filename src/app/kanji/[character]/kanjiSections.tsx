@@ -3,11 +3,13 @@ import type { ReactNode } from "react";
 import ExampleSentences from "@/app/shared/ExampleSentences";
 import { KanjiDetailPanel, type KanjiDetailSummary } from "@/app/shared/KanjiDetailModal";
 import MnemonicsBlock from "@/app/shared/subject-page/MnemonicsBlock";
+import RadicalPartsBlock from "@/app/shared/subject-page/RadicalPartsBlock";
 import RelatedGroupBlock from "@/app/shared/subject-page/RelatedGroupBlock";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
 import UsedInWordsBlock from "@/app/shared/subject-page/UsedInWordsBlock";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import type { KanjiDictionaryAttribution, KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
+import type { RadicalPart } from "@/lib/radicalSearchServer";
 import type { KanjiPage } from "@/lib/subjectPage";
 
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
@@ -36,6 +38,8 @@ export type KanjiSectionView = {
   summary?: KanjiDetailSummary;
   dictionary: KanjiDictionaryEntry | null;
   dictionaryAttribution: KanjiDictionaryAttribution | null;
+  /** What RADKFILE says this character is written with; empty where it has no entry. */
+  parts: RadicalPart[];
   page: KanjiPage;
 };
 
@@ -55,6 +59,12 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
         <KanjiDetailPanel kanji={view.character} grade={view.grade} summary={view.summary} />
       </section>
     ),
+  },
+  {
+    id: SUBJECT_SECTIONS.parts,
+    /* RADKFILE covers 6,355 characters, so plenty have no entry at all. */
+    has: (view) => view.parts.length > 0,
+    render: (view) => <RadicalPartsBlock parts={view.parts} />,
   },
   {
     id: SUBJECT_SECTIONS.meanings,

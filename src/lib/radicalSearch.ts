@@ -95,3 +95,34 @@ export function orderChosen(entries: readonly RadicalEntry[], chosen: readonly s
     .filter((radical) => order.has(radical))
     .sort((left, right) => order.get(left)! - order.get(right)!);
 }
+
+/**
+ * The radicals a character is written with, fewest strokes first.
+ *
+ * RADKFILE is stored the other way round - each radical listing the kanji that
+ * contain it - because that is the direction a search runs. A kanji page asks
+ * the opposite question, and 253 membership tests answer it, which is nothing
+ * next to keeping a second copy of the index in the other direction.
+ *
+ * Simplest parts first, so the list reads the way the character is built up
+ * rather than in the file's own order.
+ */
+export function radicalsInKanji(
+  entries: readonly RadicalEntry[],
+  kanji: string,
+): RadicalEntry[] {
+  if (kanji.length === 0) return [];
+  return entries
+    .filter((entry) => entry.kanji.includes(kanji))
+    /*
+     * Codepoint order breaks the tie, not `localeCompare`: a Japanese
+     * collation puts 月 before 日 and depends on the ICU data the runtime
+     * happens to carry, so the same character could list its parts in two
+     * orders on two machines.
+     */
+    .sort(
+      (left, right) =>
+        left.strokes - right.strokes ||
+        (left.radical < right.radical ? -1 : left.radical > right.radical ? 1 : 0),
+    );
+}

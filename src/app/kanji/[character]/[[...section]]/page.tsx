@@ -21,6 +21,8 @@ import { kanjiPageHref, parseSubjectSection } from "@/app/shared/subject-page/su
 import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout";
 
 import { KANJI_PAGE_COPY } from "../KanjiPage.constants";
+import { radicalPartsOf } from "@/lib/radicalSearchServer";
+
 import { KANJI_SECTION_BLOCKS, kanjiSectionsFor, type KanjiSectionView } from "../kanjiSections";
 
 type Props = { params: Promise<{ character: string; section?: string[] }> };
@@ -149,6 +151,7 @@ export default async function KanjiPage({ params }: Props) {
     summary,
     dictionary,
     dictionaryAttribution: getKanjiDictionaryAttribution(),
+    parts: radicalPartsOf(character),
     page,
   };
 

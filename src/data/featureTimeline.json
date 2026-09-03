@@ -3419,14 +3419,13 @@
     "id": "kanji-radical-parts",
     "name": "The radicals a kanji is built from",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T05:24:58.369Z",
     "date": "2026-09-02",
-    "summary": "A kanji page shows how the character is written and what it means, but not what it is made of - and the RADKFILE index that powers the radical search knows the parts of 6,355 characters. The page carries them in a container of its own, under the stroke box, each part a link into the radical search for the characters that share it. Its own container because it is EDRDG's data rather than WaniKani's and every box here credits one source. Requested 2026-09-02 by John.",
-    "dateIsEstimate": true,
-    "release": 53
+    "summary": "A kanji page said how the character is drawn and what it means but not what it is made of, while the RADKFILE index behind the radical search already knew the parts of 6,355 characters. Written with sits under the stroke box: each part as it is written, its English name where the dictionary has one, and a link into the radical search for everything else built from it - which is the question a reader has next. Its own block with its own credit, because the data is EDRDG's rather than WaniKani's and every block on this page names its source. The index is stored radical-first, since that is the direction a search runs, so the page's question is answered by testing 253 memberships rather than by keeping a second copy the other way round. Reachable on its own at /kanji/<character>/parts, and absent for a character RADKFILE does not cover. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
+    "version": "0.318.0",
+    "releasedAt": "2026-09-03T05:32:38Z"
   },
   {
     "id": "list-controls-on-hover",
