@@ -21,12 +21,20 @@ import { RADICAL_PARTS_COPY } from "./radicalPartsCopy";
  * blocks under them use - this one drew a box of its own for a release, and a
  * page showed two chip shapes a scroll apart.
  */
-export default function RadicalPartsBlock({ parts }: { parts: RadicalPart[] }) {
+export default function RadicalPartsBlock({
+  parts,
+  headingHref,
+}: {
+  parts: RadicalPart[];
+  /** This block's own page, where the caller is drawing the whole subject. */
+  headingHref?: string | null;
+}) {
   if (parts.length === 0) return null;
 
   return (
     <SubjectBlock
       heading={RADICAL_PARTS_COPY.heading}
+      headingHref={headingHref}
       credit={{ source: SOURCE_KEYS.radkfile, label: SOURCE_CREDIT_COPY.radicals }}
       action={<PillWordsToggle />}
     >

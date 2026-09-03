@@ -12,14 +12,18 @@ import { SUBJECT_PAGE_COPY } from "./SubjectPage.constants";
  */
 export default function MnemonicsBlock({
   mnemonics,
+  headingHref,
 }: {
   mnemonics: { meaning: string; reading: string } | null;
+  /** This block's own page, where the caller is drawing the whole subject. */
+  headingHref?: string | null;
 }) {
   if (!mnemonics || (!mnemonics.meaning && !mnemonics.reading)) return null;
 
   return (
     <SubjectBlock
       heading={SUBJECT_PAGE_COPY.sectionTitles.mnemonics}
+      headingHref={headingHref}
       credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.mnemonics }}
     >
       {mnemonics.meaning ? (

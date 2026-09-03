@@ -49,6 +49,11 @@ export type KanjiSectionView = {
    * a visitor, who has no sheet - the same answer the list cards give.
    */
   worksheetHref: string | null;
+  /**
+   * Where each part of this subject lives, for a title that links to its own
+   * page. Absent on a section page, where the title would link to itself.
+   */
+  sectionHref?: (id: SubjectSection) => string;
   page: KanjiPage;
 };
 
@@ -95,7 +100,9 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
     id: SUBJECT_SECTIONS.parts,
     /* RADKFILE covers 6,355 characters, so plenty have no entry at all. */
     has: (view) => view.parts.length > 0,
-    render: (view) => <RadicalPartsBlock parts={view.parts} />,
+    render: (view) => (
+      <RadicalPartsBlock parts={view.parts} headingHref={view.sectionHref?.(SUBJECT_SECTIONS.parts)} />
+    ),
   },
   {
     id: SUBJECT_SECTIONS.meanings,
@@ -107,13 +114,16 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
           attribution={view.dictionaryAttribution}
           jlptLevel={view.page.jlptLevel}
           heisigKeyword={view.page.heisigKeyword}
+          headingHref={view.sectionHref?.(SUBJECT_SECTIONS.meanings)}
         />
       ) : null,
   },
   {
     id: SUBJECT_SECTIONS.words,
     has: (view) => view.page.words.length > 0,
-    render: (view) => <UsedInWordsBlock words={view.page.words} />,
+    render: (view) => (
+      <UsedInWordsBlock words={view.page.words} headingHref={view.sectionHref?.(SUBJECT_SECTIONS.words)} />
+    ),
   },
   {
     id: SUBJECT_SECTIONS.related,
@@ -121,6 +131,7 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
     render: (view) => (
       <SubjectBlock
         heading={SUBJECT_PAGE_COPY.sectionTitles.related}
+        headingHref={view.sectionHref?.(SUBJECT_SECTIONS.related)}
         credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}
       >
         {view.page.related.map((group, index) => (
@@ -132,7 +143,9 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
   {
     id: SUBJECT_SECTIONS.mnemonics,
     has: (view) => Boolean(view.page.mnemonics?.meaning || view.page.mnemonics?.reading),
-    render: (view) => <MnemonicsBlock mnemonics={view.page.mnemonics} />,
+    render: (view) => (
+      <MnemonicsBlock mnemonics={view.page.mnemonics} headingHref={view.sectionHref?.(SUBJECT_SECTIONS.mnemonics)} />
+    ),
   },
   {
     id: SUBJECT_SECTIONS.examples,
@@ -141,6 +154,7 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
       <ExampleSentences
         sentences={view.page.sentences}
         heading={KANJI_PAGE_COPY.examples}
+        headingHref={view.sectionHref?.(SUBJECT_SECTIONS.examples)}
         credit={KANJI_PAGE_COPY.sentenceCredit}
       />
     ),

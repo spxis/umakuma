@@ -426,6 +426,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nanoru Kakera", ja: "名乗る欠片", reading: "なのるかけら", gloss: "every piece says what it is called" },
   { romaji: "Nishiki no Hyoushi", ja: "錦の表紙", reading: "にしきのひょうし", gloss: "a proper cover on the page" },
   { romaji: "Nunoji no Monosashi", ja: "布地の物差し", reading: "ぬのじのものさし", gloss: "one ruler, and every piece cut to it" },
+  { romaji: "Nerai Doori Tsunagu", ja: "狙い通り繋ぐ", reading: "ねらいどおりつなぐ", gloss: "each title joined to its own page" },
 ];
 
 /**

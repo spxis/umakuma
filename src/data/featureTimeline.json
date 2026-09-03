@@ -4244,11 +4244,23 @@
     "id": "glyph-sizes-one-source",
     "name": "One source for how big a glyph is",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "Nine sizes, none of them decided by anybody. A subject page headed itself at one size on a phone and another on a desktop; five list surfaces - study history, a saved list, what you looked at recently, a page of search results, the suggestions under the search box - each spelled the same three classes out in full, and copies age: one had quietly grown a larger desktop size the others knew nothing about, and one had lost the attribute that tells a browser its text is Japanese, which is what stops Chrome offering to translate \u79c1\u81ea\u8eab into \"myself\" and a screen reader spelling the kanji out in English. A list proposal row and a note modal each used a size nothing else on the site did. A glyph is three things now and one module owns all three: the subject of a surface, measured by length so a six-character word does not run off a phone; one of many on a browsing card; one of many in a row or on a chip. The sizing helper moved to the shared folder on the way, because a shared component had been reaching into the level explorer's private lib to borrow it. A gate in the quality check fails on a fourth size typed onto a line that renders Japanese: it found two this sweep had missed and a third that landed while the sweep was being written. A surface that genuinely needs its own shape - a game tile sized to its board, a sentence in prose, the radical picker - is named on its allow list with the reason written out. Asked for 2026-09-03 by John: reuse rather than one-offs, and go through the site rather than fixing where it is noticed.",
+    "dateIsEstimate": false,
+    "version": "0.375.0",
+    "releasedAt": "2026-09-03T16:13:42Z"
+  },
+  {
+    "id": "section-title-links",
+    "name": "Every section title links to its own page",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.375.0",
-    "releasedAt": "2026-09-03T16:13:42Z",
-    "summary": "Nine sizes, none of them decided by anybody. A subject page headed itself at one size on a phone and another on a desktop; five list surfaces - study history, a saved list, what you looked at recently, a page of search results, the suggestions under the search box - each spelled the same three classes out in full, and copies age: one had quietly grown a larger desktop size the others knew nothing about, and one had lost the attribute that tells a browser its text is Japanese, which is what stops Chrome offering to translate \u79c1\u81ea\u8eab into \"myself\" and a screen reader spelling the kanji out in English. A list proposal row and a note modal each used a size nothing else on the site did. A glyph is three things now and one module owns all three: the subject of a surface, measured by length so a six-character word does not run off a phone; one of many on a browsing card; one of many in a row or on a chip. The sizing helper moved to the shared folder on the way, because a shared component had been reaching into the level explorer's private lib to borrow it. A gate in the quality check fails on a fourth size typed onto a line that renders Japanese: it found two this sweep had missed and a third that landed while the sweep was being written. A surface that genuinely needs its own shape - a game tile sized to its board, a sentence in prose, the radical picker - is named on its allow list with the reason written out. Asked for 2026-09-03 by John: reuse rather than one-offs, and go through the site rather than fixing where it is noticed."
+    "version": "0.376.0",
+    "releasedAt": "2026-09-03T16:18:13Z",
+    "summary": "The subject page sections have titles now and each title already has a RESTful path behind it. Offer the link: on hover a section title becomes a link to its own view, for example /kanji/X/related, and the main kanji page can be navigated from. Requested 2026-09-03 by John."
   }
 ]

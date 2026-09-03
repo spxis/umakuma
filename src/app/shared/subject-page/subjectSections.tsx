@@ -37,6 +37,11 @@ export type SubjectSectionView = {
   neighbours: CatalogRelatedReference[];
   /** For a word: Tatoeba's sentences. A radical is never in one. */
   sentences: ExampleSentence[];
+  /**
+   * Where each part of this subject lives, for a title that links to its own
+   * page. Absent on a section page, where the title would link to itself.
+   */
+  sectionHref?: (id: SubjectSection) => string;
 };
 
 export type SubjectSectionBlock = {
@@ -76,7 +81,12 @@ export const SUBJECT_SECTION_BLOCKS: readonly SubjectSectionBlock[] = [
   {
     id: SUBJECT_SECTIONS.mnemonics,
     has: (view) => mnemonicsOf(view.subject) !== null,
-    render: (view) => <MnemonicsBlock mnemonics={mnemonicsOf(view.subject)} />,
+    render: (view) => (
+      <MnemonicsBlock
+        mnemonics={mnemonicsOf(view.subject)}
+        headingHref={view.sectionHref?.(SUBJECT_SECTIONS.mnemonics)}
+      />
+    ),
   },
   {
     id: SUBJECT_SECTIONS.related,
@@ -84,6 +94,7 @@ export const SUBJECT_SECTION_BLOCKS: readonly SubjectSectionBlock[] = [
     render: (view) => (
       <SubjectBlock
         heading={SUBJECT_PAGE_COPY.sectionTitles.related}
+        headingHref={view.sectionHref?.(SUBJECT_SECTIONS.related)}
         credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}
       >
         {relatedGroupsForSubject(view.subject, view.neighbours).map((group, index) => (
@@ -99,6 +110,7 @@ export const SUBJECT_SECTION_BLOCKS: readonly SubjectSectionBlock[] = [
       <ExampleSentences
         sentences={view.sentences}
         heading={SUBJECT_PAGE_COPY.examples}
+        headingHref={view.sectionHref?.(SUBJECT_SECTIONS.examples)}
         credit={KANJI_PAGE_COPY.sentenceCredit}
       />
     ),

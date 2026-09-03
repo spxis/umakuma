@@ -49,3 +49,41 @@ describe("a subject page block", () => {
     expect(doc.body.textContent).toContain("Sentences from");
   });
 });
+
+/*
+ * Every block is already a page of its own - /kanji/X/related draws this block
+ * and nothing else - and nothing on the page said so. John asked for the link
+ * to be offered on the title, which is the name of the thing the address is
+ * named after.
+ */
+describe("a title that is its own page", () => {
+  it("links where it is given somewhere to link", () => {
+    const doc = draw(
+      <SubjectBlock heading="Related" headingHref="/kanji/%E5%80%AB/related">
+        body
+      </SubjectBlock>,
+    );
+    const link = doc.querySelector("h2 a");
+    expect(link?.getAttribute("href")).toBe("/kanji/%E5%80%AB/related");
+    expect(link?.textContent).toBe("Related");
+  });
+
+  /* Quiet until pointed at: eight underlined headings is a page of links. */
+  it("shows nothing of the link until it is pointed at", () => {
+    const doc = draw(
+      <SubjectBlock heading="Related" headingHref="/kanji/%E5%80%AB/related">
+        body
+      </SubjectBlock>,
+    );
+    const cls = doc.querySelector("h2 a")?.getAttribute("class") ?? "";
+    expect(cls).toContain("decoration-transparent");
+    expect(cls).toContain("hover:decoration-current");
+  });
+
+  /* A section page gives none, since the title would link to itself. */
+  it("is plain text with nowhere to go", () => {
+    const doc = draw(<SubjectBlock heading="Related">body</SubjectBlock>);
+    expect(doc.querySelector("h2 a")).toBeNull();
+    expect(doc.querySelector("h2")?.textContent).toBe("Related");
+  });
+});

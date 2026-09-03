@@ -21,7 +21,11 @@ export default function KanjiDictionaryDetail({
   attribution,
   jlptLevel = null,
   heisigKeyword = null,
+  headingHref,
 }: {
+  /** This block's own page, where the caller is drawing the whole subject. */
+  headingHref?: string | null;
+
   entry: KanjiDictionaryEntry;
   attribution: KanjiDictionaryAttribution | null;
   /**
@@ -35,6 +39,7 @@ export default function KanjiDictionaryDetail({
   return (
     <SubjectBlock
       heading={SUBJECT_PAGE_COPY.sectionTitles.meanings}
+      headingHref={headingHref}
       credit={
         /* Share-alike: the credit is a licence condition, not decoration. */
         attribution ? { source: SOURCE_KEYS.kanjidic2, label: KANJI_PAGE_COPY.dictionaryCredit } : undefined

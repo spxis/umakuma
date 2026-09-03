@@ -7,7 +7,11 @@ import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import SubjectFilingBar from "@/app/shared/subject-page/SubjectFilingBar";
 import SubjectSectionHeader from "@/app/shared/subject-page/SubjectSectionHeader";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
-import { parseSubjectSection } from "@/app/shared/subject-page/subjectSectionAddress";
+import {
+  parseSubjectSection,
+  subjectSectionHref,
+  type SubjectSection,
+} from "@/app/shared/subject-page/subjectSectionAddress";
 import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout";
 import { SUBJECT_SECTION_BLOCKS, subjectSectionsFor } from "@/app/shared/subject-page/subjectSections";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
@@ -103,7 +107,14 @@ export default async function VocabularyPage({ params }: Props) {
     sessionName: session?.user?.name?.trim() ?? null,
   });
 
-  const view = { subject, label, neighbours, sentences };
+  const view = {
+    subject, label, neighbours, sentences,
+    /*
+     * Only when the whole subject is on the page. On a section page the title
+     * would link to the page it is already on.
+     */
+    sectionHref: section ? undefined : (id: SubjectSection) => subjectSectionHref(wordHref(word), id),
+  };
   const available = subjectSectionsFor(view);
   const shown = section ? available.filter((block) => block.id === section) : available;
   if (shown.length === 0) {

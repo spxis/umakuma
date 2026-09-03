@@ -19,12 +19,20 @@ import { SUBJECT_PAGE_COPY } from "./SubjectPage.constants";
  * The word itself is not a link. Most of these are not WaniKani vocabulary and
  * have no page; the kanji inside each one always do, so those are the links.
  */
-export default function UsedInWordsBlock({ words }: { words: WordExample[] }) {
+export default function UsedInWordsBlock({
+  words,
+  headingHref,
+}: {
+  words: WordExample[];
+  /** This block's own page, where the caller is drawing the whole subject. */
+  headingHref?: string | null;
+}) {
   if (words.length === 0) return null;
 
   return (
     <SubjectBlock
       heading={SUBJECT_PAGE_COPY.usedInWords}
+      headingHref={headingHref}
       credit={{ source: SOURCE_KEYS.kanjiapi, label: SOURCE_CREDIT_COPY.words }}
       action={<PillWordsToggle />}
     >

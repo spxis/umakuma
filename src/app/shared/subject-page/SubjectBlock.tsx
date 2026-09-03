@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import SourceCredit from "@/app/shared/SourceCredit";
@@ -17,12 +18,23 @@ import type { SourceKey } from "@/lib/sourceCredits";
  */
 export default function SubjectBlock({
   heading,
+  headingHref,
   credit,
   action,
   className = "",
   children,
 }: {
   heading?: string;
+  /**
+   * This block's own page, where it has one.
+   *
+   * Every block is already a page of its own - `/kanji/X/related` draws this
+   * block and nothing else - and nothing on the page said so. The title is
+   * the natural place: it is the name of the thing the address is named
+   * after. Quiet until it is pointed at, because a page of eight underlined
+   * headings reads as a page of links rather than a page about a character.
+   */
+  headingHref?: string | null;
   credit?: { source: SourceKey; label: string };
   /** A control that belongs to this block, beside its heading. */
   action?: ReactNode;
@@ -42,7 +54,16 @@ export default function SubjectBlock({
         <header className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
           {heading ? (
             <h2 className="min-w-0 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
-              {heading}
+              {headingHref ? (
+                <Link
+                  href={headingHref}
+                  className="underline decoration-transparent underline-offset-4 transition hover:text-accent hover:decoration-current focus-visible:text-accent focus-visible:decoration-current"
+                >
+                  {heading}
+                </Link>
+              ) : (
+                heading
+              )}
             </h2>
           ) : (
             <span />
