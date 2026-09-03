@@ -13,6 +13,8 @@ import {
   kanjiPlacement,
   kanjiThrough,
   levelForJlpt,
+  radicalLevel,
+  radicalsAtLevel,
   vocabularyLevel,
 } from "../kanjiLadder";
 
@@ -113,6 +115,57 @@ describe("kanji ladder coverage", () => {
   });
 });
 
+describe("radical placement", () => {
+  /* RADKFILE's decomposition, the set behind dictionary radical lookup. It is
+     already in the repo under CC BY-SA 4.0; WaniKani's 491 are their own
+     invention and are not used here. */
+  const radicals = (
+    JSON.parse(readFileSync(join(process.cwd(), "src/data/radicals/index.json"), "utf8")) as {
+      radicals: Array<{ radical: string; kanji: string }>;
+    }
+  ).radicals;
+
+  it("never teaches a kanji before a radical it is built from", () => {
+    const late: string[] = [];
+    for (const entry of radicals) {
+      const introduced = radicalLevel(entry.radical);
+      for (const kanji of entry.kanji) {
+        const placement = kanjiPlacement(kanji);
+        if (placement === null) continue;
+        /* The radical has to be there first, or the kanji arrives carrying a
+           piece the member has never seen. */
+        if (introduced === null || introduced > placement.level) {
+          late.push(`${kanji} @${placement.level} needs ${entry.radical}`);
+        }
+      }
+    }
+    expect(late).toEqual([]);
+  });
+
+  it("introduces a radical exactly when it is first needed", () => {
+    for (const entry of radicals) {
+      const levels = [...entry.kanji]
+        .map((kanji) => kanjiPlacement(kanji)?.level)
+        .filter((level): level is number => level !== undefined);
+      /* Held any earlier it is stranded from the kanji that gives it a point. */
+      if (levels.length === 0) expect(radicalLevel(entry.radical)).toBeNull();
+      else expect(radicalLevel(entry.radical)).toBe(Math.min(...levels));
+    }
+  });
+
+  it("skips only radicals no kanji we teach contains", () => {
+    const placed = radicals.filter((entry) => radicalLevel(entry.radical) !== null);
+    expect(placed.length).toBeGreaterThan(230);
+    expect(placed.length).toBeLessThanOrEqual(radicals.length);
+  });
+
+  it("counts each level's radicals", () => {
+    for (const entry of kanjiLadderLevels()) {
+      expect(radicalsAtLevel(entry.level)).toHaveLength(entry.radicals);
+    }
+  });
+});
+
 describe("vocabulary placement", () => {
   /* Loading all sixty level files is the only way to see every word's kanji. */
   const levelsDir = join(process.cwd(), "src/data/wk-catalog-levels");
@@ -153,12 +206,17 @@ describe("vocabulary placement", () => {
 
   it("keeps the early levels light once words are counted", () => {
     const levels = kanjiLadderLevels();
-    const firstTen = levels.slice(0, 10).map((entry) => entry.kanji.length + entry.vocabulary);
+    const firstTen = levels.slice(0, 10).map(
+      (entry) => entry.kanji.length + entry.vocabulary + entry.radicals,
+    );
     /* WaniKani's level 1 alone is 80 subjects and their heaviest is 213. */
-    expect(Math.max(...firstTen)).toBeLessThan(60);
-    expect(firstTen[0]).toBeLessThan(30);
-    const everyLevel = levels.map((entry) => entry.kanji.length + entry.vocabulary);
-    expect(Math.max(...everyLevel)).toBeLessThanOrEqual(110);
+    expect(Math.max(...firstTen)).toBeLessThan(70);
+    /* Level 1 is a handful of radicals, six kanji and a few words. */
+    expect(firstTen[0]).toBeLessThanOrEqual(35);
+    const everyLevel = levels.map(
+      (entry) => entry.kanji.length + entry.vocabulary + entry.radicals,
+    );
+    expect(Math.max(...everyLevel)).toBeLessThan(120);
   });
 
   it("gives every level words, right to the top of the ladder", () => {
@@ -195,7 +253,9 @@ describe("vocabulary placement", () => {
   });
 
   it("holds words back so late levels are no heavier than middle ones", () => {
-    const totals = kanjiLadderLevels().map((entry) => entry.kanji.length + entry.vocabulary);
+    const totals = kanjiLadderLevels().map(
+      (entry) => entry.kanji.length + entry.vocabulary + entry.radicals,
+    );
     const middle = totals.slice(40, 60);
     const top = totals.slice(-10);
     const average = (values: number[]) => values.reduce((sum, v) => sum + v, 0) / values.length;

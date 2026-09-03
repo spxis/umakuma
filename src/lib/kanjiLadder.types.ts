@@ -13,6 +13,8 @@ export type KanjiLadderLevel = {
   added: number;
   /** Words unlocked at this level; never before their kanji. */
   vocabulary: number;
+  /** Radicals introduced here, for the kanji this level teaches. */
+  radicals: number;
 };
 
 /** The ladder level at which a JLPT level is fully covered. */
@@ -36,6 +38,8 @@ export type KanjiLadder = {
   source: { waniKani: number; addedJoyo: number };
   milestones: KanjiLadderMilestone[];
   kanjiLevel: Record<string, KanjiLadderPlacement>;
+  /** RADKFILE radical character -> the ladder level that introduces it. */
+  radicalLevel: Record<string, number>;
   /** WaniKani vocabulary subject id -> the ladder level that teaches it. */
   vocabularyLevel: Record<string, number>;
   ladder: KanjiLadderLevel[];

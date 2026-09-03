@@ -17,6 +17,16 @@
  * Inside a band we keep WaniKani's order, which is a clean topological sort of
  * the radical -> kanji graph.
  *
+ * Radicals are the other half of the same constraint, pointing the other way.
+ * A kanji is built from radicals, so every radical must arrive at or before the
+ * first kanji that uses it — a ceiling, where a word's kanji are a floor. Each
+ * one lands exactly at its ceiling: learn the piece just before you need it.
+ *
+ * The radicals are RADKFILE's 253, not WaniKani's 491. WaniKani invents its own
+ * set to hang mnemonics on — "gun", "leaf", "hat" — which are theirs and are
+ * not a system anyone else uses. RADKFILE is the decomposition behind ordinary
+ * dictionary radical lookup, and is already in the repo under CC BY-SA 4.0.
+ *
  * Vocabulary follows the kanji. A word cannot be taught before every kanji in
  * it has been, so re-ordering the kanji moves the words too.
  *
@@ -40,6 +50,7 @@ const WK_LEVELS_DIR = path.resolve("src/data/wk-catalog-levels");
 const KANJIDIC_DIR = path.resolve("src/data/kanjidic");
 const JLPT_READINGS_PATH = path.resolve("src/data/jlptReadings.json");
 const WORD_FREQUENCY_PATH = path.resolve("src/data/wordFrequency.json");
+const RADICALS_PATH = path.resolve("src/data/radicals/index.json");
 const OUTPUT_PATH = path.resolve("src/data/kanjiLadder.json");
 
 const LADDER_LEVELS = 100;
@@ -84,6 +95,35 @@ async function loadWaniKaniOrder() {
     for (const s of kanji) ordered.push({ kanji: s.characters, waniKaniLevel: level.level });
   }
   return ordered;
+}
+
+/** RADKFILE's radicals: each one and the kanji it appears in. */
+async function loadRadicals() {
+  const data = JSON.parse(await fs.readFile(RADICALS_PATH, "utf8"));
+  return data.radicals.map((entry) => ({
+    radical: entry.radical,
+    strokes: entry.strokes,
+    kanji: new Set([...entry.kanji]),
+  }));
+}
+
+/**
+ * Puts each radical at the level of the first kanji built from it. It cannot go
+ * later — the kanji would arrive with a piece the member has never seen — and
+ * putting it earlier only strands it away from the kanji that gives it a point.
+ */
+export function placeRadicals(radicals, levelOfKanji) {
+  const level = new Map();
+  for (const entry of radicals) {
+    let earliest = Number.MAX_SAFE_INTEGER;
+    for (const kanji of entry.kanji) {
+      const kanjiLevel = levelOfKanji.get(kanji);
+      if (kanjiLevel !== undefined && kanjiLevel < earliest) earliest = kanjiLevel;
+    }
+    if (earliest !== Number.MAX_SAFE_INTEGER) level.set(entry.radical, earliest);
+  }
+  const unused = radicals.filter((entry) => !level.has(entry.radical)).map((entry) => entry.radical);
+  return { level, unused };
 }
 
 /** WaniKani's vocabulary, with the level each word was taught at. */
@@ -254,6 +294,8 @@ async function main() {
   }
 
   const levelOfKanji = new Map(levels.flatMap((l) => l.kanji.map((k) => [k, l.level])));
+  const radicals = await loadRadicals();
+  const { level: radicalLevel, unused } = placeRadicals(radicals, levelOfKanji);
   const vocabulary = await loadWaniKaniVocabulary();
   const frequency = JSON.parse(await fs.readFile(WORD_FREQUENCY_PATH, "utf8"));
   const { placed, unplaceable } = placeVocabulary(
@@ -270,6 +312,7 @@ async function main() {
     fromWaniKani: entry.kanji.filter((k) => !added.has(k)).length,
     added: entry.kanji.filter((k) => added.has(k)).length,
     vocabulary: placed[index].length,
+    radicals: [...radicalLevel.values()].filter((level) => level === entry.level).length,
   }));
 
   const milestones = JLPT_BANDS.map((band) => ({
@@ -284,6 +327,7 @@ async function main() {
     totalKanji: everything.length,
     source: { waniKani: waniKani.length, addedJoyo: missing.length },
     milestones,
+    radicalLevel: Object.fromEntries(radicalLevel),
     vocabularyLevel: Object.fromEntries(
       placed.flatMap((words, index) => words.map((w) => [w.id, index + 1])),
     ),
@@ -302,7 +346,9 @@ async function main() {
   console.log(`  ${LADDER_LEVELS} levels, ${Math.min(...sizes)}-${Math.max(...sizes)} kanji each`);
   console.log(`  curve L1-20: ${sizes.slice(0, 20).join(" ")}`);
   const vocabSizes = ladder.map((l) => l.vocabulary);
-  const totals = sizes.map((value, index) => value + vocabSizes[index]);
+  const radicalSizes = ladder.map((l) => l.radicals);
+  const totals = sizes.map((value, index) => value + vocabSizes[index] + radicalSizes[index]);
+  console.log(`  radicals ${radicalLevel.size} of ${radicals.length} placed at their first kanji (RADKFILE); ${unused.length} appear in no kanji we teach`);
   console.log(`  vocabulary ${vocabSizes.reduce((a, b) => a + b, 0)} words placed, ${unplaceable.length} unplaceable`);
   for (const entry of unplaceable) console.log(`    skipped ${entry.word} (uses a kanji the ladder never teaches)`);
   console.log(`  subjects per level: ${Math.min(...totals)}-${Math.max(...totals)} (WaniKani averages 156)`);
