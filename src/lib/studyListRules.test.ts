@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   isDuplicateListNameError,
+  isReservedListSlug,
   isMissingStudyListTableError,
   normalizeListCharacters,
   normalizeListName,
@@ -129,5 +130,28 @@ describe("a name that is already taken", () => {
     expect(isDuplicateListNameError({ code: "P2021" })).toBe(false);
     expect(isDuplicateListNameError(new Error("boom"))).toBe(false);
     expect(isDuplicateListNameError(null)).toBe(false);
+  });
+});
+
+describe("addresses that belong to a page rather than a list", () => {
+  /*
+   * Next serves a static segment ahead of `[slug]`, so a list named "Archived"
+   * would sit at an address the archived page owns and could never be opened.
+   */
+  it("refuses the names the section pages use", () => {
+    expect(isReservedListSlug("Auto")).toBe(true);
+    expect(isReservedListSlug("following")).toBe(true);
+    expect(isReservedListSlug("Archived")).toBe(true);
+  });
+
+  it("catches a name that only becomes reserved once it is an address", () => {
+    expect(isReservedListSlug("  archived  ")).toBe(true);
+    expect(isReservedListSlug("Auto!")).toBe(true);
+  });
+
+  it("leaves ordinary names alone", () => {
+    expect(isReservedListSlug("Week 1")).toBe(false);
+    expect(isReservedListSlug("Autobiography")).toBe(false);
+    expect(isReservedListSlug("Archived words")).toBe(false);
   });
 });

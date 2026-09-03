@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { NAV_SECTIONS, navChildHref, sectionForPath, sectionHasSubNav, visibleNavSections } from "./navSections";
+import { NAV_SECTIONS, navChildHref, navChildrenFor, sectionForPath, sectionHasSubNav, visibleNavSections } from "./navSections";
 
 const USER = "johnmorrisdotca";
 
@@ -261,5 +261,45 @@ describe("a page inside an absolute section", () => {
   it("still answers for the member's own pages, one level in", () => {
     expect(sectionForPath(`/users/${USER}/grades/1`, USER)?.id).toBe("explore");
     expect(sectionForPath(`/users/${USER}/practice/list/week-1`, USER)?.id).toBe("explore");
+  });
+});
+
+describe("the Lists section", () => {
+  const lists = NAV_SECTIONS.find((section) => section.id === "lists")!;
+
+  /*
+   * Lists held four collections stacked down one page and showed no second
+   * row, because the header suppresses it for a section with a single child.
+   */
+  it("has a page for each collection, so it earns a second row", () => {
+    expect(sectionHasSubNav(lists)).toBe(true);
+    expect(lists.children.map((child) => child.label)).toEqual([
+      "Your lists",
+      "Auto lists",
+      "Following",
+      "Archived",
+    ]);
+  });
+
+  it("keeps every collection inside the section", () => {
+    for (const child of lists.children) {
+      expect(sectionForPath(navChildHref(child, USER), USER)?.id, child.label).toBe("lists");
+    }
+  });
+
+  /*
+   * A visitor has no account of their own, so a member-only page has no
+   * address for them; offering one would point at the home page under a name
+   * that promised something else.
+   */
+  it("offers a visitor only the collection that is public", () => {
+    expect(navChildrenFor(lists, null).map((child) => child.label)).toEqual(["Your lists"]);
+    expect(navChildHref(navChildrenFor(lists, null)[0]!, null)).toBe("/lists");
+    expect(navChildrenFor(lists, USER)).toHaveLength(4);
+  });
+
+  /* A member's own list still resolves to the section rather than falling out. */
+  it("still answers for a single list", () => {
+    expect(sectionForPath(`/users/${USER}/lists/week-1`, USER)?.id).toBe("lists");
   });
 });

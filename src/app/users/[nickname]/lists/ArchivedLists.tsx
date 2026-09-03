@@ -58,9 +58,7 @@ export default function ArchivedLists({ lists, accountId, owner }: { lists: Stud
   if (shown.length === 0) return null;
 
   return (
-    <section className="mt-6">
-      <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">{STUDY_LIST_COPY.archivedHeading}</h2>
-      <p className="mb-2 text-xs text-foreground/60">{STUDY_LIST_COPY.archivedBlurb}</p>
+    <section>
       {error ? <p className="mb-2 text-xs font-semibold text-rose-600">{error}</p> : null}
       <ul className="space-y-1.5">
         {shown.map((list) => (

@@ -8,6 +8,7 @@ import { unionListItems } from "@/lib/listMerge";
 import { prisma } from "@/lib/prisma";
 import { STUDY_LIST_LIMITS, normalizeListName } from "@/lib/studyListRules";
 import { attachments, replaceListItems, setArchived, slugTaken } from "@/lib/studyLists";
+import { isReservedListSlug } from "@/lib/studyListRules";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -47,6 +48,9 @@ export async function POST(request: Request, context: RouteContext) {
         const name = normalizeListName(parsed.data.name);
         if (!name) {
           return NextResponse.json({ error: "A list needs a name." }, { status: 400 });
+        }
+        if (isReservedListSlug(name)) {
+          return NextResponse.json({ error: "That name belongs to a page in Lists. Pick another." }, { status: 409 });
         }
         if (await slugTaken(accountId, name)) {
           return NextResponse.json({ error: "You already have a list at that address." }, { status: 409 });

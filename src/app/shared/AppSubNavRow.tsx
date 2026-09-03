@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { navChildHref, type NavChild, type NavSection } from "./navSections";
+import { navChildHref, navChildrenFor, type NavChild, type NavSection } from "./navSections";
 import ReleaseMotto from "./ReleaseMotto";
 
 /**
@@ -35,7 +35,7 @@ export default function AppSubNavRow({
    */
   subNav?: ReactNode;
 }) {
-  const children: NavChild[] = section?.children ?? [];
+  const children: NavChild[] = navChildrenFor(section, wkUsername);
   const hrefs = children.map((child: NavChild) => navChildHref(child, wkUsername));
 
   /*

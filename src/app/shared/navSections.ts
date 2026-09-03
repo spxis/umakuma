@@ -34,6 +34,14 @@ export type NavChild = {
    * every member, which is true of most of them.
    */
   requires?: MemberCapabilityId;
+  /**
+   * A page that only exists inside somebody's own account.
+   *
+   * Without a user segment there is no address to send a visitor to, and the
+   * generic fallback would point them at the home page under a name that
+   * promised something else. Dropped from the row instead.
+   */
+  memberOnly?: boolean;
 };
 
 export type NavSection = {
@@ -85,7 +93,27 @@ export const NAV_SECTIONS: NavSection[] = [
    * auto lists. A visitor with no page of their own lands on the auto lists,
    * which are the part of Lists that belongs to everybody.
    */
-  { id: "lists", label: "Lists", placement: "nav", children: [{ label: "Lists", path: "lists", fallback: "/lists" }] },
+  {
+    id: "lists",
+    label: "Lists",
+    placement: "nav",
+    /*
+     * Four collections that used to be stacked down one page. The names are
+     * the page's own headings - "Your lists", "Auto lists", "Following",
+     * "Archived" - so the row and the page agree rather than inventing a
+     * second vocabulary for the same things.
+     *
+     * Only the first is public: a visitor with no page of their own lands on
+     * the auto lists, which are the part of Lists that belongs to everybody.
+     * What a member follows, and has put away, is theirs alone.
+     */
+    children: [
+      { label: "Your lists", path: "lists", fallback: "/lists" },
+      { label: "Auto lists", path: "lists/auto", memberOnly: true },
+      { label: "Following", path: "lists/following", memberOnly: true },
+      { label: "Archived", path: "lists/archived", memberOnly: true },
+    ],
+  },
   {
     id: "progress",
     label: "Progress",
@@ -190,6 +218,11 @@ export function sectionForPath(pathname: string | null, username: string | null)
       section.children.some((child) => child.path.split("/")[0] === normalized),
     ) ?? null
   );
+}
+
+/** The children worth drawing for this viewer: member-only pages need a member. */
+export function navChildrenFor(section: NavSection | null, username: string | null): NavChild[] {
+  return (section?.children ?? []).filter((child) => !child.memberOnly || username !== null);
 }
 
 /** Whether a section should show a second row: only when it holds more than one page. */

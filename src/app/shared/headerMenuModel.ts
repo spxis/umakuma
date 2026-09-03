@@ -1,6 +1,6 @@
 import type { MemberAccess } from "@/lib/memberCapabilities";
 
-import { MENU_NAV_SECTIONS, TOP_NAV_SECTIONS, navChildHref, visibleNavSections, type NavSection } from "./navSections";
+import { MENU_NAV_SECTIONS, TOP_NAV_SECTIONS, navChildHref, navChildrenFor, visibleNavSections, type NavSection } from "./navSections";
 
 /**
  * The one way into admin, for an admin.
@@ -52,7 +52,7 @@ function menuLinks(sections: NavSection[], username: string): { member: MenuLink
   const site: MenuLink[] = [];
 
   for (const section of sections) {
-    for (const child of section.children) {
+    for (const child of navChildrenFor(section, username)) {
       const link = { label: child.label, href: navChildHref(child, username) };
       (link.href.startsWith("/users/") ? member : site).push(link);
     }
@@ -99,7 +99,7 @@ export function buildHeaderMenu(input: {
     admin,
     navigate: visibleNavSections(TOP_NAV_SECTIONS, access).map((section) => ({
       label: section.label,
-      links: section.children.map((child) => ({
+      links: navChildrenFor(section, username).map((child) => ({
         label: child.label,
         href: navChildHref(child, username),
       })),

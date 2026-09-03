@@ -110,6 +110,7 @@ export const STUDY_LIST_COPY = {
   followFailed: "Could not change that.",
   followedHeading: "Following",
   followedBlurb: "Lists other members keep, and you read. They change as the owner changes them.",
+  followedEmpty: "You are not following anyone's list yet. Open a list somebody shared and choose Follow.",
   followedGone: "Now private",
   unfollow: "Unfollow",
   addToLists: "Add to my lists",
@@ -178,6 +179,7 @@ export const STUDY_LIST_COPY = {
   /* Finishing with a list others hold. */
   archivedHeading: "Archived",
   archivedBlurb: "Finished lists other people still hold. Readable by them, closed to change, yours to bring back.",
+  archivedEmpty: "Nothing put away. Archiving a list keeps it without it crowding the ones you are using.",
   archivedPrefix: "Archived",
   archivedPill: "Archived",
   archivedNotice: "This list is archived: it can be read, copied and followed, but not changed.",

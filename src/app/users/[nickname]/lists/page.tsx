@@ -1,124 +1,62 @@
-import { MEMBER_PAGE_HEADERS } from "../dashboardPageHeaders";
-import MemberPageHeader from "@/app/shared/MemberPageHeader";
-import { getServerSession } from "next-auth";
-import { notFound, redirect } from "next/navigation";
-
-import AppTopMenuRow from "@/app/shared/AppTopMenuRow";
-import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
-import { viewsOwnPage } from "@/app/shared/viewerAddress";
-import { accountUrlKeyWhere } from "@/lib/accountLookup";
-import { authOptions, isAdminEmail } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { fetchFollowedLists, fetchFollowedLiveKeys } from "@/lib/studyListShares";
 import { fetchStudyLists } from "@/lib/studyLists";
 import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
-import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
-import ArchivedLists from "./ArchivedLists";
-import AutoListSections from "@/app/shared/AutoListSections";
-import FollowedLists from "./FollowedLists";
 import ImportFromTextButton from "./ImportFromTextButton";
 import MergeListsButton from "./MergeListsButton";
 import NewListButton from "./NewListButton";
 import StudyListCards from "./StudyListCards";
+import { ListsPageShell, loadListsPage } from "./listsPageShell";
 
 type PageProps = {
   params: Promise<{ nickname: string }>;
 };
 
 /**
- * Every list a member has built, with a preview of what is in each.
+ * The lists a member built, with a preview of what is in each.
  *
  * The page a parent opens to see what a week covers, which is why the cards
- * show the characters rather than a count. Visible to whoever may see the
- * member's pages; editable only by the member.
+ * show the characters rather than a count. The auto lists, the ones the member
+ * follows and the ones they have put away were stacked underneath this and are
+ * now their own pages, named in the header's second row.
  */
 export default async function UserListsPage({ params }: PageProps) {
-  const session = await getServerSession(authOptions);
-  const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
-  const viewerMenuInfo = await resolveViewerMenuInfo({
-    viewerEmail,
-    sessionName: session?.user?.name?.trim() ?? null,
-  });
-
   const { nickname } = await params;
-  const userKey = decodeURIComponent(nickname);
-
-  const account = await prisma.account.findFirst({
-    where: accountUrlKeyWhere(userKey),
-    select: { id: true, lastSyncedAt: true, lastActivityAt: true },
-  });
-  if (!account) {
-    notFound();
-  }
-  if (!canViewUserPage({ viewerEmail, viewerMenuInfo, targetWkUsername: userKey, targetSlug: userKey })) {
-    redirect("/join?access=denied");
-  }
+  const page = await loadListsPage(nickname);
 
   /*
    * Both kinds, together. Trouble and Favourites are the two lists every
    * member has, and the page that is meant to show a member their lists was
    * the one place they did not appear.
    */
-  const canEdit = viewsOwnPage(viewerMenuInfo, userKey);
-  const [lists, taggedLists, followed, archived, followedLive] = await Promise.all([
-    fetchStudyLists(account.id),
-    fetchTaggedListSummaries(account.id),
-    /* What a member follows, and has put away, is theirs to see, not the page's visitors'. */
-    canEdit ? fetchFollowedLists(account.id) : Promise.resolve([]),
-    canEdit ? fetchStudyLists(account.id, true) : Promise.resolve([]),
-    canEdit ? fetchFollowedLiveKeys(account.id) : Promise.resolve([]),
+  const [lists, taggedLists] = await Promise.all([
+    fetchStudyLists(page.accountId),
+    fetchTaggedListSummaries(page.accountId),
   ]);
 
   return (
-    <div className={`${PAGE_WIDTH.wide} ${PAGE_SHELL_PADDING}`}>
-      <AppTopMenuRow
-        viewerMenuInfo={viewerMenuInfo}
-        primaryWkUsername={userKey}
-        accountId={account.id}
-        showAdminActions={isAdminEmail(viewerEmail)}
-        lastSyncedAt={account.lastSyncedAt?.toISOString() ?? null}
-        lastActivityAt={account.lastActivityAt?.toISOString() ?? null}
-        className="mb-4"
-      />
-
-      <MemberPageHeader
-        icon={MEMBER_PAGE_HEADERS.lists.icon}
-        title={STUDY_LIST_COPY.heading}
-        subtitle={STUDY_LIST_COPY.subtitle}
-        className="mb-4"
-        actions={
-          canEdit ? (
-            <span className="flex flex-wrap items-center gap-2">
-              <ImportFromTextButton accountId={account.id} />
-              <MergeListsButton accountId={account.id} lists={lists} />
-              <NewListButton accountId={account.id} />
-            </span>
-          ) : null
-        }
-      />
-
+    <ListsPageShell
+      frame={page.frame}
+      title={STUDY_LIST_COPY.heading}
+      subtitle={STUDY_LIST_COPY.subtitle}
+      actions={
+        page.canEdit ? (
+          <span className="flex flex-wrap items-center gap-2">
+            <ImportFromTextButton accountId={page.accountId} />
+            <MergeListsButton accountId={page.accountId} lists={lists} />
+            <NewListButton accountId={page.accountId} />
+          </span>
+        ) : null
+      }
+    >
       <StudyListCards
         lists={lists}
         taggedLists={taggedLists}
-        accountId={account.id}
-        owner={userKey}
-        practicePath={`/users/${encodeURIComponent(nickname)}/practice`}
-        canEdit={canEdit}
+        accountId={page.accountId}
+        owner={page.userKey}
+        practicePath={page.practicePath}
+        canEdit={page.canEdit}
       />
-
-      {canEdit ? (
-        <section className="mt-6">
-          <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
-            {STUDY_LIST_COPY.liveListsHeading}
-          </h2>
-          <p className="mb-3 text-xs text-foreground/60">{STUDY_LIST_COPY.liveListsBlurb}</p>
-          <AutoListSections followedKeys={followedLive} />
-        </section>
-      ) : null}
-      {canEdit && followed.length > 0 ? <FollowedLists lists={followed} accountId={account.id} /> : null}
-      {canEdit && archived.length > 0 ? <ArchivedLists lists={archived} accountId={account.id} owner={userKey} /> : null}
-    </div>
+    </ListsPageShell>
   );
 }

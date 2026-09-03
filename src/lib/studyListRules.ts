@@ -173,6 +173,22 @@ export function normalizeListName(raw: string): string | null {
  * save time, so a list is always found by comparing slugs over the member's
  * own names.
  */
+/**
+ * Addresses under `/lists` that are pages rather than lists.
+ *
+ * A list's address is made from its name, and Next serves a static segment
+ * ahead of `[slug]`, so a list called "Archived" would sit at an address that
+ * belongs to the archived page and could never be opened. Reserved here and
+ * refused at the point a list is named, which is the only place that can
+ * explain why.
+ */
+export const RESERVED_LIST_SLUGS = ["auto", "following", "archived"] as const;
+
+/** Whether a name would land on one of the section pages rather than a list. */
+export function isReservedListSlug(name: string): boolean {
+  return (RESERVED_LIST_SLUGS as readonly string[]).includes(listSlug(name));
+}
+
 export function listSlug(name: string): string {
   return Array.from(name.toLowerCase())
     .map((character) => (/[\p{L}\p{N}]/u.test(character) ? character : "-"))

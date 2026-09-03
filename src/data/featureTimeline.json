@@ -3223,13 +3223,11 @@
     "name": "Lists gets a second row of its own",
     "area": "platform",
     "kind": "feature",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 64,
     "summary": "Lists is a top-level section with a single child, so the header suppresses its second row and everything the page holds is stacked into the body instead. It has the same shape as Learn - several distinct collections a member moves between - so it should name them in the second row. The names should follow from what the collections actually are rather than being invented; work them out from the list kinds the code already distinguishes.",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-02T16:36:09.743Z"
+    "version": "0.301.0",
+    "releasedAt": "2026-09-03T00:04:34Z"
   },
   {
     "id": "list-worksheets",

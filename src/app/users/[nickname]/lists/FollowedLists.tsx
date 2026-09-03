@@ -42,9 +42,7 @@ export default function FollowedLists({ lists, accountId }: { lists: FollowedLis
   if (shown.length === 0) return null;
 
   return (
-    <section className="mt-6">
-      <h2 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">{STUDY_LIST_COPY.followedHeading}</h2>
-      <p className="mb-2 text-xs text-foreground/60">{STUDY_LIST_COPY.followedBlurb}</p>
+    <section>
       <ul className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]">
         {shown.map((list) => {
           const href = list.reachable

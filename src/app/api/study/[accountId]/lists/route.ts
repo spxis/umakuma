@@ -14,6 +14,7 @@ import {
 } from "@/lib/studyListRules";
 import { endOfListOutcome } from "@/lib/listArchive";
 import { attachments, countShare, ensureShareToken, fetchStudyLists, replaceListItems, setArchived, slugTaken } from "@/lib/studyLists";
+import { isReservedListSlug } from "@/lib/studyListRules";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -143,6 +144,10 @@ export async function POST(request: Request, context: RouteContext) {
             { status: 409 },
           );
         }
+        /* Auto, Following and Archived are pages under /lists, not lists. */
+        if (isReservedListSlug(name)) {
+          return NextResponse.json({ error: "That name belongs to a page in Lists. Pick another." }, { status: 409 });
+        }
         /* "Week 1" and "week-1" would share an address; one of them has to give. */
         if (!known && (await slugTaken(accountId, name))) {
           return NextResponse.json({ error: "You already have a list at that address." }, { status: 409 });
@@ -227,6 +232,9 @@ export async function PATCH(request: Request, context: RouteContext) {
           const name = normalizeListName(parsed.data.name);
           if (!name) {
             return NextResponse.json({ error: "A list needs a name." }, { status: 400 });
+          }
+          if (isReservedListSlug(name)) {
+            return NextResponse.json({ error: "That name belongs to a page in Lists. Pick another." }, { status: 409 });
           }
           if (await slugTaken(accountId, name, parsed.data.id)) {
             return NextResponse.json({ error: "You already have a list at that address." }, { status: 409 });
