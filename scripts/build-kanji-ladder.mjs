@@ -26,6 +26,11 @@
  * So the whole 6,795 are spread across all 100 levels instead, light at the
  * start and flat thereafter, which is what keeps a level's total load down.
  *
+ * Which words go first is then a question of usefulness, not of what happened
+ * to unlock earliest — a learner should be meeting words worth knowing the
+ * whole way up. They are ordered by JMdict's newspaper-corpus frequency; see
+ * scripts/build-word-frequency.mjs.
+ *
  * Reads only files, never the database, so it runs in CI without DATABASE_URL.
  */
 import fs from "node:fs/promises";
@@ -34,6 +39,7 @@ import path from "node:path";
 const WK_LEVELS_DIR = path.resolve("src/data/wk-catalog-levels");
 const KANJIDIC_DIR = path.resolve("src/data/kanjidic");
 const JLPT_READINGS_PATH = path.resolve("src/data/jlptReadings.json");
+const WORD_FREQUENCY_PATH = path.resolve("src/data/wordFrequency.json");
 const OUTPUT_PATH = path.resolve("src/data/kanjiLadder.json");
 
 const LADDER_LEVELS = 100;
@@ -127,7 +133,7 @@ export function vocabularyTargets(total, levelCount) {
  * teaches everything unlocked and the target catches up later.
  * Longest-waiting words go first, then WaniKani's own order.
  */
-export function placeVocabulary(words, levelOfKanji, kanjiPerLevel) {
+export function placeVocabulary(words, levelOfKanji, kanjiPerLevel, rankOfWord = () => 0) {
   const queuedAt = new Map();
   const unplaceable = [];
   for (const entry of words) {
@@ -150,7 +156,10 @@ export function placeVocabulary(words, levelOfKanji, kanjiPerLevel) {
   let placedSoFar = 0;
   for (let level = 1; level <= levelCount; level += 1) {
     waiting.push(...(queuedAt.get(level) ?? []));
-    waiting.sort((a, b) => a.floor - b.floor || a.waniKaniLevel - b.waniKaniLevel || a.id - b.id);
+    /* Commonest first, so every level teaches words worth knowing. Frequency
+       keeps the counting words early on its own — 一つ and 二つ are common
+       words, not just teaching scaffolding. */
+    waiting.sort((a, b) => rankOfWord(a.id) - rankOfWord(b.id) || a.waniKaniLevel - b.waniKaniLevel || a.id - b.id);
     /* Never more than the running target, never more than has been unlocked. */
     const wanted = Math.round(targets[level - 1]) - placedSoFar;
     const take = level === levelCount ? waiting.length : Math.max(0, Math.min(wanted, waiting.length));
@@ -246,10 +255,12 @@ async function main() {
 
   const levelOfKanji = new Map(levels.flatMap((l) => l.kanji.map((k) => [k, l.level])));
   const vocabulary = await loadWaniKaniVocabulary();
+  const frequency = JSON.parse(await fs.readFile(WORD_FREQUENCY_PATH, "utf8"));
   const { placed, unplaceable } = placeVocabulary(
     vocabulary,
     levelOfKanji,
     levels.map((l) => l.kanji.length),
+    (id) => frequency.rank[id] ?? Number.MAX_SAFE_INTEGER,
   );
 
   const added = new Set(missing.map((entry) => entry.kanji));

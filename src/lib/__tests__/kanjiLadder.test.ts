@@ -20,6 +20,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import wkIndex from "@/data/wk-catalog-levels/index.json";
+import wordFrequency from "@/data/wordFrequency.json";
 
 const JOYO_CATEGORIES = ["elementary", "secondary"];
 const NAME_KANJI_CATEGORY = "name_kanji";
@@ -165,6 +166,32 @@ describe("vocabulary placement", () => {
        last all hundred levels. Spending it early left the last five with
        nothing but kanji. */
     expect(kanjiLadderLevels().filter((entry) => entry.vocabulary === 0)).toEqual([]);
+  });
+
+  it("teaches the commonest words first", () => {
+    const ranks = (wordFrequency as { rank: Record<string, number> }).rank;
+    /* Words are ordered by JMdict's newspaper frequency, so the median word in
+       an early level is markedly commoner than in a late one. */
+    const medianRankFor = (from: number, to: number) => {
+      const found = vocabulary
+        .filter((entry) => {
+          const level = vocabularyLevel(entry.id);
+          return level !== null && level >= from && level <= to;
+        })
+        .map((entry) => ranks[String(entry.id)] ?? Number.MAX_SAFE_INTEGER)
+        .sort((a, b) => a - b);
+      return found[Math.floor(found.length / 2)];
+    };
+    expect(medianRankFor(1, 10)).toBeLessThan(medianRankFor(40, 60));
+    expect(medianRankFor(40, 60)).toBeLessThan(medianRankFor(90, 100));
+  });
+
+  it("keeps the counting words early, since they are essential", () => {
+    for (const word of ["一つ", "二つ", "三つ"]) {
+      const entry = vocabulary.find((candidate) => candidate.word === word);
+      expect(entry, `${word} should be taught`).toBeDefined();
+      expect(vocabularyLevel(entry!.id)).toBeLessThanOrEqual(20);
+    }
   });
 
   it("holds words back so late levels are no heavier than middle ones", () => {
