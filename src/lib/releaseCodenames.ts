@@ -415,6 +415,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Kodaina Fuchi", ja: "誇大な縁", reading: "こだいなふち", gloss: "the border that grew with the place" },
   { romaji: "Sarani Sasu", ja: "更に指す", reading: "さらにさす", gloss: "points again, and says what it points at" },
   { romaji: "Shirushita Fukusuukei", ja: "記した複数形", reading: "しるしたふくすうけい", gloss: "the plural written down instead of guessed at" },
+  { romaji: "Sunaona Eigo", ja: "素直な英語", reading: "すなおなえいご", gloss: "the English name, plainly, on an English page" },
 ];
 
 /**

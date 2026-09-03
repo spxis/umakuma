@@ -4,6 +4,7 @@ import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import type { GeoRegion } from "@/lib/geoRegion";
 import { markFor, markTone, type MapMarkIndex } from "@/lib/mapMarks";
 import { groupRegionsByArea } from "@/lib/mapDirectory";
+import { regionNameLines } from "@/lib/regionNames";
 
 import MapRegionGlyph from "./MapRegionGlyph";
 import { MAP_DIRECTORY_COPY } from "./MapStudy.constants";
@@ -65,7 +66,7 @@ export default function MapRegionDirectory({
               <ul className="space-y-0.5">
                 {area.regions.map((region) => {
                   const lit = String(region.code) === String(hovered);
-                  const native = region.nameNative && region.nameNative !== region.name ? region.nameNative : null;
+                  const names = regionNameLines(region);
                   return (
                     <li key={region.id}>
                       <button
@@ -87,13 +88,13 @@ export default function MapRegionDirectory({
                           />
                         </span>
                         <span className="min-w-0 flex-1">
-                          {native ? (
-                            <span lang="ja" translate="no" className={`block truncate text-base font-black leading-tight text-foreground ${JP_TEXT_CLASS}`}>
-                              {native}
+                          {names.leadLang ? (
+                            <span lang={names.leadLang} translate="no" className={`block truncate text-base font-black leading-tight text-foreground ${JP_TEXT_CLASS}`}>
+                              {names.lead}
                             </span>
                           ) : null}
-                          <span className={`block truncate font-bold leading-tight text-foreground/70 ${native ? "text-sm" : "text-base text-foreground"}`}>
-                            {region.name}
+                          <span className={`block truncate font-bold leading-tight ${names.sub ? "text-sm text-foreground/70" : "text-base text-foreground"}`}>
+                            {names.sub ?? names.lead}
                           </span>
                         </span>
                       </button>

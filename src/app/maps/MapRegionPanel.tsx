@@ -4,6 +4,7 @@
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import type { GeoRegion } from "@/lib/geoRegion";
 import { regionFacts, regionKanji, type FactGroup } from "@/lib/mapStudy";
+import { regionNameLines } from "@/lib/regionNames";
 
 import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 
@@ -90,6 +91,7 @@ export default function MapRegionPanel({
     onChange: (next: { status: MapMarkStatus | null; visited: boolean }) => void;
   } | null;
 }) {
+  const names = regionNameLines(region);
   const kanji = regionKanji(region);
   const groups = regionFacts(region);
 
@@ -97,15 +99,15 @@ export default function MapRegionPanel({
     <div className="flex min-h-0 flex-1 flex-col">
       <header className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
         <div className="min-w-0">
-          {region.nameNative && region.nameNative !== region.name ? (
-            <p lang="ja" translate="no" className={`text-2xl font-black text-foreground ${JP_TEXT_CLASS}`}>
-              {region.nameNative}
+          {names.leadLang ? (
+            <p lang={names.leadLang} translate="no" className={`text-2xl font-black text-foreground ${JP_TEXT_CLASS}`}>
+              {names.lead}
               {region.reading ? (
                 <span className="ml-2 text-sm font-semibold text-foreground/60">{region.reading}</span>
               ) : null}
             </p>
           ) : null}
-          <h2 className="text-lg font-black text-foreground">{region.name}</h2>
+          <h2 className={`font-black text-foreground ${names.sub ? "text-lg" : "text-2xl"}`}>{names.sub ?? names.lead}</h2>
           <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/60">
             {region.divisionType} · {region.region}
           </p>

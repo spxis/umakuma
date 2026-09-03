@@ -11,6 +11,7 @@ import { GEO_DATASETS } from "@/lib/geoRegion";
 import { MAP_COUNTRIES, type MapCountryCode } from "@/lib/mapCountries";
 import { mapHref, parseMapPath } from "@/lib/mapAddress";
 import { regionByCode, regionsInOrder } from "@/lib/mapStudy";
+import { regionNameLabel, regionNameLines } from "@/lib/regionNames";
 
 import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
 import { markFor, markTone, markTotals } from "@/lib/mapMarks";
@@ -149,7 +150,7 @@ export default function MapStudy({
     (regionCode: string | number) => {
       const region = regionByCode(country, regionCode);
       if (!region) return String(regionCode);
-      return region.nameNative && region.nameNative !== region.name ? `${region.name} ${region.nameNative}` : region.name;
+      return regionNameLabel(region);
     },
     [country],
   );
@@ -270,7 +271,7 @@ export default function MapStudy({
           <ul className="flex flex-wrap gap-1.5">
             {regions.map((region) => {
               const on = String(region.code) === String(code);
-              const native = region.nameNative && region.nameNative !== region.name ? region.nameNative : null;
+              const names = regionNameLines(region);
               return (
                 <li key={region.id}>
                   <button
@@ -283,12 +284,12 @@ export default function MapStudy({
                       on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
                     }`}
                   >
-                    {native ? (
-                      <span lang="ja" translate="no" className={JP_TEXT_CLASS}>
-                        {native}
+                    {names.leadLang ? (
+                      <span lang={names.leadLang} translate="no" className={JP_TEXT_CLASS}>
+                        {names.lead}
                       </span>
                     ) : null}
-                    <span className={native ? "text-[10px] font-semibold opacity-80" : ""}>{region.name}</span>
+                    <span className={names.sub ? "text-[10px] font-semibold opacity-80" : ""}>{names.sub ?? names.lead}</span>
                   </button>
                 </li>
               );

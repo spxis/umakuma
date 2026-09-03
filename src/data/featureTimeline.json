@@ -4112,11 +4112,23 @@
     "id": "map-division-plural",
     "name": "All 13 province / territorys",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "The directory heading pluralises the division name by adding s to whatever the dataset holds, so Canada reads 'All 13 province / territorys'. Noticed 2026-09-03 in a screenshot John sent about other map panel issues; he did not raise it.",
+    "dateIsEstimate": false,
+    "version": "0.364.0",
+    "releasedAt": "2026-09-03T13:28:56Z"
+  },
+  {
+    "id": "map-english-names",
+    "name": "Canada is listed in French on an English site",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.364.0",
-    "releasedAt": "2026-09-03T13:28:56Z",
-    "summary": "The directory heading pluralises the division name by adding s to whatever the dataset holds, so Canada reads 'All 13 province / territorys'. Noticed 2026-09-03 in a screenshot John sent about other map panel issues; he did not raise it."
+    "version": "0.365.0",
+    "releasedAt": "2026-09-03T13:33:50Z",
+    "summary": "The map directory shows Canadian provinces with the French name as the headline and the English underneath - Colombie-Britannique over British Columbia, Nouveau-Brunswick, Quebec. English is the site language and should lead; Japan's kanji-over-romaji is different because the Japanese IS the content being learned. Reported 2026-09-03 by John."
   }
 ]
