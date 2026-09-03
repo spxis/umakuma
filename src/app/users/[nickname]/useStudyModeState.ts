@@ -2,8 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import {
   parseStudyModeBehavior,
+  resolveStudyMode,
   STUDY_MODE_BEHAVIOR_QUERY_KEY,
   STUDY_MODE_BEHAVIOR_STORAGE_KEY,
+  STUDY_MODE_STORAGE_KEY,
 } from "./explorerStudyMode";
 import type { StudyModeBehavior } from "./study-explorer/lib/studyExplorerTypes";
 
@@ -27,26 +29,25 @@ export function useStudyModeState({
   initialStudyMode,
   clientStateHydratedRef,
 }: Args): StudyModeState {
-  const [studyMode, setStudyMode] = useState(() =>
-    true,
-  );
+  /*
+   * The page resolved `?studyMode=` on the server, so honouring it here is the
+   * same answer on both sides of hydration. On is the default only when
+   * nothing has an opinion.
+   */
+  const [studyMode, setStudyMode] = useState(() => initialStudyMode ?? true);
   const [studyModeBehavior, setStudyModeBehavior] = useState<StudyModeBehavior>(() =>
     "session",
   );
 
   const syncFromUrlAndStorage = useCallback((params: URLSearchParams) => {
-    const urlStudyMode = params.get("studyMode");
-    if (urlStudyMode === "on" || urlStudyMode === "1") {
-      setStudyMode(true);
-    } else if (urlStudyMode === "off" || urlStudyMode === "0") {
-      setStudyMode(true);
-      setStudyModeBehavior("session");
-    } else if (typeof initialStudyMode !== "boolean") {
-      const storedStudyMode = window.localStorage.getItem("wr:study-mode");
-      if (storedStudyMode !== null) {
-        setStudyMode(true);
-      }
-    }
+    setStudyMode((current) =>
+      resolveStudyMode({
+        urlValue: params.get("studyMode"),
+        storedValue: window.localStorage.getItem(STUDY_MODE_STORAGE_KEY),
+        initialStudyMode,
+        current,
+      }),
+    );
 
     const urlStudyModeBehavior = parseStudyModeBehavior(params.get(STUDY_MODE_BEHAVIOR_QUERY_KEY));
     if (urlStudyModeBehavior) {
@@ -66,7 +67,7 @@ export function useStudyModeState({
     let changed = false;
 
     const studyModeInUrl = params.get("studyMode");
-    const nextStudyMode = "on";
+    const nextStudyMode = studyMode ? "on" : "off";
     if (studyModeInUrl !== nextStudyMode) {
       params.set("studyMode", nextStudyMode);
       changed = true;
@@ -79,7 +80,7 @@ export function useStudyModeState({
     }
 
     return changed;
-  }, [studyModeBehavior]);
+  }, [studyMode, studyModeBehavior]);
 
   useEffect(() => {
     if (!isHydrated || typeof window === "undefined" || !clientStateHydratedRef.current) {
@@ -87,7 +88,7 @@ export function useStudyModeState({
     }
 
     try {
-      window.localStorage.setItem("wr:study-mode", studyMode ? "1" : "0");
+      window.localStorage.setItem(STUDY_MODE_STORAGE_KEY, studyMode ? "1" : "0");
     } catch {
       // Ignore storage errors in restricted browsing modes.
     }

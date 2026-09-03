@@ -424,6 +424,7 @@ export default function ExplorerTabs({
                 setStudyModeBehavior(mode);
                 setStudyMode(true);
               }}
+              onTurnOff={() => setStudyMode(false)}
             />
           </div>
         </div>

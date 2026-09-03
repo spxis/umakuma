@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import {
   STUDY_MODE_BEHAVIOR_OPTIONS,
+  STUDY_MODE_OFF_OPTION,
 } from "./explorerStudyMode";
 import type { StudyModeBehavior } from "./study-explorer/lib/studyExplorerTypes";
 
@@ -9,6 +10,14 @@ type Props = {
   studyMode: boolean;
   studyModeBehavior: StudyModeBehavior;
   onSelectMode: (mode: StudyModeBehavior) => void;
+  /**
+   * Turning it off, which the menu had no entry for.
+   *
+   * The button beside it has always drawn an off state - plain rather than
+   * hot - and there was no way to reach it: the four entries choose between
+   * behaviours and every one of them turns study mode on.
+   */
+  onTurnOff: () => void;
 };
 
 const HOVER_CLOSE_DELAY_MS = 220;
@@ -17,6 +26,7 @@ export default function ExplorerStudyModeMenu({
   studyMode,
   studyModeBehavior,
   onSelectMode,
+  onTurnOff,
 }: Props) {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const hoverCloseTimerRef = useRef<number | null>(null);
@@ -115,8 +125,27 @@ export default function ExplorerStudyModeMenu({
           onMouseEnter={openHoverMenu}
           onMouseLeave={closeHoverMenuSoon}
         >
+          <button
+            type="button"
+            role="menuitemradio"
+            aria-checked={!studyMode}
+            onClick={() => {
+              onTurnOff();
+              setIsPinnedOpen(false);
+            }}
+            className={`w-full rounded-lg px-3 py-2 text-left transition ${
+              studyMode ? "text-foreground hover:bg-surface-muted" : "bg-accent/12 text-accent"
+            }`}
+          >
+            <p className="text-xs font-black uppercase tracking-[0.08em]">{STUDY_MODE_OFF_OPTION.label}</p>
+            <p className="mt-0.5 text-[11px] font-semibold text-foreground/70">
+              {STUDY_MODE_OFF_OPTION.description}
+            </p>
+          </button>
+
           {STUDY_MODE_BEHAVIOR_OPTIONS.map((mode) => {
-            const active = mode.value === studyModeBehavior;
+            /* A behaviour is only the chosen one while study mode is on. */
+            const active = studyMode && mode.value === studyModeBehavior;
             return (
               <button
                 key={mode.value}

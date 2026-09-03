@@ -3674,14 +3674,13 @@
     "id": "explorer-study-mode-stuck",
     "name": "Study mode cannot be turned off",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "bug",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T04:44:15.892Z",
     "date": "2026-09-02",
-    "summary": "useStudyModeState in src/app/users/[nickname]/useStudyModeState.ts is hardwired on and there is no way out of it. Its useState initialiser returns true and ignores the initialStudyMode the page computed from the query; syncFromUrlAndStorage answers studyMode=off and studyMode=0 with setStudyMode(true), so the off switch turns it on; a stored value of any kind, including the '0' the hook itself writes, also becomes setStudyMode(true); and writeToUrl hardcodes nextStudyMode = 'on', so the address is rewritten to studyMode=on whatever the member chose. The effect that persists the choice does write '1' or '0' correctly, which is what makes it look like a preference that is being ignored rather than one that was never read. The visible result is the JLPT explorer always hiding English: meanings and readings show as an ellipsis and the compounds panel never appears, because all of them are gated on !studyMode. Found on 2026-09-02 while checking the explorer's paint.",
-    "dateIsEstimate": true,
-    "release": 71
+    "summary": "Study mode could not be turned off by any means. The hook returned true from its initialiser and ignored what the page had resolved from the address; it answered studyMode=off and studyMode=0 with setStudyMode(true), so the off switch turned it on; it read a stored value of any kind, including the '0' it wrote itself, as on; and it rewrote the address to studyMode=on whatever the member chose. The menu had no way out either - all four entries pick a review behaviour and every one of them turns study mode on - while the button beside it had always drawn an off state nobody could reach. So every surface gated on it stayed hidden: the JLPT explorer showed an ellipsis where meanings and readings go, and never showed a kanji's compounds at all. The decision is now one pure function, resolveStudyMode, with the address beating the browser's memory beating what it already was, and the menu offers Off above the four behaviours.",
+    "dateIsEstimate": false,
+    "version": "0.314.0",
+    "releasedAt": "2026-09-03T04:59:56Z"
   },
   {
     "id": "jlpt-stats-account-id",
