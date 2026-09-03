@@ -3,7 +3,9 @@ import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES } from "@/lib/domainConstants";
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
 import { jlptLevelPillClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import { formatDate, jlptHeading, readingLabel } from "../lib/jlptDisplay";
-import { jlptStatusClass, parseWordExamples } from "../lib/jlptExplorerContentHelpers";
+import { jlptStatusClass } from "../lib/jlptExplorerContentHelpers";
+import { JLPT_EXPLORER_TEXT } from "./JlptExplorer.constants";
+import type { JlptWordExample } from "@/lib/jlptTypes";
 import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
 import type { KanjiStats } from "./JlptExplorerContent.types";
@@ -16,6 +18,15 @@ import SurfaceCard from "../../../../shared/SurfaceCard";
 
 type Props = {
   selectedItem: JlptItem;
+  /**
+   * This kanji's compounds, fetched when it was selected.
+   *
+   * They used to ride along on every row of the list - 9.8MB of a 10.5MB page
+   * so that one panel could show them - so they arrive separately now, and
+   * null means still loading rather than none.
+   */
+  wordExamples: JlptWordExample[] | null;
+  wordExamplesError: boolean;
   showEnglish: boolean;
   studyMode: boolean;
   userKanjiByChar: Map<string, UserKanjiItem>;
@@ -28,6 +39,8 @@ type Props = {
 
 export default function JlptExplorerDetailSection({
   selectedItem,
+  wordExamples,
+  wordExamplesError,
   showEnglish,
   studyMode,
   userKanjiByChar,
@@ -54,7 +67,6 @@ export default function JlptExplorerDetailSection({
    * jlptReadings.json carried and more - checked across all 2,211 entries.
    */
   const jsonMeanings = selectedItem.meanings.filter((meaning) => meaning.trim().length > 0);
-  const wordExamples = parseWordExamples(selectedItem.wordExamples);
 
   return (
     <section className="col-span-1 rounded-2xl border-2 border-accent/35 bg-surface p-5 sm:col-span-2 lg:col-span-4">
@@ -220,10 +232,26 @@ export default function JlptExplorerDetailSection({
         </div>
       ) : null}
 
-      {!studyMode && wordExamples.length > 0 ? (
+      {/*
+        * Loading is not the same as none. The words arrive after the kanji
+        * does, so an empty panel here would tell a member this kanji has no
+        * compounds for as long as the request takes.
+        */}
+      {!studyMode && (wordExamples === null || wordExamplesError) ? (
         <div className="mt-4">
           <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <FieldLabel>Used in words</FieldLabel>
+            <FieldLabel>{JLPT_EXPLORER_TEXT.wordsHeading}</FieldLabel>
+            <p className="mt-2 text-sm text-foreground/70">
+              {wordExamplesError ? JLPT_EXPLORER_TEXT.wordsError : JLPT_EXPLORER_TEXT.wordsLoading}
+            </p>
+          </article>
+        </div>
+      ) : null}
+
+      {!studyMode && wordExamples !== null && wordExamples.length > 0 ? (
+        <div className="mt-4">
+          <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
+            <FieldLabel>{JLPT_EXPLORER_TEXT.wordsHeading}</FieldLabel>
             <ul className="mt-2 space-y-2 text-foreground/90">
               {wordExamples.map((example, index) => (
                 <li

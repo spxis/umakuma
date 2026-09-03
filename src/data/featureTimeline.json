@@ -3567,14 +3567,13 @@
     "id": "jlpt-explorer-paint",
     "name": "The JLPT explorer paints before it waits",
     "area": "jlpt",
-    "status": "planned",
+    "status": "shipped",
     "kind": "bug",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T03:42:43.189Z",
     "date": "2026-09-02",
-    "summary": "What is left after 0.295.0 moved the subject lookups onto the catalogue. Two costs remain in the server render and both happen before anything is drawn: the whole JlptKanji table, 2,211 rows, is loaded on every request, and the member's WaniKani assignments are fetched and waited on. Assignments are live SRS state so they must come from the API, but they do not have to block the first paint - the grid can arrive with the catalogue's own data and take the member's stages when they land. The rows are the other half: the client already pages through them, so the server does not need to hand over all 2,211 to draw the first forty. Measured before this was split out: 5.6s for the JLPT explorer against 0.1s for the grade explorer.",
-    "dateIsEstimate": true,
-    "release": 66
+    "summary": "The JLPT explorer's page was 13.1MB, and 9.8MB of it was word examples: every one of the 2,211 kanji carried its own compounds so that whichever one the member clicked could show them. They are read one kanji at a time, so they are fetched one kanji at a time, from a new /api/jlpt/[kanji]/words - and the panel says it is looking rather than showing an empty list while it waits. The other half was the member's own SRS state, fetched from WaniKani on every render for about 650ms before a single kanji was drawn. Account.assignmentCache already holds the whole assignments collection, refreshed by the ordinary five-minute sync, and the games and study tags already read it; getUserKanjiIndexFromCache reads the same rows without the call. Measured: 13.1MB to 1.9MB, and 1,185ms to 445ms, with the JLPT query itself falling from 381ms to 27ms. Live WaniKani assignments stay where they are needed, in the queue paths that are about to review the items.",
+    "dateIsEstimate": false,
+    "version": "0.311.0",
+    "releasedAt": "2026-09-03T04:04:31Z"
   },
   {
     "id": "theme-preference-cookie",
@@ -3667,5 +3666,27 @@
     "summary": "The filing marks now reach search, the subject pages and the glyph viewer, but not the explorer grids themselves - JLPT, grades, level and study each draw their own cards and rows. SubjectCards has renderUnder and SubjectRows has renderAfterRow, so this is passing slots rather than changing the shared pair. Split out of add-to-lists-everywhere 2026-09-02.",
     "dateIsEstimate": true,
     "release": 70
+  },
+  {
+    "id": "explorer-study-mode-stuck",
+    "name": "Study mode cannot be turned off",
+    "area": "study",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 71,
+    "summary": "useStudyModeState in src/app/users/[nickname]/useStudyModeState.ts is hardwired on and there is no way out of it. Its useState initialiser returns true and ignores the initialStudyMode the page computed from the query; syncFromUrlAndStorage answers studyMode=off and studyMode=0 with setStudyMode(true), so the off switch turns it on; a stored value of any kind, including the '0' the hook itself writes, also becomes setStudyMode(true); and writeToUrl hardcodes nextStudyMode = 'on', so the address is rewritten to studyMode=on whatever the member chose. The effect that persists the choice does write '1' or '0' correctly, which is what makes it look like a preference that is being ignored rather than one that was never read. The visible result is the JLPT explorer always hiding English: meanings and readings show as an ellipsis and the compounds panel never appears, because all of them are gated on !studyMode. Found on 2026-09-02 while checking the explorer's paint."
+  },
+  {
+    "id": "jlpt-stats-account-id",
+    "name": "Kanji review stats ask under the wrong id",
+    "area": "study",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 72,
+    "summary": "JlptExplorerContent reads the account id out of window.location with getAccountIdFromUrl, whose own comment calls it a fragile fallback. The first path segment after /users/ is the member's nickname or slug, not their account id, so every stats request goes to /api/study/johnmorrisdotca/subjects/464/history and comes back 404. Opening any kanji in the JLPT explorer logs a failed request, and Show review stats can never fill in. The account id is already on the page - JlptExplorer takes accountId as a prop and uses it for its own fetches - so this is a prop that was not threaded one level further rather than anything unknown. Found on 2026-09-02 while checking the explorer's paint."
   }
 ]

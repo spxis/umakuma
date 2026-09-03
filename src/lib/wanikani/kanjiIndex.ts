@@ -1,5 +1,5 @@
 import { fetchAllCollectionPages } from "./http";
-import { srsLabel } from "./helpers";
+import { parseAssignmentCacheRows, srsLabel } from "./helpers";
 import type { UserKanjiIndexItem } from "./types";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
@@ -18,26 +18,63 @@ import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
  * The API is still the fallback for ids the catalogue has not seen, so a
  * subject added to WaniKani since the last sync still resolves.
  */
+type KanjiAssignment = {
+  subject_id: number;
+  subject_type: string;
+  srs_stage: number;
+  unlocked_at: string | null;
+  started_at: string | null;
+  passed_at: string | null;
+  available_at: string | null;
+};
+
+function toKanjiAssignments(rows: Array<{ data: unknown }>): KanjiAssignment[] {
+  return rows
+    .map((row) => row.data as KanjiAssignment)
+    .filter((assignment) => assignment?.subject_type === SUBJECT_TYPES.kanji);
+}
+
+/**
+ * The member's kanji from their assignments, live from WaniKani.
+ *
+ * For a caller that needs this instant's SRS state - the study queue, which is
+ * about to review these items. A browsing surface should take the synced cache
+ * instead; see `getUserKanjiIndexFromCache`.
+ */
 export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexItem[]> {
   const assignmentsCollection = await fetchAllCollectionPages(
     `/assignments?subject_types=${SUBJECT_TYPES.kanji}`,
     token,
   );
 
-  const assignments = assignmentsCollection.data
-    .map((row) =>
-      row.data as {
-        subject_id: number;
-        subject_type: string;
-        srs_stage: number;
-        unlocked_at: string | null;
-        started_at: string | null;
-        passed_at: string | null;
-        available_at: string | null;
-      },
-    )
-    .filter((assignment) => assignment.subject_type === SUBJECT_TYPES.kanji);
+  return buildKanjiIndex(toKanjiAssignments(assignmentsCollection.data), token);
+}
 
+/**
+ * The same index, from the assignments the account already has on disk.
+ *
+ * `Account.assignmentCache` is written by the ordinary sync, which runs on a
+ * five-minute staleness interval and is what the games, the study tags and the
+ * reading sign-off already read. Asking WaniKani for the same rows cost the
+ * JLPT explorer roughly 650ms of its server render, before a single kanji was
+ * drawn, on a page that shows a status pill rather than conducts a review.
+ *
+ * `token` is only for subjects the catalogue has not seen; null skips that
+ * fallback rather than failing, so a member without a live connection still
+ * gets everything the catalogue knows.
+ */
+export async function getUserKanjiIndexFromCache(
+  assignmentCache: unknown,
+  token: string | null,
+): Promise<UserKanjiIndexItem[]> {
+  const assignments = toKanjiAssignments(parseAssignmentCacheRows(assignmentCache));
+  return assignments.length === 0 ? [] : buildKanjiIndex(assignments, token);
+}
+
+async function buildKanjiIndex(
+  assignments: KanjiAssignment[],
+  token: string | null,
+): Promise<UserKanjiIndexItem[]> {
   const ids = Array.from(new Set(assignments.map((assignment) => assignment.subject_id)));
   const subjectById = new Map<
     number,
@@ -67,8 +104,9 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
     });
   }
 
-  /* Only what the catalogue could not answer goes to the API. */
-  const missing = ids.filter((id) => !subjectById.has(id));
+  /* Only what the catalogue could not answer goes to the API, and only when
+   * there is a token to ask with. */
+  const missing = token ? ids.filter((id) => !subjectById.has(id)) : [];
   const chunkSize = 200;
   for (let i = 0; i < missing.length; i += chunkSize) {
     const chunk = missing.slice(i, i + chunkSize).join(",");
@@ -76,7 +114,7 @@ export async function getUserKanjiIndex(token: string): Promise<UserKanjiIndexIt
       continue;
     }
 
-    const subjects = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token);
+    const subjects = await fetchAllCollectionPages(`/subjects?ids=${chunk}`, token as string);
     for (const row of subjects.data) {
       if ((row.object ?? "") !== SUBJECT_TYPES.kanji) {
         continue;

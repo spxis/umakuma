@@ -13,7 +13,7 @@ import { EMPTY_ITEM_SPREAD, isItemSpread } from "@/lib/itemSpread";
 import type { JlptKanjiRow } from "@/lib/jlptTypes";
 import { prisma } from "@/lib/prisma";
 import { withReviewSuccessRates } from "@/lib/reviewSuccessRates";
-import { getUserKanjiIndex } from "@/lib/wanikani";
+import { getUserKanjiIndexFromCache } from "@/lib/wanikani";
 import { wanikaniConnection } from "@/lib/wanikaniConnection";
 
 import type {
@@ -54,13 +54,33 @@ type LevelSnapshotRow = {
  * `JlptKanji` table and the member's kanji index from WaniKani, which the other
  * two explorers have no use for.
  */
-async function safeKanjiIndex(account: { tokenEncrypted: string | null; tokenIv: string | null; tokenTag: string | null }) {
-  const connection = wanikaniConnection(account);
-  if (!connection?.token) return [];
+/**
+ * The member's own kanji, from the assignments the sync already stored.
+ *
+ * Not from the WaniKani API. The assignments are the member's SRS state and
+ * the API is where they originate, but `Account.assignmentCache` is written by
+ * the ordinary five-minute sync - the same rows, the same freshness the games
+ * and the study tags read - and asking WaniKani again cost this page about
+ * 650ms of server render before anything was drawn. A status pill on a
+ * browsing page does not need a fresher number than the leaderboard has.
+ *
+ * The token still goes in for the catalogue's own gaps: a subject WaniKani
+ * added since the last catalogue sync is resolved from the API, and a member
+ * without a connection simply has no gaps to fill.
+ */
+async function safeKanjiIndex(account: {
+  tokenEncrypted: string | null;
+  tokenIv: string | null;
+  tokenTag: string | null;
+  assignmentCache: unknown;
+}) {
   try {
-    return await getUserKanjiIndex(connection.token);
+    return await getUserKanjiIndexFromCache(
+      account.assignmentCache,
+      wanikaniConnection(account)?.token ?? null,
+    );
   } catch (error) {
-    console.error("Could not read the member's kanji from WaniKani", error);
+    console.error("Could not read the member's kanji", error);
     return [];
   }
 }
@@ -75,6 +95,7 @@ export async function loadLevelProgress(userKey: string, options: { withJlpt?: b
       tokenEncrypted: true,
       tokenIv: true,
       tokenTag: true,
+      assignmentCache: true,
       nickname: true,
       wkUsername: true,
       joinedByEmail: true,
@@ -137,7 +158,6 @@ export async function loadLevelProgress(userKey: string, options: { withJlpt?: b
           kunReadings: true,
           nanoriReadings: true,
           notes: true,
-          wordExamples: true,
         },
       })) as JlptKanjiRow[])
     : [];

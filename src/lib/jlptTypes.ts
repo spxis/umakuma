@@ -20,7 +20,15 @@ export type JlptMeta = {
   heisigKeyword: string | null;
 };
 
-export type JlptKanjiRow = JlptMeta & {
+/**
+ * A row in a JLPT list, which is every JLPT kanji at once.
+ *
+ * Everything `JlptMeta` carries except `wordExamples`. The compounds are 93%
+ * of the table's bytes - 9.8MB of 10.5MB across all 2,211 rows - and are only
+ * ever read for the one kanji whose panel is open, so a list loads without
+ * them and the open panel asks for its own.
+ */
+export type JlptKanjiRow = Omit<JlptMeta, "wordExamples"> & {
   kanji: string;
   nLevel: number;
   unicodeHex: string | null;

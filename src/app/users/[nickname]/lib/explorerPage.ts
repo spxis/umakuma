@@ -78,7 +78,6 @@ export async function loadExplorerPage(
       kunReadings: row.kunReadings,
       nanoriReadings: row.nanoriReadings,
       notes: row.notes,
-      wordExamples: row.wordExamples,
     })),
     userKanjiItems: progress.userKanjiIndex,
   };

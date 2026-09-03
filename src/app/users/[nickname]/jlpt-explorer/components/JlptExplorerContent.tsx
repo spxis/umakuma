@@ -28,6 +28,7 @@ import { Fragment, useEffect, useRef, useState, useSyncExternalStore } from "rea
 import { badgeClass } from "../../level-explorer/lib/levelExplorerDisplay";
 import { formatNumber } from "../lib/jlptDisplay";
 import { JLPT_EXPLORER_TEXT } from "./JlptExplorer.constants";
+import type { JlptWordExample } from "@/lib/jlptTypes";
 import { toJlptRow, toJlptView } from "../lib/jlptRowAdapter";
 import JlptExplorerCards from "./JlptExplorerCards";
 import JlptExplorerRows from "./JlptExplorerRows";
@@ -140,6 +141,53 @@ export default function JlptExplorerContent({
         setKanjiStatsLoading(false);
       });
   }, [selectedItem, userKanjiByChar]);
+
+  /*
+   * This kanji's compounds, fetched when it is selected.
+   *
+   * They used to arrive with the page: every row carried its own, which was
+   * 9.8MB of a 10.5MB payload across 2,211 rows so that the one open panel
+   * could show them.
+   *
+   * The character they belong to is stored beside them rather than cleared on
+   * the way in, so selecting a different kanji reads as loading immediately -
+   * no reset, and nothing set synchronously inside the effect.
+   */
+  const [words, setWords] = useState<{
+    kanji: string;
+    examples: JlptWordExample[] | null;
+    failed: boolean;
+  }>({ kanji: "", examples: null, failed: false });
+
+  /* The item's own character, not the prop: a selection the list does not
+   * hold has no words to ask for. */
+  const wordsForKanji = selectedItem?.kanji ?? null;
+
+  useEffect(() => {
+    if (!wordsForKanji) return;
+
+    let current = true;
+    fetch(`/api/jlpt/${encodeURIComponent(wordsForKanji)}/words`)
+      .then(async (response) => {
+        if (!response.ok) throw new Error(String(response.status));
+        return (await response.json()) as { words: JlptWordExample[] };
+      })
+      .then((payload) => {
+        if (current) setWords({ kanji: wordsForKanji, examples: payload.words ?? [], failed: false });
+      })
+      .catch(() => {
+        if (current) setWords({ kanji: wordsForKanji, examples: null, failed: true });
+      });
+
+    /* A member arrowing down the list outruns the network; the last one wins. */
+    return () => {
+      current = false;
+    };
+  }, [wordsForKanji]);
+
+  const wordsAreThisKanji = words.kanji === wordsForKanji;
+  const wordExamples = wordsAreThisKanji ? words.examples : null;
+  const wordExamplesError = wordsAreThisKanji && words.failed;
   const effectiveVisibleCount = Math.min(
     filteredItems.length,
     Math.max(PAGE_SIZE, visibleCount, selectedIndex + 1),
@@ -197,6 +245,8 @@ export default function JlptExplorerContent({
         showEnglish={showEnglish}
         studyMode={studyMode}
         userKanjiByChar={userKanjiByChar}
+        wordExamples={wordExamples}
+        wordExamplesError={wordExamplesError}
         statsOpen={statsOpen}
         kanjiStats={kanjiStats}
         kanjiStatsLoading={kanjiStatsLoading}

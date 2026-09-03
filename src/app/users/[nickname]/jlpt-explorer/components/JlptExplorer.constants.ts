@@ -16,4 +16,8 @@ export const JLPT_EXPLORER_TEXT = {
   columnJlpt: "JLPT",
   columnStatus: "Status",
   untracked: "untracked",
+  /* The compounds panel, which now arrives after the kanji rather than with it. */
+  wordsHeading: "Used in words",
+  wordsLoading: "Looking up the words\u2026",
+  wordsError: "Could not load the words for this kanji.",
 } as const;

@@ -19,8 +19,9 @@ const SOURCE = "src/lib/wanikani/kanjiIndex.ts";
  * read the source instead. The same two assertions guard the JLPT counts in
  * leaderboardJlpt.ts, which had the same bug.
  *
- * Assignments are deliberately not covered: they are the member's own SRS
- * state, they are supposed to be live, and they must keep coming from the API.
+ * Assignments originate at the API and `getUserKanjiIndex` still fetches them
+ * there for the queue paths, which are about to review the items. A browsing
+ * page reads `Account.assignmentCache` instead - see the cache tests below.
  */
 describe("the kanji index", () => {
   it("reads the catalogue before it reaches for WaniKani", () => {
@@ -36,7 +37,7 @@ describe("the kanji index", () => {
     expect(read(SOURCE)).toContain("missing.slice(i, i + chunkSize)");
   });
 
-  it("still asks WaniKani for the assignments, which are the member's own", () => {
+  it("still asks WaniKani for the assignments, for the callers that need them live", () => {
     expect(read(SOURCE)).toContain("/assignments?subject_types=");
   });
 });
