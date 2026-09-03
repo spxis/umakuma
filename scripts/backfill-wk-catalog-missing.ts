@@ -1,6 +1,7 @@
 import { decryptToken } from "../src/lib/crypto";
 import { prisma } from "../src/lib/prisma";
 import { findCatalogGap } from "../src/lib/wanikani/catalogGap";
+import { pickTokenAccount } from "../src/lib/wanikani/catalogToken";
 import { parseSubjectRow } from "../src/lib/wanikani/catalogSync.helpers";
 import type { SubjectUpsertRow } from "../src/lib/wanikani/catalogSync.types";
 import { fetchWaniKani } from "../src/lib/wanikani/http";
@@ -90,24 +91,17 @@ async function resolveToken(args: Args): Promise<{ token: string; source: string
     },
   });
 
-  const matcher = args.accountLike.toLowerCase();
-  const matched = accounts.find((account) =>
-    [account.nickname, account.joinedByEmail, account.wkUsername].some(
-      (field) => typeof field === "string" && field.toLowerCase().includes(matcher),
-    ),
-  );
+  const choice = pickTokenAccount(accounts, args.accountLike);
+  if (!choice) return null;
 
-  if (!matched?.tokenEncrypted || !matched.tokenIv || !matched.tokenTag) {
-    return null;
-  }
-
+  const { account, named } = choice;
   return {
     token: decryptToken({
-      encrypted: matched.tokenEncrypted,
-      iv: matched.tokenIv,
-      tag: matched.tokenTag,
+      encrypted: account.tokenEncrypted!,
+      iv: account.tokenIv!,
+      tag: account.tokenTag!,
     }),
-    source: `account-like:${args.accountLike}`,
+    source: named ? `account-like:${args.accountLike}` : "most recently updated connected account",
   };
 }
 

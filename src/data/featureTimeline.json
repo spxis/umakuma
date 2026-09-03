@@ -607,11 +607,11 @@
     "id": "catalog-missing-subjects",
     "name": "Backfill missing catalogue subjects",
     "area": "platform",
-    "status": "planned",
-    "date": "2026-09-03",
+    "status": "shipped",
+    "date": "2026-09-02",
     "summary": "64 subjects in the study queue are absent from the local catalogue and still fall through to the API.",
-    "dateIsEstimate": true,
-    "release": 15
+    "version": "0.319.0",
+    "releasedAt": "2026-09-03T05:41:14Z"
   },
   {
     "id": "ultra-game-kind",
@@ -2888,6 +2888,7 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "A list can be marked complete or studied by its owner, and carries a grade the system assigns after a study or review pass over it - how much of the list is known, and how well it went. Shown on the card and the list's page. Ties to practising from a list and the who-knows-what overlay. Requested 2026-09-01 by John.",
+    "dateIsEstimate": false,
     "version": "0.317.0",
     "releasedAt": "2026-09-03T05:26:21Z"
   },
