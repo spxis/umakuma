@@ -4076,11 +4076,23 @@
     "id": "subject-pill-one-size",
     "name": "One chip size on a subject page",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "A kanji page drew the same chip at two sizes a block apart: the kanji inside each compound under Used in words came out at two thirds of the parts under Written with and the radicals under Built from. All of them are the same component. It had carried a size prop since the days when four surfaces drew four different chips, and folding those into one moved the disagreement inside the shared piece instead of settling it. The prop is gone and every pill is one size - the subject pages, the strip of what you have selected, a paste being turned into a list, the updates a copied list has waiting. Its dead half went with it: the small variant also asked for a narrower minimum width, which lost to the default in the stylesheet and had never once applied. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.361.0",
+    "releasedAt": "2026-09-03T13:03:37Z"
+  },
+  {
+    "id": "map-glyph-outline",
+    "name": "Region thumbnails do not match the map",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.361.0",
-    "releasedAt": "2026-09-03T13:03:37Z",
-    "summary": "A kanji page drew the same chip at two sizes a block apart: the kanji inside each compound under Used in words came out at two thirds of the parts under Written with and the radicals under Built from. All of them are the same component. It had carried a size prop since the days when four surfaces drew four different chips, and folding those into one moved the disagreement inside the shared piece instead of settling it. The prop is gone and every pill is one size - the subject pages, the strip of what you have selected, a paste being turned into a list, the updates a copied list has waiting. Its dead half went with it: the small variant also asked for a narrower minimum width, which lost to the default in the stylesheet and had never once applied. Reported 2026-09-03 by John."
+    "version": "0.362.0",
+    "releasedAt": "2026-09-03T13:21:39Z",
+    "summary": "The little shape icons in the map directory panel carry a border that makes them look poor, and they do not render the region the way the big map does - Hokkaido is the clearest case. The thumbnail path and JapanMap should draw the same shape the same way. Reported 2026-09-03 by John with screenshots."
   }
 ]

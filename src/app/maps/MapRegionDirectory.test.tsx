@@ -76,3 +76,27 @@ describe("the directory in the empty panel", () => {
     expect(painted).toHaveLength(1);
   });
 });
+
+/*
+ * The glyph outline is drawn with `non-scaling-stroke`, so its width is screen
+ * pixels. It used to be computed from the region's own box, which is map
+ * units: Hokkaido's box is ten times Kagawa's, so Hokkaido got ten times the
+ * border - 10.5 pixels of outline on a 36 pixel icon - and the biggest
+ * prefectures were the ones that looked worst.
+ */
+describe("the glyph outline", () => {
+  it("is the same width whatever size the real place is", () => {
+    const widths = new Set(
+      [...draw().querySelectorAll("svg path")].map((path) => path.getAttribute("stroke-width")),
+    );
+    expect(widths.size).toBe(1);
+  });
+
+  /* In screen pixels, so it has to stay small enough to be an outline. */
+  it("stays a hairline rather than swallowing the shape", () => {
+    const width = Number(draw().querySelector("svg path")?.getAttribute("stroke-width"));
+    expect(width).toBeGreaterThan(0);
+    expect(width).toBeLessThanOrEqual(2);
+  });
+});
+
