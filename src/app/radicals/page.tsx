@@ -8,7 +8,7 @@ import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHead
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { authOptions } from "@/lib/auth";
 import { orderedGroups, radicalsShown, readParts } from "@/lib/radicalBrowser";
-import { radicalNameIndex } from "@/lib/radicalNames";
+import { radicalDisplayNames } from "@/lib/radicalNames";
 import { runRadicalSearch } from "@/lib/radicalSearchServer";
 
 import RadicalBrowserView from "./RadicalBrowserView";
@@ -47,7 +47,7 @@ export default async function RadicalsPage({ searchParams }: Props) {
   const result = await runRadicalSearch(chosen);
 
   const groups = orderedGroups(result.groups);
-  const names = await radicalNameIndex(groups.flatMap((group) => group.radicals));
+  const names = await radicalDisplayNames(groups.flatMap((group) => group.radicals));
 
   const session = await getServerSession(authOptions);
   const viewerMenuInfo = await resolveViewerMenuInfo({

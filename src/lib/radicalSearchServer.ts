@@ -5,7 +5,7 @@ import path from "node:path";
 
 import { getKanjiDictionaryEntry } from "./kanjiDictionary";
 import { radicalsHref } from "./radicalBrowser";
-import { resolveRadicalTokens } from "./radicalNames";
+import { radicalDisplayNames, resolveRadicalTokens } from "./radicalNames";
 import {
   RADICAL_MATCH_LIMIT,
   kanjiForRadicals,
@@ -122,7 +122,7 @@ export function radicalIndexSummary(): { radicalCount: number; kanjiCount: numbe
 export type RadicalPart = {
   radical: string;
   strokes: number;
-  /** What it is called in English, where the dictionary names it. */
+  /** What it is called in English, where anything names it. */
   name: string | null;
   /** The radicals page, opened on this part. */
   href: string;
@@ -141,11 +141,13 @@ export type RadicalPart = {
  * Empty for a character RADKFILE does not cover, which the page reads as
  * nothing to show rather than as an error.
  */
-export function radicalPartsOf(kanji: string): RadicalPart[] {
-  return radicalsInKanji(load().radicals, kanji).map((entry) => ({
+export async function radicalPartsOf(kanji: string): Promise<RadicalPart[]> {
+  const parts = radicalsInKanji(load().radicals, kanji);
+  const names = await radicalDisplayNames(parts.map((entry) => entry.radical));
+  return parts.map((entry) => ({
     radical: entry.radical,
     strokes: entry.strokes,
-    name: getKanjiDictionaryEntry(entry.radical)?.meanings?.[0] ?? null,
+    name: names.get(entry.radical) ?? null,
     href: radicalsHref({ parts: [entry.radical] }),
   }));
 }

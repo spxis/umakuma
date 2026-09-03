@@ -154,7 +154,7 @@ export default async function KanjiPage({ params }: Props) {
     summary,
     dictionary,
     dictionaryAttribution: getKanjiDictionaryAttribution(),
-    parts: radicalPartsOf(character),
+    parts: await radicalPartsOf(character),
     alone: section !== null,
     worksheetHref: (() => {
       /*

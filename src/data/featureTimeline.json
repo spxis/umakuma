@@ -4208,11 +4208,23 @@
     "id": "deploy-upload-retry",
     "name": "A flaky upload leaves production behind",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "The last deploy step, vercel deploy --prebuilt, is a single unretried command. On 2026-09-03 it threw 'fetch failed' at 59MB of a 79MB upload; the commit was on main, CI was green, and production simply stayed on older code with nothing retrying. It only got out because another agent pushed minutes later. Because cancel-in-progress means the newest run is the one that matters, a flake on the last push of a burst is exactly the case with no second chance. Retry is safe here specifically because cancel-in-progress kills a superseded run before its retry could re-alias production to an older commit.",
+    "dateIsEstimate": false,
+    "version": "0.372.0",
+    "releasedAt": "2026-09-03T16:00:21Z"
+  },
+  {
+    "id": "radical-names-complete",
+    "name": "A radical drawn as a bar has no name",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.372.0",
-    "releasedAt": "2026-09-03T16:00:21Z",
-    "summary": "The last deploy step, vercel deploy --prebuilt, is a single unretried command. On 2026-09-03 it threw 'fetch failed' at 59MB of a 79MB upload; the commit was on main, CI was green, and production simply stayed on older code with nothing retrying. It only got out because another agent pushed minutes later. Because cancel-in-progress means the newest run is the one that matters, a flake on the last push of a burst is exactly the case with no second chance. Retry is safe here specifically because cancel-in-progress kills a superseded run before its retry could re-alias production to an older commit."
+    "version": "0.373.0",
+    "releasedAt": "2026-09-03T16:02:47Z",
+    "summary": "The vertical bar radical shows on a kanji page with an empty name, and /radicals?parts=<bar> is reached from /kanji/\u502b. Find out whether the dictionary has no name for it or we are failing to read one. Reported 2026-09-03 by John."
   }
 ]

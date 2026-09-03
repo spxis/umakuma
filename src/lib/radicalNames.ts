@@ -97,3 +97,78 @@ export async function resolveRadicalTokens(
   }
   return resolved;
 }
+
+/**
+ * The six radicals RADKFILE writes with a stand-in character.
+ *
+ * Its key for a shape that has no convenient kanji form is a katakana or a
+ * fullwidth bar - ｜ is U+FF5C, the typographic vertical line, not 丨 the
+ * radical - and both name sources are keyed on characters that are kanji. So
+ * six of 253 came back with no name at all, and a reader on a kanji page saw
+ * an empty box under a part of the character they were reading about.
+ *
+ * Written down rather than looked up, because there is nothing to look them
+ * up by: the character in the data is a stand-in, and asking the dictionary
+ * about a fullwidth bar is asking about punctuation. The names are the ones
+ * the radicals are known by, not invented for the occasion.
+ */
+const STAND_IN_NAMES: Record<string, string> = {
+  "｜": "line",
+  "ノ": "slash",
+  "ハ": "eight",
+  "マ": "katakana ma",
+  "ユ": "katakana yu",
+  "ヨ": "snout",
+};
+
+/** WaniKani's radical names by character, which is input-independent and cacheable. */
+let wanikaniNames: Promise<Map<string, string>> | null = null;
+
+async function buildWanikaniNames(): Promise<Map<string, string>> {
+  const rows = await prisma.wkSubjectCatalog
+    .findMany({
+      where: { subjectType: SUBJECT_TYPES.radical },
+      select: { characters: true, meanings: true },
+    })
+    .catch(() => []);
+
+  const names = new Map<string, string>();
+  for (const row of rows) {
+    if (!row.characters || names.has(row.characters)) continue;
+    const meanings = Array.isArray(row.meanings) ? row.meanings : [];
+    const first = meanings.find((meaning): meaning is string => typeof meaning === "string");
+    if (first) names.set(row.characters, first);
+  }
+  return names;
+}
+
+/**
+ * What each radical is called, for showing rather than for searching.
+ *
+ * The index above answers "what did they type"; this answers "what is this
+ * called", which is the other direction and the one every surface that draws
+ * a radical actually needs. The radicals grid asked the reverse index for a
+ * radical and got nothing every time, so its cells had no title at all.
+ *
+ * Same order of preference as the index: the dictionary's classical name
+ * first, our own for the six it cannot be asked about, and WaniKani's teaching
+ * name last - it calls 久 a raptor cage, which is a fine mnemonic and a poor
+ * label on a public page.
+ */
+export async function radicalDisplayNames(radicals: readonly string[]): Promise<Map<string, string>> {
+  wanikaniNames ??= buildWanikaniNames();
+  const wanikani = await wanikaniNames;
+
+  const names = new Map<string, string>();
+  for (const radical of radicals) {
+    const name =
+      getKanjiDictionaryEntry(radical)?.meanings?.[0] ?? STAND_IN_NAMES[radical] ?? wanikani.get(radical) ?? null;
+    if (name) names.set(radical, name);
+  }
+  return names;
+}
+
+/** The same answer for one radical, where a caller has only one. */
+export async function radicalDisplayName(radical: string): Promise<string | null> {
+  return (await radicalDisplayNames([radical])).get(radical) ?? null;
+}
