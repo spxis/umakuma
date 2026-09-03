@@ -142,15 +142,38 @@ describe("radical placement", () => {
     expect(late).toEqual([]);
   });
 
-  it("introduces a radical exactly when it is first needed", () => {
+  it("introduces a radical ahead of the kanji built from it", () => {
+    const LEAD = 2;
     for (const entry of radicals) {
       const levels = [...entry.kanji]
         .map((kanji) => kanjiPlacement(kanji)?.level)
         .filter((level): level is number => level !== undefined);
-      /* Held any earlier it is stranded from the kanji that gives it a point. */
-      if (levels.length === 0) expect(radicalLevel(entry.radical)).toBeNull();
-      else expect(radicalLevel(entry.radical)).toBe(Math.min(...levels));
+      if (levels.length === 0) {
+        expect(radicalLevel(entry.radical)).toBeNull();
+        continue;
+      }
+      /* Early enough to be familiar, not so early it is stranded from the
+         kanji that gives it a point. Level 1 has nothing before it. */
+      expect(radicalLevel(entry.radical)).toBe(Math.max(1, Math.min(...levels) - LEAD));
     }
+  });
+
+  it("orders parts before wholes inside a band", () => {
+    /* A radical that is also a kanji reads better taught first — 言 before 語.
+       Only within a band, though: across bands the member has the radical
+       already, and forcing the kanji too would drag N1 into level 1. */
+    const wrong: string[] = [];
+    for (const entry of radicals) {
+      const part = kanjiPlacement(entry.radical);
+      if (part === null) continue;
+      for (const kanji of entry.kanji) {
+        if (kanji === entry.radical) continue;
+        const whole = kanjiPlacement(kanji);
+        if (whole === null || whole.nLevel !== part.nLevel) continue;
+        if (part.level > whole.level) wrong.push(`${kanji}@${whole.level} before ${entry.radical}@${part.level}`);
+      }
+    }
+    expect(wrong).toEqual([]);
   });
 
   it("skips only radicals no kanji we teach contains", () => {
@@ -211,8 +234,9 @@ describe("vocabulary placement", () => {
     );
     /* WaniKani's level 1 alone is 80 subjects and their heaviest is 213. */
     expect(Math.max(...firstTen)).toBeLessThan(70);
-    /* Level 1 is a handful of radicals, six kanji and a few words. */
-    expect(firstTen[0]).toBeLessThanOrEqual(35);
+    /* Level 1 carries the radical lead — 22 radicals, six kanji, 18 words.
+       WaniKani's is 25 radicals, 18 kanji and 37 words, for 80. */
+    expect(firstTen[0]).toBeLessThanOrEqual(50);
     const everyLevel = levels.map(
       (entry) => entry.kanji.length + entry.vocabulary + entry.radicals,
     );
