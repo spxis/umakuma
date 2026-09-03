@@ -4103,10 +4103,11 @@
     "name": "A kanji page with no English",
     "area": "platform",
     "kind": "bug",
-    "status": "planned",
+    "status": "shipped",
     "date": "2026-09-03",
     "dateIsEstimate": true,
     "release": 77,
-    "summary": "/kanji/\u8e74 shows the character as its own name and carries no meaning and no readings, where /kanji/\u4fc3 shows Urge and \u305d\u304f\u3001\u3046\u306a\u304c\u3001\u3046\u306a\u304c\u3059. Both are WaniKani kanji (L49 and L29), so the page has something to draw from in each case and only one of them draws it. Found 2026-09-03 by John."
+    "summary": "/kanji/\u8e74 showed the character as its own name with no meaning and no readings, where /kanji/\u4fc3 showed Urge and its readings. Reported 2026-09-03 by John from a page loaded before 0.336.0 - kanji-header-parity had rebuilt the kanji page's identity card an hour earlier and fixed it. Verified on production: \u8e74 now reads Kick with \u3057\u3085\u3046. Kept as a record that it was reported and checked rather than deleted, so nobody re-reports it.",
+    "version": "0.336.0"
   }
 ]
