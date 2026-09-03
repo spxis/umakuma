@@ -3692,5 +3692,18 @@
     "dateIsEstimate": false,
     "version": "0.312.0",
     "releasedAt": "2026-09-03T04:50:44Z"
+  },
+  {
+    "id": "stroke-step-nav",
+    "name": "Step through strokes with previous and next",
+    "area": "study",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 71,
+    "summary": "The stroke picker offers the numbers and nothing else, so following a character stroke by stroke means finding and hitting a different target each time - and on a twenty-stroke character the numbers wrap into a block a reader has to search. Put previous and next either side of them so one repeated press walks the whole character. The toggle and the numbers also sit on two lines for no reason; they are one row. Requested 2026-09-02 by John.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T05:52:52.240Z"
   }
 ]
