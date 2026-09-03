@@ -2,33 +2,54 @@
  * Ranks the vocabulary we teach by how common each word actually is.
  *
  * WaniKani's catalogue says nothing about frequency, and a word's kanji are a
- * bad proxy for it: scoring by kanji frequency promotes コーヒー but defers 父,
- * 雨 and 読む, which are day-one words whose kanji are simply uncommon in
- * newspapers. So the ranking comes from JMdict, which tags every entry from a
- * newspaper corpus.
+ * bad proxy for it: ranking by kanji frequency promotes コーヒー but defers 父,
+ * 雨 and 読む, day-one words whose kanji are merely uncommon in print.
  *
- * JMdict (EDRDG, CC BY-SA 4.0) marks entries with:
- *   nf01..nf48  frequency band in the Mainichi Shimbun corpus, 500 words each
- *   news1/2     top 12,000 / next 12,000 of that corpus
- *   ichi1/2     the Ichimango goi bunruishuu common-word list
- *   spec1/2     common words the other lists happen to miss
- *   gai1/2      common loanwords
+ * Two kinds of source, because "useful" has more than one meaning:
  *
- * Reads a local JMdict_e; download it from
- * http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz and pass the path as an
- * argument. Writes only the words we teach, so nothing large lands in the repo.
+ *   JMdict (EDRDG) tags entries by frequency band in a newspaper corpus —
+ *   nf01..nf48 at 500 words each, plus the news/ichi/spec/gai common-word
+ *   lists. This is the written, formal register.
+ *
+ *   Jiten (jiten.moe) publishes a frequency list per medium, from a corpus of
+ *   16,232 titles: anime, drama, film, novels, manga, games and more. This is
+ *   what people actually say and read for pleasure.
+ *
+ * Both CC BY-SA 4.0, both fetched by scripts/fetch-corpora.mjs. A word's final
+ * score is a weighted blend, so a word common in anime is not buried for being
+ * absent from newspapers, and vice versa.
  */
 import fs from "node:fs/promises";
 import path from "node:path";
 
 const WK_LEVELS_DIR = path.resolve("src/data/wk-catalog-levels");
+const CACHE_DIR = path.resolve(process.env.CORPORA_DIR ?? ".corpora");
 const OUTPUT_PATH = path.resolve("src/data/wordFrequency.json");
-const DEFAULT_JMDICT = process.argv[2] ?? path.resolve("JMdict_e");
 
-/** Words in the top band are rank ~250; nf48 is ~23,750. */
+/** Words in the top JMdict band are rank ~250; nf48 is ~23,750. */
 const BAND_SIZE = 500;
-/** A word with no band at all sorts behind every ranked word. */
-export const UNRANKED = 99_999;
+/** Stands in for "this corpus has never seen the word". */
+export const UNRANKED = 500_000;
+
+/**
+ * How much each register counts. Newspapers carry the most weight because they
+ * are the widest written vocabulary, but spoken media are what make a word
+ * feel worth knowing, so together they outweigh it.
+ */
+export const CORPUS_WEIGHTS = {
+  newspaper: 1.0,
+  global: 0.8,
+  anime: 0.7,
+  drama: 0.4,
+  movie: 0.3,
+  novel: 0.3,
+  manga: 0.3,
+  visualNovel: 0.15,
+  videoGame: 0.15,
+  nonFiction: 0.15,
+  webNovel: 0.1,
+  audio: 0.1,
+};
 
 /** Pulls surface form -> priority tags out of JMdict's XML. */
 export function parseJmdict(xml) {
@@ -41,23 +62,57 @@ export function parseJmdict(xml) {
       const tags = [...body.matchAll(/<(?:ke|re)_pri>([\s\S]*?)<\/(?:ke|re)_pri>/g)].map((m) => m[1]);
       if (tags.length === 0) continue;
       const previous = bySurface.get(surface);
-      const merged = previous ? [...new Set([...previous, ...tags])] : tags;
-      bySurface.set(surface, merged);
+      bySurface.set(surface, previous ? [...new Set([...previous, ...tags])] : tags);
     }
   }
   return bySurface;
 }
 
-/**
- * Turns JMdict's tags into one rank, lower being more common. The nf band is
- * the real measure; the list memberships only rescue words the bands missed.
- */
+/** Turns JMdict's tags into one rank, lower being more common. */
 export function rankFromTags(tags) {
   const band = tags.map((t) => /^nf(\d\d)$/.exec(t)).find(Boolean);
   if (band) return (Number(band[1]) - 1) * BAND_SIZE + BAND_SIZE / 2;
   if (tags.includes("news1") || tags.includes("ichi1") || tags.includes("spec1") || tags.includes("gai1")) return 12_000;
   if (tags.includes("news2") || tags.includes("ichi2") || tags.includes("spec2") || tags.includes("gai2")) return 24_000;
   return UNRANKED;
+}
+
+/** Reads a Jiten CSV into surface -> best rank. Columns are Word, Form, Rank. */
+export function parseJitenCsv(text) {
+  const ranks = new Map();
+  const lines = text.split("\n");
+  for (let index = 1; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (!line) continue;
+    const [word, form, rankText] = line.split(",");
+    const rank = Number(rankText);
+    if (!Number.isFinite(rank)) continue;
+    /* Both the dictionary form and the written form should find the word. */
+    for (const surface of [word, form]) {
+      if (!surface) continue;
+      const seen = ranks.get(surface);
+      if (seen === undefined || rank < seen) ranks.set(surface, rank);
+    }
+  }
+  return ranks;
+}
+
+/**
+ * Blends a word's ranks into one score. Ranks are heavy-tailed — the gap from
+ * 1 to 100 matters far more than 10,000 to 10,100 — so they are averaged in log
+ * space, weighted by register, and only over the corpora that know the word.
+ */
+export function blendRanks(ranks) {
+  let weighted = 0;
+  let total = 0;
+  for (const [corpus, weight] of Object.entries(CORPUS_WEIGHTS)) {
+    const rank = ranks[corpus];
+    if (rank === undefined || rank === null || rank >= UNRANKED) continue;
+    weighted += Math.log(rank) * weight;
+    total += weight;
+  }
+  if (total === 0) return UNRANKED;
+  return Math.round(Math.exp(weighted / total));
 }
 
 async function loadTaughtWords() {
@@ -67,8 +122,11 @@ async function loadTaughtWords() {
     const level = JSON.parse(await fs.readFile(path.join(WK_LEVELS_DIR, file), "utf8"));
     for (const s of level.vocabulary ?? []) {
       if (s.hiddenAt === null && typeof s.characters === "string") {
-        const reading = (s.readings ?? []).find((r) => r.primary)?.reading ?? null;
-        words.push({ id: s.wkSubjectId, word: s.characters, reading });
+        words.push({
+          id: s.wkSubjectId,
+          word: s.characters,
+          reading: (s.readings ?? []).find((r) => r.primary)?.reading ?? null,
+        });
       }
     }
   }
@@ -76,37 +134,78 @@ async function loadTaughtWords() {
 }
 
 async function main() {
-  const xml = await fs.readFile(DEFAULT_JMDICT, "utf8");
-  const tagsBySurface = parseJmdict(xml);
   const words = await loadTaughtWords();
+  const corpora = {};
 
-  const ranks = {};
-  let ranked = 0;
+  const jmdictPath = path.join(CACHE_DIR, "JMdict_e");
+  const tagsBySurface = parseJmdict(await fs.readFile(jmdictPath, "utf8"));
+  corpora.newspaper = new Map();
+  for (const [surface, tags] of tagsBySurface) corpora.newspaper.set(surface, rankFromTags(tags));
+
+  for (const name of Object.keys(CORPUS_WEIGHTS)) {
+    if (name === "newspaper") continue;
+    const file = path.join(CACHE_DIR, `jiten-${name}.csv`);
+    try {
+      corpora[name] = parseJitenCsv(await fs.readFile(file, "utf8"));
+    } catch {
+      console.log(`  ${name}: no cached list, skipped`);
+    }
+  }
+
+  const names = Object.keys(corpora);
+  const rank = {};
+  const detail = {};
+  const covered = Object.fromEntries(names.map((n) => [n, 0]));
+  let blendedCount = 0;
   for (const entry of words) {
-    /* Prefer the written form; fall back to the reading for kana-only words. */
-    const tags = tagsBySurface.get(entry.word) ?? (entry.reading ? tagsBySurface.get(entry.reading) : null);
-    const rank = tags ? rankFromTags(tags) : UNRANKED;
-    ranks[entry.id] = rank;
-    if (rank !== UNRANKED) ranked += 1;
+    const perCorpus = {};
+    for (const name of names) {
+      const table = corpora[name];
+      const found = table.get(entry.word) ?? (entry.reading ? table.get(entry.reading) : undefined);
+      if (found !== undefined && found < UNRANKED) {
+        perCorpus[name] = found;
+        covered[name] += 1;
+      }
+    }
+    const score = blendRanks(perCorpus);
+    if (score < UNRANKED) blendedCount += 1;
+    rank[entry.id] = score;
+    /* Keep only the registers worth showing a member — "common in anime" is
+       worth a badge, "rank 8,412 in web novels" is not. The rest stay out so
+       the committed file stays small; rerun to get them back. */
+    detail[entry.id] = {
+      newspaper: perCorpus.newspaper ?? null,
+      anime: perCorpus.anime ?? null,
+      global: perCorpus.global ?? null,
+    };
   }
 
   await fs.writeFile(
     OUTPUT_PATH,
-    `${JSON.stringify({ generatedAt: new Date().toISOString(), source: "JMdict (EDRDG), CC BY-SA 4.0", words: words.length, ranked, rank: ranks }, null, 2)}\n`,
+    `${JSON.stringify(
+      {
+        generatedAt: new Date().toISOString(),
+        sources: [
+          "JMdict (EDRDG), CC BY-SA 4.0",
+          "Jiten frequency lists (jiten.moe), CC BY-SA 4.0",
+        ],
+        corpora: names,
+        weights: CORPUS_WEIGHTS,
+        words: words.length,
+        ranked: blendedCount,
+        rank,
+        detail,
+      },
+      null,
+      2,
+    )}\n`,
     "utf8",
   );
   console.log(`Wrote ${OUTPUT_PATH}`);
-  console.log(`  JMdict surfaces with priority tags: ${tagsBySurface.size.toLocaleString()}`);
-  console.log(`  words we teach: ${words.length.toLocaleString()}, ranked: ${ranked.toLocaleString()} (${((ranked / words.length) * 100).toFixed(1)}%)`);
-  const buckets = { "top 500": 0, "500-2k": 0, "2k-6k": 0, "6k-24k": 0, unranked: 0 };
-  for (const rank of Object.values(ranks)) {
-    if (rank <= 500) buckets["top 500"] += 1;
-    else if (rank <= 2000) buckets["500-2k"] += 1;
-    else if (rank <= 6000) buckets["2k-6k"] += 1;
-    else if (rank < UNRANKED) buckets["6k-24k"] += 1;
-    else buckets.unranked += 1;
+  console.log(`  words we teach: ${words.length.toLocaleString()}, blended rank: ${blendedCount.toLocaleString()} (${((blendedCount / words.length) * 100).toFixed(1)}%)`);
+  for (const name of names) {
+    console.log(`  ${name.padEnd(12)} covers ${String(covered[name]).padStart(5)} (${((covered[name] / words.length) * 100).toFixed(0)}%)`);
   }
-  console.log(`  ${Object.entries(buckets).map(([k, v]) => `${k}: ${v}`).join(", ")}`);
 }
 
 main().catch((error) => {

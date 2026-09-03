@@ -56,3 +56,6 @@ e2e/.auth/
 
 # Local proof sheet for the radical glyph font; regenerate with `pnpm radicals:font`.
 /public/fonts/radical-font-proof.html
+
+# Downloaded corpora, rebuilt by pnpm corpora:fetch
+.corpora/
