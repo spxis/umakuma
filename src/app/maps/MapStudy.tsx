@@ -10,6 +10,7 @@ import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import { GEO_DATASETS } from "@/lib/geoRegion";
 import { MAP_COUNTRIES, type MapCountryCode } from "@/lib/mapCountries";
 import { mapHref, parseMapPath } from "@/lib/mapAddress";
+import { regionCodesInArea } from "@/lib/mapDirectory";
 import { regionByCode, regionsInOrder } from "@/lib/mapStudy";
 import { regionNameLabel, regionNameLines } from "@/lib/regionNames";
 
@@ -55,6 +56,14 @@ export default function MapStudy({
   const [country, setCountry] = useState<MapCountryCode>(initialCountry);
   const [code, setCode] = useState<string | number | null>(initialCode);
   const [hovered, setHovered] = useState<string | number | null>(null);
+  /*
+   * An area held down, and an area merely pointed at. Two pieces of state
+   * rather than one because pointing is a preview you get back from by moving
+   * away, while choosing survives the pointer leaving the heading - which is
+   * the whole use for it, reading the map with Tohoku lit.
+   */
+  const [area, setArea] = useState<string | null>(null);
+  const [hoveredArea, setHoveredArea] = useState<string | null>(null);
   const [wide, setWide] = useState(true);
 
   const dataset = GEO_DATASETS[country];
@@ -120,6 +129,10 @@ export default function MapStudy({
     (next: string | number) => {
       setCode(next);
       setHovered(null);
+      /* The directory goes when a region is chosen, and the heading that lit
+         the area goes with it, so the highlight must not outlive its switch. */
+      setArea(null);
+      setHoveredArea(null);
       view.focusRegion(next);
     },
     [view],
@@ -137,8 +150,17 @@ export default function MapStudy({
     return tone ? [{ code: region.code, tone: tone as MapMark["tone"] }] : [];
   });
 
+  /*
+   * The area goes on over the member's own marks and under the pointer, so a
+   * prefecture you are pointing at still reads as pointed-at while its whole
+   * area is lit behind it.
+   */
+  const litArea = hoveredArea ?? area;
+  const areaCodes = regionCodesInArea(regions, litArea);
+
   const marks: MapMark[] = [
     ...painted,
+    ...areaCodes.map((areaCode) => ({ code: areaCode, tone: MAP_TONES.candidate })),
     ...(hovered !== null && String(hovered) !== String(code) ? [{ code: hovered, tone: MAP_TONES.candidate }] : []),
     ...(code !== null ? [{ code, tone: MAP_TONES.target }] : []),
   ];
@@ -187,6 +209,8 @@ export default function MapStudy({
                 setCountry(entry.code);
                 setCode(null);
                 setHovered(null);
+                setArea(null);
+                setHoveredArea(null);
               }}
               className={`${CHIP} ${
                 entry.code === country ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/70 hover:bg-surface-muted"
@@ -313,6 +337,9 @@ export default function MapStudy({
             onHover={setHovered}
             onChoose={choose}
             divisionPlural={dataset.divisionTypePlural.toLowerCase()}
+            activeArea={area}
+            onAreaHover={setHoveredArea}
+            onAreaChoose={(next) => setArea((held) => (held === next ? null : next))}
           />
         )}
       </aside>

@@ -4124,11 +4124,23 @@
     "id": "map-english-names",
     "name": "Canada is listed in French on an English site",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "The map directory shows Canadian provinces with the French name as the headline and the English underneath - Colombie-Britannique over British Columbia, Nouveau-Brunswick, Quebec. English is the site language and should lead; Japan's kanji-over-romaji is different because the Japanese IS the content being learned. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.365.0",
+    "releasedAt": "2026-09-03T13:33:50Z"
+  },
+  {
+    "id": "map-area-highlight",
+    "name": "Select a whole region and highlight it",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.365.0",
-    "releasedAt": "2026-09-03T13:33:50Z",
-    "summary": "The map directory shows Canadian provinces with the French name as the headline and the English underneath - Colombie-Britannique over British Columbia, Nouveau-Brunswick, Quebec. English is the site language and should lead; Japan's kanji-over-romaji is different because the Japanese IS the content being learned. Reported 2026-09-03 by John."
+    "version": "0.366.0",
+    "releasedAt": "2026-09-03T15:16:03Z",
+    "summary": "The map directory groups regions under headings - Prairies, Northern Canada, Tohoku, Kansai. Those headings should be selectable, lighting up every member on the map at once, so a learner can see a region as a shape rather than picking its members off one at a time. Requested 2026-09-03 by John."
   }
 ]

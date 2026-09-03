@@ -33,3 +33,24 @@ export function groupRegionsByArea(regions: GeoRegion[]): RegionArea[] {
   }
   return areas;
 }
+
+/**
+ * Every region code in one named area.
+ *
+ * The directory groups by area for reading; the map needs the same grouping to
+ * paint. Both go through this rather than each walking the list its own way,
+ * so an area heading and the shapes it lights can never disagree about which
+ * prefectures are in Tohoku.
+ *
+ * An unknown name is an empty list rather than an error: the area a member was
+ * pointing at can go away under them when the country changes.
+ */
+export function regionCodesInArea(
+  regions: GeoRegion[],
+  areaName: string | null,
+): (string | number)[] {
+  if (!areaName) return [];
+  return regions
+    .filter((region) => (region.region?.trim() || region.name) === areaName)
+    .map((region) => region.code);
+}

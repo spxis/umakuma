@@ -43,7 +43,9 @@ export const MAP_MARK_COPY = {
 export const MAP_DIRECTORY_COPY = {
   /** "All 47 prefectures" */
   heading: (count: number, plural: string) => `All ${count} ${plural}`,
-  hint: "Point at one to find it on the map; choose one to read about it.",
+  hint: "Point at one to find it on the map; choose one to read about it. Choose an area to light all of it at once.",
+  /** "Highlight Tohoku on the map" */
+  areaTitle: (area: string) => `Highlight ${area} on the map`,
 } as const;
 
 export const MAP_SHAPE_COPY = { caption: (name: string) => `The shape of ${name}, with its neighbours in outline.` } as const;

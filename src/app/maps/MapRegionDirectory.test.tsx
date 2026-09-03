@@ -10,7 +10,7 @@ import { MAP_DIRECTORY_COPY } from "./MapStudy.constants";
 
 const regions = regionsInOrder("JP");
 
-function draw(marks = {}, hovered: string | number | null = null): Document {
+function draw(marks = {}, hovered: string | number | null = null, activeArea: string | null = null): Document {
   const markup = renderToStaticMarkup(
     <MapRegionDirectory
       regions={regions}
@@ -19,6 +19,9 @@ function draw(marks = {}, hovered: string | number | null = null): Document {
       onHover={() => undefined}
       onChoose={() => undefined}
       divisionPlural="prefectures"
+      activeArea={activeArea}
+      onAreaHover={() => undefined}
+      onAreaChoose={() => undefined}
     />,
   );
   return new JSDOM(`<!doctype html><body>${markup}</body>`).window.document;
@@ -100,3 +103,35 @@ describe("the glyph outline", () => {
   });
 });
 
+/**
+ * An area heading is a control, so a member can light the whole of Tohoku at
+ * once rather than pointing at six prefectures in turn.
+ */
+describe("choosing a whole area", () => {
+  it("offers every area as its own control", () => {
+    const headings = [...draw().querySelectorAll("h3 > button")];
+    expect(headings.length).toBeGreaterThan(1);
+    expect(headings.map((button) => button.textContent)).toEqual(
+      expect.arrayContaining([expect.stringContaining("Tohoku")]),
+    );
+  });
+
+  it("marks the held area pressed and leaves the rest alone", () => {
+    const held = [...draw({}, null, "Tohoku").querySelectorAll("h3 > button")].filter(
+      (button) => button.getAttribute("aria-pressed") === "true",
+    );
+    expect(held).toHaveLength(1);
+    expect(held[0]?.textContent).toContain("Tohoku");
+  });
+
+  /*
+   * `nested-interactive`: the heading is a sibling of the rows, never their
+   * wrapper. A button holding eight buttons is announced as one thing a screen
+   * reader cannot get inside.
+   */
+  it("puts no control inside another", () => {
+    for (const button of draw().querySelectorAll("button")) {
+      expect(button.querySelector("button"), button.textContent ?? "").toBeNull();
+    }
+  });
+});

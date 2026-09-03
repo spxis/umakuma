@@ -31,6 +31,9 @@ export default function MapRegionDirectory({
   onHover,
   onChoose,
   divisionPlural,
+  activeArea,
+  onAreaHover,
+  onAreaChoose,
 }: {
   regions: GeoRegion[];
   marks: MapMarkIndex;
@@ -39,6 +42,10 @@ export default function MapRegionDirectory({
   onChoose: (code: string | number) => void;
   /** "prefectures", "states": what this country calls the things in the list. */
   divisionPlural: string;
+  /** The area held down, whose regions the map is lighting. */
+  activeArea: string | null;
+  onAreaHover: (area: string | null) => void;
+  onAreaChoose: (area: string) => void;
 }) {
   const areas = groupRegionsByArea(regions);
 
@@ -60,8 +67,32 @@ export default function MapRegionDirectory({
         <div className="columns-1 gap-x-4 [column-fill:balance] xl:columns-2">
           {areas.map((area) => (
             <section key={area.name} className="mb-3 break-inside-avoid">
-              <h3 className="px-1 pb-1 text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
-                {area.name}
+              {/*
+                * The button sits inside the heading rather than replacing it.
+                * The areas were `h3`s, which is how a screen reader jumps
+                * through the country; making the heading a control outright
+                * would have taken that away. A heading is not a control, so
+                * nothing here is a control inside a control - the rows are
+                * siblings in the list below, not children of this.
+                */}
+              <h3>
+                <button
+                  type="button"
+                  aria-pressed={area.name === activeArea}
+                  onClick={() => onAreaChoose(area.name)}
+                  onMouseEnter={() => onAreaHover(area.name)}
+                  onMouseLeave={() => onAreaHover(null)}
+                  onFocus={() => onAreaHover(area.name)}
+                  onBlur={() => onAreaHover(null)}
+                  title={MAP_DIRECTORY_COPY.areaTitle(area.name)}
+                  className={`mb-1 block w-full cursor-pointer truncate rounded-lg px-1 py-0.5 text-left text-[11px] font-black uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
+                    area.name === activeArea
+                      ? "bg-accent/15 text-accent"
+                      : "text-foreground/60 hover:bg-surface-muted hover:text-foreground"
+                  }`}
+                >
+                  {area.name}
+                </button>
               </h3>
               <ul className="space-y-0.5">
                 {area.regions.map((region) => {
