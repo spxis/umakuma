@@ -4029,7 +4029,19 @@
     "kind": "feature",
     "date": "2026-09-03",
     "summary": "A search for 500 yen answers with what it converts to and never with how to say it. The amount a learner most wants from a price is 500\u5186 and \u3054\u3072\u3083\u304f\u3048\u3093 - the currency answer had no Japanese form at all when the query was already in yen, and the reading the number answer works out sat on a line the search dropdown does not draw. An answer carries its reading as its own field now, so every surface that shows an answer can say it aloud. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
     "version": "0.346.0",
     "releasedAt": "2026-09-03T10:45:01Z"
+  },
+  {
+    "id": "maps-region-shape",
+    "name": "The chosen region, drawn on its own",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "On the country map Kagawa is four millimetres of grey and Rhode Island is smaller than the word for it, so the shape - the one thing a map is for - is the thing you cannot see. The panel draws the chosen region filling its width, neighbours in outline so it reads as a place rather than a blob. Requested 2026-09-03 by John.",
+    "version": "0.347.0",
+    "releasedAt": "2026-09-03T10:48:44Z"
   }
 ]

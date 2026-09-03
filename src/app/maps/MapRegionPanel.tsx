@@ -10,7 +10,10 @@ import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 import type { MapMarkStatus } from "@/lib/mapMarks";
 
 import MapMarkButtons from "./MapMarkButtons";
+import type { CountryCode } from "@/lib/geoRegion";
+
 import MapRegionKanji from "./MapRegionKanji";
+import MapRegionShape from "./MapRegionShape";
 import { MAP_MARK_COPY, MAP_STUDY_COPY } from "./MapStudy.constants";
 
 /**
@@ -68,6 +71,7 @@ export default function MapRegionPanel({
   onClose,
   kanjiFacts,
   accountId,
+  country,
   mark,
 }: {
   region: GeoRegion;
@@ -75,6 +79,8 @@ export default function MapRegionPanel({
   /** What each character of the name means and how it reads. */
   kanjiFacts: MapKanjiFacts;
   accountId: string | null;
+  /** Which board the region belongs to, for drawing it on its own. */
+  country: CountryCode;
   /** What the member has said about this region, and how to change it. */
   mark?: {
     status: MapMarkStatus | null;
@@ -117,6 +123,13 @@ export default function MapRegionPanel({
       </header>
 
       <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-4">
+        {/*
+          * The shape first, because it is what the map could not show: on the
+          * country map Kagawa is four millimetres of grey, so the one thing a
+          * map is for is the thing you cannot see.
+          */}
+        <MapRegionShape country={country} code={region.code} label={region.name} />
+
         {/*
           * Above the facts, because it is the one thing on this panel the
           * reader does rather than reads - and because a member who has just

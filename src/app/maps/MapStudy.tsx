@@ -159,6 +159,7 @@ export default function MapStudy({
       onClose={() => setCode(null)}
       kanjiFacts={kanjiFacts}
       accountId={accountId}
+      country={country}
       mark={{
         ...markFor(marking.marks, selected.code),
         saving: marking.saving,

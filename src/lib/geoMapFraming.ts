@@ -135,3 +135,37 @@ export function geoRegionCentre(
   const [minX, minY, maxX, maxY] = region.map.bbox;
   return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
 }
+
+/**
+ * A window tight on one region, for drawing it on its own.
+ *
+ * Wider than the region by a little, so the neighbours show as outline: a
+ * shape with nothing around it is a blob, and recognising Toyama means
+ * recognising the bite it takes out of the coast. Where it is *drawn*, so a
+ * region that lives in an inset box is framed there.
+ */
+const SHAPE_PADDING_RATIO = 0.9;
+
+export function geoRegionBox(country: CountryCode, code: string | number): MapBox {
+  const seated = insetFor(country, code);
+  const source = seated
+    ? { minX: seated.box.x, minY: seated.box.y, maxX: seated.box.x + seated.box.width, maxY: seated.box.y + seated.box.height }
+    : (() => {
+        const region = GEO_DATASETS[country].regions.find((entry) => String(entry.code) === String(code));
+        if (!region) return null;
+        const [minX, minY, maxX, maxY] = region.map.bbox;
+        return { minX, minY, maxX, maxY };
+      })();
+  if (!source) return geoWholeCountryBox(country);
+
+  const span = Math.max(source.maxX - source.minX, source.maxY - source.minY);
+  const padding = span * SHAPE_PADDING_RATIO;
+  const width = source.maxX - source.minX + padding * 2;
+  const height = source.maxY - source.minY + padding * 2;
+  return {
+    x: (source.minX + source.maxX) / 2 - width / 2,
+    y: (source.minY + source.maxY) / 2 - height / 2,
+    width,
+    height,
+  };
+}

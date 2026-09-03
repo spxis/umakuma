@@ -39,3 +39,6 @@ export const MAP_MARK_COPY = {
   tally: (known: number, practice: number, visited: number, total: number) =>
     `${known} of ${total} known · ${practice} to practise · ${visited} visited`,
 } as const;
+
+/** The shape drawn on its own at the top of the panel. */
+export const MAP_SHAPE_COPY = { caption: (name: string) => `The shape of ${name}, with its neighbours in outline.` } as const;
