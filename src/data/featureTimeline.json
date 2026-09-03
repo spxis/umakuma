@@ -3574,7 +3574,9 @@
     "date": "2026-09-02",
     "summary": "What is left after 0.295.0 moved the subject lookups onto the catalogue. Two costs remain in the server render and both happen before anything is drawn: the whole JlptKanji table, 2,211 rows, is loaded on every request, and the member's WaniKani assignments are fetched and waited on. Assignments are live SRS state so they must come from the API, but they do not have to block the first paint - the grid can arrive with the catalogue's own data and take the member's stages when they land. The rows are the other half: the client already pages through them, so the server does not need to hand over all 2,211 to draw the first forty. Measured before this was split out: 5.6s for the JLPT explorer against 0.1s for the grade explorer.",
     "dateIsEstimate": true,
-    "release": 66
+    "release": 66,
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T03:42:43.189Z"
   },
   {
     "id": "theme-preference-cookie",
