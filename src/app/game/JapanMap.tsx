@@ -18,6 +18,14 @@ type Props = {
   marks: MapMark[];
   /** Regions the view should frame. Empty draws the whole country. */
   focusCodes?: ReadonlyArray<string | number>;
+  /**
+   * The window to draw, when the caller is framing it itself.
+   *
+   * The study map zooms and pans, so it computes its own window; the game
+   * frames whatever the question is about and leaves this off. Given, it wins
+   * over `focusCodes`, which is the caller saying it has already decided.
+   */
+  box?: MapBox;
   /** Which country's board to draw. Japan unless the run says otherwise. */
   country?: CountryCode;
   /** Handles make small prefectures tappable; off when the map is only a prompt. */
@@ -34,6 +42,11 @@ type Props = {
   onRegionHover?: (code: string | number | null) => void;
   /** What a region is called, for the pointer and the screen reader. */
   regionLabel?: (code: string | number) => string;
+  /**
+   * Pointer handlers for a caller that pans the map, spread onto the `<svg>`.
+   * The study map drags to pan; the game never does.
+   */
+  svgProps?: React.SVGProps<SVGSVGElement>;
 };
 
 /** Handle size as a share of the framed width, so it holds up at any zoom. */
@@ -48,6 +61,7 @@ function handleFor(box: MapBox) {
 export default function JapanMap({
   marks,
   focusCodes = [],
+  box: framed,
   country = "JP",
   showHandles = false,
   disabled = false,
@@ -55,10 +69,11 @@ export default function JapanMap({
   onRegionSelect,
   onRegionHover,
   regionLabel,
+  svgProps,
 }: Props) {
   const choosable = Boolean(onRegionSelect) && !disabled;
   const dataset = GEO_DATASETS[country];
-  const box = geoFocusBox(country, focusCodes);
+  const box = framed ?? geoFocusBox(country, focusCodes);
   const { radius, fontSize, stroke } = handleFor(box);
   // Codes are numbers in Japan and letters elsewhere, so key them as text.
   const marksByCode = new Map(marks.map((mark) => [String(mark.code), mark]));
@@ -104,7 +119,8 @@ export default function JapanMap({
       role={choosable ? "group" : "img"}
       aria-label={`Map of ${dataset.countryName} by ${dataset.divisionTypeName.toLowerCase()}`}
       onMouseLeave={choosable ? () => onRegionHover?.(null) : undefined}
-      className={`h-full w-full ${className ?? ""}`}
+      {...svgProps}
+      className={`h-full w-full ${className ?? ""} ${svgProps?.className ?? ""}`.trim()}
     >
       {/* Okinawa is drawn in a box rather than in place, the way Japanese maps
           do. Only Japan has an inset; the others draw everything where it is. */}

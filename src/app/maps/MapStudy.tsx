@@ -12,7 +12,10 @@ import { MAP_COUNTRIES, type MapCountryCode } from "@/lib/mapCountries";
 import { mapHref, parseMapPath } from "@/lib/mapAddress";
 import { regionByCode, regionsInOrder } from "@/lib/mapStudy";
 
+import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
+
 import MapRegionPanel from "./MapRegionPanel";
+import { useMapZoom } from "./useMapZoom";
 import { MAP_STUDY_COPY, MAP_STUDY_HEIGHT } from "./MapStudy.constants";
 
 /**
@@ -23,6 +26,10 @@ import { MAP_STUDY_COPY, MAP_STUDY_HEIGHT } from "./MapStudy.constants";
  * other. The choice is in the address either way, so a page about Tokyo can
  * be sent to somebody and opens on Tokyo.
  */
+/* Square, so the − and + read as a pair whatever the digit between them is. */
+const ZOOM_BUTTON =
+  "inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-black text-foreground/70 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-35";
+
 const CHIP =
   "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition";
 const WIDE = "(min-width: 1024px)";
@@ -69,9 +76,25 @@ export default function MapStudy({
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  const choose = useCallback((next: string | number) => {
-    setCode((previous) => (String(previous) === String(next) ? null : next));
-  }, []);
+  const view = useMapZoom(country);
+
+  /*
+   * Choosing while zoomed brings the region into view. Picking Saitama from
+   * the list and being left looking at Kyushu makes a zoom feel broken.
+   *
+   * On the act of choosing rather than in an effect on `code`: the hook hands
+   * back a fresh object every render, so an effect depending on it re-ran
+   * constantly and put the centre back on the chosen region - which silently
+   * undid every drag the moment it finished.
+   */
+  const choose = useCallback(
+    (next: string | number) => {
+      setCode(next);
+      setHovered(null);
+      view.focusRegion(next);
+    },
+    [view],
+  );
 
   const marks: MapMark[] = [
     ...(hovered !== null && String(hovered) !== String(code) ? [{ code: hovered, tone: MAP_TONES.candidate }] : []),
@@ -126,14 +149,55 @@ export default function MapStudy({
           </span>
         </div>
 
-        <div className={`${MAP_STUDY_HEIGHT} rounded-2xl border border-line bg-surface-muted p-2`}>
+        <div className={`relative ${MAP_STUDY_HEIGHT} rounded-2xl border border-line bg-surface-muted p-2`}>
           <JapanMap
             marks={marks}
             country={country}
+            box={view.box}
             onRegionSelect={choose}
             onRegionHover={setHovered}
             regionLabel={regionLabel}
+            svgProps={view.panProps}
           />
+          {/*
+            * Over the map rather than beside it: the controls belong to what
+            * they change, and a row above the map would push it down on the
+            * one screen size where its height is already tight.
+            */}
+          <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full border border-line bg-surface/90 p-1 shadow-sm backdrop-blur">
+            <button
+              type="button"
+              onClick={() => view.step(-1)}
+              disabled={view.zoom === MAP_ZOOM_LEVELS[0]}
+              aria-label={MAP_STUDY_COPY.zoomOut}
+              title={MAP_STUDY_COPY.zoomOut}
+              className={ZOOM_BUTTON}
+            >
+              −
+            </button>
+            <span className="min-w-8 text-center text-[11px] font-black text-foreground/70">{view.zoom}×</span>
+            <button
+              type="button"
+              onClick={() => view.step(1)}
+              disabled={view.zoom === MAP_ZOOM_LEVELS[MAP_ZOOM_LEVELS.length - 1]}
+              aria-label={MAP_STUDY_COPY.zoomIn}
+              title={MAP_STUDY_COPY.zoomIn}
+              className={ZOOM_BUTTON}
+            >
+              +
+            </button>
+            {view.zoomed ? (
+              <button type="button" onClick={view.reset} className={`${ZOOM_BUTTON} w-auto px-2 text-[10px]`}>
+                {MAP_STUDY_COPY.zoomReset}
+              </button>
+            ) : null}
+          </div>
+          {/* Said once, while zoomed, where somebody is about to try dragging. */}
+          {view.zoomed ? (
+            <p className="pointer-events-none absolute bottom-3 left-3 rounded-full bg-surface/85 px-2.5 py-1 text-[10px] font-semibold text-foreground/60">
+              {MAP_STUDY_COPY.panHint}
+            </p>
+          ) : null}
         </div>
 
         <div className="space-y-1.5">

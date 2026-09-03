@@ -14,7 +14,16 @@ export const MAP_STUDY_COPY = {
   readingLabel: "reading",
   /** "Map of Japan, by prefecture" */
   mapLabel: (country: string, division: string) => `Map of ${country}, by ${division}`,
+  zoomIn: "Zoom in",
+  zoomOut: "Zoom out",
+  zoomReset: "Fit",
+  panHint: "Drag, or use the arrow keys",
 } as const;
 
 /** The map keeps this much of the viewport so the whole country reads at once. */
 export const MAP_STUDY_HEIGHT = "h-[52vh] min-h-72 lg:h-[64vh]";
+
+/** The map canvas itself, which is focusable so it can be driven by keyboard. */
+export const MAP_ZOOM_COPY = {
+  canvasLabel: "Map. Arrow keys move around, plus and minus zoom, zero fits the country.",
+} as const;

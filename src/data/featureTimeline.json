@@ -3920,7 +3920,19 @@
     "kind": "bug",
     "date": "2026-09-03",
     "summary": "Between about 1000 and 1280 pixels the top row broke after LISTS and put PROGRESS and READ on a second line, and the section row stacked its pages into a column - so the header changed height as the window moved and the page below it jumped. Both rows now hold one line and scroll instead, the way the phone row already did, and the release codename waits for 1280 rather than taking the room STROKES needed. Reported 2026-09-03 by John, who had asked for this before.",
+    "dateIsEstimate": false,
     "version": "0.338.0",
     "releasedAt": "2026-09-03T09:25:12Z"
+  },
+  {
+    "id": "maps-zoom",
+    "name": "Zoom in on the map, and get about",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "Kanto is eight prefectures inside a thumbnail: on a whole-country map Saitama and Gunma are a few pixels of the same grey. Three zoom steps rather than a free zoom, with drag, arrow keys and +/-/0 to move around, and the window clamped so a drag that runs off the edge stops rather than framing open sea. Requested 2026-09-03 by John.",
+    "version": "0.339.0",
+    "releasedAt": "2026-09-03T09:28:42Z"
   }
 ]

@@ -389,6 +389,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Fudan no Nanori", ja: "普段の名乗り", reading: "ふだんのなのり", gloss: "introducing itself the way the others do" },
   { romaji: "Hedatenai Masume", ja: "隔てない升目", reading: "へだてないますめ", gloss: "one sheet, no wall between a list and a lone character" },
   { romaji: "Honegumi wa Ugokanai", ja: "骨組みは動かない", reading: "ほねぐみはうごかない", gloss: "the frame stays where it was" },
+  { romaji: "Mawaru Madoguchi", ja: "回る窓口", reading: "まわるまどぐち", gloss: "a window you can move around" },
 ];
 
 /**

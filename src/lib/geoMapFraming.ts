@@ -58,3 +58,69 @@ export function geoBoxIsWholeCountry(country: CountryCode, box: MapBox): boolean
   const dataset = GEO_DATASETS[country];
   return box.width >= dataset.width && box.height >= dataset.height;
 }
+
+/**
+ * How far in the map is drawn, as steps rather than a free zoom.
+ *
+ * Three steps because the reason for zooming is a specific one: the Kanto
+ * prefectures and the New England states are drawn a few pixels across on a
+ * whole-country map, and no amount of squinting separates Saitama from Gunma.
+ * A free zoom would offer a hundred framings of which two are useful; these
+ * are the two, plus the whole country to come back to.
+ */
+export const MAP_ZOOM_LEVELS = [1, 2, 3] as const;
+
+export type MapZoom = (typeof MAP_ZOOM_LEVELS)[number];
+
+export function isMapZoom(value: number): value is MapZoom {
+  return (MAP_ZOOM_LEVELS as readonly number[]).includes(value);
+}
+
+/** One step in or out, clamped: the ends stay put rather than wrapping. */
+export function stepMapZoom(zoom: MapZoom, by: 1 | -1): MapZoom {
+  const at = MAP_ZOOM_LEVELS.indexOf(zoom);
+  return MAP_ZOOM_LEVELS[Math.min(MAP_ZOOM_LEVELS.length - 1, Math.max(0, at + by))]!;
+}
+
+/**
+ * The window a zoom level and a centre make.
+ *
+ * Kept on the map: a centre near a coast would otherwise frame open sea, and
+ * at 3x more than half the view could be empty. Clamping the window rather
+ * than the centre means a drag that runs off the edge simply stops there,
+ * which is what a reader expects from every other map they have used.
+ */
+export function geoZoomBox(
+  country: CountryCode,
+  zoom: MapZoom,
+  centre: { x: number; y: number },
+): MapBox {
+  const whole = geoWholeCountryBox(country);
+  if (zoom <= 1) return whole;
+
+  const width = whole.width / zoom;
+  const height = whole.height / zoom;
+  return {
+    x: Math.min(Math.max(centre.x - width / 2, 0), whole.width - width),
+    y: Math.min(Math.max(centre.y - height / 2, 0), whole.height - height),
+    width,
+    height,
+  };
+}
+
+/** Where a box is looking, which is what a zoom step keeps hold of. */
+export function geoBoxCentre(box: MapBox): { x: number; y: number } {
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+}
+
+/** The middle of a region, for zooming to whatever somebody just chose. */
+export function geoRegionCentre(
+  country: CountryCode,
+  code: string | number | null,
+): { x: number; y: number } | null {
+  if (code === null) return null;
+  const region = GEO_DATASETS[country].regions.find((entry) => String(entry.code) === String(code));
+  if (!region) return null;
+  const [minX, minY, maxX, maxY] = region.map.bbox;
+  return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+}
