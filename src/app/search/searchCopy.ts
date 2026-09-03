@@ -43,6 +43,7 @@ export const SEARCH_EXAMPLES = ["pencil", "日", "えんぴつ", "Heisei 3", "15
  */
 export const SEARCH_ANSWER_COPY: Record<SearchAnswerKind, string> = {
   [SEARCH_ANSWER_KINDS.era]: "Japanese era",
+  [SEARCH_ANSWER_KINDS.number]: "Japanese number",
   /* Not "In yen": the same row answers a yen amount in dollars. */
   [SEARCH_ANSWER_KINDS.currency]: "Currency",
 } as const;

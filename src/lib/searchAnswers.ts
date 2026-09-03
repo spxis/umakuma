@@ -17,6 +17,12 @@
  */
 
 import {
+  LARGEST_JAPANESE_NUMBER,
+  parseJapaneseNumber,
+  readJapaneseNumber,
+  writeJapaneseNumber,
+} from "./japaneseNumbers";
+import {
   formatEraYearJapanese,
   formatEraYearRomaji,
   parseEraYear,
@@ -37,6 +43,7 @@ import { formatChange, type LookbackId } from "./moneyHistory";
 
 export const SEARCH_ANSWER_KINDS = {
   era: "era",
+  number: "number",
   currency: "currency",
 } as const;
 
@@ -116,6 +123,48 @@ function eraAnswer(query: string): SearchAnswer | null {
     value: String(found.westernYear),
     japanese: formatEraYearJapanese(found),
     detail: found.era.reading,
+    attribution: null,
+    history: null,
+  };
+}
+
+/**
+ * The number converter, or nothing when the query is not one number.
+ *
+ * Japanese counts in ten-thousands - 万, 億, 兆, each 10,000 times the last -
+ * so 一億二千万 is "one hundred million and two thousand ten-thousands" and
+ * reading it off a page is a different skill from reading the digits. Neither
+ * spelling found the other: the catalogues hold 億 and 万 as characters, so a
+ * query spelling out a quantity matched the pieces and never the amount.
+ *
+ * Both directions, because the question has two. A number in characters wants
+ * the digits; digits want the characters and, more than that, how to say them
+ * - 三百 is さんびゃく, and knowing it means 300 does not tell you that.
+ *
+ * The whole query has to be the number. A digit inside a sentence is somebody
+ * searching for the sentence, and an answer panel over every query with a 5 in
+ * it would be noise on the page rather than an answer to anything.
+ */
+function numberAnswer(query: string): SearchAnswer | null {
+  const trimmed = query.trim();
+  if (!trimmed) return null;
+
+  const value = parseJapaneseNumber(trimmed);
+  if (value === null || value > LARGEST_JAPANESE_NUMBER) return null;
+
+  const japanese = writeJapaneseNumber(value);
+  const reading = readJapaneseNumber(value);
+  if (!japanese || !reading) return null;
+
+  /* Nothing to tell somebody who typed the characters this would answer with. */
+  if (japanese === trimmed && value < 10) return null;
+
+  return {
+    kind: SEARCH_ANSWER_KINDS.number,
+    question: trimmed,
+    value: value.toLocaleString("en-CA"),
+    japanese,
+    detail: reading,
     attribution: null,
     history: null,
   };
@@ -212,5 +261,7 @@ export function searchAnswers(
 ): SearchAnswer[] {
   const money = parseMoneyQuery(query).map((amount) => currencyAnswer(amount, rates, rateSource));
 
-  return [eraAnswer(query), ...money].filter((answer): answer is SearchAnswer => answer !== null);
+  return [eraAnswer(query), numberAnswer(query), ...money].filter(
+    (answer): answer is SearchAnswer => answer !== null,
+  );
 }

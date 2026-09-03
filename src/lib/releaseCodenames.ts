@@ -394,6 +394,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Muda naku Mukeru", ja: "無駄なく向ける", reading: "むだなくむける", gloss: "pointed the same way, with nothing built twice" },
   { romaji: "Meguru Mejiri", ja: "巡る目尻", reading: "めぐるめじり", gloss: "the eye comes round to where it asked" },
   { romaji: "Mochiba no Moyori", ja: "持ち場の最寄り", reading: "もちばのもより", gloss: "back to its own post, and near what you asked for" },
+  { romaji: "Yajirushi Ryoumuki", ja: "矢印両向き", reading: "やじるしりょうむき", gloss: "an arrow that points both ways" },
 ];
 
 /**

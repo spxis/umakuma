@@ -177,3 +177,54 @@ describe("searchAnswers, on everything else", () => {
     expect(searchAnswers("", RATES, SOURCE)).toEqual([]);
   });
 });
+
+/*
+ * A number written one way, answered in the other.
+ *
+ * 一億二千万 found the characters 億 and 万 and never the amount, because no
+ * catalogue holds a spelled-out quantity. Neither did the digits find the
+ * spelling, which is the question a learner is more often asking.
+ */
+describe("the number answer", () => {
+  const numberFor = (query: string) =>
+    searchAnswers(query).find((answer) => answer.kind === SEARCH_ANSWER_KINDS.number) ?? null;
+
+  it("reads a number written in characters", () => {
+    const answer = numberFor("一億二千万");
+    expect(answer?.value).toBe("120,000,000");
+    expect(answer?.japanese).toBe("一億二千万");
+    expect(answer?.detail).toBe("いちおくにせんまん");
+  });
+
+  it("writes a number given in digits", () => {
+    const answer = numberFor("120000000");
+    expect(answer?.japanese).toBe("一億二千万");
+    expect(answer?.value).toBe("120,000,000");
+  });
+
+  /* The spelling a headline uses, digits for the awkward parts. */
+  it("reads the mixed spelling", () => {
+    expect(numberFor("1億2000万")?.value).toBe("120,000,000");
+    expect(numberFor("5万")?.japanese).toBe("五万");
+  });
+
+  /* The half the digits do not give you: 三百 is さんびゃく, not さんひゃく. */
+  it("says how it is read", () => {
+    expect(numberFor("300")?.detail).toBe("さんびゃく");
+    expect(numberFor("8000")?.detail).toBe("はっせん");
+  });
+
+  /*
+   * The whole query has to be the number. An answer panel over every query
+   * with a digit in it is noise on the page rather than an answer.
+   */
+  it.each(["5 people", "水", "N5 kanji", "", "heisei 3"])("stays out of %s", (query) => {
+    expect(numberFor(query)).toBeNull();
+  });
+
+  /* 一 is already the answer to 一; the panel would repeat the query back. */
+  it("says nothing a single character does not already say", () => {
+    expect(numberFor("一")).toBeNull();
+    expect(numberFor("1")?.japanese).toBe("一");
+  });
+});
