@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
 
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
-import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import type { GeoRegion } from "@/lib/geoRegion";
-import { subjectHref } from "@/lib/globalSearch";
 import { regionFacts, regionKanji, type FactGroup } from "@/lib/mapStudy";
 
+import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
+
+import MapRegionKanji from "./MapRegionKanji";
 import { MAP_STUDY_COPY } from "./MapStudy.constants";
 
 /**
@@ -60,7 +60,18 @@ function Group({ group }: { group: FactGroup }) {
   );
 }
 
-export default function MapRegionPanel({ region, onClose }: { region: GeoRegion; onClose?: () => void }) {
+export default function MapRegionPanel({
+  region,
+  onClose,
+  kanjiFacts,
+  accountId,
+}: {
+  region: GeoRegion;
+  onClose?: () => void;
+  /** What each character of the name means and how it reads. */
+  kanjiFacts: MapKanjiFacts;
+  accountId: string | null;
+}) {
   const kanji = regionKanji(region);
   const groups = regionFacts(region);
 
@@ -94,26 +105,7 @@ export default function MapRegionPanel({ region, onClose }: { region: GeoRegion;
       </header>
 
       <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-4">
-        {kanji.length > 0 ? (
-          <section className="space-y-1.5">
-            <h3 className={HEADING}>{MAP_STUDY_COPY.writtenWith}</h3>
-            <p className="flex flex-wrap gap-1.5">
-              {kanji.map((character) => {
-                const href = subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: character, slug: null });
-                const chip = `inline-flex h-10 w-10 items-center justify-center rounded-xl border border-kanji/40 bg-kanji/5 text-xl font-black text-kanji ${JP_TEXT_CLASS}`;
-                return href ? (
-                  <Link key={character} href={href} lang="ja" translate="no" className={`${chip} transition hover:bg-kanji/15`}>
-                    {character}
-                  </Link>
-                ) : (
-                  <span key={character} lang="ja" translate="no" className={chip}>
-                    {character}
-                  </span>
-                );
-              })}
-            </p>
-          </section>
-        ) : null}
+        {kanji.length > 0 ? <MapRegionKanji kanji={kanji} facts={kanjiFacts} accountId={accountId} /> : null}
 
         {groups.map((group) => (
           <Group key={group.id} group={group} />

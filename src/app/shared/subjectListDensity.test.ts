@@ -27,8 +27,22 @@ function walk(dir: string, out: string[] = []): string[] {
   return out;
 }
 
+/**
+ * Comments stripped before anything is matched.
+ *
+ * The scan reads for the words it forbids, and the files that deliberately do
+ * something else *explain* that in prose - so a component with fixed columns
+ * and a comment saying "fixed columns, not auto-fill" was reported as an
+ * auto-fill grid. A guard a comment can trip is as broken as one a comment
+ * can satisfy.
+ */
+function code(source: string): string {
+  return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+}
+
 /** A hand-rolled responsive grid, as opposed to a list or a fixed layout. */
-function buildsASubjectGrid(source: string): boolean {
+function buildsASubjectGrid(raw: string): boolean {
+  const source = code(raw);
   if (!source.includes("auto-fill") && !source.includes("auto-fit")) return false;
   /*
    * Subject grids render a glyph in the Japanese face; toolbars and stat tiles
@@ -57,7 +71,7 @@ describe("subject lists", () => {
       const folder = folderOf(file);
       const siblings = files.filter((candidate) => folderOf(candidate) === folder);
       const offersToggle = siblings.some((candidate) =>
-        readFileSync(candidate, "utf8").includes("SubjectViewModeToggle"),
+        code(readFileSync(candidate, "utf8")).includes("SubjectViewModeToggle"),
       );
 
       if (!offersToggle) {

@@ -64,6 +64,23 @@ export function useMapZoom(country: CountryCode) {
     [country],
   );
 
+  /*
+   * Double-click goes in one step closer, on what was double-clicked.
+   *
+   * The gesture everybody already knows from every other map. It steps rather
+   * than jumping to 3x, so a second double-click keeps going and the reader
+   * ends up where they were heading; at the last step it re-centres without
+   * zooming, which is still what they asked for - that region, in the middle.
+   */
+  const zoomInto = useCallback(
+    (code: string | number) => {
+      const found = geoRegionCentre(country, code);
+      if (found) setCentre(found);
+      setZoom((current) => stepMapZoom(current, 1));
+    },
+    [country],
+  );
+
   const onPointerDown = useCallback(
     (event: React.PointerEvent<SVGSVGElement>) => {
       if (!zoomed || event.button !== 0) return;
@@ -144,6 +161,7 @@ export function useMapZoom(country: CountryCode) {
     reset,
     step,
     focusRegion,
+    zoomInto,
     /*
      * Spread onto the SVG. `touch-none` is what stops a drag on a phone
      * scrolling the page instead of moving the map.

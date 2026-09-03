@@ -39,6 +39,8 @@ type Props = {
    * as easy to hit as Hokkaido.
    */
   onRegionSelect?: (code: string | number) => void;
+  /** Double-click, which the study map uses to zoom in on what was clicked. */
+  onRegionDoubleSelect?: (code: string | number) => void;
   onRegionHover?: (code: string | number | null) => void;
   /** What a region is called, for the pointer and the screen reader. */
   regionLabel?: (code: string | number) => string;
@@ -67,6 +69,7 @@ export default function JapanMap({
   disabled = false,
   className,
   onRegionSelect,
+  onRegionDoubleSelect,
   onRegionHover,
   regionLabel,
   svgProps,
@@ -153,6 +156,7 @@ export default function JapanMap({
             tabIndex={choosable ? 0 : undefined}
             aria-label={choosable ? label : undefined}
             onClick={choosable ? () => onRegionSelect?.(region.code) : undefined}
+            onDoubleClick={choosable && onRegionDoubleSelect ? () => onRegionDoubleSelect(region.code) : undefined}
             onKeyDown={
               choosable
                 ? (event) => {

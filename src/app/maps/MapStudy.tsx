@@ -13,6 +13,7 @@ import { mapHref, parseMapPath } from "@/lib/mapAddress";
 import { regionByCode, regionsInOrder } from "@/lib/mapStudy";
 
 import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
+import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 
 import MapRegionPanel from "./MapRegionPanel";
 import { useMapZoom } from "./useMapZoom";
@@ -37,9 +38,15 @@ const WIDE = "(min-width: 1024px)";
 export default function MapStudy({
   initialCountry,
   initialCode,
+  kanjiFacts,
+  accountId,
 }: {
   initialCountry: MapCountryCode;
   initialCode: string | number | null;
+  /** What each kanji in a place name means and reads, resolved on the server. */
+  kanjiFacts: MapKanjiFacts;
+  /** The reader's own account, or null for a visitor. */
+  accountId: string | null;
 }) {
   const [country, setCountry] = useState<MapCountryCode>(initialCountry);
   const [code, setCode] = useState<string | number | null>(initialCode);
@@ -110,7 +117,9 @@ export default function MapStudy({
     [country],
   );
 
-  const panel = selected ? <MapRegionPanel region={selected} onClose={() => setCode(null)} /> : null;
+  const panel = selected ? (
+    <MapRegionPanel region={selected} onClose={() => setCode(null)} kanjiFacts={kanjiFacts} accountId={accountId} />
+  ) : null;
 
   return (
     <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
@@ -155,6 +164,7 @@ export default function MapStudy({
             country={country}
             box={view.box}
             onRegionSelect={choose}
+            onRegionDoubleSelect={view.zoomInto}
             onRegionHover={setHovered}
             regionLabel={regionLabel}
             svgProps={view.panProps}
