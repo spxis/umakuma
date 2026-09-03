@@ -4097,5 +4097,18 @@
     "dateIsEstimate": true,
     "release": 76,
     "summary": "The map panel's kanji cards show the meaning and the reading together. John asked for the shared component 'with a toggle, the english/reading'; showing both was a judgement call made without flagging it, and the grade explorer already has the reveal control this would reuse. Raised 2026-09-03 by John."
+  },
+  {
+    "id": "map-shape-fills-frame",
+    "name": "The region shape is drawn tiny",
+    "area": "platform",
+    "kind": "bug",
+    "status": "planned",
+    "date": "2026-09-03",
+    "dateIsEstimate": true,
+    "release": 77,
+    "summary": "The side panel draws the chosen region on its own so the shape can be seen, and the shape is a few millimetres in the middle of the whole country. The window is padded by nine tenths of the region's longest side and is nearly square, while the frame is two and a half times as wide as it is tall, so the map scales to the height and shows two or three times more country than the window asked for: Hokkaido's window comes out larger than Japan. The shape should fill the frame it is given, with only enough room around it to place the region among its neighbours. Reported 2026-09-03 by John.",
+    "owner": "opus",
+    "claimedAt": "2026-09-03T11:23:42.275Z"
   }
 ]
