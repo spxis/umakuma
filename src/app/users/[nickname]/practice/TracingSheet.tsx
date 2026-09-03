@@ -179,8 +179,12 @@ export default function TracingSheet({
              * seven strokes takes another row instead of shrinking the squares
              * to fit, because a square too small to write in is not one.
              *
-             * The model is faint, not solid, so it reads as something to aim
-             * at rather than the answer already filled in.
+             * The model is solid, the same as the one heading every practice
+             * row below it. It was faint here on the reasoning that a chart
+             * row is something to aim at - but the two sit in one column down
+             * a single page, so the reasoning showed up as the same character
+             * printed two weights, and the eye reads that as a mistake rather
+             * than as a distinction.
              */
             <div className="grid gap-1" style={grid}>
               {Array.from({ length: strokeSheetRows(entry.strokeCount, showModel, columns) }, (_, row) => {
@@ -192,7 +196,7 @@ export default function TracingSheet({
                   <Fragment key={`row-${row}`}>
                     {showModel ? (
                       <Cell>
-                        <TraceGlyph entry={entry} tone="ghost" />
+                        <TraceGlyph entry={entry} tone="solid" />
                       </Cell>
                     ) : null}
                     {Array.from({ length: strokesHere }, (_, offset) => {

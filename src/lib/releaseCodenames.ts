@@ -418,6 +418,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Sunaona Eigo", ja: "素直な英語", reading: "すなおなえいご", gloss: "the English name, plainly, on an English page" },
   { romaji: "Sessuru Kengoto", ja: "接する県ごと", reading: "せっするけんごと", gloss: "a region lit as one shape, not six names in turn" },
   { romaji: "Sokutei no Sokuza", ja: "測定の即座", reading: "そくていのそくざ", gloss: "measured, not guessed at" },
+  { romaji: "Tate Ichiretsu", ja: "縦一列", reading: "たていちれつ", gloss: "one column, one weight" },
 ];
 
 /**

@@ -4148,11 +4148,23 @@
     "id": "stroke-repeat-looks-alive",
     "name": "A single stroke's repeat looks static",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "The repeat runs for one stroke but rests a fixed second after a 420ms draw, so the stroke sits finished for 70 percent of every cycle - running, and indistinguishable from broken. The rest is a share of the drawing now, capped at the old second so the whole character is unchanged. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.367.0",
+    "releasedAt": "2026-09-03T15:17:59Z"
+  },
+  {
+    "id": "sheet-model-one-weight",
+    "name": "The stroke chart's model character is faint",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.367.0",
-    "releasedAt": "2026-09-03T15:17:59Z",
-    "summary": "The repeat runs for one stroke but rests a fixed second after a 420ms draw, so the stroke sits finished for 70 percent of every cycle - running, and indistinguishable from broken. The rest is a share of the drawing now, capped at the old second so the whole character is unchanged. Reported 2026-09-03 by John."
+    "version": "0.368.0",
+    "releasedAt": "2026-09-03T15:22:55Z",
+    "summary": "On a stroke-order worksheet the leftmost square of every chart row holds the finished character, and it is drawn faint while the same square on every practice row below it is solid. One column down the page, two weights, for the same thing. Make the chart rows match the rest. Reported 2026-09-03 by John."
   }
 ]
