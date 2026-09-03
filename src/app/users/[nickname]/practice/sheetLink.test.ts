@@ -34,6 +34,7 @@ const BASE: SheetSettings = {
   owner: null,
   listKey: null,
   printAll: false,
+  fill: false,
 };
 
 function read(href: string) {
@@ -150,6 +151,7 @@ describe("the print layout", () => {
     const everySetting: SheetSettings = {
       ...BASE,
       printAll: true,
+      fill: false,
       choosing: true,
       picked: "一二三",
       showModel: false,
@@ -216,6 +218,7 @@ describe("the reference sheet's link", () => {
     size: DEFAULT_SHEET_SIZE,
     choosing: false,
     printAll: false,
+    fill: false,
   };
 
   /* The three sheets are one address with a mode, so a chosen one is a link. */
@@ -253,6 +256,7 @@ describe("readings on the reference sheet", () => {
     size: DEFAULT_SHEET_SIZE,
     choosing: false,
     printAll: false,
+    fill: false,
   };
 
   /*

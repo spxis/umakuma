@@ -387,6 +387,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Hashiru Hitosuji", ja: "走る一筋", reading: "はしるひとすじ", gloss: "a single line, run right through" },
   { romaji: "Hitoshii Yakume", ja: "等しい役目", reading: "ひとしいやくめ", gloss: "the same job everywhere" },
   { romaji: "Fudan no Nanori", ja: "普段の名乗り", reading: "ふだんのなのり", gloss: "introducing itself the way the others do" },
+  { romaji: "Hedatenai Masume", ja: "隔てない升目", reading: "へだてないますめ", gloss: "one sheet, no wall between a list and a lone character" },
 ];
 
 /**

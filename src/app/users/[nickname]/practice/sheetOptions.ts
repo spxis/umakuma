@@ -88,6 +88,12 @@ export function readSheetOptions(query: Query, target: PracticeTarget | null) {
     placement,
     size,
     printAll,
+    /*
+     * Whether the page's rows are shared out between the characters on it
+     * rather than one row each. Off for a list; on for the sheet a single
+     * character links to, which is that character and the page to work at it.
+     */
+    fill: firstValue(query.fill) === "1",
     printNow: firstValue(query[PRINT_NOW_PARAM]) === "1",
     pageSize: printAll ? PRINT_ALL_LIMIT : SHEET_SIZES[size].perPage,
     /*

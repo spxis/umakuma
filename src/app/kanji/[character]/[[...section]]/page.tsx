@@ -22,6 +22,8 @@ import { filingStripIndex } from "@/app/shared/subject-page/subjectSectionLayout
 
 import { KANJI_PAGE_COPY } from "../KanjiPage.constants";
 import SubjectIdentityBlock from "@/app/shared/subject-page/SubjectIdentityBlock";
+import { viewerAddress } from "@/app/shared/viewerAddress";
+import { pickedSheetHref } from "@/app/users/[nickname]/practice/sheetLink";
 import { radicalPartsOf } from "@/lib/radicalSearchServer";
 
 import { KANJI_SECTION_BLOCKS, kanjiSectionsFor, type KanjiSectionView } from "../kanjiSections";
@@ -154,6 +156,15 @@ export default async function KanjiPage({ params }: Props) {
     dictionaryAttribution: getKanjiDictionaryAttribution(),
     parts: radicalPartsOf(character),
     alone: section !== null,
+    worksheetHref: (() => {
+      /*
+       * The sheet is the member's own, at their address, so a visitor is
+       * offered none - as the list cards offer none. One character, in stroke
+       * order, with the page filled to practise it.
+       */
+      const viewerKey = viewerAddress(viewerMenuInfo);
+      return viewerKey ? pickedSheetHref(viewerKey, [character], { mode: "strokes", fill: true }) : null;
+    })(),
     page,
   };
 

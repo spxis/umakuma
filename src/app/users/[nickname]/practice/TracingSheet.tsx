@@ -57,7 +57,56 @@ type Props = {
    * told it is number 1 for the second time is worse than no number at all.
    */
   startIndex?: number;
+  /**
+   * How many rows each character gets, when the page is being filled.
+   *
+   * A list gives each character one row and moves on. A single character
+   * wants the opposite - itself, then the rest of the page to work at it - and
+   * this is the same sheet doing that: whatever rows the character needs of
+   * its own (one to trace, or its stroke chart) come first, and rows to trace
+   * and write in top the share up. Left unset, a row each, as a list prints.
+   */
+  rowsPerEntry?: number;
 };
+
+/**
+ * The row a workbook uses: the character once to copy from, faint repeats to
+ * trace over, then empty squares to write unaided. The same row whether it is
+ * a list character's only row or one of the many a filled page gives it.
+ */
+function TraceRow({
+  entry,
+  showModel,
+  columns,
+  traceCells,
+}: {
+  entry: TraceEntry;
+  showModel: boolean;
+  columns: number;
+  traceCells: number;
+}) {
+  return (
+    <>
+      {/*
+        * Solid or faint, never absent. The option is about whether the first
+        * square is a written example or another one to trace: a solid
+        * character cannot be traced over usefully, so turning it off should
+        * hand back a fourth tracing square rather than an empty one.
+        */}
+      <Cell>
+        <TraceGlyph entry={entry} tone={showModel ? "solid" : "ghost"} />
+      </Cell>
+      {Array.from({ length: traceCells }, (_, index) => (
+        <Cell key={`ghost-${index}`}>
+          <TraceGlyph entry={entry} tone="ghost" />
+        </Cell>
+      ))}
+      {Array.from({ length: columns - 1 - traceCells }, (_, index) => (
+        <Cell key={`blank-${index}`} />
+      ))}
+    </>
+  );
+}
 
 /**
  * A tracing sheet, built for paper.
@@ -74,8 +123,12 @@ export default function TracingSheet({
   size = DEFAULT_SHEET_SIZE,
   showNumbers = true,
   startIndex = 1,
+  rowsPerEntry,
 }: Props) {
   const { columns, traceCells } = SHEET_SIZES[size];
+  const grid = { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` };
+  /* The rows a character gets beyond its own, when the page is being filled. */
+  const extraRows = (own: number) => (rowsPerEntry === undefined ? 0 : Math.max(0, rowsPerEntry - own));
 
   return (
     <div className="space-y-3">
@@ -129,7 +182,7 @@ export default function TracingSheet({
              * The model is faint, not solid, so it reads as something to aim
              * at rather than the answer already filled in.
              */
-            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+            <div className="grid gap-1" style={grid}>
               {Array.from({ length: strokeSheetRows(entry.strokeCount, showModel, columns) }, (_, row) => {
                 const perRow = strokesPerRow(showModel, columns);
                 const firstStroke = row * perRow;
@@ -159,26 +212,19 @@ export default function TracingSheet({
                   </Fragment>
                 );
               })}
+              {/* Then the practice, when the page is being filled: the chart is the lesson, these are the work. */}
+              {Array.from({ length: extraRows(strokeSheetRows(entry.strokeCount, showModel, columns)) }, (_, row) => (
+                <Fragment key={`practice-${row}`}>
+                  <TraceRow entry={entry} showModel={showModel} columns={columns} traceCells={traceCells} />
+                </Fragment>
+              ))}
             </div>
           ) : (
-            <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
-              {/*
-                * Solid or faint, never absent. The option is about whether the
-                * first square is a written example or another one to trace: a
-                * solid character cannot be traced over usefully, so turning it
-                * off should hand back a fourth tracing square rather than an
-                * empty one.
-                */}
-              <Cell>
-                <TraceGlyph entry={entry} tone={showModel ? "solid" : "ghost"} />
-              </Cell>
-              {Array.from({ length: traceCells }, (_, index) => (
-                <Cell key={`ghost-${index}`}>
-                  <TraceGlyph entry={entry} tone="ghost" />
-                </Cell>
-              ))}
-              {Array.from({ length: columns - 1 - traceCells }, (_, index) => (
-                <Cell key={`blank-${index}`} />
+            <div className="grid gap-1" style={grid}>
+              {Array.from({ length: 1 + extraRows(1) }, (_, row) => (
+                <Fragment key={`row-${row}`}>
+                  <TraceRow entry={entry} showModel={showModel} columns={columns} traceCells={traceCells} />
+                </Fragment>
               ))}
             </div>
           )}

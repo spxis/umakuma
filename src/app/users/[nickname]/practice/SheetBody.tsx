@@ -22,6 +22,7 @@ export default function SheetBody({
   showNumbers,
   size,
   startIndex,
+  rowsPerEntry,
 }: {
   entries: TraceEntry[];
   source: PracticeSource;
@@ -31,6 +32,8 @@ export default function SheetBody({
   showNumbers: boolean;
   size: SheetSize;
   startIndex: number;
+  /** Rows each character gets when the page is filled; unset for a row each. */
+  rowsPerEntry?: number;
 }) {
   if (entries.length === 0) {
     return (
@@ -65,6 +68,7 @@ export default function SheetBody({
           size={size}
           showNumbers={showNumbers}
           startIndex={startIndex}
+          rowsPerEntry={rowsPerEntry}
         />
       )}
     </div>

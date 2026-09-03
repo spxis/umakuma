@@ -47,6 +47,8 @@ export const PRACTICE_SHEET_COPY = {
   optionsLabel: "Options",
   optionShowModel: "Show the finished character",
   optionShowReadings: "Show readings",
+  /* One row per character is a list; the page shared between them is practice. */
+  optionFill: "Fill the page",
   optionShowNumbers: "Number the rows",
   sizeLabel: "Squares",
   sizeLarge: "L",
@@ -149,11 +151,16 @@ export const SHEET_COLUMNS = 8;
  *
  * `perPage` is how many characters fill `SHEETS_PER_PAGE` sheets at that size -
  * see the note there for how the numbers were arrived at.
+ *
+ * `rowsPerPage` is how many rows of squares one sheet of paper holds under
+ * its header, which is what "fill the page" divides between the characters
+ * on it. Squares divide the width, so a smaller square is also a shorter
+ * row and more of them fit down the page.
  */
 export const SHEET_SIZES = {
-  large: { columns: 6, traceCells: 3, perPage: 17 },
-  medium: { columns: SHEET_COLUMNS, traceCells: TRACE_CELLS_PER_ROW, perPage: 22 },
-  small: { columns: 10, traceCells: 4, perPage: 26 },
+  large: { columns: 6, traceCells: 3, perPage: 17, rowsPerPage: 7 },
+  medium: { columns: SHEET_COLUMNS, traceCells: TRACE_CELLS_PER_ROW, perPage: 22, rowsPerPage: 9 },
+  small: { columns: 10, traceCells: 4, perPage: 26, rowsPerPage: 11 },
 } as const;
 
 export type SheetSize = keyof typeof SHEET_SIZES;

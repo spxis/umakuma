@@ -20,6 +20,7 @@ import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, SHEET_CHIP, WANI
 import SheetOptionsRow from "../SheetOptionsRow";
 import { printNowHref, sheetHref, type SheetSettings } from "../sheetLink";
 import SheetBody from "../SheetBody";
+import { fillRowsPerEntry } from "../sheetFill";
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 type PageProps = {
@@ -56,6 +57,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     placement,
     size,
     printAll,
+    fill,
     printNow,
     pageSize,
     picked,
@@ -139,6 +141,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     size,
     choosing,
     printAll,
+    fill,
   };
 
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
@@ -420,6 +423,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         showNumbers={showNumbers}
         size={size}
         startIndex={(page - 1) * pageSize + 1}
+      rowsPerEntry={fill ? fillRowsPerEntry(size, entries.length) : undefined}
       />
 
       <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 text-[10px] text-foreground/60 print:text-neutral-400">

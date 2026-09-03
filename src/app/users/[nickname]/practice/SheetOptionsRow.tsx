@@ -89,6 +89,18 @@ export default function SheetOptionsRow({ settings }: { settings: SheetSettings 
         on={settings.showNumbers}
         href={sheetHref(settings, { showNumbers: !settings.showNumbers })}
       />
+      {/*
+        * The page shared between its characters rather than a row each: one
+        * kanji gets the whole page, two get half. A reference sheet has no
+        * rows to share, so it has no such switch.
+        */}
+      {settings.mode === "reference" ? null : (
+        <Checkbox
+          label={PRACTICE_SHEET_COPY.optionFill}
+          on={settings.fill}
+          href={sheetHref(settings, { fill: !settings.fill })}
+        />
+      )}
 
       {/*
         * How big the squares are. A child needs a box big enough to form a

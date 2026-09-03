@@ -15,4 +15,6 @@ export const KANJI_PAGE_COPY = {
   examples: "In use",
   sentenceCredit: "Example sentences from",
   backHome: "UmaKuma",
+  /* Named for where it goes: the member's practice sheet, with this character picked. */
+  worksheet: "Worksheet",
 } as const;

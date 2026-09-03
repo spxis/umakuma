@@ -2,6 +2,8 @@ import type { PaginationPlacement } from "@/app/shared/paginationPlacement";
 import { practiceSourceHasLevels, practiceSourceHasSlug, type PracticeSource } from "@/lib/practiceSourceKinds";
 import { LIST_KEY_PARAM } from "@/lib/studyListRules";
 
+import { encodeSelection } from "@/app/shared/subjectSelection";
+
 import { practiceHref } from "./practiceAddress";
 
 import { DEFAULT_SHEET_SIZE, type SheetSize } from "./practiceCopy";
@@ -64,6 +66,8 @@ export type SheetSettings = {
    * square size meant a differently-sized print view, not a trip back.
    */
   printAll: boolean;
+  /** Whether the page's rows are shared between its characters rather than one each. */
+  fill: boolean;
   /** The hand-picked characters, encoded, when the sheet is a picked one. */
   picked: string;
   /** The saved list's slug, when the sheet is built from one. */
@@ -125,6 +129,7 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
     parts.push(`${LIST_KEY_PARAM}=${encodeURIComponent(next.listKey)}`);
   }
   if (next.printAll) parts.push("print=all");
+  if (next.fill) parts.push("fill=1");
   // Kept last: it is the longest parameter and the least worth reading.
   if (next.picked) parts.push(`picked=${encodeURIComponent(next.picked)}`);
 
@@ -143,4 +148,45 @@ export function sheetHref(settings: SheetSettings, changes: Partial<SheetSetting
 export function printNowHref(settings: SheetSettings, changes: Partial<SheetSettings> = {}): string {
   const href = sheetHref(settings, changes);
   return `${href}${href.includes("?") ? "&" : "?"}${PRINT_NOW_PARAM}=1`;
+}
+
+/**
+ * A sheet of characters chosen by hand, from any surface that has some.
+ *
+ * The character page links here for one character: that character in stroke
+ * order, then the page filled with rows to practise it. It is the same sheet
+ * a list prints - one entry rather than twenty, and the page shared out
+ * rather than a row each - so it has the same header, the same options and
+ * the same Print. Built through `sheetHref` so the query is spelled in one
+ * place, and never carries the arrive-and-print flag: a Worksheet link opens
+ * a sheet, and Print is on it.
+ */
+export function pickedSheetHref(
+  nickname: string,
+  characters: readonly string[],
+  changes: Partial<SheetSettings> = {},
+): string {
+  return sheetHref(
+    {
+      nickname,
+      source: "picked",
+      grade: 1,
+      level: 1,
+      page: 1,
+      mode: "trace",
+      showModel: true,
+      showReadings: false,
+      showNumbers: true,
+      placement: PRACTICE_PAGINATION_DEFAULT,
+      size: DEFAULT_SHEET_SIZE,
+      choosing: false,
+      printAll: false,
+      fill: false,
+      picked: encodeSelection(characters),
+      slug: null,
+      owner: null,
+      listKey: null,
+    },
+    changes,
+  );
 }

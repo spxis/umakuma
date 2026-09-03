@@ -15,8 +15,6 @@ import type { KanjiPage } from "@/lib/subjectPage";
 
 import KanjiDictionaryDetail from "./KanjiDictionaryDetail";
 import { KANJI_PAGE_COPY } from "./KanjiPage.constants";
-import { KANJI_SHEET_COPY } from "./sheet/kanjiSheetCopy";
-import { kanjiSheetHref } from "./sheet/kanjiSheetAddress";
 import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constants";
 import {
   SUBJECT_SECTIONS,
@@ -46,6 +44,11 @@ export type KanjiSectionView = {
   parts: RadicalPart[];
   /** True when one section is drawn on its own, with no page header above it. */
   alone: boolean;
+  /**
+   * The reader's own practice sheet with this character picked, or null for
+   * a visitor, who has no sheet - the same answer the list cards give.
+   */
+  worksheetHref: string | null;
   page: KanjiPage;
 };
 
@@ -70,13 +73,19 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
           summary={view.summary}
           showSummaryLine={view.alone}
           actions={
-            /* Named for where it goes; Print is on the sheet, like everywhere else. */
-            <Link
-              href={kanjiSheetHref(view.character)}
-              className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
-            >
-              {KANJI_SHEET_COPY.worksheet}
-            </Link>
+            /*
+             * Named for where it goes: the same practice sheet a list prints,
+             * with this one character picked and the page filled to work at
+             * it. Print is on the sheet, like everywhere else.
+             */
+            view.worksheetHref ? (
+              <Link
+                href={view.worksheetHref}
+                className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
+              >
+                {KANJI_PAGE_COPY.worksheet}
+              </Link>
+            ) : null
           }
         />
       </section>
