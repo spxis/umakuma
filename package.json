@@ -78,6 +78,8 @@
     "sentences:ingest": "pnpm dlx tsx scripts/ingest-tatoeba.ts",
     "sentences:ingest:dry": "pnpm sentences:ingest --dry-run",
     "readings:build": "node scripts/build-joyo-readings.mjs",
+    "worktree": "node scripts/worktree.mjs",
+    "release:take": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/release-take.ts",
     "backlog": "pnpm dlx tsx scripts/backlog.ts",
     "campaign:create": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/create-reading-campaign.ts",
     "campaign:reprice": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/reprice-reading-campaign.ts",

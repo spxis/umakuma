@@ -193,6 +193,23 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   own, and is released on its own. Do not batch unrelated features into a single
   commit or a single deploy — a batched release cannot be reverted without taking
   working features down with the broken one.
+- **Work in your own git worktree, never in the shared checkout.** Several
+  sessions have this repository open at once, and one working tree with several
+  writers loses work in ways that do not announce themselves: a `git add -A`
+  sweeps somebody else's half-finished file into an unrelated commit, a rebase
+  drops a deletion nobody notices, a stash pop lands inside another session's
+  edit. All three happened on 2026-09-02 and a board entry was lost outright.
+  One command sets one up:
+
+      pnpm worktree <name> [--port 6402]
+
+  It branches `work/<name>` off `origin/main`, installs into it, and prints the
+  dev-server line. Give each worktree its own port or the second session
+  silently gets the first one's app. Do not symlink `node_modules` into a
+  worktree: vitest and tsc are happy with it and then Turbopack refuses to
+  build, because the symlink points outside the project root — a real install
+  is hard-linked from the same store and costs seconds. Remove it when the work
+  is done: `git worktree remove ../umakuma-worktrees/<name>`.
 - **The timeline is the ticket board, and every agent works from it.** Several
   sessions work this repository at once and cannot see each other; the JSON is
   the one thing they all read. So: every request, bug or idea John sends becomes
@@ -224,8 +241,17 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   kana its codename must begin with — ろ to わ — and forces a fresh name that
   still describes the release and reuses no word already in the list. So build
   and test with the entry left `planned`, and do the release in one pass at the
-  end: `git fetch`, rebase, ship the entry, pick the codename, run
-  `pnpm preflight:prod`, push. Anything that is not a release — a docs change,
+  end, with the script that does all four together:
+
+      pnpm release:take <entry-id> --romaji "…" --ja "…" --reading "…" --gloss "…"
+
+  It asks `origin/main` what has actually been published — not the working
+  tree, which is usually behind — takes the next minor, ships the entry through
+  the board's own writer, and moves `package.json` and `APP_VERSION` with it. It
+  refuses rather than guesses: a reading that does not start on that minor's
+  kana, a romaji word an earlier name already used (only `na` and `no` are
+  exempt, so `ga` and `to` collide), a version somebody took while you were
+  building. Then `pnpm quality:check && pnpm preflight:prod`, and push. Anything that is not a release — a docs change,
   a rule added to this file — takes no version at all and stays out of the race.
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
 - This repo has no migrations: the schema is applied by hand with `pnpm db:push`, and nothing in the deploy pipeline applies it for you. **Any change to `prisma/schema.prisma` must be pushed to the production database as its own step, or the deploy ships code the database cannot serve.** An added enum value is the easy one to miss: `map` was added to `GameKind`, deployed green, and every Map run failed in production while passing locally, because `db push` had only ever reached the local database. Verify with `pnpm db:drift:check` (read-only; exit 0 clean, exit 2 with the missing SQL). The deploy workflow now runs the same check after `vercel pull` and stops the deploy on drift.

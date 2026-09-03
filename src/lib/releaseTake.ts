@@ -1,0 +1,151 @@
+import { FEATURE_STATUSES, type FeatureTimelineEntry } from "./featureTimeline";
+import { codenameKanaForMinor, toHiragana, type ReleaseCodename } from "./releaseCodenames";
+
+/**
+ * Taking a release number, as rules rather than as a ritual.
+ *
+ * Several sessions ship from this repository at once and all of them draw
+ * from one counter, so a number taken when the work starts is usually gone by
+ * the time the work is ready. The answer is to take it immediately before
+ * pushing - which is right, and which nobody does correctly by hand, because
+ * "the number" is four things that have to agree:
+ *
+ * - `package.json` and `APP_VERSION`, which a test compares;
+ * - the timeline entry, which must carry that version and a stamp that is not
+ *   in the future;
+ * - the codename, whose reading must begin with the kana the minor lands on -
+ *   so moving 0.263 to 0.264 changes ろ to わ and invalidates the name;
+ * - and that codename's romaji words, which may not repeat any earlier name's.
+ *
+ * Between two sessions on one afternoon that went wrong eight times: three
+ * renumbers, two codenames rejected for a repeated word (`ga` is not a
+ * particle the rule exempts), one for the wrong kana, and two releases that
+ * claimed to have shipped a few minutes into the future.
+ *
+ * These are the pure parts. `scripts/release-take.ts` reads the files, asks
+ * git what the last published version is, and writes the four places at once.
+ */
+
+/** Only `na` and `no` may recur: they are grammar, not words. */
+const PARTICLES = new Set(["na", "no"]);
+
+export type VersionParts = { major: number; minor: number; patch: number };
+
+export function parseVersion(value: string): VersionParts | null {
+  const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(value.trim());
+  if (!match) return null;
+  return { major: Number(match[1]), minor: Number(match[2]), patch: Number(match[3]) };
+}
+
+/**
+ * The next release, which is always the next minor.
+ *
+ * A feature moves the minor and nothing else; the site has never shipped a
+ * patch, and a release that did would break the codename walk, since the
+ * gojūon is indexed by minor alone.
+ */
+export function nextVersion(published: string): string {
+  const parts = parseVersion(published);
+  if (!parts) throw new Error(`"${published}" is not a version this repository uses.`);
+  return `${parts.major}.${parts.minor + 1}.0`;
+}
+
+export function minorOf(version: string): number {
+  const parts = parseVersion(version);
+  if (!parts) throw new Error(`"${version}" is not a version this repository uses.`);
+  return parts.minor;
+}
+
+/** Every romaji word already spoken for, particles aside. */
+export function usedCodenameWords(codenames: readonly ReleaseCodename[]): Set<string> {
+  const used = new Set<string>();
+  for (const codename of codenames) {
+    for (const word of codename.romaji.toLowerCase().split(/\s+/)) {
+      if (!PARTICLES.has(word)) used.add(word);
+    }
+  }
+  return used;
+}
+
+export type CodenameProblem = { field: "kana" | "words" | "pair" | "gloss"; message: string };
+
+/**
+ * Why a proposed codename would fail the gate, or nothing.
+ *
+ * Checked here rather than discovered by running the suite, because the
+ * failure arrives at the end of a release - after the build, with a push
+ * waiting - and every retry costs another full gate.
+ */
+export function codenameProblems(
+  candidate: ReleaseCodename,
+  minor: number,
+  existing: readonly ReleaseCodename[],
+): CodenameProblem[] {
+  const problems: CodenameProblem[] = [];
+  const { kana } = codenameKanaForMinor(minor);
+
+  if (!toHiragana(candidate.reading).startsWith(kana)) {
+    problems.push({
+      field: "kana",
+      message: `0.${minor}.0 lands on ${kana}, and "${candidate.reading}" does not start with it.`,
+    });
+  }
+
+  const used = usedCodenameWords(existing);
+  for (const word of candidate.romaji.toLowerCase().split(/\s+/)) {
+    if (!PARTICLES.has(word) && used.has(word)) {
+      problems.push({ field: "words", message: `"${word}" is already used by an earlier codename.` });
+    }
+  }
+
+  for (const field of ["romaji", "ja", "reading"] as const) {
+    if (existing.some((codename) => codename[field] === candidate[field])) {
+      problems.push({ field: "pair", message: `Another codename already has that ${field}.` });
+    }
+  }
+
+  if (candidate.gloss.trim().length <= 3) {
+    problems.push({ field: "gloss", message: "A codename needs an English gloss of its own." });
+  }
+
+  return problems;
+}
+
+export type ShipStamp = { version: string; releasedAt: string; date: string };
+
+/**
+ * The entry as it reads once it has shipped.
+ *
+ * The planning fields go: a release has a real date rather than an estimate,
+ * no queue position, and no owner, because it is finished rather than held.
+ */
+export function shipEntry(
+  entries: readonly FeatureTimelineEntry[],
+  id: string,
+  stamp: ShipStamp,
+): FeatureTimelineEntry[] {
+  const found = entries.find((entry) => entry.id === id);
+  if (!found) throw new Error(`No entry "${id}" on the board.`);
+  if (found.status === FEATURE_STATUSES.shipped) {
+    throw new Error(`"${id}" already shipped as ${found.version ?? "an earlier release"}.`);
+  }
+  if (entries.some((entry) => entry.version === stamp.version)) {
+    throw new Error(`${stamp.version} is already taken; fetch and try again.`);
+  }
+
+  return entries.map((entry) => {
+    if (entry.id !== id) return entry;
+    const shipped: FeatureTimelineEntry = {
+      ...entry,
+      status: FEATURE_STATUSES.shipped,
+      date: stamp.date,
+      version: stamp.version,
+      releasedAt: stamp.releasedAt,
+    };
+    delete shipped.dateIsEstimate;
+    delete shipped.release;
+    delete shipped.owner;
+    delete shipped.claimedAt;
+    return shipped;
+  });
+}
