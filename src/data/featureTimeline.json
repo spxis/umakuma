@@ -3738,6 +3738,7 @@
     "kind": "bug",
     "date": "2026-09-02",
     "summary": "The palette override covered the site's own tokens, which is most of a page and not all of it: a panel painted with a literal Tailwind colour never asks the tokens anything, so the amber suggestion box printed a tinted block and coloured text regardless. The default inverts - every surface white, every word black - so a colour has to be opted into rather than chased down after somebody notices it on paper. The tracing sheet keeps its greys, since its faint characters are the thing being traced. Requested 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.323.0",
     "releasedAt": "2026-09-03T06:18:30Z"
   },
@@ -3745,13 +3746,24 @@
     "id": "outline-both-modes",
     "name": "Outline works in both stroke views",
     "area": "study",
-    "kind": "bug",
     "status": "planned",
-    "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 71,
-    "summary": "The Outline toggle shipped in 0.322.0 only appeared while a single stroke was picked, on the reasoning that the full animation already draws its faint character and the control would do nothing there. That reads as the button disappearing when you leave one-stroke view, and it takes the choice away in the mode where somebody might well want the drawing clean. One toggle, always in the row, governing the faint character in both views. Requested 2026-09-02 by John.",
+    "kind": "bug",
     "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T06:27:49.681Z"
+    "claimedAt": "2026-09-03T06:27:49.681Z",
+    "date": "2026-09-02",
+    "summary": "The Outline toggle shipped in 0.322.0 only appeared while a single stroke was picked, on the reasoning that the full animation already draws its faint character and the control would do nothing there. That reads as the button disappearing when you leave one-stroke view, and it takes the choice away in the mode where somebody might well want the drawing clean. One toggle, always in the row, governing the faint character in both views. Requested 2026-09-02 by John.",
+    "dateIsEstimate": true,
+    "release": 71
+  },
+  {
+    "id": "print-light-theme-only",
+    "name": "Print is the light theme, and nothing else",
+    "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-02",
+    "summary": "The previous fix read 'never print in colour' as an instruction to build a printing palette: every brand colour flattened to black, every word forced black, a blanket rule over every element. It turned filled pills into solid black lozenges and spent more ink than the page it was sparing. What was actually wrong is only that the dark theme followed the page onto paper, so print now restores the ten tokens the dark theme overrides to exactly the values :root gives them, and stops. Corrected 2026-09-02 by John.",
+    "version": "0.324.0",
+    "releasedAt": "2026-09-03T06:34:40Z"
   }
 ]

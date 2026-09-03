@@ -9,66 +9,69 @@ const css = readFileSync(join(process.cwd(), "src/app/globals.css"), "utf8");
  * Comments stripped before anything is asserted.
  *
  * The first version of this test read its own prose: the rules it looks for
- * are also *named* in the comments that explain them, so `indexOf("html,")`
- * landed inside a sentence about `html, body` and every assertion passed with
- * the actual CSS deleted. A guard that a comment can satisfy is not a guard.
+ * are also named in the comments explaining them, so `indexOf` landed inside
+ * a sentence and every assertion passed with the actual CSS deleted. A guard
+ * a comment can satisfy is not a guard.
  */
 const code = (source: string) => source.replace(/\/\*[\s\S]*?\*\//g, "");
 
 const printCss = code(readFileSync(join(process.cwd(), "src/app/print.css"), "utf8"));
 const printBlock = printCss.slice(printCss.indexOf("@media print"));
 
-/*
- * Paper has no theme.
+/**
+ * Paper is the light theme, and nothing else changes.
  *
  * The dark theme is a choice about a screen at night and it followed the page
- * onto paper: `--foreground` is #e7f0ff there, so a member reading in dark
- * mode printed near-white text onto white paper, having first spent the ink
- * laying a navy wash across it.
+ * onto paper: near-white text on white paper, over a navy wash that had
+ * already been laid down in ink.
  *
- * Two separate failures, and the second is the one that hid the first. The
- * tokens are one override; the wash is four stacked gradients on `body` that
- * the dark theme replaces at `:root[data-theme="dark"] body`, and a plain
- * `html, body { background: #fff }` loses to that selector wherever it sits.
- * The computed styles said white while the PDF came out navy.
+ * The fix restores the light values and stops there. An earlier attempt
+ * flattened every brand colour to black and forced all text black, which
+ * answered a question nobody asked - it turned filled pills into solid
+ * lozenges and used more ink than the page it was sparing.
  */
-describe("printing is never themed", () => {
-  /*
-   * The tokens cover the site's own colours and not a panel painted with a
-   * literal Tailwind value, which asks them nothing. Everything is white and
-   * black by default instead, so a colour has to be opted into rather than
-   * chased down after somebody notices it on paper.
-   */
-  it("makes every surface white and every word black", () => {
-    expect(printBlock).toMatch(/\*,\s*\n\s*\*::before,\s*\n\s*\*::after\s*\{/);
-    const blanket = printBlock.slice(printBlock.indexOf("*::after"));
-    expect(blanket).toMatch(/background-color:\s*#fff\s*!important/);
-    expect(blanket).toMatch(/color:\s*#000\s*!important/);
-  });
+describe("printing is the light theme", () => {
+  /** What the dark theme changes is exactly what print has to change back. */
+  const darkBlock = (() => {
+    const themed = code(css);
+    const at = themed.indexOf(':root[data-theme="dark"] {');
+    return themed.slice(at, themed.indexOf("}", at));
+  })();
 
-  /*
-   * The one exception, and it has to be one: the sheet's faint characters are
-   * the thing being traced, so black would hand a child a page of solid kanji
-   * to write on top of.
-   */
-  it("leaves the tracing sheet its own greys", () => {
-    expect(printBlock).toContain(':not([data-print="mono"])');
-  });
+  const lightBlock = (() => {
+    const themed = code(css);
+    const at = themed.indexOf(":root {");
+    return themed.slice(at, themed.indexOf("}", at));
+  })();
 
-  it("redefines the palette for print, including the dark theme's", () => {
-    /* Both selectors: the dark block outranks a bare `:root` on its own. */
-    expect(printBlock).toMatch(/:root,\s*\n\s*:root\[data-theme="dark"\]\s*\{/);
+  const printTokens = printBlock.slice(
+    printBlock.indexOf(':root[data-theme="dark"] {'),
+    printBlock.indexOf("html,"),
+  );
 
-    const tokens = printBlock.slice(printBlock.indexOf(':root[data-theme="dark"] {'));
-    for (const token of ["--background", "--foreground", "--surface", "--surface-muted"]) {
-      expect(tokens, `${token} keeps its screen value on paper`).toContain(`${token}:`);
+  it("restores every token the dark theme overrides", () => {
+    const darkTokens = darkBlock.match(/--[a-z0-9-]+(?=:)/g) ?? [];
+    expect(darkTokens.length).toBeGreaterThan(0);
+    for (const token of darkTokens) {
+      expect(printTokens, `the dark theme changes ${token} and print says nothing about it`).toContain(`${token}:`);
     }
   });
 
   /*
-   * The gradients, at the specificity the theme set them. Without the
-   * `:root[data-theme="dark"] body` selector here the wash prints; without
-   * `background-image: none` it is only tinted.
+   * To the light theme's own values, not to invented ones. This is what stops
+   * the file drifting back into a printing palette of its own.
+   */
+  it("restores them to the values :root already gives", () => {
+    for (const [, token, value] of printTokens.matchAll(/(--[a-z0-9-]+):\s*([^;!]+)/g)) {
+      const light = new RegExp(`${token}:\\s*([^;]+);`).exec(lightBlock);
+      expect(light, `${token} is set for print but not by :root`).not.toBeNull();
+      expect(value.trim(), `print gives ${token} a value the light theme does not use`).toBe(light![1].trim());
+    }
+  });
+
+  /*
+   * The gradients, at the specificity the theme set them. Without this
+   * selector the wash prints; without `background-image: none` it is tinted.
    */
   it("removes the page wash at the selector that applied it", () => {
     expect(printBlock).toContain(':root[data-theme="dark"] body');
@@ -76,23 +79,9 @@ describe("printing is never themed", () => {
     expect(ground).toMatch(/background-image:\s*none/);
   });
 
-  /*
-   * The dark theme must not introduce a colour the print block has not been
-   * told about. Any token the dark block redefines is a token that reaches
-   * paper differently from the light one, so each needs an answer here.
-   */
-  it("answers every token the dark theme redefines", () => {
-    const themed = code(css);
-    const darkBlock = themed.slice(themed.indexOf(':root[data-theme="dark"] {'));
-    const darkTokens = new Set(
-      (darkBlock.slice(0, darkBlock.indexOf("}")).match(/--[a-z0-9-]+(?=:)/g) ?? []),
-    );
-    expect(darkTokens.size).toBeGreaterThan(0);
-
-    const printTokens = printBlock.slice(0, printBlock.indexOf("html,"));
-    expect(printTokens).toContain("--foreground");
-    for (const token of darkTokens) {
-      expect(printTokens, `the dark theme changes ${token} and print says nothing about it`).toContain(`${token}:`);
-    }
+  /* The ink stays the site's. A print-only palette is what went wrong before. */
+  it("does not invent a printing palette", () => {
+    expect(printBlock).not.toMatch(/color:\s*#000\s*!important/);
+    expect(printBlock, "a blanket rule over every element is not a theme").not.toMatch(/\*::after\s*\{/);
   });
 });
