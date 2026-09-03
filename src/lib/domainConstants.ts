@@ -189,6 +189,21 @@ export const WK_STATUS_VALUES: WkStatus[] = [
   WK_STATUSES.burned,
 ];
 
+/**
+ * Whether a number is a WaniKani subject id rather than a stand-in.
+ *
+ * Surfaces that show items WaniKani never taught still need a number for each
+ * row - React needs a key, a selection needs something to hold - so they number
+ * them -1, -2, -3 down the page. Those are page bookkeeping, and sending one to
+ * an API that expects a subject asks about subject -1: the tag route answers
+ * 400, the history route answers 400, and the list route rejects an entire
+ * PATCH, so one home-made item can stop every filing change on that list from
+ * saving.
+ */
+export function isCatalogSubjectId(value: number | null | undefined): value is number {
+  return typeof value === "number" && Number.isInteger(value) && value > 0;
+}
+
 export function isSubjectType(value: string | null | undefined): value is SubjectType {
   return value === SUBJECT_TYPES.radical || value === SUBJECT_TYPES.kanji || value === SUBJECT_TYPES.vocabulary;
 }

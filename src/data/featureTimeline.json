@@ -3650,14 +3650,13 @@
     "id": "glyph-history-standin-id",
     "name": "The viewer asks about subject -1",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "bug",
-    "owner": "Claude (session 1f28dc92)",
-    "claimedAt": "2026-09-03T04:44:16.577Z",
     "date": "2026-09-02",
-    "summary": "Surfaces that show items WaniKani never taught give them a negative stand-in id, so React has a key and a selection has something to hold - listPageItems numbers them -1, -2, -3 down the page. The glyph viewer passes that straight to /api/study/<id>/subjects/<subjectId>/history, which answers 400 twice per open. Harmless today (the panel shows nothing either way) but it is a failed request on every open of a home-made list item, and the same class of mistake that stopped filing from saving. subjectFiler.catalogId is the pattern: a stand-in is not a subject id. Found 2026-09-02.",
-    "dateIsEstimate": true,
-    "release": 69
+    "summary": "Surfaces that show items WaniKani never taught number their rows -1, -2, -3 down the page, so React has a key and a selection has something to hold. The review stats card passed that straight to /api/study/<id>/subjects/<subjectId>/history, which answered 400 twice on every open of a home-made list item - reproduced on a list of three such items before the fix and gone after it. The card now draws nothing for a row with no subject behind it, because there is no review history to show. The rule the filer already kept is one shared predicate, isCatalogSubjectId, rather than a > 0 test written wherever somebody remembered: the same mistake stopped filing from saving at all, because a single stand-in made the list route reject the whole PATCH.",
+    "dateIsEstimate": false,
+    "version": "0.315.0",
+    "releasedAt": "2026-09-03T05:07:03Z"
   },
   {
     "id": "add-to-lists-explorers",

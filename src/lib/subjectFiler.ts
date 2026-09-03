@@ -1,4 +1,4 @@
-import { LIST_ITEM_KINDS, SUBJECT_TYPES } from "./domainConstants";
+import { isCatalogSubjectId, LIST_ITEM_KINDS, SUBJECT_TYPES } from "./domainConstants";
 import { listItemId, type StudyListItemRef } from "./studyListRules";
 import { mergeListItems, withoutListItems } from "@/app/shared/mergeListItems";
 
@@ -42,7 +42,7 @@ export const NO_TAGS: FilerTags = { favorite: false, trouble: false, burned: fal
  * to that list from saving.
  */
 export function catalogId(hit: FilerHit): number | null {
-  return typeof hit.subjectId === "number" && hit.subjectId > 0 ? hit.subjectId : null;
+  return isCatalogSubjectId(hit.subjectId) ? hit.subjectId : null;
 }
 
 /** Whether the row can be tagged as trouble or a favourite. */

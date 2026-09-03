@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import FieldLabel from "../../../../shared/FieldLabel";
-import type { ReviewResult } from "@/lib/domainConstants";
+import { isCatalogSubjectId, type ReviewResult } from "@/lib/domainConstants";
 import {
   buildReviewOutcomeSeries,
   summarizeReviewOutcomes,
@@ -114,6 +114,14 @@ export default function LevelExplorerReviewStatsCard({
   const [refreshNonce, setRefreshNonce] = useState(0);
 
   useEffect(() => {
+    /*
+     * A stand-in id is page bookkeeping, not a subject. Asking about subject
+     * -1 answers 400 on every open of a home-made list item.
+     */
+    if (!isCatalogSubjectId(subjectId)) {
+      return;
+    }
+
     let cancelled = false;
 
     const cached = reviewStatsHistoryCache.get(cacheKey);
@@ -279,6 +287,15 @@ export default function LevelExplorerReviewStatsCard({
       .sort((a, b) => a.timeMs - b.timeMs)
       .slice(-90);
   }, [attempts]);
+
+  /*
+   * Nothing to show for an item WaniKani never taught: its id is a stand-in
+   * the page made up for a key, so there is no review history behind it.
+   * After the hooks, which must run on every render either way.
+   */
+  if (!isCatalogSubjectId(subjectId)) {
+    return null;
+  }
 
   return (
     <Collapsible open={open} onToggle={() => setOpen((prev) => !prev)} label="Review Stats">
