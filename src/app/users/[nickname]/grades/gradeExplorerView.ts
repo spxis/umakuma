@@ -1,6 +1,8 @@
 import type { SchoolGradeKanjiEntry, SchoolGradeReadings } from "@/lib/schoolGrades.types";
 
 import { DEFAULT_GRADE, GRADE_PAGE_SIZE } from "./GradeExplorer.constants";
+import type { FilerHit } from "@/lib/subjectFiler";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
 /** The grades the explorer offers, in the order a school year runs. */
 export const GRADE_OPTIONS = [1, 2, 3, 4, 5, 6, 8, 9] as const;
@@ -137,4 +139,20 @@ export function gradeSearchSuggestions(
   entries: readonly SchoolGradeKanjiEntry[],
 ): { value: string; label: string }[] {
   return entries.map((entry) => ({ value: entry.kanji, label: entry.primaryMeaning ?? "" }));
+}
+
+/**
+ * A grade kanji as the filer sees it.
+ *
+ * No subject id: the school catalogue is not WaniKani's, and most of what it
+ * teaches WaniKani never numbered. That is enough to put a character on a
+ * saved list, which names kanji by the character itself; it is not enough to
+ * mark it trouble or favourite, which are held against a WaniKani subject, and
+ * the filing cell leaves those marks out on its own.
+ *
+ * Module-level so its identity is stable: the hits built from it decide when
+ * the filer refetches.
+ */
+export function gradeEntryHit(entry: SchoolGradeKanjiEntry): FilerHit {
+  return { subjectType: SUBJECT_TYPES.kanji, glyph: entry.kanji, slug: null, subjectId: null };
 }

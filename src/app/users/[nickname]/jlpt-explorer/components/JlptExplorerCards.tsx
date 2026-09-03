@@ -32,6 +32,7 @@ export default function JlptExplorerCards({
   visibleDetailInsertIndex,
   onSetSelectedKanji,
   renderDetail,
+  renderFooter,
 }: {
   visibleItems: JlptItem[];
   userKanjiByChar: Map<string, UserKanjiItem>;
@@ -43,6 +44,8 @@ export default function JlptExplorerCards({
   visibleDetailInsertIndex: number;
   onSetSelectedKanji: (update: (prev: string | null) => string | null) => void;
   renderDetail: () => ReactNode;
+  /** The filing marks, along the foot of each card. */
+  renderFooter?: (kanji: string) => ReactNode;
 }) {
   return (
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -112,6 +115,7 @@ export default function JlptExplorerCards({
                       {userMatch ? `SRS ${userMatch.srsStage ?? 0}` : "-"}
                     </NeutralPill>
                   }
+                  footer={renderFooter?.(item.kanji)}
                 />
                 {selectedItem && index === visibleDetailInsertIndex ? renderDetail() : null}
               </Fragment>

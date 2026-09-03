@@ -16,7 +16,8 @@ import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
 import GradeKanjiGrid from "./GradeKanjiGrid";
-import { GRADE_REVEAL_MODES, GRADE_VIEW_MODE_STORAGE_KEY, type GradeRevealMode } from "./gradeExplorerView";
+import { GRADE_REVEAL_MODES, GRADE_VIEW_MODE_STORAGE_KEY, gradeEntryHit, type GradeRevealMode } from "./gradeExplorerView";
+import { useExplorerFiling } from "@/app/shared/useExplorerFiling";
 import { DISPLAY_PREFERENCE_COOKIES, writeDisplayPreferenceCookie } from "@/lib/displayPreferenceCookie";
 
 type Props = {
@@ -63,6 +64,8 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
   }
 
   const selection = useSubjectSelection("grades");
+  /* The marks a member files with, shut until they ask for them. */
+  const filing = useExplorerFiling(accountId, items, gradeEntryHit);
 
   const quizzing = mode === GRADE_REVEAL_MODES.hidden;
 
@@ -102,8 +105,9 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
           </>
         ) : null}
 
+        <span className="ml-auto">{filing.toggle}</span>
+
         <SubjectSelectionToggle
-          className="ml-auto"
           selection={selection}
         />
 
@@ -138,6 +142,8 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
             : undefined
         }
         hideReadings={quizzing}
+        renderFilingTrailing={filing.renderTrailing}
+        renderFilingUnder={filing.renderUnder}
         revealedKanji={revealed}
         onReveal={
           quizzing && !selection.choosing

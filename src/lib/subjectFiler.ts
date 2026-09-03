@@ -99,6 +99,30 @@ export function taggableIds(hits: FilerHit[]): number[] {
  * kanji by its character, each carrying the catalogue's id where there is one
  * so the trouble and favourite marks work too.
  */
+/**
+ * A WaniKani subject from an explorer queue, as the filer sees it.
+ *
+ * These carry a real catalogue id, so they can be tagged as well as listed -
+ * which is why the explorers pass `marks="lists"`: the tag buttons are already
+ * on the row and inside the card's glyph, and a second pair beside them would
+ * be two controls for one thing.
+ *
+ * No slug: a drawn radical has none here, and `itemOf` returns null for it
+ * rather than putting a nameless item on somebody's list.
+ */
+export function levelItemHit(item: {
+  subjectId: number;
+  subjectType?: string;
+  characters: string;
+}): FilerHit {
+  return {
+    subjectType: item.subjectType ?? SUBJECT_TYPES.kanji,
+    glyph: item.characters,
+    slug: null,
+    subjectId: item.subjectId,
+  };
+}
+
 export function subjectPageHit(subject: {
   subjectType: string;
   characters?: string | null;

@@ -53,6 +53,9 @@ import {
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import FieldLabel from "../../../../shared/FieldLabel";
+import { useExplorerFiling } from "@/app/shared/useExplorerFiling";
+import { levelItemHit } from "@/lib/subjectFiler";
+import ExplorerLoadingFillCards from "../../shared/ExplorerLoadingFillCards";
 export default function StudyExplorerPanel({
   canToggleEnglish,
   showEnglish,
@@ -108,6 +111,8 @@ export default function StudyExplorerPanel({
   accountId,
 }: StudyExplorerPanelProps) {
   const { bulkModeEnabled, selectedSubjectIds, selectedItems, selectedPreview, applyBulkSelection, toggleBulkMode, setSelectedSubjectIds } = useStudyBulkReset({ filteredItems });
+  /* Lists only: trouble and favourite are already on the row and in the glyph. */
+  const filing = useExplorerFiling(accountId, filteredItems, levelItemHit, "lists");
   const practicePath = usePracticePath();
   const [showAllSelectedInBar, setShowAllSelectedInBar] = useState(false);
   const [filtersOpen, setFiltersOpen] = usePersistedBoolean("wr:study:filters-open", { defaultValue: true });
@@ -310,6 +315,7 @@ export default function StudyExplorerPanel({
                     <text x="17.0" y="17.7" fontSize="13.4" fontWeight="700" fill="currentColor" textAnchor="middle">あ</text>
                   </svg>
                 </button>
+                {filing.toggle}
                 <SubjectViewModeToggle value={viewMode} onChange={changeViewMode} />
               </div>
           </div>
@@ -364,6 +370,7 @@ export default function StudyExplorerPanel({
                 bulkModeEnabled={bulkModeEnabled}
                 selectedSubjectIds={selectedSubjectIds}
                 onApplyBulkSelection={applyBulkSelection}
+                renderFiling={filing.renderTrailing ? (row) => filing.renderTrailing!(row.item) : undefined}
               />
             ) : (
             <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))] lg:grid-cols-4">
@@ -444,18 +451,11 @@ export default function StudyExplorerPanel({
                         ? <SrsOnlyChip srsStage={item.srsStage} />
                         : <StatusSrsChip status={item.status} srsStage={item.srsStage} />
                     }
+                    footer={filing.renderUnder?.(item)}
                   />
                 );
               })}
-              {loadingFillCount > 0
-                ? Array.from({ length: loadingFillCount }, (_, index) => (
-                    <div
-                      key={`loading-fill-${index}`}
-                      aria-hidden="true"
-                      className="rounded-2xl border border-line bg-surface-muted/70 p-4"
-                    />
-                  ))
-                : null}
+              <ExplorerLoadingFillCards count={loadingFillCount} />
             </div>
             )}
             {hasMoreMatchingItems ? (

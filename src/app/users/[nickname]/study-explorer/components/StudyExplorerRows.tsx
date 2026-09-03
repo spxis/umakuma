@@ -6,6 +6,7 @@ import { FavouriteStarIcon, TroubleFaceIcon } from "../../shared/studyTagIcons";
 import { toStudyRow, type StudyRow } from "../lib/studyRowAdapter";
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
 import { isReviewQueueItem, STUDY_PANEL_TEXT } from "./StudyExplorer.constants";
+import type { ReactNode } from "react";
 
 type Props = {
   items: StudyQueueItem[];
@@ -23,6 +24,8 @@ type Props = {
   bulkModeEnabled: boolean;
   selectedSubjectIds: Set<number>;
   onApplyBulkSelection: (args: { subjectId: number; shiftKey: boolean; sourceIndex?: number }) => boolean;
+  /** The filing marks, beside the tag buttons the row already carries. */
+  renderFiling?: (row: StudyRow) => ReactNode;
 };
 
 function tagButtonClass(active: boolean): string {
@@ -47,6 +50,7 @@ export default function StudyExplorerRows({
   bulkModeEnabled,
   selectedSubjectIds,
   onApplyBulkSelection,
+  renderFiling,
 }: Props) {
   const rows = items.map(toStudyRow);
 
@@ -84,7 +88,8 @@ export default function StudyExplorerRows({
       renderTrailing={(row) => {
         const tags = row.item.studyTags ?? { favorite: false, trouble: false, burned: false };
         return (
-          <div className="flex items-center gap-0.5">
+          <div className="flex flex-wrap items-center justify-end gap-0.5">
+            {renderFiling?.(row)}
             <button
               type="button"
               onClick={() => onToggleStudyTag(row.subjectId, STUDY_TAGS.trouble, !tags.trouble)}

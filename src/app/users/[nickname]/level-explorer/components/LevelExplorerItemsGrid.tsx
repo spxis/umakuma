@@ -28,6 +28,8 @@ import LevelExplorerGridToolbar from "./LevelExplorerGridToolbar";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import type { LevelExplorerItemsGridProps as Props } from "./LevelExplorerItemsGrid.types";
 import { noTranslateClass } from "@/app/shared/japaneseText";
+import { useExplorerFiling } from "@/app/shared/useExplorerFiling";
+import { levelItemHit } from "@/lib/subjectFiler";
 
 export default function LevelExplorerItemsGrid({
   accountId,
@@ -71,6 +73,11 @@ export default function LevelExplorerItemsGrid({
   const practicePath = usePracticePath();
   const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
     getStoredEnum(LEVEL_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+  /*
+   * Lists only: the card carries trouble and favourite inside its glyph, and a
+   * second pair beside them asks whether the two mean the same thing.
+   */
+  const filing = useExplorerFiling(accountId, visibleItems, levelItemHit, "lists");
 
   const {
     bulkModeEnabled,
@@ -154,7 +161,8 @@ export default function LevelExplorerItemsGrid({
         </div>
       ) : (
         <>
-          <div className="mb-3 flex justify-end">
+          <div className="mb-3 flex items-center justify-end gap-2">
+            {filing.toggle}
             <SubjectViewModeToggle
               value={viewMode}
               onChange={(next) => {
@@ -296,6 +304,7 @@ export default function LevelExplorerItemsGrid({
                   ? <SrsOnlyChip srsStage={item.srsStage} />
                     : <StatusSrsChip status={item.status} srsStage={item.srsStage} />
               }
+              footer={filing.renderUnder?.(item)}
             />
 
             {selectedItem && !bulkModeEnabled && index === visibleDetailInsertIndex ? (

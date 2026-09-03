@@ -46,6 +46,8 @@ import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import { usePathname } from "next/navigation";
 import type { JlptExplorerContentProps as Props } from "./JlptExplorerContent.types";
+import { useExplorerFiling } from "@/app/shared/useExplorerFiling";
+import { jlptKanjiHit } from "../lib/jlptRowAdapter";
 export default function JlptExplorerContent({
   accountId,
   items,
@@ -146,6 +148,11 @@ export default function JlptExplorerContent({
   }, [filteredItems.length, hasMoreRemote, isLoadingData, isLoadingMore, onLoadMoreRemote]);
 
   const visibleItems = filteredItems.slice(0, effectiveVisibleCount);
+  /*
+   * Lists only: the cards already carry trouble and favourite inside the
+   * glyph, where they have been since long before filing existed.
+   */
+  const filing = useExplorerFiling(accountId, visibleItems, jlptKanjiHit, "lists");
   const selectedVisibleIndex = selectedItem
     ? visibleItems.findIndex((item) => item.kanji === selectedItem.kanji)
     : -1;
@@ -343,6 +350,7 @@ export default function JlptExplorerContent({
             </p>
           </div>
           <div className="flex items-center gap-2">
+            {filing.toggle}
             <SubjectSelectionToggle selection={selection} />
             <SubjectViewModeToggle
               value={viewMode}
@@ -381,6 +389,7 @@ export default function JlptExplorerContent({
               onSelectKanji={(kanji: string) => onSetSelectedKanji((prev) => (prev === kanji ? null : kanji))}
               detailIndex={selectedItem ? visibleDetailInsertIndex : -1}
               renderDetail={renderDetail}
+              renderTrailing={filing.renderTrailing ? (row) => filing.renderTrailing!(row.item) : undefined}
             />
           </div>
         ) : (
@@ -395,6 +404,11 @@ export default function JlptExplorerContent({
           visibleDetailInsertIndex={visibleDetailInsertIndex}
           onSetSelectedKanji={onSetSelectedKanji}
           renderDetail={renderDetail}
+          renderFooter={
+            filing.renderUnder
+              ? (kanji) => filing.renderUnder!({ kanji } as (typeof visibleItems)[number])
+              : undefined
+          }
         />
         )}
         {visibleItems.length < filteredItems.length ? (

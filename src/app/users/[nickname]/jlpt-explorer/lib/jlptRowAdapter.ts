@@ -3,6 +3,7 @@ import type { SubjectListRow } from "@/app/shared/subjectListView";
 
 import type { JlptItem, UserKanjiItem } from "../../explorerTypes";
 import { jlptHeading } from "./jlptDisplay";
+import type { FilerHit } from "@/lib/subjectFiler";
 
 /** Everything both densities derive from one JLPT entry, worked out once. */
 export type JlptView = {
@@ -70,4 +71,17 @@ export function toJlptRow(item: JlptItem, view: JlptView): JlptRow {
     item,
     view,
   };
+}
+
+/**
+ * A JLPT kanji as the filer sees it.
+ *
+ * The character alone: the JLPT table is not WaniKani's catalogue, and the
+ * subject id a row shows comes from the reader's own matched assignments
+ * rather than from the item. That is enough to put it on a saved list, which
+ * names kanji by the character; trouble and favourite stay where they are, in
+ * the glyph overlay.
+ */
+export function jlptKanjiHit(item: { kanji: string }): FilerHit {
+  return { subjectType: SUBJECT_TYPES.kanji, glyph: item.kanji, slug: null, subjectId: null };
 }

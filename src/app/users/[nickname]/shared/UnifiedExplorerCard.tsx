@@ -32,6 +32,15 @@ type Props = {
    */
   density?: "grid" | "list";
   /**
+   * A strip along the foot of the card - the filing marks, in practice.
+   *
+   * A sibling of the glyph button rather than anything inside it: the card is
+   * a plain container holding one button and its overlay controls, and a
+   * control inside the button is what `nested-interactive` fails on. Absent
+   * unless a surface passes one, so a card that files nothing is unchanged.
+   */
+  footer?: ReactNode;
+  /**
    * Picked, while the surface is in choosing mode.
    *
    * Drawn here rather than by each explorer so a chosen card reads the same
@@ -78,6 +87,7 @@ export default function UnifiedExplorerCard({
   rightChip,
   density = "grid",
   chosen = false,
+  footer,
 }: Props) {
   const rows = density === "list";
   const { fontFamily } = useGlyphFontPreference();
@@ -254,6 +264,7 @@ export default function UnifiedExplorerCard({
             </div>
           </>
         )}
+        {footer ? <div className="mt-2">{footer}</div> : null}
       </div>
     </ExplorerCardDensityProvider>
   );

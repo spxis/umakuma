@@ -8,7 +8,7 @@ import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 import ReadingsLine from "@/app/shared/ReadingsLine";
 import { SUBJECT_VIEW_MODES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { READING_KIND_DISPLAY, READING_KINDS, type ReadingKind } from "@/lib/domainConstants";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import GradeKanjiRows from "./GradeKanjiRows";
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
@@ -41,6 +41,15 @@ type Props = {
    * this one, rather than this one alone.
    */
   onChoose?: (kanji: string, extend: boolean) => void;
+  /**
+   * The filing marks, when the board is showing them.
+   *
+   * Passed in rather than built here: the board owns whether they are open and
+   * whose lists they file onto, and the grid only knows where they go - beside
+   * a row, or under a card.
+   */
+  renderFilingTrailing?: (entry: SchoolGradeKanjiEntry) => ReactNode;
+  renderFilingUnder?: (entry: SchoolGradeKanjiEntry) => ReactNode;
 };
 
 /*
@@ -80,6 +89,8 @@ export default function GradeKanjiGrid({
   onReveal,
   chosenKanji,
   onChoose,
+  renderFilingTrailing,
+  renderFilingUnder,
 }: Props) {
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
   /*
@@ -128,6 +139,8 @@ export default function GradeKanjiGrid({
             setOpenKanji(entry);
           }}
           renderTrailing={(row) => (
+            <span className="flex flex-wrap items-center justify-end gap-1.5">
+            {renderFilingTrailing?.(row.entry)}
             <StrokeOrderButton
               kanji={row.entry.kanji}
               grade={row.entry.grade}
@@ -139,6 +152,7 @@ export default function GradeKanjiGrid({
               }}
               shareHref={`/kanji/${encodeURIComponent(row.entry.kanji)}`}
             />
+            </span>
           )}
         />
         {openKanji ? (
@@ -220,6 +234,7 @@ export default function GradeKanjiGrid({
             ) : null}
           </>
         )}
+        renderUnder={renderFilingUnder ? (row) => renderFilingUnder(row.entry) : undefined}
         /* Corner on hover, as before: a control on every card of a screenful is noise. */
         renderCorner={
           selection?.choosing

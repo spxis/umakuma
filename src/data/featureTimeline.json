@@ -3663,12 +3663,12 @@
     "id": "add-to-lists-explorers",
     "name": "Add to lists from the explorers",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "The filing marks now reach search, the subject pages and the glyph viewer, but not the explorer grids themselves - JLPT, grades, level and study each draw their own cards and rows. SubjectCards has renderUnder and SubjectRows has renderAfterRow, so this is passing slots rather than changing the shared pair. Split out of add-to-lists-everywhere 2026-09-02.",
-    "dateIsEstimate": true,
-    "release": 70
+    "version": "0.326.0",
+    "releasedAt": "2026-09-03T06:39:40Z"
   },
   {
     "id": "explorer-study-mode-stuck",
@@ -3762,7 +3762,19 @@
     "kind": "bug",
     "date": "2026-09-02",
     "summary": "The previous fix read 'never print in colour' as an instruction to build a printing palette: every brand colour flattened to black, every word forced black, a blanket rule over every element. It turned filled pills into solid black lozenges and spent more ink than the page it was sparing. What was actually wrong is only that the dark theme followed the page onto paper, so print now restores the ten tokens the dark theme overrides to exactly the values :root gives them, and stops. Corrected 2026-09-02 by John.",
+    "dateIsEstimate": false,
     "version": "0.324.0",
     "releasedAt": "2026-09-03T06:34:40Z"
+  },
+  {
+    "id": "catalog-gap-visible",
+    "name": "The catalogue says what it is missing",
+    "area": "admin",
+    "status": "planned",
+    "kind": "feature",
+    "date": "2026-09-02",
+    "summary": "The catalogue gap reopens every time WaniKani adds subjects and nothing says so. The admin catalogue panel already reports drift - missing levels, duplicate rows - and the count belongs beside them, but findCatalogGap reads every account's assignment cache and all 9,400 rows' relation arrays, so it cannot ride the status endpoint the panel polls. A button that measures on demand and reports the ids, next to the sync controls. Raised 2026-09-02.",
+    "dateIsEstimate": true,
+    "release": 71
   }
 ]

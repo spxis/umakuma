@@ -53,7 +53,7 @@ function nestedControls(doc: Document): string[] {
  * The three explorers between them put a checkbox in the index and tag buttons
  * in the overlay, which are the two places a control actually lands.
  */
-function card(density: "grid" | "list", extras: { choosing?: boolean } = {}) {
+function card(density: "grid" | "list", extras: { choosing?: boolean; filing?: boolean } = {}) {
   return (
     <UnifiedExplorerCard
       density={density}
@@ -86,6 +86,23 @@ function card(density: "grid" | "list", extras: { choosing?: boolean } = {}) {
       }
       statusChip={<span />}
       rightChip={<span />}
+      /*
+       * The filing strip, which is the newest thing to put controls on a card
+       * and the easiest to put in the wrong place: inside the glyph button it
+       * would be four more nested controls on every card of every explorer.
+       */
+      footer={
+        extras.filing ? (
+          <span>
+            <button type="button" aria-label="Add 水 to Week 1">
+              Week 1
+            </button>
+            <button type="button" aria-label="Add 水 to Kitchen">
+              Kitchen
+            </button>
+          </span>
+        ) : undefined
+      }
     />
   );
 }
@@ -97,6 +114,11 @@ describe("a card that holds controls", () => {
 
   it.each(["grid", "list"] as const)("nests nothing while choosing either (%s)", (density) => {
     expect(nestedControls(render(card(density, { choosing: true })))).toEqual([]);
+  });
+
+  /* The filing strip is a sibling of the glyph button, not something inside it. */
+  it.each(["grid", "list"] as const)("keeps the filing strip out of the button (%s)", (density) => {
+    expect(nestedControls(render(card(density, { filing: true, choosing: true })))).toEqual([]);
   });
 
   /*

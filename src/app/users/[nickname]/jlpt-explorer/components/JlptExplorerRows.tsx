@@ -108,6 +108,7 @@ export default function JlptExplorerRows({
   onSelectKanji,
   renderDetail,
   detailIndex,
+  renderTrailing,
 }: {
   rows: JlptRow[];
   studyMode: boolean;
@@ -118,6 +119,8 @@ export default function JlptExplorerRows({
   /** The detail panel, opened under the row that was chosen. */
   renderDetail: () => ReactNode;
   detailIndex: number;
+  /** The filing marks, when the explorer is showing them. */
+  renderTrailing?: (row: JlptRow) => ReactNode;
 }) {
   return (
     <SubjectRows<JlptRow>
@@ -130,6 +133,7 @@ export default function JlptExplorerRows({
           {selectedKanji === row.item.kanji ? "▸" : ""}
         </span>
       )}
+      renderTrailing={renderTrailing}
       renderAfterRow={(_row, index) => (index === detailIndex ? renderDetail() : null)}
     />
   );
