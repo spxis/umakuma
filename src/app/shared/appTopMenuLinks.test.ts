@@ -3,9 +3,13 @@ import { describe, expect, it } from "vitest";
 import { buildMainLinks } from "./appTopMenuLinks";
 
 describe("buildMainLinks", () => {
-  it("gives an anonymous viewer only the leaderboard", () => {
-    const links = buildMainLinks(null);
-    expect(links.map((link) => link.label)).toEqual(["Leaderboard"]);
+  /*
+   * Nothing at all, on purpose. The one link a signed-out visitor was given
+   * was the leaderboard, so a stranger who followed a link to a kanji was
+   * shown a scoreboard of people they do not know and nothing else.
+   */
+  it("offers a signed-out visitor no links at all", () => {
+    expect(buildMainLinks(null)).toEqual([]);
   });
 
   it("never points a link at /join", () => {
@@ -20,7 +24,7 @@ describe("buildMainLinks", () => {
     const links = buildMainLinks("johnmorrisdotca");
     const labels = links.map((link) => link.label);
 
-    expect(labels[0]).toBe("Leaderboard");
+    expect(labels).not.toContain("Leaderboard");
     expect(labels).toContain("Game");
     expect(labels).toContain("History");
     expect(labels).toContain("Libraries");
@@ -33,7 +37,7 @@ describe("buildMainLinks", () => {
   /* Admin is a workspace, not a place a member studies; it lives in the menu. */
   it("never puts Admin in the header row", () => {
     expect(buildMainLinks("johnmorrisdotca").map((link) => link.label)).not.toContain("Admin");
-    expect(buildMainLinks(null).map((link) => link.label)).toEqual(["Leaderboard"]);
+    expect(buildMainLinks(null)).toEqual([]);
   });
 
   it("escapes usernames in hrefs", () => {

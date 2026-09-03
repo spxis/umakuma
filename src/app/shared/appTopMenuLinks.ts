@@ -17,15 +17,20 @@ function userTabHref(username: string, tab: "learn" | "wk" | "jlpt" | "stats" | 
  *
  * A viewer with no resolved account used to see every member link anyway, each
  * quietly pointing at /join — an admin with a stale link was told to "join
- * with invite code" by their own header. No account, no member links: the
- * leaderboard is public.
+ * with invite code" by their own header. No account, no member links.
+ *
+ * Which currently means no links at all for a signed-out visitor, on purpose.
+ * The one thing they were offered was the leaderboard, so a stranger reading
+ * about a kanji was shown a scoreboard of people they do not know and nothing
+ * else. Better an empty row than that; what a visitor should be offered is a
+ * question being answered separately.
  *
  * Admin is not here. It is a workspace rather than a place a member studies,
  * so it lives in the account menu, for admins, and the header row is the same
  * for everyone.
  */
 export function buildMainLinks(resolvedWkUsername: string | null): MainLink[] {
-  const links: MainLink[] = [{ label: "Leaderboard", href: "/", dashboard: null }];
+  const links: MainLink[] = [];
 
   if (resolvedWkUsername) {
     const username = resolvedWkUsername;

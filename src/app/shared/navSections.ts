@@ -18,7 +18,7 @@ import { DASHBOARD_TAB_LABELS } from "../users/[nickname]/userReadConfig";
  * Grouping rather than hiding: everything reachable before is still one click
  * away, and the second row tells you where you are.
  */
-export type NavSectionId = "leaderboard" | "study" | "game" | "explore" | "lists" | "progress" | "read" | "settings";
+export type NavSectionId = "study" | "game" | "explore" | "lists" | "progress" | "read" | "settings";
 
 export type NavChild = {
   label: string;
@@ -66,7 +66,6 @@ export type NavSection = {
  * shows no second row; the sub-nav would just repeat the header.
  */
 export const NAV_SECTIONS: NavSection[] = [
-  { id: "leaderboard", label: "Leaderboard", placement: "nav", children: [{ label: "Leaderboard", path: "/" }] },
   { id: "study", label: "Study", placement: "nav", children: [{ label: "Study", path: "study" }] },
   { id: "game", label: "Game", placement: "nav", children: [{ label: "Game", path: "game" }] },
   {
@@ -179,9 +178,8 @@ export function sectionForPath(pathname: string | null, username: string | null)
     return null;
   }
 
-  if (pathname === "/") {
-    return NAV_SECTIONS.find((section) => section.id === "leaderboard") ?? null;
-  }
+  /* The root belongs to no group: the leaderboard is not in the header. */
+  if (pathname === "/") return null;
 
   /*
    * A page outside the user segment still belongs to a group, by its own

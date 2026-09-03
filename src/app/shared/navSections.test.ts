@@ -12,7 +12,6 @@ describe("the grouped header", () => {
   it("keeps every page reachable, none dropped in the regroup", () => {
     const paths = NAV_SECTIONS.flatMap((section) => section.children.map((child) => child.path));
     for (const expected of [
-      "/",
       "study",
       "game",
       "library-explorer",
@@ -99,8 +98,14 @@ describe("sectionForPath", () => {
     expect(sectionForPath(`/users/${USER}/practice`, USER)?.id).toBe("explore");
   });
 
-  it("finds the leaderboard at the root", () => {
-    expect(sectionForPath("/", USER)?.id).toBe("leaderboard");
+  /*
+   * The root is the leaderboard, and the leaderboard is not in the header: a
+   * signed-out visitor reading about a kanji was offered a scoreboard of
+   * people they do not know, and nothing else.
+   */
+  it("puts the root in no group, since the leaderboard left the header", () => {
+    expect(sectionForPath("/", USER)).toBeNull();
+    expect(NAV_SECTIONS.some((section) => section.children.some((child) => child.path === "/"))).toBe(false);
   });
 
   it("returns nothing for a page outside the grouped nav", () => {
