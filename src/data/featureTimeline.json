@@ -3716,5 +3716,18 @@
     "summary": "Dark mode followed the page onto paper: --foreground is near-white there, so a member reading in dark mode printed almost nothing onto white paper, having first spent the ink laying a navy wash across it. Two failures, and the second hid the first - the tokens are one override, the wash is four gradients on body that the dark theme replaces on its own selector, which a bare html,body cannot outrank. The print rules move to src/app/print.css and force a monochrome palette with !important, since an @import at the top of globals.css loses every tie on source order. Filled brand pills print as outlines rather than solid black rectangles. Found 2026-09-02 by John.",
     "version": "0.321.0",
     "releasedAt": "2026-09-03T05:59:25Z"
+  },
+  {
+    "id": "stroke-outline-overlay",
+    "name": "See the whole character behind one stroke",
+    "area": "study",
+    "kind": "feature",
+    "status": "planned",
+    "date": "2026-09-02",
+    "dateIsEstimate": true,
+    "release": 71,
+    "summary": "Studying a single stroke draws that stroke and the ones before it, and nothing else, so a first stroke is one mark floating in an empty box with no sense of where in the character it sits. The animation already draws the finished character faintly underneath and deliberately stops doing it while one stroke is picked - an outline of everything makes not-drawn-yet look drawn - so this is a mode rather than a change of default: an Outline toggle beside Replay and Numbers, off unless asked for and remembered per device. Requested 2026-09-02 by John.",
+    "owner": "Claude (session 1f28dc92)",
+    "claimedAt": "2026-09-03T06:11:45.780Z"
   }
 ]
