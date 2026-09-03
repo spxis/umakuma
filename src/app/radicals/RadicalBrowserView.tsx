@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 
 import { ListRow } from "@/app/shared/ListSubjectRows";
 import SubjectCards from "@/app/shared/SubjectCards";
@@ -15,6 +15,7 @@ import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import type { FilerHit } from "@/lib/subjectFiler";
 import { LIST_ITEM_KINDS, SUBJECT_TYPES, srsBucketFromStage } from "@/lib/domainConstants";
 import { radicalsHref, togglePart } from "@/lib/radicalBrowser";
+import { RADICAL_GRID_CLASSES, RADICAL_GRID_DEFAULT } from "@/lib/radicalGridSize";
 import type { RadicalGroup } from "@/lib/radicalSearch";
 import type { RadicalMatch } from "@/lib/radicalSearchServer";
 
@@ -87,6 +88,8 @@ export default function RadicalBrowserView({
   const filing = Boolean(accountId) && filerOpen;
   const filer = useSubjectFiler(accountId, rows, filing);
   const usableSet = useMemo(() => new Set(usable), [usable]);
+  /* The same cell and marker sizes the picker draws, so the two match. */
+  const { cell, marker } = RADICAL_GRID_CLASSES[RADICAL_GRID_DEFAULT];
 
   return (
     <div className="space-y-4">
@@ -108,56 +111,69 @@ export default function RadicalBrowserView({
           ) : null}
         </div>
 
-        <div className="mt-3 space-y-3">
-          {groups.map((group) => (
-            <div key={group.strokes} className="flex flex-wrap items-start gap-1.5">
-              {/* The count leads the row, the way the picker in search does it. */}
-              <span className="mt-1 w-6 shrink-0 text-[11px] font-black text-foreground/60">{group.strokes}</span>
-              {group.radicals.map((radical) => {
-                const on = chosen.includes(radical);
-                /*
-                 * Dimmed rather than removed. A radical that cannot narrow what
-                 * is left is still a fact about the language, and taking it off
-                 * the page would make the grid jump about as choices are made.
-                 */
-                const dead = chosen.length > 0 && !on && !usableSet.has(radical);
-                const box = `inline-flex h-9 min-w-9 items-center justify-center rounded-lg border px-1.5 text-lg leading-none transition ${JP_TEXT_CLASS}`;
-                const glyph = (
-                  <span lang="ja" translate="no">
-                    {radical}
-                  </span>
-                );
+        {/*
+          * One run, not a block per stroke count.
+          *
+          * A block each wasted most of its width on the counts holding three
+          * radicals - fourteen strokes is 鼻 and 齊 - and made the grid four
+          * screens tall, so the kanji it produces were never on screen with
+          * the radicals that produced them. Flowing left to right with the
+          * count as a marker is how the paper dictionaries print it, and how
+          * the picker in search has always drawn it.
+          *
+          * Bounded and scrolling within itself for the same reason: 253 cells
+          * must not push the answers off the page.
+          */}
+        <div className="mt-3 max-h-[42vh] overflow-y-auto">
+          <div className="flex flex-wrap items-center gap-1">
+            {groups.map((group) => (
+              <Fragment key={group.strokes}>
+                <span
+                  title={RADICAL_BROWSER_COPY.strokeTitle(group.strokes)}
+                  className={`inline-flex items-center justify-center rounded bg-foreground/70 px-1 font-black leading-none text-surface ${marker}`}
+                >
+                  {group.strokes}
+                </span>
+                {group.radicals.map((radical) => {
+                  const on = chosen.includes(radical);
+                  const dead = chosen.length > 0 && !on && !usableSet.has(radical);
+                  const box = `inline-flex items-center justify-center rounded border leading-none transition ${cell} ${JP_TEXT_CLASS}`;
+                  const glyph = (
+                    <span lang="ja" translate="no">
+                      {radical}
+                    </span>
+                  );
 
-                /*
-                 * A dead end is not a destination, so it is not a link. The
-                 * dimming matches the picker in search, which had the same
-                 * problem first: faint enough to read as unavailable, dark
-                 * enough to still be a character somebody can look at.
-                 */
-                return dead ? (
-                  <span
-                    key={radical}
-                    title={RADICAL_BROWSER_COPY.deadEnd}
-                    className={`${box} cursor-not-allowed border-line/60 bg-surface-muted text-foreground/60 opacity-40`}
-                  >
-                    {glyph}
-                  </span>
-                ) : (
-                  <Link
-                    key={radical}
-                    href={radicalsHref({ parts: togglePart(chosen, radical) })}
-                    aria-pressed={on}
-                    title={names[radical] ?? undefined}
-                    className={`${box} ${
-                      on ? "border-radical bg-radical text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"
-                    }`}
-                  >
-                    {glyph}
-                  </Link>
-                );
-              })}
-            </div>
-          ))}
+                  /*
+                   * A dead end is not a destination, so it is not a link. The
+                   * dimming matches the picker: faint enough to read as
+                   * unavailable, dark enough to still be a character.
+                   */
+                  return dead ? (
+                    <span
+                      key={radical}
+                      title={RADICAL_BROWSER_COPY.deadEnd}
+                      className={`${box} cursor-not-allowed border-line/60 bg-surface-muted text-foreground/60 opacity-40`}
+                    >
+                      {glyph}
+                    </span>
+                  ) : (
+                    <Link
+                      key={radical}
+                      href={radicalsHref({ parts: togglePart(chosen, radical) })}
+                      aria-pressed={on}
+                      title={names[radical] ?? RADICAL_BROWSER_COPY.strokeTitle(group.strokes)}
+                      className={`${box} ${
+                        on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"
+                      }`}
+                    >
+                      {glyph}
+                    </Link>
+                  );
+                })}
+              </Fragment>
+            ))}
+          </div>
         </div>
       </section>
 
