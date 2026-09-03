@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
@@ -8,7 +8,7 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHeaders";
 import { authOptions } from "@/lib/auth";
-import { readCommonOnly, readPage, strokesFromPath } from "@/lib/strokeAddress";
+import { readCommonOnly, readPage, strokesFromPath, strokesIndexHref } from "@/lib/strokeAddress";
 import { isStrokeCount, kanjiByStrokeCount, strokeCounts, strokePage } from "@/lib/strokeBrowser";
 
 import StrokeBrowserView from "../StrokeBrowserView";
@@ -49,11 +49,14 @@ export default async function StrokesPage({ params, searchParams }: Props) {
   const strokes = strokesFromPath((await params).count);
   if (strokes === undefined || (strokes !== null && !isStrokeCount(strokes))) notFound();
 
+  const counts = strokeCounts();
+  /* The index has nothing to show of its own, so it opens on the first count. */
+  if (strokes === null) redirect(strokesIndexHref(counts));
+
   const query = await searchParams;
   const commonOnly = readCommonOnly(query.common);
-  const counts = strokeCounts();
-  const all = strokes === null ? [] : kanjiByStrokeCount(strokes);
-  const shown = strokes === null ? [] : kanjiByStrokeCount(strokes, { commonOnly });
+  const all = kanjiByStrokeCount(strokes);
+  const shown = kanjiByStrokeCount(strokes, { commonOnly });
   const { rows, pageCount } = strokePage(shown, readPage(query.page));
 
   const session = await getServerSession(authOptions);

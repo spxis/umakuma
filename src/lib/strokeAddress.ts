@@ -43,3 +43,19 @@ export function readPage(value: string | string[] | undefined): number {
   const raw = Number(Array.isArray(value) ? value[0] : value);
   return Number.isInteger(raw) && raw > 0 ? raw : 1;
 }
+
+/**
+ * Where `/strokes` sends a reader, since the index has nothing of its own.
+ *
+ * It used to render a panel saying "pick a stroke count above" next to the
+ * counts - a whole page whose content was an instruction to use the page. The
+ * first count is a real answer to the same question, so the index opens there
+ * and the address bar says which one it opened on.
+ *
+ * The first count the data has rather than the number one, so a dataset that
+ * starts somewhere else still lands on a page that exists.
+ */
+export function strokesIndexHref(counts: ReadonlyArray<{ strokes: number }>): string {
+  const first = counts[0];
+  return first ? strokesHref(first.strokes) : STROKES_HREF;
+}

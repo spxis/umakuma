@@ -4172,11 +4172,23 @@
     "id": "pill-words-one-control",
     "name": "One control over a chip's words",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "The item chips printed both halves at once - \u30ad \u00b7 cape, \u3057\u3085\u304f \u00b7 Lodging - and nobody had chosen that: the control was on or off, and \"on\" meant everything the chip knew. The reading and the meaning are two different questions, and a member reading a page wants one of them at a time. It is a three-way choice now - Off, \u3042, EN - held once per browser and read by every chip on every page: the parts of a character, the words a kanji is used in, the related groups, the kanji of a place name, a paste being turned into a list. Segments rather than a button that cycles, because a cycling button cannot say what the other choices are and you end up pressing it until the page looks right. The half a chip does not print stays on its title, so seeing it costs a hover rather than a trip back to the control, and each mode falls back to the word the chip actually has - a radical WaniKani draws has a name and no reading, and asking for readings must not empty a whole row of them. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.369.0",
+    "releasedAt": "2026-09-03T15:39:25Z"
+  },
+  {
+    "id": "strokes-index-opens-on-one",
+    "name": "Stroke order opens on stroke one",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.369.0",
-    "releasedAt": "2026-09-03T15:39:25Z",
-    "summary": "The item chips printed both halves at once - \u30ad \u00b7 cape, \u3057\u3085\u304f \u00b7 Lodging - and nobody had chosen that: the control was on or off, and \"on\" meant everything the chip knew. The reading and the meaning are two different questions, and a member reading a page wants one of them at a time. It is a three-way choice now - Off, \u3042, EN - held once per browser and read by every chip on every page: the parts of a character, the words a kanji is used in, the related groups, the kanji of a place name, a paste being turned into a list. Segments rather than a button that cycles, because a cycling button cannot say what the other choices are and you end up pressing it until the page looks right. The half a chip does not print stays on its title, so seeing it costs a hover rather than a trip back to the control, and each mode falls back to the word the chip actually has - a radical WaniKani draws has a name and no reading, and asking for readings must not empty a whole row of them. Requested 2026-09-03 by John."
+    "version": "0.370.0",
+    "releasedAt": "2026-09-03T15:49:44Z",
+    "summary": "The stroke picker starts with nothing picked, so the panel opens showing no stroke at all. Default to the first one: there is no point in having nothing show. Reported 2026-09-03 by John."
   }
 ]

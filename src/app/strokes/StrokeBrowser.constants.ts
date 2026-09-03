@@ -11,5 +11,4 @@ export const STROKE_BROWSER_COPY = {
   showingAll: (count: number) => `${count} kanji`,
   showingCommon: (count: number, total: number) => `${count} common of ${total}`,
   empty: "No kanji are written in that many strokes.",
-  pick: "Pick a stroke count above.",
 } as const;
