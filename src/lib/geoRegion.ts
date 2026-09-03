@@ -80,6 +80,15 @@ export interface GeoCountryDataset {
   country: CountryCode;
   countryName: string;
   divisionTypeName: string;
+  /*
+   * The plural, written out rather than derived.
+   *
+   * The heading used to add an "s" to whatever this said, which works for
+   * prefectures and states and gave Canada "All 13 province / territorys".
+   * English plurals are not a suffix and a slashed pair is not one noun, so
+   * the dataset carries both forms and the copy picks one.
+   */
+  divisionTypePlural: string;
   viewBox: string;
   width: number;
   height: number;
@@ -324,6 +333,7 @@ export const GEO_DATASETS: Record<CountryCode, GeoCountryDataset> = {
     country: "JP",
     countryName: "Japan",
     divisionTypeName: "Prefecture",
+    divisionTypePlural: "Prefectures",
     viewBox: jpMap.viewBox || "0 0 1000 1107.9",
     width: jpMap.width || 1000,
     height: jpMap.height || 1107.9,
@@ -334,6 +344,7 @@ export const GEO_DATASETS: Record<CountryCode, GeoCountryDataset> = {
     country: "US",
     countryName: "United States",
     divisionTypeName: "State",
+    divisionTypePlural: "States",
     viewBox: usMap.viewBox || "0 0 1000 800",
     width: usMap.width || 1000,
     height: usMap.height || 800,
@@ -344,6 +355,7 @@ export const GEO_DATASETS: Record<CountryCode, GeoCountryDataset> = {
     country: "CA",
     countryName: "Canada",
     divisionTypeName: "Province / Territory",
+    divisionTypePlural: "Provinces and territories",
     viewBox: caMap.viewBox || "0 0 1000 800",
     width: caMap.width || 1000,
     height: caMap.height || 800,

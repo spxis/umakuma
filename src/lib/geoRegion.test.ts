@@ -87,3 +87,31 @@ describe("spot checks against known geography", () => {
     expect(largest("CA").name).toBe("Nunavut");
   });
 });
+
+/**
+ * The heading used to build its plural by adding an "s" to the singular,
+ * which reads fine for prefectures and states and gave Canada
+ * "All 13 province / territorys". English plurals are not a suffix, and a
+ * slashed pair is not one noun.
+ */
+describe("what a country calls its parts", () => {
+  /*
+   * Adding an "s" is right for two of the three, which is exactly why it
+   * survived: the derivation only breaks where the singular is a slashed
+   * pair, so the plural has to be written down rather than worked out.
+   */
+  it("carries a written plural for every dataset", () => {
+    for (const country of ["JP", "US", "CA"] as const) {
+      const dataset = GEO_DATASETS[country];
+      expect(dataset.divisionTypePlural.length, country).toBeGreaterThan(1);
+      expect(dataset.divisionTypePlural, country).not.toContain("/");
+    }
+  });
+
+  it("says provinces and territories rather than province / territorys", () => {
+    expect(GEO_DATASETS.CA.divisionTypePlural).toBe("Provinces and territories");
+    expect(GEO_DATASETS.CA.divisionTypePlural).not.toContain("/");
+    expect(GEO_DATASETS.JP.divisionTypePlural).toBe("Prefectures");
+    expect(GEO_DATASETS.US.divisionTypePlural).toBe("States");
+  });
+});

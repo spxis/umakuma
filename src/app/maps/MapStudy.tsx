@@ -311,7 +311,7 @@ export default function MapStudy({
             hovered={hovered}
             onHover={setHovered}
             onChoose={choose}
-            divisionPlural={`${dataset.divisionTypeName.toLowerCase()}s`}
+            divisionPlural={dataset.divisionTypePlural.toLowerCase()}
           />
         )}
       </aside>
