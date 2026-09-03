@@ -8,7 +8,13 @@ import umaKumaLeft from "@/images/umakuma-1.png";
 import umaKumaRight from "@/images/umakuma-2.png";
 import userBanner from "@/images/umakuma-banner1-transparent.png";
 
-type UmaKumaPageBannerVariant = "leaderboard" | "user" | "admin";
+/*
+ * `compact` is the brand at the top of a page that is mostly something else -
+ * a worksheet, whose page is the sheet. The mark and the name, one line tall,
+ * no side characters: enough to say whose page it is without taking the
+ * height the dashboards give it.
+ */
+type UmaKumaPageBannerVariant = "leaderboard" | "user" | "admin" | "compact";
 
 type UmaKumaPageBannerProps = {
   variant: UmaKumaPageBannerVariant;
@@ -45,6 +51,11 @@ const BANNER_CONFIG_BY_VARIANT: Record<UmaKumaPageBannerVariant, BannerConfig> =
     centerImage: adminBanner,
     frameClassName: "h-24 sm:h-32 lg:h-40",
     centerImageFrameClassName: "h-14 w-40 sm:h-16 sm:w-52 lg:h-20 lg:w-64",
+  },
+  compact: {
+    centerImage: userBanner,
+    frameClassName: "h-12 sm:h-14",
+    centerImageFrameClassName: "h-9 w-32 sm:h-10 sm:w-40",
   },
 };
 

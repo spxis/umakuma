@@ -25,6 +25,8 @@ export const PRACTICE_SHEET_COPY = {
   /* The same control, named for what it does on a sheet that has no squares. */
   columnsLabel: "Columns",
   perPage: "Characters",
+  /* On paper, where the sheet cannot show its banner: the name and the address. */
+  printedBy: "UmaKuma",
   printName: "Name",
   printDate: "Date",
   printScopeHeading: "How much?",

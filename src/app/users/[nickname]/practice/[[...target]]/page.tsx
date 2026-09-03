@@ -20,6 +20,8 @@ import { JLPT_CLASSIC_LEVELS, JLPT_LEVELS, PRACTICE_SHEET_COPY, SHEET_CHIP, WANI
 import SheetOptionsRow from "../SheetOptionsRow";
 import { printNowHref, sheetHref, type SheetSettings } from "../sheetLink";
 import SheetBody from "../SheetBody";
+import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
+import { SITE_URL } from "@/lib/siteOrigin";
 import { fillRowsPerEntry } from "../sheetFill";
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
@@ -189,6 +191,14 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
         */}
       <div className="mx-auto w-full max-w-4xl print:max-w-none">
 
+      {/*
+        * The brand, minimally. Every other page wears the banner; this one had
+        * the navigation and nothing that said UmaKuma. On screen the compact
+        * banner; on paper it goes, and the one line below says the name and
+        * the address in the grey the rest of the printed sheet uses.
+        */}
+      <UmaKumaPageBanner variant="compact" className="mb-4 print:hidden" />
+
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3 print:mb-2">
         <div className="min-w-0">
           <h1 className="text-xl font-black">
@@ -205,6 +215,9 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
           * when - the two things a screen never has to ask.
           */}
         <div className="hidden items-end gap-6 text-[11px] uppercase tracking-[0.08em] text-neutral-500 print:flex">
+          <span className="font-black text-neutral-600">
+            {PRACTICE_SHEET_COPY.printedBy} · {SITE_URL.host}
+          </span>
           <span className="flex items-end gap-2">
             {PRACTICE_SHEET_COPY.printName}
             <span className="inline-block w-44 border-b border-neutral-400" />
