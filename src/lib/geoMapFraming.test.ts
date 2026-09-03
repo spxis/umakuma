@@ -3,12 +3,14 @@ import { describe, expect, it } from "vitest";
 import {
   MAP_ZOOM_LEVELS,
   geoBoxCentre,
+  geoRegionBox,
   geoRegionCentre,
   geoWholeCountryBox,
   geoZoomBox,
   isMapZoom,
   stepMapZoom,
 } from "./geoMapFraming";
+import { GEO_DATASETS } from "./geoRegion";
 
 const JAPAN = "JP" as const;
 const whole = geoWholeCountryBox(JAPAN);
@@ -85,5 +87,69 @@ describe("zooming to a region", () => {
   it("has no centre for nothing, or for a code this map does not hold", () => {
     expect(geoRegionCentre(JAPAN, null)).toBeNull();
     expect(geoRegionCentre(JAPAN, "TX")).toBeNull();
+  });
+});
+
+/*
+ * The panel draws the chosen region on its own so its shape can be seen, and
+ * it drew a whole country with the region a speck in the middle. Two reasons,
+ * one test each below: the room around it was measured off its longest side
+ * and added to both, and the window was near enough square while the frame it
+ * was drawn in is two and a half times as wide.
+ */
+describe("framing one region on its own", () => {
+  const FRAME = 2.5;
+  const bboxOf = (code: number) =>
+    GEO_DATASETS[JAPAN].regions.find((entry) => String(entry.code) === String(code))!.map.bbox;
+
+  it("takes the shape of the frame, so nothing is added at the sides", () => {
+    for (const code of [1, 13, 25, 37, 47]) {
+      const box = geoRegionBox(JAPAN, code, FRAME);
+      expect(box.width / box.height).toBeCloseTo(FRAME);
+    }
+  });
+
+  it("fills the side that limits it, whatever shape the region is", () => {
+    /* Hokkaido is wide, Shiga is tall, Tokyo is small: all fill the height. */
+    for (const code of [1, 13, 25, 37]) {
+      const [, minY, , maxY] = bboxOf(code);
+      const box = geoRegionBox(JAPAN, code, FRAME);
+      expect((maxY - minY) / box.height).toBeGreaterThan(0.8);
+    }
+  });
+
+  /* 1309 by 1124 for Hokkaido, on a country 1000 by 1108. */
+  it("never asks for a window larger than the country", () => {
+    const whole = geoWholeCountryBox(JAPAN);
+    for (const code of [1, 13, 25, 37, 47]) {
+      const box = geoRegionBox(JAPAN, code, FRAME);
+      expect(box.width).toBeLessThan(whole.width);
+      expect(box.height).toBeLessThan(whole.height);
+    }
+  });
+
+  it("keeps the region in the middle of what it frames", () => {
+    const [minX, minY, maxX, maxY] = bboxOf(25);
+    const centre = geoBoxCentre(geoRegionBox(JAPAN, 25, FRAME));
+    expect(centre.x).toBeCloseTo((minX + maxX) / 2);
+    expect(centre.y).toBeCloseTo((minY + maxY) / 2);
+  });
+
+  /*
+   * Okinawa is drawn in a box off the south-west of the mainland. Framing its
+   * own geometry would take the reader to open sea; framing the box it sits in
+   * would leave the sea around it in shot, since it is smaller than its box.
+   */
+  it("frames a seated region where it is drawn, on the shape rather than the box", () => {
+    const box = geoRegionBox(JAPAN, 47, FRAME);
+    const inset = { x: 720, y: 860, width: 240, height: 230 };
+    const centre = geoBoxCentre(box);
+    expect(centre.x).toBeCloseTo(inset.x + inset.width / 2);
+    expect(centre.y).toBeCloseTo(inset.y + inset.height / 2);
+    expect(box.height).toBeLessThan(inset.height * 1.3);
+  });
+
+  it("falls back to the whole country for a code this map does not hold", () => {
+    expect(geoRegionBox(JAPAN, "TX", FRAME)).toEqual(geoWholeCountryBox(JAPAN));
   });
 });

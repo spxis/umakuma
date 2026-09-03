@@ -4103,13 +4103,12 @@
     "id": "map-shape-fills-frame",
     "name": "The region shape is drawn tiny",
     "area": "platform",
-    "status": "planned",
+    "status": "shipped",
     "kind": "bug",
-    "owner": "opus",
-    "claimedAt": "2026-09-03T11:23:42.275Z",
     "date": "2026-09-03",
     "summary": "The side panel draws the chosen region on its own so the shape can be seen, and the shape is a few millimetres in the middle of the whole country. The window is padded by nine tenths of the region's longest side and is nearly square, while the frame is two and a half times as wide as it is tall, so the map scales to the height and shows two or three times more country than the window asked for: Hokkaido's window comes out larger than Japan. The shape should fill the frame it is given, with only enough room around it to place the region among its neighbours. Reported 2026-09-03 by John.",
-    "dateIsEstimate": true,
-    "release": 77
+    "dateIsEstimate": false,
+    "version": "0.352.0",
+    "releasedAt": "2026-09-03T11:28:54Z"
   }
 ]

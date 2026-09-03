@@ -42,3 +42,14 @@ export const MAP_MARK_COPY = {
 
 /** The shape drawn on its own at the top of the panel. */
 export const MAP_SHAPE_COPY = { caption: (name: string) => `The shape of ${name}, with its neighbours in outline.` } as const;
+
+/**
+ * How much wider than tall the region's own frame is.
+ *
+ * A number rather than a Tailwind class because the window drawn into it is
+ * cut to the same shape: the frame's proportions have to be a thing the
+ * framing code can read, or the two drift and the map fills the difference
+ * with whatever country is next door. Two and a half keeps the height the
+ * panel had while the region was drawn small in it.
+ */
+export const MAP_SHAPE_FRAME_ASPECT = 2.5;

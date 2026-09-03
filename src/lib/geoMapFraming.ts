@@ -1,4 +1,4 @@
-import { insetFor } from "./geoMapInsets";
+import { applyInsetTransform, insetFor, insetTransform } from "./geoMapInsets";
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
 import type { MapBox } from "./japanPrefectures";
 
@@ -139,29 +139,62 @@ export function geoRegionCentre(
 /**
  * A window tight on one region, for drawing it on its own.
  *
- * Wider than the region by a little, so the neighbours show as outline: a
- * shape with nothing around it is a blob, and recognising Toyama means
- * recognising the bite it takes out of the coast. Where it is *drawn*, so a
- * region that lives in an inset box is framed there.
+ * Two things decide it, and getting either wrong draws a country instead of a
+ * shape. The room around the region is a fraction of *that side* of it, not of
+ * its longest side: nine tenths of the longest side, added to both, made
+ * Hokkaido's window 1309 by 1124 - larger than Japan - so the panel showed the
+ * whole country with the region as a speck in it. And the window takes the
+ * shape of the frame it will be drawn in, because an SVG scaled to fit keeps
+ * its window's proportions and fills the rest of the frame with whatever is
+ * next to it: a square window in a frame two and a half times as wide showed
+ * two and a half times as much map sideways as it had asked for.
+ *
+ * With both right the region fills the side that limits it, and the room left
+ * over falls on the other side, where it does what the room was for: the
+ * neighbours show in outline, so it is a place rather than a blob. Recognising
+ * Toyama means recognising the bite it takes out of the coast.
+ *
+ * Framed where it is *drawn*, so a region seated in an inset box is framed
+ * there rather than out at sea where its own geometry sits.
  */
-const SHAPE_PADDING_RATIO = 0.9;
+const SHAPE_MARGIN_RATIO = 0.1;
 
-export function geoRegionBox(country: CountryCode, code: string | number): MapBox {
+export function geoRegionBox(
+  country: CountryCode,
+  code: string | number,
+  /** How much wider than tall the frame is. Square unless the caller says. */
+  aspect = 1,
+): MapBox {
+  const region = GEO_DATASETS[country].regions.find((entry) => String(entry.code) === String(code));
+  if (!region) return geoWholeCountryBox(country);
+
+  /*
+   * Where the region is drawn, which for one seated in an inset box is inside
+   * that box rather than out at sea where its own geometry sits. The shape,
+   * not the box it is seated in: Okinawa is smaller than the box it is given,
+   * and framing the box left a tenth of the view as the sea around it.
+   */
   const seated = insetFor(country, code);
-  const source = seated
-    ? { minX: seated.box.x, minY: seated.box.y, maxX: seated.box.x + seated.box.width, maxY: seated.box.y + seated.box.height }
-    : (() => {
-        const region = GEO_DATASETS[country].regions.find((entry) => String(entry.code) === String(code));
-        if (!region) return null;
-        const [minX, minY, maxX, maxY] = region.map.bbox;
-        return { minX, minY, maxX, maxY };
-      })();
-  if (!source) return geoWholeCountryBox(country);
+  const [x0, y0, x1, y1] = region.map.bbox;
+  const source = (() => {
+    if (!seated) return { minX: x0, minY: y0, maxX: x1, maxY: y1 };
+    const transform = insetTransform(region.map.bbox, seated.box);
+    const [minX, minY] = applyInsetTransform([x0, y0], transform);
+    const [maxX, maxY] = applyInsetTransform([x1, y1], transform);
+    return { minX, minY, maxX, maxY };
+  })();
 
-  const span = Math.max(source.maxX - source.minX, source.maxY - source.minY);
-  const padding = span * SHAPE_PADDING_RATIO;
-  const width = source.maxX - source.minX + padding * 2;
-  const height = source.maxY - source.minY + padding * 2;
+  const spanX = Math.max(source.maxX - source.minX, 0.001);
+  const spanY = Math.max(source.maxY - source.minY, 0.001);
+  let width = spanX * (1 + SHAPE_MARGIN_RATIO * 2);
+  let height = spanY * (1 + SHAPE_MARGIN_RATIO * 2);
+
+  /* Grown to the frame's shape, never cropped: the region keeps its margin on
+     the side that limits it and gains context on the other. */
+  const shape = Math.max(aspect, 0.001);
+  if (width / height < shape) width = height * shape;
+  else height = width / shape;
+
   return {
     x: (source.minX + source.maxX) / 2 - width / 2,
     y: (source.minY + source.maxY) / 2 - height / 2,
