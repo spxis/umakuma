@@ -20,6 +20,16 @@ export const STROKE_ANIMATION_COPY = {
   face: (label: string) => `${label} face`,
   animated: "Stroke order",
   close: "Close",
+  /*
+   * The stroke picker. It is shut on arrival and its opener says what opening
+   * it does, rather than naming a feature: a reader wants one stroke, not a
+   * picker.
+   */
+  pickStroke: "Show one stroke",
+  pickAll: "Show every stroke",
+  chooseStroke: "Choose a stroke",
+  /** The label a screen reader hears on a numbered button. */
+  strokeNumber: (number: number) => `Stroke ${number}`,
   /* The three drawing sizes. Named by their initial, since the row is tiny. */
   sizeLabel: "Size",
   sizes: { small: "S", medium: "M", large: "L" },

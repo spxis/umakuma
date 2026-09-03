@@ -12,6 +12,7 @@ import { MODAL_LAYERS } from "./modalLayers";
 import { STROKE_ANIMATION_COPY, STROKE_SIDE_WIDTH } from "./strokeAnimationCopy";
 import { KANJI_FACES, type KanjiFace } from "./kanjiFaces";
 import { useStrokeSize } from "./useStrokeSize";
+import { strokeIsInCharacter, strokeNumbers } from "./strokeFocus";
 import { noTranslateClass } from "./japaneseText";
 import JapaneseInProse from "./JapaneseInProse";
 
@@ -98,6 +99,67 @@ function ShareLink({ href }: { href: string }) {
   );
 }
 
+/**
+ * The numbers of a character, to hold one stroke still by.
+ *
+ * Shut on arrival, and one small control while it is: the panel earns its
+ * quiet by showing the drawing and nothing else, and a row of twenty-one
+ * numbers on every character would spend that on a thing most readers are not
+ * asking for. Numbers rather than a dropdown because the strokes are a short
+ * list a reader moves along - 3, then 4, then 5 - and a dropdown makes each
+ * step two clicks and hides where you are in it.
+ */
+function StrokePicker({
+  count,
+  selected,
+  onSelect,
+}: {
+  count: number;
+  selected: number | null;
+  onSelect: (stroke: number | null) => void;
+}) {
+  const open = selected !== null;
+
+  return (
+    <div className="border-b border-line bg-surface-muted/40 px-5 py-2">
+      <button
+        type="button"
+        aria-expanded={open}
+        /* Opening picks the first stroke, so it opens onto an answer rather than a question. */
+        onClick={() => onSelect(open ? null : 1)}
+        className={`inline-flex h-7 items-center rounded-full border px-3 text-[10px] font-black uppercase tracking-[0.08em] transition ${
+          open
+            ? "border-kanji bg-kanji text-white"
+            : "border-line bg-surface text-foreground/60 hover:bg-surface-muted hover:text-foreground"
+        }`}
+      >
+        {open ? STROKE_ANIMATION_COPY.pickAll : STROKE_ANIMATION_COPY.pickStroke}
+      </button>
+
+      {open ? (
+        <div role="group" aria-label={STROKE_ANIMATION_COPY.chooseStroke} className="mt-2 flex flex-wrap gap-1">
+          {strokeNumbers(count).map((stroke) => (
+            <button
+              key={stroke}
+              type="button"
+              aria-pressed={stroke === selected}
+              aria-label={STROKE_ANIMATION_COPY.strokeNumber(stroke)}
+              onClick={() => onSelect(stroke)}
+              className={`inline-flex h-7 w-7 items-center justify-center rounded-full border text-[11px] font-black transition ${
+                stroke === selected
+                  ? "border-kanji bg-kanji text-white"
+                  : "border-line bg-surface text-foreground/70 hover:bg-surface-muted"
+              }`}
+            >
+              {stroke}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 /** One line carrying whatever the surface knows: readings first, then meaning. */
 function summaryLine(summary: KanjiDetailSummary | undefined): string | null {
   if (!summary) return null;
@@ -137,6 +199,15 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
   const [meta, setMeta] = useState<StrokeMeta | null>(null);
   const size = useStrokeSize();
   const line = summaryLine(summary);
+  /*
+   * The picked stroke is held with the character it was picked on. This panel
+   * outlives one character - the explorers open it again on the next kanji
+   * without unmounting it - and stroke 12 carried onto a four-stroke character
+   * would name nothing and leave the drawing empty.
+   */
+  const [picked, setPicked] = useState<{ kanji: string; stroke: number | null }>({ kanji, stroke: null });
+  const selected =
+    picked.kanji === kanji && strokeIsInCharacter(picked.stroke, meta?.strokeCount ?? 0) ? picked.stroke : null;
 
   return (
     <>
@@ -172,6 +243,15 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
         </div>
       </header>
 
+      {/* Under the header, where there is room for a row of numbers the body has not got. */}
+      {meta ? (
+        <StrokePicker
+          count={meta.strokeCount}
+          selected={selected}
+          onSelect={(stroke) => setPicked({ kanji, stroke })}
+        />
+      ) : null}
+
       <div className="flex flex-col items-center gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-center">
         {/*
           * Printed faces beside the drawing, and out of its way at the largest
@@ -196,6 +276,7 @@ export function KanjiDetailPanel({ kanji, grade, summary, detail, onClose, share
           showStrokeCount={false}
           showCredit={false}
           onLoaded={setMeta}
+          selectedStroke={selected}
         />
       </div>
 

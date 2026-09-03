@@ -2828,6 +2828,7 @@
     "kind": "feature",
     "date": "2026-09-02",
     "summary": "A worksheet from a list you do not own. The sheet is built at your own address, so a list belonging to somebody else is named in the path - /practice/list/mika/week-1 - rather than looked up on your own shelf, where the same name means a different list. Reachability is the list's own: public to anyone, unlisted to whoever holds the key, private to nobody. Games from a shared list are list-game-from-shared.",
+    "dateIsEstimate": false,
     "version": "0.303.0",
     "releasedAt": "2026-09-03T00:57:39Z"
   },
@@ -3601,24 +3602,22 @@
     "id": "stroke-pick-by-number",
     "name": "One stroke at a time",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
-    "status": "planned",
     "date": "2026-09-02",
-    "dateIsEstimate": true,
-    "release": 69,
     "summary": "The stroke order panel plays the whole character and nothing else: there is no way to hold a single stroke still and look at it, which is what somebody copying the character actually needs. A row of numbers opens under the header - closed by default, so the panel stays as quiet as it is now - and picking a number draws that stroke alone: the strokes before it in grey, the strokes after it blank, the chosen one in colour and animated so the pen direction is visible. Requested 2026-09-02 by John.",
-    "owner": "Claude (session cd35064c)",
-    "claimedAt": "2026-09-03T01:03:43.459Z"
+    "version": "0.304.0",
+    "releasedAt": "2026-09-03T01:04:17Z"
   },
   {
     "id": "kanji-section-paths",
     "name": "A page for each part of a character",
     "area": "study",
-    "kind": "feature",
     "status": "planned",
+    "kind": "feature",
     "date": "2026-09-02",
+    "summary": "The kanji page shows everything about a character at one address, so there is no way to hand somebody the stroke order and nothing else. Each panel gets a path of its own under the character - /kanji/<character>/stroke shows the stroke order alone, and the other panels follow the same shape - built from one registry so a section is defined once and rendered identically whether it is on the whole page or on its own. An unknown segment is a 404 rather than a silent fall back to the whole page. The same shape then covers radicals and words, and the share control on each panel points at that panel's own address. Requested 2026-09-02 by John.",
     "dateIsEstimate": true,
-    "release": 70,
-    "summary": "The kanji page shows everything about a character at one address, so there is no way to hand somebody the stroke order and nothing else. Each panel gets a path of its own under the character - /kanji/<character>/stroke shows the stroke order alone, and the other panels follow the same shape - built from one registry so a section is defined once and rendered identically whether it is on the whole page or on its own. An unknown segment is a 404 rather than a silent fall back to the whole page. The same shape then covers radicals and words, and the share control on each panel points at that panel's own address. Requested 2026-09-02 by John."
+    "release": 70
   }
 ]

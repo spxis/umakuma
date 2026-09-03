@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import SourceCredit from "./SourceCredit";
 import { SOURCE_KEYS } from "@/lib/sourceCredits";
 import { setStrokeSize, useStrokeSize } from "./useStrokeSize";
+import { STROKE_FOCUS_CLASS, STROKE_FOCUS_STATES, strokeFocusState } from "./strokeFocus";
 import {
   STROKE_ANIMATION_COPY,
   STROKE_MS_PER_STROKE,
@@ -52,6 +53,15 @@ type Props = {
   showCredit?: boolean;
   /** Hands the count and attribution up, so a caller can place them itself. */
   onLoaded?: (meta: StrokeMeta) => void;
+  /**
+   * One stroke to hold still, counted from one, or null to play them all.
+   *
+   * Chosen in the panel above rather than here: the picker needs the stroke
+   * count to draw its row of numbers, and the count is only known once this
+   * has loaded, so the panel that already receives it through `onLoaded` is
+   * the one place both halves are in scope.
+   */
+  selectedStroke?: number | null;
 };
 
 /**
@@ -71,6 +81,7 @@ export default function KanjiStrokeAnimation({
   showStrokeCount = true,
   showCredit = true,
   onLoaded,
+  selectedStroke = null,
 }: Props) {
   const [data, setData] = useState<StrokePayload | null>(null);
   const [error, setError] = useState(false);
@@ -118,7 +129,13 @@ export default function KanjiStrokeAnimation({
     };
   }, [kanji, grade]);
 
-  // Restarting means re-running the dash animation from the beginning.
+  /*
+   * Restarting means re-running the dash animation from the beginning, and
+   * picking a stroke is a restart of a smaller kind: everything is wound back
+   * to undrawn, then the strokes already down are put back instantly and the
+   * chosen one is drawn with no queue in front of it, so the pen direction is
+   * visible on the stroke you asked about rather than eight strokes later.
+   */
   useEffect(() => {
     if (!data) return;
     for (const path of pathRefs.current) {
@@ -132,13 +149,23 @@ export default function KanjiStrokeAnimation({
     const frame = requestAnimationFrame(() => {
       pathRefs.current.forEach((path, index) => {
         if (!path) return;
-        path.style.transition = `stroke-dashoffset ${STROKE_MS_PER_STROKE}ms linear ${index * STROKE_MS_PER_STROKE}ms`;
+        if (selectedStroke === null) {
+          path.style.transition = `stroke-dashoffset ${STROKE_MS_PER_STROKE}ms linear ${index * STROKE_MS_PER_STROKE}ms`;
+          path.style.strokeDashoffset = "0";
+          return;
+        }
+
+        const state = strokeFocusState(index, selectedStroke);
+        /* Left wound back, so a stroke not yet reached is not on the page at all. */
+        if (state === STROKE_FOCUS_STATES.ahead) return;
+        path.style.transition =
+          state === STROKE_FOCUS_STATES.current ? `stroke-dashoffset ${STROKE_MS_PER_STROKE}ms linear` : "none";
         path.style.strokeDashoffset = "0";
       });
     });
 
     return () => cancelAnimationFrame(frame);
-  }, [data, playToken]);
+  }, [data, playToken, selectedStroke]);
 
   if (error) {
     return <p className="text-xs font-semibold text-foreground/60">{STROKE_ANIMATION_COPY.unavailable}</p>;
@@ -167,18 +194,28 @@ export default function KanjiStrokeAnimation({
         /* Large is wider than the narrowest phone, so it shrinks to fit rather than overflowing. */
         className="h-auto max-w-full rounded-2xl border border-line bg-surface"
       >
-        {/* The finished character, faint, so a stroke is drawn onto its outline. */}
-        <g fill="none" stroke="currentColor" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/10">
-          {data.strokes.map((d, index) => (
-            <path key={`ghost-${index}`} d={d} />
-          ))}
-        </g>
+        {/*
+          * The finished character, faint, so a stroke is drawn onto its outline
+          * - but not while one stroke is being studied, where an outline of
+          * everything is what makes "not drawn yet" look drawn.
+          */}
+        {selectedStroke === null ? (
+          <g fill="none" stroke="currentColor" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/10">
+            {data.strokes.map((d, index) => (
+              <path key={`ghost-${index}`} d={d} />
+            ))}
+          </g>
+        ) : null}
 
         <g fill="none" stroke="currentColor" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" className="text-kanji">
           {data.strokes.map((d, index) => (
             <path
               key={`stroke-${index}`}
               d={d}
+              /* Nearer than the group's colour, so the three states win while one is picked. */
+              className={
+                selectedStroke === null ? undefined : STROKE_FOCUS_CLASS[strokeFocusState(index, selectedStroke)]
+              }
               ref={(element) => {
                 pathRefs.current[index] = element;
               }}
@@ -198,9 +235,12 @@ export default function KanjiStrokeAnimation({
            * room goes where it was wanted - between them.
            */
           <g className="fill-foreground/70 font-black" fontSize={numberFontUnits}>
-            {data.strokes.map((d, index) => (
-              <StrokeNumber key={`number-${index}`} d={d} index={index} />
-            ))}
+            {data.strokes.map((d, index) =>
+              /* A number is ink too: numbering a stroke that is not drawn yet answers the wrong question. */
+              selectedStroke !== null && index + 1 > selectedStroke ? null : (
+                <StrokeNumber key={`number-${index}`} d={d} index={index} />
+              ),
+            )}
           </g>
         ) : null}
       </svg>
