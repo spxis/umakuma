@@ -119,13 +119,50 @@ export type ShipStamp = { version: string; releasedAt: string; date: string };
  * The planning fields go: a release has a real date rather than an estimate,
  * no queue position, and no owner, because it is finished rather than held.
  */
+/**
+ * A ticket, as the shipped entry it becomes.
+ *
+ * The queue is in the database and the shipped record is in the file, so
+ * something has to turn one into the other at the moment a release goes out.
+ * This is that seam: the ticket supplies what the work *is*, the stamp
+ * supplies what the release *was*, and the entry that lands in the commit
+ * carries both.
+ */
+export type ShippableTicket = {
+  /** The timeline id to file it under; the ticket's `filedAs`, or a fresh slug. */
+  id: string;
+  title: string;
+  detail?: string | null;
+  area?: string | null;
+  kind?: string | null;
+};
+
+export function entryFromTicket(ticket: ShippableTicket, stamp: ShipStamp): FeatureTimelineEntry {
+  return {
+    id: ticket.id,
+    name: ticket.title,
+    area: (ticket.area ?? "platform") as FeatureTimelineEntry["area"],
+    kind: (ticket.kind ?? "feature") as FeatureTimelineEntry["kind"],
+    status: FEATURE_STATUSES.shipped,
+    date: stamp.date,
+    version: stamp.version,
+    releasedAt: stamp.releasedAt,
+    summary: ticket.detail ?? ticket.title,
+  };
+}
+
 export function shipEntry(
   entries: readonly FeatureTimelineEntry[],
   id: string,
   stamp: ShipStamp,
 ): FeatureTimelineEntry[] {
   const found = entries.find((entry) => entry.id === id);
-  if (!found) throw new Error(`No entry "${id}" on the board.`);
+  if (!found) {
+    throw new Error(
+      `No entry "${id}" in the timeline. Planned work lives on the board now: ` +
+        `run \`pnpm task\` to find its ticket, then ship it with --ticket <id>.`,
+    );
+  }
   if (found.status === FEATURE_STATUSES.shipped) {
     throw new Error(`"${id}" already shipped as ${found.version ?? "an earlier release"}.`);
   }

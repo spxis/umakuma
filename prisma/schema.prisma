@@ -958,16 +958,37 @@ model FeatureWish {
   filedAs     String?
   /// Who asked, by the email they were signed in as.
   requestedBy String?
+  /// The agent holding this task, and since when.
+  ///
+  /// Claims live here rather than in `featureTimeline.json` because a claim in
+  /// the file is invisible to every other session until it reaches main, and
+  /// is destroyed by the usual way a conflict on that file gets resolved -
+  /// take main's copy, lose your row. A claim is the one thing that has to be
+  /// true for everybody the instant it is made.
+  claimedBy   String?
+  claimedAt   DateTime?
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 
   @@index([status, createdAt])
+  @@index([claimedBy])
 }
 
+/// Where a ticket is in its life.
+///
+/// Values are added, never renamed: a Postgres enum member cannot be changed
+/// under rows that already use it, and `filed` is what the first version of
+/// this board wrote. It now means the same as `open` - work described and not
+/// started - and nothing new is written with it.
 enum FeatureWishStatus {
-  /// Waiting for an agent to pick it up.
+  /// In the backlog. Nobody is on it.
   open
-  /// An agent turned it into a planned timeline entry; `filedAs` says which.
+  /// An agent holds it. `claimedBy` says who and `claimedAt` when, which is
+  /// what makes an abandoned hold reclaimable rather than permanent.
+  in_progress
+  /// Shipped. `filedAs` names the `featureTimeline.json` entry that records it.
+  shipped
+  /// The first board's word for open. Kept for the rows that already say it.
   filed
   /// Answered no, kept on the record rather than deleted.
   declined

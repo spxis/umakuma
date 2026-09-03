@@ -114,21 +114,44 @@ async function main(): Promise<void> {
         console.log(formatBoard(load(), await openWishCount()));
         break;
       }
-      case "add": {
+      /*
+       * The queue moved to the database on 2026-09-03; this file now records
+       * what has shipped. Adding or claiming here would write a row no other
+       * session can see until it reaches main - which is the failure the move
+       * was for - so both point at the board instead of doing it quietly.
+       */
+      case "add":
+      case "claim":
+      case "release": {
+        console.error(
+          [
+            `\`pnpm backlog ${command}\` is retired: planned work lives on the shared board now.`,
+            "",
+            "  pnpm task                    what is open and who holds it",
+            '  pnpm task add "<title>" [--detail "…"] [--area <area>] [--bug]',
+            '  pnpm task claim <id> "<who>"',
+            "  pnpm task release <id>",
+            "",
+            "This file keeps the shipped record; `pnpm release:take` still writes it.",
+          ].join("\n"),
+        );
+        process.exit(2);
+      }
+      case "add-legacy": {
         const [id, area, name, summary, kind = "feature"] = rest;
         if (!id || !area || !name || !summary || !isFeatureArea(area) || !isFeatureKind(kind)) usage();
         save(addEntry(load(), { id, area, name, summary, kind }, todayInVancouver()));
         console.log(`added ${id}`);
         break;
       }
-      case "claim": {
+      case "claim-legacy": {
         const [id, owner] = rest;
         if (!id || !owner) usage();
         save(claimEntry(load(), id, owner, new Date().toISOString()));
         console.log(`${id} claimed by ${owner}`);
         break;
       }
-      case "release": {
+      case "release-legacy": {
         const [id] = rest;
         if (!id) usage();
         save(releaseEntry(load(), id));

@@ -6,7 +6,14 @@ import { stringifyTimeline } from "../src/lib/backlogBoard";
 import { getVancouverDateKey } from "../src/lib/dailySnapshot";
 import { loadFeatureTimeline } from "../src/lib/featureTimeline";
 import { CODENAMES, codenameKanaForMinor, type ReleaseCodename } from "../src/lib/releaseCodenames";
-import { codenameProblems, minorOf, nextVersion, shipEntry } from "../src/lib/releaseTake";
+import { PrismaClient } from "@prisma/client";
+
+import { codenameProblems, entryFromTicket, minorOf, nextVersion, shipEntry } from "../src/lib/releaseTake";
+
+/** A title as a timeline id, for a ticket that was never filed under one. */
+function slugFor(title: string): string {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+}
 
 /**
  * Takes the next release number, in one pass, immediately before pushing.
@@ -79,10 +86,25 @@ function appendCodename(codename: ReleaseCodename): void {
   writeFileSync(CODENAMES_FILE, source.slice(0, lineEnd) + line + source.slice(lineEnd));
 }
 
-function main(): void {
-  const id = process.argv[2];
-  if (!id || id.startsWith("--")) {
-    console.error('Usage: pnpm release:take <entry-id> --romaji "…" --ja "…" --reading "…" --gloss "…"');
+async function main(): Promise<void> {
+  /*
+   * Two ways in, because the queue is in the database and the shipped record
+   * is in this file.
+   *
+   *   pnpm release:take <entry-id> …            an entry already in the file
+   *   pnpm release:take --ticket <id> …         a ticket off the board
+   *
+   * The second is the usual one now. It reads what the work is from the
+   * ticket, writes the shipped entry, and marks the ticket shipped so the
+   * board and the file agree without anybody having to remember both.
+   */
+  const ticketId = flag("ticket");
+  const id = ticketId ? undefined : process.argv[2];
+  if (!ticketId && (!id || id.startsWith("--"))) {
+    console.error(
+      'Usage: pnpm release:take <entry-id> --romaji "…" --ja "…" --reading "…" --gloss "…"\n' +
+        '   or: pnpm release:take --ticket <ticket-id> [--as <timeline-id>] --romaji "…" …',
+    );
     process.exit(1);
   }
 
@@ -116,11 +138,28 @@ function main(): void {
   }
 
   const now = new Date();
-  const entries = shipEntry(loadFeatureTimeline(), id, {
-    version,
-    releasedAt: `${now.toISOString().slice(0, 19)}Z`,
-    date: getVancouverDateKey(now),
-  });
+  const stamp = { version, releasedAt: `${now.toISOString().slice(0, 19)}Z`, date: getVancouverDateKey(now) };
+
+  let entries;
+  let shippedId: string;
+  if (ticketId) {
+    const client = new PrismaClient({ log: ["error"] });
+    try {
+      const ticket = await client.featureWish.findUnique({ where: { id: ticketId } });
+      if (!ticket) throw new Error(`No ticket ${ticketId} on the board.`);
+      shippedId = flag("as") ?? ticket.filedAs ?? slugFor(ticket.title);
+      entries = [...loadFeatureTimeline(), entryFromTicket({ ...ticket, id: shippedId }, stamp)];
+      await client.featureWish.update({
+        where: { id: ticketId },
+        data: { status: "shipped", filedAs: shippedId, claimedBy: null, claimedAt: null },
+      });
+    } finally {
+      await client.$disconnect();
+    }
+  } else {
+    shippedId = id as string;
+    entries = shipEntry(loadFeatureTimeline(), shippedId, stamp);
+  }
 
   writeFileSync(BOARD, stringifyTimeline(entries));
   if (!planned) appendCodename(codename);
@@ -128,9 +167,9 @@ function main(): void {
   replaceOnce(PACKAGE_FILE, `"version": "${published}"`, `"version": "${version}"`);
 
   console.log(
-    `${id} is ${version} 「${codename.reading}」${codename.ja} (${codename.romaji}).\n` +
+    `${shippedId} is ${version} 「${codename.reading}」${codename.ja} (${codename.romaji}).\n` +
       `Published was ${published}. Now: pnpm quality:check && pnpm preflight:prod, then push.`,
   );
 }
 
-main();
+void main();

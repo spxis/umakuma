@@ -573,26 +573,6 @@
     "releasedAt": "2026-09-02T11:51:00Z"
   },
   {
-    "id": "clans",
-    "name": "Clans and families",
-    "area": "platform",
-    "status": "planned",
-    "date": "2026-09-02",
-    "summary": "Members form their own group and compare inside it.",
-    "dateIsEstimate": true,
-    "release": 11
-  },
-  {
-    "id": "global-family-optin",
-    "name": "Global ranking opt-in",
-    "area": "platform",
-    "status": "planned",
-    "date": "2026-09-02",
-    "summary": "A public global board that every member joins deliberately, never by default.",
-    "dateIsEstimate": true,
-    "release": 12
-  },
-  {
     "id": "catalog-sync-change-detection",
     "name": "Content-based catalogue sync",
     "area": "platform",
@@ -613,16 +593,6 @@
     "dateIsEstimate": false,
     "version": "0.319.0",
     "releasedAt": "2026-09-03T05:41:14Z"
-  },
-  {
-    "id": "ultra-game-kind",
-    "name": "Ultra as its own game kind",
-    "area": "games",
-    "status": "planned",
-    "date": "2026-09-04",
-    "summary": "Retire the batchSize = -1 sentinel in favour of a real enum value.",
-    "dateIsEstimate": true,
-    "release": 16
   },
   {
     "id": "game-activity",
@@ -647,25 +617,6 @@
     "releasedAt": "2026-08-30T06:50:42Z"
   },
   {
-    "id": "game-presence",
-    "name": "Viewing presence",
-    "area": "games",
-    "status": "backlogged",
-    "date": "2026-08-30",
-    "summary": "Who is looking at a game right now. Backlogged by John: not worth any performance or cost risk ahead of open signup.",
-    "dateIsEstimate": true
-  },
-  {
-    "id": "jlpt-level-reviews",
-    "name": "JLPT level reviews",
-    "area": "jlpt",
-    "status": "planned",
-    "date": "2026-09-05",
-    "summary": "Reviews that progress through an N level the way WaniKani progresses through 60. Design open.",
-    "dateIsEstimate": true,
-    "release": 13
-  },
-  {
     "id": "kanji-coverage",
     "name": "Kanji coverage map",
     "area": "jlpt",
@@ -675,16 +626,6 @@
     "dateIsEstimate": false,
     "version": "0.52.0",
     "releasedAt": "2026-08-30T14:00:00Z"
-  },
-  {
-    "id": "parallel-level-ladder",
-    "name": "Parallel level ladder",
-    "area": "jlpt",
-    "status": "planned",
-    "date": "2026-09-06",
-    "summary": "A WaniKani-parallel progression over roughly 100 levels, covering the kanji WaniKani leaves out.",
-    "dateIsEstimate": true,
-    "release": 18
   },
   {
     "id": "game-setup-compact",
@@ -3271,28 +3212,6 @@
     "releasedAt": "2026-09-02T16:14:52Z"
   },
   {
-    "id": "search-money-spelled-numbers",
-    "name": "An amount written in words",
-    "area": "study",
-    "status": "planned",
-    "kind": "feature",
-    "date": "2026-09-02",
-    "summary": "five hundred yen and twenty thousand yen name a price as clearly as 500 yen does, and neither parses - the amount must be digits today. Depends on the number library item 44 builds, which has to read words into values anyway for the reverse direction. Romaji units belong here too: a learner types 5 man yen before they type 5\u4e07\u5186. Noted 2026-09-02.",
-    "dateIsEstimate": true,
-    "release": 50
-  },
-  {
-    "id": "search-money-loose-phrases",
-    "name": "A price with a word too many",
-    "area": "study",
-    "status": "planned",
-    "kind": "feature",
-    "date": "2026-09-02",
-    "summary": "100 dollars CAD and 500 Japanese yen name one amount in three tokens, and the parser takes at most one token on each side of the number, so both answer with nothing. Low value on its own; worth doing when the parser is next open. Noted 2026-09-02.",
-    "dateIsEstimate": true,
-    "release": 51
-  },
-  {
     "id": "list-meta-nesting",
     "name": "The facts line up where they belong",
     "area": "study",
@@ -3590,17 +3509,6 @@
     "releasedAt": "2026-09-03T05:12:04Z"
   },
   {
-    "id": "list-game-from-shared",
-    "name": "Play a game from a list you follow",
-    "area": "study",
-    "status": "planned",
-    "kind": "feature",
-    "date": "2026-09-02",
-    "summary": "Practice, Match and the rest take a saved list as their pool, and only the player's own. A list a friend shares is something to read and now something to print, but not something to play. Needs a column on GameRun to remember which list a run drilled, so it is its own release rather than a rider on the worksheets. Split out of list-practice-from-shared 2026-09-02.",
-    "dateIsEstimate": true,
-    "release": 68
-  },
-  {
     "id": "stroke-pick-by-number",
     "name": "One stroke at a time",
     "area": "study",
@@ -3767,17 +3675,6 @@
     "dateIsEstimate": false,
     "version": "0.324.0",
     "releasedAt": "2026-09-03T06:34:40Z"
-  },
-  {
-    "id": "catalog-gap-visible",
-    "name": "The catalogue says what it is missing",
-    "area": "admin",
-    "status": "planned",
-    "kind": "feature",
-    "date": "2026-09-02",
-    "summary": "The catalogue gap reopens every time WaniKani adds subjects and nothing says so. The admin catalogue panel already reports drift - missing levels, duplicate rows - and the count belongs beside them, but findCatalogGap reads every account's assignment cache and all 9,400 rows' relation arrays, so it cannot ride the status endpoint the panel polls. A button that measures on demand and reports the ids, next to the sync controls. Raised 2026-09-02.",
-    "dateIsEstimate": true,
-    "release": 71
   },
   {
     "id": "subject-block-headers",
@@ -4075,30 +3972,9 @@
     "kind": "feature",
     "date": "2026-09-03",
     "summary": "Every release is already tagged by area, and the tags are shown without being usable: there is no way to ask for the games work, or everything that touched search. The page lays out every area it holds with a count beside it, and choosing one filters the list. Areas only - a feature and a bug are not the same kind of tag. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
     "version": "0.353.0",
     "releasedAt": "2026-09-03T11:30:27Z"
-  },
-  {
-    "id": "print-as-modal",
-    "name": "Print without leaving the page",
-    "area": "platform",
-    "status": "planned",
-    "kind": "feature",
-    "date": "2026-09-03",
-    "summary": "Printing a list opens /users/<name>/practice/list/<slug>, which switches the header's section from Lists to Learn - you asked to print and the site took you somewhere else. A print modal would keep the reader where they are and be callable from anywhere a printable thing is shown. Requested 2026-09-02 by John, twice. Tabled in the backlog 2026-09-03 at his request.",
-    "dateIsEstimate": true,
-    "release": 75
-  },
-  {
-    "id": "maps-kanji-reveal-toggle",
-    "name": "A toggle for the reading and the English",
-    "area": "platform",
-    "status": "planned",
-    "kind": "feature",
-    "date": "2026-09-03",
-    "summary": "The map panel's kanji cards show the meaning and the reading together. John asked for the shared component 'with a toggle, the english/reading'; showing both was a judgement call made without flagging it, and the grade explorer already has the reveal control this would reuse. Raised 2026-09-03 by John.",
-    "dateIsEstimate": true,
-    "release": 76
   },
   {
     "id": "map-shape-fills-frame",
@@ -4111,5 +3987,16 @@
     "dateIsEstimate": false,
     "version": "0.352.0",
     "releasedAt": "2026-09-03T11:28:54Z"
+  },
+  {
+    "id": "board-in-the-database",
+    "name": "A shared ticket board, in the database",
+    "area": "platform",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-03",
+    "version": "0.354.0",
+    "releasedAt": "2026-09-03T12:25:07Z",
+    "summary": "Planned work moves out of featureTimeline.json into Postgres, with an atomic claim and a six-hour lease. The file keeps the shipped record, because a release entry has to land in the same commit as its code. Requested 2026-09-03 by John."
   }
 ]

@@ -214,7 +214,30 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   build, because the symlink points outside the project root — a real install
   is hard-linked from the same store and costs seconds. Remove it when the work
   is done: `git worktree remove ../umakuma-worktrees/<name>`.
-- **The timeline is the ticket board, and every agent works from it.** Several
+- **The queue is in the database; the shipped record is in the file.** Two
+  places, on purpose. What has been asked for, who is doing it and what is
+  left lives in Postgres, reachable with `pnpm task` (production) or
+  `pnpm task:local`:
+
+      pnpm task                              what is open and who holds it
+      pnpm task add "<title>" [--detail "…"] [--area study] [--bug]
+      pnpm task claim <id> "<who>"           check one out
+      pnpm task release <id>                 put it back
+      pnpm task drop <id>                    answered no, kept on the record
+      pnpm task filed <id> <timeline-id>     it became planned work in the file
+
+  **Record a request the moment it arrives, before starting work on it.** A
+  claim written to `featureTimeline.json` is invisible to every other session
+  until it reaches main, and the usual way a conflict on that file is resolved
+  - take main's copy - destroys whatever the session had just added. That
+  happened three times in one afternoon on 2026-09-03 and lost a request
+  outright. A row is true for everybody the moment it is written.
+
+  A claim cannot be taken over: `claim` refuses and names the holder, because
+  two agents building the same thing is the expensive failure, not two agents
+  idle. Re-claiming your own is allowed and does nothing.
+
+- **The timeline is the ticket board for what has shipped, and every agent works from it.** Several
   sessions work this repository at once and cannot see each other; the JSON is
   the one thing they all read. So: every request, bug or idea John sends becomes
   a planned entry *before* the work starts (`pnpm backlog add <id> <area>

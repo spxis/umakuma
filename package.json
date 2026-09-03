@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "0.353.0",
+  "version": "0.354.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -86,7 +86,10 @@
     "internal:backfill": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/backfill-internal-members.ts",
     "jlpt:migrate": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/migrate-jlpt-certificates.ts",
     "radicals:build": "node scripts/build-radicals.mjs",
-    "radicals:font": "node scripts/build-radical-font.mjs"
+    "radicals:font": "node scripts/build-radical-font.mjs",
+    "task": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/tasks.ts",
+    "task:local": "node scripts/local-db.mjs run -- pnpm task",
+    "task:import": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/tasks-import.ts"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
