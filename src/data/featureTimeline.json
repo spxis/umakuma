@@ -3999,14 +3999,13 @@
     "id": "subject-pill-sweep",
     "name": "One chip for every inline kanji",
     "area": "study",
-    "status": "planned",
+    "status": "shipped",
     "kind": "feature",
-    "owner": "fable",
-    "claimedAt": "2026-09-03T10:40:36.800Z",
     "date": "2026-09-03",
     "summary": "Every inline kanji, radical or word across the site is drawn through the shared pill; hand-rolled chips and misplaced large cards are replaced.",
-    "dateIsEstimate": true,
-    "release": 73
+    "dateIsEstimate": false,
+    "version": "0.349.0",
+    "releasedAt": "2026-09-03T11:12:10Z"
   },
   {
     "id": "maps-region-marks",

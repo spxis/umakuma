@@ -167,7 +167,6 @@ export default function LevelExplorerDetailSection({
             ) : (
               <RelatedReferenceCards
                 items={selectedItem.radicals ?? []}
-                large={isKanjiSubjectType(selectedItem.subjectType)}
                 showEnglish={showEnglish}
                 subjectById={subjectById}
                 fallbackType={SUBJECT_TYPES.radical}
@@ -178,7 +177,6 @@ export default function LevelExplorerDetailSection({
           visuallySimilarContent={
             <RelatedReferenceCards
               items={selectedItem.visuallySimilar ?? []}
-              large={isKanjiSubjectType(selectedItem.subjectType)}
               showEnglish={showEnglish}
               subjectById={subjectById}
               fallbackType={SUBJECT_TYPES.kanji}
@@ -188,7 +186,6 @@ export default function LevelExplorerDetailSection({
           usedInVocabularyContent={
             <RelatedReferenceCards
               items={selectedItem.usedInVocabulary ?? []}
-              large
               showEnglish={showEnglish}
               subjectById={subjectById}
               fallbackType={

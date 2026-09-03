@@ -10,7 +10,8 @@ import { ExplorerPill, NeutralPill } from "../../shared/ExplorerPill";
 import JlptExplorerStatsPanel from "./JlptExplorerStatsPanel";
 import type { KanjiStats } from "./JlptExplorerContent.types";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
-import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
+import PillTextToggle from "@/app/shared/PillTextToggle";
+import SubjectPill from "@/app/shared/SubjectPill";
 import FieldLabel from "../../../../shared/FieldLabel";
 import ReadingsLine from "@/app/shared/ReadingsLine";
 import { READING_KIND_DISPLAY, READING_KINDS } from "@/lib/domainConstants";
@@ -251,7 +252,10 @@ export default function JlptExplorerDetailSection({
       {!studyMode && wordExamples !== null && wordExamples.length > 0 ? (
         <div className="mt-4">
           <article className="rounded-xl border border-line bg-surface-muted p-3 text-sm">
-            <FieldLabel>{JLPT_EXPLORER_TEXT.wordsHeading}</FieldLabel>
+            <div className="flex items-center justify-between gap-2">
+              <FieldLabel>{JLPT_EXPLORER_TEXT.wordsHeading}</FieldLabel>
+              <PillTextToggle />
+            </div>
             <ul className="mt-2 space-y-2 text-foreground/90">
               {wordExamples.map((example, index) => (
                 <li
@@ -264,12 +268,13 @@ export default function JlptExplorerDetailSection({
                   {example.kanjiItems?.length ? (
                     <div className="mt-2 flex flex-wrap gap-2">
                       {example.kanjiItems.map((item) => (
-                        <GlyphReferenceTile
+                        <SubjectPill
                           key={`${example.written}-${item.subjectId}`}
                           glyph={item.label}
-                          subtitle={item.reading ?? item.meaning}
                           subjectType={SUBJECT_TYPES.kanji}
-                          wkLevel={item.wkLevel}
+                          reading={item.reading}
+                          meaning={item.meaning}
+                          level={item.wkLevel}
                           successRate={userKanjiByChar.get(item.label)?.successRate}
                         />
                       ))}

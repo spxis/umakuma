@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { newsGlyphButtonClass } from "@/app/news/newsGlyphBoxStyle";
 import ModalShell from "@/app/shared/ModalShell";
 import ViewGlyphFilingRow from "@/app/shared/ViewGlyphFilingRow";
 import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 import { useViewGlyphWindowBindings } from "@/app/shared/useViewGlyphWindowBindings";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import type { RelatedReference } from "@/lib/glyphTypes";
+import SubjectPill from "@/app/shared/SubjectPill";
 import {
   buildStudyReviewAllMeanings,
   collectUsedKanjiItems,
@@ -396,34 +396,24 @@ export default function ViewGlyphModalHost() {
               : VIEW_GLYPH_SELECTOR_KINDS.kanji;
             const sessionClass = isSessionEntry && !selected ? "ring-1 ring-current/35" : "";
 
+            const name = unavailable
+              ? `${entry.label} not found in WaniKani`
+              : `${SUBJECT_TYPE_DISPLAY[entry.kind].singular}: ${entry.label}`;
+            /* The same pill as everywhere; one that cannot be opened is plain and dimmed. */
             return (
-              <button
+              <span
                 key={`${entry.label}-${entry.kind}-${entryIndex}`}
-                type="button"
-                onClick={() => {
-                  if (entry.itemIndex === null) {
-                    return;
-                  }
-                  openIndexInPlace(entry.itemIndex);
-                }}
-                disabled={entry.itemIndex === null}
-                className={
-                  unavailable
-                    ? `inline-flex min-h-14 min-w-14 items-center rounded-xl border border-line/70 bg-surface-muted px-3 text-4xl font-black leading-none text-foreground/70 ${entry.itemIndex === null ? "cursor-not-allowed opacity-80" : "cursor-pointer"}`
-                    : `${newsGlyphButtonClass({
-                        type: glyphType,
-                        selected,
-                        clickable: entry.itemIndex !== null,
-                      })} gap-1 ${sessionClass}`
-                }
-                title={
-                  unavailable
-                    ? `${entry.label} not found in WaniKani`
-                    : `${SUBJECT_TYPE_DISPLAY[entry.kind].singular}: ${entry.label}`
-                }
+                title={name}
+                className={`inline-flex rounded-xl ${sessionClass} ${unavailable ? "opacity-70" : ""}`}
               >
-                <span>{entry.label}</span>
-              </button>
+                <SubjectPill
+                  glyph={entry.label}
+                  subjectType={unavailable ? undefined : glyphType}
+                  label={name}
+                  selected={selected}
+                  onClick={entry.itemIndex === null ? undefined : () => openIndexInPlace(entry.itemIndex as number)}
+                />
+              </span>
             );
           })}
         </div>

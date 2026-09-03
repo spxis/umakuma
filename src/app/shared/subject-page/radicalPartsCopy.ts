@@ -2,5 +2,4 @@
 export const RADICAL_PARTS_COPY = {
   heading: "Written with",
   hint: "The parts this character is made of. Open one to see what else uses it.",
-  partTitle: (strokes: number) => `${strokes} strokes`,
 } as const;

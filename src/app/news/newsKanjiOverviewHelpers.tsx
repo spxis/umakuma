@@ -1,4 +1,5 @@
-import { newsGlyphButtonClass } from "./newsGlyphBoxStyle";
+import SubjectPill from "@/app/shared/SubjectPill";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { openNewsGlyphRun } from "./newsGlyphRunner";
 import FieldLabel from "../shared/FieldLabel";
 import type {
@@ -98,19 +99,14 @@ export function GroupColumn({
                         {entry.occurrenceCount}
                       </span>
                     ) : null}
-                    <button
-                      type="button"
+                    <SubjectPill
+                      glyph={entry.char}
+                      subjectType={SUBJECT_TYPES.kanji}
+                      label={`Look up ${entry.char}`}
                       onClick={() => {
                         void openNewsGlyphRun(entry.char);
                       }}
-                      className={newsGlyphButtonClass({
-                        type: "kanji",
-                        clickable: true,
-                      })}
-                      title={`Look up ${entry.char}`}
-                    >
-                      {entry.char}
-                    </button>
+                    />
                   </div>
                 ))}
               </div>

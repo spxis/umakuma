@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
-import { newsGlyphButtonClass } from "../newsGlyphBoxStyle";
+import SubjectPill from "@/app/shared/SubjectPill";
 import { openNewsGlyphRun } from "../newsGlyphRunner";
 import {
   NEWS_GLYPH_STATS_EVENT,
@@ -102,14 +102,12 @@ export default function NewsStatsClient() {
             {top.map((entry) => (
               <li key={entry.key} className="rounded-xl border border-line/80 bg-surface-muted p-3">
                 <div className="flex items-center justify-between gap-3">
-                  <button
-                    type="button"
+                  <SubjectPill
+                    glyph={entry.label}
+                    subjectType={entry.type}
+                    label={`Open ${entry.type} ${entry.label}`}
                     onClick={() => void openNewsGlyphRun(entry.label)}
-                    className={newsGlyphButtonClass({ type: entry.type })}
-                    title={`Open ${entry.type} ${entry.label}`}
-                  >
-                    {entry.label}
-                  </button>
+                  />
                   <p className="text-xs font-semibold uppercase tracking-[0.1em] text-foreground/60">
                     {entry.type} · {entry.viewCount} views
                   </p>

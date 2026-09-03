@@ -172,11 +172,9 @@ export default function StudyReviewModalMetaPanels({
   const renderSharedRelatedCards = (
     items: RelatedReference[] | undefined,
     fallbackType: SubjectType,
-    options?: { large?: boolean },
   ) => (
     <RelatedReferenceCards
       items={items ?? []}
-      large={options?.large}
       showEnglish={showEnglish}
       subjectById={EMPTY_SUBJECT_BY_ID}
       fallbackType={fallbackType}
@@ -227,7 +225,6 @@ export default function StudyReviewModalMetaPanels({
                       {renderSharedRelatedCards(
                         selectedItem.radicals as RelatedReference[] | undefined,
                         SUBJECT_TYPES.radical,
-                        { large: true },
                       )}
                     </div>
                   ) : null}
@@ -237,7 +234,6 @@ export default function StudyReviewModalMetaPanels({
                       {renderSharedRelatedCards(
                         selectedItem.visuallySimilar as RelatedReference[] | undefined,
                         SUBJECT_TYPES.kanji,
-                        { large: true },
                       )}
                     </div>
                   ) : null}
@@ -264,7 +260,6 @@ export default function StudyReviewModalMetaPanels({
                     ? renderSharedRelatedCards(
                         selectedItem.usedInVocabulary as RelatedReference[] | undefined,
                         usedInVocabularyTargetSubjectType(selectedItem.subjectType),
-                        { large: true },
                       )
                     : null}
                 </div>
@@ -279,7 +274,6 @@ export default function StudyReviewModalMetaPanels({
                 {renderSharedRelatedCards(
                   selectedItem.componentKanji as RelatedReference[] | undefined,
                   SUBJECT_TYPES.kanji,
-                  { large: true },
                 )}
               </div>
             </div>

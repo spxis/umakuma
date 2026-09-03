@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { JP_TEXT_CLASS } from "./japaneseText";
+import SubjectPill from "./SubjectPill";
 import { SUBJECT_SELECTION_COPY } from "./subjectSelection";
 
 /**
@@ -41,24 +41,18 @@ export default function SelectedItemsPanel({
   return (
     <div className="flex min-w-0 flex-wrap items-center gap-1.5">
       {shown.map((key) => (
-        <button
+        <SubjectPill
           key={key}
-          type="button"
+          glyph={key}
+          size="sm"
+          label={`${SUBJECT_SELECTION_COPY.remove} ${key}`}
           onClick={() => onRemove(key)}
-          aria-label={`${SUBJECT_SELECTION_COPY.remove} ${key}`}
-          title={`${SUBJECT_SELECTION_COPY.remove} ${key}`}
-          className="group inline-flex items-center gap-1 rounded-full border border-line bg-surface py-0.5 pl-2 pr-1 transition hover:border-rose-400 hover:bg-rose-50"
-        >
-          <span lang="ja" translate="no" className={`text-sm font-bold text-foreground ${JP_TEXT_CLASS}`}>
-            {key}
-          </span>
-          <span
-            aria-hidden="true"
-            className="text-[11px] font-black leading-none text-foreground/60 transition group-hover:text-rose-600"
-          >
-            ×
-          </span>
-        </button>
+          trailing={
+            <span aria-hidden="true" className="text-[11px] font-black leading-none text-foreground/60">
+              ×
+            </span>
+          }
+        />
       ))}
 
       {hidden > 0 || expanded ? (

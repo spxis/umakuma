@@ -1,9 +1,9 @@
-import Link from "next/link";
-
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import PillTextToggle from "@/app/shared/PillTextToggle";
 import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
-import { SOURCE_CREDIT_COPY, SOURCE_KEYS } from "@/lib/sourceCredits";
+import SubjectPill from "@/app/shared/SubjectPill";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import type { RadicalPart } from "@/lib/radicalSearchServer";
+import { SOURCE_CREDIT_COPY, SOURCE_KEYS } from "@/lib/sourceCredits";
 
 import { RADICAL_PARTS_COPY } from "./radicalPartsCopy";
 
@@ -17,7 +17,9 @@ import { RADICAL_PARTS_COPY } from "./radicalPartsCopy";
  * the search answers.
  *
  * Its own block because the parts are EDRDG's data, not WaniKani's, and every
- * block here names the source it came from.
+ * block here names the source it came from. The parts are the same pill the
+ * blocks under them use - this one drew a box of its own for a release, and a
+ * page showed two chip shapes a scroll apart.
  */
 export default function RadicalPartsBlock({ parts }: { parts: RadicalPart[] }) {
   if (parts.length === 0) return null;
@@ -26,26 +28,18 @@ export default function RadicalPartsBlock({ parts }: { parts: RadicalPart[] }) {
     <SubjectBlock
       heading={RADICAL_PARTS_COPY.heading}
       credit={{ source: SOURCE_KEYS.radkfile, label: SOURCE_CREDIT_COPY.radicals }}
+      action={<PillTextToggle />}
     >
       <p className="text-xs text-foreground/60">{RADICAL_PARTS_COPY.hint}</p>
       <ul className="flex flex-wrap gap-2">
         {parts.map((part) => (
           <li key={part.radical}>
-            <Link
-              href={part.href}
-              title={RADICAL_PARTS_COPY.partTitle(part.strokes)}
-              className="flex min-w-[3.5rem] flex-col items-center gap-0.5 rounded-xl border border-line bg-surface px-3 py-2 text-center transition hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
-            >
-              <span className={`text-2xl leading-none text-foreground ${JP_TEXT_CLASS}`}>{part.radical}</span>
-              {/*
-                * The English name where the dictionary has one. Many radicals
-                * have none, and a made-up label would be worse than none: the
-                * character is the thing being pointed at.
-                */}
-              {part.name ? (
-                <span className="text-[10px] font-semibold leading-tight text-foreground/60">{part.name}</span>
-              ) : null}
-            </Link>
+            {/*
+              * The English name where the dictionary has one. Many radicals
+              * have none, and a made-up label would be worse than none: the
+              * character is the thing being pointed at.
+              */}
+            <SubjectPill glyph={part.radical} subjectType={SUBJECT_TYPES.radical} meaning={part.name} href={part.href} />
           </li>
         ))}
       </ul>

@@ -13,7 +13,6 @@ export type RelatedEntry = {
 
 export type RelatedReferenceCardsProps = {
   items: RelatedReference[];
-  large?: boolean;
   showEnglish: boolean;
   subjectById: Map<number, LevelItem>;
   fallbackType?: LevelItem["subjectType"];

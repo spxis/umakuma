@@ -7,7 +7,7 @@ import {
   STUDY_REVIEW_HELPERS_TEXT,
   STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS,
 } from "./StudyExplorer.constants";
-import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
+import SubjectPill from "@/app/shared/SubjectPill";
 
 import { formatRelativeFromNow } from "../../level-explorer/lib/levelExplorerDisplay";
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
@@ -100,11 +100,11 @@ export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element
   return (
     <div className="mt-2 flex flex-wrap gap-2">
       {expanded.map((entry) => (
-        <GlyphReferenceTile
+        <SubjectPill
           key={entry.key}
           glyph={entry.label}
-          subtitle={entry.reading}
-          wkLevel={entry.wkLevel}
+          reading={entry.reading}
+          level={entry.wkLevel}
           successRate={entry.successRate}
         />
       ))}
@@ -159,12 +159,12 @@ export function relatedTilesClickable(
   return (
     <div className="mt-2 flex flex-wrap gap-2">
       {expanded.map((entry) => (
-        <GlyphReferenceTile
+        <SubjectPill
           key={entry.key}
           onClick={() => onSelect(entry)}
           glyph={entry.label}
-          subtitle={entry.reading}
-          wkLevel={entry.wkLevel}
+          reading={entry.reading}
+          level={entry.wkLevel}
           successRate={entry.successRate}
         />
       ))}

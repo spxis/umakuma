@@ -3,7 +3,7 @@
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
 
-import { newsGlyphButtonClass } from "./newsGlyphBoxStyle";
+import SubjectPill from "@/app/shared/SubjectPill";
 import type { NewsKanjiHistoryPanelProps } from "./NewsKanjiHistoryPanel.types";
 
 const KANJI_REGEX = /[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]/;
@@ -56,26 +56,22 @@ export default function NewsKanjiHistoryPanel({
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 {entry.hasVocabulary ? (
-                  <button
-                    type="button"
+                  <SubjectPill
+                    glyph={entry.run}
+                    subjectType={SUBJECT_TYPES.vocabulary}
+                    label={`Open vocabulary ${entry.run}`}
                     onClick={() => onSelect(entry.run)}
-                    className={newsGlyphButtonClass({ type: SUBJECT_TYPES.vocabulary })}
-                    title={`Open vocabulary ${entry.run}`}
-                  >
-                    {entry.run}
-                  </button>
+                  />
                 ) : null}
 
                 {uniqueKanji(entry.run).map((char) => (
-                  <button
+                  <SubjectPill
                     key={`${entry.run}-${char}`}
-                    type="button"
+                    glyph={char}
+                    subjectType={SUBJECT_TYPES.kanji}
+                    label={`Open kanji ${char}`}
                     onClick={() => onSelect(char)}
-                    className={newsGlyphButtonClass({ type: SUBJECT_TYPES.kanji })}
-                    title={`Open kanji ${char}`}
-                  >
-                    {char}
-                  </button>
+                  />
                 ))}
               </div>
               <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground/60">

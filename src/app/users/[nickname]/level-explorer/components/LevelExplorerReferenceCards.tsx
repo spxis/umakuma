@@ -1,7 +1,7 @@
-import type { RelatedReference } from "../../explorerTypes";
-import { pronunciationForReading } from "../lib/levelExplorerDisplay";
+import SubjectPill from "@/app/shared/SubjectPill";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
-import GlyphReferenceTile from "../../shared/GlyphReferenceTile";
+
+import type { RelatedReference } from "../../explorerTypes";
 import type {
   RelatedEntry,
   RelatedReferenceCardsProps,
@@ -40,9 +40,18 @@ function expandRelatedReferences(items: RelatedReference[]): RelatedEntry[] {
   });
 }
 
+/**
+ * The related items of the selected one - radicals, look-alikes, vocabulary -
+ * as the pill every other inline subject is.
+ *
+ * These were a tile of the explorer's own, with the level and success rate in
+ * its corners, and it was the third chip shape on the site. The pill carries
+ * both marks now; the English is held back while the explorer is hiding
+ * English, since a self-test that shows the answer under the question is not
+ * one.
+ */
 export function RelatedReferenceCards({
   items,
-  large,
   showEnglish,
   subjectById,
   fallbackType,
@@ -52,7 +61,6 @@ export function RelatedReferenceCards({
     return <p className="mt-2 text-foreground/60">-</p>;
   }
 
-  const size = large ? "large" : "normal";
   const expandedItems = expandRelatedReferences(items);
 
   return (
@@ -62,47 +70,27 @@ export function RelatedReferenceCards({
         const isClickable = linked !== null || typeof entry.wkLevel === "number";
         const relationType = linked?.subjectType ?? fallbackType;
         const referenceWkLevel = entry.wkLevel ?? linked?.wkLevel ?? null;
-        const referenceSuccessRate = entry.successRate ?? linked?.successRate;
+        const referenceSuccessRate = entry.successRate ?? linked?.successRate ?? null;
         const reading = typeof entry.reading === "string" && entry.reading.trim() ? entry.reading : null;
-        const meaning = typeof entry.meaning === "string" && entry.meaning.trim() ? entry.meaning : null;
-        const subtitle = (() => {
-          if (reading) {
-            if (!showEnglish) return reading;
-
-            const pronunciation = pronunciationForReading(reading);
-            return pronunciation ? `${reading} / ${pronunciation}` : reading;
-          }
-
-          return meaning;
-        })();
+        const meaning = showEnglish && typeof entry.meaning === "string" && entry.meaning.trim() ? entry.meaning : null;
         const key = entry.fallbackKey ?? `${entry.subjectId}-${entry.label}-${index}`;
 
-        if (!isClickable) {
-          return (
-            <GlyphReferenceTile
-              key={key}
-              glyph={entry.label}
-              subtitle={subtitle}
-              subjectType={relationType}
-              wkLevel={referenceWkLevel}
-              successRate={referenceSuccessRate}
-              size={size}
-            />
-          );
-        }
-
         return (
-          <GlyphReferenceTile
+          <SubjectPill
             key={key}
             glyph={entry.label}
-            subtitle={subtitle}
             subjectType={relationType}
-            wkLevel={referenceWkLevel}
+            reading={reading}
+            meaning={meaning}
+            level={referenceWkLevel}
             successRate={referenceSuccessRate}
-            size={size}
-            onClick={() => {
-              void onJumpToRelatedSubject(entry.subjectId, entry.wkLevel ?? linked?.wkLevel ?? null);
-            }}
+            onClick={
+              isClickable
+                ? () => {
+                    void onJumpToRelatedSubject(entry.subjectId, entry.wkLevel ?? linked?.wkLevel ?? null);
+                  }
+                : undefined
+            }
           />
         );
       })}
@@ -110,40 +98,26 @@ export function RelatedReferenceCards({
   );
 }
 
-export function VocabularyKanjiCards({
-  links,
-  showEnglish,
-  selectedSubjectId,
-  onJumpToKanji,
-}: VocabularyKanjiCardsProps) {
+export function VocabularyKanjiCards({ links, selectedSubjectId, onJumpToKanji }: VocabularyKanjiCardsProps) {
   if (links.length === 0) {
     return <p className="mt-2 text-foreground/60">-</p>;
   }
 
   return (
     <div className="mt-2 flex flex-wrap justify-start gap-2">
-      {links.map((item) => {
-        const subtitle = (() => {
-          if (!showEnglish) return item.reading;
-          const pronunciation = pronunciationForReading(item.reading);
-          return pronunciation ? `${item.reading} / ${pronunciation}` : item.reading;
-        })();
-
-        return (
-          <GlyphReferenceTile
-            key={`${selectedSubjectId}-${item.subjectId}`}
-            glyph={item.char}
-            subtitle={subtitle}
-            subjectType={SUBJECT_TYPES.kanji}
-            wkLevel={item.wkLevel}
-            successRate={item.successRate}
-            size="large"
-            onClick={() => {
-              void onJumpToKanji(item.subjectId, item.wkLevel);
-            }}
-          />
-        );
-      })}
+      {links.map((item) => (
+        <SubjectPill
+          key={`${selectedSubjectId}-${item.subjectId}`}
+          glyph={item.char}
+          subjectType={SUBJECT_TYPES.kanji}
+          reading={item.reading}
+          level={item.wkLevel}
+          successRate={item.successRate}
+          onClick={() => {
+            void onJumpToKanji(item.subjectId, item.wkLevel);
+          }}
+        />
+      ))}
     </div>
   );
 }
