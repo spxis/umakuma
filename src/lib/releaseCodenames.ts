@@ -422,6 +422,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Chanto Yomiwake", ja: "ちゃんと読み分け", reading: "ちゃんとよみわけ", gloss: "the reading and the English, told apart" },
   { romaji: "Tsukeru Ashiba", ja: "着ける足場", reading: "つけるあしば", gloss: "a footing to land on, not a sign saying choose" },
   { romaji: "Tekiyou Oboeteiru", ja: "適用覚えている", reading: "てきようおぼえている", gloss: "the settings come back the way you left them" },
+  { romaji: "Todokeru Made", ja: "届けるまで", reading: "とどけるまで", gloss: "it keeps trying until the code arrives" },
 ];
 
 /**

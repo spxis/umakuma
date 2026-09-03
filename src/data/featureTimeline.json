@@ -4196,11 +4196,23 @@
     "id": "sheet-options-remembered",
     "name": "Show readings forgets what you chose",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "On the practice sheet the Show readings option is always unchecked when the page opens. The other options are remembered; this one is not. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.371.0",
+    "releasedAt": "2026-09-03T15:56:29Z"
+  },
+  {
+    "id": "deploy-upload-retry",
+    "name": "A flaky upload leaves production behind",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.371.0",
-    "releasedAt": "2026-09-03T15:56:29Z",
-    "summary": "On the practice sheet the Show readings option is always unchecked when the page opens. The other options are remembered; this one is not. Reported 2026-09-03 by John."
+    "version": "0.372.0",
+    "releasedAt": "2026-09-03T16:00:21Z",
+    "summary": "The last deploy step, vercel deploy --prebuilt, is a single unretried command. On 2026-09-03 it threw 'fetch failed' at 59MB of a 79MB upload; the commit was on main, CI was green, and production simply stayed on older code with nothing retrying. It only got out because another agent pushed minutes later. Because cancel-in-progress means the newest run is the one that matters, a flake on the last push of a burst is exactly the case with no second chance. Retry is safe here specifically because cancel-in-progress kills a superseded run before its retry could re-alias production to an older commit."
   }
 ]
