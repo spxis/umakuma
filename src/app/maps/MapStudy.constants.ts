@@ -6,8 +6,6 @@ export const MAP_STUDY_COPY = {
   regionsLabel: "Regions",
   hint: "Point at a region to see its name; choose one to read about it.",
   hintTouch: "Tap a region to read about it.",
-  nothingChosen: "Nothing chosen yet",
-  nothingChosenBody: "Choose a region on the map, or from the list under it.",
   close: "Close",
   writtenWith: "Written with",
   neighbours: "Borders",
@@ -41,6 +39,13 @@ export const MAP_MARK_COPY = {
 } as const;
 
 /** The shape drawn on its own at the top of the panel. */
+/** Copy for the directory the panel shows while nothing is chosen. */
+export const MAP_DIRECTORY_COPY = {
+  /** "All 47 prefectures" */
+  heading: (count: number, plural: string) => `All ${count} ${plural}`,
+  hint: "Point at one to find it on the map; choose one to read about it.",
+} as const;
+
 export const MAP_SHAPE_COPY = { caption: (name: string) => `The shape of ${name}, with its neighbours in outline.` } as const;
 
 /**

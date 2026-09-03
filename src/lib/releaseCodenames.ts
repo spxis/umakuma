@@ -407,6 +407,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Ichiba no Isseini", ja: "市場の一斉に", reading: "いちばのいっせいに", gloss: "one market, everyone at once" },
   { romaji: "Utagawanai Tsuzuri", ja: "疑わない綴り", reading: "うたがわないつづり", gloss: "the spelling it takes at its word" },
   { romaji: "Enchou no Meisai", ja: "延長の明細", reading: "えんちょうのめいさい", gloss: "the line item, spelled out at length" },
+  { romaji: "Oshinagaki", ja: "お品書き", reading: "おしながき", gloss: "everything on offer, written out" },
 ];
 
 /**

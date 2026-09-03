@@ -16,6 +16,7 @@ import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
 import { markFor, markTone, markTotals } from "@/lib/mapMarks";
 import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 
+import MapRegionDirectory from "./MapRegionDirectory";
 import MapRegionPanel from "./MapRegionPanel";
 import { useMapMarks } from "./useMapMarks";
 import { useMapZoom } from "./useMapZoom";
@@ -304,13 +305,14 @@ export default function MapStudy({
         */}
       <aside className="hidden overflow-hidden rounded-3xl border border-line bg-surface shadow-sm lg:sticky lg:top-4 lg:flex lg:h-[calc(100vh-2rem)] lg:flex-col">
         {panel ?? (
-          <div className="px-5 py-8 text-center">
-            <p className="text-sm font-black text-foreground">{MAP_STUDY_COPY.nothingChosen}</p>
-            <p className="mt-1 text-xs font-semibold text-foreground/60">{MAP_STUDY_COPY.nothingChosenBody}</p>
-            <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground/60">
-              {dataset.totalRegions} {dataset.divisionTypeName.toLowerCase()}s
-            </p>
-          </div>
+          <MapRegionDirectory
+            regions={regions}
+            marks={marking.marks}
+            hovered={hovered}
+            onHover={setHovered}
+            onChoose={choose}
+            divisionPlural={`${dataset.divisionTypeName.toLowerCase()}s`}
+          />
         )}
       </aside>
 

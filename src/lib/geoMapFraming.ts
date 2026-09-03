@@ -202,3 +202,21 @@ export function geoRegionBox(
     height,
   };
 }
+
+/**
+ * A square window on one region's own outline, for drawing it as an icon.
+ *
+ * Square and tight, because a directory row wants a silhouette rather than a
+ * map: every shape gets the same box and fills it, so Kagawa is as legible in
+ * the list as Hokkaido. That is the opposite of what the panel's own frame
+ * does, and deliberately - there the sizes are the point and the neighbours
+ * give the region its place, while here the row's words already say which
+ * place it is and the picture only has to be recognisable.
+ */
+const GLYPH_MARGIN_RATIO = 0.06;
+
+export function geoShapeGlyphBox(bbox: readonly [number, number, number, number]): MapBox {
+  const [minX, minY, maxX, maxY] = bbox;
+  const side = Math.max(maxX - minX, maxY - minY, 0.001) * (1 + GLYPH_MARGIN_RATIO * 2);
+  return { x: (minX + maxX) / 2 - side / 2, y: (minY + maxY) / 2 - side / 2, width: side, height: side };
+}

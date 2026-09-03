@@ -5,6 +5,7 @@ import {
   geoBoxCentre,
   geoRegionBox,
   geoRegionCentre,
+  geoShapeGlyphBox,
   geoWholeCountryBox,
   geoZoomBox,
   isMapZoom,
@@ -151,5 +152,41 @@ describe("framing one region on its own", () => {
 
   it("falls back to the whole country for a code this map does not hold", () => {
     expect(geoRegionBox(JAPAN, "TX", FRAME)).toEqual(geoWholeCountryBox(JAPAN));
+  });
+});
+
+/*
+ * The directory's icons are the opposite job to the panel's frame: a square
+ * every shape fills, so Kagawa is as legible in a list as Hokkaido.
+ */
+describe("one region's outline as an icon", () => {
+  const bboxOf = (code: number) =>
+    GEO_DATASETS[JAPAN].regions.find((entry) => String(entry.code) === String(code))!.map.bbox;
+
+  it("is square, whatever shape the region is", () => {
+    for (const code of [1, 13, 25, 37, 47]) {
+      const box = geoShapeGlyphBox(bboxOf(code));
+      expect(box.width).toBeCloseTo(box.height);
+    }
+  });
+
+  it("is filled by the region's longest side, so every shape is drawn large", () => {
+    for (const code of [1, 13, 25, 37, 47]) {
+      const [minX, minY, maxX, maxY] = bboxOf(code);
+      const box = geoShapeGlyphBox(bboxOf(code));
+      expect(Math.max(maxX - minX, maxY - minY) / box.width).toBeGreaterThan(0.85);
+    }
+  });
+
+  it("centres the region in it", () => {
+    const [minX, minY, maxX, maxY] = bboxOf(25);
+    const centre = geoBoxCentre(geoShapeGlyphBox(bboxOf(25)));
+    expect(centre.x).toBeCloseTo((minX + maxX) / 2);
+    expect(centre.y).toBeCloseTo((minY + maxY) / 2);
+  });
+
+  /* A region of no width at all would otherwise ask for a box of zero. */
+  it("still has a size for a shape with none", () => {
+    expect(geoShapeGlyphBox([10, 10, 10, 10]).width).toBeGreaterThan(0);
   });
 });
