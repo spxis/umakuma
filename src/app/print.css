@@ -1,0 +1,162 @@
+/*
+ * What the site looks like on paper.
+ *
+ * Its own file because printing is a surface, not a decoration: a worksheet
+ * gets photocopied, handed to a child and written on, and every rule here
+ * exists because something that reads well on a screen does not survive that
+ * trip. Kept out of `globals.css` so each has room to say why.
+ */
+
+/*
+ * Paper.
+ *
+ * The writing sheet is the one surface built to leave the screen: a parent
+ * prints a grade and a child writes on it. Everything here is about that page
+ * being a worksheet rather than a screenshot of a web page.
+ *
+ * The paper size is deliberately not set. UmaKuma's readers are in Canada and
+ * the United States, where Letter is the paper - but naming it here overrides
+ * whatever the printer is actually loaded with, so an A4 sheet came out with
+ * Letter geometry scaled down inside it. Orientation is worth pinning, since a
+ * grid of squares landscape is not the sheet anyone wants; the size is the
+ * printer's business.
+ *
+ * The squares divide the printable width in `fr` units, so they simply come
+ * out slightly narrower on A4 and slightly taller down the page. Nothing has
+ * to know which paper it landed on.
+ */
+@page {
+  size: portrait;
+  margin: 12mm;
+}
+
+@media print {
+  /*
+   * Paper has no theme.
+   *
+   * The dark theme is a choice about a screen at night, and it followed the
+   * page onto paper: `--foreground` is near-white there, so a member reading
+   * in dark mode printed almost nothing onto white paper, having first spent
+   * the ink on a navy wash. Redefining the tokens covers every page that will
+   * ever be printed. Both selectors: the dark block outranks a bare `:root`.
+   *
+   * Monochrome, not light: a worksheet gets photocopied, and the brand blue
+   * is only a lighter grey there.
+   *
+   * `!important` throughout, for the reason spelled out on the ground rule
+   * below: this file arrives by an `@import` at the top of `globals.css`, so
+   * its rules are inserted *before* the theme's and lose every tie on source
+   * order. Without it `--foreground` stayed near-white in dark mode and the
+   * site's own navy in light mode - the print palette was written down and
+   * never applied.
+   */
+  :root,
+  :root[data-theme="dark"] {
+    color-scheme: light !important;
+    --background: #fff !important;
+    --foreground: #000 !important;
+    --surface: #fff !important;
+    --surface-muted: #fff !important;
+    /* Mid grey: a hairline that survives a photocopier without becoming a rule. */
+    --line: #9a9a9a !important;
+    --accent: #000 !important;
+    --accent-2: #000 !important;
+    --hot: #000 !important;
+    --highlight: #fff !important;
+    --radical: #000 !important;
+    --kanji: #000 !important;
+    --vocabulary: #000 !important;
+    --radical-text: #000 !important;
+    --kanji-text: #000 !important;
+    --vocabulary-text: #000 !important;
+  }
+
+  /*
+   * The ground, at the specificity the theme set it. `body` carries four
+   * stacked gradients and the dark theme replaces them on its own selector,
+   * which a bare `html, body` cannot outrank wherever it sits - so the wash
+   * printed through the tokens above: white by the computed styles, navy in
+   * the PDF. `background-image: none` removes them rather than tinting them.
+   *
+   * `print-color-adjust: exact` stays: browsers drop backgrounds and lighten
+   * colours to save ink, which empties a sheet whose point is faint
+   * characters to trace over.
+   *
+   * `!important` rather than a longer selector, because this file is reached
+   * by an `@import` at the top of `globals.css` - so its rules are inserted
+   * *before* the theme's, and matching the theme's specificity would lose on
+   * source order instead of winning on it. That is not hypothetical: the
+   * wash came back the moment these rules moved into their own file, and the
+   * computed styles said white while the PDF came out navy. A print reset is
+   * the case `!important` is for; it overrides a medium, not a component.
+   */
+  html,
+  body,
+  :root body,
+  :root[data-theme="dark"] body {
+    background: #fff !important;
+    background-image: none !important;
+    color: #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* The grain over the page is a screen texture; on paper it is toner. */
+  .noise-overlay {
+    display: none !important;
+  }
+
+  /*
+   * A filled pill is a black rectangle on paper.
+   *
+   * The palette above makes every brand colour black, which is right for text
+   * and a stroke and wrong for a fill: a row of accent buttons came out as
+   * solid black lozenges, using more ink than the page they sit on and
+   * hiding their own white labels. Outlined instead - the shape survives, the
+   * label is readable, and the toner goes on the characters.
+   *
+   * Ahead of the `data-print="mono"` rule below on purpose: the tracing sheet
+   * draws its own ink and that rule, being later at equal specificity, takes
+   * these outlines back off it.
+   */
+  .bg-accent,
+  .bg-kanji,
+  .bg-radical,
+  .bg-vocabulary,
+  .bg-hot {
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: inset 0 0 0 1px #9a9a9a !important;
+  }
+
+  /*
+   * Site furniture off the page. The footer sat under twenty kanji with a
+   * version number and a release codename, which is a web page's business and
+   * not a worksheet's.
+   */
+  [data-print="hide"] {
+    display: none !important;
+  }
+
+  /* A row of squares splits across a page break badly; a character is a unit. */
+  section {
+    break-inside: avoid;
+  }
+
+  /*
+   * Colour is for the screen; paper gets ink where a stroke is and nowhere
+   * else. The practice sheet is drawn in the site's palette now - blue guide
+   * lines, an accent row number - and none of that belongs on a worksheet
+   * that gets photocopied and printed on whatever is in the tray.
+   *
+   * Each element states its own printed colour with a `print:` class, which is
+   * what makes the sheet readable in the print preview. This is the backstop
+   * underneath them: a panel or a pill added later cannot lay down a filled
+   * background across a page without someone choosing to.
+   */
+  [data-print="mono"],
+  [data-print="mono"] * {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}

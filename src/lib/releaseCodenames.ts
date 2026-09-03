@@ -371,6 +371,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Komakai Buhin", ja: "細かい部品", reading: "こまかいぶひん", gloss: "the small parts a character is made of" },
   { romaji: "Saigo no Ana", ja: "最後の穴", reading: "さいごのあな", gloss: "the last hole in the shelf, filled" },
   { romaji: "Shimesu Ippo", ja: "示す一歩", reading: "しめすいっぽ", gloss: "one step, then the next" },
+  { romaji: "Sumizome", ja: "墨染め", reading: "すみぞめ", gloss: "in ink alone, whatever the screen was" },
 ];
 
 /**

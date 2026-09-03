@@ -19,7 +19,8 @@ import { describe, expect, it } from "vitest";
  */
 
 const root = join(__dirname, "..", "..");
-const globals = readFileSync(join(root, "src/app/globals.css"), "utf8");
+/* The print rules live in their own stylesheet; see `src/app/print.css`. */
+const globals = readFileSync(join(root, "src/app/print.css"), "utf8");
 const footer = readFileSync(join(root, "src/app/AppFooter.tsx"), "utf8");
 
 describe("what the practice sheet does on paper", () => {

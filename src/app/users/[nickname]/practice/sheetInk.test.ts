@@ -44,7 +44,8 @@ describe("the practice sheet's two sets of colours", () => {
   it("marks the region the print rules strip back", () => {
     expect(read("[[...target]]/page.tsx")).toContain('data-print="mono"');
 
-    const globals = readFileSync(join(process.cwd(), "src/app/globals.css"), "utf8");
+    /* The print rules live in their own stylesheet; see `src/app/print.css`. */
+    const globals = readFileSync(join(process.cwd(), "src/app/print.css"), "utf8");
     const printBlock = globals.slice(globals.indexOf("@media print"));
     expect(printBlock).toContain('[data-print="mono"]');
   });
