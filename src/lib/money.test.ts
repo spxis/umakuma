@@ -345,3 +345,43 @@ describe("an amount written in words", () => {
     expect(parseMoneyQuery(query)).toEqual([]);
   });
 });
+
+/*
+ * One amount, named in three tokens. "100 dollars CAD" and "500 Japanese yen"
+ * are how somebody writes a price when they are not sure the reader knows the
+ * sign - which is the reader this page is for - and the pattern took a single
+ * token on either side, so both answered with nothing.
+ */
+describe("a price with a word too many", () => {
+  it("narrows a dollar by the code beside it", () => {
+    expect(parseMoneyQuery("100 dollars CAD")).toEqual([{ amount: 100, currency: "CAD" }]);
+  });
+
+  it("narrows a unit by whose it is", () => {
+    expect(parseMoneyQuery("500 Japanese yen")).toEqual([{ amount: 500, currency: "JPY" }]);
+    expect(parseMoneyQuery("20 Canadian dollars")).toEqual([{ amount: 20, currency: "CAD" }]);
+  });
+
+  /* A nationality agrees harmlessly with a unit that was never ambiguous. */
+  it("takes a nationality that says nothing new", () => {
+    expect(parseMoneyQuery("30 British pounds")).toEqual([{ amount: 30, currency: "GBP" }]);
+  });
+
+  /*
+   * Every token on a side still has to name or narrow a currency. A number
+   * beside two ordinary words is a sentence, not a price.
+   */
+  it.each(["100 big dollars", "5 cats yen", "3 chapters long"])("answers nothing for %s", (query) => {
+    expect(parseMoneyQuery(query)).toEqual([]);
+  });
+
+  /* Two names that disagree name nothing: there is no US Japanese yen. */
+  it("refuses a pair that contradicts itself", () => {
+    expect(parseMoneyQuery("100 Japanese CAD")).toEqual([]);
+  });
+
+  /* And the words path still works with the extra token. */
+  it("reads a spelled amount with a qualified currency", () => {
+    expect(parseMoneyQuery("five hundred Japanese yen")).toEqual([{ amount: 500, currency: "JPY" }]);
+  });
+});

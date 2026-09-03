@@ -4004,11 +4004,23 @@
     "id": "search-money-spelled-numbers",
     "name": "An amount written in words",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "five hundred yen and twenty thousand yen name a price as clearly as 500 yen does, and neither parses - the amount must be digits today. Depends on the number library item 44 builds, which has to read words into values anyway for the reverse direction. Romaji units belong here too: a learner types 5 man yen before they type 5\u4e07\u5186. Noted 2026-09-02.",
+    "dateIsEstimate": false,
+    "version": "0.355.0",
+    "releasedAt": "2026-09-03T12:28:54Z"
+  },
+  {
+    "id": "search-money-loose-phrases",
+    "name": "A price with a word too many",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.355.0",
-    "releasedAt": "2026-09-03T12:28:54Z",
-    "summary": "five hundred yen and twenty thousand yen name a price as clearly as 500 yen does, and neither parses - the amount must be digits today. Depends on the number library item 44 builds, which has to read words into values anyway for the reverse direction. Romaji units belong here too: a learner types 5 man yen before they type 5\u4e07\u5186. Noted 2026-09-02."
+    "version": "0.356.0",
+    "releasedAt": "2026-09-03T12:33:14Z",
+    "summary": "100 dollars CAD and 500 Japanese yen name one amount in three tokens, and the parser takes at most one token on each side of the number, so both answer with nothing. Low value on its own; worth doing when the parser is next open. Noted 2026-09-02."
   }
 ]

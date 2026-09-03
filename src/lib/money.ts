@@ -96,6 +96,30 @@ const AMBIGUOUS: Record<string, CurrencyGuess> = {
 };
 
 /**
+ * The words that say whose money it is without naming the unit.
+ *
+ * "500 Japanese yen" and "100 dollars CAD" each name one amount in three
+ * tokens. The pattern took a single token on either side, so both answered
+ * with nothing - and "Japanese yen" is how somebody who is not sure the reader
+ * knows the sign writes it, which is exactly the reader this page is for.
+ *
+ * A nationality is a guess like any other and narrows by intersection: it
+ * turns "dollars" from every dollar into one of them, and agrees harmlessly
+ * with a unit that was already unambiguous.
+ */
+const NATIONALITIES: Record<string, CurrencyGuess> = {
+  japanese: { family: [JPY], unaided: [JPY] },
+  canadian: { family: ["CAD"], unaided: ["CAD"] },
+  american: { family: ["USD"], unaided: ["USD"] },
+  us: { family: ["USD"], unaided: ["USD"] },
+  australian: { family: ["AUD"], unaided: ["AUD"] },
+  british: { family: ["GBP"], unaided: ["GBP"] },
+  european: { family: ["EUR"], unaided: ["EUR"] },
+  chinese: { family: ["CNY"], unaided: ["CNY"] },
+  korean: { family: ["KRW"], unaided: ["KRW"] },
+};
+
+/**
  * The currency a word names.
  *
  * Somebody reading a Japanese page and asking what 500 yen is worth types
@@ -213,6 +237,9 @@ function currencyGuess(token: string): CurrencyGuess | null {
   const code = token.toUpperCase();
   if (isCurrencyCode(code)) return one(code);
 
+  const nationality = NATIONALITIES[word];
+  if (nationality) return nationality;
+
   return wordGuess(word) ?? wordGuess(word.replace(/s$/, ""));
 }
 
@@ -243,7 +270,14 @@ const LATIN_MAGNITUDES: Record<string, number> = { k: 1e3, m: 1e6, b: 1e9 };
  * the M of `20 MXN` reads as a million and leaves XN behind as the currency.
  */
 const MONEY_AMOUNT = String.raw`[\d.]+(?:[kKmMbB](?![A-Za-z]))?(?:\s*[千万億兆]\s*[\d.]*)*`;
-const MONEY_QUERY = new RegExp(String.raw`^(${MONEY_TOKEN})?\s*(${MONEY_AMOUNT})\s*(${MONEY_TOKEN})?$`);
+/*
+ * A side is up to three tokens, because that is how many an amount is written
+ * with when nothing is taken for granted: "500 Japanese yen", "100 dollars
+ * CAD". Every one of them still has to name or narrow a currency, so a number
+ * beside two ordinary words is not money.
+ */
+const MONEY_SIDE = String.raw`${MONEY_TOKEN}(?:\s+${MONEY_TOKEN}){0,2}`;
+const MONEY_QUERY = new RegExp(String.raw`^(${MONEY_SIDE})?\s*(${MONEY_AMOUNT})\s*(${MONEY_SIDE})?$`);
 
 /**
  * The number an amount is written as, however it is written.
@@ -311,9 +345,12 @@ function withSpelledAmountAsDigits(query: string): string {
   const tokens = query.split(" ");
   if (tokens.length < 2) return query;
 
-  /* A currency token can sit on either side, so the words are the middle. */
-  for (const start of [0, 1]) {
-    for (const end of [tokens.length, tokens.length - 1]) {
+  /*
+   * A currency sits on either side and may be up to three tokens - "five
+   * hundred Japanese yen" - so the words are whatever is left in the middle.
+   */
+  for (let start = 0; start <= 3; start += 1) {
+    for (let end = tokens.length; end >= tokens.length - 3; end -= 1) {
       if (end - start < 1 || start >= end) continue;
 
       const middle = tokens.slice(start, end).join(" ");
@@ -340,7 +377,9 @@ export function parseMoneyQuery(raw: string): MoneyAmount[] {
   if (!match) return [];
 
   const [, before, digits, after] = match;
-  const sides = [before, after].filter((token): token is string => Boolean(token));
+  const sides = [before, after]
+    .filter((side): side is string => Boolean(side))
+    .flatMap((side) => side.split(/\s+/).filter((token) => token.length > 0));
   if (sides.length === 0) return [];
 
   const guesses = sides.map(currencyGuess);
