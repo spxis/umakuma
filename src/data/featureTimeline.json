@@ -4097,17 +4097,5 @@
     "dateIsEstimate": true,
     "release": 76,
     "summary": "The map panel's kanji cards show the meaning and the reading together. John asked for the shared component 'with a toggle, the english/reading'; showing both was a judgement call made without flagging it, and the grade explorer already has the reveal control this would reuse. Raised 2026-09-03 by John."
-  },
-  {
-    "id": "kanji-missing-english",
-    "name": "A kanji page with no English",
-    "area": "platform",
-    "kind": "bug",
-    "status": "shipped",
-    "date": "2026-09-03",
-    "dateIsEstimate": true,
-    "release": 77,
-    "summary": "/kanji/\u8e74 showed the character as its own name with no meaning and no readings, where /kanji/\u4fc3 showed Urge and its readings. Reported 2026-09-03 by John from a page loaded before 0.336.0 - kanji-header-parity had rebuilt the kanji page's identity card an hour earlier and fixed it. Verified on production: \u8e74 now reads Kick with \u3057\u3085\u3046. Kept as a record that it was reported and checked rather than deleted, so nobody re-reports it.",
-    "version": "0.336.0"
   }
 ]
