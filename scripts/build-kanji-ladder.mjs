@@ -84,6 +84,22 @@ const NO_JLPT_LEVEL = 0;
  */
 /** How far ahead of its first kanji a radical is introduced. */
 const RADICAL_LEAD_LEVELS = 2;
+
+/**
+ * Kanji start at level 2, so level 1 is radicals alone.
+ *
+ * The rule is that a radical is taught before the kanji built from it, and
+ * that was quietly untrue at the top of the ladder: `placeRadicals` puts a
+ * radical `RADICAL_LEAD_LEVELS` before its first kanji and clamps at 1, so
+ * every kanji at level 1 got its radicals in the same level as itself. All six
+ * of them did, 年 with four radicals among them.
+ *
+ * There is nowhere below level 1, so the fix is to leave it empty of kanji. A
+ * first level of twenty-two shapes with no readings to memorise is also the
+ * gentlest possible opening, and it gates on its radicals reaching Guru the
+ * way every other level gates on its kanji.
+ */
+const KANJI_START_LEVEL = 2;
 const VOCABULARY_RAMP_LEVELS = 20;
 const VOCABULARY_START_SHARE = 0.25;
 const CJK_RANGES = [
@@ -405,7 +421,8 @@ async function main() {
      some kanji in ahead of their own band, so these are not the band sizes. */
   const positionOf = new Map(sequence.map((kanji, index) => [kanji, index]));
   let levels = [];
-  let previousThrough = 0;
+  /* Level 1 teaches radicals only; the bands allocate kanji from level 2. */
+  let previousThrough = KANJI_START_LEVEL - 1;
   let previousIndex = 0;
   for (const band of JLPT_BANDS) {
     const isFinalBand = band.throughLevel === LADDER_LEVELS;
@@ -431,6 +448,8 @@ async function main() {
     previousThrough = band.throughLevel;
     previousIndex = finishesAt + 1;
   }
+
+  levels.unshift({ level: 1, nLevel: JLPT_BANDS[0].nLevel, kanji: [] });
 
   /*
    * An admin's moves, replayed over the computed ladder.

@@ -45,13 +45,48 @@ describe("kanji ladder shape", () => {
     expect(new Set(all).size).toBe(KANJI_LADDER_TOTAL);
   });
 
-  it("keeps levels light enough to clear, and never empty", () => {
+  it("keeps levels light enough to clear, and empty of kanji only at the start", () => {
     const sizes = kanjiLadderLevels().map((entry) => entry.kanji.length);
     expect(sizes).toHaveLength(KANJI_LADDER_LEVELS);
-    expect(Math.min(...sizes)).toBeGreaterThan(0);
     /* A level gates on its kanji reaching Guru, so the whole point is that it
        stays well under WaniKani's 35 even at its heaviest. */
     expect(Math.max(...sizes)).toBeLessThan(30);
+
+    /*
+     * Level 1 teaches radicals and kana words and no kanji at all, which is
+     * what makes "a radical is taught before its kanji" true rather than
+     * nearly true: `placeRadicals` clamps at level 1, so a kanji there would
+     * force its own radicals into the same level. Every level after it has
+     * kanji.
+     */
+    expect(sizes[0]).toBe(0);
+    expect(Math.min(...sizes.slice(1))).toBeGreaterThan(0);
+  });
+
+  /*
+   * The rule the ladder exists to keep. It was quietly broken for all six of
+   * level 1's kanji before they moved to level 2 — 年 alone is built from four
+   * radicals that were being taught alongside it.
+   */
+  it("teaches every radical strictly before any kanji built from it", () => {
+    const radicals = JSON.parse(
+      readFileSync(join(process.cwd(), "src/data/radicals/index.json"), "utf8"),
+    ) as { radicals: { radical: string; kanji: string }[] };
+
+    const offenders: string[] = [];
+    let checked = 0;
+    for (const entry of radicals.radicals) {
+      const partLevel = radicalLevel(entry.radical);
+      if (partLevel === null) continue;
+      for (const kanji of entry.kanji) {
+        const level = kanjiPlacement(kanji)?.level;
+        if (level === undefined) continue;
+        checked += 1;
+        if (partLevel >= level) offenders.push(`${entry.radical} (L${partLevel}) -> ${kanji} (L${level})`);
+      }
+    }
+    expect(checked).toBeGreaterThan(8_000);
+    expect(offenders).toEqual([]);
   });
 
   it("starts gently so a beginner's first wins come quickly", () => {
