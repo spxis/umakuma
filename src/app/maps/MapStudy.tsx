@@ -89,7 +89,17 @@ export default function MapStudy({
    */
   const dataset = useGeoDataset(country);
   const division = dataset?.divisionTypeName.toLowerCase() ?? "";
-  const regions = useMemo(() => regionsInOrder(country), [country]);
+  /*
+   * `dataset` is in the deps because the country alone is not enough any more.
+   *
+   * A country's first render happens before its chunk lands, when the registry
+   * has nothing to order, and the country does not change when the data
+   * arrives - so a memo keyed on the country alone kept the empty list it
+   * built on that first pass. The map drew forty-seven prefectures beside a
+   * panel reading "All 0 prefectures". Shipped in 0.405.0 and live for the
+   * twenty minutes it took to notice.
+   */
+  const regions = useMemo(() => (dataset ? regionsInOrder(country) : []), [country, dataset]);
   const selected = regionByCode(country, code);
   const hoveredRegion = regionByCode(country, hovered);
 
