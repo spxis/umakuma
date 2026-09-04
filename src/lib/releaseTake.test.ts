@@ -4,6 +4,7 @@ import { FEATURE_AREAS, FEATURE_STATUSES, type FeatureTimelineEntry } from "./fe
 import type { ReleaseCodename } from "./releaseCodenames";
 import {
   codenameProblems,
+  higherVersion,
   minorOf,
   nextVersion,
   parseVersion,
@@ -178,5 +179,25 @@ describe("working out the edits before writing any of them", () => {
   it("swaps exactly one occurrence", () => {
     const edit = editReplacingOnce("package.json", 'a "v": "1" b "v": "1"', '"v": "1"', '"v": "2"');
     expect(edit.contents).toBe('a "v": "2" b "v": "1"');
+  });
+});
+
+describe("higherVersion", () => {
+  it("takes main's number when nothing local is further along", () => {
+    expect(higherVersion("0.429.0", "0.429.0")).toBe("0.429.0");
+    expect(higherVersion("0.430.0", "0.429.0")).toBe("0.430.0");
+  });
+
+  it("takes the local number when features have been stamped but not pushed", () => {
+    /* The batching case. Four features built and stamped before any is
+       pushed: without this, every take reads main's 0.429.0 and hands back
+       0.430.0 four times, and the collision is only found at the end, after
+       four codenames have been chosen against the wrong kana. */
+    expect(higherVersion("0.429.0", "0.432.0")).toBe("0.432.0");
+  });
+
+  it("falls back to main when there is no local version to read", () => {
+    expect(higherVersion("0.429.0", null)).toBe("0.429.0");
+    expect(higherVersion("0.429.0", undefined)).toBe("0.429.0");
   });
 });

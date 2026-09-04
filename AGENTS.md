@@ -193,11 +193,31 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   where the data outlives the code: persisted database values (a Prisma enum
   member like `revenge`, a `batchSize` sentinel) and anything already written to
   production.
-- **One feature, one commit, one release, with tests.** Every feature ships with
+- **One feature, one commit, one version, with tests.** Every feature ships with
   its own unit tests (and a smoke spec when it adds a route), is committed on its
-  own, and is released on its own. Do not batch unrelated features into a single
-  commit or a single deploy — a batched release cannot be reverted without taking
-  working features down with the broken one.
+  own, and takes its own `0.N.0`. Never batch two features into one commit: a
+  batched *commit* cannot be reverted without taking a working feature down with
+  the broken one, and that is the property the rule exists to protect.
+- **Batch the push, not the commit.** Three to five finished features may be
+  pushed together in one go. Revertability survives untouched, because
+  `git revert <sha>` still takes out exactly one feature — separate commits are
+  what buy that, not separate deploys. What a batch actually costs is knowing
+  *which* of the five broke production if one does, and `quality:check` plus
+  `pnpm build` run per feature before its commit, so anything a build can catch
+  is already caught. Two exceptions ship alone and immediately:
+  **a schema change** (the gap between the commit landing and `db:push`
+  completing has to stay seconds, not minutes — see below), and anything that
+  has to be verified in production before the next feature is built on top of
+  it.
+- **Never watch a deploy.** Push and start the next feature. Polling
+  `gh run list` on a thirty-second loop costs five to seven minutes a release
+  and buys nothing the gates did not already establish: `quality:check`,
+  `pnpm build` and `pnpm audit --prod` have all passed before the push, and a
+  deploy that fails after that fails for reasons watching would not have
+  prevented. Verify once at the end of a batch — `gh run list` for the
+  workflow and the canonical alias for the version — and investigate then.
+  Three deploys were watched to completion on 2026-09-04, about eighteen
+  minutes of sleeping, and every one of them was green.
 - **Work in your own git worktree, never in the shared checkout.** Several
   sessions have this repository open at once, and one working tree with several
   writers loses work in ways that do not announce themselves: a `git add -A`

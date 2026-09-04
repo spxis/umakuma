@@ -14,6 +14,7 @@ import {
   editAppendingCodename,
   editReplacingOnce,
   entryFromTicket,
+  higherVersion,
   minorOf,
   nextVersion,
   shipEntry,
@@ -56,13 +57,29 @@ function flag(name: string): string | undefined {
   return at > -1 ? process.argv[at + 1] : undefined;
 }
 
-/** What main is actually on, which is the only version that counts. */
+/**
+ * The highest version already spoken for: what main has published, or what
+ * this checkout has taken since, whichever is further along.
+ *
+ * `origin/main` alone was wrong, and quietly. Several features can be built
+ * and stamped before any of them is pushed - which is the whole point of
+ * batching a deploy rather than waiting out five minutes of Vercel per
+ * feature - and every one of those takes read the same published number and
+ * handed back the same next one. Four releases would have shipped as four
+ * copies of 0.430.0, and the timeline test would only have caught it at the
+ * end, after four codenames had been chosen against the wrong kana.
+ *
+ * Still fetches first: main moving under a local run is the other half of the
+ * same question, and it is the half that already bit us three times.
+ */
 function publishedVersion(): string {
   execFileSync("git", ["fetch", "origin", "--quiet"], { stdio: "inherit" });
   const raw = execFileSync("git", ["show", "origin/main:package.json"], { encoding: "utf8" });
-  const version = (JSON.parse(raw) as { version?: string }).version;
-  if (!version) throw new Error("origin/main's package.json has no version.");
-  return version;
+  const remote = (JSON.parse(raw) as { version?: string }).version;
+  if (!remote) throw new Error("origin/main's package.json has no version.");
+
+  const local = (JSON.parse(readFileSync("package.json", "utf8")) as { version?: string }).version;
+  return higherVersion(remote, local);
 }
 
 /** Everything the release rewrites, written only once all of them are possible. */

@@ -252,3 +252,19 @@ export function editAppendingCodename(
 
   return { file, contents: source.slice(0, lineEnd) + line + source.slice(lineEnd) };
 }
+
+
+/**
+ * The higher of two versions by minor, which is the one already spoken for.
+ *
+ * Version allocation is a single global counter that several sessions draw
+ * from, and it has gone wrong in both directions. Main moving under a local
+ * run is the known half. The other half only appears once features are built
+ * in a batch and stamped before any of them is pushed: every take reads the
+ * same published number and hands back the same next one, so four releases
+ * come out as four copies of one version.
+ */
+export function higherVersion(remote: string, local: string | null | undefined): string {
+  if (!local) return remote;
+  return minorOf(local) > minorOf(remote) ? local : remote;
+}
