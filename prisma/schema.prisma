@@ -144,6 +144,12 @@ model Account {
   ukCurriculumVersion String?
   ukLevelUpdatedAt    DateTime?
 
+  /// The second ladder: earned by turning up rather than by learning. Kept
+  /// apart from ukLevel on purpose - neither can be bought with the other.
+  xp                  Int                @default(0)
+  xpLevel             Int                @default(1)
+  xpEvents            XpEvent[]
+
   internal               Boolean                 @default(false)
   jlptCertificates       JlptCertificate[]
   studyLists             StudyList[]
@@ -1261,4 +1267,84 @@ model UkRadicalLink {
   subject UkSubject @relation(fields: [ukSubjectId], references: [id], onDelete: Cascade)
 
   @@index([characters])
+}
+
+
+/// A kind of XP that can be earned, and what it is worth.
+///
+/// A string on the event would have carried the pointer and nothing else. This
+/// carries the two things a string cannot: **what it is worth**, so the
+/// economy can be retuned without a deploy, and **a note saying what it is
+/// for**, so a member reading "+50 XP" on their history has an answer to "for
+/// what" that does not live in a developer's head.
+///
+/// The id is the same key the code uses (`dailySignIn`, `reviewCorrect`), so
+/// the constants in `xpAwards.ts` and these rows are the same vocabulary
+/// rather than two lists that drift. A test holds them equal, which is the
+/// lesson from the Prisma enum that lacked `radkfile` and silently failed
+/// every radical at seed.
+///
+/// There is no flag saying whether a kind is a "bonus". A streak milestone and
+/// a review answered are both simply kinds of XP that can be earned, and a
+/// boolean dividing them would have been a second way of saying what the
+/// amount and the note already say.
+model XpType {
+  /// Matches the key in XP_AWARDS.
+  id        String   @id
+  /// What a member reads on their history.
+  label     String
+  /// Why it exists, in a sentence, for the same reader.
+  note      String
+  amount    Int
+  /// Most XP a day of this kind may be worth. Null means uncapped, which is
+  /// deliberate for reviews: capping study means telling somebody their work
+  /// stopped counting.
+  dailyCap  Int?
+  /// Retired kinds keep their rows, so old events still explain themselves.
+  retiredAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events XpEvent[]
+}
+
+/// One kind of XP earned on one day, accumulated.
+///
+/// A row per award would have been the obvious shape and is wrong: the unique
+/// index below would then reject the second review of a day, since reviews are
+/// earned dozens of times. So a row holds a day's *total* for one kind and is
+/// incremented, which makes both jobs one read - a daily cap is the row's
+/// amount, and a once-a-day award is a row that already exists.
+///
+/// `dayKey` is the Vancouver day, the same boundary Daily Challenge uses.
+model XpEvent {
+  id        String   @id @default(cuid())
+  accountId String
+  /// References XpType.id. Named `kind` because that is what the code calls it
+  /// and a persisted field is not renamed for tidiness.
+  kind      String
+  amount    Int
+  dayKey    String
+  /// What this particular award was for, where the type's own note is not
+  /// specific enough - "a 30-day streak", "level 20, N4 complete". Null for
+  /// the routine kinds, whose type note says everything there is to say.
+  note      String?
+  /// When the first award of this kind landed on this day.
+  createdAt DateTime @default(now())
+  /// When the last one did. The row accumulates, so these two bracket the
+  /// day's earning rather than timing a single award - fifty reviews are one
+  /// row, and this says when the first and last of them were answered.
+  ///
+  /// That is the trade the accumulating shape makes: a daily cap becomes one
+  /// read and a once-a-day award becomes a row that exists, at the cost of not
+  /// timing each award individually. If per-award timing is ever wanted, the
+  /// answer is a second table of awards rather than exploding this one, since
+  /// the cap logic depends on the daily total being a single row.
+  updatedAt DateTime @updatedAt
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  type    XpType  @relation(fields: [kind], references: [id])
+
+  @@unique([accountId, kind, dayKey])
+  @@index([accountId, createdAt])
 }

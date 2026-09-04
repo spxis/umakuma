@@ -101,7 +101,8 @@
     "ladder:radical-links": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-radical-links.ts",
     "ladder:overrides:export": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/export-ladder-overrides.ts",
     "ladder:version": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/ladder-version.ts",
-    "glyph:check": "node scripts/check-glyph-sizes.mjs"
+    "glyph:check": "node scripts/check-glyph-sizes.mjs",
+    "xp:types:seed": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-xp-types.ts"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
