@@ -5012,11 +5012,23 @@
     "id": "ladder-ops",
     "name": "Admin: move a kanji between levels",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Admin: move a kanji between levels",
+    "dateIsEstimate": false,
+    "version": "0.439.0",
+    "releasedAt": "2026-09-04T21:24:59Z"
+  },
+  {
+    "id": "curriculum-version",
+    "name": "Curriculum versioning",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.439.0",
-    "releasedAt": "2026-09-04T21:24:59Z",
-    "summary": "Admin: move a kanji between levels"
+    "version": "0.440.0",
+    "releasedAt": "2026-09-04T21:58:08Z",
+    "summary": "Curriculum versioning"
   }
 ]
