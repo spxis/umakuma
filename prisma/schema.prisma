@@ -1071,6 +1071,7 @@ model UkSubject {
   updatedAt       DateTime        @updatedAt
 
   states          UkSrsState[]
+  radicalLink     UkRadicalLink?
 
   @@index([kind, level])
   @@index([level])
@@ -1207,4 +1208,57 @@ model UkReviewAttempt {
 
   @@index([accountId, submittedAt])
   @@index([accountId, subjectId, submittedAt])
+}
+
+
+/// How a pair was established, so a hand-made link is not silently recomputed.
+enum UkRadicalMatch {
+  /// The two write the same character. 196 of our 241 pair this way.
+  character
+  /// Decided by a person, where the shapes correspond but the characters do not.
+  manual
+}
+
+/// One of our radicals beside WaniKani's radical for the same shape.
+///
+/// A nullable `UkSubject.wkSubjectId` could carry the pointer, and did, but it
+/// cannot carry the thing that makes this worth having: **the two names**.
+/// WaniKani calls 一 "Ground", 月 "Moon" and ハ "Fins"; RADKFILE and KANJIDIC
+/// call them "one", "month" and nothing at all. Both are useful and they are
+/// not interchangeable — a member who learned the shape as Fins should be able
+/// to find it as Fins, and a member who never used WaniKani should never be
+/// shown a name we did not write.
+///
+/// That last point is the reason the names live in a row rather than being
+/// read live from the catalogue: WaniKani's radical names are their own
+/// invention and their content. Holding them in a table we control is what
+/// lets `canSeeWanikaniContent` gate them the way it gates their mnemonics,
+/// instead of the gate being spread across every surface that joins.
+///
+/// It also gives the mismatch somewhere to live. Our name for 冂 is
+/// "upside-down box radical (no. 13)", which is the dictionary's own
+/// bookkeeping rather than a name; theirs is "Head". A row where `ourName` is
+/// null or reads like an index entry is a piece of content waiting to be
+/// written, and now it is a query rather than a memory.
+model UkRadicalLink {
+  id          Int            @id @default(autoincrement())
+  /// Our radical.
+  ukSubjectId Int            @unique
+  /// Theirs. Unique both ways: 476 of their radicals carry a character and no
+  /// character is used twice, so the pairing is genuinely one to one.
+  wkSubjectId Int            @unique
+  /// The shape both sides agree on, denormalised so a join is not needed to
+  /// read the pair.
+  characters  String
+  /// Ours, from RADKFILE and KANJIDIC. Null where we have no name yet.
+  ourName     String?
+  /// WaniKani's. Their content: shown to connected members only.
+  theirName   String
+  matchedBy   UkRadicalMatch @default(character)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  subject UkSubject @relation(fields: [ukSubjectId], references: [id], onDelete: Cascade)
+
+  @@index([characters])
 }

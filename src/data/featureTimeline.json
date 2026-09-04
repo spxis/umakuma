@@ -4988,11 +4988,23 @@
     "id": "uk-radical-links",
     "name": "Link our radicals to WaniKani's",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Link our radicals to WaniKani's",
+    "dateIsEstimate": false,
+    "version": "0.437.0",
+    "releasedAt": "2026-09-04T21:00:24Z"
+  },
+  {
+    "id": "uk-radical-link-table",
+    "name": "An official relation between our radicals and theirs",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.437.0",
-    "releasedAt": "2026-09-04T21:00:24Z",
-    "summary": "Link our radicals to WaniKani's"
+    "version": "0.438.0",
+    "releasedAt": "2026-09-04T21:06:14Z",
+    "summary": "An official relation between our radicals and theirs"
   }
 ]
