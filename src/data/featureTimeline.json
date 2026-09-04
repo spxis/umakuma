@@ -4616,11 +4616,23 @@
     "id": "map-panel-cities",
     "name": "The side panel draws the region's cities too",
     "area": "games",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "Turning Cities on lit the country map and left the shape in the panel beside it bare, so one switch meant two different things depending which map you were looking at. The panel is handed the very same cities the map is drawing, narrowed to the region it frames, so it follows the switch and the density without a second control to keep in step.",
+    "dateIsEstimate": false,
+    "version": "0.406.0",
+    "releasedAt": "2026-09-04T13:12:55Z"
+  },
+  {
+    "id": "an-admin-s-ladder-moves-survive-a-rebuild",
+    "name": "An admin's ladder moves survive a rebuild",
+    "area": "admin",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.406.0",
-    "releasedAt": "2026-09-04T13:12:55Z",
-    "summary": "Turning Cities on lit the country map and left the shape in the panel beside it bare, so one switch meant two different things depending which map you were looking at. The panel is handed the very same cities the map is drawing, narrowed to the region it frames, so it follows the switch and the density without a second control to keep in step."
+    "version": "0.407.0",
+    "releasedAt": "2026-09-04T13:18:26Z",
+    "summary": "build-kanji-ladder recomputes the whole curriculum every run, so any edit an admin made would vanish on the next pnpm ladder:refresh - which made the admin console unbuildable. src/data/kanjiLadderOverrides.json is now replayed over the computed ladder, between the kanji sort and radical/vocabulary placement, so a moved kanji drags its radicals and the words that use it along without that rule being written twice. Ops are refused by name rather than guessed at: a move that would empty a level, overfill one past 29 kanji, or push a kanji outside its JLPT band stops the build. One implementation, imported by the build and the tests; a test fails if the build ever grows its own copy."
   }
 ]
