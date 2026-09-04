@@ -5,6 +5,7 @@ import AdminContentSourcesPanel from "./AdminContentSourcesPanel";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import AdminJlptCatalogPanel from "./AdminJlptCatalogPanel";
 import AdminJlptCatalogOperationsPanel from "./AdminJlptCatalogOperationsPanel";
+import AdminLadderBrowser from "./AdminLadderBrowser";
 import AdminSourcesPanel from "./AdminSourcesPanel";
 import { usePersistedTab } from "@/lib/usePersistedTab";
 
@@ -47,6 +48,7 @@ const DATASETS = [
   { id: "grades", label: "Grades", hasModes: false },
   { id: "maps", label: "Maps", hasModes: false },
   { id: "sources", label: "Sources", hasModes: false },
+  { id: "ladder", label: "Ladder", hasModes: false },
 ] as const;
 
 export type DataView = (typeof DATASETS)[number]["id"];
@@ -139,6 +141,10 @@ export default function AdminDataWorkspaceSection({
           sessionAuthorized={sessionAuthorized}
           checkingSession={checkingSession}
         />
+      ) : null}
+
+      {dataCatalogView === "ladder" ? (
+        <AdminLadderBrowser sessionAuthorized={sessionAuthorized} checkingSession={checkingSession} />
       ) : null}
 
       {dataCatalogView === "sources" ? (
