@@ -233,3 +233,30 @@ describe("framing a whole region", () => {
     expect(geoZoomToFit(JAPAN, everything).zoom).toBe(1);
   });
 });
+
+/*
+ * The clamp is for dragging. A region opened from its address is a fit and
+ * asked for that region in the middle; Okinawa's inset is at the bottom of
+ * the canvas, so a clamped fit shoved it into the bottom third every time.
+ */
+describe("a fit may overhang the map", () => {
+  const okinawa = geoZoomToFit(JAPAN, [47]);
+
+  it("puts the fitted region in the middle of the window", () => {
+    const window = geoZoomBox(JAPAN, okinawa.zoom, okinawa.centre, false);
+    expect(geoBoxCentre(window).x).toBeCloseTo(okinawa.centre.x);
+    expect(geoBoxCentre(window).y).toBeCloseTo(okinawa.centre.y);
+  });
+
+  it("is the thing the clamp was moving", () => {
+    const clamped = geoZoomBox(JAPAN, okinawa.zoom, okinawa.centre);
+    expect(geoBoxCentre(clamped).y).toBeLessThan(okinawa.centre.y);
+    expect(clamped.y + clamped.height).toBeLessThanOrEqual(whole.height + 0.001);
+  });
+
+  it("still clamps by default, so a drag cannot run off the map", () => {
+    const far = geoZoomBox(JAPAN, 3, { x: -500, y: -500 });
+    expect(far.x).toBe(0);
+    expect(far.y).toBe(0);
+  });
+});

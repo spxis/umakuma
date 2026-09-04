@@ -4388,11 +4388,23 @@
     "id": "credit-jmdict-and-jiten",
     "name": "Credit JMdict and Jiten",
     "area": "platform",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "The ladder ranks vocabulary against JMdict's newspaper frequency bands and Jiten's eleven per-medium lists. Both are CC BY-SA 4.0, so a visible credit is a licence condition and neither has a page. Register both in sourceCredits, give each a reader over wordFrequency.json and copy on /sources. Requested 2026-09-03 by John as the first slice of the source accreditation epic.",
+    "dateIsEstimate": false,
+    "version": "0.387.0",
+    "releasedAt": "2026-09-04T04:23:12Z"
+  },
+  {
+    "id": "map-region-fit-centre",
+    "name": "A region view should be centred on the region",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.387.0",
-    "releasedAt": "2026-09-04T04:23:12Z",
-    "summary": "The ladder ranks vocabulary against JMdict's newspaper frequency bands and Jiten's eleven per-medium lists. Both are CC BY-SA 4.0, so a visible credit is a licence condition and neither has a page. Register both in sourceCredits, give each a reader over wordFrequency.json and copy on /sources. Requested 2026-09-03 by John as the first slice of the source accreditation epic."
+    "version": "0.388.0",
+    "releasedAt": "2026-09-04T04:29:22Z",
+    "summary": "/maps/japan/region/okinawa opens at 3x with Okinawa sitting low in the frame instead of in the middle. The zoom window is clamped to the map's edges so a drag never shows open sea, but a region opened from its address is a fit, not a drag, and the fit should centre what it framed even if that means the window overhangs the map. Okinawa's inset sits at the bottom-left of the canvas, so any clamp pushes it down. Either let a fit overhang, or move the inset. Reported 2026-09-03 by John with a screenshot."
   }
 ]

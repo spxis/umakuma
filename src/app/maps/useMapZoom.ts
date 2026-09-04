@@ -56,15 +56,23 @@ export function useMapZoom(
   );
   const [zoom, setZoom] = useState<MapZoom>(start.zoom);
   const [centre, setCentre] = useState(start.centre);
+  /*
+   * A fit is allowed to overhang the map so the region it framed sits in the
+   * middle; a pan is not, so a drag never runs off into open sea. Opening a
+   * region turns the clamp off, and the first move the reader makes turns it
+   * back on - see `geoZoomBox`.
+   */
+  const [clamp, setClamp] = useState(startOnCodes.length === 0);
   const dragging = useRef<{ pointerId: number; x: number; y: number; scale: number } | null>(null);
 
-  const box: MapBox = geoZoomBox(country, zoom, centre);
+  const box: MapBox = geoZoomBox(country, zoom, centre, clamp);
   const zoomed = zoom > 1;
 
   /** Back to the whole country, which is where the map starts. */
   const reset = useCallback(() => {
     setZoom(MAP_ZOOM_LEVELS[0]);
     setCentre(geoBoxCentre(geoWholeCountryBox(country)));
+    setClamp(true);
   }, [country]);
 
   /*
@@ -91,6 +99,7 @@ export function useMapZoom(
       const fit = geoZoomToFit(country, codes);
       setCentre(fit.centre);
       setZoom(fit.zoom);
+      setClamp(false);
     },
     [country],
   );
@@ -130,6 +139,7 @@ export function useMapZoom(
     const dy = (event.clientY - drag.y) * drag.scale;
     if (dx === 0 && dy === 0) return;
     dragging.current = { ...drag, x: event.clientX, y: event.clientY };
+    setClamp(true);
     /* Dragging right moves the map right, which means looking further left. */
     setCentre((current) => ({ x: current.x - dx, y: current.y - dy }));
   }, []);
@@ -150,7 +160,10 @@ export function useMapZoom(
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<SVGSVGElement>) => {
       const nudge = box.width * PAN_STEP_RATIO;
-      const move = (dx: number, dy: number) => setCentre((at) => ({ x: at.x + dx, y: at.y + dy }));
+      const move = (dx: number, dy: number) => {
+        setClamp(true);
+        setCentre((at) => ({ x: at.x + dx, y: at.y + dy }));
+      };
 
       switch (event.key) {
         case "ArrowLeft":

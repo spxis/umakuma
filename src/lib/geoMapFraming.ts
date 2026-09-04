@@ -95,12 +95,23 @@ export function geoZoomBox(
   country: CountryCode,
   zoom: MapZoom,
   centre: { x: number; y: number },
+  /*
+   * Off for a fit, on for everything else. The clamp is for dragging - it
+   * stops a pan running off into open sea. A region opened from its address
+   * is not a drag: it asked for that region in the middle, and a clamp that
+   * pushes the window back onto the map puts it somewhere else. Okinawa's
+   * inset is at the bottom of the canvas, so at 3x the clamp shoved it to the
+   * bottom third of the view every time. Let a fit overhang; the first drag
+   * clamps again.
+   */
+  clamp = true,
 ): MapBox {
   const whole = geoWholeCountryBox(country);
   if (zoom <= 1) return whole;
 
   const width = whole.width / zoom;
   const height = whole.height / zoom;
+  if (!clamp) return { x: centre.x - width / 2, y: centre.y - height / 2, width, height };
   return {
     x: Math.min(Math.max(centre.x - width / 2, 0), whole.width - width),
     y: Math.min(Math.max(centre.y - height / 2, 0), whole.height - height),
