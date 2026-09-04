@@ -450,6 +450,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Arika no Hitomawari", ja: "在り処のひとまわり", reading: "ありかのひとまわり", gloss: "one round of where everything lives" },
   { romaji: "Issho no Sumika", ja: "一緒の住処", reading: "いっしょのすみか", gloss: "the records live where the studying happens" },
   { romaji: "Ubusuna", ja: "産土", reading: "うぶすな", gloss: "the ground you were born on" },
+  { romaji: "Eriwake no Me", ja: "選り分けの目", reading: "えりわけのめ", gloss: "an eye for picking out" },
 ];
 
 /**

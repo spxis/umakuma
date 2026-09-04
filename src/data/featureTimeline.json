@@ -4532,11 +4532,23 @@
     "id": "map-cities-canada",
     "name": "Cities on the Canada map",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Natural Earth's Populated Places drawn over the provinces, with a Cities switch and three densities beside it: 14 capitals, 46 major, or all 254. It is a true overlay because the builder makes it one - the points go through the very same projection the boundaries were fitted to, so every city lands inside the province it belongs to. Labels are placed in importance order and skipped where they would collide, and because the label box scales with the map, zooming in finds room for more names. Canada alone: Japan and the United States are drawn from GSI Global Map and Census TopoJSON on their own projections, so a Natural Earth point would land somewhere arbitrary there.",
+    "dateIsEstimate": false,
+    "version": "0.399.0",
+    "releasedAt": "2026-09-04T09:11:19Z"
+  },
+  {
+    "id": "pick-the-showcase-rows-out-of-the-source-s-data",
+    "name": "Pick the showcase rows out of the source's data",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.399.0",
-    "releasedAt": "2026-09-04T09:11:19Z",
-    "summary": "Natural Earth's Populated Places drawn over the provinces, with a Cities switch and three densities beside it: 14 capitals, 46 major, or all 254. It is a true overlay because the builder makes it one - the points go through the very same projection the boundaries were fitted to, so every city lands inside the province it belongs to. Labels are placed in importance order and skipped where they would collide, and because the label box scales with the map, zooming in finds room for more names. Canada alone: Japan and the United States are drawn from GSI Global Map and Census TopoJSON on their own projections, so a Natural Earth point would land somewhere arbitrary there."
+    "version": "0.400.0",
+    "releasedAt": "2026-09-04T10:02:45Z",
+    "summary": "The showcase picks were hand-written constants and thirteen of their figures were wrong when checked against the data. An admin can now browse any source's rows - searched and paged, twenty at a time - and tick up to four, so the detail line the public card shows is one the data built rather than one somebody typed. Reset puts a source back to the chosen defaults."
   }
 ]
