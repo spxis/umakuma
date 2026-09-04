@@ -4417,6 +4417,6 @@
     "date": "2026-09-03",
     "version": "0.389.0",
     "releasedAt": "2026-09-04T04:33:25Z",
-    "summary": "Both /sources pages are force-dynamic and uncached, so every view - including every crawler hit - runs three Prisma reads and rebuilds a border-pair Set per map. Hold each report in process for a few minutes and give the rendered page to the CDN. They stay force-dynamic because three readers need a database and the build has none. Requested 2026-09-03 by John as part of the source accreditation epic."
+    "summary": "Both /sources pages ran three Prisma reads and rebuilt a border-pair Set per map on every view, including every crawler hit. Each report is now held in process for ten minutes, which removes the repeat database work, and the index settles its readers so one dead source no longer hides eleven healthy ones. The CDN half did not land: a Cache-Control header was added and Vercel overrides it, because every page carrying PublicPageHeader is dynamic - the header reads the session - and Next sends no-store on a dynamic route. Verified against a local next start, which applies the header, and not against production, which does not. Sparing the app the request needs partial prerendering; filed separately. Requested 2026-09-03 by John as part of the source accreditation epic."
   }
 ]
