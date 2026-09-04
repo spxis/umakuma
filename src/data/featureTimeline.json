@@ -4796,11 +4796,23 @@
     "id": "srs-theme-groups",
     "name": "Theme stage groups in the viewer",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Each theme's ten rungs drawn under the bucket they belong to; WaniKani added as the 90th theme for reference.",
+    "dateIsEstimate": false,
+    "version": "0.421.0",
+    "releasedAt": "2026-09-04T14:36:41Z"
+  },
+  {
+    "id": "theme-picker-tiers",
+    "name": "Theme picker: age first, buckets, scroll",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.421.0",
-    "releasedAt": "2026-09-04T14:36:41Z",
-    "summary": "Each theme's ten rungs drawn under the bucket they belong to; WaniKani added as the 90th theme for reference."
+    "version": "0.422.0",
+    "releasedAt": "2026-09-04T14:59:13Z",
+    "summary": "Theme picker: age first, buckets, scroll"
   }
 ]

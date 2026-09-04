@@ -4,13 +4,18 @@ import { useState } from "react";
 
 import { japaneseTextProps } from "@/app/shared/japaneseText";
 import { AGE_BANDS, type AgeBand } from "@/lib/srs/ageBand";
-import type { SrsTheme } from "@/lib/srs/srsThemes";
+import { srsThemeBuckets, type SrsTheme } from "@/lib/srs/srsThemes";
+
+import ThemeLadder from "./ThemeLadder";
 
 import { THEME_PICKER_COPY as copy } from "./profileCopy";
 
 const CHIP = "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-bold transition";
 const ACTIVE = "border-accent bg-accent text-white";
 const IDLE = "border-line bg-surface text-foreground/70 hover:bg-surface-muted";
+/* Ninety themes is a page that never ends. The list scrolls inside the card,
+   so the age question and the ladder on now stay on screen while browsing. */
+const LIST_HEIGHT = "max-h-[26rem]";
 
 /**
  * What a member's stages are called.
@@ -21,10 +26,13 @@ const IDLE = "border-line bg-surface text-foreground/70 hover:bg-surface-muted";
  * time, because the stored value never moves. Nothing in the database changes
  * when they switch; only the words do.
  *
- * The age band sits in the same card because it is what decides which themes
- * appear. It asks for a band, not a birthdate: the only thing the site needs
- * from age is whether to offer the handful about organised crime and the sex
- * trade, and a date of birth is more than that question is worth.
+ * The age band is asked **first**, and nothing else is drawn until it is
+ * answered. It is what decides which themes exist for this account, so
+ * offering a grid and then taking themes out of it is the wrong order — a
+ * member would pick one and watch it disappear. It asks for a band, not a
+ * birthdate: the only thing the site needs from age is whether to offer the
+ * handful about organised crime and the sex trade, and a date of birth is more
+ * than that question is worth.
  */
 export default function ThemePicker({
   accountId,
@@ -81,23 +89,13 @@ export default function ThemePicker({
         <p className="mt-1 text-sm font-semibold leading-relaxed text-foreground/70">{copy.blurb}</p>
       </div>
 
-      {/* What is on now, drawn as the ladder it is. */}
-      <div className="rounded-2xl border border-line bg-surface-muted/40 p-3">
-        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{copy.current}</p>
-        <p className="mt-0.5 text-sm font-black text-foreground">{theme.name}</p>
-        <ol className="mt-2 flex flex-wrap gap-1.5">
-          {theme.levels.slice(1).map((level) => (
-            <li key={level.level} className="rounded-lg bg-surface px-2 py-1" title={`${level.reading} — ${level.meaning}`}>
-              <span {...japaneseTextProps("block text-sm font-black leading-tight text-foreground")}>{level.short}</span>
-              <span className="block text-[9px] font-semibold text-foreground/60">{level.reading}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-
       <div>
-        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{copy.ageHeading}</p>
-        <p className="mt-0.5 text-[13px] font-semibold text-foreground/70">{copy.ageBlurb}</p>
+        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
+          {ageBand ? copy.ageHeading : copy.ageFirstHeading}
+        </p>
+        <p className="mt-0.5 text-[13px] font-semibold text-foreground/70">
+          {ageBand ? copy.ageBlurb : copy.ageFirstBlurb}
+        </p>
         <div className="mt-2 flex flex-wrap gap-2">
           {(Object.values(AGE_BANDS) as AgeBand[]).map((band) => (
             <button
@@ -111,6 +109,20 @@ export default function ThemePicker({
             </button>
           ))}
         </div>
+      </div>
+
+      {error ? <p className="text-sm font-semibold text-rose-600">{error}</p> : null}
+
+      {/* Nothing below is drawn until the band is answered: it decides which
+          themes exist, and a grid that loses entries after a click is worse
+          than one that waits. */}
+      {!ageBand ? null : (
+        <>
+      {/* What is on now, drawn as the two-tier ladder it is. */}
+      <div className="rounded-2xl border border-line bg-surface-muted/40 p-3">
+        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{copy.current}</p>
+        <p className="mt-0.5 mb-2 text-sm font-black text-foreground">{theme.name}</p>
+        <ThemeLadder theme={theme} />
       </div>
 
       <div>
@@ -129,7 +141,7 @@ export default function ThemePicker({
         <p className="mt-1 text-[11px] font-semibold text-foreground/60">{copy.count(shown.length, choices.length)}</p>
       </div>
 
-      <ol className="grid gap-2 sm:grid-cols-2">
+      <ol className={`grid gap-2 overflow-y-auto ${LIST_HEIGHT} sm:grid-cols-2`}>
         {shown.map((entry) => {
           const chosen = entry.id === theme.id;
           return (
@@ -139,21 +151,25 @@ export default function ThemePicker({
                 disabled={saving}
                 onClick={() => save({ themeId: entry.id })}
                 aria-pressed={chosen}
-                className={`w-full rounded-2xl border p-3 text-left transition ${
+                className={`h-full w-full rounded-2xl border p-3 text-left transition ${
                   chosen ? "border-accent bg-accent/5" : "border-line bg-surface hover:bg-surface-muted"
                 }`}
               >
                 <span className="block text-sm font-black text-foreground">{entry.name}</span>
+                {/* One rung per bucket, so a card previews the tiers rather
+                    than four rungs that happen to sit at 1, 5, 7 and 9. */}
                 <span {...japaneseTextProps("mt-1 block text-[13px] font-semibold text-foreground/70")}>
-                  {[1, 5, 7, 9].map((stage) => entry.levels[stage].short).join(" → ")}
+                  {srsThemeBuckets(entry)
+                    .map((bucket) => bucket.levels[0].short)
+                    .join(" \u2192 ")}
                 </span>
               </button>
             </li>
           );
         })}
       </ol>
-
-      {error ? <p className="text-sm font-semibold text-rose-600">{error}</p> : null}
+        </>
+      )}
     </section>
   );
 }

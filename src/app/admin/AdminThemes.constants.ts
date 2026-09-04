@@ -32,15 +32,3 @@ export const THEME_RATING_BADGE: Record<string, string> = {
  * The five buckets, coloured the way the rest of the site colours SRS stages.
  * Stage 0 is "not started" and takes the muted tone rather than a bucket's.
  */
-export const THEME_STAGE_TONE: Record<number, string> = {
-  0: "bg-surface-muted text-foreground/60",
-  1: "bg-pink-100 text-pink-900",
-  2: "bg-pink-100 text-pink-900",
-  3: "bg-pink-100 text-pink-900",
-  4: "bg-pink-100 text-pink-900",
-  5: "bg-purple-100 text-purple-900",
-  6: "bg-purple-100 text-purple-900",
-  7: "bg-sky-100 text-sky-900",
-  8: "bg-indigo-100 text-indigo-900",
-  9: "bg-amber-100 text-amber-900",
-};

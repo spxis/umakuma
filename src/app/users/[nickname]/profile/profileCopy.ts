@@ -67,4 +67,16 @@ export const THEME_PICKER_COPY = {
   count: (shown: number, total: number) =>
     shown === total ? `${total} to choose from` : `${shown} of ${total}`,
   saveFailed: "Could not save that. Try again?",
+  stage: "Stage",
+  /* "5-6" for a two-rung tier, "7" for a one-rung tier: a range of one is a
+     number, and printing "7-7" reads as a mistake. */
+  stageRange: (levels: { level: number }[]) => {
+    const first = levels[0]?.level ?? 0;
+    const last = levels.at(-1)?.level ?? first;
+    return first === last ? `${first}` : `${first}\u2013${last}`;
+  },
+  /* The age question comes first, because it decides which themes exist. */
+  ageFirstHeading: "First, who is using this account?",
+  ageFirstBlurb:
+    "A few of the themes are about organised crime, nightlife and horror. Tell us this and we will only offer the ones that suit — you can change it whenever you like.",
 } as const;

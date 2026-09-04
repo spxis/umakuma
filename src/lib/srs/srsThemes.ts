@@ -42,6 +42,13 @@ export type SrsThemeLevel = {
   bucketMeaning: string;
 };
 
+/** One tier of a theme: the bucket, and the stages sitting under it. */
+export type SrsThemeBucket = {
+  bucket: string;
+  reading: string;
+  levels: SrsThemeLevel[];
+};
+
 export type SrsTheme = {
   id: string;
   name: string;
@@ -84,4 +91,29 @@ export function srsThemesFor(rating: SrsThemeRating): SrsTheme[] {
 /** What stage `n` is called in this theme, falling back to "not started". */
 export function srsThemeLevel(theme: SrsTheme, level: number): SrsThemeLevel {
   return theme.levels.find((entry) => entry.level === level) ?? theme.levels[0];
+}
+
+/**
+ * The stages gathered under the bucket each belongs to.
+ *
+ * A theme is two tiers, not one: five buckets over nine stages, so Apprentice
+ * covers four rungs and Burned covers one. Drawn as a flat row of chips that
+ * shape is invisible, and it is the shape every theme was built around.
+ *
+ * Grouped by consecutive run rather than by name, because a theme may reuse a
+ * word across tiers — Demon Slayer's 甲 is both a bucket and a stage inside it
+ * — and matching on the word alone would fold two different things together.
+ *
+ * Level 0 is excluded: "not started" is not a rank, and a member has not
+ * reached it, they have merely not left it.
+ */
+export function srsThemeBuckets(theme: SrsTheme): SrsThemeBucket[] {
+  const groups: SrsThemeBucket[] = [];
+  for (const level of theme.levels) {
+    if (level.level === 0) continue;
+    const last = groups.at(-1);
+    if (last && last.bucket === level.bucket) last.levels.push(level);
+    else groups.push({ bucket: level.bucket, reading: level.bucketReading, levels: [level] });
+  }
+  return groups;
 }
