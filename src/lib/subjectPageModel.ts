@@ -43,10 +43,13 @@ export type KanjiPageSources = {
 /** One kanji inside a compound, linked to its own page. */
 export type WordExampleKanji = {
   label: string;
-  href: string;
+  /** Null for the kanji whose page this is: a link back to here goes nowhere. */
+  href: string | null;
   reading: string | null;
   meaning: string | null;
   level: number | null;
+  /** The kanji the page is about, marked rather than missing. */
+  current: boolean;
 };
 
 export type WordExample = {
@@ -91,10 +94,23 @@ export function toWordExamples(raw: unknown, character: string): WordExample[] {
       written: example.written,
       pronounced: example.pronounced,
       gloss: example.gloss,
+      /*
+       * Every kanji in the word, this one included.
+       *
+       * The kanji whose page this is used to be dropped, on the grounds that a
+       * link back to where you are does nothing. But the row is showing what a
+       * word is made of, and leaving one out makes 成長事業 look like three
+       * characters: the reader counts the chips against the word above them
+       * and finds the maths wrong. It is drawn like the others and marked as
+       * the one you are on, with no href, so it still leads nowhere - it just
+       * says so by being flat rather than by being absent.
+       */
       kanji: (example.kanjiItems ?? []).flatMap((item) => {
-        if (item.label === character) return [];
-        const href = subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: item.label, slug: null });
-        if (!href) return [];
+        const current = item.label === character;
+        const href = current
+          ? null
+          : subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: item.label, slug: null });
+        if (!current && !href) return [];
         return [
           {
             label: item.label,
@@ -102,6 +118,7 @@ export function toWordExamples(raw: unknown, character: string): WordExample[] {
             reading: item.reading ?? null,
             meaning: item.meaning ?? null,
             level: typeof item.wkLevel === "number" ? item.wkLevel : null,
+            current,
           },
         ];
       }),

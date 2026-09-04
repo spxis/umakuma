@@ -149,16 +149,32 @@ describe("the words a kanji appears in", () => {
    */
   it("links the kanji inside a word, never the word", () => {
     const [wednesday] = toWordExamples(WORD_EXAMPLES, "水");
-    expect(wednesday!.kanji.map((item) => item.href)).toEqual([
+    expect(wednesday!.kanji.filter((item) => item.href).map((item) => item.href)).toEqual([
       `/kanji/${encodeURIComponent("曜")}`,
       `/kanji/${encodeURIComponent("日")}`,
     ]);
   });
 
-  /* A link back to the page being read is a chip that does nothing. */
-  it("leaves the page's own character out of the chips", () => {
+  /*
+   * Every character the word is made of, this one included.
+   *
+   * It used to be dropped, on the grounds that a link back to here does
+   * nothing - which was true of the link and wrong about the chip. 成長事業
+   * drew three chips under a four-character word, and a reader counting them
+   * against the word above finds the maths wrong. It is drawn and marked
+   * instead, with no href, so it still leads nowhere and says so.
+   */
+  it("shows the page's own character among the chips, unlinked", () => {
     const [wednesday] = toWordExamples(WORD_EXAMPLES, "水");
-    expect(wednesday!.kanji.map((item) => item.label)).not.toContain("水");
+    const own = wednesday!.kanji.find((item) => item.label === "水");
+    expect(own).toBeDefined();
+    expect(own!.href).toBeNull();
+    expect(own!.current).toBe(true);
+  });
+
+  it("draws a chip for every character in the word", () => {
+    const [wednesday] = toWordExamples(WORD_EXAMPLES, "水");
+    expect(wednesday!.kanji).toHaveLength([...wednesday!.written].length);
   });
 
   it("keeps a word with no kanji chips rather than dropping it", () => {

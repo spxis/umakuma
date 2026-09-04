@@ -60,6 +60,7 @@ export default function UsedInWordsBlock({
                       reading={item.reading}
                       meaning={item.meaning}
                       href={item.href}
+                      selected={item.current}
                     />
                   </li>
                 ))}
