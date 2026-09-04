@@ -1,6 +1,7 @@
 import { WORD_EXAMPLE_LIMIT } from "@/app/shared/subject-page/SubjectPage.constants";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectHref } from "@/lib/globalSearch";
+import { kanjiPlacement } from "@/lib/kanjiLadder";
 import { parseJlptWordExamples } from "@/lib/jlptWordExamples";
 import type { KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
 import { relatedGroupsFor, type RelatedGroup, type RelatedRow } from "@/lib/relatedSubjects";
@@ -72,6 +73,7 @@ export type KanjiPageModel = {
   mnemonics: { meaning: string; reading: string } | null;
   /** WaniKani's level, for the header pill. */
   wkLevel: number | null;
+  ukLevel: number | null;
   /** WaniKani's id, where it teaches the character: what the tag marks need. */
   wkSubjectId: number | null;
 };
@@ -209,6 +211,10 @@ export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {
     mnemonics:
       meaningMnemonic || readingMnemonic ? { meaning: meaningMnemonic, reading: readingMnemonic } : null,
     wkLevel: wanikani?.wkLevel ?? null,
+    /* Ours, beside theirs. The whole reason a level now carries a prefix: a
+       reader can see 生 is WaniKani 5 and UmaKuma 7 without either number
+       having to be hidden or explained. */
+    ukLevel: kanjiPlacement(character)?.level ?? null,
     wkSubjectId: wanikani?.subjectId ?? null,
   };
 }

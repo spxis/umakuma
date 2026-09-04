@@ -5,6 +5,7 @@ import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constan
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
+import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 /**
  * What a subject is: the glyph, what it means, how it is read.
@@ -36,6 +37,7 @@ export type SubjectIdentity = {
   readings: string[];
   /** Null where WaniKani does not teach the subject, which is most characters. */
   wkLevel: number | null;
+  ukLevel?: number | null;
   jlptLevel: number | null;
   /**
    * Whether WaniKani is behind what the card says.
@@ -56,7 +58,7 @@ function Pill({ children }: { children: React.ReactNode }) {
 }
 
 export default function SubjectIdentityBlock({ identity }: { identity: SubjectIdentity }) {
-  const { label, subjectType, name, meanings, readings, wkLevel, jlptLevel, credited } = identity;
+  const { label, subjectType, name, meanings, readings, wkLevel, ukLevel, jlptLevel, credited } = identity;
   const display = SUBJECT_TYPE_DISPLAY[subjectType as keyof typeof SUBJECT_TYPE_DISPLAY];
 
   return (
@@ -84,7 +86,11 @@ export default function SubjectIdentityBlock({ identity }: { identity: SubjectId
           <div className="flex flex-wrap items-center gap-1.5">
             <Pill>{display.short}</Pill>
             {/* No level pill for a character WaniKani never taught, which is most of them. */}
-            {wkLevel === null ? null : <Pill>{SUBJECT_PAGE_COPY.level(wkLevel)}</Pill>}
+            {wkLevel === null ? null : <Pill>{wkLevelBadge(wkLevel)}</Pill>}
+            {/* Ours beside theirs, and neither has to be hidden now that both
+                say whose they are. A kanji WaniKani never teaches carries only
+                the UK pill, which is exactly the case worth showing. */}
+            {ukLevel === null || ukLevel === undefined ? null : <Pill>{ukLevelBadge(ukLevel)}</Pill>}
             {jlptLevel ? <Pill>{SUBJECT_PAGE_COPY.jlpt(jlptLevel)}</Pill> : null}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
+import { kanjiPlacement } from "@/lib/kanjiLadder";
 import { prisma } from "@/lib/prisma";
 import {
   type CatalogRelatedReference,
@@ -24,7 +25,28 @@ import { neighbourReferences } from "@/lib/subjectPageModel";
  * for a signed-out reader who has no token to fetch with.
  */
 
-export type PublicSubject = CatalogSubjectDetail & { slug: string | null };
+export type PublicSubject = CatalogSubjectDetail & {
+  slug: string | null;
+  /**
+   * Which of our hundred levels teaches it, where we teach it at all.
+   *
+   * Resolved here rather than on the page because the built ladder is 351 KB:
+   * this module is server-only, so the file stays out of every bundle that a
+   * subject page ships.
+   */
+  ukLevel: number | null;
+};
+
+/**
+ * Ours, for a single character. Words and drawn radicals have no placement of
+ * their own on the ladder yet - a word's level is derived from its kanji at
+ * build time and is not addressed by character - so those come back null
+ * rather than guessing.
+ */
+function ukLevelFor(characters: string | null): number | null {
+  if (!characters || [...characters].length !== 1) return null;
+  return kanjiPlacement(characters)?.level ?? null;
+}
 
 /**
  * The row behind an address, or null.
@@ -71,7 +93,7 @@ export async function getPublicSubject(
     select: { slug: true },
   });
 
-  return { ...detail, slug: row?.slug ?? null };
+  return { ...detail, slug: row?.slug ?? null, ukLevel: ukLevelFor(detail.characters) };
 }
 
 /**
