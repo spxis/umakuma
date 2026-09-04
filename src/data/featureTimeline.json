@@ -4592,11 +4592,23 @@
     "id": "eighty-nine-names-for-the-same-nine-stages",
     "name": "Eighty-nine names for the same nine stages",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "WaniKani calls its stages Apprentice, Guru, Master, Enlightened and Burned, and that is the only vocabulary a learner ever gets. src/data/srsThemes.json is the committed source for 89 themes, each naming all ten stages from not-started to the top - Judo belts, sumo divisions, the corporate ladder, ghosts, a theme park. Every rung carries a term, a reading, a meaning and a chip-sized short form, plus an age rating so a ten-year-old is never offered the syndicate ladder. Themes are renamed off their trademarks: the rank vocabulary is ordinary Japanese and stays, but no feature ships called Naruto. The stored SRS value never changes, so switching is instant and retroactive.",
+    "dateIsEstimate": false,
+    "version": "0.404.0",
+    "releasedAt": "2026-09-04T13:01:10Z"
+  },
+  {
+    "id": "map-lazy-countries",
+    "name": "Load map data one country at a time",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.404.0",
-    "releasedAt": "2026-09-04T13:01:10Z",
-    "summary": "WaniKani calls its stages Apprentice, Guru, Master, Enlightened and Burned, and that is the only vocabulary a learner ever gets. src/data/srsThemes.json is the committed source for 89 themes, each naming all ten stages from not-started to the top - Judo belts, sumo divisions, the corporate ladder, ghosts, a theme park. Every rung carries a term, a reading, a meaning and a chip-sized short form, plus an age rating so a ten-year-old is never offered the syndicate ladder. Themes are renamed off their trademarks: the rank vocabulary is ordinary Japanese and stays, but no feature ships called Naruto. The stored SRS value never changes, so switching is instant and retroactive."
+    "version": "0.405.0",
+    "releasedAt": "2026-09-04T13:12:19Z",
+    "summary": "A map page loaded all seven countries at once, because geoRegion.ts imported fourteen data files at the top and built every one of them eagerly. That is three and a half megabytes, of which Canada is a megabyte on its own and the four admin-only countries are 1.6 MB a public visitor downloads and is then refused by the page. Each country is its own chunk now, fetched when a map actually draws it. Measured on production builds: Japan 3651 KB to 682 KB, the United States 3394 to 991, Canada 3421 to 1641. The gate on the pilot countries now holds at the network as well as at the page, since nobody downloads a country they cannot open."
   }
 ]
