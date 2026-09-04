@@ -4520,11 +4520,23 @@
     "id": "study-holds-its-records",
     "name": "History and Stats belong under Study",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "History and Stats sit under their own Progress group, but both are your WaniKani progress and belong with the studying that produced them. Move the pages for real - /users/<name>/study/history and /users/<name>/study/stats - and give Study a second row of three: Reviews, History, Stats. Progress goes away as a group. No redirects; update every caller. Requested 2026-09-04 by John.",
+    "dateIsEstimate": false,
+    "version": "0.398.0",
+    "releasedAt": "2026-09-04T08:34:22Z"
+  },
+  {
+    "id": "map-cities-canada",
+    "name": "Cities on the Canada map",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.398.0",
-    "releasedAt": "2026-09-04T08:34:22Z",
-    "summary": "History and Stats sit under their own Progress group, but both are your WaniKani progress and belong with the studying that produced them. Move the pages for real - /users/<name>/study/history and /users/<name>/study/stats - and give Study a second row of three: Reviews, History, Stats. Progress goes away as a group. No redirects; update every caller. Requested 2026-09-04 by John."
+    "version": "0.399.0",
+    "releasedAt": "2026-09-04T09:11:19Z",
+    "summary": "Natural Earth's Populated Places drawn over the provinces, with a Cities switch and three densities beside it: 14 capitals, 46 major, or all 254. It is a true overlay because the builder makes it one - the points go through the very same projection the boundaries were fitted to, so every city lands inside the province it belongs to. Labels are placed in importance order and skipped where they would collide, and because the label box scales with the map, zooming in finds room for more names. Canada alone: Japan and the United States are drawn from GSI Global Map and Census TopoJSON on their own projections, so a Natural Earth point would land somewhere arbitrary there."
   }
 ]
