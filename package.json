@@ -99,7 +99,8 @@
     "ladder:check": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/check-uk-subjects.ts",
     "themes:build": "node scripts/build-srs-themes.mjs",
     "ladder:radical-links": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-radical-links.ts",
-    "ladder:overrides:export": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/export-ladder-overrides.ts"
+    "ladder:overrides:export": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/export-ladder-overrides.ts",
+    "ladder:version": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/ladder-version.ts"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",

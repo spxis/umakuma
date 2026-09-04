@@ -28,10 +28,35 @@ import type {
   KanjiLadderMilestone,
   KanjiLadderPlacement,
 } from "./kanjiLadder.types";
+import { CURRICULUM_VERSION_START } from "./ladder/curriculumVersion";
 
 const ladder = ladderData as KanjiLadder;
 
 export const KANJI_LADDER_LEVELS = ladder.levels;
+
+/**
+ * What version of the curriculum this build teaches.
+ *
+ * Separate from the site's release number on purpose: that one answers "what
+ * code is running", this answers "has what I am being taught changed". A
+ * member who returns to find three new kanji in a level they had finished
+ * deserves to be told, and told in a way that distinguishes a wording fix from
+ * a moved ladder.
+ */
+export const CURRICULUM_VERSION: string =
+  (ladder as { curriculum?: { version?: string } }).curriculum?.version ?? CURRICULUM_VERSION_START;
+
+export type CurriculumChangelogEntry = {
+  version: string;
+  date: string;
+  bump: string;
+  summary: string;
+};
+
+/** Newest first. Empty until a change has actually moved the version. */
+export function curriculumChangelog(): CurriculumChangelogEntry[] {
+  return ((ladder as { curriculum?: { changelog?: CurriculumChangelogEntry[] } }).curriculum?.changelog ?? []);
+}
 export const KANJI_LADDER_TOTAL = ladder.totalKanji;
 
 export function isKanjiLadderLevel(level: number): boolean {
