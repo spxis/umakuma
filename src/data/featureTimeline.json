@@ -4652,11 +4652,23 @@
     "id": "map-directory-refill",
     "name": "The region directory is empty after lazy loading",
     "area": "games",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "0.405.0 began loading a country's data only when a map draws it, and left the region list memoised on the country alone. A country's first render happens before its chunk arrives, so the empty list built on that pass was kept: the map drew forty-seven prefectures beside a panel reading All 0 prefectures. The list now waits for the data it is listing.",
+    "dateIsEstimate": false,
+    "version": "0.409.0",
+    "releasedAt": "2026-09-04T13:33:48Z"
+  },
+  {
+    "id": "level-sixteen-stops-dipping",
+    "name": "Level sixteen stops dipping",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.409.0",
-    "releasedAt": "2026-09-04T13:33:48Z",
-    "summary": "0.405.0 began loading a country's data only when a map draws it, and left the region list memoised on the country alone. A country's first render happens before its chunk arrives, so the empty list built on that pass was kept: the map drew forty-seven prefectures beside a panel reading All 0 prefectures. The list now waits for the data it is listing."
+    "version": "0.410.0",
+    "releasedAt": "2026-09-04T13:40:02Z",
+    "summary": "Levels 14-18 teach kanji that unlock few words, and the vocabulary ramp reached full share by level 20 - so the early supply was spent and level 16 came up eleven words short of its target while 17 and 18 overshot repaying it. The ramp now takes 26 levels instead of 20, which banks enough to ride through that stretch. The worst dip on the whole ladder falls from eleven subjects to six, and the number of levels lighter than the one before them falls from forty to twenty-nine. Levels 15-17 read 76/74/80 where they read 84/73/92."
   }
 ]
