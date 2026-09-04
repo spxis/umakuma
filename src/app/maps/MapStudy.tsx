@@ -19,6 +19,8 @@ import { filterMarks, markFor, markTone, markTotals, type MapMarkLayers } from "
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 
 import MapCityToggle from "./MapCityToggle";
+import { citiesOfRegion } from "@/lib/geoCities";
+
 import MapStudySkeleton from "./MapStudySkeleton";
 import { useMapCities } from "./useMapCities";
 import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
@@ -258,6 +260,7 @@ export default function MapStudy({
       kanjiFacts={kanjiFacts}
       accountId={accountId}
       country={country}
+      cities={citiesOfRegion(city.cities, selected.code)}
       mark={{
         ...markFor(marking.marks, selected.code),
         saving: marking.saving,

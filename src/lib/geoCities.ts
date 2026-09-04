@@ -123,3 +123,17 @@ export function totalCitiesPlaced(): number {
 export function countriesWithCities(): CountryCode[] {
   return Object.keys(CITYSETS) as CountryCode[];
 }
+
+/**
+ * The cities of one division, from a list already narrowed by density.
+ *
+ * Takes the cities rather than fetching them so the panel cannot disagree with
+ * the map beside it: both are drawing the same set, one framed on a region.
+ * Turning cities off empties this too, which is the point - there is one
+ * switch, and it means the same thing wherever a map is drawn.
+ */
+export function citiesOfRegion(cities: MapCity[], code: string | number | null): MapCity[] {
+  if (code === null) return [];
+  const wanted = String(code);
+  return cities.filter((city) => city.region === wanted);
+}

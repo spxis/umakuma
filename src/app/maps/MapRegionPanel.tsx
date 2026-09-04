@@ -2,6 +2,7 @@
 
 
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import type { MapCity } from "@/lib/geoCities";
 import type { GeoRegion } from "@/lib/geoRegion";
 import { regionFacts, regionKanji, type FactGroup } from "@/lib/mapStudy";
 import { regionNameLines } from "@/lib/regionNames";
@@ -74,6 +75,7 @@ export default function MapRegionPanel({
   accountId,
   country,
   mark,
+  cities,
 }: {
   region: GeoRegion;
   onClose?: () => void;
@@ -82,6 +84,8 @@ export default function MapRegionPanel({
   accountId: string | null;
   /** Which board the region belongs to, for drawing it on its own. */
   country: CountryCode;
+  /** The region's cities, when the map beside this is drawing them. */
+  cities?: MapCity[];
   /** What the member has said about this region, and how to change it. */
   mark?: {
     status: MapMarkStatus | null;
@@ -130,7 +134,7 @@ export default function MapRegionPanel({
           * country map Kagawa is four millimetres of grey, so the one thing a
           * map is for is the thing you cannot see.
           */}
-        <MapRegionShape country={country} code={region.code} label={region.name} />
+        <MapRegionShape country={country} code={region.code} label={region.name} cities={cities} />
 
         {/*
           * Above the facts, because it is the one thing on this panel the

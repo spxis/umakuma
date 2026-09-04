@@ -3,6 +3,7 @@
 import CountryMap from "@/app/game/CountryMap";
 import { MAP_TONES } from "@/app/game/GameMode.constants";
 import { geoRegionBox } from "@/lib/geoMapFraming";
+import type { MapCity } from "@/lib/geoCities";
 import type { CountryCode } from "@/lib/geoRegion";
 
 import { MAP_SHAPE_COPY, MAP_SHAPE_FRAME_ASPECT } from "./MapStudy.constants";
@@ -31,10 +32,13 @@ export default function MapRegionShape({
   country,
   code,
   label,
+  cities,
 }: {
   country: CountryCode;
   code: string | number;
   label: string;
+  /** The region's cities, when the map beside this is drawing them. */
+  cities?: MapCity[];
 }) {
   return (
     <figure className="overflow-hidden rounded-2xl border border-line bg-surface-muted">
@@ -44,6 +48,7 @@ export default function MapRegionShape({
           marks={[{ code, tone: MAP_TONES.target }]}
           box={geoRegionBox(country, code, MAP_SHAPE_FRAME_ASPECT)}
           regionLabel={() => label}
+          cities={cities}
           className="pointer-events-none"
         />
       </div>
