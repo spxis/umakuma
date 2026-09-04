@@ -95,10 +95,11 @@
     "build:word-frequency": "node scripts/build-word-frequency.mjs",
     "corpora:fetch": "node scripts/fetch-corpora.mjs",
     "ladder:refresh": "pnpm db:export:wk-catalog:levels && pnpm corpora:fetch && pnpm build:word-frequency && pnpm build:kanji-ladder",
-    "ladder:seed": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-uk-subjects.ts",
+    "ladder:seed": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-uk-subjects.ts && pnpm ladder:radical-links",
     "ladder:check": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/check-uk-subjects.ts",
     "themes:build": "node scripts/build-srs-themes.mjs",
-    "ladder:radical-links": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-radical-links.ts"
+    "ladder:radical-links": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-radical-links.ts",
+    "ladder:overrides:export": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/export-ladder-overrides.ts"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",

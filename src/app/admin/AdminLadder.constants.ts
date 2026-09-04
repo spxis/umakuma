@@ -74,3 +74,26 @@ export const LADDER_BAND_LABELS: Record<KanjiGradeBand, string> = {
   [KANJI_GRADE_BANDS.nameKanji]: "Name kanji",
   [KANJI_GRADE_BANDS.unclassified]: "Unclassified",
 };
+
+export const ADMIN_LADDER_OPS_COPY = {
+  heading: "Move a kanji",
+  blurb:
+    "A move takes effect for members straight away — the item's level changes with the edit. The committed ladder is a file, though, so until the edits below are exported and shipped, a rebuild would undo them.",
+  kanji: "Kanji",
+  kanjiHint: "語",
+  toLevel: "To level",
+  reason: "Why",
+  reasonHint: "comes up in level 9 words",
+  moveIt: "Move it",
+  /* The engine's own refusal, verbatim: "the level it is leaving would have no
+     kanji left" tells an admin what to do differently; "could not save" does not. */
+  refused: (reason: string) => `Refused — ${reason}.`,
+  failed: "could not record that edit",
+  none: "No edits waiting. The ladder in the database matches the committed one.",
+  pending: (count: number) =>
+    count === 1 ? "1 edit is not in the committed ladder yet" : `${count} edits are not in the committed ladder yet`,
+  command: "pnpm ladder:overrides:export && pnpm build:kanji-ladder",
+  movedFromTo: (from: number | null, to: number | null) =>
+    from === null ? `→ ${to}` : `${from} → ${to}`,
+  withdraw: "Withdraw",
+} as const;

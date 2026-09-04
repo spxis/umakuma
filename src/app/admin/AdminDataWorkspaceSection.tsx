@@ -6,6 +6,7 @@ import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import AdminJlptCatalogPanel from "./AdminJlptCatalogPanel";
 import AdminJlptCatalogOperationsPanel from "./AdminJlptCatalogOperationsPanel";
 import AdminLadderBrowser from "./AdminLadderBrowser";
+import AdminLadderOps from "./AdminLadderOps";
 import AdminThemesPanel from "./AdminThemesPanel";
 import AdminSourcesPanel from "./AdminSourcesPanel";
 import { usePersistedTab } from "@/lib/usePersistedTab";
@@ -148,7 +149,11 @@ export default function AdminDataWorkspaceSection({
       {dataCatalogView === "themes" ? <AdminThemesPanel /> : null}
 
       {dataCatalogView === "ladder" ? (
-        <AdminLadderBrowser sessionAuthorized={sessionAuthorized} checkingSession={checkingSession} />
+        <div className="space-y-3">
+          <AdminLadderBrowser sessionAuthorized={sessionAuthorized} checkingSession={checkingSession} />
+          {/* Editing sits under the table that shows what there is to edit. */}
+          {sessionAuthorized ? <AdminLadderOps /> : null}
+        </div>
       ) : null}
 
       {dataCatalogView === "sources" ? (
