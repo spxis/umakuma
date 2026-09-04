@@ -63,11 +63,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { applyLadderOps, parseLadderOverrides } from "../src/lib/ladder/ladderOps.mjs";
+
 const WK_LEVELS_DIR = path.resolve("src/data/wk-catalog-levels");
 const KANJIDIC_DIR = path.resolve("src/data/kanjidic");
 const JLPT_READINGS_PATH = path.resolve("src/data/jlptReadings.json");
 const WORD_FREQUENCY_PATH = path.resolve("src/data/wordFrequency.json");
 const RADICALS_PATH = path.resolve("src/data/radicals/index.json");
+const OVERRIDES_PATH = path.resolve("src/data/kanjiLadderOverrides.json");
 const OUTPUT_PATH = path.resolve("src/data/kanjiLadder.json");
 
 const LADDER_LEVELS = 100;
@@ -401,7 +404,7 @@ async function main() {
   /* A band is finished at the point its last kanji appears. Prerequisites drag
      some kanji in ahead of their own band, so these are not the band sizes. */
   const positionOf = new Map(sequence.map((kanji, index) => [kanji, index]));
-  const levels = [];
+  let levels = [];
   let previousThrough = 0;
   let previousIndex = 0;
   for (const band of JLPT_BANDS) {
@@ -428,6 +431,25 @@ async function main() {
     previousThrough = band.throughLevel;
     previousIndex = finishesAt + 1;
   }
+
+  /*
+   * An admin's moves, replayed over the computed ladder.
+   *
+   * Here and not earlier: the sort has run, so the levels exist to move
+   * between; and not later, because `placeRadicals` and `placeVocabulary` are
+   * pure functions of where the kanji ended up — a kanji moved now drags its
+   * radicals and the words that use it along without that rule being written
+   * a second time.
+   */
+  const overrides = parseLadderOverrides(await fs.readFile(OVERRIDES_PATH, "utf8").catch(() => ""));
+  const applied = applyLadderOps(levels, overrides);
+  if (applied.refused.length > 0) {
+    console.error(`Refused ${applied.refused.length} of ${overrides.length} overrides:`);
+    for (const refusal of applied.refused) console.error(`  ${refusal.key} (${refusal.id}) — ${refusal.reason}`);
+    console.error("Fix or withdraw them; the ladder has not been written.");
+    process.exit(1);
+  }
+  levels = applied.levels;
 
   const levelOfKanji = new Map(levels.flatMap((l) => l.kanji.map((k) => [k, l.level])));
   const { level: radicalLevel, unused } = placeRadicals(radicals, levelOfKanji);
@@ -461,6 +483,7 @@ async function main() {
     levels: LADDER_LEVELS,
     totalKanji: everything.length,
     source: { waniKani: waniKani.length, addedJoyo: missing.length },
+    overrides: { applied: overrides.length, lastOpAt: overrides.at(-1)?.at ?? null },
     milestones,
     radicalLevel: Object.fromEntries(radicalLevel),
     vocabularyLevel: Object.fromEntries(
@@ -479,6 +502,7 @@ async function main() {
   console.log(`Wrote ${OUTPUT_PATH}`);
   console.log(`  ${everything.length} kanji = WaniKani ${waniKani.length} + added joyo ${missing.length}`);
   console.log(`  ${LADDER_LEVELS} levels, ${Math.min(...sizes)}-${Math.max(...sizes)} kanji each`);
+  console.log(`  overrides applied: ${overrides.length}`);
   console.log(`  curve L1-20: ${sizes.slice(0, 20).join(" ")}`);
   const vocabSizes = ladder.map((l) => l.vocabulary);
   const radicalSizes = ladder.map((l) => l.radicals);

@@ -1,10 +1,14 @@
 {
-  "generatedAt": "2026-09-03T17:41:01.457Z",
+  "generatedAt": "2026-09-04T13:14:53.226Z",
   "levels": 100,
   "totalKanji": 2235,
   "source": {
     "waniKani": 2101,
     "addedJoyo": 134
+  },
+  "overrides": {
+    "applied": 0,
+    "lastOpAt": null
   },
   "milestones": [
     {
