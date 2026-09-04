@@ -65,6 +65,7 @@ export type NavSection = {
  * Groups in header order. A section with one child links straight to it and
  * shows no second row; the sub-nav would just repeat the header.
  */
+import { UK_STUDY_PAGE } from "@/app/users/[nickname]/uk-study/ukStudyPage";
 import { UK_EXPLORER_PAGE } from "@/app/users/[nickname]/umakuma-explorer/umakumaExplorerPage";
 
 export const NAV_SECTIONS: NavSection[] = [
@@ -81,6 +82,9 @@ export const NAV_SECTIONS: NavSection[] = [
     placement: "nav",
     children: [
       { label: "Reviews", path: "study" },
+      /* Ours, and the only study surface that needs no WaniKani account -
+         so it carries no capability gate, unlike Stats below it. */
+      { label: UK_STUDY_PAGE.tab, path: UK_STUDY_PAGE.path },
       { label: "History", path: "study/history" },
       { label: DASHBOARD_TAB_LABELS.stats, path: "study/stats", requires: MEMBER_CAPABILITIES.wanikaniProgress },
     ],

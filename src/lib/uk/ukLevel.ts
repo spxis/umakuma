@@ -66,6 +66,8 @@ export type UkLevelResolution = {
   ratio: number;
   passed: number;
   total: number;
+  /** What the level is actually gated on, so a caller can name it correctly. */
+  gate: string;
 };
 
 /**
@@ -107,11 +109,11 @@ export function resolveUkLevel({
       level = Math.min(candidate + 1, maxLevel);
       continue;
     }
-    return { level: candidate, ratio: has / need, passed: has, total: need };
+    return { level: candidate, ratio: has / need, passed: has, total: need, gate: gateKindFor(levelTotals!) };
   }
 
   /* Every level cleared: the member is at the top with nothing outstanding. */
-  return { level, ratio: 1, passed: 0, total: 0 };
+  return { level, ratio: 1, passed: 0, total: 0, gate: SUBJECT_TYPES.kanji };
 }
 
 /** Whether an item at `itemLevel` is open to a member standing at `currentLevel`. */

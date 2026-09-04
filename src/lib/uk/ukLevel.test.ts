@@ -78,6 +78,15 @@ describe("resolveUkLevel", () => {
     expect(resolveUkLevel({ rows: [], totals, floor: 1, maxLevel: 2 }).level).toBe(2);
   });
 
+  it("names what the level is gated on, so nothing calls radicals kanji", () => {
+    /* Level 1 teaches no kanji. Reporting "0 of 15 kanji at Guru" there was
+       both wrong and, on a member's first day, discouraging. */
+    const first = resolveUkLevel({ rows: [], totals: TOTALS, floor: 1, maxLevel: 3 });
+    expect(first).toMatchObject({ level: 1, gate: SUBJECT_TYPES.radical, total: 15 });
+    const second = resolveUkLevel({ rows: radicalRows(1, 15), totals: TOTALS, floor: 1, maxLevel: 3 });
+    expect(second).toMatchObject({ level: 2, gate: SUBJECT_TYPES.kanji, total: 10 });
+  });
+
   it("reports how far through the level it stopped on", () => {
     const rows = [...radicalRows(1, 15), ...kanjiRows(2, 5)];
     const resolved = resolveUkLevel({ rows, totals: TOTALS, floor: 1, maxLevel: 3 });
