@@ -441,6 +441,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yatto Mannaka", ja: "やっと真ん中", reading: "やっとまんなか", gloss: "in the middle at last" },
   { romaji: "Yutori no Ichijikan", ja: "ゆとりの一時間", reading: "ゆとりのいちじかん", gloss: "an hour's grace, so one answer serves everybody" },
   { romaji: "Yobina no Ita", ja: "呼び名の板", reading: "よびなのいた", gloss: "the board with its own name on it" },
+  { romaji: "Rakuna Irodori", ja: "楽な彩り", reading: "らくないろどり", gloss: "colouring that is easy to switch off" },
 ];
 
 /**

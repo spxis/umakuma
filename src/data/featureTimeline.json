@@ -4424,11 +4424,23 @@
     "id": "map-view-title",
     "name": "The map says what it is looking at",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "At /maps/japan/region/kansai the only signs that Kansai is what is framed are the URL and the side panel; the map itself has no title. Put an overlay title in the map's top-left corner - there is room, and the pan hint already sits bottom-left in that style - naming the region, and the region and the province when one is chosen (Kansai \u00b7 Osaka). John also suggested a leader line from the region's centre to a label, the way the game's handles point. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.390.0",
+    "releasedAt": "2026-09-04T04:48:59Z"
+  },
+  {
+    "id": "map-mark-layers",
+    "name": "Toggle the known, practise and visited colouring",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.390.0",
-    "releasedAt": "2026-09-04T04:48:59Z",
-    "summary": "At /maps/japan/region/kansai the only signs that Kansai is what is framed are the URL and the side panel; the map itself has no title. Put an overlay title in the map's top-left corner - there is room, and the pan hint already sits bottom-left in that style - naming the region, and the region and the province when one is chosen (Kansai \u00b7 Osaka). John also suggested a leader line from the region's centre to a label, the way the game's handles point. Requested 2026-09-03 by John."
+    "version": "0.391.0",
+    "releasedAt": "2026-09-04T04:56:04Z",
+    "summary": "The study map paints a member's own marks - known green, practise amber, visited outlined - over every region, always. There is no way to turn that layer off to see the plain map, or to see one kind of mark alone. Controls to toggle each layer, in or above the map or in the side panel. Requested 2026-09-03 by John."
   }
 ]

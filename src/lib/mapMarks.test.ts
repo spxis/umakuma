@@ -1,15 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  MAP_MARK_STATUSES,
-  isMapMarkStatus,
-  markFor,
-  markIsEmpty,
-  markTone,
-  markTotals,
-  toggleStatus,
-  type MapMarkIndex,
-} from "./mapMarks";
+import { ALL_MARK_LAYERS, MAP_MARK_STATUSES, filterMarks, isMapMarkStatus, markFor, markIsEmpty, markTone, markTotals, toggleStatus, visibleMark, type MapMarkIndex } from "./mapMarks";
 
 describe("what a member has said about a region", () => {
   const index: MapMarkIndex = {
@@ -81,5 +72,34 @@ describe("how the map paints it", () => {
 
   it("paints nothing for a region nobody has marked", () => {
     expect(markTone({ status: null, visited: false })).toBeNull();
+  });
+});
+
+/*
+ * Turning a layer off changes the picture, not the marks. The panel's buttons
+ * read the real index; only the paint reads the filtered one.
+ */
+describe("showing some of the marks", () => {
+  const known = { status: MAP_MARK_STATUSES.known, visited: true };
+
+  it("shows everything with every layer on", () => {
+    expect(visibleMark(known, ALL_MARK_LAYERS)).toEqual(known);
+    const index = { "1": known };
+    expect(filterMarks(index, ALL_MARK_LAYERS)).toBe(index);
+  });
+
+  it("drops a status whose layer is off and keeps the rest", () => {
+    expect(visibleMark(known, { ...ALL_MARK_LAYERS, known: false })).toEqual({ status: null, visited: true });
+    expect(markTone(visibleMark(known, { ...ALL_MARK_LAYERS, known: false }))).toBe("visited");
+  });
+
+  it("drops the visit on its own", () => {
+    expect(visibleMark(known, { ...ALL_MARK_LAYERS, visited: false })).toEqual({ status: MAP_MARK_STATUSES.known, visited: false });
+    expect(markTone(visibleMark(known, { ...ALL_MARK_LAYERS, visited: false }))).toBe("known");
+  });
+
+  it("paints nothing when every layer is off", () => {
+    const off = { known: false, practice: false, visited: false };
+    expect(markTone(visibleMark(known, off))).toBeNull();
   });
 });

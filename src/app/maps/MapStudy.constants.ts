@@ -37,9 +37,17 @@ export const MAP_MARK_COPY = {
   visited: "I've been here",
   signedOut: "Sign in to mark the places you know.",
   failed: "Could not save that.",
-  /* The line above the map, once anything has been said about the country. */
-  tally: (known: number, practice: number, visited: number, total: number) =>
-    `${known} of ${total} known · ${practice} to practise · ${visited} visited`,
+  /*
+   * The row above the map, once anything has been said about the country.
+   * Each count is a switch for its own layer of paint.
+   */
+  layersLabel: "Show on the map",
+  layer: {
+    known: (count: number) => `${count} known`,
+    practice: (count: number) => `${count} to practise`,
+    visited: (count: number) => `${count} visited`,
+  },
+  ofTotal: (total: number) => `of ${total}`,
 } as const;
 
 /** The shape drawn on its own at the top of the panel. */

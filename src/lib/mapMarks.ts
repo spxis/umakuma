@@ -82,3 +82,32 @@ export function markTotals(index: MapMarkIndex): MapMarkTotals {
   }
   return totals;
 }
+
+/**
+ * Which of a member's marks the map is showing.
+ *
+ * The marks paint every region, always, and there was no way to see the plain
+ * map under them or one kind of mark on its own. Each layer can be turned off
+ * for the picture without touching the marks themselves - the panel's buttons
+ * still show what is actually set, because hiding green is not unlearning
+ * Gifu.
+ */
+export type MapMarkLayers = { known: boolean; practice: boolean; visited: boolean };
+
+export const ALL_MARK_LAYERS: MapMarkLayers = { known: true, practice: true, visited: true };
+
+/** The mark as painted with some layers off. */
+export function visibleMark(
+  mark: { status: MapMarkStatus | null; visited: boolean },
+  layers: MapMarkLayers,
+): { status: MapMarkStatus | null; visited: boolean } {
+  return {
+    status: mark.status && layers[mark.status] ? mark.status : null,
+    visited: layers.visited && mark.visited,
+  };
+}
+
+export function filterMarks(index: MapMarkIndex, layers: MapMarkLayers): MapMarkIndex {
+  if (layers.known && layers.practice && layers.visited) return index;
+  return Object.fromEntries(Object.entries(index).map(([code, mark]) => [code, visibleMark(mark, layers)]));
+}

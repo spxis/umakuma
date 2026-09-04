@@ -15,14 +15,16 @@ import { mapViewTitle, regionByCode, regionsInOrder } from "@/lib/mapStudy";
 import { regionNameLabel, regionNameLines } from "@/lib/regionNames";
 
 import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
-import { markFor, markTone, markTotals } from "@/lib/mapMarks";
+import { filterMarks, markFor, markTone, markTotals, type MapMarkLayers } from "@/lib/mapMarks";
+import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 
+import MapLayerToggles from "./MapLayerToggles";
 import MapRegionDirectory from "./MapRegionDirectory";
 import MapRegionPanel from "./MapRegionPanel";
 import { useMapMarks } from "./useMapMarks";
 import { useMapZoom } from "./useMapZoom";
-import { MAP_MARK_COPY, MAP_STUDY_COPY, MAP_STUDY_HEIGHT } from "./MapStudy.constants";
+import { MAP_STUDY_COPY, MAP_STUDY_HEIGHT } from "./MapStudy.constants";
 
 /**
  * The map, the country it shows, and the region being read about.
@@ -105,6 +107,26 @@ export default function MapStudy({
   const marking = useMapMarks(accountId, country);
 
   /*
+   * Which marks the map paints, remembered per browser. The marks themselves
+   * are the member's and are never filtered here - the panel's buttons read
+   * `marking.marks` - only the picture is.
+   */
+  const [showKnown, setShowKnown] = usePersistedBoolean("maps.layer.known", { defaultValue: true });
+  const [showPractice, setShowPractice] = usePersistedBoolean("maps.layer.practice", { defaultValue: true });
+  const [showVisited, setShowVisited] = usePersistedBoolean("maps.layer.visited", { defaultValue: true });
+  const layers: MapMarkLayers = { known: showKnown, practice: showPractice, visited: showVisited };
+  const shownMarks = useMemo(
+    () => filterMarks(marking.marks, layers),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- the three booleans are the object
+    [marking.marks, showKnown, showPractice, showVisited],
+  );
+  const toggleLayer = useCallback((layer: keyof MapMarkLayers) => {
+    if (layer === "known") setShowKnown((on) => !on);
+    else if (layer === "practice") setShowPractice((on) => !on);
+    else setShowVisited((on) => !on);
+  }, [setShowKnown, setShowPractice, setShowVisited]);
+
+  /*
    * Escape puts the region down. The panel has an X and, on a phone, a modal
    * that already closes on Escape - but at desktop width the panel is a column
    * beside the map with no modal behind it, so the key did nothing at all.
@@ -167,7 +189,7 @@ export default function MapStudy({
    * at should look pointed-at even if you have marked it known.
    */
   const painted: MapMark[] = regions.flatMap((region) => {
-    const tone = markTone(markFor(marking.marks, region.code));
+    const tone = markTone(markFor(shownMarks, region.code));
     return tone ? [{ code: region.code, tone: tone as MapMark["tone"] }] : [];
   });
 
@@ -255,9 +277,7 @@ export default function MapStudy({
         </div>
 
         {saidAnything ? (
-          <p className="text-[11px] font-semibold text-foreground/60">
-            {MAP_MARK_COPY.tally(totals.known, totals.practice, totals.visited, dataset.totalRegions)}
-          </p>
+          <MapLayerToggles totals={totals} layers={layers} onToggle={toggleLayer} total={dataset.totalRegions} />
         ) : null}
 
         <div className={`relative ${MAP_STUDY_HEIGHT} rounded-2xl border border-line bg-surface-muted p-2`}>
@@ -369,7 +389,7 @@ export default function MapStudy({
         {panel ?? (
           <MapRegionDirectory
             regions={regions}
-            marks={marking.marks}
+            marks={shownMarks}
             hovered={hovered}
             onHover={setHovered}
             onChoose={choose}
