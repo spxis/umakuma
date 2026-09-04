@@ -20,7 +20,11 @@ import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import JlptCertificates from "./JlptCertificates";
 import { wanikaniFact } from "./profileFacts";
+import type { AgeBand } from "@/lib/srs/ageBand";
+import { memberTheme } from "@/lib/srs/srsThemeServer";
+
 import ProfileForm from "./ProfileForm";
+import ThemePicker from "./ThemePicker";
 import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
 
 type PageProps = { params: Promise<{ nickname: string }> };
@@ -64,7 +68,7 @@ export default async function UserProfilePage({ params }: PageProps) {
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
     select: {
       id: true, nickname: true, slug: true, displayName: true, visibility: true, wkUsername: true, wkLevel: true,
-      jlptStatus: true,
+      jlptStatus: true, srsTheme: true, ageBand: true,
       jlptCertificates: { select: { id: true, system: true, level: true, year: true } },
       lastSyncedAt: true, lastActivityAt: true,
       tokenEncrypted: true, tokenIv: true, tokenTag: true,
@@ -74,6 +78,11 @@ export default async function UserProfilePage({ params }: PageProps) {
   if (!account) {
     notFound();
   }
+
+  /* Resolved here so the card arrives drawn: the theme decides its own
+     heading and every rung shown, and a spinner in a settings page for
+     data we already have is a worse first frame. */
+  const memberThemeChoices = await memberTheme(account.id);
   if (!canViewUserPage({
       viewerEmail,
       viewerMenuInfo,
@@ -133,6 +142,16 @@ export default async function UserProfilePage({ params }: PageProps) {
       <section className="mb-4 rounded-2xl border border-line bg-surface p-5">
         <ProfileForm accountId={account.id} displayName={account.displayName} visibility={account.visibility} />
       </section>
+
+      {/* Themes save on their own too, and the picker owns its whole card. */}
+      <div className="mb-4">
+        <ThemePicker
+          accountId={account.id}
+          initialTheme={memberThemeChoices.theme}
+          initialChoices={memberThemeChoices.choices}
+          initialAgeBand={(account.ageBand as AgeBand | null) ?? null}
+        />
+      </div>
 
       {/* Certificates save on their own, so they sit outside the form's Save. */}
       <section className="mb-4 rounded-2xl border border-line bg-surface p-5">

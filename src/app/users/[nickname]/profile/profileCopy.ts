@@ -48,3 +48,23 @@ export const JLPT_STATUS_LABELS: Record<string, string> = {
   none: "No certificate",
   undisclosed: "Rather not say",
 };
+
+/** Copy for the theme picker, in the feature's own module for the locale layer. */
+export const THEME_PICKER_COPY = {
+  heading: "What your stages are called",
+  blurb:
+    "WaniKani calls them Apprentice, Guru, Master, Enlightened and Burned, and that is the only set its learners get. Pick any of these instead. Nothing in your progress moves when you switch — only the words do, so you can change whenever you like.",
+  current: "On now",
+  ageHeading: "Who is using this account",
+  ageBlurb:
+    "Not a birthdate. A few themes are about organised crime and nightlife, and this is how we know whether to offer them.",
+  ageBands: {
+    under_13: "Under 13",
+    "13_17": "13 to 17",
+    "18_plus": "18 or over",
+  } as Record<string, string>,
+  search: "Search the themes…",
+  count: (shown: number, total: number) =>
+    shown === total ? `${total} to choose from` : `${shown} of ${total}`,
+  saveFailed: "Could not save that. Try again?",
+} as const;

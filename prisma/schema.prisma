@@ -117,13 +117,23 @@ model Account {
   studySubjectTags          StudySubjectTag[]
   /// One of us: the family and anybody let in deliberately. Decides who is
   /// offered the reading challenge and its check-ins, which are not public.
-  internal                  Boolean                    @default(false)
-  jlptCertificates          JlptCertificate[]
-  studyLists                StudyList[]
-  mapRegionMarks            MapRegionMark[]
-  studyListSubscriptions    StudyListSubscription[]
-  studyListProposals        StudyListProposal[]
-  gameRuns                  GameRun[]
+  /// Which SRS theme names this member's stages. Null means the default.
+  /// Display only: the stored stage values never change, so switching is
+  /// instant and retroactive.
+  srsTheme                  String?
+
+  /// under_13 | 13_17 | 18_plus. Decides which themes may be offered, since
+  /// the set includes organised crime and the sex trade. Null is treated as
+  /// the youngest: guessing upward is the mistake that reaches a child.
+  ageBand String?
+
+  internal               Boolean                 @default(false)
+  jlptCertificates       JlptCertificate[]
+  studyLists             StudyList[]
+  mapRegionMarks         MapRegionMark[]
+  studyListSubscriptions StudyListSubscription[]
+  studyListProposals     StudyListProposal[]
+  gameRuns               GameRun[]
 }
 
 /// One JLPT certificate a member reports holding.
