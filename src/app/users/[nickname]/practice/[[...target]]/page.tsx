@@ -162,7 +162,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     ? `${PRACTICE_SHEET_COPY.printRunLabel} ${page} ${PRACTICE_SHEET_COPY.printRunOf} ${pageCount}`
     : undefined;
 
-  const sheetLabel = sheetLabelFor({ source, level, grade }, listName);
+  const sheetLabel = sheetLabelFor({ source, level, grade }, listName, entries);
 
   return (
     /*

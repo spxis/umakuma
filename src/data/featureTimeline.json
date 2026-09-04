@@ -4304,11 +4304,23 @@
     "id": "map-region-address",
     "name": "Regions in the map address, and a double-click that opens one",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "The map directory groups a country into regions - Tohoku, the Prairies, West Coast - and a click now lights one. A double-click should zoom the map to it, and the address should carry it: /maps/canada/region/west-coast focuses the region, and /maps/canada/region/west-coast/british-columbia is a province chosen within a lit region. /maps/canada/british-columbia stays as it is. The explicit region/ segment is needed because Japan has a region and a prefecture both called Hokkaido, so a bare slug cannot tell them apart. Requested 2026-09-03 by John, who asked for a recommendation on the URL shape.",
+    "dateIsEstimate": false,
+    "version": "0.380.0",
+    "releasedAt": "2026-09-04T03:05:44Z"
+  },
+  {
+    "id": "sheet-title-names-it",
+    "name": "The worksheet titles itself wrongly for one kanji",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.380.0",
-    "releasedAt": "2026-09-04T03:05:44Z",
-    "summary": "The map directory groups a country into regions - Tohoku, the Prairies, West Coast - and a click now lights one. A double-click should zoom the map to it, and the address should carry it: /maps/canada/region/west-coast focuses the region, and /maps/canada/region/west-coast/british-columbia is a province chosen within a lit region. /maps/canada/british-columbia stays as it is. The explicit region/ segment is needed because Japan has a region and a prefecture both called Hokkaido, so a bare slug cannot tell them apart. Requested 2026-09-03 by John, who asked for a recommendation on the URL shape."
+    "version": "0.381.0",
+    "releasedAt": "2026-09-04T03:10:21Z",
+    "summary": "A worksheet for a single character is titled Writing practice, Chosen characters, which is neither. It should name what it is showing, mentioning the kanji. Work out what every other way in should be titled too, not just this one. Reported 2026-09-03 by John."
   }
 ]

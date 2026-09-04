@@ -138,10 +138,32 @@ export function readSheetOptions(
  * with the entries rather than looked up again, so a list the reader may not
  * open cannot be named by a title on an empty sheet.
  */
-export function sheetLabelFor(options: Pick<SheetOptions, "source" | "level" | "grade">, listName: string | null): string {
+export function sheetLabelFor(
+  options: Pick<SheetOptions, "source" | "level" | "grade">,
+  listName: string | null,
+  /**
+   * What is actually on the sheet, for a hand-picked one.
+   *
+   * "Chosen characters" is true of any hand-picked sheet and says nothing
+   * about this one, which is a poor title for the commonest case of all: the
+   * worksheet a character's own page links to, which holds that character and
+   * nothing else. With one, the sheet is named after it; with several, at
+   * least the count says how many were chosen.
+   */
+  entries: ReadonlyArray<{ kanji: string; meaning: string | null }> = [],
+): string {
   const { source, level, grade } = options;
   if (source === PRACTICE_SOURCES.list) return listName ?? PRACTICE_SHEET_COPY.fromList;
-  if (source === PRACTICE_SOURCES.picked) return PRACTICE_SHEET_COPY.fromPicked;
+  if (source === PRACTICE_SOURCES.picked) {
+    /*
+     * The character alone. The heading already reads "Writing practice · X",
+     * so a meaning after it makes two middle dots in one line - and the row
+     * under it says the meaning and the stroke count anyway.
+     */
+    const only = entries.length === 1 ? entries[0] : null;
+    if (only) return only.kanji;
+    return entries.length > 1 ? PRACTICE_SHEET_COPY.fromPickedCount(entries.length) : PRACTICE_SHEET_COPY.fromPicked;
+  }
   if (source === PRACTICE_SOURCES.trouble) return PRACTICE_SHEET_COPY.fromTrouble;
   if (source === PRACTICE_SOURCES.favorite) return PRACTICE_SHEET_COPY.fromFavourite;
   if (source === PRACTICE_SOURCES.wanikani) return `WaniKani L${level}`;

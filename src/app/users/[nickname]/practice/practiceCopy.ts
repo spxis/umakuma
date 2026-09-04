@@ -72,6 +72,8 @@ export const PRACTICE_SHEET_COPY = {
   fromTrouble: "Trouble",
   fromFavourite: "Favourites",
   fromPicked: "Chosen characters",
+  /** "3 chosen characters" - said when a hand-picked sheet holds more than one. */
+  fromPickedCount: (count: number) => `${count} chosen characters`,
   /* Only when the list itself has gone: the sheet is normally titled by name. */
   fromList: "A saved list",
   emptyTagged: "Nothing on that list yet. Tag a kanji as trouble or a favourite and it will appear here.",
