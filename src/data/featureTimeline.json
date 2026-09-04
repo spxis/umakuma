@@ -4436,11 +4436,23 @@
     "id": "map-mark-layers",
     "name": "Toggle the known, practise and visited colouring",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "The study map paints a member's own marks - known green, practise amber, visited outlined - over every region, always. There is no way to turn that layer off to see the plain map, or to see one kind of mark alone. Controls to toggle each layer, in or above the map or in the side panel. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.391.0",
+    "releasedAt": "2026-09-04T04:56:04Z"
+  },
+  {
+    "id": "world-maps-accreditation",
+    "name": "World maps accreditation and country flags",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.391.0",
-    "releasedAt": "2026-09-04T04:56:04Z",
-    "summary": "The study map paints a member's own marks - known green, practise amber, visited outlined - over every region, always. There is no way to turn that layer off to see the plain map, or to see one kind of mark alone. Controls to toggle each layer, in or above the map or in the side panel. Requested 2026-09-03 by John."
+    "version": "0.392.0",
+    "releasedAt": "2026-09-04T06:56:57Z",
+    "summary": "Update Canada map accreditation to World maps, describe Natural Earth datasets across Canada, admin pilots (TH, CN, AU, TW) and 25 catalog countries, and present national flags for all 30 countries."
   }
 ]
