@@ -454,4 +454,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "rendou", ja: "連動", reading: "れんどう", gloss: "the two moving together" },
   { romaji: "roteichou", ja: "路程帳", reading: "ろていちょう", gloss: "the log of the route taken" },
   { romaji: "wakegaki", ja: "分け書き", reading: "わけがき", gloss: "set down in parts" },
+  { romaji: "ayumi", ja: "歩み", reading: "あゆみ", gloss: "the pace of the walk" },
 ];

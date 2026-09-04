@@ -5024,11 +5024,23 @@
     "id": "curriculum-version",
     "name": "Curriculum versioning",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Curriculum versioning",
+    "dateIsEstimate": false,
+    "version": "0.440.0",
+    "releasedAt": "2026-09-04T21:58:08Z"
+  },
+  {
+    "id": "xp-second-ladder",
+    "name": "XP: the second ladder",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.440.0",
-    "releasedAt": "2026-09-04T21:58:08Z",
-    "summary": "Curriculum versioning"
+    "version": "0.441.0",
+    "releasedAt": "2026-09-04T22:46:58Z",
+    "summary": "XP: the second ladder"
   }
 ]
