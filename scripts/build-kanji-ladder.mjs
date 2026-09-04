@@ -447,11 +447,30 @@ async function main() {
   /* Among the kanji available now, take the one a learner needs soonest:
      the JLPT level it belongs to, then the school year Japan teaches it in,
      then how common it is in print, then how many strokes it costs. */
+  /* WaniKani's own teaching order, which the priority below leans on. */
+  const wkLevelOf = new Map(waniKani.map((entry) => [entry.kanji, entry.waniKaniLevel]));
+
+  /*
+   * Among the kanji available now, take the one a learner needs soonest.
+   *
+   * The band is the promise — every N5 character by level 10 — so it comes
+   * first and nothing outranks it. Inside a band the school year leads,
+   * because Japan has already spent a century deciding what a child can hold
+   * at what age, and WaniKani's own order follows it: their sequence encodes
+   * which characters build on which, which is knowledge we would otherwise
+   * have to invent. Frequency then separates what those two leave tied, and
+   * stroke count settles the rest.
+   *
+   * A kanji WaniKani does not teach has no level, so it sorts after the ones
+   * that do at the same grade — which is right, since it is a character they
+   * judged their own learners could do without.
+   */
   const priority = (kanji) => {
     const entry = entryFor(kanji);
     return [
       bandRank(kanji),
       entry?.grade ?? 9,
+      wkLevelOf.get(kanji) ?? 99,
       entry?.frequencyRank ?? 9_999,
       entry?.strokeCount ?? 30,
     ];
@@ -528,7 +547,6 @@ async function main() {
   );
 
   const added = new Set(missing.map((entry) => entry.kanji));
-  const wkLevelOf = new Map(waniKani.map((entry) => [entry.kanji, entry.waniKaniLevel]));
   const ladder = levels.map((entry, index) => ({
     ...entry,
     fromWaniKani: entry.kanji.filter((k) => !added.has(k)).length,
